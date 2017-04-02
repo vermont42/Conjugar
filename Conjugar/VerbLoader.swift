@@ -50,20 +50,20 @@ struct VerbLoader {
     var estar: [String: String] = [:]
     estar["fs" + "pr"] = "estoy"
     estar["parent"] = "hablar"
-    estar["chop"] = "habl"
+    estar["trim"] = "habl"
     estar["stem"] = "est"
     verbs["estar"] = estar
     
     var conocer: [String: String] = [:]
     conocer["fs" + "pr"] = "conozco"
     conocer["parent"] = "comer"
-    conocer["chop"] = "com"
+    conocer["trim"] = "com"
     conocer["stem"] = "conoc"
     verbs["conocer"] = conocer
     
     var reconocer: [String: String] = [:]
     reconocer["parent"] = "conocer"
-    reconocer["chop"] = ""
+    reconocer["trim"] = ""
     reconocer["stem"] = "re"
     verbs["reconocer"] = reconocer
 
@@ -73,7 +73,7 @@ struct VerbLoader {
     morder["ts" + "pr"] = "muerde"
     morder["tp" + "pr"] = "muerden"
     morder["parent"] = "comer"
-    morder["chop"] = "com"
+    morder["trim"] = "com"
     morder["stem"] = "mord"
     verbs["morder"] = morder
 
@@ -83,7 +83,7 @@ struct VerbLoader {
     promover["ts" + "pr"] = "promueve"
     promover["tp" + "pr"] = "promueven"
     promover["parent"] = "comer"
-    promover["chop"] = "com"
+    promover["trim"] = "com"
     promover["stem"] = "promov"
     verbs["promover"] = promover
     
@@ -94,7 +94,7 @@ struct VerbLoader {
     llover["fp" + "pr"] = Conjugator.defective
     llover["sp" + "pr"] = Conjugator.defective
     llover["tp" + "pr"] = Conjugator.defective
-    llover["chop"] = "prom"
+    llover["trim"] = "prom"
     llover["stem"] = "ll"
     verbs["llover"] = llover
     

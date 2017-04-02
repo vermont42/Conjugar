@@ -68,14 +68,14 @@ class Conjugator {
     }
     else {
       let parentConjugation = conjugateRecursively(infinitive: verb["parent"]!, tense: tense, personNumber: personNumber, region: region).value!
-      let chop = verb["chop"]!
+      let trim = verb["trim"]!
       let stem = verb["stem"]!
       var conjugation: String
-      if chop == "" {
+      if trim == "" {
         conjugation = stem + parentConjugation
       }
       else {
-        conjugation = parentConjugation.replaceFirstOccurence(of: chop, with: stem)
+        conjugation = parentConjugation.replaceFirstOccurence(of: trim, with: stem)
       }
       verb[conjugationKey] = conjugation
       verbs[infinitive] = verb

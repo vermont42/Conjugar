@@ -14,7 +14,7 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
       super.viewDidLoad()
       
-      _ = ["hablar", "comer", "subir", "estar", "conocer", "reconocer", "morder", "promover", "llover"].map {
+      _ = ["hablar", "comer", "subir", "estar", "conocer", "reconocer", "morder", "promover", "llover", "kickar"].map {
           print("\n\($0):")
           fullyConjugate(infinitive: $0, tense: .presenteDeIndicativo)
       }
