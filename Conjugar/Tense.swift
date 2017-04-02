@@ -8,20 +8,21 @@
 
 import Foundation
 
-enum Tense {
-    case presenteDeIndicativo
-    case imperfectoDeIndicativo
-    case preterito
-    case futuro
-    case potencialSimple
-    case presenteDeSubjuntivo
-    case imperfectoDeSubjuntivo
-    case perfectoDeIndicativo
-    case pluscuamperfectoDeIndicativo
-    case preteritoAnterior
-    case futuroPerfecto
-    case potencialCompuesto
-    case perfectoDeSubjuntivo
-    case pluscuamperfectoDeSubjuntivo
-    case gerundio
+enum Tense: String {
+  case presenteDeIndicativo = "pr"
+  case imperfectoDeIndicativo = "ii"
+  case preterito = "pt"
+  case futuro = "fu"
+  case potencialSimple = "ps"
+  case presenteDeSubjuntivo = "pb"
+  case imperfectoDeSubjuntivo = "is"
+  case perfectoDeIndicativo = "pi"
+  case pluscuamperfectoDeIndicativo = "fi"
+  case preteritoAnterior = "pa"
+  case futuroPerfecto = "fp"
+  case potencialCompuesto = "pc"
+  case perfectoDeSubjuntivo = "cp"
+  case pluscuamperfectoDeSubjuntivo = "fs"
+  case gerundio = "ge"
+  case participio = "po"
 }

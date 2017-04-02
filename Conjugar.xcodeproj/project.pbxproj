@@ -7,18 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E15A18511E91977F008455DD /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A18501E91977F008455DD /* StringExtension.swift */; };
+		E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A18521E9199C3008455DD /* ConjugatorError.swift */; };
 		E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */; };
 		E1F06ADA1E8F05F300ADD2E1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD91E8F05F300ADD2E1 /* ViewController.swift */; };
 		E1F06ADD1E8F05F300ADD2E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1F06ADB1E8F05F300ADD2E1 /* Main.storyboard */; };
 		E1F06ADF1E8F05F300ADD2E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1F06ADE1E8F05F300ADD2E1 /* Assets.xcassets */; };
 		E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */; };
 		E1F06AED1E8F05F400ADD2E1 /* ConjugarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AEC1E8F05F400ADD2E1 /* ConjugarTests.swift */; };
-		E1F06AF81E8F081700ADD2E1 /* Verb.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AF71E8F081700ADD2E1 /* Verb.swift */; };
+		E1F06AF81E8F081700ADD2E1 /* Conjugator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AF71E8F081700ADD2E1 /* Conjugator.swift */; };
 		E1F06AFB1E8F087000ADD2E1 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AFA1E8F087000ADD2E1 /* Region.swift */; };
 		E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AFC1E8F08D500ADD2E1 /* Tense.swift */; };
 		E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */; };
 		E1F06B041E8F0E9300ADD2E1 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B031E8F0E9300ADD2E1 /* Result.swift */; };
 		E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B051E8F0EA300ADD2E1 /* ResultProtocol.swift */; };
+		E1F06B081E91794800ADD2E1 /* VerbLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B071E91794800ADD2E1 /* VerbLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E15A18501E91977F008455DD /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		E15A18521E9199C3008455DD /* ConjugatorError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugatorError.swift; sourceTree = "<group>"; };
 		E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Conjugar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E1F06AD91E8F05F300ADD2E1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -42,12 +47,13 @@
 		E1F06AE81E8F05F400ADD2E1 /* ConjugarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConjugarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1F06AEC1E8F05F400ADD2E1 /* ConjugarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugarTests.swift; sourceTree = "<group>"; };
 		E1F06AEE1E8F05F400ADD2E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E1F06AF71E8F081700ADD2E1 /* Verb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Verb.swift; sourceTree = "<group>"; };
+		E1F06AF71E8F081700ADD2E1 /* Conjugator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conjugator.swift; sourceTree = "<group>"; };
 		E1F06AFA1E8F087000ADD2E1 /* Region.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		E1F06AFC1E8F08D500ADD2E1 /* Tense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tense.swift; sourceTree = "<group>"; };
 		E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonNumber.swift; sourceTree = "<group>"; };
 		E1F06B031E8F0E9300ADD2E1 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		E1F06B051E8F0EA300ADD2E1 /* ResultProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultProtocol.swift; sourceTree = "<group>"; };
+		E1F06B071E91794800ADD2E1 /* VerbLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,14 +95,15 @@
 		E1F06AD61E8F05F300ADD2E1 /* Conjugar */ = {
 			isa = PBXGroup;
 			children = (
-				E1F06B021E8F0E7F00ADD2E1 /* Third Party */,
 				E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */,
-				E1F06AD91E8F05F300ADD2E1 /* ViewController.swift */,
-				E1F06ADB1E8F05F300ADD2E1 /* Main.storyboard */,
 				E1F06ADE1E8F05F300ADD2E1 /* Assets.xcassets */,
-				E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */,
 				E1F06AE31E8F05F300ADD2E1 /* Info.plist */,
+				E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */,
+				E1F06ADB1E8F05F300ADD2E1 /* Main.storyboard */,
+				E15A18501E91977F008455DD /* StringExtension.swift */,
+				E1F06AD91E8F05F300ADD2E1 /* ViewController.swift */,
 				E1F06AF91E8F085500ADD2E1 /* Models */,
+				E1F06B021E8F0E7F00ADD2E1 /* Third Party */,
 			);
 			path = Conjugar;
 			sourceTree = "<group>";
@@ -113,10 +120,12 @@
 		E1F06AF91E8F085500ADD2E1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E1F06AF71E8F081700ADD2E1 /* Verb.swift */,
+				E1F06AF71E8F081700ADD2E1 /* Conjugator.swift */,
+				E15A18521E9199C3008455DD /* ConjugatorError.swift */,
+				E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */,
 				E1F06AFA1E8F087000ADD2E1 /* Region.swift */,
 				E1F06AFC1E8F08D500ADD2E1 /* Tense.swift */,
-				E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */,
+				E1F06B071E91794800ADD2E1 /* VerbLoader.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -235,10 +244,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1F06AF81E8F081700ADD2E1 /* Verb.swift in Sources */,
+				E15A18511E91977F008455DD /* StringExtension.swift in Sources */,
+				E1F06AF81E8F081700ADD2E1 /* Conjugator.swift in Sources */,
 				E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */,
+				E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */,
 				E1F06ADA1E8F05F300ADD2E1 /* ViewController.swift in Sources */,
 				E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */,
+				E1F06B081E91794800ADD2E1 /* VerbLoader.swift in Sources */,
 				E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */,
 				E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */,
 				E1F06B041E8F0E9300ADD2E1 /* Result.swift in Sources */,
@@ -452,6 +464,7 @@
 				E1F06AF31E8F05F400ADD2E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E1F06AF41E8F05F400ADD2E1 /* Build configuration list for PBXNativeTarget "ConjugarTests" */ = {
 			isa = XCConfigurationList;
@@ -460,6 +473,7 @@
 				E1F06AF61E8F05F400ADD2E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

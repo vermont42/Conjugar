@@ -9,6 +9,6 @@
 import Foundation
 
 enum Region {
-    case spain
-    case latinAmerica
+  case spain
+  case latinAmerica
 }

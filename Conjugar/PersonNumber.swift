@@ -8,11 +8,12 @@
 
 import Foundation
 
-enum PersonNumber {
-    case firstSingular
-    case firstPlural
-    case secondSingular
-    case secondPlural
-    case thirdSingular
-    case thirdPlural
+enum PersonNumber: String {
+  case firstSingular = "fs"
+  case firstPlural = "fp"
+  case secondSingular = "ss"
+  case secondPlural = "sp"
+  case thirdSingular = "ts"
+  case thirdPlural = "tp"
+  case none = "no"
 }
