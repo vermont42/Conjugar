@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        _ = ["cantar", "comer", "subir"].map {
+        _ = ["hablar", "comer", "subir"].map {
             print("\n\($0):")
             fullyConjugate(infinitive: $0, tense: .presenteDeIndicativo)
         }
@@ -34,8 +34,8 @@ class ViewController: UIViewController {
             print("Verb is too short.")
         case .failure(.noSuchConjugation):
             print("There is no conjugation for that verb/person/number combination.")
-        case .failure(.invalidEnding):
-            print("That verb has an invalid Spanish-verb ending.")
+        case let .failure(.invalidEnding(ending)):
+            print("That verb has an invalid Spanish-verb ending, \(ending).")
         case .failure(.tenseNotImplemented):
             print("That tense is not implemented.")
         }
