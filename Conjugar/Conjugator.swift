@@ -10,6 +10,10 @@ import Foundation
 
 class Conjugator {
   static let defective = "defective"
+  static let parent = "parent"
+  static let trim = "trim"
+  static let stem = "stem"
+  
   var verbs: [String: [String: String]] = [:]
   
   init() {
@@ -36,19 +40,19 @@ class Conjugator {
       let stem = infinitive.substring(to: index)
       var verb:[String: String] = [:]
       if ending == "ar" {
-        verb["parent"] = "hablar"
-        verb["stem"] = stem
-        verb["trim"] = "habl"
+        verb[Conjugator.parent] = "hablar"
+        verb[Conjugator.stem] = stem
+        verb[Conjugator.trim] = "habl"
       }
       else if ending == "er" {
-        verb["parent"] = "comer"
-        verb["stem"] = stem
-        verb["trim"] = "com"
+        verb[Conjugator.parent] = "comer"
+        verb[Conjugator.stem] = stem
+        verb[Conjugator.trim] = "com"
       }
       else { // if ending == "ir"
-        verb["parent"] = "subir"
-        verb["stem"] = stem
-        verb["trim"] = "sub"
+        verb[Conjugator.parent] = "subir"
+        verb[Conjugator.stem] = stem
+        verb[Conjugator.trim] = "sub"
       }
       verbs[infinitive] = verb
     }
@@ -67,9 +71,9 @@ class Conjugator {
       return .success(conjugation)
     }
     else {
-      let parentConjugation = conjugateRecursively(infinitive: verb["parent"]!, tense: tense, personNumber: personNumber, region: region).value!
-      let trim = verb["trim"]!
-      let stem = verb["stem"]!
+      let parentConjugation = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: tense, personNumber: personNumber, region: region).value!
+      let trim = verb[Conjugator.trim]!
+      let stem = verb[Conjugator.stem]!
       var conjugation: String
       if trim == "" {
         conjugation = stem + parentConjugation
