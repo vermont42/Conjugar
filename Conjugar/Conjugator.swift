@@ -21,7 +21,7 @@ class Conjugator {
   }
   
   func conjugate(infinitive: String, tense: Tense, personNumber: PersonNumber, region: Region = .spain) -> Result<String, ConjugatorError> {
-    if infinitive.characters.count < 3 {
+    if infinitive.characters.count < 2 {
       return .failure(.tooShort)
     }
     let index = infinitive.index(infinitive.endIndex, offsetBy: -2)
@@ -56,7 +56,6 @@ class Conjugator {
       }
       verbs[infinitive] = verb
     }
-    // TODO: Detect defective conjugation and return appropriate error.
     return conjugateRecursively(infinitive: infinitive, tense: tense, personNumber: personNumber, region: region)
   }
   
@@ -66,14 +65,31 @@ class Conjugator {
     if personNumber == .secondPlural && region == .latinAmerica {
       modifiedPersonNumber = .thirdPlural
     }
-    let conjugationKey = modifiedPersonNumber.rawValue + tense.rawValue
+    if let defective = verb[modifiedPersonNumber.rawValue], defective == Conjugator.defective {
+      return .success(Conjugator.defective)
+    }
+    let conjugationKey: String
+    if tense == .gerundio || tense == .participio {
+      conjugationKey = tense.rawValue
+    }
+    else {
+      conjugationKey = modifiedPersonNumber.rawValue + tense.rawValue
+    }
     if let conjugation = verb[conjugationKey] {
       return .success(conjugation)
     }
-    else {
+    else if [.presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo, .gerundio, .participio].contains(tense) {
       let parentConjugation = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: tense, personNumber: personNumber, region: region).value!
-      let trim = verb[Conjugator.trim]!
-      let stem = verb[Conjugator.stem]!
+      let trim: String
+      let stem: String
+      if (tense == .futuroDeIndicativo || tense == .condicional) && verb[Tense.talloFuturo.rawValue] != nil {
+        trim = verb[Conjugator.parent]!
+        stem = verb[Tense.talloFuturo.rawValue]!
+      }
+      else {
+        trim = verb[Conjugator.trim]!
+        stem = verb[Conjugator.stem]!
+      }
       var conjugation: String
       if trim == "" {
         conjugation = stem + parentConjugation
@@ -84,6 +100,57 @@ class Conjugator {
       verb[conjugationKey] = conjugation
       verbs[infinitive] = verb
       return .success(conjugation)
+    }
+    else if [Tense.imperfectoDeSubjuntivo1, Tense.imperfectoDeSubjuntivo2, Tense.futuroDeSubjuntivo].contains(tense) {
+      let stemWithRon: String
+      if let defective = verb[PersonNumber.thirdPlural.rawValue], defective == Conjugator.defective {
+        let parentStem = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: Tense.preterito, personNumber: PersonNumber.thirdPlural, region: region).value!
+        let trim = verb[Conjugator.trim]!
+        let stem = verb[Conjugator.stem]!
+        if trim == "" {
+          stemWithRon = stem + parentStem
+        }
+        else {
+          stemWithRon = parentStem.replaceFirstOccurence(of: trim, with: stem)
+        }
+      }
+      else {
+        stemWithRon = conjugateRecursively(infinitive: infinitive, tense: Tense.preterito, personNumber: PersonNumber.thirdPlural, region: region).value!
+      }
+      let endIndex = stemWithRon.index(stemWithRon.endIndex, offsetBy: -3)
+      let stemRange = stemWithRon.startIndex ..< endIndex
+      var stem = stemWithRon.substring(with: stemRange)
+      if personNumber == .firstPlural {
+        let lastCharIndex = stem.index(stem.endIndex, offsetBy: -1)
+        let lastChar = stem.substring(from: lastCharIndex)
+        let accentedLastChar: String
+        if lastChar == "a" {
+          accentedLastChar = "á"
+        }
+        else {
+          accentedLastChar = "é"
+        }
+        let stemWithoutLastChar = stem.substring(to: lastCharIndex)
+        stem = stemWithoutLastChar + accentedLastChar
+      }
+      let conjugation = stem + personNumber.endingForSubjuntivo(tense: tense)
+      return .success(conjugation)
+    }
+    else if [.perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].contains(tense) {
+      let haberTenseResult = tense.haberTenseForCompoundTense()
+      let haberTense: Tense
+      switch haberTenseResult {
+      case let .success(auxiliaryTense):
+        haberTense = auxiliaryTense
+      case let .failure(.noHaberForm(form)):
+        return .failure(.tenseNotImplemented(form))
+      }
+      let auxiliary = conjugateRecursively(infinitive: Tense.auxiliary, tense: haberTense, personNumber: personNumber, region: region).value!
+      let participle = conjugateRecursively(infinitive: infinitive, tense: .participio, personNumber: .none, region: region).value!
+      return .success(auxiliary + " " + participle)
+    }
+    else {
+      return .failure(.tenseNotImplemented(tense))
     }
   }
 }
