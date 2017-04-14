@@ -11,6 +11,13 @@ import Foundation
 enum Tense: String {
   static let auxiliary = "haber"
   
+  case gerundio = "ge"
+  case participio = "po"
+  case talloFuturo = "tf"
+
+  case imperativo = "io"
+  case imperativoNegativo = "ni"
+  
   case presenteDeIndicativo = "pr"
   case preterito = "pt"
   case imperfectoDeIndicativo = "ii"
@@ -30,10 +37,6 @@ enum Tense: String {
   case pluscuamperfectoDeSubjuntivo1 = "p1"
   case pluscuamperfectoDeSubjuntivo2 = "p2"
   case futuroPerfectoDeSubjuntivo = "fo"
-  
-  case gerundio = "ge"
-  case participio = "po"
-  case talloFuturo = "tf"
   
   func haberTenseForCompoundTense() -> Result<Tense, AuxiliaryError> {
     switch self {

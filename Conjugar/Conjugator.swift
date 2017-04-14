@@ -20,9 +20,16 @@ class Conjugator {
     verbs = VerbLoader.loadVerbs()
   }
   
+  func verbArray() -> [String] {
+    return Array(verbs.keys).sorted()
+  }
+  
   func conjugate(infinitive: String, tense: Tense, personNumber: PersonNumber, region: Region = .spain) -> Result<String, ConjugatorError> {
     if infinitive.characters.count < 2 {
       return .failure(.tooShort)
+    }
+    if personNumber == .firstSingular && (tense == .imperativo || tense == .imperativoNegativo) {
+      return .failure(.noFirstPersonSingularImperative)
     }
     let index = infinitive.index(infinitive.endIndex, offsetBy: -2)
     let ending = infinitive.substring(from: index)
@@ -148,6 +155,23 @@ class Conjugator {
       let auxiliary = conjugateRecursively(infinitive: Tense.auxiliary, tense: haberTense, personNumber: personNumber, region: region).value!
       let participle = conjugateRecursively(infinitive: infinitive, tense: .participio, personNumber: .none, region: region).value!
       return .success(auxiliary + " " + participle)
+    }
+    else if tense == .imperativo {
+      if personNumber == .firstSingular {
+        return .failure(.noFirstPersonSingularImperative)
+      }
+      if [.thirdSingular, .firstPlural, .thirdPlural].contains(personNumber) {
+        return .success(conjugateRecursively(infinitive: infinitive, tense: .presenteDeSubjuntivo, personNumber: personNumber, region: region).value!)
+      }
+      else {
+        return .success("FOO") // TODO: Store irregular 2s and 2p and use that or regular conjugation.
+      }
+    }
+    else if tense == .imperativoNegativo {
+      if personNumber == .firstSingular {
+        return .failure(.noFirstPersonSingularImperative)
+      }
+      return .success("no " + conjugateRecursively(infinitive: infinitive, tense: .presenteDeSubjuntivo, personNumber: personNumber, region: region).value!)
     }
     else {
       return .failure(.tenseNotImplemented(tense))

@@ -11,13 +11,21 @@ import UIKit
 // TODO: Add sentir, sentar, perder, pedir, crecer, lucir, conducir, huir, construir (like huir?), caer, oír, traer, jugar, adquirir, argüir, discernir, adquirir.
 // When looking up an infinitive, accept, for example, "oir" for "oír" or "arguir" for argüir". Might need to add "accentless" forms for verbs. Could do this programatically.
 // Add ability for user to get future/conditional stem.
+// https://www.thoughtco.com/defective-verbs-spanish-3079156
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+  private var verbs: [String] = []
   private let conjugator = Conjugator()
+  private var selectedRow = 0
+  @IBOutlet var table: UITableView!
   
   override func viewDidLoad() {
     super.viewDidLoad()
-      
+    verbs = conjugator.verbArray()
+    table.delegate = self
+    table.dataSource = self
+    table.reloadData()
+        
     _ = ["hablar", "comer", "subir", "ser", "ver", "ir", "haber", "saber", "caber", "poder", "querer", "poner", "tener", "venir", "salir", "valer", "decir", "hacer", "estar", "conocer", "reconocer", "morder", "mostrar", "mover", "promover", "beber", "vivir", "pensar", "dar", "llover", "gustar"].map {
         print("\n\($0):")
         print("\nparticipio")
@@ -60,12 +68,18 @@ class ViewController: UIViewController {
         fullyConjugate(infinitive: $0, tense: .pluscuamperfectoDeSubjuntivo2)
         print("\nfuturoPerfectoDeSubjuntivo")
         fullyConjugate(infinitive: $0, tense: .futuroPerfectoDeSubjuntivo)
+        print("\nimperativo")
+        fullyConjugate(infinitive: $0, tense: .imperativo)
+        print("\nimperativoNegativo")
+        fullyConjugate(infinitive: $0, tense: .imperativoNegativo)
       }
   }
     
   private func fullyConjugate(infinitive: String, tense: Tense) {
     _ = [PersonNumber.firstSingular, PersonNumber.secondSingular, PersonNumber.thirdSingular, PersonNumber.firstPlural, PersonNumber.secondPlural, PersonNumber.thirdPlural].map {
-      conjugate(infinitive: infinitive, tense: tense, personNumber: $0)
+      if !($0 == .firstSingular && (tense == .imperativo || tense == .imperativoNegativo)) {
+        conjugate(infinitive: infinitive, tense: tense, personNumber: $0)
+      }
     }
   }
     
@@ -86,6 +100,34 @@ class ViewController: UIViewController {
         print("Tense \(tense.rawValue) is not implemented.")
     case let .failure(.defectiveForPersonNumber(personNumber)):
       print("Verb is defective for person/number \(personNumber).")
+    case .failure(.noFirstPersonSingularImperative):
+      print("Attempted to conjugate imperative for first person singular.")
+    }
+  }
+  
+  func numberOfSections(in tableView: UITableView) -> Int {
+    return 1
+  }
+  
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return verbs.count
+  }
+  
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = table.dequeueReusableCell(withIdentifier: "VerbCell") as! VerbCell
+    cell.configure(verb: verbs[indexPath.row])
+    return cell
+  }
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    selectedRow = (indexPath as NSIndexPath).row
+    performSegue(withIdentifier: "show verb", sender: self)
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "show verb" {
+      let verbVC: VerbViewController = segue.destination as! VerbViewController
+      verbVC.verb = verbs[selectedRow]
     }
   }
 }

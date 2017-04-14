@@ -15,4 +15,5 @@ enum ConjugatorError: Error {
   case noSuchConjugation(PersonNumber)
   case personNumberAbsent(Tense)
   case defectiveForPersonNumber(PersonNumber)
+  case noFirstPersonSingularImperative
 }
