@@ -35,7 +35,26 @@ enum PersonNumber: String {
       return ""
     }
   }
-
+  
+  var pronoun: String {
+    switch self {
+    case .firstSingular:
+      return "      yo"
+    case .secondSingular:
+      return "      tú"
+    case .thirdSingular:
+      return "      él"
+    case .firstPlural:
+      return "nosotros"
+    case .secondPlural:
+      return "vosotros"
+    case .thirdPlural:
+      return "   ellas"
+    case .none:
+      return ""
+    }
+  }
+  
   func endingForSubjuntivo(tense: Tense) -> String {
     switch self {
     case .firstSingular:

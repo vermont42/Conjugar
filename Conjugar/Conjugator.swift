@@ -164,7 +164,18 @@ class Conjugator {
         return .success(conjugateRecursively(infinitive: infinitive, tense: .presenteDeSubjuntivo, personNumber: personNumber, region: region).value!)
       }
       else {
-        return .success("FOO") // TODO: Store irregular 2s and 2p and use that or regular conjugation.
+        if personNumber == .secondSingular {
+          if let conjugation = verbs[infinitive]?[PersonNumber.secondSingular.rawValue + Tense.imperativo.rawValue] {
+            return .success(conjugation)
+          }
+          else {
+            let stemWithS = conjugateRecursively(infinitive: infinitive, tense: .presenteDeIndicativo, personNumber: .secondSingular, region: region).value!
+            return .success(stemWithS.substring(to: stemWithS.index(stemWithS.endIndex, offsetBy: -1)))
+          }
+        }
+        else {
+          return .success(infinitive.substring(to: infinitive.index(infinitive.endIndex, offsetBy: -1)) + "d")
+        }
       }
     }
     else if tense == .imperativoNegativo {

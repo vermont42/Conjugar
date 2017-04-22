@@ -10,6 +10,8 @@ import UIKit
 
 // TODO: Add sentir, sentar, perder, pedir, crecer, lucir, conducir, huir, construir (like huir?), caer, oír, traer, jugar, adquirir, argüir, discernir, adquirir.
 // When looking up an infinitive, accept, for example, "oir" for "oír" or "arguir" for argüir". Might need to add "accentless" forms for verbs. Could do this programatically.
+// Oír breaks the rule that all verbs end in ir, er, or ar. One solution would be strip accents from infinitives passed in.
+// Definitely handle oír.
 // Add ability for user to get future/conditional stem.
 // https://www.thoughtco.com/defective-verbs-spanish-3079156
 
@@ -87,7 +89,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let result = conjugator.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber, region: .spain)
     switch result {
     case let .success(value):
-        print(value)
+        print(personNumber.pronoun + " " + value)
     case .failure(.tooShort):
         print("Verb is too short.")
     case let .failure(.noSuchConjugation(personNumber)):
