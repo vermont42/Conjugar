@@ -17,7 +17,8 @@ class Conjugator {
   var verbs: [String: [String: String]] = [:]
   
   init() {
-    verbs = VerbLoader.loadVerbs()
+    //verbs = VerbLoader.loadVerbs()
+    verbs = VerbParser().parse()
   }
   
   func verbArray() -> [String] {

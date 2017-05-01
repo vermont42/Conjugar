@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */ = {isa = PBXBuildFile; fileRef = E107B08A1EB66CE6004C5E91 /* verbs.xml */; };
+		E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E107B0911EB66F28004C5E91 /* VerbParser.swift */; };
 		E1151E531E9AEDF100DE44D6 /* AuxiliaryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */; };
 		E1151E551E9C5D9C00DE44D6 /* VerbCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */; };
 		E1151E571E9C610100DE44D6 /* VerbViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E561E9C610100DE44D6 /* VerbViewController.swift */; };
@@ -38,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E107B08A1EB66CE6004C5E91 /* verbs.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = verbs.xml; sourceTree = "<group>"; };
+		E107B0911EB66F28004C5E91 /* VerbParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbParser.swift; sourceTree = "<group>"; };
 		E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuxiliaryError.swift; sourceTree = "<group>"; };
 		E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbCell.swift; sourceTree = "<group>"; };
 		E1151E561E9C610100DE44D6 /* VerbViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbViewController.swift; sourceTree = "<group>"; };
@@ -80,6 +84,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E107B08C1EB66E16004C5E91 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		E107B08D1EB66E26004C5E91 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E1151E561E9C610100DE44D6 /* VerbViewController.swift */,
+				E1F06AD91E8F05F300ADD2E1 /* ViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		E107B08E1EB66E64004C5E91 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E107B0911EB66F28004C5E91 /* VerbParser.swift */,
+				E15A18501E91977F008455DD /* StringExtension.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		E107B08F1EB66E7C004C5E91 /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */,
+				E1F06AE31E8F05F300ADD2E1 /* Info.plist */,
+				E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */,
+				E1F06ADB1E8F05F300ADD2E1 /* Main.storyboard */,
+			);
+			name = Supporting;
+			sourceTree = "<group>";
+		};
+		E107B0901EB66E9F004C5E91 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				E1F06ADE1E8F05F300ADD2E1 /* Assets.xcassets */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
 		E1F06ACB1E8F05F200ADD2E1 = {
 			isa = PBXGroup;
 			children = (
@@ -101,17 +150,13 @@
 		E1F06AD61E8F05F300ADD2E1 /* Conjugar */ = {
 			isa = PBXGroup;
 			children = (
-				E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */,
-				E1F06ADE1E8F05F300ADD2E1 /* Assets.xcassets */,
-				E1F06AE31E8F05F300ADD2E1 /* Info.plist */,
-				E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */,
-				E1F06ADB1E8F05F300ADD2E1 /* Main.storyboard */,
-				E15A18501E91977F008455DD /* StringExtension.swift */,
-				E1F06AD91E8F05F300ADD2E1 /* ViewController.swift */,
-				E1151E561E9C610100DE44D6 /* VerbViewController.swift */,
-				E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */,
+				E107B0901EB66E9F004C5E91 /* Assets */,
+				E107B08D1EB66E26004C5E91 /* Controllers */,
 				E1F06AF91E8F085500ADD2E1 /* Models */,
+				E107B08F1EB66E7C004C5E91 /* Supporting */,
 				E1F06B021E8F0E7F00ADD2E1 /* Third Party */,
+				E107B08E1EB66E64004C5E91 /* Utils */,
+				E107B08C1EB66E16004C5E91 /* Views */,
 			);
 			path = Conjugar;
 			sourceTree = "<group>";
@@ -128,13 +173,14 @@
 		E1F06AF91E8F085500ADD2E1 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */,
 				E1F06AF71E8F081700ADD2E1 /* Conjugator.swift */,
 				E15A18521E9199C3008455DD /* ConjugatorError.swift */,
-				E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */,
 				E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */,
 				E1F06AFA1E8F087000ADD2E1 /* Region.swift */,
 				E1F06AFC1E8F08D500ADD2E1 /* Tense.swift */,
 				E1F06B071E91794800ADD2E1 /* VerbLoader.swift */,
+				E107B08A1EB66CE6004C5E91 /* verbs.xml */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -235,6 +281,7 @@
 			files = (
 				E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */,
 				E1F06ADF1E8F05F300ADD2E1 /* Assets.xcassets in Resources */,
+				E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */,
 				E1F06ADD1E8F05F300ADD2E1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,6 +308,7 @@
 				E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */,
 				E1F06ADA1E8F05F300ADD2E1 /* ViewController.swift in Sources */,
 				E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */,
+				E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */,
 				E1F06B081E91794800ADD2E1 /* VerbLoader.swift in Sources */,
 				E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */,
 				E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */,

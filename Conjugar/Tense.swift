@@ -11,6 +11,7 @@ import Foundation
 enum Tense: String {
   static let auxiliary = "haber"
   
+  case infinitivo = "in"
   case gerundio = "ge"
   case participio = "po"
   case talloFuturo = "tf"

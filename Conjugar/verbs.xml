@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE verbs [
+    <!ELEMENT verbs (verb+)>
+    <!ELEMENT verb (verb*)>
+    <!ATTLIST verb in CDATA #REQUIRED>
+    <!ATTLIST verb pe CDATA #IMPLIED>
+    <!ATTLIST verb tr CDATA #IMPLIED>
+    <!ATTLIST verb st CDATA #IMPLIED>
+    <!ATTLIST verb ge CDATA #IMPLIED>
+    <!ATTLIST verb po CDATA #IMPLIED>
+    <!ATTLIST verb tf CDATA #IMPLIED>
+    <!ATTLIST verb fspr CDATA #IMPLIED>
+    <!ATTLIST verb sspr CDATA #IMPLIED>
+    <!ATTLIST verb tspr CDATA #IMPLIED>
+    <!ATTLIST verb fppr CDATA #IMPLIED>
+    <!ATTLIST verb sppr CDATA #IMPLIED>
+    <!ATTLIST verb tppr CDATA #IMPLIED>
+    <!ATTLIST verb fspt CDATA #IMPLIED>
+    <!ATTLIST verb sspt CDATA #IMPLIED>
+    <!ATTLIST verb tspt CDATA #IMPLIED>
+    <!ATTLIST verb fppt CDATA #IMPLIED>
+    <!ATTLIST verb sppt CDATA #IMPLIED>
+    <!ATTLIST verb tppt CDATA #IMPLIED>
+    <!ATTLIST verb fsii CDATA #IMPLIED>
+    <!ATTLIST verb ssii CDATA #IMPLIED>
+    <!ATTLIST verb tsii CDATA #IMPLIED>
+    <!ATTLIST verb fpii CDATA #IMPLIED>
+    <!ATTLIST verb spii CDATA #IMPLIED>
+    <!ATTLIST verb tpii CDATA #IMPLIED>
+    <!ATTLIST verb fspb CDATA #IMPLIED>
+    <!ATTLIST verb sspb CDATA #IMPLIED>
+    <!ATTLIST verb tspb CDATA #IMPLIED>
+    <!ATTLIST verb fppb CDATA #IMPLIED>
+    <!ATTLIST verb sppb CDATA #IMPLIED>
+    <!ATTLIST verb tppb CDATA #IMPLIED>
+    <!ATTLIST verb fsfu CDATA #IMPLIED>
+    <!ATTLIST verb ssfu CDATA #IMPLIED>
+    <!ATTLIST verb tsfu CDATA #IMPLIED>
+    <!ATTLIST verb fpfu CDATA #IMPLIED>
+    <!ATTLIST verb spfu CDATA #IMPLIED>
+    <!ATTLIST verb tpfu CDATA #IMPLIED>
+    <!ATTLIST verb fsco CDATA #IMPLIED>
+    <!ATTLIST verb ssco CDATA #IMPLIED>
+    <!ATTLIST verb tsco CDATA #IMPLIED>
+    <!ATTLIST verb fpco CDATA #IMPLIED>
+    <!ATTLIST verb spco CDATA #IMPLIED>
+    <!ATTLIST verb tpco CDATA #IMPLIED>
+]>
+<verbs>
+	<verb in="hablar" ge="hablando" po="hablado" fspr="hablo" sspr="hablas" tspr="habla" fppr="hablamos" sppr="habláis" tppr="hablan" fspt="hablé" sspt="hablaste" tspt="habló" fppt="hablamos" sppt="hablastéis" tppt="hablaron" fsii="hablaba" ssii="hablabas" tsii="hablaba" fpii="hablábamos" spii="hablabais" tpii="hablaban" fspb="hable" sspb="hables" tspb="hable" fppb="hablemos" sppb="habléis" tppb="hablen" fsfu="hablaré" ssfu="hablarás" tsfu="hablará" fpfu="hablaremos" spfu="hablaréis" tpfu="hablarán" fsco="hablaría" ssco="hablarías" tsco="hablaríamos" fpco="hablaríamos" spco="hablaríais" tpco="hablarían" />
+</verbs>
