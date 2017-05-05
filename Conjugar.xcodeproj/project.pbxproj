@@ -104,7 +104,6 @@
 		E107B08E1EB66E64004C5E91 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				E107B0911EB66F28004C5E91 /* VerbParser.swift */,
 				E15A18501E91977F008455DD /* StringExtension.swift */,
 			);
 			name = Utils;
@@ -180,6 +179,7 @@
 				E1F06AFA1E8F087000ADD2E1 /* Region.swift */,
 				E1F06AFC1E8F08D500ADD2E1 /* Tense.swift */,
 				E1F06B071E91794800ADD2E1 /* VerbLoader.swift */,
+				E107B0911EB66F28004C5E91 /* VerbParser.swift */,
 				E107B08A1EB66CE6004C5E91 /* verbs.xml */,
 			);
 			name = Models;

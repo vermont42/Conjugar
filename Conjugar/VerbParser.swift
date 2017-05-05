@@ -131,49 +131,7 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let tp = attributeDict[PersonNumber.thirdPlural.rawValue + Tense.presenteDeSubjuntivo.rawValue] {
         currentConjugations[PersonNumber.thirdPlural.rawValue + Tense.presenteDeSubjuntivo.rawValue] = tp
       }
-
-      if let fs = attributeDict[PersonNumber.firstSingular.rawValue + Tense.futuroDeIndicativo.rawValue] {
-        currentConjugations[PersonNumber.firstSingular.rawValue + Tense.futuroDeIndicativo.rawValue] = fs
-      }
-      if let ss = attributeDict[PersonNumber.secondSingular.rawValue + Tense.futuroDeIndicativo.rawValue] {
-        currentConjugations[PersonNumber.secondSingular.rawValue + Tense.futuroDeIndicativo.rawValue] = ss
-      }
-      if let ts = attributeDict[PersonNumber.thirdSingular.rawValue + Tense.futuroDeIndicativo.rawValue] {
-        currentConjugations[PersonNumber.thirdSingular.rawValue + Tense.futuroDeIndicativo.rawValue] = ts
-      }
-      if let fp = attributeDict[PersonNumber.firstPlural.rawValue + Tense.futuroDeIndicativo.rawValue] {
-        currentConjugations[PersonNumber.firstPlural.rawValue + Tense.futuroDeIndicativo.rawValue] = fp
-      }
-      if let sp = attributeDict[PersonNumber.secondPlural.rawValue + Tense.futuroDeIndicativo.rawValue] {
-        currentConjugations[PersonNumber.secondPlural.rawValue + Tense.futuroDeIndicativo.rawValue] = sp
-      }
-      if let tp = attributeDict[PersonNumber.thirdPlural.rawValue + Tense.futuroDeIndicativo.rawValue] {
-        currentConjugations[PersonNumber.thirdPlural.rawValue + Tense.futuroDeIndicativo.rawValue] = tp
-      }
-
-      if let fs = attributeDict[PersonNumber.firstSingular.rawValue + Tense.condicional.rawValue] {
-        currentConjugations[PersonNumber.firstSingular.rawValue + Tense.condicional.rawValue] = fs
-      }
-      if let ss = attributeDict[PersonNumber.secondSingular.rawValue + Tense.condicional.rawValue] {
-        currentConjugations[PersonNumber.secondSingular.rawValue + Tense.condicional.rawValue] = ss
-      }
-      if let ts = attributeDict[PersonNumber.thirdSingular.rawValue + Tense.condicional.rawValue] {
-        currentConjugations[PersonNumber.thirdSingular.rawValue + Tense.condicional.rawValue] = ts
-      }
-      if let fp = attributeDict[PersonNumber.firstPlural.rawValue + Tense.condicional.rawValue] {
-        currentConjugations[PersonNumber.firstPlural.rawValue + Tense.condicional.rawValue] = fp
-      }
-      if let sp = attributeDict[PersonNumber.secondPlural.rawValue + Tense.condicional.rawValue] {
-        currentConjugations[PersonNumber.secondPlural.rawValue + Tense.condicional.rawValue] = sp
-      }
-      if let tp = attributeDict[PersonNumber.thirdPlural.rawValue + Tense.condicional.rawValue] {
-        currentConjugations[PersonNumber.thirdPlural.rawValue + Tense.condicional.rawValue] = tp
-      }
     }
-  }
-  
-  func parser(_ parser: XMLParser, foundCharacters string: String) {
-    // Shouldn't need. Will probably delete this method if possible.
   }
   
   func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {

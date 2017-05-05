@@ -29,7 +29,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     table.reloadData()
 
 //    _ = ["hablar", "comer", "subir", "ser", "ver", "ir", "haber", "saber", "caber", "poder", "querer", "poner", "tener", "venir", "salir", "valer", "decir", "hacer", "estar", "conocer", "reconocer", "morder", "mostrar", "mover", "promover", "beber", "vivir", "pensar", "dar", "llover", "gustar"].map {
-    _ = ["hablar"].map {
+    _ = ["comer", "hablar", "subir"].map {
       print("\n\($0):")
       print("\nparticipio")
       conjugate(infinitive: $0, tense: .participio, personNumber: .none)

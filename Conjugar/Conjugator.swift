@@ -86,7 +86,7 @@ class Conjugator {
     if let conjugation = verb[conjugationKey] {
       return .success(conjugation)
     }
-    else if [.presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo, .gerundio, .participio].contains(tense) {
+    else if [.presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .presenteDeSubjuntivo, .gerundio, .participio].contains(tense) {
       let parentConjugation = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: tense, personNumber: personNumber, region: region).value!
       let trim: String
       let stem: String
@@ -108,6 +108,10 @@ class Conjugator {
       verb[conjugationKey] = conjugation
       verbs[infinitive] = verb
       return .success(conjugation)
+    }
+    else if [Tense.futuroDeIndicativo, Tense.condicional].contains(tense) {
+      let stem = verb[Tense.talloFuturo.rawValue] ?? infinitive
+      return .success(stem + endingFor(tense: tense, personNumber: personNumber))
     }
     else if [Tense.imperfectoDeSubjuntivo1, Tense.imperfectoDeSubjuntivo2, Tense.futuroDeSubjuntivo].contains(tense) {
       let stemWithRon: String
@@ -141,8 +145,7 @@ class Conjugator {
         let stemWithoutLastChar = stem.substring(to: lastCharIndex)
         stem = stemWithoutLastChar + accentedLastChar
       }
-      let conjugation = stem + personNumber.endingForSubjuntivo(tense: tense)
-      return .success(conjugation)
+      return .success(stem + endingFor(tense: tense, personNumber: personNumber))
     }
     else if [.perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].contains(tense) {
       let haberTenseResult = tense.haberTenseForCompoundTense()
@@ -187,6 +190,103 @@ class Conjugator {
     }
     else {
       return .failure(.tenseNotImplemented(tense))
+    }
+  }
+  
+  private func endingFor(tense: Tense, personNumber: PersonNumber) -> String {
+    switch personNumber {
+    case .firstSingular:
+      switch tense {
+      case .imperfectoDeSubjuntivo1:
+        return "ra"
+      case .imperfectoDeSubjuntivo2:
+        return "se"
+      case .futuroDeSubjuntivo:
+        return "re"
+      case .futuroDeIndicativo:
+        return "é"
+      case .condicional:
+        return "ía"
+      default:
+        return ""
+      }
+    case .secondSingular:
+      switch tense {
+      case .imperfectoDeSubjuntivo1:
+        return "ras"
+      case .imperfectoDeSubjuntivo2:
+        return "ses"
+      case .futuroDeSubjuntivo:
+        return "res"
+      case .futuroDeIndicativo:
+        return "ás"
+      case .condicional:
+        return "ías"
+      default:
+        return ""
+      }
+    case .thirdSingular:
+      switch tense {
+      case .imperfectoDeSubjuntivo1:
+        return "ra"
+      case .imperfectoDeSubjuntivo2:
+        return "se"
+      case .futuroDeSubjuntivo:
+        return "re"
+      case .futuroDeIndicativo:
+        return "á"
+      case .condicional:
+        return "ía"
+      default:
+        return ""
+      }
+    case .firstPlural:
+      switch tense {
+      case .imperfectoDeSubjuntivo1:
+        return "ramos"
+      case .imperfectoDeSubjuntivo2:
+        return "semos"
+      case .futuroDeSubjuntivo:
+        return "remos"
+      case .futuroDeIndicativo:
+        return "emos"
+      case .condicional:
+        return "íamos"
+      default:
+        return ""
+      }
+    case .secondPlural:
+      switch tense {
+      case .imperfectoDeSubjuntivo1:
+        return "rais"
+      case .imperfectoDeSubjuntivo2:
+        return "seis"
+      case .futuroDeSubjuntivo:
+        return "reis"
+      case .futuroDeIndicativo:
+        return "éis"
+      case .condicional:
+        return "íais"
+      default:
+        return ""
+      }
+    case .thirdPlural:
+      switch tense {
+      case .imperfectoDeSubjuntivo1:
+        return "ran"
+      case .imperfectoDeSubjuntivo2:
+        return "sen"
+      case .futuroDeSubjuntivo:
+        return "ren"
+      case .futuroDeIndicativo:
+        return "án"
+      case .condicional:
+        return "ían"
+      default:
+        return ""
+      }
+    case .none:
+      return ""
     }
   }
 }

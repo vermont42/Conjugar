@@ -33,19 +33,10 @@
     <!ATTLIST verb fppb CDATA #IMPLIED>
     <!ATTLIST verb sppb CDATA #IMPLIED>
     <!ATTLIST verb tppb CDATA #IMPLIED>
-    <!ATTLIST verb fsfu CDATA #IMPLIED>
-    <!ATTLIST verb ssfu CDATA #IMPLIED>
-    <!ATTLIST verb tsfu CDATA #IMPLIED>
-    <!ATTLIST verb fpfu CDATA #IMPLIED>
-    <!ATTLIST verb spfu CDATA #IMPLIED>
-    <!ATTLIST verb tpfu CDATA #IMPLIED>
-    <!ATTLIST verb fsco CDATA #IMPLIED>
-    <!ATTLIST verb ssco CDATA #IMPLIED>
-    <!ATTLIST verb tsco CDATA #IMPLIED>
-    <!ATTLIST verb fpco CDATA #IMPLIED>
-    <!ATTLIST verb spco CDATA #IMPLIED>
-    <!ATTLIST verb tpco CDATA #IMPLIED>
 ]>
 <verbs>
-	<verb in="hablar" ge="hablando" po="hablado" fspr="hablo" sspr="hablas" tspr="habla" fppr="hablamos" sppr="habláis" tppr="hablan" fspt="hablé" sspt="hablaste" tspt="habló" fppt="hablamos" sppt="hablastéis" tppt="hablaron" fsii="hablaba" ssii="hablabas" tsii="hablaba" fpii="hablábamos" spii="hablabais" tpii="hablaban" fspb="hable" sspb="hables" tspb="hable" fppb="hablemos" sppb="habléis" tppb="hablen" fsfu="hablaré" ssfu="hablarás" tsfu="hablará" fpfu="hablaremos" spfu="hablaréis" tpfu="hablarán" fsco="hablaría" ssco="hablarías" tsco="hablaríamos" fpco="hablaríamos" spco="hablaríais" tpco="hablarían" />
+  <verb in="comer" ge="comiendo" po="comido" fspr="como" sspr="comes" tspr="come" fppr="comemos" sppr="coméis" tppr="comen" fspt="comí" sspt="comiste" tspt="comió" fppt="comimos" sppt="comisteis" tppt="comieron" fsii="comía" ssii="comías" tsii="comía" fpii="comíamos" spii="comíais" tpii="comían" fspb="coma" sspb="comas" tspb="coma" fppb="comamos" sppb="comáis" tppb="coman" />
+	<verb in="hablar" ge="hablando" po="hablado" fspr="hablo" sspr="hablas" tspr="habla" fppr="hablamos" sppr="habláis" tppr="hablan" fspt="hablé" sspt="hablaste" tspt="habló" fppt="hablamos" sppt="hablastéis" tppt="hablaron" fsii="hablaba" ssii="hablabas" tsii="hablaba" fpii="hablábamos" spii="hablabais" tpii="hablaban" fspb="hable" sspb="hables" tspb="hable" fppb="hablemos" sppb="habléis" tppb="hablen" />
+  <verb in="subir" ge="subiendo" po="subido" fspr="subo" sspr="subes" tspr="sube" fppr="subimos" sppr="subís" tppr="suben" fspt="subí" sspt="subiste" tspt="subió" fppt="subimos" sppt="subisteis" tppt="subieron" fsii="subía" ssii="subías" tsii="subía" fpii="subíamos" spii="subíais" tpii="subían" fspb="suba" sspb="subas" tspb="suba" fppb="subamos" sppb="subáis" tppb="suban" />
+  
 </verbs>
