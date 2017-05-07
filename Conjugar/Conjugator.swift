@@ -9,10 +9,11 @@
 import Foundation
 
 class Conjugator {
-  static let defective = "defective"
-  static let parent = "parent"
-  static let trim = "trim"
-  static let stem = "stem"
+  static let defective = "df"
+  static let parent = "pe"
+  static let trim = "tr"
+  static let stem = "st"
+  static let sharedInstance = Conjugator()
   
   var verbs: [String: [String: String]] = [:]
   
@@ -23,6 +24,57 @@ class Conjugator {
   
   func verbArray() -> [String] {
     return Array(verbs.keys).sorted()
+  }
+  
+  func parent(infinitive: String) -> String? {
+    if let verb = verbs[infinitive], let parent = verb[Conjugator.parent] {
+      return parent
+    }
+    else {
+      return nil
+    }
+  }
+  
+  func verbType(infinitive: String) -> VerbType {
+    let index = infinitive.index(infinitive.endIndex, offsetBy: -2)
+    let ending = infinitive.substring(from: index)
+    if let verb = verbs[infinitive] {
+      if verb[Conjugator.parent] == nil {
+        return typeForEnding(ending)
+      }
+      else {
+        return .irregular
+      }
+    }
+    else {
+      return typeForEnding(ending)
+    }
+  }
+  
+  private func typeForEnding(_ ending: String) -> VerbType {
+    if ending == "ar" {
+      return .regularAr
+    }
+    else if ending == "er" {
+      return .regularEr
+    }
+    else {
+      return .regularIr
+    }
+  }
+  
+  func isDefective(infinitive: String) -> Bool {
+    if let verb = verbs[infinitive] {
+      if verb[PersonNumber.firstSingular.rawValue] != nil || verb[PersonNumber.secondSingular.rawValue] != nil || verb[PersonNumber.thirdSingular.rawValue] != nil || verb[PersonNumber.firstPlural.rawValue] != nil || verb[PersonNumber.secondPlural.rawValue] != nil || verb[PersonNumber.thirdPlural.rawValue] != nil {
+        return true
+      }
+      else {
+        return false
+      }
+    }
+    else {
+      return false
+    }
   }
   
   func conjugate(infinitive: String, tense: Tense, personNumber: PersonNumber, region: Region = .spain) -> Result<String, ConjugatorError> {
@@ -37,10 +89,10 @@ class Conjugator {
     if !["ar", "er", "ir"].contains(ending) {
       return .failure(.invalidEnding(ending))
     }
-    if (tense == .gerundio || tense == .participio) && personNumber != .none {
+    if (tense == .gerundio || tense == .participio || tense == .talloFuturo) && personNumber != .none {
       return .failure(.noSuchConjugation(personNumber))
     }
-    if (tense != .gerundio && tense != .participio) && personNumber == .none {
+    if (tense != .gerundio && tense != .participio && tense != .talloFuturo) && personNumber == .none {
       return .failure(.personNumberAbsent(tense))
     }
     
@@ -77,11 +129,14 @@ class Conjugator {
       return .success(Conjugator.defective)
     }
     let conjugationKey: String
-    if tense == .gerundio || tense == .participio {
+    if tense == .gerundio || tense == .participio || tense == .talloFuturo {
       conjugationKey = tense.rawValue
     }
     else {
       conjugationKey = modifiedPersonNumber.rawValue + tense.rawValue
+    }
+    if tense == .talloFuturo && verb[conjugationKey] == nil {
+      return .success(infinitive)
     }
     if let conjugation = verb[conjugationKey] {
       return .success(conjugation)

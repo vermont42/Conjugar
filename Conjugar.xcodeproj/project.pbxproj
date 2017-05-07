@@ -14,8 +14,9 @@
 		E1151E571E9C610100DE44D6 /* VerbViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E561E9C610100DE44D6 /* VerbViewController.swift */; };
 		E15A18511E91977F008455DD /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A18501E91977F008455DD /* StringExtension.swift */; };
 		E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A18521E9199C3008455DD /* ConjugatorError.swift */; };
+		E191C9B81EBEB27500F715E7 /* VerbType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E191C9B71EBEB27500F715E7 /* VerbType.swift */; };
 		E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */; };
-		E1F06ADA1E8F05F300ADD2E1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD91E8F05F300ADD2E1 /* ViewController.swift */; };
+		E1F06ADA1E8F05F300ADD2E1 /* BrowseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD91E8F05F300ADD2E1 /* BrowseViewController.swift */; };
 		E1F06ADD1E8F05F300ADD2E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1F06ADB1E8F05F300ADD2E1 /* Main.storyboard */; };
 		E1F06ADF1E8F05F300ADD2E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1F06ADE1E8F05F300ADD2E1 /* Assets.xcassets */; };
 		E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */; };
@@ -47,9 +48,10 @@
 		E1151E561E9C610100DE44D6 /* VerbViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbViewController.swift; sourceTree = "<group>"; };
 		E15A18501E91977F008455DD /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = StringExtension.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E15A18521E9199C3008455DD /* ConjugatorError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugatorError.swift; sourceTree = "<group>"; };
+		E191C9B71EBEB27500F715E7 /* VerbType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbType.swift; sourceTree = "<group>"; };
 		E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Conjugar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		E1F06AD91E8F05F300ADD2E1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		E1F06AD91E8F05F300ADD2E1 /* BrowseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseViewController.swift; sourceTree = "<group>"; };
 		E1F06ADC1E8F05F300ADD2E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E1F06ADE1E8F05F300ADD2E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E1F06AE11E8F05F300ADD2E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -96,7 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				E1151E561E9C610100DE44D6 /* VerbViewController.swift */,
-				E1F06AD91E8F05F300ADD2E1 /* ViewController.swift */,
+				E1F06AD91E8F05F300ADD2E1 /* BrowseViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -181,6 +183,7 @@
 				E1F06B071E91794800ADD2E1 /* VerbLoader.swift */,
 				E107B0911EB66F28004C5E91 /* VerbParser.swift */,
 				E107B08A1EB66CE6004C5E91 /* verbs.xml */,
+				E191C9B71EBEB27500F715E7 /* VerbType.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -306,10 +309,11 @@
 				E1F06AF81E8F081700ADD2E1 /* Conjugator.swift in Sources */,
 				E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */,
 				E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */,
-				E1F06ADA1E8F05F300ADD2E1 /* ViewController.swift in Sources */,
+				E1F06ADA1E8F05F300ADD2E1 /* BrowseViewController.swift in Sources */,
 				E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */,
 				E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */,
 				E1F06B081E91794800ADD2E1 /* VerbLoader.swift in Sources */,
+				E191C9B81EBEB27500F715E7 /* VerbType.swift in Sources */,
 				E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */,
 				E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */,
 				E1F06B041E8F0E9300ADD2E1 /* Result.swift in Sources */,

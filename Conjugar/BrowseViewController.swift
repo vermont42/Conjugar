@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  BrowseViewController.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 3/31/17.
@@ -15,21 +15,20 @@ import UIKit
 // Add ability for user to get future/conditional stem.
 // https://www.thoughtco.com/defective-verbs-spanish-3079156
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class BrowseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
   private var verbs: [String] = []
-  private let conjugator = Conjugator()
   private var selectedRow = 0
   @IBOutlet var table: UITableView!
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    verbs = conjugator.verbArray()
+    verbs = Conjugator.sharedInstance.verbArray()
     table.delegate = self
     table.dataSource = self
     table.reloadData()
 
 //    _ = ["hablar", "comer", "subir", "ser", "ver", "ir", "haber", "saber", "caber", "poder", "querer", "poner", "tener", "venir", "salir", "valer", "decir", "hacer", "estar", "conocer", "reconocer", "morder", "mostrar", "mover", "promover", "beber", "vivir", "pensar", "dar", "llover", "gustar"].map {
-    _ = ["comer", "hablar", "subir"].map {
+    _ = ["comer", "hablar", "llover", "mover", "ser", "subir"].map {
       print("\n\($0):")
       print("\nparticipio")
       conjugate(infinitive: $0, tense: .participio, personNumber: .none)
@@ -89,7 +88,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
   }
     
   private func conjugate(infinitive: String, tense: Tense, personNumber: PersonNumber) {
-    let result = conjugator.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber, region: .spain)
+    let result = Conjugator.sharedInstance.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber, region: .spain)
     switch result {
     case let .success(value):
         print(personNumber.pronoun + " " + value)
@@ -126,6 +125,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     selectedRow = (indexPath as NSIndexPath).row
+    tableView.deselectRow(at: indexPath, animated: false)
     performSegue(withIdentifier: "show verb", sender: self)
   }
   
