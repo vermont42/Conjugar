@@ -39,6 +39,72 @@ enum Tense: String {
   case pluscuamperfectoDeSubjuntivo2 = "p2"
   case futuroPerfectoDeSubjuntivo = "fo"
   
+  func shortDisplayName() -> String {
+    switch self {
+    case .gerundio:
+      return "Ger."
+    case .participio:
+      return "PP"
+    case .talloFuturo:
+      return "Fut."
+    default:
+      return ""
+    }
+  }
+  
+  func displayName() -> String {
+    switch self {
+    case .infinitivo:
+      return "Infinitivo"
+    case .gerundio:
+      return "Gerundio"
+    case .participio:
+      return "Participio"
+    case .talloFuturo:
+      return "Tallo Futuro"
+    case .imperativo:
+      return "Imperativo"
+    case .imperativoNegativo:
+      return "Imperativo Negativo"
+    case .presenteDeIndicativo:
+      return "Presente de Indicativo"
+    case .preterito:
+      return "Pretérito"
+    case .imperfectoDeIndicativo:
+      return "Imperfecto de Indicativo"
+    case .futuroDeIndicativo:
+      return "Futuro de Indicativo"
+    case .condicional:
+      return "Condicional"
+    case .presenteDeSubjuntivo:
+      return "Presente de Subjuntivo"
+    case .imperfectoDeSubjuntivo1:
+      return "Imperfecto de Subjuntivo 1"
+    case .imperfectoDeSubjuntivo2:
+      return "Imperfecto de Subjuntivo 2"
+    case .futuroDeSubjuntivo:
+      return "Futuro de Subjuntivo"
+    case .perfectoDeIndicativo:
+      return "Perfecto de Indicativo"
+    case .preteritoAnterior:
+      return "Préterito Anterior"
+    case .pluscuamperfectoDeIndicativo:
+      return "Pluscuamperfecto de Indicativo"
+    case .futuroPerfecto:
+      return "Futuro Perfecto"
+    case .condicionalCompuesto:
+      return "Condicional Compuesto"
+    case .perfectoDeSubjuntivo:
+      return "Perfecto de Subjuntivo"
+    case .pluscuamperfectoDeSubjuntivo1:
+      return "Pluscuamperfecto de Subjuntivo 1"
+    case .pluscuamperfectoDeSubjuntivo2:
+      return "Pluscuamperfecto de Subjuntivo 2"
+    case .futuroPerfectoDeSubjuntivo:
+      return "Futuro Perfecto de Subjuntivo"
+    }
+  }
+  
   func haberTenseForCompoundTense() -> Result<Tense, AuxiliaryError> {
     switch self {
     case .perfectoDeIndicativo:

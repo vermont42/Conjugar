@@ -39,17 +39,17 @@ enum PersonNumber: String {
   var pronoun: String {
     switch self {
     case .firstSingular:
-      return "      yo"
+      return "yo"
     case .secondSingular:
-      return "      tú"
+      return "tú"
     case .thirdSingular:
-      return "      él"
+      return "él"
     case .firstPlural:
       return "nosotros"
     case .secondPlural:
       return "vosotros"
     case .thirdPlural:
-      return "   ellas"
+      return "ellas"
     case .none:
       return ""
     }
