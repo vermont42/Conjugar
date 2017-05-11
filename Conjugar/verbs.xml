@@ -43,6 +43,7 @@
 ]>
 <verbs>
   <verb in="comer" ge="comiendo" po="comido" fspr="como" sspr="comes" tspr="come" fppr="comemos" sppr="coméis" tppr="comen" fspt="comí" sspt="comiste" tspt="comió" fppt="comimos" sppt="comisteis" tppt="comieron" fsii="comía" ssii="comías" tsii="comía" fpii="comíamos" spii="comíais" tpii="comían" fspb="coma" sspb="comas" tspb="coma" fppb="comamos" sppb="comáis" tppb="coman" />
+  <verb in="haber" pe="comer" tr="com" st="hab" tf="habr" fspr="he" sspr="has" tspr="ha" fppr="hemos" tppr="han" fspt="hube" sspt="hubiste" tspt="hubo" fppt="hubimos" sppt="hubisteis" tppt="hubieron" fspb="haya" sspb="hayas" tspb="haya" fppb="hayamos" sppb="hayáis" tppb="hayan" ssio="he" />
 	<verb in="hablar" ge="hablando" po="hablado" fspr="hablo" sspr="hablas" tspr="habla" fppr="hablamos" sppr="habláis" tppr="hablan" fspt="hablé" sspt="hablaste" tspt="habló" fppt="hablamos" sppt="hablastéis" tppt="hablaron" fsii="hablaba" ssii="hablabas" tsii="hablaba" fpii="hablábamos" spii="hablabais" tpii="hablaban" fspb="hable" sspb="hables" tspb="hable" fppb="hablemos" sppb="habléis" tppb="hablen" />
   <verb in="llover" pe="mover" tr="m" st="ll" fs="df" ss="df" fp="df" sp="df" tp="df" />
   <verb in="mover" pe="comer" tr="com" st="mov" fspr="muevo" sspr="mueves" tspr="mueve" tppr="mueven" fspb="mueva" sspb="muevas" tspb="mueva" tppb="muevan" />
