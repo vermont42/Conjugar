@@ -31,21 +31,21 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
     let gerundioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .gerundio, personNumber: .none)
     switch gerundioResult {
     case let .success(value):
-      gerundio.text = Tense.gerundio.shortDisplayName() + ": " + value
+      gerundio.attributedText = NSAttributedString(string: Tense.gerundio.shortDisplayName() + ": ") + value.attributedString
     default:
       fatalError()
     }
     let participioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .participio, personNumber: .none)
     switch participioResult {
     case let .success(value):
-      participio.text = Tense.participio.shortDisplayName() + ": " + value
+      participio.attributedText = NSAttributedString(string: Tense.participio.shortDisplayName() + ": ") + value.attributedString
     default:
       fatalError()
     }
     let talloFuturoResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .talloFuturo, personNumber: .none)
     switch talloFuturoResult {
     case let .success(value):
-      talloFuturo.text = Tense.talloFuturo.shortDisplayName() + ": " + value + "-"
+      talloFuturo.attributedText = NSAttributedString(string: Tense.talloFuturo.shortDisplayName() + ": ") + value.attributedString + NSAttributedString(string: "-")
     default:
       fatalError()
     }

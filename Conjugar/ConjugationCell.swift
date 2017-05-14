@@ -13,16 +13,18 @@ class ConjugationCell: UITableViewCell {
   @IBOutlet var conjugation: UILabel!
   
   func configure(tense: Tense, personNumber: PersonNumber, conjugation: String) {
+    var conjugation = conjugation
     if conjugation == Conjugator.defective {
       self.conjugation.text = ""
     }
     else {
       if tense == .imperativo || tense == .imperativoNegativo {
-        self.conjugation.text = "¡" + conjugation + "!"
+        conjugation = "¡" + conjugation + "!"
       }
       else {
-        self.conjugation.text = personNumber.pronoun + " " + conjugation
+        conjugation = personNumber.pronoun + " " + conjugation
       }
+      self.conjugation.attributedText = conjugation.attributedString
     }
   }
 }
