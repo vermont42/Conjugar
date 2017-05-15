@@ -42,6 +42,7 @@
     <!ATTLIST verb tp CDATA #IMPLIED>
 ]>
 <verbs>
+  <verb in="caber" pe="comer" tr="com" st="cab" tf="cabR" fspr="QUEPo" fspt="cUPE" sspt="cUPiste" tspt="cUPo" fppt="cUPimos" sppt="cUPisteis" tppt="cUPieron" fspb="QUEPa" sspb="QUEPas" tspb="QUEPa" fppb="QUEPa" sppb="QUEPáis" tppb="QUEPan" />
   <verb in="comer" ge="comiendo" po="comido" fspr="como" sspr="comes" tspr="come" fppr="comemos" sppr="coméis" tppr="comen" fspt="comí" sspt="comiste" tspt="comió" fppt="comimos" sppt="comisteis" tppt="comieron" fsii="comía" ssii="comías" tsii="comía" fpii="comíamos" spii="comíais" tpii="comían" fspb="coma" sspb="comas" tspb="coma" fppb="comamos" sppb="comáis" tppb="coman" />
   <verb in="estar" pe="hablar" tr="habl" st="est" fspr="estoY" sspr="estÁs" tspr="estÁ" tppr="estÁn" fspt="estUVE" sspt="estUViste" tspt="estUVO" fppt="estUVImos" sppt="estUVIsteis" tppt="estUVIEron" fspb="estÉ" sspb="estÉs" tspb="estÉ" tppb="estÉn" ssio="estÁ" />
   <verb in="haber" pe="comer" tr="com" st="hab" tf="habR" fspr="hE" sspr="haS" tspr="hA" fppr="hEmos" tppr="haN" fspt="hUBE" sspt="hUbiste" tspt="hUBO" fppt="hUbimos" sppt="hUbisteis" tppt="hUbieron" fspb="haYa" sspb="haYas" tspb="haYa" fppb="haYamos" sppb="haYáis" tppb="haYan" ssio="hE" />
@@ -49,6 +50,8 @@
   <verb in="ir" pe="subir" tr="sub" st="" ge="Yendo" fspr="VOY" sspr="VAS" tspr="VA" fppr="VAMOS" sppr="VAIS" tppr="VAN" fspt="FUI" sspt="FUiste" tspt="FUE" fppt="FUimos" sppt="FUisteis" tppt="FUeron" fsii="IBa" ssii="IBas" tsii="IBa" fpii="IBamos" spii="IBais" tpii="IBan" fspb="VAYa" sspb="VAYas" tspb="VAYa" fppb="VAYamos" sppb="VAYáis" tppb="VAYan" ssio="VE" />
   <verb in="llover" pe="mover" tr="m" st="ll" fs="df" ss="df" fp="df" sp="df" tp="df" />
   <verb in="mover" pe="comer" tr="com" st="mov" fspr="mUEvo" sspr="mUEves" tspr="mUEve" tppr="mUEven" fspb="mUEva" sspb="mUEvas" tspb="mUEva" tppb="mUEvan" />
+  <verb in="poder" pe="comer" tr="com" st="pod" tf="podR" ge="pUdiendo" fspr="pUEdo" sspr="pUEdes" tspr="pUEde" tppr="pUEden" fspt="pUDE" sspt="pUdiste" tspt="pUDO" fppt="pUdimos" sppt="pUdisteis" tppt="pUdieron" fspb="pUEda" sspb="pUEdas" tspb="pUEda" tppb="pUEdan" />
+  <verb in="saber" pe="comer" tr="com" st="sab" tf="sabR" fspr="sÉ" fspt="sUPE" sspt="sUPiste" tspt="sUPO" fppt="sUPimos" sppt="sUPisteis" tppt="sUPieron" fspb="sEPa" sspb="sEPas" tspb="sEPa" fppb="sEPamos" sppb="sEPáis" tppb="sEPan" />
   <verb in="ser" pe="comer" tr="com" st="s" fspr="soY" sspr="ERes" tspr="ES" fppr="sOmos" sppr="sOis" tppr="sOn" fspt="FUI" sspt="FUiste" tspt="FUE" fppt="FUimos" sppt="FUisteis" tppt="FUeron" fsii="ERa" ssii="ERas" tsii="ERa" fpii="ÉRamos" spii="ERais" tpii="ERan" fspb="sEa" sspb="sEas" tspb="sEa" fppb="sEamos" sppb="sEáis" tppb="sEan" ssio="sÉ" />
   <verb in="subir" ge="subiendo" po="subido" fspr="subo" sspr="subes" tspr="sube" fppr="subimos" sppr="subís" tppr="suben" fspt="subí" sspt="subiste" tspt="subió" fppt="subimos" sppt="subisteis" tppt="subieron" fsii="subía" ssii="subías" tsii="subía" fpii="subíamos" spii="subíais" tpii="subían" fspb="suba" sspb="subas" tspb="suba" fppb="subamos" sppb="subáis" tppb="suban" />
   <verb in="ver" pe="comer" tr="com" st="v" po="vISTo" fspr="vEo" sppr="vEis" fspt="vI" tspt="viO" fsii="vEía" ssii="vEías" tsii="vEía" fpii="vEíamos" spii="vEíais" tpii="vEían" fspb="vEa" sspb="vEas" tspb="vEa" fppb="vEamos" sppb="vEáis" tppb="vEan" />
