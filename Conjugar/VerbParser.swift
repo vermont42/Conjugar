@@ -17,7 +17,6 @@ class VerbParser: NSObject, XMLParserDelegate {
   private var currentConjugations: [String: String] = [:]
   static let parseError = "An error occurred during XML parsing."
   
-  
   override init() {
     // TODO: Spit out list of verbs using VerbLoader to build XML file.
     super.init()
@@ -49,8 +48,8 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let po = attributeDict[Tense.participio.rawValue] {
         currentConjugations[Tense.participio.rawValue] = po
       }
-      if let tf = attributeDict[Tense.talloFuturo.rawValue] {
-        currentConjugations[Tense.talloFuturo.rawValue] = tf
+      if let rf = attributeDict[Tense.raizFutura.rawValue] {
+        currentConjugations[Tense.raizFutura.rawValue] = rf
       }
       if let pe = attributeDict[Conjugator.parent] {
         currentConjugations[Conjugator.parent] = pe

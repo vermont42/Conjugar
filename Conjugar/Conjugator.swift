@@ -89,10 +89,10 @@ class Conjugator {
     if !["ar", "er", "ir"].contains(ending) {
       return .failure(.invalidEnding(ending))
     }
-    if (tense == .gerundio || tense == .participio || tense == .talloFuturo) && personNumber != .none {
+    if (tense == .gerundio || tense == .participio || tense == .raizFutura) && personNumber != .none {
       return .failure(.noSuchConjugation(personNumber))
     }
-    if (tense != .gerundio && tense != .participio && tense != .talloFuturo) && personNumber == .none {
+    if (tense != .gerundio && tense != .participio && tense != .raizFutura) && personNumber == .none {
       return .failure(.personNumberAbsent(tense))
     }
     
@@ -129,13 +129,13 @@ class Conjugator {
       return .success(Conjugator.defective)
     }
     let conjugationKey: String
-    if tense == .gerundio || tense == .participio || tense == .talloFuturo {
+    if tense == .gerundio || tense == .participio || tense == .raizFutura {
       conjugationKey = tense.rawValue
     }
     else {
       conjugationKey = modifiedPersonNumber.rawValue + tense.rawValue
     }
-    if tense == .talloFuturo && verb[conjugationKey] == nil {
+    if tense == .raizFutura && verb[conjugationKey] == nil {
       return .success(infinitive)
     }
     if let conjugation = verb[conjugationKey] {
@@ -145,9 +145,9 @@ class Conjugator {
       let parentConjugation = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: tense, personNumber: personNumber, region: region).value!
       let trim: String
       let stem: String
-      if (tense == .futuroDeIndicativo || tense == .condicional) && verb[Tense.talloFuturo.rawValue] != nil {
+      if (tense == .futuroDeIndicativo || tense == .condicional) && verb[Tense.raizFutura.rawValue] != nil {
         trim = verb[Conjugator.parent]!
-        stem = verb[Tense.talloFuturo.rawValue]!
+        stem = verb[Tense.raizFutura.rawValue]!
       }
       else {
         trim = verb[Conjugator.trim]!
@@ -165,7 +165,7 @@ class Conjugator {
       return .success(conjugation)
     }
     else if [Tense.futuroDeIndicativo, Tense.condicional].contains(tense) {
-      let stem = verb[Tense.talloFuturo.rawValue] ?? infinitive
+      let stem = verb[Tense.raizFutura.rawValue] ?? infinitive
       return .success(stem + endingFor(tense: tense, personNumber: personNumber))
     }
     else if [Tense.imperfectoDeSubjuntivo1, Tense.imperfectoDeSubjuntivo2, Tense.futuroDeSubjuntivo].contains(tense) {

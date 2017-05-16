@@ -13,7 +13,7 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
   @IBOutlet var infinitivo: UILabel!
   @IBOutlet var parentOrType: UILabel!
   @IBOutlet var participio: UILabel!
-  @IBOutlet var talloFuturo: UILabel!
+  @IBOutlet var raizFutura: UILabel!
   @IBOutlet var gerundio: UILabel!
   @IBOutlet var defectivo: UILabel!
   @IBOutlet var table: UITableView!
@@ -42,10 +42,10 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
     default:
       fatalError()
     }
-    let talloFuturoResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .talloFuturo, personNumber: .none)
-    switch talloFuturoResult {
+    let raizFuturaResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .raizFutura, personNumber: .none)
+    switch raizFuturaResult {
     case let .success(value):
-      talloFuturo.attributedText = NSAttributedString(string: Tense.talloFuturo.shortDisplayName() + ": ") + value.attributedString + NSAttributedString(string: "-")
+      raizFutura.attributedText = NSAttributedString(string: Tense.raizFutura.shortDisplayName() + ": ") + value.attributedString + NSAttributedString(string: "-")
     default:
       fatalError()
     }

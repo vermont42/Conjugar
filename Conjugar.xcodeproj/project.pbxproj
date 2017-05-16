@@ -18,6 +18,10 @@
 		E14566BC1EC001ED00C16DC3 /* TenseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14566BB1EC001ED00C16DC3 /* TenseCell.swift */; };
 		E14566BE1EC001FD00C16DC3 /* ConjugationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14566BD1EC001FD00C16DC3 /* ConjugationCell.swift */; };
 		E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A18521E9199C3008455DD /* ConjugatorError.swift */; };
+		E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F371ECA7C9A00633200 /* Utterer.swift */; };
+		E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F391ECA7DA700633200 /* SoundManager.swift */; };
+		E18F7F3C1ECA7DF000633200 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F3B1ECA7DF000633200 /* Sound.swift */; };
+		E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E18F7F3D1ECA7E3700633200 /* silence.mp3 */; };
 		E191C9B81EBEB27500F715E7 /* VerbType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E191C9B71EBEB27500F715E7 /* VerbType.swift */; };
 		E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */; };
 		E1F06ADA1E8F05F300ADD2E1 /* BrowseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD91E8F05F300ADD2E1 /* BrowseViewController.swift */; };
@@ -56,6 +60,10 @@
 		E14566BB1EC001ED00C16DC3 /* TenseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TenseCell.swift; sourceTree = "<group>"; };
 		E14566BD1EC001FD00C16DC3 /* ConjugationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugationCell.swift; sourceTree = "<group>"; };
 		E15A18521E9199C3008455DD /* ConjugatorError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugatorError.swift; sourceTree = "<group>"; };
+		E18F7F371ECA7C9A00633200 /* Utterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utterer.swift; sourceTree = "<group>"; };
+		E18F7F391ECA7DA700633200 /* SoundManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+		E18F7F3B1ECA7DF000633200 /* Sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
+		E18F7F3D1ECA7E3700633200 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silence.mp3; sourceTree = "<group>"; };
 		E191C9B71EBEB27500F715E7 /* VerbType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbType.swift; sourceTree = "<group>"; };
 		E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Conjugar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -107,8 +115,8 @@
 		E107B08D1EB66E26004C5E91 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				E1151E561E9C610100DE44D6 /* VerbViewController.swift */,
 				E1F06AD91E8F05F300ADD2E1 /* BrowseViewController.swift */,
+				E1151E561E9C610100DE44D6 /* VerbViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -118,7 +126,10 @@
 			children = (
 				E139E0DF1EC7D27A00B34DE7 /* AttributedStringExtension.swift */,
 				E139E0E51EC7D36200B34DE7 /* Colors.swift */,
+				E18F7F3B1ECA7DF000633200 /* Sound.swift */,
+				E18F7F391ECA7DA700633200 /* SoundManager.swift */,
 				E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */,
+				E18F7F371ECA7C9A00633200 /* Utterer.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -138,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				E1F06ADE1E8F05F300ADD2E1 /* Assets.xcassets */,
+				E18F7F3D1ECA7E3700633200 /* silence.mp3 */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -294,6 +306,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */,
 				E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */,
 				E1F06ADF1E8F05F300ADD2E1 /* Assets.xcassets in Resources */,
 				E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */,
@@ -315,6 +328,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E18F7F3C1ECA7DF000633200 /* Sound.swift in Sources */,
 				E1151E551E9C5D9C00DE44D6 /* VerbCell.swift in Sources */,
 				E139E0E61EC7D36200B34DE7 /* Colors.swift in Sources */,
 				E1151E531E9AEDF100DE44D6 /* AuxiliaryError.swift in Sources */,
@@ -324,8 +338,10 @@
 				E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */,
 				E1F06ADA1E8F05F300ADD2E1 /* BrowseViewController.swift in Sources */,
 				E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */,
+				E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */,
 				E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */,
 				E1F06B081E91794800ADD2E1 /* VerbLoader.swift in Sources */,
+				E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */,
 				E139E0E01EC7D27A00B34DE7 /* AttributedStringExtension.swift in Sources */,
 				E191C9B81EBEB27500F715E7 /* VerbType.swift in Sources */,
 				E14566BC1EC001ED00C16DC3 /* TenseCell.swift in Sources */,

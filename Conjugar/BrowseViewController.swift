@@ -14,6 +14,7 @@ import UIKit
 // Definitely handle oír.
 // https://www.thoughtco.com/defective-verbs-spanish-3079156
 // In the section Prefixes Count, the following webpage has examples of prefixed irregulars conjugated like their parents. http://www.spanishdict.com/guide/spanish-irregular-present-tense Test.
+// More: http://studyspanish.com/grammar/lessons/future
 
 class BrowseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
   private var verbs: [String] = []

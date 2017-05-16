@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Zxq-Oh-uJF">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Zxq-Oh-uJF">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -110,8 +110,8 @@
                                 <color key="textColor" red="0.98039215686274506" green="0.78823529411764703" blue="0.086274509803921567" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fut.: llover-" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n2Q-S4-ZpD">
-                                <rect key="frame" x="16" y="175" width="93" height="25"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Raíz Fut.: llover-" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n2Q-S4-ZpD">
+                                <rect key="frame" x="16" y="175" width="132" height="25"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                 <color key="textColor" red="0.98039215686274506" green="0.78823529411764703" blue="0.086274509803921567" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -206,8 +206,8 @@
                         <outlet property="infinitivo" destination="DHL-Un-23j" id="10V-Ia-SGR"/>
                         <outlet property="parentOrType" destination="bua-b2-hjR" id="d6A-lp-mcB"/>
                         <outlet property="participio" destination="AAB-vu-2IV" id="f7g-UU-LJK"/>
+                        <outlet property="raizFutura" destination="n2Q-S4-ZpD" id="fhe-l0-w41"/>
                         <outlet property="table" destination="7xH-5p-N5S" id="4QW-R2-cZA"/>
-                        <outlet property="talloFuturo" destination="n2Q-S4-ZpD" id="QWY-ve-2N1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EQo-No-lNy" userLabel="First Responder" sceneMemberID="firstResponder"/>

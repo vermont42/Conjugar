@@ -14,7 +14,7 @@ enum Tense: String {
   case infinitivo = "in"
   case gerundio = "ge"
   case participio = "po"
-  case talloFuturo = "tf"
+  case raizFutura = "rf"
 
   case imperativo = "io"
   case imperativoNegativo = "ni"
@@ -45,8 +45,8 @@ enum Tense: String {
       return "Ger."
     case .participio:
       return "PP"
-    case .talloFuturo:
-      return "Fut."
+    case .raizFutura:
+      return "Raíz Fut."
     default:
       return ""
     }
@@ -60,8 +60,8 @@ enum Tense: String {
       return "Gerundio"
     case .participio:
       return "Participio"
-    case .talloFuturo:
-      return "Tallo Futuro"
+    case .raizFutura:
+      return "Raíz Futura"
     case .imperativo:
       return "Imperativo"
     case .imperativoNegativo:

@@ -12,6 +12,12 @@ import UIKit
 class ConjugationCell: UITableViewCell {
   @IBOutlet var conjugation: UILabel!
   
+  override func awakeFromNib() {
+    super.awakeFromNib()
+    _ = UITapGestureRecognizer(target: self, action: #selector(self.tap(_:)))
+    addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
+  }
+  
   func configure(tense: Tense, personNumber: PersonNumber, conjugation: String) {
     var conjugation = conjugation
     if conjugation == Conjugator.defective {
@@ -26,5 +32,9 @@ class ConjugationCell: UITableViewCell {
       }
       self.conjugation.attributedText = conjugation.attributedString
     }
+  }
+  
+  func tap(_ sender: UITapGestureRecognizer) {
+    Utterer.utter(conjugation.attributedText?.string ?? conjugation.text!)
   }
 }
