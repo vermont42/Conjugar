@@ -35,7 +35,6 @@
 		E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */; };
 		E1F06B041E8F0E9300ADD2E1 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B031E8F0E9300ADD2E1 /* Result.swift */; };
 		E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B051E8F0EA300ADD2E1 /* ResultProtocol.swift */; };
-		E1F06B081E91794800ADD2E1 /* VerbLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B071E91794800ADD2E1 /* VerbLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,7 +80,6 @@
 		E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PersonNumber.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E1F06B031E8F0E9300ADD2E1 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		E1F06B051E8F0EA300ADD2E1 /* ResultProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ResultProtocol.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		E1F06B071E91794800ADD2E1 /* VerbLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = VerbLoader.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,7 +202,6 @@
 				E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */,
 				E1F06AFA1E8F087000ADD2E1 /* Region.swift */,
 				E1F06AFC1E8F08D500ADD2E1 /* Tense.swift */,
-				E1F06B071E91794800ADD2E1 /* VerbLoader.swift */,
 				E107B0911EB66F28004C5E91 /* VerbParser.swift */,
 				E107B08A1EB66CE6004C5E91 /* verbs.xml */,
 				E191C9B71EBEB27500F715E7 /* VerbType.swift */,
@@ -340,7 +337,6 @@
 				E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */,
 				E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */,
 				E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */,
-				E1F06B081E91794800ADD2E1 /* VerbLoader.swift in Sources */,
 				E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */,
 				E139E0E01EC7D27A00B34DE7 /* AttributedStringExtension.swift in Sources */,
 				E191C9B81EBEB27500F715E7 /* VerbType.swift in Sources */,

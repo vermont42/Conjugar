@@ -89,10 +89,10 @@ class Conjugator {
     if !["ar", "er", "ir"].contains(ending) {
       return .failure(.invalidEnding(ending))
     }
-    if (tense == .gerundio || tense == .participio || tense == .raizFutura) && personNumber != .none {
+    if (tense == .gerundio || tense == .participio || tense == .raizFutura || tense == .translation) && personNumber != .none {
       return .failure(.noSuchConjugation(personNumber))
     }
-    if (tense != .gerundio && tense != .participio && tense != .raizFutura) && personNumber == .none {
+    if (tense != .gerundio && tense != .participio && tense != .raizFutura && tense != .translation) && personNumber == .none {
       return .failure(.personNumberAbsent(tense))
     }
     
@@ -129,7 +129,7 @@ class Conjugator {
       return .success(Conjugator.defective)
     }
     let conjugationKey: String
-    if tense == .gerundio || tense == .participio || tense == .raizFutura {
+    if tense == .gerundio || tense == .participio || tense == .raizFutura || tense == .translation {
       conjugationKey = tense.rawValue
     }
     else {

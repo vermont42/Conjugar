@@ -11,6 +11,7 @@ import UIKit
 
 class VerbViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
   @IBOutlet var infinitivo: UILabel!
+  @IBOutlet var translation: UILabel!
   @IBOutlet var parentOrType: UILabel!
   @IBOutlet var participio: UILabel!
   @IBOutlet var raizFutura: UILabel!
@@ -22,30 +23,41 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
   override func viewDidLoad() {
     table.delegate = self
     table.dataSource = self
+    infinitivo.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
+    participio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
+    raizFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
+    gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     guard verb != "" else { fatalError() }
     infinitivo.text = verb
+    let translationResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
+    switch translationResult {
+    case let .success(value):
+      translation.text = value
+    default:
+      fatalError()
+    }
     let gerundioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .gerundio, personNumber: .none)
     switch gerundioResult {
     case let .success(value):
-      gerundio.attributedText = NSAttributedString(string: Tense.gerundio.shortDisplayName() + ": ") + value.attributedString
+      gerundio.attributedText = value.attributedString
     default:
       fatalError()
     }
     let participioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .participio, personNumber: .none)
     switch participioResult {
     case let .success(value):
-      participio.attributedText = NSAttributedString(string: Tense.participio.shortDisplayName() + ": ") + value.attributedString
+      participio.attributedText = value.attributedString
     default:
       fatalError()
     }
     let raizFuturaResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .raizFutura, personNumber: .none)
     switch raizFuturaResult {
     case let .success(value):
-      raizFutura.attributedText = NSAttributedString(string: Tense.raizFutura.shortDisplayName() + ": ") + value.attributedString + NSAttributedString(string: "-")
+      raizFutura.attributedText = value.attributedString + NSAttributedString(string: "-")
     default:
       fatalError()
     }
@@ -204,6 +216,12 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
       }
       cell.configure(tense: tense, personNumber: personNumber, conjugation: conjugation)
       return cell
+    }
+  }
+  
+  func tap(_ sender: UITapGestureRecognizer) {
+    if let label = sender.view as? UILabel {
+      Utterer.utter(label.attributedText?.string ?? label.text!)
     }
   }
 }

@@ -54,6 +54,9 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let pe = attributeDict[Conjugator.parent] {
         currentConjugations[Conjugator.parent] = pe
       }
+      if let tn = attributeDict[Tense.translation.rawValue] {
+        currentConjugations[Tense.translation.rawValue] = tn
+      }
       if let tr = attributeDict[Conjugator.trim] {
         currentConjugations[Conjugator.trim] = tr
       }

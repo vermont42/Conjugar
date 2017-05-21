@@ -14,7 +14,6 @@ class ConjugationCell: UITableViewCell {
   
   override func awakeFromNib() {
     super.awakeFromNib()
-    _ = UITapGestureRecognizer(target: self, action: #selector(self.tap(_:)))
     addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
   }
   

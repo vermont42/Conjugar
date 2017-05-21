@@ -12,6 +12,7 @@ enum Tense: String {
   static let auxiliary = "haber"
   
   case infinitivo = "in"
+  case translation = "tn"
   case gerundio = "ge"
   case participio = "po"
   case raizFutura = "rf"
@@ -56,6 +57,8 @@ enum Tense: String {
     switch self {
     case .infinitivo:
       return "Infinitivo"
+    case .translation:
+      return "Translation"
     case .gerundio:
       return "Gerundio"
     case .participio:
