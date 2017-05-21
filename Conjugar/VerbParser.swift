@@ -42,6 +42,12 @@ class VerbParser: NSObject, XMLParserDelegate {
       else {
         fatalError("No infinitive specified.")
       }
+      if let vt = attributeDict[VerbType.key] {
+        currentConjugations[VerbType.key] = vt
+      }
+      else {
+        fatalError("No verb type specified.")
+      }
       if let ge = attributeDict[Tense.gerundio.rawValue] {
         currentConjugations[Tense.gerundio.rawValue] = ge
       }

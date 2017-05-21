@@ -8,9 +8,10 @@
 
 import Foundation
 
-enum VerbType {
-  case irregular
-  case regularAr
-  case regularEr
-  case regularIr
+enum VerbType: String {
+  case irregular = "ir"
+  case regularAr = "ra"
+  case regularEr = "re"
+  case regularIr = "ri"
+  static let key = "vt"
 }

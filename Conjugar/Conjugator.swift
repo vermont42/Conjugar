@@ -14,6 +14,7 @@ class Conjugator {
   static let trim = "tr"
   static let stem = "st"
   static let sharedInstance = Conjugator()
+  static let baseVerbs = ["hablar", "comer", "subir"]
   
   var verbs: [String: [String: String]] = [:]
   
@@ -36,30 +37,19 @@ class Conjugator {
   }
   
   func verbType(infinitive: String) -> VerbType {
-    let index = infinitive.index(infinitive.endIndex, offsetBy: -2)
-    let ending = infinitive.substring(from: index)
-    if let verb = verbs[infinitive] {
-      if verb[Conjugator.parent] == nil {
-        return typeForEnding(ending)
-      }
-      else {
-        return .irregular
-      }
-    }
-    else {
-      return typeForEnding(ending)
-    }
-  }
-  
-  private func typeForEnding(_ ending: String) -> VerbType {
-    if ending == "ar" {
+    guard let verb = verbs[infinitive] else { fatalError("Requested type of unsupported verb.") }
+    guard let verbType = verb[VerbType.key] else { fatalError("Verb type not specified.") }
+    switch verbType {
+    case VerbType.irregular.rawValue:
+      return .irregular
+    case VerbType.regularAr.rawValue:
       return .regularAr
-    }
-    else if ending == "er" {
+    case VerbType.regularEr.rawValue:
       return .regularEr
-    }
-    else {
+    case VerbType.regularIr.rawValue:
       return .regularIr
+    default:
+      fatalError("Unknown verb type detected.")
     }
   }
   

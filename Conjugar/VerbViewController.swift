@@ -78,7 +78,12 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
       parentOrType.text = "Regular IR"
     case .irregular:
       guard let parent = Conjugator.sharedInstance.parent(infinitive: verb) else { fatalError() }
-      parentOrType.text = "☛ \(parent)"
+      if Conjugator.baseVerbs.contains(parent) {
+        parentOrType.text = "Irregular"
+      }
+      else {
+        parentOrType.text = "Irreg. ☛ \(parent)"
+      }
     }
   }
   
