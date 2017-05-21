@@ -27,6 +27,7 @@ class BrowseViewController: UIViewController, UITableViewDelegate, UITableViewDa
     table.delegate = self
     table.dataSource = self
     table.reloadData()
+    Utterer.utter("")
   }
   
   func numberOfSections(in tableView: UITableView) -> Int {
