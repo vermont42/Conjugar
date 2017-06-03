@@ -29,6 +29,13 @@ class BrowseViewController: UIViewController, UITableViewDelegate, UITableViewDa
     table.delegate = self
     table.dataSource = self
     table.reloadData()
+    let result = Conjugator.sharedInstance.conjugate(infinitive: "rehacer", tense: .futuroDeIndicativo, personNumber: .firstSingular)
+    switch result {
+    case let .success(value):
+      print(value)
+    default:
+      fatalError()
+    }
   }
   
   func numberOfSections(in tableView: UITableView) -> Int {

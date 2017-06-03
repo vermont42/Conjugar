@@ -126,7 +126,18 @@ class Conjugator {
       conjugationKey = modifiedPersonNumber.rawValue + tense.rawValue
     }
     if tense == .raizFutura && verb[conjugationKey] == nil {
-      return .success(infinitive)
+      let parentStem = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: .raizFutura, personNumber: .none, region: region).value!
+      let trim = verb[Conjugator.trim]!
+      let stem = verb[Conjugator.stem]!
+      var raizFutura: String
+      if trim == "" {
+        raizFutura = stem + parentStem
+      }
+      else {
+        raizFutura = parentStem.replaceFirstOccurence(of: trim, with: stem)
+      }
+      verb[conjugationKey] = raizFutura
+      return .success(raizFutura)
     }
     if let conjugation = verb[conjugationKey] {
       return .success(conjugation)
@@ -155,8 +166,19 @@ class Conjugator {
       return .success(conjugation)
     }
     else if [Tense.futuroDeIndicativo, Tense.condicional].contains(tense) {
-      let stem = verb[Tense.raizFutura.rawValue] ?? infinitive
-      return .success(stem + endingFor(tense: tense, personNumber: personNumber))
+      let parentStem = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: .raizFutura, personNumber: .none, region: region).value!
+      let trim = verb[Conjugator.trim]!
+      let stem = verb[Conjugator.stem]!
+      var conjugation: String
+      if trim == "" {
+        conjugation = stem + parentStem
+      }
+      else {
+        conjugation = parentStem.replaceFirstOccurence(of: trim, with: stem)
+      }
+      conjugation += endingFor(tense: tense, personNumber: personNumber)
+      verb[conjugationKey] = conjugation
+      return .success(conjugation)
     }
     else if [Tense.imperfectoDeSubjuntivo1, Tense.imperfectoDeSubjuntivo2, Tense.futuroDeSubjuntivo].contains(tense) {
       let stemWithRon: String
