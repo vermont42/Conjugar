@@ -23,8 +23,28 @@ class Conjugator {
     verbs = VerbParser().parse()
   }
   
-  func verbArray() -> [String] {
+  func allVerbsArray() -> [String] {
     return Array(verbs.keys).sorted()
+  }
+  
+  func regularVerbsArray() -> [String] {
+    var regularVerbs: [String: [String: String]] = [:]
+    for (key, value) in verbs {
+      if value[VerbType.key] != VerbType.irregular.rawValue {
+        regularVerbs[key] = value
+      }
+    }
+    return Array(regularVerbs.keys).sorted()
+  }
+
+  func irregularVerbsArray() -> [String] {
+    var irregularVerbs: [String: [String: String]] = [:]
+    for (key, value) in verbs {
+      if value[VerbType.key] == VerbType.irregular.rawValue {
+        irregularVerbs[key] = value
+      }
+    }
+    return Array(irregularVerbs.keys).sorted()
   }
   
   func parent(infinitive: String) -> String? {
@@ -67,7 +87,7 @@ class Conjugator {
     }
   }
   
-  func conjugate(infinitive: String, tense: Tense, personNumber: PersonNumber, region: Region = .spain) -> Result<String, ConjugatorError> {
+  func conjugate(infinitive: String, tense: Tense, personNumber: PersonNumber) -> Result<String, ConjugatorError> {
     if infinitive.characters.count < 2 {
       return .failure(.tooShort)
     }
@@ -106,16 +126,12 @@ class Conjugator {
       }
       verbs[infinitive] = verb
     }
-    return conjugateRecursively(infinitive: infinitive, tense: tense, personNumber: personNumber, region: region)
+    return conjugateRecursively(infinitive: infinitive, tense: tense, personNumber: personNumber)
   }
   
-  private func conjugateRecursively(infinitive: String, tense: Tense, personNumber: PersonNumber, region: Region = .spain) -> Result<String, ConjugatorError> {
+  private func conjugateRecursively(infinitive: String, tense: Tense, personNumber: PersonNumber) -> Result<String, ConjugatorError> {
     var verb = verbs[infinitive]!
-    var modifiedPersonNumber = personNumber
-    if personNumber == .secondPlural && region == .latinAmerica {
-      modifiedPersonNumber = .thirdPlural
-    }
-    if let defective = verb[modifiedPersonNumber.rawValue], defective == Conjugator.defective {
+    if let defective = verb[personNumber.rawValue], defective == Conjugator.defective {
       return .success(Conjugator.defective)
     }
     let conjugationKey: String
@@ -123,10 +139,10 @@ class Conjugator {
       conjugationKey = tense.rawValue
     }
     else {
-      conjugationKey = modifiedPersonNumber.rawValue + tense.rawValue
+      conjugationKey = personNumber.rawValue + tense.rawValue
     }
     if tense == .raizFutura && verb[conjugationKey] == nil {
-      let parentStem = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: .raizFutura, personNumber: .none, region: region).value!
+      let parentStem = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: .raizFutura, personNumber: .none).value!
       let trim = verb[Conjugator.trim]!
       let stem = verb[Conjugator.stem]!
       var raizFutura: String
@@ -143,7 +159,7 @@ class Conjugator {
       return .success(conjugation)
     }
     else if [.presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .presenteDeSubjuntivo, .gerundio, .participio].contains(tense) {
-      let parentConjugation = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: tense, personNumber: personNumber, region: region).value!
+      let parentConjugation = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: tense, personNumber: personNumber).value!
       let trim: String
       let stem: String
       if (tense == .futuroDeIndicativo || tense == .condicional) && verb[Tense.raizFutura.rawValue] != nil {
@@ -166,7 +182,7 @@ class Conjugator {
       return .success(conjugation)
     }
     else if [Tense.futuroDeIndicativo, Tense.condicional].contains(tense) {
-      let parentStem = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: .raizFutura, personNumber: .none, region: region).value!
+      let parentStem = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: .raizFutura, personNumber: .none).value!
       let trim = verb[Conjugator.trim]!
       let stem = verb[Conjugator.stem]!
       var conjugation: String
@@ -183,7 +199,7 @@ class Conjugator {
     else if [Tense.imperfectoDeSubjuntivo1, Tense.imperfectoDeSubjuntivo2, Tense.futuroDeSubjuntivo].contains(tense) {
       let stemWithRon: String
       if let defective = verb[PersonNumber.thirdPlural.rawValue], defective == Conjugator.defective {
-        let parentStem = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: Tense.preterito, personNumber: PersonNumber.thirdPlural, region: region).value!
+        let parentStem = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: Tense.preterito, personNumber: PersonNumber.thirdPlural).value!
         let trim = verb[Conjugator.trim]!
         let stem = verb[Conjugator.stem]!
         if trim == "" {
@@ -194,7 +210,7 @@ class Conjugator {
         }
       }
       else {
-        stemWithRon = conjugateRecursively(infinitive: infinitive, tense: Tense.preterito, personNumber: PersonNumber.thirdPlural, region: region).value!
+        stemWithRon = conjugateRecursively(infinitive: infinitive, tense: Tense.preterito, personNumber: PersonNumber.thirdPlural).value!
       }
       let endIndex = stemWithRon.index(stemWithRon.endIndex, offsetBy: -3)
       let stemRange = stemWithRon.startIndex ..< endIndex
@@ -223,8 +239,8 @@ class Conjugator {
       case let .failure(.noHaberForm(form)):
         return .failure(.tenseNotImplemented(form))
       }
-      let auxiliary = conjugateRecursively(infinitive: Tense.auxiliary, tense: haberTense, personNumber: personNumber, region: region).value!
-      let participle = conjugateRecursively(infinitive: infinitive, tense: .participio, personNumber: .none, region: region).value!
+      let auxiliary = conjugateRecursively(infinitive: Tense.auxiliary, tense: haberTense, personNumber: personNumber).value!
+      let participle = conjugateRecursively(infinitive: infinitive, tense: .participio, personNumber: .none).value!
       return .success(auxiliary + " " + participle)
     }
     else if tense == .imperativo {
@@ -232,7 +248,7 @@ class Conjugator {
         return .failure(.noFirstPersonSingularImperative)
       }
       if [.thirdSingular, .firstPlural, .thirdPlural].contains(personNumber) {
-        return .success(conjugateRecursively(infinitive: infinitive, tense: .presenteDeSubjuntivo, personNumber: personNumber, region: region).value!)
+        return .success(conjugateRecursively(infinitive: infinitive, tense: .presenteDeSubjuntivo, personNumber: personNumber).value!)
       }
       else {
         if personNumber == .secondSingular {
@@ -240,7 +256,7 @@ class Conjugator {
             return .success(conjugation)
           }
           else {
-            let stemWithS = conjugateRecursively(infinitive: infinitive, tense: .presenteDeIndicativo, personNumber: .secondSingular, region: region).value!
+            let stemWithS = conjugateRecursively(infinitive: infinitive, tense: .presenteDeIndicativo, personNumber: .secondSingular).value!
             return .success(stemWithS.substring(to: stemWithS.index(stemWithS.endIndex, offsetBy: -1)))
           }
         }
@@ -253,7 +269,7 @@ class Conjugator {
       if personNumber == .firstSingular {
         return .failure(.noFirstPersonSingularImperative)
       }
-      return .success("no " + conjugateRecursively(infinitive: infinitive, tense: .presenteDeSubjuntivo, personNumber: personNumber, region: region).value!)
+      return .success("no " + conjugateRecursively(infinitive: infinitive, tense: .presenteDeSubjuntivo, personNumber: personNumber).value!)
     }
     else {
       return .failure(.tenseNotImplemented(tense))

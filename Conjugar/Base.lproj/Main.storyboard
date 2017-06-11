@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Browse View Controller-->
+        <!--Conjugar-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="BrowseViewController" customModule="Conjugar" customModuleProvider="target" sceneMemberID="viewController">
@@ -21,19 +21,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="rTm-be-p8B">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="35" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="rTm-be-p8B">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="512"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="VerbCell" id="xyB-aw-FII" customClass="VerbCell" customModule="Conjugar" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="320" height="35"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xyB-aw-FII" id="Ccs-ID-Zpz">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="35"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="conjugar" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iH6-pY-OXS">
-                                                    <rect key="frame" x="8" y="11" width="304" height="21"/>
+                                                    <rect key="frame" x="123" y="5" width="74" height="25"/>
                                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                                     <color key="textColor" red="0.98039215690000003" green="0.78823529410000004" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -42,10 +42,8 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstItem="iH6-pY-OXS" firstAttribute="leading" secondItem="Ccs-ID-Zpz" secondAttribute="leading" constant="8" id="3Xe-Sb-W3O"/>
-                                                <constraint firstItem="iH6-pY-OXS" firstAttribute="top" secondItem="Ccs-ID-Zpz" secondAttribute="top" constant="11" id="M7k-qC-uas"/>
-                                                <constraint firstAttribute="trailing" secondItem="iH6-pY-OXS" secondAttribute="trailing" constant="8" id="TAq-cu-6PR"/>
-                                                <constraint firstAttribute="bottom" secondItem="iH6-pY-OXS" secondAttribute="bottom" constant="11" id="dz5-I6-6cj"/>
+                                                <constraint firstItem="iH6-pY-OXS" firstAttribute="centerY" secondItem="Ccs-ID-Zpz" secondAttribute="centerY" id="JQL-To-529"/>
+                                                <constraint firstItem="iH6-pY-OXS" firstAttribute="centerX" secondItem="Ccs-ID-Zpz" secondAttribute="centerX" id="z8j-RE-jaN"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -55,24 +53,40 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="wi3-7M-ANU">
+                                <rect key="frame" x="16" y="520" width="288" height="29"/>
+                                <segments>
+                                    <segment title="Irregular"/>
+                                    <segment title="Regular"/>
+                                    <segment title="Ambos"/>
+                                </segments>
+                                <color key="tintColor" red="0.98039215690000003" green="0.78823529410000004" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="filter" destination="BYZ-38-t0r" eventType="valueChanged" id="fLC-5b-S8c"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="wi3-7M-ANU" firstAttribute="top" secondItem="rTm-be-p8B" secondAttribute="bottom" constant="8" id="2MK-AZ-8j2"/>
+                            <constraint firstAttribute="trailing" secondItem="wi3-7M-ANU" secondAttribute="trailing" constant="16" id="Jzm-8r-2cQ"/>
                             <constraint firstItem="rTm-be-p8B" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="LjX-FR-d3e"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="rTm-be-p8B" secondAttribute="bottom" id="MPh-04-Fyb"/>
                             <constraint firstItem="rTm-be-p8B" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Ns0-HX-x0p"/>
                             <constraint firstAttribute="trailing" secondItem="rTm-be-p8B" secondAttribute="trailing" id="YYN-i6-OXy"/>
+                            <constraint firstItem="wi3-7M-ANU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="ZWc-Ro-0hB"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="wi3-7M-ANU" secondAttribute="bottom" constant="20" id="hgf-HL-Kei"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="bpD-pK-bk6"/>
+                    <navigationItem key="navigationItem" title="Conjugar" id="bpD-pK-bk6"/>
                     <connections>
+                        <outlet property="filterControl" destination="wi3-7M-ANU" id="Gu7-iH-7nD"/>
                         <outlet property="table" destination="rTm-be-p8B" id="8NU-rw-9R6"/>
                         <segue destination="RMX-DF-iak" kind="show" identifier="show verb" id="5yz-B6-ffh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1056.8" y="123.68815592203899"/>
+            <point key="canvasLocation" x="1055.625" y="123.59154929577466"/>
         </scene>
         <!--Verb View Controller-->
         <scene sceneID="yKx-ok-aEj">
@@ -140,20 +154,20 @@
                                 <color key="textColor" red="0.98039215686274506" green="0.78823529411764703" blue="0.086274509803921567" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7xH-5p-N5S">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="35" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7xH-5p-N5S">
                                 <rect key="frame" x="0.0" y="208" width="320" height="360"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TenseCell" id="W9M-Rs-R8G" customClass="TenseCell" customModule="Conjugar" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="320" height="35"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="W9M-Rs-R8G" id="07v-PE-x4w">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="35"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Presente de Indicativo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YAN-Ri-mBX">
-                                                    <rect key="frame" x="63.5" y="9" width="194.5" height="25"/>
+                                                    <rect key="frame" x="63.5" y="5" width="194.5" height="25"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="18"/>
                                                     <color key="textColor" red="0.75686274509803919" green="0.0" blue="0.11372549019607843" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -170,14 +184,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ConjugationCell" id="W4Z-Ie-dyu" customClass="ConjugationCell" customModule="Conjugar" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="72" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="63" width="320" height="35"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="W4Z-Ie-dyu" id="s6e-cn-cc2">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="35"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="yo soy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CEU-mg-JEz">
-                                                    <rect key="frame" x="134" y="9" width="53" height="25"/>
+                                                    <rect key="frame" x="134" y="5" width="53" height="25"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                                     <color key="textColor" red="0.98039215686274506" green="0.78823529411764703" blue="0.086274509803921567" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -209,7 +223,6 @@
                             <constraint firstItem="lJW-17-UfF" firstAttribute="leading" secondItem="fvV-V0-Yeo" secondAttribute="leading" constant="16" id="2Zc-dN-HPr"/>
                             <constraint firstItem="AAB-vu-2IV" firstAttribute="top" secondItem="bua-b2-hjR" secondAttribute="bottom" constant="8" id="2hh-gb-Py2"/>
                             <constraint firstItem="01K-M5-IOt" firstAttribute="top" secondItem="bua-b2-hjR" secondAttribute="bottom" constant="8" id="5zE-AW-y5O"/>
-                            <constraint firstItem="eaU-y9-FQR" firstAttribute="top" secondItem="7xH-5p-N5S" secondAttribute="bottom" id="6ib-MF-VBz"/>
                             <constraint firstItem="n2Q-S4-ZpD" firstAttribute="leading" secondItem="lJW-17-UfF" secondAttribute="trailing" constant="4" id="7LN-lQ-7jP"/>
                             <constraint firstItem="DHL-Un-23j" firstAttribute="centerX" secondItem="fvV-V0-Yeo" secondAttribute="centerX" id="99B-ZC-b7m"/>
                             <constraint firstItem="agG-mT-dK4" firstAttribute="top" secondItem="bua-b2-hjR" secondAttribute="bottom" constant="8" id="BSQ-k5-FYp"/>
@@ -229,6 +242,7 @@
                             <constraint firstItem="JFD-ao-26H" firstAttribute="top" secondItem="01K-M5-IOt" secondAttribute="bottom" constant="8" id="dVE-p8-VEP"/>
                             <constraint firstAttribute="trailing" secondItem="bua-b2-hjR" secondAttribute="trailing" constant="16" id="daW-tr-kwg"/>
                             <constraint firstItem="DHL-Un-23j" firstAttribute="top" secondItem="dqh-EE-cdc" secondAttribute="bottom" constant="8" id="ga7-Xg-m3J"/>
+                            <constraint firstItem="eaU-y9-FQR" firstAttribute="top" secondItem="7xH-5p-N5S" secondAttribute="bottom" id="pBQ-RG-RQ9"/>
                             <constraint firstAttribute="trailing" secondItem="01K-M5-IOt" secondAttribute="trailing" constant="16" id="sdT-C5-sMm"/>
                             <constraint firstItem="lJW-17-UfF" firstAttribute="top" secondItem="X7m-kN-5Se" secondAttribute="bottom" constant="8" id="tfR-3O-awe"/>
                             <constraint firstAttribute="trailing" secondItem="JFD-ao-26H" secondAttribute="trailing" constant="16" id="zEx-lQ-1A0"/>
@@ -249,10 +263,10 @@
             </objects>
             <point key="canvasLocation" x="1899.375" y="123.59154929577466"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Conjugar-->
         <scene sceneID="lgP-cq-gjW">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Zxq-Oh-uJF" sceneMemberID="viewController">
+                <navigationController title="Conjugar" automaticallyAdjustsScrollViewInsets="NO" id="Zxq-Oh-uJF" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Zk5-4R-w9i">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>

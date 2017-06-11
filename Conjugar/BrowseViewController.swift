@@ -19,23 +19,37 @@ import UIKit
 // More: http://studyspanish.com/grammar/lessons/future
 
 class BrowseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-  private var verbs: [String] = []
+  private var allVerbs: [String] = []
+  private var regularVerbs: [String] = []
+  private var irregularVerbs: [String] = []
   private var selectedRow = 0
   @IBOutlet var table: UITableView!
+  @IBOutlet var filterControl: UISegmentedControl!
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    verbs = Conjugator.sharedInstance.verbArray()
-    table.delegate = self
-    table.dataSource = self
-    table.reloadData()
-    let result = Conjugator.sharedInstance.conjugate(infinitive: "rehacer", tense: .futuroDeIndicativo, personNumber: .firstSingular)
-    switch result {
-    case let .success(value):
-      print(value)
+  private var currentVerbs: [String] {
+    switch filterControl.selectedSegmentIndex {
+    case 0:
+      return irregularVerbs
+    case 1:
+      return regularVerbs
+    case 2:
+      return allVerbs
     default:
       fatalError()
     }
+  }
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    navigationController?.navigationBar.titleTextAttributes = [
+      NSForegroundColorAttributeName : UIColor.white,
+    ]
+    allVerbs = Conjugator.sharedInstance.allVerbsArray()
+    regularVerbs = Conjugator.sharedInstance.regularVerbsArray()
+    irregularVerbs = Conjugator.sharedInstance.irregularVerbsArray()
+    table.delegate = self
+    table.dataSource = self
+    table.reloadData()
   }
   
   func numberOfSections(in tableView: UITableView) -> Int {
@@ -43,12 +57,12 @@ class BrowseViewController: UIViewController, UITableViewDelegate, UITableViewDa
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return verbs.count
+    return currentVerbs.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = table.dequeueReusableCell(withIdentifier: "VerbCell") as! VerbCell
-    cell.configure(verb: verbs[indexPath.row])
+    cell.configure(verb: currentVerbs[indexPath.row])
     return cell
   }
   
@@ -61,8 +75,13 @@ class BrowseViewController: UIViewController, UITableViewDelegate, UITableViewDa
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "show verb" {
       let verbVC: VerbViewController = segue.destination as! VerbViewController
-      verbVC.verb = verbs[selectedRow]
+      verbVC.verb = currentVerbs[selectedRow]
     }
+  }
+  
+  @IBAction func filter() {
+    table.reloadData()
+    table.setContentOffset(CGPoint.zero, animated: false)
   }
 }
 
