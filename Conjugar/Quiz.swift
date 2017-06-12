@@ -21,5 +21,11 @@ struct Quiz {
   
   static let irregularRaizFuturaVerbs = ["haber", "saber", "caber", "poder", "querer", "poner", "tener", "venir", "salir", "valer", "decir", "hacer"]
   
-  static let irregularPresenteDeSubjuntivoVerbs = ["ser", "ir", "haber", "saber", "pensar", "perder", "sentir", "dormir", "pedir", "crecer", "conocer", "lucir", "conducir", "huir", "construir", "estar", "dar", "caber", "decir", "hacer", "caer", "oír", "traer", "poner", "salir", "tener", "valer", "venir", "ver", "jugar", "adquirir", "argüir", "discernir"]
+  static let irregularPresenteDeSubjuntivoVerbs = ["ser", "ir", "haber", "saber", "pensar", "perder", "sentir", "dormir", "pedir", "crecer", "conocer", "lucir", "conducir", "huir", "construir", "estar", "dar", "caber", "decir", "hacer", "caer", "oír", "traer", "poner", "salir", "tener", "valer", "venir", "ver", "jugar"]
+  
+  static let irregularTuImperativoVerbs = ["ser", "ir", "haber", "decir", "hacer", "ponder", "salir", "tenir", "venir", "componer", "obtener", "revenir"]
+  
+  static let irregularParticipios = ["abrir", "cubrir", "decir", "escribir", "hacer", "morir", "poner", "resolver", "romper", "ver", "volver", "pudrir"]
+  
+  static let irregularGerundios = ["pudiendo", "sentir", "medir", "dormir", "oír", "caer", "leer", "traer", "construir", "huir", "oír", "ir", "tañer", "bullir"]
 }

@@ -96,7 +96,7 @@ class Conjugator {
     }
     let index = infinitive.index(infinitive.endIndex, offsetBy: -2)
     let ending = infinitive.substring(from: index)
-    if !["ar", "er", "ir"].contains(ending) {
+    if !["ar", "er", "ir", "ír"].contains(ending) {
       return .failure(.invalidEnding(ending))
     }
     if (tense == .gerundio || tense == .participio || tense == .raizFutura || tense == .translation) && personNumber != .none {
