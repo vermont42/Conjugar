@@ -182,17 +182,19 @@ class Conjugator {
       return .success(conjugation)
     }
     else if [Tense.futuroDeIndicativo, Tense.condicional].contains(tense) {
-      let parentStem = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: .raizFutura, personNumber: .none).value!
-      let trim = verb[Conjugator.trim]!
-      let stem = verb[Conjugator.stem]!
-      var conjugation: String
-      if trim == "" {
-        conjugation = stem + parentStem
+      var futureStem = verb[Tense.raizFutura.rawValue]
+      if futureStem == nil {
+        let parentStem = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: .raizFutura, personNumber: .none).value!
+        let trim = verb[Conjugator.trim]!
+        let stem = verb[Conjugator.stem]!
+        if trim == "" {
+          futureStem = stem + parentStem
+        }
+        else {
+          futureStem = parentStem.replaceFirstOccurence(of: trim, with: stem)
+        }
       }
-      else {
-        conjugation = parentStem.replaceFirstOccurence(of: trim, with: stem)
-      }
-      conjugation += endingFor(tense: tense, personNumber: personNumber)
+      let conjugation = futureStem! + endingFor(tense: tense, personNumber: personNumber)
       verb[conjugationKey] = conjugation
       return .success(conjugation)
     }
