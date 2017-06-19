@@ -9,4 +9,6 @@ import Foundation
 
 enum Sound: String {
   case silence = "silence"
+  case successChime = "successChime"
+  case failBuzzer = "failBuzzer"
 }

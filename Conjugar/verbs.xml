@@ -49,6 +49,7 @@
   <verb in="acudir" vt="ri" tn="come, turn to" pe="subir" tr="sub" st="acud" />
   <verb in="absorber" vt="re" tn="absorb" pe="comer" tr="com" st="absorb" />
   <verb in="admitir" vt="ri" tn="admit, accept" pe="subir" tr="sub" st="admit" />
+  <verb in="adquirir" vt="ir" tn="acquire, purchase" pe="subir" tr="sub" st="adquir" fspr="adquiEro" sspr="adquiEres" tspr="adquiEre" tppr="adquiEren" fspb="adquiEra" sspb="adquiEras" tspb="adquiEra" tppb="adquiEran" />
   <verb in="aducir" vt="ir" tn="adduce" pe="conducir" tr="con" st="a" />
   <verb in="andar" vt="ir" tn="walk" pe="hablar" tr="habl" st="and" fspt="andUVE" sspt="andUViste" tspt="andUVO" fppt="andUVImos" sppt="andUVIsteis" tppt="andUVIEron" />
   <verb in="aprender" vt="re" tn="learn" pe="comer" tr="com" st="aprend" />
@@ -127,7 +128,7 @@
   <verb in="ir" vt="ir" tn="go" pe="subir" tr="sub" st="" ge="Yendo" fspr="VOY" sspr="VAS" tspr="VA" fppr="VAMOS" sppr="VAIS" tppr="VAN" fspt="FUI" sspt="FUiste" tspt="FUE" fppt="FUimos" sppt="FUisteis" tppt="FUeron" fsii="IBa" ssii="IBas" tsii="IBa" fpii="IBamos" spii="IBais" tpii="IBan" fspb="VAYa" sspb="VAYas" tspb="VAYa" fppb="VAYamos" sppb="VAYáis" tppb="VAYan" ssio="VE" />
   <verb in="jugar" vt="ir" tn="play" pe="hablar" tr="habl" st="jug" fspr="juEgo" sspr="juEgas" tspr="juEga" tppr="juEgan" fspt="jugUé" fspb="juEGUe" sspb="juEGUes" tspb="juEGUe" fppb="jugUemos" sppb="jugUéis" tppb="juEGUen" />
   <verb in="lamer" vt="re" tn="lick" pe="comer" tr="com" st="lam" />
-  <verb in="leer" vt="ir" tn="read" pe="comer" tr="com" st="le" po="leído" />
+  <verb in="leer" vt="ir" tn="read" pe="comer" tr="com" st="le" po="leÍdo" ge="leYendo" />
   <verb in="llegar" vt="ra" tn="arrive, come" pe="hablar" tr="habl" st="lleg" />
   <verb in="llevar" vt="ra" tn="take" pe="hablar" tr="habl" st="llev" />
   <verb in="llorar" vt="ra" tn="cry" pe="hablar" tr="habl" st="llor" />
@@ -146,7 +147,7 @@
   <verb in="ocurrir" vt="ri" tn="happen" pe="subir" tr="sub" st="ocurr" />
   <verb in="oír" vt="ir" tn="hear, listen" pe="subir" tr="sub" st="o" ge="oYendo" po="oÍdo" rf="oir" fspr="oIGo" sspr="oYes" tspr="oYe" fppr="oÍmos" tppr="oYen" sspt="oÍste" tspt="oYó" fppt="oÍmos" sppt="oÍsteis" tppt="oYeron" fspb="oIGa" sspb="oIGas" tspb="oIGa" fppb="oIGamos" sppb="oIGáis" tppb="oIGan" />
   <verb in="ofender" vt="re" tn="offend" pe="comer" tr="com" st="ofend" />
-  <verb in="pagar" vt="ra" tn="pay" pe="hablar" tr="habl" st="pag" />
+  <verb in="pagar" vt="ir" tn="pay" pe="hablar" tr="habl" st="pag" fspr="pagUé" fspb="pagUe" sspb="pagUes" tspb="pagUe" fppb="pagUemos" sppb="pagUéis" tppb="pagUen" />
   <verb in="partir" vt="ri" tn="cut, split" pe="subir" tr="sub" st="part" />
   <verb in="pedir" vt="ir" tn="ask for, order" pe="subir" tr="sub" st="ped" ge="pIdiendo" fspr="pIdo" sspr="pIdes" tspr="pIde" tppr="pIden" tspt="pIdió" tppt="pIdieron" fspb="pIda" sspb="pIdas" tspb="pIda" fppb="pIdamos" sppb="pIdáis" tppb="pIdan" />
   <verb in="pensar" vt="ir" tn="think" pe="hablar" tr="habl" st="pens" fspr="pIenso" sspr="pIensas" tspr="pIensa" tppr="pIensan" fspb="pIense" sspb="pIenses" tspb="pIense" tppb="pIensen" />

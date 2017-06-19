@@ -40,20 +40,7 @@ enum Tense: String {
   case pluscuamperfectoDeSubjuntivo2 = "p2"
   case futuroPerfectoDeSubjuntivo = "fo"
   
-  func shortDisplayName() -> String {
-    switch self {
-    case .gerundio:
-      return "Ger."
-    case .participio:
-      return "PP"
-    case .raizFutura:
-      return "Raíz Fut."
-    default:
-      return ""
-    }
-  }
-  
-  func displayName() -> String {
+  var displayName: String {
     switch self {
     case .infinitivo:
       return "Infinitivo"

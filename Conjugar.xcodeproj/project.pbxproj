@@ -12,12 +12,24 @@
 		E1151E531E9AEDF100DE44D6 /* AuxiliaryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */; };
 		E1151E551E9C5D9C00DE44D6 /* VerbCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */; };
 		E1151E571E9C610100DE44D6 /* VerbViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E561E9C610100DE44D6 /* VerbViewController.swift */; };
-		E115CA391EEC962700DBBD44 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = E115CA381EEC962700DBBD44 /* Quiz.swift */; };
+		E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E115CA381EEC962700DBBD44 /* VerbFamilies.swift */; };
 		E139E0E01EC7D27A00B34DE7 /* AttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E139E0DF1EC7D27A00B34DE7 /* AttributedStringExtension.swift */; };
 		E139E0E41EC7D2E500B34DE7 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */; };
 		E139E0E61EC7D36200B34DE7 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E139E0E51EC7D36200B34DE7 /* Colors.swift */; };
 		E14566BC1EC001ED00C16DC3 /* TenseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14566BB1EC001ED00C16DC3 /* TenseCell.swift */; };
 		E14566BE1EC001FD00C16DC3 /* ConjugationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14566BD1EC001FD00C16DC3 /* ConjugationCell.swift */; };
+		E1483FAD1EF5A2200052C436 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1483FAC1EF5A2200052C436 /* Assets.xcassets */; };
+		E1483FAF1EF5C3820052C436 /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FAE1EF5C3820052C436 /* Quiz.swift */; };
+		E1483FB11EF5C4C60052C436 /* Difficulty.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB01EF5C4C60052C436 /* Difficulty.swift */; };
+		E1483FB31EF5CF650052C436 /* QuizState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB21EF5CF650052C436 /* QuizState.swift */; };
+		E1483FB51EF5D0510052C436 /* QuizDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB41EF5D0510052C436 /* QuizDelegate.swift */; };
+		E1483FB71EF6E35C0052C436 /* MutableCollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB61EF6E35C0052C436 /* MutableCollectionExtension.swift */; };
+		E1483FB91EF6E3D20052C436 /* SequenceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */; };
+		E1483FBB1EF6F82A0052C436 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FBA1EF6F82A0052C436 /* QuizViewController.swift */; };
+		E1483FBF1EF746D70052C436 /* failBuzzer.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FBD1EF746D70052C436 /* failBuzzer.mp3 */; };
+		E1483FC01EF746D70052C436 /* successChime.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FBE1EF746D70052C436 /* successChime.mp3 */; };
+		E1483FC21EF7509E0052C436 /* UIAlertControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FC11EF7509E0052C436 /* UIAlertControllerExtension.swift */; };
+		E1483FC41EF7510F0052C436 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */; };
 		E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A18521E9199C3008455DD /* ConjugatorError.swift */; };
 		E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F371ECA7C9A00633200 /* Utterer.swift */; };
 		E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F391ECA7DA700633200 /* SoundManager.swift */; };
@@ -27,7 +39,6 @@
 		E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */; };
 		E1F06ADA1E8F05F300ADD2E1 /* BrowseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD91E8F05F300ADD2E1 /* BrowseViewController.swift */; };
 		E1F06ADD1E8F05F300ADD2E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1F06ADB1E8F05F300ADD2E1 /* Main.storyboard */; };
-		E1F06ADF1E8F05F300ADD2E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1F06ADE1E8F05F300ADD2E1 /* Assets.xcassets */; };
 		E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */; };
 		E1F06AED1E8F05F400ADD2E1 /* ConjugarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AEC1E8F05F400ADD2E1 /* ConjugarTests.swift */; };
 		E1F06AF81E8F081700ADD2E1 /* Conjugator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AF71E8F081700ADD2E1 /* Conjugator.swift */; };
@@ -54,12 +65,24 @@
 		E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuxiliaryError.swift; sourceTree = "<group>"; };
 		E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbCell.swift; sourceTree = "<group>"; };
 		E1151E561E9C610100DE44D6 /* VerbViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbViewController.swift; sourceTree = "<group>"; };
-		E115CA381EEC962700DBBD44 /* Quiz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
+		E115CA381EEC962700DBBD44 /* VerbFamilies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbFamilies.swift; sourceTree = "<group>"; };
 		E139E0DF1EC7D27A00B34DE7 /* AttributedStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributedStringExtension.swift; sourceTree = "<group>"; };
 		E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		E139E0E51EC7D36200B34DE7 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		E14566BB1EC001ED00C16DC3 /* TenseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TenseCell.swift; sourceTree = "<group>"; };
 		E14566BD1EC001FD00C16DC3 /* ConjugationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugationCell.swift; sourceTree = "<group>"; };
+		E1483FAC1EF5A2200052C436 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E1483FAE1EF5C3820052C436 /* Quiz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quiz.swift; sourceTree = "<group>"; };
+		E1483FB01EF5C4C60052C436 /* Difficulty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Difficulty.swift; sourceTree = "<group>"; };
+		E1483FB21EF5CF650052C436 /* QuizState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizState.swift; sourceTree = "<group>"; };
+		E1483FB41EF5D0510052C436 /* QuizDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizDelegate.swift; sourceTree = "<group>"; };
+		E1483FB61EF6E35C0052C436 /* MutableCollectionExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutableCollectionExtension.swift; sourceTree = "<group>"; };
+		E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequenceExtension.swift; sourceTree = "<group>"; };
+		E1483FBA1EF6F82A0052C436 /* QuizViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
+		E1483FBD1EF746D70052C436 /* failBuzzer.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = failBuzzer.mp3; sourceTree = "<group>"; };
+		E1483FBE1EF746D70052C436 /* successChime.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = successChime.mp3; sourceTree = "<group>"; };
+		E1483FC11EF7509E0052C436 /* UIAlertControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtension.swift; sourceTree = "<group>"; };
+		E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		E15A18521E9199C3008455DD /* ConjugatorError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugatorError.swift; sourceTree = "<group>"; };
 		E18F7F371ECA7C9A00633200 /* Utterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utterer.swift; sourceTree = "<group>"; };
 		E18F7F391ECA7DA700633200 /* SoundManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
@@ -70,7 +93,6 @@
 		E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E1F06AD91E8F05F300ADD2E1 /* BrowseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseViewController.swift; sourceTree = "<group>"; };
 		E1F06ADC1E8F05F300ADD2E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		E1F06ADE1E8F05F300ADD2E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E1F06AE11E8F05F300ADD2E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E1F06AE31E8F05F300ADD2E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E1F06AE81E8F05F400ADD2E1 /* ConjugarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConjugarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				E1F06AD91E8F05F300ADD2E1 /* BrowseViewController.swift */,
+				E1483FBA1EF6F82A0052C436 /* QuizViewController.swift */,
 				E1151E561E9C610100DE44D6 /* VerbViewController.swift */,
 			);
 			name = Controllers;
@@ -126,9 +149,13 @@
 			children = (
 				E139E0DF1EC7D27A00B34DE7 /* AttributedStringExtension.swift */,
 				E139E0E51EC7D36200B34DE7 /* Colors.swift */,
+				E1483FB61EF6E35C0052C436 /* MutableCollectionExtension.swift */,
+				E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */,
 				E18F7F3B1ECA7DF000633200 /* Sound.swift */,
 				E18F7F391ECA7DA700633200 /* SoundManager.swift */,
 				E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */,
+				E1483FC11EF7509E0052C436 /* UIAlertControllerExtension.swift */,
+				E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */,
 				E18F7F371ECA7C9A00633200 /* Utterer.swift */,
 			);
 			name = Utils;
@@ -148,10 +175,20 @@
 		E107B0901EB66E9F004C5E91 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				E1F06ADE1E8F05F300ADD2E1 /* Assets.xcassets */,
-				E18F7F3D1ECA7E3700633200 /* silence.mp3 */,
+				E1483FBC1EF746C40052C436 /* Sounds */,
+				E1483FAC1EF5A2200052C436 /* Assets.xcassets */,
 			);
 			name = Assets;
+			sourceTree = "<group>";
+		};
+		E1483FBC1EF746C40052C436 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				E1483FBD1EF746D70052C436 /* failBuzzer.mp3 */,
+				E18F7F3D1ECA7E3700633200 /* silence.mp3 */,
+				E1483FBE1EF746D70052C436 /* successChime.mp3 */,
+			);
+			name = Sounds;
 			sourceTree = "<group>";
 		};
 		E1F06ACB1E8F05F200ADD2E1 = {
@@ -201,10 +238,14 @@
 				E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */,
 				E1F06AF71E8F081700ADD2E1 /* Conjugator.swift */,
 				E15A18521E9199C3008455DD /* ConjugatorError.swift */,
+				E1483FB01EF5C4C60052C436 /* Difficulty.swift */,
 				E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */,
-				E115CA381EEC962700DBBD44 /* Quiz.swift */,
+				E1483FAE1EF5C3820052C436 /* Quiz.swift */,
+				E1483FB21EF5CF650052C436 /* QuizState.swift */,
+				E1483FB41EF5D0510052C436 /* QuizDelegate.swift */,
 				E1F06AFA1E8F087000ADD2E1 /* Region.swift */,
 				E1F06AFC1E8F08D500ADD2E1 /* Tense.swift */,
+				E115CA381EEC962700DBBD44 /* VerbFamilies.swift */,
 				E107B0911EB66F28004C5E91 /* VerbParser.swift */,
 				E107B08A1EB66CE6004C5E91 /* verbs.xml */,
 				E191C9B71EBEB27500F715E7 /* VerbType.swift */,
@@ -306,11 +347,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1483FC01EF746D70052C436 /* successChime.mp3 in Resources */,
+				E1483FBF1EF746D70052C436 /* failBuzzer.mp3 in Resources */,
 				E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */,
 				E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */,
-				E1F06ADF1E8F05F300ADD2E1 /* Assets.xcassets in Resources */,
 				E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */,
 				E1F06ADD1E8F05F300ADD2E1 /* Main.storyboard in Resources */,
+				E1483FAD1EF5A2200052C436 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -328,28 +371,37 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1483FB71EF6E35C0052C436 /* MutableCollectionExtension.swift in Sources */,
 				E18F7F3C1ECA7DF000633200 /* Sound.swift in Sources */,
 				E1151E551E9C5D9C00DE44D6 /* VerbCell.swift in Sources */,
 				E139E0E61EC7D36200B34DE7 /* Colors.swift in Sources */,
 				E1151E531E9AEDF100DE44D6 /* AuxiliaryError.swift in Sources */,
 				E1F06AF81E8F081700ADD2E1 /* Conjugator.swift in Sources */,
+				E1483FC41EF7510F0052C436 /* UIApplicationExtension.swift in Sources */,
 				E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */,
 				E14566BE1EC001FD00C16DC3 /* ConjugationCell.swift in Sources */,
+				E1483FB11EF5C4C60052C436 /* Difficulty.swift in Sources */,
 				E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */,
 				E1F06ADA1E8F05F300ADD2E1 /* BrowseViewController.swift in Sources */,
 				E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */,
 				E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */,
 				E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */,
 				E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */,
+				E1483FB51EF5D0510052C436 /* QuizDelegate.swift in Sources */,
+				E1483FB91EF6E3D20052C436 /* SequenceExtension.swift in Sources */,
+				E1483FC21EF7509E0052C436 /* UIAlertControllerExtension.swift in Sources */,
 				E139E0E01EC7D27A00B34DE7 /* AttributedStringExtension.swift in Sources */,
+				E1483FAF1EF5C3820052C436 /* Quiz.swift in Sources */,
 				E191C9B81EBEB27500F715E7 /* VerbType.swift in Sources */,
 				E14566BC1EC001ED00C16DC3 /* TenseCell.swift in Sources */,
-				E115CA391EEC962700DBBD44 /* Quiz.swift in Sources */,
+				E1483FBB1EF6F82A0052C436 /* QuizViewController.swift in Sources */,
+				E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */,
 				E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */,
 				E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */,
 				E1F06B041E8F0E9300ADD2E1 /* Result.swift in Sources */,
 				E1F06AFB1E8F087000ADD2E1 /* Region.swift in Sources */,
 				E1151E571E9C610100DE44D6 /* VerbViewController.swift in Sources */,
+				E1483FB31EF5CF650052C436 /* QuizState.swift in Sources */,
 				E139E0E41EC7D2E500B34DE7 /* StringExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

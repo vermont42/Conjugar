@@ -2,30 +2,200 @@
 //  Quiz.swift
 //  Conjugar
 //
-//  Created by Joshua Adams on 6/10/17.
+//  Created by Joshua Adams on 6/17/17.
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
 import Foundation
 
-struct Quiz {
-  static let regularArVerbs = ["hablar", "caminar", "andar", "trabajar", "estudiar", "escuchar", "visitar", "viajar", "enseñar", "llevar", "llegar", "bailar", "nadar", "cocinar", "charlar", "platicar", "llorar", "esperar", "buscar", "mirar", "pintar", "pagar", "gastar", "ganar", "comprar", "tocar", "tomar", "sacar", "ayudar", "cantar", "desear", "necesitar", "cortar", "contestar", "dibujar"]
+internal class Quiz {
+  private(set) var numberCorrect: Int = 0
+  private(set) var quizState: QuizState = .notStarted
+  private(set) var elapsedTime: Int = 0
+  private(set) var score: Int = 0
+  private(set) var currentQuestionIndex = 0
+  private var questions: [(String, Tense, PersonNumber)] = []
+  private var regularArVerbs = VerbFamilies.regularArVerbs
+  private var regularArVerbsIndex = 0
+  private var regularIrVerbs = VerbFamilies.regularIrVerbs
+  private var regularIrVerbsIndex = 0
+  private var regularErVerbs = VerbFamilies.regularErVerbs
+  private var regularErVerbsIndex = 0
+  private var irregularPresenteDeIndicativoVerbs = VerbFamilies.irregularPresenteDeIndicativoVerbs
+  private var irregularPresenteDeIndicativoVerbsIndex = 0
+  private var irregularRaizFuturaVerbs = VerbFamilies.irregularRaizFuturaVerbs
+  private var irregularRaizFuturaVerbsIndex = 0
+  private var irregularParticipioVerbs = VerbFamilies.irregularParticipioVerbs
+  private var irregularParticipioVerbsIndex = 0
+  private var timer: Timer?
+  private var personNumbers: [PersonNumber] = [.firstSingular, .secondSingular, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+  private var personNumbersIndex = 0
+  internal weak var delegate: QuizDelegate? = nil
+  static let shared = Quiz()
   
-  static let regularIrVerbs = ["vivir", "existir", "ocurrir", "recibir", "permitir", "partir", "cumplir", "decidir", "subir", "sufrir", "compartir", "consistir", "insistir", "asistir", "discutir", "unir", "coincidir", "distinguir", "definir", "admitir", "acudir"]
+  internal var questionCount: Int {
+    return questions.count
+  }
+
+  internal var verb: String {
+    if questions.count > 0 {
+      return questions[currentQuestionIndex].0
+    }
+    else {
+      return ""
+    }
+  }
   
-  static let regularErVerbs = ["comer", "beber", "leer", "aprender", "comprender", "correr", "deber", "vender", "romper", "temer", "reprender", "barrer", "conmeter", "poseer", "responder", "prometer", "meter", "someter", "absorber", "emprender", "coser", "ceder", "exceder", "ofender", "esconder", "lamer", "tejer"]
+  internal var tense: Tense {
+    if questions.count > 0 {
+      return questions[currentQuestionIndex].1
+    }
+    else {
+      return .infinitivo
+    }
+  }
+
+  internal var personNumber: PersonNumber {
+    if questions.count > 0 {
+      return questions[currentQuestionIndex].2
+    }
+    else {
+      return .none
+    }
+  }
   
-  static let irregularImperfectivoVerbs = ["ser", "ir", "ver"]
+  private init() {}
   
-  static let irregularPreteritoVerbs = ["ser", "ir", "dar", "poner", "poder", "estar", "tener", "andar", "saber", "haber", "caber", "hacer", "venir", "querer", "decir", "traer", "conducir"]
+  internal func start(region: Region = .spain, difficulty: Difficulty = .easy) {
+    questions.removeAll()
+    regularArVerbs.shuffle()
+    regularIrVerbs.shuffle()
+    regularErVerbs.shuffle()
+    _ = [regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()]].map {
+      questions.append(($0, .presenteDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+    }
+    irregularPresenteDeIndicativoVerbs.shuffle()
+    for _ in 0...6 {
+      questions.append((irregularPresenteDeIndicativoVerbs[getAndUpdateIrregularPresenteDeIndicativoVerbsIndex()], .presenteDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+    }
+    irregularRaizFuturaVerbs.shuffle()
+    for _ in 0...6 {
+      questions.append((irregularRaizFuturaVerbs[getAndUpdateIrregularRaizFuturaVerbsIndex()], .futuroDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+    }
+    _ = [regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()]].map {
+      questions.append(($0, .futuroDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+    }
+    irregularParticipioVerbs.shuffle()
+    for _ in 0...6 {
+      questions.append((irregularParticipioVerbs[getAndUpdateIrregularParticipioVerbsIndex()], .perfectoDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+    }
+    _ = [regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()]].map {
+      questions.append(($0, .perfectoDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+    }
+    questions.shuffle()
+    score = 0
+    currentQuestionIndex = 0
+    elapsedTime = 0
+    quizState = .inProgress
+    timer?.invalidate()
+    timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(Quiz.eachSecond), userInfo: nil, repeats: true)
+    delegate?.questionDidChange(verb: questions[0].0, tense: questions[0].1, personNumber: questions[0].2)
+    delegate?.scoreDidChange(newScore: 0)
+    delegate?.timeDidChange(newTime: 0)
+    delegate?.progressDidChange(current: 0, total: questions.count)
+  }
   
-  static let irregularRaizFuturaVerbs = ["haber", "saber", "caber", "poder", "querer", "poner", "tener", "venir", "salir", "valer", "decir", "hacer"]
+  internal func process(proposedAnswer: String) -> Bool {
+    let actualAnswerResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: tense, personNumber: personNumber)
+    switch actualAnswerResult {
+    case let .success(actualAnswer):
+      var isCorrect = false
+      if actualAnswer.lowercased() == proposedAnswer.lowercased() {
+        score += 1
+        isCorrect = true
+        delegate?.scoreDidChange(newScore: score)
+      }
+      if currentQuestionIndex < questions.count - 1 {
+        currentQuestionIndex += 1
+        delegate?.progressDidChange(current: currentQuestionIndex, total: questions.count)
+        delegate?.questionDidChange(verb: questions[currentQuestionIndex].0, tense: questions[currentQuestionIndex].1, personNumber: questions[currentQuestionIndex].2)
+      }
+      else {
+        timer?.invalidate()
+        quizState = .finished
+        delegate?.quizDidFinish()
+      }
+      return isCorrect
+    default:
+      fatalError()
+    }
+  }
   
-  static let irregularPresenteDeSubjuntivoVerbs = ["ser", "ir", "haber", "saber", "pensar", "perder", "sentir", "dormir", "pedir", "crecer", "conocer", "lucir", "conducir", "huir", "construir", "estar", "dar", "caber", "decir", "hacer", "caer", "oír", "traer", "poner", "salir", "tener", "valer", "venir", "ver", "jugar"]
+  @objc func eachSecond() {
+    elapsedTime += 1
+    delegate?.timeDidChange(newTime: elapsedTime)
+  }
+
+  private func getAndUpdatePersonNumbersIndex() -> Int {
+    let currentPersonNumbersIndex = personNumbersIndex
+    personNumbersIndex += 1
+    if personNumbersIndex == personNumbers.count {
+      personNumbersIndex = 0
+    }
+    return currentPersonNumbersIndex
+  }
   
-  static let irregularTuImperativoVerbs = ["ser", "ir", "haber", "decir", "hacer", "ponder", "salir", "tenir", "venir", "componer", "obtener", "revenir"]
-  
-  static let irregularParticipios = ["abrir", "cubrir", "decir", "escribir", "hacer", "morir", "poner", "resolver", "romper", "ver", "volver", "pudrir"]
-  
-  static let irregularGerundios = ["pudiendo", "sentir", "medir", "dormir", "oír", "caer", "leer", "traer", "construir", "huir", "oír", "ir", "tañer", "bullir"]
+  private func getAndUpdateRegularArVerbsIndex() -> Int {
+    let currentRegularArVerbsIndex = regularArVerbsIndex
+    regularArVerbsIndex += 1
+    if regularArVerbsIndex == regularArVerbs.count {
+      regularArVerbsIndex = 0
+    }
+    return currentRegularArVerbsIndex
+  }
+
+  private func getAndUpdateRegularIrVerbsIndex() -> Int {
+    let currentRegularIrVerbsIndex = regularIrVerbsIndex
+    regularIrVerbsIndex += 1
+    if regularIrVerbsIndex == regularIrVerbs.count {
+      regularIrVerbsIndex = 0
+    }
+    return currentRegularIrVerbsIndex
+  }
+
+  private func getAndUpdateRegularErVerbsIndex() -> Int {
+    let currentRegularErVerbsIndex = regularErVerbsIndex
+    regularErVerbsIndex += 1
+    if regularErVerbsIndex == regularErVerbs.count {
+      regularErVerbsIndex = 0
+    }
+    return currentRegularErVerbsIndex
+  }
+
+  private func getAndUpdateIrregularPresenteDeIndicativoVerbsIndex() -> Int {
+    let currentIrregularPresenteDeIndicativoVerbsIndex = irregularPresenteDeIndicativoVerbsIndex
+    irregularPresenteDeIndicativoVerbsIndex += 1
+    if irregularPresenteDeIndicativoVerbsIndex == irregularPresenteDeIndicativoVerbs.count {
+      irregularPresenteDeIndicativoVerbsIndex = 0
+    }
+    return currentIrregularPresenteDeIndicativoVerbsIndex
+  }
+
+  private func getAndUpdateIrregularRaizFuturaVerbsIndex() -> Int {
+    let currentIrregularRaizFuturaVerbsIndex = irregularRaizFuturaVerbsIndex
+    irregularRaizFuturaVerbsIndex += 1
+    if irregularRaizFuturaVerbsIndex == irregularRaizFuturaVerbs.count {
+      irregularRaizFuturaVerbsIndex = 0
+    }
+    return currentIrregularRaizFuturaVerbsIndex
+  }
+
+  private func getAndUpdateIrregularParticipioVerbsIndex() -> Int {
+    let currentIrregularParticipioVerbsIndex = irregularParticipioVerbsIndex
+    irregularParticipioVerbsIndex += 1
+    if irregularParticipioVerbsIndex == irregularParticipioVerbs.count {
+      irregularParticipioVerbsIndex = 0
+    }
+    return currentIrregularParticipioVerbsIndex
+  }
 }

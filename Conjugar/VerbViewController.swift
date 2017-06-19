@@ -62,10 +62,10 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
       fatalError()
     }
     if Conjugator.sharedInstance.isDefective(infinitive: verb) {
-      defectivo.text = "Defectivo"
+      defectivo.text = "Defective"
     }
     else {
-      defectivo.text = "No Defectivo"
+      defectivo.text = "Not Defective"
     }
     
     let verbType = Conjugator.sharedInstance.verbType(infinitive: verb)
@@ -206,7 +206,7 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     if personNumber == .none {
       let cell = table.dequeueReusableCell(withIdentifier: "TenseCell") as! TenseCell
-      cell.configure(tense: tense.displayName())
+      cell.configure(tense: tense.displayName)
       return cell
     }
     else {
@@ -229,4 +229,6 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
       Utterer.utter(label.attributedText?.string ?? label.text!)
     }
   }
+  
+  
 }
