@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    UIApplication.shared.statusBarStyle = .lightContent
     UINavigationBar.appearance().barTintColor = UIColor.black
     UINavigationBar.appearance().tintColor = UIColor.white
     UITabBar.appearance().barTintColor = UIColor.black

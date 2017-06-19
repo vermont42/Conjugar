@@ -1,7 +1,9 @@
 Conjugar
 ===================
 
-**Conjugar** is an app for learning Spanish verb conjugations. The app's primary functionality so far is conjugating commonly used Spanish verbs, but there will be educational content and a challenge mode.
+![Conjugar](Conjugar/screenshot.png "Conjugar in action")
+
+**Conjugar** is an app for learning Spanish verb conjugations. The app conjugates most Spanish verbs and has a quiz mode under development. Eventually, the quizzes will integrate with GameCenter.
 
 Tap individual conjugations to hear them spoken in an erudite Mexican accent.
 
