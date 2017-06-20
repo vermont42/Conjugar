@@ -26,10 +26,15 @@
 		E1483FB71EF6E35C0052C436 /* MutableCollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB61EF6E35C0052C436 /* MutableCollectionExtension.swift */; };
 		E1483FB91EF6E3D20052C436 /* SequenceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */; };
 		E1483FBB1EF6F82A0052C436 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FBA1EF6F82A0052C436 /* QuizViewController.swift */; };
-		E1483FBF1EF746D70052C436 /* failBuzzer.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FBD1EF746D70052C436 /* failBuzzer.mp3 */; };
-		E1483FC01EF746D70052C436 /* successChime.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FBE1EF746D70052C436 /* successChime.mp3 */; };
+		E1483FC01EF746D70052C436 /* chime.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FBE1EF746D70052C436 /* chime.mp3 */; };
 		E1483FC21EF7509E0052C436 /* UIAlertControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FC11EF7509E0052C436 /* UIAlertControllerExtension.swift */; };
 		E1483FC41EF7510F0052C436 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */; };
+		E1483FC81EF89C710052C436 /* applause1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC51EF89C710052C436 /* applause1.mp3 */; };
+		E1483FC91EF89C710052C436 /* applause2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC61EF89C710052C436 /* applause2.mp3 */; };
+		E1483FCA1EF89C710052C436 /* applause3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC71EF89C710052C436 /* applause3.mp3 */; };
+		E1483FCC1EF89D4E0052C436 /* chirp.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCB1EF89D4E0052C436 /* chirp.mp3 */; };
+		E1483FCE1EF89DAD0052C436 /* buzz.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCD1EF89DAD0052C436 /* buzz.mp3 */; };
+		E1483FD01EF961880052C436 /* ConjugationComparison.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FCF1EF961880052C436 /* ConjugationComparison.swift */; };
 		E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A18521E9199C3008455DD /* ConjugatorError.swift */; };
 		E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F371ECA7C9A00633200 /* Utterer.swift */; };
 		E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F391ECA7DA700633200 /* SoundManager.swift */; };
@@ -79,10 +84,15 @@
 		E1483FB61EF6E35C0052C436 /* MutableCollectionExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutableCollectionExtension.swift; sourceTree = "<group>"; };
 		E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequenceExtension.swift; sourceTree = "<group>"; };
 		E1483FBA1EF6F82A0052C436 /* QuizViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
-		E1483FBD1EF746D70052C436 /* failBuzzer.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = failBuzzer.mp3; sourceTree = "<group>"; };
-		E1483FBE1EF746D70052C436 /* successChime.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = successChime.mp3; sourceTree = "<group>"; };
+		E1483FBE1EF746D70052C436 /* chime.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chime.mp3; sourceTree = "<group>"; };
 		E1483FC11EF7509E0052C436 /* UIAlertControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtension.swift; sourceTree = "<group>"; };
 		E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
+		E1483FC51EF89C710052C436 /* applause1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause1.mp3; sourceTree = "<group>"; };
+		E1483FC61EF89C710052C436 /* applause2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause2.mp3; sourceTree = "<group>"; };
+		E1483FC71EF89C710052C436 /* applause3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause3.mp3; sourceTree = "<group>"; };
+		E1483FCB1EF89D4E0052C436 /* chirp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chirp.mp3; sourceTree = "<group>"; };
+		E1483FCD1EF89DAD0052C436 /* buzz.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = buzz.mp3; sourceTree = "<group>"; };
+		E1483FCF1EF961880052C436 /* ConjugationComparison.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugationComparison.swift; sourceTree = "<group>"; };
 		E15A18521E9199C3008455DD /* ConjugatorError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugatorError.swift; sourceTree = "<group>"; };
 		E18F7F371ECA7C9A00633200 /* Utterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utterer.swift; sourceTree = "<group>"; };
 		E18F7F391ECA7DA700633200 /* SoundManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
@@ -184,9 +194,13 @@
 		E1483FBC1EF746C40052C436 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				E1483FBD1EF746D70052C436 /* failBuzzer.mp3 */,
+				E1483FC51EF89C710052C436 /* applause1.mp3 */,
+				E1483FC61EF89C710052C436 /* applause2.mp3 */,
+				E1483FC71EF89C710052C436 /* applause3.mp3 */,
+				E1483FCD1EF89DAD0052C436 /* buzz.mp3 */,
+				E1483FBE1EF746D70052C436 /* chime.mp3 */,
+				E1483FCB1EF89D4E0052C436 /* chirp.mp3 */,
 				E18F7F3D1ECA7E3700633200 /* silence.mp3 */,
-				E1483FBE1EF746D70052C436 /* successChime.mp3 */,
 			);
 			name = Sounds;
 			sourceTree = "<group>";
@@ -236,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */,
+				E1483FCF1EF961880052C436 /* ConjugationComparison.swift */,
 				E1F06AF71E8F081700ADD2E1 /* Conjugator.swift */,
 				E15A18521E9199C3008455DD /* ConjugatorError.swift */,
 				E1483FB01EF5C4C60052C436 /* Difficulty.swift */,
@@ -347,13 +362,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1483FC01EF746D70052C436 /* successChime.mp3 in Resources */,
-				E1483FBF1EF746D70052C436 /* failBuzzer.mp3 in Resources */,
+				E1483FC01EF746D70052C436 /* chime.mp3 in Resources */,
 				E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */,
 				E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */,
 				E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */,
+				E1483FCC1EF89D4E0052C436 /* chirp.mp3 in Resources */,
 				E1F06ADD1E8F05F300ADD2E1 /* Main.storyboard in Resources */,
+				E1483FC91EF89C710052C436 /* applause2.mp3 in Resources */,
 				E1483FAD1EF5A2200052C436 /* Assets.xcassets in Resources */,
+				E1483FC81EF89C710052C436 /* applause1.mp3 in Resources */,
+				E1483FCA1EF89C710052C436 /* applause3.mp3 in Resources */,
+				E1483FCE1EF89DAD0052C436 /* buzz.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,6 +411,7 @@
 				E1483FC21EF7509E0052C436 /* UIAlertControllerExtension.swift in Sources */,
 				E139E0E01EC7D27A00B34DE7 /* AttributedStringExtension.swift in Sources */,
 				E1483FAF1EF5C3820052C436 /* Quiz.swift in Sources */,
+				E1483FD01EF961880052C436 /* ConjugationComparison.swift in Sources */,
 				E191C9B81EBEB27500F715E7 /* VerbType.swift in Sources */,
 				E14566BC1EC001ED00C16DC3 /* TenseCell.swift in Sources */,
 				E1483FBB1EF6F82A0052C436 /* QuizViewController.swift in Sources */,

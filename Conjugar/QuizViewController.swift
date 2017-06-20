@@ -34,7 +34,7 @@ class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
     super.viewWillAppear(animated)
     Quiz.shared.delegate = self
     switch Quiz.shared.quizState {
-    case .notStarted:
+    case .notStarted , .finished:
       hideInProgressUI()
       startRestartButton.setTitle("Start", for: .normal)
     case .inProgress:
@@ -53,9 +53,6 @@ class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
       pronounLabel.text = Quiz.shared.personNumber.pronoun
       scoreLabel.text = String(Quiz.shared.score)
       progressLabel.text = String(Quiz.shared.currentQuestionIndex + 1) + " / " + String(Quiz.shared.questionCount)
-    case .finished:
-      hideInProgressUI()
-      startRestartButton.setTitle("Start", for: .normal)
     }
   }
   
@@ -105,20 +102,33 @@ class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
   func quizDidFinish() {
     hideInProgressUI()
     startRestartButton.setTitle("Start", for: .normal)
+    let randomApplause = arc4random_uniform(Sound.applauseCount) + 1
+    switch randomApplause {
+    case 1:
+      SoundManager.play(.applause1)
+    case 2:
+      SoundManager.play(.applause2)
+    case 3:
+      SoundManager.play(.applause3)
+    default:
+      break
+    }
     UIAlertController.showMessage("You scored \(Quiz.shared.score) points.", title: "Results")
   }
   
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     guard let text = conjugationField.text else { return false }
     guard text != "" else { return false }
-    let isCorrect = Quiz.shared.process(proposedAnswer: text)
+    let result = Quiz.shared.process(proposedAnswer: text)
     conjugationField.text = nil
     conjugationField.resignFirstResponder()
-    if isCorrect {
-      SoundManager.play(.successChime)
-    }
-    else {
-      SoundManager.play(.failBuzzer)
+    switch result {
+    case .totalMatch:
+      SoundManager.play(.chime)
+    case .partialMatch:
+      SoundManager.play(.chirp)
+    case .noMatch:
+      SoundManager.play(.buzz)
     }
     return true
   }

@@ -13,7 +13,7 @@ struct VerbFamilies {
   
   static let regularIrVerbs = ["vivir", "existir", "ocurrir", "recibir", "permitir", "partir", "cumplir", "decidir", "subir", "sufrir", "compartir", "consistir", "insistir", "asistir", "discutir", "unir", "coincidir", "distinguir", "definir", "admitir", "acudir"]
   
-  static let regularErVerbs = ["comer", "beber", "leer", "aprender", "comprender", "correr", "deber", "vender", "romper", "temer", "reprender", "barrer", "conmeter", "poseer", "responder", "prometer", "meter", "someter", "absorber", "emprender", "coser", "ceder", "exceder", "ofender", "esconder", "lamer", "tejer"]
+  static let regularErVerbs = ["comer", "beber", "leer", "aprender", "comprender", "correr", "deber", "vender", "romper", "temer", "reprender", "barrer", "cometer", "poseer", "responder", "prometer", "meter", "someter", "absorber", "emprender", "coser", "ceder", "exceder", "ofender", "esconder", "lamer", "tejer"]
   
   static let irregularPresenteDeIndicativoVerbs = ["ser", "ir", "dormir", "hacer", "morir", "morder", "oír", "poder", "haber", "sentir"]
   

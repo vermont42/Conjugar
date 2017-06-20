@@ -71,26 +71,26 @@ internal class Quiz {
     regularArVerbs.shuffle()
     regularIrVerbs.shuffle()
     regularErVerbs.shuffle()
-    _ = [regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()]].map {
-      questions.append(($0, .presenteDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+    _ = [regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()]].map {
+      questions.append(($0, .presenteDeIndicativo, personNumbers[getPersonNumbersIndex()]))
     }
     irregularPresenteDeIndicativoVerbs.shuffle()
     for _ in 0...6 {
-      questions.append((irregularPresenteDeIndicativoVerbs[getAndUpdateIrregularPresenteDeIndicativoVerbsIndex()], .presenteDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+      questions.append((irregularPresenteDeIndicativoVerbs[getIrregularPresenteDeIndicativoVerbsIndex()], .presenteDeIndicativo, personNumbers[getPersonNumbersIndex()]))
     }
     irregularRaizFuturaVerbs.shuffle()
     for _ in 0...6 {
-      questions.append((irregularRaizFuturaVerbs[getAndUpdateIrregularRaizFuturaVerbsIndex()], .futuroDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+      questions.append((irregularRaizFuturaVerbs[getIrregularRaizFuturaVerbsIndex()], .futuroDeIndicativo, personNumbers[getPersonNumbersIndex()]))
     }
-    _ = [regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()]].map {
-      questions.append(($0, .futuroDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+    _ = [regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()]].map {
+      questions.append(($0, .futuroDeIndicativo, personNumbers[getPersonNumbersIndex()]))
     }
     irregularParticipioVerbs.shuffle()
     for _ in 0...6 {
-      questions.append((irregularParticipioVerbs[getAndUpdateIrregularParticipioVerbsIndex()], .perfectoDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+      questions.append((irregularParticipioVerbs[getIrregularParticipioVerbsIndex()], .perfectoDeIndicativo, personNumbers[getPersonNumbersIndex()]))
     }
-    _ = [regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularArVerbs[getAndUpdateRegularArVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularIrVerbs[getAndUpdateRegularIrVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()], regularErVerbs[getAndUpdateRegularErVerbsIndex()]].map {
-      questions.append(($0, .perfectoDeIndicativo, personNumbers[getAndUpdatePersonNumbersIndex()]))
+    _ = [regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()]].map {
+      questions.append(($0, .perfectoDeIndicativo, personNumbers[getPersonNumbersIndex()]))
     }
     questions.shuffle()
     score = 0
@@ -105,14 +105,13 @@ internal class Quiz {
     delegate?.progressDidChange(current: 0, total: questions.count)
   }
   
-  internal func process(proposedAnswer: String) -> Bool {
+  internal func process(proposedAnswer: String) -> ConjugationResult {
     let actualAnswerResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: tense, personNumber: personNumber)
     switch actualAnswerResult {
     case let .success(actualAnswer):
-      var isCorrect = false
-      if actualAnswer.lowercased() == proposedAnswer.lowercased() {
-        score += 1
-        isCorrect = true
+      let result = ConjugationResult.compare(lhs: proposedAnswer, rhs: actualAnswer)
+      if result != .noMatch {
+        score += result.rawValue
         delegate?.scoreDidChange(newScore: score)
       }
       if currentQuestionIndex < questions.count - 1 {
@@ -125,7 +124,7 @@ internal class Quiz {
         quizState = .finished
         delegate?.quizDidFinish()
       }
-      return isCorrect
+      return result
     default:
       fatalError()
     }
@@ -136,7 +135,7 @@ internal class Quiz {
     delegate?.timeDidChange(newTime: elapsedTime)
   }
 
-  private func getAndUpdatePersonNumbersIndex() -> Int {
+  private func getPersonNumbersIndex() -> Int {
     let currentPersonNumbersIndex = personNumbersIndex
     personNumbersIndex += 1
     if personNumbersIndex == personNumbers.count {
@@ -145,7 +144,7 @@ internal class Quiz {
     return currentPersonNumbersIndex
   }
   
-  private func getAndUpdateRegularArVerbsIndex() -> Int {
+  private func getRegularArVerbsIndex() -> Int {
     let currentRegularArVerbsIndex = regularArVerbsIndex
     regularArVerbsIndex += 1
     if regularArVerbsIndex == regularArVerbs.count {
@@ -154,7 +153,7 @@ internal class Quiz {
     return currentRegularArVerbsIndex
   }
 
-  private func getAndUpdateRegularIrVerbsIndex() -> Int {
+  private func getRegularIrVerbsIndex() -> Int {
     let currentRegularIrVerbsIndex = regularIrVerbsIndex
     regularIrVerbsIndex += 1
     if regularIrVerbsIndex == regularIrVerbs.count {
@@ -163,7 +162,7 @@ internal class Quiz {
     return currentRegularIrVerbsIndex
   }
 
-  private func getAndUpdateRegularErVerbsIndex() -> Int {
+  private func getRegularErVerbsIndex() -> Int {
     let currentRegularErVerbsIndex = regularErVerbsIndex
     regularErVerbsIndex += 1
     if regularErVerbsIndex == regularErVerbs.count {
@@ -172,7 +171,7 @@ internal class Quiz {
     return currentRegularErVerbsIndex
   }
 
-  private func getAndUpdateIrregularPresenteDeIndicativoVerbsIndex() -> Int {
+  private func getIrregularPresenteDeIndicativoVerbsIndex() -> Int {
     let currentIrregularPresenteDeIndicativoVerbsIndex = irregularPresenteDeIndicativoVerbsIndex
     irregularPresenteDeIndicativoVerbsIndex += 1
     if irregularPresenteDeIndicativoVerbsIndex == irregularPresenteDeIndicativoVerbs.count {
@@ -181,7 +180,7 @@ internal class Quiz {
     return currentIrregularPresenteDeIndicativoVerbsIndex
   }
 
-  private func getAndUpdateIrregularRaizFuturaVerbsIndex() -> Int {
+  private func getIrregularRaizFuturaVerbsIndex() -> Int {
     let currentIrregularRaizFuturaVerbsIndex = irregularRaizFuturaVerbsIndex
     irregularRaizFuturaVerbsIndex += 1
     if irregularRaizFuturaVerbsIndex == irregularRaizFuturaVerbs.count {
@@ -190,7 +189,7 @@ internal class Quiz {
     return currentIrregularRaizFuturaVerbsIndex
   }
 
-  private func getAndUpdateIrregularParticipioVerbsIndex() -> Int {
+  private func getIrregularParticipioVerbsIndex() -> Int {
     let currentIrregularParticipioVerbsIndex = irregularParticipioVerbsIndex
     irregularParticipioVerbsIndex += 1
     if irregularParticipioVerbsIndex == irregularParticipioVerbs.count {

@@ -62,6 +62,7 @@
   <verb in="buscar" vt="ra" tn="look for, seek" pe="hablar" tr="habl" st="busc" />
   <verb in="caber" vt="ir" tn="fit" pe="comer" tr="com" st="cab" rf="cabR" fspr="QUEPo" fspt="cUPE" sspt="cUPiste" tspt="cUPo" fppt="cUPimos" sppt="cUPisteis" tppt="cUPieron" fspb="QUEPa" sspb="QUEPas" tspb="QUEPa" fppb="QUEPa" sppb="QUEPáis" tppb="QUEPan" />
   <verb in="caer" vt="ir" tn="fall" ge="caYendo" po="caÍdo" pe="comer" tr="com" st="ca" fspr="caIGo" sspt="caÍste" tspt="caYó" fppt="caÍmos" sppt="caÍsteis" tppt="caYeron" fspb="caIGa" sspb="caIGas" tspb="caIGa" fppb="caIGamos" sppb="caIGáis" tppb="caIGan" />
+  <verb in="caminar" vt="ra" tn="walk" pe="hablar" tr="habl" st="camin" />
   <verb in="cantar" vt="ra" tn="sing" pe="hablar" tr="habl" st="cant" />
   <verb in="ceder" vt="re" tn="transfer, cede" pe="comer" tr="com" st="ced" />
   <verb in="charlar" vt="ra" tn="chat" pe="hablar" tr="habl" st="charl" />
