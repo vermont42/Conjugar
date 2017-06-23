@@ -23,10 +23,14 @@ internal class Quiz {
   private var regularErVerbsIndex = 0
   private var irregularPresenteDeIndicativoVerbs = VerbFamilies.irregularPresenteDeIndicativoVerbs
   private var irregularPresenteDeIndicativoVerbsIndex = 0
+  private var irregularPreteritoVerbs = VerbFamilies.irregularPreteritoVerbs
+  private var irregularPreteritoVerbsIndex = 0
   private var irregularRaizFuturaVerbs = VerbFamilies.irregularRaizFuturaVerbs
   private var irregularRaizFuturaVerbsIndex = 0
   private var irregularParticipioVerbs = VerbFamilies.irregularParticipioVerbs
   private var irregularParticipioVerbsIndex = 0
+  private var irregularImperfectoVerbs = VerbFamilies.irregularImperfectivoVerbs
+  private var irregularImperfectoVerbsIndex = 0
   private var timer: Timer?
   private var personNumbers: [PersonNumber] = [.firstSingular, .secondSingular, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
@@ -66,31 +70,78 @@ internal class Quiz {
   
   private init() {}
   
-  internal func start(region: Region = .spain, difficulty: Difficulty = .easy) {
+  internal func start(region: Region = .spain, difficulty: Difficulty = .moderate) {
     questions.removeAll()
     regularArVerbs.shuffle()
     regularIrVerbs.shuffle()
     regularErVerbs.shuffle()
-    _ = [regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()]].map {
-      questions.append(($0, .presenteDeIndicativo, personNumbers[getPersonNumbersIndex()]))
-    }
-    irregularPresenteDeIndicativoVerbs.shuffle()
-    for _ in 0...6 {
-      questions.append((irregularPresenteDeIndicativoVerbs[getIrregularPresenteDeIndicativoVerbsIndex()], .presenteDeIndicativo, personNumbers[getPersonNumbersIndex()]))
-    }
-    irregularRaizFuturaVerbs.shuffle()
-    for _ in 0...6 {
-      questions.append((irregularRaizFuturaVerbs[getIrregularRaizFuturaVerbsIndex()], .futuroDeIndicativo, personNumbers[getPersonNumbersIndex()]))
-    }
-    _ = [regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()]].map {
-      questions.append(($0, .futuroDeIndicativo, personNumbers[getPersonNumbersIndex()]))
-    }
-    irregularParticipioVerbs.shuffle()
-    for _ in 0...6 {
-      questions.append((irregularParticipioVerbs[getIrregularParticipioVerbsIndex()], .perfectoDeIndicativo, personNumbers[getPersonNumbersIndex()]))
-    }
-    _ = [regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()]].map {
-      questions.append(($0, .perfectoDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+    switch difficulty {
+    case .easy:
+      _ = [regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()]].map {
+        questions.append(($0, .presenteDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      irregularPresenteDeIndicativoVerbs.shuffle()
+      for _ in 0...6 {
+        questions.append((irregularPresenteDeIndicativoVerbs[getIrregularPresenteDeIndicativoVerbsIndex()], .presenteDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      irregularRaizFuturaVerbs.shuffle()
+      for _ in 0...6 {
+        questions.append((irregularRaizFuturaVerbs[getIrregularRaizFuturaVerbsIndex()], .futuroDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      _ = [regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()]].map {
+        questions.append(($0, .futuroDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      irregularParticipioVerbs.shuffle()
+      for _ in 0...6 {
+        questions.append((irregularParticipioVerbs[getIrregularParticipioVerbsIndex()], .perfectoDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      _ = [regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()]].map {
+        questions.append(($0, .perfectoDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+    case .moderate:
+      _ = [regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()]].map {
+        questions.append(($0, .presenteDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      irregularPresenteDeIndicativoVerbs.shuffle()
+      for _ in 0...2 {
+        questions.append((irregularPresenteDeIndicativoVerbs[getIrregularPresenteDeIndicativoVerbsIndex()], .presenteDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      irregularRaizFuturaVerbs.shuffle()
+      for _ in 0...1 {
+        questions.append((irregularRaizFuturaVerbs[getIrregularRaizFuturaVerbsIndex()], .futuroDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      _ = [regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()]].map {
+        questions.append(($0, .futuroDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      for _ in 0...1 {
+        questions.append((irregularRaizFuturaVerbs[getIrregularRaizFuturaVerbsIndex()], .condicional, personNumbers[getPersonNumbersIndex()]))
+      }
+      _ = [regularArVerbs[getRegularArVerbsIndex()], regularErVerbs[getRegularIrVerbsIndex()]].map {
+        questions.append(($0, .condicional, personNumbers[getPersonNumbersIndex()]))
+      }
+      irregularParticipioVerbs.shuffle()
+      for _ in 0...1 {
+        questions.append((irregularParticipioVerbs[getIrregularParticipioVerbsIndex()], .perfectoDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      _ = [regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()]].map {
+        questions.append(($0, .perfectoDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      for _ in 0...1 {
+        questions.append((irregularImperfectoVerbs[getIrregularImperfectoVerbsIndex()], .imperfectoDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      _ = [regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularErVerbsIndex()]].map {
+        questions.append(($0, .imperfectoDeIndicativo, personNumbers[getPersonNumbersIndex()]))
+      }
+      _ = [regularArVerbs[getRegularArVerbsIndex()], regularIrVerbs[getRegularIrVerbsIndex()], regularErVerbs[getRegularErVerbsIndex()]].map {
+        questions.append(($0, .preterito, personNumbers[getPersonNumbersIndex()]))
+      }
+      irregularPresenteDeIndicativoVerbs.shuffle()
+      for _ in 0...2 {
+        questions.append((irregularPreteritoVerbs[getIrregularPreteritoVerbsIndex()], .preterito, personNumbers[getPersonNumbersIndex()]))
+      }
+
+    case .difficult:
+      fatalError()
     }
     questions.shuffle()
     score = 0
@@ -196,5 +247,23 @@ internal class Quiz {
       irregularParticipioVerbsIndex = 0
     }
     return currentIrregularParticipioVerbsIndex
+  }
+  
+  private func getIrregularImperfectoVerbsIndex() -> Int {
+    let currentIrregularImperfectoVerbsIndex = irregularImperfectoVerbsIndex
+    irregularImperfectoVerbsIndex += 1
+    if irregularImperfectoVerbsIndex == irregularImperfectoVerbs.count {
+      irregularImperfectoVerbsIndex = 0
+    }
+    return currentIrregularImperfectoVerbsIndex
+  }
+  
+  private func getIrregularPreteritoVerbsIndex() -> Int {
+    let currentIrregularPreteritoVerbsIndex = irregularPreteritoVerbsIndex
+    irregularPreteritoVerbsIndex += 1
+    if irregularPreteritoVerbsIndex == irregularPreteritoVerbs.count {
+      irregularPreteritoVerbsIndex = 0
+    }
+    return currentIrregularPreteritoVerbsIndex
   }
 }
