@@ -8,8 +8,12 @@
 
 import Foundation
 
-enum Difficulty {
-  case easy
-  case moderate
-  case difficult
+enum Difficulty: String {
+  case easy = "Easy"
+  case moderate = "Moderate"
+  case difficult = "Difficult"
+  
+  init() {
+    self = .moderate
+  }
 }

@@ -19,6 +19,10 @@ class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
   @IBOutlet var tenseLabel: UILabel!
   @IBOutlet var scoreLabelLabel: UILabel!
   @IBOutlet var scoreLabel: UILabel!
+  @IBOutlet var lastLabelLabel: UILabel!
+  @IBOutlet var lastLabel: UILabel!
+  @IBOutlet var correctLabel: UILabel!
+  @IBOutlet var correctLabelLabel: UILabel!
   @IBOutlet var progressLabelLabel: UILabel!
   @IBOutlet var progressLabel: UILabel!
   @IBOutlet var elapsedLabelLabel: UILabel!
@@ -32,6 +36,7 @@ class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+    navigationController?.setNavigationBarHidden(true, animated: false)
     Quiz.shared.delegate = self
     switch Quiz.shared.quizState {
     case .notStarted , .finished:
@@ -50,14 +55,20 @@ class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
         fatalError()
       }
       tenseLabel.text = Quiz.shared.tense.displayName
-      pronounLabel.text = Quiz.shared.personNumber.pronoun
+      pronounLabel.text = Quiz.shared.currentPersonNumber.pronoun
       scoreLabel.text = String(Quiz.shared.score)
       progressLabel.text = String(Quiz.shared.currentQuestionIndex + 1) + " / " + String(Quiz.shared.questionCount)
     }
   }
   
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    navigationController?.setNavigationBarHidden(false, animated: false)
+  }
+
+  
   private func hideInProgressUI() {
-    _ = [verbLabelLabel, verbLabel, translationLabel, pronounLabelLabel, pronounLabel, tenseLabelLabel, tenseLabel, scoreLabelLabel, scoreLabel, progressLabelLabel, progressLabel, elapsedLabelLabel, elapsedLabel, conjugationField].map {
+    _ = [verbLabelLabel, verbLabel, translationLabel, pronounLabelLabel, pronounLabel, tenseLabelLabel, tenseLabel, lastLabelLabel, lastLabel, correctLabelLabel, correctLabel, scoreLabelLabel, scoreLabel, progressLabelLabel, progressLabel, elapsedLabelLabel, elapsedLabel, conjugationField].map {
       $0.isHidden = true
     }
   }
@@ -71,6 +82,9 @@ class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
   @IBAction func startRestart() {
     Quiz.shared.start()
     startRestartButton.setTitle("Restart", for: .normal)
+    _ = [lastLabelLabel, lastLabel, correctLabelLabel, correctLabel].map {
+      $0.isHidden = true
+    }
     showInProgressUI()
   }
   
@@ -79,7 +93,7 @@ class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
   }
   
   func timeDidChange(newTime: Int) {
-    elapsedLabel.text = String(newTime)
+    elapsedLabel.text = newTime.timeString
   }
   
   func progressDidChange(current: Int, total: Int) {
@@ -113,15 +127,15 @@ class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
     default:
       break
     }
-    UIAlertController.showMessage("You scored \(Quiz.shared.score) points.", title: "Results")
+    performSegue(withIdentifier: "show results", sender: self)
   }
   
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     guard let text = conjugationField.text else { return false }
     guard text != "" else { return false }
-    let result = Quiz.shared.process(proposedAnswer: text)
-    conjugationField.text = nil
     conjugationField.resignFirstResponder()
+    let (result, correctConjugation) = Quiz.shared.process(proposedAnswer: text)
+    conjugationField.text = nil
     switch result {
     case .totalMatch:
       SoundManager.play(.chime)
@@ -129,6 +143,18 @@ class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
       SoundManager.play(.chirp)
     case .noMatch:
       SoundManager.play(.buzz)
+    }
+    if let correctConjugation = correctConjugation, Quiz.shared.quizState == .inProgress {
+      _ = [lastLabelLabel, lastLabel, correctLabelLabel, correctLabel].map {
+        $0?.isHidden = false
+      }
+      lastLabel.attributedText = text.uppercased().attributedString(color: Colors.blue)
+      correctLabel.attributedText = correctConjugation.attributedString
+    }
+    else {
+      _ = [lastLabelLabel, lastLabel, correctLabelLabel, correctLabel].map {
+        $0?.isHidden = true
+      }
     }
     return true
   }

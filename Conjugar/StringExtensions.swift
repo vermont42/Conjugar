@@ -17,31 +17,44 @@ extension String {
     return self
   }
   
-  var attributedString: NSAttributedString {
-    let nsString = NSString(string: self)
-    let length = nsString.length
-    var startIndex = -1
-    var endIndex = startIndex
-    let uppercaseLetters = NSCharacterSet.uppercaseLetters
-    for i in 0 ..< length {
-      if uppercaseLetters.contains(UnicodeScalar(nsString.character(at: i))!) {
-        startIndex = i
-        break
-      }
-    }
-    if startIndex != -1 {
-      for i in (0 ..< length).reversed() {
+  func attributedString(color: UIColor) -> NSAttributedString {
+    let nsStringCombined = NSString(string: self)
+    let nsStrings = NSArray(array: nsStringCombined.components(separatedBy: " ")) as! [NSString]
+    var attStrings: [NSAttributedString] = []
+    for nsString in nsStrings {
+      let length = nsString.length
+      var startIndex = -1
+      var endIndex = startIndex
+      let uppercaseLetters = NSCharacterSet.uppercaseLetters
+      for i in 0 ..< length {
         if uppercaseLetters.contains(UnicodeScalar(nsString.character(at: i))!) {
-          endIndex = i
+          startIndex = i
           break
         }
       }
-      let attString = NSMutableAttributedString(string: nsString.lowercased)
-      attString.addAttribute(NSForegroundColorAttributeName, value: Colors.red, range:  NSRange(location: startIndex, length: endIndex - startIndex + 1))
-      return attString
+      if startIndex != -1 {
+        for i in (0 ..< length).reversed() {
+          if uppercaseLetters.contains(UnicodeScalar(nsString.character(at: i))!) {
+            endIndex = i
+            break
+          }
+        }
+        let attString = NSMutableAttributedString(string: nsString.lowercased)
+        attString.addAttribute(NSForegroundColorAttributeName, value: color, range:  NSRange(location: startIndex, length: endIndex - startIndex + 1))
+        attStrings.append(attString)
+      }
+      else {
+        attStrings.append(NSAttributedString(string: nsString as String))
+      }
     }
-    else {
-      return NSAttributedString(string: self)
+    var attString: NSAttributedString = attStrings[0]
+    for i in 1 ..< attStrings.count {
+      attString = attString + NSAttributedString(string: " " ) + attStrings[i]
     }
+    return attString
+  }
+  
+  var attributedString: NSAttributedString {
+    return attributedString(color: Colors.red)
   }
 }

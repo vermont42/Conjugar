@@ -8,7 +8,11 @@
 
 import Foundation
 
-enum Region {
-  case spain
-  case latinAmerica
+enum Region: String {
+  case spain = "Spain"
+  case latinAmerica = "Latin America"
+  
+  init() {
+    self = .spain
+  }
 }

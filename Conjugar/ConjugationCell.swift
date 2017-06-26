@@ -29,12 +29,7 @@ class ConjugationCell: UITableViewCell {
       else {
         conjugation = personNumber.pronoun + " " + conjugation
       }
-      if [.perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].contains(tense) {
-        self.conjugation.text = conjugation.lowercased()
-      }
-      else {
-        self.conjugation.attributedText = conjugation.attributedString
-      }
+      self.conjugation.attributedText = conjugation.attributedString
     }
   }
   

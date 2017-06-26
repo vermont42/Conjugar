@@ -52,6 +52,16 @@ class BrowseViewController: UIViewController, UITableViewDelegate, UITableViewDa
     table.reloadData()
   }
   
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    navigationController?.setNavigationBarHidden(true, animated: false)
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    navigationController?.setNavigationBarHidden(false, animated: false)
+  }
+  
   func numberOfSections(in tableView: UITableView) -> Int {
     return 1
   }
@@ -74,7 +84,7 @@ class BrowseViewController: UIViewController, UITableViewDelegate, UITableViewDa
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "show verb" {
-      let verbVC: VerbViewController = segue.destination as! VerbViewController
+      guard let verbVC: VerbViewController = segue.destination as? VerbViewController else { return }
       verbVC.verb = currentVerbs[selectedRow]
     }
   }

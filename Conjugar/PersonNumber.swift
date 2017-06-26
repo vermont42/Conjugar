@@ -51,7 +51,26 @@ enum PersonNumber: String {
     case .thirdPlural:
       return "ellas"
     case .none:
-      return ""
+      return "none"
+    }
+  }
+  
+  var shortDisplayName: String {
+    switch self {
+    case .firstSingular:
+      return "1S"
+    case .secondSingular:
+      return "2S"
+    case .thirdSingular:
+      return "3S"
+    case .firstPlural:
+      return "1P"
+    case .secondPlural:
+      return "2P"
+    case .thirdPlural:
+      return "3P"
+    case .none:
+      return "none"
     }
   }
 }
