@@ -103,29 +103,29 @@ internal class Quiz {
 
     switch lastDifficulty {
     case .easy:
-//      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
-//      questions.append((allRegularVerb, .pluscuamperfectoDeSubjuntivo1, PersonNumber.firstPlural))
-//      questions.append((allRegularVerb, .pluscuamperfectoDeSubjuntivo2, PersonNumber.secondPlural))
-//      questions.append((allRegularVerb, .pluscuamperfectoDeSubjuntivo1, PersonNumber.firstPlural))
-//      questions.append((allRegularVerb, .pluscuamperfectoDeSubjuntivo2, PersonNumber.secondPlural))
-      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].map {
-        questions.append(($0, .presenteDeIndicativo, personNumber()))
-      }
-      for _ in 0...8 {
-        questions.append((irregularPresenteDeIndicativoVerb, .presenteDeIndicativo, personNumber()))
-      }
-      for _ in 0...7 {
-        questions.append((irregularRaizFuturaVerb, .futuroDeIndicativo, personNumber()))
-      }
-      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb].map {
-        questions.append(($0, .futuroDeIndicativo, personNumber()))
-      }
-      for _ in 0...7 {
-        questions.append((irregularParticipioVerb, .perfectoDeIndicativo, personNumber()))
-      }
-      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].map {
-        questions.append(($0, .perfectoDeIndicativo, personNumber()))
-      }
+      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
+      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
+      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
+      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
+      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
+//      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].map {
+//        questions.append(($0, .presenteDeIndicativo, personNumber()))
+//      }
+//      for _ in 0...8 {
+//        questions.append((irregularPresenteDeIndicativoVerb, .presenteDeIndicativo, personNumber()))
+//      }
+//      for _ in 0...7 {
+//        questions.append((irregularRaizFuturaVerb, .futuroDeIndicativo, personNumber()))
+//      }
+//      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb].map {
+//        questions.append(($0, .futuroDeIndicativo, personNumber()))
+//      }
+//      for _ in 0...7 {
+//        questions.append((irregularParticipioVerb, .perfectoDeIndicativo, personNumber()))
+//      }
+//      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].map {
+//        questions.append(($0, .perfectoDeIndicativo, personNumber()))
+//      }
     case .moderate:
       _ = [regularArVerb, regularArVerb, regularIrVerb, regularErVerb].map {
         questions.append(($0, .presenteDeIndicativo, personNumber()))
@@ -279,6 +279,7 @@ internal class Quiz {
         timer?.invalidate()
         quizState = .finished
         delegate?.quizDidFinish()
+        GameCenterManager.shared.reportScore(score)
       }
       if result == .totalMatch {
         return (result, nil)

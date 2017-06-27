@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     UITabBar.appearance().barTintColor = UIColor.black
     UITabBar.appearance().tintColor = Colors.yellow
     Utterer.setup()
+    GameCenterManager.shared.authenticate()
     return true
   }
 

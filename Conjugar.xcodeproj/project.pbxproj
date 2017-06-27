@@ -16,6 +16,8 @@
 		E139E0E01EC7D27A00B34DE7 /* AttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E139E0DF1EC7D27A00B34DE7 /* AttributedStringExtension.swift */; };
 		E139E0E41EC7D2E500B34DE7 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */; };
 		E139E0E61EC7D36200B34DE7 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E139E0E51EC7D36200B34DE7 /* Colors.swift */; };
+		E14271371F01CA98001D19E1 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E14271361F01CA98001D19E1 /* GameKit.framework */; };
+		E14271391F01EFF2001D19E1 /* GameCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14271381F01EFF2001D19E1 /* GameCenterManager.swift */; };
 		E14566BC1EC001ED00C16DC3 /* TenseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14566BB1EC001ED00C16DC3 /* TenseCell.swift */; };
 		E14566BE1EC001FD00C16DC3 /* ConjugationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14566BD1EC001FD00C16DC3 /* ConjugationCell.swift */; };
 		E1483FAD1EF5A2200052C436 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1483FAC1EF5A2200052C436 /* Assets.xcassets */; };
@@ -78,6 +80,8 @@
 		E139E0DF1EC7D27A00B34DE7 /* AttributedStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributedStringExtension.swift; sourceTree = "<group>"; };
 		E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		E139E0E51EC7D36200B34DE7 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		E14271361F01CA98001D19E1 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		E14271381F01EFF2001D19E1 /* GameCenterManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCenterManager.swift; sourceTree = "<group>"; };
 		E14566BB1EC001ED00C16DC3 /* TenseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TenseCell.swift; sourceTree = "<group>"; };
 		E14566BD1EC001FD00C16DC3 /* ConjugationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugationCell.swift; sourceTree = "<group>"; };
 		E1483FAC1EF5A2200052C436 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -129,6 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E14271371F01CA98001D19E1 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,6 +175,7 @@
 			children = (
 				E139E0DF1EC7D27A00B34DE7 /* AttributedStringExtension.swift */,
 				E139E0E51EC7D36200B34DE7 /* Colors.swift */,
+				E14271381F01EFF2001D19E1 /* GameCenterManager.swift */,
 				E1483FB61EF6E35C0052C436 /* MutableCollectionExtension.swift */,
 				E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */,
 				E14BAD8D1EFF11BD000D91C5 /* SettingsManager.swift */,
@@ -203,6 +209,14 @@
 			name = Assets;
 			sourceTree = "<group>";
 		};
+		E14271351F01CA98001D19E1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E14271361F01CA98001D19E1 /* GameKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E1483FBC1EF746C40052C436 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,6 +237,7 @@
 				E1F06AD61E8F05F300ADD2E1 /* Conjugar */,
 				E1F06AEB1E8F05F400ADD2E1 /* ConjugarTests */,
 				E1F06AD51E8F05F300ADD2E1 /* Products */,
+				E14271351F01CA98001D19E1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -416,6 +431,7 @@
 				E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */,
 				E1F06ADA1E8F05F300ADD2E1 /* BrowseViewController.swift in Sources */,
 				E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */,
+				E14271391F01EFF2001D19E1 /* GameCenterManager.swift in Sources */,
 				E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */,
 				E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */,
 				E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */,
