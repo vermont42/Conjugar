@@ -224,7 +224,7 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
   }
   
-  func tap(_ sender: UITapGestureRecognizer) {
+  @objc func tap(_ sender: UITapGestureRecognizer) {
     if let label = sender.view as? UILabel {
       Utterer.utter(label.attributedText?.string ?? label.text!)
     }

@@ -42,7 +42,7 @@ class BrowseViewController: UIViewController, UITableViewDelegate, UITableViewDa
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationController?.navigationBar.titleTextAttributes = [
-      NSForegroundColorAttributeName : UIColor.white,
+      NSAttributedStringKey.foregroundColor.rawValue : UIColor.white,
     ]
     allVerbs = Conjugator.sharedInstance.allVerbsArray()
     regularVerbs = Conjugator.sharedInstance.regularVerbsArray()

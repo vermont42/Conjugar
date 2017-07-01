@@ -103,87 +103,85 @@ internal class Quiz {
 
     switch lastDifficulty {
     case .easy:
-      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
-      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
-      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
-      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
-      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
-//      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].map {
-//        questions.append(($0, .presenteDeIndicativo, personNumber()))
-//      }
-//      for _ in 0...8 {
-//        questions.append((irregularPresenteDeIndicativoVerb, .presenteDeIndicativo, personNumber()))
-//      }
-//      for _ in 0...7 {
-//        questions.append((irregularRaizFuturaVerb, .futuroDeIndicativo, personNumber()))
-//      }
-//      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb].map {
-//        questions.append(($0, .futuroDeIndicativo, personNumber()))
-//      }
-//      for _ in 0...7 {
-//        questions.append((irregularParticipioVerb, .perfectoDeIndicativo, personNumber()))
-//      }
-//      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].map {
-//        questions.append(($0, .perfectoDeIndicativo, personNumber()))
-//      }
-//    case .moderate:
-//      _ = [regularArVerb, regularArVerb, regularIrVerb, regularErVerb].map {
-//        questions.append(($0, .presenteDeIndicativo, personNumber()))
-//      }
-//      for _ in 0...3 {
-//        questions.append((irregularPresenteDeIndicativoVerb, .presenteDeIndicativo, personNumber()))
-//      }
-//      for _ in 0...2 {
-//        questions.append((irregularRaizFuturaVerb, .futuroDeIndicativo, personNumber()))
-//      }
-//      _ = [allRegularVerb, allRegularVerb].map {
-//        questions.append(($0, .futuroDeIndicativo, personNumber()))
-//      }
-//      for _ in 0...2 {
-//        questions.append((irregularRaizFuturaVerb, .condicional, personNumber()))
-//      }
-//      _ = [allRegularVerb, allRegularVerb].map {
-//        questions.append(($0, .condicional, personNumber()))
-//      }
-//      for _ in 0...2 {
-//        questions.append((irregularParticipioVerb, .perfectoDeIndicativo, personNumber()))
-//      }
-//      _ = [allRegularVerb, allRegularVerb].map {
-//        questions.append(($0, .perfectoDeIndicativo, personNumber()))
-//      }
-//      for _ in 0...2 {
-//        questions.append((irregularImperfectoVerb, .imperfectoDeIndicativo, personNumber()))
-//      }
-//      _ = [allRegularVerb, allRegularVerb, allRegularVerb].map {
-//        questions.append(($0, .imperfectoDeIndicativo, personNumber()))
-//      }
-//      for _ in 0...2 {
-//        questions.append((irregularPreteritoVerb, .preterito, personNumber()))
-//      }
-//      _ = [regularArVerb, regularIrVerb, regularErVerb].map {
-//        questions.append(($0, .preterito, personNumber()))
-//      }
-//      for _ in 0...2 {
-//        questions.append((irregularPresenteDeSubjuntivoVerb, .presenteDeSubjuntivo, personNumber()))
-//      }
-//      _ = [allRegularVerb, allRegularVerb].map {
-//        questions.append(($0, .presenteDeSubjuntivo, personNumber()))
-//      }
-//      for _ in 0...1 {
-//        questions.append((irregularGerundioVerb, .gerundio, .none))
-//      }
-//      _ = [allRegularVerb, allRegularVerb].map {
-//        questions.append(($0, .gerundio, .none))
-//      }
-//      for _ in 0...1 {
-//        questions.append((irregularTuImperativoVerb, .imperativo, .secondSingular))
-//      }
-//      _ = [allRegularVerb, allRegularVerb].map {
-//        questions.append(($0, .imperativo, personNumber(skipYo: true, skipTu: true)))
-//      }
-//      _ = [allRegularVerb, allRegularVerb].map {
-//        questions.append(($0, .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
-//      }
+//      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
+//      questions.append((allRegularVerb, .preterito, personNumber()))
+//      questions.append((allRegularVerb, .futuroDeIndicativo, personNumber()))
+      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].map {
+        questions.append(($0, .presenteDeIndicativo, personNumber()))
+      }
+      for _ in 0...8 {
+        questions.append((irregularPresenteDeIndicativoVerb, .presenteDeIndicativo, personNumber()))
+      }
+      for _ in 0...7 {
+        questions.append((irregularRaizFuturaVerb, .futuroDeIndicativo, personNumber()))
+      }
+      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb].map {
+        questions.append(($0, .futuroDeIndicativo, personNumber()))
+      }
+      for _ in 0...7 {
+        questions.append((irregularPreteritoVerb, .preterito, personNumber()))
+      }
+      for _ in 0...8 {
+        questions.append((allRegularVerb, .preterito, personNumber()))
+      }
+    case .moderate:
+      _ = [regularArVerb, regularArVerb, regularIrVerb, regularErVerb].map {
+        questions.append(($0, .presenteDeIndicativo, personNumber()))
+      }
+      for _ in 0...3 {
+        questions.append((irregularPresenteDeIndicativoVerb, .presenteDeIndicativo, personNumber()))
+      }
+      for _ in 0...2 {
+        questions.append((irregularRaizFuturaVerb, .futuroDeIndicativo, personNumber()))
+      }
+      _ = [allRegularVerb, allRegularVerb].map {
+        questions.append(($0, .futuroDeIndicativo, personNumber()))
+      }
+      for _ in 0...2 {
+        questions.append((irregularRaizFuturaVerb, .condicional, personNumber()))
+      }
+      _ = [allRegularVerb, allRegularVerb].map {
+        questions.append(($0, .condicional, personNumber()))
+      }
+      for _ in 0...2 {
+        questions.append((irregularParticipioVerb, .perfectoDeIndicativo, personNumber()))
+      }
+      _ = [allRegularVerb, allRegularVerb].map {
+        questions.append(($0, .perfectoDeIndicativo, personNumber()))
+      }
+      for _ in 0...2 {
+        questions.append((irregularImperfectoVerb, .imperfectoDeIndicativo, personNumber()))
+      }
+      _ = [allRegularVerb, allRegularVerb, allRegularVerb].map {
+        questions.append(($0, .imperfectoDeIndicativo, personNumber()))
+      }
+      for _ in 0...2 {
+        questions.append((irregularPreteritoVerb, .preterito, personNumber()))
+      }
+      _ = [regularArVerb, regularIrVerb, regularErVerb].map {
+        questions.append(($0, .preterito, personNumber()))
+      }
+      for _ in 0...2 {
+        questions.append((irregularPresenteDeSubjuntivoVerb, .presenteDeSubjuntivo, personNumber()))
+      }
+      _ = [allRegularVerb, allRegularVerb].map {
+        questions.append(($0, .presenteDeSubjuntivo, personNumber()))
+      }
+      for _ in 0...1 {
+        questions.append((irregularGerundioVerb, .gerundio, .none))
+      }
+      _ = [allRegularVerb, allRegularVerb].map {
+        questions.append(($0, .gerundio, .none))
+      }
+      for _ in 0...1 {
+        questions.append((irregularTuImperativoVerb, .imperativo, .secondSingular))
+      }
+      _ = [allRegularVerb, allRegularVerb].map {
+        questions.append(($0, .imperativo, personNumber(skipYo: true, skipTu: true)))
+      }
+      _ = [allRegularVerb, allRegularVerb].map {
+        questions.append(($0, .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
+      }
     case .difficult:
       for _ in 0...1 {
         questions.append((irregularGerundioVerb, .gerundio, .none))

@@ -33,7 +33,7 @@ class ConjugationCell: UITableViewCell {
     }
   }
   
-  func tap(_ sender: UITapGestureRecognizer) {
+  @objc func tap(_ sender: UITapGestureRecognizer) {
     Utterer.utter(conjugation.attributedText?.string ?? conjugation.text!)
   }
 }

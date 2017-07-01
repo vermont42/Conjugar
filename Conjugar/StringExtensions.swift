@@ -40,7 +40,7 @@ extension String {
           }
         }
         let attString = NSMutableAttributedString(string: nsString.lowercased)
-        attString.addAttribute(NSForegroundColorAttributeName, value: color, range:  NSRange(location: startIndex, length: endIndex - startIndex + 1))
+        attString.addAttribute(NSAttributedStringKey.foregroundColor, value: color, range:  NSRange(location: startIndex, length: endIndex - startIndex + 1))
         attStrings.append(attString)
       }
       else {
