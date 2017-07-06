@@ -690,14 +690,15 @@
                                 <color key="textColor" red="0.98039215690000003" green="0.78823529410000004" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In Latin American mode, quizzes do not include vosotros conjugations." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vYb-F8-O1U">
-                                <rect key="frame" x="16" y="138" width="288" height="33"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vYb-F8-O1U">
+                                <rect key="frame" x="16" y="138" width="288" height="49.5"/>
+                                <string key="text">In Latin American mode, quizzes do not include vosotros conjugations. This setting determines how Conjugar pronounces conjugations.</string>
                                 <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="12"/>
                                 <color key="textColor" red="0.98039215690000003" green="0.78823529410000004" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Difficulty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W0a-tv-yIO">
-                                <rect key="frame" x="123" y="195" width="75" height="25"/>
+                                <rect key="frame" x="123" y="211.5" width="75" height="25"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
                                 <color key="textColor" red="0.98039215690000003" green="0.78823529410000004" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -715,7 +716,7 @@
                                 </connections>
                             </segmentedControl>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CoD-rs-wWs">
-                                <rect key="frame" x="16" y="228" width="288" height="29"/>
+                                <rect key="frame" x="16" y="244.5" width="288" height="29"/>
                                 <segments>
                                     <segment title="Easy"/>
                                     <segment title="Moderate"/>
@@ -728,7 +729,7 @@
                                 </connections>
                             </segmentedControl>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B4f-5j-8c1">
-                                <rect key="frame" x="16" y="264" width="288" height="49.5"/>
+                                <rect key="frame" x="16" y="280.5" width="288" height="49.5"/>
                                 <string key="text">Moderate-mode quizzes test more tenses than easy-mode quizzes. Difficult-mode quizzes test more tenses than moderate-mode quizzes.</string>
                                 <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="12"/>
                                 <color key="textColor" red="0.98039215690000003" green="0.78823529410000004" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
