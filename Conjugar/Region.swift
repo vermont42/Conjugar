@@ -15,4 +15,13 @@ enum Region: String {
   init() {
     self = .spain
   }
+  
+  var accent: String {
+    switch self {
+    case .spain:
+      return "ES"
+    case .latinAmerica:
+      return "MX"
+    }
+  }
 }

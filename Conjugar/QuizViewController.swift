@@ -148,8 +148,8 @@ class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
       _ = [lastLabelLabel, lastLabel, correctLabelLabel, correctLabel].map {
         $0?.isHidden = false
       }
-      lastLabel.attributedText = text.uppercased().attributedString(color: Colors.blue)
-      correctLabel.attributedText = correctConjugation.attributedString
+      lastLabel.attributedText = text.coloredString(color: Colors.blue)
+      correctLabel.attributedText = correctConjugation.conjugatedString
     }
     else {
       _ = [lastLabelLabel, lastLabel, correctLabelLabel, correctLabel].map {

@@ -18,12 +18,12 @@ class ResultCell: UITableViewCell {
   func configure(verb: String, tense: Tense, personNumber: PersonNumber, correctAnswer: String, proposedAnswer: String) {
     verbLabel.text = verb.lowercased()
     tensePersonNumberLabel.text = "\(tense.displayName), \(personNumber.shortDisplayName)"
-    correctAnswerLabel.attributedText = correctAnswer.attributedString
+    correctAnswerLabel.attributedText = correctAnswer.conjugatedString
     if correctAnswer.lowercased() == proposedAnswer.lowercased() {
       proposedAnswerLabel.text = proposedAnswer.lowercased()
     }
     else {
-      proposedAnswerLabel.attributedText = proposedAnswer.uppercased().attributedString(color: Colors.blue)
+      proposedAnswerLabel.attributedText = proposedAnswer.coloredString(color: Colors.blue)
     }
   }
 }

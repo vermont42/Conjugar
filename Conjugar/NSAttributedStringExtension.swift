@@ -1,5 +1,5 @@
 //
-//  AttributedStringExtension.swift
+//  NSAttributedStringExtension.swift
 //  Conjugar
 //
 //  Created by Adams, Josh on 5/13/17.
@@ -15,3 +15,4 @@ func + (left: NSAttributedString, right: NSAttributedString) -> NSAttributedStri
   result.append(right)
   return result
 }
+

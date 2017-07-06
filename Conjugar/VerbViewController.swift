@@ -43,21 +43,21 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
     let gerundioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .gerundio, personNumber: .none)
     switch gerundioResult {
     case let .success(value):
-      gerundio.attributedText = value.attributedString
+      gerundio.attributedText = value.conjugatedString
     default:
       fatalError()
     }
     let participioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .participio, personNumber: .none)
     switch participioResult {
     case let .success(value):
-      participio.attributedText = value.attributedString
+      participio.attributedText = value.conjugatedString
     default:
       fatalError()
     }
     let raizFuturaResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .raizFutura, personNumber: .none)
     switch raizFuturaResult {
     case let .success(value):
-      raizFutura.attributedText = value.attributedString + NSAttributedString(string: "-")
+      raizFutura.attributedText = value.conjugatedString + NSAttributedString(string: "-")
     default:
       fatalError()
     }

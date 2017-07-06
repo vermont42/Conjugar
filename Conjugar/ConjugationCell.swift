@@ -29,7 +29,7 @@ class ConjugationCell: UITableViewCell {
       else {
         conjugation = personNumber.pronoun + " " + conjugation
       }
-      self.conjugation.attributedText = conjugation.attributedString
+      self.conjugation.attributedText = conjugation.conjugatedString
     }
   }
   

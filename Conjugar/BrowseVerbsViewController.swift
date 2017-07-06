@@ -1,5 +1,5 @@
 //
-//  BrowseViewController.swift
+//  BrowseVerbsViewController.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 3/31/17.
@@ -18,7 +18,7 @@ import UIKit
 // In the section Prefixes Count, the following webpage has examples of prefixed irregulars conjugated like their parents. http://www.spanishdict.com/guide/spanish-irregular-present-tense Test.
 // More: http://studyspanish.com/grammar/lessons/future
 
-class BrowseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class BrowseVerbsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
   private var allVerbs: [String] = []
   private var regularVerbs: [String] = []
   private var irregularVerbs: [String] = []
