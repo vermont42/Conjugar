@@ -9,5 +9,5 @@
 import Foundation
 
 protocol InfoDelegate: class {
-  func infoSelectionDidChange(newIndex: Int)
+  func infoSelectionDidChange(newHeading: String)
 }

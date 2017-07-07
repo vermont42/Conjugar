@@ -11,22 +11,21 @@ import UIKit
 
 class InfoViewController: UIViewController, UITextViewDelegate {
   @IBOutlet var infoView: UITextView!
-  internal var infoIndex = 0
   internal weak var infoDelegate: InfoDelegate? = nil
+  internal var infoString: NSAttributedString?
   
   override func viewDidLoad() {
     infoView.delegate = self
   }
   
   override func viewWillAppear(_ animated: Bool) {
-    infoView.attributedText = (Info.infos[infoIndex]).infoString
+    guard let infoString = infoString else { fatalError("InfoViewController's infoString property is nil.") }
+    infoView.attributedText = infoString
   }
   
   func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-    if let index = Info.infoTitles.index(of: URL.absoluteString) {
-      navigationController?.popViewController(animated: true)
-      infoDelegate?.infoSelectionDidChange(newIndex: index)
-    }
+    navigationController?.popViewController(animated: true)
+    infoDelegate?.infoSelectionDidChange(newHeading: URL.absoluteString)
     return false
   }
 }

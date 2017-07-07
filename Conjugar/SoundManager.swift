@@ -9,15 +9,11 @@ import Foundation
 import AVFoundation
 
 class SoundManager {
-  // MARK: properties
+  private static let soundManager = SoundManager()
+  private var sounds: [String: AVAudioPlayer]
+  private static let soundExtension = "mp3"
   
-  fileprivate static let soundManager = SoundManager()
-  fileprivate var sounds: [String: AVAudioPlayer]
-  fileprivate static let soundExtension = "mp3"
-  
-  // MARK: methods
-  
-  fileprivate init () {
+  private init () {
     sounds = Dictionary()
     do {
       try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback) // was ambient

@@ -33,7 +33,8 @@ class BrowseInfoViewController: UIViewController, UITableViewDelegate, UITableVi
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = table.dequeueReusableCell(withIdentifier: "InfoCell") as! InfoCell
-    cell.configure(info: Info.infoTitles[indexPath.row])
+    guard let decodedString = Info.infos[indexPath.row].heading.removingPercentEncoding else { fatalError("Could not decode string.") }
+    cell.configure(heading: decodedString)
     return cell
   }
   
@@ -46,13 +47,18 @@ class BrowseInfoViewController: UIViewController, UITableViewDelegate, UITableVi
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "show info" {
       guard let infoVC: InfoViewController = segue.destination as? InfoViewController else { return }
-      infoVC.infoIndex = selectedRow
+      infoVC.infoString = Info.infos[selectedRow].infoString
       infoVC.infoDelegate = self
     }
   }
   
-  func infoSelectionDidChange(newIndex: Int) {
-    selectedRow = newIndex
+  func infoSelectionDidChange(newHeading: String) {
+    for i in 0 ..< Info.infos.count {
+      if Info.infos[i].heading == newHeading {
+        selectedRow = i
+        break
+      }
+    }
     performSegue(withIdentifier: "show info", sender: self)
   }
 }

@@ -114,7 +114,9 @@ extension String {
       if char == "%" {
         if inLink {
           let nsRange = NSMakeRange(startIndex + 1, (currentIndex - startIndex) - 1)
-          attributesAndRanges.append((NSAttributedStringKey.link, substring(with: Range(nsRange, in: self)!), nsRange))
+          guard let range = Range(nsRange, in: self) else { fatalError("Could not make Range.") }
+          guard let encodedString = substring(with: range).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { fatalError("Could not URL encode substring.") }
+          attributesAndRanges.append((NSAttributedStringKey.link, encodedString, nsRange))
           inLink = false
         }
         else {
@@ -144,7 +146,7 @@ extension String {
     
     for conjugationRange in conjugationRanges {
       let conjugation = infoString.mutableString.substring(with: conjugationRange)
-      let attributedString = (conjugation as String).coloredString(color: Colors.red)
+      let attributedString = (conjugation as String).conjugatedString
       infoString.replaceCharacters(in: conjugationRange, with: (self as NSString).substring(with: conjugationRange).lowercased())
       attributedString.enumerateAttribute(NSAttributedStringKey.foregroundColor, in: NSMakeRange(0, attributedString.length), options: []) { (value, range, stop) -> Void in
         if value != nil {

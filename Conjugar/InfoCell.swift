@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 
 class InfoCell: UITableViewCell {
-  @IBOutlet var info: UILabel!
+  @IBOutlet var heading: UILabel!
   
-  func configure(info: String) {
-    self.info.text = info
+  func configure(heading: String) {
+    self.heading.text = heading
   }
 }
