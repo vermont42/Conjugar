@@ -147,9 +147,9 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
       tense = .imperfectoDeSubjuntivo2
       personNumber = personNumbers[row - 57]
     case 63:
-      tense = .imperativo
+      tense = .imperativoPositivo
     case 64...68:
-      tense = .imperativo
+      tense = .imperativoPositivo
       personNumber = personNumbers[row - 63]
     case 69:
       tense = .imperativoNegativo
@@ -206,7 +206,7 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     if personNumber == .none {
       let cell = table.dequeueReusableCell(withIdentifier: "TenseCell") as! TenseCell
-      cell.configure(tense: tense.displayName)
+      cell.configure(tense: tense.titleCaseName)
       return cell
     }
     else {
@@ -229,6 +229,4 @@ class VerbViewController: UIViewController, UITableViewDelegate, UITableViewData
       Utterer.utter(label.attributedText?.string ?? label.text!)
     }
   }
-  
-  
 }

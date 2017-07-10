@@ -31,5 +31,5 @@ struct VerbFamilies {
   
   static let irregularParticipioVerbs = ["abrir", "cubrir", "decir", "escribir", "hacer", "morir", "poner", "resolver", "romper", "ver", "volver", "pudrir"]
   
-  static let irregularGerundioVerbs = ["poder", "sentir", "medir", "dormir", "oír", "caer", "leer", "traer", "construir", "huir", "oír", "ir", "tañer", "bullir"]
+  static let irregularGerundioVerbs = ["poder", "sentir", "medir", "dormir", "caer", "leer", "traer", "construir", "huir", "oír", "ir", "tañer", "bullir"]
 }

@@ -174,10 +174,10 @@ internal class Quiz {
         questions.append(($0, .gerundio, .none))
       }
       for _ in 0...1 {
-        questions.append((irregularTuImperativoVerb, .imperativo, .secondSingular))
+        questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingular))
       }
       _ = [allRegularVerb, allRegularVerb].map {
-        questions.append(($0, .imperativo, personNumber(skipYo: true, skipTu: true)))
+        questions.append(($0, .imperativoPositivo, personNumber(skipYo: true, skipTu: true)))
       }
       _ = [allRegularVerb, allRegularVerb].map {
         questions.append(($0, .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
@@ -227,8 +227,8 @@ internal class Quiz {
       questions.append((allRegularVerb, .imperfectoDeSubjuntivo2, personNumber()))
       questions.append((irregularPreteritoVerb, .futuroDeSubjuntivo, personNumber()))
       questions.append((allRegularVerb, .futuroDeSubjuntivo, personNumber()))
-      questions.append((irregularTuImperativoVerb, .imperativo, .secondSingular))
-      questions.append((allRegularVerb, .imperativo, personNumber(skipYo: true, skipTu: true)))
+      questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingular))
+      questions.append((allRegularVerb, .imperativoPositivo, personNumber(skipYo: true, skipTu: true)))
       questions.append((allRegularVerb, .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
       _ = [.perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].map {
         questions.append((regularOrIrregularParticipioVerb, $0, personNumber()))
@@ -274,6 +274,7 @@ internal class Quiz {
         delegate?.questionDidChange(verb: questions[currentQuestionIndex].0, tense: questions[currentQuestionIndex].1, personNumber: questions[currentQuestionIndex].2)
       }
       else {
+        score = Int(Double(score) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
         timer?.invalidate()
         quizState = .finished
         delegate?.quizDidFinish()

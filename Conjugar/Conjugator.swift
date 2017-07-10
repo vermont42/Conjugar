@@ -91,7 +91,7 @@ class Conjugator {
     if infinitive.characters.count < 2 {
       return .failure(.tooShort)
     }
-    if personNumber == .firstSingular && (tense == .imperativo || tense == .imperativoNegativo) {
+    if personNumber == .firstSingular && (tense == .imperativoPositivo || tense == .imperativoNegativo) {
       return .failure(.noFirstPersonSingularImperative)
     }
     let index = infinitive.index(infinitive.endIndex, offsetBy: -2)
@@ -245,7 +245,7 @@ class Conjugator {
       let participle = conjugateRecursively(infinitive: infinitive, tense: .participio, personNumber: .none).value!
       return .success(auxiliary + " " + participle)
     }
-    else if tense == .imperativo {
+    else if tense == .imperativoPositivo {
       if personNumber == .firstSingular {
         return .failure(.noFirstPersonSingularImperative)
       }
@@ -254,7 +254,7 @@ class Conjugator {
       }
       else {
         if personNumber == .secondSingular {
-          if let conjugation = verbs[infinitive]?[PersonNumber.secondSingular.rawValue + Tense.imperativo.rawValue] {
+          if let conjugation = verbs[infinitive]?[PersonNumber.secondSingular.rawValue + Tense.imperativoPositivo.rawValue] {
             return .success(conjugation)
           }
           else {

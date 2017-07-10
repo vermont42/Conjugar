@@ -69,8 +69,8 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let st = attributeDict[Conjugator.stem] {
         currentConjugations[Conjugator.stem] = st
       }
-      if let io = attributeDict[PersonNumber.secondSingular.rawValue + Tense.imperativo.rawValue] {
-        currentConjugations[PersonNumber.secondSingular.rawValue + Tense.imperativo.rawValue] = io
+      if let io = attributeDict[PersonNumber.secondSingular.rawValue + Tense.imperativoPositivo.rawValue] {
+        currentConjugations[PersonNumber.secondSingular.rawValue + Tense.imperativoPositivo.rawValue] = io
       }
       
       if let fs = attributeDict[PersonNumber.firstSingular.rawValue + Tense.presenteDeIndicativo.rawValue] {

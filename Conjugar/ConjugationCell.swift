@@ -23,7 +23,7 @@ class ConjugationCell: UITableViewCell {
       self.conjugation.text = ""
     }
     else {
-      if tense == .imperativo || tense == .imperativoNegativo {
+      if tense == .imperativoPositivo || tense == .imperativoNegativo {
         conjugation = "¡" + conjugation + "!"
       }
       else {

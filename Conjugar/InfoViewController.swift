@@ -24,9 +24,15 @@ class InfoViewController: UIViewController, UITextViewDelegate {
   }
   
   func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-    navigationController?.popViewController(animated: true)
-    infoDelegate?.infoSelectionDidChange(newHeading: URL.absoluteString)
-    return false
+    let http = "http"
+    if URL.absoluteString.prefix(http.characters.count) == http {
+      return true
+    }
+    else {
+      navigationController?.popViewController(animated: true)
+      infoDelegate?.infoSelectionDidChange(newHeading: URL.absoluteString)
+      return false
+    }
   }
 }
 

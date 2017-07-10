@@ -17,7 +17,7 @@ enum Tense: String {
   case participio = "po"
   case raizFutura = "rf"
 
-  case imperativo = "io"
+  case imperativoPositivo = "io"
   case imperativoNegativo = "ni"
   
   case presenteDeIndicativo = "pr"
@@ -43,6 +43,61 @@ enum Tense: String {
   var displayName: String {
     switch self {
     case .infinitivo:
+      return "infinitivo"
+    case .translation:
+      return "translation"
+    case .gerundio:
+      return "gerundio"
+    case .participio:
+      return "participio"
+    case .raizFutura:
+      return "raíz futura"
+    case .imperativoPositivo:
+      return "imperativo positivo"
+    case .imperativoNegativo:
+      return "imperativo negativo"
+    case .presenteDeIndicativo:
+      return "presente de indicativo"
+    case .preterito:
+      return "pretérito"
+    case .imperfectoDeIndicativo:
+      return "imperfecto de indicativo"
+    case .futuroDeIndicativo:
+      return "futuro de indicativo"
+    case .condicional:
+      return "condicional"
+    case .presenteDeSubjuntivo:
+      return "presente de subjuntivo"
+    case .imperfectoDeSubjuntivo1:
+      return "imperfecto de subjuntivo 1"
+    case .imperfectoDeSubjuntivo2:
+      return "imperfecto de subjuntivo 2"
+    case .futuroDeSubjuntivo:
+      return "futuro de subjuntivo"
+    case .perfectoDeIndicativo:
+      return "perfecto de indicativo"
+    case .preteritoAnterior:
+      return "préterito anterior"
+    case .pluscuamperfectoDeIndicativo:
+      return "pluscuamperfecto de indicativo"
+    case .futuroPerfecto:
+      return "futuro perfecto"
+    case .condicionalCompuesto:
+      return "condicional compuesto"
+    case .perfectoDeSubjuntivo:
+      return "perfecto de subjuntivo"
+    case .pluscuamperfectoDeSubjuntivo1:
+      return "pluscuamperfecto de subjuntivo 1"
+    case .pluscuamperfectoDeSubjuntivo2:
+      return "pluscuamperfecto de subjuntivo 2"
+    case .futuroPerfectoDeSubjuntivo:
+      return "futuro perfecto de subjuntivo"
+    }
+  }
+  
+  var titleCaseName: String {
+    switch self {
+    case .infinitivo:
       return "Infinitivo"
     case .translation:
       return "Translation"
@@ -52,8 +107,8 @@ enum Tense: String {
       return "Participio"
     case .raizFutura:
       return "Raíz Futura"
-    case .imperativo:
-      return "Imperativo"
+    case .imperativoPositivo:
+      return "Imperativo Positivo"
     case .imperativoNegativo:
       return "Imperativo Negativo"
     case .presenteDeIndicativo:

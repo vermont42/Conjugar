@@ -54,7 +54,7 @@ class BrowseInfoViewController: UIViewController, UITableViewDelegate, UITableVi
   
   func infoSelectionDidChange(newHeading: String) {
     for i in 0 ..< Info.infos.count {
-      if Info.infos[i].heading == newHeading {
+      if Info.infos[i].heading.lowercased() == newHeading.lowercased() {
         selectedRow = i
         break
       }

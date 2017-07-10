@@ -115,8 +115,13 @@ extension String {
         if inLink {
           let nsRange = NSMakeRange(startIndex + 1, (currentIndex - startIndex) - 1)
           guard let range = Range(nsRange, in: self) else { fatalError("Could not make Range.") }
-          guard let encodedString = substring(with: range).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { fatalError("Could not URL encode substring.") }
-          attributesAndRanges.append((NSAttributedStringKey.link, encodedString, nsRange))
+          var subString = substring(with: range)
+          let http = "http"
+          if subString.prefix(http.characters.count) != http {
+            guard let encodedString = subString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { fatalError("Could not URL encode substring.") }
+            subString = encodedString
+          }
+          attributesAndRanges.append((NSAttributedStringKey.link, subString, nsRange))
           inLink = false
         }
         else {

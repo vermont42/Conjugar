@@ -24,4 +24,13 @@ enum Region: String {
       return "MX"
     }
   }
+  
+  var scoreModifier: Double {
+    switch self {
+    case .spain:
+      return 1.0
+    case .latinAmerica:
+      return 0.833
+    }
+  }
 }
