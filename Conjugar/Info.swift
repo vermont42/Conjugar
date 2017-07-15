@@ -28,7 +28,7 @@ Info(heading: "Purpose & Use", difficulty: .easy, text: """
 
 ^Purpose^
 
-In Spanish, conjugation, a concept defined in %terminology%, is important for the reasons stated there. People raised in Spanish-speaking countries learn conjugation passively, and people who engage in formal Spanish study learn conjugation as part of that study.
+In Spanish, conjugation, a concept defined in %terminology%, is important for the reasons stated there. People raised in Spanish-speaking countries learn conjugation passively, and people who engage in formal Spanish learn conjugation as part of that study.
 
 But there exists another category of Spanish-learners: people, like the developer of ~Conjugar~, who live in non-Spanish-speaking countries, who are currently unable to engage in formal study of Spanish, but who are exposed to Spanish vocabulary by one means or another. Here is an example of the challenge that these learners face.
 
@@ -36,7 +36,7 @@ The developer of ~Conjugar~ knew, from exposure to Spanish in a previous job, th
 
 There are excellent resources for Spanish-verb conjugation. The website ~SpanishDict.com~ and the book ~"Spanish Verbs Made Simple(r)"~ are two of them. The developer of ~Conjugar~ used these resources when he wrote Spanish, but they were unavailable when he spoke Spanish extemporaneously. At some point, he realized that he needed a way to practice conjugating Spanish verbs so that correct conjugations sprang to mind when he was speaking.
 
-This was the genesis of ~Conjugar~, the app whose bits now serve you. ~Conjugar~ allows you practice conjugating, via quizzes, ~all~ Spanish verb tenses so that correct conjugations are in your brain at the exact moment you need them. ~Conjugar~ gamifies this experience by scoring each practice session and potentially uploading it to Game Center, allowing you to compete against the global Spanish-verb-conjugation community. Some tenses are rare except in archaic or formal texts and are less useful for many learners. ~Conjugar~ therefore provides three difficulty levels for practice sessions. ~Easy~ tests the three most important tenses. ~Moderate~ tests all tenses that Spanish-speakers commonly use. ~Difficult~ tests ~all~ tenses, including a few that you are unlikely to encounter unless you are reading, for example, ~El ingenioso hidalgo don Quixote de la Mancha~.
+This was the genesis of ~Conjugar~, the app whose majesty now envelops you. ~Conjugar~ allows you practice conjugating, via quizzes, ~all~ Spanish verb tenses so that correct conjugations are in your brain at the exact moment you need them. ~Conjugar~ gamifies this experience by scoring each practice session and potentially uploading it to Game Center, allowing you to compete against the global Spanish-verb-conjugation community. Some tenses are rare except in archaic or formal texts and are less useful for many learners. ~Conjugar~ therefore provides three difficulty levels for practice sessions. ~Easy~ tests the three most important tenses. ~Moderate~ tests all tenses that Spanish-speakers commonly use. ~Difficult~ tests ~all~ tenses, including a few that you are unlikely to encounter unless you are reading, for example, ~El ingenioso hidalgo don Quixote de la Mancha~.
 
 ^Use^
 
@@ -50,7 +50,7 @@ Tap ~Settings~ in the tab bar to access settings.
 
 One class of conjugations, those of ~vosotros~, is important in Spain but largely absent in Latin America. If your goal is to communicate with Latin-American Spanish-speakers, you may want to have ~Conjugar~ omit ~vosotros~ conjugations from quizzes. If so, tap ~Latin America~ in the ~Region~ section.
 
-In recognition of the added difficulty of learning ~vosotros~ conjugations, ~Conjugar~ assigns higher scores to quizzes that include ~vosotros~ conjugations.
+In recognition of the added difficulty of learning ~vosotros~ conjugations, ~Conjugar~ assigns higher scores to quizzes that include these conjugations.
 
 Spanish verb tenses may be roughly grouped into three classes. The first class consists of the bare minimum of tenses you will need to express yourself in Spanish. If your goal is only to express yourself in Spanish, tap ~Easy~ in the ~Difficulty~ section. ~Conjugar~ will quiz you on these tenses. The second class consists of the tenses that native Spanish speakers regularly use in conversation and writing. If your goal is to understand spoken-and-written Spanish, tap ~Moderate~ in the ~Difficulty~ section. ~Conjugar~ will quiz you on these tenses. The third class consists of all the Spanish verb tenses, including a few that are considered archaic or are rarely used except in formal writing. If your goal is to understand archaic-or-formal Spanish texts, tap ~Difficult~ in the ~Difficulty~ section. ~Conjugar~ will quiz you on ~all~ Spanish verb tenses.
 
@@ -65,7 +65,7 @@ Info(heading: "Terminology", difficulty: .easy, text: """
 
 A ~verb~ is a kind of word that stands for an action in a sentence. In the sentence "Celina Zambon is dancing the flamenco", "to dance" is the verb. Verb ~tense~s express, among other things, temporality. In the example sentence, the verb tense expresses that the action is currently taking place. In English, to a limited degree, and in Spanish, to a near-total degree, the ~subject~ or actor in the sentence, combined with the tense, determines the exact form of the verb used. This is the verb ~conjugation~. In English, the example sentence's combination of subject and tense results in the conjugation "is dancing".
 
-The ~un~conjugated form of a Spanish verb is the ~infinitivo~. All infinitivos end in -ar, -ir, or -er. "Bailar" is an infinitivo that means "to dance". Dictionaries and ~Conjugar~'s Browse tab list the infinitivo forms of verbs.
+The ~un~conjugated form of a Spanish verb is the ~infinitivo~. All infinitivos end in -ar, -ir, or -er. "Bailar" is an infinitivo that means "to dance". Spanish dictionaries and ~Conjugar~'s Browse tab list the infinitivo forms of verbs.
 
 The ~verb stem~ is the inifinitivo minus the -ar, -ir, or -er ending.
 
@@ -91,7 +91,7 @@ third person, plural: ~ellos~ (masc.)/~ellas~ (fem.)
 
 "Fem." means that a pronoun refers to female subjects, and "masc" means that a pronoun refers to male subjects.
 
-The second-person subject pronouns in Spanish are more complicated in that they encode two informality levels, formal and informal. Further, uses of these pronouns differ in Spain and Latin America.
+The second-person subject pronouns in Spanish are more complicated in that they encode two formality levels, formal and informal. Further, uses of these pronouns differ in Spain and Latin America.
 
 ~Spain~
 
@@ -111,7 +111,7 @@ Usted and ustedes use the él and ellos conjugations, respectively.
 
 The difference between the two regions is that ~ustedes~ has replaced ~vosotros~/~vosotras~ in Latin America. This replacement means that Spanish-learners in Spain must learn conjugations for six person-number combinations, but Spanish-learners in Latin America must learn conjugations for only five.
 
-In parts of Latin America, ~vos~ replaces ~tú~ and uses different conjugations. This phenomenon is called "voseo". Due to developer time constraints, ~Conjugar~ does not attempt to describe voseo in greater detail or quiz the ~vos~ conjugations.
+In parts of Latin America, ~vos~ has replaced ~tú~ and uses different conjugations. This phenomenon is called "voseo". Due to developer time constraints, ~Conjugar~ does not attempt to describe voseo in greater detail or quiz the ~vos~ conjugations.
 
 ^Order and Presentation of Conjugations^
 
@@ -119,7 +119,7 @@ Treatises on Spanish verbs, when presenting the conjugations for a particular te
 
 $soY$, $ERes$, $ES$, $sOmos$, $sOis$, $sOn$
 
-Red letters in conjugations represent irregularities. A verb is considered irregular to the extent that any of its conjugations differs from the conjugation of a regular ~ar~, ~ir~, or ~er~ verb.
+Red letters in conjugations represent irregularities. A verb is considered irregular if any of its conjugations differs from the conjugation of a regular ~ar~, ~ir~, or ~er~ verb.
 """),
 Info(heading: "Presente de Indicativo", difficulty: .easy, text: """
 *Presente de Indicativo*
@@ -215,7 +215,7 @@ This form is also used to assert a command, prohibition, or obligation in Englis
 
 "¿Te importará encender la televisión?" = "Would you mind turning on the television?"
 
-Another common way to represent the future is with a %presente de indicativo% conjugation of ~ir~ followed by an Infinitivo verb: "Voy a viajar a Bolivia en el verano. = "I'm going to travel to Bolivia in the summer."
+Another common way to represent the future is with a %presente de indicativo% conjugation of ~ir~ followed by an Infinitivo verb: "Quizás $VOY$ a viajar a Bolivia en el verano. = "Perhaps I'm going to travel to Bolivia in the summer."
 
 ^Conjugation^
 
@@ -327,7 +327,7 @@ The gerundio cannot be used as an adjective and, unlike in most European languag
 
 ^Form^
 
-The participio is formed by adding the following endings to the verb stem:
+The gerundio is formed by adding the following endings to the verb stem:
 
 -ar verbs: ~-ando~
 
@@ -452,7 +452,7 @@ The ~perfecto de indicativo~ has virtually the same use as the tense sometimes c
 
 "Te $hE dICHo$ mi opinión." = "I have told you my opinion." or "I told you my opinion, and it hasn't changed."
 
-In Spanish, as in English, this tense implies that the action, although completed in the past, has continuing effects, truth, or relevance in the present.
+In Spanish, as in English, this tense implies that an action, although completed in the past, has continuing effects, truth, or relevance in the present.
 
 In most of Spain, the tense has an additional use: to express a past action or event that is contained in an unfinished period of time in the present.
 
