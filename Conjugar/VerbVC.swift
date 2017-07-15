@@ -1,5 +1,5 @@
 //
-//  VerbViewController.swift
+//  VerbVC.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 4/10/17.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class VerbViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class VerbVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
   @IBOutlet var infinitivo: UILabel!
   @IBOutlet var translation: UILabel!
   @IBOutlet var parentOrType: UILabel!

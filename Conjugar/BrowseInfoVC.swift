@@ -1,5 +1,5 @@
 //
-//  BrowseInfoViewController.swift
+//  BrowseInfoVC.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 7/1/17.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class BrowseInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, InfoDelegate {
+class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource, InfoDelegate {
   @IBOutlet var table: UITableView!
   private var selectedRow = 0
   
@@ -46,7 +46,7 @@ class BrowseInfoViewController: UIViewController, UITableViewDelegate, UITableVi
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "show info" {
-      guard let infoVC: InfoViewController = segue.destination as? InfoViewController else { return }
+      guard let infoVC: InfoVC = segue.destination as? InfoVC else { return }
       infoVC.infoString = Info.infos[selectedRow].infoString
       infoVC.infoDelegate = self
     }

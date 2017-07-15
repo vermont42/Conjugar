@@ -1,5 +1,5 @@
 //
-//  ResultsViewController.swift
+//  ResultsVC.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/25/17.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ResultsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
   @IBOutlet var table: UITableView!
   @IBOutlet var difficultyLabel: UILabel!
   @IBOutlet var regionLabel: UILabel!

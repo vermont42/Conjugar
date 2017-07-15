@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class SettingsViewController: UIViewController {
+class SettingsVC: UIViewController {
   @IBOutlet var regionControl: UISegmentedControl!
   @IBOutlet var difficultyControl: UISegmentedControl!
   

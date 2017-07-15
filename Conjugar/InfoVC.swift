@@ -1,5 +1,5 @@
 //
-//  InfoViewController.swift
+//  InfoVC.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 7/1/17.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class InfoViewController: UIViewController, UITextViewDelegate {
+class InfoVC: UIViewController, UITextViewDelegate {
   @IBOutlet var infoView: UITextView!
   internal weak var infoDelegate: InfoDelegate? = nil
   internal var infoString: NSAttributedString?
@@ -19,7 +19,7 @@ class InfoViewController: UIViewController, UITextViewDelegate {
   }
   
   override func viewWillAppear(_ animated: Bool) {
-    guard let infoString = infoString else { fatalError("InfoViewController's infoString property is nil.") }
+    guard let infoString = infoString else { fatalError("InfoVC's infoString property is nil.") }
     infoView.attributedText = infoString
   }
   

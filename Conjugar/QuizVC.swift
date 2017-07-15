@@ -1,5 +1,5 @@
 //
-//  QuizViewController.swift
+//  QuizVC.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/18/17.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class QuizViewController: UIViewController, UITextFieldDelegate, QuizDelegate {
+class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   @IBOutlet var verbLabelLabel: UILabel!
   @IBOutlet var verbLabel: UILabel!
   @IBOutlet var translationLabel: UILabel!
