@@ -11,6 +11,7 @@ import UIKit
 
 class TenseCell: UITableViewCell {
   @IBOutlet var tense: UILabel!
+  static let identifier = "TenseCell"
   
   func configure(tense: String) {
     self.tense.text = tense

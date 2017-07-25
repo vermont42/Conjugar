@@ -22,12 +22,9 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   private var allVerbs: [String] = []
   private var regularVerbs: [String] = []
   private var irregularVerbs: [String] = []
-  private var selectedRow = 0
-  @IBOutlet var table: UITableView!
-  @IBOutlet var filterControl: UISegmentedControl!
   
   private var currentVerbs: [String] {
-    switch filterControl.selectedSegmentIndex {
+    switch browseVerbsView.filterControl.selectedSegmentIndex {
     case 0:
       return irregularVerbs
     case 1:
@@ -39,31 +36,34 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
   }
   
+  var browseVerbsView: BrowseVerbsView {
+    return view as! BrowseVerbsView
+  }
+  
+  override func loadView() {
+    let browseVerbsView: BrowseVerbsView
+    if #available(iOS 11.0, *) {
+      browseVerbsView = BrowseVerbsView(frame: UIScreen.main.bounds)
+    }
+    else {
+      browseVerbsView = BrowseVerbsView(frame: UIScreen.main.bounds, safeBottomInset: 49)
+    }
+    browseVerbsView.setupTable(dataSource: self, delegate: self)
+    browseVerbsView.filterControl.addTarget(self, action: #selector(BrowseVerbsVC.valueChanged(_:)), for: .valueChanged)
+    view = browseVerbsView
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    navigationController?.navigationBar.titleTextAttributes = [
-      NSAttributedStringKey.foregroundColor.rawValue : UIColor.white,
-    ]
     allVerbs = Conjugator.sharedInstance.allVerbsArray()
     regularVerbs = Conjugator.sharedInstance.regularVerbsArray()
     irregularVerbs = Conjugator.sharedInstance.irregularVerbsArray()
-    table.delegate = self
-    table.dataSource = self
-    table.reloadData()
+    browseVerbsView.reloadTableData()
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    navigationController?.setNavigationBarHidden(true, animated: false)
-  }
-
-  override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
-    navigationController?.setNavigationBarHidden(false, animated: false)
-  }
-  
-  func numberOfSections(in tableView: UITableView) -> Int {
-    return 1
+    navigationItem.title = "Browse"
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -71,27 +71,20 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = table.dequeueReusableCell(withIdentifier: "VerbCell") as! VerbCell
+    let cell = tableView.dequeueReusableCell(withIdentifier: VerbCell.identifier) as! VerbCell
     cell.configure(verb: currentVerbs[indexPath.row])
     return cell
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    selectedRow = (indexPath as NSIndexPath).row
     tableView.deselectRow(at: indexPath, animated: false)
-    performSegue(withIdentifier: "show verb", sender: self)
+    let verbVC = VerbVC()
+    verbVC.verb = currentVerbs[indexPath.row]
+    navigationController?.pushViewController(verbVC, animated: true)
   }
   
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if segue.identifier == "show verb" {
-      guard let verbVC: VerbVC = segue.destination as? VerbVC else { return }
-      verbVC.verb = currentVerbs[selectedRow]
-    }
-  }
-  
-  @IBAction func filter() {
-    table.reloadData()
-    table.setContentOffset(CGPoint.zero, animated: false)
+  @objc func valueChanged(_ sender: UISegmentedControl) {
+    browseVerbsView.reloadTableData()
   }
 }
 

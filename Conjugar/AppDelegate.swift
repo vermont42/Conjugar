@@ -16,10 +16,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     UIApplication.shared.statusBarStyle = .lightContent
     UINavigationBar.appearance().barTintColor = UIColor.black
     UINavigationBar.appearance().tintColor = Colors.yellow
+    UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: Colors.yellow]
     UITabBar.appearance().barTintColor = UIColor.black
     UITabBar.appearance().tintColor = Colors.yellow
     Utterer.setup()
     GameCenterManager.shared.authenticate()
+    window = UIWindow(frame: UIScreen.main.bounds)
+    let mainTabBarVC = MainTabBarVC()
+    window?.rootViewController = mainTabBarVC
+    window?.makeKeyAndVisible()
     return true
   }
 

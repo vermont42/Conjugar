@@ -11,6 +11,7 @@ import UIKit
 
 class ConjugationCell: UITableViewCell {
   @IBOutlet var conjugation: UILabel!
+  static let identifier = "ConjugationCell"
   
   override func awakeFromNib() {
     super.awakeFromNib()

@@ -10,89 +10,148 @@ import Foundation
 import UIKit
 
 class VerbVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-  @IBOutlet var infinitivo: UILabel!
-  @IBOutlet var translation: UILabel!
-  @IBOutlet var parentOrType: UILabel!
-  @IBOutlet var participio: UILabel!
-  @IBOutlet var raizFutura: UILabel!
-  @IBOutlet var gerundio: UILabel!
-  @IBOutlet var defectivo: UILabel!
-  @IBOutlet var table: UITableView!
   var verb: String = ""
   
   override func viewDidLoad() {
-    table.delegate = self
-    table.dataSource = self
-    infinitivo.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
-    participio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
-    raizFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
-    gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
+    verbView.participio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
+    verbView.raizFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
+    verbView.gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
     guard verb != "" else { fatalError() }
-    infinitivo.text = verb
     let translationResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
     switch translationResult {
     case let .success(value):
-      translation.text = value
+      verbView.translation.text = value
     default:
       fatalError()
     }
     let gerundioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .gerundio, personNumber: .none)
     switch gerundioResult {
     case let .success(value):
-      gerundio.attributedText = value.conjugatedString
+      verbView.gerundio.attributedText = value.conjugatedString
     default:
       fatalError()
     }
     let participioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .participio, personNumber: .none)
     switch participioResult {
     case let .success(value):
-      participio.attributedText = value.conjugatedString
+      verbView.participio.attributedText = value.conjugatedString
     default:
       fatalError()
     }
     let raizFuturaResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .raizFutura, personNumber: .none)
     switch raizFuturaResult {
     case let .success(value):
-      raizFutura.attributedText = value.conjugatedString + NSAttributedString(string: "-")
+      verbView.raizFutura.attributedText = value.conjugatedString + NSAttributedString(string: "-")
     default:
       fatalError()
     }
     if Conjugator.sharedInstance.isDefective(infinitive: verb) {
-      defectivo.text = "Defective"
+      verbView.defectivo.text = "Defective"
     }
     else {
-      defectivo.text = "Not Defective"
+      verbView.defectivo.text = "Not Defective"
     }
     
     let verbType = Conjugator.sharedInstance.verbType(infinitive: verb)
     switch verbType {
     case .regularAr:
-      parentOrType.text = "Regular AR"
+      verbView.parentOrType.text = "Regular AR"
     case .regularEr:
-      parentOrType.text = "Regular ER"
+      verbView.parentOrType.text = "Regular ER"
     case .regularIr:
-      parentOrType.text = "Regular IR"
+      verbView.parentOrType.text = "Regular IR"
     case .irregular:
       guard let parent = Conjugator.sharedInstance.parent(infinitive: verb) else { fatalError() }
       if Conjugator.baseVerbs.contains(parent) {
-        parentOrType.text = "Irregular"
+        verbView.parentOrType.text = "Irregular"
       }
       else {
-        parentOrType.text = "Irreg. ☛ \(parent)"
+        verbView.parentOrType.text = "Irreg. ☛ \(parent)"
       }
     }
   }
   
-  func numberOfSections(in tableView: UITableView) -> Int {
-    return 1
+  var verbView: VerbView {
+    return view as! VerbView
   }
   
+  override func loadView() {
+    let verbView: VerbView
+    if #available(iOS 11.0, *) {
+      verbView = VerbView(frame: UIScreen.main.bounds)
+    }
+    else {
+      verbView = VerbView(frame: UIScreen.main.bounds, safeBottomInset: 49)
+    }
+    verbView.setupTable(dataSource: self, delegate: self)
+    view = verbView
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    navigationItem.title = verb.capitalized
+  }
+  
+//  override func viewWillAppear(_ animated: Bool) {
+//    super.viewWillAppear(animated)
+//    guard verb != "" else { fatalError() }
+//    infinitivo.text = verb
+//    let translationResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
+//    switch translationResult {
+//    case let .success(value):
+//      translation.text = value
+//    default:
+//      fatalError()
+//    }
+//    let gerundioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .gerundio, personNumber: .none)
+//    switch gerundioResult {
+//    case let .success(value):
+//      gerundio.attributedText = value.conjugatedString
+//    default:
+//      fatalError()
+//    }
+//    let participioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .participio, personNumber: .none)
+//    switch participioResult {
+//    case let .success(value):
+//      participio.attributedText = value.conjugatedString
+//    default:
+//      fatalError()
+//    }
+//    let raizFuturaResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .raizFutura, personNumber: .none)
+//    switch raizFuturaResult {
+//    case let .success(value):
+//      raizFutura.attributedText = value.conjugatedString + NSAttributedString(string: "-")
+//    default:
+//      fatalError()
+//    }
+//    if Conjugator.sharedInstance.isDefective(infinitive: verb) {
+//      defectivo.text = "Defective"
+//    }
+//    else {
+//      defectivo.text = "Not Defective"
+//    }
+//
+//    let verbType = Conjugator.sharedInstance.verbType(infinitive: verb)
+//    switch verbType {
+//    case .regularAr:
+//      parentOrType.text = "Regular AR"
+//    case .regularEr:
+//      parentOrType.text = "Regular ER"
+//    case .regularIr:
+//      parentOrType.text = "Regular IR"
+//    case .irregular:
+//      guard let parent = Conjugator.sharedInstance.parent(infinitive: verb) else { fatalError() }
+//      if Conjugator.baseVerbs.contains(parent) {
+//        parentOrType.text = "Irregular"
+//      }
+//      else {
+//        parentOrType.text = "Irreg. ☛ \(parent)"
+//      }
+//    }
+//  }
+  
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 138
+    return 0 //138
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -205,12 +264,12 @@ class VerbVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
       fatalError()
     }
     if personNumber == .none {
-      let cell = table.dequeueReusableCell(withIdentifier: "TenseCell") as! TenseCell
+      let cell = tableView.dequeueReusableCell(withIdentifier: TenseCell.identifier) as! TenseCell
       cell.configure(tense: tense.titleCaseName)
       return cell
     }
     else {
-      let cell = table.dequeueReusableCell(withIdentifier: "ConjugationCell") as! ConjugationCell
+      let cell = tableView.dequeueReusableCell(withIdentifier: ConjugationCell.identifier) as! ConjugationCell
       var conjugation = ""
       let conjugationResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: tense, personNumber: personNumber)
       switch conjugationResult {

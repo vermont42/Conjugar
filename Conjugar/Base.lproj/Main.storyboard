@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.19" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="o1m-hH-rlp">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.19" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -281,7 +281,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="2DU-hI-5LK">
             <objects>
-                <tabBarController id="o1m-hH-rlp" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="UITabeBarController" id="o1m-hH-rlp" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="nWk-Sg-YEt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
