@@ -10,10 +10,33 @@ import Foundation
 import UIKit
 
 class TenseCell: UITableViewCell {
-  @IBOutlet var tense: UILabel!
   static let identifier = "TenseCell"
+  
+  private let tense: UILabel = {
+    let label = UILabel()
+    label.textColor = Colors.red
+    label.font = Fonts.heading2
+    label.translatesAutoresizingMaskIntoConstraints = false
+    return label
+  } ()
+  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+    backgroundColor = Colors.black
+    selectionStyle = .none
+    addSubview(tense)
+    tense.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+    tense.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+  }
   
   func configure(tense: String) {
     self.tense.text = tense
   }
 }
+
+
+

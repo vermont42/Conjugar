@@ -28,6 +28,7 @@ class VerbCell: UITableViewCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     backgroundColor = Colors.black
     addSubview(verb)
+    
     addConstraint(NSLayoutConstraint(item: verb, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
     addConstraint(NSLayoutConstraint(item: verb, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
   }

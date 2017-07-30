@@ -14,7 +14,7 @@ class VerbView: UIView {
   
   internal let translation: UILabel = {
     let label = UILabel()
-    label.text = "knit"
+    label.isUserInteractionEnabled = true
     return label
   } ()
   
@@ -32,7 +32,7 @@ class VerbView: UIView {
   
   internal let participio: UILabel = {
     let label = UILabel()
-    label.text = "bebido"
+    label.isUserInteractionEnabled = true
     return label
   } ()
   
@@ -44,7 +44,7 @@ class VerbView: UIView {
   
   internal let gerundio: UILabel = {
     let label = UILabel()
-    label.text = "bebiendo"
+    label.isUserInteractionEnabled = true
     return label
   } ()
   
@@ -56,13 +56,13 @@ class VerbView: UIView {
   
   internal let raizFutura: UILabel = {
     let label = UILabel()
-    label.text = "bailar"
+    label.isUserInteractionEnabled = true
     return label
   } ()
   
   internal let defectivo: UILabel = {
     let label = UILabel()
-    label.text = "Defective"
+    label.isUserInteractionEnabled = true
     return label
   } ()
   
@@ -151,7 +151,8 @@ class VerbView: UIView {
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {
     table.dataSource = dataSource
     table.delegate = delegate
-    table.register(VerbCell.self, forCellReuseIdentifier: VerbCell.identifier)
+    table.register(TenseCell.self, forCellReuseIdentifier: TenseCell.identifier)
+    table.register(ConjugationCell.self, forCellReuseIdentifier: ConjugationCell.identifier)
   }
   
   func reloadTableData() {

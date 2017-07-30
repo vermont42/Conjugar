@@ -10,17 +10,25 @@ import Foundation
 import UIKit
 
 class InfoVC: UIViewController, UITextViewDelegate {
-  @IBOutlet var infoView: UITextView!
   internal weak var infoDelegate: InfoDelegate? = nil
   internal var infoString: NSAttributedString?
-  
-  override func viewDidLoad() {
-    infoView.delegate = self
+  var infoView: InfoView {
+    return view as! InfoView
   }
   
-  override func viewWillAppear(_ animated: Bool) {
+  override func loadView() {
+    let infoView: InfoView
+    if #available(iOS 11.0, *) {
+      infoView = InfoView(frame: UIScreen.main.bounds)
+    }
+    else {
+      infoView = InfoView(frame: UIScreen.main.bounds, safeBottomInset: 49)
+    }
     guard let infoString = infoString else { fatalError("InfoVC's infoString property is nil.") }
-    infoView.attributedText = infoString
+    infoView.info.attributedText = infoString
+    infoView.info.delegate = self
+    infoView.info.contentOffset = CGPoint.zero
+    view = infoView
   }
   
   func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
@@ -35,4 +43,3 @@ class InfoVC: UIViewController, UITextViewDelegate {
     }
   }
 }
-

@@ -13,10 +13,13 @@ class VerbVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
   var verb: String = ""
   
   override func viewDidLoad() {
-    verbView.participio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
-    verbView.raizFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
-    verbView.gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tap(_:))))
+    verbView.participio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
+    verbView.raizFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
+    verbView.gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
+    verbView.translation.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEnglish(_:))))
+    verbView.defectivo.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEnglish(_:))))
     guard verb != "" else { fatalError() }
+    initNavigationItemTitleView()
     let translationResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
     switch translationResult {
     case let .success(value):
@@ -87,71 +90,15 @@ class VerbVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     view = verbView
   }
   
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    navigationItem.title = verb.capitalized
+  private func initNavigationItemTitleView() {
+    let titleLabel = UILabel.titleLabel(title: verb.capitalized)
+    navigationItem.titleView = titleLabel
+    titleLabel.isUserInteractionEnabled = true
+    titleLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
   }
   
-//  override func viewWillAppear(_ animated: Bool) {
-//    super.viewWillAppear(animated)
-//    guard verb != "" else { fatalError() }
-//    infinitivo.text = verb
-//    let translationResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
-//    switch translationResult {
-//    case let .success(value):
-//      translation.text = value
-//    default:
-//      fatalError()
-//    }
-//    let gerundioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .gerundio, personNumber: .none)
-//    switch gerundioResult {
-//    case let .success(value):
-//      gerundio.attributedText = value.conjugatedString
-//    default:
-//      fatalError()
-//    }
-//    let participioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .participio, personNumber: .none)
-//    switch participioResult {
-//    case let .success(value):
-//      participio.attributedText = value.conjugatedString
-//    default:
-//      fatalError()
-//    }
-//    let raizFuturaResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .raizFutura, personNumber: .none)
-//    switch raizFuturaResult {
-//    case let .success(value):
-//      raizFutura.attributedText = value.conjugatedString + NSAttributedString(string: "-")
-//    default:
-//      fatalError()
-//    }
-//    if Conjugator.sharedInstance.isDefective(infinitive: verb) {
-//      defectivo.text = "Defective"
-//    }
-//    else {
-//      defectivo.text = "Not Defective"
-//    }
-//
-//    let verbType = Conjugator.sharedInstance.verbType(infinitive: verb)
-//    switch verbType {
-//    case .regularAr:
-//      parentOrType.text = "Regular AR"
-//    case .regularEr:
-//      parentOrType.text = "Regular ER"
-//    case .regularIr:
-//      parentOrType.text = "Regular IR"
-//    case .irregular:
-//      guard let parent = Conjugator.sharedInstance.parent(infinitive: verb) else { fatalError() }
-//      if Conjugator.baseVerbs.contains(parent) {
-//        parentOrType.text = "Irregular"
-//      }
-//      else {
-//        parentOrType.text = "Irreg. ☛ \(parent)"
-//      }
-//    }
-//  }
-  
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 0 //138
+    return 138
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -283,9 +230,15 @@ class VerbVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
   }
   
-  @objc func tap(_ sender: UITapGestureRecognizer) {
+  @objc func tapSpanish(_ sender: UITapGestureRecognizer) {
     if let label = sender.view as? UILabel {
       Utterer.utter(label.attributedText?.string ?? label.text!)
+    }
+  }
+  
+  @objc func tapEnglish(_ sender: UITapGestureRecognizer) {
+    if let label = sender.view as? UILabel {
+      Utterer.utter(label.attributedText?.string ?? label.text!, locale: "en-US")
     }
   }
 }

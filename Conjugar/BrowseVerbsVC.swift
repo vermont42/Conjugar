@@ -59,11 +59,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     regularVerbs = Conjugator.sharedInstance.regularVerbsArray()
     irregularVerbs = Conjugator.sharedInstance.irregularVerbsArray()
     browseVerbsView.reloadTableData()
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    navigationItem.title = "Browse"
+    navigationItem.titleView = UILabel.titleLabel(title: "Browse")
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

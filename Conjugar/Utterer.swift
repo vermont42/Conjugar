@@ -25,10 +25,15 @@ class Utterer {
     utter("")
   }
   
-  static func utter(_ thingToUtter: String) {
+  static func utter(_ thingToUtter: String, locale: String? = nil) {
     let utterance = AVSpeechUtterance(string: thingToUtter)
     utterance.rate = Utterer.rate
-    utterance.voice = AVSpeechSynthesisVoice(language: "es-" + SettingsManager.getRegion().accent)
+    if let locale = locale {
+      utterance.voice = AVSpeechSynthesisVoice(language: locale)
+    }
+    else {
+      utterance.voice = AVSpeechSynthesisVoice(language: "es-" + SettingsManager.getRegion().accent)
+    }
     utterance.pitchMultiplier = Utterer.pitchMultiplier
     synth.speak(utterance)
     SoundManager.play(.silence) // https://forums.developer.apple.com/thread/23160

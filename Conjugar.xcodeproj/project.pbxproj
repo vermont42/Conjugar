@@ -45,6 +45,9 @@
 		E16BEA041F09BCC70053DD32 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16BEA031F09BCC70053DD32 /* Fonts.swift */; };
 		E16BEA061F0A92040053DD32 /* InfoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16BEA051F0A92040053DD32 /* InfoDelegate.swift */; };
 		E18010781F1BCA0800E8608C /* BrowseVerbsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18010771F1BCA0800E8608C /* BrowseVerbsView.swift */; };
+		E18145D81F2E3E170048DEE2 /* BrowseInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18145D71F2E3E170048DEE2 /* BrowseInfoView.swift */; };
+		E18145DA1F2E43630048DEE2 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18145D91F2E43630048DEE2 /* InfoView.swift */; };
+		E18145DC1F2E49B20048DEE2 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */; };
 		E18D5FA71F1EFD2700313113 /* VerbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18D5FA61F1EFD2700313113 /* VerbView.swift */; };
 		E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F371ECA7C9A00633200 /* Utterer.swift */; };
 		E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F391ECA7DA700633200 /* SoundManager.swift */; };
@@ -118,6 +121,9 @@
 		E16BEA031F09BCC70053DD32 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		E16BEA051F0A92040053DD32 /* InfoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDelegate.swift; sourceTree = "<group>"; };
 		E18010771F1BCA0800E8608C /* BrowseVerbsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseVerbsView.swift; sourceTree = "<group>"; };
+		E18145D71F2E3E170048DEE2 /* BrowseInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseInfoView.swift; sourceTree = "<group>"; };
+		E18145D91F2E43630048DEE2 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
 		E18D5FA61F1EFD2700313113 /* VerbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbView.swift; sourceTree = "<group>"; };
 		E18F7F371ECA7C9A00633200 /* Utterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utterer.swift; sourceTree = "<group>"; };
 		E18F7F391ECA7DA700633200 /* SoundManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
@@ -168,9 +174,11 @@
 		E107B08C1EB66E16004C5E91 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E18145D71F2E3E170048DEE2 /* BrowseInfoView.swift */,
 				E18010771F1BCA0800E8608C /* BrowseVerbsView.swift */,
 				E14566BD1EC001FD00C16DC3 /* ConjugationCell.swift */,
 				E19382051F0829F6005268FF /* InfoCell.swift */,
+				E18145D91F2E43630048DEE2 /* InfoView.swift */,
 				E14BAD931F006423000D91C5 /* ResultCell.swift */,
 				E14566BB1EC001ED00C16DC3 /* TenseCell.swift */,
 				E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */,
@@ -209,6 +217,7 @@
 				E18F7F391ECA7DA700633200 /* SoundManager.swift */,
 				E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */,
 				E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */,
+				E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */,
 				E18F7F371ECA7C9A00633200 /* Utterer.swift */,
 			);
 			name = Utils;
@@ -452,6 +461,7 @@
 				E18F7F3C1ECA7DF000633200 /* Sound.swift in Sources */,
 				E18D5FA71F1EFD2700313113 /* VerbView.swift in Sources */,
 				E1151E551E9C5D9C00DE44D6 /* VerbCell.swift in Sources */,
+				E18145DA1F2E43630048DEE2 /* InfoView.swift in Sources */,
 				E139E0E61EC7D36200B34DE7 /* Colors.swift in Sources */,
 				E1151E531E9AEDF100DE44D6 /* AuxiliaryError.swift in Sources */,
 				E1F06AF81E8F081700ADD2E1 /* Conjugator.swift in Sources */,
@@ -470,6 +480,7 @@
 				E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */,
 				E1483FB51EF5D0510052C436 /* QuizDelegate.swift in Sources */,
 				E1483FB91EF6E3D20052C436 /* SequenceExtension.swift in Sources */,
+				E18145D81F2E3E170048DEE2 /* BrowseInfoView.swift in Sources */,
 				E139E0E01EC7D27A00B34DE7 /* NSAttributedStringExtension.swift in Sources */,
 				E1483FAF1EF5C3820052C436 /* Quiz.swift in Sources */,
 				E1483FD01EF961880052C436 /* ConjugationComparison.swift in Sources */,
@@ -486,6 +497,7 @@
 				E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */,
 				E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */,
 				E16BEA041F09BCC70053DD32 /* Fonts.swift in Sources */,
+				E18145DC1F2E49B20048DEE2 /* UILabelExtension.swift in Sources */,
 				E1F06B041E8F0E9300ADD2E1 /* Result.swift in Sources */,
 				E1F06AFB1E8F087000ADD2E1 /* Region.swift in Sources */,
 				E1A789771F00751D0006CA77 /* IntExtension.swift in Sources */,

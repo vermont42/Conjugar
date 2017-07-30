@@ -10,29 +10,36 @@ import Foundation
 import UIKit
 
 class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource, InfoDelegate {
-  @IBOutlet var table: UITableView!
   private var selectedRow = 0
+  
+  var browseInfoView: BrowseInfoView {
+    return view as! BrowseInfoView
+  }
+  
+  override func loadView() {
+    let browseInfoView: BrowseInfoView
+    if #available(iOS 11.0, *) {
+      browseInfoView = BrowseInfoView(frame: UIScreen.main.bounds)
+    }
+    else {
+      browseInfoView = BrowseInfoView(frame: UIScreen.main.bounds, safeBottomInset: 49)
+    }
+    browseInfoView.setupTable(dataSource: self, delegate: self)
+    view = browseInfoView
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    navigationController?.navigationBar.titleTextAttributes = [
-      NSAttributedStringKey.foregroundColor.rawValue : UIColor.white,
-    ]
-    table.delegate = self
-    table.dataSource = self
-    table.reloadData()
+    navigationItem.titleView = UILabel.titleLabel(title: "Info")
+    browseInfoView.reloadTableData()
   }
-  
-  func numberOfSections(in tableView: UITableView) -> Int {
-    return 1
-  }
-  
+    
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return Info.infos.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = table.dequeueReusableCell(withIdentifier: "InfoCell") as! InfoCell
+    let cell = tableView.dequeueReusableCell(withIdentifier: InfoCell.identifier) as! InfoCell
     guard let decodedString = Info.infos[indexPath.row].heading.removingPercentEncoding else { fatalError("Could not decode string.") }
     cell.configure(heading: decodedString)
     return cell
@@ -41,15 +48,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     selectedRow = (indexPath as NSIndexPath).row
     tableView.deselectRow(at: indexPath, animated: false)
-    performSegue(withIdentifier: "show info", sender: self)
-  }
-  
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if segue.identifier == "show info" {
-      guard let infoVC: InfoVC = segue.destination as? InfoVC else { return }
-      infoVC.infoString = Info.infos[selectedRow].infoString
-      infoVC.infoDelegate = self
-    }
+    showInfo()
   }
   
   func infoSelectionDidChange(newHeading: String) {
@@ -59,6 +58,13 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         break
       }
     }
-    performSegue(withIdentifier: "show info", sender: self)
+    showInfo()
+  }
+  
+  private func showInfo() {
+    let infoVC = InfoVC()
+    infoVC.infoString = Info.infos[selectedRow].infoString
+    infoVC.infoDelegate = self
+    navigationController?.pushViewController(infoVC, animated: true)
   }
 }
