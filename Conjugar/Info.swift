@@ -23,7 +23,7 @@ struct Info {
   }
   
   static let infos: [Info] = [
-    Info(heading: "Purpose & Use", difficulty: .easy, text: """
+Info(heading: "Purpose & Use", difficulty: .easy, text: """
 *Purpose & Use*
 
 ^Purpose^
@@ -58,7 +58,7 @@ In recognition of the relative difficulties of learning to conjugate the ~Easy~,
 
 Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%, and the tenses.
 """),
-    Info(heading: "Terminology", difficulty: .easy, text: """
+Info(heading: "Terminology", difficulty: .easy, text: """
 *Terminology*
 
 ^Verb^
@@ -121,7 +121,7 @@ $soY$, $ERes$, $ES$, $sOmos$, $sOis$, $sOn$
 
 Red letters in conjugations represent irregularities. A verb is considered irregular if any of its conjugations differs from the conjugation of a regular ~ar~, ~ir~, or ~er~ verb.
 """),
-    Info(heading: "Presente de Indicativo", difficulty: .easy, text: """
+Info(heading: "Presente de Indicativo", difficulty: .easy, text: """
 *Presente de Indicativo*
 
 ^Uses^
@@ -164,33 +164,7 @@ Some other verbs that are irregular in the presente de indicativo appear below. 
 
 caber, caer, conocer, conducir, construir, crecer, dar, decir, dormir, hacer, huir, ir, jugar, lucir, oír, pedir, pensar, perder, poner, saber, salir, ser, sentir, tener, traer, valer, venir, ver
 """),
-    Info(heading: "Raíz Futura", difficulty: .easy, text: """
-*Raíz Futura*
-
-^Uses^
-
-The ~raíz futura~ forms of verbs are used to form the %condicional% and %futuro de indicativo% tenses. Tap those tenses for descriptions of them.
-
-^Form^
-
-For all but twelve verbs, the raíz futura is identical to the infinitivo. For example, the raíz futura form of ~bailar~ is "bailar".
-
-The following verbs have irregular raíz futura forms:
-
-caber: $cabR$
-decir: $dIR$
-haber: $habR$
-hacer: $haR$
-poder: $podR$
-poner: $ponDr$
-querer: $querR$
-saber: $sabR$
-salir: $salDr$
-tener: $tenDr$
-valer: $valDr$
-venir: $venDr$
-"""),
-    Info(heading: "Futuro de Indicativo", difficulty: .easy, text: """
+Info(heading: "Futuro de Indicativo", difficulty: .easy, text: """
 *Futuro de Indicativo*
 
 ^Uses^
@@ -227,7 +201,7 @@ Example: hablaré, hablarás, hablará, hablaremos, hablaréis, hablarán
 
 See %credits% for Wikipedia attribution.
 """),
-    Info(heading: "Pretérito", difficulty: .easy, text: """
+Info(heading: "Pretérito", difficulty: .easy, text: """
 *Pretérito*
 
 ^Uses^
@@ -272,94 +246,7 @@ andar, caber, conducir, dar, decir, estar, haber, hacer, ir, poder, poner, quere
 
 See %credits% for Wikipedia attribution.
 """),
-    Info(heading: "Participio", difficulty: .moderate, text: """
-*Participio*
-
-^Use^
-
-The ~participio~ corresponds to the English -en or -ed form of a verb. This form is used following the auxiliary verb ~haber~ to form various compound tenses, including the %perfecto de indicativo%: "(Yo) $hE$ hablado." = "I have spoken."
-
-^Form^
-
-The participio is formed by adding the following endings to the verb stem:
-
--ar verbs: ~-ado~
-
-Examples: hablado ("spoken"); cantado ("sung"); bailado ("danced")
-
--er verbs: ~-ido~
-
-Examples: bebido ("drunk"); leído (requires accent mark; "read"); comprendido ("understood")
-
--ir verbs,: ~-ido~
-
-Examples: vivido ("lived"); sentido ("felt"); hervido ("boiled")
-
-When the participio is used as an adjective, it inflects for both gender and number. Example: "una lengua hablada en España" = "a language spoken in Spain"
-
-The following verbs have irregular participios:
-
-abrir: $abIERTo$
-cubrir: $cubIERTo$
-decir: $dICHo$
-escribir: $esciTo$
-hacer: $hECHo$
-morir: $mUERTo$
-poner: $pUESTo$
-pudrir: $pOdrido$
-resolver: $resUELTo$
-romper: $roTo$
-ver: $vISTo$
-volver: $vUElvo$
-
-See %credits% for Wikipedia attribution.
-"""),
-    Info(heading: "Gerundio", difficulty: .moderate, text: """
-*Gerundio*
-
-^Uses^
-
-The ~gerundio~ has a variety of uses. The gerundio of hacer, haciendo, can mean "doing", "while doing", "by doing", "because of one's doing", or "through doing".
-
-The gerundio is also used to form progressive constructions, such as "$estoY haciendo$" ("I am doing").
-
-The gerundio cannot be used as an adjective and, unlike in most European languages, generally has no corresponding adjectival forms. The archaic participio presente, which ended in -ante or -iente and formerly filled this function, in some cases survives as an adjective. For example, "durmiente" = "sleeping", and "interesante" = "interesting". But such cases are limited. Usually, alternate constructions are appropriate. Whereas in English one would say "the crying baby", one would say in Spanish "el bebé que llora", which literally means "the baby who is crying".
-
-^Form^
-
-The gerundio is formed by adding the following endings to the verb stem:
-
--ar verbs: ~-ando~
-
-Examples: hablando ("speaking"); cantando ("singing"); bailando ("dancing")
-
--er verbs: ~-iendo~
-
-Examples: bebiendo ("drinking"); cediendo ("transferring"); comprendiendo ("understanding")
-
--ir verbs,: ~-iendo~
-
-Examples: viviendo ("living"); decidiendo ("deciding"); herviendo ("boiling")
-
-The following verbs have irregular gerundios:
-
-bullir: $bullEndo$
-caer: $caYendo$
-construir: $construYendo$
-dormir: $dUrmiendo$
-huir: $huYendo$
-ir: $Yendo$
-leer: $leYendo$
-medir: $mIdiendo$
-oír: $oYendo$
-poder: $pUdiendo$
-sentir: $sIntiendo$
-tañer: $tañEndo$
-traer: $traYendo$
-
-See %credits% for Wikipedia attribution.
-"""),
-    Info(heading: "Condicional", difficulty: .moderate, text: """
+Info(heading: "Condicional", difficulty: .moderate, text: """
 *Condicional*
 
 ^Uses^
@@ -406,67 +293,7 @@ Example: hablaría, hablarías, hablaría, hablaríamos, hablaríais, hablarían
 
 See %credits% for Wikipedia attribution.
 """),
-    Info(heading: "Presente de Subjuntivo", difficulty: .moderate, text: """
-*Presente de Subjuntivo*
-
-^Uses^
-
-The ~presente de subjuntivo~ is used to express:
-
-• A command:
-
-"Nos manda que $platiQUemos$." = "He is ordering us to talk."
-
-• Emotional state:
-
-"Temo que Colombia no gane la Copa América este año." = "I fear that Colombia will not win the America Cup this year."
-
-• Doubt:
-
-"Dudo que $venGas$ mañana." = "I doubt that thou wilt come tomorrow."
-
-^Conjugation^
-
-Regular AR, IR, and ER verbs are conjugated in the presente de subjuntivo by adding the following endings to the verb stem:
-
-AR: -e, -es, -e, -emos, -éis, -en
-IR: -a, -as, -a, -amos, -áis, -an
-ER: -a, -as, -a, -amos, -áis, -an
-
-Examples:
-
-habl~ar~: hable, hables, hable, hablemos, habléis, hablen
-sub~ir~: suba, subas, suba, subamos, subáis, suban
-com~er~: coma, comas, coma, comamos, comáis, coman
-
-Some verbs that are irregular in the presente de subjuntivo appear below. Tap the ~Browse~ tab for translations and conjugations.
-
-caber, caer, conducir, conocer, construir, crecer, dar, decir, dormir, estar, ir, haber, hacer, huir, jugar, lucir, oír, pedir, pensar, perder, poner, saber, sentir, ser, salir, tener, traer, valer, venir, ver
-"""),
-    Info(heading: "Perfecto de Indicativo", difficulty: .moderate, text: """
-*Perfecto de Indicativo*
-
-^Uses^
-
-The ~perfecto de indicativo~ has virtually the same use as the tense sometimes called, in English, the present perfect.
-
-"Te $hE dICHo$ mi opinión." = "I have told you my opinion." or "I told you my opinion, and it hasn't changed."
-
-In Spanish, as in English, this tense implies that an action, although completed in the past, has continuing effects, truth, or relevance in the present.
-
-In most of Spain, the tense has an additional use: to express a past action or event that is contained in an unfinished period of time in the present.
-
-"Este mes ha llovido mucho, pero hoy hace buen día." = "It rained a lot this month, but today is a fine day."
-
-^Conjugation^
-
-In the perfecto de indicativo, the %presente de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
-
-Example: $hEmos hablado$
-
-See %credits% for Wikipedia attribution.
-"""),
-    Info(heading: "Imperfecto de Indicativo", difficulty: .moderate, text: """
+Info(heading: "Imperfecto de Indicativo", difficulty: .moderate, text: """
 *Imperfecto de Indicativo*
 
 ^Uses^
@@ -505,7 +332,68 @@ Only three verbs are irregular in the imperfecto de indicativo: ir, ser, and ver
 
 See %credits% for Wikipedia attribution.
 """),
-    Info(heading: "Imperativo Positivo", difficulty: .moderate, text: """
+Info(heading: "Presente de Subjuntivo", difficulty: .moderate, text: """
+*Presente de Subjuntivo*
+
+^Uses^
+
+The ~presente de subjuntivo~ is used to express:
+
+• A command:
+
+"Nos manda que $platiQUemos$." = "He is ordering us to talk."
+
+• Emotional state:
+
+"Temo que Colombia no gane la Copa América este año." = "I fear that Colombia will not win the America Cup this year."
+
+• Doubt:
+
+"Dudo que $venGas$ mañana." = "I doubt that thou wilt come tomorrow."
+
+^Conjugation^
+
+Regular AR, IR, and ER verbs are conjugated in the presente de subjuntivo by adding the following endings to the verb stem:
+
+AR: -e, -es, -e, -emos, -éis, -en
+IR: -a, -as, -a, -amos, -áis, -an
+ER: -a, -as, -a, -amos, -áis, -an
+
+Examples:
+
+habl~ar~: hable, hables, hable, hablemos, habléis, hablen
+sub~ir~: suba, subas, suba, subamos, subáis, suban
+com~er~: coma, comas, coma, comamos, comáis, coman
+
+Some verbs that are irregular in the presente de subjuntivo appear below. Tap the ~Browse~ tab for translations and conjugations.
+
+caber, caer, conducir, conocer, construir, crecer, dar, decir, dormir, estar, ir, haber, hacer, huir, jugar, lucir, oír, pedir, pensar, perder, poner, saber, sentir, ser, salir, tener, traer, valer, venir, ver
+"""),
+Info(heading: "Imperfecto de Subjuntivo 1", difficulty: .difficult, text: """
+*Imperfecto de Subjuntivo 1*
+
+^Use^
+
+^Conjugation^
+
+"""),
+Info(heading: "Imperfecto de Subjuntivo 2", difficulty: .difficult, text: """
+*Imperfecto de Subjuntivo 2*
+
+^Use^
+
+^Conjugation^
+
+"""),
+Info(heading: "Futuro de Subjuntivo", difficulty: .difficult, text: """
+*Futuro de Subjuntivo*
+
+^Use^
+
+^Conjugation^
+
+"""),
+Info(heading: "Imperativo Positivo", difficulty: .moderate, text: """
 *Imperativo Positivo*
 
 ^Use^
@@ -550,7 +438,7 @@ ser: $sÉ$
 tener: $teN$
 venir: $veN$
 """),
-    Info(heading: "Imperativo Negativo", difficulty: .moderate, text: """
+Info(heading: "Imperativo Negativo", difficulty: .moderate, text: """
 *Imperativo Negativo*
 
 ^Use^
@@ -579,97 +467,231 @@ habl~ar~: no hables, no hable, no hablemos, no habléis, no hablen
 sub~ir~: no subas, no suba, no subamos, no subaís, no suban
 com~er~: no comas, no coma, no comamos, no comáis, no coman
 """),
-    Info(heading: "Imperfecto de Subjuntivo 1", difficulty: .difficult, text: """
+Info(heading: "Participio", difficulty: .moderate, text: """
+*Participio*
+
+^Use^
+
+The ~participio~ corresponds to the English -en or -ed form of a verb. This form is used following the auxiliary verb ~haber~ to form various compound tenses, including the %perfecto de indicativo%: "(Yo) $hE$ hablado." = "I have spoken."
+
+^Form^
+
+The participio is formed by adding the following endings to the verb stem:
+
+-ar verbs: ~-ado~
+
+Examples: hablado ("spoken"); cantado ("sung"); bailado ("danced")
+
+-er verbs: ~-ido~
+
+Examples: bebido ("drunk"); leído (requires accent mark; "read"); comprendido ("understood")
+
+-ir verbs,: ~-ido~
+
+Examples: vivido ("lived"); sentido ("felt"); hervido ("boiled")
+
+When the participio is used as an adjective, it inflects for both gender and number. Example: "una lengua hablada en España" = "a language spoken in Spain"
+
+The following verbs have irregular participios:
+
+abrir: $abIERTo$
+cubrir: $cubIERTo$
+decir: $dICHo$
+escribir: $esciTo$
+hacer: $hECHo$
+morir: $mUERTo$
+poner: $pUESTo$
+pudrir: $pOdrido$
+resolver: $resUELTo$
+romper: $roTo$
+ver: $vISTo$
+volver: $vUElvo$
+
+See %credits% for Wikipedia attribution.
+"""),
+Info(heading: "Gerundio", difficulty: .moderate, text: """
+*Gerundio*
+
+^Uses^
+
+The ~gerundio~ has a variety of uses. The gerundio of hacer, haciendo, can mean "doing", "while doing", "by doing", "because of one's doing", or "through doing".
+
+The gerundio is also used to form progressive constructions, such as "$estoY haciendo$" ("I am doing").
+
+The gerundio cannot be used as an adjective and, unlike in most European languages, generally has no corresponding adjectival forms. The archaic participio presente, which ended in -ante or -iente and formerly filled this function, in some cases survives as an adjective. For example, "durmiente" = "sleeping", and "interesante" = "interesting". But such cases are limited. Usually, alternate constructions are appropriate. Whereas in English one would say "the crying baby", one would say in Spanish "el bebé que llora", which literally means "the baby who is crying".
+
+^Form^
+
+The gerundio is formed by adding the following endings to the verb stem:
+
+-ar verbs: ~-ando~
+
+Examples: hablando ("speaking"); cantando ("singing"); bailando ("dancing")
+
+-er verbs: ~-iendo~
+
+Examples: bebiendo ("drinking"); cediendo ("transferring"); comprendiendo ("understanding")
+
+-ir verbs,: ~-iendo~
+
+Examples: viviendo ("living"); decidiendo ("deciding"); herviendo ("boiling")
+
+The following verbs have irregular gerundios:
+
+bullir: $bullEndo$
+caer: $caYendo$
+construir: $construYendo$
+dormir: $dUrmiendo$
+huir: $huYendo$
+ir: $Yendo$
+leer: $leYendo$
+medir: $mIdiendo$
+oír: $oYendo$
+poder: $pUdiendo$
+sentir: $sIntiendo$
+tañer: $tañEndo$
+traer: $traYendo$
+
+See %credits% for Wikipedia attribution.
+"""),
+Info(heading: "Raíz Futura", difficulty: .easy, text: """
+*Raíz Futura*
+
+^Uses^
+
+The ~raíz futura~ forms of verbs are used to form the %condicional% and %futuro de indicativo% tenses. Tap those tenses for descriptions of them.
+
+^Form^
+
+For all but twelve verbs, the raíz futura is identical to the infinitivo. For example, the raíz futura form of ~bailar~ is "bailar".
+
+The following verbs have irregular raíz futura forms:
+
+caber: $cabR$
+decir: $dIR$
+haber: $habR$
+hacer: $haR$
+poder: $podR$
+poner: $ponDr$
+querer: $querR$
+saber: $sabR$
+salir: $salDr$
+tener: $tenDr$
+valer: $valDr$
+venir: $venDr$
+"""),
+Info(heading: "Perfecto de Indicativo", difficulty: .moderate, text: """
+*Perfecto de Indicativo*
+
+^Uses^
+
+The ~perfecto de indicativo~ has virtually the same use as the tense sometimes called, in English, the present perfect.
+
+"Te $hE dICHo$ mi opinión." = "I have told you my opinion." or "I told you my opinion, and it hasn't changed."
+
+In Spanish, as in English, this tense implies that an action, although completed in the past, has continuing effects, truth, or relevance in the present.
+
+In most of Spain, the tense has an additional use: to express a past action or event that is contained in an unfinished period of time in the present.
+
+"Este mes ha llovido mucho, pero hoy hace buen día." = "It rained a lot this month, but today is a fine day."
+
+^Conjugation^
+
+In the perfecto de indicativo, the %presente de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
+
+Example: $hEmos hablado$
+
+See %credits% for Wikipedia attribution.
+"""),
+Info(heading: "Pretérito Anterior", difficulty: .difficult, text: """
+*Pretérito Anterior*
+
 ^Use^
 
 ^Conjugation^
 
+In the pretérito anterior, the %pretérito% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
+
+Example: $hUBE hablado$
 """),
-    Info(heading: "Imperfecto de Subjuntivo 2", difficulty: .difficult, text: """
+Info(heading: "Pluscuamperfecto de Indicativo", difficulty: .difficult, text: """
+*Pluscuamperfecto de Indicativo*
+
 ^Use^
 
 ^Conjugation^
 
+In the pluscuamperfecto de indicativo, the %imperfecto de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
+
+Example: $había hablado$
 """),
-    Info(heading: "Futuro de Subjuntivo", difficulty: .difficult, text: """
+Info(heading: "Futuro Perfecto", difficulty: .difficult, text: """
+*Futuro Perfecto*
+
 ^Use^
 
 ^Conjugation^
 
+In the futuro perfecto, the %futuro de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
+
+Example: $habRé hablado$
 """),
-    Info(heading: "Preterito Anterior", difficulty: .difficult, text: """
+Info(heading: "Condicional Compuesto", difficulty: .difficult, text: """
+*Condicional Compuesto*
+
 ^Use^
 
 ^Conjugation^
 
-In the preterito anterior, the %% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
+In the condicional compuesto, the %condicional% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $ hablado$
+Example: $habRía hablado$
 """),
-    Info(heading: "Pluscuamperfecto de Indicativo", difficulty: .difficult, text: """
+Info(heading: "Perfecto de Subjuntivo", difficulty: .difficult, text: """
+*Perfecto de Subjuntivo*
+
 ^Use^
 
 ^Conjugation^
 
-In the pluscuamperfecto de indicativo, the %% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
+In the perfecto de subjuntivo, the %presente de subjuntivo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $ hablado$
+Example: $haYa hablado$
 """),
-    Info(heading: "Futuro Perfecto", difficulty: .difficult, text: """
+Info(heading: "Pluscuamperfecto de Subjuntivo 1", difficulty: .difficult, text: """
+*Pluscuamperfecto de Subjuntivo 1*
+
 ^Use^
 
 ^Conjugation^
 
-In the futuro perfecto, the %% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
+In the pluscuamperfecto de subjuntivo 1, the %imperfecto de subjuntivo 1% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $ hablado$
+Example: $hUbiera hablado$
 """),
-    Info(heading: "Condicional Compuesto", difficulty: .difficult, text: """
+Info(heading: "Pluscuamperfecto de Subjuntivo 2", difficulty: .difficult, text: """
+*Pluscuamperfecto de Subjuntivo 2*
+
 ^Use^
 
 ^Conjugation^
 
-In the condicional compuesto, the %% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
+In the pluscuamperfecto de indicativo 2, the %imperfecto de subjuntivo 2% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $ hablado$
+Example: $hUbiese hablado$
 """),
-    Info(heading: "Perfecto de Subjuntivo", difficulty: .difficult, text: """
+Info(heading: "Futuro Perfecto de Subjuntivo", difficulty: .difficult, text: """
+*Futuro Perfecto de Subjuntivo*
+
 ^Use^
 
 ^Conjugation^
 
-In the percecto de subjuntivo, the %% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
+In the futuro perfecto de subjuntivo, the %futuro de subjuntivo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $ hablado$
+Example: $hUbiere hablado$
 """),
-    Info(heading: "Pluscuamperfecto de Subjuntivo 1", difficulty: .difficult, text: """
-^Use^
-
-^Conjugation^
-
-In the pluscuamperfecto de subjuntivo 1, the %% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
-
-Example: $ hablado$
-"""),
-    Info(heading: "Pluscuamperfecto de Subjuntivo 2", difficulty: .difficult, text: """
-^Use^
-
-^Conjugation^
-
-In the pluscuamperfecto de indicativo 2, the %% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
-
-Example: $ hablado$
-"""),
-    Info(heading: "Futuro Perfecto de Subjuntivo", difficulty: .difficult, text: """
-^Use^
-
-^Conjugation^
-
-In the futuro perfecto de subjuntivo, the %% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
-
-Example: $ hablado$
-"""),
-    Info(heading: "Credits", difficulty: .easy, text: """
+Info(heading: "Credits", difficulty: .easy, text: """
 *Credits*
 
 ^MIT License^
