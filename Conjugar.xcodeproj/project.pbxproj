@@ -70,6 +70,7 @@
 		E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */; };
 		E1F06B041E8F0E9300ADD2E1 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B031E8F0E9300ADD2E1 /* Result.swift */; };
 		E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B051E8F0EA300ADD2E1 /* ResultProtocol.swift */; };
+		E1F289A71F30C666006B3C3E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F289A61F30C666006B3C3E /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +151,7 @@
 		E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PersonNumber.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E1F06B031E8F0E9300ADD2E1 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		E1F06B051E8F0EA300ADD2E1 /* ResultProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ResultProtocol.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		E1F289A61F30C666006B3C3E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 				E19382051F0829F6005268FF /* InfoCell.swift */,
 				E18145D91F2E43630048DEE2 /* InfoView.swift */,
 				E14BAD931F006423000D91C5 /* ResultCell.swift */,
+				E1F289A61F30C666006B3C3E /* SettingsView.swift */,
 				E14566BB1EC001ED00C16DC3 /* TenseCell.swift */,
 				E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */,
 				E18D5FA61F1EFD2700313113 /* VerbView.swift */,
@@ -494,6 +497,7 @@
 				E1483FBB1EF6F82A0052C436 /* QuizVC.swift in Sources */,
 				E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */,
 				E14BAD8E1EFF11BD000D91C5 /* SettingsManager.swift in Sources */,
+				E1F289A71F30C666006B3C3E /* SettingsView.swift in Sources */,
 				E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */,
 				E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */,
 				E16BEA041F09BCC70053DD32 /* Fonts.swift in Sources */,

@@ -15,5 +15,6 @@ struct Fonts {
   static let heading3 = UIFont(name: "AvenirNext-Regular", size: 18.0)!
   static let subheading = UIFont(name: "AvenirNext-Demibold", size: 18.0)!
   static let body = UIFont(name: "AvenirNext-Regular", size: 16.0)!
+  static let smallBody = UIFont(name: "AvenirNext-Demibold", size: 12.0)!
   static let boldBody = UIFont(name: "AvenirNext-Bold", size: 16.0)!
 }
