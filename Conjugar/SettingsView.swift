@@ -80,7 +80,6 @@ class SettingsView: UIView {
     }
     let defaultSpacing: CGFloat = 8.0
     
-    
     regionLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
     regionLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
     

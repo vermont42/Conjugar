@@ -23,7 +23,6 @@ class MainTabBarVC: UITabBarController {
     let browseInfoNavC = UINavigationController(rootViewController: BrowseInfoVC())
     browseInfoNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[3], image: UIImage(named: MainTabBarVC.tabs[3]), selectedImage: nil)
     viewControllers = [browseVerbsNavC, browseInfoNavC, settingsNavC /*, quizNavC */]
-    // TODO: Make BrowseVerbsVC and VerbVC like NOIB VCs.
   }
   
   required init?(coder aDecoder: NSCoder) {
