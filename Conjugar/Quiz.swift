@@ -103,27 +103,27 @@ internal class Quiz {
 
     switch lastDifficulty {
     case .easy:
-      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
-      questions.append((allRegularVerb, .preterito, personNumber()))
-      questions.append((allRegularVerb, .futuroDeIndicativo, personNumber()))
-//      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].map {
-//        questions.append(($0, .presenteDeIndicativo, personNumber()))
-//      }
-//      for _ in 0...8 {
-//        questions.append((irregularPresenteDeIndicativoVerb, .presenteDeIndicativo, personNumber()))
-//      }
-//      for _ in 0...7 {
-//        questions.append((irregularRaizFuturaVerb, .futuroDeIndicativo, personNumber()))
-//      }
-//      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb].map {
-//        questions.append(($0, .futuroDeIndicativo, personNumber()))
-//      }
-//      for _ in 0...7 {
-//        questions.append((irregularPreteritoVerb, .preterito, personNumber()))
-//      }
-//      for _ in 0...8 {
-//        questions.append((allRegularVerb, .preterito, personNumber()))
-//      }
+//      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
+//      questions.append((allRegularVerb, .preterito, personNumber()))
+//      questions.append((allRegularVerb, .futuroDeIndicativo, personNumber()))
+      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].map {
+        questions.append(($0, .presenteDeIndicativo, personNumber()))
+      }
+      for _ in 0...8 {
+        questions.append((irregularPresenteDeIndicativoVerb, .presenteDeIndicativo, personNumber()))
+      }
+      for _ in 0...7 {
+        questions.append((irregularRaizFuturaVerb, .futuroDeIndicativo, personNumber()))
+      }
+      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb].map {
+        questions.append(($0, .futuroDeIndicativo, personNumber()))
+      }
+      for _ in 0...7 {
+        questions.append((irregularPreteritoVerb, .preterito, personNumber()))
+      }
+      for _ in 0...8 {
+        questions.append((allRegularVerb, .preterito, personNumber()))
+      }
     case .moderate:
       _ = [regularArVerb, regularArVerb, regularIrVerb, regularErVerb].map {
         questions.append(($0, .presenteDeIndicativo, personNumber()))
