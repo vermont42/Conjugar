@@ -10,61 +10,15 @@ import Foundation
 import UIKit
 
 class VerbView: UIView {
-  private var safeBottomInset: CGFloat = 0.0
-  
-  internal let translation: UILabel = {
-    let label = UILabel()
-    label.isUserInteractionEnabled = true
-    return label
-  } ()
-  
-  internal let parentOrType: UILabel = {
-    let label = UILabel()
-    label.text = "Regular AR"
-    return label
-  } ()
-  
-  internal let participioLabel: UILabel = {
-    let label = UILabel()
-    label.text = "PP:"
-    return label
-  } ()
-  
-  internal let participio: UILabel = {
-    let label = UILabel()
-    label.isUserInteractionEnabled = true
-    return label
-  } ()
-  
-  internal let gerundioLabel: UILabel = {
-    let label = UILabel()
-    label.text = "Ger:"
-    return label
-  } ()
-  
-  internal let gerundio: UILabel = {
-    let label = UILabel()
-    label.isUserInteractionEnabled = true
-    return label
-  } ()
-  
-  internal let raizFuturaLabel: UILabel = {
-    let label = UILabel()
-    label.text = "Raíz Fut:"
-    return label
-  } ()
-  
-  internal let raizFutura: UILabel = {
-    let label = UILabel()
-    label.isUserInteractionEnabled = true
-    return label
-  } ()
-  
-  internal let defectivo: UILabel = {
-    let label = UILabel()
-    label.isUserInteractionEnabled = true
-    return label
-  } ()
+  internal let translation: UILabel = { return UILabel() } ()
+  internal let parentOrType: UILabel = { return UILabel() } ()
+  private let participioLabel: UILabel = { return UILabel() } ()
+  internal let participio: UILabel = { return UILabel() } ()
+  private let gerundioLabel: UILabel = { return UILabel() } ()
+  internal let gerundio: UILabel = { return UILabel() } ()
+  private let raizFuturaLabel: UILabel = { return UILabel() } ()
+  internal let raizFutura: UILabel = { return UILabel() } ()
+  internal let defectivo: UILabel = { return UILabel() } ()
   
   internal let table: UITableView = {
     let tableView = UITableView()
@@ -73,79 +27,67 @@ class VerbView: UIView {
     return tableView
   } ()
   
-  private func setupLabel(_ label: UILabel) {
-    label.font = Fonts.subheading
-    label.textColor = Colors.yellow
-    label.translatesAutoresizingMaskIntoConstraints = false
-  }
-  
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")
   }
   
-  private func commonInit() {
+  override init(frame: CGRect) {
+    super.init(frame: frame)
     _ = [translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].map {
-      setupLabel($0)
+      $0.font = Fonts.subheading
+      $0.textColor = Colors.yellow
+      $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+    _ = [(participioLabel, "PP:"), (gerundioLabel, "Ger:"), (raizFuturaLabel, "RF:")].map {
+      $0.0.text = $0.1
     }
     _ = [table, translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].map {
       addSubview($0)
     }
-    let defaultSpacing: CGFloat = 8.0
     
     if #available(iOS 11.0, *) {
-      translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: defaultSpacing).isActive = true
-    } else { // TODO: Delete this logic, safeBottomInset, and the associated init when iOS 11 goes live.
-      translation.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: (safeBottomInset + defaultSpacing)).isActive = true
+      translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).isActive = true
+    } else {
+      translation.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).isActive = true
     }
     translation.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     
     if #available(iOS 11.0, *) {
-      parentOrType.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: defaultSpacing).isActive = true
-    } else { // TODO: Delete this logic, safeBottomInset, and the associated init when iOS 11 goes live.
-      parentOrType.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: (safeBottomInset + defaultSpacing)).isActive = true
+      parentOrType.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).isActive = true
+    } else {
+      parentOrType.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).isActive = true
     }
     parentOrType.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
     
-    participioLabel.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: defaultSpacing).isActive = true
+    participioLabel.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     participioLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     
-    participio.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: defaultSpacing).isActive = true
-    participio.leadingAnchor.constraint(equalTo: participioLabel.trailingAnchor, constant: defaultSpacing).isActive = true
+    participio.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    participio.leadingAnchor.constraint(equalTo: participioLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
     
-    gerundio.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: defaultSpacing).isActive = true
+    gerundio.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     gerundio.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
     
-    gerundioLabel.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: defaultSpacing).isActive = true
-    gerundioLabel.trailingAnchor.constraint(equalTo: gerundio.leadingAnchor, constant: defaultSpacing * -1.0).isActive = true
+    gerundioLabel.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    gerundioLabel.trailingAnchor.constraint(equalTo: gerundio.leadingAnchor, constant: Layout.defaultSpacing * -1.0).isActive = true
     
-    raizFuturaLabel.topAnchor.constraint(equalTo: participioLabel.bottomAnchor, constant: defaultSpacing).isActive = true
+    raizFuturaLabel.topAnchor.constraint(equalTo: participioLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     raizFuturaLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     
-    raizFutura.topAnchor.constraint(equalTo: participio.bottomAnchor, constant: defaultSpacing).isActive = true
-    raizFutura.leadingAnchor.constraint(equalTo: raizFuturaLabel.trailingAnchor, constant: defaultSpacing).isActive = true
-     
-    defectivo.topAnchor.constraint(equalTo: gerundio.bottomAnchor, constant: defaultSpacing).isActive = true
+    raizFutura.topAnchor.constraint(equalTo: participio.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    raizFutura.leadingAnchor.constraint(equalTo: raizFuturaLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    
+    defectivo.topAnchor.constraint(equalTo: gerundio.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     defectivo.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
     
-    table.topAnchor.constraint(equalTo: raizFuturaLabel.bottomAnchor, constant: defaultSpacing).isActive = true
+    table.topAnchor.constraint(equalTo: raizFuturaLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
     if #available(iOS 11.0, *) {
-      table.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * defaultSpacing).isActive = true
-    } else { // TODO: Delete this logic, safeBottomInset, and the associated init when iOS 11 goes live.
-      table.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -1.0 * (safeBottomInset + defaultSpacing)).isActive = true
+      table.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
+    } else {
+      table.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
     }
-  }
-  
-  convenience init(frame: CGRect, safeBottomInset: CGFloat) {
-    self.init(frame: frame)
-    self.safeBottomInset = safeBottomInset
-    commonInit()
-  }
-  
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    commonInit()
   }
   
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {

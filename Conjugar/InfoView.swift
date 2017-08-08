@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 
 class InfoView: UIView {
-  private var safeBottomInset: CGFloat = 0.0
-  
   internal let info: UITextView = {
     let textView = UITextView()
     textView.backgroundColor = Colors.black
@@ -26,27 +24,16 @@ class InfoView: UIView {
     fatalError("This class does not support NSCoding")
   }
   
-  private func commonInit() {
+  override init(frame: CGRect) {
+    super.init(frame: frame)
     addSubview(info)
-    let defaultSpacing: CGFloat = 8.0
     info.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
     info.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     info.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
     if #available(iOS 11.0, *) {
-      info.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * defaultSpacing).isActive = true
-    } else { // TODO: Delete this logic, safeBottomInset, and the associated init when iOS 11 goes live.
-      info.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -1.0 * (safeBottomInset + defaultSpacing)).isActive = true
+      info.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
+    } else {
+      info.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
     }
-  }
-  
-  convenience init(frame: CGRect, safeBottomInset: CGFloat) {
-    self.init(frame: frame)
-    self.safeBottomInset = safeBottomInset
-    commonInit()
-  }
-  
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    commonInit()
   }
 }

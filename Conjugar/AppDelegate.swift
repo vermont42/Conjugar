@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     UIApplication.shared.statusBarStyle = .lightContent
     UINavigationBar.appearance().barTintColor = UIColor.black
     UINavigationBar.appearance().tintColor = Colors.yellow
-    UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: Colors.yellow]
+    UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): Colors.yellow]
     UITabBar.appearance().barTintColor = UIColor.black
     UITabBar.appearance().tintColor = Colors.yellow
     Utterer.setup()

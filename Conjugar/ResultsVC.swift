@@ -9,40 +9,79 @@
 import Foundation
 import UIKit
 
-class ResultsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
-  @IBOutlet var table: UITableView!
-  @IBOutlet var difficultyLabel: UILabel!
-  @IBOutlet var regionLabel: UILabel!
-  @IBOutlet var scoreLabel: UILabel!
-  @IBOutlet var timeLabel: UILabel!
+class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+  var resultsView: ResultsView {
+    return view as! ResultsView
+  }
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    table.delegate = self
-    table.dataSource = self
+  override func loadView() {
+    let resultsView: ResultsView
+    resultsView = ResultsView(frame: UIScreen.main.bounds)
+    resultsView.setupTable(dataSource: self, delegate: self)
+    navigationItem.titleView = UILabel.titleLabel(title: "Results")
+    view = resultsView
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    difficultyLabel.text = Quiz.shared.lastDifficulty.rawValue
-    regionLabel.text = Quiz.shared.lastRegion.rawValue
-    scoreLabel.text = String(Quiz.shared.score)
-    timeLabel.text = Quiz.shared.elapsedTime.timeString
-  }
-
-  func numberOfSections(in tableView: UITableView) -> Int {
-    return 1
+    resultsView.difficulty.text = Quiz.shared.lastDifficulty.rawValue
+    resultsView.region.text = Quiz.shared.lastRegion.rawValue
+    resultsView.score.text = String(Quiz.shared.score)
+    resultsView.time.text = Quiz.shared.elapsedTime.timeString
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return Quiz.shared.questions.count
   }
-  
+
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = table.dequeueReusableCell(withIdentifier: "ResultCell") as! ResultCell
+    let cell = resultsView.table.dequeueReusableCell(withIdentifier: ResultCell.identifier) as! ResultCell
     let row = indexPath.row
     let question = Quiz.shared.questions[row]
     cell.configure(verb: question.0, tense: question.1, personNumber: question.2, correctAnswer: Quiz.shared.correctAnswers[row], proposedAnswer: Quiz.shared.proposedAnswers[row])
     return cell
   }
 }
+
+
+//import Foundation
+//import UIKit
+//
+//class ResultsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+//  @IBOutlet var table: UITableView!
+//  @IBOutlet var difficultyLabel: UILabel!
+//  @IBOutlet var regionLabel: UILabel!
+//  @IBOutlet var scoreLabel: UILabel!
+//  @IBOutlet var timeLabel: UILabel!
+//
+//  override func viewDidLoad() {
+//    super.viewDidLoad()
+//    table.delegate = self
+//    table.dataSource = self
+//  }
+//
+//  override func viewWillAppear(_ animated: Bool) {
+//    super.viewWillAppear(animated)
+//    difficultyLabel.text = Quiz.shared.lastDifficulty.rawValue
+//    regionLabel.text = Quiz.shared.lastRegion.rawValue
+//    scoreLabel.text = String(Quiz.shared.score)
+//    timeLabel.text = Quiz.shared.elapsedTime.timeString
+//  }
+//
+//  func numberOfSections(in tableView: UITableView) -> Int {
+//    return 1
+//  }
+//
+//  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//    return Quiz.shared.questions.count
+//  }
+//
+//  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//    let cell = table.dequeueReusableCell(withIdentifier: "ResultCell") as! ResultCell
+//    let row = indexPath.row
+//    let question = Quiz.shared.questions[row]
+//    cell.configure(verb: question.0, tense: question.1, personNumber: question.2, correctAnswer: Quiz.shared.correctAnswers[row], proposedAnswer: Quiz.shared.proposedAnswers[row])
+//    return cell
+//  }
+//}
+

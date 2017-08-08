@@ -18,22 +18,12 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   
   override func loadView() {
     let browseInfoView: BrowseInfoView
-    if #available(iOS 11.0, *) {
-      browseInfoView = BrowseInfoView(frame: UIScreen.main.bounds)
-    }
-    else {
-      browseInfoView = BrowseInfoView(frame: UIScreen.main.bounds, safeBottomInset: 49)
-    }
+    browseInfoView = BrowseInfoView(frame: UIScreen.main.bounds)
     browseInfoView.setupTable(dataSource: self, delegate: self)
+    navigationItem.titleView = UILabel.titleLabel(title: "Info")
     view = browseInfoView
   }
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    navigationItem.titleView = UILabel.titleLabel(title: "Info")
-    browseInfoView.reloadTableData()
-  }
-    
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return Info.infos.count
   }

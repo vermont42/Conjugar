@@ -12,7 +12,13 @@ import UIKit
 class VerbVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
   var verb: String = ""
   
-  override func viewDidLoad() {
+  var verbView: VerbView {
+    return view as! VerbView
+  }
+  
+  override func loadView() {
+    let verbView = VerbView(frame: UIScreen.main.bounds)
+    verbView.setupTable(dataSource: self, delegate: self)
     verbView.participio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
     verbView.raizFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
     verbView.gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
@@ -72,21 +78,6 @@ class VerbVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         verbView.parentOrType.text = "Irreg. ☛ \(parent)"
       }
     }
-  }
-  
-  var verbView: VerbView {
-    return view as! VerbView
-  }
-  
-  override func loadView() {
-    let verbView: VerbView
-    if #available(iOS 11.0, *) {
-      verbView = VerbView(frame: UIScreen.main.bounds)
-    }
-    else {
-      verbView = VerbView(frame: UIScreen.main.bounds, safeBottomInset: 49)
-    }
-    verbView.setupTable(dataSource: self, delegate: self)
     view = verbView
   }
   

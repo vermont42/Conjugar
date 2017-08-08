@@ -16,20 +16,15 @@ class SettingsVC: UIViewController {
   
   override func loadView() {
     let settingsView: SettingsView
-    if #available(iOS 11.0, *) {
-      settingsView = SettingsView(frame: UIScreen.main.bounds)
-    }
-    else {
-      settingsView = SettingsView(frame: UIScreen.main.bounds, safeBottomInset: 49)
-    }
-    view = settingsView    
+    settingsView = SettingsView(frame: UIScreen.main.bounds)
     settingsView.regionControl.addTarget(self, action: #selector(SettingsVC.regionChanged(_:)), for: .valueChanged)
     settingsView.difficultyControl.addTarget(self, action: #selector(SettingsVC.difficultyChanged(_:)), for: .valueChanged)
+    navigationItem.titleView = UILabel.titleLabel(title: "Settings")
+    view = settingsView
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    navigationItem.titleView = UILabel.titleLabel(title: "Settings")
     updateControls()
   }
   

@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 
 class SettingsView: UIView {
-  private var safeBottomInset: CGFloat = 0.0
-  
   private let regionLabel: UILabel = {
     let label = UILabel()
     label.text = "Region"
@@ -74,43 +72,36 @@ class SettingsView: UIView {
     fatalError("This class does not support NSCoding")
   }
   
-  private func commonInit() {
+  override init(frame: CGRect) {
+    super.init(frame: frame)
     _ = [regionLabel, difficultyLabel, regionDescription, difficultyDescription, regionControl, difficultyControl].map {
       addSubview($0)
     }
-    let defaultSpacing: CGFloat = 8.0
     
-    regionLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
+    if #available(iOS 11.0, *) {
+      regionLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).isActive = true
+    } else {
+      regionLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).isActive = true
+    }
     regionLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
     
-    regionControl.topAnchor.constraint(equalTo: regionLabel.bottomAnchor, constant: defaultSpacing).isActive = true
+    regionControl.topAnchor.constraint(equalTo: regionLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     regionControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     regionControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
     
-    regionDescription.topAnchor.constraint(equalTo: regionControl.bottomAnchor, constant: defaultSpacing).isActive = true
+    regionDescription.topAnchor.constraint(equalTo: regionControl.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     regionDescription.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     regionDescription.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
     
-    difficultyLabel.topAnchor.constraint(equalTo: regionDescription.bottomAnchor, constant: defaultSpacing).isActive = true
+    difficultyLabel.topAnchor.constraint(equalTo: regionDescription.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     difficultyLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
     
-    difficultyControl.topAnchor.constraint(equalTo: difficultyLabel.bottomAnchor, constant: defaultSpacing).isActive = true
+    difficultyControl.topAnchor.constraint(equalTo: difficultyLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     difficultyControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     difficultyControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
     
-    difficultyDescription.topAnchor.constraint(equalTo: difficultyControl.bottomAnchor, constant: defaultSpacing).isActive = true
+    difficultyDescription.topAnchor.constraint(equalTo: difficultyControl.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     difficultyDescription.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     difficultyDescription.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-  }
-  
-  convenience init(frame: CGRect, safeBottomInset: CGFloat) {
-    self.init(frame: frame)
-    self.safeBottomInset = safeBottomInset
-    commonInit()
-  }
-  
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    commonInit()
   }
 }

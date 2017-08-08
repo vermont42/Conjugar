@@ -22,7 +22,7 @@ class MainTabBarVC: UITabBarController {
     settingsNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[2], image: UIImage(named: MainTabBarVC.tabs[2]), selectedImage: nil)
     let browseInfoNavC = UINavigationController(rootViewController: BrowseInfoVC())
     browseInfoNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[3], image: UIImage(named: MainTabBarVC.tabs[3]), selectedImage: nil)
-    viewControllers = [browseVerbsNavC, browseInfoNavC, settingsNavC /*, quizNavC */]
+    viewControllers = [browseVerbsNavC, quizNavC, browseInfoNavC, settingsNavC]
   }
   
   required init?(coder aDecoder: NSCoder) {

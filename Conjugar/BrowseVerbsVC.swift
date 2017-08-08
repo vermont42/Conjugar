@@ -41,25 +41,14 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   }
   
   override func loadView() {
-    let browseVerbsView: BrowseVerbsView
-    if #available(iOS 11.0, *) {
-      browseVerbsView = BrowseVerbsView(frame: UIScreen.main.bounds)
-    }
-    else {
-      browseVerbsView = BrowseVerbsView(frame: UIScreen.main.bounds, safeBottomInset: 49)
-    }
+    let browseVerbsView = BrowseVerbsView(frame: UIScreen.main.bounds)
     browseVerbsView.setupTable(dataSource: self, delegate: self)
     browseVerbsView.filterControl.addTarget(self, action: #selector(BrowseVerbsVC.valueChanged(_:)), for: .valueChanged)
-    view = browseVerbsView
-  }
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
     allVerbs = Conjugator.sharedInstance.allVerbsArray()
     regularVerbs = Conjugator.sharedInstance.regularVerbsArray()
     irregularVerbs = Conjugator.sharedInstance.irregularVerbsArray()
-    browseVerbsView.reloadTableData()
     navigationItem.titleView = UILabel.titleLabel(title: "Browse")
+    view = browseVerbsView
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

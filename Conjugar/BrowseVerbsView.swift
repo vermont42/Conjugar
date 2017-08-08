@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 
 class BrowseVerbsView: UIView {
-  private var safeBottomInset: CGFloat = 0.0
-  
   internal let table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
@@ -31,33 +29,23 @@ class BrowseVerbsView: UIView {
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")
   }
-  
-  private func commonInit() {
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
     addSubview(table)
     addSubview(filterControl)
-    let defaultSpacing: CGFloat = 8.0
     table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
     table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-    table.bottomAnchor.constraint(equalTo: filterControl.topAnchor, constant: -1.0 * defaultSpacing).isActive = true
+    table.bottomAnchor.constraint(equalTo: filterControl.topAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
     filterControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     filterControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
     if #available(iOS 11.0, *) {
-      filterControl.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * defaultSpacing).isActive = true
-    } else { // TODO: Delete this logic, safeBottomInset, and the associated init when iOS 11 goes live.
-      filterControl.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -1.0 * (safeBottomInset + defaultSpacing)).isActive = true
+      filterControl.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
     }
-  }
-  
-  convenience init(frame: CGRect, safeBottomInset: CGFloat) {
-    self.init(frame: frame)
-    self.safeBottomInset = safeBottomInset
-    commonInit()
-  }
-  
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    commonInit()
+    else {
+      filterControl.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
+    }
   }
   
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {
