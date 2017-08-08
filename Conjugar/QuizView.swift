@@ -141,8 +141,6 @@ class QuizView: UIView {
       startRestartButton.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
     }
     startRestartButton.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    
-    // TODO: Rewrite VerbView to be terse like this file when setting up controls.
   }
   
   internal func hideInProgressUI() {
