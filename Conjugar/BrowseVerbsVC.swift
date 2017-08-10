@@ -51,6 +51,11 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     view = browseVerbsView
   }
   
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    browseVerbsView.isHidden = false
+  }
+  
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return currentVerbs.count
   }
@@ -65,6 +70,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     tableView.deselectRow(at: indexPath, animated: false)
     let verbVC = VerbVC()
     verbVC.verb = currentVerbs[indexPath.row]
+    browseVerbsView.isHidden = true
     navigationController?.pushViewController(verbVC, animated: true)
   }
   

@@ -14,7 +14,6 @@ class InfoView: UIView {
     let textView = UITextView()
     textView.backgroundColor = Colors.black
     textView.translatesAutoresizingMaskIntoConstraints = false
-    textView.font = Fonts.body
     textView.textColor = Colors.yellow
     textView.isEditable = false
     return textView

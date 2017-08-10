@@ -41,7 +41,7 @@ class QuizView: UIView {
     let button = UIButton()
     button.isUserInteractionEnabled = true
     button.setTitle("Start", for: .normal)
-    button.titleLabel?.font = Fonts.largeButton
+    button.titleLabel?.font = Fonts.button
     button.setTitleColor(Colors.red, for: .normal)
     return button
   } ()
@@ -54,7 +54,7 @@ class QuizView: UIView {
     super.init(frame: frame)
     _ = [verb, verbLabel, translation, pronoun, pronounLabel, tense, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel].map {
       $0.textColor = Colors.yellow
-      $0.font = Fonts.subheading
+      $0.font = Fonts.label
     }
     _ = [verb, translation, pronoun, tense].map {
       $0.isUserInteractionEnabled = true

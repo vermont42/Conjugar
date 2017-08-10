@@ -13,7 +13,7 @@ class SettingsView: UIView {
   private let regionLabel: UILabel = {
     let label = UILabel()
     label.text = "Region"
-    label.font = Fonts.subheading
+    label.font = Fonts.label
     label.textColor = Colors.yellow
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
@@ -22,7 +22,7 @@ class SettingsView: UIView {
   private let difficultyLabel: UILabel = {
     let label = UILabel()
     label.text = "Difficulty"
-    label.font = Fonts.subheading
+    label.font = Fonts.label
     label.textColor = Colors.yellow
     label.translatesAutoresizingMaskIntoConstraints = false
     return label

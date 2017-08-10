@@ -15,7 +15,7 @@ class ConjugationCell: UITableViewCell {
   private let conjugation: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
-    label.font = Fonts.heading3
+    label.font = Fonts.smallCell
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   } ()

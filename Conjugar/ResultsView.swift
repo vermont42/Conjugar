@@ -32,7 +32,7 @@ class ResultsView: UIView {
     super.init(frame: frame)
     _ = [difficulty, region, score, time, scoreLabel, timeLabel].map {
       $0.textColor = Colors.yellow
-      $0.font = Fonts.subheading
+      $0.font = Fonts.label
     }
     _ = [table, difficulty, region, score, time, scoreLabel, timeLabel].map {
       guard let view = $0 as? UIView else { fatalError("Could not cast UIView to UIView.") }

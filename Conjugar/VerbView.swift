@@ -34,7 +34,7 @@ class VerbView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     _ = [translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].map {
-      $0.font = Fonts.subheading
+      $0.font = Fonts.label
       $0.textColor = Colors.yellow
       $0.translatesAutoresizingMaskIntoConstraints = false
     }

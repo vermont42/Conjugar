@@ -25,11 +25,11 @@ class ResultCell: UITableViewCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     _ = [verb, tensePersonNumber, correctAnswer, proposedAnswer].map {
       $0.textColor = Colors.yellow
-      $0.font = Fonts.heading3
+      $0.font = Fonts.smallCell
       $0.translatesAutoresizingMaskIntoConstraints = false
       addSubview($0)
     }
-    verb.font = Fonts.heading2
+    verb.font = Fonts.largeCell
     backgroundColor = Colors.black
     selectionStyle = .none
     verb.topAnchor.constraint(equalTo: self.topAnchor, constant: 4.0).isActive = true

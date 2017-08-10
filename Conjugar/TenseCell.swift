@@ -15,7 +15,7 @@ class TenseCell: UITableViewCell {
   private let tense: UILabel = {
     let label = UILabel()
     label.textColor = Colors.red
-    label.font = Fonts.heading2
+    label.font = Fonts.largeCell
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   } ()
