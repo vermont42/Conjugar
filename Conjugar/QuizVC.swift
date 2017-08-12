@@ -47,6 +47,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       quizView.score.text = String(Quiz.shared.score)
       quizView.progress.text = String(Quiz.shared.currentQuestionIndex + 1) + " / " + String(Quiz.shared.questionCount)
     }
+    quizView.startRestartButton.pulsate()
   }
 
   @objc func startRestart(sender: UIButton!) {
@@ -56,6 +57,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       $0.isHidden = true
     }
     quizView.showInProgressUI()
+    quizView.startRestartButton.pulsate()
   }
 
   func scoreDidChange(newScore: Int) {

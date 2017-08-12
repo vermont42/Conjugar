@@ -103,7 +103,7 @@ internal class Quiz {
 
     switch lastDifficulty {
     case .easy:
-      //questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
+//      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
       _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].map {
         questions.append(($0, .presenteDeIndicativo, personNumber()))
       }

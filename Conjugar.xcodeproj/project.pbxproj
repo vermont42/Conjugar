@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E10178021F3F753400F0BC97 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10178011F3F753400F0BC97 /* UIViewExtension.swift */; };
 		E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */ = {isa = PBXBuildFile; fileRef = E107B08A1EB66CE6004C5E91 /* verbs.xml */; };
 		E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E107B0911EB66F28004C5E91 /* VerbParser.swift */; };
 		E1151E531E9AEDF100DE44D6 /* AuxiliaryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */; };
@@ -86,6 +87,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E10178011F3F753400F0BC97 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		E107B08A1EB66CE6004C5E91 /* verbs.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = verbs.xml; sourceTree = "<group>"; };
 		E107B0911EB66F28004C5E91 /* VerbParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbParser.swift; sourceTree = "<group>"; };
 		E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuxiliaryError.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */,
 				E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */,
 				E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */,
+				E10178011F3F753400F0BC97 /* UIViewExtension.swift */,
 				E18F7F371ECA7C9A00633200 /* Utterer.swift */,
 			);
 			name = Utils;
@@ -474,6 +477,7 @@
 				E1151E531E9AEDF100DE44D6 /* AuxiliaryError.swift in Sources */,
 				E1F06AF81E8F081700ADD2E1 /* Conjugator.swift in Sources */,
 				E1483FC41EF7510F0052C436 /* UIApplicationExtension.swift in Sources */,
+				E10178021F3F753400F0BC97 /* UIViewExtension.swift in Sources */,
 				E16BEA061F0A92040053DD32 /* InfoDelegate.swift in Sources */,
 				E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */,
 				E14566BE1EC001FD00C16DC3 /* ConjugationCell.swift in Sources */,
