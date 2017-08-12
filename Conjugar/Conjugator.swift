@@ -95,7 +95,7 @@ class Conjugator {
       return .failure(.noFirstPersonSingularImperative)
     }
     let index = infinitive.index(infinitive.endIndex, offsetBy: -2)
-    let ending = infinitive.substring(from: index)
+    let ending = String(infinitive[index...])
     if !["ar", "er", "ir", "ír"].contains(ending) {
       return .failure(.invalidEnding(ending))
     }
@@ -107,7 +107,7 @@ class Conjugator {
     }
     
     if verbs[infinitive] == nil {
-      let stem = infinitive.substring(to: index)
+      let stem = String(infinitive[..<index])
       var verb:[String: String] = [:]
       if ending == "ar" {
         verb[Conjugator.parent] = "hablar"
@@ -216,10 +216,10 @@ class Conjugator {
       }
       let endIndex = stemWithRon.index(stemWithRon.endIndex, offsetBy: -3)
       let stemRange = stemWithRon.startIndex ..< endIndex
-      var stem = stemWithRon.substring(with: stemRange)
+      var stem = String(stemWithRon[stemRange])
       if personNumber == .firstPlural {
         let lastCharIndex = stem.index(stem.endIndex, offsetBy: -1)
-        let lastChar = stem.substring(from: lastCharIndex)
+        let lastChar = stem[lastCharIndex...]
         let accentedLastChar: String
         if lastChar == "a" {
           accentedLastChar = "á"
@@ -227,7 +227,7 @@ class Conjugator {
         else {
           accentedLastChar = "é"
         }
-        let stemWithoutLastChar = stem.substring(to: lastCharIndex)
+        let stemWithoutLastChar = stem[..<lastCharIndex]
         stem = stemWithoutLastChar + accentedLastChar
       }
       return .success(stem + endingFor(tense: tense, personNumber: personNumber))
@@ -259,11 +259,11 @@ class Conjugator {
           }
           else {
             let stemWithS = conjugateRecursively(infinitive: infinitive, tense: .presenteDeIndicativo, personNumber: .secondSingular).value!
-            return .success(stemWithS.substring(to: stemWithS.index(stemWithS.endIndex, offsetBy: -1)))
+            return .success(String(stemWithS[..<stemWithS.index(stemWithS.endIndex, offsetBy: -1)]))
           }
         }
         else {
-          return .success(infinitive.substring(to: infinitive.index(infinitive.endIndex, offsetBy: -1)) + "d")
+          return .success(String(infinitive[..<infinitive.index(infinitive.endIndex, offsetBy: -1)]) + "d")
         }
       }
     }
