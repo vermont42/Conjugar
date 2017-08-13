@@ -17,4 +17,5 @@ enum Sound: String {
   case chime = "chime"
   case chirp = "chirp"
   case buzz = "buzz"
+  case gun = "gun"
 }

@@ -17,20 +17,47 @@ class BrowseInfoView: UIView {
     return tableView
   } ()
   
+  private let difficultyLabel: UILabel = {
+    let label = UILabel()
+    label.text = "Filter Tenses by Difficulty"
+    label.textAlignment = .center
+    label.font = Fonts.smallBody
+    label.textColor = Colors.yellow
+    label.translatesAutoresizingMaskIntoConstraints = false
+    return label
+  } ()
+  
+  internal let difficultyControl: UISegmentedControl = {
+    let control = UISegmentedControl(items: ["E", "E & M", "E, M, & D"])
+    control.selectedSegmentIndex = 0
+    control.backgroundColor = Colors.black
+    control.translatesAutoresizingMaskIntoConstraints = false
+    control.tintColor = Colors.red
+    return control
+  } ()
+  
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")
   }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    addSubview(table)
+    _ = [table, difficultyLabel, difficultyControl].map {
+      addSubview($0)
+    }
     table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
     table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    table.bottomAnchor.constraint(equalTo: difficultyControl.topAnchor, constant: Layout.defaultSpacing * -1.0).isActive = true
+    
+    difficultyControl.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+    difficultyControl.bottomAnchor.constraint(equalTo: difficultyLabel.topAnchor, constant: Layout.defaultSpacing * -1.0).isActive = true
+
+    difficultyLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
     if #available(iOS 11.0, *) {
-      table.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
+      difficultyLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
     } else {
-      table.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
+      difficultyLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
     }
   }
   

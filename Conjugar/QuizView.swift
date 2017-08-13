@@ -101,26 +101,10 @@ class QuizView: UIView {
     tense.topAnchor.constraint(equalTo: pronoun.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     tense.leadingAnchor.constraint(equalTo: tenseLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
     
-    conjugationField.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    conjugationField.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    conjugationField.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-    
-    lastLabel.topAnchor.constraint(equalTo: conjugationField.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    lastLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    
-    last.topAnchor.constraint(equalTo: conjugationField.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    last.leadingAnchor.constraint(equalTo: lastLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
-    
-    correctLabel.topAnchor.constraint(equalTo: lastLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    correctLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    
-    correct.topAnchor.constraint(equalTo: last.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    correct.leadingAnchor.constraint(equalTo: correctLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
-    
-    scoreLabel.topAnchor.constraint(equalTo: correctLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    scoreLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     scoreLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     
-    score.topAnchor.constraint(equalTo: correct.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    score.topAnchor.constraint(equalTo: tense.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     score.leadingAnchor.constraint(equalTo: scoreLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
     
     progressLabel.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
@@ -135,12 +119,28 @@ class QuizView: UIView {
     elapsed.topAnchor.constraint(equalTo: progress.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     elapsed.leadingAnchor.constraint(equalTo: elapsedLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
     
+    lastLabel.topAnchor.constraint(equalTo: elapsedLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    lastLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    
+    last.topAnchor.constraint(equalTo: elapsed.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    last.leadingAnchor.constraint(equalTo: lastLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    
+    correctLabel.topAnchor.constraint(equalTo: lastLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    correctLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    
+    correct.topAnchor.constraint(equalTo: last.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    correct.leadingAnchor.constraint(equalTo: correctLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+
+    conjugationField.topAnchor.constraint(equalTo: correctLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    conjugationField.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    conjugationField.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    
     if #available(iOS 11.0, *) {
       startRestartButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     } else {
       startRestartButton.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
     }
-    startRestartButton.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    startRestartButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
   }
   
   internal func hideInProgressUI() {

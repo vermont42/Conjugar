@@ -44,7 +44,10 @@ class GameCenterManager: NSObject, GKGameCenterControllerDelegate {
     gkScore.value = Int64(score)
     GKScore.report([gkScore]) { error in
       if error == nil {
-        self.showLeaderboard()
+        let delay: TimeInterval = 3.0
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+          self.showLeaderboard()
+        })
       }
     }
   }

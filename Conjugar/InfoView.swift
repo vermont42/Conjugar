@@ -15,6 +15,7 @@ class InfoView: UIView {
     textView.backgroundColor = Colors.black
     textView.translatesAutoresizingMaskIntoConstraints = false
     textView.textColor = Colors.yellow
+    textView.tintColor = Colors.blue
     textView.isEditable = false
     return textView
   } ()

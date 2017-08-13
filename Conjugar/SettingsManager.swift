@@ -17,6 +17,9 @@ class SettingsManager {
   
   fileprivate var difficulty: Difficulty
   fileprivate static let difficultyKey = "difficulty"
+
+  fileprivate var infoDifficulty: Difficulty
+  fileprivate static let infoDifficultyKey = "infoDifficulty"
   
   fileprivate init() {
     userDefaults = UserDefaults.standard
@@ -36,6 +39,15 @@ class SettingsManager {
     else {
       difficulty = Difficulty()
       userDefaults.set(difficulty.rawValue, forKey: SettingsManager.difficultyKey)
+      userDefaults.synchronize()
+    }
+    
+    if let storedInfoDifficultyString = userDefaults.string(forKey: SettingsManager.infoDifficultyKey) {
+      infoDifficulty = Difficulty(rawValue: storedInfoDifficultyString)!
+    }
+    else {
+      infoDifficulty = Difficulty.difficult
+      userDefaults.set(infoDifficulty.rawValue, forKey: SettingsManager.infoDifficultyKey)
       userDefaults.synchronize()
     }
   }
@@ -60,6 +72,18 @@ class SettingsManager {
     if difficulty != settingsManager.difficulty {
       settingsManager.difficulty = difficulty
       settingsManager.userDefaults.set(difficulty.rawValue, forKey: SettingsManager.difficultyKey)
+      settingsManager.userDefaults.synchronize()
+    }
+  }
+  
+  class func getInfoDifficulty() -> Difficulty {
+    return settingsManager.infoDifficulty
+  }
+  
+  class func setInfoDifficulty(_ infoDifficulty: Difficulty) {
+    if infoDifficulty != settingsManager.infoDifficulty {
+      settingsManager.infoDifficulty = infoDifficulty
+      settingsManager.userDefaults.set(infoDifficulty.rawValue, forKey: SettingsManager.infoDifficultyKey)
       settingsManager.userDefaults.synchronize()
     }
   }

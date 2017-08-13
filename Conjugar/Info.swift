@@ -56,7 +56,7 @@ Spanish verb tenses may be roughly grouped into three classes. The first class c
 
 In recognition of the relative difficulties of learning to conjugate the ~Easy~, ~Moderate~, and ~Difficult~ classes of verbs, ~Conjugar~ assigns higher scores to ~Moderate~ quizzes than to ~Easy~ quizzes and assigns higher scores to ~Difficult~ quizzes than to ~Moderate~ quizzes.
 
-Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%, and the tenses.
+Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%, and the tenses. Near the bottom of the screen is a red widget for filtering information about tenses by the difficulty mode in which they are quizzed. The three options are ~Easy~; ~Easy~ and ~Moderate~; and ~Easy~, ~Moderate~, and ~Difficult~.
 """),
 Info(heading: "Terminology", difficulty: .easy, text: """
 *Terminology*
@@ -91,7 +91,7 @@ third person, plural: ~ellos~ (masc.)/~ellas~ (fem.)
 
 "Fem." means that a pronoun refers to female subjects, and "masc" means that a pronoun refers to male subjects.
 
-The second-person subject pronouns in Spanish are more complicated in that they encode two formality levels, formal and informal. Further, uses of these pronouns differ in Spain and Latin America.
+The second-person subject pronouns in Spanish are more complicated in that they encode two formality levels, formal and informal. Further, uses of these pronouns differ between Spain and Latin America.
 
 ~Spain~
 
@@ -100,7 +100,7 @@ second person, singular, formal: ~usted~
 second person, plural, informal: ~vosotros~ (masc.)/~vosotras~ (fem.)
 second person, plural, formal: ~ustedes~
 
-~Most of Latin America~
+~Much of Latin America~
 
 second person, singular, informal: ~tú~
 second person, singular, formal: ~usted~
@@ -142,7 +142,7 @@ The ~presente de indicativo~ is a Spanish verb tense that is used to express the
 
 ^Conjugation^
 
-Regular AR, IR, and ER verbs are conjugated in the presente de indicativo by adding the following endings to the verb stem:
+Regular ~ar~, ~ir~, and ~er~ verbs are conjugated in the presente de indicativo by adding the following endings to the verb stem:
 
 AR: -o, -as, -a, -amos, -áis, -an
 IR: -o, -es, -e, -imos, -ís, -en
@@ -175,13 +175,13 @@ The ~futuro de indicativo~ is a Spanish Verb tense that is used to express the f
 
 "El año próximo, visitaré Buenos Aires." = "Next year, I shall/will visit Buenos Aires."
 
-• Uncertainty or probability - inference, rather than direct knowledge
+• Uncertainty or probability - inference, rather than direct knowledge:
 
 "¿Quién estará tocando a la puerta?" "Será Fabio." = "Who (do you suppose) is knocking at the door?" "It must be Fabio." or "Who will that be knocking at the door?" "That'll be Fabio."
 
 • Command, prohibition, or obligation:
 
-"No llevarás a ese hombre a mi casa." = "Do not bring that man to my house." or, more accurately, "You will not bring that man to my house."
+"No llevarás a ese hombre a mi casa." = "Do not bring that man to my house." or "You will not bring that man to my house."
 
 This form is also used to assert a command, prohibition, or obligation in English.
 
@@ -197,7 +197,7 @@ The Futuro de Indicativo uses the %raíz futura% as a stem. The following ending
 
 -é, -ás, -á, -emos, -éis, -án
 
-Example: hablaré, hablarás, hablará, hablaremos, hablaréis, hablarán
+Example (hablar): hablaré, hablarás, hablará, hablaremos, hablaréis, hablarán
 
 See %credits% for Wikipedia attribution.
 """),
@@ -208,19 +208,19 @@ Info(heading: "Pretérito", difficulty: .easy, text: """
 
 The ~pretérito~ is a Spanish verb tense that is used to express the following:
 
-• An action that was done in the past
+• An action that was done in the past:
 
 "Ayer, encontré la flor que tú me $dIste$." = "Yesterday, I found the flower that you gave me."
 
 This use expresses an action that is viewed as a completed event. It is often accompanied by adverbial expressions of time, such as "ayer", "anteayer", or "la semana pasada".
 
-• An action that interrupts another action
+• An action that interrupts another action:
 
 "Tomábamos la cena cuando entró Eduardo." = "We were having dinner when Eduardo came in."
 
 This expresses an event that happened (and was completed) while another action was taking place.
 
-• A general truth
+• A general truth:
 
 "Las Filipinas $FUeron$ parte del Imperio Español." = "The Philippines were part of the Spanish Empire."
 
@@ -228,7 +228,7 @@ This expresses a past relationship that is viewed as finished.
 
 ^Conjugation^
 
-Regular AR, IR, and ER verbs are conjugated in the pretérito by adding the following endings to the verb stem:
+Regular ~ar~, ~ir~, and ~er~ verbs are conjugated in the pretérito by adding the following endings to the verb stem:
 
 AR: -é, -aste, -ó, -amos, -astéis, -aron
 IR: -í, -iste, -ió, -imos, -isteis, -ieron
@@ -289,7 +289,7 @@ Like the %futuro de indicativo%, the condicional uses the %raíz futura% as a st
 
 -ía, -ías, -ía, -íamos, -íais, -ían
 
-Example: hablaría, hablarías, hablaría, hablaríamos, hablaríais, hablarían
+Example (hablar): hablaría, hablarías, hablaría, hablaríamos, hablaríais, hablarían
 
 See %credits% for Wikipedia attribution.
 """),
@@ -316,7 +316,7 @@ Like the %pretérito% and %perfecto de indicativo%, the ~imperfecto de indicativ
 
 ^Conjugation^
 
-Regular AR, IR, and ER verbs are conjugated in the imperfecto de indicativo by adding the following endings to the verb stem:
+Regular ~ar~, ~ir~, and ~er~ verbs are conjugated in the imperfecto de indicativo by adding the following endings to the verb stem:
 
 AR: -aba, -abas, -aba, -ábamos, -abais, -aban
 IR: -ía, -ías, -ía, -íamos, -íais, -ían
@@ -353,7 +353,7 @@ The ~presente de subjuntivo~ is used to express:
 
 ^Conjugation^
 
-Regular AR, IR, and ER verbs are conjugated in the presente de subjuntivo by adding the following endings to the verb stem:
+Regular ~ar~, ~ir~, and ~er~ verbs are conjugated in the presente de subjuntivo by adding the following endings to the verb stem:
 
 AR: -e, -es, -e, -emos, -éis, -en
 IR: -a, -as, -a, -amos, -áis, -an
@@ -374,24 +374,108 @@ Info(heading: "Imperfecto de Subjuntivo 1", difficulty: .difficult, text: """
 
 ^Use^
 
+The ~imperfecto de subjuntivo 1~ serves a variety of purposes similar to those of the %presente de subjuntivo% but puts actions in the past. Here are some example uses of this tense.
+
+• A command:
+
+"Nos mandó que platicáramos." = "He ordered us to talk."
+
+• Emotional state:
+
+"Temía que Colombia no ganara la Copa América este año." = "I feared that Colombia would not win the America Cup this year."
+
+• Doubt:
+
+"Dudaba que $vIniera$ hoy." = "I doubted that you would come today."
+
+Grammarians consider the imperfecto de subjuntivo 1 and the %imperfecto de subjuntivo 2% to be different variants of the same tense called simply "imperfecto de subjuntivo". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.
+
 ^Conjugation^
 
+Verbs are conjugated in the imperfecto de subjuntivo 1 by removing the -ron ending from the ellos %pretérito% form of the verb and adding the following ending, depending on the person and number of the subject:
+
+yo: -ra
+tú: -ras
+él: -ra
+nosotros: -ramos
+vosotros: -rais
+ellos: -ran
+
+Example (cantar): cantara, cantaras, cantara, cantáramos, cantarais, cantaran
+
+As shown in the example, the vowel before the ending of the nosotros conjugation has an acute accent to reflect the stressing of that syllable.
+
+See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Imperfecto de Subjuntivo 2", difficulty: .difficult, text: """
 *Imperfecto de Subjuntivo 2*
 
 ^Use^
 
+The ~imperfecto de subjuntivo 2~ serves a variety of purposes similar to those of the %presente de subjuntivo% but puts actions in the past. Here are some example uses of this tense.
+
+• A command:
+
+"Nos mandó que platicásemos." = "He ordered us to talk."
+
+• Emotional state:
+
+"Temía que Colombia no ganase la Copa América este año." = "I feared that Colombia would not win the America Cup this year."
+
+• Doubt:
+
+"Dudaba que $vIniese$ hoy." = "I doubted that you would come today."
+
+Grammarians consider the imperfecto de subjuntivo 2 and the %imperfecto de subjuntivo 1% to be different variants of the same tense called simply "imperfecto de subjuntivo". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.
+
 ^Conjugation^
 
+Verbs are conjugated in the imperfecto de subjuntivo 2 by removing the -ron ending from the ellos %pretérito% form of the verb and adding the following ending, depending on the person and number of the subject:
+
+yo: -se
+tú: -ses
+él: -se
+nosotros: -semos
+vosotros: -seis
+ellos: -sen
+
+Example (cantar): cantase, cantases, cantase, cantásemos, cantaseis, cantasen
+
+As shown in the example, the vowel before the ending of the nosotros conjugation has an acute accent to reflect the stressing of that syllable.
+
+See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Futuro de Subjuntivo", difficulty: .difficult, text: """
 *Futuro de Subjuntivo*
 
 ^Use^
 
+The ~futuro de subjunctivo~ is no longer used in modern Spanish, except in legal language and some fixed expressions. In these expressions, this tense is used to express doubt or uncertainty about whether some event will happen in the future. In modern Spanish, the %presente de subjuntivo% replaces the futuro de subjuntivo. Here are examples of the futuro de subjuntivo:
+
+"Cuando hablaren..." = "Whenever they might speak..."
+
+"$venGa$ lo que $vIniere$" = "come what may"
+
+"El que matare al rey será castigado." = "Whoever kills the king will be punished."
+
+This last example is from a Spanish criminal law. The use of the futuro de subjuntivo in this law alludes to the remoteness of the possibility that the Spanish king will be killed. ¡Viva el Rey!
+
 ^Conjugation^
 
+Verbs are conjugated in the futuro de subjuntivo by removing the -ron ending from the ellos %pretérito% form of the verb and adding the following ending, depending on the person and number of the subject:
+
+yo: -re
+tú: -res
+él: -re
+nosotros: -remos
+vosotros: -reis
+ellos: -ren
+
+Example (cantar): cantare, cantares, cantare, cantáremos, cantareis, cantaren
+
+As shown in the example, the vowel before the ending of the nosotros conjugation has an acute accent to reflect the stressing of that syllable.
+
+See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Imperativo Positivo", difficulty: .moderate, text: """
 *Imperativo Positivo*
@@ -412,7 +496,7 @@ The ~imperativo positivo~ is used in Spanish to express commands.
 
 For conjugation of the imperativo positivo, nosotros, usted, and ustedes use the %presente de subjuntivo% conjugation. Tú uses the %presente de indicativo% conjugation minus the final s. Vosotros uses the infinitivo minus the final r, plus d.
 
-Thus, for regular AR, IR, and ER verbs, the endings are as follows. Note that there are no yo forms.
+Thus, for regular ~ar~, ~ir~, and ~er~ verbs, the endings are as follows. Note that there are no yo forms.
 
 AR: -a, -e, -emos, -ad, -en
 IR: -e, -a, -amos, -id, -an
@@ -455,7 +539,7 @@ The ~imperativo negativo~ is used in Spanish to express negative commands.
 
 ^Conjugation^
 
-For conjugation of the imperativo negativo, the word "no" is prepended to the %presente de subjuntivo% conjugation. Thus, for regular AR, IR, and ER verbs, the endings are as follows. Note that there are no yo forms.
+For conjugation of the imperativo negativo, the word "no" is prepended to the %presente de subjuntivo% conjugation. Thus, for regular ~ar~, ~ir~, and ~er~ verbs, the endings are as follows. Note that there are no yo forms.
 
 AR: -e, -es, -e, -emos, -éis, -en
 IR: -a, -as, -a, -amos, -áis, -an
@@ -478,15 +562,15 @@ The ~participio~ corresponds to the English -en or -ed form of a verb. This form
 
 The participio is formed by adding the following endings to the verb stem:
 
--ar verbs: ~-ado~
+~ar~ verbs: -ado
 
 Examples: hablado ("spoken"); cantado ("sung"); bailado ("danced")
 
--er verbs: ~-ido~
+~er~ verbs: -ido
 
 Examples: bebido ("drunk"); leído (requires accent mark; "read"); comprendido ("understood")
 
--ir verbs,: ~-ido~
+~ir~ verbs: -ido
 
 Examples: vivido ("lived"); sentido ("felt"); hervido ("boiled")
 
@@ -518,21 +602,21 @@ The ~gerundio~ has a variety of uses. The gerundio of hacer, haciendo, can mean 
 
 The gerundio is also used to form progressive constructions, such as "$estoY haciendo$" ("I am doing").
 
-The gerundio cannot be used as an adjective and, unlike in most European languages, generally has no corresponding adjectival forms. The archaic participio presente, which ended in -ante or -iente and formerly filled this function, in some cases survives as an adjective. For example, "durmiente" = "sleeping", and "interesante" = "interesting". But such cases are limited. Usually, alternate constructions are appropriate. Whereas in English one would say "the crying baby", one would say in Spanish "el bebé que llora", which literally means "the baby who is crying".
+The gerundio cannot be used as an adjective and, unlike in most European languages, generally has no corresponding adjectival forms. The archaic participio presente, which ended in -ante or -iente and formerly filled this function, in some cases survives as an adjective. For example, "$dUrmiente$" = "sleeping", and "interesante" = "interesting". But such cases are limited. Usually, alternate constructions are appropriate. Whereas in English one would say "the crying baby", one would say in Spanish "el bebé que llora", which literally means "the baby who is crying".
 
 ^Form^
 
 The gerundio is formed by adding the following endings to the verb stem:
 
--ar verbs: ~-ando~
+~ar~ verbs: -ando
 
 Examples: hablando ("speaking"); cantando ("singing"); bailando ("dancing")
 
--er verbs: ~-iendo~
+~er~ verbs: -iendo
 
 Examples: bebiendo ("drinking"); cediendo ("transferring"); comprendiendo ("understanding")
 
--ir verbs,: ~-iendo~
+~ir~ verbs: -iendo
 
 Examples: viviendo ("living"); decidiendo ("deciding"); herviendo ("boiling")
 
@@ -599,7 +683,7 @@ In most of Spain, the tense has an additional use: to express a past action or e
 
 In the perfecto de indicativo, the %presente de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $hEmos hablado$
+Example: "$hEmos hablado$" = "we have spoken"
 
 See %credits% for Wikipedia attribution.
 """),
@@ -608,95 +692,149 @@ Info(heading: "Pretérito Anterior", difficulty: .difficult, text: """
 
 ^Use^
 
+The ~pretérito anterior~ is very rare in spoken Spanish, but it is sometimes used in formal written language, where it is almost entirely limited to subordinate clauses. Thus, it is usually introduced by temporal conjunctions such as cuando, apenas, or en cuanto. This tense is used to express an action that ended immediately before another past action.
+
+"Cuando $hUbieron llegado$ todos, empezó la ceremonia." = "When everyone had arrived, the ceremony began."
+
+"Apenas María $hUBO terminado$ la canción, su padre entró." = "As soon as Maria had finished the song, her father came in."
+
 ^Conjugation^
 
 In the pretérito anterior, the %pretérito% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $hUBE hablado$
+Example: "$hUBE hablado$" = "I had spoken"
+
+See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Pluscuamperfecto de Indicativo", difficulty: .difficult, text: """
 *Pluscuamperfecto de Indicativo*
 
 ^Use^
 
+The ~pluscuamperfecto de indicativo~ expresses a past action that occurred prior to another past action.
+
+"Yo había esperado tres horas cuando él llegó." = "I had been waiting for three hours when he arrived."
+
 ^Conjugation^
 
 In the pluscuamperfecto de indicativo, the %imperfecto de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $había hablado$
+Example: "$había hablado$" = "it had spoken"
+
+See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Futuro Perfecto", difficulty: .difficult, text: """
 *Futuro Perfecto*
 
 ^Use^
 
+The ~futuro perfecto~ is used to indicate a future action that will be finished right before another action.
+
+"Cuando yo llegue a la fiesta, ya se $habRán$ marchado todos." = "When I get to the party, everyone will already have left."
+
 ^Conjugation^
 
 In the futuro perfecto, the %futuro de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $habRé hablado$
+Example: "$habRé hablado$" = "I will have spoken"
+
+See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Condicional Compuesto", difficulty: .difficult, text: """
 *Condicional Compuesto*
 
 ^Use^
 
+The ~condicional compuesto~ refers to a hypothetical past action.
+
+"Yo $habRía hablado$ si me $hUbieran dado$ la oportunidad." = "I would have spoken if they had given me the opportunity."
+
 ^Conjugation^
 
 In the condicional compuesto, the %condicional% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $habRía hablado$
+Example: "$habRía hablado$" = "I would have spoken"
+
+See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Perfecto de Subjuntivo", difficulty: .difficult, text: """
 *Perfecto de Subjuntivo*
 
 ^Use^
 
+The ~perfecto de subjuntivo~ expresses doubt, uncertainty or an emotional state with respect to a past action.
+
+"Lamentan que él no $haYa podido$ regresar a la casa." = "They regret that he was unable to return home."
+
+"Al final del siglo, temo que Colombia no $haYa ganado$ la Copa América." = "At the end of the century, I fear that Colombia will not have won the America Cup."
+
+"Dudo que $haYas venido$ antes del final de la película." = "I doubt that you will have come before the end of the movie."
+
 ^Conjugation^
 
 In the perfecto de subjuntivo, the %presente de subjuntivo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $haYa hablado$
+Example: "$haYa hablado$" = "I spoke" or "I have spoken"
+
+See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Pluscuamperfecto de Subjuntivo 1", difficulty: .difficult, text: """
 *Pluscuamperfecto de Subjuntivo 1*
 
 ^Use^
 
+The ~pluscuamperfecto de subjuntivo 1~ expresses doubt, uncertainty or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
+
+"Dudo que $habRía hablado$ si me $hUbieran dado$ la oportunidad." = "I doubt that I would have spoken if they had given me the opportunity."
+
+Grammarians consider the pluscuamperfecto de subjuntivo 1 and the %pluscuamperfecto de subjuntivo 2% to be different variants of the same tense called simply "pluscuamperfecto de subjuntivo". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.
+
 ^Conjugation^
 
 In the pluscuamperfecto de subjuntivo 1, the %imperfecto de subjuntivo 1% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $hUbiera hablado$
+Example: "$hUbiera hablado$" = "I had spoken"
 """),
 Info(heading: "Pluscuamperfecto de Subjuntivo 2", difficulty: .difficult, text: """
 *Pluscuamperfecto de Subjuntivo 2*
 
 ^Use^
 
+The ~pluscuamperfecto de subjuntivo 2~ expresses doubt, uncertainty or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
+
+"Dudo que $habRía hablado$ si me $hUbiesen dado$ la oportunidad." = "I doubt that I would have spoken if they had given me the opportunity."
+
+Grammarians consider the pluscuamperfecto de subjuntivo 2 and the %pluscuamperfecto de subjuntivo 1% to be different variants of the same tense called simply "pluscuamperfecto de subjuntivo". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.
+
 ^Conjugation^
 
 In the pluscuamperfecto de indicativo 2, the %imperfecto de subjuntivo 2% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $hUbiese hablado$
+Example: "$hUbiese hablado$" = "I had spoken"
 """),
 Info(heading: "Futuro Perfecto de Subjuntivo", difficulty: .difficult, text: """
 *Futuro Perfecto de Subjuntivo*
 
 ^Use^
 
+The ~futuro perfecto de subjuntivo~ expresses an uncertain, future act as finished in relation to future event. This tense is no longer used in Spanish except in formal or legal texts.
+
+"Si para Navidad no $hUbiere vUELTo$, no me esperéis." = "If he has not returned by Christmas, do not wait for me."
+
 ^Conjugation^
 
 In the futuro perfecto de subjuntivo, the %futuro de subjuntivo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: $hUbiere hablado$
+Example: "$hUbiere hablado$" = "I have spoken (possibly, in the future)"
+
+See %credits% for Word Reference attribution.
 """),
 Info(heading: "Credits", difficulty: .easy, text: """
 *Credits*
 
-^MIT License^
+^Conjugar^
 
-~Conjugar~'s source code is licensed under the MIT license, reproduced here:
+Josh Adams developed ~Conjugar~ and has released its source code under the MIT license, reproduced here:
 
 Copyright 2017 Josh Adams
 
@@ -706,8 +844,26 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+~Conjugar~'s source code lives here: %https://github.com/vermont42/Conjugar/%
+
 ^Wikipedia^
 
-Descriptions of the %pretérito%, %futuro de indicativo%, %condicional%, %participio%, %gerundio%, %imperfecto de indicativo%, and %perfecto de indicativo% have been borrowed, in part, from Wikipedia's article on Spanish verbs, %https://en.wikipedia.org/wiki/Spanish_verbs%. Modifications to Wikipedia's content include, but are not entirely limited to, formatting and the addition of example irregular verbs. In a case of one hand washing the other, ~Conjugar~'s developer has corrected the Wikipedia article's description of the %gerundio%, which stated, as of July 8, 2017, that only one verb has an irregular %gerundio%. Wikipedia has licensed the content of the Spanish-verb article under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%. All of ~Conjugar~'s developer's modifications of Wikipedia content are licensed under that license, as well as under the MIT license.
+Descriptions of the %pretérito%, %futuro de indicativo%, %condicional%, %participio%, %gerundio%, %imperfecto de indicativo%, %futuro de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2%, %perfecto de indicativo%, %pluscuamperfecto de indicativo%, %futuro perfecto%, %pretérito anterior%, %condicional compuesto%, and %perfecto de subjuntivo% have been borrowed, in part, from Wikipedia's article on Spanish verbs, %https://en.wikipedia.org/wiki/Spanish_verbs%. Modifications to Wikipedia's content include, but are not entirely limited to, formatting and the addition of example irregular verbs. Wikipedia has licensed the content of the Spanish-verb article under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%. All of ~Conjugar~'s developer's modifications of Wikipedia content are licensed under that license, as well as under the MIT license.
+
+^Word Reference^
+
+The description and example of the %futuro perfecto de subjuntivo% are from a post by user kunvla in the following Word Reference thread: %https://forum.wordreference.com/threads/futuro-compuesto-subjuntivo.1375438/% With respect to reuse of this content, Word Reference states the following: "You are free to quote short passages or definitions from threads in the Forums outside the forums."
+
+^Icons^
+
+Borja santos Lobo created the dancer icon and released it under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%.
+
+Saeful Muslim created the bull icon and released it under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%.
+
+Mariela Peña created the gear and question-mark icons.
+
+^Sound Jay^
+
+Sound Jay (%https://www.soundjay.com%) created all sounds in ~Conjugar~ and graciously "allow[s] ... incorporat[ion of these sounds] into ... projects, be it for commercial or non-commercial use." Sound Jay "and its licensors retain all ownership rights to the sound files".
 """)]
 }

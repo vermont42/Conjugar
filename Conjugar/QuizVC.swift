@@ -51,6 +51,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   }
 
   @objc func startRestart(sender: UIButton!) {
+    SoundManager.play(.gun)
     Quiz.shared.start()
     quizView.startRestartButton.setTitle("Restart", for: .normal)
     _ = [quizView.lastLabel, quizView.correctLabel, quizView.last, quizView.correct].map {
@@ -58,6 +59,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     quizView.showInProgressUI()
     quizView.startRestartButton.pulsate()
+    quizView.conjugationField.becomeFirstResponder()
   }
 
   func scoreDidChange(newScore: Int) {
@@ -83,6 +85,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     quizView.tense.text = tense.displayName
     quizView.pronoun.text = personNumber.pronoun
+    quizView.conjugationField.becomeFirstResponder()
   }
 
   func quizDidFinish() {
