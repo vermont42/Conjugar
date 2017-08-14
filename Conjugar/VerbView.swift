@@ -41,6 +41,11 @@ class VerbView: UIView {
     _ = [(participioLabel, "PP:"), (gerundioLabel, "Ger:"), (raizFuturaLabel, "RF:")].map {
       $0.0.text = $0.1
     }
+    
+    _ = [translation, participio, gerundio, raizFutura, defectivo].map {
+      $0.isUserInteractionEnabled = true
+    }
+    
     _ = [table, translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].map {
       addSubview($0)
     }

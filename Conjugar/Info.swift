@@ -643,26 +643,26 @@ Info(heading: "Raíz Futura", difficulty: .easy, text: """
 
 ^Uses^
 
-The ~raíz futura~ forms of verbs are used to form the %condicional% and %futuro de indicativo% tenses. Tap those tenses for descriptions of them.
+The ~raíz futura~ forms of verbs are used as stems for the %condicional% and %futuro de indicativo% tenses. Tap those tenses for descriptions of them.
 
 ^Form^
 
-For all but twelve verbs, the raíz futura is identical to the infinitivo. For example, the raíz futura form of ~bailar~ is "bailar".
+For all but twelve verbs, the raíz futura is identical to the infinitivo. For example, the raíz futura form of ~bailar~ is "bailar-".
 
 The following verbs have irregular raíz futura forms:
 
-caber: $cabR$
-decir: $dIR$
-haber: $habR$
-hacer: $haR$
-poder: $podR$
-poner: $ponDr$
-querer: $querR$
-saber: $sabR$
-salir: $salDr$
-tener: $tenDr$
-valer: $valDr$
-venir: $venDr$
+caber: $cabR$-
+decir: $dIR$-
+haber: $habR$-
+hacer: $haR$-
+poder: $podR$-
+poner: $ponDr$-
+querer: $querR$-
+saber: $sabR$-
+salir: $salDr$-
+tener: $tenDr$-
+valer: $valDr$-
+venir: $venDr$-
 """),
 Info(heading: "Perfecto de Indicativo", difficulty: .moderate, text: """
 *Perfecto de Indicativo*

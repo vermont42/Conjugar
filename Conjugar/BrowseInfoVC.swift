@@ -11,7 +11,23 @@ import UIKit
 
 class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource, InfoDelegate {
   private var selectedRow = 0
+  private var allInfos: [Info] = []
+  private var easyModerateInfos: [Info] = []
+  private var easyInfos: [Info] = []
   
+  private var currentInfos: [Info] {
+    switch browseInfoView.difficultyControl.selectedSegmentIndex {
+    case 0:
+      return easyInfos
+    case 1:
+      return easyModerateInfos
+    case 2:
+      return allInfos
+    default:
+      fatalError("Invalid UISegmentedControl index.")
+    }
+  }
+
   var browseInfoView: BrowseInfoView {
     return view as! BrowseInfoView
   }
@@ -22,6 +38,13 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     browseInfoView.difficultyControl.addTarget(self, action: #selector(BrowseInfoVC.difficultyChanged(_:)), for: .valueChanged)
     browseInfoView.setupTable(dataSource: self, delegate: self)
     navigationItem.titleView = UILabel.titleLabel(title: "Info")
+    easyInfos = Info.infos.filter {
+      $0.difficulty == .easy
+    }
+    easyModerateInfos = Info.infos.filter {
+      $0.difficulty == .easy || $0.difficulty == .moderate
+    }
+    allInfos = Info.infos
     view = browseInfoView
   }
   
@@ -42,40 +65,12 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    let difficulty = SettingsManager.getInfoDifficulty()
-    if difficulty == .easy {
-      return Info.infos.filter {
-        $0.difficulty == .easy
-      }.count
-    }
-    else if difficulty == .moderate {
-      return Info.infos.filter {
-        $0.difficulty == .easy || $0.difficulty == .moderate
-      }.count
-    }
-    else {
-      return Info.infos.count
-    }
+    return currentInfos.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: InfoCell.identifier) as! InfoCell
-    let infos: [Info]
-    let difficulty = SettingsManager.getInfoDifficulty()
-    if difficulty == .easy {
-      infos = Info.infos.filter {
-        $0.difficulty == .easy
-      }
-    }
-    else if difficulty == .moderate {
-      infos = Info.infos.filter {
-        $0.difficulty == .easy || $0.difficulty == .moderate
-      }
-    }
-    else {
-      infos = Info.infos
-    }
-    guard let decodedString = infos[indexPath.row].heading.removingPercentEncoding else { fatalError("Could not decode string.") }
+    guard let decodedString = currentInfos[indexPath.row].heading.removingPercentEncoding else { fatalError("Could not decode string.") }
     cell.configure(heading: decodedString)
     return cell
   }
@@ -88,7 +83,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   
   func infoSelectionDidChange(newHeading: String) {
     for i in 0 ..< Info.infos.count {
-      if Info.infos[i].heading.lowercased() == newHeading.lowercased() {
+      if currentInfos[i].heading.lowercased() == newHeading.lowercased() {
         selectedRow = i
         break
       }
@@ -98,7 +93,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   
   private func showInfo() {
     let infoVC = InfoVC()
-    infoVC.infoString = Info.infos[selectedRow].infoString
+    infoVC.infoString = currentInfos[selectedRow].infoString
     infoVC.infoDelegate = self
     navigationController?.pushViewController(infoVC, animated: true)
   }

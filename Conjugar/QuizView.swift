@@ -39,7 +39,7 @@ class QuizView: UIView {
   
   internal let startRestartButton: UIButton = {
     let button = UIButton()
-    button.isUserInteractionEnabled = true
+    //button.isUserInteractionEnabled = true
     button.setTitle("Start", for: .normal)
     button.titleLabel?.font = Fonts.button
     button.setTitleColor(Colors.red, for: .normal)
