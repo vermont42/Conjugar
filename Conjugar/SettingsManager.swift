@@ -20,7 +20,15 @@ class SettingsManager {
 
   fileprivate var infoDifficulty: Difficulty
   fileprivate static let infoDifficultyKey = "infoDifficulty"
-  
+
+  fileprivate var userRejectedGameCenter: Bool
+  fileprivate static let userRejectedGameCenterKey = "userRejectedGameCenter"
+  fileprivate static let userRejectedGameCenterDefault = false
+
+  fileprivate var didShowGameCenterDialog: Bool
+  fileprivate static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
+  fileprivate static let didShowGameCenterDialogDefault = false
+
   fileprivate init() {
     userDefaults = UserDefaults.standard
     
@@ -48,6 +56,24 @@ class SettingsManager {
     else {
       infoDifficulty = Difficulty.difficult
       userDefaults.set(infoDifficulty.rawValue, forKey: SettingsManager.infoDifficultyKey)
+      userDefaults.synchronize()
+    }
+    
+    if let storedUserRejectedGameCenterString = userDefaults.string(forKey: SettingsManager.userRejectedGameCenterKey) {
+      userRejectedGameCenter = (storedUserRejectedGameCenterString as NSString).boolValue
+    }
+    else {
+      userRejectedGameCenter = SettingsManager.userRejectedGameCenterDefault
+      userDefaults.set("\(userRejectedGameCenter)", forKey: SettingsManager.userRejectedGameCenterKey)
+      userDefaults.synchronize()
+    }
+    
+    if let storedDidShowGameCenterDialogString = userDefaults.string(forKey: SettingsManager.didShowGameCenterDialogKey) {
+      didShowGameCenterDialog = (storedDidShowGameCenterDialogString as NSString).boolValue
+    }
+    else {
+      didShowGameCenterDialog = SettingsManager.didShowGameCenterDialogDefault
+      userDefaults.set("\(didShowGameCenterDialog)", forKey: SettingsManager.didShowGameCenterDialogKey)
       userDefaults.synchronize()
     }
   }
@@ -84,6 +110,30 @@ class SettingsManager {
     if infoDifficulty != settingsManager.infoDifficulty {
       settingsManager.infoDifficulty = infoDifficulty
       settingsManager.userDefaults.set(infoDifficulty.rawValue, forKey: SettingsManager.infoDifficultyKey)
+      settingsManager.userDefaults.synchronize()
+    }
+  }
+  
+  class func getUserRejectedGameCenter() -> Bool {
+    return settingsManager.userRejectedGameCenter
+  }
+  
+  class func setUserRejectedGameCenter(_ userRejectedGameCenter: Bool) {
+    if userRejectedGameCenter != settingsManager.userRejectedGameCenter {
+      settingsManager.userRejectedGameCenter = userRejectedGameCenter
+      settingsManager.userDefaults.set("\(userRejectedGameCenter)", forKey: SettingsManager.userRejectedGameCenterKey)
+      settingsManager.userDefaults.synchronize()
+    }
+  }
+
+  class func getDidShowGameCenterDialog() -> Bool {
+    return settingsManager.didShowGameCenterDialog
+  }
+  
+  class func setDidShowGameCenterDialog(_ didShowGameCenterDialog: Bool) {
+    if didShowGameCenterDialog != settingsManager.didShowGameCenterDialog {
+      settingsManager.didShowGameCenterDialog = didShowGameCenterDialog
+      settingsManager.userDefaults.set("\(didShowGameCenterDialog)", forKey: SettingsManager.didShowGameCenterDialogKey)
       settingsManager.userDefaults.synchronize()
     }
   }

@@ -48,6 +48,33 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       quizView.progress.text = String(Quiz.shared.currentQuestionIndex + 1) + " / " + String(Quiz.shared.questionCount)
     }
     quizView.startRestartButton.pulsate()
+    authenticate()
+  }
+  
+  private func authenticate() {
+    if !GameCenterManager.shared.isAuthenticated && !SettingsManager.getUserRejectedGameCenter() {
+      if !SettingsManager.getDidShowGameCenterDialog() {
+        showGameCenterDialog()
+      }
+      else {
+        GameCenterManager.shared.authenticate()
+      }
+    }
+  }
+  
+  private func showGameCenterDialog() {
+    SettingsManager.setDidShowGameCenterDialog(true)
+    let gameCenterController = UIAlertController(title: "Game Center", message: "Would you like Conjugar to upload your future scores to Game Center after your quiz? See how you stack up against the global community of conjugators.", preferredStyle: UIAlertControllerStyle.alert)
+    let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.destructive) { (action) in
+      SoundManager.play(.sadTrombone)
+      SettingsManager.setUserRejectedGameCenter(true)
+    }
+    gameCenterController.addAction(noAction)
+    let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (action) in
+      GameCenterManager.shared.authenticate()
+    }
+    gameCenterController.addAction(yesAction)
+    present(gameCenterController, animated: true, completion: nil)
   }
 
   @objc func startRestart(sender: UIButton!) {

@@ -17,21 +17,27 @@ class GameCenterManager: NSObject, GKGameCenterControllerDelegate {
   
   private override init() {}
   
-  func authenticate() {
+  func authenticate(completion: ((Bool) -> Void)? = nil) {
     localPlayer.authenticateHandler = { viewController, error in
       if let viewController = viewController, let topController = UIApplication.topViewController() {
         topController.present(viewController, animated: true, completion: nil)
       }
       else if self.localPlayer.isAuthenticated {
         print("AUTHENTICATED displayName: \(self.localPlayer.displayName!) alias: \(self.localPlayer.alias!) playerID: \(self.localPlayer.playerID!)")
+        
         self.isAuthenticated = true
+        SoundManager.play(.applause1)
         self.localPlayer.loadDefaultLeaderboardIdentifier { identifier, error in
           self.leaderboardIdentifier = identifier ?? "ERROR"
           print("identifier: \(self.leaderboardIdentifier)")
         }
+        completion?(true)
       }
       else {
-        print("DISABLING GAME CENTER")
+        SoundManager.play(.sadTrombone)
+        UIAlertController.showMessage("Game Center authentication failed. This can happen if you cancel authentication or if your iPhone is not already signed into Game Center. Try launching the Settings app, tapping Game Center, signing in, and relaunching Conjugar.", title: "😰", okTitle: "Got It")
+        self.isAuthenticated = false
+        completion?(false)
       }
     }
   }

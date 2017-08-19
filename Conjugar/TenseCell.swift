@@ -29,8 +29,8 @@ class TenseCell: UITableViewCell {
     backgroundColor = Colors.black
     selectionStyle = .none
     addSubview(tense)
-    tense.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-    tense.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+    tense.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+    tense.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
   }
   
   func configure(tense: String) {

@@ -50,10 +50,10 @@ class BrowseInfoView: UIView {
     table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
     table.bottomAnchor.constraint(equalTo: difficultyControl.topAnchor, constant: Layout.defaultSpacing * -1.0).isActive = true
     
-    difficultyControl.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+    difficultyControl.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     difficultyControl.bottomAnchor.constraint(equalTo: difficultyLabel.topAnchor, constant: Layout.defaultSpacing * -1.0).isActive = true
 
-    difficultyLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+    difficultyLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     if #available(iOS 11.0, *) {
       difficultyLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
     } else {

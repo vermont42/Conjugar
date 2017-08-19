@@ -13,4 +13,5 @@ struct Layout {
   static let safeTop: CGFloat = 75.0
   static let safeBottom: CGFloat = -57.0
   static let defaultSpacing: CGFloat = 8.0
+  static let doubleDefaultSpacing: CGFloat = 16.0
 }

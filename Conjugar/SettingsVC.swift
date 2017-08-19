@@ -19,6 +19,8 @@ class SettingsVC: UIViewController {
     settingsView = SettingsView(frame: UIScreen.main.bounds)
     settingsView.regionControl.addTarget(self, action: #selector(SettingsVC.regionChanged(_:)), for: .valueChanged)
     settingsView.difficultyControl.addTarget(self, action: #selector(SettingsVC.difficultyChanged(_:)), for: .valueChanged)
+    settingsView.gameCenterButton.addTarget(self, action: #selector(authenticate), for: .touchUpInside)
+
     navigationItem.titleView = UILabel.titleLabel(title: "Settings")
     view = settingsView
   }
@@ -26,6 +28,20 @@ class SettingsVC: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     updateControls()
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    _ = [settingsView.gameCenterLabel, settingsView.gameCenterDescription, settingsView.gameCenterButton].map {
+      $0.isHidden = GameCenterManager.shared.isAuthenticated
+    }
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    if !settingsView.gameCenterButton.isHidden {
+      settingsView.gameCenterButton.pulsate()
+    }
   }
   
   private func updateControls() {
@@ -66,6 +82,17 @@ class SettingsVC: UIViewController {
     }
     else /* index == 2 */ {
       SettingsManager.setDifficulty(.difficult)
+    }
+  }
+  
+  @objc func authenticate(sender: UIButton!) {
+    SettingsManager.setUserRejectedGameCenter(false)
+    GameCenterManager.shared.authenticate { authenticated in
+      DispatchQueue.main.async {
+        _ = [self.settingsView.gameCenterLabel, self.settingsView.gameCenterDescription, self.settingsView.gameCenterButton].map {
+          $0.isHidden = authenticated
+        }
+      }
     }
   }
 }

@@ -15,6 +15,7 @@
 		E1151E551E9C5D9C00DE44D6 /* VerbCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */; };
 		E1151E571E9C610100DE44D6 /* VerbVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E561E9C610100DE44D6 /* VerbVC.swift */; };
 		E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E115CA381EEC962700DBBD44 /* VerbFamilies.swift */; };
+		E11CE1021F48867400E74E10 /* sadTrombone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E11CE1011F48867400E74E10 /* sadTrombone.mp3 */; };
 		E1201A041F1AB99F00BCB27D /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1201A031F1AB99F00BCB27D /* MainTabBarVC.swift */; };
 		E12FCBEE1F391CDA0076AFF1 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12FCBED1F391CDA0076AFF1 /* ResultsView.swift */; };
 		E139E0E01EC7D27A00B34DE7 /* NSAttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E139E0DF1EC7D27A00B34DE7 /* NSAttributedStringExtension.swift */; };
@@ -52,6 +53,7 @@
 		E18145D81F2E3E170048DEE2 /* BrowseInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18145D71F2E3E170048DEE2 /* BrowseInfoView.swift */; };
 		E18145DA1F2E43630048DEE2 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18145D91F2E43630048DEE2 /* InfoView.swift */; };
 		E18145DC1F2E49B20048DEE2 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */; };
+		E182F8D21F48AA1400D4569E /* UIAlertControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E182F8D11F48AA1400D4569E /* UIAlertControllerExtension.swift */; };
 		E18D5FA71F1EFD2700313113 /* VerbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18D5FA61F1EFD2700313113 /* VerbView.swift */; };
 		E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F371ECA7C9A00633200 /* Utterer.swift */; };
 		E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F391ECA7DA700633200 /* SoundManager.swift */; };
@@ -96,6 +98,7 @@
 		E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbCell.swift; sourceTree = "<group>"; };
 		E1151E561E9C610100DE44D6 /* VerbVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbVC.swift; sourceTree = "<group>"; };
 		E115CA381EEC962700DBBD44 /* VerbFamilies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbFamilies.swift; sourceTree = "<group>"; };
+		E11CE1011F48867400E74E10 /* sadTrombone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone.mp3; sourceTree = "<group>"; };
 		E1201A031F1AB99F00BCB27D /* MainTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarVC.swift; sourceTree = "<group>"; };
 		E12FCBED1F391CDA0076AFF1 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
 		E139E0DF1EC7D27A00B34DE7 /* NSAttributedStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSAttributedStringExtension.swift; sourceTree = "<group>"; };
@@ -133,6 +136,7 @@
 		E18145D71F2E3E170048DEE2 /* BrowseInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseInfoView.swift; sourceTree = "<group>"; };
 		E18145D91F2E43630048DEE2 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
+		E182F8D11F48AA1400D4569E /* UIAlertControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtension.swift; sourceTree = "<group>"; };
 		E18D5FA61F1EFD2700313113 /* VerbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbView.swift; sourceTree = "<group>"; };
 		E18F7F371ECA7C9A00633200 /* Utterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utterer.swift; sourceTree = "<group>"; };
 		E18F7F391ECA7DA700633200 /* SoundManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
@@ -229,6 +233,7 @@
 				E14BAD8D1EFF11BD000D91C5 /* SettingsManager.swift */,
 				E18F7F391ECA7DA700633200 /* SoundManager.swift */,
 				E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */,
+				E182F8D11F48AA1400D4569E /* UIAlertControllerExtension.swift */,
 				E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */,
 				E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */,
 				E10178011F3F753400F0BC97 /* UIViewExtension.swift */,
@@ -274,6 +279,7 @@
 				E1483FBE1EF746D70052C436 /* chime.mp3 */,
 				E1483FCB1EF89D4E0052C436 /* chirp.mp3 */,
 				E10178031F40BD2000F0BC97 /* gun.mp3 */,
+				E11CE1011F48867400E74E10 /* sadTrombone.mp3 */,
 				E18F7F3D1ECA7E3700633200 /* silence.mp3 */,
 			);
 			name = Sounds;
@@ -449,6 +455,7 @@
 				E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */,
 				E1483FCC1EF89D4E0052C436 /* chirp.mp3 in Resources */,
 				E1483FC91EF89C710052C436 /* applause2.mp3 in Resources */,
+				E11CE1021F48867400E74E10 /* sadTrombone.mp3 in Resources */,
 				E1483FAD1EF5A2200052C436 /* Assets.xcassets in Resources */,
 				E1483FC81EF89C710052C436 /* applause1.mp3 in Resources */,
 				E1483FCA1EF89C710052C436 /* applause3.mp3 in Resources */,
@@ -482,6 +489,7 @@
 				E1F06AF81E8F081700ADD2E1 /* Conjugator.swift in Sources */,
 				E1483FC41EF7510F0052C436 /* UIApplicationExtension.swift in Sources */,
 				E10178021F3F753400F0BC97 /* UIViewExtension.swift in Sources */,
+				E182F8D21F48AA1400D4569E /* UIAlertControllerExtension.swift in Sources */,
 				E16BEA061F0A92040053DD32 /* InfoDelegate.swift in Sources */,
 				E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */,
 				E14566BE1EC001FD00C16DC3 /* ConjugationCell.swift in Sources */,

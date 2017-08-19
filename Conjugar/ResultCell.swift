@@ -32,14 +32,14 @@ class ResultCell: UITableViewCell {
     verb.font = Fonts.largeCell
     backgroundColor = Colors.black
     selectionStyle = .none
-    verb.topAnchor.constraint(equalTo: self.topAnchor, constant: 4.0).isActive = true
-    verb.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+    verb.topAnchor.constraint(equalTo: topAnchor, constant: 4.0).isActive = true
+    verb.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     tensePersonNumber.topAnchor.constraint(equalTo: verb.bottomAnchor, constant: 4.0).isActive = true
-    tensePersonNumber.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+    tensePersonNumber.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     correctAnswer.topAnchor.constraint(equalTo: tensePersonNumber.bottomAnchor, constant: 4.0).isActive = true
-    correctAnswer.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+    correctAnswer.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     proposedAnswer.topAnchor.constraint(equalTo: correctAnswer.bottomAnchor, constant: 4.0).isActive = true
-    proposedAnswer.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+    proposedAnswer.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
   }
   
   func configure(verb: String, tense: Tense, personNumber: PersonNumber, correctAnswer: String, proposedAnswer: String) {

@@ -30,8 +30,8 @@ class ConjugationCell: UITableViewCell {
     selectionStyle = .none
     backgroundColor = Colors.black
     addSubview(conjugation)
-    conjugation.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-    conjugation.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+    conjugation.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+    conjugation.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
   }
   
   func configure(tense: Tense, personNumber: PersonNumber, conjugation: String) {

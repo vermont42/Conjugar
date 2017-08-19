@@ -39,7 +39,6 @@ class QuizView: UIView {
   
   internal let startRestartButton: UIButton = {
     let button = UIButton()
-    //button.isUserInteractionEnabled = true
     button.setTitle("Start", for: .normal)
     button.titleLabel?.font = Fonts.button
     button.setTitleColor(Colors.red, for: .normal)
@@ -140,7 +139,7 @@ class QuizView: UIView {
     } else {
       startRestartButton.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
     }
-    startRestartButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+    startRestartButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
   }
   
   internal func hideInProgressUI() {
