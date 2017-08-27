@@ -189,7 +189,7 @@ This form is also used to assert a command, prohibition, or obligation in Englis
 
 "¿Te importará encender la televisión?" = "Would you mind turning on the television?"
 
-Another common way to represent the future is with a %presente de indicativo% conjugation of ~ir~ followed by an Infinitivo verb: "Quizás $VOY$ a viajar a Bolivia en el verano. = "Perhaps I'm going to travel to Bolivia in the summer."
+Another common way to represent the future is with a %presente de indicativo% conjugation of ~ir~ followed by an infinitivo verb: "Quizás $VOY$ a viajar a Bolivia en el verano. = "Perhaps I'm going to travel to Bolivia in the summer."
 
 ^Conjugation^
 
@@ -728,7 +728,7 @@ Info(heading: "Futuro Perfecto", difficulty: .difficult, text: """
 
 ^Use^
 
-The ~futuro perfecto~ is used to indicate a future action that will be finished right before another action.
+The ~futuro perfecto~ is used to indicate a future action that will be finished before another action.
 
 "Cuando yo llegue a la fiesta, ya se $habRán$ marchado todos." = "When I get to the party, everyone will already have left."
 
@@ -753,7 +753,7 @@ The ~condicional compuesto~ refers to a hypothetical past action.
 
 In the condicional compuesto, the %condicional% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: "$habRía hablado$" = "I would have spoken"
+Example: "$habRías decidido$" = "you would have decided"
 
 See %credits% for Wikipedia attribution.
 """),
@@ -762,7 +762,7 @@ Info(heading: "Perfecto de Subjuntivo", difficulty: .difficult, text: """
 
 ^Use^
 
-The ~perfecto de subjuntivo~ expresses doubt, uncertainty or an emotional state with respect to a past action.
+The ~perfecto de subjuntivo~ expresses doubt, uncertainty, or an emotional state with respect to a past action or to an action that will be complete before some other action.
 
 "Lamentan que él no $haYa podido$ regresar a la casa." = "They regret that he was unable to return home."
 
@@ -783,7 +783,7 @@ Info(heading: "Pluscuamperfecto de Subjuntivo 1", difficulty: .difficult, text: 
 
 ^Use^
 
-The ~pluscuamperfecto de subjuntivo 1~ expresses doubt, uncertainty or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
+The ~pluscuamperfecto de subjuntivo 1~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
 
 "Dudo que $habRía hablado$ si me $hUbieran dado$ la oportunidad." = "I doubt that I would have spoken if they had given me the opportunity."
 
@@ -800,7 +800,7 @@ Info(heading: "Pluscuamperfecto de Subjuntivo 2", difficulty: .difficult, text: 
 
 ^Use^
 
-The ~pluscuamperfecto de subjuntivo 2~ expresses doubt, uncertainty or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
+The ~pluscuamperfecto de subjuntivo 2~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
 
 "Dudo que $habRía hablado$ si me $hUbiesen dado$ la oportunidad." = "I doubt that I would have spoken if they had given me the opportunity."
 
@@ -808,7 +808,7 @@ Grammarians consider the pluscuamperfecto de subjuntivo 2 and the %pluscuamperfe
 
 ^Conjugation^
 
-In the pluscuamperfecto de indicativo 2, the %imperfecto de subjuntivo 2% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
+In the pluscuamperfecto de subjuntivo 2, the %imperfecto de subjuntivo 2% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
 Example: "$hUbiese hablado$" = "I had spoken"
 """),
@@ -828,6 +828,29 @@ In the futuro perfecto de subjuntivo, the %futuro de subjuntivo% conjugation of 
 Example: "$hUbiere hablado$" = "I have spoken (possibly, in the future)"
 
 See %credits% for Word Reference attribution.
+"""),
+Info(heading: "Questions & Answers", difficulty: .easy, text: """
+*Questions & Answers*
+
+~Q:~ How can I contact the developer of ~Conjugar~?
+
+~A:~ Email vermontcoder@gmail.com.
+
+~Q:~ There is a verb missing from the ~Browse~ list. What gives?
+
+~A:~ ~Conjugar~'s goal is to teach Spanish-verb conjugation, not to serve as an exhaustive reference of Spanish verbs. ~SpanishDict.com~ and ~Spanish Verbs Made Simple(r)~ are better choices if you seek exhaustivity. That said, feel free to email ~Conjugar's~ developer at vermontcoder@gmail.com if you would like to see a verb added.
+
+~Q:~ Why does ~Conjugar~ use Spanish names for tenses rather than English, for example, %presente de indicativo% rather than "present indicative"?
+
+~A:~ Admittedly, English tense names would perhaps be more approachable for the learner in certain cases, for example, %raíz futura%. English speakers might better understand the term "future stem". But perhaps because of his years working as a lawyer and software developer, ~Conjugar~'s developer values precision in language. English tense names are imprecise when applied to Spanish tenses. For example, the English "gerund" can act as an adjective, but the Spanish %gerundio% cannot. "Gerund" is, in that sense, inaccurate when applied to the %gerundio%. The same goes for other English tense names and Spanish tenses, to varying degrees.
+
+~Q:~ I've seen the terms "mood" and "aspect" in descriptions of verb tenses, but ~Conjugar~ does not use these terms. Also, the %participio%, %gerundio%, and %raíz futura% are not really tenses.
+
+~A:~ Was that a question? You are correct that ~Conjugar~ does not use these two terms, and those three things are not usually described as "tenses". With respect to the former, bear in mind that ~Conjugar~'s purpose is to teach Spanish-verb conjugation, not to teach English Spanish-verb-conjugation nomenclature. With respect to the latter, ~Conjugar~'s developer does consider those three things to be tenses, if "tense" is taken to mean "a systematic way of changing verbs for a specific purpose". This definition, though absent, on information and belief, from any dictionary, serves ~Conjugar~'s pedagogical purpose well enough.
+
+~Q:~ Why is Conjugar free?
+
+~A:~ The developer's goals in creating ~Conjugar~ were to learn Spanish-verb conjugation and a software-development technique, programmatic layout, not to earn a living. That said, money is useful, and the developer will implement a tip jar or some other type of in-app purchase if download numbers justify the effort.
 """),
 Info(heading: "Credits", difficulty: .easy, text: """
 *Credits*
@@ -865,5 +888,9 @@ Mariela Peña created the gear and question-mark icons.
 ^Sound Jay^
 
 Sound Jay (%https://www.soundjay.com%) created all sounds in ~Conjugar~ and graciously "allow[s] ... incorporat[ion of these sounds] into ... projects, be it for commercial or non-commercial use." Sound Jay "and its licensors retain all ownership rights to the sound files".
+
+^Unit Testing^
+
+Dominik Hauser wrote code that inspired a unit-testing technique that ~Conjugar~ uses. Hauser released this code, available at %https://github.com/dasdom/TestingNavigationDemo%, under the MIT License, reproduced above.
 """)]
 }

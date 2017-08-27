@@ -40,7 +40,7 @@ class SettingsView: UIView {
   
   private let regionDescription: UILabel = {
     let label = UILabel()
-    label.text = "In Latin American mode, quizzes do not include vosotros conjugations. This setting determines how Conjugar pronounces conjugations."
+    label.text = "In Latin American mode, quizzes do not include vosotros conjugations. This setting also determines how Conjugar pronounces conjugations."
     label.numberOfLines = 0
     label.lineBreakMode = .byWordWrapping
     label.font = Fonts.smallBody

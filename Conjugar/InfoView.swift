@@ -20,10 +20,6 @@ class InfoView: UIView {
     return textView
   } ()
   
-  required init(coder aDecoder: NSCoder) {
-    fatalError("This class does not support NSCoding")
-  }
-  
   override init(frame: CGRect) {
     super.init(frame: frame)
     addSubview(info)
@@ -35,5 +31,9 @@ class InfoView: UIView {
     } else {
       info.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
     }
+  }
+  
+  required init(coder aDecoder: NSCoder) {
+    fatalError("This class does not support NSCoding")
   }
 }

@@ -32,7 +32,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     case 2:
       return allVerbs
     default:
-      fatalError()
+      fatalError("Invalid verb-filter index.")
     }
   }
   
