@@ -35,7 +35,7 @@ class VerbView: UIView {
     super.init(frame: frame)
     _ = [translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].map {
       $0.font = Fonts.label
-      $0.textColor = Colors.red
+      $0.textColor = Colors.yellow
       $0.translatesAutoresizingMaskIntoConstraints = false
     }
     _ = [(participioLabel, "PP:"), (gerundioLabel, "Ger:"), (raizFuturaLabel, "RF:")].map {
