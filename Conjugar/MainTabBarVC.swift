@@ -24,7 +24,7 @@ class MainTabBarVC: UITabBarController {
     browseInfoNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[3], image: UIImage(named: MainTabBarVC.tabs[3]), selectedImage: nil)
     viewControllers = [browseVerbsNavC, quizNavC, browseInfoNavC, settingsNavC]
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

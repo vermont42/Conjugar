@@ -44,7 +44,11 @@ Primary navigation in ~Conjugar~ occurs via the tab bar at the bottom of the scr
 
 ~Conjugar~ starts on the ~Browse~ tab. This tab has three lists of Spanish verbs: a list of many irregular verbs, a list of many regular verbs, and a list that combines the other two. Swap these lists by tapping a red button above the tab bar. When you find a verb you would like to know more about, tap it. ~Conjugar~ then displays a screen with ~all~ conjugations of that verb. This screen is helpful for learning because it calls out, by highlighting in $RED$, parts of conjugations that are irregular. For example, the presente de indicativo, first-person singular conjugation of "dar" has an irregular "y", so ~Conjugar~ displays this conjugation as "$doY$". Tap any conjugation to hear it spoken. Tap ~Browse~ in the top-left corner to return to the ~Browse~ tab.
 
-Tap ~Quiz~ in the tab bar to start a quiz. Tap ~Start~ on the bottom-left corner of the screen. ~Conjugar~ will then present you a set of fifty Spanish verbs to conjugate. When you are done, ~Conjugar~ will report and score your results, uploading the score to Game Center if it represents a personal best. Tap ~Quiz~ in the top-left corner to return to the ~Quiz~ tab. You can then start a new quiz.
+Tap ~Quiz~ in the tab bar to start a quiz. Tap ~Start~ on the bottom-left corner of the screen. ~Conjugar~ will then present you a set of fifty Spanish verbs to conjugate. Conjugate.
+
+If a letter in a word like "habló" requires an accent mark and you input, for example, "hablo", you will receive partial credit for that conjugation. To input an accented letter, hold your finger on ("long press") the letter you want to accent, "o" in this example, swipe to the accented letter, "ó" in this example, and release.
+
+When you are done with the quiz, ~Conjugar~ will report and score your results, uploading the score to Game Center if it represents a personal best. Tap ~Quiz~ in the top-left corner to return to the ~Quiz~ tab. You can then start a new quiz.
 
 Tap ~Settings~ in the tab bar to access settings.
 
@@ -879,6 +883,8 @@ The description and example of the %futuro perfecto de subjuntivo% are from a po
 
 ^Icons^
 
+Christine Daughtry created the app icon.
+
 Borja santos Lobo created the dancer icon and released it under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%.
 
 Saeful Muslim created the bull icon and released it under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%.
@@ -892,5 +898,9 @@ Sound Jay (%https://www.soundjay.com%) created all sounds in ~Conjugar~ and grac
 ^Unit Testing^
 
 Dominik Hauser wrote code that inspired a unit-testing technique that ~Conjugar~ uses. Hauser released this code, available at %https://github.com/dasdom/TestingNavigationDemo%, under the MIT License, reproduced above.
+
+^Accented Characters^
+
+Sheila Smith suggested clarifying how to input accented characters like ó.
 """)]
 }

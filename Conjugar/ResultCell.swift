@@ -29,7 +29,7 @@ class ResultCell: UITableViewCell {
       $0.translatesAutoresizingMaskIntoConstraints = false
       addSubview($0)
     }
-    verb.font = Fonts.largeCell
+    verb.font = Fonts.regularCell
     backgroundColor = Colors.black
     selectionStyle = .none
     verb.topAnchor.constraint(equalTo: topAnchor, constant: 4.0).isActive = true

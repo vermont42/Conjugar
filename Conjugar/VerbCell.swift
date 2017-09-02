@@ -15,7 +15,7 @@ class VerbCell: UITableViewCell {
   private let verb: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
-    label.font = Fonts.boldBody
+    label.font = Fonts.largeCell
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
   } ()
