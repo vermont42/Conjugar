@@ -1,5 +1,4 @@
-Conjugar
-===================
+![Conjugar](Conjugar/launch.png "Conjugar's Launch Screen")
 
 ### Introduction
 
