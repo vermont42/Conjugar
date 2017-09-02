@@ -101,15 +101,15 @@ class QuizView: UIView {
     tense.leadingAnchor.constraint(equalTo: tenseLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
     
     scoreLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    scoreLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    scoreLabel.trailingAnchor.constraint(equalTo: score.leadingAnchor, constant: Layout.defaultSpacing * -1.0).isActive = true
     
     score.topAnchor.constraint(equalTo: tense.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    score.leadingAnchor.constraint(equalTo: scoreLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    score.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
     
-    progressLabel.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    progressLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     progressLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
     
-    progress.topAnchor.constraint(equalTo: score.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+    progress.topAnchor.constraint(equalTo: tense.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
     progress.leadingAnchor.constraint(equalTo: progressLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
     
     elapsedLabel.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
