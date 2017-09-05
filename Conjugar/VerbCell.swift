@@ -12,7 +12,7 @@ import UIKit
 class VerbCell: UITableViewCell {
   static let identifier = "VerbCell"
   
-  private let verb: UILabel = {
+  internal let verb: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.largeCell
@@ -37,3 +37,4 @@ class VerbCell: UITableViewCell {
     self.verb.text = verb
   }
 }
+
