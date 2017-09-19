@@ -902,5 +902,9 @@ Dominik Hauser wrote code that inspired a unit-testing technique that ~Conjugar~
 ^Accented Characters^
 
 Sheila Smith suggested clarifying how to input accented characters like ó.
+
+^App Preview^
+
+~Conjugar~'s app preview uses the song "Leopard Print Elevator" by Kevin MacLeod (incompetech.com). Licensed under Creative Commons: By Attribution 3.0 License %http://creativecommons.org/licenses/by/3.0/%
 """)]
 }
