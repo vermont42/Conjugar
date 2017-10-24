@@ -4,6 +4,8 @@
 
 **Conjugar** is an iPhone™ app for learning Spanish verb conjugations. **Conjugar** conjugates most Spanish verbs, regular and irregular, in **all** Spanish verb tenses. There is a quiz mode with three difficulty levels. Results from quizzes are available in Game Center™. On a pedagogical note, **Conjugar** contains descriptions of the tenses.
 
+**Conjugar** uses programmatic layout rather than storyboards. Thus, if you are curious about how to implement programmatic layout, **Conjugar** may be instructive.
+
 ### Installation
 
 **Conjugar** is available for free download in the iOS App Store™. Tap the log below to install.
