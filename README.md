@@ -6,9 +6,11 @@
 
 ### Installation
 
-If you would like to run a TestFlight (beta) version of **Conjugar** on your iPhone™, email vermontcoder AT gmail DOT com, converting " AT " and " DOT " to "@" and ".", respectively.
+**Conjugar** is available for free download in the iOS App Store™. Tap the log below to install.
 
-Alternatively, you can clone this repo and build, using Xcode™ 9 beta, **Conjugar** yourself. Building **Conjugar** for the simulator (but not iPhone™) causes the following warning, truncated for clarity: `objc[10192]: Class VCWeakObjectHolder is implemented in both ... Frameworks/ViceroyTrace.framework/ViceroyTrace (0x1269c97c0) and  ... AVConference (0x126857a18). One of the two will be used. Which one is undefined."`
+[![Install](apple.png)](https://itunes.apple.com/us/app/conjugar/id1236500467?mt=8)
+
+Alternatively, you can clone this repo and build, using Xcode™ 9, **Conjugar** yourself. Building **Conjugar** for the simulator (but not iPhone™) causes the following warning, truncated for clarity: `objc[10192]: Class VCWeakObjectHolder is implemented in both ... Frameworks/ViceroyTrace.framework/ViceroyTrace (0x1269c97c0) and  ... AVConference (0x126857a18). One of the two will be used. Which one is undefined."`
 
 The immediate cause of this warning is linking GameKit.framework, required for Game Center™ support. This [appears](https://forums.developer.apple.com/thread/63254) appears to be a vendor bug.
 
