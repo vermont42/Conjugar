@@ -63,83 +63,83 @@ class QuizView: UIView {
     }
     _ = [verb, verbLabel, translation, pronoun, pronounLabel, tense, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel, startRestartButton, conjugationField].map {
       guard let view = $0 as? UIView else { fatalError("Could not cast UIView to UIView.") }
-      view.translatesAutoresizingMaskIntoConstraints = false
+      view.enableAutoLayout()
       addSubview(view)
     }
     
     if #available(iOS 11.0, *) {
-      verbLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).isActive = true
+      verbLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     } else {
-      verbLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).isActive = true
+      verbLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).activate()
     }
-    verbLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    verbLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
     if #available(iOS 11.0, *) {
-      verb.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).isActive = true
+      verb.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     } else {
-      verb.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).isActive = true
+      verb.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).activate()
     }
-    verb.leadingAnchor.constraint(equalTo: verbLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    verb.leadingAnchor.constraint(equalTo: verbLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
     
     if #available(iOS 11.0, *) {
-      translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).isActive = true
+      translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     } else {
-      translation.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).isActive = true
+      translation.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).activate()
     }
-    translation.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    translation.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
-    pronounLabel.topAnchor.constraint(equalTo: verbLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    pronounLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    pronounLabel.topAnchor.constraint(equalTo: verbLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    pronounLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
-    pronoun.topAnchor.constraint(equalTo: verb.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    pronoun.leadingAnchor.constraint(equalTo: pronounLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    pronoun.topAnchor.constraint(equalTo: verb.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    pronoun.leadingAnchor.constraint(equalTo: pronounLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
     
-    tenseLabel.topAnchor.constraint(equalTo: pronounLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    tenseLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    tenseLabel.topAnchor.constraint(equalTo: pronounLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    tenseLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
-    tense.topAnchor.constraint(equalTo: pronoun.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    tense.leadingAnchor.constraint(equalTo: tenseLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    tense.topAnchor.constraint(equalTo: pronoun.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    tense.leadingAnchor.constraint(equalTo: tenseLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
     
-    scoreLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    scoreLabel.trailingAnchor.constraint(equalTo: score.leadingAnchor, constant: Layout.defaultSpacing * -1.0).isActive = true
+    scoreLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    scoreLabel.trailingAnchor.constraint(equalTo: score.leadingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
     
-    score.topAnchor.constraint(equalTo: tense.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    score.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    score.topAnchor.constraint(equalTo: tense.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    score.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
-    progressLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    progressLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    progressLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    progressLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
-    progress.topAnchor.constraint(equalTo: tense.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    progress.leadingAnchor.constraint(equalTo: progressLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    progress.topAnchor.constraint(equalTo: tense.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    progress.leadingAnchor.constraint(equalTo: progressLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
     
-    elapsedLabel.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    elapsedLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    elapsedLabel.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    elapsedLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
-    elapsed.topAnchor.constraint(equalTo: progress.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    elapsed.leadingAnchor.constraint(equalTo: elapsedLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    elapsed.topAnchor.constraint(equalTo: progress.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    elapsed.leadingAnchor.constraint(equalTo: elapsedLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
     
-    lastLabel.topAnchor.constraint(equalTo: elapsedLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    lastLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    lastLabel.topAnchor.constraint(equalTo: elapsedLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    lastLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
-    last.topAnchor.constraint(equalTo: elapsed.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    last.leadingAnchor.constraint(equalTo: lastLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    last.topAnchor.constraint(equalTo: elapsed.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    last.leadingAnchor.constraint(equalTo: lastLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
     
-    correctLabel.topAnchor.constraint(equalTo: lastLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    correctLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    correctLabel.topAnchor.constraint(equalTo: lastLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    correctLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
-    correct.topAnchor.constraint(equalTo: last.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    correct.leadingAnchor.constraint(equalTo: correctLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    correct.topAnchor.constraint(equalTo: last.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    correct.leadingAnchor.constraint(equalTo: correctLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
 
-    conjugationField.topAnchor.constraint(equalTo: correctLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    conjugationField.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    conjugationField.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    conjugationField.topAnchor.constraint(equalTo: correctLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    conjugationField.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    conjugationField.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
     if #available(iOS 11.0, *) {
-      startRestartButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
+      startRestartButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: Layout.defaultSpacing).activate()
     } else {
-      startRestartButton.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
+      startRestartButton.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).activate()
     }
-    startRestartButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+    startRestartButton.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
   }
   
   internal func hideInProgressUI() {

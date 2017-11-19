@@ -16,7 +16,7 @@ class ConjugationCell: UITableViewCell {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.smallCell
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.enableAutoLayout()
     return label
   } ()
   
@@ -30,8 +30,8 @@ class ConjugationCell: UITableViewCell {
     selectionStyle = .none
     backgroundColor = Colors.black
     addSubview(conjugation)
-    conjugation.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-    conjugation.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+    conjugation.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
+    conjugation.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
   }
   
   func configure(tense: Tense, personNumber: PersonNumber, conjugation: String) {

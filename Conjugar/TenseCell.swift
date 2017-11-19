@@ -16,7 +16,7 @@ class TenseCell: UITableViewCell {
     let label = UILabel()
     label.textColor = Colors.red
     label.font = Fonts.regularCell
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.enableAutoLayout()
     return label
   } ()
   
@@ -29,8 +29,8 @@ class TenseCell: UITableViewCell {
     backgroundColor = Colors.black
     selectionStyle = .none
     addSubview(tense)
-    tense.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-    tense.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+    tense.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
+    tense.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
   }
   
   func configure(tense: String) {

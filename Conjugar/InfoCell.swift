@@ -16,7 +16,7 @@ class InfoCell: UITableViewCell {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.boldBody
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.enableAutoLayout()
     return label
   } ()
   
@@ -28,9 +28,8 @@ class InfoCell: UITableViewCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     backgroundColor = Colors.black
     addSubview(heading)
-    
-    addConstraint(NSLayoutConstraint(item: heading, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
-    addConstraint(NSLayoutConstraint(item: heading, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
+    heading.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
+    heading.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
   }
   
   func configure(heading: String) {

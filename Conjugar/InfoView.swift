@@ -13,7 +13,7 @@ class InfoView: UIView {
   internal let info: UITextView = {
     let textView = UITextView()
     textView.backgroundColor = Colors.black
-    textView.translatesAutoresizingMaskIntoConstraints = false
+    textView.enableAutoLayout()
     textView.textColor = Colors.yellow
     textView.tintColor = Colors.blue
     textView.isEditable = false
@@ -23,13 +23,13 @@ class InfoView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     addSubview(info)
-    info.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-    info.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    info.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    info.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).activate()
+    info.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    info.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     if #available(iOS 11.0, *) {
-      info.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
+      info.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
     } else {
-      info.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
+      info.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).activate()
     }
   }
   

@@ -13,7 +13,7 @@ class BrowseInfoView: UIView {
   internal let table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
-    tableView.translatesAutoresizingMaskIntoConstraints = false
+    tableView.enableAutoLayout()
     return tableView
   } ()
   
@@ -23,7 +23,7 @@ class BrowseInfoView: UIView {
     label.textAlignment = .center
     label.font = Fonts.smallBody
     label.textColor = Colors.yellow
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.enableAutoLayout()
     return label
   } ()
   
@@ -31,7 +31,7 @@ class BrowseInfoView: UIView {
     let control = UISegmentedControl(items: ["E", "E & M", "E, M, & D"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
-    control.translatesAutoresizingMaskIntoConstraints = false
+    control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
   } ()
@@ -45,19 +45,19 @@ class BrowseInfoView: UIView {
     _ = [table, difficultyLabel, difficultyControl].map {
       addSubview($0)
     }
-    table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-    table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-    table.bottomAnchor.constraint(equalTo: difficultyControl.topAnchor, constant: Layout.defaultSpacing * -1.0).isActive = true
+    table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).activate()
+    table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
+    table.bottomAnchor.constraint(equalTo: difficultyControl.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
     
-    difficultyControl.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-    difficultyControl.bottomAnchor.constraint(equalTo: difficultyLabel.topAnchor, constant: Layout.defaultSpacing * -1.0).isActive = true
+    difficultyControl.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
+    difficultyControl.bottomAnchor.constraint(equalTo: difficultyLabel.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
 
-    difficultyLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+    difficultyLabel.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
     if #available(iOS 11.0, *) {
-      difficultyLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
+      difficultyLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
     } else {
-      difficultyLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
+      difficultyLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).activate()
     }
   }
   

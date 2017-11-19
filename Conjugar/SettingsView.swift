@@ -15,7 +15,7 @@ class SettingsView: UIView {
     label.text = "Region"
     label.font = Fonts.label
     label.textColor = Colors.yellow
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.enableAutoLayout()
     return label
   } ()
   
@@ -24,7 +24,7 @@ class SettingsView: UIView {
     label.text = "Difficulty"
     label.font = Fonts.label
     label.textColor = Colors.yellow
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.enableAutoLayout()
     return label
   } ()
   
@@ -33,7 +33,7 @@ class SettingsView: UIView {
     label.text = "Game Center"
     label.font = Fonts.label
     label.textColor = Colors.yellow
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.enableAutoLayout()
     return label
   } ()
 
@@ -45,7 +45,7 @@ class SettingsView: UIView {
     label.lineBreakMode = .byWordWrapping
     label.font = Fonts.smallBody
     label.textColor = Colors.yellow
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.enableAutoLayout()
     return label
   } ()
   
@@ -56,7 +56,7 @@ class SettingsView: UIView {
     label.lineBreakMode = .byWordWrapping
     label.font = Fonts.smallBody
     label.textColor = Colors.yellow
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.enableAutoLayout()
     return label
   } ()
   
@@ -67,7 +67,7 @@ class SettingsView: UIView {
     label.lineBreakMode = .byWordWrapping
     label.font = Fonts.smallBody
     label.textColor = Colors.yellow
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.enableAutoLayout()
     return label
   } ()
   
@@ -75,7 +75,7 @@ class SettingsView: UIView {
     let control = UISegmentedControl(items: ["Spain", "Latin America"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
-    control.translatesAutoresizingMaskIntoConstraints = false
+    control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
   } ()
@@ -84,7 +84,7 @@ class SettingsView: UIView {
     let control = UISegmentedControl(items: ["Easy", "Moderate", "Difficult"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
-    control.translatesAutoresizingMaskIntoConstraints = false
+    control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
   } ()
@@ -94,7 +94,7 @@ class SettingsView: UIView {
     button.setTitle("Enable", for: .normal)
     button.titleLabel?.font = Fonts.button
     button.setTitleColor(Colors.red, for: .normal)
-    button.translatesAutoresizingMaskIntoConstraints = false
+    button.enableAutoLayout()
     return button
   } ()
   
@@ -109,39 +109,39 @@ class SettingsView: UIView {
     }
     
     if #available(iOS 11.0, *) {
-      regionLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).isActive = true
+      regionLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     } else {
-      regionLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).isActive = true
+      regionLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).activate()
     }
-    regionLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+    regionLabel.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
     
-    regionControl.topAnchor.constraint(equalTo: regionLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    regionControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    regionControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    regionControl.topAnchor.constraint(equalTo: regionLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    regionControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    regionControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
-    regionDescription.topAnchor.constraint(equalTo: regionControl.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    regionDescription.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    regionDescription.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    regionDescription.topAnchor.constraint(equalTo: regionControl.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    regionDescription.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    regionDescription.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
-    difficultyLabel.topAnchor.constraint(equalTo: regionDescription.bottomAnchor, constant: Layout.doubleDefaultSpacing).isActive = true
-    difficultyLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+    difficultyLabel.topAnchor.constraint(equalTo: regionDescription.bottomAnchor, constant: Layout.doubleDefaultSpacing).activate()
+    difficultyLabel.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
     
-    difficultyControl.topAnchor.constraint(equalTo: difficultyLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    difficultyControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    difficultyControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    difficultyControl.topAnchor.constraint(equalTo: difficultyLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    difficultyControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    difficultyControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
-    difficultyDescription.topAnchor.constraint(equalTo: difficultyControl.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    difficultyDescription.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    difficultyDescription.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    difficultyDescription.topAnchor.constraint(equalTo: difficultyControl.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    difficultyDescription.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    difficultyDescription.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
-    gameCenterLabel.topAnchor.constraint(equalTo: difficultyDescription.bottomAnchor, constant: Layout.doubleDefaultSpacing).isActive = true
-    gameCenterLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+    gameCenterLabel.topAnchor.constraint(equalTo: difficultyDescription.bottomAnchor, constant: Layout.doubleDefaultSpacing).activate()
+    gameCenterLabel.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
 
-    gameCenterButton.topAnchor.constraint(equalTo: gameCenterLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    gameCenterButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+    gameCenterButton.topAnchor.constraint(equalTo: gameCenterLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    gameCenterButton.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
 
-    gameCenterDescription.topAnchor.constraint(equalTo: gameCenterButton.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    gameCenterDescription.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    gameCenterDescription.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    gameCenterDescription.topAnchor.constraint(equalTo: gameCenterButton.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    gameCenterDescription.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    gameCenterDescription.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
   }
 }

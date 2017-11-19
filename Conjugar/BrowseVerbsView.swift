@@ -13,7 +13,7 @@ class BrowseVerbsView: UIView {
   internal let table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
-    tableView.translatesAutoresizingMaskIntoConstraints = false
+    tableView.enableAutoLayout()
     return tableView
   } ()
   
@@ -21,7 +21,7 @@ class BrowseVerbsView: UIView {
     let control = UISegmentedControl(items: ["Irregular", "Regular", "Both"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
-    control.translatesAutoresizingMaskIntoConstraints = false
+    control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
   } ()
@@ -34,17 +34,17 @@ class BrowseVerbsView: UIView {
     super.init(frame: frame)
     addSubview(table)
     addSubview(filterControl)
-    table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).isActive = true
-    table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-    table.bottomAnchor.constraint(equalTo: filterControl.topAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
-    filterControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    filterControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).activate()
+    table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
+    table.bottomAnchor.constraint(equalTo: filterControl.topAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
+    filterControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    filterControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     if #available(iOS 11.0, *) {
-      filterControl.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
+      filterControl.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
     }
     else {
-      filterControl.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
+      filterControl.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).activate()
     }
   }
   

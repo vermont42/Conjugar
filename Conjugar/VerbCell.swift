@@ -16,7 +16,7 @@ class VerbCell: UITableViewCell {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.largeCell
-    label.translatesAutoresizingMaskIntoConstraints = false
+    label.enableAutoLayout()
     return label
   } ()
   
@@ -28,9 +28,8 @@ class VerbCell: UITableViewCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     backgroundColor = Colors.black
     addSubview(verb)
-    
-    addConstraint(NSLayoutConstraint(item: verb, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
-    addConstraint(NSLayoutConstraint(item: verb, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
+    verb.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
+    verb.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
   }
   
   func configure(verb: String) {

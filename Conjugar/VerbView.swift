@@ -23,7 +23,7 @@ class VerbView: UIView {
   internal let table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
-    tableView.translatesAutoresizingMaskIntoConstraints = false
+    tableView.enableAutoLayout()
     return tableView
   } ()
   
@@ -36,7 +36,7 @@ class VerbView: UIView {
     _ = [translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].map {
       $0.font = Fonts.label
       $0.textColor = Colors.yellow
-      $0.translatesAutoresizingMaskIntoConstraints = false
+      $0.enableAutoLayout()
     }
     _ = [(participioLabel, "PP:"), (gerundioLabel, "Ger:"), (raizFuturaLabel, "RF:")].map {
       $0.0.text = $0.1
@@ -51,47 +51,47 @@ class VerbView: UIView {
     }
     
     if #available(iOS 11.0, *) {
-      translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).isActive = true
+      translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     } else {
-      translation.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).isActive = true
+      translation.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).activate()
     }
-    translation.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    translation.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
     if #available(iOS 11.0, *) {
-      parentOrType.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).isActive = true
+      parentOrType.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     } else {
-      parentOrType.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).isActive = true
+      parentOrType.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).activate()
     }
-    parentOrType.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    parentOrType.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
-    participioLabel.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    participioLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    participioLabel.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    participioLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
-    participio.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    participio.leadingAnchor.constraint(equalTo: participioLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    participio.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    participio.leadingAnchor.constraint(equalTo: participioLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
     
-    gerundio.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    gerundio.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    gerundio.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    gerundio.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
-    gerundioLabel.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    gerundioLabel.trailingAnchor.constraint(equalTo: gerundio.leadingAnchor, constant: Layout.defaultSpacing * -1.0).isActive = true
+    gerundioLabel.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    gerundioLabel.trailingAnchor.constraint(equalTo: gerundio.leadingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
     
-    raizFuturaLabel.topAnchor.constraint(equalTo: participioLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    raizFuturaLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+    raizFuturaLabel.topAnchor.constraint(equalTo: participioLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    raizFuturaLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
-    raizFutura.topAnchor.constraint(equalTo: participio.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    raizFutura.leadingAnchor.constraint(equalTo: raizFuturaLabel.trailingAnchor, constant: Layout.defaultSpacing).isActive = true
+    raizFutura.topAnchor.constraint(equalTo: participio.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    raizFutura.leadingAnchor.constraint(equalTo: raizFuturaLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
     
-    defectivo.topAnchor.constraint(equalTo: gerundio.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    defectivo.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    defectivo.topAnchor.constraint(equalTo: gerundio.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    defectivo.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
-    table.topAnchor.constraint(equalTo: raizFuturaLabel.bottomAnchor, constant: Layout.defaultSpacing).isActive = true
-    table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
+    table.topAnchor.constraint(equalTo: raizFuturaLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     if #available(iOS 11.0, *) {
-      table.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).isActive = true
+      table.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
     } else {
-      table.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).isActive = true
+      table.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).activate()
     }
   }
   
