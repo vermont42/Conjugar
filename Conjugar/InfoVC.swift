@@ -28,7 +28,7 @@ class InfoVC: UIViewController, UITextViewDelegate {
   
   func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
     let http = "http"
-    if URL.absoluteString.prefix(http.characters.count) == http {
+    if URL.absoluteString.prefix(http.count) == http {
       return true
     }
     else {

@@ -88,7 +88,7 @@ class Conjugator {
   }
   
   func conjugate(infinitive: String, tense: Tense, personNumber: PersonNumber) -> Result<String, ConjugatorError> {
-    if infinitive.characters.count < 2 {
+    if infinitive.count < 2 {
       return .failure(.tooShort)
     }
     if personNumber == .firstSingular && (tense == .imperativoPositivo || tense == .imperativoNegativo) {

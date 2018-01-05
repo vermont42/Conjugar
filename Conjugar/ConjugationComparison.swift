@@ -14,8 +14,8 @@ enum ConjugationResult: Int {
   case noMatch = 0
   
   static func compare(lhs: String, rhs: String) -> ConjugationResult {
-    let lhsCount = lhs.characters.count
-    let rhsCount = rhs.characters.count
+    let lhsCount = lhs.count
+    let rhsCount = rhs.count
     if lhsCount != rhsCount || lhsCount == 0 {
       return .noMatch
     }

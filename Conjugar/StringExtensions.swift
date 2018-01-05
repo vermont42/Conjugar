@@ -56,7 +56,7 @@ extension String {
   
   func coloredString(color: UIColor) -> NSAttributedString {
     let attributedString = NSMutableAttributedString(string: self)
-    attributedString.addAttribute(NSAttributedStringKey.foregroundColor, value: color, range: NSMakeRange(0, characters.count))
+    attributedString.addAttribute(NSAttributedStringKey.foregroundColor, value: color, range: NSMakeRange(0, count))
     return attributedString
   }
   
@@ -117,7 +117,7 @@ extension String {
           guard let range = Range(nsRange, in: self) else { fatalError("Could not make Range.") }
           var subString = String(self[range])          
           let http = "http"
-          if subString.prefix(http.characters.count) != http {
+          if subString.prefix(http.count) != http {
             guard let encodedString = subString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { fatalError("Could not URL encode substring.") }
             subString = encodedString
           }
