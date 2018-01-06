@@ -7,31 +7,31 @@
 //
 import Foundation
 class SettingsManager {
-  fileprivate static let settingsManager = SettingsManager()
-  fileprivate var userDefaults: UserDefaults
+  private static let settingsManager = SettingsManager()
+  private var userDefaults: UserDefaults
+  private var region: Region
+  private static let regionKey = "region"
+  private var difficulty: Difficulty
+  private static let difficultyKey = "difficulty"
+  private var infoDifficulty: Difficulty
+  private static let infoDifficultyKey = "infoDifficulty"
+  private var userRejectedGameCenter: Bool
+  private static let userRejectedGameCenterKey = "userRejectedGameCenter"
+  private static let userRejectedGameCenterDefault = false
+  private var didShowGameCenterDialog: Bool
+  private static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
+  private static let didShowGameCenterDialogDefault = false
+  private var lastReviewPromptDate: Date
+  private static let lastReviewPromptDateKey = "lastReviewPromptDate"
+  private static let lastReviewPromptDateDefault = Date(timeIntervalSince1970: 0.0)
+  private var promptActionCount: Int
+  private static let promptActionCountKey = "promptActionCount"
+  private static let promptActionCountDefault = 0
+  private static let formatter = DateFormatter()
 
-  fileprivate var region: Region
-  fileprivate static let regionKey = "region"
-
-  fileprivate var difficulty: Difficulty
-  fileprivate static let difficultyKey = "difficulty"
-  fileprivate var infoDifficulty: Difficulty
-  fileprivate static let infoDifficultyKey = "infoDifficulty"
-  fileprivate var userRejectedGameCenter: Bool
-  fileprivate static let userRejectedGameCenterKey = "userRejectedGameCenter"
-  fileprivate static let userRejectedGameCenterDefault = false
-  fileprivate var didShowGameCenterDialog: Bool
-  fileprivate static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
-  fileprivate static let didShowGameCenterDialogDefault = false
-
-  fileprivate var lastReviewPromptDate: Date
-  fileprivate static let lastReviewPromptDateKey = "lastReviewPromptDate"
-  fileprivate static let lastReviewPromptDateDefault = Date(timeIntervalSince1970: 0.0)
-  fileprivate var promptActionCount: Int
-  fileprivate static let promptActionCountKey = "promptActionCount"
-  fileprivate static let promptActionCountDefault = 0
-  fileprivate init() {
+  private init() {
     userDefaults = UserDefaults.standard
+    SettingsManager.formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
 
     if let storedRegionString = userDefaults.string(forKey: SettingsManager.regionKey) {
       region = Region(rawValue: storedRegionString)!
@@ -79,13 +79,14 @@ class SettingsManager {
     }
 
     if let lastReviewPromptDateString = userDefaults.string(forKey: SettingsManager.lastReviewPromptDateKey) {
-      lastReviewPromptDate = Date(timeIntervalSince1970: (lastReviewPromptDateString as NSString).doubleValue)
+      lastReviewPromptDate = SettingsManager.formatter.date(from: lastReviewPromptDateString) ?? Date()
     }
     else {
       lastReviewPromptDate = SettingsManager.lastReviewPromptDateDefault
-      userDefaults.set("\(lastReviewPromptDate)", forKey: SettingsManager.lastReviewPromptDateKey)
+      userDefaults.set(SettingsManager.formatter.string(from: lastReviewPromptDate), forKey: SettingsManager.lastReviewPromptDateKey)
       userDefaults.synchronize()
     }
+
     if let promptActionCountString = userDefaults.string(forKey: SettingsManager.promptActionCountKey) {
       promptActionCount = Int((promptActionCountString as NSString).intValue)
     }
@@ -153,6 +154,7 @@ class SettingsManager {
       settingsManager.userDefaults.synchronize()
     }
   }
+
   class func getLastReviewPromptDate() -> Date {
     return settingsManager.lastReviewPromptDate
   }
@@ -160,7 +162,7 @@ class SettingsManager {
   class func setLastReviewPromptDate(_ lastReviewPromptDate: Date) {
     if lastReviewPromptDate != settingsManager.lastReviewPromptDate {
       settingsManager.lastReviewPromptDate = lastReviewPromptDate
-      settingsManager.userDefaults.set("\(lastReviewPromptDate)", forKey: SettingsManager.lastReviewPromptDateKey)
+      settingsManager.userDefaults.set(SettingsManager.formatter.string(from: lastReviewPromptDate), forKey: SettingsManager.lastReviewPromptDateKey)
       settingsManager.userDefaults.synchronize()
     }
   }

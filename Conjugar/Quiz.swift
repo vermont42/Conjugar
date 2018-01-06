@@ -277,6 +277,7 @@ internal class Quiz {
         quizState = .finished
         delegate?.quizDidFinish()
         GameCenterManager.shared.reportScore(score)
+        ReviewPrompter.promptableActionHappened()
       }
       if result == .totalMatch {
         return (result, nil)

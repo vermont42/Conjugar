@@ -15,6 +15,7 @@
 		E1151E551E9C5D9C00DE44D6 /* VerbCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */; };
 		E1151E571E9C610100DE44D6 /* VerbVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E561E9C610100DE44D6 /* VerbVC.swift */; };
 		E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E115CA381EEC962700DBBD44 /* VerbFamilies.swift */; };
+		E118CA281FFFD07400612D71 /* ReviewPrompter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E118CA271FFFD07400612D71 /* ReviewPrompter.swift */; };
 		E11CE1021F48867400E74E10 /* sadTrombone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E11CE1011F48867400E74E10 /* sadTrombone.mp3 */; };
 		E11CFED11FC2083900BD3568 /* NSLayoutConstraintExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11CFED01FC2083900BD3568 /* NSLayoutConstraintExtension.swift */; };
 		E1201A041F1AB99F00BCB27D /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1201A031F1AB99F00BCB27D /* MainTabBarVC.swift */; };
@@ -106,6 +107,7 @@
 		E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbCell.swift; sourceTree = "<group>"; };
 		E1151E561E9C610100DE44D6 /* VerbVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbVC.swift; sourceTree = "<group>"; };
 		E115CA381EEC962700DBBD44 /* VerbFamilies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbFamilies.swift; sourceTree = "<group>"; };
+		E118CA271FFFD07400612D71 /* ReviewPrompter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPrompter.swift; sourceTree = "<group>"; };
 		E11CE1011F48867400E74E10 /* sadTrombone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone.mp3; sourceTree = "<group>"; };
 		E11CFED01FC2083900BD3568 /* NSLayoutConstraintExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraintExtension.swift; sourceTree = "<group>"; };
 		E1201A031F1AB99F00BCB27D /* MainTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarVC.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				E1483FB61EF6E35C0052C436 /* MutableCollectionExtension.swift */,
 				E139E0DF1EC7D27A00B34DE7 /* NSAttributedStringExtension.swift */,
 				E11CFED01FC2083900BD3568 /* NSLayoutConstraintExtension.swift */,
+				E118CA271FFFD07400612D71 /* ReviewPrompter.swift */,
 				E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */,
 				E14BAD8D1EFF11BD000D91C5 /* SettingsManager.swift */,
 				E18F7F391ECA7DA700633200 /* SoundManager.swift */,
@@ -573,6 +576,7 @@
 				E1AB244F1F083CB300FE76E8 /* Info.swift in Sources */,
 				E19382061F0829F6005268FF /* InfoCell.swift in Sources */,
 				E14566BC1EC001ED00C16DC3 /* TenseCell.swift in Sources */,
+				E118CA281FFFD07400612D71 /* ReviewPrompter.swift in Sources */,
 				E1201A041F1AB99F00BCB27D /* MainTabBarVC.swift in Sources */,
 				E1483FBB1EF6F82A0052C436 /* QuizVC.swift in Sources */,
 				E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */,
