@@ -9,25 +9,32 @@ import Foundation
 class SettingsManager {
   private static let settingsManager = SettingsManager()
   private var userDefaults: UserDefaults
+
   private var region: Region
   private static let regionKey = "region"
+
   private var difficulty: Difficulty
   private static let difficultyKey = "difficulty"
+
   private var infoDifficulty: Difficulty
   private static let infoDifficultyKey = "infoDifficulty"
+
   private var userRejectedGameCenter: Bool
   private static let userRejectedGameCenterKey = "userRejectedGameCenter"
   private static let userRejectedGameCenterDefault = false
+
   private var didShowGameCenterDialog: Bool
   private static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
   private static let didShowGameCenterDialogDefault = false
+
   private var lastReviewPromptDate: Date
   private static let lastReviewPromptDateKey = "lastReviewPromptDate"
   private static let lastReviewPromptDateDefault = Date(timeIntervalSince1970: 0.0)
+  private static let formatter = DateFormatter()
+
   private var promptActionCount: Int
   private static let promptActionCountKey = "promptActionCount"
   private static let promptActionCountDefault = 0
-  private static let formatter = DateFormatter()
 
   private init() {
     userDefaults = UserDefaults.standard
