@@ -163,7 +163,7 @@
   <verb in="ocurrir" vt="ri" tn="happen" pe="subir" tr="sub" st="ocurr" />
   <verb in="oír" vt="ir" tn="hear, listen" pe="subir" tr="sub" st="o" ge="oYendo" po="oÍdo" rf="oir" fspr="oIGo" sspr="oYes" tspr="oYe" fppr="oÍmos" tppr="oYen" sspt="oÍste" tspt="oYó" fppt="oÍmos" sppt="oÍsteis" tppt="oYeron" fspb="oIGa" sspb="oIGas" tspb="oIGa" fppb="oIGamos" sppb="oIGáis" tppb="oIGan" />
   <verb in="ofender" vt="re" tn="offend" pe="comer" tr="com" st="ofend" />
-  <verb in="pagar" vt="ir" tn="pay" pe="hablar" tr="habl" st="pag" fspr="pagUé" fspb="pagUe" sspb="pagUes" tspb="pagUe" fppb="pagUemos" sppb="pagUéis" tppb="pagUen" />
+  <verb in="pagar" vt="ir" tn="pay" pe="hablar" tr="habl" st="pag" fspt="pagUé" fspb="pagUe" sspb="pagUes" tspb="pagUe" fppb="pagUemos" sppb="pagUéis" tppb="pagUen" />
   <verb in="partir" vt="ri" tn="cut, split" pe="subir" tr="sub" st="part" />
   <verb in="pedir" vt="ir" tn="ask for, order" pe="subir" tr="sub" st="ped" ge="pIdiendo" fspr="pIdo" sspr="pIdes" tspr="pIde" tppr="pIden" tspt="pIdió" tppt="pIdieron" fspb="pIda" sspb="pIdas" tspb="pIda" fppb="pIdamos" sppb="pIdáis" tppb="pIdan" />
   <verb in="penar" vt="ra" tn="punish" pe="hablar" tr="habl" st="pen" />
