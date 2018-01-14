@@ -67,25 +67,13 @@ class QuizView: UIView {
       addSubview(view)
     }
     
-    if #available(iOS 11.0, *) {
-      verbLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
-    } else {
-      verbLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).activate()
-    }
+    verbLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     verbLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
-    if #available(iOS 11.0, *) {
-      verb.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
-    } else {
-      verb.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).activate()
-    }
+    verb.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     verb.leadingAnchor.constraint(equalTo: verbLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
     
-    if #available(iOS 11.0, *) {
-      translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
-    } else {
-      translation.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).activate()
-    }
+    translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     translation.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
     pronounLabel.topAnchor.constraint(equalTo: verbLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
@@ -134,11 +122,7 @@ class QuizView: UIView {
     conjugationField.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     conjugationField.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
-    if #available(iOS 11.0, *) {
-      startRestartButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    } else {
-      startRestartButton.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).activate()
-    }
+    startRestartButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: Layout.defaultSpacing).activate()
     startRestartButton.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
   }
   

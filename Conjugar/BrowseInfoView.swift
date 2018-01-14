@@ -54,11 +54,7 @@ class BrowseInfoView: UIView {
     difficultyControl.bottomAnchor.constraint(equalTo: difficultyLabel.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
 
     difficultyLabel.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
-    if #available(iOS 11.0, *) {
-      difficultyLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
-    } else {
-      difficultyLabel.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).activate()
-    }
+    difficultyLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
   }
   
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {

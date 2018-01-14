@@ -16,6 +16,8 @@
 		E1151E571E9C610100DE44D6 /* VerbVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E561E9C610100DE44D6 /* VerbVC.swift */; };
 		E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E115CA381EEC962700DBBD44 /* VerbFamilies.swift */; };
 		E118CA281FFFD07400612D71 /* ReviewPrompter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E118CA271FFFD07400612D71 /* ReviewPrompter.swift */; };
+		E11BC1732004335B00494504 /* SecondSingularQuiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BC1722004335B00494504 /* SecondSingularQuiz.swift */; };
+		E11BC175200433AC00494504 /* SecondSingularBrowse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BC174200433AC00494504 /* SecondSingularBrowse.swift */; };
 		E11CE1021F48867400E74E10 /* sadTrombone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E11CE1011F48867400E74E10 /* sadTrombone.mp3 */; };
 		E11CFED11FC2083900BD3568 /* NSLayoutConstraintExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11CFED01FC2083900BD3568 /* NSLayoutConstraintExtension.swift */; };
 		E1201A041F1AB99F00BCB27D /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1201A031F1AB99F00BCB27D /* MainTabBarVC.swift */; };
@@ -108,6 +110,8 @@
 		E1151E561E9C610100DE44D6 /* VerbVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbVC.swift; sourceTree = "<group>"; };
 		E115CA381EEC962700DBBD44 /* VerbFamilies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbFamilies.swift; sourceTree = "<group>"; };
 		E118CA271FFFD07400612D71 /* ReviewPrompter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPrompter.swift; sourceTree = "<group>"; };
+		E11BC1722004335B00494504 /* SecondSingularQuiz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondSingularQuiz.swift; sourceTree = "<group>"; };
+		E11BC174200433AC00494504 /* SecondSingularBrowse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondSingularBrowse.swift; sourceTree = "<group>"; };
 		E11CE1011F48867400E74E10 /* sadTrombone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone.mp3; sourceTree = "<group>"; };
 		E11CFED01FC2083900BD3568 /* NSLayoutConstraintExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraintExtension.swift; sourceTree = "<group>"; };
 		E1201A031F1AB99F00BCB27D /* MainTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarVC.swift; sourceTree = "<group>"; };
@@ -401,6 +405,8 @@
 				E1483FB21EF5CF650052C436 /* QuizState.swift */,
 				E1483FB41EF5D0510052C436 /* QuizDelegate.swift */,
 				E1F06AFA1E8F087000ADD2E1 /* Region.swift */,
+				E11BC174200433AC00494504 /* SecondSingularBrowse.swift */,
+				E11BC1722004335B00494504 /* SecondSingularQuiz.swift */,
 				E18F7F3B1ECA7DF000633200 /* Sound.swift */,
 				E1F06AFC1E8F08D500ADD2E1 /* Tense.swift */,
 				E115CA381EEC962700DBBD44 /* VerbFamilies.swift */,
@@ -536,6 +542,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E11BC175200433AC00494504 /* SecondSingularBrowse.swift in Sources */,
 				E1483FB71EF6E35C0052C436 /* MutableCollectionExtension.swift in Sources */,
 				E18010781F1BCA0800E8608C /* BrowseVerbsView.swift in Sources */,
 				E14BAD941F006423000D91C5 /* ResultCell.swift in Sources */,
@@ -553,6 +560,7 @@
 				E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */,
 				E14566BE1EC001FD00C16DC3 /* ConjugationCell.swift in Sources */,
 				E1483FB11EF5C4C60052C436 /* Difficulty.swift in Sources */,
+				E11BC1732004335B00494504 /* SecondSingularQuiz.swift in Sources */,
 				E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */,
 				E1F06ADA1E8F05F300ADD2E1 /* BrowseVerbsVC.swift in Sources */,
 				E1D1D8F81F33732D006A6052 /* QuizView.swift in Sources */,
@@ -745,7 +753,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				INFOPLIST_FILE = Conjugar/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -761,7 +769,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				INFOPLIST_FILE = Conjugar/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar;
 				PRODUCT_NAME = "$(TARGET_NAME)";

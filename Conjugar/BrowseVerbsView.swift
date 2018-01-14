@@ -40,12 +40,7 @@ class BrowseVerbsView: UIView {
     table.bottomAnchor.constraint(equalTo: filterControl.topAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
     filterControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     filterControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    if #available(iOS 11.0, *) {
-      filterControl.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
-    }
-    else {
-      filterControl.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).activate()
-    }
+    filterControl.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
   }
   
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {

@@ -50,18 +50,10 @@ class VerbView: UIView {
       addSubview($0)
     }
     
-    if #available(iOS 11.0, *) {
-      translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
-    } else {
-      translation.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).activate()
-    }
+    translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     translation.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     
-    if #available(iOS 11.0, *) {
-      parentOrType.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
-    } else {
-      parentOrType.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: Layout.safeTop).activate()
-    }
+    parentOrType.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     parentOrType.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     
     participioLabel.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: Layout.defaultSpacing).activate()
@@ -88,11 +80,7 @@ class VerbView: UIView {
     table.topAnchor.constraint(equalTo: raizFuturaLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    if #available(iOS 11.0, *) {
-      table.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
-    } else {
-      table.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).activate()
-    }
+    table.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
   }
   
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {

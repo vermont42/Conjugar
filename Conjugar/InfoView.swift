@@ -26,11 +26,7 @@ class InfoView: UIView {
     info.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).activate()
     info.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     info.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    if #available(iOS 11.0, *) {
-      info.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
-    } else {
-      info.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: Layout.safeBottom).activate()
-    }
+    info.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
   }
   
   required init(coder aDecoder: NSCoder) {
