@@ -89,8 +89,4 @@ class VerbView: UIView {
     table.register(TenseCell.self, forCellReuseIdentifier: TenseCell.identifier)
     table.register(ConjugationCell.self, forCellReuseIdentifier: ConjugationCell.identifier)
   }
-  
-  func reloadTableData() {
-    table.reloadData()
-  }
 }

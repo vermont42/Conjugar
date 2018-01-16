@@ -12,6 +12,7 @@ enum PersonNumber: String {
   case firstSingular = "fs"
   case firstPlural = "fp"
   case secondSingular = "ss"
+  case secondSingularVos = "sv"
   case secondPlural = "sp"
   case thirdSingular = "ts"
   case thirdPlural = "tp"
@@ -22,6 +23,8 @@ enum PersonNumber: String {
     case .firstSingular:
       return "re"
     case .secondSingular:
+      return "res"
+    case .secondSingularVos:
       return "res"
     case .thirdSingular:
       return "re"
@@ -42,6 +45,8 @@ enum PersonNumber: String {
       return "yo"
     case .secondSingular:
       return "tú"
+    case .secondSingularVos:
+      return "vos"
     case .thirdSingular:
       return "él"
     case .firstPlural:
@@ -61,6 +66,8 @@ enum PersonNumber: String {
       return "1S"
     case .secondSingular:
       return "2S"
+    case .secondSingularVos:
+      return "2SV"
     case .thirdSingular:
       return "3S"
     case .firstPlural:

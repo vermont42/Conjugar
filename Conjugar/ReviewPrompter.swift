@@ -10,7 +10,7 @@ import Foundation
 import StoreKit
 
 struct ReviewPrompter {
-  private static let promptModulo = 3
+  private static let promptModulo = 9
   private static let promptInterval: TimeInterval = 60 * 60 * 24 * 180
 
   internal static func promptableActionHappened() {

@@ -43,6 +43,8 @@ internal class Quiz {
   private var irregularGerundioVerbsIndex = 0
   private var irregularTuImperativoVerbs = VerbFamilies.irregularTuImperativoVerbs
   private var irregularTuImperativoVerbsIndex = 0
+  private var irregularVosImperativoVerbs = VerbFamilies.irregularVosImperativoVerbs
+  private var irregularVosImperativoVerbsIndex = 0
   private var timer: Timer?
   private var personNumbers: [PersonNumber] = [.firstSingular, .secondSingular, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
@@ -100,6 +102,7 @@ internal class Quiz {
     irregularPresenteDeSubjuntivoVerbs.shuffle()
     irregularGerundioVerbs.shuffle()
     irregularTuImperativoVerbs.shuffle()
+    irregularVosImperativoVerbs.shuffle()
 
     switch lastDifficulty {
     case .easy:
@@ -172,7 +175,12 @@ internal class Quiz {
         questions.append(($0, .gerundio, .none))
       }
       for _ in 0...1 {
-        questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingular))
+        if SettingsManager.getSecondSingularQuiz() == .tu {
+          questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingular))
+        }
+        else {
+          questions.append((irregularVosImperativoVerb, .imperativoPositivo, .secondSingularVos))
+        }
       }
       _ = [allRegularVerb, allRegularVerb].map {
         questions.append(($0, .imperativoPositivo, personNumber(skipYo: true, skipTu: true)))
@@ -225,7 +233,12 @@ internal class Quiz {
       questions.append((allRegularVerb, .imperfectoDeSubjuntivo2, personNumber()))
       questions.append((irregularPreteritoVerb, .futuroDeSubjuntivo, personNumber()))
       questions.append((allRegularVerb, .futuroDeSubjuntivo, personNumber()))
-      questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingular))
+      if SettingsManager.getSecondSingularQuiz() == .tu {
+        questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingular))
+      }
+      else {
+        questions.append((irregularVosImperativoVerb, .imperativoPositivo, .secondSingularVos))
+      }
       questions.append((allRegularVerb, .imperativoPositivo, personNumber(skipYo: true, skipTu: true)))
       questions.append((allRegularVerb, .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
       _ = [.perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].map {
@@ -277,7 +290,6 @@ internal class Quiz {
         quizState = .finished
         delegate?.quizDidFinish()
         GameCenterManager.shared.reportScore(score)
-        ReviewPrompter.promptableActionHappened()
       }
       if result == .totalMatch {
         return (result, nil)
@@ -406,5 +418,13 @@ internal class Quiz {
       irregularTuImperativoVerbsIndex = 0
     }
     return irregularTuImperativoVerbs[irregularTuImperativoVerbsIndex]
+  }
+
+  private var irregularVosImperativoVerb: String {
+    irregularVosImperativoVerbsIndex += 1
+    if irregularVosImperativoVerbsIndex == irregularVosImperativoVerbs.count {
+      irregularVosImperativoVerbsIndex = 0
+    }
+    return irregularVosImperativoVerbs[irregularVosImperativoVerbsIndex]
   }
 }

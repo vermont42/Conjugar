@@ -28,6 +28,8 @@ struct VerbFamilies {
   static let irregularPresenteDeSubjuntivoVerbs = ["ser", "ir", "haber", "saber", "pensar", "perder", "sentir", "dormir", "pedir", "crecer", "conocer", "lucir", "conducir", "huir", "construir", "estar", "dar", "caber", "decir", "hacer", "caer", "oír", "traer", "poner", "salir", "tener", "valer", "venir", "ver", "jugar"]
   
   static let irregularTuImperativoVerbs = ["ser", "ir", "haber", "decir", "hacer", "poner", "salir", "tener", "venir", "componer", "obtener"]
+
+  static let irregularVosImperativoVerbs = ["ser", "ir", "haber"]
   
   static let irregularParticipioVerbs = ["abrir", "cubrir", "decir", "escribir", "hacer", "morir", "poner", "resolver", "romper", "ver", "volver", "pudrir"]
   

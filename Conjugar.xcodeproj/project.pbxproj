@@ -74,6 +74,7 @@
 		E19382061F0829F6005268FF /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19382051F0829F6005268FF /* InfoCell.swift */; };
 		E198F9021F5D79F100BAF553 /* VerbViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E198F9011F5D79F100BAF553 /* VerbViewTests.swift */; };
 		E198F9051F5D7CB200BAF553 /* ConjugatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E198F9041F5D7CB200BAF553 /* ConjugatorTests.swift */; };
+		E1A44314200D10D200C48857 /* ConjugationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A44313200D10D200C48857 /* ConjugationDataSource.swift */; };
 		E1A789771F00751D0006CA77 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A789761F00751D0006CA77 /* IntExtension.swift */; };
 		E1AB244F1F083CB300FE76E8 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB244E1F083CB300FE76E8 /* Info.swift */; };
 		E1D1D8F81F33732D006A6052 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D1D8F71F33732D006A6052 /* QuizView.swift */; };
@@ -168,6 +169,7 @@
 		E19382051F0829F6005268FF /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		E198F9011F5D79F100BAF553 /* VerbViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbViewTests.swift; sourceTree = "<group>"; };
 		E198F9041F5D7CB200BAF553 /* ConjugatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugatorTests.swift; sourceTree = "<group>"; };
+		E1A44313200D10D200C48857 /* ConjugationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugationDataSource.swift; sourceTree = "<group>"; };
 		E1A789761F00751D0006CA77 /* IntExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 		E1AB244E1F083CB300FE76E8 /* Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
 		E1D1D8F71F33732D006A6052 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
@@ -396,6 +398,7 @@
 				E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */,
 				E1483FCF1EF961880052C436 /* ConjugationComparison.swift */,
 				E1F06AF71E8F081700ADD2E1 /* Conjugator.swift */,
+				E1A44313200D10D200C48857 /* ConjugationDataSource.swift */,
 				E15A18521E9199C3008455DD /* ConjugatorError.swift */,
 				E1483FB01EF5C4C60052C436 /* Difficulty.swift */,
 				E1AB244E1F083CB300FE76E8 /* Info.swift */,
@@ -587,6 +590,7 @@
 				E118CA281FFFD07400612D71 /* ReviewPrompter.swift in Sources */,
 				E1201A041F1AB99F00BCB27D /* MainTabBarVC.swift in Sources */,
 				E1483FBB1EF6F82A0052C436 /* QuizVC.swift in Sources */,
+				E1A44314200D10D200C48857 /* ConjugationDataSource.swift in Sources */,
 				E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */,
 				E14BAD8E1EFF11BD000D91C5 /* SettingsManager.swift in Sources */,
 				E15E63F61F3A29890083DB4B /* Layout.swift in Sources */,

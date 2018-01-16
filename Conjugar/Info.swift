@@ -514,7 +514,7 @@ com~er~: come, coma, comamos, comed, coman
 
 The following verbs have irregular tú imperativo positivo conjugations:
 
-componer: $compÓn$
+componer: $compoN$
 decir: $dI$
 haber: $hE$
 hacer: $haZ$

@@ -39,7 +39,40 @@ enum Tense: String {
   case pluscuamperfectoDeSubjuntivo1 = "p1"
   case pluscuamperfectoDeSubjuntivo2 = "p2"
   case futuroPerfectoDeSubjuntivo = "fo"
-  
+
+  var conjugationCount: Int {
+    var extraConjugation = 0
+    if SettingsManager.getSecondSingularBrowse() == .both {
+      extraConjugation = 1
+    }
+    switch self {
+    case .infinitivo, .translation, .gerundio, .participio, .raizFutura:
+      return 0
+    case .imperativoPositivo, .imperativoNegativo:
+      return 5 + extraConjugation
+    case .presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
+         .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo,
+         .perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto,
+         .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1,
+         .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo:
+      return 6 + extraConjugation
+    }
+  }
+
+  var hasYoForm: Bool {
+    switch self {
+    case .imperativoPositivo, .imperativoNegativo,
+         .infinitivo, .translation, .gerundio, .participio, .raizFutura:
+      return false
+    case .presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
+         .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo,
+         .perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto,
+         .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1,
+         .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo:
+      return true
+    }
+  }
+
   var displayName: String {
     switch self {
     case .infinitivo:
@@ -174,4 +207,6 @@ enum Tense: String {
       return .failure(.noHaberForm(self))
     }
   }
+
+  static let conjugatedTenses: [Tense] = [.presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo, .imperativoPositivo, .imperativoNegativo, .perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo]
 }

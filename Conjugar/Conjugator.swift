@@ -75,7 +75,14 @@ class Conjugator {
   
   func isDefective(infinitive: String) -> Bool {
     if let verb = verbs[infinitive] {
-      if verb[PersonNumber.firstSingular.rawValue] != nil || verb[PersonNumber.secondSingular.rawValue] != nil || verb[PersonNumber.thirdSingular.rawValue] != nil || verb[PersonNumber.firstPlural.rawValue] != nil || verb[PersonNumber.secondPlural.rawValue] != nil || verb[PersonNumber.thirdPlural.rawValue] != nil {
+      if
+        verb[PersonNumber.firstSingular.rawValue] != nil ||
+        verb[PersonNumber.secondSingular.rawValue] != nil ||
+        verb[PersonNumber.secondSingularVos.rawValue] != nil ||
+        verb[PersonNumber.thirdSingular.rawValue] != nil ||
+        verb[PersonNumber.firstPlural.rawValue] != nil ||
+        verb[PersonNumber.secondPlural.rawValue] != nil ||
+        verb[PersonNumber.thirdPlural.rawValue] != nil {
         return true
       }
       else {
@@ -249,22 +256,51 @@ class Conjugator {
       if personNumber == .firstSingular {
         return .failure(.noFirstPersonSingularImperative)
       }
-      if [.thirdSingular, .firstPlural, .thirdPlural].contains(personNumber) {
+      else if [.thirdSingular, .firstPlural, .thirdPlural].contains(personNumber) {
         return .success(conjugateRecursively(infinitive: infinitive, tense: .presenteDeSubjuntivo, personNumber: personNumber).value!)
       }
-      else {
-        if personNumber == .secondSingular {
+      else if personNumber == .secondSingular {
           if let conjugation = verbs[infinitive]?[PersonNumber.secondSingular.rawValue + Tense.imperativoPositivo.rawValue] {
             return .success(conjugation)
           }
           else {
-            let stemWithS = conjugateRecursively(infinitive: infinitive, tense: .presenteDeIndicativo, personNumber: .secondSingular).value!
-            return .success(String(stemWithS[..<stemWithS.index(stemWithS.endIndex, offsetBy: -1)]))
+            let parentConjugation = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: .imperativoPositivo, personNumber: .secondSingular).value!
+            let trim = verb[Conjugator.trim]!
+            let stem = verb[Conjugator.stem]!
+            var conjugation: String
+            if trim == "" {
+              conjugation = stem + parentConjugation
+            }
+            else {
+              conjugation = parentConjugation.replaceFirstOccurence(of: trim, with: stem)
+            }
+            verb[conjugationKey] = conjugation
+            verbs[infinitive] = verb
+            return .success(conjugation)
           }
+      }
+      else if personNumber == .secondSingularVos {
+        if let conjugation = verbs[infinitive]?[PersonNumber.secondSingularVos.rawValue + Tense.imperativoPositivo.rawValue] {
+          return .success(conjugation)
         }
         else {
-          return .success(String(infinitive[..<infinitive.index(infinitive.endIndex, offsetBy: -1)]) + "d")
+          let parentConjugation = conjugateRecursively(infinitive: verb[Conjugator.parent]!, tense: .imperativoPositivo, personNumber: .secondSingularVos).value!
+          let trim = verb[Conjugator.trim]!
+          let stem = verb[Conjugator.stem]!
+          var conjugation: String
+          if trim == "" {
+            conjugation = stem + parentConjugation
+          }
+          else {
+            conjugation = parentConjugation.replaceFirstOccurence(of: trim, with: stem)
+          }
+          verb[conjugationKey] = conjugation
+          verbs[infinitive] = verb
+          return .success(conjugation)
         }
+      }
+      else /* personNumber == .secondPlural */ {
+        return .success(String(infinitive[..<infinitive.index(infinitive.endIndex, offsetBy: -1)]) + "d")
       }
     }
     else if tense == .imperativoNegativo {
@@ -295,7 +331,7 @@ class Conjugator {
       default:
         return ""
       }
-    case .secondSingular:
+    case .secondSingular, .secondSingularVos:
       switch tense {
       case .imperfectoDeSubjuntivo1:
         return "ras"
