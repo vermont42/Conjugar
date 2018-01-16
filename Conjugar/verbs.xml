@@ -109,7 +109,7 @@
   <verb in="discutir" vt="ri" tn="argue, discuss" pe="subir" tr="sub" st="discut" />
   <verb in="disponer" vt="ir" tn="make available" pe="poner" tr="" st="dis" />
   <verb in="distraer" vt="ir" tn="distract" pe="traer" tr="" st="dis" />
-  <verb in="dormir" vt="ir" tn="sleep" pe="subir" tr="sub" st="dorm" ge="dUrmiendo" fspr="dUErmo" sspr="dUErmes" tspr="dUErme" tppr="dUErmen" tspt="dUrmió" tppt="dUrmieron" fspb="dUErma" sspb="dUErmas" tspb="dUErma" fppb="dUrmamos" sppb="dUrmáis" tppb="dUErman" />
+  <verb in="dormir" vt="ir" tn="sleep" pe="subir" tr="sub" st="dorm" ge="dUrmiendo" fspr="dUErmo" sspr="dUErmes" tspr="dUErme" tppr="dUErmen" tspt="dUrmió" tppt="dUrmieron" fspb="dUErma" sspb="dUErmas" svpb="dUErmas" tspb="dUErma" fppb="dUrmamos" sppb="dUrmáis" tppb="dUErman" ssio="dUErme" />
   <verb in="empinar" vt="ra" tn="tip up, raise" pe="hablar" tr="habl" st="empin" />
   <verb in="emprender" vt="re" tn="undertake" pe="comer" tr="com" st="emprend" />
   <verb in="encalar" vt="ra" tn="whitewash" pe="hablar" tr="habl" st="encal" />
@@ -142,7 +142,7 @@
   <verb in="inducir" vt="ir" tn="induce" pe="conducir" tr="con" st="in" />
   <verb in="insistir" vt="ri" tn="insist" pe="subir" tr="sub" st="insist" />
   <verb in="introducir" vt="ir" tn="insert" pe="conducir" tr="con" st="intro" />
-  <verb in="ir" vt="ir" tn="go" pe="subir" tr="sub" st="" ge="Yendo" fspr="VOY" sspr="VAS" tspr="VA" fppr="VAMOS" sppr="VAIS" tppr="VAN" fspt="FUI" sspt="FUiste" tspt="FUE" fppt="FUimos" sppt="FUisteis" tppt="FUeron" fsii="iBa" ssii="iBas" tsii="iBa" fpii="iBamos" spii="iBais" tpii="iBan" fspb="VAYa" sspb="VAYas" tspb="VAYa" fppb="VAYamos" sppb="VAYáis" tppb="VAYan" ssio="VE" svio="ANDÁ" />
+  <verb in="ir" vt="ir" tn="go" pe="subir" tr="sub" st="" ge="Yendo" fspr="VOY" sspr="VAS" svpr="VAS" tspr="VA" fppr="VAMOS" sppr="VAIS" tppr="VAN" fspt="FUI" sspt="FUiste" svpt="FUiste" tspt="FUE" fppt="FUimos" sppt="FUisteis" tppt="FUeron" fsii="IBa" ssii="IBas" svii="IBas" tsii="IBa" fpii="IBamos" spii="IBais" tpii="IBan" fspb="VAYa" sspb="VAYas" svpb="VAYas" tspb="VAYa" fppb="VAYamos" sppb="VAYáis" tppb="VAYan" ssio="VE" svio="ANDÁ" />
   <verb in="jugar" vt="ir" tn="play" pe="hablar" tr="habl" st="jug" fspr="juEgo" sspr="juEgas" tspr="juEga" tppr="juEgan" fspt="jugUé" fspb="juEGUe" sspb="juEGUes" tspb="juEGUe" fppb="jugUemos" sppb="jugUéis" tppb="juEGUen" />
   <verb in="lamer" vt="re" tn="lick" pe="comer" tr="com" st="lam" />
   <verb in="leer" vt="ir" tn="read" pe="comer" tr="com" st="le" po="leÍdo" ge="leYendo" />
@@ -159,7 +159,7 @@
   <verb in="morder" vt="ir" tn="bite" pe="comer" tr="com" st="mord" fspr="mUErdo" sspr="mUErdes" tspr="mUErde" tppr="mUErden" fspb="mUErda" sspb="mUErdas" tspb="mUErda" tppb="mUErdan" />
   <verb in="morir" vt="ir" tn="die" pe="subir" tr="sub" st="mor" po="mUERTo" ge="mUriendo" fspr="mUEro" sspr="mUEres" tspr="mUEre" tppr="mUEren" tspt="mUrió" tppt="mUrieron" fspb="mUEra" sspb="mUEras" tspb="mUEra" fppb="mUramos" sppb="mUráis" tppb="mUEran" />
   <verb in="mostrar" vt="ir" tn="show" pe="hablar" tr="habl" st="mostr" fspr="mUEstro" sspr="mUEstras" tspr="mUEstra" tppr="mUEstran" fspb="mUEstre" sspb="mUEstres" tspb="mUEstre" tppb="mUEstren" />
-  <verb in="mover" vt="ir" tn="move" pe="comer" tr="com" st="mov" fspr="mUEvo" sspr="mUEves" tspr="mUEve" tppr="mUEven" fspb="mUEva" sspb="mUEvas" tspb="mUEva" tppb="mUEvan" />
+  <verb in="mover" vt="ir" tn="move" pe="comer" tr="com" st="mov" fspr="mUEvo" sspr="mUEves" tspr="mUEve" tppr="mUEven" fspb="mUEva" sspb="mUEvas" tspb="mUEva" tppb="mUEvan" ssio="mueve" />
   <verb in="nadar" vt="ra" tn="swim" pe="hablar" tr="habl" st="nad" />
   <verb in="necesitar" vt="ra" tn="need" pe="hablar" tr="habl" st="necesit" />
   <verb in="nublar" vt="ra" tn="cloud" pe="hablar" tr="habl" st="nubl" />
@@ -168,7 +168,7 @@
   <verb in="ocurrir" vt="ri" tn="happen" pe="subir" tr="sub" st="ocurr" />
   <verb in="oír" vt="ir" tn="hear, listen" pe="subir" tr="sub" st="o" ge="oYendo" po="oÍdo" rf="oir" fspr="oIGo" sspr="oYes" tspr="oYe" fppr="oÍmos" tppr="oYen" sspt="oÍste" tspt="oYó" fppt="oÍmos" sppt="oÍsteis" tppt="oYeron" fspb="oIGa" sspb="oIGas" tspb="oIGa" fppb="oIGamos" sppb="oIGáis" tppb="oIGan" />
   <verb in="ofender" vt="re" tn="offend" pe="comer" tr="com" st="ofend" />
-  <verb in="pagar" vt="ir" tn="pay" pe="hablar" tr="habl" st="pag" fspt="pagUé" fspb="pagUe" sspb="pagUes" tspb="pagUe" fppb="pagUemos" sppb="pagUéis" tppb="pagUen" />
+  <verb in="pagar" vt="ir" tn="pay" pe="hablar" tr="habl" st="pag" fspt="pagUé" fspb="pagUe" svpb="pagUes" sspb="pagUes" tspb="pagUe" fppb="pagUemos" sppb="pagUéis" tppb="pagUen" />
   <verb in="partir" vt="ri" tn="cut, split" pe="subir" tr="sub" st="part" />
   <verb in="pedir" vt="ir" tn="ask for, order" pe="subir" tr="sub" st="ped" ge="pIdiendo" fspr="pIdo" sspr="pIdes" tspr="pIde" tppr="pIden" tspt="pIdió" tppt="pIdieron" fspb="pIda" sspb="pIdas" tspb="pIda" fppb="pIdamos" sppb="pIdáis" tppb="pIdan" />
   <verb in="penar" vt="ra" tn="punish" pe="hablar" tr="habl" st="pen" />
@@ -219,7 +219,7 @@
   <verb in="tomar" vt="ra" tn="drink, take" pe="hablar" tr="habl" st="tom" />
   <verb in="trabajar" vt="ra" tn="work" pe="hablar" tr="habl" st="trabaj" />
   <verb in="traducir" vt="ir" tn="translate" pe="conducir" tr="con" st="tra" />
-  <verb in="traer" vt="ir" tn="bring" pe="comer" tr="com" st="tra" ge="traYendo" fspr="traIGo" fspt="traJE" sspt="traJiste" tspt="traJO" fppt="traJimos" sppt="traJisteis" tppt="traJeron" fspb="traIGa" sspb="traIGas" tspb="traIGa" fppb="traIGamos" sppb="traIGáis" tppb="traIGan" />
+  <verb in="traer" vt="ir" tn="bring" pe="comer" tr="com" st="tra" ge="traYendo" fspr="traIGo" fspt="traJE" sspt="traJiste" svpt="traJiste" tspt="traJO" fppt="traJimos" sppt="traJisteis" tppt="traJeron" fspb="traIGa" sspb="traIGas" svpb="traIGas" tspb="traIGa" fppb="traIGamos" sppb="traIGáis" tppb="traIGan" />
   <verb in="trinchar" vt="ra" tn="carve" pe="hablar" tr="habl" st="trinch" />
   <verb in="unir" vt="ri" tn="join" pe="subir" tr="sub" st="un" />
   <verb in="valer" vt="ir" tn="be worth, cost" pe="comer" tr="com" st="val" rf="valDr" fspr="valGo" fspb="valGa" sspb="valGas" tspb="valGa" fppb="valGamos" sppb="valGáis" tppb="valGa" />
