@@ -34,7 +34,7 @@ But there exists another category of Spanish-learners: people, like the develope
 
 The developer of ~Conjugar~ knew, from exposure to Spanish in a previous job, that "ir" means "to go" and that "ir" has certain conjugations starting with "va-". But this knowledge did not allow him to communicate with Spanish-speakers he encountered. For instance, to express the thought "I'm going to the office", he might have said "ir a la oficina" or "va a la oficina". But these sentences were nonsensical to Spanish-speakers because the conjugations were incorrect. The correct (and understandable) sentence was (and is) "$voY$ a la oficina".
 
-There are excellent resources for Spanish-verb conjugation. The website ~SpanishDict.com~ and the book ~"Spanish Verbs Made Simple(r)"~ are two of them. The developer of ~Conjugar~ used these resources when he wrote Spanish, but they were unavailable when he spoke Spanish extemporaneously. At some point, he realized that he needed a way to practice conjugating Spanish verbs so that correct conjugations sprang to mind when he was speaking.
+There are excellent resources for Spanish-verb conjugation. The website ~SpanishDict.com~ and the book ~Spanish Verbs Made Simple(r)~ are two of them. The developer of ~Conjugar~ used these resources when he wrote Spanish, but they were unavailable when he spoke Spanish extemporaneously. At some point, he realized that he needed a way to practice conjugating Spanish verbs so that correct conjugations sprang to mind when he was speaking.
 
 This was the genesis of ~Conjugar~, the app whose majesty now envelops you. ~Conjugar~ allows you practice conjugating, via quizzes, ~all~ Spanish verb tenses so that correct conjugations are in your brain at the exact moment you need them. ~Conjugar~ gamifies this experience by scoring each practice session and potentially uploading it to Game Center, allowing you to compete against the global Spanish-verb-conjugation community. Some tenses are rare except in archaic or formal texts and are less useful for many learners. ~Conjugar~ therefore provides three difficulty levels for practice sessions. ~Easy~ tests the three most important tenses. ~Moderate~ tests all tenses that Spanish-speakers commonly use. ~Difficult~ tests ~all~ tenses, including a few that you are unlikely to encounter unless you are reading, for example, ~El ingenioso hidalgo don Quixote de la Mancha~.
 
@@ -42,7 +42,7 @@ This was the genesis of ~Conjugar~, the app whose majesty now envelops you. ~Con
 
 Primary navigation in ~Conjugar~ occurs via the tab bar at the bottom of the screen. Descriptions of these tabs follow.
 
-~Conjugar~ starts on the ~Browse~ tab. This tab has three lists of Spanish verbs: a list of many irregular verbs, a list of many regular verbs, and a list that combines the other two. Swap these lists by tapping a red button above the tab bar. When you find a verb you would like to know more about, tap it. ~Conjugar~ then displays a screen with ~all~ conjugations of that verb. This screen is helpful for learning because it calls out, by highlighting in $RED$, parts of conjugations that are irregular. For example, the presente de indicativo, first-person singular conjugation of "dar" has an irregular "y", so ~Conjugar~ displays this conjugation as "$doY$". Tap any conjugation to hear it spoken. Tap ~Browse~ in the top-left corner to return to the ~Browse~ tab.
+~Conjugar~ starts on the ~Browse~ tab. This tab has three lists of Spanish verbs: a list of many irregular verbs, a list of many regular verbs, and a list that combines the other two. Swap these lists by tapping a red button above the tab bar. When you find a verb you would like to know more about, tap it. ~Conjugar~ then displays a screen with ~all~ conjugations of that verb. This screen is helpful for learning because it calls out, by highlighting in $RED$, parts of conjugations that are irregular. For example, the %presente de indicativo%, first-person singular conjugation of "dar" has an irregular "y", so ~Conjugar~ displays this conjugation as "$doY$". Tap any conjugation to hear it spoken. Tap ~Browse~ in the top-left corner to return to the ~Browse~ tab.
 
 Tap ~Quiz~ in the tab bar to start a quiz. Tap ~Start~ on the bottom-left corner of the screen. ~Conjugar~ will then present you a set of fifty Spanish verbs to conjugate. Conjugate.
 
@@ -60,7 +60,13 @@ Spanish verb tenses may be roughly grouped into three classes. The first class c
 
 In recognition of the relative difficulties of learning to conjugate the ~Easy~, ~Moderate~, and ~Difficult~ classes of verbs, ~Conjugar~ assigns higher scores to ~Moderate~ quizzes than to ~Easy~ quizzes and assigns higher scores to ~Difficult~ quizzes than to ~Moderate~ quizzes.
 
-Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%, and the tenses. Near the bottom of the screen is a red widget for filtering information about tenses by the difficulty mode in which they are quizzed. The three options are ~Easy~; ~Easy~ and ~Moderate~; and ~Easy~, ~Moderate~, and ~Difficult~.
+As described elsewhere in ~Conjugar~, %voseo% is a phenomenon whereby certain Spanish speakers use the pronoun ~vos~ and its conjugations instead of ~tú~ and its conjugations.
+
+In the ~Settings~ section "Browse Tú and/or Vos", tap "Vos" to see ~vos~ conjugations instead of ~tú~ conjugations on the ~Browse~ tab. Tap "Both" to see both.
+
+In the ~Settings~ section "Quiz Tú or Vos", tap "Vos" to be quizzed on ~vos~, rather than ~tú~, conjugations.
+
+Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%, and the tenses. Near the bottom of the screen is a $RED$ widget for filtering information about tenses by the difficulty mode in which they are quizzed. The three options are ~Easy~; ~Easy~ and ~Moderate~; and ~Easy~, ~Moderate~, and ~Difficult~.
 """),
 Info(heading: "Terminology", difficulty: .easy, text: """
 *Terminology*
@@ -115,7 +121,7 @@ Usted and ustedes use the él and ellos conjugations, respectively.
 
 The difference between the two regions is that ~ustedes~ has replaced ~vosotros~/~vosotras~ in Latin America. This replacement means that Spanish-learners in Spain must learn conjugations for six person-number combinations, but Spanish-learners in Latin America must learn conjugations for only five.
 
-In parts of Latin America, ~vos~ has replaced ~tú~ and uses different conjugations. This phenomenon is called "voseo". Due to developer time constraints, ~Conjugar~ does not attempt to describe voseo in greater detail or quiz the ~vos~ conjugations.
+In parts of Latin America, ~vos~ has replaced ~tú~ and uses different conjugations. This phenomenon is called %voseo%. Tap the blue word for a description of this phenomenon.
 
 ^Order and Presentation of Conjugations^
 
@@ -856,6 +862,27 @@ Info(heading: "Questions & Answers", difficulty: .easy, text: """
 
 ~A:~ The developer's goals in creating ~Conjugar~ were to learn Spanish-verb conjugation and a software-development technique, programmatic layout, not to earn a living. That said, money is useful, and the developer will implement a tip jar or some other type of in-app purchase if download numbers justify the effort.
 """),
+Info(heading: "Voseo", difficulty: .easy, text: """
+*Voseo*
+
+^Background^
+
+In certain parts of Latin America, when addressing one person informally, Spanish speakers use the pronoun ~vos~ and its conjugations instead of the pronoun ~tú~ and and its conjugations. This phenomenon, ~voseo~, is ubiquitous in Argentina and occurs, to varying degrees, in all of Latin America except in Dominican Republic and Puerto Rico. Unfortunately, ~vos~ conjugations vary by country and region, complicating matters for the Spanish-learner, but the Real Academia Española (RAE), an authority on the Spanish language, provides model conjugations. These conjugations have some value because a Spanish-speaker from Medellín, Colombia reported to ~Conjugar~'s developer that he uses them. For the sake of expediency, ~Conjugar~ adopts the RAE’s ~vos~ conjugations.
+
+^Conjugation^
+
+~Vos~ conjugations broadly resemble those of ~tú~ and, to a lesser extent, ~vosotros~. In the %presente de indicativo%, the endings are -ás, -ís, and -és for regular AR, IR, and ER verbs, respectively. Examples: hablás, subís, comés.
+
+In the %imperativo positivo%, the endings are -á, -í, and -é for regular AR, IR, and ER verbs, respectively. Examples: hablá, subí, comé. Three irregular ~vos~ %imperativo positivo% verbs are ir ($ANDÁ$), haber ($hE$ or $habE$), and dar ($dA$).
+
+In the following tenses, the ~vos~ endings are identical to the ~tú~ endings: %pretérito%, %imperfecto de indicativo%, %futuro de indicativo%, %condicional%, %presente de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2%, %futuro de subjuntivo%, and %imperativo negativo%.
+
+Compound-tense ~vos~ conjugations are identical to their ~tú~ counterparts.
+
+Certain verbs that change vowels in the ~yo~, ~tú~, ~él~, and ~ellos~ conjugations, but not in the ~nosotros~ or ~vosotros~ conjugations, do not change vowels in the ~vos~ conjugation. Examples: Tú $mUEves$. Vos movés. Yo $pIerdo$. Vos perdés. Ella $pUEde$. Vos podés. In this sense, ~vos~ conjugations are more regular than those of ~yo~, ~tú~, ~él~, and ~ellos~ .
+
+See %Credits% for Wikipedia and RAE attribution.
+"""),
 Info(heading: "Credits", difficulty: .easy, text: """
 *Credits*
 
@@ -875,7 +902,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ^Wikipedia^
 
-Descriptions of the %pretérito%, %futuro de indicativo%, %condicional%, %participio%, %gerundio%, %imperfecto de indicativo%, %futuro de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2%, %perfecto de indicativo%, %pluscuamperfecto de indicativo%, %futuro perfecto%, %pretérito anterior%, %condicional compuesto%, and %perfecto de subjuntivo% have been borrowed, in part, from Wikipedia's article on Spanish verbs, %https://en.wikipedia.org/wiki/Spanish_verbs%. Modifications to Wikipedia's content include, but are not entirely limited to, formatting and the addition of example irregular verbs. Wikipedia has licensed the content of the Spanish-verb article under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%. All of ~Conjugar~'s developer's modifications of Wikipedia content are licensed under that license, as well as under the MIT license.
+Descriptions of the %pretérito%, %futuro de indicativo%, %condicional%, %participio%, %gerundio%, %imperfecto de indicativo%, %futuro de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2%, %perfecto de indicativo%, %pluscuamperfecto de indicativo%, %futuro perfecto%, %pretérito anterior%, %condicional compuesto%, and %perfecto de subjuntivo% have been borrowed, in part, from Wikipedia's article on Spanish verbs, %https://en.wikipedia.org/wiki/Spanish_verbs%. The description of %voseo% is informed by Wikipedia's article on ~voseo~, %https://en.wikipedia.org/wiki/Voseo%, as well as the Real Academia Española's conjugations, %http://www.rae.es%. Modifications to Wikipedia's content include, but are not entirely limited to, formatting and the addition of example irregular verbs. Wikipedia has licensed the content of the Spanish-verb and ~voseo~ articles under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%. All of ~Conjugar~'s developer's modifications of Wikipedia content are licensed under that license, as well as under the MIT license.
 
 ^Word Reference^
 

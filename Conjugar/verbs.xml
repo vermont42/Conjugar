@@ -20,7 +20,6 @@
     <!ATTLIST verb tppr CDATA #IMPLIED>
     <!ATTLIST verb fspt CDATA #IMPLIED>
     <!ATTLIST verb sspt CDATA #IMPLIED>
-    <!ATTLIST verb svpt CDATA #IMPLIED>
     <!ATTLIST verb tspt CDATA #IMPLIED>
     <!ATTLIST verb fppt CDATA #IMPLIED>
     <!ATTLIST verb sppt CDATA #IMPLIED>
@@ -34,7 +33,6 @@
     <!ATTLIST verb tpii CDATA #IMPLIED>
     <!ATTLIST verb fspb CDATA #IMPLIED>
     <!ATTLIST verb sspb CDATA #IMPLIED>
-    <!ATTLIST verb svpb CDATA #IMPLIED>
     <!ATTLIST verb tspb CDATA #IMPLIED>
     <!ATTLIST verb fppb CDATA #IMPLIED>
     <!ATTLIST verb sppb CDATA #IMPLIED>
@@ -49,14 +47,14 @@
     <!ATTLIST verb tp CDATA #IMPLIED>
 ]>
 <verbs>
-  <verb in="abrazar" vt="ir" tn="hug" pe="hablar" tr="habl" st="abraz" fspt="abraCé" fspb="abraCe" sspb="abraCes" svpb="abraCes" tspb="abraCe" fppb="abraCemosa" sppb="abraCéis" tppb="abraCen" />
+  <verb in="abrazar" vt="ir" tn="hug" pe="hablar" tr="habl" st="abraz" fspt="abraCé" fspb="abraCe" sspb="abraCes" tspb="abraCe" fppb="abraCemosa" sppb="abraCéis" tppb="abraCen" />
   <verb in="abrir" vt="ir" tn="open" pe="subir" tr="sub" st="abr" po="abIERTo" />
   <verb in="acudir" vt="ri" tn="come, turn to" pe="subir" tr="sub" st="acud" />
   <verb in="absorber" vt="re" tn="absorb" pe="comer" tr="com" st="absorb" />
   <verb in="admitir" vt="ri" tn="admit, accept" pe="subir" tr="sub" st="admit" />
-  <verb in="adquirir" vt="ir" tn="acquire, purchase" pe="subir" tr="sub" st="adquir" fspr="adquiEro" sspr="adquiEres" tspr="adquiEre" tppr="adquiEren" fspb="adquiEra" sspb="adquiEras" svpb="adquiEras" tspb="adquiEra" tppb="adquiEran" />
+  <verb in="adquirir" vt="ir" tn="acquire, purchase" pe="subir" tr="sub" st="adquir" fspr="adquiEro" sspr="adquiEres" tspr="adquiEre" tppr="adquiEren" fspb="adquiEra" sspb="adquiEras" tspb="adquiEra" tppb="adquiEran" />
   <verb in="aducir" vt="ir" tn="adduce" pe="conducir" tr="con" st="a" />
-  <verb in="andar" vt="ir" tn="walk" pe="hablar" tr="habl" st="and" fspt="andUVE" sspt="andUViste" svpt="andUViste" tspt="andUVO" fppt="andUVImos" sppt="andUVIsteis" tppt="andUVIEron" />
+  <verb in="andar" vt="ir" tn="walk" pe="hablar" tr="habl" st="and" fspt="andUVE" sspt="andUViste" tspt="andUVO" fppt="andUVImos" sppt="andUVIsteis" tppt="andUVIEron" />
   <verb in="aprender" vt="re" tn="learn" pe="comer" tr="com" st="aprend" />
   <verb in="asistir" vt="ri" tn="attend" pe="subir" tr="sub" st="asist" />
   <verb in="ayudar" vt="ra" tn="help" pe="hablar" tr="habl" st="ayud" />
@@ -65,8 +63,8 @@
   <verb in="beber" vt="re" tn="drink" pe="comer" tr="com" st="beb" />
   <verb in="bullir" vt="ir" tn="boil" pe="subir" tr="sub" st="bull" ge="bullEndo" tspt="bullÓ" tppt="bullEron" />
   <verb in="buscar" vt="ra" tn="look for, seek" pe="hablar" tr="habl" st="busc" />
-  <verb in="caber" vt="ir" tn="fit" pe="comer" tr="com" st="cab" rf="cabR" fspr="QUEPo" fspt="cUPE" sspt="cUPiste" svpt="cUPiste" tspt="cUPo" fppt="cUPimos" sppt="cUPisteis" tppt="cUPieron" fspb="QUEPa" sspb="QUEPas" svpb="QUEPas" tspb="QUEPa" fppb="QUEPa" sppb="QUEPáis" tppb="QUEPan" />
-  <verb in="caer" vt="ir" tn="fall" ge="caYendo" po="caÍdo" pe="comer" tr="com" st="ca" fspr="caIGo" sspt="caÍste" svpt="caÍste" tspt="caYó" fppt="caÍmos" sppt="caÍsteis" tppt="caYeron" fspb="caIGa" sspb="caIGas" svpb="caIGas" tspb="caIGa" fppb="caIGamos" sppb="caIGáis" tppb="caIGan" />
+  <verb in="caber" vt="ir" tn="fit" pe="comer" tr="com" st="cab" rf="cabR" fspr="QUEPo" fspt="cUPE" sspt="cUPiste" tspt="cUPo" fppt="cUPimos" sppt="cUPisteis" tppt="cUPieron" fspb="QUEPa" sspb="QUEPas" tspb="QUEPa" fppb="QUEPa" sppb="QUEPáis" tppb="QUEPan" />
+  <verb in="caer" vt="ir" tn="fall" ge="caYendo" po="caÍdo" pe="comer" tr="com" st="ca" fspr="caIGo" sspt="caÍste" tspt="caYó" fppt="caÍmos" sppt="caÍsteis" tppt="caYeron" fspb="caIGa" sspb="caIGas" tspb="caIGa" fppb="caIGamos" sppb="caIGáis" tppb="caIGan" />
   <verb in="caminar" vt="ra" tn="walk" pe="hablar" tr="habl" st="camin" />
   <verb in="cantar" vt="ra" tn="sing" pe="hablar" tr="habl" st="cant" />
   <verb in="ceder" vt="re" tn="transfer, cede" pe="comer" tr="com" st="ced" />
@@ -74,17 +72,17 @@
   <verb in="clonar" vt="ra" tn="clone" pe="hablar" tr="habl" st="clon" />
   <verb in="cocinar" vt="ra" tn="cook" pe="hablar" tr="habl" st="cocin" />
   <verb in="coincidir" vt="ri" tn="coincide" pe="subir" tr="sub" st="coincid" />
-  <verb in="comer" vt="re" tn="eat" ge="comiendo" po="comido" rf="comer" fspr="como" sspr="comes" svpr="comés" tspr="come" fppr="comemos" sppr="coméis" tppr="comen" fspt="comí" sspt="comiste" svpt="comiste" tspt="comió" fppt="comimos" sppt="comisteis" tppt="comieron" fsii="comía" ssii="comías" svii="comías" tsii="comía" fpii="comíamos" spii="comíais" tpii="comían" fspb="coma" sspb="comas" svpb="comas" tspb="coma" fppb="comamos" sppb="comáis" tppb="coman" ssio="come" svio="comé" />
+  <verb in="comer" vt="re" tn="eat" ge="comiendo" po="comido" rf="comer" fspr="como" sspr="comes" svpr="comés" tspr="come" fppr="comemos" sppr="coméis" tppr="comen" fspt="comí" sspt="comiste" tspt="comió" fppt="comimos" sppt="comisteis" tppt="comieron" fsii="comía" ssii="comías" tsii="comía" fpii="comíamos" spii="comíais" tpii="comían" fspb="coma" sspb="comas" tspb="coma" fppb="comamos" sppb="comáis" tppb="coman" ssio="come" svio="comé" />
   <verb in="cometer" vt="re" tn="commit" pe="comer" tr="com" st="comet" />
   <verb in="compartir" vt="ri" tn="share" pe="subir" tr="sub" st="compart" />
   <verb in="componer" vt="ir" tn="compose" pe="poner" tr="" st="com" ssio="compóN" />
   <verb in="comprar" vt="ra" tn="buy" pe="hablar" tr="habl" st="compr" />
   <verb in="comprender" vt="re" tn="understand" pe="comer" tr="com" st="comprend" />
   <verb in="concluir" vt="ir" tn="conclude" pe="construir" tr="constr" st="concl" />
-  <verb in="conducir" vt="ir" tn="lead, drive" pe="subir" tr="sub" st="conduc" fspr="conduZco" fspt="conduJE" sspt="conduJiste" svpt="conduJiste" tspt="conduJO" fppt="conduJimos" sppt="conduJisteis" tppt="conduJeron" fspb="conduZca" sspb="conduZcas" svpb="conduZcas" tspb="conduZca" fppb="conduZcamos" sppb="conduZcáis" tppb="conduZcan" />
-  <verb in="conocer" vt="ir" tn="know, meet" pe="comer" tr="com" st="conoc" fspr="conoZco" fspb="conoZca" sspb="conoZcas" svpb="conoZcas" tspb="conoZca" fppb="conoZcamos" sppb="conoZcáis" tppb="conoZcan" />
+  <verb in="conducir" vt="ir" tn="lead, drive" pe="subir" tr="sub" st="conduc" fspr="conduZco" fspt="conduJE" sspt="conduJiste" tspt="conduJO" fppt="conduJimos" sppt="conduJisteis" tppt="conduJeron" fspb="conduZca" sspb="conduZcas" tspb="conduZca" fppb="conduZcamos" sppb="conduZcáis" tppb="conduZcan" />
+  <verb in="conocer" vt="ir" tn="know, meet" pe="comer" tr="com" st="conoc" fspr="conoZco" fspb="conoZca" sspb="conoZcas" tspb="conoZca" fppb="conoZcamos" sppb="conoZcáis" tppb="conoZcan" />
   <verb in="consistir" vt="ri" tn="consist of" pe="subir" tr="sub" st="consist" />
-  <verb in="construir" vt="ir" tn="build" pe="subir" tr="sub" st="constru" ge="construYendo" fspr="construYo" sspr="construYes" tspr="construYe" tppr="construYen" tspt="construYó" tppt="construYeron" fspb="construYa" sspb="construYas" svpb="construYas" tspb="construYa" fppb="construYamos" sppb="construYáis" tppb="construYan" ssio="construYe" />
+  <verb in="construir" vt="ir" tn="build" pe="subir" tr="sub" st="constru" ge="construYendo" fspr="construYo" sspr="construYes" tspr="construYe" tppr="construYen" tspt="construYó" tppt="construYeron" fspb="construYa" sspb="construYas" tspb="construYa" fppb="construYamos" sppb="construYáis" tppb="construYan" ssio="construYe" />
   <verb in="contestar" vt="ra" tn="answer" pe="hablar" tr="habl" st="contest" />
   <verb in="correr" vt="re" tn="run" pe="comer" tr="com" st="corr" />
   <verb in="cortar" vt="ra" tn="cut" pe="hablar" tr="habl" st="cort" />
@@ -93,23 +91,23 @@
   <verb in="crecer" vt="ir" tn="grow" pe="conocer" tr="cono" st="cre" />
   <verb in="cubrir" vt="ir" tn="cover" pe="subir" tr="sub" st="cubr" po="cubIERTo" />
   <verb in="cumplir" vt="ri" tn="carry out" pe="subir" tr="sub" st="cumpl" />
-  <verb in="dar" vt="ir" tn="give" pe="hablar" tr="habl" st="d" fspr="doY" svpr="dAs" sppr="dAis" fspt="dI" sspt="dIste" svpt="dIste" tspt="dIO" fppt="dImos" sppt="dIsteis" tppt="dIEron" fspb="dÉ" tspb="dÉ" sppb="dEis" svio="dA" />
+  <verb in="dar" vt="ir" tn="give" pe="hablar" tr="habl" st="d" fspr="doY" svpr="dAs" sppr="dAis" fspt="dI" sspt="dIste" tspt="dIO" fppt="dImos" sppt="dIsteis" tppt="dIEron" fspb="dÉ" tspb="dÉ" sppb="dEis" svio="dA" />
   <verb in="datar" vt="ra" tn="date" pe="hablar" tr="habl" st="dat" />
   <verb in="deber" vt="re" tn="owe, must" pe="comer" tr="com" st="deb" />
   <verb in="decidir" vt="ri" tn="decide" pe="subir" tr="sub" st="decid" />
-  <verb in="decir" vt="ir" tn="say" pe="subir" tr="sub" st="dec" rf="dIR" po="dICHo" ge="dIciendo" fspr="dIgo" sspr="dIces" tspr="dIce" tppr="dIcen" fspt="dIJE" sspt="dIJiste" svpt="dIJiste" tspt="dIJO" fppt="dIJimos" sppt="dIJisteis" tppt="dIJeron" fspb="dIGa" sspb="dIGas" svpb="dIGas" tspb="dIGa" fppb="dIGamos" sppb="dIGáis" tppb="dIGan" ssio="dI" />
+  <verb in="decir" vt="ir" tn="say" pe="subir" tr="sub" st="dec" rf="dIR" po="dICHo" ge="dIciendo" fspr="dIgo" sspr="dIces" tspr="dIce" tppr="dIcen" fspt="dIJE" sspt="dIJiste" tspt="dIJO" fppt="dIJimos" sppt="dIJisteis" tppt="dIJeron" fspb="dIGa" sspb="dIGas" tspb="dIGa" fppb="dIGamos" sppb="dIGáis" tppb="dIGan" ssio="dI" />
   <verb in="deducir" vt="ir" tn="deduce" pe="conducir" tr="con" st="de" />
   <verb in="definir" vt="ri" tn="define" pe="subir" tr="sub" st="defin" />
   <verb in="desear" vt="ra" tn="want, wish" pe="hablar" tr="habl" st="dese" />
   <verb in="deshacer" vt="ir" tn="undo" pe="hacer" tr="" st="des" />
   <verb in="dibujar" vt="ra" tn="draw" pe="hablar" tr="habl" st="dibuj" />
-  <verb in="dirigir" vt="ir" tn="manage, direct" pe="subir" tr="sub" st="dirig" fspr="diriJo" fspb="diriJa" sspb="diriJas" svpb="diriJas" tspb="diriJa" fppb="diriJamos" sppb="diriJáis" tppb="diriJan" />
+  <verb in="dirigir" vt="ir" tn="manage, direct" pe="subir" tr="sub" st="dirig" fspr="diriJo" fspb="diriJa" sspb="diriJas" tspb="diriJa" fppb="diriJamos" sppb="diriJáis" tppb="diriJan" />
   <verb in="distar" vt="ra" tn="be away from" pe="hablar" tr="habl" st="dist" />
   <verb in="distinguir" vt="ri" tn="distinguish" pe="subir" tr="sub" st="distingu" />
   <verb in="discutir" vt="ri" tn="argue, discuss" pe="subir" tr="sub" st="discut" />
   <verb in="disponer" vt="ir" tn="make available" pe="poner" tr="" st="dis" />
   <verb in="distraer" vt="ir" tn="distract" pe="traer" tr="" st="dis" />
-  <verb in="dormir" vt="ir" tn="sleep" pe="subir" tr="sub" st="dorm" ge="dUrmiendo" fspr="dUErmo" sspr="dUErmes" tspr="dUErme" tppr="dUErmen" tspt="dUrmió" tppt="dUrmieron" fspb="dUErma" sspb="dUErmas" svpb="dUErmas" tspb="dUErma" fppb="dUrmamos" sppb="dUrmáis" tppb="dUErman" ssio="dUErme" />
+  <verb in="dormir" vt="ir" tn="sleep" pe="subir" tr="sub" st="dorm" ge="dUrmiendo" fspr="dUErmo" sspr="dUErmes" tspr="dUErme" tppr="dUErmen" tspt="dUrmió" tppt="dUrmieron" fspb="dUErma" sspb="dUErmas" tspb="dUErma" fppb="dUrmamos" sppb="dUrmáis" tppb="dUErman" ssio="dUErme" />
   <verb in="empinar" vt="ra" tn="tip up, raise" pe="hablar" tr="habl" st="empin" />
   <verb in="emprender" vt="re" tn="undertake" pe="comer" tr="com" st="emprend" />
   <verb in="encalar" vt="ra" tn="whitewash" pe="hablar" tr="habl" st="encal" />
@@ -134,16 +132,16 @@
   <verb in="golpear" vt="ra" tn="hit, punch" pe="hablar" tr="habl" st="golpe" />
   <verb in="grapar" vt="ra" tn="staple" pe="hablar" tr="habl" st="grap" />
   <verb in="gustar" vt="ra" tn="be pleasing to" pe="hablar" tr="habl" st="gust" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" />
-  <verb in="haber" vt="ir" tn="have (aux.)" pe="comer" tr="com" st="hab" rf="habR" fspr="hE" sspr="haS" svpr="haS" tspr="hA" fppr="hEmos" tppr="haN" fspt="hUBE" sspt="hUbiste" svpt="hUbiste" tspt="hUBO" fppt="hUbimos" sppt="hUbisteis" tppt="hUbieron" fspb="haYa" sspb="haYas" svpb="haYas" tspb="haYa" fppb="haYamos" sppb="haYáis" tppb="haYan" ssio="hE" svio="hE" />
-	<verb in="hablar" vt="ra" tn="speak" ge="hablando" po="hablado" rf="hablar" fspr="hablo" sspr="hablas" svpr="hablás" tspr="habla" fppr="hablamos" sppr="habláis" tppr="hablan" fspt="hablé" sspt="hablaste" svpt="hablaste" tspt="habló" fppt="hablamos" sppt="hablastéis" tppt="hablaron" fsii="hablaba" ssii="hablabas" svii="hablabas" tsii="hablaba" fpii="hablábamos" spii="hablabais" tpii="hablaban" fspb="hable" sspb="hables" svpb="hables" tspb="hable" fppb="hablemos" sppb="habléis" tppb="hablen" ssio="habla" svio="hablá" />
-  <verb in="hacer" vt="ir" tn="do, make" pe="comer" tr="com" st="hac" rf="haR" po="hECHo" fspr="haGo" fspt="hICE" sspt="hIciste" svpt="hIciste" tspt="hIZO" fppt="hIcimos" sppt="hIcisteis" tppt="hIcieron" fspb="haGa" sspb="haGas" svpb="haGas" tspb="haGa" fppb="haGamos" sppb="haGáis" tppb="haGan" ssio="haZ" />
+  <verb in="haber" vt="ir" tn="have (aux.)" pe="comer" tr="com" st="hab" rf="habR" fspr="hE" sspr="haS" svpr="haS" tspr="hA" fppr="hEmos" tppr="haN" fspt="hUBE" sspt="hUbiste" tspt="hUBO" fppt="hUbimos" sppt="hUbisteis" tppt="hUbieron" fspb="haYa" sspb="haYas" tspb="haYa" fppb="haYamos" sppb="haYáis" tppb="haYan" ssio="hE" svio="hE" />
+	<verb in="hablar" vt="ra" tn="speak" ge="hablando" po="hablado" rf="hablar" fspr="hablo" sspr="hablas" svpr="hablás" tspr="habla" fppr="hablamos" sppr="habláis" tppr="hablan" fspt="hablé" sspt="hablaste" tspt="habló" fppt="hablamos" sppt="hablastéis" tppt="hablaron" fsii="hablaba" ssii="hablabas" tsii="hablaba" fpii="hablábamos" spii="hablabais" tpii="hablaban" fspb="hable" sspb="hables" tspb="hable" fppb="hablemos" sppb="habléis" tppb="hablen" ssio="habla" svio="hablá" />
+  <verb in="hacer" vt="ir" tn="do, make" pe="comer" tr="com" st="hac" rf="haR" po="hECHo" fspr="haGo" fspt="hICE" sspt="hIciste" tspt="hIZO" fppt="hIcimos" sppt="hIcisteis" tppt="hIcieron" fspb="haGa" sspb="haGas" tspb="haGa" fppb="haGamos" sppb="haGáis" tppb="haGan" ssio="haZ" />
   <verb in="hibernar" vt="ra" tn="hibernate" pe="hablar" tr="habl" st="hibern" />
   <verb in="huir" vt="ir" tn="flee" pe="construir" tr="constr" st="h" />
   <verb in="inducir" vt="ir" tn="induce" pe="conducir" tr="con" st="in" />
   <verb in="insistir" vt="ri" tn="insist" pe="subir" tr="sub" st="insist" />
   <verb in="introducir" vt="ir" tn="insert" pe="conducir" tr="con" st="intro" />
-  <verb in="ir" vt="ir" tn="go" pe="subir" tr="sub" st="" ge="Yendo" fspr="VOY" sspr="VAS" svpr="VAS" tspr="VA" fppr="VAMOS" sppr="VAIS" tppr="VAN" fspt="FUI" sspt="FUiste" svpt="FUiste" tspt="FUE" fppt="FUimos" sppt="FUisteis" tppt="FUeron" fsii="IBa" ssii="IBas" svii="IBas" tsii="IBa" fpii="IBamos" spii="IBais" tpii="IBan" fspb="VAYa" sspb="VAYas" svpb="VAYas" tspb="VAYa" fppb="VAYamos" sppb="VAYáis" tppb="VAYan" ssio="VE" svio="ANDÁ" />
-  <verb in="jugar" vt="ir" tn="play" pe="hablar" tr="habl" st="jug" fspr="juEgo" sspr="juEgas" tspr="juEga" tppr="juEgan" fspt="jugUé" fspb="juEGUe" sspb="juEGUes" tspb="juEGUe" fppb="jugUemos" sppb="jugUéis" tppb="juEGUen" />
+  <verb in="ir" vt="ir" tn="go" pe="subir" tr="sub" st="" ge="Yendo" fspr="VOY" sspr="VAS" svpr="VAS" tspr="VA" fppr="VAMOS" sppr="VAIS" tppr="VAN" fspt="FUI" sspt="FUiste" tspt="FUE" fppt="FUimos" sppt="FUisteis" tppt="FUeron" fsii="IBa" ssii="IBas" svii="IBas" tsii="IBa" fpii="IBamos" spii="IBais" tpii="IBan" fspb="VAYa" sspb="VAYas" tspb="VAYa" fppb="VAYamos" sppb="VAYáis" tppb="VAYan" ssio="VE" svio="ANDÁ" />
+  <verb in="jugar" vt="ir" tn="play" pe="hablar" tr="habl" st="jug" fspr="juEgo" sspr="juEgas" tspr="juEga" tppr="juEgan" fspt="jugUé" fspb="juEGUe" sspb="juEGUes" tspb="juEGUe" fppb="jugUemos" sppb="jugUéis" tppb="juEGUen" ssio="juEGUa" />
   <verb in="lamer" vt="re" tn="lick" pe="comer" tr="com" st="lam" />
   <verb in="leer" vt="ir" tn="read" pe="comer" tr="com" st="le" po="leÍdo" ge="leYendo" />
   <verb in="llegar" vt="ra" tn="arrive, come" pe="hablar" tr="habl" st="lleg" />
@@ -157,46 +155,46 @@
   <verb in="meter" vt="re" tn="put" pe="comer" tr="com" st="met" />
   <verb in="mirar" vt="ra" tn="look at" pe="hablar" tr="habl" st="mir" />
   <verb in="morder" vt="ir" tn="bite" pe="comer" tr="com" st="mord" fspr="mUErdo" sspr="mUErdes" tspr="mUErde" tppr="mUErden" fspb="mUErda" sspb="mUErdas" tspb="mUErda" tppb="mUErdan" />
-  <verb in="morir" vt="ir" tn="die" pe="subir" tr="sub" st="mor" po="mUERTo" ge="mUriendo" fspr="mUEro" sspr="mUEres" tspr="mUEre" tppr="mUEren" tspt="mUrió" tppt="mUrieron" fspb="mUEra" sspb="mUEras" tspb="mUEra" fppb="mUramos" sppb="mUráis" tppb="mUEran" />
-  <verb in="mostrar" vt="ir" tn="show" pe="hablar" tr="habl" st="mostr" fspr="mUEstro" sspr="mUEstras" tspr="mUEstra" tppr="mUEstran" fspb="mUEstre" sspb="mUEstres" tspb="mUEstre" tppb="mUEstren" />
-  <verb in="mover" vt="ir" tn="move" pe="comer" tr="com" st="mov" fspr="mUEvo" sspr="mUEves" tspr="mUEve" tppr="mUEven" fspb="mUEva" sspb="mUEvas" tspb="mUEva" tppb="mUEvan" ssio="mueve" />
+  <verb in="morir" vt="ir" tn="die" pe="subir" tr="sub" st="mor" po="mUERTo" ge="mUriendo" fspr="mUEro" sspr="mUEres" tspr="mUEre" tppr="mUEren" tspt="mUrió" tppt="mUrieron" fspb="mUEra" sspb="mUEras" tspb="mUEra" fppb="mUramos" sppb="mUráis" tppb="mUEran" ssio="mUEre" />
+  <verb in="mostrar" vt="ir" tn="show" pe="hablar" tr="habl" st="mostr" fspr="mUEstro" sspr="mUEstras" tspr="mUEstra" tppr="mUEstran" fspb="mUEstre" sspb="mUEstres" tspb="mUEstre" tppb="mUEstren" ssio="mUEstra" />
+  <verb in="mover" vt="ir" tn="move" pe="comer" tr="com" st="mov" fspr="mUEvo" sspr="mUEves" tspr="mUEve" tppr="mUEven" fspb="mUEva" sspb="mUEvas" tspb="mUEva" tppb="mUEvan" ssio="mUEve" />
   <verb in="nadar" vt="ra" tn="swim" pe="hablar" tr="habl" st="nad" />
   <verb in="necesitar" vt="ra" tn="need" pe="hablar" tr="habl" st="necesit" />
   <verb in="nublar" vt="ra" tn="cloud" pe="hablar" tr="habl" st="nubl" />
   <verb in="nutrir" vt="ri" tn="nourish" pe="subir" tr="sub" st="nutr" />
   <verb in="obtener" vt="ir" tn="obtain, get" pe="tener" tr="" st="ob" ssio="obtÉn" />
   <verb in="ocurrir" vt="ri" tn="happen" pe="subir" tr="sub" st="ocurr" />
-  <verb in="oír" vt="ir" tn="hear, listen" pe="subir" tr="sub" st="o" ge="oYendo" po="oÍdo" rf="oir" fspr="oIGo" sspr="oYes" tspr="oYe" fppr="oÍmos" tppr="oYen" sspt="oÍste" tspt="oYó" fppt="oÍmos" sppt="oÍsteis" tppt="oYeron" fspb="oIGa" sspb="oIGas" tspb="oIGa" fppb="oIGamos" sppb="oIGáis" tppb="oIGan" />
+  <verb in="oír" vt="ir" tn="hear, listen" pe="subir" tr="sub" st="o" ge="oYendo" po="oÍdo" rf="oir" fspr="oIGo" sspr="oYes" tspr="oYe" fppr="oÍmos" tppr="oYen" sspt="oÍste" tspt="oYó" fppt="oÍmos" sppt="oÍsteis" tppt="oYeron" fspb="oIGa" sspb="oIGas" tspb="oIGa" fppb="oIGamos" sppb="oIGáis" tppb="oIGan" ssio="oYe" />
   <verb in="ofender" vt="re" tn="offend" pe="comer" tr="com" st="ofend" />
-  <verb in="pagar" vt="ir" tn="pay" pe="hablar" tr="habl" st="pag" fspt="pagUé" fspb="pagUe" svpb="pagUes" sspb="pagUes" tspb="pagUe" fppb="pagUemos" sppb="pagUéis" tppb="pagUen" />
+  <verb in="pagar" vt="ir" tn="pay" pe="hablar" tr="habl" st="pag" fspt="pagUé" fspb="pagUe" sspb="pagUes" tspb="pagUe" fppb="pagUemos" sppb="pagUéis" tppb="pagUen" />
   <verb in="partir" vt="ri" tn="cut, split" pe="subir" tr="sub" st="part" />
-  <verb in="pedir" vt="ir" tn="ask for, order" pe="subir" tr="sub" st="ped" ge="pIdiendo" fspr="pIdo" sspr="pIdes" tspr="pIde" tppr="pIden" tspt="pIdió" tppt="pIdieron" fspb="pIda" sspb="pIdas" tspb="pIda" fppb="pIdamos" sppb="pIdáis" tppb="pIdan" />
+  <verb in="pedir" vt="ir" tn="ask for, order" pe="subir" tr="sub" st="ped" ge="pIdiendo" fspr="pIdo" sspr="pIdes" tspr="pIde" tppr="pIden" tspt="pIdió" tppt="pIdieron" fspb="pIda" sspb="pIdas" tspb="pIda" fppb="pIdamos" sppb="pIdáis" tppb="pIdan" ssio="pIde" />
   <verb in="penar" vt="ra" tn="punish" pe="hablar" tr="habl" st="pen" />
-  <verb in="pensar" vt="ir" tn="think" pe="hablar" tr="habl" st="pens" fspr="pIenso" sspr="pIensas" tspr="pIensa" tppr="pIensan" fspb="pIense" sspb="pIenses" tspb="pIense" tppb="pIensen" />
-  <verb in="perder" vt="ir" tn="lose" pe="comer" tr="com" st="perd" fspr="pIerdo" sspr="pIerdes" tspr="pIerde" tppr="pIerden" fspb="pIerda" sspb="pIerdas" tspb="pIerda" tppb="pIerdan" />
+  <verb in="pensar" vt="ir" tn="think" pe="hablar" tr="habl" st="pens" fspr="pIenso" sspr="pIensas" tspr="pIensa" tppr="pIensan" fspb="pIense" sspb="pIenses" tspb="pIense" tppb="pIensen" ssio="pIensa" />
+  <verb in="perder" vt="ir" tn="lose" pe="comer" tr="com" st="perd" fspr="pIerdo" sspr="pIerdes" tspr="pIerde" tppr="pIerden" fspb="pIerda" sspb="pIerdas" tspb="pIerda" tppb="pIerdan" ssio="pIerde" />
   <verb in="permitir" vt="ri" tn="allow" pe="subir" tr="sub" st="permit" />
   <verb in="pintar" vt="ra" tn="paint" pe="hablar" tr="habl" st="pint" />
   <verb in="platicar" vt="ra" tn="talk" pe="hablar" tr="habl" st="platic" />
-  <verb in="poder" vt="ir" tn="can" pe="comer" tr="com" st="pod" rf="podR" ge="pUdiendo" fspr="pUEdo" sspr="pUEdes" tspr="pUEde" tppr="pUEden" fspt="pUDE" sspt="pUdiste" tspt="pUDO" fppt="pUdimos" sppt="pUdisteis" tppt="pUdieron" fspb="pUEda" sspb="pUEdas" tspb="pUEda" tppb="pUEdan" />
+  <verb in="poder" vt="ir" tn="can" pe="comer" tr="com" st="pod" rf="podR" ge="pUdiendo" fspr="pUEdo" sspr="pUEdes" tspr="pUEde" tppr="pUEden" fspt="pUDE" sspt="pUdiste" tspt="pUDO" fppt="pUdimos" sppt="pUdisteis" tppt="pUdieron" fspb="pUEda" sspb="pUEdas" tspb="pUEda" tppb="pUEdan" ssio="pUEde" />
   <verb in="ponderar" vt="ra" tn="praise, consider" pe="hablar" tr="habl" st="ponder" />
-  <verb in="poner" vt="ir" tn="put" pe="comer" tr="com" st="pon" rf="ponDr" po="pUESTo" fspr="ponGo" fspt="pUSE" sspt="pUSiste" svpt="pUSiste" tspt="pUSO" fppt="pUSimos" sppt="pUSisteis" tppt="pUSieron" fspb="ponGa" sspb="ponGas" svpb="ponGas" tspb="ponGa" fppb="ponGamos" sppb="ponGáis" tppb="ponGan" ssio="poN" />
+  <verb in="poner" vt="ir" tn="put" pe="comer" tr="com" st="pon" rf="ponDr" po="pUESTo" fspr="ponGo" fspt="pUSE" sspt="pUSiste" tspt="pUSO" fppt="pUSimos" sppt="pUSisteis" tppt="pUSieron" fspb="ponGa" sspb="ponGas" tspb="ponGa" fppb="ponGamos" sppb="ponGáis" tppb="ponGan" ssio="poN" />
   <verb in="poseer" vt="re" tn="have" pe="comer" tr="com" st="pose" />
   <verb in="prometer" vt="re" tn="promise" pe="comer" tr="com" st="promet" />
   <verb in="promover" vt="ir" tn="promote" pe="mover" tr="" st="pro" />
   <verb in="proponer" vt="ir" tn="propose" pe="poner" tr="" st="pro" />
   <verb in="pudrir" vt="ir" tn="rot, putrefy" pe="subir" tr="sub" st="pudr" po="pOdrido" />
-  <verb in="querer" vt="ir" tn="want, love" pe="comer" tr="com" st="quer" rf="querR" fspr="quIero" sspr="quIeres" tspr="quIere" tppr="quIeren" fspt="quISE" sspt="quISiste" tspt="quISO" fppt="quISimos" sppt="quISisteis" tppt="quISieron" fspb="quIera" sspb="quIeras" tspb="quIera" tppb="quIeran" />
+  <verb in="querer" vt="ir" tn="want, love" pe="comer" tr="com" st="quer" rf="querR" fspr="quIero" sspr="quIeres" tspr="quIere" tppr="quIeren" fspt="quISE" sspt="quISiste" tspt="quISO" fppt="quISimos" sppt="quISisteis" tppt="quISieron" fspb="quIera" sspb="quIeras" tspb="quIera" tppb="quIeran" ssio="quIere" />
   <verb in="rasar" vt="ra" tn="skim" pe="hablar" tr="habl" st="ras" />
   <verb in="recibir" vt="ri" tn="receive, welcome" pe="subir" tr="sub" st="recib" />
   <verb in="reconducir" vt="ir" tn="redirect" pe="conducir" tr="con" st="recon" />
   <verb in="recoger" vt="ir" tn="pick up, gather" pe="escoger" tr="es" st="re" />
   <verb in="reconocer" vt="ir" tn="recognize" pe="conocer" tr="" st="re" />
   <verb in="rehacer" vt="ir" tn="redo" pe="hacer" tr="" st="re" />
-  <verb in="reír" vt="ir" tn="laugh" pe="subir" tr="sub" st="re" ge="rIendo" fspr="rÍo" sspr="rÍes" tspr="rÍe" fppr="reÍmos" tppr="rÍen" sspt="reÍste" tspt="rIó" fppt="reÍmos" sppt="reÍsteis" tppt="rIeron" fspb="rÍa" sspb="rÍas" tspb="rÍa" fppb="rÍamos" sppb="rIAis" tppb="rÍan" />
+  <verb in="reír" vt="ir" tn="laugh" pe="subir" tr="sub" st="re" ge="rIendo" fspr="rÍo" sspr="rÍes" tspr="rÍe" fppr="reÍmos" tppr="rÍen" sspt="reÍste" tspt="rIó" fppt="reÍmos" sppt="reÍsteis" tppt="rIeron" fspb="rÍa" sspb="rÍas" tspb="rÍa" fppb="rÍamos" sppb="rIAis" tppb="rÍan" ssio="rÍe" />
   <verb in="reponer" vt="ir" tn="put back" pe="poner" tr="" st="re" />
   <verb in="reprender" vt="re" tn="reprimand" pe="comer" tr="com" st="reprend" />
   <verb in="reproducir" vt="ir" tn="reproduce" pe="conducir" tr="con" st="repro" />
-  <verb in="resolver" vt="ir" tn="solve" pe="comer" tr="com" st="resolv" po="resUELTo" fspr="resUElvo" sspr="resUElves" tspr="resUElve" tppr="resUElven" fspb="resUElva" sspb="resUElvas" tspb="resUElva" tppb="resUElvan" />
+  <verb in="resolver" vt="ir" tn="solve" pe="comer" tr="com" st="resolv" po="resUELTo" fspr="resUElvo" sspr="resUElves" tspr="resUElve" tppr="resUElven" fspb="resUElva" sspb="resUElvas" tspb="resUElva" tppb="resUElvan" ssio="resUElve" />
   <verb in="responder" vt="re" tn="answer, reply" pe="comer" tr="com" st="respond" />
   <verb in="roer" vt="ir" tn="gnaw on" pe="caer" tr="ca" st="ro" />
   <verb in="romper" vt="ir" tn="break" pe="comer" tr="com" st="romp" po="roTo" />
@@ -204,11 +202,11 @@
   <verb in="sacar" vt="ra" tn="take out, remove" pe="hablar" tr="habl" st="sac" />
   <verb in="salir" vt="ir" tn="leave, go out" pe="subir" tr="sub" st="sal" rf="salDr" fspr="salGo" fspb="salGa" sspb="salGas" tspb="salGa" fppb="salGamos" sppb="salGáis" tppb="salGa" ssio="saL" />
   <verb in="seducir" vt="ir" tn="seduce" pe="conducir" tr="con" st="se" />
-  <verb in="sentir" vt="ir" tn="feel" ge="sIntiendo" pe="subir" tr="sub" st="sent" fspr="sIento" sspr="sIentes" tspr="sIente"  tppr="sIenten" tspt="sIntió" tppt="sIntieron" fspb="sIenta" sspb="sIentas" tspb="sIenta" fppb="sIntamos" sppb="sIntáis" tppb="sIentan" />
-  <verb in="ser" vt="ir" tn="be" pe="comer" tr="com" st="s" fspr="soY" sspr="ERes" tspr="ES" fppr="sOmos" sppr="sOis" tppr="sOn" fspt="FUI" sspt="FUiste" tspt="FUE" fppt="FUimos" sppt="FUisteis" tppt="FUeron" fsii="ERa" ssii="ERas" tsii="ERa" fpii="ÉRamos" spii="ERais" tpii="ERan" fspb="sEa" sspb="sEas" tspb="sEa" fppb="sEamos" sppb="sEáis" tppb="sEan" ssio="sÉ" svio="sÉ" />
+  <verb in="sentir" vt="ir" tn="feel" ge="sIntiendo" pe="subir" tr="sub" st="sent" fspr="sIento" sspr="sIentes" tspr="sIente"  tppr="sIenten" tspt="sIntió" tppt="sIntieron" fspb="sIenta" sspb="sIentas" tspb="sIenta" fppb="sIntamos" sppb="sIntáis" tppb="sIentan" ssio="sIente" />
+  <verb in="ser" vt="ir" tn="be" pe="comer" tr="com" st="s" fspr="soY" sspr="ERes" svpr="sOs" tspr="ES" fppr="sOmos" sppr="sOis" tppr="sOn" fspt="FUI" sspt="FUiste" tspt="FUE" fppt="FUimos" sppt="FUisteis" tppt="FUeron" fsii="ERa" ssii="ERas" tsii="ERa" fpii="ÉRamos" spii="ERais" tpii="ERan" fspb="sEa" sspb="sEas" tspb="sEa" fppb="sEamos" sppb="sEáis" tppb="sEan" ssio="sÉ" />
   <verb in="seriar" vt="ra" tn="mass-produce" pe="hablar" tr="habl" st="seri" />
   <verb in="someter" vt="re" tn="submit, subdue" pe="comer" tr="com" st="somet" />
-  <verb in="subir" vt="ri" tn="go up" ge="subiendo" po="subido" rf="subir" fspr="subo" sspr="subes" svpr="subís" tspr="sube" fppr="subimos" sppr="subís" tppr="suben" fspt="subí" sspt="subiste" svpt="subiste" tspt="subió" fppt="subimos" sppt="subisteis" tppt="subieron" fsii="subía" ssii="subías" svii="subías" tsii="subía" fpii="subíamos" spii="subíais" tpii="subían" fspb="suba" sspb="subas" svpb="subas" tspb="suba" fppb="subamos" sppb="subáis" tppb="suban" ssio="sube" svio="subí" />
+  <verb in="subir" vt="ri" tn="go up" ge="subiendo" po="subido" rf="subir" fspr="subo" sspr="subes" svpr="subís" tspr="sube" fppr="subimos" sppr="subís" tppr="suben" fspt="subí" sspt="subiste" tspt="subió" fppt="subimos" sppt="subisteis" tppt="subieron" fsii="subía" ssii="subías" tsii="subía" fpii="subíamos" spii="subíais" tpii="subían" fspb="suba" sspb="subas" tspb="suba" fppb="subamos" sppb="subáis" tppb="suban" ssio="sube" svio="subí" />
   <verb in="sufrir" vt="ri" tn="suffer" pe="subir" tr="sub" st="sufr" />
   <verb in="suponer" vt="ir" tn="suppose" pe="poner" tr="" st="su" />
   <verb in="tañer" vt="ir" tn="strum" pe="comer" tr="com" st="tañ" ge="tañEndo" tspt="tañÓ" tppt="tañEron" />
@@ -219,12 +217,12 @@
   <verb in="tomar" vt="ra" tn="drink, take" pe="hablar" tr="habl" st="tom" />
   <verb in="trabajar" vt="ra" tn="work" pe="hablar" tr="habl" st="trabaj" />
   <verb in="traducir" vt="ir" tn="translate" pe="conducir" tr="con" st="tra" />
-  <verb in="traer" vt="ir" tn="bring" pe="comer" tr="com" st="tra" ge="traYendo" fspr="traIGo" fspt="traJE" sspt="traJiste" svpt="traJiste" tspt="traJO" fppt="traJimos" sppt="traJisteis" tppt="traJeron" fspb="traIGa" sspb="traIGas" svpb="traIGas" tspb="traIGa" fppb="traIGamos" sppb="traIGáis" tppb="traIGan" />
+  <verb in="traer" vt="ir" tn="bring" pe="comer" tr="com" st="tra" ge="traYendo" fspr="traIGo" fspt="traJE" sspt="traJiste" tspt="traJO" fppt="traJimos" sppt="traJisteis" tppt="traJeron" fspb="traIGa" sspb="traIGas" tspb="traIGa" fppb="traIGamos" sppb="traIGáis" tppb="traIGan" />
   <verb in="trinchar" vt="ra" tn="carve" pe="hablar" tr="habl" st="trinch" />
   <verb in="unir" vt="ri" tn="join" pe="subir" tr="sub" st="un" />
   <verb in="valer" vt="ir" tn="be worth, cost" pe="comer" tr="com" st="val" rf="valDr" fspr="valGo" fspb="valGa" sspb="valGas" tspb="valGa" fppb="valGamos" sppb="valGáis" tppb="valGa" />
   <verb in="vender" vt="re" tn="sell" pe="comer" tr="com" st="vend" />
-  <verb in="venir" vt="ir" tn="come, arrive" pe="subir" tr="sub" st="ven" rf="venDr" fspr="venGo" sspr="vIenes" tspr="vIene" tppr="vIenen" fspt="vINE" sspt="vIniste" tspt="vINO" fppt="vInimos" sppt="vInisteis" tppt="vInieron" fspb="venGa" sspb="venGas" tspb="venGa" fppb="venGamos" sppb="venGáis" tppb="venGan" ssio="veN" />
+  <verb in="venir" vt="ir" tn="come, arrive" pe="subir" tr="sub" st="ven" rf="venDr" fspr="venGo" sspr="vIenes" tspr="vIene" tppr="vIenen" fspt="vINE" sspt="vIniste" tspt="vInO" fppt="vInimos" sppt="vInisteis" tppt="vInieron" fspb="venGa" sspb="venGas" tspb="venGa" fppb="venGamos" sppb="venGáis" tppb="venGan" ssio="veN" />
   <verb in="ver" vt="ir" tn="see" pe="comer" tr="com" st="v" po="vISTo" fspr="vEo" sppr="vEis" fspt="vI" tspt="viO" fsii="vEía" ssii="vEías" tsii="vEía" fpii="vEíamos" spii="vEíais" tpii="vEían" fspb="vEa" sspb="vEas" tspb="vEa" fppb="vEamos" sppb="vEáis" tppb="vEan" />
   <verb in="viajar" vt="ra" tn="travel" pe="hablar" tr="habl" st="viaj" />
   <verb in="visitar" vt="ra" tn="visit" pe="hablar" tr="habl" st="visit" />

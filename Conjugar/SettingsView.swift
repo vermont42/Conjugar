@@ -77,7 +77,7 @@ class SettingsView: UIView {
 
   private let browseVosLabel: UILabel = {
     let label = UILabel()
-    label.text = "Browse Tú and/or Vos Forms"
+    label.text = "Browse Tú and/or Vos"
     label.font = Fonts.label
     label.textColor = Colors.yellow
     label.enableAutoLayout()
@@ -95,7 +95,7 @@ class SettingsView: UIView {
 
   private let browseVosDescription: UILabel = {
     let label = UILabel()
-    label.text = "This setting determines whether you see tú forms, vos forms, or both when you browse verb conjugations."
+    label.text = "This setting determines whether you see tú conjugations, vos conjugations, or both when you browse verb conjugations."
     label.numberOfLines = 0
     label.lineBreakMode = .byWordWrapping
     label.font = Fonts.smallBody
@@ -106,7 +106,7 @@ class SettingsView: UIView {
 
   private let quizVosLabel: UILabel = {
     let label = UILabel()
-    label.text = "Quiz Tú or Vos Forms"
+    label.text = "Quiz Tú or Vos"
     label.font = Fonts.label
     label.textColor = Colors.yellow
     label.enableAutoLayout()
