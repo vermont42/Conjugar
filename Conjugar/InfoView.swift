@@ -6,7 +6,6 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class InfoView: UIView {

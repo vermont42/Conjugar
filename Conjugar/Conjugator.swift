@@ -6,8 +6,6 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-import Foundation
-
 class Conjugator {
   static let defective = "df"
   static let parent = "pe"

@@ -6,8 +6,6 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-import Foundation
-
 protocol QuizDelegate: class {
   func scoreDidChange(newScore: Int)
   func timeDidChange(newTime: Int)

@@ -6,8 +6,6 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-import Foundation
-
 enum PersonNumber: String {
   case firstSingular = "fs"
   case firstPlural = "fp"

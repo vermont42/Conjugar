@@ -6,8 +6,6 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-import Foundation
-
 enum VerbType: String {
   case irregular = "ir"
   case regularAr = "ra"

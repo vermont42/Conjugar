@@ -6,7 +6,6 @@
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 enum ConjugationRow {

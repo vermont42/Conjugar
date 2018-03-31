@@ -6,8 +6,6 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-import Foundation
-
 enum Difficulty: String {
   case easy = "Easy"
   case moderate = "Moderate"

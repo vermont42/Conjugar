@@ -6,8 +6,6 @@
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
 
-import Foundation
-
 enum SecondSingularQuiz: String {
   case tu = "Tú"
   case vos = "Vos"

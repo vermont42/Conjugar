@@ -6,7 +6,6 @@
 //  Copyright © 2015 Josh Adams. All rights reserved.
 //
 
-import Foundation
 import AVFoundation
 
 class Utterer {

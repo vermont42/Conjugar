@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import UIKit
 
 func + (left: NSAttributedString, right: NSAttributedString) -> NSAttributedString {
   let result = NSMutableAttributedString()

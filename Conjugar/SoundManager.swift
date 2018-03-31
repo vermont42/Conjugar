@@ -5,7 +5,7 @@
 //  Created by Josh Adams on 11/18/15.
 //  Copyright © 2015 Josh Adams. All rights reserved.
 //
-import Foundation
+
 import AVFoundation
 
 class SoundManager {
