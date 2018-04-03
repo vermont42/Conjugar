@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		E10178021F3F753400F0BC97 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10178011F3F753400F0BC97 /* UIViewExtensions.swift */; };
-		E10178041F40BD2000F0BC97 /* gun.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E10178031F40BD2000F0BC97 /* gun.mp3 */; };
 		E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */ = {isa = PBXBuildFile; fileRef = E107B08A1EB66CE6004C5E91 /* verbs.xml */; };
 		E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E107B0911EB66F28004C5E91 /* VerbParser.swift */; };
 		E1151E531E9AEDF100DE44D6 /* AuxiliaryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */; };
@@ -72,6 +71,7 @@
 		E19382021F082257005268FF /* BrowseInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19382011F082257005268FF /* BrowseInfoVC.swift */; };
 		E19382041F0822B2005268FF /* InfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19382031F0822B2005268FF /* InfoVC.swift */; };
 		E19382061F0829F6005268FF /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19382051F0829F6005268FF /* InfoCell.swift */; };
+		E19794342073D0C90015D490 /* gun.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E19794332073D0C90015D490 /* gun.mp3 */; };
 		E198F9021F5D79F100BAF553 /* VerbViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E198F9011F5D79F100BAF553 /* VerbViewTests.swift */; };
 		E198F9051F5D7CB200BAF553 /* ConjugatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E198F9041F5D7CB200BAF553 /* ConjugatorTests.swift */; };
 		E1A44314200D10D200C48857 /* ConjugationDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A44313200D10D200C48857 /* ConjugationDataSource.swift */; };
@@ -103,7 +103,6 @@
 
 /* Begin PBXFileReference section */
 		E10178011F3F753400F0BC97 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
-		E10178031F40BD2000F0BC97 /* gun.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = gun.mp3; path = ../../RaceRunner/RaceRunner/gun.mp3; sourceTree = "<group>"; };
 		E107B08A1EB66CE6004C5E91 /* verbs.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = verbs.xml; sourceTree = "<group>"; };
 		E107B0911EB66F28004C5E91 /* VerbParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbParser.swift; sourceTree = "<group>"; };
 		E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuxiliaryError.swift; sourceTree = "<group>"; };
@@ -167,6 +166,7 @@
 		E19382011F082257005268FF /* BrowseInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseInfoVC.swift; sourceTree = "<group>"; };
 		E19382031F0822B2005268FF /* InfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoVC.swift; sourceTree = "<group>"; };
 		E19382051F0829F6005268FF /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
+		E19794332073D0C90015D490 /* gun.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gun.mp3; sourceTree = "<group>"; };
 		E198F9011F5D79F100BAF553 /* VerbViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbViewTests.swift; sourceTree = "<group>"; };
 		E198F9041F5D7CB200BAF553 /* ConjugatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugatorTests.swift; sourceTree = "<group>"; };
 		E1A44313200D10D200C48857 /* ConjugationDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugationDataSource.swift; sourceTree = "<group>"; };
@@ -304,7 +304,7 @@
 				E1483FCD1EF89DAD0052C436 /* buzz.mp3 */,
 				E1483FBE1EF746D70052C436 /* chime.mp3 */,
 				E1483FCB1EF89D4E0052C436 /* chirp.mp3 */,
-				E10178031F40BD2000F0BC97 /* gun.mp3 */,
+				E19794332073D0C90015D490 /* gun.mp3 */,
 				E11CE1011F48867400E74E10 /* sadTrombone.mp3 */,
 				E18F7F3D1ECA7E3700633200 /* silence.mp3 */,
 			);
@@ -519,7 +519,7 @@
 				E1483FC01EF746D70052C436 /* chime.mp3 in Resources */,
 				E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */,
 				E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */,
-				E10178041F40BD2000F0BC97 /* gun.mp3 in Resources */,
+				E19794342073D0C90015D490 /* gun.mp3 in Resources */,
 				E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */,
 				E1483FCC1EF89D4E0052C436 /* chirp.mp3 in Resources */,
 				E1483FC91EF89C710052C436 /* applause2.mp3 in Resources */,
