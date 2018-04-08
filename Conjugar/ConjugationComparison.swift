@@ -22,7 +22,7 @@ enum ConjugationResult: Int {
     if lhsClean == rhsClean {
       return .totalMatch
     }
-    _ = [("á", "a"), ("é", "e"), ("í", "i"), ("ó", "o"), ("ú", "u")].map {
+    [("á", "a"), ("é", "e"), ("í", "i"), ("ó", "o"), ("ú", "u")].forEach {
       lhsClean = lhsClean.replacingOccurrences(of: $0.0, with: $0.1)
       rhsClean = rhsClean.replacingOccurrences(of: $0.0, with: $0.1)
     }

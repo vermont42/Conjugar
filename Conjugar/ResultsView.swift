@@ -29,16 +29,16 @@ class ResultsView: UIView {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    _ = [difficulty, region, score, time, scoreLabel, timeLabel].map {
+    [difficulty, region, score, time, scoreLabel, timeLabel].forEach {
       $0.textColor = Colors.yellow
       $0.font = Fonts.label
     }
-    _ = [table, difficulty, region, score, time, scoreLabel, timeLabel].map {
+    [table, difficulty, region, score, time, scoreLabel, timeLabel].forEach {
       guard let view = $0 as? UIView else { fatalError("Could not cast UIView to UIView.") }
       view.enableAutoLayout()
       addSubview(view)
     }
-    _ = [(scoreLabel, "Score:"), (timeLabel, "Time:")].map {
+    [(scoreLabel, "Score:"), (timeLabel, "Time:")].forEach {
       $0.0.text = $0.1
     }
     table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).activate()

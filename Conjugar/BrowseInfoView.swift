@@ -41,7 +41,7 @@ class BrowseInfoView: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    _ = [table, difficultyLabel, difficultyControl].map {
+    [table, difficultyLabel, difficultyControl].forEach {
       addSubview($0)
     }
     table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).activate()

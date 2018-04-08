@@ -25,7 +25,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
     let tenses = Tense.conjugatedTenses
     rowCount = tenses.reduce(0, { $0 + $1.conjugationCount }) + tenses.count
     super.init()
-    _ = tenses.map { tense in
+    tenses.forEach { tense in
       self.rows.append(.tense(tense))
       if tense.hasYoForm {
         let yoResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: tense, personNumber: .firstSingular)
@@ -62,7 +62,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
         self.rows.append(.conjugation(tense, .secondSingular, tuConjugation))
         self.rows.append(.conjugation(tense, .secondSingularVos, vosConjugation))
       }
-      _ = [PersonNumber.thirdSingular, .firstPlural, .secondPlural, .thirdPlural].map { personNumber in
+      [PersonNumber.thirdSingular, .firstPlural, .secondPlural, .thirdPlural].forEach { personNumber in
         let result = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: tense, personNumber: personNumber)
         switch result {
         case let .success(value):

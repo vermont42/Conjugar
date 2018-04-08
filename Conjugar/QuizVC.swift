@@ -80,7 +80,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     SoundManager.play(.gun)
     Quiz.shared.start()
     quizView.startRestartButton.setTitle("Restart", for: .normal)
-    _ = [quizView.lastLabel, quizView.correctLabel, quizView.last, quizView.correct].map {
+    [quizView.lastLabel, quizView.correctLabel, quizView.last, quizView.correct].forEach {
       $0.isHidden = true
     }
     quizView.showInProgressUI()
@@ -147,14 +147,14 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       SoundManager.play(.buzz)
     }
     if let correctConjugation = correctConjugation, Quiz.shared.quizState == .inProgress {
-      _ = [quizView.lastLabel, quizView.last, quizView.correctLabel, quizView.correct].map {
+      [quizView.lastLabel, quizView.last, quizView.correctLabel, quizView.correct].forEach {
         $0.isHidden = false
       }
       quizView.last.attributedText = text.coloredString(color: Colors.blue)
       quizView.correct.attributedText = correctConjugation.conjugatedString
     }
     else {
-      _ = [quizView.lastLabel, quizView.last, quizView.correctLabel, quizView.correct].map {
+      [quizView.lastLabel, quizView.last, quizView.correctLabel, quizView.correct].forEach {
         $0.isHidden = true
       }
     }

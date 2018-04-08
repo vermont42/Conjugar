@@ -50,17 +50,17 @@ class QuizView: UIView {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    _ = [verb, verbLabel, translation, pronoun, pronounLabel, tense, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel].map {
+    [verb, verbLabel, translation, pronoun, pronounLabel, tense, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel].forEach {
       $0.textColor = Colors.yellow
       $0.font = Fonts.label
     }
-    _ = [verb, translation, pronoun, tense].map {
+    [verb, translation, pronoun, tense].forEach {
       $0.isUserInteractionEnabled = true
     }
-    _ = [(verbLabel, "Verb:"), (pronounLabel, "Pronoun:"), (tenseLabel, "Tense:"), (lastLabel, "Last Answer:"), (correctLabel, "Correct Answer:"), (scoreLabel, "Score:"), (progressLabel, "Progress:"), (elapsedLabel, "Elapsed:"), (last, " "), (correct, " ")].map {
+    [(verbLabel, "Verb:"), (pronounLabel, "Pronoun:"), (tenseLabel, "Tense:"), (lastLabel, "Last Answer:"), (correctLabel, "Correct Answer:"), (scoreLabel, "Score:"), (progressLabel, "Progress:"), (elapsedLabel, "Elapsed:"), (last, " "), (correct, " ")].forEach {
       $0.0.text = $0.1
     }
-    _ = [verb, verbLabel, translation, pronoun, pronounLabel, tense, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel, startRestartButton, conjugationField].map {
+    [verb, verbLabel, translation, pronoun, pronounLabel, tense, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel, startRestartButton, conjugationField].forEach {
       guard let view = $0 as? UIView else { fatalError("Could not cast UIView to UIView.") }
       view.enableAutoLayout()
       addSubview(view)
@@ -126,13 +126,13 @@ class QuizView: UIView {
   }
   
   internal func hideInProgressUI() {
-    _ = [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, tense, lastLabel, last, correctLabel, correct, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].map {
+    [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, tense, lastLabel, last, correctLabel, correct, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].forEach {
       $0.isHidden = true
     }
   }
   
   internal func showInProgressUI() {
-    _ = [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, tense, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].map {
+    [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, tense, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].forEach {
       $0.isHidden = false
     }
   }

@@ -32,20 +32,20 @@ class VerbView: UIView {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    _ = [translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].map {
+    [translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].forEach {
       $0.font = Fonts.label
       $0.textColor = Colors.yellow
       $0.enableAutoLayout()
     }
-    _ = [(participioLabel, "PP:"), (gerundioLabel, "Ger:"), (raizFuturaLabel, "RF:")].map {
+    [(participioLabel, "PP:"), (gerundioLabel, "Ger:"), (raizFuturaLabel, "RF:")].forEach {
       $0.0.text = $0.1
     }
     
-    _ = [translation, participio, gerundio, raizFutura, defectivo].map {
+    [translation, participio, gerundio, raizFutura, defectivo].forEach {
       $0.isUserInteractionEnabled = true
     }
     
-    _ = [table, translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].map {
+    [table, translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].forEach {
       addSubview($0)
     }
     

@@ -160,7 +160,7 @@ extension String {
       }
     }
     
-    _ = ["*", "^", "$", "~", "%"].map {
+    ["*", "^", "$", "~", "%"].forEach {
     infoString.mutableString.replaceOccurrences(of: $0, with: "", options: NSString.CompareOptions.caseInsensitive, range: NSRange(location: 0, length: infoString.length))
     }
     

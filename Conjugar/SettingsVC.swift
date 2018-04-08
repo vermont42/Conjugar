@@ -33,7 +33,7 @@ class SettingsVC: UIViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    _ = [settingsView.gameCenterLabel, settingsView.gameCenterDescription, settingsView.gameCenterButton].map {
+    [settingsView.gameCenterLabel, settingsView.gameCenterDescription, settingsView.gameCenterButton].forEach {
       $0.isHidden = GameCenterManager.shared.isAuthenticated
     }
   }
@@ -129,7 +129,7 @@ class SettingsVC: UIViewController {
     SettingsManager.setUserRejectedGameCenter(false)
     GameCenterManager.shared.authenticate { authenticated in
       DispatchQueue.main.async {
-        _ = [self.settingsView.gameCenterLabel, self.settingsView.gameCenterDescription, self.settingsView.gameCenterButton].map {
+        [self.settingsView.gameCenterLabel, self.settingsView.gameCenterDescription, self.settingsView.gameCenterButton].forEach {
           $0.isHidden = authenticated
         }
       }

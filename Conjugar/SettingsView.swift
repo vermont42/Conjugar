@@ -168,7 +168,7 @@ class SettingsView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     addSubview(scrollView)
-    _ = [regionLabel, difficultyLabel, gameCenterLabel, browseVosLabel, quizVosLabel, regionDescription, difficultyDescription, gameCenterDescription, browseVosDescription, quizVosDescription, regionControl, difficultyControl, browseVosControl, quizVosControl, gameCenterButton].map {
+    [regionLabel, difficultyLabel, gameCenterLabel, browseVosLabel, quizVosLabel, regionDescription, difficultyDescription, gameCenterDescription, browseVosDescription, quizVosDescription, regionControl, difficultyControl, browseVosControl, quizVosControl, gameCenterButton].forEach {
       scrollView.addSubview($0)
     }
 

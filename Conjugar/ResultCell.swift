@@ -22,7 +22,7 @@ class ResultCell: UITableViewCell {
   
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
-    _ = [verb, tensePersonNumber, correctAnswer, proposedAnswer].map {
+    [verb, tensePersonNumber, correctAnswer, proposedAnswer].forEach {
       $0.textColor = Colors.yellow
       $0.font = Fonts.smallCell
       $0.enableAutoLayout()

@@ -107,7 +107,7 @@ internal class Quiz {
     switch lastDifficulty {
     case .easy:
 //      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
-      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].map {
+      [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].forEach {
         questions.append(($0, .presenteDeIndicativo, personNumber()))
       }
       for _ in 0...8 {
@@ -116,7 +116,7 @@ internal class Quiz {
       for _ in 0...7 {
         questions.append((irregularRaizFuturaVerb, .futuroDeIndicativo, personNumber()))
       }
-      _ = [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb].map {
+      [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb].forEach {
         questions.append(($0, .futuroDeIndicativo, personNumber()))
       }
       for _ in 0...7 {
@@ -126,7 +126,7 @@ internal class Quiz {
         questions.append((allRegularVerb, .preterito, personNumber()))
       }
     case .moderate:
-      _ = [regularArVerb, regularArVerb, regularIrVerb, regularErVerb].map {
+      [regularArVerb, regularArVerb, regularIrVerb, regularErVerb].forEach {
         questions.append(($0, .presenteDeIndicativo, personNumber()))
       }
       for _ in 0...3 {
@@ -135,43 +135,43 @@ internal class Quiz {
       for _ in 0...2 {
         questions.append((irregularRaizFuturaVerb, .futuroDeIndicativo, personNumber()))
       }
-      _ = [allRegularVerb, allRegularVerb].map {
+      [allRegularVerb, allRegularVerb].forEach {
         questions.append(($0, .futuroDeIndicativo, personNumber()))
       }
       for _ in 0...2 {
         questions.append((irregularRaizFuturaVerb, .condicional, personNumber()))
       }
-      _ = [allRegularVerb, allRegularVerb].map {
+      [allRegularVerb, allRegularVerb].forEach {
         questions.append(($0, .condicional, personNumber()))
       }
       for _ in 0...2 {
         questions.append((irregularParticipioVerb, .perfectoDeIndicativo, personNumber()))
       }
-      _ = [allRegularVerb, allRegularVerb].map {
+      [allRegularVerb, allRegularVerb].forEach {
         questions.append(($0, .perfectoDeIndicativo, personNumber()))
       }
       for _ in 0...2 {
         questions.append((irregularImperfectoVerb, .imperfectoDeIndicativo, personNumber()))
       }
-      _ = [allRegularVerb, allRegularVerb, allRegularVerb].map {
+      [allRegularVerb, allRegularVerb, allRegularVerb].forEach {
         questions.append(($0, .imperfectoDeIndicativo, personNumber()))
       }
       for _ in 0...2 {
         questions.append((irregularPreteritoVerb, .preterito, personNumber()))
       }
-      _ = [regularArVerb, regularIrVerb, regularErVerb].map {
+      [regularArVerb, regularIrVerb, regularErVerb].forEach {
         questions.append(($0, .preterito, personNumber()))
       }
       for _ in 0...2 {
         questions.append((irregularPresenteDeSubjuntivoVerb, .presenteDeSubjuntivo, personNumber()))
       }
-      _ = [allRegularVerb, allRegularVerb].map {
+      [allRegularVerb, allRegularVerb].forEach {
         questions.append(($0, .presenteDeSubjuntivo, personNumber()))
       }
       for _ in 0...1 {
         questions.append((irregularGerundioVerb, .gerundio, .none))
       }
-      _ = [allRegularVerb, allRegularVerb].map {
+      [allRegularVerb, allRegularVerb].forEach {
         questions.append(($0, .gerundio, .none))
       }
       for _ in 0...1 {
@@ -182,20 +182,20 @@ internal class Quiz {
           questions.append((irregularVosImperativoVerb, .imperativoPositivo, .secondSingularVos))
         }
       }
-      _ = [allRegularVerb, allRegularVerb].map {
+      [allRegularVerb, allRegularVerb].forEach {
         questions.append(($0, .imperativoPositivo, personNumber(skipYo: true, skipTu: true)))
       }
-      _ = [allRegularVerb, allRegularVerb].map {
+      [allRegularVerb, allRegularVerb].forEach {
         questions.append(($0, .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
       }
     case .difficult:
       for _ in 0...1 {
         questions.append((irregularGerundioVerb, .gerundio, .none))
       }
-      _ = [regularArVerb, regularIrVerb, regularErVerb].map {
+      [regularArVerb, regularIrVerb, regularErVerb].forEach {
         questions.append(($0, .gerundio, .none))
       }
-      _ = [regularArVerb, regularIrVerb, regularErVerb].map {
+      [regularArVerb, regularIrVerb, regularErVerb].forEach {
         questions.append(($0, .presenteDeIndicativo, personNumber()))
       }
       for _ in 0...2 {
@@ -204,19 +204,19 @@ internal class Quiz {
       for _ in 0...2 {
         questions.append((irregularPreteritoVerb, .preterito, personNumber()))
       }
-      _ = [regularArVerb, regularIrVerb, regularErVerb].map {
+      [regularArVerb, regularIrVerb, regularErVerb].forEach {
         questions.append(($0, .preterito, personNumber()))
       }
       for _ in 0...1 {
         questions.append((irregularImperfectoVerb, .imperfectoDeIndicativo, personNumber()))
       }
-      _ = [allRegularVerb, allRegularVerb].map {
+      [allRegularVerb, allRegularVerb].forEach {
         questions.append(($0, .imperfectoDeIndicativo, personNumber()))
       }
       for _ in 0...1 {
         questions.append((irregularRaizFuturaVerb, .futuroDeIndicativo, personNumber()))
       }
-      _ = [allRegularVerb, allRegularVerb].map {
+      [allRegularVerb, allRegularVerb].forEach {
         questions.append(($0, .futuroDeIndicativo, personNumber()))
       }
       for _ in 0...1 {
@@ -226,7 +226,7 @@ internal class Quiz {
       for _ in 0...2 {
         questions.append((irregularPresenteDeSubjuntivoVerb, .presenteDeSubjuntivo, personNumber()))
       }
-      _ = [regularArVerb, regularIrVerb, regularErVerb].map {
+      [regularArVerb, regularIrVerb, regularErVerb].forEach {
         questions.append(($0, .presenteDeSubjuntivo, personNumber()))
       }
       questions.append((irregularPreteritoVerb, .imperfectoDeSubjuntivo1, personNumber()))
@@ -241,7 +241,7 @@ internal class Quiz {
       }
       questions.append((allRegularVerb, .imperativoPositivo, personNumber(skipYo: true, skipTu: true)))
       questions.append((allRegularVerb, .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
-      _ = [.perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].map {
+      [.perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].forEach {
         questions.append((regularOrIrregularParticipioVerb, $0, personNumber()))
       }
     }
