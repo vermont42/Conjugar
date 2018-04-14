@@ -14,7 +14,7 @@
 
 Alternatively, you can clone this repo and build, using Xcode™ 9, **Conjugar** yourself. Building **Conjugar** for the simulator (but not iPhone™) causes the following warning, truncated for clarity: `objc[10192]: Class VCWeakObjectHolder is implemented in both ... Frameworks/ViceroyTrace.framework/ViceroyTrace (0x1269c97c0) and  ... AVConference (0x126857a18). One of the two will be used. Which one is undefined."`
 
-The immediate cause of this warning is linking GameKit.framework, required for Game Center™ support. This [appears](https://forums.developer.apple.com/thread/63254) appears to be a vendor bug.
+The immediate cause of this warning is linking GameKit.framework, required for Game Center™ support. This [appears](https://forums.developer.apple.com/thread/63254) to be a vendor bug.
 
 ### Screenshots
 
