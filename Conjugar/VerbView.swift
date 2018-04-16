@@ -9,15 +9,15 @@
 import UIKit
 
 class VerbView: UIView {
-  internal let translation: UILabel = { return UILabel() } ()
-  internal let parentOrType: UILabel = { return UILabel() } ()
-  private let participioLabel: UILabel = { return UILabel() } ()
-  internal let participio: UILabel = { return UILabel() } ()
-  private let gerundioLabel: UILabel = { return UILabel() } ()
-  internal let gerundio: UILabel = { return UILabel() } ()
-  private let raizFuturaLabel: UILabel = { return UILabel() } ()
-  internal let raizFutura: UILabel = { return UILabel() } ()
-  internal let defectivo: UILabel = { return UILabel() } ()
+  internal let translation = UILabel()
+  internal let parentOrType = UILabel()
+  private let participioLabel = UILabel()
+  internal let participio = UILabel()
+  private let gerundioLabel = UILabel()
+  internal let gerundio = UILabel()
+  private let raizFuturaLabel = UILabel()
+  internal let raizFutura = UILabel()
+  internal let defectivo = UILabel()
   
   internal let table: UITableView = {
     let tableView = UITableView()

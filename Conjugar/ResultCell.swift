@@ -11,10 +11,10 @@ import UIKit
 class ResultCell: UITableViewCell {
   static let identifier = "ResultCell"
 
-  private let verb: UILabel = { return UILabel() } ()
-  private let tensePersonNumber: UILabel = { return UILabel() } ()
-  private let correctAnswer: UILabel = { return UILabel() } ()
-  private let proposedAnswer: UILabel = { return UILabel() } ()
+  private let verb = UILabel()
+  private let tensePersonNumber = UILabel()
+  private let correctAnswer = UILabel()
+  private let proposedAnswer = UILabel()
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")

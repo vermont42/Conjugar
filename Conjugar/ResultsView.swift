@@ -16,12 +16,12 @@ class ResultsView: UIView {
     return tableView
   } ()
 
-  internal let difficulty: UILabel = { return UILabel() } ()
-  internal let region: UILabel = { return UILabel() } ()
-  internal let score: UILabel = { return UILabel() } ()
-  internal let time: UILabel = { return UILabel() } ()
-  internal let scoreLabel: UILabel = { return UILabel() } ()
-  internal let timeLabel: UILabel = { return UILabel() } ()
+  internal let difficulty = UILabel()
+  internal let region = UILabel()
+  internal let score = UILabel()
+  internal let time = UILabel()
+  internal let scoreLabel = UILabel()
+  internal let timeLabel = UILabel()
 
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")
