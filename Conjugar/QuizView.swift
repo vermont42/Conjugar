@@ -61,9 +61,8 @@ class QuizView: UIView {
       $0.0.text = $0.1
     }
     [verb, verbLabel, translation, pronoun, pronounLabel, tense, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel, startRestartButton, conjugationField].forEach {
-      guard let view = $0 as? UIView else { fatalError("Could not cast UIView to UIView.") }
-      view.enableAutoLayout()
-      addSubview(view)
+      $0.enableAutoLayout()
+      addSubview($0)
     }
     
     verbLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()

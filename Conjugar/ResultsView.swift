@@ -34,9 +34,8 @@ class ResultsView: UIView {
       $0.font = Fonts.label
     }
     [table, difficulty, region, score, time, scoreLabel, timeLabel].forEach {
-      guard let view = $0 as? UIView else { fatalError("Could not cast UIView to UIView.") }
-      view.enableAutoLayout()
-      addSubview(view)
+      $0.enableAutoLayout()
+      addSubview($0)
     }
     [(scoreLabel, "Score:"), (timeLabel, "Time:")].forEach {
       $0.0.text = $0.1
