@@ -16,6 +16,8 @@ Alternatively, you can clone this repo and build, using Xcode™ 9, **Conjugar**
 
 The immediate cause of this warning is linking GameKit.framework, required for Game Center™ support. This [appears](https://forums.developer.apple.com/thread/63254) to be a vendor bug.
 
+**Conjugar** is currently using AWS Pinpoint analytics. The two relevant frameworks are in source control, but the configuration files and folder, in particular `awsconfiguration.json`, `.amplifyrc`, and `amplify`, respectively, are excluded from source control by the `.gitignore` file. For instructions on Pinpoint configuration, see this excellent [tutorial](https://itnext.io/integrate-analytics-into-your-ios-swift-applications-with-aws-amplify-20d31fe0a20e).
+
 ### Screenshots
 
 ![Conjugar](Conjugar/browse.png "Browse View of Verbs")

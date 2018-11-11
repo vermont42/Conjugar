@@ -31,6 +31,7 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     resultsView.region.text = Quiz.shared.lastRegion.rawValue
     resultsView.score.text = String(Quiz.shared.score)
     resultsView.time.text = Quiz.shared.elapsedTime.timeString
+    AWSAnalyticsService.shared.recordVisitation(viewController: "\(ResultsVC.self)")
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

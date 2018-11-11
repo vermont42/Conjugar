@@ -56,6 +56,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     quizView.startRestartButton.pulsate()
     authenticate()
+    AWSAnalyticsService.shared.recordVisitation(viewController: "\(QuizVC.self)")
   }
   
   private func authenticate() {

@@ -55,6 +55,11 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     super.viewDidLoad()
     updateDifficultyControl()
   }
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    AWSAnalyticsService.shared.recordVisitation(viewController: "\(BrowseInfoVC.self)")
+  }
   
   private func updateDifficultyControl() {
     switch SettingsManager.getInfoDifficulty() {

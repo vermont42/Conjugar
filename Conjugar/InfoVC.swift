@@ -29,7 +29,12 @@ class InfoVC: UIViewController, UITextViewDelegate {
     infoView.info.contentOffset = CGPoint.zero
     view = infoView
   }
-  
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    AWSAnalyticsService.shared.recordVisitation(viewController: "\(InfoVC.self)")
+  }
+
   func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
     let http = "http"
     if URL.absoluteString.prefix(http.count) == http {

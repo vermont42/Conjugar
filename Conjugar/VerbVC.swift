@@ -89,6 +89,7 @@ class VerbVC: UIViewController {
     conjugationDataSource = ConjugationDataSource(verb: verb, table: verbView.table)
     verbView.setupTable(dataSource: conjugationDataSource, delegate: conjugationDataSource)
     verbView.table.reloadData()
+    AWSAnalyticsService.shared.recordVisitation(viewController: "\(VerbVC.self)")
   }
   
   private func initNavigationItemTitleView() {
