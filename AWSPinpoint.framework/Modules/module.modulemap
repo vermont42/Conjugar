@@ -1,0 +1,6 @@
+framework module AWSPinpoint {
+  umbrella header "AWSPinpoint.h"
+
+  export *
+  module * { export * }
+}

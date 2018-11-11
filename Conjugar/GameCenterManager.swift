@@ -22,8 +22,8 @@ class GameCenterManager: NSObject, GKGameCenterControllerDelegate {
         topController.present(viewController, animated: true, completion: nil)
       }
       else if self.localPlayer.isAuthenticated {
-        print("AUTHENTICATED displayName: \(self.localPlayer.displayName!) alias: \(self.localPlayer.alias!) playerID: \(self.localPlayer.playerID!)")
-        
+        //print("AUTHENTICATED displayName: \(self.localPlayer.displayName!) alias: \(self.localPlayer.alias!) playerID: \(self.localPlayer.playerID!)")
+        AWSAnalyticsService.shared.recordGameCenterAuth()
         self.isAuthenticated = true
         SoundManager.play(.applause1)
         self.localPlayer.loadDefaultLeaderboardIdentifier { identifier, error in

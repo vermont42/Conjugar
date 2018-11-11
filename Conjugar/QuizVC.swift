@@ -56,6 +56,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     quizView.startRestartButton.pulsate()
     authenticate()
+    AWSAnalyticsService.shared.recordVisitation(viewController: "\(QuizVC.self)")
   }
   
   private func authenticate() {
@@ -94,6 +95,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     quizView.showInProgressUI()
     quizView.startRestartButton.pulsate()
     quizView.conjugationField.becomeFirstResponder()
+    AWSAnalyticsService.shared.recordQuizStart()
   }
 
   func scoreDidChange(newScore: Int) {
@@ -138,6 +140,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     let resultsVC = ResultsVC()
     navigationController?.pushViewController(resultsVC, animated: true)
+    AWSAnalyticsService.shared.recordQuizCompletion(score: Quiz.shared.score)
   }
 
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
