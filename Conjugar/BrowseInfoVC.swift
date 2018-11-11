@@ -28,9 +28,13 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   }
 
   var browseInfoView: BrowseInfoView {
-    return view as! BrowseInfoView
+    if let castedView = view as? BrowseInfoView {
+      return castedView
+    } else {
+      fatalError(fatalCastMessage(viewController: BrowseInfoVC.self, view: BrowseInfoView.self))
+    }
   }
-  
+
   override func loadView() {
     let browseInfoView: BrowseInfoView
     browseInfoView = BrowseInfoView(frame: UIScreen.main.bounds)

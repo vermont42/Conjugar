@@ -78,6 +78,8 @@
 		E1A789771F00751D0006CA77 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A789761F00751D0006CA77 /* IntExtension.swift */; };
 		E1AB244F1F083CB300FE76E8 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB244E1F083CB300FE76E8 /* Info.swift */; };
 		E1D1D8F81F33732D006A6052 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D1D8F71F33732D006A6052 /* QuizView.swift */; };
+		E1EC70F12198A10B00872787 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC70F02198A10B00872787 /* UIViewControllerExtension.swift */; };
+		E1EC70F22198A10B00872787 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC70F02198A10B00872787 /* UIViewControllerExtension.swift */; };
 		E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */; };
 		E1F06ADA1E8F05F300ADD2E1 /* BrowseVerbsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD91E8F05F300ADD2E1 /* BrowseVerbsVC.swift */; };
 		E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */; };
@@ -173,6 +175,7 @@
 		E1A789761F00751D0006CA77 /* IntExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 		E1AB244E1F083CB300FE76E8 /* Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
 		E1D1D8F71F33732D006A6052 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
+		E1EC70F02198A10B00872787 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Conjugar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = AppDelegate.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E1F06AD91E8F05F300ADD2E1 /* BrowseVerbsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseVerbsVC.swift; sourceTree = "<group>"; };
@@ -263,6 +266,7 @@
 				E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */,
 				E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */,
 				E10178011F3F753400F0BC97 /* UIViewExtensions.swift */,
+				E1EC70F02198A10B00872787 /* UIViewControllerExtension.swift */,
 				E18F7F371ECA7C9A00633200 /* Utterer.swift */,
 			);
 			name = Utils;
@@ -563,6 +567,7 @@
 				E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */,
 				E14566BE1EC001FD00C16DC3 /* ConjugationCell.swift in Sources */,
 				E1483FB11EF5C4C60052C436 /* Difficulty.swift in Sources */,
+				E1EC70F12198A10B00872787 /* UIViewControllerExtension.swift in Sources */,
 				E11BC1732004335B00494504 /* SecondSingularQuiz.swift in Sources */,
 				E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */,
 				E1F06ADA1E8F05F300ADD2E1 /* BrowseVerbsVC.swift in Sources */,
@@ -615,6 +620,7 @@
 			files = (
 				E12D06A31F5E85A200CDD54E /* VerbCellTests.swift in Sources */,
 				E198F9051F5D7CB200BAF553 /* ConjugatorTests.swift in Sources */,
+				E1EC70F22198A10B00872787 /* UIViewControllerExtension.swift in Sources */,
 				E14589F41F5B7BB000EEF141 /* BrowseInfoVCTests.swift in Sources */,
 				E14589F61F5B7E9D00EEF141 /* VerbVCTests.swift in Sources */,
 				E15D3BF61F533997003771BB /* MockNavigationC.swift in Sources */,

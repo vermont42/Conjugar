@@ -12,7 +12,15 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   var quizView: QuizView {
     return view as! QuizView
   }
-  
+
+  var qizView: QuizView {
+    if let castedView = view as? QuizView {
+      return castedView
+    } else {
+      fatalError(fatalCastMessage(viewController: QuizVC.self, view: QuizView.self))
+    }
+  }
+
   override func loadView() {
     let quizView: QuizView
     quizView = QuizView(frame: UIScreen.main.bounds)

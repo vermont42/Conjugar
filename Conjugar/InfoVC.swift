@@ -11,8 +11,13 @@ import UIKit
 class InfoVC: UIViewController, UITextViewDelegate {
   internal weak var infoDelegate: InfoDelegate? = nil
   internal var infoString: NSAttributedString?
+
   var infoView: InfoView {
-    return view as! InfoView
+    if let castedView = view as? InfoView {
+      return castedView
+    } else {
+      fatalError(fatalCastMessage(viewController: InfoVC.self, view: InfoView.self))
+    }
   }
   
   override func loadView() {

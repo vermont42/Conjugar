@@ -35,9 +35,13 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
       fatalError("Invalid verb-filter index.")
     }
   }
-  
+
   var browseVerbsView: BrowseVerbsView {
-    return view as! BrowseVerbsView
+    if let castedView = view as? BrowseVerbsView {
+      return castedView
+    } else {
+      fatalError(fatalCastMessage(viewController: BrowseVerbsVC.self, view: BrowseVerbsView.self))
+    }
   }
   
   override func loadView() {

@@ -10,7 +10,11 @@ import UIKit
 
 class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
   var resultsView: ResultsView {
-    return view as! ResultsView
+    if let castedView = view as? ResultsView {
+      return castedView
+    } else {
+      fatalError(fatalCastMessage(viewController: ResultsVC.self, view: ResultsView.self))
+    }
   }
   
   override func loadView() {

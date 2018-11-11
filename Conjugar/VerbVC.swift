@@ -13,9 +13,13 @@ class VerbVC: UIViewController {
   private var conjugationDataSource: ConjugationDataSource!
   
   var verbView: VerbView {
-    return view as! VerbView
+    if let castedView = view as? VerbView {
+      return castedView
+    } else {
+      fatalError(fatalCastMessage(viewController: VerbVC.self, view: VerbView.self))
+    }
   }
-  
+
   override func loadView() {
     let verbView = VerbView(frame: UIScreen.main.bounds)
     verbView.participio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))

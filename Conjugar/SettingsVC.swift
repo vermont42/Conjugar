@@ -10,9 +10,13 @@ import UIKit
 
 class SettingsVC: UIViewController {
   var settingsView: SettingsView {
-    return view as! SettingsView
+    if let castedView = view as? SettingsView {
+      return castedView
+    } else {
+      fatalError(fatalCastMessage(viewController: SettingsVC.self, view: SettingsView.self))
+    }
   }
-  
+
   override func loadView() {
     let settingsView: SettingsView
     settingsView = SettingsView(frame: UIScreen.main.bounds)
