@@ -56,6 +56,7 @@
   <verb in="aducir" vt="ir" tn="adduce" pe="conducir" tr="con" st="a" />
   <verb in="andar" vt="ir" tn="walk" pe="hablar" tr="habl" st="and" fspt="andUVE" sspt="andUViste" tspt="andUVO" fppt="andUVImos" sppt="andUVIsteis" tppt="andUVIEron" />
   <verb in="aprender" vt="re" tn="learn" pe="comer" tr="com" st="aprend" />
+  <verb in="argüir" vt="ir" tn="argue" pe="subir" tr="sub" st="argü" ge="argUYendo" fspr="argUYo" sspr="argUYes" tspr="argUYe" tppr="argUYen" tspt="argUYó" tppt="argUYeron" fspb="argUYa" sspb="argUYas" tspb="argUYa" fppb="argUYamos" sppb="argUYáis" tppb="argUYan" ssio="argUYe" />
   <verb in="asistir" vt="ri" tn="attend" pe="subir" tr="sub" st="asist" />
   <verb in="ayudar" vt="ra" tn="help" pe="hablar" tr="habl" st="ayud" />
   <verb in="bailar" vt="ra" tn="dance" pe="hablar" tr="habl" st="bail" />
@@ -102,6 +103,7 @@
   <verb in="deshacer" vt="ir" tn="undo" pe="hacer" tr="" st="des" />
   <verb in="dibujar" vt="ra" tn="draw" pe="hablar" tr="habl" st="dibuj" />
   <verb in="dirigir" vt="ir" tn="manage, direct" pe="subir" tr="sub" st="dirig" fspr="diriJo" fspb="diriJa" sspb="diriJas" tspb="diriJa" fppb="diriJamos" sppb="diriJáis" tppb="diriJan" />
+  <verb in="discernir" vt="ir" tn="discern, distinguish" pe="subir" tr="sub" st="discern" fspr="discIerno" sspr="discIernes" tspr="discIerne" tppr="discIernen" fspb="discIerna" sspb="discIernas" tspb="discIerna" tppb="discIernan" ssio="discIerne" />
   <verb in="distar" vt="ra" tn="be away from" pe="hablar" tr="habl" st="dist" />
   <verb in="distinguir" vt="ri" tn="distinguish" pe="subir" tr="sub" st="distingu" />
   <verb in="discutir" vt="ri" tn="argue, discuss" pe="subir" tr="sub" st="discut" />
@@ -114,12 +116,14 @@
   <verb in="enseñar" vt="ra" tn="teach" pe="hablar" tr="habl" st="enseñ" />
   <verb in="esconder" vt="re" tn="hide" pe="comer" tr="com" st="escond" />
   <verb in="escoger" vt="ir" tn="choose" pe="comer" tr="com" st="escog" fspr="escoJo" fspb="escoJa" sspb="escoJas" tspb="escoJa" fppb="escoJamos" sppb="escoJáis" tppb="escoJan" />
+  <verb in="esconder" vt="re" tn="hide" pe="comer" tr="com" st="escond" />
   <verb in="escribir" vt="ir" tn="write" pe="subir" tr="sub" st="escrib" po="escriTo" />
   <verb in="escuchar" vt="ra" tn="listen" pe="hablar" tr="habl" st="escuch" />
   <verb in="esperar" vt="ra" tn="wait for, hope" pe="hablar" tr="habl" st="esper" />
   <verb in="esposar" vt="ra" tn="handcuff" pe="hablar" tr="habl" st="espos" />
   <verb in="estar" vt="ir" tn="be" pe="hablar" tr="habl" st="est" fspr="estoY" sspr="estÁs" tspr="estÁ" tppr="estÁn" fspt="estUVE" sspt="estUViste" tspt="estUVO" fppt="estUVImos" sppt="estUVIsteis" tppt="estUVIEron" fspb="estÉ" sspb="estÉs" tspb="estÉ" tppb="estÉn" ssio="estÁ" />
   <verb in="estudiar" vt="ra" tn="study" pe="hablar" tr="habl" st="estudi" />
+  <verb in="evadir" vt="ri" tn="evade" pe="subir" tr="sub" st="evad" />
   <verb in="exceder" vt="re" tn="exceed" pe="comer" tr="com" st="exced" />
   <verb in="exigir" vt="ir" tn="demand" pe="dirigir" tr="dir" st="ex" />
   <verb in="extinguir" vt="ir" tn="extinguish" pe="subir" tr="sub" st="extingu" fspr="extingO" fspb="extingA" sspb="extingAs" tspb="extingA" fppb="extingAmos" sppb="extingÁis" tppb="extingAn" />
@@ -179,6 +183,7 @@
   <verb in="ponderar" vt="ra" tn="praise, consider" pe="hablar" tr="habl" st="ponder" />
   <verb in="poner" vt="ir" tn="put" pe="comer" tr="com" st="pon" rf="ponDr" po="pUESTo" fspr="ponGo" fspt="pUSE" sspt="pUSiste" tspt="pUSO" fppt="pUSimos" sppt="pUSisteis" tppt="pUSieron" fspb="ponGa" sspb="ponGas" tspb="ponGa" fppb="ponGamos" sppb="ponGáis" tppb="ponGan" ssio="poN" />
   <verb in="poseer" vt="re" tn="have" pe="comer" tr="com" st="pose" />
+  <verb in="procesar" vt="ra" tn="prosecute, process" pe="hablar" tr="habl" st="proces" />
   <verb in="prometer" vt="re" tn="promise" pe="comer" tr="com" st="promet" />
   <verb in="promover" vt="ir" tn="promote" pe="mover" tr="" st="pro" />
   <verb in="proponer" vt="ir" tn="propose" pe="poner" tr="" st="pro" />
@@ -202,6 +207,7 @@
   <verb in="sacar" vt="ra" tn="take out, remove" pe="hablar" tr="habl" st="sac" />
   <verb in="salir" vt="ir" tn="leave, go out" pe="subir" tr="sub" st="sal" rf="salDr" fspr="salGo" fspb="salGa" sspb="salGas" tspb="salGa" fppb="salGamos" sppb="salGáis" tppb="salGa" ssio="saL" />
   <verb in="seducir" vt="ir" tn="seduce" pe="conducir" tr="con" st="se" />
+  <verb in="sentar" vt="ir" tn="sit" pe="hablar" tr="habl" st="sent" fspr="sIento" sspr="sIentas" tspr="sIenta" tppr="sIentan" fspb="sIente" sspb="sIentes" tspb="sIente" tppb="sIenten" ssio="sIenta" />
   <verb in="sentir" vt="ir" tn="feel" ge="sIntiendo" pe="subir" tr="sub" st="sent" fspr="sIento" sspr="sIentes" tspr="sIente"  tppr="sIenten" tspt="sIntió" tppt="sIntieron" fspb="sIenta" sspb="sIentas" tspb="sIenta" fppb="sIntamos" sppb="sIntáis" tppb="sIentan" ssio="sIente" />
   <verb in="ser" vt="ir" tn="be" pe="comer" tr="com" st="s" fspr="soY" sspr="ERes" svpr="sOs" tspr="ES" fppr="sOmos" sppr="sOis" tppr="sOn" fspt="FUI" sspt="FUiste" tspt="FUE" fppt="FUimos" sppt="FUisteis" tppt="FUeron" fsii="ERa" ssii="ERas" tsii="ERa" fpii="ÉRamos" spii="ERais" tpii="ERan" fspb="sEa" sspb="sEas" tspb="sEa" fppb="sEamos" sppb="sEáis" tppb="sEan" ssio="sÉ" />
   <verb in="seriar" vt="ra" tn="mass-produce" pe="hablar" tr="habl" st="seri" />
