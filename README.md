@@ -8,7 +8,7 @@
 
 ### Installation
 
-**Conjugar** is available for free download in the iOS App Store™. Tap the log below to install.
+**Conjugar** is available for free download in the iOS App Store™. Tap the logo below to install.
 
 [![Install](apple.png)](https://itunes.apple.com/us/app/conjugar/id1236500467?mt=8)
 
