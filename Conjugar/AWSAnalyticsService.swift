@@ -47,6 +47,21 @@ import AWSPinpoint
     recordEvent(visited, parameters: ["viewController" : "\(viewController)"])
   }
 
+  @objc func recordQuizStart() {
+    let quizStart = "quizStart"
+    recordEvent(quizStart)
+  }
+
+  @objc func recordQuizCompletion(score: Int) {
+    let quizCompletion = "quizCompletion"
+    recordEvent(quizCompletion, parameters: ["score" : "\(score)"])
+  }
+
+  @objc func recordGameCenterAuth() {
+    let gameCenterAuth = "gameCenterAuth"
+    recordEvent(gameCenterAuth)
+  }
+
   private func recordCustomProfileDemographics() {
     let profile: AWSPinpointEndpointProfile = (pinpoint.targetingClient.currentEndpointProfile())
     profile.demographic?.model = UIDevice.current.modelName
