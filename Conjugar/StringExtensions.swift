@@ -18,7 +18,9 @@ extension String {
   
   var conjugatedString: NSAttributedString {
     let nsStringCombined = NSString(string: self)
-    let nsStrings = NSArray(array: nsStringCombined.components(separatedBy: " ")) as! [NSString]
+    guard let nsStrings = NSArray(array: nsStringCombined.components(separatedBy: " ")) as? [NSString] else {
+      fatalError("nsStrings was nil.")
+    }
     var attStrings: [NSAttributedString] = []
     for nsString in nsStrings {
       let length = nsString.length
@@ -26,14 +28,20 @@ extension String {
       var endIndex = startIndex
       let uppercaseLetters = NSCharacterSet.uppercaseLetters
       for i in 0 ..< length {
-        if uppercaseLetters.contains(UnicodeScalar(nsString.character(at: i))!) {
+        guard let unicodeScalar = UnicodeScalar(nsString.character(at: i)) else {
+          fatalError("unicodeScalar was nil.")
+        }
+        if uppercaseLetters.contains(unicodeScalar) {
           startIndex = i
           break
         }
       }
       if startIndex != -1 {
         for i in (0 ..< length).reversed() {
-          if uppercaseLetters.contains(UnicodeScalar(nsString.character(at: i))!) {
+          guard let unicodeScalar = UnicodeScalar(nsString.character(at: i)) else {
+            fatalError("unicodeScalar was nil.")
+          }
+          if uppercaseLetters.contains(unicodeScalar) {
             endIndex = i
             break
           }

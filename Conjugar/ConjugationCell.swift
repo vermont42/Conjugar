@@ -50,6 +50,6 @@ class ConjugationCell: UITableViewCell {
   }
   
   @objc func tap(_ sender: UITapGestureRecognizer) {
-    Utterer.utter(conjugation.attributedText?.string ?? conjugation.text!)
+    Utterer.utter(conjugation.attributedText?.string ?? conjugation.text ?? "")
   }
 }

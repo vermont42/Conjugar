@@ -49,7 +49,7 @@ class SettingsManager {
     SettingsManager.formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
 
     if let storedRegionString = userDefaults.string(forKey: SettingsManager.regionKey) {
-      region = Region(rawValue: storedRegionString)!
+      region = Region(rawValue: storedRegionString) ?? .latinAmerica
     }
     else {
       region = Region()
@@ -58,7 +58,7 @@ class SettingsManager {
     }
 
     if let storedDifficultyString = userDefaults.string(forKey: SettingsManager.difficultyKey) {
-      difficulty = Difficulty(rawValue: storedDifficultyString)!
+      difficulty = Difficulty(rawValue: storedDifficultyString) ?? .easy
     }
     else {
       difficulty = Difficulty()
@@ -67,7 +67,7 @@ class SettingsManager {
     }
 
     if let storedInfoDifficultyString = userDefaults.string(forKey: SettingsManager.infoDifficultyKey) {
-      infoDifficulty = Difficulty(rawValue: storedInfoDifficultyString)!
+      infoDifficulty = Difficulty(rawValue: storedInfoDifficultyString) ?? .easy
     }
     else {
       infoDifficulty = Difficulty.difficult
@@ -112,7 +112,7 @@ class SettingsManager {
     }
 
     if let storedSecondSingularBrowseString = userDefaults.string(forKey: SettingsManager.secondSingularBrowseKey) {
-      secondSingularBrowse = SecondSingularBrowse(rawValue: storedSecondSingularBrowseString)!
+      secondSingularBrowse = SecondSingularBrowse(rawValue: storedSecondSingularBrowseString) ?? .tu
     }
     else {
       secondSingularBrowse = SecondSingularBrowse()
@@ -121,7 +121,7 @@ class SettingsManager {
     }
 
     if let storedSecondSingularQuizString = userDefaults.string(forKey: SettingsManager.secondSingularQuizKey) {
-      secondSingularQuiz = SecondSingularQuiz(rawValue: storedSecondSingularQuizString)!
+      secondSingularQuiz = SecondSingularQuiz(rawValue: storedSecondSingularQuizString) ?? .tu
     }
     else {
       secondSingularQuiz = SecondSingularQuiz()

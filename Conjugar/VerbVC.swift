@@ -10,7 +10,7 @@ import UIKit
 
 class VerbVC: UIViewController {
   var verb: String = ""
-  private var conjugationDataSource: ConjugationDataSource!
+  private var conjugationDataSource: ConjugationDataSource?
   
   var verbView: VerbView {
     if let castedView = view as? VerbView {
@@ -27,7 +27,9 @@ class VerbVC: UIViewController {
     verbView.gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
     verbView.translation.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEnglish(_:))))
     verbView.defectivo.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEnglish(_:))))
-    guard verb != "" else { fatalError() }
+    guard verb != "" else {
+      fatalError("verb was nil.")
+    }
     initNavigationItemTitleView()
     let translationResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
     switch translationResult {
@@ -87,6 +89,9 @@ class VerbVC: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     conjugationDataSource = ConjugationDataSource(verb: verb, table: verbView.table)
+    guard let conjugationDataSource = conjugationDataSource else {
+      fatalError("\(ConjugationDataSource.self) was nil.")
+    }
     verbView.setupTable(dataSource: conjugationDataSource, delegate: conjugationDataSource)
     verbView.table.reloadData()
     AWSAnalyticsService.shared.recordVisitation(viewController: "\(VerbVC.self)")
@@ -101,13 +106,13 @@ class VerbVC: UIViewController {
   
   @objc func tapSpanish(_ sender: UITapGestureRecognizer) {
     if let label = sender.view as? UILabel {
-      Utterer.utter(label.attributedText?.string ?? label.text!)
+      Utterer.utter(label.attributedText?.string ?? label.text ?? "")
     }
   }
   
   @objc func tapEnglish(_ sender: UITapGestureRecognizer) {
     if let label = sender.view as? UILabel {
-      Utterer.utter(label.attributedText?.string ?? label.text!, locale: "en-US")
+      Utterer.utter(label.attributedText?.string ?? label.text ?? "", locale: "en-US")
     }
   }
 }

@@ -10,10 +10,6 @@ import UIKit
 
 class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   var quizView: QuizView {
-    return view as! QuizView
-  }
-
-  var qizView: QuizView {
     if let castedView = view as? QuizView {
       return castedView
     } else {
@@ -85,7 +81,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     present(gameCenterController, animated: true, completion: nil)
   }
 
-  @objc func startRestart(sender: UIButton!) {
+  @objc func startRestart() {
     SoundManager.play(.gun)
     Quiz.shared.start()
     quizView.startRestartButton.setTitle("Restart", for: .normal)

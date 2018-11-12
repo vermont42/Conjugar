@@ -130,7 +130,7 @@ class SettingsVC: UIViewController {
     }
   }
 
-  @objc func authenticate(sender: UIButton!) {
+  @objc func authenticate() {
     SettingsManager.setUserRejectedGameCenter(false)
     GameCenterManager.shared.authenticate { authenticated in
       DispatchQueue.main.async {
