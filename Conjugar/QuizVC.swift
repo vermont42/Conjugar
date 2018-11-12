@@ -30,7 +30,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     super.viewWillAppear(animated)
     Quiz.shared.delegate = self
     switch Quiz.shared.quizState {
-    case .notStarted , .finished:
+    case .notStarted, .finished:
       quizView.hideInProgressUI()
       quizView.startRestartButton.setTitle("Start", for: .normal)
     case .inProgress:
