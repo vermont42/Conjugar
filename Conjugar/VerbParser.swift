@@ -18,7 +18,6 @@ class VerbParser: NSObject, XMLParserDelegate {
   static let parseError = "An error occurred during XML parsing."
   
   override init() {
-    // TODO: Spit out list of verbs using VerbLoader to build XML file.
     super.init()
     if let url = Bundle.main.url(forResource: "verbs", withExtension: "xml") {
       parser = XMLParser(contentsOf: url)

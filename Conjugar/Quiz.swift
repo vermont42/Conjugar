@@ -106,7 +106,7 @@ internal class Quiz {
 
     switch lastDifficulty {
     case .easy:
-//      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber()))
+//      questions.append((allRegularVerb, .presenteDeIndicativo, personNumber())) // useful for testing
       [regularArVerb, regularArVerb, regularArVerb, regularIrVerb, regularIrVerb, regularIrVerb, regularErVerb, regularErVerb, regularErVerb].forEach {
         questions.append(($0, .presenteDeIndicativo, personNumber()))
       }
