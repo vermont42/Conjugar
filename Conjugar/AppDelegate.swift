@@ -13,7 +13,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-    // https://stackoverflow.com/a/47750574/8248798; I like blue and prefer not to override preferredStatusBarStyle in every UIViewController.
+    // https://stackoverflow.com/a/47750574/8248798
+    // I like blue and prefer not to override preferredStatusBarStyle in every UIViewController.
     let statusBarKey = "statusBar"
     if let statusbar = UIApplication.shared.value(forKey: statusBarKey) as? UIView {
       let foregroundColorKey = "foregroundColor"
