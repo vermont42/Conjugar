@@ -61,7 +61,9 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let cell = tableView.dequeueReusableCell(withIdentifier: VerbCell.identifier) as? VerbCell else { fatalError("Could not dequeue \(VerbCell.self).") }
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: VerbCell.identifier) as? VerbCell else {
+      fatalError("Could not dequeue \(VerbCell.self).")
+    }
     cell.configure(verb: currentVerbs[indexPath.row])
     return cell
   }

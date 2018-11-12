@@ -77,8 +77,12 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let cell = tableView.dequeueReusableCell(withIdentifier: InfoCell.identifier) as? InfoCell else { fatalError("Could not dequeue \(InfoCell.self).")}
-    guard let decodedString = currentInfos[indexPath.row].heading.removingPercentEncoding else { fatalError("Could not decode string.") }
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: InfoCell.identifier) as? InfoCell else {
+      fatalError("Could not dequeue \(InfoCell.self).")
+    }
+    guard let decodedString = currentInfos[indexPath.row].heading.removingPercentEncoding else {
+      fatalError("Could not decode string.")
+    }
     cell.configure(heading: decodedString)
     return cell
   }

@@ -39,7 +39,9 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let cell = resultsView.table.dequeueReusableCell(withIdentifier: ResultCell.identifier) as? ResultCell else { fatalError("Could not dequeue \(ResultCell.self).") }
+    guard let cell = resultsView.table.dequeueReusableCell(withIdentifier: ResultCell.identifier) as? ResultCell else {
+      fatalError("Could not dequeue \(ResultCell.self).")
+    }
     let row = indexPath.row
     let question = Quiz.shared.questions[row]
     cell.configure(verb: question.0, tense: question.1, personNumber: question.2, correctAnswer: Quiz.shared.correctAnswers[row], proposedAnswer: Quiz.shared.proposedAnswers[row])

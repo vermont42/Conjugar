@@ -75,7 +75,9 @@ class VerbVC: UIViewController {
     case .regularIr:
       verbView.parentOrType.text = "Regular IR"
     case .irregular:
-      guard let parent = Conjugator.sharedInstance.parent(infinitive: verb) else { fatalError() }
+      guard let parent = Conjugator.sharedInstance.parent(infinitive: verb) else {
+        fatalError("Parent verb not found.")
+      }
       if Conjugator.baseVerbs.contains(parent) {
         verbView.parentOrType.text = "Irregular"
       }

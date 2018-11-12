@@ -121,11 +121,15 @@ extension String {
       if char == "%" {
         if inLink {
           let nsRange = NSMakeRange(startIndex + 1, (currentIndex - startIndex) - 1)
-          guard let range = Range(nsRange, in: self) else { fatalError("Could not make Range.") }
+          guard let range = Range(nsRange, in: self) else {
+            fatalError("Could not make Range.")
+          }
           var subString = String(self[range])          
           let http = "http"
           if subString.prefix(http.count) != http {
-            guard let encodedString = subString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { fatalError("Could not URL encode substring.") }
+            guard let encodedString = subString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
+              fatalError("Could not URL encode substring.")
+            }
             subString = encodedString
           }
           attributesAndRanges.append((NSAttributedStringKey.link, subString, nsRange))

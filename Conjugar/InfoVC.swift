@@ -23,7 +23,9 @@ class InfoVC: UIViewController, UITextViewDelegate {
   override func loadView() {
     let infoView: InfoView
     infoView = InfoView(frame: UIScreen.main.bounds)
-    guard let infoString = infoString else { fatalError("InfoVC's infoString property is nil.") }
+    guard let infoString = infoString else {
+      fatalError("InfoVC's infoString property is nil.")
+    }
     infoView.info.attributedText = infoString
     infoView.info.delegate = self
     infoView.info.contentOffset = CGPoint.zero

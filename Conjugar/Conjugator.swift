@@ -55,8 +55,12 @@ class Conjugator {
   }
   
   func verbType(infinitive: String) -> VerbType {
-    guard let verb = verbs[infinitive] else { fatalError("Requested type of unsupported verb.") }
-    guard let verbType = verb[VerbType.key] else { fatalError("Verb type not specified.") }
+    guard let verb = verbs[infinitive] else {
+      fatalError("Requested type of unsupported verb.")
+    }
+    guard let verbType = verb[VerbType.key] else {
+      fatalError("Verb type not specified.")
+    }
     switch verbType {
     case VerbType.irregular.rawValue:
       return .irregular
