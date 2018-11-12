@@ -32,7 +32,7 @@ class InfoVC: UIViewController, UITextViewDelegate {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    AWSAnalyticsService.shared.recordVisitation(viewController: "\(InfoVC.self)")
+    AnalyticsService.shared.recordVisitation(viewController: "\(InfoVC.self)")
   }
 
   func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {

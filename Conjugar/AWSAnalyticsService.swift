@@ -1,5 +1,5 @@
 //
-//  AWSAnalyticsService.swift
+//  AnalyticsService.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 10/8/18.
@@ -9,9 +9,9 @@
 import Foundation
 import AWSPinpoint
 
-@objc class AWSAnalyticsService: NSObject, AnalyticsService {
+@objc class AnalyticsService: NSObject {
   var pinpoint: AWSPinpoint
-  @objc static let shared = AWSAnalyticsService()
+  @objc static let shared = AnalyticsService()
 
   override init() {
     let config = AWSPinpointConfiguration.defaultPinpointConfiguration(launchOptions: nil)

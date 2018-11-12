@@ -40,7 +40,7 @@ class SettingsVC: UIViewController {
     [settingsView.gameCenterLabel, settingsView.gameCenterDescription, settingsView.gameCenterButton].forEach {
       $0.isHidden = GameCenterManager.shared.isAuthenticated
     }
-    AWSAnalyticsService.shared.recordVisitation(viewController: "\(SettingsVC.self)")
+    AnalyticsService.shared.recordVisitation(viewController: "\(SettingsVC.self)")
   }
   
   override func viewDidAppear(_ animated: Bool) {

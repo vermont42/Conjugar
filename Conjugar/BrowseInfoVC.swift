@@ -58,7 +58,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    AWSAnalyticsService.shared.recordVisitation(viewController: "\(BrowseInfoVC.self)")
+    AnalyticsService.shared.recordVisitation(viewController: "\(BrowseInfoVC.self)")
   }
   
   private func updateDifficultyControl() {

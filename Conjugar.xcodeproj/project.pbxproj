@@ -85,7 +85,6 @@
 		E1EC70F72198A63700872787 /* AWSPinpoint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1EC70F42198A63700872787 /* AWSPinpoint.framework */; };
 		E1EC70F82198A63700872787 /* AWSPinpoint.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E1EC70F42198A63700872787 /* AWSPinpoint.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E1EC70FD2198BA0D00872787 /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = E1EC70FC2198BA0D00872787 /* awsconfiguration.json */; };
-		E1EC71002198BA6400872787 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC70FE2198BA6300872787 /* AnalyticsService.swift */; };
 		E1EC71012198BA6400872787 /* AWSAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC70FF2198BA6300872787 /* AWSAnalyticsService.swift */; };
 		E1EC71032198BA8A00872787 /* DeviceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC71022198BA8A00872787 /* DeviceUtility.swift */; };
 		E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */; };
@@ -202,7 +201,6 @@
 		E1EC70F32198A63600872787 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		E1EC70F42198A63700872787 /* AWSPinpoint.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSPinpoint.framework; sourceTree = "<group>"; };
 		E1EC70FC2198BA0D00872787 /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = SOURCE_ROOT; };
-		E1EC70FE2198BA6300872787 /* AnalyticsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		E1EC70FF2198BA6300872787 /* AWSAnalyticsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSAnalyticsService.swift; sourceTree = "<group>"; };
 		E1EC71022198BA8A00872787 /* DeviceUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceUtility.swift; sourceTree = "<group>"; };
 		E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Conjugar.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -385,7 +383,6 @@
 		E1EC70FB2198B9D900872787 /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
-				E1EC70FE2198BA6300872787 /* AnalyticsService.swift */,
 				E1EC70FF2198BA6300872787 /* AWSAnalyticsService.swift */,
 				E1EC70FC2198BA0D00872787 /* awsconfiguration.json */,
 				E1EC71022198BA8A00872787 /* DeviceUtility.swift */,
@@ -665,7 +662,6 @@
 				E1201A041F1AB99F00BCB27D /* MainTabBarVC.swift in Sources */,
 				E1483FBB1EF6F82A0052C436 /* QuizVC.swift in Sources */,
 				E1A44314200D10D200C48857 /* ConjugationDataSource.swift in Sources */,
-				E1EC71002198BA6400872787 /* AnalyticsService.swift in Sources */,
 				E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */,
 				E14BAD8E1EFF11BD000D91C5 /* SettingsManager.swift in Sources */,
 				E15E63F61F3A29890083DB4B /* Layout.swift in Sources */,

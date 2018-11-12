@@ -53,7 +53,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     browseVerbsView.isHidden = false
-    AWSAnalyticsService.shared.recordVisitation(viewController: "\(BrowseVerbsVC.self)")
+    AnalyticsService.shared.recordVisitation(viewController: "\(BrowseVerbsVC.self)")
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
