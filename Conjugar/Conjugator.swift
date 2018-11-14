@@ -11,6 +11,7 @@ class Conjugator {
   static let parent = "pe"
   static let trim = "tr"
   static let stem = "st"
+  static let translation = "tn"
   static let shared = Conjugator()
   static let baseVerbs = ["hablar", "comer", "subir"]
   
@@ -102,7 +103,8 @@ class Conjugator {
     if personNumber == .firstSingular && (tense == .imperativoPositivo || tense == .imperativoNegativo) {
       return .failure(.noFirstPersonSingularImperative)
     }
-    let index = infinitive.index(infinitive.endIndex, offsetBy: -2)
+    let spanishVerbEndingLength = 2
+    let index = infinitive.index(infinitive.endIndex, offsetBy: -1 * spanishVerbEndingLength)
     let ending = String(infinitive[index...])
     if !["ar", "er", "ir", "ír"].contains(ending) {
       return .failure(.invalidEnding(ending))
@@ -132,6 +134,7 @@ class Conjugator {
         verb[Conjugator.stem] = stem
         verb[Conjugator.trim] = "sub"
       }
+      verb[Conjugator.translation] = "unknown"
       verbs[infinitive] = verb
     }
     return conjugateRecursively(infinitive: infinitive, tense: tense, personNumber: personNumber)
