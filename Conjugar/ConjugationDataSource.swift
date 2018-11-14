@@ -28,7 +28,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
     tenses.forEach { tense in
       self.rows.append(.tense(tense))
       if tense.hasYoForm {
-        let yoResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: tense, personNumber: .firstSingular)
+        let yoResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: .firstSingular)
         switch yoResult {
         case let .success(value):
           self.rows.append(.conjugation(tense, .firstSingular, value))
@@ -37,7 +37,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
         }
       }
 
-      let tuResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: tense, personNumber: .secondSingular)
+      let tuResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: .secondSingular)
       let tuConjugation: String
       switch tuResult {
       case let .success(value):
@@ -45,7 +45,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
       default:
         fatalError("No tú form found for tense \(tense.displayName).")
       }
-      let vosResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: tense, personNumber: .secondSingularVos)
+      let vosResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: .secondSingularVos)
       let vosConjugation: String
       switch vosResult {
       case let .success(value):
@@ -63,7 +63,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
         self.rows.append(.conjugation(tense, .secondSingularVos, vosConjugation))
       }
       [PersonNumber.thirdSingular, .firstPlural, .secondPlural, .thirdPlural].forEach { personNumber in
-        let result = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: tense, personNumber: personNumber)
+        let result = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: personNumber)
         switch result {
         case let .success(value):
           self.rows.append(.conjugation(tense, personNumber, value))

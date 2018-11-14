@@ -42,9 +42,9 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     let browseVerbsView = BrowseVerbsView(frame: UIScreen.main.bounds)
     browseVerbsView.setupTable(dataSource: self, delegate: self)
     browseVerbsView.filterControl.addTarget(self, action: #selector(BrowseVerbsVC.valueChanged(_:)), for: .valueChanged)
-    allVerbs = Conjugator.sharedInstance.allVerbsArray()
-    regularVerbs = Conjugator.sharedInstance.regularVerbsArray()
-    irregularVerbs = Conjugator.sharedInstance.irregularVerbsArray()
+    allVerbs = Conjugator.shared.allVerbsArray()
+    regularVerbs = Conjugator.shared.regularVerbsArray()
+    irregularVerbs = Conjugator.shared.irregularVerbsArray()
     navigationItem.titleView = UILabel.titleLabel(title: "Browse")
     view = browseVerbsView
     ReviewPrompter.promptableActionHappened()

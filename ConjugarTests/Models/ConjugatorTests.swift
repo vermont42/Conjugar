@@ -11,7 +11,7 @@ import XCTest
 
 class ConjugatorTests: XCTestCase {
   func testConjugate() {
-    var result = Conjugator.sharedInstance.conjugate(infinitive: "m", tense: .futuroDeIndicativo, personNumber: .firstSingular)
+    var result = Conjugator.shared.conjugate(infinitive: "m", tense: .futuroDeIndicativo, personNumber: .firstSingular)
     switch result {
     case .failure:
       break
@@ -20,7 +20,7 @@ class ConjugatorTests: XCTestCase {
       break
     }
 
-    result = Conjugator.sharedInstance.conjugate(infinitive: "tango", tense: .preterito, personNumber: .thirdPlural)
+    result = Conjugator.shared.conjugate(infinitive: "tango", tense: .preterito, personNumber: .thirdPlural)
     switch result {
     case .failure:
       break
@@ -29,7 +29,7 @@ class ConjugatorTests: XCTestCase {
       break
     }
 
-    result = Conjugator.sharedInstance.conjugate(infinitive: "maltear", tense: .presenteDeIndicativo, personNumber: .secondSingular)
+    result = Conjugator.shared.conjugate(infinitive: "maltear", tense: .presenteDeIndicativo, personNumber: .secondSingular)
     switch result {
     case let .success(value):
       XCTAssertEqual(value, "malteas")

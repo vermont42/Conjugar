@@ -31,42 +31,42 @@ class VerbVC: UIViewController {
       fatalError("verb was nil.")
     }
     initNavigationItemTitleView()
-    let translationResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
+    let translationResult = Conjugator.shared.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
     switch translationResult {
     case let .success(value):
       verbView.translation.text = value
     default:
       fatalError()
     }
-    let gerundioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .gerundio, personNumber: .none)
+    let gerundioResult = Conjugator.shared.conjugate(infinitive: verb, tense: .gerundio, personNumber: .none)
     switch gerundioResult {
     case let .success(value):
       verbView.gerundio.attributedText = value.conjugatedString
     default:
       fatalError()
     }
-    let participioResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .participio, personNumber: .none)
+    let participioResult = Conjugator.shared.conjugate(infinitive: verb, tense: .participio, personNumber: .none)
     switch participioResult {
     case let .success(value):
       verbView.participio.attributedText = value.conjugatedString
     default:
       fatalError()
     }
-    let raizFuturaResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .raizFutura, personNumber: .none)
+    let raizFuturaResult = Conjugator.shared.conjugate(infinitive: verb, tense: .raizFutura, personNumber: .none)
     switch raizFuturaResult {
     case let .success(value):
       verbView.raizFutura.attributedText = value.conjugatedString + NSAttributedString(string: "-")
     default:
       fatalError()
     }
-    if Conjugator.sharedInstance.isDefective(infinitive: verb) {
+    if Conjugator.shared.isDefective(infinitive: verb) {
       verbView.defectivo.text = "Defective"
     }
     else {
       verbView.defectivo.text = "Not Defective"
     }
     
-    let verbType = Conjugator.sharedInstance.verbType(infinitive: verb)
+    let verbType = Conjugator.shared.verbType(infinitive: verb)
     switch verbType {
     case .regularAr:
       verbView.parentOrType.text = "Regular AR"
@@ -75,7 +75,7 @@ class VerbVC: UIViewController {
     case .regularIr:
       verbView.parentOrType.text = "Regular IR"
     case .irregular:
-      guard let parent = Conjugator.sharedInstance.parent(infinitive: verb) else {
+      guard let parent = Conjugator.shared.parent(infinitive: verb) else {
         fatalError("Parent verb not found.")
       }
       if Conjugator.baseVerbs.contains(parent) {

@@ -269,7 +269,7 @@ internal class Quiz {
   }
   
   internal func process(proposedAnswer: String) -> (ConjugationResult, String?) {
-    let correctAnswerResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: tense, personNumber: currentPersonNumber)
+    let correctAnswerResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: currentPersonNumber)
     switch correctAnswerResult {
     case let .success(correctAnswer):
       let result = ConjugationResult.compare(lhs: proposedAnswer, rhs: correctAnswer)

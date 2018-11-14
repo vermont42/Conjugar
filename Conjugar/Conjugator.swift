@@ -11,7 +11,7 @@ class Conjugator {
   static let parent = "pe"
   static let trim = "tr"
   static let stem = "st"
-  static let sharedInstance = Conjugator()
+  static let shared = Conjugator()
   static let baseVerbs = ["hablar", "comer", "subir"]
   
   var verbs: [String: [String: String]] = [:]

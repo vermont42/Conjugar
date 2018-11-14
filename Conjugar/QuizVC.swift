@@ -38,7 +38,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       quizView.startRestartButton.setTitle("Restart", for: .normal)
       let verb = Quiz.shared.verb
       quizView.verb.text = verb
-      let translationResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
+      let translationResult = Conjugator.shared.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
       switch translationResult {
       case let .success(value):
         quizView.translation.text = value
@@ -108,7 +108,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
 
   func questionDidChange(verb: String, tense: Tense, personNumber: PersonNumber) {
     quizView.verb.text = verb
-    let translationResult = Conjugator.sharedInstance.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
+    let translationResult = Conjugator.shared.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
     switch translationResult {
     case let .success(value):
       quizView.translation.text = value
