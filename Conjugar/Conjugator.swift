@@ -288,7 +288,7 @@ class Conjugator {
       }
       else if [.thirdSingular, .firstPlural, .thirdPlural].contains(personNumber) {
         guard let conjugation = conjugateRecursively(infinitive: infinitive, tense: .presenteDeSubjuntivo, personNumber: personNumber).value else {
-          fatalError("Conjugation was nil.")
+          fatalError("conjugation was nil.")
         }
         return .success(conjugation)
       }
