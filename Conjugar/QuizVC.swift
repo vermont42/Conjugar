@@ -43,7 +43,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       case let .success(value):
         quizView.translation.text = value
       default:
-        fatalError()
+        fatalError("translation not found.")
       }
       quizView.tense.text = Quiz.shared.tense.displayName
       quizView.pronoun.text = Quiz.shared.currentPersonNumber.pronoun
