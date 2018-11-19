@@ -34,7 +34,7 @@ class QuizView: UIView {
     field.placeholder = "conjugation"
     field.backgroundColor = UIColor.white
     return field
-  } ()
+  }()
   
   internal let startRestartButton: UIButton = {
     let button = UIButton()
@@ -42,7 +42,7 @@ class QuizView: UIView {
     button.titleLabel?.font = Fonts.button
     button.setTitleColor(Colors.red, for: .normal)
     return button
-  } ()
+  }()
   
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")

@@ -14,7 +14,7 @@ class ResultsView: UIView {
     tableView.backgroundColor = Colors.black
     tableView.rowHeight = 120
     return tableView
-  } ()
+  }()
 
   internal let difficulty = UILabel()
   internal let region = UILabel()

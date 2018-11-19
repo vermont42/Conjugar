@@ -14,7 +14,7 @@ class BrowseVerbsView: UIView {
     tableView.backgroundColor = Colors.black
     tableView.enableAutoLayout()
     return tableView
-  } ()
+  }()
   
   internal let filterControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Irregular", "Regular", "Both"])
@@ -23,7 +23,7 @@ class BrowseVerbsView: UIView {
     control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
-  } ()
+  }()
   
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")

@@ -24,7 +24,7 @@ class VerbView: UIView {
     tableView.backgroundColor = Colors.black
     tableView.enableAutoLayout()
     return tableView
-  } ()
+  }()
   
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")

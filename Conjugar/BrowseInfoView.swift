@@ -14,7 +14,7 @@ class BrowseInfoView: UIView {
     tableView.backgroundColor = Colors.black
     tableView.enableAutoLayout()
     return tableView
-  } ()
+  }()
   
   private let difficultyLabel: UILabel = {
     let label = UILabel()
@@ -24,7 +24,7 @@ class BrowseInfoView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  } ()
+  }()
   
   internal let difficultyControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["E", "E & M", "E, M, & D"])
@@ -33,7 +33,7 @@ class BrowseInfoView: UIView {
     control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
-  } ()
+  }()
   
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")

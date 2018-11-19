@@ -17,7 +17,7 @@ class InfoView: UIView {
     textView.tintColor = Colors.blue
     textView.isEditable = false
     return textView
-  } ()
+  }()
   
   override init(frame: CGRect) {
     super.init(frame: frame)

@@ -17,7 +17,7 @@ class InfoCell: UITableViewCell {
     label.font = Fonts.boldBody
     label.enableAutoLayout()
     return label
-  } ()
+  }()
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented.")

@@ -14,7 +14,7 @@ class SettingsView: UIView {
     scrollView.enableAutoLayout()
     scrollView.isUserInteractionEnabled = true
     return scrollView
-  } ()
+  }()
 
   private let regionLabel: UILabel = {
     let label = UILabel()
@@ -23,7 +23,7 @@ class SettingsView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  } ()
+  }()
 
   internal let regionControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Spain", "Latin America"])
@@ -32,7 +32,7 @@ class SettingsView: UIView {
     control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
-  } ()
+  }()
 
   private let regionDescription: UILabel = {
     let label = UILabel()
@@ -43,7 +43,7 @@ class SettingsView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  } ()
+  }()
 
   private let difficultyLabel: UILabel = {
     let label = UILabel()
@@ -52,7 +52,7 @@ class SettingsView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  } ()
+  }()
 
   internal let difficultyControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Easy", "Moderate", "Difficult"])
@@ -61,7 +61,7 @@ class SettingsView: UIView {
     control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
-  } ()
+  }()
 
   private let difficultyDescription: UILabel = {
     let label = UILabel()
@@ -72,7 +72,7 @@ class SettingsView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  } ()
+  }()
 
   private let browseVosLabel: UILabel = {
     let label = UILabel()
@@ -81,7 +81,7 @@ class SettingsView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  } ()
+  }()
 
   internal let browseVosControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Tú", "Vos", "Both"])
@@ -90,7 +90,7 @@ class SettingsView: UIView {
     control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
-  } ()
+  }()
 
   private let browseVosDescription: UILabel = {
     let label = UILabel()
@@ -101,7 +101,7 @@ class SettingsView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  } ()
+  }()
 
   private let quizVosLabel: UILabel = {
     let label = UILabel()
@@ -110,7 +110,7 @@ class SettingsView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  } ()
+  }()
 
   internal let quizVosControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Tú", "Vos"])
@@ -119,7 +119,7 @@ class SettingsView: UIView {
     control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
-  } ()
+  }()
 
   private let quizVosDescription: UILabel = {
     let label = UILabel()
@@ -130,7 +130,7 @@ class SettingsView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  } ()
+  }()
 
   internal let gameCenterLabel: UILabel = {
     let label = UILabel()
@@ -139,7 +139,7 @@ class SettingsView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  } ()
+  }()
 
   internal let gameCenterButton: UIButton = {
     let button = UIButton()
@@ -148,7 +148,7 @@ class SettingsView: UIView {
     button.setTitleColor(Colors.red, for: .normal)
     button.enableAutoLayout()
     return button
-  } ()
+  }()
 
   internal let gameCenterDescription: UILabel = {
     let label = UILabel()
@@ -159,7 +159,7 @@ class SettingsView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  } ()
+  }()
 
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")

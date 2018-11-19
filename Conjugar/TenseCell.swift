@@ -17,7 +17,7 @@ class TenseCell: UITableViewCell {
     label.font = Fonts.regularCell
     label.enableAutoLayout()
     return label
-  } ()
+  }()
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented.")
