@@ -22,11 +22,11 @@ class VerbVC: UIViewController {
 
   override func loadView() {
     let verbView = VerbView(frame: UIScreen.main.bounds)
-    verbView.participio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
-    verbView.raizFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
-    verbView.gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
-    verbView.translation.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEnglish(_:))))
-    verbView.defectivo.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapEnglish(_:))))
+    verbView.participio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
+    verbView.raizFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
+    verbView.gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
+    verbView.translation.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
+    verbView.defectivo.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
     guard verb != "" else {
       fatalError("verb was nil.")
     }
