@@ -61,8 +61,7 @@ class VerbVC: UIViewController {
     }
     if Conjugator.shared.isDefective(infinitive: verb) {
       verbView.defectivo.text = "Defective"
-    }
-    else {
+    } else {
       verbView.defectivo.text = "Not Defective"
     }
     
@@ -80,8 +79,7 @@ class VerbVC: UIViewController {
       }
       if Conjugator.baseVerbs.contains(parent) {
         verbView.parentOrType.text = "Irregular"
-      }
-      else {
+      } else {
         verbView.parentOrType.text = "Irreg. ☛ \(parent)"
       }
     }

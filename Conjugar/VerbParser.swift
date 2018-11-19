@@ -33,18 +33,16 @@ class VerbParser: NSObject, XMLParserDelegate {
     return verbs
   }
   
-  func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+  func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String: String]) {
     if elementName == verbTag {
       if let currentVerb = attributeDict[Tense.infinitivo.rawValue] {
         self.currentVerb = currentVerb
-      }
-      else {
+      } else {
         fatalError("No infinitive specified.")
       }
       if let vt = attributeDict[VerbType.key] {
         currentConjugations[VerbType.key] = vt
-      }
-      else {
+      } else {
         fatalError("No verb type specified.")
       }
       if let ge = attributeDict[Tense.gerundio.rawValue] {

@@ -59,8 +59,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     if !GameCenterManager.shared.isAuthenticated && !SettingsManager.getUserRejectedGameCenter() {
       if !SettingsManager.getDidShowGameCenterDialog() {
         showGameCenterDialog()
-      }
-      else {
+      } else {
         GameCenterManager.shared.authenticate()
       }
     }
@@ -159,8 +158,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       }
       quizView.last.attributedText = text.coloredString(color: Colors.blue)
       quizView.correct.attributedText = correctConjugation.conjugatedString
-    }
-    else {
+    } else {
       [quizView.lastLabel, quizView.last, quizView.correctLabel, quizView.correct].forEach {
         $0.isHidden = true
       }

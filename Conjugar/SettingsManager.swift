@@ -50,8 +50,7 @@ class SettingsManager {
 
     if let storedRegionString = userDefaults.string(forKey: SettingsManager.regionKey) {
       region = Region(rawValue: storedRegionString) ?? .latinAmerica
-    }
-    else {
+    } else {
       region = Region()
       userDefaults.set(region.rawValue, forKey: SettingsManager.regionKey)
       userDefaults.synchronize()
@@ -59,8 +58,7 @@ class SettingsManager {
 
     if let storedDifficultyString = userDefaults.string(forKey: SettingsManager.difficultyKey) {
       difficulty = Difficulty(rawValue: storedDifficultyString) ?? .easy
-    }
-    else {
+    } else {
       difficulty = Difficulty()
       userDefaults.set(difficulty.rawValue, forKey: SettingsManager.difficultyKey)
       userDefaults.synchronize()
@@ -68,8 +66,7 @@ class SettingsManager {
 
     if let storedInfoDifficultyString = userDefaults.string(forKey: SettingsManager.infoDifficultyKey) {
       infoDifficulty = Difficulty(rawValue: storedInfoDifficultyString) ?? .easy
-    }
-    else {
+    } else {
       infoDifficulty = Difficulty.difficult
       userDefaults.set(infoDifficulty.rawValue, forKey: SettingsManager.infoDifficultyKey)
       userDefaults.synchronize()
@@ -77,8 +74,7 @@ class SettingsManager {
 
     if let storedUserRejectedGameCenterString = userDefaults.string(forKey: SettingsManager.userRejectedGameCenterKey) {
       userRejectedGameCenter = (storedUserRejectedGameCenterString as NSString).boolValue
-    }
-    else {
+    } else {
       userRejectedGameCenter = SettingsManager.userRejectedGameCenterDefault
       userDefaults.set("\(userRejectedGameCenter)", forKey: SettingsManager.userRejectedGameCenterKey)
       userDefaults.synchronize()
@@ -86,8 +82,7 @@ class SettingsManager {
 
     if let storedDidShowGameCenterDialogString = userDefaults.string(forKey: SettingsManager.didShowGameCenterDialogKey) {
       didShowGameCenterDialog = (storedDidShowGameCenterDialogString as NSString).boolValue
-    }
-    else {
+    } else {
       didShowGameCenterDialog = SettingsManager.didShowGameCenterDialogDefault
       userDefaults.set("\(didShowGameCenterDialog)", forKey: SettingsManager.didShowGameCenterDialogKey)
       userDefaults.synchronize()
@@ -95,8 +90,7 @@ class SettingsManager {
 
     if let lastReviewPromptDateString = userDefaults.string(forKey: SettingsManager.lastReviewPromptDateKey) {
       lastReviewPromptDate = SettingsManager.formatter.date(from: lastReviewPromptDateString) ?? Date()
-    }
-    else {
+    } else {
       lastReviewPromptDate = SettingsManager.lastReviewPromptDateDefault
       userDefaults.set(SettingsManager.formatter.string(from: lastReviewPromptDate), forKey: SettingsManager.lastReviewPromptDateKey)
       userDefaults.synchronize()
@@ -104,8 +98,7 @@ class SettingsManager {
 
     if let promptActionCountString = userDefaults.string(forKey: SettingsManager.promptActionCountKey) {
       promptActionCount = Int((promptActionCountString as NSString).intValue)
-    }
-    else {
+    } else {
       promptActionCount = SettingsManager.promptActionCountDefault
       userDefaults.set("\(promptActionCount)", forKey: SettingsManager.promptActionCountKey)
       userDefaults.synchronize()
@@ -113,8 +106,7 @@ class SettingsManager {
 
     if let storedSecondSingularBrowseString = userDefaults.string(forKey: SettingsManager.secondSingularBrowseKey) {
       secondSingularBrowse = SecondSingularBrowse(rawValue: storedSecondSingularBrowseString) ?? .tu
-    }
-    else {
+    } else {
       secondSingularBrowse = SecondSingularBrowse()
       userDefaults.set(secondSingularBrowse.rawValue, forKey: SettingsManager.secondSingularBrowseKey)
       userDefaults.synchronize()
@@ -122,8 +114,7 @@ class SettingsManager {
 
     if let storedSecondSingularQuizString = userDefaults.string(forKey: SettingsManager.secondSingularQuizKey) {
       secondSingularQuiz = SecondSingularQuiz(rawValue: storedSecondSingularQuizString) ?? .tu
-    }
-    else {
+    } else {
       secondSingularQuiz = SecondSingularQuiz()
       userDefaults.set(secondSingularQuiz.rawValue, forKey: SettingsManager.secondSingularQuizKey)
       userDefaults.synchronize()

@@ -47,8 +47,7 @@ class ResultCell: UITableViewCell {
     self.correctAnswer.attributedText = correctAnswer.conjugatedString
     if correctAnswer.lowercased() == proposedAnswer.lowercased() {
       self.proposedAnswer.text = proposedAnswer.lowercased()
-    }
-    else {
+    } else {
       self.proposedAnswer.attributedText = proposedAnswer.coloredString(color: Colors.blue)
     }
   }

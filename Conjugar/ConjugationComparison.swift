@@ -28,8 +28,7 @@ enum ConjugationResult: Int {
     }
     if lhsClean == rhsClean {
       return .partialMatch
-    }
-    else {
+    } else {
       return .noMatch
     }
   }

@@ -29,8 +29,7 @@ class Utterer {
     utterance.rate = Utterer.rate
     if let locale = locale {
       utterance.voice = AVSpeechSynthesisVoice(language: locale)
-    }
-    else {
+    } else {
       utterance.voice = AVSpeechSynthesisVoice(language: "es-" + SettingsManager.getRegion().accent)
     }
     utterance.pitchMultiplier = Utterer.pitchMultiplier

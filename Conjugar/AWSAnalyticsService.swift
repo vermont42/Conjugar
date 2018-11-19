@@ -26,7 +26,7 @@ import AWSPinpoint
     recordEvent(eventName, parameters: nil, metrics: nil)
   }
 
-  @objc func recordEvent(_ eventName: String, parameters: [String : String]? = nil, metrics: [String : Double]? = nil) {
+  @objc func recordEvent(_ eventName: String, parameters: [String: String]? = nil, metrics: [String: Double]? = nil) {
     let event = pinpoint.analyticsClient.createEvent(withEventType: eventName)
     if let parameters = parameters {
       for (key, value) in parameters {
@@ -44,7 +44,7 @@ import AWSPinpoint
 
   @objc func recordVisitation(viewController: String) {
     let visited = "visited"
-    recordEvent(visited, parameters: ["viewController" : "\(viewController)"])
+    recordEvent(visited, parameters: ["viewController": "\(viewController)"])
   }
 
   @objc func recordQuizStart() {
@@ -54,7 +54,7 @@ import AWSPinpoint
 
   @objc func recordQuizCompletion(score: Int) {
     let quizCompletion = "quizCompletion"
-    recordEvent(quizCompletion, parameters: ["score" : "\(score)"])
+    recordEvent(quizCompletion, parameters: ["score": "\(score)"])
   }
 
   @objc func recordGameCenterAuth() {

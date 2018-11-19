@@ -49,8 +49,7 @@ extension String {
         let attString = NSMutableAttributedString(string: nsString.lowercased)
         attString.addAttribute(NSAttributedStringKey.foregroundColor, value: Colors.red, range:  NSRange(location: startIndex, length: endIndex - startIndex + 1))
         attStrings.append(attString)
-      }
-      else {
+      } else {
         attStrings.append(NSAttributedString(string: nsString as String))
       }
     }
@@ -88,8 +87,7 @@ extension String {
           attributesAndRanges.append((NSAttributedStringKey.paragraphStyle, centeredStyle, NSMakeRange(startIndex, currentIndex - startIndex)))
           attributesAndRanges.append((NSAttributedStringKey.font, Fonts.heading, NSMakeRange(startIndex, currentIndex - startIndex)))
           inHeading = false
-        }
-        else {
+        } else {
           inHeading = true
           startIndex = currentIndex
         }
@@ -100,8 +98,7 @@ extension String {
           attributesAndRanges.append((NSAttributedStringKey.paragraphStyle, centeredStyle, NSMakeRange(startIndex, currentIndex - startIndex)))
           attributesAndRanges.append((NSAttributedStringKey.font, Fonts.subheading, NSMakeRange(startIndex, currentIndex - startIndex)))
           inSubheading = false
-        }
-        else {
+        } else {
           inSubheading = true
           startIndex = currentIndex
         }
@@ -111,8 +108,7 @@ extension String {
         if inBold {
           attributesAndRanges.append((NSAttributedStringKey.font, Fonts.boldBody, NSMakeRange(startIndex, currentIndex - startIndex)))
           inBold = false
-        }
-        else {
+        } else {
           inBold = true
           startIndex = currentIndex
         }
@@ -134,8 +130,7 @@ extension String {
           }
           attributesAndRanges.append((NSAttributedStringKey.link, subString, nsRange))
           inLink = false
-        }
-        else {
+        } else {
           inLink = true
           startIndex = currentIndex
         }
@@ -146,8 +141,7 @@ extension String {
           let nsRange = NSMakeRange(startIndex + 1, (currentIndex - startIndex) - 1)
           conjugationRanges.append(nsRange)
           inConjugation = false
-        }
-        else {
+        } else {
           inConjugation = true
           startIndex = currentIndex
         }

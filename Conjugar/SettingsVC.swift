@@ -98,11 +98,9 @@ class SettingsVC: UIViewController {
     let index = settingsView.difficultyControl.selectedSegmentIndex
     if index == 0 {
       SettingsManager.setDifficulty(.easy)
-    }
-    else if index == 1 {
+    } else if index == 1 {
       SettingsManager.setDifficulty(.moderate)
-    }
-    else /* index == 2 */ {
+    } else /* index == 2 */ {
       SettingsManager.setDifficulty(.difficult)
     }
   }
@@ -111,8 +109,7 @@ class SettingsVC: UIViewController {
     let index = settingsView.quizVosControl.selectedSegmentIndex
     if index == 0 {
       SettingsManager.setSecondSingularQuiz(.tu)
-    }
-    else if index == 1 {
+    } else if index == 1 {
       SettingsManager.setSecondSingularQuiz(.vos)
     }
   }
@@ -121,11 +118,9 @@ class SettingsVC: UIViewController {
     let index = settingsView.browseVosControl.selectedSegmentIndex
     if index == 0 {
       SettingsManager.setSecondSingularBrowse(.tu)
-    }
-    else if index == 1 {
+    } else if index == 1 {
       SettingsManager.setSecondSingularBrowse(.vos)
-    }
-    else if index == 2 {
+    } else if index == 2 {
       SettingsManager.setSecondSingularBrowse(.both)
     }
   }

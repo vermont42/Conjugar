@@ -31,8 +31,7 @@ class Settings {
 
     if let promptActionCountString = userDefaults.string(forKey: Settings.promptActionCountKey) {
       promptActionCount = Int((promptActionCountString as NSString).intValue)
-    }
-    else {
+    } else {
       promptActionCount = Settings.promptActionCountDefault
       userDefaults.set("\(promptActionCount)", forKey: Settings.promptActionCountKey)
     }

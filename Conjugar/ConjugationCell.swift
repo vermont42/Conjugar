@@ -37,12 +37,10 @@ class ConjugationCell: UITableViewCell {
     var conjugation = conjugation
     if conjugation == Conjugator.defective {
       self.conjugation.text = ""
-    }
-    else {
+    } else {
       if tense == .imperativoPositivo || tense == .imperativoNegativo {
         conjugation = "¡" + conjugation + "!"
-      }
-      else {
+      } else {
         conjugation = personNumber.pronoun + " " + conjugation
       }
       self.conjugation.attributedText = conjugation.conjugatedString

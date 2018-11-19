@@ -114,8 +114,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     let index = browseInfoView.difficultyControl.selectedSegmentIndex
     if index == 0 {
       SettingsManager.setInfoDifficulty(.easy)
-    }
-    else if index == 1 {
+    } else if index == 1 {
       SettingsManager.setInfoDifficulty(.moderate)
     }
     else /* index == 2 */ {

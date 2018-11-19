@@ -58,8 +58,7 @@ internal class Quiz {
   internal var verb: String {
     if questions.count > 0 {
       return questions[currentQuestionIndex].0
-    }
-    else {
+    } else {
       return ""
     }
   }
@@ -67,8 +66,7 @@ internal class Quiz {
   internal var tense: Tense {
     if questions.count > 0 {
       return questions[currentQuestionIndex].1
-    }
-    else {
+    } else {
       return .infinitivo
     }
   }
@@ -76,8 +74,7 @@ internal class Quiz {
   internal var currentPersonNumber: PersonNumber {
     if questions.count > 0 {
       return questions[currentQuestionIndex].2
-    }
-    else {
+    } else {
       return .none
     }
   }
@@ -177,8 +174,7 @@ internal class Quiz {
       for _ in 0...1 {
         if SettingsManager.getSecondSingularQuiz() == .tu {
           questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingular))
-        }
-        else {
+        } else {
           questions.append((irregularVosImperativoVerb, .imperativoPositivo, .secondSingularVos))
         }
       }
@@ -235,8 +231,7 @@ internal class Quiz {
       questions.append((allRegularVerb, .futuroDeSubjuntivo, personNumber()))
       if SettingsManager.getSecondSingularQuiz() == .tu {
         questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingular))
-      }
-      else {
+      } else {
         questions.append((irregularVosImperativoVerb, .imperativoPositivo, .secondSingularVos))
       }
       questions.append((allRegularVerb, .imperativoPositivo, personNumber(skipYo: true, skipTu: true)))
@@ -283,8 +278,7 @@ internal class Quiz {
         currentQuestionIndex += 1
         delegate?.progressDidChange(current: currentQuestionIndex, total: questions.count)
         delegate?.questionDidChange(verb: questions[currentQuestionIndex].0, tense: questions[currentQuestionIndex].1, personNumber: questions[currentQuestionIndex].2)
-      }
-      else {
+      } else {
         score = Int(Double(score) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
         timer?.invalidate()
         quizState = .finished
@@ -293,8 +287,7 @@ internal class Quiz {
       }
       if result == .totalMatch {
         return (result, nil)
-      }
-      else {
+      } else {
         return (result, correctAnswer)
       }
     default:
@@ -311,15 +304,13 @@ internal class Quiz {
     personNumbersIndex += 1
     if personNumbersIndex == personNumbers.count {
       personNumbersIndex = 0
-    }
-    else if personNumbers[personNumbersIndex].pronoun == PersonNumber.secondPlural.pronoun && lastRegion == .latinAmerica {
+    } else if personNumbers[personNumbersIndex].pronoun == PersonNumber.secondPlural.pronoun && lastRegion == .latinAmerica {
       personNumbersIndex += 1
     }
     
     if (personNumbers[personNumbersIndex].pronoun == PersonNumber.firstSingular.pronoun && skipYo) || (personNumbers[personNumbersIndex].pronoun == PersonNumber.secondSingular.pronoun && skipTu) {
       return personNumber(skipYo: skipYo, skipTu: skipTu)
-    }
-    else {
+    } else {
       return personNumbers[personNumbersIndex]
     }
   }

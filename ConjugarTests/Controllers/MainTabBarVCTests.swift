@@ -21,8 +21,7 @@ class MainTabBarVCTests: XCTestCase {
           XCTFail("First tab's UINavigationController's visibleViewController is not a BrowseVerbsVC.")
         }
       }
-    }
-    else {
+    } else {
       XCTFail("First tab is not a UINavigationController.")
     }
     mtbvc.selectedIndex = 1
@@ -32,8 +31,7 @@ class MainTabBarVCTests: XCTestCase {
           XCTFail("Second tab's UINavigationController's visibleViewController is not a QuizVC.")
         }
       }
-    }
-    else {
+    } else {
       XCTFail("Second tab is not a UINavigationController.")
     }
     mtbvc.selectedIndex = 2
@@ -43,8 +41,7 @@ class MainTabBarVCTests: XCTestCase {
           XCTFail("Third tab's UINavigationController's visibleViewController is not a BrowseInfoVC.")
         }
       }
-    }
-    else {
+    } else {
       XCTFail("Third tab is not a UINavigationController.")
     }
     mtbvc.selectedIndex = 3
@@ -54,8 +51,7 @@ class MainTabBarVCTests: XCTestCase {
           XCTFail("Fourth tab's UINavigationController's visibleViewController is not a SettingsVC.")
         }
       }
-    }
-    else {
+    } else {
       XCTFail("Fourth tab is not a UINavigationController.")
     }
   }
