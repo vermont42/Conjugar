@@ -47,7 +47,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     irregularVerbs = Conjugator.shared.irregularVerbsArray()
     navigationItem.titleView = UILabel.titleLabel(title: "Browse")
     view = browseVerbsView
-    ReviewPrompter.promptableActionHappened()
+    ReviewPrompter.shared.promptableActionHappened()
   }
   
   override func viewWillAppear(_ animated: Bool) {
