@@ -16,10 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // https://stackoverflow.com/a/47750574/8248798
     // I like blue and prefer not to override preferredStatusBarStyle in every UIViewController.
     let statusBarKey = "statusBar"
-    if let statusbar = UIApplication.shared.value(forKey: statusBarKey) as? UIView {
-      let foregroundColorKey = "foregroundColor"
-      statusbar.setValue(Colors.blue, forKey: foregroundColorKey)
-    }
+    let statusbar = UIApplication.shared.value(forKey: statusBarKey) as? UIView
+    let foregroundColorKey = "foregroundColor"
+    statusbar?.setValue(Colors.blue, forKey: foregroundColorKey)
 
     UINavigationBar.appearance().barTintColor = UIColor.black
     UINavigationBar.appearance().tintColor = Colors.yellow
