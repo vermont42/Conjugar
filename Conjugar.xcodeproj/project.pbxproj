@@ -52,7 +52,7 @@
 		E14BAD921F0049AF000D91C5 /* ResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BAD911F0049AF000D91C5 /* ResultsVC.swift */; };
 		E14BAD941F006423000D91C5 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BAD931F006423000D91C5 /* ResultCell.swift */; };
 		E151222D21A0DBB0008EF307 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E151222C21A0DBB0008EF307 /* Settings.swift */; };
-		E151222E21A0DBB0008EF307 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E151222C21A0DBB0008EF307 /* Settings.swift */; };
+		E151223121A62AE9008EF307 /* ReviewPrompterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E151223021A62AE9008EF307 /* ReviewPrompterTests.swift */; };
 		E15A18531E9199C3008455DD /* ConjugatorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A18521E9199C3008455DD /* ConjugatorError.swift */; };
 		E15D3BF11F532F4E003771BB /* BrowseVerbsVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D3BF01F532F4E003771BB /* BrowseVerbsVCTests.swift */; };
 		E15D3BF61F533997003771BB /* MockNavigationC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D3BF51F533997003771BB /* MockNavigationC.swift */; };
@@ -173,6 +173,7 @@
 		E14BAD911F0049AF000D91C5 /* ResultsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsVC.swift; sourceTree = "<group>"; };
 		E14BAD931F006423000D91C5 /* ResultCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
 		E151222C21A0DBB0008EF307 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		E151223021A62AE9008EF307 /* ReviewPrompterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPrompterTests.swift; sourceTree = "<group>"; };
 		E15A18521E9199C3008455DD /* ConjugatorError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugatorError.swift; sourceTree = "<group>"; };
 		E15D3BF01F532F4E003771BB /* BrowseVerbsVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseVerbsVCTests.swift; sourceTree = "<group>"; };
 		E15D3BF51F533997003771BB /* MockNavigationC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationC.swift; sourceTree = "<group>"; };
@@ -348,6 +349,14 @@
 			name = Sounds;
 			sourceTree = "<group>";
 		};
+		E151222F21A62AA9008EF307 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E151223021A62AE9008EF307 /* ReviewPrompterTests.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		E15D3BED1F532E8E003771BB /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -436,6 +445,7 @@
 				E15D3BED1F532E8E003771BB /* Controllers */,
 				E15D3BF41F53397A003771BB /* Helpers */,
 				E198F9031F5D7C6B00BAF553 /* Models */,
+				E151222F21A62AA9008EF307 /* Utils */,
 				E198F9001F5D79BA00BAF553 /* Views */,
 				E1F06AEE1E8F05F400ADD2E1 /* Info.plist */,
 			);
@@ -536,7 +546,6 @@
 					};
 					E1F06AE71E8F05F400ADD2E1 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = V3L2PL4QC9;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						TestTargetID = E1F06AD31E8F05F200ADD2E1;
@@ -691,10 +700,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E12D06A31F5E85A200CDD54E /* VerbCellTests.swift in Sources */,
+				E151223121A62AE9008EF307 /* ReviewPrompterTests.swift in Sources */,
 				E198F9051F5D7CB200BAF553 /* ConjugatorTests.swift in Sources */,
 				E1EC70F22198A10B00872787 /* UIViewControllerExtension.swift in Sources */,
 				E14589F41F5B7BB000EEF141 /* BrowseInfoVCTests.swift in Sources */,
-				E151222E21A0DBB0008EF307 /* Settings.swift in Sources */,
 				E14589F61F5B7E9D00EEF141 /* VerbVCTests.swift in Sources */,
 				E15D3BF61F533997003771BB /* MockNavigationC.swift in Sources */,
 				E198F9021F5D79F100BAF553 /* VerbViewTests.swift in Sources */,
@@ -879,7 +888,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = V3L2PL4QC9;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarTests;
@@ -895,7 +904,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = V3L2PL4QC9;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarTests;

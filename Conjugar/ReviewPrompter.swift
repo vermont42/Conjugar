@@ -10,16 +10,16 @@ import StoreKit
 
 struct ReviewPrompter {
   static let shared = ReviewPrompter()
-  private static let promptModulo = 9
-  private static let promptInterval: TimeInterval = 60 * 60 * 24 * 180
+  static let promptModulo = 9
+  static let promptInterval: TimeInterval = 60 * 60 * 24 * 180
   private let settings: Settings
   private let now: Date
-  private let requestReviewClosure: () -> ()
+  private let requestReview: () -> ()
 
-  init(settings: Settings = Settings.shared, now: Date = Date(), requestReviewClosure: @escaping () -> () = { SKStoreReviewController.requestReview() }) {
+  init(settings: Settings = Settings.shared, now: Date = Date(), requestReview: @escaping () -> () = { SKStoreReviewController.requestReview() }) {
     self.settings = settings
     self.now = now
-    self.requestReviewClosure = requestReviewClosure
+    self.requestReview = requestReview
   }
 
   func promptableActionHappened() {
@@ -28,7 +28,7 @@ struct ReviewPrompter {
     settings.promptActionCount = actionCount
     let lastReviewPromptDate = settings.lastReviewPromptDate
     if actionCount % ReviewPrompter.promptModulo == 0 && now.timeIntervalSince(lastReviewPromptDate) >= ReviewPrompter.promptInterval {
-      requestReviewClosure()
+      requestReview()
       settings.lastReviewPromptDate = now
     }
   }
