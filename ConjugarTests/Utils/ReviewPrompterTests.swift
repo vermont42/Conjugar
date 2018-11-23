@@ -7,29 +7,46 @@
 //
 
 import XCTest
-import Foundation
 @testable import Conjugar
 
 class ReviewPrompterTests: XCTestCase {
     func testPromptableActionHappened() {
-      var customDefaults: [String: Any] = [:]
-      customDefaults[Settings.promptActionCountKey] = ReviewPrompter.promptModulo - 1
-      let settings = Settings(customDefaults: customDefaults)
       let now = Date()
-      let smallAmountOfTime: TimeInterval = -5.0
-      let recentPromptDate = now.addingTimeInterval(smallAmountOfTime)
-      settings.lastReviewPromptDate = recentPromptDate
+      let smallAmountOfTime: TimeInterval = 5.0
+      let recentPromptDate = now.addingTimeInterval(-1.0 * smallAmountOfTime)
+      var customDefaults1: [String: Any] = [:]
+      customDefaults1[Settings.lastReviewPromptDateKey] = recentPromptDate
+      let settings1 = Settings(customDefaults: customDefaults1)
       var didRequestReview = false
-      let prompter = ReviewPrompter(settings: settings, now: now, requestReview: { didRequestReview = true })
-      prompter.promptableActionHappened()
+      let prompter1 = ReviewPrompter(settings: settings1, now: now, requestReview: { didRequestReview = true })
+
+      prompter1.promptableActionHappened()
       XCTAssertFalse(didRequestReview)
-      let longAgoPromptDate = recentPromptDate.addingTimeInterval(-1.0 * ReviewPrompter.promptInterval)
-      settings.lastReviewPromptDate = longAgoPromptDate
-      settings.promptActionCount = ReviewPrompter.promptModulo - 2
-      prompter.promptableActionHappened()
-      XCTAssert(!didRequestReview)
-      settings.promptActionCount = ReviewPrompter.promptModulo - 1
-      prompter.promptableActionHappened()
+
+      settings1.promptActionCount = ReviewPrompter.promptModulo - 1
+      XCTAssertFalse(didRequestReview)
+
+      let longAgoDate = recentPromptDate.addingTimeInterval(-1.0 * ReviewPrompter.promptInterval)
+      settings1.lastReviewPromptDate = longAgoDate
+      settings1.promptActionCount = ReviewPrompter.promptModulo - 2
+      prompter1.promptableActionHappened()
+      XCTAssertFalse(didRequestReview)
+
+      settings1.promptActionCount = ReviewPrompter.promptModulo - 1
+      prompter1.promptableActionHappened()
       XCTAssert(didRequestReview)
+
+      var customDefaults2: [String: Any] = [:]
+      customDefaults2[Settings.promptActionCountKey] = ReviewPrompter.promptModulo - 1
+      let settings2 = Settings(customDefaults: customDefaults2)
+      let prompter2 = ReviewPrompter(settings: settings2, now: longAgoDate, requestReview: { didRequestReview = true })
+
+      didRequestReview = false
+      prompter2.promptableActionHappened()
+      XCTAssert(didRequestReview)
+
+      didRequestReview = false
+      prompter2.promptableActionHappened()
+      XCTAssertFalse(didRequestReview)
   }
 }

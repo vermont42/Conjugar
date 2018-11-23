@@ -29,15 +29,6 @@ class SettingsManager {
   private static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
   private static let didShowGameCenterDialogDefault = false
 
-  private var lastReviewPromptDate: Date
-  private static let lastReviewPromptDateKey = "lastReviewPromptDate"
-  private static let lastReviewPromptDateDefault = Date(timeIntervalSince1970: 0.0)
-  private static let formatter = DateFormatter()
-
-  private var promptActionCount: Int
-  private static let promptActionCountKey = "promptActionCount"
-  private static let promptActionCountDefault = 0
-
   private var secondSingularBrowse: SecondSingularBrowse
   private static let secondSingularBrowseKey = "secondSingularBrowse"
 
@@ -46,7 +37,6 @@ class SettingsManager {
 
   private init() {
     userDefaults = UserDefaults.standard
-    SettingsManager.formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
 
     if let storedRegionString = userDefaults.string(forKey: SettingsManager.regionKey) {
       region = Region(rawValue: storedRegionString) ?? .latinAmerica
@@ -85,22 +75,6 @@ class SettingsManager {
     } else {
       didShowGameCenterDialog = SettingsManager.didShowGameCenterDialogDefault
       userDefaults.set("\(didShowGameCenterDialog)", forKey: SettingsManager.didShowGameCenterDialogKey)
-      userDefaults.synchronize()
-    }
-
-    if let lastReviewPromptDateString = userDefaults.string(forKey: SettingsManager.lastReviewPromptDateKey) {
-      lastReviewPromptDate = SettingsManager.formatter.date(from: lastReviewPromptDateString) ?? Date()
-    } else {
-      lastReviewPromptDate = SettingsManager.lastReviewPromptDateDefault
-      userDefaults.set(SettingsManager.formatter.string(from: lastReviewPromptDate), forKey: SettingsManager.lastReviewPromptDateKey)
-      userDefaults.synchronize()
-    }
-
-    if let promptActionCountString = userDefaults.string(forKey: SettingsManager.promptActionCountKey) {
-      promptActionCount = Int((promptActionCountString as NSString).intValue)
-    } else {
-      promptActionCount = SettingsManager.promptActionCountDefault
-      userDefaults.set("\(promptActionCount)", forKey: SettingsManager.promptActionCountKey)
       userDefaults.synchronize()
     }
 
@@ -175,30 +149,6 @@ class SettingsManager {
     if didShowGameCenterDialog != settingsManager.didShowGameCenterDialog {
       settingsManager.didShowGameCenterDialog = didShowGameCenterDialog
       settingsManager.userDefaults.set("\(didShowGameCenterDialog)", forKey: SettingsManager.didShowGameCenterDialogKey)
-      settingsManager.userDefaults.synchronize()
-    }
-  }
-
-  class func getLastReviewPromptDate() -> Date {
-    return settingsManager.lastReviewPromptDate
-  }
-
-  class func setLastReviewPromptDate(_ lastReviewPromptDate: Date) {
-    if lastReviewPromptDate != settingsManager.lastReviewPromptDate {
-      settingsManager.lastReviewPromptDate = lastReviewPromptDate
-      settingsManager.userDefaults.set(SettingsManager.formatter.string(from: lastReviewPromptDate), forKey: SettingsManager.lastReviewPromptDateKey)
-      settingsManager.userDefaults.synchronize()
-    }
-  }
-
-  class func getPromptActionCount() -> Int {
-    return settingsManager.promptActionCount
-  }
-
-  class func setPromptActionCount(_ promptActionCount: Int) {
-    if promptActionCount != settingsManager.promptActionCount {
-      settingsManager.promptActionCount = promptActionCount
-      settingsManager.userDefaults.set("\(promptActionCount)", forKey: SettingsManager.promptActionCountKey)
       settingsManager.userDefaults.synchronize()
     }
   }
