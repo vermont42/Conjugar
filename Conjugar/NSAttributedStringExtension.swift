@@ -14,4 +14,3 @@ func + (left: NSAttributedString, right: NSAttributedString) -> NSAttributedStri
   result.append(right)
   return result
 }
-

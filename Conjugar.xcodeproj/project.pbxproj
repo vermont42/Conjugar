@@ -501,6 +501,7 @@
 				E1F06AD21E8F05F200ADD2E1 /* Resources */,
 				E1EC70F92198A63700872787 /* Embed Frameworks */,
 				E1EC70FA2198A6A800872787 /* Pinpoint Hocus Pocus */,
+				E1171C8F21A9A4AD00B06342 /* Run SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -602,6 +603,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		E1171C8F21A9A4AD00B06342 /* Run SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 		E1EC70FA2198A6A800872787 /* Pinpoint Hocus Pocus */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

@@ -115,7 +115,7 @@ class Conjugator {
     
     if verbs[infinitive] == nil {
       let stem = String(infinitive[..<index])
-      var verb:[String: String] = [:]
+      var verb: [String: String] = [:]
       if ending == "ar" {
         verb[Conjugator.parent] = "hablar"
         verb[Conjugator.stem] = stem

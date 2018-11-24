@@ -55,7 +55,9 @@ extension String {
     }
     var attString: NSAttributedString = attStrings[0]
     for i in 1 ..< attStrings.count {
+      // swiftlint:disable shorthand_operator
       attString = attString + NSAttributedString(string: " " ) + attStrings[i]
+      // swiftlint:enable shorthand_operator
     }
     return attString
   }

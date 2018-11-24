@@ -1,0 +1,11 @@
+
+disabled_rules:
+  - line_length
+  - function_body_length
+  - type_body_length
+  - identifier_name
+  - cyclomatic_complexity
+
+excluded:
+  - Conjugar/Result.swift
+  - Conjugar/ResultProtocol.swift
