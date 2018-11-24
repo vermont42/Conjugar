@@ -15,7 +15,7 @@ class BrowseInfoView: UIView {
     tableView.enableAutoLayout()
     return tableView
   }()
-  
+
   private let difficultyLabel: UILabel = {
     let label = UILabel()
     label.text = "Filter Tenses by Difficulty"
@@ -25,7 +25,7 @@ class BrowseInfoView: UIView {
     label.enableAutoLayout()
     return label
   }()
-  
+
   internal let difficultyControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["E", "E & M", "E, M, & D"])
     control.selectedSegmentIndex = 0
@@ -34,7 +34,7 @@ class BrowseInfoView: UIView {
     control.tintColor = Colors.red
     return control
   }()
-  
+
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")
   }
@@ -48,23 +48,22 @@ class BrowseInfoView: UIView {
     table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     table.bottomAnchor.constraint(equalTo: difficultyControl.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
-    
+
     difficultyControl.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
     difficultyControl.bottomAnchor.constraint(equalTo: difficultyLabel.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
 
     difficultyLabel.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
     difficultyLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
   }
-  
+
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {
     table.dataSource = dataSource
     table.delegate = delegate
     table.register(InfoCell.self, forCellReuseIdentifier: InfoCell.identifier)
   }
-  
+
   func reloadTableData() {
     table.reloadData()
     table.setContentOffset(CGPoint.zero, animated: false)
   }
 }
-

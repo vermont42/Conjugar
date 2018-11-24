@@ -10,11 +10,11 @@ enum Difficulty: String {
   case easy = "Easy"
   case moderate = "Moderate"
   case difficult = "Difficult"
-  
+
   init() {
     self = .easy
   }
-  
+
   var scoreModifier: Double {
     switch self {
     case .easy:

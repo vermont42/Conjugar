@@ -26,7 +26,7 @@ class QuizView: UIView {
   internal let correct = UILabel()
   internal let score = UILabel()
   internal let progress = UILabel()
-  
+
   internal let conjugationField: UITextField = {
     let field = UITextField()
     field.autocapitalizationType = .none
@@ -35,7 +35,7 @@ class QuizView: UIView {
     field.backgroundColor = UIColor.white
     return field
   }()
-  
+
   internal let startRestartButton: UIButton = {
     let button = UIButton()
     button.setTitle("Start", for: .normal)
@@ -43,11 +43,11 @@ class QuizView: UIView {
     button.setTitleColor(Colors.red, for: .normal)
     return button
   }()
-  
+
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")
   }
-  
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     [verb, verbLabel, translation, pronoun, pronounLabel, tense, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel].forEach {
@@ -64,76 +64,75 @@ class QuizView: UIView {
       $0.enableAutoLayout()
       addSubview($0)
     }
-    
+
     verbLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     verbLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    
+
     verb.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     verb.leadingAnchor.constraint(equalTo: verbLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
-    
+
     translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     translation.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    
+
     pronounLabel.topAnchor.constraint(equalTo: verbLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     pronounLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    
+
     pronoun.topAnchor.constraint(equalTo: verb.bottomAnchor, constant: Layout.defaultSpacing).activate()
     pronoun.leadingAnchor.constraint(equalTo: pronounLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
-    
+
     tenseLabel.topAnchor.constraint(equalTo: pronounLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     tenseLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    
+
     tense.topAnchor.constraint(equalTo: pronoun.bottomAnchor, constant: Layout.defaultSpacing).activate()
     tense.leadingAnchor.constraint(equalTo: tenseLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
-    
+
     scoreLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     scoreLabel.trailingAnchor.constraint(equalTo: score.leadingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
-    
+
     score.topAnchor.constraint(equalTo: tense.bottomAnchor, constant: Layout.defaultSpacing).activate()
     score.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    
+
     progressLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     progressLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    
+
     progress.topAnchor.constraint(equalTo: tense.bottomAnchor, constant: Layout.defaultSpacing).activate()
     progress.leadingAnchor.constraint(equalTo: progressLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
-    
+
     elapsedLabel.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     elapsedLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    
+
     elapsed.topAnchor.constraint(equalTo: progress.bottomAnchor, constant: Layout.defaultSpacing).activate()
     elapsed.leadingAnchor.constraint(equalTo: elapsedLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
-    
+
     lastLabel.topAnchor.constraint(equalTo: elapsedLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     lastLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    
+
     last.topAnchor.constraint(equalTo: elapsed.bottomAnchor, constant: Layout.defaultSpacing).activate()
     last.leadingAnchor.constraint(equalTo: lastLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
-    
+
     correctLabel.topAnchor.constraint(equalTo: lastLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     correctLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    
+
     correct.topAnchor.constraint(equalTo: last.bottomAnchor, constant: Layout.defaultSpacing).activate()
     correct.leadingAnchor.constraint(equalTo: correctLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
 
     conjugationField.topAnchor.constraint(equalTo: correctLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     conjugationField.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     conjugationField.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    
+
     startRestartButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: Layout.defaultSpacing).activate()
     startRestartButton.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
   }
-  
+
   internal func hideInProgressUI() {
     [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, tense, lastLabel, last, correctLabel, correct, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].forEach {
       $0.isHidden = true
     }
   }
-  
+
   internal func showInProgressUI() {
     [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, tense, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].forEach {
       $0.isHidden = false
     }
   }
 }
-

@@ -13,7 +13,7 @@ struct Info {
   let difficulty: Difficulty
   let text: String
   let infoString: NSAttributedString
-  
+
   private init(heading: String, difficulty: Difficulty, text: String) {
     guard let encodedHeading = heading.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
       fatalError("Could not URL encode heading \(heading).")
@@ -23,7 +23,7 @@ struct Info {
     self.text = text
     infoString = text.infoString
   }
-  
+
   static let infos: [Info] = [
 Info(heading: "Purpose & Use", difficulty: .easy, text: """
 *Purpose & Use*

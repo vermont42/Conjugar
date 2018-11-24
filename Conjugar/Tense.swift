@@ -8,7 +8,7 @@
 
 enum Tense: String {
   static let auxiliary = "haber"
-  
+
   case infinitivo = "in"
   case translation = "tn"
   case gerundio = "ge"
@@ -17,7 +17,7 @@ enum Tense: String {
 
   case imperativoPositivo = "io"
   case imperativoNegativo = "ni"
-  
+
   case presenteDeIndicativo = "pr"
   case preterito = "pt"
   case imperfectoDeIndicativo = "ii"
@@ -27,7 +27,7 @@ enum Tense: String {
   case imperfectoDeSubjuntivo1 = "i1"
   case imperfectoDeSubjuntivo2 = "i2"
   case futuroDeSubjuntivo = "fv"
-  
+
   case perfectoDeIndicativo = "pi"
   case preteritoAnterior = "pa"
   case pluscuamperfectoDeIndicativo = "fi"
@@ -125,7 +125,7 @@ enum Tense: String {
       return "futuro perfecto de subjuntivo"
     }
   }
-  
+
   var titleCaseName: String {
     switch self {
     case .infinitivo:
@@ -180,7 +180,7 @@ enum Tense: String {
       return "Futuro Perfecto de Subjuntivo"
     }
   }
-  
+
   func haberTenseForCompoundTense() -> Result<Tense, AuxiliaryError> {
     switch self {
     case .perfectoDeIndicativo:

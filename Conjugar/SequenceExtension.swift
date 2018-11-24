@@ -13,4 +13,3 @@ extension Sequence {
     return result
   }
 }
-

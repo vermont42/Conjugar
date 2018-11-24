@@ -26,7 +26,7 @@ class ResultsView: UIView {
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")
   }
-  
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     [difficulty, region, score, time, scoreLabel, timeLabel].forEach {
@@ -44,13 +44,13 @@ class ResultsView: UIView {
     table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     table.bottomAnchor.constraint(equalTo: difficulty.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
-    
+
     difficulty.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     difficulty.bottomAnchor.constraint(equalTo: score.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
-    
+
     region.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     region.bottomAnchor.constraint(equalTo: time.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
-    
+
     scoreLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
     scoreLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
 
@@ -66,13 +66,13 @@ class ResultsView: UIView {
     time.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     time.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
   }
-  
+
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {
     table.dataSource = dataSource
     table.delegate = delegate
     table.register(ResultCell.self, forCellReuseIdentifier: ResultCell.identifier)
   }
-  
+
   func reloadTableData() {
     table.reloadData()
     table.setContentOffset(CGPoint.zero, animated: false)

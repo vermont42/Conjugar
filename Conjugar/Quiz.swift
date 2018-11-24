@@ -48,9 +48,9 @@ internal class Quiz {
   private var timer: Timer?
   private var personNumbers: [PersonNumber] = [.firstSingular, .secondSingular, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
-  internal weak var delegate: QuizDelegate? = nil
+  internal weak var delegate: QuizDelegate?
   static let shared = Quiz()
-  
+
   internal var questionCount: Int {
     return questions.count
   }
@@ -62,7 +62,7 @@ internal class Quiz {
       return ""
     }
   }
-  
+
   internal var tense: Tense {
     if questions.count > 0 {
       return questions[currentQuestionIndex].1
@@ -78,9 +78,9 @@ internal class Quiz {
       return .none
     }
   }
-  
+
   private init() {}
-  
+
   internal func start() {
     lastRegion = SettingsManager.getRegion()
     lastDifficulty = SettingsManager.getDifficulty()
@@ -252,17 +252,16 @@ internal class Quiz {
     delegate?.timeDidChange(newTime: 0)
     delegate?.progressDidChange(current: 0, total: questions.count)
   }
-  
+
   private var regularOrIrregularParticipioVerb: String {
     let diceRoll = Int(arc4random_uniform(2))
     if diceRoll == 0 {
       return allRegularVerb
-    }
-    else /* diceRoll == 1 */ {
+    } else /* diceRoll == 1 */ {
       return irregularParticipioVerb
     }
   }
-  
+
   internal func process(proposedAnswer: String) -> (ConjugationResult, String?) {
     let correctAnswerResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: currentPersonNumber)
     switch correctAnswerResult {
@@ -294,7 +293,7 @@ internal class Quiz {
       fatalError()
     }
   }
-  
+
   @objc func eachSecond() {
     elapsedTime += 1
     delegate?.timeDidChange(newTime: elapsedTime)
@@ -307,14 +306,14 @@ internal class Quiz {
     } else if personNumbers[personNumbersIndex].pronoun == PersonNumber.secondPlural.pronoun && lastRegion == .latinAmerica {
       personNumbersIndex += 1
     }
-    
+
     if (personNumbers[personNumbersIndex].pronoun == PersonNumber.firstSingular.pronoun && skipYo) || (personNumbers[personNumbersIndex].pronoun == PersonNumber.secondSingular.pronoun && skipTu) {
       return personNumber(skipYo: skipYo, skipTu: skipTu)
     } else {
       return personNumbers[personNumbersIndex]
     }
   }
-  
+
   private var regularArVerb: String {
     regularArVerbsIndex += 1
     if regularArVerbsIndex == regularArVerbs.count {
@@ -338,7 +337,7 @@ internal class Quiz {
     }
     return regularErVerbs[regularErVerbsIndex]
   }
-  
+
   private var allRegularVerb: String {
     allRegularVerbsIndex += 1
     if allRegularVerbsIndex == allRegularVerbs.count {
@@ -346,7 +345,7 @@ internal class Quiz {
     }
     return allRegularVerbs[allRegularVerbsIndex]
   }
-  
+
   private var irregularPresenteDeIndicativoVerb: String {
     irregularPresenteDeIndicativoVerbsIndex += 1
     if irregularPresenteDeIndicativoVerbsIndex == irregularPresenteDeIndicativoVerbs.count {
@@ -370,7 +369,7 @@ internal class Quiz {
     }
     return irregularParticipioVerbs[irregularParticipioVerbsIndex]
   }
-  
+
   private var irregularImperfectoVerb: String {
     irregularImperfectoVerbsIndex += 1
     if irregularImperfectoVerbsIndex == irregularImperfectoVerbs.count {
@@ -378,7 +377,7 @@ internal class Quiz {
     }
     return irregularImperfectoVerbs[irregularImperfectoVerbsIndex]
   }
-  
+
   private var irregularPreteritoVerb: String {
     irregularPreteritoVerbsIndex += 1
     if irregularPreteritoVerbsIndex == irregularPreteritoVerbs.count {
@@ -386,7 +385,7 @@ internal class Quiz {
     }
     return irregularPreteritoVerbs[irregularPreteritoVerbsIndex]
   }
-  
+
   private var irregularPresenteDeSubjuntivoVerb: String {
     irregularPresenteDeSubjuntivoVerbsIndex += 1
     if irregularPresenteDeSubjuntivoVerbsIndex == irregularPresenteDeSubjuntivoVerbs.count {
@@ -394,7 +393,7 @@ internal class Quiz {
     }
     return irregularPresenteDeSubjuntivoVerbs[irregularPresenteDeSubjuntivoVerbsIndex]
   }
-  
+
   private var irregularGerundioVerb: String {
     irregularGerundioVerbsIndex += 1
     if irregularGerundioVerbsIndex == irregularGerundioVerbs.count {
@@ -402,7 +401,7 @@ internal class Quiz {
     }
     return irregularGerundioVerbs[irregularGerundioVerbsIndex]
   }
-  
+
   private var irregularTuImperativoVerb: String {
     irregularTuImperativoVerbsIndex += 1
     if irregularTuImperativoVerbsIndex == irregularTuImperativoVerbs.count {

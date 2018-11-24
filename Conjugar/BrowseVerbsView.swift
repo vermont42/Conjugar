@@ -15,7 +15,7 @@ class BrowseVerbsView: UIView {
     tableView.enableAutoLayout()
     return tableView
   }()
-  
+
   internal let filterControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Irregular", "Regular", "Both"])
     control.selectedSegmentIndex = 0
@@ -24,7 +24,7 @@ class BrowseVerbsView: UIView {
     control.tintColor = Colors.red
     return control
   }()
-  
+
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")
   }
@@ -41,16 +41,15 @@ class BrowseVerbsView: UIView {
     filterControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     filterControl.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
   }
-  
+
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {
     table.dataSource = dataSource
     table.delegate = delegate
     table.register(VerbCell.self, forCellReuseIdentifier: VerbCell.identifier)
   }
-  
+
   func reloadTableData() {
     table.reloadData()
     table.setContentOffset(CGPoint.zero, animated: false)
   }
 }
-

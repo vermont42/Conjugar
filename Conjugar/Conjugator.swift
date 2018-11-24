@@ -14,37 +14,33 @@ class Conjugator {
   static let translation = "tn"
   static let shared = Conjugator()
   static let baseVerbs = ["hablar", "comer", "subir"]
-  
+
   var verbs: [String: [String: String]] = [:]
-  
+
   init() {
     verbs = VerbParser().parse()
   }
-  
+
   func allVerbsArray() -> [String] {
     return Array(verbs.keys).sorted()
   }
-  
+
   func regularVerbsArray() -> [String] {
     var regularVerbs: [String: [String: String]] = [:]
-    for (key, value) in verbs {
-      if value[VerbType.key] != VerbType.irregular.rawValue {
-        regularVerbs[key] = value
-      }
+    for (key, value) in verbs where value[VerbType.key] != VerbType.irregular.rawValue {
+      regularVerbs[key] = value
     }
     return Array(regularVerbs.keys).sorted()
   }
 
   func irregularVerbsArray() -> [String] {
     var irregularVerbs: [String: [String: String]] = [:]
-    for (key, value) in verbs {
-      if value[VerbType.key] == VerbType.irregular.rawValue {
-        irregularVerbs[key] = value
-      }
+    for (key, value) in verbs where value[VerbType.key] == VerbType.irregular.rawValue {
+      irregularVerbs[key] = value
     }
     return Array(irregularVerbs.keys).sorted()
   }
-  
+
   func parent(infinitive: String) -> String? {
     if let verb = verbs[infinitive], let parent = verb[Conjugator.parent] {
       return parent
@@ -52,7 +48,7 @@ class Conjugator {
       return nil
     }
   }
-  
+
   func verbType(infinitive: String) -> VerbType {
     guard let verb = verbs[infinitive] else {
       fatalError("Requested type of unsupported verb.")
@@ -73,7 +69,7 @@ class Conjugator {
       fatalError("Unknown verb type detected.")
     }
   }
-  
+
   func isDefective(infinitive: String) -> Bool {
     if let verb = verbs[infinitive] {
       if
@@ -92,7 +88,7 @@ class Conjugator {
       return false
     }
   }
-  
+
   func conjugate(infinitive: String, tense: Tense, personNumber: PersonNumber) -> Result<String, ConjugatorError> {
     if infinitive.count < 2 {
       return .failure(.tooShort)
@@ -112,7 +108,7 @@ class Conjugator {
     if (tense != .gerundio && tense != .participio && tense != .raizFutura && tense != .translation) && personNumber == .none {
       return .failure(.personNumberAbsent(tense))
     }
-    
+
     if verbs[infinitive] == nil {
       let stem = String(infinitive[..<index])
       var verb: [String: String] = [:]
@@ -134,7 +130,7 @@ class Conjugator {
     }
     return conjugateRecursively(infinitive: infinitive, tense: tense, personNumber: personNumber)
   }
-  
+
   private func conjugateRecursively(infinitive: String, tense: Tense, personNumber: PersonNumber) -> Result<String, ConjugatorError> {
     guard var verb = verbs[infinitive] else {
       fatalError("verbs[\(infinitive)] was nil.")
@@ -313,8 +309,7 @@ class Conjugator {
           verbs[infinitive] = verb
           return .success(conjugation)
         }
-      }
-      else /* personNumber == .secondPlural */ {
+      } else /* personNumber == .secondPlural */ {
         return .success(String(infinitive[..<infinitive.index(infinitive.endIndex, offsetBy: -1)]) + "d")
       }
     } else if tense == .imperativoNegativo {
@@ -329,7 +324,7 @@ class Conjugator {
       return .failure(.tenseNotImplemented(tense))
     }
   }
-  
+
   private func endingFor(tense: Tense, personNumber: PersonNumber) -> String {
     switch personNumber {
     case .firstSingular:

@@ -10,7 +10,7 @@ import UIKit
 
 class ConjugationCell: UITableViewCell {
   static let identifier = "ConjugationCell"
-  
+
   private let conjugation: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
@@ -18,11 +18,11 @@ class ConjugationCell: UITableViewCell {
     label.enableAutoLayout()
     return label
   }()
-  
+
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented.")
   }
-  
+
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ConjugationCell.tap(_:))))
@@ -32,7 +32,7 @@ class ConjugationCell: UITableViewCell {
     conjugation.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
     conjugation.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
   }
-  
+
   func configure(tense: Tense, personNumber: PersonNumber, conjugation: String) {
     var conjugation = conjugation
     if conjugation == Conjugator.defective {
@@ -46,7 +46,7 @@ class ConjugationCell: UITableViewCell {
       self.conjugation.attributedText = conjugation.conjugatedString
     }
   }
-  
+
   @objc func tap(_ sender: UITapGestureRecognizer) {
     Utterer.utter(conjugation.attributedText?.string ?? conjugation.text ?? "")
   }

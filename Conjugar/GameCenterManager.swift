@@ -13,9 +13,9 @@ class GameCenterManager: NSObject, GKGameCenterControllerDelegate {
   let localPlayer = GKLocalPlayer.localPlayer()
   var isAuthenticated = false
   var leaderboardIdentifier = ""
-  
+
   private override init() {}
-  
+
   func authenticate(completion: ((Bool) -> Void)? = nil) {
     localPlayer.authenticateHandler = { viewController, error in
       if let viewController = viewController, let topController = UIApplication.topViewController() {
@@ -27,7 +27,7 @@ class GameCenterManager: NSObject, GKGameCenterControllerDelegate {
         SoundManager.play(.applause1)
         self.localPlayer.loadDefaultLeaderboardIdentifier { identifier, error in
           self.leaderboardIdentifier = identifier ?? "ERROR"
-          print("identifier: \(self.leaderboardIdentifier)")
+          //print("identifier: \(self.leaderboardIdentifier)")
         }
         completion?(true)
       } else {
@@ -38,7 +38,7 @@ class GameCenterManager: NSObject, GKGameCenterControllerDelegate {
       }
     }
   }
-  
+
   func reportScore(_ score: Int) {
     if !isAuthenticated {
       return
@@ -54,7 +54,7 @@ class GameCenterManager: NSObject, GKGameCenterControllerDelegate {
       }
     }
   }
-  
+
   func showLeaderboard() {
     if !isAuthenticated {
       return
@@ -67,7 +67,7 @@ class GameCenterManager: NSObject, GKGameCenterControllerDelegate {
       topController.present(gcViewController, animated: true, completion: nil)
     }
   }
-  
+
   func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
     gameCenterViewController.dismiss(animated: true, completion: nil)
   }

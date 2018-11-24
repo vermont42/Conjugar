@@ -16,13 +16,12 @@ class BrowseInfoVCTests: XCTestCase {
     UIApplication.shared.keyWindow?.rootViewController = nc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(bivc)
-    XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), 27)
+    XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), 28)
     bivc.browseInfoView.difficultyControl.selectedSegmentIndex = 0
-    XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), 8)
+    XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), 9)
     bivc.browseInfoView.difficultyControl.selectedSegmentIndex = 1
-    XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), 16)
+    XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), 17)
     bivc.tableView(UITableView(), didSelectRowAt: IndexPath(row: 0, section: 0))
     XCTAssertTrue(nc.pushedViewController is InfoVC)
   }
 }
-

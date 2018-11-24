@@ -9,7 +9,7 @@
 import UIKit
 
 class InfoVC: UIViewController, UITextViewDelegate {
-  internal weak var infoDelegate: InfoDelegate? = nil
+  internal weak var infoDelegate: InfoDelegate?
   internal var infoString: NSAttributedString?
 
   var infoView: InfoView {
@@ -19,7 +19,7 @@ class InfoVC: UIViewController, UITextViewDelegate {
       fatalError(fatalCastMessage(viewController: InfoVC.self, view: InfoView.self))
     }
   }
-  
+
   override func loadView() {
     let infoView: InfoView
     infoView = InfoView(frame: UIScreen.main.bounds)
@@ -41,8 +41,7 @@ class InfoVC: UIViewController, UITextViewDelegate {
     let http = "http"
     if URL.absoluteString.prefix(http.count) == http {
       return true
-    }
-    else {
+    } else {
       navigationController?.popViewController(animated: true)
       infoDelegate?.infoSelectionDidChange(newHeading: URL.absoluteString)
       return false

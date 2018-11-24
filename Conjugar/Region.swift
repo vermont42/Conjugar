@@ -9,11 +9,11 @@
 enum Region: String {
   case spain = "Spain"
   case latinAmerica = "Latin America"
-  
+
   init() {
     self = .spain
   }
-  
+
   var accent: String {
     switch self {
     case .spain:
@@ -22,7 +22,7 @@ enum Region: String {
       return "MX"
     }
   }
-  
+
   var scoreModifier: Double {
     switch self {
     case .spain:

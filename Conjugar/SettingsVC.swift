@@ -29,7 +29,7 @@ class SettingsVC: UIViewController {
     navigationItem.titleView = UILabel.titleLabel(title: "Settings")
     view = settingsView
   }
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
     updateControls()
@@ -42,14 +42,14 @@ class SettingsVC: UIViewController {
     }
     AnalyticsService.shared.recordVisitation(viewController: "\(SettingsVC.self)")
   }
-  
+
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     if !settingsView.gameCenterButton.isHidden {
       settingsView.gameCenterButton.pulsate()
     }
   }
-  
+
   private func updateControls() {
     switch SettingsManager.getRegion() {
     case .spain:
@@ -57,7 +57,7 @@ class SettingsVC: UIViewController {
     case .latinAmerica:
       settingsView.regionControl.selectedSegmentIndex = 1
     }
-    
+
     switch SettingsManager.getDifficulty() {
     case .easy:
       settingsView.difficultyControl.selectedSegmentIndex = 0
@@ -83,17 +83,16 @@ class SettingsVC: UIViewController {
       settingsView.quizVosControl.selectedSegmentIndex = 1
     }
   }
-  
+
   @objc func regionChanged(_ sender: UISegmentedControl) {
     let index = settingsView.regionControl.selectedSegmentIndex
     if index == 0 {
       SettingsManager.setRegion(.spain)
-    }
-    else /* index == 1 */ {
+    } else /* index == 1 */ {
       SettingsManager.setRegion(.latinAmerica)
     }
   }
-  
+
   @objc func difficultyChanged(_ sender: UISegmentedControl) {
     let index = settingsView.difficultyControl.selectedSegmentIndex
     if index == 0 {
@@ -136,4 +135,3 @@ class SettingsVC: UIViewController {
     }
   }
 }
-

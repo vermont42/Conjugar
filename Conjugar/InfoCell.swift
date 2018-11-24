@@ -10,7 +10,7 @@ import UIKit
 
 class InfoCell: UITableViewCell {
   static let identifier = "InfoCell"
-  
+
   private let heading: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
@@ -18,11 +18,11 @@ class InfoCell: UITableViewCell {
     label.enableAutoLayout()
     return label
   }()
-  
+
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented.")
   }
-  
+
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     backgroundColor = Colors.black
@@ -30,7 +30,7 @@ class InfoCell: UITableViewCell {
     heading.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
     heading.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
   }
-  
+
   func configure(heading: String) {
     self.heading.text = heading
   }

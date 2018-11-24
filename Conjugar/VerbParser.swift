@@ -16,7 +16,7 @@ class VerbParser: NSObject, XMLParserDelegate {
   private var currentVerb = ""
   private var currentConjugations: [String: String] = [:]
   static let parseError = "An error occurred during XML parsing."
-  
+
   override init() {
     super.init()
     if let url = Bundle.main.url(forResource: "verbs", withExtension: "xml") {
@@ -27,12 +27,12 @@ class VerbParser: NSObject, XMLParserDelegate {
       parser?.delegate = self
     }
   }
-  
+
   func parse() -> [String: [String: String]] {
     parser?.parse()
     return verbs
   }
-  
+
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String: String]) {
     if elementName == verbTag {
       if let currentVerb = attributeDict[Tense.infinitivo.rawValue] {

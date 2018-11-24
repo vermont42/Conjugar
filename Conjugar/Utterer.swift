@@ -12,18 +12,17 @@ class Utterer {
   private static let synth = AVSpeechSynthesizer()
   private static let rate: Float = 0.5
   private static let pitchMultiplier: Float = 0.8
-  
+
   static func setup() {
     let session = AVAudioSession.sharedInstance()
     do {
       try session.setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSessionCategoryOptions.mixWithOthers)
-    }
-    catch let error as NSError {
+    } catch let error as NSError {
       print("\(error.localizedDescription)")
     }
     utter("")
   }
-  
+
   static func utter(_ thingToUtter: String, locale: String? = nil) {
     let utterance = AVSpeechUtterance(string: thingToUtter)
     utterance.rate = Utterer.rate

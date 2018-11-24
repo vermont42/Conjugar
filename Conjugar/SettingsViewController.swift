@@ -12,12 +12,12 @@ import UIKit
 class SettingsViewController: UIViewController {
   @IBOutlet var regionControl: UISegmentedControl!
   @IBOutlet var difficultyControl: UISegmentedControl!
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
     updateControls()
   }
-  
+
   private func updateControls() {
     switch SettingsManager.getRegion() {
     case .spain:
@@ -25,7 +25,7 @@ class SettingsViewController: UIViewController {
     case .latinAmerica:
       regionControl.selectedSegmentIndex = 1
     }
-    
+
     switch SettingsManager.getDifficulty() {
     case .easy:
       difficultyControl.selectedSegmentIndex = 0
@@ -35,26 +35,23 @@ class SettingsViewController: UIViewController {
       difficultyControl.selectedSegmentIndex = 2
     }
   }
-  
+
   @IBAction func regionChanged() {
     let index = regionControl.selectedSegmentIndex
     if index == 0 {
       SettingsManager.setRegion(.spain)
-    }
-    else /* index == 1 */ {
+    } else /* index == 1 */ {
       SettingsManager.setRegion(.latinAmerica)
     }
   }
-  
+
   @IBAction func difficultyChanged() {
     let index = difficultyControl.selectedSegmentIndex
     if index == 0 {
       SettingsManager.setDifficulty(.easy)
-    }
-    else if index == 1 {
+    } else if index == 1 {
       SettingsManager.setDifficulty(.moderate)
-    }
-    else /* index == 2 */ {
+    } else /* index == 2 */ {
       SettingsManager.setDifficulty(.difficult)
     }
   }

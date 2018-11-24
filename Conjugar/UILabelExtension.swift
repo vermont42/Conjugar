@@ -16,7 +16,7 @@ extension UILabel {
     titleLabel.textColor = Colors.yellow
     let width = titleLabel.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)).width
     let tappableHeight: CGFloat = 100.0
-    titleLabel.frame = CGRect(origin:CGPoint.zero, size:CGSize(width: width, height: tappableHeight))
+    titleLabel.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: width, height: tappableHeight))
     return titleLabel
   }
 }

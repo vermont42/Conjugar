@@ -12,7 +12,7 @@ class SoundManager {
   private static let soundManager = SoundManager()
   private var sounds: [String: AVAudioPlayer]
   private static let soundExtension = "mp3"
-  
+
   private init () {
     sounds = Dictionary()
     do {
@@ -21,7 +21,7 @@ class SoundManager {
       print("\(error.localizedDescription)")
     }
   }
-  
+
   static func play(_ sound: Sound) {
     if soundManager.sounds[sound.rawValue] == nil {
       if let audioUrl = Bundle.main.url(forResource: sound.rawValue, withExtension: soundExtension) {
@@ -34,13 +34,12 @@ class SoundManager {
     }
     soundManager.sounds[sound.rawValue]?.play()
   }
-  
+
   static func enableBackgroundAudio() {
     let session = AVAudioSession.sharedInstance()
     do {
       try session.setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSessionCategoryOptions.mixWithOthers)
-    }
-    catch let error as NSError {
+    } catch let error as NSError {
       print("\(error.localizedDescription)")
     }
   }

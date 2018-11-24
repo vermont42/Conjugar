@@ -17,7 +17,6 @@ class ConjugatorTests: XCTestCase {
       break
     default:
       XCTFail("One-letter words cannot be conjugated.")
-      break
     }
 
     result = Conjugator.shared.conjugate(infinitive: "tango", tense: .preterito, personNumber: .thirdPlural)
@@ -26,7 +25,6 @@ class ConjugatorTests: XCTestCase {
       break
     default:
       XCTFail("Words not ending in ar, er, or ir cannot be conjugated.")
-      break
     }
 
     result = Conjugator.shared.conjugate(infinitive: "maltear", tense: .presenteDeIndicativo, personNumber: .secondSingular)
@@ -35,7 +33,6 @@ class ConjugatorTests: XCTestCase {
       XCTAssertEqual(value, "malteas")
     default:
       XCTFail("Conjugation failed.")
-      break
     }
   }
 }

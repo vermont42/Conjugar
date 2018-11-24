@@ -13,7 +13,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   private var allInfos: [Info] = []
   private var easyModerateInfos: [Info] = []
   private var easyInfos: [Info] = []
-  
+
   private var currentInfos: [Info] {
     switch browseInfoView.difficultyControl.selectedSegmentIndex {
     case 0:
@@ -50,7 +50,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     allInfos = Info.infos
     view = browseInfoView
   }
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
     updateDifficultyControl()
@@ -60,7 +60,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     super.viewWillAppear(animated)
     AnalyticsService.shared.recordVisitation(viewController: "\(BrowseInfoVC.self)")
   }
-  
+
   private func updateDifficultyControl() {
     switch SettingsManager.getInfoDifficulty() {
     case .easy:
@@ -71,11 +71,11 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
       browseInfoView.difficultyControl.selectedSegmentIndex = 2
     }
   }
-  
+
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return currentInfos.count
   }
-  
+
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: InfoCell.identifier) as? InfoCell else {
       fatalError("Could not dequeue \(InfoCell.self).")
@@ -86,13 +86,13 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     cell.configure(heading: decodedString)
     return cell
   }
-  
+
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     selectedRow = (indexPath as NSIndexPath).row
     tableView.deselectRow(at: indexPath, animated: false)
     showInfo()
   }
-  
+
   func infoSelectionDidChange(newHeading: String) {
     for i in 0 ..< Info.infos.count {
       if currentInfos[i].heading.lowercased() == newHeading.lowercased() {
@@ -102,22 +102,21 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     showInfo()
   }
-  
+
   private func showInfo() {
     let infoVC = InfoVC()
     infoVC.infoString = currentInfos[selectedRow].infoString
     infoVC.infoDelegate = self
     navigationController?.pushViewController(infoVC, animated: true)
   }
-  
+
   @objc func difficultyChanged(_ sender: UISegmentedControl) {
     let index = browseInfoView.difficultyControl.selectedSegmentIndex
     if index == 0 {
       SettingsManager.setInfoDifficulty(.easy)
     } else if index == 1 {
       SettingsManager.setInfoDifficulty(.moderate)
-    }
-    else /* index == 2 */ {
+    } else /* index == 2 */ {
       SettingsManager.setInfoDifficulty(.difficult)
     }
     browseInfoView.table.reloadData()

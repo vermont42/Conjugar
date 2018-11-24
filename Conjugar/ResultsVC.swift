@@ -16,7 +16,7 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
       fatalError(fatalCastMessage(viewController: ResultsVC.self, view: ResultsView.self))
     }
   }
-  
+
   override func loadView() {
     let resultsView: ResultsView
     resultsView = ResultsView(frame: UIScreen.main.bounds)
@@ -24,7 +24,7 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     navigationItem.titleView = UILabel.titleLabel(title: "Results")
     view = resultsView
   }
-  
+
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     resultsView.difficulty.text = Quiz.shared.lastDifficulty.rawValue
@@ -33,7 +33,7 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     resultsView.time.text = Quiz.shared.elapsedTime.timeString
     AnalyticsService.shared.recordVisitation(viewController: "\(ResultsVC.self)")
   }
-  
+
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return Quiz.shared.questions.count
   }
@@ -48,4 +48,3 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     return cell
   }
 }
-

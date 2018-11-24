@@ -11,7 +11,7 @@ import UIKit
 class VerbVC: UIViewController {
   var verb: String = ""
   private var conjugationDataSource: ConjugationDataSource?
-  
+
   var verbView: VerbView {
     if let castedView = view as? VerbView {
       return castedView
@@ -64,7 +64,7 @@ class VerbVC: UIViewController {
     } else {
       verbView.defectivo.text = "Not Defective"
     }
-    
+
     let verbType = Conjugator.shared.verbType(infinitive: verb)
     switch verbType {
     case .regularAr:
@@ -96,20 +96,20 @@ class VerbVC: UIViewController {
     verbView.table.reloadData()
     AnalyticsService.shared.recordVisitation(viewController: "\(VerbVC.self)")
   }
-  
+
   private func initNavigationItemTitleView() {
     let titleLabel = UILabel.titleLabel(title: verb.capitalized)
     navigationItem.titleView = titleLabel
     titleLabel.isUserInteractionEnabled = true
     titleLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.tapSpanish(_:))))
   }
-  
+
   @objc func tapSpanish(_ sender: UITapGestureRecognizer) {
     if let label = sender.view as? UILabel {
       Utterer.utter(label.attributedText?.string ?? label.text ?? "")
     }
   }
-  
+
   @objc func tapEnglish(_ sender: UITapGestureRecognizer) {
     if let label = sender.view as? UILabel {
       Utterer.utter(label.attributedText?.string ?? label.text ?? "", locale: "en-US")

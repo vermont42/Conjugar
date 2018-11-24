@@ -233,4 +233,3 @@ class SettingsView: UIView {
     gameCenterDescription.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: Layout.defaultSpacing * -1.0).activate()
   }
 }
-

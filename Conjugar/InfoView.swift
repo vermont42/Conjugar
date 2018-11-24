@@ -18,7 +18,7 @@ class InfoView: UIView {
     textView.isEditable = false
     return textView
   }()
-  
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     addSubview(info)
@@ -27,7 +27,7 @@ class InfoView: UIView {
     info.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     info.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
   }
-  
+
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding")
   }

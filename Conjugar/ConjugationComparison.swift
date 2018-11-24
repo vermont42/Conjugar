@@ -10,7 +10,7 @@ enum ConjugationResult: Int {
   case totalMatch = 10
   case partialMatch = 5
   case noMatch = 0
-  
+
   static func compare(lhs: String, rhs: String) -> ConjugationResult {
     let lhsCount = lhs.count
     let rhsCount = rhs.count

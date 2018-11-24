@@ -19,4 +19,3 @@ class VerbVCTests: XCTestCase {
     XCTAssertNotNil(vvc.verbView)
   }
 }
-

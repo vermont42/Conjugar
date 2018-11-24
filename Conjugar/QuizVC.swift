@@ -25,7 +25,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     quizView.conjugationField.delegate = self
     view = quizView
   }
-  
+
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     Quiz.shared.delegate = self
@@ -54,7 +54,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     authenticate()
     AnalyticsService.shared.recordVisitation(viewController: "\(QuizVC.self)")
   }
-  
+
   private func authenticate() {
     if !GameCenterManager.shared.isAuthenticated && !SettingsManager.getUserRejectedGameCenter() {
       if !SettingsManager.getDidShowGameCenterDialog() {
@@ -64,7 +64,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       }
     }
   }
-  
+
   private func showGameCenterDialog() {
     SettingsManager.setDidShowGameCenterDialog(true)
     let gameCenterController = UIAlertController(title: "Game Center", message: "Would you like Conjugar to upload your future scores to Game Center after your quiz? See how you stack up against the global community of conjugators.", preferredStyle: UIAlertControllerStyle.alert)
@@ -166,4 +166,3 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     return true
   }
 }
-

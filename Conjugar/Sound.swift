@@ -8,14 +8,14 @@
 
 enum Sound: String {
   static let applauseCount: UInt32 = 3
-  
-  case applause1 = "applause1"
-  case applause2 = "applause2"
-  case applause3 = "applause3"
-  case chime = "chime"
-  case chirp = "chirp"
-  case buzz = "buzz"
-  case gun = "gun"
-  case sadTrombone = "sadTrombone"
-  case silence = "silence"
+
+  case applause1
+  case applause2
+  case applause3
+  case chime
+  case chirp
+  case buzz
+  case gun
+  case sadTrombone
+  case silence
 }

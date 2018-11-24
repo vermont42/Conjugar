@@ -15,11 +15,11 @@ class ResultCell: UITableViewCell {
   private let tensePersonNumber = UILabel()
   private let correctAnswer = UILabel()
   private let proposedAnswer = UILabel()
-  
+
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented.")
   }
-  
+
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     [verb, tensePersonNumber, correctAnswer, proposedAnswer].forEach {
@@ -40,7 +40,7 @@ class ResultCell: UITableViewCell {
     proposedAnswer.topAnchor.constraint(equalTo: correctAnswer.bottomAnchor, constant: 4.0).activate()
     proposedAnswer.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
   }
-  
+
   func configure(verb: String, tense: Tense, personNumber: PersonNumber, correctAnswer: String, proposedAnswer: String) {
     self.verb.text = verb.lowercased()
     tensePersonNumber.text = "\(tense.displayName), \(personNumber.shortDisplayName)"

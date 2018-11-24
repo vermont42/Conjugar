@@ -10,7 +10,7 @@ import UIKit
 
 class VerbCell: UITableViewCell {
   static let identifier = "VerbCell"
-  
+
   internal let verb: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
@@ -18,11 +18,11 @@ class VerbCell: UITableViewCell {
     label.enableAutoLayout()
     return label
   }()
-  
+
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented.")
   }
-  
+
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     backgroundColor = Colors.black
@@ -30,9 +30,8 @@ class VerbCell: UITableViewCell {
     verb.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
     verb.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
   }
-  
+
   func configure(verb: String) {
     self.verb.text = verb
   }
 }
-

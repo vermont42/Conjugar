@@ -14,3 +14,7 @@ func + (left: NSAttributedString, right: NSAttributedString) -> NSAttributedStri
   result.append(right)
   return result
 }
+
+func += (lhs: inout NSAttributedString, rhs: NSAttributedString) {
+  return lhs = lhs + rhs
+}

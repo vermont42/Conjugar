@@ -10,9 +10,9 @@ import UIKit
 
 class MainTabBarVC: UITabBarController {
   internal static let tabs = ["Browse", "Quiz", "Settings", "Info"]
-  
+
   init() {
-    super.init(nibName: nil, bundle:nil)
+    super.init(nibName: nil, bundle: nil)
     let browseVerbsNavC = UINavigationController(rootViewController: BrowseVerbsVC())
     browseVerbsNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[0], image: UIImage(named: MainTabBarVC.tabs[0]), selectedImage: nil)
     let quizNavC = UINavigationController(rootViewController: QuizVC())
