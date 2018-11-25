@@ -11,11 +11,14 @@ import XCTest
 
 class BrowseInfoVCTests: XCTestCase {
   func testBrowseInfoVC() {
-    let bivc = BrowseInfoVC()
+    var analytic = ""
+    let bivc = BrowseInfoVC(analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
     let nc = MockNavigationC(rootViewController: bivc)
     UIApplication.shared.keyWindow?.rootViewController = nc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(bivc)
+    bivc.viewWillAppear(true)
+    XCTAssertEqual(analytic, "visited viewController: \(BrowseInfoVC.self) ")
     XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), 28)
     bivc.browseInfoView.difficultyControl.selectedSegmentIndex = 0
     XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), 9)

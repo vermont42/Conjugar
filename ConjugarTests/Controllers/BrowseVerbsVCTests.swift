@@ -11,11 +11,14 @@ import XCTest
 
 class BrowseVerbsVCTests: XCTestCase {
   func testBrowseVerbsVC() {
-    let bvvc = BrowseVerbsVC()
+    var analytic = ""
+    let bvvc = BrowseVerbsVC(analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }), reviewPrompter: nil)
     let nc = MockNavigationC(rootViewController: bvvc)
     UIApplication.shared.keyWindow?.rootViewController = nc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(bvvc)
+    bvvc.viewWillAppear(true)
+    XCTAssertEqual(analytic, "visited viewController: \(BrowseVerbsVC.self) ")
     XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 84)
     bvvc.browseVerbsView.filterControl.selectedSegmentIndex = 1
     XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 102)

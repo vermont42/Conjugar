@@ -9,12 +9,19 @@
 import UIKit
 
 class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
+  private var analyticsService: AnalyticsService?
+
   var quizView: QuizView {
     if let castedView = view as? QuizView {
       return castedView
     } else {
       fatalError(fatalCastMessage(viewController: QuizVC.self, view: QuizView.self))
     }
+  }
+
+  convenience init(analyticsService: AnalyticsService?) {
+    self.init()
+    self.analyticsService = analyticsService
   }
 
   override func loadView() {
@@ -52,7 +59,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     quizView.startRestartButton.pulsate()
     authenticate()
-    AnalyticsService.shared.recordVisitation(viewController: "\(QuizVC.self)")
+    analyticsService?.recordVisitation(viewController: "\(QuizVC.self)")
   }
 
   private func authenticate() {
@@ -90,7 +97,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     quizView.showInProgressUI()
     quizView.startRestartButton.pulsate()
     quizView.conjugationField.becomeFirstResponder()
-    AnalyticsService.shared.recordQuizStart()
+    analyticsService?.recordQuizStart()
   }
 
   func scoreDidChange(newScore: Int) {
@@ -133,9 +140,9 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     default:
       break
     }
-    let resultsVC = ResultsVC()
+    let resultsVC = ResultsVC(analyticsService: analyticsService)
     navigationController?.pushViewController(resultsVC, animated: true)
-    AnalyticsService.shared.recordQuizCompletion(score: Quiz.shared.score)
+    analyticsService?.recordQuizCompletion(score: Quiz.shared.score)
   }
 
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {

@@ -16,6 +16,8 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   private var allVerbs: [String] = []
   private var regularVerbs: [String] = []
   private var irregularVerbs: [String] = []
+  private var analyticsService: AnalyticsService?
+  private var reviewPrompter: ReviewPrompter?
 
   private var currentVerbs: [String] {
     switch browseVerbsView.filterControl.selectedSegmentIndex {
@@ -38,6 +40,12 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
   }
 
+  convenience init(analyticsService: AnalyticsService?, reviewPrompter: ReviewPrompter?) {
+    self.init()
+    self.analyticsService = analyticsService
+    self.reviewPrompter = reviewPrompter
+  }
+
   override func loadView() {
     let browseVerbsView = BrowseVerbsView(frame: UIScreen.main.bounds)
     browseVerbsView.setupTable(dataSource: self, delegate: self)
@@ -47,13 +55,13 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     irregularVerbs = Conjugator.shared.irregularVerbsArray()
     navigationItem.titleView = UILabel.titleLabel(title: "Browse")
     view = browseVerbsView
-    ReviewPrompter.shared.promptableActionHappened()
+    reviewPrompter?.promptableActionHappened()
   }
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     browseVerbsView.isHidden = false
-    AnalyticsService.shared.recordVisitation(viewController: "\(BrowseVerbsVC.self)")
+    analyticsService?.recordVisitation(viewController: "\(BrowseVerbsVC.self)")
   }
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -70,7 +78,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: false)
-    let verbVC = VerbVC()
+    let verbVC = VerbVC(analyticsService: analyticsService)
     verbVC.verb = currentVerbs[indexPath.row]
     browseVerbsView.isHidden = true
     navigationController?.pushViewController(verbVC, animated: true)

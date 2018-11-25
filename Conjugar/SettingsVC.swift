@@ -9,12 +9,19 @@
 import UIKit
 
 class SettingsVC: UIViewController {
+  private var analyticsService: AnalyticsService?
+
   var settingsView: SettingsView {
     if let castedView = view as? SettingsView {
       return castedView
     } else {
       fatalError(fatalCastMessage(viewController: SettingsVC.self, view: SettingsView.self))
     }
+  }
+
+  convenience init(analyticsService: AnalyticsService?) {
+    self.init()
+    self.analyticsService = analyticsService
   }
 
   override func loadView() {
@@ -40,7 +47,7 @@ class SettingsVC: UIViewController {
     [settingsView.gameCenterLabel, settingsView.gameCenterDescription, settingsView.gameCenterButton].forEach {
       $0.isHidden = GameCenterManager.shared.isAuthenticated
     }
-    AnalyticsService.shared.recordVisitation(viewController: "\(SettingsVC.self)")
+    analyticsService?.recordVisitation(viewController: "\(SettingsVC.self)")
   }
 
   override func viewDidAppear(_ animated: Bool) {

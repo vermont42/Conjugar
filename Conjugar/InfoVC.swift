@@ -11,6 +11,7 @@ import UIKit
 class InfoVC: UIViewController, UITextViewDelegate {
   internal weak var infoDelegate: InfoDelegate?
   internal var infoString: NSAttributedString?
+  private var analyticsService: AnalyticsService?
 
   var infoView: InfoView {
     if let castedView = view as? InfoView {
@@ -18,6 +19,11 @@ class InfoVC: UIViewController, UITextViewDelegate {
     } else {
       fatalError(fatalCastMessage(viewController: InfoVC.self, view: InfoView.self))
     }
+  }
+
+  convenience init(analyticsService: AnalyticsService?) {
+    self.init()
+    self.analyticsService = analyticsService
   }
 
   override func loadView() {
@@ -34,7 +40,7 @@ class InfoVC: UIViewController, UITextViewDelegate {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    AnalyticsService.shared.recordVisitation(viewController: "\(InfoVC.self)")
+    analyticsService?.recordVisitation(viewController: "\(InfoVC.self)")
   }
 
   func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {

@@ -9,12 +9,19 @@
 import UIKit
 
 class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+  private var analyticsService: AnalyticsService?
+
   var resultsView: ResultsView {
     if let castedView = view as? ResultsView {
       return castedView
     } else {
       fatalError(fatalCastMessage(viewController: ResultsVC.self, view: ResultsView.self))
     }
+  }
+
+  convenience init(analyticsService: AnalyticsService?) {
+    self.init()
+    self.analyticsService = analyticsService
   }
 
   override func loadView() {
@@ -31,7 +38,7 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     resultsView.region.text = Quiz.shared.lastRegion.rawValue
     resultsView.score.text = String(Quiz.shared.score)
     resultsView.time.text = Quiz.shared.elapsedTime.timeString
-    AnalyticsService.shared.recordVisitation(viewController: "\(ResultsVC.self)")
+    analyticsService?.recordVisitation(viewController: "\(ResultsVC.self)")
   }
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

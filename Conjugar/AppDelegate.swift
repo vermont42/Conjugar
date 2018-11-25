@@ -30,7 +30,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     Utterer.setup()
 
     window = UIWindow(frame: UIScreen.main.bounds)
-    let mainTabBarVC = MainTabBarVC()
+    #if DEBUG
+    let mainTabBarVC = MainTabBarVC(analyticsService: TestAnalyticsService(), reviewPrompter: nil)
+    #else
+    let mainTabBarVC = MainTabBarVC(analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared)
+    #endif
+
     window?.rootViewController = mainTabBarVC
     window?.makeKeyAndVisible()
 

@@ -1,5 +1,5 @@
 //
-//  AnalyticsService.swift
+//  AWSAnalyticsService.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 10/8/18.
@@ -9,9 +9,9 @@
 import Foundation
 import AWSPinpoint
 
-@objc class AnalyticsService: NSObject {
+class AWSAnalyticsService: NSObject, AnalyticsService {
   var pinpoint: AWSPinpoint
-  @objc static let shared = AnalyticsService()
+  static let shared = AWSAnalyticsService()
 
   override init() {
     let config = AWSPinpointConfiguration.defaultPinpointConfiguration(launchOptions: nil)
@@ -22,11 +22,7 @@ import AWSPinpoint
 //    AWSDDLog.add(AWSDDTTYLogger.sharedInstance)
   }
 
-  @objc func recordEvent(_ eventName: String) {
-    recordEvent(eventName, parameters: nil, metrics: nil)
-  }
-
-  @objc func recordEvent(_ eventName: String, parameters: [String: String]? = nil, metrics: [String: Double]? = nil) {
+  func recordEvent(_ eventName: String, parameters: [String: String]? = nil, metrics: [String: Double]? = nil) {
     let event = pinpoint.analyticsClient.createEvent(withEventType: eventName)
     if let parameters = parameters {
       for (key, value) in parameters {
@@ -40,26 +36,6 @@ import AWSPinpoint
     }
     pinpoint.analyticsClient.record(event)
     pinpoint.analyticsClient.submitEvents()
-  }
-
-  @objc func recordVisitation(viewController: String) {
-    let visited = "visited"
-    recordEvent(visited, parameters: ["viewController": "\(viewController)"])
-  }
-
-  @objc func recordQuizStart() {
-    let quizStart = "quizStart"
-    recordEvent(quizStart)
-  }
-
-  @objc func recordQuizCompletion(score: Int) {
-    let quizCompletion = "quizCompletion"
-    recordEvent(quizCompletion, parameters: ["score": "\(score)"])
-  }
-
-  @objc func recordGameCenterAuth() {
-    let gameCenterAuth = "gameCenterAuth"
-    recordEvent(gameCenterAuth)
   }
 
   private func recordCustomProfileDemographics() {

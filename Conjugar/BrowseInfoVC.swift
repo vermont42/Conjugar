@@ -13,6 +13,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   private var allInfos: [Info] = []
   private var easyModerateInfos: [Info] = []
   private var easyInfos: [Info] = []
+  private var analyticsService: AnalyticsService?
 
   private var currentInfos: [Info] {
     switch browseInfoView.difficultyControl.selectedSegmentIndex {
@@ -33,6 +34,11 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     } else {
       fatalError(fatalCastMessage(viewController: BrowseInfoVC.self, view: BrowseInfoView.self))
     }
+  }
+
+  convenience init(analyticsService: AnalyticsService?) {
+    self.init()
+    self.analyticsService = analyticsService
   }
 
   override func loadView() {
@@ -58,7 +64,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    AnalyticsService.shared.recordVisitation(viewController: "\(BrowseInfoVC.self)")
+    analyticsService?.recordVisitation(viewController: "\(BrowseInfoVC.self)")
   }
 
   private func updateDifficultyControl() {
@@ -104,7 +110,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   }
 
   private func showInfo() {
-    let infoVC = InfoVC()
+    let infoVC = InfoVC(analyticsService: analyticsService)
     infoVC.infoString = currentInfos[selectedRow].infoString
     infoVC.infoDelegate = self
     navigationController?.pushViewController(infoVC, animated: true)

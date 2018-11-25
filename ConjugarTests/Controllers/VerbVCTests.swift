@@ -11,11 +11,14 @@ import XCTest
 
 class VerbVCTests: XCTestCase {
   func testVerbVC() {
-    let vvc = VerbVC()
+    var analytic = ""
+    let vvc = VerbVC(analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
     vvc.verb = "maltear"
     UIApplication.shared.keyWindow?.rootViewController = vvc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(vvc)
     XCTAssertNotNil(vvc.verbView)
+    vvc.viewWillAppear(true)
+    XCTAssertEqual(analytic, "visited viewController: \(VerbVC.self) ")
   }
 }

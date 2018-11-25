@@ -11,7 +11,7 @@ import XCTest
 
 class MainTabBarVCTests: XCTestCase {
   func testMainTabBarVC() {
-    let mtbvc = MainTabBarVC()
+    let mtbvc = MainTabBarVC(analyticsService: nil, reviewPrompter: nil)
     XCTAssertNotNil(mtbvc)
     UIApplication.shared.keyWindow?.rootViewController = mtbvc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
