@@ -9,6 +9,7 @@
 import UIKit
 
 class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
+  private var settings: Settings?
   private var analyticsService: AnalyticsService?
 
   var quizView: QuizView {
@@ -19,8 +20,9 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
   }
 
-  convenience init(analyticsService: AnalyticsService?) {
+  convenience init(settings: Settings, analyticsService: AnalyticsService?) {
     self.init()
+    self.settings = settings
     self.analyticsService = analyticsService
   }
 
@@ -89,7 +91,10 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
 
   @objc func startRestart() {
     SoundManager.play(.gun)
-    Quiz.shared.start()
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
+    Quiz.shared.start(settings: settings)
     quizView.startRestartButton.setTitle("Restart", for: .normal)
     [quizView.lastLabel, quizView.correctLabel, quizView.last, quizView.correct].forEach {
       $0.isHidden = true

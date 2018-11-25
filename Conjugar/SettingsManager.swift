@@ -12,9 +12,6 @@ class SettingsManager {
   private static let settingsManager = SettingsManager()
   private var userDefaults: UserDefaults
 
-  private var region: Region
-  private static let regionKey = "region"
-
   private var difficulty: Difficulty
   private static let difficultyKey = "difficulty"
 
@@ -37,14 +34,6 @@ class SettingsManager {
 
   private init() {
     userDefaults = UserDefaults.standard
-
-    if let storedRegionString = userDefaults.string(forKey: SettingsManager.regionKey) {
-      region = Region(rawValue: storedRegionString) ?? .latinAmerica
-    } else {
-      region = Region()
-      userDefaults.set(region.rawValue, forKey: SettingsManager.regionKey)
-      userDefaults.synchronize()
-    }
 
     if let storedDifficultyString = userDefaults.string(forKey: SettingsManager.difficultyKey) {
       difficulty = Difficulty(rawValue: storedDifficultyString) ?? .easy
@@ -92,17 +81,6 @@ class SettingsManager {
       secondSingularQuiz = SecondSingularQuiz()
       userDefaults.set(secondSingularQuiz.rawValue, forKey: SettingsManager.secondSingularQuizKey)
       userDefaults.synchronize()
-    }
-  }
-
-  class func getRegion() -> Region {
-    return settingsManager.region
-  }
-  class func setRegion(_ region: Region) {
-    if region != settingsManager.region {
-      settingsManager.region = region
-      settingsManager.userDefaults.set(region.rawValue, forKey: SettingsManager.regionKey)
-      settingsManager.userDefaults.synchronize()
     }
   }
 

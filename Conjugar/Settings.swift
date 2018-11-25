@@ -13,6 +13,16 @@ class Settings {
 
   private var userDefaults: UserDefaults?
 
+  var region: Region {
+    didSet {
+      if let userDefaults = userDefaults, region != oldValue {
+        userDefaults.set("\(region.rawValue)", forKey: Settings.regionKey)
+      }
+    }
+  }
+  static let regionKey = "region"
+  private static let regionDefault: Region = .latinAmerica
+
   var promptActionCount: Int {
     didSet {
       if let userDefaults = userDefaults, promptActionCount != oldValue {
@@ -37,10 +47,16 @@ class Settings {
 
   private init() {
     userDefaults = UserDefaults.standard
-    formatter.dateFormat = Settings.format
 
     guard let userDefaults = userDefaults else {
       fatalError("userDefaults was nil.")
+    }
+
+    if let regionString = userDefaults.string(forKey: Settings.regionKey) {
+      region = Region(rawValue: regionString) ?? Settings.regionDefault
+    } else {
+      region = Settings.regionDefault
+      userDefaults.set(region.rawValue, forKey: Settings.regionKey)
     }
 
     if let promptActionCountString = userDefaults.string(forKey: Settings.promptActionCountKey) {
@@ -49,6 +65,8 @@ class Settings {
       promptActionCount = Settings.promptActionCountDefault
       userDefaults.set("\(promptActionCount)", forKey: Settings.promptActionCountKey)
     }
+
+    formatter.dateFormat = Settings.format
 
     if let lastReviewPromptDateString = userDefaults.string(forKey: Settings.lastReviewPromptDateKey) {
       lastReviewPromptDate = formatter.date(from: lastReviewPromptDateString) ?? Date()
@@ -59,13 +77,19 @@ class Settings {
   }
 
   init(customDefaults: [String: Any]) {
-    formatter.dateFormat = Settings.format
+    if let region = Region(rawValue: (customDefaults[Settings.regionKey] as? String) ?? "") {
+      self.region = region
+    } else {
+      region = Settings.regionDefault
+    }
 
     if let promptActionCount = customDefaults[Settings.promptActionCountKey] as? Int {
       self.promptActionCount = promptActionCount
     } else {
       promptActionCount = Settings.promptActionCountDefault
     }
+
+    formatter.dateFormat = Settings.format
 
     if let lastReviewPromptDate = formatter.date(from: (customDefaults[Settings.lastReviewPromptDateKey] as? String ?? "")) {
       self.lastReviewPromptDate = lastReviewPromptDate

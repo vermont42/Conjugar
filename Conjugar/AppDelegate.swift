@@ -27,13 +27,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     UITabBar.appearance().barTintColor = UIColor.black
     UITabBar.appearance().tintColor = Colors.yellow
 
-    Utterer.setup()
+    Utterer.setup(settings: Settings.shared)
 
     window = UIWindow(frame: UIScreen.main.bounds)
     #if DEBUG
-    let mainTabBarVC = MainTabBarVC(analyticsService: TestAnalyticsService(), reviewPrompter: nil)
+    let mainTabBarVC = MainTabBarVC(settings: Settings.shared, analyticsService: TestAnalyticsService(), reviewPrompter: nil)
     #else
-    let mainTabBarVC = MainTabBarVC(analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared)
+    let mainTabBarVC = MainTabBarVC(settings: Settings.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared)
     #endif
 
     window?.rootViewController = mainTabBarVC

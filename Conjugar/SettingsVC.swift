@@ -9,6 +9,7 @@
 import UIKit
 
 class SettingsVC: UIViewController {
+  private var settings: Settings?
   private var analyticsService: AnalyticsService?
 
   var settingsView: SettingsView {
@@ -19,8 +20,9 @@ class SettingsVC: UIViewController {
     }
   }
 
-  convenience init(analyticsService: AnalyticsService?) {
+  convenience init(settings: Settings?, analyticsService: AnalyticsService?) {
     self.init()
+    self.settings = settings
     self.analyticsService = analyticsService
   }
 
@@ -58,7 +60,10 @@ class SettingsVC: UIViewController {
   }
 
   private func updateControls() {
-    switch SettingsManager.getRegion() {
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
+    switch settings.region {
     case .spain:
       settingsView.regionControl.selectedSegmentIndex = 0
     case .latinAmerica:
@@ -92,11 +97,14 @@ class SettingsVC: UIViewController {
   }
 
   @objc func regionChanged(_ sender: UISegmentedControl) {
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
     let index = settingsView.regionControl.selectedSegmentIndex
     if index == 0 {
-      SettingsManager.setRegion(.spain)
+      settings.region = .spain
     } else /* index == 1 */ {
-      SettingsManager.setRegion(.latinAmerica)
+      settings.region = .latinAmerica
     }
   }
 

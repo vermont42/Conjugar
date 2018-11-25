@@ -12,8 +12,11 @@ class Utterer {
   private static let synth = AVSpeechSynthesizer()
   private static let rate: Float = 0.5
   private static let pitchMultiplier: Float = 0.8
+  private static var settings: Settings?
 
-  static func setup() {
+  static func setup(settings: Settings) {
+    Utterer.settings = settings
+
     let session = AVAudioSession.sharedInstance()
     do {
       try session.setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSessionCategoryOptions.mixWithOthers)
@@ -24,12 +27,15 @@ class Utterer {
   }
 
   static func utter(_ thingToUtter: String, locale: String? = nil) {
+    guard let settings = settings else {
+      fatalError("settings not initialized. Accent not inferrable.")
+    }
     let utterance = AVSpeechUtterance(string: thingToUtter)
     utterance.rate = Utterer.rate
     if let locale = locale {
       utterance.voice = AVSpeechSynthesisVoice(language: locale)
     } else {
-      utterance.voice = AVSpeechSynthesisVoice(language: "es-" + SettingsManager.getRegion().accent)
+      utterance.voice = AVSpeechSynthesisVoice(language: "es-" + settings.region.accent)
     }
     utterance.pitchMultiplier = Utterer.pitchMultiplier
     synth.speak(utterance)
