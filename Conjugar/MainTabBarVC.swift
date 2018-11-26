@@ -19,7 +19,7 @@ class MainTabBarVC: UITabBarController {
     quizNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[1], image: UIImage(named: MainTabBarVC.tabs[1]), selectedImage: nil)
     let settingsNavC = UINavigationController(rootViewController: SettingsVC(settings: settings, analyticsService: analyticsService))
     settingsNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[2], image: UIImage(named: MainTabBarVC.tabs[2]), selectedImage: nil)
-    let browseInfoNavC = UINavigationController(rootViewController: BrowseInfoVC(analyticsService: analyticsService))
+    let browseInfoNavC = UINavigationController(rootViewController: BrowseInfoVC(settings: settings, analyticsService: analyticsService))
     browseInfoNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[3], image: UIImage(named: MainTabBarVC.tabs[3]), selectedImage: nil)
     viewControllers = [browseVerbsNavC, quizNavC, browseInfoNavC, settingsNavC]
   }

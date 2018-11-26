@@ -83,7 +83,7 @@ internal class Quiz {
 
   func start(settings: Settings) {
     lastRegion = settings.region
-    lastDifficulty = SettingsManager.getDifficulty()
+    lastDifficulty = settings.difficulty
     questions.removeAll()
     proposedAnswers.removeAll()
     correctAnswers.removeAll()

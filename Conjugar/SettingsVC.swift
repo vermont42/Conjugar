@@ -70,7 +70,7 @@ class SettingsVC: UIViewController {
       settingsView.regionControl.selectedSegmentIndex = 1
     }
 
-    switch SettingsManager.getDifficulty() {
+    switch settings.difficulty {
     case .easy:
       settingsView.difficultyControl.selectedSegmentIndex = 0
     case .moderate:
@@ -111,11 +111,11 @@ class SettingsVC: UIViewController {
   @objc func difficultyChanged(_ sender: UISegmentedControl) {
     let index = settingsView.difficultyControl.selectedSegmentIndex
     if index == 0 {
-      SettingsManager.setDifficulty(.easy)
+      settings?.difficulty = .easy
     } else if index == 1 {
-      SettingsManager.setDifficulty(.moderate)
+      settings?.difficulty = .moderate
     } else /* index == 2 */ {
-      SettingsManager.setDifficulty(.difficult)
+      settings?.difficulty = .difficult
     }
   }
 

@@ -13,6 +13,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   private var allInfos: [Info] = []
   private var easyModerateInfos: [Info] = []
   private var easyInfos: [Info] = []
+  private var settings: Settings?
   private var analyticsService: AnalyticsService?
 
   private var currentInfos: [Info] {
@@ -36,8 +37,9 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
   }
 
-  convenience init(analyticsService: AnalyticsService?) {
+  convenience init(settings: Settings?, analyticsService: AnalyticsService?) {
     self.init()
+    self.settings = settings
     self.analyticsService = analyticsService
   }
 
@@ -68,7 +70,10 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   }
 
   private func updateDifficultyControl() {
-    switch SettingsManager.getInfoDifficulty() {
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
+    switch settings.infoDifficulty {
     case .easy:
       browseInfoView.difficultyControl.selectedSegmentIndex = 0
     case .moderate:
@@ -117,13 +122,16 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   }
 
   @objc func difficultyChanged(_ sender: UISegmentedControl) {
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
     let index = browseInfoView.difficultyControl.selectedSegmentIndex
     if index == 0 {
-      SettingsManager.setInfoDifficulty(.easy)
+      settings.infoDifficulty = .easy
     } else if index == 1 {
-      SettingsManager.setInfoDifficulty(.moderate)
+      settings.infoDifficulty = .moderate
     } else /* index == 2 */ {
-      SettingsManager.setInfoDifficulty(.difficult)
+      settings.infoDifficulty = .difficult
     }
     browseInfoView.table.reloadData()
   }

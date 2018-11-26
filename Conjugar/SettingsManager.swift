@@ -12,12 +12,6 @@ class SettingsManager {
   private static let settingsManager = SettingsManager()
   private var userDefaults: UserDefaults
 
-  private var difficulty: Difficulty
-  private static let difficultyKey = "difficulty"
-
-  private var infoDifficulty: Difficulty
-  private static let infoDifficultyKey = "infoDifficulty"
-
   private var userRejectedGameCenter: Bool
   private static let userRejectedGameCenterKey = "userRejectedGameCenter"
   private static let userRejectedGameCenterDefault = false
@@ -34,22 +28,6 @@ class SettingsManager {
 
   private init() {
     userDefaults = UserDefaults.standard
-
-    if let storedDifficultyString = userDefaults.string(forKey: SettingsManager.difficultyKey) {
-      difficulty = Difficulty(rawValue: storedDifficultyString) ?? .easy
-    } else {
-      difficulty = Difficulty()
-      userDefaults.set(difficulty.rawValue, forKey: SettingsManager.difficultyKey)
-      userDefaults.synchronize()
-    }
-
-    if let storedInfoDifficultyString = userDefaults.string(forKey: SettingsManager.infoDifficultyKey) {
-      infoDifficulty = Difficulty(rawValue: storedInfoDifficultyString) ?? .easy
-    } else {
-      infoDifficulty = Difficulty.difficult
-      userDefaults.set(infoDifficulty.rawValue, forKey: SettingsManager.infoDifficultyKey)
-      userDefaults.synchronize()
-    }
 
     if let storedUserRejectedGameCenterString = userDefaults.string(forKey: SettingsManager.userRejectedGameCenterKey) {
       userRejectedGameCenter = (storedUserRejectedGameCenterString as NSString).boolValue
@@ -81,30 +59,6 @@ class SettingsManager {
       secondSingularQuiz = SecondSingularQuiz()
       userDefaults.set(secondSingularQuiz.rawValue, forKey: SettingsManager.secondSingularQuizKey)
       userDefaults.synchronize()
-    }
-  }
-
-  class func getDifficulty() -> Difficulty {
-    return settingsManager.difficulty
-  }
-
-  class func setDifficulty(_ difficulty: Difficulty) {
-    if difficulty != settingsManager.difficulty {
-      settingsManager.difficulty = difficulty
-      settingsManager.userDefaults.set(difficulty.rawValue, forKey: SettingsManager.difficultyKey)
-      settingsManager.userDefaults.synchronize()
-    }
-  }
-
-  class func getInfoDifficulty() -> Difficulty {
-    return settingsManager.infoDifficulty
-  }
-
-  class func setInfoDifficulty(_ infoDifficulty: Difficulty) {
-    if infoDifficulty != settingsManager.infoDifficulty {
-      settingsManager.infoDifficulty = infoDifficulty
-      settingsManager.userDefaults.set(infoDifficulty.rawValue, forKey: SettingsManager.infoDifficultyKey)
-      settingsManager.userDefaults.synchronize()
     }
   }
 

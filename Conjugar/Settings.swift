@@ -23,6 +23,26 @@ class Settings {
   static let regionKey = "region"
   private static let regionDefault: Region = .latinAmerica
 
+  var difficulty: Difficulty {
+    didSet {
+      if let userDefaults = userDefaults, difficulty != oldValue {
+        userDefaults.set("\(difficulty.rawValue)", forKey: Settings.difficultyKey)
+      }
+    }
+  }
+  static let difficultyKey = "difficulty"
+  private static let difficultyDefault: Difficulty = .easy
+
+  var infoDifficulty: Difficulty {
+    didSet {
+      if let userDefaults = userDefaults, infoDifficulty != oldValue {
+        userDefaults.set("\(infoDifficulty.rawValue)", forKey: Settings.infoDifficultyKey)
+      }
+    }
+  }
+  static let infoDifficultyKey = "infoDifficulty"
+  private static let infoDifficultyDefault: Difficulty = .difficult
+
   var promptActionCount: Int {
     didSet {
       if let userDefaults = userDefaults, promptActionCount != oldValue {
@@ -59,6 +79,20 @@ class Settings {
       userDefaults.set(region.rawValue, forKey: Settings.regionKey)
     }
 
+    if let difficultyString = userDefaults.string(forKey: Settings.difficultyKey) {
+      difficulty = Difficulty(rawValue: difficultyString) ?? Settings.difficultyDefault
+    } else {
+      difficulty = Settings.difficultyDefault
+      userDefaults.set(difficulty.rawValue, forKey: Settings.difficultyKey)
+    }
+
+    if let infoDifficultyString = userDefaults.string(forKey: Settings.infoDifficultyKey) {
+      infoDifficulty = Difficulty(rawValue: infoDifficultyString) ?? Settings.infoDifficultyDefault
+    } else {
+      infoDifficulty = Settings.infoDifficultyDefault
+      userDefaults.set(infoDifficulty.rawValue, forKey: Settings.infoDifficultyKey)
+    }
+
     if let promptActionCountString = userDefaults.string(forKey: Settings.promptActionCountKey) {
       promptActionCount = Int((promptActionCountString as NSString).intValue)
     } else {
@@ -81,6 +115,18 @@ class Settings {
       self.region = region
     } else {
       region = Settings.regionDefault
+    }
+
+    if let difficulty = Difficulty(rawValue: (customDefaults[Settings.difficultyKey] as? String) ?? "") {
+      self.difficulty = difficulty
+    } else {
+      difficulty = Settings.difficultyDefault
+    }
+
+    if let infoDifficulty = Difficulty(rawValue: (customDefaults[Settings.infoDifficultyKey] as? String) ?? "") {
+      self.infoDifficulty = infoDifficulty
+    } else {
+      infoDifficulty = Settings.infoDifficultyDefault
     }
 
     if let promptActionCount = customDefaults[Settings.promptActionCountKey] as? Int {
