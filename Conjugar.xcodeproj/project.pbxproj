@@ -49,7 +49,6 @@
 		E1483FCC1EF89D4E0052C436 /* chirp.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCB1EF89D4E0052C436 /* chirp.mp3 */; };
 		E1483FCE1EF89DAD0052C436 /* buzz.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCD1EF89DAD0052C436 /* buzz.mp3 */; };
 		E1483FD01EF961880052C436 /* ConjugationComparison.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FCF1EF961880052C436 /* ConjugationComparison.swift */; };
-		E14BAD8E1EFF11BD000D91C5 /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BAD8D1EFF11BD000D91C5 /* SettingsManager.swift */; };
 		E14BAD901EFF1474000D91C5 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BAD8F1EFF1473000D91C5 /* SettingsVC.swift */; };
 		E14BAD921F0049AF000D91C5 /* ResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BAD911F0049AF000D91C5 /* ResultsVC.swift */; };
 		E14BAD941F006423000D91C5 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BAD931F006423000D91C5 /* ResultCell.swift */; };
@@ -172,7 +171,6 @@
 		E1483FCB1EF89D4E0052C436 /* chirp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chirp.mp3; sourceTree = "<group>"; };
 		E1483FCD1EF89DAD0052C436 /* buzz.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = buzz.mp3; sourceTree = "<group>"; };
 		E1483FCF1EF961880052C436 /* ConjugationComparison.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugationComparison.swift; sourceTree = "<group>"; };
-		E14BAD8D1EFF11BD000D91C5 /* SettingsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
 		E14BAD8F1EFF1473000D91C5 /* SettingsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		E14BAD911F0049AF000D91C5 /* ResultsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsVC.swift; sourceTree = "<group>"; };
 		E14BAD931F006423000D91C5 /* ResultCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
@@ -297,7 +295,6 @@
 				E118CA271FFFD07400612D71 /* ReviewPrompter.swift */,
 				E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */,
 				E151222C21A0DBB0008EF307 /* Settings.swift */,
-				E14BAD8D1EFF11BD000D91C5 /* SettingsManager.swift */,
 				E18F7F391ECA7DA700633200 /* SoundManager.swift */,
 				E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */,
 				E182F8D11F48AA1400D4569E /* UIAlertControllerExtension.swift */,
@@ -702,7 +699,6 @@
 				E1483FBB1EF6F82A0052C436 /* QuizVC.swift in Sources */,
 				E1A44314200D10D200C48857 /* ConjugationDataSource.swift in Sources */,
 				E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */,
-				E14BAD8E1EFF11BD000D91C5 /* SettingsManager.swift in Sources */,
 				E15E63F61F3A29890083DB4B /* Layout.swift in Sources */,
 				E1F289A71F30C666006B3C3E /* SettingsView.swift in Sources */,
 				E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */,

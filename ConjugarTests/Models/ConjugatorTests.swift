@@ -27,7 +27,7 @@ class ConjugatorTests: XCTestCase {
       XCTFail("Words not ending in ar, er, or ir cannot be conjugated.")
     }
 
-    result = Conjugator.shared.conjugate(infinitive: "maltear", tense: .presenteDeIndicativo, personNumber: .secondSingular)
+    result = Conjugator.shared.conjugate(infinitive: "maltear", tense: .presenteDeIndicativo, personNumber: .secondSingularTu)
     switch result {
     case let .success(value):
       XCTAssertEqual(value, "malteas")

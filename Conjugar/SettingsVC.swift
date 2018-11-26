@@ -146,7 +146,10 @@ class SettingsVC: UIViewController {
   }
 
   @objc func authenticate() {
-    SettingsManager.setUserRejectedGameCenter(false)
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
+    settings.userRejectedGameCenter = false
     GameCenterManager.shared.authenticate { authenticated in
       DispatchQueue.main.async {
         [self.settingsView.gameCenterLabel, self.settingsView.gameCenterDescription, self.settingsView.gameCenterButton].forEach {

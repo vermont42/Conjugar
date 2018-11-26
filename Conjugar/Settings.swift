@@ -85,6 +85,26 @@ class Settings {
   private let formatter = DateFormatter()
   private static let format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
 
+  var userRejectedGameCenter: Bool {
+    didSet {
+      if let userDefaults = userDefaults, userRejectedGameCenter != oldValue {
+        userDefaults.set("\(userRejectedGameCenter)", forKey: Settings.userRejectedGameCenterKey)
+      }
+    }
+  }
+  static let userRejectedGameCenterKey = "userRejectedGameCenter"
+  static let userRejectedGameCenterDefault = false
+
+  var didShowGameCenterDialog: Bool {
+    didSet {
+      if let userDefaults = userDefaults, didShowGameCenterDialog != oldValue {
+        userDefaults.set("\(didShowGameCenterDialog)", forKey: Settings.didShowGameCenterDialogKey)
+      }
+    }
+  }
+  static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
+  static let didShowGameCenterDialogDefault = false
+
   private init() {
     userDefaults = UserDefaults.standard
 
@@ -142,6 +162,20 @@ class Settings {
       lastReviewPromptDate = Settings.lastReviewPromptDateDefault
       userDefaults.set(formatter.string(from: lastReviewPromptDate), forKey: Settings.lastReviewPromptDateKey)
     }
+
+    if let userRejectedGameCenterString = userDefaults.string(forKey: Settings.userRejectedGameCenterKey) {
+      userRejectedGameCenter = Bool((userRejectedGameCenterString as NSString).boolValue)
+    } else {
+      userRejectedGameCenter = Settings.userRejectedGameCenterDefault
+      userDefaults.set("\(userRejectedGameCenter)", forKey: Settings.userRejectedGameCenterKey)
+    }
+
+    if let didShowGameCenterDialogString = userDefaults.string(forKey: Settings.didShowGameCenterDialogKey) {
+      didShowGameCenterDialog = Bool((didShowGameCenterDialogString as NSString).boolValue)
+    } else {
+      didShowGameCenterDialog = Settings.didShowGameCenterDialogDefault
+      userDefaults.set("\(didShowGameCenterDialog)", forKey: Settings.didShowGameCenterDialogKey)
+    }
   }
 
   init(customDefaults: [String: Any]) {
@@ -187,6 +221,18 @@ class Settings {
       self.lastReviewPromptDate = lastReviewPromptDate
     } else {
       lastReviewPromptDate = Settings.lastReviewPromptDateDefault
+    }
+
+    if let userRejectedGameCenter = customDefaults[Settings.userRejectedGameCenterKey] as? Bool {
+      self.userRejectedGameCenter = userRejectedGameCenter
+    } else {
+      userRejectedGameCenter = Settings.userRejectedGameCenterDefault
+    }
+
+    if let didShowGameCenterDialog = customDefaults[Settings.didShowGameCenterDialogKey] as? Bool {
+      self.didShowGameCenterDialog = didShowGameCenterDialog
+    } else {
+      didShowGameCenterDialog = Settings.didShowGameCenterDialogDefault
     }
   }
 }
