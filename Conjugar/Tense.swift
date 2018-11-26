@@ -38,9 +38,9 @@ enum Tense: String {
   case pluscuamperfectoDeSubjuntivo2 = "p2"
   case futuroPerfectoDeSubjuntivo = "fo"
 
-  var conjugationCount: Int {
+  func conjugationCount(secondSingularBrowse: SecondSingularBrowse) -> Int {
     var extraConjugation = 0
-    if SettingsManager.getSecondSingularBrowse() == .both {
+    if secondSingularBrowse == .both {
       extraConjugation = 1
     }
     switch self {

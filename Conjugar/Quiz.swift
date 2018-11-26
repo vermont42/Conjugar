@@ -46,7 +46,9 @@ internal class Quiz {
   private var irregularVosImperativoVerbs = VerbFamilies.irregularVosImperativoVerbs
   private var irregularVosImperativoVerbsIndex = 0
   private var timer: Timer?
-  private var personNumbers: [PersonNumber] = [.firstSingular, .secondSingular, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+  private var settings: Settings?
+  private var personNumbersWithTu: [PersonNumber] = [.firstSingular, .secondSingularTu, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+  private var personNumbersWithVos: [PersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
   internal weak var delegate: QuizDelegate?
   static let shared = Quiz()
@@ -82,6 +84,7 @@ internal class Quiz {
   private init() {}
 
   func start(settings: Settings) {
+    self.settings = settings
     lastRegion = settings.region
     lastDifficulty = settings.difficulty
     questions.removeAll()
@@ -172,8 +175,8 @@ internal class Quiz {
         questions.append(($0, .gerundio, .none))
       }
       for _ in 0...1 {
-        if SettingsManager.getSecondSingularQuiz() == .tu {
-          questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingular))
+        if settings.secondSingularQuiz == .tu {
+          questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingularTu))
         } else {
           questions.append((irregularVosImperativoVerb, .imperativoPositivo, .secondSingularVos))
         }
@@ -229,8 +232,8 @@ internal class Quiz {
       questions.append((allRegularVerb, .imperfectoDeSubjuntivo2, personNumber()))
       questions.append((irregularPreteritoVerb, .futuroDeSubjuntivo, personNumber()))
       questions.append((allRegularVerb, .futuroDeSubjuntivo, personNumber()))
-      if SettingsManager.getSecondSingularQuiz() == .tu {
-        questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingular))
+      if settings.secondSingularQuiz == .tu {
+        questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingularTu))
       } else {
         questions.append((irregularVosImperativoVerb, .imperativoPositivo, .secondSingularVos))
       }
@@ -300,6 +303,16 @@ internal class Quiz {
   }
 
   private func personNumber(skipYo: Bool = false, skipTu: Bool = false) -> PersonNumber {
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
+    let personNumbers: [PersonNumber]
+    switch settings.secondSingularQuiz {
+    case .tu:
+      personNumbers = personNumbersWithTu
+    case .vos:
+      personNumbers = personNumbersWithVos
+    }
     personNumbersIndex += 1
     if personNumbersIndex == personNumbers.count {
       personNumbersIndex = 0
@@ -307,7 +320,7 @@ internal class Quiz {
       personNumbersIndex += 1
     }
 
-    if (personNumbers[personNumbersIndex].pronoun == PersonNumber.firstSingular.pronoun && skipYo) || (personNumbers[personNumbersIndex].pronoun == PersonNumber.secondSingular.pronoun && skipTu) {
+    if (personNumbers[personNumbersIndex].pronoun == PersonNumber.firstSingular.pronoun && skipYo) || (personNumbers[personNumbersIndex].pronoun == PersonNumber.secondSingularTu.pronoun && skipTu) {
       return personNumber(skipYo: skipYo, skipTu: skipTu)
     } else {
       return personNumbers[personNumbersIndex]

@@ -19,11 +19,11 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
   weak var table: UITableView?
   var rows: [ConjugationRow] = []
 
-  init(verb: String, table: UITableView) {
+  init(verb: String, table: UITableView, secondSingularBrowse: SecondSingularBrowse) {
     self.verb = verb
     self.table = table
     let tenses = Tense.conjugatedTenses
-    rowCount = tenses.reduce(0, { $0 + $1.conjugationCount }) + tenses.count
+    rowCount = tenses.reduce(0, { $0 + $1.conjugationCount(secondSingularBrowse: secondSingularBrowse) }) + tenses.count
     super.init()
     tenses.forEach { tense in
       self.rows.append(.tense(tense))
@@ -37,7 +37,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
         }
       }
 
-      let tuResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: .secondSingular)
+      let tuResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: .secondSingularTu)
       let tuConjugation: String
       switch tuResult {
       case let .success(value):
@@ -53,13 +53,13 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
       default:
         fatalError("No vos form found for tense \(tense.displayName).")
       }
-      switch SettingsManager.getSecondSingularBrowse() {
+      switch secondSingularBrowse {
       case .tu:
-        self.rows.append(.conjugation(tense, .secondSingular, tuConjugation))
+        self.rows.append(.conjugation(tense, .secondSingularTu, tuConjugation))
       case .vos:
         self.rows.append(.conjugation(tense, .secondSingularVos, vosConjugation))
       case .both:
-        self.rows.append(.conjugation(tense, .secondSingular, tuConjugation))
+        self.rows.append(.conjugation(tense, .secondSingularTu, tuConjugation))
         self.rows.append(.conjugation(tense, .secondSingularVos, vosConjugation))
       }
       [PersonNumber.thirdSingular, .firstPlural, .secondPlural, .thirdPlural].forEach { personNumber in

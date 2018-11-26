@@ -11,6 +11,7 @@ import UIKit
 class VerbVC: UIViewController {
   var verb: String = ""
   private var conjugationDataSource: ConjugationDataSource?
+  private var settings: Settings?
   private var analyticsService: AnalyticsService?
 
   var verbView: VerbView {
@@ -21,8 +22,9 @@ class VerbVC: UIViewController {
     }
   }
 
-  convenience init(analyticsService: AnalyticsService?) {
+  convenience init(settings: Settings, analyticsService: AnalyticsService?) {
     self.init()
+    self.settings = settings
     self.analyticsService = analyticsService
   }
 
@@ -94,7 +96,10 @@ class VerbVC: UIViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    conjugationDataSource = ConjugationDataSource(verb: verb, table: verbView.table)
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
+    conjugationDataSource = ConjugationDataSource(verb: verb, table: verbView.table, secondSingularBrowse: settings.secondSingularBrowse)
     guard let conjugationDataSource = conjugationDataSource else {
       fatalError("\(ConjugationDataSource.self) was nil.")
     }

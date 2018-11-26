@@ -9,7 +9,7 @@
 enum PersonNumber: String {
   case firstSingular = "fs"
   case firstPlural = "fp"
-  case secondSingular = "ss"
+  case secondSingularTu = "ss"
   case secondSingularVos = "sv"
   case secondPlural = "sp"
   case thirdSingular = "ts"
@@ -20,7 +20,7 @@ enum PersonNumber: String {
     switch self {
     case .firstSingular:
       return "re"
-    case .secondSingular:
+    case .secondSingularTu:
       return "res"
     case .secondSingularVos:
       return "res"
@@ -41,7 +41,7 @@ enum PersonNumber: String {
     switch self {
     case .firstSingular:
       return "yo"
-    case .secondSingular:
+    case .secondSingularTu:
       return "tú"
     case .secondSingularVos:
       return "vos"
@@ -62,7 +62,7 @@ enum PersonNumber: String {
     switch self {
     case .firstSingular:
       return "1S"
-    case .secondSingular:
+    case .secondSingularTu:
       return "2S"
     case .secondSingularVos:
       return "2SV"

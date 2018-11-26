@@ -66,8 +66,8 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let st = attributeDict[Conjugator.stem] {
         currentConjugations[Conjugator.stem] = st
       }
-      if let io = attributeDict[PersonNumber.secondSingular.rawValue + Tense.imperativoPositivo.rawValue] {
-        currentConjugations[PersonNumber.secondSingular.rawValue + Tense.imperativoPositivo.rawValue] = io
+      if let io = attributeDict[PersonNumber.secondSingularTu.rawValue + Tense.imperativoPositivo.rawValue] {
+        currentConjugations[PersonNumber.secondSingularTu.rawValue + Tense.imperativoPositivo.rawValue] = io
       }
       if let iv = attributeDict[PersonNumber.secondSingularVos.rawValue + Tense.imperativoPositivo.rawValue] {
         currentConjugations[PersonNumber.secondSingularVos.rawValue + Tense.imperativoPositivo.rawValue] = iv
@@ -75,8 +75,8 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let fs = attributeDict[PersonNumber.firstSingular.rawValue + Tense.presenteDeIndicativo.rawValue] {
         currentConjugations[PersonNumber.firstSingular.rawValue + Tense.presenteDeIndicativo.rawValue] = fs
       }
-      if let ss = attributeDict[PersonNumber.secondSingular.rawValue + Tense.presenteDeIndicativo.rawValue] {
-        currentConjugations[PersonNumber.secondSingular.rawValue + Tense.presenteDeIndicativo.rawValue] = ss
+      if let ss = attributeDict[PersonNumber.secondSingularTu.rawValue + Tense.presenteDeIndicativo.rawValue] {
+        currentConjugations[PersonNumber.secondSingularTu.rawValue + Tense.presenteDeIndicativo.rawValue] = ss
       }
       if let sv = attributeDict[PersonNumber.secondSingularVos.rawValue + Tense.presenteDeIndicativo.rawValue] {
         currentConjugations[PersonNumber.secondSingularVos.rawValue + Tense.presenteDeIndicativo.rawValue] = sv
@@ -96,8 +96,8 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let fs = attributeDict[PersonNumber.firstSingular.rawValue + Tense.preterito.rawValue] {
         currentConjugations[PersonNumber.firstSingular.rawValue + Tense.preterito.rawValue] = fs
       }
-      if let ss = attributeDict[PersonNumber.secondSingular.rawValue + Tense.preterito.rawValue] {
-        currentConjugations[PersonNumber.secondSingular.rawValue + Tense.preterito.rawValue] = ss
+      if let ss = attributeDict[PersonNumber.secondSingularTu.rawValue + Tense.preterito.rawValue] {
+        currentConjugations[PersonNumber.secondSingularTu.rawValue + Tense.preterito.rawValue] = ss
         currentConjugations[PersonNumber.secondSingularVos.rawValue + Tense.preterito.rawValue] = ss
       }
       if let ts = attributeDict[PersonNumber.thirdSingular.rawValue + Tense.preterito.rawValue] {
@@ -115,8 +115,8 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let fs = attributeDict[PersonNumber.firstSingular.rawValue + Tense.imperfectoDeIndicativo.rawValue] {
         currentConjugations[PersonNumber.firstSingular.rawValue + Tense.imperfectoDeIndicativo.rawValue] = fs
       }
-      if let ss = attributeDict[PersonNumber.secondSingular.rawValue + Tense.imperfectoDeIndicativo.rawValue] {
-        currentConjugations[PersonNumber.secondSingular.rawValue + Tense.imperfectoDeIndicativo.rawValue] = ss
+      if let ss = attributeDict[PersonNumber.secondSingularTu.rawValue + Tense.imperfectoDeIndicativo.rawValue] {
+        currentConjugations[PersonNumber.secondSingularTu.rawValue + Tense.imperfectoDeIndicativo.rawValue] = ss
         currentConjugations[PersonNumber.secondSingularVos.rawValue + Tense.imperfectoDeIndicativo.rawValue] = ss
       }
       if let ts = attributeDict[PersonNumber.thirdSingular.rawValue + Tense.imperfectoDeIndicativo.rawValue] {
@@ -134,8 +134,8 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let fs = attributeDict[PersonNumber.firstSingular.rawValue + Tense.presenteDeSubjuntivo.rawValue] {
         currentConjugations[PersonNumber.firstSingular.rawValue + Tense.presenteDeSubjuntivo.rawValue] = fs
       }
-      if let ss = attributeDict[PersonNumber.secondSingular.rawValue + Tense.presenteDeSubjuntivo.rawValue] {
-        currentConjugations[PersonNumber.secondSingular.rawValue + Tense.presenteDeSubjuntivo.rawValue] = ss
+      if let ss = attributeDict[PersonNumber.secondSingularTu.rawValue + Tense.presenteDeSubjuntivo.rawValue] {
+        currentConjugations[PersonNumber.secondSingularTu.rawValue + Tense.presenteDeSubjuntivo.rawValue] = ss
         currentConjugations[PersonNumber.secondSingularVos.rawValue + Tense.presenteDeSubjuntivo.rawValue] = ss
       }
       if let ts = attributeDict[PersonNumber.thirdSingular.rawValue + Tense.presenteDeSubjuntivo.rawValue] {
@@ -153,8 +153,8 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let fs = attributeDict[PersonNumber.firstSingular.rawValue] {
         currentConjugations[PersonNumber.firstSingular.rawValue] = fs
       }
-      if let ss = attributeDict[PersonNumber.secondSingular.rawValue] {
-        currentConjugations[PersonNumber.secondSingular.rawValue] = ss
+      if let ss = attributeDict[PersonNumber.secondSingularTu.rawValue] {
+        currentConjugations[PersonNumber.secondSingularTu.rawValue] = ss
       }
       if let sv = attributeDict[PersonNumber.secondSingularVos.rawValue] {
         currentConjugations[PersonNumber.secondSingularVos.rawValue] = sv

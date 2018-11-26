@@ -20,12 +20,6 @@ class SettingsManager {
   private static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
   private static let didShowGameCenterDialogDefault = false
 
-  private var secondSingularBrowse: SecondSingularBrowse
-  private static let secondSingularBrowseKey = "secondSingularBrowse"
-
-  private var secondSingularQuiz: SecondSingularQuiz
-  private static let secondSingularQuizKey = "secondSingularQuiz"
-
   private init() {
     userDefaults = UserDefaults.standard
 
@@ -42,22 +36,6 @@ class SettingsManager {
     } else {
       didShowGameCenterDialog = SettingsManager.didShowGameCenterDialogDefault
       userDefaults.set("\(didShowGameCenterDialog)", forKey: SettingsManager.didShowGameCenterDialogKey)
-      userDefaults.synchronize()
-    }
-
-    if let storedSecondSingularBrowseString = userDefaults.string(forKey: SettingsManager.secondSingularBrowseKey) {
-      secondSingularBrowse = SecondSingularBrowse(rawValue: storedSecondSingularBrowseString) ?? .tu
-    } else {
-      secondSingularBrowse = SecondSingularBrowse()
-      userDefaults.set(secondSingularBrowse.rawValue, forKey: SettingsManager.secondSingularBrowseKey)
-      userDefaults.synchronize()
-    }
-
-    if let storedSecondSingularQuizString = userDefaults.string(forKey: SettingsManager.secondSingularQuizKey) {
-      secondSingularQuiz = SecondSingularQuiz(rawValue: storedSecondSingularQuizString) ?? .tu
-    } else {
-      secondSingularQuiz = SecondSingularQuiz()
-      userDefaults.set(secondSingularQuiz.rawValue, forKey: SettingsManager.secondSingularQuizKey)
       userDefaults.synchronize()
     }
   }
@@ -81,30 +59,6 @@ class SettingsManager {
     if didShowGameCenterDialog != settingsManager.didShowGameCenterDialog {
       settingsManager.didShowGameCenterDialog = didShowGameCenterDialog
       settingsManager.userDefaults.set("\(didShowGameCenterDialog)", forKey: SettingsManager.didShowGameCenterDialogKey)
-      settingsManager.userDefaults.synchronize()
-    }
-  }
-
-  class func getSecondSingularBrowse() -> SecondSingularBrowse {
-    return settingsManager.secondSingularBrowse
-  }
-
-  class func setSecondSingularBrowse(_ secondSingularBrowse: SecondSingularBrowse) {
-    if secondSingularBrowse != settingsManager.secondSingularBrowse {
-      settingsManager.secondSingularBrowse = secondSingularBrowse
-      settingsManager.userDefaults.set(secondSingularBrowse.rawValue, forKey: SettingsManager.secondSingularBrowseKey)
-      settingsManager.userDefaults.synchronize()
-    }
-  }
-
-  class func getSecondSingularQuiz() -> SecondSingularQuiz {
-    return settingsManager.secondSingularQuiz
-  }
-
-  class func setSecondSingularQuiz(_ secondSingularQuiz: SecondSingularQuiz) {
-    if secondSingularQuiz != settingsManager.secondSingularQuiz {
-      settingsManager.secondSingularQuiz = secondSingularQuiz
-      settingsManager.userDefaults.set(secondSingularQuiz.rawValue, forKey: SettingsManager.secondSingularQuizKey)
       settingsManager.userDefaults.synchronize()
     }
   }

@@ -74,7 +74,7 @@ class Conjugator {
     if let verb = verbs[infinitive] {
       if
         verb[PersonNumber.firstSingular.rawValue] != nil ||
-        verb[PersonNumber.secondSingular.rawValue] != nil ||
+        verb[PersonNumber.secondSingularTu.rawValue] != nil ||
         verb[PersonNumber.secondSingularVos.rawValue] != nil ||
         verb[PersonNumber.thirdSingular.rawValue] != nil ||
         verb[PersonNumber.firstPlural.rawValue] != nil ||
@@ -268,14 +268,14 @@ class Conjugator {
           fatalError("conjugation was nil.")
         }
         return .success(conjugation)
-      } else if personNumber == .secondSingular {
-          if let conjugation = verbs[infinitive]?[PersonNumber.secondSingular.rawValue + Tense.imperativoPositivo.rawValue] {
+      } else if personNumber == .secondSingularTu {
+          if let conjugation = verbs[infinitive]?[PersonNumber.secondSingularTu.rawValue + Tense.imperativoPositivo.rawValue] {
             return .success(conjugation)
           } else {
             guard let parent = verb[Conjugator.parent] else {
               fatalError("parent was nil.")
             }
-            guard let parentConjugation = conjugateRecursively(infinitive: parent, tense: .imperativoPositivo, personNumber: .secondSingular).value else {
+            guard let parentConjugation = conjugateRecursively(infinitive: parent, tense: .imperativoPositivo, personNumber: .secondSingularTu).value else {
               fatalError("parentConjugation was nil.")
             }
             let trim = verb[Conjugator.trim] ?? ""
@@ -342,7 +342,7 @@ class Conjugator {
       default:
         return ""
       }
-    case .secondSingular, .secondSingularVos:
+    case .secondSingularTu, .secondSingularVos:
       switch tense {
       case .imperfectoDeSubjuntivo1:
         return "ras"

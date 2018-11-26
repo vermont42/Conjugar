@@ -79,7 +79,7 @@ class SettingsVC: UIViewController {
       settingsView.difficultyControl.selectedSegmentIndex = 2
     }
 
-    switch SettingsManager.getSecondSingularBrowse() {
+    switch settings.secondSingularBrowse {
     case .tu:
       settingsView.browseVosControl.selectedSegmentIndex = 0
     case .vos:
@@ -88,7 +88,7 @@ class SettingsVC: UIViewController {
       settingsView.browseVosControl.selectedSegmentIndex = 2
     }
 
-    switch SettingsManager.getSecondSingularQuiz() {
+    switch settings.secondSingularQuiz {
     case .tu:
       settingsView.quizVosControl.selectedSegmentIndex = 0
     case .vos:
@@ -120,22 +120,28 @@ class SettingsVC: UIViewController {
   }
 
   @objc func quizVosChanged(_ sender: UISegmentedControl) {
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
     let index = settingsView.quizVosControl.selectedSegmentIndex
     if index == 0 {
-      SettingsManager.setSecondSingularQuiz(.tu)
+      settings.secondSingularQuiz = .tu
     } else if index == 1 {
-      SettingsManager.setSecondSingularQuiz(.vos)
+      settings.secondSingularQuiz = .vos
     }
   }
 
   @objc func browseVosChanged(_ sender: UISegmentedControl) {
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
     let index = settingsView.browseVosControl.selectedSegmentIndex
     if index == 0 {
-      SettingsManager.setSecondSingularBrowse(.tu)
+      settings.secondSingularBrowse = .tu
     } else if index == 1 {
-      SettingsManager.setSecondSingularBrowse(.vos)
+      settings.secondSingularBrowse = .vos
     } else if index == 2 {
-      SettingsManager.setSecondSingularBrowse(.both)
+      settings.secondSingularBrowse = .both
     }
   }
 

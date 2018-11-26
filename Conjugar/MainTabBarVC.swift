@@ -13,7 +13,7 @@ class MainTabBarVC: UITabBarController {
 
   convenience init(settings: Settings, analyticsService: AnalyticsService?, reviewPrompter: ReviewPrompter?) {
     self.init(nibName: nil, bundle: nil)
-    let browseVerbsNavC = UINavigationController(rootViewController: BrowseVerbsVC(analyticsService: analyticsService, reviewPrompter: reviewPrompter))
+    let browseVerbsNavC = UINavigationController(rootViewController: BrowseVerbsVC(settings: settings, analyticsService: analyticsService, reviewPrompter: reviewPrompter))
     browseVerbsNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[0], image: UIImage(named: MainTabBarVC.tabs[0]), selectedImage: nil)
     let quizNavC = UINavigationController(rootViewController: QuizVC(settings: settings, analyticsService: analyticsService))
     quizNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[1], image: UIImage(named: MainTabBarVC.tabs[1]), selectedImage: nil)

@@ -16,6 +16,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   private var allVerbs: [String] = []
   private var regularVerbs: [String] = []
   private var irregularVerbs: [String] = []
+  private var settings: Settings?
   private var analyticsService: AnalyticsService?
   private var reviewPrompter: ReviewPrompter?
 
@@ -40,8 +41,9 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
   }
 
-  convenience init(analyticsService: AnalyticsService?, reviewPrompter: ReviewPrompter?) {
+  convenience init(settings: Settings, analyticsService: AnalyticsService?, reviewPrompter: ReviewPrompter?) {
     self.init()
+    self.settings = settings
     self.analyticsService = analyticsService
     self.reviewPrompter = reviewPrompter
   }
@@ -78,7 +80,10 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: false)
-    let verbVC = VerbVC(analyticsService: analyticsService)
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
+    let verbVC = VerbVC(settings: settings, analyticsService: analyticsService)
     verbVC.verb = currentVerbs[indexPath.row]
     browseVerbsView.isHidden = true
     navigationController?.pushViewController(verbVC, animated: true)

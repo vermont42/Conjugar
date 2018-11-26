@@ -43,6 +43,26 @@ class Settings {
   static let infoDifficultyKey = "infoDifficulty"
   private static let infoDifficultyDefault: Difficulty = .difficult
 
+  var secondSingularBrowse: SecondSingularBrowse {
+    didSet {
+      if let userDefaults = userDefaults, secondSingularBrowse != oldValue {
+        userDefaults.set("\(secondSingularBrowse.rawValue)", forKey: Settings.secondSingularBrowseKey)
+      }
+    }
+  }
+  static let secondSingularBrowseKey = "secondSingularBrowse"
+  private static let secondSingularBrowseDefault: SecondSingularBrowse = .tu
+
+  var secondSingularQuiz: SecondSingularQuiz {
+    didSet {
+      if let userDefaults = userDefaults, secondSingularQuiz != oldValue {
+        userDefaults.set("\(secondSingularQuiz.rawValue)", forKey: Settings.secondSingularQuizKey)
+      }
+    }
+  }
+  static let secondSingularQuizKey = "secondSingularQuiz"
+  private static let secondSingularQuizDefault: SecondSingularQuiz = .tu
+
   var promptActionCount: Int {
     didSet {
       if let userDefaults = userDefaults, promptActionCount != oldValue {
@@ -93,6 +113,20 @@ class Settings {
       userDefaults.set(infoDifficulty.rawValue, forKey: Settings.infoDifficultyKey)
     }
 
+    if let secondSingularBrowseString = userDefaults.string(forKey: Settings.secondSingularBrowseKey) {
+      secondSingularBrowse = SecondSingularBrowse(rawValue: secondSingularBrowseString) ?? Settings.secondSingularBrowseDefault
+    } else {
+      secondSingularBrowse = Settings.secondSingularBrowseDefault
+      userDefaults.set(secondSingularBrowse.rawValue, forKey: Settings.secondSingularBrowseKey)
+    }
+
+    if let secondSingularQuizString = userDefaults.string(forKey: Settings.secondSingularQuizKey) {
+      secondSingularQuiz = SecondSingularQuiz(rawValue: secondSingularQuizString) ?? Settings.secondSingularQuizDefault
+    } else {
+      secondSingularQuiz = Settings.secondSingularQuizDefault
+      userDefaults.set(secondSingularQuiz.rawValue, forKey: Settings.secondSingularQuizKey)
+    }
+
     if let promptActionCountString = userDefaults.string(forKey: Settings.promptActionCountKey) {
       promptActionCount = Int((promptActionCountString as NSString).intValue)
     } else {
@@ -127,6 +161,18 @@ class Settings {
       self.infoDifficulty = infoDifficulty
     } else {
       infoDifficulty = Settings.infoDifficultyDefault
+    }
+
+    if let secondSingularBrowse = SecondSingularBrowse(rawValue: (customDefaults[Settings.secondSingularBrowseKey] as? String) ?? "") {
+      self.secondSingularBrowse = secondSingularBrowse
+    } else {
+      secondSingularBrowse = Settings.secondSingularBrowseDefault
+    }
+
+    if let secondSingularQuiz = SecondSingularQuiz(rawValue: (customDefaults[Settings.secondSingularQuizKey] as? String) ?? "") {
+      self.secondSingularQuiz = secondSingularQuiz
+    } else {
+      secondSingularQuiz = Settings.secondSingularQuizDefault
     }
 
     if let promptActionCount = customDefaults[Settings.promptActionCountKey] as? Int {
