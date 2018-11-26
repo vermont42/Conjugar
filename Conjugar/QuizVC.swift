@@ -68,11 +68,14 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     guard let settings = settings else {
       fatalError("settings was nil.")
     }
+    guard let analyticsService = analyticsService else {
+      fatalError("analyticsService was nil.")
+    }
     if !GameCenterManager.shared.isAuthenticated && settings.userRejectedGameCenter {
       if !settings.didShowGameCenterDialog {
         showGameCenterDialog()
       } else {
-        GameCenterManager.shared.authenticate()
+        GameCenterManager.shared.authenticate(analyticsService: analyticsService)
       }
     }
   }
@@ -80,6 +83,9 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   private func showGameCenterDialog() {
     guard let settings = settings else {
       fatalError("settings was nil.")
+    }
+    guard let analyticsService = analyticsService else {
+      fatalError("analyticsService was nil.")
     }
     settings.didShowGameCenterDialog = true
     let gameCenterController = UIAlertController(title: "Game Center", message: "Would you like Conjugar to upload your future scores to Game Center after your quiz? See how you stack up against the global community of conjugators.", preferredStyle: UIAlertControllerStyle.alert)
@@ -89,7 +95,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     gameCenterController.addAction(noAction)
     let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (action) in
-      GameCenterManager.shared.authenticate()
+      GameCenterManager.shared.authenticate(analyticsService: analyticsService)
     }
     gameCenterController.addAction(yesAction)
     present(gameCenterController, animated: true, completion: nil)
