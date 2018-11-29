@@ -557,11 +557,13 @@
 				TargetAttributes = {
 					E1F06AD31E8F05F200ADD2E1 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = V3L2PL4QC9;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					E1F06AE71E8F05F400ADD2E1 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = V3L2PL4QC9;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						TestTargetID = E1F06AD31E8F05F200ADD2E1;
@@ -886,7 +888,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -906,7 +908,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -927,7 +929,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarTests;
@@ -943,7 +945,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarTests;

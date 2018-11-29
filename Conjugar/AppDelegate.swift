@@ -30,7 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     Utterer.setup(settings: Settings.shared)
 
     window = UIWindow(frame: UIScreen.main.bounds)
-    #if DEBUG
+
+    #if targetEnvironment(simulator)
     let mainTabBarVC = MainTabBarVC(settings: Settings.shared, analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenterManager: TestGameCenterManager())
     #else
     let mainTabBarVC = MainTabBarVC(settings: Settings.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenterManager: GameCenterManager.shared)
