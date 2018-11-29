@@ -8,21 +8,21 @@
 
 import GameKit
 
-class GameCenterManager: NSObject, GKGameCenterControllerDelegate {
+class GameCenterManager: NSObject, GameCenterManageable, GKGameCenterControllerDelegate {
   static let shared = GameCenterManager()
-  let localPlayer = GKLocalPlayer.localPlayer()
   var isAuthenticated = false
-  var leaderboardIdentifier = ""
+  private let localPlayer = GKLocalPlayer.localPlayer()
+  private var leaderboardIdentifier = ""
 
   private override init() {}
 
-  func authenticate(analyticsService: AnalyticsService = AWSAnalyticsService.shared, completion: ((Bool) -> Void)? = nil) {
+  func authenticate(analyticsService: AnalyticsService?, completion: ((Bool) -> Void)? = nil) {
     localPlayer.authenticateHandler = { viewController, error in
       if let viewController = viewController, let topController = UIApplication.topViewController() {
         topController.present(viewController, animated: true, completion: nil)
       } else if self.localPlayer.isAuthenticated {
         //print("AUTHENTICATED displayName: \(self.localPlayer.displayName) alias: \(self.localPlayer.alias) playerID: \(self.localPlayer.playerID)")
-        analyticsService.recordGameCenterAuth()
+        analyticsService?.recordGameCenterAuth()
         self.isAuthenticated = true
         SoundManager.play(.applause1)
         self.localPlayer.loadDefaultLeaderboardIdentifier { identifier, error in

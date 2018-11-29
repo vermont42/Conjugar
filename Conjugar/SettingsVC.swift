@@ -11,6 +11,7 @@ import UIKit
 class SettingsVC: UIViewController {
   private var settings: Settings?
   private var analyticsService: AnalyticsService?
+  private var gameCenterManager: GameCenterManageable?
 
   var settingsView: SettingsView {
     if let castedView = view as? SettingsView {
@@ -20,10 +21,11 @@ class SettingsVC: UIViewController {
     }
   }
 
-  convenience init(settings: Settings?, analyticsService: AnalyticsService?) {
+  convenience init(settings: Settings, analyticsService: AnalyticsService, gameCenterManager: GameCenterManageable) {
     self.init()
     self.settings = settings
     self.analyticsService = analyticsService
+    self.gameCenterManager = gameCenterManager
   }
 
   override func loadView() {
@@ -46,8 +48,11 @@ class SettingsVC: UIViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+    guard let gameCenterManager = gameCenterManager else {
+      fatalError("gameCenterManager was nil.")
+    }
     [settingsView.gameCenterLabel, settingsView.gameCenterDescription, settingsView.gameCenterButton].forEach {
-      $0.isHidden = GameCenterManager.shared.isAuthenticated
+      $0.isHidden = gameCenterManager.isAuthenticated
     }
     analyticsService?.recordVisitation(viewController: "\(SettingsVC.self)")
   }
@@ -149,8 +154,11 @@ class SettingsVC: UIViewController {
     guard let settings = settings else {
       fatalError("settings was nil.")
     }
+    guard let gameCenterManager = gameCenterManager else {
+      fatalError("gameCenterManager was nil.")
+    }
     settings.userRejectedGameCenter = false
-    GameCenterManager.shared.authenticate { authenticated in
+    gameCenterManager.authenticate(analyticsService: analyticsService) { authenticated in
       DispatchQueue.main.async {
         [self.settingsView.gameCenterLabel, self.settingsView.gameCenterDescription, self.settingsView.gameCenterButton].forEach {
           $0.isHidden = authenticated

@@ -19,7 +19,7 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
   }
 
-  convenience init(analyticsService: AnalyticsService?) {
+  convenience init(analyticsService: AnalyticsService) {
     self.init()
     self.analyticsService = analyticsService
   }

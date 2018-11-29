@@ -16,6 +16,7 @@
 		E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E115CA381EEC962700DBBD44 /* VerbFamilies.swift */; };
 		E1171C9121AA1BF000B06342 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1171C9021AA1BF000B06342 /* AnalyticsService.swift */; };
 		E1171C9321AB387500B06342 /* TestAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1171C9221AB387500B06342 /* TestAnalyticsService.swift */; };
+		E1171C9521ACC02200B06342 /* GameCenterManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1171C9421ACC02200B06342 /* GameCenterManageable.swift */; };
 		E118CA281FFFD07400612D71 /* ReviewPrompter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E118CA271FFFD07400612D71 /* ReviewPrompter.swift */; };
 		E11BC1732004335B00494504 /* SecondSingularQuiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BC1722004335B00494504 /* SecondSingularQuiz.swift */; };
 		E11BC175200433AC00494504 /* SecondSingularBrowse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E11BC174200433AC00494504 /* SecondSingularBrowse.swift */; };
@@ -58,6 +59,7 @@
 		E15D3BF11F532F4E003771BB /* BrowseVerbsVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D3BF01F532F4E003771BB /* BrowseVerbsVCTests.swift */; };
 		E15D3BF61F533997003771BB /* MockNavigationC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D3BF51F533997003771BB /* MockNavigationC.swift */; };
 		E15E63F61F3A29890083DB4B /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F51F3A29880083DB4B /* Layout.swift */; };
+		E168865321ADA020005B8636 /* TestGameCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E168865221ADA020005B8636 /* TestGameCenterManager.swift */; };
 		E16BEA041F09BCC70053DD32 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16BEA031F09BCC70053DD32 /* Fonts.swift */; };
 		E16BEA061F0A92040053DD32 /* InfoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16BEA051F0A92040053DD32 /* InfoDelegate.swift */; };
 		E18010781F1BCA0800E8608C /* BrowseVerbsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18010771F1BCA0800E8608C /* BrowseVerbsView.swift */; };
@@ -65,6 +67,8 @@
 		E18145DA1F2E43630048DEE2 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18145D91F2E43630048DEE2 /* InfoView.swift */; };
 		E18145DC1F2E49B20048DEE2 /* UILabelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */; };
 		E182F8D21F48AA1400D4569E /* UIAlertControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E182F8D11F48AA1400D4569E /* UIAlertControllerExtension.swift */; };
+		E188B56021AF78CE009777D8 /* ReviewPromptable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E188B55F21AF78CE009777D8 /* ReviewPromptable.swift */; };
+		E188B56221AF7920009777D8 /* TestReviewPrompter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E188B56121AF7920009777D8 /* TestReviewPrompter.swift */; };
 		E18D5FA71F1EFD2700313113 /* VerbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18D5FA61F1EFD2700313113 /* VerbView.swift */; };
 		E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F371ECA7C9A00633200 /* Utterer.swift */; };
 		E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F391ECA7DA700633200 /* SoundManager.swift */; };
@@ -138,6 +142,7 @@
 		E115CA381EEC962700DBBD44 /* VerbFamilies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbFamilies.swift; sourceTree = "<group>"; };
 		E1171C9021AA1BF000B06342 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		E1171C9221AB387500B06342 /* TestAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAnalyticsService.swift; sourceTree = "<group>"; };
+		E1171C9421ACC02200B06342 /* GameCenterManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenterManageable.swift; sourceTree = "<group>"; };
 		E118CA271FFFD07400612D71 /* ReviewPrompter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPrompter.swift; sourceTree = "<group>"; };
 		E11BC1722004335B00494504 /* SecondSingularQuiz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondSingularQuiz.swift; sourceTree = "<group>"; };
 		E11BC174200433AC00494504 /* SecondSingularBrowse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondSingularBrowse.swift; sourceTree = "<group>"; };
@@ -180,6 +185,7 @@
 		E15D3BF01F532F4E003771BB /* BrowseVerbsVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseVerbsVCTests.swift; sourceTree = "<group>"; };
 		E15D3BF51F533997003771BB /* MockNavigationC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationC.swift; sourceTree = "<group>"; };
 		E15E63F51F3A29880083DB4B /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
+		E168865221ADA020005B8636 /* TestGameCenterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenterManager.swift; sourceTree = "<group>"; };
 		E16BEA031F09BCC70053DD32 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		E16BEA051F0A92040053DD32 /* InfoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDelegate.swift; sourceTree = "<group>"; };
 		E18010771F1BCA0800E8608C /* BrowseVerbsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseVerbsView.swift; sourceTree = "<group>"; };
@@ -187,6 +193,8 @@
 		E18145D91F2E43630048DEE2 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtension.swift; sourceTree = "<group>"; };
 		E182F8D11F48AA1400D4569E /* UIAlertControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtension.swift; sourceTree = "<group>"; };
+		E188B55F21AF78CE009777D8 /* ReviewPromptable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPromptable.swift; sourceTree = "<group>"; };
+		E188B56121AF7920009777D8 /* TestReviewPrompter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReviewPrompter.swift; sourceTree = "<group>"; };
 		E18D5FA61F1EFD2700313113 /* VerbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbView.swift; sourceTree = "<group>"; };
 		E18F7F371ECA7C9A00633200 /* Utterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utterer.swift; sourceTree = "<group>"; };
 		E18F7F391ECA7DA700633200 /* SoundManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
@@ -287,16 +295,20 @@
 				E139E0E51EC7D36200B34DE7 /* Colors.swift */,
 				E16BEA031F09BCC70053DD32 /* Fonts.swift */,
 				E14271381F01EFF2001D19E1 /* GameCenterManager.swift */,
+				E1171C9421ACC02200B06342 /* GameCenterManageable.swift */,
 				E1A789761F00751D0006CA77 /* IntExtension.swift */,
 				E15E63F51F3A29880083DB4B /* Layout.swift */,
 				E1483FB61EF6E35C0052C436 /* MutableCollectionExtension.swift */,
 				E139E0DF1EC7D27A00B34DE7 /* NSAttributedStringExtension.swift */,
 				E11CFED01FC2083900BD3568 /* NSLayoutConstraintExtension.swift */,
+				E188B55F21AF78CE009777D8 /* ReviewPromptable.swift */,
 				E118CA271FFFD07400612D71 /* ReviewPrompter.swift */,
 				E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */,
 				E151222C21A0DBB0008EF307 /* Settings.swift */,
 				E18F7F391ECA7DA700633200 /* SoundManager.swift */,
 				E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */,
+				E168865221ADA020005B8636 /* TestGameCenterManager.swift */,
+				E188B56121AF7920009777D8 /* TestReviewPrompter.swift */,
 				E182F8D11F48AA1400D4569E /* UIAlertControllerExtension.swift */,
 				E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */,
 				E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */,
@@ -653,6 +665,7 @@
 				E1483FB71EF6E35C0052C436 /* MutableCollectionExtension.swift in Sources */,
 				E18010781F1BCA0800E8608C /* BrowseVerbsView.swift in Sources */,
 				E14BAD941F006423000D91C5 /* ResultCell.swift in Sources */,
+				E168865321ADA020005B8636 /* TestGameCenterManager.swift in Sources */,
 				E18F7F3C1ECA7DF000633200 /* Sound.swift in Sources */,
 				E18D5FA71F1EFD2700313113 /* VerbView.swift in Sources */,
 				E1151E551E9C5D9C00DE44D6 /* VerbCell.swift in Sources */,
@@ -675,6 +688,7 @@
 				E1D1D8F81F33732D006A6052 /* QuizView.swift in Sources */,
 				E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */,
 				E1EC71012198BA6400872787 /* AWSAnalyticsService.swift in Sources */,
+				E188B56021AF78CE009777D8 /* ReviewPromptable.swift in Sources */,
 				E19382041F0822B2005268FF /* InfoVC.swift in Sources */,
 				E14271391F01EFF2001D19E1 /* GameCenterManager.swift in Sources */,
 				E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */,
@@ -698,6 +712,7 @@
 				E1201A041F1AB99F00BCB27D /* MainTabBarVC.swift in Sources */,
 				E1483FBB1EF6F82A0052C436 /* QuizVC.swift in Sources */,
 				E1A44314200D10D200C48857 /* ConjugationDataSource.swift in Sources */,
+				E1171C9521ACC02200B06342 /* GameCenterManageable.swift in Sources */,
 				E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */,
 				E15E63F61F3A29890083DB4B /* Layout.swift in Sources */,
 				E1F289A71F30C666006B3C3E /* SettingsView.swift in Sources */,
@@ -714,6 +729,7 @@
 				E1171C9121AA1BF000B06342 /* AnalyticsService.swift in Sources */,
 				E1EC71032198BA8A00872787 /* DeviceUtility.swift in Sources */,
 				E139E0E41EC7D2E500B34DE7 /* StringExtensions.swift in Sources */,
+				E188B56221AF7920009777D8 /* TestReviewPrompter.swift in Sources */,
 				E19382021F082257005268FF /* BrowseInfoVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

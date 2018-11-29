@@ -21,7 +21,7 @@ class InfoVC: UIViewController, UITextViewDelegate {
     }
   }
 
-  convenience init(analyticsService: AnalyticsService?) {
+  convenience init(analyticsService: AnalyticsService) {
     self.init()
     self.analyticsService = analyticsService
   }

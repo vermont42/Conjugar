@@ -31,9 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     window = UIWindow(frame: UIScreen.main.bounds)
     #if DEBUG
-    let mainTabBarVC = MainTabBarVC(settings: Settings.shared, analyticsService: TestAnalyticsService(), reviewPrompter: nil)
+    let mainTabBarVC = MainTabBarVC(settings: Settings.shared, analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenterManager: TestGameCenterManager())
     #else
-    let mainTabBarVC = MainTabBarVC(settings: Settings.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared)
+    let mainTabBarVC = MainTabBarVC(settings: Settings.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenterManager: GameCenterManager.shared)
     #endif
 
     window?.rootViewController = mainTabBarVC

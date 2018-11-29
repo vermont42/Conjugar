@@ -11,6 +11,7 @@ import UIKit
 class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   private var settings: Settings?
   private var analyticsService: AnalyticsService?
+  private var gameCenterManager: GameCenterManageable?
 
   var quizView: QuizView {
     if let castedView = view as? QuizView {
@@ -20,10 +21,11 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsService?) {
+  convenience init(settings: Settings, analyticsService: AnalyticsService, gameCenterManager: GameCenterManageable) {
     self.init()
     self.settings = settings
     self.analyticsService = analyticsService
+    self.gameCenterManager = gameCenterManager
   }
 
   override func loadView() {
@@ -71,11 +73,14 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     guard let analyticsService = analyticsService else {
       fatalError("analyticsService was nil.")
     }
-    if !GameCenterManager.shared.isAuthenticated && settings.userRejectedGameCenter {
+    guard let gameCenterManager = gameCenterManager else {
+      fatalError("gameCenterManager was nil.")
+    }
+    if !gameCenterManager.isAuthenticated && settings.userRejectedGameCenter {
       if !settings.didShowGameCenterDialog {
         showGameCenterDialog()
       } else {
-        GameCenterManager.shared.authenticate(analyticsService: analyticsService)
+        gameCenterManager.authenticate(analyticsService: analyticsService, completion: nil)
       }
     }
   }
@@ -87,15 +92,18 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     guard let analyticsService = analyticsService else {
       fatalError("analyticsService was nil.")
     }
+    guard let gameCenterManager = gameCenterManager else {
+      fatalError("gameCenterManager was nil.")
+    }
     settings.didShowGameCenterDialog = true
     let gameCenterController = UIAlertController(title: "Game Center", message: "Would you like Conjugar to upload your future scores to Game Center after your quiz? See how you stack up against the global community of conjugators.", preferredStyle: UIAlertControllerStyle.alert)
-    let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.destructive) { (action) in
+    let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.destructive) { action in
       SoundManager.play(.sadTrombone)
       settings.userRejectedGameCenter = true
     }
     gameCenterController.addAction(noAction)
-    let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (action) in
-      GameCenterManager.shared.authenticate(analyticsService: analyticsService)
+    let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { action in
+      gameCenterManager.authenticate(analyticsService: analyticsService, completion: nil)
     }
     gameCenterController.addAction(yesAction)
     present(gameCenterController, animated: true, completion: nil)
@@ -144,6 +152,9 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   }
 
   func quizDidFinish() {
+    guard let analyticsService = analyticsService else {
+      fatalError("analyticsService was nil.")
+    }
     quizView.hideInProgressUI()
     quizView.startRestartButton.setTitle("Start", for: .normal)
     let randomApplause = arc4random_uniform(Sound.applauseCount) + 1
@@ -159,7 +170,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     let resultsVC = ResultsVC(analyticsService: analyticsService)
     navigationController?.pushViewController(resultsVC, animated: true)
-    analyticsService?.recordQuizCompletion(score: Quiz.shared.score)
+    analyticsService.recordQuizCompletion(score: Quiz.shared.score)
   }
 
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {

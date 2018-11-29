@@ -37,7 +37,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
   }
 
-  convenience init(settings: Settings?, analyticsService: AnalyticsService?) {
+  convenience init(settings: Settings, analyticsService: AnalyticsService) {
     self.init()
     self.settings = settings
     self.analyticsService = analyticsService
@@ -115,6 +115,9 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   }
 
   private func showInfo() {
+    guard let analyticsService = analyticsService else {
+      fatalError("analyticsService was nil.")
+    }
     let infoVC = InfoVC(analyticsService: analyticsService)
     infoVC.infoString = currentInfos[selectedRow].infoString
     infoVC.infoDelegate = self

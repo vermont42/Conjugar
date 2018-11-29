@@ -22,7 +22,7 @@ class VerbVC: UIViewController {
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsService?) {
+  convenience init(settings: Settings, analyticsService: AnalyticsService) {
     self.init()
     self.settings = settings
     self.analyticsService = analyticsService
