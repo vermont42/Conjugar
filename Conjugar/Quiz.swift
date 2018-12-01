@@ -51,7 +51,7 @@ internal class Quiz {
   private var personNumbersWithVos: [PersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
   internal weak var delegate: QuizDelegate?
-  static let shared = Quiz()
+  static let shared = Quiz(settings: Settings.shared)
 
   internal var questionCount: Int {
     return questions.count
@@ -81,10 +81,14 @@ internal class Quiz {
     }
   }
 
-  private init() {}
-
-  func start(settings: Settings) {
+  init(settings: Settings) {
     self.settings = settings
+  }
+
+  func start() {
+    guard let settings = settings else {
+      fatalError("settings was nil.")
+    }
     lastRegion = settings.region
     lastDifficulty = settings.difficulty
     questions.removeAll()

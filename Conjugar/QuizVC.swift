@@ -10,6 +10,7 @@ import UIKit
 
 class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   private var settings: Settings?
+  private var quiz: Quiz?
   private var analyticsService: AnalyticsService?
   private var gameCenterManager: GameCenterManageable?
 
@@ -21,9 +22,10 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsService, gameCenterManager: GameCenterManageable) {
+  convenience init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsService, gameCenterManager: GameCenterManageable) {
     self.init()
     self.settings = settings
+    self.quiz = quiz
     self.analyticsService = analyticsService
     self.gameCenterManager = gameCenterManager
   }
@@ -39,15 +41,18 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    Quiz.shared.delegate = self
-    switch Quiz.shared.quizState {
+    guard let quiz = quiz else {
+      fatalError("quiz was nil.")
+    }
+    quiz.delegate = self
+    switch quiz.quizState {
     case .notStarted, .finished:
       quizView.hideInProgressUI()
       quizView.startRestartButton.setTitle("Start", for: .normal)
     case .inProgress:
       quizView.showInProgressUI()
       quizView.startRestartButton.setTitle("Restart", for: .normal)
-      let verb = Quiz.shared.verb
+      let verb = quiz.verb
       quizView.verb.text = verb
       let translationResult = Conjugator.shared.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
       switch translationResult {
@@ -56,10 +61,10 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       default:
         fatalError("translation not found.")
       }
-      quizView.tense.text = Quiz.shared.tense.displayName
-      quizView.pronoun.text = Quiz.shared.currentPersonNumber.pronoun
-      quizView.score.text = String(Quiz.shared.score)
-      quizView.progress.text = String(Quiz.shared.currentQuestionIndex + 1) + " / " + String(Quiz.shared.questionCount)
+      quizView.tense.text = quiz.tense.displayName
+      quizView.pronoun.text = quiz.currentPersonNumber.pronoun
+      quizView.score.text = String(quiz.score)
+      quizView.progress.text = String(quiz.currentQuestionIndex + 1) + " / " + String(quiz.questionCount)
     }
     quizView.startRestartButton.pulsate()
     authenticate()
@@ -110,11 +115,11 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   }
 
   @objc func startRestart() {
-    SoundManager.play(.gun)
-    guard let settings = settings else {
-      fatalError("settings was nil.")
+    guard let quiz = quiz else {
+      fatalError("quiz was nil.")
     }
-    Quiz.shared.start(settings: settings)
+    SoundManager.play(.gun)
+    quiz.start()
     quizView.startRestartButton.setTitle("Restart", for: .normal)
     [quizView.lastLabel, quizView.correctLabel, quizView.last, quizView.correct].forEach {
       $0.isHidden = true
@@ -155,6 +160,9 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     guard let analyticsService = analyticsService else {
       fatalError("analyticsService was nil.")
     }
+    guard let quiz = quiz else {
+      fatalError("quiz was nil.")
+    }
     quizView.hideInProgressUI()
     quizView.startRestartButton.setTitle("Start", for: .normal)
     let randomApplause = arc4random_uniform(Sound.applauseCount) + 1
@@ -168,16 +176,19 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     default:
       break
     }
-    let resultsVC = ResultsVC(analyticsService: analyticsService)
+    let resultsVC = ResultsVC(quiz: quiz, analyticsService: analyticsService)
     navigationController?.pushViewController(resultsVC, animated: true)
-    analyticsService.recordQuizCompletion(score: Quiz.shared.score)
+    analyticsService.recordQuizCompletion(score: quiz.score)
   }
 
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    guard let quiz = quiz else {
+      fatalError("quiz was nil.")
+    }
     guard let text = quizView.conjugationField.text else { return false }
     guard text != "" else { return false }
     quizView.conjugationField.resignFirstResponder()
-    let (result, correctConjugation) = Quiz.shared.process(proposedAnswer: text)
+    let (result, correctConjugation) = quiz.process(proposedAnswer: text)
     quizView.conjugationField.text = nil
     switch result {
     case .totalMatch:
@@ -187,7 +198,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     case .noMatch:
       SoundManager.play(.buzz)
     }
-    if let correctConjugation = correctConjugation, Quiz.shared.quizState == .inProgress {
+    if let correctConjugation = correctConjugation, quiz.quizState == .inProgress {
       [quizView.lastLabel, quizView.last, quizView.correctLabel, quizView.correct].forEach {
         $0.isHidden = false
       }
