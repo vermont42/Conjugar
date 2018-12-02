@@ -24,14 +24,14 @@ class GameCenterManager: NSObject, GameCenterManageable, GKGameCenterControllerD
         //print("AUTHENTICATED displayName: \(self.localPlayer.displayName) alias: \(self.localPlayer.alias) playerID: \(self.localPlayer.playerID)")
         analyticsService?.recordGameCenterAuth()
         self.isAuthenticated = true
-        SoundManager.play(.applause1)
+        SoundPlayer.play(.applause1)
         self.localPlayer.loadDefaultLeaderboardIdentifier { identifier, error in
           self.leaderboardIdentifier = identifier ?? "ERROR"
           //print("identifier: \(self.leaderboardIdentifier)")
         }
         completion?(true)
       } else {
-        SoundManager.play(.sadTrombone)
+        SoundPlayer.play(.sadTrombone)
         UIAlertController.showMessage("Game Center authentication failed. This can happen if you cancel authentication or if your iPhone is not already signed into Game Center. Try launching the Settings app, tapping Game Center, signing in, and relaunching Conjugar.", title: "😰", okTitle: "Got It")
         self.isAuthenticated = false
         completion?(false)

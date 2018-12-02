@@ -103,7 +103,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     settings.didShowGameCenterDialog = true
     let gameCenterController = UIAlertController(title: "Game Center", message: "Would you like Conjugar to upload your future scores to Game Center after your quiz? See how you stack up against the global community of conjugators.", preferredStyle: UIAlertControllerStyle.alert)
     let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.destructive) { action in
-      SoundManager.play(.sadTrombone)
+      SoundPlayer.play(.sadTrombone)
       settings.userRejectedGameCenter = true
     }
     gameCenterController.addAction(noAction)
@@ -118,7 +118,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     guard let quiz = quiz else {
       fatalError("quiz was nil.")
     }
-    SoundManager.play(.gun)
+    SoundPlayer.play(.gun)
     quiz.start()
     quizView.startRestartButton.setTitle("Restart", for: .normal)
     [quizView.lastLabel, quizView.correctLabel, quizView.last, quizView.correct].forEach {
@@ -168,11 +168,11 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     let applauseIndex = Int.random(in: 1...Sound.applauseCount)
     switch applauseIndex {
     case 1:
-      SoundManager.play(.applause1)
+      SoundPlayer.play(.applause1)
     case 2:
-      SoundManager.play(.applause2)
+      SoundPlayer.play(.applause2)
     case 3:
-      SoundManager.play(.applause3)
+      SoundPlayer.play(.applause3)
     default:
       break
     }
@@ -192,11 +192,11 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     quizView.conjugationField.text = nil
     switch result {
     case .totalMatch:
-      SoundManager.play(.chime)
+      SoundPlayer.play(.chime)
     case .partialMatch:
-      SoundManager.play(.chirp)
+      SoundPlayer.play(.chirp)
     case .noMatch:
-      SoundManager.play(.buzz)
+      SoundPlayer.play(.buzz)
     }
     if let correctConjugation = correctConjugation, quiz.quizState == .inProgress {
       [quizView.lastLabel, quizView.last, quizView.correctLabel, quizView.correct].forEach {

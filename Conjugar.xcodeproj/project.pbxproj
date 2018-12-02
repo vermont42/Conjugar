@@ -69,7 +69,7 @@
 		E188B56221AF7920009777D8 /* TestReviewPrompter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E188B56121AF7920009777D8 /* TestReviewPrompter.swift */; };
 		E18D5FA71F1EFD2700313113 /* VerbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18D5FA61F1EFD2700313113 /* VerbView.swift */; };
 		E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F371ECA7C9A00633200 /* Utterer.swift */; };
-		E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F391ECA7DA700633200 /* SoundManager.swift */; };
+		E18F7F3A1ECA7DA700633200 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F391ECA7DA700633200 /* SoundPlayer.swift */; };
 		E18F7F3C1ECA7DF000633200 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18F7F3B1ECA7DF000633200 /* Sound.swift */; };
 		E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E18F7F3D1ECA7E3700633200 /* silence.mp3 */; };
 		E191C9B81EBEB27500F715E7 /* VerbType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E191C9B71EBEB27500F715E7 /* VerbType.swift */; };
@@ -193,7 +193,7 @@
 		E188B56121AF7920009777D8 /* TestReviewPrompter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReviewPrompter.swift; sourceTree = "<group>"; };
 		E18D5FA61F1EFD2700313113 /* VerbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbView.swift; sourceTree = "<group>"; };
 		E18F7F371ECA7C9A00633200 /* Utterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utterer.swift; sourceTree = "<group>"; };
-		E18F7F391ECA7DA700633200 /* SoundManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+		E18F7F391ECA7DA700633200 /* SoundPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		E18F7F3B1ECA7DF000633200 /* Sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 		E18F7F3D1ECA7E3700633200 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silence.mp3; sourceTree = "<group>"; };
 		E191C9B71EBEB27500F715E7 /* VerbType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbType.swift; sourceTree = "<group>"; };
@@ -299,7 +299,7 @@
 				E188B55F21AF78CE009777D8 /* ReviewPromptable.swift */,
 				E118CA271FFFD07400612D71 /* ReviewPrompter.swift */,
 				E151222C21A0DBB0008EF307 /* Settings.swift */,
-				E18F7F391ECA7DA700633200 /* SoundManager.swift */,
+				E18F7F391ECA7DA700633200 /* SoundPlayer.swift */,
 				E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */,
 				E168865221ADA020005B8636 /* TestGameCenterManager.swift */,
 				E188B56121AF7920009777D8 /* TestReviewPrompter.swift */,
@@ -686,7 +686,7 @@
 				E188B56021AF78CE009777D8 /* ReviewPromptable.swift in Sources */,
 				E19382041F0822B2005268FF /* InfoVC.swift in Sources */,
 				E14271391F01EFF2001D19E1 /* GameCenterManager.swift in Sources */,
-				E18F7F3A1ECA7DA700633200 /* SoundManager.swift in Sources */,
+				E18F7F3A1ECA7DA700633200 /* SoundPlayer.swift in Sources */,
 				E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */,
 				E11CFED11FC2083900BD3568 /* NSLayoutConstraintExtension.swift in Sources */,
 				E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */,

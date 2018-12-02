@@ -1,5 +1,5 @@
 //
-//  SoundManager.swift
+//  SoundPlayer.swift
 //  Conjugar
 //
 //  Created by Josh Adams on 11/18/15.
@@ -8,8 +8,8 @@
 
 import AVFoundation
 
-class SoundManager {
-  private static let soundManager = SoundManager()
+class SoundPlayer {
+  private static let soundPlayer = SoundPlayer()
   private var sounds: [String: AVAudioPlayer]
   private static let soundExtension = "mp3"
 
@@ -23,16 +23,16 @@ class SoundManager {
   }
 
   static func play(_ sound: Sound) {
-    if soundManager.sounds[sound.rawValue] == nil {
+    if soundPlayer.sounds[sound.rawValue] == nil {
       if let audioUrl = Bundle.main.url(forResource: sound.rawValue, withExtension: soundExtension) {
         do {
-          try soundManager.sounds[sound.rawValue] = AVAudioPlayer.init(contentsOf: audioUrl)
+          try soundPlayer.sounds[sound.rawValue] = AVAudioPlayer.init(contentsOf: audioUrl)
         } catch let error as NSError {
           print("\(error.localizedDescription)")
         }
       }
     }
-    soundManager.sounds[sound.rawValue]?.play()
+    soundPlayer.sounds[sound.rawValue]?.play()
   }
 
   static func enableBackgroundAudio() {

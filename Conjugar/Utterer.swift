@@ -39,6 +39,6 @@ class Utterer {
     }
     utterance.pitchMultiplier = Utterer.pitchMultiplier
     synth.speak(utterance)
-    SoundManager.play(.silence) // https://forums.developer.apple.com/thread/23160
+    SoundPlayer.play(.silence) // https://forums.developer.apple.com/thread/23160
   }
 }
