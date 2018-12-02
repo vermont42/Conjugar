@@ -280,7 +280,12 @@ internal class Quiz {
   }
 
   private var regularOrIrregularParticipioVerb: String {
-    let diceRoll = Int(arc4random_uniform(2))
+    let diceRoll: Int
+    if shouldShuffle {
+      diceRoll = Int.random(in: 0..<2)
+    } else {
+      diceRoll = questions.count % 2
+    }
     if diceRoll == 0 {
       return allRegularVerb
     } else /* diceRoll == 1 */ {

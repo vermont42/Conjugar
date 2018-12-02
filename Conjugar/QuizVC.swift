@@ -165,8 +165,8 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     quizView.hideInProgressUI()
     quizView.startRestartButton.setTitle("Start", for: .normal)
-    let randomApplause = arc4random_uniform(Sound.applauseCount) + 1
-    switch randomApplause {
+    let applauseIndex = Int.random(in: 1...Sound.applauseCount)
+    switch applauseIndex {
     case 1:
       SoundManager.play(.applause1)
     case 2:

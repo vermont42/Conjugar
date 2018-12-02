@@ -8,10 +8,6 @@
 
 import UIKit
 
-// TODO: Don't store present subjunctive forms of any verbs except dar, estar, ser, haber, ir, and saber. Instead, construct them based on yo-present form. Actually, it's complicated because of spelling changes. http://www.spanishdict.com/guide/spanish-present-subjunctive
-
-// TODO: Add more defective verbs. Examples: https://www.thoughtco.com/defective-verbs-spanish-3079156
-
 class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
   private var allVerbs: [String] = []
   private var regularVerbs: [String] = []

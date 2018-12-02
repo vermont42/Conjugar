@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window = UIWindow(frame: UIScreen.main.bounds)
 
     #if targetEnvironment(simulator)
-    let mainTabBarVC = MainTabBarVC(settings: Settings.shared, quiz: Quiz.shared, analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenterManager: TestGameCenterManager())
+    let mainTabBarVC = MainTabBarVC(settings: Settings.shared, quiz: Quiz(settings: Settings.shared, shouldShuffle: true), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenterManager: TestGameCenterManager())
     #else
     let mainTabBarVC = MainTabBarVC(settings: Settings.shared, quiz: Quiz.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenterManager: GameCenterManager.shared)
     #endif
