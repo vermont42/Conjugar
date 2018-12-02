@@ -39,8 +39,6 @@
 		E1483FB11EF5C4C60052C436 /* Difficulty.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB01EF5C4C60052C436 /* Difficulty.swift */; };
 		E1483FB31EF5CF650052C436 /* QuizState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB21EF5CF650052C436 /* QuizState.swift */; };
 		E1483FB51EF5D0510052C436 /* QuizDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB41EF5D0510052C436 /* QuizDelegate.swift */; };
-		E1483FB71EF6E35C0052C436 /* MutableCollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB61EF6E35C0052C436 /* MutableCollectionExtension.swift */; };
-		E1483FB91EF6E3D20052C436 /* SequenceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */; };
 		E1483FBB1EF6F82A0052C436 /* QuizVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FBA1EF6F82A0052C436 /* QuizVC.swift */; };
 		E1483FC01EF746D70052C436 /* chime.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FBE1EF746D70052C436 /* chime.mp3 */; };
 		E1483FC41EF7510F0052C436 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */; };
@@ -165,8 +163,6 @@
 		E1483FB01EF5C4C60052C436 /* Difficulty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Difficulty.swift; sourceTree = "<group>"; };
 		E1483FB21EF5CF650052C436 /* QuizState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizState.swift; sourceTree = "<group>"; };
 		E1483FB41EF5D0510052C436 /* QuizDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizDelegate.swift; sourceTree = "<group>"; };
-		E1483FB61EF6E35C0052C436 /* MutableCollectionExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutableCollectionExtension.swift; sourceTree = "<group>"; };
-		E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SequenceExtension.swift; sourceTree = "<group>"; };
 		E1483FBA1EF6F82A0052C436 /* QuizVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizVC.swift; sourceTree = "<group>"; };
 		E1483FBE1EF746D70052C436 /* chime.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chime.mp3; sourceTree = "<group>"; };
 		E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
@@ -298,12 +294,10 @@
 				E1171C9421ACC02200B06342 /* GameCenterManageable.swift */,
 				E1A789761F00751D0006CA77 /* IntExtension.swift */,
 				E15E63F51F3A29880083DB4B /* Layout.swift */,
-				E1483FB61EF6E35C0052C436 /* MutableCollectionExtension.swift */,
 				E139E0DF1EC7D27A00B34DE7 /* NSAttributedStringExtension.swift */,
 				E11CFED01FC2083900BD3568 /* NSLayoutConstraintExtension.swift */,
 				E188B55F21AF78CE009777D8 /* ReviewPromptable.swift */,
 				E118CA271FFFD07400612D71 /* ReviewPrompter.swift */,
-				E1483FB81EF6E3D20052C436 /* SequenceExtension.swift */,
 				E151222C21A0DBB0008EF307 /* Settings.swift */,
 				E18F7F391ECA7DA700633200 /* SoundManager.swift */,
 				E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */,
@@ -664,7 +658,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E11BC175200433AC00494504 /* SecondSingularBrowse.swift in Sources */,
-				E1483FB71EF6E35C0052C436 /* MutableCollectionExtension.swift in Sources */,
 				E18010781F1BCA0800E8608C /* BrowseVerbsView.swift in Sources */,
 				E14BAD941F006423000D91C5 /* ResultCell.swift in Sources */,
 				E168865321ADA020005B8636 /* TestGameCenterManager.swift in Sources */,
@@ -698,7 +691,6 @@
 				E11CFED11FC2083900BD3568 /* NSLayoutConstraintExtension.swift in Sources */,
 				E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */,
 				E1483FB51EF5D0510052C436 /* QuizDelegate.swift in Sources */,
-				E1483FB91EF6E3D20052C436 /* SequenceExtension.swift in Sources */,
 				E18145D81F2E3E170048DEE2 /* BrowseInfoView.swift in Sources */,
 				E139E0E01EC7D27A00B34DE7 /* NSAttributedStringExtension.swift in Sources */,
 				E1483FAF1EF5C3820052C436 /* Quiz.swift in Sources */,

@@ -50,6 +50,7 @@ internal class Quiz {
   private var personNumbersWithTu: [PersonNumber] = [.firstSingular, .secondSingularTu, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersWithVos: [PersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
+  private var shouldShuffle = true
   internal weak var delegate: QuizDelegate?
   static let shared = Quiz(settings: Settings.shared)
 
@@ -81,8 +82,9 @@ internal class Quiz {
     }
   }
 
-  init(settings: Settings) {
+  init(settings: Settings, shouldShuffle: Bool = true) {
     self.settings = settings
+    self.shouldShuffle = shouldShuffle
   }
 
   func start() {
@@ -94,19 +96,34 @@ internal class Quiz {
     questions.removeAll()
     proposedAnswers.removeAll()
     correctAnswers.removeAll()
-    regularArVerbs.shuffle()
-    regularIrVerbs.shuffle()
-    regularErVerbs.shuffle()
-    allRegularVerbs.shuffle()
-    irregularPresenteDeIndicativoVerbs.shuffle()
-    irregularPreteritoVerbs.shuffle()
-    irregularRaizFuturaVerbs.shuffle()
-    irregularParticipioVerbs.shuffle()
-    irregularImperfectoVerbs.shuffle()
-    irregularPresenteDeSubjuntivoVerbs.shuffle()
-    irregularGerundioVerbs.shuffle()
-    irregularTuImperativoVerbs.shuffle()
-    irregularVosImperativoVerbs.shuffle()
+    if shouldShuffle {
+      regularArVerbs.shuffle()
+      regularIrVerbs.shuffle()
+      regularErVerbs.shuffle()
+      allRegularVerbs.shuffle()
+      irregularPresenteDeIndicativoVerbs.shuffle()
+      irregularPreteritoVerbs.shuffle()
+      irregularRaizFuturaVerbs.shuffle()
+      irregularParticipioVerbs.shuffle()
+      irregularImperfectoVerbs.shuffle()
+      irregularPresenteDeSubjuntivoVerbs.shuffle()
+      irregularGerundioVerbs.shuffle()
+      irregularTuImperativoVerbs.shuffle()
+      irregularVosImperativoVerbs.shuffle()
+    }
+
+    regularArVerbsIndex = 0
+    regularIrVerbsIndex = 0
+    regularErVerbsIndex = 0
+    allRegularVerbsIndex = 0
+    irregularPresenteDeIndicativoVerbsIndex = 0
+    irregularRaizFuturaVerbsIndex = 0
+    irregularParticipioVerbsIndex = 0
+    irregularImperfectoVerbsIndex = 0
+    irregularPresenteDeSubjuntivoVerbsIndex = 0
+    irregularGerundioVerbsIndex = 0
+    irregularTuImperativoVerbsIndex = 0
+    irregularVosImperativoVerbsIndex = 0
 
     switch lastDifficulty {
     case .easy:
@@ -247,7 +264,9 @@ internal class Quiz {
         questions.append((regularOrIrregularParticipioVerb, $0, personNumber()))
       }
     }
-    questions = questions.shuffled().shuffled()
+    if shouldShuffle {
+      questions = questions.shuffled().shuffled()
+    }
     score = 0
     currentQuestionIndex = 0
     elapsedTime = 0
