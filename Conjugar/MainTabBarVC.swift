@@ -11,13 +11,13 @@ import UIKit
 class MainTabBarVC: UITabBarController {
   internal static let tabs = ["Browse", "Quiz", "Settings", "Info"]
 
-  convenience init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsService, reviewPrompter: ReviewPromptable, gameCenterManager: GameCenterManageable) {
+  convenience init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsService, reviewPrompter: ReviewPromptable, gameCenter: GameCenterable) {
     self.init(nibName: nil, bundle: nil)
     let browseVerbsNavC = UINavigationController(rootViewController: BrowseVerbsVC(settings: settings, analyticsService: analyticsService, reviewPrompter: reviewPrompter))
     browseVerbsNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[0], image: UIImage(named: MainTabBarVC.tabs[0]), selectedImage: nil)
-    let quizNavC = UINavigationController(rootViewController: QuizVC(settings: settings, quiz: quiz, analyticsService: analyticsService, gameCenterManager: gameCenterManager))
+    let quizNavC = UINavigationController(rootViewController: QuizVC(settings: settings, quiz: quiz, analyticsService: analyticsService, gameCenter: gameCenter))
     quizNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[1], image: UIImage(named: MainTabBarVC.tabs[1]), selectedImage: nil)
-    let settingsNavC = UINavigationController(rootViewController: SettingsVC(settings: settings, analyticsService: analyticsService, gameCenterManager: gameCenterManager))
+    let settingsNavC = UINavigationController(rootViewController: SettingsVC(settings: settings, analyticsService: analyticsService, gameCenter: gameCenter))
     settingsNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[2], image: UIImage(named: MainTabBarVC.tabs[2]), selectedImage: nil)
     let browseInfoNavC = UINavigationController(rootViewController: BrowseInfoVC(settings: settings, analyticsService: analyticsService))
     browseInfoNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[3], image: UIImage(named: MainTabBarVC.tabs[3]), selectedImage: nil)

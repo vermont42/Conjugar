@@ -47,12 +47,13 @@ internal class Quiz {
   private var irregularVosImperativoVerbsIndex = 0
   private var timer: Timer?
   private var settings: Settings?
+  private var gameCenter: GameCenterable?
   private var personNumbersWithTu: [PersonNumber] = [.firstSingular, .secondSingularTu, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersWithVos: [PersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
   private var shouldShuffle = true
   internal weak var delegate: QuizDelegate?
-  static let shared = Quiz(settings: Settings.shared)
+  static let shared = Quiz(settings: Settings.shared, gameCenter: GameCenter.shared)
 
   internal var questionCount: Int {
     return questions.count
@@ -82,8 +83,9 @@ internal class Quiz {
     }
   }
 
-  init(settings: Settings, shouldShuffle: Bool = true) {
+  init(settings: Settings, gameCenter: GameCenterable, shouldShuffle: Bool = true) {
     self.settings = settings
+    self.gameCenter = gameCenter
     self.shouldShuffle = shouldShuffle
   }
 
@@ -294,6 +296,9 @@ internal class Quiz {
   }
 
   internal func process(proposedAnswer: String) -> (ConjugationResult, String?) {
+    guard let gameCenter = gameCenter else {
+      fatalError("gameCenter was nil.")
+    }
     let correctAnswerResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: currentPersonNumber)
     switch correctAnswerResult {
     case let .success(correctAnswer):
@@ -313,7 +318,7 @@ internal class Quiz {
         timer?.invalidate()
         quizState = .finished
         delegate?.quizDidFinish()
-        GameCenterManager.shared.reportScore(score)
+        gameCenter.reportScore(score)
       }
       if result == .totalMatch {
         return (result, nil)

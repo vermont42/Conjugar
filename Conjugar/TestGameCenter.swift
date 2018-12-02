@@ -1,5 +1,5 @@
 //
-//  TestGameCenterManager.swift
+//  TestGameCenter.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 11/27/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TestGameCenterManager: GameCenterManageable {
+class TestGameCenter: GameCenterable {
   var isAuthenticated: Bool
 
   init(isAuthenticated: Bool = false) {

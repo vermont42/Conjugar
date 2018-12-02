@@ -1,5 +1,5 @@
 //
-//  GameCenterManager.swift
+//  GameCenter.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/26/17.
@@ -8,8 +8,8 @@
 
 import GameKit
 
-class GameCenterManager: NSObject, GameCenterManageable, GKGameCenterControllerDelegate {
-  static let shared = GameCenterManager()
+class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
+  static let shared = GameCenter()
   var isAuthenticated = false
   private let localPlayer = GKLocalPlayer.localPlayer()
   private var leaderboardIdentifier = ""

@@ -12,7 +12,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   private var settings: Settings?
   private var quiz: Quiz?
   private var analyticsService: AnalyticsService?
-  private var gameCenterManager: GameCenterManageable?
+  private var gameCenter: GameCenterable?
 
   var quizView: QuizView {
     if let castedView = view as? QuizView {
@@ -22,12 +22,12 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
   }
 
-  convenience init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsService, gameCenterManager: GameCenterManageable) {
+  convenience init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsService, gameCenter: GameCenterable) {
     self.init()
     self.settings = settings
     self.quiz = quiz
     self.analyticsService = analyticsService
-    self.gameCenterManager = gameCenterManager
+    self.gameCenter = gameCenter
   }
 
   override func loadView() {
@@ -78,14 +78,14 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     guard let analyticsService = analyticsService else {
       fatalError("analyticsService was nil.")
     }
-    guard let gameCenterManager = gameCenterManager else {
-      fatalError("gameCenterManager was nil.")
+    guard let gameCenter = gameCenter else {
+      fatalError("gameCenter was nil.")
     }
-    if !gameCenterManager.isAuthenticated && settings.userRejectedGameCenter {
+    if !gameCenter.isAuthenticated && settings.userRejectedGameCenter {
       if !settings.didShowGameCenterDialog {
         showGameCenterDialog()
       } else {
-        gameCenterManager.authenticate(analyticsService: analyticsService, completion: nil)
+        gameCenter.authenticate(analyticsService: analyticsService, completion: nil)
       }
     }
   }
@@ -97,8 +97,8 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     guard let analyticsService = analyticsService else {
       fatalError("analyticsService was nil.")
     }
-    guard let gameCenterManager = gameCenterManager else {
-      fatalError("gameCenterManager was nil.")
+    guard let gameCenter = gameCenter else {
+      fatalError("gameCenter was nil.")
     }
     settings.didShowGameCenterDialog = true
     let gameCenterController = UIAlertController(title: "Game Center", message: "Would you like Conjugar to upload your future scores to Game Center after your quiz? See how you stack up against the global community of conjugators.", preferredStyle: UIAlertControllerStyle.alert)
@@ -108,7 +108,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     gameCenterController.addAction(noAction)
     let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { action in
-      gameCenterManager.authenticate(analyticsService: analyticsService, completion: nil)
+      gameCenter.authenticate(analyticsService: analyticsService, completion: nil)
     }
     gameCenterController.addAction(yesAction)
     present(gameCenterController, animated: true, completion: nil)

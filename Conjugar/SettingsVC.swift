@@ -11,7 +11,7 @@ import UIKit
 class SettingsVC: UIViewController {
   private var settings: Settings?
   private var analyticsService: AnalyticsService?
-  private var gameCenterManager: GameCenterManageable?
+  private var gameCenter: GameCenterable?
 
   var settingsView: SettingsView {
     if let castedView = view as? SettingsView {
@@ -21,11 +21,11 @@ class SettingsVC: UIViewController {
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsService, gameCenterManager: GameCenterManageable) {
+  convenience init(settings: Settings, analyticsService: AnalyticsService, gameCenter: GameCenterable) {
     self.init()
     self.settings = settings
     self.analyticsService = analyticsService
-    self.gameCenterManager = gameCenterManager
+    self.gameCenter = gameCenter
   }
 
   override func loadView() {
@@ -48,11 +48,11 @@ class SettingsVC: UIViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    guard let gameCenterManager = gameCenterManager else {
-      fatalError("gameCenterManager was nil.")
+    guard let gameCenter = gameCenter else {
+      fatalError("gameCenter was nil.")
     }
     [settingsView.gameCenterLabel, settingsView.gameCenterDescription, settingsView.gameCenterButton].forEach {
-      $0.isHidden = gameCenterManager.isAuthenticated
+      $0.isHidden = gameCenter.isAuthenticated
     }
     analyticsService?.recordVisitation(viewController: "\(SettingsVC.self)")
   }
@@ -154,11 +154,11 @@ class SettingsVC: UIViewController {
     guard let settings = settings else {
       fatalError("settings was nil.")
     }
-    guard let gameCenterManager = gameCenterManager else {
-      fatalError("gameCenterManager was nil.")
+    guard let gameCenter = gameCenter else {
+      fatalError("gameCenter was nil.")
     }
     settings.userRejectedGameCenter = false
-    gameCenterManager.authenticate(analyticsService: analyticsService) { authenticated in
+    gameCenter.authenticate(analyticsService: analyticsService) { authenticated in
       DispatchQueue.main.async {
         [self.settingsView.gameCenterLabel, self.settingsView.gameCenterDescription, self.settingsView.gameCenterButton].forEach {
           $0.isHidden = authenticated
