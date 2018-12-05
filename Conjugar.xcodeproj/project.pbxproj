@@ -83,6 +83,7 @@
 		E1A789771F00751D0006CA77 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A789761F00751D0006CA77 /* IntExtension.swift */; };
 		E1AB244F1F083CB300FE76E8 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB244E1F083CB300FE76E8 /* Info.swift */; };
 		E1D1D8F81F33732D006A6052 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D1D8F71F33732D006A6052 /* QuizView.swift */; };
+		E1DC939521B5836400DD4048 /* QuizTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1DC939421B5836400DD4048 /* QuizTests.swift */; };
 		E1EC70F12198A10B00872787 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC70F02198A10B00872787 /* UIViewControllerExtension.swift */; };
 		E1EC70F22198A10B00872787 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC70F02198A10B00872787 /* UIViewControllerExtension.swift */; };
 		E1EC70F52198A63700872787 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1EC70F32198A63600872787 /* AWSCore.framework */; };
@@ -207,6 +208,7 @@
 		E1A789761F00751D0006CA77 /* IntExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 		E1AB244E1F083CB300FE76E8 /* Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
 		E1D1D8F71F33732D006A6052 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
+		E1DC939421B5836400DD4048 /* QuizTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizTests.swift; sourceTree = "<group>"; };
 		E1EC70F02198A10B00872787 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		E1EC70F32198A63600872787 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		E1EC70F42198A63700872787 /* AWSPinpoint.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSPinpoint.framework; sourceTree = "<group>"; };
@@ -396,6 +398,7 @@
 			isa = PBXGroup;
 			children = (
 				E198F9041F5D7CB200BAF553 /* ConjugatorTests.swift */,
+				E1DC939421B5836400DD4048 /* QuizTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -734,6 +737,7 @@
 			files = (
 				E12D06A31F5E85A200CDD54E /* VerbCellTests.swift in Sources */,
 				E151223121A62AE9008EF307 /* ReviewPrompterTests.swift in Sources */,
+				E1DC939521B5836400DD4048 /* QuizTests.swift in Sources */,
 				E198F9051F5D7CB200BAF553 /* ConjugatorTests.swift in Sources */,
 				E1EC70F22198A10B00872787 /* UIViewControllerExtension.swift in Sources */,
 				E14589F41F5B7BB000EEF141 /* BrowseInfoVCTests.swift in Sources */,
