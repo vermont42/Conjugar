@@ -9,29 +9,29 @@
 import UIKit
 
 class QuizView: UIView {
-  private let verbLabel = UILabel()
-  private let pronounLabel = UILabel()
-  private let tenseLabel = UILabel()
-  private let scoreLabel = UILabel()
-  private let progressLabel = UILabel()
-  private let elapsedLabel = UILabel()
+  static let tenseString = "Tense:"
   internal let lastLabel = UILabel()
   internal let correctLabel = UILabel()
   internal let elapsed = UILabel()
   internal let verb = UILabel()
   internal let translation = UILabel()
   internal let pronoun = UILabel()
-  internal let tense = UILabel()
   internal let last = UILabel()
   internal let correct = UILabel()
   internal let score = UILabel()
   internal let progress = UILabel()
+  internal let tenseLabel = UILabel()
+  private let verbLabel = UILabel()
+  private let pronounLabel = UILabel()
+  private let scoreLabel = UILabel()
+  private let progressLabel = UILabel()
+  private let elapsedLabel = UILabel()
 
   internal let conjugationField: UITextField = {
     let field = UITextField()
     field.autocapitalizationType = .none
     field.autocorrectionType = .no
-    field.placeholder = "conjugation"
+    field.placeholder = " conjugation"
     field.backgroundColor = UIColor.white
     return field
   }()
@@ -45,22 +45,22 @@ class QuizView: UIView {
   }()
 
   required init(coder aDecoder: NSCoder) {
-    fatalError("This class does not support NSCoding")
+    fatalError("This class does not support NSCoding.")
   }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    [verb, verbLabel, translation, pronoun, pronounLabel, tense, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel].forEach {
+    [verb, verbLabel, translation, pronoun, pronounLabel, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel].forEach {
       $0.textColor = Colors.yellow
       $0.font = Fonts.label
     }
-    [verb, translation, pronoun, tense].forEach {
+    [verb, translation, pronoun].forEach {
       $0.isUserInteractionEnabled = true
     }
-    [(verbLabel, "Verb:"), (pronounLabel, "Pronoun:"), (tenseLabel, "Tense:"), (lastLabel, "Last Answer:"), (correctLabel, "Correct Answer:"), (scoreLabel, "Score:"), (progressLabel, "Progress:"), (elapsedLabel, "Elapsed:"), (last, " "), (correct, " ")].forEach {
+    [(verbLabel, "Verb:"), (pronounLabel, "Pronoun:"), (tenseLabel, QuizView.tenseString), (lastLabel, "Last Answer:"), (correctLabel, "Correct Answer:"), (scoreLabel, "Score:"), (progressLabel, "Progress:"), (elapsedLabel, "Elapsed:"), (last, " "), (correct, " ")].forEach {
       $0.0.text = $0.1
     }
-    [verb, verbLabel, translation, pronoun, pronounLabel, tense, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel, startRestartButton, conjugationField].forEach {
+    [verb, verbLabel, translation, pronoun, pronounLabel, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel, startRestartButton, conjugationField].forEach {
       $0.enableAutoLayout()
       addSubview($0)
     }
@@ -82,20 +82,21 @@ class QuizView: UIView {
 
     tenseLabel.topAnchor.constraint(equalTo: pronounLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     tenseLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-
-    tense.topAnchor.constraint(equalTo: pronoun.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    tense.leadingAnchor.constraint(equalTo: tenseLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
+    tenseLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
+    tenseLabel.adjustsFontSizeToFitWidth = true
+    let minimumScaleFactor: CGFloat = 0.5
+    tenseLabel.minimumScaleFactor = minimumScaleFactor
 
     scoreLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     scoreLabel.trailingAnchor.constraint(equalTo: score.leadingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
 
-    score.topAnchor.constraint(equalTo: tense.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    score.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     score.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
 
     progressLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     progressLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
 
-    progress.topAnchor.constraint(equalTo: tense.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    progress.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
     progress.leadingAnchor.constraint(equalTo: progressLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
 
     elapsedLabel.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
@@ -125,13 +126,13 @@ class QuizView: UIView {
   }
 
   internal func hideInProgressUI() {
-    [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, tense, lastLabel, last, correctLabel, correct, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].forEach {
+    [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, lastLabel, last, correctLabel, correct, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].forEach {
       $0.isHidden = true
     }
   }
 
   internal func showInProgressUI() {
-    [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, tense, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].forEach {
+    [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].forEach {
       $0.isHidden = false
     }
   }

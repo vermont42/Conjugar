@@ -61,7 +61,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       default:
         fatalError("translation not found.")
       }
-      quizView.tense.text = quiz.tense.displayName
+      quizView.tenseLabel.text = quiz.tense.displayName
       quizView.pronoun.text = quiz.currentPersonNumber.pronoun
       quizView.score.text = String(quiz.score)
       quizView.progress.text = String(quiz.currentQuestionIndex + 1) + " / " + String(quiz.questionCount)
@@ -151,7 +151,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     default:
       fatalError()
     }
-    quizView.tense.text = tense.displayName
+    quizView.tenseLabel.text = QuizView.tenseString + " " + tense.displayName
     quizView.pronoun.text = personNumber.pronoun
     quizView.conjugationField.becomeFirstResponder()
   }

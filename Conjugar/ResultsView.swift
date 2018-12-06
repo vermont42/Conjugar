@@ -24,7 +24,7 @@ class ResultsView: UIView {
   internal let timeLabel = UILabel()
 
   required init(coder aDecoder: NSCoder) {
-    fatalError("This class does not support NSCoding")
+    fatalError("This class does not support NSCoding.")
   }
 
   override init(frame: CGRect) {
