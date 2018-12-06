@@ -9,8 +9,4 @@
 enum SecondSingularQuiz: String {
   case tu = "Tú"
   case vos = "Vos"
-
-  init() {
-    self = .tu
-  }
 }

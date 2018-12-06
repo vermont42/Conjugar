@@ -13,23 +13,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-    // https://stackoverflow.com/a/47750574/8248798
-    // I like blue and prefer not to override preferredStatusBarStyle in every UIViewController.
-    let statusBarKey = "statusBar"
-    let statusbar = UIApplication.shared.value(forKey: statusBarKey) as? UIView
-    let foregroundColorKey = "foregroundColor"
-    statusbar?.setValue(Colors.blue, forKey: foregroundColorKey)
-
-    UINavigationBar.appearance().barTintColor = UIColor.black
-    UINavigationBar.appearance().tintColor = Colors.yellow
-    UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): Colors.yellow]
-
-    UITabBar.appearance().barTintColor = UIColor.black
-    UITabBar.appearance().tintColor = Colors.yellow
-
     Utterer.setup(settings: Settings.shared)
 
-    window = UIWindow(frame: UIScreen.main.bounds)
+    configureTabBar()
+    configureNavBar()
+    configureStatusBar()
 
     #if targetEnvironment(simulator)
     let testGameCenter = TestGameCenter()
@@ -38,10 +26,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let mainTabBarVC = MainTabBarVC(settings: Settings.shared, quiz: Quiz.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared)
     #endif
 
+    window = UIWindow(frame: UIScreen.main.bounds)
     window?.rootViewController = mainTabBarVC
     window?.makeKeyAndVisible()
 
     return true
+  }
+
+  private func configureStatusBar() {
+    // I like blue and prefer not to override preferredStatusBarStyle in every UIViewController.
+    let statusBarKey = "statusBar"
+    let statusbar = UIApplication.shared.value(forKey: statusBarKey) as? UIView
+    let foregroundColorKey = "foregroundColor"
+    statusbar?.setValue(Colors.blue, forKey: foregroundColorKey)
+  }
+
+  private func configureTabBar() {
+    UITabBar.appearance().barTintColor = UIColor.black
+    UITabBar.appearance().tintColor = Colors.yellow
+  }
+
+  private func configureNavBar() {
+    UINavigationBar.appearance().barTintColor = UIColor.black
+    UINavigationBar.appearance().tintColor = Colors.yellow
+    UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): Colors.yellow]
   }
 
   func applicationWillResignActive(_ application: UIApplication) {}
