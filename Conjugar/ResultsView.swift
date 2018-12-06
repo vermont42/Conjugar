@@ -9,19 +9,19 @@
 import UIKit
 
 class ResultsView: UIView {
-  internal let table: UITableView = {
+  let table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
     tableView.rowHeight = 120
     return tableView
   }()
 
-  internal let difficulty = UILabel()
-  internal let region = UILabel()
-  internal let score = UILabel()
-  internal let time = UILabel()
-  internal let scoreLabel = UILabel()
-  internal let timeLabel = UILabel()
+  let difficulty = UILabel()
+  let region = UILabel()
+  let score = UILabel()
+  let time = UILabel()
+  let scoreLabel = UILabel()
+  let timeLabel = UILabel()
 
   required init(coder aDecoder: NSCoder) {
     fatalError("This class does not support NSCoding.")

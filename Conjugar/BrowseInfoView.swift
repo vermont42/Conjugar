@@ -9,11 +9,20 @@
 import UIKit
 
 class BrowseInfoView: UIView {
-  internal let table: UITableView = {
+  let table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
     tableView.enableAutoLayout()
     return tableView
+  }()
+
+  let difficultyControl: UISegmentedControl = {
+    let control = UISegmentedControl(items: ["E", "E & M", "E, M, & D"])
+    control.selectedSegmentIndex = 0
+    control.backgroundColor = Colors.black
+    control.enableAutoLayout()
+    control.tintColor = Colors.red
+    return control
   }()
 
   private let difficultyLabel: UILabel = {
@@ -24,15 +33,6 @@ class BrowseInfoView: UIView {
     label.textColor = Colors.yellow
     label.enableAutoLayout()
     return label
-  }()
-
-  internal let difficultyControl: UISegmentedControl = {
-    let control = UISegmentedControl(items: ["E", "E & M", "E, M, & D"])
-    control.selectedSegmentIndex = 0
-    control.backgroundColor = Colors.black
-    control.enableAutoLayout()
-    control.tintColor = Colors.red
-    return control
   }()
 
   required init(coder aDecoder: NSCoder) {

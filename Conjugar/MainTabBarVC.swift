@@ -9,7 +9,7 @@
 import UIKit
 
 class MainTabBarVC: UITabBarController {
-  internal static let tabs = ["Browse", "Quiz", "Settings", "Info"]
+  static let tabs = ["Browse", "Quiz", "Settings", "Info"]
 
   convenience init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsService, reviewPrompter: ReviewPromptable, gameCenter: GameCenterable) {
     self.init(nibName: nil, bundle: nil)

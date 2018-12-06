@@ -9,17 +9,17 @@
 import UIKit
 
 class VerbView: UIView {
-  internal let translation = UILabel()
-  internal let parentOrType = UILabel()
+  let translation = UILabel()
+  let parentOrType = UILabel()
+  let participio = UILabel()
+  let gerundio = UILabel()
+  let raizFutura = UILabel()
+  let defectivo = UILabel()
   private let participioLabel = UILabel()
-  internal let participio = UILabel()
   private let gerundioLabel = UILabel()
-  internal let gerundio = UILabel()
   private let raizFuturaLabel = UILabel()
-  internal let raizFutura = UILabel()
-  internal let defectivo = UILabel()
 
-  internal let table: UITableView = {
+  let table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
     tableView.enableAutoLayout()

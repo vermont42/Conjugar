@@ -11,7 +11,7 @@ import UIKit
 class VerbCell: UITableViewCell {
   static let identifier = "VerbCell"
 
-  internal let verb: UILabel = {
+  let verb: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.largeCell

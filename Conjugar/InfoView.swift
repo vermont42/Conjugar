@@ -9,7 +9,7 @@
 import UIKit
 
 class InfoView: UIView {
-  internal let info: UITextView = {
+  let info: UITextView = {
     let textView = UITextView()
     textView.backgroundColor = Colors.black
     textView.enableAutoLayout()

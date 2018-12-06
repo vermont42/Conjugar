@@ -10,24 +10,24 @@ import UIKit
 
 class QuizView: UIView {
   static let tenseString = "Tense:"
-  internal let lastLabel = UILabel()
-  internal let correctLabel = UILabel()
-  internal let elapsed = UILabel()
-  internal let verb = UILabel()
-  internal let translation = UILabel()
-  internal let pronoun = UILabel()
-  internal let last = UILabel()
-  internal let correct = UILabel()
-  internal let score = UILabel()
-  internal let progress = UILabel()
-  internal let tenseLabel = UILabel()
+  let lastLabel = UILabel()
+  let correctLabel = UILabel()
+  let elapsed = UILabel()
+  let verb = UILabel()
+  let translation = UILabel()
+  let pronoun = UILabel()
+  let last = UILabel()
+  let correct = UILabel()
+  let score = UILabel()
+  let progress = UILabel()
+  let tenseLabel = UILabel()
   private let verbLabel = UILabel()
   private let pronounLabel = UILabel()
   private let scoreLabel = UILabel()
   private let progressLabel = UILabel()
   private let elapsedLabel = UILabel()
 
-  internal let conjugationField: UITextField = {
+  let conjugationField: UITextField = {
     let field = UITextField()
     field.autocapitalizationType = .none
     field.autocorrectionType = .no
@@ -36,7 +36,7 @@ class QuizView: UIView {
     return field
   }()
 
-  internal let startRestartButton: UIButton = {
+  let startRestartButton: UIButton = {
     let button = UIButton()
     button.setTitle("Start", for: .normal)
     button.titleLabel?.font = Fonts.button
@@ -125,13 +125,13 @@ class QuizView: UIView {
     startRestartButton.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
   }
 
-  internal func hideInProgressUI() {
+  func hideInProgressUI() {
     [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, lastLabel, last, correctLabel, correct, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].forEach {
       $0.isHidden = true
     }
   }
 
-  internal func showInProgressUI() {
+  func showInProgressUI() {
     [verbLabel, verb, translation, pronounLabel, pronoun, tenseLabel, scoreLabel, score, progressLabel, progress, elapsedLabel, elapsed, conjugationField].forEach {
       $0.isHidden = false
     }

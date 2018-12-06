@@ -9,8 +9,8 @@
 import UIKit
 
 class InfoVC: UIViewController, UITextViewDelegate {
-  internal weak var infoDelegate: InfoDelegate?
-  internal var infoString: NSAttributedString?
+  weak var infoDelegate: InfoDelegate?
+  var infoString: NSAttributedString?
   private var analyticsService: AnalyticsService?
 
   var infoView: InfoView {

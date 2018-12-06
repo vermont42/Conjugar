@@ -9,14 +9,14 @@
 import UIKit
 
 class BrowseVerbsView: UIView {
-  internal let table: UITableView = {
+  let table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
     tableView.enableAutoLayout()
     return tableView
   }()
 
-  internal let filterControl: UISegmentedControl = {
+  let filterControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Irregular", "Regular", "Both"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black

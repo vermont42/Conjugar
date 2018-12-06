@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal class Quiz {
+class Quiz {
   private(set) var numberCorrect: Int = 0
   private(set) var quizState: QuizState = .notStarted
   private(set) var elapsedTime: Int = 0
@@ -52,14 +52,14 @@ internal class Quiz {
   private var personNumbersWithVos: [PersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
   private var shouldShuffle = true
-  internal weak var delegate: QuizDelegate?
+  weak var delegate: QuizDelegate?
   static let shared = Quiz(settings: Settings.shared, gameCenter: GameCenter.shared)
 
-  internal var questionCount: Int {
+  var questionCount: Int {
     return questions.count
   }
 
-  internal var verb: String {
+  var verb: String {
     if questions.count > 0 {
       return questions[currentQuestionIndex].0
     } else {
@@ -67,7 +67,7 @@ internal class Quiz {
     }
   }
 
-  internal var tense: Tense {
+  var tense: Tense {
     if questions.count > 0 {
       return questions[currentQuestionIndex].1
     } else {
@@ -75,7 +75,7 @@ internal class Quiz {
     }
   }
 
-  internal var currentPersonNumber: PersonNumber {
+  var currentPersonNumber: PersonNumber {
     if questions.count > 0 {
       return questions[currentQuestionIndex].2
     } else {
@@ -295,7 +295,7 @@ internal class Quiz {
     }
   }
 
-  internal func process(proposedAnswer: String) -> (ConjugationResult, String?) {
+  func process(proposedAnswer: String) -> (ConjugationResult, String?) {
     guard let gameCenter = gameCenter else {
       fatalError("gameCenter was nil.")
     }

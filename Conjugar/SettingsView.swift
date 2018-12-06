@@ -9,7 +9,7 @@
 import UIKit
 
 class SettingsView: UIView {
-  internal let scrollView: UIScrollView = {
+  let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.enableAutoLayout()
     scrollView.isUserInteractionEnabled = true
@@ -25,7 +25,7 @@ class SettingsView: UIView {
     return label
   }()
 
-  internal let regionControl: UISegmentedControl = {
+  let regionControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Spain", "Latin America"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
@@ -54,7 +54,7 @@ class SettingsView: UIView {
     return label
   }()
 
-  internal let difficultyControl: UISegmentedControl = {
+  let difficultyControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Easy", "Moderate", "Difficult"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
@@ -83,7 +83,7 @@ class SettingsView: UIView {
     return label
   }()
 
-  internal let browseVosControl: UISegmentedControl = {
+  let browseVosControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Tú", "Vos", "Both"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
@@ -112,7 +112,7 @@ class SettingsView: UIView {
     return label
   }()
 
-  internal let quizVosControl: UISegmentedControl = {
+  let quizVosControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Tú", "Vos"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
@@ -132,7 +132,7 @@ class SettingsView: UIView {
     return label
   }()
 
-  internal let gameCenterLabel: UILabel = {
+  let gameCenterLabel: UILabel = {
     let label = UILabel()
     label.text = "Game Center"
     label.font = Fonts.label
@@ -141,7 +141,7 @@ class SettingsView: UIView {
     return label
   }()
 
-  internal let gameCenterButton: UIButton = {
+  let gameCenterButton: UIButton = {
     let button = UIButton()
     button.setTitle("Enable", for: .normal)
     button.titleLabel?.font = Fonts.button
@@ -150,7 +150,7 @@ class SettingsView: UIView {
     return button
   }()
 
-  internal let gameCenterDescription: UILabel = {
+  let gameCenterDescription: UILabel = {
     let label = UILabel()
     label.text = "Conjugar can send future quiz scores to Game Center so that you can see them in the global leaderboard. Tap Enable to enable this."
     label.numberOfLines = 0
