@@ -10,8 +10,4 @@ enum SecondSingularBrowse: String {
   case tu = "Tú"
   case vos = "Vos"
   case both = "Both"
-
-  init() {
-    self = .tu
-  }
 }

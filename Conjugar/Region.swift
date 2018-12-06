@@ -10,10 +10,6 @@ enum Region: String {
   case spain = "Spain"
   case latinAmerica = "Latin America"
 
-  init() {
-    self = .spain
-  }
-
   var accent: String {
     switch self {
     case .spain:
