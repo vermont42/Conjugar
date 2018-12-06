@@ -9,6 +9,10 @@
 import XCTest
 @testable import Conjugar
 
+// swiftlint:disable private_over_fileprivate
+fileprivate let difficultSpain = 750
+// swiftlint:enable private_over_fileprivate
+
 class QuizTests: XCTestCase {
   private let testGameCenter = TestGameCenter()
 
@@ -19,7 +23,6 @@ class QuizTests: XCTestCase {
     let moderate = Difficulty.moderate.rawValue
     let easy = Difficulty.easy.rawValue
 
-    let difficultSpain = 750
     let difficultLatinAmerica = 624
     let moderateSpain = 500
     let moderateLatinAmerica = 416
@@ -45,6 +48,7 @@ class QuizTests: XCTestCase {
 class TestQuizDelegate: QuizDelegate {
   let quiz: Quiz
   let onFinish: (Int) -> ()
+  private var score = 0
 
   init(quiz: Quiz, onFinish: @escaping (Int) -> ()) {
     self.quiz = quiz
@@ -67,9 +71,20 @@ class TestQuizDelegate: QuizDelegate {
     onFinish(quiz.score)
   }
 
-  func scoreDidChange(newScore: Int) {}
+  func scoreDidChange(newScore: Int) {
+    score = newScore
+    XCTAssert(score >= 0 && score <= difficultSpain)
+  }
 
-  func timeDidChange(newTime: Int) {}
+  func timeDidChange(newTime: Int) {
+    // Note: The time is always 0, so I'm not going to bother testing it.
+    // I could slow down the test so it takes longer than 0 seconds, but
+    // that would be contrary to the quickness goal of unit tests.
+  }
 
-  func progressDidChange(current: Int, total: Int) {}
+  func progressDidChange(current: Int, total: Int) {
+    let questionCount = 50
+    XCTAssert(current >= 0 && current < questionCount)
+    XCTAssertEqual(total, questionCount)
+  }
 }
