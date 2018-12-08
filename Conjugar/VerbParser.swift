@@ -15,7 +15,6 @@ class VerbParser: NSObject, XMLParserDelegate {
   private var verbs: [String: [String: String]] = [:]
   private var currentVerb = ""
   private var currentConjugations: [String: String] = [:]
-  static let parseError = "An error occurred during XML parsing."
 
   override init() {
     super.init()

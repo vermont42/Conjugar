@@ -9,7 +9,6 @@
 import Foundation
 
 class Quiz {
-  private(set) var numberCorrect: Int = 0
   private(set) var quizState: QuizState = .notStarted
   private(set) var elapsedTime: Int = 0
   private(set) var score: Int = 0

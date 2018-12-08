@@ -9,7 +9,6 @@
 import UIKit
 
 struct Layout {
-  static let safeTop: CGFloat = 75.0
   static let defaultSpacing: CGFloat = 8.0
   static let tripleDefaultSpacing: CGFloat = 24.0
 }

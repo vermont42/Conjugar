@@ -34,13 +34,4 @@ class SoundPlayer {
     }
     soundPlayer.sounds[sound.rawValue]?.play()
   }
-
-  static func enableBackgroundAudio() {
-    let session = AVAudioSession.sharedInstance()
-    do {
-      try session.setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSessionCategoryOptions.mixWithOthers)
-    } catch let error as NSError {
-      print("\(error.localizedDescription)")
-    }
-  }
 }

@@ -16,27 +16,6 @@ enum PersonNumber: String {
   case thirdPlural = "tp"
   case none = "no"
 
-  func endingForFuturoDeSubjuntivo() -> String {
-    switch self {
-    case .firstSingular:
-      return "re"
-    case .secondSingularTu:
-      return "res"
-    case .secondSingularVos:
-      return "res"
-    case .thirdSingular:
-      return "re"
-    case .firstPlural:
-      return "remos"
-    case .secondPlural:
-      return "reis"
-    case .thirdPlural:
-      return "ren"
-    case .none:
-      return ""
-    }
-  }
-
   var pronoun: String {
     switch self {
     case .firstSingular:
