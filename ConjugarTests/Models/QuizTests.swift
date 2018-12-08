@@ -78,7 +78,7 @@ class TestQuizDelegate: QuizDelegate {
 
   func timeDidChange(newTime: Int) {
     // Note: The time is always 0, so I'm not going to bother testing it.
-    // I could slow down the test so it takes longer than 0 seconds, but
+    // I could slow down the test so it takes longer than 0 second, but
     // that would be contrary to the quickness goal of unit tests.
   }
 
