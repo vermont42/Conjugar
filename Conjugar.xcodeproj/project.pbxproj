@@ -57,6 +57,7 @@
 		E15D3BF11F532F4E003771BB /* BrowseVerbsVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D3BF01F532F4E003771BB /* BrowseVerbsVCTests.swift */; };
 		E15D3BF61F533997003771BB /* MockNavigationC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D3BF51F533997003771BB /* MockNavigationC.swift */; };
 		E15E63F61F3A29890083DB4B /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F51F3A29880083DB4B /* Layout.swift */; };
+		E16004CD21BC863500909ED1 /* ConjugarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16004CC21BC863500909ED1 /* ConjugarUITests.swift */; };
 		E168865321ADA020005B8636 /* TestGameCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E168865221ADA020005B8636 /* TestGameCenter.swift */; };
 		E16BEA041F09BCC70053DD32 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16BEA031F09BCC70053DD32 /* Fonts.swift */; };
 		E16BEA061F0A92040053DD32 /* InfoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16BEA051F0A92040053DD32 /* InfoDelegate.swift */; };
@@ -107,6 +108,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E16004CF21BC863500909ED1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E1F06ACC1E8F05F200ADD2E1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E1F06AD31E8F05F200ADD2E1;
+			remoteInfo = Conjugar;
+		};
 		E1F06AE91E8F05F400ADD2E1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E1F06ACC1E8F05F200ADD2E1 /* Project object */;
@@ -182,6 +190,9 @@
 		E15D3BF01F532F4E003771BB /* BrowseVerbsVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseVerbsVCTests.swift; sourceTree = "<group>"; };
 		E15D3BF51F533997003771BB /* MockNavigationC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationC.swift; sourceTree = "<group>"; };
 		E15E63F51F3A29880083DB4B /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
+		E16004CA21BC863500909ED1 /* ConjugarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConjugarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E16004CC21BC863500909ED1 /* ConjugarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugarUITests.swift; sourceTree = "<group>"; };
+		E16004CE21BC863500909ED1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E168865221ADA020005B8636 /* TestGameCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenter.swift; sourceTree = "<group>"; };
 		E16BEA031F09BCC70053DD32 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		E16BEA051F0A92040053DD32 /* InfoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDelegate.swift; sourceTree = "<group>"; };
@@ -233,6 +244,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E16004C721BC863500909ED1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E1F06AD11E8F05F200ADD2E1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -385,6 +403,15 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		E16004CB21BC863500909ED1 /* ConjugarUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E16004CC21BC863500909ED1 /* ConjugarUITests.swift */,
+				E16004CE21BC863500909ED1 /* Info.plist */,
+			);
+			path = ConjugarUITests;
+			sourceTree = "<group>";
+		};
 		E198F9001F5D79BA00BAF553 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -420,6 +447,7 @@
 			children = (
 				E1F06AD61E8F05F300ADD2E1 /* Conjugar */,
 				E1F06AEB1E8F05F400ADD2E1 /* ConjugarTests */,
+				E16004CB21BC863500909ED1 /* ConjugarUITests */,
 				E1F06AD51E8F05F300ADD2E1 /* Products */,
 				E14271351F01CA98001D19E1 /* Frameworks */,
 				E1EC70F32198A63600872787 /* AWSCore.framework */,
@@ -432,6 +460,7 @@
 			children = (
 				E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */,
 				E1F06AE81E8F05F400ADD2E1 /* ConjugarTests.xctest */,
+				E16004CA21BC863500909ED1 /* ConjugarUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -504,6 +533,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		E16004C921BC863500909ED1 /* ConjugarUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E16004D321BC863600909ED1 /* Build configuration list for PBXNativeTarget "ConjugarUITests" */;
+			buildPhases = (
+				E16004C621BC863500909ED1 /* Sources */,
+				E16004C721BC863500909ED1 /* Frameworks */,
+				E16004C821BC863500909ED1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E16004D021BC863500909ED1 /* PBXTargetDependency */,
+			);
+			name = ConjugarUITests;
+			productName = ConjugarUITests;
+			productReference = E16004CA21BC863500909ED1 /* ConjugarUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		E1F06AD31E8F05F200ADD2E1 /* Conjugar */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E1F06AF11E8F05F400ADD2E1 /* Build configuration list for PBXNativeTarget "Conjugar" */;
@@ -548,10 +595,17 @@
 		E1F06ACC1E8F05F200ADD2E1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0820;
+				DefaultBuildSystemTypeForWorkspace = Latest;
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Josh Adams";
 				TargetAttributes = {
+					E16004C921BC863500909ED1 = {
+						CreatedOnToolsVersion = 10.1;
+						DevelopmentTeam = V3L2PL4QC9;
+						ProvisioningStyle = Automatic;
+						TestTargetID = E1F06AD31E8F05F200ADD2E1;
+					};
 					E1F06AD31E8F05F200ADD2E1 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = V3L2PL4QC9;
@@ -582,11 +636,19 @@
 			targets = (
 				E1F06AD31E8F05F200ADD2E1 /* Conjugar */,
 				E1F06AE71E8F05F400ADD2E1 /* ConjugarTests */,
+				E16004C921BC863500909ED1 /* ConjugarUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E16004C821BC863500909ED1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E1F06AD21E8F05F200ADD2E1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -656,6 +718,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E16004C621BC863500909ED1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E16004CD21BC863500909ED1 /* ConjugarUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E1F06AD01E8F05F200ADD2E1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -752,6 +822,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E16004D021BC863500909ED1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E1F06AD31E8F05F200ADD2E1 /* Conjugar */;
+			targetProxy = E16004CF21BC863500909ED1 /* PBXContainerItemProxy */;
+		};
 		E1F06AEA1E8F05F400ADD2E1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E1F06AD31E8F05F200ADD2E1 /* Conjugar */;
@@ -771,6 +846,51 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		E16004D121BC863600909ED1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V3L2PL4QC9;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ConjugarUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Conjugar;
+			};
+			name = Debug;
+		};
+		E16004D221BC863600909ED1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V3L2PL4QC9;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ConjugarUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Conjugar;
+			};
+			name = Release;
+		};
 		E1F06AEF1E8F05F400ADD2E1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -955,6 +1075,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E16004D321BC863600909ED1 /* Build configuration list for PBXNativeTarget "ConjugarUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E16004D121BC863600909ED1 /* Debug */,
+				E16004D221BC863600909ED1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E1F06ACF1E8F05F200ADD2E1 /* Build configuration list for PBXProject "Conjugar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
