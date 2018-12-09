@@ -57,7 +57,7 @@
 		E15D3BF11F532F4E003771BB /* BrowseVerbsVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D3BF01F532F4E003771BB /* BrowseVerbsVCTests.swift */; };
 		E15D3BF61F533997003771BB /* MockNavigationC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15D3BF51F533997003771BB /* MockNavigationC.swift */; };
 		E15E63F61F3A29890083DB4B /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F51F3A29880083DB4B /* Layout.swift */; };
-		E16004CD21BC863500909ED1 /* ConjugarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16004CC21BC863500909ED1 /* ConjugarUITests.swift */; };
+		E16004CD21BC863500909ED1 /* QuizVCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16004CC21BC863500909ED1 /* QuizVCUITests.swift */; };
 		E168865321ADA020005B8636 /* TestGameCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E168865221ADA020005B8636 /* TestGameCenter.swift */; };
 		E16BEA041F09BCC70053DD32 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16BEA031F09BCC70053DD32 /* Fonts.swift */; };
 		E16BEA061F0A92040053DD32 /* InfoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16BEA051F0A92040053DD32 /* InfoDelegate.swift */; };
@@ -191,7 +191,7 @@
 		E15D3BF51F533997003771BB /* MockNavigationC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNavigationC.swift; sourceTree = "<group>"; };
 		E15E63F51F3A29880083DB4B /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		E16004CA21BC863500909ED1 /* ConjugarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConjugarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E16004CC21BC863500909ED1 /* ConjugarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugarUITests.swift; sourceTree = "<group>"; };
+		E16004CC21BC863500909ED1 /* QuizVCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizVCUITests.swift; sourceTree = "<group>"; };
 		E16004CE21BC863500909ED1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E168865221ADA020005B8636 /* TestGameCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenter.swift; sourceTree = "<group>"; };
 		E16BEA031F09BCC70053DD32 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
@@ -406,7 +406,7 @@
 		E16004CB21BC863500909ED1 /* ConjugarUITests */ = {
 			isa = PBXGroup;
 			children = (
-				E16004CC21BC863500909ED1 /* ConjugarUITests.swift */,
+				E16004CC21BC863500909ED1 /* QuizVCUITests.swift */,
 				E16004CE21BC863500909ED1 /* Info.plist */,
 			);
 			path = ConjugarUITests;
@@ -722,7 +722,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E16004CD21BC863500909ED1 /* ConjugarUITests.swift in Sources */,
+				E16004CD21BC863500909ED1 /* QuizVCUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
