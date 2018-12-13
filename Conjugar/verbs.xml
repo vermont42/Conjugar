@@ -73,6 +73,7 @@
   <verb in="clonar" vt="ra" tn="clone" pe="hablar" tr="habl" st="clon" />
   <verb in="cocinar" vt="ra" tn="cook" pe="hablar" tr="habl" st="cocin" />
   <verb in="coincidir" vt="ri" tn="coincide" pe="subir" tr="sub" st="coincid" />
+  <verb in="colegir" vt="ir" tn="infer, deduce" pe="elegir" tr="e" st="co" />
   <verb in="comer" vt="re" tn="eat" ge="comiendo" po="comido" rf="comer" fspr="como" sspr="comes" svpr="comés" tspr="come" fppr="comemos" sppr="coméis" tppr="comen" fspt="comí" sspt="comiste" tspt="comió" fppt="comimos" sppt="comisteis" tppt="comieron" fsii="comía" ssii="comías" tsii="comía" fpii="comíamos" spii="comíais" tpii="comían" fspb="coma" sspb="comas" tspb="coma" fppb="comamos" sppb="comáis" tppb="coman" ssio="come" svio="comé" />
   <verb in="cometer" vt="re" tn="commit" pe="comer" tr="com" st="comet" />
   <verb in="compartir" vt="ri" tn="share" pe="subir" tr="sub" st="compart" />
@@ -97,6 +98,7 @@
   <verb in="deber" vt="re" tn="owe, must" pe="comer" tr="com" st="deb" />
   <verb in="decidir" vt="ri" tn="decide" pe="subir" tr="sub" st="decid" />
   <verb in="decir" vt="ir" tn="say" pe="subir" tr="sub" st="dec" rf="dIR" po="dICHo" ge="dIciendo" fspr="dIgo" sspr="dIces" tspr="dIce" tppr="dIcen" fspt="dIJE" sspt="dIJiste" tspt="dIJO" fppt="dIJimos" sppt="dIJisteis" tppt="dIJeron" fspb="dIGa" sspb="dIGas" tspb="dIGa" fppb="dIGamos" sppb="dIGáis" tppb="dIGan" ssio="dI" />
+  <verb in="declarar" vt="ra" tn="declare" pe="hablar" tr="habl" st="declar" />
   <verb in="deducir" vt="ir" tn="deduce" pe="conducir" tr="con" st="de" />
   <verb in="definir" vt="ri" tn="define" pe="subir" tr="sub" st="defin" />
   <verb in="desear" vt="ra" tn="want, wish" pe="hablar" tr="habl" st="dese" />
@@ -110,6 +112,7 @@
   <verb in="disponer" vt="ir" tn="make available" pe="poner" tr="" st="dis" />
   <verb in="distraer" vt="ir" tn="distract" pe="traer" tr="" st="dis" />
   <verb in="dormir" vt="ir" tn="sleep" pe="subir" tr="sub" st="dorm" ge="dUrmiendo" fspr="dUErmo" sspr="dUErmes" tspr="dUErme" tppr="dUErmen" tspt="dUrmió" tppt="dUrmieron" fspb="dUErma" sspb="dUErmas" tspb="dUErma" fppb="dUrmamos" sppb="dUrmáis" tppb="dUErman" ssio="dUErme" />
+  <verb in="elegir" vt="ir" tn="choose" pe="subir" tr="sub" st="eleg" ge="elIgiendo" fspr="elIJo" sspr="elIges" tspr="elIge" tppr="elIgen" tspt="elIgió" tppt="elIgieron" fspb="elIJa" sspb="elIJas" tspb="elIJa" fppb="elIJamos" sppb="elIJáis" tppb="elIJan" ssio="elIge" />
   <verb in="empinar" vt="ra" tn="tip up, raise" pe="hablar" tr="habl" st="empin" />
   <verb in="emprender" vt="re" tn="undertake" pe="comer" tr="com" st="emprend" />
   <verb in="encalar" vt="ra" tn="whitewash" pe="hablar" tr="habl" st="encal" />
