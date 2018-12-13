@@ -19,12 +19,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     configureNavBar()
     configureStatusBar()
 
-    #if targetEnvironment(simulator)
-    let testGameCenter = TestGameCenter()
-    let mainTabBarVC = MainTabBarVC(settings: Settings.shared, quiz: Quiz(settings: Settings.shared, gameCenter: testGameCenter, shouldShuffle: false), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: TestGameCenter())
-    #else
-    let mainTabBarVC = MainTabBarVC(settings: Settings.shared, quiz: Quiz.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared)
-    #endif
+    let mainTabBarVC: MainTabBarVC
+
+    if CommandLine.arguments.contains("enable-ui-testing") {
+      let settings = Settings(customDefaults: [:])
+
+      if CommandLine.arguments.contains(Region.spain.rawValue) {
+        settings.region = .spain
+      } else if CommandLine.arguments.contains(Region.latinAmerica.rawValue) {
+        settings.region = .latinAmerica
+      }
+
+      if CommandLine.arguments.contains(Difficulty.difficult.rawValue) {
+        settings.difficulty = .difficult
+      } else if CommandLine.arguments.contains(Difficulty.moderate.rawValue) {
+        settings.difficulty = .moderate
+      } else if CommandLine.arguments.contains(Difficulty.easy.rawValue) {
+        settings.difficulty = .easy
+      }
+
+      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: TestGameCenter(), shouldShuffle: false), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: TestGameCenter())
+    } else {
+      #if targetEnvironment(simulator)
+      let testGameCenter = TestGameCenter()
+      mainTabBarVC = MainTabBarVC(settings: Settings.shared, quiz: Quiz(settings: Settings.shared, gameCenter: testGameCenter, shouldShuffle: false), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter)
+      #else
+      mainTabBarVC = MainTabBarVC(settings: Settings.shared, quiz: Quiz.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared)
+      #endif
+    }
 
     window = UIWindow(frame: UIScreen.main.bounds)
     window?.rootViewController = mainTabBarVC
