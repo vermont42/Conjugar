@@ -12,7 +12,7 @@ class VerbVC: UIViewController {
   var verb: String = ""
   private var conjugationDataSource: ConjugationDataSource?
   private var settings: Settings?
-  private var analyticsService: AnalyticsService?
+  private var analyticsService: AnalyticsServiceable?
 
   var verbView: VerbView {
     if let castedView = view as? VerbView {
@@ -22,7 +22,7 @@ class VerbVC: UIViewController {
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsService) {
+  convenience init(settings: Settings, analyticsService: AnalyticsServiceable) {
     self.init()
     self.settings = settings
     self.analyticsService = analyticsService

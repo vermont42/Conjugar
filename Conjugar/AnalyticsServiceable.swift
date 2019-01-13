@@ -1,5 +1,5 @@
 //
-//  AnalyticsService.swift
+//  AnalyticsServiceable.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 11/24/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol AnalyticsService {
+protocol AnalyticsServiceable {
   func recordEvent(_ eventName: String, parameters: [String: String]?, metrics: [String: Double]?)
   func recordEvent(_ eventName: String)
   func recordVisitation(viewController: String)
@@ -17,7 +17,7 @@ protocol AnalyticsService {
   func recordGameCenterAuth()
 }
 
-extension AnalyticsService {
+extension AnalyticsServiceable {
   func recordEvent(_ eventName: String) {
     recordEvent(eventName, parameters: nil, metrics: nil)
   }

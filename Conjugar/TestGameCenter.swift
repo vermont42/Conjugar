@@ -15,7 +15,7 @@ class TestGameCenter: GameCenterable {
     self.isAuthenticated = isAuthenticated
   }
 
-  func authenticate(analyticsService: AnalyticsService?, completion: ((Bool) -> Void)?) {
+  func authenticate(analyticsService: AnalyticsServiceable?, completion: ((Bool) -> Void)?) {
     if !isAuthenticated {
       isAuthenticated = true
       completion?(true)

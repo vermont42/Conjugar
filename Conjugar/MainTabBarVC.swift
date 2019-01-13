@@ -11,7 +11,7 @@ import UIKit
 class MainTabBarVC: UITabBarController {
   static let tabs = ["Browse", "Quiz", "Settings", "Info"]
 
-  convenience init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsService, reviewPrompter: ReviewPromptable, gameCenter: GameCenterable) {
+  convenience init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsServiceable, reviewPrompter: ReviewPromptable, gameCenter: GameCenterable) {
     self.init(nibName: nil, bundle: nil)
     let browseVerbsNavC = UINavigationController(rootViewController: BrowseVerbsVC(settings: settings, analyticsService: analyticsService, reviewPrompter: reviewPrompter))
     browseVerbsNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[0], image: UIImage(named: MainTabBarVC.tabs[0]), selectedImage: nil)

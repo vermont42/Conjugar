@@ -16,7 +16,7 @@ class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
 
   private override init() {}
 
-  func authenticate(analyticsService: AnalyticsService?, completion: ((Bool) -> Void)? = nil) {
+  func authenticate(analyticsService: AnalyticsServiceable?, completion: ((Bool) -> Void)? = nil) {
     localPlayer.authenticateHandler = { viewController, error in
       if let viewController = viewController, let topController = UIApplication.topViewController() {
         topController.present(viewController, animated: true, completion: nil)

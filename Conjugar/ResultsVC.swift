@@ -9,7 +9,7 @@
 import UIKit
 
 class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-  private var analyticsService: AnalyticsService?
+  private var analyticsService: AnalyticsServiceable?
   private var quiz: Quiz?
 
   var resultsView: ResultsView {
@@ -20,7 +20,7 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
   }
 
-  convenience init(quiz: Quiz, analyticsService: AnalyticsService) {
+  convenience init(quiz: Quiz, analyticsService: AnalyticsServiceable) {
     self.init()
     self.quiz = quiz
     self.analyticsService = analyticsService

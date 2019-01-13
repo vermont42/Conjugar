@@ -10,7 +10,7 @@ import Foundation
 
 protocol GameCenterable {
   var isAuthenticated: Bool { get set }
-  func authenticate(analyticsService: AnalyticsService?, completion: ((Bool) -> Void)?)
+  func authenticate(analyticsService: AnalyticsServiceable?, completion: ((Bool) -> Void)?)
   func reportScore(_ score: Int)
   func showLeaderboard()
 }

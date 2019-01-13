@@ -9,7 +9,7 @@
 import Foundation
 import AWSPinpoint
 
-class AWSAnalyticsService: NSObject, AnalyticsService {
+class AWSAnalyticsService: NSObject, AnalyticsServiceable {
   var pinpoint: AWSPinpoint
   static let shared = AWSAnalyticsService()
 

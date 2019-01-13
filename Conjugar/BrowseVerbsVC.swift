@@ -13,7 +13,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   private var regularVerbs: [String] = []
   private var irregularVerbs: [String] = []
   private var settings: Settings?
-  private var analyticsService: AnalyticsService?
+  private var analyticsService: AnalyticsServiceable?
   private var reviewPrompter: ReviewPromptable?
 
   private var currentVerbs: [String] {
@@ -37,7 +37,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsService, reviewPrompter: ReviewPromptable) {
+  convenience init(settings: Settings, analyticsService: AnalyticsServiceable, reviewPrompter: ReviewPromptable) {
     self.init()
     self.settings = settings
     self.analyticsService = analyticsService

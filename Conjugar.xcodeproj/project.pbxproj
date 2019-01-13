@@ -14,7 +14,7 @@
 		E1151E551E9C5D9C00DE44D6 /* VerbCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */; };
 		E1151E571E9C610100DE44D6 /* VerbVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1151E561E9C610100DE44D6 /* VerbVC.swift */; };
 		E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E115CA381EEC962700DBBD44 /* VerbFamilies.swift */; };
-		E1171C9121AA1BF000B06342 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1171C9021AA1BF000B06342 /* AnalyticsService.swift */; };
+		E1171C9121AA1BF000B06342 /* AnalyticsServiceable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1171C9021AA1BF000B06342 /* AnalyticsServiceable.swift */; };
 		E1171C9321AB387500B06342 /* TestAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1171C9221AB387500B06342 /* TestAnalyticsService.swift */; };
 		E1171C9521ACC02200B06342 /* GameCenterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1171C9421ACC02200B06342 /* GameCenterable.swift */; };
 		E118CA281FFFD07400612D71 /* ReviewPrompter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E118CA271FFFD07400612D71 /* ReviewPrompter.swift */; };
@@ -147,7 +147,7 @@
 		E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbCell.swift; sourceTree = "<group>"; };
 		E1151E561E9C610100DE44D6 /* VerbVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbVC.swift; sourceTree = "<group>"; };
 		E115CA381EEC962700DBBD44 /* VerbFamilies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbFamilies.swift; sourceTree = "<group>"; };
-		E1171C9021AA1BF000B06342 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		E1171C9021AA1BF000B06342 /* AnalyticsServiceable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsServiceable.swift; sourceTree = "<group>"; };
 		E1171C9221AB387500B06342 /* TestAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAnalyticsService.swift; sourceTree = "<group>"; };
 		E1171C9421ACC02200B06342 /* GameCenterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenterable.swift; sourceTree = "<group>"; };
 		E118CA271FFFD07400612D71 /* ReviewPrompter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPrompter.swift; sourceTree = "<group>"; };
@@ -435,7 +435,7 @@
 		E1EC70FB2198B9D900872787 /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
-				E1171C9021AA1BF000B06342 /* AnalyticsService.swift */,
+				E1171C9021AA1BF000B06342 /* AnalyticsServiceable.swift */,
 				E1EC70FF2198BA6300872787 /* AWSAnalyticsService.swift */,
 				E1EC70FC2198BA0D00872787 /* awsconfiguration.json */,
 				E1EC71022198BA8A00872787 /* DeviceUtility.swift */,
@@ -793,7 +793,7 @@
 				E1A789771F00751D0006CA77 /* IntExtension.swift in Sources */,
 				E1151E571E9C610100DE44D6 /* VerbVC.swift in Sources */,
 				E1483FB31EF5CF650052C436 /* QuizState.swift in Sources */,
-				E1171C9121AA1BF000B06342 /* AnalyticsService.swift in Sources */,
+				E1171C9121AA1BF000B06342 /* AnalyticsServiceable.swift in Sources */,
 				E1EC71032198BA8A00872787 /* DeviceUtility.swift in Sources */,
 				E139E0E41EC7D2E500B34DE7 /* StringExtensions.swift in Sources */,
 				E188B56221AF7920009777D8 /* TestReviewPrompter.swift in Sources */,

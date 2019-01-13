@@ -11,7 +11,7 @@ import UIKit
 class InfoVC: UIViewController, UITextViewDelegate {
   weak var infoDelegate: InfoDelegate?
   var infoString: NSAttributedString?
-  private var analyticsService: AnalyticsService?
+  private var analyticsService: AnalyticsServiceable?
 
   var infoView: InfoView {
     if let castedView = view as? InfoView {
@@ -21,7 +21,7 @@ class InfoVC: UIViewController, UITextViewDelegate {
     }
   }
 
-  convenience init(analyticsService: AnalyticsService) {
+  convenience init(analyticsService: AnalyticsServiceable) {
     self.init()
     self.analyticsService = analyticsService
   }

@@ -10,7 +10,7 @@ import UIKit
 
 class SettingsVC: UIViewController {
   private var settings: Settings?
-  private var analyticsService: AnalyticsService?
+  private var analyticsService: AnalyticsServiceable?
   private var gameCenter: GameCenterable?
 
   var settingsView: SettingsView {
@@ -21,7 +21,7 @@ class SettingsVC: UIViewController {
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsService, gameCenter: GameCenterable) {
+  convenience init(settings: Settings, analyticsService: AnalyticsServiceable, gameCenter: GameCenterable) {
     self.init()
     self.settings = settings
     self.analyticsService = analyticsService

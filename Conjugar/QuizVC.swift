@@ -11,7 +11,7 @@ import UIKit
 class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   private var settings: Settings?
   private var quiz: Quiz?
-  private var analyticsService: AnalyticsService?
+  private var analyticsService: AnalyticsServiceable?
   private var gameCenter: GameCenterable?
 
   var quizView: QuizView {
@@ -22,7 +22,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
   }
 
-  convenience init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsService, gameCenter: GameCenterable) {
+  convenience init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsServiceable, gameCenter: GameCenterable) {
     self.init()
     self.settings = settings
     self.quiz = quiz

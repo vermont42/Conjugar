@@ -14,7 +14,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   private var easyModerateInfos: [Info] = []
   private var easyInfos: [Info] = []
   private var settings: Settings?
-  private var analyticsService: AnalyticsService?
+  private var analyticsService: AnalyticsServiceable?
 
   private var currentInfos: [Info] {
     switch browseInfoView.difficultyControl.selectedSegmentIndex {
@@ -37,7 +37,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsService) {
+  convenience init(settings: Settings, analyticsService: AnalyticsServiceable) {
     self.init()
     self.settings = settings
     self.analyticsService = analyticsService
