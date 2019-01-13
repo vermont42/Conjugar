@@ -355,6 +355,8 @@
 		E14271351F01CA98001D19E1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E1EC70F42198A63700872787 /* AWSPinpoint.framework */,
+				E1EC70F32198A63600872787 /* AWSCore.framework */,
 				E14271361F01CA98001D19E1 /* GameKit.framework */,
 			);
 			name = Frameworks;
@@ -450,8 +452,6 @@
 				E16004CB21BC863500909ED1 /* ConjugarUITests */,
 				E1F06AD51E8F05F300ADD2E1 /* Products */,
 				E14271351F01CA98001D19E1 /* Frameworks */,
-				E1EC70F32198A63600872787 /* AWSCore.framework */,
-				E1EC70F42198A63700872787 /* AWSPinpoint.framework */,
 			);
 			sourceTree = "<group>";
 		};
