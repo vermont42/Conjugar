@@ -52,7 +52,7 @@ class Quiz {
   private var personNumbersIndex = 0
   private var shouldShuffle = true
   weak var delegate: QuizDelegate?
-  static let shared = Quiz(settings: Settings.shared, gameCenter: GameCenter.shared)
+  static let shared = Quiz(settings: Settings(getterSetter: UserDefaultsGetterSetter()), gameCenter: GameCenter.shared)
 
   var questionCount: Int {
     return questions.count

@@ -16,7 +16,7 @@ struct ReviewPrompter: ReviewPromptable {
   private let now: Date
   private let requestReview: () -> ()
 
-  init(settings: Settings = Settings.shared, now: Date = Date(), requestReview: @escaping () -> () = { SKStoreReviewController.requestReview() }) {
+  init(settings: Settings = Settings(getterSetter: UserDefaultsGetterSetter()), now: Date = Date(), requestReview: @escaping () -> () = { SKStoreReviewController.requestReview() }) {
     self.settings = settings
     self.now = now
     self.requestReview = requestReview

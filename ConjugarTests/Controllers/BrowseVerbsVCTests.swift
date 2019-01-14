@@ -12,18 +12,18 @@ import XCTest
 class BrowseVerbsVCTests: XCTestCase {
   func testBrowseVerbsVC() {
     var analytic = ""
-    let bvvc = BrowseVerbsVC(settings: Settings(customDefaults: [:]), analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }), reviewPrompter: TestReviewPrompter())
+    let bvvc = BrowseVerbsVC(settings: Settings(getterSetter: DictionaryGetterSetter(dictionary: [:])), analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }), reviewPrompter: TestReviewPrompter())
     let nc = MockNavigationC(rootViewController: bvvc)
     UIApplication.shared.keyWindow?.rootViewController = nc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(bvvc)
     bvvc.viewWillAppear(true)
     XCTAssertEqual(analytic, "visited viewController: \(BrowseVerbsVC.self) ")
-    XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 84)
+    XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 86)
     bvvc.browseVerbsView.filterControl.selectedSegmentIndex = 1
-    XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 102)
+    XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 103)
     bvvc.browseVerbsView.filterControl.selectedSegmentIndex = 2
-    XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 186)
+    XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 189)
     bvvc.tableView(UITableView(), didSelectRowAt: IndexPath(row: 0, section: 0))
     XCTAssertTrue(nc.pushedViewController is VerbVC)
   }

@@ -36,7 +36,7 @@ class QuizTests: XCTestCase {
      (spain, easy, easySpain),
      (latinAmerica, easy, easyLatinAmerica)
     ].forEach { region, difficulty, maxScore in
-      let settings = Settings(customDefaults: [Settings.difficultyKey: difficulty, Settings.regionKey: region])
+      let settings = Settings(getterSetter: DictionaryGetterSetter(dictionary: [Settings.difficultyKey: difficulty, Settings.regionKey: region]))
       let quiz = Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: true)
       _ = TestQuizDelegate(quiz: quiz, onFinish: { score in
         XCTAssertEqual(score, maxScore)

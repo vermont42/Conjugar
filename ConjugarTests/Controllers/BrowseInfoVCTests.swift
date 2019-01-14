@@ -12,7 +12,7 @@ import XCTest
 class BrowseInfoVCTests: XCTestCase {
   func testBrowseInfoVC() {
     var analytic = ""
-    let bivc = BrowseInfoVC(settings: Settings(customDefaults: [:]), analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
+    let bivc = BrowseInfoVC(settings: Settings(getterSetter: DictionaryGetterSetter(dictionary: [:])), analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
     let nc = MockNavigationC(rootViewController: bivc)
     UIApplication.shared.keyWindow?.rootViewController = nc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)

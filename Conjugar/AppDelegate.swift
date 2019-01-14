@@ -13,8 +13,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-    Utterer.setup(settings: Settings.shared)
-
     configureTabBar()
     configureNavBar()
     configureStatusBar()
@@ -22,7 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let mainTabBarVC: MainTabBarVC
 
     if CommandLine.arguments.contains("enable-ui-testing") {
-      let settings = Settings(customDefaults: [:])
+      let settings = Settings(getterSetter: DictionaryGetterSetter())
+
+      Utterer.setup(settings: settings)
 
       if CommandLine.arguments.contains(Region.spain.rawValue) {
         settings.region = .spain
@@ -40,11 +40,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
       mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: TestGameCenter(), shouldShuffle: false), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: TestGameCenter())
     } else {
+      let settings = Settings(getterSetter: UserDefaultsGetterSetter())
       #if targetEnvironment(simulator)
       let testGameCenter = TestGameCenter()
-      mainTabBarVC = MainTabBarVC(settings: Settings.shared, quiz: Quiz(settings: Settings.shared, gameCenter: testGameCenter, shouldShuffle: true), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter)
+      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: true), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter)
       #else
-      mainTabBarVC = MainTabBarVC(settings: Settings.shared, quiz: Quiz.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared)
+      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared)
       #endif
     }
 

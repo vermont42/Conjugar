@@ -2,21 +2,19 @@
 //  Settings.swift
 //  Conjugar
 //
-//  Created by Joshua Adams on 11/17/18.
-//  Copyright © 2018 Josh Adams. All rights reserved.
+//  Created by Joshua Adams on 1/13/19.
+//  Copyright © 2019 Josh Adams. All rights reserved.
 //
 
 import Foundation
 
 class Settings {
-  static let shared = Settings()
-
-  private var userDefaults: UserDefaults?
+  private let getterSetter: GetterSetter
 
   var region: Region {
     didSet {
-      if let userDefaults = userDefaults, region != oldValue {
-        userDefaults.set("\(region.rawValue)", forKey: Settings.regionKey)
+      if region != oldValue {
+        getterSetter.set(key: Settings.regionKey, value: region.rawValue)
       }
     }
   }
@@ -25,8 +23,8 @@ class Settings {
 
   var difficulty: Difficulty {
     didSet {
-      if let userDefaults = userDefaults, difficulty != oldValue {
-        userDefaults.set("\(difficulty.rawValue)", forKey: Settings.difficultyKey)
+      if difficulty != oldValue {
+        getterSetter.set(key: Settings.difficultyKey, value: difficulty.rawValue)
       }
     }
   }
@@ -35,8 +33,8 @@ class Settings {
 
   var infoDifficulty: Difficulty {
     didSet {
-      if let userDefaults = userDefaults, infoDifficulty != oldValue {
-        userDefaults.set("\(infoDifficulty.rawValue)", forKey: Settings.infoDifficultyKey)
+      if infoDifficulty != oldValue {
+        getterSetter.set(key: Settings.infoDifficultyKey, value: infoDifficulty.rawValue)
       }
     }
   }
@@ -45,8 +43,8 @@ class Settings {
 
   var secondSingularBrowse: SecondSingularBrowse {
     didSet {
-      if let userDefaults = userDefaults, secondSingularBrowse != oldValue {
-        userDefaults.set("\(secondSingularBrowse.rawValue)", forKey: Settings.secondSingularBrowseKey)
+      if secondSingularBrowse != oldValue {
+        getterSetter.set(key: Settings.secondSingularBrowseKey, value: secondSingularBrowse.rawValue)
       }
     }
   }
@@ -55,8 +53,8 @@ class Settings {
 
   var secondSingularQuiz: SecondSingularQuiz {
     didSet {
-      if let userDefaults = userDefaults, secondSingularQuiz != oldValue {
-        userDefaults.set("\(secondSingularQuiz.rawValue)", forKey: Settings.secondSingularQuizKey)
+      if secondSingularQuiz != oldValue {
+        getterSetter.set(key: Settings.secondSingularQuizKey, value: secondSingularQuiz.rawValue)
       }
     }
   }
@@ -65,8 +63,8 @@ class Settings {
 
   var promptActionCount: Int {
     didSet {
-      if let userDefaults = userDefaults, promptActionCount != oldValue {
-        userDefaults.set("\(promptActionCount)", forKey: Settings.promptActionCountKey)
+      if promptActionCount != oldValue {
+        getterSetter.set(key: Settings.promptActionCountKey, value: "\(promptActionCount)")
       }
     }
   }
@@ -75,8 +73,8 @@ class Settings {
 
   var lastReviewPromptDate: Date {
     didSet {
-      if let userDefaults = userDefaults, lastReviewPromptDate != oldValue {
-        userDefaults.set(formatter.string(from: lastReviewPromptDate), forKey: Settings.lastReviewPromptDateKey)
+      if lastReviewPromptDate != oldValue {
+        getterSetter.set(key: Settings.lastReviewPromptDateKey, value: formatter.string(from: lastReviewPromptDate))
       }
     }
   }
@@ -87,8 +85,8 @@ class Settings {
 
   var userRejectedGameCenter: Bool {
     didSet {
-      if let userDefaults = userDefaults, userRejectedGameCenter != oldValue {
-        userDefaults.set("\(userRejectedGameCenter)", forKey: Settings.userRejectedGameCenterKey)
+      if userRejectedGameCenter != oldValue {
+        getterSetter.set(key: Settings.userRejectedGameCenterKey, value: "\(userRejectedGameCenter)")
       }
     }
   }
@@ -97,142 +95,80 @@ class Settings {
 
   var didShowGameCenterDialog: Bool {
     didSet {
-      if let userDefaults = userDefaults, didShowGameCenterDialog != oldValue {
-        userDefaults.set("\(didShowGameCenterDialog)", forKey: Settings.didShowGameCenterDialogKey)
+      if didShowGameCenterDialog != oldValue {
+        getterSetter.set(key: Settings.didShowGameCenterDialogKey, value: "\(didShowGameCenterDialog)")
       }
     }
   }
   static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
   static let didShowGameCenterDialogDefault = false
 
-  private init() {
-    userDefaults = UserDefaults.standard
+  init(getterSetter: GetterSetter) {
+    self.getterSetter = getterSetter
 
-    guard let userDefaults = userDefaults else {
-      fatalError("userDefaults was nil.")
-    }
-
-    if let regionString = userDefaults.string(forKey: Settings.regionKey) {
+    if let regionString = getterSetter.get(key: Settings.regionKey) {
       region = Region(rawValue: regionString) ?? Settings.regionDefault
     } else {
       region = Settings.regionDefault
-      userDefaults.set(region.rawValue, forKey: Settings.regionKey)
+      getterSetter.set(key: Settings.regionKey, value: region.rawValue)
     }
 
-    if let difficultyString = userDefaults.string(forKey: Settings.difficultyKey) {
+    if let difficultyString = getterSetter.get(key: Settings.difficultyKey) {
       difficulty = Difficulty(rawValue: difficultyString) ?? Settings.difficultyDefault
     } else {
       difficulty = Settings.difficultyDefault
-      userDefaults.set(difficulty.rawValue, forKey: Settings.difficultyKey)
+      getterSetter.set(key: Settings.difficultyKey, value: difficulty.rawValue)
     }
 
-    if let infoDifficultyString = userDefaults.string(forKey: Settings.infoDifficultyKey) {
+    if let infoDifficultyString = getterSetter.get(key: Settings.infoDifficultyKey) {
       infoDifficulty = Difficulty(rawValue: infoDifficultyString) ?? Settings.infoDifficultyDefault
     } else {
       infoDifficulty = Settings.infoDifficultyDefault
-      userDefaults.set(infoDifficulty.rawValue, forKey: Settings.infoDifficultyKey)
+      getterSetter.set(key: Settings.infoDifficultyKey, value: infoDifficulty.rawValue)
     }
 
-    if let secondSingularBrowseString = userDefaults.string(forKey: Settings.secondSingularBrowseKey) {
+    if let secondSingularBrowseString = getterSetter.get(key: Settings.secondSingularBrowseKey) {
       secondSingularBrowse = SecondSingularBrowse(rawValue: secondSingularBrowseString) ?? Settings.secondSingularBrowseDefault
     } else {
       secondSingularBrowse = Settings.secondSingularBrowseDefault
-      userDefaults.set(secondSingularBrowse.rawValue, forKey: Settings.secondSingularBrowseKey)
+      getterSetter.set(key: Settings.secondSingularBrowseKey, value: secondSingularBrowse.rawValue)
     }
 
-    if let secondSingularQuizString = userDefaults.string(forKey: Settings.secondSingularQuizKey) {
+    if let secondSingularQuizString = getterSetter.get(key: Settings.secondSingularQuizKey) {
       secondSingularQuiz = SecondSingularQuiz(rawValue: secondSingularQuizString) ?? Settings.secondSingularQuizDefault
     } else {
       secondSingularQuiz = Settings.secondSingularQuizDefault
-      userDefaults.set(secondSingularQuiz.rawValue, forKey: Settings.secondSingularQuizKey)
+      getterSetter.set(key: Settings.secondSingularQuizKey, value: secondSingularQuiz.rawValue)
     }
 
-    if let promptActionCountString = userDefaults.string(forKey: Settings.promptActionCountKey) {
+    if let promptActionCountString = getterSetter.get(key: Settings.promptActionCountKey) {
       promptActionCount = Int((promptActionCountString as NSString).intValue)
     } else {
       promptActionCount = Settings.promptActionCountDefault
-      userDefaults.set("\(promptActionCount)", forKey: Settings.promptActionCountKey)
+      getterSetter.set(key: Settings.promptActionCountKey, value: "\(promptActionCount)")
     }
 
     formatter.dateFormat = Settings.format
 
-    if let lastReviewPromptDateString = userDefaults.string(forKey: Settings.lastReviewPromptDateKey) {
-      lastReviewPromptDate = formatter.date(from: lastReviewPromptDateString) ?? Date()
+    if let lastReviewPromptDateString = getterSetter.get(key: Settings.lastReviewPromptDateKey) {
+      lastReviewPromptDate = formatter.date(from: lastReviewPromptDateString) ?? Settings.lastReviewPromptDateDefault
     } else {
       lastReviewPromptDate = Settings.lastReviewPromptDateDefault
-      userDefaults.set(formatter.string(from: lastReviewPromptDate), forKey: Settings.lastReviewPromptDateKey)
+      getterSetter.set(key: Settings.lastReviewPromptDateKey, value: formatter.string(from: lastReviewPromptDate))
     }
 
-    if let userRejectedGameCenterString = userDefaults.string(forKey: Settings.userRejectedGameCenterKey) {
+    if let userRejectedGameCenterString = getterSetter.get(key: Settings.userRejectedGameCenterKey) {
       userRejectedGameCenter = Bool((userRejectedGameCenterString as NSString).boolValue)
     } else {
       userRejectedGameCenter = Settings.userRejectedGameCenterDefault
-      userDefaults.set("\(userRejectedGameCenter)", forKey: Settings.userRejectedGameCenterKey)
+      getterSetter.set(key: Settings.userRejectedGameCenterKey, value: "\(userRejectedGameCenter)")
     }
 
-    if let didShowGameCenterDialogString = userDefaults.string(forKey: Settings.didShowGameCenterDialogKey) {
+    if let didShowGameCenterDialogString = getterSetter.get(key: Settings.didShowGameCenterDialogKey) {
       didShowGameCenterDialog = Bool((didShowGameCenterDialogString as NSString).boolValue)
     } else {
       didShowGameCenterDialog = Settings.didShowGameCenterDialogDefault
-      userDefaults.set("\(didShowGameCenterDialog)", forKey: Settings.didShowGameCenterDialogKey)
-    }
-  }
-
-  init(customDefaults: [String: Any]) {
-    if let region = Region(rawValue: (customDefaults[Settings.regionKey] as? String) ?? "") {
-      self.region = region
-    } else {
-      region = Settings.regionDefault
-    }
-
-    if let difficulty = Difficulty(rawValue: (customDefaults[Settings.difficultyKey] as? String) ?? "") {
-      self.difficulty = difficulty
-    } else {
-      difficulty = Settings.difficultyDefault
-    }
-
-    if let infoDifficulty = Difficulty(rawValue: (customDefaults[Settings.infoDifficultyKey] as? String) ?? "") {
-      self.infoDifficulty = infoDifficulty
-    } else {
-      infoDifficulty = Settings.infoDifficultyDefault
-    }
-
-    if let secondSingularBrowse = SecondSingularBrowse(rawValue: (customDefaults[Settings.secondSingularBrowseKey] as? String) ?? "") {
-      self.secondSingularBrowse = secondSingularBrowse
-    } else {
-      secondSingularBrowse = Settings.secondSingularBrowseDefault
-    }
-
-    if let secondSingularQuiz = SecondSingularQuiz(rawValue: (customDefaults[Settings.secondSingularQuizKey] as? String) ?? "") {
-      self.secondSingularQuiz = secondSingularQuiz
-    } else {
-      secondSingularQuiz = Settings.secondSingularQuizDefault
-    }
-
-    if let promptActionCount = customDefaults[Settings.promptActionCountKey] as? Int {
-      self.promptActionCount = promptActionCount
-    } else {
-      promptActionCount = Settings.promptActionCountDefault
-    }
-
-    formatter.dateFormat = Settings.format
-
-    if let lastReviewPromptDate = formatter.date(from: (customDefaults[Settings.lastReviewPromptDateKey] as? String ?? "")) {
-      self.lastReviewPromptDate = lastReviewPromptDate
-    } else {
-      lastReviewPromptDate = Settings.lastReviewPromptDateDefault
-    }
-
-    if let userRejectedGameCenter = customDefaults[Settings.userRejectedGameCenterKey] as? Bool {
-      self.userRejectedGameCenter = userRejectedGameCenter
-    } else {
-      userRejectedGameCenter = Settings.userRejectedGameCenterDefault
-    }
-
-    if let didShowGameCenterDialog = customDefaults[Settings.didShowGameCenterDialogKey] as? Bool {
-      self.didShowGameCenterDialog = didShowGameCenterDialog
-    } else {
-      didShowGameCenterDialog = Settings.didShowGameCenterDialogDefault
+      getterSetter.set(key: Settings.didShowGameCenterDialogKey, value: "\(didShowGameCenterDialog)")
     }
   }
 }

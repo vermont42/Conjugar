@@ -11,8 +11,7 @@ import XCTest
 
 class MainTabBarVCTests: XCTestCase {
   func testMainTabBarVC() {
-    let none: [String: Any] = [:]
-    let settings = Settings(customDefaults: none)
+    let settings = Settings(getterSetter: DictionaryGetterSetter(dictionary: [:]))
     let testGameCenter = TestGameCenter()
     let mtbvc = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: false), analyticsService: TestAnalyticsService(fire: {_ in}), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter)
     XCTAssertNotNil(mtbvc)

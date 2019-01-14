@@ -14,9 +14,14 @@ class ReviewPrompterTests: XCTestCase {
       let now = Date()
       let smallAmountOfTime: TimeInterval = 5.0
       let recentPromptDate = now.addingTimeInterval(-1.0 * smallAmountOfTime)
-      var customDefaults1: [String: Any] = [:]
-      customDefaults1[Settings.lastReviewPromptDateKey] = recentPromptDate
-      let settings1 = Settings(customDefaults: customDefaults1)
+
+      let formatter = DateFormatter()
+      let format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
+      formatter.dateFormat = format
+
+      var settingsDictionary1: [String: String] = [:]
+      settingsDictionary1[Settings.lastReviewPromptDateKey] = formatter.string(from: recentPromptDate)
+      let settings1 = Settings(getterSetter: DictionaryGetterSetter(dictionary: settingsDictionary1))
       var didRequestReview = false
       let prompter1 = ReviewPrompter(settings: settings1, now: now, requestReview: { didRequestReview = true })
 
@@ -36,9 +41,9 @@ class ReviewPrompterTests: XCTestCase {
       prompter1.promptableActionHappened()
       XCTAssert(didRequestReview)
 
-      var customDefaults2: [String: Any] = [:]
-      customDefaults2[Settings.promptActionCountKey] = ReviewPrompter.promptModulo - 1
-      let settings2 = Settings(customDefaults: customDefaults2)
+      var settingsDictionary2: [String: String] = [:]
+      settingsDictionary2[Settings.promptActionCountKey] = "\(ReviewPrompter.promptModulo - 1)"
+      let settings2 = Settings(getterSetter: DictionaryGetterSetter(dictionary: settingsDictionary2))
       let prompter2 = ReviewPrompter(settings: settings2, now: longAgoDate, requestReview: { didRequestReview = true })
 
       didRequestReview = false
