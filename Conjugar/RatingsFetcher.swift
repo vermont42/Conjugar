@@ -26,10 +26,10 @@ struct RatingsFetcher {
       } else if let responseData = responseData {
         guard
           let json = try? JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
-          let results = json?["results"] as? [[String: Any]],
+          let results = json["results"] as? [[String: Any]],
           results.count == 1,
           let ratingsCount = (results[0])["userRatingCountForCurrentVersion"] as? Int
-          else {
+        else {
             completion(errorMessage)
             return
         }

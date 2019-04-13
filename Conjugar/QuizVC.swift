@@ -101,13 +101,13 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       fatalError("gameCenter was nil.")
     }
     settings.didShowGameCenterDialog = true
-    let gameCenterController = UIAlertController(title: "Game Center", message: "Would you like Conjugar to upload your future scores to Game Center after your quiz? See how you stack up against the global community of conjugators.", preferredStyle: UIAlertControllerStyle.alert)
-    let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.destructive) { _ in
+    let gameCenterController = UIAlertController(title: "Game Center", message: "Would you like Conjugar to upload your future scores to Game Center after your quiz? See how you stack up against the global community of conjugators.", preferredStyle: UIAlertController.Style.alert)
+    let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.destructive) { _ in
       SoundPlayer.play(.sadTrombone)
       settings.userRejectedGameCenter = true
     }
     gameCenterController.addAction(noAction)
-    let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { _ in
+    let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) { _ in
       gameCenter.authenticate(analyticsService: analyticsService, completion: nil)
     }
     gameCenterController.addAction(yesAction)

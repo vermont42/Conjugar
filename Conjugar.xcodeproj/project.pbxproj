@@ -106,8 +106,6 @@
 		E1F06AFB1E8F087000ADD2E1 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AFA1E8F087000ADD2E1 /* Region.swift */; };
 		E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AFC1E8F08D500ADD2E1 /* Tense.swift */; };
 		E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */; };
-		E1F06B041E8F0E9300ADD2E1 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B031E8F0E9300ADD2E1 /* Result.swift */; };
-		E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06B051E8F0EA300ADD2E1 /* ResultProtocol.swift */; };
 		E1F289A71F30C666006B3C3E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F289A61F30C666006B3C3E /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
@@ -246,8 +244,6 @@
 		E1F06AFA1E8F087000ADD2E1 /* Region.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		E1F06AFC1E8F08D500ADD2E1 /* Tense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tense.swift; sourceTree = "<group>"; };
 		E1F06B001E8F0C5A00ADD2E1 /* PersonNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = PersonNumber.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		E1F06B031E8F0E9300ADD2E1 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
-		E1F06B051E8F0EA300ADD2E1 /* ResultProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = ResultProtocol.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E1F289A61F30C666006B3C3E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -485,7 +481,6 @@
 				E107B08D1EB66E26004C5E91 /* Controllers */,
 				E1F06AF91E8F085500ADD2E1 /* Models */,
 				E107B08F1EB66E7C004C5E91 /* Supporting */,
-				E1F06B021E8F0E7F00ADD2E1 /* Third Party */,
 				E107B08E1EB66E64004C5E91 /* Utils */,
 				E107B08C1EB66E16004C5E91 /* Views */,
 			);
@@ -531,15 +526,6 @@
 				E191C9B71EBEB27500F715E7 /* VerbType.swift */,
 			);
 			name = Models;
-			sourceTree = "<group>";
-		};
-		E1F06B021E8F0E7F00ADD2E1 /* Third Party */ = {
-			isa = PBXGroup;
-			children = (
-				E1F06B031E8F0E9300ADD2E1 /* Result.swift */,
-				E1F06B051E8F0EA300ADD2E1 /* ResultProtocol.swift */,
-			);
-			name = "Third Party";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -609,25 +595,26 @@
 			attributes = {
 				DefaultBuildSystemTypeForWorkspace = Latest;
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Josh Adams";
 				TargetAttributes = {
 					E16004C921BC863500909ED1 = {
 						CreatedOnToolsVersion = 10.1;
 						DevelopmentTeam = V3L2PL4QC9;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						TestTargetID = E1F06AD31E8F05F200ADD2E1;
 					};
 					E1F06AD31E8F05F200ADD2E1 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = V3L2PL4QC9;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					E1F06AE71E8F05F400ADD2E1 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = V3L2PL4QC9;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						TestTargetID = E1F06AD31E8F05F200ADD2E1;
 					};
@@ -635,7 +622,7 @@
 			};
 			buildConfigurationList = E1F06ACF1E8F05F200ADD2E1 /* Build configuration list for PBXProject "Conjugar" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -799,11 +786,9 @@
 				E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */,
 				E15E63F61F3A29890083DB4B /* Layout.swift in Sources */,
 				E1F289A71F30C666006B3C3E /* SettingsView.swift in Sources */,
-				E1F06B061E8F0EA300ADD2E1 /* ResultProtocol.swift in Sources */,
 				E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */,
 				E16BEA041F09BCC70053DD32 /* Fonts.swift in Sources */,
 				E18145DC1F2E49B20048DEE2 /* UILabelExtension.swift in Sources */,
-				E1F06B041E8F0E9300ADD2E1 /* Result.swift in Sources */,
 				E1F06AFB1E8F087000ADD2E1 /* Region.swift in Sources */,
 				E1A789771F00751D0006CA77 /* IntExtension.swift in Sources */,
 				E1151E571E9C610100DE44D6 /* VerbVC.swift in Sources */,
@@ -879,7 +864,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Conjugar;
 			};
@@ -901,7 +886,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Conjugar;
 			};
@@ -1030,8 +1015,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1050,8 +1034,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -1066,8 +1049,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Conjugar.app/Conjugar";
 			};
 			name = Debug;
@@ -1082,8 +1064,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Conjugar.app/Conjugar";
 			};
 			name = Release;

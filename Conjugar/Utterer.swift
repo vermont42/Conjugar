@@ -19,7 +19,7 @@ class Utterer {
 
     let session = AVAudioSession.sharedInstance()
     do {
-      try session.setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSessionCategoryOptions.mixWithOthers)
+      try session.setCategory(.playback, options: .mixWithOthers)
     } catch let error as NSError {
       print("\(error.localizedDescription)")
     }

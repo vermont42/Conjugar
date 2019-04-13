@@ -11,7 +11,7 @@ import GameKit
 class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
   static let shared = GameCenter()
   var isAuthenticated = false
-  private let localPlayer = GKLocalPlayer.localPlayer()
+  private let localPlayer = GKLocalPlayer.local
   private var leaderboardIdentifier = ""
 
   private override init() {}

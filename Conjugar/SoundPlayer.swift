@@ -16,7 +16,7 @@ class SoundPlayer {
   private init () {
     sounds = Dictionary()
     do {
-      try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback) // was ambient
+      try AVAudioSession.sharedInstance().setCategory(.playback) // was ambient
     } catch let error as NSError {
       print("\(error.localizedDescription)")
     }

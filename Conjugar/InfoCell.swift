@@ -23,7 +23,7 @@ class InfoCell: UITableViewCell {
     fatalError("init(coder:) has not been implemented.")
   }
 
-  override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     backgroundColor = Colors.black
     addSubview(heading)

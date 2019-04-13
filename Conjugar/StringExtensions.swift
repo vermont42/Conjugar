@@ -47,7 +47,7 @@ extension String {
           }
         }
         let attString = NSMutableAttributedString(string: nsString.lowercased)
-        attString.addAttribute(NSAttributedStringKey.foregroundColor, value: Colors.red, range: NSRange(location: startIndex, length: endIndex - startIndex + 1))
+        attString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colors.red, range: NSRange(location: startIndex, length: endIndex - startIndex + 1))
         attStrings.append(attString)
       } else {
         attStrings.append(NSAttributedString(string: nsString as String))
@@ -62,14 +62,14 @@ extension String {
 
   func coloredString(color: UIColor) -> NSAttributedString {
     let attributedString = NSMutableAttributedString(string: self)
-    attributedString.addAttribute(NSAttributedStringKey.foregroundColor, value: color, range: NSRange(location: 0, length: count))
+    attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location: 0, length: count))
     return attributedString
   }
 
   var infoString: NSAttributedString {
     let infoString = NSMutableAttributedString(string: self)
-    infoString.addAttributes([NSAttributedStringKey.foregroundColor: Colors.yellow, NSAttributedStringKey.font: Fonts.body], range: NSRange(location: 0, length: infoString.length))
-    var attributesAndRanges: [(NSAttributedStringKey, Any, NSRange)] = []
+    infoString.addAttributes([NSAttributedString.Key.foregroundColor: Colors.yellow, NSAttributedString.Key.font: Fonts.body], range: NSRange(location: 0, length: infoString.length))
+    var attributesAndRanges: [(NSAttributedString.Key, Any, NSRange)] = []
     var conjugationRanges: [NSRange] = []
     let centeredStyle = NSMutableParagraphStyle()
     centeredStyle.alignment = .center
@@ -84,8 +84,8 @@ extension String {
     for char in self {
       if char == "*" {
         if inHeading {
-          attributesAndRanges.append((NSAttributedStringKey.paragraphStyle, centeredStyle, NSRange(location: startIndex, length: currentIndex - startIndex)))
-          attributesAndRanges.append((NSAttributedStringKey.font, Fonts.heading, NSRange(location: startIndex, length: currentIndex - startIndex)))
+          attributesAndRanges.append((NSAttributedString.Key.paragraphStyle, centeredStyle, NSRange(location: startIndex, length: currentIndex - startIndex)))
+          attributesAndRanges.append((NSAttributedString.Key.font, Fonts.heading, NSRange(location: startIndex, length: currentIndex - startIndex)))
           inHeading = false
         } else {
           inHeading = true
@@ -95,8 +95,8 @@ extension String {
 
       if char == "^" {
         if inSubheading {
-          attributesAndRanges.append((NSAttributedStringKey.paragraphStyle, centeredStyle, NSRange(location: startIndex, length: currentIndex - startIndex)))
-          attributesAndRanges.append((NSAttributedStringKey.font, Fonts.subheading, NSRange(location: startIndex, length: currentIndex - startIndex)))
+          attributesAndRanges.append((NSAttributedString.Key.paragraphStyle, centeredStyle, NSRange(location: startIndex, length: currentIndex - startIndex)))
+          attributesAndRanges.append((NSAttributedString.Key.font, Fonts.subheading, NSRange(location: startIndex, length: currentIndex - startIndex)))
           inSubheading = false
         } else {
           inSubheading = true
@@ -106,7 +106,7 @@ extension String {
 
       if char == "~" {
         if inBold {
-          attributesAndRanges.append((NSAttributedStringKey.font, Fonts.boldBody, NSRange(location: startIndex, length: currentIndex - startIndex)))
+          attributesAndRanges.append((NSAttributedString.Key.font, Fonts.boldBody, NSRange(location: startIndex, length: currentIndex - startIndex)))
           inBold = false
         } else {
           inBold = true
@@ -128,7 +128,7 @@ extension String {
             }
             subString = encodedString
           }
-          attributesAndRanges.append((NSAttributedStringKey.link, subString, nsRange))
+          attributesAndRanges.append((NSAttributedString.Key.link, subString, nsRange))
           inLink = false
         } else {
           inLink = true
@@ -158,10 +158,10 @@ extension String {
       let conjugation = infoString.mutableString.substring(with: conjugationRange)
       let attributedString = (conjugation as String).conjugatedString
       infoString.replaceCharacters(in: conjugationRange, with: (self as NSString).substring(with: conjugationRange).lowercased())
-      attributedString.enumerateAttribute(NSAttributedStringKey.foregroundColor, in: NSRange(location: 0, length: attributedString.length), options: []) { (value, range, _) -> Void in
+      attributedString.enumerateAttribute(NSAttributedString.Key.foregroundColor, in: NSRange(location: 0, length: attributedString.length), options: []) { (value, range, _) -> Void in
         if value != nil {
           let infoRange = NSRange(location: conjugationRange.location + range.location, length: range.length)
-          infoString.addAttribute(NSAttributedStringKey.foregroundColor, value: Colors.red, range: infoRange)
+          infoString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colors.red, range: infoRange)
         }
       }
     }

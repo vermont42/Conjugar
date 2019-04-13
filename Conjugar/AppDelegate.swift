@@ -12,17 +12,16 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     configureTabBar()
     configureNavBar()
     configureStatusBar()
 
     let mainTabBarVC: MainTabBarVC
+    let settings: Settings
 
     if CommandLine.arguments.contains("enable-ui-testing") {
-      let settings = Settings(getterSetter: DictionaryGetterSetter())
-
-      Utterer.setup(settings: settings)
+      settings = Settings(getterSetter: DictionaryGetterSetter())
 
       if CommandLine.arguments.contains(Region.spain.rawValue) {
         settings.region = .spain
@@ -40,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
       mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: TestGameCenter(), shouldShuffle: false), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: TestGameCenter())
     } else {
-      let settings = Settings(getterSetter: UserDefaultsGetterSetter())
+      settings = Settings(getterSetter: UserDefaultsGetterSetter())
       #if targetEnvironment(simulator)
       let testGameCenter = TestGameCenter()
       mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: true), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter)
@@ -49,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       #endif
     }
 
+    Utterer.setup(settings: settings)
     window = UIWindow(frame: UIScreen.main.bounds)
     window?.rootViewController = mainTabBarVC
     window?.makeKeyAndVisible()
@@ -72,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   private func configureNavBar() {
     UINavigationBar.appearance().barTintColor = UIColor.black
     UINavigationBar.appearance().tintColor = Colors.yellow
-    UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): Colors.yellow]
+    UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key(rawValue: NSAttributedString.Key.foregroundColor.rawValue): Colors.yellow]
   }
 
   func applicationWillResignActive(_ application: UIApplication) {}
