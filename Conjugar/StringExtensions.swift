@@ -158,7 +158,7 @@ extension String {
       let conjugation = infoString.mutableString.substring(with: conjugationRange)
       let attributedString = (conjugation as String).conjugatedString
       infoString.replaceCharacters(in: conjugationRange, with: (self as NSString).substring(with: conjugationRange).lowercased())
-      attributedString.enumerateAttribute(NSAttributedStringKey.foregroundColor, in: NSRange(location: 0, length: attributedString.length), options: []) { (value, range, stop) -> Void in
+      attributedString.enumerateAttribute(NSAttributedStringKey.foregroundColor, in: NSRange(location: 0, length: attributedString.length), options: []) { (value, range, _) -> Void in
         if value != nil {
           let infoRange = NSRange(location: conjugationRange.location + range.location, length: range.length)
           infoString.addAttribute(NSAttributedStringKey.foregroundColor, value: Colors.red, range: infoRange)

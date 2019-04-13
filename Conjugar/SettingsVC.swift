@@ -36,6 +36,15 @@ class SettingsVC: UIViewController {
     settingsView.browseVosControl.addTarget(self, action: #selector(SettingsVC.browseVosChanged(_:)), for: .valueChanged)
     settingsView.quizVosControl.addTarget(self, action: #selector(SettingsVC.quizVosChanged(_:)), for: .valueChanged)
     settingsView.gameCenterButton.addTarget(self, action: #selector(authenticate), for: .touchUpInside)
+    settingsView.rateReviewButton.addTarget(self, action: #selector(rateReview), for: .touchUpInside)
+
+    RatingsFetcher.fetchDescription { description in
+      if description != RatingsFetcher.errorMessage {
+        DispatchQueue.main.async {
+          settingsView.showRatingsUI(description: description)
+        }
+      }
+    }
 
     navigationItem.titleView = UILabel.titleLabel(title: "Settings")
     view = settingsView
@@ -165,5 +174,12 @@ class SettingsVC: UIViewController {
         }
       }
     }
+  }
+
+  @objc func rateReview() {
+    guard let url = URL(string: "https://itunes.apple.com/us/app/immigration/id\(RatingsFetcher.iTunesID)?action=write-review") else {
+      return
+    }
+    UIApplication.shared.open(url)
   }
 }

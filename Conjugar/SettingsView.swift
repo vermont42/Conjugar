@@ -11,8 +11,8 @@ import UIKit
 class SettingsView: UIView {
   let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
-    scrollView.enableAutoLayout()
     scrollView.isUserInteractionEnabled = true
+    scrollView.enableAutoLayout()
     return scrollView
   }()
 
@@ -21,7 +21,6 @@ class SettingsView: UIView {
     label.text = "Region"
     label.font = Fonts.label
     label.textColor = Colors.yellow
-    label.enableAutoLayout()
     return label
   }()
 
@@ -29,7 +28,6 @@ class SettingsView: UIView {
     let control = UISegmentedControl(items: ["Spain", "Latin America"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
-    control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
   }()
@@ -41,7 +39,6 @@ class SettingsView: UIView {
     label.lineBreakMode = .byWordWrapping
     label.font = Fonts.smallBody
     label.textColor = Colors.yellow
-    label.enableAutoLayout()
     return label
   }()
 
@@ -50,7 +47,6 @@ class SettingsView: UIView {
     label.text = "Difficulty"
     label.font = Fonts.label
     label.textColor = Colors.yellow
-    label.enableAutoLayout()
     return label
   }()
 
@@ -58,7 +54,6 @@ class SettingsView: UIView {
     let control = UISegmentedControl(items: ["Easy", "Moderate", "Difficult"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
-    control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
   }()
@@ -70,7 +65,6 @@ class SettingsView: UIView {
     label.lineBreakMode = .byWordWrapping
     label.font = Fonts.smallBody
     label.textColor = Colors.yellow
-    label.enableAutoLayout()
     return label
   }()
 
@@ -79,7 +73,6 @@ class SettingsView: UIView {
     label.text = "Browse Tú and/or Vos"
     label.font = Fonts.label
     label.textColor = Colors.yellow
-    label.enableAutoLayout()
     return label
   }()
 
@@ -87,7 +80,6 @@ class SettingsView: UIView {
     let control = UISegmentedControl(items: ["Tú", "Vos", "Both"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
-    control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
   }()
@@ -99,7 +91,6 @@ class SettingsView: UIView {
     label.lineBreakMode = .byWordWrapping
     label.font = Fonts.smallBody
     label.textColor = Colors.yellow
-    label.enableAutoLayout()
     return label
   }()
 
@@ -108,7 +99,6 @@ class SettingsView: UIView {
     label.text = "Quiz Tú or Vos"
     label.font = Fonts.label
     label.textColor = Colors.yellow
-    label.enableAutoLayout()
     return label
   }()
 
@@ -116,7 +106,6 @@ class SettingsView: UIView {
     let control = UISegmentedControl(items: ["Tú", "Vos"])
     control.selectedSegmentIndex = 0
     control.backgroundColor = Colors.black
-    control.enableAutoLayout()
     control.tintColor = Colors.red
     return control
   }()
@@ -128,7 +117,6 @@ class SettingsView: UIView {
     label.lineBreakMode = .byWordWrapping
     label.font = Fonts.smallBody
     label.textColor = Colors.yellow
-    label.enableAutoLayout()
     return label
   }()
 
@@ -137,7 +125,6 @@ class SettingsView: UIView {
     label.text = "Game Center"
     label.font = Fonts.label
     label.textColor = Colors.yellow
-    label.enableAutoLayout()
     return label
   }()
 
@@ -146,7 +133,6 @@ class SettingsView: UIView {
     button.setTitle("Enable", for: .normal)
     button.titleLabel?.font = Fonts.button
     button.setTitleColor(Colors.red, for: .normal)
-    button.enableAutoLayout()
     return button
   }()
 
@@ -157,7 +143,35 @@ class SettingsView: UIView {
     label.lineBreakMode = .byWordWrapping
     label.font = Fonts.smallBody
     label.textColor = Colors.yellow
-    label.enableAutoLayout()
+    return label
+  }()
+
+  let rateReviewLabel: UILabel = {
+    let label = UILabel()
+    label.text = "Ratings and Reviews"
+    label.font = Fonts.label
+    label.textColor = Colors.yellow
+    label.isHidden = true
+    return label
+  }()
+
+  let rateReviewButton: UIButton = {
+    let button = UIButton()
+    button.setTitle("Rate or Review", for: .normal)
+    button.titleLabel?.font = Fonts.button
+    button.setTitleColor(Colors.red, for: .normal)
+    button.isHidden = true
+    return button
+  }()
+
+  let rateReviewDescription: UILabel = {
+    let label = UILabel()
+    label.text = "This version of Conjugar has 42 ratings. Tap Rate or Review to add your rating or review."
+    label.numberOfLines = 0
+    label.lineBreakMode = .byWordWrapping
+    label.font = Fonts.smallBody
+    label.textColor = Colors.yellow
+    label.isHidden = true
     return label
   }()
 
@@ -168,7 +182,8 @@ class SettingsView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     addSubview(scrollView)
-    [regionLabel, difficultyLabel, gameCenterLabel, browseVosLabel, quizVosLabel, regionDescription, difficultyDescription, gameCenterDescription, browseVosDescription, quizVosDescription, regionControl, difficultyControl, browseVosControl, quizVosControl, gameCenterButton].forEach {
+    [regionLabel, difficultyLabel, gameCenterLabel, rateReviewLabel, browseVosLabel, quizVosLabel, regionDescription, difficultyDescription, gameCenterDescription, rateReviewDescription, browseVosDescription, quizVosDescription, regionControl, difficultyControl, browseVosControl, quizVosControl, gameCenterButton, rateReviewButton].forEach {
+      $0.enableAutoLayout()
       scrollView.addSubview($0)
     }
 
@@ -230,6 +245,23 @@ class SettingsView: UIView {
     gameCenterDescription.topAnchor.constraint(equalTo: gameCenterButton.bottomAnchor).activate()
     gameCenterDescription.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: Layout.defaultSpacing).activate()
     gameCenterDescription.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
-    gameCenterDescription.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: Layout.defaultSpacing * -1.0).activate()
+
+    rateReviewLabel.topAnchor.constraint(equalTo: gameCenterDescription.bottomAnchor, constant: Layout.tripleDefaultSpacing).activate()
+    rateReviewLabel.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
+
+    rateReviewButton.topAnchor.constraint(equalTo: rateReviewLabel.bottomAnchor).activate()
+    rateReviewButton.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
+
+    rateReviewDescription.topAnchor.constraint(equalTo: rateReviewButton.bottomAnchor).activate()
+    rateReviewDescription.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: Layout.defaultSpacing).activate()
+    rateReviewDescription.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
+    rateReviewDescription.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: Layout.defaultSpacing * -1.0).activate()
+  }
+
+  func showRatingsUI(description: String) {
+    rateReviewDescription.text = description
+    [rateReviewLabel, rateReviewButton, rateReviewDescription].forEach {
+      $0.isHidden = false
+    }
   }
 }

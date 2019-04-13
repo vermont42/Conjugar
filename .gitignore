@@ -1,4 +1,9 @@
 # Analytics
+AWSPinpoint.framework/
+AWSCore.framework/
 amplify/
 awsconfiguration.json
 .amplifyrc
+.DS_Store
+Conjugar.xcodeproj/project.xcworkspace/xcuserdata/
+Conjugar.xcodeproj/xcuserdata/
