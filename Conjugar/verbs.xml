@@ -54,7 +54,9 @@
   <verb in="admitir" vt="ri" tn="admit, accept" pe="subir" tr="sub" st="admit" />
   <verb in="adquirir" vt="ir" tn="acquire, purchase" pe="subir" tr="sub" st="adquir" fspr="adquiEro" sspr="adquiEres" tspr="adquiEre" tppr="adquiEren" fspb="adquiEra" sspb="adquiEras" tspb="adquiEra" tppb="adquiEran" />
   <verb in="aducir" vt="ir" tn="adduce" pe="conducir" tr="con" st="a" />
+  <verb in="amanecer" vt="ir" tn="dawn" pe="conocer" tr="cono" st="amane" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" />
   <verb in="andar" vt="ir" tn="walk" pe="hablar" tr="habl" st="and" fspt="andUVE" sspt="andUViste" tspt="andUVO" fppt="andUVImos" sppt="andUVIsteis" tppt="andUVIEron" />
+  <verb in="anochecer" vt="ir" tn="get dark" pe="conocer" tr="cono" st="anoche" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" />
   <verb in="aprender" vt="re" tn="learn" pe="comer" tr="com" st="aprend" />
   <verb in="argüir" vt="ir" tn="argue" pe="subir" tr="sub" st="argü" ge="argUYendo" fspr="argUYo" sspr="argUYes" tspr="argUYe" tppr="argUYen" tspt="argUYó" tppt="argUYeron" fspb="argUYa" sspb="argUYas" tspb="argUYa" fppb="argUYamos" sppb="argUYáis" tppb="argUYan" ssio="argUYe" />
   <verb in="asistir" vt="ri" tn="attend" pe="subir" tr="sub" st="asist" />
@@ -68,6 +70,7 @@
   <verb in="caer" vt="ir" tn="fall" ge="caYendo" po="caÍdo" pe="comer" tr="com" st="ca" fspr="caIGo" sspt="caÍste" tspt="caYó" fppt="caÍmos" sppt="caÍsteis" tppt="caYeron" fspb="caIGa" sspb="caIGas" tspb="caIGa" fppb="caIGamos" sppb="caIGáis" tppb="caIGan" />
   <verb in="caminar" vt="ra" tn="walk" pe="hablar" tr="habl" st="camin" />
   <verb in="cantar" vt="ra" tn="sing" pe="hablar" tr="habl" st="cant" />
+  <verb in="cazar" vt="ir" tn="hunt" pe="hablar" tr="habl" st="caz" fspt="caCé" fspb="caCe" sspb="caCes" tspb="caCe" fppb="caCemos" sppb="caCéis" tppb="caCen" />
   <verb in="ceder" vt="re" tn="transfer, cede" pe="comer" tr="com" st="ced" />
   <verb in="charlar" vt="ra" tn="chat" pe="hablar" tr="habl" st="charl" />
   <verb in="clonar" vt="ra" tn="clone" pe="hablar" tr="habl" st="clon" />
@@ -137,11 +140,13 @@
   <verb in="gastar" vt="ra" tn="spend" pe="hablar" tr="habl" st="gast" />
   <verb in="glosar" vt="ra" tn="gloss" pe="hablar" tr="habl" st="glos" />
   <verb in="golpear" vt="ra" tn="hit, punch" pe="hablar" tr="habl" st="golpe" />
+  <verb in="granizar" vt="ir" tn="hail" pe="cazar" tr="ca" st="grani" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" />
   <verb in="grapar" vt="ra" tn="staple" pe="hablar" tr="habl" st="grap" />
   <verb in="gustar" vt="ra" tn="be pleasing to" pe="hablar" tr="habl" st="gust" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" />
   <verb in="haber" vt="ir" tn="have (aux.)" pe="comer" tr="com" st="hab" rf="habR" fspr="hE" sspr="haS" svpr="haS" tspr="hA" fppr="hEmos" tppr="haN" fspt="hUBE" sspt="hUbiste" tspt="hUBO" fppt="hUbimos" sppt="hUbisteis" tppt="hUbieron" fspb="haYa" sspb="haYas" tspb="haYa" fppb="haYamos" sppb="haYáis" tppb="haYan" ssio="hE" svio="hE" />
 	<verb in="hablar" vt="ra" tn="speak" ge="hablando" po="hablado" rf="hablar" fspr="hablo" sspr="hablas" svpr="hablás" tspr="habla" fppr="hablamos" sppr="habláis" tppr="hablan" fspt="hablé" sspt="hablaste" tspt="habló" fppt="hablamos" sppt="hablastéis" tppt="hablaron" fsii="hablaba" ssii="hablabas" tsii="hablaba" fpii="hablábamos" spii="hablabais" tpii="hablaban" fspb="hable" sspb="hables" tspb="hable" fppb="hablemos" sppb="habléis" tppb="hablen" ssio="habla" svio="hablá" />
   <verb in="hacer" vt="ir" tn="do, make" pe="comer" tr="com" st="hac" rf="haR" po="hECHo" fspr="haGo" fspt="hICE" sspt="hIciste" tspt="hIZO" fppt="hIcimos" sppt="hIcisteis" tppt="hIcieron" fspb="haGa" sspb="haGas" tspb="haGa" fppb="haGamos" sppb="haGáis" tppb="haGan" ssio="haZ" />
+  <verb in="helar" vt="ra" tn="freeze, get cold" pe="hablar" tr="habl" st="hel" />
   <verb in="hibernar" vt="ra" tn="hibernate" pe="hablar" tr="habl" st="hibern" />
   <verb in="huir" vt="ir" tn="flee" pe="construir" tr="constr" st="h" />
   <verb in="inducir" vt="ir" tn="induce" pe="conducir" tr="con" st="in" />
@@ -167,6 +172,7 @@
   <verb in="mover" vt="ir" tn="move" pe="comer" tr="com" st="mov" fspr="mUEvo" sspr="mUEves" tspr="mUEve" tppr="mUEven" fspb="mUEva" sspb="mUEvas" tspb="mUEva" tppb="mUEvan" ssio="mUEve" />
   <verb in="nadar" vt="ra" tn="swim" pe="hablar" tr="habl" st="nad" />
   <verb in="necesitar" vt="ra" tn="need" pe="hablar" tr="habl" st="necesit" />
+  <verb in="nevar" vt="ir" tn="snow" pe="hablar" tr="habl" st="nev" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df"  tspr="nIeva" tspb="nIeve" ssio="nIeva" />
   <verb in="nublar" vt="ra" tn="cloud" pe="hablar" tr="habl" st="nubl" />
   <verb in="nutrir" vt="ri" tn="nourish" pe="subir" tr="sub" st="nutr" />
   <verb in="obtener" vt="ir" tn="obtain, get" pe="tener" tr="" st="ob" ssio="obtÉn" />
@@ -199,6 +205,7 @@
   <verb in="reconocer" vt="ir" tn="recognize" pe="conocer" tr="" st="re" />
   <verb in="rehacer" vt="ir" tn="redo" pe="hacer" tr="" st="re" />
   <verb in="reír" vt="ir" tn="laugh" pe="subir" tr="sub" st="re" ge="rIendo" fspr="rÍo" sspr="rÍes" tspr="rÍe" fppr="reÍmos" tppr="rÍen" sspt="reÍste" tspt="rIó" fppt="reÍmos" sppt="reÍsteis" tppt="rIeron" fspb="rÍa" sspb="rÍas" tspb="rÍa" fppb="rÍamos" sppb="rIAis" tppb="rÍan" ssio="rÍe" />
+  <verb in="relampaguear" vt="ra" tn="flash lightning" pe="hablar" tr="habl" st="relampague" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" />
   <verb in="reponer" vt="ir" tn="put back" pe="poner" tr="" st="re" />
   <verb in="reprender" vt="re" tn="reprimand" pe="comer" tr="com" st="reprend" />
   <verb in="reproducir" vt="ir" tn="reproduce" pe="conducir" tr="con" st="repro" />
@@ -228,6 +235,7 @@
   <verb in="traducir" vt="ir" tn="translate" pe="conducir" tr="con" st="tra" />
   <verb in="traer" vt="ir" tn="bring" pe="comer" tr="com" st="tra" ge="traYendo" fspr="traIGo" fspt="traJE" sspt="traJiste" tspt="traJO" fppt="traJimos" sppt="traJisteis" tppt="traJeron" fspb="traIGa" sspb="traIGas" tspb="traIGa" fppb="traIGamos" sppb="traIGáis" tppb="traIGan" />
   <verb in="trinchar" vt="ra" tn="carve" pe="hablar" tr="habl" st="trinch" />
+  <verb in="tronar" vt="ir" tn="thunder" pe="hablar" tr="habl" st="tron" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" tspr="trUEna" tspb="trUEne" ssio="trUEna" />
   <verb in="unir" vt="ri" tn="join" pe="subir" tr="sub" st="un" />
   <verb in="valer" vt="ir" tn="be worth, cost" pe="comer" tr="com" st="val" rf="valDr" fspr="valGo" fspb="valGa" sspb="valGas" tspb="valGa" fppb="valGamos" sppb="valGáis" tppb="valGa" />
   <verb in="vender" vt="re" tn="sell" pe="comer" tr="com" st="vend" />

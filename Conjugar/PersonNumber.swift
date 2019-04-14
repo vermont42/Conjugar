@@ -6,7 +6,7 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-enum PersonNumber: String {
+enum PersonNumber: String, CaseIterable {
   case firstSingular = "fs"
   case firstPlural = "fp"
   case secondSingularTu = "ss"

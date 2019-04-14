@@ -7,7 +7,7 @@
 //
 
 struct VerbFamilies {
-  static let regularArVerbs = ["hablar", "caminar", "andar", "trabajar", "estudiar", "escuchar", "visitar", "viajar", "enseñar", "llevar", "llegar", "bailar", "nadar", "cocinar", "charlar", "platicar", "llorar", "esperar", "buscar", "mirar", "pintar", "gastar", "ganar", "comprar", "tocar", "tomar", "sacar", "ayudar", "cantar", "desear", "necesitar", "cortar", "contestar", "dibujar", "clonar", "datar", "distar", "empinar", "encalar", "esposar", "formar", "glosar", "golpear", "grapar", "hibernar", "maltear", "manar", "nublar", "penar", "ponderar", "rasar", "seriar", "trinchar", "procesar", "declarar"]
+  static let regularArVerbs = ["hablar", "caminar", "andar", "trabajar", "estudiar", "escuchar", "visitar", "viajar", "enseñar", "llevar", "llegar", "bailar", "nadar", "cocinar", "charlar", "platicar", "llorar", "esperar", "buscar", "mirar", "pintar", "gastar", "ganar", "comprar", "tocar", "tomar", "sacar", "ayudar", "cantar", "desear", "necesitar", "cortar", "contestar", "dibujar", "clonar", "datar", "distar", "empinar", "encalar", "esposar", "formar", "glosar", "golpear", "grapar", "hibernar", "maltear", "manar", "nublar", "penar", "ponderar", "rasar", "seriar", "trinchar", "procesar", "declarar", "helar"]
 
   static let regularIrVerbs = ["vivir", "existir", "ocurrir", "recibir", "permitir", "partir", "cumplir", "decidir", "subir", "sufrir", "compartir", "consistir", "insistir", "asistir", "discutir", "unir", "coincidir", "distinguir", "definir", "admitir", "acudir", "nutrir", "evadir"]
 
@@ -23,7 +23,7 @@ struct VerbFamilies {
 
   static let irregularRaizFuturaVerbs = ["haber", "saber", "caber", "poder", "querer", "poner", "tener", "venir", "salir", "valer", "decir", "hacer"]
 
-  static let irregularPresenteDeSubjuntivoVerbs = ["ser", "ir", "haber", "saber", "pensar", "perder", "sentir", "dormir", "pedir", "crecer", "conocer", "lucir", "conducir", "huir", "construir", "estar", "dar", "caber", "decir", "hacer", "caer", "oír", "traer", "poner", "salir", "tener", "valer", "venir", "ver", "jugar", "argüir", "elegir", "colegir"]
+  static let irregularPresenteDeSubjuntivoVerbs = ["ser", "ir", "haber", "saber", "pensar", "perder", "sentir", "dormir", "pedir", "crecer", "conocer", "lucir", "conducir", "huir", "construir", "estar", "dar", "caber", "decir", "hacer", "caer", "oír", "traer", "poner", "salir", "tener", "valer", "venir", "ver", "jugar", "argüir", "elegir", "colegir", "manecer", "anochecer", "cazar", "granizar"]
 
   static let irregularTuImperativoVerbs = ["ser", "ir", "haber", "decir", "hacer", "poner", "salir", "tener", "venir", "componer", "obtener", "medir", "pedir", "oír", "elegir", "colegir"]
 
@@ -32,4 +32,6 @@ struct VerbFamilies {
   static let irregularParticipioVerbs = ["abrir", "cubrir", "decir", "escribir", "hacer", "morir", "poner", "resolver", "romper", "ver", "volver", "pudrir"]
 
   static let irregularGerundioVerbs = ["poder", "sentir", "medir", "dormir", "caer", "leer", "traer", "construir", "huir", "oír", "ir", "tañer", "bullir", "argüir", "elegir", "colegir"]
+    
+  static let thirdPersonSingularOnlyVerbs = ["amanecer", "anochecer", "llover", "granizar", "nevar", "relampaguear", "tronar"]
 }

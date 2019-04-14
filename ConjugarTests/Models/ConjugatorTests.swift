@@ -10,7 +10,7 @@ import XCTest
 @testable import Conjugar
 
 class ConjugatorTests: XCTestCase {
-  func testConjugate() {
+  func testBadInput() {
     var result = Conjugator.shared.conjugate(infinitive: "m", tense: .futuroDeIndicativo, personNumber: .firstSingular)
     switch result {
     case .failure:
@@ -26,13 +26,24 @@ class ConjugatorTests: XCTestCase {
     default:
       XCTFail("Words not ending in ar, er, or ir cannot be conjugated.")
     }
+  }
 
-    result = Conjugator.shared.conjugate(infinitive: "maltear", tense: .presenteDeIndicativo, personNumber: .secondSingularTu)
-    switch result {
-    case let .success(value):
-      XCTAssertEqual(value, "malteas")
-    default:
-      XCTFail("Conjugation failed.")
+  func testThirdPersonSingularOnlyVerb() {
+    VerbFamilies.thirdPersonSingularOnlyVerbs.forEach { verb in
+      PersonNumber.allCases.forEach { personNumber in
+        if ![.none, .thirdSingular].contains(personNumber) {
+          let tense = Tense.conjugatedTenses[Int.random(in: 0 ..< Tense.conjugatedTenses.count)]
+          let result = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: personNumber)
+          switch result {
+          case .success(let value):
+            if value != Conjugator.defective {
+              XCTFail("\(verb) should be defective for \(personNumber.pronoun), tense \(tense.displayName).")
+            }
+          default:
+            XCTFail("\(verb) cannot be conjugated for \(personNumber.pronoun), tense \(tense.displayName).")
+          }
+        }
+      }
     }
   }
 }
