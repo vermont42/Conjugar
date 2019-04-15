@@ -19,7 +19,7 @@ class ConjugatorTests: XCTestCase {
       XCTFail("One-letter words cannot be conjugated.")
     }
 
-    result = Conjugator.shared.conjugate(infinitive: "tango", tense: .preterito, personNumber: .thirdPlural)
+    result = Conjugator.shared.conjugate(infinitive: "tango 💃🏻", tense: .preterito, personNumber: .thirdPlural)
     switch result {
     case .failure:
       break

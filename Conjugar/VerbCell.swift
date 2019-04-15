@@ -15,6 +15,8 @@ class VerbCell: UITableViewCell {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.largeCell
+    label.textAlignment = .center
+    label.adjustsFontSizeToFitWidth = true
     label.enableAutoLayout()
     return label
   }()
@@ -27,7 +29,8 @@ class VerbCell: UITableViewCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     backgroundColor = Colors.black
     addSubview(verb)
-    verb.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
+    verb.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.defaultSpacing).activate()
+    verb.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
     verb.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
   }
 

@@ -206,5 +206,5 @@ enum Tense: String, CaseIterable {
     }
   }
 
-  static let conjugatedTenses: [Tense] = [.presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo, .imperativoPositivo, .imperativoNegativo, .perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo]  
+  static let conjugatedTenses: [Tense] = [.presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo, .imperativoPositivo, .imperativoNegativo, .perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo]
 }

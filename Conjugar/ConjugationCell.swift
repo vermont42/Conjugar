@@ -15,6 +15,8 @@ class ConjugationCell: UITableViewCell {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.smallCell
+    label.textAlignment = .center
+    label.adjustsFontSizeToFitWidth = true
     label.enableAutoLayout()
     return label
   }()
@@ -29,7 +31,8 @@ class ConjugationCell: UITableViewCell {
     selectionStyle = .none
     backgroundColor = Colors.black
     addSubview(conjugation)
-    conjugation.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
+    conjugation.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.defaultSpacing).activate()
+    conjugation.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
     conjugation.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
   }
 
