@@ -15,8 +15,6 @@ class VerbView: UIView {
   let gerundio = UILabel()
   let raizFutura = UILabel()
   let defectivo = UILabel()
-  private let participioLabel = UILabel()
-  private let gerundioLabel = UILabel()
   private let raizFuturaLabel = UILabel()
 
   let table: UITableView = {
@@ -32,20 +30,18 @@ class VerbView: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    [translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].forEach {
+    [translation, parentOrType, participio, gerundio, raizFuturaLabel, raizFutura, defectivo].forEach {
       $0.font = Fonts.label
       $0.textColor = Colors.yellow
       $0.enableAutoLayout()
     }
-    [(participioLabel, "PP:"), (gerundioLabel, "Ger:"), (raizFuturaLabel, "RF:")].forEach {
-      $0.0.text = $0.1
-    }
+    raizFuturaLabel.text = "RF:"
 
     [translation, participio, gerundio, raizFutura, defectivo].forEach {
       $0.isUserInteractionEnabled = true
     }
 
-    [table, translation, parentOrType, participioLabel, participio, gerundioLabel, gerundio, raizFuturaLabel, raizFutura, defectivo].forEach {
+    [table, translation, parentOrType, participio, gerundio, raizFuturaLabel, raizFutura, defectivo].forEach {
       addSubview($0)
     }
 
@@ -55,19 +51,13 @@ class VerbView: UIView {
     parentOrType.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
     parentOrType.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
 
-    participioLabel.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    participioLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-
     participio.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    participio.leadingAnchor.constraint(equalTo: participioLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
+    participio.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
 
     gerundio.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: Layout.defaultSpacing).activate()
     gerundio.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
 
-    gerundioLabel.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    gerundioLabel.trailingAnchor.constraint(equalTo: gerundio.leadingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
-
-    raizFuturaLabel.topAnchor.constraint(equalTo: participioLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
+    raizFuturaLabel.topAnchor.constraint(equalTo: participio.bottomAnchor, constant: Layout.defaultSpacing).activate()
     raizFuturaLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
 
     raizFutura.topAnchor.constraint(equalTo: participio.bottomAnchor, constant: Layout.defaultSpacing).activate()
