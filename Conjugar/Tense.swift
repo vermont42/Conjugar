@@ -13,7 +13,7 @@ enum Tense: String, CaseIterable {
   case translation = "tn"
   case gerundio = "ge"
   case participio = "po"
-  case raizFutura = "rf"
+  case raízFutura = "rf"
 
   case imperativoPositivo = "io"
   case imperativoNegativo = "ni"
@@ -44,7 +44,7 @@ enum Tense: String, CaseIterable {
       extraConjugation = 1
     }
     switch self {
-    case .infinitivo, .translation, .gerundio, .participio, .raizFutura:
+    case .infinitivo, .translation, .gerundio, .participio, .raízFutura:
       return 0
     case .imperativoPositivo, .imperativoNegativo:
       return 5 + extraConjugation
@@ -60,7 +60,7 @@ enum Tense: String, CaseIterable {
   var hasYoForm: Bool {
     switch self {
     case .imperativoPositivo, .imperativoNegativo,
-         .infinitivo, .translation, .gerundio, .participio, .raizFutura:
+         .infinitivo, .translation, .gerundio, .participio, .raízFutura:
       return false
     case .presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
          .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo,
@@ -81,7 +81,7 @@ enum Tense: String, CaseIterable {
       return "gerundio"
     case .participio:
       return "participio"
-    case .raizFutura:
+    case .raízFutura:
       return "raíz futura"
     case .imperativoPositivo:
       return "imperativo positivo"
@@ -136,7 +136,7 @@ enum Tense: String, CaseIterable {
       return "Gerundio"
     case .participio:
       return "Participio"
-    case .raizFutura:
+    case .raízFutura:
       return "Raíz Futura"
     case .imperativoPositivo:
       return "Imperativo Positivo"

@@ -102,10 +102,10 @@ class Conjugator {
     if !["ar", "er", "ir", "ír"].contains(ending) {
       return .failure(.invalidEnding(ending))
     }
-    if (tense == .gerundio || tense == .participio || tense == .raizFutura || tense == .translation) && personNumber != .none {
+    if (tense == .gerundio || tense == .participio || tense == .raízFutura || tense == .translation) && personNumber != .none {
       return .failure(.noSuchConjugation(personNumber))
     }
-    if (tense != .gerundio && tense != .participio && tense != .raizFutura && tense != .translation) && personNumber == .none {
+    if (tense != .gerundio && tense != .participio && tense != .raízFutura && tense != .translation) && personNumber == .none {
       return .failure(.personNumberAbsent(tense))
     }
 
@@ -139,29 +139,29 @@ class Conjugator {
       return .success(Conjugator.defective)
     }
     let conjugationKey: String
-    if tense == .gerundio || tense == .participio || tense == .raizFutura || tense == .translation {
+    if tense == .gerundio || tense == .participio || tense == .raízFutura || tense == .translation {
       conjugationKey = tense.rawValue
     } else {
       conjugationKey = personNumber.rawValue + tense.rawValue
     }
-    if tense == .raizFutura && verb[conjugationKey] == nil {
+    if tense == .raízFutura && verb[conjugationKey] == nil {
       guard let parent = verb[Conjugator.parent] else {
         fatalError("verb[\(Conjugator.parent) was nil.")
       }
 
-      guard case .success(let parentStem) = conjugateRecursively(infinitive: parent, tense: .raizFutura, personNumber: .none) else {
+      guard case .success(let parentStem) = conjugateRecursively(infinitive: parent, tense: .raízFutura, personNumber: .none) else {
         fatalError("parentStem was nil.")
       }
       let trim = verb[Conjugator.trim] ?? ""
       let stem = verb[Conjugator.stem] ?? ""
-      var raizFutura: String
+      var raízFutura: String
       if trim == "" {
-        raizFutura = stem + parentStem
+        raízFutura = stem + parentStem
       } else {
-        raizFutura = parentStem.replaceFirstOccurence(of: trim, with: stem)
+        raízFutura = parentStem.replaceFirstOccurence(of: trim, with: stem)
       }
-      verb[conjugationKey] = raizFutura
-      return .success(raizFutura)
+      verb[conjugationKey] = raízFutura
+      return .success(raízFutura)
     }
     if let conjugation = verb[conjugationKey] {
       return .success(conjugation)
@@ -174,9 +174,9 @@ class Conjugator {
       }
       let trim: String
       let stem: String
-      if (tense == .futuroDeIndicativo || tense == .condicional) && verb[Tense.raizFutura.rawValue] != nil {
+      if (tense == .futuroDeIndicativo || tense == .condicional) && verb[Tense.raízFutura.rawValue] != nil {
         trim = parent
-        stem = verb[Tense.raizFutura.rawValue] ?? ""
+        stem = verb[Tense.raízFutura.rawValue] ?? ""
       } else {
         trim = verb[Conjugator.trim] ?? ""
         stem = verb[Conjugator.stem] ?? ""
@@ -191,12 +191,12 @@ class Conjugator {
       verbs[infinitive] = verb
       return .success(conjugation)
     } else if [Tense.futuroDeIndicativo, Tense.condicional].contains(tense) {
-      var futureStem = verb[Tense.raizFutura.rawValue]
+      var futureStem = verb[Tense.raízFutura.rawValue]
       if futureStem == nil {
         guard let parent = verb[Conjugator.parent] else {
           fatalError("verb[\(Conjugator.parent) was nil.")
         }
-        guard case .success(let parentStem) = conjugateRecursively(infinitive: parent, tense: .raizFutura, personNumber: .none) else {
+        guard case .success(let parentStem) = conjugateRecursively(infinitive: parent, tense: .raízFutura, personNumber: .none) else {
           fatalError("parentStem was nil.")
         }
         let trim = verb[Conjugator.trim] ?? ""

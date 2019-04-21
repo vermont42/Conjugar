@@ -17,6 +17,6 @@ class VerbViewTests: XCTestCase {
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     let verbView = vvc.verbView
     XCTAssertNotNil(verbView)
-    XCTAssertEqual(verbView.subviews.count, 10)
+    XCTAssertEqual(verbView.subviews.count, 8)
   }
 }

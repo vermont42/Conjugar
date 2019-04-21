@@ -57,4 +57,6 @@ enum PersonNumber: String, CaseIterable {
       return "none"
     }
   }
+
+  static let actualPersonNumbers: [PersonNumber] = [.firstSingular, .secondSingularTu, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
 }

@@ -50,8 +50,8 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let po = attributeDict[Tense.participio.rawValue] {
         currentConjugations[Tense.participio.rawValue] = po
       }
-      if let rf = attributeDict[Tense.raizFutura.rawValue] {
-        currentConjugations[Tense.raizFutura.rawValue] = rf
+      if let rf = attributeDict[Tense.raízFutura.rawValue] {
+        currentConjugations[Tense.raízFutura.rawValue] = rf
       }
       if let pe = attributeDict[Conjugator.parent] {
         currentConjugations[Conjugator.parent] = pe

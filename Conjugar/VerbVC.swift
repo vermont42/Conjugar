@@ -31,7 +31,7 @@ class VerbVC: UIViewController {
   override func loadView() {
     let verbView = VerbView(frame: UIScreen.main.bounds)
     verbView.participio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
-    verbView.raizFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
+    verbView.raízFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
     verbView.gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
     verbView.translation.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
     verbView.defectivo.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
@@ -60,10 +60,10 @@ class VerbVC: UIViewController {
     default:
       fatalError()
     }
-    let raizFuturaResult = Conjugator.shared.conjugate(infinitive: verb, tense: .raizFutura, personNumber: .none)
-    switch raizFuturaResult {
+    let raízFuturaResult = Conjugator.shared.conjugate(infinitive: verb, tense: .raízFutura, personNumber: .none)
+    switch raízFuturaResult {
     case let .success(value):
-      verbView.raizFutura.attributedText = value.conjugatedString + NSAttributedString(string: "-")
+      verbView.raízFutura.attributedText = value.conjugatedString + NSAttributedString(string: "-")
     default:
       fatalError()
     }
