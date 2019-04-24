@@ -17,7 +17,7 @@ class InfoVC: UIViewController, UITextViewDelegate {
     if let castedView = view as? InfoView {
       return castedView
     } else {
-      fatalError(fatalCastMessage(viewController: InfoVC.self, view: InfoView.self))
+      fatalError(fatalCastMessage(view: InfoView.self))
     }
   }
 

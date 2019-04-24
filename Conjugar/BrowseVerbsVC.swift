@@ -33,7 +33,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     if let castedView = view as? BrowseVerbsView {
       return castedView
     } else {
-      fatalError(fatalCastMessage(viewController: BrowseVerbsVC.self, view: BrowseVerbsView.self))
+      fatalError(fatalCastMessage(view: BrowseVerbsView.self))
     }
   }
 

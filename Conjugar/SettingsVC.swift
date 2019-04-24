@@ -17,7 +17,7 @@ class SettingsVC: UIViewController {
     if let castedView = view as? SettingsView {
       return castedView
     } else {
-      fatalError(fatalCastMessage(viewController: SettingsVC.self, view: SettingsView.self))
+      fatalError(fatalCastMessage(view: SettingsView.self))
     }
   }
 

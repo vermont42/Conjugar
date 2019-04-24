@@ -16,7 +16,7 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     if let castedView = view as? ResultsView {
       return castedView
     } else {
-      fatalError(fatalCastMessage(viewController: ResultsVC.self, view: ResultsView.self))
+      fatalError(fatalCastMessage(view: ResultsView.self))
     }
   }
 

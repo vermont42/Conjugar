@@ -33,7 +33,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     if let castedView = view as? BrowseInfoView {
       return castedView
     } else {
-      fatalError(fatalCastMessage(viewController: BrowseInfoVC.self, view: BrowseInfoView.self))
+      fatalError(fatalCastMessage(view: BrowseInfoView.self))
     }
   }
 

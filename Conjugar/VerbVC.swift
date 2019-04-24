@@ -18,7 +18,7 @@ class VerbVC: UIViewController {
     if let castedView = view as? VerbView {
       return castedView
     } else {
-      fatalError(fatalCastMessage(viewController: VerbVC.self, view: VerbView.self))
+      fatalError(fatalCastMessage(view: VerbView.self))
     }
   }
 

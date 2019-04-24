@@ -18,7 +18,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     if let castedView = view as? QuizView {
       return castedView
     } else {
-      fatalError(fatalCastMessage(viewController: QuizVC.self, view: QuizView.self))
+      fatalError(fatalCastMessage(view: QuizView.self))
     }
   }
 

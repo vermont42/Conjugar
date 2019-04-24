@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIViewController {
-  func fatalCastMessage(viewController: Any, view: Any) -> String {
-    return "Could not cast \(viewController).view to \(view)."
+  func fatalCastMessage(view: Any) -> String {
+    return "Could not cast \(self).view to \(view)."
   }
 }
