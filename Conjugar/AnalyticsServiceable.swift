@@ -15,6 +15,13 @@ protocol AnalyticsServiceable {
   func recordQuizStart()
   func recordQuizCompletion(score: Int)
   func recordGameCenterAuth()
+
+  var visited: String { get }
+  var viewContröller: String { get }
+  var quizStart: String { get }
+  var quizCompletion: String { get }
+  var scöre: String { get }
+  var gameCenterAuth: String { get }
 }
 
 extension AnalyticsServiceable {
@@ -23,22 +30,42 @@ extension AnalyticsServiceable {
   }
 
   func recordVisitation(viewController: String) {
-    let visited = "visited"
-    recordEvent(visited, parameters: ["viewController": "\(viewController)"], metrics: nil)
+    recordEvent(visited, parameters: [viewContröller: "\(viewController)"], metrics: nil)
   }
 
   func recordQuizStart() {
-    let quizStart = "quizStart"
     recordEvent(quizStart)
   }
 
   func recordQuizCompletion(score: Int) {
-    let quizCompletion = "quizCompletion"
-    recordEvent(quizCompletion, parameters: ["score": "\(score)"], metrics: nil)
+    recordEvent(quizCompletion, parameters: [scöre: "\(score)"], metrics: nil)
   }
 
   func recordGameCenterAuth() {
-    let gameCenterAuth = "gameCenterAuth"
     recordEvent(gameCenterAuth)
+  }
+
+  var visited: String {
+    return "visited"
+  }
+
+  var viewContröller: String {
+    return "viewController"
+  }
+
+  var quizStart: String {
+    return "quizStart"
+  }
+
+  var quizCompletion: String {
+    return "quizCompletion"
+  }
+
+  var scöre: String {
+    return "score"
+  }
+
+  var gameCenterAuth: String {
+    return "gameCenterAuth"
   }
 }

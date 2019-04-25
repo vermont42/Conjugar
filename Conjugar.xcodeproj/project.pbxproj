@@ -12,6 +12,7 @@
 		038E03152270A9FB005CFC96 /* TestGameCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */; };
 		038E03182270AC01005CFC96 /* DeviceUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03172270AC01005CFC96 /* DeviceUtilityTests.swift */; };
 		038E031A22711B76005CFC96 /* UIViewControllerExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E031922711B76005CFC96 /* UIViewControllerExtensionTests.swift */; };
+		038E031C2271E239005CFC96 /* AnalyticsServiceableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E031B2271E239005CFC96 /* AnalyticsServiceableTests.swift */; };
 		E10178021F3F753400F0BC97 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10178011F3F753400F0BC97 /* UIViewExtensions.swift */; };
 		E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */ = {isa = PBXBuildFile; fileRef = E107B08A1EB66CE6004C5E91 /* verbs.xml */; };
 		E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E107B0911EB66F28004C5E91 /* VerbParser.swift */; };
@@ -151,6 +152,7 @@
 		038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenterTests.swift; sourceTree = "<group>"; };
 		038E03172270AC01005CFC96 /* DeviceUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceUtilityTests.swift; sourceTree = "<group>"; };
 		038E031922711B76005CFC96 /* UIViewControllerExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensionTests.swift; sourceTree = "<group>"; };
+		038E031B2271E239005CFC96 /* AnalyticsServiceableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsServiceableTests.swift; sourceTree = "<group>"; };
 		E10178011F3F753400F0BC97 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		E107B08A1EB66CE6004C5E91 /* verbs.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = verbs.xml; sourceTree = "<group>"; };
 		E107B0911EB66F28004C5E91 /* VerbParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbParser.swift; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 			isa = PBXGroup;
 			children = (
 				038E03172270AC01005CFC96 /* DeviceUtilityTests.swift */,
+				038E031B2271E239005CFC96 /* AnalyticsServiceableTests.swift */,
 			);
 			path = Analytics;
 			sourceTree = "<group>";
@@ -836,6 +839,7 @@
 				E1EC70F22198A10B00872787 /* UIViewControllerExtension.swift in Sources */,
 				E14589F41F5B7BB000EEF141 /* BrowseInfoVCTests.swift in Sources */,
 				E14589F61F5B7E9D00EEF141 /* VerbVCTests.swift in Sources */,
+				038E031C2271E239005CFC96 /* AnalyticsServiceableTests.swift in Sources */,
 				E15D3BF61F533997003771BB /* MockNavigationC.swift in Sources */,
 				E198F9021F5D79F100BAF553 /* VerbViewTests.swift in Sources */,
 				038E03152270A9FB005CFC96 /* TestGameCenterTests.swift in Sources */,
