@@ -37,14 +37,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         settings.difficulty = .easy
       }
 
-      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: TestGameCenter(), shouldShuffle: false), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: TestGameCenter())
+      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: TestGameCenter(), shouldShuffle: false), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: TestGameCenter(), session: stubSession)
     } else {
       settings = Settings(getterSetter: UserDefaultsGetterSetter())
       #if targetEnvironment(simulator)
       let testGameCenter = TestGameCenter()
-      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: true), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter)
+      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: true), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter, session: stubSession)
       #else
-      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared)
+      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared, session: URLSession.shared)
       #endif
     }
 
@@ -54,6 +54,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window?.makeKeyAndVisible()
 
     return true
+  }
+
+  private var stubSession: URLSession {
+    URLProtocolStub.testURLs = [RatingsFetcher.iTunesURL: RatingsFetcher.stubData()]
+    let config = URLSessionConfiguration.ephemeral
+    config.protocolClasses = [URLProtocolStub.self]
+    return URLSession(configuration: config)
   }
 
   private func configureStatusBar() {

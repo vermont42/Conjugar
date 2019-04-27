@@ -11,15 +11,17 @@ import Foundation
 struct RatingsFetcher {
   static let iTunesID = "1236500467"
   static let errorMessage = "Fetching failed."
-
-  static func fetchDescription(completion: @escaping (String) -> ()) {
-    guard let itunesUrl = URL(string: "https://itunes.apple.com/lookup?id=\(iTunesID)") else {
-      return
+  static var iTunesURL: URL {
+    guard let url = URL(string: "https://itunes.apple.com/lookup?id=\(iTunesID)") else {
+      fatalError("iTunes URL could not be initialized.")
     }
+    return url
+  }
 
-    let request = URLRequest(url: itunesUrl)
+  static func fetchRatingsDescription(session: URLSession, completion: @escaping (String) -> ()) {
+    let request = URLRequest(url: RatingsFetcher.iTunesURL)
 
-    let task = URLSession.shared.dataTask(with: request) { (responseData, _, error) in
+    let task = session.dataTask(with: request) { (responseData, _, error) in
       if error != nil {
         completion(errorMessage)
         return
@@ -33,7 +35,6 @@ struct RatingsFetcher {
             completion(errorMessage)
             return
         }
-
         let description: String
         let addYours = "Add yours!"
         switch ratingsCount {
@@ -49,5 +50,9 @@ struct RatingsFetcher {
     }
 
     task.resume()
+  }
+
+  static func stubData(ratingsCount: Int = 42) -> Data {
+    return Data("{ \"resultCount\":1, \"results\": [ { \"userRatingCountForCurrentVersion\": \(ratingsCount) } ] }".utf8)
   }
 }

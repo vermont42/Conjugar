@@ -12,6 +12,7 @@ class SettingsVC: UIViewController {
   private var settings: Settings?
   private var analyticsService: AnalyticsServiceable?
   private var gameCenter: GameCenterable?
+  private var session: URLSession?
 
   var settingsView: SettingsView {
     if let castedView = view as? SettingsView {
@@ -21,11 +22,12 @@ class SettingsVC: UIViewController {
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsServiceable, gameCenter: GameCenterable) {
+  convenience init(settings: Settings, analyticsService: AnalyticsServiceable, gameCenter: GameCenterable, session: URLSession) {
     self.init()
     self.settings = settings
     self.analyticsService = analyticsService
     self.gameCenter = gameCenter
+    self.session = session
   }
 
   override func loadView() {
@@ -38,7 +40,10 @@ class SettingsVC: UIViewController {
     settingsView.gameCenterButton.addTarget(self, action: #selector(authenticate), for: .touchUpInside)
     settingsView.rateReviewButton.addTarget(self, action: #selector(rateReview), for: .touchUpInside)
 
-    RatingsFetcher.fetchDescription { description in
+    guard let session = session else {
+      return
+    }
+    RatingsFetcher.fetchRatingsDescription(session: session) { description in
       if description != RatingsFetcher.errorMessage {
         DispatchQueue.main.async {
           settingsView.showRatingsUI(description: description)
