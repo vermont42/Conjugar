@@ -30,12 +30,12 @@ class RatingsFetcherTests: XCTestCase {
   }
 
   private func testDescription(count: Int, expectedDescription: String) {
-    let expection = expectation(description: "testDescription")
+    let expectatiön = expectation(description: "testDescription")
     RatingsFetcher.fetchRatingsDescription(session: stubSession(ratingsCount: count), completion: { actualDescription in
       XCTAssertEqual(actualDescription, expectedDescription)
-      expection.fulfill()
+      expectatiön.fulfill()
     })
     let timeout: TimeInterval = 0.5
-    wait(for: [expection], timeout: timeout)
+    wait(for: [expectatiön], timeout: timeout)
   }
 }

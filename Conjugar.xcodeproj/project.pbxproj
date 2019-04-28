@@ -15,6 +15,7 @@
 		038E031C2271E239005CFC96 /* AnalyticsServiceableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E031B2271E239005CFC96 /* AnalyticsServiceableTests.swift */; };
 		038E031E22734800005CFC96 /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E031D22734800005CFC96 /* URLProtocolStub.swift */; };
 		038E03202273BF29005CFC96 /* RatingsFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E031F2273BF29005CFC96 /* RatingsFetcherTests.swift */; };
+		038E032222760A40005CFC96 /* UIViewExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E032122760A40005CFC96 /* UIViewExtensionsTests.swift */; };
 		E10178021F3F753400F0BC97 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10178011F3F753400F0BC97 /* UIViewExtensions.swift */; };
 		E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */ = {isa = PBXBuildFile; fileRef = E107B08A1EB66CE6004C5E91 /* verbs.xml */; };
 		E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E107B0911EB66F28004C5E91 /* VerbParser.swift */; };
@@ -157,6 +158,7 @@
 		038E031B2271E239005CFC96 /* AnalyticsServiceableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsServiceableTests.swift; sourceTree = "<group>"; };
 		038E031D22734800005CFC96 /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
 		038E031F2273BF29005CFC96 /* RatingsFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsFetcherTests.swift; sourceTree = "<group>"; };
+		038E032122760A40005CFC96 /* UIViewExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensionsTests.swift; sourceTree = "<group>"; };
 		E10178011F3F753400F0BC97 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		E107B08A1EB66CE6004C5E91 /* verbs.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = verbs.xml; sourceTree = "<group>"; };
 		E107B0911EB66F28004C5E91 /* VerbParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbParser.swift; sourceTree = "<group>"; };
@@ -418,6 +420,7 @@
 				038E031F2273BF29005CFC96 /* RatingsFetcherTests.swift */,
 				038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */,
 				038E031922711B76005CFC96 /* UIViewControllerExtensionTests.swift */,
+				038E032122760A40005CFC96 /* UIViewExtensionsTests.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -838,6 +841,7 @@
 			files = (
 				038E03182270AC01005CFC96 /* DeviceUtilityTests.swift in Sources */,
 				E12D06A31F5E85A200CDD54E /* VerbCellTests.swift in Sources */,
+				038E032222760A40005CFC96 /* UIViewExtensionsTests.swift in Sources */,
 				038E031A22711B76005CFC96 /* UIViewControllerExtensionTests.swift in Sources */,
 				038E03132270A868005CFC96 /* IntExtensionTests.swift in Sources */,
 				E151223121A62AE9008EF307 /* ReviewPrompterTests.swift in Sources */,
