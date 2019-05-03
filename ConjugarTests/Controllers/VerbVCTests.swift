@@ -12,8 +12,7 @@ import XCTest
 class VerbVCTests: XCTestCase {
   func testVerbVC() {
     var analytic = ""
-    let vvc = VerbVC(settings: Settings(getterSetter: DictionaryGetterSetter(dictionary: [:])), analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
-    vvc.verb = "maltear"
+    let vvc = VerbVC(verb: "maltear", settings: Settings(getterSetter: DictionaryGetterSetter(dictionary: [:])), analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
     UIApplication.shared.keyWindow?.rootViewController = vvc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(vvc)

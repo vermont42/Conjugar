@@ -9,8 +9,8 @@
 import UIKit
 
 class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-  private var analyticsService: AnalyticsServiceable?
-  private var quiz: Quiz?
+  private let analyticsService: AnalyticsServiceable
+  private let quiz: Quiz
 
   var resultsView: ResultsView {
     if let castedView = view as? ResultsView {
@@ -20,10 +20,14 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
   }
 
-  convenience init(quiz: Quiz, analyticsService: AnalyticsServiceable) {
-    self.init()
+  init(quiz: Quiz, analyticsService: AnalyticsServiceable) {
     self.quiz = quiz
     self.analyticsService = analyticsService
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
   }
 
   override func loadView() {
@@ -36,27 +40,18 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    guard let quiz = quiz else {
-      fatalError("quiz was nil.")
-    }
     resultsView.difficulty.text = quiz.lastDifficulty.rawValue
     resultsView.region.text = quiz.lastRegion.rawValue
     resultsView.score.text = String(quiz.score)
     resultsView.time.text = quiz.elapsedTime.timeString
-    analyticsService?.recordVisitation(viewController: "\(ResultsVC.self)")
+    analyticsService.recordVisitation(viewController: "\(ResultsVC.self)")
   }
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    guard let quiz = quiz else {
-      fatalError("quiz was nil.")
-    }
     return quiz.questions.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let quiz = quiz else {
-      fatalError("quiz was nil.")
-    }
     guard let cell = resultsView.table.dequeueReusableCell(withIdentifier: ResultCell.identifier) as? ResultCell else {
       fatalError("Could not dequeue \(ResultCell.self).")
     }

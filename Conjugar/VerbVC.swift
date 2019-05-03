@@ -9,10 +9,10 @@
 import UIKit
 
 class VerbVC: UIViewController {
-  var verb: String = ""
+  private let verb: String
   private var conjugationDataSource: ConjugationDataSource?
-  private var settings: Settings?
-  private var analyticsService: AnalyticsServiceable?
+  private let settings: Settings
+  private let analyticsService: AnalyticsServiceable
 
   var verbView: VerbView {
     if let castedView = view as? VerbView {
@@ -22,10 +22,15 @@ class VerbVC: UIViewController {
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsServiceable) {
-    self.init()
+  init(verb: String, settings: Settings, analyticsService: AnalyticsServiceable) {
+    self.verb = verb
     self.settings = settings
     self.analyticsService = analyticsService
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
   }
 
   override func loadView() {
@@ -35,9 +40,6 @@ class VerbVC: UIViewController {
     verbView.gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
     verbView.translation.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
     verbView.defectivo.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
-    guard verb != "" else {
-      fatalError("verb was nil.")
-    }
     initNavigationItemTitleView()
     let translationResult = Conjugator.shared.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
     switch translationResult {
@@ -96,16 +98,13 @@ class VerbVC: UIViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
     conjugationDataSource = ConjugationDataSource(verb: verb, table: verbView.table, secondSingularBrowse: settings.secondSingularBrowse)
     guard let conjugationDataSource = conjugationDataSource else {
       fatalError("\(ConjugationDataSource.self) was nil.")
     }
     verbView.setupTable(dataSource: conjugationDataSource, delegate: conjugationDataSource)
     verbView.table.reloadData()
-    analyticsService?.recordVisitation(viewController: "\(VerbVC.self)")
+    analyticsService.recordVisitation(viewController: "\(VerbVC.self)")
   }
 
   private func initNavigationItemTitleView() {

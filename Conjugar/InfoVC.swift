@@ -9,9 +9,9 @@
 import UIKit
 
 class InfoVC: UIViewController, UITextViewDelegate {
-  weak var infoDelegate: InfoDelegate?
-  var infoString: NSAttributedString?
-  private var analyticsService: AnalyticsServiceable?
+  private weak var infoDelegate: InfoDelegate?
+  private let infoString: NSAttributedString
+  private let analyticsService: AnalyticsServiceable
 
   var infoView: InfoView {
     if let castedView = view as? InfoView {
@@ -21,17 +21,20 @@ class InfoVC: UIViewController, UITextViewDelegate {
     }
   }
 
-  convenience init(analyticsService: AnalyticsServiceable) {
-    self.init()
+  init(analyticsService: AnalyticsServiceable, infoString: NSAttributedString, infoDelegate: InfoDelegate) {
     self.analyticsService = analyticsService
+    self.infoString = infoString
+    self.infoDelegate = infoDelegate
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
   }
 
   override func loadView() {
     let infoView: InfoView
     infoView = InfoView(frame: UIScreen.main.bounds)
-    guard let infoString = infoString else {
-      fatalError("InfoVC's infoString property is nil.")
-    }
     infoView.info.attributedText = infoString
     infoView.info.delegate = self
     infoView.info.contentOffset = CGPoint.zero
@@ -40,7 +43,7 @@ class InfoVC: UIViewController, UITextViewDelegate {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    analyticsService?.recordVisitation(viewController: "\(InfoVC.self)")
+    analyticsService.recordVisitation(viewController: "\(InfoVC.self)")
   }
 
   func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {

@@ -12,9 +12,9 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   private var allVerbs: [String] = []
   private var regularVerbs: [String] = []
   private var irregularVerbs: [String] = []
-  private var settings: Settings?
-  private var analyticsService: AnalyticsServiceable?
-  private var reviewPrompter: ReviewPromptable?
+  private let settings: Settings
+  private let analyticsService: AnalyticsServiceable
+  private let reviewPrompter: ReviewPromptable
 
   private var currentVerbs: [String] {
     switch browseVerbsView.filterControl.selectedSegmentIndex {
@@ -37,11 +37,15 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsServiceable, reviewPrompter: ReviewPromptable) {
-    self.init()
+  init(settings: Settings, analyticsService: AnalyticsServiceable, reviewPrompter: ReviewPromptable) {
     self.settings = settings
     self.analyticsService = analyticsService
     self.reviewPrompter = reviewPrompter
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
   }
 
   override func loadView() {
@@ -53,13 +57,13 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     irregularVerbs = Conjugator.shared.irregularVerbsArray()
     navigationItem.titleView = UILabel.titleLabel(title: "Browse")
     view = browseVerbsView
-    reviewPrompter?.promptableActionHappened()
+    reviewPrompter.promptableActionHappened()
   }
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     browseVerbsView.isHidden = false
-    analyticsService?.recordVisitation(viewController: "\(BrowseVerbsVC.self)")
+    analyticsService.recordVisitation(viewController: "\(BrowseVerbsVC.self)")
   }
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -75,15 +79,8 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
-    guard let analyticsService = analyticsService else {
-      fatalError("analyticsService was nil.")
-    }
     tableView.deselectRow(at: indexPath, animated: false)
-    let verbVC = VerbVC(settings: settings, analyticsService: analyticsService)
-    verbVC.verb = currentVerbs[indexPath.row]
+    let verbVC = VerbVC(verb: currentVerbs[indexPath.row], settings: settings, analyticsService: analyticsService)
     browseVerbsView.isHidden = true
     navigationController?.pushViewController(verbVC, animated: true)
   }

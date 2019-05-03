@@ -9,10 +9,10 @@
 import UIKit
 
 class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
-  private var settings: Settings?
-  private var quiz: Quiz?
-  private var analyticsService: AnalyticsServiceable?
-  private var gameCenter: GameCenterable?
+  private let settings: Settings
+  private let quiz: Quiz
+  private let analyticsService: AnalyticsServiceable
+  private let gameCenter: GameCenterable
 
   var quizView: QuizView {
     if let castedView = view as? QuizView {
@@ -22,12 +22,16 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
   }
 
-  convenience init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsServiceable, gameCenter: GameCenterable) {
-    self.init()
+  init(settings: Settings, quiz: Quiz, analyticsService: AnalyticsServiceable, gameCenter: GameCenterable) {
     self.settings = settings
     self.quiz = quiz
     self.analyticsService = analyticsService
     self.gameCenter = gameCenter
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
   }
 
   override func loadView() {
@@ -41,9 +45,6 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    guard let quiz = quiz else {
-      fatalError("quiz was nil.")
-    }
     quiz.delegate = self
     switch quiz.quizState {
     case .notStarted, .finished:
@@ -68,19 +69,10 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     quizView.startRestartButton.pulsate()
     authenticate()
-    analyticsService?.recordVisitation(viewController: "\(QuizVC.self)")
+    analyticsService.recordVisitation(viewController: "\(QuizVC.self)")
   }
 
   private func authenticate() {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
-    guard let analyticsService = analyticsService else {
-      fatalError("analyticsService was nil.")
-    }
-    guard let gameCenter = gameCenter else {
-      fatalError("gameCenter was nil.")
-    }
     if !gameCenter.isAuthenticated && settings.userRejectedGameCenter {
       if !settings.didShowGameCenterDialog {
         showGameCenterDialog()
@@ -91,33 +83,21 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   }
 
   private func showGameCenterDialog() {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
-    guard let analyticsService = analyticsService else {
-      fatalError("analyticsService was nil.")
-    }
-    guard let gameCenter = gameCenter else {
-      fatalError("gameCenter was nil.")
-    }
     settings.didShowGameCenterDialog = true
     let gameCenterController = UIAlertController(title: "Game Center", message: "Would you like Conjugar to upload your future scores to Game Center after your quiz? See how you stack up against the global community of conjugators.", preferredStyle: UIAlertController.Style.alert)
     let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.destructive) { _ in
       SoundPlayer.play(.sadTrombone)
-      settings.userRejectedGameCenter = true
+      self.settings.userRejectedGameCenter = true
     }
     gameCenterController.addAction(noAction)
     let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) { _ in
-      gameCenter.authenticate(analyticsService: analyticsService, completion: nil)
+      self.gameCenter.authenticate(analyticsService: self.analyticsService, completion: nil)
     }
     gameCenterController.addAction(yesAction)
     present(gameCenterController, animated: true, completion: nil)
   }
 
   @objc func startRestart() {
-    guard let quiz = quiz else {
-      fatalError("quiz was nil.")
-    }
     SoundPlayer.play(.gun)
     quiz.start()
     quizView.startRestartButton.setTitle("Restart", for: .normal)
@@ -127,7 +107,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     quizView.showInProgressUI()
     quizView.startRestartButton.pulsate()
     quizView.conjugationField.becomeFirstResponder()
-    analyticsService?.recordQuizStart()
+    analyticsService.recordQuizStart()
   }
 
   func scoreDidChange(newScore: Int) {
@@ -157,12 +137,6 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   }
 
   func quizDidFinish() {
-    guard let analyticsService = analyticsService else {
-      fatalError("analyticsService was nil.")
-    }
-    guard let quiz = quiz else {
-      fatalError("quiz was nil.")
-    }
     quizView.hideInProgressUI()
     quizView.startRestartButton.setTitle("Start", for: .normal)
     let applauseIndex = Int.random(in: 1...Sound.applauseCount)
@@ -182,9 +156,6 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   }
 
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    guard let quiz = quiz else {
-      fatalError("quiz was nil.")
-    }
     guard let text = quizView.conjugationField.text else { return false }
     guard text != "" else { return false }
     quizView.conjugationField.resignFirstResponder()

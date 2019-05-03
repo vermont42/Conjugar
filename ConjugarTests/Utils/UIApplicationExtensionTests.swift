@@ -1,5 +1,5 @@
 //
-//  UIApplicationTests.swift
+//  UIApplicationExtensionTests.swift
 //  ConjugarTests
 //
 //  Created by Joshua Adams on 4/28/19.
@@ -10,7 +10,7 @@ import XCTest
 import UIKit
 @testable import Conjugar
 
-class UIApplicationTests: XCTestCase {
+class UIApplicationExtensionTests: XCTestCase {
   private let 🥥 = "🥥"
   private let 🥩 = "🥩"
 

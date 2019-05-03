@@ -9,10 +9,10 @@
 import UIKit
 
 class SettingsVC: UIViewController {
-  private var settings: Settings?
-  private var analyticsService: AnalyticsServiceable?
-  private var gameCenter: GameCenterable?
-  private var session: URLSession?
+  private let settings: Settings
+  private let analyticsService: AnalyticsServiceable
+  private let gameCenter: GameCenterable
+  private let session: URLSession
 
   var settingsView: SettingsView {
     if let castedView = view as? SettingsView {
@@ -22,12 +22,16 @@ class SettingsVC: UIViewController {
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsServiceable, gameCenter: GameCenterable, session: URLSession) {
-    self.init()
+  init(settings: Settings, analyticsService: AnalyticsServiceable, gameCenter: GameCenterable, session: URLSession) {
     self.settings = settings
     self.analyticsService = analyticsService
     self.gameCenter = gameCenter
     self.session = session
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
   }
 
   override func loadView() {
@@ -40,9 +44,6 @@ class SettingsVC: UIViewController {
     settingsView.gameCenterButton.addTarget(self, action: #selector(authenticate), for: .touchUpInside)
     settingsView.rateReviewButton.addTarget(self, action: #selector(rateReview), for: .touchUpInside)
 
-    guard let session = session else {
-      return
-    }
     RatingsFetcher.fetchRatingsDescription(session: session) { description in
       if description != RatingsFetcher.errorMessage {
         DispatchQueue.main.async {
@@ -62,13 +63,10 @@ class SettingsVC: UIViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    guard let gameCenter = gameCenter else {
-      fatalError("gameCenter was nil.")
-    }
     [settingsView.gameCenterLabel, settingsView.gameCenterDescription, settingsView.gameCenterButton].forEach {
       $0.isHidden = gameCenter.isAuthenticated
     }
-    analyticsService?.recordVisitation(viewController: "\(SettingsVC.self)")
+    analyticsService.recordVisitation(viewController: "\(SettingsVC.self)")
   }
 
   override func viewDidAppear(_ animated: Bool) {
@@ -79,9 +77,6 @@ class SettingsVC: UIViewController {
   }
 
   private func updateControls() {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
     switch settings.region {
     case .spain:
       settingsView.regionControl.selectedSegmentIndex = 0
@@ -116,9 +111,6 @@ class SettingsVC: UIViewController {
   }
 
   @objc func regionChanged(_ sender: UISegmentedControl) {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
     let index = settingsView.regionControl.selectedSegmentIndex
     if index == 0 {
       settings.region = .spain
@@ -130,18 +122,15 @@ class SettingsVC: UIViewController {
   @objc func difficultyChanged(_ sender: UISegmentedControl) {
     let index = settingsView.difficultyControl.selectedSegmentIndex
     if index == 0 {
-      settings?.difficulty = .easy
+      settings.difficulty = .easy
     } else if index == 1 {
-      settings?.difficulty = .moderate
+      settings.difficulty = .moderate
     } else /* index == 2 */ {
-      settings?.difficulty = .difficult
+      settings.difficulty = .difficult
     }
   }
 
   @objc func quizVosChanged(_ sender: UISegmentedControl) {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
     let index = settingsView.quizVosControl.selectedSegmentIndex
     if index == 0 {
       settings.secondSingularQuiz = .tu
@@ -151,9 +140,6 @@ class SettingsVC: UIViewController {
   }
 
   @objc func browseVosChanged(_ sender: UISegmentedControl) {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
     let index = settingsView.browseVosControl.selectedSegmentIndex
     if index == 0 {
       settings.secondSingularBrowse = .tu
@@ -165,12 +151,6 @@ class SettingsVC: UIViewController {
   }
 
   @objc func authenticate() {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
-    guard let gameCenter = gameCenter else {
-      fatalError("gameCenter was nil.")
-    }
     settings.userRejectedGameCenter = false
     gameCenter.authenticate(analyticsService: analyticsService) { authenticated in
       DispatchQueue.main.async {

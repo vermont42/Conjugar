@@ -13,8 +13,8 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   private var allInfos: [Info] = []
   private var easyModerateInfos: [Info] = []
   private var easyInfos: [Info] = []
-  private var settings: Settings?
-  private var analyticsService: AnalyticsServiceable?
+  private let settings: Settings
+  private let analyticsService: AnalyticsServiceable
 
   private var currentInfos: [Info] {
     switch browseInfoView.difficultyControl.selectedSegmentIndex {
@@ -37,10 +37,14 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
   }
 
-  convenience init(settings: Settings, analyticsService: AnalyticsServiceable) {
-    self.init()
+  init(settings: Settings, analyticsService: AnalyticsServiceable) {
     self.settings = settings
     self.analyticsService = analyticsService
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
   }
 
   override func loadView() {
@@ -66,13 +70,10 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    analyticsService?.recordVisitation(viewController: "\(BrowseInfoVC.self)")
+    analyticsService.recordVisitation(viewController: "\(BrowseInfoVC.self)")
   }
 
   private func updateDifficultyControl() {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
     switch settings.infoDifficulty {
     case .easy:
       browseInfoView.difficultyControl.selectedSegmentIndex = 0
@@ -115,19 +116,11 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   }
 
   private func showInfo() {
-    guard let analyticsService = analyticsService else {
-      fatalError("analyticsService was nil.")
-    }
-    let infoVC = InfoVC(analyticsService: analyticsService)
-    infoVC.infoString = currentInfos[selectedRow].infoString
-    infoVC.infoDelegate = self
+    let infoVC = InfoVC(analyticsService: analyticsService, infoString: currentInfos[selectedRow].infoString, infoDelegate: self)
     navigationController?.pushViewController(infoVC, animated: true)
   }
 
   @objc func difficultyChanged(_ sender: UISegmentedControl) {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
     let index = browseInfoView.difficultyControl.selectedSegmentIndex
     if index == 0 {
       settings.infoDifficulty = .easy
