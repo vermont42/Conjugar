@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let mainTabBarVC: MainTabBarVC
     let settings: Settings
+    let stubSession = URLSession.stubSession(ratingsCount: 42)
 
     if CommandLine.arguments.contains("enable-ui-testing") {
       settings = Settings(getterSetter: DictionaryGetterSetter())
@@ -54,13 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window?.makeKeyAndVisible()
 
     return true
-  }
-
-  private var stubSession: URLSession {
-    URLProtocolStub.testURLs = [RatingsFetcher.iTunesURL: RatingsFetcher.stubData()]
-    let config = URLSessionConfiguration.ephemeral
-    config.protocolClasses = [URLProtocolStub.self]
-    return URLSession(configuration: config)
   }
 
   private func configureStatusBar() {

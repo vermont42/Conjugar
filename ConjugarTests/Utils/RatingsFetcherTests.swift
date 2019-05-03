@@ -22,16 +22,9 @@ class RatingsFetcherTests: XCTestCase {
     testDescription(count: 42, expectedDescription: "There are 42 ratings for this version of Conjugar. Add yours!")
   }
 
-  private func stubSession(ratingsCount: Int) -> URLSession {
-    URLProtocolStub.testURLs = [RatingsFetcher.iTunesURL: RatingsFetcher.stubData(ratingsCount: ratingsCount)]
-    let config = URLSessionConfiguration.ephemeral
-    config.protocolClasses = [URLProtocolStub.self]
-    return URLSession(configuration: config)
-  }
-
   private func testDescription(count: Int, expectedDescription: String) {
     let expectatiön = expectation(description: "testDescription")
-    RatingsFetcher.fetchRatingsDescription(session: stubSession(ratingsCount: count), completion: { actualDescription in
+    RatingsFetcher.fetchRatingsDescription(session: URLSession.stubSession(ratingsCount: count), completion: { actualDescription in
       XCTAssertEqual(actualDescription, expectedDescription)
       expectatiön.fulfill()
     })

@@ -181,10 +181,12 @@ class SettingsVC: UIViewController {
     }
   }
 
-  @objc func rateReview() {
+  @objc func rateReview(completion: @escaping ((Bool) -> ()) = { _ in }) {
     guard let url = URL(string: "https://itunes.apple.com/us/app/immigration/id\(RatingsFetcher.iTunesID)?action=write-review") else {
       return
     }
-    UIApplication.shared.open(url)
+    UIApplication.shared.open(url, options: [:], completionHandler: { didSucceed in
+      completion(didSucceed)
+    })
   }
 }

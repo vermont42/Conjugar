@@ -17,6 +17,8 @@
 		038E03202273BF29005CFC96 /* RatingsFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E031F2273BF29005CFC96 /* RatingsFetcherTests.swift */; };
 		038E032222760A40005CFC96 /* UIViewExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E032122760A40005CFC96 /* UIViewExtensionsTests.swift */; };
 		038E0324227617FC005CFC96 /* UIApplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E0323227617FC005CFC96 /* UIApplicationTests.swift */; };
+		038E03262279CCCB005CFC96 /* SettingsVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03252279CCCB005CFC96 /* SettingsVCTests.swift */; };
+		038E03282279D034005CFC96 /* URLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03272279D034005CFC96 /* URLSessionExtension.swift */; };
 		E10178021F3F753400F0BC97 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10178011F3F753400F0BC97 /* UIViewExtensions.swift */; };
 		E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */ = {isa = PBXBuildFile; fileRef = E107B08A1EB66CE6004C5E91 /* verbs.xml */; };
 		E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E107B0911EB66F28004C5E91 /* VerbParser.swift */; };
@@ -161,6 +163,8 @@
 		038E031F2273BF29005CFC96 /* RatingsFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsFetcherTests.swift; sourceTree = "<group>"; };
 		038E032122760A40005CFC96 /* UIViewExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensionsTests.swift; sourceTree = "<group>"; };
 		038E0323227617FC005CFC96 /* UIApplicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationTests.swift; sourceTree = "<group>"; };
+		038E03252279CCCB005CFC96 /* SettingsVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVCTests.swift; sourceTree = "<group>"; };
+		038E03272279D034005CFC96 /* URLSessionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionExtension.swift; sourceTree = "<group>"; };
 		E10178011F3F753400F0BC97 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		E107B08A1EB66CE6004C5E91 /* verbs.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = verbs.xml; sourceTree = "<group>"; };
 		E107B0911EB66F28004C5E91 /* VerbParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbParser.swift; sourceTree = "<group>"; };
@@ -365,6 +369,7 @@
 				E1E092C221ED3C6900828C37 /* UserDefaultsGetterSetter.swift */,
 				E18F7F371ECA7C9A00633200 /* Utterer.swift */,
 				038E031D22734800005CFC96 /* URLProtocolStub.swift */,
+				038E03272279D034005CFC96 /* URLSessionExtension.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -434,6 +439,7 @@
 				E1F06AEC1E8F05F400ADD2E1 /* MainTabBarVCTests.swift */,
 				E15D3BF01F532F4E003771BB /* BrowseVerbsVCTests.swift */,
 				E14589F31F5B7BB000EEF141 /* BrowseInfoVCTests.swift */,
+				038E03252279CCCB005CFC96 /* SettingsVCTests.swift */,
 				E14589F51F5B7E9D00EEF141 /* VerbVCTests.swift */,
 			);
 			path = Controllers;
@@ -796,6 +802,7 @@
 				E1EC71012198BA6400872787 /* AWSAnalyticsService.swift in Sources */,
 				E188B56021AF78CE009777D8 /* ReviewPromptable.swift in Sources */,
 				E19382041F0822B2005268FF /* InfoVC.swift in Sources */,
+				038E03282279D034005CFC96 /* URLSessionExtension.swift in Sources */,
 				E14271391F01EFF2001D19E1 /* GameCenter.swift in Sources */,
 				E18F7F3A1ECA7DA700633200 /* SoundPlayer.swift in Sources */,
 				E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */,
@@ -855,6 +862,7 @@
 				E14589F41F5B7BB000EEF141 /* BrowseInfoVCTests.swift in Sources */,
 				E14589F61F5B7E9D00EEF141 /* VerbVCTests.swift in Sources */,
 				038E031C2271E239005CFC96 /* AnalyticsServiceableTests.swift in Sources */,
+				038E03262279CCCB005CFC96 /* SettingsVCTests.swift in Sources */,
 				E15D3BF61F533997003771BB /* MockNavigationC.swift in Sources */,
 				E198F9021F5D79F100BAF553 /* VerbViewTests.swift in Sources */,
 				038E03202273BF29005CFC96 /* RatingsFetcherTests.swift in Sources */,
