@@ -1,5 +1,5 @@
 //
-//  UIViewControllerExtensionTests.swift
+//  UIViewControllerExtensionsTests.swift
 //  ConjugarTests
 //
 //  Created by Joshua Adams on 4/24/19.
@@ -10,7 +10,7 @@ import XCTest
 import UIKit
 @testable import Conjugar
 
-class UIViewControllerExtensionTests: XCTestCase {
+class UIViewControllerExtensionsTests: XCTestCase {
   func testFatalCastMessage() {
     let vc = VerbVC(verb: "maltear", settings: Settings(getterSetter: DictionaryGetterSetter()), analyticsService: TestAnalyticsService())
     let view = VerbView()

@@ -45,7 +45,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   }
 
   required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    UIViewController.fatalErrorNotImplemented()
   }
 
   override func loadView() {

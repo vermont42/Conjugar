@@ -1,5 +1,5 @@
 //
-//  UIViewControllerExtension.swift
+//  UIViewControllerExtensions.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 11/11/18.
@@ -11,5 +11,9 @@ import UIKit
 extension UIViewController {
   func fatalCastMessage(view: Any) -> String {
     return "Could not cast \(self).view to \(view)."
+  }
+
+  static func fatalErrorNotImplemented() -> Never {
+    fatalError("init(coder:) has not been implemented")
   }
 }
