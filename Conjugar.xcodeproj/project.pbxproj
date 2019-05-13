@@ -20,6 +20,7 @@
 		038E03262279CCCB005CFC96 /* SettingsVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03252279CCCB005CFC96 /* SettingsVCTests.swift */; };
 		038E03282279D034005CFC96 /* URLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03272279D034005CFC96 /* URLSessionExtension.swift */; };
 		038E032A227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E0329227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift */; };
+		038E032C228A1E49005CFC96 /* ConjugationResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E032B228A1E49005CFC96 /* ConjugationResultTests.swift */; };
 		E10178021F3F753400F0BC97 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10178011F3F753400F0BC97 /* UIViewExtensions.swift */; };
 		E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */ = {isa = PBXBuildFile; fileRef = E107B08A1EB66CE6004C5E91 /* verbs.xml */; };
 		E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E107B0911EB66F28004C5E91 /* VerbParser.swift */; };
@@ -60,7 +61,7 @@
 		E1483FCA1EF89C710052C436 /* applause3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC71EF89C710052C436 /* applause3.mp3 */; };
 		E1483FCC1EF89D4E0052C436 /* chirp.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCB1EF89D4E0052C436 /* chirp.mp3 */; };
 		E1483FCE1EF89DAD0052C436 /* buzz.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCD1EF89DAD0052C436 /* buzz.mp3 */; };
-		E1483FD01EF961880052C436 /* ConjugationComparison.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FCF1EF961880052C436 /* ConjugationComparison.swift */; };
+		E1483FD01EF961880052C436 /* ConjugationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FCF1EF961880052C436 /* ConjugationResult.swift */; };
 		E14BAD901EFF1474000D91C5 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BAD8F1EFF1473000D91C5 /* SettingsVC.swift */; };
 		E14BAD921F0049AF000D91C5 /* ResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BAD911F0049AF000D91C5 /* ResultsVC.swift */; };
 		E14BAD941F006423000D91C5 /* ResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BAD931F006423000D91C5 /* ResultCell.swift */; };
@@ -167,6 +168,7 @@
 		038E03252279CCCB005CFC96 /* SettingsVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVCTests.swift; sourceTree = "<group>"; };
 		038E03272279D034005CFC96 /* URLSessionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionExtension.swift; sourceTree = "<group>"; };
 		038E0329227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtensionTests.swift; sourceTree = "<group>"; };
+		038E032B228A1E49005CFC96 /* ConjugationResultTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugationResultTests.swift; sourceTree = "<group>"; };
 		E10178011F3F753400F0BC97 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		E107B08A1EB66CE6004C5E91 /* verbs.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = verbs.xml; sourceTree = "<group>"; };
 		E107B0911EB66F28004C5E91 /* VerbParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbParser.swift; sourceTree = "<group>"; };
@@ -207,7 +209,7 @@
 		E1483FC71EF89C710052C436 /* applause3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause3.mp3; sourceTree = "<group>"; };
 		E1483FCB1EF89D4E0052C436 /* chirp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chirp.mp3; sourceTree = "<group>"; };
 		E1483FCD1EF89DAD0052C436 /* buzz.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = buzz.mp3; sourceTree = "<group>"; };
-		E1483FCF1EF961880052C436 /* ConjugationComparison.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugationComparison.swift; sourceTree = "<group>"; };
+		E1483FCF1EF961880052C436 /* ConjugationResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConjugationResult.swift; sourceTree = "<group>"; };
 		E14BAD8F1EFF1473000D91C5 /* SettingsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		E14BAD911F0049AF000D91C5 /* ResultsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsVC.swift; sourceTree = "<group>"; };
 		E14BAD931F006423000D91C5 /* ResultCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultCell.swift; sourceTree = "<group>"; };
@@ -479,6 +481,7 @@
 			children = (
 				E198F9041F5D7CB200BAF553 /* ConjugatorTests.swift */,
 				E1DC939421B5836400DD4048 /* QuizTests.swift */,
+				038E032B228A1E49005CFC96 /* ConjugationResultTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -548,9 +551,9 @@
 			isa = PBXGroup;
 			children = (
 				E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */,
-				E1483FCF1EF961880052C436 /* ConjugationComparison.swift */,
 				E1F06AF71E8F081700ADD2E1 /* Conjugator.swift */,
 				E1A44313200D10D200C48857 /* ConjugationDataSource.swift */,
+				E1483FCF1EF961880052C436 /* ConjugationResult.swift */,
 				E15A18521E9199C3008455DD /* ConjugatorError.swift */,
 				E1483FB01EF5C4C60052C436 /* Difficulty.swift */,
 				E1AB244E1F083CB300FE76E8 /* Info.swift */,
@@ -815,7 +818,7 @@
 				E18145D81F2E3E170048DEE2 /* BrowseInfoView.swift in Sources */,
 				E139E0E01EC7D27A00B34DE7 /* NSAttributedStringExtension.swift in Sources */,
 				E1483FAF1EF5C3820052C436 /* Quiz.swift in Sources */,
-				E1483FD01EF961880052C436 /* ConjugationComparison.swift in Sources */,
+				E1483FD01EF961880052C436 /* ConjugationResult.swift in Sources */,
 				E191C9B81EBEB27500F715E7 /* VerbType.swift in Sources */,
 				E14BAD921F0049AF000D91C5 /* ResultsVC.swift in Sources */,
 				E14BAD901EFF1474000D91C5 /* SettingsVC.swift in Sources */,
@@ -858,6 +861,7 @@
 				038E032222760A40005CFC96 /* UIViewExtensionsTests.swift in Sources */,
 				038E031A22711B76005CFC96 /* UIViewControllerExtensionsTests.swift in Sources */,
 				038E03132270A868005CFC96 /* IntExtensionTests.swift in Sources */,
+				038E032C228A1E49005CFC96 /* ConjugationResultTests.swift in Sources */,
 				E151223121A62AE9008EF307 /* ReviewPrompterTests.swift in Sources */,
 				E1DC939521B5836400DD4048 /* QuizTests.swift in Sources */,
 				038E032A227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift in Sources */,
