@@ -142,10 +142,10 @@ class Quiz {
         questions.append(($0, .futuroDeIndicativo, personNumber()))
       }
       for _ in 0...7 {
-        questions.append((irregularPreteritoVerb, .preterito, personNumber()))
+        questions.append((irregularPreteritoVerb, .pretérito, personNumber()))
       }
       for _ in 0...8 {
-        questions.append((allRegularVerb, .preterito, personNumber()))
+        questions.append((allRegularVerb, .pretérito, personNumber()))
       }
     case .moderate:
       [regularArVerb, regularArVerb, regularIrVerb, regularErVerb].forEach {
@@ -179,10 +179,10 @@ class Quiz {
         questions.append(($0, .imperfectoDeIndicativo, personNumber()))
       }
       for _ in 0...2 {
-        questions.append((irregularPreteritoVerb, .preterito, personNumber()))
+        questions.append((irregularPreteritoVerb, .pretérito, personNumber()))
       }
       [regularArVerb, regularIrVerb, regularErVerb].forEach {
-        questions.append(($0, .preterito, personNumber()))
+        questions.append(($0, .pretérito, personNumber()))
       }
       for _ in 0...2 {
         questions.append((irregularPresenteDeSubjuntivoVerb, .presenteDeSubjuntivo, personNumber()))
@@ -223,10 +223,10 @@ class Quiz {
         questions.append((irregularPresenteDeIndicativoVerb, .presenteDeIndicativo, personNumber()))
       }
       for _ in 0...2 {
-        questions.append((irregularPreteritoVerb, .preterito, personNumber()))
+        questions.append((irregularPreteritoVerb, .pretérito, personNumber()))
       }
       [regularArVerb, regularIrVerb, regularErVerb].forEach {
-        questions.append(($0, .preterito, personNumber()))
+        questions.append(($0, .pretérito, personNumber()))
       }
       for _ in 0...1 {
         questions.append((irregularImperfectoVerb, .imperfectoDeIndicativo, personNumber()))
@@ -261,7 +261,7 @@ class Quiz {
       }
       questions.append((allRegularVerb, .imperativoPositivo, personNumber(skipYo: true, skipTu: true)))
       questions.append((allRegularVerb, .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
-      [.perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].forEach {
+      [.perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].forEach {
         questions.append((regularOrIrregularParticipioVerb, $0, personNumber()))
       }
     }

@@ -22,6 +22,7 @@
 		038E032A227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E0329227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift */; };
 		038E032C228A1E49005CFC96 /* ConjugationResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E032B228A1E49005CFC96 /* ConjugationResultTests.swift */; };
 		038E032E228A2F18005CFC96 /* PersonNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E032D228A2F18005CFC96 /* PersonNumberTests.swift */; };
+		038E0330228B0429005CFC96 /* TenseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E032F228B0429005CFC96 /* TenseTests.swift */; };
 		E10178021F3F753400F0BC97 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10178011F3F753400F0BC97 /* UIViewExtensions.swift */; };
 		E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */ = {isa = PBXBuildFile; fileRef = E107B08A1EB66CE6004C5E91 /* verbs.xml */; };
 		E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E107B0911EB66F28004C5E91 /* VerbParser.swift */; };
@@ -171,6 +172,7 @@
 		038E0329227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtensionTests.swift; sourceTree = "<group>"; };
 		038E032B228A1E49005CFC96 /* ConjugationResultTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugationResultTests.swift; sourceTree = "<group>"; };
 		038E032D228A2F18005CFC96 /* PersonNumberTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonNumberTests.swift; sourceTree = "<group>"; };
+		038E032F228B0429005CFC96 /* TenseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenseTests.swift; sourceTree = "<group>"; };
 		E10178011F3F753400F0BC97 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		E107B08A1EB66CE6004C5E91 /* verbs.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = verbs.xml; sourceTree = "<group>"; };
 		E107B0911EB66F28004C5E91 /* VerbParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbParser.swift; sourceTree = "<group>"; };
@@ -485,6 +487,7 @@
 				E1DC939421B5836400DD4048 /* QuizTests.swift */,
 				038E032B228A1E49005CFC96 /* ConjugationResultTests.swift */,
 				038E032D228A2F18005CFC96 /* PersonNumberTests.swift */,
+				038E032F228B0429005CFC96 /* TenseTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -871,6 +874,7 @@
 				038E032A227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift in Sources */,
 				E198F9051F5D7CB200BAF553 /* ConjugatorTests.swift in Sources */,
 				E1EC70F22198A10B00872787 /* UIViewControllerExtensions.swift in Sources */,
+				038E0330228B0429005CFC96 /* TenseTests.swift in Sources */,
 				E14589F41F5B7BB000EEF141 /* BrowseInfoVCTests.swift in Sources */,
 				E14589F61F5B7E9D00EEF141 /* VerbVCTests.swift in Sources */,
 				038E031C2271E239005CFC96 /* AnalyticsServiceableTests.swift in Sources */,

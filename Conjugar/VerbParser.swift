@@ -92,24 +92,24 @@ class VerbParser: NSObject, XMLParserDelegate {
       if let tp = attributeDict[PersonNumber.thirdPlural.rawValue + Tense.presenteDeIndicativo.rawValue] {
         currentConjugations[PersonNumber.thirdPlural.rawValue + Tense.presenteDeIndicativo.rawValue] = tp
       }
-      if let fs = attributeDict[PersonNumber.firstSingular.rawValue + Tense.preterito.rawValue] {
-        currentConjugations[PersonNumber.firstSingular.rawValue + Tense.preterito.rawValue] = fs
+      if let fs = attributeDict[PersonNumber.firstSingular.rawValue + Tense.pretérito.rawValue] {
+        currentConjugations[PersonNumber.firstSingular.rawValue + Tense.pretérito.rawValue] = fs
       }
-      if let ss = attributeDict[PersonNumber.secondSingularTu.rawValue + Tense.preterito.rawValue] {
-        currentConjugations[PersonNumber.secondSingularTu.rawValue + Tense.preterito.rawValue] = ss
-        currentConjugations[PersonNumber.secondSingularVos.rawValue + Tense.preterito.rawValue] = ss
+      if let ss = attributeDict[PersonNumber.secondSingularTu.rawValue + Tense.pretérito.rawValue] {
+        currentConjugations[PersonNumber.secondSingularTu.rawValue + Tense.pretérito.rawValue] = ss
+        currentConjugations[PersonNumber.secondSingularVos.rawValue + Tense.pretérito.rawValue] = ss
       }
-      if let ts = attributeDict[PersonNumber.thirdSingular.rawValue + Tense.preterito.rawValue] {
-        currentConjugations[PersonNumber.thirdSingular.rawValue + Tense.preterito.rawValue] = ts
+      if let ts = attributeDict[PersonNumber.thirdSingular.rawValue + Tense.pretérito.rawValue] {
+        currentConjugations[PersonNumber.thirdSingular.rawValue + Tense.pretérito.rawValue] = ts
       }
-      if let fp = attributeDict[PersonNumber.firstPlural.rawValue + Tense.preterito.rawValue] {
-        currentConjugations[PersonNumber.firstPlural.rawValue + Tense.preterito.rawValue] = fp
+      if let fp = attributeDict[PersonNumber.firstPlural.rawValue + Tense.pretérito.rawValue] {
+        currentConjugations[PersonNumber.firstPlural.rawValue + Tense.pretérito.rawValue] = fp
       }
-      if let sp = attributeDict[PersonNumber.secondPlural.rawValue + Tense.preterito.rawValue] {
-        currentConjugations[PersonNumber.secondPlural.rawValue + Tense.preterito.rawValue] = sp
+      if let sp = attributeDict[PersonNumber.secondPlural.rawValue + Tense.pretérito.rawValue] {
+        currentConjugations[PersonNumber.secondPlural.rawValue + Tense.pretérito.rawValue] = sp
       }
-      if let tp = attributeDict[PersonNumber.thirdPlural.rawValue + Tense.preterito.rawValue] {
-        currentConjugations[PersonNumber.thirdPlural.rawValue + Tense.preterito.rawValue] = tp
+      if let tp = attributeDict[PersonNumber.thirdPlural.rawValue + Tense.pretérito.rawValue] {
+        currentConjugations[PersonNumber.thirdPlural.rawValue + Tense.pretérito.rawValue] = tp
       }
       if let fs = attributeDict[PersonNumber.firstSingular.rawValue + Tense.imperfectoDeIndicativo.rawValue] {
         currentConjugations[PersonNumber.firstSingular.rawValue + Tense.imperfectoDeIndicativo.rawValue] = fs

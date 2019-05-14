@@ -19,7 +19,7 @@ enum Tense: String, CaseIterable {
   case imperativoNegativo = "ni"
 
   case presenteDeIndicativo = "pr"
-  case preterito = "pt"
+  case pretérito = "pt"
   case imperfectoDeIndicativo = "ii"
   case futuroDeIndicativo = "fu"
   case condicional = "co"
@@ -29,7 +29,7 @@ enum Tense: String, CaseIterable {
   case futuroDeSubjuntivo = "fv"
 
   case perfectoDeIndicativo = "pi"
-  case preteritoAnterior = "pa"
+  case pretéritoAnterior = "pa"
   case pluscuamperfectoDeIndicativo = "fi"
   case futuroPerfecto = "fp"
   case condicionalCompuesto = "cc"
@@ -48,9 +48,9 @@ enum Tense: String, CaseIterable {
       return 0
     case .imperativoPositivo, .imperativoNegativo:
       return 5 + extraConjugation
-    case .presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
+    case .presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
          .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo,
-         .perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto,
+         .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto,
          .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1,
          .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo:
       return 6 + extraConjugation
@@ -62,9 +62,9 @@ enum Tense: String, CaseIterable {
     case .imperativoPositivo, .imperativoNegativo,
          .infinitivo, .translation, .gerundio, .participio, .raízFutura:
       return false
-    case .presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
+    case .presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
          .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo,
-         .perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto,
+         .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto,
          .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1,
          .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo:
       return true
@@ -89,7 +89,7 @@ enum Tense: String, CaseIterable {
       return "imperativo negativo"
     case .presenteDeIndicativo:
       return "presente de indicativo"
-    case .preterito:
+    case .pretérito:
       return "pretérito"
     case .imperfectoDeIndicativo:
       return "imperfecto de indicativo"
@@ -107,8 +107,8 @@ enum Tense: String, CaseIterable {
       return "futuro de subjuntivo"
     case .perfectoDeIndicativo:
       return "perfecto de indicativo"
-    case .preteritoAnterior:
-      return "préterito anterior"
+    case .pretéritoAnterior:
+      return "pretérito anterior"
     case .pluscuamperfectoDeIndicativo:
       return "pluscuamperfecto de indicativo"
     case .futuroPerfecto:
@@ -144,7 +144,7 @@ enum Tense: String, CaseIterable {
       return "Imperativo Negativo"
     case .presenteDeIndicativo:
       return "Presente de Indicativo"
-    case .preterito:
+    case .pretérito:
       return "Pretérito"
     case .imperfectoDeIndicativo:
       return "Imperfecto de Indicativo"
@@ -162,8 +162,8 @@ enum Tense: String, CaseIterable {
       return "Futuro de Subjuntivo"
     case .perfectoDeIndicativo:
       return "Perfecto de Indicativo"
-    case .preteritoAnterior:
-      return "Préterito Anterior"
+    case .pretéritoAnterior:
+      return "Pretérito Anterior"
     case .pluscuamperfectoDeIndicativo:
       return "Pluscuamperfecto de Indicativo"
     case .futuroPerfecto:
@@ -185,8 +185,8 @@ enum Tense: String, CaseIterable {
     switch self {
     case .perfectoDeIndicativo:
       return .success(.presenteDeIndicativo)
-    case .preteritoAnterior:
-      return .success(.preterito)
+    case .pretéritoAnterior:
+      return .success(.pretérito)
     case .pluscuamperfectoDeIndicativo:
       return .success(.imperfectoDeIndicativo)
     case .futuroPerfecto:
@@ -206,5 +206,5 @@ enum Tense: String, CaseIterable {
     }
   }
 
-  static let conjugatedTenses: [Tense] = [.presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo, .imperativoPositivo, .imperativoNegativo, .perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo]
+  static let conjugatedTenses: [Tense] = [.presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo, .imperativoPositivo, .imperativoNegativo, .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo]
 }

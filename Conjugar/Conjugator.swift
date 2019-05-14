@@ -165,7 +165,7 @@ class Conjugator {
     }
     if let conjugation = verb[conjugationKey] {
       return .success(conjugation)
-    } else if [.presenteDeIndicativo, .preterito, .imperfectoDeIndicativo, .presenteDeSubjuntivo, .gerundio, .participio].contains(tense) {
+    } else if [.presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .presenteDeSubjuntivo, .gerundio, .participio].contains(tense) {
       guard let parent = verb[Conjugator.parent] else {
         fatalError("verb[\(Conjugator.parent) was nil.")
       }
@@ -216,7 +216,7 @@ class Conjugator {
         guard let parent = verb[Conjugator.parent] else {
           fatalError("verb[\(Conjugator.parent) was nil.")
         }
-        guard case .success(let parentStem) = conjugateRecursively(infinitive: parent, tense: .preterito, personNumber: .thirdPlural) else {
+        guard case .success(let parentStem) = conjugateRecursively(infinitive: parent, tense: .pretérito, personNumber: .thirdPlural) else {
           fatalError("parentStem was nil.")
         }
         let trim = verb[Conjugator.trim] ?? ""
@@ -227,7 +227,7 @@ class Conjugator {
           stemWithRon = parentStem.replaceFirstOccurence(of: trim, with: stem)
         }
       } else {
-        guard case .success(let nonDefectiveStemWithRon) = conjugateRecursively(infinitive: infinitive, tense: .preterito, personNumber: .thirdPlural) else {
+        guard case .success(let nonDefectiveStemWithRon) = conjugateRecursively(infinitive: infinitive, tense: .pretérito, personNumber: .thirdPlural) else {
           fatalError("nonDefectiveStemWithRon was nil.")
         }
         stemWithRon = nonDefectiveStemWithRon
@@ -248,7 +248,7 @@ class Conjugator {
         stem = stemWithoutLastChar + accentedLastChar
       }
       return .success(stem + endingFor(tense: tense, personNumber: personNumber))
-    } else if [.perfectoDeIndicativo, .preteritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].contains(tense) {
+    } else if [.perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].contains(tense) {
       let haberTenseResult = tense.haberTenseForCompoundTense()
       let haberTense: Tense
       switch haberTenseResult {
