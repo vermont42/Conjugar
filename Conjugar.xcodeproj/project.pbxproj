@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03533491228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */; };
 		035C646F22299A7E001ECC02 /* RatingsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035C646E22299A7E001ECC02 /* RatingsFetcher.swift */; };
 		038E03132270A868005CFC96 /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03122270A868005CFC96 /* IntExtensionTests.swift */; };
 		038E03152270A9FB005CFC96 /* TestGameCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */; };
@@ -157,6 +158,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsGetterSetterTests.swift; sourceTree = "<group>"; };
 		035C646E22299A7E001ECC02 /* RatingsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsFetcher.swift; sourceTree = "<group>"; };
 		038E03122270A868005CFC96 /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenterTests.swift; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 				038E0323227617FC005CFC96 /* UIApplicationExtensionTests.swift */,
 				038E031922711B76005CFC96 /* UIViewControllerExtensionsTests.swift */,
 				038E032122760A40005CFC96 /* UIViewExtensionsTests.swift */,
+				03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -874,6 +877,7 @@
 				038E032A227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift in Sources */,
 				E198F9051F5D7CB200BAF553 /* ConjugatorTests.swift in Sources */,
 				E1EC70F22198A10B00872787 /* UIViewControllerExtensions.swift in Sources */,
+				03533491228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift in Sources */,
 				038E0330228B0429005CFC96 /* TenseTests.swift in Sources */,
 				E14589F41F5B7BB000EEF141 /* BrowseInfoVCTests.swift in Sources */,
 				E14589F61F5B7E9D00EEF141 /* VerbVCTests.swift in Sources */,
