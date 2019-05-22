@@ -11,7 +11,7 @@ import UIKit
 class InfoCell: UITableViewCell {
   static let identifier = "InfoCell"
 
-  private let heading: UILabel = {
+  let heading: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.boldBody

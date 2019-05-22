@@ -10,6 +10,7 @@
 		03533491228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */; };
 		03533493228DA52400046CCC /* ResultCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533492228DA52400046CCC /* ResultCellTests.swift */; };
 		035334B5229608AA00046CCC /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334B4229608AA00046CCC /* UIColorExtension.swift */; };
+		035334B722960B4400046CCC /* InfoCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334B622960B4400046CCC /* InfoCellTests.swift */; };
 		035C646F22299A7E001ECC02 /* RatingsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035C646E22299A7E001ECC02 /* RatingsFetcher.swift */; };
 		038E03132270A868005CFC96 /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03122270A868005CFC96 /* IntExtensionTests.swift */; };
 		038E03152270A9FB005CFC96 /* TestGameCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */; };
@@ -163,6 +164,7 @@
 		03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsGetterSetterTests.swift; sourceTree = "<group>"; };
 		03533492228DA52400046CCC /* ResultCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCellTests.swift; sourceTree = "<group>"; };
 		035334B4229608AA00046CCC /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		035334B622960B4400046CCC /* InfoCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCellTests.swift; sourceTree = "<group>"; };
 		035C646E22299A7E001ECC02 /* RatingsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsFetcher.swift; sourceTree = "<group>"; };
 		038E03122270A868005CFC96 /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenterTests.swift; sourceTree = "<group>"; };
@@ -482,6 +484,7 @@
 		E198F9001F5D79BA00BAF553 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				035334B622960B4400046CCC /* InfoCellTests.swift */,
 				03533492228DA52400046CCC /* ResultCellTests.swift */,
 				E198F9011F5D79F100BAF553 /* VerbViewTests.swift */,
 				E12D06A21F5E85A200CDD54E /* VerbCellTests.swift */,
@@ -875,6 +878,7 @@
 				E12D06A31F5E85A200CDD54E /* VerbCellTests.swift in Sources */,
 				038E032222760A40005CFC96 /* UIViewExtensionsTests.swift in Sources */,
 				038E031A22711B76005CFC96 /* UIViewControllerExtensionsTests.swift in Sources */,
+				035334B722960B4400046CCC /* InfoCellTests.swift in Sources */,
 				038E03132270A868005CFC96 /* IntExtensionTests.swift in Sources */,
 				038E032C228A1E49005CFC96 /* ConjugationResultTests.swift in Sources */,
 				E151223121A62AE9008EF307 /* ReviewPrompterTests.swift in Sources */,
