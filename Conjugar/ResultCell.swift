@@ -11,10 +11,10 @@ import UIKit
 class ResultCell: UITableViewCell {
   static let identifier = "ResultCell"
 
-  private let verb = UILabel()
-  private let tensePersonNumber = UILabel()
-  private let correctAnswer = UILabel()
-  private let proposedAnswer = UILabel()
+  let verb = UILabel()
+  let tensePersonNumber = UILabel()
+  let correctAnswer = UILabel()
+  let proposedAnswer = UILabel()
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented.")
@@ -45,10 +45,9 @@ class ResultCell: UITableViewCell {
     self.verb.text = verb.lowercased()
     tensePersonNumber.text = "\(tense.displayName), \(personNumber.shortDisplayName)"
     self.correctAnswer.attributedText = correctAnswer.conjugatedString
-    if correctAnswer.lowercased() == proposedAnswer.lowercased() {
-      self.proposedAnswer.text = proposedAnswer.lowercased()
-    } else {
-      self.proposedAnswer.attributedText = proposedAnswer.coloredString(color: Colors.blue)
+    self.proposedAnswer.text = proposedAnswer.lowercased()
+    if correctAnswer.lowercased() != proposedAnswer.lowercased() {
+      self.proposedAnswer.textColor = Colors.blue
     }
   }
 }

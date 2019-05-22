@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		03533491228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */; };
+		03533493228DA52400046CCC /* ResultCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533492228DA52400046CCC /* ResultCellTests.swift */; };
+		035334B5229608AA00046CCC /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334B4229608AA00046CCC /* UIColorExtension.swift */; };
 		035C646F22299A7E001ECC02 /* RatingsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035C646E22299A7E001ECC02 /* RatingsFetcher.swift */; };
 		038E03132270A868005CFC96 /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03122270A868005CFC96 /* IntExtensionTests.swift */; };
 		038E03152270A9FB005CFC96 /* TestGameCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */; };
@@ -159,6 +161,8 @@
 
 /* Begin PBXFileReference section */
 		03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsGetterSetterTests.swift; sourceTree = "<group>"; };
+		03533492228DA52400046CCC /* ResultCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCellTests.swift; sourceTree = "<group>"; };
+		035334B4229608AA00046CCC /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		035C646E22299A7E001ECC02 /* RatingsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsFetcher.swift; sourceTree = "<group>"; };
 		038E03122270A868005CFC96 /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenterTests.swift; sourceTree = "<group>"; };
@@ -461,6 +465,7 @@
 			isa = PBXGroup;
 			children = (
 				E15D3BF51F533997003771BB /* MockNavigationC.swift */,
+				035334B4229608AA00046CCC /* UIColorExtension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -477,6 +482,7 @@
 		E198F9001F5D79BA00BAF553 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				03533492228DA52400046CCC /* ResultCellTests.swift */,
 				E198F9011F5D79F100BAF553 /* VerbViewTests.swift */,
 				E12D06A21F5E85A200CDD54E /* VerbCellTests.swift */,
 			);
@@ -874,9 +880,11 @@
 				E151223121A62AE9008EF307 /* ReviewPrompterTests.swift in Sources */,
 				E1DC939521B5836400DD4048 /* QuizTests.swift in Sources */,
 				038E032E228A2F18005CFC96 /* PersonNumberTests.swift in Sources */,
+				03533493228DA52400046CCC /* ResultCellTests.swift in Sources */,
 				038E032A227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift in Sources */,
 				E198F9051F5D7CB200BAF553 /* ConjugatorTests.swift in Sources */,
 				E1EC70F22198A10B00872787 /* UIViewControllerExtensions.swift in Sources */,
+				035334B5229608AA00046CCC /* UIColorExtension.swift in Sources */,
 				03533491228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift in Sources */,
 				038E0330228B0429005CFC96 /* TenseTests.swift in Sources */,
 				E14589F41F5B7BB000EEF141 /* BrowseInfoVCTests.swift in Sources */,
