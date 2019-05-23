@@ -13,6 +13,7 @@
 		035334B722960B4400046CCC /* InfoCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334B622960B4400046CCC /* InfoCellTests.swift */; };
 		035334B922960CE300046CCC /* TenseCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334B822960CE300046CCC /* TenseCellTests.swift */; };
 		035334BB22960CF500046CCC /* ConjugationCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334BA22960CF500046CCC /* ConjugationCellTests.swift */; };
+		035334BD2297593C00046CCC /* InfoVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334BC2297593C00046CCC /* InfoVCTests.swift */; };
 		035C646F22299A7E001ECC02 /* RatingsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035C646E22299A7E001ECC02 /* RatingsFetcher.swift */; };
 		038E03132270A868005CFC96 /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03122270A868005CFC96 /* IntExtensionTests.swift */; };
 		038E03152270A9FB005CFC96 /* TestGameCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */; };
@@ -169,6 +170,7 @@
 		035334B622960B4400046CCC /* InfoCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCellTests.swift; sourceTree = "<group>"; };
 		035334B822960CE300046CCC /* TenseCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenseCellTests.swift; sourceTree = "<group>"; };
 		035334BA22960CF500046CCC /* ConjugationCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugationCellTests.swift; sourceTree = "<group>"; };
+		035334BC2297593C00046CCC /* InfoVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoVCTests.swift; sourceTree = "<group>"; };
 		035C646E22299A7E001ECC02 /* RatingsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsFetcher.swift; sourceTree = "<group>"; };
 		038E03122270A868005CFC96 /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenterTests.swift; sourceTree = "<group>"; };
@@ -461,6 +463,7 @@
 				E1F06AEC1E8F05F400ADD2E1 /* MainTabBarVCTests.swift */,
 				E15D3BF01F532F4E003771BB /* BrowseVerbsVCTests.swift */,
 				E14589F31F5B7BB000EEF141 /* BrowseInfoVCTests.swift */,
+				035334BC2297593C00046CCC /* InfoVCTests.swift */,
 				038E03252279CCCB005CFC96 /* SettingsVCTests.swift */,
 				E14589F51F5B7E9D00EEF141 /* VerbVCTests.swift */,
 			);
@@ -895,6 +898,7 @@
 				E198F9051F5D7CB200BAF553 /* ConjugatorTests.swift in Sources */,
 				035334B922960CE300046CCC /* TenseCellTests.swift in Sources */,
 				E1EC70F22198A10B00872787 /* UIViewControllerExtensions.swift in Sources */,
+				035334BD2297593C00046CCC /* InfoVCTests.swift in Sources */,
 				035334B5229608AA00046CCC /* UIColorExtension.swift in Sources */,
 				03533491228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift in Sources */,
 				038E0330228B0429005CFC96 /* TenseTests.swift in Sources */,
