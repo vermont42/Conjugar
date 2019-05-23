@@ -37,7 +37,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
         }
       }
 
-      let tuResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: .secondSingularTu)
+      let tuResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: .secondSingularTú)
       let tuConjugation: String
       switch tuResult {
       case let .success(value):
@@ -55,11 +55,11 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
       }
       switch secondSingularBrowse {
       case .tu:
-        self.rows.append(.conjugation(tense, .secondSingularTu, tuConjugation))
+        self.rows.append(.conjugation(tense, .secondSingularTú, tuConjugation))
       case .vos:
         self.rows.append(.conjugation(tense, .secondSingularVos, vosConjugation))
       case .both:
-        self.rows.append(.conjugation(tense, .secondSingularTu, tuConjugation))
+        self.rows.append(.conjugation(tense, .secondSingularTú, tuConjugation))
         self.rows.append(.conjugation(tense, .secondSingularVos, vosConjugation))
       }
       [PersonNumber.thirdSingular, .firstPlural, .secondPlural, .thirdPlural].forEach { personNumber in

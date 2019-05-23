@@ -11,7 +11,7 @@ import UIKit
 class ConjugationCell: UITableViewCell {
   static let identifier = "ConjugationCell"
 
-  private let conjugation: UILabel = {
+  let conjugation: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.smallCell

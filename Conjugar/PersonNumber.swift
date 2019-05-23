@@ -9,7 +9,7 @@
 enum PersonNumber: String, CaseIterable {
   case firstSingular = "fs"
   case firstPlural = "fp"
-  case secondSingularTu = "ss"
+  case secondSingularTú = "ss"
   case secondSingularVos = "sv"
   case secondPlural = "sp"
   case thirdSingular = "ts"
@@ -20,7 +20,7 @@ enum PersonNumber: String, CaseIterable {
     switch self {
     case .firstSingular:
       return "yo"
-    case .secondSingularTu:
+    case .secondSingularTú:
       return "tú"
     case .secondSingularVos:
       return "vos"
@@ -41,7 +41,7 @@ enum PersonNumber: String, CaseIterable {
     switch self {
     case .firstSingular:
       return "1S"
-    case .secondSingularTu:
+    case .secondSingularTú:
       return "2S"
     case .secondSingularVos:
       return "2SV"
@@ -58,5 +58,5 @@ enum PersonNumber: String, CaseIterable {
     }
   }
 
-  static let actualPersonNumbers: [PersonNumber] = [.firstSingular, .secondSingularTu, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+  static let actualPersonNumbers: [PersonNumber] = [.firstSingular, .secondSingularTú, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
 }

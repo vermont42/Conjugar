@@ -11,7 +11,7 @@ import UIKit
 class TenseCell: UITableViewCell {
   static let identifier = "TenseCell"
 
-  private let tense: UILabel = {
+  let tense: UILabel = {
     let label = UILabel()
     label.textColor = Colors.red
     label.font = Fonts.regularCell

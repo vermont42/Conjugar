@@ -13,7 +13,7 @@ class PersonNumberTests: XCTestCase {
   func testShortDisplayName() {
     var personNumber = PersonNumber.firstSingular
     XCTAssertEqual(personNumber.shortDisplayName, "1S")
-    personNumber = .secondSingularTu
+    personNumber = .secondSingularTú
     XCTAssertEqual(personNumber.shortDisplayName, "2S")
     personNumber = .secondSingularVos
     XCTAssertEqual(personNumber.shortDisplayName, "2SV")
@@ -32,7 +32,7 @@ class PersonNumberTests: XCTestCase {
   func testPronoun() {
     var personNumber = PersonNumber.firstSingular
     XCTAssertEqual(personNumber.pronoun, "yo")
-    personNumber = PersonNumber.secondSingularTu
+    personNumber = PersonNumber.secondSingularTú
     XCTAssertEqual(personNumber.pronoun, "tú")
     personNumber = PersonNumber.secondSingularVos
     XCTAssertEqual(personNumber.pronoun, "vos")

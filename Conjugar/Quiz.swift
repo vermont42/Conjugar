@@ -47,7 +47,7 @@ class Quiz {
   private var timer: Timer?
   private var settings: Settings?
   private var gameCenter: GameCenterable?
-  private var personNumbersWithTu: [PersonNumber] = [.firstSingular, .secondSingularTu, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+  private var personNumbersWithTu: [PersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersWithVos: [PersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
   private var shouldShuffle = true
@@ -198,7 +198,7 @@ class Quiz {
       }
       for _ in 0...1 {
         if settings.secondSingularQuiz == .tu {
-          questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingularTu))
+          questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingularTú))
         } else {
           questions.append((irregularVosImperativoVerb, .imperativoPositivo, .secondSingularVos))
         }
@@ -255,7 +255,7 @@ class Quiz {
       questions.append((irregularPreteritoVerb, .futuroDeSubjuntivo, personNumber()))
       questions.append((allRegularVerb, .futuroDeSubjuntivo, personNumber()))
       if settings.secondSingularQuiz == .tu {
-        questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingularTu))
+        questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingularTú))
       } else {
         questions.append((irregularVosImperativoVerb, .imperativoPositivo, .secondSingularVos))
       }
@@ -352,7 +352,7 @@ class Quiz {
       personNumbersIndex += 1
     }
 
-    if (personNumbers[personNumbersIndex].pronoun == PersonNumber.firstSingular.pronoun && skipYo) || (personNumbers[personNumbersIndex].pronoun == PersonNumber.secondSingularTu.pronoun && skipTu) {
+    if (personNumbers[personNumbersIndex].pronoun == PersonNumber.firstSingular.pronoun && skipYo) || (personNumbers[personNumbersIndex].pronoun == PersonNumber.secondSingularTú.pronoun && skipTu) {
       return personNumber(skipYo: skipYo, skipTu: skipTu)
     } else {
       return personNumbers[personNumbersIndex]

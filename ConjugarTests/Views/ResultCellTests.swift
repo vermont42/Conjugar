@@ -12,6 +12,7 @@ import XCTest
 class ResultCellTests: XCTestCase {
   func testResultCell() {
     let cell = ResultCell(style: .default, reuseIdentifier: "cell")
+
     cell.configure(verb: "dar", tense: .presenteDeIndicativo, personNumber: .firstSingular, correctAnswer: "doy", proposedAnswer: "doy")
     XCTAssertEqual(cell.verb.text, "dar")
     XCTAssertEqual(cell.tensePersonNumber.text, "presente de indicativo, 1S")
