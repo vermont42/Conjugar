@@ -32,11 +32,12 @@ class InfoVCTests: XCTestCase, InfoDelegate {
     let ivc = InfoVC(analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }), infoString: NSAttributedString(string: "\(nonURLInfoString)\(url)"), infoDelegate: self)
     UIApplication.shared.keyWindow?.rootViewController = ivc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
+
     XCTAssertNotNil(ivc)
     XCTAssertNotNil(ivc.infoView)
     ivc.viewWillAppear(true)
     XCTAssertEqual(analytic, "visited viewController: \(InfoVC.self) ")
-    
+
     XCTAssertEqual(newHeading, "")
     var shouldInteract = ivc.textView(UITextView(), shouldInteractWith: nonURLInfoURL, in: NSRange(location: 0, length: nonURLInfoString.count))
     XCTAssertFalse(shouldInteract)

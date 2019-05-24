@@ -19,6 +19,7 @@ class SettingsVCTests: XCTestCase {
     let svc = SettingsVC(settings: settings, analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }), gameCenter: gameCenter, session: URLSession.stubSession(ratingsCount: ratingsCount))
     let nc = MockNavigationC(rootViewController: svc)
     UIApplication.shared.keyWindow?.rootViewController = nc
+
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(svc)
     svc.viewWillAppear(true)

@@ -14,6 +14,7 @@ class VerbVCTests: XCTestCase {
     var analytic = ""
     let vvc = VerbVC(verb: "maltear", settings: Settings(getterSetter: DictionaryGetterSetter(dictionary: [:])), analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
     UIApplication.shared.keyWindow?.rootViewController = vvc
+
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(vvc)
     XCTAssertNotNil(vvc.verbView)

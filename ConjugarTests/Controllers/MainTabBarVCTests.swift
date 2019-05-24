@@ -16,6 +16,7 @@ class MainTabBarVCTests: XCTestCase {
     let mtbvc = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: false), analyticsService: TestAnalyticsService(fire: {_ in}), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter, session: stubSession)
     XCTAssertNotNil(mtbvc)
     UIApplication.shared.keyWindow?.rootViewController = mtbvc
+
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     if let firstNavC = mtbvc.selectedViewController as? UINavigationController {
       if let browseVerbsVC = firstNavC.visibleViewController {
