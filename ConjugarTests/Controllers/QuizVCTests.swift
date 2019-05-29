@@ -13,7 +13,8 @@ class QuizVCTests: XCTestCase {
   func testQuizVC() {
     var analytic = ""
     let settings = Settings(getterSetter: DictionaryGetterSetter(dictionary: [:]))
-    let gameCenter = TestGameCenter(isAuthenticated: true)
+    settings.userRejectedGameCenter = true
+    let gameCenter = TestGameCenter(isAuthenticated: false)
     let analytics = TestAnalyticsService(fire: { fired in analytic = fired })
     let quiz = Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false)
     let qvc = QuizVC(settings: settings, quiz: quiz, analyticsService: analytics, gameCenter: gameCenter)
