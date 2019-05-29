@@ -15,6 +15,7 @@
 		035334BB22960CF500046CCC /* ConjugationCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334BA22960CF500046CCC /* ConjugationCellTests.swift */; };
 		035334BD2297593C00046CCC /* InfoVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334BC2297593C00046CCC /* InfoVCTests.swift */; };
 		035334BF229837BE00046CCC /* ResultsVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334BE229837BE00046CCC /* ResultsVCTests.swift */; };
+		035334C12298968600046CCC /* QuizVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334C02298968600046CCC /* QuizVCTests.swift */; };
 		035C646F22299A7E001ECC02 /* RatingsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035C646E22299A7E001ECC02 /* RatingsFetcher.swift */; };
 		038E03132270A868005CFC96 /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03122270A868005CFC96 /* IntExtensionTests.swift */; };
 		038E03152270A9FB005CFC96 /* TestGameCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */; };
@@ -173,6 +174,7 @@
 		035334BA22960CF500046CCC /* ConjugationCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugationCellTests.swift; sourceTree = "<group>"; };
 		035334BC2297593C00046CCC /* InfoVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoVCTests.swift; sourceTree = "<group>"; };
 		035334BE229837BE00046CCC /* ResultsVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsVCTests.swift; sourceTree = "<group>"; };
+		035334C02298968600046CCC /* QuizVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizVCTests.swift; sourceTree = "<group>"; };
 		035C646E22299A7E001ECC02 /* RatingsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsFetcher.swift; sourceTree = "<group>"; };
 		038E03122270A868005CFC96 /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenterTests.swift; sourceTree = "<group>"; };
@@ -466,6 +468,7 @@
 				E15D3BF01F532F4E003771BB /* BrowseVerbsVCTests.swift */,
 				035334BC2297593C00046CCC /* InfoVCTests.swift */,
 				E1F06AEC1E8F05F400ADD2E1 /* MainTabBarVCTests.swift */,
+				035334C02298968600046CCC /* QuizVCTests.swift */,
 				035334BE229837BE00046CCC /* ResultsVCTests.swift */,
 				038E03252279CCCB005CFC96 /* SettingsVCTests.swift */,
 				E14589F51F5B7E9D00EEF141 /* VerbVCTests.swift */,
@@ -915,6 +918,7 @@
 				038E03202273BF29005CFC96 /* RatingsFetcherTests.swift in Sources */,
 				038E03152270A9FB005CFC96 /* TestGameCenterTests.swift in Sources */,
 				035334BB22960CF500046CCC /* ConjugationCellTests.swift in Sources */,
+				035334C12298968600046CCC /* QuizVCTests.swift in Sources */,
 				E1F06AED1E8F05F400ADD2E1 /* MainTabBarVCTests.swift in Sources */,
 				E15D3BF11F532F4E003771BB /* BrowseVerbsVCTests.swift in Sources */,
 			);
