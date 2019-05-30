@@ -20,11 +20,21 @@ class BrowseVerbsVCTests: XCTestCase {
     XCTAssertNotNil(bvvc)
     bvvc.viewWillAppear(true)
     XCTAssertEqual(analytic, "visited viewController: \(BrowseVerbsVC.self) ")
-    XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 92)
-    bvvc.browseVerbsView.filterControl.selectedSegmentIndex = 1
-    XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 105)
-    bvvc.browseVerbsView.filterControl.selectedSegmentIndex = 2
-    XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 197)
+
+    let irregularVerbCount = 92
+    let regularVerbCount = 105
+    let combinedVerbCount = irregularVerbCount + regularVerbCount
+
+    let bvv = bvvc.browseVerbsView
+    [(0, irregularVerbCount), (1, regularVerbCount), (2, combinedVerbCount)].forEach {
+      bvv.filterControl.selectedSegmentIndex = $0.0
+      XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), $0.1)
+    }
+
+    bvv.filterControl.selectedSegmentIndex = 0
+    bvvc.valueChanged(bvv.filterControl)
+    XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), irregularVerbCount)
+
     bvvc.tableView(UITableView(), didSelectRowAt: IndexPath(row: 0, section: 0))
     XCTAssert(nc.pushedViewController is VerbVC)
   }

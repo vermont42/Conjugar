@@ -25,7 +25,11 @@ class BrowseInfoVCTests: XCTestCase {
 
     let biv = bivc.browseInfoView
 
-    [(0, 9), (1, 17), (2, 28)].forEach {
+    let easyCount = 9
+    let easyModerateCount = 17
+    let allCount = 28
+
+    [(0, easyCount), (1, easyModerateCount), (2, allCount)].forEach {
       biv.difficultyControl.selectedSegmentIndex = $0.0
       XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), $0.1)
     }
