@@ -12,7 +12,8 @@ import XCTest
 class BrowseInfoVCTests: XCTestCase {
   func testBrowseInfoVC() {
     var analytic = ""
-    let bivc = BrowseInfoVC(settings: Settings(getterSetter: DictionaryGetterSetter(dictionary: [:])), analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
+    let settings = Settings(getterSetter: DictionaryGetterSetter(dictionary: [:]))
+    let bivc = BrowseInfoVC(settings: settings, analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
     let nc = MockNavigationC(rootViewController: bivc)
     UIApplication.shared.keyWindow?.rootViewController = nc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
@@ -21,11 +22,25 @@ class BrowseInfoVCTests: XCTestCase {
     bivc.viewWillAppear(true)
     XCTAssertEqual(analytic, "visited viewController: \(BrowseInfoVC.self) ")
     XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), 28)
-    bivc.browseInfoView.difficultyControl.selectedSegmentIndex = 0
-    XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), 9)
-    bivc.browseInfoView.difficultyControl.selectedSegmentIndex = 1
-    XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), 17)
+
+    let biv = bivc.browseInfoView
+
+    [(0, 9), (1, 17), (2, 28)].forEach {
+      biv.difficultyControl.selectedSegmentIndex = $0.0
+      XCTAssertEqual(bivc.tableView(UITableView(), numberOfRowsInSection: 0), $0.1)
+    }
+
     bivc.tableView(UITableView(), didSelectRowAt: IndexPath(row: 0, section: 0))
-    XCTAssertTrue(nc.pushedViewController is InfoVC)
+    XCTAssert(nc.pushedViewController is InfoVC)
+    nc.popViewController(animated: false)
+
+    [(0, Difficulty.easy), (1, .moderate), (2, .difficult)].forEach {
+      biv.difficultyControl.selectedSegmentIndex = $0.0
+      bivc.difficultyChanged(biv.difficultyControl)
+      XCTAssertEqual(settings.infoDifficulty, $0.1)
+    }
+
+    bivc.infoSelectionDidChange(newHeading: "Terminology")
+    XCTAssert(nc.pushedViewController is InfoVC)
   }
 }

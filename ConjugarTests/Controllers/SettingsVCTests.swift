@@ -23,7 +23,7 @@ class SettingsVCTests: XCTestCase {
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(svc)
     svc.viewWillAppear(true)
-    XCTAssertTrue(nc.pushedViewController is SettingsVC)
+    XCTAssert(nc.pushedViewController is SettingsVC)
     XCTAssertEqual(analytic, "visited viewController: \(SettingsVC.self) ")
 
     XCTAssertEqual(settings.region, .latinAmerica)

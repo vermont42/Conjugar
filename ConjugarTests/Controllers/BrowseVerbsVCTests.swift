@@ -26,6 +26,6 @@ class BrowseVerbsVCTests: XCTestCase {
     bvvc.browseVerbsView.filterControl.selectedSegmentIndex = 2
     XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), 197)
     bvvc.tableView(UITableView(), didSelectRowAt: IndexPath(row: 0, section: 0))
-    XCTAssertTrue(nc.pushedViewController is VerbVC)
+    XCTAssert(nc.pushedViewController is VerbVC)
   }
 }
