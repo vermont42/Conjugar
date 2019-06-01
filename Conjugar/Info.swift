@@ -890,15 +890,7 @@ Info(heading: "Credits", difficulty: .easy, text: """
 
 ^Conjugar^
 
-Josh Adams developed ~Conjugar~ and has released its source code under the MIT license, reproduced here:
-
-Copyright 2017 Josh Adams
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Josh Adams developed ~Conjugar~ and has released its source code under the GNU Affero General Public License, available here: %https://github.com/vermont42/Conjugar/blob/master/LICENSE%
 
 ~Conjugar~'s source code lives here: %https://github.com/vermont42/Conjugar/%
 
