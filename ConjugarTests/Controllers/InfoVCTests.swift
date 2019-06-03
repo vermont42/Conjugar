@@ -19,10 +19,13 @@ class InfoVCTests: XCTestCase, InfoDelegate {
 
   func testInfoVC() {
     var analytic = ""
-    guard let url = URL(string: "https://racecondition.software") else {
+
+    let urlString = "https://racecondition.software"
+    guard let url = URL(string: urlString) else {
       XCTFail("Could not create URL.")
       return
     }
+    
     let nonURLInfoString = "info"
     guard let nonURLInfoURL = URL(string: nonURLInfoString) else {
       XCTFail("Could not create nonURLInfoURL.")
