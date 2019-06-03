@@ -12,7 +12,7 @@ import XCTest
 class QuizVCTests: XCTestCase {
   func testQuizVC() {
     var analytic = ""
-    let settings = Settings(getterSetter: DictionaryGetterSetter(dictionary: [:]))
+    let settings = Settings(getterSetter: DictionaryGetterSetter())
     settings.userRejectedGameCenter = true
     let gameCenter = TestGameCenter(isAuthenticated: false)
     let analytics = TestAnalyticsService(fire: { fired in analytic = fired })

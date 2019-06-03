@@ -12,7 +12,7 @@ import XCTest
 class ResultsVCTests: XCTestCase {
   func testResultsVC() {
     var analytic = ""
-    let quiz = Quiz(settings: Settings(getterSetter: DictionaryGetterSetter(dictionary: [:])), gameCenter: TestGameCenter(isAuthenticated: true), shouldShuffle: false)
+    let quiz = Quiz(settings: Settings(getterSetter: DictionaryGetterSetter()), gameCenter: TestGameCenter(isAuthenticated: true), shouldShuffle: false)
     let rvc = ResultsVC(quiz: quiz, analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
     UIApplication.shared.keyWindow?.rootViewController = rvc
 
