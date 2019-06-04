@@ -15,8 +15,9 @@ class SettingsVCTests: XCTestCase {
     var analytic = ""
     let settings = Settings(getterSetter: DictionaryGetterSetter())
     let gameCenter = TestGameCenter(isAuthenticated: false)
-    let ratingsCount = 42
-    let svc = SettingsVC(settings: settings, analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }), gameCenter: gameCenter, session: URLSession.stubSession(ratingsCount: ratingsCount))
+    let fakeRatingsCount = 42
+
+    let svc = SettingsVC(settings: settings, analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }), gameCenter: gameCenter, session: URLSession.stubSession(ratingsCount: fakeRatingsCount))
     let nc = MockNavigationC(rootViewController: svc)
     UIApplication.shared.keyWindow?.rootViewController = nc
 

@@ -19,7 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let mainTabBarVC: MainTabBarVC
     let settings: Settings
-    let stubSession = URLSession.stubSession(ratingsCount: 42)
+    let fakeRatingsCount = 42
+    let stubSession = URLSession.stubSession(ratingsCount: fakeRatingsCount)
 
     if CommandLine.arguments.contains("enable-ui-testing") {
       settings = Settings(getterSetter: DictionaryGetterSetter())

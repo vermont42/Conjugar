@@ -13,7 +13,9 @@ class MainTabBarVCTests: XCTestCase {
   func testMainTabBarVC() {
     let settings = Settings(getterSetter: DictionaryGetterSetter())
     let testGameCenter = TestGameCenter()
-    let mtbvc = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: false), analyticsService: TestAnalyticsService(fire: {_ in}), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter, session: stubSession)
+    let fakeRatingsCount = 42
+
+    let mtbvc = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: false), analyticsService: TestAnalyticsService(fire: {_ in}), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter, session: URLSession.stubSession(ratingsCount: fakeRatingsCount))
     XCTAssertNotNil(mtbvc)
     UIApplication.shared.keyWindow?.rootViewController = mtbvc
 
@@ -57,12 +59,5 @@ class MainTabBarVCTests: XCTestCase {
     } else {
       XCTFail("Fourth tab is not a UINavigationController.")
     }
-  }
-
-  private var stubSession: URLSession {
-    URLProtocolStub.testURLs = [RatingsFetcher.iTunesURL: RatingsFetcher.stubData()]
-    let config = URLSessionConfiguration.ephemeral
-    config.protocolClasses = [URLProtocolStub.self]
-    return URLSession(configuration: config)
   }
 }

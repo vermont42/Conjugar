@@ -25,7 +25,7 @@ class InfoVCTests: XCTestCase, InfoDelegate {
       XCTFail("Could not create URL.")
       return
     }
-    
+
     let nonURLInfoString = "info"
     guard let nonURLInfoURL = URL(string: nonURLInfoString) else {
       XCTFail("Could not create nonURLInfoURL.")
