@@ -22,7 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let fakeRatingsCount = 42
     let stubSession = URLSession.stubSession(ratingsCount: fakeRatingsCount)
 
-    if CommandLine.arguments.contains("enable-ui-testing") {
+    let uiTestingFlag = "enable-ui-testing"
+    if CommandLine.arguments.contains(uiTestingFlag) {
       settings = Settings(getterSetter: DictionaryGetterSetter())
 
       if CommandLine.arguments.contains(Region.spain.rawValue) {
