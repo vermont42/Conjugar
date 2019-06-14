@@ -12,8 +12,10 @@ import XCTest
 class BrowseInfoVCTests: XCTestCase {
   func testBrowseInfoVC() {
     var analytic = ""
-    let settings = Settings(getterSetter: DictionaryGetterSetter())
-    let bivc = BrowseInfoVC(settings: settings, analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
+    GlobalContainer.registerUnitTestingDependencies()
+    GlobalContainer.registerAnalytics(TestAnalyticsService(fire: { fired in analytic = fired }))
+
+    let bivc = BrowseInfoVC()
     let nc = MockNavigationC(rootViewController: bivc)
     UIApplication.shared.keyWindow?.rootViewController = nc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
@@ -41,7 +43,7 @@ class BrowseInfoVCTests: XCTestCase {
     [(0, Difficulty.easy), (1, .moderate), (2, .difficult)].forEach {
       biv.difficultyControl.selectedSegmentIndex = $0.0
       bivc.difficultyChanged(biv.difficultyControl)
-      XCTAssertEqual(settings.infoDifficulty, $0.1)
+      XCTAssertEqual(GlobalContainer.settings.infoDifficulty, $0.1)
     }
 
     bivc.infoSelectionDidChange(newHeading: "Terminology")

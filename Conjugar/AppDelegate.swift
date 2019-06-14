@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Swinject
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,42 +18,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     configureNavBar()
     configureStatusBar()
 
-    let mainTabBarVC: MainTabBarVC
-    let settings: Settings
-    let fakeRatingsCount = 42
-    let stubSession = URLSession.stubSession(ratingsCount: fakeRatingsCount)
-
-    if CommandLine.arguments.contains("enable-ui-testing") {
-      settings = Settings(getterSetter: DictionaryGetterSetter())
-
-      if CommandLine.arguments.contains(Region.spain.rawValue) {
-        settings.region = .spain
-      } else if CommandLine.arguments.contains(Region.latinAmerica.rawValue) {
-        settings.region = .latinAmerica
-      }
-
-      if CommandLine.arguments.contains(Difficulty.difficult.rawValue) {
-        settings.difficulty = .difficult
-      } else if CommandLine.arguments.contains(Difficulty.moderate.rawValue) {
-        settings.difficulty = .moderate
-      } else if CommandLine.arguments.contains(Difficulty.easy.rawValue) {
-        settings.difficulty = .easy
-      }
-
-      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: TestGameCenter(), shouldShuffle: false), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: TestGameCenter(), session: stubSession)
+    let uiTestingFlag = "enable-ui-testing"
+    if CommandLine.arguments.contains(uiTestingFlag) {
+      GlobalContainer.registerUITestingDependencies(launchArguments: CommandLine.arguments)
     } else {
-      settings = Settings(getterSetter: UserDefaultsGetterSetter())
       #if targetEnvironment(simulator)
-      let testGameCenter = TestGameCenter()
-      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: true), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter, session: stubSession)
+        GlobalContainer.registerSimulatorDependencies()
       #else
-      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz.shared, analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared, session: URLSession.shared)
+        GlobalContainer.registerDeviceDependencies()
       #endif
     }
 
-    Utterer.setup(settings: settings)
+    Utterer.setup(settings: GlobalContainer.settings)
     window = UIWindow(frame: UIScreen.main.bounds)
-    window?.rootViewController = mainTabBarVC
+    window?.rootViewController = MainTabBarVC()
     window?.makeKeyAndVisible()
 
     return true

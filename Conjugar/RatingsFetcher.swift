@@ -18,10 +18,10 @@ struct RatingsFetcher {
     return url
   }
 
-  static func fetchRatingsDescription(session: URLSession, completion: @escaping (String) -> ()) {
+  static func fetchRatingsDescription(completion: @escaping (String) -> ()) {
     let request = URLRequest(url: RatingsFetcher.iTunesURL)
 
-    let task = session.dataTask(with: request) { (responseData, _, error) in
+    let task = GlobalContainer.session.dataTask(with: request) { (responseData, _, error) in
       if error != nil {
         completion(errorMessage)
         return

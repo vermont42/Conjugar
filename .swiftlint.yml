@@ -13,6 +13,7 @@ disabled_rules:
 excluded:
   - Conjugar/Result.swift
   - Conjugar/ResultProtocol.swift
+  - Carthage
 
 file_length:
   warning: 10000

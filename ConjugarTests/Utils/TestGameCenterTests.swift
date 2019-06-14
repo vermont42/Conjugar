@@ -10,15 +10,16 @@ import XCTest
 @testable import Conjugar
 
 class TestGameCenterTests: XCTestCase {
-  private let analytics = TestAnalyticsService()
-
   func testAuthenticate() {
     let tgc = TestGameCenter(isAuthenticated: false)
 
-    tgc.authenticate(analyticsService: analytics, completion: { didAuthenticate in
+    GlobalContainer.registerUnitTestingDependencies()
+    GlobalContainer.registerGameCenter(tgc)
+
+    tgc.authenticate(completion: { didAuthenticate in
       XCTAssert(didAuthenticate)
 
-      tgc.authenticate(analyticsService: self.analytics, completion: { didAuthenticate in
+      tgc.authenticate(completion: { didAuthenticate in
         XCTAssertFalse(didAuthenticate)
       })
     })

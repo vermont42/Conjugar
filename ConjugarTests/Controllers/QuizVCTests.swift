@@ -12,12 +12,11 @@ import XCTest
 class QuizVCTests: XCTestCase {
   func testQuizVC() {
     var analytic = ""
-    let settings = Settings(getterSetter: DictionaryGetterSetter())
-    settings.userRejectedGameCenter = true
-    let gameCenter = TestGameCenter(isAuthenticated: false)
-    let analytics = TestAnalyticsService(fire: { fired in analytic = fired })
-    let quiz = Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false)
-    let qvc = QuizVC(settings: settings, quiz: quiz, analyticsService: analytics, gameCenter: gameCenter)
+    GlobalContainer.registerUnitTestingDependencies()
+    GlobalContainer.registerAnalytics(TestAnalyticsService(fire: { fired in analytic = fired }))
+    GlobalContainer.registerQuiz(Quiz(shouldShuffle: false))
+
+    let qvc = QuizVC()
     UIApplication.shared.keyWindow?.rootViewController = qvc
 
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
@@ -53,7 +52,7 @@ class QuizVCTests: XCTestCase {
     XCTAssertEqual(quizView.correct.text, correctAnswer)
 
     let remainingQuestionCount = 48
-    for _ in 0 ..< remainingQuestionCount {
+    (0 ..< remainingQuestionCount).forEach { _ in
       quizView.conjugationField.text = wrongAnswer
       XCTAssert(qvc.textFieldShouldReturn(quizView.conjugationField))
     }

@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0334DDE522A8055500F1B0E6 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0334DDE422A8055500F1B0E6 /* AWSCore.framework */; };
+		0334DDE722A8056200F1B0E6 /* AWSPinpoint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0334DDE622A8056200F1B0E6 /* AWSPinpoint.framework */; };
+		0334DDE822A8058800F1B0E6 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0334DDE422A8055500F1B0E6 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0334DDE922A8058800F1B0E6 /* AWSPinpoint.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0334DDE622A8056200F1B0E6 /* AWSPinpoint.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0334DDEB22A8060400F1B0E6 /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 0334DDEA22A8060400F1B0E6 /* awsconfiguration.json */; };
+		0334DDEF22A8880300F1B0E6 /* Swinject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0334DDED22A8880300F1B0E6 /* Swinject.framework */; };
+		0334DDF222AB20FE00F1B0E6 /* GlobalContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334DDF122AB20FE00F1B0E6 /* GlobalContainer.swift */; };
 		03533491228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */; };
 		03533493228DA52400046CCC /* ResultCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533492228DA52400046CCC /* ResultCellTests.swift */; };
 		035334B5229608AA00046CCC /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334B4229608AA00046CCC /* UIColorExtension.swift */; };
@@ -115,11 +122,6 @@
 		E1E092C421ED3C6900828C37 /* UserDefaultsGetterSetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1E092C221ED3C6900828C37 /* UserDefaultsGetterSetter.swift */; };
 		E1EC70F12198A10B00872787 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC70F02198A10B00872787 /* UIViewControllerExtensions.swift */; };
 		E1EC70F22198A10B00872787 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC70F02198A10B00872787 /* UIViewControllerExtensions.swift */; };
-		E1EC70F52198A63700872787 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1EC70F32198A63600872787 /* AWSCore.framework */; };
-		E1EC70F62198A63700872787 /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E1EC70F32198A63600872787 /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E1EC70F72198A63700872787 /* AWSPinpoint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1EC70F42198A63700872787 /* AWSPinpoint.framework */; };
-		E1EC70F82198A63700872787 /* AWSPinpoint.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E1EC70F42198A63700872787 /* AWSPinpoint.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E1EC70FD2198BA0D00872787 /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = E1EC70FC2198BA0D00872787 /* awsconfiguration.json */; };
 		E1EC71012198BA6400872787 /* AWSAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC70FF2198BA6300872787 /* AWSAnalyticsService.swift */; };
 		E1EC71032198BA8A00872787 /* DeviceUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EC71022198BA8A00872787 /* DeviceUtility.swift */; };
 		E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */; };
@@ -157,8 +159,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E1EC70F62198A63700872787 /* AWSCore.framework in Embed Frameworks */,
-				E1EC70F82198A63700872787 /* AWSPinpoint.framework in Embed Frameworks */,
+				0334DDE822A8058800F1B0E6 /* AWSCore.framework in Embed Frameworks */,
+				0334DDE922A8058800F1B0E6 /* AWSPinpoint.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -166,6 +168,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0334DDE422A8055500F1B0E6 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
+		0334DDE622A8056200F1B0E6 /* AWSPinpoint.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSPinpoint.framework; sourceTree = "<group>"; };
+		0334DDEA22A8060400F1B0E6 /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
+		0334DDED22A8880300F1B0E6 /* Swinject.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Swinject.framework; sourceTree = "<group>"; };
+		0334DDF122AB20FE00F1B0E6 /* GlobalContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalContainer.swift; sourceTree = "<group>"; };
 		03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsGetterSetterTests.swift; sourceTree = "<group>"; };
 		03533492228DA52400046CCC /* ResultCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCellTests.swift; sourceTree = "<group>"; };
 		035334B4229608AA00046CCC /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
@@ -275,9 +282,6 @@
 		E1E092C121ED3C6900828C37 /* DictionaryGetterSetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryGetterSetter.swift; sourceTree = "<group>"; };
 		E1E092C221ED3C6900828C37 /* UserDefaultsGetterSetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsGetterSetter.swift; sourceTree = "<group>"; };
 		E1EC70F02198A10B00872787 /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
-		E1EC70F32198A63600872787 /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
-		E1EC70F42198A63700872787 /* AWSPinpoint.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSPinpoint.framework; sourceTree = "<group>"; };
-		E1EC70FC2198BA0D00872787 /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = SOURCE_ROOT; };
 		E1EC70FF2198BA6300872787 /* AWSAnalyticsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSAnalyticsService.swift; sourceTree = "<group>"; };
 		E1EC71022198BA8A00872787 /* DeviceUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceUtility.swift; sourceTree = "<group>"; };
 		E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Conjugar.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -308,8 +312,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E14271371F01CA98001D19E1 /* GameKit.framework in Frameworks */,
-				E1EC70F52198A63700872787 /* AWSCore.framework in Frameworks */,
-				E1EC70F72198A63700872787 /* AWSPinpoint.framework in Frameworks */,
+				0334DDE522A8055500F1B0E6 /* AWSCore.framework in Frameworks */,
+				0334DDEF22A8880300F1B0E6 /* Swinject.framework in Frameworks */,
+				0334DDE722A8056200F1B0E6 /* AWSPinpoint.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,9 +427,10 @@
 		E14271351F01CA98001D19E1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E1EC70F42198A63700872787 /* AWSPinpoint.framework */,
-				E1EC70F32198A63600872787 /* AWSCore.framework */,
+				0334DDE422A8055500F1B0E6 /* AWSCore.framework */,
+				0334DDE622A8056200F1B0E6 /* AWSPinpoint.framework */,
 				E14271361F01CA98001D19E1 /* GameKit.framework */,
+				0334DDED22A8880300F1B0E6 /* Swinject.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -524,7 +530,7 @@
 			children = (
 				E1171C9021AA1BF000B06342 /* AnalyticsServiceable.swift */,
 				E1EC70FF2198BA6300872787 /* AWSAnalyticsService.swift */,
-				E1EC70FC2198BA0D00872787 /* awsconfiguration.json */,
+				0334DDEA22A8060400F1B0E6 /* awsconfiguration.json */,
 				E1EC71022198BA8A00872787 /* DeviceUtility.swift */,
 				E1171C9221AB387500B06342 /* TestAnalyticsService.swift */,
 			);
@@ -588,6 +594,7 @@
 				E1A44313200D10D200C48857 /* ConjugationDataSource.swift */,
 				E1483FCF1EF961880052C436 /* ConjugationResult.swift */,
 				E15A18521E9199C3008455DD /* ConjugatorError.swift */,
+				0334DDF122AB20FE00F1B0E6 /* GlobalContainer.swift */,
 				E1483FB01EF5C4C60052C436 /* Difficulty.swift */,
 				E1AB244E1F083CB300FE76E8 /* Info.swift */,
 				E16BEA051F0A92040053DD32 /* InfoDelegate.swift */,
@@ -633,6 +640,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E1F06AF11E8F05F400ADD2E1 /* Build configuration list for PBXNativeTarget "Conjugar" */;
 			buildPhases = (
+				0334DDF022A8886B00F1B0E6 /* Carthage */,
 				E1F06AD01E8F05F200ADD2E1 /* Sources */,
 				E1F06AD11E8F05F200ADD2E1 /* Frameworks */,
 				E1F06AD21E8F05F200ADD2E1 /* Resources */,
@@ -734,7 +742,7 @@
 			files = (
 				E1483FC01EF746D70052C436 /* chime.mp3 in Resources */,
 				E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */,
-				E1EC70FD2198BA0D00872787 /* awsconfiguration.json in Resources */,
+				0334DDEB22A8060400F1B0E6 /* awsconfiguration.json in Resources */,
 				E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */,
 				E19794342073D0C90015D490 /* gun.mp3 in Resources */,
 				E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */,
@@ -758,6 +766,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0334DDF022A8886B00F1B0E6 /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Swinject.framework",
+			);
+			name = Carthage;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Swinject.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
 		E1171C8F21A9A4AD00B06342 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -848,6 +876,7 @@
 				E11CFED11FC2083900BD3568 /* NSLayoutConstraintExtension.swift in Sources */,
 				E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */,
 				E1483FB51EF5D0510052C436 /* QuizDelegate.swift in Sources */,
+				0334DDF222AB20FE00F1B0E6 /* GlobalContainer.swift in Sources */,
 				E18145D81F2E3E170048DEE2 /* BrowseInfoView.swift in Sources */,
 				E139E0E01EC7D27A00B34DE7 /* NSAttributedStringExtension.swift in Sources */,
 				E1483FAF1EF5C3820052C436 /* Quiz.swift in Sources */,
@@ -1113,6 +1142,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Conjugar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
@@ -1132,6 +1162,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Conjugar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;

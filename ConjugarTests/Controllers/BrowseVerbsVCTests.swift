@@ -12,7 +12,10 @@ import XCTest
 class BrowseVerbsVCTests: XCTestCase {
   func testBrowseVerbsVC() {
     var analytic = ""
-    let bvvc = BrowseVerbsVC(settings: Settings(getterSetter: DictionaryGetterSetter()), analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }), reviewPrompter: TestReviewPrompter())
+    GlobalContainer.registerUnitTestingDependencies()
+    GlobalContainer.registerAnalytics(TestAnalyticsService(fire: { fired in analytic = fired }))
+
+    let bvvc = BrowseVerbsVC()
     let nc = MockNavigationC(rootViewController: bvvc)
     UIApplication.shared.keyWindow?.rootViewController = nc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)

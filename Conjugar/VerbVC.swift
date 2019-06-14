@@ -11,8 +11,6 @@ import UIKit
 class VerbVC: UIViewController {
   private let verb: String
   private var conjugationDataSource: ConjugationDataSource?
-  private let settings: Settings
-  private let analyticsService: AnalyticsServiceable
 
   var verbView: VerbView {
     if let castedView = view as? VerbView {
@@ -22,10 +20,8 @@ class VerbVC: UIViewController {
     }
   }
 
-  init(verb: String, settings: Settings, analyticsService: AnalyticsServiceable) {
+  init(verb: String) {
     self.verb = verb
-    self.settings = settings
-    self.analyticsService = analyticsService
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -98,13 +94,13 @@ class VerbVC: UIViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    conjugationDataSource = ConjugationDataSource(verb: verb, table: verbView.table, secondSingularBrowse: settings.secondSingularBrowse)
+    conjugationDataSource = ConjugationDataSource(verb: verb, table: verbView.table, secondSingularBrowse: GlobalContainer.settings.secondSingularBrowse)
     guard let conjugationDataSource = conjugationDataSource else {
       fatalError("\(ConjugationDataSource.self) was nil.")
     }
     verbView.setupTable(dataSource: conjugationDataSource, delegate: conjugationDataSource)
     verbView.table.reloadData()
-    analyticsService.recordVisitation(viewController: "\(VerbVC.self)")
+    GlobalContainer.analytics.recordVisitation(viewController: "\(VerbVC.self)")
   }
 
   private func initNavigationItemTitleView() {

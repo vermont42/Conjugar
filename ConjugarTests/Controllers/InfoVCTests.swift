@@ -19,6 +19,8 @@ class InfoVCTests: XCTestCase, InfoDelegate {
 
   func testInfoVC() {
     var analytic = ""
+    GlobalContainer.registerUnitTestingDependencies()
+    GlobalContainer.registerAnalytics(TestAnalyticsService(fire: { fired in analytic = fired }))
 
     let urlString = "https://racecondition.software"
     guard let url = URL(string: urlString) else {
@@ -32,7 +34,7 @@ class InfoVCTests: XCTestCase, InfoDelegate {
       return
     }
 
-    let ivc = InfoVC(analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }), infoString: NSAttributedString(string: "\(nonURLInfoString)\(url)"), infoDelegate: self)
+    let ivc = InfoVC(infoString: NSAttributedString(string: "\(nonURLInfoString)\(url)"), infoDelegate: self)
     UIApplication.shared.keyWindow?.rootViewController = ivc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
 

@@ -12,8 +12,10 @@ import XCTest
 class ResultsVCTests: XCTestCase {
   func testResultsVC() {
     var analytic = ""
-    let quiz = Quiz(settings: Settings(getterSetter: DictionaryGetterSetter()), gameCenter: TestGameCenter(isAuthenticated: true), shouldShuffle: false)
-    let rvc = ResultsVC(quiz: quiz, analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
+    GlobalContainer.registerUnitTestingDependencies()
+    GlobalContainer.registerAnalytics(TestAnalyticsService(fire: { fired in analytic = fired }))
+
+    let rvc = ResultsVC()
     UIApplication.shared.keyWindow?.rootViewController = rvc
 
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
@@ -22,11 +24,11 @@ class ResultsVCTests: XCTestCase {
     rvc.viewWillAppear(true)
     XCTAssertEqual(analytic, "visited viewController: \(ResultsVC.self) ")
 
-    quiz.start()
+    GlobalContainer.quiz.start()
     let expectedQuestionCount = 50
     (0 ..< expectedQuestionCount).forEach { _ in
       let wrongAnswer = "🥥"
-      _ = quiz.process(proposedAnswer: wrongAnswer)
+      _ = GlobalContainer.quiz.process(proposedAnswer: wrongAnswer)
     }
 
     XCTAssertEqual(rvc.tableView(rvc.resultsView.table, numberOfRowsInSection: 0), expectedQuestionCount)

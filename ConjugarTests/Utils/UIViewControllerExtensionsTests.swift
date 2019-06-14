@@ -12,7 +12,8 @@ import UIKit
 
 class UIViewControllerExtensionsTests: XCTestCase {
   func testFatalCastMessage() {
-    let vc = VerbVC(verb: "maltear", settings: Settings(getterSetter: DictionaryGetterSetter()), analyticsService: TestAnalyticsService())
+    GlobalContainer.registerUnitTestingDependencies()
+    let vc = VerbVC(verb: "maltear")
     let view = VerbView()
     let message = vc.fatalCastMessage(view: view.self)
     XCTAssert(message.contains("Could not cast <Conjugar.VerbVC:"))

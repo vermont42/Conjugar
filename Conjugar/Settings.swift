@@ -19,7 +19,7 @@ class Settings {
     }
   }
   static let regionKey = "region"
-  private static let regionDefault: Region = .latinAmerica
+  static let regionDefault: Region = .latinAmerica
 
   var difficulty: Difficulty {
     didSet {
@@ -29,7 +29,7 @@ class Settings {
     }
   }
   static let difficultyKey = "difficulty"
-  private static let difficultyDefault: Difficulty = .easy
+  static let difficultyDefault: Difficulty = .easy
 
   var infoDifficulty: Difficulty {
     didSet {

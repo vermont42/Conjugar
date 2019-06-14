@@ -45,14 +45,11 @@ class Quiz {
   private var irregularVosImperativoVerbs = VerbFamilies.irregularVosImperativoVerbs
   private var irregularVosImperativoVerbsIndex = 0
   private var timer: Timer?
-  private var settings: Settings?
-  private var gameCenter: GameCenterable?
   private var personNumbersWithTu: [PersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersWithVos: [PersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
   private var shouldShuffle = true
   weak var delegate: QuizDelegate?
-  static let shared = Quiz(settings: Settings(getterSetter: UserDefaultsGetterSetter()), gameCenter: GameCenter.shared)
 
   var questionCount: Int {
     return questions.count
@@ -82,18 +79,13 @@ class Quiz {
     }
   }
 
-  init(settings: Settings, gameCenter: GameCenterable, shouldShuffle: Bool = true) {
-    self.settings = settings
-    self.gameCenter = gameCenter
+  init(shouldShuffle: Bool = true) {
     self.shouldShuffle = shouldShuffle
   }
 
   func start() {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
-    lastRegion = settings.region
-    lastDifficulty = settings.difficulty
+    lastRegion = GlobalContainer.settings.region
+    lastDifficulty = GlobalContainer.settings.difficulty
     questions.removeAll()
     proposedAnswers.removeAll()
     correctAnswers.removeAll()
@@ -197,7 +189,7 @@ class Quiz {
         questions.append(($0, .gerundio, .none))
       }
       for _ in 0...1 {
-        if settings.secondSingularQuiz == .tu {
+        if GlobalContainer.settings.secondSingularQuiz == .tu {
           questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingularTú))
         } else {
           questions.append((irregularVosImperativoVerb, .imperativoPositivo, .secondSingularVos))
@@ -254,7 +246,7 @@ class Quiz {
       questions.append((allRegularVerb, .imperfectoDeSubjuntivo2, personNumber()))
       questions.append((irregularPreteritoVerb, .futuroDeSubjuntivo, personNumber()))
       questions.append((allRegularVerb, .futuroDeSubjuntivo, personNumber()))
-      if settings.secondSingularQuiz == .tu {
+      if GlobalContainer.settings.secondSingularQuiz == .tu {
         questions.append((irregularTuImperativoVerb, .imperativoPositivo, .secondSingularTú))
       } else {
         questions.append((irregularVosImperativoVerb, .imperativoPositivo, .secondSingularVos))
@@ -295,9 +287,6 @@ class Quiz {
   }
 
   func process(proposedAnswer: String) -> (ConjugationResult, String?) {
-    guard let gameCenter = gameCenter else {
-      fatalError("gameCenter was nil.")
-    }
     let correctAnswerResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: currentPersonNumber)
     switch correctAnswerResult {
     case let .success(correctAnswer):
@@ -317,7 +306,7 @@ class Quiz {
         timer?.invalidate()
         quizState = .finished
         delegate?.quizDidFinish()
-        gameCenter.reportScore(score)
+        GlobalContainer.gameCenter.reportScore(score)
       }
       if result == .totalMatch {
         return (result, nil)
@@ -335,11 +324,8 @@ class Quiz {
   }
 
   private func personNumber(skipYo: Bool = false, skipTu: Bool = false) -> PersonNumber {
-    guard let settings = settings else {
-      fatalError("settings was nil.")
-    }
     let personNumbers: [PersonNumber]
-    switch settings.secondSingularQuiz {
+    switch GlobalContainer.settings.secondSingularQuiz {
     case .tu:
       personNumbers = personNumbersWithTu
     case .vos:

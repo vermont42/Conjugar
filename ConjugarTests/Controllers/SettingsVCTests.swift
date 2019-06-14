@@ -13,11 +13,10 @@ import UIKit
 class SettingsVCTests: XCTestCase {
   func testSettings() {
     var analytic = ""
-    let settings = Settings(getterSetter: DictionaryGetterSetter())
-    let gameCenter = TestGameCenter(isAuthenticated: false)
-    let fakeRatingsCount = 42
+    GlobalContainer.registerUnitTestingDependencies()
+    GlobalContainer.registerAnalytics(TestAnalyticsService(fire: { fired in analytic = fired }))
 
-    let svc = SettingsVC(settings: settings, analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }), gameCenter: gameCenter, session: URLSession.stubSession(ratingsCount: fakeRatingsCount))
+    let svc = SettingsVC()
     let nc = MockNavigationC(rootViewController: svc)
     UIApplication.shared.keyWindow?.rootViewController = nc
 
@@ -27,39 +26,39 @@ class SettingsVCTests: XCTestCase {
     XCTAssert(nc.pushedViewController is SettingsVC)
     XCTAssertEqual(analytic, "visited viewController: \(SettingsVC.self) ")
 
-    XCTAssertEqual(settings.region, .latinAmerica)
+    XCTAssertEqual(GlobalContainer.settings.region, .latinAmerica)
     let regionControl = svc.settingsView.regionControl
     regionControl.selectedSegmentIndex = 0
     svc.regionChanged(regionControl)
-    XCTAssertEqual(settings.region, .spain)
+    XCTAssertEqual(GlobalContainer.settings.region, .spain)
 
-    XCTAssertEqual(settings.difficulty, .easy)
+    XCTAssertEqual(GlobalContainer.settings.difficulty, .easy)
     let difficultyControl = svc.settingsView.difficultyControl
     difficultyControl.selectedSegmentIndex = 2
     svc.difficultyChanged(difficultyControl)
-    XCTAssertEqual(settings.difficulty, .difficult)
+    XCTAssertEqual(GlobalContainer.settings.difficulty, .difficult)
     difficultyControl.selectedSegmentIndex = 1
     svc.difficultyChanged(difficultyControl)
-    XCTAssertEqual(settings.difficulty, .moderate)
+    XCTAssertEqual(GlobalContainer.settings.difficulty, .moderate)
 
-    XCTAssertEqual(settings.secondSingularBrowse, .tu)
+    XCTAssertEqual(GlobalContainer.settings.secondSingularBrowse, .tu)
     let browseVosControl = svc.settingsView.browseVosControl
     browseVosControl.selectedSegmentIndex = 2
     svc.browseVosChanged(browseVosControl)
-    XCTAssertEqual(settings.secondSingularBrowse, .both)
+    XCTAssertEqual(GlobalContainer.settings.secondSingularBrowse, .both)
     browseVosControl.selectedSegmentIndex = 1
     svc.browseVosChanged(browseVosControl)
-    XCTAssertEqual(settings.secondSingularBrowse, .vos)
+    XCTAssertEqual(GlobalContainer.settings.secondSingularBrowse, .vos)
 
-    XCTAssertEqual(settings.secondSingularQuiz, .tu)
+    XCTAssertEqual(GlobalContainer.settings.secondSingularQuiz, .tu)
     let quizVosControl = svc.settingsView.quizVosControl
     quizVosControl.selectedSegmentIndex = 1
     svc.quizVosChanged(quizVosControl)
-    XCTAssertEqual(settings.secondSingularQuiz, .vos)
+    XCTAssertEqual(GlobalContainer.settings.secondSingularQuiz, .vos)
 
-    XCTAssertFalse(gameCenter.isAuthenticated)
+    XCTAssertFalse(GlobalContainer.gameCenter.isAuthenticated)
     svc.authenticate()
-    XCTAssert(gameCenter.isAuthenticated)
+    XCTAssert(GlobalContainer.gameCenter.isAuthenticated)
 
     let expectatiön = expectation(description: "testRateReview")
     svc.rateReview(completion: { didSucceed in

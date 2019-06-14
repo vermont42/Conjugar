@@ -31,7 +31,7 @@ class TenseTests: XCTestCase {
   }
 
   func testHaberTensesForCompoundTenses() {
-    // The following line uses as much type inference as the compiler allows.
+    // Tense. is sadly required because the compiler can't otherwise fully infer types.
     [(Tense.perfectoDeIndicativo, .presenteDeIndicativo), (.pretéritoAnterior, .pretérito), (.pluscuamperfectoDeIndicativo, .imperfectoDeIndicativo), (.futuroPerfecto, .futuroDeIndicativo), (.condicionalCompuesto, .condicional), (.perfectoDeSubjuntivo, .presenteDeSubjuntivo), (.pluscuamperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo1), (.pluscuamperfectoDeSubjuntivo2, .imperfectoDeSubjuntivo1), (Tense.futuroPerfectoDeSubjuntivo, Tense.futuroDeSubjuntivo)].forEach {
       testHaberTenseForCompoundTense(compoundTense: $0.0, haberTense: $0.1)
     }
