@@ -14,7 +14,7 @@ class VerbVCTests: XCTestCase {
     var analytic = ""
     GlobalContainer.registerUnitTestingDependencies()
     GlobalContainer.registerAnalytics(TestAnalyticsService(fire: { fired in analytic = fired }))
-    
+
     let vvc = VerbVC(verb: "maltear")
     UIApplication.shared.keyWindow?.rootViewController = vvc
 
