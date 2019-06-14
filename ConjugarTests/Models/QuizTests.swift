@@ -16,7 +16,7 @@ fileprivate let difficultSpain = 750
 class QuizTests: XCTestCase {
   private let testGameCenter = TestGameCenter()
 
-  func testDifficultSpainQuiz() {
+  func testQuiz() {
     let spain = Region.spain.rawValue
     let latinAmerica = Region.latinAmerica.rawValue
     let difficult = Difficulty.difficult.rawValue

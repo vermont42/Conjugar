@@ -4,6 +4,8 @@ AWSCore.framework/
 amplify/
 awsconfiguration.json
 .amplifyrc
+
+# Other
 .DS_Store
 Conjugar.xcodeproj/project.xcworkspace/xcuserdata/
 Conjugar.xcodeproj/xcuserdata/
