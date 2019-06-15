@@ -10,7 +10,6 @@ import Foundation
 
 class VerbParser: NSObject, XMLParserDelegate {
   private var parser: XMLParser?
-  private var buffer = ""
   private let verbTag = "verb"
   private var verbs: [String: [String: String]] = [:]
   private var currentVerb = ""
