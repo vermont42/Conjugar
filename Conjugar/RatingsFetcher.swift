@@ -30,7 +30,7 @@ struct RatingsFetcher {
           let json = try? JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
           let results = json["results"] as? [[String: Any]],
           results.count == 1,
-          let ratingsCount = (results[0])["userRatingCountForCurrentVersion"] as? Int
+          let ratingsCount = (results[0])["userRatingCount"] as? Int
         else {
             completion(errorMessage)
             return
@@ -39,11 +39,11 @@ struct RatingsFetcher {
         let addYours = "Add yours!"
         switch ratingsCount {
         case 0:
-          description = "No one has rated this version of Conjugar. Be the first!"
+          description = "No one has rated Conjugar. Be the first!"
         case 1:
-          description = "There is one rating for this version of Conjugar. \(addYours)"
+          description = "There is one rating for Conjugar. \(addYours)"
         default:
-          description = "There are \(ratingsCount) ratings for this version of Conjugar. \(addYours)"
+          description = "There are \(ratingsCount) ratings for Conjugar. \(addYours)"
         }
         completion(description)
       }
