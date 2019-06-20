@@ -90,7 +90,7 @@ struct GlobalContainer {
     let settings = Settings(getterSetter: UserDefaultsGetterSetter())
     let gameCenter = GameCenter()
 
-    registerDependencies(settings: settings, analytics: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter(), gameCenter: gameCenter, quiz: Quiz(shouldShuffle: true), session: URLSession.shared)
+    registerDependencies(settings: settings, analytics: AWSAnalyticsService(), reviewPrompter: ReviewPrompter(), gameCenter: gameCenter, quiz: Quiz(shouldShuffle: true), session: URLSession.shared)
   }
 
   static func registerSimulatorDependencies() {

@@ -11,7 +11,6 @@ import AWSPinpoint
 
 class AWSAnalyticsService: NSObject, AnalyticsServiceable {
   var pinpoint: AWSPinpoint
-  static let shared = AWSAnalyticsService()
 
   override init() {
     let config = AWSPinpointConfiguration.defaultPinpointConfiguration(launchOptions: nil)
