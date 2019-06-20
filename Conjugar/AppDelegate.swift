@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let testGameCenter = TestGameCenter()
       mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: true), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter, session: stubSession)
       #else
-      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: GameCenter.shared), analyticsService: AWSAnalyticsService.shared, reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared, session: URLSession.shared)
+      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: GameCenter.shared), analyticsService: AWSAnalyticsService(), reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared, session: URLSession.shared)
       #endif
     }
 
