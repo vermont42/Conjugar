@@ -29,21 +29,23 @@ struct RatingsFetcher {
         guard
           let json = try? JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
           let results = json["results"] as? [[String: Any]],
-          results.count == 1,
-          let ratingsCount = (results[0])["userRatingCount"] as? Int
-        else {
+          results.count == 1
+          else {
             completion(errorMessage)
             return
         }
+
+        let ratingsCount = (results[0])["userRatingCountForCurrentVersion"] as? Int ?? 0
+
         let description: String
         let addYours = "Add yours!"
         switch ratingsCount {
         case 0:
-          description = "No one has rated Conjugar. Be the first!"
+          description = "No one has rated this version of Conjugar. ¡Sé la primera o el primero!"
         case 1:
-          description = "There is one rating for Conjugar. \(addYours)"
+          description = "There is one rating for this version of Conjugar. \(addYours)"
         default:
-          description = "There are \(ratingsCount) ratings for Conjugar. \(addYours)"
+          description = "There are \(ratingsCount) ratings for this version of Conjugar. \(addYours)"
         }
         completion(description)
       }
