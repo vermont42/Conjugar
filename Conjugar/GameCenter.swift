@@ -14,8 +14,6 @@ class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
   private let localPlayer = GKLocalPlayer.local
   private var leaderboardIdentifier = ""
 
-  //private override init() {}
-
   func authenticate(completion: ((Bool) -> Void)? = nil) {
     localPlayer.authenticateHandler = { viewController, error in
       if let viewController = viewController, let topController = UIApplication.topViewController() {
