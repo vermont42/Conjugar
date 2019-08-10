@@ -21,11 +21,11 @@ class Conjugator {
     verbs = VerbParser().parse()
   }
 
-  func allVerbsArray() -> [String] {
+  var allVerbs: [String] {
     return Array(verbs.keys).sorted()
   }
 
-  func regularVerbsArray() -> [String] {
+  var regularVerbs: [String] {
     var regularVerbs: [String: [String: String]] = [:]
     for (key, value) in verbs where value[VerbType.key] != VerbType.irregular.rawValue {
       regularVerbs[key] = value
@@ -33,7 +33,7 @@ class Conjugator {
     return Array(regularVerbs.keys).sorted()
   }
 
-  func irregularVerbsArray() -> [String] {
+  var irregularVerbs: [String] {
     var irregularVerbs: [String: [String: String]] = [:]
     for (key, value) in verbs where value[VerbType.key] == VerbType.irregular.rawValue {
       irregularVerbs[key] = value
