@@ -49,12 +49,13 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   }
 
   override func loadView() {
+    print("@@@ loadView")
     let browseVerbsView = BrowseVerbsView(frame: UIScreen.main.bounds)
     browseVerbsView.setupTable(dataSource: self, delegate: self)
     browseVerbsView.filterControl.addTarget(self, action: #selector(BrowseVerbsVC.valueChanged(_:)), for: .valueChanged)
-    allVerbs = Conjugator.shared.allVerbsArray()
-    regularVerbs = Conjugator.shared.regularVerbsArray()
-    irregularVerbs = Conjugator.shared.irregularVerbsArray()
+    allVerbs = Conjugator.shared.allVerbs
+    regularVerbs = Conjugator.shared.regularVerbs
+    irregularVerbs = Conjugator.shared.irregularVerbs
     navigationItem.titleView = UILabel.titleLabel(title: "Browse")
     view = browseVerbsView
     reviewPrompter.promptableActionHappened()

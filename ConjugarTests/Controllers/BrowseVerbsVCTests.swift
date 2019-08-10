@@ -21,8 +21,8 @@ class BrowseVerbsVCTests: XCTestCase {
     bvvc.viewWillAppear(true)
     XCTAssertEqual(analytic, "visited viewController: \(BrowseVerbsVC.self) ")
 
-    let irregularVerbCount = 92
-    let regularVerbCount = 105
+    let irregularVerbCount = Conjugator.shared.irregularVerbs.count
+    let regularVerbCount = Conjugator.shared.regularVerbs.count
     let combinedVerbCount = irregularVerbCount + regularVerbCount
 
     let bvv = bvvc.browseVerbsView
