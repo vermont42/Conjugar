@@ -15,7 +15,7 @@ class RatingsFetcherTests: XCTestCase {
   }
 
   func testNoReviews() {
-    testDescription(count: 0, expectedDescription: "No one has rated this version of Conjugar. Be the first!")
+    testDescription(count: 0, expectedDescription: "No one has rated this version of Conjugar. ¡Sé la primera o el primero!")
   }
 
   func testOneReview() {

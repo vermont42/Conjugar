@@ -7,7 +7,7 @@
 //
 
 struct VerbFamilies {
-  static let regularArVerbs = ["hablar", "caminar", "andar", "trabajar", "estudiar", "escuchar", "visitar", "viajar", "enseñar", "llevar", "llegar", "bailar", "nadar", "cocinar", "charlar", "platicar", "llorar", "esperar", "buscar", "mirar", "pintar", "gastar", "ganar", "comprar", "tocar", "tomar", "sacar", "ayudar", "cantar", "desear", "necesitar", "cortar", "contestar", "dibujar", "clonar", "datar", "distar", "empinar", "encalar", "esposar", "formar", "glosar", "golpear", "grapar", "hibernar", "maltear", "manar", "nublar", "penar", "ponderar", "rasar", "seriar", "trinchar", "procesar", "declarar", "helar"]
+  static let regularArVerbs = ["hablar", "caminar", "andar", "trabajar", "estudiar", "escuchar", "visitar", "viajar", "enseñar", "llevar", "llegar", "bailar", "nadar", "cocinar", "charlar", "platicar", "llorar", "esperar", "buscar", "mirar", "pintar", "gastar", "ganar", "comprar", "tocar", "tomar", "sacar", "ayudar", "cantar", "desear", "necesitar", "cortar", "contestar", "dibujar", "clonar", "datar", "distar", "empinar", "encalar", "esposar", "formar", "glosar", "golpear", "grapar", "hibernar", "maltear", "manar", "nublar", "penar", "ponderar", "rasar", "seriar", "trinchar", "procesar", "declarar", "helar", "usar", "regresar", "quedar", "lavar", "limpiar", "amar"]
 
   static let regularIrVerbs = ["vivir", "existir", "ocurrir", "recibir", "permitir", "partir", "cumplir", "decidir", "subir", "sufrir", "compartir", "consistir", "insistir", "asistir", "discutir", "unir", "coincidir", "distinguir", "definir", "admitir", "acudir", "nutrir", "evadir"]
 
