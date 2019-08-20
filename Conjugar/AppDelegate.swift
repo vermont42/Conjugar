@@ -11,6 +11,7 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
+  var analytics: AnalyticsServiceable?
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     configureTabBar()
@@ -23,6 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let stubSession = URLSession.stubSession(ratingsCount: fakeRatingsCount)
 
     let uiTestingFlag = "enable-ui-testing"
+    let testAnalyticsService = TestAnalyticsService()
+
     if CommandLine.arguments.contains(uiTestingFlag) {
       settings = Settings(getterSetter: DictionaryGetterSetter())
 
@@ -40,14 +43,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         settings.difficulty = .easy
       }
 
-      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: TestGameCenter(), shouldShuffle: false), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: TestGameCenter(), session: stubSession)
+      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: TestGameCenter(), shouldShuffle: false), analyticsService: testAnalyticsService, reviewPrompter: TestReviewPrompter(), gameCenter: TestGameCenter(), session: stubSession)
+      analytics = testAnalyticsService
     } else {
       settings = Settings(getterSetter: UserDefaultsGetterSetter())
       #if targetEnvironment(simulator)
       let testGameCenter = TestGameCenter()
-      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: true), analyticsService: TestAnalyticsService(), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter, session: stubSession)
+      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: true), analyticsService: testAnalyticsService, reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter, session: stubSession)
+      analytics = testAnalyticsService
       #else
-      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: GameCenter.shared), analyticsService: AWSAnalyticsService(), reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared, session: URLSession.shared)
+      let awsAnalyticsService = AWSAnalyticsService()
+      mainTabBarVC = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: GameCenter.shared), analyticsService: awsAnalyticsService, reviewPrompter: ReviewPrompter.shared, gameCenter: GameCenter.shared, session: URLSession.shared)
+      analytics = awsAnalyticsService
       #endif
     }
 
@@ -84,7 +91,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func applicationWillEnterForeground(_ application: UIApplication) {}
 
-  func applicationDidBecomeActive(_ application: UIApplication) {}
+  func applicationDidBecomeActive(_ application: UIApplication) {
+    analytics?.recordBecameActive()
+  }
 
   func applicationWillTerminate(_ application: UIApplication) {}
 }

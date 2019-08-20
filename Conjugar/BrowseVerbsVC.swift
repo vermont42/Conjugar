@@ -49,7 +49,6 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   }
 
   override func loadView() {
-    print("@@@ loadView")
     let browseVerbsView = BrowseVerbsView(frame: UIScreen.main.bounds)
     browseVerbsView.setupTable(dataSource: self, delegate: self)
     browseVerbsView.filterControl.addTarget(self, action: #selector(BrowseVerbsVC.valueChanged(_:)), for: .valueChanged)
