@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol AnalyticsServiceable {
   func recordEvent(_ eventName: String, parameters: [String: String]?, metrics: [String: Double]?)
@@ -15,6 +16,7 @@ protocol AnalyticsServiceable {
   func recordQuizStart()
   func recordQuizCompletion(score: Int)
   func recordGameCenterAuth()
+  func recordBecameActive()
 
   var visited: String { get }
   var viewContröller: String { get }
@@ -43,6 +45,12 @@ extension AnalyticsServiceable {
 
   func recordGameCenterAuth() {
     recordEvent(gameCenterAuth)
+  }
+
+  func recordBecameActive() {
+    let becameActive = "becameActive"
+    let modelKey = "model"
+    recordEvent(becameActive, parameters: [modelKey: "\(UIDevice.current.modelName)"], metrics: nil)
   }
 
   var visited: String {
