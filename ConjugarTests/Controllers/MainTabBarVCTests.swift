@@ -11,11 +11,7 @@ import XCTest
 
 class MainTabBarVCTests: XCTestCase {
   func testMainTabBarVC() {
-    let settings = Settings(getterSetter: DictionaryGetterSetter())
-    let testGameCenter = TestGameCenter()
-    let fakeRatingsCount = 42
-
-    let mtbvc = MainTabBarVC(settings: settings, quiz: Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: false), analyticsService: TestAnalyticsService(fire: {_ in}), reviewPrompter: TestReviewPrompter(), gameCenter: testGameCenter, session: URLSession.stubSession(ratingsCount: fakeRatingsCount))
+    let mtbvc = MainTabBarVC()
     XCTAssertNotNil(mtbvc)
     UIApplication.shared.keyWindow?.rootViewController = mtbvc
 

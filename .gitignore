@@ -4,15 +4,6 @@ AWSCore.framework/
 amplify/
 awsconfiguration.json
 .amplifyrc
-build/
-dist/
-node_modules/
-aws-exports.js
-
-# Carthage
-Cartfile
-Cartfile.resolved
-Carthage/
 
 # Other
 .DS_Store

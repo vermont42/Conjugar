@@ -12,7 +12,8 @@ import UIKit
 
 class UIAlertControllerExtensionTests: XCTestCase, InfoDelegate {
   func testShowMessage() {
-    let ivc = InfoVC(analyticsService: TestAnalyticsService(), infoString: NSAttributedString(string: "🍕"), infoDelegate: self)
+    Current = World.unitTest
+    let ivc = InfoVC(infoString: NSAttributedString(string: "🍕"), infoDelegate: self)
     UIApplication.shared.keyWindow?.rootViewController = ivc
     ivc.viewWillAppear(true)
     UIAlertController.showMessage("", title: "")

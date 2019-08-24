@@ -18,10 +18,10 @@ struct RatingsFetcher {
     return url
   }
 
-  static func fetchRatingsDescription(session: URLSession, completion: @escaping (String) -> ()) {
+  static func fetchRatingsDescription(completion: @escaping (String) -> ()) {
     let request = URLRequest(url: RatingsFetcher.iTunesURL)
 
-    let task = session.dataTask(with: request) { (responseData, _, error) in
+    let task = Current.session.dataTask(with: request) { (responseData, _, error) in
       if error != nil {
         completion(errorMessage)
         return
@@ -30,7 +30,7 @@ struct RatingsFetcher {
           let json = try? JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
           let results = json["results"] as? [[String: Any]],
           results.count == 1
-        else {
+          else {
             completion(errorMessage)
             return
         }

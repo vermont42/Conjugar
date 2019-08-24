@@ -14,10 +14,22 @@ class SettingsVCTests: XCTestCase {
   func testSettings() {
     var analytic = ""
     let settings = Settings(getterSetter: DictionaryGetterSetter())
+    settings.userRejectedGameCenter = true
     let gameCenter = TestGameCenter(isAuthenticated: false)
-    let fakeRatingsCount = 42
+    let analytics = TestAnalyticsService(fire: { fired in analytic = fired })
+    let quiz = Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false)
+    let ratingsCount = 42
 
-    let svc = SettingsVC(settings: settings, analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }), gameCenter: gameCenter, session: URLSession.stubSession(ratingsCount: fakeRatingsCount))
+    Current = World(
+      analytics: analytics,
+      reviewPrompter: TestReviewPrompter(),
+      gameCenter: gameCenter,
+      settings: settings,
+      quiz: quiz,
+      session: URLSession.stubSession(ratingsCount: ratingsCount)
+    )
+
+    let svc = SettingsVC()
     let nc = MockNavigationC(rootViewController: svc)
     UIApplication.shared.keyWindow?.rootViewController = nc
 

@@ -9,29 +9,12 @@
 import UIKit
 
 class SettingsVC: UIViewController {
-  private let settings: Settings
-  private let analyticsService: AnalyticsServiceable
-  private let gameCenter: GameCenterable
-  private let session: URLSession
-
   var settingsView: SettingsView {
     if let castedView = view as? SettingsView {
       return castedView
     } else {
       fatalError(fatalCastMessage(view: SettingsView.self))
     }
-  }
-
-  init(settings: Settings, analyticsService: AnalyticsServiceable, gameCenter: GameCenterable, session: URLSession) {
-    self.settings = settings
-    self.analyticsService = analyticsService
-    self.gameCenter = gameCenter
-    self.session = session
-    super.init(nibName: nil, bundle: nil)
-  }
-
-  required init?(coder aDecoder: NSCoder) {
-    UIViewController.fatalErrorNotImplemented()
   }
 
   override func loadView() {
@@ -44,13 +27,13 @@ class SettingsVC: UIViewController {
     settingsView.gameCenterButton.addTarget(self, action: #selector(authenticate), for: .touchUpInside)
     settingsView.rateReviewButton.addTarget(self, action: #selector(rateReview), for: .touchUpInside)
 
-    RatingsFetcher.fetchRatingsDescription(session: session) { description in
+    RatingsFetcher.fetchRatingsDescription(completion: { description in
       if description != RatingsFetcher.errorMessage {
         DispatchQueue.main.async {
           settingsView.showRatingsUI(description: description)
         }
       }
-    }
+    })
 
     navigationItem.titleView = UILabel.titleLabel(title: "Settings")
     view = settingsView
@@ -64,9 +47,9 @@ class SettingsVC: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     [settingsView.gameCenterLabel, settingsView.gameCenterDescription, settingsView.gameCenterButton].forEach {
-      $0.isHidden = gameCenter.isAuthenticated
+      $0.isHidden = Current.gameCenter.isAuthenticated
     }
-    analyticsService.recordVisitation(viewController: "\(SettingsVC.self)")
+    Current.analytics.recordVisitation(viewController: "\(SettingsVC.self)")
   }
 
   override func viewDidAppear(_ animated: Bool) {
@@ -77,14 +60,14 @@ class SettingsVC: UIViewController {
   }
 
   private func updateControls() {
-    switch settings.region {
+    switch Current.settings.region {
     case .spain:
       settingsView.regionControl.selectedSegmentIndex = 0
     case .latinAmerica:
       settingsView.regionControl.selectedSegmentIndex = 1
     }
 
-    switch settings.difficulty {
+    switch Current.settings.difficulty {
     case .easy:
       settingsView.difficultyControl.selectedSegmentIndex = 0
     case .moderate:
@@ -93,7 +76,7 @@ class SettingsVC: UIViewController {
       settingsView.difficultyControl.selectedSegmentIndex = 2
     }
 
-    switch settings.secondSingularBrowse {
+    switch Current.settings.secondSingularBrowse {
     case .tu:
       settingsView.browseVosControl.selectedSegmentIndex = 0
     case .vos:
@@ -102,7 +85,7 @@ class SettingsVC: UIViewController {
       settingsView.browseVosControl.selectedSegmentIndex = 2
     }
 
-    switch settings.secondSingularQuiz {
+    switch Current.settings.secondSingularQuiz {
     case .tu:
       settingsView.quizVosControl.selectedSegmentIndex = 0
     case .vos:
@@ -113,52 +96,52 @@ class SettingsVC: UIViewController {
   @objc func regionChanged(_ sender: UISegmentedControl) {
     let index = settingsView.regionControl.selectedSegmentIndex
     if index == 0 {
-      settings.region = .spain
+      Current.settings.region = .spain
     } else /* index == 1 */ {
-      settings.region = .latinAmerica
+      Current.settings.region = .latinAmerica
     }
   }
 
   @objc func difficultyChanged(_ sender: UISegmentedControl) {
     let index = settingsView.difficultyControl.selectedSegmentIndex
     if index == 0 {
-      settings.difficulty = .easy
+      Current.settings.difficulty = .easy
     } else if index == 1 {
-      settings.difficulty = .moderate
+      Current.settings.difficulty = .moderate
     } else /* index == 2 */ {
-      settings.difficulty = .difficult
+      Current.settings.difficulty = .difficult
     }
   }
 
   @objc func quizVosChanged(_ sender: UISegmentedControl) {
     let index = settingsView.quizVosControl.selectedSegmentIndex
     if index == 0 {
-      settings.secondSingularQuiz = .tu
+      Current.settings.secondSingularQuiz = .tu
     } else if index == 1 {
-      settings.secondSingularQuiz = .vos
+      Current.settings.secondSingularQuiz = .vos
     }
   }
 
   @objc func browseVosChanged(_ sender: UISegmentedControl) {
     let index = settingsView.browseVosControl.selectedSegmentIndex
     if index == 0 {
-      settings.secondSingularBrowse = .tu
+      Current.settings.secondSingularBrowse = .tu
     } else if index == 1 {
-      settings.secondSingularBrowse = .vos
+      Current.settings.secondSingularBrowse = .vos
     } else if index == 2 {
-      settings.secondSingularBrowse = .both
+      Current.settings.secondSingularBrowse = .both
     }
   }
 
   @objc func authenticate() {
-    settings.userRejectedGameCenter = false
-    gameCenter.authenticate(analyticsService: analyticsService) { authenticated in
+    Current.settings.userRejectedGameCenter = false
+    Current.gameCenter.authenticate(completion: { authenticated in
       DispatchQueue.main.async {
         [self.settingsView.gameCenterLabel, self.settingsView.gameCenterDescription, self.settingsView.gameCenterButton].forEach {
           $0.isHidden = authenticated
         }
       }
-    }
+    })
   }
 
   @objc func rateReview(completion: @escaping ((Bool) -> ()) = { _ in }) {

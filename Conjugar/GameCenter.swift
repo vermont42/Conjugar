@@ -16,13 +16,13 @@ class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
 
   private override init() {}
 
-  func authenticate(analyticsService: AnalyticsServiceable?, completion: ((Bool) -> Void)? = nil) {
+  func authenticate(completion: ((Bool) -> Void)? = nil) {
     localPlayer.authenticateHandler = { viewController, error in
       if let viewController = viewController, let topController = UIApplication.topViewController() {
         topController.present(viewController, animated: true, completion: nil)
       } else if self.localPlayer.isAuthenticated {
         //print("AUTHENTICATED displayName: \(self.localPlayer.displayName) alias: \(self.localPlayer.alias) playerID: \(self.localPlayer.playerID)")
-        analyticsService?.recordGameCenterAuth()
+        Current.analytics.recordGameCenterAuth()
         self.isAuthenticated = true
         SoundPlayer.play(.applause1)
         self.localPlayer.loadDefaultLeaderboardIdentifier { identifier, _ in

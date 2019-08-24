@@ -11,11 +11,13 @@ import XCTest
 
 class VerbViewTests: XCTestCase {
   func testVerbVC() {
-    let vvc = VerbVC(verb: "maltear", settings: Settings(getterSetter: DictionaryGetterSetter()), analyticsService: TestAnalyticsService(fire: { _ in }))
+    Current = World.unitTest
+    let vvc = VerbVC(verb: "maltear")
     UIApplication.shared.keyWindow?.rootViewController = vvc
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     let verbView = vvc.verbView
     XCTAssertNotNil(verbView)
-    XCTAssertEqual(verbView.subviews.count, 8)
+    let expectedSubviewCount = 8
+    XCTAssertEqual(verbView.subviews.count, expectedSubviewCount)
   }
 }

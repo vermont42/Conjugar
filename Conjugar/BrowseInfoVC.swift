@@ -13,8 +13,6 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   private var allInfos: [Info] = []
   private var easyModerateInfos: [Info] = []
   private var easyInfos: [Info] = []
-  private let settings: Settings
-  private let analyticsService: AnalyticsServiceable
 
   private var currentInfos: [Info] {
     switch browseInfoView.difficultyControl.selectedSegmentIndex {
@@ -35,16 +33,6 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     } else {
       fatalError(fatalCastMessage(view: BrowseInfoView.self))
     }
-  }
-
-  init(settings: Settings, analyticsService: AnalyticsServiceable) {
-    self.settings = settings
-    self.analyticsService = analyticsService
-    super.init(nibName: nil, bundle: nil)
-  }
-
-  required init?(coder aDecoder: NSCoder) {
-    UIViewController.fatalErrorNotImplemented()
   }
 
   override func loadView() {
@@ -70,11 +58,11 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    analyticsService.recordVisitation(viewController: "\(BrowseInfoVC.self)")
+    Current.analytics.recordVisitation(viewController: "\(BrowseInfoVC.self)")
   }
 
   private func updateDifficultyControl() {
-    switch settings.infoDifficulty {
+    switch Current.settings.infoDifficulty {
     case .easy:
       browseInfoView.difficultyControl.selectedSegmentIndex = 0
     case .moderate:
@@ -116,18 +104,18 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
   }
 
   private func showInfo() {
-    let infoVC = InfoVC(analyticsService: analyticsService, infoString: currentInfos[selectedRow].infoString, infoDelegate: self)
+    let infoVC = InfoVC(infoString: currentInfos[selectedRow].infoString, infoDelegate: self)
     navigationController?.pushViewController(infoVC, animated: true)
   }
 
   @objc func difficultyChanged(_ sender: UISegmentedControl) {
     let index = browseInfoView.difficultyControl.selectedSegmentIndex
     if index == 0 {
-      settings.infoDifficulty = .easy
+      Current.settings.infoDifficulty = .easy
     } else if index == 1 {
-      settings.infoDifficulty = .moderate
+      Current.settings.infoDifficulty = .moderate
     } else /* index == 2 */ {
-      settings.infoDifficulty = .difficult
+      Current.settings.infoDifficulty = .difficult
     }
     browseInfoView.table.reloadData()
   }

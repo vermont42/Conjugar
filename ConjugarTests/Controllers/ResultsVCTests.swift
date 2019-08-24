@@ -12,8 +12,23 @@ import XCTest
 class ResultsVCTests: XCTestCase {
   func testResultsVC() {
     var analytic = ""
-    let quiz = Quiz(settings: Settings(getterSetter: DictionaryGetterSetter()), gameCenter: TestGameCenter(isAuthenticated: true), shouldShuffle: false)
-    let rvc = ResultsVC(quiz: quiz, analyticsService: TestAnalyticsService(fire: { fired in analytic = fired }))
+    let settings = Settings(getterSetter: DictionaryGetterSetter())
+    settings.userRejectedGameCenter = true
+    let gameCenter = TestGameCenter(isAuthenticated: true)
+    let analytics = TestAnalyticsService(fire: { fired in analytic = fired })
+    let quiz = Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false)
+    let fakeRatingsCount = 42
+
+    Current = World(
+      analytics: analytics,
+      reviewPrompter: TestReviewPrompter(),
+      gameCenter: gameCenter,
+      settings: settings,
+      quiz: quiz,
+      session: URLSession.stubSession(ratingsCount: fakeRatingsCount)
+    )
+
+    let rvc = ResultsVC()
     UIApplication.shared.keyWindow?.rootViewController = rvc
 
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)

@@ -19,7 +19,7 @@ class Settings {
     }
   }
   static let regionKey = "region"
-  private static let regionDefault: Region = .latinAmerica
+  static let regionDefault: Region = .latinAmerica
 
   var difficulty: Difficulty {
     didSet {
@@ -29,7 +29,7 @@ class Settings {
     }
   }
   static let difficultyKey = "difficulty"
-  private static let difficultyDefault: Difficulty = .easy
+  static let difficultyDefault: Difficulty = .easy
 
   var infoDifficulty: Difficulty {
     didSet {
@@ -39,7 +39,7 @@ class Settings {
     }
   }
   static let infoDifficultyKey = "infoDifficulty"
-  private static let infoDifficultyDefault: Difficulty = .difficult
+  static let infoDifficultyDefault: Difficulty = .difficult
 
   var secondSingularBrowse: SecondSingularBrowse {
     didSet {
@@ -49,7 +49,7 @@ class Settings {
     }
   }
   static let secondSingularBrowseKey = "secondSingularBrowse"
-  private static let secondSingularBrowseDefault: SecondSingularBrowse = .tu
+  static let secondSingularBrowseDefault: SecondSingularBrowse = .tu
 
   var secondSingularQuiz: SecondSingularQuiz {
     didSet {
@@ -59,7 +59,7 @@ class Settings {
     }
   }
   static let secondSingularQuizKey = "secondSingularQuiz"
-  private static let secondSingularQuizDefault: SecondSingularQuiz = .tu
+  static let secondSingularQuizDefault: SecondSingularQuiz = .tu
 
   var promptActionCount: Int {
     didSet {
@@ -69,7 +69,7 @@ class Settings {
     }
   }
   static let promptActionCountKey = "promptActionCount"
-  private static let promptActionCountDefault = 0
+  static let promptActionCountDefault = 0
 
   var lastReviewPromptDate: Date {
     didSet {
@@ -79,7 +79,7 @@ class Settings {
     }
   }
   static let lastReviewPromptDateKey = "lastReviewPromptDate"
-  private static let lastReviewPromptDateDefault = Date(timeIntervalSince1970: 0.0)
+  static let lastReviewPromptDateDefault = Date(timeIntervalSince1970: 0.0)
   private let formatter = DateFormatter()
   private static let format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
 

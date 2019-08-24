@@ -17,7 +17,18 @@ class QuizVCTests: XCTestCase {
     let gameCenter = TestGameCenter(isAuthenticated: false)
     let analytics = TestAnalyticsService(fire: { fired in analytic = fired })
     let quiz = Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false)
-    let qvc = QuizVC(settings: settings, quiz: quiz, analyticsService: analytics, gameCenter: gameCenter)
+    let fakeRatingsCount = 42
+
+    Current = World(
+      analytics: analytics,
+      reviewPrompter: TestReviewPrompter(),
+      gameCenter: gameCenter,
+      settings: settings,
+      quiz: quiz,
+      session: URLSession.stubSession(ratingsCount: fakeRatingsCount)
+    )
+
+    let qvc = QuizVC()
     UIApplication.shared.keyWindow?.rootViewController = qvc
 
     XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)

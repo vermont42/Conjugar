@@ -11,7 +11,8 @@ disabled_rules:
   - void_return
 
 excluded:
-  - Carthage/
+  - Conjugar/Result.swift
+  - Conjugar/ResultProtocol.swift
 
 file_length:
   warning: 10000
