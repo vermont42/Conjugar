@@ -135,7 +135,7 @@ class SettingsVC: UIViewController {
 
   @objc func authenticate() {
     Current.settings.userRejectedGameCenter = false
-    Current.gameCenter.authenticate(completion: { authenticated in
+    Current.gameCenter.authenticate(onViewController: self, completion: { authenticated in
       DispatchQueue.main.async {
         [self.settingsView.gameCenterLabel, self.settingsView.gameCenterDescription, self.settingsView.gameCenterButton].forEach {
           $0.isHidden = authenticated

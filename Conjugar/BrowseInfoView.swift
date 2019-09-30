@@ -20,6 +20,7 @@ class BrowseInfoView: UIView {
     let control = UISegmentedControl(items: ["E", "E & M", "E, M, & D"])
     control.selectedSegmentIndex = 0
     control.enableAutoLayout()
+    control.yellowfyText()
     return control
   }()
 

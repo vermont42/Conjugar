@@ -13,8 +13,6 @@ class VerbViewTests: XCTestCase {
   func testVerbVC() {
     Current = World.unitTest
     let vvc = VerbVC(verb: "maltear")
-    UIApplication.shared.keyWindow?.rootViewController = vvc
-    XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     let verbView = vvc.verbView
     XCTAssertNotNil(verbView)
     let expectedSubviewCount = 8

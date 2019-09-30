@@ -27,6 +27,7 @@ class SettingsView: UIView {
   let regionControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Spain", "Latin America"])
     control.selectedSegmentIndex = 0
+    control.yellowfyText()
     return control
   }()
 
@@ -51,6 +52,7 @@ class SettingsView: UIView {
   let difficultyControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Easy", "Moderate", "Difficult"])
     control.selectedSegmentIndex = 0
+    control.yellowfyText()
     return control
   }()
 
@@ -75,6 +77,7 @@ class SettingsView: UIView {
   let browseVosControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Tú", "Vos", "Both"])
     control.selectedSegmentIndex = 0
+    control.yellowfyText()
     return control
   }()
 
@@ -99,6 +102,7 @@ class SettingsView: UIView {
   let quizVosControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Tú", "Vos"])
     control.selectedSegmentIndex = 0
+    control.yellowfyText()
     return control
   }()
 

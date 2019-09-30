@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		031DAD9C2341627B006B8F5F /* UISegmentedControlExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031DAD9B2341627B006B8F5F /* UISegmentedControlExtension.swift */; };
 		033F19B422A32ABC007678E6 /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F19B322A32ABC007678E6 /* World.swift */; };
 		03533491228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */; };
 		03533493228DA52400046CCC /* ResultCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533492228DA52400046CCC /* ResultCellTests.swift */; };
@@ -26,7 +27,6 @@
 		038E031E22734800005CFC96 /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E031D22734800005CFC96 /* URLProtocolStub.swift */; };
 		038E03202273BF29005CFC96 /* RatingsFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E031F2273BF29005CFC96 /* RatingsFetcherTests.swift */; };
 		038E032222760A40005CFC96 /* UIViewExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E032122760A40005CFC96 /* UIViewExtensionsTests.swift */; };
-		038E0324227617FC005CFC96 /* UIApplicationExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E0323227617FC005CFC96 /* UIApplicationExtensionTests.swift */; };
 		038E03262279CCCB005CFC96 /* SettingsVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03252279CCCB005CFC96 /* SettingsVCTests.swift */; };
 		038E03282279D034005CFC96 /* URLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03272279D034005CFC96 /* URLSessionExtension.swift */; };
 		038E032A227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E0329227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift */; };
@@ -69,7 +69,6 @@
 		E1483FB51EF5D0510052C436 /* QuizDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FB41EF5D0510052C436 /* QuizDelegate.swift */; };
 		E1483FBB1EF6F82A0052C436 /* QuizVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FBA1EF6F82A0052C436 /* QuizVC.swift */; };
 		E1483FC01EF746D70052C436 /* chime.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FBE1EF746D70052C436 /* chime.mp3 */; };
-		E1483FC41EF7510F0052C436 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */; };
 		E1483FC81EF89C710052C436 /* applause1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC51EF89C710052C436 /* applause1.mp3 */; };
 		E1483FC91EF89C710052C436 /* applause2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC61EF89C710052C436 /* applause2.mp3 */; };
 		E1483FCA1EF89C710052C436 /* applause3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC71EF89C710052C436 /* applause3.mp3 */; };
@@ -165,6 +164,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		031DAD9B2341627B006B8F5F /* UISegmentedControlExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISegmentedControlExtension.swift; sourceTree = "<group>"; };
 		033F19B322A32ABC007678E6 /* World.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = World.swift; sourceTree = "<group>"; };
 		03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsGetterSetterTests.swift; sourceTree = "<group>"; };
 		03533492228DA52400046CCC /* ResultCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCellTests.swift; sourceTree = "<group>"; };
@@ -184,7 +184,6 @@
 		038E031D22734800005CFC96 /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
 		038E031F2273BF29005CFC96 /* RatingsFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsFetcherTests.swift; sourceTree = "<group>"; };
 		038E032122760A40005CFC96 /* UIViewExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensionsTests.swift; sourceTree = "<group>"; };
-		038E0323227617FC005CFC96 /* UIApplicationExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtensionTests.swift; sourceTree = "<group>"; };
 		038E03252279CCCB005CFC96 /* SettingsVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVCTests.swift; sourceTree = "<group>"; };
 		038E03272279D034005CFC96 /* URLSessionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionExtension.swift; sourceTree = "<group>"; };
 		038E0329227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertControllerExtensionTests.swift; sourceTree = "<group>"; };
@@ -227,7 +226,6 @@
 		E1483FB41EF5D0510052C436 /* QuizDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizDelegate.swift; sourceTree = "<group>"; };
 		E1483FBA1EF6F82A0052C436 /* QuizVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizVC.swift; sourceTree = "<group>"; };
 		E1483FBE1EF746D70052C436 /* chime.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chime.mp3; sourceTree = "<group>"; };
-		E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIApplicationExtension.swift; sourceTree = "<group>"; };
 		E1483FC51EF89C710052C436 /* applause1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause1.mp3; sourceTree = "<group>"; };
 		E1483FC61EF89C710052C436 /* applause2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause2.mp3; sourceTree = "<group>"; };
 		E1483FC71EF89C710052C436 /* applause3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause3.mp3; sourceTree = "<group>"; };
@@ -386,8 +384,8 @@
 				E168865221ADA020005B8636 /* TestGameCenter.swift */,
 				E188B56121AF7920009777D8 /* TestReviewPrompter.swift */,
 				E182F8D11F48AA1400D4569E /* UIAlertControllerExtension.swift */,
-				E1483FC31EF7510F0052C436 /* UIApplicationExtension.swift */,
 				E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */,
+				031DAD9B2341627B006B8F5F /* UISegmentedControlExtension.swift */,
 				E10178011F3F753400F0BC97 /* UIViewExtensions.swift */,
 				E1EC70F02198A10B00872787 /* UIViewControllerExtensions.swift */,
 				E1E092C221ED3C6900828C37 /* UserDefaultsGetterSetter.swift */,
@@ -451,7 +449,6 @@
 				038E031F2273BF29005CFC96 /* RatingsFetcherTests.swift */,
 				038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */,
 				038E0329227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift */,
-				038E0323227617FC005CFC96 /* UIApplicationExtensionTests.swift */,
 				038E031922711B76005CFC96 /* UIViewControllerExtensionsTests.swift */,
 				038E032122760A40005CFC96 /* UIViewExtensionsTests.swift */,
 				03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */,
@@ -822,10 +819,10 @@
 				E1E092C421ED3C6900828C37 /* UserDefaultsGetterSetter.swift in Sources */,
 				E1151E531E9AEDF100DE44D6 /* AuxiliaryError.swift in Sources */,
 				E1F06AF81E8F081700ADD2E1 /* Conjugator.swift in Sources */,
-				E1483FC41EF7510F0052C436 /* UIApplicationExtension.swift in Sources */,
 				E10178021F3F753400F0BC97 /* UIViewExtensions.swift in Sources */,
 				E182F8D21F48AA1400D4569E /* UIAlertControllerExtension.swift in Sources */,
 				E16BEA061F0A92040053DD32 /* InfoDelegate.swift in Sources */,
+				031DAD9C2341627B006B8F5F /* UISegmentedControlExtension.swift in Sources */,
 				E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */,
 				E14566BE1EC001FD00C16DC3 /* ConjugationCell.swift in Sources */,
 				E1483FB11EF5C4C60052C436 /* Difficulty.swift in Sources */,
@@ -888,7 +885,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				038E0324227617FC005CFC96 /* UIApplicationExtensionTests.swift in Sources */,
 				038E03182270AC01005CFC96 /* DeviceUtilityTests.swift in Sources */,
 				E12D06A31F5E85A200CDD54E /* VerbCellTests.swift in Sources */,
 				038E032222760A40005CFC96 /* UIViewExtensionsTests.swift in Sources */,
@@ -1044,7 +1040,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1096,7 +1092,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

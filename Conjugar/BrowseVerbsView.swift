@@ -20,6 +20,7 @@ class BrowseVerbsView: UIView {
     let control = UISegmentedControl(items: ["Irregular", "Regular", "Both"])
     control.selectedSegmentIndex = 0
     control.enableAutoLayout()
+    control.yellowfyText()
     return control
   }()
 

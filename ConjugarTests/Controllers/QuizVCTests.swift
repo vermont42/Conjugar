@@ -29,9 +29,7 @@ class QuizVCTests: XCTestCase {
     )
 
     let qvc = QuizVC()
-    UIApplication.shared.keyWindow?.rootViewController = qvc
 
-    XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(qvc)
     XCTAssertNotNil(qvc.quizView)
     qvc.viewWillAppear(true)

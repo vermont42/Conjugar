@@ -14,11 +14,12 @@ class TestGameCenterTests: XCTestCase {
     let tgc = TestGameCenter()
     Current = World.unitTest
     Current.gameCenter = tgc
+    let dummyVC = UIViewController()
 
-    tgc.authenticate(completion: { didAuthenticate in
+    tgc.authenticate(onViewController: dummyVC, completion: { didAuthenticate in
       XCTAssert(didAuthenticate)
 
-      tgc.authenticate(completion: { didAuthenticate in
+      tgc.authenticate(onViewController: dummyVC, completion: { didAuthenticate in
         XCTAssertFalse(didAuthenticate)
       })
     })

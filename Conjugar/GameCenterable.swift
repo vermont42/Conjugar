@@ -6,11 +6,11 @@
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol GameCenterable {
   var isAuthenticated: Bool { get set }
-  func authenticate(completion: ((Bool) -> Void)?)
+  func authenticate(onViewController: UIViewController, completion: ((Bool) -> Void)?)
   func reportScore(_ score: Int)
   func showLeaderboard()
 }

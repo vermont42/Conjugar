@@ -13,9 +13,7 @@ class MainTabBarVCTests: XCTestCase {
   func testMainTabBarVC() {
     let mtbvc = MainTabBarVC()
     XCTAssertNotNil(mtbvc)
-    UIApplication.shared.keyWindow?.rootViewController = mtbvc
 
-    XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     if let firstNavC = mtbvc.selectedViewController as? UINavigationController {
       if let browseVerbsVC = firstNavC.visibleViewController {
         if !(browseVerbsVC is BrowseVerbsVC) {

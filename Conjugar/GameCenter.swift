@@ -13,13 +13,16 @@ class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
   var isAuthenticated = false
   private let localPlayer = GKLocalPlayer.local
   private var leaderboardIdentifier = ""
+  private var onViewController: UIViewController?
 
   private override init() {}
 
-  func authenticate(completion: ((Bool) -> Void)? = nil) {
+  func authenticate(onViewController: UIViewController, completion: ((Bool) -> Void)? = nil) {
+    self.onViewController = onViewController
+
     localPlayer.authenticateHandler = { viewController, error in
-      if let viewController = viewController, let topController = UIApplication.topViewController() {
-        topController.present(viewController, animated: true, completion: nil)
+      if let viewController = viewController {
+        onViewController.present(viewController, animated: true, completion: nil)
       } else if self.localPlayer.isAuthenticated {
         //print("AUTHENTICATED displayName: \(self.localPlayer.displayName) alias: \(self.localPlayer.alias) playerID: \(self.localPlayer.playerID)")
         Current.analytics.recordGameCenterAuth()
@@ -32,7 +35,7 @@ class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
         completion?(true)
       } else {
         SoundPlayer.play(.sadTrombone)
-        UIAlertController.showMessage("Game Center authentication failed. This can happen if you cancel authentication or if your iPhone is not already signed into Game Center. Try launching the Settings app, tapping Game Center, signing in, and relaunching Conjugar.", title: "😰", okTitle: "Got It")
+        UIAlertController.showMessage("Game Center authentication failed. This can happen if you cancel authentication or if your iPhone is not already signed into Game Center. Try launching the Settings app, tapping Game Center, signing in, and relaunching Conjugar.", title: "😰", okTitle: "Got It", onViewController: onViewController)
         self.isAuthenticated = false
         completion?(false)
       }
@@ -63,9 +66,7 @@ class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
     gcViewController.gameCenterDelegate = self
     gcViewController.viewState = .leaderboards
     gcViewController.leaderboardIdentifier = leaderboardIdentifier
-    if let topController = UIApplication.topViewController() {
-      topController.present(gcViewController, animated: true, completion: nil)
-    }
+    onViewController?.present(gcViewController, animated: true, completion: nil)
   }
 
   func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {

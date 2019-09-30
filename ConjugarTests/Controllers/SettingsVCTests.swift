@@ -31,9 +31,7 @@ class SettingsVCTests: XCTestCase {
 
     let svc = SettingsVC()
     let nc = MockNavigationC(rootViewController: svc)
-    UIApplication.shared.keyWindow?.rootViewController = nc
 
-    XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(svc)
     svc.viewWillAppear(true)
     XCTAssert(nc.pushedViewController is SettingsVC)

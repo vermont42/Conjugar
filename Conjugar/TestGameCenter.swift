@@ -6,7 +6,7 @@
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class TestGameCenter: GameCenterable {
   var isAuthenticated: Bool
@@ -15,7 +15,7 @@ class TestGameCenter: GameCenterable {
     self.isAuthenticated = isAuthenticated
   }
 
-  func authenticate(completion: ((Bool) -> Void)?) {
+  func authenticate(onViewController: UIViewController, completion: ((Bool) -> Void)?) {
     if !isAuthenticated {
       isAuthenticated = true
       completion?(true)
