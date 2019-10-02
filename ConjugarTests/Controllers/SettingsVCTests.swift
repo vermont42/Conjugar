@@ -70,13 +70,5 @@ class SettingsVCTests: XCTestCase {
     XCTAssertFalse(gameCenter.isAuthenticated)
     svc.authenticate()
     XCTAssert(gameCenter.isAuthenticated)
-
-    let expectatiön = expectation(description: "testRateReview")
-    svc.rateReview(completion: { didSucceed in
-      XCTAssert(didSucceed)
-      expectatiön.fulfill()
-    })
-    let timeout: TimeInterval = 0.5
-    wait(for: [expectatiön], timeout: timeout)
   }
 }
