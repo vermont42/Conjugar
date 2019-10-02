@@ -18,8 +18,6 @@ class BrowseInfoVCTests: XCTestCase {
 
     let bivc = BrowseInfoVC()
     let nc = MockNavigationC(rootViewController: bivc)
-    UIApplication.shared.keyWindow?.rootViewController = nc
-    XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
 
     XCTAssertNotNil(bivc)
     bivc.viewWillAppear(true)

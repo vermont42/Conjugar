@@ -18,8 +18,6 @@ class BrowseVerbsVCTests: XCTestCase {
     let bvvc = BrowseVerbsVC()
 
     let nc = MockNavigationC(rootViewController: bvvc)
-    UIApplication.shared.keyWindow?.rootViewController = nc
-    XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
 
     XCTAssertNotNil(bvvc)
     bvvc.viewWillAppear(true)

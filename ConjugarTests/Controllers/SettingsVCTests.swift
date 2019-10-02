@@ -31,9 +31,7 @@ class SettingsVCTests: XCTestCase {
 
     let svc = SettingsVC()
     let nc = MockNavigationC(rootViewController: svc)
-    UIApplication.shared.keyWindow?.rootViewController = nc
 
-    XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(svc)
     svc.viewWillAppear(true)
     XCTAssert(nc.pushedViewController is SettingsVC)
@@ -72,13 +70,5 @@ class SettingsVCTests: XCTestCase {
     XCTAssertFalse(gameCenter.isAuthenticated)
     svc.authenticate()
     XCTAssert(gameCenter.isAuthenticated)
-
-    let expectatiön = expectation(description: "testRateReview")
-    svc.rateReview(completion: { didSucceed in
-      XCTAssert(didSucceed)
-      expectatiön.fulfill()
-    })
-    let timeout: TimeInterval = 0.5
-    wait(for: [expectatiön], timeout: timeout)
   }
 }

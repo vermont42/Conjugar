@@ -35,8 +35,6 @@ class InfoVCTests: XCTestCase, InfoDelegate {
     }
 
     let ivc = InfoVC(infoString: NSAttributedString(string: "\(nonURLInfoString)\(url)"), infoDelegate: self)
-    UIApplication.shared.keyWindow?.rootViewController = ivc
-    XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
 
     XCTAssertNotNil(ivc)
     XCTAssertNotNil(ivc.infoView)

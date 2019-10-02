@@ -29,9 +29,7 @@ class ResultsVCTests: XCTestCase {
     )
 
     let rvc = ResultsVC()
-    UIApplication.shared.keyWindow?.rootViewController = rvc
 
-    XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(rvc)
     XCTAssertNotNil(rvc.resultsView)
     rvc.viewWillAppear(true)

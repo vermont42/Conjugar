@@ -135,7 +135,7 @@ class SettingsVC: UIViewController {
 
   @objc func authenticate() {
     Current.settings.userRejectedGameCenter = false
-    Current.gameCenter.authenticate(completion: { authenticated in
+    Current.gameCenter.authenticate(onViewController: self, completion: { authenticated in
       DispatchQueue.main.async {
         [self.settingsView.gameCenterLabel, self.settingsView.gameCenterDescription, self.settingsView.gameCenterButton].forEach {
           $0.isHidden = authenticated
@@ -144,12 +144,10 @@ class SettingsVC: UIViewController {
     })
   }
 
-  @objc func rateReview(completion: @escaping ((Bool) -> ()) = { _ in }) {
+  @objc func rateReview() {
     guard let url = URL(string: "https://itunes.apple.com/us/app/immigration/id\(RatingsFetcher.iTunesID)?action=write-review") else {
       return
     }
-    UIApplication.shared.open(url, options: [:], completionHandler: { didSucceed in
-      completion(didSucceed)
-    })
+    UIApplication.shared.open(url, options: [:])
   }
 }

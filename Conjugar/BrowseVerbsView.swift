@@ -19,9 +19,8 @@ class BrowseVerbsView: UIView {
   let filterControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Irregular", "Regular", "Both"])
     control.selectedSegmentIndex = 0
-    control.backgroundColor = Colors.black
     control.enableAutoLayout()
-    control.tintColor = Colors.red
+    control.yellowfyText()
     return control
   }()
 

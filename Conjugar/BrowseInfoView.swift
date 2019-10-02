@@ -19,9 +19,8 @@ class BrowseInfoView: UIView {
   let difficultyControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["E", "E & M", "E, M, & D"])
     control.selectedSegmentIndex = 0
-    control.backgroundColor = Colors.black
     control.enableAutoLayout()
-    control.tintColor = Colors.red
+    control.yellowfyText()
     return control
   }()
 

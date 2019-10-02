@@ -16,9 +16,7 @@ class VerbVCTests: XCTestCase {
     Current.analytics = TestAnalyticsService(fire: { fired in analytic = fired })
 
     let vvc = VerbVC(verb: "maltear")
-    UIApplication.shared.keyWindow?.rootViewController = vvc
 
-    XCTAssertNotNil(UIApplication.shared.keyWindow?.rootViewController)
     XCTAssertNotNil(vvc)
     XCTAssertNotNil(vvc.verbView)
     vvc.viewWillAppear(true)
@@ -43,7 +41,6 @@ class VerbVCTests: XCTestCase {
       ("ser", irregularText, notDefectiveText)
     ].forEach {
       let vvc = VerbVC(verb: $0.0)
-      UIApplication.shared.keyWindow?.rootViewController = vvc
       vvc.viewWillAppear(true)
       let vv = vvc.verbView
       XCTAssertEqual(vv.parentOrType.text, $0.1)

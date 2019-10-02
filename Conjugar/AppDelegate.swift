@@ -15,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     configureTabBar()
     configureNavBar()
-    configureStatusBar()
 
     let uiTestingFlag = "enable-ui-testing"
     if CommandLine.arguments.contains(uiTestingFlag) {
@@ -30,14 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window?.makeKeyAndVisible()
 
     return true
-  }
-
-  private func configureStatusBar() {
-    // I like blue and prefer not to override preferredStatusBarStyle in every UIViewController.
-    let statusBarKey = "statusBar"
-    let statusbar = UIApplication.shared.value(forKey: statusBarKey) as? UIView
-    let foregroundColorKey = "foregroundColor"
-    statusbar?.setValue(Colors.blue, forKey: foregroundColorKey)
   }
 
   private func configureTabBar() {

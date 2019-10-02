@@ -14,9 +14,21 @@ class UIAlertControllerExtensionTests: XCTestCase, InfoDelegate {
   func testShowMessage() {
     Current = World.unitTest
     let ivc = InfoVC(infoString: NSAttributedString(string: "🍕"), infoDelegate: self)
-    UIApplication.shared.keyWindow?.rootViewController = ivc
+
+    guard let window = UIApplication.shared.connectedScenes
+    .filter({$0.activationState == .foregroundActive})
+    .map({$0 as? UIWindowScene})
+    .compactMap({$0})
+    .first?.windows
+    .filter({$0.isKeyWindow}).first else {
+      XCTFail("Could not create window.")
+      return
+    }
+
+    window.rootViewController = ivc
+
     ivc.viewWillAppear(true)
-    UIAlertController.showMessage("", title: "")
+    UIAlertController.showMessage("", title: "", okTitle: "", onViewController: ivc)
     XCTAssert(ivc.presentedViewController is UIAlertController)
   }
 

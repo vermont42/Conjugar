@@ -60,7 +60,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
             if !Current.settings.didShowGameCenterDialog {
                 showGameCenterDialog()
             } else {
-                Current.gameCenter.authenticate(completion: nil)
+              Current.gameCenter.authenticate(onViewController: self, completion: nil)
             }
         }
     }
@@ -74,7 +74,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     gameCenterController.addAction(noAction)
     let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) { _ in
-      Current.gameCenter.authenticate(completion: nil)
+      Current.gameCenter.authenticate(onViewController: self, completion: nil)
     }
     gameCenterController.addAction(yesAction)
     present(gameCenterController, animated: true, completion: nil)
