@@ -32,7 +32,6 @@ class QuizView: UIView {
     field.autocapitalizationType = .none
     field.autocorrectionType = .no
     field.placeholder = " conjugation"
-    field.backgroundColor = UIColor.white
     return field
   }()
 
