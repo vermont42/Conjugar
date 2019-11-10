@@ -35,7 +35,7 @@ class BrowseInfoView: UIView {
   }()
 
   required init(coder aDecoder: NSCoder) {
-    fatalError("This class does not support NSCoding.")
+    UIViewController.fatalErrorNotImplemented()
   }
 
   override init(frame: CGRect) {
