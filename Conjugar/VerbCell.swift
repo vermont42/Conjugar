@@ -22,7 +22,7 @@ class VerbCell: UITableViewCell {
   }()
 
   required init?(coder aDecoder: NSCoder) {
-    UIViewController.fatalErrorNotImplemented()
+    NSCoder.fatalErrorNotImplemented()
   }
 
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

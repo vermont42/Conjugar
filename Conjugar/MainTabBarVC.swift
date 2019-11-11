@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class MainTabBarVC: UITabBarController {
   static let tabs = ["Browse", "Quiz", "Settings", "Info"]
@@ -17,10 +18,11 @@ class MainTabBarVC: UITabBarController {
     browseVerbsNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[0], image: UIImage(named: MainTabBarVC.tabs[0]), selectedImage: nil)
     let quizNavC = UINavigationController(rootViewController: QuizVC())
     quizNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[1], image: UIImage(named: MainTabBarVC.tabs[1]), selectedImage: nil)
-    let settingsNavC = UINavigationController(rootViewController: SettingsVC())
-    settingsNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[2], image: UIImage(named: MainTabBarVC.tabs[2]), selectedImage: nil)
+    let settingsVC = UIHostingController(rootView: SettingsView().environmentObject(Current))
+    Current.parentViewController = settingsVC
+    settingsVC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[2], image: UIImage(named: MainTabBarVC.tabs[2]), selectedImage: nil)
     let browseInfoNavC = UINavigationController(rootViewController: BrowseInfoVC())
     browseInfoNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[3], image: UIImage(named: MainTabBarVC.tabs[3]), selectedImage: nil)
-    viewControllers = [browseVerbsNavC, quizNavC, browseInfoNavC, settingsNavC]
+    viewControllers = [browseVerbsNavC, quizNavC, browseInfoNavC, settingsVC]
   }
 }

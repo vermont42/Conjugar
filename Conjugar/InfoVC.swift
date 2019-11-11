@@ -27,7 +27,7 @@ class InfoVC: UIViewController, UITextViewDelegate {
   }
 
   required init?(coder aDecoder: NSCoder) {
-    UIViewController.fatalErrorNotImplemented()
+    NSCoder.fatalErrorNotImplemented()
   }
 
   override func loadView() {

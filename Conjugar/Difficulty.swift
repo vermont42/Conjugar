@@ -6,7 +6,7 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-enum Difficulty: String {
+enum Difficulty: String, CaseIterable {
   case easy = "Easy"
   case moderate = "Moderate"
   case difficult = "Difficult"

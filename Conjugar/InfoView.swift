@@ -29,6 +29,6 @@ class InfoView: UIView {
   }
 
   required init(coder aDecoder: NSCoder) {
-    UIViewController.fatalErrorNotImplemented()
+    NSCoder.fatalErrorNotImplemented()
   }
 }

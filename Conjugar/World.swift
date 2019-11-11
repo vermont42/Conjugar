@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 #if targetEnvironment(simulator)
 var Current = World.simulator
@@ -15,15 +16,32 @@ var Current = World.simulator
 var Current = World.device
 #endif
 
-struct World {
-  var analytics: AnalyticsServiceable
-  var reviewPrompter: ReviewPromptable
-  var gameCenter: GameCenterable
-  var settings: Settings
-  var quiz: Quiz
-  var session: URLSession
+class World: ObservableObject {
+  @Published var analytics: AnalyticsServiceable
+  @Published var reviewPrompter: ReviewPromptable
+  @Published var gameCenter: GameCenterable
+  @Published var settings: Settings
+  @Published var quiz: Quiz
+  @Published var session: URLSession
+  @Published var parentViewController: UIViewController?
 
   private static let fakeRatingsCount = 42
+
+  init(
+    analytics: AnalyticsServiceable,
+    reviewPrompter: ReviewPromptable,
+    gameCenter: GameCenterable,
+    settings: Settings,
+    quiz: Quiz,
+    session: URLSession
+  ) {
+    self.analytics = analytics
+    self.reviewPrompter = reviewPrompter
+    self.gameCenter = gameCenter
+    self.settings = settings
+    self.quiz = quiz
+    self.session = session
+  }
 
   static let device: World = {
     let settings = Settings(getterSetter: UserDefaultsGetterSetter())

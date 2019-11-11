@@ -6,7 +6,7 @@
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
 
-enum SecondSingularBrowse: String {
+enum SecondSingularBrowse: String, CaseIterable {
   case tu = "Tú"
   case vos = "Vos"
   case both = "Both"

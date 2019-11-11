@@ -6,7 +6,7 @@
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
 
-enum SecondSingularQuiz: String {
+enum SecondSingularQuiz: String, CaseIterable {
   case tu = "Tú"
   case vos = "Vos"
 }

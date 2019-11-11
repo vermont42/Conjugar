@@ -24,7 +24,7 @@ class ResultsView: UIView {
   let timeLabel = UILabel()
 
   required init(coder aDecoder: NSCoder) {
-    UIViewController.fatalErrorNotImplemented()
+    NSCoder.fatalErrorNotImplemented()
   }
 
   override init(frame: CGRect) {
