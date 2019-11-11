@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import SwiftUI
 @testable import Conjugar
 
 class MainTabBarVCTests: XCTestCase {
@@ -23,6 +24,7 @@ class MainTabBarVCTests: XCTestCase {
     } else {
       XCTFail("First tab is not a UINavigationController.")
     }
+
     mtbvc.selectedIndex = 1
     if let secondNavC = mtbvc.selectedViewController as? UINavigationController {
       if let quizVC = secondNavC.visibleViewController {
@@ -33,6 +35,7 @@ class MainTabBarVCTests: XCTestCase {
     } else {
       XCTFail("Second tab is not a UINavigationController.")
     }
+
     mtbvc.selectedIndex = 2
     if let thirdNavC = mtbvc.selectedViewController as? UINavigationController {
       if let browseInfoVC = thirdNavC.visibleViewController {
@@ -43,15 +46,10 @@ class MainTabBarVCTests: XCTestCase {
     } else {
       XCTFail("Third tab is not a UINavigationController.")
     }
+
     mtbvc.selectedIndex = 3
-    if let fourthNavC = mtbvc.selectedViewController as? UINavigationController {
-      if let settingsVC = fourthNavC.visibleViewController {
-        if !(settingsVC is SettingsVC) {
-          XCTFail("Fourth tab's UINavigationController's visibleViewController is not a SettingsVC.")
-        }
-      }
-    } else {
-      XCTFail("Fourth tab is not a UINavigationController.")
+    if mtbvc.selectedViewController == nil {
+      XCTFail("Fourth tab's selectedViewController was nil.")
     }
   }
 }
