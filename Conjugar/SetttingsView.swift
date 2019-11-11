@@ -191,6 +191,8 @@ struct SettingsView: View {
         }
       })
 
+      self.current.analytics.recordVisitation(viewController: "\(SettingsView.self)")
+
       self.isGameCenterUIHidden = self.current.gameCenter.isAuthenticated
     }
   }
