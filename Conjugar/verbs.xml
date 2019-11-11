@@ -49,6 +49,7 @@
 <verbs>
   <verb in="abrazar" vt="ir" tn="hug" pe="hablar" tr="habl" st="abraz" fspt="abraCé" fspb="abraCe" sspb="abraCes" tspb="abraCe" fppb="abraCemosa" sppb="abraCéis" tppb="abraCen" />
   <verb in="abrir" vt="ir" tn="open" pe="subir" tr="sub" st="abr" po="abIERTo" />
+  <verb in="acordar" vt="ir" tn="agree" pe="recordar" tr="re" st="a" />
   <verb in="acudir" vt="ri" tn="come, turn to" pe="subir" tr="sub" st="acud" />
   <verb in="absorber" vt="re" tn="absorb" pe="comer" tr="com" st="absorb" />
   <verb in="admitir" vt="ri" tn="admit, accept" pe="subir" tr="sub" st="admit" />
@@ -73,6 +74,7 @@
   <verb in="cantar" vt="ra" tn="sing" pe="hablar" tr="habl" st="cant" />
   <verb in="cazar" vt="ir" tn="hunt" pe="hablar" tr="habl" st="caz" fspt="caCé" fspb="caCe" sspb="caCes" tspb="caCe" fppb="caCemos" sppb="caCéis" tppb="caCen" />
   <verb in="ceder" vt="re" tn="transfer, cede" pe="comer" tr="com" st="ced" />
+  <verb in="cenar" vt="ra" tn="have dinner" pe="hablar" tr="habl" st="cen" />
   <verb in="charlar" vt="ra" tn="chat" pe="hablar" tr="habl" st="charl" />
   <verb in="clonar" vt="ra" tn="clone" pe="hablar" tr="habl" st="clon" />
   <verb in="cocinar" vt="ra" tn="cook" pe="hablar" tr="habl" st="cocin" />
@@ -207,6 +209,7 @@
   <verb in="reconducir" vt="ir" tn="redirect" pe="conducir" tr="con" st="recon" />
   <verb in="recoger" vt="ir" tn="pick up, gather" pe="escoger" tr="es" st="re" />
   <verb in="reconocer" vt="ir" tn="recognize" pe="conocer" tr="" st="re" />
+  <verb in="recordar" vt="ir" tn="remember" pe="hablar" tr="habl" st="record" fspr="recUErdo" sspr="recUErdas" tspr="recUErda" tppr="recUErdan" fspb="recUErde" sspb="recUErdes" tspb="recUErde" tppb="recUErden" ssio="recUErda" />
   <verb in="regresar" vt="ra" tn="return" pe="hablar" tr="habl" st="regres" />
   <verb in="rehacer" vt="ir" tn="redo" pe="hacer" tr="" st="re" />
   <verb in="reír" vt="ir" tn="laugh" pe="subir" tr="sub" st="re" ge="rIendo" fspr="rÍo" sspr="rÍes" tspr="rÍe" fppr="reÍmos" tppr="rÍen" sspt="reÍste" tspt="rIó" fppt="reÍmos" sppt="reÍsteis" tppt="rIeron" fspb="rÍa" sspb="rÍas" tspb="rÍa" fppb="rÍamos" sppb="rIAis" tppb="rÍan" ssio="rÍe" />
