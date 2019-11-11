@@ -143,15 +143,15 @@ struct SettingsView: View {
               // https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears
               // @State var scale: CGFloat = 1
 
-              //                    .scaleEffect(scale)
-              //                    .onAppear {
-              //                        let baseAnimation = Animation.easeInOut(duration: 1)
-              //                        let repeated = baseAnimation.repeatForever(autoreverses: true)
-              //
-              //                        return withAnimation(repeated) {
-              //                            self.scale = 0.9
-              //                        }
-              //                    }
+//              .scaleEffect(scale)
+//              .onAppear {
+//                  let baseAnimation = Animation.easeInOut(duration: 1)
+//                  let repeated = baseAnimation.repeatForever(autoreverses: true)
+//
+//                  return withAnimation(repeated) {
+//                      self.scale = 0.9
+//                  }
+//              }
 
               Text("Conjugar can send future quiz scores to Game Center so that you can see them in the global leaderboard. Tap Enable to enable this.")
                 .modifier(BodyLabel())
