@@ -499,7 +499,7 @@
 			path = ConjugarUITests;
 			sourceTree = "<group>";
 		};
-		E198F9001F5D79BA00BAF553 /* Views */ = {
+		E198F9001F5D79BA00BAF553 /* UIViews */ = {
 			isa = PBXGroup;
 			children = (
 				035334BA22960CF500046CCC /* ConjugationCellTests.swift */,
@@ -509,7 +509,7 @@
 				E198F9011F5D79F100BAF553 /* VerbUIVTests.swift */,
 				E12D06A21F5E85A200CDD54E /* VerbCellTests.swift */,
 			);
-			path = Views;
+			path = UIViews;
 			sourceTree = "<group>";
 		};
 		E198F9031F5D7C6B00BAF553 /* Models */ = {
@@ -578,10 +578,10 @@
 				038E03162270ABEA005CFC96 /* Analytics */,
 				E15D3BED1F532E8E003771BB /* Controllers */,
 				E15D3BF41F53397A003771BB /* Helpers */,
-				E198F9031F5D7C6B00BAF553 /* Models */,
-				E151222F21A62AA9008EF307 /* Utils */,
-				E198F9001F5D79BA00BAF553 /* Views */,
 				E1F06AEE1E8F05F400ADD2E1 /* Info.plist */,
+				E198F9031F5D7C6B00BAF553 /* Models */,
+				E198F9001F5D79BA00BAF553 /* UIViews */,
+				E151222F21A62AA9008EF307 /* Utils */,
 			);
 			path = ConjugarTests;
 			sourceTree = "<group>";
