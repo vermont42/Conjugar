@@ -1,5 +1,5 @@
 //
-//  ResultsView.swift
+//  ResultsUIV.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 8/7/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ResultsView: UIView {
+class ResultsUIV: UIView {
   let table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black

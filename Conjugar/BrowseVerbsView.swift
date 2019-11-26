@@ -1,5 +1,5 @@
 //
-//  BrowseVerbsView.swift
+//  BrowseVerbsUIV.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 7/16/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BrowseVerbsView: UIView {
+class BrowseVerbsUIV: UIView {
   let table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black

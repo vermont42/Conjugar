@@ -1,5 +1,5 @@
 //
-//  InfoView.swift
+//  InfoUIV.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 7/30/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InfoView: UIView {
+class InfoUIV: UIView {
   let info: UITextView = {
     let textView = UITextView()
     textView.backgroundColor = Colors.black

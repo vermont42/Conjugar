@@ -1,5 +1,5 @@
 //
-//  VerbViewTests.swift
+//  VerbUIVTests.swift
 //  ConjugarTests
 //
 //  Created by Joshua Adams on 9/4/17.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import Conjugar
 
-class VerbViewTests: XCTestCase {
+class VerbUIVTests: XCTestCase {
   func testVerbVC() {
     Current = World.unitTest
     let vvc = VerbVC(verb: "maltear")

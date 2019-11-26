@@ -12,11 +12,11 @@ class InfoVC: UIViewController, UITextViewDelegate {
   private weak var infoDelegate: InfoDelegate?
   private let infoString: NSAttributedString
 
-  var infoView: InfoView {
-    if let castedView = view as? InfoView {
+  var infoView: InfoUIV {
+    if let castedView = view as? InfoUIV {
       return castedView
     } else {
-      fatalError(fatalCastMessage(view: InfoView.self))
+      fatalError(fatalCastMessage(view: InfoUIV.self))
     }
   }
 
@@ -31,8 +31,8 @@ class InfoVC: UIViewController, UITextViewDelegate {
   }
 
   override func loadView() {
-    let infoView: InfoView
-    infoView = InfoView(frame: UIScreen.main.bounds)
+    let infoView: InfoUIV
+    infoView = InfoUIV(frame: UIScreen.main.bounds)
     infoView.info.attributedText = infoString
     infoView.info.delegate = self
     infoView.info.contentOffset = CGPoint.zero

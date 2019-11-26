@@ -12,11 +12,11 @@ class VerbVC: UIViewController {
   private let verb: String
   private var conjugationDataSource: ConjugationDataSource?
 
-  var verbView: VerbView {
-    if let castedView = view as? VerbView {
+  var verbView: VerbUIV {
+    if let castedView = view as? VerbUIV {
       return castedView
     } else {
-      fatalError(fatalCastMessage(view: VerbView.self))
+      fatalError(fatalCastMessage(view: VerbUIV.self))
     }
   }
 
@@ -30,7 +30,7 @@ class VerbVC: UIViewController {
   }
 
   override func loadView() {
-    let verbView = VerbView(frame: UIScreen.main.bounds)
+    let verbView = VerbUIV(frame: UIScreen.main.bounds)
     verbView.participio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
     verbView.raízFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
     verbView.gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))

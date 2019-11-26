@@ -9,17 +9,17 @@
 import UIKit
 
 class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
-  var quizView: QuizView {
-    if let castedView = view as? QuizView {
+  var quizView: QuizUIV {
+    if let castedView = view as? QuizUIV {
       return castedView
     } else {
-      fatalError(fatalCastMessage(view: QuizView.self))
+      fatalError(fatalCastMessage(view: QuizUIV.self))
     }
   }
 
   override func loadView() {
-    let quizView: QuizView
-    quizView = QuizView(frame: UIScreen.main.bounds)
+    let quizView: QuizUIV
+    quizView = QuizUIV(frame: UIScreen.main.bounds)
     quizView.startRestartButton.addTarget(self, action: #selector(startRestart), for: .touchUpInside)
     navigationItem.titleView = UILabel.titleLabel(title: "Quiz")
     quizView.conjugationField.delegate = self
@@ -114,7 +114,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     default:
       fatalError()
     }
-    quizView.tenseLabel.text = QuizView.tenseString + " " + tense.displayName
+    quizView.tenseLabel.text = QuizUIV.tenseString + " " + tense.displayName
     quizView.pronoun.text = personNumber.pronoun
     quizView.conjugationField.becomeFirstResponder()
   }

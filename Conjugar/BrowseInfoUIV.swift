@@ -1,5 +1,5 @@
 //
-//  BrowseInfoView.swift
+//  BrowseInfoUIV.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 7/30/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BrowseInfoView: UIView {
+class BrowseInfoUIV: UIView {
   let table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black

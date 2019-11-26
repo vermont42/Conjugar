@@ -27,17 +27,17 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
   }
 
-  var browseInfoView: BrowseInfoView {
-    if let castedView = view as? BrowseInfoView {
+  var browseInfoView: BrowseInfoUIV {
+    if let castedView = view as? BrowseInfoUIV {
       return castedView
     } else {
-      fatalError(fatalCastMessage(view: BrowseInfoView.self))
+      fatalError(fatalCastMessage(view: BrowseInfoUIV.self))
     }
   }
 
   override func loadView() {
-    let browseInfoView: BrowseInfoView
-    browseInfoView = BrowseInfoView(frame: UIScreen.main.bounds)
+    let browseInfoView: BrowseInfoUIV
+    browseInfoView = BrowseInfoUIV(frame: UIScreen.main.bounds)
     browseInfoView.difficultyControl.addTarget(self, action: #selector(BrowseInfoVC.difficultyChanged(_:)), for: .valueChanged)
     browseInfoView.setupTable(dataSource: self, delegate: self)
     navigationItem.titleView = UILabel.titleLabel(title: "Info")

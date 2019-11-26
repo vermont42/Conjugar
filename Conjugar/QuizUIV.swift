@@ -1,5 +1,5 @@
 //
-//  QuizView.swift
+//  QuizUIV.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 8/3/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class QuizView: UIView {
+class QuizUIV: UIView {
   static let tenseString = "Tense:"
   let lastLabel = UILabel()
   let correctLabel = UILabel()
@@ -56,7 +56,7 @@ class QuizView: UIView {
     [verb, translation, pronoun].forEach {
       $0.isUserInteractionEnabled = true
     }
-    [(verbLabel, "Verb:"), (pronounLabel, "Pronoun:"), (tenseLabel, QuizView.tenseString), (lastLabel, "Last Answer:"), (correctLabel, "Correct Answer:"), (scoreLabel, "Score:"), (progressLabel, "Progress:"), (elapsedLabel, "Elapsed:"), (last, " "), (correct, " ")].forEach {
+    [(verbLabel, "Verb:"), (pronounLabel, "Pronoun:"), (tenseLabel, QuizUIV.tenseString), (lastLabel, "Last Answer:"), (correctLabel, "Correct Answer:"), (scoreLabel, "Score:"), (progressLabel, "Progress:"), (elapsedLabel, "Elapsed:"), (last, " "), (correct, " ")].forEach {
       $0.0.text = $0.1
     }
     [verb, verbLabel, translation, pronoun, pronounLabel, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel, startRestartButton, conjugationField].forEach {

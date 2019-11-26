@@ -26,16 +26,16 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
   }
 
-  var browseVerbsView: BrowseVerbsView {
-    if let castedView = view as? BrowseVerbsView {
+  var browseVerbsView: BrowseVerbsUIV {
+    if let castedView = view as? BrowseVerbsUIV {
       return castedView
     } else {
-      fatalError(fatalCastMessage(view: BrowseVerbsView.self))
+      fatalError(fatalCastMessage(view: BrowseVerbsUIV.self))
     }
   }
 
   override func loadView() {
-    let browseVerbsView = BrowseVerbsView(frame: UIScreen.main.bounds)
+    let browseVerbsView = BrowseVerbsUIV(frame: UIScreen.main.bounds)
     browseVerbsView.setupTable(dataSource: self, delegate: self)
     browseVerbsView.filterControl.addTarget(self, action: #selector(BrowseVerbsVC.valueChanged(_:)), for: .valueChanged)
     allVerbs = Conjugator.shared.allVerbs

@@ -1,5 +1,5 @@
 //
-//  VerbView.swift
+//  VerbUIV.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 7/18/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VerbView: UIView {
+class VerbUIV: UIView {
   let translation = UILabel()
   let parentOrType = UILabel()
   let participio = UILabel()

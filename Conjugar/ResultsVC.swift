@@ -9,17 +9,17 @@
 import UIKit
 
 class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-  var resultsView: ResultsView {
-    if let castedView = view as? ResultsView {
+  var resultsView: ResultsUIV {
+    if let castedView = view as? ResultsUIV {
       return castedView
     } else {
-      fatalError(fatalCastMessage(view: ResultsView.self))
+      fatalError(fatalCastMessage(view: ResultsUIV.self))
     }
   }
 
   override func loadView() {
-    let resultsView: ResultsView
-    resultsView = ResultsView(frame: UIScreen.main.bounds)
+    let resultsView: ResultsUIV
+    resultsView = ResultsUIV(frame: UIScreen.main.bounds)
     resultsView.setupTable(dataSource: self, delegate: self)
     navigationItem.titleView = UILabel.titleLabel(title: "Results")
     view = resultsView
