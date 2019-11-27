@@ -43,11 +43,11 @@ struct SettingsView: View {
                 Text(type.rawValue).tag(type)
               }
             }
-            .modifier(SegmentedPicker())
-            .onAppear {
-              self.store.region = self.current.settings.region
-              self.store.current = self.current
-            }
+              .modifier(SegmentedPicker())
+              .onAppear {
+                self.store.region = self.current.settings.region
+                self.store.current = self.current
+              }
 
             Text("In Latin American mode, quizzes do not include vosotros conjugations. This setting also determines how Conjugar pronounces conjugations.")
               .modifier(BodyLabel())
@@ -64,11 +64,11 @@ struct SettingsView: View {
                 Text(type.rawValue).tag(type)
               }
             }
-            .modifier(SegmentedPicker())
-            .onAppear {
-              self.store.difficulty = self.current.settings.difficulty
-              self.store.current = self.current
-            }
+              .modifier(SegmentedPicker())
+              .onAppear {
+                self.store.difficulty = self.current.settings.difficulty
+                self.store.current = self.current
+              }
 
             Text("Moderate-mode quizzes test more tenses than easy-mode quizzes. Difficult-mode quizzes test more tenses than moderate-mode quizzes.")
               .modifier(BodyLabel())
@@ -85,11 +85,11 @@ struct SettingsView: View {
                 Text(type.rawValue).tag(type)
               }
             }
-            .modifier(SegmentedPicker())
-            .onAppear {
-              self.store.secondSingularBrowse = self.current.settings.secondSingularBrowse
-              self.store.current = self.current
-            }
+              .modifier(SegmentedPicker())
+              .onAppear {
+                self.store.secondSingularBrowse = self.current.settings.secondSingularBrowse
+                self.store.current = self.current
+              }
 
             Text("This setting determines whether you see tú conjugations, vos conjugations, or both when you browse verb conjugations.")
               .modifier(BodyLabel())
@@ -106,11 +106,11 @@ struct SettingsView: View {
                 Text(type.rawValue).tag(type)
               }
             }
-            .modifier(SegmentedPicker())
-            .onAppear {
-              self.store.secondSingularQuiz = self.current.settings.secondSingularQuiz
-              self.store.current = self.current
-            }
+              .modifier(SegmentedPicker())
+              .onAppear {
+                self.store.secondSingularQuiz = self.current.settings.secondSingularQuiz
+                self.store.current = self.current
+              }
 
             Text("This setting determines whether Conjugar's quiz mode quizzes you on tú forms or vos forms of verbs.")
               .modifier(BodyLabel())
@@ -132,12 +132,12 @@ struct SettingsView: View {
                     self.isGameCenterUIHidden = authenticated
                 })
               }
-              .modifier(StandardButton())
-              .onAppear {
-                self.isGameCenterButtonOffScreen = false
-              }
-              .scaleEffect(isGameCenterButtonOffScreen ? offScreenButtonScale : 1.0)
-              .animation(.easeInOut(duration: animationDuration))
+                .modifier(StandardButton())
+                .onAppear {
+                  self.isGameCenterButtonOffScreen = false
+                }
+                .scaleEffect(isGameCenterButtonOffScreen ? offScreenButtonScale : 1.0)
+                .animation(.easeInOut(duration: animationDuration))
 
               // Does not work in ScrollView.
               // https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears
@@ -170,7 +170,7 @@ struct SettingsView: View {
               }
               UIApplication.shared.open(url, options: [:])
             }
-            .modifier(StandardButton())
+              .modifier(StandardButton())
 
             if rateReviewDescription != "" {
               Text(rateReviewDescription)
@@ -182,19 +182,19 @@ struct SettingsView: View {
         }
       }
     }
-    .onAppear {
-      RatingsFetcher.fetchRatingsDescription(completion: { description in
-        if description != RatingsFetcher.errorMessage {
-          DispatchQueue.main.async {
-            self.rateReviewDescription = description
+      .onAppear {
+        RatingsFetcher.fetchRatingsDescription(completion: { description in
+          if description != RatingsFetcher.errorMessage {
+            DispatchQueue.main.async {
+              self.rateReviewDescription = description
+            }
           }
-        }
-      })
+        })
 
-      self.current.analytics.recordVisitation(viewController: "\(SettingsView.self)")
+        self.current.analytics.recordVisitation(viewController: "\(SettingsView.self)")
 
-      self.isGameCenterUIHidden = self.current.gameCenter.isAuthenticated
-    }
+        self.isGameCenterUIHidden = self.current.gameCenter.isAuthenticated
+      }
   }
 }
 
