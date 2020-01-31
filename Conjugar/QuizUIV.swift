@@ -64,64 +64,67 @@ class QuizUIV: UIView {
       addSubview($0)
     }
 
-    verbLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
-    verbLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-
-    verb.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
-    verb.leadingAnchor.constraint(equalTo: verbLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
-
-    translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
-    translation.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-
-    pronounLabel.topAnchor.constraint(equalTo: verbLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    pronounLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-
-    pronoun.topAnchor.constraint(equalTo: verb.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    pronoun.leadingAnchor.constraint(equalTo: pronounLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
-
-    tenseLabel.topAnchor.constraint(equalTo: pronounLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    tenseLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    tenseLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
     tenseLabel.adjustsFontSizeToFitWidth = true
     let minimumScaleFactor: CGFloat = 0.5
     tenseLabel.minimumScaleFactor = minimumScaleFactor
 
-    scoreLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    scoreLabel.trailingAnchor.constraint(equalTo: score.leadingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
+    NSLayoutConstraint.activate([
+      verbLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing),
+      verbLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 
-    score.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    score.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
+      verb.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing),
+      verb.leadingAnchor.constraint(equalTo: verbLabel.trailingAnchor, constant: Layout.defaultSpacing),
 
-    progressLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    progressLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+      translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing),
+      translation.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 
-    progress.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    progress.leadingAnchor.constraint(equalTo: progressLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
+      pronounLabel.topAnchor.constraint(equalTo: verbLabel.bottomAnchor, constant: Layout.defaultSpacing),
+      pronounLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 
-    elapsedLabel.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    elapsedLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+      pronoun.topAnchor.constraint(equalTo: verb.bottomAnchor, constant: Layout.defaultSpacing),
+      pronoun.leadingAnchor.constraint(equalTo: pronounLabel.trailingAnchor, constant: Layout.defaultSpacing),
 
-    elapsed.topAnchor.constraint(equalTo: progress.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    elapsed.leadingAnchor.constraint(equalTo: elapsedLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
+      tenseLabel.topAnchor.constraint(equalTo: pronounLabel.bottomAnchor, constant: Layout.defaultSpacing),
+      tenseLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      tenseLabel.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 
-    lastLabel.topAnchor.constraint(equalTo: elapsedLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    lastLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+      scoreLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing),
+      scoreLabel.trailingAnchor.constraint(equalTo: score.leadingAnchor, constant: Layout.defaultSpacing * -1.0),
 
-    last.topAnchor.constraint(equalTo: elapsed.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    last.leadingAnchor.constraint(equalTo: lastLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
+      score.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing),
+      score.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 
-    correctLabel.topAnchor.constraint(equalTo: lastLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    correctLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+      progressLabel.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing),
+      progressLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 
-    correct.topAnchor.constraint(equalTo: last.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    correct.leadingAnchor.constraint(equalTo: correctLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
+      progress.topAnchor.constraint(equalTo: tenseLabel.bottomAnchor, constant: Layout.defaultSpacing),
+      progress.leadingAnchor.constraint(equalTo: progressLabel.trailingAnchor, constant: Layout.defaultSpacing),
 
-    conjugationField.topAnchor.constraint(equalTo: correctLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    conjugationField.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    conjugationField.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
+      elapsedLabel.topAnchor.constraint(equalTo: progressLabel.bottomAnchor, constant: Layout.defaultSpacing),
+      elapsedLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 
-    startRestartButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    startRestartButton.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
+      elapsed.topAnchor.constraint(equalTo: progress.bottomAnchor, constant: Layout.defaultSpacing),
+      elapsed.leadingAnchor.constraint(equalTo: elapsedLabel.trailingAnchor, constant: Layout.defaultSpacing),
+
+      lastLabel.topAnchor.constraint(equalTo: elapsedLabel.bottomAnchor, constant: Layout.defaultSpacing),
+      lastLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+
+      last.topAnchor.constraint(equalTo: elapsed.bottomAnchor, constant: Layout.defaultSpacing),
+      last.leadingAnchor.constraint(equalTo: lastLabel.trailingAnchor, constant: Layout.defaultSpacing),
+
+      correctLabel.topAnchor.constraint(equalTo: lastLabel.bottomAnchor, constant: Layout.defaultSpacing),
+      correctLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+
+      correct.topAnchor.constraint(equalTo: last.bottomAnchor, constant: Layout.defaultSpacing),
+      correct.leadingAnchor.constraint(equalTo: correctLabel.trailingAnchor, constant: Layout.defaultSpacing),
+
+      conjugationField.topAnchor.constraint(equalTo: correctLabel.bottomAnchor, constant: Layout.defaultSpacing),
+      conjugationField.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      conjugationField.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+
+      startRestartButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: Layout.defaultSpacing),
+      startRestartButton.centerXAnchor.constraint(equalTo: centerXAnchor)
+    ])
   }
 
   func hideInProgressUI() {

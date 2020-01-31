@@ -31,9 +31,12 @@ class ConjugationCell: UITableViewCell {
     selectionStyle = .none
     backgroundColor = Colors.black
     addSubview(conjugation)
-    conjugation.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.defaultSpacing).activate()
-    conjugation.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
-    conjugation.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
+
+    NSLayoutConstraint.activate([
+      conjugation.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.defaultSpacing),
+      conjugation.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Layout.defaultSpacing * -1.0),
+      conjugation.centerYAnchor.constraint(equalTo: centerYAnchor)
+    ])
   }
 
   func configure(tense: Tense, personNumber: PersonNumber, conjugation: String) {

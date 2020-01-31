@@ -45,31 +45,33 @@ class VerbUIV: UIView {
       addSubview($0)
     }
 
-    translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
-    translation.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+    NSLayoutConstraint.activate([
+      translation.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing),
+      translation.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 
-    parentOrType.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing).activate()
-    parentOrType.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
+      parentOrType.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: Layout.defaultSpacing),
+      parentOrType.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 
-    participio.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    participio.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+      participio.topAnchor.constraint(equalTo: translation.bottomAnchor, constant: Layout.defaultSpacing),
+      participio.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 
-    gerundio.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    gerundio.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
+      gerundio.topAnchor.constraint(equalTo: parentOrType.bottomAnchor, constant: Layout.defaultSpacing),
+      gerundio.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 
-    raízFuturaLabel.topAnchor.constraint(equalTo: participio.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    raízFuturaLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
+      raízFuturaLabel.topAnchor.constraint(equalTo: participio.bottomAnchor, constant: Layout.defaultSpacing),
+      raízFuturaLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 
-    raízFutura.topAnchor.constraint(equalTo: participio.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    raízFutura.leadingAnchor.constraint(equalTo: raízFuturaLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
+      raízFutura.topAnchor.constraint(equalTo: participio.bottomAnchor, constant: Layout.defaultSpacing),
+      raízFutura.leadingAnchor.constraint(equalTo: raízFuturaLabel.trailingAnchor, constant: Layout.defaultSpacing),
 
-    defectivo.topAnchor.constraint(equalTo: gerundio.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    defectivo.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
+      defectivo.topAnchor.constraint(equalTo: gerundio.bottomAnchor, constant: Layout.defaultSpacing),
+      defectivo.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 
-    table.topAnchor.constraint(equalTo: raízFuturaLabel.bottomAnchor, constant: Layout.defaultSpacing).activate()
-    table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    table.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
+      table.topAnchor.constraint(equalTo: raízFuturaLabel.bottomAnchor, constant: Layout.defaultSpacing),
+      table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      table.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing)
+    ])
   }
 
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {

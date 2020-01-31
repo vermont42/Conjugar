@@ -30,15 +30,19 @@ class BrowseVerbsUIV: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    addSubview(table)
-    addSubview(filterControl)
-    table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).activate()
-    table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    table.bottomAnchor.constraint(equalTo: filterControl.topAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
-    filterControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    filterControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    filterControl.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
+    [table, filterControl].forEach {
+      addSubview($0)
+    }
+
+    NSLayoutConstraint.activate([
+      table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+      table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      table.bottomAnchor.constraint(equalTo: filterControl.topAnchor, constant: -1.0 * Layout.defaultSpacing),
+      filterControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      filterControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      filterControl.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing)
+    ])
   }
 
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {

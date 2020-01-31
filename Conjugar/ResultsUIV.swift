@@ -40,31 +40,34 @@ class ResultsUIV: UIView {
     [(scoreLabel, "Score:"), (timeLabel, "Time:")].forEach {
       $0.0.text = $0.1
     }
-    table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).activate()
-    table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    table.bottomAnchor.constraint(equalTo: difficulty.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
 
-    difficulty.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    difficulty.bottomAnchor.constraint(equalTo: score.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
+    NSLayoutConstraint.activate([
+      table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+      table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      table.bottomAnchor.constraint(equalTo: difficulty.topAnchor, constant: Layout.defaultSpacing * -1.0),
 
-    region.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    region.bottomAnchor.constraint(equalTo: time.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
+      difficulty.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      difficulty.bottomAnchor.constraint(equalTo: score.topAnchor, constant: Layout.defaultSpacing * -1.0),
 
-    scoreLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    scoreLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
+      region.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      region.bottomAnchor.constraint(equalTo: time.topAnchor, constant: Layout.defaultSpacing * -1.0),
 
-    timeLabel.trailingAnchor.constraint(equalTo: time.leadingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
-    timeLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
+      scoreLabel.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      scoreLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing),
 
-    time.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    time.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
+      timeLabel.trailingAnchor.constraint(equalTo: time.leadingAnchor, constant: Layout.defaultSpacing * -1.0),
+      timeLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing),
 
-    score.leadingAnchor.constraint(equalTo: scoreLabel.trailingAnchor, constant: Layout.defaultSpacing).activate()
-    score.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
+      time.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      time.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing),
 
-    time.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    time.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
+      score.leadingAnchor.constraint(equalTo: scoreLabel.trailingAnchor, constant: Layout.defaultSpacing),
+      score.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing),
+
+      time.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      time.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing)
+    ])
   }
 
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {

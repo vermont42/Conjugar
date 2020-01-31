@@ -22,10 +22,13 @@ class InfoUIV: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     addSubview(info)
-    info.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).activate()
-    info.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    info.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    info.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
+
+    NSLayoutConstraint.activate([
+      info.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+      info.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      info.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      info.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing)
+    ])
   }
 
   required init(coder aDecoder: NSCoder) {

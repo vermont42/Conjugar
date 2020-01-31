@@ -30,9 +30,12 @@ class TenseCell: UITableViewCell {
     backgroundColor = Colors.black
     selectionStyle = .none
     addSubview(tense)
-    tense.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.defaultSpacing).activate()
-    tense.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
-    tense.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
+
+    NSLayoutConstraint.activate([
+      tense.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.defaultSpacing),
+      tense.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Layout.defaultSpacing * -1.0),
+      tense.centerYAnchor.constraint(equalTo: centerYAnchor)
+    ])
   }
 
   func configure(tense: String) {

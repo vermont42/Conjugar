@@ -29,9 +29,12 @@ class VerbCell: UITableViewCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     backgroundColor = Colors.black
     addSubview(verb)
-    verb.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.defaultSpacing).activate()
-    verb.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Layout.defaultSpacing * -1.0).activate()
-    verb.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
+
+    NSLayoutConstraint.activate([
+      verb.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.defaultSpacing),
+      verb.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Layout.defaultSpacing * -1.0),
+      verb.centerYAnchor.constraint(equalTo: centerYAnchor)
+    ])
   }
 
   func configure(verb: String) {

@@ -27,8 +27,11 @@ class InfoCell: UITableViewCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     backgroundColor = Colors.black
     addSubview(heading)
-    heading.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
-    heading.centerYAnchor.constraint(equalTo: centerYAnchor).activate()
+
+    NSLayoutConstraint.activate([
+      heading.centerXAnchor.constraint(equalTo: centerXAnchor),
+      heading.centerYAnchor.constraint(equalTo: centerYAnchor)
+    ])
   }
 
   func configure(heading: String) {

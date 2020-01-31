@@ -43,16 +43,19 @@ class BrowseInfoUIV: UIView {
     [table, difficultyLabel, difficultyControl].forEach {
       addSubview($0)
     }
-    table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor).activate()
-    table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).activate()
-    table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor).activate()
-    table.bottomAnchor.constraint(equalTo: difficultyControl.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
 
-    difficultyControl.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
-    difficultyControl.bottomAnchor.constraint(equalTo: difficultyLabel.topAnchor, constant: Layout.defaultSpacing * -1.0).activate()
+    NSLayoutConstraint.activate([
+      table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+      table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      table.bottomAnchor.constraint(equalTo: difficultyControl.topAnchor, constant: Layout.defaultSpacing * -1.0),
 
-    difficultyLabel.centerXAnchor.constraint(equalTo: centerXAnchor).activate()
-    difficultyLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing).activate()
+      difficultyControl.centerXAnchor.constraint(equalTo: centerXAnchor),
+      difficultyControl.bottomAnchor.constraint(equalTo: difficultyLabel.topAnchor, constant: Layout.defaultSpacing * -1.0),
+
+      difficultyLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+      difficultyLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing)
+    ])
   }
 
   func setupTable(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {
