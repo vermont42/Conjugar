@@ -10,24 +10,25 @@ import UIKit
 
 class QuizUIV: UIView {
   static let tenseString = "Tense:"
-  let lastLabel = UILabel()
-  let correctLabel = UILabel()
-  let elapsed = UILabel()
-  let verb = UILabel()
-  let translation = UILabel()
-  let pronoun = UILabel()
-  let last = UILabel()
-  let correct = UILabel()
-  let score = UILabel()
-  let progress = UILabel()
-  let tenseLabel = UILabel()
-  private let verbLabel = UILabel()
-  private let pronounLabel = UILabel()
-  private let scoreLabel = UILabel()
-  private let progressLabel = UILabel()
-  private let elapsedLabel = UILabel()
+  @UsesAutoLayout var lastLabel = UILabel()
+  @UsesAutoLayout var correctLabel = UILabel()
+  @UsesAutoLayout var elapsed = UILabel()
+  @UsesAutoLayout var verb = UILabel()
+  @UsesAutoLayout var translation = UILabel()
+  @UsesAutoLayout var pronoun = UILabel()
+  @UsesAutoLayout var last = UILabel()
+  @UsesAutoLayout var correct = UILabel()
+  @UsesAutoLayout var score = UILabel()
+  @UsesAutoLayout var progress = UILabel()
+  @UsesAutoLayout var tenseLabel = UILabel()
+  @UsesAutoLayout private var verbLabel = UILabel()
+  @UsesAutoLayout private var pronounLabel = UILabel()
+  @UsesAutoLayout private var scoreLabel = UILabel()
+  @UsesAutoLayout private var progressLabel = UILabel()
+  @UsesAutoLayout private var elapsedLabel = UILabel()
 
-  let conjugationField: UITextField = {
+  @UsesAutoLayout
+  var conjugationField: UITextField = {
     let field = UITextField()
     field.autocapitalizationType = .none
     field.autocorrectionType = .no
@@ -35,7 +36,8 @@ class QuizUIV: UIView {
     return field
   }()
 
-  let startRestartButton: UIButton = {
+  @UsesAutoLayout
+  var startRestartButton: UIButton = {
     let button = UIButton()
     button.setTitle("Start", for: .normal)
     button.titleLabel?.font = Fonts.button
@@ -60,7 +62,6 @@ class QuizUIV: UIView {
       $0.0.text = $0.1
     }
     [verb, verbLabel, translation, pronoun, pronounLabel, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel, startRestartButton, conjugationField].forEach {
-      $0.enableAutoLayout()
       addSubview($0)
     }
 

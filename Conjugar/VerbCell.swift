@@ -11,13 +11,13 @@ import UIKit
 class VerbCell: UITableViewCell {
   static let identifier = "VerbCell"
 
-  let verb: UILabel = {
+  @UsesAutoLayout
+  var verb: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.largeCell
     label.textAlignment = .center
     label.adjustsFontSizeToFitWidth = true
-    label.enableAutoLayout()
     return label
   }()
 

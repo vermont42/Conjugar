@@ -11,11 +11,11 @@ import UIKit
 class InfoCell: UITableViewCell {
   static let identifier = "InfoCell"
 
-  let heading: UILabel = {
+  @UsesAutoLayout
+  var heading: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.boldBody
-    label.enableAutoLayout()
     return label
   }()
 

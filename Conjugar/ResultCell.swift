@@ -11,10 +11,10 @@ import UIKit
 class ResultCell: UITableViewCell {
   static let identifier = "ResultCell"
 
-  let verb = UILabel()
-  let tensePersonNumber = UILabel()
-  let correctAnswer = UILabel()
-  let proposedAnswer = UILabel()
+  @UsesAutoLayout private(set) var verb = UILabel()
+  @UsesAutoLayout private(set) var tensePersonNumber = UILabel()
+  @UsesAutoLayout private(set) var correctAnswer = UILabel()
+  @UsesAutoLayout private(set) var proposedAnswer = UILabel()
 
   required init?(coder aDecoder: NSCoder) {
     NSCoder.fatalErrorNotImplemented()
@@ -25,7 +25,6 @@ class ResultCell: UITableViewCell {
     [verb, tensePersonNumber, correctAnswer, proposedAnswer].forEach {
       $0.textColor = Colors.yellow
       $0.font = Fonts.smallCell
-      $0.enableAutoLayout()
       addSubview($0)
     }
     verb.font = Fonts.regularCell

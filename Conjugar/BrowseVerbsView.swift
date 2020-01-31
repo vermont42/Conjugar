@@ -9,17 +9,17 @@
 import UIKit
 
 class BrowseVerbsUIV: UIView {
-  let table: UITableView = {
+  @UsesAutoLayout
+  var table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
-    tableView.enableAutoLayout()
     return tableView
   }()
 
-  let filterControl: UISegmentedControl = {
+  @UsesAutoLayout
+  var filterControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["Irregular", "Regular", "Both"])
     control.selectedSegmentIndex = 0
-    control.enableAutoLayout()
     control.yellowfyText()
     return control
   }()

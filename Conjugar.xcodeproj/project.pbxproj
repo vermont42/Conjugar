@@ -37,6 +37,8 @@
 		038E0330228B0429005CFC96 /* TenseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E032F228B0429005CFC96 /* TenseTests.swift */; };
 		0392B0E4237A08DA008BB76E /* NSCoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0392B0E3237A08DA008BB76E /* NSCoderExtension.swift */; };
 		039B5CD6238F276000034337 /* SettingsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B5CD5238F276000034337 /* SettingsViewTests.swift */; };
+		03C8506623E4883300FD74AD /* UsesAutoLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C8506523E4883300FD74AD /* UsesAutoLayout.swift */; };
+		03C8506823E48A6C00FD74AD /* UsesAutoLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C8506723E48A6C00FD74AD /* UsesAutoLayoutTests.swift */; };
 		03C9508F22A47E750030151C /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508B22A47D460030151C /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		03C9509022A47E750030151C /* AWSPinpoint.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508C22A47D460030151C /* AWSPinpoint.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E10178021F3F753400F0BC97 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10178011F3F753400F0BC97 /* UIViewExtensions.swift */; };
@@ -195,6 +197,8 @@
 		038E032F228B0429005CFC96 /* TenseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenseTests.swift; sourceTree = "<group>"; };
 		0392B0E3237A08DA008BB76E /* NSCoderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCoderExtension.swift; sourceTree = "<group>"; };
 		039B5CD5238F276000034337 /* SettingsViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewTests.swift; sourceTree = "<group>"; };
+		03C8506523E4883300FD74AD /* UsesAutoLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsesAutoLayout.swift; sourceTree = "<group>"; };
+		03C8506723E48A6C00FD74AD /* UsesAutoLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsesAutoLayoutTests.swift; sourceTree = "<group>"; };
 		03C9508B22A47D460030151C /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		03C9508C22A47D460030151C /* AWSPinpoint.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSPinpoint.framework; sourceTree = "<group>"; };
 		E10178011F3F753400F0BC97 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
@@ -408,6 +412,7 @@
 				E10178011F3F753400F0BC97 /* UIViewExtensions.swift */,
 				038E031D22734800005CFC96 /* URLProtocolStub.swift */,
 				038E03272279D034005CFC96 /* URLSessionExtension.swift */,
+				03C8506523E4883300FD74AD /* UsesAutoLayout.swift */,
 				E1E092C221ED3C6900828C37 /* UserDefaultsGetterSetter.swift */,
 				E18F7F371ECA7C9A00633200 /* Utterer.swift */,
 			);
@@ -470,6 +475,7 @@
 				038E031922711B76005CFC96 /* UIViewControllerExtensionsTests.swift */,
 				038E032122760A40005CFC96 /* UIViewExtensionsTests.swift */,
 				03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */,
+				03C8506723E48A6C00FD74AD /* UsesAutoLayoutTests.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -855,6 +861,7 @@
 				E1F06ADA1E8F05F300ADD2E1 /* BrowseVerbsVC.swift in Sources */,
 				E1D1D8F81F33732D006A6052 /* QuizUIV.swift in Sources */,
 				E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */,
+				03C8506623E4883300FD74AD /* UsesAutoLayout.swift in Sources */,
 				E1EC71012198BA6400872787 /* AWSAnalyticsService.swift in Sources */,
 				E188B56021AF78CE009777D8 /* ReviewPromptable.swift in Sources */,
 				E19382041F0822B2005268FF /* InfoVC.swift in Sources */,
@@ -929,6 +936,7 @@
 				E14589F41F5B7BB000EEF141 /* BrowseInfoVCTests.swift in Sources */,
 				E14589F61F5B7E9D00EEF141 /* VerbVCTests.swift in Sources */,
 				038E031C2271E239005CFC96 /* AnalyticsServiceableTests.swift in Sources */,
+				03C8506823E48A6C00FD74AD /* UsesAutoLayoutTests.swift in Sources */,
 				E15D3BF61F533997003771BB /* MockNavigationC.swift in Sources */,
 				E198F9021F5D79F100BAF553 /* VerbUIVTests.swift in Sources */,
 				038E03202273BF29005CFC96 /* RatingsFetcherTests.swift in Sources */,

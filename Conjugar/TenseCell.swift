@@ -11,13 +11,13 @@ import UIKit
 class TenseCell: UITableViewCell {
   static let identifier = "TenseCell"
 
-  let tense: UILabel = {
+  @UsesAutoLayout
+  var tense: UILabel = {
     let label = UILabel()
     label.textColor = Colors.red
     label.font = Fonts.regularCell
     label.textAlignment = .center
     label.adjustsFontSizeToFitWidth = true
-    label.enableAutoLayout()
     return label
   }()
 

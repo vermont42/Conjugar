@@ -9,28 +9,28 @@
 import UIKit
 
 class BrowseInfoUIV: UIView {
-  let table: UITableView = {
+  @UsesAutoLayout
+  var table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
-    tableView.enableAutoLayout()
     return tableView
   }()
 
-  let difficultyControl: UISegmentedControl = {
+  @UsesAutoLayout
+  var difficultyControl: UISegmentedControl = {
     let control = UISegmentedControl(items: ["E", "E & M", "E, M, & D"])
     control.selectedSegmentIndex = 0
-    control.enableAutoLayout()
     control.yellowfyText()
     return control
   }()
 
-  private let difficultyLabel: UILabel = {
+  @UsesAutoLayout
+  private var difficultyLabel: UILabel = {
     let label = UILabel()
     label.text = "Filter Tenses by Difficulty"
     label.textAlignment = .center
     label.font = Fonts.smallBody
     label.textColor = Colors.yellow
-    label.enableAutoLayout()
     return label
   }()
 

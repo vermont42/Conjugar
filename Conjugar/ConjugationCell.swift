@@ -11,13 +11,13 @@ import UIKit
 class ConjugationCell: UITableViewCell {
   static let identifier = "ConjugationCell"
 
-  let conjugation: UILabel = {
+  @UsesAutoLayout
+  var conjugation: UILabel = {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.smallCell
     label.textAlignment = .center
     label.adjustsFontSizeToFitWidth = true
-    label.enableAutoLayout()
     return label
   }()
 

@@ -9,19 +9,20 @@
 import UIKit
 
 class ResultsUIV: UIView {
-  let table: UITableView = {
+  @UsesAutoLayout
+  var table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
     tableView.rowHeight = 120
     return tableView
   }()
 
-  let difficulty = UILabel()
-  let region = UILabel()
-  let score = UILabel()
-  let time = UILabel()
-  let scoreLabel = UILabel()
-  let timeLabel = UILabel()
+  @UsesAutoLayout var difficulty = UILabel()
+  @UsesAutoLayout var region = UILabel()
+  @UsesAutoLayout var score = UILabel()
+  @UsesAutoLayout var time = UILabel()
+  @UsesAutoLayout var scoreLabel = UILabel()
+  @UsesAutoLayout var timeLabel = UILabel()
 
   required init(coder aDecoder: NSCoder) {
     NSCoder.fatalErrorNotImplemented()
@@ -34,7 +35,6 @@ class ResultsUIV: UIView {
       $0.font = Fonts.label
     }
     [table, difficulty, region, score, time, scoreLabel, timeLabel].forEach {
-      $0.enableAutoLayout()
       addSubview($0)
     }
     [(scoreLabel, "Score:"), (timeLabel, "Time:")].forEach {

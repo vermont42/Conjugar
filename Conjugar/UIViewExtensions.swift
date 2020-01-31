@@ -20,8 +20,4 @@ extension UIView {
       })
     })
   }
-
-  func enableAutoLayout() {
-    translatesAutoresizingMaskIntoConstraints = false
-  }
 }

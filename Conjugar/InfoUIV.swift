@@ -9,10 +9,10 @@
 import UIKit
 
 class InfoUIV: UIView {
-  let info: UITextView = {
-    let textView = UITextView()
+  @UsesAutoLayout
+  var info: UITextView = {
+    var textView = UITextView()
     textView.backgroundColor = Colors.black
-    textView.enableAutoLayout()
     textView.textColor = Colors.yellow
     textView.tintColor = Colors.blue
     textView.isEditable = false

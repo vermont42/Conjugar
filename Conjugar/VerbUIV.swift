@@ -9,18 +9,18 @@
 import UIKit
 
 class VerbUIV: UIView {
-  let translation = UILabel()
-  let parentOrType = UILabel()
-  let participio = UILabel()
-  let gerundio = UILabel()
-  let raízFutura = UILabel()
-  let defectivo = UILabel()
-  private let raízFuturaLabel = UILabel()
+  @UsesAutoLayout var translation = UILabel()
+  @UsesAutoLayout var parentOrType = UILabel()
+  @UsesAutoLayout var participio = UILabel()
+  @UsesAutoLayout var gerundio = UILabel()
+  @UsesAutoLayout var raízFutura = UILabel()
+  @UsesAutoLayout var defectivo = UILabel()
+  @UsesAutoLayout private var raízFuturaLabel = UILabel()
 
-  let table: UITableView = {
+  @UsesAutoLayout
+  var table: UITableView = {
     let tableView = UITableView()
     tableView.backgroundColor = Colors.black
-    tableView.enableAutoLayout()
     return tableView
   }()
 
@@ -33,7 +33,6 @@ class VerbUIV: UIView {
     [translation, parentOrType, participio, gerundio, raízFuturaLabel, raízFutura, defectivo].forEach {
       $0.font = Fonts.label
       $0.textColor = Colors.yellow
-      $0.enableAutoLayout()
     }
     raízFuturaLabel.text = "RF:"
 

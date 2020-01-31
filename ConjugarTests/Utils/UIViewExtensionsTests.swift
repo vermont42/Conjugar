@@ -23,11 +23,4 @@ class UIViewExtensionsTests: XCTestCase {
     })
     wait(for: [expectatiön], timeout: duration + cushion * timeoutFactor)
   }
-
-  func testEnableAutoLayout() {
-    let view = UIView()
-    XCTAssert(view.translatesAutoresizingMaskIntoConstraints)
-    view.enableAutoLayout()
-    XCTAssertFalse(view.translatesAutoresizingMaskIntoConstraints)
-  }
 }
