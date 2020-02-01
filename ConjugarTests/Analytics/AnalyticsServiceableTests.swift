@@ -10,23 +10,15 @@ import XCTest
 @testable import Conjugar
 
 class AnalyticsServiceableTests: XCTestCase {
-  var analytics: [String] = []
-  var service: TestAnalyticsService?
   private let nilServiceMessage = "TestAnalyticsService was nil."
-
-  override func setUp() {
-    super.setUp()
-    analytics = []
-    service = TestAnalyticsService(fire: { event in
-      self.analytics.append(event)
-    })
-  }
+  private let nilAnalyticsMessage = "analytics array was nil."
 
   func testRecordEvent() {
-    guard let service = service else {
-      XCTFail(nilServiceMessage)
-      return
-    }
+    var analytics: [String] = []
+    let service = TestAnalyticsService(fire: { event in
+      analytics.append(event)
+    })
+
     let 🥥 = "🥥"
     XCTAssertFalse(analytics.contains(🥥))
     service.recordEvent(🥥)
@@ -34,10 +26,11 @@ class AnalyticsServiceableTests: XCTestCase {
   }
 
   func testRecordVisitation() {
-    guard let service = service else {
-      XCTFail(nilServiceMessage)
-      return
-    }
+    var analytics: [String] = []
+    let service = TestAnalyticsService(fire: { event in
+      analytics.append(event)
+    })
+
     let pizzaViewController = "PizzaViewController"
     XCTAssertFalse(analytics.contains("\(service.visited) \(pizzaViewController)"))
     service.recordVisitation(viewController: pizzaViewController)
@@ -45,20 +38,22 @@ class AnalyticsServiceableTests: XCTestCase {
   }
 
   func testRecordQuizStart() {
-    guard let service = service else {
-      XCTFail(nilServiceMessage)
-      return
-    }
+    var analytics: [String] = []
+    let service = TestAnalyticsService(fire: { event in
+      analytics.append(event)
+    })
+
     XCTAssertFalse(analytics.contains(service.quizStart))
     service.recordQuizStart()
     XCTAssert(analytics.contains(service.quizStart))
   }
 
   func testRecordQuizCompletion() {
-    guard let service = service else {
-      XCTFail(nilServiceMessage)
-      return
-    }
+    var analytics: [String] = []
+    let service = TestAnalyticsService(fire: { event in
+      analytics.append(event)
+    })
+
     let score = 42
     XCTAssertFalse(analytics.contains("\(service.quizCompletion) \(service.scöre): \(score) "))
     service.recordQuizCompletion(score: score)
@@ -66,10 +61,11 @@ class AnalyticsServiceableTests: XCTestCase {
   }
 
   func testRecordGameCenterAuth() {
-    guard let service = service else {
-      XCTFail(nilServiceMessage)
-      return
-    }
+    var analytics: [String] = []
+    let service = TestAnalyticsService(fire: { event in
+      analytics.append(event)
+    })
+
     XCTAssertFalse(analytics.contains("\(service.gameCenterAuth)"))
     service.recordGameCenterAuth()
     XCTAssert(analytics.contains("\(service.gameCenterAuth)"))
