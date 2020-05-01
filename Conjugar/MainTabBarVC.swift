@@ -10,19 +10,38 @@ import UIKit
 import SwiftUI
 
 class MainTabBarVC: UITabBarController {
-  static let tabs = ["Browse", "Quiz", "Settings", "Info"]
-
   convenience init() {
     self.init(nibName: nil, bundle: nil)
+
     let browseVerbsNavC = UINavigationController(rootViewController: BrowseVerbsVC())
-    browseVerbsNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[0], image: UIImage(named: MainTabBarVC.tabs[0]), selectedImage: nil)
+    browseVerbsNavC.tabBarItem = UITabBarItem(
+      title: Localizations.BrowseVerbs.localizedTitle,
+      image: UIImage(named: Localizations.BrowseVerbs.englishTitle),
+      selectedImage: nil
+    )
+
     let quizNavC = UINavigationController(rootViewController: QuizVC())
-    quizNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[1], image: UIImage(named: MainTabBarVC.tabs[1]), selectedImage: nil)
+    quizNavC.tabBarItem = UITabBarItem(
+      title: Localizations.Quiz.localizedTitle,
+      image: UIImage(named: Localizations.Quiz.englishTitle),
+      selectedImage: nil
+    )
+
     let settingsVC = UIHostingController(rootView: SettingsView().environmentObject(Current))
     Current.parentViewController = settingsVC
-    settingsVC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[2], image: UIImage(named: MainTabBarVC.tabs[2]), selectedImage: nil)
+    settingsVC.tabBarItem = UITabBarItem(
+      title: Localizations.Settings.localizedTitle,
+      image: UIImage(named: Localizations.Settings.englishTitle),
+      selectedImage: nil
+    )
+
     let browseInfoNavC = UINavigationController(rootViewController: BrowseInfoVC())
-    browseInfoNavC.tabBarItem = UITabBarItem(title: MainTabBarVC.tabs[3], image: UIImage(named: MainTabBarVC.tabs[3]), selectedImage: nil)
+    browseInfoNavC.tabBarItem = UITabBarItem(
+      title: Localizations.BrowseInfo.localizedTitle,
+      image: UIImage(named: Localizations.BrowseInfo.englishTitle),
+      selectedImage: nil
+    )
+
     viewControllers = [browseVerbsNavC, quizNavC, browseInfoNavC, settingsVC]
   }
 }

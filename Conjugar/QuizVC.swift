@@ -21,7 +21,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     let quizView: QuizUIV
     quizView = QuizUIV(frame: UIScreen.main.bounds)
     quizView.startRestartButton.addTarget(self, action: #selector(startRestart), for: .touchUpInside)
-    navigationItem.titleView = UILabel.titleLabel(title: "Quiz")
+    navigationItem.titleView = UILabel.titleLabel(title: Localizations.Quiz.localizedTitle)
     quizView.conjugationField.delegate = self
     view = quizView
   }

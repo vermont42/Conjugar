@@ -30,7 +30,7 @@ struct SettingsView: View {
         .edgesIgnoringSafeArea(.all)
 
       VStack(alignment: .center, spacing: 16) {
-        Text("Settings")
+        Text(Localizations.Settings.localizedTitle)
           .modifier(HeadingLabel())
 
         ScrollView(.vertical) {

@@ -22,6 +22,7 @@
 		035334BF229837BE00046CCC /* ResultsVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334BE229837BE00046CCC /* ResultsVCTests.swift */; };
 		035334C12298968600046CCC /* QuizVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334C02298968600046CCC /* QuizVCTests.swift */; };
 		035C646F22299A7E001ECC02 /* RatingsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035C646E22299A7E001ECC02 /* RatingsFetcher.swift */; };
+		035EF5BB245C746800F29894 /* Localizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035EF5BA245C746800F29894 /* Localizations.swift */; };
 		038E03132270A868005CFC96 /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03122270A868005CFC96 /* IntExtensionTests.swift */; };
 		038E03152270A9FB005CFC96 /* TestGameCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */; };
 		038E03182270AC01005CFC96 /* DeviceUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03172270AC01005CFC96 /* DeviceUtilityTests.swift */; };
@@ -185,6 +186,7 @@
 		035334BE229837BE00046CCC /* ResultsVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsVCTests.swift; sourceTree = "<group>"; };
 		035334C02298968600046CCC /* QuizVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizVCTests.swift; sourceTree = "<group>"; };
 		035C646E22299A7E001ECC02 /* RatingsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsFetcher.swift; sourceTree = "<group>"; };
+		035EF5BA245C746800F29894 /* Localizations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizations.swift; sourceTree = "<group>"; };
 		038E03122270A868005CFC96 /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenterTests.swift; sourceTree = "<group>"; };
 		038E03172270AC01005CFC96 /* DeviceUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceUtilityTests.swift; sourceTree = "<group>"; };
@@ -440,6 +442,7 @@
 				E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */,
 				E1F06AE31E8F05F300ADD2E1 /* Info.plist */,
 				E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */,
+				035EF5BA245C746800F29894 /* Localizations.swift */,
 				03C8506923E4F39600FD74AD /* main.swift */,
 			);
 			name = Supporting;
@@ -879,6 +882,7 @@
 				E1D1D8F81F33732D006A6052 /* QuizUIV.swift in Sources */,
 				E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */,
 				03C8506623E4883300FD74AD /* UsesAutoLayout.swift in Sources */,
+				035EF5BB245C746800F29894 /* Localizations.swift in Sources */,
 				E1EC71012198BA6400872787 /* AWSAnalyticsService.swift in Sources */,
 				E188B56021AF78CE009777D8 /* ReviewPromptable.swift in Sources */,
 				03C8506A23E4F39600FD74AD /* main.swift in Sources */,

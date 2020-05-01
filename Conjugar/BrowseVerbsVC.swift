@@ -41,7 +41,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     allVerbs = Conjugator.shared.allVerbs
     regularVerbs = Conjugator.shared.regularVerbs
     irregularVerbs = Conjugator.shared.irregularVerbs
-    navigationItem.titleView = UILabel.titleLabel(title: "Browse")
+    navigationItem.titleView = UILabel.titleLabel(title: Localizations.BrowseVerbs.localizedTitle)
     view = browseVerbsView
     Current.reviewPrompter.promptableActionHappened()
   }

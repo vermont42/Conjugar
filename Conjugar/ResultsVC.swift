@@ -21,7 +21,7 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let resultsView: ResultsUIV
     resultsView = ResultsUIV(frame: UIScreen.main.bounds)
     resultsView.setupTable(dataSource: self, delegate: self)
-    navigationItem.titleView = UILabel.titleLabel(title: "Results")
+    navigationItem.titleView = UILabel.titleLabel(title: Localizations.Results.title)
     view = resultsView
   }
 
