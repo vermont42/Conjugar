@@ -19,9 +19,9 @@ class BrowseVerbsUIV: UIView {
   @UsesAutoLayout
   var filterControl: UISegmentedControl = {
     let control = UISegmentedControl(items: [
-      Localizations.BrowseVerbs.Filter.irregular,
-      Localizations.BrowseVerbs.Filter.regular,
-      Localizations.BrowseVerbs.Filter.both
+      Localizations.Verb.irregular,
+      Localizations.Verb.regular,
+      Localizations.BrowseVerbs.both
     ])
     control.selectedSegmentIndex = 0
     control.yellowfyText()

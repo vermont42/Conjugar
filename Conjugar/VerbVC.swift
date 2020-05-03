@@ -66,27 +66,27 @@ class VerbVC: UIViewController {
       fatalError()
     }
     if Conjugator.shared.isDefective(infinitive: verb) {
-      verbView.defectivo.text = "Defective"
+      verbView.defectivo.text = Localizations.Verb.defective
     } else {
-      verbView.defectivo.text = "Not Defective"
+      verbView.defectivo.text = Localizations.Verb.notDefective
     }
 
     let verbType = Conjugator.shared.verbType(infinitive: verb)
     switch verbType {
     case .regularAr:
-      verbView.parentOrType.text = "Regular AR"
+      verbView.parentOrType.text = "\(Localizations.Verb.regular) AR"
     case .regularEr:
-      verbView.parentOrType.text = "Regular ER"
+      verbView.parentOrType.text = "\(Localizations.Verb.regular) ER"
     case .regularIr:
-      verbView.parentOrType.text = "Regular IR"
+      verbView.parentOrType.text = "\(Localizations.Verb.regular) IR"
     case .irregular:
       guard let parent = Conjugator.shared.parent(infinitive: verb) else {
         fatalError("Parent verb not found.")
       }
       if Conjugator.baseVerbs.contains(parent) {
-        verbView.parentOrType.text = "Irregular"
+        verbView.parentOrType.text = Localizations.Verb.irregular
       } else {
-        verbView.parentOrType.text = "Irreg. ☛ \(parent)"
+        verbView.parentOrType.text = String(format: Localizations.Verb.irregularWithParent, parent)
       }
     }
     view = verbView

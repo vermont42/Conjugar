@@ -22,18 +22,8 @@ enum Localizations {
       NSLocalizedString("Browse", comment: "")
     }
 
-    enum Filter {
-      static var irregular: String {
-        NSLocalizedString("Irregular", comment: "")
-      }
-
-      static var regular: String {
-        NSLocalizedString("Regular", comment: "")
-      }
-
-      static var both: String {
-        NSLocalizedString("Both", comment: "")
-      }
+    static var both: String {
+      NSLocalizedString("Both", comment: "")
     }
   }
 
@@ -59,5 +49,24 @@ enum Localizations {
   }
 
   enum Verb {
+    static var irregular: String {
+      NSLocalizedString("Irregular", comment: "")
+    }
+
+    static var regular: String {
+      NSLocalizedString("Regular", comment: "")
+    }
+
+    static var defective: String {
+      NSLocalizedString("Defective", comment: "")
+    }
+
+    static var notDefective: String {
+      NSLocalizedString("Not Defective", comment: "")
+    }
+
+    static var irregularWithParent: String {
+      NSLocalizedString("Irreg. ☛ %@", comment: "")
+    }
   }
 }
