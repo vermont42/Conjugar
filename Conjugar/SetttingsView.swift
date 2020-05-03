@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct SettingsView: View {
+  static let englishTitle = "Settings"
+
   @State private var isGameCenterButtonOffScreen = true
   @State private var isGameCenterUIHidden = false
   @State private var rateReviewDescription = ""

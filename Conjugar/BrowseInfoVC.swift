@@ -9,6 +9,8 @@
 import UIKit
 
 class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource, InfoDelegate {
+  static let englishTitle = "Info"
+
   private var selectedRow = 0
   private var allInfos: [Info] = []
   private var easyModerateInfos: [Info] = []

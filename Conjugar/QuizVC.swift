@@ -9,6 +9,8 @@
 import UIKit
 
 class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
+  static let englishTitle = "Quiz"
+
   var quizView: QuizUIV {
     if let castedView = view as? QuizUIV {
       return castedView

@@ -9,6 +9,8 @@
 import UIKit
 
 class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+  static let englishTitle = "Browse"
+
   private var allVerbs: [String] = []
   private var regularVerbs: [String] = []
   private var irregularVerbs: [String] = []

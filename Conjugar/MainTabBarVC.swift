@@ -16,14 +16,14 @@ class MainTabBarVC: UITabBarController {
     let browseVerbsNavC = UINavigationController(rootViewController: BrowseVerbsVC())
     browseVerbsNavC.tabBarItem = UITabBarItem(
       title: Localizations.BrowseVerbs.localizedTitle,
-      image: UIImage(named: Localizations.BrowseVerbs.englishTitle),
+      image: UIImage(named: BrowseVerbsVC.englishTitle),
       selectedImage: nil
     )
 
     let quizNavC = UINavigationController(rootViewController: QuizVC())
     quizNavC.tabBarItem = UITabBarItem(
       title: Localizations.Quiz.localizedTitle,
-      image: UIImage(named: Localizations.Quiz.englishTitle),
+      image: UIImage(named: QuizVC.englishTitle),
       selectedImage: nil
     )
 
@@ -31,14 +31,14 @@ class MainTabBarVC: UITabBarController {
     Current.parentViewController = settingsVC
     settingsVC.tabBarItem = UITabBarItem(
       title: Localizations.Settings.localizedTitle,
-      image: UIImage(named: Localizations.Settings.englishTitle),
+      image: UIImage(named: SettingsView.englishTitle),
       selectedImage: nil
     )
 
     let browseInfoNavC = UINavigationController(rootViewController: BrowseInfoVC())
     browseInfoNavC.tabBarItem = UITabBarItem(
       title: Localizations.BrowseInfo.localizedTitle,
-      image: UIImage(named: Localizations.BrowseInfo.englishTitle),
+      image: UIImage(named: BrowseInfoVC.englishTitle),
       selectedImage: nil
     )
 

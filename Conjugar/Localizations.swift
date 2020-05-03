@@ -8,60 +8,56 @@
 
 import Foundation
 
+// genstrings -o es.lproj *.swift
+
 enum Localizations {
-    enum BrowseInfo {
-        static var englishTitle: String {
-            "Info"
-        }
+  enum BrowseInfo {
+    static var localizedTitle: String {
+      NSLocalizedString("Info", comment: "")
+    }
+  }
 
-        static var localizedTitle: String {
-            NSL(englishTitle)
-        }
+  enum BrowseVerbs {
+    static var localizedTitle: String {
+      NSLocalizedString("Browse", comment: "")
     }
 
-    enum BrowseVerbs {
-        static var englishTitle: String {
-            "Browse"
-        }
+    enum Filter {
+      static var irregular: String {
+        NSLocalizedString("Irregular", comment: "")
+      }
 
-        static var localizedTitle: String {
-            NSL(englishTitle)
-        }
+      static var regular: String {
+        NSLocalizedString("Regular", comment: "")
+      }
+
+      static var both: String {
+        NSLocalizedString("Both", comment: "")
+      }
     }
+  }
 
-    enum Info {
+  enum Info {
+  }
+
+  enum Quiz {
+    static var localizedTitle: String {
+      NSLocalizedString("Quiz", comment: "")
     }
+  }
 
-    enum Quiz {
-        static var englishTitle: String {
-            "Quiz"
-        }
-
-        static var localizedTitle: String {
-            NSL(englishTitle)
-        }
+  enum Results {
+    static var title: String {
+      NSLocalizedString("Results", comment: "")
     }
+  }
 
-    enum Results {
-        static var title: String {
-            NSL("Results")
-        }
+  enum Settings {
+    static var localizedTitle: String {
+      NSLocalizedString("Settings", comment: "")
     }
+  }
 
-    enum Settings {
-        static var englishTitle: String {
-            "Settings"
-        }
-
-        static var localizedTitle: String {
-            NSL(englishTitle)
-        }
-    }
-
-    enum Verb {
-    }
-
-    private static func NSL(_ key: String, comment: String = "") -> String {
-        NSLocalizedString(key, comment: comment)
-    }
+  enum Verb {
+  }
 }
