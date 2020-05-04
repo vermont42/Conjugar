@@ -79,7 +79,7 @@ struct SettingsView: View {
           }
 
           Group {
-            Text("Browse Tú and/or Vos")
+            Text(Localizations.Settings.browse)
               .modifier(SubheadingLabel())
 
             Picker("", selection: $store.secondSingularBrowse) {
@@ -93,7 +93,7 @@ struct SettingsView: View {
                 self.store.current = self.current
               }
 
-            Text("This setting determines whether you see tú conjugations, vos conjugations, or both when you browse verb conjugations.")
+            Text(Localizations.Settings.browseDescription)
               .modifier(BodyLabel())
 
             Spacer(minLength: Layout.tripleDefaultSpacing)
