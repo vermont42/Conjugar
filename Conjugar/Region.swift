@@ -27,4 +27,13 @@ enum Region: String, CaseIterable {
       return 0.833
     }
   }
+
+  var localizedRegion: String {
+    switch self {
+    case .spain:
+      return Localizations.spain
+    case .latinAmerica:
+      return Localizations.latinAmerica
+    }
+  }
 }

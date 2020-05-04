@@ -37,12 +37,12 @@ struct SettingsView: View {
 
         ScrollView(.vertical) {
           Group {
-            Text("Region")
+            Text(Localizations.Settings.region)
               .modifier(SubheadingLabel())
 
             Picker("", selection: $store.region) {
               ForEach(Region.allCases, id: \.self) { type in
-                Text(type.rawValue).tag(type)
+                Text(type.localizedRegion).tag(type)
               }
             }
               .modifier(SegmentedPicker())
@@ -51,19 +51,19 @@ struct SettingsView: View {
                 self.store.current = self.current
               }
 
-            Text("In Latin American mode, quizzes do not include vosotros conjugations. This setting also determines how Conjugar pronounces conjugations.")
+            Text(Localizations.Settings.regionDescription)
               .modifier(BodyLabel())
 
             Spacer(minLength: Layout.tripleDefaultSpacing)
           }
 
           Group {
-            Text("Difficulty")
+            Text(Localizations.Settings.difficulty)
               .modifier(SubheadingLabel())
 
             Picker("", selection: $store.difficulty) {
               ForEach(Difficulty.allCases, id: \.self) { type in
-                Text(type.rawValue).tag(type)
+                Text(type.localizedDifficulty).tag(type)
               }
             }
               .modifier(SegmentedPicker())
@@ -72,7 +72,7 @@ struct SettingsView: View {
                 self.store.current = self.current
               }
 
-            Text("Moderate-mode quizzes test more tenses than easy-mode quizzes. Difficult-mode quizzes test more tenses than moderate-mode quizzes.")
+            Text(Localizations.Settings.difficultyDescription)
               .modifier(BodyLabel())
 
             Spacer(minLength: Layout.tripleDefaultSpacing)
@@ -84,7 +84,7 @@ struct SettingsView: View {
 
             Picker("", selection: $store.secondSingularBrowse) {
               ForEach(SecondSingularBrowse.allCases, id: \.self) { type in
-                Text(type.rawValue).tag(type)
+                Text(type.localizedSecondSingularBrowse).tag(type)
               }
             }
               .modifier(SegmentedPicker())
@@ -100,7 +100,7 @@ struct SettingsView: View {
           }
 
           Group {
-            Text("Quiz Tú or Vos")
+            Text(Localizations.Settings.quiz)
               .modifier(SubheadingLabel())
 
             Picker("", selection: $store.secondSingularQuiz) {
@@ -114,7 +114,7 @@ struct SettingsView: View {
                 self.store.current = self.current
               }
 
-            Text("This setting determines whether Conjugar's quiz mode quizzes you on tú forms or vos forms of verbs.")
+            Text(Localizations.Settings.quizDescription)
               .modifier(BodyLabel())
 
             Spacer(minLength: Layout.tripleDefaultSpacing)
@@ -122,10 +122,10 @@ struct SettingsView: View {
 
           if !isGameCenterUIHidden {
             Group {
-              Text("Game Center")
+              Text(Localizations.Quiz.gameCenter)
                 .modifier(SubheadingLabel())
 
-              Button("Enable") {
+              Button(Localizations.Settings.enable) {
                 self.current.settings.userRejectedGameCenter = false
 
                 self.current.gameCenter.authenticate(
@@ -155,7 +155,7 @@ struct SettingsView: View {
 //                  }
 //              }
 
-              Text("Conjugar can send future quiz scores to Game Center so that you can see them in the global leaderboard. Tap Enable to enable this.")
+              Text(Localizations.Settings.enableDescription)
                 .modifier(BodyLabel())
 
               Spacer(minLength: Layout.tripleDefaultSpacing)
@@ -163,10 +163,10 @@ struct SettingsView: View {
           }
 
           Group {
-            Text("Ratings and Reviews")
+            Text(Localizations.Settings.ratingsAndReviews)
               .modifier(SubheadingLabel())
 
-            Button("Rate or Review") {
+            Button(Localizations.Settings.rateOrReview) {
               guard let url = URL(string: "https://itunes.apple.com/us/app/immigration/id\(RatingsFetcher.iTunesID)?action=write-review") else {
                 return
               }

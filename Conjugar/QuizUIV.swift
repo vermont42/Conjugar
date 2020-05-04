@@ -32,14 +32,14 @@ class QuizUIV: UIView {
     let field = UITextField()
     field.autocapitalizationType = .none
     field.autocorrectionType = .no
-    field.placeholder = " conjugation"
+    field.placeholder = " " + Localizations.Quiz.conjugation
     return field
   }()
 
   @UsesAutoLayout
   var startRestartButton: UIButton = {
     let button = UIButton()
-    button.setTitle("Start", for: .normal)
+    button.setTitle(Localizations.Quiz.start, for: .normal)
     button.titleLabel?.font = Fonts.button
     button.setTitleColor(Colors.red, for: .normal)
     return button
@@ -58,7 +58,8 @@ class QuizUIV: UIView {
     [verb, translation, pronoun].forEach {
       $0.isUserInteractionEnabled = true
     }
-    [(verbLabel, "Verb:"), (pronounLabel, "Pronoun:"), (tenseLabel, QuizUIV.tenseString), (lastLabel, "Last Answer:"), (correctLabel, "Correct Answer:"), (scoreLabel, "Score:"), (progressLabel, "Progress:"), (elapsedLabel, "Elapsed:"), (last, " "), (correct, " ")].forEach {
+    let colon = ":"
+    [(verbLabel, Localizations.Quiz.verb + colon), (pronounLabel, Localizations.Quiz.pronoun + colon), (tenseLabel, QuizUIV.tenseString), (lastLabel, Localizations.Quiz.lastAnswer + colon), (correctLabel, Localizations.Quiz.correctAnswer + colon), (scoreLabel, Localizations.Quiz.score + colon), (progressLabel, Localizations.Quiz.progress + colon), (elapsedLabel, Localizations.Quiz.elapsed + colon), (last, " "), (correct, " ")].forEach {
       $0.0.text = $0.1
     }
     [verb, verbLabel, translation, pronoun, pronounLabel, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel, startRestartButton, conjugationField].forEach {

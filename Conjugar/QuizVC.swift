@@ -34,10 +34,10 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     switch Current.quiz.quizState {
     case .notStarted, .finished:
       quizView.hideInProgressUI()
-      quizView.startRestartButton.setTitle("Start", for: .normal)
+      quizView.startRestartButton.setTitle(Localizations.Quiz.start, for: .normal)
     case .inProgress:
       quizView.showInProgressUI()
-      quizView.startRestartButton.setTitle("Restart", for: .normal)
+      quizView.startRestartButton.setTitle(Localizations.Quiz.restart, for: .normal)
       let verb = Current.quiz.verb
       quizView.verb.text = verb
       let translationResult = Conjugator.shared.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
@@ -69,13 +69,13 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
 
   private func showGameCenterDialog() {
     Current.settings.didShowGameCenterDialog = true
-    let gameCenterController = UIAlertController(title: "Game Center", message: "Would you like Conjugar to upload your future scores to Game Center after your quiz? See how you stack up against the global community of conjugators.", preferredStyle: UIAlertController.Style.alert)
-    let noAction = UIAlertAction(title: "No", style: UIAlertAction.Style.destructive) { _ in
+    let gameCenterController = UIAlertController(title: Localizations.Quiz.gameCenter, message: Localizations.Quiz.gameCenterMessage, preferredStyle: UIAlertController.Style.alert)
+    let noAction = UIAlertAction(title: Localizations.Quiz.no, style: UIAlertAction.Style.destructive) { _ in
       SoundPlayer.play(.sadTrombone)
       Current.settings.userRejectedGameCenter = true
     }
     gameCenterController.addAction(noAction)
-    let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) { _ in
+    let yesAction = UIAlertAction(title: Localizations.Quiz.yes, style: UIAlertAction.Style.default) { _ in
       Current.gameCenter.authenticate(onViewController: self, completion: nil)
     }
     gameCenterController.addAction(yesAction)
@@ -85,7 +85,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   @objc func startRestart() {
     SoundPlayer.play(.gun)
     Current.quiz.start()
-    quizView.startRestartButton.setTitle("Restart", for: .normal)
+    quizView.startRestartButton.setTitle(Localizations.Quiz.restart, for: .normal)
     [quizView.lastLabel, quizView.correctLabel, quizView.last, quizView.correct].forEach {
       $0.isHidden = true
     }
@@ -123,7 +123,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
 
   func quizDidFinish() {
     quizView.hideInProgressUI()
-    quizView.startRestartButton.setTitle("Start", for: .normal)
+    quizView.startRestartButton.setTitle(Localizations.Quiz.start, for: .normal)
     let applauseIndex = Int.random(in: 1...Sound.applauseCount)
     switch applauseIndex {
     case 1:
