@@ -190,7 +190,6 @@
 		035EF5BA245C746800F29894 /* Localizations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizations.swift; sourceTree = "<group>"; };
 		035EF5C3245F299900F29894 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		035EF5C5245F29B000F29894 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		035EF5C8245F316700F29894 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		038E03122270A868005CFC96 /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenterTests.swift; sourceTree = "<group>"; };
 		038E03172270AC01005CFC96 /* DeviceUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceUtilityTests.swift; sourceTree = "<group>"; };
@@ -999,7 +998,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				035EF5C5245F29B000F29894 /* es */,
-				035EF5C8245F316700F29894 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
