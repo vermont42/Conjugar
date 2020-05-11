@@ -9,6 +9,26 @@
 import UIKit
 
 extension String {
+  static var headingSeparator: Character {
+    "*"
+  }
+
+  static var subheadingSeparator: Character {
+    "^"
+  }
+
+  static var boldSeparator: Character {
+    "~"
+  }
+
+  static var linkSeparator: Character {
+    "%"
+  }
+
+  static var conjugationSeparator: Character {
+    "$"
+  }
+
   func replaceFirstOccurence(of oldSubstring: String, with newSubstring: String) -> String {
     if let range = self.range(of: oldSubstring) {
       return self.replacingCharacters(in: range, with: newSubstring)
@@ -82,7 +102,7 @@ extension String {
     var startIndex = 0
 
     for char in self {
-      if char == "*" {
+      if char == String.headingSeparator {
         if inHeading {
           attributesAndRanges.append((NSAttributedString.Key.paragraphStyle, centeredStyle, NSRange(location: startIndex, length: currentIndex - startIndex)))
           attributesAndRanges.append((NSAttributedString.Key.font, Fonts.heading, NSRange(location: startIndex, length: currentIndex - startIndex)))
@@ -93,7 +113,7 @@ extension String {
         }
       }
 
-      if char == "^" {
+      if char == String.subheadingSeparator {
         if inSubheading {
           attributesAndRanges.append((NSAttributedString.Key.paragraphStyle, centeredStyle, NSRange(location: startIndex, length: currentIndex - startIndex)))
           attributesAndRanges.append((NSAttributedString.Key.font, Fonts.subheading, NSRange(location: startIndex, length: currentIndex - startIndex)))
@@ -104,7 +124,7 @@ extension String {
         }
       }
 
-      if char == "~" {
+      if char == String.boldSeparator {
         if inBold {
           attributesAndRanges.append((NSAttributedString.Key.font, Fonts.boldBody, NSRange(location: startIndex, length: currentIndex - startIndex)))
           inBold = false
@@ -114,7 +134,7 @@ extension String {
         }
       }
 
-      if char == "%" {
+      if char == String.linkSeparator {
         if inLink {
           let nsRange = NSRange(location: startIndex + 1, length: (currentIndex - startIndex) - 1)
           guard let range = Range(nsRange, in: self) else {
@@ -136,7 +156,7 @@ extension String {
         }
       }
 
-      if char == "$" {
+      if char == String.conjugationSeparator {
         if inConjugation {
           let nsRange = NSRange(location: startIndex + 1, length: (currentIndex - startIndex) - 1)
           conjugationRanges.append(nsRange)
@@ -166,7 +186,13 @@ extension String {
       }
     }
 
-    ["*", "^", "$", "~", "%"].forEach {
+    [
+      String(String.headingSeparator),
+      String(String.subheadingSeparator),
+      String(String.boldSeparator),
+      String(String.linkSeparator),
+      String(String.conjugationSeparator)
+    ].forEach {
       infoString.mutableString.replaceOccurrences(of: $0, with: "", options: NSString.CompareOptions.caseInsensitive, range: NSRange(location: 0, length: infoString.length))
     }
 

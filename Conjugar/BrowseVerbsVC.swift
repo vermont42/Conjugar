@@ -46,6 +46,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     navigationItem.titleView = UILabel.titleLabel(title: Localizations.BrowseVerbs.localizedTitle)
     view = browseVerbsView
     Current.reviewPrompter.promptableActionHappened()
+    print(Localizations.Info.purposeAndUseText)
   }
 
   override func viewWillAppear(_ animated: Bool) {

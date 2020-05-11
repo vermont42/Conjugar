@@ -20,14 +20,13 @@ struct Info {
     }
     self.heading = encodedHeading
     self.difficulty = difficulty
-    self.text = text
-    infoString = text.infoString
+    self.text = String(String.headingSeparator) + heading + String(String.headingSeparator) + "\n\n" + text
+    infoString = self.text.infoString
   }
 
   static let infos: [Info] = [
-Info(heading: "Purpose & Use", difficulty: .easy, text: """
-*Purpose & Use*
-
+    Info(heading: Localizations.Info.purposeAndUseHeading, difficulty: .easy, text: NSLocalizedString("purposeAndUseText", value:
+"""
 ^Purpose^
 
 In Spanish, conjugation, a concept defined in %terminology%, is important for the reasons stated there. People raised in Spanish-speaking countries learn conjugation passively, and people who engage in formal Spanish learn conjugation as part of that study.
@@ -69,10 +68,8 @@ In the ~Settings~ section "Browse Tú and/or Vos", tap "Vos" to see ~vos~ conjug
 In the ~Settings~ section "Quiz Tú or Vos", tap "Vos" to be quizzed on ~vos~, rather than ~tú~, conjugations.
 
 Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%, and the tenses. Near the bottom of the screen is a $RED$ widget for filtering information about tenses by the difficulty mode in which they are quizzed. The three options are ~Easy~; ~Easy~ and ~Moderate~; and ~Easy~, ~Moderate~, and ~Difficult~.
-"""),
-Info(heading: "Terminology", difficulty: .easy, text: """
-*Terminology*
-
+""", comment: "")),
+Info(heading: Localizations.Info.terminologyHeading, difficulty: .easy, text: """
 ^Verb^
 
 A ~verb~ is a kind of word that stands for an action in a sentence. In the sentence "Celina Zambon is dancing the flamenco", "to dance" is the verb. Verb ~tense~s express, among other things, temporality. In the example sentence, the verb tense expresses that the action is currently taking place. In English, to a limited degree, and in Spanish, to a near-total degree, the ~subject~ or actor in the sentence, combined with the tense, determines the exact form of the verb used. This is the verb ~conjugation~. In English, the example sentence's combination of subject and tense results in the conjugation "is dancing".
@@ -134,8 +131,6 @@ $soY$, $ERes$, $ES$, $sOmos$, $sOis$, $sOn$
 Red letters in conjugations represent irregularities. A verb is considered irregular if any of its conjugations differs from the conjugation of a regular ~ar~, ~ir~, or ~er~ verb.
 """),
 Info(heading: "Presente de Indicativo", difficulty: .easy, text: """
-*Presente de Indicativo*
-
 ^Uses^
 
 The ~presente de indicativo~ is a Spanish verb tense that is used to express the following:
@@ -177,8 +172,6 @@ Some other verbs that are irregular in the presente de indicativo appear below. 
 caber, caer, conocer, conducir, construir, crecer, dar, decir, dormir, hacer, huir, ir, jugar, lucir, oír, pedir, pensar, perder, poner, saber, salir, ser, sentir, tener, traer, valer, venir, ver
 """),
 Info(heading: "Futuro de Indicativo", difficulty: .easy, text: """
-*Futuro de Indicativo*
-
 ^Uses^
 
 The ~futuro de indicativo~ is a Spanish Verb tense that is used to express the following:
@@ -214,8 +207,6 @@ Example (hablar): hablaré, hablarás, hablará, hablaremos, hablaréis, hablar�
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Pretérito", difficulty: .easy, text: """
-*Pretérito*
-
 ^Uses^
 
 The ~pretérito~ is a Spanish verb tense that is used to express the following:
@@ -259,8 +250,6 @@ andar, caber, conducir, dar, decir, estar, haber, hacer, ir, poder, poner, quere
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Condicional", difficulty: .moderate, text: """
-*Condicional*
-
 ^Uses^
 
 The ~condicional~ is used to express the following:
@@ -306,8 +295,6 @@ Example (hablar): hablaría, hablarías, hablaría, hablaríamos, hablaríais, h
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Imperfecto de Indicativo", difficulty: .moderate, text: """
-*Imperfecto de Indicativo*
-
 ^Uses^
 
 Like the %pretérito% and %perfecto de indicativo%, the ~imperfecto de indicativo~ is used for past events. But the imperfecto de indicativo is used for:
@@ -345,8 +332,6 @@ Only three verbs are irregular in the imperfecto de indicativo: ir, ser, and ver
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Presente de Subjuntivo", difficulty: .moderate, text: """
-*Presente de Subjuntivo*
-
 ^Uses^
 
 The ~presente de subjuntivo~ is used to express:
@@ -382,8 +367,6 @@ Some verbs that are irregular in the presente de subjuntivo appear below. Tap th
 caber, caer, conducir, conocer, construir, crecer, dar, decir, dormir, estar, ir, haber, hacer, huir, jugar, lucir, oír, pedir, pensar, perder, poner, saber, sentir, ser, salir, tener, traer, valer, venir, ver
 """),
 Info(heading: "Imperfecto de Subjuntivo 1", difficulty: .difficult, text: """
-*Imperfecto de Subjuntivo 1*
-
 ^Use^
 
 The ~imperfecto de subjuntivo 1~ serves a variety of purposes similar to those of the %presente de subjuntivo% but puts actions in the past. Here are some example uses of this tense.
@@ -420,8 +403,6 @@ As shown in the example, the vowel before the ending of the nosotros conjugation
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Imperfecto de Subjuntivo 2", difficulty: .difficult, text: """
-*Imperfecto de Subjuntivo 2*
-
 ^Use^
 
 The ~imperfecto de subjuntivo 2~ serves a variety of purposes similar to those of the %presente de subjuntivo% but puts actions in the past. Here are some example uses of this tense.
@@ -458,8 +439,6 @@ As shown in the example, the vowel before the ending of the nosotros conjugation
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Futuro de Subjuntivo", difficulty: .difficult, text: """
-*Futuro de Subjuntivo*
-
 ^Use^
 
 The ~futuro de subjunctivo~ is no longer used in modern Spanish, except in legal language and some fixed expressions. In these expressions, this tense is used to express doubt or uncertainty about whether some event will happen in the future. In modern Spanish, the %presente de subjuntivo% replaces the futuro de subjuntivo. Here are examples of the futuro de subjuntivo:
@@ -490,8 +469,6 @@ As shown in the example, the vowel before the ending of the nosotros conjugation
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Imperativo Positivo", difficulty: .moderate, text: """
-*Imperativo Positivo*
-
 ^Use^
 
 The ~imperativo positivo~ is used in Spanish to express commands.
@@ -535,8 +512,6 @@ tener: $teN$
 venir: $veN$
 """),
 Info(heading: "Imperativo Negativo", difficulty: .moderate, text: """
-*Imperativo Negativo*
-
 ^Use^
 
 The ~imperativo negativo~ is used in Spanish to express negative commands.
@@ -564,8 +539,6 @@ sub~ir~: no subas, no suba, no subamos, no subaís, no suban
 com~er~: no comas, no coma, no comamos, no comáis, no coman
 """),
 Info(heading: "Participio", difficulty: .moderate, text: """
-*Participio*
-
 ^Use^
 
 The ~participio~ corresponds to the English -en or -ed form of a verb. This form is used following the auxiliary verb ~haber~ to form various compound tenses, including the %perfecto de indicativo%: "(Yo) $hE$ hablado." = "I have spoken."
@@ -606,8 +579,6 @@ volver: $vUElvo$
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Gerundio", difficulty: .moderate, text: """
-*Gerundio*
-
 ^Uses^
 
 The ~gerundio~ has a variety of uses. The gerundio of hacer, haciendo, can mean "doing", "while doing", "by doing", "because of one's doing", or "through doing".
@@ -651,8 +622,6 @@ traer: $traYendo$
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Raíz Futura", difficulty: .easy, text: """
-*Raíz Futura*
-
 ^Uses^
 
 The ~raíz futura~ forms of verbs are used as stems for the %condicional% and %futuro de indicativo% tenses. Tap those tenses for descriptions of them.
@@ -677,8 +646,6 @@ valer: $valDr$-
 venir: $venDr$-
 """),
 Info(heading: "Perfecto de Indicativo", difficulty: .moderate, text: """
-*Perfecto de Indicativo*
-
 ^Uses^
 
 The ~perfecto de indicativo~ has virtually the same use as the tense sometimes called, in English, the present perfect.
@@ -700,8 +667,6 @@ Example: "$hEmos hablado$" = "we have spoken"
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Pretérito Anterior", difficulty: .difficult, text: """
-*Pretérito Anterior*
-
 ^Use^
 
 The ~pretérito anterior~ is very rare in spoken Spanish, but it is sometimes used in formal written language, where it is almost entirely limited to subordinate clauses. Thus, it is usually introduced by temporal conjunctions such as cuando, apenas, or en cuanto. This tense is used to express an action that ended immediately before another past action.
@@ -719,8 +684,6 @@ Example: "$hUBE hablado$" = "I had spoken"
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Pluscuamperfecto de Indicativo", difficulty: .difficult, text: """
-*Pluscuamperfecto de Indicativo*
-
 ^Use^
 
 The ~pluscuamperfecto de indicativo~ expresses a past action that occurred prior to another past action.
@@ -736,8 +699,6 @@ Example: "$había hablado$" = "it had spoken"
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Futuro Perfecto", difficulty: .difficult, text: """
-*Futuro Perfecto*
-
 ^Use^
 
 The ~futuro perfecto~ is used to indicate a future action that will be finished before another action.
@@ -753,8 +714,6 @@ Example: "$habRé hablado$" = "I will have spoken"
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Condicional Compuesto", difficulty: .difficult, text: """
-*Condicional Compuesto*
-
 ^Use^
 
 The ~condicional compuesto~ refers to a hypothetical past action.
@@ -770,8 +729,6 @@ Example: "$habRías decidido$" = "you would have decided"
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Perfecto de Subjuntivo", difficulty: .difficult, text: """
-*Perfecto de Subjuntivo*
-
 ^Use^
 
 The ~perfecto de subjuntivo~ expresses doubt, uncertainty, or an emotional state with respect to a past action or to an action that will be complete before some other action.
@@ -791,8 +748,6 @@ Example: "$haYa hablado$" = "I spoke" or "I have spoken"
 See %credits% for Wikipedia attribution.
 """),
 Info(heading: "Pluscuamperfecto de Subjuntivo 1", difficulty: .difficult, text: """
-*Pluscuamperfecto de Subjuntivo 1*
-
 ^Use^
 
 The ~pluscuamperfecto de subjuntivo 1~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
@@ -808,8 +763,6 @@ In the pluscuamperfecto de subjuntivo 1, the %imperfecto de subjuntivo 1% conjug
 Example: "$hUbiera hablado$" = "I had spoken"
 """),
 Info(heading: "Pluscuamperfecto de Subjuntivo 2", difficulty: .difficult, text: """
-*Pluscuamperfecto de Subjuntivo 2*
-
 ^Use^
 
 The ~pluscuamperfecto de subjuntivo 2~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
@@ -825,8 +778,6 @@ In the pluscuamperfecto de subjuntivo 2, the %imperfecto de subjuntivo 2% conjug
 Example: "$hUbiese hablado$" = "I had spoken"
 """),
 Info(heading: "Futuro Perfecto de Subjuntivo", difficulty: .difficult, text: """
-*Futuro Perfecto de Subjuntivo*
-
 ^Use^
 
 The ~futuro perfecto de subjuntivo~ expresses an uncertain, future act as finished in relation to future event. This tense is no longer used in Spanish except in formal or legal texts.
@@ -841,9 +792,7 @@ Example: "$hUbiere hablado$" = "I have spoken (possibly, in the future)"
 
 See %credits% for Word Reference attribution.
 """),
-Info(heading: "Questions & Answers", difficulty: .easy, text: """
-*Questions & Answers*
-
+Info(heading: Localizations.Info.questionsAndAnswersHeading, difficulty: .easy, text: """
 ~Q:~ How can I contact the developer of ~Conjugar~?
 
 ~A:~ Email vermontcoder@gmail.com.
@@ -865,8 +814,6 @@ Info(heading: "Questions & Answers", difficulty: .easy, text: """
 ~A:~ The developer's goals in creating ~Conjugar~ were to learn Spanish-verb conjugation and a software-development technique, programmatic layout, not to earn a living. That said, money is useful, and the developer will implement a tip jar or some other type of in-app purchase if download numbers justify the effort.
 """),
 Info(heading: "Voseo", difficulty: .easy, text: """
-*Voseo*
-
 ^Background^
 
 In certain parts of Latin America, when addressing one person informally, Spanish speakers use the pronoun ~vos~ and its conjugations instead of the pronoun ~tú~ and and its conjugations. This phenomenon, ~voseo~, is ubiquitous in Argentina and occurs, to varying degrees, in all of Latin America except in Dominican Republic and Puerto Rico. Unfortunately, ~vos~ conjugations vary by country and region, complicating matters for the Spanish-learner, but the Real Academia Española (RAE), an authority on the Spanish language, provides model conjugations. These conjugations have some value because a Spanish-speaker from Medellín, Colombia reported to ~Conjugar~'s developer that he uses them. For the sake of expediency, ~Conjugar~ adopts the RAE’s ~vos~ conjugations.
@@ -885,9 +832,7 @@ Certain verbs that change vowels in the ~yo~, ~tú~, ~él~, and ~ellos~ conjugat
 
 See %Credits% for Wikipedia and RAE attribution.
 """),
-Info(heading: "Credits", difficulty: .easy, text: """
-*Credits*
-
+Info(heading: Localizations.Info.creditsHeading, difficulty: .easy, text: """
 ^Conjugar^
 
 Josh Adams developed ~Conjugar~ and has released its source code under the GNU Affero General Public License, available here: %https://github.com/vermont42/Conjugar/blob/master/LICENSE%
