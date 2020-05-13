@@ -69,7 +69,8 @@ In the ~Settings~ section "Quiz Tú or Vos", tap "Vos" to be quizzed on ~vos~, r
 
 Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%, and the tenses. Near the bottom of the screen is a $RED$ widget for filtering information about tenses by the difficulty mode in which they are quizzed. The three options are ~Easy~; ~Easy~ and ~Moderate~; and ~Easy~, ~Moderate~, and ~Difficult~.
 """, comment: "")),
-Info(heading: Localizations.Info.terminologyHeading, difficulty: .easy, text: """
+Info(heading: Localizations.Info.terminologyHeading, difficulty: .easy, text: NSLocalizedString("terminologyText", value:
+"""
 ^Verb^
 
 A ~verb~ is a kind of word that stands for an action in a sentence. In the sentence "Celina Zambon is dancing the flamenco", "to dance" is the verb. Verb ~tense~s express, among other things, temporality. In the example sentence, the verb tense expresses that the action is currently taking place. In English, to a limited degree, and in Spanish, to a near-total degree, the ~subject~ or actor in the sentence, combined with the tense, determines the exact form of the verb used. This is the verb ~conjugation~. In English, the example sentence's combination of subject and tense results in the conjugation "is dancing".
@@ -129,7 +130,7 @@ Treatises on Spanish verbs, when presenting the conjugations for a particular te
 $soY$, $ERes$, $ES$, $sOmos$, $sOis$, $sOn$
 
 Red letters in conjugations represent irregularities. A verb is considered irregular if any of its conjugations differs from the conjugation of a regular ~ar~, ~ir~, or ~er~ verb.
-"""),
+""", comment: "")),
 Info(heading: "Presente de Indicativo", difficulty: .easy, text: """
 ^Uses^
 
