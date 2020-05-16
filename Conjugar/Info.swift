@@ -131,7 +131,8 @@ $soY$, $ERes$, $ES$, $sOmos$, $sOis$, $sOn$
 
 Red letters in conjugations represent irregularities. A verb is considered irregular if any of its conjugations differs from the conjugation of a regular ~ar~, ~ir~, or ~er~ verb.
 """, comment: "")),
-Info(heading: "Presente de Indicativo", difficulty: .easy, text: """
+Info(heading: "Presente de Indicativo", difficulty: .easy, text: NSLocalizedString("presenteDeIndicativoText", value:
+"""
 ^Uses^
 
 The ~presente de indicativo~ is a Spanish verb tense that is used to express the following:
@@ -171,8 +172,9 @@ Two verbs that are irregular in the presente de indicativo deserve especial note
 Some other verbs that are irregular in the presente de indicativo appear below. Tap the ~Browse~ tab for translations and conjugations.
 
 caber, caer, conocer, conducir, construir, crecer, dar, decir, dormir, hacer, huir, ir, jugar, lucir, oír, pedir, pensar, perder, poner, saber, salir, ser, sentir, tener, traer, valer, venir, ver
-"""),
-Info(heading: "Futuro de Indicativo", difficulty: .easy, text: """
+""", comment: "")),
+Info(heading: "Futuro de Indicativo", difficulty: .easy, text: NSLocalizedString("futuroDeIndicativoText", value:
+"""
 ^Uses^
 
 The ~futuro de indicativo~ is a Spanish Verb tense that is used to express the following:
@@ -199,22 +201,23 @@ Another common way to represent the future is with a %presente de indicativo% co
 
 ^Conjugation^
 
-The Futuro de Indicativo uses the %raíz futura% as a stem. The following endings are attached to it:
+The futuro de indicativo uses the %raíz futura% as a stem. The following endings are attached to it:
 
 -é, -ás, -á, -emos, -éis, -án
 
 Example (hablar): hablaré, hablarás, hablará, hablaremos, hablaréis, hablarán
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Pretérito", difficulty: .easy, text: """
+""", comment: "")),
+Info(heading: "Pretérito", difficulty: .easy, text: NSLocalizedString("pretéritoText", value:
+"""
 ^Uses^
 
 The ~pretérito~ is a Spanish verb tense that is used to express the following:
 
 • An action that was done in the past:
 
-"Ayer, encontré la flor que tú me $dIste$." = "Yesterday, I found the flower that you gave me."
+"Ayer, encontré la flor que tú me $dIste$." = "Yesterday, I found the flower that you $gAve$ me."
 
 This use expresses an action that is viewed as a completed event. It is often accompanied by adverbial expressions of time, such as "ayer", "anteayer", or "la semana pasada".
 
@@ -249,8 +252,9 @@ Some verbs that are irregular in the pretérito appear below. Tap the ~Browse~ t
 andar, caber, conducir, dar, decir, estar, haber, hacer, ir, poder, poner, querer, sabar, ser, tener, traer, venir
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Condicional", difficulty: .moderate, text: """
+""", comment: "")),
+Info(heading: "Condicional", difficulty: .moderate, text: NSLocalizedString("condicionalText", value:
+"""
 ^Uses^
 
 The ~condicional~ is used to express the following:
@@ -277,13 +281,13 @@ In this context, the speaker's knowledge is indirect, unconfirmed, or approximat
 
 • A future action in relation to the past:
 
-"Cuando $ERa$ pequeño, pensaba que me gustaría ser médico." = "When I was young, I thought that I would like to be a doctor."
+"Cuando $ERa$ pequeño, pensaba que me gustaría ser médico." = "When I $WAS$ young, I thought that I would like to be a doctor."
 
 This use expresses future action that was imagined in the past.
 
 • A suggestion:
 
-"Yo que tú, lo olvidaría completamente." = "If I were you, I would forget him completely."
+"Yo que tú, lo olvidaría completamente." = "If I $WERE$ you, I would forget him completely."
 
 ^Conjugation^
 
@@ -294,15 +298,16 @@ Like the %futuro de indicativo%, the condicional uses the %raíz futura% as a st
 Example (hablar): hablaría, hablarías, hablaría, hablaríamos, hablaríais, hablarían
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Imperfecto de Indicativo", difficulty: .moderate, text: """
+""", comment: "")),
+Info(heading: "Imperfecto de Indicativo", difficulty: .moderate, text: NSLocalizedString("imperfectoDeIndicativoText", value:
+"""
 ^Uses^
 
 Like the %pretérito% and %perfecto de indicativo%, the ~imperfecto de indicativo~ is used for past events. But the imperfecto de indicativo is used for:
 
 • A habitual or repeated action:
 
-"Cada año mi familia $iBa$ a Puerto Rico." = "Each year my family went to Rich Port."
+"Cada año mi familia $iBa$ a Puerto Rico." = "Each year my family $WENT$ to Rich Port."
 
 "Frecuentemente el gato saltaba al sofá." = "The cat often jumped on the couch."
 
@@ -312,7 +317,7 @@ Like the %pretérito% and %perfecto de indicativo%, the ~imperfecto de indicativ
 
 • A background event during which another event in the same sentence occurred:
 
-"Mientras cruzaba la calle, me atropelló un coche." = "While I was crossing the road, a car ran over me."
+"Mientras cruzaba la calle, me atropelló un coche." = "While I was crossing the road, a car $rAn$ me over."
 
 ^Conjugation^
 
@@ -331,8 +336,9 @@ com~er~: comía, comías, comía, comíamos, comíais, comían
 Only three verbs are irregular in the imperfecto de indicativo: ir, ser, and ver. Tap the ~Browse~ tab for translations and conjugations.
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Presente de Subjuntivo", difficulty: .moderate, text: """
+""", comment: "")),
+Info(heading: "Presente de Subjuntivo", difficulty: .moderate, text: NSLocalizedString("presenteDeSubjuntivoText", value:
+"""
 ^Uses^
 
 The ~presente de subjuntivo~ is used to express:
@@ -366,8 +372,9 @@ com~er~: coma, comas, coma, comamos, comáis, coman
 Some verbs that are irregular in the presente de subjuntivo appear below. Tap the ~Browse~ tab for translations and conjugations.
 
 caber, caer, conducir, conocer, construir, crecer, dar, decir, dormir, estar, ir, haber, hacer, huir, jugar, lucir, oír, pedir, pensar, perder, poner, saber, sentir, ser, salir, tener, traer, valer, venir, ver
-"""),
-Info(heading: "Imperfecto de Subjuntivo 1", difficulty: .difficult, text: """
+""", comment: "")),
+Info(heading: "Imperfecto de Subjuntivo 1", difficulty: .difficult, text: NSLocalizedString("imperfectoDeSubjuntivo1Text", value:
+"""
 ^Use^
 
 The ~imperfecto de subjuntivo 1~ serves a variety of purposes similar to those of the %presente de subjuntivo% but puts actions in the past. Here are some example uses of this tense.
@@ -402,8 +409,9 @@ Example (cantar): cantara, cantaras, cantara, cantáramos, cantarais, cantaran
 As shown in the example, the vowel before the ending of the nosotros conjugation has an acute accent to reflect the stressing of that syllable.
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Imperfecto de Subjuntivo 2", difficulty: .difficult, text: """
+""", comment: "")),
+Info(heading: "Imperfecto de Subjuntivo 2", difficulty: .difficult, text: NSLocalizedString("imperfectoDeSubjuntivo2Text", value:
+"""
 ^Use^
 
 The ~imperfecto de subjuntivo 2~ serves a variety of purposes similar to those of the %presente de subjuntivo% but puts actions in the past. Here are some example uses of this tense.
@@ -438,8 +446,9 @@ Example (cantar): cantase, cantases, cantase, cantásemos, cantaseis, cantasen
 As shown in the example, the vowel before the ending of the nosotros conjugation has an acute accent to reflect the stressing of that syllable.
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Futuro de Subjuntivo", difficulty: .difficult, text: """
+""", comment: "")),
+Info(heading: "Futuro de Subjuntivo", difficulty: .difficult, text: NSLocalizedString("futuroDeSubjuntivoText", value:
+"""
 ^Use^
 
 The ~futuro de subjunctivo~ is no longer used in modern Spanish, except in legal language and some fixed expressions. In these expressions, this tense is used to express doubt or uncertainty about whether some event will happen in the future. In modern Spanish, the %presente de subjuntivo% replaces the futuro de subjuntivo. Here are examples of the futuro de subjuntivo:
@@ -468,8 +477,9 @@ Example (cantar): cantare, cantares, cantare, cantáremos, cantareis, cantaren
 As shown in the example, the vowel before the ending of the nosotros conjugation has an acute accent to reflect the stressing of that syllable.
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Imperativo Positivo", difficulty: .moderate, text: """
+""", comment: "")),
+Info(heading: "Imperativo Positivo", difficulty: .moderate, text: NSLocalizedString("imperativoPositivoText", value:
+"""
 ^Use^
 
 The ~imperativo positivo~ is used in Spanish to express commands.
@@ -511,7 +521,7 @@ salir: $saL$
 ser: $sÉ$
 tener: $teN$
 venir: $veN$
-"""),
+""", comment: "")),
 Info(heading: "Imperativo Negativo", difficulty: .moderate, text: """
 ^Use^
 
