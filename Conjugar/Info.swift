@@ -854,7 +854,7 @@ In the following tenses, the ~vos~ endings are identical to the ~tú~ endings: %
 
 Compound-tense ~vos~ conjugations are identical to their ~tú~ counterparts.
 
-Certain verbs that change vowels in the ~yo~, ~tú~, ~él~, and ~ellos~ conjugations, but not in the ~nosotros~ or ~vosotros~ conjugations, do not change vowels in the ~vos~ conjugation. Examples: Tú $mUEves$. Vos movés. Yo $pIerdo$. Vos perdés. Ella $pUEde$. Vos podés. In this sense, ~vos~ conjugations are more regular than those of ~yo~, ~tú~, ~él~, and ~ellos~ .
+Certain verbs that change vowels in the ~yo~, ~tú~, ~él~, and ~ellos~ conjugations, but not in the ~nosotros~ or ~vosotros~ conjugations, do not change vowels in the ~vos~ conjugation. Examples: Tú $mUEves$. Vos movés. Yo $pIerdo$. Vos perdés. Ella $pUEde$. Vos podés. In this sense, ~vos~ conjugations are more regular than those of ~yo~, ~tú~, ~él~, and ~ellos~.
 
 See %Credits% for Wikipedia and RAE attribution.
 """, comment: "")),
@@ -884,6 +884,8 @@ Saeful Muslim created the bull icon and released it under the Creative Commons A
 
 Mariela Peña created the gear and question-mark icons.
 
+Ferran Poveda provided corrections to the Spanish translations.
+
 ^Sound Jay^
 
 Sound Jay (%https://www.soundjay.com%) created all sounds in ~Conjugar~ and graciously "allow[s] ... incorporat[ion of these sounds] into ... projects, be it for commercial or non-commercial use." Sound Jay "and its licensors retain all ownership rights to the sound files".
@@ -898,7 +900,7 @@ Sheila Smith suggested clarifying how to input accented characters like ó.
 
 ^App Preview^
 
-~Conjugar~'s app preview uses the song "Leopard Print Elevator" by Kevin MacLeod (incompetech.com). Licensed under Creative Commons: By Attribution 3.0 License %http://creativecommons.org/licenses/by/3.0/%
+~Conjugar~'s app preview uses the song "Leopard Print Elevator" by Kevin MacLeod (incompetech.com). Licensed under Creative Commons: By Attribution 3.0 License, available at %http://creativecommons.org/licenses/by/3.0/%.
 """, comment: ""))
 ]
 }
