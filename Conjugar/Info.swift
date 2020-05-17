@@ -522,7 +522,8 @@ ser: $sÉ$
 tener: $teN$
 venir: $veN$
 """, comment: "")),
-Info(heading: "Imperativo Negativo", difficulty: .moderate, text: """
+Info(heading: "Imperativo Negativo", difficulty: .moderate, text: NSLocalizedString("imperativoNegativoText", value:
+"""
 ^Use^
 
 The ~imperativo negativo~ is used in Spanish to express negative commands.
@@ -548,11 +549,12 @@ Examples:
 habl~ar~: no hables, no hable, no hablemos, no habléis, no hablen
 sub~ir~: no subas, no suba, no subamos, no subaís, no suban
 com~er~: no comas, no coma, no comamos, no comáis, no coman
-"""),
-Info(heading: "Participio", difficulty: .moderate, text: """
+""", comment: "")),
+Info(heading: "Participio", difficulty: .moderate, text: NSLocalizedString("participioText", value:
+"""
 ^Use^
 
-The ~participio~ corresponds to the English -en or -ed form of a verb. This form is used following the auxiliary verb ~haber~ to form various compound tenses, including the %perfecto de indicativo%: "(Yo) $hE$ hablado." = "I have spoken."
+The ~participio~ corresponds to the English -en or -ed form of a verb. This form is used following the auxiliary verb ~haber~ to form various compound tenses, including the %perfecto de indicativo%: "(Yo) $hE$ hablado." = "I have $spOken$."
 
 ^Form^
 
@@ -560,15 +562,15 @@ The participio is formed by adding the following endings to the verb stem:
 
 ~ar~ verbs: -ado
 
-Examples: hablado ("spoken"); cantado ("sung"); bailado ("danced")
+Examples: hablado ("$spOken$"); cantado ("$sUng$"); bailado ("danced")
 
 ~er~ verbs: -ido
 
-Examples: bebido ("drunk"); leído (requires accent mark; "read"); comprendido ("understood")
+Examples: bebido ("$drUnk$"); leído (requires acute accent; "read"); comprendido ("$understOOd$")
 
 ~ir~ verbs: -ido
 
-Examples: vivido ("lived"); sentido ("felt"); hervido ("boiled")
+Examples: vivido ("lived"); sentido ("$fElt$"); hervido ("boiled")
 
 When the participio is used as an adjective, it inflects for both gender and number. Example: "una lengua hablada en España" = "a language spoken in Spain"
 
@@ -577,7 +579,7 @@ The following verbs have irregular participios:
 abrir: $abIERTo$
 cubrir: $cubIERTo$
 decir: $dICHo$
-escribir: $esciTo$
+escribir: $escriTo$
 hacer: $hECHo$
 morir: $mUERTo$
 poner: $pUESTo$
@@ -588,13 +590,14 @@ ver: $vISTo$
 volver: $vUElvo$
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Gerundio", difficulty: .moderate, text: """
+""", comment: "")),
+Info(heading: "Gerundio", difficulty: .moderate, text: NSLocalizedString("gerundioText", value:
+"""
 ^Uses^
 
 The ~gerundio~ has a variety of uses. The gerundio of hacer, haciendo, can mean "doing", "while doing", "by doing", "because of one's doing", or "through doing".
 
-The gerundio is also used to form progressive constructions, such as "$estoY haciendo$" ("I am doing").
+The gerundio is also used to form progressive constructions, such as "$estoY haciendo$" ("I $AM$ doing").
 
 The gerundio cannot be used as an adjective and, unlike in most European languages, generally has no corresponding adjectival forms. The archaic participio presente, which ended in -ante or -iente and formerly filled this function, in some cases survives as an adjective. For example, "$dUrmiente$" = "sleeping", and "interesante" = "interesting". But such cases are limited. Usually, alternate constructions are appropriate. Whereas in English one would say "the crying baby", one would say in Spanish "el bebé que llora", which literally means "the baby who is crying".
 
@@ -631,8 +634,9 @@ tañer: $tañEndo$
 traer: $traYendo$
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Raíz Futura", difficulty: .easy, text: """
+""", comment: "")),
+Info(heading: "Raíz Futura", difficulty: .easy, text: NSLocalizedString("raízFuturaText", value:
+"""
 ^Uses^
 
 The ~raíz futura~ forms of verbs are used as stems for the %condicional% and %futuro de indicativo% tenses. Tap those tenses for descriptions of them.
@@ -655,34 +659,36 @@ salir: $salDr$-
 tener: $tenDr$-
 valer: $valDr$-
 venir: $venDr$-
-"""),
-Info(heading: "Perfecto de Indicativo", difficulty: .moderate, text: """
+""", comment: "")),
+Info(heading: "Perfecto de Indicativo", difficulty: .moderate, text: NSLocalizedString("perfectoDeIndicativoText", value:
+"""
 ^Uses^
 
 The ~perfecto de indicativo~ has virtually the same use as the tense sometimes called, in English, the present perfect.
 
-"Te $hE dICHo$ mi opinión." = "I have told you my opinion." or "I told you my opinion, and it hasn't changed."
+"Te $hE dICHo$ mi opinión." = "I have $tOLD$ you my opinion." or "I $tOLD$ you my opinion, and it hasn't changed."
 
 In Spanish, as in English, this tense implies that an action, although completed in the past, has continuing effects, truth, or relevance in the present.
 
 In most of Spain, the tense has an additional use: to express a past action or event that is contained in an unfinished period of time in the present.
 
-"Este mes ha llovido mucho, pero hoy hace buen día." = "It rained a lot this month, but today is a fine day."
+"Este mes ha llovido mucho, pero hoy hace buen día." = "It rained a lot this month, but today $IS$ a fine day."
 
 ^Conjugation^
 
 In the perfecto de indicativo, the %presente de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: "$hEmos hablado$" = "we have spoken"
+Example: "$hEmos hablado$" = "we have $spOken$"
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Pretérito Anterior", difficulty: .difficult, text: """
+""", comment: "")),
+Info(heading: "Pretérito Anterior", difficulty: .difficult, text: NSLocalizedString("pretéritoAnteriorText", value:
+"""
 ^Use^
 
 The ~pretérito anterior~ is very rare in spoken Spanish, but it is sometimes used in formal written language, where it is almost entirely limited to subordinate clauses. Thus, it is usually introduced by temporal conjunctions such as cuando, apenas, or en cuanto. This tense is used to express an action that ended immediately before another past action.
 
-"Cuando $hUbieron llegado$ todos, empezó la ceremonia." = "When everyone had arrived, the ceremony began."
+"Cuando $hUbieron llegado$ todos, empezó la ceremonia." = "When everyone had arrived, the ceremony $begAn$."
 
 "Apenas María $hUBO terminado$ la canción, su padre entró." = "As soon as Maria had finished the song, her father came in."
 
@@ -690,11 +696,12 @@ The ~pretérito anterior~ is very rare in spoken Spanish, but it is sometimes us
 
 In the pretérito anterior, the %pretérito% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: "$hUBE hablado$" = "I had spoken"
+Example: "$hUBE hablado$" = "I had $spOken$"
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Pluscuamperfecto de Indicativo", difficulty: .difficult, text: """
+""", comment: "")),
+Info(heading: "Pluscuamperfecto de Indicativo", difficulty: .difficult, text: NSLocalizedString("pluscuamperfectoDeIndicativoText", value:
+"""
 ^Use^
 
 The ~pluscuamperfecto de indicativo~ expresses a past action that occurred prior to another past action.
@@ -705,31 +712,33 @@ The ~pluscuamperfecto de indicativo~ expresses a past action that occurred prior
 
 In the pluscuamperfecto de indicativo, the %imperfecto de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: "$había hablado$" = "it had spoken"
+Example: "$había hablado$" = "it had $spOken$"
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Futuro Perfecto", difficulty: .difficult, text: """
+""", comment: "")),
+Info(heading: "Futuro Perfecto", difficulty: .difficult, text: NSLocalizedString("futuroPerfectoText", value:
+"""
 ^Use^
 
 The ~futuro perfecto~ is used to indicate a future action that will be finished before another action.
 
-"Cuando yo llegue a la fiesta, ya se $habRán$ marchado todos." = "When I get to the party, everyone will already have left."
+"Cuando yo llegue a la fiesta, ya se $habRán$ marchado todos." = "When I get to the party, everyone will already have $leFT$."
 
 ^Conjugation^
 
 In the futuro perfecto, the %futuro de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: "$habRé hablado$" = "I will have spoken"
+Example: "$habRé hablado$" = "I will have $spOken$"
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Condicional Compuesto", difficulty: .difficult, text: """
+""", comment: "")),
+Info(heading: "Condicional Compuesto", difficulty: .difficult, text: NSLocalizedString("condicionalCompuestoText", value:
+"""
 ^Use^
 
 The ~condicional compuesto~ refers to a hypothetical past action.
 
-"Yo $habRía hablado$ si me $hUbieran dado$ la oportunidad." = "I would have spoken if they had given me the opportunity."
+"Yo $habRía hablado$ si me $hUbieran dado$ la oportunidad." = "I would have $spOken$ if they had given me the opportunity."
 
 ^Conjugation^
 
@@ -738,15 +747,16 @@ In the condicional compuesto, the %condicional% conjugation of ~haber~ is used a
 Example: "$habRías decidido$" = "you would have decided"
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Perfecto de Subjuntivo", difficulty: .difficult, text: """
+""", comment: "")),
+Info(heading: "Perfecto de Subjuntivo", difficulty: .difficult, text: NSLocalizedString("perfectoDeSubjuntivoText", value:
+"""
 ^Use^
 
 The ~perfecto de subjuntivo~ expresses doubt, uncertainty, or an emotional state with respect to a past action or to an action that will be complete before some other action.
 
-"Lamentan que él no $haYa podido$ regresar a la casa." = "They regret that he was unable to return home."
+"Lamentan que él no $haYa podido$ regresar a la casa." = "They regret that he $WAS$ unable to return home."
 
-"Al final del siglo, temo que Colombia no $haYa ganado$ la Copa América." = "At the end of the century, I fear that Colombia will not have won the America Cup."
+"Al final del siglo, temo que Colombia no $haYa ganado$ la Copa América." = "At the end of the century, I fear that Colombia will not have $wOn$ the America Cup."
 
 "Dudo que $haYas venido$ antes del final de la película." = "I doubt that you will have come before the end of the movie."
 
@@ -754,16 +764,17 @@ The ~perfecto de subjuntivo~ expresses doubt, uncertainty, or an emotional state
 
 In the perfecto de subjuntivo, the %presente de subjuntivo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: "$haYa hablado$" = "I spoke" or "I have spoken"
+Example: "$haYa hablado$" = "I $spOke$" or "I have $spOken$"
 
 See %credits% for Wikipedia attribution.
-"""),
-Info(heading: "Pluscuamperfecto de Subjuntivo 1", difficulty: .difficult, text: """
+""", comment: "")),
+Info(heading: "Pluscuamperfecto de Subjuntivo 1", difficulty: .difficult, text: NSLocalizedString("pluscuamperfectoDeSubjuntivo1Text", value:
+"""
 ^Use^
 
 The ~pluscuamperfecto de subjuntivo 1~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
 
-"Dudo que $habRía hablado$ si me $hUbieran dado$ la oportunidad." = "I doubt that I would have spoken if they had given me the opportunity."
+"Dudo que $habRía hablado$ si me $hUbieran dado$ la oportunidad." = "I doubt that I would have $spOken$ if they had given me the opportunity."
 
 Grammarians consider the pluscuamperfecto de subjuntivo 1 and the %pluscuamperfecto de subjuntivo 2% to be different variants of the same tense called simply "pluscuamperfecto de subjuntivo". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.
 
@@ -771,14 +782,15 @@ Grammarians consider the pluscuamperfecto de subjuntivo 1 and the %pluscuamperfe
 
 In the pluscuamperfecto de subjuntivo 1, the %imperfecto de subjuntivo 1% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: "$hUbiera hablado$" = "I had spoken"
-"""),
-Info(heading: "Pluscuamperfecto de Subjuntivo 2", difficulty: .difficult, text: """
+Example: "$hUbiera hablado$" = "I had $spOken$"
+""", comment: "")),
+Info(heading: "Pluscuamperfecto de Subjuntivo 2", difficulty: .difficult, text: NSLocalizedString("pluscuamperfectoDeSubjuntivo2Text", value:
+"""
 ^Use^
 
 The ~pluscuamperfecto de subjuntivo 2~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
 
-"Dudo que $habRía hablado$ si me $hUbiesen dado$ la oportunidad." = "I doubt that I would have spoken if they had given me the opportunity."
+"Dudo que $habRía hablado$ si me $hUbiesen dado$ la oportunidad." = "I doubt that I would have $spOken$ if they had given me the opportunity."
 
 Grammarians consider the pluscuamperfecto de subjuntivo 2 and the %pluscuamperfecto de subjuntivo 1% to be different variants of the same tense called simply "pluscuamperfecto de subjuntivo". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.
 
@@ -786,9 +798,10 @@ Grammarians consider the pluscuamperfecto de subjuntivo 2 and the %pluscuamperfe
 
 In the pluscuamperfecto de subjuntivo 2, the %imperfecto de subjuntivo 2% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: "$hUbiese hablado$" = "I had spoken"
-"""),
-Info(heading: "Futuro Perfecto de Subjuntivo", difficulty: .difficult, text: """
+Example: "$hUbiese hablado$" = "I had $spOken$"
+""", comment: "")),
+Info(heading: "Futuro Perfecto de Subjuntivo", difficulty: .difficult, text: NSLocalizedString("futuroPerfectoDeSubjuntivoText", value:
+"""
 ^Use^
 
 The ~futuro perfecto de subjuntivo~ expresses an uncertain, future act as finished in relation to future event. This tense is no longer used in Spanish except in formal or legal texts.
@@ -799,11 +812,12 @@ The ~futuro perfecto de subjuntivo~ expresses an uncertain, future act as finish
 
 In the futuro perfecto de subjuntivo, the %futuro de subjuntivo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: "$hUbiere hablado$" = "I have spoken (possibly, in the future)"
+Example: "$hUbiere hablado$" = "I have $spOken$ (possibly, in the future)"
 
 See %credits% for Word Reference attribution.
-"""),
-Info(heading: Localizations.Info.questionsAndAnswersHeading, difficulty: .easy, text: """
+""", comment: "")),
+Info(heading: Localizations.Info.questionsAndAnswersHeading, difficulty: .easy, text: NSLocalizedString("questionsAndAnswersText", value:
+"""
 ~Q:~ How can I contact the developer of ~Conjugar~?
 
 ~A:~ Email vermontcoder@gmail.com.
@@ -823,8 +837,9 @@ Info(heading: Localizations.Info.questionsAndAnswersHeading, difficulty: .easy, 
 ~Q:~ Why is Conjugar free?
 
 ~A:~ The developer's goals in creating ~Conjugar~ were to learn Spanish-verb conjugation and a software-development technique, programmatic layout, not to earn a living. That said, money is useful, and the developer will implement a tip jar or some other type of in-app purchase if download numbers justify the effort.
-"""),
-Info(heading: "Voseo", difficulty: .easy, text: """
+""", comment: "")),
+Info(heading: "Voseo", difficulty: .easy, text: NSLocalizedString("voseoText", value:
+"""
 ^Background^
 
 In certain parts of Latin America, when addressing one person informally, Spanish speakers use the pronoun ~vos~ and its conjugations instead of the pronoun ~tú~ and and its conjugations. This phenomenon, ~voseo~, is ubiquitous in Argentina and occurs, to varying degrees, in all of Latin America except in Dominican Republic and Puerto Rico. Unfortunately, ~vos~ conjugations vary by country and region, complicating matters for the Spanish-learner, but the Real Academia Española (RAE), an authority on the Spanish language, provides model conjugations. These conjugations have some value because a Spanish-speaker from Medellín, Colombia reported to ~Conjugar~'s developer that he uses them. For the sake of expediency, ~Conjugar~ adopts the RAE’s ~vos~ conjugations.
@@ -842,8 +857,9 @@ Compound-tense ~vos~ conjugations are identical to their ~tú~ counterparts.
 Certain verbs that change vowels in the ~yo~, ~tú~, ~él~, and ~ellos~ conjugations, but not in the ~nosotros~ or ~vosotros~ conjugations, do not change vowels in the ~vos~ conjugation. Examples: Tú $mUEves$. Vos movés. Yo $pIerdo$. Vos perdés. Ella $pUEde$. Vos podés. In this sense, ~vos~ conjugations are more regular than those of ~yo~, ~tú~, ~él~, and ~ellos~ .
 
 See %Credits% for Wikipedia and RAE attribution.
-"""),
-Info(heading: Localizations.Info.creditsHeading, difficulty: .easy, text: """
+""", comment: "")),
+Info(heading: Localizations.Info.creditsHeading, difficulty: .easy, text: NSLocalizedString("creditsText", value:
+"""
 ^Conjugar^
 
 Josh Adams developed ~Conjugar~ and has released its source code under the GNU Affero General Public License, available here: %https://github.com/vermont42/Conjugar/blob/master/LICENSE%
@@ -883,5 +899,6 @@ Sheila Smith suggested clarifying how to input accented characters like ó.
 ^App Preview^
 
 ~Conjugar~'s app preview uses the song "Leopard Print Elevator" by Kevin MacLeod (incompetech.com). Licensed under Creative Commons: By Attribution 3.0 License %http://creativecommons.org/licenses/by/3.0/%
-""")]
+""", comment: ""))
+]
 }
