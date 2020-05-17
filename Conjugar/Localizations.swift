@@ -35,6 +35,10 @@ enum Localizations {
     NSLocalizedString("Difficult", comment: "")
   }
 
+  static var score: String {
+    NSLocalizedString("Score", comment: "")
+  }
+
   enum BrowseInfo {
     static var localizedTitle: String {
       NSLocalizedString("Info", comment: "")
@@ -178,10 +182,6 @@ Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%,
       NSLocalizedString("Correct Answer", comment: "")
     }
 
-    static var score: String {
-      NSLocalizedString("Score", comment: "")
-    }
-
     static var progress: String {
       NSLocalizedString("Progress", comment: "")
     }
@@ -194,6 +194,10 @@ Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%,
   enum Results {
     static var title: String {
       NSLocalizedString("Results", comment: "")
+    }
+
+    static var time: String {
+      NSLocalizedString("Time", comment: "")
     }
   }
 
@@ -248,6 +252,20 @@ Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%,
 
     static var rateOrReview: String {
       NSLocalizedString("Rate or Review", comment: "")
+    }
+
+    static var addYours: String {
+      NSLocalizedString("Add yours!", comment: "")
+    }
+
+    static var noRating: String {
+      NSLocalizedString("No one has rated this version of Conjugar.", comment: "")
+    }
+    static var oneRating: String {
+      NSLocalizedString("There is one rating for this version of Conjugar.", comment: "")
+    }
+    static var multipleRatings: String {
+      NSLocalizedString("There are %d ratings for this version of Conjugar.", comment: "")
     }
   }
 

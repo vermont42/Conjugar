@@ -27,8 +27,8 @@ class ResultsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    resultsView.difficulty.text = Current.quiz.lastDifficulty.rawValue
-    resultsView.region.text = Current.quiz.lastRegion.rawValue
+    resultsView.difficulty.text = Current.quiz.lastDifficulty.localizedDifficulty
+    resultsView.region.text = Current.quiz.lastRegion.localizedRegion
     resultsView.score.text = String(Current.quiz.score)
     resultsView.time.text = Current.quiz.elapsedTime.timeString
     Current.analytics.recordVisitation(viewController: "\(ResultsVC.self)")

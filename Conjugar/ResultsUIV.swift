@@ -37,7 +37,7 @@ class ResultsUIV: UIView {
     [table, difficulty, region, score, time, scoreLabel, timeLabel].forEach {
       addSubview($0)
     }
-    [(scoreLabel, "Score:"), (timeLabel, "Time:")].forEach {
+    [(scoreLabel, Localizations.score + ":"), (timeLabel, Localizations.Results.time + ":")].forEach {
       $0.0.text = $0.1
     }
 

@@ -38,14 +38,15 @@ struct RatingsFetcher {
         let ratingsCount = (results[0])["userRatingCountForCurrentVersion"] as? Int ?? 0
 
         let description: String
-        let addYours = "Add yours!"
+        let exhortation = " ¡Sé la primera o el primero!"
+
         switch ratingsCount {
         case 0:
-          description = "No one has rated this version of Conjugar. ¡Sé la primera o el primero!"
+          description = Localizations.Settings.noRating + exhortation
         case 1:
-          description = "There is one rating for this version of Conjugar. \(addYours)"
+          description = Localizations.Settings.oneRating + " " + Localizations.Settings.addYours
         default:
-          description = "There are \(ratingsCount) ratings for this version of Conjugar. \(addYours)"
+          description = String(format: Localizations.Settings.multipleRatings, ratingsCount) + " " + Localizations.Settings.addYours
         }
         completion(description)
       }
