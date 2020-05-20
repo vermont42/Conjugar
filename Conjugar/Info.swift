@@ -223,7 +223,7 @@ This use expresses an action that is viewed as a completed event. It is often ac
 
 • An action that interrupts another action:
 
-"Tomábamos la cena cuando entró Eduardo." = "We were having dinner when Eduardo came in."
+"Tomábamos la cena cuando entró Eduardo." = "We were having dinner when Eduardo $cAme$ in."
 
 This expresses an event that happened (and was completed) while another action was taking place.
 
@@ -353,7 +353,7 @@ The ~presente de subjuntivo~ is used to express:
 
 • Doubt:
 
-"Dudo que $venGas$ mañana." = "I doubt that thou wilt come tomorrow."
+"Dudo que $venGas$ mañana." = "I doubt that thou $wilT$ come tomorrow."
 
 ^Conjugation^
 
@@ -484,7 +484,7 @@ Info(heading: "Imperativo Positivo", difficulty: .moderate, text: NSLocalizedStr
 
 The ~imperativo positivo~ is used in Spanish to express commands.
 
-"Levanten la mana derecha." = "Raise your right hand."
+"Levanten la mana derecha." = "Raise your right hand(s)."
 
 "Regresad." = "Y'all come back."
 
@@ -528,7 +528,7 @@ Info(heading: "Imperativo Negativo", difficulty: .moderate, text: NSLocalizedStr
 
 The ~imperativo negativo~ is used in Spanish to express negative commands.
 
-"No levanten la mana derecha." = "Don't raise your right hand."
+"No levanten la mana derecha." = "Don't raise your right hand(s)."
 
 "No regreséis." = "Don't come back, y'all."
 
@@ -554,7 +554,7 @@ Info(heading: "Participio", difficulty: .moderate, text: NSLocalizedString("part
 """
 ^Use^
 
-The ~participio~ corresponds to the English -en or -ed form of a verb. This form is used following the auxiliary verb ~haber~ to form various compound tenses, including the %perfecto de indicativo%: "(Yo) $hE$ hablado." = "I have $spOken$."
+The ~participio~ corresponds to the English -en, -ed, or -t form of a verb. This form is used following the auxiliary verb ~haber~ to form various compound tenses, including the %perfecto de indicativo%: "(Yo) $hE$ hablado." = "I have $spOken$."
 
 ^Form^
 
@@ -566,7 +566,7 @@ Examples: hablado ("$spOken$"); cantado ("$sUng$"); bailado ("danced")
 
 ~er~ verbs: -ido
 
-Examples: bebido ("$drUnk$"); leído (requires acute accent; "read"); comprendido ("$understOOd$")
+Examples: bebido ("$drUnk$"); leído (requires acute accent; "$reaD$"); comprendido ("$understOOd$")
 
 ~ir~ verbs: -ido
 
@@ -611,7 +611,7 @@ Examples: hablando ("speaking"); cantando ("singing"); bailando ("dancing")
 
 ~er~ verbs: -iendo
 
-Examples: bebiendo ("drinking"); cediendo ("transferring"); comprendiendo ("understanding")
+Examples: bebiendo ("drinking"); cediendo ("$transferRing$"); comprendiendo ("understanding")
 
 ~ir~ verbs: -iendo
 
@@ -670,10 +670,6 @@ The ~perfecto de indicativo~ has virtually the same use as the tense sometimes c
 
 In Spanish, as in English, this tense implies that an action, although completed in the past, has continuing effects, truth, or relevance in the present.
 
-In most of Spain, the tense has an additional use: to express a past action or event that is contained in an unfinished period of time in the present.
-
-"Este mes ha llovido mucho, pero hoy hace buen día." = "It rained a lot this month, but today $IS$ a fine day."
-
 ^Conjugation^
 
 In the perfecto de indicativo, the %presente de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
@@ -690,7 +686,7 @@ The ~pretérito anterior~ is very rare in spoken Spanish, but it is sometimes us
 
 "Cuando $hUbieron llegado$ todos, empezó la ceremonia." = "When everyone had arrived, the ceremony $begAn$."
 
-"Apenas María $hUBO terminado$ la canción, su padre entró." = "As soon as Maria had finished the song, her father came in."
+"Apenas María $hUBO terminado$ la canción, su padre entró." = "As soon as Maria had finished the song, her father $cAme$ in."
 
 ^Conjugation^
 
@@ -824,7 +820,7 @@ Info(heading: Localizations.Info.questionsAndAnswersHeading, difficulty: .easy, 
 
 ~Q:~ There is a verb missing from the ~Browse~ list. What gives?
 
-~A:~ ~Conjugar~'s goal is to teach Spanish-verb conjugation, not to serve as an exhaustive reference of Spanish verbs. ~SpanishDict.com~ and ~Spanish Verbs Made Simple(r)~ are better choices if you seek exhaustivity. That said, feel free to email ~Conjugar's~ developer at vermontcoder@gmail.com if you would like to see a verb added.
+~A:~ ~Conjugar~'s goal is to teach Spanish-verb conjugation, not to serve as an exhaustive reference. ~SpanishDict.com~ and ~Spanish Verbs Made Simple(r)~ are better choices if you seek exhaustivity. That said, feel free to email ~Conjugar's~ developer at vermontcoder@gmail.com if you would like to see a verb added.
 
 ~Q:~ Why does ~Conjugar~ use Spanish names for tenses rather than English, for example, %presente de indicativo% rather than "present indicative"?
 
@@ -832,7 +828,7 @@ Info(heading: Localizations.Info.questionsAndAnswersHeading, difficulty: .easy, 
 
 ~Q:~ I've seen the terms "mood" and "aspect" in descriptions of verb tenses, but ~Conjugar~ does not use these terms. Also, the %participio%, %gerundio%, and %raíz futura% are not really tenses.
 
-~A:~ Was that a question? You are correct that ~Conjugar~ does not use these two terms, and those three things are not usually described as "tenses". With respect to the former, bear in mind that ~Conjugar~'s purpose is to teach Spanish-verb conjugation, not to teach English Spanish-verb-conjugation nomenclature. With respect to the latter, ~Conjugar~'s developer does consider those three things to be tenses, if "tense" is taken to mean "a systematic way of changing verbs for a specific purpose". This definition, though absent, on information and belief, from any dictionary, serves ~Conjugar~'s pedagogical purpose well enough.
+~A:~ Was that a question? You are correct that ~Conjugar~ does not use these two terms, and those three things are not usually described as "tenses". With respect to terminology, bear in mind that ~Conjugar~'s purpose is to teach Spanish-verb conjugation, not to teach English Spanish-verb-conjugation nomenclature. With respect to the participio, gerundio, and raíz futura, ~Conjugar~'s developer does consider those three things to be tenses, if "tense" is taken to mean "a systematic way of changing verbs for a specific purpose". This definition, though absent, on information and belief, from any dictionary, serves ~Conjugar~'s pedagogical purpose well enough.
 
 ~Q:~ Why is Conjugar free?
 
@@ -868,7 +864,7 @@ Josh Adams developed ~Conjugar~ and has released its source code under the GNU A
 
 ^Wikipedia^
 
-Descriptions of the %pretérito%, %futuro de indicativo%, %condicional%, %participio%, %gerundio%, %imperfecto de indicativo%, %futuro de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2%, %perfecto de indicativo%, %pluscuamperfecto de indicativo%, %futuro perfecto%, %pretérito anterior%, %condicional compuesto%, and %perfecto de subjuntivo% have been borrowed, in part, from Wikipedia's article on Spanish verbs, %https://en.wikipedia.org/wiki/Spanish_verbs%. The description of %voseo% is informed by Wikipedia's article on ~voseo~, %https://en.wikipedia.org/wiki/Voseo%, as well as the Real Academia Española's conjugations, %http://www.rae.es%. Modifications to Wikipedia's content include, but are not entirely limited to, formatting and the addition of example irregular verbs. Wikipedia has licensed the content of the Spanish-verb and ~voseo~ articles under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%. All of ~Conjugar~'s developer's modifications of Wikipedia content are licensed under that license, as well as under the MIT license.
+Descriptions of the %pretérito%, %futuro de indicativo%, %condicional%, %participio%, %gerundio%, %imperfecto de indicativo%, %futuro de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2%, %perfecto de indicativo%, %pluscuamperfecto de indicativo%, %futuro perfecto%, %pretérito anterior%, %condicional compuesto%, and %perfecto de subjuntivo% have been borrowed, in part, from Wikipedia's article on Spanish verbs, %https://en.wikipedia.org/wiki/Spanish_verbs%. The description of %voseo% is informed by Wikipedia's article on ~voseo~, %https://en.wikipedia.org/wiki/Voseo%, as well as the Real Academia Española's conjugations, %http://www.rae.es%. Modifications to Wikipedia's content include, but are not entirely limited to, formatting and the addition of example irregular verbs. Wikipedia has licensed the content of the Spanish-verb and ~voseo~ articles under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%. All of ~Conjugar~'s developer's modifications of Wikipedia content are licensed under that license, as well as under the Affero license.
 
 ^Word Reference^
 
