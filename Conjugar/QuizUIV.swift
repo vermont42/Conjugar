@@ -9,7 +9,6 @@
 import UIKit
 
 class QuizUIV: UIView {
-  static let tenseString = "Tense:"
   @UsesAutoLayout var lastLabel = UILabel()
   @UsesAutoLayout var correctLabel = UILabel()
   @UsesAutoLayout var elapsed = UILabel()
@@ -59,7 +58,7 @@ class QuizUIV: UIView {
       $0.isUserInteractionEnabled = true
     }
     let colon = ":"
-    [(verbLabel, Localizations.Quiz.verb + colon), (pronounLabel, Localizations.Quiz.pronoun + colon), (tenseLabel, QuizUIV.tenseString), (lastLabel, Localizations.Quiz.lastAnswer + colon), (correctLabel, Localizations.Quiz.correctAnswer + colon), (scoreLabel, Localizations.score + colon), (progressLabel, Localizations.Quiz.progress + colon), (elapsedLabel, Localizations.Quiz.elapsed + colon), (last, " "), (correct, " ")].forEach {
+    [(verbLabel, Localizations.Quiz.verb + colon), (pronounLabel, Localizations.Quiz.pronoun + colon), (tenseLabel, Localizations.Quiz.tense + colon), (lastLabel, Localizations.Quiz.lastAnswer + colon), (correctLabel, Localizations.Quiz.correctAnswer + colon), (scoreLabel, Localizations.score + colon), (progressLabel, Localizations.Quiz.progress + colon), (elapsedLabel, Localizations.Quiz.elapsed + colon), (last, " "), (correct, " ")].forEach {
       $0.0.text = $0.1
     }
     [verb, verbLabel, translation, pronoun, pronounLabel, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel, startRestartButton, conjugationField].forEach {

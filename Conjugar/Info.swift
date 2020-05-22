@@ -249,7 +249,7 @@ com~er~: comí, comiste, comió, comimos, comisteis, comieron
 
 Some verbs that are irregular in the pretérito appear below. Tap the ~Browse~ tab for translations and conjugations.
 
-andar, caber, conducir, dar, decir, estar, haber, hacer, ir, poder, poner, querer, sabar, ser, tener, traer, venir
+andar, caber, conducir, dar, decir, estar, haber, hacer, ir, poder, poner, querer, saber, ser, tener, traer, venir
 
 See %credits% for Wikipedia attribution.
 """, comment: "")),
@@ -265,7 +265,7 @@ The ~condicional~ is used to express the following:
 
 This use softens a request, making it more polite.
 
-• Polite expression, using querrer, of a desire:
+• Polite expression, using querer, of a desire:
 
 "Q$ueRría$ ver la película esta semana." = "I would like to see the film this week."
 
@@ -275,7 +275,7 @@ This use softens a request, making it more polite.
 
 • Speculation about past events:
 
-"¿Cuantas personas asistieron a la inauguración del Presidente?" "No lo $sÉ$; $habRía$ unas 5.000." = "How many people attended the President's inauguration?" "I do not know; there must have been about 5,000."
+"¿Cuántas personas asistieron a la inauguración del Presidente?" "No lo $sÉ$; $habRía$ unas 5.000." = "How many people attended the President's inauguration?" "I do not know; there must have been about 5,000."
 
 In this context, the speaker's knowledge is indirect, unconfirmed, or approximate.
 
@@ -686,7 +686,7 @@ The ~pretérito anterior~ is very rare in spoken Spanish, but it is sometimes us
 
 "Cuando $hUbieron llegado$ todos, empezó la ceremonia." = "When everyone had arrived, the ceremony $begAn$."
 
-"Apenas María $hUBO terminado$ la canción, su padre entró." = "As soon as Maria had finished the song, her father $cAme$ in."
+"Apenas María $hUBO terminado$ la canción, su padre entró." = "As soon as Mary had finished the song, her father $cAme$ in."
 
 ^Conjugation^
 
@@ -838,7 +838,7 @@ Info(heading: "Voseo", difficulty: .easy, text: NSLocalizedString("voseoText", v
 """
 ^Background^
 
-In certain parts of Latin America, when addressing one person informally, Spanish speakers use the pronoun ~vos~ and its conjugations instead of the pronoun ~tú~ and and its conjugations. This phenomenon, ~voseo~, is ubiquitous in Argentina and occurs, to varying degrees, in all of Latin America except in Dominican Republic and Puerto Rico. Unfortunately, ~vos~ conjugations vary by country and region, complicating matters for the Spanish-learner, but the Real Academia Española (RAE), an authority on the Spanish language, provides model conjugations. These conjugations have some value because a Spanish-speaker from Medellín, Colombia reported to ~Conjugar~'s developer that he uses them. For the sake of expediency, ~Conjugar~ adopts the RAE’s ~vos~ conjugations.
+In certain parts of Latin America, when addressing one person informally, Spanish speakers use the pronoun ~vos~ and its conjugations instead of the pronoun ~tú~ and its conjugations. This phenomenon, ~voseo~, is ubiquitous in Argentina and occurs, to varying degrees, in all of Latin America except in Dominican Republic and Puerto Rico. Unfortunately, ~vos~ conjugations vary by country and region, complicating matters for the Spanish-learner, but the Real Academia Española (RAE), an authority on the Spanish language, provides model conjugations. These conjugations have some value because a Spanish-speaker from Medellín, Colombia reported to ~Conjugar~'s developer that he uses them. For the sake of expediency, ~Conjugar~ adopts the RAE’s ~vos~ conjugations.
 
 ^Conjugation^
 

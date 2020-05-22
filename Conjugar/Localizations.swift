@@ -138,6 +138,10 @@ Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%,
       NSLocalizedString("Quiz", comment: "")
     }
 
+    static var tense: String {
+      NSLocalizedString("Tense", comment: "")
+    }
+
     static var start: String {
       NSLocalizedString("Start", comment: "")
     }

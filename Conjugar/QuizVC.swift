@@ -116,7 +116,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     default:
       fatalError()
     }
-    quizView.tenseLabel.text = QuizUIV.tenseString + " " + tense.displayName
+    quizView.tenseLabel.text = Localizations.Quiz.tense + ": " + tense.displayName
     quizView.pronoun.text = personNumber.pronoun
     quizView.conjugationField.becomeFirstResponder()
   }
