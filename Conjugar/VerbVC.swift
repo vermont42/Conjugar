@@ -35,7 +35,7 @@ class VerbVC: UIViewController {
     verbView.raízFutura.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
     verbView.gerundio.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapSpanish(_:))))
     verbView.translation.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
-    verbView.defectivo.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
+    verbView.defectuoso.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
     initNavigationItemTitleView()
     let translationResult = Conjugator.shared.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
     switch translationResult {
@@ -66,9 +66,9 @@ class VerbVC: UIViewController {
       fatalError()
     }
     if Conjugator.shared.isDefective(infinitive: verb) {
-      verbView.defectivo.text = Localizations.Verb.defective
+      verbView.defectuoso.text = Localizations.Verb.defective
     } else {
-      verbView.defectivo.text = Localizations.Verb.notDefective
+      verbView.defectuoso.text = Localizations.Verb.notDefective
     }
 
     let verbType = Conjugator.shared.verbType(infinitive: verb)

@@ -14,7 +14,7 @@ class VerbUIV: UIView {
   @UsesAutoLayout var participio = UILabel()
   @UsesAutoLayout var gerundio = UILabel()
   @UsesAutoLayout var raízFutura = UILabel()
-  @UsesAutoLayout var defectivo = UILabel()
+  @UsesAutoLayout var defectuoso = UILabel()
   @UsesAutoLayout private var raízFuturaLabel = UILabel()
 
   @UsesAutoLayout
@@ -30,17 +30,17 @@ class VerbUIV: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    [translation, parentOrType, participio, gerundio, raízFuturaLabel, raízFutura, defectivo].forEach {
+    [translation, parentOrType, participio, gerundio, raízFuturaLabel, raízFutura, defectuoso].forEach {
       $0.font = Fonts.label
       $0.textColor = Colors.yellow
     }
     raízFuturaLabel.text = "RF:"
 
-    [translation, participio, gerundio, raízFutura, defectivo].forEach {
+    [translation, participio, gerundio, raízFutura, defectuoso].forEach {
       $0.isUserInteractionEnabled = true
     }
 
-    [table, translation, parentOrType, participio, gerundio, raízFuturaLabel, raízFutura, defectivo].forEach {
+    [table, translation, parentOrType, participio, gerundio, raízFuturaLabel, raízFutura, defectuoso].forEach {
       addSubview($0)
     }
 
@@ -63,8 +63,8 @@ class VerbUIV: UIView {
       raízFutura.topAnchor.constraint(equalTo: participio.bottomAnchor, constant: Layout.defaultSpacing),
       raízFutura.leadingAnchor.constraint(equalTo: raízFuturaLabel.trailingAnchor, constant: Layout.defaultSpacing),
 
-      defectivo.topAnchor.constraint(equalTo: gerundio.bottomAnchor, constant: Layout.defaultSpacing),
-      defectivo.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      defectuoso.topAnchor.constraint(equalTo: gerundio.bottomAnchor, constant: Layout.defaultSpacing),
+      defectuoso.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 
       table.topAnchor.constraint(equalTo: raízFuturaLabel.bottomAnchor, constant: Layout.defaultSpacing),
       table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
