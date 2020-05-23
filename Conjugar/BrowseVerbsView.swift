@@ -21,7 +21,7 @@ class BrowseVerbsUIV: UIView {
     let control = UISegmentedControl(items: [
       Localizations.Verb.irregular,
       Localizations.Verb.regular,
-      Localizations.both
+      Localizations.bothMasculine
     ])
     control.selectedSegmentIndex = 0
     control.yellowfyText()

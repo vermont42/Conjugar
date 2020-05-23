@@ -11,8 +11,12 @@ import Foundation
 // genstrings -o es.lproj *.swift
 
 enum Localizations {
-  static var both: String {
-    NSLocalizedString("Both", comment: "")
+  static var bothMasculine: String {
+    NSLocalizedString("bothMasculineText", value: "Both", comment: "")
+  }
+
+  static var bothFeminine: String {
+    NSLocalizedString("bothFeminineText", value: "Both", comment: "")
   }
 
   static var spain: String {

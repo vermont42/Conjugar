@@ -18,7 +18,7 @@ enum SecondSingularBrowse: String, CaseIterable {
     case .vos:
       return rawValue
     case .both:
-      return Localizations.both
+      return Localizations.bothFeminine
     }
   }
 }

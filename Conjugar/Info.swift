@@ -75,7 +75,7 @@ Info(heading: Localizations.Info.terminologyHeading, difficulty: .easy, text: NS
 
 A ~verb~ is a kind of word that stands for an action in a sentence. In the sentence "Celina Zambon is dancing the flamenco", "to dance" is the verb. Verb ~tense~s express, among other things, temporality. In the example sentence, the verb tense expresses that the action is currently taking place. In English, to a limited degree, and in Spanish, to a near-total degree, the ~subject~ or actor in the sentence, combined with the tense, determines the exact form of the verb used. This is the verb ~conjugation~. In English, the example sentence's combination of subject and tense results in the conjugation "is dancing".
 
-The ~un~conjugated form of a Spanish verb is the ~infinitivo~. All infinitivos end in -ar, -ir, or -er. "Bailar" is an infinitivo that means "to dance". Spanish dictionaries and ~Conjugar~'s Browse tab list the infinitivo forms of verbs.
+The ~infinitivo~ is an invariant form of the verb than ends in -ar, -er, or -ir. The ~infinitivo~ does not indicate time, number, or person. "Bailar" is an infinitivo that means "to dance". Spanish dictionaries and ~Conjugar~'s Browse tab list the infinitivo forms of verbs.
 
 The ~verb stem~ is the inifinitivo minus the -ar, -ir, or -er ending.
 
