@@ -223,7 +223,7 @@ This use expresses an action that is viewed as a completed event. It is often ac
 
 • An action that interrupts another action:
 
-"Tomábamos la cena cuando entró Eduardo." = "We were having dinner when Eduardo $cAme$ in."
+"Estábamos cenando la cena cuando entró Eduardo." = "We were having dinner when Eduardo $cAme$ in."
 
 This expresses an event that happened (and was completed) while another action was taking place.
 
@@ -275,7 +275,7 @@ This use softens a request, making it more polite.
 
 • Speculation about past events:
 
-"¿Cuántas personas asistieron a la inauguración del Presidente?" "No lo $sÉ$; $habRía$ unas 5.000." = "How many people attended the President's inauguration?" "I do not know; there must have been about 5,000."
+"¿Cuántas personas asistieron a la investidura del Presidente?" "No lo $sÉ$; $habRía$ unas 5.000." = "How many people attended the President's inauguration?" "I do not know; there must have been about 5,000."
 
 In this context, the speaker's knowledge is indirect, unconfirmed, or approximate.
 
@@ -309,7 +309,7 @@ Like the %pretérito% and %perfecto de indicativo%, the ~imperfecto de indicativ
 
 "Cada año mi familia $iBa$ a Puerto Rico." = "Each year my family $WENT$ to Rich Port."
 
-"Frecuentemente el gato saltaba al sofá." = "The cat often jumped on the couch."
+"El gato saltaba al sofá muy a menudo." = "The cat often jumped on the couch."
 
 • A "used to" action:
 
@@ -349,7 +349,7 @@ The ~presente de subjuntivo~ is used to express:
 
 • Emotional state:
 
-"Temo que Colombia no gane la Copa América este año." = "I fear that Colombia will not win the America Cup this year."
+"Tengo miedo de que Colombia no gane la Copa América este año." = "I fear that Colombia will not win the America Cup this year."
 
 • Doubt:
 
@@ -752,7 +752,7 @@ The ~perfecto de subjuntivo~ expresses doubt, uncertainty, or an emotional state
 
 "Lamentan que él no $haYa podido$ regresar a la casa." = "They regret that he $WAS$ unable to return home."
 
-"Al final del siglo, temo que Colombia no $haYa ganado$ la Copa América." = "At the end of the century, I fear that Colombia will not have $wOn$ the America Cup."
+"Al final del siglo, tengo miedo de que Colombia no $haYa ganado$ la Copa América." = "At the end of the century, I fear that Colombia will not have $wOn$ the America Cup."
 
 "Dudo que $haYas venido$ antes del final de la película." = "I doubt that you will have come before the end of the movie."
 
