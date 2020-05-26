@@ -25,13 +25,13 @@ struct VerbFamilies {
 
   static let irregularPresenteDeSubjuntivoVerbs = ["ser", "ir", "haber", "saber", "pensar", "perder", "sentir", "dormir", "pedir", "crecer", "conocer", "lucir", "conducir", "huir", "construir", "estar", "dar", "caber", "decir", "hacer", "caer", "oír", "traer", "poner", "salir", "tener", "valer", "venir", "ver", "jugar", "argüir", "elegir", "colegir", "manecer", "anochecer", "cazar", "granizar"]
 
-  static let irregularTuImperativoVerbs = ["ser", "ir", "haber", "decir", "hacer", "poner", "salir", "tener", "venir", "componer", "obtener", "medir", "pedir", "oír", "elegir", "colegir"]
+  static let irregularTuImperativoVerbs = ["ser", "ir", "decir", "hacer", "poner", "salir", "tener", "venir", "componer", "obtener", "medir", "pedir", "oír", "elegir", "colegir"]
 
-  static let irregularVosImperativoVerbs = ["ser", "ir", "haber"]
+  static let irregularVosImperativoVerbs = ["ser", "ir"]
 
   static let irregularParticipioVerbs = ["abrir", "cubrir", "decir", "escribir", "hacer", "morir", "poner", "resolver", "romper", "ver", "volver", "pudrir"]
 
-  static let irregularGerundioVerbs = ["poder", "sentir", "medir", "dormir", "caer", "leer", "traer", "construir", "huir", "oír", "ir", "tañer", "bullir", "argüir", "elegir", "colegir"]
+  static let irregularGerundioVerbs = ["poder", "sentir", "medir", "dormir", "caer", "leer", "traer", "construir", "huir", "oír", "ir", "tañer", "bullir", "argüir", "elegir", "colegir", "hervir"]
 
   static let thirdPersonSingularOnlyVerbs = ["amanecer", "anochecer", "llover", "granizar", "nevar", "relampaguear", "tronar"]
 }

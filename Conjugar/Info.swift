@@ -451,7 +451,11 @@ Info(heading: "Futuro de Subjuntivo", difficulty: .difficult, text: NSLocalizedS
 """
 ^Use^
 
-The ~futuro de subjunctivo~ is no longer used in modern Spanish, except in legal language and some fixed expressions. In these expressions, this tense is used to express doubt or uncertainty about whether some event will happen in the future. In modern Spanish, the %presente de subjuntivo% replaces the futuro de subjuntivo. Here are examples of the futuro de subjuntivo:
+The ~futuro de subjunctivo~ is no longer used in modern Spanish, except in legal language and some fixed expressions.
+
+"Donde fueres, $haZ$ lo que vieres." = "When in Rome, do as the Romans do."
+
+In these expressions, this tense is used to express doubt or uncertainty about whether some event will happen in the future. In modern Spanish, the %presente de subjuntivo% replaces the futuro de subjuntivo. Here are examples of the futuro de subjuntivo:
 
 "Cuando hablaren..." = "Whenever they might speak..."
 
@@ -484,11 +488,11 @@ Info(heading: "Imperativo Positivo", difficulty: .moderate, text: NSLocalizedStr
 
 The ~imperativo positivo~ is used in Spanish to express commands.
 
-"Levanten la mana derecha." = "Raise your right hand(s)."
+"Levanten la mano derecha." = "Raise your right hand(s)."
 
 "Regresad." = "Y'all come back."
 
-"Lo $dI$." = "Say it."
+"D$I$lo." = "Say it."
 
 "Tejamos." = "Let's knit."
 
@@ -510,9 +514,8 @@ com~er~: come, coma, comamos, comed, coman
 
 The following verbs have irregular tú imperativo positivo conjugations:
 
-componer: $compoN$
+componer: $compóN$
 decir: $dI$
-haber: $hE$
 hacer: $haZ$
 ir: $VE$
 obtener: $obtÉn$
@@ -528,7 +531,7 @@ Info(heading: "Imperativo Negativo", difficulty: .moderate, text: NSLocalizedStr
 
 The ~imperativo negativo~ is used in Spanish to express negative commands.
 
-"No levanten la mana derecha." = "Don't raise your right hand(s)."
+"No levanten la mano derecha." = "Don't raise your right hand(s)."
 
 "No regreséis." = "Don't come back, y'all."
 
@@ -587,7 +590,7 @@ pudrir: $pOdrido$
 resolver: $resUELTo$
 romper: $roTo$
 ver: $vISTo$
-volver: $vUElvo$
+volver: $vUElTo$
 
 See %credits% for Wikipedia attribution.
 """, comment: "")),
@@ -597,9 +600,9 @@ Info(heading: "Gerundio", difficulty: .moderate, text: NSLocalizedString("gerund
 
 The ~gerundio~ has a variety of uses. The gerundio of hacer, haciendo, can mean "doing", "while doing", "by doing", "because of one's doing", or "through doing".
 
-The gerundio is also used to form progressive constructions, such as "$estoY haciendo$" ("I $AM$ doing").
+The gerundio is also used to form a progressive construction called verbal periphrasis. Example: "$estoY haciendo$" ("I $AM$ doing")
 
-The gerundio cannot be used as an adjective and, unlike in most European languages, generally has no corresponding adjectival forms. The archaic participio presente, which ended in -ante or -iente and formerly filled this function, in some cases survives as an adjective. For example, "$dUrmiente$" = "sleeping", and "interesante" = "interesting". But such cases are limited. Usually, alternate constructions are appropriate. Whereas in English one would say "the crying baby", one would say in Spanish "el bebé que llora", which literally means "the baby who is crying".
+The gerundio cannot be used as an adjective and, unlike in most European languages, has no corresponding adjectival forms. The archaic participio presente, which ended in -ante or -iente and formerly filled this function, in some cases survives as an adjective. For example, "$dUrmiente$" = "sleeping", and "interesante" = "interesting". But such cases are limited. Usually, alternate constructions are appropriate. Whereas in English one would say "the crying baby", one would say in Spanish "el bebé que llora", which literally means "the baby who is crying".
 
 ^Form^
 
@@ -611,11 +614,11 @@ Examples: hablando ("speaking"); cantando ("singing"); bailando ("dancing")
 
 ~er~ verbs: -iendo
 
-Examples: bebiendo ("drinking"); cediendo ("$transferRing$"); comprendiendo ("understanding")
+Examples: bebiendo ("drinking"); cediendo ("yielding"); comprendiendo ("understanding")
 
 ~ir~ verbs: -iendo
 
-Examples: viviendo ("living"); decidiendo ("deciding"); herviendo ("boiling")
+Examples: viviendo ("living"); decidiendo ("deciding"); compartiendo ("sharing")
 
 The following verbs have irregular gerundios:
 
@@ -623,6 +626,7 @@ bullir: $bullEndo$
 caer: $caYendo$
 construir: $construYendo$
 dormir: $dUrmiendo$
+hervir: $hIrviendo$
 huir: $huYendo$
 ir: $Yendo$
 leer: $leYendo$
@@ -664,7 +668,7 @@ Info(heading: "Perfecto de Indicativo", difficulty: .moderate, text: NSLocalized
 """
 ^Uses^
 
-The ~perfecto de indicativo~ has virtually the same use as the tense sometimes called, in English, the present perfect.
+The ~perfecto de indicativo~ has virtually the same use as the tense sometimes called, in English, the "present perfect".
 
 "Te $hE dICHo$ mi opinión." = "I have $tOLD$ you my opinion." or "I $tOLD$ you my opinion, and it hasn't changed."
 
@@ -700,9 +704,9 @@ Info(heading: "Pluscuamperfecto de Indicativo", difficulty: .difficult, text: NS
 """
 ^Use^
 
-The ~pluscuamperfecto de indicativo~ expresses a past action that occurred prior to another past action.
+The ~pluscuamperfecto de indicativo~ expresses a past action that occurred prior to another past action. This tense is used in practically the same manner as the English "past perfect" tense.
 
-"Yo había esperado tres horas cuando él llegó." = "I had been waiting for three hours when he arrived."
+"Cuando bajé a la cocina, mis hijos ya habían preparado el desayuno." = "When I went downstairs to the kitchen, the children had already prepared breakfast."
 
 ^Conjugation^
 
@@ -748,11 +752,11 @@ Info(heading: "Perfecto de Subjuntivo", difficulty: .difficult, text: NSLocalize
 """
 ^Use^
 
-The ~perfecto de subjuntivo~ expresses doubt, uncertainty, or an emotional state with respect to a past action or to an action that will be complete before some other action.
+The ~perfecto de subjuntivo~ expresses doubt, uncertainty, disbelief, or an emotional state with respect to a past action or to an action that will be complete before some other action.
 
 "Lamentan que él no $haYa podido$ regresar a la casa." = "They regret that he $WAS$ unable to return home."
 
-"Al final del siglo, tengo miedo de que Colombia no $haYa ganado$ la Copa América." = "At the end of the century, I fear that Colombia will not have $wOn$ the America Cup."
+"Es posible que al finales de este siglo Colombia no $haYa ganado$ la Copa América." = "At the end of the century, it's possible that Colombia will not have $wOn$ the America Cup."
 
 "Dudo que $haYas venido$ antes del final de la película." = "I doubt that you will have come before the end of the movie."
 
@@ -768,9 +772,9 @@ Info(heading: "Pluscuamperfecto de Subjuntivo 1", difficulty: .difficult, text: 
 """
 ^Use^
 
-The ~pluscuamperfecto de subjuntivo 1~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
+The ~pluscuamperfecto de subjuntivo 1~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%. This tense is used in the same manner as the English "third conditional" tense.
 
-"Dudo que $habRía hablado$ si me $hUbieran dado$ la oportunidad." = "I doubt that I would have $spOken$ if they had given me the opportunity."
+"Si me $hUbiera traÍdo$ una chaqueta, ahora no $tendRía$ frío." = "If I had brought a jacket, I wouldn't be cold now."
 
 Grammarians consider the pluscuamperfecto de subjuntivo 1 and the %pluscuamperfecto de subjuntivo 2% to be different variants of the same tense called simply "pluscuamperfecto de subjuntivo". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.
 
@@ -786,7 +790,7 @@ Info(heading: "Pluscuamperfecto de Subjuntivo 2", difficulty: .difficult, text: 
 
 The ~pluscuamperfecto de subjuntivo 2~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
 
-"Dudo que $habRía hablado$ si me $hUbiesen dado$ la oportunidad." = "I doubt that I would have $spOken$ if they had given me the opportunity."
+"Si me $hUbiese traÍdo$ una chaqueta, ahora no $tendRía$ frío." = "If I had brought a jacket, I wouldn't be cold now."
 
 Grammarians consider the pluscuamperfecto de subjuntivo 2 and the %pluscuamperfecto de subjuntivo 1% to be different variants of the same tense called simply "pluscuamperfecto de subjuntivo". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.
 
@@ -800,7 +804,7 @@ Info(heading: "Futuro Perfecto de Subjuntivo", difficulty: .difficult, text: NSL
 """
 ^Use^
 
-The ~futuro perfecto de subjuntivo~ expresses an uncertain, future act as finished in relation to future event. This tense is no longer used in Spanish except in formal or legal texts.
+The ~futuro perfecto de subjuntivo~ expresses an uncertain, future act as finished in relation to a future event. This tense is no longer used in Spanish except in formal or legal texts.
 
 "Si para Navidad no $hUbiere vUELTo$, no me esperéis." = "If he has not returned by Christmas, do not wait for me."
 
@@ -808,7 +812,7 @@ The ~futuro perfecto de subjuntivo~ expresses an uncertain, future act as finish
 
 In the futuro perfecto de subjuntivo, the %futuro de subjuntivo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.
 
-Example: "$hUbiere hablado$" = "I have $spOken$ (possibly, in the future)"
+Example: "$hUbiere hablado$" = "I would (or shall) have $spOken$"
 
 See %credits% for Word Reference attribution.
 """, comment: "")),
@@ -820,7 +824,7 @@ Info(heading: Localizations.Info.questionsAndAnswersHeading, difficulty: .easy, 
 
 ~Q:~ There is a verb missing from the ~Browse~ list. What gives?
 
-~A:~ ~Conjugar~'s goal is to teach Spanish-verb conjugation, not to serve as an exhaustive reference. ~SpanishDict.com~ and ~Spanish Verbs Made Simple(r)~ are better choices if you seek exhaustivity. That said, feel free to email ~Conjugar's~ developer at vermontcoder@gmail.com if you would like to see a verb added.
+~A:~ ~Conjugar~'s goal is to teach Spanish-verb conjugation, not to serve as a dictionary. ~SpanishDict.com~ and ~Spanish Verbs Made Simple(r)~ are better choices if you seek exhaustivity. That said, feel free to email ~Conjugar's~ developer at vermontcoder@gmail.com if you would like to see a verb added.
 
 ~Q:~ Why does ~Conjugar~ use Spanish names for tenses rather than English, for example, %presente de indicativo% rather than "present indicative"?
 
@@ -844,7 +848,7 @@ In certain parts of Latin America, when addressing one person informally, Spanis
 
 ~Vos~ conjugations broadly resemble those of ~tú~ and, to a lesser extent, ~vosotros~. In the %presente de indicativo%, the endings are -ás, -ís, and -és for regular AR, IR, and ER verbs, respectively. Examples: hablás, subís, comés.
 
-In the %imperativo positivo%, the endings are -á, -í, and -é for regular AR, IR, and ER verbs, respectively. Examples: hablá, subí, comé. Three irregular ~vos~ %imperativo positivo% verbs are ir ($ANDÁ$), haber ($hE$ or $habE$), and dar ($dA$).
+In the %imperativo positivo%, the endings are -á, -í, and -é for regular AR, IR, and ER verbs, respectively. Examples: hablá, subí, comé. Two irregular ~vos~ %imperativo positivo% verbs are ir ($ANDÁ$) and dar ($dA$).
 
 In the following tenses, the ~vos~ endings are identical to the ~tú~ endings: %pretérito%, %imperfecto de indicativo%, %futuro de indicativo%, %condicional%, %presente de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2%, %futuro de subjuntivo%, and %imperativo negativo%.
 

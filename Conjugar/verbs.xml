@@ -73,7 +73,7 @@
   <verb in="caminar" vt="ra" tn="walk" pe="hablar" tr="habl" st="camin" />
   <verb in="cantar" vt="ra" tn="sing" pe="hablar" tr="habl" st="cant" />
   <verb in="cazar" vt="ir" tn="hunt" pe="hablar" tr="habl" st="caz" fspt="caCé" fspb="caCe" sspb="caCes" tspb="caCe" fppb="caCemos" sppb="caCéis" tppb="caCen" />
-  <verb in="ceder" vt="re" tn="transfer, cede" pe="comer" tr="com" st="ced" />
+  <verb in="ceder" vt="re" tn="yield" pe="comer" tr="com" st="ced" />
   <verb in="cenar" vt="ra" tn="have dinner" pe="hablar" tr="habl" st="cen" />
   <verb in="charlar" vt="ra" tn="chat" pe="hablar" tr="habl" st="charl" />
   <verb in="clonar" vt="ra" tn="clone" pe="hablar" tr="habl" st="clon" />
@@ -146,10 +146,11 @@
   <verb in="granizar" vt="ir" tn="hail" pe="cazar" tr="ca" st="grani" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" />
   <verb in="grapar" vt="ra" tn="staple" pe="hablar" tr="habl" st="grap" />
   <verb in="gustar" vt="ra" tn="be pleasing to" pe="hablar" tr="habl" st="gust" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" />
-  <verb in="haber" vt="ir" tn="have (aux.)" pe="comer" tr="com" st="hab" rf="habR" fspr="hE" sspr="haS" svpr="haS" tspr="hA" fppr="hEmos" tppr="haN" fspt="hUBE" sspt="hUbiste" tspt="hUBO" fppt="hUbimos" sppt="hUbisteis" tppt="hUbieron" fspb="haYa" sspb="haYas" tspb="haYa" fppb="haYamos" sppb="haYáis" tppb="haYan" ssio="hE" svio="hE" />
+  <verb in="haber" vt="ir" tn="have (aux.)" pe="comer" tr="com" st="hab" rf="habR" fspr="hE" sspr="haS" svpr="haS" tspr="hA" fppr="hEmos" tppr="haN" fspt="hUBE" sspt="hUbiste" tspt="hUBO" fppt="hUbimos" sppt="hUbisteis" tppt="hUbieron" fspb="haYa" sspb="haYas" tspb="haYa" fppb="haYamos" sppb="haYáis" tppb="haYan" />
 	<verb in="hablar" vt="ra" tn="speak" ge="hablando" po="hablado" rf="hablar" fspr="hablo" sspr="hablas" svpr="hablás" tspr="habla" fppr="hablamos" sppr="habláis" tppr="hablan" fspt="hablé" sspt="hablaste" tspt="habló" fppt="hablamos" sppt="hablastéis" tppt="hablaron" fsii="hablaba" ssii="hablabas" tsii="hablaba" fpii="hablábamos" spii="hablabais" tpii="hablaban" fspb="hable" sspb="hables" tspb="hable" fppb="hablemos" sppb="habléis" tppb="hablen" ssio="habla" svio="hablá" />
   <verb in="hacer" vt="ir" tn="do, make" pe="comer" tr="com" st="hac" rf="haR" po="hECHo" fspr="haGo" fspt="hICE" sspt="hIciste" tspt="hIZO" fppt="hIcimos" sppt="hIcisteis" tppt="hIcieron" fspb="haGa" sspb="haGas" tspb="haGa" fppb="haGamos" sppb="haGáis" tppb="haGan" ssio="haZ" />
   <verb in="helar" vt="ra" tn="freeze, get cold" pe="hablar" tr="habl" st="hel" />
+  <verb in="hervir" vt="ir" tn="boil" ge="hIrviendo" pe="subir" tr="sub" st="herv" fspr="hIervo" sspr="hIerves" tspr="hIerve"  tppr="hIerven" tspt="hIrvió" tppt="hIrvieron" fspb="hIerva" sspb="hIervas" tspb="hIerva" fppb="hIrvamos" sppb="hIrváis" tppb="hIervan" ssio="hIerve" />
   <verb in="hibernar" vt="ra" tn="hibernate" pe="hablar" tr="habl" st="hibern" />
   <verb in="huir" vt="ir" tn="flee" pe="construir" tr="constr" st="h" />
   <verb in="inducir" vt="ir" tn="induce" pe="conducir" tr="con" st="in" />
