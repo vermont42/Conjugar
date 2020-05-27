@@ -271,7 +271,7 @@ This use softens a request, making it more polite.
 
 • In a then clause whose realization depends on a hypothetical if clause:
 
-"Si yo $FUera$ rico, viajaría a Sudamérica." = "If I were rich, (then) I would travel to South America."
+"Si yo $FUera$ rico, viajaría a Sudamérica." = "If I $WERE$ rich, (then) I would travel to South America."
 
 • Speculation about past events:
 
@@ -453,7 +453,7 @@ Info(heading: "Futuro de Subjuntivo", difficulty: .difficult, text: NSLocalizedS
 
 The ~futuro de subjunctivo~ is no longer used in modern Spanish, except in legal language and some fixed expressions.
 
-"Donde fueres, $haZ$ lo que vieres." = "When in Rome, do as the Romans do."
+"Donde fueres, $haZ$ lo que vieres." = "When in Rome, do as the Romans do." = "Cum Romae fueritis, Romano vivite more."
 
 In these expressions, this tense is used to express doubt or uncertainty about whether some event will happen in the future. In modern Spanish, the %presente de subjuntivo% replaces the futuro de subjuntivo. Here are examples of the futuro de subjuntivo:
 
@@ -774,7 +774,7 @@ Info(heading: "Pluscuamperfecto de Subjuntivo 1", difficulty: .difficult, text: 
 
 The ~pluscuamperfecto de subjuntivo 1~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%. This tense is used in the same manner as the English "third conditional" tense.
 
-"Si me $hUbiera traÍdo$ una chaqueta, ahora no $tendRía$ frío." = "If I had brought a jacket, I wouldn't be cold now."
+"Si me $hUbiera traÍdo$ una chaqueta, ahora no $tendRía$ frío." = "If I had $brOUGHT$ a jacket, I wouldn't be cold now."
 
 Grammarians consider the pluscuamperfecto de subjuntivo 1 and the %pluscuamperfecto de subjuntivo 2% to be different variants of the same tense called simply "pluscuamperfecto de subjuntivo". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.
 
@@ -790,7 +790,7 @@ Info(heading: "Pluscuamperfecto de Subjuntivo 2", difficulty: .difficult, text: 
 
 The ~pluscuamperfecto de subjuntivo 2~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.
 
-"Si me $hUbiese traÍdo$ una chaqueta, ahora no $tendRía$ frío." = "If I had brought a jacket, I wouldn't be cold now."
+"Si me $hUbiese traÍdo$ una chaqueta, ahora no $tendRía$ frío." = "If I had $brOUGHT$ a jacket, I wouldn't be cold now."
 
 Grammarians consider the pluscuamperfecto de subjuntivo 2 and the %pluscuamperfecto de subjuntivo 1% to be different variants of the same tense called simply "pluscuamperfecto de subjuntivo". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.
 
@@ -878,11 +878,15 @@ The description and example of the %futuro perfecto de subjuntivo% are from a po
 
 Christine Daughtry created the app icon.
 
-Borja santos Lobo created the dancer icon and released it under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%.
+Borja Santos Lobo created the dancer icon and released it under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%.
 
 Saeful Muslim created the bull icon and released it under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%.
 
 Mariela Peña created the gear and question-mark icons.
+
+^Translation^
+
+Margarita Gracia proofread the translation of Conjugar into Spanish, provided corrections to tense descriptions, and improved several examples of tense usage.
 
 Ferran Poveda provided corrections to the Spanish translations.
 
