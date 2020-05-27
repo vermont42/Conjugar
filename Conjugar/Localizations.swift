@@ -43,6 +43,18 @@ enum Localizations {
     NSLocalizedString("Score", comment: "")
   }
 
+  static var okay: String {
+    NSLocalizedString("Okay", comment: "")
+  }
+
+  static var gotIt: String {
+    NSLocalizedString("Got It", comment: "")
+  }
+
+  static var gameCenterFailure: String {
+    NSLocalizedString("Game Center authentication failed. This can happen if you cancel authentication or if your iPhone is not already signed into Game Center. Launch the Settings app, tap Game Center, sign in, and relaunch Conjugar.", comment: "")
+  }
+
   enum BrowseInfo {
     static var localizedTitle: String {
       NSLocalizedString("Info", comment: "")

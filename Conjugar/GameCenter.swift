@@ -35,7 +35,7 @@ class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
         completion?(true)
       } else {
         SoundPlayer.play(.sadTrombone)
-        UIAlertController.showMessage("Game Center authentication failed. This can happen if you cancel authentication or if your iPhone is not already signed into Game Center. Try launching the Settings app, tapping Game Center, signing in, and relaunching Conjugar.", title: "😰", okTitle: "Got It", onViewController: onViewController)
+        UIAlertController.showMessage(Localizations.gameCenterFailure, title: "😰", okTitle: Localizations.gotIt, onViewController: onViewController)
         self.isAuthenticated = false
         completion?(false)
       }

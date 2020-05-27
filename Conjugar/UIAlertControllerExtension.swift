@@ -10,7 +10,7 @@ import UIKit
 
 extension UIAlertController {
   // See http://stackoverflow.com/a/39975404/2084036 for why this needs to be a class method rather than a class property.
-  static func okTitle() -> String { return "OK" }
+  static func okTitle() -> String { return Localizations.okay }
 
   class func showMessage(_ message: String, title: String, okTitle: String, onViewController viewController: UIViewController, handler: ((UIAlertAction) -> Void)? = nil) {
       let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
