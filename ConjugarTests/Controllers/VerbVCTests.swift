@@ -44,7 +44,7 @@ class VerbVCTests: XCTestCase {
       vvc.viewWillAppear(true)
       let vv = vvc.verbView
       XCTAssertEqual(vv.parentOrType.text, $0.1)
-      XCTAssertEqual(vv.defectivo.text, $0.2)
+      XCTAssertEqual(vv.defectuoso.text, $0.2)
     }
   }
 }
