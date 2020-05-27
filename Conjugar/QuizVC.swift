@@ -57,15 +57,15 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     Current.analytics.recordVisitation(viewController: "\(QuizVC.self)")
   }
 
-    private func authenticate() {
-        if !Current.gameCenter.isAuthenticated && Current.settings.userRejectedGameCenter {
-            if !Current.settings.didShowGameCenterDialog {
-                showGameCenterDialog()
-            } else {
-              Current.gameCenter.authenticate(onViewController: self, completion: nil)
-            }
-        }
+  private func authenticate() {
+    if !Current.gameCenter.isAuthenticated && Current.settings.userRejectedGameCenter {
+      if !Current.settings.didShowGameCenterDialog {
+        showGameCenterDialog()
+      } else {
+        Current.gameCenter.authenticate(onViewController: self, completion: nil)
+      }
     }
+  }
 
   private func showGameCenterDialog() {
     Current.settings.didShowGameCenterDialog = true

@@ -120,8 +120,7 @@ In the ~Settings~ section "Browse Tú and/or Vos", tap "Vos" to see ~vos~ conjug
 In the ~Settings~ section "Quiz Tú or Vos", tap "Vos" to be quizzed on ~vos~, rather than ~tú~, conjugations.
 
 Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%, and the tenses. Near the bottom of the screen is a $RED$ widget for filtering information about tenses by the difficulty mode in which they are quizzed. The three options are ~Easy~; ~Easy~ and ~Moderate~; and ~Easy~, ~Moderate~, and ~Difficult~.
-""",
-      comment: "")
+""", comment: "")
     }
 
     static var terminologyHeading: String {
