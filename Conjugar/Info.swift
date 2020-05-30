@@ -904,7 +904,11 @@ Sheila Smith suggested clarifying how to input accented characters like ó.
 
 ^App Preview^
 
-~Conjugar~'s app preview uses the song "Leopard Print Elevator" by Kevin MacLeod (incompetech.com). Licensed under Creative Commons: By Attribution 3.0 License, available at %http://creativecommons.org/licenses/by/3.0/%.
+~Conjugar~'s app preview uses the song "Arroz Con Pollo" by Kevin MacLeod (incompetech.com). Attribution follows.
+
+Arroz Con Pollo by Kevin MacLeod
+Link: %https://incompetech.filmmusic.io/song/3381-arroz-con-pollo%
+License: %http://creativecommons.org/licenses/by/4.0/%
 """, comment: ""))
 ]
 }
