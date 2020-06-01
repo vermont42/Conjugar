@@ -50,7 +50,16 @@ extension AnalyticsServiceable {
   func recordBecameActive() {
     let becameActive = "becameActive"
     let modelKey = "model"
-    recordEvent(becameActive, parameters: [modelKey: "\(UIDevice.current.modelName)"], metrics: nil)
+    let localeKey = "locale"
+    let none = "none"
+    let NONE = "NONE"
+
+    let modelName = UIDevice.current.modelName
+    let language = NSLocale.current.languageCode ?? none
+    let region = NSLocale.current.regionCode ?? NONE
+    let locale = language + region
+
+    recordEvent(becameActive, parameters: [modelKey: modelName, localeKey: locale], metrics: nil)
   }
 
   var visited: String {
