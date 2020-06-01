@@ -162,7 +162,7 @@
   <verb in="lavar" vt="ra" tn="wash" pe="hablar" tr="habl" st="lav" />
   <verb in="limpiar" vt="ra" tn="clean" pe="hablar" tr="habl" st="limpi" />
   <verb in="leer" vt="ir" tn="read" pe="comer" tr="com" st="le" po="leÍdo" ge="leYendo" />
-  <verb in="llegar" vt="ra" tn="arrive, come" pe="hablar" tr="habl" st="lleg" />
+  <verb in="llegar" vt="ir" tn="arrive, come" pe="hablar" tr="habl" st="lleg" fspt="llegUé" fspb="llegUe" sspb="llegUes" tspb="llegUe" fppb="llegUemos" sppb="llegUéis" tppb="llegUen" />
   <verb in="llevar" vt="ra" tn="take" pe="hablar" tr="habl" st="llev" />
   <verb in="llorar" vt="ra" tn="cry" pe="hablar" tr="habl" st="llor" />
   <verb in="llover" vt="ir" tn="rain" pe="mover" tr="m" st="ll" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" />
