@@ -1,5 +1,5 @@
 //
-//  SetttingsView.swift
+//  SettingsView.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 11/3/19.

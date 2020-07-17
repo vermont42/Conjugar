@@ -33,6 +33,13 @@ struct BodyLabel: ViewModifier {
   }
 }
 
+struct WidgetLabel: ViewModifier {
+  func body(content: Content) -> some View {
+    content
+      .font(.heading)
+  }
+}
+
 struct StandardButton: ViewModifier {
   func body(content: Content) -> some View {
     content

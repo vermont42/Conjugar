@@ -7,10 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		03144676236F9AD900C01202 /* SetttingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03144675236F9AD900C01202 /* SetttingsView.swift */; };
+		03144676236F9AD900C01202 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03144675236F9AD900C01202 /* SettingsView.swift */; };
 		03144678236F9B4200C01202 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03144677236F9B4200C01202 /* Modifiers.swift */; };
 		0314467A236F9B6F00C01202 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03144679236F9B6F00C01202 /* FontExtensions.swift */; };
 		031DAD9C2341627B006B8F5F /* UISegmentedControlExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031DAD9B2341627B006B8F5F /* UISegmentedControlExtension.swift */; };
+		0329121724BE6D8A003E119D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0329121624BE6D8A003E119D /* WidgetKit.framework */; };
+		0329121924BE6D8A003E119D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0329121824BE6D8A003E119D /* SwiftUI.framework */; };
+		0329121C24BE6D8A003E119D /* ConjugarWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0329121B24BE6D8A003E119D /* ConjugarWidget.swift */; };
+		0329121F24BE6D8A003E119D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0329121E24BE6D8A003E119D /* Assets.xcassets */; };
+		0329122124BE6D8A003E119D /* ConjugarWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0329121D24BE6D8A003E119D /* ConjugarWidget.intentdefinition */; };
+		0329122224BE6D8A003E119D /* ConjugarWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0329121D24BE6D8A003E119D /* ConjugarWidget.intentdefinition */; };
+		0329122524BE6D8A003E119D /* ConjugarWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0329121524BE6D8A003E119D /* ConjugarWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		033F19B422A32ABC007678E6 /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F19B322A32ABC007678E6 /* World.swift */; };
 		03533491228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */; };
 		03533493228DA52400046CCC /* ResultCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533492228DA52400046CCC /* ResultCellTests.swift */; };
@@ -37,6 +44,13 @@
 		038E032C228A1E49005CFC96 /* ConjugationResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E032B228A1E49005CFC96 /* ConjugationResultTests.swift */; };
 		038E032E228A2F18005CFC96 /* PersonNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E032D228A2F18005CFC96 /* PersonNumberTests.swift */; };
 		038E0330228B0429005CFC96 /* TenseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E032F228B0429005CFC96 /* TenseTests.swift */; };
+		038FF38B24C144F200857905 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E139E0E51EC7D36200B34DE7 /* Colors.swift */; };
+		038FF38E24C146E700857905 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */; };
+		038FF38F24C1474F00857905 /* NSAttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E139E0DF1EC7D27A00B34DE7 /* NSAttributedStringExtension.swift */; };
+		038FF39024C1476300857905 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16BEA031F09BCC70053DD32 /* Fonts.swift */; };
+		038FF39124C14FB000857905 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03144677236F9B4200C01202 /* Modifiers.swift */; };
+		038FF39224C14FBE00857905 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15E63F51F3A29880083DB4B /* Layout.swift */; };
+		038FF39324C1502600857905 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03144679236F9B6F00C01202 /* FontExtensions.swift */; };
 		0392B0E4237A08DA008BB76E /* NSCoderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0392B0E3237A08DA008BB76E /* NSCoderExtension.swift */; };
 		039B5CD6238F276000034337 /* SettingsViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039B5CD5238F276000034337 /* SettingsViewTests.swift */; };
 		03C8506623E4883300FD74AD /* UsesAutoLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C8506523E4883300FD74AD /* UsesAutoLayout.swift */; };
@@ -140,6 +154,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0329122324BE6D8A003E119D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E1F06ACC1E8F05F200ADD2E1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0329121424BE6D8A003E119D;
+			remoteInfo = ConjugarWidgetExtension;
+		};
 		E16004CF21BC863500909ED1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E1F06ACC1E8F05F200ADD2E1 /* Project object */;
@@ -157,6 +178,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		0329122924BE6D8A003E119D /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				0329122524BE6D8A003E119D /* ConjugarWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E1EC70F92198A63700872787 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -172,10 +204,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		03144675236F9AD900C01202 /* SetttingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetttingsView.swift; sourceTree = "<group>"; };
+		03144675236F9AD900C01202 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		03144677236F9B4200C01202 /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		03144679236F9B6F00C01202 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
 		031DAD9B2341627B006B8F5F /* UISegmentedControlExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISegmentedControlExtension.swift; sourceTree = "<group>"; };
+		0329121524BE6D8A003E119D /* ConjugarWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ConjugarWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0329121624BE6D8A003E119D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		0329121824BE6D8A003E119D /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		0329121B24BE6D8A003E119D /* ConjugarWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjugarWidget.swift; sourceTree = "<group>"; };
+		0329121D24BE6D8A003E119D /* ConjugarWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = ConjugarWidget.intentdefinition; sourceTree = "<group>"; };
+		0329121E24BE6D8A003E119D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0329122024BE6D8A003E119D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		033F19B322A32ABC007678E6 /* World.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = World.swift; sourceTree = "<group>"; };
 		03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsGetterSetterTests.swift; sourceTree = "<group>"; };
 		03533492228DA52400046CCC /* ResultCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCellTests.swift; sourceTree = "<group>"; };
@@ -311,6 +350,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0329121224BE6D8A003E119D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0329121924BE6D8A003E119D /* SwiftUI.framework in Frameworks */,
+				0329121724BE6D8A003E119D /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E16004C721BC863500909ED1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -339,9 +387,20 @@
 		03144674236F9A6F00C01202 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				03144675236F9AD900C01202 /* SetttingsView.swift */,
+				03144675236F9AD900C01202 /* SettingsView.swift */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		0329121A24BE6D8A003E119D /* ConjugarWidget */ = {
+			isa = PBXGroup;
+			children = (
+				0329121B24BE6D8A003E119D /* ConjugarWidget.swift */,
+				0329121D24BE6D8A003E119D /* ConjugarWidget.intentdefinition */,
+				0329121E24BE6D8A003E119D /* Assets.xcassets */,
+				0329122024BE6D8A003E119D /* Info.plist */,
+			);
+			path = ConjugarWidget;
 			sourceTree = "<group>";
 		};
 		038E03162270ABEA005CFC96 /* Analytics */ = {
@@ -467,6 +526,8 @@
 				03C9508B22A47D460030151C /* AWSCore.framework */,
 				03C9508C22A47D460030151C /* AWSPinpoint.framework */,
 				E14271361F01CA98001D19E1 /* GameKit.framework */,
+				0329121624BE6D8A003E119D /* WidgetKit.framework */,
+				0329121824BE6D8A003E119D /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -578,6 +639,7 @@
 				E1F06AD61E8F05F300ADD2E1 /* Conjugar */,
 				E1F06AEB1E8F05F400ADD2E1 /* ConjugarTests */,
 				E16004CB21BC863500909ED1 /* ConjugarUITests */,
+				0329121A24BE6D8A003E119D /* ConjugarWidget */,
 				E1F06AD51E8F05F300ADD2E1 /* Products */,
 				E14271351F01CA98001D19E1 /* Frameworks */,
 			);
@@ -589,6 +651,7 @@
 				E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */,
 				E1F06AE81E8F05F400ADD2E1 /* ConjugarTests.xctest */,
 				E16004CA21BC863500909ED1 /* ConjugarUITests.xctest */,
+				0329121524BE6D8A003E119D /* ConjugarWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -656,6 +719,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0329121424BE6D8A003E119D /* ConjugarWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0329122624BE6D8A003E119D /* Build configuration list for PBXNativeTarget "ConjugarWidgetExtension" */;
+			buildPhases = (
+				0329121124BE6D8A003E119D /* Sources */,
+				0329121224BE6D8A003E119D /* Frameworks */,
+				0329121324BE6D8A003E119D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ConjugarWidgetExtension;
+			productName = ConjugarWidgetExtension;
+			productReference = 0329121524BE6D8A003E119D /* ConjugarWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		E16004C921BC863500909ED1 /* ConjugarUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E16004D321BC863600909ED1 /* Build configuration list for PBXNativeTarget "ConjugarUITests" */;
@@ -684,10 +764,12 @@
 				E1EC70F92198A63700872787 /* Embed Frameworks */,
 				E1EC70FA2198A6A800872787 /* Pinpoint Hocus Pocus */,
 				E1171C8F21A9A4AD00B06342 /* Run SwiftLint */,
+				0329122924BE6D8A003E119D /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				0329122424BE6D8A003E119D /* PBXTargetDependency */,
 			);
 			name = Conjugar;
 			productName = Conjugar;
@@ -719,10 +801,15 @@
 			isa = PBXProject;
 			attributes = {
 				DefaultBuildSystemTypeForWorkspace = Latest;
-				LastSwiftUpdateCheck = 1010;
+				LastSwiftUpdateCheck = 1200;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Josh Adams";
 				TargetAttributes = {
+					0329121424BE6D8A003E119D = {
+						CreatedOnToolsVersion = 12.0;
+						DevelopmentTeam = V3L2PL4QC9;
+						ProvisioningStyle = Automatic;
+					};
 					E16004C921BC863500909ED1 = {
 						CreatedOnToolsVersion = 10.1;
 						DevelopmentTeam = V3L2PL4QC9;
@@ -762,11 +849,20 @@
 				E1F06AD31E8F05F200ADD2E1 /* Conjugar */,
 				E1F06AE71E8F05F400ADD2E1 /* ConjugarTests */,
 				E16004C921BC863500909ED1 /* ConjugarUITests */,
+				0329121424BE6D8A003E119D /* ConjugarWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0329121324BE6D8A003E119D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0329121F24BE6D8A003E119D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E16004C821BC863500909ED1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -844,6 +940,22 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0329121124BE6D8A003E119D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				038FF39024C1476300857905 /* Fonts.swift in Sources */,
+				0329121C24BE6D8A003E119D /* ConjugarWidget.swift in Sources */,
+				038FF39324C1502600857905 /* FontExtensions.swift in Sources */,
+				038FF38E24C146E700857905 /* StringExtensions.swift in Sources */,
+				038FF39124C14FB000857905 /* Modifiers.swift in Sources */,
+				038FF39224C14FBE00857905 /* Layout.swift in Sources */,
+				038FF38F24C1474F00857905 /* NSAttributedStringExtension.swift in Sources */,
+				038FF38B24C144F200857905 /* Colors.swift in Sources */,
+				0329122124BE6D8A003E119D /* ConjugarWidget.intentdefinition in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E16004C621BC863500909ED1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -879,6 +991,7 @@
 				E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */,
 				E14566BE1EC001FD00C16DC3 /* ConjugationCell.swift in Sources */,
 				E1483FB11EF5C4C60052C436 /* Difficulty.swift in Sources */,
+				0329122224BE6D8A003E119D /* ConjugarWidget.intentdefinition in Sources */,
 				E1171C9321AB387500B06342 /* TestAnalyticsService.swift in Sources */,
 				E1EC70F12198A10B00872787 /* UIViewControllerExtension.swift in Sources */,
 				E11BC1732004335B00494504 /* SecondSingularQuiz.swift in Sources */,
@@ -900,7 +1013,7 @@
 				E18F7F381ECA7C9A00633200 /* Utterer.swift in Sources */,
 				E1483FB51EF5D0510052C436 /* QuizDelegate.swift in Sources */,
 				E18145D81F2E3E170048DEE2 /* BrowseInfoUIV.swift in Sources */,
-				03144676236F9AD900C01202 /* SetttingsView.swift in Sources */,
+				03144676236F9AD900C01202 /* SettingsView.swift in Sources */,
 				E139E0E01EC7D27A00B34DE7 /* NSAttributedStringExtension.swift in Sources */,
 				E1483FAF1EF5C3820052C436 /* Quiz.swift in Sources */,
 				E1483FD01EF961880052C436 /* ConjugationResult.swift in Sources */,
@@ -981,6 +1094,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0329122424BE6D8A003E119D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0329121424BE6D8A003E119D /* ConjugarWidgetExtension */;
+			targetProxy = 0329122324BE6D8A003E119D /* PBXContainerItemProxy */;
+		};
 		E16004D021BC863500909ED1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E1F06AD31E8F05F200ADD2E1 /* Conjugar */;
@@ -1014,6 +1132,55 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0329122724BE6D8A003E119D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V3L2PL4QC9;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ConjugarWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar.ConjugarWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0329122824BE6D8A003E119D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V3L2PL4QC9;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ConjugarWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar.ConjugarWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		E16004D121BC863600909ED1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1175,6 +1342,7 @@
 		E1F06AF21E8F05F400ADD2E1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 2.3;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
@@ -1196,6 +1364,7 @@
 		E1F06AF31E8F05F400ADD2E1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 2.3;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
@@ -1247,6 +1416,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0329122624BE6D8A003E119D /* Build configuration list for PBXNativeTarget "ConjugarWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0329122724BE6D8A003E119D /* Debug */,
+				0329122824BE6D8A003E119D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E16004D321BC863600909ED1 /* Build configuration list for PBXNativeTarget "ConjugarUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
