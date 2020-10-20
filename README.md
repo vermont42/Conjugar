@@ -16,7 +16,7 @@ Alternatively, you can clone this repo and build, using Xcode™, **Conjugar** y
 
 **Conjugar** is currently using AWS Pinpoint analytics. The two relevant frameworks are in source control, but the configuration files and folder, in particular `awsconfiguration.json`, `.amplifyrc`, and `amplify`, respectively, are excluded from source control by the `.gitignore` file. For instructions on Pinpoint configuration, see this excellent [tutorial](https://itnext.io/integrate-analytics-into-your-ios-swift-applications-with-aws-amplify-20d31fe0a20e).
 
-If you want to build **Conjugar** without using AWS Pinpoint analytics, you can use the following workaround;
+If you want to build **Conjugar** without using AWS Pinpoint analytics, you can use the following workaround:
 
 * Remove AWSFrameworks from the 'Embed Frameworks' build phase.
 * Comment out script in the the Pinpoint Hocus Pocus build phase.
