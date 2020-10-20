@@ -46,6 +46,7 @@
 		03C8506F23E4F50100FD74AD /* TestingRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C8506E23E4F50100FD74AD /* TestingRootViewController.swift */; };
 		03C9508F22A47E750030151C /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508B22A47D460030151C /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		03C9509022A47E750030151C /* AWSPinpoint.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508C22A47D460030151C /* AWSPinpoint.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		23729312253F692100DD3939 /* UIView+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23729311253F692100DD3939 /* UIView+Accessibility.swift */; };
 		E10178021F3F753400F0BC97 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10178011F3F753400F0BC97 /* UIViewExtensions.swift */; };
 		E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */ = {isa = PBXBuildFile; fileRef = E107B08A1EB66CE6004C5E91 /* verbs.xml */; };
 		E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E107B0911EB66F28004C5E91 /* VerbParser.swift */; };
@@ -212,6 +213,7 @@
 		03C8506E23E4F50100FD74AD /* TestingRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingRootViewController.swift; sourceTree = "<group>"; };
 		03C9508B22A47D460030151C /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		03C9508C22A47D460030151C /* AWSPinpoint.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSPinpoint.framework; sourceTree = "<group>"; };
+		23729311253F692100DD3939 /* UIView+Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Accessibility.swift"; sourceTree = "<group>"; };
 		E10178011F3F753400F0BC97 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		E107B08A1EB66CE6004C5E91 /* verbs.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = verbs.xml; sourceTree = "<group>"; };
 		E107B0911EB66F28004C5E91 /* VerbParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbParser.swift; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 		E107B08E1EB66E64004C5E91 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				23729311253F692100DD3939 /* UIView+Accessibility.swift */,
 				E139E0E51EC7D36200B34DE7 /* Colors.swift */,
 				E1E092C121ED3C6900828C37 /* DictionaryGetterSetter.swift */,
 				03144679236F9B6F00C01202 /* FontExtensions.swift */,
@@ -918,6 +921,7 @@
 				E1171C9521ACC02200B06342 /* GameCenterable.swift in Sources */,
 				E115CA391EEC962700DBBD44 /* VerbFamilies.swift in Sources */,
 				038E031E22734800005CFC96 /* URLProtocolStub.swift in Sources */,
+				23729312253F692100DD3939 /* UIView+Accessibility.swift in Sources */,
 				E15E63F61F3A29890083DB4B /* Layout.swift in Sources */,
 				E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */,
 				E16BEA041F09BCC70053DD32 /* Fonts.swift in Sources */,

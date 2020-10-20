@@ -39,5 +39,6 @@ class VerbCell: UITableViewCell {
 
   func configure(verb: String) {
     self.verb.text = verb
+    self.verb.setAccessibilityLabelInSpanish(verb)
   }
 }

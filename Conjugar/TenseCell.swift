@@ -30,6 +30,7 @@ class TenseCell: UITableViewCell {
     backgroundColor = Colors.black
     selectionStyle = .none
     addSubview(tense)
+    accessibilityTraits = accessibilityTraits.union(.header)
 
     NSLayoutConstraint.activate([
       tense.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.defaultSpacing),
@@ -40,5 +41,6 @@ class TenseCell: UITableViewCell {
 
   func configure(tense: String) {
     self.tense.text = tense
+    self.tense.setAccessibilityLabelInSpanish(tense)
   }
 }

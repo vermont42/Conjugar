@@ -50,6 +50,7 @@ class ConjugationCell: UITableViewCell {
         conjugation = personNumber.pronoun + " " + conjugation
       }
       self.conjugation.attributedText = conjugation.conjugatedString
+        self.conjugation.setAccessibilityLabelInSpanish(conjugation)
     }
   }
 
