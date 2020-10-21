@@ -8,7 +8,6 @@
 
 import UIKit
 
-// MARK: - Animation
 extension UIView {
   func pulsate() {
     let duration: TimeInterval = 0.3
@@ -23,7 +22,6 @@ extension UIView {
   }
 }
 
-// MARK: - Accessibility
 extension UIView {
   func setAccessibilityLabelInSpanish(_ label: String, region: String = Current.settings.region.accent) {
     setAccessibilityLabel(label, spokenInLanguage: "es_\(region)")
