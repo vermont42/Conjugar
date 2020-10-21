@@ -902,6 +902,10 @@ Dominik Hauser wrote code that inspired a unit-testing technique that ~Conjugar~
 
 Sheila Smith suggested clarifying how to input accented characters like ó.
 
+^Accessibility & Readme^
+
+Bruno Scheele contributed to accessibility and the readme.
+
 ^App Preview^
 
 ~Conjugar~'s app preview uses the song "Arroz Con Pollo" by Kevin MacLeod (incompetech.com). Attribution follows.
