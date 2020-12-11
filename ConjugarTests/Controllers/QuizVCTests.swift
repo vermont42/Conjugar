@@ -49,7 +49,7 @@ class QuizVCTests: XCTestCase {
       XCTAssert($0.isHidden)
     }
 
-    let wrongAnswer = "coconut"
+    let wrongAnswer = "🥥"
     let correctAnswer = "anda"
     XCTAssertEqual(quizView.score.text, "10")
     XCTAssertEqual(quizView.progress.text, "2 / 50")
@@ -68,5 +68,11 @@ class QuizVCTests: XCTestCase {
     }
     let expectedCompletionAnalytic = "quizCompletion score: 4 "
     XCTAssertEqual(analytic, expectedCompletionAnalytic)
+
+    XCTAssert(quizView.score.isHidden)
+    qvc.startRestart()
+    XCTAssertFalse(quizView.score.isHidden)
+    qvc.quit()
+    XCTAssert(quizView.score.isHidden)
   }
 }

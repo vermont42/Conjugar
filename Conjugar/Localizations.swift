@@ -165,6 +165,10 @@ Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%,
       NSLocalizedString("Restart", comment: "")
     }
 
+    static var quit: String {
+      NSLocalizedString("Quit", comment: "")
+    }
+
     static var gameCenter: String {
       NSLocalizedString("Game Center", comment: "")
     }

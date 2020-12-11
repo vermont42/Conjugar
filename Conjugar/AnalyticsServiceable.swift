@@ -43,6 +43,10 @@ extension AnalyticsServiceable {
     recordEvent(quizCompletion, parameters: [scöre: "\(score)"], metrics: nil)
   }
 
+  func recordQuizQuit(currentQuestionIndex: Int, score: Int) {
+    recordEvent(quizQuit, parameters: [cürrentQuestionIndex: "\(currentQuestionIndex)", scöre: "\(score)"], metrics: nil)
+  }
+
   func recordGameCenterAuth() {
     recordEvent(gameCenterAuth)
   }
@@ -74,12 +78,20 @@ extension AnalyticsServiceable {
     return "quizStart"
   }
 
+  var quizQuit: String {
+    return "quizStart"
+  }
+
   var quizCompletion: String {
     return "quizCompletion"
   }
 
   var scöre: String {
     return "score"
+  }
+
+  var cürrentQuestionIndex: String {
+    return "currentQuestionIndex"
   }
 
   var gameCenterAuth: String {

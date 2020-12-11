@@ -23,6 +23,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     let quizView: QuizUIV
     quizView = QuizUIV(frame: UIScreen.main.bounds)
     quizView.startRestartButton.addTarget(self, action: #selector(startRestart), for: .touchUpInside)
+    quizView.quitButton.addTarget(self, action: #selector(quit), for: .touchUpInside)
     navigationItem.titleView = UILabel.titleLabel(title: Localizations.Quiz.localizedTitle)
     quizView.conjugationField.delegate = self
     view = quizView
@@ -92,7 +93,15 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     quizView.showInProgressUI()
     quizView.startRestartButton.pulsate()
     quizView.conjugationField.becomeFirstResponder()
+    quizView.quitButton.isHidden = false
     Current.analytics.recordQuizStart()
+  }
+
+  @objc func quit() {
+    Current.quiz.quit()
+    SoundPlayer.play(.sadTrombone)
+    resetUI()
+    Current.analytics.recordQuizQuit(currentQuestionIndex: Current.quiz.currentQuestionIndex, score: Current.quiz.score)
   }
 
   func scoreDidChange(newScore: Int) {
@@ -122,9 +131,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   }
 
   func quizDidFinish() {
-    quizView.hideInProgressUI()
-    quizView.startRestartButton.setTitle(Localizations.Quiz.start, for: .normal)
-    let applauseIndex = Int.random(in: 1...Sound.applauseCount)
+    let applauseIndex = Int.random(in: 1 ... Sound.applauseCount)
     switch applauseIndex {
     case 1:
       SoundPlayer.play(.applause1)
@@ -137,7 +144,16 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     }
     let resultsVC = ResultsVC()
     navigationController?.pushViewController(resultsVC, animated: true)
+    resetUI()
     Current.analytics.recordQuizCompletion(score: Current.quiz.score)
+  }
+
+  private func resetUI() {
+    quizView.hideInProgressUI()
+    quizView.conjugationField.text = ""
+    quizView.conjugationField.resignFirstResponder()
+    quizView.startRestartButton.setTitle(Localizations.Quiz.start, for: .normal)
+    quizView.quitButton.isHidden = true
   }
 
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {

@@ -328,6 +328,11 @@ class Quiz {
     }
   }
 
+  func quit() {
+    timer?.invalidate()
+    quizState = .finished
+  }
+
   @objc func eachSecond() {
     elapsedTime += 1
     delegate?.timeDidChange(newTime: elapsedTime)
