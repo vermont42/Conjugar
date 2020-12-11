@@ -79,7 +79,7 @@ extension AnalyticsServiceable {
   }
 
   var quizQuit: String {
-    return "quizStart"
+    return "quizQuit"
   }
 
   var quizCompletion: String {
