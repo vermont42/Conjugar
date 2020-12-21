@@ -103,6 +103,16 @@ class Settings {
   static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
   static let didShowGameCenterDialogDefault = false
 
+  var lastCommunIdentifierShown: Int {
+    didSet {
+      if lastCommunIdentifierShown != oldValue {
+        getterSetter.set(key: Settings.lastCommunIdentifierShownKey, value: "\(lastCommunIdentifierShown)")
+      }
+    }
+  }
+  static let lastCommunIdentifierShownKey = "lastCommunIdentifierShown"
+  static let lastCommunIdentifierShownDefault = -1
+
   init(getterSetter: GetterSetter) {
     self.getterSetter = getterSetter
 
@@ -169,6 +179,13 @@ class Settings {
     } else {
       didShowGameCenterDialog = Settings.didShowGameCenterDialogDefault
       getterSetter.set(key: Settings.didShowGameCenterDialogKey, value: "\(didShowGameCenterDialog)")
+    }
+
+    if let lastCommunIdentifierShownString = getterSetter.get(key: Settings.lastCommunIdentifierShownKey) {
+      lastCommunIdentifierShown = Int((lastCommunIdentifierShownString as NSString).doubleValue)
+    } else {
+      lastCommunIdentifierShown = Settings.lastCommunIdentifierShownDefault
+      getterSetter.set(key: Settings.lastCommunIdentifierShownKey, value: "\(lastCommunIdentifierShown)")
     }
   }
 }

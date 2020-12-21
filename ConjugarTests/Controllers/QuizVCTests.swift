@@ -25,7 +25,9 @@ class QuizVCTests: XCTestCase {
       gameCenter: gameCenter,
       settings: settings,
       quiz: quiz,
-      session: URLSession.stubSession(ratingsCount: fakeRatingsCount)
+      session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
+      communGetter: StubCommunGetter(),
+      locale: StubLocale(languageCode: "en", regionCode: "US")
     )
 
     let qvc = QuizVC()

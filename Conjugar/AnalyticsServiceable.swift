@@ -13,6 +13,10 @@ protocol AnalyticsServiceable {
   func recordEvent(_ eventName: String, parameters: [String: String]?, metrics: [String: Double]?)
   func recordEvent(_ eventName: String)
   func recordVisitation(viewController: String)
+  func recordCommunVisitation(identifier: Int)
+  func recordOkayTap(identifier: Int)
+  func recordActionTap(identifier: Int)
+  func recordCancelTap(identifier: Int)
   func recordQuizStart()
   func recordQuizCompletion(score: Int)
   func recordGameCenterAuth()
@@ -35,6 +39,26 @@ extension AnalyticsServiceable {
     recordEvent(visited, parameters: [viewContröller: "\(viewController)"], metrics: nil)
   }
 
+  func recordCommunVisitation(identifier: Int) {
+    recordVisitation(viewController: "\(CommunVC.self) \(identifier)")
+  }
+
+  func recordOkayTap(identifier: Int) {
+    recordEvent(okayTapped, parameters: [identifīer: "\(identifier)"], metrics: nil)
+  }
+
+  func recordActionTap(identifier: Int) {
+    recordEvent(actionTapped, parameters: [identifīer: "\(identifier)"], metrics: nil)
+  }
+
+  func recordCancelTap(identifier: Int) {
+    recordEvent(cancelTapped, parameters: [identifīer: "\(identifier)"], metrics: nil)
+  }
+
+  func recordCloseTap(identifier: Int) {
+    recordEvent(closeTapped, parameters: [identifīer: "\(identifier)"], metrics: nil)
+  }
+
   func recordQuizStart() {
     recordEvent(quizStart)
   }
@@ -55,13 +79,9 @@ extension AnalyticsServiceable {
     let becameActive = "becameActive"
     let modelKey = "model"
     let localeKey = "locale"
-    let none = "none"
-    let NONE = "NONE"
 
     let modelName = UIDevice.current.modelName
-    let language = NSLocale.current.languageCode ?? none
-    let region = NSLocale.current.regionCode ?? NONE
-    let locale = language + region
+    let locale = Current.locale.locale
 
     recordEvent(becameActive, parameters: [modelKey: modelName, localeKey: locale], metrics: nil)
   }
@@ -72,6 +92,26 @@ extension AnalyticsServiceable {
 
   var viewContröller: String {
     return "viewController"
+  }
+
+  var okayTapped: String {
+    return "okayTapped"
+  }
+
+  var actionTapped: String {
+    return "actionTapped"
+  }
+
+  var cancelTapped: String {
+    return "cancelTapped"
+  }
+
+  var closeTapped: String {
+    return "closeTapped"
+  }
+
+  var identifīer: String {
+    return "identifier"
   }
 
   var quizStart: String {

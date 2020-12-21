@@ -23,6 +23,8 @@ class World: ObservableObject {
   @Published var settings: Settings
   @Published var quiz: Quiz
   @Published var session: URLSession
+  @Published var communGetter: CommunGetter
+  @Published var locale: Locale
   @Published var parentViewController: UIViewController?
 
   private static let fakeRatingsCount = 42
@@ -33,7 +35,9 @@ class World: ObservableObject {
     gameCenter: GameCenterable,
     settings: Settings,
     quiz: Quiz,
-    session: URLSession
+    session: URLSession,
+    communGetter: CommunGetter,
+    locale: Locale
   ) {
     self.analytics = analytics
     self.reviewPrompter = reviewPrompter
@@ -41,6 +45,8 @@ class World: ObservableObject {
     self.settings = settings
     self.quiz = quiz
     self.session = session
+    self.communGetter = communGetter
+    self.locale = locale
   }
 
   static let device: World = {
@@ -53,7 +59,9 @@ class World: ObservableObject {
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: true),
-      session: URLSession.shared
+      session: URLSession.shared,
+      communGetter: CloudCommunGetter(),
+      locale: RealLocale()
     )
   }()
 
@@ -67,7 +75,9 @@ class World: ObservableObject {
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: true),
-      session: URLSession.stubSession(ratingsCount: fakeRatingsCount)
+      session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
+      communGetter: StubCommunGetter(),
+      locale: StubLocale(languageCode: "en", regionCode: "US")
     )
   }()
 
@@ -81,7 +91,9 @@ class World: ObservableObject {
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false),
-      session: URLSession.stubSession(ratingsCount: fakeRatingsCount)
+      session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
+      communGetter: StubCommunGetter(),
+      locale: StubLocale()
     )
   }()
 
@@ -116,7 +128,9 @@ class World: ObservableObject {
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false),
-      session: URLSession.stubSession(ratingsCount: fakeRatingsCount)
+      session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
+      communGetter: StubCommunGetter(),
+      locale: StubLocale()
     )
   }
 }

@@ -7,8 +7,6 @@
 //
 
 enum Sound: String {
-  static let applauseCount = 3
-
   case applause1
   case applause2
   case applause3

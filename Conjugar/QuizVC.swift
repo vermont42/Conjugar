@@ -131,17 +131,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   }
 
   func quizDidFinish() {
-    let applauseIndex = Int.random(in: 1 ... Sound.applauseCount)
-    switch applauseIndex {
-    case 1:
-      SoundPlayer.play(.applause1)
-    case 2:
-      SoundPlayer.play(.applause2)
-    case 3:
-      SoundPlayer.play(.applause3)
-    default:
-      break
-    }
+    SoundPlayer.playRandomApplause()
     let resultsVC = ResultsVC()
     navigationController?.pushViewController(resultsVC, animated: true)
     resetUI()

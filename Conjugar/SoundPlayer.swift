@@ -34,4 +34,10 @@ class SoundPlayer {
     }
     soundPlayer.sounds[sound.rawValue]?.play()
   }
+
+  static func playRandomApplause() {
+    let applauses: [Sound] = [.applause1, .applause2, .applause3]
+    let applauseIndex = Int.random(in: 0 ... (applauses.count - 1))
+    SoundPlayer.play(applauses[applauseIndex])
+  }
 }

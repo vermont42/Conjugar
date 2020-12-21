@@ -46,6 +46,21 @@
 		03C8506F23E4F50100FD74AD /* TestingRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C8506E23E4F50100FD74AD /* TestingRootViewController.swift */; };
 		03C9508F22A47E750030151C /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508B22A47D460030151C /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		03C9509022A47E750030151C /* AWSPinpoint.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508C22A47D460030151C /* AWSPinpoint.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		03FF17132586D0A100BA447D /* CommunVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF17122586D0A100BA447D /* CommunVC.swift */; };
+		03FF17172586D0CC00BA447D /* CommunUIV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF17162586D0CC00BA447D /* CommunUIV.swift */; };
+		03FF171D2588395500BA447D /* Commun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF171C2588395500BA447D /* Commun.swift */; };
+		03FF172325883A7800BA447D /* CommunGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF172225883A7800BA447D /* CommunGetter.swift */; };
+		03FF172725883B0700BA447D /* StubCommunGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF172625883B0700BA447D /* StubCommunGetter.swift */; };
+		03FF172F2589286700BA447D /* CommunViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF172E2589286700BA447D /* CommunViewModel.swift */; };
+		03FF1733258959A000BA447D /* Locale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF1732258959A000BA447D /* Locale.swift */; };
+		03FF173725895A3700BA447D /* StubLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF173625895A3700BA447D /* StubLocale.swift */; };
+		03FF173B25895AE900BA447D /* RealLocale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF173A25895AE900BA447D /* RealLocale.swift */; };
+		03FF1741258C0F6C00BA447D /* UIApplicationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF1740258C0F6B00BA447D /* UIApplicationExtensions.swift */; };
+		03FF1748258C17E900BA447D /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03FF1747258C17E900BA447D /* CloudKit.framework */; };
+		03FF174C258D5F7A00BA447D /* CloudCommunGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF174B258D5F7A00BA447D /* CloudCommunGetter.swift */; };
+		03FF1752258FBF8200BA447D /* Emailer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF1751258FBF8200BA447D /* Emailer.swift */; };
+		03FF17562591434800BA447D /* CommunVCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF17552591434800BA447D /* CommunVCTests.swift */; };
+		03FF175A25914B9300BA447D /* CommunViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FF175925914B9300BA447D /* CommunViewModelTests.swift */; };
 		E10178021F3F753400F0BC97 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10178011F3F753400F0BC97 /* UIViewExtensions.swift */; };
 		E107B08B1EB66CE6004C5E91 /* verbs.xml in Resources */ = {isa = PBXBuildFile; fileRef = E107B08A1EB66CE6004C5E91 /* verbs.xml */; };
 		E107B0921EB66F28004C5E91 /* VerbParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E107B0911EB66F28004C5E91 /* VerbParser.swift */; };
@@ -212,6 +227,22 @@
 		03C8506E23E4F50100FD74AD /* TestingRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingRootViewController.swift; sourceTree = "<group>"; };
 		03C9508B22A47D460030151C /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
 		03C9508C22A47D460030151C /* AWSPinpoint.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSPinpoint.framework; sourceTree = "<group>"; };
+		03FF17122586D0A100BA447D /* CommunVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunVC.swift; sourceTree = "<group>"; };
+		03FF17162586D0CC00BA447D /* CommunUIV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunUIV.swift; sourceTree = "<group>"; };
+		03FF171C2588395500BA447D /* Commun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Commun.swift; sourceTree = "<group>"; };
+		03FF172225883A7800BA447D /* CommunGetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunGetter.swift; sourceTree = "<group>"; };
+		03FF172625883B0700BA447D /* StubCommunGetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubCommunGetter.swift; sourceTree = "<group>"; };
+		03FF172E2589286700BA447D /* CommunViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunViewModel.swift; sourceTree = "<group>"; };
+		03FF1732258959A000BA447D /* Locale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locale.swift; sourceTree = "<group>"; };
+		03FF173625895A3700BA447D /* StubLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubLocale.swift; sourceTree = "<group>"; };
+		03FF173A25895AE900BA447D /* RealLocale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealLocale.swift; sourceTree = "<group>"; };
+		03FF1740258C0F6B00BA447D /* UIApplicationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtensions.swift; sourceTree = "<group>"; };
+		03FF1744258C17E500BA447D /* Conjugar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Conjugar.entitlements; sourceTree = "<group>"; };
+		03FF1747258C17E900BA447D /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		03FF174B258D5F7A00BA447D /* CloudCommunGetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudCommunGetter.swift; sourceTree = "<group>"; };
+		03FF1751258FBF8200BA447D /* Emailer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Emailer.swift; sourceTree = "<group>"; };
+		03FF17552591434800BA447D /* CommunVCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunVCTests.swift; sourceTree = "<group>"; };
+		03FF175925914B9300BA447D /* CommunViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunViewModelTests.swift; sourceTree = "<group>"; };
 		E10178011F3F753400F0BC97 /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		E107B08A1EB66CE6004C5E91 /* verbs.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = verbs.xml; sourceTree = "<group>"; };
 		E107B0911EB66F28004C5E91 /* VerbParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerbParser.swift; sourceTree = "<group>"; };
@@ -323,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E14271371F01CA98001D19E1 /* GameKit.framework in Frameworks */,
+				03FF1748258C17E900BA447D /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +407,7 @@
 			children = (
 				E18145D71F2E3E170048DEE2 /* BrowseInfoUIV.swift */,
 				E18010771F1BCA0800E8608C /* BrowseVerbsView.swift */,
+				03FF17162586D0CC00BA447D /* CommunUIV.swift */,
 				E14566BD1EC001FD00C16DC3 /* ConjugationCell.swift */,
 				E19382051F0829F6005268FF /* InfoCell.swift */,
 				E18145D91F2E43630048DEE2 /* InfoUIV.swift */,
@@ -393,6 +426,8 @@
 			children = (
 				E19382011F082257005268FF /* BrowseInfoVC.swift */,
 				E1F06AD91E8F05F300ADD2E1 /* BrowseVerbsVC.swift */,
+				03FF17122586D0A100BA447D /* CommunVC.swift */,
+				03FF172E2589286700BA447D /* CommunViewModel.swift */,
 				E19382031F0822B2005268FF /* InfoVC.swift */,
 				E1201A031F1AB99F00BCB27D /* MainTabBarVC.swift */,
 				E1483FBA1EF6F82A0052C436 /* QuizVC.swift */,
@@ -405,8 +440,11 @@
 		E107B08E1EB66E64004C5E91 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				03FF174B258D5F7A00BA447D /* CloudCommunGetter.swift */,
 				E139E0E51EC7D36200B34DE7 /* Colors.swift */,
+				03FF172225883A7800BA447D /* CommunGetter.swift */,
 				E1E092C121ED3C6900828C37 /* DictionaryGetterSetter.swift */,
+				03FF1751258FBF8200BA447D /* Emailer.swift */,
 				03144679236F9B6F00C01202 /* FontExtensions.swift */,
 				E16BEA031F09BCC70053DD32 /* Fonts.swift */,
 				E14271381F01EFF2001D19E1 /* GameCenter.swift */,
@@ -414,18 +452,23 @@
 				E1E092BF21ED389300828C37 /* GetterSetter.swift */,
 				E1A789761F00751D0006CA77 /* IntExtension.swift */,
 				E15E63F51F3A29880083DB4B /* Layout.swift */,
+				03FF1732258959A000BA447D /* Locale.swift */,
 				03144677236F9B4200C01202 /* Modifiers.swift */,
 				E139E0DF1EC7D27A00B34DE7 /* NSAttributedStringExtension.swift */,
 				0392B0E3237A08DA008BB76E /* NSCoderExtension.swift */,
 				035C646E22299A7E001ECC02 /* RatingsFetcher.swift */,
+				03FF173A25895AE900BA447D /* RealLocale.swift */,
 				E188B55F21AF78CE009777D8 /* ReviewPromptable.swift */,
 				E118CA271FFFD07400612D71 /* ReviewPrompter.swift */,
 				E1E092BD21ED385E00828C37 /* Settings.swift */,
 				E18F7F391ECA7DA700633200 /* SoundPlayer.swift */,
 				E139E0E31EC7D2E500B34DE7 /* StringExtensions.swift */,
+				03FF172625883B0700BA447D /* StubCommunGetter.swift */,
+				03FF173625895A3700BA447D /* StubLocale.swift */,
 				E168865221ADA020005B8636 /* TestGameCenter.swift */,
 				E188B56121AF7920009777D8 /* TestReviewPrompter.swift */,
 				E182F8D11F48AA1400D4569E /* UIAlertControllerExtension.swift */,
+				03FF1740258C0F6B00BA447D /* UIApplicationExtensions.swift */,
 				E18145DB1F2E49B20048DEE2 /* UILabelExtension.swift */,
 				031DAD9B2341627B006B8F5F /* UISegmentedControlExtension.swift */,
 				E1EC70F02198A10B00872787 /* UIViewControllerExtension.swift */,
@@ -464,6 +507,7 @@
 		E14271351F01CA98001D19E1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				03FF1747258C17E900BA447D /* CloudKit.framework */,
 				03C9508B22A47D460030151C /* AWSCore.framework */,
 				03C9508C22A47D460030151C /* AWSPinpoint.framework */,
 				E14271361F01CA98001D19E1 /* GameKit.framework */,
@@ -508,6 +552,8 @@
 			children = (
 				E14589F31F5B7BB000EEF141 /* BrowseInfoVCTests.swift */,
 				E15D3BF01F532F4E003771BB /* BrowseVerbsVCTests.swift */,
+				03FF17552591434800BA447D /* CommunVCTests.swift */,
+				03FF175925914B9300BA447D /* CommunViewModelTests.swift */,
 				035334BC2297593C00046CCC /* InfoVCTests.swift */,
 				E1F06AEC1E8F05F400ADD2E1 /* MainTabBarVCTests.swift */,
 				035334C02298968600046CCC /* QuizVCTests.swift */,
@@ -596,6 +642,7 @@
 		E1F06AD61E8F05F300ADD2E1 /* Conjugar */ = {
 			isa = PBXGroup;
 			children = (
+				03FF1744258C17E500BA447D /* Conjugar.entitlements */,
 				E1EC70FB2198B9D900872787 /* Analytics */,
 				E107B0901EB66E9F004C5E91 /* Assets */,
 				E107B08D1EB66E26004C5E91 /* Controllers */,
@@ -628,6 +675,7 @@
 			isa = PBXGroup;
 			children = (
 				E1151E521E9AEDF100DE44D6 /* AuxiliaryError.swift */,
+				03FF171C2588395500BA447D /* Commun.swift */,
 				E1F06AF71E8F081700ADD2E1 /* Conjugator.swift */,
 				E1A44313200D10D200C48857 /* ConjugationDataSource.swift */,
 				E1483FCF1EF961880052C436 /* ConjugationResult.swift */,
@@ -859,6 +907,7 @@
 				E11BC175200433AC00494504 /* SecondSingularBrowse.swift in Sources */,
 				E18010781F1BCA0800E8608C /* BrowseVerbsView.swift in Sources */,
 				E14BAD941F006423000D91C5 /* ResultCell.swift in Sources */,
+				03FF1752258FBF8200BA447D /* Emailer.swift in Sources */,
 				E1E092C021ED389300828C37 /* GetterSetter.swift in Sources */,
 				E168865321ADA020005B8636 /* TestGameCenter.swift in Sources */,
 				E18F7F3C1ECA7DF000633200 /* Sound.swift in Sources */,
@@ -866,6 +915,8 @@
 				E1151E551E9C5D9C00DE44D6 /* VerbCell.swift in Sources */,
 				03144678236F9B4200C01202 /* Modifiers.swift in Sources */,
 				035C646F22299A7E001ECC02 /* RatingsFetcher.swift in Sources */,
+				03FF172F2589286700BA447D /* CommunViewModel.swift in Sources */,
+				03FF173B25895AE900BA447D /* RealLocale.swift in Sources */,
 				0392B0E4237A08DA008BB76E /* NSCoderExtension.swift in Sources */,
 				E18145DA1F2E43630048DEE2 /* InfoUIV.swift in Sources */,
 				E139E0E61EC7D36200B34DE7 /* Colors.swift in Sources */,
@@ -878,6 +929,7 @@
 				031DAD9C2341627B006B8F5F /* UISegmentedControlExtension.swift in Sources */,
 				E1F06AFD1E8F08D500ADD2E1 /* Tense.swift in Sources */,
 				E14566BE1EC001FD00C16DC3 /* ConjugationCell.swift in Sources */,
+				03FF1741258C0F6C00BA447D /* UIApplicationExtensions.swift in Sources */,
 				E1483FB11EF5C4C60052C436 /* Difficulty.swift in Sources */,
 				E1171C9321AB387500B06342 /* TestAnalyticsService.swift in Sources */,
 				E1EC70F12198A10B00872787 /* UIViewControllerExtension.swift in Sources */,
@@ -886,12 +938,14 @@
 				E1E092C321ED3C6900828C37 /* DictionaryGetterSetter.swift in Sources */,
 				E1F06ADA1E8F05F300ADD2E1 /* BrowseVerbsVC.swift in Sources */,
 				E1D1D8F81F33732D006A6052 /* QuizUIV.swift in Sources */,
+				03FF172325883A7800BA447D /* CommunGetter.swift in Sources */,
 				E1F06B011E8F0C5A00ADD2E1 /* PersonNumber.swift in Sources */,
 				03C8506623E4883300FD74AD /* UsesAutoLayout.swift in Sources */,
 				035EF5BB245C746800F29894 /* Localizations.swift in Sources */,
 				E1EC71012198BA6400872787 /* AWSAnalyticsService.swift in Sources */,
 				E188B56021AF78CE009777D8 /* ReviewPromptable.swift in Sources */,
 				03C8506A23E4F39600FD74AD /* main.swift in Sources */,
+				03FF171D2588395500BA447D /* Commun.swift in Sources */,
 				E19382041F0822B2005268FF /* InfoVC.swift in Sources */,
 				038E03282279D034005CFC96 /* URLSessionExtension.swift in Sources */,
 				E14271391F01EFF2001D19E1 /* GameCenter.swift in Sources */,
@@ -910,6 +964,7 @@
 				E12FCBEE1F391CDA0076AFF1 /* ResultsUIV.swift in Sources */,
 				E1AB244F1F083CB300FE76E8 /* Info.swift in Sources */,
 				E19382061F0829F6005268FF /* InfoCell.swift in Sources */,
+				03FF174C258D5F7A00BA447D /* CloudCommunGetter.swift in Sources */,
 				E14566BC1EC001ED00C16DC3 /* TenseCell.swift in Sources */,
 				E118CA281FFFD07400612D71 /* ReviewPrompter.swift in Sources */,
 				E1201A041F1AB99F00BCB27D /* MainTabBarVC.swift in Sources */,
@@ -922,11 +977,16 @@
 				E1F06AD81E8F05F300ADD2E1 /* AppDelegate.swift in Sources */,
 				E16BEA041F09BCC70053DD32 /* Fonts.swift in Sources */,
 				E18145DC1F2E49B20048DEE2 /* UILabelExtension.swift in Sources */,
+				03FF17172586D0CC00BA447D /* CommunUIV.swift in Sources */,
+				03FF172725883B0700BA447D /* StubCommunGetter.swift in Sources */,
+				03FF1733258959A000BA447D /* Locale.swift in Sources */,
 				E1F06AFB1E8F087000ADD2E1 /* Region.swift in Sources */,
 				E1A789771F00751D0006CA77 /* IntExtension.swift in Sources */,
 				E1151E571E9C610100DE44D6 /* VerbVC.swift in Sources */,
 				E1483FB31EF5CF650052C436 /* QuizState.swift in Sources */,
 				E1171C9121AA1BF000B06342 /* AnalyticsServiceable.swift in Sources */,
+				03FF17132586D0A100BA447D /* CommunVC.swift in Sources */,
+				03FF173725895A3700BA447D /* StubLocale.swift in Sources */,
 				E1EC71032198BA8A00872787 /* DeviceUtility.swift in Sources */,
 				E139E0E41EC7D2E500B34DE7 /* StringExtensions.swift in Sources */,
 				E1E092BE21ED385E00828C37 /* Settings.swift in Sources */,
@@ -941,6 +1001,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				038E03182270AC01005CFC96 /* DeviceUtilityTests.swift in Sources */,
+				03FF17562591434800BA447D /* CommunVCTests.swift in Sources */,
 				E12D06A31F5E85A200CDD54E /* VerbCellTests.swift in Sources */,
 				038E032222760A40005CFC96 /* UIViewExtensionsTests.swift in Sources */,
 				038E031A22711B76005CFC96 /* UIViewControllerExtensionsTests.swift in Sources */,
@@ -949,6 +1010,7 @@
 				038E032C228A1E49005CFC96 /* ConjugationResultTests.swift in Sources */,
 				E151223121A62AE9008EF307 /* ReviewPrompterTests.swift in Sources */,
 				E1DC939521B5836400DD4048 /* QuizTests.swift in Sources */,
+				03FF175A25914B9300BA447D /* CommunViewModelTests.swift in Sources */,
 				038E032E228A2F18005CFC96 /* PersonNumberTests.swift in Sources */,
 				03533493228DA52400046CCC /* ResultCellTests.swift in Sources */,
 				038E032A227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift in Sources */,
@@ -1176,7 +1238,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 2.4;
+				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
+				CURRENT_PROJECT_VERSION = 2.5;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1185,7 +1248,7 @@
 				INFOPLIST_FILE = Conjugar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.4;
+				MARKETING_VERSION = 2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1197,7 +1260,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 2.4;
+				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
+				CURRENT_PROJECT_VERSION = 2.5;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1206,7 +1270,7 @@
 				INFOPLIST_FILE = Conjugar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.4;
+				MARKETING_VERSION = 2.5;
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

@@ -27,7 +27,7 @@ class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
         //print("AUTHENTICATED displayName: \(self.localPlayer.displayName) alias: \(self.localPlayer.alias) playerID: \(self.localPlayer.playerID)")
         Current.analytics.recordGameCenterAuth()
         self.isAuthenticated = true
-        SoundPlayer.play(.applause1)
+        SoundPlayer.playRandomApplause()
         self.localPlayer.loadDefaultLeaderboardIdentifier { identifier, _ in
           self.leaderboardIdentifier = identifier ?? "ERROR"
           //print("identifier: \(self.leaderboardIdentifier)")
