@@ -21,18 +21,5 @@ struct Commun {
     case newVersion(okayTitle: [String: String], actionTitle: [String: String], cancelTitle: [String: String], action: () -> (), alreadyUpdated: Bool)
     case email(actionTitle: [String: String], cancelTitle: [String: String], action: () -> ())
     case website(actionTitle: [String: String], cancelTitle: [String: String], action: () -> ())
-
-    var stringValue: String {
-      switch self {
-      case .information:
-        return "information"
-      case .newVersion:
-        return "newVersion"
-      case .email:
-        return "email"
-      case .website:
-        return "website"
-      }
-    }
   }
 }
