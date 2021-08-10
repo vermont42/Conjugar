@@ -99,7 +99,7 @@ third person, singular: ~él~ (masc.)/~ella~ (fem.)
 first person, plural: ~nosotros~ (masc.)/~nosotras~ (fem.)
 third person, plural: ~ellos~ (masc.)/~ellas~ (fem.)
 
-"Fem." means that a pronoun refers to female subjects, and "masc" means that a pronoun refers to male subjects.
+"Fem." means that a pronoun refers to female subjects, and "masc." means that a pronoun refers to male subjects.
 
 The second-person subject pronouns in Spanish are more complicated in that they encode two formality levels, formal and informal. Further, uses of these pronouns differ between Spain and Latin America.
 
