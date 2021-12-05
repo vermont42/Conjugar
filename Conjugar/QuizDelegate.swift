@@ -6,7 +6,7 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-protocol QuizDelegate: class {
+protocol QuizDelegate: AnyObject {
   func scoreDidChange(newScore: Int)
   func timeDidChange(newTime: Int)
   func progressDidChange(current: Int, total: Int)

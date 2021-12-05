@@ -475,8 +475,8 @@
 				E10178011F3F753400F0BC97 /* UIViewExtensions.swift */,
 				038E031D22734800005CFC96 /* URLProtocolStub.swift */,
 				038E03272279D034005CFC96 /* URLSessionExtension.swift */,
-				03C8506523E4883300FD74AD /* UsesAutoLayout.swift */,
 				E1E092C221ED3C6900828C37 /* UserDefaultsGetterSetter.swift */,
+				03C8506523E4883300FD74AD /* UsesAutoLayout.swift */,
 				E18F7F371ECA7C9A00633200 /* Utterer.swift */,
 			);
 			name = Utils;
@@ -1088,6 +1088,7 @@
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ConjugarUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1111,6 +1112,7 @@
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ConjugarUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarUITests;
@@ -1178,6 +1180,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_WORKSPACE = NO;
 			};
 			name = Debug;
 		};
@@ -1231,6 +1234,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALIDATE_WORKSPACE = NO;
 			};
 			name = Release;
 		};
@@ -1239,21 +1243,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
-				CURRENT_PROJECT_VERSION = 2.5;
+				CURRENT_PROJECT_VERSION = 2.6;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Conjugar/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				VALIDATE_WORKSPACE = YES;
+				VALIDATE_WORKSPACE = NO;
 			};
 			name = Debug;
 		};
@@ -1262,21 +1266,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
-				CURRENT_PROJECT_VERSION = 2.5;
+				CURRENT_PROJECT_VERSION = 2.6;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Conjugar/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				VALIDATE_WORKSPACE = YES;
+				VALIDATE_WORKSPACE = NO;
 			};
 			name = Release;
 		};
@@ -1287,6 +1291,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1302,6 +1307,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

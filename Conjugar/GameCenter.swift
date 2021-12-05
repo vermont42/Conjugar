@@ -43,29 +43,19 @@ class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
   }
 
   func reportScore(_ score: Int) {
-    if !isAuthenticated {
+    guard isAuthenticated else {
       return
     }
-    let gkScore = GKScore(leaderboardIdentifier: leaderboardIdentifier)
-    gkScore.value = Int64(score)
-    GKScore.report([gkScore]) { error in
-      if error == nil {
-        let delay: TimeInterval = 3.0
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
-          self.showLeaderboard()
-        })
-      }
-    }
+
+    GKLeaderboard.submitScore(score, context: 0, player: localPlayer, leaderboardIDs: [leaderboardIdentifier], completionHandler: { _ in })
   }
 
   func showLeaderboard() {
-    if !isAuthenticated {
+    guard isAuthenticated else {
       return
     }
-    let gcViewController = GKGameCenterViewController()
+    let gcViewController = GKGameCenterViewController(leaderboardID: leaderboardIdentifier, playerScope: .global, timeScope: .allTime)
     gcViewController.gameCenterDelegate = self
-    gcViewController.viewState = .leaderboards
-    gcViewController.leaderboardIdentifier = leaderboardIdentifier
     onViewController?.present(gcViewController, animated: true, completion: nil)
   }
 

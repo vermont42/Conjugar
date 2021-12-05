@@ -6,6 +6,6 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-protocol InfoDelegate: class {
+protocol InfoDelegate: AnyObject {
   func infoSelectionDidChange(newHeading: String)
 }

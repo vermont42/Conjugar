@@ -135,6 +135,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     let resultsVC = ResultsVC()
     navigationController?.pushViewController(resultsVC, animated: true)
     resetUI()
+    Current.gameCenter.showLeaderboard()
     Current.analytics.recordQuizCompletion(score: Current.quiz.score)
   }
 
