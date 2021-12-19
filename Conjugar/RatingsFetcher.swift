@@ -11,11 +11,21 @@ import Foundation
 struct RatingsFetcher {
   static let iTunesID = "1236500467"
   static let errorMessage = "Fetching failed."
+
+  private static let urlInitializationMessage = " URL could not be initializaed."
+
   static var iTunesURL: URL {
-    guard let url = URL(string: "https://itunes.apple.com/lookup?id=\(iTunesID)") else {
-      fatalError("iTunes URL could not be initialized.")
+    guard let iTunesURL = URL(string: "https://itunes.apple.com/lookup?id=\(iTunesID)") else {
+      fatalError("iTunes" + urlInitializationMessage)
     }
-    return url
+    return iTunesURL
+  }
+
+  static var reviewURL: URL {
+    guard let reviewURL = URL(string: "https://itunes.apple.com/app/conjugar/id\(iTunesID)?action=write-review") else {
+      fatalError("Rate/review" + urlInitializationMessage)
+    }
+    return reviewURL
   }
 
   static func fetchRatingsDescription(completion: @escaping (String) -> ()) {

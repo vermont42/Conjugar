@@ -167,10 +167,7 @@ struct SettingsView: View {
               .modifier(SubheadingLabel())
 
             Button(Localizations.Settings.rateOrReview) {
-              guard let url = URL(string: "https://itunes.apple.com/us/app/immigration/id\(RatingsFetcher.iTunesID)?action=write-review") else {
-                return
-              }
-              UIApplication.shared.open(url, options: [:])
+              UIApplication.shared.open(RatingsFetcher.reviewURL, options: [:])
             }
               .modifier(StandardButton())
 

@@ -534,9 +534,9 @@
 		E151222F21A62AA9008EF307 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				E151223021A62AE9008EF307 /* ReviewPrompterTests.swift */,
 				038E03122270A868005CFC96 /* IntExtensionTests.swift */,
 				038E031F2273BF29005CFC96 /* RatingsFetcherTests.swift */,
+				E151223021A62AE9008EF307 /* ReviewPrompterTests.swift */,
 				038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */,
 				038E0329227CD8B7005CFC96 /* UIAlertControllerExtensionTests.swift */,
 				038E031922711B76005CFC96 /* UIViewControllerExtensionsTests.swift */,
