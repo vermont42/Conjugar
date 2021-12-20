@@ -40,9 +40,9 @@ struct RatingsFetcher {
           let json = try? JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
           let results = json["results"] as? [[String: Any]],
           results.count == 1
-          else {
-            completion(errorMessage)
-            return
+        else {
+          completion(errorMessage)
+          return
         }
 
         let ratingsCount = (results[0])["userRatingCountForCurrentVersion"] as? Int ?? 0
