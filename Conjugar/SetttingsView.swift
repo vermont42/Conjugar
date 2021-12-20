@@ -11,7 +11,6 @@ import SwiftUI
 struct SettingsView: View {
   static let englishTitle = "Settings"
 
-  @State private var isGameCenterButtonOffScreen = true
   @State private var isGameCenterUIHidden = false
   @State private var rateReviewDescription = ""
 
@@ -135,25 +134,6 @@ struct SettingsView: View {
                 })
               }
                 .modifier(StandardButton())
-                .onAppear {
-                  self.isGameCenterButtonOffScreen = false
-                }
-                .scaleEffect(isGameCenterButtonOffScreen ? offScreenButtonScale : 1.0)
-                .animation(.easeInOut(duration: animationDuration))
-
-              // Does not work in ScrollView.
-              // https://www.hackingwithswift.com/quick-start/swiftui/how-to-start-an-animation-immediately-after-a-view-appears
-              // @State var scale: CGFloat = 1
-
-//              .scaleEffect(scale)
-//              .onAppear {
-//                  let baseAnimation = Animation.easeInOut(duration: 1)
-//                  let repeated = baseAnimation.repeatForever(autoreverses: true)
-//
-//                  return withAnimation(repeated) {
-//                      self.scale = 0.9
-//                  }
-//              }
 
               Text(Localizations.Settings.enableDescription)
                 .modifier(BodyLabel())
