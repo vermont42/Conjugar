@@ -9,7 +9,6 @@
 import StoreKit
 
 struct ReviewPrompter: ReviewPromptable {
-  static let shared = ReviewPrompter()
   static let promptModulo = 9
   static let promptInterval: TimeInterval = 60 * 60 * 24 * 180
   private let settings: Settings
