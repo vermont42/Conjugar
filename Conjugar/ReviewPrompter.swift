@@ -14,7 +14,15 @@ struct ReviewPrompter: ReviewPromptable {
   private let settings: Settings
   private let now: Date
   private let requestReview: () -> ()
-  private static let defaultRequestReview: () -> () = { (UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene).map { SKStoreReviewController.requestReview(in: $0) } }
+  private static let defaultRequestReview: () -> () = {
+    if let scene = UIApplication.shared.connectedScenes.first(
+      where: { $0.activationState == .foregroundActive }
+    ) as? UIWindowScene {
+      DispatchQueue.main.async {
+        SKStoreReviewController.requestReview(in: scene)
+      }
+    }
+  }
 
   init(settings: Settings = Settings(getterSetter: UserDefaultsGetterSetter()), now: Date = Date(), requestReview: @escaping () -> () = ReviewPrompter.defaultRequestReview) {
     self.settings = settings
