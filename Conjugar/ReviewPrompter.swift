@@ -14,7 +14,7 @@ struct ReviewPrompter: ReviewPromptable {
   private let settings: Settings
   private let now: Date
   private let requestReview: () -> ()
-  private static let defaultRequestReview: () -> () = {
+  private static let defaultRequestReview: () -> Void = {
     if let scene = UIApplication.shared.connectedScenes.first(
       where: { $0.activationState == .foregroundActive }
     ) as? UIWindowScene {
