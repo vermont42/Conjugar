@@ -7,7 +7,7 @@
 //  Copyright © 2019 Josh Adams. All rights reserved.
 //
 
-import Foundation
+import Observation
 import SwiftUI
 
 #if targetEnvironment(simulator)
@@ -16,16 +16,16 @@ var Current = World.simulator
 var Current = World.device
 #endif
 
-class World: ObservableObject {
-  @Published var analytics: AnalyticsServiceable
-  @Published var reviewPrompter: ReviewPromptable
-  @Published var gameCenter: GameCenterable
-  @Published var settings: Settings
-  @Published var quiz: Quiz
-  @Published var session: URLSession
-  @Published var communGetter: CommunGetter
-  @Published var locale: Locale
-  @Published var parentViewController: UIViewController?
+class World {
+  var analytics: AnalyticsServiceable
+  var reviewPrompter: ReviewPromptable
+  var gameCenter: GameCenterable
+  var settings: Settings
+  var quiz: Quiz
+  var session: URLSession
+  var communGetter: CommunGetter
+  var locale: Locale
+  var parentViewController: UIViewController?
 
   private static let fakeRatingsCount = 42
 

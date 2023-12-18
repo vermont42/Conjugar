@@ -15,6 +15,18 @@ struct CloudCommunGetter: CommunGetter {
     let predicate = NSPredicate(format: "isCurrent == 1")
     let query = CKQuery(recordType: "Communs", predicate: predicate)
     let identifier = "iCloud.biz.Conjugar"
+
+    // TODO: Perhaps use something like this to fix deprecation in code after this.
+    // TODO: When done, reenable getCommunication() in MainTabBarVC.
+//    CKContainer(identifier: identifier).publicCloudDatabase.fetch(withQuery: query) { result in
+//      switch result {
+//      case .success((let matchResults, let queryCursor)):
+//        <#code#>
+//      case .failure:
+//        return
+//      }
+//    }
+
     CKContainer(identifier: identifier).publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in
       guard
         error == nil,

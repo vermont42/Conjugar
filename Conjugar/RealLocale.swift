@@ -13,10 +13,10 @@ struct RealLocale: Locale {
   private let NONE = "NONE"
 
   var languageCode: String {
-    NSLocale.current.languageCode ?? none
+    NSLocale.current.language.languageCode?.identifier ?? none
   }
 
   var regionCode: String {
-    NSLocale.current.regionCode ?? NONE
+    NSLocale.current.region?.identifier ?? NONE
   }
 }

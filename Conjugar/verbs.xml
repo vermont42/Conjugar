@@ -245,8 +245,10 @@
   <verb in="traer" vt="ir" tn="bring" pe="comer" tr="com" st="tra" ge="traYendo" fspr="traIGo" fspt="traJE" sspt="traJiste" tspt="traJO" fppt="traJimos" sppt="traJisteis" tppt="traJeron" fspb="traIGa" sspb="traIGas" tspb="traIGa" fppb="traIGamos" sppb="traIGáis" tppb="traIGan" />
   <verb in="trinchar" vt="ra" tn="carve" pe="hablar" tr="habl" st="trinch" />
   <verb in="tronar" vt="ir" tn="thunder" pe="hablar" tr="habl" st="tron" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" tspr="trUEna" tspb="trUEne" ssio="trUEna" />
+  <verb in="tutear" vt="ra" tn="use tú and its conjugations" pe="hablar" tr="habl" st="tute" />
   <verb in="unir" vt="ri" tn="join" pe="subir" tr="sub" st="un" />
   <verb in="usar" vt="ra" tn="use" pe="hablar" tr="habl" st="us" />
+  <verb in="ustedear" vt="ra" tn="use usted and its conjugations" pe="hablar" tr="habl" st="ustede" />
   <verb in="valer" vt="ir" tn="be worth, cost" pe="comer" tr="com" st="val" rf="valDr" fspr="valGo" fspb="valGa" sspb="valGas" tspb="valGa" fppb="valGamos" sppb="valGáis" tppb="valGa" />
   <verb in="vender" vt="re" tn="sell" pe="comer" tr="com" st="vend" />
   <verb in="venir" vt="ir" tn="come, arrive" pe="subir" tr="sub" st="ven" rf="venDr" fspr="venGo" sspr="vIenes" tspr="vIene" tppr="vIenen" fspt="vINE" sspt="vIniste" tspt="vInO" fppt="vInimos" sppt="vInisteis" tppt="vInieron" fspb="venGa" sspb="venGas" tspb="venGa" fppb="venGamos" sppb="venGáis" tppb="venGan" ssio="veN" />
@@ -255,4 +257,5 @@
   <verb in="visitar" vt="ra" tn="visit" pe="hablar" tr="habl" st="visit" />
   <verb in="vivir" vt="ri" tn="live" pe="subir" tr="sub" st="viv" />
   <verb in="volver" vt="ir" tn="return" pe="resolver" tr="res" st="v" />
+  <verb in="vosear" vt="ra" tn="use vos and its conjugations" pe="hablar" tr="habl" st="vose" />
 </verbs>

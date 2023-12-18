@@ -10,6 +10,8 @@ disabled_rules:
   - large_tuple
   - void_return
   - nesting
+  - blanket_disable_command
+  - for_where
 
 file_length:
   warning: 10000

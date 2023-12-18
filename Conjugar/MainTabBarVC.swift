@@ -27,7 +27,7 @@ class MainTabBarVC: UITabBarController {
       selectedImage: nil
     )
 
-    let settingsVC = UIHostingController(rootView: SettingsView().environmentObject(Current))
+    let settingsVC = UIHostingController(rootView: SettingsView())
     Current.parentViewController = settingsVC
     settingsVC.tabBarItem = UITabBarItem(
       title: Localizations.Settings.localizedTitle,
@@ -47,16 +47,16 @@ class MainTabBarVC: UITabBarController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    Current.communGetter.getCommunication(completion: { [weak self] commun in
-      DispatchQueue.main.async {
-        let lastCommunIdentifierShown = Current.settings.lastCommunIdentifierShown
-        if Current.quiz.quizState != .inProgress && commun.identifier > lastCommunIdentifierShown {
-          let communVC = CommunVC(commun: commun)
-          communVC.modalPresentationStyle = .fullScreen
-          self?.present(communVC, animated: true)
-          Current.settings.lastCommunIdentifierShown = commun.identifier
-        }
-      }
-    })
+//    Current.communGetter.getCommunication(completion: { [weak self] commun in
+//      DispatchQueue.main.async {
+//        let lastCommunIdentifierShown = Current.settings.lastCommunIdentifierShown
+//        if Current.quiz.quizState != .inProgress && commun.identifier > lastCommunIdentifierShown {
+//          let communVC = CommunVC(commun: commun)
+//          communVC.modalPresentationStyle = .fullScreen
+//          self?.present(communVC, animated: true)
+//          Current.settings.lastCommunIdentifierShown = commun.identifier
+//        }
+//      }
+//    })
   }
 }

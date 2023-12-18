@@ -13,8 +13,6 @@ struct SettingsView: View {
 
   @State private var isGameCenterUIHidden = false
   @State private var rateReviewDescription = ""
-
-  @EnvironmentObject var current: World
   @ObservedObject var store = SelectionStore()
 
   private let offScreenButtonScale: CGFloat = 1.5
@@ -35,126 +33,114 @@ struct SettingsView: View {
           .modifier(HeadingLabel())
 
         ScrollView(.vertical) {
-          Group {
-            Text(Localizations.Settings.region)
-              .modifier(SubheadingLabel())
+          Text(Localizations.Settings.region)
+            .modifier(SubheadingLabel())
 
-            Picker("", selection: $store.region) {
-              ForEach(Region.allCases, id: \.self) { type in
-                Text(type.localizedRegion).tag(type)
-              }
+          Picker("", selection: $store.region) {
+            ForEach(Region.allCases, id: \.self) { type in
+              Text(type.localizedRegion).tag(type)
             }
-              .modifier(SegmentedPicker())
-              .onAppear {
-                self.store.region = self.current.settings.region
-                self.store.current = self.current
-              }
-
-            Text(Localizations.Settings.regionDescription)
-              .modifier(BodyLabel())
-
-            Spacer(minLength: Layout.tripleDefaultSpacing)
           }
-
-          Group {
-            Text(Localizations.Settings.difficulty)
-              .modifier(SubheadingLabel())
-
-            Picker("", selection: $store.difficulty) {
-              ForEach(Difficulty.allCases, id: \.self) { type in
-                Text(type.localizedDifficulty).tag(type)
-              }
+            .modifier(SegmentedPicker())
+            .onAppear {
+              self.store.region = Current.settings.region
+              self.store.current = Current
             }
-              .modifier(SegmentedPicker())
-              .onAppear {
-                self.store.difficulty = self.current.settings.difficulty
-                self.store.current = self.current
-              }
 
-            Text(Localizations.Settings.difficultyDescription)
-              .modifier(BodyLabel())
+          Text(Localizations.Settings.regionDescription)
+            .modifier(BodyLabel())
 
-            Spacer(minLength: Layout.tripleDefaultSpacing)
-          }
+          Spacer(minLength: Layout.tripleDefaultSpacing)
 
-          Group {
-            Text(Localizations.Settings.browse)
-              .modifier(SubheadingLabel())
+          Text(Localizations.Settings.difficulty)
+            .modifier(SubheadingLabel())
 
-            Picker("", selection: $store.secondSingularBrowse) {
-              ForEach(SecondSingularBrowse.allCases, id: \.self) { type in
-                Text(type.localizedSecondSingularBrowse).tag(type)
-              }
+          Picker("", selection: $store.difficulty) {
+            ForEach(Difficulty.allCases, id: \.self) { type in
+              Text(type.localizedDifficulty).tag(type)
             }
-              .modifier(SegmentedPicker())
-              .onAppear {
-                self.store.secondSingularBrowse = self.current.settings.secondSingularBrowse
-                self.store.current = self.current
-              }
-
-            Text(Localizations.Settings.browseDescription)
-              .modifier(BodyLabel())
-
-            Spacer(minLength: Layout.tripleDefaultSpacing)
           }
-
-          Group {
-            Text(Localizations.Settings.quiz)
-              .modifier(SubheadingLabel())
-
-            Picker("", selection: $store.secondSingularQuiz) {
-              ForEach(SecondSingularQuiz.allCases, id: \.self) { type in
-                Text(type.rawValue).tag(type)
-              }
+            .modifier(SegmentedPicker())
+            .onAppear {
+              self.store.difficulty = Current.settings.difficulty
+              self.store.current = Current
             }
-              .modifier(SegmentedPicker())
-              .onAppear {
-                self.store.secondSingularQuiz = self.current.settings.secondSingularQuiz
-                self.store.current = self.current
-              }
 
-            Text(Localizations.Settings.quizDescription)
-              .modifier(BodyLabel())
+          Text(Localizations.Settings.difficultyDescription)
+            .modifier(BodyLabel())
 
-            Spacer(minLength: Layout.tripleDefaultSpacing)
+          Spacer(minLength: Layout.tripleDefaultSpacing)
+
+          Text(Localizations.Settings.browse)
+            .modifier(SubheadingLabel())
+
+          Picker("", selection: $store.secondSingularBrowse) {
+            ForEach(SecondSingularBrowse.allCases, id: \.self) { type in
+              Text(type.localizedSecondSingularBrowse).tag(type)
+            }
           }
+            .modifier(SegmentedPicker())
+            .onAppear {
+              self.store.secondSingularBrowse = Current.settings.secondSingularBrowse
+              self.store.current = Current
+            }
+
+          Text(Localizations.Settings.browseDescription)
+            .modifier(BodyLabel())
+
+          Spacer(minLength: Layout.tripleDefaultSpacing)
+
+          Text(Localizations.Settings.quiz)
+            .modifier(SubheadingLabel())
+
+          Picker("", selection: $store.secondSingularQuiz) {
+            ForEach(SecondSingularQuiz.allCases, id: \.self) { type in
+              Text(type.rawValue).tag(type)
+            }
+          }
+            .modifier(SegmentedPicker())
+            .onAppear {
+              self.store.secondSingularQuiz = Current.settings.secondSingularQuiz
+              self.store.current = Current
+            }
+
+          Text(Localizations.Settings.quizDescription)
+            .modifier(BodyLabel())
+
+          Spacer(minLength: Layout.tripleDefaultSpacing)
 
           if !isGameCenterUIHidden {
-            Group {
-              Text(Localizations.Quiz.gameCenter)
-                .modifier(SubheadingLabel())
-
-              Button(Localizations.Settings.enable) {
-                self.current.settings.userRejectedGameCenter = false
-
-                self.current.gameCenter.authenticate(
-                  onViewController: self.current.parentViewController ?? UIViewController(),
-                  completion: { authenticated in
-                    self.isGameCenterUIHidden = authenticated
-                })
-              }
-                .modifier(StandardButton())
-
-              Text(Localizations.Settings.enableDescription)
-                .modifier(BodyLabel())
-
-              Spacer(minLength: Layout.tripleDefaultSpacing)
-            }
-          }
-
-          Group {
-            Text(Localizations.Settings.ratingsAndReviews)
+            Text(Localizations.Quiz.gameCenter)
               .modifier(SubheadingLabel())
 
-            Button(Localizations.Settings.rateOrReview) {
-              UIApplication.shared.open(RatingsFetcher.reviewURL, options: [:])
+            Button(Localizations.Settings.enable) {
+              Current.settings.userRejectedGameCenter = false
+
+              Current.gameCenter.authenticate(
+                onViewController: Current.parentViewController ?? UIViewController(),
+                completion: { authenticated in
+                  self.isGameCenterUIHidden = authenticated
+              })
             }
               .modifier(StandardButton())
 
-            if rateReviewDescription != "" {
-              Text(rateReviewDescription)
-                .modifier(BodyLabel())
-            }
+            Text(Localizations.Settings.enableDescription)
+              .modifier(BodyLabel())
+
+            Spacer(minLength: Layout.tripleDefaultSpacing)
+          }
+
+          Text(Localizations.Settings.ratingsAndReviews)
+            .modifier(SubheadingLabel())
+
+          Button(Localizations.Settings.rateOrReview) {
+            UIApplication.shared.open(RatingsFetcher.reviewURL, options: [:])
+          }
+            .modifier(StandardButton())
+
+          if rateReviewDescription != "" {
+            Text(rateReviewDescription)
+              .modifier(BodyLabel())
           }
 
           Spacer()
@@ -170,9 +156,9 @@ struct SettingsView: View {
           }
         })
 
-        self.current.analytics.recordVisitation(viewController: "\(SettingsView.self)")
+        Current.analytics.recordVisitation(viewController: "\(SettingsView.self)")
 
-        self.isGameCenterUIHidden = self.current.gameCenter.isAuthenticated
+        self.isGameCenterUIHidden = Current.gameCenter.isAuthenticated
       }
   }
 }

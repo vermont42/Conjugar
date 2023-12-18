@@ -27,7 +27,7 @@ public extension UIDevice {
       return identifier + String(UnicodeScalar(UInt8(value)))
     }
 
-    // https://everyi.com/by-identifier/ipod-iphone-ipad-specs-by-model-identifier.html
+    // https://gist.github.com/adamawolf/3048717
     // swiftlint:disable switch_case_on_newline
     switch identifier {
     case "iPod5,1":                                 return "iPod Touch 5"
@@ -64,7 +64,17 @@ public extension UIDevice {
     case "iPhone14,3":                              return "iPhone 13 Pro Max"
     case "iPhone14,4":                              return "iPhone 13 Mini"
     case "iPhone14,5":                              return "iPhone 13"
+    case "iPhone14,6":                              return "iPhone SE 3rd Gen"
+    case "iPhone14,7":                              return "iPhone 14"
+    case "iPhone14,8":                              return "iPhone 14 Plus"
+    case "iPhone15,2":                              return "iPhone 14 Pro"
+    case "iPhone15,3":                              return "iPhone 14 Pro Max"
+    case "iPhone15,4":                              return "iPhone 15"
+    case "iPhone15,5":                              return "iPhone 15 Plus"
+    case "iPhone16,1":                              return "iPhone 15 Pro"
+    case "iPhone16,2":                              return "iPhone 15 Pro Max"
 
+    // swiftlint:disable colon
     case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4":return "iPad 2"
     case "iPad2,5", "iPad2,6", "iPad2,7":           return "iPad Mini"
     case "iPad3,1", "iPad3,2", "iPad3,3":           return "iPad 3"
@@ -91,6 +101,8 @@ public extension UIDevice {
     case "iPad13,4", "iPad13,5", "iPad13,6", "iPad13,7": return "iPad Pro 11 Inch 3rd Gen."
     case "iPad13,8", "iPad13,9", "iPad13,10", "iPad13,11": return "iPad Pro 12.9 Inch 5th Gen."
     case "iPad14,1", "iPad14,2":                    return "iPad Mini 6th Gen."
+    case "iPad14,3", "iPad14,4":                    return "iPad Pro 11 inch 4th Gen"
+    case "iPad14,5", "iPad14,6":                    return "iPad Pro 12.9 inch 6th Gen"
 
     case "AppleTV5,3":                              return "Apple TV"
     case "AppleTV6,2":                              return "Apple TV 4K"
