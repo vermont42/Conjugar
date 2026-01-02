@@ -37,45 +37,30 @@ extension String {
   }
 
   var conjugatedString: NSAttributedString {
-    let nsStringCombined = NSString(string: self)
-    guard let nsStrings = NSArray(array: nsStringCombined.components(separatedBy: " ")) as? [NSString] else {
-      fatalError("nsStrings was nil.")
-    }
+    let words = self.components(separatedBy: " ")
     var attStrings: [NSAttributedString] = []
-    for nsString in nsStrings {
-      let length = nsString.length
-      var startIndex = -1
-      var endIndex = startIndex
-      let uppercaseLetters = NSCharacterSet.uppercaseLetters
-      for i in 0 ..< length {
-        guard let unicodeScalar = UnicodeScalar(nsString.character(at: i)) else {
-          fatalError("unicodeScalar was nil.")
-        }
-        if uppercaseLetters.contains(unicodeScalar) {
-          startIndex = i
-          break
+    for word in words {
+      var startIndex: Int?
+      var endIndex: Int?
+      for (i, char) in word.enumerated() {
+        if char.isUppercase {
+          if startIndex == nil {
+            startIndex = i
+          }
+          endIndex = i
         }
       }
-      if startIndex != -1 {
-        for i in (0 ..< length).reversed() {
-          guard let unicodeScalar = UnicodeScalar(nsString.character(at: i)) else {
-            fatalError("unicodeScalar was nil.")
-          }
-          if uppercaseLetters.contains(unicodeScalar) {
-            endIndex = i
-            break
-          }
-        }
-        let attString = NSMutableAttributedString(string: nsString.lowercased)
-        attString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colors.red, range: NSRange(location: startIndex, length: endIndex - startIndex + 1))
+      if let start = startIndex, let end = endIndex {
+        let attString = NSMutableAttributedString(string: word.lowercased())
+        attString.addAttribute(.foregroundColor, value: Colors.red, range: NSRange(location: start, length: end - start + 1))
         attStrings.append(attString)
       } else {
-        attStrings.append(NSAttributedString(string: nsString as String))
+        attStrings.append(NSAttributedString(string: word))
       }
     }
     var attString: NSAttributedString = attStrings[0]
     for i in 1 ..< attStrings.count {
-      attString += (NSAttributedString(string: " " ) + attStrings[i])
+      attString += (NSAttributedString(string: " ") + attStrings[i])
     }
     return attString
   }
@@ -176,8 +161,9 @@ extension String {
 
     for conjugationRange in conjugationRanges {
       let conjugation = infoString.mutableString.substring(with: conjugationRange)
-      let attributedString = (conjugation as String).conjugatedString
-      infoString.replaceCharacters(in: conjugationRange, with: (self as NSString).substring(with: conjugationRange).lowercased())
+      let attributedString = conjugation.conjugatedString
+      guard let swiftRange = Range(conjugationRange, in: self) else { continue }
+      infoString.replaceCharacters(in: conjugationRange, with: String(self[swiftRange]).lowercased())
       attributedString.enumerateAttribute(NSAttributedString.Key.foregroundColor, in: NSRange(location: 0, length: attributedString.length), options: []) { (value, range, _) -> Void in
         if value != nil {
           let infoRange = NSRange(location: conjugationRange.location + range.location, length: range.length)
@@ -193,7 +179,7 @@ extension String {
       String(String.linkSeparator),
       String(String.conjugationSeparator)
     ].forEach {
-      infoString.mutableString.replaceOccurrences(of: $0, with: "", options: NSString.CompareOptions.caseInsensitive, range: NSRange(location: 0, length: infoString.length))
+      infoString.mutableString.replaceOccurrences(of: $0, with: "", options: .caseInsensitive, range: NSRange(location: 0, length: infoString.length))
     }
 
     return infoString

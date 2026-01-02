@@ -10,14 +10,14 @@ import Foundation
 import MessageUI
 
 protocol CommunGetter {
-  func getCommunication(completion: @escaping (Commun) -> Void)
+  func getCommunication() async -> Commun?
   func openUrlClosure(urlString: String) -> (() -> ())?
 }
 
 extension CommunGetter {
   func openUrlClosure(urlString: String) -> (() -> ())? {
     if let url = URL(string: urlString) {
-      return { UIApplication.shared.open(url, options: [:], completionHandler: nil) }
+      return { UIApplication.shared.open(url) }
     } else {
       return nil
     }

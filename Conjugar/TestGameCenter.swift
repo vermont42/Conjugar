@@ -15,16 +15,16 @@ class TestGameCenter: GameCenterable {
     self.isAuthenticated = isAuthenticated
   }
 
-  func authenticate(onViewController: UIViewController, completion: ((Bool) -> Void)?) {
+  func authenticate(onViewController: UIViewController) async -> Bool {
     if !isAuthenticated {
       isAuthenticated = true
-      completion?(true)
+      return true
     } else {
-      completion?(false)
+      return false
     }
   }
 
-  func reportScore(_ score: Int) {
+  func reportScore(_ score: Int) async {
     print("Pretending to report score \(score).")
   }
 

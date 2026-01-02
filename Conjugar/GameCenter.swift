@@ -17,37 +17,57 @@ class GameCenter: NSObject, GameCenterable, GKGameCenterControllerDelegate {
 
   private override init() {}
 
-  func authenticate(onViewController: UIViewController, completion: ((Bool) -> Void)? = nil) {
+  func authenticate(onViewController: UIViewController) async -> Bool {
     self.onViewController = onViewController
 
-    localPlayer.authenticateHandler = { viewController, _ in
-      if let viewController = viewController {
-        onViewController.present(viewController, animated: true, completion: nil)
-      } else if self.localPlayer.isAuthenticated {
-        // print("AUTHENTICATED displayName: \(self.localPlayer.displayName) alias: \(self.localPlayer.alias) playerID: \(self.localPlayer.playerID)")
-        Current.analytics.recordGameCenterAuth()
-        self.isAuthenticated = true
-        SoundPlayer.playRandomApplause()
-        self.localPlayer.loadDefaultLeaderboardIdentifier { identifier, _ in
-          self.leaderboardIdentifier = identifier ?? "ERROR"
-          // print("identifier: \(self.leaderboardIdentifier)")
+    return await withCheckedContinuation { continuation in
+      localPlayer.authenticateHandler = { [weak self] viewController, _ in
+        guard let self = self else {
+          continuation.resume(returning: false)
+          return
         }
-        completion?(true)
-      } else {
-        SoundPlayer.play(.sadTrombone)
-        UIAlertController.showMessage(Localizations.gameCenterFailure, title: "😰", okTitle: Localizations.gotIt, onViewController: onViewController)
-        self.isAuthenticated = false
-        completion?(false)
+
+        if let viewController {
+          Task { @MainActor in
+            onViewController.present(viewController, animated: true)
+          }
+        } else if self.localPlayer.isAuthenticated {
+          Current.analytics.recordGameCenterAuth()
+          self.isAuthenticated = true
+          SoundPlayer.playRandomApplause()
+
+          Task {
+            do {
+              self.leaderboardIdentifier = try await self.localPlayer.loadDefaultLeaderboardIdentifier()
+            } catch {
+              self.leaderboardIdentifier = "ERROR"
+            }
+          }
+          continuation.resume(returning: true)
+        } else {
+          SoundPlayer.play(.sadTrombone)
+          Task { @MainActor in
+            UIAlertController.showMessage(
+              Localizations.gameCenterFailure,
+              title: "😰", okTitle: Localizations.gotIt,
+              onViewController: onViewController
+            )
+          }
+          self.isAuthenticated = false
+          continuation.resume(returning: false)
+        }
       }
     }
   }
 
-  func reportScore(_ score: Int) {
+  func reportScore(_ score: Int) async {
     guard isAuthenticated else {
       return
     }
 
-    GKLeaderboard.submitScore(score, context: 0, player: localPlayer, leaderboardIDs: [leaderboardIdentifier], completionHandler: { _ in })
+    do {
+      try await GKLeaderboard.submitScore(score, context: 0, player: localPlayer, leaderboardIDs: [leaderboardIdentifier])
+    } catch {}
   }
 
   func showLeaderboard() {

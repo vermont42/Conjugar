@@ -12,6 +12,8 @@
 		0314467A236F9B6F00C01202 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03144679236F9B6F00C01202 /* FontExtensions.swift */; };
 		031DAD9C2341627B006B8F5F /* UISegmentedControlExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031DAD9B2341627B006B8F5F /* UISegmentedControlExtension.swift */; };
 		033F19B422A32ABC007678E6 /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F19B322A32ABC007678E6 /* World.swift */; };
+		0344CAB32F05E6A90048B612 /* AWSPinpoint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508C22A47D460030151C /* AWSPinpoint.framework */; };
+		0344CAB42F05E6A90048B612 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508B22A47D460030151C /* AWSCore.framework */; };
 		03533491228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533490228B7B0900046CCC /* UserDefaultsGetterSetterTests.swift */; };
 		03533493228DA52400046CCC /* ResultCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03533492228DA52400046CCC /* ResultCellTests.swift */; };
 		035334B5229608AA00046CCC /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035334B4229608AA00046CCC /* UIColorExtension.swift */; };
@@ -24,6 +26,7 @@
 		035C646F22299A7E001ECC02 /* RatingsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035C646E22299A7E001ECC02 /* RatingsFetcher.swift */; };
 		035EF5BB245C746800F29894 /* Localizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035EF5BA245C746800F29894 /* Localizations.swift */; };
 		035EF5C4245F29B000F29894 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 035EF5C6245F29B000F29894 /* Localizable.strings */; };
+		038A31ED2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */; };
 		038E03132270A868005CFC96 /* IntExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03122270A868005CFC96 /* IntExtensionTests.swift */; };
 		038E03152270A9FB005CFC96 /* TestGameCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */; };
 		038E03182270AC01005CFC96 /* DeviceUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038E03172270AC01005CFC96 /* DeviceUtilityTests.swift */; };
@@ -205,6 +208,7 @@
 		035EF5BA245C746800F29894 /* Localizations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizations.swift; sourceTree = "<group>"; };
 		035EF5C3245F299900F29894 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		035EF5C5245F29B000F29894 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		038E03122270A868005CFC96 /* IntExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtensionTests.swift; sourceTree = "<group>"; };
 		038E03142270A9FB005CFC96 /* TestGameCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGameCenterTests.swift; sourceTree = "<group>"; };
 		038E03172270AC01005CFC96 /* DeviceUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceUtilityTests.swift; sourceTree = "<group>"; };
@@ -362,6 +366,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0344CAB32F05E6A90048B612 /* AWSPinpoint.framework in Frameworks */,
+				0344CAB42F05E6A90048B612 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,8 +504,9 @@
 			isa = PBXGroup;
 			children = (
 				E1483FAC1EF5A2200052C436 /* Assets.xcassets */,
-				E1483FBC1EF746C40052C436 /* Sounds */,
 				035EF5C6245F29B000F29894 /* Localizable.strings */,
+				038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */,
+				E1483FBC1EF746C40052C436 /* Sounds */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -830,6 +837,7 @@
 				E1483FC01EF746D70052C436 /* chime.mp3 in Resources */,
 				E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */,
 				E1EC70FD2198BA0D00872787 /* awsconfiguration.json in Resources */,
+				038A31ED2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy in Resources */,
 				035EF5C4245F29B000F29894 /* Localizable.strings in Resources */,
 				E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */,
 				E19794342073D0C90015D490 /* gun.mp3 in Resources */,
@@ -1255,7 +1263,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
-				CURRENT_PROJECT_VERSION = 2.7;
+				CURRENT_PROJECT_VERSION = 2.8;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1267,7 +1275,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.7;
+				MARKETING_VERSION = 2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1281,7 +1289,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
-				CURRENT_PROJECT_VERSION = 2.7;
+				CURRENT_PROJECT_VERSION = 2.8;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1293,7 +1301,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.7;
+				MARKETING_VERSION = 2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1308,6 +1316,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1328,6 +1340,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (

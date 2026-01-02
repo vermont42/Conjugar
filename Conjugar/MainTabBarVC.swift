@@ -47,16 +47,15 @@ class MainTabBarVC: UITabBarController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-//    Current.communGetter.getCommunication(completion: { [weak self] commun in
-//      DispatchQueue.main.async {
-//        let lastCommunIdentifierShown = Current.settings.lastCommunIdentifierShown
-//        if Current.quiz.quizState != .inProgress && commun.identifier > lastCommunIdentifierShown {
-//          let communVC = CommunVC(commun: commun)
-//          communVC.modalPresentationStyle = .fullScreen
-//          self?.present(communVC, animated: true)
-//          Current.settings.lastCommunIdentifierShown = commun.identifier
-//        }
-//      }
-//    })
+    Task {
+      guard let commun = await Current.communGetter.getCommunication() else { return }
+      let lastCommunIdentifierShown = Current.settings.lastCommunIdentifierShown
+      if Current.quiz.quizState != .inProgress && commun.identifier > lastCommunIdentifierShown {
+        let communVC = CommunVC(commun: commun)
+        communVC.modalPresentationStyle = .fullScreen
+        self.present(communVC, animated: true)
+        Current.settings.lastCommunIdentifierShown = commun.identifier
+      }
+    }
   }
 }

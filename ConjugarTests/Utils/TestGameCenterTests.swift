@@ -10,25 +10,23 @@ import XCTest
 @testable import Conjugar
 
 class TestGameCenterTests: XCTestCase {
-  func testAuthenticate() {
+  func testAuthenticate() async {
     let tgc = TestGameCenter()
     Current = World.unitTest
     Current.gameCenter = tgc
     let dummyVC = UIViewController()
 
-    tgc.authenticate(onViewController: dummyVC, completion: { didAuthenticate in
-      XCTAssert(didAuthenticate)
+    let didAuthenticate = await tgc.authenticate(onViewController: dummyVC)
+    XCTAssert(didAuthenticate)
 
-      tgc.authenticate(onViewController: dummyVC, completion: { didAuthenticate in
-        XCTAssertFalse(didAuthenticate)
-      })
-    })
+    let didAuthenticateAgain = await tgc.authenticate(onViewController: dummyVC)
+    XCTAssertFalse(didAuthenticateAgain)
   }
 
-  func testReportScore() {
+  func testReportScore() async {
     // Nothing to test. Exercising for coverage.
     let tgc = TestGameCenter()
-    tgc.reportScore(42)
+    await tgc.reportScore(42)
   }
 
   func testShowLeaderboard() {

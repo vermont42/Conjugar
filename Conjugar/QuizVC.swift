@@ -63,7 +63,9 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       if !Current.settings.didShowGameCenterDialog {
         showGameCenterDialog()
       } else {
-        Current.gameCenter.authenticate(onViewController: self, completion: nil)
+        Task {
+          await Current.gameCenter.authenticate(onViewController: self)
+        }
       }
     }
   }
@@ -76,8 +78,11 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       Current.settings.userRejectedGameCenter = true
     }
     gameCenterController.addAction(noAction)
-    let yesAction = UIAlertAction(title: Localizations.Quiz.yes, style: UIAlertAction.Style.default) { _ in
-      Current.gameCenter.authenticate(onViewController: self, completion: nil)
+    let yesAction = UIAlertAction(title: Localizations.Quiz.yes, style: UIAlertAction.Style.default) { [weak self] _ in
+      guard let self = self else { return }
+      Task {
+        await Current.gameCenter.authenticate(onViewController: self)
+      }
     }
     gameCenterController.addAction(yesAction)
     present(gameCenterController, animated: true, completion: nil)

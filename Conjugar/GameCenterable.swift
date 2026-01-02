@@ -10,7 +10,7 @@ import UIKit
 
 protocol GameCenterable {
   var isAuthenticated: Bool { get set }
-  func authenticate(onViewController: UIViewController, completion: ((Bool) -> Void)?)
-  func reportScore(_ score: Int)
+  func authenticate(onViewController: UIViewController) async -> Bool
+  func reportScore(_ score: Int) async
   func showLeaderboard()
 }

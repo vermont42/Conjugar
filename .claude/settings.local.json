@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "Bash(xcodebuild:*)",
+      "Bash(cat:*)",
+      "Bash(kill:*)"
+    ]
+  }
+}

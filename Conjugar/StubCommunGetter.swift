@@ -10,15 +10,10 @@ import MessageUI
 import UIKit
 
 struct StubCommunGetter: CommunGetter {
-  func getCommunication(completion: @escaping (Commun) -> Void) {
-    let delay: TimeInterval = 2.0
-    DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
-//      if let sendEmailClosure = Emailer.shared.sendEmailClosure {
-//        let commun = email(sendEmailClosure: sendEmailClosure)
-//        completion(commun, communVersion)
-//      }
-      completion(newVersion)
-    })
+  func getCommunication() async -> Commun? {
+    let delay: UInt64 = 2_000_000_000 // 2 seconds in nanoseconds
+    try? await Task.sleep(nanoseconds: delay)
+    return newVersion
   }
 
   func email(sendEmailClosure: @escaping () -> ()) -> Commun {

@@ -55,6 +55,7 @@
   <verb in="admitir" vt="ri" tn="admit, accept" pe="subir" tr="sub" st="admit" />
   <verb in="adquirir" vt="ir" tn="acquire, purchase" pe="subir" tr="sub" st="adquir" fspr="adquiEro" sspr="adquiEres" tspr="adquiEre" tppr="adquiEren" fspb="adquiEra" sspb="adquiEras" tspb="adquiEra" tppb="adquiEran" />
   <verb in="aducir" vt="ir" tn="adduce" pe="conducir" tr="con" st="a" />
+  <verb in="aguachicolear" vt="ra" tn="steal water" pe="hablar" tr="habl" st="aguachicole" />
   <verb in="amanecer" vt="ir" tn="dawn" pe="conocer" tr="cono" st="amane" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" />
   <verb in="amar" vt="ra" tn="love" pe="hablar" tr="habl" st="am" />
   <verb in="andar" vt="ir" tn="walk" pe="hablar" tr="habl" st="and" fspt="andUVE" sspt="andUViste" tspt="andUVO" fppt="andUVImos" sppt="andUVIsteis" tppt="andUVIEron" />
@@ -142,6 +143,7 @@
   <verb in="ganar" vt="ra" tn="win, earn" pe="hablar" tr="habl" st="gan" />
   <verb in="gastar" vt="ra" tn="spend" pe="hablar" tr="habl" st="gast" />
   <verb in="glosar" vt="ra" tn="gloss" pe="hablar" tr="habl" st="glos" />
+  <verb in="googlear" vt="ra" tn="search for something in Google" pe="hablar" tr="habl" st="google" />
   <verb in="golpear" vt="ra" tn="hit, punch" pe="hablar" tr="habl" st="golpe" />
   <verb in="granizar" vt="ir" tn="hail" pe="cazar" tr="ca" st="grani" fs="df" ss="df" sv="df" fp="df" sp="df" tp="df" />
   <verb in="grapar" vt="ra" tn="staple" pe="hablar" tr="habl" st="grap" />
@@ -255,6 +257,7 @@
   <verb in="ver" vt="ir" tn="see" pe="comer" tr="com" st="v" po="vISTo" fspr="vEo" sppr="vEis" fspt="vI" tspt="viO" fsii="vEía" ssii="vEías" tsii="vEía" fpii="vEíamos" spii="vEíais" tpii="vEían" fspb="vEa" sspb="vEas" tspb="vEa" fppb="vEamos" sppb="vEáis" tppb="vEan" />
   <verb in="viajar" vt="ra" tn="travel" pe="hablar" tr="habl" st="viaj" />
   <verb in="visitar" vt="ra" tn="visit" pe="hablar" tr="habl" st="visit" />
+  <verb in="viralizar" vt="ir" tn="go viral" pe="cazar" tr="ca" st="virali" />
   <verb in="vivir" vt="ri" tn="live" pe="subir" tr="sub" st="viv" />
   <verb in="volver" vt="ir" tn="return" pe="resolver" tr="res" st="v" />
   <verb in="vosear" vt="ra" tn="use vos and its conjugations" pe="hablar" tr="habl" st="vose" />

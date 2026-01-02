@@ -152,7 +152,7 @@ class Settings {
     }
 
     if let promptActionCountString = getterSetter.get(key: Settings.promptActionCountKey) {
-      promptActionCount = Int((promptActionCountString as NSString).intValue)
+      promptActionCount = Int(promptActionCountString) ?? Settings.promptActionCountDefault
     } else {
       promptActionCount = Settings.promptActionCountDefault
       getterSetter.set(key: Settings.promptActionCountKey, value: "\(promptActionCount)")
@@ -168,21 +168,21 @@ class Settings {
     }
 
     if let userRejectedGameCenterString = getterSetter.get(key: Settings.userRejectedGameCenterKey) {
-      userRejectedGameCenter = Bool((userRejectedGameCenterString as NSString).boolValue)
+      userRejectedGameCenter = (userRejectedGameCenterString == "true")
     } else {
       userRejectedGameCenter = Settings.userRejectedGameCenterDefault
       getterSetter.set(key: Settings.userRejectedGameCenterKey, value: "\(userRejectedGameCenter)")
     }
 
     if let didShowGameCenterDialogString = getterSetter.get(key: Settings.didShowGameCenterDialogKey) {
-      didShowGameCenterDialog = Bool((didShowGameCenterDialogString as NSString).boolValue)
+      didShowGameCenterDialog = (didShowGameCenterDialogString == "true")
     } else {
       didShowGameCenterDialog = Settings.didShowGameCenterDialogDefault
       getterSetter.set(key: Settings.didShowGameCenterDialogKey, value: "\(didShowGameCenterDialog)")
     }
 
     if let lastCommunIdentifierShownString = getterSetter.get(key: Settings.lastCommunIdentifierShownKey) {
-      lastCommunIdentifierShown = Int((lastCommunIdentifierShownString as NSString).doubleValue)
+      lastCommunIdentifierShown = Int(lastCommunIdentifierShownString) ?? Settings.lastCommunIdentifierShownDefault
     } else {
       lastCommunIdentifierShown = Settings.lastCommunIdentifierShownDefault
       getterSetter.set(key: Settings.lastCommunIdentifierShownKey, value: "\(lastCommunIdentifierShown)")

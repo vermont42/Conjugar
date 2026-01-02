@@ -116,11 +116,12 @@ struct SettingsView: View {
             Button(Localizations.Settings.enable) {
               Current.settings.userRejectedGameCenter = false
 
-              Current.gameCenter.authenticate(
-                onViewController: Current.parentViewController ?? UIViewController(),
-                completion: { authenticated in
-                  self.isGameCenterUIHidden = authenticated
-              })
+              Task {
+                let authenticated = await Current.gameCenter.authenticate(
+                  onViewController: Current.parentViewController ?? UIViewController()
+                )
+                self.isGameCenterUIHidden = authenticated
+              }
             }
               .modifier(StandardButton())
 

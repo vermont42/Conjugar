@@ -316,7 +316,9 @@ class Quiz {
         timer?.invalidate()
         quizState = .finished
         delegate?.quizDidFinish()
-        gameCenter.reportScore(score)
+        Task {
+          await gameCenter.reportScore(score)
+        }
       }
       if result == .totalMatch {
         return (result, nil)

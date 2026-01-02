@@ -16,11 +16,11 @@ extension Int {
     let minutes = remainingSeconds / 60
     remainingSeconds -= minutes * 60
     if hours > 0 {
-      return NSString(format: "%d:%02d:%02d", hours, minutes, remainingSeconds) as String
+      return String(format: "%d:%02d:%02d", hours, minutes, remainingSeconds)
     } else if minutes > 0 {
-      return NSString(format: "%d:%02d", minutes, remainingSeconds) as String
+      return String(format: "%d:%02d", minutes, remainingSeconds)
     } else {
-      return NSString(format: "%d", remainingSeconds) as String
+      return String(format: "%d", remainingSeconds)
     }
   }
 }
