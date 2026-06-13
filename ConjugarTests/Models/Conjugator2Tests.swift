@@ -86,7 +86,7 @@ struct Conjugator2Tests {
   static let asir = VerbModel2(base: .ir, features: [StemFeature2.g1g])
   static let caer = VerbModel2(base: .er, features: [StemFeature2.g1ig, IYHiatus2.oYhiatus])
   static let construir = VerbModel2(base: .ir, features: [StemFeature2.yAdd, IYHiatus2.oYhiatus])
-  static let salir = VerbModel2(base: .ir, features: [StemFeature2.g1g, FutureEndings2.fDr])
+  static let salir = VerbModel2(base: .ir, features: [StemFeature2.g1g, FutureEndings2.fDr, ApocopatedImperative2()])
   static let valer = VerbModel2(base: .er, features: [StemFeature2.g1g, FutureEndings2.fDr])
 
   // Phase 4: strong / suppletive preterites (§4.6)
@@ -98,15 +98,14 @@ struct Conjugator2Tests {
     PreteriteEndings2.spJend
   ])
   static let decirSpJend = VerbModel2(base: .ir, features: [StemFeature2.strongPreterite(from: "dec", to: "dij"), PreteriteEndings2.spJend])
-  static let dar = VerbModel2(base: .ar, features: [PreteriteEndings2.wpI])
-  static let ver = VerbModel2(base: .er, features: [PreteriteEndings2.wpI])
-  static let ser = VerbModel2(base: .er, features: [SuppletivePreterite2.fue])
-  static let ir = VerbModel2(base: .ir, features: [SuppletivePreterite2.fue])
+  // dar/ver/ser/ir (the wp-i / pret-fue exemplars) are now the **full** Phase 5
+  // models defined below, which are supersets of the Phase 4 partials the §4.6
+  // tests exercise (the preterite/IS slots are unchanged).
 
   // Phase 4: future / conditional stems (§4.7)
-  static let haber = VerbModel2(base: .er, features: [FutureEndings2.fDrope])
   static let tenerFDr = VerbModel2(base: .er, features: [FutureEndings2.fDr])
-  static let hacer = VerbModel2(base: .er, features: [StemFeature2.contractedFuture(from: "hac", to: "ha"), FutureEndings2.fContract])
+  // haber/hacer likewise upgraded to their full Phase 5 builds below (the §4.7
+  // future/conditional slots they assert are unchanged).
   static let decirFContract = VerbModel2(base: .ir, features: [StemFeature2.contractedFuture(from: "dec", to: "di"), FutureEndings2.fContract])
 
   // Phase 4: capstones (whole phase in one verb)
@@ -115,7 +114,8 @@ struct Conjugator2Tests {
     StemFeature2.g1g,
     StemFeature2.strongPreterite(from: "ten", to: "tuv"),
     PreteriteEndings2.spEnd,
-    FutureEndings2.fDr
+    FutureEndings2.fDr,
+    ApocopatedImperative2()
   ])
   static let venir = VerbModel2(base: .ir, features: [
     StemVowel2.dIe,
@@ -123,8 +123,238 @@ struct Conjugator2Tests {
     StemFeature2.g1g,
     StemFeature2.strongPreterite(from: "ven", to: "vin"),
     PreteriteEndings2.spEnd,
-    FutureEndings2.fDr
+    FutureEndings2.fDr,
+    ApocopatedImperative2()
   ])
+
+  // MARK: - Phase 5 models (residue catalog — classes 19–35, sub-classes, §4.8)
+
+  /// Build a `LiteralSlotOverride2` from `(slot, form)` pairs (the catch-all residue).
+  static func residue(_ pairs: [(Tense2, String)]) -> LiteralSlotOverride2 {
+    LiteralSlotOverride2(overrides: pairs.map { (slot: $0.0, form: $0.1) })
+  }
+
+  /// A suppletive present-subjunctive stem (ser sea-, haber haya-, …): replace the
+  /// whole stem in PS{all} only, leaving the (separately suppletive) PI 1s alone.
+  static func subjunctiveStem(_ whole: String) -> StemFeature2 {
+    StemFeature2(operation: .replaceWhole(whole), slots: Slot2.isPresentSubjunctive)
+  }
+
+  // 19 ser = comer + pret-fue + residue (suppletive PI/IM, PS sea-, IMP sé).
+  static let ser = VerbModel2(base: .er, features: [
+    SuppletivePreterite2.fue,
+    subjunctiveStem("se"),
+    residue([
+      (.presenteDeIndicativo(.firstSingular), "soy"), (.presenteDeIndicativo(.secondSingular), "eres"),
+      (.presenteDeIndicativo(.thirdSingular), "es"), (.presenteDeIndicativo(.firstPlural), "somos"),
+      (.presenteDeIndicativo(.secondPlural), "sois"), (.presenteDeIndicativo(.thirdPlural), "son"),
+      (.presenteDeIndicativo(.secondSingularVos), "sos"),  // the sole present-tense voseo irregular
+      (.imperfectoDeIndicativo(.firstSingular), "era"), (.imperfectoDeIndicativo(.secondSingular), "eras"),
+      (.imperfectoDeIndicativo(.thirdSingular), "era"), (.imperfectoDeIndicativo(.firstPlural), "éramos"),
+      (.imperfectoDeIndicativo(.secondPlural), "erais"), (.imperfectoDeIndicativo(.thirdPlural), "eran"),
+      (.imperativoAfirmativo(.secondSingular), "sé"),
+    ]),
+  ])
+
+  // 20 estar = cantar + sp-end(estuv) + residue (estoy + the stress-shift accents).
+  static let estar = VerbModel2(base: .ar, features: [
+    StemFeature2.strongPreterite(from: "est", to: "estuv"), PreteriteEndings2.spEnd,
+    residue([
+      (.presenteDeIndicativo(.firstSingular), "estoy"), (.presenteDeIndicativo(.secondSingular), "estás"),
+      (.presenteDeIndicativo(.thirdSingular), "está"), (.presenteDeIndicativo(.thirdPlural), "están"),
+      (.presenteDeSubjuntivo(.firstSingular), "esté"), (.presenteDeSubjuntivo(.secondSingular), "estés"),
+      (.presenteDeSubjuntivo(.thirdSingular), "esté"), (.presenteDeSubjuntivo(.thirdPlural), "estén"),
+      (.imperativoAfirmativo(.secondSingular), "está"),
+    ]),
+  ])
+
+  // 21 haber = comer + sp-end(hub) + f-drope + residue (he/has/ha…, PS haya-).
+  static let haber = VerbModel2(base: .er, features: [
+    StemFeature2.strongPreterite(from: "hab", to: "hub"), PreteriteEndings2.spEnd,
+    FutureEndings2.fDrope,
+    subjunctiveStem("hay"),
+    residue([
+      (.presenteDeIndicativo(.firstSingular), "he"), (.presenteDeIndicativo(.secondSingular), "has"),
+      (.presenteDeIndicativo(.thirdSingular), "ha"), (.presenteDeIndicativo(.firstPlural), "hemos"),
+      (.presenteDeIndicativo(.thirdPlural), "han"),
+      (.imperativoAfirmativo(.secondSingular), "he"),
+    ]),
+  ])
+
+  // 22 saber = comer + sp-end(sup) + f-drope + residue (PI 1s sé, PS sep-).
+  static let saber = VerbModel2(base: .er, features: [
+    StemFeature2.strongPreterite(from: "sab", to: "sup"), PreteriteEndings2.spEnd,
+    FutureEndings2.fDrope,
+    subjunctiveStem("sep"),
+    residue([(.presenteDeIndicativo(.firstSingular), "sé")]),
+  ])
+
+  // 23 caber = comer + sp-end(cup) + f-drope + residue (PI 1s quepo, PS quep-).
+  static let caber = VerbModel2(base: .er, features: [
+    StemFeature2.strongPreterite(from: "cab", to: "cup"), PreteriteEndings2.spEnd,
+    FutureEndings2.fDrope,
+    subjunctiveStem("quep"),
+    residue([(.presenteDeIndicativo(.firstSingular), "quepo")]),
+  ])
+
+  // 24 ir = subir + pret-fue + residue (voy/vas…, IM iba-, PS vaya-, ve/vamos, yendo).
+  static let ir = VerbModel2(base: .ir, features: [
+    SuppletivePreterite2.fue,
+    subjunctiveStem("vay"),
+    residue([
+      (.presenteDeIndicativo(.firstSingular), "voy"), (.presenteDeIndicativo(.secondSingular), "vas"),
+      (.presenteDeIndicativo(.thirdSingular), "va"), (.presenteDeIndicativo(.firstPlural), "vamos"),
+      (.presenteDeIndicativo(.secondPlural), "vais"), (.presenteDeIndicativo(.thirdPlural), "van"),
+      (.imperfectoDeIndicativo(.firstSingular), "iba"), (.imperfectoDeIndicativo(.secondSingular), "ibas"),
+      (.imperfectoDeIndicativo(.thirdSingular), "iba"), (.imperfectoDeIndicativo(.firstPlural), "íbamos"),
+      (.imperfectoDeIndicativo(.secondPlural), "ibais"), (.imperfectoDeIndicativo(.thirdPlural), "iban"),
+      (.gerundio, "yendo"),
+      (.imperativoAfirmativo(.secondSingular), "ve"),
+      (.imperativoAfirmativo(.firstPlural), "vamos"),  // the PS-derivation (vayamos) exception
+    ]),
+  ])
+
+  // 25 dar = cantar + wp-i + residue (doy, the monosyllable accents dé/dais/deis).
+  static let dar = VerbModel2(base: .ar, features: [
+    PreteriteEndings2.wpI,
+    residue([
+      (.presenteDeIndicativo(.firstSingular), "doy"), (.presenteDeIndicativo(.secondPlural), "dais"),
+      (.presenteDeSubjuntivo(.firstSingular), "dé"), (.presenteDeSubjuntivo(.thirdSingular), "dé"),
+      (.presenteDeSubjuntivo(.secondPlural), "deis"),
+    ]),
+  ])
+
+  // 26 poder = comer + d-ue + sp-end(pud) + f-drope + residue (GER pudiendo).
+  static let poder = VerbModel2(base: .er, features: [
+    StemVowel2.dUe,
+    StemFeature2.strongPreterite(from: "pod", to: "pud"), PreteriteEndings2.spEnd,
+    FutureEndings2.fDrope,
+    residue([(.gerundio, "pudiendo")]),
+  ])
+
+  // 27 querer = comer + d-ie + sp-end(quis) + f-drope (querr-). No residue.
+  static let querer = VerbModel2(base: .er, features: [
+    StemVowel2.dIe,
+    StemFeature2.strongPreterite(from: "quer", to: "quis"), PreteriteEndings2.spEnd,
+    FutureEndings2.fDrope,
+  ])
+
+  // 28 decir's shared core (digo, dij-, dir-, dicho) — reused by the sub-classes.
+  static let decirCore: [Feature2] = [
+    StemVowel2.rEiStr, StemVowel2.rEiWk,
+    StemFeature2.irregularFirstSingular(from: "dec", to: "dig"),
+    StemFeature2.strongPreterite(from: "dec", to: "dij"), PreteriteEndings2.spJend,
+    StemFeature2.contractedFuture(from: "dec", to: "di"), FutureEndings2.fContract,
+    IrregularParticiple2("dec", "dicho"),
+  ]
+  static let decir = VerbModel2(base: .ir, features: decirCore + [residue([(.imperativoAfirmativo(.secondSingular), "di")])])
+  // 28-1 predecir = decir − the irregular-tú literal (so tú is the regular predice).
+  static let predecir = VerbModel2(base: .ir, features: decirCore)
+  // 28-2 bendecir = decir − f-contract − PP − IMP residue (regular FU/CO/PP/tú; keeps dig-/dij-).
+  static let bendecir = VerbModel2(base: .ir, features: [
+    StemVowel2.rEiStr, StemVowel2.rEiWk,
+    StemFeature2.irregularFirstSingular(from: "dec", to: "dig"),
+    StemFeature2.strongPreterite(from: "dec", to: "dij"), PreteriteEndings2.spJend,
+  ])
+
+  // 29 hacer = comer + hag- + sp-end(hic) + f-contract(har) + residue. Keyed on the
+  // end-anchored core `ac` (h-ac → h-ic), so satisfacer / deshacer ride free.
+  static let hacer = VerbModel2(base: .er, features: [
+    StemFeature2.irregularFirstSingular(from: "ac", to: "ag"),
+    StemFeature2.strongPreterite(from: "ac", to: "ic"), PreteriteEndings2.spEnd,
+    StemFeature2.contractedFuture(from: "ac", to: "a"), FutureEndings2.fContract,
+    RunningStemConsonantSwap2.hizo,
+    IrregularParticiple2("ac", "echo"),
+    ApocopatedImperative2(finalSwap: ("c", "z")),
+  ])
+  // 29-1 rehacer = hacer + accent residue (rehíce / rehízo).
+  static let rehacer = VerbModel2(base: .er, features: hacer.features + [residue([
+    (.pretérito(.firstSingular), "rehíce"), (.pretérito(.thirdSingular), "rehízo"),
+  ])])
+  // (29-2 satisfacer needs *no* model — it rides hacer by prefix-invariance: satisfaz/satisfizo.)
+
+  // 30 poner = comer + g1-g + sp-end(pus) + f-dr + residue (PP puesto, IMP pon).
+  static let poner = VerbModel2(base: .er, features: [
+    StemFeature2.g1g,
+    StemFeature2.strongPreterite(from: "pon", to: "pus"), PreteriteEndings2.spEnd,
+    FutureEndings2.fDr,
+    IrregularParticiple2("pon", "puesto"),
+    ApocopatedImperative2(),
+  ])
+
+  // 33 traer = comer + g1-ig(traig) + sp-jend(traj) + o-yhiatus (trayendo/traído).
+  static let traer = VerbModel2(base: .er, features: [
+    StemFeature2.g1ig,
+    StemFeature2.strongPreterite(from: "tra", to: "traj"), PreteriteEndings2.spJend,
+    IYHiatus2.oYhiatus,
+  ])
+
+  // 34 conducir = subir + zc + sp-jend(-duj).
+  static let conducirFull = VerbModel2(base: .ir, features: [
+    StemFeature2.zc,
+    StemFeature2.strongPreterite(from: "conduc", to: "conduj"), PreteriteEndings2.spJend,
+  ])
+
+  // 35 andar = cantar + sp-end(anduv).
+  static let andarFull = VerbModel2(base: .ar, features: [
+    StemFeature2.strongPreterite(from: "and", to: "anduv"), PreteriteEndings2.spEnd,
+  ])
+
+  // 14 ver = comer + wp-i + residue. The veo/vea- present and the veía- imperfect
+  // are clean stem rebuilds (append `e` to the regular `v-`), thinner than literals.
+  static let ver = VerbModel2(base: .er, features: [
+    StemFeature2(operation: .append("e"), slots: Slot2.isSubjFrom1s),  // veo, vea-
+    StemFeature2(operation: .append("e"), slots: Slot2.isImperfect),   // veía-
+    PreteriteEndings2.wpI,
+    IrregularParticiple2("v", "visto"),
+    residue([
+      (.presenteDeIndicativo(.secondPlural), "veis"),       // monosyllable: no accent (vs. regular véis)
+      (.presenteDeIndicativo(.secondSingularVos), "ves"),
+    ]),
+  ])
+
+  // 14-1 prever = ver's stem rebuilds + monosyllable→polysyllable accent residue.
+  // Distinct from ver (prever takes the regular véis/prevéis, not ver's bare veis).
+  static let prever = VerbModel2(base: .er, features: [
+    StemFeature2(operation: .append("e"), slots: Slot2.isSubjFrom1s),
+    StemFeature2(operation: .append("e"), slots: Slot2.isImperfect),
+    PreteriteEndings2.wpI,
+    IrregularParticiple2("v", "visto"),
+    residue([
+      (.presenteDeIndicativo(.secondSingular), "prevés"), (.presenteDeIndicativo(.thirdSingular), "prevé"),
+      (.presenteDeIndicativo(.thirdPlural), "prevén"),
+      (.pretérito(.firstSingular), "preví"), (.pretérito(.thirdSingular), "previó"),
+    ]),
+  ])
+
+  // 6B-4 reír = subir + r-ei-str + r-ei-wk + collapse-ii + the hiatus-accent residue.
+  static let reir = VerbModel2(base: .ir, features: [
+    StemVowel2.rEiStr, StemVowel2.rEiWk,
+    CollapseDoubleI2.collapse,
+    residue([
+      (.presenteDeIndicativo(.firstSingular), "río"), (.presenteDeIndicativo(.secondSingular), "ríes"),
+      (.presenteDeIndicativo(.thirdSingular), "ríe"), (.presenteDeIndicativo(.firstPlural), "reímos"),
+      (.presenteDeIndicativo(.thirdPlural), "ríen"),
+      (.pretérito(.secondSingular), "reíste"), (.pretérito(.firstPlural), "reímos"),
+      (.pretérito(.secondPlural), "reísteis"),
+      (.presenteDeSubjuntivo(.firstSingular), "ría"), (.presenteDeSubjuntivo(.secondSingular), "rías"),
+      (.presenteDeSubjuntivo(.thirdSingular), "ría"), (.presenteDeSubjuntivo(.thirdPlural), "rían"),
+      (.imperativoAfirmativo(.secondSingular), "ríe"), (.imperativoAfirmativo(.secondPlural), "reíd"),
+      (.participioPasado, "reído"),
+    ]),
+  ])
+
+  // §4.8 participle / defective sub-classes — base + a single PP (or defectivity).
+  static let romper = VerbModel2(base: .er, features: [IrregularParticiple2("romp", "roto")])
+  static let abrir = VerbModel2(base: .ir, features: [IrregularParticiple2("abr", "abierto")])
+  static let cubrir = VerbModel2(base: .ir, features: [IrregularParticiple2("cubr", "cubierto")])
+  static let escribir = VerbModel2(base: .ir, features: [IrregularParticiple2("scrib", "scrito")])
+  static let imprimir = VerbModel2(base: .ir, features: [IrregularParticiple2("imprim", "impreso", alternate: "imprimido")])
+  static let pudrir = VerbModel2(base: .ir, features: [IrregularParticiple2("pudr", "podrido")])
+  static let resolver = VerbModel2(base: .er, features: [StemVowel2.dUe, IrregularParticiple2("solv", "suelto")])
+  static let volver = VerbModel2(base: .er, features: [StemVowel2.dUe, IrregularParticiple2("volv", "vuelto")])
+  static let morir = VerbModel2(base: .ir, features: [StemVowel2.dUe, StemVowel2.rOuWk, IrregularParticiple2("mor", "muerto")])
+  static let abolir = VerbModel2(base: .ir, features: [DefectiveFeature2.abolir])
 
   // MARK: - cantar (regular -ar)
 
@@ -335,11 +565,15 @@ struct Conjugator2Tests {
     }
   }
 
-  @Test("non-second-person imperative is unavailable")
-  func nonSecondPersonImperativeIsUnavailable() {
-    assertFailure(
-      Conjugator2.conjugate(infinitive: "cantar", tense: .imperativoAfirmativo(.firstPlural)),
-      .imperativeNotAvailable(.firstPlural))
+  // The non-2nd-person imperatives are now **derived** from the present
+  // subjunctive (Phase 5), so they succeed where Phase 1–4 returned a failure.
+  @Test("non-second-person imperative derives from the present subjunctive", arguments: [
+    (Tense2.imperativoAfirmativo(.thirdSingular), "cante"),
+    (.imperativoAfirmativo(.firstPlural), "cantemos"),
+    (.imperativoAfirmativo(.thirdPlural), "canten"),
+  ])
+  func nonSecondPersonImperativeDerives(tense: Tense2, expected: String) {
+    expectForm("cantar", tense, expected)
   }
 
   // MARK: - Phase 2: orthographic features (§4.1)
@@ -1567,6 +1801,602 @@ struct Conjugator2Tests {
     ])
     expectForm("componer", model: poner, .pretérito(.firstSingular), "compuse")
     expectForm("componer", model: poner, .futuro(.firstSingular), "compondré")
+  }
+
+  // MARK: - Phase 5: imperative derivation (the last derivation rule)
+
+  // usted/nosotros/ustedes derive from the present subjunctive; tú/vosotros stay
+  // as the regular root; the irregular tú is scoped to .secondSingular so vos/vosotros
+  // remain regular. A regular verb, a stem-changer, an irregular-tú verb, and ir.
+  @Test("imperative derivation — regular (cantar)", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "canta"),
+    (.imperativoAfirmativo(.thirdSingular), "cante"),
+    (.imperativoAfirmativo(.firstPlural), "cantemos"),
+    (.imperativoAfirmativo(.secondPlural), "cantad"),
+    (.imperativoAfirmativo(.thirdPlural), "canten"),
+  ])
+  func imperativeRegular(tense: Tense2, expected: String) {
+    expectForm("cantar", tense, expected)
+  }
+
+  @Test("imperative derivation — stem-changer (pensar)", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "piensa"),
+    (.imperativoAfirmativo(.thirdSingular), "piense"),
+    (.imperativoAfirmativo(.firstPlural), "pensemos"),
+    (.imperativoAfirmativo(.secondPlural), "pensad"),
+    (.imperativoAfirmativo(.thirdPlural), "piensen"),
+  ])
+  func imperativeStemChanger(tense: Tense2, expected: String) {
+    expectForm("pensar", model: Self.pensar, tense, expected)
+  }
+
+  @Test("imperative derivation — irregular tú with regular vos/vosotros (tener)", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "ten"),
+    (.imperativoAfirmativo(.secondSingularVos), "tené"),
+    (.imperativoAfirmativo(.thirdSingular), "tenga"),
+    (.imperativoAfirmativo(.firstPlural), "tengamos"),
+    (.imperativoAfirmativo(.secondPlural), "tened"),
+    (.imperativoAfirmativo(.thirdPlural), "tengan"),
+  ])
+  func imperativeIrregularTu(tense: Tense2, expected: String) {
+    expectForm("tener", model: Self.tener, tense, expected)
+  }
+
+  @Test("imperative derivation — ir (ve / vamos / id)", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "ve"),
+    (.imperativoAfirmativo(.thirdSingular), "vaya"),
+    (.imperativoAfirmativo(.firstPlural), "vamos"),  // residue overrides the PS-derived vayamos
+    (.imperativoAfirmativo(.secondPlural), "id"),
+    (.imperativoAfirmativo(.thirdPlural), "vayan"),
+  ])
+  func imperativeIr(tense: Tense2, expected: String) {
+    expectForm("ir", model: Self.ir, tense, expected)
+  }
+
+  // MARK: - Phase 5: classes 19–27 (new full builds)
+
+  @Test("ser — presente de indicativo (suppletive, incl. vos sos)", arguments: zip(PersonNumber2.oracleOrder,
+    ["soy", "eres", "es", "somos", "sois", "son"]))
+  func serPresent(person: PersonNumber2, expected: String) {
+    expectForm("ser", model: Self.ser, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("ser — imperfecto de indicativo (era-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["era", "eras", "era", "éramos", "erais", "eran"]))
+  func serImperfect(person: PersonNumber2, expected: String) {
+    expectForm("ser", model: Self.ser, .imperfectoDeIndicativo(person), expected)
+  }
+
+  @Test("ser — presente de subjuntivo (sea-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["sea", "seas", "sea", "seamos", "seáis", "sean"]))
+  func serPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("ser", model: Self.ser, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("ser — futuro (regular ser-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["seré", "serás", "será", "seremos", "seréis", "serán"]))
+  func serFuture(person: PersonNumber2, expected: String) {
+    expectForm("ser", model: Self.ser, .futuro(person), expected)
+  }
+
+  @Test("ser — imperative, vos & non-finite", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "sé"),
+    (.imperativoAfirmativo(.secondSingularVos), "sé"),
+    (.imperativoAfirmativo(.secondPlural), "sed"),
+    (.imperativoAfirmativo(.thirdSingular), "sea"),
+    (.imperativoAfirmativo(.thirdPlural), "sean"),
+    (.presenteDeIndicativo(.secondSingularVos), "sos"),
+  ])
+  func serImperativeVosNonFinite(tense: Tense2, expected: String) {
+    expectForm("ser", model: Self.ser, tense, expected)
+  }
+
+  @Test("estar — presente de indicativo (estoy + stress shift)", arguments: zip(PersonNumber2.oracleOrder,
+    ["estoy", "estás", "está", "estamos", "estáis", "están"]))
+  func estarPresent(person: PersonNumber2, expected: String) {
+    expectForm("estar", model: Self.estar, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("estar — pretérito (estuv)", arguments: zip(PersonNumber2.oracleOrder,
+    ["estuve", "estuviste", "estuvo", "estuvimos", "estuvisteis", "estuvieron"]))
+  func estarPreterite(person: PersonNumber2, expected: String) {
+    expectForm("estar", model: Self.estar, .pretérito(person), expected)
+  }
+
+  @Test("estar — presente de subjuntivo (esté-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["esté", "estés", "esté", "estemos", "estéis", "estén"]))
+  func estarPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("estar", model: Self.estar, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("estar — derived imperatives", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "está"),
+    (.imperativoAfirmativo(.thirdSingular), "esté"),
+    (.imperativoAfirmativo(.firstPlural), "estemos"),
+    (.imperativoAfirmativo(.thirdPlural), "estén"),
+  ])
+  func estarImperatives(tense: Tense2, expected: String) {
+    expectForm("estar", model: Self.estar, tense, expected)
+  }
+
+  @Test("haber — presente de indicativo (he/has/ha…)", arguments: zip(PersonNumber2.oracleOrder,
+    ["he", "has", "ha", "hemos", "habéis", "han"]))
+  func haberPresent(person: PersonNumber2, expected: String) {
+    expectForm("haber", model: Self.haber, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("haber — pretérito (hub)", arguments: zip(PersonNumber2.oracleOrder,
+    ["hube", "hubiste", "hubo", "hubimos", "hubisteis", "hubieron"]))
+  func haberPreterite(person: PersonNumber2, expected: String) {
+    expectForm("haber", model: Self.haber, .pretérito(person), expected)
+  }
+
+  @Test("haber — futuro (habr-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["habré", "habrás", "habrá", "habremos", "habréis", "habrán"]))
+  func haberFutureClass(person: PersonNumber2, expected: String) {
+    expectForm("haber", model: Self.haber, .futuro(person), expected)
+  }
+
+  @Test("haber — presente de subjuntivo (haya-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["haya", "hayas", "haya", "hayamos", "hayáis", "hayan"]))
+  func haberPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("haber", model: Self.haber, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("saber — present, preterite, future, subjunctive", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), "sé"),
+    (.presenteDeIndicativo(.secondSingular), "sabes"),
+    (.pretérito(.firstSingular), "supe"),
+    (.pretérito(.thirdPlural), "supieron"),
+    (.futuro(.firstSingular), "sabré"),
+    (.presenteDeSubjuntivo(.firstSingular), "sepa"),
+    (.presenteDeSubjuntivo(.firstPlural), "sepamos"),
+    (.imperativoAfirmativo(.thirdSingular), "sepa"),
+    (.imperativoAfirmativo(.secondSingular), "sabe"),
+  ])
+  func saberSlots(tense: Tense2, expected: String) {
+    expectForm("saber", model: Self.saber, tense, expected)
+  }
+
+  @Test("caber — present, preterite, future, subjunctive", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), "quepo"),
+    (.presenteDeIndicativo(.secondSingular), "cabes"),
+    (.pretérito(.firstSingular), "cupe"),
+    (.pretérito(.thirdPlural), "cupieron"),
+    (.futuro(.firstSingular), "cabré"),
+    (.presenteDeSubjuntivo(.firstSingular), "quepa"),
+    (.presenteDeSubjuntivo(.firstPlural), "quepamos"),
+  ])
+  func caberSlots(tense: Tense2, expected: String) {
+    expectForm("caber", model: Self.caber, tense, expected)
+  }
+
+  @Test("ir — presente de indicativo (voy/vas…)", arguments: zip(PersonNumber2.oracleOrder,
+    ["voy", "vas", "va", "vamos", "vais", "van"]))
+  func irPresent(person: PersonNumber2, expected: String) {
+    expectForm("ir", model: Self.ir, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("ir — imperfecto de indicativo (iba-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["iba", "ibas", "iba", "íbamos", "ibais", "iban"]))
+  func irImperfect(person: PersonNumber2, expected: String) {
+    expectForm("ir", model: Self.ir, .imperfectoDeIndicativo(person), expected)
+  }
+
+  @Test("ir — presente de subjuntivo (vaya-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["vaya", "vayas", "vaya", "vayamos", "vayáis", "vayan"]))
+  func irPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("ir", model: Self.ir, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("ir — futuro & gerund", arguments: [
+    (Tense2.futuro(.firstSingular), "iré"),
+    (.futuro(.thirdPlural), "irán"),
+    (.gerundio, "yendo"),
+  ])
+  func irFutureGerund(tense: Tense2, expected: String) {
+    expectForm("ir", model: Self.ir, tense, expected)
+  }
+
+  @Test("dar — presente de indicativo (doy, monosyllable dais)", arguments: zip(PersonNumber2.oracleOrder,
+    ["doy", "das", "da", "damos", "dais", "dan"]))
+  func darPresent(person: PersonNumber2, expected: String) {
+    expectForm("dar", model: Self.dar, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("dar — presente de subjuntivo (dé / des / dé …)", arguments: zip(PersonNumber2.oracleOrder,
+    ["dé", "des", "dé", "demos", "deis", "den"]))
+  func darPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("dar", model: Self.dar, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("dar — derived imperative usted = dé")
+  func darImperativeUsted() {
+    expectForm("dar", model: Self.dar, .imperativoAfirmativo(.thirdSingular), "dé")
+  }
+
+  @Test("poder — present, preterite, future, gerund", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), "puedo"),
+    (.pretérito(.firstSingular), "pude"),
+    (.pretérito(.thirdPlural), "pudieron"),
+    (.futuro(.firstSingular), "podré"),
+    (.presenteDeSubjuntivo(.firstPlural), "podamos"),
+    (.gerundio, "pudiendo"),
+  ])
+  func poderSlots(tense: Tense2, expected: String) {
+    expectForm("poder", model: Self.poder, tense, expected)
+  }
+
+  @Test("querer — present, preterite, future", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), "quiero"),
+    (.pretérito(.firstSingular), "quise"),
+    (.pretérito(.thirdSingular), "quiso"),
+    (.futuro(.firstSingular), "querré"),
+    (.condicional(.thirdPlural), "querrían"),
+    (.presenteDeSubjuntivo(.firstPlural), "queramos"),
+  ])
+  func quererSlotsClass(tense: Tense2, expected: String) {
+    expectForm("querer", model: Self.querer, tense, expected)
+  }
+
+  // MARK: - Phase 5: classes 28–35 (finish the Phase-4 partials with residue)
+
+  @Test("decir — presente de indicativo (digo/dices…)", arguments: zip(PersonNumber2.oracleOrder,
+    ["digo", "dices", "dice", "decimos", "decís", "dicen"]))
+  func decirPresent(person: PersonNumber2, expected: String) {
+    expectForm("decir", model: Self.decir, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("decir — presente de subjuntivo (dig-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["diga", "digas", "diga", "digamos", "digáis", "digan"]))
+  func decirPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("decir", model: Self.decir, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("decir — preterite, future, participle, imperatives", arguments: [
+    (Tense2.pretérito(.firstSingular), "dije"),
+    (.pretérito(.thirdPlural), "dijeron"),
+    (.futuro(.firstSingular), "diré"),
+    (.participioPasado, "dicho"),
+    (.gerundio, "diciendo"),
+    (.imperativoAfirmativo(.secondSingular), "di"),
+    (.imperativoAfirmativo(.secondSingularVos), "decí"),
+    (.imperativoAfirmativo(.secondPlural), "decid"),
+    (.imperativoAfirmativo(.firstPlural), "digamos"),
+  ])
+  func decirSlots(tense: Tense2, expected: String) {
+    expectForm("decir", model: Self.decir, tense, expected)
+  }
+
+  @Test("predecir — regular tú, irregular future/participle", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "predice"),
+    (.futuro(.firstSingular), "prediré"),
+    (.participioPasado, "predicho"),
+    (.pretérito(.firstSingular), "predije"),
+  ])
+  func predecirSlots(tense: Tense2, expected: String) {
+    expectForm("predecir", model: Self.predecir, tense, expected)
+  }
+
+  @Test("bendecir — regular FU/CO/PP/tú, but irregular dig-/dij-", arguments: [
+    (Tense2.futuro(.firstSingular), "bendeciré"),
+    (.condicional(.firstSingular), "bendeciría"),
+    (.participioPasado, "bendecido"),
+    (.imperativoAfirmativo(.secondSingular), "bendice"),
+    (.presenteDeIndicativo(.firstSingular), "bendigo"),
+    (.pretérito(.firstSingular), "bendije"),
+    (.imperfectoDeSubjuntivoRa(.firstSingular), "bendijera"),
+  ])
+  func bendecirSlots(tense: Tense2, expected: String) {
+    expectForm("bendecir", model: Self.bendecir, tense, expected)
+  }
+
+  @Test("hacer — presente de indicativo (hago…)", arguments: zip(PersonNumber2.oracleOrder,
+    ["hago", "haces", "hace", "hacemos", "hacéis", "hacen"]))
+  func hacerPresent(person: PersonNumber2, expected: String) {
+    expectForm("hacer", model: Self.hacer, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("hacer — pretérito (hic-, hizo)", arguments: zip(PersonNumber2.oracleOrder,
+    ["hice", "hiciste", "hizo", "hicimos", "hicisteis", "hicieron"]))
+  func hacerPreterite(person: PersonNumber2, expected: String) {
+    expectForm("hacer", model: Self.hacer, .pretérito(person), expected)
+  }
+
+  @Test("hacer — future, participle, imperatives", arguments: [
+    (Tense2.futuro(.firstSingular), "haré"),
+    (.participioPasado, "hecho"),
+    (.imperativoAfirmativo(.secondSingular), "haz"),
+    (.imperativoAfirmativo(.secondSingularVos), "hacé"),
+    (.imperativoAfirmativo(.thirdSingular), "haga"),
+    (.imperativoAfirmativo(.firstPlural), "hagamos"),
+  ])
+  func hacerSlots(tense: Tense2, expected: String) {
+    expectForm("hacer", model: Self.hacer, tense, expected)
+  }
+
+  @Test("rehacer — accent residue (rehíce / rehízo)", arguments: [
+    (Tense2.pretérito(.firstSingular), "rehíce"),
+    (.pretérito(.thirdSingular), "rehízo"),
+    (.pretérito(.secondSingular), "rehiciste"),
+  ])
+  func rehacerSlots(tense: Tense2, expected: String) {
+    expectForm("rehacer", model: Self.rehacer, tense, expected)
+  }
+
+  @Test("satisfacer — rides hacer by prefix-invariance (satisfaz/satisfizo)", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "satisfaz"),
+    (.pretérito(.firstSingular), "satisfice"),
+    (.pretérito(.thirdSingular), "satisfizo"),
+    (.presenteDeIndicativo(.firstSingular), "satisfago"),
+    (.futuro(.firstSingular), "satisfaré"),
+    (.participioPasado, "satisfecho"),
+  ])
+  func satisfacerSlots(tense: Tense2, expected: String) {
+    expectForm("satisfacer", model: Self.hacer, tense, expected)
+  }
+
+  @Test("poner — presente de subjuntivo (pong-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["ponga", "pongas", "ponga", "pongamos", "pongáis", "pongan"]))
+  func ponerPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("poner", model: Self.poner, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("poner — preterite, future, participle, imperatives", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), "pongo"),
+    (.pretérito(.firstSingular), "puse"),
+    (.futuro(.firstSingular), "pondré"),
+    (.participioPasado, "puesto"),
+    (.imperativoAfirmativo(.secondSingular), "pon"),
+    (.imperativoAfirmativo(.secondSingularVos), "poné"),
+    (.imperativoAfirmativo(.thirdSingular), "ponga"),
+    (.imperativoAfirmativo(.firstPlural), "pongamos"),
+  ])
+  func ponerSlots(tense: Tense2, expected: String) {
+    expectForm("poner", model: Self.poner, tense, expected)
+  }
+
+  @Test("tener — capstone imperatives (ten/tenga/tengamos/tengan)", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "ten"),
+    (.imperativoAfirmativo(.thirdSingular), "tenga"),
+    (.imperativoAfirmativo(.firstPlural), "tengamos"),
+    (.imperativoAfirmativo(.thirdPlural), "tengan"),
+  ])
+  func tenerImperatives(tense: Tense2, expected: String) {
+    expectForm("tener", model: Self.tener, tense, expected)
+  }
+
+  @Test("venir — gerund & derived imperatives (ven/venga/vengamos)", arguments: [
+    (Tense2.gerundio, "viniendo"),
+    (.imperativoAfirmativo(.secondSingular), "ven"),
+    (.imperativoAfirmativo(.secondSingularVos), "vení"),
+    (.imperativoAfirmativo(.thirdSingular), "venga"),
+    (.imperativoAfirmativo(.firstPlural), "vengamos"),
+    (.imperativoAfirmativo(.thirdPlural), "vengan"),
+  ])
+  func venirImperatives(tense: Tense2, expected: String) {
+    expectForm("venir", model: Self.venir, tense, expected)
+  }
+
+  @Test("traer — presente de indicativo (traig-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["traigo", "traes", "trae", "traemos", "traéis", "traen"]))
+  func traerPresent(person: PersonNumber2, expected: String) {
+    expectForm("traer", model: Self.traer, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("traer — pretérito (traj-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["traje", "trajiste", "trajo", "trajimos", "trajisteis", "trajeron"]))
+  func traerPreterite(person: PersonNumber2, expected: String) {
+    expectForm("traer", model: Self.traer, .pretérito(person), expected)
+  }
+
+  @Test("traer — non-finite & derived imperatives", arguments: [
+    (Tense2.gerundio, "trayendo"),
+    (.participioPasado, "traído"),
+    (.imperativoAfirmativo(.thirdSingular), "traiga"),
+    (.imperativoAfirmativo(.firstPlural), "traigamos"),
+    (.imperativoAfirmativo(.thirdPlural), "traigan"),
+  ])
+  func traerSlots(tense: Tense2, expected: String) {
+    expectForm("traer", model: Self.traer, tense, expected)
+  }
+
+  @Test("conducir — derived imperatives (conduzca/conduzcamos/conduzcan)", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "conduce"),
+    (.imperativoAfirmativo(.thirdSingular), "conduzca"),
+    (.imperativoAfirmativo(.firstPlural), "conduzcamos"),
+    (.imperativoAfirmativo(.thirdPlural), "conduzcan"),
+  ])
+  func conducirImperatives(tense: Tense2, expected: String) {
+    expectForm("conducir", model: Self.conducirFull, tense, expected)
+  }
+
+  @Test("andar — pretérito & derived imperatives", arguments: [
+    (Tense2.pretérito(.firstSingular), "anduve"),
+    (.imperativoAfirmativo(.secondSingular), "anda"),
+    (.imperativoAfirmativo(.thirdSingular), "ande"),
+    (.imperativoAfirmativo(.firstPlural), "andemos"),
+  ])
+  func andarImperatives(tense: Tense2, expected: String) {
+    expectForm("andar", model: Self.andarFull, tense, expected)
+  }
+
+  // MARK: - Phase 5: derived-model prefix-invariance (the residue must compose)
+
+  @Test("derived-accent compounds (apocopated imperative is prefix-invariant)", arguments: [
+    ("obtener", Tense2.imperativoAfirmativo(.secondSingular), "obtén"),
+    ("detener", .imperativoAfirmativo(.secondSingular), "detén"),
+    ("suponer", .imperativoAfirmativo(.secondSingular), "supón"),
+    ("reponer", .imperativoAfirmativo(.secondSingular), "repón"),
+    ("convenir", .imperativoAfirmativo(.secondSingular), "convén"),
+  ])
+  func derivedAccentCompounds(infinitive: String, tense: Tense2, expected: String) {
+    let model = infinitive.hasSuffix("poner") ? Self.poner : (infinitive.hasSuffix("venir") ? Self.venir : Self.tener)
+    expectForm(infinitive, model: model, tense, expected)
+  }
+
+  @Test("residue prefix-invariance — strong/contracted stems & participles", arguments: [
+    ("detener", Tense2.pretérito(.firstSingular), "detuve"),
+    ("detener", .futuro(.firstSingular), "detendré"),
+    ("componer", .participioPasado, "compuesto"),
+    ("componer", .pretérito(.firstSingular), "compuse"),
+    ("descubrir", .participioPasado, "descubierto"),
+    ("describir", .participioPasado, "descrito"),
+    ("devolver", .participioPasado, "devuelto"),
+    ("deshacer", .participioPasado, "deshecho"),
+  ])
+  func residuePrefixInvariance(infinitive: String, tense: Tense2, expected: String) {
+    let model: VerbModel2
+    switch infinitive {
+    case "detener": model = Self.tener
+    case "componer": model = Self.poner
+    case "descubrir": model = Self.cubrir
+    case "describir": model = Self.escribir
+    case "devolver": model = Self.volver
+    case "deshacer": model = Self.hacer
+    default: model = Self.tener
+    }
+    expectForm(infinitive, model: model, tense, expected)
+  }
+
+  // MARK: - Phase 5: §4.8 participles & defectives
+
+  @Test("irregular participles", arguments: [
+    ("romper", Self.romper, "roto"),
+    ("abrir", Self.abrir, "abierto"),
+    ("cubrir", Self.cubrir, "cubierto"),
+    ("escribir", Self.escribir, "escrito"),
+    ("imprimir", Self.imprimir, "impreso"),
+    ("pudrir", Self.pudrir, "podrido"),
+    ("resolver", Self.resolver, "resuelto"),
+    ("volver", Self.volver, "vuelto"),
+    ("morir", Self.morir, "muerto"),
+  ])
+  func irregularParticiples(infinitive: String, model: VerbModel2, expected: String) {
+    expectForm(infinitive, model: model, .participioPasado, expected)
+  }
+
+  // The rest of the paradigm stays the base's: a PP override doesn't leak.
+  @Test("participle classes keep the base paradigm", arguments: [
+    ("romper", Self.romper, Tense2.pretérito(.firstSingular), "rompí"),
+    ("abrir", Self.abrir, .pretérito(.firstSingular), "abrí"),
+    ("resolver", Self.resolver, .presenteDeIndicativo(.firstSingular), "resuelvo"),
+    ("morir", Self.morir, .pretérito(.thirdSingular), "murió"),
+    ("morir", Self.morir, .gerundio, "muriendo"),
+  ])
+  func participleClassesKeepParadigm(infinitive: String, model: VerbModel2, tense: Tense2, expected: String) {
+    expectForm(infinitive, model: model, tense, expected)
+  }
+
+  @Test("morir — presente de indicativo (dormir-features)", arguments: zip(PersonNumber2.oracleOrder,
+    ["muero", "mueres", "muere", "morimos", "morís", "mueren"]))
+  func morirPresent(person: PersonNumber2, expected: String) {
+    expectForm("morir", model: Self.morir, .presenteDeIndicativo(person), expected)
+  }
+
+  // abolir (defective): the -i-vowel forms exist; the STR/1s/PS-less slots have none.
+  @Test("abolir — the existing forms", arguments: [
+    (Tense2.presenteDeIndicativo(.firstPlural), "abolimos"),
+    (.presenteDeIndicativo(.secondPlural), "abolís"),
+    (.pretérito(.firstSingular), "abolí"),
+    (.imperfectoDeIndicativo(.firstSingular), "abolía"),
+    (.futuro(.firstSingular), "aboliré"),
+    (.imperativoAfirmativo(.secondPlural), "abolid"),
+    (.participioPasado, "abolido"),
+    (.gerundio, "aboliendo"),
+  ])
+  func abolirExistingForms(tense: Tense2, expected: String) {
+    expectForm("abolir", model: Self.abolir, tense, expected)
+  }
+
+  @Test("abolir — the missing forms report .noForm", arguments: [
+    Tense2.presenteDeIndicativo(.firstSingular),
+    .presenteDeIndicativo(.thirdSingular),
+    .presenteDeIndicativo(.thirdPlural),
+    .presenteDeSubjuntivo(.firstSingular),
+    .imperativoAfirmativo(.secondSingular),
+    .imperativoAfirmativo(.firstPlural),
+  ])
+  func abolirMissingForms(tense: Tense2) {
+    assertFailure(
+      Conjugator2.conjugate(infinitive: "abolir", tense: tense, model: Self.abolir),
+      .noForm(tense))
+  }
+
+  // MARK: - Phase 5: ver / reír (the deferred residue stem classes)
+
+  @Test("ver — presente de indicativo (veo/ves…)", arguments: zip(PersonNumber2.oracleOrder,
+    ["veo", "ves", "ve", "vemos", "veis", "ven"]))
+  func verPresent(person: PersonNumber2, expected: String) {
+    expectForm("ver", model: Self.ver, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("ver — imperfecto de indicativo (veía-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["veía", "veías", "veía", "veíamos", "veíais", "veían"]))
+  func verImperfect(person: PersonNumber2, expected: String) {
+    expectForm("ver", model: Self.ver, .imperfectoDeIndicativo(person), expected)
+  }
+
+  @Test("ver — presente de subjuntivo (vea-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["vea", "veas", "vea", "veamos", "veáis", "vean"]))
+  func verPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("ver", model: Self.ver, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("ver — preterite, participle, imperative", arguments: [
+    (Tense2.pretérito(.firstSingular), "vi"),
+    (.pretérito(.thirdSingular), "vio"),
+    (.participioPasado, "visto"),
+    (.imperativoAfirmativo(.secondSingular), "ve"),
+  ])
+  func verSlots(tense: Tense2, expected: String) {
+    expectForm("ver", model: Self.ver, tense, expected)
+  }
+
+  @Test("prever — monosyllable→polysyllable accent residue", arguments: zip(PersonNumber2.oracleOrder,
+    ["preveo", "prevés", "prevé", "prevemos", "prevéis", "prevén"]))
+  func preverPresent(person: PersonNumber2, expected: String) {
+    expectForm("prever", model: Self.prever, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("prever — preterite & participle", arguments: [
+    (Tense2.pretérito(.firstSingular), "preví"),
+    (.pretérito(.thirdSingular), "previó"),
+    (.pretérito(.secondSingular), "previste"),
+    (.participioPasado, "previsto"),
+    (.imperfectoDeIndicativo(.firstSingular), "preveía"),
+  ])
+  func preverSlots(tense: Tense2, expected: String) {
+    expectForm("prever", model: Self.prever, tense, expected)
+  }
+
+  @Test("reír — presente de indicativo (hiatus accents)", arguments: zip(PersonNumber2.oracleOrder,
+    ["río", "ríes", "ríe", "reímos", "reís", "ríen"]))
+  func reirPresent(person: PersonNumber2, expected: String) {
+    expectForm("reír", model: Self.reir, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("reír — pretérito (collapse-ii + accents)", arguments: zip(PersonNumber2.oracleOrder,
+    ["reí", "reíste", "rió", "reímos", "reísteis", "rieron"]))
+  func reirPreterite(person: PersonNumber2, expected: String) {
+    expectForm("reír", model: Self.reir, .pretérito(person), expected)
+  }
+
+  @Test("reír — presente de subjuntivo (STR accents, WK clean)", arguments: zip(PersonNumber2.oracleOrder,
+    ["ría", "rías", "ría", "riamos", "riáis", "rían"]))
+  func reirPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("reír", model: Self.reir, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("reír — imperfecto de subjuntivo & non-finite (collapse-ii)", arguments: [
+    (Tense2.imperfectoDeSubjuntivoRa(.firstSingular), "riera"),
+    (.imperfectoDeSubjuntivoRa(.firstPlural), "riéramos"),
+    (.gerundio, "riendo"),
+    (.participioPasado, "reído"),
+    (.futuro(.firstSingular), "reiré"),
+  ])
+  func reirSlots(tense: Tense2, expected: String) {
+    expectForm("reír", model: Self.reir, tense, expected)
   }
 
   // MARK: - Helpers

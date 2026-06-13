@@ -46,16 +46,47 @@ enum Conjugator2 {
 
     let stem = String(infinitive.dropLast(2))
 
+    // Defectivity (taxonomy §5 abolir): a slot a feature declares formless has no
+    // composition at all — report it before reaching the ending tables.
+    if model.features.contains(where: { $0.suppresses(tense) }) {
+      return .failure(.noForm(tense))
+    }
+
     guard let ending = model.base.ending(for: tense) else {
       // The only slot a regular root legitimately lacks is an affirmative
-      // imperative for a non-2nd-person (those are derived later).
+      // imperative for a non-2nd-person; those are now **derived** (usted/
+      // ustedes/nosotros from the present subjunctive, taxonomy §1).
       if case let .imperativoAfirmativo(personNumber) = tense {
-        return .failure(.imperativeNotAvailable(personNumber))
+        return deriveImperative(personNumber: personNumber, stem: stem, model: model)
       }
       preconditionFailure("Regular root \(model.base) produced no ending for \(tense).")
     }
 
     return .success(compose(stem: stem, ending: ending, tense: tense, features: model.features))
+  }
+
+  /// Derive the affirmative imperative for usted (3s) / nosotros (1p) / ustedes
+  /// (3p) — the persons the regular paradigm lacks (taxonomy §1 imperative row).
+  /// They are the **present subjunctive** of the same person, so every PS
+  /// irregularity rides through for free (tenga, pongamos, conduzcan, vayan, sea,
+  /// dé). Crucially this reuses the *computed* PS (`compose`), not a re-derivation
+  /// (crux 1). A trailing imperative-slot residue may then override it — the one
+  /// case being `ir`'s nosotros = **vamos** (not vayamos).
+  private static func deriveImperative(personNumber: PersonNumber2, stem: String, model: VerbModel2) -> Result<String, Conjugator2Error> {
+    guard let psEnding = model.base.ending(for: .presenteDeSubjuntivo(personNumber)) else {
+      return .failure(.imperativeNotAvailable(personNumber))
+    }
+    let subjunctive = compose(stem: stem, ending: psEnding, tense: .presenteDeSubjuntivo(personNumber), features: model.features)
+
+    // Apply any imperative-slot residue (a literal override) on top of the PS
+    // form. Only residue literals target a non-2nd imperative person, so this
+    // loop is a no-op except for the `ir` vamos exception.
+    let imperative = Tense2.imperativoAfirmativo(personNumber)
+    var form = subjunctive
+    for feature in model.features where feature.applies(to: imperative) {
+      (form, _) = feature.apply(stem: form, ending: "", tense: imperative, regularStem: stem)
+    }
+    return .success(form)
   }
 
   /// Composition seam (taxonomy §1): start from the regular `(stem, ending)` pair

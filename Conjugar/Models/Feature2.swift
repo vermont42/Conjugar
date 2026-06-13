@@ -43,6 +43,16 @@ protocol Feature2 {
   /// `subj-from-1s` last-wins reset: tener → `teng-`, not `*tieng-`). The Phase
   /// 2/3 features ignore it and transform the running `stem` as before.
   func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String)
+
+  /// True for a slot that this feature declares **has no form at all** (a
+  /// *defective* verb — Phase 5, taxonomy §5 abolir). The conjugator reports such
+  /// a slot as `.noForm` rather than composing a (nonexistent) form. Defaults to
+  /// `false`: a feature suppresses nothing unless it opts in (`DefectiveFeature2`).
+  func suppresses(_ tense: Tense2) -> Bool
+}
+
+extension Feature2 {
+  func suppresses(_ tense: Tense2) -> Bool { false }
 }
 
 // MARK: - Shared slot vocabulary (taxonomy §2)
@@ -155,5 +165,25 @@ enum Slot2 {
     default:
       return false
     }
+  }
+
+  // MARK: - Phase 5 residue slot sets
+
+  /// **IM{all}** = the imperfect indicative. The only verbs with an irregular
+  /// imperfect are `ser`/`ir`/`ver` (taxonomy §1); `ver`/`prever` route their
+  /// `ve-`/`preve-` imperfect stem through `StemFeature2` here (regular `-er`
+  /// endings on the rebuilt stem), while `ser`/`ir` use literal residue.
+  static func isImperfect(_ tense: Tense2) -> Bool {
+    if case .imperfectoDeIndicativo = tense { return true }
+    return false
+  }
+
+  /// **PS{all}** = the whole present subjunctive. The suppletive-subjunctive
+  /// verbs (`ser` sea-, `haber` haya-, `saber` sep-, `caber` quep-, `ir` vaya-)
+  /// rebuild a fresh subjunctive stem here without touching the (separately
+  /// suppletive) present indicative 1s — so this is `subj-from-1s` minus PI{1s}.
+  static func isPresentSubjunctive(_ tense: Tense2) -> Bool {
+    if case .presenteDeSubjuntivo = tense { return true }
+    return false
   }
 }
