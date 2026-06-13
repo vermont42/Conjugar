@@ -395,7 +395,7 @@
 			children = (
 				03144675236F9AD900C01202 /* SetttingsView.swift */,
 			);
-			name = Views;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		038E03162270ABEA005CFC96 /* Analytics */ = {
@@ -440,7 +440,7 @@
 				E1151E541E9C5D9C00DE44D6 /* VerbCell.swift */,
 				E18D5FA61F1EFD2700313113 /* VerbUIV.swift */,
 			);
-			name = UIViews;
+			path = UIViews;
 			sourceTree = "<group>";
 		};
 		E107B08D1EB66E26004C5E91 /* Controllers */ = {
@@ -456,7 +456,7 @@
 				E14BAD911F0049AF000D91C5 /* ResultsVC.swift */,
 				E1151E561E9C610100DE44D6 /* VerbVC.swift */,
 			);
-			name = Controllers;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		E107B08E1EB66E64004C5E91 /* Utils */ = {
@@ -501,19 +501,17 @@
 				03C8506523E4883300FD74AD /* UsesAutoLayout.swift */,
 				E18F7F371ECA7C9A00633200 /* Utterer.swift */,
 			);
-			name = Utils;
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		E107B08F1EB66E7C004C5E91 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
 				E1F06AD71E8F05F300ADD2E1 /* AppDelegate.swift */,
-				E1F06AE31E8F05F300ADD2E1 /* Info.plist */,
-				E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */,
 				035EF5BA245C746800F29894 /* Localizations.swift */,
 				03C8506923E4F39600FD74AD /* main.swift */,
 			);
-			name = Supporting;
+			path = Supporting;
 			sourceTree = "<group>";
 		};
 		E107B0901EB66E9F004C5E91 /* Assets */ = {
@@ -635,11 +633,10 @@
 			children = (
 				E1171C9021AA1BF000B06342 /* AnalyticsServiceable.swift */,
 				E1EC70FF2198BA6300872787 /* AWSAnalyticsService.swift */,
-				E1EC70FC2198BA0D00872787 /* awsconfiguration.json */,
 				E1EC71022198BA8A00872787 /* DeviceUtility.swift */,
 				E1171C9221AB387500B06342 /* TestAnalyticsService.swift */,
 			);
-			name = Analytics;
+			path = Analytics;
 			sourceTree = "<group>";
 		};
 		E1F06ACB1E8F05F200ADD2E1 = {
@@ -675,6 +672,9 @@
 				03144674236F9A6F00C01202 /* Views */,
 				03EA266B238C944F008DF4B7 /* UIViews */,
 				E107B08E1EB66E64004C5E91 /* Utils */,
+				E1EC70FC2198BA0D00872787 /* awsconfiguration.json */,
+				E1F06AE31E8F05F300ADD2E1 /* Info.plist */,
+				E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */,
 			);
 			path = Conjugar;
 			sourceTree = "<group>";
@@ -729,7 +729,7 @@
 				67595FC58D54A929A92266F3 /* Conjugator2.swift */,
 				BBAD34C17140CE6B3FA82314 /* Conjugator2Error.swift */,
 			);
-			name = Models;
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
