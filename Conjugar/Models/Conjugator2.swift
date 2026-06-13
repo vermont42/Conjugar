@@ -10,17 +10,22 @@
 // Suffixed `2` while it lives alongside the old `Conjugator`; the suffix is
 // dropped once the old engine is removed.
 //
-// Phase 1 scope: conjugate the three regular roots (and therefore any regular
-// -ar/-er/-ir verb) correctly. There is no verb→model map yet, so a verb's model
-// is inferred from its ending as the matching base with no features. Features and
-// the verb→model map arrive in later phases; the composition seam (`compose`) is
-// already in place so they slot in without restructuring.
+// The no-`model:` entry points (Phase 6 C) resolve a verb's model from the
+// verb→model map (`VerbMap2` → `ModelCatalog2`), falling back to a regular base
+// inferred from the ending for any verb outside the 4,818. The `model:`-taking
+// overloads take an explicit `VerbModel2` and are unchanged (the tests and the
+// alternate-forms path call them directly). The composition seam (`compose`) is
+// end-anchored, so a prefixed verb (detener, reconocer) rides its base's model
+// for free.
 enum Conjugator2 {
   /// Smallest valid Spanish infinitive length ("ir").
   static let minimumInfinitiveLength = 2
 
-  /// Conjugate a regular verb (no features) — convenience over the model-taking
-  /// entry point, inferring the base from the infinitive's ending.
+  /// Conjugate by verb name alone — the convenience entry point. Resolves the
+  /// verb's model from the verb→model map (Phase 6 C; see `resolvedModel`) and
+  /// conjugates against it, so an irregular verb conjugates correctly without the
+  /// caller naming its model. A verb outside the map falls back to a regular base
+  /// inferred from the ending.
   static func conjugate(infinitive: String, tense: Tense2) -> Result<String, Conjugator2Error> {
     guard infinitive.count >= minimumInfinitiveLength else {
       return .failure(.infinitiveTooShort)
@@ -28,7 +33,7 @@ enum Conjugator2 {
     guard let base = RegularRoot2(infinitive: infinitive) else {
       return .failure(.invalidInfinitiveEnding(String(infinitive.suffix(2))))
     }
-    return conjugate(infinitive: infinitive, tense: tense, model: VerbModel2(base: base))
+    return conjugate(infinitive: infinitive, tense: tense, model: resolvedModel(for: infinitive, base: base))
   }
 
   /// Conjugate `infinitive` against an explicit `model` (base + ordered features).
@@ -75,7 +80,9 @@ enum Conjugator2 {
     guard let base = RegularRoot2(infinitive: infinitive) else {
       return .failure(.invalidInfinitiveEnding(String(infinitive.suffix(2))))
     }
-    return conjugateAll(infinitive: infinitive, tense: tense, model: VerbModel2(base: base))
+    // Same resolution as `conjugate`, so the all-forms path picks up a mapped
+    // model's alternates (erguir yergo/irgo, raer raigo/rayo, …) by verb name.
+    return conjugateAll(infinitive: infinitive, tense: tense, model: resolvedModel(for: infinitive, base: base))
   }
 
   static func conjugateAll(infinitive: String, tense: Tense2, model: VerbModel2) -> Result<[String], Conjugator2Error> {
@@ -116,6 +123,40 @@ enum Conjugator2 {
     // book-preference order, and coincident slots collapse to a single form.
     var seen = Set<String>()
     return .success(forms.filter { seen.insert($0).inserted })
+  }
+
+  // MARK: - The resolver (Phase 6 C)
+
+  /// Resolve a verb's model for the no-`model:` entry points: consult the
+  /// verb→model map (`VerbMap2`, loaded from `verbModelMap.xml`) — verb → its
+  /// default class number → the `ModelCatalog2` model — so an irregular verb
+  /// conjugates correctly by name, and a prefixed compound (detener, reconocer)
+  /// rides its base's model on its own stem (the end-anchored §1 payoff).
+  ///
+  /// **Fallback policy:** a verb **not** in the map (a typo, or a verb outside the
+  /// 4,818 — `hablar`, `vivir`, …) falls back to a **regular base inferred from the
+  /// ending**, today's pre-Phase-6 behavior. This is the safe, useful default: an
+  /// unknown verb that conjugates regularly still works, and every pre-Phase-6
+  /// no-`model:` test stays green. (The alternative — a `.unknownVerb` error — was
+  /// rejected: it would break those tests and gives callers nothing useful.) The
+  /// same fallback covers the should-never-happen case of a class number the map
+  /// carries but the catalog lacks (the catalog-completeness test rules it out).
+  ///
+  /// **Homonym policy (crux 4):** the map stores **both** senses of the 4 homonyms
+  /// (apostar/asolar/aterrar/atestar); the resolver conjugates the **default
+  /// sense** — `entry.classNumber`, the first/everyday sense (apostar→bet 4B,
+  /// asolar→raze 4B, aterrar→terrify 1, atestar→stuff 4A). Both senses remain
+  /// retrievable through `VerbMap2` for the future UI, which can offer the other.
+  ///
+  /// The gloss (`entry.gloss`) is display-only and never consulted here, so it can
+  /// never influence a conjugation.
+  private static func resolvedModel(for infinitive: String, base: RegularRoot2) -> VerbModel2 {
+    if
+      let entry = VerbMap2.shared.entry(for: infinitive),
+      let model = ModelCatalog2.model(forClass: entry.classNumber) {
+      return model
+    }
+    return VerbModel2(base: base)
   }
 
   /// The post-validation single-slot core: defectivity check → regular ending →
