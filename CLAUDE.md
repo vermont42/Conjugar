@@ -34,7 +34,7 @@ var Current = World.device  // Production
 ```
 
 Services provided by World:
-- `analytics: AnalyticsServiceable` - AWS Pinpoint or test stub
+- `analytics: AnalyticsServiceable` - no-op test stub (AWS Pinpoint removed; TelemetryDeck planned)
 - `gameCenter: GameCenterable` - Game Center integration
 - `reviewPrompter: ReviewPromptable` - App Store review prompting
 - `settings: Settings` - User preferences (wraps UserDefaults)
@@ -43,7 +43,7 @@ Services provided by World:
 ### Protocol-Based Abstractions
 
 All external services have protocol abstractions with test implementations:
-- `AnalyticsServiceable` → `AWSAnalyticsService` / `TestAnalyticsService`
+- `AnalyticsServiceable` → `TestAnalyticsService` (the only implementation; a TelemetryDeck-backed one is planned)
 - `GameCenterable` → `GameCenter` / `TestGameCenter`
 - `ReviewPromptable` → `ReviewPrompter` / `TestReviewPrompter`
 - `GetterSetter` → `UserDefaultsGetterSetter` / `DictionaryGetterSetter`

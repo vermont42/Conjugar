@@ -54,7 +54,8 @@ class World {
     let gameCenter = GameCenter.shared
 
     return World(
-      analytics: AWSAnalyticsService(),
+      // TODO: swap in a TelemetryDeck-backed AnalyticsServiceable once integrated.
+      analytics: TestAnalyticsService(),
       reviewPrompter: ReviewPrompter(),
       gameCenter: gameCenter,
       settings: settings,

@@ -7,12 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0344CAB32F05E6A90048B612 /* AWSPinpoint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508C22A47D460030151C /* AWSPinpoint.framework */; };
-		0344CAB42F05E6A90048B612 /* AWSCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508B22A47D460030151C /* AWSCore.framework */; };
 		035EF5C4245F29B000F29894 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 035EF5C6245F29B000F29894 /* Localizable.strings */; };
 		038A31ED2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */; };
-		03C9508F22A47E750030151C /* AWSCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508B22A47D460030151C /* AWSCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		03C9509022A47E750030151C /* AWSPinpoint.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 03C9508C22A47D460030151C /* AWSPinpoint.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		03FF1748258C17E900BA447D /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03FF1747258C17E900BA447D /* CloudKit.framework */; };
 		E11CE1021F48867400E74E10 /* sadTrombone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E11CE1011F48867400E74E10 /* sadTrombone.mp3 */; };
 		E14271371F01CA98001D19E1 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E14271361F01CA98001D19E1 /* GameKit.framework */; };
@@ -26,7 +22,6 @@
 		E16004CD21BC863500909ED1 /* QuizVCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16004CC21BC863500909ED1 /* QuizVCUITests.swift */; };
 		E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E18F7F3D1ECA7E3700633200 /* silence.mp3 */; };
 		E19794342073D0C90015D490 /* gun.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E19794332073D0C90015D490 /* gun.mp3 */; };
-		E1EC70FD2198BA0D00872787 /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = E1EC70FC2198BA0D00872787 /* awsconfiguration.json */; };
 		E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -54,8 +49,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				03C9508F22A47E750030151C /* AWSCore.framework in Embed Frameworks */,
-				03C9509022A47E750030151C /* AWSPinpoint.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -66,8 +59,6 @@
 		035EF5C3245F299900F29894 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		035EF5C5245F29B000F29894 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		03C9508B22A47D460030151C /* AWSCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSCore.framework; sourceTree = "<group>"; };
-		03C9508C22A47D460030151C /* AWSPinpoint.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSPinpoint.framework; sourceTree = "<group>"; };
 		03FF1744258C17E500BA447D /* Conjugar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Conjugar.entitlements; sourceTree = "<group>"; };
 		03FF1747258C17E900BA447D /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		E11CE1011F48867400E74E10 /* sadTrombone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone.mp3; sourceTree = "<group>"; };
@@ -84,7 +75,6 @@
 		E16004CE21BC863500909ED1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E18F7F3D1ECA7E3700633200 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silence.mp3; sourceTree = "<group>"; };
 		E19794332073D0C90015D490 /* gun.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gun.mp3; sourceTree = "<group>"; };
-		E1EC70FC2198BA0D00872787 /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = SOURCE_ROOT; };
 		E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Conjugar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1F06AE11E8F05F300ADD2E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E1F06AE31E8F05F300ADD2E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -140,8 +130,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0344CAB32F05E6A90048B612 /* AWSPinpoint.framework in Frameworks */,
-				0344CAB42F05E6A90048B612 /* AWSCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,8 +151,6 @@
 			isa = PBXGroup;
 			children = (
 				03FF1747258C17E900BA447D /* CloudKit.framework */,
-				03C9508B22A47D460030151C /* AWSCore.framework */,
-				03C9508C22A47D460030151C /* AWSPinpoint.framework */,
 				E14271361F01CA98001D19E1 /* GameKit.framework */,
 			);
 			name = Frameworks;
@@ -228,7 +214,6 @@
 				0353B2F62FDCE50E00FF069B /* Views */,
 				0353B3042FDCE50E00FF069B /* UIViews */,
 				0353B3372FDCE50E00FF069B /* Utils */,
-				E1EC70FC2198BA0D00872787 /* awsconfiguration.json */,
 				E1F06AE31E8F05F300ADD2E1 /* Info.plist */,
 				E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */,
 			);
@@ -264,7 +249,6 @@
 				E1F06AD11E8F05F200ADD2E1 /* Frameworks */,
 				E1F06AD21E8F05F200ADD2E1 /* Resources */,
 				E1EC70F92198A63700872787 /* Embed Frameworks */,
-				E1EC70FA2198A6A800872787 /* Pinpoint Hocus Pocus */,
 				E1171C8F21A9A4AD00B06342 /* Run SwiftLint */,
 			);
 			buildRules = (
@@ -375,7 +359,6 @@
 			files = (
 				E1483FC01EF746D70052C436 /* chime.mp3 in Resources */,
 				E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */,
-				E1EC70FD2198BA0D00872787 /* awsconfiguration.json in Resources */,
 				038A31ED2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy in Resources */,
 				035EF5C4245F29B000F29894 /* Localizable.strings in Resources */,
 				E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */,
@@ -418,25 +401,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-		E1EC70FA2198A6A800872787 /* Pinpoint Hocus Pocus */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Pinpoint Hocus Pocus";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework/strip-frameworks.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -677,10 +641,6 @@
 				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
 				CURRENT_PROJECT_VERSION = 2.8;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
 				INFOPLIST_FILE = Conjugar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -703,10 +663,6 @@
 				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
 				CURRENT_PROJECT_VERSION = 2.8;
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
 				INFOPLIST_FILE = Conjugar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -728,10 +684,6 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -752,10 +704,6 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
