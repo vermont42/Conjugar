@@ -595,6 +595,283 @@ final class Conjugator2Tests: XCTestCase {
     assertEqual("repetir", repetir, .gerundio, "repitiendo")
   }
 
+  // MARK: - Phase 4: irregular 1s + present subjunctive (§4.5)
+
+  // zc: c→zc in PI 1s + PS{all}, built on the regular stem (subj-from-1s bundled).
+  func testZc() { // conocer (7A) + lucir (7B)
+    let conocer = VerbModel2(base: .er, features: [StemFeature2.zc])
+    assertEqual("conocer", conocer, .presenteDeIndicativo(.firstSingular), "conozco")
+    assertEqual("conocer", conocer, .presenteDeIndicativo(.secondSingular), "conoces")
+    assertParadigm("conocer", conocer, { .presenteDeSubjuntivo($0) },
+                   ["conozca", "conozcas", "conozca", "conozcamos", "conozcáis", "conozcan"])
+    // The preterite stays regular (no strong preterite here).
+    assertEqual("conocer", conocer, .pretérito(.firstSingular), "conocí")
+
+    let lucir = VerbModel2(base: .ir, features: [StemFeature2.zc])
+    assertEqual("lucir", lucir, .presenteDeIndicativo(.firstSingular), "luzco")
+    assertParadigm("lucir", lucir, { .presenteDeSubjuntivo($0) },
+                   ["luzca", "luzcas", "luzca", "luzcamos", "luzcáis", "luzcan"])
+  }
+
+  // g1-g: append g to the regular stem in PI 1s + PS{all}.
+  func testG1g() { // asir (13)
+    let asir = VerbModel2(base: .ir, features: [StemFeature2.g1g])
+    assertEqual("asir", asir, .presenteDeIndicativo(.firstSingular), "asgo")
+    assertEqual("asir", asir, .presenteDeIndicativo(.secondSingular), "ases")
+    assertParadigm("asir", asir, { .presenteDeSubjuntivo($0) },
+                   ["asga", "asgas", "asga", "asgamos", "asgáis", "asgan"])
+  }
+
+  // g1-ig + o-yhiatus: caigo/caiga AND the hiatus glide/accents (caíste/caído/
+  // cayó/cayera) — the accent fires because the -i- follows a strong vowel (a).
+  func testG1igPlusYhiatus() { // caer (9)
+    let caer = VerbModel2(base: .er, features: [StemFeature2.g1ig, IYHiatus2.oYhiatus])
+    assertEqual("caer", caer, .presenteDeIndicativo(.firstSingular), "caigo")
+    assertParadigm("caer", caer, { .presenteDeSubjuntivo($0) },
+                   ["caiga", "caigas", "caiga", "caigamos", "caigáis", "caigan"])
+    assertParadigm("caer", caer, { .pretérito($0) },
+                   ["caí", "caíste", "cayó", "caímos", "caísteis", "cayeron"])
+    assertEqual("caer", caer, .participioPasado, "caído")
+    assertEqual("caer", caer, .gerundio, "cayendo")
+    assertParadigm("caer", caer, { .imperfectoDeSubjuntivoRa($0) },
+                   ["cayera", "cayeras", "cayera", "cayéramos", "cayerais", "cayeran"])
+  }
+
+  // y-add + o-yhiatus: the i→y glide everywhere it surfaces (construyo/construye/
+  // construyen, construya, construyó, construyera, construyendo) BUT the -uir
+  // hiatus accents do NOT fire (construiste/construimos/construido) because the
+  // -i- follows the weak -u-, not a strong vowel — Phase 4 crux 5.
+  func testYAddPlusYhiatus() { // construir (8)
+    let m = VerbModel2(base: .ir, features: [StemFeature2.yAdd, IYHiatus2.oYhiatus])
+    assertParadigm("construir", m, { .presenteDeIndicativo($0) },
+                   ["construyo", "construyes", "construye", "construimos", "construís", "construyen"])
+    assertParadigm("construir", m, { .presenteDeSubjuntivo($0) },
+                   ["construya", "construyas", "construya", "construyamos", "construyáis", "construyan"])
+    assertParadigm("construir", m, { .pretérito($0) },
+                   ["construí", "construiste", "construyó", "construimos", "construisteis", "construyeron"])
+    assertEqual("construir", m, .gerundio, "construyendo")
+    assertEqual("construir", m, .participioPasado, "construido")
+    assertParadigm("construir", m, { .imperfectoDeSubjuntivoRa($0) },
+                   ["construyera", "construyeras", "construyera", "construyéramos", "construyerais", "construyeran"])
+  }
+
+  // §4.5 + §4.7 integration (no residue): g1-g for the 1s/subjunctive, f-dr for
+  // the future/conditional. (IMP is Phase-5 residue — sal — so it is skipped.)
+  func testGoPlusFutureDr() { // salir (11) + valer (12)
+    let salir = VerbModel2(base: .ir, features: [StemFeature2.g1g, FutureEndings2.fDr])
+    assertEqual("salir", salir, .presenteDeIndicativo(.firstSingular), "salgo")
+    assertParadigm("salir", salir, { .presenteDeSubjuntivo($0) },
+                   ["salga", "salgas", "salga", "salgamos", "salgáis", "salgan"])
+    assertParadigm("salir", salir, { .futuro($0) },
+                   ["saldré", "saldrás", "saldrá", "saldremos", "saldréis", "saldrán"])
+    assertParadigm("salir", salir, { .condicional($0) },
+                   ["saldría", "saldrías", "saldría", "saldríamos", "saldríais", "saldrían"])
+
+    let valer = VerbModel2(base: .er, features: [StemFeature2.g1g, FutureEndings2.fDr])
+    assertEqual("valer", valer, .presenteDeIndicativo(.firstSingular), "valgo")
+    assertEqual("valer", valer, .presenteDeSubjuntivo(.firstSingular), "valga")
+    assertParadigm("valer", valer, { .futuro($0) },
+                   ["valdré", "valdrás", "valdrá", "valdremos", "valdréis", "valdrán"])
+  }
+
+  // MARK: - Phase 4: strong / suppletive preterites (§4.6)
+
+  // sp-end is base-independent: andar/estar are -ar verbs yet take the -ie- IS
+  // (anduviera, not *anduvara) — crux 2.
+  func testSpEnd() { // andar (35) + estar (20) + tener preterite
+    let andar = VerbModel2(base: .ar, features: [StemFeature2.strongPreterite(from: "and", to: "anduv"), PreteriteEndings2.spEnd])
+    assertParadigm("andar", andar, { .pretérito($0) },
+                   ["anduve", "anduviste", "anduvo", "anduvimos", "anduvisteis", "anduvieron"])
+    assertParadigm("andar", andar, { .imperfectoDeSubjuntivoRa($0) },
+                   ["anduviera", "anduvieras", "anduviera", "anduviéramos", "anduvierais", "anduvieran"])
+    assertParadigm("andar", andar, { .imperfectoDeSubjuntivoSe($0) },
+                   ["anduviese", "anduvieses", "anduviese", "anduviésemos", "anduvieseis", "anduviesen"])
+
+    let estar = VerbModel2(base: .ar, features: [StemFeature2.strongPreterite(from: "est", to: "estuv"), PreteriteEndings2.spEnd])
+    assertEqual("estar", estar, .pretérito(.firstSingular), "estuve")
+    assertEqual("estar", estar, .imperfectoDeSubjuntivoRa(.firstSingular), "estuviera")
+
+    let tener = VerbModel2(base: .er, features: [StemFeature2.strongPreterite(from: "ten", to: "tuv"), PreteriteEndings2.spEnd])
+    assertParadigm("tener", tener, { .pretérito($0) },
+                   ["tuve", "tuviste", "tuvo", "tuvimos", "tuvisteis", "tuvieron"])
+    assertEqual("tener", tener, .imperfectoDeSubjuntivoRa(.firstSingular), "tuviera")
+  }
+
+  // sp-jend absorbs the i after j: 3p -eron (not -ieron), IS -era (not -iera).
+  func testSpJend() { // conducir (34, zc + sp-jend) + decir preterite (28)
+    let conducir = VerbModel2(base: .ir, features: [
+      StemFeature2.zc,
+      StemFeature2.strongPreterite(from: "conduc", to: "conduj"),
+      PreteriteEndings2.spJend
+    ])
+    assertEqual("conducir", conducir, .presenteDeIndicativo(.firstSingular), "conduzco")
+    assertParadigm("conducir", conducir, { .pretérito($0) },
+                   ["conduje", "condujiste", "condujo", "condujimos", "condujisteis", "condujeron"])
+    assertParadigm("conducir", conducir, { .imperfectoDeSubjuntivoRa($0) },
+                   ["condujera", "condujeras", "condujera", "condujéramos", "condujerais", "condujeran"])
+
+    let decir = VerbModel2(base: .ir, features: [StemFeature2.strongPreterite(from: "dec", to: "dij"), PreteriteEndings2.spJend])
+    assertParadigm("decir", decir, { .pretérito($0) },
+                   ["dije", "dijiste", "dijo", "dijimos", "dijisteis", "dijeron"])
+    assertEqual("decir", decir, .imperfectoDeSubjuntivoRa(.firstSingular), "dijera")
+  }
+
+  // wp-i: unaccented monosyllables, and -iera forced on an -ar base (dar → diera,
+  // not *dara) — crux 4.
+  func testWpI() { // dar (25) + ver (14)
+    let dar = VerbModel2(base: .ar, features: [PreteriteEndings2.wpI])
+    assertParadigm("dar", dar, { .pretérito($0) },
+                   ["di", "diste", "dio", "dimos", "disteis", "dieron"])
+    assertParadigm("dar", dar, { .imperfectoDeSubjuntivoRa($0) },
+                   ["diera", "dieras", "diera", "diéramos", "dierais", "dieran"])
+    assertEqual("dar", dar, .imperfectoDeSubjuntivoSe(.firstSingular), "diese")
+
+    let ver = VerbModel2(base: .er, features: [PreteriteEndings2.wpI])
+    assertParadigm("ver", ver, { .pretérito($0) },
+                   ["vi", "viste", "vio", "vimos", "visteis", "vieron"])
+    assertEqual("ver", ver, .imperfectoDeSubjuntivoRa(.firstSingular), "viera")
+  }
+
+  // pret-fue: the suppletive fu- stem shared by ser and ir.
+  func testPretFue() { // ser (19) + ir (24)
+    let ser = VerbModel2(base: .er, features: [SuppletivePreterite2.fue])
+    assertParadigm("ser", ser, { .pretérito($0) },
+                   ["fui", "fuiste", "fue", "fuimos", "fuisteis", "fueron"])
+    assertParadigm("ser", ser, { .imperfectoDeSubjuntivoRa($0) },
+                   ["fuera", "fueras", "fuera", "fuéramos", "fuerais", "fueran"])
+    assertParadigm("ser", ser, { .imperfectoDeSubjuntivoSe($0) },
+                   ["fuese", "fueses", "fuese", "fuésemos", "fueseis", "fuesen"])
+
+    let ir = VerbModel2(base: .ir, features: [SuppletivePreterite2.fue])
+    assertParadigm("ir", ir, { .pretérito($0) },
+                   ["fui", "fuiste", "fue", "fuimos", "fuisteis", "fueron"])
+    assertEqual("ir", ir, .imperfectoDeSubjuntivoSe(.firstSingular), "fuese")
+  }
+
+  // MARK: - Phase 4: future / conditional stems (§4.7)
+
+  // f-drope drops the theme -e- (-er → -r); querer's stem ends in r, so the
+  // future doubles it (querré).
+  func testFDrope() { // haber (21) + querer (27) + poder (26)
+    let haber = VerbModel2(base: .er, features: [FutureEndings2.fDrope])
+    assertParadigm("haber", haber, { .futuro($0) },
+                   ["habré", "habrás", "habrá", "habremos", "habréis", "habrán"])
+    assertParadigm("haber", haber, { .condicional($0) },
+                   ["habría", "habrías", "habría", "habríamos", "habríais", "habrían"])
+
+    let querer = VerbModel2(base: .er, features: [FutureEndings2.fDrope])
+    assertEqual("querer", querer, .futuro(.firstSingular), "querré")
+    assertEqual("querer", querer, .condicional(.thirdPlural), "querrían")
+
+    let poder = VerbModel2(base: .er, features: [FutureEndings2.fDrope])
+    assertEqual("poder", poder, .futuro(.firstSingular), "podré")
+  }
+
+  // f-dr inserts d (drops the theme vowel).
+  func testFDr() { // tener (31) + poner (30)
+    let tener = VerbModel2(base: .er, features: [FutureEndings2.fDr])
+    assertParadigm("tener", tener, { .futuro($0) },
+                   ["tendré", "tendrás", "tendrá", "tendremos", "tendréis", "tendrán"])
+    assertParadigm("tener", tener, { .condicional($0) },
+                   ["tendría", "tendrías", "tendría", "tendríamos", "tendríais", "tendrían"])
+
+    let poner = VerbModel2(base: .er, features: [FutureEndings2.fDr])
+    assertEqual("poner", poner, .futuro(.firstSingular), "pondré")
+  }
+
+  // f-contract: a per-verb contracted future stem (residue) + the f-drope endings.
+  func testFContract() { // hacer (29) + decir (28)
+    let hacer = VerbModel2(base: .er, features: [StemFeature2.contractedFuture(from: "hac", to: "ha"), FutureEndings2.fContract])
+    assertParadigm("hacer", hacer, { .futuro($0) },
+                   ["haré", "harás", "hará", "haremos", "haréis", "harán"])
+    assertParadigm("hacer", hacer, { .condicional($0) },
+                   ["haría", "harías", "haría", "haríamos", "haríais", "harían"])
+
+    let decir = VerbModel2(base: .ir, features: [StemFeature2.contractedFuture(from: "dec", to: "di"), FutureEndings2.fContract])
+    assertEqual("decir", decir, .futuro(.firstSingular), "diré")
+    assertEqual("decir", decir, .condicional(.thirdPlural), "dirían")
+  }
+
+  // MARK: - Phase 4: capstone — the whole phase in one verb (minus IMP residue)
+
+  // tener (31) = comer + d-ie + g1-g + sp-end(tuv) + f-dr. Features are listed in
+  // the §1 precedence order (stem-vowel → 1s/subjunctive → preterite → future),
+  // so g1-g's subj-from-1s reset wins over the diphthong in PI 1s and all of PS
+  // (tengo/tenga, not *tiengo/*tienga) while the diphthong still surfaces in
+  // PI{2s,3s,3p} (tienes/tiene/tienen) — crux 1.
+  func testTenerCapstone() {
+    let tener = VerbModel2(base: .er, features: [
+      StemVowel2.dIe,
+      StemFeature2.g1g,
+      StemFeature2.strongPreterite(from: "ten", to: "tuv"),
+      PreteriteEndings2.spEnd,
+      FutureEndings2.fDr
+    ])
+    assertParadigm("tener", tener, { .presenteDeIndicativo($0) },
+                   ["tengo", "tienes", "tiene", "tenemos", "tenéis", "tienen"])
+    assertParadigm("tener", tener, { .presenteDeSubjuntivo($0) },
+                   ["tenga", "tengas", "tenga", "tengamos", "tengáis", "tengan"])
+    assertParadigm("tener", tener, { .pretérito($0) },
+                   ["tuve", "tuviste", "tuvo", "tuvimos", "tuvisteis", "tuvieron"])
+    assertParadigm("tener", tener, { .imperfectoDeSubjuntivoRa($0) },
+                   ["tuviera", "tuvieras", "tuviera", "tuviéramos", "tuvierais", "tuvieran"])
+    assertParadigm("tener", tener, { .futuro($0) },
+                   ["tendré", "tendrás", "tendrá", "tendremos", "tendréis", "tendrán"])
+    assertParadigm("tener", tener, { .condicional($0) },
+                   ["tendría", "tendrías", "tendría", "tendríamos", "tendríais", "tendrían"])
+  }
+
+  // venir (32) = subir + d-ie + r-ei-wk + g1-g + sp-end(vin) + f-dr. The extra
+  // wrinkle over tener: r-ei-wk would raise the PS{1p,2p} stem (ven→vin), but
+  // g1-g (listed after it) resets all of PS to veng- — vengamos, not *vingamos —
+  // while the raise still drives the gerund (viniendo).
+  func testVenir() {
+    let venir = VerbModel2(base: .ir, features: [
+      StemVowel2.dIe,
+      StemVowel2.rEiWk,
+      StemFeature2.g1g,
+      StemFeature2.strongPreterite(from: "ven", to: "vin"),
+      PreteriteEndings2.spEnd,
+      FutureEndings2.fDr
+    ])
+    assertParadigm("venir", venir, { .presenteDeIndicativo($0) },
+                   ["vengo", "vienes", "viene", "venimos", "venís", "vienen"])
+    assertParadigm("venir", venir, { .presenteDeSubjuntivo($0) },
+                   ["venga", "vengas", "venga", "vengamos", "vengáis", "vengan"])
+    assertParadigm("venir", venir, { .pretérito($0) },
+                   ["vine", "viniste", "vino", "vinimos", "vinisteis", "vinieron"])
+    assertEqual("venir", venir, .gerundio, "viniendo")
+    assertEqual("venir", venir, .futuro(.firstSingular), "vendré")
+  }
+
+  // MARK: - Phase 4: prefix-invariance (end-anchored inserts, strong & contracted stems)
+
+  func testPhase4PrefixInvariance() {
+    let conocer = VerbModel2(base: .er, features: [StemFeature2.zc])
+    assertEqual("reconocer", conocer, .presenteDeIndicativo(.firstSingular), "reconozco")
+    assertEqual("reconocer", conocer, .presenteDeSubjuntivo(.firstSingular), "reconozca")
+
+    let tener = VerbModel2(base: .er, features: [
+      StemVowel2.dIe,
+      StemFeature2.g1g,
+      StemFeature2.strongPreterite(from: "ten", to: "tuv"),
+      PreteriteEndings2.spEnd,
+      FutureEndings2.fDr
+    ])
+    assertEqual("detener", tener, .presenteDeIndicativo(.firstSingular), "detengo")
+    assertEqual("detener", tener, .pretérito(.firstSingular), "detuve")
+    assertEqual("detener", tener, .futuro(.firstSingular), "detendré")
+
+    let poner = VerbModel2(base: .er, features: [
+      StemFeature2.g1g,
+      StemFeature2.strongPreterite(from: "pon", to: "pus"),
+      PreteriteEndings2.spEnd,
+      FutureEndings2.fDr
+    ])
+    assertEqual("componer", poner, .pretérito(.firstSingular), "compuse")
+    assertEqual("componer", poner, .futuro(.firstSingular), "compondré")
+  }
+
   // MARK: - Helpers
 
   private func assertParadigm(

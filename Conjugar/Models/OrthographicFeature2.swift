@@ -56,7 +56,7 @@ struct StemFinalConsonant2: Feature2 {
     trigger.applies(to: tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
     guard stem.hasSuffix(from) else { return (stem, ending) }
     return (String(stem.dropLast(from.count)) + to, ending)
   }
@@ -110,11 +110,22 @@ struct IYHiatus2: Feature2 {
     isIGlideSlot(tense) || isAccentSlot(tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
     guard ending.hasPrefix("i") else { return (stem, ending) }
     let rest = ending.dropFirst()
-    let head = isIGlideSlot(tense) ? "y" : "í"
-    return (stem, head + rest)
+    if isIGlideSlot(tense) {
+      // The i→y glide fires regardless of the preceding vowel (leyó, oyó, and
+      // construyó / huyó after a weak -u-).
+      return (stem, "y" + rest)
+    }
+    // Accent slot: the written accent marks a true hiatus, so it fires **only
+    // when the -i- follows a strong vowel (a/e/o)** — leíste/caído/oímos. After
+    // a weak vowel there is no hiatus, so the -uir verbs take no accent:
+    // construiste / construido (Phase 4 §4.5 crux). This keeps the accent
+    // end-anchored to the stem's last vowel.
+    let strongVowels: Set<Character> = ["a", "e", "o"]
+    guard let last = stem.last, strongVowels.contains(last) else { return (stem, ending) }
+    return (stem, "í" + rest)
   }
 
   static let oYhiatus = IYHiatus2()
@@ -129,7 +140,7 @@ struct AbsorbIAfterPalatal2: Feature2 {
     isIGlideSlot(tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
     guard ending.hasPrefix("i") else { return (stem, ending) }
     return (stem, String(ending.dropFirst()))
   }

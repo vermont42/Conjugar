@@ -66,10 +66,14 @@ enum Conjugator2 {
   /// so prefixes ride along untouched. With no features this returns the regular
   /// `stem + ending`.
   private static func compose(stem: String, ending: String, tense: Tense2, features: [Feature2]) -> String {
+    // The regular base stem, captured before any feature runs, so the §4.5
+    // 1s/subjunctive features and the residue stem features can rebuild from it
+    // (the subj-from-1s reset and prefix-invariant strong/contracted stems).
+    let regularStem = stem
     var stem = stem
     var ending = ending
     for feature in features where feature.applies(to: tense) {
-      (stem, ending) = feature.apply(stem: stem, ending: ending, tense: tense)
+      (stem, ending) = feature.apply(stem: stem, ending: ending, tense: tense, regularStem: regularStem)
     }
     return stem + ending
   }

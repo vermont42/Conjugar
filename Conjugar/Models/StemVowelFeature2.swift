@@ -53,7 +53,7 @@ struct StemVowel2: Feature2 {
     slots.applies(to: tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
     // End-anchored: rewrite the LAST occurrence of the trigger vowel in the stem
     // (pensar → piens-, mostrar → muestr-, adquirir → adquier-, comprobar →
     // compruebo on the last o). The prefix rides along untouched.

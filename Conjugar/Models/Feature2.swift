@@ -35,7 +35,14 @@ protocol Feature2 {
   /// to. Must be end-anchored (see the type doc). Called only when
   /// `applies(to: tense)` is true; returning the pair unchanged is fine when the
   /// trigger letter happens to be absent.
-  func apply(stem: String, ending: String, tense: Tense2) -> (stem: String, ending: String)
+  ///
+  /// `regularStem` is the verb's **base** stem (infinitive minus its two-letter
+  /// ending), *before* any feature ran — the seam Phase 4 added so the §4.5
+  /// 1s/subjunctive features and the residue stem features can **rebuild** the
+  /// stem from the regular base, discarding a prior diphthong/raise (the
+  /// `subj-from-1s` last-wins reset: tener → `teng-`, not `*tieng-`). The Phase
+  /// 2/3 features ignore it and transform the running `stem` as before.
+  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String)
 }
 
 // MARK: - Shared slot vocabulary (taxonomy §2)
@@ -84,6 +91,66 @@ enum Slot2 {
     case .pretérito(.thirdSingular), .pretérito(.thirdPlural),
          .gerundio,
          .imperfectoDeSubjuntivoRa, .imperfectoDeSubjuntivoSe:
+      return true
+    default:
+      return false
+    }
+  }
+
+  // MARK: - Phase 4 slot sets (the derivation-rule targets, taxonomy §1)
+
+  /// **subj-from-1s** target = `PI{1s}` + `PS{all}`. The §4.5 features (`g1-g`,
+  /// `g1-ig`, `zc`) and any explicit irregular-1s residue rebuild the stem from
+  /// the regular base here, so the whole present subjunctive is built on the
+  /// PI-1s stem (decision §6.2, bundled) and a prior diphthong is reset
+  /// (tengo/tenga, not `*tiengo`). Deliberately excludes `PI{2s,3s,3p}`, where a
+  /// diphthong still surfaces (tienes/tiene/tienen).
+  static func isSubjFrom1s(_ tense: Tense2) -> Bool {
+    switch tense {
+    case .presenteDeIndicativo(.firstSingular), .presenteDeSubjuntivo:
+      return true
+    default:
+      return false
+    }
+  }
+
+  /// `y-add`'s slots = `PI{1s,2s,3s,3p}` + `PS{all}` (construir → construyo/
+  /// construyes/construye/construyen, construya). Like subj-from-1s but also the
+  /// stressed PI persons.
+  static func isYAdd(_ tense: Tense2) -> Bool {
+    switch tense {
+    case let .presenteDeIndicativo(pn):
+      switch pn {
+      case .firstSingular, .secondSingular, .thirdSingular, .thirdPlural:
+        return true
+      default:
+        return false
+      }
+    case .presenteDeSubjuntivo:
+      return true
+    default:
+      return false
+    }
+  }
+
+  /// **Preterite system** = `PR{all}` + `IS{all}` (both -ra and -se). A strong /
+  /// suppletive preterite stem drives the imperfect subjunctives too (the §1
+  /// "strong preterite" derivation rule), so the strong-stem and strong-ending
+  /// features span this whole set.
+  static func isPreteriteSystem(_ tense: Tense2) -> Bool {
+    switch tense {
+    case .pretérito, .imperfectoDeSubjuntivoRa, .imperfectoDeSubjuntivoSe:
+      return true
+    default:
+      return false
+    }
+  }
+
+  /// **Future system** = `FU{all}` + `CO{all}`. One future-stem override drives
+  /// both the future and the conditional (the §1 "future stem" derivation rule).
+  static func isFutureSystem(_ tense: Tense2) -> Bool {
+    switch tense {
+    case .futuro, .condicional:
       return true
     default:
       return false
