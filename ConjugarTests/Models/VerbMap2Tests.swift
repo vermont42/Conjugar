@@ -32,14 +32,16 @@ struct VerbMap2Tests {
 
   // MARK: - Map loads (gate: crux 7)
 
-  // 4,822 <verb> elements collapse to 4,818 distinct infinitives: the 4,818 Annex B
+  // 4,828 <verb> elements collapse to 4,824 distinct infinitives: the 4,818 Annex B
   // verbs (− 4 homonyms that contribute 2 elements each = 4,814) + 4 legacy-app-only
-  // neologisms (googlear/viralizar/ustedear/aguachicolear) the 2010 book predates,
-  // appended by `_build_verbmap.py` so the map is a superset of the shipping app. A
-  // nonzero count proves the resource actually shipped in the (test-hosted) bundle.
-  @Test("map loads from the bundle: 4,818 distinct infinitives")
+  // neologisms (googlear/viralizar/ustedear/aguachicolear) the 2010 book predates +
+  // 6 frequency-list gaps (circular/quejar/egresar/respectar/adir/hacendar) absent
+  // from Annex B, all appended by `_build_verbmap.py` so the map is a superset of the
+  // shipping app and of the top-1000 verbs. A nonzero count proves the resource
+  // actually shipped in the (test-hosted) bundle.
+  @Test("map loads from the bundle: 4,824 distinct infinitives")
   func mapLoads() {
-    #expect(Self.map.count == 4818, "loaded \(Self.map.count) entries (resource bundled?)")
+    #expect(Self.map.count == 4824, "loaded \(Self.map.count) entries (resource bundled?)")
   }
 
   // MARK: - Marker stripping (crux 3): keys are bare infinitives
@@ -134,6 +136,63 @@ struct VerbMap2Tests {
   @Test("non-reflexive verbs do not carry rx", arguments: ["abrir", "comer", "hablar", "abrazar"])
   func nonReflexive(infinitive: String) {
     #expect(Self.map.entry(for: infinitive)?.isReflexive == false)
+  }
+
+  // MARK: - Frequency rank (fr) — display-only, from SpanishVerbFrequencyRanks.txt
+
+  @Test("top-frequency verbs carry their rank", arguments: [
+    ("ser", 1), ("haber", 2), ("tener", 3), ("desvelar", 1000),
+  ])
+  func frequencyRank(infinitive: String, rank: Int) {
+    #expect(Self.map.entry(for: infinitive)?.frequencyRank == rank)
+  }
+
+  // A verb outside the top 1000 ships no `fr` and parses to nil.
+  @Test("verbs outside the top 1000 have no rank", arguments: ["abajar", "abdicar"])
+  func unranked(infinitive: String) {
+    #expect(Self.map.entry(for: infinitive)?.frequencyRank == nil)
+  }
+
+  // 987 of the 1000 ranked corpus verbs match a map infinitive (981 from Annex B + 6
+  // frequency-gap additions); the other 13 are corpus junk/non-verbs
+  // (docs/freq_unmatched.txt). Ranks are unique 1…1000, so exactly 987 distinct ranks
+  // should appear across the map. Homonyms share one rank across their two rows, so
+  // this counts entries, not <verb> elements.
+  @Test("exactly 987 ranked verbs, with distinct ranks")
+  func rankedCount() {
+    let ranks = Self.map.entries.values.compactMap(\.frequencyRank)
+    #expect(ranks.count == 987, "ranked verbs = \(ranks.count)")
+    #expect(Set(ranks).count == 987, "ranks should be unique")
+    #expect(ranks.allSatisfy { (1...1000).contains($0) }, "ranks out of 1…1000 range")
+  }
+
+  // MARK: - Frequency-gap verbs (top-1000 list ∖ Annex B; docs/freq_unmatched.txt)
+
+  // Six real verbs the 2010 book's Annex B omits but the frequency list ranks, added
+  // by `_build_verbmap.py`. quejar is reflexive-only; respectar and adir are DEFECTIVE
+  // (noted in def_worklist.md — full defectivity is a later phase, so the engine still
+  // over-generates their forms here).
+  @Test("frequency-gap verbs are present with expected class/gloss/rx/rank", arguments: [
+    ("circular", "1", "circulate", false, 510),
+    ("quejar", "1", "complain", true, 693),
+    ("egresar", "1", "graduate", false, 842),
+    ("respectar", "1", "concern", false, 970),
+    ("adir", "3", "accept inheritance", false, 985),
+    ("hacendar", "4A", "give property", false, 465),
+  ])
+  func freqGapVerbs(infinitive: String, classNumber: String, gloss: String, reflexive: Bool, rank: Int) {
+    let entry = Self.map.entry(for: infinitive)
+    #expect(entry?.classNumber == classNumber, "\(infinitive) class")
+    #expect(entry?.gloss == gloss, "\(infinitive) gloss")
+    #expect(entry?.isReflexive == reflexive, "\(infinitive) rx")
+    #expect(entry?.frequencyRank == rank, "\(infinitive) rank")
+  }
+
+  @Test("frequency-gap verbs conjugate via the map")
+  func freqGapConjugation() {
+    #expect(Self.form("circular", .presenteDeIndicativo(.firstSingular)) == "circulo")
+    #expect(Self.form("egresar", .presenteDeIndicativo(.firstSingular)) == "egreso")
+    #expect(Self.form("quejar", .presenteDeIndicativo(.firstSingular)) == "quejo")
   }
 
   // MARK: - Homonyms (gate; crux 4) — both senses, default first, distinct glosses

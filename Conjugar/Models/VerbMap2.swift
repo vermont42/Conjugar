@@ -33,6 +33,11 @@ struct VerbMapEntry2 {
   let classNumbers: [String]
   let glosses: [String]
   let isReflexive: Bool
+  /// 1-based frequency rank (1 = most frequent), or `nil` for verbs outside the
+  /// top 1000. Display-only — sourced from `docs/SpanishVerbFrequencyRanks.txt`
+  /// via the `fr` attribute, never affects conjugation. Per spelling, not per
+  /// sense, so a homonym's two rows share one rank.
+  let frequencyRank: Int?
 
   /// The default-sense class number (what the no-`model:` resolver conjugates).
   var classNumber: String { classNumbers[0] }
@@ -97,21 +102,25 @@ private final class VerbMapParser2: NSObject, XMLParserDelegate {
     guard let infinitive = attributeDict["in"], let cl = attributeDict["cl"] else { return }
     let gloss = attributeDict["tn"] ?? ""
     let reflexive = attributeDict["rx"] == "1"
+    let frequencyRank = attributeDict["fr"].flatMap { Int($0) }
 
     if let existing = entries[infinitive] {
-      // A second sense of a homonym — append, preserving file order.
+      // A second sense of a homonym — append, preserving file order. Both rows
+      // carry the same `fr`; keep whichever the first row supplied.
       entries[infinitive] = VerbMapEntry2(
         infinitive: infinitive,
         classNumbers: existing.classNumbers + [cl],
         glosses: existing.glosses + [gloss],
-        isReflexive: existing.isReflexive || reflexive
+        isReflexive: existing.isReflexive || reflexive,
+        frequencyRank: existing.frequencyRank ?? frequencyRank
       )
     } else {
       entries[infinitive] = VerbMapEntry2(
         infinitive: infinitive,
         classNumbers: [cl],
         glosses: [gloss],
-        isReflexive: reflexive
+        isReflexive: reflexive,
+        frequencyRank: frequencyRank
       )
     }
   }
