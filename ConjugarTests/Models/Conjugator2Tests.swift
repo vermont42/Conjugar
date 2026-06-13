@@ -371,6 +371,230 @@ final class Conjugator2Tests: XCTestCase {
     assertEqual("reenviar", enviar, .presenteDeIndicativo(.thirdPlural), "reenvían")
   }
 
+  // MARK: - Phase 3: stem-vowel diphthongs (§4.3, STR slots)
+
+  // Diphthong with no raise: the change surfaces only in STR (PI/PS{1s,2s,3s,3p},
+  // IMP 2s); unstressed forms (1p/2p, the whole preterite/imperfect) stay regular.
+  func testDIeAr() { // pensar (4A)
+    let m = VerbModel2(base: .ar, features: [StemVowel2.dIe])
+    assertParadigm("pensar", m, { .presenteDeIndicativo($0) },
+                   ["pienso", "piensas", "piensa", "pensamos", "pensáis", "piensan"])
+    assertParadigm("pensar", m, { .presenteDeSubjuntivo($0) },
+                   ["piense", "pienses", "piense", "pensemos", "penséis", "piensen"])
+    assertParadigm("pensar", m, { .pretérito($0) },
+                   ["pensé", "pensaste", "pensó", "pensamos", "pensasteis", "pensaron"])
+    assertEqual("pensar", m, .imperativoAfirmativo(.secondSingular), "piensa")
+    assertEqual("pensar", m, .imperativoAfirmativo(.secondPlural), "pensad")
+    // Voseo present-2s / imperative-2s ride the regular stem — no diphthong.
+    assertEqual("pensar", m, .presenteDeIndicativo(.secondSingularVos), "pensás")
+    assertEqual("pensar", m, .imperativoAfirmativo(.secondSingularVos), "pensá")
+  }
+
+  func testDUeAr() { // mostrar (4B)
+    let m = VerbModel2(base: .ar, features: [StemVowel2.dUe])
+    assertParadigm("mostrar", m, { .presenteDeIndicativo($0) },
+                   ["muestro", "muestras", "muestra", "mostramos", "mostráis", "muestran"])
+    assertParadigm("mostrar", m, { .presenteDeSubjuntivo($0) },
+                   ["muestre", "muestres", "muestre", "mostremos", "mostréis", "muestren"])
+    assertEqual("mostrar", m, .imperativoAfirmativo(.secondSingular), "muestra")
+  }
+
+  func testDIeEr() { // perder (5A)
+    let m = VerbModel2(base: .er, features: [StemVowel2.dIe])
+    assertParadigm("perder", m, { .presenteDeIndicativo($0) },
+                   ["pierdo", "pierdes", "pierde", "perdemos", "perdéis", "pierden"])
+    assertParadigm("perder", m, { .presenteDeSubjuntivo($0) },
+                   ["pierda", "pierdas", "pierda", "perdamos", "perdáis", "pierdan"])
+  }
+
+  func testDUeEr() { // mover (5B)
+    let m = VerbModel2(base: .er, features: [StemVowel2.dUe])
+    assertParadigm("mover", m, { .presenteDeIndicativo($0) },
+                   ["muevo", "mueves", "mueve", "movemos", "movéis", "mueven"])
+    assertParadigm("mover", m, { .presenteDeSubjuntivo($0) },
+                   ["mueva", "muevas", "mueva", "movamos", "mováis", "muevan"])
+  }
+
+  // Spelled variants — same operation, a different target string.
+  func testSpelledDiphthongs() {
+    let errar = VerbModel2(base: .ar, features: [StemVowel2.dIeYe]) // 4A-3, e → ye
+    assertParadigm("errar", errar, { .presenteDeIndicativo($0) },
+                   ["yerro", "yerras", "yerra", "erramos", "erráis", "yerran"])
+    assertParadigm("errar", errar, { .presenteDeSubjuntivo($0) },
+                   ["yerre", "yerres", "yerre", "erremos", "erréis", "yerren"])
+
+    let agorar = VerbModel2(base: .ar, features: [StemVowel2.dUeGue]) // 4B-4, o → üe
+    assertParadigm("agorar", agorar, { .presenteDeIndicativo($0) },
+                   ["agüero", "agüeras", "agüera", "agoramos", "agoráis", "agüeran"])
+    assertParadigm("agorar", agorar, { .presenteDeSubjuntivo($0) },
+                   ["agüere", "agüeres", "agüere", "agoremos", "agoréis", "agüeren"])
+
+    let oler = VerbModel2(base: .er, features: [StemVowel2.dUeHue]) // 5B-2, o → hue
+    assertParadigm("oler", oler, { .presenteDeIndicativo($0) },
+                   ["huelo", "hueles", "huele", "olemos", "oléis", "huelen"])
+    assertParadigm("oler", oler, { .presenteDeSubjuntivo($0) },
+                   ["huela", "huelas", "huela", "olamos", "oláis", "huelan"])
+  }
+
+  // Rare diphthongs.
+  func testRareDiphthongs() {
+    let adquirir = VerbModel2(base: .ir, features: [StemVowel2.dIIe]) // 17, i → ie
+    assertParadigm("adquirir", adquirir, { .presenteDeIndicativo($0) },
+                   ["adquiero", "adquieres", "adquiere", "adquirimos", "adquirís", "adquieren"])
+    assertParadigm("adquirir", adquirir, { .presenteDeSubjuntivo($0) },
+                   ["adquiera", "adquieras", "adquiera", "adquiramos", "adquiráis", "adquieran"])
+
+    let jugar = VerbModel2(base: .ar, features: [StemVowel2.dUUe, StemFinalConsonant2.oGar]) // 16, u → ue + o-gar
+    assertParadigm("jugar", jugar, { .presenteDeIndicativo($0) },
+                   ["juego", "juegas", "juega", "jugamos", "jugáis", "juegan"])
+    assertParadigm("jugar", jugar, { .presenteDeSubjuntivo($0) },
+                   ["juegue", "juegues", "juegue", "juguemos", "juguéis", "jueguen"])
+    assertEqual("jugar", jugar, .pretérito(.firstSingular), "jugué")
+  }
+
+  // Control case: discernir (15) diphthongizes in STR but its WK slots stay
+  // regular — it proves the diphthong feature is independent of the raise.
+  func testDiphthongOnIrNoRaise() {
+    let m = VerbModel2(base: .ir, features: [StemVowel2.dIe])
+    assertParadigm("discernir", m, { .presenteDeIndicativo($0) },
+                   ["discierno", "disciernes", "discierne", "discernimos", "discernís", "disciernen"])
+    assertParadigm("discernir", m, { .presenteDeSubjuntivo($0) },
+                   ["discierna", "disciernas", "discierna", "discernamos", "discernáis", "disciernan"])
+    // WK stays regular: no *discirnió / *discirnamos.
+    assertEqual("discernir", m, .pretérito(.thirdSingular), "discernió")
+    assertEqual("discernir", m, .pretérito(.thirdPlural), "discernieron")
+    assertEqual("discernir", m, .gerundio, "discerniendo")
+  }
+
+  // MARK: - Phase 3: -ir weak-slot raising (§4.4) — the STR/WK split
+
+  // sentir (6A) = subir + d-ie + r-ei-wk. The present subjunctive splits:
+  // PS{1s,2s,3s,3p} diphthong (STR), PS{1p,2p} raise (WK). PR{1s,2s,1p,2p} stay
+  // regular (only PR{3s,3p} are WK).
+  func testSentir() {
+    let m = VerbModel2(base: .ir, features: [StemVowel2.dIe, StemVowel2.rEiWk])
+    assertParadigm("sentir", m, { .presenteDeIndicativo($0) },
+                   ["siento", "sientes", "siente", "sentimos", "sentís", "sienten"])
+    assertParadigm("sentir", m, { .pretérito($0) },
+                   ["sentí", "sentiste", "sintió", "sentimos", "sentisteis", "sintieron"])
+    assertParadigm("sentir", m, { .presenteDeSubjuntivo($0) },
+                   ["sienta", "sientas", "sienta", "sintamos", "sintáis", "sientan"])
+    assertParadigm("sentir", m, { .imperfectoDeSubjuntivoRa($0) },
+                   ["sintiera", "sintieras", "sintiera", "sintiéramos", "sintierais", "sintieran"])
+    assertParadigm("sentir", m, { .imperfectoDeSubjuntivoSe($0) },
+                   ["sintiese", "sintieses", "sintiese", "sintiésemos", "sintieseis", "sintiesen"])
+    assertEqual("sentir", m, .gerundio, "sintiendo")
+    assertEqual("sentir", m, .imperativoAfirmativo(.secondSingular), "siente")
+    assertEqual("sentir", m, .imperativoAfirmativo(.secondPlural), "sentid")
+  }
+
+  // pedir (6B) = subir + r-ei-str + r-ei-wk. Raise everywhere (STR and WK), no
+  // diphthong — both PS halves raise (pida… / pidamos).
+  func testPedir() {
+    let m = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk])
+    assertParadigm("pedir", m, { .presenteDeIndicativo($0) },
+                   ["pido", "pides", "pide", "pedimos", "pedís", "piden"])
+    assertParadigm("pedir", m, { .pretérito($0) },
+                   ["pedí", "pediste", "pidió", "pedimos", "pedisteis", "pidieron"])
+    assertParadigm("pedir", m, { .presenteDeSubjuntivo($0) },
+                   ["pida", "pidas", "pida", "pidamos", "pidáis", "pidan"])
+    assertParadigm("pedir", m, { .imperfectoDeSubjuntivoRa($0) },
+                   ["pidiera", "pidieras", "pidiera", "pidiéramos", "pidierais", "pidieran"])
+    assertEqual("pedir", m, .gerundio, "pidiendo")
+    assertEqual("pedir", m, .imperativoAfirmativo(.secondSingular), "pide")
+  }
+
+  // dormir (6C) = subir + d-ue + r-ou-wk. Same STR/WK split as sentir, o → u.
+  func testDormir() {
+    let m = VerbModel2(base: .ir, features: [StemVowel2.dUe, StemVowel2.rOuWk])
+    assertParadigm("dormir", m, { .presenteDeIndicativo($0) },
+                   ["duermo", "duermes", "duerme", "dormimos", "dormís", "duermen"])
+    assertParadigm("dormir", m, { .pretérito($0) },
+                   ["dormí", "dormiste", "durmió", "dormimos", "dormisteis", "durmieron"])
+    assertParadigm("dormir", m, { .presenteDeSubjuntivo($0) },
+                   ["duerma", "duermas", "duerma", "durmamos", "durmáis", "duerman"])
+    assertParadigm("dormir", m, { .imperfectoDeSubjuntivoRa($0) },
+                   ["durmiera", "durmieras", "durmiera", "durmiéramos", "durmierais", "durmieran"])
+    assertEqual("dormir", m, .gerundio, "durmiendo")
+  }
+
+  // MARK: - Phase 3: cross-phase composition (§4.3/§4.4 feature + a §4.1 swap)
+
+  // Watch the preterite/subjunctive divergence: empiece (diphthong + z→c in PS)
+  // vs empecé (PR 1s gets the z→c swap only — PR 1s ∉ STR, so no diphthong);
+  // likewise niegue vs negué.
+  func testCompositionDiphthongPlusOrthographic() {
+    let negar = VerbModel2(base: .ar, features: [StemVowel2.dIe, StemFinalConsonant2.oGar]) // 4A-1
+    assertParadigm("negar", negar, { .presenteDeSubjuntivo($0) },
+                   ["niegue", "niegues", "niegue", "neguemos", "neguéis", "nieguen"])
+    assertEqual("negar", negar, .pretérito(.firstSingular), "negué")
+    assertEqual("negar", negar, .presenteDeIndicativo(.firstSingular), "niego")
+
+    let empezar = VerbModel2(base: .ar, features: [StemVowel2.dIe, StemFinalConsonant2.oZar]) // 4A-2
+    assertParadigm("empezar", empezar, { .presenteDeSubjuntivo($0) },
+                   ["empiece", "empieces", "empiece", "empecemos", "empecéis", "empiecen"])
+    assertEqual("empezar", empezar, .pretérito(.firstSingular), "empecé")
+
+    let colgar = VerbModel2(base: .ar, features: [StemVowel2.dUe, StemFinalConsonant2.oGar]) // 4B-2
+    assertParadigm("colgar", colgar, { .presenteDeSubjuntivo($0) },
+                   ["cuelgue", "cuelgues", "cuelgue", "colguemos", "colguéis", "cuelguen"])
+    assertEqual("colgar", colgar, .pretérito(.firstSingular), "colgué")
+
+    let forzar = VerbModel2(base: .ar, features: [StemVowel2.dUe, StemFinalConsonant2.oZar]) // 4B-3
+    assertParadigm("forzar", forzar, { .presenteDeSubjuntivo($0) },
+                   ["fuerce", "fuerces", "fuerce", "forcemos", "forcéis", "fuercen"])
+    assertEqual("forzar", forzar, .pretérito(.firstSingular), "forcé")
+
+    let cocer = VerbModel2(base: .er, features: [StemVowel2.dUe, StemFinalConsonant2.oCz]) // 5B-1
+    assertParadigm("cocer", cocer, { .presenteDeIndicativo($0) },
+                   ["cuezo", "cueces", "cuece", "cocemos", "cocéis", "cuecen"])
+    assertParadigm("cocer", cocer, { .presenteDeSubjuntivo($0) },
+                   ["cueza", "cuezas", "cueza", "cozamos", "cozáis", "cuezan"])
+
+    let elegir = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk, StemFinalConsonant2.oGj]) // 6B-1
+    assertParadigm("elegir", elegir, { .presenteDeIndicativo($0) },
+                   ["elijo", "eliges", "elige", "elegimos", "elegís", "eligen"])
+    assertParadigm("elegir", elegir, { .presenteDeSubjuntivo($0) },
+                   ["elija", "elijas", "elija", "elijamos", "elijáis", "elijan"])
+    assertEqual("elegir", elegir, .pretérito(.thirdSingular), "eligió")
+    assertEqual("elegir", elegir, .gerundio, "eligiendo")
+
+    let seguir = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk, StemFinalConsonant2.oGug]) // 6B-2
+    assertParadigm("seguir", seguir, { .presenteDeIndicativo($0) },
+                   ["sigo", "sigues", "sigue", "seguimos", "seguís", "siguen"])
+    assertParadigm("seguir", seguir, { .presenteDeSubjuntivo($0) },
+                   ["siga", "sigas", "siga", "sigamos", "sigáis", "sigan"])
+    assertEqual("seguir", seguir, .pretérito(.thirdSingular), "siguió")
+    assertEqual("seguir", seguir, .gerundio, "siguiendo")
+  }
+
+  // Bonus (not required): ceñir (6B-3) = pedir-raises + o-llñ is clean composition
+  // with no residue — the raise feeds the i, the palatal absorbs it (ciñó, ciñendo).
+  func testCenir() {
+    let m = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk, AbsorbIAfterPalatal2.oLlñ])
+    assertParadigm("ceñir", m, { .presenteDeIndicativo($0) },
+                   ["ciño", "ciñes", "ciñe", "ceñimos", "ceñís", "ciñen"])
+    assertParadigm("ceñir", m, { .pretérito($0) },
+                   ["ceñí", "ceñiste", "ciñó", "ceñimos", "ceñisteis", "ciñeron"])
+    assertParadigm("ceñir", m, { .presenteDeSubjuntivo($0) },
+                   ["ciña", "ciñas", "ciña", "ciñamos", "ciñáis", "ciñan"])
+    assertEqual("ceñir", m, .gerundio, "ciñendo")
+  }
+
+  // MARK: - Phase 3: prefix-invariance (the end-anchored rule for stem vowels)
+
+  // A prefixed verb whose stem isn't a listed model gets the diphthong/raise on
+  // its own last stem vowel, prefix riding free.
+  func testStemVowelPrefixInvariance() {
+    let comprobar = VerbModel2(base: .ar, features: [StemVowel2.dUe]) // d-ue on comprob-
+    assertEqual("comprobar", comprobar, .presenteDeIndicativo(.firstSingular), "compruebo")
+    assertEqual("comprobar", comprobar, .presenteDeIndicativo(.thirdPlural), "comprueban")
+
+    let repetir = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk]) // pedir-raises on repet-
+    assertEqual("repetir", repetir, .presenteDeIndicativo(.firstSingular), "repito")
+    assertEqual("repetir", repetir, .gerundio, "repitiendo")
+  }
+
   // MARK: - Helpers
 
   private func assertParadigm(

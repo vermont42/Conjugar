@@ -40,14 +40,16 @@ protocol Feature2 {
 
 // MARK: - Shared slot vocabulary (taxonomy §2)
 
-/// The named slot sets the feature catalog refers to by name. Phase 2 needs only
-/// **STR**; **WK** arrives with the Phase 3 -ir raising features.
+/// The named slot sets the feature catalog refers to by name. **STR** and **WK**
+/// are the two recurring sets, and they are deliberately **disjoint** (taxonomy
+/// §2): an -ir verb that both diphthongizes and raises splits its present
+/// subjunctive cleanly along this line (PS{1s,2s,3s,3p} = STR, PS{1p,2p} = WK).
 enum Slot2 {
   /// **STR** ("stressed stem") = `PI{1s,2s,3s,3p}` + `PS{1s,2s,3s,3p}` + `IMP{2s}`:
   /// the slots where the stress falls on the stem, so a stem-vowel accent (or, in
   /// Phase 3, a diphthong) surfaces. Deliberately **excludes** voseo present-2s
   /// and imperative-2s: those are built on the regular stem and bypass the
-  /// stem-vowel change (`vos enviás`, not *envíás`).
+  /// stem-vowel change (`vos enviás`, not *envíás`; `vos pensás`, not *piensás`).
   static func isStressedStem(_ tense: Tense2) -> Bool {
     switch tense {
     case let .presenteDeIndicativo(pn), let .presenteDeSubjuntivo(pn):
@@ -58,6 +60,30 @@ enum Slot2 {
         return false
       }
     case .imperativoAfirmativo(.secondSingular):
+      return true
+    default:
+      return false
+    }
+  }
+
+  /// **WK** ("weak -ir slots") = `PS{1p,2p}` + `PR{3s,3p}` + `GER` + `IS{all}`:
+  /// the unstressed-stem slots where an -ir verb raises e→i / o→u. Disjoint from
+  /// STR — note PS{1p,2p} are WK while PS{1s,2s,3s,3p} are STR, which is what
+  /// lets the diphthong and raise features each fire on their own PS persons
+  /// without conflict. `PR{1s,2s,1p,2p}` are **not** WK (sentí/sentiste/sentimos/
+  /// sentisteis stay regular). Voseo slots are never WK.
+  static func isWeakIr(_ tense: Tense2) -> Bool {
+    switch tense {
+    case let .presenteDeSubjuntivo(pn):
+      switch pn {
+      case .firstPlural, .secondPlural:
+        return true
+      default:
+        return false
+      }
+    case .pretérito(.thirdSingular), .pretérito(.thirdPlural),
+         .gerundio,
+         .imperfectoDeSubjuntivoRa, .imperfectoDeSubjuntivoSe:
       return true
     default:
       return false
