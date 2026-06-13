@@ -32,12 +32,14 @@ struct VerbMap2Tests {
 
   // MARK: - Map loads (gate: crux 7)
 
-  // 4,818 <verb> elements collapse to 4,814 distinct infinitives (the 4 homonyms
-  // contribute 2 elements each). A nonzero count proves the resource actually
-  // shipped in the (test-hosted app) bundle.
-  @Test("map loads from the bundle: 4,814 distinct infinitives")
+  // 4,822 <verb> elements collapse to 4,818 distinct infinitives: the 4,818 Annex B
+  // verbs (− 4 homonyms that contribute 2 elements each = 4,814) + 4 legacy-app-only
+  // neologisms (googlear/viralizar/ustedear/aguachicolear) the 2010 book predates,
+  // appended by `_build_verbmap.py` so the map is a superset of the shipping app. A
+  // nonzero count proves the resource actually shipped in the (test-hosted) bundle.
+  @Test("map loads from the bundle: 4,818 distinct infinitives")
   func mapLoads() {
-    #expect(Self.map.count == 4814, "loaded \(Self.map.count) entries (resource bundled?)")
+    #expect(Self.map.count == 4818, "loaded \(Self.map.count) entries (resource bundled?)")
   }
 
   // MARK: - Marker stripping (crux 3): keys are bare infinitives
@@ -54,6 +56,31 @@ struct VerbMap2Tests {
   @Test("the marker forms are NOT keys", arguments: ["aborregar(se)", "acaecer (DEF)", "apostar (1)"])
   func noMarkerKeys(raw: String) {
     #expect(Self.map.entry(for: raw) == nil, "marker leaked into key: \(raw)")
+  }
+
+  // MARK: - Legacy-app-only verbs (map ⊇ the shipping app)
+
+  // Four neologisms ship in the old Conjugar verbs.xml but post-date the 2010 book,
+  // so they're absent from Annex B; `_build_verbmap.py` appends them so no app verb
+  // regresses in the migration. They must be present, glossed, and conjugate — incl.
+  // viralizar's z→c orthography (class 1-4) via the data path.
+  @Test("legacy-app-only neologisms are present and glossed", arguments: [
+    ("aguachicolear", "1", "steal water"),
+    ("googlear", "1", "google"),
+    ("ustedear", "1", "use usted"),
+    ("viralizar", "1-4", "go viral"),
+  ])
+  func legacyVerbs(infinitive: String, classNumber: String, gloss: String) {
+    let entry = Self.map.entry(for: infinitive)
+    #expect(entry?.classNumber == classNumber, "\(infinitive) class")
+    #expect(entry?.gloss == gloss, "\(infinitive) gloss")
+  }
+
+  @Test("legacy neologisms conjugate via the map")
+  func legacyConjugation() {
+    #expect(Self.form("googlear", .presenteDeIndicativo(.firstSingular)) == "googleo")
+    #expect(Self.form("viralizar", .pretérito(.firstSingular)) == "viralicé")  // z→c
+    #expect(Self.form("ustedear", .presenteDeIndicativo(.thirdSingular)) == "ustedea")
   }
 
   // MARK: - Glosses present (gate, B2; crux 8)
