@@ -140,21 +140,22 @@ enum ModelCatalog2 {
   static let elegir = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk, StemFinalConsonant2.oGj])
   static let seguir = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk, StemFinalConsonant2.oGug])
   static let ceñir = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk, AbsorbIAfterPalatal2.oLlñ])
-  // 6B-4 reír = subir + r-ei-str + r-ei-wk + collapse-ii + the hiatus-accent residue.
+  // 6B-4 reír = subir + r-ei-str + r-ei-wk (re→ri) + a-i (ri→rí in STR) +
+  // collapse-ii + o-yhiatus — all end-anchored, so the 6 compounds (freír, sonreír,
+  // sofreír, refreír, desleír, engreír) conjugate on their own stem (frío, deslío)
+  // rather than on a baked-in literal. The raise runs **before** a-i so the accent
+  // lands on the raised i (río/ríe/ría). collapse runs **before** o-yhiatus so the
+  // glide slots (PR{3s,3p}/GER/IS) drop the double-i (ri+ió→rió, ri+iendo→riendo)
+  // instead of gliding (*riyó); o-yhiatus then supplies the hiatus accents on the
+  // unraised-stem slots (reí­ste/reímos/reísteis/reído, plus reímos PI-1p / reíd
+  // IMP-2p from its extended accent set). (The preferred frito/sofrito/refrito PP
+  // variants are per-verb data, out of scope — Annex B fn15/22/24; freír now yields
+  // the accepted regular freído.)
   static let reir = VerbModel2(base: .ir, features: [
     StemVowel2.rEiStr, StemVowel2.rEiWk,
+    AccentStem2.aI,
     CollapseDoubleI2.collapse,
-    residue([
-      (.presenteDeIndicativo(.firstSingular), "río"), (.presenteDeIndicativo(.secondSingular), "ríes"),
-      (.presenteDeIndicativo(.thirdSingular), "ríe"), (.presenteDeIndicativo(.firstPlural), "reímos"),
-      (.presenteDeIndicativo(.thirdPlural), "ríen"),
-      (.pretérito(.secondSingular), "reíste"), (.pretérito(.firstPlural), "reímos"),
-      (.pretérito(.secondPlural), "reísteis"),
-      (.presenteDeSubjuntivo(.firstSingular), "ría"), (.presenteDeSubjuntivo(.secondSingular), "rías"),
-      (.presenteDeSubjuntivo(.thirdSingular), "ría"), (.presenteDeSubjuntivo(.thirdPlural), "rían"),
-      (.imperativoAfirmativo(.secondSingular), "ríe"), (.imperativoAfirmativo(.secondPlural), "reíd"),
-      (.participioPasado, "reído"),
-    ]),
+    IYHiatus2.oYhiatus,
   ])
 
   static let dormir = VerbModel2(base: .ir, features: [StemVowel2.dUe, StemVowel2.rOuWk])
@@ -202,23 +203,19 @@ enum ModelCatalog2 {
     features: [IYHiatus2.oYhiatus],
     alternates: [[StemFeature2.g1ig, IYHiatus2.oYhiatus], [yAddSubjunctive, IYHiatus2.oYhiatus]])
 
-  // 10 oír = subir + y-add + g1-ig + o-yhiatus, plus the present-1p / imperative-2p
-  // hiatus accents (oímos / oíd) as literal residue — the two -i--initial -ir
-  // endings the o-yhiatus accent slots (preterite/PP only) don't reach. g1-ig is
-  // listed AFTER y-add so it wins in the overlapping subj-from-1s slots: PI 1s
-  // oigo (not *oyo) and PS{all} oiga… (not *oya…), while y-add keeps the glide in
-  // PI{2s,3s,3p}/IMP-2s (oyes/oye/oyen/oye). (Taxonomy §5 lists an `a-stem`, but
-  // oír's stem "o" has no i/u for it to accent — it would be inert — so it is
-  // omitted to keep the irregularity score honest; the real accents are the
-  // residue below.)
+  // 10 oír = subir + y-add + g1-ig + o-yhiatus — all end-anchored, so desoír /
+  // entreoír conjugate on their own stem (desoímos / desoíd, not the base's literal).
+  // g1-ig is listed AFTER y-add so it wins in the overlapping subj-from-1s slots: PI
+  // 1s oigo (not *oyo) and PS{all} oiga… (not *oya…), while y-add keeps the glide in
+  // PI{2s,3s,3p}/IMP-2s (oyes/oye/oyen/oye). o-yhiatus's extended accent set now
+  // supplies the present-1p / imperative-2p hiatus accents (oímos / oíd) directly —
+  // they used to be literal residue, which broke the prefix (oímos rode desoír).
+  // (Taxonomy §5 lists an `a-stem`, but oír's stem "o" has no i/u for it to accent —
+  // it would be inert — so it is omitted to keep the irregularity score honest.)
   static let oir = VerbModel2(base: .ir, features: [
     StemFeature2.yAdd,
     StemFeature2.g1ig,
     IYHiatus2.oYhiatus,
-    residue([
-      (.presenteDeIndicativo(.firstPlural), "oímos"),
-      (.imperativoAfirmativo(.secondPlural), "oíd"),
-    ]),
   ])
 
   static let salir = VerbModel2(base: .ir, features: [StemFeature2.g1g, FutureEndings2.fDr, ApocopatedImperative2()])

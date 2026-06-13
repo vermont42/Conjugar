@@ -95,11 +95,19 @@ private func isIGlideSlot(_ tense: Tense2) -> Bool {
 /// -eer/-aer/-oer verbs.
 struct IYHiatus2: Feature2 {
   /// The remaining regular -i- forms that take a written accent: `PR{2s,1p,2p}`
-  /// (the -i…- preterite forms whose stress is on the ending) + `PP`.
+  /// (the -i…- preterite forms whose stress is on the ending) + `PP`, plus the two
+  /// present-system -i--initial endings the preterite/PP slots don't reach:
+  /// `PI{1p}` (-imos) and `IMP{2p}` (-id). The accent fires only when the ending
+  /// starts with -i- AND the stem's last char is a strong vowel (a/e/o), so adding
+  /// these slots is a no-op for the -er users (leer/caer/traer/raer/roer: -emos/-ed
+  /// don't start with -i-) and the weak-stem -ir user (construir: stem ends in -u-,
+  /// guard blocks → construimos/construid). It surfaces only on oír (oímos/oíd) and
+  /// reír (reímos/reíd), where the stem's last vowel is a strong o/e.
   private func isAccentSlot(_ tense: Tense2) -> Bool {
     switch tense {
     case .pretérito(.secondSingular), .pretérito(.firstPlural), .pretérito(.secondPlural),
-         .participioPasado:
+         .participioPasado,
+         .presenteDeIndicativo(.firstPlural), .imperativoAfirmativo(.secondPlural):
       return true
     default:
       return false

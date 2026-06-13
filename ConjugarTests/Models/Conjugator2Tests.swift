@@ -262,6 +262,25 @@ struct Conjugator2Tests {
     expectForm("oír", model: Self.oir, tense, expected)
   }
 
+  // Prefix-invariance (gate): the 10 model is now fully end-anchored (no literal
+  // residue), so desoír / entreoír conjugate on their own stem — including the two
+  // slots that used to ride the base's literal, PI-1p (desoímos, not oímos) and
+  // IMP-2p (desoíd, not oíd) — while -go/glide/PP ride along (desoigo/desoyó/desoído).
+  @Test("oír (10) — prefix-invariance (desoír/entreoír)", arguments: [
+    ("desoír", Tense2.presenteDeIndicativo(.firstPlural), "desoímos"),
+    ("desoír", .imperativoAfirmativo(.secondPlural), "desoíd"),
+    ("desoír", .presenteDeIndicativo(.firstSingular), "desoigo"),
+    ("desoír", .pretérito(.thirdSingular), "desoyó"),
+    ("desoír", .participioPasado, "desoído"),
+    ("desoír", .gerundio, "desoyendo"),
+    ("entreoír", .presenteDeIndicativo(.firstPlural), "entreoímos"),
+    ("entreoír", .imperativoAfirmativo(.secondPlural), "entreoíd"),
+    ("entreoír", .presenteDeIndicativo(.thirdSingular), "entreoye"),
+  ])
+  func oirPrefixInvariance(infinitive: String, tense: Tense2, expected: String) {
+    expectForm(infinitive, model: Self.oir, tense, expected)
+  }
+
   // The prefix-accent aliases (29-2/30-1/31-1/32-1) resolve to the parent model and
   // ride free on the compound stem — proving no distinct model is needed (§1).
   @Test("prefix-accent aliases conjugate on their own stem", arguments: [
@@ -2358,6 +2377,31 @@ struct Conjugator2Tests {
   ])
   func reirSlots(tense: Tense2, expected: String) {
     expectForm("reír", model: Self.reir, tense, expected)
+  }
+
+  // Prefix-invariance (gate): the 6B-4 model is now fully end-anchored, so every
+  // compound conjugates on its OWN stem — frío (not río), deslío (not *desrío,
+  // proving the stem is computed, not prepended), sonrío/sofrío/refrío/engrío. The
+  // PP rides along as the regular freído (the preferred frito/sofrito variants are
+  // per-verb data, out of scope — Annex B fn15/22/24).
+  @Test("reír (6B-4) — prefix-invariance (freír/sonreír/sofreír/refreír/desleír/engreír)", arguments: [
+    ("freír", Tense2.presenteDeIndicativo(.firstSingular), "frío"),
+    ("freír", .pretérito(.thirdSingular), "frió"),
+    ("freír", .gerundio, "friendo"),
+    ("freír", .presenteDeIndicativo(.firstPlural), "freímos"),
+    ("freír", .participioPasado, "freído"),
+    ("sonreír", .presenteDeIndicativo(.firstSingular), "sonrío"),
+    ("sonreír", .pretérito(.thirdSingular), "sonrió"),
+    ("sonreír", .gerundio, "sonriendo"),
+    ("sofreír", .presenteDeIndicativo(.firstSingular), "sofrío"),
+    ("refreír", .pretérito(.thirdSingular), "refrió"),
+    ("engreír", .presenteDeIndicativo(.thirdPlural), "engríen"),
+    ("desleír", .presenteDeIndicativo(.firstSingular), "deslío"),
+    ("desleír", .pretérito(.thirdSingular), "deslió"),
+    ("desleír", .imperativoAfirmativo(.secondPlural), "desleíd"),
+  ])
+  func reirPrefixInvariance(infinitive: String, tense: Tense2, expected: String) {
+    expectForm(infinitive, model: Self.reir, tense, expected)
   }
 
   // MARK: - Phase 5b: argüir (class 18 — güy→guy)

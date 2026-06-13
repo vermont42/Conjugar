@@ -168,7 +168,7 @@ struct VerbMap2Tests {
     ("elegir", .presenteDeIndicativo(.firstSingular), "elijo"),        // 6B-1
     ("seguir", .presenteDeIndicativo(.firstSingular), "sigo"),         // 6B-2
     ("ceñir", .pretérito(.thirdSingular), "ciñó"),                     // 6B-3
-    ("reír", .presenteDeIndicativo(.firstSingular), "río"),            // 6B-4 (base verb; compounds deferred — see docs/phase6_known_issues.md)
+    ("reír", .presenteDeIndicativo(.firstSingular), "río"),            // 6B-4
     ("dormir", .presenteDeIndicativo(.firstSingular), "duermo"),       // 6C
     ("discernir", .presenteDeIndicativo(.firstSingular), "discierno"), // 15
     ("jugar", .presenteDeIndicativo(.firstSingular), "juego"),         // 16
@@ -221,8 +221,9 @@ struct VerbMap2Tests {
   // MARK: - Prefix payoff (gate; crux 1) — compounds ride their own stem
 
   // Each compound maps to its base verb's class; the engine conjugates the compound's
-  // OWN stem and the end-anchored features ride along. (reír/sonreír is a known
-  // engine gap, tracked in docs/phase6_known_issues.md — not asserted here.)
+  // OWN stem and the end-anchored features ride along — including the reír (6B-4) and
+  // oír (10) families, now that those models are fully end-anchored (freír → frío,
+  // desleír → deslío, desoír → desoímos; no baked-in literal rides the prefix).
   static let prefixSample: [(String, Tense2, String)] = [
     ("detener", .presenteDeIndicativo(.firstSingular), "detengo"),
     ("detener", .pretérito(.firstSingular), "detuve"),
@@ -237,6 +238,15 @@ struct VerbMap2Tests {
     ("prever", .participioPasado, "previsto"),
     ("convenir", .presenteDeIndicativo(.firstSingular), "convengo"),
     ("rehacer", .pretérito(.thirdSingular), "rehízo"),
+    // 6B-4 reír family (end-anchored: own stem, not the base's literal).
+    ("freír", .presenteDeIndicativo(.firstSingular), "frío"),
+    ("freír", .pretérito(.thirdSingular), "frió"),
+    ("sonreír", .gerundio, "sonriendo"),
+    ("desleír", .presenteDeIndicativo(.firstSingular), "deslío"),
+    // 10 oír family (the two formerly-literal slots now ride the prefix).
+    ("desoír", .presenteDeIndicativo(.firstPlural), "desoímos"),
+    ("desoír", .imperativoAfirmativo(.secondPlural), "desoíd"),
+    ("desoír", .presenteDeIndicativo(.firstSingular), "desoigo"),
   ]
 
   @Test("prefix payoff: compounds conjugate on their own stem", arguments: prefixSample)
