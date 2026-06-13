@@ -121,7 +121,9 @@ struct VerbMap2Tests {
   // MARK: - Reflexive flag
 
   @Test("reflexive-only verbs carry rx (and gloss the reflexive sense)", arguments: [
-    ("aborregar", "curdle"), ("arrepentir", "repent"), ("atrever", "dare"), ("jactar", "boast"),
+    // aborregar: gloss corrected curdle -> "become fleecy" by the B2 grounded gloss
+    // pass (RAE: cielo cubrirse de nubes a modo de vellones); see gloss_verification_report.md.
+    ("aborregar", "become fleecy"), ("arrepentir", "repent"), ("atrever", "dare"), ("jactar", "boast"),
   ])
   func reflexiveFlag(infinitive: String, gloss: String) {
     let entry = Self.map.entry(for: infinitive)
