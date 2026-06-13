@@ -13,12 +13,31 @@
 //
 // In the Phase 1 skeleton every (regular) verb's model is simply its base with
 // an empty feature list; the feature machinery arrives in Phase 2.
+//
+// **Alternate paradigms (Phase 5b).** A handful of verbs have slots with more
+// than one accepted form because the book lists two or three co-equal *whole
+// derivations* of the same slots (erguir yergo/irgo, raer raigo/rayo, roer
+// roo/roigo/royo, yacer yazco/yazgo/yago). Each such variant is a complete
+// feature stack of its own, recorded in `alternates`. The *primary* stack
+// (`features`) is the only thing `conjugate` and the irregularity score (§6.5)
+// ever see; the alternate stacks surface **only** through `Conjugator2.conjugateAll`,
+// which composes each one and unions the per-slot results (dedup, primary first).
+// Default `[]`, so every pre-5b model is unchanged and the single-form path is
+// untouched. (Per-slot *literal* alternates — the two-form participles
+// impreso/imprimido, frito/freído, the -scripto family — are carried instead on
+// `IrregularParticiple2.alternate`, not here; a whole stack would be overkill.)
 struct VerbModel2 {
   let base: RegularRoot2
   let features: [Feature2]
+  /// Zero or more alternate feature stacks (whole co-equal paradigms). Each is
+  /// composed independently by `conjugateAll`; the union (primary first, then
+  /// these in listed = book-preference order, de-duplicated) is the slot's
+  /// answer. Invisible to `conjugate` and to the irregularity score.
+  let alternates: [[Feature2]]
 
-  init(base: RegularRoot2, features: [Feature2] = []) {
+  init(base: RegularRoot2, features: [Feature2] = [], alternates: [[Feature2]] = []) {
     self.base = base
     self.features = features
+    self.alternates = alternates
   }
 }

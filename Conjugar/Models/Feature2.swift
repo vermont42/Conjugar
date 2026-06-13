@@ -124,9 +124,12 @@ enum Slot2 {
     }
   }
 
-  /// `y-add`'s slots = `PI{1s,2s,3s,3p}` + `PS{all}` (construir → construyo/
-  /// construyes/construye/construyen, construya). Like subj-from-1s but also the
-  /// stressed PI persons.
+  /// `y-add`'s slots = `PI{1s,2s,3s,3p}` + `PS{all}` + `IMP{2s}` (construir →
+  /// construyo/construyes/construye/construyen, construya, **construye**). Like
+  /// subj-from-1s but also the stressed PI persons and the tú imperative. The
+  /// tú imperative is included because it equals PI{3s} (construye, oye, arguye) —
+  /// without it the glide would be lost there (*construe). It stays out of the
+  /// voseo/vosotros imperatives, which are regular (construí / construid).
   static func isYAdd(_ tense: Tense2) -> Bool {
     switch tense {
     case let .presenteDeIndicativo(pn):
@@ -136,7 +139,7 @@ enum Slot2 {
       default:
         return false
       }
-    case .presenteDeSubjuntivo:
+    case .presenteDeSubjuntivo, .imperativoAfirmativo(.secondSingular):
       return true
     default:
       return false

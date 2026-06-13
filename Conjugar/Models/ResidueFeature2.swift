@@ -91,11 +91,17 @@ struct IrregularParticiple2: Feature2 {
   }
 
   func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
-    // End-anchored: prefix (stem − coreSuffix) + the irregular participle. The
-    // guard's fallback (no suffix match) returns the bare participle, which is
-    // only reached for a degenerate stem and never in the catalog below.
-    guard stem.hasSuffix(coreSuffix) else { return (participle, "") }
-    return (String(stem.dropLast(coreSuffix.count)) + participle, "")
+    (form(participle, stem: stem), "")
+  }
+
+  /// End-anchored realization of a participle string against this stem: prefix
+  /// (stem − coreSuffix) + the participle, so it rides free on prefixes
+  /// (`compon` → compuesto, `inscrib` → inscripto). Shared by `apply` (primary)
+  /// and `Conjugator2.conjugateAll` (the `alternate`). The guard's fallback (no
+  /// suffix match) returns the bare string, reached only for a degenerate stem.
+  func form(_ participleString: String, stem: String) -> String {
+    guard stem.hasSuffix(coreSuffix) else { return participleString }
+    return String(stem.dropLast(coreSuffix.count)) + participleString
   }
 }
 

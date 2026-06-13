@@ -356,6 +356,92 @@ struct Conjugator2Tests {
   static let morir = VerbModel2(base: .ir, features: [StemVowel2.dUe, StemVowel2.rOuWk, IrregularParticiple2("mor", "muerto")])
   static let abolir = VerbModel2(base: .ir, features: [DefectiveFeature2.abolir])
 
+  // MARK: - Phase 5b models (alternate forms + deferred corner classes)
+
+  /// `y-add` restricted to the §4.5 subj-from-1s slots (PI 1s + PS{all}) — the
+  /// raer/roer **alternate** paradigm (rayo/raya, royo/roya). Distinct from
+  /// construir's `StemFeature2.yAdd`, whose `isYAdd` also takes the stressed PI
+  /// persons (raer's PI 2s/3s/3p are regular: raes/rae/raen).
+  static let yAddSubjunctive = StemFeature2(operation: .append("y"), slots: Slot2.isSubjFrom1s)
+
+  // 18 argüir = subir + y-add + o-yhiatus + güy→guy (a single paradigm; the only
+  // "alternate" is orthographic, not a variant stack).
+  static let arguir = VerbModel2(base: .ir, features: [
+    StemFeature2.yAdd, IYHiatus2.oYhiatus, DiaeresisDropBeforeY2.güyGuy,
+  ])
+
+  // 6A-1 erguir = two co-equal paradigms in the stressed slots; the unstressed
+  // slots (erguí/irguió/irguiendo/erguimos) are shared and collapse via dedup.
+  // Primary = the sentir/`ye` model (the book calls it "more common"); alternate =
+  // the pedir/raise model. (The book's `yergamos`/`yergáis` are not surfaced — the
+  // engine's `irgamos`/`irgáis` from the WK raise are the RAE-preferred ones; the
+  // diphthonged-but-unstressed variants are bonus we leave out.)
+  static let erguir = VerbModel2(base: .ir,
+    features: [StemVowel2.dIeYe, StemVowel2.rEiWk, StemFinalConsonant2.oGug],
+    alternates: [[StemVowel2.rEiStr, StemVowel2.rEiWk, StemFinalConsonant2.oGug]])
+
+  // 9-1 raer = caer-build (g1-ig + o-yhiatus) primary + a y-add alternate stack
+  // (rayo/raya). The preterite/gerund/participle (rayó/rayendo/raído) come from
+  // o-yhiatus and are shared. (The rare fully-regular `rao` is bonus, omitted.)
+  static let raer = VerbModel2(base: .er,
+    features: [StemFeature2.g1ig, IYHiatus2.oYhiatus],
+    alternates: [[yAddSubjunctive, IYHiatus2.oYhiatus]])
+
+  // 9-2 roer = THREE variants in PI 1s / PS: the plain regular `roo` (primary),
+  // the g1-ig `roigo`, and the y-add `royo`. Shared royó/royendo/roído via o-yhiatus.
+  static let roer = VerbModel2(base: .er,
+    features: [IYHiatus2.oYhiatus],
+    alternates: [[StemFeature2.g1ig, IYHiatus2.oYhiatus], [yAddSubjunctive, IYHiatus2.oYhiatus]])
+
+  // 7A-1 yacer = conocer/lucir-build (zc) primary + two alternate stacks: c→zg
+  // (yazgo/yazga) and c→g (yago/yaga). The c→g stack also carries the apocopated
+  // imperative `yaz` (yace is the primary tú imperative).
+  static let yacer = VerbModel2(base: .er,
+    features: [StemFeature2.zc],
+    alternates: [
+      [StemFeature2(operation: .swapSuffix(from: "c", to: "zg"), slots: Slot2.isSubjFrom1s)],
+      [StemFeature2(operation: .swapSuffix(from: "c", to: "g"), slots: Slot2.isSubjFrom1s),
+       ApocopatedImperative2(finalSwap: ("c", "z"))],
+    ])
+
+  // 7A-2 placer = zc primary + a representative slice of the archaic alternates
+  // (PS 3s plazca/plegue/plega — N=3; PR 3s plació/plugo). Deliberately OMITTED as
+  // deep archaic minutiae (out of scope §"Exhaustive archaic minutiae"): the rest
+  // of the `plug-` preterite (pluguieron, pluguiera/pluguiese) and complacer's
+  // (RAE-unrecognized) alternates. The mechanism already allows N≥2, which is the
+  // point; the full set would be data, not machinery.
+  static let placer = VerbModel2(base: .er,
+    features: [StemFeature2.zc],
+    alternates: [
+      [StemFeature2.zc, residue([(.presenteDeSubjuntivo(.thirdSingular), "plegue")])],
+      [StemFeature2.zc, residue([
+        (.presenteDeSubjuntivo(.thirdSingular), "plega"), (.pretérito(.thirdSingular), "plugo"),
+      ])],
+    ])
+
+  // 6B-4 freír = reír's umlaut/collapse machinery + the two-form participle
+  // frito (primary) / freído (alternate). The reír-style residue is freír's literal
+  // forms (prefix "fr"); PS{1p,2p} (friamos/friáis) come from the WK raise.
+  static let freir = VerbModel2(base: .ir, features: [
+    StemVowel2.rEiStr, StemVowel2.rEiWk, CollapseDoubleI2.collapse,
+    IrregularParticiple2("fre", "frito", alternate: "freído"),
+    residue([
+      (.presenteDeIndicativo(.firstSingular), "frío"), (.presenteDeIndicativo(.secondSingular), "fríes"),
+      (.presenteDeIndicativo(.thirdSingular), "fríe"), (.presenteDeIndicativo(.firstPlural), "freímos"),
+      (.presenteDeIndicativo(.thirdPlural), "fríen"),
+      (.pretérito(.secondSingular), "freíste"), (.pretérito(.firstPlural), "freímos"),
+      (.pretérito(.secondPlural), "freísteis"),
+      (.presenteDeSubjuntivo(.firstSingular), "fría"), (.presenteDeSubjuntivo(.secondSingular), "frías"),
+      (.presenteDeSubjuntivo(.thirdSingular), "fría"), (.presenteDeSubjuntivo(.thirdPlural), "frían"),
+      (.imperativoAfirmativo(.secondSingular), "fríe"), (.imperativoAfirmativo(.secondPlural), "freíd"),
+    ]),
+  ])
+
+  // 3-11 escribir family — inscribir takes the -scripto alternate (escribir itself
+  // does NOT; see the 3-11 footnote). Primary inscrito, alternate inscripto, both
+  // via the end-anchored `scrib` swap so any -scribir verb rides free.
+  static let inscribir = VerbModel2(base: .ir, features: [IrregularParticiple2("scrib", "scrito", alternate: "scripto")])
+
   // MARK: - cantar (regular -ar)
 
   @Test("cantar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
@@ -2399,6 +2485,302 @@ struct Conjugator2Tests {
     expectForm("reír", model: Self.reir, tense, expected)
   }
 
+  // MARK: - Phase 5b: argüir (class 18 — güy→guy)
+
+  @Test("argüir — presente de indicativo (güy→guy; güi keeps the diaeresis)", arguments: zip(PersonNumber2.oracleOrder,
+    ["arguyo", "arguyes", "arguye", "argüimos", "argüís", "arguyen"]))
+  func arguirPresent(person: PersonNumber2, expected: String) {
+    expectForm("argüir", model: Self.arguir, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("argüir — pretérito (boundary güy in arguyó/arguyeron; güi keeps it)", arguments: zip(PersonNumber2.oracleOrder,
+    ["argüí", "argüiste", "arguyó", "argüimos", "argüisteis", "arguyeron"]))
+  func arguirPreterite(person: PersonNumber2, expected: String) {
+    expectForm("argüir", model: Self.arguir, .pretérito(person), expected)
+  }
+
+  @Test("argüir — imperfecto de indicativo (all güi)", arguments: zip(PersonNumber2.oracleOrder,
+    ["argüía", "argüías", "argüía", "argüíamos", "argüíais", "argüían"]))
+  func arguirImperfect(person: PersonNumber2, expected: String) {
+    expectForm("argüir", model: Self.arguir, .imperfectoDeIndicativo(person), expected)
+  }
+
+  @Test("argüir — futuro (all güi)", arguments: zip(PersonNumber2.oracleOrder,
+    ["argüiré", "argüirás", "argüirá", "argüiremos", "argüiréis", "argüirán"]))
+  func arguirFuture(person: PersonNumber2, expected: String) {
+    expectForm("argüir", model: Self.arguir, .futuro(person), expected)
+  }
+
+  @Test("argüir — condicional (all güi)", arguments: zip(PersonNumber2.oracleOrder,
+    ["argüiría", "argüirías", "argüiría", "argüiríamos", "argüiríais", "argüirían"]))
+  func arguirConditional(person: PersonNumber2, expected: String) {
+    expectForm("argüir", model: Self.arguir, .condicional(person), expected)
+  }
+
+  @Test("argüir — presente de subjuntivo (güy→guy throughout)", arguments: zip(PersonNumber2.oracleOrder,
+    ["arguya", "arguyas", "arguya", "arguyamos", "arguyáis", "arguyan"]))
+  func arguirPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("argüir", model: Self.arguir, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("argüir — imperfecto de subjuntivo (-ra; boundary güy)", arguments: zip(PersonNumber2.oracleOrder,
+    ["arguyera", "arguyeras", "arguyera", "arguyéramos", "arguyerais", "arguyeran"]))
+  func arguirImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+    expectForm("argüir", model: Self.arguir, .imperfectoDeSubjuntivoRa(person), expected)
+  }
+
+  @Test("argüir — imperfecto de subjuntivo (-se; boundary güy)", arguments: zip(PersonNumber2.oracleOrder,
+    ["arguyese", "arguyeses", "arguyese", "arguyésemos", "arguyeseis", "arguyesen"]))
+  func arguirImperfectSubjunctiveSe(person: PersonNumber2, expected: String) {
+    expectForm("argüir", model: Self.arguir, .imperfectoDeSubjuntivoSe(person), expected)
+  }
+
+  @Test("argüir — imperative & non-finite", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "arguye"),
+    (.imperativoAfirmativo(.secondPlural), "argüid"),
+    (.imperativoAfirmativo(.thirdSingular), "arguya"),    // derived from PS arguya
+    (.imperativoAfirmativo(.firstPlural), "arguyamos"),
+    (.imperativoAfirmativo(.thirdPlural), "arguyan"),
+    (.gerundio, "arguyendo"),
+    (.participioPasado, "argüido"),
+  ])
+  func arguirImperativeAndNonFinite(tense: Tense2, expected: String) {
+    expectForm("argüir", model: Self.arguir, tense, expected)
+  }
+
+  // Prefix-invariance: a hypothetical re-argüir rides the same model untouched.
+  @Test("argüir — prefix-invariance (reargüir)", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), "rearguyo"),
+    (.pretérito(.thirdSingular), "rearguyó"),
+    (.presenteDeIndicativo(.firstPlural), "reargüimos"),
+    (.gerundio, "rearguyendo"),
+  ])
+  func arguirPrefixInvariance(tense: Tense2, expected: String) {
+    expectForm("reargüir", model: Self.arguir, tense, expected)
+  }
+
+  // The tú imperative of a y-add verb equals PI{3s} and keeps the glide. Phase 5b
+  // added IMP{2s} to `isYAdd`, so construir's imperative is now `construye` (it
+  // was the never-tested `construe` before); voseo/vosotros stay regular.
+  @Test("construir — tú imperative keeps the y glide (isYAdd fix)", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "construye"),
+    (.imperativoAfirmativo(.secondPlural), "construid"),
+    (.imperativoAfirmativo(.secondSingularVos), "construí"),
+  ])
+  func construirImperative(tense: Tense2, expected: String) {
+    expectForm("construir", model: Self.construir, tense, expected)
+  }
+
+  // MARK: - Phase 5b: erguir (class 6A-1 — two co-equal paradigms)
+
+  // `conjugate` returns the primary (yerg-) paradigm. (PS{1p,2p} are the shared WK
+  // raise irgamos/irgáis — the RAE-preferred forms — in both paradigms.)
+  @Test("erguir — presente de indicativo (primary, yerg-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["yergo", "yergues", "yergue", "erguimos", "erguís", "yerguen"]))
+  func erguirPresent(person: PersonNumber2, expected: String) {
+    expectForm("erguir", model: Self.erguir, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("erguir — pretérito (unstressed raise irguió/irguieron, shared)", arguments: zip(PersonNumber2.oracleOrder,
+    ["erguí", "erguiste", "irguió", "erguimos", "erguisteis", "irguieron"]))
+  func erguirPreterite(person: PersonNumber2, expected: String) {
+    expectForm("erguir", model: Self.erguir, .pretérito(person), expected)
+  }
+
+  @Test("erguir — presente de subjuntivo (primary: STR yerg-, WK irg-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["yerga", "yergas", "yerga", "irgamos", "irgáis", "yergan"]))
+  func erguirPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("erguir", model: Self.erguir, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("erguir — imperative & non-finite (primary)", arguments: [
+    (Tense2.imperativoAfirmativo(.secondSingular), "yergue"),
+    (.imperativoAfirmativo(.secondPlural), "erguid"),
+    (.gerundio, "irguiendo"),
+    (.participioPasado, "erguido"),
+  ])
+  func erguirImperativeAndNonFinite(tense: Tense2, expected: String) {
+    expectForm("erguir", model: Self.erguir, tense, expected)
+  }
+
+  // conjugateAll surfaces BOTH yerg-/irg- in the stressed slots…
+  @Test("erguir — conjugateAll, stressed slots return both paradigms", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), ["yergo", "irgo"]),
+    (.presenteDeIndicativo(.secondSingular), ["yergues", "irgues"]),
+    (.presenteDeIndicativo(.thirdSingular), ["yergue", "irgue"]),
+    (.presenteDeIndicativo(.thirdPlural), ["yerguen", "irguen"]),
+    (.presenteDeSubjuntivo(.firstSingular), ["yerga", "irga"]),
+    (.presenteDeSubjuntivo(.thirdPlural), ["yergan", "irgan"]),
+    (.imperativoAfirmativo(.secondSingular), ["yergue", "irgue"]),
+  ])
+  func erguirAllStressed(tense: Tense2, expected: [String]) {
+    expectForms("erguir", model: Self.erguir, tense, expected)
+  }
+
+  // …and a single form in the shared unstressed slots (no duplicate).
+  @Test("erguir — conjugateAll, shared unstressed slots collapse to one form", arguments: [
+    (Tense2.presenteDeIndicativo(.firstPlural), ["erguimos"]),
+    (.pretérito(.firstSingular), ["erguí"]),
+    (.pretérito(.thirdSingular), ["irguió"]),
+    (.pretérito(.thirdPlural), ["irguieron"]),
+    (.presenteDeSubjuntivo(.firstPlural), ["irgamos"]),
+    (.presenteDeSubjuntivo(.secondPlural), ["irgáis"]),
+    (.gerundio, ["irguiendo"]),
+  ])
+  func erguirAllShared(tense: Tense2, expected: [String]) {
+    expectForms("erguir", model: Self.erguir, tense, expected)
+  }
+
+  // MARK: - Phase 5b: raer / roer / yacer (variant -go/-y/-zc paradigms)
+
+  // raer (9-1): PI 2s/3s/… are regular (raes/rae/raen); only 1s + PS branch.
+  @Test("raer — presente de indicativo (primary raigo; rest regular)", arguments: zip(PersonNumber2.oracleOrder,
+    ["raigo", "raes", "rae", "raemos", "raéis", "raen"]))
+  func raerPresent(person: PersonNumber2, expected: String) {
+    expectForm("raer", model: Self.raer, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("raer — shared preterite/gerund/participle (single-valued)", arguments: [
+    (Tense2.pretérito(.thirdSingular), "rayó"),
+    (.pretérito(.secondSingular), "raíste"),
+    (.gerundio, "rayendo"),
+    (.participioPasado, "raído"),
+  ])
+  func raerShared(tense: Tense2, expected: String) {
+    expectForm("raer", model: Self.raer, tense, expected)
+  }
+
+  @Test("raer — conjugateAll variant set (raigo+rayo) and shared singletons", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), ["raigo", "rayo"]),
+    (.presenteDeSubjuntivo(.firstSingular), ["raiga", "raya"]),
+    (.presenteDeSubjuntivo(.firstPlural), ["raigamos", "rayamos"]),
+    (.pretérito(.thirdSingular), ["rayó"]),
+    (.gerundio, ["rayendo"]),
+    (.participioPasado, ["raído"]),
+  ])
+  func raerAll(tense: Tense2, expected: [String]) {
+    expectForms("raer", model: Self.raer, tense, expected)
+  }
+
+  // roer (9-2): THREE variants — the regular roo is primary.
+  @Test("roer — primary is the regular roo/roa; shared royó/royendo", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), "roo"),
+    (.presenteDeSubjuntivo(.firstSingular), "roa"),
+    (.pretérito(.thirdSingular), "royó"),
+    (.gerundio, "royendo"),
+    (.participioPasado, "roído"),
+  ])
+  func roerPrimary(tense: Tense2, expected: String) {
+    expectForm("roer", model: Self.roer, tense, expected)
+  }
+
+  @Test("roer — conjugateAll returns all THREE variants (N=3)", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), ["roo", "roigo", "royo"]),
+    (.presenteDeSubjuntivo(.firstSingular), ["roa", "roiga", "roya"]),
+    (.presenteDeSubjuntivo(.firstPlural), ["roamos", "roigamos", "royamos"]),
+    (.pretérito(.thirdSingular), ["royó"]),
+    (.gerundio, ["royendo"]),
+  ])
+  func roerAll(tense: Tense2, expected: [String]) {
+    expectForms("roer", model: Self.roer, tense, expected)
+  }
+
+  // yacer (7A-1): THREE variants in PI 1s / PS; primary yazco, imperative yace.
+  @Test("yacer — primary (yazco/yazca/yace); rest regular", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), "yazco"),
+    (.presenteDeIndicativo(.secondSingular), "yaces"),
+    (.presenteDeSubjuntivo(.firstSingular), "yazca"),
+    (.imperativoAfirmativo(.secondSingular), "yace"),
+  ])
+  func yacerPrimary(tense: Tense2, expected: String) {
+    expectForm("yacer", model: Self.yacer, tense, expected)
+  }
+
+  @Test("yacer — conjugateAll variant set (yazco/yazgo/yago) + apocopated yaz", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), ["yazco", "yazgo", "yago"]),
+    (.presenteDeSubjuntivo(.firstSingular), ["yazca", "yazga", "yaga"]),
+    (.presenteDeSubjuntivo(.firstPlural), ["yazcamos", "yazgamos", "yagamos"]),
+    (.imperativoAfirmativo(.secondSingular), ["yace", "yaz"]),
+  ])
+  func yacerAll(tense: Tense2, expected: [String]) {
+    expectForms("yacer", model: Self.yacer, tense, expected)
+  }
+
+  // placer (7A-2): primary plazco; a representative archaic alternate slice.
+  @Test("placer — primary (zc) paradigm", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), "plazco"),
+    (.presenteDeSubjuntivo(.thirdSingular), "plazca"),
+    (.pretérito(.thirdSingular), "plació"),
+  ])
+  func placerPrimary(tense: Tense2, expected: String) {
+    expectForm("placer", model: Self.placer, tense, expected)
+  }
+
+  @Test("placer — conjugateAll archaic alternates (N≥2)", arguments: [
+    (Tense2.presenteDeSubjuntivo(.thirdSingular), ["plazca", "plegue", "plega"]),
+    (.pretérito(.thirdSingular), ["plació", "plugo"]),
+  ])
+  func placerAll(tense: Tense2, expected: [String]) {
+    expectForms("placer", model: Self.placer, tense, expected)
+  }
+
+  // MARK: - Phase 5b: two-form participles (§4.8)
+
+  @Test("two-form participles — conjugate returns the book's primary", arguments: [
+    ("imprimir", Self.imprimir, "impreso"),
+    ("freír", Self.freir, "frito"),
+    ("inscribir", Self.inscribir, "inscrito"),
+  ])
+  func twoFormParticiplePrimary(infinitive: String, model: VerbModel2, expected: String) {
+    expectForm(infinitive, model: model, .participioPasado, expected)
+  }
+
+  @Test("two-form participles — conjugateAll returns [primary, alternate]", arguments: [
+    ("imprimir", Self.imprimir, ["impreso", "imprimido"]),
+    ("freír", Self.freir, ["frito", "freído"]),
+    ("inscribir", Self.inscribir, ["inscrito", "inscripto"]),
+  ])
+  func twoFormParticipleAll(infinitive: String, model: VerbModel2, expected: [String]) {
+    expectForms(infinitive, model: model, .participioPasado, expected)
+  }
+
+  // freír also carries reír's umlaut/collapse machinery (sanity beyond the PP).
+  @Test("freír — umlaut/collapse spot-checks", arguments: [
+    (Tense2.presenteDeIndicativo(.firstSingular), "frío"),
+    (.pretérito(.thirdSingular), "frió"),
+    (.gerundio, "friendo"),
+    (.presenteDeSubjuntivo(.firstPlural), "friamos"),
+  ])
+  func freirSpotChecks(tense: Tense2, expected: String) {
+    expectForm("freír", model: Self.freir, tense, expected)
+  }
+
+  // MARK: - Phase 5b: conjugateAll degenerates correctly (strict superset)
+
+  // A regular verb and a single-form irregular (tener) return exactly [onlyForm]:
+  // no spurious alternates, and element 0 == conjugate's result.
+  @Test("conjugateAll — regular verb returns exactly [onlyForm]", arguments: [
+    Tense2.presenteDeIndicativo(.firstSingular),
+    .pretérito(.thirdSingular),
+    .gerundio,
+    .participioPasado,
+    .imperativoAfirmativo(.firstPlural),
+  ])
+  func conjugateAllRegularDegenerate(tense: Tense2) {
+    expectForms("hablar", tense, [conjugatePrimary("hablar", model: nil, tense)])
+  }
+
+  @Test("conjugateAll — single-form irregular (tener) returns exactly [onlyForm]", arguments: [
+    Tense2.presenteDeIndicativo(.firstSingular),
+    .pretérito(.firstSingular),
+    .futuro(.firstSingular),
+    .imperativoAfirmativo(.secondSingular),
+    .participioPasado,
+  ])
+  func conjugateAllSingleIrregularDegenerate(tense: Tense2) {
+    expectForms("tener", model: Self.tener, tense, [conjugatePrimary("tener", model: Self.tener, tense)])
+  }
+
   // MARK: - Helpers
 
   /// Conjugate one slot (optionally against an explicit model) and assert the form.
@@ -2416,6 +2798,47 @@ struct Conjugator2Tests {
     switch result {
     case let .success(form):
       #expect(form == expected, "\(infinitive) \(tense)", sourceLocation: sourceLocation)
+    case let .failure(error):
+      Issue.record("\(infinitive) \(tense) unexpectedly failed: \(error)", sourceLocation: sourceLocation)
+    }
+  }
+
+  /// The single-form (`conjugate`) result for a slot, for the degenerate-path
+  /// tests that prove `conjugateAll` returns exactly `[that form]`. Records an
+  /// issue and returns "" if the single-form path itself fails (so the equality
+  /// assertion then surfaces the real problem).
+  private func conjugatePrimary(
+    _ infinitive: String,
+    model: VerbModel2?,
+    _ tense: Tense2,
+    sourceLocation: SourceLocation = #_sourceLocation
+  ) -> String {
+    let result = model.map { Conjugator2.conjugate(infinitive: infinitive, tense: tense, model: $0) }
+      ?? Conjugator2.conjugate(infinitive: infinitive, tense: tense)
+    switch result {
+    case let .success(form):
+      return form
+    case let .failure(error):
+      Issue.record("\(infinitive) \(tense) single-form failed: \(error)", sourceLocation: sourceLocation)
+      return ""
+    }
+  }
+
+  /// Conjugate one slot via the **all-forms** entry point and assert the full
+  /// ordered list (primary first, alternates in book order, de-duplicated). Order
+  /// is significant: the assertion is order-sensitive (taxonomy §5b crux 2).
+  private func expectForms(
+    _ infinitive: String,
+    model: VerbModel2? = nil,
+    _ tense: Tense2,
+    _ expected: [String],
+    sourceLocation: SourceLocation = #_sourceLocation
+  ) {
+    let result = model.map { Conjugator2.conjugateAll(infinitive: infinitive, tense: tense, model: $0) }
+      ?? Conjugator2.conjugateAll(infinitive: infinitive, tense: tense)
+    switch result {
+    case let .success(forms):
+      #expect(forms == expected, "\(infinitive) \(tense)", sourceLocation: sourceLocation)
     case let .failure(error):
       Issue.record("\(infinitive) \(tense) unexpectedly failed: \(error)", sourceLocation: sourceLocation)
     }

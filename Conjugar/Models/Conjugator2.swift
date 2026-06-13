@@ -43,26 +43,105 @@ enum Conjugator2 {
     guard RegularRoot2(infinitive: infinitive) != nil else {
       return .failure(.invalidInfinitiveEnding(String(infinitive.suffix(2))))
     }
+    // The single-form answer is the **primary** feature stack only — alternates
+    // (`model.alternates`) are invisible here, so this path (and the irregularity
+    // score that reads `model.features`) is byte-for-byte unchanged by Phase 5b.
+    return conjugateOne(infinitive: infinitive, tense: tense, base: model.base, features: model.features)
+  }
 
+  // MARK: - All accepted forms (Phase 5b)
+
+  /// All accepted forms for a slot — the **primary** form plus any alternates,
+  /// primary first, in the book's preference order, de-duplicated. For a regular
+  /// verb or a single-form irregular this is exactly `[conjugate(...)]`; the path
+  /// is a strict superset of `conjugate` that degenerates correctly.
+  ///
+  /// Two sources of alternates compose here (taxonomy §5b):
+  ///   1. **Variant paradigms** (`model.alternates`): each is a whole alternate
+  ///      feature stack, composed through the *same* `conjugateOne` machinery and
+  ///      unioned per slot (erguir yergo/irgo, raer raigo/rayo, roer roo/roigo/royo,
+  ///      yacer yazco/yazgo/yago). Slots where the stacks agree collapse via dedup.
+  ///   2. **Per-slot literal alternates**: a second participle carried on
+  ///      `IrregularParticiple2.alternate` (impreso/imprimido, frito/freído, the
+  ///      escribir `-scripto` family), surfaced only in the PP slot.
+  ///
+  /// The primary element **must** equal `conjugate`'s result (crux 1); it is in
+  /// fact produced by the identical call. An alternate stack that fails/suppresses
+  /// for a given slot is simply skipped (it contributes no form there).
+  static func conjugateAll(infinitive: String, tense: Tense2) -> Result<[String], Conjugator2Error> {
+    guard infinitive.count >= minimumInfinitiveLength else {
+      return .failure(.infinitiveTooShort)
+    }
+    guard let base = RegularRoot2(infinitive: infinitive) else {
+      return .failure(.invalidInfinitiveEnding(String(infinitive.suffix(2))))
+    }
+    return conjugateAll(infinitive: infinitive, tense: tense, model: VerbModel2(base: base))
+  }
+
+  static func conjugateAll(infinitive: String, tense: Tense2, model: VerbModel2) -> Result<[String], Conjugator2Error> {
+    guard infinitive.count >= minimumInfinitiveLength else {
+      return .failure(.infinitiveTooShort)
+    }
+    guard RegularRoot2(infinitive: infinitive) != nil else {
+      return .failure(.invalidInfinitiveEnding(String(infinitive.suffix(2))))
+    }
+
+    // Primary first — the same call `conjugate` makes, so element 0 is identical.
+    let primary = conjugateOne(infinitive: infinitive, tense: tense, base: model.base, features: model.features)
+    guard case let .success(primaryForm) = primary else {
+      // A formless primary slot (defective) has no alternates to offer either.
+      return primary.map { [$0] }
+    }
+
+    var forms = [primaryForm]
+
+    // 1. Variant-paradigm alternate stacks (each through the same machinery).
+    for stack in model.alternates {
+      if case let .success(form) = conjugateOne(infinitive: infinitive, tense: tense, base: model.base, features: stack) {
+        forms.append(form)
+      }
+    }
+
+    // 2. Per-slot literal participle alternates (PP only).
+    if tense == .participioPasado {
+      let stem = String(infinitive.dropLast(2))
+      for case let participle as IrregularParticiple2 in model.features {
+        if let alternate = participle.alternate {
+          forms.append(participle.form(alternate, stem: stem))
+        }
+      }
+    }
+
+    // Stable dedup: keep first occurrence, so order is primary then alternates in
+    // book-preference order, and coincident slots collapse to a single form.
+    var seen = Set<String>()
+    return .success(forms.filter { seen.insert($0).inserted })
+  }
+
+  /// The post-validation single-slot core: defectivity check → regular ending →
+  /// `compose` (or the derived imperative). Shared by `conjugate` (the primary
+  /// stack) and `conjugateAll` (the primary stack *and* each alternate stack), so
+  /// alternates ride the exact same seam, derivation rules, and imperative logic.
+  private static func conjugateOne(infinitive: String, tense: Tense2, base: RegularRoot2, features: [Feature2]) -> Result<String, Conjugator2Error> {
     let stem = String(infinitive.dropLast(2))
 
     // Defectivity (taxonomy §5 abolir): a slot a feature declares formless has no
     // composition at all — report it before reaching the ending tables.
-    if model.features.contains(where: { $0.suppresses(tense) }) {
+    if features.contains(where: { $0.suppresses(tense) }) {
       return .failure(.noForm(tense))
     }
 
-    guard let ending = model.base.ending(for: tense) else {
+    guard let ending = base.ending(for: tense) else {
       // The only slot a regular root legitimately lacks is an affirmative
       // imperative for a non-2nd-person; those are now **derived** (usted/
       // ustedes/nosotros from the present subjunctive, taxonomy §1).
       if case let .imperativoAfirmativo(personNumber) = tense {
-        return deriveImperative(personNumber: personNumber, stem: stem, model: model)
+        return deriveImperative(personNumber: personNumber, stem: stem, base: base, features: features)
       }
-      preconditionFailure("Regular root \(model.base) produced no ending for \(tense).")
+      preconditionFailure("Regular root \(base) produced no ending for \(tense).")
     }
 
-    return .success(compose(stem: stem, ending: ending, tense: tense, features: model.features))
+    return .success(compose(stem: stem, ending: ending, tense: tense, features: features))
   }
 
   /// Derive the affirmative imperative for usted (3s) / nosotros (1p) / ustedes
@@ -72,18 +151,18 @@ enum Conjugator2 {
   /// dé). Crucially this reuses the *computed* PS (`compose`), not a re-derivation
   /// (crux 1). A trailing imperative-slot residue may then override it — the one
   /// case being `ir`'s nosotros = **vamos** (not vayamos).
-  private static func deriveImperative(personNumber: PersonNumber2, stem: String, model: VerbModel2) -> Result<String, Conjugator2Error> {
-    guard let psEnding = model.base.ending(for: .presenteDeSubjuntivo(personNumber)) else {
+  private static func deriveImperative(personNumber: PersonNumber2, stem: String, base: RegularRoot2, features: [Feature2]) -> Result<String, Conjugator2Error> {
+    guard let psEnding = base.ending(for: .presenteDeSubjuntivo(personNumber)) else {
       return .failure(.imperativeNotAvailable(personNumber))
     }
-    let subjunctive = compose(stem: stem, ending: psEnding, tense: .presenteDeSubjuntivo(personNumber), features: model.features)
+    let subjunctive = compose(stem: stem, ending: psEnding, tense: .presenteDeSubjuntivo(personNumber), features: features)
 
     // Apply any imperative-slot residue (a literal override) on top of the PS
     // form. Only residue literals target a non-2nd imperative person, so this
     // loop is a no-op except for the `ir` vamos exception.
     let imperative = Tense2.imperativoAfirmativo(personNumber)
     var form = subjunctive
-    for feature in model.features where feature.applies(to: imperative) {
+    for feature in features where feature.applies(to: imperative) {
       (form, _) = feature.apply(stem: form, ending: "", tense: imperative, regularStem: stem)
     }
     return .success(form)
