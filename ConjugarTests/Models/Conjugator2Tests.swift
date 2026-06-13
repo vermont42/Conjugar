@@ -17,79 +17,112 @@ import Testing
 // the XCTest version — only the test *structure* changed.
 @Suite("Conjugator2 (new engine)")
 struct Conjugator2Tests {
-  // MARK: - Shared models (the §1 "model = base + ordered features" catalog)
+  // MARK: - Shared models — the catalog under test (Phase 6A)
 
-  // Phase 2: orthographic (§4.1)
-  static let tocar = VerbModel2(base: .ar, features: [StemFinalConsonant2.oCar])
-  static let pagar = VerbModel2(base: .ar, features: [StemFinalConsonant2.oGar])
-  static let averiguar = VerbModel2(base: .ar, features: [StemFinalConsonant2.oGuar])
-  static let cazar = VerbModel2(base: .ar, features: [StemFinalConsonant2.oZar])
-  static let vencer = VerbModel2(base: .er, features: [StemFinalConsonant2.oCz])
-  static let fruncir = VerbModel2(base: .ir, features: [StemFinalConsonant2.oCz])
-  static let coger = VerbModel2(base: .er, features: [StemFinalConsonant2.oGj])
-  static let dirigir = VerbModel2(base: .ir, features: [StemFinalConsonant2.oGj])
-  static let distinguir = VerbModel2(base: .ir, features: [StemFinalConsonant2.oGug])
-  static let delinquir = VerbModel2(base: .ir, features: [StemFinalConsonant2.oQuc])
-  static let leer = VerbModel2(base: .er, features: [IYHiatus2.oYhiatus])
-  static let empeller = VerbModel2(base: .er, features: [AbsorbIAfterPalatal2.oLlñ])
-  static let tañer = VerbModel2(base: .er, features: [AbsorbIAfterPalatal2.oLlñ])
-  static let bullir = VerbModel2(base: .ir, features: [AbsorbIAfterPalatal2.oLlñ])
-  static let bruñir = VerbModel2(base: .ir, features: [AbsorbIAfterPalatal2.oLlñ])
+  // The ~95 oracle-verified model exemplars now live in the app target's
+  // `ModelCatalog2`, keyed by book class number. These `static let`s alias the
+  // catalog, so every assertion below exercises the catalog (the single source
+  // of truth). `model(forClass:)` is force-unwrapped on purpose: a nil here is a
+  // real regression (a class number that stopped resolving), surfaced loudly.
+  static let tocar = ModelCatalog2.model(forClass: "1-1")!
+  static let pagar = ModelCatalog2.model(forClass: "1-2")!
+  static let averiguar = ModelCatalog2.model(forClass: "1-3")!
+  static let cazar = ModelCatalog2.model(forClass: "1-4")!
+  static let aislar = ModelCatalog2.model(forClass: "1-5")!
+  static let aullar = ModelCatalog2.model(forClass: "1-6")!
+  static let descafeinar = ModelCatalog2.model(forClass: "1-7")!
+  static let rehusar = ModelCatalog2.model(forClass: "1-8")!
+  static let amohinar = ModelCatalog2.model(forClass: "1-9")!
+  static let ahincar = ModelCatalog2.model(forClass: "1-10")!
+  static let cabrahigar = ModelCatalog2.model(forClass: "1-11")!
+  static let enraizar = ModelCatalog2.model(forClass: "1-12")!
+  static let europeizar = ModelCatalog2.model(forClass: "1-13")!
+  static let actuar = ModelCatalog2.model(forClass: "1-14")!
+  static let enviar = ModelCatalog2.model(forClass: "1-15")!
+  static let vencer = ModelCatalog2.model(forClass: "2-1")!
+  static let coger = ModelCatalog2.model(forClass: "2-2")!
+  static let leer = ModelCatalog2.model(forClass: "2-3")!
+  static let empeller = ModelCatalog2.model(forClass: "2-4")!
+  static let tañer = ModelCatalog2.model(forClass: "2-5")!
+  static let romper = ModelCatalog2.model(forClass: "2-6")!
+  static let fruncir = ModelCatalog2.model(forClass: "3-1")!
+  static let dirigir = ModelCatalog2.model(forClass: "3-2")!
+  static let distinguir = ModelCatalog2.model(forClass: "3-3")!
+  static let delinquir = ModelCatalog2.model(forClass: "3-4")!
+  static let bullir = ModelCatalog2.model(forClass: "3-5")!
+  static let bruñir = ModelCatalog2.model(forClass: "3-6")!
+  static let reunir = ModelCatalog2.model(forClass: "3-7")!
+  static let prohibir = ModelCatalog2.model(forClass: "3-8")!
+  static let abrir = ModelCatalog2.model(forClass: "3-9")!
+  static let cubrir = ModelCatalog2.model(forClass: "3-10")!
+  static let escribir = ModelCatalog2.model(forClass: "3-11")!
+  static let imprimir = ModelCatalog2.model(forClass: "3-12")!
+  static let pudrir = ModelCatalog2.model(forClass: "3-13")!
+  static let abolir = ModelCatalog2.model(forClass: "3-14")!
+  static let pensar = ModelCatalog2.model(forClass: "4A")!
+  static let negar = ModelCatalog2.model(forClass: "4A-1")!
+  static let empezar = ModelCatalog2.model(forClass: "4A-2")!
+  static let errar = ModelCatalog2.model(forClass: "4A-3")!
+  static let mostrar = ModelCatalog2.model(forClass: "4B")!
+  static let colgar = ModelCatalog2.model(forClass: "4B-2")!
+  static let forzar = ModelCatalog2.model(forClass: "4B-3")!
+  static let agorar = ModelCatalog2.model(forClass: "4B-4")!
+  static let perder = ModelCatalog2.model(forClass: "5A")!
+  static let mover = ModelCatalog2.model(forClass: "5B")!
+  static let cocer = ModelCatalog2.model(forClass: "5B-1")!
+  static let oler = ModelCatalog2.model(forClass: "5B-2")!
+  static let resolver = ModelCatalog2.model(forClass: "5B-3")!
+  static let volver = ModelCatalog2.model(forClass: "5B-4")!
+  static let sentir = ModelCatalog2.model(forClass: "6A")!
+  static let erguir = ModelCatalog2.model(forClass: "6A-1")!
+  static let pedir = ModelCatalog2.model(forClass: "6B")!
+  static let elegir = ModelCatalog2.model(forClass: "6B-1")!
+  static let seguir = ModelCatalog2.model(forClass: "6B-2")!
+  static let ceñir = ModelCatalog2.model(forClass: "6B-3")!
+  static let reir = ModelCatalog2.model(forClass: "6B-4")!
+  static let dormir = ModelCatalog2.model(forClass: "6C")!
+  static let morir = ModelCatalog2.model(forClass: "6C-1")!
+  static let conocer = ModelCatalog2.model(forClass: "7A")!
+  static let yacer = ModelCatalog2.model(forClass: "7A-1")!
+  static let placer = ModelCatalog2.model(forClass: "7A-2")!
+  static let lucir = ModelCatalog2.model(forClass: "7B")!
+  static let construir = ModelCatalog2.model(forClass: "8")!
+  static let caer = ModelCatalog2.model(forClass: "9")!
+  static let raer = ModelCatalog2.model(forClass: "9-1")!
+  static let roer = ModelCatalog2.model(forClass: "9-2")!
+  static let salir = ModelCatalog2.model(forClass: "11")!
+  static let valer = ModelCatalog2.model(forClass: "12")!
+  static let asir = ModelCatalog2.model(forClass: "13")!
+  static let ver = ModelCatalog2.model(forClass: "14")!
+  static let prever = ModelCatalog2.model(forClass: "14-1")!
+  static let discernir = ModelCatalog2.model(forClass: "15")!
+  static let jugar = ModelCatalog2.model(forClass: "16")!
+  static let adquirir = ModelCatalog2.model(forClass: "17")!
+  static let arguir = ModelCatalog2.model(forClass: "18")!
+  static let ser = ModelCatalog2.model(forClass: "19")!
+  static let estar = ModelCatalog2.model(forClass: "20")!
+  static let haber = ModelCatalog2.model(forClass: "21")!
+  static let saber = ModelCatalog2.model(forClass: "22")!
+  static let caber = ModelCatalog2.model(forClass: "23")!
+  static let ir = ModelCatalog2.model(forClass: "24")!
+  static let dar = ModelCatalog2.model(forClass: "25")!
+  static let poder = ModelCatalog2.model(forClass: "26")!
+  static let querer = ModelCatalog2.model(forClass: "27")!
+  static let decir = ModelCatalog2.model(forClass: "28")!
+  static let predecir = ModelCatalog2.model(forClass: "28-1")!
+  static let bendecir = ModelCatalog2.model(forClass: "28-2")!
+  static let hacer = ModelCatalog2.model(forClass: "29")!
+  static let rehacer = ModelCatalog2.model(forClass: "29-1")!
+  static let poner = ModelCatalog2.model(forClass: "30")!
+  static let tener = ModelCatalog2.model(forClass: "31")!
+  static let venir = ModelCatalog2.model(forClass: "32")!
+  static let traer = ModelCatalog2.model(forClass: "33")!
+  static let conducirFull = ModelCatalog2.model(forClass: "34")!
+  static let andarFull = ModelCatalog2.model(forClass: "35")!
 
-  // Phase 2: accent (§4.2)
-  static let enviar = VerbModel2(base: .ar, features: [AccentStem2.aI])
-  static let actuar = VerbModel2(base: .ar, features: [AccentStem2.aU])
-  static let aislar = VerbModel2(base: .ar, features: [AccentStem2.aStemI])
-  static let aullar = VerbModel2(base: .ar, features: [AccentStem2.aStemU])
-  static let descafeinar = VerbModel2(base: .ar, features: [AccentStem2.aStemI])
-  static let rehusar = VerbModel2(base: .ar, features: [AccentStem2.aStemU])
-  static let amohinar = VerbModel2(base: .ar, features: [AccentStem2.aStemI])
-  static let reunir = VerbModel2(base: .ir, features: [AccentStem2.aStemU])
-  static let prohibir = VerbModel2(base: .ir, features: [AccentStem2.aStemI])
-
-  // Phase 2: composition (a-stem + orthographic swap)
-  static let ahincar = VerbModel2(base: .ar, features: [AccentStem2.aStemI, StemFinalConsonant2.oCar])
-  static let cabrahigar = VerbModel2(base: .ar, features: [AccentStem2.aStemI, StemFinalConsonant2.oGar])
-  static let enraizar = VerbModel2(base: .ar, features: [AccentStem2.aStemI, StemFinalConsonant2.oZar])
-  static let europeizar = VerbModel2(base: .ar, features: [AccentStem2.aStemI, StemFinalConsonant2.oZar])
-
-  // Phase 3: stem-vowel diphthongs (§4.3)
-  static let pensar = VerbModel2(base: .ar, features: [StemVowel2.dIe])
-  static let mostrar = VerbModel2(base: .ar, features: [StemVowel2.dUe])
-  static let perder = VerbModel2(base: .er, features: [StemVowel2.dIe])
-  static let mover = VerbModel2(base: .er, features: [StemVowel2.dUe])
-  static let errar = VerbModel2(base: .ar, features: [StemVowel2.dIeYe])
-  static let agorar = VerbModel2(base: .ar, features: [StemVowel2.dUeGue])
-  static let oler = VerbModel2(base: .er, features: [StemVowel2.dUeHue])
-  static let adquirir = VerbModel2(base: .ir, features: [StemVowel2.dIIe])
-  static let jugar = VerbModel2(base: .ar, features: [StemVowel2.dUUe, StemFinalConsonant2.oGar])
-  static let discernir = VerbModel2(base: .ir, features: [StemVowel2.dIe])
-
-  // Phase 3: -ir weak-slot raising (§4.4)
-  static let sentir = VerbModel2(base: .ir, features: [StemVowel2.dIe, StemVowel2.rEiWk])
-  static let pedir = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk])
-  static let dormir = VerbModel2(base: .ir, features: [StemVowel2.dUe, StemVowel2.rOuWk])
-
-  // Phase 3: cross-phase composition (§4.3/§4.4 feature + a §4.1 swap)
-  static let negar = VerbModel2(base: .ar, features: [StemVowel2.dIe, StemFinalConsonant2.oGar])
-  static let empezar = VerbModel2(base: .ar, features: [StemVowel2.dIe, StemFinalConsonant2.oZar])
-  static let colgar = VerbModel2(base: .ar, features: [StemVowel2.dUe, StemFinalConsonant2.oGar])
-  static let forzar = VerbModel2(base: .ar, features: [StemVowel2.dUe, StemFinalConsonant2.oZar])
-  static let cocer = VerbModel2(base: .er, features: [StemVowel2.dUe, StemFinalConsonant2.oCz])
-  static let elegir = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk, StemFinalConsonant2.oGj])
-  static let seguir = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk, StemFinalConsonant2.oGug])
-  static let ceñir = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk, AbsorbIAfterPalatal2.oLlñ])
-
-  // Phase 4: irregular 1s + present subjunctive (§4.5)
-  static let conocer = VerbModel2(base: .er, features: [StemFeature2.zc])
-  static let lucir = VerbModel2(base: .ir, features: [StemFeature2.zc])
-  static let asir = VerbModel2(base: .ir, features: [StemFeature2.g1g])
-  static let caer = VerbModel2(base: .er, features: [StemFeature2.g1ig, IYHiatus2.oYhiatus])
-  static let construir = VerbModel2(base: .ir, features: [StemFeature2.yAdd, IYHiatus2.oYhiatus])
-  static let salir = VerbModel2(base: .ir, features: [StemFeature2.g1g, FutureEndings2.fDr, ApocopatedImperative2()])
-  static let valer = VerbModel2(base: .er, features: [StemFeature2.g1g, FutureEndings2.fDr])
-
-  // Phase 4: strong / suppletive preterites (§4.6)
+  // Phase-4 *scaffold* models that isolate one tense system in a test — not
+  // catalog classes (the full builds their verbs follow are 31/34/35/28). Kept
+  // local; they prove the §4.6/§4.7 machinery on its own.
   static let andar = VerbModel2(base: .ar, features: [StemFeature2.strongPreterite(from: "and", to: "anduv"), PreteriteEndings2.spEnd])
   static let tenerSpEnd = VerbModel2(base: .er, features: [StemFeature2.strongPreterite(from: "ten", to: "tuv"), PreteriteEndings2.spEnd])
   static let conducir = VerbModel2(base: .ir, features: [
@@ -98,330 +131,15 @@ struct Conjugator2Tests {
     PreteriteEndings2.spJend
   ])
   static let decirSpJend = VerbModel2(base: .ir, features: [StemFeature2.strongPreterite(from: "dec", to: "dij"), PreteriteEndings2.spJend])
-  // dar/ver/ser/ir (the wp-i / pret-fue exemplars) are now the **full** Phase 5
-  // models defined below, which are supersets of the Phase 4 partials the §4.6
-  // tests exercise (the preterite/IS slots are unchanged).
-
-  // Phase 4: future / conditional stems (§4.7)
   static let tenerFDr = VerbModel2(base: .er, features: [FutureEndings2.fDr])
-  // haber/hacer likewise upgraded to their full Phase 5 builds below (the §4.7
-  // future/conditional slots they assert are unchanged).
   static let decirFContract = VerbModel2(base: .ir, features: [StemFeature2.contractedFuture(from: "dec", to: "di"), FutureEndings2.fContract])
 
-  // Phase 4: capstones (whole phase in one verb)
-  static let tener = VerbModel2(base: .er, features: [
-    StemVowel2.dIe,
-    StemFeature2.g1g,
-    StemFeature2.strongPreterite(from: "ten", to: "tuv"),
-    PreteriteEndings2.spEnd,
-    FutureEndings2.fDr,
-    ApocopatedImperative2()
-  ])
-  static let venir = VerbModel2(base: .ir, features: [
-    StemVowel2.dIe,
-    StemVowel2.rEiWk,
-    StemFeature2.g1g,
-    StemFeature2.strongPreterite(from: "ven", to: "vin"),
-    PreteriteEndings2.spEnd,
-    FutureEndings2.fDr,
-    ApocopatedImperative2()
-  ])
-
-  // MARK: - Phase 5 models (residue catalog — classes 19–35, sub-classes, §4.8)
-
-  /// Build a `LiteralSlotOverride2` from `(slot, form)` pairs (the catch-all residue).
+  // Phase-5b two-form-participle exemplars. freír/inscribir follow classes
+  // 6B-4/3-11 but carry a richer participle (frito/freído, inscrito/inscripto);
+  // kept local to exercise the alternate-PP path without overstating the catalog.
   static func residue(_ pairs: [(Tense2, String)]) -> LiteralSlotOverride2 {
     LiteralSlotOverride2(overrides: pairs.map { (slot: $0.0, form: $0.1) })
   }
-
-  /// A suppletive present-subjunctive stem (ser sea-, haber haya-, …): replace the
-  /// whole stem in PS{all} only, leaving the (separately suppletive) PI 1s alone.
-  static func subjunctiveStem(_ whole: String) -> StemFeature2 {
-    StemFeature2(operation: .replaceWhole(whole), slots: Slot2.isPresentSubjunctive)
-  }
-
-  // 19 ser = comer + pret-fue + residue (suppletive PI/IM, PS sea-, IMP sé).
-  static let ser = VerbModel2(base: .er, features: [
-    SuppletivePreterite2.fue,
-    subjunctiveStem("se"),
-    residue([
-      (.presenteDeIndicativo(.firstSingular), "soy"), (.presenteDeIndicativo(.secondSingular), "eres"),
-      (.presenteDeIndicativo(.thirdSingular), "es"), (.presenteDeIndicativo(.firstPlural), "somos"),
-      (.presenteDeIndicativo(.secondPlural), "sois"), (.presenteDeIndicativo(.thirdPlural), "son"),
-      (.presenteDeIndicativo(.secondSingularVos), "sos"),  // the sole present-tense voseo irregular
-      (.imperfectoDeIndicativo(.firstSingular), "era"), (.imperfectoDeIndicativo(.secondSingular), "eras"),
-      (.imperfectoDeIndicativo(.thirdSingular), "era"), (.imperfectoDeIndicativo(.firstPlural), "éramos"),
-      (.imperfectoDeIndicativo(.secondPlural), "erais"), (.imperfectoDeIndicativo(.thirdPlural), "eran"),
-      (.imperativoAfirmativo(.secondSingular), "sé"),
-    ]),
-  ])
-
-  // 20 estar = cantar + sp-end(estuv) + residue (estoy + the stress-shift accents).
-  static let estar = VerbModel2(base: .ar, features: [
-    StemFeature2.strongPreterite(from: "est", to: "estuv"), PreteriteEndings2.spEnd,
-    residue([
-      (.presenteDeIndicativo(.firstSingular), "estoy"), (.presenteDeIndicativo(.secondSingular), "estás"),
-      (.presenteDeIndicativo(.thirdSingular), "está"), (.presenteDeIndicativo(.thirdPlural), "están"),
-      (.presenteDeSubjuntivo(.firstSingular), "esté"), (.presenteDeSubjuntivo(.secondSingular), "estés"),
-      (.presenteDeSubjuntivo(.thirdSingular), "esté"), (.presenteDeSubjuntivo(.thirdPlural), "estén"),
-      (.imperativoAfirmativo(.secondSingular), "está"),
-    ]),
-  ])
-
-  // 21 haber = comer + sp-end(hub) + f-drope + residue (he/has/ha…, PS haya-).
-  static let haber = VerbModel2(base: .er, features: [
-    StemFeature2.strongPreterite(from: "hab", to: "hub"), PreteriteEndings2.spEnd,
-    FutureEndings2.fDrope,
-    subjunctiveStem("hay"),
-    residue([
-      (.presenteDeIndicativo(.firstSingular), "he"), (.presenteDeIndicativo(.secondSingular), "has"),
-      (.presenteDeIndicativo(.thirdSingular), "ha"), (.presenteDeIndicativo(.firstPlural), "hemos"),
-      (.presenteDeIndicativo(.thirdPlural), "han"),
-      (.imperativoAfirmativo(.secondSingular), "he"),
-    ]),
-  ])
-
-  // 22 saber = comer + sp-end(sup) + f-drope + residue (PI 1s sé, PS sep-).
-  static let saber = VerbModel2(base: .er, features: [
-    StemFeature2.strongPreterite(from: "sab", to: "sup"), PreteriteEndings2.spEnd,
-    FutureEndings2.fDrope,
-    subjunctiveStem("sep"),
-    residue([(.presenteDeIndicativo(.firstSingular), "sé")]),
-  ])
-
-  // 23 caber = comer + sp-end(cup) + f-drope + residue (PI 1s quepo, PS quep-).
-  static let caber = VerbModel2(base: .er, features: [
-    StemFeature2.strongPreterite(from: "cab", to: "cup"), PreteriteEndings2.spEnd,
-    FutureEndings2.fDrope,
-    subjunctiveStem("quep"),
-    residue([(.presenteDeIndicativo(.firstSingular), "quepo")]),
-  ])
-
-  // 24 ir = subir + pret-fue + residue (voy/vas…, IM iba-, PS vaya-, ve/vamos, yendo).
-  static let ir = VerbModel2(base: .ir, features: [
-    SuppletivePreterite2.fue,
-    subjunctiveStem("vay"),
-    residue([
-      (.presenteDeIndicativo(.firstSingular), "voy"), (.presenteDeIndicativo(.secondSingular), "vas"),
-      (.presenteDeIndicativo(.thirdSingular), "va"), (.presenteDeIndicativo(.firstPlural), "vamos"),
-      (.presenteDeIndicativo(.secondPlural), "vais"), (.presenteDeIndicativo(.thirdPlural), "van"),
-      (.imperfectoDeIndicativo(.firstSingular), "iba"), (.imperfectoDeIndicativo(.secondSingular), "ibas"),
-      (.imperfectoDeIndicativo(.thirdSingular), "iba"), (.imperfectoDeIndicativo(.firstPlural), "íbamos"),
-      (.imperfectoDeIndicativo(.secondPlural), "ibais"), (.imperfectoDeIndicativo(.thirdPlural), "iban"),
-      (.gerundio, "yendo"),
-      (.imperativoAfirmativo(.secondSingular), "ve"),
-      (.imperativoAfirmativo(.firstPlural), "vamos"),  // the PS-derivation (vayamos) exception
-    ]),
-  ])
-
-  // 25 dar = cantar + wp-i + residue (doy, the monosyllable accents dé/dais/deis).
-  static let dar = VerbModel2(base: .ar, features: [
-    PreteriteEndings2.wpI,
-    residue([
-      (.presenteDeIndicativo(.firstSingular), "doy"), (.presenteDeIndicativo(.secondPlural), "dais"),
-      (.presenteDeSubjuntivo(.firstSingular), "dé"), (.presenteDeSubjuntivo(.thirdSingular), "dé"),
-      (.presenteDeSubjuntivo(.secondPlural), "deis"),
-    ]),
-  ])
-
-  // 26 poder = comer + d-ue + sp-end(pud) + f-drope + residue (GER pudiendo).
-  static let poder = VerbModel2(base: .er, features: [
-    StemVowel2.dUe,
-    StemFeature2.strongPreterite(from: "pod", to: "pud"), PreteriteEndings2.spEnd,
-    FutureEndings2.fDrope,
-    residue([(.gerundio, "pudiendo")]),
-  ])
-
-  // 27 querer = comer + d-ie + sp-end(quis) + f-drope (querr-). No residue.
-  static let querer = VerbModel2(base: .er, features: [
-    StemVowel2.dIe,
-    StemFeature2.strongPreterite(from: "quer", to: "quis"), PreteriteEndings2.spEnd,
-    FutureEndings2.fDrope,
-  ])
-
-  // 28 decir's shared core (digo, dij-, dir-, dicho) — reused by the sub-classes.
-  static let decirCore: [Feature2] = [
-    StemVowel2.rEiStr, StemVowel2.rEiWk,
-    StemFeature2.irregularFirstSingular(from: "dec", to: "dig"),
-    StemFeature2.strongPreterite(from: "dec", to: "dij"), PreteriteEndings2.spJend,
-    StemFeature2.contractedFuture(from: "dec", to: "di"), FutureEndings2.fContract,
-    IrregularParticiple2("dec", "dicho"),
-  ]
-  static let decir = VerbModel2(base: .ir, features: decirCore + [residue([(.imperativoAfirmativo(.secondSingular), "di")])])
-  // 28-1 predecir = decir − the irregular-tú literal (so tú is the regular predice).
-  static let predecir = VerbModel2(base: .ir, features: decirCore)
-  // 28-2 bendecir = decir − f-contract − PP − IMP residue (regular FU/CO/PP/tú; keeps dig-/dij-).
-  static let bendecir = VerbModel2(base: .ir, features: [
-    StemVowel2.rEiStr, StemVowel2.rEiWk,
-    StemFeature2.irregularFirstSingular(from: "dec", to: "dig"),
-    StemFeature2.strongPreterite(from: "dec", to: "dij"), PreteriteEndings2.spJend,
-  ])
-
-  // 29 hacer = comer + hag- + sp-end(hic) + f-contract(har) + residue. Keyed on the
-  // end-anchored core `ac` (h-ac → h-ic), so satisfacer / deshacer ride free.
-  static let hacer = VerbModel2(base: .er, features: [
-    StemFeature2.irregularFirstSingular(from: "ac", to: "ag"),
-    StemFeature2.strongPreterite(from: "ac", to: "ic"), PreteriteEndings2.spEnd,
-    StemFeature2.contractedFuture(from: "ac", to: "a"), FutureEndings2.fContract,
-    RunningStemConsonantSwap2.hizo,
-    IrregularParticiple2("ac", "echo"),
-    ApocopatedImperative2(finalSwap: ("c", "z")),
-  ])
-  // 29-1 rehacer = hacer + accent residue (rehíce / rehízo).
-  static let rehacer = VerbModel2(base: .er, features: hacer.features + [residue([
-    (.pretérito(.firstSingular), "rehíce"), (.pretérito(.thirdSingular), "rehízo"),
-  ])])
-  // (29-2 satisfacer needs *no* model — it rides hacer by prefix-invariance: satisfaz/satisfizo.)
-
-  // 30 poner = comer + g1-g + sp-end(pus) + f-dr + residue (PP puesto, IMP pon).
-  static let poner = VerbModel2(base: .er, features: [
-    StemFeature2.g1g,
-    StemFeature2.strongPreterite(from: "pon", to: "pus"), PreteriteEndings2.spEnd,
-    FutureEndings2.fDr,
-    IrregularParticiple2("pon", "puesto"),
-    ApocopatedImperative2(),
-  ])
-
-  // 33 traer = comer + g1-ig(traig) + sp-jend(traj) + o-yhiatus (trayendo/traído).
-  static let traer = VerbModel2(base: .er, features: [
-    StemFeature2.g1ig,
-    StemFeature2.strongPreterite(from: "tra", to: "traj"), PreteriteEndings2.spJend,
-    IYHiatus2.oYhiatus,
-  ])
-
-  // 34 conducir = subir + zc + sp-jend(-duj).
-  static let conducirFull = VerbModel2(base: .ir, features: [
-    StemFeature2.zc,
-    StemFeature2.strongPreterite(from: "conduc", to: "conduj"), PreteriteEndings2.spJend,
-  ])
-
-  // 35 andar = cantar + sp-end(anduv).
-  static let andarFull = VerbModel2(base: .ar, features: [
-    StemFeature2.strongPreterite(from: "and", to: "anduv"), PreteriteEndings2.spEnd,
-  ])
-
-  // 14 ver = comer + wp-i + residue. The veo/vea- present and the veía- imperfect
-  // are clean stem rebuilds (append `e` to the regular `v-`), thinner than literals.
-  static let ver = VerbModel2(base: .er, features: [
-    StemFeature2(operation: .append("e"), slots: Slot2.isSubjFrom1s),  // veo, vea-
-    StemFeature2(operation: .append("e"), slots: Slot2.isImperfect),   // veía-
-    PreteriteEndings2.wpI,
-    IrregularParticiple2("v", "visto"),
-    residue([
-      (.presenteDeIndicativo(.secondPlural), "veis"),       // monosyllable: no accent (vs. regular véis)
-      (.presenteDeIndicativo(.secondSingularVos), "ves"),
-    ]),
-  ])
-
-  // 14-1 prever = ver's stem rebuilds + monosyllable→polysyllable accent residue.
-  // Distinct from ver (prever takes the regular véis/prevéis, not ver's bare veis).
-  static let prever = VerbModel2(base: .er, features: [
-    StemFeature2(operation: .append("e"), slots: Slot2.isSubjFrom1s),
-    StemFeature2(operation: .append("e"), slots: Slot2.isImperfect),
-    PreteriteEndings2.wpI,
-    IrregularParticiple2("v", "visto"),
-    residue([
-      (.presenteDeIndicativo(.secondSingular), "prevés"), (.presenteDeIndicativo(.thirdSingular), "prevé"),
-      (.presenteDeIndicativo(.thirdPlural), "prevén"),
-      (.pretérito(.firstSingular), "preví"), (.pretérito(.thirdSingular), "previó"),
-    ]),
-  ])
-
-  // 6B-4 reír = subir + r-ei-str + r-ei-wk + collapse-ii + the hiatus-accent residue.
-  static let reir = VerbModel2(base: .ir, features: [
-    StemVowel2.rEiStr, StemVowel2.rEiWk,
-    CollapseDoubleI2.collapse,
-    residue([
-      (.presenteDeIndicativo(.firstSingular), "río"), (.presenteDeIndicativo(.secondSingular), "ríes"),
-      (.presenteDeIndicativo(.thirdSingular), "ríe"), (.presenteDeIndicativo(.firstPlural), "reímos"),
-      (.presenteDeIndicativo(.thirdPlural), "ríen"),
-      (.pretérito(.secondSingular), "reíste"), (.pretérito(.firstPlural), "reímos"),
-      (.pretérito(.secondPlural), "reísteis"),
-      (.presenteDeSubjuntivo(.firstSingular), "ría"), (.presenteDeSubjuntivo(.secondSingular), "rías"),
-      (.presenteDeSubjuntivo(.thirdSingular), "ría"), (.presenteDeSubjuntivo(.thirdPlural), "rían"),
-      (.imperativoAfirmativo(.secondSingular), "ríe"), (.imperativoAfirmativo(.secondPlural), "reíd"),
-      (.participioPasado, "reído"),
-    ]),
-  ])
-
-  // §4.8 participle / defective sub-classes — base + a single PP (or defectivity).
-  static let romper = VerbModel2(base: .er, features: [IrregularParticiple2("romp", "roto")])
-  static let abrir = VerbModel2(base: .ir, features: [IrregularParticiple2("abr", "abierto")])
-  static let cubrir = VerbModel2(base: .ir, features: [IrregularParticiple2("cubr", "cubierto")])
-  static let escribir = VerbModel2(base: .ir, features: [IrregularParticiple2("scrib", "scrito")])
-  static let imprimir = VerbModel2(base: .ir, features: [IrregularParticiple2("imprim", "impreso", alternate: "imprimido")])
-  static let pudrir = VerbModel2(base: .ir, features: [IrregularParticiple2("pudr", "podrido")])
-  static let resolver = VerbModel2(base: .er, features: [StemVowel2.dUe, IrregularParticiple2("solv", "suelto")])
-  static let volver = VerbModel2(base: .er, features: [StemVowel2.dUe, IrregularParticiple2("volv", "vuelto")])
-  static let morir = VerbModel2(base: .ir, features: [StemVowel2.dUe, StemVowel2.rOuWk, IrregularParticiple2("mor", "muerto")])
-  static let abolir = VerbModel2(base: .ir, features: [DefectiveFeature2.abolir])
-
-  // MARK: - Phase 5b models (alternate forms + deferred corner classes)
-
-  /// `y-add` restricted to the §4.5 subj-from-1s slots (PI 1s + PS{all}) — the
-  /// raer/roer **alternate** paradigm (rayo/raya, royo/roya). Distinct from
-  /// construir's `StemFeature2.yAdd`, whose `isYAdd` also takes the stressed PI
-  /// persons (raer's PI 2s/3s/3p are regular: raes/rae/raen).
-  static let yAddSubjunctive = StemFeature2(operation: .append("y"), slots: Slot2.isSubjFrom1s)
-
-  // 18 argüir = subir + y-add + o-yhiatus + güy→guy (a single paradigm; the only
-  // "alternate" is orthographic, not a variant stack).
-  static let arguir = VerbModel2(base: .ir, features: [
-    StemFeature2.yAdd, IYHiatus2.oYhiatus, DiaeresisDropBeforeY2.güyGuy,
-  ])
-
-  // 6A-1 erguir = two co-equal paradigms in the stressed slots; the unstressed
-  // slots (erguí/irguió/irguiendo/erguimos) are shared and collapse via dedup.
-  // Primary = the sentir/`ye` model (the book calls it "more common"); alternate =
-  // the pedir/raise model. (The book's `yergamos`/`yergáis` are not surfaced — the
-  // engine's `irgamos`/`irgáis` from the WK raise are the RAE-preferred ones; the
-  // diphthonged-but-unstressed variants are bonus we leave out.)
-  static let erguir = VerbModel2(base: .ir,
-    features: [StemVowel2.dIeYe, StemVowel2.rEiWk, StemFinalConsonant2.oGug],
-    alternates: [[StemVowel2.rEiStr, StemVowel2.rEiWk, StemFinalConsonant2.oGug]])
-
-  // 9-1 raer = caer-build (g1-ig + o-yhiatus) primary + a y-add alternate stack
-  // (rayo/raya). The preterite/gerund/participle (rayó/rayendo/raído) come from
-  // o-yhiatus and are shared. (The rare fully-regular `rao` is bonus, omitted.)
-  static let raer = VerbModel2(base: .er,
-    features: [StemFeature2.g1ig, IYHiatus2.oYhiatus],
-    alternates: [[yAddSubjunctive, IYHiatus2.oYhiatus]])
-
-  // 9-2 roer = THREE variants in PI 1s / PS: the plain regular `roo` (primary),
-  // the g1-ig `roigo`, and the y-add `royo`. Shared royó/royendo/roído via o-yhiatus.
-  static let roer = VerbModel2(base: .er,
-    features: [IYHiatus2.oYhiatus],
-    alternates: [[StemFeature2.g1ig, IYHiatus2.oYhiatus], [yAddSubjunctive, IYHiatus2.oYhiatus]])
-
-  // 7A-1 yacer = conocer/lucir-build (zc) primary + two alternate stacks: c→zg
-  // (yazgo/yazga) and c→g (yago/yaga). The c→g stack also carries the apocopated
-  // imperative `yaz` (yace is the primary tú imperative).
-  static let yacer = VerbModel2(base: .er,
-    features: [StemFeature2.zc],
-    alternates: [
-      [StemFeature2(operation: .swapSuffix(from: "c", to: "zg"), slots: Slot2.isSubjFrom1s)],
-      [StemFeature2(operation: .swapSuffix(from: "c", to: "g"), slots: Slot2.isSubjFrom1s),
-       ApocopatedImperative2(finalSwap: ("c", "z"))],
-    ])
-
-  // 7A-2 placer = zc primary + a representative slice of the archaic alternates
-  // (PS 3s plazca/plegue/plega — N=3; PR 3s plació/plugo). Deliberately OMITTED as
-  // deep archaic minutiae (out of scope §"Exhaustive archaic minutiae"): the rest
-  // of the `plug-` preterite (pluguieron, pluguiera/pluguiese) and complacer's
-  // (RAE-unrecognized) alternates. The mechanism already allows N≥2, which is the
-  // point; the full set would be data, not machinery.
-  static let placer = VerbModel2(base: .er,
-    features: [StemFeature2.zc],
-    alternates: [
-      [StemFeature2.zc, residue([(.presenteDeSubjuntivo(.thirdSingular), "plegue")])],
-      [StemFeature2.zc, residue([
-        (.presenteDeSubjuntivo(.thirdSingular), "plega"), (.pretérito(.thirdSingular), "plugo"),
-      ])],
-    ])
-
-  // 6B-4 freír = reír's umlaut/collapse machinery + the two-form participle
-  // frito (primary) / freído (alternate). The reír-style residue is freír's literal
-  // forms (prefix "fr"); PS{1p,2p} (friamos/friáis) come from the WK raise.
   static let freir = VerbModel2(base: .ir, features: [
     StemVowel2.rEiStr, StemVowel2.rEiWk, CollapseDoubleI2.collapse,
     IrregularParticiple2("fre", "frito", alternate: "freído"),
@@ -436,11 +154,168 @@ struct Conjugator2Tests {
       (.imperativoAfirmativo(.secondSingular), "fríe"), (.imperativoAfirmativo(.secondPlural), "freíd"),
     ]),
   ])
-
-  // 3-11 escribir family — inscribir takes the -scripto alternate (escribir itself
-  // does NOT; see the 3-11 footnote). Primary inscrito, alternate inscripto, both
-  // via the end-anchored `scrib` swap so any -scribir verb rides free.
   static let inscribir = VerbModel2(base: .ir, features: [IrregularParticiple2("scrib", "scrito", alternate: "scripto")])
+
+  // MARK: - Phase 6A: catalog new builds, aliases & completeness
+
+  // The four classes never built as test exemplars before, and the prefix-accent
+  // aliases — all resolved through the catalog, conjugated against the oracle.
+  static let trocar = ModelCatalog2.model(forClass: "4B-1")!
+  static let desosar = ModelCatalog2.model(forClass: "4B-5")!
+  static let avergonzar = ModelCatalog2.model(forClass: "4B-6")!
+  static let oir = ModelCatalog2.model(forClass: "10")!
+
+  // 4B-1 trocar = mostrar (d-ue) + o-car (c→qu).
+  @Test("trocar (4B-1) — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+    ["trueco", "truecas", "trueca", "trocamos", "trocáis", "truecan"]))
+  func trocarPresent(person: PersonNumber2, expected: String) {
+    expectForm("trocar", model: Self.trocar, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("trocar (4B-1) — diphthong + c→qu edges", arguments: [
+    (Tense2.presenteDeSubjuntivo(.firstSingular), "trueque"),
+    (.presenteDeSubjuntivo(.firstPlural), "troquemos"),
+    (.pretérito(.firstSingular), "troqué"),
+    (.imperativoAfirmativo(.secondSingular), "trueca"),
+    (.imperativoAfirmativo(.secondPlural), "trocad"),
+  ])
+  func trocarEdges(tense: Tense2, expected: String) {
+    expectForm("trocar", model: Self.trocar, tense, expected)
+  }
+
+  // 4B-5 desosar = d-ue-hue on an -ar base (deshueso).
+  @Test("desosar (4B-5) — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+    ["deshueso", "deshuesas", "deshuesa", "desosamos", "desosáis", "deshuesan"]))
+  func desosarPresent(person: PersonNumber2, expected: String) {
+    expectForm("desosar", model: Self.desosar, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("desosar (4B-5) — subjunctive + imperative + regular preterite", arguments: [
+    (Tense2.presenteDeSubjuntivo(.firstSingular), "deshuese"),
+    (.presenteDeSubjuntivo(.firstPlural), "desosemos"),
+    (.imperativoAfirmativo(.secondSingular), "deshuesa"),
+    (.imperativoAfirmativo(.secondPlural), "desosad"),
+    (.pretérito(.firstSingular), "desosé"),
+  ])
+  func desosarEdges(tense: Tense2, expected: String) {
+    expectForm("desosar", model: Self.desosar, tense, expected)
+  }
+
+  // 4B-6 avergonzar = d-ue-gue (GO→GÜE) + o-zar (Z→C).
+  @Test("avergonzar (4B-6) — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+    ["avergüenzo", "avergüenzas", "avergüenza", "avergonzamos", "avergonzáis", "avergüenzan"]))
+  func avergonzarPresent(person: PersonNumber2, expected: String) {
+    expectForm("avergonzar", model: Self.avergonzar, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("avergonzar (4B-6) — subjunctive (üe + z→c)", arguments: zip(PersonNumber2.oracleOrder,
+    ["avergüence", "avergüences", "avergüence", "avergoncemos", "avergoncéis", "avergüencen"]))
+  func avergonzarPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("avergonzar", model: Self.avergonzar, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("avergonzar (4B-6) — preterite 1s (z→c) + imperative", arguments: [
+    (Tense2.pretérito(.firstSingular), "avergoncé"),
+    (.pretérito(.thirdSingular), "avergonzó"),
+    (.imperativoAfirmativo(.secondSingular), "avergüenza"),
+  ])
+  func avergonzarEdges(tense: Tense2, expected: String) {
+    expectForm("avergonzar", model: Self.avergonzar, tense, expected)
+  }
+
+  // 10 oír — full paradigm against the oracle (the never-exemplar'd -go/-y/hiatus mix).
+  @Test("oír (10) — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+    ["oigo", "oyes", "oye", "oímos", "oís", "oyen"]))
+  func oirPresent(person: PersonNumber2, expected: String) {
+    expectForm("oír", model: Self.oir, .presenteDeIndicativo(person), expected)
+  }
+
+  @Test("oír (10) — pretérito", arguments: zip(PersonNumber2.oracleOrder,
+    ["oí", "oíste", "oyó", "oímos", "oísteis", "oyeron"]))
+  func oirPreterite(person: PersonNumber2, expected: String) {
+    expectForm("oír", model: Self.oir, .pretérito(person), expected)
+  }
+
+  @Test("oír (10) — presente de subjuntivo (oig-)", arguments: zip(PersonNumber2.oracleOrder,
+    ["oiga", "oigas", "oiga", "oigamos", "oigáis", "oigan"]))
+  func oirPresentSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("oír", model: Self.oir, .presenteDeSubjuntivo(person), expected)
+  }
+
+  @Test("oír (10) — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+    ["oyera", "oyeras", "oyera", "oyéramos", "oyerais", "oyeran"]))
+  func oirImperfectSubjunctive(person: PersonNumber2, expected: String) {
+    expectForm("oír", model: Self.oir, .imperfectoDeSubjuntivoRa(person), expected)
+  }
+
+  @Test("oír (10) — future, imperative & non-finite", arguments: [
+    (Tense2.futuro(.firstSingular), "oiré"),
+    (.condicional(.firstPlural), "oiríamos"),
+    (.imperfectoDeIndicativo(.firstSingular), "oía"),
+    (.imperativoAfirmativo(.secondSingular), "oye"),
+    (.imperativoAfirmativo(.secondPlural), "oíd"),
+    (.imperativoAfirmativo(.firstPlural), "oigamos"),   // derived from PS
+    (.participioPasado, "oído"),
+    (.gerundio, "oyendo"),
+  ])
+  func oirMixed(tense: Tense2, expected: String) {
+    expectForm("oír", model: Self.oir, tense, expected)
+  }
+
+  // The prefix-accent aliases (29-2/30-1/31-1/32-1) resolve to the parent model and
+  // ride free on the compound stem — proving no distinct model is needed (§1).
+  @Test("prefix-accent aliases conjugate on their own stem", arguments: [
+    ("satisfacer", "29-2", Tense2.presenteDeIndicativo(.firstSingular), "satisfago"),
+    ("satisfacer", "29-2", .pretérito(.thirdSingular), "satisfizo"),
+    ("satisfacer", "29-2", .participioPasado, "satisfecho"),
+    ("satisfacer", "29-2", .imperativoAfirmativo(.secondSingular), "satisfaz"),
+    ("suponer", "30-1", .presenteDeIndicativo(.firstSingular), "supongo"),
+    ("suponer", "30-1", .participioPasado, "supuesto"),
+    ("suponer", "30-1", .imperativoAfirmativo(.secondSingular), "supón"),
+    ("obtener", "31-1", .pretérito(.firstSingular), "obtuve"),
+    ("obtener", "31-1", .futuro(.firstSingular), "obtendré"),
+    ("obtener", "31-1", .imperativoAfirmativo(.secondSingular), "obtén"),
+    ("convenir", "32-1", .presenteDeIndicativo(.firstSingular), "convengo"),
+    ("convenir", "32-1", .imperativoAfirmativo(.secondSingular), "convén"),
+    ("convenir", "32-1", .gerundio, "conviniendo"),
+  ])
+  func prefixAccentAliases(infinitive: String, classNumber: String, tense: Tense2, expected: String) {
+    guard let model = ModelCatalog2.model(forClass: classNumber) else {
+      Issue.record("alias class \(classNumber) must resolve")
+      return
+    }
+    expectForm(infinitive, model: model, tense, expected)
+  }
+
+  // Completeness invariant (crux 2): every distinct Model # in Annex B resolves to
+  // a catalog entry, so no verb can map to a missing model. The 106 numbers are
+  // generated from `docs/annex_b_verb_models.md` (Phase 6B replaces this literal
+  // with the resource-derived set once the map ships); the count guards the list.
+  static let annexBModelNumbers: [String] = [
+    "1", "1-1", "1-2", "1-3", "1-4", "1-5", "1-6", "1-7", "1-8", "1-9",
+    "1-10", "1-11", "1-12", "1-13", "1-14", "1-15",
+    "2", "2-1", "2-2", "2-3", "2-4", "2-5", "2-6",
+    "3", "3-1", "3-2", "3-3", "3-4", "3-5", "3-6", "3-7", "3-8", "3-9",
+    "3-10", "3-11", "3-12", "3-13", "3-14",
+    "4A", "4A-1", "4A-2", "4A-3", "4B", "4B-1", "4B-2", "4B-3", "4B-4", "4B-5", "4B-6",
+    "5A", "5B", "5B-1", "5B-2", "5B-3", "5B-4",
+    "6A", "6A-1", "6B", "6B-1", "6B-2", "6B-3", "6B-4", "6C", "6C-1",
+    "7A", "7A-1", "7A-2", "7B", "8", "9", "9-1", "9-2", "10", "11", "12", "13",
+    "14", "14-1", "15", "16", "17", "18",
+    "19", "20", "21", "22", "23", "24", "25", "26", "27",
+    "28", "28-1", "28-2", "29", "29-1", "29-2", "30", "30-1", "31", "31-1",
+    "32", "32-1", "33", "34", "35",
+  ]
+
+  @Test("catalog completeness — Annex B has exactly 106 distinct model numbers")
+  func annexBCount() {
+    #expect(Set(Self.annexBModelNumbers).count == 106, "Annex B distinct model numbers")
+  }
+
+  @Test("catalog completeness — every Annex B model number resolves", arguments: annexBModelNumbers)
+  func everyAnnexBNumberResolves(classNumber: String) {
+    #expect(ModelCatalog2.model(forClass: classNumber) != nil, "no catalog entry for class \(classNumber)")
+  }
 
   // MARK: - cantar (regular -ar)
 
