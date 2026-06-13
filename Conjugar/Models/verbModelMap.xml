@@ -24,7 +24,7 @@
   <verb in="abismar" cl="1" tn="plunge" />
   <verb in="abjurar" cl="1" tn="abjure" />
   <verb in="ablandar" cl="1" tn="soften" />
-  <verb in="abnegar" cl="4A-1" tn="deny" />
+  <verb in="abnegar" cl="4A-1" tn="renounce" />
   <verb in="abobar" cl="1" tn="stupefy" />
   <verb in="abocar" cl="1-1" tn="pour" />
   <verb in="abocetar" cl="1" tn="sketch" />
@@ -60,7 +60,7 @@
   <verb in="abuchear" cl="1" tn="boo" />
   <verb in="abultar" cl="1" tn="bulk" />
   <verb in="abundar" cl="1" tn="abound" />
-  <verb in="aburguesar" cl="1" tn="embourgeois" />
+  <verb in="aburguesar" cl="1" tn="make bourgeois" />
   <verb in="aburrir" cl="3" tn="bore" />
   <verb in="abusar" cl="1" tn="abuse" />
   <verb in="acabar" cl="1" tn="finish" />
@@ -2509,7 +2509,7 @@
   <verb in="eximir" cl="3" tn="exempt" />
   <verb in="existir" cl="3" tn="exist" />
   <verb in="exonerar" cl="1" tn="exonerate" />
-  <verb in="exorbitar" cl="1" tn="exorbitate" />
+  <verb in="exorbitar" cl="1" tn="exceed" />
   <verb in="exorcizar" cl="1-4" tn="exorcize" />
   <verb in="expandir" cl="3" tn="expand" />
   <verb in="expansionar" cl="1" tn="expand" />
@@ -4700,7 +4700,7 @@
   <verb in="urgir" cl="3-2" tn="urge" />
   <verb in="usar" cl="1" tn="use" />
   <verb in="usufructuar" cl="1-14" tn="usufruct" />
-  <verb in="usurar" cl="1" tn="usure" />
+  <verb in="usurar" cl="1" tn="practice usury" />
   <verb in="usurpar" cl="1" tn="usurp" />
   <verb in="utilizar" cl="1-4" tn="use" />
   <verb in="vacar" cl="1-1" tn="be vacant" />
