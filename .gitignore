@@ -14,6 +14,8 @@ __pycache__/
 # Commercial reference PDFs (do not redistribute)
 *.pdf
 
-# Gloss-pipeline scratch artifacts
+# Gloss-pipeline scratch artifacts (preserved in ~/Desktop/workspace/Migration)
 docs/glosses/.bak_phase3/
 docs/glosses/phase1/phase2/chunks/
+docs/glosses/phase1/phase2/checks/
+docs/glosses/phase1/phase2/consensus/
