@@ -12,6 +12,8 @@ Conjugar is an iOS app for learning Spanish verb conjugations. It conjugates reg
 
 As of 2026, a project is underway to modernize and improve Conjugar. A new conjugation engine, which can conjugate more than 4,800 verbs, has already landed. The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
 
+As you, Claude, complete chunks of work on the modernization/improvement project, please add a note to docs/blog_notes.md . Eventually, Josh will generate a blog post from this work.
+
 ## Build and Test Commands
 
 This is an Xcode project (project `Conjugar.xcodeproj`, scheme `Conjugar`). Use the following commands:

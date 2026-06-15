@@ -731,3 +731,30 @@ touching. Left two dated, past-tense Migration references intact as historical
 records: the token-accounting table here (it cites the real
 `~/.claude/projects/-Users-josh-Desktop-workspace-Migration/` transcript path) and
 the 6/12 oracle-prompt Q&A.
+
+## 2026-06-15 — Smoke-tested the build/test commands in the new home
+
+First session run from `Conjugar.mig` itself (rather than the old `Migration`
+workspace), so the first order of business was confirming the project still
+builds and tests cleanly from its new home using the commands now documented in
+`CLAUDE.md`. **Build succeeded.** Ran the full unit-test surface — both the
+**Swift Testing** new-engine suites (`Conjugator2Tests`, `Resolver2Tests`,
+`VerbMap2Tests`): **348/348 passing** — and the **XCTest** legacy suites:
+**52/53**, the lone failure being `TestGameCenterTests.testAuthenticate`, which
+**passes in isolation** (it's an order-dependent flake in a Game Center test
+stub, not a regression in any code under test — the new engine and data are
+fully green). The `ConjugarUITests` target fails (6/6, can't locate the tab bar:
+`QuizVCUITests.swift:48`), but those are UI tests, pre-existing and independent
+of the migration. Net: the new home is a working build/test environment, and the
+`CLAUDE.md` command incantations (explicit `-project`, iPhone 17 destination,
+`-parallel-testing-enabled NO`, the mixed XCTest/Swift-Testing `-only-testing:`
+formats) are correct as written.
+
+While here, did some housekeeping on the freshly-folded-in `docs/`: gitignored
+and pruned the gloss-pipeline scratch artifacts that had been committed wholesale
+with the workspace fold (`docs/glosses/.bak_phase3/` backup slices, the
+`phase1/phase2/chunks/` inputs, and the per-checker `phase2/checks/` +
+`phase2/consensus/` chunk outputs — all regenerable and preserved in the
+`Migration` backup), keeping the concatenated `consensus_all.tsv` deliverable.
+Also gitignored Python `__pycache__`/`*.pyc` and the two commercial reference
+PDFs (`*.pdf`) so they stay out of the eventual public `master` merge.
