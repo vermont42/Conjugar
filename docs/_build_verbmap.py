@@ -1,0 +1,345 @@
+#!/usr/bin/env python3
+"""Phase 6 (B/B2) — build the verb→model map bundle resource for Conjugar.
+
+Turns `docs/annex_b_verb_models.md` (4,818 verbs → book model number) into an
+attribute-based XML resource the app loads at launch:
+
+    <verb in="abrir"   cl="3-9" tn="open" />
+    <verb in="abrazar" cl="1-4" tn="hug" />
+    <verb in="apostar" cl="4B"  tn="bet" />   <!-- homonym sense (1) -->
+    <verb in="apostar" cl="1"   tn="station" /><!-- homonym sense (2) -->
+
+`in` = bare infinitive, `cl` = book class number, `tn` = terse English gloss.
+Optional `rx="1"` marks a reflexive-only verb (Annex B `(se)`); the schema
+intentionally leaves room for future optional attributes (`tnr` reflexive gloss,
+`dg` defect group) to drop in with zero migration.
+
+Reproducible: re-running reproduces the resource byte-for-byte from the markdown
+plus the checked-in gloss sources.
+
+Glosses (B2) are sourced in priority order so existing curation is reused and only
+the genuinely-missing ones are authored fresh:
+  1. oracle class headers (docs/spanish_models.md, "cantar — *to sing*")
+  2. the old app's verbs.xml `tn` attribute (~213 verbs)        [oracle wins ties]
+  3. Annex B footnotes, for the homonym senses (special-cased table below)
+  4. authored side-table(s) in docs/glosses/*.tsv  (infinitive<TAB>gloss[<TAB>flag])
+
+Verbs with no source gloss are written to docs/glosses_missing.txt (the worklist
+the gloss-authoring pass fills); the script fails its 0-glossless check until that
+worklist is emptied. Authored glosses flagged low-confidence are collected into
+docs/glosses_to_review.md.
+"""
+import os
+import re
+import glob
+
+HERE = os.path.dirname(os.path.abspath(__file__))                 # .../Conjugar.mig/docs
+WORKSPACE = os.path.dirname(os.path.dirname(HERE))                # .../workspace
+
+ANNEX = os.path.join(HERE, "annex_b_verb_models.md")
+ORACLE = os.path.join(HERE, "spanish_models.md")
+OLD_VERBS_XML = os.path.join(WORKSPACE, "Conjugar.mig", "Conjugar", "Models", "verbs.xml")
+GLOSS_DIR = os.path.join(HERE, "glosses")                         # authored slice files
+FREQ_RANKS = os.path.join(HERE, "SpanishVerbFrequencyRanks.txt")  # infinitive,rank (1=top)
+
+OUT_XML = os.path.join(WORKSPACE, "Conjugar.mig", "Conjugar", "Models", "verbModelMap.xml")
+OUT_MISSING = os.path.join(HERE, "glosses_missing.txt")
+OUT_REVIEW = os.path.join(HERE, "glosses_to_review.md")
+OUT_DEF = os.path.join(HERE, "def_worklist.md")
+OUT_FREQ_UNMATCHED = os.path.join(HERE, "freq_unmatched.txt")     # ranked verbs absent from the map
+
+ROW_RE = re.compile(r"^\|\s*(\d+)\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|\s*([\w-]+)\s*\|\s*(.*?)\s*\|$")
+# Strip a marker in parens: (se) reflexive-only, (DEF) defective, (1)/(2) homonym.
+MARKER_RE = re.compile(r"\s*\((se|DEF|1|2)\)")
+
+# The 4 homonyms: explicit, footnote-glossed, default-sense-first ordering.
+# (book sense (1) is NOT always the everyday sense — aterrar defaults to "terrify",
+#  the regular sense (2); see docs/annex_b_verb_models.md footnotes 2-9.)
+HOMONYMS = {
+    "apostar": [("4B", "bet"), ("1", "station")],
+    "asolar":  [("4B", "raze"), ("1", "scorch")],
+    "aterrar": [("1", "terrify"), ("4A", "demolish")],
+    "atestar": [("4A", "stuff"), ("1", "attest")],
+}
+
+# Verbs that ship in the legacy Conjugar app
+# (Conjugar.mig/Conjugar/Models/verbs.xml) but are ABSENT from Annex B: neologisms /
+# slang that post-date the 2010 book (to google, to go viral, …). Appended after the
+# Annex B rows so the map is a strict superset of BOTH the book's 4,818 and the
+# shipping app's verb list — no app verb regresses in the migration. Each is
+# (infinitive, book class number, terse gloss, reflexive); glosses are terse-ified
+# from the legacy `tn`. All four are simple -ar verbs (the old engine parents them to
+# hablar = regular class 1; viralizar to cazar = 1-4, z->c so viralicé).
+EXTRA_VERBS = [
+    ("aguachicolear", "1",   "steal water", False),
+    ("googlear",      "1",   "google",      False),
+    ("ustedear",      "1",   "use usted",   False),
+    ("viralizar",     "1-4", "go viral",    False),
+]
+
+# Verbs absent from Annex B but present in the top-1000 frequency list
+# (docs/SpanishVerbFrequencyRanks.txt) — genuine gaps the 2010 book omits, surfaced
+# by the frequency pass (docs/freq_unmatched.txt) and confirmed by hand. Added so the
+# map covers the common verbs a user is most likely to look up; they pick up their
+# `fr` automatically on the next run. Same (infinitive, class, gloss, reflexive)
+# shape as EXTRA_VERBS. Three are everyday verbs (circular, quejarse, egresar); three
+# are rare — respectar and adir are DEFECTIVE (see EXTRA_DEFECTIVE → def_worklist.md),
+# hacendar is merely archaic. Full defectivity is NOT enforced yet (a later phase,
+# mirroring Conjuguer); for now the engine over-generates the missing forms.
+FREQ_GAP_VERBS = [
+    ("circular",  "1",  "circulate",          False),  # rank 510, regular -ar
+    ("quejar",    "1",  "complain",           True),   # rank 693, reflexive (quejarse)
+    ("egresar",   "1",  "graduate",           False),  # rank 842, regular -ar (Lat. Am.)
+    ("respectar", "1",  "concern",            False),  # rank 970, DEFECTIVE (por lo que respecta a)
+    ("adir",      "3",  "accept inheritance", False),  # rank 985, DEFECTIVE (adir la herencia)
+    ("hacendar",  "4A", "give property",      False),  # rank 465, e->ie (model acertar)
+]
+
+# Of the frequency-gap verbs, those that are DEFECTIVE in standard usage. Listed in
+# def_worklist.md beside the Annex B defectives. Not yet enforced by the engine.
+EXTRA_DEFECTIVE = {"respectar", "adir"}
+
+
+def load_frequency_ranks():
+    """SpanishVerbFrequencyRanks.txt -> {infinitive: rank}. One `infinitive,rank`
+    per line, rank 1 = most frequent. Display-only (like `tn`): a rank can never
+    affect a conjugation, so a misranked or junk line is cosmetically wrong at
+    worst. Verbs absent from this file simply ship without an `fr` attribute."""
+    ranks = {}
+    with open(FREQ_RANKS, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            inf, rank = line.rsplit(",", 1)
+            ranks[inf.strip()] = int(rank)
+    return ranks
+
+
+def strip_markers(verb_cell):
+    """'aborregar(se)' -> ('aborregar', rx=True); 'acaecer (DEF)' -> ('acaecer', def=True)."""
+    rx = bool(re.search(r"\(se\)", verb_cell))
+    defective = bool(re.search(r"\(DEF\)", verb_cell))
+    bare = MARKER_RE.sub("", verb_cell).strip()
+    return bare, rx, defective
+
+
+def parse_annex():
+    rows = []  # (idx, bare, rx, defective, cls, is_homonym)
+    with open(ANNEX, encoding="utf-8") as f:
+        for line in f:
+            m = ROW_RE.match(line.rstrip("\n"))
+            if not m:
+                continue
+            idx, verb_cell, _subclass, cls, _note = m.groups()
+            if verb_cell == "Verb":   # header row
+                continue
+            bare, rx, defective = strip_markers(verb_cell)
+            is_homonym = bool(re.search(r"\([12]\)", verb_cell))
+            rows.append((int(idx), bare, rx, defective, cls, is_homonym))
+    return rows
+
+
+def load_oracle_glosses():
+    glosses = {}
+    hdr = re.compile(r"·\s+([a-záéíóúüñ]+)\b.*?—\s+\*([^*]+)\*")
+    with open(ORACLE, encoding="utf-8") as f:
+        for line in f:
+            if not line.startswith("#"):
+                continue
+            m = hdr.search(line)
+            if m:
+                verb, gloss = m.group(1), terse(m.group(2))
+                glosses.setdefault(verb, gloss)
+    return glosses
+
+
+def load_old_xml_glosses():
+    glosses = {}
+    if not os.path.exists(OLD_VERBS_XML):
+        return glosses
+    with open(OLD_VERBS_XML, encoding="utf-8") as f:
+        text = f.read()
+    for el in re.findall(r"<verb\b[^>]*>", text):
+        mi = re.search(r'\bin="([^"]+)"', el)
+        mt = re.search(r'\btn="([^"]+)"', el)
+        if mi and mt:
+            glosses.setdefault(mi.group(1), mt.group(1).strip())
+    return glosses
+
+
+def load_authored_glosses():
+    """Merge docs/glosses/*.tsv : infinitive<TAB>gloss[<TAB>flag]."""
+    glosses, flagged = {}, []
+    for path in sorted(glob.glob(os.path.join(GLOSS_DIR, "*.tsv"))):
+        with open(path, encoding="utf-8") as f:
+            for line in f:
+                line = line.rstrip("\n")
+                if not line or line.startswith("#"):
+                    continue
+                parts = line.split("\t")
+                if len(parts) < 2 or not parts[1].strip():
+                    continue
+                inf, gloss = parts[0].strip(), parts[1].strip()
+                flag = len(parts) >= 3 and parts[2].strip() in ("1", "flag", "review")
+                glosses[inf] = gloss
+                if flag:
+                    flagged.append((inf, gloss))
+    return glosses, flagged
+
+
+def terse(gloss):
+    """Trim oracle 'to sing' -> 'sing'; keep 'can'; first sense only."""
+    g = gloss.strip()
+    if g.lower().startswith("to "):
+        g = g[3:]
+    return g.split(",")[0].strip()
+
+
+def xml_escape(s):
+    return (s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+             .replace('"', "&quot;"))
+
+
+def main():
+    rows = parse_annex()
+    oracle = load_oracle_glosses()
+    oldxml = load_old_xml_glosses()
+    authored, flagged = load_authored_glosses()
+    ranks = load_frequency_ranks()
+
+    def gloss_for(key):
+        if key in oracle:
+            return oracle[key]
+        if key in oldxml:
+            return oldxml[key]
+        if key in authored:
+            return authored[key]
+        return None
+
+    out_rows = []      # (in, cl, tn, rx)
+    missing = []       # (in, rx)  -- non-homonym keys lacking any source gloss
+    defectives = []    # (in, cl)
+    seen_homonym = set()
+    seen_missing = set()
+
+    for idx, bare, rx, defective, cls, is_homonym in rows:
+        if defective:
+            defectives.append((bare, cls))
+        if is_homonym:
+            if bare in seen_homonym:
+                continue                      # second sense emitted alongside the first
+            seen_homonym.add(bare)
+            for hcls, hgloss in HOMONYMS[bare]:
+                out_rows.append((bare, hcls, hgloss, rx))
+            continue
+        g = gloss_for(bare)
+        if g is None:
+            out_rows.append((bare, cls, None, rx))
+            if bare not in seen_missing:
+                seen_missing.add(bare)
+                missing.append((bare, rx))
+        else:
+            out_rows.append((bare, cls, g, rx))
+
+    # Append legacy-app-only verbs (neologisms absent from the 2010 book's Annex B),
+    # skipping any that the book turns out to list after all. These carry their own
+    # gloss, so they bypass the gloss_for() sources.
+    existing = {r[0] for r in out_rows}
+    extra_added = 0
+    for inf, cls, tn, rx in EXTRA_VERBS:
+        if inf not in existing:
+            out_rows.append((inf, cls, tn, rx))
+            existing.add(inf)
+            extra_added += 1
+
+    # Frequency-list gaps (absent from Annex B). Defective ones are recorded in the
+    # def worklist; defectivity itself is not yet enforced by the engine.
+    freq_added = 0
+    for inf, cls, tn, rx in FREQ_GAP_VERBS:
+        if inf not in existing:
+            out_rows.append((inf, cls, tn, rx))
+            existing.add(inf)
+            freq_added += 1
+            if inf in EXTRA_DEFECTIVE:
+                defectives.append((inf, cls))
+
+    # --- write the worklists ---
+    with open(OUT_MISSING, "w", encoding="utf-8") as f:
+        for inf, rx in missing:
+            f.write(f"{inf}\t{'1' if rx else '0'}\n")
+
+    with open(OUT_DEF, "w", encoding="utf-8") as f:
+        f.write("# Defective (DEF) verbs\n\n")
+        f.write("From Annex B, plus a few frequency-list additions (respectar, adir) "
+                "absent from the book. Mapped to their conjugation model; defectivity "
+                "is **not** enforced by the engine (out of scope this phase; reserve "
+                "the `dg` hook). Worklist for a future defect-group pass.\n\n")
+        for inf, cls in defectives:
+            f.write(f"- {inf} ({cls})\n")
+
+    # Ranked verbs that have no row in the map: mostly junk/non-verbs from the
+    # frequency corpus (también, están, aquí, iphone, …), plus a few real-but-
+    # absent verbs worth a human look (reflexive-only spellings, regionalisms).
+    map_keys = {r[0] for r in out_rows}
+    freq_unmatched = sorted(
+        (inf for inf in ranks if inf not in map_keys), key=lambda i: ranks[i]
+    )
+    with open(OUT_FREQ_UNMATCHED, "w", encoding="utf-8") as f:
+        f.write("# Ranked verbs with no verbModelMap row (rank order)\n")
+        f.write("# These shipped no `fr` attribute. Most are corpus junk/non-verbs;\n")
+        f.write("# a few may be genuine gaps or reflexive spellings worth adding.\n")
+        for inf in freq_unmatched:
+            f.write(f"{ranks[inf]}\t{inf}\n")
+
+    with open(OUT_REVIEW, "w", encoding="utf-8") as f:
+        f.write("# Authored glosses flagged for human review (B2)\n\n")
+        f.write("Model-authored, low-confidence glosses. Display-only; safe to ship, "
+                "but a later human pass should confirm.\n\n")
+        for inf, g in flagged:
+            f.write(f"- {inf}: {g}\n")
+
+    # --- write the XML resource only if every row is glossed ---
+    glossless = [r for r in out_rows if r[2] is None]
+    lines = ['<?xml version="1.0" encoding="utf-8"?>',
+             "<!-- Generated by docs/_build_verbmap.py from docs/annex_b_verb_models.md.",
+             "     Do not edit by hand; re-run the script. in=infinitive cl=book class",
+             "     number tn=English gloss rx=reflexive-only fr=frequency rank (1=top,",
+             "     omitted if outside the top 1000, source docs/SpanishVerbFrequencyRanks.txt). -->",
+             "<verbs>"]
+    for inf, cls, tn, rx in out_rows:
+        rxattr = ' rx="1"' if rx else ""
+        tnattr = f' tn="{xml_escape(tn)}"' if tn else ' tn=""'
+        # Rank is per spelling, not per sense, so each homonym row gets the same fr.
+        frattr = f' fr="{ranks[inf]}"' if inf in ranks else ""
+        lines.append(f'  <verb in="{xml_escape(inf)}" cl="{cls}"{tnattr}{rxattr}{frattr} />')
+    lines.append("</verbs>")
+    if not glossless:
+        with open(OUT_XML, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines) + "\n")
+
+    # --- report ---
+    keys = {r[0] for r in out_rows}
+    print(f"annex rows parsed     : {len(rows)} (expect 4818)")
+    print(f"legacy-app verbs added: {extra_added} (expect {len(EXTRA_VERBS)})")
+    print(f"freq-gap verbs added  : {freq_added} (expect {len(FREQ_GAP_VERBS)})")
+    print(f"verb elements emitted : {len(out_rows)} (expect 4828 = 4818 annex + {len(EXTRA_VERBS)} legacy + {len(FREQ_GAP_VERBS)} freq-gap)")
+    print(f"distinct infinitives  : {len(keys)} (expect 4824 = 4814 annex + {len(EXTRA_VERBS)} legacy + {len(FREQ_GAP_VERBS)} freq-gap)")
+    print(f"glossed from oracle    : {sum(1 for r in out_rows if r[0] in oracle)}")
+    print(f"glossed from old xml   : {sum(1 for r in out_rows if r[0] not in oracle and r[0] in oldxml)}")
+    print(f"glossed from authored  : {len(authored)} loaded")
+    print(f"homonym senses         : {len(seen_homonym)*2} ({len(seen_homonym)} verbs)")
+    print(f"reflexive-only (rx)    : {sum(1 for r in out_rows if r[3])}")
+    print(f"frequency-ranked (fr)  : {sum(1 for k in keys if k in ranks)} of {len(ranks)} ranked  ({len(freq_unmatched)} unmatched, docs/freq_unmatched.txt)")
+    print(f"defective (DEF) logged : {len(defectives)}")
+    print(f"flagged for review     : {len(flagged)}")
+    print(f"GLOSSLESS (must be 0)  : {len(glossless)}")
+    print(f"-> need authoring      : {len(missing)} infinitives  (docs/glosses_missing.txt)")
+    if glossless:
+        print(f"XML NOT written (still {len(glossless)} glossless). Fill glosses, re-run.")
+    else:
+        print(f"wrote {OUT_XML}")
+
+
+if __name__ == "__main__":
+    main()

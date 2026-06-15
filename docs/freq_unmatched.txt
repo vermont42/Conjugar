@@ -1,0 +1,16 @@
+# Ranked verbs with no verbModelMap row (rank order)
+# These shipped no `fr` attribute. Most are corpus junk/non-verbs;
+# a few may be genuine gaps or reflexive spellings worth adding.
+365	tambien
+531	estan
+586	aqui
+649	á
+720	pablar
+746	on
+760	linear
+775	paular
+784	rodrigar
+860	ende
+868	iphone
+888	pilar
+994	salgar

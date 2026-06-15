@@ -1,0 +1,16 @@
+fajar	wrap	keep	wrap	3	https://dle.rae.es/fajar:rodear o envolver con faja una parte del cuerpo	high
+faldear	skirt	keep	skirt	3	https://dle.rae.es/faldear:caminar por la falda de un monte	high
+fanatizar	fanaticize	keep	fanaticize	3	https://dle.rae.es/fanatizar:volver fanatico a alguien	high
+feriar	trade	keep	trade	3	https://dle.rae.es/feriar:vender comprar o permutar algo en la feria	high	trade/barter both valid
+festonear	festoon	keep	festoon	3	https://dle.rae.es/festonear:adornar con feston	high
+filiar	enroll	keep	enroll	3	https://dle.rae.es/filiar:tomar los datos personales o sentar en el registro militar	high
+florear	adorn	keep	adorn	3	https://dle.rae.es/florear:adornar y guarnecer con flores	high	adorn/embellish both valid
+fluidificar	fluidify	keep	fluidify	3	https://www.spanishdict.com/translate/fluidificar : make fluid	high
+fluorar	fluoridate	keep	fluoridate	3	https://dle.rae.es/fluorar:anadir fluoruros al agua o dentifricos	high
+foguear	fire	replace	season	3	https://es.wiktionary.org/wiki/foguear:acostumbrar a alguien a las penalidades de un trabajo	high	all 3 checkers agree season (inure), not fire
+foliar	foliate	keep	foliate	3	https://dle.rae.es/foliar:numerar los folios de un libro o cuaderno	high
+fraguar	forge	keep	forge	2	https://es.wiktionary.org/wiki/fraguar:modelar el metal en la fragua (primary listed sense)	medium	rae+morph keep forge; wikt prefers set/harden (cement)
+fregotear	scrub	keep	scrub	3	https://dle.rae.es/fregotear:fregar deprisa y mal	high	scrub/scour both valid
+gallardear	flaunt	keep	flaunt	3	https://dle.rae.es/gallardear:mostrar gallardia y donaire al hacer algo	high	flaunt/swagger both valid
+gallear	strut	keep	strut	3	https://dle.rae.es/gallear:pretender sobresalir con presuncion o jactancia	high
+gansear	clown	keep	clown	3	https://dle.rae.es/gansear:hacer o decir gansadas	high	clown/clown around both valid

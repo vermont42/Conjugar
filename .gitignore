@@ -6,3 +6,10 @@ Conjugar.xcodeproj/xcuserdata/
 build/
 dist/
 node_modules/
+
+# Python
+__pycache__/
+*.pyc
+
+# Commercial reference PDFs (do not redistribute)
+*.pdf

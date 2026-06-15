@@ -6,21 +6,34 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Conjugar is an iOS app for learning Spanish verb conjugations. It conjugates regular and irregular Spanish verbs in all tenses with quiz mode (3 difficulty levels), verb browsing, tense information, and Game Center integration.
 
+**Developer:** Josh Adams (vermontcoder@gmail.com), who released the app in 2017.
 **Target:** iOS 17+
 **License:** GNU Affero General Public License
 
-## Build Commands
+As of 2026, a project is underway to modernize and improve Conjugar. A new conjugation engine, which can conjugate more than 4,800 verbs, has already landed. The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
+
+## Build and Test Commands
+
+This is an Xcode project (project `Conjugar.xcodeproj`, scheme `Conjugar`). Use the following commands:
 
 ```bash
-# Build the project
-xcodebuild -scheme Conjugar build
+# Build the app
+xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' build
 
-# Run tests
-xcodebuild test -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 16'
+# Run all tests (disable parallel testing to avoid simulator flakiness)
+xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test
+
+# Run a single test suite
+xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/Conjugator2Tests
+
+# Run a single test method (Swift Testing — note the trailing, shell-escaped parentheses)
+xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/Conjugator2Tests/oirPresent\(\)
 
 # Lint
 swiftlint
 ```
+
+> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The new-engine suites (`Conjugator2Tests`, `VerbMap2Tests`, `Resolver2Tests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The legacy suites (`ConjugatorTests`, etc.) use **XCTest**, whose method names take **no** parentheses (e.g. `testRegularARVerb`).
 
 ## Architecture
 
