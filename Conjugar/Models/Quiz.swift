@@ -46,7 +46,7 @@ class Quiz {
   private var irregularVosImperativoVerbsIndex = 0
   private var timer: Timer?
   private var settings: Settings?
-  private var gameCenter: GameCenterable?
+  private var gameCenter: GameCenter?
   private var personNumbersWithTu: [PersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersWithVos: [PersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
@@ -81,7 +81,7 @@ class Quiz {
     }
   }
 
-  init(settings: Settings, gameCenter: GameCenterable, shouldShuffle: Bool = true) {
+  init(settings: Settings, gameCenter: GameCenter, shouldShuffle: Bool = true) {
     self.settings = settings
     self.gameCenter = gameCenter
     self.shouldShuffle = shouldShuffle

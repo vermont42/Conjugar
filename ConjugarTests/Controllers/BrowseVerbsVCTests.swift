@@ -12,12 +12,12 @@ import XCTest
 class BrowseVerbsVCTests: XCTestCase {
   func testBrowseVerbsVC() {
     var analytic = ""
-    Current.analytics = TestAnalyticsService(fire: { fired in analytic = fired })
-    Current.settings = Settings(getterSetter: DictionaryGetterSetter())
+    Current.analytics = AnalyticsServiceSpy(fire: { fired in analytic = fired })
+    Current.settings = Settings(getterSetter: GetterSetterFake())
 
     let bvvc = BrowseVerbsVC()
 
-    let nc = MockNavigationC(rootViewController: bvvc)
+    let nc = NavigationCSpy(rootViewController: bvvc)
 
     XCTAssertNotNil(bvvc)
     bvvc.viewWillAppear(true)

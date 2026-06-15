@@ -1,5 +1,5 @@
 //
-//  Locale.swift
+//  AnalyticsLocale.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 12/15/20.
@@ -8,14 +8,14 @@
 
 import Foundation
 
-protocol Locale {
+protocol AnalyticsLocale {
   var locale: String { get }
   var languageCode: String { get }
   var defaultLanguageCode: String { get }
   var regionCode: String { get }
 }
 
-extension Locale {
+extension AnalyticsLocale {
   var locale: String {
     return languageCode + regionCode
   }

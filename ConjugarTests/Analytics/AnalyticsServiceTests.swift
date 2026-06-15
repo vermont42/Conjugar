@@ -1,5 +1,5 @@
 //
-//  AnalyticsServiceableTests.swift
+//  AnalyticsServiceTests.swift
 //  ConjugarTests
 //
 //  Created by Joshua Adams on 4/25/19.
@@ -9,13 +9,13 @@
 import XCTest
 @testable import Conjugar
 
-class AnalyticsServiceableTests: XCTestCase {
-  private let nilServiceMessage = "TestAnalyticsService was nil."
+class AnalyticsServiceTests: XCTestCase {
+  private let nilServiceMessage = "AnalyticsServiceSpy was nil."
   private let nilAnalyticsMessage = "analytics array was nil."
 
   func testRecordEvent() {
     var analytics: [String] = []
-    let service = TestAnalyticsService(fire: { event in
+    let service = AnalyticsServiceSpy(fire: { event in
       analytics.append(event)
     })
 
@@ -27,7 +27,7 @@ class AnalyticsServiceableTests: XCTestCase {
 
   func testRecordVisitation() {
     var analytics: [String] = []
-    let service = TestAnalyticsService(fire: { event in
+    let service = AnalyticsServiceSpy(fire: { event in
       analytics.append(event)
     })
 
@@ -39,7 +39,7 @@ class AnalyticsServiceableTests: XCTestCase {
 
   func testRecordQuizStart() {
     var analytics: [String] = []
-    let service = TestAnalyticsService(fire: { event in
+    let service = AnalyticsServiceSpy(fire: { event in
       analytics.append(event)
     })
 
@@ -50,7 +50,7 @@ class AnalyticsServiceableTests: XCTestCase {
 
   func testRecordQuizCompletion() {
     var analytics: [String] = []
-    let service = TestAnalyticsService(fire: { event in
+    let service = AnalyticsServiceSpy(fire: { event in
       analytics.append(event)
     })
 
@@ -62,7 +62,7 @@ class AnalyticsServiceableTests: XCTestCase {
 
   func testRecordGameCenterAuth() {
     var analytics: [String] = []
-    let service = TestAnalyticsService(fire: { event in
+    let service = AnalyticsServiceSpy(fire: { event in
       analytics.append(event)
     })
 

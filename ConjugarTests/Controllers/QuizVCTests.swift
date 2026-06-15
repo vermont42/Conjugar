@@ -12,22 +12,22 @@ import XCTest
 class QuizVCTests: XCTestCase {
   func testQuizVC() {
     var analytic = ""
-    let settings = Settings(getterSetter: DictionaryGetterSetter())
+    let settings = Settings(getterSetter: GetterSetterFake())
     settings.userRejectedGameCenter = true
-    let gameCenter = TestGameCenter(isAuthenticated: false)
-    let analytics = TestAnalyticsService(fire: { fired in analytic = fired })
+    let gameCenter = GameCenterFake(isAuthenticated: false)
+    let analytics = AnalyticsServiceSpy(fire: { fired in analytic = fired })
     let quiz = Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false)
     let fakeRatingsCount = 42
 
     Current = World(
       analytics: analytics,
-      reviewPrompter: TestReviewPrompter(),
+      reviewPrompter: ReviewPrompterStub(),
       gameCenter: gameCenter,
       settings: settings,
       quiz: quiz,
       session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
-      communGetter: StubCommunGetter(),
-      locale: StubLocale(languageCode: "en", regionCode: "US")
+      communGetter: CommunGetterStub(),
+      locale: AnalyticsLocaleStub(languageCode: "en", regionCode: "US")
     )
 
     let qvc = QuizVC()

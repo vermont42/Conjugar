@@ -1,5 +1,5 @@
 //
-//  MockNavigationC.swift
+//  NavigationCSpy.swift
 //  ConjugarTests
 //
 //  Created by Joshua Adams on 8/27/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MockNavigationC: UINavigationController {
+class NavigationCSpy: UINavigationController {
   var pushedViewController: UIViewController?
 
   override func pushViewController(_ viewController: UIViewController, animated: Bool) {

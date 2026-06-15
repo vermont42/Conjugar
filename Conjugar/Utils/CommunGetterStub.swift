@@ -1,5 +1,5 @@
 //
-//  StubCommunGetter.swift
+//  CommunGetterStub.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 12/14/20.
@@ -9,7 +9,7 @@
 import MessageUI
 import UIKit
 
-struct StubCommunGetter: CommunGetter {
+struct CommunGetterStub: CommunGetter {
   func getCommunication() async -> Commun? {
     let delay: UInt64 = 2_000_000_000 // 2 seconds in nanoseconds
     try? await Task.sleep(nanoseconds: delay)

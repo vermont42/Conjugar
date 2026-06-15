@@ -49,19 +49,30 @@ var Current = World.device  // Production
 ```
 
 Services provided by World:
-- `analytics: AnalyticsServiceable` - no-op test stub (AWS Pinpoint removed; TelemetryDeck planned)
-- `gameCenter: GameCenterable` - Game Center integration
-- `reviewPrompter: ReviewPromptable` - App Store review prompting
+- `analytics: AnalyticsService` - no-op spy (AWS Pinpoint removed; TelemetryDeck planned)
+- `gameCenter: GameCenter` - Game Center integration
+- `reviewPrompter: ReviewPrompter` - App Store review prompting
 - `settings: Settings` - User preferences (wraps UserDefaults)
 - `communGetter: CommunGetter` - CloudKit-based messaging
+- `locale: AnalyticsLocale` - language/region codes
 
 ### Protocol-Based Abstractions
 
-All external services have protocol abstractions with test implementations:
-- `AnalyticsServiceable` → `TestAnalyticsService` (the only implementation; a TelemetryDeck-backed one is planned)
-- `GameCenterable` → `GameCenter` / `TestGameCenter`
-- `ReviewPromptable` → `ReviewPrompter` / `TestReviewPrompter`
-- `GetterSetter` → `UserDefaultsGetterSetter` / `DictionaryGetterSetter`
+All external services have protocol abstractions with production and test implementations, named in the Fowler test-double convention — `…Real` for the production conformer, `…Fake`/`…Stub`/`…Spy` for the double:
+- `AnalyticsService` → `AnalyticsServiceSpy` (the only implementation, a spy; a TelemetryDeck-backed `AnalyticsServiceReal` is planned)
+- `GameCenter` → `GameCenterReal` / `GameCenterFake`
+- `ReviewPrompter` → `ReviewPrompterReal` / `ReviewPrompterStub`
+- `GetterSetter` → `GetterSetterReal` / `GetterSetterFake`
+- `CommunGetter` → `CommunGetterReal` / `CommunGetterStub`
+- `AnalyticsLocale` → `AnalyticsLocaleReal` / `AnalyticsLocaleStub` (protocol renamed from `Locale` to avoid shadowing `Foundation.Locale`)
+
+> **Convention — adding a new behavior protocol with real + test-double conformances.** Name the protocol a **plain role noun** — no `-able`/`-Protocol`/`-ing` suffix (`GetterSetter`, `CommunGetter`, `GameCenter`). Name the production conformer `<Protocol>Real` and the test double `<Protocol><Role>`, where `<Role>` is the [Fowler test-double type](https://martinfowler.com/bliki/TestDouble.html) that matches what the double actually *does*:
+> - **`Fake`** — a working implementation with a production-unsuitable shortcut, e.g. an in-memory store (`GetterSetterFake`).
+> - **`Stub`** — returns canned answers, no real logic (`CommunGetterStub`).
+> - **`Spy`** — a stub that *also records* how it was called, for assertions (`AnalyticsServiceSpy`).
+> - **`Mock`** — pre-programmed with expectations it verifies. **`Dummy`** — passed to fill a slot but never exercised.
+>
+> Because the protocol and all its conformers share a prefix, they **sort together in Xcode's Project Navigator** — the point of the convention (and consistent with the `CatFancy-final` app). One type per file, filename = type name. **Check for a system-API collision** before settling on the protocol name: `Locale` had to become `AnalyticsLocale` because it shadowed `Foundation.Locale` module-wide. Wire the real conformer into `World.device` and the double into `World.simulator` / `.unitTest` / `.uiTest`.
 
 ### View Architecture
 
@@ -97,7 +108,7 @@ Tests are in `ConjugarTests/` organized by layer:
 Test infrastructure:
 - `TestingAppDelegate` loads for test environments via `main.swift`
 - `URLProtocolStub` for network mocking
-- Stub classes (`StubLocale`, `StubCommunGetter`) for isolation
+- Stub classes (`AnalyticsLocaleStub`, `CommunGetterStub`) for isolation
 
 ## Localization
 

@@ -1,5 +1,5 @@
 //
-//  TestGameCenterTests.swift
+//  GameCenterFakeTests.swift
 //  ConjugarTests
 //
 //  Created by Joshua Adams on 4/24/19.
@@ -9,9 +9,9 @@
 import XCTest
 @testable import Conjugar
 
-class TestGameCenterTests: XCTestCase {
+class GameCenterFakeTests: XCTestCase {
   func testAuthenticate() async {
-    let tgc = TestGameCenter()
+    let tgc = GameCenterFake()
     Current = World.unitTest
     Current.gameCenter = tgc
     let dummyVC = UIViewController()
@@ -25,13 +25,13 @@ class TestGameCenterTests: XCTestCase {
 
   func testReportScore() async {
     // Nothing to test. Exercising for coverage.
-    let tgc = TestGameCenter()
+    let tgc = GameCenterFake()
     await tgc.reportScore(42)
   }
 
   func testShowLeaderboard() {
     // Nothing to test. Exercising for coverage.
-    let tgc = TestGameCenter()
+    let tgc = GameCenterFake()
     tgc.showLeaderboard()
   }
 }

@@ -1,5 +1,5 @@
 //
-//  CloudCommunGetter.swift
+//  CommunGetterReal.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 12/18/20.
@@ -10,7 +10,7 @@ import CloudKit
 import MessageUI
 import UIKit
 
-struct CloudCommunGetter: CommunGetter {
+struct CommunGetterReal: CommunGetter {
   func getCommunication() async -> Commun? {
     let predicate = NSPredicate(format: "isCurrent == 1")
     let query = CKQuery(recordType: "Communs", predicate: predicate)

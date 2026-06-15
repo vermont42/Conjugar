@@ -787,3 +787,67 @@ first (today only Settings is SwiftUI; the rest is programmatic UIKit), so it's
 downstream of the UI-modernization phase that still follows the engine+data work.
 Until then, removing the dead XCUITest target is pure subtraction — no coverage
 lost, one less source of red.
+
+## 2026-06-15 — Renamed the test doubles to Fowler-consistent names
+
+Reworked the World DI layer's protocol conformances so the test doubles follow
+Martin Fowler's test-double taxonomy (dummy/fake/stub/spy/mock) and — the practical
+payoff — so related files finally **sort together in Xcode's Project Navigator**,
+the `CatFancy-final` convention: protocol = plain noun, conformers = `<Protocol>Real`
+for production and `<Protocol><FowlerType>` for the double. Six service protocols,
+each double classified by what it actually does:
+
+- **`GetterSetter`** (kept): `UserDefaultsGetterSetter`→`GetterSetterReal`,
+  `DictionaryGetterSetter`→`GetterSetterFake` (a working in-memory dictionary = a
+  **Fake**).
+- **`CommunGetter`** (kept): `CloudCommunGetter`→`CommunGetterReal`,
+  `StubCommunGetter`→`CommunGetterStub` (canned `Commun` objects = a **Stub**).
+- **`GameCenterable`→`GameCenter`**: the GameKit class `GameCenter`→`GameCenterReal`,
+  `TestGameCenter`→`GameCenterFake` (keeps a working auth-state machine — `authenticate`
+  returns true-then-false — = a **Fake**).
+- **`ReviewPromptable`→`ReviewPrompter`**: the struct `ReviewPrompter`→
+  `ReviewPrompterReal`, `TestReviewPrompter`→`ReviewPrompterStub` (an empty no-op =
+  a **Stub**).
+- **`Locale`→`AnalyticsLocale`**: `RealLocale`→`AnalyticsLocaleReal`,
+  `StubLocale`→`AnalyticsLocaleStub`.
+- **`AnalyticsServiceable`→`AnalyticsService`** (not in the original ask — caught
+  during the sweep): `TestAnalyticsService`→`AnalyticsServiceSpy` (an injectable
+  `fire` closure records every event for test assertions = the textbook **Spy**). No
+  production impl yet — a TelemetryDeck-backed `AnalyticsServiceReal` is still planned.
+
+Two findings worth recording. (1) The `Locale` protocol **shadowed
+`Foundation.Locale`** module-wide — the tell was `RealLocale` reaching for
+`NSLocale.current` to dodge the collision. Renaming the protocol (to `AnalyticsLocale`,
+Josh's call) clears the shadow. (2) Two renames are name *swaps*: the protocol takes a
+name its concrete type already held (`GameCenterable`→`GameCenter`,
+`ReviewPromptable`→`ReviewPrompter`), so the concrete type had to vacate to `…Real`
+**before** the protocol could take the freed name — sequenced that way in both the text
+pass and the `git mv`s.
+
+Mechanics: a single ordered `perl` pass over every tracked `.swift` (word-boundary
+matches where substrings would otherwise collide — `\bGameCenter\b` must not touch
+`GameCenterable`/`TestGameCenter`/`GKGameCenter*`) renamed the types and references;
+`git mv` renamed the 19 files (the four `…Tests` files included). Because the project
+uses `PBXFileSystemSynchronizedRootGroup`s, the file renames needed **zero
+`project.pbxproj` edits** — the synchronized groups auto-discover. Build succeeded;
+**XCTest 53/53** and the full `test` action green (**TEST SUCCEEDED**, 0 failures); the
+Swift Testing engine suites are untouched by the rename.
+
+Checked and left out of scope (not behavior-protocol/double pairs): `Feature2` (an
+engine strategy protocol with many domain conformers), the `QuizDelegate`/`InfoDelegate`
+delegates, and `URLProtocolStub` (stubs Foundation's `URLSession`). Noted one stray:
+`MockNavigationC` is actually a **Spy** (it records `pushedViewController`), so it's
+mis-labeled under Fowler — flagged for a future cleanup. Also updated `CLAUDE.md`'s
+architecture section to the new names.
+
+**Follow-up (same session).** Codified the rule in `CLAUDE.md` (protocol = plain role
+noun; `<Protocol>Real` + the Fowler-typed double; check for system-API shadowing; wire
+into `World`) so new behavior protocols follow it, then applied the two loose ends:
+(1) **dropped the `NSLocale.current` workaround** — with the shadow gone,
+`AnalyticsLocaleReal` reads `Locale.current.language.languageCode` / `Locale.current.region`
+directly; and (2) **renamed the mis-labeled `MockNavigationC`→`NavigationCSpy`** (a
+`UINavigationController` subclass that records `pushedViewController` — a Fowler **Spy**,
+not a mock; its two call sites in `BrowseVerbsVCTests`/`BrowseInfoVCTests` updated). The
+SourceKit indexer briefly flagged `AnalyticsLocale` as unresolved mid-rename, a stale-index
+artifact — a clean build disproved it. Rebuilt: **53/53 XCTest, 0 failures**
+(`TEST SUCCEEDED`).

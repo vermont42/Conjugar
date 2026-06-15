@@ -1,5 +1,5 @@
 //
-//  ReviewPromptable.swift
+//  ReviewPrompterStub.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 11/28/18.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol ReviewPromptable {
-  func promptableActionHappened()
+class ReviewPrompterStub: ReviewPrompter {
+  func promptableActionHappened() {}
 }

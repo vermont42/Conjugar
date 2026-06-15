@@ -1,5 +1,5 @@
 //
-//  TestAnalyticsService.swift
+//  AnalyticsServiceSpy.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 11/25/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TestAnalyticsService: AnalyticsServiceable {
+class AnalyticsServiceSpy: AnalyticsService {
   private var fire: (String) -> ()
 
   init(fire: @escaping (String) -> () = { analytic in print(analytic) }) {

@@ -1,5 +1,5 @@
 //
-//  DictionaryGetterSetter.swift
+//  GetterSetterFake.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 1/13/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class DictionaryGetterSetter: GetterSetter {
+class GetterSetterFake: GetterSetter {
   var dictionary: [String: String] = [:]
 
   init() {}

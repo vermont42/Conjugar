@@ -12,12 +12,12 @@ import XCTest
 class BrowseInfoVCTests: XCTestCase {
   func testBrowseInfoVC() {
     var analytic = ""
-    let settings = Settings(getterSetter: DictionaryGetterSetter())
-    Current.analytics = TestAnalyticsService(fire: { fired in analytic = fired })
+    let settings = Settings(getterSetter: GetterSetterFake())
+    Current.analytics = AnalyticsServiceSpy(fire: { fired in analytic = fired })
     Current.settings = settings
 
     let bivc = BrowseInfoVC()
-    let nc = MockNavigationC(rootViewController: bivc)
+    let nc = NavigationCSpy(rootViewController: bivc)
 
     XCTAssertNotNil(bivc)
     bivc.viewWillAppear(true)

@@ -11,21 +11,21 @@ import XCTest
 
 class CommunVCTests: XCTestCase {
   func testTaps() {
-    let settings = Settings(getterSetter: DictionaryGetterSetter())
-    let gameCenter = TestGameCenter(isAuthenticated: false)
-    let analytics = TestAnalyticsService()
+    let settings = Settings(getterSetter: GetterSetterFake())
+    let gameCenter = GameCenterFake(isAuthenticated: false)
+    let analytics = AnalyticsServiceSpy()
     let quiz = Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false)
-    let communGetter = StubCommunGetter()
+    let communGetter = CommunGetterStub()
 
     Current = World(
       analytics: analytics,
-      reviewPrompter: TestReviewPrompter(),
+      reviewPrompter: ReviewPrompterStub(),
       gameCenter: gameCenter,
       settings: settings,
       quiz: quiz,
       session: URLSession.stubSession(ratingsCount: 0),
       communGetter: communGetter,
-      locale: StubLocale(languageCode: "en", regionCode: "US")
+      locale: AnalyticsLocaleStub(languageCode: "en", regionCode: "US")
     )
 
     let window = UIWindow(frame: UIScreen.main.bounds)

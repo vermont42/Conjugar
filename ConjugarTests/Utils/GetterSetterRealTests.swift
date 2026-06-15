@@ -1,5 +1,5 @@
 //
-//  UserDefaultsGetterSetterTests.swift
+//  GetterSetterRealTests.swift
 //  ConjugarTests
 //
 //  Created by Joshua Adams on 5/14/19.
@@ -9,9 +9,9 @@
 import XCTest
 @testable import Conjugar
 
-class UserDefaultsGetterSetterTests: XCTestCase {
+class GetterSetterRealTests: XCTestCase {
   func testGetAndSet() {
-    let settings = Settings(getterSetter: UserDefaultsGetterSetter())
+    let settings = Settings(getterSetter: GetterSetterReal())
     let savedRegion = settings.region
     settings.region = .spain
     XCTAssertEqual(settings.region, .spain)

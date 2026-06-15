@@ -14,7 +14,7 @@ fileprivate let difficultSpain = 750
 // swiftlint:enable private_over_fileprivate
 
 class QuizTests: XCTestCase {
-  private let testGameCenter = TestGameCenter()
+  private let testGameCenter = GameCenterFake()
 
   func testQuiz() {
     let spain = Region.spain.rawValue
@@ -36,7 +36,7 @@ class QuizTests: XCTestCase {
      (spain, easy, easySpain),
      (latinAmerica, easy, easyLatinAmerica)
     ].forEach { region, difficulty, maxScore in
-      let settings = Settings(getterSetter: DictionaryGetterSetter(dictionary: [Settings.difficultyKey: difficulty, Settings.regionKey: region]))
+      let settings = Settings(getterSetter: GetterSetterFake(dictionary: [Settings.difficultyKey: difficulty, Settings.regionKey: region]))
       let quiz = Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: true)
       _ = TestQuizDelegate(quiz: quiz, onFinish: { score in
         XCTAssertEqual(score, maxScore)

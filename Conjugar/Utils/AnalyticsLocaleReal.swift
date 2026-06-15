@@ -1,5 +1,5 @@
 //
-//  RealLocale.swift
+//  AnalyticsLocaleReal.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 12/15/20.
@@ -8,15 +8,15 @@
 
 import Foundation
 
-struct RealLocale: Locale {
+struct AnalyticsLocaleReal: AnalyticsLocale {
   private let none = "none"
   private let NONE = "NONE"
 
   var languageCode: String {
-    NSLocale.current.language.languageCode?.identifier ?? none
+    Locale.current.language.languageCode?.identifier ?? none
   }
 
   var regionCode: String {
-    NSLocale.current.region?.identifier ?? NONE
+    Locale.current.region?.identifier ?? NONE
   }
 }

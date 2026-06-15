@@ -17,27 +17,27 @@ var Current = World.device
 #endif
 
 class World {
-  var analytics: AnalyticsServiceable
-  var reviewPrompter: ReviewPromptable
-  var gameCenter: GameCenterable
+  var analytics: AnalyticsService
+  var reviewPrompter: ReviewPrompter
+  var gameCenter: GameCenter
   var settings: Settings
   var quiz: Quiz
   var session: URLSession
   var communGetter: CommunGetter
-  var locale: Locale
+  var locale: AnalyticsLocale
   var parentViewController: UIViewController?
 
   private static let fakeRatingsCount = 42
 
   init(
-    analytics: AnalyticsServiceable,
-    reviewPrompter: ReviewPromptable,
-    gameCenter: GameCenterable,
+    analytics: AnalyticsService,
+    reviewPrompter: ReviewPrompter,
+    gameCenter: GameCenter,
     settings: Settings,
     quiz: Quiz,
     session: URLSession,
     communGetter: CommunGetter,
-    locale: Locale
+    locale: AnalyticsLocale
   ) {
     self.analytics = analytics
     self.reviewPrompter = reviewPrompter
@@ -50,51 +50,51 @@ class World {
   }
 
   static let device: World = {
-    let settings = Settings(getterSetter: UserDefaultsGetterSetter())
-    let gameCenter = GameCenter.shared
+    let settings = Settings(getterSetter: GetterSetterReal())
+    let gameCenter = GameCenterReal.shared
 
     return World(
-      // TODO: swap in a TelemetryDeck-backed AnalyticsServiceable once integrated.
-      analytics: TestAnalyticsService(),
-      reviewPrompter: ReviewPrompter(),
+      // TODO: swap in a TelemetryDeck-backed AnalyticsService once integrated.
+      analytics: AnalyticsServiceSpy(),
+      reviewPrompter: ReviewPrompterReal(),
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: true),
       session: URLSession.shared,
-      communGetter: CloudCommunGetter(),
-      locale: RealLocale()
+      communGetter: CommunGetterReal(),
+      locale: AnalyticsLocaleReal()
     )
   }()
 
   static let simulator: World = {
-    let settings = Settings(getterSetter: UserDefaultsGetterSetter())
-    let gameCenter = TestGameCenter()
+    let settings = Settings(getterSetter: GetterSetterReal())
+    let gameCenter = GameCenterFake()
 
     return World(
-      analytics: TestAnalyticsService(),
-      reviewPrompter: TestReviewPrompter(),
+      analytics: AnalyticsServiceSpy(),
+      reviewPrompter: ReviewPrompterStub(),
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: true),
       session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
-      communGetter: StubCommunGetter(),
-      locale: StubLocale(languageCode: "en", regionCode: "US")
+      communGetter: CommunGetterStub(),
+      locale: AnalyticsLocaleStub(languageCode: "en", regionCode: "US")
     )
   }()
 
   static let unitTest: World = {
-    let settings = Settings(getterSetter: DictionaryGetterSetter())
-    let gameCenter = TestGameCenter()
+    let settings = Settings(getterSetter: GetterSetterFake())
+    let gameCenter = GameCenterFake()
 
     return World(
-      analytics: TestAnalyticsService(),
-      reviewPrompter: TestReviewPrompter(),
+      analytics: AnalyticsServiceSpy(),
+      reviewPrompter: ReviewPrompterStub(),
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false),
       session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
-      communGetter: StubCommunGetter(),
-      locale: StubLocale()
+      communGetter: CommunGetterStub(),
+      locale: AnalyticsLocaleStub()
     )
   }()
 
@@ -120,18 +120,18 @@ class World {
     }
 
     let dictionary = [Settings.regionKey: region.rawValue, Settings.difficultyKey: difficulty.rawValue]
-    let settings = Settings(getterSetter: DictionaryGetterSetter(dictionary: dictionary))
-    let gameCenter = TestGameCenter()
+    let settings = Settings(getterSetter: GetterSetterFake(dictionary: dictionary))
+    let gameCenter = GameCenterFake()
 
     return World(
-      analytics: TestAnalyticsService(),
-      reviewPrompter: TestReviewPrompter(),
+      analytics: AnalyticsServiceSpy(),
+      reviewPrompter: ReviewPrompterStub(),
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false),
       session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
-      communGetter: StubCommunGetter(),
-      locale: StubLocale()
+      communGetter: CommunGetterStub(),
+      locale: AnalyticsLocaleStub()
     )
   }
 }

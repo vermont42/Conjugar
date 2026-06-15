@@ -20,7 +20,7 @@ class InfoVCTests: XCTestCase, InfoDelegate {
   func testInfoVC() {
     var analytic = ""
     Current = World.unitTest
-    Current.analytics = TestAnalyticsService(fire: { fired in analytic = fired })
+    Current.analytics = AnalyticsServiceSpy(fire: { fired in analytic = fired })
 
     let urlString = "https://racecondition.software"
     guard let url = URL(string: urlString) else {

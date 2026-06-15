@@ -13,7 +13,7 @@ class VerbVCTests: XCTestCase {
   func testVerbVC() {
     var analytic = ""
     Current = World.unitTest
-    Current.analytics = TestAnalyticsService(fire: { fired in analytic = fired })
+    Current.analytics = AnalyticsServiceSpy(fire: { fired in analytic = fired })
 
     let vvc = VerbVC(verb: "maltear")
 
