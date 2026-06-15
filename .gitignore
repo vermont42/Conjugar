@@ -13,3 +13,7 @@ __pycache__/
 
 # Commercial reference PDFs (do not redistribute)
 *.pdf
+
+# Gloss-pipeline scratch artifacts
+docs/glosses/.bak_phase3/
+docs/glosses/phase1/phase2/chunks/
