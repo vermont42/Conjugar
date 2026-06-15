@@ -19,20 +19,12 @@
 		E1483FCA1EF89C710052C436 /* applause3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC71EF89C710052C436 /* applause3.mp3 */; };
 		E1483FCC1EF89D4E0052C436 /* chirp.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCB1EF89D4E0052C436 /* chirp.mp3 */; };
 		E1483FCE1EF89DAD0052C436 /* buzz.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCD1EF89DAD0052C436 /* buzz.mp3 */; };
-		E16004CD21BC863500909ED1 /* QuizVCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16004CC21BC863500909ED1 /* QuizVCUITests.swift */; };
 		E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E18F7F3D1ECA7E3700633200 /* silence.mp3 */; };
 		E19794342073D0C90015D490 /* gun.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E19794332073D0C90015D490 /* gun.mp3 */; };
 		E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E16004CF21BC863500909ED1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E1F06ACC1E8F05F200ADD2E1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E1F06AD31E8F05F200ADD2E1;
-			remoteInfo = Conjugar;
-		};
 		E1F06AE91E8F05F400ADD2E1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E1F06ACC1E8F05F200ADD2E1 /* Project object */;
@@ -70,9 +62,6 @@
 		E1483FC71EF89C710052C436 /* applause3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause3.mp3; sourceTree = "<group>"; };
 		E1483FCB1EF89D4E0052C436 /* chirp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chirp.mp3; sourceTree = "<group>"; };
 		E1483FCD1EF89DAD0052C436 /* buzz.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = buzz.mp3; sourceTree = "<group>"; };
-		E16004CA21BC863500909ED1 /* ConjugarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConjugarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E16004CC21BC863500909ED1 /* QuizVCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizVCUITests.swift; sourceTree = "<group>"; };
-		E16004CE21BC863500909ED1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E18F7F3D1ECA7E3700633200 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silence.mp3; sourceTree = "<group>"; };
 		E19794332073D0C90015D490 /* gun.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gun.mp3; sourceTree = "<group>"; };
 		E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Conjugar.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,13 +99,6 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		E16004C721BC863500909ED1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E1F06AD11E8F05F200ADD2E1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -172,21 +154,11 @@
 			name = Sounds;
 			sourceTree = "<group>";
 		};
-		E16004CB21BC863500909ED1 /* ConjugarUITests */ = {
-			isa = PBXGroup;
-			children = (
-				E16004CC21BC863500909ED1 /* QuizVCUITests.swift */,
-				E16004CE21BC863500909ED1 /* Info.plist */,
-			);
-			path = ConjugarUITests;
-			sourceTree = "<group>";
-		};
 		E1F06ACB1E8F05F200ADD2E1 = {
 			isa = PBXGroup;
 			children = (
 				E1F06AD61E8F05F300ADD2E1 /* Conjugar */,
 				0353B3B12FDCE54000FF069B /* ConjugarTests */,
-				E16004CB21BC863500909ED1 /* ConjugarUITests */,
 				E1F06AD51E8F05F300ADD2E1 /* Products */,
 				E14271351F01CA98001D19E1 /* Frameworks */,
 			);
@@ -197,7 +169,6 @@
 			children = (
 				E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */,
 				E1F06AE81E8F05F400ADD2E1 /* ConjugarTests.xctest */,
-				E16004CA21BC863500909ED1 /* ConjugarUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -223,24 +194,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E16004C921BC863500909ED1 /* ConjugarUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E16004D321BC863600909ED1 /* Build configuration list for PBXNativeTarget "ConjugarUITests" */;
-			buildPhases = (
-				E16004C621BC863500909ED1 /* Sources */,
-				E16004C721BC863500909ED1 /* Frameworks */,
-				E16004C821BC863500909ED1 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E16004D021BC863500909ED1 /* PBXTargetDependency */,
-			);
-			name = ConjugarUITests;
-			productName = ConjugarUITests;
-			productReference = E16004CA21BC863500909ED1 /* ConjugarUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		E1F06AD31E8F05F200ADD2E1 /* Conjugar */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E1F06AF11E8F05F400ADD2E1 /* Build configuration list for PBXNativeTarget "Conjugar" */;
@@ -302,13 +255,6 @@
 				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "Josh Adams";
 				TargetAttributes = {
-					E16004C921BC863500909ED1 = {
-						CreatedOnToolsVersion = 10.1;
-						DevelopmentTeam = V3L2PL4QC9;
-						LastSwiftMigration = 1020;
-						ProvisioningStyle = Automatic;
-						TestTargetID = E1F06AD31E8F05F200ADD2E1;
-					};
 					E1F06AD31E8F05F200ADD2E1 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = V3L2PL4QC9;
@@ -340,19 +286,11 @@
 			targets = (
 				E1F06AD31E8F05F200ADD2E1 /* Conjugar */,
 				E1F06AE71E8F05F400ADD2E1 /* ConjugarTests */,
-				E16004C921BC863500909ED1 /* ConjugarUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		E16004C821BC863500909ED1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E1F06AD21E8F05F200ADD2E1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -405,14 +343,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		E16004C621BC863500909ED1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E16004CD21BC863500909ED1 /* QuizVCUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E1F06AD01E8F05F200ADD2E1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -430,11 +360,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E16004D021BC863500909ED1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E1F06AD31E8F05F200ADD2E1 /* Conjugar */;
-			targetProxy = E16004CF21BC863500909ED1 /* PBXContainerItemProxy */;
-		};
 		E1F06AEA1E8F05F400ADD2E1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E1F06AD31E8F05F200ADD2E1 /* Conjugar */;
@@ -463,61 +388,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		E16004D121BC863600909ED1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = V3L2PL4QC9;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = ConjugarUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Conjugar;
-			};
-			name = Debug;
-		};
-		E16004D221BC863600909ED1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = V3L2PL4QC9;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = ConjugarUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.ConjugarUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Conjugar;
-			};
-			name = Release;
-		};
 		E1F06AEF1E8F05F400ADD2E1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -681,7 +551,6 @@
 		E1F06AF51E8F05F400ADD2E1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
@@ -701,7 +570,6 @@
 		E1F06AF61E8F05F400ADD2E1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = V3L2PL4QC9;
 				INFOPLIST_FILE = ConjugarTests/Info.plist;
@@ -721,15 +589,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E16004D321BC863600909ED1 /* Build configuration list for PBXNativeTarget "ConjugarUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E16004D121BC863600909ED1 /* Debug */,
-				E16004D221BC863600909ED1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		E1F06ACF1E8F05F200ADD2E1 /* Build configuration list for PBXProject "Conjugar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

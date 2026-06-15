@@ -758,3 +758,32 @@ with the workspace fold (`docs/glosses/.bak_phase3/` backup slices, the
 `Migration` backup), keeping the concatenated `consensus_all.tsv` deliverable.
 Also gitignored Python `__pycache__`/`*.pyc` and the two commercial reference
 PDFs (`*.pdf`) so they stay out of the eventual public `master` merge.
+
+## 2026-06-15 — Removed the dead UI-test target
+
+The `ConjugarUITests` target had been failing wholesale (6/6, couldn't find the
+tab bar) and was never part of the migration's test strategy, so Josh deleted the
+`ConjugarUITests/` folder. Deleting the folder leaves the Xcode project still
+*defining* the target, so excised every `ConjugarUITests` reference from
+`Conjugar.xcodeproj/project.pbxproj` by hand — the native target, its product
+file reference + Products-group entry, the Sources/Frameworks/Resources build
+phases, the target dependency + its container-item proxy, the two
+`XCBuildConfiguration`s and their `XCConfigurationList`, the `TargetAttributes`
+entry, and the `targets` list membership — plus the `TestableReference` in the
+shared `Conjugar.xcscheme`. (The `xcodeproj` Ruby gem that drove earlier project
+edits **can't be used here**: v1.23.0 chokes on `PBXFileSystemSynchronizedRootGroup`,
+the objectVersion-70 synchronized-folder format this project adopted in the
+groups→folders migration, so the edits were surgical hand-edits instead.)
+`xcodebuild -list` now shows exactly two targets (`Conjugar`, `ConjugarTests`),
+and the plain `test` command — no `-only-testing:` needed — runs clean: **XCTest
+53/53 + Swift Testing 348/348, 0 failures**, with no UI-test phase attempted.
+
+The deeper reasoning: over the years Josh has consistently found UI tests flaky
+(this target was no exception — its failures were environmental, not real
+regressions), so they earn their keep poorly. The plan for exercising Conjugar's
+UI isn't XCUITest at all — eventually the `ios-build-verify` skill will drive the
+actual UI. That, however, requires the app to be **fully converted to SwiftUI**
+first (today only Settings is SwiftUI; the rest is programmatic UIKit), so it's
+downstream of the UI-modernization phase that still follows the engine+data work.
+Until then, removing the dead XCUITest target is pure subtraction — no coverage
+lost, one less source of red.

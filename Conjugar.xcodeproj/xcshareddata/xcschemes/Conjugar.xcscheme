@@ -49,17 +49,6 @@
                ReferencedContainer = "container:Conjugar.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E16004C921BC863500909ED1"
-               BuildableName = "ConjugarUITests.xctest"
-               BlueprintName = "ConjugarUITests"
-               ReferencedContainer = "container:Conjugar.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
