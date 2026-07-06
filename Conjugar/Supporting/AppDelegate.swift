@@ -29,12 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   private func configureTabBar() {
-    UITabBar.appearance().barTintColor = UIColor.black
+    UITabBar.appearance().barTintColor = Colors.background
     UITabBar.appearance().tintColor = Colors.yellow
   }
 
   private func configureNavBar() {
-    UINavigationBar.appearance().barTintColor = UIColor.black
+    UINavigationBar.appearance().barTintColor = Colors.background
     UINavigationBar.appearance().tintColor = Colors.yellow
     UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key(rawValue: NSAttributedString.Key.foregroundColor.rawValue): Colors.yellow]
   }

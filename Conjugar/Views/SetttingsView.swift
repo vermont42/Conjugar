@@ -26,7 +26,7 @@ struct SettingsView: View {
 
   var body: some View {
     ZStack {
-      Color.black
+      Color.customBackground
         .edgesIgnoringSafeArea(.all)
 
       VStack(alignment: .center, spacing: 16) {

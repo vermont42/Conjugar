@@ -1437,3 +1437,43 @@ starts a quiz (haber · él · presente de indicativo) whose **Elapsed** counter
 — proof the closure timer and the observable→delegate updates both fire. Build and
 SwiftLint clean; the removed `MainTabBarVC`/`MainTabBarVCTests` took the last
 `UITabBarController` code with them.
+
+7/6/26: **SwiftUI migration Step 1 — the design system (light mode arrives).**
+Conjugar shipped dark-only since 2017: `Colors.swift` hardcoded four fixed
+`UIColor`s (red 193,0,29 · gold 205,165,27 · blue 85,135,255 · black), there were
+**zero color assets**, and `Info.plist` pinned `UIUserInterfaceStyle = Dark` so the
+whole app ignored the system appearance. Step 1 replaces that with an
+appearance-aware palette, ported from sibling Konjugieren's asset-catalog approach
+but seeded with Conjugar's own brand hues.
+
+- **Eight light/dark colorsets** now live in `Assets.xcassets`: the seven Konjugieren
+  roles (`customBackground`, `customForeground`, `customCardBackground`,
+  `customCardBorder`, `customRed`, `customYellow`, `AccentColor`) plus a
+  Conjugar-specific `customBlue` (its links). The trick light mode demands: a
+  yellow-on-black scheme doesn't invert for free, so `customYellow` keeps Conjugar's
+  bright gold (0xCDA51B) in dark mode but becomes a **darker, legible gold**
+  (0x8A6600, ~5.2:1 on white) in light; `customBlue` likewise darkens to 0x1E56E0 for
+  link contrast on white. Red stays identical in both (legible either way). Enabled
+  `ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES` so the colors
+  surface as `Color.customYellow` / `UIColor.customYellow`, matching how the
+  to-be-ported Konjugieren views reference them.
+- **`Colors.swift` is now a thin adaptive bridge.** Its four legacy names
+  (`red`/`yellow`/`blue`/`black`, still referenced by ~20 not-yet-migrated UIKit
+  files) became `static let`s pointing at the generated `UIColor.custom*` symbols —
+  so every old screen turns appearance-aware for free, with no edits to the VCs. Kept
+  as `static let` (one cached instance) precisely so the cell tests that assert
+  `textColor == Colors.yellow` by identity still pass. Added the newer semantic roles
+  (`background`, `foreground`, `cardBackground`, `cardBorder`) for the SwiftUI work
+  ahead. SwiftUI `Modifiers.swift` and `SettingsView` now read the generated symbols
+  directly (`.customYellow`, `Color.customBackground`), retiring the last hardcoded
+  `Color.black` background.
+- **Unpinned the appearance.** Removed `UIUserInterfaceStyle = Dark` from `Info.plist`
+  and switched `AppDelegate`'s nav/tab `barTintColor` from `UIColor.black` to the
+  adaptive `Colors.background`, so bars follow the system too.
+
+**Verified in the simulator, both appearances.** Dark mode is pixel-unchanged from
+before (yellow-on-black Browse list). Light mode now renders white backgrounds with
+dark-gold titles, darkened-blue glosses, and red interactive text — legible and still
+recognizably Conjugar — across the UIKit Browse list and the SwiftUI Settings screen.
+Build clean, SwiftLint clean (0 violations), the four color-sensitive cell suites
+green.

@@ -506,6 +506,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
 				CURRENT_PROJECT_VERSION = 2.8;
 				INFOPLIST_FILE = Conjugar/Info.plist;
@@ -530,6 +531,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
 				CURRENT_PROJECT_VERSION = 2.8;
 				INFOPLIST_FILE = Conjugar/Info.plist;

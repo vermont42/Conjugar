@@ -12,7 +12,7 @@ struct HeadingLabel: ViewModifier {
   func body(content: Content) -> some View {
     content
       .font(.heading)
-      .foregroundColor(Color(Colors.yellow))
+      .foregroundStyle(Color.customYellow)
   }
 }
 
@@ -20,7 +20,7 @@ struct SubheadingLabel: ViewModifier {
   func body(content: Content) -> some View {
     content
       .font(.subheading)
-      .foregroundColor(Color(Colors.yellow))
+      .foregroundStyle(Color.customYellow)
   }
 }
 
@@ -28,7 +28,7 @@ struct BodyLabel: ViewModifier {
   func body(content: Content) -> some View {
     content
       .font(.smallBody)
-      .foregroundColor(Color(Colors.yellow))
+      .foregroundStyle(Color.customYellow)
       .padding(.horizontal, Layout.defaultHorizontalMargin)
   }
 }
@@ -37,7 +37,7 @@ struct StandardButton: ViewModifier {
   func body(content: Content) -> some View {
     content
       .font(.button)
-      .foregroundColor(Color(Colors.red))
+      .foregroundStyle(Color.customRed)
   }
 }
 
