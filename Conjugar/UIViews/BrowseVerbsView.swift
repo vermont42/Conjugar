@@ -17,12 +17,8 @@ class BrowseVerbsUIV: UIView {
   }()
 
   @UsesAutoLayout
-  var filterControl: UISegmentedControl = {
-    let control = UISegmentedControl(items: [
-      Localizations.Verb.irregular,
-      Localizations.Verb.regular,
-      Localizations.bothMasculine
-    ])
+  var sortControl: UISegmentedControl = {
+    let control = UISegmentedControl(items: VerbSort.allCases.map { $0.localizedDisplayName })
     control.selectedSegmentIndex = 0
     control.yellowfyText()
     return control
@@ -34,7 +30,7 @@ class BrowseVerbsUIV: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    [table, filterControl].forEach {
+    [table, sortControl].forEach {
       addSubview($0)
     }
 
@@ -42,10 +38,10 @@ class BrowseVerbsUIV: UIView {
       table.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
       table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
       table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-      table.bottomAnchor.constraint(equalTo: filterControl.topAnchor, constant: -1.0 * Layout.defaultSpacing),
-      filterControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-      filterControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-      filterControl.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing)
+      table.bottomAnchor.constraint(equalTo: sortControl.topAnchor, constant: -1.0 * Layout.defaultSpacing),
+      sortControl.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      sortControl.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      sortControl.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing)
     ])
   }
 

@@ -16,8 +16,26 @@ class VerbCell: UITableViewCell {
     let label = UILabel()
     label.textColor = Colors.yellow
     label.font = Fonts.largeCell
-    label.textAlignment = .center
     label.adjustsFontSizeToFitWidth = true
+    return label
+  }()
+
+  @UsesAutoLayout
+  var gloss: UILabel = {
+    let label = UILabel()
+    label.textColor = Colors.blue
+    label.font = Fonts.smallCell
+    label.adjustsFontSizeToFitWidth = true
+    return label
+  }()
+
+  @UsesAutoLayout
+  var rank: UILabel = {
+    let label = UILabel()
+    label.textColor = Colors.blue
+    label.font = Fonts.smallCell
+    label.textAlignment = .right
+    label.isAccessibilityElement = false
     return label
   }()
 
@@ -28,17 +46,33 @@ class VerbCell: UITableViewCell {
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     backgroundColor = Colors.black
-    addSubview(verb)
+    [verb, gloss, rank].forEach {
+      addSubview($0)
+    }
+    rank.setContentHuggingPriority(.required, for: .horizontal)
+    rank.setContentCompressionResistancePriority(.required, for: .horizontal)
 
     NSLayoutConstraint.activate([
       verb.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.defaultSpacing),
-      verb.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Layout.defaultSpacing * -1.0),
-      verb.centerYAnchor.constraint(equalTo: centerYAnchor)
+      verb.topAnchor.constraint(equalTo: topAnchor, constant: Layout.defaultSpacing),
+      verb.trailingAnchor.constraint(lessThanOrEqualTo: rank.leadingAnchor, constant: Layout.defaultSpacing * -1.0),
+      gloss.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Layout.defaultSpacing),
+      gloss.topAnchor.constraint(equalTo: verb.bottomAnchor),
+      gloss.trailingAnchor.constraint(lessThanOrEqualTo: rank.leadingAnchor, constant: Layout.defaultSpacing * -1.0),
+      gloss.bottomAnchor.constraint(equalTo: bottomAnchor, constant: Layout.defaultSpacing * -1.0),
+      rank.trailingAnchor.constraint(equalTo: trailingAnchor, constant: Layout.defaultSpacing * -1.0),
+      rank.centerYAnchor.constraint(equalTo: centerYAnchor)
     ])
   }
 
-  func configure(verb: String) {
-    self.verb.text = verb
-    self.verb.setAccessibilityLabelInSpanish(verb)
+  func configure(entry: VerbMapEntry2) {
+    verb.text = entry.infinitive
+    verb.setAccessibilityLabelInSpanish(entry.infinitive)
+    gloss.text = entry.gloss
+    if let frequencyRank = entry.frequencyRank {
+      rank.text = "#\(frequencyRank)"
+    } else {
+      rank.text = nil
+    }
   }
 }

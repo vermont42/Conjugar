@@ -1034,3 +1034,49 @@ simulator — abnegar shows "Irreg. ☛ negar" with red `abniego`/`abnegué` spa
 full compound table down to futuro perfecto de subjuntivo, abolir shows "Defective"
 with correctly blank person rows, and the quiz graded *habran* as a partial match for
 `habrán` with the irregular r in red.
+
+## Part B: Browse Verbs is now an all-verbs list, sortable by Frequency / Alphabetical
+
+Rebuilt the Browse tab around the new engine's verb map, mirroring the UX of my French
+app Conjuguer's `VerbBrowseView` (adapted to Conjugar's programmatic UIKit, not
+SwiftUI). The old 3-segment irregular/regular/both filter over ~214 verbs is gone;
+Browse now lists **all 4,811 `VerbMap2` entries** with two sorts:
+
+- **Frequency** (the default): ranked verbs first, ascending by `frequencyRank` —
+  *ser* #1, *haber* #2, *tener* #3 — with the ~3,800 unranked verbs after the ranked
+  block, alphabetized among themselves. The comparator replicates Conjuguer's
+  nil-handling exactly.
+- **Alphabetical**: locale-aware `compare(_:locale:)` with a Spanish locale, so *ñ*
+  sorts as its own letter between *n* and *o* (a plain code-point compare would dump
+  *ñoñear* after *obrar*; the test asserts this).
+
+Implementation notes:
+
+1. **`VerbSort`** (`Models/VerbSort.swift`) — a `CaseIterable` string enum
+   (`.frequency` / `.alphabetical`) that owns both comparators and localized segment
+   titles ("Frequency"/"Frecuencia", "Alphabetical"/"Alfabético"). `BrowseVerbsVC`
+   precomputes both sorted arrays once in `loadView` (Conjuguer's `itemsBySort` idea);
+   toggling the control just swaps which array backs the table and calls the existing
+   `reloadTableData()`, which also resets scroll to top.
+2. **Persistence** — a new `Settings.verbSort` (GetterSetter-backed UserDefaults,
+   default `.frequency`), written on every segment change and read to select the
+   initial segment. Same pattern as `secondSingularBrowse`.
+3. **`VerbCell`** grew from a single centered infinitive to Conjuguer's row shape:
+   yellow infinitive + blue gloss stacked at the leading edge, blue `#rank` at the
+   trailing edge (omitted for unranked verbs). Spanish accessibility label kept.
+4. Nothing references `Conjugator.shared.allVerbs/regularVerbs/irregularVerbs` anymore;
+   the legacy engine is fully dormant (removal remains a separate cleanup).
+
+Skipped for now: the optional `UISearchController` parallel to Conjuguer's
+`.searchable` field — the sort requirement stood alone, and search is a clean
+follow-up. Also worth a follow-up: the Info tab's "Purpose & Use" copy still describes
+the old three-list Browse UI in both languages.
+
+New tests: `VerbSortTests` (rank ordering, nil-rank alphabetization, Spanish collation,
+ser-is-#1 over the real map), `SettingsTests` (verbSort default + round-trip), plus
+updated `VerbCellTests` and `BrowseVerbsVCTests`. Full suite green (365 Swift Testing
+tests + all XCTest suites). Drove it in the simulator with idb: frequency order shows
+ser/haber/tener with ranks, tapping Alphabetical re-sorts instantly (*abajar* first,
+*abandonar* keeps its #287 badge), the choice survives relaunch, and tapping *abajar* —
+a verb the legacy engine never knew — pushes a fully rendered Conjugator2-powered verb
+screen.

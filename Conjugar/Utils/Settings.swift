@@ -51,6 +51,16 @@ class Settings {
   static let secondSingularBrowseKey = "secondSingularBrowse"
   static let secondSingularBrowseDefault: SecondSingularBrowse = .tu
 
+  var verbSort: VerbSort {
+    didSet {
+      if verbSort != oldValue {
+        getterSetter.set(key: Settings.verbSortKey, value: verbSort.rawValue)
+      }
+    }
+  }
+  static let verbSortKey = "verbSort"
+  static let verbSortDefault: VerbSort = .frequency
+
   var secondSingularQuiz: SecondSingularQuiz {
     didSet {
       if secondSingularQuiz != oldValue {
@@ -142,6 +152,13 @@ class Settings {
     } else {
       secondSingularBrowse = Settings.secondSingularBrowseDefault
       getterSetter.set(key: Settings.secondSingularBrowseKey, value: secondSingularBrowse.rawValue)
+    }
+
+    if let verbSortString = getterSetter.get(key: Settings.verbSortKey) {
+      verbSort = VerbSort(rawValue: verbSortString) ?? Settings.verbSortDefault
+    } else {
+      verbSort = Settings.verbSortDefault
+      getterSetter.set(key: Settings.verbSortKey, value: verbSort.rawValue)
     }
 
     if let secondSingularQuizString = getterSetter.get(key: Settings.secondSingularQuizKey) {

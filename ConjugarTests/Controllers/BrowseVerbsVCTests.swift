@@ -23,23 +23,47 @@ class BrowseVerbsVCTests: XCTestCase {
     bvvc.viewWillAppear(true)
     XCTAssertEqual(analytic, "visited viewController: \(BrowseVerbsVC.self) ")
 
-    let regularClasses: Set<String> = ["1", "2", "3"]
-    let entries = VerbMap2.shared.entries.values
-    let regularVerbCount = entries.filter { regularClasses.contains($0.classNumber) }.count
-    let irregularVerbCount = entries.count - regularVerbCount
-    let combinedVerbCount = entries.count
+    let verbCount = VerbMap2.shared.entries.count
 
     let bvv = bvvc.browseVerbsView
-    [(0, irregularVerbCount), (1, regularVerbCount), (2, combinedVerbCount)].forEach {
-      bvv.filterControl.selectedSegmentIndex = $0.0
-      XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), $0.1)
+    XCTAssertEqual(bvv.sortControl.numberOfSegments, VerbSort.allCases.count)
+    XCTAssertEqual(bvv.sortControl.selectedSegmentIndex, VerbSort.allCases.firstIndex(of: .frequency))
+
+    VerbSort.allCases.indices.forEach { index in
+      bvv.sortControl.selectedSegmentIndex = index
+      XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), verbCount)
     }
 
-    bvv.filterControl.selectedSegmentIndex = 0
-    bvvc.valueChanged(bvv.filterControl)
-    XCTAssertEqual(bvvc.tableView(UITableView(), numberOfRowsInSection: 0), irregularVerbCount)
+    let alphabeticalIndex = VerbSort.allCases.firstIndex(of: .alphabetical) ?? 0
+    bvv.sortControl.selectedSegmentIndex = alphabeticalIndex
+    bvvc.valueChanged(bvv.sortControl)
+    XCTAssertEqual(Current.settings.verbSort, .alphabetical)
+
+    let frequencyIndex = VerbSort.allCases.firstIndex(of: .frequency) ?? 0
+    bvv.sortControl.selectedSegmentIndex = frequencyIndex
+    bvvc.valueChanged(bvv.sortControl)
+    XCTAssertEqual(Current.settings.verbSort, .frequency)
+
+    let table = UITableView()
+    table.register(VerbCell.self, forCellReuseIdentifier: VerbCell.identifier)
+    guard let firstCell = bvvc.tableView(table, cellForRowAt: IndexPath(row: 0, section: 0)) as? VerbCell else {
+      XCTFail("First cell was not a VerbCell.")
+      return
+    }
+    XCTAssertEqual(firstCell.verb.text, "ser")
+    XCTAssertEqual(firstCell.rank.text, "#1")
 
     bvvc.tableView(UITableView(), didSelectRowAt: IndexPath(row: 0, section: 0))
     XCTAssert(nc.pushedViewController is VerbVC)
+  }
+
+  func testInitialSortComesFromSettings() {
+    Current.analytics = AnalyticsServiceSpy()
+    Current.settings = Settings(getterSetter: GetterSetterFake())
+    Current.settings.verbSort = .alphabetical
+
+    let bvvc = BrowseVerbsVC()
+    let expectedIndex = VerbSort.allCases.firstIndex(of: .alphabetical)
+    XCTAssertEqual(bvvc.browseVerbsView.sortControl.selectedSegmentIndex, expectedIndex)
   }
 }

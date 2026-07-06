@@ -11,21 +11,18 @@ import UIKit
 class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
   static let englishTitle = "Browse"
 
-  private var allVerbs: [String] = []
-  private var regularVerbs: [String] = []
-  private var irregularVerbs: [String] = []
+  private var verbsBySort: [VerbSort: [VerbMapEntry2]] = [:]
 
-  private var currentVerbs: [String] {
-    switch browseVerbsView.filterControl.selectedSegmentIndex {
-    case 0:
-      return irregularVerbs
-    case 1:
-      return regularVerbs
-    case 2:
-      return allVerbs
-    default:
-      fatalError("Invalid verb-filter index.")
+  private var currentSort: VerbSort {
+    let index = browseVerbsView.sortControl.selectedSegmentIndex
+    guard index >= 0 && index < VerbSort.allCases.count else {
+      fatalError("Invalid verb-sort index.")
     }
+    return VerbSort.allCases[index]
+  }
+
+  private var currentVerbs: [VerbMapEntry2] {
+    verbsBySort[currentSort] ?? []
   }
 
   var browseVerbsView: BrowseVerbsUIV {
@@ -39,12 +36,11 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
   override func loadView() {
     let browseVerbsView = BrowseVerbsUIV(frame: UIScreen.main.bounds)
     browseVerbsView.setupTable(dataSource: self, delegate: self)
-    browseVerbsView.filterControl.addTarget(self, action: #selector(BrowseVerbsVC.valueChanged(_:)), for: .valueChanged)
+    browseVerbsView.sortControl.addTarget(self, action: #selector(BrowseVerbsVC.valueChanged(_:)), for: .valueChanged)
     let entries = VerbMap2.shared.entries.values
-    let regularClasses: Set<String> = ["1", "2", "3"]
-    allVerbs = entries.map(\.infinitive).sorted()
-    regularVerbs = entries.filter { regularClasses.contains($0.classNumber) }.map(\.infinitive).sorted()
-    irregularVerbs = entries.filter { !regularClasses.contains($0.classNumber) }.map(\.infinitive).sorted()
+    verbsBySort = Dictionary(uniqueKeysWithValues: VerbSort.allCases.map { ($0, $0.sorted(entries)) })
+    let initialSortIndex = VerbSort.allCases.firstIndex(of: Current.settings.verbSort) ?? 0
+    browseVerbsView.sortControl.selectedSegmentIndex = initialSortIndex
     navigationItem.titleView = UILabel.titleLabel(title: Localizations.BrowseVerbs.localizedTitle)
     view = browseVerbsView
     Current.reviewPrompter.promptableActionHappened()
@@ -64,18 +60,19 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     guard let cell = tableView.dequeueReusableCell(withIdentifier: VerbCell.identifier) as? VerbCell else {
       fatalError("Could not dequeue \(VerbCell.self).")
     }
-    cell.configure(verb: currentVerbs[indexPath.row])
+    cell.configure(entry: currentVerbs[indexPath.row])
     return cell
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: false)
-    let verbVC = VerbVC(verb: currentVerbs[indexPath.row])
+    let verbVC = VerbVC(verb: currentVerbs[indexPath.row].infinitive)
     browseVerbsView.isHidden = true
     navigationController?.pushViewController(verbVC, animated: true)
   }
 
   @objc func valueChanged(_ sender: UISegmentedControl) {
+    Current.settings.verbSort = currentSort
     browseVerbsView.reloadTableData()
   }
 }

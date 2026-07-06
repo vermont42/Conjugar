@@ -292,6 +292,16 @@ Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%,
     }
   }
 
+  enum VerbSort {
+    static var frequency: String {
+      NSLocalizedString("Frequency", comment: "")
+    }
+
+    static var alphabetical: String {
+      NSLocalizedString("Alphabetical", comment: "")
+    }
+  }
+
   enum Verb {
     static var irregular: String {
       NSLocalizedString("Irregular", comment: "")
