@@ -196,6 +196,46 @@
         }
       }
     },
+    "BrowseModels.modelCount %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld model"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld models"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld modelo"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld modelos"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "BrowseVerbs.localizedTitle" : {
       "localizations" : {
         "en" : {
@@ -840,6 +880,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "^Antecedentes^\n\nEn ciertas partes de América Latina, cuando se dirigen a una persona de manera informal, los hispanohablantes usan el pronombre ~vos~ y sus conjugaciones en lugar del pronombre ~tú~ y sus conjugaciones. Este fenómeno, ~voseo~, aparece por toda Argentina y ocurre, en diversos grados, en toda América Latina, excepto en República Dominicana y Puerto Rico. Desafortunadamente, las conjugaciones de ~vos~ varían según el país y la región, lo que le complica las cosas al estudiante de español, pero la Real Academia Española (RAE), la principal autoridad del idioma español, proporciona unas conjugaciones modelo. Estas conjugaciones tienen algún valor porque un hispanohablante de Medellín, Colombia, le confirmó al desarrollador de ~Conjugar~ que las usa. Para una mayor conveniencia, ~Conjugar~ usa las conjugaciones ~vos~ de RAE.\n\n^Conjugación^\n\nLas conjugaciones de ~vos~ son muy parecidas a las de ~tú~ y, en menor medida, a las de ~vosotros~. En %presente de indicativo%, las terminaciones son -ás, -ís y -és para los verbos regulares terminados en AR, IR y ER, respectivamente. Ejemplos: hablás, subís, comés.\n\nEn %imperativo positivo%, las terminaciones son -á, -í y -é para los verbos regulares en AR, IR y ER, respectivamente. Ejemplos: hablá, subí, comé. Hay dos verbos irregulares de ~vos~ en %imperativo positivo%: ir ($ANDÁ$) y dar ($dA$).\n\nEn los siguientes tiempos, las terminaciones de ~vos~ son idénticas a las terminaciones de ~tú~: %pretérito%, %imperfecto de indicativo%, %futuro de indicativo%, %condicional%, %presente de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2%, %futuro de subjuntivo% e %imperativo negativo%.\n\nLas conjugaciones de ~vos~ de los tiempos compuestos son idénticas a las formas correspondientes de ~tú~.\n\nHay ciertos verbos que cambian las vocales en las conjugaciones de ~yo~, ~tú~, ~él~ y ~ellos~, pero no en las conjugaciones de ~nosotros~ o ~vosotros~, que tampoco cambian las vocales en la conjugación de ~vos~. Ejemplos: Tú $mUEves$. Vos movés. Yo $pIerdo$. Vos perdés. Ella $pUEde$. Vos podés. En este sentido, las conjugaciones de ~vos~ son más regulares que las de ~yo~, ~tú~, ~él~ y ~ellos~.\n\nVe a %créditos% para leer la atribución a la Wikipedia y RAE."
+          }
+        }
+      }
+    },
+    "Model.modelLabel %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Model %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modelo %@"
           }
         }
       }

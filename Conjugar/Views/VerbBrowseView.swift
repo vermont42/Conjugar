@@ -82,6 +82,19 @@ private struct VerbRow: View {
   let navigate: () -> Void
 
   var body: some View {
+    VerbRowLabel(entry: entry)
+      .contentShape(Rectangle())
+      .onTapGesture { navigate() }
+  }
+}
+
+/// The visual content of a verb row — serif gold infinitive + gloss with a blue
+/// frequency-rank badge. Shared by Browse Verbs and the Model detail's
+/// "verbs using this model" list.
+struct VerbRowLabel: View {
+  let entry: VerbMapEntry
+
+  var body: some View {
     HStack(alignment: .firstTextBaseline) {
       VStack(alignment: .leading, spacing: 2) {
         Text(entry.infinitive)
@@ -104,10 +117,8 @@ private struct VerbRow: View {
           .accessibilityHidden(true)
       }
     }
-    .contentShape(Rectangle())
     .padding(.horizontal)
     .padding(.vertical, 12)
-    .onTapGesture { navigate() }
   }
 }
 

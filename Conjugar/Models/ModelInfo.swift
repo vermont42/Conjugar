@@ -24,11 +24,15 @@
 
 import Foundation
 
-struct ModelInfo {
+struct ModelInfo: Identifiable, Hashable {
   let classNumber: String
   let exemplar: String
   let verbs: [String]
   let irregularityPercent: Int
+
+  /// The class number uniquely identifies a model row — used for SwiftUI
+  /// navigation and list identity.
+  var id: String { classNumber }
 
   /// Every displayable model row, built once. Order is unspecified; `ModelSort`
   /// supplies the display orders.

@@ -63,6 +63,10 @@ enum L {
     static var localizedTitle: String {
       String(localized: "BrowseModels.localizedTitle")
     }
+
+    static func modelCount(count: Int) -> String {
+      String(localized: "BrowseModels.modelCount \(count)")
+    }
   }
 
   enum BrowseVerbs {
@@ -236,6 +240,10 @@ enum L {
 
     static func verbsUsing(count: Int) -> String {
       String(localized: "Model.verbsUsing \(count)")
+    }
+
+    static func modelLabel(number: String) -> String {
+      String(localized: "Model.modelLabel \(number)")
     }
   }
 

@@ -1630,3 +1630,43 @@ frequency order (ser #1 · haber #2 · tener #3) with rank badges; tapping *ser*
 VerbView whose Presente reads yo so**y** / tú **er**es / **es** and Pretérito **fu**i /
 **fu**e with the irregular spans red, over accent-barred serif cards — legible in light
 and dark. Build clean, SwiftLint clean (0 violations), new + touched suites green.
+
+7/6/26: **SwiftUI migration Step 4, screen 3 — Browse Models + Model detail.** The
+Models flow, migrated end-to-end (the Conjugar-specific tab the siblings lack). This
+also retired the last verb-flow UIKit: with ModelView linking to the native VerbView,
+`VerbVC`/`VerbUIV`/`VerbCell` were finally deleted.
+
+- **`ModelBrowseView`** (replaces BrowseModelsVC/BrowseModelsUIV/ModelCell): the 102
+  model rows — serif gold exemplar + class number + a **tinted irregularity-percent
+  capsule** (green→yellow→red by magnitude, audit §11/C15) — with a "102 models" count
+  banner and the Irregularity / Alphabetical / Number sort control pinned at the bottom
+  (animated re-sort + selection haptic, `Settings.modelSort` persistence). `ModelPalette.
+  tint(forPercent:)` is the shared percent→color scale.
+- **`ModelView`** (replaces ModelVC/ModelUIV/ModelHeaderUIV): a carded header (gloss +
+  a blue "Model N" pill + the tinted % pill + a red Defective pill when defective + the
+  Participio/Gerundio non-finite forms), then the **horizontally-scrollable
+  pronoun-by-tense conjugation grid** — Conjugar's answer to Conjuguer's endings card,
+  showing *how* the model is irregular slot-by-slot with red spans — now with a **visible
+  scroll indicator** to cue the swipe (audit §10). Below, the "N verbs use this model"
+  banner (pluralized) and the verbs-using list, each row the shared `VerbRowLabel` linking
+  to the native `VerbView`.
+- **A navigation gotcha, fixed:** `NavigationLink(value:)` inside a *pushed* destination
+  view (ModelView) did not reach the stack's root-registered `String` destination — the
+  button pressed but nothing navigated (confirmed via `idb ui describe-all`: a real
+  Button, no push). Appending to the stack's `NavigationPath` does work, so both the model
+  rows and ModelView's verb rows now navigate via `navigationPath.append(...)` (a closure
+  threaded into ModelView), matching VerbBrowseView's proven pattern.
+- **Cleanup:** `ModelInfo` gained `Identifiable, Hashable` (id = class number) for
+  navigation; `VerbRowLabel` was extracted from VerbBrowseView so Model reuses it. Deleted
+  BrowseModelsVC/ModelVC/VerbVC + BrowseModelsUIV/ModelCell/ModelUIV/ModelHeaderUIV/
+  VerbUIV/VerbCell and their five XCTest suites (incl. three of the crashing doomed set:
+  BrowseModelsVCTests, ModelVCTests); re-pointed `UIViewControllerExtensionsTests` off the
+  deleted VerbVC. `ConjugationDataSource`/`TenseCell`/`ConjugationCell` stay (VerbView
+  reuses the data source; the Quiz screens still lean on the cells). New L strings
+  `BrowseModels.modelCount` (plural) and `Model.modelLabel`.
+
+**Verified in the simulator.** Models lists 102 rows irregularity-first with red %
+badges; tapping *decir* opens a ModelView whose grid shows d**i**go / d**i**ce /
+d**i**jo… with the future-stem d**i**ré across the scrollable pronoun columns; tapping the
+*decir* row drills into the native VerbView — all inside the one Models NavigationStack.
+Build clean, SwiftLint clean, model/verb/info suites green.

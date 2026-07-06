@@ -18,8 +18,7 @@ struct MainTabView: View {
       VerbBrowseView()
         .tabItem { Label(L.BrowseVerbs.localizedTitle, image: "Browse") }
 
-      NavHostedVC { BrowseModelsVC() }
-        .ignoresSafeArea()
+      ModelBrowseView()
         .tabItem { Label(L.BrowseModels.localizedTitle, systemImage: "key.fill") }
 
       NavHostedVC { QuizVC() }

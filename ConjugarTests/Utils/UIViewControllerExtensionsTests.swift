@@ -14,10 +14,10 @@ import UIKit
 class UIViewControllerExtensionsTests: XCTestCase {
   func testFatalCastMessage() {
     Current = World.unitTest
-    let vc = VerbVC(verb: "maltear")
-    let view = VerbUIV()
+    let vc = QuizVC()
+    let view = QuizUIV()
     let message = vc.fatalCastMessage(view: view.self)
-    XCTAssert(message.contains("Could not cast <Conjugar.VerbVC:"))
-    XCTAssert(message.contains("to <Conjugar.VerbUIV:"))
+    XCTAssert(message.contains("Could not cast <Conjugar.QuizVC:"))
+    XCTAssert(message.contains("to <Conjugar.QuizUIV:"))
   }
 }
