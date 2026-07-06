@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class ConjugationCellTests: XCTestCase {
   func testConjugationCell() {
     let cell = ConjugationCell(style: .default, reuseIdentifier: "cell")

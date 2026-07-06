@@ -1314,3 +1314,66 @@ build-file, file-reference, group, and resources entries to excise (leaving
 un-escapes ASCII quotes in `.xcstrings`, Grep truncates its one-line-per-value
 JSON, always `json.load`-validate after touching it — are now recorded in
 `CLAUDE.md` for the next person.
+
+---
+
+## 2026-07-06 — Adopted Konjugieren's build settings ahead of the SwiftUI migration
+
+Before converting the UIKit UI to SwiftUI, matched Conjugar's build settings to
+the recently-built sibling app **Konjugieren**, so new SwiftUI is born under modern
+concurrency instead of being retrofitted later. Four settings changed, structured
+exactly like Konjugieren (project level vs. app vs. test target): min iOS
+**17 → 26**, Swift **5 → 6**, `SWIFT_STRICT_CONCURRENCY = complete`,
+`SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor`, plus `SWIFT_APPROACHABLE_CONCURRENCY`
+and `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY`. Doing the concurrency flip
+*first* means the fixes land mostly on the layers that survive the migration (the
+engine, the models, the services) rather than on the doomed UIKit VCs.
+
+**The engine went fully `nonisolated` + `Sendable` — the right home for it.** With
+MainActor-default isolation, everything is implicitly `@MainActor` unless it opts
+out. The pure `Conjugator` engine (the feature-composition types, `Slot`,
+`EngineTense`/`EnginePersonNumber`, `ModelCatalog`, `VerbModel`, `VerbMap`,
+`CompoundTense`, `TenseBridge`, the UI vocabulary `DisplayTense`/
+`DisplayPersonNumber`, `IrregularityMarker`) is deterministic value-type
+computation with no UI, so it was marked `nonisolated` throughout and the
+`ConjugationFeature` protocol made `: Sendable` — which propagates Sendability to
+the `[any ConjugationFeature]` a `VerbModel` holds and thus to `ModelCatalog`'s
+static exemplars. Stored slot-predicate closures became `@Sendable (EngineTense)
+-> Bool`. `VerbMap` (a load-once XML cache) became `nonisolated ... @unchecked
+Sendable`. Result: the engine is thread-agnostic and callable from anywhere,
+future-proofing off-main conjugation, and its Swift Testing suites stay
+parallel-friendly with no `@MainActor`. `MEMBER_IMPORT_VISIBILITY` also forced a
+couple of transitive `import Foundation`s to become explicit.
+
+**`SettingsView` modernized to `@Observable`.** Its `SelectionStore` was a
+`@Published`-less `ObservableObject` whose Combine `objectWillChange` default is no
+longer visible under `MEMBER_IMPORT_VISIBILITY`; it became an `@Observable` class
+with `@State` at the call site — the Konjugieren-consistent, and actually-observing,
+pattern. `Current` was made explicitly `@MainActor` so the DI container's isolation
+is unambiguous across the app *and* test targets.
+
+**The one real wall: an Xcode 26.3 isolated-deinit runtime bug.** Under
+MainActor-default isolation every pure-Swift `@MainActor` class gets an *isolated
+deinit*, and this toolchain's `swift_task_deinitOnExecutorImpl` double-frees when
+**XCTest** deallocates such an object — so nine XCTest suites crashed on teardown
+(largely via `World.deinit` releasing its `@MainActor` service members when a test
+reassigns `Current`). It is test-infrastructure-only — the shipping app never
+deallocates `World` (it's a `Current` singleton) — and Konjugieren avoids it purely
+by using **Swift Testing** rather than XCTest. Confirmed structural: making one
+service `nonisolated` just moves the crash to the next member, and `Quiz` (needs
+`@MainActor` for its `Timer`/`#selector`/UI-delegate) is held by `World` and can't
+be nonisolated. Chosen fix: convert the four *surviving* service suites
+(`Settings`, `GetterSetterReal`, `ReviewPrompterReal`, `GameCenterFake`) to Swift
+Testing now — they pass green — and leave the five *doomed* UIKit VC/View suites
+(`BrowseModelsVC`, `BrowseVerbsVC`, `CommunVC`/`CommunViewModel`, `ModelVC`,
+`SettingsView`) to be rewritten as Swift Testing during the SwiftUI migration that
+deletes those VCs. (`AnalyticsServiceSpy`, a pure infrastructure spy, was made
+`nonisolated` — its isolated deinit was the same bug and it has no reason to be
+MainActor.)
+
+**Verified end-to-end.** App and test targets build clean; SwiftLint clean; all
+Swift Testing suites (engine, VerbMap, TenseBridge, the four converted service
+suites) and the non-VC XCTest suites pass. Launched in the simulator: Browse Verbs
+renders frequency-sorted with glosses, and tapping *tener* conjugates correctly
+through the nonisolated engine — `yo tengo` / `tú tienes` / pretérito `yo tuve`
+with the irregularity highlighting and `RF: tendr-` intact.

@@ -7,7 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Conjugar is an iOS app for learning Spanish verb conjugations. It conjugates regular and irregular Spanish verbs in all tenses with quiz mode (3 difficulty levels), verb browsing, tense information, and Game Center integration.
 
 **Developer:** Josh Adams (vermontcoder@gmail.com), who released the app in 2017.
-**Target:** iOS 17+
+**Target:** iOS 26+ (raised from 17 in July 2026 to match Konjugieren, ahead of the SwiftUI migration)
+**Language:** Swift 6 language mode, `SWIFT_STRICT_CONCURRENCY = complete`, `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` (see **Concurrency model** below)
 **License:** GNU Affero General Public License
 
 As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. The legacy engine (the original `Conjugator`), `verbs.xml`, and their tests were **removed** in July 2026; the new engine's types then dropped their interim `2` suffixes (`Conjugator2` → `Conjugator`, etc.), so the plain names now always mean the new engine. Next planned step (separate effort): converting the UIKit UI to SwiftUI. The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
@@ -35,13 +36,42 @@ xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=i
 swiftlint
 ```
 
-> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The new-engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The older suites (`QuizTests`, `BrowseVerbsVCTests`, etc.) use **XCTest**, whose method names take **no** parentheses (e.g. `testBrowseVerbsVC`).
+> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`, `TenseBridgeTests`) and the migrated service suites (`SettingsTests`, `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The remaining (mostly UIKit VC) suites like `QuizTests` / `BrowseVerbsVCTests` use **XCTest**, whose method names take **no** parentheses (e.g. `testBrowseVerbsVC`). New tests should be Swift Testing — see **XCTest + MainActor: the isolated-deinit crash** below.
 
 ## Running the App in the Simulator
 
 To launch and drive the built app (screenshots, taps, verifying UI behavior — not just tests), use the project skill **`run-in-simulator`** (`.claude/skills/run-in-simulator/SKILL.md`). It captures the verified recipe: resolving the built `.app`, pinning a booted-simulator UDID (several devices are named "iPhone 17"), `simctl` install/launch/screenshot, tapping with `idb` in points (screenshot pixels ÷ 3), and the pitfalls (launch-screen delay, `simctl spawn defaults write` not reaching the app's sandboxed UserDefaults). This skill is interim: after the planned SwiftUI conversion, the `ios-build-verify` skill will replace it.
 
 ## Architecture
+
+### Concurrency model (Swift 6 / strict concurrency)
+
+The project builds under **Swift 6** with `SWIFT_STRICT_CONCURRENCY = complete`,
+`SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor`, `SWIFT_APPROACHABLE_CONCURRENCY = YES`,
+and `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` (adopted July 2026 to
+match the sibling app Konjugieren, ahead of the SwiftUI migration). The settings are
+placed like Konjugieren's: strict-concurrency at the **project** level; default-actor
+isolation on the **app** target only; the rest on app + test. Consequences to work with:
+
+- **Default isolation is `@MainActor`.** Any type with no explicit annotation is
+  MainActor-isolated. UIKit VCs and the DI services (`World`, `Settings`, `Quiz`, the
+  `…Real`/`…Fake`/`…Stub` service conformers) live here and want it.
+- **The engine and its vocabulary are `nonisolated` + `Sendable`, on purpose.** The
+  whole `Conjugator` engine — the `ConjugationFeature` types, `Slot`, `EngineTense`/
+  `EnginePersonNumber`, `ModelCatalog`, `VerbModel`, `VerbMap`, `CompoundTense`,
+  `TenseBridge`, `IrregularityMarker`, and the UI vocabulary `DisplayTense`/
+  `DisplayPersonNumber` — is pure value-type computation, marked `nonisolated`
+  throughout. `ConjugationFeature` is `: Sendable` (so `[any ConjugationFeature]` in a
+  `VerbModel`, and `ModelCatalog`'s static exemplars, are Sendable); stored slot
+  predicates are `@Sendable (EngineTense) -> Bool`; `VerbMap` is a load-once
+  `@unchecked Sendable` cache. **When adding to the engine, keep new types
+  `nonisolated`** so they compose with the rest and their Swift Testing suites stay
+  parallel. MainActor UI calls into the nonisolated engine synchronously — always fine.
+- **`MEMBER_IMPORT_VISIBILITY`** means transitive imports no longer leak members: a
+  file using `String.replacingOccurrences`, `compare(_:options:…)`, etc. needs its own
+  explicit `import Foundation`.
+- **`Current` is explicitly `@MainActor`** (in `World.swift`) so the DI global's
+  isolation is unambiguous to both the app and the test target.
 
 ### Dependency Injection via World Singleton
 
@@ -113,6 +143,31 @@ Test infrastructure:
 - `TestingAppDelegate` loads for test environments via `main.swift`
 - `URLProtocolStub` for network mocking
 - Stub classes (`AnalyticsLocaleStub`, `CommunGetterStub`) for isolation
+
+### XCTest + MainActor: the isolated-deinit crash (write new tests in Swift Testing)
+
+> **Landmine (Xcode 26.3, seen July 2026).** Under `SWIFT_DEFAULT_ACTOR_ISOLATION =
+> MainActor`, every pure-Swift `@MainActor` class gets an *isolated deinit*, and this
+> toolchain's `swift_task_deinitOnExecutorImpl` **double-frees** (`malloc: pointer being
+> freed was not allocated` → SIGABRT) when **XCTest** deallocates such an object at
+> teardown. It fires mostly through `World.deinit` releasing its `@MainActor` service
+> members when a test reassigns `Current` in `setUp`. It is **test-only** — the shipping
+> app never deallocates `World` (a `Current` singleton) — and **Swift Testing does not
+> trigger it** (Konjugieren's all–Swift Testing suite is why it never hit this).
+>
+> **Convention: write new tests as Swift Testing** (`@Suite`/`@Test`/`#expect`), not
+> XCTest. Add `@MainActor` to a suite that touches MainActor types; leave engine suites
+> nonisolated (they touch only the nonisolated engine). `@Test(arguments:)` collections
+> are evaluated *outside* the suite's isolation, so any static data they reference must
+> be `nonisolated`.
+>
+> **Known-crashing (as of July 2026):** five *doomed* UIKit XCTest suites still crash on
+> teardown — `BrowseModelsVCTests`, `BrowseVerbsVCTests`, `CommunVCTests`,
+> `ModelVCTests`, `SettingsViewTests` — to be rewritten as Swift Testing during the
+> SwiftUI migration that deletes those VCs. A full `test` run therefore reports FAILED
+> from these alone; everything else is green. The service suites `SettingsTests`,
+> `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests` were already
+> converted to Swift Testing (and `AnalyticsServiceSpy` made `nonisolated`) to escape it.
 
 ## Localization
 

@@ -6,6 +6,6 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-enum AuxiliaryError: Error {
+nonisolated enum AuxiliaryError: Error {
   case noHaberForm(DisplayTense)
 }

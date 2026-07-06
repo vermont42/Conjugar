@@ -14,7 +14,7 @@
 // legacy `DisplayTense.haberTenseForCompoundTense()` table). The auxiliary routes back
 // through `TenseBridge` so futuro perfecto de subjuntivo picks up the derived
 // futuro de subjuntivo of haber (hubiere) for free.
-enum CompoundTense {
+nonisolated enum CompoundTense {
   /// The compound form for a legacy compound tense: "haber-in-tense participle".
   static func conjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, ConjugatorError> {
     guard case let .success(haberTense) = tense.haberTenseForCompoundTense() else {

@@ -15,7 +15,7 @@
 // alternate-forms path call them directly). The composition seam (`compose`) is
 // end-anchored, so a prefixed verb (detener, reconocer) rides its base's model
 // for free.
-enum Conjugator {
+nonisolated enum Conjugator {
   /// Smallest valid Spanish infinitive length ("ir").
   static let minimumInfinitiveLength = 2
 

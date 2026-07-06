@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class BrowseModelsVCTests: XCTestCase {
   func testBrowseModelsVC() {
     var analytic = ""

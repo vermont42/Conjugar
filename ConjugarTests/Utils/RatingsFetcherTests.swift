@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class RatingsFetcherTests: XCTestCase {
   override func setUp() {
     Current = World.unitTest

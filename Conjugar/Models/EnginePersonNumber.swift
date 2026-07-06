@@ -13,7 +13,7 @@
 // `vos` is supplemental to the book (see the Voseo section of spanish_models.md)
 // but is a first-class person from the start so it never becomes a later
 // core-type change.
-enum EnginePersonNumber: CaseIterable {
+nonisolated enum EnginePersonNumber: CaseIterable {
   case firstSingular        // yo
   case secondSingular       // tú
   case secondSingularVos    // vos

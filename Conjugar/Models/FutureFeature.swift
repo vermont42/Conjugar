@@ -23,7 +23,7 @@
 // `f-contract` (hacer→har-, decir→dir-) is connector "" here **plus** a
 // `StemFeature.contractedFuture` that swaps the stem (hac→ha, dec→di): ha+ré =
 // haré, di+ré = diré.
-struct FutureEndings: ConjugationFeature {
+nonisolated struct FutureEndings: ConjugationFeature {
   /// Inserted between the stem and the bare future/conditional marker: "" for
   /// `f-drope`/`f-contract`, "d" for `f-dr`.
   let connector: String

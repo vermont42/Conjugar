@@ -28,7 +28,7 @@
 // Every operation is **end-anchored** (append to / swap the end of the regular
 // stem, or — for a genuinely suppletive form — replace it whole), so prefixed
 // verbs ride free: `reconoc` → `reconozc`, `deten` → `detuv`, `compon` → `compus`.
-struct StemFeature: ConjugationFeature {
+nonisolated struct StemFeature: ConjugationFeature {
   enum Operation {
     /// Append a suffix to the regular stem: `g1-g` (g), `g1-ig` (ig), `y-add` (y).
     case append(String)
@@ -43,7 +43,7 @@ struct StemFeature: ConjugationFeature {
 
   let operation: Operation
   /// The slot set this stem rebuild fires in (a named Phase 4 derivation target).
-  let slots: (EngineTense) -> Bool
+  let slots: @Sendable (EngineTense) -> Bool
 
   func applies(to tense: EngineTense) -> Bool {
     slots(tense)

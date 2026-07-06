@@ -6,23 +6,29 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-import XCTest
+import Testing
 @testable import Conjugar
 
-class SettingsTests: XCTestCase {
-  func testVerbSortDefaultsToFrequency() {
+// Swift Testing (not XCTest): under MainActor default isolation, XCTest's
+// teardown deallocates the local @MainActor `Settings` via the isolated-deinit
+// path, which crashes on the Xcode 26.3 toolchain. Swift Testing sidesteps that,
+// matching Konjugieren's all-Swift-Testing suite.
+@Suite("Settings")
+@MainActor
+struct SettingsTests {
+  @Test func verbSortDefaultsToFrequency() {
     let settings = Settings(getterSetter: GetterSetterFake())
-    XCTAssertEqual(settings.verbSort, Settings.verbSortDefault)
-    XCTAssertEqual(settings.verbSort, .frequency)
+    #expect(settings.verbSort == Settings.verbSortDefault)
+    #expect(settings.verbSort == .frequency)
   }
 
-  func testVerbSortPersists() {
+  @Test func verbSortPersists() {
     let getterSetter = GetterSetterFake()
     let settings = Settings(getterSetter: getterSetter)
     settings.verbSort = .alphabetical
-    XCTAssertEqual(getterSetter.get(key: Settings.verbSortKey), VerbSort.alphabetical.rawValue)
+    #expect(getterSetter.get(key: Settings.verbSortKey) == VerbSort.alphabetical.rawValue)
 
     let reloadedSettings = Settings(getterSetter: getterSetter)
-    XCTAssertEqual(reloadedSettings.verbSort, .alphabetical)
+    #expect(reloadedSettings.verbSort == .alphabetical)
   }
 }

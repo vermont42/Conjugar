@@ -9,6 +9,7 @@
 @testable import Conjugar
 import XCTest
 
+@MainActor
 class CommunViewModelTests: XCTestCase {
   func testProperties() {
     var didTapAction = false

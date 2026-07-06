@@ -42,7 +42,7 @@
 /// is correct: every verb that needs a literal override is either prefix-free
 /// (ser, ir, dar, haber…) or a monosyllabic base whose compounds are *more*
 /// regular, not less (ver `veis` vs. prever `prevéis`).
-struct LiteralSlotOverride: ConjugationFeature {
+nonisolated struct LiteralSlotOverride: ConjugationFeature {
   /// Slot → literal final form. Listed as pairs (EngineTense is Equatable, not
   /// Hashable; the tables are a handful of entries, so a linear scan is fine).
   let overrides: [(slot: EngineTense, form: String)]
@@ -70,7 +70,7 @@ struct LiteralSlotOverride: ConjugationFeature {
 /// the future irregularity score (decision §6.5). A second accepted form may be
 /// carried in `alternate` (impreso/imprimido, frito/freído); the conjugator emits
 /// the book's primary `participle`.
-struct IrregularParticiple: ConjugationFeature {
+nonisolated struct IrregularParticiple: ConjugationFeature {
   /// The trailing slice of the regular stem the irregular participle replaces
   /// (`pon`, `hac`, `scrib`, `solv`, `v`…). Chosen so the prefix rides free.
   let coreSuffix: String
@@ -121,7 +121,7 @@ struct IrregularParticiple: ConjugationFeature {
 /// free — `detener → detén`, `suponer → supón`, `convenir → convén`,
 /// `reponer → repón` — and the z-final `satisfacer → satisfaz` / `deshacer →
 /// deshaz` correctly do **not** (they end in `z`). No per-compound residue.
-struct ApocopatedImperative: ConjugationFeature {
+nonisolated struct ApocopatedImperative: ConjugationFeature {
   /// An optional final-consonant finish applied to the bare stem (`hacer`'s
   /// c→z: hac → haz). `nil` for the plain g-stems (ten/pon/sal/ven).
   let finalSwap: (from: Character, to: Character)?
@@ -191,8 +191,8 @@ struct ApocopatedImperative: ConjugationFeature {
 /// failure. abolir (§5 3-14): only the slots whose post-stem vowel is `-i-` (or
 /// the diphthongs `-ie-`/`-io-`) exist; the stressed-stem present, the whole
 /// present subjunctive, and the imperatives derived from it do not.
-struct DefectiveFeature: ConjugationFeature {
-  let isMissing: (EngineTense) -> Bool
+nonisolated struct DefectiveFeature: ConjugationFeature {
+  let isMissing: @Sendable (EngineTense) -> Bool
 
   func applies(to tense: EngineTense) -> Bool { false }
 
@@ -237,10 +237,10 @@ struct DefectiveFeature: ConjugationFeature {
 /// hacer's `hizo`: after the strong stem is `hic-`, swap c→z in PR 3s only
 /// (hic+o → hiz+o), prefix-invariant to `satisfizo`/`rehízo` and leaving the
 /// other strong persons (hice/hiciste/hicimos) with their `c`.
-struct RunningStemConsonantSwap: ConjugationFeature {
+nonisolated struct RunningStemConsonantSwap: ConjugationFeature {
   let from: String
   let to: String
-  let slots: (EngineTense) -> Bool
+  let slots: @Sendable (EngineTense) -> Bool
 
   func applies(to tense: EngineTense) -> Bool { slots(tense) }
 
@@ -258,7 +258,7 @@ struct RunningStemConsonantSwap: ConjugationFeature {
 /// double i (drop the ending's leading `-i-`) in the i-glide slots: ri+ió → rió,
 /// ri+ieron → rieron, ri+iendo → riendo, ri+iera → riera. Mirrors `o-llñ`'s
 /// absorption, but triggered by the raised stem vowel rather than a palatal.
-struct CollapseDoubleI: ConjugationFeature {
+nonisolated struct CollapseDoubleI: ConjugationFeature {
   func applies(to tense: EngineTense) -> Bool {
     switch tense {
     case .pretérito(.thirdSingular), .pretérito(.thirdPlural),

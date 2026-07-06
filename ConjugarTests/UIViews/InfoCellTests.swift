@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class InfoCellTests: XCTestCase {
   func testInfoCell() {
     let cell = InfoCell(style: .default, reuseIdentifier: "cell")

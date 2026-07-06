@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class SettingsViewTests: XCTestCase {
   func testInitialization() {
     let settingsView = SettingsView()

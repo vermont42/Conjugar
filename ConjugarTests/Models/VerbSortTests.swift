@@ -9,6 +9,7 @@
 import Testing
 @testable import Conjugar
 
+@MainActor
 struct VerbSortTests {
   private func entry(_ infinitive: String, rank: Int? = nil) -> VerbMapEntry {
     VerbMapEntry(infinitive: infinitive, classNumbers: ["1"], glosses: ["gloss"], isReflexive: false, frequencyRank: rank)

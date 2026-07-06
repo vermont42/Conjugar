@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class UIViewExtensionsTests: XCTestCase {
   func testPulsate() {
     let view = UIView()

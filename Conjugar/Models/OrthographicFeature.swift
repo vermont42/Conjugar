@@ -22,7 +22,7 @@
 
 /// The two slot patterns a consonant swap fires in. A consonant's spelling has
 /// to change exactly when the ending's leading vowel crosses the front/back line.
-enum ConsonantTrigger {
+nonisolated enum ConsonantTrigger {
   /// Fires before a front vowel **e**: `PR{1s}` + `PS{all}`. (-ar verbs: the
   /// preterite 1s `-é` and the whole present subjunctive `-e…`.)
   case beforeFrontE
@@ -47,7 +47,7 @@ enum ConsonantTrigger {
 /// A stem-final consonant swap: replace the trailing `from` of the stem with
 /// `to` in the trigger's slots. The slot set guarantees the triggering vowel, so
 /// no inspection of the ending is needed.
-struct StemFinalConsonant: ConjugationFeature {
+nonisolated struct StemFinalConsonant: ConjugationFeature {
   let from: String
   let to: String
   let trigger: ConsonantTrigger
@@ -78,7 +78,7 @@ struct StemFinalConsonant: ConjugationFeature {
 /// between the stem-final vowel/palatal and the next vowel. `PR{3s,3p}` + `GER` +
 /// `IS{all}` — every ending here begins with that -i- (-ió, -ieron, -iendo,
 /// -iera…, -iese…).
-private func isIGlideSlot(_ tense: EngineTense) -> Bool {
+private nonisolated func isIGlideSlot(_ tense: EngineTense) -> Bool {
   switch tense {
   case .pretérito(.thirdSingular), .pretérito(.thirdPlural),
        .gerundio,
@@ -93,7 +93,7 @@ private func isIGlideSlot(_ tense: EngineTense) -> Bool {
 /// leyera), and the regular -i- forms that *aren't* rewritten take a written
 /// accent to mark the hiatus (leíste, leímos, leísteis, leído). Covers
 /// -eer/-aer/-oer verbs.
-struct IYHiatus: ConjugationFeature {
+nonisolated struct IYHiatus: ConjugationFeature {
   /// The remaining regular -i- forms that take a written accent: `PR{2s,1p,2p}`
   /// (the -i…- preterite forms whose stress is on the ending) + `PP`, plus the two
   /// present-system -i--initial endings the preterite/PP slots don't reach:
@@ -143,7 +143,7 @@ struct IYHiatus: ConjugationFeature {
 /// absorbed (-ió→-ó, -ieron→-eron, -iendo→-endo, -iera→-era): tañer → tañó,
 /// tañendo; bullir → bulló. Same i-glide slots as `o-yhiatus`, but the -i- is
 /// dropped rather than turned to -y-, and no written accents are added.
-struct AbsorbIAfterPalatal: ConjugationFeature {
+nonisolated struct AbsorbIAfterPalatal: ConjugationFeature {
   func applies(to tense: EngineTense) -> Bool {
     isIGlideSlot(tense)
   }

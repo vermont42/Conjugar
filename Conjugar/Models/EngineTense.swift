@@ -13,7 +13,7 @@
 // (spanish_models.md slot vocabulary §2). The nine compound tenses (haber +
 // participle) are mechanical and are composed outside the engine by
 // `CompoundTense`.
-enum EngineTense: Equatable {
+nonisolated enum EngineTense: Equatable {
   case presenteDeIndicativo(EnginePersonNumber)         // PI
   case pretérito(EnginePersonNumber)                    // PR (pretérito indefinido / simple past)
   case imperfectoDeIndicativo(EnginePersonNumber)       // IM

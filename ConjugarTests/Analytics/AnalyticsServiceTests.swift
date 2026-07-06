@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class AnalyticsServiceTests: XCTestCase {
   private let nilServiceMessage = "AnalyticsServiceSpy was nil."
   private let nilAnalyticsMessage = "analytics array was nil."

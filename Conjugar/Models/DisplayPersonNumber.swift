@@ -6,7 +6,7 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-enum DisplayPersonNumber: String, CaseIterable {
+nonisolated enum DisplayPersonNumber: String, CaseIterable {
   case firstSingular = "fs"
   case firstPlural = "fp"
   case secondSingularTú = "ss"

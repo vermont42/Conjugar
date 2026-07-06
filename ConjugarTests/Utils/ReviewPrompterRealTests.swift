@@ -6,52 +6,56 @@
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
 
-import XCTest
+import Foundation
+import Testing
 @testable import Conjugar
 
-class ReviewPrompterRealTests: XCTestCase {
-    func testPromptableActionHappened() {
-      let now = Date()
-      let smallAmountOfTime: TimeInterval = 5.0
-      let recentPromptDate = now.addingTimeInterval(-1.0 * smallAmountOfTime)
+// Swift Testing (not XCTest) — see SettingsTests for the isolated-deinit rationale.
+@Suite("ReviewPrompterReal")
+@MainActor
+struct ReviewPrompterRealTests {
+  @Test func promptableActionHappened() {
+    let now = Date()
+    let smallAmountOfTime: TimeInterval = 5.0
+    let recentPromptDate = now.addingTimeInterval(-1.0 * smallAmountOfTime)
 
-      let formatter = DateFormatter()
-      let format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
-      formatter.dateFormat = format
+    let formatter = DateFormatter()
+    let format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
+    formatter.dateFormat = format
 
-      var settingsDictionary1: [String: String] = [:]
-      settingsDictionary1[Settings.lastReviewPromptDateKey] = formatter.string(from: recentPromptDate)
-      let settings1 = Settings(getterSetter: GetterSetterFake(dictionary: settingsDictionary1))
-      var didRequestReview = false
-      let prompter1 = ReviewPrompterReal(settings: settings1, now: now, requestReview: { didRequestReview = true })
+    var settingsDictionary1: [String: String] = [:]
+    settingsDictionary1[Settings.lastReviewPromptDateKey] = formatter.string(from: recentPromptDate)
+    let settings1 = Settings(getterSetter: GetterSetterFake(dictionary: settingsDictionary1))
+    var didRequestReview = false
+    let prompter1 = ReviewPrompterReal(settings: settings1, now: now, requestReview: { didRequestReview = true })
 
-      prompter1.promptableActionHappened()
-      XCTAssertFalse(didRequestReview)
+    prompter1.promptableActionHappened()
+    #expect(!didRequestReview)
 
-      settings1.promptActionCount = ReviewPrompterReal.promptModulo - 1
-      XCTAssertFalse(didRequestReview)
+    settings1.promptActionCount = ReviewPrompterReal.promptModulo - 1
+    #expect(!didRequestReview)
 
-      let longAgoDate = recentPromptDate.addingTimeInterval(-1.0 * ReviewPrompterReal.promptInterval)
-      settings1.lastReviewPromptDate = longAgoDate
-      settings1.promptActionCount = ReviewPrompterReal.promptModulo - 2
-      prompter1.promptableActionHappened()
-      XCTAssertFalse(didRequestReview)
+    let longAgoDate = recentPromptDate.addingTimeInterval(-1.0 * ReviewPrompterReal.promptInterval)
+    settings1.lastReviewPromptDate = longAgoDate
+    settings1.promptActionCount = ReviewPrompterReal.promptModulo - 2
+    prompter1.promptableActionHappened()
+    #expect(!didRequestReview)
 
-      settings1.promptActionCount = ReviewPrompterReal.promptModulo - 1
-      prompter1.promptableActionHappened()
-      XCTAssert(didRequestReview)
+    settings1.promptActionCount = ReviewPrompterReal.promptModulo - 1
+    prompter1.promptableActionHappened()
+    #expect(didRequestReview)
 
-      var settingsDictionary2: [String: String] = [:]
-      settingsDictionary2[Settings.promptActionCountKey] = "\(ReviewPrompterReal.promptModulo - 1)"
-      let settings2 = Settings(getterSetter: GetterSetterFake(dictionary: settingsDictionary2))
-      let prompter2 = ReviewPrompterReal(settings: settings2, now: longAgoDate, requestReview: { didRequestReview = true })
+    var settingsDictionary2: [String: String] = [:]
+    settingsDictionary2[Settings.promptActionCountKey] = "\(ReviewPrompterReal.promptModulo - 1)"
+    let settings2 = Settings(getterSetter: GetterSetterFake(dictionary: settingsDictionary2))
+    let prompter2 = ReviewPrompterReal(settings: settings2, now: longAgoDate, requestReview: { didRequestReview = true })
 
-      didRequestReview = false
-      prompter2.promptableActionHappened()
-      XCTAssert(didRequestReview)
+    didRequestReview = false
+    prompter2.promptableActionHappened()
+    #expect(didRequestReview)
 
-      didRequestReview = false
-      prompter2.promptableActionHappened()
-      XCTAssertFalse(didRequestReview)
+    didRequestReview = false
+    prompter2.promptableActionHappened()
+    #expect(!didRequestReview)
   }
 }

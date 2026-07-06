@@ -15,7 +15,7 @@
 // They are unified here as `AccentStem(vowel:)`, parameterized by the accented
 // vowel exactly as §6.3 resolved for `a-stem`; `a-i`/`a-u` are simply the i/u
 // instances. (Their book names are kept as `static let`s for the catalog.)
-struct AccentStem: ConjugationFeature {
+nonisolated struct AccentStem: ConjugationFeature {
   enum Vowel {
     case i  // í
     case u  // ú

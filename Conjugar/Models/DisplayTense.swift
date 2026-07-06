@@ -6,7 +6,7 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-enum DisplayTense: String, CaseIterable {
+nonisolated enum DisplayTense: String, CaseIterable {
   static let auxiliary = "haber"
 
   case infinitivo = "in"

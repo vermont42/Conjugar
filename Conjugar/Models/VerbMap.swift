@@ -28,7 +28,7 @@ import Foundation
 
 /// One verb's mapping. For non-homonyms `classNumbers`/`glosses` have a single
 /// element; for the 4 homonyms they hold both senses, default sense first.
-struct VerbMapEntry {
+nonisolated struct VerbMapEntry {
   let infinitive: String
   let classNumbers: [String]
   let glosses: [String]
@@ -47,7 +47,7 @@ struct VerbMapEntry {
   var isHomonym: Bool { classNumbers.count > 1 }
 }
 
-final class VerbMap {
+nonisolated final class VerbMap: @unchecked Sendable {
   /// infinitive → its mapping.
   private(set) var entries: [String: VerbMapEntry] = [:]
 
@@ -94,7 +94,7 @@ final class VerbMap {
 /// `XMLParser` delegate (adapted from Conjuguer's `VerbParser`). Accumulates
 /// `<verb>` elements, merging same-`in` rows into one entry so homonyms keep both
 /// senses in file order.
-private final class VerbMapParser: NSObject, XMLParserDelegate {
+nonisolated private final class VerbMapParser: NSObject, XMLParserDelegate {
   var entries: [String: VerbMapEntry] = [:]
 
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String: String]) {

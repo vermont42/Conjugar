@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class BrowseVerbsVCTests: XCTestCase {
   func testBrowseVerbsVC() {
     var analytic = ""

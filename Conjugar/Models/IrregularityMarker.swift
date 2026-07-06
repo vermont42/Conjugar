@@ -16,7 +16,7 @@
 
 import Foundation
 
-enum IrregularityMarker {
+nonisolated enum IrregularityMarker {
   /// `form` with the span that differs from `regular` uppercased, word by word
   /// (compound tenses diff the auxiliary and the participle independently). A
   /// word-count mismatch returns `form` unmarked.

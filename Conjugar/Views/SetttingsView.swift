@@ -6,6 +6,7 @@
 //  Copyright © 2019 Josh Adams. All rights reserved.
 //
 
+import Observation
 import SwiftUI
 
 struct SettingsView: View {
@@ -13,7 +14,7 @@ struct SettingsView: View {
 
   @State private var isGameCenterUIHidden = false
   @State private var rateReviewDescription = ""
-  @ObservedObject var store = SelectionStore()
+  @State private var store = SelectionStore()
 
   private let offScreenButtonScale: CGFloat = 1.5
   private let animationDuration = 1.0
@@ -164,7 +165,7 @@ struct SettingsView: View {
   }
 }
 
-final class SelectionStore: ObservableObject {
+@Observable final class SelectionStore {
   var current: World?
 
   var region: Region = Settings.regionDefault {

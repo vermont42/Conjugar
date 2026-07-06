@@ -25,7 +25,7 @@
 //
 // A defective verb's formless slot surfaces as `.noForm`, which the UI renders
 // as a blank row (the legacy engine's "df" sentinel played this role).
-enum TenseBridge {
+nonisolated enum TenseBridge {
   /// Conjugate a legacy `(DisplayTense, DisplayPersonNumber)` slot through `Conjugator`,
   /// irregularity-marked for display.
   static func conjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, ConjugatorError> {

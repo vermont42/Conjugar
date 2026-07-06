@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class DeviceUtilityTests: XCTestCase {
   func testModelName() {
     // This won't work if tests run on device. But in my case, they don't.

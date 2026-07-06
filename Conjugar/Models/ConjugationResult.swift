@@ -6,6 +6,8 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
+import Foundation
+
 enum ConjugationResult: Int {
   case totalMatch = 10
   case partialMatch = 5

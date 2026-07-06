@@ -10,6 +10,7 @@ import XCTest
 import UIKit
 @testable import Conjugar
 
+@MainActor
 class InfoVCTests: XCTestCase, InfoDelegate {
   var newHeading = ""
 

@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class TenseCellTests: XCTestCase {
   func testTenseCell() {
     let cell = TenseCell(style: .default, reuseIdentifier: "cell")

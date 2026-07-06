@@ -6,31 +6,35 @@
 //  Copyright © 2019 Josh Adams. All rights reserved.
 //
 
-import XCTest
+import Testing
+import UIKit
 @testable import Conjugar
 
-class GameCenterFakeTests: XCTestCase {
+// Swift Testing (not XCTest) — see SettingsTests for the isolated-deinit rationale.
+@Suite("GameCenterFake")
+@MainActor
+struct GameCenterFakeTests {
   // Deliberately not installed into Current: a fire-and-forget authenticate
   // Task lingering from an earlier test (QuizVC/SettingsView spawn them) could
   // otherwise consume this fake's one "first authenticate" and flake the test.
-  func testAuthenticate() async {
+  @Test func authenticate() async {
     let tgc = GameCenterFake()
     let dummyVC = UIViewController()
 
     let didAuthenticate = await tgc.authenticate(onViewController: dummyVC)
-    XCTAssert(didAuthenticate)
+    #expect(didAuthenticate)
 
     let didAuthenticateAgain = await tgc.authenticate(onViewController: dummyVC)
-    XCTAssertFalse(didAuthenticateAgain)
+    #expect(!didAuthenticateAgain)
   }
 
-  func testReportScore() async {
+  @Test func reportScore() async {
     // Nothing to test. Exercising for coverage.
     let tgc = GameCenterFake()
     await tgc.reportScore(42)
   }
 
-  func testShowLeaderboard() {
+  @Test func showLeaderboard() {
     // Nothing to test. Exercising for coverage.
     let tgc = GameCenterFake()
     tgc.showLeaderboard()

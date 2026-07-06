@@ -6,9 +6,11 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
+import Foundation
 import Testing
 @testable import Conjugar
 
+@MainActor
 struct ModelInfoTests {
   private func info(_ classNumber: String) -> ModelInfo? {
     ModelInfo.all.first { $0.classNumber == classNumber }

@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class CommunVCTests: XCTestCase {
   func testTaps() {
     let settings = Settings(getterSetter: GetterSetterFake())

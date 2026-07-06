@@ -26,7 +26,7 @@
 // take the WK raise (sintamos/sintáis). Because `Slot.isStressedStem` and
 // `Slot.isWeakIr` are disjoint, each feature fires on its own PS persons and the
 // two never conflict — composition just works.
-struct StemVowel: ConjugationFeature {
+nonisolated struct StemVowel: ConjugationFeature {
   /// Which named slot set this stem-vowel change fires in (taxonomy §2).
   enum Slots {
     case str // diphthongs (§4.3) and pedir-style raise (`r-ei-str`)

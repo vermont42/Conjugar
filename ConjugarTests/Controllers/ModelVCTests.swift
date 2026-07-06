@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class ModelVCTests: XCTestCase {
   private func modelInfo(forClass classNumber: String) -> ModelInfo? {
     ModelInfo.all.first { $0.classNumber == classNumber }

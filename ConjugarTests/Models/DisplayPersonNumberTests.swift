@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class DisplayPersonNumberTests: XCTestCase {
   func testShortDisplayName() {
     var personNumber = DisplayPersonNumber.firstSingular

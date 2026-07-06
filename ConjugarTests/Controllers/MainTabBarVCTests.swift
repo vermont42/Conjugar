@@ -10,6 +10,7 @@ import XCTest
 import SwiftUI
 @testable import Conjugar
 
+@MainActor
 class MainTabBarVCTests: XCTestCase {
   func testMainTabBarVC() {
     let mtbvc = MainTabBarVC()

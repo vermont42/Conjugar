@@ -29,7 +29,7 @@
 // inert on `güi` slots and end-anchored / prefix-invariant (a hypothetical
 // `re-argüir` rides free). It is harmless to leave `applies` always-true: the
 // guards make every non-`güy` slot a no-op.
-struct DiaeresisDropBeforeY: ConjugationFeature {
+nonisolated struct DiaeresisDropBeforeY: ConjugationFeature {
   func applies(to tense: EngineTense) -> Bool { true }
 
   func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class AnalyticsServiceSpy: AnalyticsService {
+nonisolated class AnalyticsServiceSpy: AnalyticsService {
   private var fire: (String) -> ()
 
   init(fire: @escaping (String) -> () = { analytic in print(analytic) }) {

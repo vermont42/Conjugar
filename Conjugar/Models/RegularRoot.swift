@@ -13,7 +13,7 @@
 //
 // -er and -ir differ only in PI 1p/2p, IMP 2p, and the future/conditional theme
 // vowel; they are kept as separate roots for tradition and clarity.
-enum RegularRoot {
+nonisolated enum RegularRoot {
   case ar
   case er
   case ir

@@ -11,9 +11,9 @@ import Observation
 import SwiftUI
 
 #if targetEnvironment(simulator)
-var Current = World.simulator
+@MainActor var Current = World.simulator
 #else
-var Current = World.device
+@MainActor var Current = World.device
 #endif
 
 class World {

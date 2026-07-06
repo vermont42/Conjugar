@@ -10,6 +10,7 @@ import XCTest
 import UIKit
 @testable import Conjugar
 
+@MainActor
 class UIViewControllerExtensionsTests: XCTestCase {
   func testFatalCastMessage() {
     Current = World.unitTest

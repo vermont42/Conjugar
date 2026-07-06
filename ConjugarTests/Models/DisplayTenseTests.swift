@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class DisplayTenseTests: XCTestCase {
   func testDisplayNames() {
     [(DisplayTense.infinitivo, "infinitivo"), (.translation, "translation"), (.gerundio, "gerundio"), (.participio, "participio"), (.raízFutura, "raíz futura"), (.imperativoPositivo, "imperativo positivo"), (.imperativoNegativo, "imperativo negativo"), (.presenteDeIndicativo, "presente de indicativo"), (.pretérito, "pretérito"), (.imperfectoDeIndicativo, "imperfecto de indicativo"), (.futuroDeIndicativo, "futuro de indicativo"), (.condicional, "condicional"), (.presenteDeSubjuntivo, "presente de subjuntivo"), (.imperfectoDeSubjuntivo1, "imperfecto de subjuntivo 1"), (.imperfectoDeSubjuntivo2, "imperfecto de subjuntivo 2"), (.futuroDeSubjuntivo, "futuro de subjuntivo"), (.perfectoDeIndicativo, "perfecto de indicativo"), (.pretéritoAnterior, "pretérito anterior"), (.pluscuamperfectoDeIndicativo, "pluscuamperfecto de indicativo"), (.futuroPerfecto, "futuro perfecto"), (.condicionalCompuesto, "condicional compuesto"), (.perfectoDeSubjuntivo, "perfecto de subjuntivo"), (.pluscuamperfectoDeSubjuntivo1, "pluscuamperfecto de subjuntivo 1"), (.pluscuamperfectoDeSubjuntivo2, "pluscuamperfecto de subjuntivo 2")].forEach {

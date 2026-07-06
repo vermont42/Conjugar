@@ -7,8 +7,8 @@
 
 import Foundation
 
-class URLProtocolStub: URLProtocol {
-  static var testURLs = [URL?: Data]()
+nonisolated class URLProtocolStub: URLProtocol {
+  nonisolated(unsafe) static var testURLs = [URL?: Data]()
 
   override class func canInit(with request: URLRequest) -> Bool {
     return true

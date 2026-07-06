@@ -25,7 +25,7 @@
 // / 32 venir) because `ApocopatedImperative` already derives the accented
 // imperative (satisfaz/supón/obtén/convén) and every other feature is
 // prefix-invariant (§1 "ride for free"). Their class numbers alias the parent.
-enum ModelCatalog {
+nonisolated enum ModelCatalog {
   // MARK: - Lookup
 
   /// The `VerbModel` for a book class number, or `nil` if the number is unknown.

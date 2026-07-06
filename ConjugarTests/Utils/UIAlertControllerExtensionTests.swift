@@ -10,6 +10,7 @@ import XCTest
 import UIKit
 @testable import Conjugar
 
+@MainActor
 class UIAlertControllerExtensionTests: XCTestCase, InfoDelegate {
   func testShowMessage() {
     Current = World.unitTest

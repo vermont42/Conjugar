@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class VerbCellTests: XCTestCase {
   func testVerbCellWithRank() {
     let cell = VerbCell(style: .default, reuseIdentifier: "cell")

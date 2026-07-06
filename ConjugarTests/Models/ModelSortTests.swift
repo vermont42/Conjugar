@@ -9,6 +9,7 @@
 import Testing
 @testable import Conjugar
 
+@MainActor
 struct ModelSortTests {
   private func info(_ classNumber: String, exemplar: String = "cantar", percent: Int = 0) -> ModelInfo {
     ModelInfo(classNumber: classNumber, exemplar: exemplar, verbs: [], irregularityPercent: percent)

@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class UsesAutoLayoutTests: XCTestCase {
   @UsesAutoLayout
   var wrappedView: UIView = {

@@ -26,7 +26,7 @@
 // untouched. (Per-slot *literal* alternates — the two-form participles
 // impreso/imprimido, frito/freído, the -scripto family — are carried instead on
 // `IrregularParticiple.alternate`, not here; a whole stack would be overkill.)
-struct VerbModel {
+nonisolated struct VerbModel {
   let base: RegularRoot
   let features: [ConjugationFeature]
   /// Zero or more alternate feature stacks (whole co-equal paradigms). Each is

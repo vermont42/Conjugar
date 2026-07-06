@@ -13,6 +13,7 @@ import XCTest
 fileprivate let difficultSpain = 750
 // swiftlint:enable private_over_fileprivate
 
+@MainActor
 class QuizTests: XCTestCase {
   private let testGameCenter = GameCenterFake()
 
@@ -45,6 +46,7 @@ class QuizTests: XCTestCase {
   }
 }
 
+@MainActor
 class TestQuizDelegate: QuizDelegate {
   let quiz: Quiz
   let onFinish: (Int) -> ()

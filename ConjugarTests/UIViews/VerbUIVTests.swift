@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class VerbUIVTests: XCTestCase {
   func testVerbVC() {
     Current = World.unitTest

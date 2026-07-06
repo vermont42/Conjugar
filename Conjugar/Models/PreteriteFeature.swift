@@ -16,7 +16,7 @@
 // the `-ie-` family of IS endings **regardless of base** — `-ar` verbs included.
 // So `andar` (cantar base) → anduve…anduvieron / **anduviera** (not `*anduvara`).
 // On an `-er`/`-ir` base the IS override is a no-op (`-iera` is already regular).
-struct PreteriteEndings: ConjugationFeature {
+nonisolated struct PreteriteEndings: ConjugationFeature {
   /// Endings keyed by person for the preterite and the two imperfect
   /// subjunctives. `vos` falls back to the `tú` (secondSingular) form, as in the
   /// regular paradigm.
@@ -106,7 +106,7 @@ struct PreteriteEndings: ConjugationFeature {
 // Both the stem (always `fu-`) and the endings are suppletive: fui, fuiste, fue,
 // fuimos, fuisteis, fueron; IS fuera…/fuese…. A single feature, since it owns
 // stem and endings together (the stem is not derived from any base).
-struct SuppletivePreterite: ConjugationFeature {
+nonisolated struct SuppletivePreterite: ConjugationFeature {
   func applies(to tense: EngineTense) -> Bool {
     Slot.isPreteriteSystem(tense)
   }

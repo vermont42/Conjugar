@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class ConjugationResultTests: XCTestCase {
   func testCompare() {
     var lhs = ""

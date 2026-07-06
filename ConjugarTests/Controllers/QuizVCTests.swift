@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class QuizVCTests: XCTestCase {
   func testQuizVC() {
     var analytic = ""
