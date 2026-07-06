@@ -1080,3 +1080,26 @@ ser/haber/tener with ranks, tapping Alphabetical re-sorts instantly (*abajar* fi
 *abandonar* keeps its #287 badge), the choice survives relaunch, and tapping *abajar* —
 a verb the legacy engine never knew — pushes a fully rendered Conjugator2-powered verb
 screen.
+
+## Purpose & Use copy updated for the new Browse; run-in-simulator skill
+
+The Info tab's "Purpose & Use" text still described the old Browse UI ("three lists
+of Spanish verbs… swap these lists"). Rewrote that paragraph in both languages to
+describe the new reality: thousands of verbs with English translations, frequency
+ranks (ser is #1), and the Frequency/Alphabetical sort control. Amusing archaeology:
+the English fallback copy existed in *two* places — `Info.swift` (the one actually
+rendered) and an apparently vestigial duplicate in `Localizations.swift` — and they
+had already drifted ("yellow button" vs. "red button"). Updated both, plus the
+Spanish in the UTF-16 `Localizable.strings` (edited via a small Python script, since
+the file's encoding defeats normal text tools).
+
+Also captured the simulator-driving recipe from the Part B verification as a project
+skill, `.claude/skills/run-in-simulator/SKILL.md`: resolve the built .app, pin one
+booted-simulator UDID (several sims are named "iPhone 17"), simctl
+install/launch/screenshot, tap with idb in points (screenshot pixels ÷ 3), and the
+traps — the lingering launch screen, and the fact that `simctl spawn defaults write`
+never reaches the app's sandboxed UserDefaults (change state through the UI instead).
+Noted in CLAUDE.md that ios-build-verify will supersede this skill after the SwiftUI
+conversion. Verified both localizations on-device: navigated Info → Purpose & Use in
+English and (via `-AppleLanguages "(es)"`) in Spanish; markup, red/blue spans, and
+the new sentences all render.

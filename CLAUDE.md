@@ -37,6 +37,10 @@ swiftlint
 
 > **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The new-engine suites (`Conjugator2Tests`, `VerbMap2Tests`, `Resolver2Tests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The legacy suites (`ConjugatorTests`, etc.) use **XCTest**, whose method names take **no** parentheses (e.g. `testRegularARVerb`).
 
+## Running the App in the Simulator
+
+To launch and drive the built app (screenshots, taps, verifying UI behavior — not just tests), use the project skill **`run-in-simulator`** (`.claude/skills/run-in-simulator/SKILL.md`). It captures the verified recipe: resolving the built `.app`, pinning a booted-simulator UDID (several devices are named "iPhone 17"), `simctl` install/launch/screenshot, tapping with `idb` in points (screenshot pixels ÷ 3), and the pitfalls (launch-screen delay, `simctl spawn defaults write` not reaching the app's sandboxed UserDefaults). This skill is interim: after the planned SwiftUI conversion, the `ios-build-verify` skill will replace it.
+
 ## Architecture
 
 ### Dependency Injection via World Singleton
