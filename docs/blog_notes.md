@@ -1161,3 +1161,32 @@ consume the fake's one "first authenticate" before the test's own call. Renaming
 alphabetical order, shifting timing just enough to expose the race. Fix: the test
 exercises the local fake, so it simply no longer touches `Current`. Two consecutive
 full-suite runs green.
+
+## Dropped the `*2` suffixes — the engine's types get their real names
+
+With the legacy engine gone, the "2" on the new engine's types no longer
+distinguished anything, so the whole family lost it: `Conjugator2` → `Conjugator`,
+`VerbModel2` → `VerbModel`, `ModelCatalog2` → `ModelCatalog`, `VerbMap2` →
+`VerbMap`, `Conjugator2Error` → `ConjugatorError`, plus all 20-odd feature
+conformers (`StemFeature`, `AccentStem`, `IYHiatus`, `DefectiveFeature`, …) and
+the `Slot` slot-set namespace. Two names deviated from plain 2-dropping:
+`Feature2` became **`ConjugationFeature`** (bare `Feature` is too generic to be
+searchable or self-describing), and `Resolver2Tests` became
+**`ConjugatorResolverTests`** (there is no `Resolver` type — the suite tests
+`Conjugator`'s conjugate-by-name path, and the prefix parks it next to
+`ConjugatorTests` in the navigator).
+
+An amusing wrinkle of the prompt's inventory: seven "types" on the list
+(`AccentFeature2`, `ResidueFeature2`, `OrthographicFeature2`, …) turned out to be
+*file names only* — category files bundling several conformers. The greps
+recommended by the prompt caught that immediately. Nineteen files were `git mv`'d
+(file-system-synchronized groups meant zero pbxproj surgery), a word-boundary
+perl handled the ~800 identifier occurrences, and the localization keys with a
+real "2" in them (`imperfectoDeSubjuntivo2Text` = the -se variant) were protected
+by the word-boundary approach plus an explicit audit. Comments that the blind
+replace would have made circular ("the Conjugator → Conjugator2 migration") were
+reworded by hand, including two stale "Suffixed `2` while it lives alongside…"
+headers left in `EngineTense`/`EnginePersonNumber` from the earlier rename rounds.
+
+Build green, full suite green twice (no ordering flake this time), swiftlint
+steady at 132, and Browse → abajar renders the full grid in the simulator.

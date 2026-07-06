@@ -65,7 +65,7 @@ class VerbCell: UITableViewCell {
     ])
   }
 
-  func configure(entry: VerbMapEntry2) {
+  func configure(entry: VerbMapEntry) {
     verb.text = entry.infinitive
     verb.setAccessibilityLabelInSpanish(entry.infinitive)
     gloss.text = entry.gloss

@@ -1,12 +1,12 @@
 //
-//  Feature2.swift
+//  ConjugationFeature.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/12/26.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// A composable irregularity layered onto a `RegularRoot2` (taxonomy §1:
+// A composable irregularity layered onto a `RegularRoot` (taxonomy §1:
 // model = base + an ordered list of features, last-wins on slot conflicts).
 //
 // A feature is two things, mirroring its row in the taxonomy's feature table:
@@ -22,12 +22,12 @@
 // along untouched. `o-yhiatus`/`o-llñ` likewise touch only the ending boundary,
 // so `releer` → `releyó` needs no model of its own.
 //
-// Composition (`Conjugator2.compose`) threads the `(stem, ending)` pair through
+// Composition (`Conjugator.compose`) threads the `(stem, ending)` pair through
 // the model's features in listed order: feature N sees the pair as rewritten by
 // features 1…N-1. Orthogonal changes therefore stack (`a-stem` accents the stem
 // vowel, then `o-car` rewrites the stem-final consonant → `ahínque`), and a true
 // conflict resolves last-wins (the later feature's output is final).
-protocol Feature2 {
+protocol ConjugationFeature {
   /// True for each slot this feature transforms (the taxonomy "Slots" column).
   func applies(to tense: EngineTense) -> Bool
 
@@ -47,11 +47,11 @@ protocol Feature2 {
   /// True for a slot that this feature declares **has no form at all** (a
   /// *defective* verb — Phase 5, taxonomy §5 abolir). The conjugator reports such
   /// a slot as `.noForm` rather than composing a (nonexistent) form. Defaults to
-  /// `false`: a feature suppresses nothing unless it opts in (`DefectiveFeature2`).
+  /// `false`: a feature suppresses nothing unless it opts in (`DefectiveFeature`).
   func suppresses(_ tense: EngineTense) -> Bool
 }
 
-extension Feature2 {
+extension ConjugationFeature {
   func suppresses(_ tense: EngineTense) -> Bool { false }
 }
 
@@ -61,7 +61,7 @@ extension Feature2 {
 /// are the two recurring sets, and they are deliberately **disjoint** (taxonomy
 /// §2): an -ir verb that both diphthongizes and raises splits its present
 /// subjunctive cleanly along this line (PS{1s,2s,3s,3p} = STR, PS{1p,2p} = WK).
-enum Slot2 {
+enum Slot {
   /// **STR** ("stressed stem") = `PI{1s,2s,3s,3p}` + `PS{1s,2s,3s,3p}` + `IMP{2s}`:
   /// the slots where the stress falls on the stem, so a stem-vowel accent (or, in
   /// Phase 3, a diphthong) surfaces. Deliberately **excludes** voseo present-2s
@@ -174,7 +174,7 @@ enum Slot2 {
 
   /// **IM{all}** = the imperfect indicative. The only verbs with an irregular
   /// imperfect are `ser`/`ir`/`ver` (taxonomy §1); `ver`/`prever` route their
-  /// `ve-`/`preve-` imperfect stem through `StemFeature2` here (regular `-er`
+  /// `ve-`/`preve-` imperfect stem through `StemFeature` here (regular `-er`
   /// endings on the rebuilt stem), while `ser`/`ir` use literal residue.
   static func isImperfect(_ tense: EngineTense) -> Bool {
     if case .imperfectoDeIndicativo = tense { return true }

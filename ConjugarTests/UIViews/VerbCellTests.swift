@@ -12,7 +12,7 @@ import XCTest
 class VerbCellTests: XCTestCase {
   func testVerbCellWithRank() {
     let cell = VerbCell(style: .default, reuseIdentifier: "cell")
-    let entry = VerbMapEntry2(infinitive: "maltear", classNumbers: ["1"], glosses: ["malt"], isReflexive: false, frequencyRank: 42)
+    let entry = VerbMapEntry(infinitive: "maltear", classNumbers: ["1"], glosses: ["malt"], isReflexive: false, frequencyRank: 42)
     cell.configure(entry: entry)
     XCTAssertEqual(cell.verb.text, "maltear")
     XCTAssertEqual(cell.verb.textColor, Colors.yellow)
@@ -23,7 +23,7 @@ class VerbCellTests: XCTestCase {
 
   func testVerbCellWithoutRank() {
     let cell = VerbCell(style: .default, reuseIdentifier: "cell")
-    let entry = VerbMapEntry2(infinitive: "maltear", classNumbers: ["1"], glosses: ["malt"], isReflexive: false, frequencyRank: nil)
+    let entry = VerbMapEntry(infinitive: "maltear", classNumbers: ["1"], glosses: ["malt"], isReflexive: false, frequencyRank: nil)
     cell.configure(entry: entry)
     XCTAssertEqual(cell.verb.text, "maltear")
     XCTAssertEqual(cell.gloss.text, "malt")

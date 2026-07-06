@@ -1,5 +1,5 @@
 //
-//  Conjugator2AccessorsTests.swift
+//  ConjugatorAccessorsTests.swift
 //  ConjugarTests
 //
 //  Created by Joshua Adams on 7/5/26.
@@ -9,12 +9,12 @@
 import Testing
 @testable import Conjugar
 
-// The app-facing accessors added for the Conjugator → Conjugator2 migration:
-// the Verb screen's raíz futura, defectiveness, and verb-type affordances, plus
+// The engine's app-facing accessors: the Verb screen's raíz futura,
+// defectiveness, and verb-type affordances, plus
 // the class-number → exemplar-verb lookup that replaces the legacy "parent verb"
 // label.
-@Suite("Conjugator2 app-facing accessors")
-struct Conjugator2AccessorsTests {
+@Suite("Conjugator app-facing accessors")
+struct ConjugatorAccessorsTests {
   // MARK: - futureRoot (raíz futura)
 
   @Test("futureRoot is the stem of the future system", arguments: [
@@ -30,19 +30,19 @@ struct Conjugator2AccessorsTests {
     ("obtener", "obtendr")
   ])
   func futureRoot(infinitive: String, expected: String) {
-    #expect(Conjugator2.futureRoot(infinitive: infinitive) == .success(expected))
+    #expect(Conjugator.futureRoot(infinitive: infinitive) == .success(expected))
   }
 
   // MARK: - isDefective
 
   @Test("isDefective is true exactly for verbs with formless slots")
   func isDefective() {
-    #expect(Conjugator2.isDefective(infinitive: "abolir"))
-    #expect(!Conjugator2.isDefective(infinitive: "hablar"))
-    #expect(!Conjugator2.isDefective(infinitive: "tener"))
+    #expect(Conjugator.isDefective(infinitive: "abolir"))
+    #expect(!Conjugator.isDefective(infinitive: "hablar"))
+    #expect(!Conjugator.isDefective(infinitive: "tener"))
     // Defective *by legacy data* only — the new engine conjugates these fully.
-    #expect(!Conjugator2.isDefective(infinitive: "gustar"))
-    #expect(!Conjugator2.isDefective(infinitive: "soler"))
+    #expect(!Conjugator.isDefective(infinitive: "gustar"))
+    #expect(!Conjugator.isDefective(infinitive: "soler"))
   }
 
   // MARK: - verbType (class number → four-way classification)
@@ -58,10 +58,10 @@ struct Conjugator2AccessorsTests {
     ("zumbarrar", .regularAr)  // off-list: falls back to regular-by-ending
   ])
   func verbType(infinitive: String, expected: VerbType) {
-    #expect(Conjugator2.verbType(infinitive: infinitive) == expected)
+    #expect(Conjugator.verbType(infinitive: infinitive) == expected)
   }
 
-  // MARK: - ModelCatalog2.exemplar
+  // MARK: - ModelCatalog.exemplar
 
   @Test("exemplar names the model verb for a class", arguments: [
     ("1", "cantar"),
@@ -73,22 +73,22 @@ struct Conjugator2AccessorsTests {
     ("18", "argüir")
   ])
   func exemplar(classNumber: String, expected: String) {
-    #expect(ModelCatalog2.exemplar(forClass: classNumber) == expected)
+    #expect(ModelCatalog.exemplar(forClass: classNumber) == expected)
   }
 
   @Test("every catalog class has an exemplar, and every exemplar is a mapped verb")
   func exemplarCompleteness() {
-    for classNumber in ModelCatalog2.classNumbers {
-      let exemplar = ModelCatalog2.exemplar(forClass: classNumber)
+    for classNumber in ModelCatalog.classNumbers {
+      let exemplar = ModelCatalog.exemplar(forClass: classNumber)
       #expect(exemplar != nil, "class \(classNumber) has no exemplar")
       if let exemplar {
-        #expect(VerbMap2.shared.entry(for: exemplar) != nil, "exemplar \(exemplar) (class \(classNumber)) is not in the verb map")
+        #expect(VerbMap.shared.entry(for: exemplar) != nil, "exemplar \(exemplar) (class \(classNumber)) is not in the verb map")
       }
     }
   }
 
   @Test("an unknown class has no exemplar")
   func unknownClass() {
-    #expect(ModelCatalog2.exemplar(forClass: "99Z") == nil)
+    #expect(ModelCatalog.exemplar(forClass: "99Z") == nil)
   }
 }

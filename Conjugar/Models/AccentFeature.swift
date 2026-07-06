@@ -1,5 +1,5 @@
 //
-//  AccentFeature2.swift
+//  AccentFeature.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/12/26.
@@ -12,10 +12,10 @@
 // The three book features `a-i` (i→í, enviar → envío), `a-u` (u→ú, actuar →
 // actúo) and the parameterized `a-stem` (aislar → aíslo, reunir → reúno) are
 // mechanically one operation: accent the last i or last u of the stem in STR.
-// They are unified here as `AccentStem2(vowel:)`, parameterized by the accented
+// They are unified here as `AccentStem(vowel:)`, parameterized by the accented
 // vowel exactly as §6.3 resolved for `a-stem`; `a-i`/`a-u` are simply the i/u
 // instances. (Their book names are kept as `static let`s for the catalog.)
-struct AccentStem2: Feature2 {
+struct AccentStem: ConjugationFeature {
   enum Vowel {
     case i  // í
     case u  // ú
@@ -27,7 +27,7 @@ struct AccentStem2: Feature2 {
   let vowel: Vowel
 
   func applies(to tense: EngineTense) -> Bool {
-    Slot2.isStressedStem(tense)
+    Slot.isStressedStem(tense)
   }
 
   func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
@@ -39,8 +39,8 @@ struct AccentStem2: Feature2 {
     return (accented, ending)
   }
 
-  static let aI = AccentStem2(vowel: .i)    // enviar → envío   (§4.2 a-i)
-  static let aU = AccentStem2(vowel: .u)    // actuar → actúo   (§4.2 a-u)
-  static let aStemI = AccentStem2(vowel: .i) // aislar → aíslo   (§4.2 a-stem, í)
-  static let aStemU = AccentStem2(vowel: .u) // aullar → aúllo   (§4.2 a-stem, ú)
+  static let aI = AccentStem(vowel: .i)    // enviar → envío   (§4.2 a-i)
+  static let aU = AccentStem(vowel: .u)    // actuar → actúo   (§4.2 a-u)
+  static let aStemI = AccentStem(vowel: .i) // aislar → aíslo   (§4.2 a-stem, í)
+  static let aStemU = AccentStem(vowel: .u) // aullar → aúllo   (§4.2 a-stem, ú)
 }

@@ -1,5 +1,5 @@
 //
-//  ResidueFeature2.swift
+//  ResidueFeature.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/12/26.
@@ -8,26 +8,26 @@
 
 // Phase 5 machinery — the **per-verb residue** (taxonomy §5/§6.4: "residue *is* a
 // feature") plus the two cross-cutting derivations the earlier phases deferred
-// (irregular participles §4.8, and — in `Conjugator2` — the imperative). Each
-// type here is a `Feature2`, so the residue composes through the same seam as the
+// (irregular participles §4.8, and — in `Conjugator` — the imperative). Each
+// type here is a `ConjugationFeature`, so the residue composes through the same seam as the
 // productive features and obeys the same last-wins rule; residue features go
 // **at the end** of a model's feature list.
 //
 // Four mechanisms live here:
-//   - `LiteralSlotOverride2` — the catch-all: map specific slots to a literal
+//   - `LiteralSlotOverride` — the catch-all: map specific slots to a literal
 //     final form (the suppletive presents soy/voy/he…, the suppletive imperfects
 //     era-/iba-, the accent residue dé/prevé…, the gerund residue yendo/pudiendo).
-//   - `IrregularParticiple2` — the §4.8 past-participle attribute (puesto, hecho,
+//   - `IrregularParticiple` — the §4.8 past-participle attribute (puesto, hecho,
 //     dicho, visto…), expressed as an **end-anchored** stem swap so it rides free
 //     on prefixes (componer → compuesto, descubrir → descubierto).
-//   - `ApocopatedImperative2` — the irregular tú imperatives (ten/pon/sal/ven and,
+//   - `ApocopatedImperative` — the irregular tú imperatives (ten/pon/sal/ven and,
 //     via c→z, haz), as the **bare regular stem** with the monosyllable→poly­
 //     syllable accent shift baked in (so detener → detén, suponer → supón,
 //     satisfacer → satisfaz all fall out by prefix-invariance, no per-verb residue).
-//   - `DefectiveFeature2` — abolir: declare the slots that have **no form**.
+//   - `DefectiveFeature` — abolir: declare the slots that have **no form**.
 //
-// Two tiny orthographic-residue features round it out: `RunningStemConsonantSwap2`
-// (hacer's PR 3s `hizo`, prefix-invariant to satisfizo) and `CollapseDoubleI2`
+// Two tiny orthographic-residue features round it out: `RunningStemConsonantSwap`
+// (hacer's PR 3s `hizo`, prefix-invariant to satisfizo) and `CollapseDoubleI`
 // (reír's raised stem-i meeting an ending-i: ri+ió → rió, ri+iendo → riendo).
 
 // MARK: - Literal slot override (the catch-all residue)
@@ -42,7 +42,7 @@
 /// is correct: every verb that needs a literal override is either prefix-free
 /// (ser, ir, dar, haber…) or a monosyllabic base whose compounds are *more*
 /// regular, not less (ver `veis` vs. prever `prevéis`).
-struct LiteralSlotOverride2: Feature2 {
+struct LiteralSlotOverride: ConjugationFeature {
   /// Slot → literal final form. Listed as pairs (EngineTense is Equatable, not
   /// Hashable; the tables are a handful of entries, so a linear scan is fine).
   let overrides: [(slot: EngineTense, form: String)]
@@ -70,7 +70,7 @@ struct LiteralSlotOverride2: Feature2 {
 /// the future irregularity score (decision §6.5). A second accepted form may be
 /// carried in `alternate` (impreso/imprimido, frito/freído); the conjugator emits
 /// the book's primary `participle`.
-struct IrregularParticiple2: Feature2 {
+struct IrregularParticiple: ConjugationFeature {
   /// The trailing slice of the regular stem the irregular participle replaces
   /// (`pon`, `hac`, `scrib`, `solv`, `v`…). Chosen so the prefix rides free.
   let coreSuffix: String
@@ -97,7 +97,7 @@ struct IrregularParticiple2: Feature2 {
   /// End-anchored realization of a participle string against this stem: prefix
   /// (stem − coreSuffix) + the participle, so it rides free on prefixes
   /// (`compon` → compuesto, `inscrib` → inscripto). Shared by `apply` (primary)
-  /// and `Conjugator2.conjugateAll` (the `alternate`). The guard's fallback (no
+  /// and `Conjugator.conjugateAll` (the `alternate`). The guard's fallback (no
   /// suffix match) returns the bare string, reached only for a degenerate stem.
   func form(_ participleString: String, stem: String) -> String {
     guard stem.hasSuffix(coreSuffix) else { return participleString }
@@ -121,7 +121,7 @@ struct IrregularParticiple2: Feature2 {
 /// free — `detener → detén`, `suponer → supón`, `convenir → convén`,
 /// `reponer → repón` — and the z-final `satisfacer → satisfaz` / `deshacer →
 /// deshaz` correctly do **not** (they end in `z`). No per-compound residue.
-struct ApocopatedImperative2: Feature2 {
+struct ApocopatedImperative: ConjugationFeature {
   /// An optional final-consonant finish applied to the bare stem (`hacer`'s
   /// c→z: hac → haz). `nil` for the plain g-stems (ten/pon/sal/ven).
   let finalSwap: (from: Character, to: Character)?
@@ -186,12 +186,12 @@ struct ApocopatedImperative2: Feature2 {
 // MARK: - Defectivity (abolir)
 
 /// Declares the slots that have **no form** for a defective verb. Never rewrites
-/// the running pair (it is inert as a `Feature2`); it only answers `suppresses`,
+/// the running pair (it is inert as a `ConjugationFeature`); it only answers `suppresses`,
 /// which the conjugator checks before composing and turns into a `.noForm`
 /// failure. abolir (§5 3-14): only the slots whose post-stem vowel is `-i-` (or
 /// the diphthongs `-ie-`/`-io-`) exist; the stressed-stem present, the whole
 /// present subjunctive, and the imperatives derived from it do not.
-struct DefectiveFeature2: Feature2 {
+struct DefectiveFeature: ConjugationFeature {
   let isMissing: (EngineTense) -> Bool
 
   func applies(to tense: EngineTense) -> Bool { false }
@@ -206,7 +206,7 @@ struct DefectiveFeature2: Feature2 {
   /// PS{all} (post-stem a), and IMP{2s,3s,1p,3p} (the 2s `-e` and the PS-derived
   /// persons). PI{1p,2p}/vos, the whole preterite/imperfect/future/conditional,
   /// IS{all}, IMP 2p/vos, PP and GER all keep their `-i-`-vowel forms.
-  static let abolir = DefectiveFeature2 { tense in
+  static let abolir = DefectiveFeature { tense in
     switch tense {
     case let .presenteDeIndicativo(person):
       switch person {
@@ -233,11 +233,11 @@ struct DefectiveFeature2: Feature2 {
 // MARK: - Tiny orthographic residues
 
 /// Swap a trailing consonant on the **running** stem in a given slot set —
-/// distinct from `StemFeature2`, which rebuilds from the *regular* base. Used for
+/// distinct from `StemFeature`, which rebuilds from the *regular* base. Used for
 /// hacer's `hizo`: after the strong stem is `hic-`, swap c→z in PR 3s only
 /// (hic+o → hiz+o), prefix-invariant to `satisfizo`/`rehízo` and leaving the
 /// other strong persons (hice/hiciste/hicimos) with their `c`.
-struct RunningStemConsonantSwap2: Feature2 {
+struct RunningStemConsonantSwap: ConjugationFeature {
   let from: String
   let to: String
   let slots: (EngineTense) -> Bool
@@ -250,7 +250,7 @@ struct RunningStemConsonantSwap2: Feature2 {
   }
 
   /// hacer (29) — PR 3s `hizo` (c→z), run after the strong stem so it sees `hic-`.
-  static let hizo = RunningStemConsonantSwap2(from: "c", to: "z", slots: { $0 == .pretérito(.thirdSingular) })
+  static let hizo = RunningStemConsonantSwap(from: "c", to: "z", slots: { $0 == .pretérito(.thirdSingular) })
 }
 
 /// reír (6B-4): once `r-ei-str`/`r-ei-wk` have raised the stem to `ri-`, the
@@ -258,7 +258,7 @@ struct RunningStemConsonantSwap2: Feature2 {
 /// double i (drop the ending's leading `-i-`) in the i-glide slots: ri+ió → rió,
 /// ri+ieron → rieron, ri+iendo → riendo, ri+iera → riera. Mirrors `o-llñ`'s
 /// absorption, but triggered by the raised stem vowel rather than a palatal.
-struct CollapseDoubleI2: Feature2 {
+struct CollapseDoubleI: ConjugationFeature {
   func applies(to tense: EngineTense) -> Bool {
     switch tense {
     case .pretérito(.thirdSingular), .pretérito(.thirdPlural),
@@ -275,5 +275,5 @@ struct CollapseDoubleI2: Feature2 {
     return (stem, String(ending.dropFirst()))
   }
 
-  static let collapse = CollapseDoubleI2()
+  static let collapse = CollapseDoubleI()
 }

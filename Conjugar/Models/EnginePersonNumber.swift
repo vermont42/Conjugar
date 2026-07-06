@@ -6,8 +6,8 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// New (composition-engine) person model. Suffixed `2` while it lives alongside
-// the old `DisplayPersonNumber`; the suffix is dropped once the old engine is removed.
+// The engine-side person model; the UI's `DisplayPersonNumber` vocabulary maps
+// onto it via `TenseBridge`.
 //
 // The six oracle persons (yo, tú, él, nosotros, vosotros, ellos) plus `vos`.
 // `vos` is supplemental to the book (see the Voseo section of spanish_models.md)

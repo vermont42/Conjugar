@@ -6,12 +6,13 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// New (composition-engine) tense model. Suffixed `2` while it lives alongside
-// the old `DisplayTense`; the suffix is dropped once the old engine is removed.
+// The engine-side tense model; the UI's `DisplayTense` vocabulary maps onto it
+// via `TenseBridge`.
 //
 // Scope: the ten simple / non-finite tenses the verified oracle covers
 // (spanish_models.md slot vocabulary §2). The nine compound tenses (haber +
-// participle) are mechanical and are added later, not in the Phase 1 skeleton.
+// participle) are mechanical and are composed outside the engine by
+// `CompoundTense`.
 enum EngineTense: Equatable {
   case presenteDeIndicativo(EnginePersonNumber)         // PI
   case pretérito(EnginePersonNumber)                    // PR (pretérito indefinido / simple past)

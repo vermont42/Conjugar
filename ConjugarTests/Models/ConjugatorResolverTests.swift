@@ -1,5 +1,5 @@
 //
-//  Resolver2Tests.swift
+//  ConjugatorResolverTests.swift
 //  ConjugarTests
 //
 //  Created by Joshua Adams on 6/13/26.
@@ -9,19 +9,19 @@
 import Testing
 @testable import Conjugar
 
-// Phase 6 (C) — the **resolver**. `VerbMap2Tests` drives the data path with an
+// Phase 6 (C) — the **resolver**. `VerbMapTests` drives the data path with an
 // *explicit* catalog model; these tests drive the no-`model:` entry points
 // (`conjugate(infinitive:tense:)` / `conjugateAll(...)`), which now resolve the
 // model from the map themselves. The gate (cruxes 1/4/5) asks that the per-class
 // sample and the prefix compounds conjugate **through the verb name alone** — so
-// here we replay `VerbMap2Tests`'s samples through the convenience entry points,
+// here we replay `VerbMapTests`'s samples through the convenience entry points,
 // plus the homonym default, the fallback policy, and the all-forms wiring.
-@Suite("Conjugator2 resolver (Phase 6 C — conjugate by name)")
-struct Resolver2Tests {
+@Suite("Conjugator resolver (Phase 6 C — conjugate by name)")
+struct ConjugatorResolverTests {
   /// Conjugate by **verb name alone** — the no-`model:` path under test. Returns
   /// the form, or nil on failure (so a failure surfaces as a clear mismatch).
   static func form(_ infinitive: String, _ tense: EngineTense) -> String? {
-    if case .success(let conjugated) = Conjugator2.conjugate(infinitive: infinitive, tense: tense) {
+    if case .success(let conjugated) = Conjugator.conjugate(infinitive: infinitive, tense: tense) {
       return conjugated
     }
     return nil
@@ -29,10 +29,10 @@ struct Resolver2Tests {
 
   // MARK: - Per-class sample, conjugated by name (gate; crux 5)
 
-  // The same representative-per-class sample `VerbMap2Tests` checks through an
+  // The same representative-per-class sample `VerbMapTests` checks through an
   // explicit model — here through the resolver, proving the no-`model:` path looks
   // up verb → class → catalog model → conjugate for every class.
-  @Test("per-class sample conjugates correctly by name", arguments: VerbMap2Tests.perClassSample)
+  @Test("per-class sample conjugates correctly by name", arguments: VerbMapTests.perClassSample)
   func perClassByName(infinitive: String, tense: EngineTense, expected: String) {
     #expect(Self.form(infinitive, tense) == expected, "\(infinitive) \(tense)")
   }
@@ -42,7 +42,7 @@ struct Resolver2Tests {
   // Each compound maps to its base verb's class; the resolver hands the catalog
   // model to the conjugator, which conjugates the compound's OWN stem and the
   // end-anchored features ride along — incl. the reír/oír families.
-  @Test("prefix payoff: compounds conjugate on their own stem by name", arguments: VerbMap2Tests.prefixSample)
+  @Test("prefix payoff: compounds conjugate on their own stem by name", arguments: VerbMapTests.prefixSample)
   func prefixPayoffByName(infinitive: String, tense: EngineTense, expected: String) {
     #expect(Self.form(infinitive, tense) == expected, "\(infinitive) \(tense)")
   }
@@ -50,7 +50,7 @@ struct Resolver2Tests {
   // MARK: - Homonym default sense (gate; crux 4)
 
   // The resolver conjugates the **default** (first/everyday) sense; the other
-  // sense stays retrievable via the map (VerbMap2Tests covers the alternate).
+  // sense stays retrievable via the map (VerbMapTests covers the alternate).
   @Test("homonyms conjugate their default sense by name", arguments: [
     ("apostar", "apuesto"),  // default 4B (bet) — mostrar diphthong, not regular 1 (station)
     ("asolar",  "asuelo"),   // default 4B (raze)
@@ -64,7 +64,7 @@ struct Resolver2Tests {
   // MARK: - Fallback policy (gate)
 
   // A verb NOT in the 4,818-verb map falls back to a regular base inferred from the
-  // ending (documented policy in `Conjugator2.resolvedModel`). It must (a) really be
+  // ending (documented policy in `Conjugator.resolvedModel`). It must (a) really be
   // off-list and (b) conjugate as a plain regular verb of its conjugation.
   @Test("off-list verbs fall back to regular-by-ending", arguments: [
     ("plopar", EngineTense.presenteDeIndicativo(.firstSingular), "plopo"),
@@ -73,16 +73,16 @@ struct Resolver2Tests {
     ("frobir", .gerundio, "frobiendo"),
   ])
   func offListFallback(infinitive: String, tense: EngineTense, expected: String) {
-    #expect(VerbMap2.shared.entry(for: infinitive) == nil, "\(infinitive) unexpectedly in the map")
+    #expect(VerbMap.shared.entry(for: infinitive) == nil, "\(infinitive) unexpectedly in the map")
     #expect(Self.form(infinitive, tense) == expected, "\(infinitive) \(tense)")
   }
 
   @Test("invalid infinitives still fail the same way through the resolver")
   func invalidStillFails() {
-    if case .success = Conjugator2.conjugate(infinitive: "hello", tense: .gerundio) {
+    if case .success = Conjugator.conjugate(infinitive: "hello", tense: .gerundio) {
       Issue.record("Infinitive not ending in -ar/-er/-ir should fail, even via the resolver.")
     }
-    if case .success = Conjugator2.conjugate(infinitive: "a", tense: .gerundio) {
+    if case .success = Conjugator.conjugate(infinitive: "a", tense: .gerundio) {
       Issue.record("Too-short infinitive should fail.")
     }
   }
@@ -97,8 +97,8 @@ struct Resolver2Tests {
   ])
   func byNameMatchesExplicit(infinitive: String) {
     guard
-      let entry = VerbMap2.shared.entry(for: infinitive),
-      let model = ModelCatalog2.model(forClass: entry.classNumber)
+      let entry = VerbMap.shared.entry(for: infinitive),
+      let model = ModelCatalog.model(forClass: entry.classNumber)
     else { Issue.record("\(infinitive) did not resolve in the map/catalog"); return }
     let slots: [EngineTense] = [
       .presenteDeIndicativo(.firstSingular), .pretérito(.thirdSingular),
@@ -106,8 +106,8 @@ struct Resolver2Tests {
       .imperativoAfirmativo(.secondSingular),
     ]
     for tense in slots {
-      let byName = Conjugator2.conjugate(infinitive: infinitive, tense: tense)
-      let byModel = Conjugator2.conjugate(infinitive: infinitive, tense: tense, model: model)
+      let byName = Conjugator.conjugate(infinitive: infinitive, tense: tense)
+      let byModel = Conjugator.conjugate(infinitive: infinitive, tense: tense, model: model)
       #expect(byName == byModel, "\(infinitive) \(tense): by-name \(byName) != by-model \(byModel)")
     }
   }
@@ -118,18 +118,18 @@ struct Resolver2Tests {
   // verb surfaces its alternates by name (erguir yergo/irgo; roer's three 1s forms).
   @Test("conjugateAll by name surfaces alternates")
   func conjugateAllByName() {
-    if case .success(let forms) = Conjugator2.conjugateAll(infinitive: "erguir", tense: .presenteDeIndicativo(.firstSingular)) {
+    if case .success(let forms) = Conjugator.conjugateAll(infinitive: "erguir", tense: .presenteDeIndicativo(.firstSingular)) {
       #expect(forms == ["yergo", "irgo"], "erguir present-1s all forms: \(forms)")
     } else {
       Issue.record("erguir conjugateAll by name failed")
     }
-    if case .success(let forms) = Conjugator2.conjugateAll(infinitive: "roer", tense: .presenteDeIndicativo(.firstSingular)) {
+    if case .success(let forms) = Conjugator.conjugateAll(infinitive: "roer", tense: .presenteDeIndicativo(.firstSingular)) {
       #expect(forms == ["roo", "roigo", "royo"], "roer present-1s all forms: \(forms)")
     } else {
       Issue.record("roer conjugateAll by name failed")
     }
     // A regular verb degenerates to exactly [onlyForm].
-    if case .success(let forms) = Conjugator2.conjugateAll(infinitive: "hablar", tense: .presenteDeIndicativo(.firstSingular)) {
+    if case .success(let forms) = Conjugator.conjugateAll(infinitive: "hablar", tense: .presenteDeIndicativo(.firstSingular)) {
       #expect(forms == ["hablo"])
     } else {
       Issue.record("hablar conjugateAll by name failed")

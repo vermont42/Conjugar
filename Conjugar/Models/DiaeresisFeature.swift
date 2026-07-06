@@ -1,5 +1,5 @@
 //
-//  DiaeresisFeature2.swift
+//  DiaeresisFeature.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/13/26.
@@ -29,7 +29,7 @@
 // inert on `güi` slots and end-anchored / prefix-invariant (a hypothetical
 // `re-argüir` rides free). It is harmless to leave `applies` always-true: the
 // guards make every non-`güy` slot a no-op.
-struct DiaeresisDropBeforeY2: Feature2 {
+struct DiaeresisDropBeforeY: ConjugationFeature {
   func applies(to tense: EngineTense) -> Bool { true }
 
   func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
@@ -46,5 +46,5 @@ struct DiaeresisDropBeforeY2: Feature2 {
     return (stem, ending)
   }
 
-  static let güyGuy = DiaeresisDropBeforeY2()
+  static let güyGuy = DiaeresisDropBeforeY()
 }

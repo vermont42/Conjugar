@@ -23,7 +23,7 @@ class BrowseVerbsVCTests: XCTestCase {
     bvvc.viewWillAppear(true)
     XCTAssertEqual(analytic, "visited viewController: \(BrowseVerbsVC.self) ")
 
-    let verbCount = VerbMap2.shared.entries.count
+    let verbCount = VerbMap.shared.entries.count
 
     let bvv = bvvc.browseVerbsView
     XCTAssertEqual(bvv.sortControl.numberOfSegments, VerbSort.allCases.count)

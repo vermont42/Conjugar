@@ -10,8 +10,8 @@ import Testing
 @testable import Conjugar
 
 struct VerbSortTests {
-  private func entry(_ infinitive: String, rank: Int? = nil) -> VerbMapEntry2 {
-    VerbMapEntry2(infinitive: infinitive, classNumbers: ["1"], glosses: ["gloss"], isReflexive: false, frequencyRank: rank)
+  private func entry(_ infinitive: String, rank: Int? = nil) -> VerbMapEntry {
+    VerbMapEntry(infinitive: infinitive, classNumbers: ["1"], glosses: ["gloss"], isReflexive: false, frequencyRank: rank)
   }
 
   @Test func frequencySortPutsRankedVerbsFirstInRankOrder() {
@@ -35,8 +35,8 @@ struct VerbSortTests {
   }
 
   @Test func frequencySortOfVerbMapStartsWithSer() {
-    let sorted = VerbSort.frequency.sorted(VerbMap2.shared.entries.values)
-    #expect(sorted.count == VerbMap2.shared.count)
+    let sorted = VerbSort.frequency.sorted(VerbMap.shared.entries.values)
+    #expect(sorted.count == VerbMap.shared.count)
     #expect(sorted.first?.infinitive == "ser")
     #expect(sorted.first?.frequencyRank == 1)
     #expect(sorted.last?.frequencyRank == nil)

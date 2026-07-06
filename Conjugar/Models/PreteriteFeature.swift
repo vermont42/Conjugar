@@ -1,5 +1,5 @@
 //
-//  PreteriteFeature2.swift
+//  PreteriteFeature.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/12/26.
@@ -10,13 +10,13 @@
 // the endings** of `PR{all}`, and because the imperfect subjunctives derive from
 // the preterite (the §1 "strong preterite" derivation rule), it replaces the
 // `IS{all}` endings too. The *stem* a strong preterite runs on is per-verb
-// residue (`StemFeature2.strongPreterite`); this feature owns only the **endings**.
+// residue (`StemFeature.strongPreterite`); this feature owns only the **endings**.
 //
 // Crux of base-independence (the andar/estar proof): a strong preterite forces
 // the `-ie-` family of IS endings **regardless of base** — `-ar` verbs included.
 // So `andar` (cantar base) → anduve…anduvieron / **anduviera** (not `*anduvara`).
 // On an `-er`/`-ir` base the IS override is a no-op (`-iera` is already regular).
-struct PreteriteEndings2: Feature2 {
+struct PreteriteEndings: ConjugationFeature {
   /// Endings keyed by person for the preterite and the two imperfect
   /// subjunctives. `vos` falls back to the `tú` (secondSingular) form, as in the
   /// regular paradigm.
@@ -25,7 +25,7 @@ struct PreteriteEndings2: Feature2 {
   let isSe: [EnginePersonNumber: String]
 
   func applies(to tense: EngineTense) -> Bool {
-    Slot2.isPreteriteSystem(tense)
+    Slot.isPreteriteSystem(tense)
   }
 
   func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
@@ -69,7 +69,7 @@ struct PreteriteEndings2: Feature2 {
   /// imos, isteis, **ieron**; IS = regular `-iera…/-iese…`.
   /// tener (tuve…/tuviera), andar (anduve…, 35), estar (estuve…, 20), haber,
   /// poner, poder, saber, querer, caber.
-  static let spEnd = PreteriteEndings2(
+  static let spEnd = PreteriteEndings(
     pr: [
       .firstSingular: "e", .secondSingular: "iste", .thirdSingular: "o",
       .firstPlural: "imos", .secondPlural: "isteis", .thirdPlural: "ieron"
@@ -80,7 +80,7 @@ struct PreteriteEndings2: Feature2 {
 
   /// `sp-jend` — the j-preterite: 3p is **eron** (no -i- after j), IS likewise
   /// drops the -i- (dijera, condujese). decir (28), conducir (34), traer (33).
-  static let spJend = PreteriteEndings2(
+  static let spJend = PreteriteEndings(
     pr: [
       .firstSingular: "e", .secondSingular: "iste", .thirdSingular: "o",
       .firstPlural: "imos", .secondPlural: "isteis", .thirdPlural: "eron"
@@ -92,7 +92,7 @@ struct PreteriteEndings2: Feature2 {
   /// `wp-i` — the weak monosyllabic -i preterite: i, iste, **io**, imos, isteis,
   /// ieron (unaccented monosyllables di/dio, vi/vio); IS forced to regular
   /// `-iera…` (so dar → diera, not `*dara`). dar (25), ver (14).
-  static let wpI = PreteriteEndings2(
+  static let wpI = PreteriteEndings(
     pr: [
       .firstSingular: "i", .secondSingular: "iste", .thirdSingular: "io",
       .firstPlural: "imos", .secondPlural: "isteis", .thirdPlural: "ieron"
@@ -106,9 +106,9 @@ struct PreteriteEndings2: Feature2 {
 // Both the stem (always `fu-`) and the endings are suppletive: fui, fuiste, fue,
 // fuimos, fuisteis, fueron; IS fuera…/fuese…. A single feature, since it owns
 // stem and endings together (the stem is not derived from any base).
-struct SuppletivePreterite2: Feature2 {
+struct SuppletivePreterite: ConjugationFeature {
   func applies(to tense: EngineTense) -> Bool {
-    Slot2.isPreteriteSystem(tense)
+    Slot.isPreteriteSystem(tense)
   }
 
   func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
@@ -141,5 +141,5 @@ struct SuppletivePreterite2: Feature2 {
     .firstPlural: "ésemos", .secondPlural: "eseis", .thirdPlural: "esen"
   ]
 
-  static let fue = SuppletivePreterite2()
+  static let fue = SuppletivePreterite()
 }

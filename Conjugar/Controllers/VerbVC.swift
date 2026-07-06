@@ -37,7 +37,7 @@ class VerbVC: UIViewController {
     verbView.translation.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
     verbView.defectuoso.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
     initNavigationItemTitleView()
-    let entry = VerbMap2.shared.entry(for: verb)
+    let entry = VerbMap.shared.entry(for: verb)
     verbView.translation.text = entry?.gloss ?? ""
     let gerundioResult = TenseBridge.conjugate(infinitive: verb, tense: .gerundio, personNumber: .none)
     switch gerundioResult {
@@ -60,13 +60,13 @@ class VerbVC: UIViewController {
     default:
       fatalError()
     }
-    if Conjugator2.isDefective(infinitive: verb) {
+    if Conjugator.isDefective(infinitive: verb) {
       verbView.defectuoso.text = Localizations.Verb.defective
     } else {
       verbView.defectuoso.text = Localizations.Verb.notDefective
     }
 
-    let verbType = Conjugator2.verbType(infinitive: verb)
+    let verbType = Conjugator.verbType(infinitive: verb)
     switch verbType {
     case .regularAr:
       verbView.parentOrType.text = "\(Localizations.Verb.regular) AR"
@@ -75,7 +75,7 @@ class VerbVC: UIViewController {
     case .regularIr:
       verbView.parentOrType.text = "\(Localizations.Verb.regular) IR"
     case .irregular:
-      if let classNumber = entry?.classNumber, let exemplar = ModelCatalog2.exemplar(forClass: classNumber), exemplar != verb {
+      if let classNumber = entry?.classNumber, let exemplar = ModelCatalog.exemplar(forClass: classNumber), exemplar != verb {
         verbView.parentOrType.text = String(format: Localizations.Verb.irregularWithParent, exemplar)
       } else {
         verbView.parentOrType.text = Localizations.Verb.irregular

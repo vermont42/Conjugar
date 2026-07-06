@@ -1,5 +1,5 @@
 //
-//  StemVowelFeature2.swift
+//  StemVowelFeature.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/12/26.
@@ -18,15 +18,15 @@
 // Like every Phase 2 feature this is end-anchored — it rewrites the **last**
 // occurrence of the trigger vowel — so it rides free on prefixed verbs
 // (`comprobar` → compruebo, `repetir` → repito) and composes through the existing
-// `Conjugator2.compose` seam.
+// `Conjugator.compose` seam.
 //
 // **The STR/WK split is the crux of Phase 3.** In an -ir verb that both
 // diphthongizes and raises (e.g. sentir = subir + `d-ie` + `r-ei-wk`) the present
 // subjunctive splits: PS{1s,2s,3s,3p} take the STR diphthong (sienta…), PS{1p,2p}
-// take the WK raise (sintamos/sintáis). Because `Slot2.isStressedStem` and
-// `Slot2.isWeakIr` are disjoint, each feature fires on its own PS persons and the
+// take the WK raise (sintamos/sintáis). Because `Slot.isStressedStem` and
+// `Slot.isWeakIr` are disjoint, each feature fires on its own PS persons and the
 // two never conflict — composition just works.
-struct StemVowel2: Feature2 {
+struct StemVowel: ConjugationFeature {
   /// Which named slot set this stem-vowel change fires in (taxonomy §2).
   enum Slots {
     case str // diphthongs (§4.3) and pedir-style raise (`r-ei-str`)
@@ -35,9 +35,9 @@ struct StemVowel2: Feature2 {
     func applies(to tense: EngineTense) -> Bool {
       switch self {
       case .str:
-        return Slot2.isStressedStem(tense)
+        return Slot.isStressedStem(tense)
       case .wk:
-        return Slot2.isWeakIr(tense)
+        return Slot.isWeakIr(tense)
       }
     }
   }
@@ -65,19 +65,19 @@ struct StemVowel2: Feature2 {
 
   // MARK: - §4.3 diphthongs (STR)
 
-  static let dIe = StemVowel2(from: "e", to: "ie", slots: .str)    // pensar → pienso; perder → pierdo
-  static let dUe = StemVowel2(from: "o", to: "ue", slots: .str)    // mostrar → muestro; mover → muevo
-  static let dIIe = StemVowel2(from: "i", to: "ie", slots: .str)   // adquirir → adquiero
-  static let dUUe = StemVowel2(from: "u", to: "ue", slots: .str)   // jugar → juego
+  static let dIe = StemVowel(from: "e", to: "ie", slots: .str)    // pensar → pienso; perder → pierdo
+  static let dUe = StemVowel(from: "o", to: "ue", slots: .str)    // mostrar → muestro; mover → muevo
+  static let dIIe = StemVowel(from: "i", to: "ie", slots: .str)   // adquirir → adquiero
+  static let dUUe = StemVowel(from: "u", to: "ue", slots: .str)   // jugar → juego
 
   // Spelled variants — same operation, different target string.
-  static let dIeYe = StemVowel2(from: "e", to: "ye", slots: .str)    // errar → yerro
-  static let dUeGue = StemVowel2(from: "o", to: "üe", slots: .str)   // agorar → agüero; avergonzar → avergüenzo
-  static let dUeHue = StemVowel2(from: "o", to: "hue", slots: .str)  // oler → huelo; desosar → deshueso
+  static let dIeYe = StemVowel(from: "e", to: "ye", slots: .str)    // errar → yerro
+  static let dUeGue = StemVowel(from: "o", to: "üe", slots: .str)   // agorar → agüero; avergonzar → avergüenzo
+  static let dUeHue = StemVowel(from: "o", to: "hue", slots: .str)  // oler → huelo; desosar → deshueso
 
   // MARK: - §4.4 -ir weak-slot raising
 
-  static let rEiWk = StemVowel2(from: "e", to: "i", slots: .wk)   // sentir → sintió, sintamos, sintiendo
-  static let rEiStr = StemVowel2(from: "e", to: "i", slots: .str) // pedir → pido (raise instead of diphthong)
-  static let rOuWk = StemVowel2(from: "o", to: "u", slots: .wk)   // dormir → durmió, durmamos, durmiendo
+  static let rEiWk = StemVowel(from: "e", to: "i", slots: .wk)   // sentir → sintió, sintamos, sintiendo
+  static let rEiStr = StemVowel(from: "e", to: "i", slots: .str) // pedir → pido (raise instead of diphthong)
+  static let rOuWk = StemVowel(from: "o", to: "u", slots: .wk)   // dormir → durmió, durmamos, durmiendo
 }

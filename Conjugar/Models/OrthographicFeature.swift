@@ -1,5 +1,5 @@
 //
-//  OrthographicFeature2.swift
+//  OrthographicFeature.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/12/26.
@@ -9,20 +9,20 @@
 // Taxonomy §4.1 — orthographic (spelling-only) features. Two sub-kinds:
 //
 //   1. Stem-final consonant swaps triggered by the *following* ending vowel
-//      (`StemFinalConsonant2`): c↔qu, g↔gu, gu↔gü/g, z↔c, c↔z, qu↔c. These keep
+//      (`StemFinalConsonant`): c↔qu, g↔gu, gu↔gü/g, z↔c, c↔z, qu↔c. These keep
 //      the spoken consonant constant across a front/back ending vowel.
-//   2. i/y changes at the stem↔ending junction (`IYHiatus2` = `o-yhiatus`,
-//      `AbsorbIAfterPalatal2` = `o-llñ`): these rewrite the ending, not the
+//   2. i/y changes at the stem↔ending junction (`IYHiatus` = `o-yhiatus`,
+//      `AbsorbIAfterPalatal` = `o-llñ`): these rewrite the ending, not the
 //      stem-final consonant.
 //
-// All operations are end-anchored (see `Feature2`), so they ride free on
+// All operations are end-anchored (see `ConjugationFeature`), so they ride free on
 // prefixed verbs (`reconocer`, `releer`, …).
 
 // MARK: - Stem-final consonant swaps (o-car … o-quc)
 
 /// The two slot patterns a consonant swap fires in. A consonant's spelling has
 /// to change exactly when the ending's leading vowel crosses the front/back line.
-enum ConsonantTrigger2 {
+enum ConsonantTrigger {
   /// Fires before a front vowel **e**: `PR{1s}` + `PS{all}`. (-ar verbs: the
   /// preterite 1s `-é` and the whole present subjunctive `-e…`.)
   case beforeFrontE
@@ -47,10 +47,10 @@ enum ConsonantTrigger2 {
 /// A stem-final consonant swap: replace the trailing `from` of the stem with
 /// `to` in the trigger's slots. The slot set guarantees the triggering vowel, so
 /// no inspection of the ending is needed.
-struct StemFinalConsonant2: Feature2 {
+struct StemFinalConsonant: ConjugationFeature {
   let from: String
   let to: String
-  let trigger: ConsonantTrigger2
+  let trigger: ConsonantTrigger
 
   func applies(to tense: EngineTense) -> Bool {
     trigger.applies(to: tense)
@@ -62,14 +62,14 @@ struct StemFinalConsonant2: Feature2 {
   }
 
   // The §4.1 catalog. `-ar` swaps fire before -e; `-er`/`-ir` swaps before -a/-o.
-  static let oCar = StemFinalConsonant2(from: "c", to: "qu", trigger: .beforeFrontE)   // tocar → toqué, toque
-  static let oGar = StemFinalConsonant2(from: "g", to: "gu", trigger: .beforeFrontE)   // pagar → pagué, pague
-  static let oGuar = StemFinalConsonant2(from: "gu", to: "gü", trigger: .beforeFrontE) // averiguar → averigüé
-  static let oZar = StemFinalConsonant2(from: "z", to: "c", trigger: .beforeFrontE)    // cazar → cacé, cace
-  static let oCz = StemFinalConsonant2(from: "c", to: "z", trigger: .beforeBackAO)     // vencer → venzo; fruncir → frunzo
-  static let oGj = StemFinalConsonant2(from: "g", to: "j", trigger: .beforeBackAO)     // coger → cojo; dirigir → dirijo
-  static let oGug = StemFinalConsonant2(from: "gu", to: "g", trigger: .beforeBackAO)   // distinguir → distingo
-  static let oQuc = StemFinalConsonant2(from: "qu", to: "c", trigger: .beforeBackAO)   // delinquir → delinco
+  static let oCar = StemFinalConsonant(from: "c", to: "qu", trigger: .beforeFrontE)   // tocar → toqué, toque
+  static let oGar = StemFinalConsonant(from: "g", to: "gu", trigger: .beforeFrontE)   // pagar → pagué, pague
+  static let oGuar = StemFinalConsonant(from: "gu", to: "gü", trigger: .beforeFrontE) // averiguar → averigüé
+  static let oZar = StemFinalConsonant(from: "z", to: "c", trigger: .beforeFrontE)    // cazar → cacé, cace
+  static let oCz = StemFinalConsonant(from: "c", to: "z", trigger: .beforeBackAO)     // vencer → venzo; fruncir → frunzo
+  static let oGj = StemFinalConsonant(from: "g", to: "j", trigger: .beforeBackAO)     // coger → cojo; dirigir → dirijo
+  static let oGug = StemFinalConsonant(from: "gu", to: "g", trigger: .beforeBackAO)   // distinguir → distingo
+  static let oQuc = StemFinalConsonant(from: "qu", to: "c", trigger: .beforeBackAO)   // delinquir → delinco
 }
 
 // MARK: - i/y at the stem↔ending junction (o-yhiatus, o-llñ)
@@ -93,7 +93,7 @@ private func isIGlideSlot(_ tense: EngineTense) -> Bool {
 /// leyera), and the regular -i- forms that *aren't* rewritten take a written
 /// accent to mark the hiatus (leíste, leímos, leísteis, leído). Covers
 /// -eer/-aer/-oer verbs.
-struct IYHiatus2: Feature2 {
+struct IYHiatus: ConjugationFeature {
   /// The remaining regular -i- forms that take a written accent: `PR{2s,1p,2p}`
   /// (the -i…- preterite forms whose stress is on the ending) + `PP`, plus the two
   /// present-system -i--initial endings the preterite/PP slots don't reach:
@@ -136,14 +136,14 @@ struct IYHiatus2: Feature2 {
     return (stem, "í" + rest)
   }
 
-  static let oYhiatus = IYHiatus2()
+  static let oYhiatus = IYHiatus()
 }
 
 /// `o-llñ` — after a palatal stem-final ll/ñ the unstressed -i- of the ending is
 /// absorbed (-ió→-ó, -ieron→-eron, -iendo→-endo, -iera→-era): tañer → tañó,
 /// tañendo; bullir → bulló. Same i-glide slots as `o-yhiatus`, but the -i- is
 /// dropped rather than turned to -y-, and no written accents are added.
-struct AbsorbIAfterPalatal2: Feature2 {
+struct AbsorbIAfterPalatal: ConjugationFeature {
   func applies(to tense: EngineTense) -> Bool {
     isIGlideSlot(tense)
   }
@@ -153,5 +153,5 @@ struct AbsorbIAfterPalatal2: Feature2 {
     return (stem, String(ending.dropFirst()))
   }
 
-  static let oLlñ = AbsorbIAfterPalatal2()
+  static let oLlñ = AbsorbIAfterPalatal()
 }

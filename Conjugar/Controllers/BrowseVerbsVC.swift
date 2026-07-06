@@ -11,7 +11,7 @@ import UIKit
 class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
   static let englishTitle = "Browse"
 
-  private var verbsBySort: [VerbSort: [VerbMapEntry2]] = [:]
+  private var verbsBySort: [VerbSort: [VerbMapEntry]] = [:]
 
   private var currentSort: VerbSort {
     let index = browseVerbsView.sortControl.selectedSegmentIndex
@@ -21,7 +21,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     return VerbSort.allCases[index]
   }
 
-  private var currentVerbs: [VerbMapEntry2] {
+  private var currentVerbs: [VerbMapEntry] {
     verbsBySort[currentSort] ?? []
   }
 
@@ -37,7 +37,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     let browseVerbsView = BrowseVerbsUIV(frame: UIScreen.main.bounds)
     browseVerbsView.setupTable(dataSource: self, delegate: self)
     browseVerbsView.sortControl.addTarget(self, action: #selector(BrowseVerbsVC.valueChanged(_:)), for: .valueChanged)
-    let entries = VerbMap2.shared.entries.values
+    let entries = VerbMap.shared.entries.values
     verbsBySort = Dictionary(uniqueKeysWithValues: VerbSort.allCases.map { ($0, $0.sorted(entries)) })
     let initialSortIndex = VerbSort.allCases.firstIndex(of: Current.settings.verbSort) ?? 0
     browseVerbsView.sortControl.selectedSegmentIndex = initialSortIndex

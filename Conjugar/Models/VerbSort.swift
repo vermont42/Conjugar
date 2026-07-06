@@ -23,7 +23,7 @@ enum VerbSort: String, CaseIterable {
     }
   }
 
-  func areInIncreasingOrder(_ lhs: VerbMapEntry2, _ rhs: VerbMapEntry2) -> Bool {
+  func areInIncreasingOrder(_ lhs: VerbMapEntry, _ rhs: VerbMapEntry) -> Bool {
     switch self {
     case .frequency:
       if lhs.frequencyRank == nil && rhs.frequencyRank == nil {
@@ -40,7 +40,7 @@ enum VerbSort: String, CaseIterable {
     }
   }
 
-  func sorted(_ entries: some Sequence<VerbMapEntry2>) -> [VerbMapEntry2] {
+  func sorted(_ entries: some Sequence<VerbMapEntry>) -> [VerbMapEntry] {
     entries.sorted(by: areInIncreasingOrder)
   }
 }

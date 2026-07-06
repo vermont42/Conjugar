@@ -1,5 +1,5 @@
 //
-//  StemFeature2.swift
+//  StemFeature.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/12/26.
@@ -28,7 +28,7 @@
 // Every operation is **end-anchored** (append to / swap the end of the regular
 // stem, or — for a genuinely suppletive form — replace it whole), so prefixed
 // verbs ride free: `reconoc` → `reconozc`, `deten` → `detuv`, `compon` → `compus`.
-struct StemFeature2: Feature2 {
+struct StemFeature: ConjugationFeature {
   enum Operation {
     /// Append a suffix to the regular stem: `g1-g` (g), `g1-ig` (ig), `y-add` (y).
     case append(String)
@@ -64,28 +64,28 @@ struct StemFeature2: Feature2 {
 
   // MARK: - §4.5 productive features (1s present + whole subjunctive)
 
-  static let g1g = StemFeature2(operation: .append("g"), slots: Slot2.isSubjFrom1s)   // salir→salgo, tener→tengo
-  static let g1ig = StemFeature2(operation: .append("ig"), slots: Slot2.isSubjFrom1s) // caer→caigo, traer→traigo
-  static let zc = StemFeature2(operation: .swapSuffix(from: "c", to: "zc"), slots: Slot2.isSubjFrom1s) // conocer→conozco
-  static let yAdd = StemFeature2(operation: .append("y"), slots: Slot2.isYAdd)         // construir→construyo
+  static let g1g = StemFeature(operation: .append("g"), slots: Slot.isSubjFrom1s)   // salir→salgo, tener→tengo
+  static let g1ig = StemFeature(operation: .append("ig"), slots: Slot.isSubjFrom1s) // caer→caigo, traer→traigo
+  static let zc = StemFeature(operation: .swapSuffix(from: "c", to: "zc"), slots: Slot.isSubjFrom1s) // conocer→conozco
+  static let yAdd = StemFeature(operation: .append("y"), slots: Slot.isYAdd)         // construir→construyo
 
   // MARK: - Residue stem factories (mechanism proven this phase; catalog is Phase 5)
 
   /// A strong / suppletive **preterite** stem, driving `PR{all}` + `IS{all}`
   /// (ten→tuv, and→anduv, dec→dij, conduc→conduj, …).
-  static func strongPreterite(from: String, to: String) -> StemFeature2 {
-    StemFeature2(operation: .swapSuffix(from: from, to: to), slots: Slot2.isPreteriteSystem)
+  static func strongPreterite(from: String, to: String) -> StemFeature {
+    StemFeature(operation: .swapSuffix(from: from, to: to), slots: Slot.isPreteriteSystem)
   }
 
   /// A contracted **future** stem (`f-contract`), driving `FU{all}` + `CO{all}`
   /// (hac→ha, dec→di).
-  static func contractedFuture(from: String, to: String) -> StemFeature2 {
-    StemFeature2(operation: .swapSuffix(from: from, to: to), slots: Slot2.isFutureSystem)
+  static func contractedFuture(from: String, to: String) -> StemFeature {
+    StemFeature(operation: .swapSuffix(from: from, to: to), slots: Slot.isFutureSystem)
   }
 
   /// An explicit irregular **1s/subjunctive** stem (decir's dig-), used where the
   /// `-go` is not a productive append (`subj-from-1s` slots).
-  static func irregularFirstSingular(from: String, to: String) -> StemFeature2 {
-    StemFeature2(operation: .swapSuffix(from: from, to: to), slots: Slot2.isSubjFrom1s)
+  static func irregularFirstSingular(from: String, to: String) -> StemFeature {
+    StemFeature(operation: .swapSuffix(from: from, to: to), slots: Slot.isSubjFrom1s)
   }
 }

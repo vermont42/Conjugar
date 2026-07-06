@@ -9,7 +9,7 @@
 import Testing
 @testable import Conjugar
 
-// The legacy-vocabulary → Conjugator2 bridge the migrated UI conjugates through:
+// The legacy-vocabulary → Conjugator bridge the migrated UI conjugates through:
 // simple tenses map onto `EngineTense`; the compound (perfect) tenses, imperativo
 // negativo, and futuro de subjuntivo are composed/derived here because `EngineTense`
 // deliberately does not model them. Expected forms were verified against the
@@ -19,7 +19,7 @@ import Testing
 // (`IrregularityMarker`): the letters that differ from the verb's regular
 // composition, which `conjugatedString` renders red — the same convention the
 // legacy verbs.xml hand-encoded.
-@Suite("TenseBridge (legacy DisplayTense/DisplayPersonNumber → Conjugator2)")
+@Suite("TenseBridge (legacy DisplayTense/DisplayPersonNumber → Conjugator)")
 struct TenseBridgeTests {
   /// Bridge-conjugate, returning the form or nil on failure (a failure surfaces
   /// as a clear mismatch).

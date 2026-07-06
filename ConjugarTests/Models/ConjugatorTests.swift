@@ -1,5 +1,5 @@
 //
-//  Conjugator2Tests.swift
+//  ConjugatorTests.swift
 //  ConjugarTests
 //
 //  Created by Joshua Adams on 6/12/26.
@@ -15,134 +15,134 @@ import Testing
 // pairs; multi-verb / non-finite / failure checks stay plain `@Test`s. Expected
 // forms are the verified oracle (docs/spanish_models.md) and are unchanged from
 // the XCTest version — only the test *structure* changed.
-@Suite("Conjugator2 (new engine)")
-struct Conjugator2Tests {
+@Suite("Conjugator (new engine)")
+struct ConjugatorTests {
   // MARK: - Shared models — the catalog under test (Phase 6A)
 
   // The ~95 oracle-verified model exemplars now live in the app target's
-  // `ModelCatalog2`, keyed by book class number. These `static let`s alias the
+  // `ModelCatalog`, keyed by book class number. These `static let`s alias the
   // catalog, so every assertion below exercises the catalog (the single source
   // of truth). `model(forClass:)` is force-unwrapped on purpose: a nil here is a
   // real regression (a class number that stopped resolving), surfaced loudly.
-  static let tocar = ModelCatalog2.model(forClass: "1-1")!
-  static let pagar = ModelCatalog2.model(forClass: "1-2")!
-  static let averiguar = ModelCatalog2.model(forClass: "1-3")!
-  static let cazar = ModelCatalog2.model(forClass: "1-4")!
-  static let aislar = ModelCatalog2.model(forClass: "1-5")!
-  static let aullar = ModelCatalog2.model(forClass: "1-6")!
-  static let descafeinar = ModelCatalog2.model(forClass: "1-7")!
-  static let rehusar = ModelCatalog2.model(forClass: "1-8")!
-  static let amohinar = ModelCatalog2.model(forClass: "1-9")!
-  static let ahincar = ModelCatalog2.model(forClass: "1-10")!
-  static let cabrahigar = ModelCatalog2.model(forClass: "1-11")!
-  static let enraizar = ModelCatalog2.model(forClass: "1-12")!
-  static let europeizar = ModelCatalog2.model(forClass: "1-13")!
-  static let actuar = ModelCatalog2.model(forClass: "1-14")!
-  static let enviar = ModelCatalog2.model(forClass: "1-15")!
-  static let vencer = ModelCatalog2.model(forClass: "2-1")!
-  static let coger = ModelCatalog2.model(forClass: "2-2")!
-  static let leer = ModelCatalog2.model(forClass: "2-3")!
-  static let empeller = ModelCatalog2.model(forClass: "2-4")!
-  static let tañer = ModelCatalog2.model(forClass: "2-5")!
-  static let romper = ModelCatalog2.model(forClass: "2-6")!
-  static let fruncir = ModelCatalog2.model(forClass: "3-1")!
-  static let dirigir = ModelCatalog2.model(forClass: "3-2")!
-  static let distinguir = ModelCatalog2.model(forClass: "3-3")!
-  static let delinquir = ModelCatalog2.model(forClass: "3-4")!
-  static let bullir = ModelCatalog2.model(forClass: "3-5")!
-  static let bruñir = ModelCatalog2.model(forClass: "3-6")!
-  static let reunir = ModelCatalog2.model(forClass: "3-7")!
-  static let prohibir = ModelCatalog2.model(forClass: "3-8")!
-  static let abrir = ModelCatalog2.model(forClass: "3-9")!
-  static let cubrir = ModelCatalog2.model(forClass: "3-10")!
-  static let escribir = ModelCatalog2.model(forClass: "3-11")!
-  static let imprimir = ModelCatalog2.model(forClass: "3-12")!
-  static let pudrir = ModelCatalog2.model(forClass: "3-13")!
-  static let abolir = ModelCatalog2.model(forClass: "3-14")!
-  static let pensar = ModelCatalog2.model(forClass: "4A")!
-  static let negar = ModelCatalog2.model(forClass: "4A-1")!
-  static let empezar = ModelCatalog2.model(forClass: "4A-2")!
-  static let errar = ModelCatalog2.model(forClass: "4A-3")!
-  static let mostrar = ModelCatalog2.model(forClass: "4B")!
-  static let colgar = ModelCatalog2.model(forClass: "4B-2")!
-  static let forzar = ModelCatalog2.model(forClass: "4B-3")!
-  static let agorar = ModelCatalog2.model(forClass: "4B-4")!
-  static let perder = ModelCatalog2.model(forClass: "5A")!
-  static let mover = ModelCatalog2.model(forClass: "5B")!
-  static let cocer = ModelCatalog2.model(forClass: "5B-1")!
-  static let oler = ModelCatalog2.model(forClass: "5B-2")!
-  static let resolver = ModelCatalog2.model(forClass: "5B-3")!
-  static let volver = ModelCatalog2.model(forClass: "5B-4")!
-  static let sentir = ModelCatalog2.model(forClass: "6A")!
-  static let erguir = ModelCatalog2.model(forClass: "6A-1")!
-  static let pedir = ModelCatalog2.model(forClass: "6B")!
-  static let elegir = ModelCatalog2.model(forClass: "6B-1")!
-  static let seguir = ModelCatalog2.model(forClass: "6B-2")!
-  static let ceñir = ModelCatalog2.model(forClass: "6B-3")!
-  static let reir = ModelCatalog2.model(forClass: "6B-4")!
-  static let dormir = ModelCatalog2.model(forClass: "6C")!
-  static let morir = ModelCatalog2.model(forClass: "6C-1")!
-  static let conocer = ModelCatalog2.model(forClass: "7A")!
-  static let yacer = ModelCatalog2.model(forClass: "7A-1")!
-  static let placer = ModelCatalog2.model(forClass: "7A-2")!
-  static let lucir = ModelCatalog2.model(forClass: "7B")!
-  static let construir = ModelCatalog2.model(forClass: "8")!
-  static let caer = ModelCatalog2.model(forClass: "9")!
-  static let raer = ModelCatalog2.model(forClass: "9-1")!
-  static let roer = ModelCatalog2.model(forClass: "9-2")!
-  static let salir = ModelCatalog2.model(forClass: "11")!
-  static let valer = ModelCatalog2.model(forClass: "12")!
-  static let asir = ModelCatalog2.model(forClass: "13")!
-  static let ver = ModelCatalog2.model(forClass: "14")!
-  static let prever = ModelCatalog2.model(forClass: "14-1")!
-  static let discernir = ModelCatalog2.model(forClass: "15")!
-  static let jugar = ModelCatalog2.model(forClass: "16")!
-  static let adquirir = ModelCatalog2.model(forClass: "17")!
-  static let arguir = ModelCatalog2.model(forClass: "18")!
-  static let ser = ModelCatalog2.model(forClass: "19")!
-  static let estar = ModelCatalog2.model(forClass: "20")!
-  static let haber = ModelCatalog2.model(forClass: "21")!
-  static let saber = ModelCatalog2.model(forClass: "22")!
-  static let caber = ModelCatalog2.model(forClass: "23")!
-  static let ir = ModelCatalog2.model(forClass: "24")!
-  static let dar = ModelCatalog2.model(forClass: "25")!
-  static let poder = ModelCatalog2.model(forClass: "26")!
-  static let querer = ModelCatalog2.model(forClass: "27")!
-  static let decir = ModelCatalog2.model(forClass: "28")!
-  static let predecir = ModelCatalog2.model(forClass: "28-1")!
-  static let bendecir = ModelCatalog2.model(forClass: "28-2")!
-  static let hacer = ModelCatalog2.model(forClass: "29")!
-  static let rehacer = ModelCatalog2.model(forClass: "29-1")!
-  static let poner = ModelCatalog2.model(forClass: "30")!
-  static let tener = ModelCatalog2.model(forClass: "31")!
-  static let venir = ModelCatalog2.model(forClass: "32")!
-  static let traer = ModelCatalog2.model(forClass: "33")!
-  static let conducirFull = ModelCatalog2.model(forClass: "34")!
-  static let andarFull = ModelCatalog2.model(forClass: "35")!
+  static let tocar = ModelCatalog.model(forClass: "1-1")!
+  static let pagar = ModelCatalog.model(forClass: "1-2")!
+  static let averiguar = ModelCatalog.model(forClass: "1-3")!
+  static let cazar = ModelCatalog.model(forClass: "1-4")!
+  static let aislar = ModelCatalog.model(forClass: "1-5")!
+  static let aullar = ModelCatalog.model(forClass: "1-6")!
+  static let descafeinar = ModelCatalog.model(forClass: "1-7")!
+  static let rehusar = ModelCatalog.model(forClass: "1-8")!
+  static let amohinar = ModelCatalog.model(forClass: "1-9")!
+  static let ahincar = ModelCatalog.model(forClass: "1-10")!
+  static let cabrahigar = ModelCatalog.model(forClass: "1-11")!
+  static let enraizar = ModelCatalog.model(forClass: "1-12")!
+  static let europeizar = ModelCatalog.model(forClass: "1-13")!
+  static let actuar = ModelCatalog.model(forClass: "1-14")!
+  static let enviar = ModelCatalog.model(forClass: "1-15")!
+  static let vencer = ModelCatalog.model(forClass: "2-1")!
+  static let coger = ModelCatalog.model(forClass: "2-2")!
+  static let leer = ModelCatalog.model(forClass: "2-3")!
+  static let empeller = ModelCatalog.model(forClass: "2-4")!
+  static let tañer = ModelCatalog.model(forClass: "2-5")!
+  static let romper = ModelCatalog.model(forClass: "2-6")!
+  static let fruncir = ModelCatalog.model(forClass: "3-1")!
+  static let dirigir = ModelCatalog.model(forClass: "3-2")!
+  static let distinguir = ModelCatalog.model(forClass: "3-3")!
+  static let delinquir = ModelCatalog.model(forClass: "3-4")!
+  static let bullir = ModelCatalog.model(forClass: "3-5")!
+  static let bruñir = ModelCatalog.model(forClass: "3-6")!
+  static let reunir = ModelCatalog.model(forClass: "3-7")!
+  static let prohibir = ModelCatalog.model(forClass: "3-8")!
+  static let abrir = ModelCatalog.model(forClass: "3-9")!
+  static let cubrir = ModelCatalog.model(forClass: "3-10")!
+  static let escribir = ModelCatalog.model(forClass: "3-11")!
+  static let imprimir = ModelCatalog.model(forClass: "3-12")!
+  static let pudrir = ModelCatalog.model(forClass: "3-13")!
+  static let abolir = ModelCatalog.model(forClass: "3-14")!
+  static let pensar = ModelCatalog.model(forClass: "4A")!
+  static let negar = ModelCatalog.model(forClass: "4A-1")!
+  static let empezar = ModelCatalog.model(forClass: "4A-2")!
+  static let errar = ModelCatalog.model(forClass: "4A-3")!
+  static let mostrar = ModelCatalog.model(forClass: "4B")!
+  static let colgar = ModelCatalog.model(forClass: "4B-2")!
+  static let forzar = ModelCatalog.model(forClass: "4B-3")!
+  static let agorar = ModelCatalog.model(forClass: "4B-4")!
+  static let perder = ModelCatalog.model(forClass: "5A")!
+  static let mover = ModelCatalog.model(forClass: "5B")!
+  static let cocer = ModelCatalog.model(forClass: "5B-1")!
+  static let oler = ModelCatalog.model(forClass: "5B-2")!
+  static let resolver = ModelCatalog.model(forClass: "5B-3")!
+  static let volver = ModelCatalog.model(forClass: "5B-4")!
+  static let sentir = ModelCatalog.model(forClass: "6A")!
+  static let erguir = ModelCatalog.model(forClass: "6A-1")!
+  static let pedir = ModelCatalog.model(forClass: "6B")!
+  static let elegir = ModelCatalog.model(forClass: "6B-1")!
+  static let seguir = ModelCatalog.model(forClass: "6B-2")!
+  static let ceñir = ModelCatalog.model(forClass: "6B-3")!
+  static let reir = ModelCatalog.model(forClass: "6B-4")!
+  static let dormir = ModelCatalog.model(forClass: "6C")!
+  static let morir = ModelCatalog.model(forClass: "6C-1")!
+  static let conocer = ModelCatalog.model(forClass: "7A")!
+  static let yacer = ModelCatalog.model(forClass: "7A-1")!
+  static let placer = ModelCatalog.model(forClass: "7A-2")!
+  static let lucir = ModelCatalog.model(forClass: "7B")!
+  static let construir = ModelCatalog.model(forClass: "8")!
+  static let caer = ModelCatalog.model(forClass: "9")!
+  static let raer = ModelCatalog.model(forClass: "9-1")!
+  static let roer = ModelCatalog.model(forClass: "9-2")!
+  static let salir = ModelCatalog.model(forClass: "11")!
+  static let valer = ModelCatalog.model(forClass: "12")!
+  static let asir = ModelCatalog.model(forClass: "13")!
+  static let ver = ModelCatalog.model(forClass: "14")!
+  static let prever = ModelCatalog.model(forClass: "14-1")!
+  static let discernir = ModelCatalog.model(forClass: "15")!
+  static let jugar = ModelCatalog.model(forClass: "16")!
+  static let adquirir = ModelCatalog.model(forClass: "17")!
+  static let arguir = ModelCatalog.model(forClass: "18")!
+  static let ser = ModelCatalog.model(forClass: "19")!
+  static let estar = ModelCatalog.model(forClass: "20")!
+  static let haber = ModelCatalog.model(forClass: "21")!
+  static let saber = ModelCatalog.model(forClass: "22")!
+  static let caber = ModelCatalog.model(forClass: "23")!
+  static let ir = ModelCatalog.model(forClass: "24")!
+  static let dar = ModelCatalog.model(forClass: "25")!
+  static let poder = ModelCatalog.model(forClass: "26")!
+  static let querer = ModelCatalog.model(forClass: "27")!
+  static let decir = ModelCatalog.model(forClass: "28")!
+  static let predecir = ModelCatalog.model(forClass: "28-1")!
+  static let bendecir = ModelCatalog.model(forClass: "28-2")!
+  static let hacer = ModelCatalog.model(forClass: "29")!
+  static let rehacer = ModelCatalog.model(forClass: "29-1")!
+  static let poner = ModelCatalog.model(forClass: "30")!
+  static let tener = ModelCatalog.model(forClass: "31")!
+  static let venir = ModelCatalog.model(forClass: "32")!
+  static let traer = ModelCatalog.model(forClass: "33")!
+  static let conducirFull = ModelCatalog.model(forClass: "34")!
+  static let andarFull = ModelCatalog.model(forClass: "35")!
 
   // Phase-4 *scaffold* models that isolate one tense system in a test — not
   // catalog classes (the full builds their verbs follow are 31/34/35/28). Kept
   // local; they prove the §4.6/§4.7 machinery on its own.
-  static let andar = VerbModel2(base: .ar, features: [StemFeature2.strongPreterite(from: "and", to: "anduv"), PreteriteEndings2.spEnd])
-  static let tenerSpEnd = VerbModel2(base: .er, features: [StemFeature2.strongPreterite(from: "ten", to: "tuv"), PreteriteEndings2.spEnd])
-  static let conducir = VerbModel2(base: .ir, features: [
-    StemFeature2.zc,
-    StemFeature2.strongPreterite(from: "conduc", to: "conduj"),
-    PreteriteEndings2.spJend
+  static let andar = VerbModel(base: .ar, features: [StemFeature.strongPreterite(from: "and", to: "anduv"), PreteriteEndings.spEnd])
+  static let tenerSpEnd = VerbModel(base: .er, features: [StemFeature.strongPreterite(from: "ten", to: "tuv"), PreteriteEndings.spEnd])
+  static let conducir = VerbModel(base: .ir, features: [
+    StemFeature.zc,
+    StemFeature.strongPreterite(from: "conduc", to: "conduj"),
+    PreteriteEndings.spJend
   ])
-  static let decirSpJend = VerbModel2(base: .ir, features: [StemFeature2.strongPreterite(from: "dec", to: "dij"), PreteriteEndings2.spJend])
-  static let tenerFDr = VerbModel2(base: .er, features: [FutureEndings2.fDr])
-  static let decirFContract = VerbModel2(base: .ir, features: [StemFeature2.contractedFuture(from: "dec", to: "di"), FutureEndings2.fContract])
+  static let decirSpJend = VerbModel(base: .ir, features: [StemFeature.strongPreterite(from: "dec", to: "dij"), PreteriteEndings.spJend])
+  static let tenerFDr = VerbModel(base: .er, features: [FutureEndings.fDr])
+  static let decirFContract = VerbModel(base: .ir, features: [StemFeature.contractedFuture(from: "dec", to: "di"), FutureEndings.fContract])
 
   // Phase-5b two-form-participle exemplars. freír/inscribir follow classes
   // 6B-4/3-11 but carry a richer participle (frito/freído, inscrito/inscripto);
   // kept local to exercise the alternate-PP path without overstating the catalog.
-  static func residue(_ pairs: [(EngineTense, String)]) -> LiteralSlotOverride2 {
-    LiteralSlotOverride2(overrides: pairs.map { (slot: $0.0, form: $0.1) })
+  static func residue(_ pairs: [(EngineTense, String)]) -> LiteralSlotOverride {
+    LiteralSlotOverride(overrides: pairs.map { (slot: $0.0, form: $0.1) })
   }
-  static let freir = VerbModel2(base: .ir, features: [
-    StemVowel2.rEiStr, StemVowel2.rEiWk, CollapseDoubleI2.collapse,
-    IrregularParticiple2("fre", "frito", alternate: "freído"),
+  static let freir = VerbModel(base: .ir, features: [
+    StemVowel.rEiStr, StemVowel.rEiWk, CollapseDoubleI.collapse,
+    IrregularParticiple("fre", "frito", alternate: "freído"),
     residue([
       (.presenteDeIndicativo(.firstSingular), "frío"), (.presenteDeIndicativo(.secondSingular), "fríes"),
       (.presenteDeIndicativo(.thirdSingular), "fríe"), (.presenteDeIndicativo(.firstPlural), "freímos"),
@@ -154,16 +154,16 @@ struct Conjugator2Tests {
       (.imperativoAfirmativo(.secondSingular), "fríe"), (.imperativoAfirmativo(.secondPlural), "freíd"),
     ]),
   ])
-  static let inscribir = VerbModel2(base: .ir, features: [IrregularParticiple2("scrib", "scrito", alternate: "scripto")])
+  static let inscribir = VerbModel(base: .ir, features: [IrregularParticiple("scrib", "scrito", alternate: "scripto")])
 
   // MARK: - Phase 6A: catalog new builds, aliases & completeness
 
   // The four classes never built as test exemplars before, and the prefix-accent
   // aliases — all resolved through the catalog, conjugated against the oracle.
-  static let trocar = ModelCatalog2.model(forClass: "4B-1")!
-  static let desosar = ModelCatalog2.model(forClass: "4B-5")!
-  static let avergonzar = ModelCatalog2.model(forClass: "4B-6")!
-  static let oir = ModelCatalog2.model(forClass: "10")!
+  static let trocar = ModelCatalog.model(forClass: "4B-1")!
+  static let desosar = ModelCatalog.model(forClass: "4B-5")!
+  static let avergonzar = ModelCatalog.model(forClass: "4B-6")!
+  static let oir = ModelCatalog.model(forClass: "10")!
 
   // 4B-1 trocar = mostrar (d-ue) + o-car (c→qu).
   @Test("trocar (4B-1) — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
@@ -299,7 +299,7 @@ struct Conjugator2Tests {
     ("convenir", "32-1", .gerundio, "conviniendo"),
   ])
   func prefixAccentAliases(infinitive: String, classNumber: String, tense: EngineTense, expected: String) {
-    guard let model = ModelCatalog2.model(forClass: classNumber) else {
+    guard let model = ModelCatalog.model(forClass: classNumber) else {
       Issue.record("alias class \(classNumber) must resolve")
       return
     }
@@ -333,7 +333,7 @@ struct Conjugator2Tests {
 
   @Test("catalog completeness — every Annex B model number resolves", arguments: annexBModelNumbers)
   func everyAnnexBNumberResolves(classNumber: String) {
-    #expect(ModelCatalog2.model(forClass: classNumber) != nil, "no catalog entry for class \(classNumber)")
+    #expect(ModelCatalog.model(forClass: classNumber) != nil, "no catalog entry for class \(classNumber)")
   }
 
   // MARK: - cantar (regular -ar)
@@ -539,8 +539,8 @@ struct Conjugator2Tests {
 
   @Test("invalid input")
   func invalidInput() {
-    assertFailure(Conjugator2.conjugate(infinitive: "a", tense: .gerundio), .infinitiveTooShort)
-    if case .success = Conjugator2.conjugate(infinitive: "hello", tense: .gerundio) {
+    assertFailure(Conjugator.conjugate(infinitive: "a", tense: .gerundio), .infinitiveTooShort)
+    if case .success = Conjugator.conjugate(infinitive: "hello", tense: .gerundio) {
       Issue.record("Infinitive not ending in -ar/-er/-ir should fail.")
     }
   }
@@ -1330,10 +1330,10 @@ struct Conjugator2Tests {
   // own last stem vowel, prefix riding free.
   @Test("stem-vowel prefix invariance (end-anchored)")
   func stemVowelPrefixInvariance() {
-    let comprobar = VerbModel2(base: .ar, features: [StemVowel2.dUe])
+    let comprobar = VerbModel(base: .ar, features: [StemVowel.dUe])
     expectForm("comprobar", model: comprobar, .presenteDeIndicativo(.firstSingular), "compruebo")
     expectForm("comprobar", model: comprobar, .presenteDeIndicativo(.thirdPlural), "comprueban")
-    let repetir = VerbModel2(base: .ir, features: [StemVowel2.rEiStr, StemVowel2.rEiWk])
+    let repetir = VerbModel(base: .ir, features: [StemVowel.rEiStr, StemVowel.rEiWk])
     expectForm("repetir", model: repetir, .presenteDeIndicativo(.firstSingular), "repito")
     expectForm("repetir", model: repetir, .gerundio, "repitiendo")
   }
@@ -1511,7 +1511,7 @@ struct Conjugator2Tests {
     (.imperfectoDeSubjuntivoRa(.firstSingular), "estuviera"),
   ])
   func estarSlots(tense: EngineTense, expected: String) {
-    let estar = VerbModel2(base: .ar, features: [StemFeature2.strongPreterite(from: "est", to: "estuv"), PreteriteEndings2.spEnd])
+    let estar = VerbModel(base: .ar, features: [StemFeature.strongPreterite(from: "est", to: "estuv"), PreteriteEndings.spEnd])
     expectForm("estar", model: estar, tense, expected)
   }
 
@@ -1635,13 +1635,13 @@ struct Conjugator2Tests {
     (.condicional(.thirdPlural), "querrían"),
   ])
   func quererSlots(tense: EngineTense, expected: String) {
-    let querer = VerbModel2(base: .er, features: [FutureEndings2.fDrope])
+    let querer = VerbModel(base: .er, features: [FutureEndings.fDrope])
     expectForm("querer", model: querer, tense, expected)
   }
 
   @Test("poder — futuro 1s (f-drope)")
   func poderFuture() {
-    let poder = VerbModel2(base: .er, features: [FutureEndings2.fDrope])
+    let poder = VerbModel(base: .er, features: [FutureEndings.fDrope])
     expectForm("poder", model: poder, .futuro(.firstSingular), "podré")
   }
 
@@ -1660,7 +1660,7 @@ struct Conjugator2Tests {
 
   @Test("poner — futuro 1s (f-dr)")
   func ponerFuture() {
-    let poner = VerbModel2(base: .er, features: [FutureEndings2.fDr])
+    let poner = VerbModel(base: .er, features: [FutureEndings.fDr])
     expectForm("poner", model: poner, .futuro(.firstSingular), "pondré")
   }
 
@@ -1773,11 +1773,11 @@ struct Conjugator2Tests {
     expectForm("detener", model: Self.tener, .pretérito(.firstSingular), "detuve")
     expectForm("detener", model: Self.tener, .futuro(.firstSingular), "detendré")
 
-    let poner = VerbModel2(base: .er, features: [
-      StemFeature2.g1g,
-      StemFeature2.strongPreterite(from: "pon", to: "pus"),
-      PreteriteEndings2.spEnd,
-      FutureEndings2.fDr
+    let poner = VerbModel(base: .er, features: [
+      StemFeature.g1g,
+      StemFeature.strongPreterite(from: "pon", to: "pus"),
+      PreteriteEndings.spEnd,
+      FutureEndings.fDr
     ])
     expectForm("componer", model: poner, .pretérito(.firstSingular), "compuse")
     expectForm("componer", model: poner, .futuro(.firstSingular), "compondré")
@@ -2226,7 +2226,7 @@ struct Conjugator2Tests {
     ("deshacer", .participioPasado, "deshecho"),
   ])
   func residuePrefixInvariance(infinitive: String, tense: EngineTense, expected: String) {
-    let model: VerbModel2
+    let model: VerbModel
     switch infinitive {
     case "detener": model = Self.tener
     case "componer": model = Self.poner
@@ -2252,7 +2252,7 @@ struct Conjugator2Tests {
     ("volver", Self.volver, "vuelto"),
     ("morir", Self.morir, "muerto"),
   ])
-  func irregularParticiples(infinitive: String, model: VerbModel2, expected: String) {
+  func irregularParticiples(infinitive: String, model: VerbModel, expected: String) {
     expectForm(infinitive, model: model, .participioPasado, expected)
   }
 
@@ -2264,7 +2264,7 @@ struct Conjugator2Tests {
     ("morir", Self.morir, .pretérito(.thirdSingular), "murió"),
     ("morir", Self.morir, .gerundio, "muriendo"),
   ])
-  func participleClassesKeepParadigm(infinitive: String, model: VerbModel2, tense: EngineTense, expected: String) {
+  func participleClassesKeepParadigm(infinitive: String, model: VerbModel, tense: EngineTense, expected: String) {
     expectForm(infinitive, model: model, tense, expected)
   }
 
@@ -2299,7 +2299,7 @@ struct Conjugator2Tests {
   ])
   func abolirMissingForms(tense: EngineTense) {
     assertFailure(
-      Conjugator2.conjugate(infinitive: "abolir", tense: tense, model: Self.abolir),
+      Conjugator.conjugate(infinitive: "abolir", tense: tense, model: Self.abolir),
       .noForm(tense))
   }
 
@@ -2650,7 +2650,7 @@ struct Conjugator2Tests {
     ("freír", Self.freir, "frito"),
     ("inscribir", Self.inscribir, "inscrito"),
   ])
-  func twoFormParticiplePrimary(infinitive: String, model: VerbModel2, expected: String) {
+  func twoFormParticiplePrimary(infinitive: String, model: VerbModel, expected: String) {
     expectForm(infinitive, model: model, .participioPasado, expected)
   }
 
@@ -2659,7 +2659,7 @@ struct Conjugator2Tests {
     ("freír", Self.freir, ["frito", "freído"]),
     ("inscribir", Self.inscribir, ["inscrito", "inscripto"]),
   ])
-  func twoFormParticipleAll(infinitive: String, model: VerbModel2, expected: [String]) {
+  func twoFormParticipleAll(infinitive: String, model: VerbModel, expected: [String]) {
     expectForms(infinitive, model: model, .participioPasado, expected)
   }
 
@@ -2707,13 +2707,13 @@ struct Conjugator2Tests {
   /// forwards the failure to the call site.
   private func expectForm(
     _ infinitive: String,
-    model: VerbModel2? = nil,
+    model: VerbModel? = nil,
     _ tense: EngineTense,
     _ expected: String,
     sourceLocation: SourceLocation = #_sourceLocation
   ) {
-    let result = model.map { Conjugator2.conjugate(infinitive: infinitive, tense: tense, model: $0) }
-      ?? Conjugator2.conjugate(infinitive: infinitive, tense: tense)
+    let result = model.map { Conjugator.conjugate(infinitive: infinitive, tense: tense, model: $0) }
+      ?? Conjugator.conjugate(infinitive: infinitive, tense: tense)
     switch result {
     case let .success(form):
       #expect(form == expected, "\(infinitive) \(tense)", sourceLocation: sourceLocation)
@@ -2728,12 +2728,12 @@ struct Conjugator2Tests {
   /// assertion then surfaces the real problem).
   private func conjugatePrimary(
     _ infinitive: String,
-    model: VerbModel2?,
+    model: VerbModel?,
     _ tense: EngineTense,
     sourceLocation: SourceLocation = #_sourceLocation
   ) -> String {
-    let result = model.map { Conjugator2.conjugate(infinitive: infinitive, tense: tense, model: $0) }
-      ?? Conjugator2.conjugate(infinitive: infinitive, tense: tense)
+    let result = model.map { Conjugator.conjugate(infinitive: infinitive, tense: tense, model: $0) }
+      ?? Conjugator.conjugate(infinitive: infinitive, tense: tense)
     switch result {
     case let .success(form):
       return form
@@ -2748,13 +2748,13 @@ struct Conjugator2Tests {
   /// is significant: the assertion is order-sensitive (taxonomy §5b crux 2).
   private func expectForms(
     _ infinitive: String,
-    model: VerbModel2? = nil,
+    model: VerbModel? = nil,
     _ tense: EngineTense,
     _ expected: [String],
     sourceLocation: SourceLocation = #_sourceLocation
   ) {
-    let result = model.map { Conjugator2.conjugateAll(infinitive: infinitive, tense: tense, model: $0) }
-      ?? Conjugator2.conjugateAll(infinitive: infinitive, tense: tense)
+    let result = model.map { Conjugator.conjugateAll(infinitive: infinitive, tense: tense, model: $0) }
+      ?? Conjugator.conjugateAll(infinitive: infinitive, tense: tense)
     switch result {
     case let .success(forms):
       #expect(forms == expected, "\(infinitive) \(tense)", sourceLocation: sourceLocation)
@@ -2764,8 +2764,8 @@ struct Conjugator2Tests {
   }
 
   private func assertFailure(
-    _ result: Result<String, Conjugator2Error>,
-    _ expected: Conjugator2Error,
+    _ result: Result<String, ConjugatorError>,
+    _ expected: ConjugatorError,
     sourceLocation: SourceLocation = #_sourceLocation
   ) {
     guard case let .failure(error) = result else {

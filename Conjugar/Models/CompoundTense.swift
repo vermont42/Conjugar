@@ -6,7 +6,7 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// Composes the nine compound (perfect) tenses the UI displays. `Conjugator2`
+// Composes the nine compound (perfect) tenses the UI displays. `Conjugator`
 // deliberately models only the simple tenses; the compounds are mechanical —
 // haber conjugated in the matching simple tense plus the invariant past
 // participle (perfecto de indicativo = presente of haber + participle,
@@ -16,13 +16,13 @@
 // futuro de subjuntivo of haber (hubiere) for free.
 enum CompoundTense {
   /// The compound form for a legacy compound tense: "haber-in-tense participle".
-  static func conjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, Conjugator2Error> {
+  static func conjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, ConjugatorError> {
     guard case let .success(haberTense) = tense.haberTenseForCompoundTense() else {
       fatalError("\(tense.displayName) is not a compound tense.")
     }
     switch TenseBridge.conjugate(infinitive: DisplayTense.auxiliary, tense: haberTense, personNumber: personNumber) {
     case let .success(auxiliary):
-      return Conjugator2.conjugate(infinitive: infinitive, tense: .participioPasado).map { auxiliary + " " + $0 }
+      return Conjugator.conjugate(infinitive: infinitive, tense: .participioPasado).map { auxiliary + " " + $0 }
     case let .failure(error):
       return .failure(error)
     }

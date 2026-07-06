@@ -1,5 +1,5 @@
 //
-//  VerbMap2.swift
+//  VerbMap.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/13/26.
@@ -13,7 +13,7 @@
 //     bare infinitive → (book class number(s), English gloss(es), reflexive?)
 //
 // One `<verb>` element per (verb, sense): `in` = infinitive, `cl` = book class
-// number (the `ModelCatalog2` key), `tn` = terse English gloss (display-only,
+// number (the `ModelCatalog` key), `tn` = terse English gloss (display-only,
 // **decoupled from conjugation** — a wrong gloss can never produce a wrong form),
 // optional `rx="1"` = reflexive-only. The schema deliberately leaves room for
 // future optional attributes (`tnr` reflexive gloss, `dg` defect group) with zero
@@ -28,7 +28,7 @@ import Foundation
 
 /// One verb's mapping. For non-homonyms `classNumbers`/`glosses` have a single
 /// element; for the 4 homonyms they hold both senses, default sense first.
-struct VerbMapEntry2 {
+struct VerbMapEntry {
   let infinitive: String
   let classNumbers: [String]
   let glosses: [String]
@@ -47,15 +47,15 @@ struct VerbMapEntry2 {
   var isHomonym: Bool { classNumbers.count > 1 }
 }
 
-final class VerbMap2 {
+final class VerbMap {
   /// infinitive → its mapping.
-  private(set) var entries: [String: VerbMapEntry2] = [:]
+  private(set) var entries: [String: VerbMapEntry] = [:]
 
   /// The shared map, loaded once from the app/test bundle resource.
-  static let shared = VerbMap2()
+  static let shared = VerbMap()
 
   /// Look up a bare infinitive (markers already stripped: no `(se)`/`(DEF)`/`(1)`).
-  func entry(for infinitive: String) -> VerbMapEntry2? { entries[infinitive] }
+  func entry(for infinitive: String) -> VerbMapEntry? { entries[infinitive] }
 
   var count: Int { entries.count }
 
@@ -64,7 +64,7 @@ final class VerbMap2 {
   /// Load from an explicit URL (used by the `swiftc` driver and unit tests).
   init(url: URL) {
     if let parser = XMLParser(contentsOf: url) {
-      let delegate = VerbMapParser2()
+      let delegate = VerbMapParser()
       parser.delegate = delegate
       parser.parse()
       entries = delegate.entries
@@ -77,13 +77,13 @@ final class VerbMap2 {
   private init() {
     let bundle = Bundle.main.url(forResource: "verbModelMap", withExtension: "xml") != nil
       ? Bundle.main
-      : Bundle(for: VerbMap2.self)
+      : Bundle(for: VerbMap.self)
     guard let url = bundle.url(forResource: "verbModelMap", withExtension: "xml") else {
       assertionFailure("verbModelMap.xml not found in bundle")
       return
     }
     if let parser = XMLParser(contentsOf: url) {
-      let delegate = VerbMapParser2()
+      let delegate = VerbMapParser()
       parser.delegate = delegate
       parser.parse()
       entries = delegate.entries
@@ -94,8 +94,8 @@ final class VerbMap2 {
 /// `XMLParser` delegate (adapted from Conjuguer's `VerbParser`). Accumulates
 /// `<verb>` elements, merging same-`in` rows into one entry so homonyms keep both
 /// senses in file order.
-private final class VerbMapParser2: NSObject, XMLParserDelegate {
-  var entries: [String: VerbMapEntry2] = [:]
+private final class VerbMapParser: NSObject, XMLParserDelegate {
+  var entries: [String: VerbMapEntry] = [:]
 
   func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String: String]) {
     guard elementName == "verb" else { return }
@@ -107,7 +107,7 @@ private final class VerbMapParser2: NSObject, XMLParserDelegate {
     if let existing = entries[infinitive] {
       // A second sense of a homonym — append, preserving file order. Both rows
       // carry the same `fr`; keep whichever the first row supplied.
-      entries[infinitive] = VerbMapEntry2(
+      entries[infinitive] = VerbMapEntry(
         infinitive: infinitive,
         classNumbers: existing.classNumbers + [cl],
         glosses: existing.glosses + [gloss],
@@ -115,7 +115,7 @@ private final class VerbMapParser2: NSObject, XMLParserDelegate {
         frequencyRank: existing.frequencyRank ?? frequencyRank
       )
     } else {
-      entries[infinitive] = VerbMapEntry2(
+      entries[infinitive] = VerbMapEntry(
         infinitive: infinitive,
         classNumbers: [cl],
         glosses: [gloss],

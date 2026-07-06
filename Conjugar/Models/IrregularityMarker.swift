@@ -9,7 +9,7 @@
 // Reconstructs the legacy engine's irregularity highlighting. The legacy
 // verbs.xml hand-encoded each form's irregular letters as UPPERCASE
 // ("abIERTo", "hE", "tUVieron"), which `String.conjugatedString` renders as a
-// red span (and lowercases for display). Conjugator2 produces plain-lowercase
+// red span (and lowercases for display). Conjugator produces plain-lowercase
 // forms, so the bridge recreates the encoding mechanically: diff the conjugated
 // form against its **regular composition** (the same verb conjugated with a
 // feature-less model) and uppercase the differing span.

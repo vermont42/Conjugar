@@ -10,7 +10,7 @@ Conjugar is an iOS app for learning Spanish verb conjugations. It conjugates reg
 **Target:** iOS 17+
 **License:** GNU Affero General Public License
 
-As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator2` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. The legacy `Conjugator` engine, `verbs.xml`, and their tests were **removed** in July 2026. Next planned step (separate effort): converting the UIKit UI to SwiftUI. The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
+As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. The legacy engine (the original `Conjugator`), `verbs.xml`, and their tests were **removed** in July 2026; the new engine's types then dropped their interim `2` suffixes (`Conjugator2` → `Conjugator`, etc.), so the plain names now always mean the new engine. Next planned step (separate effort): converting the UIKit UI to SwiftUI. The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
 
 As you, Claude, complete chunks of work on the modernization/improvement project, please add a note to docs/blog_notes.md . Eventually, Josh will generate a blog post from this work.
 
@@ -26,16 +26,16 @@ xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=i
 xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test
 
 # Run a single test suite
-xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/Conjugator2Tests
+xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/ConjugatorTests
 
 # Run a single test method (Swift Testing — note the trailing, shell-escaped parentheses)
-xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/Conjugator2Tests/oirPresent\(\)
+xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/ConjugatorTests/oirPresent\(\)
 
 # Lint
 swiftlint
 ```
 
-> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The new-engine suites (`Conjugator2Tests`, `VerbMap2Tests`, `Resolver2Tests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The older suites (`QuizTests`, `BrowseVerbsVCTests`, etc.) use **XCTest**, whose method names take **no** parentheses (e.g. `testBrowseVerbsVC`).
+> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The new-engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The older suites (`QuizTests`, `BrowseVerbsVCTests`, etc.) use **XCTest**, whose method names take **no** parentheses (e.g. `testBrowseVerbsVC`).
 
 ## Running the App in the Simulator
 
@@ -100,7 +100,7 @@ Layout constants are in `Layout.swift` (defaultSpacing = 8.0, tripleDefaultSpaci
 
 ### Core Models
 
-- **Conjugator2.swift** (+ the `*2.swift` family and `ModelCatalog2`/`VerbMap2`) - The conjugation engine: composition of feature rules over a book-class model catalog, resolving each verb's model from `verbModelMap.xml` (4,811 verbs). The app UI conjugates through it via `TenseBridge` (maps the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary to `EngineTense`, the simple-tense-plus-person slots the engine consumes) and `CompoundTense` (composes perfect tenses as *haber* + participle, and imperativo negativo as "no" + subjunctive — the engine itself models only simple tenses). The legacy `Conjugator`/`verbs.xml` engine was removed in July 2026; `DisplayTense.swift`/`DisplayPersonNumber.swift` (formerly `Tense.swift`/`PersonNumber.swift`) remain as the UI's vocabulary, covering the full displayed tense set including compounds.
+- **Conjugator.swift** (+ the feature-file family, `ModelCatalog`, and `VerbMap`) - The conjugation engine: composition of feature rules over a book-class model catalog, resolving each verb's model from `verbModelMap.xml` (4,811 verbs). The app UI conjugates through it via `TenseBridge` (maps the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary to `EngineTense`, the simple-tense-plus-person slots the engine consumes) and `CompoundTense` (composes perfect tenses as *haber* + participle, and imperativo negativo as "no" + subjunctive — the engine itself models only simple tenses). The legacy `Conjugator`/`verbs.xml` engine was removed in July 2026; `DisplayTense.swift`/`DisplayPersonNumber.swift` (formerly `Tense.swift`/`PersonNumber.swift`) remain as the UI's vocabulary, covering the full displayed tense set including compounds.
 - **Quiz.swift** - Quiz state management with QuizDelegate protocol for updates. Handles scoring, timing, difficulty levels.
 - **Settings.swift** - User preferences with GetterSetter protocol abstraction.
 
