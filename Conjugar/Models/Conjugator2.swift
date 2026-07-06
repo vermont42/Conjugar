@@ -164,6 +164,12 @@ enum Conjugator2 {
   /// stack) and `conjugateAll` (the primary stack *and* each alternate stack), so
   /// alternates ride the exact same seam, derivation rules, and imperative logic.
   private static func conjugateOne(infinitive: String, tense: Tense2, base: RegularRoot2, features: [Feature2]) -> Result<String, Conjugator2Error> {
+    // Outside the presente de indicativo and the affirmative imperative — the
+    // two tenses with distinct voseo forms — vos conjugates identically to tú,
+    // so canonicalize the slot to tú before composing. The ending tables already
+    // fall back; doing it here makes every *feature* (hiatus accents, raises,
+    // strong stems, residue literals) ride along too (caíste, duermas, ibas).
+    let tense = canonicalized(tense)
     let stem = String(infinitive.dropLast(2))
 
     // Defectivity (taxonomy §5 abolir): a slot a feature declares formless has no
@@ -183,6 +189,30 @@ enum Conjugator2 {
     }
 
     return .success(compose(stem: stem, ending: ending, tense: tense, features: features))
+  }
+
+  /// The tú-slot equivalent of a vos slot in the tenses where vos and tú share
+  /// every form; identity everywhere else (PI and IMP keep their real voseo
+  /// slots — cantás/cantá and the sos/ves/has/andá residue).
+  private static func canonicalized(_ tense: Tense2) -> Tense2 {
+    switch tense {
+    case .pretérito(.secondSingularVos):
+      return .pretérito(.secondSingular)
+    case .imperfectoDeIndicativo(.secondSingularVos):
+      return .imperfectoDeIndicativo(.secondSingular)
+    case .futuro(.secondSingularVos):
+      return .futuro(.secondSingular)
+    case .condicional(.secondSingularVos):
+      return .condicional(.secondSingular)
+    case .presenteDeSubjuntivo(.secondSingularVos):
+      return .presenteDeSubjuntivo(.secondSingular)
+    case .imperfectoDeSubjuntivoRa(.secondSingularVos):
+      return .imperfectoDeSubjuntivoRa(.secondSingular)
+    case .imperfectoDeSubjuntivoSe(.secondSingularVos):
+      return .imperfectoDeSubjuntivoSe(.secondSingular)
+    default:
+      return tense
+    }
   }
 
   /// Derive the affirmative imperative for usted (3s) / nosotros (1p) / ustedes
@@ -207,6 +237,74 @@ enum Conjugator2 {
       (form, _) = feature.apply(stem: form, ending: "", tense: imperative, regularStem: stem)
     }
     return .success(form)
+  }
+
+  // MARK: - App-facing accessors (the Conjugator → Conjugator2 migration)
+
+  /// The future root ("raíz futura") the Verb screen displays: the stem the whole
+  /// future/conditional system is built on (hablar → "hablar", tener → "tendr",
+  /// hacer → "har"). The future 1s always ends in the accented marker `-é`
+  /// (hablaré, tendré, iré), so the root is that form minus its final character.
+  static func futureRoot(infinitive: String) -> Result<String, Conjugator2Error> {
+    conjugate(infinitive: infinitive, tense: .futuro(.firstSingular)).map { String($0.dropLast()) }
+  }
+
+  /// Whether any slot of this verb's paradigm has no form at all (taxonomy §5
+  /// abolir). True exactly when the resolved model carries a feature that
+  /// suppresses at least one slot.
+  static func isDefective(infinitive: String) -> Bool {
+    guard let base = RegularRoot2(infinitive: infinitive) else {
+      return false
+    }
+    let features = resolvedModel(for: infinitive, base: base).features
+    return allSlots.contains { slot in features.contains { $0.suppresses(slot) } }
+  }
+
+  /// The four-way classification the Verb screen displays, derived from the
+  /// mapped class number: 1/2/3 are the perfectly regular classes; every other
+  /// class (including the orthographic sub-classes) counts as irregular. A verb
+  /// outside the map conjugates regularly, so it classifies by its ending.
+  static func verbType(infinitive: String) -> VerbType {
+    switch VerbMap2.shared.entry(for: infinitive)?.classNumber {
+    case "1":
+      return .regularAr
+    case "2":
+      return .regularEr
+    case "3":
+      return .regularIr
+    case .some:
+      return .irregular
+    case nil:
+      switch RegularRoot2(infinitive: infinitive) {
+      case .ar:
+        return .regularAr
+      case .er:
+        return .regularEr
+      case .ir:
+        return .regularIr
+      case nil:
+        return .irregular
+      }
+    }
+  }
+
+  /// Every slot a verb's paradigm can have — the domain `isDefective` sweeps.
+  private static var allSlots: [Tense2] {
+    var slots: [Tense2] = [.participioPasado, .gerundio]
+    for personNumber in PersonNumber2.allCases {
+      slots += [
+        .presenteDeIndicativo(personNumber),
+        .pretérito(personNumber),
+        .imperfectoDeIndicativo(personNumber),
+        .futuro(personNumber),
+        .condicional(personNumber),
+        .presenteDeSubjuntivo(personNumber),
+        .imperfectoDeSubjuntivoRa(personNumber),
+        .imperfectoDeSubjuntivoSe(personNumber),
+        .imperativoAfirmativo(personNumber)
+      ]
+    }
+    return slots
   }
 
   /// Composition seam (taxonomy §1): start from the regular `(stem, ending)` pair

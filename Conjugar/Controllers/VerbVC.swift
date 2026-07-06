@@ -37,41 +37,36 @@ class VerbVC: UIViewController {
     verbView.translation.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
     verbView.defectuoso.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapEnglish(_:))))
     initNavigationItemTitleView()
-    let translationResult = Conjugator.shared.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
-    switch translationResult {
-    case let .success(value):
-      verbView.translation.text = value
-    default:
-      fatalError()
-    }
-    let gerundioResult = Conjugator.shared.conjugate(infinitive: verb, tense: .gerundio, personNumber: .none)
+    let entry = VerbMap2.shared.entry(for: verb)
+    verbView.translation.text = entry?.gloss ?? ""
+    let gerundioResult = TenseBridge.conjugate(infinitive: verb, tense: .gerundio, personNumber: .none)
     switch gerundioResult {
     case let .success(value):
       verbView.gerundio.attributedText = value.conjugatedString
     default:
       fatalError()
     }
-    let participioResult = Conjugator.shared.conjugate(infinitive: verb, tense: .participio, personNumber: .none)
+    let participioResult = TenseBridge.conjugate(infinitive: verb, tense: .participio, personNumber: .none)
     switch participioResult {
     case let .success(value):
       verbView.participio.attributedText = value.conjugatedString
     default:
       fatalError()
     }
-    let raízFuturaResult = Conjugator.shared.conjugate(infinitive: verb, tense: .raízFutura, personNumber: .none)
+    let raízFuturaResult = TenseBridge.conjugate(infinitive: verb, tense: .raízFutura, personNumber: .none)
     switch raízFuturaResult {
     case let .success(value):
       verbView.raízFutura.attributedText = value.conjugatedString + NSAttributedString(string: "-")
     default:
       fatalError()
     }
-    if Conjugator.shared.isDefective(infinitive: verb) {
+    if Conjugator2.isDefective(infinitive: verb) {
       verbView.defectuoso.text = Localizations.Verb.defective
     } else {
       verbView.defectuoso.text = Localizations.Verb.notDefective
     }
 
-    let verbType = Conjugator.shared.verbType(infinitive: verb)
+    let verbType = Conjugator2.verbType(infinitive: verb)
     switch verbType {
     case .regularAr:
       verbView.parentOrType.text = "\(Localizations.Verb.regular) AR"
@@ -80,13 +75,10 @@ class VerbVC: UIViewController {
     case .regularIr:
       verbView.parentOrType.text = "\(Localizations.Verb.regular) IR"
     case .irregular:
-      guard let parent = Conjugator.shared.parent(infinitive: verb) else {
-        fatalError("Parent verb not found.")
-      }
-      if Conjugator.baseVerbs.contains(parent) {
-        verbView.parentOrType.text = Localizations.Verb.irregular
+      if let classNumber = entry?.classNumber, let exemplar = ModelCatalog2.exemplar(forClass: classNumber), exemplar != verb {
+        verbView.parentOrType.text = String(format: Localizations.Verb.irregularWithParent, exemplar)
       } else {
-        verbView.parentOrType.text = String(format: Localizations.Verb.irregularWithParent, parent)
+        verbView.parentOrType.text = Localizations.Verb.irregular
       }
     }
     view = verbView

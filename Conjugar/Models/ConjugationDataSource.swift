@@ -28,49 +28,35 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
     tenses.forEach { tense in
       self.rows.append(.tense(tense))
       if tense.hasYoForm {
-        let yoResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: .firstSingular)
-        switch yoResult {
-        case let .success(value):
-          self.rows.append(.conjugation(tense, .firstSingular, value))
-        default:
-          fatalError("No yo form found for tense \(tense.displayName).")
-        }
+        self.rows.append(.conjugation(tense, .firstSingular, ConjugationDataSource.conjugation(verb: verb, tense: tense, personNumber: .firstSingular)))
       }
 
-      let tuResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: .secondSingularTú)
-      let tuConjugation: String
-      switch tuResult {
-      case let .success(value):
-        tuConjugation = value
-      default:
-        fatalError("No tú form found for tense \(tense.displayName).")
-      }
-      let vosResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: .secondSingularVos)
-      let vosConjugation: String
-      switch vosResult {
-      case let .success(value):
-        vosConjugation = value
-      default:
-        fatalError("No vos form found for tense \(tense.displayName).")
-      }
       switch secondSingularBrowse {
       case .tu:
-        self.rows.append(.conjugation(tense, .secondSingularTú, tuConjugation))
+        self.rows.append(.conjugation(tense, .secondSingularTú, ConjugationDataSource.conjugation(verb: verb, tense: tense, personNumber: .secondSingularTú)))
       case .vos:
-        self.rows.append(.conjugation(tense, .secondSingularVos, vosConjugation))
+        self.rows.append(.conjugation(tense, .secondSingularVos, ConjugationDataSource.conjugation(verb: verb, tense: tense, personNumber: .secondSingularVos)))
       case .both:
-        self.rows.append(.conjugation(tense, .secondSingularTú, tuConjugation))
-        self.rows.append(.conjugation(tense, .secondSingularVos, vosConjugation))
+        self.rows.append(.conjugation(tense, .secondSingularTú, ConjugationDataSource.conjugation(verb: verb, tense: tense, personNumber: .secondSingularTú)))
+        self.rows.append(.conjugation(tense, .secondSingularVos, ConjugationDataSource.conjugation(verb: verb, tense: tense, personNumber: .secondSingularVos)))
       }
       [PersonNumber.thirdSingular, .firstPlural, .secondPlural, .thirdPlural].forEach { personNumber in
-        let result = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: personNumber)
-        switch result {
-        case let .success(value):
-          self.rows.append(.conjugation(tense, personNumber, value))
-        default:
-          fatalError("No \(personNumber.pronoun) form found.")
-        }
+        self.rows.append(.conjugation(tense, personNumber, ConjugationDataSource.conjugation(verb: verb, tense: tense, personNumber: personNumber)))
       }
+    }
+  }
+
+  /// The displayable form for one slot: a defective verb's formless slot renders
+  /// as an empty string (a blank row, like the legacy engine's "df" sentinel);
+  /// any other failure is a programming or data error.
+  private static func conjugation(verb: String, tense: Tense, personNumber: PersonNumber) -> String {
+    switch TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber) {
+    case let .success(value):
+      return value
+    case .failure(.noForm):
+      return ""
+    case let .failure(error):
+      fatalError("No \(personNumber.pronoun) form found for tense \(tense.displayName) of \(verb): \(error).")
     }
   }
 

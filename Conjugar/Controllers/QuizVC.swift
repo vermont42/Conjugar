@@ -41,13 +41,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
       quizView.startRestartButton.setTitle(Localizations.Quiz.restart, for: .normal)
       let verb = Current.quiz.verb
       quizView.verb.text = verb
-      let translationResult = Conjugator.shared.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
-      switch translationResult {
-      case let .success(value):
-        quizView.translation.text = value
-      default:
-        fatalError("translation not found.")
-      }
+      quizView.translation.text = VerbMap2.shared.entry(for: verb)?.gloss ?? ""
       quizView.tenseLabel.text = Current.quiz.tense.displayName
       quizView.pronoun.text = Current.quiz.currentPersonNumber.pronoun
       quizView.score.text = String(Current.quiz.score)
@@ -123,13 +117,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
 
   func questionDidChange(verb: String, tense: Tense, personNumber: PersonNumber) {
     quizView.verb.text = verb
-    let translationResult = Conjugator.shared.conjugate(infinitive: verb, tense: .translation, personNumber: .none)
-    switch translationResult {
-    case let .success(value):
-      quizView.translation.text = value
-    default:
-      fatalError()
-    }
+    quizView.translation.text = VerbMap2.shared.entry(for: verb)?.gloss ?? ""
     quizView.tenseLabel.text = Localizations.Quiz.tense + ": " + tense.displayName
     quizView.pronoun.text = personNumber.pronoun
     quizView.conjugationField.becomeFirstResponder()

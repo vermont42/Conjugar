@@ -297,7 +297,7 @@ class Quiz {
     guard let gameCenter = gameCenter else {
       fatalError("gameCenter was nil.")
     }
-    let correctAnswerResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: currentPersonNumber)
+    let correctAnswerResult = TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: currentPersonNumber)
     switch correctAnswerResult {
     case let .success(correctAnswer):
       let result = ConjugationResult.compare(lhs: proposedAnswer, rhs: correctAnswer)

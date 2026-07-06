@@ -36,7 +36,10 @@ class VerbVCTests: XCTestCase {
       ("maltear", arText, notDefectiveText),
       ("comer", erText, notDefectiveText),
       ("subir", irText, notDefectiveText),
-      ("gustar", arText, defectiveText),
+      // gustar was "defective" in the legacy verbs.xml data model; the new engine
+      // reserves defectiveness for verbs with formless slots (the abolir class).
+      ("gustar", arText, notDefectiveText),
+      ("abolir", irregularText, defectiveText),
       ("reconocer", parentText, notDefectiveText),
       ("ser", irregularText, notDefectiveText)
     ].forEach {

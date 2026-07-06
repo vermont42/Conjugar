@@ -41,7 +41,7 @@ class ConjugationCell: UITableViewCell {
 
   func configure(tense: Tense, personNumber: PersonNumber, conjugation: String) {
     var conjugation = conjugation
-    if conjugation == Conjugator.defective {
+    if conjugation.isEmpty || conjugation == Conjugator.defective {
       self.conjugation.text = ""
     } else {
       if tense == .imperativoPositivo || tense == .imperativoNegativo {

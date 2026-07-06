@@ -58,7 +58,7 @@ class TestQuizDelegate: QuizDelegate {
   }
 
   func questionDidChange(verb: String, tense: Tense, personNumber: PersonNumber) {
-    let conjugationResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: personNumber)
+    let conjugationResult = TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber)
     switch conjugationResult {
     case let .success(value):
       _ = quiz.process(proposedAnswer: value)

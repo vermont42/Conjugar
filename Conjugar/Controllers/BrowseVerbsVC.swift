@@ -40,9 +40,11 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     let browseVerbsView = BrowseVerbsUIV(frame: UIScreen.main.bounds)
     browseVerbsView.setupTable(dataSource: self, delegate: self)
     browseVerbsView.filterControl.addTarget(self, action: #selector(BrowseVerbsVC.valueChanged(_:)), for: .valueChanged)
-    allVerbs = Conjugator.shared.allVerbs
-    regularVerbs = Conjugator.shared.regularVerbs
-    irregularVerbs = Conjugator.shared.irregularVerbs
+    let entries = VerbMap2.shared.entries.values
+    let regularClasses: Set<String> = ["1", "2", "3"]
+    allVerbs = entries.map(\.infinitive).sorted()
+    regularVerbs = entries.filter { regularClasses.contains($0.classNumber) }.map(\.infinitive).sorted()
+    irregularVerbs = entries.filter { !regularClasses.contains($0.classNumber) }.map(\.infinitive).sorted()
     navigationItem.titleView = UILabel.titleLabel(title: Localizations.BrowseVerbs.localizedTitle)
     view = browseVerbsView
     Current.reviewPrompter.promptableActionHappened()

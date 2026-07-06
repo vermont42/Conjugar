@@ -39,6 +39,14 @@ enum ModelCatalog2 {
     Set(byClassNumber.keys)
   }
 
+  /// The exemplar (model verb) for a book class number — the human-readable name
+  /// the Verb screen shows in place of the legacy "parent verb" concept
+  /// (reconocer → 7A → "conocer"). The prefix-accent alias classes (29-2, 30-1,
+  /// 31-1, 32-1) name the parent exemplar they ride.
+  static func exemplar(forClass classNumber: String) -> String? {
+    exemplarByClassNumber[classNumber]
+  }
+
   // MARK: - Shared build helpers (mirrors the test exemplars' helpers)
 
   /// Build a `LiteralSlotOverride2` from `(slot, form)` pairs (the catch-all residue).
@@ -290,6 +298,7 @@ enum ModelCatalog2 {
       (.presenteDeIndicativo(.firstSingular), "he"), (.presenteDeIndicativo(.secondSingular), "has"),
       (.presenteDeIndicativo(.thirdSingular), "ha"), (.presenteDeIndicativo(.firstPlural), "hemos"),
       (.presenteDeIndicativo(.thirdPlural), "han"),
+      (.presenteDeIndicativo(.secondSingularVos), "has"),  // voseo auxiliary: vos has hablado
       (.imperativoAfirmativo(.secondSingular), "he"),
     ]),
   ])
@@ -318,6 +327,8 @@ enum ModelCatalog2 {
       (.presenteDeIndicativo(.firstSingular), "voy"), (.presenteDeIndicativo(.secondSingular), "vas"),
       (.presenteDeIndicativo(.thirdSingular), "va"), (.presenteDeIndicativo(.firstPlural), "vamos"),
       (.presenteDeIndicativo(.secondPlural), "vais"), (.presenteDeIndicativo(.thirdPlural), "van"),
+      (.presenteDeIndicativo(.secondSingularVos), "vas"),
+      (.imperativoAfirmativo(.secondSingularVos), "andá"),  // voseo avoids *í; andá (per the legacy data)
       (.imperfectoDeIndicativo(.firstSingular), "iba"), (.imperfectoDeIndicativo(.secondSingular), "ibas"),
       (.imperfectoDeIndicativo(.thirdSingular), "iba"), (.imperfectoDeIndicativo(.firstPlural), "íbamos"),
       (.imperfectoDeIndicativo(.secondPlural), "ibais"), (.imperfectoDeIndicativo(.thirdPlural), "iban"),
@@ -332,6 +343,8 @@ enum ModelCatalog2 {
     PreteriteEndings2.wpI,
     residue([
       (.presenteDeIndicativo(.firstSingular), "doy"), (.presenteDeIndicativo(.secondPlural), "dais"),
+      (.presenteDeIndicativo(.secondSingularVos), "das"),  // monosyllable: no accent, unlike the derived *dás
+      (.imperativoAfirmativo(.secondSingularVos), "da"),   // likewise
       (.presenteDeSubjuntivo(.firstSingular), "dé"), (.presenteDeSubjuntivo(.thirdSingular), "dé"),
       (.presenteDeSubjuntivo(.secondPlural), "deis"),
     ]),
@@ -422,10 +435,12 @@ enum ModelCatalog2 {
     IYHiatus2.oYhiatus,
   ])
 
-  // 34 conducir (-ducir) = subir + zc + sp-jend(-duj).
+  // 34 conducir (-ducir) = subir + zc + sp-jend(-duj). The strong-preterite swap
+  // anchors on the shared "duc" tail (not "conduc") so every -ducir verb rides it
+  // (aducir → aduje, traducir → traduje) — the §1 end-anchored payoff.
   static let conducir = VerbModel2(base: .ir, features: [
     StemFeature2.zc,
-    StemFeature2.strongPreterite(from: "conduc", to: "conduj"), PreteriteEndings2.spJend,
+    StemFeature2.strongPreterite(from: "duc", to: "duj"), PreteriteEndings2.spJend,
   ])
 
   // 35 andar = cantar + sp-end(anduv).
@@ -482,5 +497,57 @@ enum ModelCatalog2 {
     "31": tener, "31-1": tener,                     // 31-1 obtener aliases tener
     "32": venir, "32-1": venir,                     // 32-1 convenir aliases venir
     "33": traer, "34": conducir, "35": andar,
+  ]
+
+  // MARK: - The class-number → exemplar-name map
+
+  // Mirrors `byClassNumber` key-for-key (a test asserts every class number has an
+  // exemplar), naming each model's exemplar verb with its dictionary spelling
+  // (reír, oír, argüir). The alias classes 29-2/30-1/31-1/32-1 name the parent
+  // exemplar whose model they ride.
+  private static let exemplarByClassNumber: [String: String] = [
+    "1": "cantar",
+    "1-1": "tocar", "1-2": "pagar", "1-3": "averiguar", "1-4": "cazar",
+    "1-5": "aislar", "1-6": "aullar", "1-7": "descafeinar", "1-8": "rehusar", "1-9": "amohinar",
+    "1-10": "ahincar", "1-11": "cabrahigar", "1-12": "enraizar", "1-13": "europeizar",
+    "1-14": "actuar", "1-15": "enviar",
+
+    "2": "comer",
+    "2-1": "vencer", "2-2": "coger", "2-3": "leer", "2-4": "empeller", "2-5": "tañer", "2-6": "romper",
+
+    "3": "subir",
+    "3-1": "fruncir", "3-2": "dirigir", "3-3": "distinguir", "3-4": "delinquir",
+    "3-5": "bullir", "3-6": "bruñir", "3-7": "reunir", "3-8": "prohibir",
+    "3-9": "abrir", "3-10": "cubrir", "3-11": "escribir", "3-12": "imprimir",
+    "3-13": "pudrir", "3-14": "abolir",
+
+    "4A": "pensar", "4A-1": "negar", "4A-2": "empezar", "4A-3": "errar",
+    "4B": "mostrar", "4B-1": "trocar", "4B-2": "colgar", "4B-3": "forzar",
+    "4B-4": "agorar", "4B-5": "desosar", "4B-6": "avergonzar",
+
+    "5A": "perder",
+    "5B": "mover", "5B-1": "cocer", "5B-2": "oler", "5B-3": "resolver", "5B-4": "volver",
+
+    "6A": "sentir", "6A-1": "erguir",
+    "6B": "pedir", "6B-1": "elegir", "6B-2": "seguir", "6B-3": "ceñir", "6B-4": "reír",
+    "6C": "dormir", "6C-1": "morir",
+
+    "7A": "conocer", "7A-1": "yacer", "7A-2": "placer", "7B": "lucir",
+
+    "8": "construir",
+
+    "9": "caer", "9-1": "raer", "9-2": "roer",
+    "10": "oír", "11": "salir", "12": "valer", "13": "asir",
+
+    "14": "ver", "14-1": "prever", "15": "discernir", "16": "jugar", "17": "adquirir", "18": "argüir",
+
+    "19": "ser", "20": "estar", "21": "haber", "22": "saber", "23": "caber", "24": "ir",
+    "25": "dar", "26": "poder", "27": "querer",
+    "28": "decir", "28-1": "predecir", "28-2": "bendecir",
+    "29": "hacer", "29-1": "rehacer", "29-2": "hacer",
+    "30": "poner", "30-1": "poner",
+    "31": "tener", "31-1": "tener",
+    "32": "venir", "32-1": "venir",
+    "33": "traer", "34": "conducir", "35": "andar",
   ]
 }

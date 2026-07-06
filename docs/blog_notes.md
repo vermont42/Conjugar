@@ -954,3 +954,83 @@ Scoping surfaced the parts that make this more than a find-and-replace of
   `ModelCatalog2` carries `ves`/`sos`, so vos is genuinely supported.
 - The 7 remaining `Conjugator.shared` call sites (Quiz, QuizVC, VerbVC, data source,
   browse) are inventoried in the prompt as the migration checklist.
+
+---
+
+## Part A: the app now conjugates through Conjugator2 (legacy engine dormant)
+
+Executed Part A of the migration prompt: **every app/UI call site is off
+`Conjugator.shared`** — `ConjugationDataSource`, `Quiz`, `QuizVC`, `VerbVC`, and
+`BrowseVerbsVC` now speak to the new engine. The legacy `Conjugator`/`verbs.xml` stay
+in the target, compiling but unreferenced (retiring them is the agreed later cleanup).
+
+**The bridge.** The UI is still structured around the legacy `Tense`/`PersonNumber`
+vocabulary, so a new `TenseBridge` maps each legacy slot onto the new engine: the ten
+simple tenses map case-for-case onto `Tense2`; the three tense families `Tense2`
+deliberately doesn't model are composed at the bridge layer — the nine **compound
+tenses** via a `CompoundTense` helper (haber in the matching simple tense + invariant
+participle, reusing the legacy `haberTenseForCompoundTense()` table), **imperativo
+negativo** as "no " + presente de subjuntivo, and **futuro de subjuntivo** derived from
+the computed -ra imperfect subjunctive by an ending swap (hablara → hablare,
+tuviéramos → tuviéremos) so strong preterite stems ride through for free. Defective
+slots surface as `.noForm` and render as blank rows — the role the legacy `"df"`
+sentinel used to play.
+
+**Irregularity highlighting had to be reconstructed.** A one-day surprise: the legacy
+engine's output strings *are* the highlighting — verbs.xml hand-encodes irregular
+letters as UPPERCASE (`abIERTo`, `hE`, `tUVieron`) and `conjugatedString` renders that
+as the red span. Conjugator2 emits plain lowercase, so a naïve swap silently loses a
+signature UI feature. New `IrregularityMarker` recreates the encoding mechanically:
+diff each form against the verb's **regular composition** (same verb, feature-less
+model — an entry point the engine already had) and uppercase the differing span, word
+by word so compound auxiliaries and participles mark independently. The mechanical
+spans match the hand-authored ones remarkably often (`hE`, `hUbiera`, `vUELTo`,
+`abIERTo`, `VAYamos`).
+
+**New public accessors** for VerbVC's affordances: `Conjugator2.futureRoot` (future 1s
+minus its invariant `-é`), `Conjugator2.isDefective` (any feature suppresses any slot),
+`Conjugator2.verbType` (class 1/2/3 = regular AR/ER/IR, everything else irregular),
+and `ModelCatalog2.exemplar(forClass:)` — the class-number → model-verb name that
+replaces the legacy "parent verb" label (reconocer now shows "Irreg. ☛ conocer" via
+the class-7A exemplar rather than a parent chain; a verb that *is* its class exemplar
+just shows "Irregular").
+
+**The throwaway parity test earned its keep.** Compared the bridged engine against the
+legacy engine over all 213 legacy verbs × the full displayed grid (30,033 slots), then
+deleted it as planned. It caught three real new-engine bugs before any user could:
+1. **The -ducir family was broken by name** — conducir's strong-preterite feature
+   anchored on `conduc`, which no *other* -ducir stem ends with, so `aducir` yielded
+   *aduce* instead of *aduje*. Re-anchored on the shared `duc` tail (the end-anchored
+   §1 payoff, properly applied); 8 verbs × 28 slots fixed.
+2. **Voseo silently lost features in the tú-fallback tenses** — the slot sets exclude
+   vos by design for the present/imperative, but that meant *dormas* for `duermas`,
+   *caiste* for `caíste`, *ías* for `ibas`. Fixed in one place: `conjugateOne` now
+   canonicalizes a vos slot to tú outside the presente de indicativo and affirmative
+   imperative, so every feature rides along.
+3. **Catalog voseo gaps** — haber lacked its irregular vos present (`has`, so compound
+   vos rows read "habés hablado"), ir lacked `vas`/`andá`, dar lacked unaccented
+   `das`/`da`. Added as residue literals, following the existing ser `sos` / ver `ves`
+   pattern.
+The remaining ~1,500 mismatches were all **legacy defects the new engine corrects**
+(sampled and categorized): missing orthographic changes (*sacé* → `saqué`, *distinguo*
+→ `distingo`), missing hiatus accents (*leiste/traido/ibamos* → `leíste/traído/íbamos`),
+y-hiatus (*leió* → `leyó`), data typos (*abracemosa*, *juegua*, *adquire*, haber's
+imperative *habe* → `he`, venir's *veniendo* → `viniendo`), wrong persons (*salga* for
+ellas → `salgan`), and RAE-mandated accents legacy dropped (suponer tú imperative
+*supon* → `supón`). Plus two deliberate modeling changes worth a blog paragraph: verbs
+that were "defective by data" (gustar, llover, amanecer — third-person-only usage) now
+conjugate fully, since the new engine reserves defectiveness for paradigm gaps (the
+abolir class); and freír's primary participle is `freído` (frito is Annex-B per-verb
+data, out of scope), roer's is `roo` (roigo/royo remain as alternates).
+
+**Browse** now lists all 4,811 mapped verbs (regular = class 1/2/3, everything else
+irregular) — Part B will replace the 3-way filter with Frequency/Alphabetical sorting.
+Quiz answers grade through the bridge (its test double now answers via the bridge too,
+since the legacy engine's known-wrong forms would fail an engine-vs-engine quiz).
+
+Verified: full suite green (361 Swift Testing + all XCTest, including new
+`TenseBridgeTests` and `Conjugator2AccessorsTests`), and drove the app in the
+simulator — abnegar shows "Irreg. ☛ negar" with red `abniego`/`abnegué` spans and the
+full compound table down to futuro perfecto de subjuntivo, abolir shows "Defective"
+with correctly blank person rows, and the quiz graded *habran* as a partial match for
+`habrán` with the irregular r in red.
