@@ -10,7 +10,7 @@ import Testing
 @testable import Conjugar
 
 // The composition-engine tests, in idiomatic Swift Testing. Full six-person
-// paradigms are parameterized over `zip(PersonNumber2.oracleOrder, [forms])`;
+// paradigms are parameterized over `zip(EnginePersonNumber.oracleOrder, [forms])`;
 // clusters of single slots for one verb are parameterized over `(EngineTense, String)`
 // pairs; multi-verb / non-finite / failure checks stay plain `@Test`s. Expected
 // forms are the verified oracle (docs/spanish_models.md) and are unchanged from
@@ -166,9 +166,9 @@ struct Conjugator2Tests {
   static let oir = ModelCatalog2.model(forClass: "10")!
 
   // 4B-1 trocar = mostrar (d-ue) + o-car (c→qu).
-  @Test("trocar (4B-1) — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("trocar (4B-1) — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["trueco", "truecas", "trueca", "trocamos", "trocáis", "truecan"]))
-  func trocarPresent(person: PersonNumber2, expected: String) {
+  func trocarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("trocar", model: Self.trocar, .presenteDeIndicativo(person), expected)
   }
 
@@ -184,9 +184,9 @@ struct Conjugator2Tests {
   }
 
   // 4B-5 desosar = d-ue-hue on an -ar base (deshueso).
-  @Test("desosar (4B-5) — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("desosar (4B-5) — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["deshueso", "deshuesas", "deshuesa", "desosamos", "desosáis", "deshuesan"]))
-  func desosarPresent(person: PersonNumber2, expected: String) {
+  func desosarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("desosar", model: Self.desosar, .presenteDeIndicativo(person), expected)
   }
 
@@ -202,15 +202,15 @@ struct Conjugator2Tests {
   }
 
   // 4B-6 avergonzar = d-ue-gue (GO→GÜE) + o-zar (Z→C).
-  @Test("avergonzar (4B-6) — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("avergonzar (4B-6) — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["avergüenzo", "avergüenzas", "avergüenza", "avergonzamos", "avergonzáis", "avergüenzan"]))
-  func avergonzarPresent(person: PersonNumber2, expected: String) {
+  func avergonzarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("avergonzar", model: Self.avergonzar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("avergonzar (4B-6) — subjunctive (üe + z→c)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("avergonzar (4B-6) — subjunctive (üe + z→c)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["avergüence", "avergüences", "avergüence", "avergoncemos", "avergoncéis", "avergüencen"]))
-  func avergonzarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func avergonzarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("avergonzar", model: Self.avergonzar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -224,27 +224,27 @@ struct Conjugator2Tests {
   }
 
   // 10 oír — full paradigm against the oracle (the never-exemplar'd -go/-y/hiatus mix).
-  @Test("oír (10) — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("oír (10) — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["oigo", "oyes", "oye", "oímos", "oís", "oyen"]))
-  func oirPresent(person: PersonNumber2, expected: String) {
+  func oirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("oír", model: Self.oir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("oír (10) — pretérito", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("oír (10) — pretérito", arguments: zip(EnginePersonNumber.oracleOrder,
     ["oí", "oíste", "oyó", "oímos", "oísteis", "oyeron"]))
-  func oirPreterite(person: PersonNumber2, expected: String) {
+  func oirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("oír", model: Self.oir, .pretérito(person), expected)
   }
 
-  @Test("oír (10) — presente de subjuntivo (oig-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("oír (10) — presente de subjuntivo (oig-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["oiga", "oigas", "oiga", "oigamos", "oigáis", "oigan"]))
-  func oirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func oirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("oír", model: Self.oir, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("oír (10) — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("oír (10) — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["oyera", "oyeras", "oyera", "oyéramos", "oyerais", "oyeran"]))
-  func oirImperfectSubjunctive(person: PersonNumber2, expected: String) {
+  func oirImperfectSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("oír", model: Self.oir, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
@@ -338,51 +338,51 @@ struct Conjugator2Tests {
 
   // MARK: - cantar (regular -ar)
 
-  @Test("cantar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cantar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["canto", "cantas", "canta", "cantamos", "cantáis", "cantan"]))
-  func cantarPresent(person: PersonNumber2, expected: String) {
+  func cantarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("cantar", .presenteDeIndicativo(person), expected)
   }
 
-  @Test("cantar — pretérito", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cantar — pretérito", arguments: zip(EnginePersonNumber.oracleOrder,
     ["canté", "cantaste", "cantó", "cantamos", "cantasteis", "cantaron"]))
-  func cantarPreterite(person: PersonNumber2, expected: String) {
+  func cantarPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("cantar", .pretérito(person), expected)
   }
 
-  @Test("cantar — imperfecto de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cantar — imperfecto de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cantaba", "cantabas", "cantaba", "cantábamos", "cantabais", "cantaban"]))
-  func cantarImperfect(person: PersonNumber2, expected: String) {
+  func cantarImperfect(person: EnginePersonNumber, expected: String) {
     expectForm("cantar", .imperfectoDeIndicativo(person), expected)
   }
 
-  @Test("cantar — futuro", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cantar — futuro", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cantaré", "cantarás", "cantará", "cantaremos", "cantaréis", "cantarán"]))
-  func cantarFuture(person: PersonNumber2, expected: String) {
+  func cantarFuture(person: EnginePersonNumber, expected: String) {
     expectForm("cantar", .futuro(person), expected)
   }
 
-  @Test("cantar — condicional", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cantar — condicional", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cantaría", "cantarías", "cantaría", "cantaríamos", "cantaríais", "cantarían"]))
-  func cantarConditional(person: PersonNumber2, expected: String) {
+  func cantarConditional(person: EnginePersonNumber, expected: String) {
     expectForm("cantar", .condicional(person), expected)
   }
 
-  @Test("cantar — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cantar — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cante", "cantes", "cante", "cantemos", "cantéis", "canten"]))
-  func cantarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func cantarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("cantar", .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("cantar — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cantar — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cantara", "cantaras", "cantara", "cantáramos", "cantarais", "cantaran"]))
-  func cantarImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func cantarImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("cantar", .imperfectoDeSubjuntivoRa(person), expected)
   }
 
-  @Test("cantar — imperfecto de subjuntivo (-se)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cantar — imperfecto de subjuntivo (-se)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cantase", "cantases", "cantase", "cantásemos", "cantaseis", "cantasen"]))
-  func cantarImperfectSubjunctiveSe(person: PersonNumber2, expected: String) {
+  func cantarImperfectSubjunctiveSe(person: EnginePersonNumber, expected: String) {
     expectForm("cantar", .imperfectoDeSubjuntivoSe(person), expected)
   }
 
@@ -396,51 +396,51 @@ struct Conjugator2Tests {
 
   // MARK: - comer (regular -er)
 
-  @Test("comer — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("comer — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["como", "comes", "come", "comemos", "coméis", "comen"]))
-  func comerPresent(person: PersonNumber2, expected: String) {
+  func comerPresent(person: EnginePersonNumber, expected: String) {
     expectForm("comer", .presenteDeIndicativo(person), expected)
   }
 
-  @Test("comer — pretérito", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("comer — pretérito", arguments: zip(EnginePersonNumber.oracleOrder,
     ["comí", "comiste", "comió", "comimos", "comisteis", "comieron"]))
-  func comerPreterite(person: PersonNumber2, expected: String) {
+  func comerPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("comer", .pretérito(person), expected)
   }
 
-  @Test("comer — imperfecto de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("comer — imperfecto de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["comía", "comías", "comía", "comíamos", "comíais", "comían"]))
-  func comerImperfect(person: PersonNumber2, expected: String) {
+  func comerImperfect(person: EnginePersonNumber, expected: String) {
     expectForm("comer", .imperfectoDeIndicativo(person), expected)
   }
 
-  @Test("comer — futuro", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("comer — futuro", arguments: zip(EnginePersonNumber.oracleOrder,
     ["comeré", "comerás", "comerá", "comeremos", "comeréis", "comerán"]))
-  func comerFuture(person: PersonNumber2, expected: String) {
+  func comerFuture(person: EnginePersonNumber, expected: String) {
     expectForm("comer", .futuro(person), expected)
   }
 
-  @Test("comer — condicional", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("comer — condicional", arguments: zip(EnginePersonNumber.oracleOrder,
     ["comería", "comerías", "comería", "comeríamos", "comeríais", "comerían"]))
-  func comerConditional(person: PersonNumber2, expected: String) {
+  func comerConditional(person: EnginePersonNumber, expected: String) {
     expectForm("comer", .condicional(person), expected)
   }
 
-  @Test("comer — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("comer — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["coma", "comas", "coma", "comamos", "comáis", "coman"]))
-  func comerPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func comerPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("comer", .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("comer — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("comer — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["comiera", "comieras", "comiera", "comiéramos", "comierais", "comieran"]))
-  func comerImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func comerImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("comer", .imperfectoDeSubjuntivoRa(person), expected)
   }
 
-  @Test("comer — imperfecto de subjuntivo (-se)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("comer — imperfecto de subjuntivo (-se)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["comiese", "comieses", "comiese", "comiésemos", "comieseis", "comiesen"]))
-  func comerImperfectSubjunctiveSe(person: PersonNumber2, expected: String) {
+  func comerImperfectSubjunctiveSe(person: EnginePersonNumber, expected: String) {
     expectForm("comer", .imperfectoDeSubjuntivoSe(person), expected)
   }
 
@@ -454,51 +454,51 @@ struct Conjugator2Tests {
 
   // MARK: - subir (regular -ir)
 
-  @Test("subir — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("subir — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["subo", "subes", "sube", "subimos", "subís", "suben"]))
-  func subirPresent(person: PersonNumber2, expected: String) {
+  func subirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("subir", .presenteDeIndicativo(person), expected)
   }
 
-  @Test("subir — pretérito", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("subir — pretérito", arguments: zip(EnginePersonNumber.oracleOrder,
     ["subí", "subiste", "subió", "subimos", "subisteis", "subieron"]))
-  func subirPreterite(person: PersonNumber2, expected: String) {
+  func subirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("subir", .pretérito(person), expected)
   }
 
-  @Test("subir — imperfecto de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("subir — imperfecto de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["subía", "subías", "subía", "subíamos", "subíais", "subían"]))
-  func subirImperfect(person: PersonNumber2, expected: String) {
+  func subirImperfect(person: EnginePersonNumber, expected: String) {
     expectForm("subir", .imperfectoDeIndicativo(person), expected)
   }
 
-  @Test("subir — futuro", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("subir — futuro", arguments: zip(EnginePersonNumber.oracleOrder,
     ["subiré", "subirás", "subirá", "subiremos", "subiréis", "subirán"]))
-  func subirFuture(person: PersonNumber2, expected: String) {
+  func subirFuture(person: EnginePersonNumber, expected: String) {
     expectForm("subir", .futuro(person), expected)
   }
 
-  @Test("subir — condicional", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("subir — condicional", arguments: zip(EnginePersonNumber.oracleOrder,
     ["subiría", "subirías", "subiría", "subiríamos", "subiríais", "subirían"]))
-  func subirConditional(person: PersonNumber2, expected: String) {
+  func subirConditional(person: EnginePersonNumber, expected: String) {
     expectForm("subir", .condicional(person), expected)
   }
 
-  @Test("subir — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("subir — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["suba", "subas", "suba", "subamos", "subáis", "suban"]))
-  func subirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func subirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("subir", .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("subir — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("subir — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["subiera", "subieras", "subiera", "subiéramos", "subierais", "subieran"]))
-  func subirImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func subirImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("subir", .imperfectoDeSubjuntivoRa(person), expected)
   }
 
-  @Test("subir — imperfecto de subjuntivo (-se)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("subir — imperfecto de subjuntivo (-se)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["subiese", "subieses", "subiese", "subiésemos", "subieseis", "subiesen"]))
-  func subirImperfectSubjunctiveSe(person: PersonNumber2, expected: String) {
+  func subirImperfectSubjunctiveSe(person: EnginePersonNumber, expected: String) {
     expectForm("subir", .imperfectoDeSubjuntivoSe(person), expected)
   }
 
@@ -559,9 +559,9 @@ struct Conjugator2Tests {
   // MARK: - Phase 2: orthographic features (§4.1)
 
   // -ar consonant swaps fire before -e: PR 1s + PS{all}. PI/other PR stay regular.
-  @Test("tocar — presente de subjuntivo (c→qu)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("tocar — presente de subjuntivo (c→qu)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["toque", "toques", "toque", "toquemos", "toquéis", "toquen"]))
-  func tocarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func tocarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("tocar", model: Self.tocar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -579,9 +579,9 @@ struct Conjugator2Tests {
     expectForm("pagar", model: Self.pagar, .pretérito(.firstSingular), "pagué")
   }
 
-  @Test("pagar — presente de subjuntivo (g→gu)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("pagar — presente de subjuntivo (g→gu)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["pague", "pagues", "pague", "paguemos", "paguéis", "paguen"]))
-  func pagarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func pagarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("pagar", model: Self.pagar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -590,9 +590,9 @@ struct Conjugator2Tests {
     expectForm("averiguar", model: Self.averiguar, .pretérito(.firstSingular), "averigüé")
   }
 
-  @Test("averiguar — presente de subjuntivo (gu→gü)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("averiguar — presente de subjuntivo (gu→gü)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["averigüe", "averigües", "averigüe", "averigüemos", "averigüéis", "averigüen"]))
-  func averiguarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func averiguarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("averiguar", model: Self.averiguar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -601,16 +601,16 @@ struct Conjugator2Tests {
     expectForm("cazar", model: Self.cazar, .pretérito(.firstSingular), "cacé")
   }
 
-  @Test("cazar — presente de subjuntivo (z→c)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cazar — presente de subjuntivo (z→c)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cace", "caces", "cace", "cacemos", "cacéis", "cacen"]))
-  func cazarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func cazarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("cazar", model: Self.cazar, .presenteDeSubjuntivo(person), expected)
   }
 
   // -er/-ir consonant swaps fire before -a/-o: PI 1s + PS{all}.
-  @Test("vencer — presente de subjuntivo (c→z)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("vencer — presente de subjuntivo (c→z)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["venza", "venzas", "venza", "venzamos", "venzáis", "venzan"]))
-  func vencerPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func vencerPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("vencer", model: Self.vencer, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -627,9 +627,9 @@ struct Conjugator2Tests {
     expectForm("fruncir", model: Self.fruncir, .presenteDeIndicativo(.firstSingular), "frunzo")
   }
 
-  @Test("fruncir — presente de subjuntivo (c→z)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("fruncir — presente de subjuntivo (c→z)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["frunza", "frunzas", "frunza", "frunzamos", "frunzáis", "frunzan"]))
-  func fruncirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func fruncirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("fruncir", model: Self.fruncir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -638,9 +638,9 @@ struct Conjugator2Tests {
     expectForm("coger", model: Self.coger, .presenteDeIndicativo(.firstSingular), "cojo")
   }
 
-  @Test("coger — presente de subjuntivo (g→j)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("coger — presente de subjuntivo (g→j)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["coja", "cojas", "coja", "cojamos", "cojáis", "cojan"]))
-  func cogerPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func cogerPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("coger", model: Self.coger, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -649,9 +649,9 @@ struct Conjugator2Tests {
     expectForm("dirigir", model: Self.dirigir, .presenteDeIndicativo(.firstSingular), "dirijo")
   }
 
-  @Test("dirigir — presente de subjuntivo (g→j)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("dirigir — presente de subjuntivo (g→j)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["dirija", "dirijas", "dirija", "dirijamos", "dirijáis", "dirijan"]))
-  func dirigirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func dirigirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("dirigir", model: Self.dirigir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -660,9 +660,9 @@ struct Conjugator2Tests {
     expectForm("distinguir", model: Self.distinguir, .presenteDeIndicativo(.firstSingular), "distingo")
   }
 
-  @Test("distinguir — presente de subjuntivo (gu→g)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("distinguir — presente de subjuntivo (gu→g)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["distinga", "distingas", "distinga", "distingamos", "distingáis", "distingan"]))
-  func distinguirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func distinguirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("distinguir", model: Self.distinguir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -671,41 +671,41 @@ struct Conjugator2Tests {
     expectForm("delinquir", model: Self.delinquir, .presenteDeIndicativo(.firstSingular), "delinco")
   }
 
-  @Test("delinquir — presente de subjuntivo (qu→c)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("delinquir — presente de subjuntivo (qu→c)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["delinca", "delincas", "delinca", "delincamos", "delincáis", "delincan"]))
-  func delinquirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func delinquirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("delinquir", model: Self.delinquir, .presenteDeSubjuntivo(person), expected)
   }
 
   // o-yhiatus: i→y in PR{3s,3p}+GER+IS{all}, plus written accents on the regular
   // -i- forms (PR{2s,1p,2p}, PP). Full paradigm against leer (2-3).
-  @Test("leer — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("leer — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["leo", "lees", "lee", "leemos", "leéis", "leen"]))
-  func leerPresent(person: PersonNumber2, expected: String) {
+  func leerPresent(person: EnginePersonNumber, expected: String) {
     expectForm("leer", model: Self.leer, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("leer — pretérito", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("leer — pretérito", arguments: zip(EnginePersonNumber.oracleOrder,
     ["leí", "leíste", "leyó", "leímos", "leísteis", "leyeron"]))
-  func leerPreterite(person: PersonNumber2, expected: String) {
+  func leerPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("leer", model: Self.leer, .pretérito(person), expected)
   }
 
-  @Test("leer — imperfecto de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("leer — imperfecto de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["leía", "leías", "leía", "leíamos", "leíais", "leían"]))
-  func leerImperfect(person: PersonNumber2, expected: String) {
+  func leerImperfect(person: EnginePersonNumber, expected: String) {
     expectForm("leer", model: Self.leer, .imperfectoDeIndicativo(person), expected)
   }
 
-  @Test("leer — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("leer — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["leyera", "leyeras", "leyera", "leyéramos", "leyerais", "leyeran"]))
-  func leerImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func leerImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("leer", model: Self.leer, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
-  @Test("leer — imperfecto de subjuntivo (-se)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("leer — imperfecto de subjuntivo (-se)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["leyese", "leyeses", "leyese", "leyésemos", "leyeseis", "leyesen"]))
-  func leerImperfectSubjunctiveSe(person: PersonNumber2, expected: String) {
+  func leerImperfectSubjunctiveSe(person: EnginePersonNumber, expected: String) {
     expectForm("leer", model: Self.leer, .imperfectoDeSubjuntivoSe(person), expected)
   }
 
@@ -716,33 +716,33 @@ struct Conjugator2Tests {
   }
 
   // o-llñ: -i- absorbed after ll/ñ (-ió→-ó, -ieron→-eron, -iendo→-endo), no accents.
-  @Test("empeller — pretérito (-i- absorbed after ll)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("empeller — pretérito (-i- absorbed after ll)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["empellí", "empelliste", "empelló", "empellimos", "empellisteis", "empelleron"]))
-  func empellerPreterite(person: PersonNumber2, expected: String) {
+  func empellerPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("empeller", model: Self.empeller, .pretérito(person), expected)
   }
 
-  @Test("empeller — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("empeller — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["empellera", "empelleras", "empellera", "empelléramos", "empellerais", "empelleran"]))
-  func empellerImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func empellerImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("empeller", model: Self.empeller, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
-  @Test("tañer — pretérito (-i- absorbed after ñ)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("tañer — pretérito (-i- absorbed after ñ)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["tañí", "tañiste", "tañó", "tañimos", "tañisteis", "tañeron"]))
-  func tanerPreterite(person: PersonNumber2, expected: String) {
+  func tanerPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("tañer", model: Self.tañer, .pretérito(person), expected)
   }
 
-  @Test("bullir — pretérito (-i- absorbed after ll)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("bullir — pretérito (-i- absorbed after ll)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["bullí", "bulliste", "bulló", "bullimos", "bullisteis", "bulleron"]))
-  func bullirPreterite(person: PersonNumber2, expected: String) {
+  func bullirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("bullir", model: Self.bullir, .pretérito(person), expected)
   }
 
-  @Test("bruñir — pretérito (-i- absorbed after ñ)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("bruñir — pretérito (-i- absorbed after ñ)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["bruñí", "bruñiste", "bruñó", "bruñimos", "bruñisteis", "bruñeron"]))
-  func brunirPreterite(person: PersonNumber2, expected: String) {
+  func brunirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("bruñir", model: Self.bruñir, .pretérito(person), expected)
   }
 
@@ -756,15 +756,15 @@ struct Conjugator2Tests {
 
   // MARK: - Phase 2: accent features (§4.2)
 
-  @Test("enviar — presente de indicativo (i→í in STR)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("enviar — presente de indicativo (i→í in STR)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["envío", "envías", "envía", "enviamos", "enviáis", "envían"]))
-  func enviarPresent(person: PersonNumber2, expected: String) {
+  func enviarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("enviar", model: Self.enviar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("enviar — presente de subjuntivo (i→í in STR)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("enviar — presente de subjuntivo (i→í in STR)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["envíe", "envíes", "envíe", "enviemos", "enviéis", "envíen"]))
-  func enviarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func enviarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("enviar", model: Self.enviar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -773,15 +773,15 @@ struct Conjugator2Tests {
     expectForm("enviar", model: Self.enviar, .imperativoAfirmativo(.secondSingular), "envía")
   }
 
-  @Test("actuar — presente de indicativo (u→ú in STR)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("actuar — presente de indicativo (u→ú in STR)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["actúo", "actúas", "actúa", "actuamos", "actuáis", "actúan"]))
-  func actuarPresent(person: PersonNumber2, expected: String) {
+  func actuarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("actuar", model: Self.actuar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("actuar — presente de subjuntivo (u→ú in STR)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("actuar — presente de subjuntivo (u→ú in STR)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["actúe", "actúes", "actúe", "actuemos", "actuéis", "actúen"]))
-  func actuarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func actuarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("actuar", model: Self.actuar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -791,57 +791,57 @@ struct Conjugator2Tests {
   }
 
   // a-stem family (1-5…1-9, 3-7, 3-8): accent on the stem vowel in STR only.
-  @Test("aislar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("aislar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["aíslo", "aíslas", "aísla", "aislamos", "aisláis", "aíslan"]))
-  func aislarPresent(person: PersonNumber2, expected: String) {
+  func aislarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("aislar", model: Self.aislar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("aislar — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("aislar — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["aísle", "aísles", "aísle", "aislemos", "aisléis", "aíslen"]))
-  func aislarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func aislarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("aislar", model: Self.aislar, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("aullar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("aullar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["aúllo", "aúllas", "aúlla", "aullamos", "aulláis", "aúllan"]))
-  func aullarPresent(person: PersonNumber2, expected: String) {
+  func aullarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("aullar", model: Self.aullar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("descafeinar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("descafeinar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["descafeíno", "descafeínas", "descafeína", "descafeinamos", "descafeináis", "descafeínan"]))
-  func descafeinarPresent(person: PersonNumber2, expected: String) {
+  func descafeinarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("descafeinar", model: Self.descafeinar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("rehusar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("rehusar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["rehúso", "rehúsas", "rehúsa", "rehusamos", "rehusáis", "rehúsan"]))
-  func rehusarPresent(person: PersonNumber2, expected: String) {
+  func rehusarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("rehusar", model: Self.rehusar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("amohinar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("amohinar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["amohíno", "amohínas", "amohína", "amohinamos", "amohináis", "amohínan"]))
-  func amohinarPresent(person: PersonNumber2, expected: String) {
+  func amohinarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("amohinar", model: Self.amohinar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("reunir — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("reunir — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["reúno", "reúnes", "reúne", "reunimos", "reunís", "reúnen"]))
-  func reunirPresent(person: PersonNumber2, expected: String) {
+  func reunirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("reunir", model: Self.reunir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("prohibir — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("prohibir — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["prohíbo", "prohíbes", "prohíbe", "prohibimos", "prohibís", "prohíben"]))
-  func prohibirPresent(person: PersonNumber2, expected: String) {
+  func prohibirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("prohibir", model: Self.prohibir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("prohibir — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("prohibir — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["prohíba", "prohíbas", "prohíba", "prohibamos", "prohibáis", "prohíban"]))
-  func prohibirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func prohibirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("prohibir", model: Self.prohibir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -857,57 +857,57 @@ struct Conjugator2Tests {
   // a-stem touches STR; the orthographic swap touches PR 1s / PS{all}. They overlap
   // on PS (both apply, stacking) and diverge on PR 1s (swap only) and PI 1s (accent
   // only).
-  @Test("ahincar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ahincar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["ahínco", "ahíncas", "ahínca", "ahincamos", "ahincáis", "ahíncan"]))
-  func ahincarPresent(person: PersonNumber2, expected: String) {
+  func ahincarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("ahincar", model: Self.ahincar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("ahincar — presente de subjuntivo (accent + c→qu stack)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ahincar — presente de subjuntivo (accent + c→qu stack)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["ahínque", "ahínques", "ahínque", "ahinquemos", "ahinquéis", "ahínquen"]))
-  func ahincarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func ahincarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("ahincar", model: Self.ahincar, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("ahincar — pretérito (swap only, no accent)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ahincar — pretérito (swap only, no accent)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["ahinqué", "ahincaste", "ahincó", "ahincamos", "ahincasteis", "ahincaron"]))
-  func ahincarPreterite(person: PersonNumber2, expected: String) {
+  func ahincarPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("ahincar", model: Self.ahincar, .pretérito(person), expected)
   }
 
-  @Test("cabrahigar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cabrahigar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cabrahígo", "cabrahígas", "cabrahíga", "cabrahigamos", "cabrahigáis", "cabrahígan"]))
-  func cabrahigarPresent(person: PersonNumber2, expected: String) {
+  func cabrahigarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("cabrahigar", model: Self.cabrahigar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("cabrahigar — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cabrahigar — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cabrahígue", "cabrahígues", "cabrahígue", "cabrahiguemos", "cabrahiguéis", "cabrahíguen"]))
-  func cabrahigarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func cabrahigarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("cabrahigar", model: Self.cabrahigar, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("enraizar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("enraizar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["enraízo", "enraízas", "enraíza", "enraizamos", "enraizáis", "enraízan"]))
-  func enraizarPresent(person: PersonNumber2, expected: String) {
+  func enraizarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("enraizar", model: Self.enraizar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("enraizar — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("enraizar — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["enraíce", "enraíces", "enraíce", "enraicemos", "enraicéis", "enraícen"]))
-  func enraizarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func enraizarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("enraizar", model: Self.enraizar, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("europeizar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("europeizar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["europeízo", "europeízas", "europeíza", "europeizamos", "europeizáis", "europeízan"]))
-  func europeizarPresent(person: PersonNumber2, expected: String) {
+  func europeizarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("europeizar", model: Self.europeizar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("europeizar — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("europeizar — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["europeíce", "europeíces", "europeíce", "europeicemos", "europeicéis", "europeícen"]))
-  func europeizarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func europeizarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("europeizar", model: Self.europeizar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -937,21 +937,21 @@ struct Conjugator2Tests {
 
   // Diphthong with no raise: the change surfaces only in STR; unstressed forms stay
   // regular.
-  @Test("pensar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("pensar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["pienso", "piensas", "piensa", "pensamos", "pensáis", "piensan"]))
-  func pensarPresent(person: PersonNumber2, expected: String) {
+  func pensarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("pensar", model: Self.pensar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("pensar — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("pensar — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["piense", "pienses", "piense", "pensemos", "penséis", "piensen"]))
-  func pensarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func pensarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("pensar", model: Self.pensar, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("pensar — pretérito (no diphthong, unstressed)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("pensar — pretérito (no diphthong, unstressed)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["pensé", "pensaste", "pensó", "pensamos", "pensasteis", "pensaron"]))
-  func pensarPreterite(person: PersonNumber2, expected: String) {
+  func pensarPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("pensar", model: Self.pensar, .pretérito(person), expected)
   }
 
@@ -966,15 +966,15 @@ struct Conjugator2Tests {
     expectForm("pensar", model: Self.pensar, tense, expected)
   }
 
-  @Test("mostrar — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("mostrar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["muestro", "muestras", "muestra", "mostramos", "mostráis", "muestran"]))
-  func mostrarPresent(person: PersonNumber2, expected: String) {
+  func mostrarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("mostrar", model: Self.mostrar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("mostrar — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("mostrar — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["muestre", "muestres", "muestre", "mostremos", "mostréis", "muestren"]))
-  func mostrarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func mostrarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("mostrar", model: Self.mostrar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -983,89 +983,89 @@ struct Conjugator2Tests {
     expectForm("mostrar", model: Self.mostrar, .imperativoAfirmativo(.secondSingular), "muestra")
   }
 
-  @Test("perder — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("perder — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["pierdo", "pierdes", "pierde", "perdemos", "perdéis", "pierden"]))
-  func perderPresent(person: PersonNumber2, expected: String) {
+  func perderPresent(person: EnginePersonNumber, expected: String) {
     expectForm("perder", model: Self.perder, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("perder — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("perder — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["pierda", "pierdas", "pierda", "perdamos", "perdáis", "pierdan"]))
-  func perderPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func perderPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("perder", model: Self.perder, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("mover — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("mover — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["muevo", "mueves", "mueve", "movemos", "movéis", "mueven"]))
-  func moverPresent(person: PersonNumber2, expected: String) {
+  func moverPresent(person: EnginePersonNumber, expected: String) {
     expectForm("mover", model: Self.mover, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("mover — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("mover — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["mueva", "muevas", "mueva", "movamos", "mováis", "muevan"]))
-  func moverPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func moverPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("mover", model: Self.mover, .presenteDeSubjuntivo(person), expected)
   }
 
   // Spelled variants — same operation, a different target string.
-  @Test("errar — presente de indicativo (e→ye)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("errar — presente de indicativo (e→ye)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["yerro", "yerras", "yerra", "erramos", "erráis", "yerran"]))
-  func errarPresent(person: PersonNumber2, expected: String) {
+  func errarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("errar", model: Self.errar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("errar — presente de subjuntivo (e→ye)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("errar — presente de subjuntivo (e→ye)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["yerre", "yerres", "yerre", "erremos", "erréis", "yerren"]))
-  func errarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func errarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("errar", model: Self.errar, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("agorar — presente de indicativo (o→üe)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("agorar — presente de indicativo (o→üe)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["agüero", "agüeras", "agüera", "agoramos", "agoráis", "agüeran"]))
-  func agorarPresent(person: PersonNumber2, expected: String) {
+  func agorarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("agorar", model: Self.agorar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("agorar — presente de subjuntivo (o→üe)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("agorar — presente de subjuntivo (o→üe)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["agüere", "agüeres", "agüere", "agoremos", "agoréis", "agüeren"]))
-  func agorarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func agorarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("agorar", model: Self.agorar, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("oler — presente de indicativo (o→hue)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("oler — presente de indicativo (o→hue)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["huelo", "hueles", "huele", "olemos", "oléis", "huelen"]))
-  func olerPresent(person: PersonNumber2, expected: String) {
+  func olerPresent(person: EnginePersonNumber, expected: String) {
     expectForm("oler", model: Self.oler, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("oler — presente de subjuntivo (o→hue)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("oler — presente de subjuntivo (o→hue)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["huela", "huelas", "huela", "olamos", "oláis", "huelan"]))
-  func olerPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func olerPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("oler", model: Self.oler, .presenteDeSubjuntivo(person), expected)
   }
 
   // Rare diphthongs.
-  @Test("adquirir — presente de indicativo (i→ie)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("adquirir — presente de indicativo (i→ie)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["adquiero", "adquieres", "adquiere", "adquirimos", "adquirís", "adquieren"]))
-  func adquirirPresent(person: PersonNumber2, expected: String) {
+  func adquirirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("adquirir", model: Self.adquirir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("adquirir — presente de subjuntivo (i→ie)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("adquirir — presente de subjuntivo (i→ie)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["adquiera", "adquieras", "adquiera", "adquiramos", "adquiráis", "adquieran"]))
-  func adquirirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func adquirirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("adquirir", model: Self.adquirir, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("jugar — presente de indicativo (u→ue)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("jugar — presente de indicativo (u→ue)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["juego", "juegas", "juega", "jugamos", "jugáis", "juegan"]))
-  func jugarPresent(person: PersonNumber2, expected: String) {
+  func jugarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("jugar", model: Self.jugar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("jugar — presente de subjuntivo (u→ue + o-gar)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("jugar — presente de subjuntivo (u→ue + o-gar)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["juegue", "juegues", "juegue", "juguemos", "juguéis", "jueguen"]))
-  func jugarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func jugarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("jugar", model: Self.jugar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1075,15 +1075,15 @@ struct Conjugator2Tests {
   }
 
   // Control case: discernir (15) diphthongizes in STR but its WK slots stay regular.
-  @Test("discernir — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("discernir — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["discierno", "disciernes", "discierne", "discernimos", "discernís", "disciernen"]))
-  func discernirPresent(person: PersonNumber2, expected: String) {
+  func discernirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("discernir", model: Self.discernir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("discernir — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("discernir — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["discierna", "disciernas", "discierna", "discernamos", "discernáis", "disciernan"]))
-  func discernirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func discernirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("discernir", model: Self.discernir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1101,33 +1101,33 @@ struct Conjugator2Tests {
 
   // sentir (6A) = subir + d-ie + r-ei-wk. PS{1s,2s,3s,3p} diphthong (STR),
   // PS{1p,2p} raise (WK).
-  @Test("sentir — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("sentir — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["siento", "sientes", "siente", "sentimos", "sentís", "sienten"]))
-  func sentirPresent(person: PersonNumber2, expected: String) {
+  func sentirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("sentir", model: Self.sentir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("sentir — pretérito (WK raise in 3s/3p)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("sentir — pretérito (WK raise in 3s/3p)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["sentí", "sentiste", "sintió", "sentimos", "sentisteis", "sintieron"]))
-  func sentirPreterite(person: PersonNumber2, expected: String) {
+  func sentirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("sentir", model: Self.sentir, .pretérito(person), expected)
   }
 
-  @Test("sentir — presente de subjuntivo (STR/WK split)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("sentir — presente de subjuntivo (STR/WK split)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["sienta", "sientas", "sienta", "sintamos", "sintáis", "sientan"]))
-  func sentirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func sentirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("sentir", model: Self.sentir, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("sentir — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("sentir — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["sintiera", "sintieras", "sintiera", "sintiéramos", "sintierais", "sintieran"]))
-  func sentirImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func sentirImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("sentir", model: Self.sentir, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
-  @Test("sentir — imperfecto de subjuntivo (-se)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("sentir — imperfecto de subjuntivo (-se)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["sintiese", "sintieses", "sintiese", "sintiésemos", "sintieseis", "sintiesen"]))
-  func sentirImperfectSubjunctiveSe(person: PersonNumber2, expected: String) {
+  func sentirImperfectSubjunctiveSe(person: EnginePersonNumber, expected: String) {
     expectForm("sentir", model: Self.sentir, .imperfectoDeSubjuntivoSe(person), expected)
   }
 
@@ -1141,27 +1141,27 @@ struct Conjugator2Tests {
   }
 
   // pedir (6B) = subir + r-ei-str + r-ei-wk. Raise everywhere, no diphthong.
-  @Test("pedir — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("pedir — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["pido", "pides", "pide", "pedimos", "pedís", "piden"]))
-  func pedirPresent(person: PersonNumber2, expected: String) {
+  func pedirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("pedir", model: Self.pedir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("pedir — pretérito", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("pedir — pretérito", arguments: zip(EnginePersonNumber.oracleOrder,
     ["pedí", "pediste", "pidió", "pedimos", "pedisteis", "pidieron"]))
-  func pedirPreterite(person: PersonNumber2, expected: String) {
+  func pedirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("pedir", model: Self.pedir, .pretérito(person), expected)
   }
 
-  @Test("pedir — presente de subjuntivo (both halves raise)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("pedir — presente de subjuntivo (both halves raise)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["pida", "pidas", "pida", "pidamos", "pidáis", "pidan"]))
-  func pedirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func pedirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("pedir", model: Self.pedir, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("pedir — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("pedir — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["pidiera", "pidieras", "pidiera", "pidiéramos", "pidierais", "pidieran"]))
-  func pedirImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func pedirImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("pedir", model: Self.pedir, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
@@ -1174,27 +1174,27 @@ struct Conjugator2Tests {
   }
 
   // dormir (6C) = subir + d-ue + r-ou-wk. Same STR/WK split as sentir, o → u.
-  @Test("dormir — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("dormir — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["duermo", "duermes", "duerme", "dormimos", "dormís", "duermen"]))
-  func dormirPresent(person: PersonNumber2, expected: String) {
+  func dormirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("dormir", model: Self.dormir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("dormir — pretérito", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("dormir — pretérito", arguments: zip(EnginePersonNumber.oracleOrder,
     ["dormí", "dormiste", "durmió", "dormimos", "dormisteis", "durmieron"]))
-  func dormirPreterite(person: PersonNumber2, expected: String) {
+  func dormirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("dormir", model: Self.dormir, .pretérito(person), expected)
   }
 
-  @Test("dormir — presente de subjuntivo (STR/WK split)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("dormir — presente de subjuntivo (STR/WK split)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["duerma", "duermas", "duerma", "durmamos", "durmáis", "duerman"]))
-  func dormirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func dormirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("dormir", model: Self.dormir, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("dormir — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("dormir — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["durmiera", "durmieras", "durmiera", "durmiéramos", "durmierais", "durmieran"]))
-  func dormirImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func dormirImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("dormir", model: Self.dormir, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
@@ -1207,9 +1207,9 @@ struct Conjugator2Tests {
 
   // Watch the preterite/subjunctive divergence: niegue (diphthong + g→gu in PS) vs
   // negué (PR 1s gets the swap only — PR 1s ∉ STR, so no diphthong).
-  @Test("negar — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("negar — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["niegue", "niegues", "niegue", "neguemos", "neguéis", "nieguen"]))
-  func negarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func negarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("negar", model: Self.negar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1221,21 +1221,21 @@ struct Conjugator2Tests {
     expectForm("negar", model: Self.negar, tense, expected)
   }
 
-  @Test("empezar — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("empezar — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["empiece", "empieces", "empiece", "empecemos", "empecéis", "empiecen"]))
-  func empezarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func empezarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("empezar", model: Self.empezar, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("colgar — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("colgar — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cuelgue", "cuelgues", "cuelgue", "colguemos", "colguéis", "cuelguen"]))
-  func colgarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func colgarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("colgar", model: Self.colgar, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("forzar — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("forzar — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["fuerce", "fuerces", "fuerce", "forcemos", "forcéis", "fuercen"]))
-  func forzarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func forzarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("forzar", model: Self.forzar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1247,27 +1247,27 @@ struct Conjugator2Tests {
     expectForm("forzar", model: Self.forzar, .pretérito(.firstSingular), "forcé")
   }
 
-  @Test("cocer — presente de indicativo (d-ue + c→z)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cocer — presente de indicativo (d-ue + c→z)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cuezo", "cueces", "cuece", "cocemos", "cocéis", "cuecen"]))
-  func cocerPresent(person: PersonNumber2, expected: String) {
+  func cocerPresent(person: EnginePersonNumber, expected: String) {
     expectForm("cocer", model: Self.cocer, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("cocer — presente de subjuntivo (d-ue + c→z)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("cocer — presente de subjuntivo (d-ue + c→z)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cueza", "cuezas", "cueza", "cozamos", "cozáis", "cuezan"]))
-  func cocerPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func cocerPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("cocer", model: Self.cocer, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("elegir — presente de indicativo (raise + g→j)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("elegir — presente de indicativo (raise + g→j)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["elijo", "eliges", "elige", "elegimos", "elegís", "eligen"]))
-  func elegirPresent(person: PersonNumber2, expected: String) {
+  func elegirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("elegir", model: Self.elegir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("elegir — presente de subjuntivo (raise + g→j)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("elegir — presente de subjuntivo (raise + g→j)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["elija", "elijas", "elija", "elijamos", "elijáis", "elijan"]))
-  func elegirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func elegirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("elegir", model: Self.elegir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1279,15 +1279,15 @@ struct Conjugator2Tests {
     expectForm("elegir", model: Self.elegir, tense, expected)
   }
 
-  @Test("seguir — presente de indicativo (raise + gu→g)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("seguir — presente de indicativo (raise + gu→g)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["sigo", "sigues", "sigue", "seguimos", "seguís", "siguen"]))
-  func seguirPresent(person: PersonNumber2, expected: String) {
+  func seguirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("seguir", model: Self.seguir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("seguir — presente de subjuntivo (raise + gu→g)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("seguir — presente de subjuntivo (raise + gu→g)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["siga", "sigas", "siga", "sigamos", "sigáis", "sigan"]))
-  func seguirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func seguirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("seguir", model: Self.seguir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1301,21 +1301,21 @@ struct Conjugator2Tests {
 
   // ceñir (6B-3) = pedir-raises + o-llñ — the raise feeds the i, the palatal
   // absorbs it (ciñó, ciñendo).
-  @Test("ceñir — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ceñir — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["ciño", "ciñes", "ciñe", "ceñimos", "ceñís", "ciñen"]))
-  func cenirPresent(person: PersonNumber2, expected: String) {
+  func cenirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("ceñir", model: Self.ceñir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("ceñir — pretérito (raise + palatal absorb)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ceñir — pretérito (raise + palatal absorb)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["ceñí", "ceñiste", "ciñó", "ceñimos", "ceñisteis", "ciñeron"]))
-  func cenirPreterite(person: PersonNumber2, expected: String) {
+  func cenirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("ceñir", model: Self.ceñir, .pretérito(person), expected)
   }
 
-  @Test("ceñir — presente de subjuntivo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ceñir — presente de subjuntivo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["ciña", "ciñas", "ciña", "ciñamos", "ciñáis", "ciñan"]))
-  func cenirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func cenirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("ceñir", model: Self.ceñir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1341,9 +1341,9 @@ struct Conjugator2Tests {
   // MARK: - Phase 4: irregular 1s + present subjunctive (§4.5)
 
   // zc: c→zc in PI 1s + PS{all}, built on the regular stem (subj-from-1s bundled).
-  @Test("conocer — presente de subjuntivo (c→zc)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("conocer — presente de subjuntivo (c→zc)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["conozca", "conozcas", "conozca", "conozcamos", "conozcáis", "conozcan"]))
-  func conocerPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func conocerPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("conocer", model: Self.conocer, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1362,16 +1362,16 @@ struct Conjugator2Tests {
     expectForm("lucir", model: Self.lucir, .presenteDeIndicativo(.firstSingular), "luzco")
   }
 
-  @Test("lucir — presente de subjuntivo (c→zc)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("lucir — presente de subjuntivo (c→zc)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["luzca", "luzcas", "luzca", "luzcamos", "luzcáis", "luzcan"]))
-  func lucirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func lucirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("lucir", model: Self.lucir, .presenteDeSubjuntivo(person), expected)
   }
 
   // g1-g: append g to the regular stem in PI 1s + PS{all}.
-  @Test("asir — presente de subjuntivo (g-add)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("asir — presente de subjuntivo (g-add)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["asga", "asgas", "asga", "asgamos", "asgáis", "asgan"]))
-  func asirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func asirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("asir", model: Self.asir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1385,21 +1385,21 @@ struct Conjugator2Tests {
 
   // g1-ig + o-yhiatus: caigo/caiga AND the hiatus glide/accents (caíste/caído/cayó/
   // cayera) — the accent fires because the -i- follows a strong vowel (a).
-  @Test("caer — presente de subjuntivo (ig-add)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("caer — presente de subjuntivo (ig-add)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["caiga", "caigas", "caiga", "caigamos", "caigáis", "caigan"]))
-  func caerPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func caerPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("caer", model: Self.caer, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("caer — pretérito (hiatus glide + accents)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("caer — pretérito (hiatus glide + accents)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["caí", "caíste", "cayó", "caímos", "caísteis", "cayeron"]))
-  func caerPreterite(person: PersonNumber2, expected: String) {
+  func caerPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("caer", model: Self.caer, .pretérito(person), expected)
   }
 
-  @Test("caer — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("caer — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["cayera", "cayeras", "cayera", "cayéramos", "cayerais", "cayeran"]))
-  func caerImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func caerImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("caer", model: Self.caer, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
@@ -1415,27 +1415,27 @@ struct Conjugator2Tests {
   // y-add + o-yhiatus: the i→y glide everywhere it surfaces BUT the -uir hiatus
   // accents do NOT fire (construiste/construimos/construido) — the -i- follows the
   // weak -u-, not a strong vowel.
-  @Test("construir — presente de indicativo (y glide)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("construir — presente de indicativo (y glide)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["construyo", "construyes", "construye", "construimos", "construís", "construyen"]))
-  func construirPresent(person: PersonNumber2, expected: String) {
+  func construirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("construir", model: Self.construir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("construir — presente de subjuntivo (y glide)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("construir — presente de subjuntivo (y glide)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["construya", "construyas", "construya", "construyamos", "construyáis", "construyan"]))
-  func construirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func construirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("construir", model: Self.construir, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("construir — pretérito (y glide, no accents)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("construir — pretérito (y glide, no accents)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["construí", "construiste", "construyó", "construimos", "construisteis", "construyeron"]))
-  func construirPreterite(person: PersonNumber2, expected: String) {
+  func construirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("construir", model: Self.construir, .pretérito(person), expected)
   }
 
-  @Test("construir — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("construir — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["construyera", "construyeras", "construyera", "construyéramos", "construyerais", "construyeran"]))
-  func construirImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func construirImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("construir", model: Self.construir, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
@@ -1448,21 +1448,21 @@ struct Conjugator2Tests {
   }
 
   // §4.5 + §4.7 integration: g1-g for the 1s/subjunctive, f-dr for future/conditional.
-  @Test("salir — presente de subjuntivo (g-add)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("salir — presente de subjuntivo (g-add)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["salga", "salgas", "salga", "salgamos", "salgáis", "salgan"]))
-  func salirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func salirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("salir", model: Self.salir, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("salir — futuro (f-dr)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("salir — futuro (f-dr)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["saldré", "saldrás", "saldrá", "saldremos", "saldréis", "saldrán"]))
-  func salirFuture(person: PersonNumber2, expected: String) {
+  func salirFuture(person: EnginePersonNumber, expected: String) {
     expectForm("salir", model: Self.salir, .futuro(person), expected)
   }
 
-  @Test("salir — condicional (f-dr)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("salir — condicional (f-dr)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["saldría", "saldrías", "saldría", "saldríamos", "saldríais", "saldrían"]))
-  func salirConditional(person: PersonNumber2, expected: String) {
+  func salirConditional(person: EnginePersonNumber, expected: String) {
     expectForm("salir", model: Self.salir, .condicional(person), expected)
   }
 
@@ -1471,9 +1471,9 @@ struct Conjugator2Tests {
     expectForm("salir", model: Self.salir, .presenteDeIndicativo(.firstSingular), "salgo")
   }
 
-  @Test("valer — futuro (f-dr)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("valer — futuro (f-dr)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["valdré", "valdrás", "valdrá", "valdremos", "valdréis", "valdrán"]))
-  func valerFuture(person: PersonNumber2, expected: String) {
+  func valerFuture(person: EnginePersonNumber, expected: String) {
     expectForm("valer", model: Self.valer, .futuro(person), expected)
   }
 
@@ -1488,21 +1488,21 @@ struct Conjugator2Tests {
   // MARK: - Phase 4: strong / suppletive preterites (§4.6)
 
   // sp-end is base-independent: andar/estar are -ar verbs yet take the -ie- IS.
-  @Test("andar — pretérito (strong stem)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("andar — pretérito (strong stem)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["anduve", "anduviste", "anduvo", "anduvimos", "anduvisteis", "anduvieron"]))
-  func andarPreterite(person: PersonNumber2, expected: String) {
+  func andarPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("andar", model: Self.andar, .pretérito(person), expected)
   }
 
-  @Test("andar — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("andar — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["anduviera", "anduvieras", "anduviera", "anduviéramos", "anduvierais", "anduvieran"]))
-  func andarImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func andarImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("andar", model: Self.andar, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
-  @Test("andar — imperfecto de subjuntivo (-se)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("andar — imperfecto de subjuntivo (-se)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["anduviese", "anduvieses", "anduviese", "anduviésemos", "anduvieseis", "anduviesen"]))
-  func andarImperfectSubjunctiveSe(person: PersonNumber2, expected: String) {
+  func andarImperfectSubjunctiveSe(person: EnginePersonNumber, expected: String) {
     expectForm("andar", model: Self.andar, .imperfectoDeSubjuntivoSe(person), expected)
   }
 
@@ -1515,9 +1515,9 @@ struct Conjugator2Tests {
     expectForm("estar", model: estar, tense, expected)
   }
 
-  @Test("tener — pretérito (strong stem)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("tener — pretérito (strong stem)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["tuve", "tuviste", "tuvo", "tuvimos", "tuvisteis", "tuvieron"]))
-  func tenerStrongPreterite(person: PersonNumber2, expected: String) {
+  func tenerStrongPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("tener", model: Self.tenerSpEnd, .pretérito(person), expected)
   }
 
@@ -1527,15 +1527,15 @@ struct Conjugator2Tests {
   }
 
   // sp-jend absorbs the i after j: 3p -eron (not -ieron), IS -era (not -iera).
-  @Test("conducir — pretérito (j-stem absorbs i)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("conducir — pretérito (j-stem absorbs i)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["conduje", "condujiste", "condujo", "condujimos", "condujisteis", "condujeron"]))
-  func conducirPreterite(person: PersonNumber2, expected: String) {
+  func conducirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("conducir", model: Self.conducir, .pretérito(person), expected)
   }
 
-  @Test("conducir — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("conducir — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["condujera", "condujeras", "condujera", "condujéramos", "condujerais", "condujeran"]))
-  func conducirImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func conducirImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("conducir", model: Self.conducir, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
@@ -1544,9 +1544,9 @@ struct Conjugator2Tests {
     expectForm("conducir", model: Self.conducir, .presenteDeIndicativo(.firstSingular), "conduzco")
   }
 
-  @Test("decir — pretérito (j-stem absorbs i)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("decir — pretérito (j-stem absorbs i)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["dije", "dijiste", "dijo", "dijimos", "dijisteis", "dijeron"]))
-  func decirPreterite(person: PersonNumber2, expected: String) {
+  func decirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("decir", model: Self.decirSpJend, .pretérito(person), expected)
   }
 
@@ -1556,15 +1556,15 @@ struct Conjugator2Tests {
   }
 
   // wp-i: unaccented monosyllables, and -iera forced on an -ar base (dar → diera).
-  @Test("dar — pretérito (weak monosyllables)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("dar — pretérito (weak monosyllables)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["di", "diste", "dio", "dimos", "disteis", "dieron"]))
-  func darPreterite(person: PersonNumber2, expected: String) {
+  func darPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("dar", model: Self.dar, .pretérito(person), expected)
   }
 
-  @Test("dar — imperfecto de subjuntivo (-ra, -iera on -ar base)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("dar — imperfecto de subjuntivo (-ra, -iera on -ar base)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["diera", "dieras", "diera", "diéramos", "dierais", "dieran"]))
-  func darImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func darImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("dar", model: Self.dar, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
@@ -1573,9 +1573,9 @@ struct Conjugator2Tests {
     expectForm("dar", model: Self.dar, .imperfectoDeSubjuntivoSe(.firstSingular), "diese")
   }
 
-  @Test("ver — pretérito (weak monosyllables)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ver — pretérito (weak monosyllables)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["vi", "viste", "vio", "vimos", "visteis", "vieron"]))
-  func verPreterite(person: PersonNumber2, expected: String) {
+  func verPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("ver", model: Self.ver, .pretérito(person), expected)
   }
 
@@ -1585,27 +1585,27 @@ struct Conjugator2Tests {
   }
 
   // pret-fue: the suppletive fu- stem shared by ser and ir.
-  @Test("ser — pretérito (suppletive fu-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ser — pretérito (suppletive fu-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["fui", "fuiste", "fue", "fuimos", "fuisteis", "fueron"]))
-  func serPreterite(person: PersonNumber2, expected: String) {
+  func serPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("ser", model: Self.ser, .pretérito(person), expected)
   }
 
-  @Test("ser — imperfecto de subjuntivo (-ra)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ser — imperfecto de subjuntivo (-ra)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["fuera", "fueras", "fuera", "fuéramos", "fuerais", "fueran"]))
-  func serImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func serImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("ser", model: Self.ser, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
-  @Test("ser — imperfecto de subjuntivo (-se)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ser — imperfecto de subjuntivo (-se)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["fuese", "fueses", "fuese", "fuésemos", "fueseis", "fuesen"]))
-  func serImperfectSubjunctiveSe(person: PersonNumber2, expected: String) {
+  func serImperfectSubjunctiveSe(person: EnginePersonNumber, expected: String) {
     expectForm("ser", model: Self.ser, .imperfectoDeSubjuntivoSe(person), expected)
   }
 
-  @Test("ir — pretérito (suppletive fu-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ir — pretérito (suppletive fu-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["fui", "fuiste", "fue", "fuimos", "fuisteis", "fueron"]))
-  func irPreterite(person: PersonNumber2, expected: String) {
+  func irPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("ir", model: Self.ir, .pretérito(person), expected)
   }
 
@@ -1618,15 +1618,15 @@ struct Conjugator2Tests {
 
   // f-drope drops the theme -e- (-er → -r); querer's stem ends in r, so the future
   // doubles it (querré).
-  @Test("haber — futuro (f-drope)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("haber — futuro (f-drope)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["habré", "habrás", "habrá", "habremos", "habréis", "habrán"]))
-  func haberFuture(person: PersonNumber2, expected: String) {
+  func haberFuture(person: EnginePersonNumber, expected: String) {
     expectForm("haber", model: Self.haber, .futuro(person), expected)
   }
 
-  @Test("haber — condicional (f-drope)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("haber — condicional (f-drope)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["habría", "habrías", "habría", "habríamos", "habríais", "habrían"]))
-  func haberConditional(person: PersonNumber2, expected: String) {
+  func haberConditional(person: EnginePersonNumber, expected: String) {
     expectForm("haber", model: Self.haber, .condicional(person), expected)
   }
 
@@ -1646,15 +1646,15 @@ struct Conjugator2Tests {
   }
 
   // f-dr inserts d (drops the theme vowel).
-  @Test("tener — futuro (f-dr)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("tener — futuro (f-dr)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["tendré", "tendrás", "tendrá", "tendremos", "tendréis", "tendrán"]))
-  func tenerFutureDr(person: PersonNumber2, expected: String) {
+  func tenerFutureDr(person: EnginePersonNumber, expected: String) {
     expectForm("tener", model: Self.tenerFDr, .futuro(person), expected)
   }
 
-  @Test("tener — condicional (f-dr)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("tener — condicional (f-dr)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["tendría", "tendrías", "tendría", "tendríamos", "tendríais", "tendrían"]))
-  func tenerConditionalDr(person: PersonNumber2, expected: String) {
+  func tenerConditionalDr(person: EnginePersonNumber, expected: String) {
     expectForm("tener", model: Self.tenerFDr, .condicional(person), expected)
   }
 
@@ -1665,15 +1665,15 @@ struct Conjugator2Tests {
   }
 
   // f-contract: a per-verb contracted future stem (residue) + the f-drope endings.
-  @Test("hacer — futuro (contracted stem)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("hacer — futuro (contracted stem)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["haré", "harás", "hará", "haremos", "haréis", "harán"]))
-  func hacerFuture(person: PersonNumber2, expected: String) {
+  func hacerFuture(person: EnginePersonNumber, expected: String) {
     expectForm("hacer", model: Self.hacer, .futuro(person), expected)
   }
 
-  @Test("hacer — condicional (contracted stem)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("hacer — condicional (contracted stem)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["haría", "harías", "haría", "haríamos", "haríais", "harían"]))
-  func hacerConditional(person: PersonNumber2, expected: String) {
+  func hacerConditional(person: EnginePersonNumber, expected: String) {
     expectForm("hacer", model: Self.hacer, .condicional(person), expected)
   }
 
@@ -1736,21 +1736,21 @@ struct Conjugator2Tests {
   // venir (32) = subir + d-ie + r-ei-wk + g1-g + sp-end(vin) + f-dr. r-ei-wk would
   // raise PS{1p,2p} (ven→vin), but g1-g resets all of PS to veng- (vengamos, not
   // *vingamos) while the raise still drives the gerund (viniendo).
-  @Test("venir — presente de indicativo", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("venir — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["vengo", "vienes", "viene", "venimos", "venís", "vienen"]))
-  func venirPresent(person: PersonNumber2, expected: String) {
+  func venirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("venir", model: Self.venir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("venir — presente de subjuntivo (g1-g reset wins)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("venir — presente de subjuntivo (g1-g reset wins)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["venga", "vengas", "venga", "vengamos", "vengáis", "vengan"]))
-  func venirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func venirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("venir", model: Self.venir, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("venir — pretérito (strong stem)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("venir — pretérito (strong stem)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["vine", "viniste", "vino", "vinimos", "vinisteis", "vinieron"]))
-  func venirPreterite(person: PersonNumber2, expected: String) {
+  func venirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("venir", model: Self.venir, .pretérito(person), expected)
   }
 
@@ -1835,27 +1835,27 @@ struct Conjugator2Tests {
 
   // MARK: - Phase 5: classes 19–27 (new full builds)
 
-  @Test("ser — presente de indicativo (suppletive, incl. vos sos)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ser — presente de indicativo (suppletive, incl. vos sos)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["soy", "eres", "es", "somos", "sois", "son"]))
-  func serPresent(person: PersonNumber2, expected: String) {
+  func serPresent(person: EnginePersonNumber, expected: String) {
     expectForm("ser", model: Self.ser, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("ser — imperfecto de indicativo (era-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ser — imperfecto de indicativo (era-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["era", "eras", "era", "éramos", "erais", "eran"]))
-  func serImperfect(person: PersonNumber2, expected: String) {
+  func serImperfect(person: EnginePersonNumber, expected: String) {
     expectForm("ser", model: Self.ser, .imperfectoDeIndicativo(person), expected)
   }
 
-  @Test("ser — presente de subjuntivo (sea-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ser — presente de subjuntivo (sea-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["sea", "seas", "sea", "seamos", "seáis", "sean"]))
-  func serPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func serPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("ser", model: Self.ser, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("ser — futuro (regular ser-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ser — futuro (regular ser-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["seré", "serás", "será", "seremos", "seréis", "serán"]))
-  func serFuture(person: PersonNumber2, expected: String) {
+  func serFuture(person: EnginePersonNumber, expected: String) {
     expectForm("ser", model: Self.ser, .futuro(person), expected)
   }
 
@@ -1871,21 +1871,21 @@ struct Conjugator2Tests {
     expectForm("ser", model: Self.ser, tense, expected)
   }
 
-  @Test("estar — presente de indicativo (estoy + stress shift)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("estar — presente de indicativo (estoy + stress shift)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["estoy", "estás", "está", "estamos", "estáis", "están"]))
-  func estarPresent(person: PersonNumber2, expected: String) {
+  func estarPresent(person: EnginePersonNumber, expected: String) {
     expectForm("estar", model: Self.estar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("estar — pretérito (estuv)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("estar — pretérito (estuv)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["estuve", "estuviste", "estuvo", "estuvimos", "estuvisteis", "estuvieron"]))
-  func estarPreterite(person: PersonNumber2, expected: String) {
+  func estarPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("estar", model: Self.estar, .pretérito(person), expected)
   }
 
-  @Test("estar — presente de subjuntivo (esté-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("estar — presente de subjuntivo (esté-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["esté", "estés", "esté", "estemos", "estéis", "estén"]))
-  func estarPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func estarPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("estar", model: Self.estar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1899,27 +1899,27 @@ struct Conjugator2Tests {
     expectForm("estar", model: Self.estar, tense, expected)
   }
 
-  @Test("haber — presente de indicativo (he/has/ha…)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("haber — presente de indicativo (he/has/ha…)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["he", "has", "ha", "hemos", "habéis", "han"]))
-  func haberPresent(person: PersonNumber2, expected: String) {
+  func haberPresent(person: EnginePersonNumber, expected: String) {
     expectForm("haber", model: Self.haber, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("haber — pretérito (hub)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("haber — pretérito (hub)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["hube", "hubiste", "hubo", "hubimos", "hubisteis", "hubieron"]))
-  func haberPreterite(person: PersonNumber2, expected: String) {
+  func haberPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("haber", model: Self.haber, .pretérito(person), expected)
   }
 
-  @Test("haber — futuro (habr-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("haber — futuro (habr-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["habré", "habrás", "habrá", "habremos", "habréis", "habrán"]))
-  func haberFutureClass(person: PersonNumber2, expected: String) {
+  func haberFutureClass(person: EnginePersonNumber, expected: String) {
     expectForm("haber", model: Self.haber, .futuro(person), expected)
   }
 
-  @Test("haber — presente de subjuntivo (haya-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("haber — presente de subjuntivo (haya-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["haya", "hayas", "haya", "hayamos", "hayáis", "hayan"]))
-  func haberPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func haberPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("haber", model: Self.haber, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1951,21 +1951,21 @@ struct Conjugator2Tests {
     expectForm("caber", model: Self.caber, tense, expected)
   }
 
-  @Test("ir — presente de indicativo (voy/vas…)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ir — presente de indicativo (voy/vas…)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["voy", "vas", "va", "vamos", "vais", "van"]))
-  func irPresent(person: PersonNumber2, expected: String) {
+  func irPresent(person: EnginePersonNumber, expected: String) {
     expectForm("ir", model: Self.ir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("ir — imperfecto de indicativo (iba-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ir — imperfecto de indicativo (iba-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["iba", "ibas", "iba", "íbamos", "ibais", "iban"]))
-  func irImperfect(person: PersonNumber2, expected: String) {
+  func irImperfect(person: EnginePersonNumber, expected: String) {
     expectForm("ir", model: Self.ir, .imperfectoDeIndicativo(person), expected)
   }
 
-  @Test("ir — presente de subjuntivo (vaya-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ir — presente de subjuntivo (vaya-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["vaya", "vayas", "vaya", "vayamos", "vayáis", "vayan"]))
-  func irPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func irPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("ir", model: Self.ir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -1978,15 +1978,15 @@ struct Conjugator2Tests {
     expectForm("ir", model: Self.ir, tense, expected)
   }
 
-  @Test("dar — presente de indicativo (doy, monosyllable dais)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("dar — presente de indicativo (doy, monosyllable dais)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["doy", "das", "da", "damos", "dais", "dan"]))
-  func darPresent(person: PersonNumber2, expected: String) {
+  func darPresent(person: EnginePersonNumber, expected: String) {
     expectForm("dar", model: Self.dar, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("dar — presente de subjuntivo (dé / des / dé …)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("dar — presente de subjuntivo (dé / des / dé …)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["dé", "des", "dé", "demos", "deis", "den"]))
-  func darPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func darPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("dar", model: Self.dar, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -2021,15 +2021,15 @@ struct Conjugator2Tests {
 
   // MARK: - Phase 5: classes 28–35 (finish the Phase-4 partials with residue)
 
-  @Test("decir — presente de indicativo (digo/dices…)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("decir — presente de indicativo (digo/dices…)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["digo", "dices", "dice", "decimos", "decís", "dicen"]))
-  func decirPresent(person: PersonNumber2, expected: String) {
+  func decirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("decir", model: Self.decir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("decir — presente de subjuntivo (dig-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("decir — presente de subjuntivo (dig-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["diga", "digas", "diga", "digamos", "digáis", "digan"]))
-  func decirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func decirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("decir", model: Self.decir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -2071,15 +2071,15 @@ struct Conjugator2Tests {
     expectForm("bendecir", model: Self.bendecir, tense, expected)
   }
 
-  @Test("hacer — presente de indicativo (hago…)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("hacer — presente de indicativo (hago…)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["hago", "haces", "hace", "hacemos", "hacéis", "hacen"]))
-  func hacerPresent(person: PersonNumber2, expected: String) {
+  func hacerPresent(person: EnginePersonNumber, expected: String) {
     expectForm("hacer", model: Self.hacer, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("hacer — pretérito (hic-, hizo)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("hacer — pretérito (hic-, hizo)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["hice", "hiciste", "hizo", "hicimos", "hicisteis", "hicieron"]))
-  func hacerPreterite(person: PersonNumber2, expected: String) {
+  func hacerPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("hacer", model: Self.hacer, .pretérito(person), expected)
   }
 
@@ -2116,9 +2116,9 @@ struct Conjugator2Tests {
     expectForm("satisfacer", model: Self.hacer, tense, expected)
   }
 
-  @Test("poner — presente de subjuntivo (pong-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("poner — presente de subjuntivo (pong-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["ponga", "pongas", "ponga", "pongamos", "pongáis", "pongan"]))
-  func ponerPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func ponerPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("poner", model: Self.poner, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -2158,15 +2158,15 @@ struct Conjugator2Tests {
     expectForm("venir", model: Self.venir, tense, expected)
   }
 
-  @Test("traer — presente de indicativo (traig-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("traer — presente de indicativo (traig-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["traigo", "traes", "trae", "traemos", "traéis", "traen"]))
-  func traerPresent(person: PersonNumber2, expected: String) {
+  func traerPresent(person: EnginePersonNumber, expected: String) {
     expectForm("traer", model: Self.traer, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("traer — pretérito (traj-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("traer — pretérito (traj-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["traje", "trajiste", "trajo", "trajimos", "trajisteis", "trajeron"]))
-  func traerPreterite(person: PersonNumber2, expected: String) {
+  func traerPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("traer", model: Self.traer, .pretérito(person), expected)
   }
 
@@ -2268,9 +2268,9 @@ struct Conjugator2Tests {
     expectForm(infinitive, model: model, tense, expected)
   }
 
-  @Test("morir — presente de indicativo (dormir-features)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("morir — presente de indicativo (dormir-features)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["muero", "mueres", "muere", "morimos", "morís", "mueren"]))
-  func morirPresent(person: PersonNumber2, expected: String) {
+  func morirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("morir", model: Self.morir, .presenteDeIndicativo(person), expected)
   }
 
@@ -2305,21 +2305,21 @@ struct Conjugator2Tests {
 
   // MARK: - Phase 5: ver / reír (the deferred residue stem classes)
 
-  @Test("ver — presente de indicativo (veo/ves…)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ver — presente de indicativo (veo/ves…)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["veo", "ves", "ve", "vemos", "veis", "ven"]))
-  func verPresent(person: PersonNumber2, expected: String) {
+  func verPresent(person: EnginePersonNumber, expected: String) {
     expectForm("ver", model: Self.ver, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("ver — imperfecto de indicativo (veía-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ver — imperfecto de indicativo (veía-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["veía", "veías", "veía", "veíamos", "veíais", "veían"]))
-  func verImperfect(person: PersonNumber2, expected: String) {
+  func verImperfect(person: EnginePersonNumber, expected: String) {
     expectForm("ver", model: Self.ver, .imperfectoDeIndicativo(person), expected)
   }
 
-  @Test("ver — presente de subjuntivo (vea-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("ver — presente de subjuntivo (vea-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["vea", "veas", "vea", "veamos", "veáis", "vean"]))
-  func verPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func verPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("ver", model: Self.ver, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -2333,9 +2333,9 @@ struct Conjugator2Tests {
     expectForm("ver", model: Self.ver, tense, expected)
   }
 
-  @Test("prever — monosyllable→polysyllable accent residue", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("prever — monosyllable→polysyllable accent residue", arguments: zip(EnginePersonNumber.oracleOrder,
     ["preveo", "prevés", "prevé", "prevemos", "prevéis", "prevén"]))
-  func preverPresent(person: PersonNumber2, expected: String) {
+  func preverPresent(person: EnginePersonNumber, expected: String) {
     expectForm("prever", model: Self.prever, .presenteDeIndicativo(person), expected)
   }
 
@@ -2350,21 +2350,21 @@ struct Conjugator2Tests {
     expectForm("prever", model: Self.prever, tense, expected)
   }
 
-  @Test("reír — presente de indicativo (hiatus accents)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("reír — presente de indicativo (hiatus accents)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["río", "ríes", "ríe", "reímos", "reís", "ríen"]))
-  func reirPresent(person: PersonNumber2, expected: String) {
+  func reirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("reír", model: Self.reir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("reír — pretérito (collapse-ii + accents)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("reír — pretérito (collapse-ii + accents)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["reí", "reíste", "rió", "reímos", "reísteis", "rieron"]))
-  func reirPreterite(person: PersonNumber2, expected: String) {
+  func reirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("reír", model: Self.reir, .pretérito(person), expected)
   }
 
-  @Test("reír — presente de subjuntivo (STR accents, WK clean)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("reír — presente de subjuntivo (STR accents, WK clean)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["ría", "rías", "ría", "riamos", "riáis", "rían"]))
-  func reirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func reirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("reír", model: Self.reir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -2406,51 +2406,51 @@ struct Conjugator2Tests {
 
   // MARK: - Phase 5b: argüir (class 18 — güy→guy)
 
-  @Test("argüir — presente de indicativo (güy→guy; güi keeps the diaeresis)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("argüir — presente de indicativo (güy→guy; güi keeps the diaeresis)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["arguyo", "arguyes", "arguye", "argüimos", "argüís", "arguyen"]))
-  func arguirPresent(person: PersonNumber2, expected: String) {
+  func arguirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("argüir", model: Self.arguir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("argüir — pretérito (boundary güy in arguyó/arguyeron; güi keeps it)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("argüir — pretérito (boundary güy in arguyó/arguyeron; güi keeps it)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["argüí", "argüiste", "arguyó", "argüimos", "argüisteis", "arguyeron"]))
-  func arguirPreterite(person: PersonNumber2, expected: String) {
+  func arguirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("argüir", model: Self.arguir, .pretérito(person), expected)
   }
 
-  @Test("argüir — imperfecto de indicativo (all güi)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("argüir — imperfecto de indicativo (all güi)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["argüía", "argüías", "argüía", "argüíamos", "argüíais", "argüían"]))
-  func arguirImperfect(person: PersonNumber2, expected: String) {
+  func arguirImperfect(person: EnginePersonNumber, expected: String) {
     expectForm("argüir", model: Self.arguir, .imperfectoDeIndicativo(person), expected)
   }
 
-  @Test("argüir — futuro (all güi)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("argüir — futuro (all güi)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["argüiré", "argüirás", "argüirá", "argüiremos", "argüiréis", "argüirán"]))
-  func arguirFuture(person: PersonNumber2, expected: String) {
+  func arguirFuture(person: EnginePersonNumber, expected: String) {
     expectForm("argüir", model: Self.arguir, .futuro(person), expected)
   }
 
-  @Test("argüir — condicional (all güi)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("argüir — condicional (all güi)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["argüiría", "argüirías", "argüiría", "argüiríamos", "argüiríais", "argüirían"]))
-  func arguirConditional(person: PersonNumber2, expected: String) {
+  func arguirConditional(person: EnginePersonNumber, expected: String) {
     expectForm("argüir", model: Self.arguir, .condicional(person), expected)
   }
 
-  @Test("argüir — presente de subjuntivo (güy→guy throughout)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("argüir — presente de subjuntivo (güy→guy throughout)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["arguya", "arguyas", "arguya", "arguyamos", "arguyáis", "arguyan"]))
-  func arguirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func arguirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("argüir", model: Self.arguir, .presenteDeSubjuntivo(person), expected)
   }
 
-  @Test("argüir — imperfecto de subjuntivo (-ra; boundary güy)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("argüir — imperfecto de subjuntivo (-ra; boundary güy)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["arguyera", "arguyeras", "arguyera", "arguyéramos", "arguyerais", "arguyeran"]))
-  func arguirImperfectSubjunctiveRa(person: PersonNumber2, expected: String) {
+  func arguirImperfectSubjunctiveRa(person: EnginePersonNumber, expected: String) {
     expectForm("argüir", model: Self.arguir, .imperfectoDeSubjuntivoRa(person), expected)
   }
 
-  @Test("argüir — imperfecto de subjuntivo (-se; boundary güy)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("argüir — imperfecto de subjuntivo (-se; boundary güy)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["arguyese", "arguyeses", "arguyese", "arguyésemos", "arguyeseis", "arguyesen"]))
-  func arguirImperfectSubjunctiveSe(person: PersonNumber2, expected: String) {
+  func arguirImperfectSubjunctiveSe(person: EnginePersonNumber, expected: String) {
     expectForm("argüir", model: Self.arguir, .imperfectoDeSubjuntivoSe(person), expected)
   }
 
@@ -2494,21 +2494,21 @@ struct Conjugator2Tests {
 
   // `conjugate` returns the primary (yerg-) paradigm. (PS{1p,2p} are the shared WK
   // raise irgamos/irgáis — the RAE-preferred forms — in both paradigms.)
-  @Test("erguir — presente de indicativo (primary, yerg-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("erguir — presente de indicativo (primary, yerg-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["yergo", "yergues", "yergue", "erguimos", "erguís", "yerguen"]))
-  func erguirPresent(person: PersonNumber2, expected: String) {
+  func erguirPresent(person: EnginePersonNumber, expected: String) {
     expectForm("erguir", model: Self.erguir, .presenteDeIndicativo(person), expected)
   }
 
-  @Test("erguir — pretérito (unstressed raise irguió/irguieron, shared)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("erguir — pretérito (unstressed raise irguió/irguieron, shared)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["erguí", "erguiste", "irguió", "erguimos", "erguisteis", "irguieron"]))
-  func erguirPreterite(person: PersonNumber2, expected: String) {
+  func erguirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("erguir", model: Self.erguir, .pretérito(person), expected)
   }
 
-  @Test("erguir — presente de subjuntivo (primary: STR yerg-, WK irg-)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("erguir — presente de subjuntivo (primary: STR yerg-, WK irg-)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["yerga", "yergas", "yerga", "irgamos", "irgáis", "yergan"]))
-  func erguirPresentSubjunctive(person: PersonNumber2, expected: String) {
+  func erguirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("erguir", model: Self.erguir, .presenteDeSubjuntivo(person), expected)
   }
 
@@ -2553,9 +2553,9 @@ struct Conjugator2Tests {
   // MARK: - Phase 5b: raer / roer / yacer (variant -go/-y/-zc paradigms)
 
   // raer (9-1): PI 2s/3s/… are regular (raes/rae/raen); only 1s + PS branch.
-  @Test("raer — presente de indicativo (primary raigo; rest regular)", arguments: zip(PersonNumber2.oracleOrder,
+  @Test("raer — presente de indicativo (primary raigo; rest regular)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["raigo", "raes", "rae", "raemos", "raéis", "raen"]))
-  func raerPresent(person: PersonNumber2, expected: String) {
+  func raerPresent(person: EnginePersonNumber, expected: String) {
     expectForm("raer", model: Self.raer, .presenteDeIndicativo(person), expected)
   }
 

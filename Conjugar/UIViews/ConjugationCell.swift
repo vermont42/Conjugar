@@ -39,7 +39,7 @@ class ConjugationCell: UITableViewCell {
     ])
   }
 
-  func configure(tense: DisplayTense, personNumber: PersonNumber, conjugation: String) {
+  func configure(tense: DisplayTense, personNumber: DisplayPersonNumber, conjugation: String) {
     var conjugation = conjugation
     if conjugation.isEmpty {
       self.conjugation.text = ""

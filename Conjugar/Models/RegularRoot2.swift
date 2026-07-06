@@ -69,7 +69,7 @@ enum RegularRoot2 {
 
   // MARK: - Lookup
 
-  private func ending(_ endings: [PersonNumber2: String], _ pn: PersonNumber2, vosFallsBackToTú: Bool = true) -> String? {
+  private func ending(_ endings: [EnginePersonNumber: String], _ pn: EnginePersonNumber, vosFallsBackToTú: Bool = true) -> String? {
     if let ending = endings[pn] {
       return ending
     }
@@ -81,7 +81,7 @@ enum RegularRoot2 {
 
   // MARK: - Ending tables (oracle §3 + voseo)
 
-  private var presenteDeIndicativo: [PersonNumber2: String] {
+  private var presenteDeIndicativo: [EnginePersonNumber: String] {
     switch self {
     case .ar:
       return [.firstSingular: "o", .secondSingular: "as", .secondSingularVos: "ás", .thirdSingular: "a", .firstPlural: "amos", .secondPlural: "áis", .thirdPlural: "an"]
@@ -92,7 +92,7 @@ enum RegularRoot2 {
     }
   }
 
-  private var pretérito: [PersonNumber2: String] {
+  private var pretérito: [EnginePersonNumber: String] {
     switch self {
     case .ar:
       return [.firstSingular: "é", .secondSingular: "aste", .thirdSingular: "ó", .firstPlural: "amos", .secondPlural: "asteis", .thirdPlural: "aron"]
@@ -101,7 +101,7 @@ enum RegularRoot2 {
     }
   }
 
-  private var imperfectoDeIndicativo: [PersonNumber2: String] {
+  private var imperfectoDeIndicativo: [EnginePersonNumber: String] {
     switch self {
     case .ar:
       return [.firstSingular: "aba", .secondSingular: "abas", .thirdSingular: "aba", .firstPlural: "ábamos", .secondPlural: "abais", .thirdPlural: "aban"]
@@ -110,7 +110,7 @@ enum RegularRoot2 {
     }
   }
 
-  private var futuro: [PersonNumber2: String] {
+  private var futuro: [EnginePersonNumber: String] {
     switch self {
     case .ar:
       return [.firstSingular: "aré", .secondSingular: "arás", .thirdSingular: "ará", .firstPlural: "aremos", .secondPlural: "aréis", .thirdPlural: "arán"]
@@ -121,7 +121,7 @@ enum RegularRoot2 {
     }
   }
 
-  private var condicional: [PersonNumber2: String] {
+  private var condicional: [EnginePersonNumber: String] {
     switch self {
     case .ar:
       return [.firstSingular: "aría", .secondSingular: "arías", .thirdSingular: "aría", .firstPlural: "aríamos", .secondPlural: "aríais", .thirdPlural: "arían"]
@@ -132,7 +132,7 @@ enum RegularRoot2 {
     }
   }
 
-  private var presenteDeSubjuntivo: [PersonNumber2: String] {
+  private var presenteDeSubjuntivo: [EnginePersonNumber: String] {
     switch self {
     case .ar:
       return [.firstSingular: "e", .secondSingular: "es", .thirdSingular: "e", .firstPlural: "emos", .secondPlural: "éis", .thirdPlural: "en"]
@@ -141,7 +141,7 @@ enum RegularRoot2 {
     }
   }
 
-  private var imperfectoDeSubjuntivoRa: [PersonNumber2: String] {
+  private var imperfectoDeSubjuntivoRa: [EnginePersonNumber: String] {
     switch self {
     case .ar:
       return [.firstSingular: "ara", .secondSingular: "aras", .thirdSingular: "ara", .firstPlural: "áramos", .secondPlural: "arais", .thirdPlural: "aran"]
@@ -150,7 +150,7 @@ enum RegularRoot2 {
     }
   }
 
-  private var imperfectoDeSubjuntivoSe: [PersonNumber2: String] {
+  private var imperfectoDeSubjuntivoSe: [EnginePersonNumber: String] {
     switch self {
     case .ar:
       return [.firstSingular: "ase", .secondSingular: "ases", .thirdSingular: "ase", .firstPlural: "ásemos", .secondPlural: "aseis", .thirdPlural: "asen"]
@@ -160,7 +160,7 @@ enum RegularRoot2 {
   }
 
   // Only 2s (tú), 2s (vos), and 2p (vosotros) exist in the regular paradigm.
-  private var imperativoAfirmativo: [PersonNumber2: String] {
+  private var imperativoAfirmativo: [EnginePersonNumber: String] {
     switch self {
     case .ar:
       return [.secondSingular: "a", .secondSingularVos: "á", .secondPlural: "ad"]

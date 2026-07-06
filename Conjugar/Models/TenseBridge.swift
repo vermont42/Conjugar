@@ -6,8 +6,8 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// The seam between the legacy `DisplayTense`/`PersonNumber` vocabulary the UI is
-// structured around and the new engine (`Conjugator2`/`EngineTense`/`PersonNumber2`).
+// The seam between the legacy `DisplayTense`/`DisplayPersonNumber` vocabulary the UI is
+// structured around and the new engine (`Conjugator2`/`EngineTense`/`EnginePersonNumber`).
 // The simple tenses map case-for-case onto `EngineTense`; the tenses `EngineTense`
 // deliberately does not model are composed here:
 //
@@ -26,9 +26,9 @@
 // A defective verb's formless slot surfaces as `.noForm`, which the UI renders
 // as a blank row (the legacy engine's "df" sentinel played this role).
 enum TenseBridge {
-  /// Conjugate a legacy `(DisplayTense, PersonNumber)` slot through `Conjugator2`,
+  /// Conjugate a legacy `(DisplayTense, DisplayPersonNumber)` slot through `Conjugator2`,
   /// irregularity-marked for display.
-  static func conjugate(infinitive: String, tense: DisplayTense, personNumber: PersonNumber) -> Result<String, Conjugator2Error> {
+  static func conjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, Conjugator2Error> {
     let result = unmarkedConjugate(infinitive: infinitive, tense: tense, personNumber: personNumber)
     guard
       case let .success(form) = result,
@@ -38,8 +38,8 @@ enum TenseBridge {
     return .success(IrregularityMarker.marked(form: form, regular: regular))
   }
 
-  /// The legacy person's `PersonNumber2` counterpart, or nil for `.none`.
-  static func personNumber2(for personNumber: PersonNumber) -> PersonNumber2? {
+  /// The legacy person's `EnginePersonNumber` counterpart, or nil for `.none`.
+  static func enginePersonNumber(for personNumber: DisplayPersonNumber) -> EnginePersonNumber? {
     switch personNumber {
     case .firstSingular:
       return .firstSingular
@@ -63,7 +63,7 @@ enum TenseBridge {
   /// The `EngineTense` case for a legacy simple tense, or nil for the tenses `EngineTense`
   /// does not model (compounds, futuro de subjuntivo, imperativo negativo, and
   /// the pseudo-tenses).
-  static func simpleEngineTense(for tense: DisplayTense, personNumber: PersonNumber2) -> EngineTense? {
+  static func simpleEngineTense(for tense: DisplayTense, personNumber: EnginePersonNumber) -> EngineTense? {
     switch tense {
     case .presenteDeIndicativo:
       return .presenteDeIndicativo(personNumber)
@@ -90,7 +90,7 @@ enum TenseBridge {
 
   // MARK: - The unmarked conjugation
 
-  private static func unmarkedConjugate(infinitive: String, tense: DisplayTense, personNumber: PersonNumber) -> Result<String, Conjugator2Error> {
+  private static func unmarkedConjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, Conjugator2Error> {
     switch tense {
     case .infinitivo, .translation:
       fatalError("\(tense.displayName) is not a conjugation; look it up directly.")
@@ -101,24 +101,24 @@ enum TenseBridge {
     case .raízFutura:
       return Conjugator2.futureRoot(infinitive: infinitive)
     case .imperativoPositivo, .imperativoNegativo:
-      guard personNumber != .firstSingular, let personNumber2 = personNumber2(for: personNumber) else {
+      guard personNumber != .firstSingular, let enginePersonNumber = enginePersonNumber(for: personNumber) else {
         return .failure(.imperativeNotAvailable(.firstSingular))
       }
       if tense == .imperativoPositivo {
-        return Conjugator2.conjugate(infinitive: infinitive, tense: .imperativoAfirmativo(personNumber2))
+        return Conjugator2.conjugate(infinitive: infinitive, tense: .imperativoAfirmativo(enginePersonNumber))
       } else {
-        return Conjugator2.conjugate(infinitive: infinitive, tense: .presenteDeSubjuntivo(personNumber2)).map { "no " + $0 }
+        return Conjugator2.conjugate(infinitive: infinitive, tense: .presenteDeSubjuntivo(enginePersonNumber)).map { "no " + $0 }
       }
     case .futuroDeSubjuntivo:
-      guard let personNumber2 = personNumber2(for: personNumber) else {
+      guard let enginePersonNumber = enginePersonNumber(for: personNumber) else {
         fatalError("\(tense.displayName) requires a person.")
       }
-      return Conjugator2.conjugate(infinitive: infinitive, tense: .imperfectoDeSubjuntivoRa(personNumber2)).map {
-        futureSubjunctive(fromRaForm: $0, personNumber: personNumber2)
+      return Conjugator2.conjugate(infinitive: infinitive, tense: .imperfectoDeSubjuntivoRa(enginePersonNumber)).map {
+        futureSubjunctive(fromRaForm: $0, personNumber: enginePersonNumber)
       }
     case .presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
          .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2:
-      guard let personNumber2 = personNumber2(for: personNumber), let engineTense = simpleEngineTense(for: tense, personNumber: personNumber2) else {
+      guard let enginePersonNumber = enginePersonNumber(for: personNumber), let engineTense = simpleEngineTense(for: tense, personNumber: enginePersonNumber) else {
         fatalError("\(tense.displayName) requires a person.")
       }
       return Conjugator2.conjugate(infinitive: infinitive, tense: engineTense)
@@ -133,7 +133,7 @@ enum TenseBridge {
 
   /// The same slot conjugated with a **feature-less** regular model — the
   /// baseline whose differing span is the verb's irregularity.
-  private static func regularForm(infinitive: String, tense: DisplayTense, personNumber: PersonNumber) -> String? {
+  private static func regularForm(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> String? {
     guard let base = RegularRoot2(infinitive: infinitive) else {
       return nil
     }
@@ -154,25 +154,25 @@ enum TenseBridge {
     case .raízFutura:
       return regular(.futuro(.firstSingular)).map { String($0.dropLast()) }
     case .imperativoPositivo:
-      guard let personNumber2 = personNumber2(for: personNumber) else {
+      guard let enginePersonNumber = enginePersonNumber(for: personNumber) else {
         return nil
       }
-      return regular(.imperativoAfirmativo(personNumber2))
+      return regular(.imperativoAfirmativo(enginePersonNumber))
     case .imperativoNegativo:
-      guard let personNumber2 = personNumber2(for: personNumber) else {
+      guard let enginePersonNumber = enginePersonNumber(for: personNumber) else {
         return nil
       }
-      return regular(.presenteDeSubjuntivo(personNumber2)).map { "no " + $0 }
+      return regular(.presenteDeSubjuntivo(enginePersonNumber)).map { "no " + $0 }
     case .futuroDeSubjuntivo:
-      guard let personNumber2 = personNumber2(for: personNumber) else {
+      guard let enginePersonNumber = enginePersonNumber(for: personNumber) else {
         return nil
       }
-      return regular(.imperfectoDeSubjuntivoRa(personNumber2)).map {
-        futureSubjunctive(fromRaForm: $0, personNumber: personNumber2)
+      return regular(.imperfectoDeSubjuntivoRa(enginePersonNumber)).map {
+        futureSubjunctive(fromRaForm: $0, personNumber: enginePersonNumber)
       }
     case .presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
          .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2:
-      guard let personNumber2 = personNumber2(for: personNumber), let engineTense = simpleEngineTense(for: tense, personNumber: personNumber2) else {
+      guard let enginePersonNumber = enginePersonNumber(for: personNumber), let engineTense = simpleEngineTense(for: tense, personNumber: enginePersonNumber) else {
         return nil
       }
       return regular(engineTense)
@@ -196,7 +196,7 @@ enum TenseBridge {
   /// habláremos). Deriving from the computed -ra form means every strong
   /// preterite stem rides through for free, exactly as it does for the -ra/-se
   /// pair.
-  private static func futureSubjunctive(fromRaForm raForm: String, personNumber: PersonNumber2) -> String {
+  private static func futureSubjunctive(fromRaForm raForm: String, personNumber: EnginePersonNumber) -> String {
     switch personNumber {
     case .firstSingular, .thirdSingular:
       return raForm.dropLast(1) + "e"      // -ra → -re

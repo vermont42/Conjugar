@@ -20,9 +20,9 @@ struct PreteriteEndings2: Feature2 {
   /// Endings keyed by person for the preterite and the two imperfect
   /// subjunctives. `vos` falls back to the `tú` (secondSingular) form, as in the
   /// regular paradigm.
-  let pr: [PersonNumber2: String]
-  let isRa: [PersonNumber2: String]
-  let isSe: [PersonNumber2: String]
+  let pr: [EnginePersonNumber: String]
+  let isRa: [EnginePersonNumber: String]
+  let isSe: [EnginePersonNumber: String]
 
   func applies(to tense: EngineTense) -> Bool {
     Slot2.isPreteriteSystem(tense)
@@ -30,8 +30,8 @@ struct PreteriteEndings2: Feature2 {
 
   func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     guard let person = tense.personNumber else { return (stem, ending) }
-    let key: PersonNumber2 = (person == .secondSingularVos) ? .secondSingular : person
-    let table: [PersonNumber2: String]
+    let key: EnginePersonNumber = (person == .secondSingularVos) ? .secondSingular : person
+    let table: [EnginePersonNumber: String]
     switch tense {
     case .pretérito:
       table = pr
@@ -47,20 +47,20 @@ struct PreteriteEndings2: Feature2 {
   }
 
   // The regular -er/-ir imperfect-subjunctive endings, forced regardless of base.
-  private static let regularIsRa: [PersonNumber2: String] = [
+  private static let regularIsRa: [EnginePersonNumber: String] = [
     .firstSingular: "iera", .secondSingular: "ieras", .thirdSingular: "iera",
     .firstPlural: "iéramos", .secondPlural: "ierais", .thirdPlural: "ieran"
   ]
-  private static let regularIsSe: [PersonNumber2: String] = [
+  private static let regularIsSe: [EnginePersonNumber: String] = [
     .firstSingular: "iese", .secondSingular: "ieses", .thirdSingular: "iese",
     .firstPlural: "iésemos", .secondPlural: "ieseis", .thirdPlural: "iesen"
   ]
   // The j-preterite imperfect subjunctive: no -i- after the j (dijera, condujese).
-  private static let jIsRa: [PersonNumber2: String] = [
+  private static let jIsRa: [EnginePersonNumber: String] = [
     .firstSingular: "era", .secondSingular: "eras", .thirdSingular: "era",
     .firstPlural: "éramos", .secondPlural: "erais", .thirdPlural: "eran"
   ]
-  private static let jIsSe: [PersonNumber2: String] = [
+  private static let jIsSe: [EnginePersonNumber: String] = [
     .firstSingular: "ese", .secondSingular: "eses", .thirdSingular: "ese",
     .firstPlural: "ésemos", .secondPlural: "eseis", .thirdPlural: "esen"
   ]
@@ -113,8 +113,8 @@ struct SuppletivePreterite2: Feature2 {
 
   func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     guard let person = tense.personNumber else { return ("fu", ending) }
-    let key: PersonNumber2 = (person == .secondSingularVos) ? .secondSingular : person
-    let table: [PersonNumber2: String]
+    let key: EnginePersonNumber = (person == .secondSingularVos) ? .secondSingular : person
+    let table: [EnginePersonNumber: String]
     switch tense {
     case .pretérito:
       table = pr
@@ -128,15 +128,15 @@ struct SuppletivePreterite2: Feature2 {
     return ("fu", table[key] ?? ending)
   }
 
-  private let pr: [PersonNumber2: String] = [
+  private let pr: [EnginePersonNumber: String] = [
     .firstSingular: "i", .secondSingular: "iste", .thirdSingular: "e",
     .firstPlural: "imos", .secondPlural: "isteis", .thirdPlural: "eron"
   ]
-  private let isRa: [PersonNumber2: String] = [
+  private let isRa: [EnginePersonNumber: String] = [
     .firstSingular: "era", .secondSingular: "eras", .thirdSingular: "era",
     .firstPlural: "éramos", .secondPlural: "erais", .thirdPlural: "eran"
   ]
-  private let isSe: [PersonNumber2: String] = [
+  private let isSe: [EnginePersonNumber: String] = [
     .firstSingular: "ese", .secondSingular: "eses", .thirdSingular: "ese",
     .firstPlural: "ésemos", .secondPlural: "eseis", .thirdPlural: "esen"
   ]

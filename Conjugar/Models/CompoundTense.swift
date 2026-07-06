@@ -16,7 +16,7 @@
 // futuro de subjuntivo of haber (hubiere) for free.
 enum CompoundTense {
   /// The compound form for a legacy compound tense: "haber-in-tense participle".
-  static func conjugate(infinitive: String, tense: DisplayTense, personNumber: PersonNumber) -> Result<String, Conjugator2Error> {
+  static func conjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, Conjugator2Error> {
     guard case let .success(haberTense) = tense.haberTenseForCompoundTense() else {
       fatalError("\(tense.displayName) is not a compound tense.")
     }

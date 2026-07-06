@@ -13,20 +13,20 @@
 // (spanish_models.md slot vocabulary §2). The nine compound tenses (haber +
 // participle) are mechanical and are added later, not in the Phase 1 skeleton.
 enum EngineTense: Equatable {
-  case presenteDeIndicativo(PersonNumber2)         // PI
-  case pretérito(PersonNumber2)                    // PR (pretérito indefinido / simple past)
-  case imperfectoDeIndicativo(PersonNumber2)       // IM
-  case futuro(PersonNumber2)                       // FU
-  case condicional(PersonNumber2)                  // CO
-  case presenteDeSubjuntivo(PersonNumber2)         // PS
-  case imperfectoDeSubjuntivoRa(PersonNumber2)     // IS, -ra form (Imperfect I)
-  case imperfectoDeSubjuntivoSe(PersonNumber2)     // IS, -se form (Imperfect II)
-  case imperativoAfirmativo(PersonNumber2)         // IMP (afirmativo)
+  case presenteDeIndicativo(EnginePersonNumber)         // PI
+  case pretérito(EnginePersonNumber)                    // PR (pretérito indefinido / simple past)
+  case imperfectoDeIndicativo(EnginePersonNumber)       // IM
+  case futuro(EnginePersonNumber)                       // FU
+  case condicional(EnginePersonNumber)                  // CO
+  case presenteDeSubjuntivo(EnginePersonNumber)         // PS
+  case imperfectoDeSubjuntivoRa(EnginePersonNumber)     // IS, -ra form (Imperfect I)
+  case imperfectoDeSubjuntivoSe(EnginePersonNumber)     // IS, -se form (Imperfect II)
+  case imperativoAfirmativo(EnginePersonNumber)         // IMP (afirmativo)
   case participioPasado                            // PP (person-less)
   case gerundio                                    // GER (person-less)
 
   /// The person of a finite tense, or nil for the non-finite forms.
-  var personNumber: PersonNumber2? {
+  var personNumber: EnginePersonNumber? {
     switch self {
     case let .presenteDeIndicativo(pn),
          let .pretérito(pn),

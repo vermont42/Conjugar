@@ -10,10 +10,11 @@ import XCTest
 @testable import Conjugar
 
 class GameCenterFakeTests: XCTestCase {
+  // Deliberately not installed into Current: a fire-and-forget authenticate
+  // Task lingering from an earlier test (QuizVC/SettingsView spawn them) could
+  // otherwise consume this fake's one "first authenticate" and flake the test.
   func testAuthenticate() async {
     let tgc = GameCenterFake()
-    Current = World.unitTest
-    Current.gameCenter = tgc
     let dummyVC = UIViewController()
 
     let didAuthenticate = await tgc.authenticate(onViewController: dummyVC)

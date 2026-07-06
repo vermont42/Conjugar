@@ -1,5 +1,5 @@
 //
-//  PersonNumberTests.swift
+//  DisplayPersonNumberTests.swift
 //  ConjugarTests
 //
 //  Created by Joshua Adams on 5/13/19.
@@ -9,9 +9,9 @@
 import XCTest
 @testable import Conjugar
 
-class PersonNumberTests: XCTestCase {
+class DisplayPersonNumberTests: XCTestCase {
   func testShortDisplayName() {
-    var personNumber = PersonNumber.firstSingular
+    var personNumber = DisplayPersonNumber.firstSingular
     XCTAssertEqual(personNumber.shortDisplayName, "1S")
     personNumber = .secondSingularTú
     XCTAssertEqual(personNumber.shortDisplayName, "2S")
@@ -30,21 +30,21 @@ class PersonNumberTests: XCTestCase {
   }
 
   func testPronoun() {
-    var personNumber = PersonNumber.firstSingular
+    var personNumber = DisplayPersonNumber.firstSingular
     XCTAssertEqual(personNumber.pronoun, "yo")
-    personNumber = PersonNumber.secondSingularTú
+    personNumber = DisplayPersonNumber.secondSingularTú
     XCTAssertEqual(personNumber.pronoun, "tú")
-    personNumber = PersonNumber.secondSingularVos
+    personNumber = DisplayPersonNumber.secondSingularVos
     XCTAssertEqual(personNumber.pronoun, "vos")
-    personNumber = PersonNumber.thirdSingular
+    personNumber = DisplayPersonNumber.thirdSingular
     XCTAssertEqual(personNumber.pronoun, "él")
-    personNumber = PersonNumber.firstPlural
+    personNumber = DisplayPersonNumber.firstPlural
     XCTAssertEqual(personNumber.pronoun, "nosotros")
-    personNumber = PersonNumber.secondPlural
+    personNumber = DisplayPersonNumber.secondPlural
     XCTAssertEqual(personNumber.pronoun, "vosotros")
-    personNumber = PersonNumber.thirdPlural
+    personNumber = DisplayPersonNumber.thirdPlural
     XCTAssertEqual(personNumber.pronoun, "ellas")
-    personNumber = PersonNumber.none
+    personNumber = DisplayPersonNumber.none
     XCTAssertEqual(personNumber.pronoun, "none")
   }
 }

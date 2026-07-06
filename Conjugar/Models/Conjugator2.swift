@@ -222,7 +222,7 @@ enum Conjugator2 {
   /// dé). Crucially this reuses the *computed* PS (`compose`), not a re-derivation
   /// (crux 1). A trailing imperative-slot residue may then override it — the one
   /// case being `ir`'s nosotros = **vamos** (not vayamos).
-  private static func deriveImperative(personNumber: PersonNumber2, stem: String, base: RegularRoot2, features: [Feature2]) -> Result<String, Conjugator2Error> {
+  private static func deriveImperative(personNumber: EnginePersonNumber, stem: String, base: RegularRoot2, features: [Feature2]) -> Result<String, Conjugator2Error> {
     guard let psEnding = base.ending(for: .presenteDeSubjuntivo(personNumber)) else {
       return .failure(.imperativeNotAvailable(personNumber))
     }
@@ -291,7 +291,7 @@ enum Conjugator2 {
   /// Every slot a verb's paradigm can have — the domain `isDefective` sweeps.
   private static var allSlots: [EngineTense] {
     var slots: [EngineTense] = [.participioPasado, .gerundio]
-    for personNumber in PersonNumber2.allCases {
+    for personNumber in EnginePersonNumber.allCases {
       slots += [
         .presenteDeIndicativo(personNumber),
         .pretérito(personNumber),

@@ -10,7 +10,7 @@ import UIKit
 
 enum ConjugationRow {
   case tense(DisplayTense)
-  case conjugation(DisplayTense, PersonNumber, String)
+  case conjugation(DisplayTense, DisplayPersonNumber, String)
 }
 
 class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
@@ -40,7 +40,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
         self.rows.append(.conjugation(tense, .secondSingularTú, ConjugationDataSource.conjugation(verb: verb, tense: tense, personNumber: .secondSingularTú)))
         self.rows.append(.conjugation(tense, .secondSingularVos, ConjugationDataSource.conjugation(verb: verb, tense: tense, personNumber: .secondSingularVos)))
       }
-      [PersonNumber.thirdSingular, .firstPlural, .secondPlural, .thirdPlural].forEach { personNumber in
+      [DisplayPersonNumber.thirdSingular, .firstPlural, .secondPlural, .thirdPlural].forEach { personNumber in
         self.rows.append(.conjugation(tense, personNumber, ConjugationDataSource.conjugation(verb: verb, tense: tense, personNumber: personNumber)))
       }
     }
@@ -49,7 +49,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
   /// The displayable form for one slot: a defective verb's formless slot renders
   /// as an empty string (a blank row, like the legacy engine's "df" sentinel);
   /// any other failure is a programming or data error.
-  private static func conjugation(verb: String, tense: DisplayTense, personNumber: PersonNumber) -> String {
+  private static func conjugation(verb: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> String {
     switch TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber) {
     case let .success(value):
       return value

@@ -19,11 +19,11 @@ import Testing
 // (`IrregularityMarker`): the letters that differ from the verb's regular
 // composition, which `conjugatedString` renders red — the same convention the
 // legacy verbs.xml hand-encoded.
-@Suite("TenseBridge (legacy DisplayTense/PersonNumber → Conjugator2)")
+@Suite("TenseBridge (legacy DisplayTense/DisplayPersonNumber → Conjugator2)")
 struct TenseBridgeTests {
   /// Bridge-conjugate, returning the form or nil on failure (a failure surfaces
   /// as a clear mismatch).
-  static func form(_ infinitive: String, _ tense: DisplayTense, _ personNumber: PersonNumber) -> String? {
+  static func form(_ infinitive: String, _ tense: DisplayTense, _ personNumber: DisplayPersonNumber) -> String? {
     if case .success(let conjugated) = TenseBridge.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber) {
       return conjugated
     }
@@ -33,7 +33,7 @@ struct TenseBridgeTests {
   // MARK: - Simple tenses ride the case-for-case mapping
 
   @Test("simple tenses map case-for-case onto EngineTense", arguments: [
-    ("hablar", DisplayTense.presenteDeIndicativo, PersonNumber.firstSingular, "hablo"),
+    ("hablar", DisplayTense.presenteDeIndicativo, DisplayPersonNumber.firstSingular, "hablo"),
     ("pensar", .presenteDeIndicativo, .firstSingular, "pIenso"),
     ("pensar", .presenteDeIndicativo, .secondSingularVos, "pensás"),
     ("pagar", .pretérito, .firstSingular, "pagUé"),
@@ -49,14 +49,14 @@ struct TenseBridgeTests {
     ("subir", .gerundio, .none, "subiendo"),
     ("volver", .participio, .none, "vUELTo")
   ])
-  func simpleTenses(infinitive: String, tense: DisplayTense, personNumber: PersonNumber, expected: String) {
+  func simpleTenses(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber, expected: String) {
     #expect(Self.form(infinitive, tense, personNumber) == expected, "\(infinitive) \(tense.displayName) \(personNumber.pronoun)")
   }
 
   // MARK: - Compound tenses: haber in the matching simple tense + participle
 
   @Test("compound tenses compose haber + participle", arguments: [
-    ("hablar", DisplayTense.perfectoDeIndicativo, PersonNumber.firstSingular, "hE hablado"),
+    ("hablar", DisplayTense.perfectoDeIndicativo, DisplayPersonNumber.firstSingular, "hE hablado"),
     ("comer", .pretéritoAnterior, .secondSingularTú, "hUbiste comido"),
     ("tener", .pluscuamperfectoDeIndicativo, .thirdPlural, "habían tenido"),
     ("imprimir", .futuroPerfecto, .firstSingular, "habRé imprESo"),
@@ -67,14 +67,14 @@ struct TenseBridgeTests {
     ("volver", .futuroPerfectoDeSubjuntivo, .thirdSingular, "hUbiere vUELTo"),
     ("hacer", .perfectoDeIndicativo, .secondSingularVos, "haS hECHo")
   ])
-  func compoundTenses(infinitive: String, tense: DisplayTense, personNumber: PersonNumber, expected: String) {
+  func compoundTenses(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber, expected: String) {
     #expect(Self.form(infinitive, tense, personNumber) == expected, "\(infinitive) \(tense.displayName) \(personNumber.pronoun)")
   }
 
   // MARK: - Futuro de subjuntivo: derived from the -ra imperfect subjunctive
 
   @Test("futuro de subjuntivo derives from the -ra form", arguments: [
-    ("hablar", PersonNumber.firstSingular, "hablare"),
+    ("hablar", DisplayPersonNumber.firstSingular, "hablare"),
     ("hablar", .secondSingularTú, "hablares"),
     ("hablar", .secondSingularVos, "hablares"),
     ("hablar", .thirdSingular, "hablare"),
@@ -85,21 +85,21 @@ struct TenseBridgeTests {
     ("ir", .firstSingular, "FUere"),
     ("comer", .firstPlural, "comiéremos")
   ])
-  func futuroDeSubjuntivo(infinitive: String, personNumber: PersonNumber, expected: String) {
+  func futuroDeSubjuntivo(infinitive: String, personNumber: DisplayPersonNumber, expected: String) {
     #expect(Self.form(infinitive, .futuroDeSubjuntivo, personNumber) == expected, "\(infinitive) \(personNumber.pronoun)")
   }
 
   // MARK: - Imperativo negativo: "no" + presente de subjuntivo
 
   @Test("imperativo negativo is no + presente de subjuntivo", arguments: [
-    ("hablar", PersonNumber.secondSingularTú, "no hables"),
+    ("hablar", DisplayPersonNumber.secondSingularTú, "no hables"),
     ("hablar", .secondSingularVos, "no hables"),
     ("hablar", .thirdSingular, "no hable"),
     ("hablar", .firstPlural, "no hablemos"),
     ("tener", .secondSingularTú, "no tenGas"),
     ("ir", .secondPlural, "no VAYáis")
   ])
-  func imperativoNegativo(infinitive: String, personNumber: PersonNumber, expected: String) {
+  func imperativoNegativo(infinitive: String, personNumber: DisplayPersonNumber, expected: String) {
     #expect(Self.form(infinitive, .imperativoNegativo, personNumber) == expected, "\(infinitive) \(personNumber.pronoun)")
   }
 

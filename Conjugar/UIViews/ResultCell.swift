@@ -43,7 +43,7 @@ class ResultCell: UITableViewCell {
     ])
   }
 
-  func configure(verb: String, tense: DisplayTense, personNumber: PersonNumber, correctAnswer: String, proposedAnswer: String) {
+  func configure(verb: String, tense: DisplayTense, personNumber: DisplayPersonNumber, correctAnswer: String, proposedAnswer: String) {
     self.verb.text = verb.lowercased()
     tensePersonNumber.text = "\(tense.displayName), \(personNumber.shortDisplayName)"
     self.correctAnswer.attributedText = correctAnswer.conjugatedString

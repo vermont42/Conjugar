@@ -34,8 +34,8 @@ struct FutureEndings2: Feature2 {
 
   func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     guard let person = tense.personNumber else { return (stem, ending) }
-    let key: PersonNumber2 = (person == .secondSingularVos) ? .secondSingular : person
-    let markers: [PersonNumber2: String]
+    let key: EnginePersonNumber = (person == .secondSingularVos) ? .secondSingular : person
+    let markers: [EnginePersonNumber: String]
     switch tense {
     case .futuro:
       markers = Self.futureMarkers
@@ -50,11 +50,11 @@ struct FutureEndings2: Feature2 {
 
   // The bare future/conditional markers (theme vowel already dropped) the
   // connector prefixes: "r" + the simple future/conditional person endings.
-  private static let futureMarkers: [PersonNumber2: String] = [
+  private static let futureMarkers: [EnginePersonNumber: String] = [
     .firstSingular: "ré", .secondSingular: "rás", .thirdSingular: "rá",
     .firstPlural: "remos", .secondPlural: "réis", .thirdPlural: "rán"
   ]
-  private static let conditionalMarkers: [PersonNumber2: String] = [
+  private static let conditionalMarkers: [EnginePersonNumber: String] = [
     .firstSingular: "ría", .secondSingular: "rías", .thirdSingular: "ría",
     .firstPlural: "ríamos", .secondPlural: "ríais", .thirdPlural: "rían"
   ]

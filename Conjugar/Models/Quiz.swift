@@ -17,7 +17,7 @@ class Quiz {
   private(set) var lastDifficulty: Difficulty = .moderate
   private(set) var proposedAnswers: [String] = []
   private(set) var correctAnswers: [String] = []
-  private(set) var questions: [(String, DisplayTense, PersonNumber)] = []
+  private(set) var questions: [(String, DisplayTense, DisplayPersonNumber)] = []
   private var regularArVerbs = VerbFamilies.regularArVerbs
   private var regularArVerbsIndex = 0
   private var regularIrVerbs = VerbFamilies.regularIrVerbs
@@ -47,8 +47,8 @@ class Quiz {
   private var timer: Timer?
   private var settings: Settings?
   private var gameCenter: GameCenter?
-  private var personNumbersWithTu: [PersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
-  private var personNumbersWithVos: [PersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+  private var personNumbersWithTu: [DisplayPersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+  private var personNumbersWithVos: [DisplayPersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
   private var shouldShuffle = true
   weak var delegate: QuizDelegate?
@@ -73,7 +73,7 @@ class Quiz {
     }
   }
 
-  var currentPersonNumber: PersonNumber {
+  var currentPersonNumber: DisplayPersonNumber {
     if questions.count > 0 {
       return questions[currentQuestionIndex].2
     } else {
@@ -340,11 +340,11 @@ class Quiz {
     delegate?.timeDidChange(newTime: elapsedTime)
   }
 
-  private func personNumber(skipYo: Bool = false, skipTu: Bool = false) -> PersonNumber {
+  private func personNumber(skipYo: Bool = false, skipTu: Bool = false) -> DisplayPersonNumber {
     guard let settings = settings else {
       fatalError("settings was nil.")
     }
-    let personNumbers: [PersonNumber]
+    let personNumbers: [DisplayPersonNumber]
     switch settings.secondSingularQuiz {
     case .tu:
       personNumbers = personNumbersWithTu
@@ -354,11 +354,11 @@ class Quiz {
     personNumbersIndex += 1
     if personNumbersIndex == personNumbers.count {
       personNumbersIndex = 0
-    } else if personNumbers[personNumbersIndex].pronoun == PersonNumber.secondPlural.pronoun && lastRegion == .latinAmerica {
+    } else if personNumbers[personNumbersIndex].pronoun == DisplayPersonNumber.secondPlural.pronoun && lastRegion == .latinAmerica {
       personNumbersIndex += 1
     }
 
-    if (personNumbers[personNumbersIndex].pronoun == PersonNumber.firstSingular.pronoun && skipYo) || (personNumbers[personNumbersIndex].pronoun == PersonNumber.secondSingularTú.pronoun && skipTu) {
+    if (personNumbers[personNumbersIndex].pronoun == DisplayPersonNumber.firstSingular.pronoun && skipYo) || (personNumbers[personNumbersIndex].pronoun == DisplayPersonNumber.secondSingularTú.pronoun && skipTu) {
       return personNumber(skipYo: skipYo, skipTu: skipTu)
     } else {
       return personNumbers[personNumbersIndex]

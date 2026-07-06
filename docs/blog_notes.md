@@ -1141,3 +1141,23 @@ care — the `NSLocalizedString("Tense", …)` localization *key* had to stay "T
 `tense2` locals followed up by hand. The rest of the `*2` family (`Conjugator2`,
 `PersonNumber2`, `VerbMap2`…) keeps its names for now; those could get the same
 treatment during the SwiftUI conversion.
+
+## Renamed PersonNumber → DisplayPersonNumber, PersonNumber2 → EnginePersonNumber
+
+Same split, same treatment as the tense rename: **`DisplayPersonNumber`** is the
+UI/quiz person vocabulary; **`EnginePersonNumber`** is the engine's seven-person set
+(including `secondSingularVos`) that rides inside `EngineTense` cases. `TenseBridge`'s
+`personNumber2(for:)`/locals became `enginePersonNumber`. No localization keys were
+at stake this time.
+
+The rename surfaced a fun latent flake: `GameCenterFakeTests.testAuthenticate`
+started failing intermittently in full-suite runs — first `authenticate()` on a
+*fresh, local* fake "returned false," which the fake's code cannot do. Mechanism:
+the test installed its fake into the global `Current.gameCenter`, and QuizVC /
+SettingsView spawn fire-and-forget `Task`s that call
+`Current.gameCenter.authenticate(...)` — a task lingering from an earlier test could
+consume the fake's one "first authenticate" before the test's own call. Renaming
+`PersonNumberTests`/`TenseTests` to `Display…` moved them earlier in XCTest's
+alphabetical order, shifting timing just enough to expose the race. Fix: the test
+exercises the local fake, so it simply no longer touches `Current`. Two consecutive
+full-suite runs green.

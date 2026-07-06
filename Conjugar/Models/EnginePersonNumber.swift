@@ -1,5 +1,5 @@
 //
-//  PersonNumber2.swift
+//  EnginePersonNumber.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/12/26.
@@ -7,13 +7,13 @@
 //
 
 // New (composition-engine) person model. Suffixed `2` while it lives alongside
-// the old `PersonNumber`; the suffix is dropped once the old engine is removed.
+// the old `DisplayPersonNumber`; the suffix is dropped once the old engine is removed.
 //
 // The six oracle persons (yo, tú, él, nosotros, vosotros, ellos) plus `vos`.
 // `vos` is supplemental to the book (see the Voseo section of spanish_models.md)
 // but is a first-class person from the start so it never becomes a later
 // core-type change.
-enum PersonNumber2: CaseIterable {
+enum EnginePersonNumber: CaseIterable {
   case firstSingular        // yo
   case secondSingular       // tú
   case secondSingularVos    // vos
@@ -24,7 +24,7 @@ enum PersonNumber2: CaseIterable {
 
   /// The six persons the verified oracle covers, in the book's row order
   /// (vos excluded — it is a supplement).
-  static let oracleOrder: [PersonNumber2] = [
+  static let oracleOrder: [EnginePersonNumber] = [
     .firstSingular, .secondSingular, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural
   ]
 

@@ -1,12 +1,12 @@
 //
-//  PersonNumber.swift
+//  DisplayPersonNumber.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 3/31/17.
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-enum PersonNumber: String, CaseIterable {
+enum DisplayPersonNumber: String, CaseIterable {
   case firstSingular = "fs"
   case firstPlural = "fp"
   case secondSingularTú = "ss"
@@ -58,5 +58,5 @@ enum PersonNumber: String, CaseIterable {
     }
   }
 
-  static let actualPersonNumbers: [PersonNumber] = [.firstSingular, .secondSingularTú, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+  static let actualPersonNumbers: [DisplayPersonNumber] = [.firstSingular, .secondSingularTú, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
 }
