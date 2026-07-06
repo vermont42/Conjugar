@@ -10,7 +10,7 @@ Conjugar is an iOS app for learning Spanish verb conjugations. It conjugates reg
 **Target:** iOS 17+
 **License:** GNU Affero General Public License
 
-As of 2026, a project is underway to modernize and improve Conjugar. The new conjugation engine (`Conjugator2`) is **complete**: it conjugates 4,811 distinct verbs (the `verbModelMap.xml` model map) across all 16+ tenses — regular and irregular verbs, homonyms, defectives, and prefixed compounds — and is covered by ~350 passing tests (`Conjugator2Tests`, `VerbMap2Tests`, `Resolver2Tests`). **Not yet done: wiring it into the app.** The UI still conjugates through the *legacy* `Conjugator` (parsing the 214-verb `verbs.xml`) via `ConjugationDataSource.swift`; `Conjugator2` is not yet referenced by any app/UI code. Swapping the app onto the new engine is the remaining migration step. The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
+As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator2` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's legacy `Tense`/`PersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. The legacy `Conjugator` engine, `verbs.xml`, and their tests were **removed** in July 2026. Next planned step (separate effort): converting the UIKit UI to SwiftUI. The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
 
 As you, Claude, complete chunks of work on the modernization/improvement project, please add a note to docs/blog_notes.md . Eventually, Josh will generate a blog post from this work.
 
@@ -35,7 +35,7 @@ xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=i
 swiftlint
 ```
 
-> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The new-engine suites (`Conjugator2Tests`, `VerbMap2Tests`, `Resolver2Tests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The legacy suites (`ConjugatorTests`, etc.) use **XCTest**, whose method names take **no** parentheses (e.g. `testRegularARVerb`).
+> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The new-engine suites (`Conjugator2Tests`, `VerbMap2Tests`, `Resolver2Tests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The older suites (`QuizTests`, `BrowseVerbsVCTests`, etc.) use **XCTest**, whose method names take **no** parentheses (e.g. `testBrowseVerbsVC`).
 
 ## Running the App in the Simulator
 
@@ -100,8 +100,7 @@ Layout constants are in `Layout.swift` (defaultSpacing = 8.0, tripleDefaultSpaci
 
 ### Core Models
 
-- **Conjugator2.swift** (+ the `*2.swift` family and `ModelCatalog2`/`VerbMap2`) - The **new, complete** conjugation engine: composition of feature rules over a book-class model catalog, resolving each verb's model from `verbModelMap.xml` (4,811 verbs). This is the engine the modernization is migrating to, but it is **not yet wired into the app UI** (see Project Overview).
-- **Conjugator.swift** - The **legacy** conjugation engine, still the one the app UI uses (via `ConjugationDataSource.swift`). Stem-based transformations; handles 16+ tenses, regular/irregular verbs, with recursive parent verb inheritance. Parses the 214-verb `verbs.xml`.
+- **Conjugator2.swift** (+ the `*2.swift` family and `ModelCatalog2`/`VerbMap2`) - The conjugation engine: composition of feature rules over a book-class model catalog, resolving each verb's model from `verbModelMap.xml` (4,811 verbs). The app UI conjugates through it via `TenseBridge` (maps the UI's legacy `Tense`/`PersonNumber` vocabulary to `Tense2`) and `CompoundTense` (composes perfect tenses as *haber* + participle, and imperativo negativo as "no" + subjunctive — the engine itself models only simple tenses). The legacy `Conjugator`/`verbs.xml` engine was removed in July 2026; `Tense.swift`/`PersonNumber.swift` remain as the UI's vocabulary.
 - **Quiz.swift** - Quiz state management with QuizDelegate protocol for updates. Handles scoring, timing, difficulty levels.
 - **Settings.swift** - User preferences with GetterSetter protocol abstraction.
 

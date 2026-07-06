@@ -24,7 +24,7 @@ class ConjugationCellTests: XCTestCase {
     cell.configure(tense: .imperativoNegativo, personNumber: .secondSingularTú, conjugation: "no seas")
     XCTAssertEqual(cell.conjugation.text, "¡no seas!")
 
-    cell.configure(tense: .imperativoNegativo, personNumber: .secondSingularTú, conjugation: Conjugator.defective)
+    cell.configure(tense: .imperativoNegativo, personNumber: .secondSingularTú, conjugation: "")
     XCTAssertEqual(cell.conjugation.text, "")
   }
 }

@@ -1103,3 +1103,20 @@ Noted in CLAUDE.md that ios-build-verify will supersede this skill after the Swi
 conversion. Verified both localizations on-device: navigated Info → Purpose & Use in
 English and (via `-AppleLanguages "(es)"`) in Spanish; markup, red/blue spans, and
 the new sentences all render.
+
+## The legacy engine is gone
+
+With the app fully on Conjugator2 and display parity confirmed, deleted the legacy
+engine: `Conjugator.swift`, `ConjugatorError.swift`, `VerbParser.swift`, the 214-verb
+`verbs.xml`, and `ConjugatorTests.swift`. An audit first mapped every remaining
+reference — all comments except one live call the `Conjugator.shared` grep never
+caught: `ConjugationCell` still compared against `Conjugator.defective`, the legacy
+"df" sentinel for defective slots. That check is dead on the new engine (the data
+source renders a formless slot as an empty string), so it's simply removed.
+
+What deliberately stays: `Tense.swift` and `PersonNumber.swift` (the vocabulary the
+UI still speaks, bridged to `Tense2` by `TenseBridge`), `VerbType` (now fed by class
+numbers), and `CompoundTense`. The app bundle now ships a single verb-data XML,
+`verbModelMap.xml`. Full suite green (365 tests) and a simulator smoke test confirmed
+Browse → verb screen works with only the new engine aboard. CLAUDE.md's project
+overview now reads "migration done" instead of "not yet wired in."
