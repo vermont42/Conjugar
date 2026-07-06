@@ -1477,3 +1477,27 @@ dark-gold titles, darkened-blue glosses, and red interactive text — legible an
 recognizably Conjugar — across the UIKit Browse list and the SwiftUI Settings screen.
 Build clean, SwiftLint clean (0 violations), the four color-sensitive cell suites
 green.
+
+7/6/26: **SwiftUI migration Step 2 — the UI audit, by mapping not fresh discovery.**
+Conjugar's UIKit UI is nearly identical to the *pre-improvement* UI of its already-
+audited siblings Konjugieren (German) and Conjuguer (French), so re-auditing a UI
+we're about to delete would be wasted effort. Instead, `docs/conjugar-ui-issues.md`
+**maps** Konjugieren's 24 audit items (`K#`) and Conjuguer's 30 (`C#`) onto Conjugar's
+concrete screens, tagging each as direct/adapted, and fresh-audits only the screens the
+siblings lack or lay out differently.
+
+- **Before-screenshots** of every current UIKit screen (dark + light) were captured with
+  the `run-in-simulator` skill and live in `docs/screenshots/` (git-ignored). They confirm
+  the mapped findings: the ~90%-empty not-started Quiz, the seven-identical-rows in-progress
+  Quiz with its invisible borderless answer field, the single-column verb conjugations, the
+  centered Info/Settings section headers, and Step 1's light mode rendering correctly.
+- **Foundations are half-built already.** Step 1 shipped `customCardBackground`/
+  `customCardBorder` (the siblings' `customSurface` role) and a brand-colored `HeadingLabel`,
+  so of Conjuguer's five "Batch A" primitives only **`customGreen`** (to de-overload red)
+  and a `.card()` modifier + sensory-feedback/numeric-text helpers remain.
+- **One real bug surfaced in the fresh audit:** the Model-detail conjugation grid
+  (`ModelVC`) lays out six pronoun columns at a fixed width but **only ~4 fit** — vosotros
+  and ellos are clipped off the right edge with no scroll (screenshot `04`). Flagged for the
+  Step-4 detail-screen migration.
+- The audit closes with a sequencing table tying each screen's mapped items to Step 4's
+  migration order (Info → lists → details → Commun → Quiz last).
