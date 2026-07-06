@@ -33,6 +33,10 @@ enum Colors {
   static let yellow = UIColor.customYellow
   /// Conjugar's brand blue — links. Darkened for contrast in light mode.
   static let blue = UIColor.customBlue
+  /// The "correct" semantic. A legible forest green in light mode; a brighter
+  /// green in dark mode. Added in the SwiftUI migration so quiz/results
+  /// correctness gets its own color and `red` can retreat to error/irregularity.
+  static let green = UIColor.customGreen
 
   // MARK: Semantic roles
 

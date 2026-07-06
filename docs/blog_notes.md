@@ -1504,3 +1504,40 @@ siblings lack or lay out differently.
   isn't proof of a defect — check the source (and swipe) before crying bug.
 - The audit closes with a sequencing table tying each screen's mapped items to Step 4's
   migration order (Info → lists → details → Commun → Quiz last).
+
+7/6/26: **SwiftUI migration Step 3 — the shared design-system code (port + adapt).**
+Before migrating any screen, built the reusable SwiftUI primitives the mapped audit
+(`docs/conjugar-ui-issues.md`) leans on — ported and adapted from Konjugieren's
+`Utils/Modifiers.swift`, all reading from Step 1's adaptive color assets so every one
+is light/dark correct for free.
+
+- **The one new color: `customGreen`.** Step 1 already shipped the surface/card tokens,
+  so the audit's only missing colorset was a "correct" green — added as a light/dark
+  `customGreen.colorset` (forest green on white, brighter green in dark) plus a
+  `Colors.green` UIKit bridge. This de-overloads red, which today does CTA + destructive
+  + link + error/irregularity all at once; going forward red retreats to error/irregular,
+  green means "correct", and primary CTAs take the yellow accent.
+- **`Modifiers.swift` grew from ~6 thin modifiers to the full primitive set:** `.card()` /
+  `.cardWithAccentBar(_:)` / `.cardRim()` (the surface behind quiz cards, conjugation
+  sections, results summaries, settings groups), `.linguistic()` (serif for Spanish
+  linguistic content, K9/C-cross), `.readingWidth()` (comfortable measure for Info
+  articles / conjugation columns), `.numeric()` (`monospacedDigit` + `.numericText()`
+  content transition so ticking score/progress/elapsed stop jittering, C5/K6),
+  `.metadataPill(tint:)` (tinted capsule badges for irregularity %, verb count, K12/C15),
+  `.selectionFeedback(trigger:)` (sort-control haptic, K13/C19), and `.speakOnTapFlash`
+  (tap-to-speak + brief flash, ported from Konjugieren's `SpeakOnTap`, wired to Conjugar's
+  `Utterer`, K11/§4). Plus two `ButtonStyle`s — `PrimaryButtonStyle` (filled accent
+  capsule, `lineLimit(1).minimumScaleFactor(0.7)` so large Dynamic Type shrinks instead of
+  clipping "Start", §1/C6) and `LinkButtonStyle` (non-red link tint for Enable/Rate, §9).
+- **`FontExtensions.swift` stays the type ramp**, plus a `heroNumeral` (large rounded
+  numeral) for the Results score the audit wants promoted from a labeled line (§3/K6,C7).
+  Serif itself is a `.linguistic()` modifier, not a font, matching how Konjugieren applies
+  `.fontDesign(.serif)` inline. Added `Layout.doubleDefaultSpacing`, `.readingWidth`,
+  `.cornerRadius` to back the new modifiers.
+- **The existing `HeadingLabel`/`SubheadingLabel`/`BodyLabel`/`StandardButton`/
+  `SegmentedPicker` were kept** (SettingsView still consumes them), but `BodyLabel` moved
+  from all-gold to adaptive `customForeground` — the audit's §8 "reconsider all-gold body
+  text". Verified on the live Settings screen (the one screen using the shared modifiers
+  today) in both light and dark: gold headings over legible neutral body copy, no
+  regression. Build clean, SwiftLint clean (0 violations). No screen wired to the new
+  primitives yet — that's Step 4, which now has its whole toolbox ready.
