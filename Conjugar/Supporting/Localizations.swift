@@ -162,6 +162,10 @@ Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%,
     static var verbsUsing: String {
       NSLocalizedString("%d verbs use this model", comment: "")
     }
+
+    static var verbUsing: String {
+      NSLocalizedString("One verb uses this model", comment: "")
+    }
   }
 
   enum ModelSort {

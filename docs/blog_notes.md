@@ -1234,3 +1234,25 @@ Number) persist via `Settings.modelSort`, GetterSetter-backed like `verbSort`.
 Everything is localized in English and Spanish. Search on the Models and Browse
 lists remains a possible follow-up, as does making the Verb screen's
 "Irreg. ☛ conocer" label tap through to the model's detail screen.
+
+### Follow-up: the model detail now says *how* a model is irregular
+
+Conjuguer's `ModelView` doesn't just badge a model with a percent — it shows the
+irregularity itself: an endings grid with the deviant endings in red, plus a
+stem-alterations card. Conjugar's first-pass detail screen showed only the
+percent, so it got the same treatment, adapted to how Conjugar's models work.
+Conjugar has no endings tables or stem-alteration metadata to render (its models
+are feature stacks over stems), but it has something better: the engine can
+conjugate the exemplar and mark exactly which spans deviate from the regular
+composition — the same red marking the Verb screen uses. So the detail screen now
+opens with Participio and Gerundio lines and a horizontally scrollable
+pronoun-by-tense grid (yo through ellas × the Spanish analogs of Conjuguer's five
+grid tenses — presente, imperativo, pretérito, subj. presente, subj. imperfecto —
+plus futuro, because Spanish parks so much irregularity in the future stem, which
+Conjuguer surfaced via its stem-alterations card instead). Red spans show the
+deviation slot by slot: predecir's grid shows predIGo / predIJe / predIré / and
+the model's signature *regular* tú imperative predice, uncolored. A model that
+suppresses slots gets a "Defective" note in the header line, and defective slots
+render blank in the grid. The grid and the verb count live in the table's header
+view, so the whole thing scrolls away with the verb list — the list stays the
+screen's single scrolling element even for class 1's thousands of verbs.

@@ -11,7 +11,6 @@ import UIKit
 class ModelUIV: UIView {
   @UsesAutoLayout var details = UILabel()
   @UsesAutoLayout var gloss = UILabel()
-  @UsesAutoLayout var verbsCount = UILabel()
 
   @UsesAutoLayout
   var table: UITableView = {
@@ -26,13 +25,13 @@ class ModelUIV: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    [details, gloss, verbsCount].forEach {
+    [details, gloss].forEach {
       $0.font = Fonts.label
       $0.textColor = Colors.yellow
       $0.adjustsFontSizeToFitWidth = true
     }
 
-    [table, details, gloss, verbsCount].forEach {
+    [table, details, gloss].forEach {
       addSubview($0)
     }
 
@@ -45,11 +44,7 @@ class ModelUIV: UIView {
       gloss.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
       gloss.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor),
 
-      verbsCount.topAnchor.constraint(equalTo: gloss.bottomAnchor, constant: Layout.defaultSpacing),
-      verbsCount.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-      verbsCount.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor),
-
-      table.topAnchor.constraint(equalTo: verbsCount.bottomAnchor, constant: Layout.defaultSpacing),
+      table.topAnchor.constraint(equalTo: gloss.bottomAnchor, constant: Layout.defaultSpacing),
       table.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
       table.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
       table.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * Layout.defaultSpacing)

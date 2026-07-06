@@ -34,6 +34,27 @@ class ModelVCTests: XCTestCase {
     XCTAssert(tener.verbs.contains("obtener"))
     XCTAssertEqual(mvc.modelView.details.text?.contains("31"), true)
 
+    guard let headerView = mvc.headerView else {
+      XCTFail("Table header was not a ModelHeaderUIV.")
+      return
+    }
+    XCTAssertEqual(headerView.participio.attributedText?.string, "Participio: tenido")
+    XCTAssertEqual(headerView.gerundio.attributedText?.string, "Gerundio: teniendo")
+    XCTAssertEqual(headerView.verbsCount.text?.contains("\(tener.verbs.count)"), true)
+
+    let yoIndex = 0
+    let presenteIndex = 0
+    let yoPresente = headerView.formLabels[yoIndex][presenteIndex]
+    XCTAssertEqual(yoPresente.attributedText?.string, "tengo")
+
+    let imperativoIndex = 1
+    let yoImperativo = headerView.formLabels[yoIndex][imperativoIndex]
+    XCTAssertEqual(yoImperativo.text, " ")
+
+    let túIndex = 1
+    let túImperativo = headerView.formLabels[túIndex][imperativoIndex]
+    XCTAssertEqual(túImperativo.attributedText?.string, "ten")
+
     let table = UITableView()
     table.register(VerbCell.self, forCellReuseIdentifier: VerbCell.identifier)
     guard let firstCell = mvc.tableView(table, cellForRowAt: IndexPath(row: 0, section: 0)) as? VerbCell else {

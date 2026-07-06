@@ -9,6 +9,24 @@
 import UIKit
 
 class ModelVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+  /// The grid's tense rows: the Spanish analogs of Conjuguer's five endings-grid
+  /// tenses, plus futuro — Spanish concentrates irregularity in the future stem
+  /// (tendr-, har-), which Conjuguer surfaced via its stem-alterations card.
+  /// Tense names are Spanish grammar terms, invariant across localizations like
+  /// the Verb screen's tense headings.
+  static let gridTenses: [(label: String, tense: DisplayTense)] = [
+    ("Ind. Presente", .presenteDeIndicativo),
+    ("Imperativo", .imperativoPositivo),
+    ("Pretérito", .pretérito),
+    ("Futuro", .futuroDeIndicativo),
+    ("Subj. Presente", .presenteDeSubjuntivo),
+    ("Subj. Imperfecto", .imperfectoDeSubjuntivo1)
+  ]
+
+  /// The grid's person columns, in the book's row order (vos is a Verb-screen
+  /// affordance; the grid matches Conjuguer's six pronouns).
+  static let gridPersons: [DisplayPersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+
   private let modelInfo: ModelInfo
   private let entries: [VerbMapEntry]
 
@@ -18,6 +36,10 @@ class ModelVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     } else {
       fatalError(fatalCastMessage(view: ModelUIV.self))
     }
+  }
+
+  var headerView: ModelHeaderUIV? {
+    modelView.table.tableHeaderView as? ModelHeaderUIV
   }
 
   init(modelInfo: ModelInfo) {
@@ -34,9 +56,13 @@ class ModelVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let modelView = ModelUIV(frame: UIScreen.main.bounds)
     modelView.setupTable(dataSource: self, delegate: self)
     initNavigationItemTitleView()
-    modelView.details.text = String(format: Localizations.Model.numberAndPercent, modelInfo.classNumber, modelInfo.irregularityPercent)
+    var details = String(format: Localizations.Model.numberAndPercent, modelInfo.classNumber, modelInfo.irregularityPercent)
+    if Conjugator.isDefective(infinitive: modelInfo.exemplar) {
+      details += " · " + Localizations.Verb.defective
+    }
+    modelView.details.text = details
     modelView.gloss.text = VerbMap.shared.entry(for: modelInfo.exemplar)?.gloss ?? ""
-    modelView.verbsCount.text = String(format: Localizations.Model.verbsUsing, modelInfo.verbs.count)
+    modelView.table.tableHeaderView = makeHeaderView()
     view = modelView
   }
 
@@ -44,6 +70,21 @@ class ModelVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     super.viewWillAppear(animated)
     modelView.isHidden = false
     Current.analytics.recordVisitation(viewController: "\(ModelVC.self)")
+  }
+
+  // The table sizes its header from an explicit frame, not constraints, so fit
+  // it to the table's width whenever layout changes.
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    guard let headerView = modelView.table.tableHeaderView else {
+      return
+    }
+    let targetSize = CGSize(width: modelView.table.bounds.width, height: UIView.layoutFittingCompressedSize.height)
+    let height = headerView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
+    if headerView.frame.size.height != height {
+      headerView.frame.size = CGSize(width: modelView.table.bounds.width, height: height)
+      modelView.table.tableHeaderView = headerView
+    }
   }
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -63,6 +104,44 @@ class ModelVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let verbVC = VerbVC(verb: entries[indexPath.row].infinitive)
     modelView.isHidden = true
     navigationController?.pushViewController(verbVC, animated: true)
+  }
+
+  // MARK: - The conjugation-grid header
+
+  /// The exemplar's conjugations, irregular spans red — how this model deviates
+  /// from a regular conjugation, slot by slot. The UIKit adaptation of
+  /// Conjuguer's endings and stem-alterations cards.
+  private func makeHeaderView() -> ModelHeaderUIV {
+    let headerView = ModelHeaderUIV(
+      tenseLabels: ModelVC.gridTenses.map { $0.label },
+      pronouns: ModelVC.gridPersons.map { $0.pronoun }
+    )
+    headerView.participio.attributedText = nonFiniteLine(tense: .participio)
+    headerView.gerundio.attributedText = nonFiniteLine(tense: .gerundio)
+    headerView.verbsCount.text = modelInfo.verbs.count == 1
+      ? Localizations.Model.verbUsing
+      : String(format: Localizations.Model.verbsUsing, modelInfo.verbs.count)
+    for (personIndex, personNumber) in ModelVC.gridPersons.enumerated() {
+      for (tenseIndex, gridTense) in ModelVC.gridTenses.enumerated() {
+        let label = headerView.formLabels[personIndex][tenseIndex]
+        if case let .success(form) = TenseBridge.conjugate(infinitive: modelInfo.exemplar, tense: gridTense.tense, personNumber: personNumber) {
+          label.attributedText = form.conjugatedString
+          label.setAccessibilityLabelInSpanish(form.lowercased())
+        } else {
+          // A slot with no form: yo has no imperative, and a defective verb's
+          // formless slots surface as errors. Keep the row height with a space.
+          label.text = " "
+        }
+      }
+    }
+    return headerView
+  }
+
+  private func nonFiniteLine(tense: DisplayTense) -> NSAttributedString {
+    guard case let .success(form) = TenseBridge.conjugate(infinitive: modelInfo.exemplar, tense: tense, personNumber: .none) else {
+      return NSAttributedString(string: tense.titleCaseName + ":")
+    }
+    return NSAttributedString(string: tense.titleCaseName + ": ") + form.conjugatedString
   }
 
   private func initNavigationItemTitleView() {
