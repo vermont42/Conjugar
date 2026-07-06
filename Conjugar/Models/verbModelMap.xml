@@ -795,7 +795,6 @@
   <verb in="cachear" cl="1" tn="frisk" />
   <verb in="caducar" cl="1-1" tn="expire" />
   <verb in="caer" cl="9" tn="fall" fr="138" />
-  <verb in="cagar" cl="1-2" tn="shit" />
   <verb in="calafatear" cl="1" tn="caulk" />
   <verb in="calar" cl="1" tn="soak" />
   <verb in="calcar" cl="1-1" tn="trace" />
@@ -1201,7 +1200,6 @@
   <verb in="copear" cl="1" tn="drink" />
   <verb in="copiar" cl="1" tn="copy" fr="737" />
   <verb in="coproducir" cl="34" tn="co-produce" />
-  <verb in="copular" cl="1" tn="copulate" />
   <verb in="coquetear" cl="1" tn="flirt" />
   <verb in="corear" cl="1" tn="chant" />
   <verb in="coreografiar" cl="1-15" tn="choreograph" />
@@ -1600,7 +1598,6 @@
   <verb in="desfigurar" cl="1" tn="disfigure" />
   <verb in="desfilar" cl="1" tn="parade" />
   <verb in="desflecar" cl="1-1" tn="fray" />
-  <verb in="desflorar" cl="1" tn="deflower" />
   <verb in="desfogar" cl="1-2" tn="vent" />
   <verb in="desfondar" cl="1" tn="break bottom" />
   <verb in="desforrar" cl="1" tn="remove lining" />
@@ -1794,7 +1791,6 @@
   <verb in="desvestir" cl="6B" tn="undress" />
   <verb in="desviar" cl="1-15" tn="divert" fr="856" />
   <verb in="desvincular" cl="1" tn="disconnect" />
-  <verb in="desvirgar" cl="1-2" tn="deflower" />
   <verb in="desvirtuar" cl="1-14" tn="distort" />
   <verb in="desvitalizar" cl="1-4" tn="devitalize" />
   <verb in="desvivir" cl="3" tn="go out of way" rx="1" />
@@ -2320,7 +2316,6 @@
   <verb in="erisipelar" cl="1" tn="cause erysipelas" />
   <verb in="erizar" cl="1-4" tn="bristle" />
   <verb in="erosionar" cl="1" tn="erode" />
-  <verb in="erotizar" cl="1-4" tn="eroticize" />
   <verb in="erradicar" cl="1-1" tn="eradicate" />
   <verb in="errar" cl="4A-3" tn="err" />
   <verb in="eructar" cl="1" tn="burp" />
@@ -2468,7 +2463,6 @@
   <verb in="estucar" cl="1-1" tn="stucco" />
   <verb in="estuchar" cl="1" tn="case" />
   <verb in="estudiar" cl="1" tn="study" fr="175" />
-  <verb in="estuprar" cl="1" tn="rape" />
   <verb in="eternizar" cl="1-4" tn="prolong" />
   <verb in="etimologizar" cl="1-4" tn="etymologize" />
   <verb in="etiquetar" cl="1" tn="label" />
@@ -2558,7 +2552,6 @@
   <verb in="extremar" cl="1" tn="maximize" />
   <verb in="exudar" cl="1" tn="exude" />
   <verb in="exultar" cl="1" tn="exult" />
-  <verb in="eyacular" cl="1" tn="ejaculate" />
   <verb in="fabricar" cl="1-1" tn="manufacture" fr="402" />
   <verb in="fabular" cl="1" tn="fabricate" />
   <verb in="facilitar" cl="1" tn="facilitate" fr="240" />
@@ -2632,7 +2625,6 @@
   <verb in="focalizar" cl="1-4" tn="focus" />
   <verb in="foguear" cl="1" tn="season" />
   <verb in="foliar" cl="1" tn="foliate" />
-  <verb in="follar" cl="1" tn="screw" />
   <verb in="fomentar" cl="1" tn="foster" fr="488" />
   <verb in="fondear" cl="1" tn="anchor" />
   <verb in="forcejear" cl="1" tn="struggle" />
@@ -2642,7 +2634,6 @@
   <verb in="formar" cl="1" tn="form" fr="89" />
   <verb in="formatear" cl="1" tn="format" />
   <verb in="formular" cl="1" tn="formulate" fr="461" />
-  <verb in="fornicar" cl="1-1" tn="fornicate" />
   <verb in="forrajear" cl="1" tn="forage" />
   <verb in="forrar" cl="1" tn="line" />
   <verb in="fortalecer" cl="7A" tn="strengthen" fr="459" />
@@ -3067,7 +3058,6 @@
   <verb in="jaspear" cl="1" tn="mottle" />
   <verb in="jerarquizar" cl="1-4" tn="rank" />
   <verb in="jeringar" cl="1-2" tn="annoy" />
-  <verb in="joder" cl="2" tn="screw" fr="880" />
   <verb in="jorobar" cl="1" tn="annoy" />
   <verb in="jubilar" cl="1" tn="retire" />
   <verb in="judaizar" cl="1-12" tn="judaize" />
@@ -3215,7 +3205,6 @@
   <verb in="manifestar" cl="4A" tn="show" fr="216" />
   <verb in="maniobrar" cl="1" tn="maneuver" />
   <verb in="manipular" cl="1" tn="manipulate" fr="798" />
-  <verb in="manosear" cl="1" tn="fondle" />
   <verb in="manotear" cl="1" tn="gesticulate" />
   <verb in="mantear" cl="1" tn="toss" />
   <verb in="mantener" cl="31-1" tn="maintain" fr="49" />
@@ -3244,9 +3233,9 @@
   <verb in="mascullar" cl="1" tn="mumble" />
   <verb in="masificar" cl="1-1" tn="overcrowd" />
   <verb in="masticar" cl="1-1" tn="chew" />
-  <verb in="masturbar" cl="1" tn="masturbate" />
   <verb in="matar" cl="1" tn="kill" fr="310" />
   <verb in="matasellar" cl="1" tn="postmark" />
+  <verb in="matear" cl="1" tn="drink mate" />
   <verb in="materializar" cl="1-4" tn="materialize" />
   <verb in="maternizar" cl="1-4" tn="humanize milk" />
   <verb in="matizar" cl="1-4" tn="nuance" />
@@ -3254,7 +3243,6 @@
   <verb in="matrimoniar" cl="1" tn="marry" />
   <verb in="maullar" cl="1-6" tn="meow" />
   <verb in="maximizar" cl="1-4" tn="maximize" />
-  <verb in="mear" cl="1" tn="pee" />
   <verb in="mecanizar" cl="1-4" tn="mechanize" />
   <verb in="mecanografiar" cl="1-15" tn="type" />
   <verb in="mecer" cl="2-1" tn="rock" />
@@ -3777,7 +3765,6 @@
   <verb in="prosificar" cl="1-1" tn="turn into prose" />
   <verb in="prosperar" cl="1" tn="prosper" />
   <verb in="prosternar" cl="1" tn="prostrate" rx="1" />
-  <verb in="prostituir" cl="8" tn="prostitute" />
   <verb in="protagonizar" cl="1-4" tn="star" fr="602" />
   <verb in="proteger" cl="2-2" tn="protect" fr="207" />
   <verb in="protestar" cl="1" tn="protest" fr="981" />
@@ -3803,7 +3790,6 @@
   <verb in="punzar" cl="1-4" tn="prick" />
   <verb in="purgar" cl="1-2" tn="purge" />
   <verb in="purificar" cl="1-1" tn="purify" />
-  <verb in="putear" cl="1" tn="pester" />
   <verb in="quebrantar" cl="1" tn="break" />
   <verb in="quebrar" cl="4A" tn="break" fr="939" />
   <verb in="quedar" cl="1" tn="stay" fr="24" />
@@ -4231,6 +4217,7 @@
   <verb in="rociar" cl="1-15" tn="sprinkle" />
   <verb in="rodar" cl="4B" tn="roll" fr="707" />
   <verb in="rodear" cl="1" tn="surround" fr="386" />
+  <verb in="rodrigar" cl="1-2" tn="stake" fr="784" />
   <verb in="roer" cl="9-2" tn="gnaw" />
   <verb in="rogar" cl="4B-2" tn="beg" />
   <verb in="romanizar" cl="1-4" tn="romanize" />
@@ -4265,6 +4252,7 @@
   <verb in="sajar" cl="1" tn="lance" />
   <verb in="salar" cl="1" tn="salt" fr="770" />
   <verb in="saldar" cl="1" tn="settle" />
+  <verb in="salgar" cl="1-2" tn="salt livestock" fr="994" />
   <verb in="salir" cl="11" tn="exit" fr="45" />
   <verb in="salivar" cl="1" tn="salivate" />
   <verb in="salmodiar" cl="1" tn="chant" />
@@ -4577,7 +4565,6 @@
   <verb in="tonsurar" cl="1" tn="tonsure" />
   <verb in="tontear" cl="1" tn="fool around" />
   <verb in="topar" cl="1" tn="bump" />
-  <verb in="toquetear" cl="1" tn="fondle" />
   <verb in="torcer" cl="5B-1" tn="twist" />
   <verb in="torear" cl="1" tn="bullfight" />
   <verb in="tornar" cl="1" tn="return" fr="972" />

@@ -851,3 +851,106 @@ not a mock; its two call sites in `BrowseVerbsVCTests`/`BrowseInfoVCTests` updat
 SourceKit indexer briefly flagged `AnalyticsLocale` as unresolved mid-rename, a stale-index
 artifact — a clean build disproved it. Rebuilt: **53/53 XCTest, 0 failures**
 (`TEST SUCCEEDED`).
+
+---
+
+## Frequency-list cleanup + closing the top-990 coverage gap
+
+Started from a raw corpus dump (`estenten23_fl6`) exported as `docs/verbs.csv`:
+three header rows (`corpus`/`subcorpus`/`Item`) plus 1000 `"lemma",freq,relfreq`
+rows. Rewrote it as a clean, sequentially **ranked** `verb,rank` file — `ser,1` …
+`penetrar,990`. Pruning the corpus junk cost 13 lines: 3 export headers and 10
+non-verbs embedded in the lemma list — adverbs (`tambien`, `aqui`), an inflected
+form (`estan`), a brand (`iphone`), noise (`on`, `ende`), a noun (`pilar`), an
+adjective (`linear`), and two lemmatizer artifacts (`pablar`, `paular`). Kept the
+obscure-but-real verbs the corpus surfaced (`jamar`, `salgar`, `rodrigar`, `adir`,
+`musicar`, `matear`, …); a UTF-8 BOM on line 1 initially smuggled `corpus` through
+as rank 1, caught and re-ranked.
+
+Then checked those 990 against the **new engine's** coverage — `verbModelMap.xml`
+(4,828 entries), *not* the legacy `verbs.xml` (214 model verbs). Only **3** were
+missing: `rodrigar` (stake plants), `salgar` (salt livestock), `matear` (drink
+mate) — all regular, which is exactly why a hand-curated model map might skip them.
+Added all three: `rodrigar`/`salgar` as `cl="1-2"` (regular `-gar`, g→gu before *e*,
+like `pagar`/`cargar` — 160 such entries) and `matear` as `cl="1"` (regular `-ear`,
+like `rodear` — 2,978 such entries), each inserted in alphabetical position with a
+terse `tn` gloss. `rodrigar` and `salgar` turned out to sit at ranks 784 and 994 in
+the existing `fr` scheme (sourced from `SpanishVerbFrequencyRanks.txt`) — two of that
+scheme's 13 gaps — so they were restored with `fr="784"`/`fr="994"`; `matear` isn't
+in that source, so it carries no `fr`. XML re-validated (`xmllint`), entry count
+4,828 → 4,831, and the CSV-vs-engine diff now reports **full coverage of the top 990**.
+
+---
+
+## G-rating the verb data
+
+The app is G-rated, so pulled the R-rated verbs out of the data. `chingar` (named in
+the request) turned out to already be absent. Rather than eyeball 4,800+ Spanish
+infinitives, scanned the **English `tn` glosses** in `verbModelMap.xml` for
+vulgar/sexual/scatological terms (`shit`, `screw`, `fornicate`, `masturbate`,
+`fondle`, `deflower`, `rape`, …), then did a second pass on notorious vulgar Spanish
+verbs that might hide behind a *clean* gloss. **Removed 16:** `cagar`, `copular`,
+`desflorar`, `desvirgar`, `erotizar`, `estuprar`, `eyacular`, `follar`, `fornicar`,
+`joder`, `manosear`, `masturbar`, `mear`, `prostituir`, `putear`, `toquetear` — from
+`verbModelMap.xml`, plus `joder` from `docs/verbs.csv` (re-ranked: now 989, ending
+`penetrar,989`) and `docs/SpanishVerbFrequencyRanks.txt`.
+
+The interesting part was what **not** to remove: many core verbs carry vulgar *dialectal*
+slang but an innocent primary meaning + gloss, so they stayed — `coger` (grasp; the
+Latin-American vulgar sense is dialectal), `correr` (run), `tirar` (throw), `penetrar`
+(penetrate), `montar` (mount), `chupar` (suck), `clavar` (nail), `cascar` (crack),
+`sobar` (rub). The rule that fell out: remove when the word is *inherently* profane
+(`putear` ← *puta*) or its glossed meaning is sexual/scatological; keep when only a
+dialectal slang sense is off-color. `xmllint` re-validated; entry count 4,831 → 4,815.
+
+Left in but **flagged for Josh to decide** (borderline, not clearly R-rated):
+`violar` (violate/rape — but the standard word for violating a law/right, rank ~678),
+`seducir` (seduce — often figurative), `orinar`/`defecar` (clinical), `capar`/`castrar`
+(veterinary), `circuncidar` (medical/religious), `mamar` (suckle).
+
+---
+
+## Status check: engine "done", plus fixing the fallout from the data edits
+
+Assessed whether the new engine is finished. Verdict: the **engine** is — 4,811
+distinct verbs, zero `TODO`/`FIXME`/`fatalError` markers, ~350 passing tests — but it
+is **not wired into the app**: the UI still conjugates through the legacy `Conjugator`
+(`verbs.xml`, 214 verbs) via `ConjugationDataSource`; `Conjugator2` is referenced only
+by `Models/` + tests. Updated `CLAUDE.md` to say exactly that (engine complete;
+app-integration is the remaining migration step) rather than a flat "done" that would
+imply the app already uses it. Also corrected the stale count — the overview said
+"more than 4,800"; actual distinct count is 4,811.
+
+The earlier data edits (+3 coverage verbs, −16 R-rated) had silently invalidated two
+`VerbMap2Tests` count assertions: distinct infinitives `4824 → 4811`, and ranked-verb
+count `987 → 988` (the two frequency-gap fills rodrigar@784/salgar@994 added a rank
+each; removing `joder` dropped one). Updated both assertions and their derivation
+comments, then ran the three new-engine suites: **348 tests, TEST SUCCEEDED**. Lesson
+worth a line in the post: a hand-edited data resource has a test contract, and
+"add 3 / remove 16" quietly broke it two files away.
+
+---
+
+## Scoping the Conjugator2 app-migration (wrote a fresh-session prompt)
+
+Wrote `prompts/migrate-app-to-conjugator2-and-sortable-browse.md` for a future session
+to (A) move the app off the legacy `Conjugator`/`verbs.xml` onto `Conjugator2` and (B)
+rebuild Browse Verbs as an all-verbs list sortable by Frequency/Alphabetical, modeled on
+the Conjuguer French app. Kept it UIKit — the SwiftUI conversion is a later step.
+
+Scoping surfaced the parts that make this more than a find-and-replace of
+`Conjugator.shared`:
+- **Tense-coverage gap (the crux).** `Tense2` only covers *simple* tenses + participle
+  + gerundio; the app's conjugation grid also shows the **compound/perfect** tenses,
+  `futuro de subjuntivo`, and `imperativo negativo`. A naïve swap silently drops rows.
+  Recommended composing the compounds in-app (`haber` in tense T + participle) rather
+  than extending the engine.
+- **VerbVC's non-conjugation affordances** have no public Conjugator2 equivalent:
+  `raízFutura`, `isDefective`, `verbType`, and especially `parent` — "parent verb" is a
+  legacy modeling idea the class-number engine simply doesn't have, so that label needs
+  a redesign. Enumerated each with a mapping (gloss ← `VerbMap2`, verbType ← class
+  number) or a "add an accessor" note.
+- **Voseo checked, not assumed:** `PersonNumber2` includes `secondSingularVos` and
+  `ModelCatalog2` carries `ves`/`sos`, so vos is genuinely supported.
+- The 7 remaining `Conjugator.shared` call sites (Quiz, QuizVC, VerbVC, data source,
+  browse) are inventoried in the prompt as the migration checklist.

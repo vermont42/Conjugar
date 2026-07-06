@@ -877,7 +877,6 @@ postular,876
 rezar,877
 cotizar,878
 acomodar,879
-joder,880
 picar,881
 inducir,882
 fundir,883

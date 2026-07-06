@@ -32,16 +32,19 @@ struct VerbMap2Tests {
 
   // MARK: - Map loads (gate: crux 7)
 
-  // 4,828 <verb> elements collapse to 4,824 distinct infinitives: the 4,818 Annex B
+  // 4,815 <verb> elements collapse to 4,811 distinct infinitives. Base build
+  // (`_build_verbmap.py`) produced 4,828 elements → 4,824 distinct: the 4,818 Annex B
   // verbs (− 4 homonyms that contribute 2 elements each = 4,814) + 4 legacy-app-only
   // neologisms (googlear/viralizar/ustedear/aguachicolear) the 2010 book predates +
   // 6 frequency-list gaps (circular/quejar/egresar/respectar/adir/hacendar) absent
-  // from Annex B, all appended by `_build_verbmap.py` so the map is a superset of the
-  // shipping app and of the top-1000 verbs. A nonzero count proves the resource
-  // actually shipped in the (test-hosted) bundle.
-  @Test("map loads from the bundle: 4,824 distinct infinitives")
+  // from Annex B, all appended so the map is a superset of the shipping app and of
+  // the top-1000 verbs. Two hand-edits since: +3 rare top-990 verbs
+  // (matear/rodrigar/salgar) for full frequency coverage, −16 R-rated verbs removed
+  // for the app's G rating → net 4,815 elements / 4,811 distinct. A nonzero count
+  // proves the resource actually shipped in the (test-hosted) bundle.
+  @Test("map loads from the bundle: 4,811 distinct infinitives")
   func mapLoads() {
-    #expect(Self.map.count == 4824, "loaded \(Self.map.count) entries (resource bundled?)")
+    #expect(Self.map.count == 4811, "loaded \(Self.map.count) entries (resource bundled?)")
   }
 
   // MARK: - Marker stripping (crux 3): keys are bare infinitives
@@ -153,16 +156,16 @@ struct VerbMap2Tests {
     #expect(Self.map.entry(for: infinitive)?.frequencyRank == nil)
   }
 
-  // 987 of the 1000 ranked corpus verbs match a map infinitive (981 from Annex B + 6
-  // frequency-gap additions); the other 13 are corpus junk/non-verbs
-  // (docs/freq_unmatched.txt). Ranks are unique 1…1000, so exactly 987 distinct ranks
-  // should appear across the map. Homonyms share one rank across their two rows, so
+  // 988 distinct corpus ranks appear in the map: 980 Annex B verbs (the original 981
+  // minus `joder`, removed for the app's G rating) + 8 frequency-gap fills (the
+  // original 6 plus rodrigar@784 / salgar@994, added for full top-990 coverage).
+  // Ranks are unique within 1…1000. Homonyms share one rank across their two rows, so
   // this counts entries, not <verb> elements.
-  @Test("exactly 987 ranked verbs, with distinct ranks")
+  @Test("exactly 988 ranked verbs, with distinct ranks")
   func rankedCount() {
     let ranks = Self.map.entries.values.compactMap(\.frequencyRank)
-    #expect(ranks.count == 987, "ranked verbs = \(ranks.count)")
-    #expect(Set(ranks).count == 987, "ranks should be unique")
+    #expect(ranks.count == 988, "ranked verbs = \(ranks.count)")
+    #expect(Set(ranks).count == 988, "ranks should be unique")
     #expect(ranks.allSatisfy { (1...1000).contains($0) }, "ranks out of 1…1000 range")
   }
 
