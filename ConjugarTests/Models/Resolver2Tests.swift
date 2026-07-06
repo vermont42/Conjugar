@@ -20,7 +20,7 @@ import Testing
 struct Resolver2Tests {
   /// Conjugate by **verb name alone** — the no-`model:` path under test. Returns
   /// the form, or nil on failure (so a failure surfaces as a clear mismatch).
-  static func form(_ infinitive: String, _ tense: Tense2) -> String? {
+  static func form(_ infinitive: String, _ tense: EngineTense) -> String? {
     if case .success(let conjugated) = Conjugator2.conjugate(infinitive: infinitive, tense: tense) {
       return conjugated
     }
@@ -33,7 +33,7 @@ struct Resolver2Tests {
   // explicit model — here through the resolver, proving the no-`model:` path looks
   // up verb → class → catalog model → conjugate for every class.
   @Test("per-class sample conjugates correctly by name", arguments: VerbMap2Tests.perClassSample)
-  func perClassByName(infinitive: String, tense: Tense2, expected: String) {
+  func perClassByName(infinitive: String, tense: EngineTense, expected: String) {
     #expect(Self.form(infinitive, tense) == expected, "\(infinitive) \(tense)")
   }
 
@@ -43,7 +43,7 @@ struct Resolver2Tests {
   // model to the conjugator, which conjugates the compound's OWN stem and the
   // end-anchored features ride along — incl. the reír/oír families.
   @Test("prefix payoff: compounds conjugate on their own stem by name", arguments: VerbMap2Tests.prefixSample)
-  func prefixPayoffByName(infinitive: String, tense: Tense2, expected: String) {
+  func prefixPayoffByName(infinitive: String, tense: EngineTense, expected: String) {
     #expect(Self.form(infinitive, tense) == expected, "\(infinitive) \(tense)")
   }
 
@@ -67,12 +67,12 @@ struct Resolver2Tests {
   // ending (documented policy in `Conjugator2.resolvedModel`). It must (a) really be
   // off-list and (b) conjugate as a plain regular verb of its conjugation.
   @Test("off-list verbs fall back to regular-by-ending", arguments: [
-    ("plopar", Tense2.presenteDeIndicativo(.firstSingular), "plopo"),
+    ("plopar", EngineTense.presenteDeIndicativo(.firstSingular), "plopo"),
     ("plopar", .pretérito(.thirdSingular), "plopó"),
     ("zumber", .presenteDeIndicativo(.firstSingular), "zumbo"),
     ("frobir", .gerundio, "frobiendo"),
   ])
-  func offListFallback(infinitive: String, tense: Tense2, expected: String) {
+  func offListFallback(infinitive: String, tense: EngineTense, expected: String) {
     #expect(VerbMap2.shared.entry(for: infinitive) == nil, "\(infinitive) unexpectedly in the map")
     #expect(Self.form(infinitive, tense) == expected, "\(infinitive) \(tense)")
   }
@@ -100,7 +100,7 @@ struct Resolver2Tests {
       let entry = VerbMap2.shared.entry(for: infinitive),
       let model = ModelCatalog2.model(forClass: entry.classNumber)
     else { Issue.record("\(infinitive) did not resolve in the map/catalog"); return }
-    let slots: [Tense2] = [
+    let slots: [EngineTense] = [
       .presenteDeIndicativo(.firstSingular), .pretérito(.thirdSingular),
       .futuro(.firstSingular), .participioPasado, .gerundio,
       .imperativoAfirmativo(.secondSingular),

@@ -43,15 +43,15 @@
 /// (ser, ir, dar, haber…) or a monosyllabic base whose compounds are *more*
 /// regular, not less (ver `veis` vs. prever `prevéis`).
 struct LiteralSlotOverride2: Feature2 {
-  /// Slot → literal final form. Listed as pairs (Tense2 is Equatable, not
+  /// Slot → literal final form. Listed as pairs (EngineTense is Equatable, not
   /// Hashable; the tables are a handful of entries, so a linear scan is fine).
-  let overrides: [(slot: Tense2, form: String)]
+  let overrides: [(slot: EngineTense, form: String)]
 
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     overrides.contains { $0.slot == tense }
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     for override in overrides where override.slot == tense {
       return (override.form, "")
     }
@@ -86,11 +86,11 @@ struct IrregularParticiple2: Feature2 {
     self.alternate = alternate
   }
 
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     tense == .participioPasado
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     (form(participle, stem: stem), "")
   }
 
@@ -130,11 +130,11 @@ struct ApocopatedImperative2: Feature2 {
     self.finalSwap = finalSwap
   }
 
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     tense == .imperativoAfirmativo(.secondSingular)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     var letters = Array(regularStem)
     if let finalSwap, letters.last == finalSwap.from {
       letters[letters.count - 1] = finalSwap.to
@@ -192,15 +192,15 @@ struct ApocopatedImperative2: Feature2 {
 /// the diphthongs `-ie-`/`-io-`) exist; the stressed-stem present, the whole
 /// present subjunctive, and the imperatives derived from it do not.
 struct DefectiveFeature2: Feature2 {
-  let isMissing: (Tense2) -> Bool
+  let isMissing: (EngineTense) -> Bool
 
-  func applies(to tense: Tense2) -> Bool { false }
+  func applies(to tense: EngineTense) -> Bool { false }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     (stem, ending)
   }
 
-  func suppresses(_ tense: Tense2) -> Bool { isMissing(tense) }
+  func suppresses(_ tense: EngineTense) -> Bool { isMissing(tense) }
 
   /// abolir's missing slots: PI{1s,2s,3s,3p} (the post-stem vowel is o/e),
   /// PS{all} (post-stem a), and IMP{2s,3s,1p,3p} (the 2s `-e` and the PS-derived
@@ -240,11 +240,11 @@ struct DefectiveFeature2: Feature2 {
 struct RunningStemConsonantSwap2: Feature2 {
   let from: String
   let to: String
-  let slots: (Tense2) -> Bool
+  let slots: (EngineTense) -> Bool
 
-  func applies(to tense: Tense2) -> Bool { slots(tense) }
+  func applies(to tense: EngineTense) -> Bool { slots(tense) }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     guard stem.hasSuffix(from) else { return (stem, ending) }
     return (String(stem.dropLast(from.count)) + to, ending)
   }
@@ -259,7 +259,7 @@ struct RunningStemConsonantSwap2: Feature2 {
 /// ri+ieron → rieron, ri+iendo → riendo, ri+iera → riera. Mirrors `o-llñ`'s
 /// absorption, but triggered by the raised stem vowel rather than a palatal.
 struct CollapseDoubleI2: Feature2 {
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     switch tense {
     case .pretérito(.thirdSingular), .pretérito(.thirdPlural),
          .gerundio,
@@ -270,7 +270,7 @@ struct CollapseDoubleI2: Feature2 {
     }
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     guard stem.hasSuffix("i"), ending.hasPrefix("i") else { return (stem, ending) }
     return (stem, String(ending.dropFirst()))
   }

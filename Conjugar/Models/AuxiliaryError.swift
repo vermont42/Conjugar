@@ -7,5 +7,5 @@
 //
 
 enum AuxiliaryError: Error {
-  case noHaberForm(Tense)
+  case noHaberForm(DisplayTense)
 }

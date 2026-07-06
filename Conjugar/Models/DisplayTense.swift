@@ -1,12 +1,12 @@
 //
-//  Tense.swift
+//  DisplayTense.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 3/31/17.
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-enum Tense: String, CaseIterable {
+enum DisplayTense: String, CaseIterable {
   static let auxiliary = "haber"
 
   case infinitivo = "in"
@@ -181,7 +181,7 @@ enum Tense: String, CaseIterable {
     }
   }
 
-  func haberTenseForCompoundTense() -> Result<Tense, AuxiliaryError> {
+  func haberTenseForCompoundTense() -> Result<DisplayTense, AuxiliaryError> {
     switch self {
     case .perfectoDeIndicativo:
       return .success(.presenteDeIndicativo)
@@ -206,5 +206,5 @@ enum Tense: String, CaseIterable {
     }
   }
 
-  static let conjugatedTenses: [Tense] = [.presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo, .imperativoPositivo, .imperativoNegativo, .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo]
+  static let conjugatedTenses: [DisplayTense] = [.presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo, .imperativoPositivo, .imperativoNegativo, .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo]
 }

@@ -26,11 +26,11 @@ struct AccentStem2: Feature2 {
 
   let vowel: Vowel
 
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     Slot2.isStressedStem(tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     // End-anchored: accent the LAST plain occurrence of the vowel in the stem
     // (descafeinar → descafeín, enraizar → enraíz, enviar → enví).
     guard let index = stem.lastIndex(of: vowel.plain) else { return (stem, ending) }

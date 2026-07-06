@@ -29,7 +29,7 @@
 // conflict resolves last-wins (the later feature's output is final).
 protocol Feature2 {
   /// True for each slot this feature transforms (the taxonomy "Slots" column).
-  func applies(to tense: Tense2) -> Bool
+  func applies(to tense: EngineTense) -> Bool
 
   /// Rewrite the regular `(stem, ending)` pair for a slot this feature applies
   /// to. Must be end-anchored (see the type doc). Called only when
@@ -42,17 +42,17 @@ protocol Feature2 {
   /// stem from the regular base, discarding a prior diphthong/raise (the
   /// `subj-from-1s` last-wins reset: tener → `teng-`, not `*tieng-`). The Phase
   /// 2/3 features ignore it and transform the running `stem` as before.
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String)
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String)
 
   /// True for a slot that this feature declares **has no form at all** (a
   /// *defective* verb — Phase 5, taxonomy §5 abolir). The conjugator reports such
   /// a slot as `.noForm` rather than composing a (nonexistent) form. Defaults to
   /// `false`: a feature suppresses nothing unless it opts in (`DefectiveFeature2`).
-  func suppresses(_ tense: Tense2) -> Bool
+  func suppresses(_ tense: EngineTense) -> Bool
 }
 
 extension Feature2 {
-  func suppresses(_ tense: Tense2) -> Bool { false }
+  func suppresses(_ tense: EngineTense) -> Bool { false }
 }
 
 // MARK: - Shared slot vocabulary (taxonomy §2)
@@ -67,7 +67,7 @@ enum Slot2 {
   /// Phase 3, a diphthong) surfaces. Deliberately **excludes** voseo present-2s
   /// and imperative-2s: those are built on the regular stem and bypass the
   /// stem-vowel change (`vos enviás`, not *envíás`; `vos pensás`, not *piensás`).
-  static func isStressedStem(_ tense: Tense2) -> Bool {
+  static func isStressedStem(_ tense: EngineTense) -> Bool {
     switch tense {
     case let .presenteDeIndicativo(pn), let .presenteDeSubjuntivo(pn):
       switch pn {
@@ -89,7 +89,7 @@ enum Slot2 {
   /// lets the diphthong and raise features each fire on their own PS persons
   /// without conflict. `PR{1s,2s,1p,2p}` are **not** WK (sentí/sentiste/sentimos/
   /// sentisteis stay regular). Voseo slots are never WK.
-  static func isWeakIr(_ tense: Tense2) -> Bool {
+  static func isWeakIr(_ tense: EngineTense) -> Bool {
     switch tense {
     case let .presenteDeSubjuntivo(pn):
       switch pn {
@@ -115,7 +115,7 @@ enum Slot2 {
   /// PI-1s stem (decision §6.2, bundled) and a prior diphthong is reset
   /// (tengo/tenga, not `*tiengo`). Deliberately excludes `PI{2s,3s,3p}`, where a
   /// diphthong still surfaces (tienes/tiene/tienen).
-  static func isSubjFrom1s(_ tense: Tense2) -> Bool {
+  static func isSubjFrom1s(_ tense: EngineTense) -> Bool {
     switch tense {
     case .presenteDeIndicativo(.firstSingular), .presenteDeSubjuntivo:
       return true
@@ -130,7 +130,7 @@ enum Slot2 {
   /// tú imperative is included because it equals PI{3s} (construye, oye, arguye) —
   /// without it the glide would be lost there (*construe). It stays out of the
   /// voseo/vosotros imperatives, which are regular (construí / construid).
-  static func isYAdd(_ tense: Tense2) -> Bool {
+  static func isYAdd(_ tense: EngineTense) -> Bool {
     switch tense {
     case let .presenteDeIndicativo(pn):
       switch pn {
@@ -150,7 +150,7 @@ enum Slot2 {
   /// suppletive preterite stem drives the imperfect subjunctives too (the §1
   /// "strong preterite" derivation rule), so the strong-stem and strong-ending
   /// features span this whole set.
-  static func isPreteriteSystem(_ tense: Tense2) -> Bool {
+  static func isPreteriteSystem(_ tense: EngineTense) -> Bool {
     switch tense {
     case .pretérito, .imperfectoDeSubjuntivoRa, .imperfectoDeSubjuntivoSe:
       return true
@@ -161,7 +161,7 @@ enum Slot2 {
 
   /// **Future system** = `FU{all}` + `CO{all}`. One future-stem override drives
   /// both the future and the conditional (the §1 "future stem" derivation rule).
-  static func isFutureSystem(_ tense: Tense2) -> Bool {
+  static func isFutureSystem(_ tense: EngineTense) -> Bool {
     switch tense {
     case .futuro, .condicional:
       return true
@@ -176,7 +176,7 @@ enum Slot2 {
   /// imperfect are `ser`/`ir`/`ver` (taxonomy §1); `ver`/`prever` route their
   /// `ve-`/`preve-` imperfect stem through `StemFeature2` here (regular `-er`
   /// endings on the rebuilt stem), while `ser`/`ir` use literal residue.
-  static func isImperfect(_ tense: Tense2) -> Bool {
+  static func isImperfect(_ tense: EngineTense) -> Bool {
     if case .imperfectoDeIndicativo = tense { return true }
     return false
   }
@@ -185,7 +185,7 @@ enum Slot2 {
   /// verbs (`ser` sea-, `haber` haya-, `saber` sep-, `caber` quep-, `ir` vaya-)
   /// rebuild a fresh subjunctive stem here without touching the (separately
   /// suppletive) present indicative 1s — so this is `subj-from-1s` minus PI{1s}.
-  static func isPresentSubjunctive(_ tense: Tense2) -> Bool {
+  static func isPresentSubjunctive(_ tense: EngineTense) -> Bool {
     if case .presenteDeSubjuntivo = tense { return true }
     return false
   }

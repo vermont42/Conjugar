@@ -1,5 +1,5 @@
 //
-//  Tense2.swift
+//  EngineTense.swift
 //  Conjugar
 //
 //  Created by Joshua Adams on 6/12/26.
@@ -7,12 +7,12 @@
 //
 
 // New (composition-engine) tense model. Suffixed `2` while it lives alongside
-// the old `Tense`; the suffix is dropped once the old engine is removed.
+// the old `DisplayTense`; the suffix is dropped once the old engine is removed.
 //
 // Scope: the ten simple / non-finite tenses the verified oracle covers
 // (spanish_models.md slot vocabulary §2). The nine compound tenses (haber +
 // participle) are mechanical and are added later, not in the Phase 1 skeleton.
-enum Tense2: Equatable {
+enum EngineTense: Equatable {
   case presenteDeIndicativo(PersonNumber2)         // PI
   case pretérito(PersonNumber2)                    // PR (pretérito indefinido / simple past)
   case imperfectoDeIndicativo(PersonNumber2)       // IM

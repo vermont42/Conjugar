@@ -10,8 +10,8 @@ import Testing
 @testable import Conjugar
 
 // The legacy-vocabulary → Conjugator2 bridge the migrated UI conjugates through:
-// simple tenses map onto `Tense2`; the compound (perfect) tenses, imperativo
-// negativo, and futuro de subjuntivo are composed/derived here because `Tense2`
+// simple tenses map onto `EngineTense`; the compound (perfect) tenses, imperativo
+// negativo, and futuro de subjuntivo are composed/derived here because `EngineTense`
 // deliberately does not model them. Expected forms were verified against the
 // legacy engine's output for verbs both engines know.
 //
@@ -19,11 +19,11 @@ import Testing
 // (`IrregularityMarker`): the letters that differ from the verb's regular
 // composition, which `conjugatedString` renders red — the same convention the
 // legacy verbs.xml hand-encoded.
-@Suite("TenseBridge (legacy Tense/PersonNumber → Conjugator2)")
+@Suite("TenseBridge (legacy DisplayTense/PersonNumber → Conjugator2)")
 struct TenseBridgeTests {
   /// Bridge-conjugate, returning the form or nil on failure (a failure surfaces
   /// as a clear mismatch).
-  static func form(_ infinitive: String, _ tense: Tense, _ personNumber: PersonNumber) -> String? {
+  static func form(_ infinitive: String, _ tense: DisplayTense, _ personNumber: PersonNumber) -> String? {
     if case .success(let conjugated) = TenseBridge.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber) {
       return conjugated
     }
@@ -32,8 +32,8 @@ struct TenseBridgeTests {
 
   // MARK: - Simple tenses ride the case-for-case mapping
 
-  @Test("simple tenses map case-for-case onto Tense2", arguments: [
-    ("hablar", Tense.presenteDeIndicativo, PersonNumber.firstSingular, "hablo"),
+  @Test("simple tenses map case-for-case onto EngineTense", arguments: [
+    ("hablar", DisplayTense.presenteDeIndicativo, PersonNumber.firstSingular, "hablo"),
     ("pensar", .presenteDeIndicativo, .firstSingular, "pIenso"),
     ("pensar", .presenteDeIndicativo, .secondSingularVos, "pensás"),
     ("pagar", .pretérito, .firstSingular, "pagUé"),
@@ -49,14 +49,14 @@ struct TenseBridgeTests {
     ("subir", .gerundio, .none, "subiendo"),
     ("volver", .participio, .none, "vUELTo")
   ])
-  func simpleTenses(infinitive: String, tense: Tense, personNumber: PersonNumber, expected: String) {
+  func simpleTenses(infinitive: String, tense: DisplayTense, personNumber: PersonNumber, expected: String) {
     #expect(Self.form(infinitive, tense, personNumber) == expected, "\(infinitive) \(tense.displayName) \(personNumber.pronoun)")
   }
 
   // MARK: - Compound tenses: haber in the matching simple tense + participle
 
   @Test("compound tenses compose haber + participle", arguments: [
-    ("hablar", Tense.perfectoDeIndicativo, PersonNumber.firstSingular, "hE hablado"),
+    ("hablar", DisplayTense.perfectoDeIndicativo, PersonNumber.firstSingular, "hE hablado"),
     ("comer", .pretéritoAnterior, .secondSingularTú, "hUbiste comido"),
     ("tener", .pluscuamperfectoDeIndicativo, .thirdPlural, "habían tenido"),
     ("imprimir", .futuroPerfecto, .firstSingular, "habRé imprESo"),
@@ -67,7 +67,7 @@ struct TenseBridgeTests {
     ("volver", .futuroPerfectoDeSubjuntivo, .thirdSingular, "hUbiere vUELTo"),
     ("hacer", .perfectoDeIndicativo, .secondSingularVos, "haS hECHo")
   ])
-  func compoundTenses(infinitive: String, tense: Tense, personNumber: PersonNumber, expected: String) {
+  func compoundTenses(infinitive: String, tense: DisplayTense, personNumber: PersonNumber, expected: String) {
     #expect(Self.form(infinitive, tense, personNumber) == expected, "\(infinitive) \(tense.displayName) \(personNumber.pronoun)")
   }
 

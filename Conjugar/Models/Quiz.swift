@@ -17,7 +17,7 @@ class Quiz {
   private(set) var lastDifficulty: Difficulty = .moderate
   private(set) var proposedAnswers: [String] = []
   private(set) var correctAnswers: [String] = []
-  private(set) var questions: [(String, Tense, PersonNumber)] = []
+  private(set) var questions: [(String, DisplayTense, PersonNumber)] = []
   private var regularArVerbs = VerbFamilies.regularArVerbs
   private var regularArVerbsIndex = 0
   private var regularIrVerbs = VerbFamilies.regularIrVerbs
@@ -65,7 +65,7 @@ class Quiz {
     }
   }
 
-  var tense: Tense {
+  var tense: DisplayTense {
     if questions.count > 0 {
       return questions[currentQuestionIndex].1
     } else {

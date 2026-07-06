@@ -43,13 +43,13 @@ struct StemFeature2: Feature2 {
 
   let operation: Operation
   /// The slot set this stem rebuild fires in (a named Phase 4 derivation target).
-  let slots: (Tense2) -> Bool
+  let slots: (EngineTense) -> Bool
 
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     slots(tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     switch operation {
     case let .append(suffix):
       return (regularStem + suffix, ending)

@@ -24,11 +24,11 @@ struct PreteriteEndings2: Feature2 {
   let isRa: [PersonNumber2: String]
   let isSe: [PersonNumber2: String]
 
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     Slot2.isPreteriteSystem(tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     guard let person = tense.personNumber else { return (stem, ending) }
     let key: PersonNumber2 = (person == .secondSingularVos) ? .secondSingular : person
     let table: [PersonNumber2: String]
@@ -107,11 +107,11 @@ struct PreteriteEndings2: Feature2 {
 // fuimos, fuisteis, fueron; IS fuera…/fuese…. A single feature, since it owns
 // stem and endings together (the stem is not derived from any base).
 struct SuppletivePreterite2: Feature2 {
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     Slot2.isPreteriteSystem(tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     guard let person = tense.personNumber else { return ("fu", ending) }
     let key: PersonNumber2 = (person == .secondSingularVos) ? .secondSingular : person
     let table: [PersonNumber2: String]

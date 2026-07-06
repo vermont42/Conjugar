@@ -30,9 +30,9 @@
 // `re-argüir` rides free). It is harmless to leave `applies` always-true: the
 // guards make every non-`güy` slot a no-op.
 struct DiaeresisDropBeforeY2: Feature2 {
-  func applies(to tense: Tense2) -> Bool { true }
+  func applies(to tense: EngineTense) -> Bool { true }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     // Boundary case first: stem ends `gü`, ending begins `y` (argü + yó → arguyó).
     // Drop only the diaeresis (ü → u); the `y` stays on the ending.
     if stem.hasSuffix("gü"), ending.hasPrefix("y") {

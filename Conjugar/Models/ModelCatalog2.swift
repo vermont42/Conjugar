@@ -50,7 +50,7 @@ enum ModelCatalog2 {
   // MARK: - Shared build helpers (mirrors the test exemplars' helpers)
 
   /// Build a `LiteralSlotOverride2` from `(slot, form)` pairs (the catch-all residue).
-  private static func residue(_ pairs: [(Tense2, String)]) -> LiteralSlotOverride2 {
+  private static func residue(_ pairs: [(EngineTense, String)]) -> LiteralSlotOverride2 {
     LiteralSlotOverride2(overrides: pairs.map { (slot: $0.0, form: $0.1) })
   }
 

@@ -6,9 +6,9 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// The seam between the legacy `Tense`/`PersonNumber` vocabulary the UI is
-// structured around and the new engine (`Conjugator2`/`Tense2`/`PersonNumber2`).
-// The simple tenses map case-for-case onto `Tense2`; the tenses `Tense2`
+// The seam between the legacy `DisplayTense`/`PersonNumber` vocabulary the UI is
+// structured around and the new engine (`Conjugator2`/`EngineTense`/`PersonNumber2`).
+// The simple tenses map case-for-case onto `EngineTense`; the tenses `EngineTense`
 // deliberately does not model are composed here:
 //
 //   - the nine compound (perfect) tenses — `CompoundTense` (haber + participle),
@@ -26,9 +26,9 @@
 // A defective verb's formless slot surfaces as `.noForm`, which the UI renders
 // as a blank row (the legacy engine's "df" sentinel played this role).
 enum TenseBridge {
-  /// Conjugate a legacy `(Tense, PersonNumber)` slot through `Conjugator2`,
+  /// Conjugate a legacy `(DisplayTense, PersonNumber)` slot through `Conjugator2`,
   /// irregularity-marked for display.
-  static func conjugate(infinitive: String, tense: Tense, personNumber: PersonNumber) -> Result<String, Conjugator2Error> {
+  static func conjugate(infinitive: String, tense: DisplayTense, personNumber: PersonNumber) -> Result<String, Conjugator2Error> {
     let result = unmarkedConjugate(infinitive: infinitive, tense: tense, personNumber: personNumber)
     guard
       case let .success(form) = result,
@@ -60,10 +60,10 @@ enum TenseBridge {
     }
   }
 
-  /// The `Tense2` case for a legacy simple tense, or nil for the tenses `Tense2`
+  /// The `EngineTense` case for a legacy simple tense, or nil for the tenses `EngineTense`
   /// does not model (compounds, futuro de subjuntivo, imperativo negativo, and
   /// the pseudo-tenses).
-  static func simpleTense2(for tense: Tense, personNumber: PersonNumber2) -> Tense2? {
+  static func simpleEngineTense(for tense: DisplayTense, personNumber: PersonNumber2) -> EngineTense? {
     switch tense {
     case .presenteDeIndicativo:
       return .presenteDeIndicativo(personNumber)
@@ -90,7 +90,7 @@ enum TenseBridge {
 
   // MARK: - The unmarked conjugation
 
-  private static func unmarkedConjugate(infinitive: String, tense: Tense, personNumber: PersonNumber) -> Result<String, Conjugator2Error> {
+  private static func unmarkedConjugate(infinitive: String, tense: DisplayTense, personNumber: PersonNumber) -> Result<String, Conjugator2Error> {
     switch tense {
     case .infinitivo, .translation:
       fatalError("\(tense.displayName) is not a conjugation; look it up directly.")
@@ -118,10 +118,10 @@ enum TenseBridge {
       }
     case .presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
          .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2:
-      guard let personNumber2 = personNumber2(for: personNumber), let tense2 = simpleTense2(for: tense, personNumber: personNumber2) else {
+      guard let personNumber2 = personNumber2(for: personNumber), let engineTense = simpleEngineTense(for: tense, personNumber: personNumber2) else {
         fatalError("\(tense.displayName) requires a person.")
       }
-      return Conjugator2.conjugate(infinitive: infinitive, tense: tense2)
+      return Conjugator2.conjugate(infinitive: infinitive, tense: engineTense)
     case .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto,
          .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1,
          .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo:
@@ -133,13 +133,13 @@ enum TenseBridge {
 
   /// The same slot conjugated with a **feature-less** regular model — the
   /// baseline whose differing span is the verb's irregularity.
-  private static func regularForm(infinitive: String, tense: Tense, personNumber: PersonNumber) -> String? {
+  private static func regularForm(infinitive: String, tense: DisplayTense, personNumber: PersonNumber) -> String? {
     guard let base = RegularRoot2(infinitive: infinitive) else {
       return nil
     }
     let regularModel = VerbModel2(base: base)
-    func regular(_ tense2: Tense2) -> String? {
-      if case let .success(form) = Conjugator2.conjugate(infinitive: infinitive, tense: tense2, model: regularModel) {
+    func regular(_ engineTense: EngineTense) -> String? {
+      if case let .success(form) = Conjugator2.conjugate(infinitive: infinitive, tense: engineTense, model: regularModel) {
         return form
       }
       return nil
@@ -172,16 +172,16 @@ enum TenseBridge {
       }
     case .presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
          .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2:
-      guard let personNumber2 = personNumber2(for: personNumber), let tense2 = simpleTense2(for: tense, personNumber: personNumber2) else {
+      guard let personNumber2 = personNumber2(for: personNumber), let engineTense = simpleEngineTense(for: tense, personNumber: personNumber2) else {
         return nil
       }
-      return regular(tense2)
+      return regular(engineTense)
     case .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto,
          .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1,
          .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo:
       guard
         case let .success(haberTense) = tense.haberTenseForCompoundTense(),
-        let auxiliary = regularForm(infinitive: Tense.auxiliary, tense: haberTense, personNumber: personNumber),
+        let auxiliary = regularForm(infinitive: DisplayTense.auxiliary, tense: haberTense, personNumber: personNumber),
         let participle = regularForm(infinitive: infinitive, tense: .participio, personNumber: .none) else {
         return nil
       }

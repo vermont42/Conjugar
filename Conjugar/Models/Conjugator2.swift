@@ -26,7 +26,7 @@ enum Conjugator2 {
   /// conjugates against it, so an irregular verb conjugates correctly without the
   /// caller naming its model. A verb outside the map falls back to a regular base
   /// inferred from the ending.
-  static func conjugate(infinitive: String, tense: Tense2) -> Result<String, Conjugator2Error> {
+  static func conjugate(infinitive: String, tense: EngineTense) -> Result<String, Conjugator2Error> {
     guard infinitive.count >= minimumInfinitiveLength else {
       return .failure(.infinitiveTooShort)
     }
@@ -41,7 +41,7 @@ enum Conjugator2 {
   /// letter ending, so a prefixed verb (`releer`, `reenviar`) conjugates on its
   /// own stem and the model's end-anchored features ride along untouched. This is
   /// the test entry point until the verb→model map arrives in Phase 6.
-  static func conjugate(infinitive: String, tense: Tense2, model: VerbModel2) -> Result<String, Conjugator2Error> {
+  static func conjugate(infinitive: String, tense: EngineTense, model: VerbModel2) -> Result<String, Conjugator2Error> {
     guard infinitive.count >= minimumInfinitiveLength else {
       return .failure(.infinitiveTooShort)
     }
@@ -73,7 +73,7 @@ enum Conjugator2 {
   /// The primary element **must** equal `conjugate`'s result (crux 1); it is in
   /// fact produced by the identical call. An alternate stack that fails/suppresses
   /// for a given slot is simply skipped (it contributes no form there).
-  static func conjugateAll(infinitive: String, tense: Tense2) -> Result<[String], Conjugator2Error> {
+  static func conjugateAll(infinitive: String, tense: EngineTense) -> Result<[String], Conjugator2Error> {
     guard infinitive.count >= minimumInfinitiveLength else {
       return .failure(.infinitiveTooShort)
     }
@@ -85,7 +85,7 @@ enum Conjugator2 {
     return conjugateAll(infinitive: infinitive, tense: tense, model: resolvedModel(for: infinitive, base: base))
   }
 
-  static func conjugateAll(infinitive: String, tense: Tense2, model: VerbModel2) -> Result<[String], Conjugator2Error> {
+  static func conjugateAll(infinitive: String, tense: EngineTense, model: VerbModel2) -> Result<[String], Conjugator2Error> {
     guard infinitive.count >= minimumInfinitiveLength else {
       return .failure(.infinitiveTooShort)
     }
@@ -163,7 +163,7 @@ enum Conjugator2 {
   /// `compose` (or the derived imperative). Shared by `conjugate` (the primary
   /// stack) and `conjugateAll` (the primary stack *and* each alternate stack), so
   /// alternates ride the exact same seam, derivation rules, and imperative logic.
-  private static func conjugateOne(infinitive: String, tense: Tense2, base: RegularRoot2, features: [Feature2]) -> Result<String, Conjugator2Error> {
+  private static func conjugateOne(infinitive: String, tense: EngineTense, base: RegularRoot2, features: [Feature2]) -> Result<String, Conjugator2Error> {
     // Outside the presente de indicativo and the affirmative imperative — the
     // two tenses with distinct voseo forms — vos conjugates identically to tú,
     // so canonicalize the slot to tú before composing. The ending tables already
@@ -194,7 +194,7 @@ enum Conjugator2 {
   /// The tú-slot equivalent of a vos slot in the tenses where vos and tú share
   /// every form; identity everywhere else (PI and IMP keep their real voseo
   /// slots — cantás/cantá and the sos/ves/has/andá residue).
-  private static func canonicalized(_ tense: Tense2) -> Tense2 {
+  private static func canonicalized(_ tense: EngineTense) -> EngineTense {
     switch tense {
     case .pretérito(.secondSingularVos):
       return .pretérito(.secondSingular)
@@ -231,7 +231,7 @@ enum Conjugator2 {
     // Apply any imperative-slot residue (a literal override) on top of the PS
     // form. Only residue literals target a non-2nd imperative person, so this
     // loop is a no-op except for the `ir` vamos exception.
-    let imperative = Tense2.imperativoAfirmativo(personNumber)
+    let imperative = EngineTense.imperativoAfirmativo(personNumber)
     var form = subjunctive
     for feature in features where feature.applies(to: imperative) {
       (form, _) = feature.apply(stem: form, ending: "", tense: imperative, regularStem: stem)
@@ -289,8 +289,8 @@ enum Conjugator2 {
   }
 
   /// Every slot a verb's paradigm can have — the domain `isDefective` sweeps.
-  private static var allSlots: [Tense2] {
-    var slots: [Tense2] = [.participioPasado, .gerundio]
+  private static var allSlots: [EngineTense] {
+    var slots: [EngineTense] = [.participioPasado, .gerundio]
     for personNumber in PersonNumber2.allCases {
       slots += [
         .presenteDeIndicativo(personNumber),
@@ -314,7 +314,7 @@ enum Conjugator2 {
   /// a true conflict resolves last-wins. Every feature operation is end-anchored,
   /// so prefixes ride along untouched. With no features this returns the regular
   /// `stem + ending`.
-  private static func compose(stem: String, ending: String, tense: Tense2, features: [Feature2]) -> String {
+  private static func compose(stem: String, ending: String, tense: EngineTense, features: [Feature2]) -> String {
     // The regular base stem, captured before any feature runs, so the §4.5
     // 1s/subjunctive features and the residue stem features can rebuild from it
     // (the subj-from-1s reset and prefix-invariant strong/contracted stems).

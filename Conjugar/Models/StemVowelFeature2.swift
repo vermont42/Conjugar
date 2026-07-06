@@ -32,7 +32,7 @@ struct StemVowel2: Feature2 {
     case str // diphthongs (§4.3) and pedir-style raise (`r-ei-str`)
     case wk  // -ir weak-slot raising (§4.4: `r-ei-wk`, `r-ou-wk`)
 
-    func applies(to tense: Tense2) -> Bool {
+    func applies(to tense: EngineTense) -> Bool {
       switch self {
       case .str:
         return Slot2.isStressedStem(tense)
@@ -49,11 +49,11 @@ struct StemVowel2: Feature2 {
   let to: String
   let slots: Slots
 
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     slots.applies(to: tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     // End-anchored: rewrite the LAST occurrence of the trigger vowel in the stem
     // (pensar → piens-, mostrar → muestr-, adquirir → adquier-, comprobar →
     // compruebo on the last o). The prefix rides along untouched.

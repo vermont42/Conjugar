@@ -1120,3 +1120,24 @@ numbers), and `CompoundTense`. The app bundle now ships a single verb-data XML,
 `verbModelMap.xml`. Full suite green (365 tests) and a simulator smoke test confirmed
 Browse → verb screen works with only the new engine aboard. CLAUDE.md's project
 overview now reads "migration done" instead of "not yet wired in."
+
+## Renamed Tense → DisplayTense, Tense2 → EngineTense
+
+With the legacy engine gone, the "2" suffix on `Tense2` no longer signaled
+"the new one of two" — and plain `Tense` undersold what the type had become. The
+new names state their roles: **`DisplayTense`** is the user-facing tense taxonomy
+the UI and quiz speak — the full 16+ set, including the compound tenses, futuro de
+subjuntivo, and imperativo negativo that the engine deliberately doesn't model.
+**`EngineTense`** is what `Conjugator2` consumes: simple-tense-plus-person slots
+like `.presenteDeIndicativo(.firstSingular)`. The architecture now reads directly
+from the type names: UI speaks DisplayTense → `TenseBridge` maps it (routing
+compounds through `CompoundTense`) → engine speaks EngineTense.
+
+Mechanics worth noting: a word-boundary-aware perl rename (`\bTense2\b` first, then
+`\bTense\b`) handled all 284 occurrences without touching `TenseBridge`,
+`CompoundTense`, or `haberTenseForCompoundTense`, but two things needed manual
+care — the `NSLocalizedString("Tense", …)` localization *key* had to stay "Tense"
+(it's how the Spanish "Tiempo" is looked up), and the `TenseTests` class /
+`tense2` locals followed up by hand. The rest of the `*2` family (`Conjugator2`,
+`PersonNumber2`, `VerbMap2`…) keeps its names for now; those could get the same
+treatment during the SwiftUI conversion.

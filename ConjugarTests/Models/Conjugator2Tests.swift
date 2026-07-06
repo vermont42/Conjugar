@@ -11,7 +11,7 @@ import Testing
 
 // The composition-engine tests, in idiomatic Swift Testing. Full six-person
 // paradigms are parameterized over `zip(PersonNumber2.oracleOrder, [forms])`;
-// clusters of single slots for one verb are parameterized over `(Tense2, String)`
+// clusters of single slots for one verb are parameterized over `(EngineTense, String)`
 // pairs; multi-verb / non-finite / failure checks stay plain `@Test`s. Expected
 // forms are the verified oracle (docs/spanish_models.md) and are unchanged from
 // the XCTest version — only the test *structure* changed.
@@ -137,7 +137,7 @@ struct Conjugator2Tests {
   // Phase-5b two-form-participle exemplars. freír/inscribir follow classes
   // 6B-4/3-11 but carry a richer participle (frito/freído, inscrito/inscripto);
   // kept local to exercise the alternate-PP path without overstating the catalog.
-  static func residue(_ pairs: [(Tense2, String)]) -> LiteralSlotOverride2 {
+  static func residue(_ pairs: [(EngineTense, String)]) -> LiteralSlotOverride2 {
     LiteralSlotOverride2(overrides: pairs.map { (slot: $0.0, form: $0.1) })
   }
   static let freir = VerbModel2(base: .ir, features: [
@@ -173,13 +173,13 @@ struct Conjugator2Tests {
   }
 
   @Test("trocar (4B-1) — diphthong + c→qu edges", arguments: [
-    (Tense2.presenteDeSubjuntivo(.firstSingular), "trueque"),
+    (EngineTense.presenteDeSubjuntivo(.firstSingular), "trueque"),
     (.presenteDeSubjuntivo(.firstPlural), "troquemos"),
     (.pretérito(.firstSingular), "troqué"),
     (.imperativoAfirmativo(.secondSingular), "trueca"),
     (.imperativoAfirmativo(.secondPlural), "trocad"),
   ])
-  func trocarEdges(tense: Tense2, expected: String) {
+  func trocarEdges(tense: EngineTense, expected: String) {
     expectForm("trocar", model: Self.trocar, tense, expected)
   }
 
@@ -191,13 +191,13 @@ struct Conjugator2Tests {
   }
 
   @Test("desosar (4B-5) — subjunctive + imperative + regular preterite", arguments: [
-    (Tense2.presenteDeSubjuntivo(.firstSingular), "deshuese"),
+    (EngineTense.presenteDeSubjuntivo(.firstSingular), "deshuese"),
     (.presenteDeSubjuntivo(.firstPlural), "desosemos"),
     (.imperativoAfirmativo(.secondSingular), "deshuesa"),
     (.imperativoAfirmativo(.secondPlural), "desosad"),
     (.pretérito(.firstSingular), "desosé"),
   ])
-  func desosarEdges(tense: Tense2, expected: String) {
+  func desosarEdges(tense: EngineTense, expected: String) {
     expectForm("desosar", model: Self.desosar, tense, expected)
   }
 
@@ -215,11 +215,11 @@ struct Conjugator2Tests {
   }
 
   @Test("avergonzar (4B-6) — preterite 1s (z→c) + imperative", arguments: [
-    (Tense2.pretérito(.firstSingular), "avergoncé"),
+    (EngineTense.pretérito(.firstSingular), "avergoncé"),
     (.pretérito(.thirdSingular), "avergonzó"),
     (.imperativoAfirmativo(.secondSingular), "avergüenza"),
   ])
-  func avergonzarEdges(tense: Tense2, expected: String) {
+  func avergonzarEdges(tense: EngineTense, expected: String) {
     expectForm("avergonzar", model: Self.avergonzar, tense, expected)
   }
 
@@ -249,7 +249,7 @@ struct Conjugator2Tests {
   }
 
   @Test("oír (10) — future, imperative & non-finite", arguments: [
-    (Tense2.futuro(.firstSingular), "oiré"),
+    (EngineTense.futuro(.firstSingular), "oiré"),
     (.condicional(.firstPlural), "oiríamos"),
     (.imperfectoDeIndicativo(.firstSingular), "oía"),
     (.imperativoAfirmativo(.secondSingular), "oye"),
@@ -258,7 +258,7 @@ struct Conjugator2Tests {
     (.participioPasado, "oído"),
     (.gerundio, "oyendo"),
   ])
-  func oirMixed(tense: Tense2, expected: String) {
+  func oirMixed(tense: EngineTense, expected: String) {
     expectForm("oír", model: Self.oir, tense, expected)
   }
 
@@ -267,7 +267,7 @@ struct Conjugator2Tests {
   // slots that used to ride the base's literal, PI-1p (desoímos, not oímos) and
   // IMP-2p (desoíd, not oíd) — while -go/glide/PP ride along (desoigo/desoyó/desoído).
   @Test("oír (10) — prefix-invariance (desoír/entreoír)", arguments: [
-    ("desoír", Tense2.presenteDeIndicativo(.firstPlural), "desoímos"),
+    ("desoír", EngineTense.presenteDeIndicativo(.firstPlural), "desoímos"),
     ("desoír", .imperativoAfirmativo(.secondPlural), "desoíd"),
     ("desoír", .presenteDeIndicativo(.firstSingular), "desoigo"),
     ("desoír", .pretérito(.thirdSingular), "desoyó"),
@@ -277,14 +277,14 @@ struct Conjugator2Tests {
     ("entreoír", .imperativoAfirmativo(.secondPlural), "entreoíd"),
     ("entreoír", .presenteDeIndicativo(.thirdSingular), "entreoye"),
   ])
-  func oirPrefixInvariance(infinitive: String, tense: Tense2, expected: String) {
+  func oirPrefixInvariance(infinitive: String, tense: EngineTense, expected: String) {
     expectForm(infinitive, model: Self.oir, tense, expected)
   }
 
   // The prefix-accent aliases (29-2/30-1/31-1/32-1) resolve to the parent model and
   // ride free on the compound stem — proving no distinct model is needed (§1).
   @Test("prefix-accent aliases conjugate on their own stem", arguments: [
-    ("satisfacer", "29-2", Tense2.presenteDeIndicativo(.firstSingular), "satisfago"),
+    ("satisfacer", "29-2", EngineTense.presenteDeIndicativo(.firstSingular), "satisfago"),
     ("satisfacer", "29-2", .pretérito(.thirdSingular), "satisfizo"),
     ("satisfacer", "29-2", .participioPasado, "satisfecho"),
     ("satisfacer", "29-2", .imperativoAfirmativo(.secondSingular), "satisfaz"),
@@ -298,7 +298,7 @@ struct Conjugator2Tests {
     ("convenir", "32-1", .imperativoAfirmativo(.secondSingular), "convén"),
     ("convenir", "32-1", .gerundio, "conviniendo"),
   ])
-  func prefixAccentAliases(infinitive: String, classNumber: String, tense: Tense2, expected: String) {
+  func prefixAccentAliases(infinitive: String, classNumber: String, tense: EngineTense, expected: String) {
     guard let model = ModelCatalog2.model(forClass: classNumber) else {
       Issue.record("alias class \(classNumber) must resolve")
       return
@@ -548,11 +548,11 @@ struct Conjugator2Tests {
   // The non-2nd-person imperatives are now **derived** from the present
   // subjunctive (Phase 5), so they succeed where Phase 1–4 returned a failure.
   @Test("non-second-person imperative derives from the present subjunctive", arguments: [
-    (Tense2.imperativoAfirmativo(.thirdSingular), "cante"),
+    (EngineTense.imperativoAfirmativo(.thirdSingular), "cante"),
     (.imperativoAfirmativo(.firstPlural), "cantemos"),
     (.imperativoAfirmativo(.thirdPlural), "canten"),
   ])
-  func nonSecondPersonImperativeDerives(tense: Tense2, expected: String) {
+  func nonSecondPersonImperativeDerives(tense: EngineTense, expected: String) {
     expectForm("cantar", tense, expected)
   }
 
@@ -566,11 +566,11 @@ struct Conjugator2Tests {
   }
 
   @Test("tocar — swap fires only before -e", arguments: [
-    (Tense2.pretérito(.firstSingular), "toqué"),
+    (EngineTense.pretérito(.firstSingular), "toqué"),
     (.presenteDeIndicativo(.firstSingular), "toco"),
     (.pretérito(.thirdSingular), "tocó"),
   ])
-  func tocarSwapEdges(tense: Tense2, expected: String) {
+  func tocarSwapEdges(tense: EngineTense, expected: String) {
     expectForm("tocar", model: Self.tocar, tense, expected)
   }
 
@@ -615,10 +615,10 @@ struct Conjugator2Tests {
   }
 
   @Test("vencer — swap fires only before -a/-o", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "venzo"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "venzo"),
     (.presenteDeIndicativo(.secondSingular), "vences"),
   ])
-  func vencerSwapEdges(tense: Tense2, expected: String) {
+  func vencerSwapEdges(tense: EngineTense, expected: String) {
     expectForm("vencer", model: Self.vencer, tense, expected)
   }
 
@@ -957,12 +957,12 @@ struct Conjugator2Tests {
 
   // imp 2s diphthongs (STR); voseo present-2s / imperative-2s ride the regular stem.
   @Test("pensar — imperative & voseo", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "piensa"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "piensa"),
     (.imperativoAfirmativo(.secondPlural), "pensad"),
     (.presenteDeIndicativo(.secondSingularVos), "pensás"),
     (.imperativoAfirmativo(.secondSingularVos), "pensá"),
   ])
-  func pensarImperativeAndVoseo(tense: Tense2, expected: String) {
+  func pensarImperativeAndVoseo(tense: EngineTense, expected: String) {
     expectForm("pensar", model: Self.pensar, tense, expected)
   }
 
@@ -1089,11 +1089,11 @@ struct Conjugator2Tests {
 
   // WK stays regular: no *discirnió / *discirnamos.
   @Test("discernir — weak slots stay regular", arguments: [
-    (Tense2.pretérito(.thirdSingular), "discernió"),
+    (EngineTense.pretérito(.thirdSingular), "discernió"),
     (.pretérito(.thirdPlural), "discernieron"),
     (.gerundio, "discerniendo"),
   ])
-  func discernirWeakSlots(tense: Tense2, expected: String) {
+  func discernirWeakSlots(tense: EngineTense, expected: String) {
     expectForm("discernir", model: Self.discernir, tense, expected)
   }
 
@@ -1132,11 +1132,11 @@ struct Conjugator2Tests {
   }
 
   @Test("sentir — gerund & imperatives", arguments: [
-    (Tense2.gerundio, "sintiendo"),
+    (EngineTense.gerundio, "sintiendo"),
     (.imperativoAfirmativo(.secondSingular), "siente"),
     (.imperativoAfirmativo(.secondPlural), "sentid"),
   ])
-  func sentirGerundAndImperatives(tense: Tense2, expected: String) {
+  func sentirGerundAndImperatives(tense: EngineTense, expected: String) {
     expectForm("sentir", model: Self.sentir, tense, expected)
   }
 
@@ -1166,10 +1166,10 @@ struct Conjugator2Tests {
   }
 
   @Test("pedir — gerund & imperative 2s", arguments: [
-    (Tense2.gerundio, "pidiendo"),
+    (EngineTense.gerundio, "pidiendo"),
     (.imperativoAfirmativo(.secondSingular), "pide"),
   ])
-  func pedirGerundAndImperative(tense: Tense2, expected: String) {
+  func pedirGerundAndImperative(tense: EngineTense, expected: String) {
     expectForm("pedir", model: Self.pedir, tense, expected)
   }
 
@@ -1214,10 +1214,10 @@ struct Conjugator2Tests {
   }
 
   @Test("negar — diphthong vs swap divergence", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "niego"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "niego"),
     (.pretérito(.firstSingular), "negué"),
   ])
-  func negarDivergence(tense: Tense2, expected: String) {
+  func negarDivergence(tense: EngineTense, expected: String) {
     expectForm("negar", model: Self.negar, tense, expected)
   }
 
@@ -1272,10 +1272,10 @@ struct Conjugator2Tests {
   }
 
   @Test("elegir — WK raise (no swap before -i-)", arguments: [
-    (Tense2.pretérito(.thirdSingular), "eligió"),
+    (EngineTense.pretérito(.thirdSingular), "eligió"),
     (.gerundio, "eligiendo"),
   ])
-  func elegirWeakSlots(tense: Tense2, expected: String) {
+  func elegirWeakSlots(tense: EngineTense, expected: String) {
     expectForm("elegir", model: Self.elegir, tense, expected)
   }
 
@@ -1292,10 +1292,10 @@ struct Conjugator2Tests {
   }
 
   @Test("seguir — WK raise", arguments: [
-    (Tense2.pretérito(.thirdSingular), "siguió"),
+    (EngineTense.pretérito(.thirdSingular), "siguió"),
     (.gerundio, "siguiendo"),
   ])
-  func seguirWeakSlots(tense: Tense2, expected: String) {
+  func seguirWeakSlots(tense: EngineTense, expected: String) {
     expectForm("seguir", model: Self.seguir, tense, expected)
   }
 
@@ -1349,11 +1349,11 @@ struct Conjugator2Tests {
 
   // The 1s carries the swap; 2s stays regular; the preterite stays regular too.
   @Test("conocer — 1s swap, other slots regular", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "conozco"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "conozco"),
     (.presenteDeIndicativo(.secondSingular), "conoces"),
     (.pretérito(.firstSingular), "conocí"),
   ])
-  func conocerSlots(tense: Tense2, expected: String) {
+  func conocerSlots(tense: EngineTense, expected: String) {
     expectForm("conocer", model: Self.conocer, tense, expected)
   }
 
@@ -1376,10 +1376,10 @@ struct Conjugator2Tests {
   }
 
   @Test("asir — 1s g-add, 2s regular", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "asgo"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "asgo"),
     (.presenteDeIndicativo(.secondSingular), "ases"),
   ])
-  func asirSlots(tense: Tense2, expected: String) {
+  func asirSlots(tense: EngineTense, expected: String) {
     expectForm("asir", model: Self.asir, tense, expected)
   }
 
@@ -1404,11 +1404,11 @@ struct Conjugator2Tests {
   }
 
   @Test("caer — 1s insert & non-finite", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "caigo"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "caigo"),
     (.participioPasado, "caído"),
     (.gerundio, "cayendo"),
   ])
-  func caerSlots(tense: Tense2, expected: String) {
+  func caerSlots(tense: EngineTense, expected: String) {
     expectForm("caer", model: Self.caer, tense, expected)
   }
 
@@ -1440,10 +1440,10 @@ struct Conjugator2Tests {
   }
 
   @Test("construir — non-finite (glide but no -uir accents)", arguments: [
-    (Tense2.gerundio, "construyendo"),
+    (EngineTense.gerundio, "construyendo"),
     (.participioPasado, "construido"),
   ])
-  func construirNonFinite(tense: Tense2, expected: String) {
+  func construirNonFinite(tense: EngineTense, expected: String) {
     expectForm("construir", model: Self.construir, tense, expected)
   }
 
@@ -1478,10 +1478,10 @@ struct Conjugator2Tests {
   }
 
   @Test("valer — 1s & subjunctive 1s (g-add)", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "valgo"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "valgo"),
     (.presenteDeSubjuntivo(.firstSingular), "valga"),
   ])
-  func valerSlots(tense: Tense2, expected: String) {
+  func valerSlots(tense: EngineTense, expected: String) {
     expectForm("valer", model: Self.valer, tense, expected)
   }
 
@@ -1507,10 +1507,10 @@ struct Conjugator2Tests {
   }
 
   @Test("estar — strong preterite slots", arguments: [
-    (Tense2.pretérito(.firstSingular), "estuve"),
+    (EngineTense.pretérito(.firstSingular), "estuve"),
     (.imperfectoDeSubjuntivoRa(.firstSingular), "estuviera"),
   ])
-  func estarSlots(tense: Tense2, expected: String) {
+  func estarSlots(tense: EngineTense, expected: String) {
     let estar = VerbModel2(base: .ar, features: [StemFeature2.strongPreterite(from: "est", to: "estuv"), PreteriteEndings2.spEnd])
     expectForm("estar", model: estar, tense, expected)
   }
@@ -1631,10 +1631,10 @@ struct Conjugator2Tests {
   }
 
   @Test("querer — doubled r (f-drope on r-final stem)", arguments: [
-    (Tense2.futuro(.firstSingular), "querré"),
+    (EngineTense.futuro(.firstSingular), "querré"),
     (.condicional(.thirdPlural), "querrían"),
   ])
-  func quererSlots(tense: Tense2, expected: String) {
+  func quererSlots(tense: EngineTense, expected: String) {
     let querer = VerbModel2(base: .er, features: [FutureEndings2.fDrope])
     expectForm("querer", model: querer, tense, expected)
   }
@@ -1678,10 +1678,10 @@ struct Conjugator2Tests {
   }
 
   @Test("decir — contracted future stem", arguments: [
-    (Tense2.futuro(.firstSingular), "diré"),
+    (EngineTense.futuro(.firstSingular), "diré"),
     (.condicional(.thirdPlural), "dirían"),
   ])
-  func decirFutureSlots(tense: Tense2, expected: String) {
+  func decirFutureSlots(tense: EngineTense, expected: String) {
     expectForm("decir", model: Self.decirFContract, tense, expected)
   }
 
@@ -1692,7 +1692,7 @@ struct Conjugator2Tests {
   // and all of PS (tengo/tenga, not *tiengo/*tienga) while the diphthong still
   // surfaces in PI{2s,3s,3p} (tienes/tiene/tienen). Every slot is its own case.
   @Test("tener — capstone (whole phase)", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "tengo"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "tengo"),
     (.presenteDeIndicativo(.secondSingular), "tienes"),
     (.presenteDeIndicativo(.thirdSingular), "tiene"),
     (.presenteDeIndicativo(.firstPlural), "tenemos"),
@@ -1729,7 +1729,7 @@ struct Conjugator2Tests {
     (.condicional(.secondPlural), "tendríais"),
     (.condicional(.thirdPlural), "tendrían"),
   ])
-  func tenerCapstone(tense: Tense2, expected: String) {
+  func tenerCapstone(tense: EngineTense, expected: String) {
     expectForm("tener", model: Self.tener, tense, expected)
   }
 
@@ -1755,10 +1755,10 @@ struct Conjugator2Tests {
   }
 
   @Test("venir — gerund (raise) & future (f-dr)", arguments: [
-    (Tense2.gerundio, "viniendo"),
+    (EngineTense.gerundio, "viniendo"),
     (.futuro(.firstSingular), "vendré"),
   ])
-  func venirGerundAndFuture(tense: Tense2, expected: String) {
+  func venirGerundAndFuture(tense: EngineTense, expected: String) {
     expectForm("venir", model: Self.venir, tense, expected)
   }
 
@@ -1789,47 +1789,47 @@ struct Conjugator2Tests {
   // as the regular root; the irregular tú is scoped to .secondSingular so vos/vosotros
   // remain regular. A regular verb, a stem-changer, an irregular-tú verb, and ir.
   @Test("imperative derivation — regular (cantar)", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "canta"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "canta"),
     (.imperativoAfirmativo(.thirdSingular), "cante"),
     (.imperativoAfirmativo(.firstPlural), "cantemos"),
     (.imperativoAfirmativo(.secondPlural), "cantad"),
     (.imperativoAfirmativo(.thirdPlural), "canten"),
   ])
-  func imperativeRegular(tense: Tense2, expected: String) {
+  func imperativeRegular(tense: EngineTense, expected: String) {
     expectForm("cantar", tense, expected)
   }
 
   @Test("imperative derivation — stem-changer (pensar)", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "piensa"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "piensa"),
     (.imperativoAfirmativo(.thirdSingular), "piense"),
     (.imperativoAfirmativo(.firstPlural), "pensemos"),
     (.imperativoAfirmativo(.secondPlural), "pensad"),
     (.imperativoAfirmativo(.thirdPlural), "piensen"),
   ])
-  func imperativeStemChanger(tense: Tense2, expected: String) {
+  func imperativeStemChanger(tense: EngineTense, expected: String) {
     expectForm("pensar", model: Self.pensar, tense, expected)
   }
 
   @Test("imperative derivation — irregular tú with regular vos/vosotros (tener)", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "ten"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "ten"),
     (.imperativoAfirmativo(.secondSingularVos), "tené"),
     (.imperativoAfirmativo(.thirdSingular), "tenga"),
     (.imperativoAfirmativo(.firstPlural), "tengamos"),
     (.imperativoAfirmativo(.secondPlural), "tened"),
     (.imperativoAfirmativo(.thirdPlural), "tengan"),
   ])
-  func imperativeIrregularTu(tense: Tense2, expected: String) {
+  func imperativeIrregularTu(tense: EngineTense, expected: String) {
     expectForm("tener", model: Self.tener, tense, expected)
   }
 
   @Test("imperative derivation — ir (ve / vamos / id)", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "ve"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "ve"),
     (.imperativoAfirmativo(.thirdSingular), "vaya"),
     (.imperativoAfirmativo(.firstPlural), "vamos"),  // residue overrides the PS-derived vayamos
     (.imperativoAfirmativo(.secondPlural), "id"),
     (.imperativoAfirmativo(.thirdPlural), "vayan"),
   ])
-  func imperativeIr(tense: Tense2, expected: String) {
+  func imperativeIr(tense: EngineTense, expected: String) {
     expectForm("ir", model: Self.ir, tense, expected)
   }
 
@@ -1860,14 +1860,14 @@ struct Conjugator2Tests {
   }
 
   @Test("ser — imperative, vos & non-finite", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "sé"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "sé"),
     (.imperativoAfirmativo(.secondSingularVos), "sé"),
     (.imperativoAfirmativo(.secondPlural), "sed"),
     (.imperativoAfirmativo(.thirdSingular), "sea"),
     (.imperativoAfirmativo(.thirdPlural), "sean"),
     (.presenteDeIndicativo(.secondSingularVos), "sos"),
   ])
-  func serImperativeVosNonFinite(tense: Tense2, expected: String) {
+  func serImperativeVosNonFinite(tense: EngineTense, expected: String) {
     expectForm("ser", model: Self.ser, tense, expected)
   }
 
@@ -1890,12 +1890,12 @@ struct Conjugator2Tests {
   }
 
   @Test("estar — derived imperatives", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "está"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "está"),
     (.imperativoAfirmativo(.thirdSingular), "esté"),
     (.imperativoAfirmativo(.firstPlural), "estemos"),
     (.imperativoAfirmativo(.thirdPlural), "estén"),
   ])
-  func estarImperatives(tense: Tense2, expected: String) {
+  func estarImperatives(tense: EngineTense, expected: String) {
     expectForm("estar", model: Self.estar, tense, expected)
   }
 
@@ -1924,7 +1924,7 @@ struct Conjugator2Tests {
   }
 
   @Test("saber — present, preterite, future, subjunctive", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "sé"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "sé"),
     (.presenteDeIndicativo(.secondSingular), "sabes"),
     (.pretérito(.firstSingular), "supe"),
     (.pretérito(.thirdPlural), "supieron"),
@@ -1934,12 +1934,12 @@ struct Conjugator2Tests {
     (.imperativoAfirmativo(.thirdSingular), "sepa"),
     (.imperativoAfirmativo(.secondSingular), "sabe"),
   ])
-  func saberSlots(tense: Tense2, expected: String) {
+  func saberSlots(tense: EngineTense, expected: String) {
     expectForm("saber", model: Self.saber, tense, expected)
   }
 
   @Test("caber — present, preterite, future, subjunctive", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "quepo"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "quepo"),
     (.presenteDeIndicativo(.secondSingular), "cabes"),
     (.pretérito(.firstSingular), "cupe"),
     (.pretérito(.thirdPlural), "cupieron"),
@@ -1947,7 +1947,7 @@ struct Conjugator2Tests {
     (.presenteDeSubjuntivo(.firstSingular), "quepa"),
     (.presenteDeSubjuntivo(.firstPlural), "quepamos"),
   ])
-  func caberSlots(tense: Tense2, expected: String) {
+  func caberSlots(tense: EngineTense, expected: String) {
     expectForm("caber", model: Self.caber, tense, expected)
   }
 
@@ -1970,11 +1970,11 @@ struct Conjugator2Tests {
   }
 
   @Test("ir — futuro & gerund", arguments: [
-    (Tense2.futuro(.firstSingular), "iré"),
+    (EngineTense.futuro(.firstSingular), "iré"),
     (.futuro(.thirdPlural), "irán"),
     (.gerundio, "yendo"),
   ])
-  func irFutureGerund(tense: Tense2, expected: String) {
+  func irFutureGerund(tense: EngineTense, expected: String) {
     expectForm("ir", model: Self.ir, tense, expected)
   }
 
@@ -1996,26 +1996,26 @@ struct Conjugator2Tests {
   }
 
   @Test("poder — present, preterite, future, gerund", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "puedo"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "puedo"),
     (.pretérito(.firstSingular), "pude"),
     (.pretérito(.thirdPlural), "pudieron"),
     (.futuro(.firstSingular), "podré"),
     (.presenteDeSubjuntivo(.firstPlural), "podamos"),
     (.gerundio, "pudiendo"),
   ])
-  func poderSlots(tense: Tense2, expected: String) {
+  func poderSlots(tense: EngineTense, expected: String) {
     expectForm("poder", model: Self.poder, tense, expected)
   }
 
   @Test("querer — present, preterite, future", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "quiero"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "quiero"),
     (.pretérito(.firstSingular), "quise"),
     (.pretérito(.thirdSingular), "quiso"),
     (.futuro(.firstSingular), "querré"),
     (.condicional(.thirdPlural), "querrían"),
     (.presenteDeSubjuntivo(.firstPlural), "queramos"),
   ])
-  func quererSlotsClass(tense: Tense2, expected: String) {
+  func quererSlotsClass(tense: EngineTense, expected: String) {
     expectForm("querer", model: Self.querer, tense, expected)
   }
 
@@ -2034,7 +2034,7 @@ struct Conjugator2Tests {
   }
 
   @Test("decir — preterite, future, participle, imperatives", arguments: [
-    (Tense2.pretérito(.firstSingular), "dije"),
+    (EngineTense.pretérito(.firstSingular), "dije"),
     (.pretérito(.thirdPlural), "dijeron"),
     (.futuro(.firstSingular), "diré"),
     (.participioPasado, "dicho"),
@@ -2044,22 +2044,22 @@ struct Conjugator2Tests {
     (.imperativoAfirmativo(.secondPlural), "decid"),
     (.imperativoAfirmativo(.firstPlural), "digamos"),
   ])
-  func decirSlots(tense: Tense2, expected: String) {
+  func decirSlots(tense: EngineTense, expected: String) {
     expectForm("decir", model: Self.decir, tense, expected)
   }
 
   @Test("predecir — regular tú, irregular future/participle", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "predice"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "predice"),
     (.futuro(.firstSingular), "prediré"),
     (.participioPasado, "predicho"),
     (.pretérito(.firstSingular), "predije"),
   ])
-  func predecirSlots(tense: Tense2, expected: String) {
+  func predecirSlots(tense: EngineTense, expected: String) {
     expectForm("predecir", model: Self.predecir, tense, expected)
   }
 
   @Test("bendecir — regular FU/CO/PP/tú, but irregular dig-/dij-", arguments: [
-    (Tense2.futuro(.firstSingular), "bendeciré"),
+    (EngineTense.futuro(.firstSingular), "bendeciré"),
     (.condicional(.firstSingular), "bendeciría"),
     (.participioPasado, "bendecido"),
     (.imperativoAfirmativo(.secondSingular), "bendice"),
@@ -2067,7 +2067,7 @@ struct Conjugator2Tests {
     (.pretérito(.firstSingular), "bendije"),
     (.imperfectoDeSubjuntivoRa(.firstSingular), "bendijera"),
   ])
-  func bendecirSlots(tense: Tense2, expected: String) {
+  func bendecirSlots(tense: EngineTense, expected: String) {
     expectForm("bendecir", model: Self.bendecir, tense, expected)
   }
 
@@ -2084,35 +2084,35 @@ struct Conjugator2Tests {
   }
 
   @Test("hacer — future, participle, imperatives", arguments: [
-    (Tense2.futuro(.firstSingular), "haré"),
+    (EngineTense.futuro(.firstSingular), "haré"),
     (.participioPasado, "hecho"),
     (.imperativoAfirmativo(.secondSingular), "haz"),
     (.imperativoAfirmativo(.secondSingularVos), "hacé"),
     (.imperativoAfirmativo(.thirdSingular), "haga"),
     (.imperativoAfirmativo(.firstPlural), "hagamos"),
   ])
-  func hacerSlots(tense: Tense2, expected: String) {
+  func hacerSlots(tense: EngineTense, expected: String) {
     expectForm("hacer", model: Self.hacer, tense, expected)
   }
 
   @Test("rehacer — accent residue (rehíce / rehízo)", arguments: [
-    (Tense2.pretérito(.firstSingular), "rehíce"),
+    (EngineTense.pretérito(.firstSingular), "rehíce"),
     (.pretérito(.thirdSingular), "rehízo"),
     (.pretérito(.secondSingular), "rehiciste"),
   ])
-  func rehacerSlots(tense: Tense2, expected: String) {
+  func rehacerSlots(tense: EngineTense, expected: String) {
     expectForm("rehacer", model: Self.rehacer, tense, expected)
   }
 
   @Test("satisfacer — rides hacer by prefix-invariance (satisfaz/satisfizo)", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "satisfaz"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "satisfaz"),
     (.pretérito(.firstSingular), "satisfice"),
     (.pretérito(.thirdSingular), "satisfizo"),
     (.presenteDeIndicativo(.firstSingular), "satisfago"),
     (.futuro(.firstSingular), "satisfaré"),
     (.participioPasado, "satisfecho"),
   ])
-  func satisfacerSlots(tense: Tense2, expected: String) {
+  func satisfacerSlots(tense: EngineTense, expected: String) {
     expectForm("satisfacer", model: Self.hacer, tense, expected)
   }
 
@@ -2123,7 +2123,7 @@ struct Conjugator2Tests {
   }
 
   @Test("poner — preterite, future, participle, imperatives", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "pongo"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "pongo"),
     (.pretérito(.firstSingular), "puse"),
     (.futuro(.firstSingular), "pondré"),
     (.participioPasado, "puesto"),
@@ -2132,29 +2132,29 @@ struct Conjugator2Tests {
     (.imperativoAfirmativo(.thirdSingular), "ponga"),
     (.imperativoAfirmativo(.firstPlural), "pongamos"),
   ])
-  func ponerSlots(tense: Tense2, expected: String) {
+  func ponerSlots(tense: EngineTense, expected: String) {
     expectForm("poner", model: Self.poner, tense, expected)
   }
 
   @Test("tener — capstone imperatives (ten/tenga/tengamos/tengan)", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "ten"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "ten"),
     (.imperativoAfirmativo(.thirdSingular), "tenga"),
     (.imperativoAfirmativo(.firstPlural), "tengamos"),
     (.imperativoAfirmativo(.thirdPlural), "tengan"),
   ])
-  func tenerImperatives(tense: Tense2, expected: String) {
+  func tenerImperatives(tense: EngineTense, expected: String) {
     expectForm("tener", model: Self.tener, tense, expected)
   }
 
   @Test("venir — gerund & derived imperatives (ven/venga/vengamos)", arguments: [
-    (Tense2.gerundio, "viniendo"),
+    (EngineTense.gerundio, "viniendo"),
     (.imperativoAfirmativo(.secondSingular), "ven"),
     (.imperativoAfirmativo(.secondSingularVos), "vení"),
     (.imperativoAfirmativo(.thirdSingular), "venga"),
     (.imperativoAfirmativo(.firstPlural), "vengamos"),
     (.imperativoAfirmativo(.thirdPlural), "vengan"),
   ])
-  func venirImperatives(tense: Tense2, expected: String) {
+  func venirImperatives(tense: EngineTense, expected: String) {
     expectForm("venir", model: Self.venir, tense, expected)
   }
 
@@ -2171,52 +2171,52 @@ struct Conjugator2Tests {
   }
 
   @Test("traer — non-finite & derived imperatives", arguments: [
-    (Tense2.gerundio, "trayendo"),
+    (EngineTense.gerundio, "trayendo"),
     (.participioPasado, "traído"),
     (.imperativoAfirmativo(.thirdSingular), "traiga"),
     (.imperativoAfirmativo(.firstPlural), "traigamos"),
     (.imperativoAfirmativo(.thirdPlural), "traigan"),
   ])
-  func traerSlots(tense: Tense2, expected: String) {
+  func traerSlots(tense: EngineTense, expected: String) {
     expectForm("traer", model: Self.traer, tense, expected)
   }
 
   @Test("conducir — derived imperatives (conduzca/conduzcamos/conduzcan)", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "conduce"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "conduce"),
     (.imperativoAfirmativo(.thirdSingular), "conduzca"),
     (.imperativoAfirmativo(.firstPlural), "conduzcamos"),
     (.imperativoAfirmativo(.thirdPlural), "conduzcan"),
   ])
-  func conducirImperatives(tense: Tense2, expected: String) {
+  func conducirImperatives(tense: EngineTense, expected: String) {
     expectForm("conducir", model: Self.conducirFull, tense, expected)
   }
 
   @Test("andar — pretérito & derived imperatives", arguments: [
-    (Tense2.pretérito(.firstSingular), "anduve"),
+    (EngineTense.pretérito(.firstSingular), "anduve"),
     (.imperativoAfirmativo(.secondSingular), "anda"),
     (.imperativoAfirmativo(.thirdSingular), "ande"),
     (.imperativoAfirmativo(.firstPlural), "andemos"),
   ])
-  func andarImperatives(tense: Tense2, expected: String) {
+  func andarImperatives(tense: EngineTense, expected: String) {
     expectForm("andar", model: Self.andarFull, tense, expected)
   }
 
   // MARK: - Phase 5: derived-model prefix-invariance (the residue must compose)
 
   @Test("derived-accent compounds (apocopated imperative is prefix-invariant)", arguments: [
-    ("obtener", Tense2.imperativoAfirmativo(.secondSingular), "obtén"),
+    ("obtener", EngineTense.imperativoAfirmativo(.secondSingular), "obtén"),
     ("detener", .imperativoAfirmativo(.secondSingular), "detén"),
     ("suponer", .imperativoAfirmativo(.secondSingular), "supón"),
     ("reponer", .imperativoAfirmativo(.secondSingular), "repón"),
     ("convenir", .imperativoAfirmativo(.secondSingular), "convén"),
   ])
-  func derivedAccentCompounds(infinitive: String, tense: Tense2, expected: String) {
+  func derivedAccentCompounds(infinitive: String, tense: EngineTense, expected: String) {
     let model = infinitive.hasSuffix("poner") ? Self.poner : (infinitive.hasSuffix("venir") ? Self.venir : Self.tener)
     expectForm(infinitive, model: model, tense, expected)
   }
 
   @Test("residue prefix-invariance — strong/contracted stems & participles", arguments: [
-    ("detener", Tense2.pretérito(.firstSingular), "detuve"),
+    ("detener", EngineTense.pretérito(.firstSingular), "detuve"),
     ("detener", .futuro(.firstSingular), "detendré"),
     ("componer", .participioPasado, "compuesto"),
     ("componer", .pretérito(.firstSingular), "compuse"),
@@ -2225,7 +2225,7 @@ struct Conjugator2Tests {
     ("devolver", .participioPasado, "devuelto"),
     ("deshacer", .participioPasado, "deshecho"),
   ])
-  func residuePrefixInvariance(infinitive: String, tense: Tense2, expected: String) {
+  func residuePrefixInvariance(infinitive: String, tense: EngineTense, expected: String) {
     let model: VerbModel2
     switch infinitive {
     case "detener": model = Self.tener
@@ -2258,13 +2258,13 @@ struct Conjugator2Tests {
 
   // The rest of the paradigm stays the base's: a PP override doesn't leak.
   @Test("participle classes keep the base paradigm", arguments: [
-    ("romper", Self.romper, Tense2.pretérito(.firstSingular), "rompí"),
+    ("romper", Self.romper, EngineTense.pretérito(.firstSingular), "rompí"),
     ("abrir", Self.abrir, .pretérito(.firstSingular), "abrí"),
     ("resolver", Self.resolver, .presenteDeIndicativo(.firstSingular), "resuelvo"),
     ("morir", Self.morir, .pretérito(.thirdSingular), "murió"),
     ("morir", Self.morir, .gerundio, "muriendo"),
   ])
-  func participleClassesKeepParadigm(infinitive: String, model: VerbModel2, tense: Tense2, expected: String) {
+  func participleClassesKeepParadigm(infinitive: String, model: VerbModel2, tense: EngineTense, expected: String) {
     expectForm(infinitive, model: model, tense, expected)
   }
 
@@ -2276,7 +2276,7 @@ struct Conjugator2Tests {
 
   // abolir (defective): the -i-vowel forms exist; the STR/1s/PS-less slots have none.
   @Test("abolir — the existing forms", arguments: [
-    (Tense2.presenteDeIndicativo(.firstPlural), "abolimos"),
+    (EngineTense.presenteDeIndicativo(.firstPlural), "abolimos"),
     (.presenteDeIndicativo(.secondPlural), "abolís"),
     (.pretérito(.firstSingular), "abolí"),
     (.imperfectoDeIndicativo(.firstSingular), "abolía"),
@@ -2285,19 +2285,19 @@ struct Conjugator2Tests {
     (.participioPasado, "abolido"),
     (.gerundio, "aboliendo"),
   ])
-  func abolirExistingForms(tense: Tense2, expected: String) {
+  func abolirExistingForms(tense: EngineTense, expected: String) {
     expectForm("abolir", model: Self.abolir, tense, expected)
   }
 
   @Test("abolir — the missing forms report .noForm", arguments: [
-    Tense2.presenteDeIndicativo(.firstSingular),
+    EngineTense.presenteDeIndicativo(.firstSingular),
     .presenteDeIndicativo(.thirdSingular),
     .presenteDeIndicativo(.thirdPlural),
     .presenteDeSubjuntivo(.firstSingular),
     .imperativoAfirmativo(.secondSingular),
     .imperativoAfirmativo(.firstPlural),
   ])
-  func abolirMissingForms(tense: Tense2) {
+  func abolirMissingForms(tense: EngineTense) {
     assertFailure(
       Conjugator2.conjugate(infinitive: "abolir", tense: tense, model: Self.abolir),
       .noForm(tense))
@@ -2324,12 +2324,12 @@ struct Conjugator2Tests {
   }
 
   @Test("ver — preterite, participle, imperative", arguments: [
-    (Tense2.pretérito(.firstSingular), "vi"),
+    (EngineTense.pretérito(.firstSingular), "vi"),
     (.pretérito(.thirdSingular), "vio"),
     (.participioPasado, "visto"),
     (.imperativoAfirmativo(.secondSingular), "ve"),
   ])
-  func verSlots(tense: Tense2, expected: String) {
+  func verSlots(tense: EngineTense, expected: String) {
     expectForm("ver", model: Self.ver, tense, expected)
   }
 
@@ -2340,13 +2340,13 @@ struct Conjugator2Tests {
   }
 
   @Test("prever — preterite & participle", arguments: [
-    (Tense2.pretérito(.firstSingular), "preví"),
+    (EngineTense.pretérito(.firstSingular), "preví"),
     (.pretérito(.thirdSingular), "previó"),
     (.pretérito(.secondSingular), "previste"),
     (.participioPasado, "previsto"),
     (.imperfectoDeIndicativo(.firstSingular), "preveía"),
   ])
-  func preverSlots(tense: Tense2, expected: String) {
+  func preverSlots(tense: EngineTense, expected: String) {
     expectForm("prever", model: Self.prever, tense, expected)
   }
 
@@ -2369,13 +2369,13 @@ struct Conjugator2Tests {
   }
 
   @Test("reír — imperfecto de subjuntivo & non-finite (collapse-ii)", arguments: [
-    (Tense2.imperfectoDeSubjuntivoRa(.firstSingular), "riera"),
+    (EngineTense.imperfectoDeSubjuntivoRa(.firstSingular), "riera"),
     (.imperfectoDeSubjuntivoRa(.firstPlural), "riéramos"),
     (.gerundio, "riendo"),
     (.participioPasado, "reído"),
     (.futuro(.firstSingular), "reiré"),
   ])
-  func reirSlots(tense: Tense2, expected: String) {
+  func reirSlots(tense: EngineTense, expected: String) {
     expectForm("reír", model: Self.reir, tense, expected)
   }
 
@@ -2385,7 +2385,7 @@ struct Conjugator2Tests {
   // PP rides along as the regular freído (the preferred frito/sofrito variants are
   // per-verb data, out of scope — Annex B fn15/22/24).
   @Test("reír (6B-4) — prefix-invariance (freír/sonreír/sofreír/refreír/desleír/engreír)", arguments: [
-    ("freír", Tense2.presenteDeIndicativo(.firstSingular), "frío"),
+    ("freír", EngineTense.presenteDeIndicativo(.firstSingular), "frío"),
     ("freír", .pretérito(.thirdSingular), "frió"),
     ("freír", .gerundio, "friendo"),
     ("freír", .presenteDeIndicativo(.firstPlural), "freímos"),
@@ -2400,7 +2400,7 @@ struct Conjugator2Tests {
     ("desleír", .pretérito(.thirdSingular), "deslió"),
     ("desleír", .imperativoAfirmativo(.secondPlural), "desleíd"),
   ])
-  func reirPrefixInvariance(infinitive: String, tense: Tense2, expected: String) {
+  func reirPrefixInvariance(infinitive: String, tense: EngineTense, expected: String) {
     expectForm(infinitive, model: Self.reir, tense, expected)
   }
 
@@ -2455,7 +2455,7 @@ struct Conjugator2Tests {
   }
 
   @Test("argüir — imperative & non-finite", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "arguye"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "arguye"),
     (.imperativoAfirmativo(.secondPlural), "argüid"),
     (.imperativoAfirmativo(.thirdSingular), "arguya"),    // derived from PS arguya
     (.imperativoAfirmativo(.firstPlural), "arguyamos"),
@@ -2463,18 +2463,18 @@ struct Conjugator2Tests {
     (.gerundio, "arguyendo"),
     (.participioPasado, "argüido"),
   ])
-  func arguirImperativeAndNonFinite(tense: Tense2, expected: String) {
+  func arguirImperativeAndNonFinite(tense: EngineTense, expected: String) {
     expectForm("argüir", model: Self.arguir, tense, expected)
   }
 
   // Prefix-invariance: a hypothetical re-argüir rides the same model untouched.
   @Test("argüir — prefix-invariance (reargüir)", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "rearguyo"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "rearguyo"),
     (.pretérito(.thirdSingular), "rearguyó"),
     (.presenteDeIndicativo(.firstPlural), "reargüimos"),
     (.gerundio, "rearguyendo"),
   ])
-  func arguirPrefixInvariance(tense: Tense2, expected: String) {
+  func arguirPrefixInvariance(tense: EngineTense, expected: String) {
     expectForm("reargüir", model: Self.arguir, tense, expected)
   }
 
@@ -2482,11 +2482,11 @@ struct Conjugator2Tests {
   // added IMP{2s} to `isYAdd`, so construir's imperative is now `construye` (it
   // was the never-tested `construe` before); voseo/vosotros stay regular.
   @Test("construir — tú imperative keeps the y glide (isYAdd fix)", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "construye"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "construye"),
     (.imperativoAfirmativo(.secondPlural), "construid"),
     (.imperativoAfirmativo(.secondSingularVos), "construí"),
   ])
-  func construirImperative(tense: Tense2, expected: String) {
+  func construirImperative(tense: EngineTense, expected: String) {
     expectForm("construir", model: Self.construir, tense, expected)
   }
 
@@ -2513,18 +2513,18 @@ struct Conjugator2Tests {
   }
 
   @Test("erguir — imperative & non-finite (primary)", arguments: [
-    (Tense2.imperativoAfirmativo(.secondSingular), "yergue"),
+    (EngineTense.imperativoAfirmativo(.secondSingular), "yergue"),
     (.imperativoAfirmativo(.secondPlural), "erguid"),
     (.gerundio, "irguiendo"),
     (.participioPasado, "erguido"),
   ])
-  func erguirImperativeAndNonFinite(tense: Tense2, expected: String) {
+  func erguirImperativeAndNonFinite(tense: EngineTense, expected: String) {
     expectForm("erguir", model: Self.erguir, tense, expected)
   }
 
   // conjugateAll surfaces BOTH yerg-/irg- in the stressed slots…
   @Test("erguir — conjugateAll, stressed slots return both paradigms", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), ["yergo", "irgo"]),
+    (EngineTense.presenteDeIndicativo(.firstSingular), ["yergo", "irgo"]),
     (.presenteDeIndicativo(.secondSingular), ["yergues", "irgues"]),
     (.presenteDeIndicativo(.thirdSingular), ["yergue", "irgue"]),
     (.presenteDeIndicativo(.thirdPlural), ["yerguen", "irguen"]),
@@ -2532,13 +2532,13 @@ struct Conjugator2Tests {
     (.presenteDeSubjuntivo(.thirdPlural), ["yergan", "irgan"]),
     (.imperativoAfirmativo(.secondSingular), ["yergue", "irgue"]),
   ])
-  func erguirAllStressed(tense: Tense2, expected: [String]) {
+  func erguirAllStressed(tense: EngineTense, expected: [String]) {
     expectForms("erguir", model: Self.erguir, tense, expected)
   }
 
   // …and a single form in the shared unstressed slots (no duplicate).
   @Test("erguir — conjugateAll, shared unstressed slots collapse to one form", arguments: [
-    (Tense2.presenteDeIndicativo(.firstPlural), ["erguimos"]),
+    (EngineTense.presenteDeIndicativo(.firstPlural), ["erguimos"]),
     (.pretérito(.firstSingular), ["erguí"]),
     (.pretérito(.thirdSingular), ["irguió"]),
     (.pretérito(.thirdPlural), ["irguieron"]),
@@ -2546,7 +2546,7 @@ struct Conjugator2Tests {
     (.presenteDeSubjuntivo(.secondPlural), ["irgáis"]),
     (.gerundio, ["irguiendo"]),
   ])
-  func erguirAllShared(tense: Tense2, expected: [String]) {
+  func erguirAllShared(tense: EngineTense, expected: [String]) {
     expectForms("erguir", model: Self.erguir, tense, expected)
   }
 
@@ -2560,86 +2560,86 @@ struct Conjugator2Tests {
   }
 
   @Test("raer — shared preterite/gerund/participle (single-valued)", arguments: [
-    (Tense2.pretérito(.thirdSingular), "rayó"),
+    (EngineTense.pretérito(.thirdSingular), "rayó"),
     (.pretérito(.secondSingular), "raíste"),
     (.gerundio, "rayendo"),
     (.participioPasado, "raído"),
   ])
-  func raerShared(tense: Tense2, expected: String) {
+  func raerShared(tense: EngineTense, expected: String) {
     expectForm("raer", model: Self.raer, tense, expected)
   }
 
   @Test("raer — conjugateAll variant set (raigo+rayo) and shared singletons", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), ["raigo", "rayo"]),
+    (EngineTense.presenteDeIndicativo(.firstSingular), ["raigo", "rayo"]),
     (.presenteDeSubjuntivo(.firstSingular), ["raiga", "raya"]),
     (.presenteDeSubjuntivo(.firstPlural), ["raigamos", "rayamos"]),
     (.pretérito(.thirdSingular), ["rayó"]),
     (.gerundio, ["rayendo"]),
     (.participioPasado, ["raído"]),
   ])
-  func raerAll(tense: Tense2, expected: [String]) {
+  func raerAll(tense: EngineTense, expected: [String]) {
     expectForms("raer", model: Self.raer, tense, expected)
   }
 
   // roer (9-2): THREE variants — the regular roo is primary.
   @Test("roer — primary is the regular roo/roa; shared royó/royendo", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "roo"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "roo"),
     (.presenteDeSubjuntivo(.firstSingular), "roa"),
     (.pretérito(.thirdSingular), "royó"),
     (.gerundio, "royendo"),
     (.participioPasado, "roído"),
   ])
-  func roerPrimary(tense: Tense2, expected: String) {
+  func roerPrimary(tense: EngineTense, expected: String) {
     expectForm("roer", model: Self.roer, tense, expected)
   }
 
   @Test("roer — conjugateAll returns all THREE variants (N=3)", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), ["roo", "roigo", "royo"]),
+    (EngineTense.presenteDeIndicativo(.firstSingular), ["roo", "roigo", "royo"]),
     (.presenteDeSubjuntivo(.firstSingular), ["roa", "roiga", "roya"]),
     (.presenteDeSubjuntivo(.firstPlural), ["roamos", "roigamos", "royamos"]),
     (.pretérito(.thirdSingular), ["royó"]),
     (.gerundio, ["royendo"]),
   ])
-  func roerAll(tense: Tense2, expected: [String]) {
+  func roerAll(tense: EngineTense, expected: [String]) {
     expectForms("roer", model: Self.roer, tense, expected)
   }
 
   // yacer (7A-1): THREE variants in PI 1s / PS; primary yazco, imperative yace.
   @Test("yacer — primary (yazco/yazca/yace); rest regular", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "yazco"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "yazco"),
     (.presenteDeIndicativo(.secondSingular), "yaces"),
     (.presenteDeSubjuntivo(.firstSingular), "yazca"),
     (.imperativoAfirmativo(.secondSingular), "yace"),
   ])
-  func yacerPrimary(tense: Tense2, expected: String) {
+  func yacerPrimary(tense: EngineTense, expected: String) {
     expectForm("yacer", model: Self.yacer, tense, expected)
   }
 
   @Test("yacer — conjugateAll variant set (yazco/yazgo/yago) + apocopated yaz", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), ["yazco", "yazgo", "yago"]),
+    (EngineTense.presenteDeIndicativo(.firstSingular), ["yazco", "yazgo", "yago"]),
     (.presenteDeSubjuntivo(.firstSingular), ["yazca", "yazga", "yaga"]),
     (.presenteDeSubjuntivo(.firstPlural), ["yazcamos", "yazgamos", "yagamos"]),
     (.imperativoAfirmativo(.secondSingular), ["yace", "yaz"]),
   ])
-  func yacerAll(tense: Tense2, expected: [String]) {
+  func yacerAll(tense: EngineTense, expected: [String]) {
     expectForms("yacer", model: Self.yacer, tense, expected)
   }
 
   // placer (7A-2): primary plazco; a representative archaic alternate slice.
   @Test("placer — primary (zc) paradigm", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "plazco"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "plazco"),
     (.presenteDeSubjuntivo(.thirdSingular), "plazca"),
     (.pretérito(.thirdSingular), "plació"),
   ])
-  func placerPrimary(tense: Tense2, expected: String) {
+  func placerPrimary(tense: EngineTense, expected: String) {
     expectForm("placer", model: Self.placer, tense, expected)
   }
 
   @Test("placer — conjugateAll archaic alternates (N≥2)", arguments: [
-    (Tense2.presenteDeSubjuntivo(.thirdSingular), ["plazca", "plegue", "plega"]),
+    (EngineTense.presenteDeSubjuntivo(.thirdSingular), ["plazca", "plegue", "plega"]),
     (.pretérito(.thirdSingular), ["plació", "plugo"]),
   ])
-  func placerAll(tense: Tense2, expected: [String]) {
+  func placerAll(tense: EngineTense, expected: [String]) {
     expectForms("placer", model: Self.placer, tense, expected)
   }
 
@@ -2665,12 +2665,12 @@ struct Conjugator2Tests {
 
   // freír also carries reír's umlaut/collapse machinery (sanity beyond the PP).
   @Test("freír — umlaut/collapse spot-checks", arguments: [
-    (Tense2.presenteDeIndicativo(.firstSingular), "frío"),
+    (EngineTense.presenteDeIndicativo(.firstSingular), "frío"),
     (.pretérito(.thirdSingular), "frió"),
     (.gerundio, "friendo"),
     (.presenteDeSubjuntivo(.firstPlural), "friamos"),
   ])
-  func freirSpotChecks(tense: Tense2, expected: String) {
+  func freirSpotChecks(tense: EngineTense, expected: String) {
     expectForm("freír", model: Self.freir, tense, expected)
   }
 
@@ -2679,24 +2679,24 @@ struct Conjugator2Tests {
   // A regular verb and a single-form irregular (tener) return exactly [onlyForm]:
   // no spurious alternates, and element 0 == conjugate's result.
   @Test("conjugateAll — regular verb returns exactly [onlyForm]", arguments: [
-    Tense2.presenteDeIndicativo(.firstSingular),
+    EngineTense.presenteDeIndicativo(.firstSingular),
     .pretérito(.thirdSingular),
     .gerundio,
     .participioPasado,
     .imperativoAfirmativo(.firstPlural),
   ])
-  func conjugateAllRegularDegenerate(tense: Tense2) {
+  func conjugateAllRegularDegenerate(tense: EngineTense) {
     expectForms("hablar", tense, [conjugatePrimary("hablar", model: nil, tense)])
   }
 
   @Test("conjugateAll — single-form irregular (tener) returns exactly [onlyForm]", arguments: [
-    Tense2.presenteDeIndicativo(.firstSingular),
+    EngineTense.presenteDeIndicativo(.firstSingular),
     .pretérito(.firstSingular),
     .futuro(.firstSingular),
     .imperativoAfirmativo(.secondSingular),
     .participioPasado,
   ])
-  func conjugateAllSingleIrregularDegenerate(tense: Tense2) {
+  func conjugateAllSingleIrregularDegenerate(tense: EngineTense) {
     expectForms("tener", model: Self.tener, tense, [conjugatePrimary("tener", model: Self.tener, tense)])
   }
 
@@ -2708,7 +2708,7 @@ struct Conjugator2Tests {
   private func expectForm(
     _ infinitive: String,
     model: VerbModel2? = nil,
-    _ tense: Tense2,
+    _ tense: EngineTense,
     _ expected: String,
     sourceLocation: SourceLocation = #_sourceLocation
   ) {
@@ -2729,7 +2729,7 @@ struct Conjugator2Tests {
   private func conjugatePrimary(
     _ infinitive: String,
     model: VerbModel2?,
-    _ tense: Tense2,
+    _ tense: EngineTense,
     sourceLocation: SourceLocation = #_sourceLocation
   ) -> String {
     let result = model.map { Conjugator2.conjugate(infinitive: infinitive, tense: tense, model: $0) }
@@ -2749,7 +2749,7 @@ struct Conjugator2Tests {
   private func expectForms(
     _ infinitive: String,
     model: VerbModel2? = nil,
-    _ tense: Tense2,
+    _ tense: EngineTense,
     _ expected: [String],
     sourceLocation: SourceLocation = #_sourceLocation
   ) {

@@ -19,7 +19,7 @@ struct VerbMap2Tests {
   static let map = VerbMap2.shared
 
   /// verb → (default) class number → catalog model → conjugate. The data path.
-  static func form(_ infinitive: String, _ tense: Tense2) -> String? {
+  static func form(_ infinitive: String, _ tense: EngineTense) -> String? {
     guard
       let entry = map.entry(for: infinitive),
       let model = ModelCatalog2.model(forClass: entry.classNumber)
@@ -232,7 +232,7 @@ struct VerbMap2Tests {
   // One representative verb per class (a spread across the orthographic, stem-vowel,
   // and fundamentally-irregular families), conjugated through the map at the slot
   // that carries that class's irregularity, checked against the oracle.
-  static let perClassSample: [(String, Tense2, String)] = [
+  static let perClassSample: [(String, EngineTense, String)] = [
     // regular + orthographic
     ("abajar", .presenteDeIndicativo(.firstSingular), "abajo"),
     ("abanicar", .pretérito(.firstSingular), "abaniqué"),
@@ -305,7 +305,7 @@ struct VerbMap2Tests {
   ]
 
   @Test("per-class sample conjugates correctly via the map", arguments: perClassSample)
-  func perClass(infinitive: String, tense: Tense2, expected: String) {
+  func perClass(infinitive: String, tense: EngineTense, expected: String) {
     #expect(Self.form(infinitive, tense) == expected, "\(infinitive) \(tense)")
   }
 
@@ -315,7 +315,7 @@ struct VerbMap2Tests {
   // OWN stem and the end-anchored features ride along — including the reír (6B-4) and
   // oír (10) families, now that those models are fully end-anchored (freír → frío,
   // desleír → deslío, desoír → desoímos; no baked-in literal rides the prefix).
-  static let prefixSample: [(String, Tense2, String)] = [
+  static let prefixSample: [(String, EngineTense, String)] = [
     ("detener", .presenteDeIndicativo(.firstSingular), "detengo"),
     ("detener", .pretérito(.firstSingular), "detuve"),
     ("detener", .imperativoAfirmativo(.secondSingular), "detén"),
@@ -341,7 +341,7 @@ struct VerbMap2Tests {
   ]
 
   @Test("prefix payoff: compounds conjugate on their own stem", arguments: prefixSample)
-  func prefixPayoff(infinitive: String, tense: Tense2, expected: String) {
+  func prefixPayoff(infinitive: String, tense: EngineTense, expected: String) {
     #expect(Self.form(infinitive, tense) == expected, "\(infinitive) \(tense)")
   }
 

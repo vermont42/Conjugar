@@ -21,5 +21,5 @@ enum Conjugator2Error: Error, Equatable {
   /// The requested slot has **no form at all** for this verb — a *defective*
   /// verb (Phase 5, taxonomy §5 abolir: only the slots whose post-stem vowel is
   /// -i-/-ie-/-io- exist). Associated value is the missing slot.
-  case noForm(Tense2)
+  case noForm(EngineTense)
 }

@@ -28,11 +28,11 @@ struct FutureEndings2: Feature2 {
   /// `f-drope`/`f-contract`, "d" for `f-dr`.
   let connector: String
 
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     Slot2.isFutureSystem(tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     guard let person = tense.personNumber else { return (stem, ending) }
     let key: PersonNumber2 = (person == .secondSingularVos) ? .secondSingular : person
     let markers: [PersonNumber2: String]

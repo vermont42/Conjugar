@@ -115,7 +115,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     quizView.progress.text = String(current + 1) + " / " + String(total)
   }
 
-  func questionDidChange(verb: String, tense: Tense, personNumber: PersonNumber) {
+  func questionDidChange(verb: String, tense: DisplayTense, personNumber: PersonNumber) {
     quizView.verb.text = verb
     quizView.translation.text = VerbMap2.shared.entry(for: verb)?.gloss ?? ""
     quizView.tenseLabel.text = Localizations.Quiz.tense + ": " + tense.displayName

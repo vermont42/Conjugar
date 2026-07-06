@@ -30,7 +30,7 @@ enum ConsonantTrigger2 {
   /// present indicative 1s `-o` and the whole present subjunctive `-a…`.)
   case beforeBackAO
 
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     switch tense {
     case .presenteDeSubjuntivo:
       return true
@@ -52,11 +52,11 @@ struct StemFinalConsonant2: Feature2 {
   let to: String
   let trigger: ConsonantTrigger2
 
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     trigger.applies(to: tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     guard stem.hasSuffix(from) else { return (stem, ending) }
     return (String(stem.dropLast(from.count)) + to, ending)
   }
@@ -78,7 +78,7 @@ struct StemFinalConsonant2: Feature2 {
 /// between the stem-final vowel/palatal and the next vowel. `PR{3s,3p}` + `GER` +
 /// `IS{all}` — every ending here begins with that -i- (-ió, -ieron, -iendo,
 /// -iera…, -iese…).
-private func isIGlideSlot(_ tense: Tense2) -> Bool {
+private func isIGlideSlot(_ tense: EngineTense) -> Bool {
   switch tense {
   case .pretérito(.thirdSingular), .pretérito(.thirdPlural),
        .gerundio,
@@ -103,7 +103,7 @@ struct IYHiatus2: Feature2 {
   /// don't start with -i-) and the weak-stem -ir user (construir: stem ends in -u-,
   /// guard blocks → construimos/construid). It surfaces only on oír (oímos/oíd) and
   /// reír (reímos/reíd), where the stem's last vowel is a strong o/e.
-  private func isAccentSlot(_ tense: Tense2) -> Bool {
+  private func isAccentSlot(_ tense: EngineTense) -> Bool {
     switch tense {
     case .pretérito(.secondSingular), .pretérito(.firstPlural), .pretérito(.secondPlural),
          .participioPasado,
@@ -114,11 +114,11 @@ struct IYHiatus2: Feature2 {
     }
   }
 
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     isIGlideSlot(tense) || isAccentSlot(tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     guard ending.hasPrefix("i") else { return (stem, ending) }
     let rest = ending.dropFirst()
     if isIGlideSlot(tense) {
@@ -144,11 +144,11 @@ struct IYHiatus2: Feature2 {
 /// tañendo; bullir → bulló. Same i-glide slots as `o-yhiatus`, but the -i- is
 /// dropped rather than turned to -y-, and no written accents are added.
 struct AbsorbIAfterPalatal2: Feature2 {
-  func applies(to tense: Tense2) -> Bool {
+  func applies(to tense: EngineTense) -> Bool {
     isIGlideSlot(tense)
   }
 
-  func apply(stem: String, ending: String, tense: Tense2, regularStem: String) -> (stem: String, ending: String) {
+  func apply(stem: String, ending: String, tense: EngineTense, regularStem: String) -> (stem: String, ending: String) {
     guard ending.hasPrefix("i") else { return (stem, ending) }
     return (stem, String(ending.dropFirst()))
   }

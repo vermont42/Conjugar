@@ -9,8 +9,8 @@
 import UIKit
 
 enum ConjugationRow {
-  case tense(Tense)
-  case conjugation(Tense, PersonNumber, String)
+  case tense(DisplayTense)
+  case conjugation(DisplayTense, PersonNumber, String)
 }
 
 class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
@@ -22,7 +22,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
   init(verb: String, table: UITableView, secondSingularBrowse: SecondSingularBrowse) {
     self.verb = verb
     self.table = table
-    let tenses = Tense.conjugatedTenses
+    let tenses = DisplayTense.conjugatedTenses
     rowCount = tenses.reduce(0, { $0 + $1.conjugationCount(secondSingularBrowse: secondSingularBrowse) }) + tenses.count
     super.init()
     tenses.forEach { tense in
@@ -49,7 +49,7 @@ class ConjugationDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
   /// The displayable form for one slot: a defective verb's formless slot renders
   /// as an empty string (a blank row, like the legacy engine's "df" sentinel);
   /// any other failure is a programming or data error.
-  private static func conjugation(verb: String, tense: Tense, personNumber: PersonNumber) -> String {
+  private static func conjugation(verb: String, tense: DisplayTense, personNumber: PersonNumber) -> String {
     switch TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber) {
     case let .success(value):
       return value

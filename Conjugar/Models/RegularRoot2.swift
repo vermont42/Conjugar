@@ -35,7 +35,7 @@ enum RegularRoot2 {
   /// The regular ending for a slot, or nil when the regular paradigm has no such
   /// form (e.g. an affirmative imperative for usted/nosotros/ustedes, which are
   /// derived from the subjunctive in a later phase).
-  func ending(for tense: Tense2) -> String? {
+  func ending(for tense: EngineTense) -> String? {
     switch tense {
     case .participioPasado:
       return self == .ar ? "ado" : "ido"

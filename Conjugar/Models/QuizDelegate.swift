@@ -10,6 +10,6 @@ protocol QuizDelegate: AnyObject {
   func scoreDidChange(newScore: Int)
   func timeDidChange(newTime: Int)
   func progressDidChange(current: Int, total: Int)
-  func questionDidChange(verb: String, tense: Tense, personNumber: PersonNumber)
+  func questionDidChange(verb: String, tense: DisplayTense, personNumber: PersonNumber)
   func quizDidFinish()
 }
