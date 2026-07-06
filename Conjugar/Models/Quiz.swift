@@ -7,7 +7,10 @@
 //
 
 import Foundation
+import Observation
 
+@MainActor
+@Observable
 class Quiz {
   private(set) var quizState: QuizState = .notStarted
   private(set) var elapsedTime: Int = 0
@@ -44,14 +47,17 @@ class Quiz {
   private var irregularTuImperativoVerbsIndex = 0
   private var irregularVosImperativoVerbs = VerbFamilies.irregularVosImperativoVerbs
   private var irregularVosImperativoVerbsIndex = 0
-  private var timer: Timer?
+  @ObservationIgnored private var timer: Timer?
   private var settings: Settings?
   private var gameCenter: GameCenter?
   private var personNumbersWithTu: [DisplayPersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersWithVos: [DisplayPersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
   private var shouldShuffle = true
-  weak var delegate: QuizDelegate?
+  // Transitional: the still-wrapped QuizVC and QuizTests drive the quiz through
+  // this delegate. It is removed when QuizVC is migrated to a SwiftUI QuizView
+  // that observes this @Observable model directly (Step 4).
+  @ObservationIgnored weak var delegate: QuizDelegate?
 
   var questionCount: Int {
     return questions.count
@@ -271,8 +277,7 @@ class Quiz {
     currentQuestionIndex = 0
     elapsedTime = 0
     quizState = .inProgress
-    timer?.invalidate()
-    timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(Quiz.eachSecond), userInfo: nil, repeats: true)
+    startTimer()
     delegate?.questionDidChange(verb: questions[0].0, tense: questions[0].1, personNumber: questions[0].2)
     delegate?.scoreDidChange(newScore: 0)
     delegate?.timeDidChange(newTime: 0)
@@ -331,11 +336,32 @@ class Quiz {
   }
 
   func quit() {
+    stop()
+  }
+
+  func stop() {
     timer?.invalidate()
     quizState = .finished
   }
 
-  @objc func eachSecond() {
+  func pauseTimer() {
+    timer?.invalidate()
+  }
+
+  func resumeTimer() {
+    startTimer()
+  }
+
+  private func startTimer() {
+    timer?.invalidate()
+    timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+      MainActor.assumeIsolated {
+        self?.eachSecond()
+      }
+    }
+  }
+
+  private func eachSecond() {
     elapsedTime += 1
     delegate?.timeDidChange(newTime: elapsedTime)
   }

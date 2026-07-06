@@ -9,8 +9,11 @@
 import UIKit
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-  var window: UIWindow?
-
+  // Retained under @UIApplicationDelegateAdaptor for the hooks the App
+  // lifecycle doesn't cover. The window is now owned by SwiftUI's WindowGroup,
+  // so this no longer creates one; it only styles the shared UIKit appearance
+  // (which still applies to the SwiftUI TabView and the wrapped UIKit VCs) and
+  // handles the UI-test-World override.
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     configureTabBar()
     configureNavBar()
@@ -21,11 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     Utterer.setup(settings: Current.settings)
-    let mainTabBarVC = MainTabBarVC()
-
-    window = UIWindow(frame: UIScreen.main.bounds)
-    window?.rootViewController = mainTabBarVC
-    window?.makeKeyAndVisible()
 
     return true
   }

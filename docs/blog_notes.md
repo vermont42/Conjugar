@@ -1377,3 +1377,63 @@ suites) and the non-VC XCTest suites pass. Launched in the simulator: Browse Ver
 renders frequency-sorted with glosses, and tapping *tener* conjugates correctly
 through the nonisolated engine — `yo tengo` / `tú tienes` / pretérito `yo tuve`
 with the irregularity highlighting and `RF: tendr-` intact.
+
+---
+
+## SwiftUI migration, Step 0: the app skeleton and state model (July 2026)
+
+Before touching a single color or screen, the migration's real risk had to be
+retired: the app's *entry point*, *test-World injection*, *coexistence strategy*,
+and *state model*. These are structural — get them wrong and every subsequent
+screen inherits the mistake. Konjugieren, already fully SwiftUI, was the template
+for all four.
+
+**Entry point.** The custom `main.swift` (`UIApplicationMain` +
+`NSClassFromString("TestingAppDelegate")`) is gone, replaced by an `@main enum
+AppLauncher` that runs the real `ConjugarApp: App` normally but a minimal
+`TestApp` placeholder scene under XCTest — Konjugieren's exact pattern. A trimmed
+`AppDelegate` survives only via `@UIApplicationDelegateAdaptor`, for the hooks the
+App lifecycle doesn't cover (UIKit appearance config, the UI-test launch-argument
+`World` override, `Utterer` setup); it no longer creates a `UIWindow`, since
+SwiftUI's `WindowGroup` now owns it.
+
+**Test-World injection — the one real wrinkle.** The App lifecycle can't use the
+old `main.swift` trick that selected `TestingAppDelegate` (which set `Current =
+World.unitTest`). That selection moved into `World.chooseWorld()`: a *simulator*
+process with the XCTest runtime loaded is a unit-test run and gets
+`World.unitTest`; otherwise `.simulator`/`.device`. Confirmed green — the engine,
+Settings, and Quiz suites all pass against the test world.
+
+**Coexistence: SwiftUI-first from day one.** Rather than keep the UIKit
+`MainTabBarVC` shell and bolt SwiftUI on with `UIHostingController` (the old
+arrangement), the shell flipped to SwiftUI immediately: a new `MainTabView` with a
+`TabView` of five tabs. `SettingsView` (already SwiftUI) drops straight in; the
+four not-yet-migrated screens are hosted through a tiny `NavHostedVC`
+`UIViewControllerRepresentable` that wraps each VC in a `UINavigationController` so
+its `pushViewController` navigation keeps working. Each wrapper is retired — swapped
+for a native `NavigationStack` — as its screen migrates, so no un-migration is ever
+needed. (The launch-time "new communication" auto-present that `MainTabBarVC` did
+is deliberately deferred to the CommunVC migration rather than bridge a
+self-dismissing UIKit modal into a SwiftUI cover for a screen about to be rewritten.)
+
+**DI unchanged.** No `@Environment` for the container — SwiftUI reaches the DI
+services through the same `@MainActor Current` global the rest of the app uses, one
+pattern everywhere.
+
+**State model: `Quiz` becomes `@Observable`.** The flagship conversion.
+`Models/Quiz.swift` is now an `@MainActor @Observable class`, its
+`Timer.scheduledTimer(target:selector:)` replaced by the closure form
+(`withTimeInterval:repeats:` + `MainActor.assumeIsolated`), with
+`start`/`stop`/`pauseTimer`/`resumeTimer`. Its `QuizDelegate` is retained, marked
+`@ObservationIgnored`, as a *transitional bridge*: the still-wrapped `QuizVC` and
+the XCTest `QuizTests` drive the quiz through it until `QuizVC` becomes a SwiftUI
+`QuizView` that observes the model directly (Step 4). Doing the model conversion
+first — before the screen — is what lets that later swap be purely local.
+
+**Verified end-to-end** in the simulator: the app launches into the SwiftUI
+`TabView`; Browse Verbs renders frequency-sorted inside its wrapper and pushes
+`VerbVC` (tener → `tenGo`/`tIenes`/`tUve`, `RF: tendr-`) on tap; the Quiz tab
+starts a quiz (haber · él · presente de indicativo) whose **Elapsed** counter ticks
+— proof the closure timer and the observable→delegate updates both fire. Build and
+SwiftLint clean; the removed `MainTabBarVC`/`MainTabBarVCTests` took the last
+`UITabBarController` code with them.

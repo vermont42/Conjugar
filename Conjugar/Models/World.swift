@@ -7,14 +7,11 @@
 //  Copyright © 2019 Josh Adams. All rights reserved.
 //
 
+import Foundation
 import Observation
 import SwiftUI
 
-#if targetEnvironment(simulator)
-@MainActor var Current = World.simulator
-#else
-@MainActor var Current = World.device
-#endif
+@MainActor var Current = World.chooseWorld()
 
 class World {
   var analytics: AnalyticsService
@@ -47,6 +44,23 @@ class World {
     self.session = session
     self.communGetter = communGetter
     self.locale = locale
+  }
+
+  // Under the SwiftUI App lifecycle there is no custom main.swift to select a
+  // TestingAppDelegate, so the unit-test World selection lives here instead: a
+  // simulator process with the XCTest runtime loaded is a unit-test run and
+  // gets World.unitTest. (UI tests run the app in its own process and instead
+  // override Current via the launch-argument path in AppDelegate.)
+  static func chooseWorld() -> World {
+#if targetEnvironment(simulator)
+    if NSClassFromString("XCTest") != nil {
+      return World.unitTest
+    } else {
+      return World.simulator
+    }
+#else
+    return World.device
+#endif
   }
 
   static let device: World = {
