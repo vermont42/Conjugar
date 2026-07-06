@@ -16,3 +16,7 @@ disabled_rules:
 file_length:
   warning: 10000
   error: 100000
+
+type_name:
+  excluded:
+    - L

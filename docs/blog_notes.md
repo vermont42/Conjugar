@@ -1256,3 +1256,61 @@ suppresses slots gets a "Defective" note in the header line, and defective slots
 render blank in the grid. The grid and the verb count live in the table's header
 view, so the whole thing scrolls away with the verb list — the list stays the
 screen's single scrolling element even for class 1's thousands of verbs.
+
+### Localization, modernized: `enum L` + a single `.xcstrings` catalog
+
+Conjugar's localization was showing its age: string constants in a
+`Localizations` enum whose accessors called `NSLocalizedString` — most keyed by
+the English text itself (`NSLocalizedString("Start", …)`), a few by symbolic keys
+— with Spanish living separately in a UTF-16 `es.lproj/Localizable.strings`, and
+the long rich-text Info/tense bodies keeping their English inline in `Info.swift`.
+The sibling apps Conjuguer and Konjugieren had already moved to the modern Xcode
+setup, so Conjugar followed: a type-safe `enum L` backed by `String(localized:)`
+and one `Localizable.xcstrings` string catalog holding **both** languages.
+
+**`enum L`.** Keys now mirror the Swift path exactly — `L.Quiz.start` →
+`String(localized: "Quiz.start")` — instead of leaning on English-as-key.
+Parameterized strings became functions whose runtime key is built by
+interpolation (`L.Model.numberAndPercent(model:percent:)` →
+`"Model.numberAndPercent %@ %lld"`). The loose top-level strings that had no home
+(`spain`, `easy`, `score`, `gotIt`, the gendered `both…`) got scoped into
+`Region`, `Difficulty`, `Quiz`, `Alert`, `Both`. Two accessors shed their accents
+for clean ASCII identifiers (`pretéritoText` → `preteritoText`), and one genuinely
+dead body — a `purposeAndUseText` in the old enum that nothing referenced, the
+live copy being inline in `Info.swift` — was dropped. `Info.swift` went from 918
+lines to 60: all 28 rich-text bodies now resolve through `L.Info.*`, and no raw
+`NSLocalizedString` survives anywhere.
+
+**The catalog, without losing hours of translation.** The high-risk step was
+folding the UTF-16 Spanish `.strings` and the scattered English bases into one
+`.xcstrings` without dropping a single translation. This got **scripted**: read
+the Spanish with `plutil -convert json` (never by hand — UTF-16, C-escapes, and
+literal newlines are parser territory), assemble each entry from a reviewable
+old-key → new-key mapping, and emit the JSON with a real serializer so `\"` and
+`\n` come out right automatically. The builder printed a coverage report as its
+own proof: all 97 legacy Spanish keys consumed, zero missing Spanish, zero
+orphans. The build then compiled the catalog into `en.lproj` and `es.lproj`, and
+spot-checks confirmed the wiring (`Quiz.start` → "Comenzar", the gendered
+`Both.masculine`/`feminine` → "Ambos"/"Ambas" that the old file really did
+distinguish).
+
+**Plurals and positional specifiers, done properly.** The old code hard-coded
+singular/plural pairs (`verbUsing`/`verbsUsing`, `oneRating`/`multipleRatings`)
+and picked between them with `count == 1` checks. Those collapsed into xcstrings
+plural **variations** (`one`/`other`, `%lld`) for both languages — one key, the
+plural engine chooses. Ratings keep a separate `noRating` sentence selected at the
+call site when `count == 0`, because CLDR maps `0 → other` for English and
+Spanish, so a plural "zero" category would never fire. The one multi-argument
+string became positional (`Model %1$@ · %2$lld%% irregular`) in both languages so
+a translator can reorder.
+
+**Project mechanics.** Conjugar's source folders are
+`PBXFileSystemSynchronizedRootGroup`s, so `L.swift` and the new catalog — both
+dropped into `Supporting/` — were auto-added to the target with no `project.pbxproj`
+edit. Removing the legacy `Localizable.strings` still needed real pbxproj surgery,
+though: it predated synchronized groups and was an explicit `PBXVariantGroup` with
+build-file, file-reference, group, and resources entries to excise (leaving
+`LaunchScreen.strings` alone). The hard-won editing tips — the Edit tool silently
+un-escapes ASCII quotes in `.xcstrings`, Grep truncates its one-line-per-value
+JSON, always `json.load`-validate after touching it — are now recorded in
+`CLAUDE.md` for the next person.

@@ -42,7 +42,7 @@ class BrowseInfoVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     browseInfoView = BrowseInfoUIV(frame: UIScreen.main.bounds)
     browseInfoView.difficultyControl.addTarget(self, action: #selector(BrowseInfoVC.difficultyChanged(_:)), for: .valueChanged)
     browseInfoView.setupTable(dataSource: self, delegate: self)
-    navigationItem.titleView = UILabel.titleLabel(title: Localizations.BrowseInfo.localizedTitle)
+    navigationItem.titleView = UILabel.titleLabel(title: L.BrowseInfo.localizedTitle)
     easyInfos = Info.infos.filter {
       $0.difficulty == .easy
     }

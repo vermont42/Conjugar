@@ -24,7 +24,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     quizView = QuizUIV(frame: UIScreen.main.bounds)
     quizView.startRestartButton.addTarget(self, action: #selector(startRestart), for: .touchUpInside)
     quizView.quitButton.addTarget(self, action: #selector(quit), for: .touchUpInside)
-    navigationItem.titleView = UILabel.titleLabel(title: Localizations.Quiz.localizedTitle)
+    navigationItem.titleView = UILabel.titleLabel(title: L.Quiz.localizedTitle)
     quizView.conjugationField.delegate = self
     view = quizView
   }
@@ -35,10 +35,10 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     switch Current.quiz.quizState {
     case .notStarted, .finished:
       quizView.hideInProgressUI()
-      quizView.startRestartButton.setTitle(Localizations.Quiz.start, for: .normal)
+      quizView.startRestartButton.setTitle(L.Quiz.start, for: .normal)
     case .inProgress:
       quizView.showInProgressUI()
-      quizView.startRestartButton.setTitle(Localizations.Quiz.restart, for: .normal)
+      quizView.startRestartButton.setTitle(L.Quiz.restart, for: .normal)
       let verb = Current.quiz.verb
       quizView.verb.text = verb
       quizView.translation.text = VerbMap.shared.entry(for: verb)?.gloss ?? ""
@@ -66,13 +66,13 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
 
   private func showGameCenterDialog() {
     Current.settings.didShowGameCenterDialog = true
-    let gameCenterController = UIAlertController(title: Localizations.Quiz.gameCenter, message: Localizations.Quiz.gameCenterMessage, preferredStyle: UIAlertController.Style.alert)
-    let noAction = UIAlertAction(title: Localizations.Quiz.no, style: UIAlertAction.Style.destructive) { _ in
+    let gameCenterController = UIAlertController(title: L.Quiz.gameCenter, message: L.Quiz.gameCenterMessage, preferredStyle: UIAlertController.Style.alert)
+    let noAction = UIAlertAction(title: L.Quiz.no, style: UIAlertAction.Style.destructive) { _ in
       SoundPlayer.play(.sadTrombone)
       Current.settings.userRejectedGameCenter = true
     }
     gameCenterController.addAction(noAction)
-    let yesAction = UIAlertAction(title: Localizations.Quiz.yes, style: UIAlertAction.Style.default) { [weak self] _ in
+    let yesAction = UIAlertAction(title: L.Quiz.yes, style: UIAlertAction.Style.default) { [weak self] _ in
       guard let self = self else { return }
       Task {
         await Current.gameCenter.authenticate(onViewController: self)
@@ -85,7 +85,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   @objc func startRestart() {
     SoundPlayer.play(.gun)
     Current.quiz.start()
-    quizView.startRestartButton.setTitle(Localizations.Quiz.restart, for: .normal)
+    quizView.startRestartButton.setTitle(L.Quiz.restart, for: .normal)
     [quizView.lastLabel, quizView.correctLabel, quizView.last, quizView.correct].forEach {
       $0.isHidden = true
     }
@@ -118,7 +118,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
   func questionDidChange(verb: String, tense: DisplayTense, personNumber: DisplayPersonNumber) {
     quizView.verb.text = verb
     quizView.translation.text = VerbMap.shared.entry(for: verb)?.gloss ?? ""
-    quizView.tenseLabel.text = Localizations.Quiz.tense + ": " + tense.displayName
+    quizView.tenseLabel.text = L.Quiz.tense + ": " + tense.displayName
     quizView.pronoun.text = personNumber.pronoun
     quizView.conjugationField.becomeFirstResponder()
   }
@@ -136,7 +136,7 @@ class QuizVC: UIViewController, UITextFieldDelegate, QuizDelegate {
     quizView.hideInProgressUI()
     quizView.conjugationField.text = ""
     quizView.conjugationField.resignFirstResponder()
-    quizView.startRestartButton.setTitle(Localizations.Quiz.start, for: .normal)
+    quizView.startRestartButton.setTitle(L.Quiz.start, for: .normal)
     quizView.quitButton.isHidden = true
   }
 

@@ -25,11 +25,11 @@ enum Difficulty: String, CaseIterable {
   var localizedDifficulty: String {
     switch self {
     case .easy:
-      return Localizations.easy
+      return L.Difficulty.easy
     case .moderate:
-      return Localizations.moderate
+      return L.Difficulty.moderate
     case .difficult:
-      return Localizations.difficult
+      return L.Difficulty.difficult
     }
   }
 }

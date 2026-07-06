@@ -48,8 +48,8 @@ class GameCenterReal: NSObject, GameCenter, GKGameCenterControllerDelegate {
           SoundPlayer.play(.sadTrombone)
           Task { @MainActor in
             UIAlertController.showMessage(
-              Localizations.gameCenterFailure,
-              title: "😰", okTitle: Localizations.gotIt,
+              L.GameCenter.failure,
+              title: "😰", okTitle: L.Alert.gotIt,
               onViewController: onViewController
             )
           }

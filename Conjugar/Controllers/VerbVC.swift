@@ -61,24 +61,24 @@ class VerbVC: UIViewController {
       fatalError()
     }
     if Conjugator.isDefective(infinitive: verb) {
-      verbView.defectuoso.text = Localizations.Verb.defective
+      verbView.defectuoso.text = L.Verb.defective
     } else {
-      verbView.defectuoso.text = Localizations.Verb.notDefective
+      verbView.defectuoso.text = L.Verb.notDefective
     }
 
     let verbType = Conjugator.verbType(infinitive: verb)
     switch verbType {
     case .regularAr:
-      verbView.parentOrType.text = "\(Localizations.Verb.regular) AR"
+      verbView.parentOrType.text = "\(L.Verb.regular) AR"
     case .regularEr:
-      verbView.parentOrType.text = "\(Localizations.Verb.regular) ER"
+      verbView.parentOrType.text = "\(L.Verb.regular) ER"
     case .regularIr:
-      verbView.parentOrType.text = "\(Localizations.Verb.regular) IR"
+      verbView.parentOrType.text = "\(L.Verb.regular) IR"
     case .irregular:
       if let classNumber = entry?.classNumber, let exemplar = ModelCatalog.exemplar(forClass: classNumber), exemplar != verb {
-        verbView.parentOrType.text = String(format: Localizations.Verb.irregularWithParent, exemplar)
+        verbView.parentOrType.text = L.Verb.irregularWithParent(exemplar: exemplar)
       } else {
-        verbView.parentOrType.text = Localizations.Verb.irregular
+        verbView.parentOrType.text = L.Verb.irregular
       }
     }
     view = verbView

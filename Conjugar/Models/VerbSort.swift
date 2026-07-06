@@ -17,9 +17,9 @@ enum VerbSort: String, CaseIterable {
   var localizedDisplayName: String {
     switch self {
     case .frequency:
-      return Localizations.VerbSort.frequency
+      return L.VerbSort.frequency
     case .alphabetical:
-      return Localizations.VerbSort.alphabetical
+      return L.VerbSort.alphabetical
     }
   }
 

@@ -29,11 +29,11 @@ struct SettingsView: View {
         .edgesIgnoringSafeArea(.all)
 
       VStack(alignment: .center, spacing: 16) {
-        Text(Localizations.Settings.localizedTitle)
+        Text(L.Settings.localizedTitle)
           .modifier(HeadingLabel())
 
         ScrollView(.vertical) {
-          Text(Localizations.Settings.region)
+          Text(L.Settings.region)
             .modifier(SubheadingLabel())
 
           Picker("", selection: $store.region) {
@@ -47,12 +47,12 @@ struct SettingsView: View {
               self.store.current = Current
             }
 
-          Text(Localizations.Settings.regionDescription)
+          Text(L.Settings.regionDescription)
             .modifier(BodyLabel())
 
           Spacer(minLength: Layout.tripleDefaultSpacing)
 
-          Text(Localizations.Settings.difficulty)
+          Text(L.Settings.difficulty)
             .modifier(SubheadingLabel())
 
           Picker("", selection: $store.difficulty) {
@@ -66,12 +66,12 @@ struct SettingsView: View {
               self.store.current = Current
             }
 
-          Text(Localizations.Settings.difficultyDescription)
+          Text(L.Settings.difficultyDescription)
             .modifier(BodyLabel())
 
           Spacer(minLength: Layout.tripleDefaultSpacing)
 
-          Text(Localizations.Settings.browse)
+          Text(L.Settings.browse)
             .modifier(SubheadingLabel())
 
           Picker("", selection: $store.secondSingularBrowse) {
@@ -85,12 +85,12 @@ struct SettingsView: View {
               self.store.current = Current
             }
 
-          Text(Localizations.Settings.browseDescription)
+          Text(L.Settings.browseDescription)
             .modifier(BodyLabel())
 
           Spacer(minLength: Layout.tripleDefaultSpacing)
 
-          Text(Localizations.Settings.quiz)
+          Text(L.Settings.quiz)
             .modifier(SubheadingLabel())
 
           Picker("", selection: $store.secondSingularQuiz) {
@@ -104,16 +104,16 @@ struct SettingsView: View {
               self.store.current = Current
             }
 
-          Text(Localizations.Settings.quizDescription)
+          Text(L.Settings.quizDescription)
             .modifier(BodyLabel())
 
           Spacer(minLength: Layout.tripleDefaultSpacing)
 
           if !isGameCenterUIHidden {
-            Text(Localizations.Quiz.gameCenter)
+            Text(L.Quiz.gameCenter)
               .modifier(SubheadingLabel())
 
-            Button(Localizations.Settings.enable) {
+            Button(L.Settings.enable) {
               Current.settings.userRejectedGameCenter = false
 
               Task {
@@ -125,16 +125,16 @@ struct SettingsView: View {
             }
               .modifier(StandardButton())
 
-            Text(Localizations.Settings.enableDescription)
+            Text(L.Settings.enableDescription)
               .modifier(BodyLabel())
 
             Spacer(minLength: Layout.tripleDefaultSpacing)
           }
 
-          Text(Localizations.Settings.ratingsAndReviews)
+          Text(L.Settings.ratingsAndReviews)
             .modifier(SubheadingLabel())
 
-          Button(Localizations.Settings.rateOrReview) {
+          Button(L.Settings.rateOrReview) {
             UIApplication.shared.open(RatingsFetcher.reviewURL, options: [:])
           }
             .modifier(StandardButton())

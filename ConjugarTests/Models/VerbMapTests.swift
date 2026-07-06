@@ -52,7 +52,7 @@ struct VerbMapTests {
   @Test("verb-cell markers are stripped from the key", arguments: [
     "aborregar",  // was aborregar(se)
     "acaecer",    // was acaecer (DEF)
-    "apostar",    // was apostar (1)/(2)
+    "apostar"    // was apostar (1)/(2)
   ])
   func bareKeys(infinitive: String) {
     #expect(Self.map.entry(for: infinitive) != nil, "missing bare key \(infinitive)")
@@ -73,7 +73,7 @@ struct VerbMapTests {
     ("aguachicolear", "1", "steal water"),
     ("googlear", "1", "google"),
     ("ustedear", "1", "use usted"),
-    ("viralizar", "1-4", "go viral"),
+    ("viralizar", "1-4", "go viral")
   ])
   func legacyVerbs(infinitive: String, classNumber: String, gloss: String) {
     let entry = Self.map.entry(for: infinitive)
@@ -100,7 +100,7 @@ struct VerbMapTests {
 
   @Test("glosses are reused verbatim from the oracle / old verbs.xml", arguments: [
     ("abrir", "open"), ("decir", "say"), ("tener", "have"),
-    ("caber", "fit"), ("salir", "exit"), ("hacer", "do"),
+    ("caber", "fit"), ("salir", "exit"), ("hacer", "do")
   ])
   func reusedGlosses(infinitive: String, gloss: String) {
     #expect(Self.map.entry(for: infinitive)?.gloss == gloss)
@@ -128,7 +128,7 @@ struct VerbMapTests {
   @Test("reflexive-only verbs carry rx (and gloss the reflexive sense)", arguments: [
     // aborregar: gloss corrected curdle -> "become fleecy" by the B2 grounded gloss
     // pass (RAE: cielo cubrirse de nubes a modo de vellones); see gloss_verification_report.md.
-    ("aborregar", "become fleecy"), ("arrepentir", "repent"), ("atrever", "dare"), ("jactar", "boast"),
+    ("aborregar", "become fleecy"), ("arrepentir", "repent"), ("atrever", "dare"), ("jactar", "boast")
   ])
   func reflexiveFlag(infinitive: String, gloss: String) {
     let entry = Self.map.entry(for: infinitive)
@@ -144,7 +144,7 @@ struct VerbMapTests {
   // MARK: - Frequency rank (fr) — display-only, from SpanishVerbFrequencyRanks.txt
 
   @Test("top-frequency verbs carry their rank", arguments: [
-    ("ser", 1), ("haber", 2), ("tener", 3), ("desvelar", 1000),
+    ("ser", 1), ("haber", 2), ("tener", 3), ("desvelar", 1000)
   ])
   func frequencyRank(infinitive: String, rank: Int) {
     #expect(Self.map.entry(for: infinitive)?.frequencyRank == rank)
@@ -181,7 +181,7 @@ struct VerbMapTests {
     ("egresar", "1", "graduate", false, 842),
     ("respectar", "1", "concern", false, 970),
     ("adir", "3", "accept inheritance", false, 985),
-    ("hacendar", "4A", "give property", false, 465),
+    ("hacendar", "4A", "give property", false, 465)
   ])
   func freqGapVerbs(infinitive: String, classNumber: String, gloss: String, reflexive: Bool, rank: Int) {
     let entry = Self.map.entry(for: infinitive)
@@ -202,9 +202,9 @@ struct VerbMapTests {
 
   @Test("homonyms keep both senses in default order with distinct glosses", arguments: [
     ("apostar", ["4B", "1"], ["bet", "station"]),
-    ("asolar",  ["4B", "1"], ["raze", "scorch"]),
+    ("asolar", ["4B", "1"], ["raze", "scorch"]),
     ("aterrar", ["1", "4A"], ["terrify", "demolish"]),
-    ("atestar", ["4A", "1"], ["stuff", "attest"]),
+    ("atestar", ["4A", "1"], ["stuff", "attest"])
   ])
   func homonyms(infinitive: String, classes: [String], glosses: [String]) {
     let entry = Self.map.entry(for: infinitive)
@@ -301,7 +301,7 @@ struct VerbMapTests {
     ("traer", .pretérito(.firstSingular), "traje"),
     ("conducir", .presenteDeIndicativo(.firstSingular), "conduzco"),   // 34
     ("conducir", .pretérito(.firstSingular), "conduje"),
-    ("andar", .pretérito(.firstSingular), "anduve"),                   // 35
+    ("andar", .pretérito(.firstSingular), "anduve")                   // 35
   ]
 
   @Test("per-class sample conjugates correctly via the map", arguments: perClassSample)
@@ -337,7 +337,7 @@ struct VerbMapTests {
     // 10 oír family (the two formerly-literal slots now ride the prefix).
     ("desoír", .presenteDeIndicativo(.firstPlural), "desoímos"),
     ("desoír", .imperativoAfirmativo(.secondPlural), "desoíd"),
-    ("desoír", .presenteDeIndicativo(.firstSingular), "desoigo"),
+    ("desoír", .presenteDeIndicativo(.firstSingular), "desoigo")
   ]
 
   @Test("prefix payoff: compounds conjugate on their own stem", arguments: prefixSample)

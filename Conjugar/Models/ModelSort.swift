@@ -16,11 +16,11 @@ enum ModelSort: String, CaseIterable {
   var localizedDisplayName: String {
     switch self {
     case .irregularity:
-      return Localizations.ModelSort.irregularity
+      return L.ModelSort.irregularity
     case .alphabetical:
-      return Localizations.VerbSort.alphabetical
+      return L.VerbSort.alphabetical
     case .classNumber:
-      return Localizations.ModelSort.classNumber
+      return L.ModelSort.classNumber
     }
   }
 

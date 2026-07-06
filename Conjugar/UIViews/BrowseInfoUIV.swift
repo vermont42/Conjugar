@@ -19,9 +19,9 @@ class BrowseInfoUIV: UIView {
   @UsesAutoLayout
   var difficultyControl: UISegmentedControl = {
     let control = UISegmentedControl(items: [
-      Localizations.BrowseInfo.easy,
-      Localizations.BrowseInfo.easyAndModerate,
-      Localizations.BrowseInfo.easyModerateAndDifficult
+      L.BrowseInfo.easy,
+      L.BrowseInfo.easyAndModerate,
+      L.BrowseInfo.easyModerateAndDifficult
     ])
     control.selectedSegmentIndex = 0
     control.yellowfyText()
@@ -31,7 +31,7 @@ class BrowseInfoUIV: UIView {
   @UsesAutoLayout
   private var difficultyLabel: UILabel = {
     let label = UILabel()
-    label.text = Localizations.BrowseInfo.filter
+    label.text = L.BrowseInfo.filter
     label.textAlignment = .center
     label.font = Fonts.smallBody
     label.textColor = Colors.yellow

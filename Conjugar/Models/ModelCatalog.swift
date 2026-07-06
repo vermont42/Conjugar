@@ -163,7 +163,7 @@ enum ModelCatalog {
     StemVowel.rEiStr, StemVowel.rEiWk,
     AccentStem.aI,
     CollapseDoubleI.collapse,
-    IYHiatus.oYhiatus,
+    IYHiatus.oYhiatus
   ])
 
   static let dormir = VerbModel(base: .ir, features: [StemVowel.dUe, StemVowel.rOuWk])
@@ -178,7 +178,7 @@ enum ModelCatalog {
     alternates: [
       [StemFeature(operation: .swapSuffix(from: "c", to: "zg"), slots: Slot.isSubjFrom1s)],
       [StemFeature(operation: .swapSuffix(from: "c", to: "g"), slots: Slot.isSubjFrom1s),
-       ApocopatedImperative(finalSwap: ("c", "z"))],
+       ApocopatedImperative(finalSwap: ("c", "z"))]
     ])
   // 7A-2 placer = zc primary + a representative archaic alternate slice (plegue/plega/plugo).
   static let placer = VerbModel(base: .er,
@@ -186,8 +186,8 @@ enum ModelCatalog {
     alternates: [
       [StemFeature.zc, residue([(.presenteDeSubjuntivo(.thirdSingular), "plegue")])],
       [StemFeature.zc, residue([
-        (.presenteDeSubjuntivo(.thirdSingular), "plega"), (.pretérito(.thirdSingular), "plugo"),
-      ])],
+        (.presenteDeSubjuntivo(.thirdSingular), "plega"), (.pretérito(.thirdSingular), "plugo")
+      ])]
     ])
   static let lucir = VerbModel(base: .ir, features: [StemFeature.zc])
 
@@ -196,7 +196,7 @@ enum ModelCatalog {
   static let construir = VerbModel(base: .ir, features: [StemFeature.yAdd, IYHiatus.oYhiatus])
   // 18 argüir = construir + güy→guy (a single paradigm; the "alternate" is orthographic).
   static let arguir = VerbModel(base: .ir, features: [
-    StemFeature.yAdd, IYHiatus.oYhiatus, DiaeresisDropBeforeY.güyGuy,
+    StemFeature.yAdd, IYHiatus.oYhiatus, DiaeresisDropBeforeY.güyGuy
   ])
 
   // MARK: - Irregular 1st-singular -go (§4.5): 9 / 10 / 11 / 12 / 13
@@ -223,7 +223,7 @@ enum ModelCatalog {
   static let oir = VerbModel(base: .ir, features: [
     StemFeature.yAdd,
     StemFeature.g1ig,
-    IYHiatus.oYhiatus,
+    IYHiatus.oYhiatus
   ])
 
   static let salir = VerbModel(base: .ir, features: [StemFeature.g1g, FutureEndings.fDr, ApocopatedImperative()])
@@ -240,8 +240,8 @@ enum ModelCatalog {
     IrregularParticiple("v", "visto"),
     residue([
       (.presenteDeIndicativo(.secondPlural), "veis"),
-      (.presenteDeIndicativo(.secondSingularVos), "ves"),
-    ]),
+      (.presenteDeIndicativo(.secondSingularVos), "ves")
+    ])
   ])
   // 14-1 prever = ver's stem rebuilds + monosyllable→polysyllable accent residue.
   static let prever = VerbModel(base: .er, features: [
@@ -252,8 +252,8 @@ enum ModelCatalog {
     residue([
       (.presenteDeIndicativo(.secondSingular), "prevés"), (.presenteDeIndicativo(.thirdSingular), "prevé"),
       (.presenteDeIndicativo(.thirdPlural), "prevén"),
-      (.pretérito(.firstSingular), "preví"), (.pretérito(.thirdSingular), "previó"),
-    ]),
+      (.pretérito(.firstSingular), "preví"), (.pretérito(.thirdSingular), "previó")
+    ])
   ])
   static let discernir = VerbModel(base: .ir, features: [StemVowel.dIe])
   static let jugar = VerbModel(base: .ar, features: [StemVowel.dUUe, StemFinalConsonant.oGar])
@@ -273,8 +273,8 @@ enum ModelCatalog {
       (.imperfectoDeIndicativo(.firstSingular), "era"), (.imperfectoDeIndicativo(.secondSingular), "eras"),
       (.imperfectoDeIndicativo(.thirdSingular), "era"), (.imperfectoDeIndicativo(.firstPlural), "éramos"),
       (.imperfectoDeIndicativo(.secondPlural), "erais"), (.imperfectoDeIndicativo(.thirdPlural), "eran"),
-      (.imperativoAfirmativo(.secondSingular), "sé"),
-    ]),
+      (.imperativoAfirmativo(.secondSingular), "sé")
+    ])
   ])
 
   // 20 estar = cantar + sp-end(estuv) + residue (estoy + the stress-shift accents).
@@ -285,8 +285,8 @@ enum ModelCatalog {
       (.presenteDeIndicativo(.thirdSingular), "está"), (.presenteDeIndicativo(.thirdPlural), "están"),
       (.presenteDeSubjuntivo(.firstSingular), "esté"), (.presenteDeSubjuntivo(.secondSingular), "estés"),
       (.presenteDeSubjuntivo(.thirdSingular), "esté"), (.presenteDeSubjuntivo(.thirdPlural), "estén"),
-      (.imperativoAfirmativo(.secondSingular), "está"),
-    ]),
+      (.imperativoAfirmativo(.secondSingular), "está")
+    ])
   ])
 
   // 21 haber = comer + sp-end(hub) + f-drope + residue (he/has/ha…, PS haya-).
@@ -299,8 +299,8 @@ enum ModelCatalog {
       (.presenteDeIndicativo(.thirdSingular), "ha"), (.presenteDeIndicativo(.firstPlural), "hemos"),
       (.presenteDeIndicativo(.thirdPlural), "han"),
       (.presenteDeIndicativo(.secondSingularVos), "has"),  // voseo auxiliary: vos has hablado
-      (.imperativoAfirmativo(.secondSingular), "he"),
-    ]),
+      (.imperativoAfirmativo(.secondSingular), "he")
+    ])
   ])
 
   // 22 saber = comer + sp-end(sup) + f-drope + residue (PI 1s sé, PS sep-).
@@ -308,7 +308,7 @@ enum ModelCatalog {
     StemFeature.strongPreterite(from: "sab", to: "sup"), PreteriteEndings.spEnd,
     FutureEndings.fDrope,
     subjunctiveStem("sep"),
-    residue([(.presenteDeIndicativo(.firstSingular), "sé")]),
+    residue([(.presenteDeIndicativo(.firstSingular), "sé")])
   ])
 
   // 23 caber = comer + sp-end(cup) + f-drope + residue (PI 1s quepo, PS quep-).
@@ -316,7 +316,7 @@ enum ModelCatalog {
     StemFeature.strongPreterite(from: "cab", to: "cup"), PreteriteEndings.spEnd,
     FutureEndings.fDrope,
     subjunctiveStem("quep"),
-    residue([(.presenteDeIndicativo(.firstSingular), "quepo")]),
+    residue([(.presenteDeIndicativo(.firstSingular), "quepo")])
   ])
 
   // 24 ir = subir + pret-fue + residue (voy/vas…, IM iba-, PS vaya-, ve/vamos, yendo).
@@ -334,8 +334,8 @@ enum ModelCatalog {
       (.imperfectoDeIndicativo(.secondPlural), "ibais"), (.imperfectoDeIndicativo(.thirdPlural), "iban"),
       (.gerundio, "yendo"),
       (.imperativoAfirmativo(.secondSingular), "ve"),
-      (.imperativoAfirmativo(.firstPlural), "vamos"),
-    ]),
+      (.imperativoAfirmativo(.firstPlural), "vamos")
+    ])
   ])
 
   // 25 dar = cantar + wp-i + residue (doy, the monosyllable accents dé/dais/deis).
@@ -346,8 +346,8 @@ enum ModelCatalog {
       (.presenteDeIndicativo(.secondSingularVos), "das"),  // monosyllable: no accent, unlike the derived *dás
       (.imperativoAfirmativo(.secondSingularVos), "da"),   // likewise
       (.presenteDeSubjuntivo(.firstSingular), "dé"), (.presenteDeSubjuntivo(.thirdSingular), "dé"),
-      (.presenteDeSubjuntivo(.secondPlural), "deis"),
-    ]),
+      (.presenteDeSubjuntivo(.secondPlural), "deis")
+    ])
   ])
 
   // 26 poder = comer + d-ue + sp-end(pud) + f-drope + residue (GER pudiendo).
@@ -355,14 +355,14 @@ enum ModelCatalog {
     StemVowel.dUe,
     StemFeature.strongPreterite(from: "pod", to: "pud"), PreteriteEndings.spEnd,
     FutureEndings.fDrope,
-    residue([(.gerundio, "pudiendo")]),
+    residue([(.gerundio, "pudiendo")])
   ])
 
   // 27 querer = comer + d-ie + sp-end(quis) + f-drope (querr-).
   static let querer = VerbModel(base: .er, features: [
     StemVowel.dIe,
     StemFeature.strongPreterite(from: "quer", to: "quis"), PreteriteEndings.spEnd,
-    FutureEndings.fDrope,
+    FutureEndings.fDrope
   ])
 
   // 28 decir's shared core (digo, dij-, dir-, dicho) — reused by the sub-classes.
@@ -371,7 +371,7 @@ enum ModelCatalog {
     StemFeature.irregularFirstSingular(from: "dec", to: "dig"),
     StemFeature.strongPreterite(from: "dec", to: "dij"), PreteriteEndings.spJend,
     StemFeature.contractedFuture(from: "dec", to: "di"), FutureEndings.fContract,
-    IrregularParticiple("dec", "dicho"),
+    IrregularParticiple("dec", "dicho")
   ]
   static let decir = VerbModel(base: .ir, features: decirCore + [residue([(.imperativoAfirmativo(.secondSingular), "di")])])
   // 28-1 predecir = decir − the irregular-tú literal (so tú is the regular predice).
@@ -380,7 +380,7 @@ enum ModelCatalog {
   static let bendecir = VerbModel(base: .ir, features: [
     StemVowel.rEiStr, StemVowel.rEiWk,
     StemFeature.irregularFirstSingular(from: "dec", to: "dig"),
-    StemFeature.strongPreterite(from: "dec", to: "dij"), PreteriteEndings.spJend,
+    StemFeature.strongPreterite(from: "dec", to: "dij"), PreteriteEndings.spJend
   ])
 
   // 29 hacer = comer + hag- + sp-end(hic) + f-contract(har) + residue. Keyed on the
@@ -391,11 +391,11 @@ enum ModelCatalog {
     StemFeature.contractedFuture(from: "ac", to: "a"), FutureEndings.fContract,
     RunningStemConsonantSwap.hizo,
     IrregularParticiple("ac", "echo"),
-    ApocopatedImperative(finalSwap: ("c", "z")),
+    ApocopatedImperative(finalSwap: ("c", "z"))
   ])
   // 29-1 rehacer = hacer + accent residue (rehíce / rehízo).
   static let rehacer = VerbModel(base: .er, features: hacer.features + [residue([
-    (.pretérito(.firstSingular), "rehíce"), (.pretérito(.thirdSingular), "rehízo"),
+    (.pretérito(.firstSingular), "rehíce"), (.pretérito(.thirdSingular), "rehízo")
   ])])
 
   // 30 poner = comer + g1-g + sp-end(pus) + f-dr + residue (PP puesto, IMP pon).
@@ -404,7 +404,7 @@ enum ModelCatalog {
     StemFeature.strongPreterite(from: "pon", to: "pus"), PreteriteEndings.spEnd,
     FutureEndings.fDr,
     IrregularParticiple("pon", "puesto"),
-    ApocopatedImperative(),
+    ApocopatedImperative()
   ])
 
   // 31 tener = comer + d-ie + g1-g + sp-end(tuv) + f-dr + apocopated tú (ten).
@@ -414,7 +414,7 @@ enum ModelCatalog {
     StemFeature.strongPreterite(from: "ten", to: "tuv"),
     PreteriteEndings.spEnd,
     FutureEndings.fDr,
-    ApocopatedImperative(),
+    ApocopatedImperative()
   ])
 
   // 32 venir = subir + d-ie + r-ei-wk + g1-g + sp-end(vin) + f-dr + apocopated tú (ven).
@@ -425,14 +425,14 @@ enum ModelCatalog {
     StemFeature.strongPreterite(from: "ven", to: "vin"),
     PreteriteEndings.spEnd,
     FutureEndings.fDr,
-    ApocopatedImperative(),
+    ApocopatedImperative()
   ])
 
   // 33 traer = comer + g1-ig(traig) + sp-jend(traj) + o-yhiatus (trayendo/traído).
   static let traer = VerbModel(base: .er, features: [
     StemFeature.g1ig,
     StemFeature.strongPreterite(from: "tra", to: "traj"), PreteriteEndings.spJend,
-    IYHiatus.oYhiatus,
+    IYHiatus.oYhiatus
   ])
 
   // 34 conducir (-ducir) = subir + zc + sp-jend(-duj). The strong-preterite swap
@@ -440,12 +440,12 @@ enum ModelCatalog {
   // (aducir → aduje, traducir → traduje) — the §1 end-anchored payoff.
   static let conducir = VerbModel(base: .ir, features: [
     StemFeature.zc,
-    StemFeature.strongPreterite(from: "duc", to: "duj"), PreteriteEndings.spJend,
+    StemFeature.strongPreterite(from: "duc", to: "duj"), PreteriteEndings.spJend
   ])
 
   // 35 andar = cantar + sp-end(anduv).
   static let andar = VerbModel(base: .ar, features: [
-    StemFeature.strongPreterite(from: "and", to: "anduv"), PreteriteEndings.spEnd,
+    StemFeature.strongPreterite(from: "and", to: "anduv"), PreteriteEndings.spEnd
   ])
 
   // MARK: - The class-number → model map
@@ -496,7 +496,7 @@ enum ModelCatalog {
     "30": poner, "30-1": poner,                     // 30-1 suponer aliases poner
     "31": tener, "31-1": tener,                     // 31-1 obtener aliases tener
     "32": venir, "32-1": venir,                     // 32-1 convenir aliases venir
-    "33": traer, "34": conducir, "35": andar,
+    "33": traer, "34": conducir, "35": andar
   ]
 
   // MARK: - The class-number → exemplar-name map
@@ -548,6 +548,6 @@ enum ModelCatalog {
     "30": "poner", "30-1": "poner",
     "31": "tener", "31-1": "tener",
     "32": "venir", "32-1": "venir",
-    "33": "traer", "34": "conducir", "35": "andar",
+    "33": "traer", "34": "conducir", "35": "andar"
   ]
 }

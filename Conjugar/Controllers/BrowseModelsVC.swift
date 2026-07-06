@@ -41,7 +41,7 @@ class BrowseModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     modelsBySort = Dictionary(uniqueKeysWithValues: ModelSort.allCases.map { ($0, $0.sorted(models)) })
     let initialSortIndex = ModelSort.allCases.firstIndex(of: Current.settings.modelSort) ?? 0
     browseModelsView.sortControl.selectedSegmentIndex = initialSortIndex
-    navigationItem.titleView = UILabel.titleLabel(title: Localizations.BrowseModels.localizedTitle)
+    navigationItem.titleView = UILabel.titleLabel(title: L.BrowseModels.localizedTitle)
     view = browseModelsView
     Current.reviewPrompter.promptableActionHappened()
   }

@@ -41,7 +41,7 @@ class BrowseVerbsVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     verbsBySort = Dictionary(uniqueKeysWithValues: VerbSort.allCases.map { ($0, $0.sorted(entries)) })
     let initialSortIndex = VerbSort.allCases.firstIndex(of: Current.settings.verbSort) ?? 0
     browseVerbsView.sortControl.selectedSegmentIndex = initialSortIndex
-    navigationItem.titleView = UILabel.titleLabel(title: Localizations.BrowseVerbs.localizedTitle)
+    navigationItem.titleView = UILabel.titleLabel(title: L.BrowseVerbs.localizedTitle)
     view = browseVerbsView
     Current.reviewPrompter.promptableActionHappened()
   }

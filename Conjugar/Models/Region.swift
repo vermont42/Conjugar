@@ -31,9 +31,9 @@ enum Region: String, CaseIterable {
   var localizedRegion: String {
     switch self {
     case .spain:
-      return Localizations.spain
+      return L.Region.spain
     case .latinAmerica:
-      return Localizations.latinAmerica
+      return L.Region.latinAmerica
     }
   }
 }

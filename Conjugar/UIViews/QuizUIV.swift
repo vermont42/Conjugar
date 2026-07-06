@@ -29,7 +29,7 @@ class QuizUIV: UIView {
   @UsesAutoLayout
   var quitButton: UIButton = {
     let button = UIButton()
-    button.setTitle(Localizations.Quiz.quit, for: .normal)
+    button.setTitle(L.Quiz.quit, for: .normal)
     button.titleLabel?.font = Fonts.button
     button.setTitleColor(Colors.red, for: .normal)
     return button
@@ -40,14 +40,14 @@ class QuizUIV: UIView {
     let field = UITextField()
     field.autocapitalizationType = .none
     field.autocorrectionType = .no
-    field.placeholder = " " + Localizations.Quiz.conjugation
+    field.placeholder = " " + L.Quiz.conjugation
     return field
   }()
 
   @UsesAutoLayout
   var startRestartButton: UIButton = {
     let button = UIButton()
-    button.setTitle(Localizations.Quiz.start, for: .normal)
+    button.setTitle(L.Quiz.start, for: .normal)
     button.titleLabel?.font = Fonts.button
     button.setTitleColor(Colors.red, for: .normal)
     return button
@@ -67,7 +67,7 @@ class QuizUIV: UIView {
       $0.isUserInteractionEnabled = true
     }
     let colon = ":"
-    [(verbLabel, Localizations.Quiz.verb + colon), (pronounLabel, Localizations.Quiz.pronoun + colon), (tenseLabel, Localizations.Quiz.tense + colon), (lastLabel, Localizations.Quiz.lastAnswer + colon), (correctLabel, Localizations.Quiz.correctAnswer + colon), (scoreLabel, Localizations.score + colon), (progressLabel, Localizations.Quiz.progress + colon), (elapsedLabel, Localizations.Quiz.elapsed + colon), (last, " "), (correct, " ")].forEach {
+    [(verbLabel, L.Quiz.verb + colon), (pronounLabel, L.Quiz.pronoun + colon), (tenseLabel, L.Quiz.tense + colon), (lastLabel, L.Quiz.lastAnswer + colon), (correctLabel, L.Quiz.correctAnswer + colon), (scoreLabel, L.Quiz.score + colon), (progressLabel, L.Quiz.progress + colon), (elapsedLabel, L.Quiz.elapsed + colon), (last, " "), (correct, " ")].forEach {
       $0.0.text = $0.1
     }
     [verb, verbLabel, translation, pronoun, pronounLabel, tenseLabel, last, lastLabel, correct, correctLabel, score, scoreLabel, progress, progressLabel, elapsed, elapsedLabel, startRestartButton, conjugationField, quitButton].forEach {

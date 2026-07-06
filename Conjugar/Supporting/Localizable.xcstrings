@@ -1,0 +1,1577 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "Alert.gotIt" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Got It"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entiendo"
+          }
+        }
+      }
+    },
+    "Alert.okay" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Okay"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "Both.feminine" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambas"
+          }
+        }
+      }
+    },
+    "Both.masculine" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Both"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambos"
+          }
+        }
+      }
+    },
+    "BrowseInfo.easy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "F"
+          }
+        }
+      }
+    },
+    "BrowseInfo.easyAndModerate" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E & M"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "F y M"
+          }
+        }
+      }
+    },
+    "BrowseInfo.easyModerateAndDifficult" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E, M, & D"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "F, M y D"
+          }
+        }
+      }
+    },
+    "BrowseInfo.filter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter Tenses by Difficulty"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filtrar Tiempos por Dificultad"
+          }
+        }
+      }
+    },
+    "BrowseInfo.localizedTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Información"
+          }
+        }
+      }
+    },
+    "BrowseModels.localizedTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Models"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modelos"
+          }
+        }
+      }
+    },
+    "BrowseVerbs.localizedTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Browse"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explorar"
+          }
+        }
+      }
+    },
+    "Difficulty.difficult" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Difficult"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Difícil"
+          }
+        }
+      }
+    },
+    "Difficulty.easy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Easy"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fácil"
+          }
+        }
+      }
+    },
+    "Difficulty.moderate" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moderate"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moderado"
+          }
+        }
+      }
+    },
+    "GameCenter.failure" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Center authentication failed. This can happen if you cancel authentication or if your iPhone is not already signed into Game Center. Launch the Settings app, tap Game Center, sign in, and relaunch Conjugar."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La autenticación de Game Center falló. Esto puede suceder si cancelas la autenticación o si tu iPhone aún no ha iniciado una sesión en Game Center. Inicia la aplicación Configuración, toca Game Center, inicia una sesión y relanza Conjugar."
+          }
+        }
+      }
+    },
+    "Info.condicionalCompuestoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~condicional compuesto~ refers to a hypothetical past action.\n\n\"Yo $habRía hablado$ si me $hUbieran dado$ la oportunidad.\" = \"I would have $spOken$ if they had given me the opportunity.\"\n\n^Conjugation^\n\nIn the condicional compuesto, the %condicional% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.\n\nExample: \"$habRías decidido$\" = \"you would have decided\"\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~condicional compuesto~ se refiere a una acción hipotética en pasado.\n\n\"Yo $habRía hablado$ si me $hUbieran dado$ la oportunidad.\" = \"I would have $spOken$ if they had given me the opportunity.\"\n\n^Conjugación^\n\nEn condicional compuesto, la conjugación del %condicional% de ~haber~ se usa como auxiliar, y le sigue el %participio% del verbo que se conjuga.\n\nEjemplo: \"$habRías decidido$\" = \"you would have decided\"\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.condicionalText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uses^\n\nThe ~condicional~ is used to express the following:\n\n• Courtesy:\n\n\"Señor, ¿$podRía$ darme una copa de vino?\" = \"Sir, could you give me a glass of wine?\"\n\nThis use softens a request, making it more polite.\n\n• Polite expression, using querer, of a desire:\n\n\"Q$ueRría$ ver la película esta semana.\" = \"I would like to see the film this week.\"\n\n• In a then clause whose realization depends on a hypothetical if clause:\n\n\"Si yo $FUera$ rico, viajaría a Sudamérica.\" = \"If I $WERE$ rich, (then) I would travel to South America.\"\n\n• Speculation about past events:\n\n\"¿Cuántas personas asistieron a la investidura del Presidente?\" \"No lo $sÉ$; $habRía$ unas 5.000.\" = \"How many people attended the President's inauguration?\" \"I do not know; there must have been about 5,000.\"\n\nIn this context, the speaker's knowledge is indirect, unconfirmed, or approximate.\n\n• A future action in relation to the past:\n\n\"Cuando $ERa$ pequeño, pensaba que me gustaría ser médico.\" = \"When I $WAS$ young, I thought that I would like to be a doctor.\"\n\nThis use expresses future action that was imagined in the past.\n\n• A suggestion:\n\n\"Yo que tú, lo olvidaría completamente.\" = \"If I $WERE$ you, I would forget him completely.\"\n\n^Conjugation^\n\nLike the %futuro de indicativo%, the condicional uses the %raíz futura% as a stem. To form the condicional, the following endings are attached to the raíz futura:\n\n-ía, -ías, -ía, -íamos, -íais, -ían\n\nExample (hablar): hablaría, hablarías, hablaría, hablaríamos, hablaríais, hablarían\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Usos^\n\nEl ~condicional~ se utiliza para expresar lo siguiente:\n\n• Cortesía:\n\n\"Señor, ¿$podRía$ darme una copa de vino?\" = \"Sir, could you give me a glass of wine?\"\n\nEste uso suaviza una solicitud, haciéndola más educada.\n\n• Expresión cortés de un deseo cuando se usa con querer:\n\n\"Q$ueRría$ ver la película esta semana.\" = \"I would like to see the film this week.\"\n\n• En una acción que necesita que se cumpla una condición para poderse llevar a cabo. Esta condición está marcada por la conjunción condicional \"si\":\n\n\"Si yo $FUera$ rico, viajaría a Sudamérica.\" = \"If I $WERE$ rich, (then) I would travel to South America.\"\n\n• Suposición sobre eventos pasados:\n\n\"¿Cuántas personas asistieron a la investidura del Presidente?\" \"No lo $sÉ$; $habRía$ unas 5.000.\" = \"How many people attended the President's inauguration?\" \"I do not know; there must have been about 5,000.\"\n\nEn este contexto, el conocimiento del hablante es indirecto, no confirmado o aproximado.\n\n• Una acción futura que se relaciona con el pasado:\n\n\"Cuando $ERa$ pequeño, pensaba que me gustaría ser médico.\" = \"When I $WAS$ young, I thought that I would like to be a doctor.\"\n\nEste uso expresa una acción futura que se imaginó en el pasado.\n\n• Una sugerencia:\n\n\"Yo que tú, lo olvidaría completamente.\" = \"If I $WERE$ you, I would forget him completely.\"\n\n^Conjugación^\n\nAl igual que en %futuro de indicativo%, el condicional usa la %raíz futura%. Para formar el condicional, se usan las siguientes terminaciones con la raíz futura:\n\n-ía, -ías, -ía, -íamos, -íais, -ían\n\nEjemplo con hablar: hablaría, hablarías, hablaría, hablaríamos, hablaríais, hablarían\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.creditsHeading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credits"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créditos"
+          }
+        }
+      }
+    },
+    "Info.creditsText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Conjugar^\n\nJosh Adams developed ~Conjugar~ and has released its source code under the GNU Affero General Public License, available here: %https://github.com/vermont42/Conjugar/blob/master/LICENSE%\n\n~Conjugar~'s source code lives here: %https://github.com/vermont42/Conjugar/%\n\n^Wikipedia^\n\nDescriptions of the %pretérito%, %futuro de indicativo%, %condicional%, %participio%, %gerundio%, %imperfecto de indicativo%, %futuro de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2%, %perfecto de indicativo%, %pluscuamperfecto de indicativo%, %futuro perfecto%, %pretérito anterior%, %condicional compuesto%, and %perfecto de subjuntivo% have been borrowed, in part, from Wikipedia's article on Spanish verbs, %https://en.wikipedia.org/wiki/Spanish_verbs%. The description of %voseo% is informed by Wikipedia's article on ~voseo~, %https://en.wikipedia.org/wiki/Voseo%, as well as the Real Academia Española's conjugations, %http://www.rae.es%. Modifications to Wikipedia's content include, but are not entirely limited to, formatting and the addition of example irregular verbs. Wikipedia has licensed the content of the Spanish-verb and ~voseo~ articles under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%. All of ~Conjugar~'s developer's modifications of Wikipedia content are licensed under that license, as well as under the Affero license.\n\n^Word Reference^\n\nThe description and example of the %futuro perfecto de subjuntivo% are from a post by user kunvla in the following Word Reference thread: %https://forum.wordreference.com/threads/futuro-compuesto-subjuntivo.1375438/% With respect to reuse of this content, Word Reference states the following: \"You are free to quote short passages or definitions from threads in the Forums outside the forums.\"\n\n^Icons^\n\nChristine Daughtry created the app icon.\n\nBorja Santos Lobo created the dancer icon and released it under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%.\n\nSaeful Muslim created the bull icon and released it under the Creative Commons Attribution-Share-Alike License 3.0, available at %https://creativecommons.org/licenses/by-sa/3.0/%.\n\nMariela Peña created the gear and question-mark icons.\n\n^Translation^\n\nMargarita Gracia proofread the translation of Conjugar into Spanish, provided corrections to tense descriptions, and improved several examples of tense usage.\n\nFerran Poveda provided corrections to the Spanish translations.\n\n^Sound Jay^\n\nSound Jay (%https://www.soundjay.com%) created all sounds in ~Conjugar~ and graciously \"allow[s] ... incorporat[ion of these sounds] into ... projects, be it for commercial or non-commercial use.\" Sound Jay \"and its licensors retain all ownership rights to the sound files\".\n\n^Unit Testing^\n\nDominik Hauser wrote code that inspired a unit-testing technique that ~Conjugar~ uses. Hauser released this code, available at %https://github.com/dasdom/TestingNavigationDemo%, under the MIT License, reproduced above.\n\n^Accented Characters^\n\nSheila Smith suggested clarifying how to input accented characters like ó.\n\n^Accessibility & Readme^\n\nBruno Scheele contributed to accessibility and the readme.\n\n^App Preview^\n\n~Conjugar~'s app preview uses the song \"Arroz Con Pollo\" by Kevin MacLeod (incompetech.com). Attribution follows.\n\nArroz Con Pollo by Kevin MacLeod\nLink: %https://incompetech.filmmusic.io/song/3381-arroz-con-pollo%\nLicense: %http://creativecommons.org/licenses/by/4.0/%"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Conjugar^\n\nJosh Adams desarrolló ~Conjugar~ y lanzó su código fuente con la Licencia Pública General Affero de GNU, disponible en el siguente enlace: %https://github.com/vermont42/Conjugar/blob/master/LICENSE%\n\nEl código fuente de ~Conjugar~ vive aquí: %https://github.com/vermont42/Conjugar/%\n\n^Wikipedia^\n\nLas descripciones del %pretérito%, %futuro de indicativo%, %condicional%, %participio%, %gerundio%, %imperfecto de indicativo% , %futuro de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2% , %perfecto de indicativo%, %pluscuamperfecto de indicativo%, %futuro perfecto%, %pretérito anterior%, %condicional compuesto% y %perfecto de subjuntivo% se han tomado, en parte, del artículo de la Wikipedia sobre los verbos españoles, %https://en.wikipedia.org/wiki/Spanish_verbs%. La descripción de %voseo% se basa en el artículo de la Wikipedia sobre ~voseo~, %https://en.wikipedia.org/wiki/Voseo%, así como en las conjugaciones de la Real Academia Española, %http://www.rae.es%. Las modificaciones del contenido de la Wikipedia incluyen el formateo y los verbos irregulares añadidos como ejemplo, entre otros. Wikipedia ha publicado los contenidos de sus artículos con los verbos españoles y ~voseo~ con la licencia de \"Atribución-CompartirIgual 3.0 No portada (CC BY-SA 3.0)\", disponible en %https://creativecommons.org/licenses/by-sa/3.0/%. Todas las modificaciones del contenido de Wikipedia añadidas por el desarrollador de ~Conjugar~ tienen esa misma licencia, así como la licencia Affero.\n\n^Word Reference^\n\nLa descripción y el ejemplo del %futuro perfecto de subjuntivo% provienen de una publicación del usuario kunvla del siguiente hilo de Word Reference: %https://forum.wordreference.com/threads/futuro-compuesto-subjuntivo.1375438/% Sobre la reutilización de este contenido, Word Reference establece lo siguiente: \"You are free to quote short passages or definitions from threads in the Forums outside the forums.\".\n\n^Íconos / Iconos^\n\nChristine Daughtry creó el ícono (icono) de la aplicación.\n\nBorja Santos Lobo creó el ícono (icono) del bailarín y lo publicó con la licencia \"Atribución-CompartirIgual 3.0 No portada (CC BY-SA 3.0)\", disponible en %https://creativecommons.org/licenses/by-sa/3.0/%.\n\nSaeful Muslim creó el ícono (icono) del toro y lo publicó con la licencia \"Atribución-CompartirIgual 3.0 No portada (CC BY-SA 3.0)\", disponible en %https://creativecommons.org/licenses/by-sa/3.0/%.\n\nMariela Peña creó los íconos (iconos) de los engranajes y de los signos de interrogación.\n\n^Traducción^\n\nMargarita Gracia revisó la traducción al español de Conjugar, aportó correcciones a las descripciones de los tiempos verbales y mejoró algunos ejemplos de sus usos.\n\nFerran Poveda llevó a cabo las correcciones de las traducciones al español.\n\n^Sound Jay^\n\nSound Jay (%https://www.soundjay.com%) creó todos los sonidos de ~Conjugar~ y graciosamente \"allow[s] ... incorporat[ion of these sounds] into ... projects, be it for commercial or non-commercial use.\" Sound Jay \"and its licensors retain all ownership rights to the sound files\".\n\n^Prueba de Unidad^\n\nDominik Hauser escribió un código que sirvió de inspiración para creer una de las técnicas de prueba de unidad que usa ~Conjugar~. Señor Hauser publicó este código que se encuentra disponible en %https://github.com/dasdom/TestingNavigationDemo% con la Licencia del MIT reproducida anteriormente.\n\n^Letras Acentuadas^\n\nSheila Smith sugirió aclaraciones sobre cómo escribir letras acentuadas como ó.\n\n^Vista Previa de la Aplicación^\n\nLa vista previa de la aplicación ~Conjugar~ usa la canción \"Arroz Con Pollo\" de Kevin MacLeod (incompetech.com). La atribución sigue.\n\nArroz Con Pollo by Kevin MacLeod\nLink: %https://incompetech.filmmusic.io/song/3381-arroz-con-pollo%\nLicense: %http://creativecommons.org/licenses/by/4.0/%"
+          }
+        }
+      }
+    },
+    "Info.futuroDeIndicativoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uses^\n\nThe ~futuro de indicativo~ is a Spanish Verb tense that is used to express the following:\n\n• A future action:\n\n\"El año próximo, visitaré Buenos Aires.\" = \"Next year, I shall/will visit Buenos Aires.\"\n\n• Uncertainty or probability - inference, rather than direct knowledge:\n\n\"¿Quién estará tocando a la puerta?\" \"Será Fabio.\" = \"Who (do you suppose) is knocking at the door?\" \"It must be Fabio.\" or \"Who will that be knocking at the door?\" \"That'll be Fabio.\"\n\n• Command, prohibition, or obligation:\n\n\"No llevarás a ese hombre a mi casa.\" = \"Do not bring that man to my house.\" or \"You will not bring that man to my house.\"\n\nThis form is also used to assert a command, prohibition, or obligation in English.\n\n• Courtesy:\n\n\"¿Te importará encender la televisión?\" = \"Would you mind turning on the television?\"\n\nAnother common way to represent the future is with a %presente de indicativo% conjugation of ~ir~ followed by an infinitivo verb: \"Quizás $VOY$ a viajar a Bolivia en el verano. = \"Perhaps I'm going to travel to Bolivia in the summer.\"\n\n^Conjugation^\n\nThe futuro de indicativo uses the %raíz futura% as a stem. The following endings are attached to it:\n\n-é, -ás, -á, -emos, -éis, -án\n\nExample (hablar): hablaré, hablarás, hablará, hablaremos, hablaréis, hablarán\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Usos^\n\nEl ~futuro de indicativo~ es un tiempo verbal del español que se utiliza para expresar lo siguiente:\n\n• Una acción futura:\n\n\"El año próximo, visitaré Buenos Aires.\" = \"Next year, I shall/will visit Buenos Aires.\"\n\n• Incertidumbre o probabilidad; inferencia o deducción, en lugar de conocimiento directo:\n\n\"¿Quién estará tocando a la puerta?\" \"Será Fabio.\" = \"Who (do you suppose) is knocking at the door?\" \"It must be Fabio.\" o \"Who will that be knocking at the door?\" \"That'll be Fabio.\"\n\n• Orden, prohibición u obligación:\n\n\"No llevarás a ese hombre a mi casa.\" = \"Do not bring that man to my house.\" o \"You will not bring that man to my house.\"\n\nEsta forma también se utiliza para hacer valer una orden, prohibición u obligación en inglés.\n\n• Cortesía:\n\n\"¿Te importará encender la televisión? \" = \"Would you mind turning on the television?\"\n\nOtra forma común de representar el futuro es con una forma del %presente de indicativo% de ~ir~ seguida de un verbo en infinitivo: \"Quizás $VOY$ a viajar a Bolivia este verano. = \"Perhaps I'm going to travel to Bolivia in the summer.\"\n\n^Conjugación^\n\nEl futuro de indicativo utiliza la %raíz futura% como base. Se le adjuntan las siguientes terminaciones:\n\n-é, -ás, -á, -emos, -éis, -án\n\nEjemplo (hablar): hablaré, hablarás, hablará, hablaremos, hablaréis, hablarán\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.futuroDeSubjuntivoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~futuro de subjunctivo~ is no longer used in modern Spanish, except in legal language and some fixed expressions.\n\n\"Donde fueres, $haZ$ lo que vieres.\" = \"When in Rome, do as the Romans do.\" = \"Cum Romae fueritis, Romano vivite more.\"\n\nIn these expressions, this tense is used to express doubt or uncertainty about whether some event will happen in the future. In modern Spanish, the %presente de subjuntivo% replaces the futuro de subjuntivo. Here are examples of the futuro de subjuntivo:\n\n\"Cuando hablaren...\" = \"Whenever they might speak...\"\n\n\"$venGa$ lo que $vIniere$\" = \"come what may\"\n\n\"El que matare al rey será castigado.\" = \"Whoever kills the king will be punished.\"\n\nThis last example is from a Spanish criminal law. The use of the futuro de subjuntivo in this law alludes to the remoteness of the possibility that the Spanish king will be killed. ¡Viva el Rey!\n\n^Conjugation^\n\nVerbs are conjugated in the futuro de subjuntivo by removing the -ron ending from the ellos %pretérito% form of the verb and adding the following ending, depending on the person and number of the subject:\n\nyo: -re\ntú: -res\nél: -re\nnosotros: -remos\nvosotros: -reis\nellos: -ren\n\nExample (cantar): cantare, cantares, cantare, cantáremos, cantareis, cantaren\n\nAs shown in the example, the vowel before the ending of the nosotros conjugation has an acute accent to reflect the stressing of that syllable.\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~futuro de subjunctivo~ ya no se usa en español moderno, excepto en lenguaje legal y algunas expresiones fijas.\n\n\"Donde fueres, $haZ$ lo que vieres.\" = \"When in Rome, do as the Romans do.\" = \"Cum Romae fueritis, Romano vivite more.\"\n\nEn estas expresiones, este tiempo se usa para expresar dudas o incertidumbre acerca de si algún evento ocurrirá en el futuro. En español moderno, el %presente de subjuntivo% reemplaza al futuro de subjuntivo. Aquí hay ejemplos del futuro de subjuntivo:\n\n\"Cuando hablaren...\" = \"Whenever they might speak...\"\n\n\"$venGa$ lo que $vIniere$\" = \"come what may\"\n\n\"El que matare al rey será castigado.\" = \"Whoever kills the king will be punished.\"\n\nEste último ejemplo es de una ley penal española. El uso del futuro de subjuntivo en esta ley alude a la lejanía de la posibilidad de que el rey español sea asesinado. ¡Viva el Rey!\n\n^Conjugación^\n\nLos verbos se conjugan en futuro de subjuntivo eliminando la terminación -ron de la forma para el pronombre \"ellos\" del %pretérito% del verbo y agregándole la siguiente terminación, dependiendo de la persona y el número del sujeto:\n\nyo: -re\ntú: -res\nél: -re\nnosotros: -remos\nvosotros: -reis\nellos: -ren\n\nEjemplo (cantar): cantare, cantares, cantare, cantáremos, cantareis, cantaren\n\nComo se muestra en el ejemplo, la vocal que aparace antes del final de la conjugación de \"nosotros\" tiene un acento para indicar que esa es la sílabla tónica.\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.futuroPerfectoDeSubjuntivoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~futuro perfecto de subjuntivo~ expresses an uncertain, future act as finished in relation to a future event. This tense is no longer used in Spanish except in formal or legal texts.\n\n\"Si para Navidad no $hUbiere vUELTo$, no me esperéis.\" = \"If he has not returned by Christmas, do not wait for me.\"\n\n^Conjugation^\n\nIn the futuro perfecto de subjuntivo, the %futuro de subjuntivo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.\n\nExample: \"$hUbiere hablado$\" = \"I would (or shall) have $spOken$\"\n\nSee %credits% for Word Reference attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~futuro perfecto de subjuntivo~ expresa un acto incierto y futuro como terminado con relación a un evento futuro. Este tiempo ya no se usa en español, excepto en textos formales o legales.\n\n\"Si para Navidad no $hUbiere vUELTo$, no me esperéis.\" = \"If he has not returned by Christmas, do not wait for me.\"\n\n^Conjugación^\n\nEn futuro perfecto de subjuntivo se usa la conjugación del %futuro de subjuntivo% de ~haber~ como auxiliar, seguida del %participio% del verbo que se conjuga.\n\nEjemplo: \"$hUbiere hablado$\" = \"I would (or shall) have $spOken$\"\n\nVe a %créditos% para leer la atribución a la Word Reference."
+          }
+        }
+      }
+    },
+    "Info.futuroPerfectoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~futuro perfecto~ is used to indicate a future action that will be finished before another action.\n\n\"Cuando yo llegue a la fiesta, ya se $habRán$ marchado todos.\" = \"When I get to the party, everyone will already have $leFT$.\"\n\n^Conjugation^\n\nIn the futuro perfecto, the %futuro de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.\n\nExample: \"$habRé hablado$\" = \"I will have $spOken$\"\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~futuro perfecto~ se usa para indicar una acción futura que se terminará antes de que ocurra otra acción.\n\n\"Cuando llegue a la fiesta, ya se $habRán$ marchado todos.\" = \"When I get to the party, everyone will already have $leFT$.\"\n\n^Conjugación^\n\nEn futuro perfecto, la conjugación del %futuro de indicativo% de ~haber~ se usa como auxiliar, seguida del %participio% del verbo que se conjuga.\n\nEjemplo: \"$habRé hablado$\" = \"I will have $spOken$\"\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.gerundioText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uses^\n\nThe ~gerundio~ has a variety of uses. The gerundio of hacer, haciendo, can mean \"doing\", \"while doing\", \"by doing\", \"because of one's doing\", or \"through doing\".\n\nThe gerundio is also used to form a progressive construction called verbal periphrasis. Example: \"$estoY haciendo$\" (\"I $AM$ doing\")\n\nThe gerundio cannot be used as an adjective and, unlike in most European languages, has no corresponding adjectival forms. The archaic participio presente, which ended in -ante or -iente and formerly filled this function, in some cases survives as an adjective. For example, \"$dUrmiente$\" = \"sleeping\", and \"interesante\" = \"interesting\". But such cases are limited. Usually, alternate constructions are appropriate. Whereas in English one would say \"the crying baby\", one would say in Spanish \"el bebé que llora\", which literally means \"the baby who is crying\".\n\n^Form^\n\nThe gerundio is formed by adding the following endings to the verb stem:\n\n~ar~ verbs: -ando\n\nExamples: hablando (\"speaking\"); cantando (\"singing\"); bailando (\"dancing\")\n\n~er~ verbs: -iendo\n\nExamples: bebiendo (\"drinking\"); cediendo (\"yielding\"); comprendiendo (\"understanding\")\n\n~ir~ verbs: -iendo\n\nExamples: viviendo (\"living\"); decidiendo (\"deciding\"); compartiendo (\"sharing\")\n\nThe following verbs have irregular gerundios:\n\nbullir: $bullEndo$\ncaer: $caYendo$\nconstruir: $construYendo$\ndormir: $dUrmiendo$\nhervir: $hIrviendo$\nhuir: $huYendo$\nir: $Yendo$\nleer: $leYendo$\nmedir: $mIdiendo$\noír: $oYendo$\npoder: $pUdiendo$\nsentir: $sIntiendo$\ntañer: $tañEndo$\ntraer: $traYendo$\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Usos^\n\nEl ~gerundio~ tiene una gran variedad de usos. El gerundio de hacer, haciendo, en inglés puede equivaler a \"doing\", \"while doing\", \"by doing\", \"because of one's doing\" o \"through doing\".\n\nEl gerundio también se usa para formar una perífrasis verbal con valor progresivo. Ejemplo: \"$estoY haciendo$\" (\"I $AM$ doing\")\n\nEl gerundio no se puede usar como adjetivo y, a diferencia de la mayoría de las lenguas europeas, no tiene formas de adjetivo propias. El presente participio presente, que terminaba en -ante o -iente y anteriormente cumplía esta función, en algunos casos sobrevive como un adjetivo. Por ejemplo, \"$dUrmiente$\" = \"sleeping\", y \"interesante\" = \"interesting\", pero estos casos son limitados. Por lo general, las construcciones alternativas al uso del gerundio como ajetivo son apropiadas. Mientras que en inglés se diría \"the crying baby\", se diría en español \"el bebé que llora\", que literalmente significa \"the baby who is crying\".\n\n^Forma^\n\nEl gerundio se forma agregando las siguientes terminaciones a la raíz del verbo:\n\nVerbos ~ar~: -ando\n\nEjemplos: hablando (\"speaking\"); cantando (\"singing\"); bailando (\"dancing\")\n\nVerbos ~er~: -iendo\n\nEjemplos: bebiendo (\"drinking\"); cediendo (\"yielding\"); comprendiendo (\"understanding\")\n\nVerbos ~ir~: -iendo\n\nEjemplos: viviendo (\"living\"); decidiendo (\"deciding\"); compartiendo (\"sharing\")\n\nLos siguientes verbos tienen gerundios irregulares:\n\nbullir: $bullEndo$\ncaer: $caYendo$\nconstruir: $construYendo$\ndormir: $dUrmiendo$\nhervir: $hIrviendo$\nhuir: $huYendo$\nir: $Yendo$\nleer: $leYendo$\nmedir: $mIdiendo$\noír: $oYendo$\npoder: $pUdiendo$\nsentir: $sIntiendo$\ntañer: $tañEndo$\ntraer: $traYendo$\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.imperativoNegativoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~imperativo negativo~ is used in Spanish to express negative commands.\n\n\"No levanten la mano derecha.\" = \"Don't raise your right hand(s).\"\n\n\"No regreséis.\" = \"Don't come back, y'all.\"\n\n\"No lo $dIGa$.\" = \"Don't say it.\"\n\n\"No tejamos.\" = \"Let's not knit.\"\n\n^Conjugation^\n\nFor conjugation of the imperativo negativo, the word \"no\" is prepended to the %presente de subjuntivo% conjugation. Thus, for regular ~ar~, ~ir~, and ~er~ verbs, the endings are as follows. Note that there are no yo forms.\n\nAR: -e, -es, -e, -emos, -éis, -en\nIR: -a, -as, -a, -amos, -áis, -an\nER: -a, -as, -a, -amos, -áis, -an\n\nExamples:\n\nhabl~ar~: no hables, no hable, no hablemos, no habléis, no hablen\nsub~ir~: no subas, no suba, no subamos, no subaís, no suban\ncom~er~: no comas, no coma, no comamos, no comáis, no coman"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~imperativo negativo~ se usa en español para expresar órdenes negativas.\n\n\"No levanten la mano derecha.\" = \"Don't raise your right hand(s).\"\n\n\"No regreséis.\" = \"Don't come back, y'all.\"\n\n\"No lo $dIGa$.\" = \"Don't say it.\"\n\n\"No tejamos.\" = \"Let's not knit.\"\n\n^Conjugación^\n\nPara conjugar el imperativo negativo, se coloca la palabra \"no\" delante de la conjugación de %presente de subjuntivo%. Por lo tanto, para los verbos regulares que terminan en ~ar~, ~ir~ y ~er~, las terminaciones son las siguientes. Ten en cuenta que no hay una forma para usar con el pronombre yo.\n\nAR: -e, -es, -e, -emos, -éis, -en\nIR: -a, -as, -a, -amos, -áis, -an\nER: -a, -as, -a, -amos, -áis, -an\n\nEjemplos:\n\nhabl~ar~: no hables, no hable, no hablemos, no habléis, no hablen\nsub~ir~: no subas, no suba, no subamos, no subaís, no suban\ncom~er~: no comas, no coma, no comamos, no comáis, no coman"
+          }
+        }
+      }
+    },
+    "Info.imperativoPositivoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~imperativo positivo~ is used in Spanish to express commands.\n\n\"Levanten la mano derecha.\" = \"Raise your right hand(s).\"\n\n\"Regresad.\" = \"Y'all come back.\"\n\n\"D$I$lo.\" = \"Say it.\"\n\n\"Tejamos.\" = \"Let's knit.\"\n\n^Conjugation^\n\nFor conjugation of the imperativo positivo, nosotros, usted, and ustedes use the %presente de subjuntivo% conjugation. Tú uses the %presente de indicativo% conjugation minus the final s. Vosotros uses the infinitivo minus the final r, plus d.\n\nThus, for regular ~ar~, ~ir~, and ~er~ verbs, the endings are as follows. Note that there are no yo forms.\n\nAR: -a, -e, -emos, -ad, -en\nIR: -e, -a, -amos, -id, -an\nER: -e, -a, -amos, -ed, -an\n\nExamples:\n\nhabl~ar~: habla, hable, hablemos, hablad, hablen\nsub~ir~: sube, suba, subamos, subid, suban\ncom~er~: come, coma, comamos, comed, coman\n\nThe following verbs have irregular tú imperativo positivo conjugations:\n\ncomponer: $compóN$\ndecir: $dI$\nhacer: $haZ$\nir: $VE$\nobtener: $obtÉn$\nponder: $poN$\nsalir: $saL$\nser: $sÉ$\ntener: $teN$\nvenir: $veN$"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~imperativo positivo~ se usa en español para expresar las órdenes.\n\n\"Levanten la mano derecha.\" = \"Raise your right hand(s).\"\n\n\"Regresad.\" = \"Y'all come back.\"\n\n\"D$I$lo.\" = \"Say it.\"\n\n\"Tejamos.\" = \"Let's knit.\"\n\n^Conjugación^\n\nPara la conjugación del imperativo positivo de nosotros, usted y ustedes usaremos la conjugación del %presente de subjuntivo%. Tú usa la conjugación del %presente de indicativo% sin la s final. Vosotros usa el infinitivo sin la r final y con una d.\n\nAsí, para los verbos regulares en ~ar~, ~ir~ y ~er~, las terminaciones son las siguientes. Ten en cuenta que no hay formas yo.\n\nAR: -a, -e, -emos, -ad, -en\nIR: -e, -a, -amos, -id, -an\nER: -e, -a, -amos, -ed, -an\n\nEjemplos:\n\nhabl~ar~: habla, hable, hablemos, hablad, hablen\nsub~ir~: sube, suba, subamos, subid, suban\ncom~er~: come, coma, comamos, comed, coman\n\nLos siguientes verbos tienen conjugaciones irregulares de tú en imperativo positivo:\n\ncomponer: $compóN$\ndecir: $dI$\nhacer: $haZ$\nir: $VE$\nobtener: $obtÉn$\nponer: $poN$\nsalir: $saL$\nser: $sÉ$\ntener: $teN$\nvenir: $veN$"
+          }
+        }
+      }
+    },
+    "Info.imperfectoDeIndicativoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uses^\n\nLike the %pretérito% and %perfecto de indicativo%, the ~imperfecto de indicativo~ is used for past events. But the imperfecto de indicativo is used for:\n\n• A habitual or repeated action:\n\n\"Cada año mi familia $iBa$ a Puerto Rico.\" = \"Each year my family $WENT$ to Rich Port.\"\n\n\"El gato saltaba al sofá muy a menudo.\" = \"The cat often jumped on the couch.\"\n\n• A \"used to\" action:\n\n\"Yo leía el diário.\" = \"~I~ used to read the newspaper.\"\n\n• A background event during which another event in the same sentence occurred:\n\n\"Mientras cruzaba la calle, me atropelló un coche.\" = \"While I was crossing the road, a car $rAn$ me over.\"\n\n^Conjugation^\n\nRegular ~ar~, ~ir~, and ~er~ verbs are conjugated in the imperfecto de indicativo by adding the following endings to the verb stem:\n\nAR: -aba, -abas, -aba, -ábamos, -abais, -aban\nIR: -ía, -ías, -ía, -íamos, -íais, -ían\nER: -ía, -ías, -ía, -íamos, -íais, -ían\n\nExamples:\n\nhabl~ar~: hablaba, hablabas, hablaba, hablábamos, hablabais, hablaban\nsub~ir~: subía, subías, subía, subíamos, subíais, subían\ncom~er~: comía, comías, comía, comíamos, comíais, comían\n\nOnly three verbs are irregular in the imperfecto de indicativo: ir, ser, and ver. Tap the ~Browse~ tab for translations and conjugations.\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Usos^\n\nAl igual que el %pretérito% y el %perfecto de indicativo%, el ~imperfecto de indicativo~ se usa para eventos pasados. Sin embargo, el imperfecto de indicativo se usa para:\n\n• Una acción habitual o repetida:\n\n\"Cada año mi familia $iBa$ a Puerto Rico.\" = \"Each year my family $WENT$ to Rich Port.\"\n\n\"El gato saltaba al sofá muy a menudo.\" = \"The cat often jumped on the couch.\"\n\n• Una acción pasada habitual que ~no~ continuó hasta el presente:\n\n\"Yo leía el diário.\" = \"~I~ used to read the newspaper.\"\n\n• Un evento que ocurrió al mismo tiempo que otro siempre que los dos eventos aparezcan en la misma oración:\n\n\"Mientras cruzaba la calle, me atropelló un coche.\" = \"While I was crossing the road, a car $rAn$ me over.\"\n\n^Conjugación^\n\nLos verbos regulares en ~ar~, ~ir~ y ~er~ se conjugan en imperfecto de indicativo agregando las siguientes terminaciones a la raíz del verbo:\n\nAR: -aba, -abas, -aba, -ábamos, -abais, -aban\nIR: -ía, -ías, -ía, -íamos, -íais, -ían\nER: -ía, -ías, -ía, -íamos, -íais, -ían\n\nEjemplos:\n\nhabl~ar~: hablaba, hablabas, hablaba, hablábamos, hablabais, hablaban\nsub~ir~: subía, subías, subía, subíamos, subíais, subían\ncom~er~: comía, comías, comía, comíamos, comíais, comían\n\nSolo hay tres verbos irregulares en imperfecto de indicativo: ir, ser y ver. Toca la pestaña ~Explorar~ para ver sus traducciones y conjugaciones.\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.imperfectoDeSubjuntivo1Text" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~imperfecto de subjuntivo 1~ serves a variety of purposes similar to those of the %presente de subjuntivo% but puts actions in the past. Here are some example uses of this tense.\n\n• A command:\n\n\"Nos mandó que platicáramos.\" = \"He ordered us to talk.\"\n\n• Emotional state:\n\n\"Temía que Colombia no ganara la Copa América este año.\" = \"I feared that Colombia would not win the America Cup this year.\"\n\n• Doubt:\n\n\"Dudaba que $vIniera$ hoy.\" = \"I doubted that you would come today.\"\n\nGrammarians consider the imperfecto de subjuntivo 1 and the %imperfecto de subjuntivo 2% to be different variants of the same tense called simply \"imperfecto de subjuntivo\". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.\n\n^Conjugation^\n\nVerbs are conjugated in the imperfecto de subjuntivo 1 by removing the -ron ending from the ellos %pretérito% form of the verb and adding the following ending, depending on the person and number of the subject:\n\nyo: -ra\ntú: -ras\nél: -ra\nnosotros: -ramos\nvosotros: -rais\nellos: -ran\n\nExample (cantar): cantara, cantaras, cantara, cantáramos, cantarais, cantaran\n\nAs shown in the example, the vowel before the ending of the nosotros conjugation has an acute accent to reflect the stressing of that syllable.\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~imperfecto de subjuntivo 1~ sirve para unos usos similares a los del %presente de subjuntivo% pero colocandos las acciones en pasado. Aquí hay algunos ejemplos de usos de este tiempo.\n\n• Una orden:\n\n\"Nos mandó que platicáramos.\" = \"He ordered us to talk.\"\n\n• Un estado emocional:\n\n\"Temía que Colombia no ganara la Copa América este año.\" = \"I feared that Colombia would not win the America Cup this year.\"\n\n• Duda:\n\n\"Dudaba que $vIniera$ hoy.\" = \"I doubted that you would come today.\"\n\nLos expertos en gramática consideran que el imperfecto de subjuntivo 1 y el %imperfecto de subjuntivo 2% son variantes diferentes del mismo tiempo, a los que simplemente se les llama \"imperfecto de subjuntivo\". En español moderno, los usos de las dos variantes no difieren. El desarrollador de ~Conjugar~ ha tratado estas variantes como tiempos separados con diferentes nombres con fines pedagógicos.\n\n^Conjugación^\n\nLos verbos se conjugan en imperfecto de subjuntivo 1 eliminando la terminación -ron de la forma ellos del %pretérito% del verbo y agregando la siguiente terminación, dependiendo de la persona y el número del sujeto:\n\nyo: -ra\ntú: -ras\nél: -ra\nnosotros: -ramos\nvosotros: -rais\nellos: -ran\n\nEjemplo (cantar): cantara, cantaras, cantara, cantáramos, cantarais, cantaran\n\nComo se muestra en el ejemplo, la vocal que aparece antes del final de la conjugación de nosotros tiene un acento para indicar que esa es la sílaba tónica y que su pronunciación es, por lo tanto, un poco diferente del resto de formas de este tiempo verbal.\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.imperfectoDeSubjuntivo2Text" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~imperfecto de subjuntivo 2~ serves a variety of purposes similar to those of the %presente de subjuntivo% but puts actions in the past. Here are some example uses of this tense.\n\n• A command:\n\n\"Nos mandó que platicásemos.\" = \"He ordered us to talk.\"\n\n• Emotional state:\n\n\"Temía que Colombia no ganase la Copa América este año.\" = \"I feared that Colombia would not win the America Cup this year.\"\n\n• Doubt:\n\n\"Dudaba que $vIniese$ hoy.\" = \"I doubted that you would come today.\"\n\nGrammarians consider the imperfecto de subjuntivo 2 and the %imperfecto de subjuntivo 1% to be different variants of the same tense called simply \"imperfecto de subjuntivo\". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.\n\n^Conjugation^\n\nVerbs are conjugated in the imperfecto de subjuntivo 2 by removing the -ron ending from the ellos %pretérito% form of the verb and adding the following ending, depending on the person and number of the subject:\n\nyo: -se\ntú: -ses\nél: -se\nnosotros: -semos\nvosotros: -seis\nellos: -sen\n\nExample (cantar): cantase, cantases, cantase, cantásemos, cantaseis, cantasen\n\nAs shown in the example, the vowel before the ending of the nosotros conjugation has an acute accent to reflect the stressing of that syllable.\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~imperfecto de subjuntivo 2~ sirve para unos usos similares a los del %presente de subjuntivo% pero colocando las acciones en pasado. Aquí hay algunos ejemplos de usos de este tiempo.\n\n• Una orden:\n\n\"Nos mandó que platicásemos.\" = \"He ordered us to talk.\"\n\n• Un estado emocional:\n\n\"Temía que Colombia no ganase la Copa América este año.\" = \"I feared that Colombia would not win the America Cup this year.\"\n\n• Duda:\n\n\"Dudaba que $vIniese$ hoy.\" = \"I doubted that you would come today.\"\n\nLos expertos en gramática consideran que imperfecto de subjuntivo 2 y el %imperfecto de subjuntivo 1% son variantes diferentes del mismo tiempo, a los que simplemente se les llama \"imperfecto de subjuntivo\". En español moderno, los usos de las dos variantes no difieren. El desarrollador de ~Conjugar~ ha tratado estas variantes como tiempos separados con diferentes nombres con fines pedagógicos.\n\n^Conjugación^\n\nLos verbos se conjugan en imperfecto de subjuntivo 2 eliminando la terminación -ron de la forma ellos del %pretérito% del verbo y agregando la siguiente terminación, dependiendo de la persona y el número del sujeto:\n\nyo: -se\ntú: -ses\nél: -se\nnosotros: -semos\nvosotros: -seis\nellos: -sen\n\nEjemplo (cantar): cantase, cantases, cantase, cantásemos, cantaseis, cantasen\n\nComo se muestra en el ejemplo, la vocal que aparece antes del final de la conjugación de nosotros tiene un acento para indicar que esa es la sílaba tónica y que su pronunciación es, por lo tanto, un poco diferente del resto de formas de este tiempo verbal.\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.participioText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~participio~ corresponds to the English -en, -ed, or -t form of a verb. This form is used following the auxiliary verb ~haber~ to form various compound tenses, including the %perfecto de indicativo%: \"(Yo) $hE$ hablado.\" = \"I have $spOken$.\"\n\n^Form^\n\nThe participio is formed by adding the following endings to the verb stem:\n\n~ar~ verbs: -ado\n\nExamples: hablado (\"$spOken$\"); cantado (\"$sUng$\"); bailado (\"danced\")\n\n~er~ verbs: -ido\n\nExamples: bebido (\"$drUnk$\"); leído (requires acute accent; \"$reaD$\"); comprendido (\"$understOOd$\")\n\n~ir~ verbs: -ido\n\nExamples: vivido (\"lived\"); sentido (\"$fElt$\"); hervido (\"boiled\")\n\nWhen the participio is used as an adjective, it inflects for both gender and number. Example: \"una lengua hablada en España\" = \"a language spoken in Spain\"\n\nThe following verbs have irregular participios:\n\nabrir: $abIERTo$\ncubrir: $cubIERTo$\ndecir: $dICHo$\nescribir: $escriTo$\nhacer: $hECHo$\nmorir: $mUERTo$\nponer: $pUESTo$\npudrir: $pOdrido$\nresolver: $resUELTo$\nromper: $roTo$\nver: $vISTo$\nvolver: $vUElTo$\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~participio~ corresponde a la forma inglesa terminanda en -en, -ed, o -t de un verbo. Esta forma se usa tras el verbo auxiliar ~haber~ para formar los tiempos compuestos, como por ejemplo el %perfecto de indicativo%: \"(Yo) $ hE $ hablado.\" = \"I have $spOken$.\"\n\n^Forma^\n\nEl participio se forma agregando las siguientes terminaciones a la raíz del verbo:\n\nVerbos ~ar~: -ado\n\nEjemplos: hablado (\"$spOken$\"); cantado (\"$sUng$\"); bailado (\"danced\")\n\nVerbos ~er~: -ido\n\nEjemplos: bebido (\"$drUnk$\"); leído (requiere un acento; \"$reaD$\"); comprendido (\"$understOOd$\")\n\nVerbos ~ir~: -ido\n\nEjemplos: vivido (\"lived\"); sentido (\"$fElt$\"); hervido (\"boiled\")\n\nCuando el participio se usa como un adjetivo, refleja tanto el género como el número del nombre al que acompaña. Ejemplo: \"una lengua hablada en España\" = \"a language spoken in Spain\"\n\nLos siguientes verbos tienen participios irregulares:\n\nabrir: $abIERTo$\ncubrir: $cubIERTo$\ndecir: $dICHo$\nescribir: $escriTo$\nhacer: $hECHo$\nmorir: $mUERTo$\nponer: $pUESTo$\npudrir: $pOdrido$\nresolver: $resUELTo$\nromper: $roTo$\nver: $vISTo$\nvolver: $vUElTo$\n\nVe a %créditos% para ver la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.perfectoDeIndicativoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uses^\n\nThe ~perfecto de indicativo~ has virtually the same use as the tense sometimes called, in English, the \"present perfect\".\n\n\"Te $hE dICHo$ mi opinión.\" = \"I have $tOLD$ you my opinion.\" or \"I $tOLD$ you my opinion, and it hasn't changed.\"\n\nIn Spanish, as in English, this tense implies that an action, although completed in the past, has continuing effects, truth, or relevance in the present.\n\n^Conjugation^\n\nIn the perfecto de indicativo, the %presente de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.\n\nExample: \"$hEmos hablado$\" = \"we have $spOken$\"\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Usos^\n\nEl ~perfecto de indicativo~ tiene prácticamente el mismo uso que el tiempo inglés conocido como \"present perfect\".\n\n\"Te $ hE dICHo $ mi opinión.\" = \"I have $tOLD$ you my opinion.\" o \"I $tOLD$ you my opinion, and it hasn't changed.\"\n\nTanto en español como en inglés, este tiempo implica que una acción, aunque se completó en el pasado, tiene efectos, es verdad o tiene relevancia en el presente.\n\n^Conjugación^\n\nEn perfecto de indicativo, las formas del %presente de indicativo% de ~haber~ se usa como auxiliar, y le sigue el %participio% del verbo que se conjuga.\n\nEjemplo: \"$hEmos hablado$\" = \"we have $spOken$\"\n\nVe a %créditos% para ver la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.perfectoDeSubjuntivoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~perfecto de subjuntivo~ expresses doubt, uncertainty, disbelief, or an emotional state with respect to a past action or to an action that will be complete before some other action.\n\n\"Lamentan que él no $haYa podido$ regresar a la casa.\" = \"They regret that he $WAS$ unable to return home.\"\n\n\"Es posible que al finales de este siglo Colombia no $haYa ganado$ la Copa América.\" = \"At the end of the century, it's possible that Colombia will not have $wOn$ the America Cup.\"\n\n\"Dudo que $haYas venido$ antes del final de la película.\" = \"I doubt that you will have come before the end of the movie.\"\n\n^Conjugation^\n\nIn the perfecto de subjuntivo, the %presente de subjuntivo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.\n\nExample: \"$haYa hablado$\" = \"I $spOke$\" or \"I have $spOken$\"\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~perfecto de subjuntivo~ expresa dudas, incertidumbre, incredulidad o un estado emocional con respecto a una acción pasada o a una acción que se completará antes de alguna otra acción.\n\n\"Lamentan que él no $haYa podido$ regresar a la casa.\" = \"They regret that he $WAS$ unable to return home.\"\n\n\"Es posible que al finales de este siglo Colombia no $haYa ganado$ la Copa América.\" = \"At the end of the century, it's possible that Colombia will not have $wOn$ the America Cup.\"\n\n\"Dudo que $haYas venido$ antes del final de la película.\" = \"I doubt that you will have come before the end of the movie.\"\n\n^Conjugación^\n\nEn perfecto de subjuntivo, se usa la conjugación del %presente de subjuntivo% de ~haber~ como auxiliar, y le sigue el %participio% del verbo que se conjuga.\n\nEjemplo: \"$haYa hablado$\" = \"I $spOke$\" o \"I have $spOken$\"\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.pluscuamperfectoDeIndicativoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~pluscuamperfecto de indicativo~ expresses a past action that occurred prior to another past action. This tense is used in practically the same manner as the English \"past perfect\" tense.\n\n\"Cuando bajé a la cocina, mis hijos ya habían preparado el desayuno.\" = \"When I went downstairs to the kitchen, the children had already prepared breakfast.\"\n\n^Conjugation^\n\nIn the pluscuamperfecto de indicativo, the %imperfecto de indicativo% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.\n\nExample: \"$había hablado$\" = \"it had $spOken$\"\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~pluscuamperfecto de indicativo~ expresa una acción pasada que ocurrió antes de otra acción pasada.\n\n\"Cuando bajé a la cocina, mis hijos ya habían preparado el desayuno.\" = \"When I went downstairs to the kitchen, the children had already prepared breakfast.\"\n\n^Conjugación^\n\nEn pluscuamperfecto de indicativo, la conjugación del %imperfecto de indicativo% de ~haber~ se usa como auxiliar, y le sigue el %participio% del verbo que se conjuga. Este tiempo tiene prácticamente el mismo uso que el tiempo inglés conocido como \"past perfect\".\n\nEjemplo: \"$había hablado$ \" = \"it had $spOken$\"\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.pluscuamperfectoDeSubjuntivo1Text" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~pluscuamperfecto de subjuntivo 1~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%. This tense is used in the same manner as the English \"third conditional\" tense.\n\n\"Si me $hUbiera traÍdo$ una chaqueta, ahora no $tendRía$ frío.\" = \"If I had $brOUGHT$ a jacket, I wouldn't be cold now.\"\n\nGrammarians consider the pluscuamperfecto de subjuntivo 1 and the %pluscuamperfecto de subjuntivo 2% to be different variants of the same tense called simply \"pluscuamperfecto de subjuntivo\". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.\n\n^Conjugation^\n\nIn the pluscuamperfecto de subjuntivo 1, the %imperfecto de subjuntivo 1% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.\n\nExample: \"$hUbiera hablado$\" = \"I had $spOken$\""
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~pluscuamperfecto de subjuntivo 1~ expresa dudas, incertidumbre o un estado emocional con respecto a una acción que ocurrió antes de otra acción pasada. Como se muestra en el siguiente ejemplo, este tiempo a menudo se usa con el %condicional compuesto%. Este tiempo tiene el mismo uso que el tiempo inglés conocido como \"third conditional\".\n\n\"Si me $hUbiera traÍdo$ una chaqueta, ahora no $tendRía$ frío.\" = \"If I had $brOUGHT$ a jacket, I wouldn't be cold now.\"\n\nLos expertos en gramática consideran que el pluscuamperfecto de subjuntivo 1 y el %pluscuamperfecto de subjuntivo 2% son variantes diferentes del mismo tiempo, a los que simplemente se les llama \"pluscuamperfecto de subjuntivo\". En español moderno, los usos de las dos variantes no difieren. El desarrollador de ~Conjugar~ ha tratado estas variantes como tiempos separados con diferentes nombres con fines pedagógicos.\n\n^Conjugación^\n\nEn pluscuamperfecto de subjuntivo 1, se usa la conjugación del %imperfecto de subjuntivo 1% de ~haber~ como auxiliar, y le sigue el %participio% del verbo que se conjuga.\n\nEjemplo: \"$hUbiera hablado$\" = \"I had $spOken$\""
+          }
+        }
+      }
+    },
+    "Info.pluscuamperfectoDeSubjuntivo2Text" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~pluscuamperfecto de subjuntivo 2~ expresses doubt, uncertainty, or an emotional state with respect to an action occurring before another past action. As shown in the following example, this tense co-occurs with the %condicional compuesto%.\n\n\"Si me $hUbiese traÍdo$ una chaqueta, ahora no $tendRía$ frío.\" = \"If I had $brOUGHT$ a jacket, I wouldn't be cold now.\"\n\nGrammarians consider the pluscuamperfecto de subjuntivo 2 and the %pluscuamperfecto de subjuntivo 1% to be different variants of the same tense called simply \"pluscuamperfecto de subjuntivo\". In modern Spanish, uses of the two variants do not differ. The developer of ~Conjugar~ has treated these variants as separate tenses with different names for pedagogical purposes.\n\n^Conjugation^\n\nIn the pluscuamperfecto de subjuntivo 2, the %imperfecto de subjuntivo 2% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.\n\nExample: \"$hUbiese hablado$\" = \"I had $spOken$\""
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~pluscuamperfecto de subjuntivo 2~ expresa dudas, incertidumbre o un estado emocional con respecto a una acción que ocurre antes de otra acción pasada. Como se muestra en el siguiente ejemplo, este tiempo a menudo se usa con el %condicional compuesto%.\n\n\"Si me $hUbiese traÍdo$ una chaqueta, ahora no $tendRía$ frío.\" = \"If I had $brOUGHT$ a jacket, I wouldn't be cold now.\"\n\nLos gramáticos consideran que el pluscuamperfecto de subjuntivo 2 y el %pluscuamperfecto de subjuntivo 1% son diferentes variantes del mismo tiempo llamado simplemente \"pluscuamperfecto de subjuntivo\". En español moderno, los usos de las dos variantes no difieren. El desarrollador de ~Conjugar~ ha tratado estas variantes como tiempos separados con diferentes nombres con fines pedagógicos.\n\n^Conjugación^\n\nEn pluscuamperfecto de subjuntivo 2, se usa la conjugación del %imperfecto de subjuntivo 2% de ~haber~ como auxiliar, y es seguida por el %participio% del verbo que se conjuga.\n\nEjemplo: \"$hUbiese hablado$\" = \"I had $spOken$\""
+          }
+        }
+      }
+    },
+    "Info.presenteDeIndicativoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uses^\n\nThe ~presente de indicativo~ is a Spanish verb tense that is used to express the following:\n\n• Present action:\n\n\"Malteamos.\" = \"We are malting.\"\n\n• Habitual action:\n\n\"Malteamos.\" = \"We have a habit of malting.\" or \"We malt.\"\n\n• Emphasis on present action:\n\n\"Sí, malteamos.\" = \"Yes, we ~do~ malt.\"\n\n^Conjugation^\n\nRegular ~ar~, ~ir~, and ~er~ verbs are conjugated in the presente de indicativo by adding the following endings to the verb stem:\n\nAR: -o, -as, -a, -amos, -áis, -an\nIR: -o, -es, -e, -imos, -ís, -en\nER: -o, -es, -e, -emos, -éis, -en\n\nExamples:\n\nhabl~ar~: hablo, hablas, habla, hablamos, habláis, hablan\nsub~ir~: subo, subes, sube, subimos, subís, suben\ncom~er~: como, comes, come, comemos, coméis, comen\n\nTwo verbs that are irregular in the presente de indicativo deserve especial note.\n\n~Estar~, in the presente de indicativo, is used, in conjunction with the %gerundio%, to emphasize an action's ongoing nature. For example, to translate the sentence \"I am reading\", one might say \"$estoY leYendo$\".\n\n~Haber~, in the presente de indicativo, is used, in conjunction with the %participio%, to form the %perfecto de indicativo%, a popular verb tense in Spanish-speaking countries. Tap the blue links for descriptions.\n\nSome other verbs that are irregular in the presente de indicativo appear below. Tap the ~Browse~ tab for translations and conjugations.\n\ncaber, caer, conocer, conducir, construir, crecer, dar, decir, dormir, hacer, huir, ir, jugar, lucir, oír, pedir, pensar, perder, poner, saber, salir, ser, sentir, tener, traer, valer, venir, ver"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Usos^\n\nEl ~presente de indicativo~ es un tiempo verbal del español que se utiliza para expresar lo siguiente:\n\n• Acción que se realiza en el momento en el que se está hablando:\n\n\"Malteamos.\" = \"We are malting.\"\n\n• Accion que se realiza en el momento en el que se está hablando:\n\n\"Malteamos.\" = \"We have a habit of malting.\" o \"We malt.\"\n\n• Énfasis en la acción que se está realizando ahora mismo:\n\n\"Sí, malteamos.\" = \"Yes, we ~do~ malt.\"\n\n^Conjugación^\n\nLos verbos regulares terminados en ~ar~, ~ir~ y ~er~ se conjugan en presente de indicativo agregando las siguientes terminaciones a la raíz del verbo:\n\nAR: -o, -as, -a, -amos, -áis, -an\nIR: -o, -es, -e, -imos, -ís, -en\nER: -o, -es, -e, -emos, -éis, -en\n\nEjemplos:\n\nhabl~ar~: hablo, hablas, habla, hablamos, habláis, hablan\nsub~ir~: subo, subes, sube, subimos, subís, suben\ncom~er~: como, come, come, comemos, coméis, comen\n\nHay dos verbos irregulares en presente de indicativo que merecen una nota especial.\n\n~Estar~ se usa en presente de indicativo junto con el %gerundio% para enfatizar la naturaleza continua de una acción. Por ejemplo, para traducir la oración inglesa \"I am reading\", se podría decir \"$estoY leYendo$\".\n\n~Haber~ se usa en presente de indicativo junto con el %participio% para formar los tiempos en %perfecto de indicativo%, un tiempo verbal popular en los países de habla hispana. Toca las palabras azules para obtener descripciones.\n\nA continuación aparecen algunos otros verbos que son irregulares en presente de indicativo. Toca la pestaña ~Explorar~ para ver sus traducciones y conjugaciones.\n\ncaber, caer, conocer, conducir, construir, crecer, dar, decir, dormir, hacer, huir, ir, jugar, lucir, oír, pedir, pensar, perder, poner, saber, salir, ser, sentir, tener, traer, valer, venir, ver"
+          }
+        }
+      }
+    },
+    "Info.presenteDeSubjuntivoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uses^\n\nThe ~presente de subjuntivo~ is used to express:\n\n• A command:\n\n\"Nos manda que $platiQUemos$.\" = \"He is ordering us to talk.\"\n\n• Emotional state:\n\n\"Tengo miedo de que Colombia no gane la Copa América este año.\" = \"I fear that Colombia will not win the America Cup this year.\"\n\n• Doubt:\n\n\"Dudo que $venGas$ mañana.\" = \"I doubt that thou $wilT$ come tomorrow.\"\n\n^Conjugation^\n\nRegular ~ar~, ~ir~, and ~er~ verbs are conjugated in the presente de subjuntivo by adding the following endings to the verb stem:\n\nAR: -e, -es, -e, -emos, -éis, -en\nIR: -a, -as, -a, -amos, -áis, -an\nER: -a, -as, -a, -amos, -áis, -an\n\nExamples:\n\nhabl~ar~: hable, hables, hable, hablemos, habléis, hablen\nsub~ir~: suba, subas, suba, subamos, subáis, suban\ncom~er~: coma, comas, coma, comamos, comáis, coman\n\nSome verbs that are irregular in the presente de subjuntivo appear below. Tap the ~Browse~ tab for translations and conjugations.\n\ncaber, caer, conducir, conocer, construir, crecer, dar, decir, dormir, estar, ir, haber, hacer, huir, jugar, lucir, oír, pedir, pensar, perder, poner, saber, sentir, ser, salir, tener, traer, valer, venir, ver"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Usos^\n\nEl ~presente de subjuntivo~ se usa para expresar:\n\n• Una orden:\n\n\"Nos manda que $platiQUemos$.\" = \"He $IS$ ordering us to talk.\"\n\n• Un estado emocional:\n\n\"Tengo miedo de que Colombia no gane la Copa América este año.\" = \"I fear that Colombia will not win the America Cup this year.\"\n\n• Duda:\n\n\"Dudo que $venGas$ mañana.\" = \"I doubt that thou $wilT$ come tomorrow.\"\n\n^Conjugación^\n\nLos verbos regulares en ~ar~, ~ir~ y ~er~ se conjugan en presente de subjuntivo agregando las siguientes terminaciones a la raíz del verbo:\n\nAR: -e, -es, -e, -emos, -éis, -en\nIR: -a, -as, -a, -amos, -áis, -an\nER: -a, -as, -a, -amos, -áis, -an\n\nEjemplos:\n\nhabl~ar~: hable, hables, hable, hablemos, habléis, hablen\nsub~ir~: suba, subas, suba, subamos, subáis, suban\ncom~er~: coma, comas, coma, comamos, comáis, coman\n\nA continuación aparecen algunos verbos que son irregulares en presente de subjuntivo. Toca la pestaña ~Explorar~ para ver sus traducciones y conjugaciones.\n\ncaber, caer, conducir, conocer, construir, crecer, dar, decir, dormir, estar, ir, haber, hacer, huir, jugar, lucir, escuchar, pedir, pensar, perder, poner, sable, sentir, ser, salir, tener, traer, valer, venir, ver"
+          }
+        }
+      }
+    },
+    "Info.preteritoAnteriorText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Use^\n\nThe ~pretérito anterior~ is very rare in spoken Spanish, but it is sometimes used in formal written language, where it is almost entirely limited to subordinate clauses. Thus, it is usually introduced by temporal conjunctions such as cuando, apenas, or en cuanto. This tense is used to express an action that ended immediately before another past action.\n\n\"Cuando $hUbieron llegado$ todos, empezó la ceremonia.\" = \"When everyone had arrived, the ceremony $begAn$.\"\n\n\"Apenas María $hUBO terminado$ la canción, su padre entró.\" = \"As soon as Mary had finished the song, her father $cAme$ in.\"\n\n^Conjugation^\n\nIn the pretérito anterior, the %pretérito% conjugation of ~haber~ is used as an auxiliary, and it is followed by the %participio% of the verb to be conjugated.\n\nExample: \"$hUBE hablado$\" = \"I had $spOken$\"\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uso^\n\nEl ~pretérito anterior~ es muy raro en el español hablado, pero a veces se usa en lenguaje escrito formal, donde se limita a oraciones subordinadas en casi todos los casos. Por lo tanto, generalmente aparecen conjunciones temporales antes de esta forma verbal como cuando, apenas o en cuanto. Este tiempo se usa para expresar una acción que terminó inmediatamente antes de otra acción pasada.\n\n\"Cuando $hUbieron llegado$ todos, comenzó la ceremonia.\" = \"When everyone had arrived, the ceremony $begAn$.\"\n\n\"Apenas María $hUBO terminado$ la canción, su padre entró.\" = \"As soon as Mary had finished the song, her father $cAme$ in.\"\n\n^Conjugación^\n\nEn pretérito anterior, la conjugación en %pretérito% de ~haber~ se usa como auxiliar, seguida del %participio% del verbo que se conjuga.\n\nEjemplo: \"$hUBE hablado$\" = \"I had $spOken$\"\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.preteritoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uses^\n\nThe ~pretérito~ is a Spanish verb tense that is used to express the following:\n\n• An action that was done in the past:\n\n\"Ayer, encontré la flor que tú me $dIste$.\" = \"Yesterday, I found the flower that you $gAve$ me.\"\n\nThis use expresses an action that is viewed as a completed event. It is often accompanied by adverbial expressions of time, such as \"ayer\", \"anteayer\", or \"la semana pasada\".\n\n• An action that interrupts another action:\n\n\"Estábamos cenando la cena cuando entró Eduardo.\" = \"We were having dinner when Eduardo $cAme$ in.\"\n\nThis expresses an event that happened (and was completed) while another action was taking place.\n\n• A general truth:\n\n\"Las Filipinas $FUeron$ parte del Imperio Español.\" = \"The Philippines were part of the Spanish Empire.\"\n\nThis expresses a past relationship that is viewed as finished.\n\n^Conjugation^\n\nRegular ~ar~, ~ir~, and ~er~ verbs are conjugated in the pretérito by adding the following endings to the verb stem:\n\nAR: -é, -aste, -ó, -amos, -astéis, -aron\nIR: -í, -iste, -ió, -imos, -isteis, -ieron\nER: -í, -iste, -ió, -imos, -isteis, -ieron\n\nExamples:\n\nhabl~ar~: hablé, hablaste, habló, hablamos, hablastéis, hablaron\nsub~ir~: subí, subiste, subió, subimos, subisteis, subieron\ncom~er~: comí, comiste, comió, comimos, comisteis, comieron\n\nSome verbs that are irregular in the pretérito appear below. Tap the ~Browse~ tab for translations and conjugations.\n\nandar, caber, conducir, dar, decir, estar, haber, hacer, ir, poder, poner, querer, saber, ser, tener, traer, venir\n\nSee %credits% for Wikipedia attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Usos^\n\nEl ~pretérito~ es un tiempo verbal del español que se utiliza para expresar lo siguiente:\n\n• Una acción que se realizó en el pasado:\n\n\"Ayer encontré la flor que tú me $dIste$.\" = \"Yesterday, I found the flower that you $gAve$ me.\"\n\nEste uso expresa una acción que se entiende como un evento terminado. A menudo se acompaña de expresiones de tiempo adverbiales, como \"ayer\", \"anteayer\" o \"la semana pasada\".\n\n• Una acción que interrumpe otra acción:\n\n\"Estábamos cenando cuando entró Eduardo.\" = \"We were having dinner when Eduardo $cAme$ in.\"\n\nEsto expresa un evento que sucedió (y se completó) mientras se realizaba otra acción.\n\n• Una verdad general:\n\n\"Las Filipinas $FUeron$ parte del Imperio Español.\" = \"The Philippines were part of the Spanish Empire.\"\n\nEsto expresa una acción o situación pasada que se ve como terminada.\n\n^Conjugación^\n\nLos verbos regulares terminados en ~ar~, ~ir~ y ~er~ se conjugan en pretérito agregando las siguientes terminaciones a la raíz del verbo:\n\nAR: -é, -aste, -ó, -amos, -astéis, -aron\nIR: -í, -iste, -ió, -imos, -isteis, -ieron\nER: -í, -iste, -ió, -imos, -isteis, -ieron\n\nEjemplos:\n\nhabl~ar~: hablé, hablaste, habló, hablamos, hablastéis, hablaron\nsub~ir~: subí, subiste, subió, subimos, subisteis, subieron\ncom~er~: comí, comiste, comió, comimos, comisteis, comieron\n\nA continuación aparecen algunos verbos que son irregulares en pretérito. Toca la pestaña ~Explorar~ para ver sus traducciones y conjugaciones.\n\nandar, caber, conducir, dar, decir, estar, haber, hacer, ir, poder, poner, querer, saber, ser, tener, traer, venir\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.purposeAndUseHeading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purpose & Use"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valor y Uso"
+          }
+        }
+      }
+    },
+    "Info.purposeAndUseText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Purpose^\n\nIn Spanish, conjugation, a concept defined in %terminology%, is important for the reasons stated there. People raised in Spanish-speaking countries learn conjugation passively, and people who engage in formal Spanish learn conjugation as part of that study.\n\nBut there exists another category of Spanish-learners: people, like the developer of ~Conjugar~, who live in non-Spanish-speaking countries, who are currently unable to engage in formal study of Spanish, but who are exposed to Spanish vocabulary by one means or another. Here is an example of the challenge that these learners face.\n\nThe developer of ~Conjugar~ knew, from exposure to Spanish in a previous job, that \"ir\" means \"to go\" and that \"ir\" has certain conjugations starting with \"va-\". But this knowledge did not allow him to communicate with Spanish-speakers he encountered. For instance, to express the thought \"I'm going to the office\", he might have said \"ir a la oficina\" or \"va a la oficina\". But these sentences were nonsensical to Spanish-speakers because the conjugations were incorrect. The correct (and understandable) sentence was (and is) \"$voY$ a la oficina\".\n\nThere are excellent resources for Spanish-verb conjugation. The website ~SpanishDict.com~ and the book ~Spanish Verbs Made Simple(r)~ are two of them. The developer of ~Conjugar~ used these resources when he wrote Spanish, but they were unavailable when he spoke Spanish extemporaneously. At some point, he realized that he needed a way to practice conjugating Spanish verbs so that correct conjugations sprang to mind when he was speaking.\n\nThis was the genesis of ~Conjugar~, the app whose majesty now envelops you. ~Conjugar~ allows you practice conjugating, via quizzes, ~all~ Spanish verb tenses so that correct conjugations are in your brain at the exact moment you need them. ~Conjugar~ gamifies this experience by scoring each practice session and potentially uploading it to Game Center, allowing you to compete against the global Spanish-verb-conjugation community. Some tenses are rare except in archaic or formal texts and are less useful for many learners. ~Conjugar~ therefore provides three difficulty levels for practice sessions. ~Easy~ tests the three most important tenses. ~Moderate~ tests all tenses that Spanish-speakers commonly use. ~Difficult~ tests ~all~ tenses, including a few that you are unlikely to encounter unless you are reading, for example, ~El ingenioso hidalgo don Quixote de la Mancha~.\n\n^Use^\n\nPrimary navigation in ~Conjugar~ occurs via the tab bar at the bottom of the screen. Descriptions of these tabs follow.\n\n~Conjugar~ starts on the ~Browse~ tab. This tab lists thousands of Spanish verbs with their English translations. The most common verbs also show their frequency ranks; \"ser\", the most common verb of all, is #1. Sort the verbs by frequency or alphabetically by tapping the yellow control above the tab bar. When you find a verb you would like to know more about, tap it. ~Conjugar~ then displays a screen with ~all~ conjugations of that verb. This screen is helpful for learning because it calls out, by highlighting in $RED$, parts of conjugations that are irregular. For example, the %presente de indicativo%, first-person singular conjugation of \"dar\" has an irregular \"y\", so ~Conjugar~ displays this conjugation as \"$doY$\". Tap any conjugation to hear it spoken. Tap ~Browse~ in the top-left corner to return to the ~Browse~ tab.\n\nTap ~Quiz~ in the tab bar to start a quiz. Tap ~Start~ on the bottom-left corner of the screen. ~Conjugar~ will then present you a set of fifty Spanish verbs to conjugate. Conjugate.\n\nIf a letter in a word like \"habló\" requires an accent mark and you input, for example, \"hablo\", you will receive partial credit for that conjugation. To input an accented letter, hold your finger on (\"long press\") the letter you want to accent, \"o\" in this example, swipe to the accented letter, \"ó\" in this example, and release.\n\nWhen you are done with the quiz, ~Conjugar~ will report and score your results, uploading the score to Game Center if it represents a personal best. Tap ~Quiz~ in the top-left corner to return to the ~Quiz~ tab. You can then start a new quiz.\n\nTap ~Settings~ in the tab bar to access settings.\n\nOne class of conjugations, those of ~vosotros~, is important in Spain but largely absent in Latin America. If your goal is to communicate with Latin-American Spanish-speakers, you may want to have ~Conjugar~ omit ~vosotros~ conjugations from quizzes. If so, tap ~Latin America~ in the ~Region~ section.\n\nIn recognition of the added difficulty of learning ~vosotros~ conjugations, ~Conjugar~ assigns higher scores to quizzes that include these conjugations.\n\nSpanish verb tenses may be roughly grouped into three classes. The first class consists of the bare minimum of tenses you will need to express yourself in Spanish. If your goal is only to express yourself in Spanish, tap ~Easy~ in the ~Difficulty~ section. ~Conjugar~ will quiz you on these tenses. The second class consists of the tenses that native Spanish speakers regularly use in conversation and writing. If your goal is to understand spoken-and-written Spanish, tap ~Moderate~ in the ~Difficulty~ section. ~Conjugar~ will quiz you on these tenses. The third class consists of all the Spanish verb tenses, including a few that are considered archaic or are rarely used except in formal writing. If your goal is to understand archaic-or-formal Spanish texts, tap ~Difficult~ in the ~Difficulty~ section. ~Conjugar~ will quiz you on ~all~ Spanish verb tenses.\n\nIn recognition of the relative difficulties of learning to conjugate the ~Easy~, ~Moderate~, and ~Difficult~ classes of verbs, ~Conjugar~ assigns higher scores to ~Moderate~ quizzes than to ~Easy~ quizzes and assigns higher scores to ~Difficult~ quizzes than to ~Moderate~ quizzes.\n\nAs described elsewhere in ~Conjugar~, %voseo% is a phenomenon whereby certain Spanish speakers use the pronoun ~vos~ and its conjugations instead of ~tú~ and its conjugations.\n\nIn the ~Settings~ section \"Browse Tú and/or Vos\", tap \"Vos\" to see ~vos~ conjugations instead of ~tú~ conjugations on the ~Browse~ tab. Tap \"Both\" to see both.\n\nIn the ~Settings~ section \"Quiz Tú or Vos\", tap \"Vos\" to be quizzed on ~vos~, rather than ~tú~, conjugations.\n\nTap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%, and the tenses. Near the bottom of the screen is a $RED$ widget for filtering information about tenses by the difficulty mode in which they are quizzed. The three options are ~Easy~; ~Easy~ and ~Moderate~; and ~Easy~, ~Moderate~, and ~Difficult~."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Valor^\n\nEn español, la conjugación, un concepto definido en %Terminología%, es importante por los motivos allí expuestos. Las personas criadas en países de habla hispana aprenden la conjugación mediante la escucha y el uso diario, y las personas que toman clases de español aprenden las conjugaciones como parte de su curso.\n\nPero existe otra categoría de estudiantes de español: gentes, como el desarrollador de ~Conjugar~, que viven en países en el que no se habla el español, que no pueden asistir a clases, pero que de una manera u otra están expuestos al español. Aquí hay un ejemplo del desafío al que se enfrentan estos estudiantes.\n\nEl desarrollador de ~Conjugar~ sabía, por haber estado expuesto al español durante un trabajo anterior, que \"ir\" significa \"to go\" y que \"ir\" tiene ciertas conjugaciones que comienzan con \"va-\". Pero saber esto no le permitió comunicarse con los hispanohablantes que se encontraba. Por ejemplo, para expresar el pensamiento \"I'm going to the office\", podría haber dicho \"ir a la oficina\" o \"va a la oficina\". Pero estas oraciones no tienen sentido para los hispanohablantes porque las conjugaciones son incorrectas. La oración correcta (y comprensible) es \"$voY$ a la oficina\".\n\nHay recursos excelentes para conjugar los verbos españoles. El sitio web ~SpanishDict.com~ y el libro ~Spanish Verbs Made Simple(r)~ son dos de ellos. El desarrollador de ~Conjugar~ utilizaba estos recursos cuando escribía español, pero no los tenía a mano cuando conversaba en español de manera espontánea. En algún momento, se dio cuenta de que necesitaba una forma de practicar la conjugación de verbos en español que le ayudara a que las conjugaciones correctas aparecieran en su mente cuando hablaba.\n\nEsta fue la génesis de ~Conjugar~, la aplicación que ahora te envuelve con su majestad. ~Conjugar~ te permite practicar la conjugación de ~todos~ los tiempos verbales en español por medio de tests para que las conjugaciones correctas estén en tu cerebro en el momento exacto en que las necesites. ~Conjugar~ convierte esta experiencia en un juego calificando cada sesión de práctica y ofreciéndote la posibilidad de subiéndola a Game Center, lo que te permite competir contra la comunidad global de conjugación de verbos en español. Algunos tiempos son raros de encontrar fuera de textos antiguos o formales y son menos útiles para muchos estudiantes. Por lo tanto, ~Conjugar~ proporciona tres niveles de dificultad para las sesiones de práctica. ~Fácil~ prueba los tres tiempos más importantes. ~Moderado~ prueba todos los tiempos que los hispanohablantes usan comúnmente. ~Difícil~ prueba ~todos~ los tiempos, incluyendo algunos que es poco probable que se encuentre a menos que estés leyendo, por ejemplo, ~El ingenioso hidalgo don Quijote de la Mancha~.\n\n^Uso^\n\nPara moverte por los contenidos de ~Conjugar~, usa las pestañas que verás en la parte inferior de la pantalla. Las descripciones de estas pestañas se detallan a continuación.\n\nLa primera pestaña de ~Conjugar~ se llama ~Explorar~. Esta pestaña presenta miles de verbos en español con sus traducciones al inglés. Los verbos más comunes también muestran su rango de frecuencia; \"ser\", el verbo más común de todos, es el #1. Ordena los verbos por frecuencia o alfabéticamente tocando el control amarillo que hay encima de la barra de pestañas. Cuando encuentres un verbo sobre el que te gustaría saber más, tócalo. ~Conjugar~ te mostrará una pantalla con ~todas~ las conjugaciones de ese verbo. Esta pantalla es útil para el aprendizaje porque resalta en $ROJO$ las partes de las conjugaciones que son irregulares. Por ejemplo, en %presente de indicativo%, la conjugación en primera persona del singular de \"dar\" tiene una \"y\" irregular, por lo que ~Conjugar~ muestra esta conjugación como \"$doY$\". Toca cualquier conjugación para escucharla. Toca ~Explorar~ en la esquina superior izquierda para volver a la pestaña ~Explorar~.\n\nToca ~Test~ en la barra de pestañas para empezar un test. Toca ~Comenzar~ en la esquina inferior izquierda de la pantalla. ~Conjugar~ te presentará un conjunto de cincuenta verbos en español. ¡A conjugarlos!\n\nSi hay una letra en una palabra como \"habló\" que requiere un acento y introduces, por ejemplo, \"hablo\", recibirás una puntuación parcial por esa conjugación. Para introducir una letra acentuada, mantén presionado el dedo (\"pulsación larga\") en la letra que deseas acentuar. Por ejemplo, \"o\", desliza tu dedo hacia la letra acentuada, \"ó\" y suéltalo.\n\nCuando hayas terminado con el test, ~Conjugar~ te informará y te dará puntos por tus resultados, y cargará la puntuación en Game Center si has mejorado tu marca personal. Toca ~Test~ en la esquina superior izquierda para volver a la pestaña de ~Test~. Ahora puedes comenzar un nuevo test.\n\nToca ~Configuración~ en la barra de pestañas para acceder a la configuración.\n\nUna clase de conjugaciones, las de ~vosotros~, es importante en España pero no se usa en América Latina. Si tu objetivo es comunicarte con hispanohablantes latinoamericanos, es posible que desees que ~Conjugar~ omita las conjugaciones de ~vosotros~ de los tests. Si es así, toca ~América Latina~ en la sección ~Región~.\n\n~Conjugar~ asigna puntuaciones más altas a los tests que incluyen las conjugaciones de ~vosotros~ para reconocer el esfuerzo extra de aprenderlas.\n\nLos tiempos verbales del español se pueden agrupar en tres clases. La primera clase cuenta con el numéro mínimo de tiempos verbales que necesitarás para expresarte en español. Si tu objetivo es solo expresarte en español, toca ~Fácil~ en la sección ~Dificultad~. ~Conjugar~ solo te hará preguntas sobre estos tiempos. La segunda clase contiene los tiempos verbales que los hablantes nativos del español usan a diario cuando hablan y esriben. Si tu objetivo es comprender el español hablado y escrito, toca ~Moderado~ en la sección ~Dificultad~. ~Conjugar~ te preguntará sobre estos tiempos. La tercera clase incluye todos los tiempos verbales del español, incluyendo algunos que se consideran arcaicos o que rara vez se usan fuera de la escritura formal. Si tu objetivo es comprender textos antiguos o formales en español, toca ~Difícil~ en la sección ~Dificultad~. ~Conjugar~ te hará preguntas sobre ~todos~ los tiempos verbales del español.\n\nPara reconocer el esfuerzo de aprender a conjugar las clases de verbos ~Fácil~, ~Moderado~ y ~Difícil~, ~Conjugar~ asigna puntuaciones más altas a los tests ~Moderados~ que a los tests ~Fáciles~ y asigna puntuaciones más altas a los ~Difíciles~ que a los ~Moderados~.\n\nComo se describe en otra parte de ~Conjugar~, el %voseo% consiste en el uso que ciertos hispanohablantes hacen del pronombre ~vos~ y de sus conjugaciones, en lugar de emplear las de ~tú~.\n\nEn la sección ~Configuración~ \"Explorar Tú y / o Vos\", toca \"Vos\" para ver las conjugaciones ~vos~ en lugar de las conjugaciones de ~tú~ en la pestaña ~Test~. Toca \"Ambas\" para ver ambas.\n\nEn la sección ~Configuración~ \"Hacer el Test de Tú o Vos\", toca \"Vos\" para hacer un test con las conjugaciones de ~vos~ en lugar de las de ~tú~.\n\nToca ~Informacíon~ en la barra de pestañas para acceder a información sobre ~Conjugar~, su %terminología% y los tiempos verbales. Cerca de la parte inferior de la pantalla hay un ajuste en $ROJO$ para filtrar información sobre tiempos según el modo de dificultad en el que se preguntan. Las tres opciones son ~Fácil~; ~Fácil~ y ~Moderado~; y ~Fácil~, ~Moderado~ y ~Difícil~."
+          }
+        }
+      }
+    },
+    "Info.questionsAndAnswersHeading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questions & Answers"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preguntas y Respuestas"
+          }
+        }
+      }
+    },
+    "Info.questionsAndAnswersText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~Q:~ How can I contact the developer of ~Conjugar~?\n\n~A:~ Email vermontcoder@gmail.com.\n\n~Q:~ There is a verb missing from the ~Browse~ list. What gives?\n\n~A:~ ~Conjugar~'s goal is to teach Spanish-verb conjugation, not to serve as a dictionary. ~SpanishDict.com~ and ~Spanish Verbs Made Simple(r)~ are better choices if you seek exhaustivity. That said, feel free to email ~Conjugar's~ developer at vermontcoder@gmail.com if you would like to see a verb added.\n\n~Q:~ Why does ~Conjugar~ use Spanish names for tenses rather than English, for example, %presente de indicativo% rather than \"present indicative\"?\n\n~A:~ Admittedly, English tense names would perhaps be more approachable for the learner in certain cases, for example, %raíz futura%. English speakers might better understand the term \"future stem\". But perhaps because of his years working as a lawyer and software developer, ~Conjugar~'s developer values precision in language. English tense names are imprecise when applied to Spanish tenses. For example, the English \"gerund\" can act as an adjective, but the Spanish %gerundio% cannot. \"Gerund\" is, in that sense, inaccurate when applied to the %gerundio%. The same goes for other English tense names and Spanish tenses, to varying degrees.\n\n~Q:~ I've seen the terms \"mood\" and \"aspect\" in descriptions of verb tenses, but ~Conjugar~ does not use these terms. Also, the %participio%, %gerundio%, and %raíz futura% are not really tenses.\n\n~A:~ Was that a question? You are correct that ~Conjugar~ does not use these two terms, and those three things are not usually described as \"tenses\". With respect to terminology, bear in mind that ~Conjugar~'s purpose is to teach Spanish-verb conjugation, not to teach English Spanish-verb-conjugation nomenclature. With respect to the participio, gerundio, and raíz futura, ~Conjugar~'s developer does consider those three things to be tenses, if \"tense\" is taken to mean \"a systematic way of changing verbs for a specific purpose\". This definition, though absent, on information and belief, from any dictionary, serves ~Conjugar~'s pedagogical purpose well enough.\n\n~Q:~ Why is Conjugar free?\n\n~A:~ The developer's goals in creating ~Conjugar~ were to learn Spanish-verb conjugation and a software-development technique, programmatic layout, not to earn a living. That said, money is useful, and the developer will implement a tip jar or some other type of in-app purchase if download numbers justify the effort."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~P:~ ¿Cómo puedo contactar con el desarrollador de ~Conjugar~?\n\n~R:~ Envíale un correo electrónico al desarrollador: vermontcoder@gmail.com\n\n~P:~ Falta un verbo en la lista de ~Explorar~. ¿Por qué?\n\n~R:~ El objetivo de ~Conjugar~ es enseñar la conjugación de los verbos españoles, no servir de diccionario. Si buscas un inventario de verbos completo, ~SpanishDict.com~ y ~Spanish Verbs Made Simple(r)~ son mejores opciones. Dicho esto, no dudes en enviarle un correo electrónico al desarrollador de ~Conjugar~ a vermontcoder@gmail.com si deseas que aparezca un verbo en concreto.\n\n~P:~ ¿Por qué ~Conjugar~ usa nombres en español para los tiempos verbales en lugar de en inglés (por ejemplo, %presente de indicativo% en lugar de \"present indicative\")?\n\n~R:~ Es cierto que los nombres verbales del inglés quizás sean más fáciles de entender para el alumno en ciertos casos, como por ejemplo, el de %raíz futura%. Los angloparlantes podrían entender mejor el término \"future stem\", pero quizás debido a sus años trabajando como abogado y desarrollador de software, el desarrollador de ~Conjugar~ valora la precisión en el lenguaje. Los nombres de los tiempos en inglés son imprecisos cuando se aplican a los tiempos en español. Por ejemplo, el \"gerund\" inglés puede actuar como un adjetivo, pero no el %gerundio% español. En ese sentido, el término \"gerund\" es inexacto cuando se emplea para referirse al %gerundio%. Lo mismo ocurre con otros nombres en inglés y otros tiempos del español, en diversos grados.\n\n~P:~ He visto los términos \"modo\" y \"aspecto\" en las descripciones de los tiempos verbales, pero ~Conjugar~ no usa estos términos. Además, %participio%, %gerundio% y %raíz futura% no son realmente tiempos verbales.\n\n~R:~ ¿Es una pregunta? Tienes razón. ~Conjugar~ no usa estos dos términos, y esas tres cosas normalmente no se describen como \"tiempos\". Sobre los nombres usados para nombrarlos, ten en cuenta que el propósito de ~Conjugar~ es enseñar las conjugaciones de los verbos del español, no enseñar los nombres de las conjugaciones de los verbos españoles en inglés. Y con respecto al participio, gerundio y raíz futura, el desarrollador de ~Conjugar~ considera que estas tres cosas son tiempos verbales, si se considera que \"tiempo\" significa \"una forma sistemática de cambiar verbos para un propósito específico\". Esta definición, aunque no es la habitual en los diccionarios, desde el humilde punto de vista del desarrollador de ~Conjugar~, contribuye bastante bien al propósito pedagógico de ~Conjugar~.\n\n~P:~ ¿Cómo es que ~Conjugar~ es gratis?\n\n~R:~ Los objetivos que tenía el desarrollador al crear ~Conjugar~ eran aprender la conjugación de los verbos del español y practicar diseño programático (una técnica de desarrollo de software), no ganarse la vida. Dicho esto, el dinero es útil, y el desarrollador añadirá un tarro de propinas o algún tipo de compra integrada en la aplicación si el número de descargas justifica el esfuerzo."
+          }
+        }
+      }
+    },
+    "Info.raizFuturaText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Uses^\n\nThe ~raíz futura~ forms of verbs are used as stems for the %condicional% and %futuro de indicativo% tenses. Tap those tenses for descriptions of them.\n\n^Form^\n\nFor all but twelve verbs, the raíz futura is identical to the infinitivo. For example, the raíz futura form of ~bailar~ is \"bailar-\".\n\nThe following verbs have irregular raíz futura forms:\n\ncaber: $cabR$-\ndecir: $dIR$-\nhaber: $habR$-\nhacer: $haR$-\npoder: $podR$-\nponer: $ponDr$-\nquerer: $querR$-\nsaber: $sabR$-\nsalir: $salDr$-\ntener: $tenDr$-\nvaler: $valDr$-\nvenir: $venDr$-"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Usos^\n\nLas formas de verbos con ~raíz futura~ se usan como derivaciones para los tiempos %condicional% y %futuro de indicativo%. Toca esos tiempos para obtener descripciones de ellos.\n\n^Forma^\n\nPara todos los verbos excepto doce, la raíz futura es idéntica a la forma del infinitivo. Por ejemplo, la raíz futura de ~bailar~ es \"bailar-\".\n\nLos siguientes verbos tienen formas de raíz futura irregulares:\n\ncaber: $cabR$-\ndecir: $dIR$-\nhaber: $habR$-\nhacer: $haR$-\npoder: $podR$-\nponer: $ponDr$-\nquerer: $querR$-\nsaber: $sabR$-\nsalir: $salDr$-\ntener: $tenDr$-\nvaler: $valDr$-\nvenir: $venDr$-"
+          }
+        }
+      }
+    },
+    "Info.terminologyHeading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminology"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminología"
+          }
+        }
+      }
+    },
+    "Info.terminologyText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Verb^\n\nA ~verb~ is a kind of word that represents an action in a sentence. In the sentence \"Celina Zambon dances the flamenco\", \"to dance\" is the verb. Verb ~tense~s express, among other things, temporality. In the example sentence, the verb tense could express that the action is currently taking place. (That said, \"is dancing\" would specify this more precisely.) In English, to a limited degree, and in Spanish, to a near-total degree, the ~subject~ or actor in the sentence, combined with the tense, determines the exact form of the verb used. This is the verb ~conjugation~. In English, the example sentence's combination of subject and tense results in the conjugation \"dances\".\n\nThe ~infinitivo~ is an invariant form of the verb that ends in -ar, -er, or -ir. The ~infinitivo~ does not indicate time, number, or person. \"Bailar\" is an infinitivo that means \"to dance\". Spanish dictionaries and ~Conjugar~'s Browse tab list the infinitivo forms of verbs.\n\nThe ~verb stem~ is the inifinitivo minus the -ar, -ir, or -er ending.\n\n^Pronoun^\n\nA subject ~pronoun~ is a word that stands in for a subject. In English, the subject pronouns are ~I~, ~you~, ~he/she/it~, ~we~, ~y'all~, and ~they~.\n\nIn both English and Spanish, subject pronouns have the ~singular~ or ~plural~ number. They are also ~first person~, ~second person~, or ~third person~. English subject pronouns correspond to the following person/number combinations:\n\nfirst person, singular: ~I~\nsecond person, singular: ~you~\nthird person, singular: ~he/she/it~\nfirst person, plural: ~we~\nsecond person, plural: ~y'all~\nthird person, plural: ~they~\n\nThe first- and third-person subject pronouns in Spanish are straightforward for English-speakers:\n\nfirst person, singular: ~yo~\nthird person, singular: ~él~ (masc.)/~ella~ (fem.)\nfirst person, plural: ~nosotros~ (masc.)/~nosotras~ (fem.)\nthird person, plural: ~ellos~ (masc.)/~ellas~ (fem.)\n\n\"Fem.\" means that a pronoun refers to female subjects, and \"masc.\" means that a pronoun refers to male subjects.\n\nThe second-person subject pronouns in Spanish are more complicated in that they encode two formality levels, formal and informal. Further, uses of these pronouns differ between Spain and Latin America.\n\n~Spain~\n\nsecond person, singular, informal: ~tú~\nsecond person, singular, formal: ~usted~\nsecond person, plural, informal: ~vosotros~ (masc.)/~vosotras~ (fem.)\nsecond person, plural, formal: ~ustedes~\n\n~Much of Latin America~\n\nsecond person, singular, informal: ~tú~\nsecond person, singular, formal: ~usted~\nsecond person, plural, informal: ~ustedes~\nsecond person, plural, formal: ~ustedes~\n\nUsted and ustedes use the él and ellos conjugations, respectively.\n\nThe difference between the two regions is that ~ustedes~ has replaced ~vosotros~/~vosotras~ in Latin America. This replacement means that Spanish-learners in Spain must learn conjugations for six person-number combinations, but Spanish-learners in Latin America must learn conjugations for only five.\n\nIn parts of Latin America, ~vos~ has replaced ~tú~ and uses different conjugations. This phenomenon is called %voseo%. Tap the blue word for a description of this phenomenon.\n\n^Order and Presentation of Conjugations^\n\nTreatises on Spanish verbs, when presenting the conjugations for a particular tense, present the conjugations in the following subject-pronoun order: yo, tú, él, nosotros, vosotros, ellos. In the interests of clarity and brevity, ~Conjugar~ does the same. For example, ~Conjugar~ would present the %presente de indicativo% conjugations of ~ser~ as follows:\n\n$soY$, $ERes$, $ES$, $sOmos$, $sOis$, $sOn$\n\nRed letters in conjugations represent irregularities. A verb is considered irregular if any of its conjugations differs from the conjugation of a regular ~ar~, ~ir~, or ~er~ verb."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Verbo^\n\nUn ~verbo~ es un tipo de palabra que representa una acción en una oración. En la oración \"Celina Zambon baila el flamenco\", \"bailar\" es el verbo. Los tiempos verbales expresan, entre otras cosas, cuándo se realiza la acción. En la oración de ejemplo, el tiempo verbal expresa que la acción se está llevando a cabo ahora mismo. En español, el ~sujeto~ o actor en la oración determina la forma exacta del verbo utilizado junto con el tiempo verbal en práticamente todos los casos. Este es la ~conjugación~ del verbo. En español, la combinación de sujeto y tiempo de la oración de ejemplo da como resultado la conjugación \"baila\".\n\nEl ~infinitivo~ es un forma invariable del verbo que termina en -ar, -er o -ir. No indica tiempo, número ni persona. \"Bailar\" es un ejemplo de infinitivo. Los diccionarios de español y la pestaña Explorar de ~Conjugar~ presentan los verbos con sus formas en infinitivo.\n\nLa ~raíz del verbo~ es el inifinitivo sin la terminación -ar, -ir o -er.\n\n^Pronombre^\n\nUn ~pronombre~ personal es una palabra que representa a un sujeto. En español, los pronombres personales que pueden actuar como sujetos son ~yo~, ~tú~, ~vos~, ~usted~, ~él~/~ella~, ~nosotros~/~nosotras~, ~vosotras~/~vosotros~, ~ustedes~ y ~ellas~/~ellos~.\n\nTanto en español como en inglés, los pronombres de sujeto pueden tener el número ~singular~ o ~plural~. También pueden ser de ~primera persona~, ~segunda persona~ o ~tercera persona~. Estos son los pronombres personales del español, incluyendo las combinaciones de persona y número:\n\nprimera persona, singular: ~yo~\nsegunda persona, singular: ~tú~ / ~vos~ / ~usted~\ntercera persona, singular: ~él~ / ~ella~\nprimera persona, plural: ~nosotras~ / ~nosotros~\nsegunda persona, plural: ~vosotras~ / ~vosotros~ / ~ustedes~\ntercera persona, plural: ~ellos~ / ~ellas~\n\nLos pronombres de sujeto en segunda persona del español son complicados porque expresan dos niveles de formalidad, formal y informal. Además, los usos de estos pronombres en España y América Latina son muy diferentes. \"Vosotros\" solo se usa en España, y \"vos\" solo se usa en algunas partes de América Latina.\n\n~España~\n\nsegunda persona, singular, informal: ~tú~\nsegunda persona, singular, formal: ~usted~\nsegunda persona, plural, informal: ~vosotros~ / ~vosotras~\nsegunda persona, plural, formal: ~ustedes~\n\n~Algunas Regiones de América Latina (p.ej., Argentina)~\n\nsegunda persona, singular, informal: ~vos~\nsegunda persona, singular, formal: ~usted~\nsegunda persona, plural, informal: ~ustedes~\nsegunda persona, plural, formal: ~ustedes~\n\n~Otra Regiones de América Latina (p.ej., Peru)~\n\nsegunda persona, singular, informal: ~tú~\nsegunda persona, singular, formal: ~usted~\nsegunda persona, plural, informal: ~ustedes~\nsegunda persona, plural, formal: ~ustedes~\n\nUsted y ustedes usan las conjugaciones de él y ellos, respectivamente.\n\n~Ustedes~ sustituye a ~vosotros~ / ~vosotras~ en América Latina. De este modo, los estudiantes de español deben aprender seis formas verbales cuando estudian las conjugaciones en España, pero en América Latina deben aprender solo cinco formas verbales.\n\nComo ya hemos dicho, en algunas regiones de América Latina, ~vos~ susituye a ~tú~ y usa diferentes conjugaciones. Este fenómeno se llama %voseo%. Toca la palabra en azul para leer una descripción de este fenómeno.\n\n^Orden y Presentación de Conjugaciones^\n\nLos tratados sobre verbos españoles presentan las conjugaciones en el siguiente orden de sujeto y pronombre: yo, tú, él, nosotros, vosotros, ellos. Para una mayor claridad y brevedad, ~Conjugar~ hace lo mismo. Por ejemplo, ~Conjugar~ presenta las conjugaciones %presente de indicativo% de ~ser~ de la siguiente manera:\n\n$soY$, $ERes$, $ES$, $sOmos$, $sOis$, $sOn$\n\nLas letras en rojo de las conjugaciones señalan las formas irregulares. Un verbo se considera irregular si alguna de sus formas es diferente de las que emplea un verbo regular ~ar~, ~ir~ o ~er~."
+          }
+        }
+      }
+    },
+    "Info.voseoText" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Background^\n\nIn certain parts of Latin America, when addressing one person informally, Spanish speakers use the pronoun ~vos~ and its conjugations instead of the pronoun ~tú~ and its conjugations. This phenomenon, ~voseo~, is ubiquitous in Argentina and occurs, to varying degrees, in all of Latin America except in Dominican Republic and Puerto Rico. Unfortunately, ~vos~ conjugations vary by country and region, complicating matters for the Spanish-learner, but the Real Academia Española (RAE), an authority on the Spanish language, provides model conjugations. These conjugations have some value because a Spanish-speaker from Medellín, Colombia reported to ~Conjugar~'s developer that he uses them. For the sake of expediency, ~Conjugar~ adopts the RAE’s ~vos~ conjugations.\n\n^Conjugation^\n\n~Vos~ conjugations broadly resemble those of ~tú~ and, to a lesser extent, ~vosotros~. In the %presente de indicativo%, the endings are -ás, -ís, and -és for regular AR, IR, and ER verbs, respectively. Examples: hablás, subís, comés.\n\nIn the %imperativo positivo%, the endings are -á, -í, and -é for regular AR, IR, and ER verbs, respectively. Examples: hablá, subí, comé. Two irregular ~vos~ %imperativo positivo% verbs are ir ($ANDÁ$) and dar ($dA$).\n\nIn the following tenses, the ~vos~ endings are identical to the ~tú~ endings: %pretérito%, %imperfecto de indicativo%, %futuro de indicativo%, %condicional%, %presente de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2%, %futuro de subjuntivo%, and %imperativo negativo%.\n\nCompound-tense ~vos~ conjugations are identical to their ~tú~ counterparts.\n\nCertain verbs that change vowels in the ~yo~, ~tú~, ~él~, and ~ellos~ conjugations, but not in the ~nosotros~ or ~vosotros~ conjugations, do not change vowels in the ~vos~ conjugation. Examples: Tú $mUEves$. Vos movés. Yo $pIerdo$. Vos perdés. Ella $pUEde$. Vos podés. In this sense, ~vos~ conjugations are more regular than those of ~yo~, ~tú~, ~él~, and ~ellos~.\n\nSee %credits% for Wikipedia and RAE attribution."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "^Antecedentes^\n\nEn ciertas partes de América Latina, cuando se dirigen a una persona de manera informal, los hispanohablantes usan el pronombre ~vos~ y sus conjugaciones en lugar del pronombre ~tú~ y sus conjugaciones. Este fenómeno, ~voseo~, aparece por toda Argentina y ocurre, en diversos grados, en toda América Latina, excepto en República Dominicana y Puerto Rico. Desafortunadamente, las conjugaciones de ~vos~ varían según el país y la región, lo que le complica las cosas al estudiante de español, pero la Real Academia Española (RAE), la principal autoridad del idioma español, proporciona unas conjugaciones modelo. Estas conjugaciones tienen algún valor porque un hispanohablante de Medellín, Colombia, le confirmó al desarrollador de ~Conjugar~ que las usa. Para una mayor conveniencia, ~Conjugar~ usa las conjugaciones ~vos~ de RAE.\n\n^Conjugación^\n\nLas conjugaciones de ~vos~ son muy parecidas a las de ~tú~ y, en menor medida, a las de ~vosotros~. En %presente de indicativo%, las terminaciones son -ás, -ís y -és para los verbos regulares terminados en AR, IR y ER, respectivamente. Ejemplos: hablás, subís, comés.\n\nEn %imperativo positivo%, las terminaciones son -á, -í y -é para los verbos regulares en AR, IR y ER, respectivamente. Ejemplos: hablá, subí, comé. Hay dos verbos irregulares de ~vos~ en %imperativo positivo%: ir ($ANDÁ$) y dar ($dA$).\n\nEn los siguientes tiempos, las terminaciones de ~vos~ son idénticas a las terminaciones de ~tú~: %pretérito%, %imperfecto de indicativo%, %futuro de indicativo%, %condicional%, %presente de subjuntivo%, %imperfecto de subjuntivo 1%, %imperfecto de subjuntivo 2%, %futuro de subjuntivo% e %imperativo negativo%.\n\nLas conjugaciones de ~vos~ de los tiempos compuestos son idénticas a las formas correspondientes de ~tú~.\n\nHay ciertos verbos que cambian las vocales en las conjugaciones de ~yo~, ~tú~, ~él~ y ~ellos~, pero no en las conjugaciones de ~nosotros~ o ~vosotros~, que tampoco cambian las vocales en la conjugación de ~vos~. Ejemplos: Tú $mUEves$. Vos movés. Yo $pIerdo$. Vos perdés. Ella $pUEde$. Vos podés. En este sentido, las conjugaciones de ~vos~ son más regulares que las de ~yo~, ~tú~, ~él~ y ~ellos~.\n\nVe a %créditos% para leer la atribución a la Wikipedia y RAE."
+          }
+        }
+      }
+    },
+    "Model.numberAndPercent %@ %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Model %1$@ · %2$lld%% irregular"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modelo %1$@ · %2$lld%% irregular"
+          }
+        }
+      }
+    },
+    "Model.verbsUsing %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "One verb uses this model"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld verbs use this model"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Un verbo usa este modelo"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld verbos usan este modelo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ModelSort.classNumber" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Número"
+          }
+        }
+      }
+    },
+    "ModelSort.irregularity" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregularity"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregularidad"
+          }
+        }
+      }
+    },
+    "Quiz.conjugation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "conjugation"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "conjugación"
+          }
+        }
+      }
+    },
+    "Quiz.correctAnswer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correct Answer"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Respuesta Correcta"
+          }
+        }
+      }
+    },
+    "Quiz.elapsed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elapsed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transcurrido"
+          }
+        }
+      }
+    },
+    "Quiz.gameCenter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Center"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Center"
+          }
+        }
+      }
+    },
+    "Quiz.gameCenterMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Would you like Conjugar to upload your future scores to Game Center after your quiz? See how you stack up against the global community of conjugators."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Te gustaría que Conjugar suiera tus futuras puntuaciones a Game Center después de tu test? Averigua dónde estás en comparación con la comunidad global de conjugadores."
+          }
+        }
+      }
+    },
+    "Quiz.lastAnswer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Answer"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Respuesta Anterior"
+          }
+        }
+      }
+    },
+    "Quiz.localizedTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quiz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test"
+          }
+        }
+      }
+    },
+    "Quiz.no" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        }
+      }
+    },
+    "Quiz.progress" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progress"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progreso"
+          }
+        }
+      }
+    },
+    "Quiz.pronoun" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronoun"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronombre"
+          }
+        }
+      }
+    },
+    "Quiz.quit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonar"
+          }
+        }
+      }
+    },
+    "Quiz.restart" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciar"
+          }
+        }
+      }
+    },
+    "Quiz.score" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Score"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puntuación"
+          }
+        }
+      }
+    },
+    "Quiz.start" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comenzar"
+          }
+        }
+      }
+    },
+    "Quiz.tense" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tense"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiempo"
+          }
+        }
+      }
+    },
+    "Quiz.verb" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbo"
+          }
+        }
+      }
+    },
+    "Quiz.yes" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sí"
+          }
+        }
+      }
+    },
+    "Region.latinAmerica" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latin America"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "América Latina"
+          }
+        }
+      }
+    },
+    "Region.spain" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spain"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "España"
+          }
+        }
+      }
+    },
+    "Results.time" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiempo"
+          }
+        }
+      }
+    },
+    "Results.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Results"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resultados"
+          }
+        }
+      }
+    },
+    "Settings.addYours" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add yours!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Añade la tuya!"
+          }
+        }
+      }
+    },
+    "Settings.browse" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Browse Tú and/or Vos"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explorar Tú y/o Vos"
+          }
+        }
+      }
+    },
+    "Settings.browseDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This setting determines whether you see tú conjugations, vos conjugations, or both when you browse verb conjugations."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este ajuste determina si se muestran las conjugaciones de tú, conjugaciones de vos o ambas cuando exploras las conjugaciones verbales."
+          }
+        }
+      }
+    },
+    "Settings.difficulty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Difficulty"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dificultad"
+          }
+        }
+      }
+    },
+    "Settings.difficultyDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moderate-mode quizzes test more tenses than easy-mode quizzes. Difficult-mode quizzes test more tenses than moderate-mode quizzes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los tests del modo moderado examinan más tiempos verbales que los tests del modo fácil. Los tests del modo difícil examinan más tiempos verbales que los tests del modo moderado."
+          }
+        }
+      }
+    },
+    "Settings.enable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permitir"
+          }
+        }
+      }
+    },
+    "Settings.enableDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar can send future quiz scores to Game Center so that you can see them in the global leaderboard. Tap Enable to enable this."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar puede enviar tus puntuaciones futuras a Game Center para que puedas verlas en la tabla de clasificación mundial (\"leaderboard\"). Toca Permitir para habilitarlo."
+          }
+        }
+      }
+    },
+    "Settings.localizedTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuración"
+          }
+        }
+      }
+    },
+    "Settings.noRating" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No one has rated this version of Conjugar."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nadie ha valorado esta versión de Conjugar."
+          }
+        }
+      }
+    },
+    "Settings.quiz" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quiz Tú or Vos"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hacer el Test de Tú o Vos"
+          }
+        }
+      }
+    },
+    "Settings.quizDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This setting determines whether Conjugar's quiz mode quizzes you on tú forms or vos forms of verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta opción determina si las preguntas del test usan las formas de tú o de vos."
+          }
+        }
+      }
+    },
+    "Settings.rateOrReview" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rate or Review"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valorar o Reseñar"
+          }
+        }
+      }
+    },
+    "Settings.ratings %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "There is one rating for this version of Conjugar."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "There are %lld ratings for this version of Conjugar."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hay una valoración para esta versión de Conjugar."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hay %lld valoraciones para esta versión de Conjugar."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Settings.ratingsAndReviews" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ratings and Reviews"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valoraciones y Reseñas"
+          }
+        }
+      }
+    },
+    "Settings.region" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Region"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Región"
+          }
+        }
+      }
+    },
+    "Settings.regionDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Latin American mode, quizzes do not include vosotros conjugations. This setting also determines how Conjugar pronounces conjugations."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el modo latinoamericano, los tests no incluyen las conjugaciones de vosotros. Esta configuración también influye en la forma en que Conjugar pronuncia las conjugaciones."
+          }
+        }
+      }
+    },
+    "Verb.defective" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Defective"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Defectuoso"
+          }
+        }
+      }
+    },
+    "Verb.irregular" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregular"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregular"
+          }
+        }
+      }
+    },
+    "Verb.irregularWithParent %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irreg. ☛ %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irreg. ☛ %@"
+          }
+        }
+      }
+    },
+    "Verb.notDefective" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not Defective"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Defectuoso"
+          }
+        }
+      }
+    },
+    "Verb.regular" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regular"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regular"
+          }
+        }
+      }
+    },
+    "VerbSort.alphabetical" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alphabetical"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alfabético"
+          }
+        }
+      }
+    },
+    "VerbSort.frequency" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frequency"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frecuencia"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

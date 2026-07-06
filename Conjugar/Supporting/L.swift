@@ -1,0 +1,423 @@
+//
+//  L.swift
+//  Conjugar
+//
+//  Created by Joshua Adams on 5/1/20.
+//  Copyright © 2020 Josh Adams. All rights reserved.
+//
+
+import Foundation
+
+enum L {
+  enum Alert {
+    static var okay: String {
+      String(localized: "Alert.okay")
+    }
+
+    static var gotIt: String {
+      String(localized: "Alert.gotIt")
+    }
+  }
+
+  enum Both {
+    static var masculine: String {
+      String(localized: "Both.masculine")
+    }
+
+    static var feminine: String {
+      String(localized: "Both.feminine")
+    }
+  }
+
+  enum BrowseInfo {
+    static var localizedTitle: String {
+      String(localized: "BrowseInfo.localizedTitle")
+    }
+
+    static var easy: String {
+      String(localized: "BrowseInfo.easy")
+    }
+
+    static var easyAndModerate: String {
+      String(localized: "BrowseInfo.easyAndModerate")
+    }
+
+    static var easyModerateAndDifficult: String {
+      String(localized: "BrowseInfo.easyModerateAndDifficult")
+    }
+
+    static var filter: String {
+      String(localized: "BrowseInfo.filter")
+    }
+  }
+
+  enum BrowseModels {
+    static var localizedTitle: String {
+      String(localized: "BrowseModels.localizedTitle")
+    }
+  }
+
+  enum BrowseVerbs {
+    static var localizedTitle: String {
+      String(localized: "BrowseVerbs.localizedTitle")
+    }
+  }
+
+  enum Difficulty {
+    static var easy: String {
+      String(localized: "Difficulty.easy")
+    }
+
+    static var moderate: String {
+      String(localized: "Difficulty.moderate")
+    }
+
+    static var difficult: String {
+      String(localized: "Difficulty.difficult")
+    }
+  }
+
+  enum GameCenter {
+    static var failure: String {
+      String(localized: "GameCenter.failure")
+    }
+  }
+
+  enum Info {
+    static var purposeAndUseHeading: String {
+      String(localized: "Info.purposeAndUseHeading")
+    }
+
+    static var terminologyHeading: String {
+      String(localized: "Info.terminologyHeading")
+    }
+
+    static var questionsAndAnswersHeading: String {
+      String(localized: "Info.questionsAndAnswersHeading")
+    }
+
+    static var creditsHeading: String {
+      String(localized: "Info.creditsHeading")
+    }
+
+    static var purposeAndUseText: String {
+      String(localized: "Info.purposeAndUseText")
+    }
+
+    static var terminologyText: String {
+      String(localized: "Info.terminologyText")
+    }
+
+    static var presenteDeIndicativoText: String {
+      String(localized: "Info.presenteDeIndicativoText")
+    }
+
+    static var futuroDeIndicativoText: String {
+      String(localized: "Info.futuroDeIndicativoText")
+    }
+
+    static var preteritoText: String {
+      String(localized: "Info.preteritoText")
+    }
+
+    static var condicionalText: String {
+      String(localized: "Info.condicionalText")
+    }
+
+    static var imperfectoDeIndicativoText: String {
+      String(localized: "Info.imperfectoDeIndicativoText")
+    }
+
+    static var presenteDeSubjuntivoText: String {
+      String(localized: "Info.presenteDeSubjuntivoText")
+    }
+
+    static var imperfectoDeSubjuntivo1Text: String {
+      String(localized: "Info.imperfectoDeSubjuntivo1Text")
+    }
+
+    static var imperfectoDeSubjuntivo2Text: String {
+      String(localized: "Info.imperfectoDeSubjuntivo2Text")
+    }
+
+    static var futuroDeSubjuntivoText: String {
+      String(localized: "Info.futuroDeSubjuntivoText")
+    }
+
+    static var imperativoPositivoText: String {
+      String(localized: "Info.imperativoPositivoText")
+    }
+
+    static var imperativoNegativoText: String {
+      String(localized: "Info.imperativoNegativoText")
+    }
+
+    static var participioText: String {
+      String(localized: "Info.participioText")
+    }
+
+    static var gerundioText: String {
+      String(localized: "Info.gerundioText")
+    }
+
+    static var raizFuturaText: String {
+      String(localized: "Info.raizFuturaText")
+    }
+
+    static var perfectoDeIndicativoText: String {
+      String(localized: "Info.perfectoDeIndicativoText")
+    }
+
+    static var preteritoAnteriorText: String {
+      String(localized: "Info.preteritoAnteriorText")
+    }
+
+    static var pluscuamperfectoDeIndicativoText: String {
+      String(localized: "Info.pluscuamperfectoDeIndicativoText")
+    }
+
+    static var futuroPerfectoText: String {
+      String(localized: "Info.futuroPerfectoText")
+    }
+
+    static var condicionalCompuestoText: String {
+      String(localized: "Info.condicionalCompuestoText")
+    }
+
+    static var perfectoDeSubjuntivoText: String {
+      String(localized: "Info.perfectoDeSubjuntivoText")
+    }
+
+    static var pluscuamperfectoDeSubjuntivo1Text: String {
+      String(localized: "Info.pluscuamperfectoDeSubjuntivo1Text")
+    }
+
+    static var pluscuamperfectoDeSubjuntivo2Text: String {
+      String(localized: "Info.pluscuamperfectoDeSubjuntivo2Text")
+    }
+
+    static var futuroPerfectoDeSubjuntivoText: String {
+      String(localized: "Info.futuroPerfectoDeSubjuntivoText")
+    }
+
+    static var questionsAndAnswersText: String {
+      String(localized: "Info.questionsAndAnswersText")
+    }
+
+    static var voseoText: String {
+      String(localized: "Info.voseoText")
+    }
+
+    static var creditsText: String {
+      String(localized: "Info.creditsText")
+    }
+  }
+
+  enum Model {
+    static func numberAndPercent(model: String, percent: Int) -> String {
+      String(localized: "Model.numberAndPercent \(model) \(percent)")
+    }
+
+    static func verbsUsing(count: Int) -> String {
+      String(localized: "Model.verbsUsing \(count)")
+    }
+  }
+
+  enum ModelSort {
+    static var irregularity: String {
+      String(localized: "ModelSort.irregularity")
+    }
+
+    static var classNumber: String {
+      String(localized: "ModelSort.classNumber")
+    }
+  }
+
+  enum Quiz {
+    static var localizedTitle: String {
+      String(localized: "Quiz.localizedTitle")
+    }
+
+    static var tense: String {
+      String(localized: "Quiz.tense")
+    }
+
+    static var start: String {
+      String(localized: "Quiz.start")
+    }
+
+    static var restart: String {
+      String(localized: "Quiz.restart")
+    }
+
+    static var quit: String {
+      String(localized: "Quiz.quit")
+    }
+
+    static var gameCenter: String {
+      String(localized: "Quiz.gameCenter")
+    }
+
+    static var gameCenterMessage: String {
+      String(localized: "Quiz.gameCenterMessage")
+    }
+
+    static var no: String {
+      String(localized: "Quiz.no")
+    }
+
+    static var yes: String {
+      String(localized: "Quiz.yes")
+    }
+
+    static var conjugation: String {
+      String(localized: "Quiz.conjugation")
+    }
+
+    static var verb: String {
+      String(localized: "Quiz.verb")
+    }
+
+    static var pronoun: String {
+      String(localized: "Quiz.pronoun")
+    }
+
+    static var lastAnswer: String {
+      String(localized: "Quiz.lastAnswer")
+    }
+
+    static var correctAnswer: String {
+      String(localized: "Quiz.correctAnswer")
+    }
+
+    static var progress: String {
+      String(localized: "Quiz.progress")
+    }
+
+    static var elapsed: String {
+      String(localized: "Quiz.elapsed")
+    }
+
+    static var score: String {
+      String(localized: "Quiz.score")
+    }
+  }
+
+  enum Results {
+    static var title: String {
+      String(localized: "Results.title")
+    }
+
+    static var time: String {
+      String(localized: "Results.time")
+    }
+  }
+
+  enum Region {
+    static var spain: String {
+      String(localized: "Region.spain")
+    }
+
+    static var latinAmerica: String {
+      String(localized: "Region.latinAmerica")
+    }
+  }
+
+  enum Settings {
+    static var localizedTitle: String {
+      String(localized: "Settings.localizedTitle")
+    }
+
+    static var region: String {
+      String(localized: "Settings.region")
+    }
+
+    static var regionDescription: String {
+      String(localized: "Settings.regionDescription")
+    }
+
+    static var difficulty: String {
+      String(localized: "Settings.difficulty")
+    }
+
+    static var difficultyDescription: String {
+      String(localized: "Settings.difficultyDescription")
+    }
+
+    static var browse: String {
+      String(localized: "Settings.browse")
+    }
+
+    static var browseDescription: String {
+      String(localized: "Settings.browseDescription")
+    }
+
+    static var quiz: String {
+      String(localized: "Settings.quiz")
+    }
+
+    static var quizDescription: String {
+      String(localized: "Settings.quizDescription")
+    }
+
+    static var enable: String {
+      String(localized: "Settings.enable")
+    }
+
+    static var enableDescription: String {
+      String(localized: "Settings.enableDescription")
+    }
+
+    static var ratingsAndReviews: String {
+      String(localized: "Settings.ratingsAndReviews")
+    }
+
+    static var rateOrReview: String {
+      String(localized: "Settings.rateOrReview")
+    }
+
+    static var addYours: String {
+      String(localized: "Settings.addYours")
+    }
+
+    static var noRating: String {
+      String(localized: "Settings.noRating")
+    }
+
+    static func ratings(count: Int) -> String {
+      String(localized: "Settings.ratings \(count)")
+    }
+  }
+
+  enum VerbSort {
+    static var frequency: String {
+      String(localized: "VerbSort.frequency")
+    }
+
+    static var alphabetical: String {
+      String(localized: "VerbSort.alphabetical")
+    }
+  }
+
+  enum Verb {
+    static var irregular: String {
+      String(localized: "Verb.irregular")
+    }
+
+    static var regular: String {
+      String(localized: "Verb.regular")
+    }
+
+    static var defective: String {
+      String(localized: "Verb.defective")
+    }
+
+    static var notDefective: String {
+      String(localized: "Verb.notDefective")
+    }
+
+    static func irregularWithParent(exemplar: String) -> String {
+      String(localized: "Verb.irregularWithParent \(exemplar)")
+    }
+  }
+}

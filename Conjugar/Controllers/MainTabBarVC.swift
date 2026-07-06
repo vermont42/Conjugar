@@ -15,21 +15,21 @@ class MainTabBarVC: UITabBarController {
 
     let browseVerbsNavC = UINavigationController(rootViewController: BrowseVerbsVC())
     browseVerbsNavC.tabBarItem = UITabBarItem(
-      title: Localizations.BrowseVerbs.localizedTitle,
+      title: L.BrowseVerbs.localizedTitle,
       image: UIImage(named: BrowseVerbsVC.englishTitle),
       selectedImage: nil
     )
 
     let browseModelsNavC = UINavigationController(rootViewController: BrowseModelsVC())
     browseModelsNavC.tabBarItem = UITabBarItem(
-      title: Localizations.BrowseModels.localizedTitle,
+      title: L.BrowseModels.localizedTitle,
       image: UIImage(systemName: "key.fill"),
       selectedImage: nil
     )
 
     let quizNavC = UINavigationController(rootViewController: QuizVC())
     quizNavC.tabBarItem = UITabBarItem(
-      title: Localizations.Quiz.localizedTitle,
+      title: L.Quiz.localizedTitle,
       image: UIImage(named: QuizVC.englishTitle),
       selectedImage: nil
     )
@@ -37,14 +37,14 @@ class MainTabBarVC: UITabBarController {
     let settingsVC = UIHostingController(rootView: SettingsView())
     Current.parentViewController = settingsVC
     settingsVC.tabBarItem = UITabBarItem(
-      title: Localizations.Settings.localizedTitle,
+      title: L.Settings.localizedTitle,
       image: UIImage(named: SettingsView.englishTitle),
       selectedImage: nil
     )
 
     let browseInfoNavC = UINavigationController(rootViewController: BrowseInfoVC())
     browseInfoNavC.tabBarItem = UITabBarItem(
-      title: Localizations.BrowseInfo.localizedTitle,
+      title: L.BrowseInfo.localizedTitle,
       image: UIImage(named: BrowseInfoVC.englishTitle),
       selectedImage: nil
     )

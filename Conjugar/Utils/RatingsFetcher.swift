@@ -52,11 +52,9 @@ struct RatingsFetcher {
 
         switch ratingsCount {
         case 0:
-          description = Localizations.Settings.noRating + exhortation
-        case 1:
-          description = Localizations.Settings.oneRating + " " + Localizations.Settings.addYours
+          description = L.Settings.noRating + exhortation
         default:
-          description = String(format: Localizations.Settings.multipleRatings, ratingsCount) + " " + Localizations.Settings.addYours
+          description = L.Settings.ratings(count: ratingsCount) + " " + L.Settings.addYours
         }
         completion(description)
       }

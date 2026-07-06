@@ -56,9 +56,9 @@ class ModelVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let modelView = ModelUIV(frame: UIScreen.main.bounds)
     modelView.setupTable(dataSource: self, delegate: self)
     initNavigationItemTitleView()
-    var details = String(format: Localizations.Model.numberAndPercent, modelInfo.classNumber, modelInfo.irregularityPercent)
+    var details = L.Model.numberAndPercent(model: modelInfo.classNumber, percent: modelInfo.irregularityPercent)
     if Conjugator.isDefective(infinitive: modelInfo.exemplar) {
-      details += " · " + Localizations.Verb.defective
+      details += " · " + L.Verb.defective
     }
     modelView.details.text = details
     modelView.gloss.text = VerbMap.shared.entry(for: modelInfo.exemplar)?.gloss ?? ""
@@ -118,9 +118,7 @@ class ModelVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     )
     headerView.participio.attributedText = nonFiniteLine(tense: .participio)
     headerView.gerundio.attributedText = nonFiniteLine(tense: .gerundio)
-    headerView.verbsCount.text = modelInfo.verbs.count == 1
-      ? Localizations.Model.verbUsing
-      : String(format: Localizations.Model.verbsUsing, modelInfo.verbs.count)
+    headerView.verbsCount.text = L.Model.verbsUsing(count: modelInfo.verbs.count)
     for (personIndex, personNumber) in ModelVC.gridPersons.enumerated() {
       for (tenseIndex, gridTense) in ModelVC.gridTenses.enumerated() {
         let label = headerView.formLabels[personIndex][tenseIndex]

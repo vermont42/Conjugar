@@ -53,9 +53,9 @@ struct ConjugatorResolverTests {
   // sense stays retrievable via the map (VerbMapTests covers the alternate).
   @Test("homonyms conjugate their default sense by name", arguments: [
     ("apostar", "apuesto"),  // default 4B (bet) — mostrar diphthong, not regular 1 (station)
-    ("asolar",  "asuelo"),   // default 4B (raze)
+    ("asolar", "asuelo"),   // default 4B (raze)
     ("aterrar", "aterro"),   // default 1 (terrify) — regular, not 4A (demolish → atierro)
-    ("atestar", "atiesto"),  // default 4A (stuff) — diphthong, not regular 1 (attest)
+    ("atestar", "atiesto")  // default 4A (stuff) — diphthong, not regular 1 (attest)
   ])
   func homonymDefaultByName(infinitive: String, expected: String) {
     #expect(Self.form(infinitive, .presenteDeIndicativo(.firstSingular)) == expected)
@@ -70,7 +70,7 @@ struct ConjugatorResolverTests {
     ("plopar", EngineTense.presenteDeIndicativo(.firstSingular), "plopo"),
     ("plopar", .pretérito(.thirdSingular), "plopó"),
     ("zumber", .presenteDeIndicativo(.firstSingular), "zumbo"),
-    ("frobir", .gerundio, "frobiendo"),
+    ("frobir", .gerundio, "frobiendo")
   ])
   func offListFallback(infinitive: String, tense: EngineTense, expected: String) {
     #expect(VerbMap.shared.entry(for: infinitive) == nil, "\(infinitive) unexpectedly in the map")
@@ -93,7 +93,7 @@ struct ConjugatorResolverTests {
   // model the map points at. This pins the no-`model:` path to the (independently
   // tested) explicit path so the two can never silently diverge.
   @Test("by-name == explicit model for mapped verbs", arguments: [
-    "tener", "oír", "reír", "conducir", "hacer", "construir", "ir", "haber", "abrir", "cantar",
+    "tener", "oír", "reír", "conducir", "hacer", "construir", "ir", "haber", "abrir", "cantar"
   ])
   func byNameMatchesExplicit(infinitive: String) {
     guard
@@ -103,7 +103,7 @@ struct ConjugatorResolverTests {
     let slots: [EngineTense] = [
       .presenteDeIndicativo(.firstSingular), .pretérito(.thirdSingular),
       .futuro(.firstSingular), .participioPasado, .gerundio,
-      .imperativoAfirmativo(.secondSingular),
+      .imperativoAfirmativo(.secondSingular)
     ]
     for tense in slots {
       let byName = Conjugator.conjugate(infinitive: infinitive, tense: tense)
