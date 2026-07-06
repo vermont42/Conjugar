@@ -40,7 +40,7 @@ struct ConjugarApp: App {
 struct TestApp: App {
   var body: some Scene {
     WindowGroup {
-      Text("Running unit tests…")
+      Text(verbatim: "Running unit tests…")
     }
   }
 }
