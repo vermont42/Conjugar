@@ -27,8 +27,7 @@ struct MainTabView: View {
         .ignoresSafeArea()
         .tabItem { Label(L.Quiz.localizedTitle, image: "Quiz") }
 
-      NavHostedVC { BrowseInfoVC() }
-        .ignoresSafeArea()
+      InfoBrowseView()
         .tabItem { Label(L.BrowseInfo.localizedTitle, image: "Info") }
 
       SettingsView()

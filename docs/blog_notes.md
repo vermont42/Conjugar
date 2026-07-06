@@ -1541,3 +1541,52 @@ is light/dark correct for free.
   today) in both light and dark: gold headings over legible neutral body copy, no
   regression. Build clean, SwiftLint clean (0 violations). No screen wired to the new
   primitives yet — that's Step 4, which now has its whole toolbox ready.
+
+7/6/26: **SwiftUI migration Step 4, screen 1 — Info (list + detail).** The first
+UIKit screen retired for a native SwiftUI one. The old `BrowseInfoVC`/`InfoVC` pair
+rendered marked-up articles by building an `NSAttributedString` (`String.infoString`)
+for a `UITextView`; the port parses the same markup into a structured, SwiftUI-native
+model instead — ported and adapted from sibling Konjugieren's rich-text pipeline.
+
+- **A structured rich-text model + parser** (`Utils/RichText.swift`): the markup
+  (`^…^` subheading, `~…~` bold, `%…%` link/cross-ref, `$…$` conjugation with
+  uppercase = irregular) parses into `[RichTextBlock]` → `[TextSegment]` →
+  `[ConjugationPart]`, which `RichTextView` renders as native `Text`. This is what lets
+  body copy be adaptive-colored: subheadings stay serif gold, but body runs now render
+  in `customForeground` (audit §8 "reconsider the all-gold body"), and irregular
+  conjugation spans stay `customRed`. Konjugieren's `^`-for-emoji marker was dropped
+  (Conjugar uses `^` for subheadings, has no emoji), and the link marker adapted from
+  `‡` to Conjugar's `%`. Unterminated markers recover gracefully (`assertionFailure` +
+  flush) rather than the reference's hard `fatalError`.
+- **`Info` became a SwiftUI value model** (`Hashable, Identifiable`): heading renders
+  separately as a serif gold `largeTitle`, and the body parses to `richTextBlocks`. Gave
+  each article an `InfoSection` (`.about` / `.tenses`) so the list can be sectioned per
+  audit §7 — "About" (Purpose & Use, Terminology, Q&A, Voseo, Credits) vs "Tenses"
+  (everything else). The old percent-encoded-heading link machinery is gone; cross-refs
+  resolve at tap time via `Info.info(forHeading:)`.
+- **`InfoBrowseView`** — a sectioned `List` of left-aligned serif rows (replacing the
+  centered UIKit cells), with the **difficulty filter moved into the Tenses section
+  header** so its relationship to what it narrows is explicit (audit §7: the About
+  articles are all `.easy`, so the filter only ever affects tenses). The rank-based
+  filter reproduces the old thresholds exactly (Easy → 9 rows, +Moderate → 17, all → 28),
+  still persisted through `Settings.infoDifficulty`, now with `.snappy` animation and a
+  selection haptic. `InfoView` — serif gold title, reading-width body, the app's
+  red/yellow/blue triad rule; a tapped `%…%` term opens an external URL
+  (`.systemAction`) or drills into the referenced article (`navigationPath.append`,
+  replacing the old pop-then-push).
+- **Test debt retired.** Deleted `BrowseInfoVC`/`InfoVC`/`BrowseInfoUIV`/`InfoUIV`/
+  `InfoCell`/`InfoDelegate` and their three crashing-prone XCTest suites
+  (`BrowseInfoVCTests`, `InfoVCTests`, `InfoCellTests`); replaced them with a Swift
+  Testing `InfoTests` suite (10 tests: model counts, difficulty thresholds, section
+  partition, case-insensitive heading lookup, and the parser's subheading/bold/http-link/
+  cross-ref/conjugation cases). Also dropped the now-dead `String.infoString` +
+  markup-separator statics from `StringExtensions` (keeping `conjugatedString`/
+  `coloredString`, still used by the not-yet-migrated Verb/Model/Quiz screens) and
+  de-`InfoVC`'d `UIAlertControllerExtensionTests`.
+
+**Verified in the simulator, both appearances.** The list reads as sectioned
+About/Tenses cards with gold-labeled filter; tapping "E" narrows Tenses to the four easy
+articles while About is untouched; the detail renders serif gold title + subheadings,
+adaptive body copy, and bold inline terms — legible in light (darkened gold on white) and
+dark alike. Build clean, SwiftLint clean (0 violations), `InfoTests` + the touched alert
+suite green.

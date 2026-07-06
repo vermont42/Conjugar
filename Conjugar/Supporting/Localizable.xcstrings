@@ -68,6 +68,22 @@
         }
       }
     },
+    "BrowseInfo.aboutSection" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acerca de"
+          }
+        }
+      }
+    },
     "BrowseInfo.easy" : {
       "localizations" : {
         "en" : {
@@ -144,6 +160,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Información"
+          }
+        }
+      }
+    },
+    "BrowseInfo.tensesSection" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tenses"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiempos"
           }
         }
       }

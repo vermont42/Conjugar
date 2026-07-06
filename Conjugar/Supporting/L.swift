@@ -49,6 +49,14 @@ enum L {
     static var filter: String {
       String(localized: "BrowseInfo.filter")
     }
+
+    static var aboutSection: String {
+      String(localized: "BrowseInfo.aboutSection")
+    }
+
+    static var tensesSection: String {
+      String(localized: "BrowseInfo.tensesSection")
+    }
   }
 
   enum BrowseModels {

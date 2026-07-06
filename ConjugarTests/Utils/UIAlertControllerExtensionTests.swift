@@ -11,10 +11,10 @@ import UIKit
 @testable import Conjugar
 
 @MainActor
-class UIAlertControllerExtensionTests: XCTestCase, InfoDelegate {
+class UIAlertControllerExtensionTests: XCTestCase {
   func testShowMessage() {
     Current = World.unitTest
-    let ivc = InfoVC(infoString: NSAttributedString(string: "🍕"), infoDelegate: self)
+    let ivc = UIViewController()
 
     guard let window = UIApplication.shared.connectedScenes
     .filter({$0.activationState == .foregroundActive})
@@ -32,6 +32,4 @@ class UIAlertControllerExtensionTests: XCTestCase, InfoDelegate {
     UIAlertController.showMessage("", title: "", okTitle: "", onViewController: ivc)
     XCTAssert(ivc.presentedViewController is UIAlertController)
   }
-
-  func infoSelectionDidChange(newHeading: String) { }
 }
