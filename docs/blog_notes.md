@@ -1495,9 +1495,12 @@ siblings lack or lay out differently.
   `customCardBorder` (the siblings' `customSurface` role) and a brand-colored `HeadingLabel`,
   so of Conjuguer's five "Batch A" primitives only **`customGreen`** (to de-overload red)
   and a `.card()` modifier + sensory-feedback/numeric-text helpers remain.
-- **One real bug surfaced in the fresh audit:** the Model-detail conjugation grid
-  (`ModelVC`) lays out six pronoun columns at a fixed width but **only ~4 fit** — vosotros
-  and ellos are clipped off the right edge with no scroll (screenshot `04`). Flagged for the
-  Step-4 detail-screen migration.
+- **A false alarm, corrected during review:** the Model-detail conjugation grid (`ModelVC`)
+  looks clipped at rest (screenshot `04` cuts "nosotr…" mid-word), and an early draft called
+  it a layout bug. It isn't — the grid is a horizontal `UIScrollView`, and swiping reveals all
+  six persons incl. vosotros/ellas (screenshot `04b`). The real, minor note is
+  *discoverability*: the scroll indicator is disabled and nothing cues that more columns exist,
+  so the SwiftUI port should signal the horizontal scroll. A reminder that a static screenshot
+  isn't proof of a defect — check the source (and swipe) before crying bug.
 - The audit closes with a sequencing table tying each screen's mapped items to Step 4's
   migration order (Info → lists → details → Commun → Quiz last).

@@ -8,6 +8,12 @@ the **pre-improvement** UI of its siblings **Konjugieren** (German) and **Conjug
 audit only** for the screens the siblings lack or lay out differently — chiefly the
 **Models** tab and the **Commun** messaging modal._
 
+> **Correction (post-review):** an earlier draft flagged the Model-detail conjugation grid
+> as a clipping *bug*. It is **not** — the grid is a horizontal `UIScrollView`
+> (`ModelHeaderUIV.gridScroll`) and all six persons are reachable by swiping
+> (see `04-…` un-scrolled vs `04b-…` scrolled). The remaining note is a minor
+> *discoverability* one (§10), not a defect.
+
 **Source audits (cross-reference keys used below):**
 
 - **K#** → Konjugieren, `Konjugieren/docs/ui-audit.md` (24 numbered items).
@@ -22,7 +28,7 @@ the `run-in-simulator` skill, iPhone 17 / iOS 26):
 | Browse Verbs (`BrowseVerbsVC`) | verb list | `01-browse-verbs-dark.png` | `11-browse-verbs-light.png` |
 | Verb detail (`VerbVC`) | conjugation list | `02-verb-detail-dark.png` | _(see light verb detail in run)_ |
 | Browse Models (`BrowseModelsVC`) | model list | `03-browse-models-dark.png` | — |
-| Model detail (`ModelVC`) | grid + verbs-using | `04-model-detail-dark.png` | — |
+| Model detail (`ModelVC`) | grid + verbs-using | `04-model-detail-dark.png`, `04b-…-scrolled-dark.png` | — |
 | Quiz not-started (`QuizVC`) | Start screen | `05-quiz-notstarted-dark.png` | — |
 | Quiz in-progress (`QuizVC`) | question screen | `06-quiz-inprogress-dark.png` | `12-quiz-inprogress-light.png` |
 | Browse Info (`BrowseInfoVC`) | topic list | `07-browse-info-dark.png` | — |
@@ -244,20 +250,24 @@ the siblings' pre-improvement issues:
 
 ## Fresh audit — Conjugar-specific screens
 
-### 10. Model detail  (`ModelVC`, screenshot 04)  ⚠️ contains a real layout bug
+### 10. Model detail  (`ModelVC`, screenshots 04 / 04b)
 
 This screen has no direct sibling equivalent (Conjuguer's `ModelView` uses an endings grid,
 not a full conjugation grid). It shows: a header (exemplar, "Model 28 · 82% irregular",
 gloss, participio/gerundio), a **conjugation grid** (tense rows × pronoun columns), a
 "verbs using this model" count, and a list of those verbs.
 
-- **🔴 The conjugation grid overflows the screen and clips.** _(fresh, high)_ The grid lays
-  out six pronoun columns (yo / tú / él / nosotros / vosotros / ellos) at a fixed width, but
-  **only ~4 fit** — screenshot 04 shows "nosotr…", "decim…", "digam…" hard-cut at the right
-  edge with **no horizontal scroll and no truncation affordance**. The last two persons
-  (vosotros, ellos) are entirely invisible. The SwiftUI rebuild must either make the grid
-  horizontally scrollable, shrink to fit (`minimumScaleFactor`/`ViewThatFits`), or restructure
-  (e.g. pronoun rows within each tense) so all six persons are reachable.
+- **The grid already scrolls horizontally — preserve that, and improve its discoverability.**
+  _(fresh, low)_ The grid is a horizontal `UIScrollView` (`ModelHeaderUIV.gridScroll`) whose
+  `gridStack` holds all six persons (yo / tú / él / nosotros / vosotros / ellas); screenshot
+  04 is only the un-scrolled position, and 04b confirms vosotros/ellas appear on swipe — so
+  it is **not** a clipping bug. What it *is* missing is a **cue that more columns exist**: the
+  scroll indicator is disabled (`showsHorizontalScrollIndicator = false`) and the initial view
+  cuts mid-word ("nosotr…", "decim…") with no fade or arrow. The SwiftUI port should keep the
+  horizontal scroll but signal it — e.g. a leading/trailing mask-gradient, a visible
+  indicator, or a `ScrollView(.horizontal)` with `.scrollIndicators(.visible)` — so users know
+  to swipe. (An even better rebuild might fit all six persons via a two-column-per-tense
+  layout or `ViewThatFits`, but that's an enhancement, not a fix.)
 - **Badge the irregularity percent.** _(adapted from C15)_ "Model 28 · 82% irregular" and the
   list's inline "82%" (screenshot 03) should be a tinted `Capsule` badge, its tint scaled by
   the percentage.
@@ -323,7 +333,7 @@ Step 4's suggested order, annotated with the mapped items each screen carries:
 | **0 (foundations)** | `Modifiers.swift`, `Assets.xcassets` | `.card()`, `customGreen`, sensory-feedback + numeric-text helpers |
 | **1** | Info (`BrowseInfoVC` → list, `InfoVC` → detail) | §7, §8 — mostly text; exercises rich-text markup |
 | **2** | Browse lists (`BrowseVerbsVC`, `BrowseModelsVC`) | §6, §11 |
-| **3** | Detail screens (`VerbVC`, `ModelVC`) | §4, §5, §10 — **incl. the Model-grid overflow bug** |
+| **3** | Detail screens (`VerbVC`, `ModelVC`) | §4, §5, §10 — incl. signalling the Model-grid horizontal scroll |
 | **4** | `CommunVC` | §12 |
 | **5** | Quiz (`QuizVC` → `ResultsVC`) — last | §1, §2, §3 — the marquee redesign, on the Step-0 `@Observable Quiz` |
 
