@@ -8,13 +8,17 @@
 
 import UIKit
 
-struct Commun {
+struct Commun: Identifiable {
   let title: [String: String]
   let image: UIImage
   let imageLabel: [String: String]
   let content: [String: String]
   let type: CommunType
   let identifier: Int
+
+  /// A communication is uniquely identified by its CloudKit identifier — used to
+  /// drive the SwiftUI `fullScreenCover(item:)` presentation.
+  var id: Int { identifier }
 
   enum CommunType {
     case information(okayTitle: [String: String])

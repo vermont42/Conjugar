@@ -13,6 +13,8 @@ import SwiftUI
 import UIKit
 
 struct MainTabView: View {
+  @State private var commun: Commun?
+
   var body: some View {
     TabView {
       VerbBrowseView()
@@ -31,11 +33,21 @@ struct MainTabView: View {
       SettingsView()
         .tabItem { Label(L.Settings.localizedTitle, image: "Settings") }
     }
-    // NOTE: the launch-time "new communication" presentation that MainTabBarVC
-    // did in viewDidLoad (present CommunVC when a newer commun exists and no
-    // quiz is in progress) is intentionally deferred until CommunVC is migrated
-    // to SwiftUI in Step 4, rather than bridging a self-dismissing UIKit modal
-    // into a SwiftUI cover for a screen about to be rewritten.
+    .task { await presentCommunIfNeeded() }
+    .fullScreenCover(item: $commun) { commun in
+      CommunView(commun: commun) { self.commun = nil }
+    }
+  }
+
+  /// The launch-time "new communication" presentation MainTabBarVC used to do in
+  /// viewDidLoad: fetch the latest commun and present it once if it is newer than
+  /// the last one shown and no quiz is in progress.
+  private func presentCommunIfNeeded() async {
+    guard let commun = await Current.communGetter.getCommunication() else { return }
+    guard Current.quiz.quizState != .inProgress,
+          commun.identifier > Current.settings.lastCommunIdentifierShown else { return }
+    Current.settings.lastCommunIdentifierShown = commun.identifier
+    self.commun = commun
   }
 }
 

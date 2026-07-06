@@ -40,7 +40,7 @@ extension AnalyticsService {
   }
 
   func recordCommunVisitation(identifier: Int) {
-    recordVisitation(viewController: "\(CommunVC.self) \(identifier)")
+    recordVisitation(viewController: "\(CommunView.self) \(identifier)")
   }
 
   func recordOkayTap(identifier: Int) {

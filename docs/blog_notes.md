@@ -1670,3 +1670,33 @@ badges; tapping *decir* opens a ModelView whose grid shows d**i**go / d**i**ce /
 d**i**jo… with the future-stem d**i**ré across the scrollable pronoun columns; tapping the
 *decir* row drills into the native VerbView — all inside the one Models NavigationStack.
 Build clean, SwiftLint clean, model/verb/info suites green.
+
+7/6/26: **SwiftUI migration Step 4, screen 4 — Commun (the CloudKit message modal).**
+The rarely-seen, server-driven popup, and the piece whose launch-time auto-present was
+deliberately deferred back in Step 0. Both are now done.
+
+- **`CommunView`** (replaces CommunVC/CommunUIV): serif gold title, a **conditionally-
+  omitted** image (the stub/absent image is a zero-size `UIImage()` — `hasImage` gates the
+  view), and carded body copy on the app surface, with the type-specific buttons
+  (okay / action / cancel) routed through the shared `PrimaryButtonStyle` /
+  `LinkButtonStyle`, and a **discoverable toolbar dismiss** (a red ✕ in the cancellation
+  slot) — audit §12. It reuses the existing `CommunViewModel` unchanged for the display
+  logic (title/content/image/button visibility, per `Commun.CommunType`), and preserves
+  the exact tap behaviors: close/okay/cancel dismiss + analytics; action plays applause,
+  dismisses, then runs the commun's `action()` (open App Store / email / website).
+- **Restored the launch-time presentation** in `MainTabView`: a `.task` fetches
+  `Current.communGetter.getCommunication()` and, if no quiz is in progress and the
+  identifier is newer than `Settings.lastCommunIdentifierShown`, presents it via
+  `.fullScreenCover(item:)` and records it as shown — the SwiftUI equivalent of the old
+  `MainTabBarVC.viewDidLoad` gate. `Commun` gained `Identifiable` (id = identifier) to
+  drive the cover.
+- Deleted CommunVC/CommunUIV and the crashing `CommunVCTests`; kept `CommunViewModel` (+
+  `CommunViewModelTests`, still valid) and the `Commun`/`CommunGetter` model. Re-pointed
+  `AnalyticsService.recordCommunVisitation` off the deleted `CommunVC` to `CommunView`.
+
+**Verified in the simulator.** On a fresh install the simulator's `CommunGetterStub`
+returns the "New Version" commun (id 2 > the −1 default) after its 2 s delay, and it
+presents full-screen at launch: serif gold title, the flamenco-dancer image, the release
+message, and a "Cool, I Have It" primary capsule (alreadyUpdated ⇒ okay-only). Tapping the
+✕ dismisses back to Browse, and `lastCommunIdentifierShown` is bumped so it won't recur.
+Build clean, SwiftLint clean.
