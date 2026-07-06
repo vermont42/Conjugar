@@ -15,8 +15,7 @@ import UIKit
 struct MainTabView: View {
   var body: some View {
     TabView {
-      NavHostedVC { BrowseVerbsVC() }
-        .ignoresSafeArea()
+      VerbBrowseView()
         .tabItem { Label(L.BrowseVerbs.localizedTitle, image: "Browse") }
 
       NavHostedVC { BrowseModelsVC() }

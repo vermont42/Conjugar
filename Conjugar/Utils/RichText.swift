@@ -200,9 +200,11 @@ extension String {
     return URL(string: encoded)
   }
 
-  /// Split a `$…$` conjugation body into irregular (uppercase) and regular runs,
-  /// lowercasing everything for display. Mirrors the legacy `conjugatedString`.
-  private func parseConjugationToSegment() -> TextSegment {
+  /// Split a conjugation string into irregular (uppercase) and regular runs,
+  /// lowercasing everything for display. Mirrors the legacy `conjugatedString`;
+  /// also used directly for the Verb/Model/Quiz conjugation displays, where the
+  /// engine marks the irregular span with uppercase letters.
+  func parseConjugationToSegment() -> TextSegment {
     guard !isEmpty else { return .conjugation([]) }
 
     var parts: [ConjugationPart] = []

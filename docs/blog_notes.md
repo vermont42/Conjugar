@@ -1590,3 +1590,43 @@ articles while About is untouched; the detail renders serif gold title + subhead
 adaptive body copy, and bold inline terms — legible in light (darkened gold on white) and
 dark alike. Build clean, SwiftLint clean (0 violations), `InfoTests` + the touched alert
 suite green.
+
+7/6/26: **SwiftUI migration Step 4, screen 2 — Browse Verbs + Verb detail.** Migrated
+the verb-browse flow as one unit. The plan lists "browse lists" and "detail screens" as
+separate steps, but the screens push each other (Browse → Verb, and later Model → Verb),
+so migrating a list while its pushed detail stays UIKit would mean hosting a
+push-capable VC inside SwiftUI navigation — messy and short-lived. Migrating each *flow*
+end-to-end keeps navigation value-based and needs no un-migration.
+
+- **A shared conjugation renderer** (`Views/ConjugationText.swift`): the SwiftUI
+  equivalent of the legacy `String.conjugatedString` — takes an engine-marked form
+  (uppercase = irregular) and renders native `Text` with the irregular span in
+  `customRed`, serif. Reused by Verb now and Model/Quiz/Results later. Backed by making
+  `String.parseConjugationToSegment` (from the Info work) internal.
+- **`VerbView`** (replaces VerbVC/VerbUIV): a metadata header — gloss, an Irregular/
+  parent or Regular-AR/ER/IR pill, a red "Defective" pill when defective, and the
+  Participio / Gerundio / Raíz Futura non-finite forms — over one card **per tense** with
+  a leading yellow accent bar, a serif gold tense heading, and a **two-column
+  pronoun | form `Grid`** (audit §4). Irregular spans render red; every form speaks on tap
+  (`.speakOnTapFlash`); defective slots show a muted "—". It reuses `ConjugationDataSource`
+  to build the exact rows the UIKit table showed (same secondSingularBrowse handling,
+  imperativo ¡…! wrapping, defective blanks), so conjugation parity is guaranteed.
+- **`VerbBrowseView`** (replaces BrowseVerbsVC/BrowseVerbsUIV/VerbCell): all ~4,811 mapped
+  verbs in a `LazyVStack`, a "4,811 verbs" small-caps count banner (audit §6, K14), two-
+  line serif rows (gold infinitive + gloss + blue #rank badge), and the Frequency /
+  Alphabetical segmented control pinned at the bottom — now with `.snappy` animated
+  re-sort, scroll-to-top, a `.selection` haptic, and `Settings.verbSort` persistence
+  intact. Both sort orders precompute once (`static let verbsBySort`, mirroring the old
+  VC). New `L.BrowseVerbs.sort` / `verbCount` (pluralized) strings.
+- **Coexistence note:** VerbVC/VerbUIV/VerbCell are **kept for now** — the still-UIKit
+  ModelVC pushes VerbVC and its "verbs using this model" list dequeues VerbCell. They're
+  deleted in the next unit (Browse Models + Model detail), where ModelView will link to
+  the native VerbView instead. Deleted only BrowseVerbsVC/BrowseVerbsUIV and the crashing
+  `BrowseVerbsVCTests`; added Swift Testing `ConjugationTextTests` (irregular-span
+  coloring). Verb sorting stays covered by the existing `VerbSortTests`.
+
+**Verified in the simulator, both appearances.** Browse shows the count banner and
+frequency order (ser #1 · haber #2 · tener #3) with rank badges; tapping *ser* pushes a
+VerbView whose Presente reads yo so**y** / tú **er**es / **es** and Pretérito **fu**i /
+**fu**e with the irregular spans red, over accent-barred serif cards — legible in light
+and dark. Build clean, SwiftLint clean (0 violations), new + touched suites green.

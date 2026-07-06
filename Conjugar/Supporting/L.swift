@@ -69,6 +69,14 @@ enum L {
     static var localizedTitle: String {
       String(localized: "BrowseVerbs.localizedTitle")
     }
+
+    static var sort: String {
+      String(localized: "BrowseVerbs.sort")
+    }
+
+    static func verbCount(count: Int) -> String {
+      String(localized: "BrowseVerbs.verbCount \(count)")
+    }
   }
 
   enum Difficulty {
