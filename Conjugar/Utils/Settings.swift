@@ -61,6 +61,16 @@ class Settings {
   static let verbSortKey = "verbSort"
   static let verbSortDefault: VerbSort = .frequency
 
+  var modelSort: ModelSort {
+    didSet {
+      if modelSort != oldValue {
+        getterSetter.set(key: Settings.modelSortKey, value: modelSort.rawValue)
+      }
+    }
+  }
+  static let modelSortKey = "modelSort"
+  static let modelSortDefault: ModelSort = .irregularity
+
   var secondSingularQuiz: SecondSingularQuiz {
     didSet {
       if secondSingularQuiz != oldValue {
@@ -159,6 +169,13 @@ class Settings {
     } else {
       verbSort = Settings.verbSortDefault
       getterSetter.set(key: Settings.verbSortKey, value: verbSort.rawValue)
+    }
+
+    if let modelSortString = getterSetter.get(key: Settings.modelSortKey) {
+      modelSort = ModelSort(rawValue: modelSortString) ?? Settings.modelSortDefault
+    } else {
+      modelSort = Settings.modelSortDefault
+      getterSetter.set(key: Settings.modelSortKey, value: modelSort.rawValue)
     }
 
     if let secondSingularQuizString = getterSetter.get(key: Settings.secondSingularQuizKey) {

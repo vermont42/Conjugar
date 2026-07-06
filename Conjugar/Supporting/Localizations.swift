@@ -77,6 +77,12 @@ enum Localizations {
     }
   }
 
+  enum BrowseModels {
+    static var localizedTitle: String {
+      NSLocalizedString("Models", comment: "")
+    }
+  }
+
   enum BrowseVerbs {
     static var localizedTitle: String {
       NSLocalizedString("Browse", comment: "")
@@ -145,6 +151,26 @@ Tap ~Info~ in the tab bar to access information about ~Conjugar~, %terminology%,
 
     static var creditsHeading: String {
       NSLocalizedString("Credits", comment: "")
+    }
+  }
+
+  enum Model {
+    static var numberAndPercent: String {
+      NSLocalizedString("Model %@ · %d%% irregular", comment: "")
+    }
+
+    static var verbsUsing: String {
+      NSLocalizedString("%d verbs use this model", comment: "")
+    }
+  }
+
+  enum ModelSort {
+    static var irregularity: String {
+      NSLocalizedString("Irregularity", comment: "")
+    }
+
+    static var classNumber: String {
+      NSLocalizedString("Number", comment: "")
     }
   }
 

@@ -20,6 +20,13 @@ class MainTabBarVC: UITabBarController {
       selectedImage: nil
     )
 
+    let browseModelsNavC = UINavigationController(rootViewController: BrowseModelsVC())
+    browseModelsNavC.tabBarItem = UITabBarItem(
+      title: Localizations.BrowseModels.localizedTitle,
+      image: UIImage(systemName: "key.fill"),
+      selectedImage: nil
+    )
+
     let quizNavC = UINavigationController(rootViewController: QuizVC())
     quizNavC.tabBarItem = UITabBarItem(
       title: Localizations.Quiz.localizedTitle,
@@ -42,7 +49,7 @@ class MainTabBarVC: UITabBarController {
       selectedImage: nil
     )
 
-    viewControllers = [browseVerbsNavC, quizNavC, browseInfoNavC, settingsVC]
+    viewControllers = [browseVerbsNavC, browseModelsNavC, quizNavC, browseInfoNavC, settingsVC]
   }
 
   override func viewDidLoad() {

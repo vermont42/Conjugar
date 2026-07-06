@@ -14,6 +14,7 @@ class MainTabBarVCTests: XCTestCase {
   func testMainTabBarVC() {
     let mtbvc = MainTabBarVC()
     XCTAssertNotNil(mtbvc)
+    XCTAssertEqual(mtbvc.viewControllers?.count, 5)
 
     if let firstNavC = mtbvc.selectedViewController as? UINavigationController {
       if let browseVerbsVC = firstNavC.visibleViewController {
@@ -27,9 +28,9 @@ class MainTabBarVCTests: XCTestCase {
 
     mtbvc.selectedIndex = 1
     if let secondNavC = mtbvc.selectedViewController as? UINavigationController {
-      if let quizVC = secondNavC.visibleViewController {
-        if !(quizVC is QuizVC) {
-          XCTFail("Second tab's UINavigationController's visibleViewController is not a QuizVC.")
+      if let browseModelsVC = secondNavC.visibleViewController {
+        if !(browseModelsVC is BrowseModelsVC) {
+          XCTFail("Second tab's UINavigationController's visibleViewController is not a BrowseModelsVC.")
         }
       }
     } else {
@@ -38,9 +39,9 @@ class MainTabBarVCTests: XCTestCase {
 
     mtbvc.selectedIndex = 2
     if let thirdNavC = mtbvc.selectedViewController as? UINavigationController {
-      if let browseInfoVC = thirdNavC.visibleViewController {
-        if !(browseInfoVC is BrowseInfoVC) {
-          XCTFail("Third tab's UINavigationController's visibleViewController is not a BrowseInfoVC.")
+      if let quizVC = thirdNavC.visibleViewController {
+        if !(quizVC is QuizVC) {
+          XCTFail("Third tab's UINavigationController's visibleViewController is not a QuizVC.")
         }
       }
     } else {
@@ -48,8 +49,19 @@ class MainTabBarVCTests: XCTestCase {
     }
 
     mtbvc.selectedIndex = 3
+    if let fourthNavC = mtbvc.selectedViewController as? UINavigationController {
+      if let browseInfoVC = fourthNavC.visibleViewController {
+        if !(browseInfoVC is BrowseInfoVC) {
+          XCTFail("Fourth tab's UINavigationController's visibleViewController is not a BrowseInfoVC.")
+        }
+      }
+    } else {
+      XCTFail("Fourth tab is not a UINavigationController.")
+    }
+
+    mtbvc.selectedIndex = 4
     if mtbvc.selectedViewController == nil {
-      XCTFail("Fourth tab's selectedViewController was nil.")
+      XCTFail("Fifth tab's selectedViewController was nil.")
     }
   }
 }

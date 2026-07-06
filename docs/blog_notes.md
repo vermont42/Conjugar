@@ -1190,3 +1190,47 @@ headers left in `EngineTense`/`EnginePersonNumber` from the earlier rename round
 
 Build green, full suite green twice (no ordering flake this time), swiftlint
 steady at 132, and Browse → abajar renders the full grid in the simulator.
+
+## The Models tab — browsing the engine's verb models, Conjuguer-style
+
+Conjugar's French sibling Conjuguer has always had a tab Conjugar could not:
+**Models**, a browsable list of every verb model with an irregularity badge, a
+detail screen, and deep links to the verbs that use it. The legacy engine had no
+model concept to browse; the new engine's `ModelCatalog` is exactly that concept.
+So Conjugar now has a Models tab too, second from the left (Browse, **Models**,
+Quiz, Info, Settings), reproducing Conjuguer's UX in Conjugar's UIKit idiom — a
+new `BrowseModelsVC`/`BrowseModelsUIV`/`ModelCell` trio cloned from the Browse
+Verbs pattern, plus a `ModelVC`/`ModelUIV` detail screen whose verb rows push the
+regular Verb screen. Tab icon: the same `key.fill` SF Symbol Conjuguer uses.
+
+Three decisions worth recording:
+
+**Alias folding.** The catalog maps 106 class numbers, but four of them —
+29-2 satisfacer, 30-1 suponer, 31-1 obtener, 32-1 convenir — are prefix-accent
+aliases that ride their parents' models byte-for-byte (hacer, poner, tener,
+venir). Rows for them would have duplicated their parents' exemplars in the
+list, so they get no rows; their verbs fold into the parent row. The tab shows
+**102 models**, and a test pins that number so a future catalog edit can't
+silently change it.
+
+**The computed irregularity score.** Conjuguer stores each model's irregularity
+percent in its XML; Conjugar's models store nothing — but the score is
+*computable*. `ModelInfo` conjugates each row's exemplar twice per slot — once
+normally, once against a feature-less `VerbModel(base:)`, the same baseline the
+irregularity highlighting diffs against — across all 65 engine slots (9
+person-bearing tenses × 7 persons + participle + gerund) and counts differing
+results, treating an error (a defective's formless slot) as a distinct value.
+Classes 1/2/3 come out 0%; ir tops the list. The whole 102-exemplar computation
+is a one-time ~13k-conjugation pass, imperceptible at tab load.
+
+**The book-order comparator.** Conjuguer's Identifier sort leans on a stored
+`position`; Conjugar's class numbers must sort themselves, and book order is not
+string order ("2" < "10", "4A-2" < "4B", "4B" < "4B-1"). `ModelSort` parses each
+number into (leading integer, letter suffix, sub-number) and compares
+component-wise, with comparator edge cases pinned in tests.
+
+The three sorts (Irregularity — the Conjuguer default — Alphabetical, and
+Number) persist via `Settings.modelSort`, GetterSetter-backed like `verbSort`.
+Everything is localized in English and Spanish. Search on the Models and Browse
+lists remains a possible follow-up, as does making the Verb screen's
+"Irreg. ☛ conocer" label tap through to the model's detail screen.
