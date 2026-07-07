@@ -18,4 +18,8 @@ class LanguageModelServiceDummy: LanguageModelService {
   }
 
   func resetTutorSession() {}
+
+  func startAvailabilityMonitoring() {}
+
+  func stopAvailabilityMonitoring() {}
 }

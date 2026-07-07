@@ -2372,3 +2372,62 @@ slots (6 tenses × 6 persons) on every `body` evaluation; those forms are now pr
 
 Green: build succeeds, **411 tests / 0 failures**, SwiftLint 0 violations. The refactored
 `BrowseSearchTests` (now nonisolated, calling the pure filter) pass unchanged.
+
+---
+
+## Phase 6 — Quiz + services internals (items 12, 15, 16, 6)
+
+This was the "make the internals honest" pass: four unrelated bits of debt in `Quiz` and the
+audio/tutor services, none user-visible on a good day, all traps for the next person to touch them.
+
+**`Quiz` stops fighting itself (item 12).** The quiz carried thirteen near-identical cycling
+accessors — `regularArVerb`, `irregularPreteritoVerb`, … — each a five-line `index += 1; wrap;
+return` block paired with its own `…Index` var, plus a 13-line shuffle block and a 12-line
+index-reset block in `start()` (which, incidentally, forgot to reset one of the thirteen). All of
+it was one abstraction: a `Cycler` cursor (`restart(shuffle:)` + `next()`) that preserves the
+original stepping exactly (advance-first, so the first draw is element 1 and element 0 is reached
+only after a wrap). `Quiz` now holds `let regularAr = Cycler(VerbFamilies.regularArVerbs)` etc. and
+an `allCyclers` array, so both the shuffle and reset blocks collapse to one loop that can't skip a
+list. `settings`/`gameCenter`, stored as optionals and then `fatalError`-guarded in three places
+despite the initializer always setting them, became non-optional `let`s — three crash paths gone.
+`questions.shuffled().shuffled()` (one uniform shuffle was always enough) became `questions.shuffle()`.
+And `process()`'s `default: fatalError()` — which would crash a learner mid-quiz if the engine ever
+returned `.failure` for a quiz slot — now logs the slot and scores the question as a miss, still
+appending to `proposedAnswers`/`correctAnswers` and advancing so the run finishes cleanly. (The
+`VerbFamilies`↔`VerbMap` guard test from Phase 1 makes that branch "can't happen," but degrading
+beats crashing.)
+
+**The tutor stops polling forever (item 15).** `LanguageModelServiceReal` started an unconditional
+`while true { sleep 5s; re-check availability }` loop in `init` — for the whole app lifetime, on
+every launch, even for users who never open the Info tab, and it kept polling after availability
+settled. It exists so the Info-tab entry point can flip live between "tappable" and "Apple
+Intelligence not enabled," which only matters while that screen is visible. The loop is now behind
+`startAvailabilityMonitoring()` / `stopAvailabilityMonitoring()`, driven by `InfoBrowseView`'s
+`onAppear`/`onDisappear`, and it self-terminates the moment the model reports available (the common
+transition is one-way). The `LanguageModelServiceDummy` no-ops both.
+
+**The tool-call counter loses its `nonisolated(unsafe)` (item 6).** `ConjugationTool` capped tool
+calls per turn with a `nonisolated(unsafe) private static var callCount`, incremented from wherever
+the FoundationModels runtime invokes the tool and zeroed from the MainActor before each send — an
+unsynchronized read-modify-write across actors that the annotation merely silenced, and *global*, so
+a chat and the `TutorTestView` batch shared one counter. It's now a per-instance
+`OSAllocatedUnfairLock(initialState:)` (reference semantics, so it survives the struct being copied
+by the runtime), reset through the single tool instance the service now reuses across sessions. Same
+per-message cap, no race, no global sharing.
+
+**One audio-session owner, deliberately `.ambient` (item 16).** `Utterer.setup` set the shared
+`AVAudioSession` to `.playback` **with** `.mixWithOthers`; `SoundPlayer`'s lazy `init` later set
+`.playback` **without** it. Last writer won on the shared session, so the first quiz chime would
+reconfigure it and stop the user's podcast — and `.playback` plays through the silent switch, wrong
+for a study app's feedback chirps. `Utterer` is now the sole owner, configured once at launch to
+`.ambient` (mix with other audio *and* respect the silent switch — the right contract, and speech
+still works under it). `SoundPlayer` no longer touches the category; its `print`-on-error became a
+`Logger`, and its `Int.random(in: 0...count-1)` sound picks became `randomElement()`.
+`Utterer.settings` shed its optional + `fatalError` for a non-optional injected default. The
+2016-vintage `SoundPlayer.play(.silence)` workaround after each utterance was left in place pending a
+physical-device check — it's cheap and removing it risks a speech-audio regression I can't verify in
+the simulator.
+
+Green: build succeeds, **411 tests / 0 failures**, SwiftLint 0 violations. `QuizTests`' six
+region/difficulty perfect-run score invariants — the safety net for the `Cycler` rewrite — pass
+unchanged.

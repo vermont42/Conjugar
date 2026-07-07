@@ -67,7 +67,11 @@ struct InfoBrowseView: View {
       .navigationDestination(for: Info.self) { info in
         InfoView(info: info) { target in navigationPath.append(target) }
       }
-      .onAppear { Current.analytics.recordVisitation(viewController: "\(InfoBrowseView.self)") }
+      .onAppear {
+        Current.analytics.recordVisitation(viewController: "\(InfoBrowseView.self)")
+        Current.languageModelService.startAvailabilityMonitoring()
+      }
+      .onDisappear { Current.languageModelService.stopAvailabilityMonitoring() }
       .onChange(of: infoDifficulty) { _, newValue in
         Current.settings.infoDifficulty = newValue
       }

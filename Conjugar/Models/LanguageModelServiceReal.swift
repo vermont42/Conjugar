@@ -31,6 +31,10 @@ class LanguageModelServiceReal: LanguageModelService {
   private let model = SystemLanguageModel(guardrails: .permissiveContentTransformations)
 
   private var tutorSession: LanguageModelSession?
+  // One tool instance, reused across sessions, so its per-instance call counter is
+  // reset per message rather than shared through a global static (item 6).
+  private let conjugationTool = ConjugationTool()
+  private var availabilityMonitor: Task<Void, Never>?
 
   private(set) var isAvailable: Bool
   private(set) var unavailabilityReason: LanguageModelUnavailability?
@@ -39,18 +43,34 @@ class LanguageModelServiceReal: LanguageModelService {
     let snapshot = Self.snapshot(of: model.availability)
     self.isAvailable = snapshot.isAvailable
     self.unavailabilityReason = snapshot.reason
-    // Availability can flip after launch (user enables Apple Intelligence, the
-    // model finishes downloading). Poll so the Info-tab entry point reacts live —
-    // `@Observable` drives the SwiftUI update.
-    Task { [weak self] in
+  }
+
+  // Availability can flip after launch (user enables Apple Intelligence, the model
+  // finishes downloading). Poll so the Info-tab entry point reacts live — but only
+  // while that screen is on view, and stop once the model is available (item 15).
+  // `@Observable` drives the SwiftUI update.
+  func startAvailabilityMonitoring() {
+    guard availabilityMonitor == nil, !isAvailable else {
+      return
+    }
+    availabilityMonitor = Task { [weak self] in
       while !Task.isCancelled {
         try? await Task.sleep(for: .seconds(5))
         guard let self else {
           return
         }
         self.refreshAvailability()
+        if self.isAvailable {
+          break
+        }
       }
+      self?.availabilityMonitor = nil
     }
+  }
+
+  func stopAvailabilityMonitoring() {
+    availabilityMonitor?.cancel()
+    availabilityMonitor = nil
   }
 
   private func refreshAvailability() {
@@ -145,9 +165,9 @@ class LanguageModelServiceReal: LanguageModelService {
     var lastError: Error?
 
     for attempt in 0...maxRetries {
-      ConjugationTool.resetCallCount()
+      conjugationTool.resetCallCount()
       if attempt > 0 || tutorSession == nil {
-        tutorSession = LanguageModelSession(model: model, tools: [ConjugationTool()], instructions: Self.tutorInstructions)
+        tutorSession = LanguageModelSession(model: model, tools: [conjugationTool], instructions: Self.tutorInstructions)
       }
       guard let session = tutorSession else {
         throw LanguageModelServiceError.sessionUnavailable
@@ -168,7 +188,7 @@ class LanguageModelServiceReal: LanguageModelService {
       }
     }
 
-    tutorSession = LanguageModelSession(model: model, tools: [ConjugationTool()], instructions: Self.tutorInstructions)
+    tutorSession = LanguageModelSession(model: model, tools: [conjugationTool], instructions: Self.tutorInstructions)
     if lastRefusalResponse != nil {
       return L.Tutor.unableToAnswer
     }
@@ -224,11 +244,16 @@ struct ConjugationTool: Tool {
   let name = "conjugateVerb"
   let description = "Look up a Spanish verb conjugation"
 
-  nonisolated(unsafe) private static var callCount = 0
+  // Per-instance, lock-protected call counter. The FoundationModels runtime may
+  // invoke `call` from off the MainActor, so the count must be synchronized rather
+  // than a `nonisolated(unsafe)` static shared across every session (item 6).
+  // `OSAllocatedUnfairLock` has reference semantics, so the count survives the
+  // struct being copied by the runtime.
+  private let callState = OSAllocatedUnfairLock(initialState: 0)
   private static let maxCallsPerSession = 3
 
-  static func resetCallCount() {
-    callCount = 0
+  func resetCallCount() {
+    callState.withLock { $0 = 0 }
   }
 
   @Generable(description: "A Spanish verb conjugation lookup")
@@ -249,8 +274,11 @@ struct ConjugationTool: Tool {
   }
 
   func call(arguments: Arguments) async throws -> String {
-    Self.callCount += 1
-    if Self.callCount > Self.maxCallsPerSession {
+    let count = callState.withLock { state -> Int in
+      state += 1
+      return state
+    }
+    if count > Self.maxCallsPerSession {
       lmsLogger.warning("Tool call limit reached (\(Self.maxCallsPerSession))")
       return "Limit reached. Respond with the conjugations you already have."
     }

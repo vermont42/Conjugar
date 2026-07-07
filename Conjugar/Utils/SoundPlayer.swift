@@ -8,6 +8,9 @@
 
 import AVFoundation
 import Foundation
+import os
+
+nonisolated private let soundLogger = Logger(subsystem: "com.racecondition.Conjugar", category: "SoundPlayer")
 
 class SoundPlayer {
   private static let soundPlayer = SoundPlayer()
@@ -17,13 +20,12 @@ class SoundPlayer {
   private static let minSoundInterval: TimeInterval = 1.0
   private var instantOfLastPlay: TimeInterval = 0.0
 
+  // The shared `AVAudioSession` is owned and configured once at launch by
+  // `Utterer.setup` (item 16: a single owner, `.ambient` — respect the silent
+  // switch and mix with other audio). `SoundPlayer` no longer sets a category, so
+  // the last-writer-wins conflict that stopped the user's music is gone.
   private init () {
     sounds = Dictionary()
-    do {
-      try AVAudioSession.sharedInstance().setCategory(.playback) // was ambient
-    } catch let error as NSError {
-      print("\(error.localizedDescription)")
-    }
   }
 
   /// Play a sound. Pass `shouldDebounce: true` for sounds that can be triggered in
@@ -39,8 +41,8 @@ class SoundPlayer {
       if let audioUrl = Bundle.main.url(forResource: sound.rawValue, withExtension: soundExtension) {
         do {
           try soundPlayer.sounds[sound.rawValue] = AVAudioPlayer.init(contentsOf: audioUrl)
-        } catch let error as NSError {
-          print("\(error.localizedDescription)")
+        } catch {
+          soundLogger.error("Could not load sound \(sound.rawValue): \(error.localizedDescription)")
         }
       }
     }
@@ -49,14 +51,14 @@ class SoundPlayer {
   }
 
   static func playRandomApplause() {
-    let applauses: [Sound] = [.applause1, .applause2, .applause3]
-    let applauseIndex = Int.random(in: 0 ... (applauses.count - 1))
-    SoundPlayer.play(applauses[applauseIndex])
+    if let applause = [Sound.applause1, .applause2, .applause3].randomElement() {
+      SoundPlayer.play(applause)
+    }
   }
 
   static func playRandomSadTrombone() {
-    let sadTrombones: [Sound] = [.sadTrombone1, .sadTrombone2, .sadTrombone3, .sadTrombone4]
-    let sadTromboneIndex = Int.random(in: 0 ... (sadTrombones.count - 1))
-    SoundPlayer.play(sadTrombones[sadTromboneIndex], shouldDebounce: true)
+    if let sadTrombone = [Sound.sadTrombone1, .sadTrombone2, .sadTrombone3, .sadTrombone4].randomElement() {
+      SoundPlayer.play(sadTrombone, shouldDebounce: true)
+    }
   }
 }
