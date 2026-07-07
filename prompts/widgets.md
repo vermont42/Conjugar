@@ -1,0 +1,1 @@
+Conjugar's French cousin Conjuguer has extensive widget support. Please bring that functionality over to Conjugar. Conjuguer lives here: /Users/josh/Desktop/workspace/Conjuguer

@@ -8,6 +8,7 @@
 
 import Foundation
 import Observation
+import TipKit
 
 @MainActor
 @Observable
@@ -320,6 +321,9 @@ class Quiz {
         score = Int(Double(score) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
         timer?.invalidate()
         quizState = .finished
+        // Unlocks the "Change Quiz Difficulty" tip, which is rule-gated on having
+        // finished at least one quiz.
+        ChangeDifficultyTip.quizCompleted.sendDonation()
         LiveActivityManager.end(liveActivityState(isFinished: true))
         Task {
           await gameCenter.reportScore(score)

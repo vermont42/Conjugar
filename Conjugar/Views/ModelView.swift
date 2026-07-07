@@ -11,6 +11,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct ModelView: View {
   let model: ModelInfo
@@ -76,7 +77,10 @@ struct ModelView: View {
     .background(Color.customBackground.ignoresSafeArea())
     .navigationTitle(model.exemplar.capitalized)
     .navigationBarTitleDisplayMode(.large)
-    .onAppear { Current.analytics.recordVisitation(viewController: "\(ModelView.self)") }
+    .onAppear {
+      ExploreModelsTip().invalidate(reason: .actionPerformed)
+      Current.analytics.recordVisitation(viewController: "\(ModelView.self)")
+    }
   }
 
   // MARK: - Header

@@ -1,0 +1,1 @@
+Create a Pac-Man-inspired game for Conjugar. Pac Man is a flamenco dancer. The ghosts are bulls. Get images from Gemini and sounds from PixaBay. When done, add a tip about the game.

@@ -8,6 +8,7 @@
 
 import Observation
 import SwiftUI
+import TipKit
 
 struct SettingsView: View {
   static let englishTitle = "Settings"
@@ -15,6 +16,8 @@ struct SettingsView: View {
   @State private var isGameCenterUIHidden = false
   @State private var rateReviewDescription = ""
   @State private var store = SelectionStore()
+  private let changeDifficultyTip = ChangeDifficultyTip()
+  private let enableGameCenterTip = EnableGameCenterTip()
 
   private let offScreenButtonScale: CGFloat = 1.5
   private let animationDuration = 1.0
@@ -62,6 +65,10 @@ struct SettingsView: View {
             }
           }
             .modifier(SegmentedPicker())
+            .popoverTip(changeDifficultyTip)
+            .onChange(of: store.difficulty) {
+              changeDifficultyTip.invalidate(reason: .actionPerformed)
+            }
             .onAppear {
               self.store.difficulty = Current.settings.difficulty
               self.store.current = Current
@@ -115,6 +122,7 @@ struct SettingsView: View {
               .modifier(SubheadingLabel())
 
             Button(L.Settings.enable) {
+              enableGameCenterTip.invalidate(reason: .actionPerformed)
               Current.settings.userRejectedGameCenter = false
 
               Task {
@@ -125,6 +133,7 @@ struct SettingsView: View {
               }
             }
               .modifier(StandardButton())
+              .popoverTip(enableGameCenterTip)
 
             Text(L.Settings.enableDescription)
               .modifier(BodyLabel())

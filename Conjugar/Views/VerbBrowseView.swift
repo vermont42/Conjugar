@@ -11,6 +11,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct VerbBrowseView: View {
   static let englishTitle = "Browse"
@@ -19,6 +20,7 @@ struct VerbBrowseView: View {
   @State private var navigationPath = NavigationPath()
   @State private var searchText = ""
   @Environment(AppRouter.self) private var router
+  private let tryQuizTip = TryQuizTip()
 
   /// Both sort orders, computed once (mirrors the UIKit VC's `verbsBySort`).
   private static let verbsBySort: [VerbSort: [VerbMapEntry]] = {
@@ -49,6 +51,12 @@ struct VerbBrowseView: View {
               .padding(.horizontal)
               .padding(.top, Layout.defaultSpacing)
               .id("top")
+
+            if searchText.isEmpty {
+              TipView(tryQuizTip)
+                .padding(.horizontal)
+                .padding(.top, Layout.defaultSpacing)
+            }
 
             if !searchText.isEmpty && filteredVerbs.isEmpty {
               ContentUnavailableView(L.BrowseVerbs.searchNoResults, systemImage: "magnifyingglass")

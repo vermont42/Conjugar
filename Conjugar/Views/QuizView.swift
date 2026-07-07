@@ -11,6 +11,7 @@
 //
 
 import SwiftUI
+import TipKit
 import UIKit
 
 struct QuizView: View {
@@ -226,6 +227,7 @@ struct QuizView: View {
   // MARK: - Actions
 
   private func startQuiz() {
+    TryQuizTip().invalidate(reason: .actionPerformed)
     SoundPlayer.play(.gun)
     Current.quiz.start()
     answer = ""

@@ -11,6 +11,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct ModelBrowseView: View {
   static let englishTitle = "Models"
@@ -18,6 +19,7 @@ struct ModelBrowseView: View {
   @State private var sort: ModelSort = Current.settings.modelSort
   @State private var navigationPath = NavigationPath()
   @State private var searchText = ""
+  private let exploreModelsTip = ExploreModelsTip()
 
   private static let modelsBySort: [ModelSort: [ModelInfo]] = {
     let models = ModelInfo.all
@@ -48,6 +50,12 @@ struct ModelBrowseView: View {
               .padding(.horizontal)
               .padding(.top, Layout.defaultSpacing)
               .id("top")
+
+            if searchText.isEmpty {
+              TipView(exploreModelsTip)
+                .padding(.horizontal)
+                .padding(.top, Layout.defaultSpacing)
+            }
 
             if !searchText.isEmpty && filteredModels.isEmpty {
               ContentUnavailableView(L.BrowseModels.searchNoResults, systemImage: "magnifyingglass")

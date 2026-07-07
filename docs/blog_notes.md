@@ -1958,3 +1958,32 @@ shared asset catalog. The extension target was added by hand-editing `project.pb
 `ConjugarWidget` + the shared `Shared`, an "Embed Foundation Extensions" copy phase, the App
 Group in both entitlements. App + widget build clean; note the widget can only be *exercised*
 on a device / booted simulator home screen, and Live Activities need a real device.
+
+## TipKit onboarding tips (ported from Conjuguer)
+
+Brought over Conjuguer's TipKit support to nudge new users toward the app's main features.
+`Conjugar/Models/ConjugarTips.swift` defines four `Tip`s and a `TipDisplay.tipsEnabled` master
+switch (a `Bool`, `true` by default): flip it to `false` before capturing screenshots and — since
+TipKit displays nothing until `Tips.configure()` runs — every `TipView`/`.popoverTip` in the app
+stays hidden with no per-call-site changes. `ConjugarApp.init()` calls `Tips.configure()` only
+when the switch is on; because `AppLauncher` launches `ConjugarApp` only outside XCTest, the
+unit-test process never touches TipKit.
+
+The four tips, adapted from the French original for Spanish:
+- **TryQuizTip** — an inline `TipView` atop Browse Verbs (hidden while searching), invalidated
+  when a quiz starts (`QuizView.startQuiz`).
+- **ExploreModelsTip** — an inline `TipView` atop the Models list, invalidated on first
+  `ModelView` appearance.
+- **ChangeDifficultyTip** — a `.popoverTip` on the Settings difficulty picker, rule-gated on a
+  `quizCompleted` `Tips.Event` that `Quiz` donates when a quiz finishes (so it only appears once
+  the user has played), and invalidated when they change difficulty.
+- **EnableGameCenterTip** — Conjuguer's arcade-game tip has no Spanish analog, so it became a
+  `.popoverTip` on the Settings "Enable Game Center" button, inviting users to compete on the
+  leaderboards.
+
+Strings live in `L.Tips` (+ en/es in `Localizable.xcstrings`). Gotcha: TipKit's `Tip.title` /
+`.message` requirements are `nonisolated`, but the project's `SWIFT_DEFAULT_ACTOR_ISOLATION =
+MainActor` makes the `L.Tips` accessors MainActor-isolated by default, which won't satisfy them —
+so the `L.Tips` accessors are marked `nonisolated static var` (exactly as Conjuguer does it). App
+builds clean and the full test suite still passes; tips can only be *seen* on a booted
+simulator/device since TipKit needs the configured, running app.

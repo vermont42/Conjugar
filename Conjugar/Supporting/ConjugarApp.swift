@@ -8,6 +8,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 // The App-lifecycle equivalent of the old main.swift's TestingAppDelegate trick:
 // under XCTest we launch a minimal placeholder scene instead of the full UI, so
@@ -29,6 +30,16 @@ struct ConjugarApp: App {
   // appearance config, the UI-test-World launch-argument override, and
   // Utterer setup / became-active analytics.
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
+  init() {
+    // TipKit shows nothing until configured, so the `tipsEnabled` kill switch —
+    // flipped off before capturing screenshots — hides every tip app-wide with no
+    // per-call-site changes. Configured here (only the real app, never TestApp, is
+    // launched by AppLauncher), so the unit-test process never touches TipKit.
+    if TipDisplay.tipsEnabled {
+      try? Tips.configure()
+    }
+  }
 
   var body: some Scene {
     WindowGroup {

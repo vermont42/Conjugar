@@ -522,4 +522,40 @@ enum L {
       String(localized: "Tutor.reasonUnknown")
     }
   }
+
+  // The Tip protocol's `title`/`message` properties are nonisolated, so these
+  // accessors must be too (matching Conjuguer's L.Tips).
+  enum Tips {
+    nonisolated static var tryQuizTitle: String {
+      String(localized: "Tips.tryQuizTitle")
+    }
+
+    nonisolated static var tryQuizMessage: String {
+      String(localized: "Tips.tryQuizMessage")
+    }
+
+    nonisolated static var exploreModelsTitle: String {
+      String(localized: "Tips.exploreModelsTitle")
+    }
+
+    nonisolated static var exploreModelsMessage: String {
+      String(localized: "Tips.exploreModelsMessage")
+    }
+
+    nonisolated static var changeDifficultyTitle: String {
+      String(localized: "Tips.changeDifficultyTitle")
+    }
+
+    nonisolated static var changeDifficultyMessage: String {
+      String(localized: "Tips.changeDifficultyMessage")
+    }
+
+    nonisolated static var enableGameCenterTitle: String {
+      String(localized: "Tips.enableGameCenterTitle")
+    }
+
+    nonisolated static var enableGameCenterMessage: String {
+      String(localized: "Tips.enableGameCenterMessage")
+    }
+  }
 }

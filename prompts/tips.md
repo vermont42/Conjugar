@@ -1,0 +1,1 @@
+Conjugar's French cousin Conjuguer has extensive TipKit support. Please bring that functionality over to Conjugar. Include the Bool, which is false, that I can use to disable TipKit when making screenshots. Conjuguer lives here: /Users/josh/Desktop/workspace/Conjuguer

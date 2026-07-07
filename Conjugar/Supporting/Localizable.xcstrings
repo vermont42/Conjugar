@@ -1698,6 +1698,134 @@
         }
       }
     },
+    "Tips.changeDifficultyMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try Difficult difficulty for a greater challenge with more tenses to conjugate."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prueba la dificultad Difícil para un mayor reto con más tiempos verbales que conjugar."
+          }
+        }
+      }
+    },
+    "Tips.changeDifficultyTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change Quiz Difficulty"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia la dificultad del test"
+          }
+        }
+      }
+    },
+    "Tips.enableGameCenterMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable Game Center to post your quiz scores to the leaderboards and compete with other learners."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activa Game Center para publicar tus puntuaciones del test en las clasificaciones y competir con otros estudiantes."
+          }
+        }
+      }
+    },
+    "Tips.enableGameCenterTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compete on Game Center"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compite en Game Center"
+          }
+        }
+      }
+    },
+    "Tips.exploreModelsMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discover the conjugation patterns that group Spanish verbs, and see how regular or irregular each one is."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descubre los patrones de conjugación que agrupan los verbos españoles y observa qué tan regular o irregular es cada uno."
+          }
+        }
+      }
+    },
+    "Tips.exploreModelsTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explore Verb Models"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explora los modelos de verbos"
+          }
+        }
+      }
+    },
+    "Tips.tryQuizMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test your knowledge of Spanish verb conjugations with a timed quiz."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pon a prueba tu conocimiento de las conjugaciones de verbos españoles con un test cronometrado."
+          }
+        }
+      }
+    },
+    "Tips.tryQuizTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try the Quiz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prueba el test"
+          }
+        }
+      }
+    },
     "Tutor.getSampleQuery" : {
       "localizations" : {
         "en" : {
