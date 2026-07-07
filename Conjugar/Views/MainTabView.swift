@@ -47,6 +47,10 @@ struct MainTabView: View {
     .onOpenURL { router.handle(url: $0) }
     .onChange(of: scenePhase) { _, phase in
       guard phase == .active else { return }
+      // The scene lifecycle — not AppDelegate.applicationDidBecomeActive, which
+      // never fires under WindowGroup — is where became-active analytics live now
+      // (Phase 4 / item 4).
+      Current.analytics.recordBecameActive()
       WidgetSnapshotWriter.refresh()
       drainPendingDeeplink()
     }

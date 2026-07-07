@@ -7,126 +7,89 @@
 //
 
 import Foundation
+import Observation
 
-class Settings {
+// `@MainActor @Observable` (Phase 4 / item 11): views that read a setting now
+// invalidate automatically when it changes, so the Quiz briefing pills track the
+// Settings tab live and `SettingsView` binds its pickers straight to this object —
+// the old `SelectionStore` bridge is gone. Persistence is funneled through the two
+// `read`/`persist` helper families below, collapsing what used to be ~90 lines of
+// clone-stamped `didSet`/`init` stanzas. The helpers are `static` so the `read`
+// calls are legal during `init` (calling an instance method on a not-yet-fully-
+// initialized `self` is not).
+@MainActor
+@Observable
+final class Settings {
   private let getterSetter: GetterSetter
 
   var region: Region {
-    didSet {
-      if region != oldValue {
-        getterSetter.set(key: Settings.regionKey, value: region.rawValue)
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.regionKey, region, oldValue) }
   }
   static let regionKey = "region"
   static let regionDefault: Region = .latinAmerica
 
   var difficulty: Difficulty {
-    didSet {
-      if difficulty != oldValue {
-        getterSetter.set(key: Settings.difficultyKey, value: difficulty.rawValue)
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.difficultyKey, difficulty, oldValue) }
   }
   static let difficultyKey = "difficulty"
   static let difficultyDefault: Difficulty = .easy
 
   var infoDifficulty: Difficulty {
-    didSet {
-      if infoDifficulty != oldValue {
-        getterSetter.set(key: Settings.infoDifficultyKey, value: infoDifficulty.rawValue)
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.infoDifficultyKey, infoDifficulty, oldValue) }
   }
   static let infoDifficultyKey = "infoDifficulty"
   static let infoDifficultyDefault: Difficulty = .difficult
 
   var secondSingularBrowse: SecondSingularBrowse {
-    didSet {
-      if secondSingularBrowse != oldValue {
-        getterSetter.set(key: Settings.secondSingularBrowseKey, value: secondSingularBrowse.rawValue)
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.secondSingularBrowseKey, secondSingularBrowse, oldValue) }
   }
   static let secondSingularBrowseKey = "secondSingularBrowse"
   static let secondSingularBrowseDefault: SecondSingularBrowse = .tu
 
   var verbSort: VerbSort {
-    didSet {
-      if verbSort != oldValue {
-        getterSetter.set(key: Settings.verbSortKey, value: verbSort.rawValue)
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.verbSortKey, verbSort, oldValue) }
   }
   static let verbSortKey = "verbSort"
   static let verbSortDefault: VerbSort = .frequency
 
   var modelSort: ModelSort {
-    didSet {
-      if modelSort != oldValue {
-        getterSetter.set(key: Settings.modelSortKey, value: modelSort.rawValue)
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.modelSortKey, modelSort, oldValue) }
   }
   static let modelSortKey = "modelSort"
   static let modelSortDefault: ModelSort = .irregularity
 
   var secondSingularQuiz: SecondSingularQuiz {
-    didSet {
-      if secondSingularQuiz != oldValue {
-        getterSetter.set(key: Settings.secondSingularQuizKey, value: secondSingularQuiz.rawValue)
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.secondSingularQuizKey, secondSingularQuiz, oldValue) }
   }
   static let secondSingularQuizKey = "secondSingularQuiz"
   static let secondSingularQuizDefault: SecondSingularQuiz = .tu
 
   var promptActionCount: Int {
-    didSet {
-      if promptActionCount != oldValue {
-        getterSetter.set(key: Settings.promptActionCountKey, value: "\(promptActionCount)")
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.promptActionCountKey, promptActionCount, oldValue) }
   }
   static let promptActionCountKey = "promptActionCount"
   static let promptActionCountDefault = 0
 
   var lastReviewPromptDate: Date {
-    didSet {
-      if lastReviewPromptDate != oldValue {
-        getterSetter.set(key: Settings.lastReviewPromptDateKey, value: "\(lastReviewPromptDate.timeIntervalSince1970)")
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.lastReviewPromptDateKey, lastReviewPromptDate, oldValue) }
   }
   static let lastReviewPromptDateKey = "lastReviewPromptDate"
   static let lastReviewPromptDateDefault = Date(timeIntervalSince1970: 0.0)
 
   var userRejectedGameCenter: Bool {
-    didSet {
-      if userRejectedGameCenter != oldValue {
-        getterSetter.set(key: Settings.userRejectedGameCenterKey, value: "\(userRejectedGameCenter)")
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.userRejectedGameCenterKey, userRejectedGameCenter, oldValue) }
   }
   static let userRejectedGameCenterKey = "userRejectedGameCenter"
   static let userRejectedGameCenterDefault = false
 
   var didShowGameCenterDialog: Bool {
-    didSet {
-      if didShowGameCenterDialog != oldValue {
-        getterSetter.set(key: Settings.didShowGameCenterDialogKey, value: "\(didShowGameCenterDialog)")
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.didShowGameCenterDialogKey, didShowGameCenterDialog, oldValue) }
   }
   static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
   static let didShowGameCenterDialogDefault = false
 
   var lastCommunIdentifierShown: Int {
-    didSet {
-      if lastCommunIdentifierShown != oldValue {
-        getterSetter.set(key: Settings.lastCommunIdentifierShownKey, value: "\(lastCommunIdentifierShown)")
-      }
-    }
+    didSet { Settings.persist(getterSetter, Settings.lastCommunIdentifierShownKey, lastCommunIdentifierShown, oldValue) }
   }
   static let lastCommunIdentifierShownKey = "lastCommunIdentifierShown"
   static let lastCommunIdentifierShownDefault = -1
@@ -134,89 +97,78 @@ class Settings {
   init(getterSetter: GetterSetter) {
     self.getterSetter = getterSetter
 
-    if let regionString = getterSetter.get(key: Settings.regionKey) {
-      region = Region(rawValue: regionString) ?? Settings.regionDefault
-    } else {
-      region = Settings.regionDefault
-      getterSetter.set(key: Settings.regionKey, value: region.rawValue)
-    }
+    region = Settings.read(getterSetter, Settings.regionKey, default: Settings.regionDefault)
+    difficulty = Settings.read(getterSetter, Settings.difficultyKey, default: Settings.difficultyDefault)
+    infoDifficulty = Settings.read(getterSetter, Settings.infoDifficultyKey, default: Settings.infoDifficultyDefault)
+    secondSingularBrowse = Settings.read(getterSetter, Settings.secondSingularBrowseKey, default: Settings.secondSingularBrowseDefault)
+    verbSort = Settings.read(getterSetter, Settings.verbSortKey, default: Settings.verbSortDefault)
+    modelSort = Settings.read(getterSetter, Settings.modelSortKey, default: Settings.modelSortDefault)
+    secondSingularQuiz = Settings.read(getterSetter, Settings.secondSingularQuizKey, default: Settings.secondSingularQuizDefault)
+    promptActionCount = Settings.read(getterSetter, Settings.promptActionCountKey, default: Settings.promptActionCountDefault)
+    lastReviewPromptDate = Settings.read(getterSetter, Settings.lastReviewPromptDateKey, default: Settings.lastReviewPromptDateDefault)
+    userRejectedGameCenter = Settings.read(getterSetter, Settings.userRejectedGameCenterKey, default: Settings.userRejectedGameCenterDefault)
+    didShowGameCenterDialog = Settings.read(getterSetter, Settings.didShowGameCenterDialogKey, default: Settings.didShowGameCenterDialogDefault)
+    lastCommunIdentifierShown = Settings.read(getterSetter, Settings.lastCommunIdentifierShownKey, default: Settings.lastCommunIdentifierShownDefault)
+  }
 
-    if let difficultyString = getterSetter.get(key: Settings.difficultyKey) {
-      difficulty = Difficulty(rawValue: difficultyString) ?? Settings.difficultyDefault
-    } else {
-      difficulty = Settings.difficultyDefault
-      getterSetter.set(key: Settings.difficultyKey, value: difficulty.rawValue)
-    }
+  // MARK: - Persistence helpers
 
-    if let infoDifficultyString = getterSetter.get(key: Settings.infoDifficultyKey) {
-      infoDifficulty = Difficulty(rawValue: infoDifficultyString) ?? Settings.infoDifficultyDefault
-    } else {
-      infoDifficulty = Settings.infoDifficultyDefault
-      getterSetter.set(key: Settings.infoDifficultyKey, value: infoDifficulty.rawValue)
-    }
+  // Read a value for `key`, seeding (and persisting) `defaultValue` the first time
+  // the key is absent so the store always reflects the effective setting. A
+  // present-but-unparseable value falls back to the default without a rewrite,
+  // matching the pre-Phase-4 behavior.
 
-    if let secondSingularBrowseString = getterSetter.get(key: Settings.secondSingularBrowseKey) {
-      secondSingularBrowse = SecondSingularBrowse(rawValue: secondSingularBrowseString) ?? Settings.secondSingularBrowseDefault
-    } else {
-      secondSingularBrowse = Settings.secondSingularBrowseDefault
-      getterSetter.set(key: Settings.secondSingularBrowseKey, value: secondSingularBrowse.rawValue)
+  private static func read<T: RawRepresentable<String>>(_ getterSetter: GetterSetter, _ key: String, default defaultValue: T) -> T {
+    guard let raw = getterSetter.get(key: key) else {
+      getterSetter.set(key: key, value: defaultValue.rawValue)
+      return defaultValue
     }
+    return T(rawValue: raw) ?? defaultValue
+  }
 
-    if let verbSortString = getterSetter.get(key: Settings.verbSortKey) {
-      verbSort = VerbSort(rawValue: verbSortString) ?? Settings.verbSortDefault
-    } else {
-      verbSort = Settings.verbSortDefault
-      getterSetter.set(key: Settings.verbSortKey, value: verbSort.rawValue)
+  private static func read(_ getterSetter: GetterSetter, _ key: String, default defaultValue: Int) -> Int {
+    guard let raw = getterSetter.get(key: key) else {
+      getterSetter.set(key: key, value: "\(defaultValue)")
+      return defaultValue
     }
+    return Int(raw) ?? defaultValue
+  }
 
-    if let modelSortString = getterSetter.get(key: Settings.modelSortKey) {
-      modelSort = ModelSort(rawValue: modelSortString) ?? Settings.modelSortDefault
-    } else {
-      modelSort = Settings.modelSortDefault
-      getterSetter.set(key: Settings.modelSortKey, value: modelSort.rawValue)
+  private static func read(_ getterSetter: GetterSetter, _ key: String, default defaultValue: Bool) -> Bool {
+    guard let raw = getterSetter.get(key: key) else {
+      getterSetter.set(key: key, value: "\(defaultValue)")
+      return defaultValue
     }
+    return raw == "true"
+  }
 
-    if let secondSingularQuizString = getterSetter.get(key: Settings.secondSingularQuizKey) {
-      secondSingularQuiz = SecondSingularQuiz(rawValue: secondSingularQuizString) ?? Settings.secondSingularQuizDefault
-    } else {
-      secondSingularQuiz = Settings.secondSingularQuizDefault
-      getterSetter.set(key: Settings.secondSingularQuizKey, value: secondSingularQuiz.rawValue)
+  private static func read(_ getterSetter: GetterSetter, _ key: String, default defaultValue: Date) -> Date {
+    guard let raw = getterSetter.get(key: key), let interval = TimeInterval(raw) else {
+      getterSetter.set(key: key, value: "\(defaultValue.timeIntervalSince1970)")
+      return defaultValue
     }
+    return Date(timeIntervalSince1970: interval)
+  }
 
-    if let promptActionCountString = getterSetter.get(key: Settings.promptActionCountKey) {
-      promptActionCount = Int(promptActionCountString) ?? Settings.promptActionCountDefault
-    } else {
-      promptActionCount = Settings.promptActionCountDefault
-      getterSetter.set(key: Settings.promptActionCountKey, value: "\(promptActionCount)")
-    }
+  // Persist `value` only when it actually changed, mirroring the old `didSet` guards.
 
-    if let lastReviewPromptDateString = getterSetter.get(key: Settings.lastReviewPromptDateKey),
-      let interval = TimeInterval(lastReviewPromptDateString) {
-      lastReviewPromptDate = Date(timeIntervalSince1970: interval)
-    } else {
-      lastReviewPromptDate = Settings.lastReviewPromptDateDefault
-      getterSetter.set(key: Settings.lastReviewPromptDateKey, value: "\(Settings.lastReviewPromptDateDefault.timeIntervalSince1970)")
-    }
+  private static func persist(_ getterSetter: GetterSetter, _ key: String, _ value: some RawRepresentable<String>, _ oldValue: some RawRepresentable<String>) {
+    guard value.rawValue != oldValue.rawValue else { return }
+    getterSetter.set(key: key, value: value.rawValue)
+  }
 
-    if let userRejectedGameCenterString = getterSetter.get(key: Settings.userRejectedGameCenterKey) {
-      userRejectedGameCenter = (userRejectedGameCenterString == "true")
-    } else {
-      userRejectedGameCenter = Settings.userRejectedGameCenterDefault
-      getterSetter.set(key: Settings.userRejectedGameCenterKey, value: "\(userRejectedGameCenter)")
-    }
+  private static func persist(_ getterSetter: GetterSetter, _ key: String, _ value: Int, _ oldValue: Int) {
+    guard value != oldValue else { return }
+    getterSetter.set(key: key, value: "\(value)")
+  }
 
-    if let didShowGameCenterDialogString = getterSetter.get(key: Settings.didShowGameCenterDialogKey) {
-      didShowGameCenterDialog = (didShowGameCenterDialogString == "true")
-    } else {
-      didShowGameCenterDialog = Settings.didShowGameCenterDialogDefault
-      getterSetter.set(key: Settings.didShowGameCenterDialogKey, value: "\(didShowGameCenterDialog)")
-    }
+  private static func persist(_ getterSetter: GetterSetter, _ key: String, _ value: Bool, _ oldValue: Bool) {
+    guard value != oldValue else { return }
+    getterSetter.set(key: key, value: "\(value)")
+  }
 
-    if let lastCommunIdentifierShownString = getterSetter.get(key: Settings.lastCommunIdentifierShownKey) {
-      lastCommunIdentifierShown = Int(lastCommunIdentifierShownString) ?? Settings.lastCommunIdentifierShownDefault
-    } else {
-      lastCommunIdentifierShown = Settings.lastCommunIdentifierShownDefault
-      getterSetter.set(key: Settings.lastCommunIdentifierShownKey, value: "\(lastCommunIdentifierShown)")
-    }
+  private static func persist(_ getterSetter: GetterSetter, _ key: String, _ value: Date, _ oldValue: Date) {
+    guard value != oldValue else { return }
+    getterSetter.set(key: key, value: "\(value.timeIntervalSince1970)")
   }
 }

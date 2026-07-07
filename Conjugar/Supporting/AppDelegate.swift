@@ -28,6 +28,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return true
   }
 
+  // The empty lifecycle hooks and `applicationDidBecomeActive` were removed in
+  // Phase 4 / item 4: under the SwiftUI scene lifecycle UIKit delivers activation
+  // to the scene, not the app delegate, so those callbacks never fired. The
+  // became-active analytics now ride `MainTabView`'s `scenePhase == .active`
+  // observer, which actually runs.
+
   private func configureTabBar() {
     UITabBar.appearance().barTintColor = Colors.background
     UITabBar.appearance().tintColor = Colors.yellow
@@ -38,16 +44,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     UINavigationBar.appearance().tintColor = Colors.yellow
     UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key(rawValue: NSAttributedString.Key.foregroundColor.rawValue): Colors.yellow]
   }
-
-  func applicationWillResignActive(_ application: UIApplication) {}
-
-  func applicationDidEnterBackground(_ application: UIApplication) {}
-
-  func applicationWillEnterForeground(_ application: UIApplication) {}
-
-  func applicationDidBecomeActive(_ application: UIApplication) {
-    Current.analytics.recordBecameActive()
-  }
-
-  func applicationWillTerminate(_ application: UIApplication) {}
 }

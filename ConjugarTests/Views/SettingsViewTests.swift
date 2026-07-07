@@ -6,9 +6,10 @@
 //  Copyright © 2019 Josh Adams. All rights reserved.
 //
 //  Converted from XCTest to Swift Testing during the SwiftUI migration (Step 4):
-//  under MainActor default isolation, XCTest deallocating SettingsView's
-//  @Observable SelectionStore hit the Xcode 26.3 isolated-deinit double-free.
-//  Swift Testing sidesteps it (see CLAUDE.md).
+//  under MainActor default isolation, XCTest deallocating a @MainActor @Observable
+//  object (SettingsView's since-retired SelectionStore, and now @Observable Settings)
+//  hits the Xcode 26.3 isolated-deinit double-free. Swift Testing sidesteps it
+//  (see CLAUDE.md).
 //
 
 import SwiftUI

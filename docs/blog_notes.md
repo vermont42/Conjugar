@@ -2279,3 +2279,48 @@ Green after the rewrite: build succeeds, **411 tests / 0 failures** (the new
 SwiftLint 0 violations. The live sign-in flow can only be exercised on a physical device —
 the simulator Worlds use `GameCenterFake` — so the No→don't-nag / Yes→authenticate /
 Settings-Enable→re-opt-in paths still want a device pass before shipping.
+
+## Phase 4 — Settings observability (item 11) + became-active analytics (item 4)
+
+Two Settings-adjacent fixes landed together so all the churn stayed in one window.
+
+**`Settings` is now `@MainActor @Observable`.** It had been a plain class, so any view
+that read a setting got no invalidation when it changed. The classic symptom: the Quiz
+briefing's difficulty/region pills (`QuizView` reads `Current.settings.difficulty/region`
+directly in `body`) only updated if something *else* happened to re-render the screen —
+change the difficulty in the Settings tab, flip back to Quiz, and the pill could still show
+the old value. Marking `Settings` `@Observable` fixes this for free: SwiftUI's Observation
+tracking picks up the property reads during `body` even though `Current.settings` is a
+global, not a `@State`/`@Bindable` the view owns.
+
+**The `SelectionStore` bridge is gone.** That `@Observable` shim existed *only* to supply
+the observability `Settings` lacked — `SettingsView` copied four settings into it in
+`.onAppear` (via a nilable `current: World?`) and mirrored changes back through `didSet`.
+Now the pickers bind straight to the real thing: `@Bindable private var settings =
+Current.settings`, `$settings.region` / `$settings.difficulty` / etc. The store class, the
+copy-in dance, and the `current` back-reference all deleted.
+
+**~90 lines of clone-stamped persistence collapsed.** Every setting used to carry a
+hand-copied `didSet`-guard-persist block *and* a read-or-seed-default `init` stanza. Those
+are now funneled through two small `static` helper families — `read(_:_:default:)` and
+`persist(_:_:_:_:)` — overloaded for string-backed `RawRepresentable` enums (Region,
+Difficulty, the sorts, …) plus tiny `Int`/`Bool`/`Date` adapters. Each property's `didSet`
+is a one-liner and each `init` assignment is a one-liner. (The helpers are `static` on
+purpose: calling an *instance* method on a not-yet-fully-initialized `self` during `init` is
+illegal, so `read` takes the `getterSetter` as a parameter instead.) Behavior is preserved:
+the change-guard still skips no-op writes, and a missing key still seeds its default; the
+one deliberate nuance — a present-but-unparseable value falls back to the default without a
+rewrite — matches the pre-refactor code.
+
+**`applicationDidBecomeActive` never fired — moved to `scenePhase`.** Under the SwiftUI
+`WindowGroup` lifecycle the app adopts scenes, and UIKit delivers activation to the *scene*,
+not the app delegate, so `AppDelegate.applicationDidBecomeActive` (and its
+`recordBecameActive()` call) was dead. Harmless today because analytics is a print-only spy,
+but a trap for the planned TelemetryDeck integration — launch/activation counts would have
+been silently zero. The call now rides `MainTabView`'s existing `onChange(of: scenePhase)`
+`.active` branch, which actually runs; the empty delegate lifecycle stubs
+(`applicationWillResignActive`, `applicationDidEnterBackground`, …) went with it.
+
+Green: build succeeds, **411 tests / 0 failures**, SwiftLint 0 violations. `SettingsTests`
+and `SettingsViewTests` (both already Swift Testing, since a `@MainActor @Observable`
+deallocated by XCTest would hit the Xcode 26.3 isolated-deinit double-free) pass unchanged.

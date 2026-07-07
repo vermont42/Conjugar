@@ -11,20 +11,20 @@
 //  settings section with a tinted SF Symbol heading, a segmented control or a
 //  `TintedCapsuleButtonStyle` action, and a `.callout` explanation, split by
 //  `GradientDivider`s. Segmented changes fire a selection haptic; the whole
-//  measure is reading-width-constrained for iPad. The `@Observable SelectionStore`
-//  bridge remains because `Settings` is a plain (non-`@Observable`) class.
+//  measure is reading-width-constrained for iPad. Since Phase 4 / item 11 made
+//  `Settings` `@Observable`, the pickers bind straight to `Current.settings` via
+//  `@Bindable` — the old `SelectionStore` bridge and its `onAppear` copy-in are gone.
 //
 
-import Observation
 import SwiftUI
 import TipKit
 
 struct SettingsView: View {
   static let englishTitle = "Settings"
 
+  @Bindable private var settings = Current.settings
   @State private var isGameCenterUIHidden = false
   @State private var rateReviewDescription = ""
-  @State private var store = SelectionStore()
   private let changeDifficultyTip = ChangeDifficultyTip()
   private let enableGameCenterTip = EnableGameCenterTip()
 
@@ -51,11 +51,6 @@ struct SettingsView: View {
       .background(Color.customBackground.ignoresSafeArea())
       .navigationTitle(L.Settings.localizedTitle)
       .onAppear {
-        store.current = Current
-        store.region = Current.settings.region
-        store.difficulty = Current.settings.difficulty
-        store.secondSingularBrowse = Current.settings.secondSingularBrowse
-        store.secondSingularQuiz = Current.settings.secondSingularQuiz
         isGameCenterUIHidden = Current.gameCenter.isAuthenticated
         Current.analytics.recordVisitation(viewController: "\(SettingsView.self)")
         RatingsFetcher.fetchRatingsDescription { description in
@@ -76,13 +71,13 @@ struct SettingsView: View {
         heading: L.Settings.region,
         description: L.Settings.regionDescription
       ) {
-        Picker("", selection: $store.region) {
+        Picker("", selection: $settings.region) {
           ForEach(Region.allCases, id: \.self) { region in
             Text(region.localizedRegion).tag(region)
           }
         }
         .pickerStyle(.segmented)
-        .selectionFeedback(trigger: store.region)
+        .selectionFeedback(trigger: settings.region)
         .accessibilityLabel(L.Settings.region)
       }
     }
@@ -96,17 +91,17 @@ struct SettingsView: View {
         heading: L.Settings.difficulty,
         description: L.Settings.difficultyDescription
       ) {
-        Picker("", selection: $store.difficulty) {
+        Picker("", selection: $settings.difficulty) {
           ForEach(Difficulty.allCases, id: \.self) { difficulty in
             Text(difficulty.localizedDifficulty).tag(difficulty)
           }
         }
         .pickerStyle(.segmented)
-        .selectionFeedback(trigger: store.difficulty)
+        .selectionFeedback(trigger: settings.difficulty)
         .accessibilityLabel(L.Settings.difficulty)
       }
       .popoverTip(changeDifficultyTip)
-      .onChange(of: store.difficulty) {
+      .onChange(of: settings.difficulty) {
         changeDifficultyTip.invalidate(reason: .actionPerformed)
       }
 
@@ -118,13 +113,13 @@ struct SettingsView: View {
         heading: L.Settings.quiz,
         description: L.Settings.quizDescription
       ) {
-        Picker("", selection: $store.secondSingularQuiz) {
+        Picker("", selection: $settings.secondSingularQuiz) {
           ForEach(SecondSingularQuiz.allCases, id: \.self) { form in
             Text(form.rawValue).tag(form)
           }
         }
         .pickerStyle(.segmented)
-        .selectionFeedback(trigger: store.secondSingularQuiz)
+        .selectionFeedback(trigger: settings.secondSingularQuiz)
         .accessibilityLabel(L.Settings.quiz)
       }
     }
@@ -138,13 +133,13 @@ struct SettingsView: View {
         heading: L.Settings.browse,
         description: L.Settings.browseDescription
       ) {
-        Picker("", selection: $store.secondSingularBrowse) {
+        Picker("", selection: $settings.secondSingularBrowse) {
           ForEach(SecondSingularBrowse.allCases, id: \.self) { form in
             Text(form.localizedSecondSingularBrowse).tag(form)
           }
         }
         .pickerStyle(.segmented)
-        .selectionFeedback(trigger: store.secondSingularBrowse)
+        .selectionFeedback(trigger: settings.secondSingularBrowse)
         .accessibilityLabel(L.Settings.browse)
       }
     }
@@ -259,33 +254,5 @@ struct SettingsView: View {
       return "v\(short) (\(build))"
     }
     return "v\(short)"
-  }
-}
-
-@Observable final class SelectionStore {
-  var current: World?
-
-  var region: Region = Settings.regionDefault {
-    didSet {
-      current?.settings.region = region
-    }
-  }
-
-  var difficulty: Difficulty = Settings.difficultyDefault {
-    didSet {
-      current?.settings.difficulty = difficulty
-    }
-  }
-
-  var secondSingularBrowse: SecondSingularBrowse = Settings.secondSingularBrowseDefault {
-    didSet {
-      current?.settings.secondSingularBrowse = secondSingularBrowse
-    }
-  }
-
-  var secondSingularQuiz: SecondSingularQuiz = Settings.secondSingularQuizDefault {
-    didSet {
-      current?.settings.secondSingularQuiz = secondSingularQuiz
-    }
   }
 }
