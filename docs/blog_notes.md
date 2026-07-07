@@ -1815,3 +1815,17 @@ replacing the removed `.sadTrombone`. Build clean, SwiftLint clean (0 violations
 suite **TEST SUCCEEDED** (403). Verified in the simulator: an empty search decodes and
 plays an mp3 (system log shows `AudioQueueNewOutput … .mp3` + an mp3 AudioConverter at the
 moment the filter empties) — and all four files are present in the built `.app` bundle.
+
+7/6/26: **Debounced the search trombone.** Typing `foooooooo` fired a *burst* of
+trombones, not one. Two compounding causes: (1) every empty-keeping keystroke re-runs the
+filter, and (2) `filteredVerbs`/`filteredModels` is a computed property with a side effect
+(`playRandomSadTrombone()` lives inside `BrowseSearch.results`), and SwiftUI reads it
+several times per render (count banner + the `if` empty-check + the `ForEach`), so a single
+keystroke could fire it multiple times. Conjuguer never hit this because its
+`SoundPlayerReal.play` debounces — a `minSoundInterval` gate on `instantOfLastPlay`. Ported
+that: `SoundPlayer.play` gained a `shouldDebounce: Bool = false` parameter (a 1.0 s gate
+since the last play) and stamps `instantOfLastPlay` on every play; `playRandomSadTrombone()`
+now calls with `shouldDebounce: true`. Default `false` leaves every other call site (chime,
+applause, quiz sounds) unchanged. Build/lint/tests green (403); verified in the simulator by
+capturing the audio log while typing `foooooooo` — **exactly one** `.mp3` audio-queue start
+for the whole burst (was up to ~one per keystroke-times-render before).
