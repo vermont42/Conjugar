@@ -18,8 +18,13 @@ import Testing
 
 @MainActor
 @Suite struct SettingsViewTests {
-  @Test func initializationProducesABody() {
+  // A crash smoke test (item 19): constructing SettingsView and evaluating its body
+  // exercises the `@Bindable` binding to `Current.settings` and the whole card tree.
+  // The old `body is (any View)` assertion was vacuously true by construction — the
+  // real signal is that neither `init` nor `body` traps. `_ = body` keeps that signal
+  // without the tautological `#expect`.
+  @Test func bodyEvaluatesWithoutTrapping() {
     let settingsView = SettingsView()
-    #expect(settingsView.body is (any View))
+    _ = settingsView.body
   }
 }

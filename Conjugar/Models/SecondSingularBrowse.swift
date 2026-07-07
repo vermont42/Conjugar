@@ -6,6 +6,10 @@
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
 
+// The raw values are the persisted `Settings.secondSingularBrowse` value; keep them
+// stable (renaming a case's raw value would silently reset stored user prefs — item
+// 20). The *displayed* label is decoupled via `localizedSecondSingularBrowse`, so a
+// label change never needs to touch the persisted raw value.
 enum SecondSingularBrowse: String, CaseIterable {
   case tu = "Tú"
   case vos = "Vos"

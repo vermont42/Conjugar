@@ -180,7 +180,10 @@ struct QuizView: View {
   }
 
   private var answerField: some View {
-    TextField("", text: $answer, prompt: Text(L.Quiz.conjugation).foregroundStyle(.secondary))
+    TextField(text: $answer, prompt: Text(L.Quiz.conjugation).foregroundStyle(.secondary)) {
+      Text(verbatim: "")
+    }
+      .accessibilityLabel(L.Quiz.conjugation)
       .textInputAutocapitalization(.never)
       .autocorrectionDisabled()
       .submitLabel(.next)

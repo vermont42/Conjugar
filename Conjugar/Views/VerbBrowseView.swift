@@ -80,8 +80,15 @@ struct VerbBrowseView: View {
             } else {
               LazyVStack(spacing: 0) {
                 ForEach(Array(filteredVerbs.enumerated()), id: \.element.infinitive) { index, entry in
-                  VerbRow(entry: entry) { navigationPath.append(entry.infinitive) }
-                    .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
+                  // A real `NavigationLink` (item 18): `.isButton` trait, press
+                  // highlight, and stronger VoiceOver semantics than the old
+                  // `.onTapGesture`. The stack's `navigationDestination(for: String)`
+                  // already renders the pushed `VerbView`.
+                  NavigationLink(value: entry.infinitive) {
+                    VerbRowLabel(entry: entry)
+                  }
+                  .buttonStyle(.plain)
+                  .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
                   Divider().padding(.leading)
                 }
               }
@@ -124,17 +131,6 @@ struct VerbBrowseView: View {
         Current.reviewPrompter.promptableActionHappened()
       }
     }
-  }
-}
-
-private struct VerbRow: View {
-  let entry: VerbMapEntry
-  let navigate: () -> Void
-
-  var body: some View {
-    VerbRowLabel(entry: entry)
-      .contentShape(Rectangle())
-      .onTapGesture { navigate() }
   }
 }
 

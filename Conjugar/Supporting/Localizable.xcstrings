@@ -1,7 +1,22 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {},
+    "Accessibility.speak" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speak"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronunciar"
+          }
+        }
+      }
+    },
     "Alert.gotIt" : {
       "localizations" : {
         "en" : {
@@ -1434,6 +1449,22 @@
         }
       }
     },
+    "Settings.beFirst" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Sé la primera o el primero!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Sé la primera o el primero!"
+          }
+        }
+      }
+    },
     "Settings.browse" : {
       "localizations" : {
         "en" : {
@@ -1558,6 +1589,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nadie ha valorado esta versión de Conjugar."
+          }
+        }
+      }
+    },
+    "Settings.ratingsUnavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ratings are currently unavailable."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las valoraciones no están disponibles en este momento."
           }
         }
       }

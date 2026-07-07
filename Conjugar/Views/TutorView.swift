@@ -249,7 +249,9 @@ struct TutorView: View {
 
   private var inputBar: some View {
     HStack(spacing: Layout.defaultSpacing) {
-      TextField("", text: $inputText, axis: .vertical)
+      TextField(text: $inputText, prompt: nil, axis: .vertical) {
+        Text(verbatim: "")
+      }
         .textFieldStyle(.roundedBorder)
         .lineLimit(1...4)
         .focused($isInputFocused)

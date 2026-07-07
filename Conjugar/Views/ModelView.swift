@@ -75,10 +75,18 @@ struct ModelView: View {
 
         LazyVStack(spacing: 0) {
           ForEach(Array(entries.enumerated()), id: \.element.infinitive) { index, entry in
-            VerbRowLabel(entry: entry)
-              .contentShape(Rectangle())
-              .onTapGesture { onSelectVerb(entry.infinitive) }
-              .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
+            // A `Button` wrapper (item 18) gives these rows `.isButton` semantics and
+            // a press highlight; the closure-based navigation (rather than
+            // `NavigationLink(value:)`) is kept because appending to the enclosing
+            // stack's path from this pushed view reliably reaches the String
+            // destination.
+            Button {
+              onSelectVerb(entry.infinitive)
+            } label: {
+              VerbRowLabel(entry: entry)
+            }
+            .buttonStyle(.plain)
+            .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
             Divider().padding(.leading)
           }
         }

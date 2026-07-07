@@ -10,7 +10,6 @@ import Foundation
 
 struct RatingsFetcher {
   nonisolated static let iTunesID = "1236500467"
-  nonisolated static let errorMessage = "Fetching failed."
 
   nonisolated private static let urlInitializationMessage = " URL could not be initializaed."
 
@@ -28,39 +27,43 @@ struct RatingsFetcher {
     return reviewURL
   }
 
-  static func fetchRatingsDescription(completion: @escaping @Sendable (String) -> ()) {
+  /// The iTunes lookup response, decoded via `Codable` (item 20) rather than the old
+  /// untyped `JSONSerialization` dictionary spelunking. Only the one field the row
+  /// needs is modeled; everything else in the payload is ignored.
+  private struct LookupResponse: Decodable {
+    let results: [Entry]
+
+    struct Entry: Decodable {
+      let userRatingCountForCurrentVersion: Int?
+    }
+  }
+
+  /// The localized ratings sentence for the current app version, or `nil` when the
+  /// lookup fails or returns an unexpected shape. `async`/`await` + `Codable` replace
+  /// the old completion-handler + `JSONSerialization` (item 20); returning an optional
+  /// lets the caller surface the failure instead of leaving the row silently empty.
+  static func ratingsDescription() async -> String? {
     let request = URLRequest(url: RatingsFetcher.iTunesURL)
 
-    let task = Current.session.dataTask(with: request) { (responseData, _, error) in
-      if error != nil {
-        completion(errorMessage)
-        return
-      } else if let responseData = responseData {
-        guard
-          let json = try? JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any],
-          let results = json["results"] as? [[String: Any]],
-          results.count == 1
-        else {
-          completion(errorMessage)
-          return
-        }
-
-        let ratingsCount = (results[0])["userRatingCountForCurrentVersion"] as? Int ?? 0
-
-        let description: String
-        let exhortation = " ¡Sé la primera o el primero!"
-
-        switch ratingsCount {
-        case 0:
-          description = L.Settings.noRating + exhortation
-        default:
-          description = L.Settings.ratings(count: ratingsCount) + " " + L.Settings.addYours
-        }
-        completion(description)
-      }
+    guard
+      let (data, _) = try? await Current.session.data(for: request),
+      let response = try? JSONDecoder().decode(LookupResponse.self, from: data),
+      response.results.count == 1
+    else {
+      return nil
     }
 
-    task.resume()
+    let ratingsCount = response.results[0].userRatingCountForCurrentVersion ?? 0
+
+    switch ratingsCount {
+    case 0:
+      // The Spanish exhortation used to be a hardcoded literal here; it now lives in
+      // the catalog (item 20) so the deliberate mixed-language flavor is visible to
+      // translation. It stays Spanish in both localizations by design.
+      return L.Settings.noRating + " " + L.Settings.beFirst
+    default:
+      return L.Settings.ratings(count: ratingsCount) + " " + L.Settings.addYours
+    }
   }
 
   nonisolated static func stubData(ratingsCount: Int) -> Data {

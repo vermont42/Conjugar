@@ -73,10 +73,14 @@ struct ModelBrowseView: View {
             } else {
               LazyVStack(spacing: 0) {
                 ForEach(Array(filteredModels.enumerated()), id: \.element.classNumber) { index, model in
-                  ModelRowLabel(model: model)
-                    .contentShape(Rectangle())
-                    .onTapGesture { navigationPath.append(model) }
-                    .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
+                  // A real `NavigationLink` (item 18) — button semantics + press
+                  // highlight; the stack's `navigationDestination(for: ModelInfo)`
+                  // renders the pushed `ModelView`.
+                  NavigationLink(value: model) {
+                    ModelRowLabel(model: model)
+                  }
+                  .buttonStyle(.plain)
+                  .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
                   Divider().padding(.leading)
                 }
               }

@@ -204,12 +204,22 @@ private struct SpeakOnTapFlash: ViewModifier {
       .animation(.easeOut(duration: 0.15), value: isSpeaking)
       .onTapGesture {
         guard !UIAccessibility.isVoiceOverRunning else { return }
-        Utterer.utter(text, locale: locale)
-        isSpeaking = true
-        Task { @MainActor in
-          try? await Task.sleep(for: .milliseconds(300))
-          isSpeaking = false
-        }
+        speak()
       }
+      // The tap gesture above is skipped under VoiceOver (which owns the tap), so
+      // expose the same "hear it pronounced" affordance as a named accessibility
+      // action (item 18).
+      .accessibilityAction(named: Text(L.Accessibility.speak)) {
+        speak()
+      }
+  }
+
+  private func speak() {
+    Utterer.utter(text, locale: locale)
+    isSpeaking = true
+    Task { @MainActor in
+      try? await Task.sleep(for: .milliseconds(300))
+      isSpeaking = false
+    }
   }
 }

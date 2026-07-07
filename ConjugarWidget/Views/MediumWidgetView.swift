@@ -8,6 +8,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct MediumWidgetView: View {
   let snapshot: WidgetSnapshot

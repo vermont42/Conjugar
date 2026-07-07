@@ -12,6 +12,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct LargeWidgetView: View {
   let snapshot: WidgetSnapshot

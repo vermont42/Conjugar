@@ -53,10 +53,11 @@ struct SettingsView: View {
       .onAppear {
         isGameCenterUIHidden = Current.gameCenter.isAuthenticated
         Current.analytics.recordVisitation(viewController: "\(SettingsView.self)")
-        RatingsFetcher.fetchRatingsDescription { description in
-          guard description != RatingsFetcher.errorMessage else { return }
-          Task { @MainActor in rateReviewDescription = description }
-        }
+      }
+      .task {
+        // Surface the failure (item 20): show an unavailable message rather than
+        // leaving the row silently empty when the iTunes lookup fails.
+        rateReviewDescription = await RatingsFetcher.ratingsDescription() ?? L.Settings.ratingsUnavailable
       }
     }
   }
@@ -71,10 +72,12 @@ struct SettingsView: View {
         heading: L.Settings.region,
         description: L.Settings.regionDescription
       ) {
-        Picker("", selection: $settings.region) {
+        Picker(selection: $settings.region) {
           ForEach(Region.allCases, id: \.self) { region in
             Text(region.localizedRegion).tag(region)
           }
+        } label: {
+          Text(verbatim: "")
         }
         .pickerStyle(.segmented)
         .selectionFeedback(trigger: settings.region)
@@ -91,10 +94,12 @@ struct SettingsView: View {
         heading: L.Settings.difficulty,
         description: L.Settings.difficultyDescription
       ) {
-        Picker("", selection: $settings.difficulty) {
+        Picker(selection: $settings.difficulty) {
           ForEach(Difficulty.allCases, id: \.self) { difficulty in
             Text(difficulty.localizedDifficulty).tag(difficulty)
           }
+        } label: {
+          Text(verbatim: "")
         }
         .pickerStyle(.segmented)
         .selectionFeedback(trigger: settings.difficulty)
@@ -113,10 +118,12 @@ struct SettingsView: View {
         heading: L.Settings.quiz,
         description: L.Settings.quizDescription
       ) {
-        Picker("", selection: $settings.secondSingularQuiz) {
+        Picker(selection: $settings.secondSingularQuiz) {
           ForEach(SecondSingularQuiz.allCases, id: \.self) { form in
             Text(form.rawValue).tag(form)
           }
+        } label: {
+          Text(verbatim: "")
         }
         .pickerStyle(.segmented)
         .selectionFeedback(trigger: settings.secondSingularQuiz)
@@ -133,10 +140,12 @@ struct SettingsView: View {
         heading: L.Settings.browse,
         description: L.Settings.browseDescription
       ) {
-        Picker("", selection: $settings.secondSingularBrowse) {
+        Picker(selection: $settings.secondSingularBrowse) {
           ForEach(SecondSingularBrowse.allCases, id: \.self) { form in
             Text(form.localizedSecondSingularBrowse).tag(form)
           }
+        } label: {
+          Text(verbatim: "")
         }
         .pickerStyle(.segmented)
         .selectionFeedback(trigger: settings.secondSingularBrowse)

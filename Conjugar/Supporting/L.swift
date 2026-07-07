@@ -9,6 +9,15 @@
 import Foundation
 
 nonisolated enum L {
+  enum Accessibility {
+    // The VoiceOver action name for a tappable conjugation form (item 18): the tap
+    // gesture that speaks a form is skipped under VoiceOver, so an accessibility
+    // action exposes the same "hear it pronounced" affordance.
+    static var speak: String {
+      String(localized: "Accessibility.speak")
+    }
+  }
+
   enum Alert {
     static var okay: String {
       String(localized: "Alert.okay")
@@ -430,6 +439,17 @@ nonisolated enum L {
 
     static var noRating: String {
       String(localized: "Settings.noRating")
+    }
+
+    // A deliberately Spanish exhortation appended after `noRating`, kept Spanish in
+    // both localizations by design (item 20). Formerly a hardcoded literal in
+    // RatingsFetcher.
+    static var beFirst: String {
+      String(localized: "Settings.beFirst")
+    }
+
+    static var ratingsUnavailable: String {
+      String(localized: "Settings.ratingsUnavailable")
     }
 
     static func ratings(count: Int) -> String {

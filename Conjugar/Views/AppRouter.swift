@@ -30,7 +30,7 @@ final class AppRouter {
   /// Route a `conjugar://` deeplink. Hosts: `verb/<infinitive>` (or `verb/random`) and
   /// `quiz/start`. Unknown or unmapped verbs are ignored.
   func handle(url: URL) {
-    guard url.scheme == "conjugar", let host = url.host else { return }
+    guard url.scheme == "conjugar", let host = url.host() else { return }
     switch host {
     case "verb":
       let last = url.lastPathComponent

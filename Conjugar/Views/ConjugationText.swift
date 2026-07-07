@@ -9,6 +9,7 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
+import Foundation
 import SwiftUI
 
 struct ConjugationText: View {
@@ -22,10 +23,15 @@ struct ConjugationText: View {
   }
 
   /// Build the attributed form: irregular runs red, the rest `regularColor`,
-  /// everything lowercased for display.
+  /// everything lowercased for display. The whole string is tagged
+  /// `languageIdentifier = "es"` (item 18) so VoiceOver pronounces the Spanish forms
+  /// with Spanish rules instead of reading *hablo* as English — restoring what the
+  /// retired UIKit `setAccessibilityLabelInSpanish` did.
   static func attributedString(for form: String, regularColor: Color = .customForeground) -> AttributedString {
     guard case .conjugation(let parts) = form.parseConjugationToSegment() else {
-      return AttributedString(form.lowercased())
+      var plain = AttributedString(form.lowercased())
+      plain.languageIdentifier = "es"
+      return plain
     }
     var result = AttributedString()
     for part in parts {
@@ -40,6 +46,7 @@ struct ConjugationText: View {
         result.append(attr)
       }
     }
+    result.languageIdentifier = "es"
     return result
   }
 

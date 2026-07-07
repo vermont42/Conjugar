@@ -2512,3 +2512,60 @@ The bull is rendered at 1.2× (a per-symbol scale in the generator) so it fills 
 so the stroke stays weight-matched to the stock symbols rather than growing with it. The generator
 and its source SVGs live in `scripts/` (`make_symbols.py`, `symbol-sources/`) so the symbols are
 reproducible from source.
+
+---
+
+## Phase 7, part 2 — accessibility, test depth, and the polish grab-bag (items 18, 19-remainder, 20)
+
+Item 17 (the `Tab` API + unified icons) closed the modernization work earlier in Phase 7; this pass
+finishes the phase with accessibility, test depth, and a long tail of micro-cleanups.
+
+**Item 18 — rows that are actually buttons, and Spanish that VoiceOver pronounces as Spanish.** The
+browse/detail lists navigated on a bare `.onTapGesture`, which gives a tap target none of a button's
+semantics: no `.isButton` trait, no press highlight, weaker VoiceOver. Browse Verbs and Models now
+use `NavigationLink(value:)` (their `navigationDestination`s already handle `String`/`ModelInfo`),
+and `ModelView`'s "verbs using this model" rows — whose closure-based navigation is deliberate —
+wrap that closure in a `Button`. All three take `.buttonStyle(.plain)` so the visual stays identical
+while the semantics upgrade. The bigger win is speech: the retired UIKit app tagged conjugations
+with `accessibilitySpeechLanguage` es, so VoiceOver said *hablo* with Spanish vowels; the SwiftUI
+screens had lost that, reading Spanish forms with English pronunciation. `ConjugationText` now stamps
+`languageIdentifier = "es"` on the whole attributed form, restoring Spanish pronunciation across the
+Verb, Model, and Results screens. (Under `MEMBER_IMPORT_VISIBILITY` that attribute needs an explicit
+`import Foundation` — the transitive SwiftUI import no longer leaks it.) And because the tap-to-hear
+gesture is deliberately skipped under VoiceOver, `speakOnTapFlash` now also exposes a named
+`.accessibilityAction(named: L.Accessibility.speak)` ("Speak" / "Pronunciar") so VoiceOver users get
+the same pronounce-aloud affordance.
+
+**Item 19 — pinning Spanish truth, not the engine's own answer.** The guard test (Phase 1) and the
+Game Center gating tests (Phase 3) already landed; what was missing was golden coverage of the quiz
+*content*. `QuizTests` only proves self-consistency — it scores a run by comparing each answer to the
+same engine output the quiz asked for — so a mis-conjugating engine would still pass. The new
+`QuizGoldenFormsTests` drives 58 (verb, tense, person) triples, one batch per `VerbFamilies` list
+paired with the tense that list is quizzed at, and compares the **lowercased** (marking-stripped)
+engine output to hand-written, independently-known Spanish. Lowercasing is the trick that keeps the
+assertion about *letters* (linguistic truth) rather than the engine's UPPERCASE irregularity
+encoding. All 58 matched on the first run — confirming both the hand-written forms and the engine.
+Alongside it: `SettingsViewTests` swapped its vacuous `body is (any View)` (true by construction) for
+a real crash smoke test (`_ = body`), and `QuizTests` now iterates **both** `shouldShuffle` values so
+the deterministic run pins reproducible content while the shuffled run still exercises that path.
+
+**Item 20 — the grab-bag.** Deleted the junk `""` string-catalog key (auto-extracted from unlabeled
+`Picker("")`/`TextField("")`) and gave those six controls explicit `Text(verbatim: "")` labels so it
+can't regenerate. Rewrote `RatingsFetcher` from a completion handler + `JSONSerialization` dictionary
+walk to `ratingsDescription() async -> String?` over `URLSession.data(for:)` + a `Decodable`
+response; `SettingsView` now calls it from a `.task` and shows a new `Settings.ratingsUnavailable`
+message on failure instead of a silently-empty row, and the hardcoded Spanish exhortation moved into
+a `Settings.beFirst` catalog key (kept Spanish in both localizations by design, so the mixed-language
+flavor is now visible to translation). Smaller ones: `AppRouter` uses `url.host()` instead of the
+soft-deprecated `url.host`; the widget target gains `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY`
+to match app+test — which promptly surfaced three latent missing `import WidgetKit`s in the widget
+views (exactly the kind of transitive-import rot the flag exists to catch); the unused
+`aps-environment` entitlement is dropped (the commun fetch polls at launch, nothing registers for
+push); and explanatory comments now pin the persisted-raw-value contract on both `SecondSingular*`
+enums and the deliberately mixed-gender `él`/`ellas` pronoun pairing. `RatingsFetcherTests` was
+adapted to the async API but kept as XCTest on purpose — it mutates the global `Current`, and
+XCTest's serial execution keeps that from racing the other `Current`-reassigning suite, which a
+parallel Swift Testing suite would not. The diacritic-identifier cleanup stays opportunistic: retired
+`expectatiön` in the rewritten test file, left the rest where they sit until those files are touched.
+
+Build green, 412 tests / 0 failures, SwiftLint clean. Phase 7 is complete.
