@@ -11,7 +11,7 @@ Conjugar is an iOS app for learning Spanish verb conjugations. It conjugates reg
 **Language:** Swift 6 language mode, `SWIFT_STRICT_CONCURRENCY = complete`, `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` (see **Concurrency model** below)
 **License:** GNU Affero General Public License
 
-As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. The legacy engine (the original `Conjugator`), `verbs.xml`, and their tests were **removed** in July 2026; the new engine's types then dropped their interim `2` suffixes (`Conjugator2` → `Conjugator`, etc.), so the plain names now always mean the new engine. Next planned step (separate effort): converting the UIKit UI to SwiftUI. The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
+As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. The legacy engine (the original `Conjugator`), `verbs.xml`, and their tests were **removed** in July 2026; the new engine's types then dropped their interim `2` suffixes (`Conjugator2` → `Conjugator`, etc.), so the plain names now always mean the new engine. The **UIKit-to-SwiftUI UI migration is also done** (July 2026): every screen is now a native SwiftUI view (`Views/`), the app shell is a `MainTabView` `TabView`, and no `UIViewController` subclass remains in the app target — see the Step-4 notes in `docs/blog_notes.md`. The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
 
 As you, Claude, complete chunks of work on the modernization/improvement project, please add a note to docs/blog_notes.md . Eventually, Josh will generate a blog post from this work.
 
@@ -36,11 +36,11 @@ xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=i
 swiftlint
 ```
 
-> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`, `TenseBridgeTests`) and the migrated service suites (`SettingsTests`, `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The remaining (mostly UIKit VC) suites like `QuizTests` / `BrowseVerbsVCTests` use **XCTest**, whose method names take **no** parentheses (e.g. `testBrowseVerbsVC`). New tests should be Swift Testing — see **XCTest + MainActor: the isolated-deinit crash** below.
+> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`, `TenseBridgeTests`) the migrated service suites (`SettingsTests`, `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests`), and the SwiftUI-migration suites (`InfoTests`, `ConjugationTextTests`, `QuizTests`, `SettingsViewTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The remaining lower-level suites like `ConjugationCellTests` / `AnalyticsServiceTests` are still **XCTest**, whose method names take **no** parentheses (e.g. `testConjugationCell`). New tests should be Swift Testing — see **XCTest + MainActor: the isolated-deinit crash** below.
 
 ## Running the App in the Simulator
 
-To launch and drive the built app (screenshots, taps, verifying UI behavior — not just tests), use the project skill **`run-in-simulator`** (`.claude/skills/run-in-simulator/SKILL.md`). It captures the verified recipe: resolving the built `.app`, pinning a booted-simulator UDID (several devices are named "iPhone 17"), `simctl` install/launch/screenshot, tapping with `idb` in points (screenshot pixels ÷ 3), and the pitfalls (launch-screen delay, `simctl spawn defaults write` not reaching the app's sandboxed UserDefaults). This skill is interim: after the planned SwiftUI conversion, the `ios-build-verify` skill will replace it.
+To launch and drive the built app (screenshots, taps, verifying UI behavior — not just tests), use the project skill **`run-in-simulator`** (`.claude/skills/run-in-simulator/SKILL.md`). It captures the verified recipe: resolving the built `.app`, pinning a booted-simulator UDID (several devices are named "iPhone 17"), `simctl` install/launch/screenshot, tapping with `idb` in points (screenshot pixels ÷ 3), and the pitfalls (launch-screen delay, `simctl spawn defaults write` not reaching the app's sandboxed UserDefaults). This skill was written as interim tooling; now that the SwiftUI conversion is complete, the `ios-build-verify` skill can supersede it, but `run-in-simulator` remains the verified, working recipe until that swap is made.
 
 ## Architecture
 
@@ -110,28 +110,39 @@ All external services have protocol abstractions with production and test implem
 
 ### View Architecture
 
-**No Storyboards** - All UI is programmatic using NSLayoutConstraint.
+**All SwiftUI** (since the July 2026 migration — Step 4). The UI lives in `Conjugar/Views/`
+as native SwiftUI: an `@main App` → `MainTabView` (`TabView`) whose tabs are each a
+SwiftUI screen using `NavigationStack` + value-based navigation. Shared design-system
+primitives are in `Utils/Modifiers.swift` (`.card()`, `.metadataPill()`, `.linguistic()`,
+`.numeric()`, `.speakOnTapFlash()`, `PrimaryButtonStyle`, …) and read the adaptive color
+assets, so every screen is light/dark correct. Marked-up Info bodies parse via
+`Utils/RichText.swift` → `Views/RichTextView.swift`; conjugation forms (uppercase =
+irregular) render via `Views/ConjugationText.swift`. The old UIKit `*VC`/`*UIV`/`*Cell`
+files, the `MainTabBarVC` shell, and the `NavHostedVC` hosting bridge are all gone; **no
+`UIViewController` subclass remains in the app target.**
 
-Naming conventions:
-- View Controllers: `*VC` (e.g., `BrowseVerbsVC`)
-- UIKit Views: `*UIV` (e.g., `BrowseVerbsUIV`)
-- Table Cells: `*Cell` (e.g., `VerbCell`)
+Layout constants are in `Layout.swift` (defaultSpacing = 8.0, doubleDefaultSpacing = 16.0,
+tripleDefaultSpacing = 24.0, defaultHorizontalMargin = 16.0, readingWidth = 680,
+cornerRadius = 12). The `@UsesAutoLayout` property wrapper survives only for the few
+remaining UIKit *extensions* (appearance config in `AppDelegate`), not for screen layout.
 
-The `@UsesAutoLayout` property wrapper automatically sets `translatesAutoresizingMaskIntoConstraints = false`.
+The mapped UI audit that drove the migration is `docs/conjugar-ui-issues.md`.
 
-Layout constants are in `Layout.swift` (defaultSpacing = 8.0, tripleDefaultSpacing = 24.0, defaultHorizontalMargin = 16.0).
+### Tab Structure (`MainTabView`)
 
-### Tab Structure (MainTabBarVC)
+1. **Browse Verbs** — `VerbBrowseView` → `VerbView`
+2. **Models** — `ModelBrowseView` → `ModelView` (→ `VerbView`)
+3. **Quiz** — `QuizView` → `ResultsView`
+4. **Info** — `InfoBrowseView` → `InfoView`
+5. **Settings** — `SettingsView`
 
-1. **Browse Verbs** - `BrowseVerbsVC` → `VerbVC`
-2. **Quiz** - `QuizVC` → `ResultsVC`
-3. **Browse Info** - `BrowseInfoVC` → `InfoVC`
-4. **Settings** - SwiftUI `SettingsView` via UIHostingController
+`CommunView` (the CloudKit message) is a `.fullScreenCover` presented from `MainTabView`,
+not a tab.
 
 ### Core Models
 
 - **Conjugator.swift** (+ the feature-file family, `ModelCatalog`, and `VerbMap`) - The conjugation engine: composition of feature rules over a book-class model catalog, resolving each verb's model from `verbModelMap.xml` (4,811 verbs). The app UI conjugates through it via `TenseBridge` (maps the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary to `EngineTense`, the simple-tense-plus-person slots the engine consumes) and `CompoundTense` (composes perfect tenses as *haber* + participle, and imperativo negativo as "no" + subjunctive — the engine itself models only simple tenses). The legacy `Conjugator`/`verbs.xml` engine was removed in July 2026; `DisplayTense.swift`/`DisplayPersonNumber.swift` (formerly `Tense.swift`/`PersonNumber.swift`) remain as the UI's vocabulary, covering the full displayed tense set including compounds.
-- **Quiz.swift** - Quiz state management with QuizDelegate protocol for updates. Handles scoring, timing, difficulty levels.
+- **Quiz.swift** - A `@MainActor @Observable` quiz state model (scoring, closure-based timer, difficulty levels), observed directly by `QuizView`/`ResultsView`. The old `QuizDelegate` was removed in the SwiftUI migration.
 - **Settings.swift** - User preferences with GetterSetter protocol abstraction.
 
 ## Testing
@@ -140,7 +151,9 @@ Tests are in `ConjugarTests/` organized by layer:
 - `Analytics/`, `Controllers/`, `Models/`, `UIViews/`, `Utils/`, `Views/`
 
 Test infrastructure:
-- `TestingAppDelegate` loads for test environments via `main.swift`
+- The test environment is selected in `World.chooseWorld()` (a simulator process with the
+  XCTest runtime loaded gets `World.unitTest`) — the SwiftUI `@main App` lifecycle replaced
+  the old custom `main.swift`/`TestingAppDelegate` selection during the migration.
 - `URLProtocolStub` for network mocking
 - Stub classes (`AnalyticsLocaleStub`, `CommunGetterStub`) for isolation
 
@@ -161,13 +174,16 @@ Test infrastructure:
 > are evaluated *outside* the suite's isolation, so any static data they reference must
 > be `nonisolated`.
 >
-> **Known-crashing (as of July 2026):** five *doomed* UIKit XCTest suites still crash on
-> teardown — `BrowseModelsVCTests`, `BrowseVerbsVCTests`, `CommunVCTests`,
-> `ModelVCTests`, `SettingsViewTests` — to be rewritten as Swift Testing during the
-> SwiftUI migration that deletes those VCs. A full `test` run therefore reports FAILED
-> from these alone; everything else is green. The service suites `SettingsTests`,
-> `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests` were already
-> converted to Swift Testing (and `AnalyticsServiceSpy` made `nonisolated`) to escape it.
+> **Resolved (July 2026):** the five formerly-*doomed* UIKit XCTest suites that crashed on
+> teardown (`BrowseModelsVCTests`, `BrowseVerbsVCTests`, `CommunVCTests`, `ModelVCTests`,
+> `SettingsViewTests`) are gone — the first four were deleted with their VCs during the
+> SwiftUI migration, and `SettingsViewTests` was converted to Swift Testing. A full
+> `xcodebuild … test` run is now **TEST SUCCEEDED** (all XCTest + Swift Testing, 0
+> failures). The general rule still stands, since MainActor default isolation remains: a
+> new pure-Swift `@MainActor` object deallocated by XCTest will hit the same double-free —
+> so **write new tests in Swift Testing.** (The service suites `SettingsTests`,
+> `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests` were converted
+> earlier, and `AnalyticsServiceSpy` made `nonisolated`.)
 
 ## Localization
 

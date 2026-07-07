@@ -1747,3 +1747,17 @@ clean, SwiftLint clean (0 violations).
 every screen, with the mapped audit (`docs/conjugar-ui-issues.md`) items delivered:
 Info (§7/§8), Browse Verbs (§6), Verb detail (§4/§5), Browse Models (§11), Model detail
 (§10), Commun (§12), and Quiz/Results (§1/§2/§3).
+
+7/6/26: **Step 4 epilogue — deleted the last UIKit UI code.** With every screen SwiftUI,
+the only UIKit left in the *UI* layer was vestigial: `VerbView` still reused the legacy
+`ConjugationDataSource` (a `UITableViewDataSource`) just to build its row list, which kept
+`ConjugationCell`/`TenseCell` alive as compile-only dependencies of a cell-rendering path
+nothing called. Inlined that ~20-line row-building logic straight into
+`VerbView.buildSections` (same yo/tú-vos-both/plural ordering, same defective-blank
+handling), then deleted `ConjugationDataSource`, `ConjugationCell`, `TenseCell`, and their
+two XCTest suites. `Conjugar/UIViews/` is now **empty** — the app target has no UIKit view
+or view-controller code at all (only a handful of UIKit *extensions* for appearance config
+remain). Full suite still green (397 Swift Testing + XCTest, TEST SUCCEEDED), SwiftLint
+clean (128 files), and *tener* still renders every person (yo ten**g**o … vosotros tenéis,
+pretérito t**uv**e…t**uv**ieron) with the red irregularity spans. Updated `CLAUDE.md`'s
+View Architecture / Tab Structure / testing sections to describe the finished SwiftUI app.

@@ -11,7 +11,6 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct VerbView: View {
   let verb: String
@@ -156,36 +155,48 @@ struct VerbView: View {
     }
   }
 
+  /// Build the displayed conjugation sections — one per tense, each a
+  /// pronoun-ordered list of rows. Mirrors the row set the legacy
+  /// `ConjugationDataSource` produced (yo where the tense has one, the tú/vos/both
+  /// second-singular per `Settings.secondSingularBrowse`, then the plural persons),
+  /// with a defective/formless slot rendered blank.
   private static func buildSections(verb: String) -> [ConjugationSection] {
-    let dataSource = ConjugationDataSource(verb: verb, table: UITableView(), secondSingularBrowse: Current.settings.secondSingularBrowse)
-    var sections: [ConjugationSection] = []
-    var currentTense: DisplayTense?
-    var currentRows: [ConjugationDisplayRow] = []
-
-    func flush() {
-      if let tense = currentTense {
-        sections.append(ConjugationSection(tense: tense, rows: currentRows))
+    let secondSingular = Current.settings.secondSingularBrowse
+    return DisplayTense.conjugatedTenses.map { tense in
+      let isImperative = tense == .imperativoPositivo || tense == .imperativoNegativo
+      var persons: [DisplayPersonNumber] = []
+      if tense.hasYoForm {
+        persons.append(.firstSingular)
       }
-    }
+      switch secondSingular {
+      case .tu:
+        persons.append(.secondSingularTú)
+      case .vos:
+        persons.append(.secondSingularVos)
+      case .both:
+        persons.append(contentsOf: [.secondSingularTú, .secondSingularVos])
+      }
+      persons.append(contentsOf: [.thirdSingular, .firstPlural, .secondPlural, .thirdPlural])
 
-    for row in dataSource.rows {
-      switch row {
-      case .tense(let tense):
-        flush()
-        currentTense = tense
-        currentRows = []
-      case .conjugation(let tense, let personNumber, let form):
-        let isImperative = tense == .imperativoPositivo || tense == .imperativoNegativo
-        currentRows.append(ConjugationDisplayRow(
-          index: currentRows.count,
+      let rows = persons.enumerated().map { index, personNumber in
+        ConjugationDisplayRow(
+          index: index,
           pronoun: isImperative ? nil : personNumber.pronoun,
-          form: form,
+          form: formOrBlank(verb, tense, personNumber),
           isImperative: isImperative
-        ))
+        )
       }
+      return ConjugationSection(tense: tense, rows: rows)
     }
-    flush()
-    return sections
+  }
+
+  /// One displayed slot: a defective verb's formless slot renders blank; any other
+  /// failure renders blank rather than crash.
+  private static func formOrBlank(_ verb: String, _ tense: DisplayTense, _ personNumber: DisplayPersonNumber) -> String {
+    if case .success(let value) = TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber) {
+      return value
+    }
+    return ""
   }
 }
 
