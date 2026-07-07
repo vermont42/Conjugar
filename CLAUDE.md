@@ -11,7 +11,7 @@ Conjugar is an iOS app for learning Spanish verb conjugations. It conjugates reg
 **Language:** Swift 6 language mode, `SWIFT_STRICT_CONCURRENCY = complete`, `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` (see **Concurrency model** below)
 **License:** GNU Affero General Public License
 
-As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. The legacy engine (the original `Conjugator`), `verbs.xml`, and their tests were **removed** in July 2026; the new engine's types then dropped their interim `2` suffixes (`Conjugator2` → `Conjugator`, etc.), so the plain names now always mean the new engine. The **UIKit-to-SwiftUI UI migration is also done** (July 2026): every screen is now a native SwiftUI view (`Views/`), the app shell is a `MainTabView` `TabView`, and no `UIViewController` subclass remains in the app target — see the Step-4 notes in `docs/blog_notes.md`. The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
+As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. The legacy engine (the original `Conjugator`), `verbs.xml`, and their tests were **removed** in July 2026; the new engine's types then dropped their interim `2` suffixes (`Conjugator2` → `Conjugator`, etc.), so the plain names now always mean the new engine. The **UIKit-to-SwiftUI UI migration is also done** (July 2026): every screen is now a native SwiftUI view (`Views/`), the app shell is a `MainTabView` `TabView`, and no `UIViewController` subclass remains in the app target — see the Step-4 notes in `docs/blog_notes.md`. A **Spanish conjugation tutor** backed by Apple's on-device `SystemLanguageModel` (Foundation Models) was added July 2026 — a chat screen reached from the Info tab, grounded in the app's own engine so it never invents forms (see **Conjugation Tutor** below). The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
 
 As you, Claude, complete chunks of work on the modernization/improvement project, please add a note to docs/blog_notes.md . Eventually, Josh will generate a blog post from this work.
 
@@ -89,6 +89,8 @@ Services provided by World:
 - `settings: Settings` - User preferences (wraps UserDefaults)
 - `communGetter: CommunGetter` - CloudKit-based messaging
 - `locale: AnalyticsLocale` - language/region codes
+- `languageModelService: LanguageModelService` - the on-device conjugation tutor (see **Conjugation Tutor** below)
+- `getterSetter: GetterSetter` - shared string key-value store (same instance `Settings` wraps); the tutor persists chat history through it
 
 ### Protocol-Based Abstractions
 
@@ -99,6 +101,7 @@ All external services have protocol abstractions with production and test implem
 - `GetterSetter` → `GetterSetterReal` / `GetterSetterFake`
 - `CommunGetter` → `CommunGetterReal` / `CommunGetterStub`
 - `AnalyticsLocale` → `AnalyticsLocaleReal` / `AnalyticsLocaleStub` (protocol renamed from `Locale` to avoid shadowing `Foundation.Locale`)
+- `LanguageModelService` → `LanguageModelServiceReal` / `LanguageModelServiceDummy` (the double is a `Dummy` — always reports unavailable and is never exercised; the test/UI-test worlds must not touch the on-device model)
 
 > **Convention — adding a new behavior protocol with real + test-double conformances.** Name the protocol a **plain role noun** — no `-able`/`-Protocol`/`-ing` suffix (`GetterSetter`, `CommunGetter`, `GameCenter`). Name the production conformer `<Protocol>Real` and the test double `<Protocol><Role>`, where `<Role>` is the [Fowler test-double type](https://martinfowler.com/bliki/TestDouble.html) that matches what the double actually *does*:
 > - **`Fake`** — a working implementation with a production-unsuitable shortcut, e.g. an in-memory store (`GetterSetterFake`).
@@ -133,7 +136,7 @@ The mapped UI audit that drove the migration is `docs/conjugar-ui-issues.md`.
 1. **Browse Verbs** — `VerbBrowseView` → `VerbView`
 2. **Models** — `ModelBrowseView` → `ModelView` (→ `VerbView`)
 3. **Quiz** — `QuizView` → `ResultsView`
-4. **Info** — `InfoBrowseView` → `InfoView`
+4. **Info** — `InfoBrowseView` → `InfoView` (and → `TutorView`, the conjugation tutor, from a section at the top of the list)
 5. **Settings** — `SettingsView`
 
 `CommunView` (the CloudKit message) is a `.fullScreenCover` presented from `MainTabView`,
@@ -144,6 +147,51 @@ not a tab.
 - **Conjugator.swift** (+ the feature-file family, `ModelCatalog`, and `VerbMap`) - The conjugation engine: composition of feature rules over a book-class model catalog, resolving each verb's model from `verbModelMap.xml` (4,811 verbs). The app UI conjugates through it via `TenseBridge` (maps the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary to `EngineTense`, the simple-tense-plus-person slots the engine consumes) and `CompoundTense` (composes perfect tenses as *haber* + participle, and imperativo negativo as "no" + subjunctive — the engine itself models only simple tenses). The legacy `Conjugator`/`verbs.xml` engine was removed in July 2026; `DisplayTense.swift`/`DisplayPersonNumber.swift` (formerly `Tense.swift`/`PersonNumber.swift`) remain as the UI's vocabulary, covering the full displayed tense set including compounds.
 - **Quiz.swift** - A `@MainActor @Observable` quiz state model (scoring, closure-based timer, difficulty levels), observed directly by `QuizView`/`ResultsView`. The old `QuizDelegate` was removed in the SwiftUI migration.
 - **Settings.swift** - User preferences with GetterSetter protocol abstraction.
+
+### Conjugation Tutor (on-device LLM)
+
+A Spanish conjugation tutor, ported from the sibling app Conjuguer (French) and adapted for
+Spanish (July 2026). It is a chat screen (`Views/TutorView.swift`) backed by
+`LanguageModelServiceReal`, which wraps Apple's **on-device** `SystemLanguageModel` /
+`LanguageModelSession` from the **Foundation Models** framework. Reached from a section at the
+top of the Info tab (`InfoBrowseView`). Files: `Models/LanguageModelService.swift` (protocol
++ `TutorMessage` + `LanguageModelUnavailability`), `LanguageModelServiceReal.swift`,
+`LanguageModelServiceDummy.swift`, `TutorChatHistory.swift`, `Views/TutorView.swift`,
+`Views/TutorTestView.swift`. Things to know when working on it:
+
+- **Grounded, never hallucinated.** The model is given one `Tool` (`ConjugationTool`, in
+  `LanguageModelServiceReal.swift`) that looks up real forms through the app's own engine —
+  `VerbMap.shared.entry(for:)` to validate the verb, then `TenseBridge.conjugate(...)` per
+  person. Because the whole engine is `nonisolated`, the tool's `nonisolated` `call` invokes
+  it directly (no `@MainActor` hop; the French original needed one). A tolerant
+  `displayTense(forName:)` maps a Spanish **or** English tense name onto `DisplayTense`,
+  most-specific compound/subjunctive phrases first so "presente de subjuntivo" isn't swallowed
+  by "presente". Marked forms are lowercased to strip the red-irregularity UPPERCASE encoding
+  before they reach the model.
+- **Prompt is localized by *system language*, not the UI locale.** `LanguageModelServiceReal`
+  holds two hand-written instruction blocks and picks Spanish when
+  `Locale.current.language.languageCode == "es"`, English otherwise — this steers what
+  language the model *answers in*, independent of the `.xcstrings` UI localization. **If you
+  change tutor behavior, edit both blocks.**
+- **Over-refusal workaround.** The on-device model sometimes refuses conjugation content, so
+  `sendTutorMessage` retries up to 3× with a fresh session and screens replies through
+  `isLikelyRefusal` (English + Spanish canned-refusal phrases); a persistent refusal falls
+  back to `L.Tutor.unableToAnswer`.
+- **Availability is live.** The service polls `SystemLanguageModel.availability` every 5 s and
+  is `@Observable`, so the Info-tab section flips itself between a tappable `NavigationLink`
+  (→ `TutorView`) and a reason row (the "Apple Intelligence not enabled" reason deep-links to
+  Settings). **In the simulator the model is unavailable**, so the tutor screen isn't even
+  reachable there — the chat and the `TutorTestView` batch harness can only be *exercised* on
+  a real Apple-Intelligence device.
+- **`TutorTestView`** is a batch harness (runs ~30 Spanish/English queries, one per fresh
+  session, `ShareLink`-exports the results) reached by a **triple-tap on the tutor's title**.
+  It is deliberately **not** behind `#if DEBUG` — it ships. Its hardcoded strings use
+  `Text(verbatim:)` to stay out of the string catalog.
+- **iOS 26 only.** The Foundation Models types are guarded `@available(iOS 26, *)` +
+  `#if canImport(FoundationModels)`, but since the deployment target is already iOS 26 the
+  service is instantiated unconditionally in `World`. Editing this code trips a swarm of bogus
+  SourceKit "only available in macOS 26 / cannot find type" diagnostics — all stale-index
+  noise; trust `xcodebuild`, which compiles it cleanly.
 
 ## Testing
 
