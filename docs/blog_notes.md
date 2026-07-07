@@ -2052,3 +2052,28 @@ Separately, the Quiz screen's Start button borrows Conjuguer's subtle "breathing
 `phaseAnimator` gently scaling it 1.0 ↔ 1.1 (0.9 s ease-in-out), suppressed under Reduce
 Motion. It draws the eye to the primary action without the jarring >1.5× scale jumps the
 design skill warns against.
+
+## Clearing the iOS 26 deprecation & concurrency warnings
+
+A pass to zero out the 12 build warnings that surfaced once the deployment target moved to
+iOS 26:
+
+- **`UIRequiresFullScreen` removed.** Deprecated in iOS 26 (and ignored in a future release);
+  dropped from `Conjugar/Info.plist`. The app was already portrait-locked via
+  `UISupportedInterfaceOrientations`, so behavior is unchanged.
+- **StoreKit review prompt modernized.** `SKStoreReviewController.requestReview(in:)`
+  (deprecated since iOS 18) became `AppStore.requestReview(in:)` in `ReviewPrompterReal`.
+- **Game Center leaderboard UI de-deprecated.** `GKGameCenterViewController` and its
+  `GKGameCenterControllerDelegate` were deprecated in iOS 26. `GameCenterReal.showLeaderboard()`
+  now calls `GKAccessPoint.shared.trigger(state: .leaderboards)`, dropping the delegate
+  conformance and the `gameCenterViewControllerDidFinish(_:)` method entirely. Tradeoff: it
+  opens the dashboard on the leaderboards page rather than pushing the specific `leaderboardID`.
+- **`RatingsFetcher` made concurrency-clean.** Under `SWIFT_DEFAULT_ACTOR_ISOLATION =
+  MainActor`, the `URLSession` completion (a `@Sendable` closure running off the main actor)
+  couldn't touch the type's MainActor-isolated statics or `L`. Fix: mark the pure statics
+  (`errorMessage`, the URLs, `stubData`) `nonisolated`, mark the whole localization enum
+  `nonisolated L` (it's just `String(localized:)` accessors — inherently actor-agnostic), and
+  make the `completion` parameter `@escaping @Sendable`. The `fetchRatingsDescription` function
+  itself stays MainActor so it can still read `Current.session`.
+
+Result: `Build Succeeded` with no warnings; RatingsFetcher and GameCenter suites green.

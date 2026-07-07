@@ -19,7 +19,7 @@ struct ReviewPrompterReal: ReviewPrompter {
       where: { $0.activationState == .foregroundActive }
     ) as? UIWindowScene {
       DispatchQueue.main.async {
-        SKStoreReviewController.requestReview(in: scene)
+        AppStore.requestReview(in: scene)
       }
     }
   }

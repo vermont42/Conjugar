@@ -8,7 +8,7 @@
 
 import GameKit
 
-class GameCenterReal: NSObject, GameCenter, GKGameCenterControllerDelegate {
+class GameCenterReal: NSObject, GameCenter {
   static let shared = GameCenterReal()
   var isAuthenticated = false
   private let localPlayer = GKLocalPlayer.local
@@ -74,12 +74,6 @@ class GameCenterReal: NSObject, GameCenter, GKGameCenterControllerDelegate {
     guard isAuthenticated else {
       return
     }
-    let gcViewController = GKGameCenterViewController(leaderboardID: leaderboardIdentifier, playerScope: .global, timeScope: .allTime)
-    gcViewController.gameCenterDelegate = self
-    onViewController?.present(gcViewController, animated: true, completion: nil)
-  }
-
-  func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
-    gameCenterViewController.dismiss(animated: true, completion: nil)
+    GKAccessPoint.shared.trigger(state: .leaderboards) {}
   }
 }

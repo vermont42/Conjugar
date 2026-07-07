@@ -115,7 +115,6 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0353B2D62FDCE50E00FF069B /* Models */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Models; sourceTree = "<group>"; };
 		0353B2F62FDCE50E00FF069B /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
-		0353B3042FDCE50E00FF069B /* UIViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = UIViews; sourceTree = "<group>"; };
 		0353B3372FDCE50E00FF069B /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
 		0353B3632FDCE50E00FF069B /* Analytics */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Analytics; sourceTree = "<group>"; };
 		0353B36B2FDCE50E00FF069B /* Supporting */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Supporting; sourceTree = "<group>"; };
@@ -223,7 +222,6 @@
 				0353B2D62FDCE50E00FF069B /* Models */,
 				0353B36B2FDCE50E00FF069B /* Supporting */,
 				0353B2F62FDCE50E00FF069B /* Views */,
-				0353B3042FDCE50E00FF069B /* UIViews */,
 				0353B3372FDCE50E00FF069B /* Utils */,
 				E1F06AE31E8F05F300ADD2E1 /* Info.plist */,
 				E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */,
@@ -253,7 +251,6 @@
 			fileSystemSynchronizedGroups = (
 				0353B2D62FDCE50E00FF069B /* Models */,
 				0353B2F62FDCE50E00FF069B /* Views */,
-				0353B3042FDCE50E00FF069B /* UIViews */,
 				0353B3372FDCE50E00FF069B /* Utils */,
 				0353B3632FDCE50E00FF069B /* Analytics */,
 				0353B36B2FDCE50E00FF069B /* Supporting */,

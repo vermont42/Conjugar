@@ -9,26 +9,26 @@
 import Foundation
 
 struct RatingsFetcher {
-  static let iTunesID = "1236500467"
-  static let errorMessage = "Fetching failed."
+  nonisolated static let iTunesID = "1236500467"
+  nonisolated static let errorMessage = "Fetching failed."
 
-  private static let urlInitializationMessage = " URL could not be initializaed."
+  nonisolated private static let urlInitializationMessage = " URL could not be initializaed."
 
-  static var iTunesURL: URL {
+  nonisolated static var iTunesURL: URL {
     guard let iTunesURL = URL(string: "https://itunes.apple.com/lookup?id=\(iTunesID)") else {
       fatalError("iTunes" + urlInitializationMessage)
     }
     return iTunesURL
   }
 
-  static var reviewURL: URL {
+  nonisolated static var reviewURL: URL {
     guard let reviewURL = URL(string: "https://itunes.apple.com/app/conjugar/id\(iTunesID)?action=write-review") else {
       fatalError("Rate/review" + urlInitializationMessage)
     }
     return reviewURL
   }
 
-  static func fetchRatingsDescription(completion: @escaping (String) -> ()) {
+  static func fetchRatingsDescription(completion: @escaping @Sendable (String) -> ()) {
     let request = URLRequest(url: RatingsFetcher.iTunesURL)
 
     let task = Current.session.dataTask(with: request) { (responseData, _, error) in
@@ -63,7 +63,7 @@ struct RatingsFetcher {
     task.resume()
   }
 
-  static func stubData(ratingsCount: Int) -> Data {
+  nonisolated static func stubData(ratingsCount: Int) -> Data {
     return Data("{ \"resultCount\":1, \"results\": [ { \"userRatingCountForCurrentVersion\": \(ratingsCount) } ] }".utf8)
   }
 }

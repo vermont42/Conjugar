@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum L {
+nonisolated enum L {
   enum Alert {
     static var okay: String {
       String(localized: "Alert.okay")
