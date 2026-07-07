@@ -67,6 +67,14 @@ enum L {
     static func modelCount(count: Int) -> String {
       String(localized: "BrowseModels.modelCount \(count)")
     }
+
+    static var searchPrompt: String {
+      String(localized: "BrowseModels.searchPrompt")
+    }
+
+    static var searchNoResults: String {
+      String(localized: "BrowseModels.searchNoResults")
+    }
   }
 
   enum BrowseVerbs {
@@ -80,6 +88,14 @@ enum L {
 
     static func verbCount(count: Int) -> String {
       String(localized: "BrowseVerbs.verbCount \(count)")
+    }
+
+    static var searchPrompt: String {
+      String(localized: "BrowseVerbs.searchPrompt")
+    }
+
+    static var searchNoResults: String {
+      String(localized: "BrowseVerbs.searchNoResults")
     }
   }
 

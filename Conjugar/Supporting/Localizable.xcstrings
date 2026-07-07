@@ -236,6 +236,38 @@
         }
       }
     },
+    "BrowseModels.searchNoResults" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No models found"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontraron modelos"
+          }
+        }
+      }
+    },
+    "BrowseModels.searchPrompt" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search models"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar modelos"
+          }
+        }
+      }
+    },
     "BrowseVerbs.localizedTitle" : {
       "localizations" : {
         "en" : {
@@ -248,6 +280,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Explorar"
+          }
+        }
+      }
+    },
+    "BrowseVerbs.searchNoResults" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No verbs found"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se encontraron verbos"
+          }
+        }
+      }
+    },
+    "BrowseVerbs.searchPrompt" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar verbos"
           }
         }
       }
