@@ -111,7 +111,7 @@ struct VerbRowLabel: View {
       Spacer()
 
       if let rank = entry.frequencyRank {
-        Text("#\(rank)")
+        Text(verbatim: "#\(rank)")
           .font(.caption.monospacedDigit())
           .foregroundStyle(Color.customBlue)
           .accessibilityHidden(true)

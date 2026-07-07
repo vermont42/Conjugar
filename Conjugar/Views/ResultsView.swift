@@ -55,7 +55,7 @@ struct ResultsView: View {
 
   private var summaryCard: some View {
     VStack(spacing: Layout.defaultSpacing) {
-      Text("\(quiz.score)")
+      Text(verbatim: "\(quiz.score)")
         .font(.heroNumeral)
         .foregroundStyle(scoreColor)
         .contentTransition(.numericText())
@@ -86,7 +86,7 @@ struct ResultsView: View {
           .font(.headline)
           .fontDesign(.serif)
           .foregroundStyle(Color.customYellow)
-        Text("\(tense.displayName), \(person.shortDisplayName)")
+        Text(verbatim: "\(tense.displayName), \(person.shortDisplayName)")
           .font(.caption)
           .foregroundStyle(.secondary)
 

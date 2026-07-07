@@ -143,7 +143,7 @@ struct QuizView: View {
           .foregroundStyle(.secondary)
       }
 
-      Text("\(quiz.currentPersonNumber.pronoun) · \(quiz.tense.displayName)")
+      Text(verbatim: "\(quiz.currentPersonNumber.pronoun) · \(quiz.tense.displayName)")
         .font(.title3.weight(.semibold))
         .fontDesign(.serif)
         .foregroundStyle(Color.customForeground)
@@ -199,9 +199,13 @@ struct QuizView: View {
 
   private var statusStrip: some View {
     HStack {
-      Label("\(quiz.score)", systemImage: "star.fill")
-        .foregroundStyle(.secondary)
-        .numeric()
+      Label {
+        Text(verbatim: "\(quiz.score)")
+      } icon: {
+        Image(systemName: "star.fill")
+      }
+      .foregroundStyle(.secondary)
+      .numeric()
       Spacer()
       Label(quiz.elapsedTime.timeString, systemImage: "clock")
         .foregroundStyle(.secondary)

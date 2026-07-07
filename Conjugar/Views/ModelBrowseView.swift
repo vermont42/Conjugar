@@ -100,7 +100,7 @@ struct ModelRowLabel: View {
 
       Spacer()
 
-      Text("\(model.irregularityPercent)%")
+      Text(verbatim: "\(model.irregularityPercent)%")
         .metadataPill(tint: ModelPalette.tint(forPercent: model.irregularityPercent))
     }
     .padding(.horizontal)

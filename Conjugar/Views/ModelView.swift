@@ -92,7 +92,7 @@ struct ModelView: View {
       HStack(spacing: Layout.defaultSpacing) {
         Text(L.Model.modelLabel(number: model.classNumber))
           .metadataPill(tint: .customBlue)
-        Text("\(model.irregularityPercent)%")
+        Text(verbatim: "\(model.irregularityPercent)%")
           .metadataPill(tint: ModelPalette.tint(forPercent: model.irregularityPercent))
         if isDefective {
           Text(L.Verb.defective).metadataPill(tint: .customRed)
