@@ -1,9 +1,7 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
+    "" : {},
     "Alert.gotIt" : {
       "localizations" : {
         "en" : {
@@ -1696,6 +1694,214 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "En el modo latinoamericano, los tests no incluyen las conjugaciones de vosotros. Esta configuración también influye en la forma en que Conjugar pronuncia las conjugaciones."
+          }
+        }
+      }
+    },
+    "Tutor.getSampleQuery" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get a Sample Question"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obtener una pregunta de ejemplo"
+          }
+        }
+      }
+    },
+    "Tutor.getSampleQueryDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap a question to drop it into the input box."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca una pregunta para insertarla en el cuadro de texto."
+          }
+        }
+      }
+    },
+    "Tutor.heading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugation Tutor"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutor de Conjugación"
+          }
+        }
+      }
+    },
+    "Tutor.inputPlaceholder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "e.g. \"Conjugate hablar in the presente.\""
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "p. ej. «Conjuga hablar en el presente.»"
+          }
+        }
+      }
+    },
+    "Tutor.poweredBy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Powered by Apple Intelligence. Responses may be incomplete or unexpected."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con la tecnología de Apple Intelligence. Las respuestas pueden ser incompletas o inesperadas."
+          }
+        }
+      }
+    },
+    "Tutor.reasonAppleIntelligenceOff" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Intelligence is not enabled. Tap to open Settings, where you can turn it on."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Intelligence no está activado. Toca para abrir Ajustes, donde puedes activarlo."
+          }
+        }
+      }
+    },
+    "Tutor.reasonDeviceNotEligible" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Intelligence is not available on this device."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Intelligence no está disponible en este dispositivo."
+          }
+        }
+      }
+    },
+    "Tutor.reasonModelNotReady" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Intelligence is still getting ready. Please try again later."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Intelligence todavía se está preparando. Inténtalo de nuevo más tarde."
+          }
+        }
+      }
+    },
+    "Tutor.reasonUnknown" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The tutor is unavailable on this device."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El tutor no está disponible en este dispositivo."
+          }
+        }
+      }
+    },
+    "Tutor.section" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugation Tutor"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutor de Conjugación"
+          }
+        }
+      }
+    },
+    "Tutor.send" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar"
+          }
+        }
+      }
+    },
+    "Tutor.unableToAnswer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I can only help with Spanish verb conjugation. Please ask me about a Spanish verb or tense."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo puedo ayudarte con la conjugación de verbos españoles. Pregúntame sobre un verbo o un tiempo verbal español."
+          }
+        }
+      }
+    },
+    "Tutor.unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The tutor is unavailable right now. Please try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El tutor no está disponible en este momento. Inténtalo de nuevo."
           }
         }
       }

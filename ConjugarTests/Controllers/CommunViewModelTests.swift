@@ -28,7 +28,9 @@ class CommunViewModelTests: XCTestCase {
       quiz: quiz,
       session: URLSession.stubSession(ratingsCount: 0),
       communGetter: communGetter,
-      locale: AnalyticsLocaleStub(languageCode: "en", regionCode: "US")
+      locale: AnalyticsLocaleStub(languageCode: "en", regionCode: "US"),
+      languageModelService: LanguageModelServiceDummy(),
+      getterSetter: GetterSetterFake()
     )
 
     let actionType = Commun.CommunType.website(actionTitle: ["en": "🐬"], cancelTitle: ["en": "🐉"], action: { didTapAction = true })

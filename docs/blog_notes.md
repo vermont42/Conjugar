@@ -1829,3 +1829,76 @@ now calls with `shouldDebounce: true`. Default `false` leaves every other call s
 applause, quiz sounds) unchanged. Build/lint/tests green (403); verified in the simulator by
 capturing the audio log while typing `foooooooo` — **exactly one** `.mp3` audio-queue start
 for the whole burst (was up to ~one per keystroke-times-render before).
+
+7/6/26: **Ported the on-device conjugation tutor from Conjuguer, in Spanish.** Conjuguer
+(the French sibling) has a chat tutor backed by Apple's on-device `SystemLanguageModel`
+(`FoundationModels`), grounded by a `Tool` that looks up real conjugations from the app's
+own engine so the model never invents forms. Brought the whole feature across and adapted it
+to Spanish and to Conjugar's engine + design system.
+
+New files (all in `PBXFileSystemSynchronizedRootGroup` folders, so no `project.pbxproj`
+edit): `Models/LanguageModelService.swift` (protocol, `TutorMessage`,
+`LanguageModelUnavailability`), `Models/LanguageModelServiceReal.swift` (the
+`@Observable` service wrapping `SystemLanguageModel(guardrails: .permissiveContentTransformations)`
++ the `ConjugationTool`), `Models/LanguageModelServiceDummy.swift` (test/unavailable double),
+`Models/TutorChatHistory.swift` (JSON-string persistence), and `Views/TutorView.swift` (the
+chat screen). Wired a `languageModelService` + a shared `getterSetter` onto `World`
+(`Real`/`Dummy` per world), an `L.Tutor` scope into `L.swift`, 13 `Tutor.*` keys (en+es)
+into `Localizable.xcstrings`, and a live-availability tutor **section** at the top of
+`InfoBrowseView`.
+
+Adaptation notes vs. the French original:
+- **Prompt is localized by *system language*, not UI locale.** `LanguageModelServiceReal`
+  keeps two hand-written instruction blocks and picks Spanish when
+  `Locale.current.language.languageCode == "es"`, English otherwise — this steers what
+  language the model *answers in*, independent of the app's `.xcstrings` UI localization.
+  The Spanish block tells the model to always answer in Spanish and never translate forms
+  to English; both blocks teach the Spanish tense vocabulary (pretérito vs. imperfecto,
+  the two imperfecto-de-subjuntivo forms, the compounds, etc.).
+- **Grounding tool rewired to Conjugar's engine.** Conjuguer's tool called `Conjugator` +
+  `Verb.verbs`; Conjugar's engine is different, so `ConjugationTool.performLookup` validates
+  the verb with `VerbMap.shared.entry(for:)` and conjugates through
+  `TenseBridge.conjugate(infinitive:tense:personNumber:)`, iterating a textbook person set
+  (imperatives drop `yo` and use usted/ustedes). Because Conjugar's whole engine is
+  `nonisolated`, the tool's `nonisolated` `call` invokes it directly — no `@MainActor` hop
+  (Conjuguer needed one). A `displayTense(forName:)` matcher folds accents/hyphens and maps
+  either Spanish or English tense names (however the model phrases them) onto `DisplayTense`,
+  most-specific compound/subjunctive phrases first so "presente de subjuntivo" isn't
+  swallowed by "presente". Marked forms are lowercased to strip the red-irregularity
+  UPPERCASE encoding before handing them to the model.
+- **Kept the over-refusal workaround.** The on-device model sometimes refuses conjugation
+  content; the retry-with-fresh-session loop and `isLikelyRefusal` heuristic came across,
+  extended with Spanish refusal phrases ("no puedo ayudarte", "soy un modelo de lenguaje",
+  …). A persistent refusal falls back to the localized `L.Tutor.unableToAnswer`.
+- **Design-system swaps.** Conjuguer's `.funButton()`/`Color.customSurface`/
+  `Current.soundPlayer.play(.chirp)` became `PrimaryButtonStyle`/`Color.customCardBackground`/
+  `SoundPlayer.play(.chirp)` (chirp.mp3 already ships), and appearance is recorded via the
+  existing `Current.analytics.recordVisitation`.
+- **Availability is live.** The service polls `SystemLanguageModel.availability` every 5 s
+  and is `@Observable`, so `InfoBrowseView`'s tutor section flips between a tappable
+  `NavigationLink` (brain icon → `TutorView`) and a reason row on its own — tapping the
+  "Apple Intelligence not enabled" reason deep-links to Settings.
+
+Build clean, SwiftLint clean (0 violations). Verified in the simulator: the Info tab shows
+the new **Conjugation Tutor** section with the correctly-localized unavailable reason
+("Apple Intelligence is still getting ready.") — the expected state on a simulator with no
+on-device model; the full chat path needs a real Apple-Intelligence device to exercise. (The
+`SystemLanguageModel`/`@available(iOS 26)` code trips a swarm of bogus SourceKit
+"only available in macOS 26 / cannot find type" diagnostics during editing — all noise from
+the stale whole-project index; `xcodebuild` compiles it cleanly.)
+
+7/6/26 (follow-up): **Added the batch harness** (`Views/TutorTestView.swift`), ported from
+Conjuguer. It runs a fixed set of ~30 queries — Spanish or English, chosen by
+`Locale.current` like the prompt — each in a fresh session, and renders/`ShareLink`-exports
+the results (tenses, off-topic redirects like "how do you conjugate pizza?", and
+grammar-concept questions such as "when do you use the subjunctive?"). Reached by the same
+hidden gesture as the original: a **triple-tap on the tutor's navigation title**, wired via a
+`.principal` toolbar item with `.onTapGesture(count: 3)`. Unlike Conjuguer's, this one is
+**not** behind `#if DEBUG` — Josh is happy for it to ship, so the gesture and harness are
+present in release builds too. Hardcoded harness strings use `Text(verbatim:)` to stay out of
+the string catalog; the on-Conjugar swaps are the usual `customSurface →
+customCardBackground`, `Current.soundPlayer.play(.chirp) → SoundPlayer.play(.chirp)`, and
+`L.Navigation.done → L.Alert.okay`. Build + SwiftLint clean. Note the harness (and the whole
+chat path) can only be *exercised* on a real Apple-Intelligence device — in the simulator the
+tutor reports unavailable, so `runAllTests()` short-circuits to its "Language model is not
+available." row and the tutor screen isn't even reachable from the Info tab.

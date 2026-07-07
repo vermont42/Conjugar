@@ -468,4 +468,58 @@ enum L {
       String(localized: "Verb.irregularWithParent \(exemplar)")
     }
   }
+
+  enum Tutor {
+    static var section: String {
+      String(localized: "Tutor.section")
+    }
+
+    static var heading: String {
+      String(localized: "Tutor.heading")
+    }
+
+    static var getSampleQuery: String {
+      String(localized: "Tutor.getSampleQuery")
+    }
+
+    static var getSampleQueryDescription: String {
+      String(localized: "Tutor.getSampleQueryDescription")
+    }
+
+    static var poweredBy: String {
+      String(localized: "Tutor.poweredBy")
+    }
+
+    static var inputPlaceholder: String {
+      String(localized: "Tutor.inputPlaceholder")
+    }
+
+    static var send: String {
+      String(localized: "Tutor.send")
+    }
+
+    static var unavailable: String {
+      String(localized: "Tutor.unavailable")
+    }
+
+    static var unableToAnswer: String {
+      String(localized: "Tutor.unableToAnswer")
+    }
+
+    static var reasonAppleIntelligenceOff: String {
+      String(localized: "Tutor.reasonAppleIntelligenceOff")
+    }
+
+    static var reasonDeviceNotEligible: String {
+      String(localized: "Tutor.reasonDeviceNotEligible")
+    }
+
+    static var reasonModelNotReady: String {
+      String(localized: "Tutor.reasonModelNotReady")
+    }
+
+    static var reasonUnknown: String {
+      String(localized: "Tutor.reasonUnknown")
+    }
+  }
 }

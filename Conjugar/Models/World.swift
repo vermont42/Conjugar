@@ -22,6 +22,8 @@ class World {
   var session: URLSession
   var communGetter: CommunGetter
   var locale: AnalyticsLocale
+  var languageModelService: LanguageModelService
+  var getterSetter: GetterSetter
   var parentViewController: UIViewController?
 
   private static let fakeRatingsCount = 42
@@ -34,7 +36,9 @@ class World {
     quiz: Quiz,
     session: URLSession,
     communGetter: CommunGetter,
-    locale: AnalyticsLocale
+    locale: AnalyticsLocale,
+    languageModelService: LanguageModelService,
+    getterSetter: GetterSetter
   ) {
     self.analytics = analytics
     self.reviewPrompter = reviewPrompter
@@ -44,6 +48,8 @@ class World {
     self.session = session
     self.communGetter = communGetter
     self.locale = locale
+    self.languageModelService = languageModelService
+    self.getterSetter = getterSetter
   }
 
   // Under the SwiftUI App lifecycle there is no custom main.swift to select a
@@ -64,7 +70,8 @@ class World {
   }
 
   static let device: World = {
-    let settings = Settings(getterSetter: GetterSetterReal())
+    let getterSetter = GetterSetterReal()
+    let settings = Settings(getterSetter: getterSetter)
     let gameCenter = GameCenterReal.shared
 
     return World(
@@ -76,12 +83,15 @@ class World {
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: true),
       session: URLSession.shared,
       communGetter: CommunGetterReal(),
-      locale: AnalyticsLocaleReal()
+      locale: AnalyticsLocaleReal(),
+      languageModelService: LanguageModelServiceReal(),
+      getterSetter: getterSetter
     )
   }()
 
   static let simulator: World = {
-    let settings = Settings(getterSetter: GetterSetterReal())
+    let getterSetter = GetterSetterReal()
+    let settings = Settings(getterSetter: getterSetter)
     let gameCenter = GameCenterFake()
 
     return World(
@@ -92,12 +102,15 @@ class World {
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: true),
       session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
       communGetter: CommunGetterStub(),
-      locale: AnalyticsLocaleStub(languageCode: "en", regionCode: "US")
+      locale: AnalyticsLocaleStub(languageCode: "en", regionCode: "US"),
+      languageModelService: LanguageModelServiceReal(),
+      getterSetter: getterSetter
     )
   }()
 
   static let unitTest: World = {
-    let settings = Settings(getterSetter: GetterSetterFake())
+    let getterSetter = GetterSetterFake()
+    let settings = Settings(getterSetter: getterSetter)
     let gameCenter = GameCenterFake()
 
     return World(
@@ -108,7 +121,9 @@ class World {
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false),
       session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
       communGetter: CommunGetterStub(),
-      locale: AnalyticsLocaleStub()
+      locale: AnalyticsLocaleStub(),
+      languageModelService: LanguageModelServiceDummy(),
+      getterSetter: getterSetter
     )
   }()
 
@@ -134,7 +149,8 @@ class World {
     }
 
     let dictionary = [Settings.regionKey: region.rawValue, Settings.difficultyKey: difficulty.rawValue]
-    let settings = Settings(getterSetter: GetterSetterFake(dictionary: dictionary))
+    let getterSetter = GetterSetterFake(dictionary: dictionary)
+    let settings = Settings(getterSetter: getterSetter)
     let gameCenter = GameCenterFake()
 
     return World(
@@ -145,7 +161,9 @@ class World {
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false),
       session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
       communGetter: CommunGetterStub(),
-      locale: AnalyticsLocaleStub()
+      locale: AnalyticsLocaleStub(),
+      languageModelService: LanguageModelServiceDummy(),
+      getterSetter: getterSetter
     )
   }
 }

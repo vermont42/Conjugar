@@ -11,6 +11,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct InfoBrowseView: View {
   static let englishTitle = "Info"
@@ -37,6 +38,8 @@ struct InfoBrowseView: View {
   var body: some View {
     NavigationStack(path: $navigationPath) {
       List {
+        tutorSection
+
         Section(L.BrowseInfo.aboutSection) {
           ForEach(aboutInfos) { info in
             row(info)
@@ -79,6 +82,60 @@ struct InfoBrowseView: View {
         .font(.body)
         .fontDesign(.serif)
         .foregroundStyle(Color.customForeground)
+    }
+  }
+
+  // The conjugation-tutor entry point. Reads the `@Observable` service's live
+  // availability: a tappable row when the on-device model is ready, otherwise a
+  // reason row (tap to open Settings when Apple Intelligence is merely off). The
+  // whole section hides only when there is neither availability nor a reason.
+  @ViewBuilder
+  private var tutorSection: some View {
+    let service = Current.languageModelService
+    if service.isAvailable {
+      Section(L.Tutor.section) {
+        NavigationLink {
+          TutorView()
+        } label: {
+          Label(L.Tutor.heading, systemImage: "brain")
+            .foregroundStyle(Color.customForeground)
+        }
+      }
+    } else if let reason = service.unavailabilityReason {
+      Section(L.Tutor.section) {
+        tutorUnavailableRow(reason)
+      }
+    }
+  }
+
+  @ViewBuilder
+  private func tutorUnavailableRow(_ reason: LanguageModelUnavailability) -> some View {
+    let text = Self.reasonText(reason)
+    if reason == .appleIntelligenceNotEnabled {
+      Button {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+          UIApplication.shared.open(url)
+        }
+      } label: {
+        Label(text, systemImage: "brain")
+          .foregroundStyle(Color.customBlue)
+      }
+    } else {
+      Label(text, systemImage: "brain")
+        .foregroundStyle(.secondary)
+    }
+  }
+
+  private static func reasonText(_ reason: LanguageModelUnavailability) -> String {
+    switch reason {
+    case .appleIntelligenceNotEnabled:
+      return L.Tutor.reasonAppleIntelligenceOff
+    case .deviceNotEligible:
+      return L.Tutor.reasonDeviceNotEligible
+    case .modelNotReady:
+      return L.Tutor.reasonModelNotReady
+    case .unknown:
+      return L.Tutor.reasonUnknown
     }
   }
 }
