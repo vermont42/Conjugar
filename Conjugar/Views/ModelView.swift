@@ -39,6 +39,10 @@ struct ModelView: View {
   private let participio: String
   private let gerundio: String
   private let entries: [VerbMapEntry]
+  /// The 6×6 grid's conjugated forms, precomputed once in `init` (item 14) — indexed
+  /// `[tenseIndex][personIndex]` to parallel `gridTenses` / `gridPersons`, `nil` where a
+  /// slot has no form. Previously `gridCell` re-conjugated all 36 slots on every `body`.
+  private let gridForms: [[String?]]
 
   init(model: ModelInfo, onSelectVerb: @escaping (String) -> Void) {
     self.model = model
@@ -48,6 +52,14 @@ struct ModelView: View {
     participio = Self.form(model.exemplar, .participio)
     gerundio = Self.form(model.exemplar, .gerundio)
     entries = model.verbs.compactMap { VerbMap.shared.entry(for: $0) }
+    gridForms = Self.gridTenses.map { gridTense in
+      Self.gridPersons.map { person in
+        if case .success(let form) = TenseBridge.conjugate(infinitive: model.exemplar, tense: gridTense.tense, personNumber: person) {
+          return form
+        }
+        return nil
+      }
+    }
   }
 
   var body: some View {
@@ -136,14 +148,14 @@ struct ModelView: View {
               .foregroundStyle(Color.customBlue)
           }
         }
-        ForEach(Self.gridTenses, id: \.label) { gridTense in
+        ForEach(Array(Self.gridTenses.enumerated()), id: \.element.label) { tenseIndex, gridTense in
           GridRow {
             Text(gridTense.label)
               .font(.caption.weight(.semibold))
               .foregroundStyle(Color.customBlue)
               .gridColumnAlignment(.leading)
-            ForEach(Self.gridPersons, id: \.self) { person in
-              gridCell(tense: gridTense.tense, person: person)
+            ForEach(Array(Self.gridPersons.enumerated()), id: \.element) { personIndex, _ in
+              gridCell(form: gridForms[tenseIndex][personIndex])
             }
           }
         }
@@ -155,8 +167,8 @@ struct ModelView: View {
   }
 
   @ViewBuilder
-  private func gridCell(tense: DisplayTense, person: DisplayPersonNumber) -> some View {
-    if case .success(let form) = TenseBridge.conjugate(infinitive: model.exemplar, tense: tense, personNumber: person) {
+  private func gridCell(form: String?) -> some View {
+    if let form {
       ConjugationText(form: form)
         .font(.subheadline)
         .speakOnTapFlash(ConjugationText.plain(form))

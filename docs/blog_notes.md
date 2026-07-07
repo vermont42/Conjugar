@@ -2324,3 +2324,51 @@ been silently zero. The call now rides `MainTabView`'s existing `onChange(of: sc
 Green: build succeeds, **411 tests / 0 failures**, SwiftLint 0 violations. `SettingsTests`
 and `SettingsViewTests` (both already Swift Testing, since a `@MainActor @Observable`
 deallocated by XCTest would hit the Xcode 26.3 isolated-deinit double-free) pass unchanged.
+
+## Phase 5 — View-layer hygiene (items 3, 13, 14)
+
+Three view-layer cleanups that don't change what any screen *does*, only how much work
+it does to do it — filtering, appearance config, and launch-path conjugation.
+
+**Browse search: filter once, into `@State`, with the sound out of `body`.** The two browse
+screens (`VerbBrowseView`, `ModelBrowseView`) had a `filteredVerbs`/`filteredModels`
+*computed property* that scanned all ~4,811 entries with two case/diacritic-insensitive
+`.range(of:)` probes each — and `body` read it *twice* per render (the count banner and the
+`ForEach`), so every keystroke ran the full scan twice on the main thread. Worse, the shared
+`BrowseSearch.results` helper played the sad trombone *as a side effect of view evaluation*
+— the canonical SwiftUI anti-pattern, papered over with a 1-second `SoundPlayer` debounce
+because `body` runs several times per keystroke. Now the filtered list is materialized into
+`@State`, recomputed only in `.onChange(of: searchText)` / `.onChange(of: sort)`, and seeded
+to the initial sort's full list so the first frame isn't a "0 verbs" flash. `BrowseSearch`
+became a pure `nonisolated` function (the no-results sound moved to the caller's `.onChange`
+handler — the one-shot search transition, where it belongs), so its unit suite dropped
+`@MainActor` and the `playSoundIfEmpty` parameter. Per-keystroke work is halved and render is
+side-effect-free.
+
+**The legacy UIKit appearance layer, verified on-device-simulator and mostly deleted.**
+`AppDelegate` had `configureTabBar()`/`configureNavBar()` setting `barTintColor`, `tintColor`,
+and `titleTextAttributes` — pre-iOS-13 appearance APIs. Rather than guess, I screenshotted the
+running app on iOS 26 and looked: the selected tab was system-**blue** (not the yellow
+`tintColor` asked for), the large nav titles were **white**, and a detail screen's back chevron
+was **white** — every one of those lines is inert under the Liquid-Glass bars, and the nav-bar
+one even round-tripped `NSAttributedString.Key.foregroundColor` through its own `rawValue` for
+no effect. Both methods deleted. The *one* appearance that does matter — yellow segmented-control
+titles, visible on the Browse/Models sort pickers and every Settings picker — was being set from
+`SettingsView.init`, which SwiftUI re-runs on every `MainTabView` body evaluation. Moved it to a
+single `AppDelegate` call at launch; before/after screenshots are pixel-identical, so nothing
+visible regressed and `SettingsView` no longer needs an `init`.
+
+**Launch-path conjugation moved off-main, date-gated, and cached.** `WidgetSnapshotWriter.refresh()`
+parses the 231 KB `verbModelMap.xml`, sorts ~1,000 ranked verbs, runs ~50 conjugations, encodes
+JSON, writes the App Group file, and calls `reloadAllTimelines()` — and it ran synchronously on
+the MainActor from `MainTabView.task` at launch *and again on every foreground activation*. Both
+call sites now wrap it in `Task.detached` (everything it touches is already `nonisolated`/`Sendable`),
+so the map parse no longer blocks post-launch taps. And `refresh()` is now date-gated: it reads the
+`dateString` of the snapshot already on disk and, when it matches today, skips the rewrite *and* the
+`reloadAllTimelines()` — the widget content changes once a day, so spending WidgetKit's refresh
+budget on every activation was pure waste. Separately, `ModelView` was re-conjugating all 36 grid
+slots (6 tenses × 6 persons) on every `body` evaluation; those forms are now precomputed once in
+`init` into a `[[String?]]` the grid just reads.
+
+Green: build succeeds, **411 tests / 0 failures**, SwiftLint 0 violations. The refactored
+`BrowseSearchTests` (now nonisolated, calling the pure filter) pass unchanged.

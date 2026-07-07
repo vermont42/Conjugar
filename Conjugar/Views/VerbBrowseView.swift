@@ -30,13 +30,25 @@ struct VerbBrowseView: View {
 
   private var verbs: [VerbMapEntry] { Self.verbsBySort[sort] ?? [] }
 
-  /// The current sort filtered by the search query, matching infinitive **or** gloss
-  /// case- and diacritic-insensitively (so `esta` finds `está`, `have` finds haber/tener).
-  private var filteredVerbs: [VerbMapEntry] {
-    BrowseSearch.results(in: verbs, query: searchText, playSoundIfEmpty: true) { entry, query in
+  /// The current sort filtered by the search query, materialized into `@State` and
+  /// recomputed only when `searchText` or `sort` changes (item 3) — rather than as a
+  /// computed property `body` scanned twice per render. Seeded to the initial sort's
+  /// full list so the first frame isn't a "0 verbs" flash.
+  @State private var filteredVerbs: [VerbMapEntry] = Self.verbsBySort[Current.settings.verbSort] ?? []
+
+  /// Refilter for the current `searchText` + `sort`, firing the no-results sad trombone
+  /// here — the one-shot search transition — instead of inside `body`. Matches infinitive
+  /// **or** gloss case- and diacritic-insensitively (so `esta` finds `está`, `have` finds
+  /// haber/tener).
+  private func recomputeFilteredVerbs() {
+    let results = BrowseSearch.results(in: verbs, query: searchText) { entry, query in
       entry.infinitive.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
         || entry.gloss.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
     }
+    if results.isEmpty && !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+      SoundPlayer.playRandomSadTrombone()
+    }
+    filteredVerbs = results
   }
 
   var body: some View {
@@ -77,7 +89,11 @@ struct VerbBrowseView: View {
           }
           .onChange(of: sort) { _, newValue in
             Current.settings.verbSort = newValue
+            recomputeFilteredVerbs()
             proxy.scrollTo("top", anchor: .top)
+          }
+          .onChange(of: searchText) { _, _ in
+            recomputeFilteredVerbs()
           }
         }
 

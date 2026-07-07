@@ -44,9 +44,30 @@ nonisolated enum WidgetSnapshotWriter {
   // MARK: - Entry points
 
   /// Rebuild the snapshot for today and ask WidgetKit to reload every timeline.
+  ///
+  /// Date-gated (item 14): the verb/quiz content changes once a day, so when the
+  /// snapshot already on disk is stamped with today's date this is a no-op — skipping
+  /// the rewrite and, crucially, the `reloadAllTimelines()` that would otherwise spend
+  /// WidgetKit's refresh budget on every foreground activation for unchanged content.
   static func refresh() {
+    let today = dateString(for: Date(), calendar: .current)
+    if currentSnapshotDateString() == today { return }
     guard writeSnapshot() else { return }
     WidgetCenter.shared.reloadAllTimelines()
+  }
+
+  /// The `dateString` of the snapshot currently on disk, or nil if none is written yet
+  /// (or it can't be read/decoded). Decodes the shared `WidgetSnapshot` the app itself
+  /// wrote; the widget target's `SnapshotReader` isn't visible here.
+  private static func currentSnapshotDateString() -> String? {
+    guard
+      let url = WidgetConstants.snapshotURL,
+      let data = try? Data(contentsOf: url),
+      let snapshot = try? JSONDecoder().decode(WidgetSnapshot.self, from: data)
+    else {
+      return nil
+    }
+    return snapshot.dateString
   }
 
   /// Build and persist the snapshot for the given day. Returns whether it was written.

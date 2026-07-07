@@ -41,7 +41,9 @@ struct MainTabView: View {
     .task {
       // Widgets show today's verb/quiz; clean up any Live Activity left by a prior run.
       LiveActivityManager.endAll()
-      WidgetSnapshotWriter.refresh()
+      // Off-main (item 14): refresh() parses verbModelMap.xml + runs ~50 conjugations;
+      // everything it touches is nonisolated/Sendable, so it belongs off the launch path.
+      Task.detached { WidgetSnapshotWriter.refresh() }
       await presentCommunIfNeeded()
     }
     .onOpenURL { router.handle(url: $0) }
@@ -51,7 +53,7 @@ struct MainTabView: View {
       // never fires under WindowGroup — is where became-active analytics live now
       // (Phase 4 / item 4).
       Current.analytics.recordBecameActive()
-      WidgetSnapshotWriter.refresh()
+      Task.detached { WidgetSnapshotWriter.refresh() }
       drainPendingDeeplink()
     }
     .fullScreenCover(item: $commun) { commun in

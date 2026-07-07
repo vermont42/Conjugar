@@ -11,12 +11,10 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
   // Retained under @UIApplicationDelegateAdaptor for the hooks the App
   // lifecycle doesn't cover. The window is now owned by SwiftUI's WindowGroup,
-  // so this no longer creates one; it only styles the shared UIKit appearance
-  // (which still applies to the SwiftUI TabView and the wrapped UIKit VCs) and
-  // handles the UI-test-World override.
+  // so this no longer creates one; it sets the one global UIKit appearance the
+  // SwiftUI screens still rely on and handles the UI-test-World override.
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    configureTabBar()
-    configureNavBar()
+    configureSegmentedControlAppearance()
 
     let uiTestingFlag = "enable-ui-testing"
     if CommandLine.arguments.contains(uiTestingFlag) {
@@ -34,14 +32,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   // became-active analytics now ride `MainTabView`'s `scenePhase == .active`
   // observer, which actually runs.
 
-  private func configureTabBar() {
-    UITabBar.appearance().barTintColor = Colors.background
-    UITabBar.appearance().tintColor = Colors.yellow
-  }
-
-  private func configureNavBar() {
-    UINavigationBar.appearance().barTintColor = Colors.background
-    UINavigationBar.appearance().tintColor = Colors.yellow
-    UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key(rawValue: NSAttributedString.Key.foregroundColor.rawValue): Colors.yellow]
+  // Conjugar styles its segmented controls (Browse/Models sort, Settings pickers) with
+  // yellow titles — the one global UIKit appearance the SwiftUI screens still rely on.
+  // Set once at launch (item 13) rather than from `SettingsView.init`, which re-ran it
+  // on every `MainTabView` body evaluation. The pre-iOS-13 tab-/nav-bar `barTintColor`
+  // + `tintColor` + `titleTextAttributes` config that used to live here was verified
+  // inert on iOS 26's Liquid-Glass bars (selected tab stayed system-blue, large titles
+  // and the back chevron stayed default) and removed.
+  private func configureSegmentedControlAppearance() {
+    UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: Colors.yellow], for: .selected)
+    UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: Colors.yellow], for: .normal)
   }
 }

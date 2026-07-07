@@ -14,6 +14,8 @@
 //  measure is reading-width-constrained for iPad. Since Phase 4 / item 11 made
 //  `Settings` `@Observable`, the pickers bind straight to `Current.settings` via
 //  `@Bindable` — the old `SelectionStore` bridge and its `onAppear` copy-in are gone.
+//  The global segmented-control appearance (yellow titles) moved to AppDelegate in
+//  Phase 5 / item 13, so this view no longer needs an `init`.
 //
 
 import SwiftUI
@@ -28,10 +30,8 @@ struct SettingsView: View {
   private let changeDifficultyTip = ChangeDifficultyTip()
   private let enableGameCenterTip = EnableGameCenterTip()
 
-  init() {
-    UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: Colors.yellow], for: .selected)
-    UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: Colors.yellow], for: .normal)
-  }
+  // Segmented-control appearance (yellow titles) is set once in AppDelegate now, not
+  // from a per-body-evaluation `init` (item 13).
 
   var body: some View {
     NavigationStack {
