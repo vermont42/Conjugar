@@ -101,7 +101,7 @@ Three small correctness issues in one feature:
 
 `CommunGetterReal.swift:64-66` parses both the CloudKit-pushed version and `CFBundleShortVersionString` with `Double(...)`: version `"2.10"` becomes 2.1 and compares *older* than `"2.9"`, and any future two-dot version (`"2.8.1"`) fails to parse and drops the commun entirely. Marketing version is currently `2.8`, so this bites exactly when you ship a `x.10` or adopt patch versions. Compare numeric components instead (split on `"."`, compare lexicographically), or `String.compare(options: .numeric)`.
 
-## 10. Delete the dead UIKit stratum · **code health (large, zero-risk)**
+## 10. ✅ Delete the dead UIKit stratum · **code health (large, zero-risk)**
 
 The SwiftUI migration finished, but its fossil record remains in the app target. All of the following have **no callers in app code** (verified by project-wide search); together they're ~500 lines that mislead readers (and CLAUDE.md) about what the app still uses:
 
@@ -217,7 +217,7 @@ Small, independent; batch them opportunistically:
 Ordered so every step ships green (build + 403 tests + lint), bugs land before refactors, and refactors before modernization. Each step is a natural commit (or two) on `migration`, with a `docs/blog_notes.md` note per chunk.
 
 1. ✅ **Data + one-liner bug fixes** *(items 2, 5, 7, 8, 9, plus item 20's `ü`)* — fix `VerbFamilies` (manecer/helar/esconder), add the VerbFamilies↔VerbMap guard test, invert `InfoView`'s width conditional, POSIX/UTC (or epoch) date storage + call-time `now` + injected settings in the review prompter, FNV seed + DST-safe midnight in the widgets, numeric version compare in `CommunGetterReal`. Small, independent, high confidence — do first while the tree is quiet.
-2. **Dead-code purge** *(item 10)* — one sweeping deletion commit + CLAUDE.md correction. Zero behavior change; shrinks everything after it (and removes files later steps would otherwise have to edit).
+2. ✅ **Dead-code purge** *(item 10)* — one sweeping deletion commit + CLAUDE.md correction. Zero behavior change; shrinks everything after it (and removes files later steps would otherwise have to edit).
 3. **Game Center rewrite** *(item 1, folding in the relevant bits of items 19 and 10)* — the gate fix, the once-set `authenticateHandler`, top-VC presentation, protocol cleanup (`UIViewController` out, `parentViewController` deleted), leaderboard-ID await, SwiftUI failure alert, fake-backed tests. Verify on a physical device (simulator Worlds use the fake).
 4. **Settings observability** *(item 11, then item 4)* — `@Observable Settings`, delete `SelectionStore`, collapse the persistence boilerplate; then move became-active analytics to `scenePhase` and delete the dead delegate methods. (Doing 4 after 11 keeps all Settings churn in one window.)
 5. **View-layer hygiene** *(items 3, 13, 14)* — browse filtering into `onChange` state + sound out of `body`; appearance config consolidated/retired after on-simulator verification; snapshot refresh off-main + date-gated; `ModelView` grid cached in `init`.
