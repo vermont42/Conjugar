@@ -38,7 +38,7 @@ Verification note: the simulator Worlds use `GameCenterFake`, so this must be ex
 
 Reference implementation: none of this bug exists in the siblings, and **Konjugieren's `GameCenterReal`** (`Konjugieren/Utils/GameCenterReal.swift`) already embodies the recommended shape — a set-once, `[weak self]` `authenticateHandler` installed at app init, `@Observable` with `isAuthenticated` mirroring `GKLocalPlayer`, a scene-aware top-view-controller lookup for the login sheet, and logged (not swallowed) submit failures. Port that file and wrap Conjugar's opt-in dialog around it rather than designing from scratch. (Conjuguer solves the presentation differently — a real zero-size VC mounted via `UIViewControllerRepresentable` — workable, but the Konjugieren approach needs no view-hierarchy plumbing.)
 
-## 2. The quiz can teach wrong Spanish — `VerbFamilies` data bugs · **bug (content)**
+## 2. ✅ The quiz can teach wrong Spanish — `VerbFamilies` data bugs · **bug (content)**
 
 `Quiz` builds questions from the hand-curated lists in `Conjugar/Models/VerbFamilies.swift`, and the engine conjugates whatever it's given. Three data problems (verified against `verbModelMap.xml`):
 
@@ -62,7 +62,7 @@ Under the SwiftUI `App` lifecycle the app adopts scenes, and UIKit then delivers
 
 **Fix:** delete the empty delegate lifecycle methods and move the call into the existing scene-phase observer — `MainTabView.onChange(of: scenePhase)` (`MainTabView.swift:48-52`) already runs on `.active`. While there, note `DeviceUtility.swift`'s 100-line hand-maintained device table exists *only* for this event; TelemetryDeck reports model identifiers natively, so the whole file can likely go when the integration lands.
 
-## 5. `InfoView`'s reading-width logic is inverted · **UI bug (iPad)**
+## 5. ✅ `InfoView`'s reading-width logic is inverted · **UI bug (iPad)**
 
 `InfoView.swift:49`:
 
@@ -84,7 +84,7 @@ nonisolated(unsafe) private static var callCount = 0
 
 **Fix:** make the limit per-tool-instance — a fresh `ConjugationTool()` is already created per session (`:150`, `:171`), so an instance `let counter = OSAllocatedUnfairLock(initialState: 0)` (or `Mutex<Int>` from `Synchronization`) gives you a correctly-scoped, race-free count and deletes the static + reset dance entirely.
 
-## 7. Review-prompt bookkeeping: locale-fragile date round-trip, time frozen at launch, and a second `Settings` instance · **minor bugs**
+## 7. ✅ Review-prompt bookkeeping: locale-fragile date round-trip, time frozen at launch, and a second `Settings` instance · **minor bugs**
 
 Three small correctness issues in one feature:
 
@@ -92,12 +92,12 @@ Three small correctness issues in one feature:
 - **`ReviewPrompterReal` captures `now` once** (`ReviewPrompterReal.swift:27-29`): `now: Date = Date()` is evaluated when `World.device` is built at launch, and `promptableActionHappened()` both compares against and *records* that stale timestamp (`:38-40`). The `now` parameter is a test seam; production should read `Date()` at call time (e.g. `now: () -> Date = { Date() }`).
 - **It also constructs its own `Settings`** (`ReviewPrompterReal.swift:27` default argument) instead of receiving `World.device`'s instance (`World.swift:80`). Two live `Settings` objects cache the same UserDefaults keys independently — harmless today only because their key usage happens to be disjoint. Inject `settings` explicitly in `World.device`.
 
-## 8. Widget nits: "deterministic" shuffle isn't, and midnight refresh ignores DST · **minor bugs**
+## 8. ✅ Widget nits: "deterministic" shuffle isn't, and midnight refresh ignores DST · **minor bugs**
 
 - **`QuizWidgetView.shuffledAnswers`** (`ConjugarWidget/Views/QuizWidgetView.swift:92-100`) seeds its RNG from `Hasher`, which is **randomly seeded per process**. Widget-extension processes are killed and respawned between timeline renders, so the answer order the comment promises is "stable across reloads" actually reshuffles whenever the extension relaunches. Correctness is unaffected (the intent carries the answer string) but the button order visibly jumps. Seed deterministically — e.g. FNV-1a over `questionID.utf8` — and keep the nice `SeededRNG`.
 - **Both timeline providers compute the next refresh as `startOfDay + 86_400`** (`VerbOfTheDayWidget.swift:33`, `QuizWidget.swift:32`). On DST-change days that's 11 PM or 1 AM, so the verb of the day rolls over an hour early/late twice a year. Use `Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)`.
 
-## 9. `CommunGetterReal` compares app versions as `Double`s · **latent bug**
+## 9. ✅ `CommunGetterReal` compares app versions as `Double`s · **latent bug**
 
 `CommunGetterReal.swift:64-66` parses both the CloudKit-pushed version and `CFBundleShortVersionString` with `Double(...)`: version `"2.10"` becomes 2.1 and compares *older* than `"2.9"`, and any future two-dot version (`"2.8.1"`) fails to parse and drops the commun entirely. Marketing version is currently `2.8`, so this bites exactly when you ship a `x.10` or adopt patch versions. Compare numeric components instead (split on `"."`, compare lexicographically), or `String.compare(options: .numeric)`.
 
@@ -202,7 +202,7 @@ Small, independent; batch them opportunistically:
 
 - **Localization:** the catalog contains a junk `""` key (auto-extracted from unlabeled `Picker(""...)`/`TextField(""...)`); use explicit empty labels (`Text(verbatim:)` / labeled initializers) and delete it. `RatingsFetcher.swift:51` hardcodes the Spanish exhortation `" ¡Sé la primera o el primero!"` outside the catalog — deliberate flavor or not, it belongs in `L`/xcstrings so the decision is visible to translation.
 - **`RatingsFetcher`:** callback + `JSONSerialization` → `async`/`await` + `Codable`; surface the error case (today the Settings row silently stays empty).
-- **`ConjugationResult.compare`** (`ConjugationResult.swift:27`) folds `á é í ó ú` but not `ü`, so *averigue* vs *averigüé* scores `noMatch` instead of `partialMatch`. Add `("ü","u")` (leave `ñ` strict — it's a distinct letter).
+- ✅ **`ConjugationResult.compare`** (`ConjugationResult.swift:27`) folds `á é í ó ú` but not `ü`, so *averigue* vs *averigüé* scores `noMatch` instead of `partialMatch`. Add `("ü","u")` (leave `ñ` strict — it's a distinct letter).
 - **`AppRouter.handle`** uses soft-deprecated `url.host` (`AppRouter.swift:33`) → `url.host()`.
 - **Build settings:** the widget target lacks `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY` that app+test set — add for consistency.
 - **Entitlements:** `aps-environment: development` is present but nothing registers for push; if the CloudKit commun fetch stays poll-at-launch, drop it (one less provisioning variable).
@@ -212,11 +212,11 @@ Small, independent; batch them opportunistically:
 
 ---
 
-## Proposed implementation sequence
+## Proposed implementation phases
 
 Ordered so every step ships green (build + 403 tests + lint), bugs land before refactors, and refactors before modernization. Each step is a natural commit (or two) on `migration`, with a `docs/blog_notes.md` note per chunk.
 
-1. **Data + one-liner bug fixes** *(items 2, 5, 7, 8, 9, plus item 20's `ü`)* — fix `VerbFamilies` (manecer/helar/esconder), add the VerbFamilies↔VerbMap guard test, invert `InfoView`'s width conditional, POSIX/UTC (or epoch) date storage + call-time `now` + injected settings in the review prompter, FNV seed + DST-safe midnight in the widgets, numeric version compare in `CommunGetterReal`. Small, independent, high confidence — do first while the tree is quiet.
+1. ✅ **Data + one-liner bug fixes** *(items 2, 5, 7, 8, 9, plus item 20's `ü`)* — fix `VerbFamilies` (manecer/helar/esconder), add the VerbFamilies↔VerbMap guard test, invert `InfoView`'s width conditional, POSIX/UTC (or epoch) date storage + call-time `now` + injected settings in the review prompter, FNV seed + DST-safe midnight in the widgets, numeric version compare in `CommunGetterReal`. Small, independent, high confidence — do first while the tree is quiet.
 2. **Dead-code purge** *(item 10)* — one sweeping deletion commit + CLAUDE.md correction. Zero behavior change; shrinks everything after it (and removes files later steps would otherwise have to edit).
 3. **Game Center rewrite** *(item 1, folding in the relevant bits of items 19 and 10)* — the gate fix, the once-set `authenticateHandler`, top-VC presentation, protocol cleanup (`UIViewController` out, `parentViewController` deleted), leaderboard-ID await, SwiftUI failure alert, fake-backed tests. Verify on a physical device (simulator Worlds use the fake).
 4. **Settings observability** *(item 11, then item 4)* — `@Observable Settings`, delete `SelectionStore`, collapse the persistence boilerplate; then move became-active analytics to `scenePhase` and delete the dead delegate methods. (Doing 4 after 11 keeps all Settings churn in one window.)

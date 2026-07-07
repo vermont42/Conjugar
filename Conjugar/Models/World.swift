@@ -77,7 +77,7 @@ class World {
     return World(
       // TODO: swap in a TelemetryDeck-backed AnalyticsService once integrated.
       analytics: AnalyticsServiceSpy(),
-      reviewPrompter: ReviewPrompterReal(),
+      reviewPrompter: ReviewPrompterReal(settings: settings),
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: true),

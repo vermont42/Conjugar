@@ -12,7 +12,7 @@ struct ReviewPrompterReal: ReviewPrompter {
   static let promptModulo = 9
   static let promptInterval: TimeInterval = 60 * 60 * 24 * 180
   private let settings: Settings
-  private let now: Date
+  private let now: () -> Date
   private let requestReview: () -> ()
   private static let defaultRequestReview: () -> Void = {
     if let scene = UIApplication.shared.connectedScenes.first(
@@ -24,7 +24,7 @@ struct ReviewPrompterReal: ReviewPrompter {
     }
   }
 
-  init(settings: Settings = Settings(getterSetter: GetterSetterReal()), now: Date = Date(), requestReview: @escaping () -> () = ReviewPrompterReal.defaultRequestReview) {
+  init(settings: Settings, now: @escaping () -> Date = { Date() }, requestReview: @escaping () -> () = ReviewPrompterReal.defaultRequestReview) {
     self.settings = settings
     self.now = now
     self.requestReview = requestReview
@@ -35,6 +35,7 @@ struct ReviewPrompterReal: ReviewPrompter {
     actionCount += 1
     settings.promptActionCount = actionCount
     let lastReviewPromptDate = settings.lastReviewPromptDate
+    let now = now()
     if actionCount % ReviewPrompterReal.promptModulo == 0 && now.timeIntervalSince(lastReviewPromptDate) >= ReviewPrompterReal.promptInterval {
       requestReview()
       settings.lastReviewPromptDate = now

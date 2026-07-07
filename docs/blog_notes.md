@@ -2121,3 +2121,52 @@ that survived the migration only as fossils, plus dead members like `Quiz.pauseT
 Nothing in the engine itself drew blood: the feature-composition core, the resolver, the
 bridge, and the widget snapshot pipeline all came through clean — the oracle-pinned test
 suites are doing their job.
+
+7/7/26: Started working through the code-review recommendations. **Phase 1 — the
+data-and-one-liner bug fixes**, the batch of small, independent, high-confidence
+corrections meant to land while the tree is quiet.
+
+- **`VerbFamilies` data bugs (item 2).** The hand-curated quiz lists taught wrong
+  Spanish. `manecer` isn't in the 4,811-verb map and isn't standard Spanish — it was a
+  truncation of `amanecer` (whose dawn/dusk partner `anochecer` sits right beside it in
+  the list), so I restored the intended verb rather than deleting the slot. `helar`
+  (a 4A stem-changer, *hiela*) and — a fourth bug the guard test surfaced that the review
+  hadn't named — `andar` (class 35, irregular pretérito *anduve*) were both misfiled in
+  the *regular* -ar list, where the quiz drills them as regular drills (directly, and via
+  `allRegularVerbs`, which feeds the pretérito/imperfecto/… questions); removed both. And
+  the duplicate `esconder` in the -er list was skewing its round-robin cycle; removed one.
+- **The guard test (item 2).** A new `VerbFamiliesTests` Swift Testing suite pins the
+  lists to `VerbMap.shared`: every entry must resolve in the map, every `regular…` list
+  must contain only verbs of its own regular class (-ar → 1, -er → 2, -ir → 3, comparing
+  the *leading* class digit so orthographic variants like `buscar`@1-1 still pass), and no
+  list may repeat an entry. This is the test `QuizTests` structurally can't be — it
+  compares the engine's answer to the engine's own output, so it verifies self-consistency,
+  not linguistic truth. Writing the intent down as a test is also what caught `andar`.
+- **InfoView reading width (item 5).** The iPad conditional was inverted — regular size
+  class got `.infinity`, removing the very measure cap `Layout.readingWidth` exists for, so
+  article text sprawled the full window on iPad. Replaced with the standard unconditional
+  `.frame(maxWidth: readingWidth)` + `.frame(maxWidth: .infinity)` pair the sibling screens
+  use, and dropped the now-unused `horizontalSizeClass` environment read.
+- **Review-prompt bookkeeping (item 7).** `Settings.lastReviewPromptDate` now stores a
+  bare `timeIntervalSince1970`, retiring the locale-fragile `DateFormatter` (whose `'Z'`
+  was a literal and whose `HH` could misparse under a 24-hour override). `ReviewPrompterReal`
+  reads `Date()` at call time via an injected `() -> Date` seam instead of freezing `now`
+  when `World.device` is built at launch, and it now receives `World.device`'s `Settings`
+  instance rather than constructing a second one over the same UserDefaults keys.
+- **Widget bugs (item 8).** The Quiz widget's "deterministic" answer shuffle seeded from
+  `Hasher`, which is randomly seeded per process — and the extension is killed and
+  respawned between renders, so the order visibly jumped on every relaunch. Swapped in a
+  stable FNV-1a hash of the question id (keeping the nice SplitMix64 `SeededRNG`). Both
+  timeline providers computed the next refresh as `startOfDay + 86_400`, which lands an
+  hour off on DST-change days; now they add one *calendar* day.
+- **Version compare (item 9).** `CommunGetterReal` parsed app and cloud versions as
+  `Double`, so `"2.10"` read as older than `"2.9"` and any patch version (`"2.8.1"`)
+  failed to parse and dropped the commun. Now compares the dotted strings with
+  `.numeric`. (Needed an explicit `import Foundation` under `MEMBER_IMPORT_VISIBILITY`.)
+- **Diacritic folding (item 20).** `ConjugationResult.compare` folded the five accented
+  vowels but not `ü`, so *averigüé* vs *averigüe* scored `noMatch` instead of
+  `partialMatch`; added `("ü","u")`, leaving `ñ` strict (a distinct letter). Extended the
+  existing `ConjugationResultTests` with both the ü-partial and ñ-strict cases.
+
+All green after the batch: build succeeds, the full suite is **406 tests / 0 failures**
+(up from 403 — the three new guard tests), SwiftLint reports 0 violations.

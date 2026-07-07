@@ -26,5 +26,9 @@ class ConjugationResultTests: XCTestCase {
     XCTAssertEqual(ConjugationResult.compare(lhs: lhs, rhs: rhs), .totalMatch)
     rhs = "🥥🥥🥥🥥"
     XCTAssertEqual(ConjugationResult.compare(lhs: lhs, rhs: rhs), .noMatch)
+    // ü folds like the other diacritics: a missing diaeresis scores partial, not none.
+    XCTAssertEqual(ConjugationResult.compare(lhs: "averigüé", rhs: "averigue"), .partialMatch)
+    // ñ stays strict — it is a distinct letter, not an accented n.
+    XCTAssertEqual(ConjugationResult.compare(lhs: "año", rhs: "ano"), .noMatch)
   }
 }

@@ -19,15 +19,11 @@ struct ReviewPrompterRealTests {
     let smallAmountOfTime: TimeInterval = 5.0
     let recentPromptDate = now.addingTimeInterval(-1.0 * smallAmountOfTime)
 
-    let formatter = DateFormatter()
-    let format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
-    formatter.dateFormat = format
-
     var settingsDictionary1: [String: String] = [:]
-    settingsDictionary1[Settings.lastReviewPromptDateKey] = formatter.string(from: recentPromptDate)
+    settingsDictionary1[Settings.lastReviewPromptDateKey] = "\(recentPromptDate.timeIntervalSince1970)"
     let settings1 = Settings(getterSetter: GetterSetterFake(dictionary: settingsDictionary1))
     var didRequestReview = false
-    let prompter1 = ReviewPrompterReal(settings: settings1, now: now, requestReview: { didRequestReview = true })
+    let prompter1 = ReviewPrompterReal(settings: settings1, now: { now }, requestReview: { didRequestReview = true })
 
     prompter1.promptableActionHappened()
     #expect(!didRequestReview)
@@ -48,7 +44,7 @@ struct ReviewPrompterRealTests {
     var settingsDictionary2: [String: String] = [:]
     settingsDictionary2[Settings.promptActionCountKey] = "\(ReviewPrompterReal.promptModulo - 1)"
     let settings2 = Settings(getterSetter: GetterSetterFake(dictionary: settingsDictionary2))
-    let prompter2 = ReviewPrompterReal(settings: settings2, now: longAgoDate, requestReview: { didRequestReview = true })
+    let prompter2 = ReviewPrompterReal(settings: settings2, now: { longAgoDate }, requestReview: { didRequestReview = true })
 
     didRequestReview = false
     prompter2.promptableActionHappened()

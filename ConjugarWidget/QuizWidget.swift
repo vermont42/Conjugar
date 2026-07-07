@@ -29,7 +29,10 @@ struct QuizProvider: TimelineProvider {
   }
 
   func getTimeline(in context: Context, completion: @escaping (Timeline<QuizEntry>) -> Void) {
-    let nextMidnight = Calendar.current.startOfDay(for: .now).addingTimeInterval(86_400)
+    // Add one calendar day (not a flat 86,400 s) so the rollover lands on local
+    // midnight even on DST-change days.
+    let startOfToday = Calendar.current.startOfDay(for: .now)
+    let nextMidnight = Calendar.current.date(byAdding: .day, value: 1, to: startOfToday) ?? startOfToday.addingTimeInterval(86_400)
     completion(Timeline(entries: [makeEntry()], policy: .after(nextMidnight)))
   }
 

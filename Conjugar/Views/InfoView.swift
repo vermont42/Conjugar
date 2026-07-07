@@ -16,8 +16,6 @@ struct InfoView: View {
   /// Navigate to another Info article (a tapped `%…%` cross-reference).
   let navigate: (Info) -> Void
 
-  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-
   var body: some View {
     ZStack {
       Color.customBackground
@@ -46,7 +44,7 @@ struct InfoView: View {
           .accessibilityHidden(true)
 
           RichTextView(blocks: info.richTextBlocks)
-            .frame(maxWidth: horizontalSizeClass == .regular ? .infinity : Layout.readingWidth, alignment: .leading)
+            .frame(maxWidth: Layout.readingWidth, alignment: .leading)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.horizontal, Layout.doubleDefaultSpacing)

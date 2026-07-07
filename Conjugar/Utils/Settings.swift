@@ -94,14 +94,12 @@ class Settings {
   var lastReviewPromptDate: Date {
     didSet {
       if lastReviewPromptDate != oldValue {
-        getterSetter.set(key: Settings.lastReviewPromptDateKey, value: formatter.string(from: lastReviewPromptDate))
+        getterSetter.set(key: Settings.lastReviewPromptDateKey, value: "\(lastReviewPromptDate.timeIntervalSince1970)")
       }
     }
   }
   static let lastReviewPromptDateKey = "lastReviewPromptDate"
   static let lastReviewPromptDateDefault = Date(timeIntervalSince1970: 0.0)
-  private let formatter = DateFormatter()
-  private static let format = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
 
   var userRejectedGameCenter: Bool {
     didSet {
@@ -192,13 +190,12 @@ class Settings {
       getterSetter.set(key: Settings.promptActionCountKey, value: "\(promptActionCount)")
     }
 
-    formatter.dateFormat = Settings.format
-
-    if let lastReviewPromptDateString = getterSetter.get(key: Settings.lastReviewPromptDateKey) {
-      lastReviewPromptDate = formatter.date(from: lastReviewPromptDateString) ?? Settings.lastReviewPromptDateDefault
+    if let lastReviewPromptDateString = getterSetter.get(key: Settings.lastReviewPromptDateKey),
+      let interval = TimeInterval(lastReviewPromptDateString) {
+      lastReviewPromptDate = Date(timeIntervalSince1970: interval)
     } else {
       lastReviewPromptDate = Settings.lastReviewPromptDateDefault
-      getterSetter.set(key: Settings.lastReviewPromptDateKey, value: formatter.string(from: lastReviewPromptDate))
+      getterSetter.set(key: Settings.lastReviewPromptDateKey, value: "\(Settings.lastReviewPromptDateDefault.timeIntervalSince1970)")
     }
 
     if let userRejectedGameCenterString = getterSetter.get(key: Settings.userRejectedGameCenterKey) {

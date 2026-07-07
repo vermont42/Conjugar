@@ -89,14 +89,25 @@ struct QuizWidgetView: View {
   }
 
   // Deterministic shuffle keyed on the question id so the layout is stable across reloads.
+  // `Hasher` is randomly seeded per process, and the widget extension is killed and
+  // respawned between timeline renders, so it would reshuffle on every relaunch — seed
+  // from a stable FNV-1a hash of the question id instead.
   private var shuffledAnswers: [String] {
     var answers = quiz.wrongAnswers
     answers.append(quiz.correctAnswer)
-    var hasher = Hasher()
-    hasher.combine(quiz.questionID)
-    var rng = SeededRNG(seed: UInt64(bitPattern: Int64(hasher.finalize())))
+    var rng = SeededRNG(seed: fnv1a(quiz.questionID))
     answers.shuffle(using: &rng)
     return answers
+  }
+
+  /// 64-bit FNV-1a hash — a stable, process-independent seed for the answer shuffle.
+  private func fnv1a(_ string: String) -> UInt64 {
+    var hash: UInt64 = 0xcbf2_9ce4_8422_2325
+    for byte in string.utf8 {
+      hash ^= UInt64(byte)
+      hash = hash &* 0x0000_0100_0000_01b3
+    }
+    return hash
   }
 }
 

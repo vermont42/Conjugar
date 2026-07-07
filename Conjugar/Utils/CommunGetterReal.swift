@@ -7,6 +7,7 @@
 //
 
 import CloudKit
+import Foundation
 import MessageUI
 import UIKit
 
@@ -61,15 +62,17 @@ struct CommunGetterReal: CommunGetter {
     case "newVersion":
       guard
         typeElements.count > 1,
-        let cloudVersion = Double(typeElements[1]),
         let appVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-        let appVersion = Double(appVersionString),
         let openUrlClosure = openUrlClosure(urlString: "https://itunes.apple.com/\(Current.locale.regionCode)/app/conjugar/id1236500467")
       else {
         return nil
       }
+      let cloudVersion = typeElements[1]
 
-      let alreadyUpdated = appVersion >= cloudVersion
+      // Compare as dotted version strings, not Doubles: "2.10" is newer than "2.9",
+      // and patch versions like "2.8.1" must parse. `.numeric` compares each numeric
+      // run by value, so "2.10" > "2.9" and "2.8.1" > "2.8".
+      let alreadyUpdated = appVersionString.compare(cloudVersion, options: .numeric) != .orderedAscending
 
       type = Commun.CommunType.newVersion(
         okayTitle: okayTitleDict,

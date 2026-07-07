@@ -24,7 +24,9 @@ enum ConjugationResult: Int {
     if lhsClean == rhsClean {
       return .totalMatch
     }
-    [("á", "a"), ("é", "e"), ("í", "i"), ("ó", "o"), ("ú", "u")].forEach {
+    // Fold diacritics so a missing/extra accent scores partialMatch, not noMatch —
+    // including ü (averigüé vs. averigue). ñ stays strict: it is a distinct letter.
+    [("á", "a"), ("é", "e"), ("í", "i"), ("ó", "o"), ("ú", "u"), ("ü", "u")].forEach {
       lhsClean = lhsClean.replacingOccurrences(of: $0.0, with: $0.1)
       rhsClean = rhsClean.replacingOccurrences(of: $0.0, with: $0.1)
     }
