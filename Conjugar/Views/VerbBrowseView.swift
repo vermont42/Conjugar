@@ -17,6 +17,7 @@ struct VerbBrowseView: View {
 
   @State private var sort: VerbSort = Current.settings.verbSort
   @State private var navigationPath = NavigationPath()
+  @State private var searchText = ""
 
   /// Both sort orders, computed once (mirrors the UIKit VC's `verbsBySort`).
   private static let verbsBySort: [VerbSort: [VerbMapEntry]] = {
@@ -26,12 +27,21 @@ struct VerbBrowseView: View {
 
   private var verbs: [VerbMapEntry] { Self.verbsBySort[sort] ?? [] }
 
+  /// The current sort filtered by the search query, matching infinitive **or** gloss
+  /// case- and diacritic-insensitively (so `esta` finds `está`, `have` finds haber/tener).
+  private var filteredVerbs: [VerbMapEntry] {
+    BrowseSearch.results(in: verbs, query: searchText, playSoundIfEmpty: true) { entry, query in
+      entry.infinitive.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
+        || entry.gloss.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
+    }
+  }
+
   var body: some View {
     NavigationStack(path: $navigationPath) {
       VStack(spacing: 0) {
         ScrollViewReader { proxy in
           ScrollView {
-            Text(L.BrowseVerbs.verbCount(count: verbs.count))
+            Text(L.BrowseVerbs.verbCount(count: filteredVerbs.count))
               .font(.caption.smallCaps())
               .foregroundStyle(.secondary)
               .frame(maxWidth: .infinity, alignment: .leading)
@@ -39,11 +49,16 @@ struct VerbBrowseView: View {
               .padding(.top, Layout.defaultSpacing)
               .id("top")
 
-            LazyVStack(spacing: 0) {
-              ForEach(Array(verbs.enumerated()), id: \.element.infinitive) { index, entry in
-                VerbRow(entry: entry) { navigationPath.append(entry.infinitive) }
-                  .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
-                Divider().padding(.leading)
+            if !searchText.isEmpty && filteredVerbs.isEmpty {
+              ContentUnavailableView(L.BrowseVerbs.searchNoResults, systemImage: "magnifyingglass")
+                .padding(.top, Layout.tripleDefaultSpacing)
+            } else {
+              LazyVStack(spacing: 0) {
+                ForEach(Array(filteredVerbs.enumerated()), id: \.element.infinitive) { index, entry in
+                  VerbRow(entry: entry) { navigationPath.append(entry.infinitive) }
+                    .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
+                  Divider().padding(.leading)
+                }
               }
             }
           }
@@ -64,6 +79,7 @@ struct VerbBrowseView: View {
         .padding()
       }
       .background(Color.customBackground.ignoresSafeArea())
+      .searchable(text: $searchText, prompt: L.BrowseVerbs.searchPrompt)
       .sensoryFeedback(.selection, trigger: sort)
       .navigationTitle(L.BrowseVerbs.localizedTitle)
       .navigationDestination(for: String.self) { verb in

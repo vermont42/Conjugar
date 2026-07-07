@@ -17,6 +17,7 @@ struct ModelBrowseView: View {
 
   @State private var sort: ModelSort = Current.settings.modelSort
   @State private var navigationPath = NavigationPath()
+  @State private var searchText = ""
 
   private static let modelsBySort: [ModelSort: [ModelInfo]] = {
     let models = ModelInfo.all
@@ -25,12 +26,22 @@ struct ModelBrowseView: View {
 
   private var models: [ModelInfo] { Self.modelsBySort[sort] ?? [] }
 
+  /// The current sort filtered by the search query, matching the exemplar **or** the
+  /// class number case- and diacritic-insensitively (so `28` or `4B` finds a model by
+  /// its book number, `hacer` finds it by exemplar).
+  private var filteredModels: [ModelInfo] {
+    BrowseSearch.results(in: models, query: searchText, playSoundIfEmpty: true) { model, query in
+      model.exemplar.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
+        || model.classNumber.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
+    }
+  }
+
   var body: some View {
     NavigationStack(path: $navigationPath) {
       VStack(spacing: 0) {
         ScrollViewReader { proxy in
           ScrollView {
-            Text(L.BrowseModels.modelCount(count: models.count))
+            Text(L.BrowseModels.modelCount(count: filteredModels.count))
               .font(.caption.smallCaps())
               .foregroundStyle(.secondary)
               .frame(maxWidth: .infinity, alignment: .leading)
@@ -38,13 +49,18 @@ struct ModelBrowseView: View {
               .padding(.top, Layout.defaultSpacing)
               .id("top")
 
-            LazyVStack(spacing: 0) {
-              ForEach(Array(models.enumerated()), id: \.element.classNumber) { index, model in
-                ModelRowLabel(model: model)
-                  .contentShape(Rectangle())
-                  .onTapGesture { navigationPath.append(model) }
-                  .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
-                Divider().padding(.leading)
+            if !searchText.isEmpty && filteredModels.isEmpty {
+              ContentUnavailableView(L.BrowseModels.searchNoResults, systemImage: "magnifyingglass")
+                .padding(.top, Layout.tripleDefaultSpacing)
+            } else {
+              LazyVStack(spacing: 0) {
+                ForEach(Array(filteredModels.enumerated()), id: \.element.classNumber) { index, model in
+                  ModelRowLabel(model: model)
+                    .contentShape(Rectangle())
+                    .onTapGesture { navigationPath.append(model) }
+                    .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
+                  Divider().padding(.leading)
+                }
               }
             }
           }
@@ -65,6 +81,7 @@ struct ModelBrowseView: View {
         .padding()
       }
       .background(Color.customBackground.ignoresSafeArea())
+      .searchable(text: $searchText, prompt: L.BrowseModels.searchPrompt)
       .sensoryFeedback(.selection, trigger: sort)
       .navigationTitle(L.BrowseModels.localizedTitle)
       .navigationDestination(for: ModelInfo.self) { model in

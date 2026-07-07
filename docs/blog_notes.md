@@ -1761,3 +1761,36 @@ remain). Full suite still green (397 Swift Testing + XCTest, TEST SUCCEEDED), Sw
 clean (128 files), and *tener* still renders every person (yo ten**g**o … vosotros tenéis,
 pretérito t**uv**e…t**uv**ieron) with the red irregularity spans. Updated `CLAUDE.md`'s
 View Architecture / Tab Structure / testing sections to describe the finished SwiftUI app.
+
+7/6/26: **Search bars on Browse Verbs and Models.** The SwiftUI migration (Step 4)
+deliberately deferred list search; this is the clean follow-up the audit called for
+(`conjugar-ui-issues.md` §6/§11 flagged a search empty-state, and the Browse-rebuild note
+named the missing search bar). Ported Conjuguer's one shared abstraction —
+`Utils/BrowseSearch.swift`, a generic `enum BrowseSearch` with a single
+`results(in:query:playSoundIfEmpty:matches:)` that both screens share: empty/whitespace
+query returns the list unchanged, otherwise `filter { matches }`, and if an active query
+finds nothing it plays the sad-trombone once. Adapted to Conjugar's static
+`SoundPlayer.play(.sadTrombone)` (Conjuguer routes through `Current.soundPlayer`), left
+`@MainActor` since it touches the UI sound helper, explicit `import Foundation`.
+
+Wired `.searchable` into `VerbBrowseView` and `ModelBrowseView`: a `@State searchText`, a
+`filteredVerbs`/`filteredModels` computed off the **current sort's** array (so sort +
+search compose), and the **count banner + `ForEach`** now read the filtered array. Match
+is **case- and diacritic-insensitive** (`range(of:options:[.caseInsensitive,
+.diacriticInsensitive])`) so `esta` finds `está` and `SER` finds `ser`. Went with
+scope-decision **(a)**: verbs match infinitive **or** gloss (a user finds "have" →
+haber/tener, "insert" → introducir) — no `SearchScope` setting/UI (Conjuguer-parity (b)
+noted as a further follow-up); models match exemplar **or** class number (typing `28`
+finds decir/predecir/bendecir by book number). When a query is active and empty, a
+`ContentUnavailableView(…searchNoResults, systemImage: "magnifyingglass")` replaces the
+list. New localized strings (en + es): `BrowseVerbs.searchPrompt`/`.searchNoResults`,
+`BrowseModels.searchPrompt`/`.searchNoResults`.
+
+Tests: `ConjugarTests/Utils/BrowseSearchTests.swift` (Swift Testing, `@MainActor`) covers
+the seam — empty/whitespace-query identity (order preserved), matches-only, no-match `[]`
+(with `playSoundIfEmpty: false` to stay silent), and case/diacritic-insensitivity. Build
+clean, SwiftLint clean (0 violations), full suite **TEST SUCCEEDED** (now 409 tests).
+**Verified in the simulator, light and dark:** Browse `ten` → "94 VERBS" (tener, mantener,
+… plus gloss hits like escuchar/listen), row tap still pushes `VerbView`, gibberish → "No
+verbs found" + sad-trombone, clearing restores 4,811; Models `28` → the three decir
+models, and the bottom Number sort re-sorts the filtered set with the query still active.
