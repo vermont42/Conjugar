@@ -1700,3 +1700,50 @@ presents full-screen at launch: serif gold title, the flamenco-dancer image, the
 message, and a "Cool, I Have It" primary capsule (alreadyUpdated ⇒ okay-only). Tapping the
 ✕ dismisses back to Browse, and `lastCommunIdentifierShown` is bumped so it won't recur.
 Build clean, SwiftLint clean.
+
+7/6/26: **SwiftUI migration Step 4, screen 5 — Quiz + Results (the marquee redesign).**
+The last and hardest screen, built on the Step-0 `@MainActor @Observable Quiz`. The
+`QuizDelegate` is gone — the model's redundant `delegate?.…` callbacks were deleted and
+the views observe the model's published state directly.
+
+- **`QuizView`** (replaces QuizVC/QuizUIV). The old not-started screen was ~90% empty
+  black with a lone red "Start" text button; now it's a **briefing** (§1): a pulsing
+  graduation-cap glyph (Reduce-Motion-gated), a one-line description, the active
+  Difficulty + Region as pills, and **Start** as a filled `PrimaryButtonStyle` capsule.
+  The in-progress screen (§2) is a full rebuild: a `ProgressView` bar, a **hero question
+  card** (serif verb, gloss subtitle, "pronoun · tense" ask), a **visible answer field**
+  with a yellow focus ring (the old one was an invisible borderless `UITextField`), an
+  unmissable answer **reveal** (✓/✗ icon + "Your Answer" / "Correct Answer" with the
+  irregular span red) in a fixed-height slot, a de-emphasized Score/Elapsed status strip
+  with `.numeric()` transitions, `.sensoryFeedback` success/warning/error haptics, and
+  **Quit moved into the toolbar** (destructive role). The Game-Center-reconsider prompt
+  became a SwiftUI `.alert`.
+- **`ResultsView`** (replaces ResultsVC/ResultsUIV/ResultCell). The score is promoted to
+  a **hero numeral** (`.heroNumeral`) color-coded by accuracy (green ≥80% / yellow ≥50% /
+  red below, recomputed from the per-answer `ConjugationResult`) with a `.numericText()`
+  transition, over a carded Difficulty/Region/Time summary (§3). Each result row is
+  left-aligned and **labeled + color-coded**: a ✓/◐/✗ outcome glyph, the serif verb,
+  "tense, person", "Your Answer" (blue when wrong), and "Correct Answer" with the red
+  irregularity marking.
+- **Retired the last test debt.** Deleted QuizVC/ResultsVC/QuizUIV/ResultsUIV/ResultCell/
+  QuizDelegate and their XCTest suites; rewrote `QuizTests` as Swift Testing that drives
+  the delegate-free model in a loop (answer each question correctly → assert the maxed
+  score per region/difficulty). Converted the last of the five *doomed* isolated-deinit
+  suites, **`SettingsViewTests`**, to Swift Testing. `fatalCastMessage` +
+  `UIViewControllerExtension` were deleted as dead (no `UIViewController` subclasses
+  remain in the app), and the now-unused `NavHostedVC` hosting bridge came out of
+  `MainTabView` — **the app shell is 100% SwiftUI, no UIKit VC anywhere.**
+
+**The whole test suite is green again** — `xcodebuild … test` = **TEST SUCCEEDED**, 397
+Swift Testing tests in 16 suites + all XCTest suites, 0 failures, no teardown crashes (the
+goal Step 4 set). **Verified the full quiz in the simulator:** the briefing → Start →
+question card (evadir · yo · presente, focus-ringed field) → a wrong answer flashes the
+red ✗ with "Correct Answer: evado" and advances the progress bar and elapsed clock →
+finishing 50 questions pushes ResultsView with the red hero "0", the Easy/Latin
+America/1:49 pills, and the color-coded rows (caber → c**up**imos, unir → uni**ó**). Build
+clean, SwiftLint clean (0 violations).
+
+**Step 4 is complete — Conjugar's UI is now entirely SwiftUI**, light/dark correct on
+every screen, with the mapped audit (`docs/conjugar-ui-issues.md`) items delivered:
+Info (§7/§8), Browse Verbs (§6), Verb detail (§4/§5), Browse Models (§11), Model detail
+(§10), Commun (§12), and Quiz/Results (§1/§2/§3).

@@ -54,10 +54,6 @@ class Quiz {
   private var personNumbersWithVos: [DisplayPersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
   private var shouldShuffle = true
-  // Transitional: the still-wrapped QuizVC and QuizTests drive the quiz through
-  // this delegate. It is removed when QuizVC is migrated to a SwiftUI QuizView
-  // that observes this @Observable model directly (Step 4).
-  @ObservationIgnored weak var delegate: QuizDelegate?
 
   var questionCount: Int {
     return questions.count
@@ -278,10 +274,6 @@ class Quiz {
     elapsedTime = 0
     quizState = .inProgress
     startTimer()
-    delegate?.questionDidChange(verb: questions[0].0, tense: questions[0].1, personNumber: questions[0].2)
-    delegate?.scoreDidChange(newScore: 0)
-    delegate?.timeDidChange(newTime: 0)
-    delegate?.progressDidChange(current: 0, total: questions.count)
   }
 
   private var regularOrIrregularParticipioVerb: String {
@@ -310,17 +302,13 @@ class Quiz {
       correctAnswers.append(correctAnswer)
       if result != .noMatch {
         score += result.rawValue
-        delegate?.scoreDidChange(newScore: score)
       }
       if currentQuestionIndex < questions.count - 1 {
         currentQuestionIndex += 1
-        delegate?.progressDidChange(current: currentQuestionIndex, total: questions.count)
-        delegate?.questionDidChange(verb: questions[currentQuestionIndex].0, tense: questions[currentQuestionIndex].1, personNumber: questions[currentQuestionIndex].2)
       } else {
         score = Int(Double(score) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
         timer?.invalidate()
         quizState = .finished
-        delegate?.quizDidFinish()
         Task {
           await gameCenter.reportScore(score)
         }
@@ -363,7 +351,6 @@ class Quiz {
 
   private func eachSecond() {
     elapsedTime += 1
-    delegate?.timeDidChange(newTime: elapsedTime)
   }
 
   private func personNumber(skipYo: Bool = false, skipTu: Bool = false) -> DisplayPersonNumber {

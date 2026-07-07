@@ -262,6 +262,14 @@ enum L {
       String(localized: "Quiz.localizedTitle")
     }
 
+    static var briefing: String {
+      String(localized: "Quiz.briefing")
+    }
+
+    static var yourAnswer: String {
+      String(localized: "Quiz.yourAnswer")
+    }
+
     static var tense: String {
       String(localized: "Quiz.tense")
     }

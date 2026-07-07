@@ -988,6 +988,22 @@
         }
       }
     },
+    "Quiz.briefing" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugate 50 Spanish verbs against the clock. Your score rewards both speed and accuracy."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjuga 50 verbos españoles contra el reloj. Tu puntuación premia tanto la velocidad como la precisión."
+          }
+        }
+      }
+    },
     "Quiz.conjugation" : {
       "localizations" : {
         "en" : {
@@ -1256,6 +1272,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sí"
+          }
+        }
+      }
+    },
+    "Quiz.yourAnswer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your Answer"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu Respuesta"
           }
         }
       }

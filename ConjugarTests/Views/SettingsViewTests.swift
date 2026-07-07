@@ -5,15 +5,20 @@
 //  Created by Joshua Adams on 11/27/19.
 //  Copyright © 2019 Josh Adams. All rights reserved.
 //
+//  Converted from XCTest to Swift Testing during the SwiftUI migration (Step 4):
+//  under MainActor default isolation, XCTest deallocating SettingsView's
+//  @Observable SelectionStore hit the Xcode 26.3 isolated-deinit double-free.
+//  Swift Testing sidesteps it (see CLAUDE.md).
+//
 
-import XCTest
+import SwiftUI
+import Testing
 @testable import Conjugar
 
 @MainActor
-class SettingsViewTests: XCTestCase {
-  func testInitialization() {
+@Suite struct SettingsViewTests {
+  @Test func initializationProducesABody() {
     let settingsView = SettingsView()
-    XCTAssertNotNil(settingsView)
-    XCTAssertNotNil(settingsView.body)
+    #expect(settingsView.body is (any View))
   }
 }
