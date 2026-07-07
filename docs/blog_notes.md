@@ -2170,3 +2170,51 @@ corrections meant to land while the tree is quiet.
 
 All green after the batch: build succeeds, the full suite is **406 tests / 0 failures**
 (up from 403 — the three new guard tests), SwiftLint reports 0 violations.
+
+## Phase 2 — the post-migration dead-code purge (item 10)
+
+7/7/26: The SwiftUI migration left a fossil record behind — UIKit helpers, a font
+table, property wrappers, and test relics that no shipping code path touched. This is
+one sweeping deletion commit: zero behavior change, and it shrinks everything the later
+phases have to edit. Every target below was confirmed unreferenced by a project-wide
+search *before* deletion — the point of a dead-code purge is that "looks dead" isn't
+good enough.
+
+- **Whole files deleted (app target).** `StringExtensions.swift`
+  (`conjugatedString`/`coloredString`/`replaceFirstOccurence` — superseded by
+  `RichText`/`ConjugationText`, referenced now only in comments), its lone consumer
+  `NSAttributedStringExtension.swift` (the `+`/`+=` operators), `UILabelExtension`
+  (`titleLabel`), `UISegmentedControlExtension` (`yellowfyText` — no callers at all),
+  `UIViewExtensions` (`pulsate` + `setAccessibilityLabelInSpanish`, kept alive only by
+  its own test), `NSCoderExtension` (`fatalErrorNotImplemented`), `UsesAutoLayout` (the
+  property wrapper, kept alive only by its own test), and `Fonts.swift` (the UIFont
+  table — its only remaining references were the two dead files above and the dead
+  test-support VC).
+- **Whole files deleted (test target).** `TestingAppDelegate` +
+  `TestingRootViewController` (the `@objc` delegate selection died with `main.swift`
+  during the migration), `NavigationCSpy` (referenced by nothing), the test-only
+  `UIColorExtension` (a `UIColor ==` used only by already-gone tests), and the
+  tests-of-dead-code `UsesAutoLayoutTests` / `UIViewExtensionsTests`.
+- **Partial deletions.** `FontExtensions` lost `heading`/`subheading`/`smallBody` (their
+  only users were the deleted `Modifiers` labels) but keeps `button` (button styles) and
+  `heroNumeral` (Results score). `Modifiers.swift` lost the five brand-type-label
+  modifiers `HeadingLabel`/`SubheadingLabel`/`BodyLabel`/`StandardButton`/`SegmentedPicker`
+  — never applied via `.modifier(...)`; their "kept for SettingsView" comment predated
+  the SettingsView rebuild. `UIAlertControllerExtension` lost the dead `okTitle()` static
+  (its `showMessage` stays — Game Center still calls it until item 1). `Quiz` lost
+  `pauseTimer`/`resumeTimer` (no callers since the VC lifecycle went away), `DisplayTense`
+  lost `conjugationCount(secondSingularBrowse:)` (legacy table-row math), `DisplayPersonNumber`
+  lost `actualPersonNumbers`, and `VerbFamilies` lost the unreferenced
+  `thirdPersonSingularOnlyVerbs`.
+- **Held back for their owning phase.** `World.parentViewController` and the rest of
+  `UIAlertControllerExtension` are still read by `QuizView`/`SettingsView` and
+  `GameCenterReal`; they die with the Game Center rewrite (item 1, Phase 3), not here —
+  Phase 2's contract is *zero behavior change*.
+- **Xcode housekeeping was free.** Every source group (`Utils`, `Models`, `Views`,
+  `Supporting`, `ConjugarTests`, …) is a `PBXFileSystemSynchronizedRootGroup`, so
+  removing a file auto-removes it from the target — no `project.pbxproj` surgery. Also
+  corrected CLAUDE.md, whose "`@UsesAutoLayout` survives for AppDelegate" sentence was
+  stale (the wrapper is now gone).
+
+Green after the purge: build succeeds, **406 tests / 0 failures**, SwiftLint 0 violations
+across the remaining 149 source files.

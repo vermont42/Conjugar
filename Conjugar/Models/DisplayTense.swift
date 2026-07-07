@@ -38,25 +38,6 @@ nonisolated enum DisplayTense: String, CaseIterable {
   case pluscuamperfectoDeSubjuntivo2 = "p2"
   case futuroPerfectoDeSubjuntivo = "fo"
 
-  func conjugationCount(secondSingularBrowse: SecondSingularBrowse) -> Int {
-    var extraConjugation = 0
-    if secondSingularBrowse == .both {
-      extraConjugation = 1
-    }
-    switch self {
-    case .infinitivo, .translation, .gerundio, .participio, .raízFutura:
-      return 0
-    case .imperativoPositivo, .imperativoNegativo:
-      return 5 + extraConjugation
-    case .presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
-         .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo,
-         .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto,
-         .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1,
-         .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo:
-      return 6 + extraConjugation
-    }
-  }
-
   var hasYoForm: Bool {
     switch self {
     case .imperativoPositivo, .imperativoNegativo,

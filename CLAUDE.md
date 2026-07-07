@@ -175,8 +175,11 @@ files, the `MainTabBarVC` shell, and the `NavHostedVC` hosting bridge are all go
 
 Layout constants are in `Layout.swift` (defaultSpacing = 8.0, doubleDefaultSpacing = 16.0,
 tripleDefaultSpacing = 24.0, defaultHorizontalMargin = 16.0, readingWidth = 680,
-cornerRadius = 12). The `@UsesAutoLayout` property wrapper survives only for the few
-remaining UIKit *extensions* (appearance config in `AppDelegate`), not for screen layout.
+cornerRadius = 12). The `@UsesAutoLayout` property wrapper and the rest of the UIKit
+layout/font stratum (`Fonts`, `StringExtensions.conjugatedString`, `UsesAutoLayout`, the
+`titleLabel`/`pulsate`/`yellowfyText` helpers) were deleted in the July 2026 post-migration
+dead-code purge; screen layout is all SwiftUI. The only UIKit that remains is appearance
+config in `AppDelegate` and a shrinking set of service-seam extensions.
 
 The mapped UI audit that drove the migration is `docs/conjugar-ui-issues.md`.
 

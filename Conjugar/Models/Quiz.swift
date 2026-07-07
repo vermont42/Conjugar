@@ -365,14 +365,6 @@ class Quiz {
     String(format: "%d:%02d", seconds / 60, seconds % 60)
   }
 
-  func pauseTimer() {
-    timer?.invalidate()
-  }
-
-  func resumeTimer() {
-    startTimer()
-  }
-
   private func startTimer() {
     timer?.invalidate()
     timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in

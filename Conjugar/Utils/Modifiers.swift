@@ -77,51 +77,6 @@ extension View {
   }
 }
 
-// MARK: - Brand type labels (kept for SettingsView; route ported titles through these)
-
-struct HeadingLabel: ViewModifier {
-  func body(content: Content) -> some View {
-    content
-      .font(.heading)
-      .foregroundStyle(Color.customYellow)
-      .accessibilityAddTraits(.isHeader)
-  }
-}
-
-struct SubheadingLabel: ViewModifier {
-  func body(content: Content) -> some View {
-    content
-      .font(.subheading)
-      .foregroundStyle(Color.customYellow)
-      .accessibilityAddTraits(.isHeader)
-  }
-}
-
-struct BodyLabel: ViewModifier {
-  func body(content: Content) -> some View {
-    content
-      .font(.smallBody)
-      .foregroundStyle(Color.customForeground)
-      .padding(.horizontal, Layout.defaultHorizontalMargin)
-  }
-}
-
-struct StandardButton: ViewModifier {
-  func body(content: Content) -> some View {
-    content
-      .font(.button)
-      .foregroundStyle(Color.customRed)
-  }
-}
-
-struct SegmentedPicker: ViewModifier {
-  func body(content: Content) -> some View {
-    content
-      .pickerStyle(SegmentedPickerStyle())
-      .padding(.horizontal, Layout.defaultHorizontalMargin)
-  }
-}
-
 // MARK: - Button styles
 
 /// The primary call-to-action: a filled, accent-tinted capsule that scales

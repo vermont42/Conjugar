@@ -57,6 +57,4 @@ nonisolated enum DisplayPersonNumber: String, CaseIterable {
       return "none"
     }
   }
-
-  static let actualPersonNumbers: [DisplayPersonNumber] = [.firstSingular, .secondSingularTú, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
 }
