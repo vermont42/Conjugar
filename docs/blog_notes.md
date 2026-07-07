@@ -1902,3 +1902,59 @@ customCardBackground`, `Current.soundPlayer.play(.chirp) → SoundPlayer.play(.c
 chat path) can only be *exercised* on a real Apple-Intelligence device — in the simulator the
 tutor reports unavailable, so `runAllTests()` short-circuits to its "Language model is not
 available." row and the tutor screen isn't even reachable from the Info tab.
+
+7/6/26: **Ported Conjuguer's widget suite to Conjugar** (a WidgetKit app-extension target,
+the app's first). Conjuguer's design is the thing worth copying: the widget extension never
+runs the conjugation engine or loads `verbModelMap.xml` — instead the **app** precomputes a
+JSON "snapshot" (verb of the day + a daily quiz question), writes it into an **App Group**
+container, and the widget is a thin renderer that only decodes it. That keeps the extension
+engine-free and tiny.
+
+What shipped, at full parity with the French app:
+
+- **Verb of the Day** widget — `systemSmall` / `systemMedium` / `systemLarge` plus the Lock
+  Screen `accessoryRectangular` / `accessoryInline`. Refreshes at local midnight.
+- **Interactive Quiz** widget — a tap-to-answer question via an `AppIntent`
+  (`AnswerQuizIntent`) with a deterministic, question-id-seeded answer shuffle so the layout
+  is stable across timeline reloads; flips to a correct/incorrect state (answer stored in the
+  shared `UserDefaults` suite, keyed to the question).
+- **Two Control Center controls** — Quick Quiz (`OpenQuizIntent`) and Random Verb
+  (`OpenRandomVerbIntent`); each stashes a `conjugar://` deeplink the app drains on activation.
+- **Quiz Live Activity** with full **Dynamic Island** (expanded/compact/minimal), driven by
+  the app from `Quiz.swift` via a new `LiveActivityManager`.
+
+Structure: a `Shared/` folder (a `PBXFileSystemSynchronizedRootGroup` added to **both** the
+app and widget targets) holds the `Codable` `WidgetSnapshot`, `WidgetConstants` (App Group id
+`group.biz.joshadams.Conjugar`, file/key names), `WidgetL` localization accessors,
+`QuizActivityAttributes`, and the two control intents. The `ConjugarWidget/` folder is the
+extension. `Conjugar/Utils/WidgetSnapshotWriter.swift` is the one place the engine is invoked
+for widget purposes — it picks a date-seeded verb of the day from the frequency-ranked verbs
+and conjugates paradigms + a quiz question through `VerbMap` + `TenseBridge` (marked forms, so
+the widget colors irregular letters just like the app's `ConjugationText`).
+
+Spanish adaptations vs. the French original: Conjuguer's Verb of the Day shows an etymology
+snippet and an example sentence, which Spanish verbs don't carry yet. Per Josh's call, the
+large widget instead shows **extra tenses** (presente + pretérito + futuro paradigms, plus
+gerundio/participio), with **TODOs** in `WidgetSnapshot`, `LargeWidgetView`, and
+`WidgetSnapshotWriter` to trim back to just the presente and surface etymology/examples once
+that data exists.
+
+Deeplinks: registered the `conjugar://` URL scheme + `NSSupportsLiveActivities` in the app
+Info.plist; a small `AppRouter` turns `conjugar://verb/<infinitive>` (or `verb/random`) and
+`conjugar://quiz/start` into a tab switch plus a pending navigation the Browse/Quiz screens
+consume (`MainTabView` now owns a `TabView(selection:)` with `.tag`s + `.onOpenURL`, and
+refreshes the snapshot on launch/active).
+
+Gotchas hit along the way: (1) `nonisolated struct` can't wrap an `AppIntent` that has
+`@Parameter` property wrappers (Swift-6-mode error) — `AnswerQuizIntent` drops the keyword and
+relies on the widget target's default nonisolated isolation. (2) `AppIntent` `title` /
+`@Parameter(title:)` metadata is extracted at compile time and can't reference `WidgetL`, so
+those use inline `"Widget.*"` literals with English `defaultValue`s. (3) `VerbSort` is a plain
+`@MainActor` enum (default isolation), so the `nonisolated` `WidgetSnapshotWriter` sorts the
+ranked verbs inline instead of via `VerbSort.frequency.sorted(...)`. (4) Widget colors are
+hardcoded dynamic copies of the app's `customForeground`/`customRed` so the extension needs no
+shared asset catalog. The extension target was added by hand-editing `project.pbxproj`
+(objectVersion 70): new app-extension `PBXNativeTarget`, synchronized groups for
+`ConjugarWidget` + the shared `Shared`, an "Embed Foundation Extensions" copy phase, the App
+Group in both entitlements. App + widget build clean; note the widget can only be *exercised*
+on a device / booted simulator home screen, and Live Activities need a real device.

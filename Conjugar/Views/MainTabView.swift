@@ -12,28 +12,61 @@ import SwiftUI
 
 struct MainTabView: View {
   @State private var commun: Commun?
+  @State private var router = AppRouter()
+  @Environment(\.scenePhase) private var scenePhase
 
   var body: some View {
-    TabView {
+    TabView(selection: $router.selectedTab) {
       VerbBrowseView()
         .tabItem { Label(L.BrowseVerbs.localizedTitle, image: "Browse") }
+        .tag(AppTab.browseVerbs)
 
       ModelBrowseView()
         .tabItem { Label(L.BrowseModels.localizedTitle, systemImage: "key.fill") }
+        .tag(AppTab.models)
 
       QuizView()
         .tabItem { Label(L.Quiz.localizedTitle, image: "Quiz") }
+        .tag(AppTab.quiz)
 
       InfoBrowseView()
         .tabItem { Label(L.BrowseInfo.localizedTitle, image: "Info") }
+        .tag(AppTab.info)
 
       SettingsView()
         .tabItem { Label(L.Settings.localizedTitle, image: "Settings") }
+        .tag(AppTab.settings)
     }
-    .task { await presentCommunIfNeeded() }
+    .environment(router)
+    .task {
+      // Widgets show today's verb/quiz; clean up any Live Activity left by a prior run.
+      LiveActivityManager.endAll()
+      WidgetSnapshotWriter.refresh()
+      await presentCommunIfNeeded()
+    }
+    .onOpenURL { router.handle(url: $0) }
+    .onChange(of: scenePhase) { _, phase in
+      guard phase == .active else { return }
+      WidgetSnapshotWriter.refresh()
+      drainPendingDeeplink()
+    }
     .fullScreenCover(item: $commun) { commun in
       CommunView(commun: commun) { self.commun = nil }
     }
+  }
+
+  /// Control-center controls can't navigate, so they stash a deeplink in the shared
+  /// defaults suite; drain and route it when the app next becomes active.
+  private func drainPendingDeeplink() {
+    guard
+      let defaults = WidgetConstants.sharedDefaults,
+      let deeplink = defaults.string(forKey: WidgetConstants.pendingDeeplinkKey),
+      let url = URL(string: deeplink)
+    else {
+      return
+    }
+    defaults.removeObject(forKey: WidgetConstants.pendingDeeplinkKey)
+    router.handle(url: url)
   }
 
   /// The launch-time "new communication" presentation MainTabBarVC used to do in

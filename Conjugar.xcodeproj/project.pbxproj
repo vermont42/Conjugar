@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		038A31ED2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */; };
 		03FF1748258C17E900BA447D /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03FF1747258C17E900BA447D /* CloudKit.framework */; };
-		E11CE1021F48867400E74E10 /* sadTrombone1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */; };
 		AA01B2C3D4E5F60718293A02 /* sadTrombone2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A01 /* sadTrombone2.mp3 */; };
 		AA01B2C3D4E5F60718293A04 /* sadTrombone3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A03 /* sadTrombone3.mp3 */; };
 		AA01B2C3D4E5F60718293A06 /* sadTrombone4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A05 /* sadTrombone4.mp3 */; };
+		E11CE1021F48867400E74E10 /* sadTrombone1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */; };
 		E14271371F01CA98001D19E1 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E14271361F01CA98001D19E1 /* GameKit.framework */; };
 		E1483FAD1EF5A2200052C436 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1483FAC1EF5A2200052C436 /* Assets.xcassets */; };
 		E1483FC01EF746D70052C436 /* chime.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FBE1EF746D70052C436 /* chime.mp3 */; };
@@ -24,6 +24,7 @@
 		E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E18F7F3D1ECA7E3700633200 /* silence.mp3 */; };
 		E19794342073D0C90015D490 /* gun.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E19794332073D0C90015D490 /* gun.mp3 */; };
 		E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */; };
+		F1D6E700000000000000000D /* ConjugarWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F1D6E7000000000000000002 /* ConjugarWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +34,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = E1F06AD31E8F05F200ADD2E1;
 			remoteInfo = Conjugar;
+		};
+		F1D6E700000000000000000F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E1F06ACC1E8F05F200ADD2E1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F1D6E7000000000000000001;
+			remoteInfo = ConjugarWidgetExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -47,6 +55,17 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F1D6E700000000000000000C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F1D6E700000000000000000D /* ConjugarWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -54,10 +73,10 @@
 		038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		03FF1744258C17E500BA447D /* Conjugar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Conjugar.entitlements; sourceTree = "<group>"; };
 		03FF1747258C17E900BA447D /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone1.mp3; sourceTree = "<group>"; };
 		AA01B2C3D4E5F60718293A01 /* sadTrombone2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone2.mp3; sourceTree = "<group>"; };
 		AA01B2C3D4E5F60718293A03 /* sadTrombone3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone3.mp3; sourceTree = "<group>"; };
 		AA01B2C3D4E5F60718293A05 /* sadTrombone4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone4.mp3; sourceTree = "<group>"; };
+		E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone1.mp3; sourceTree = "<group>"; };
 		E14271361F01CA98001D19E1 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		E1483FAC1EF5A2200052C436 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E1483FBE1EF746D70052C436 /* chime.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chime.mp3; sourceTree = "<group>"; };
@@ -72,6 +91,8 @@
 		E1F06AE11E8F05F300ADD2E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E1F06AE31E8F05F300ADD2E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E1F06AE81E8F05F400ADD2E1 /* ConjugarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConjugarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1D6E7000000000000000002 /* ConjugarWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ConjugarWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1D6E7000000000000000005 /* ConjugarWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ConjugarWidget.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -81,6 +102,13 @@
 				Info.plist,
 			);
 			target = E1F06AE71E8F05F400ADD2E1 /* ConjugarTests */;
+		};
+		F1D6E7000000000000000010 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = F1D6E7000000000000000001 /* ConjugarWidgetExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -93,6 +121,8 @@
 		0353B36B2FDCE50E00FF069B /* Supporting */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Supporting; sourceTree = "<group>"; };
 		0353B3782FDCE50E00FF069B /* Controllers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Controllers; sourceTree = "<group>"; };
 		0353B3B12FDCE54000FF069B /* ConjugarTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0353B3D82FDCE54000FF069B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ConjugarTests; sourceTree = "<group>"; };
+		F1D6E7000000000000000003 /* ConjugarWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F1D6E7000000000000000010 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ConjugarWidget; sourceTree = "<group>"; };
+		F1D6E7000000000000000004 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +136,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E1F06AE51E8F05F400ADD2E1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1D6E700000000000000000A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -157,6 +194,9 @@
 			isa = PBXGroup;
 			children = (
 				E1F06AD61E8F05F300ADD2E1 /* Conjugar */,
+				F1D6E7000000000000000003 /* ConjugarWidget */,
+				F1D6E7000000000000000004 /* Shared */,
+				F1D6E7000000000000000005 /* ConjugarWidget.entitlements */,
 				0353B3B12FDCE54000FF069B /* ConjugarTests */,
 				E1F06AD51E8F05F300ADD2E1 /* Products */,
 				E14271351F01CA98001D19E1 /* Frameworks */,
@@ -168,6 +208,7 @@
 			children = (
 				E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */,
 				E1F06AE81E8F05F400ADD2E1 /* ConjugarTests.xctest */,
+				F1D6E7000000000000000002 /* ConjugarWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,11 +242,13 @@
 				E1F06AD11E8F05F200ADD2E1 /* Frameworks */,
 				E1F06AD21E8F05F200ADD2E1 /* Resources */,
 				E1EC70F92198A63700872787 /* Embed Frameworks */,
+				F1D6E700000000000000000C /* Embed Foundation Extensions */,
 				E1171C8F21A9A4AD00B06342 /* Run SwiftLint */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				F1D6E700000000000000000E /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				0353B2D62FDCE50E00FF069B /* Models */,
@@ -215,6 +258,7 @@
 				0353B3632FDCE50E00FF069B /* Analytics */,
 				0353B36B2FDCE50E00FF069B /* Supporting */,
 				0353B3782FDCE50E00FF069B /* Controllers */,
+				F1D6E7000000000000000004 /* Shared */,
 			);
 			name = Conjugar;
 			productName = Conjugar;
@@ -242,6 +286,27 @@
 			productReference = E1F06AE81E8F05F400ADD2E1 /* ConjugarTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		F1D6E7000000000000000001 /* ConjugarWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1D6E7000000000000000006 /* Build configuration list for PBXNativeTarget "ConjugarWidgetExtension" */;
+			buildPhases = (
+				F1D6E7000000000000000009 /* Sources */,
+				F1D6E700000000000000000A /* Frameworks */,
+				F1D6E700000000000000000B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F1D6E7000000000000000003 /* ConjugarWidget */,
+				F1D6E7000000000000000004 /* Shared */,
+			);
+			name = ConjugarWidgetExtension;
+			productName = ConjugarWidgetExtension;
+			productReference = F1D6E7000000000000000002 /* ConjugarWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -267,6 +332,11 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = E1F06AD31E8F05F200ADD2E1;
 					};
+					F1D6E7000000000000000001 = {
+						CreatedOnToolsVersion = 26.0;
+						DevelopmentTeam = V3L2PL4QC9;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = E1F06ACF1E8F05F200ADD2E1 /* Build configuration list for PBXProject "Conjugar" */;
@@ -285,6 +355,7 @@
 			targets = (
 				E1F06AD31E8F05F200ADD2E1 /* Conjugar */,
 				E1F06AE71E8F05F400ADD2E1 /* ConjugarTests */,
+				F1D6E7000000000000000001 /* ConjugarWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -313,6 +384,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E1F06AE61E8F05F400ADD2E1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1D6E700000000000000000B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -358,6 +436,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F1D6E7000000000000000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -365,6 +450,11 @@
 			isa = PBXTargetDependency;
 			target = E1F06AD31E8F05F200ADD2E1 /* Conjugar */;
 			targetProxy = E1F06AE91E8F05F400ADD2E1 /* PBXContainerItemProxy */;
+		};
+		F1D6E700000000000000000E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F1D6E7000000000000000001 /* ConjugarWidgetExtension */;
+			targetProxy = F1D6E700000000000000000F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -597,6 +687,70 @@
 			};
 			name = Release;
 		};
+		F1D6E7000000000000000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ConjugarWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2.8;
+				DEVELOPMENT_TEAM = V3L2PL4QC9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ConjugarWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Conjugar;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.8;
+				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar.ConjugarWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F1D6E7000000000000000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ConjugarWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2.8;
+				DEVELOPMENT_TEAM = V3L2PL4QC9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ConjugarWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Conjugar;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.8;
+				PRODUCT_BUNDLE_IDENTIFIER = biz.joshadams.Conjugar.ConjugarWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -623,6 +777,15 @@
 			buildConfigurations = (
 				E1F06AF51E8F05F400ADD2E1 /* Debug */,
 				E1F06AF61E8F05F400ADD2E1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1D6E7000000000000000006 /* Build configuration list for PBXNativeTarget "ConjugarWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1D6E7000000000000000007 /* Debug */,
+				F1D6E7000000000000000008 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

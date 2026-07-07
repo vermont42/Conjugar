@@ -16,6 +16,7 @@ class Quiz {
   private(set) var elapsedTime: Int = 0
   private(set) var score: Int = 0
   private(set) var currentQuestionIndex = 0
+  private(set) var correctCount = 0
   private(set) var lastRegion: Region = .spain
   private(set) var lastDifficulty: Difficulty = .moderate
   private(set) var proposedAnswers: [String] = []
@@ -270,10 +271,16 @@ class Quiz {
       questions = questions.shuffled().shuffled()
     }
     score = 0
+    correctCount = 0
     currentQuestionIndex = 0
     elapsedTime = 0
     quizState = .inProgress
     startTimer()
+    LiveActivityManager.start(
+      difficulty: lastDifficulty.rawValue,
+      totalQuestions: questions.count,
+      state: liveActivityState(isFinished: false)
+    )
   }
 
   private var regularOrIrregularParticipioVerb: String {
@@ -303,12 +310,17 @@ class Quiz {
       if result != .noMatch {
         score += result.rawValue
       }
+      if result == .totalMatch {
+        correctCount += 1
+      }
       if currentQuestionIndex < questions.count - 1 {
         currentQuestionIndex += 1
+        LiveActivityManager.update(liveActivityState(isFinished: false))
       } else {
         score = Int(Double(score) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
         timer?.invalidate()
         quizState = .finished
+        LiveActivityManager.end(liveActivityState(isFinished: true))
         Task {
           await gameCenter.reportScore(score)
         }
@@ -330,6 +342,23 @@ class Quiz {
   func stop() {
     timer?.invalidate()
     quizState = .finished
+    LiveActivityManager.end(liveActivityState(isFinished: true))
+  }
+
+  /// The Live Activity content state for the current quiz progress.
+  private func liveActivityState(isFinished: Bool) -> QuizActivityAttributes.ContentState {
+    QuizActivityAttributes.ContentState(
+      currentQuestion: questions.isEmpty ? 0 : min(currentQuestionIndex + 1, questions.count),
+      score: score,
+      correctCount: correctCount,
+      elapsedTime: Quiz.formatElapsed(elapsedTime),
+      isFinished: isFinished
+    )
+  }
+
+  /// Seconds → "m:ss".
+  private static func formatElapsed(_ seconds: Int) -> String {
+    String(format: "%d:%02d", seconds / 60, seconds % 60)
   }
 
   func pauseTimer() {

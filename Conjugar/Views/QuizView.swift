@@ -24,6 +24,7 @@ struct QuizView: View {
   @State private var showingGameCenterPrompt = false
   @FocusState private var fieldFocused: Bool
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @Environment(AppRouter.self) private var router
 
   var body: some View {
     NavigationStack {
@@ -50,6 +51,13 @@ struct QuizView: View {
       .onAppear {
         Current.analytics.recordVisitation(viewController: "\(QuizView.self)")
         maybePromptGameCenter()
+      }
+      .onChange(of: router.pendingQuizStart, initial: true) { _, shouldStart in
+        guard shouldStart else { return }
+        router.pendingQuizStart = false
+        if quiz.quizState != .inProgress {
+          startQuiz()
+        }
       }
       .alert(L.Quiz.gameCenter, isPresented: $showingGameCenterPrompt) {
         Button(L.Quiz.no, role: .destructive) {

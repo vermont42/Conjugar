@@ -18,6 +18,7 @@ struct VerbBrowseView: View {
   @State private var sort: VerbSort = Current.settings.verbSort
   @State private var navigationPath = NavigationPath()
   @State private var searchText = ""
+  @Environment(AppRouter.self) private var router
 
   /// Both sort orders, computed once (mirrors the UIKit VC's `verbsBySort`).
   private static let verbsBySort: [VerbSort: [VerbMapEntry]] = {
@@ -85,6 +86,11 @@ struct VerbBrowseView: View {
       .navigationDestination(for: String.self) { verb in
         VerbView(verb: verb)
       }
+      .onChange(of: router.pendingVerb, initial: true) { _, verb in
+        guard let verb else { return }
+        navigationPath.append(verb)
+        router.pendingVerb = nil
+      }
       .onAppear {
         Current.analytics.recordVisitation(viewController: "\(VerbBrowseView.self)")
         Current.reviewPrompter.promptableActionHappened()
@@ -140,4 +146,5 @@ struct VerbRowLabel: View {
 
 #Preview {
   VerbBrowseView()
+    .environment(AppRouter())
 }
