@@ -25,7 +25,7 @@ enum BrowseSearch {
     }
     let filtered = items.filter { matches($0, trimmed) }
     if filtered.isEmpty && playSoundIfEmpty {
-      SoundPlayer.play(.sadTrombone)
+      SoundPlayer.playRandomSadTrombone()
     }
     return filtered
   }

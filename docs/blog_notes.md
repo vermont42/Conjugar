@@ -1794,3 +1794,24 @@ clean, SwiftLint clean (0 violations), full suite **TEST SUCCEEDED** (now 409 te
 … plus gloss hits like escuchar/listen), row tap still pushes `VerbView`, gibberish → "No
 verbs found" + sad-trombone, clearing restores 4,811; Models `28` → the three decir
 models, and the bottom Number sort re-sorts the filtered set with the query still active.
+
+7/6/26: **Random sad trombone, ported from Conjuguer.** Conjugar had a single
+`sadTrombone.mp3` / `case sadTrombone`; Conjuguer instead has four variations
+(`sadTrombone1`–`4`) picked at random via `Sound.randomSadTrombone`, used at *every*
+failure site (quiz wrong answer, Game Center failure, empty search). Brought that over.
+Handy discovery: Conjugar's existing `sadTrombone.mp3` is **byte-identical** (same md5) to
+Conjuguer's `sadTrombone1.mp3`, so it *is* variation 1 — I `git mv`'d it to
+`sadTrombone1.mp3` and copied in `sadTrombone2/3/4.mp3` (no duplicate sound). The mp3s live
+in the root `Conjugar/` group, which is **not** a `PBXFileSystemSynchronizedRootGroup`
+(only the `Models/`, `Views/`, `Utils/`, … subfolders are), so the three new files needed
+hand-added `PBXFileReference` + `PBXBuildFile` entries, the Sounds group children, and the
+Resources build phase — mirroring the `applause1–3` template already in the project.
+
+Rather than a `Sound.randomSadTrombone` computed var, I followed Conjugar's own idiom:
+`SoundPlayer` already has a `static func playRandomApplause()`, so I added a parallel
+`static func playRandomSadTrombone()` and pointed all four call sites
+(`BrowseSearch`, `GameCenterReal`, and `QuizView`'s reject-Game-Center + quit paths) at it,
+replacing the removed `.sadTrombone`. Build clean, SwiftLint clean (0 violations), full
+suite **TEST SUCCEEDED** (403). Verified in the simulator: an empty search decodes and
+plays an mp3 (system log shows `AudioQueueNewOutput … .mp3` + an mp3 AudioConverter at the
+moment the filter empties) — and all four files are present in the built `.app` bundle.

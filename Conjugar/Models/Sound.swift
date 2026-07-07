@@ -14,6 +14,9 @@ enum Sound: String {
   case chirp
   case buzz
   case gun
-  case sadTrombone
+  case sadTrombone1
+  case sadTrombone2
+  case sadTrombone3
+  case sadTrombone4
   case silence
 }

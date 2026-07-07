@@ -9,7 +9,10 @@
 /* Begin PBXBuildFile section */
 		038A31ED2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */; };
 		03FF1748258C17E900BA447D /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03FF1747258C17E900BA447D /* CloudKit.framework */; };
-		E11CE1021F48867400E74E10 /* sadTrombone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E11CE1011F48867400E74E10 /* sadTrombone.mp3 */; };
+		E11CE1021F48867400E74E10 /* sadTrombone1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */; };
+		AA01B2C3D4E5F60718293A02 /* sadTrombone2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A01 /* sadTrombone2.mp3 */; };
+		AA01B2C3D4E5F60718293A04 /* sadTrombone3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A03 /* sadTrombone3.mp3 */; };
+		AA01B2C3D4E5F60718293A06 /* sadTrombone4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A05 /* sadTrombone4.mp3 */; };
 		E14271371F01CA98001D19E1 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E14271361F01CA98001D19E1 /* GameKit.framework */; };
 		E1483FAD1EF5A2200052C436 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1483FAC1EF5A2200052C436 /* Assets.xcassets */; };
 		E1483FC01EF746D70052C436 /* chime.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FBE1EF746D70052C436 /* chime.mp3 */; };
@@ -51,7 +54,10 @@
 		038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		03FF1744258C17E500BA447D /* Conjugar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Conjugar.entitlements; sourceTree = "<group>"; };
 		03FF1747258C17E900BA447D /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		E11CE1011F48867400E74E10 /* sadTrombone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone.mp3; sourceTree = "<group>"; };
+		E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone1.mp3; sourceTree = "<group>"; };
+		AA01B2C3D4E5F60718293A01 /* sadTrombone2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone2.mp3; sourceTree = "<group>"; };
+		AA01B2C3D4E5F60718293A03 /* sadTrombone3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone3.mp3; sourceTree = "<group>"; };
+		AA01B2C3D4E5F60718293A05 /* sadTrombone4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone4.mp3; sourceTree = "<group>"; };
 		E14271361F01CA98001D19E1 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		E1483FAC1EF5A2200052C436 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E1483FBE1EF746D70052C436 /* chime.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chime.mp3; sourceTree = "<group>"; };
@@ -138,7 +144,10 @@
 				E1483FBE1EF746D70052C436 /* chime.mp3 */,
 				E1483FCB1EF89D4E0052C436 /* chirp.mp3 */,
 				E19794332073D0C90015D490 /* gun.mp3 */,
-				E11CE1011F48867400E74E10 /* sadTrombone.mp3 */,
+				E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */,
+				AA01B2C3D4E5F60718293A01 /* sadTrombone2.mp3 */,
+				AA01B2C3D4E5F60718293A03 /* sadTrombone3.mp3 */,
+				AA01B2C3D4E5F60718293A05 /* sadTrombone4.mp3 */,
 				E18F7F3D1ECA7E3700633200 /* silence.mp3 */,
 			);
 			name = Sounds;
@@ -292,7 +301,10 @@
 				E19794342073D0C90015D490 /* gun.mp3 in Resources */,
 				E1483FCC1EF89D4E0052C436 /* chirp.mp3 in Resources */,
 				E1483FC91EF89C710052C436 /* applause2.mp3 in Resources */,
-				E11CE1021F48867400E74E10 /* sadTrombone.mp3 in Resources */,
+				E11CE1021F48867400E74E10 /* sadTrombone1.mp3 in Resources */,
+				AA01B2C3D4E5F60718293A02 /* sadTrombone2.mp3 in Resources */,
+				AA01B2C3D4E5F60718293A04 /* sadTrombone3.mp3 in Resources */,
+				AA01B2C3D4E5F60718293A06 /* sadTrombone4.mp3 in Resources */,
 				E1483FAD1EF5A2200052C436 /* Assets.xcassets in Resources */,
 				E1483FC81EF89C710052C436 /* applause1.mp3 in Resources */,
 				E1483FCA1EF89C710052C436 /* applause3.mp3 in Resources */,

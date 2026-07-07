@@ -45,7 +45,7 @@ class GameCenterReal: NSObject, GameCenter, GKGameCenterControllerDelegate {
           }
           continuation.resume(returning: true)
         } else {
-          SoundPlayer.play(.sadTrombone)
+          SoundPlayer.playRandomSadTrombone()
           Task { @MainActor in
             UIAlertController.showMessage(
               L.GameCenter.failure,

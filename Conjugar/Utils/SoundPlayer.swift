@@ -40,4 +40,10 @@ class SoundPlayer {
     let applauseIndex = Int.random(in: 0 ... (applauses.count - 1))
     SoundPlayer.play(applauses[applauseIndex])
   }
+
+  static func playRandomSadTrombone() {
+    let sadTrombones: [Sound] = [.sadTrombone1, .sadTrombone2, .sadTrombone3, .sadTrombone4]
+    let sadTromboneIndex = Int.random(in: 0 ... (sadTrombones.count - 1))
+    SoundPlayer.play(sadTrombones[sadTromboneIndex])
+  }
 }

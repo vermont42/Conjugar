@@ -53,7 +53,7 @@ struct QuizView: View {
       }
       .alert(L.Quiz.gameCenter, isPresented: $showingGameCenterPrompt) {
         Button(L.Quiz.no, role: .destructive) {
-          SoundPlayer.play(.sadTrombone)
+          SoundPlayer.playRandomSadTrombone()
           Current.settings.userRejectedGameCenter = true
         }
         Button(L.Quiz.yes) { authenticateGameCenter() }
@@ -260,7 +260,7 @@ struct QuizView: View {
 
   private func quit() {
     Current.quiz.quit()
-    SoundPlayer.play(.sadTrombone)
+    SoundPlayer.playRandomSadTrombone()
     Current.analytics.recordQuizQuit(currentQuestionIndex: Current.quiz.currentQuestionIndex, score: Current.quiz.score)
     fieldFocused = false
     lastResult = nil
