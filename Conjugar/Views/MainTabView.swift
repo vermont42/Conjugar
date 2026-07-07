@@ -17,25 +17,45 @@ struct MainTabView: View {
 
   var body: some View {
     TabView(selection: $router.selectedTab) {
-      VerbBrowseView()
-        .tabItem { Label(L.BrowseVerbs.localizedTitle, image: "Browse") }
-        .tag(AppTab.browseVerbs)
+      // Tab(_:image:value:) builders (iOS 18+) replace the soft-deprecated
+      // .tabItem/.tag pair (Phase 7 / item 17). Models/Info/Settings are stock SF
+      // Symbols; the dancer (Browse) and bull (Quiz) are still custom line-art bitmaps.
+      // Tab bars auto-substitute the .fill variant of an SF Symbol, which would clash
+      // with the outline dancer/bull — so the three symbol tabs use the explicit-label
+      // Tab(value:content:label:) form and pin `.symbolVariants(.none)` on the Label
+      // (the TabView-level environment doesn't reach the tab-bar chrome) to hold the
+      // whole bar to one outline family. Browse/Quiz use custom symbol sets ("dancer"/
+      // "bull", spliced from Noun Project line art into an SF Symbols template): custom
+      // symbols take `image:`, not `systemImage:`, and aren't auto-filled, so they render
+      // their line art as-is and need no symbolVariants override.
+      Tab(L.BrowseVerbs.localizedTitle, image: "dancer", value: AppTab.browseVerbs) {
+        VerbBrowseView()
+      }
 
-      ModelBrowseView()
-        .tabItem { Label(L.BrowseModels.localizedTitle, systemImage: "key.fill") }
-        .tag(AppTab.models)
+      Tab(value: AppTab.models) {
+        ModelBrowseView()
+      } label: {
+        Label(L.BrowseModels.localizedTitle, systemImage: "key")
+          .environment(\.symbolVariants, .none)
+      }
 
-      QuizView()
-        .tabItem { Label(L.Quiz.localizedTitle, image: "Quiz") }
-        .tag(AppTab.quiz)
+      Tab(L.Quiz.localizedTitle, image: "bull", value: AppTab.quiz) {
+        QuizView()
+      }
 
-      InfoBrowseView()
-        .tabItem { Label(L.BrowseInfo.localizedTitle, image: "Info") }
-        .tag(AppTab.info)
+      Tab(value: AppTab.info) {
+        InfoBrowseView()
+      } label: {
+        Label(L.BrowseInfo.localizedTitle, systemImage: "info.circle")
+          .environment(\.symbolVariants, .none)
+      }
 
-      SettingsView()
-        .tabItem { Label(L.Settings.localizedTitle, image: "Settings") }
-        .tag(AppTab.settings)
+      Tab(value: AppTab.settings) {
+        SettingsView()
+      } label: {
+        Label(L.Settings.localizedTitle, systemImage: "gearshape")
+          .environment(\.symbolVariants, .none)
+      }
     }
     .environment(router)
     .task {
