@@ -2019,3 +2019,36 @@ cache) keeps the terminal path from rotting on plugin updates. CLAUDE.md's *Buil
 Commands* and *Running the App in the Simulator* sections now name the skill as the default
 path, with raw `xcodebuild` demoted to a diagnostic fallback and `run-in-simulator` kept as a
 no-AXe fallback.
+
+## Settings, rebuilt to the design system (+ a breathing Start button)
+
+SettingsView was the last screen still wearing its pre-migration clothes: a hand-rolled
+`ZStack`/`ScrollView` of `HeadingLabel`/`SubheadingLabel`/`BodyLabel` modifiers and bare
+segmented pickers, with a manual yellow title instead of the nav bar. Taking cues from the
+**ios-design-agent-skill** audit and the sibling apps (Conjuguer, Konjugieren), it now speaks
+the same visual language as the rest of the app:
+
+- **Grouped cards.** A `NavigationStack` + large title over a scroll of `card()`s, one per
+  concern — Region, Quiz (difficulty + tú/vos), Browse (tú/vos), and an actions card (Game
+  Center, Rate or Review). Settings are grouped by the feature they affect rather than dumped
+  in one long column.
+- **Tinted SF Symbol headings.** Each section leads with a role-colored glyph — a blue
+  `globe.americas.fill` for Region, a yellow `speedometer` for Difficulty, a green
+  `graduationcap.fill` for the quiz pronoun, blue `books.vertical.fill` for browse — over a
+  bold `.title3` yellow heading, a `.callout` explanation in secondary, and `GradientDivider`s
+  splitting sections that share a card.
+- **A new design-system primitive.** `GradientDivider` (a hairline that fades in from and out
+  to transparent, ported from Konjugieren) landed in `Utils/`, and `TintedCapsuleButtonStyle`
+  joined `Modifiers.swift` — a subtle tinted-capsule secondary action (keyed to its section's
+  color) for "Enable" and "Rate or Review", lighter than the filled `PrimaryButtonStyle` CTA.
+- **Motion & polish.** Segmented changes fire a `.selectionFeedback` haptic; the whole measure
+  is `readingWidth()`-constrained for iPad; a small serif "Conjugar · vX (build)" footer closes
+  the screen. The `@Observable SelectionStore` bridge stays because `Settings` is still a plain
+  class, not `@Observable`.
+- **Filename typo fixed.** The file was `SetttingsView.swift` (three t's) since 2019; it's now
+  `SettingsView.swift`. The synchronized `Views/` group meant no `project.pbxproj` edit.
+
+Separately, the Quiz screen's Start button borrows Conjuguer's subtle "breathing" pulse — a
+`phaseAnimator` gently scaling it 1.0 ↔ 1.1 (0.9 s ease-in-out), suppressed under Reduce
+Motion. It draws the eye to the primary action without the jarring >1.5× scale jumps the
+design skill warns against.

@@ -97,14 +97,32 @@ struct QuizView: View {
           .metadataPill(tint: .customBlue)
       }
 
-      Button(L.Quiz.start) { startQuiz() }
-        .buttonStyle(PrimaryButtonStyle())
+      startButton
 
       Spacer()
     }
     .padding()
     .frame(maxWidth: Layout.readingWidth)
     .frame(maxWidth: .infinity)
+  }
+
+  /// The primary Start CTA, borrowing Conjuguer's subtle "breathing" pulse: the
+  /// button gently scales 1.0 ↔ 1.1 to draw the eye without the jarring >1.5×
+  /// jumps the design skill warns against. Suppressed under Reduce Motion.
+  @ViewBuilder
+  private var startButton: some View {
+    let base = Button(L.Quiz.start) { startQuiz() }
+      .buttonStyle(PrimaryButtonStyle())
+
+    if reduceMotion {
+      base
+    } else {
+      base.phaseAnimator([1.0, 1.1]) { content, scale in
+        content.scaleEffect(scale)
+      } animation: { _ in
+        .easeInOut(duration: 0.9)
+      }
+    }
   }
 
   // MARK: - In progress

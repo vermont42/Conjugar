@@ -144,6 +144,29 @@ struct PrimaryButtonStyle: ButtonStyle {
   }
 }
 
+/// A subtle, tinted capsule for secondary actions that live inside a card —
+/// "Enable", "Rate or Review". Reads as tappable (tinted fill + rim, press
+/// feedback) without the visual weight of `PrimaryButtonStyle`'s filled CTA, and
+/// keys itself to a per-action `tint` so it matches its section's icon.
+struct TintedCapsuleButtonStyle: ButtonStyle {
+  var tint: Color = .customYellow
+
+  func makeBody(configuration: Configuration) -> some View {
+    configuration.label
+      .font(.callout.weight(.semibold))
+      .lineLimit(1)
+      .minimumScaleFactor(0.7)
+      .foregroundStyle(tint)
+      .padding(.vertical, Layout.defaultSpacing)
+      .padding(.horizontal, Layout.doubleDefaultSpacing)
+      .background(tint.opacity(0.15), in: Capsule())
+      .overlay(Capsule().strokeBorder(tint.opacity(0.35), lineWidth: 1))
+      .opacity(configuration.isPressed ? 0.7 : 1)
+      .scaleEffect(configuration.isPressed ? 0.97 : 1)
+      .animation(.snappy(duration: 0.15), value: configuration.isPressed)
+  }
+}
+
 /// A text-only action link in the brand link color — for non-destructive
 /// actions like "Enable" and "Rate or Review" that today render in red.
 /// _(audit §9 / C11)_
