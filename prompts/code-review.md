@@ -6,4 +6,4 @@ I recognize that there is code duplication between ModelBrowseView and VerbBrows
 
 Here is some context on Conjugar. I created the app in 2017 using UIKit. Recently, I converted Conjugar to SwiftUI and added some features. Recent development starts at commit fa251ef.
 
-Conjugar has sibling apps for French- and German-verb conjugation. Those live at /Users/josh/Desktop/workspace/Conjuguer and /Users/josh/Desktop/workspace/Konjugieren , respectively.
+Conjugar has sibling apps for French- and German-verb conjugation. Those live at /Users/josh/Desktop/workspace/Conjuguer and /Users/josh/Desktop/workspace/Konjugieren , respectively. Conjugar's implementation need not match those of those apps, but they may provide inspiration for your review. Do not review Conjuguer or Konjugieren as part of this task.

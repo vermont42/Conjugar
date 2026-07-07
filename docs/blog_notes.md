@@ -2077,3 +2077,47 @@ iOS 26:
   itself stays MainActor so it can still read `Current.session`.
 
 Result: `Build Succeeded` with no warnings; RatingsFetcher and GameCenter suites green.
+
+## A full-codebase review before the next round of work
+
+With the migration functionally complete, I had Claude do a max-effort review of the whole
+codebase — app target, widget extension, `Shared/`, tests, build settings, and the string
+catalog — looking for bugs, smells, duplication, outdated API use, and concurrency gotchas.
+Baseline first: the full suite passed (403 tests, 0 failures) and SwiftLint reported zero
+violations. The deliverable is `prompts/code-review-recommendations.md`: twenty ranked
+recommendations plus a seven-step implementation sequence.
+
+The headline finding was humbling: **Game Center has been inert for years**. The gate in
+the quiz screen reads `guard !isAuthenticated, userRejectedGameCenter` — inverted, so only
+users who *declined* Game Center ever get authenticated — and the condition was ported
+faithfully from the UIKit-era `QuizVC`, where it dates back to a 2019-era commit. Stacked
+on top: `Current.parentViewController` is never assigned (so the GameKit login sheet would
+present on a detached `UIViewController()`), and `authenticate` wraps GameKit's long-lived,
+multi-shot `authenticateHandler` in a `withCheckedContinuation` — a resumed-twice crash
+waiting to happen. The fix is a small rewrite, not a patch.
+
+Number two was the kind of bug only a data-driven review catches: `VerbFamilies`, the
+hand-curated quiz lists, contains **`manecer`** — not in the 4,816-verb map and not standard
+Spanish — so the new engine's regular fallback happily teaches a wrong subjunctive
+(*"maneza"*) in roughly one Difficult quiz in twelve. `helar` (a 4A stem-changer, *hiela*)
+sits in the *regular* -ar list, and `esconder` appears twice. The recommendation pairs the
+three one-line fixes with a guard test pinning every list entry to the verb map — the
+existing `QuizTests` couldn't catch this because it compares the engine's answers to the
+engine's answers.
+
+The rest of the top ten: browse search filters 4,811 verbs twice per keystroke *inside
+`body`* — and plays the sad trombone as a side effect of view evaluation;
+`applicationDidBecomeActive` never fires under the SwiftUI scene lifecycle (a trap for the
+planned TelemetryDeck integration); InfoView's iPad reading-width conditional is inverted;
+the tutor's tool-call counter is a `nonisolated(unsafe)` static shared across sessions; the
+review-prompt date round-trips through a locale-fragile `DateFormatter` and a `Date()`
+frozen at launch; the quiz widget's "deterministic" answer shuffle seeds from Swift's
+per-process-random `Hasher`; and `CommunGetterReal` compares app versions as `Double`s
+("2.10" < "2.9"). There's also a satisfying deletion queue — roughly 500 lines of dead
+UIKit-era utilities (`conjugatedString`, `UsesAutoLayout`, appearance helpers, test relics)
+that survived the migration only as fossils, plus dead members like `Quiz.pauseTimer` and
+`World.parentViewController`.
+
+Nothing in the engine itself drew blood: the feature-composition core, the resolver, the
+bridge, and the widget snapshot pipeline all came through clean — the oracle-pinned test
+suites are doing their job.
