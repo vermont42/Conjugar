@@ -6,29 +6,21 @@
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
 
-import UIKit
-
 class GameCenterFake: GameCenter {
-  var isAuthenticated: Bool
+  private(set) var isAuthenticated: Bool
 
   init(isAuthenticated: Bool = false) {
     self.isAuthenticated = isAuthenticated
   }
 
-  func authenticate(onViewController: UIViewController) async -> Bool {
-    if !isAuthenticated {
-      isAuthenticated = true
-      return true
-    } else {
-      return false
-    }
+  // Straightened per item 19: authenticating is idempotent — it authenticates the
+  // player. The old fake's "return false when already authenticated" semantics were
+  // a surprising artifact of the removed `-> Bool` return value.
+  func authenticate() {
+    isAuthenticated = true
   }
 
-  func reportScore(_ score: Int) async {
-    print("Pretending to report score \(score).")
-  }
+  func reportScore(_ score: Int) async {}
 
-  func showLeaderboard() {
-    print("Pretending to show leaderboard.")
-  }
+  func showLeaderboard() {}
 }

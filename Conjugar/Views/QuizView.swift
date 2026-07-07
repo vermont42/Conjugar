@@ -12,7 +12,6 @@
 
 import SwiftUI
 import TipKit
-import UIKit
 
 struct QuizView: View {
   @State private var quiz = Current.quiz
@@ -297,18 +296,24 @@ struct QuizView: View {
   // MARK: - Game Center
 
   private func maybePromptGameCenter() {
-    guard !Current.gameCenter.isAuthenticated, Current.settings.userRejectedGameCenter else { return }
-    if !Current.settings.didShowGameCenterDialog {
+    switch GameCenterPrompt.decision(
+      isAuthenticated: Current.gameCenter.isAuthenticated,
+      userRejected: Current.settings.userRejectedGameCenter,
+      didShowDialog: Current.settings.didShowGameCenterDialog
+    ) {
+    case .doNothing:
+      break
+    case .showDialog:
       Current.settings.didShowGameCenterDialog = true
       showingGameCenterPrompt = true
-    } else {
+    case .authenticate:
       authenticateGameCenter()
     }
   }
 
   private func authenticateGameCenter() {
-    Task {
-      await Current.gameCenter.authenticate(onViewController: Current.parentViewController ?? UIViewController())
-    }
+    // Fire-and-forget: GameKit's authenticateHandler presents its own login sheet
+    // against the live window and publishes `isAuthenticated` when it settles.
+    Current.gameCenter.authenticate()
   }
 }

@@ -9,7 +9,7 @@ Items are ranked highest impact → lowest. Impact = user-visible correctness fi
 
 ---
 
-## 1. Game Center is inert — and its auth flow is structurally unsafe · **bug (feature-dead) + crash risk**
+## 1. ✅ Game Center is inert — and its auth flow is structurally unsafe · **bug (feature-dead) + crash risk**
 
 The Game Center integration cannot activate for any user, and the code that would run if it did has a latent crash. Four interlocking problems:
 
@@ -218,7 +218,7 @@ Ordered so every step ships green (build + 403 tests + lint), bugs land before r
 
 1. ✅ **Data + one-liner bug fixes** *(items 2, 5, 7, 8, 9, plus item 20's `ü`)* — fix `VerbFamilies` (manecer/helar/esconder), add the VerbFamilies↔VerbMap guard test, invert `InfoView`'s width conditional, POSIX/UTC (or epoch) date storage + call-time `now` + injected settings in the review prompter, FNV seed + DST-safe midnight in the widgets, numeric version compare in `CommunGetterReal`. Small, independent, high confidence — do first while the tree is quiet.
 2. ✅ **Dead-code purge** *(item 10)* — one sweeping deletion commit + CLAUDE.md correction. Zero behavior change; shrinks everything after it (and removes files later steps would otherwise have to edit).
-3. **Game Center rewrite** *(item 1, folding in the relevant bits of items 19 and 10)* — the gate fix, the once-set `authenticateHandler`, top-VC presentation, protocol cleanup (`UIViewController` out, `parentViewController` deleted), leaderboard-ID await, SwiftUI failure alert, fake-backed tests. Verify on a physical device (simulator Worlds use the fake).
+3. ✅ **Game Center rewrite** *(item 1, folding in the relevant bits of items 19 and 10)* — the gate fix, the once-set `authenticateHandler`, top-VC presentation, protocol cleanup (`UIViewController` out, `parentViewController` deleted), leaderboard-ID await, SwiftUI failure alert, fake-backed tests. Verify on a physical device (simulator Worlds use the fake). *(Done: `authenticate()` is fire-and-forget with a set-once handler; the gate is a pure, unit-tested `GameCenterPrompt.decision`; login sheet presents via `UIApplication.topViewController()`; `World.parentViewController` + `UIViewController` protocol dependency + the dead `UIAlertControllerExtension` are gone; leaderboard ID is lazy-loaded/cached with logged failures. Following the cited Konjugieren port, the detached-VC failure alert is replaced by `os.Logger` + GameKit's own sheet rather than a new modal. **Still needs a physical-device pass** for the live sign-in flow.)*
 4. **Settings observability** *(item 11, then item 4)* — `@Observable Settings`, delete `SelectionStore`, collapse the persistence boilerplate; then move became-active analytics to `scenePhase` and delete the dead delegate methods. (Doing 4 after 11 keeps all Settings churn in one window.)
 5. **View-layer hygiene** *(items 3, 13, 14)* — browse filtering into `onChange` state + sound out of `body`; appearance config consolidated/retired after on-simulator verification; snapshot refresh off-main + date-gated; `ModelView` grid cached in `init`.
 6. **Quiz + services internals** *(items 12, 15, 16, 6)* — `Cycler`, non-optional dependencies, single shuffle, graceful `process` failure; tutor poll scoped to visibility + per-instance tool counter; single audio-session owner with an explicit category decision.

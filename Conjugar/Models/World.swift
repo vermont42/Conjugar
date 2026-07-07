@@ -24,7 +24,6 @@ class World {
   var locale: AnalyticsLocale
   var languageModelService: LanguageModelService
   var getterSetter: GetterSetter
-  var parentViewController: UIViewController?
 
   private static let fakeRatingsCount = 42
 

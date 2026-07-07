@@ -2218,3 +2218,64 @@ good enough.
 
 Green after the purge: build succeeds, **406 tests / 0 failures**, SwiftLint 0 violations
 across the remaining 149 source files.
+
+## Phase 3 — the Game Center rewrite (item 1, folding in items 19 + the last of 10)
+
+Game Center had been **inert for every user for years**, with a latent crash waiting for
+the day it wasn't. Four interlocking bugs, fixed as one coherent rewrite modeled on the
+sibling app Konjugieren's already-correct `GameCenterReal`.
+
+- **The gate was inverted.** `QuizView.maybePromptGameCenter` authenticated *only* users
+  whose settings said `userRejectedGameCenter == true` — i.e. only people who had said
+  **No** ever got prompted (and then got force-authenticated on every Quiz visit), while a
+  fresh install could never reach the dialog at all. The bug traces back to commit
+  `cc4a651`; it predates the migration by years. Rather than fix the guard in place, the
+  decision now lives in a pure, `nonisolated` `GameCenterPrompt.decision(isAuthenticated:
+  userRejected:didShowDialog:)` returning `.doNothing` / `.showDialog` / `.authenticate`,
+  and its four-row truth table is pinned by `GameCenterPromptTests`. Extracting it out of a
+  private `View` method is what makes the corrected logic testable — and the guard-rail
+  against a silent re-inversion (item 19).
+
+- **`withCheckedContinuation` wrapped a multi-shot handler.** GameKit invokes
+  `authenticateHandler` repeatedly for the life of the process (foregrounding, sign-in/out).
+  The old code resumed a *checked* continuation from inside it, so the second invocation
+  that reached a `resume` was a fatal "continuation resumed twice"; conversely the
+  present-the-login-VC branch never resumed, leaking the continuation and hanging the
+  caller's `Task` forever. `GameCenterReal` is now `@MainActor @Observable`, installs the
+  handler **exactly once** (guarded by `didInstallHandler`), and treats it as a stream:
+  it publishes `isAuthenticated` from `GKLocalPlayer.local.isAuthenticated`, fires the
+  applause + analytics only on the false→true transition, and never re-assigns the handler.
+
+- **The login sheet was presented on a detached VC.** `World.parentViewController` was
+  declared but never assigned, so both call sites fell back to `?? UIViewController()` —
+  presenting GameKit's sheet on a view controller that's in no window hierarchy silently
+  does nothing. The handler now presents against the live window via the scene-aware
+  `UIApplication.topViewController()`. With that, `World.parentViewController` is deleted,
+  `UIViewController` is dropped from the `GameCenter` protocol (its **last** UIKit type),
+  and `authenticate()` becomes a fire-and-forget `func authenticate()` — no view
+  controller in, no `Bool` out.
+
+- **Leaderboard ID raced / swallowed errors.** The ID was loaded in a fire-and-forget
+  `Task`, so a `reportScore` racing right after auth submitted to `[""]`; on failure it
+  became the sentinel `"ERROR"`, and `reportScore`'s `catch {}` swallowed everything. It's
+  now loaded **lazily and cached** on first submit, `nil` until then, with both the load and
+  the submit failures logged through `os.Logger` instead of discarded.
+
+- **The failure path stopped using a UIKit alert on a detached VC.** `UIAlertController.
+  showMessage(...)` was the only remaining consumer of `UIAlertControllerExtension`, so the
+  extension (and its test-of-dead-code `UIAlertControllerExtensionTests`) — the last of the
+  Phase 2 dead-code purge, held back because item 1 still used it — are deleted. Following
+  the Konjugieren port, unauthenticated/error outcomes are now *logged*, and GameKit
+  presents its own login sheet; the only Game-Center dialog left is QuizView's SwiftUI
+  opt-in prompt. (SettingsView's Enable button hides on the next `onAppear` rather than the
+  instant auth settles — reactive hiding waits on Settings observability, Phase 4 / item 11.)
+
+- **The fake's semantics were straightened** (item 19): `GameCenterFake.authenticate()` is
+  now idempotent — it authenticates the player — instead of the surprising "return `false`
+  when already authenticated" artifact of the old `-> Bool` signature.
+
+Green after the rewrite: build succeeds, **411 tests / 0 failures** (the new
+`GameCenterPrompt` suite plus the reworked fake tests, net of the deleted dead-code test),
+SwiftLint 0 violations. The live sign-in flow can only be exercised on a physical device —
+the simulator Worlds use `GameCenterFake` — so the No→don't-nag / Yes→authenticate /
+Settings-Enable→re-opt-in paths still want a device pass before shipping.

@@ -245,12 +245,11 @@ struct SettingsView: View {
   private func enableGameCenter() {
     enableGameCenterTip.invalidate(reason: .actionPerformed)
     Current.settings.userRejectedGameCenter = false
-    Task {
-      let authenticated = await Current.gameCenter.authenticate(
-        onViewController: Current.parentViewController ?? UIViewController()
-      )
-      isGameCenterUIHidden = authenticated
-    }
+    // Fire-and-forget: GameKit presents its own login sheet and publishes
+    // `isAuthenticated` asynchronously. `isGameCenterUIHidden` is refreshed from
+    // that state on the next `onAppear`; making it reactively hide the moment auth
+    // settles waits on Settings observability (Phase 4 / item 11).
+    Current.gameCenter.authenticate()
   }
 
   private static var versionString: String? {
