@@ -47,12 +47,14 @@ private struct BodyTextView: View {
   let segments: [TextSegment]
 
   var body: some View {
-    segments.reduce(Text(verbatim: "")) { $0 + text(for: $1) }
+    Text(combinedAttributedString)
       .lineSpacing(4)
   }
 
-  private func text(for segment: TextSegment) -> Text {
-    Text(attributedString(for: segment))
+  /// Concatenate every segment's attributed string into one, preserving each
+  /// run's color / emphasis / link so the whole body renders as a single `Text`.
+  private var combinedAttributedString: AttributedString {
+    segments.reduce(into: AttributedString()) { $0.append(attributedString(for: $1)) }
   }
 
   private func attributedString(for segment: TextSegment) -> AttributedString {
