@@ -11,36 +11,85 @@ Conjugar is an iOS app for learning Spanish verb conjugations. It conjugates reg
 **Language:** Swift 6 language mode, `SWIFT_STRICT_CONCURRENCY = complete`, `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` (see **Concurrency model** below)
 **License:** GNU Affero General Public License
 
-As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. The legacy engine (the original `Conjugator`), `verbs.xml`, and their tests were **removed** in July 2026; the new engine's types then dropped their interim `2` suffixes (`Conjugator2` → `Conjugator`, etc.), so the plain names now always mean the new engine. The **UIKit-to-SwiftUI UI migration is also done** (July 2026): every screen is now a native SwiftUI view (`Views/`), the app shell is a `MainTabView` `TabView`, and no `UIViewController` subclass remains in the app target — see the Step-4 notes in `docs/blog_notes.md`. A **Spanish conjugation tutor** backed by Apple's on-device `SystemLanguageModel` (Foundation Models) was added July 2026 — a chat screen reached from the Info tab, grounded in the app's own engine so it never invents forms (see **Conjugation Tutor** below). The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
+As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. Every screen is now a native SwiftUI view (`Views/`), the app shell is a `MainTabView` `TabView`, and no `UIViewController` subclass remains in the app target. A **Spanish conjugation tutor** backed by Apple's on-device `SystemLanguageModel` (Foundation Models) was added July 2026 — a chat screen reached from the Info tab, grounded in the app's own engine so it never invents forms (see **Conjugation Tutor** below). The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
 
 As you, Claude, complete chunks of work on the modernization/improvement project, please add a note to docs/blog_notes.md . Eventually, Josh will generate a blog post from this work.
 
 ## Build and Test Commands
 
-This is an Xcode project (project `Conjugar.xcodeproj`, scheme `Conjugar`). Use the following commands:
+This is an Xcode project (project `Conjugar.xcodeproj`, scheme `Conjugar`). Build and
+test go through the **`ios-build-verify`** Claude Code skill, which pipes `xcodebuild`
+through `xcbeautify` (concise output, raw `build.log` fallback) and disables parallel
+testing. The per-project config lives at `.claude/ios-build-verify.config.sh` (sourced
+by every script; hand-editable). The skill is installed via Claude Code's plugin
+marketplace; a stable symlink (`~/.claude/skills/ios-build-verify`) points at the
+versioned cache so the terminal path survives plugin updates.
 
 ```bash
-# Build the app
-xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' build
+# Build the app — this is the COMPILE step
+~/.claude/skills/ios-build-verify/scripts/build_app.sh
 
-# Run all tests (disable parallel testing to avoid simulator flakiness)
-xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test
+# Run all tests
+~/.claude/skills/ios-build-verify/scripts/run_tests.sh
 
 # Run a single test suite
-xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/ConjugatorTests
+~/.claude/skills/ios-build-verify/scripts/run_tests.sh --only-testing ConjugarTests/ConjugatorTests
 
 # Run a single test method (Swift Testing — note the trailing, shell-escaped parentheses)
-xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/ConjugatorTests/oirPresent\(\)
+~/.claude/skills/ios-build-verify/scripts/run_tests.sh --only-testing ConjugarTests/ConjugatorTests/oirPresent\(\)
 
 # Lint
 swiftlint
 ```
 
+The skill also drives the running app in the simulator (launch, tap, screenshot, verify)
+— see **Running the App in the Simulator** below. Its full operation surface is documented
+in `~/.claude/skills/ios-build-verify/SKILL.md`.
+
+> **Diagnostic fallback — raw `xcodebuild`.** When `xcbeautify`'s lossy filter drops an
+> early-stage error, or the skill scripts are unavailable, the underlying commands still
+> work directly. Prefer the skill scripts so future sessions exercise them.
+>
+> ```bash
+> xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' build
+> xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/ConjugatorTests/oirPresent\(\)
+> ```
+
 > **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`, `TenseBridgeTests`) the migrated service suites (`SettingsTests`, `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests`), and the SwiftUI-migration suites (`InfoTests`, `ConjugationTextTests`, `QuizTests`, `SettingsViewTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The remaining lower-level suites like `ConjugationCellTests` / `AnalyticsServiceTests` are still **XCTest**, whose method names take **no** parentheses (e.g. `testConjugationCell`). New tests should be Swift Testing — see **XCTest + MainActor: the isolated-deinit crash** below.
 
 ## Running the App in the Simulator
 
-To launch and drive the built app (screenshots, taps, verifying UI behavior — not just tests), use the project skill **`run-in-simulator`** (`.claude/skills/run-in-simulator/SKILL.md`). It captures the verified recipe: resolving the built `.app`, pinning a booted-simulator UDID (several devices are named "iPhone 17"), `simctl` install/launch/screenshot, tapping with `idb` in points (screenshot pixels ÷ 3), and the pitfalls (launch-screen delay, `simctl spawn defaults write` not reaching the app's sandboxed UserDefaults). This skill was written as interim tooling; now that the SwiftUI conversion is complete, the `ios-build-verify` skill can supersede it, but `run-in-simulator` remains the verified, working recipe until that swap is made.
+To launch and drive the built app (screenshots, taps, verifying UI behavior — not just
+tests), use the **`ios-build-verify`** skill. It was verified end-to-end against Conjugar
+in July 2026 (build → launch → per-tab tap-and-screenshot). It wraps the `simctl`
+lifecycle plus **AXe** for observation and HID dispatch.
+
+```bash
+S=~/.claude/skills/ios-build-verify/scripts
+"$S/build_app.sh"                 # COMPILE (launch_app.sh does NOT compile — run this first)
+"$S/launch_app.sh"                # install last build + launch; polls FIRST_SCREEN_ID for render
+"$S/screenshot.sh" my-label       # PNG into docs/screenshots/ (pixels, 3× — AXe taps use points)
+"$S/tap_tab.sh" settings          # tap a main-tab by name (browse | models | quiz | info | settings)
+"$S/describe_ui.sh" --point 200,540   # inspect the element under a logical-points coordinate
+```
+
+Conjugar-specific config facts baked into `.claude/ios-build-verify.config.sh`:
+
+- **Launch anchor** `FIRST_SCREEN_ID = browse_verb_count` — the `.accessibilityIdentifier`
+  on the Browse tab's verb-count banner (`VerbBrowseView.swift`), a stable launch-screen
+  **leaf** (not a container — SwiftUI rolls a parent's id onto every descendant). It's the
+  app's only accessibility identifier; add more leaf anchors when you need to verify a
+  deeper screen with `tap_id.sh` / `--verify-anchor`.
+- **Five-tab pill needs explicit coords.** The shipped centroid detector calibrates the
+  canonical 3-tab pill; Conjugar's 5-tab pill under-segments, so `MAIN_TABS_COORDS` is set
+  by hand (`63,822 131,822 200,822 269,822 337,822`, logical points, verified by tapping
+  each tab). Re-measure via `screenshot.sh` + manual centering if the tab bar geometry
+  changes; don't trust `calibrate.sh`'s auto-measure for 5 tabs.
+- **AXe coordinates are logical points, not screenshot pixels.** iPhone 17 is 3× — divide
+  a pixel coordinate by 3 before passing it to a tap.
+- **SourceKit false positives.** Editing a view file spams `Cannot find 'X' in scope` /
+  `has no member` diagnostics for same-module symbols; `build_app.sh` is authoritative —
+  trust it, don't "fix" the SourceKit-only noise.
 
 ## Architecture
 
@@ -113,7 +162,7 @@ All external services have protocol abstractions with production and test implem
 
 ### View Architecture
 
-**All SwiftUI** (since the July 2026 migration — Step 4). The UI lives in `Conjugar/Views/`
+**All SwiftUI**. The UI lives in `Conjugar/Views/`
 as native SwiftUI: an `@main App` → `MainTabView` (`TabView`) whose tabs are each a
 SwiftUI screen using `NavigationStack` + value-based navigation. Shared design-system
 primitives are in `Utils/Modifiers.swift` (`.card()`, `.metadataPill()`, `.linguistic()`,
@@ -222,16 +271,10 @@ Test infrastructure:
 > are evaluated *outside* the suite's isolation, so any static data they reference must
 > be `nonisolated`.
 >
-> **Resolved (July 2026):** the five formerly-*doomed* UIKit XCTest suites that crashed on
-> teardown (`BrowseModelsVCTests`, `BrowseVerbsVCTests`, `CommunVCTests`, `ModelVCTests`,
-> `SettingsViewTests`) are gone — the first four were deleted with their VCs during the
-> SwiftUI migration, and `SettingsViewTests` was converted to Swift Testing. A full
-> `xcodebuild … test` run is now **TEST SUCCEEDED** (all XCTest + Swift Testing, 0
-> failures). The general rule still stands, since MainActor default isolation remains: a
-> new pure-Swift `@MainActor` object deallocated by XCTest will hit the same double-free —
-> so **write new tests in Swift Testing.** (The service suites `SettingsTests`,
-> `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests` were converted
-> earlier, and `AnalyticsServiceSpy` made `nonisolated`.)
+> **Status (July 2026):** a full `xcodebuild … test` run is **TEST SUCCEEDED** (all XCTest
+> + Swift Testing, 0 failures). The general rule still stands, since MainActor default
+> isolation remains: a new pure-Swift `@MainActor` object deallocated by XCTest will hit the
+> same double-free — so **write new tests in Swift Testing.**
 
 ## Localization
 

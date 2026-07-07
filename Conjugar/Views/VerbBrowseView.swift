@@ -51,6 +51,10 @@ struct VerbBrowseView: View {
               .padding(.horizontal)
               .padding(.top, Layout.defaultSpacing)
               .id("top")
+              // Stable launch-screen leaf anchor for the ios-build-verify skill's
+              // wait-for-render poll (FIRST_SCREEN_ID); a leaf, not a container, to
+              // avoid SwiftUI AXTree identifier rollover onto descendants.
+              .accessibilityIdentifier("browse_verb_count")
 
             if searchText.isEmpty {
               TipView(tryQuizTip)

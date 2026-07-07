@@ -20,3 +20,6 @@ docs/glosses/.bak_phase3/
 docs/glosses/phase1/phase2/chunks/
 docs/glosses/phase1/phase2/checks/
 docs/glosses/phase1/phase2/consensus/
+# ios-build-verify
+build.log
+.claude/ios-build-verify.*

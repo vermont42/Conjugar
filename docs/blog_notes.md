@@ -1987,3 +1987,35 @@ MainActor` makes the `L.Tips` accessors MainActor-isolated by default, which won
 so the `L.Tips` accessors are marked `nonisolated static var` (exactly as Conjuguer does it). App
 builds clean and the full test suite still passes; tips can only be *seen* on a booted
 simulator/device since TipKit needs the configured, running app.
+
+## Swapping the simulator tooling to the `ios-build-verify` skill
+
+The interim `run-in-simulator` skill (a hand-rolled `simctl` + `idb` recipe) was written
+before the SwiftUI migration to give the agent a way to drive the UIKit app. Now that every
+screen is SwiftUI, we swapped to the purpose-built **`ios-build-verify`** Claude Code skill —
+a plugin-marketplace skill that wraps `xcodebuild` (through `xcbeautify`) for builds and
+**AXe** for simulator observation/HID dispatch, all behind named scripts driven by a
+per-project `.claude/ios-build-verify.config.sh`.
+
+Setup was mostly introspection: bundle id and scheme come straight out of the pbxproj (the
+project has a second `ConjugarWidgetExtension` scheme, so scheme can't be guessed — but the
+app scheme is `Conjugar`). Two adopter-side friction points, both documented in the skill's
+SKILL.md, showed up on this real app:
+
+- **Greenfield accessibility identifiers.** The app had *zero* `.accessibilityIdentifier`
+  calls, but the skill's launch step polls `describe-ui` for a known `FIRST_SCREEN_ID` to
+  confirm the app rendered. Fix: add one stable **leaf** anchor — `browse_verb_count` on the
+  Browse tab's verb-count banner. It has to be a leaf, not a container, because SwiftUI rolls
+  a parent's identifier onto every descendant in the AXTree.
+- **Five-tab pill.** The shipped tab-pill centroid detector is calibrated for the canonical
+  3-tab floating pill; Conjugar's 5-tab pill under-segments (it detected 3). So
+  `MAIN_TABS_COORDS` is measured by hand off a screenshot (pixels ÷ 3 → logical points) and
+  verified by tapping each of the five tabs and screenshotting that the right screen loads.
+
+Verified end-to-end: `calibrate.sh` built and launched the app (the `browse_verb_count`
+anchor confirmed render), then a tap through Models / Quiz / Info / Settings each highlighted
+the correct tab. A stable symlink (`~/.claude/skills/ios-build-verify` → the versioned plugin
+cache) keeps the terminal path from rotting on plugin updates. CLAUDE.md's *Build and Test
+Commands* and *Running the App in the Simulator* sections now name the skill as the default
+path, with raw `xcodebuild` demoted to a diagnostic fallback and `run-in-simulator` kept as a
+no-AXe fallback.
