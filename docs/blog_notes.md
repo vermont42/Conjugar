@@ -2813,3 +2813,49 @@ Next: `invitar` (rank 252).
   of the "poder" row now `describe_ui`-resolves to a full-width `Button "poder, can"`
   (frame x:0, width:402) and navigates to the Poder detail screen. This also unblocks
   ios-build-verify's tap-to-drill-down on a verb.
+
+## Etymology pipeline — batch 5 (ranks 252–351)
+
+Fifth generation batch, a second **full 100 verbs**: ranks 252–351 (`invitar`, `importar`,
+`armar`, `concluir`, `modificar`, `destinar`, `brindar`, `describir`, `seleccionar`,
+`asociar`, `encargar`, `apuntar`, `viajar`, `repetir`, `echar`, `componer`, `negar`,
+`acudir`, `asistir`, `encantar`, `quitar`, `conectar`, `romper`, `estimar`, `separar`,
+`agradecer`, `contribuir`, `fijar`, `emitir`, `adaptar`, `conducir`, `cuidar`, `costar`,
+`abandonar`, `andar`, `caber`, `emplear`, `preferir`, `enseñar`, `impedir`, `introducir`,
+`ejercer`, `guardar`, `imaginar`, `matar`, `valorar`, `derivar`, `mandar`, `animar`, `amar`,
+`ejecutar`, `trasladar`, `interpretar`, `retirar`, `revelar`, `advertir`, `sorprender`,
+`cometer`, `someter`, `manejar`, `luchar`, `medir`, and the rest). Ten `general-purpose`
+subagents × 10, launched in two parallel messages of five, each returning a bilingual
+(en/es) JSON block. `Etymologies.json` now holds **351/988** ranked verbs in both languages.
+
+- **Cleanest batch yet — zero Step 4 issues across 200 strings.** No odd tildes, no en/es
+  count mismatches, no ASCII quotes, no misplaced reconstruction asterisks. The batch-4 lesson
+  paid off: the worked example pasted into every subagent prompt this run carried **real curly
+  quotes `“ ”` and guillemets `« »`**, so no agent copied ASCII `"` glosses (batch 4 had 30 to
+  fix). Confirms agents mirror the example's literal characters.
+- **Extraction ran strict=False by default** (the other batch-4 lesson), so all 10 transcripts
+  parsed on the first pass — no "0 verbs" false-empties to re-run.
+- **Rich crop of doublets — one Latin verb, two Spanish reflexes:** `invitar`/`convidar` (learned
+  vs. patrimonial from `invītāre`); `completar`/`cumplir` and `fijar`'s `fijo`/`hito` (learned vs.
+  the `f-` > silent `h-` popular form); `emplear`/`implicar`; `respetar`/`respectar`; `animar`'s
+  `ánima`/`alma`; `cobrar`/`recuperar`; `someter`/`cometer` as near-rhyming `sub-`/`com-` + `mittere`.
+- **Disputed origins hedged, not laundered:** `invitar` (three rival deep roots — `invocāre`,
+  De Vaan's `*weyh₁-`, older `velle` — all marked as competing); `andar` (`ambulāre` reduction vs.
+  `*ambitāre`, unsettled, with the cognate family flagged as holding *only* under the `ambulāre`
+  hypothesis); `matar` (Corominas's `mattus` "stunned" → the striking `matto` "crazy" kinship,
+  explicitly a hypothesis); `acudir` (Corominas's `recudir` < `recutere` "favored" account);
+  `estimar` (the `aes`+"cut" = "copper-minter" story De Vaan calls "not very credible");
+  `retirar` (Corominas: `tirar`'s origin "deeply obscure" — Germanic `teran`? Parthian `tir`
+  "arrow"? — both speculative); `interpretar` (the memorable `pretium` "price-setter between
+  strangers" gloss marked contested); `amar` (Lallwort `*am-` vs. De Vaan's `*h₂emh₃-` "to grasp");
+  `manejar` (Corominas rejects the folk `manus`+`agere` parse); `luchar`'s `lujo`/`lujuria` link
+  ("by the traditional account").
+- **Memorable payoffs that are actually settled:** `echar` < `iactāre`, a spectacular sound-change
+  (`ject-` re-borrowed learnedly as `sujeto`/`proyecto`); `brindar` from German `bring dir's`
+  "I bring it to you," carried home by Landsknechte after the 1527 Sack of Rome (Covarrubias 1611);
+  `derivar`'s `rīvālis` = neighbors quarreling over the same `rīvus` (stream); `negar`'s hidden "no"
+  in `negōtium` = `nec` + `ōtium` "not-leisure" → `negocio`; `guardar`'s `ward`/`guard` doublet (one
+  Germanic word, native to English *and* looped back through French); `imaginar`'s `imāgō` as the
+  wax ancestral death-mask; `impedir` "to shackle the feet" against `expedīre` "to free them."
+
+Next: `contemplar` (rank 352).
