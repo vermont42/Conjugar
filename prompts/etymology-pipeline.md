@@ -183,7 +183,7 @@ for aid, out in agents:
         for b in obj.get("message", {}).get("content", []):
             if b.get("type") == "text": text = b["text"]
     text = text[text.find("{"):]      # drop any preamble before the JSON
-    data = json.loads(text)
+    data = json.loads(text, strict=False)   # strict=False: agents often use raw newlines in values
     pathlib.Path(out).write_text(json.dumps(data, ensure_ascii=False))
     print(f"{aid}: {len(data)} verbs -> {out}")
 ENDPY
@@ -576,6 +576,13 @@ file.
 > checkable, a matching check in the Step 4 validator. The point is that the next session
 > starts from your hard-won knowledge, not from scratch.
 
+- **Subagents may emit real literal newlines inside their JSON string values** (the "use
+  real line breaks for paragraph breaks" instruction invites exactly this). Strict JSON
+  forbids raw control characters in strings, so the Step 3 extractor's `json.loads(text)`
+  dies with `Invalid control character at: …`. **Fix: parse with `json.loads(text,
+  strict=False)`** — it accepts the raw newlines, and the re-serialization to
+  `/tmp/etym_g*.json` normalizes them back to `\n`. Seen in batch 1 (ranks 1–51): 2 of 5
+  agents did this. Cheap to handle; just use `strict=False` in Step 3 by default.
 - **A subagent may silently omit the second language entirely.** Seen in practice: an agent
   wrote ten polished `"en"` etymologies and emitted *no* `"es"` key at all, despite the
   prompt demanding both languages and shipping a bilingual worked example. The Step 4

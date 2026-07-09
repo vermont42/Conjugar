@@ -487,6 +487,10 @@ nonisolated enum L {
     static func irregularWithParent(exemplar: String) -> String {
       String(localized: "Verb.irregularWithParent \(exemplar)")
     }
+
+    static var etymology: String {
+      String(localized: "Verb.etymology")
+    }
   }
 
   enum Tutor {

@@ -2097,6 +2097,22 @@
         }
       }
     },
+    "Verb.etymology" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etymology"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etimología"
+          }
+        }
+      }
+    },
     "Verb.irregular" : {
       "localizations" : {
         "en" : {

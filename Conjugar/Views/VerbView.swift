@@ -22,6 +22,7 @@ struct VerbView: View {
   private let raizFutura: String
   private let isDefective: Bool
   private let sections: [ConjugationSection]
+  private let etymology: String?
 
   init(verb: String) {
     self.verb = verb
@@ -33,6 +34,7 @@ struct VerbView: View {
     isDefective = Conjugator.isDefective(infinitive: verb)
     typeOrParent = Self.typeOrParent(verb: verb, entry: entry)
     sections = Self.buildSections(verb: verb)
+    etymology = Etymology.text(for: verb)
   }
 
   var body: some View {
@@ -41,6 +43,9 @@ struct VerbView: View {
         metadataHeader
         ForEach(sections) { section in
           conjugationCard(section)
+        }
+        if let etymology {
+          etymologyCard(etymology)
         }
       }
       .padding()
@@ -87,6 +92,22 @@ struct VerbView: View {
         .font(.body)
         .speakOnTapFlash(ConjugationText.plain(form))
     }
+  }
+
+  // MARK: - Etymology
+
+  private func etymologyCard(_ text: String) -> some View {
+    VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
+      Text(L.Verb.etymology)
+        .font(.headline)
+        .fontDesign(.serif)
+        .foregroundStyle(Color.customYellow)
+        .accessibilityAddTraits(.isHeader)
+
+      EtymologyText(text: text)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .card()
   }
 
   // MARK: - Conjugation cards

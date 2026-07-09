@@ -2613,3 +2613,66 @@ subjunctive), and `fuī` (the preterite it shares wholesale with `ir`).
 Remaining lifecycle step (deliberately not in this checkpoint): wiring the `~…~`→bold
 renderer and an etymology card into `VerbView`, then running the pipeline across sessions to
 fill the 988. Build green, JSON valid.
+
+### Etymology UI (VerbView card)
+
+Wired the display half. `VerbView` now shows an **etymology card below the conjugation
+sections** whenever `Etymology.text(for:)` has an entry (verbs without one — the vast
+majority until the pipeline runs — render nothing, no empty card). The card reuses the
+serif-yellow section heading of the tense cards (`L.Verb.etymology` → "Etymology" /
+"Etimología", added to `L.swift` + the catalog) over a plain `.card()`, so it reads as a
+peer section without stealing a tense's accent bar.
+
+The renderer is a new **`EtymologyText`** view (mirroring `ConjugationText`'s dedicated-view
+pattern) with its **own** minimal parser — deliberately *not* the Info `richTextBlocks`
+parser — so etymology prose can contain a stray `%`, `$`, or `^` without it being misread as
+Info markup. It splits on the bold marker `~`, toggling `.stronglyEmphasized` (which composes
+with Dynamic Type rather than pinning a font), and passes every `*` through verbatim so a
+reconstruction asterisk (`*~steh₂-~`) renders literally. Matches Conjuguer's
+`String.etymologyAttributedString` approach, adapted to Conjugar's post-migration
+system-font stack.
+
+Verified on-device-sim by deep-linking `conjugar://verb/estar`: the seeded `estar` card
+renders with correct bold forms, literal reconstruction asterisks, the `₂` subscript, and
+the `\n\n` paragraph gap; `hablar` (no entry) shows no card. Five Swift Testing cases cover
+the renderer (bold spans, asterisk pass-through, paragraph preservation, unmarked
+round-trip, marker-stripping). Build green, SwiftLint clean, tests pass.
+
+## Etymology pipeline — batch 1 (ranks 1–51)
+
+Ran the first real generation batch of the Spanish etymology pipeline: 50 verbs, the
+50 smallest-remaining usage ranks (1–51, minus the pre-seeded `estar`), covering the
+absolute core of the language — `ser`, `haber`, `tener`, `poder`, `hacer`, `decir`, `ir`,
+`dar`, `ver`, `deber`, `pasar`, `querer`, `saber`, `poner`, `llevar`, `dejar`, `conocer`,
+`creer`, `tratar`, `hablar`, `venir`, `vivir`, `mantener`, `abrir`, `crear`, and the rest.
+Five `general-purpose` subagents × 10 verbs, launched in parallel, each returning a bilingual
+(en/es) JSON block. `Etymologies.json` now holds **51/988** ranked verbs in both languages.
+
+- **`ser` and `haber` got the three-paragraph deep-dive treatment** (matching Conjuguer's
+  `être`/`avoir`). `haber` lands the Spanish payoff: possession ceded to `tener`, the old
+  `ser`/`haber` auxiliary split leveled to universal `haber`, and `hay` < medieval `ha` +
+  locative `y` (< `ibī`). `ser` swaps `être`'s donors for the Spanish three — `esse`
+  (present/imperfect), `sedēre` "to sit" (the infinitive `ser` itself + future/subjunctive),
+  `fuī` (the preterite shared wholesale with `ir`). `ir` got the parallel suppletion story
+  (`īre` + `vādere` + `fuī`), so the two entries cross-reference cleanly.
+- **Disputed origins were hedged, not laundered** — exactly the pitfall the pipeline warns
+  about. `tomar` (« de origen incierto », Corominas' `autumāre` vs. Walsh's `domāre`),
+  `buscar` (`bosque` vs. Celtic `*boudi`), `trabajar` (the `tripalium` torture-frame story,
+  flagged as debated rather than asserted), `llegar` (the nautical "fold the sails" path),
+  and `considerar` (the `sīdus`/"observe the stars" hypothesis, paired with `desear` <
+  `dēsīderāre`) all carry their hedge in both languages.
+- **A subagent caught two source errors**: en/es.Wiktionary wrongly call English *leave* a
+  cognate of `dejar` (it's Germanic — used *lax*/*relax*/*slack* instead), and `salir` was
+  kept clear of the false `sal`/*salt*/*sauce* conflation.
+- **Step 4 markup validation passed clean on the first try** — all 100 (verb, lang) values:
+  even tilde counts, en/es tilde parity, no ASCII quotes, real paragraph breaks, no misplaced
+  reconstruction asterisks.
+
+**Pipeline friction (fed back into the lessons):** two of the five subagents emitted their
+JSON with **real literal newlines inside the string values** (as the prompt's "use real line
+breaks" instruction invites), which the Step 3 extractor's `json.loads(text)` rejects with
+`Invalid control character`. Fix: parse the transcript text with `json.loads(text,
+strict=False)`, which accepts control characters inside strings; the re-serialization to
+`/tmp/etym_g*.json` then normalizes them to `\n`. Added this to the pipeline's Lessons.
+
+Next: `necesitar` (rank 52).
