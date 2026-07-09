@@ -2859,3 +2859,56 @@ subagents × 10, launched in two parallel messages of five, each returning a bil
   wax ancestral death-mask; `impedir` "to shackle the feet" against `expedīre` "to free them."
 
 Next: `contemplar` (rank 352).
+
+## Etymology pipeline — batch 6 (ranks 352–452)
+
+Sixth generation batch, a third **full 100 verbs**: ranks 352–452 (`contemplar`, `comparar`,
+`complicar`, `incrementar`, `dormir`, `actualizar`, `divertir`, `investigar`, `invertir`,
+`hallar`, `detectar`, `combinar`, `acordar`, `votar`, `aclarar`, `conservar`, `contratar`,
+`admitir`, `coincidir`, `rechazar`, `tirar`, `transmitir`, `convocar`, `abordar`, `vestir`,
+`acusar`, `cargar`, `reclamar`, `disminuir`, `caracterizar`, `oír`, `nombrar`, `dividir`,
+`rodear`, `experimentar`, `orientar`, `justificar`, `autorizar`, `cruzar`, `regular`, `parar`,
+`caminar`, `cortar`, `detallar`, `satisfacer`, `ajustar`, `salvar`, `conceder`, `apreciar`,
+`fabricar`, `intervenir`, `fundar`, `consumir`, `atacar`, `descargar`, `sugerir`, `alejar`,
+`dudar`, `gestionar`, `precisar`, `casar`, `favorecer`, `calificar`, `convencer`, `dictar`,
+`beneficiar`, `grabar`, `involucrar`, `constar`, `sonar`, `percibir`, `destruir`, `insistir`,
+`adelantar`, `contestar`, `cantar`, `llenar`, `condenar`, `criticar`, `implementar`, `durar`,
+`montar`, `recurrir`, `clasificar`, `distribuir`, `confiar`, `vencer`, `saltar`, `concentrar`,
+`calcular`, `prohibir`, `oponer`, `coger`, `optar`, `parir`, `devolver`, `corregir`, `pintar`,
+`liberar`, `asignar`). Ten `general-purpose` subagents × 10, launched in two parallel messages
+of five, each returning a bilingual (en/es) JSON block. `Etymologies.json` now holds
+**451/988** ranked verbs in both languages.
+
+- **Second clean batch in a row — zero Step 4 issues across 200 strings.** No odd tildes, no
+  en/es count mismatches, no ASCII quotes, no misplaced reconstruction asterisks. Curly-quote/
+  guillemet example + `strict=False` extraction remain the two habits that keep the run smooth.
+- **Fertile doublet crop again:** `comparar`/`comprar` (learned vs. patrimonial from `comparāre`);
+  `fabricar`/`fragua` (culto `fábrica` vs. sound-worn `fragua`, and its verb `fraguar`);
+  `dividir`'s `individuo`; `cruzar`'s religious `cruzada` vs. geometric `crucero`; `pintar`'s
+  earthy line vs. bookish `pigmento`/`pictórico`; `liberar`'s `libre`/`libertad` family (with the
+  false-friend caution that `libro` is *not* a relative — a homonymous `liber` "tree-bark").
+- **False friends flagged in both languages:** `actualizar` (Spanish `actual` = "current," not
+  English "actual"); `consumir` vs. the constantly-confused `consumar` (< `consummāre` < `summa`,
+  unrelated); `grabar` vs. `gravar` "to tax" (< `gravāre`, same sound, alien root); `casar`'s legal
+  homonym "to quash" (< `cassāre` "annul"); `cortar`'s `corte` "court" belonging to `cohors`, not
+  `curtus`.
+- **Disputed origins hedged, not laundered:** `tirar` (Vulgar Latin `*tīrāre`, "one of the murkiest
+  cases in Romance" — Germanic source vs. Corominas's Parthian `tir` "arrow" from Roman military
+  slang, both explicitly proposals, with the "throw = flight of a Parthian shaft" flourish marked
+  suggestive-not-proven); `invertir`'s financial sense (a debated 17th-c. semantic loan from Italian
+  `investire`, distinct from the clean "reverse" descent from `vertere`); `hallar` (< `afflāre`
+  "to blow toward" — Corominas's hound-scent path favored but not certain); `favorecer` (`favēre`'s
+  deep root genuinely split, `*bʰeh₂-`/`*bʰuH-` vs. `*gʷʰew-` "to worship," the striking Slavic link
+  left open); `condenar` (`damnum`'s `*deh₂p-` sacrifice-root uncertain); `atacar` (Italian
+  `attaccare`'s Germanic-stake origin disputed in detail); `durar`, `optar`, `distribuir`, `calcular`,
+  `asignar`, `precisar`, `prohibir` — each with its unsettled or unknown deep root marked as such.
+- **Memorable payoffs that are actually settled:** `oír`'s `obedecer` = "to lend one's ear toward"
+  (< `oboedīre`); `votar`'s hidden wedding — Latin plural `vōta` "the vows" → `boda`; `contestar`'s
+  `testis` = `*tri-sth₂-` "the third one standing" (the impartial witness); `dudar`'s "two minds"
+  (`dubitāre` ← `duo`), with English `doubt`'s silent `b` a Renaissance fossil of the very letter
+  Spanish dropped; `sonar`'s loveliest cognate, English `swan` = "the sounding/singing bird";
+  `caminar`'s Celtic `camminus` (the loan that displaced Latin's own word for "road," now the
+  pilgrim's `Camino`); `rechazar`/`cazar` and the English `chase`/`catch` doublet from one
+  `*captiāre`; `satisfacer` = `satis` + `facere`, kin to English `sad` ("sated, full") via `*seh₂-`.
+
+Next: `fallecer` (rank 453).
