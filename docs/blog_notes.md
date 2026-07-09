@@ -3063,3 +3063,30 @@ than laundered throughout — `aguantar` (RAE's "quizá" Italian-glove nautical 
 `autumāre`, explicitly unproven), `embarazar` (pre-Roman `baraça`, DLE "quizá"), `optimizar`
 (`ops` vs. de Vaan's `ob`), `alegrar` (`alacer`'s disputed PIE root), `perdonar` (which side
 calqued `forgive`/`vergeben`) — exactly the cases the pipeline's confident-voice warning targets.
+
+## Spanish etymology pipeline — batch 10 (ranks 758–809)
+
+A 50-verb batch: 5 parallel general-purpose subagents × 10 verbs, one launch message. No
+context compaction, no lost transcripts. Step 4 flagged exactly **one** issue — the `documentar`
+Spanish had an agent self-correction artifact baked into the string (`~doctrine~ y así —perdón—:
+~doctrina~`), which showed up as an en/es tilde mismatch (44 vs 46); a one-line replace removed
+the phantom `~doctrine~` and the stray "perdón" aside, and re-validation was clean. Everything
+else passed on the first pass: matched tilde counts across all 50, curly quotes / guillemets
+throughout, no missing-language returns. `Etymologies.json` now holds **801 / 988 ranked verbs**
+in both languages; next up is `charlar` (rank 810).
+
+The payoff details this batch: `aburrir` and English `abhor` being *literally the same Latin
+verb* (`abhorrēre`, "to shrink back") — boredom as fossilized loathing, cooled down through the
+reflexive; `ser`-root cousins `restar`/`estar` both from *steh₂-* ("to stand"), so subtraction is
+asking "what stands left"; `expandir`/`spawn` as doublets (a spreading empire and a spawning fish
+share `expandere`); `alojar` bottoming out in Frankish *laubja*, a shelter woven from *leaves*;
+`compensar`/`pesar`/`pensar` as three children of `pēnsāre` ("to weigh" → "to think"); `fumar`
+vs. patrimonial `humo` showing the Castilian `f-`→`h-` split on one root; and `admirar` reaching,
+through *smey-*, the same Indo-European root as English `smile`. Disputed origins were hedged not
+laundered — `agarrar`'s `garra` (Gaulish "leg" vs. Andalusian-Arabic "handful"),
+`rodrigar`/`rodrigón` (Corominas rejects the tempting `Rodrigo` link; `rīdica`/`rudis`
+contested), `respirar`'s `spīrāre` (onomatopoeic per De Vaan vs. a debated PIE *(s)peys-*),
+`equilibrar`'s `libra` and `empujar`'s `impulsāre`-vs.-`pujar` derivation — plus two false-friend
+catches the agents flagged rather than asserted: English `flow` is *not* cognate with `fluere`,
+and `have` is *not* cognate with `haber`-family words. The lone friction (a subagent's `—perdón—`
+self-edit surviving into the JSON) got written back to the pipeline's Lessons.

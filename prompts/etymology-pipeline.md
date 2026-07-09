@@ -637,6 +637,15 @@ file.
   silently produced "0 verbs" for 4 of 10 agents until re-run with
   `json.JSONDecoder(strict=False)`. Construct the decoder as `json.JSONDecoder(strict=False)`
   up front so every agent parses on the first pass regardless of newline style.
+- **A subagent can bake a self-correction into the string.** In batch 10 one agent wrote a
+  visible mid-sentence edit into `documentar`'s Spanish value — `~doctor~ …, ~doctrine~ y así
+  —perdón—: ~doctrina~ …` — leaving a phantom bolded English `~doctrine~` and a « perdón »
+  aside inside the prose. The Step 4 en/es tilde-mismatch check caught it (44 vs 46), which is
+  how it surfaced; the fix was a one-line `str.replace` of the whole artifact span. When a
+  mismatch traces to a stray extra bold in one language, **read the surrounding sentence** — an
+  agent apology word (`perdón`, `sorry`, `wait`, `actually`) next to the extra tilde is the
+  tell that it's a self-edit, not a real cognate. It parses as valid JSON, so only the tilde
+  check (or a read) catches it.
 
 ## Reminders
 
