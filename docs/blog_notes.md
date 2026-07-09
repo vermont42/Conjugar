@@ -3019,3 +3019,24 @@ Because the race requires a verb store that can be observed empty — which a sy
 static cannot be — the Conjuguer symptom can't reproduce here. The lazy-synchronous `VerbMap`
 plus guarded routing is already the robust design, so no code change was made; recorded the
 outcome and stopped.
+
+## Spanish etymology pipeline — batch 8 (ranks 554–655)
+
+Ran another 100-verb batch of the Spanish etymology generator: 10 parallel general-purpose
+subagents × 10 verbs, split across two launch messages of five agents each. Zero context
+compaction, zero lost transcripts, and — for the first time across a full 100 — the Step 4
+markup validator reported **OK on the first pass**: no odd/mismatched tildes, no stray ASCII
+quotes (every agent used curly `“ ”` / guillemets `« »`), no missing-language returns. All 100
+en/es tilde counts matched. `Etymologies.json` now holds **651 / 988 ranked verbs** in both
+languages; next up is `educar` (rank 656).
+
+The batch surfaced a good crop of the kind of detail this feature exists for: `ser`-adjacent
+suppletion echoes (`resistir`/`existir`/`estar` all tracing to *~steh₂-~*, "holding one's
+ground"); the `conjugar` payoff hiding inside `juntar` (both from *~yewg-~*, "to yoke"); Arabic
+`al-` fossils (`almacenar` ← *al-makhzan*, cousin of English *magazine*); Viking seafaring in
+`equipar` (← Old Norse *skipa*, "to fit out a ship"); and the `negociar` = *nec-ōtium*
+("not-leisure") etymological joke, with `ocio` as its exact opposite. Disputed origins were
+hedged rather than laundered throughout — `quemar` (Corominas rejects a straight *cremāre*
+descent), `regalar` (French *gale* vs. the seductive-but-contested *regalis* "treat like a
+king"), `bailar`, `gritar` (the *Quirites* folk etymology flagged as such), `marchar`,
+`derrotar` — exactly the cases the pipeline's confident-voice warning targets.
