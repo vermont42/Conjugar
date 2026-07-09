@@ -2915,6 +2915,66 @@ Next: `fallecer` (rank 453).
 
 ---
 
+## Etymology pipeline — batch 7 (ranks 453–553)
+
+Seventh generation batch, a fourth **full 100 verbs**: ranks 453–553 (`fallecer`, `discutir`,
+`acumular`, `robar`, `acreditar`, `disputar`, `fortalecer`, `escoger`, `formular`, `reforzar`,
+`demandar`, `titular`, `hacendar`, `editar`, `figurar`, `resaltar`, `escapar`, `sustituir`,
+`despertar`, `distinguir`, `bastar`, `articular`, `desempeñar`, `traducir`, `inscribir`, `pegar`,
+`apostar`, `tender`, `reservar`, `consolidar`, `beber`, `solucionar`, `localizar`, `renovar`,
+`prometer`, `fomentar`, `esconder`, `lucir`, `acoger`, `personalizar`, `gastar`, `inspirar`,
+`liderar`, `financiar`, `tardar`, `mezclar`, `atraer`, `designar`, `activar`, `dominar`,
+`arrancar`, `soportar`, `difundir`, `enfocar`, `competir`, `desplazar`, `alimentar`, `circular`,
+`prevenir`, `reportar`, `cuestionar`, `equivocar`, `atravesar`, `contactar`, `diferenciar`,
+`perseguir`, `impartir`, `coordinar`, `ignorar`, `inaugurar`, `estrenar`, `rendir`, `administrar`,
+`padecer`, `asesinar`, `convenir`, `motivar`, `ahorrar`, `influir`, `verificar`, `acostumbrar`,
+`encabezar`, `amenazar`, `juzgar`, `suspender`, `enterar`, `programar`, `carecer`, `especificar`,
+`mediar`, `proyectar`, `repartir`, `remitir`, `opinar`, `configurar`, `gobernar`, `pronunciar`,
+`combatir`, `atribuir`, `dotar`). Ten `general-purpose` subagents × 10, launched in two parallel
+messages of five, each returning a bilingual (en/es) JSON block. `Etymologies.json` now holds
+**551/988** ranked verbs in both languages.
+
+- **Third clean batch running — zero Step 4 issues across 200 strings.** No odd tildes, no en/es
+  count mismatches, no ASCII quotes, no misplaced reconstruction asterisks, all 100 en/es tilde
+  counts matched. The curly-quote/guillemet worked example plus `strict=False` extraction stay the
+  two habits that keep the run frictionless.
+- **A true homonym handled as one entry, two origins:** `apostar` — the "bet" sense (< `appōnere`,
+  the stake *placed* on the table, via `apuesta`) and the "station/post" sense (< `posta` <
+  `posita`, via Italian `posto`), separate paths that both descend from `pōnere` "to place." One
+  key, both accounts given, exactly as the homonym rule prescribes.
+- **Doublet crop again:** `escoger`/`coger` (learned-ish vs. worn-down reflexes of `colligere`);
+  `acumular`/`colmar` (culto `cúmulo` vs. metathesized `colmo`, `¡el colmo!`); `localizar`'s
+  `local`/`lugar` from one `locālis`; `designar`/`diseñar` from `dēsignāre`; `traducir`'s Renaissance
+  coinage (Leonardo Bruni misreading Aulus Gellius c. 1400, displacing `trasladar`).
+- **False friends flagged in both languages:** `soportar` = "to endure," not English "support"
+  (« no lo puedo soportar »); `reservar`'s caution that `servāre` "to guard" is *not* the source of
+  `servir` (< `servus`); `editar`'s two Latin `ēdere` (give-out vs. eat), only the first the ancestor.
+- **Arabism + Germanic loans, cited only where sourced:** `ahorrar` < Andalusi Arabic `ḥurr` "free"
+  (to free a slave → to spare an expense → to save money); `robar`/`ropa` from Germanic war-booty
+  (`*raubōn`, the `rob`/`robe` pairing mirrored in English); `gastar`'s `vastāre`×Germanic `*wōstijan`
+  blend for the initial `g-` (Corominas); `liderar`, a 20th-c. denominal from English `leader`
+  (`líder` admitted by the RAE only in 1970).
+- **Disputed origins hedged, not laundered:** `arrancar` ("genuinely disputed," three competing
+  accounts — Occitan `ranc` battle-line vs. Latin `ēruncāre` "to weed" vs. rejected Gothic `*wrankjan`);
+  `distinguir` (traditional `*steyg-` "prick" vs. de Vaan's "push/thrust"); `asesinar` (the Marco-Polo
+  hashish story marked disputed against the rival "Hasan's men"); `estrenar`'s goddess `Strēnia`;
+  `personalizar`'s `persōna` ← Etruscan `phersu` (the `per-`+`sonāre` "sound-through-the-mask" gloss
+  called out as folk etymology); `combatir`'s Gaulish `battuere`; `atribuir`'s `tribus`←`trēs`;
+  `opinar`, `remitir`, `pronunciar`, `tardar`, `inspirar`, `atraer`, `carecer`, `fluere` (`influir`)
+  — each unsettled deep root marked as such rather than asserted.
+- **Memorable payoffs that are actually settled:** `fallecer`'s euphemism (`fallere` "to trip" →
+  "to fail" → "to run out" → "to die," English's "pass away" impulse); `esconder`'s buried `*dʰeh₁-`
+  linking *hide* and *make* (`hacer`, English `do`); `circular`'s astronomy debut (Kepler's optical
+  `focus`/`enfocar` "little hearth," `hogar` from `focārium`); `influir`'s astrological `influentia`
+  (the stellar "flowing-in" that also named `influenza`); `gobernar` ← Greek `kybernáō` "to steer,"
+  the same helmsman Wiener drew `cybernetics` from in 1948; `administrar`'s irony (a `minister` is
+  by origin the "lesser one," `minus`, opposite of `magister`); `figurar`/`configurar` sharing
+  `*dʰeyǵʰ-` "to knead clay" with English `dough`.
+
+Next: `temer` (rank 554).
+
+---
+
 ## Deleting the device-model table (DeviceUtility) ahead of TelemetryDeck
 
 The old analytics stack hand-maintained a ~100-line `switch` that mapped raw device
