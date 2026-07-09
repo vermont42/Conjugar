@@ -20,8 +20,8 @@ struct GameCenterFakeTests {
     gameCenter.authenticate()
     #expect(gameCenter.isAuthenticated)
 
-    // Straightened semantics (item 19): re-authenticating keeps the player
-    // authenticated instead of surprisingly reporting failure.
+    // Re-authenticating keeps the player authenticated instead of surprisingly
+    // reporting failure.
     gameCenter.authenticate()
     #expect(gameCenter.isAuthenticated)
   }

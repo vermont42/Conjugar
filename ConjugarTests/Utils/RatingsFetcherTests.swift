@@ -8,8 +8,7 @@
 //  Kept as XCTest (rather than converted to Swift Testing) on purpose: it reassigns
 //  the global `Current`, and XCTest's serial execution keeps that mutation from
 //  racing the other `Current`-reassigning suite (CommunViewModelTests) — which a
-//  parallel Swift Testing suite would not. Adapted to RatingsFetcher's async/await +
-//  Codable API (item 20); the old completion-handler `expectation` dance is gone.
+//  parallel Swift Testing suite would not.
 //
 
 import XCTest

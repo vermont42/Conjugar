@@ -5,17 +5,16 @@
 //  Created by Joshua Adams on 11/3/19.
 //  Copyright © 2019 Josh Adams. All rights reserved.
 //
-//  Rebuilt for the SwiftUI migration to match the app's card-based design system
-//  (drawing on the ios-design-agent-skill audit and the sibling apps Conjuguer /
-//  Konjugieren): a NavigationStack with a scroll of grouped `card()`s, each a
-//  settings section with a tinted SF Symbol heading, a segmented control or a
+//  Rebuilt for the SwiftUI migration to match the app's card-based design system:
+//  a NavigationStack with a scroll of grouped `card()`s, each a settings section
+//  with a tinted SF Symbol heading, a segmented control or a
 //  `TintedCapsuleButtonStyle` action, and a `.callout` explanation, split by
 //  `GradientDivider`s. Segmented changes fire a selection haptic; the whole
-//  measure is reading-width-constrained for iPad. Since Phase 4 / item 11 made
-//  `Settings` `@Observable`, the pickers bind straight to `Current.settings` via
-//  `@Bindable` — the old `SelectionStore` bridge and its `onAppear` copy-in are gone.
-//  The global segmented-control appearance (yellow titles) moved to AppDelegate in
-//  Phase 5 / item 13, so this view no longer needs an `init`.
+//  measure is reading-width-constrained for iPad. Because `Settings` is
+//  `@Observable`, the pickers bind straight to `Current.settings` via `@Bindable`
+//  — the old `SelectionStore` bridge and its `onAppear` copy-in are gone. The
+//  global segmented-control appearance (yellow titles) lives in AppDelegate, so
+//  this view needs no `init`.
 //
 
 import SwiftUI
@@ -29,9 +28,6 @@ struct SettingsView: View {
   @State private var rateReviewDescription = ""
   private let changeDifficultyTip = ChangeDifficultyTip()
   private let enableGameCenterTip = EnableGameCenterTip()
-
-  // Segmented-control appearance (yellow titles) is set once in AppDelegate now, not
-  // from a per-body-evaluation `init` (item 13).
 
   var body: some View {
     NavigationStack {
@@ -55,14 +51,12 @@ struct SettingsView: View {
         Current.analytics.recordVisitation(viewController: "\(SettingsView.self)")
       }
       .task {
-        // Surface the failure (item 20): show an unavailable message rather than
+        // Surface the failure: show an unavailable message rather than
         // leaving the row silently empty when the iTunes lookup fails.
         rateReviewDescription = await RatingsFetcher.ratingsDescription() ?? L.Settings.ratingsUnavailable
       }
     }
   }
-
-  // MARK: - Cards
 
   private var regionCard: some View {
     settingsCard {
@@ -203,8 +197,6 @@ struct SettingsView: View {
     .accessibilityElement(children: .combine)
   }
 
-  // MARK: - Section builders
-
   private func settingsCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
     VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
       content()
@@ -244,15 +236,13 @@ struct SettingsView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
   }
 
-  // MARK: - Actions
-
   private func enableGameCenter() {
     enableGameCenterTip.invalidate(reason: .actionPerformed)
     Current.settings.userRejectedGameCenter = false
     // Fire-and-forget: GameKit presents its own login sheet and publishes
     // `isAuthenticated` asynchronously. `isGameCenterUIHidden` is refreshed from
     // that state on the next `onAppear`; making it reactively hide the moment auth
-    // settles waits on Settings observability (Phase 4 / item 11).
+    // settles waits on Settings observability.
     Current.gameCenter.authenticate()
   }
 

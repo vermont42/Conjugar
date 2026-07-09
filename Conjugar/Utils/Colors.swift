@@ -15,16 +15,14 @@ import UIKit
 /// dark-only `UIColor`s this file held through mid-2026.
 ///
 /// SwiftUI code should prefer the auto-generated asset symbols directly
-/// (`Color.customYellow`, `Color.customBackground`, …); those are what the ported
-/// Konjugieren views use. This type is the **UIKit-facing** bridge: it keeps the
+/// (`Color.customYellow`, `Color.customBackground`, …). This type is the
+/// **UIKit-facing** bridge: it keeps the
 /// legacy `Colors.red/yellow/blue/black` names compiling for the not-yet-migrated
 /// UIKit screens, which now become appearance-aware for free, and it names the
 /// newer semantic roles (`foreground`, `cardBackground`, `cardBorder`) for any
 /// remaining UIKit use. Both sets read from the same colorsets, so the two APIs
 /// never drift.
 enum Colors {
-  // MARK: Brand accents (legacy names kept for UIKit call sites)
-
   /// Conjugar's brand red (193, 0, 29) — interactive text and buttons. Identical
   /// in both appearances; legible on white and on black.
   static let red = UIColor.customRed
@@ -37,8 +35,6 @@ enum Colors {
   /// green in dark mode. Added in the SwiftUI migration so quiz/results
   /// correctness gets its own color and `red` can retreat to error/irregularity.
   static let green = UIColor.customGreen
-
-  // MARK: Semantic roles
 
   /// The app background. White in light mode, pure black in dark mode. Named
   /// `black` for source compatibility with the dark-only UIKit screens that set

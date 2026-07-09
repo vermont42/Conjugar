@@ -9,14 +9,11 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Shared view modifiers (SwiftUI migration, Step 3)
-//
-// The design-system primitives the mapped audit (`docs/conjugar-ui-issues.md`)
-// leans on, ported and adapted from Konjugieren's `Utils/Modifiers.swift`. They
-// all read from the adaptive color assets (`.customBackground`, `.customCardBackground`,
-// `.customYellow`, `.customGreen`, …), so every one supports light **and** dark mode
-// automatically. Point new SwiftUI screens at these convenience methods rather than
-// re-deriving card/pill/serif treatments per view.
+// The shared design-system primitives. They all read from the adaptive color assets
+// (`.customBackground`, `.customCardBackground`, `.customYellow`, `.customGreen`, …),
+// so every one supports light **and** dark mode automatically. Point new SwiftUI
+// screens at these convenience methods rather than re-deriving card/pill/serif
+// treatments per view.
 
 extension View {
   /// Wrap content in a rounded card: `customCardBackground` fill with a subtle
@@ -39,7 +36,7 @@ extension View {
 
   /// Set linguistic content (Spanish infinitives, conjugation forms, tense
   /// headings, article titles) in a serif face to distinguish "language" from
-  /// "UI chrome". _(audit K9 / C-cross)_
+  /// "UI chrome".
   func linguistic() -> some View {
     fontDesign(.serif)
   }
@@ -52,37 +49,35 @@ extension View {
   }
 
   /// Stabilize changing numbers (score, progress, elapsed time) so the layout
-  /// stops jittering per tick. _(audit C5 / K6)_
+  /// stops jittering per tick.
   func numeric() -> some View {
     monospacedDigit()
       .contentTransition(.numericText())
   }
 
   /// A tinted, capsule-shaped badge for metadata (irregularity percent, verb
-  /// count, participio/gerundio). _(audit K12 / C15)_
+  /// count, participio/gerundio).
   func metadataPill(tint: Color = .customYellow) -> some View {
     modifier(MetadataPill(tint: tint))
   }
 
   /// A light selection haptic keyed to `trigger`. Attach to sort controls and
-  /// pickers. _(audit K13 / C19)_
+  /// pickers.
   func selectionFeedback(trigger: some Equatable) -> some View {
     sensoryFeedback(.selection, trigger: trigger)
   }
 
   /// Speak `text` on tap and flash a brief background to confirm the tap landed
-  /// (skipped under VoiceOver, which has its own affordance). _(audit K11 / §4)_
+  /// (skipped under VoiceOver, which has its own affordance).
   func speakOnTapFlash(_ text: String, locale: String? = nil, flash: Color = .customYellow) -> some View {
     modifier(SpeakOnTapFlash(text: text, locale: locale, flash: flash))
   }
 }
 
-// MARK: - Button styles
-
 /// The primary call-to-action: a filled, accent-tinted capsule that scales
 /// slightly on press and shrinks to fit large Dynamic Type rather than clipping.
 /// Primary CTAs take the yellow/accent tint — red is reserved for destructive /
-/// error. _(audit §1 / C6)_
+/// error.
 struct PrimaryButtonStyle: ButtonStyle {
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
@@ -124,7 +119,6 @@ struct TintedCapsuleButtonStyle: ButtonStyle {
 
 /// A text-only action link in the brand link color — for non-destructive
 /// actions like "Enable" and "Rate or Review" that today render in red.
-/// _(audit §9 / C11)_
 struct LinkButtonStyle: ButtonStyle {
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
@@ -133,8 +127,6 @@ struct LinkButtonStyle: ButtonStyle {
       .opacity(configuration.isPressed ? 0.6 : 1)
   }
 }
-
-// MARK: - Private primitives
 
 private struct Card: ViewModifier {
   let cornerRadius: CGFloat
@@ -208,7 +200,7 @@ private struct SpeakOnTapFlash: ViewModifier {
       }
       // The tap gesture above is skipped under VoiceOver (which owns the tap), so
       // expose the same "hear it pronounced" affordance as a named accessibility
-      // action (item 18).
+      // action.
       .accessibilityAction(named: Text(L.Accessibility.speak)) {
         speak()
       }

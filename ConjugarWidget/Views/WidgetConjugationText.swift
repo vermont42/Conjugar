@@ -6,8 +6,7 @@
 //  marked form flag the irregular span. Regular letters render in the foreground
 //  color, irregular letters in red, and everything is lowercased for display. The
 //  colors are hardcoded dynamic (light/dark) copies of the app's `customForeground`
-//  / `customRed` assets so the extension needs no shared asset catalog — matching
-//  Conjuguer's approach.
+//  / `customRed` assets so the extension needs no shared asset catalog.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

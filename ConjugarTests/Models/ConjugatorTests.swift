@@ -12,15 +12,11 @@ import Testing
 // The composition-engine tests, in idiomatic Swift Testing. Full six-person
 // paradigms are parameterized over `zip(EnginePersonNumber.oracleOrder, [forms])`;
 // clusters of single slots for one verb are parameterized over `(EngineTense, String)`
-// pairs; multi-verb / non-finite / failure checks stay plain `@Test`s. Expected
-// forms are the verified oracle (docs/spanish_models.md) and are unchanged from
-// the XCTest version — only the test *structure* changed.
+// pairs; multi-verb / non-finite / failure checks stay plain `@Test`s.
 @Suite("Conjugator (new engine)")
 struct ConjugatorTests {
-  // MARK: - Shared models — the catalog under test (Phase 6A)
-
-  // The ~95 oracle-verified model exemplars now live in the app target's
-  // `ModelCatalog`, keyed by book class number. These `static let`s alias the
+  // The ~95 model exemplars now live in the app target's
+  // `ModelCatalog`, keyed by class number. These `static let`s alias the
   // catalog, so every assertion below exercises the catalog (the single source
   // of truth). `model(forClass:)` is force-unwrapped on purpose: a nil here is a
   // real regression (a class number that stopped resolving), surfaced loudly.
@@ -120,9 +116,9 @@ struct ConjugatorTests {
   static let conducirFull = ModelCatalog.model(forClass: "34")!
   static let andarFull = ModelCatalog.model(forClass: "35")!
 
-  // Phase-4 *scaffold* models that isolate one tense system in a test — not
+  // Scaffold models that isolate one tense system in a test — not
   // catalog classes (the full builds their verbs follow are 31/34/35/28). Kept
-  // local; they prove the §4.6/§4.7 machinery on its own.
+  // local; they prove the strong-preterite and future-stem machinery on its own.
   static let andar = VerbModel(base: .ar, features: [StemFeature.strongPreterite(from: "and", to: "anduv"), PreteriteEndings.spEnd])
   static let tenerSpEnd = VerbModel(base: .er, features: [StemFeature.strongPreterite(from: "ten", to: "tuv"), PreteriteEndings.spEnd])
   static let conducir = VerbModel(base: .ir, features: [
@@ -134,7 +130,7 @@ struct ConjugatorTests {
   static let tenerFDr = VerbModel(base: .er, features: [FutureEndings.fDr])
   static let decirFContract = VerbModel(base: .ir, features: [StemFeature.contractedFuture(from: "dec", to: "di"), FutureEndings.fContract])
 
-  // Phase-5b two-form-participle exemplars. freír/inscribir follow classes
+  // Two-form-participle exemplars. freír/inscribir follow classes
   // 6B-4/3-11 but carry a richer participle (frito/freído, inscrito/inscripto);
   // kept local to exercise the alternate-PP path without overstating the catalog.
   static func residue(_ pairs: [(EngineTense, String)]) -> LiteralSlotOverride {
@@ -156,10 +152,8 @@ struct ConjugatorTests {
   ])
   static let inscribir = VerbModel(base: .ir, features: [IrregularParticiple("scrib", "scrito", alternate: "scripto")])
 
-  // MARK: - Phase 6A: catalog new builds, aliases & completeness
-
   // The four classes never built as test exemplars before, and the prefix-accent
-  // aliases — all resolved through the catalog, conjugated against the oracle.
+  // aliases — all resolved through the catalog.
   static let trocar = ModelCatalog.model(forClass: "4B-1")!
   static let desosar = ModelCatalog.model(forClass: "4B-5")!
   static let avergonzar = ModelCatalog.model(forClass: "4B-6")!
@@ -223,7 +217,7 @@ struct ConjugatorTests {
     expectForm("avergonzar", model: Self.avergonzar, tense, expected)
   }
 
-  // 10 oír — full paradigm against the oracle (the never-exemplar'd -go/-y/hiatus mix).
+  // 10 oír — full paradigm (the never-exemplar'd -go/-y/hiatus mix).
   @Test("oír (10) — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["oigo", "oyes", "oye", "oímos", "oís", "oyen"]))
   func oirPresent(person: EnginePersonNumber, expected: String) {
@@ -262,7 +256,7 @@ struct ConjugatorTests {
     expectForm("oír", model: Self.oir, tense, expected)
   }
 
-  // Prefix-invariance (gate): the 10 model is now fully end-anchored (no literal
+  // Prefix-invariance: the 10 model is now fully end-anchored (no literal
   // residue), so desoír / entreoír conjugate on their own stem — including the two
   // slots that used to ride the base's literal, PI-1p (desoímos, not oímos) and
   // IMP-2p (desoíd, not oíd) — while -go/glide/PP ride along (desoigo/desoyó/desoído).
@@ -282,7 +276,7 @@ struct ConjugatorTests {
   }
 
   // The prefix-accent aliases (29-2/30-1/31-1/32-1) resolve to the parent model and
-  // ride free on the compound stem — proving no distinct model is needed (§1).
+  // ride free on the compound stem — proving no distinct model is needed.
   @Test("prefix-accent aliases conjugate on their own stem", arguments: [
     ("satisfacer", "29-2", EngineTense.presenteDeIndicativo(.firstSingular), "satisfago"),
     ("satisfacer", "29-2", .pretérito(.thirdSingular), "satisfizo"),
@@ -306,10 +300,9 @@ struct ConjugatorTests {
     expectForm(infinitive, model: model, tense, expected)
   }
 
-  // Completeness invariant (crux 2): every distinct Model # in Annex B resolves to
-  // a catalog entry, so no verb can map to a missing model. The 106 numbers are
-  // generated from `docs/annex_b_verb_models.md` (Phase 6B replaces this literal
-  // with the resource-derived set once the map ships); the count guards the list.
+  // Completeness invariant: every distinct Model # in the taxonomy resolves to
+  // a catalog entry, so no verb can map to a missing model. The count of the
+  // 106 numbers guards the list.
   static let annexBModelNumbers: [String] = [
     "1", "1-1", "1-2", "1-3", "1-4", "1-5", "1-6", "1-7", "1-8", "1-9",
     "1-10", "1-11", "1-12", "1-13", "1-14", "1-15",
@@ -335,8 +328,6 @@ struct ConjugatorTests {
   func everyAnnexBNumberResolves(classNumber: String) {
     #expect(ModelCatalog.model(forClass: classNumber) != nil, "no catalog entry for class \(classNumber)")
   }
-
-  // MARK: - cantar (regular -ar)
 
   @Test("cantar — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["canto", "cantas", "canta", "cantamos", "cantáis", "cantan"]))
@@ -394,8 +385,6 @@ struct ConjugatorTests {
     expectForm("cantar", .gerundio, "cantando")
   }
 
-  // MARK: - comer (regular -er)
-
   @Test("comer — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["como", "comes", "come", "comemos", "coméis", "comen"]))
   func comerPresent(person: EnginePersonNumber, expected: String) {
@@ -451,8 +440,6 @@ struct ConjugatorTests {
     expectForm("comer", .participioPasado, "comido")
     expectForm("comer", .gerundio, "comiendo")
   }
-
-  // MARK: - subir (regular -ir)
 
   @Test("subir — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
     ["subo", "subes", "sube", "subimos", "subís", "suben"]))
@@ -510,8 +497,6 @@ struct ConjugatorTests {
     expectForm("subir", .gerundio, "subiendo")
   }
 
-  // MARK: - Voseo (supplement)
-
   // Present 2s and affirmative imperative 2s are the only slots that differ from
   // tú; everything else falls back to the tú form.
   @Test("voseo (supplement)")
@@ -526,8 +511,6 @@ struct ConjugatorTests {
     expectForm("cantar", .pretérito(.secondSingularVos), "cantaste")
     expectForm("comer", .presenteDeSubjuntivo(.secondSingularVos), "comas")
   }
-
-  // MARK: - Genericity & validation
 
   @Test("arbitrary regular verbs conjugate")
   func arbitraryRegularVerbsConjugate() {
@@ -545,8 +528,8 @@ struct ConjugatorTests {
     }
   }
 
-  // The non-2nd-person imperatives are now **derived** from the present
-  // subjunctive (Phase 5), so they succeed where Phase 1–4 returned a failure.
+  // The non-2nd-person imperatives are **derived** from the present
+  // subjunctive.
   @Test("non-second-person imperative derives from the present subjunctive", arguments: [
     (EngineTense.imperativoAfirmativo(.thirdSingular), "cante"),
     (.imperativoAfirmativo(.firstPlural), "cantemos"),
@@ -555,8 +538,6 @@ struct ConjugatorTests {
   func nonSecondPersonImperativeDerives(tense: EngineTense, expected: String) {
     expectForm("cantar", tense, expected)
   }
-
-  // MARK: - Phase 2: orthographic features (§4.1)
 
   // -ar consonant swaps fire before -e: PR 1s + PS{all}. PI/other PR stay regular.
   @Test("tocar — presente de subjuntivo (c→qu)", arguments: zip(EnginePersonNumber.oracleOrder,
@@ -754,8 +735,6 @@ struct ConjugatorTests {
     expectForm("bruñir", model: Self.bruñir, .gerundio, "bruñendo")
   }
 
-  // MARK: - Phase 2: accent features (§4.2)
-
   @Test("enviar — presente de indicativo (i→í in STR)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["envío", "envías", "envía", "enviamos", "enviáis", "envían"]))
   func enviarPresent(person: EnginePersonNumber, expected: String) {
@@ -852,8 +831,6 @@ struct ConjugatorTests {
     expectForm("reunir", model: Self.reunir, .imperativoAfirmativo(.secondSingular), "reúne")
   }
 
-  // MARK: - Phase 2: composition (multiple features, last-wins)
-
   // a-stem touches STR; the orthographic swap touches PR 1s / PS{all}. They overlap
   // on PS (both apply, stacking) and diverge on PR 1s (swap only) and PI 1s (accent
   // only).
@@ -919,8 +896,6 @@ struct ConjugatorTests {
     expectForm("europeizar", model: Self.europeizar, .pretérito(.firstSingular), "europeicé")
   }
 
-  // MARK: - Phase 2: prefix-invariance (the end-anchored rule)
-
   // A prefixed verb whose stem isn't a listed model rides on its base's features
   // for free, because every feature operation is anchored to the end of the stem.
   @Test("prefix invariance — orthographic & accent (end-anchored)")
@@ -932,8 +907,6 @@ struct ConjugatorTests {
     expectForm("reenviar", model: Self.enviar, .presenteDeIndicativo(.firstSingular), "reenvío")
     expectForm("reenviar", model: Self.enviar, .presenteDeIndicativo(.thirdPlural), "reenvían")
   }
-
-  // MARK: - Phase 3: stem-vowel diphthongs (§4.3, STR slots)
 
   // Diphthong with no raise: the change surfaces only in STR; unstressed forms stay
   // regular.
@@ -1097,8 +1070,6 @@ struct ConjugatorTests {
     expectForm("discernir", model: Self.discernir, tense, expected)
   }
 
-  // MARK: - Phase 3: -ir weak-slot raising (§4.4) — the STR/WK split
-
   // sentir (6A) = subir + d-ie + r-ei-wk. PS{1s,2s,3s,3p} diphthong (STR),
   // PS{1p,2p} raise (WK).
   @Test("sentir — presente de indicativo", arguments: zip(EnginePersonNumber.oracleOrder,
@@ -1202,8 +1173,6 @@ struct ConjugatorTests {
   func dormirGerund() {
     expectForm("dormir", model: Self.dormir, .gerundio, "durmiendo")
   }
-
-  // MARK: - Phase 3: cross-phase composition (§4.3/§4.4 feature + a §4.1 swap)
 
   // Watch the preterite/subjunctive divergence: niegue (diphthong + g→gu in PS) vs
   // negué (PR 1s gets the swap only — PR 1s ∉ STR, so no diphthong).
@@ -1324,8 +1293,6 @@ struct ConjugatorTests {
     expectForm("ceñir", model: Self.ceñir, .gerundio, "ciñendo")
   }
 
-  // MARK: - Phase 3: prefix-invariance (the end-anchored rule for stem vowels)
-
   // A prefixed verb whose stem isn't a listed model gets the diphthong/raise on its
   // own last stem vowel, prefix riding free.
   @Test("stem-vowel prefix invariance (end-anchored)")
@@ -1337,8 +1304,6 @@ struct ConjugatorTests {
     expectForm("repetir", model: repetir, .presenteDeIndicativo(.firstSingular), "repito")
     expectForm("repetir", model: repetir, .gerundio, "repitiendo")
   }
-
-  // MARK: - Phase 4: irregular 1s + present subjunctive (§4.5)
 
   // zc: c→zc in PI 1s + PS{all}, built on the regular stem (subj-from-1s bundled).
   @Test("conocer — presente de subjuntivo (c→zc)", arguments: zip(EnginePersonNumber.oracleOrder,
@@ -1447,7 +1412,7 @@ struct ConjugatorTests {
     expectForm("construir", model: Self.construir, tense, expected)
   }
 
-  // §4.5 + §4.7 integration: g1-g for the 1s/subjunctive, f-dr for future/conditional.
+  // Integration: g1-g for the 1s/subjunctive, f-dr for future/conditional.
   @Test("salir — presente de subjuntivo (g-add)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["salga", "salgas", "salga", "salgamos", "salgáis", "salgan"]))
   func salirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
@@ -1484,8 +1449,6 @@ struct ConjugatorTests {
   func valerSlots(tense: EngineTense, expected: String) {
     expectForm("valer", model: Self.valer, tense, expected)
   }
-
-  // MARK: - Phase 4: strong / suppletive preterites (§4.6)
 
   // sp-end is base-independent: andar/estar are -ar verbs yet take the -ie- IS.
   @Test("andar — pretérito (strong stem)", arguments: zip(EnginePersonNumber.oracleOrder,
@@ -1614,8 +1577,6 @@ struct ConjugatorTests {
     expectForm("ir", model: Self.ir, .imperfectoDeSubjuntivoSe(.firstSingular), "fuese")
   }
 
-  // MARK: - Phase 4: future / conditional stems (§4.7)
-
   // f-drope drops the theme -e- (-er → -r); querer's stem ends in r, so the future
   // doubles it (querré).
   @Test("haber — futuro (f-drope)", arguments: zip(EnginePersonNumber.oracleOrder,
@@ -1685,9 +1646,7 @@ struct ConjugatorTests {
     expectForm("decir", model: Self.decirFContract, tense, expected)
   }
 
-  // MARK: - Phase 4: capstone — the whole phase in one verb (minus IMP residue)
-
-  // tener (31) = comer + d-ie + g1-g + sp-end(tuv) + f-dr. Features are in §1
+  // tener (31) = comer + d-ie + g1-g + sp-end(tuv) + f-dr. Features are in
   // precedence order, so g1-g's subj-from-1s reset wins over the diphthong in PI 1s
   // and all of PS (tengo/tenga, not *tiengo/*tienga) while the diphthong still
   // surfaces in PI{2s,3s,3p} (tienes/tiene/tienen). Every slot is its own case.
@@ -1762,8 +1721,6 @@ struct ConjugatorTests {
     expectForm("venir", model: Self.venir, tense, expected)
   }
 
-  // MARK: - Phase 4: prefix-invariance (end-anchored inserts, strong & contracted stems)
-
   @Test("phase 4 prefix invariance (end-anchored)")
   func phase4PrefixInvariance() {
     expectForm("reconocer", model: Self.conocer, .presenteDeIndicativo(.firstSingular), "reconozco")
@@ -1782,8 +1739,6 @@ struct ConjugatorTests {
     expectForm("componer", model: poner, .pretérito(.firstSingular), "compuse")
     expectForm("componer", model: poner, .futuro(.firstSingular), "compondré")
   }
-
-  // MARK: - Phase 5: imperative derivation (the last derivation rule)
 
   // usted/nosotros/ustedes derive from the present subjunctive; tú/vosotros stay
   // as the regular root; the irregular tú is scoped to .secondSingular so vos/vosotros
@@ -1832,8 +1787,6 @@ struct ConjugatorTests {
   func imperativeIr(tense: EngineTense, expected: String) {
     expectForm("ir", model: Self.ir, tense, expected)
   }
-
-  // MARK: - Phase 5: classes 19–27 (new full builds)
 
   @Test("ser — presente de indicativo (suppletive, incl. vos sos)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["soy", "eres", "es", "somos", "sois", "son"]))
@@ -2019,8 +1972,6 @@ struct ConjugatorTests {
     expectForm("querer", model: Self.querer, tense, expected)
   }
 
-  // MARK: - Phase 5: classes 28–35 (finish the Phase-4 partials with residue)
-
   @Test("decir — presente de indicativo (digo/dices…)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["digo", "dices", "dice", "decimos", "decís", "dicen"]))
   func decirPresent(person: EnginePersonNumber, expected: String) {
@@ -2201,8 +2152,6 @@ struct ConjugatorTests {
     expectForm("andar", model: Self.andarFull, tense, expected)
   }
 
-  // MARK: - Phase 5: derived-model prefix-invariance (the residue must compose)
-
   @Test("derived-accent compounds (apocopated imperative is prefix-invariant)", arguments: [
     ("obtener", EngineTense.imperativoAfirmativo(.secondSingular), "obtén"),
     ("detener", .imperativoAfirmativo(.secondSingular), "detén"),
@@ -2238,8 +2187,6 @@ struct ConjugatorTests {
     }
     expectForm(infinitive, model: model, tense, expected)
   }
-
-  // MARK: - Phase 5: §4.8 participles & defectives
 
   @Test("irregular participles", arguments: [
     ("romper", Self.romper, "roto"),
@@ -2302,8 +2249,6 @@ struct ConjugatorTests {
       Conjugator.conjugate(infinitive: "abolir", tense: tense, model: Self.abolir),
       .noForm(tense))
   }
-
-  // MARK: - Phase 5: ver / reír (the deferred residue stem classes)
 
   @Test("ver — presente de indicativo (veo/ves…)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["veo", "ves", "ve", "vemos", "veis", "ven"]))
@@ -2379,11 +2324,11 @@ struct ConjugatorTests {
     expectForm("reír", model: Self.reir, tense, expected)
   }
 
-  // Prefix-invariance (gate): the 6B-4 model is now fully end-anchored, so every
+  // Prefix-invariance: the 6B-4 model is now fully end-anchored, so every
   // compound conjugates on its OWN stem — frío (not río), deslío (not *desrío,
   // proving the stem is computed, not prepended), sonrío/sofrío/refrío/engrío. The
   // PP rides along as the regular freído (the preferred frito/sofrito variants are
-  // per-verb data, out of scope — Annex B fn15/22/24).
+  // per-verb data, out of scope).
   @Test("reír (6B-4) — prefix-invariance (freír/sonreír/sofreír/refreír/desleír/engreír)", arguments: [
     ("freír", EngineTense.presenteDeIndicativo(.firstSingular), "frío"),
     ("freír", .pretérito(.thirdSingular), "frió"),
@@ -2403,8 +2348,6 @@ struct ConjugatorTests {
   func reirPrefixInvariance(infinitive: String, tense: EngineTense, expected: String) {
     expectForm(infinitive, model: Self.reir, tense, expected)
   }
-
-  // MARK: - Phase 5b: argüir (class 18 — güy→guy)
 
   @Test("argüir — presente de indicativo (güy→guy; güi keeps the diaeresis)", arguments: zip(EnginePersonNumber.oracleOrder,
     ["arguyo", "arguyes", "arguye", "argüimos", "argüís", "arguyen"]))
@@ -2478,9 +2421,8 @@ struct ConjugatorTests {
     expectForm("reargüir", model: Self.arguir, tense, expected)
   }
 
-  // The tú imperative of a y-add verb equals PI{3s} and keeps the glide. Phase 5b
-  // added IMP{2s} to `isYAdd`, so construir's imperative is now `construye` (it
-  // was the never-tested `construe` before); voseo/vosotros stay regular.
+  // The tú imperative of a y-add verb equals PI{3s} and keeps the glide, so
+  // construir's imperative is `construye`; voseo/vosotros stay regular.
   @Test("construir — tú imperative keeps the y glide (isYAdd fix)", arguments: [
     (EngineTense.imperativoAfirmativo(.secondSingular), "construye"),
     (.imperativoAfirmativo(.secondPlural), "construid"),
@@ -2489,8 +2431,6 @@ struct ConjugatorTests {
   func construirImperative(tense: EngineTense, expected: String) {
     expectForm("construir", model: Self.construir, tense, expected)
   }
-
-  // MARK: - Phase 5b: erguir (class 6A-1 — two co-equal paradigms)
 
   // `conjugate` returns the primary (yerg-) paradigm. (PS{1p,2p} are the shared WK
   // raise irgamos/irgáis — the RAE-preferred forms — in both paradigms.)
@@ -2549,8 +2489,6 @@ struct ConjugatorTests {
   func erguirAllShared(tense: EngineTense, expected: [String]) {
     expectForms("erguir", model: Self.erguir, tense, expected)
   }
-
-  // MARK: - Phase 5b: raer / roer / yacer (variant -go/-y/-zc paradigms)
 
   // raer (9-1): PI 2s/3s/… are regular (raes/rae/raen); only 1s + PS branch.
   @Test("raer — presente de indicativo (primary raigo; rest regular)", arguments: zip(EnginePersonNumber.oracleOrder,
@@ -2643,8 +2581,6 @@ struct ConjugatorTests {
     expectForms("placer", model: Self.placer, tense, expected)
   }
 
-  // MARK: - Phase 5b: two-form participles (§4.8)
-
   @Test("two-form participles — conjugate returns the book's primary", arguments: [
     ("imprimir", Self.imprimir, "impreso"),
     ("freír", Self.freir, "frito"),
@@ -2674,8 +2610,6 @@ struct ConjugatorTests {
     expectForm("freír", model: Self.freir, tense, expected)
   }
 
-  // MARK: - Phase 5b: conjugateAll degenerates correctly (strict superset)
-
   // A regular verb and a single-form irregular (tener) return exactly [onlyForm]:
   // no spurious alternates, and element 0 == conjugate's result.
   @Test("conjugateAll — regular verb returns exactly [onlyForm]", arguments: [
@@ -2699,8 +2633,6 @@ struct ConjugatorTests {
   func conjugateAllSingleIrregularDegenerate(tense: EngineTense) {
     expectForms("tener", model: Self.tener, tense, [conjugatePrimary("tener", model: Self.tener, tense)])
   }
-
-  // MARK: - Helpers
 
   /// Conjugate one slot (optionally against an explicit model) and assert the form.
   /// Used as the body of every parameterized paradigm/slot test; `sourceLocation`
@@ -2744,8 +2676,8 @@ struct ConjugatorTests {
   }
 
   /// Conjugate one slot via the **all-forms** entry point and assert the full
-  /// ordered list (primary first, alternates in book order, de-duplicated). Order
-  /// is significant: the assertion is order-sensitive (taxonomy §5b crux 2).
+  /// ordered list (primary first, alternates in canonical order, de-duplicated). Order
+  /// is significant: the assertion is order-sensitive.
   private func expectForms(
     _ infinitive: String,
     model: VerbModel? = nil,

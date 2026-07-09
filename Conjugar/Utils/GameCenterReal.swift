@@ -5,17 +5,6 @@
 //  Created by Joshua Adams on 6/26/17.
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
-//  Rewritten July 2026 (Phase 3) to match the sibling app Konjugieren's shape and
-//  fix four interlocking bugs in the old implementation: the `authenticateHandler`
-//  was wrapped in a one-shot `withCheckedContinuation` even though GameKit invokes
-//  it repeatedly (double-resume crash on re-auth, leaked continuation when the
-//  login sheet was dismissed); the login sheet was presented on a detached
-//  `UIViewController()`; and the leaderboard identifier could be `""`/`"ERROR"`
-//  during an early submit. Now: the handler is installed exactly once and treated
-//  as a stream of auth-state changes, `isAuthenticated` is `@Observable` published
-//  state, the sheet is presented against the live window, and the leaderboard ID is
-//  loaded lazily and cached with failures logged rather than swallowed.
-//
 
 import GameKit
 import Observation

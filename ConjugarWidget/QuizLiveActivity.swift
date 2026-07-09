@@ -4,7 +4,7 @@
 //
 //  The quiz Live Activity: a Lock Screen presentation and a full Dynamic Island. The
 //  activity is driven by the app (LiveActivityManager, from Quiz.swift); this file only
-//  renders QuizActivityAttributes / ContentState. Ported from Conjuguer.
+//  renders QuizActivityAttributes / ContentState.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

@@ -5,7 +5,6 @@
 //  The "Verb of the Day" home-screen + Lock Screen widget. A StaticConfiguration
 //  whose timeline holds one entry, refreshing at the next local midnight. All content
 //  comes from the app-written snapshot; the widget never runs the engine.
-//  Ported from Conjuguer's VerbDuJourWidget.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

@@ -16,13 +16,13 @@ class Utterer {
   private static let rate: Float = 0.5
   private static let pitchMultiplier: Float = 0.8
   // The region-accent source. Injected once at launch via `setup`; defaults to the
-  // live settings so `utter` never needs an optional guard (item 16).
+  // live settings so `utter` never needs an optional guard.
   private static var settings: Settings = Current.settings
 
   // The single owner of the shared `AVAudioSession`, configured once at launch.
   // `.ambient` is the deliberate contract for a study app's feedback chirps and
-  // spoken forms: mix with the user's music/podcast and respect the silent switch
-  // (item 16). `SoundPlayer` no longer touches the session, so there is no more
+  // spoken forms: mix with the user's music/podcast and respect the silent switch.
+  // `SoundPlayer` no longer touches the session, so there is no more
   // last-writer-wins race that silenced other audio.
   static func setup(settings: Settings) {
     Utterer.settings = settings

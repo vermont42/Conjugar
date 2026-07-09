@@ -6,9 +6,9 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// The composition-aware conjugator (taxonomy §1 / build plan Phase 1).
+// The composition-aware conjugator.
 //
-// The no-`model:` entry points (Phase 6 C) resolve a verb's model from the
+// The no-`model:` entry points resolve a verb's model from the
 // verb→model map (`VerbMap` → `ModelCatalog`), falling back to a regular base
 // inferred from the ending for any verb outside the 4,818. The `model:`-taking
 // overloads take an explicit `VerbModel` and are unchanged (the tests and the
@@ -20,7 +20,7 @@ nonisolated enum Conjugator {
   static let minimumInfinitiveLength = 2
 
   /// Conjugate by verb name alone — the convenience entry point. Resolves the
-  /// verb's model from the verb→model map (Phase 6 C; see `resolvedModel`) and
+  /// verb's model from the verb→model map (see `resolvedModel`) and
   /// conjugates against it, so an irregular verb conjugates correctly without the
   /// caller naming its model. A verb outside the map falls back to a regular base
   /// inferred from the ending.
@@ -37,8 +37,7 @@ nonisolated enum Conjugator {
   /// Conjugate `infinitive` against an explicit `model` (base + ordered features).
   /// Endings come from `model.base`; the stem is the infinitive minus its two-
   /// letter ending, so a prefixed verb (`releer`, `reenviar`) conjugates on its
-  /// own stem and the model's end-anchored features ride along untouched. This is
-  /// the test entry point until the verb→model map arrives in Phase 6.
+  /// own stem and the model's end-anchored features ride along untouched.
   static func conjugate(infinitive: String, tense: EngineTense, model: VerbModel) -> Result<String, ConjugatorError> {
     guard infinitive.count >= minimumInfinitiveLength else {
       return .failure(.infinitiveTooShort)
@@ -48,18 +47,16 @@ nonisolated enum Conjugator {
     }
     // The single-form answer is the **primary** feature stack only — alternates
     // (`model.alternates`) are invisible here, so this path (and the irregularity
-    // score that reads `model.features`) is byte-for-byte unchanged by Phase 5b.
+    // score that reads `model.features`) is unaffected by them.
     return conjugateOne(infinitive: infinitive, tense: tense, base: model.base, features: model.features)
   }
 
-  // MARK: - All accepted forms (Phase 5b)
-
   /// All accepted forms for a slot — the **primary** form plus any alternates,
-  /// primary first, in the book's preference order, de-duplicated. For a regular
+  /// primary first, in preference order, de-duplicated. For a regular
   /// verb or a single-form irregular this is exactly `[conjugate(...)]`; the path
   /// is a strict superset of `conjugate` that degenerates correctly.
   ///
-  /// Two sources of alternates compose here (taxonomy §5b):
+  /// Two sources of alternates compose here:
   ///   1. **Variant paradigms** (`model.alternates`): each is a whole alternate
   ///      feature stack, composed through the *same* `conjugateOne` machinery and
   ///      unioned per slot (erguir yergo/irgo, raer raigo/rayo, roer roo/roigo/royo,
@@ -68,7 +65,7 @@ nonisolated enum Conjugator {
   ///      `IrregularParticiple.alternate` (impreso/imprimido, frito/freído, the
   ///      escribir `-scripto` family), surfaced only in the PP slot.
   ///
-  /// The primary element **must** equal `conjugate`'s result (crux 1); it is in
+  /// The primary element **must** equal `conjugate`'s result; it is in
   /// fact produced by the identical call. An alternate stack that fails/suppresses
   /// for a given slot is simply skipped (it contributes no form there).
   static func conjugateAll(infinitive: String, tense: EngineTense) -> Result<[String], ConjugatorError> {
@@ -118,29 +115,27 @@ nonisolated enum Conjugator {
     }
 
     // Stable dedup: keep first occurrence, so order is primary then alternates in
-    // book-preference order, and coincident slots collapse to a single form.
+    // preference order, and coincident slots collapse to a single form.
     var seen = Set<String>()
     return .success(forms.filter { seen.insert($0).inserted })
   }
-
-  // MARK: - The resolver (Phase 6 C)
 
   /// Resolve a verb's model for the no-`model:` entry points: consult the
   /// verb→model map (`VerbMap`, loaded from `verbModelMap.xml`) — verb → its
   /// default class number → the `ModelCatalog` model — so an irregular verb
   /// conjugates correctly by name, and a prefixed compound (detener, reconocer)
-  /// rides its base's model on its own stem (the end-anchored §1 payoff).
+  /// rides its base's model on its own stem (the end-anchored payoff).
   ///
   /// **Fallback policy:** a verb **not** in the map (a typo, or a verb outside the
   /// 4,818 — `hablar`, `vivir`, …) falls back to a **regular base inferred from the
-  /// ending**, today's pre-Phase-6 behavior. This is the safe, useful default: an
-  /// unknown verb that conjugates regularly still works, and every pre-Phase-6
-  /// no-`model:` test stays green. (The alternative — a `.unknownVerb` error — was
+  /// ending**. This is the safe, useful default: an unknown verb that conjugates
+  /// regularly still works, and every no-`model:` test stays green. (The
+  /// alternative — a `.unknownVerb` error — was
   /// rejected: it would break those tests and gives callers nothing useful.) The
   /// same fallback covers the should-never-happen case of a class number the map
   /// carries but the catalog lacks (the catalog-completeness test rules it out).
   ///
-  /// **Homonym policy (crux 4):** the map stores **both** senses of the 4 homonyms
+  /// **Homonym policy:** the map stores **both** senses of the 4 homonyms
   /// (apostar/asolar/aterrar/atestar); the resolver conjugates the **default
   /// sense** — `entry.classNumber`, the first/everyday sense (apostar→bet 4B,
   /// asolar→raze 4B, aterrar→terrify 1, atestar→stuff 4A). Both senses remain
@@ -170,7 +165,7 @@ nonisolated enum Conjugator {
     let tense = canonicalized(tense)
     let stem = String(infinitive.dropLast(2))
 
-    // Defectivity (taxonomy §5 abolir): a slot a feature declares formless has no
+    // Defectivity (abolir): a slot a feature declares formless has no
     // composition at all — report it before reaching the ending tables.
     if features.contains(where: { $0.suppresses(tense) }) {
       return .failure(.noForm(tense))
@@ -179,7 +174,7 @@ nonisolated enum Conjugator {
     guard let ending = base.ending(for: tense) else {
       // The only slot a regular root legitimately lacks is an affirmative
       // imperative for a non-2nd-person; those are now **derived** (usted/
-      // ustedes/nosotros from the present subjunctive, taxonomy §1).
+      // ustedes/nosotros from the present subjunctive).
       if case let .imperativoAfirmativo(personNumber) = tense {
         return deriveImperative(personNumber: personNumber, stem: stem, base: base, features: features)
       }
@@ -214,11 +209,11 @@ nonisolated enum Conjugator {
   }
 
   /// Derive the affirmative imperative for usted (3s) / nosotros (1p) / ustedes
-  /// (3p) — the persons the regular paradigm lacks (taxonomy §1 imperative row).
-  /// They are the **present subjunctive** of the same person, so every PS
+  /// (3p) — the persons the regular paradigm lacks. They are the **present
+  /// subjunctive** of the same person, so every PS
   /// irregularity rides through for free (tenga, pongamos, conduzcan, vayan, sea,
-  /// dé). Crucially this reuses the *computed* PS (`compose`), not a re-derivation
-  /// (crux 1). A trailing imperative-slot residue may then override it — the one
+  /// dé). Crucially this reuses the *computed* PS (`compose`), not a re-derivation.
+  /// A trailing imperative-slot residue may then override it — the one
   /// case being `ir`'s nosotros = **vamos** (not vayamos).
   private static func deriveImperative(personNumber: EnginePersonNumber, stem: String, base: RegularRoot, features: [ConjugationFeature]) -> Result<String, ConjugatorError> {
     guard let psEnding = base.ending(for: .presenteDeSubjuntivo(personNumber)) else {
@@ -237,8 +232,6 @@ nonisolated enum Conjugator {
     return .success(form)
   }
 
-  // MARK: - App-facing accessors
-
   /// The future root ("raíz futura") the Verb screen displays: the stem the whole
   /// future/conditional system is built on (hablar → "hablar", tener → "tendr",
   /// hacer → "har"). The future 1s always ends in the accented marker `-é`
@@ -247,8 +240,8 @@ nonisolated enum Conjugator {
     conjugate(infinitive: infinitive, tense: .futuro(.firstSingular)).map { String($0.dropLast()) }
   }
 
-  /// Whether any slot of this verb's paradigm has no form at all (taxonomy §5
-  /// abolir). True exactly when the resolved model carries a feature that
+  /// Whether any slot of this verb's paradigm has no form at all (abolir). True
+  /// exactly when the resolved model carries a feature that
   /// suppresses at least one slot.
   static func isDefective(infinitive: String) -> Bool {
     guard let base = RegularRoot(infinitive: infinitive) else {
@@ -305,7 +298,7 @@ nonisolated enum Conjugator {
     return slots
   }
 
-  /// Composition seam (taxonomy §1): start from the regular `(stem, ending)` pair
+  /// Composition seam: start from the regular `(stem, ending)` pair
   /// and thread it through the model's features in listed order. Each feature
   /// that `applies(to:)` this slot rewrites the pair, seeing the prior features'
   /// result — so orthogonal changes stack (`a-stem` then `o-car` → `ahínque`) and
@@ -313,7 +306,7 @@ nonisolated enum Conjugator {
   /// so prefixes ride along untouched. With no features this returns the regular
   /// `stem + ending`.
   private static func compose(stem: String, ending: String, tense: EngineTense, features: [ConjugationFeature]) -> String {
-    // The regular base stem, captured before any feature runs, so the §4.5
+    // The regular base stem, captured before any feature runs, so the
     // 1s/subjunctive features and the residue stem features can rebuild from it
     // (the subj-from-1s reset and prefix-invariant strong/contracted stems).
     let regularStem = stem

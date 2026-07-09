@@ -2,7 +2,7 @@
 //  TutorTestView.swift
 //  Conjugar
 //
-//  A batch harness for the conjugation tutor, ported from Conjuguer. Runs a fixed
+//  A batch harness for the conjugation tutor. Runs a fixed
 //  set of queries (Spanish or English, chosen by the system language), one per
 //  fresh session, and shows/share-exports the results — a quick way to eyeball
 //  whether the on-device model + `ConjugationTool` behave across tenses, off-topic

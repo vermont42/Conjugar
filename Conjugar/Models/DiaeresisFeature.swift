@@ -6,11 +6,11 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// Phase 5b machinery — the **GÜY → GUY** diaeresis drop (oracle class 18 argüir,
-// "like construir except GÜY → GUY").
+// The **GÜY → GUY** diaeresis drop (class 18 argüir, "like construir except
+// GÜY → GUY").
 //
 // argüir is construir's build (`y-add` + `o-yhiatus`) on the stem `argü`. The
-// book's one extra rule: when the glide `y` lands immediately after `gü`, the
+// one extra rule: when the glide `y` lands immediately after `gü`, the
 // diaeresis is dropped — `argüy-` → `arguy-` (arguyo, arguyendo, arguyera) — but a
 // plain `güi` keeps it (argüimos, argüí, argüido). The crux is that the `güy`
 // cluster can **span the stem↔ending boundary**: in `arguyó`/`arguyendo` the `ü`

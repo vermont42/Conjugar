@@ -11,8 +11,7 @@ import Testing
 
 // Swift Testing (not XCTest): under MainActor default isolation, XCTest's
 // teardown deallocates the local @MainActor `Settings` via the isolated-deinit
-// path, which crashes on the Xcode 26.3 toolchain. Swift Testing sidesteps that,
-// matching Konjugieren's all-Swift-Testing suite.
+// path, which crashes on the Xcode 26.3 toolchain. Swift Testing sidesteps that.
 @Suite("Settings")
 @MainActor
 struct SettingsTests {

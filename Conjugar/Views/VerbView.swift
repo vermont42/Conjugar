@@ -4,7 +4,7 @@
 //
 //  The SwiftUI verb-detail screen, replacing the UIKit VerbVC/VerbUIV. Metadata
 //  pills over conjugation-section cards with leading accent bars and a two-column
-//  pronoun | form grid (audit §4); irregular spans render red, Spanish forms are
+//  pronoun | form grid; irregular spans render red, Spanish forms are
 //  serif, and every form speaks on tap. Reuses `ConjugationDataSource` to build
 //  the exact same rows the UIKit screen showed.
 //  Copyright © 2026 Josh Adams. All rights reserved.
@@ -57,8 +57,6 @@ struct VerbView: View {
     .onAppear { Current.analytics.recordVisitation(viewController: "\(VerbView.self)") }
   }
 
-  // MARK: - Header
-
   private var metadataHeader: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
       if !gloss.isEmpty {
@@ -94,8 +92,6 @@ struct VerbView: View {
     }
   }
 
-  // MARK: - Etymology
-
   private func etymologyCard(_ text: String) -> some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
       Text(L.Verb.etymology)
@@ -109,8 +105,6 @@ struct VerbView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
     .card()
   }
-
-  // MARK: - Conjugation cards
 
   private func conjugationCard(_ section: ConjugationSection) -> some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
@@ -148,8 +142,6 @@ struct VerbView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
   }
-
-  // MARK: - Building blocks
 
   private static func form(_ verb: String, _ tense: DisplayTense) -> String {
     if case .success(let value) = TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: .none) {

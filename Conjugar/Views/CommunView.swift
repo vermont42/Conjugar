@@ -6,7 +6,7 @@
 //  message shown modally at launch. Replaces the UIKit CommunVC/CommunUIV. Carded
 //  content on the app surface, a discoverable toolbar dismiss, a conditionally-
 //  omitted image, and the type-specific buttons routed through the shared button
-//  styles (audit §12). Reuses `CommunViewModel` for the display logic.
+//  styles. Reuses `CommunViewModel` for the display logic.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

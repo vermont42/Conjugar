@@ -3,7 +3,7 @@
 //  Conjugar
 //
 //  The action behind the Random Verb control-center widget. Opens the app and stashes
-//  a deeplink the app drains on activation. Ported from Conjuguer.
+//  a deeplink the app drains on activation.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

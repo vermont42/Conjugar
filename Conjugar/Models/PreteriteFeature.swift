@@ -6,9 +6,9 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// Taxonomy §4.6 — strong / suppletive preterites. A strong preterite **replaces
+// Strong / suppletive preterites. A strong preterite **replaces
 // the endings** of `PR{all}`, and because the imperfect subjunctives derive from
-// the preterite (the §1 "strong preterite" derivation rule), it replaces the
+// the preterite (the "strong preterite" derivation rule), it replaces the
 // `IS{all}` endings too. The *stem* a strong preterite runs on is per-verb
 // residue (`StemFeature.strongPreterite`); this feature owns only the **endings**.
 //

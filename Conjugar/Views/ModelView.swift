@@ -5,7 +5,7 @@
 //  The SwiftUI model-detail screen, replacing the UIKit ModelVC/ModelUIV/
 //  ModelHeaderUIV. A carded header (gloss + tinted metadata pills + non-finite
 //  forms), a horizontally-scrollable pronoun-by-tense conjugation grid whose
-//  irregular spans render red (with a visible scroll indicator — audit §10), and
+//  irregular spans render red (with a visible scroll indicator), and
 //  the "verbs using this model" list, each row linking to the native VerbView.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
@@ -20,8 +20,8 @@ struct ModelView: View {
   /// enclosing view reliably reaches its String destination from this pushed view.
   let onSelectVerb: (String) -> Void
 
-  /// The grid's tense rows: the Spanish analogs of Conjuguer's five endings-grid
-  /// tenses, plus futuro (Spanish concentrates irregularity in the future stem).
+  /// The grid's tense rows: five core tenses, plus futuro (Spanish concentrates
+  /// irregularity in the future stem).
   static let gridTenses: [(label: String, tense: DisplayTense)] = [
     ("Ind. Presente", .presenteDeIndicativo),
     ("Imperativo", .imperativoPositivo),
@@ -31,7 +31,7 @@ struct ModelView: View {
     ("Subj. Imperfecto", .imperfectoDeSubjuntivo1)
   ]
 
-  /// The grid's person columns, in the book's row order.
+  /// The grid's person columns, in canonical order.
   static let gridPersons: [DisplayPersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
 
   private let gloss: String
@@ -39,7 +39,7 @@ struct ModelView: View {
   private let participio: String
   private let gerundio: String
   private let entries: [VerbMapEntry]
-  /// The 6×6 grid's conjugated forms, precomputed once in `init` (item 14) — indexed
+  /// The 6×6 grid's conjugated forms, precomputed once in `init` — indexed
   /// `[tenseIndex][personIndex]` to parallel `gridTenses` / `gridPersons`, `nil` where a
   /// slot has no form. Previously `gridCell` re-conjugated all 36 slots on every `body`.
   private let gridForms: [[String?]]
@@ -75,7 +75,7 @@ struct ModelView: View {
 
         LazyVStack(spacing: 0) {
           ForEach(Array(entries.enumerated()), id: \.element.infinitive) { index, entry in
-            // A `Button` wrapper (item 18) gives these rows `.isButton` semantics and
+            // A `Button` wrapper gives these rows `.isButton` semantics and
             // a press highlight; the closure-based navigation (rather than
             // `NavigationLink(value:)`) is kept because appending to the enclosing
             // stack's path from this pushed view reliably reaches the String
@@ -102,8 +102,6 @@ struct ModelView: View {
       Current.analytics.recordVisitation(viewController: "\(ModelView.self)")
     }
   }
-
-  // MARK: - Header
 
   private var headerCard: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
@@ -142,8 +140,6 @@ struct ModelView: View {
         .speakOnTapFlash(ConjugationText.plain(form))
     }
   }
-
-  // MARK: - Conjugation grid
 
   private var gridCard: some View {
     ScrollView(.horizontal) {

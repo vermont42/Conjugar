@@ -5,8 +5,7 @@
 //  The one place the conjugation engine is invoked for widget purposes. Deterministically
 //  picks a verb of the day and a daily quiz question (both keyed on the date), conjugates
 //  them through the app's own engine (VerbMap + TenseBridge), and writes the result as
-//  JSON into the App Group container for the widget to render. Ported from Conjuguer's
-//  WidgetSnapshotWriter and adapted for Spanish.
+//  JSON into the App Group container for the widget to render.
 //
 //  Everything here is `nonisolated`: the engine is pure value-type computation, so the
 //  snapshot can be built off the main actor.
@@ -41,11 +40,9 @@ nonisolated enum WidgetSnapshotWriter {
     .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo
   ]
 
-  // MARK: - Entry points
-
   /// Rebuild the snapshot for today and ask WidgetKit to reload every timeline.
   ///
-  /// Date-gated (item 14): the verb/quiz content changes once a day, so when the
+  /// Date-gated: the verb/quiz content changes once a day, so when the
   /// snapshot already on disk is stamped with today's date this is a no-op — skipping
   /// the rewrite and, crucially, the `reloadAllTimelines()` that would otherwise spend
   /// WidgetKit's refresh budget on every foreground activation for unchanged content.
@@ -87,8 +84,6 @@ nonisolated enum WidgetSnapshotWriter {
       return false
     }
   }
-
-  // MARK: - Snapshot construction
 
   static func makeSnapshot(for date: Date) -> WidgetSnapshot? {
     let calendar = Calendar.current
@@ -140,8 +135,6 @@ nonisolated enum WidgetSnapshotWriter {
     return WidgetParadigm(tenseDisplay: tense.titleCaseName, conjugations: conjugations)
   }
 
-  // MARK: - Quiz question
-
   private static func makeQuizQuestion(infinitive: String, dayOffset: Int, dateString: String) -> WidgetQuizQuestion {
     let tense = quizTenses[abs(dayOffset) % quizTenses.count]
     let person = paradigmPersons[abs(dayOffset / quizTenses.count) % paradigmPersons.count]
@@ -190,8 +183,6 @@ nonisolated enum WidgetSnapshotWriter {
     return result
   }
 
-  // MARK: - Engine
-
   /// A marked (UPPERCASE-irregular) conjugated form, or nil if the engine can't produce it.
   private static func markedForm(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> String? {
     if case let .success(form) = TenseBridge.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber) {
@@ -199,8 +190,6 @@ nonisolated enum WidgetSnapshotWriter {
     }
     return nil
   }
-
-  // MARK: - Dates
 
   private static func daysSinceReference(to date: Date, calendar: Calendar) -> Int {
     let today = calendar.startOfDay(for: date)

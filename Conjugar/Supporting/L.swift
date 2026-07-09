@@ -10,7 +10,7 @@ import Foundation
 
 nonisolated enum L {
   enum Accessibility {
-    // The VoiceOver action name for a tappable conjugation form (item 18): the tap
+    // The VoiceOver action name for a tappable conjugation form: the tap
     // gesture that speaks a form is skipped under VoiceOver, so an accessibility
     // action exposes the same "hear it pronounced" affordance.
     static var speak: String {
@@ -442,8 +442,7 @@ nonisolated enum L {
     }
 
     // A deliberately Spanish exhortation appended after `noRating`, kept Spanish in
-    // both localizations by design (item 20). Formerly a hardcoded literal in
-    // RatingsFetcher.
+    // both localizations by design.
     static var beFirst: String {
       String(localized: "Settings.beFirst")
     }
@@ -548,7 +547,7 @@ nonisolated enum L {
   }
 
   // The Tip protocol's `title`/`message` properties are nonisolated, so these
-  // accessors must be too (matching Conjuguer's L.Tips).
+  // accessors must be too.
   enum Tips {
     nonisolated static var tryQuizTitle: String {
       String(localized: "Tips.tryQuizTitle")

@@ -6,7 +6,7 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// Taxonomy §4.1 — orthographic (spelling-only) features. Two sub-kinds:
+// Orthographic (spelling-only) features. Two sub-kinds:
 //
 //   1. Stem-final consonant swaps triggered by the *following* ending vowel
 //      (`StemFinalConsonant`): c↔qu, g↔gu, gu↔gü/g, z↔c, c↔z, qu↔c. These keep
@@ -17,8 +17,6 @@
 //
 // All operations are end-anchored (see `ConjugationFeature`), so they ride free on
 // prefixed verbs (`reconocer`, `releer`, …).
-
-// MARK: - Stem-final consonant swaps (o-car … o-quc)
 
 /// The two slot patterns a consonant swap fires in. A consonant's spelling has
 /// to change exactly when the ending's leading vowel crosses the front/back line.
@@ -61,7 +59,7 @@ nonisolated struct StemFinalConsonant: ConjugationFeature {
     return (String(stem.dropLast(from.count)) + to, ending)
   }
 
-  // The §4.1 catalog. `-ar` swaps fire before -e; `-er`/`-ir` swaps before -a/-o.
+  // The consonant-swap catalog. `-ar` swaps fire before -e; `-er`/`-ir` swaps before -a/-o.
   static let oCar = StemFinalConsonant(from: "c", to: "qu", trigger: .beforeFrontE)   // tocar → toqué, toque
   static let oGar = StemFinalConsonant(from: "g", to: "gu", trigger: .beforeFrontE)   // pagar → pagué, pague
   static let oGuar = StemFinalConsonant(from: "gu", to: "gü", trigger: .beforeFrontE) // averiguar → averigüé
@@ -71,8 +69,6 @@ nonisolated struct StemFinalConsonant: ConjugationFeature {
   static let oGug = StemFinalConsonant(from: "gu", to: "g", trigger: .beforeBackAO)   // distinguir → distingo
   static let oQuc = StemFinalConsonant(from: "qu", to: "c", trigger: .beforeBackAO)   // delinquir → delinco
 }
-
-// MARK: - i/y at the stem↔ending junction (o-yhiatus, o-llñ)
 
 /// The slots both junction features share: unstressed -i- of the ending sits
 /// between the stem-final vowel/palatal and the next vowel. `PR{3s,3p}` + `GER` +
@@ -129,8 +125,8 @@ nonisolated struct IYHiatus: ConjugationFeature {
     // Accent slot: the written accent marks a true hiatus, so it fires **only
     // when the -i- follows a strong vowel (a/e/o)** — leíste/caído/oímos. After
     // a weak vowel there is no hiatus, so the -uir verbs take no accent:
-    // construiste / construido (Phase 4 §4.5 crux). This keeps the accent
-    // end-anchored to the stem's last vowel.
+    // construiste / construido. This keeps the accent end-anchored to the
+    // stem's last vowel.
     let strongVowels: Set<Character> = ["a", "e", "o"]
     guard let last = stem.last, strongVowels.contains(last) else { return (stem, ending) }
     return (stem, "í" + rest)

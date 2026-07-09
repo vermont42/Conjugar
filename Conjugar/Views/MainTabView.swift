@@ -3,8 +3,8 @@
 //  Conjugar
 //
 //  The SwiftUI-first app shell that replaces the UIKit MainTabBarVC, created
-//  during the SwiftUI migration, July 2026. As of the Step 4 completion every tab
-//  is a native SwiftUI screen; the transitional UIKit-hosting wrapper is gone.
+//  during the SwiftUI migration, July 2026. Every tab is a native SwiftUI screen;
+//  the transitional UIKit-hosting wrapper is gone.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -18,7 +18,7 @@ struct MainTabView: View {
   var body: some View {
     TabView(selection: $router.selectedTab) {
       // Tab(_:image:value:) builders (iOS 18+) replace the soft-deprecated
-      // .tabItem/.tag pair (Phase 7 / item 17). Models/Info/Settings are stock SF
+      // .tabItem/.tag pair. Models/Info/Settings are stock SF
       // Symbols; the dancer (Browse) and bull (Quiz) are still custom line-art bitmaps.
       // Tab bars auto-substitute the .fill variant of an SF Symbol, which would clash
       // with the outline dancer/bull — so the three symbol tabs use the explicit-label
@@ -61,7 +61,7 @@ struct MainTabView: View {
     .task {
       // Widgets show today's verb/quiz; clean up any Live Activity left by a prior run.
       LiveActivityManager.endAll()
-      // Off-main (item 14): refresh() parses verbModelMap.xml + runs ~50 conjugations;
+      // Off-main: refresh() parses verbModelMap.xml + runs ~50 conjugations;
       // everything it touches is nonisolated/Sendable, so it belongs off the launch path.
       Task.detached { WidgetSnapshotWriter.refresh() }
       await presentCommunIfNeeded()
@@ -70,8 +70,7 @@ struct MainTabView: View {
     .onChange(of: scenePhase) { _, phase in
       guard phase == .active else { return }
       // The scene lifecycle — not AppDelegate.applicationDidBecomeActive, which
-      // never fires under WindowGroup — is where became-active analytics live now
-      // (Phase 4 / item 4).
+      // never fires under WindowGroup — is where became-active analytics live now.
       Current.analytics.recordBecameActive()
       Task.detached { WidgetSnapshotWriter.refresh() }
       drainPendingDeeplink()

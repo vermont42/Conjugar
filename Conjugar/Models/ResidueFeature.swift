@@ -6,9 +6,8 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// Phase 5 machinery — the **per-verb residue** (taxonomy §5/§6.4: "residue *is* a
-// feature") plus the two cross-cutting derivations the earlier phases deferred
-// (irregular participles §4.8, and — in `Conjugator` — the imperative). Each
+// The **per-verb residue** (residue *is* a feature) plus two cross-cutting
+// derivations: irregular participles, and — in `Conjugator` — the imperative. Each
 // type here is a `ConjugationFeature`, so the residue composes through the same seam as the
 // productive features and obeys the same last-wins rule; residue features go
 // **at the end** of a model's feature list.
@@ -17,7 +16,7 @@
 //   - `LiteralSlotOverride` — the catch-all: map specific slots to a literal
 //     final form (the suppletive presents soy/voy/he…, the suppletive imperfects
 //     era-/iba-, the accent residue dé/prevé…, the gerund residue yendo/pudiendo).
-//   - `IrregularParticiple` — the §4.8 past-participle attribute (puesto, hecho,
+//   - `IrregularParticiple` — the past-participle attribute (puesto, hecho,
 //     dicho, visto…), expressed as an **end-anchored** stem swap so it rides free
 //     on prefixes (componer → compuesto, descubrir → descubierto).
 //   - `ApocopatedImperative` — the irregular tú imperatives (ten/pon/sal/ven and,
@@ -29,8 +28,6 @@
 // Two tiny orthographic-residue features round it out: `RunningStemConsonantSwap`
 // (hacer's PR 3s `hizo`, prefix-invariant to satisfizo) and `CollapseDoubleI`
 // (reír's raised stem-i meeting an ending-i: ri+ió → rió, ri+iendo → riendo).
-
-// MARK: - Literal slot override (the catch-all residue)
 
 /// Maps specific `(tense, person)` slots — and the person-less PP/GER — to a
 /// **literal final form**, replacing whatever composition produced (it sits last
@@ -59,24 +56,22 @@ nonisolated struct LiteralSlotOverride: ConjugationFeature {
   }
 }
 
-// MARK: - Irregular participle (§4.8)
-
-/// The past participle as a per-model attribute (Conjuguer's `ep`). Encoded as an
+/// The past participle as a per-model attribute. Encoded as an
 /// **end-anchored stem swap** in the PP slot: replace the trailing `coreSuffix`
 /// of the stem with `participle` and drop the regular `-ido`/`-ado` ending. That
 /// keeps it prefix-invariant — `pon→puesto` gives `componer → compuesto`,
 /// `cubr→cubierto` gives `descubrir → descubierto`, `v→visto` gives
 /// `prever → previsto` — and, being its own feature *type*, it stays countable for
-/// the future irregularity score (decision §6.5). A second accepted form may be
+/// the future irregularity score. A second accepted form may be
 /// carried in `alternate` (impreso/imprimido, frito/freído); the conjugator emits
-/// the book's primary `participle`.
+/// the primary `participle`.
 nonisolated struct IrregularParticiple: ConjugationFeature {
   /// The trailing slice of the regular stem the irregular participle replaces
   /// (`pon`, `hac`, `scrib`, `solv`, `v`…). Chosen so the prefix rides free.
   let coreSuffix: String
-  /// The book's primary irregular participle (`puesto`, `hecho`, `escrito`…).
+  /// The primary irregular participle (`puesto`, `hecho`, `escrito`…).
   let participle: String
-  /// A second accepted participle, where the book lists one (`imprimido`,
+  /// A second accepted participle, where one exists (`imprimido`,
   /// `freído`). Not emitted by the conjugator; recorded for completeness/scoring.
   let alternate: String?
 
@@ -105,15 +100,13 @@ nonisolated struct IrregularParticiple: ConjugationFeature {
   }
 }
 
-// MARK: - Irregular tú imperative (apocopated)
-
-/// The irregular tú imperatives that are the **bare regular stem** (taxonomy §1
-/// imperative row + §5 residue): `ten`, `pon`, `sal`, `ven`, and — with a c→z
+/// The irregular tú imperatives that are the **bare regular stem**: `ten`, `pon`,
+/// `sal`, `ven`, and — with a c→z
 /// finish — `haz`. Built from `regularStem` (so a diphthong/raise is reset:
 /// tener's STR `tien-` becomes `ten`), targeting **`.secondSingular` only** so the
-/// regular vos (`tené`) and vosotros (`tened`) are untouched (crux 2).
+/// regular vos (`tené`) and vosotros (`tened`) are untouched.
 ///
-/// The monosyllable→polysyllable accent shift (crux 3) is intrinsic, not residue:
+/// The monosyllable→polysyllable accent shift is intrinsic, not residue:
 /// the bare stem takes a written accent on its last vowel exactly when it is
 /// polysyllabic **and** ends in a vowel, `n`, or `s` (the cases Spanish stress
 /// rules would otherwise mis-read). So the bare verbs stay accentless (`ten`,
@@ -183,12 +176,10 @@ nonisolated struct ApocopatedImperative: ConjugationFeature {
   }
 }
 
-// MARK: - Defectivity (abolir)
-
 /// Declares the slots that have **no form** for a defective verb. Never rewrites
 /// the running pair (it is inert as a `ConjugationFeature`); it only answers `suppresses`,
 /// which the conjugator checks before composing and turns into a `.noForm`
-/// failure. abolir (§5 3-14): only the slots whose post-stem vowel is `-i-` (or
+/// failure. abolir: only the slots whose post-stem vowel is `-i-` (or
 /// the diphthongs `-ie-`/`-io-`) exist; the stressed-stem present, the whole
 /// present subjunctive, and the imperatives derived from it do not.
 nonisolated struct DefectiveFeature: ConjugationFeature {
@@ -230,8 +221,6 @@ nonisolated struct DefectiveFeature: ConjugationFeature {
   }
 }
 
-// MARK: - Tiny orthographic residues
-
 /// Swap a trailing consonant on the **running** stem in a given slot set —
 /// distinct from `StemFeature`, which rebuilds from the *regular* base. Used for
 /// hacer's `hizo`: after the strong stem is `hic-`, swap c→z in PR 3s only
@@ -253,7 +242,7 @@ nonisolated struct RunningStemConsonantSwap: ConjugationFeature {
   static let hizo = RunningStemConsonantSwap(from: "c", to: "z", slots: { $0 == .pretérito(.thirdSingular) })
 }
 
-/// reír (6B-4): once `r-ei-str`/`r-ei-wk` have raised the stem to `ri-`, the
+/// reír: once `r-ei-str`/`r-ei-wk` have raised the stem to `ri-`, the
 /// stem-final `-i-` collides with an ending that begins in `-i-`. Collapse the
 /// double i (drop the ending's leading `-i-`) in the i-glide slots: ri+ió → rió,
 /// ri+ieron → rieron, ri+iendo → riendo, ri+iera → riera. Mirrors `o-llñ`'s

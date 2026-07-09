@@ -11,13 +11,13 @@ import Foundation
 // Supplies an etymology for a verb, keyed by infinitive, loaded from the bundled
 // `Etymologies.json`. That file is keyed language → infinitive → text; the text uses
 // single-tilde `~bold~` markup (bold every cited form/root/cognate, nothing else) and
-// `\n\n` paragraph breaks. Entries are produced, a batch per session, by the pipeline in
-// `prompts/etymology-pipeline.md` (English + Spanish for every verb). English is the
+// `\n\n` paragraph breaks. Entries are produced, a batch per session, by an offline
+// generation pipeline (English + Spanish for every verb). English is the
 // fallback: `text(for:)` returns the `"en"` entry when the device language has no table.
 //
 // NOTE (wiring): this reads the JSON but is not yet displayed. Rendering it under the
 // conjugations in `VerbView` (a `~…~`→bold attributed-string renderer + an etymology card)
-// is the remaining lifecycle step — see the Status section of `etymology-pipeline.md`.
+// is the remaining lifecycle step.
 nonisolated enum Etymology {
   private static let cache = EtymologyCache()
 

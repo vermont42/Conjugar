@@ -4,7 +4,7 @@
 //
 //  Exercises the shared browse-filter seam: empty-query identity, matching,
 //  no-match empties, and the case/diacritic-insensitive predicate the browse
-//  screens use. Since item 3 made `BrowseSearch.results` a pure function (the
+//  screens use. Because `BrowseSearch.results` is a pure function (the
 //  no-results sound moved to the callers' `.onChange` handlers), this suite is
 //  nonisolated and needs no `playSoundIfEmpty` argument.
 //  Copyright © 2026 Josh Adams. All rights reserved.

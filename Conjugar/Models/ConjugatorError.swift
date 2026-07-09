@@ -13,12 +13,12 @@ enum ConjugatorError: Error, Equatable {
   /// Infinitive does not end in -ar, -er, or -ir/-ír. Associated value is the ending.
   case invalidInfinitiveEnding(String)
   /// The requested affirmative-imperative person has no form in the regular
-  /// paradigm yet (usted/nosotros/ustedes are derived from the subjunctive in a
-  /// later phase). Retained as the safety fallback for the derivation; in Phase 5
-  /// every non-defective imperative person now resolves.
+  /// paradigm (usted/nosotros/ustedes are derived from the subjunctive).
+  /// Retained as the safety fallback for the derivation; every non-defective
+  /// imperative person now resolves.
   case imperativeNotAvailable(EnginePersonNumber)
   /// The requested slot has **no form at all** for this verb — a *defective*
-  /// verb (Phase 5, taxonomy §5 abolir: only the slots whose post-stem vowel is
+  /// verb (abolir: only the slots whose post-stem vowel is
   /// -i-/-ie-/-io- exist). Associated value is the missing slot.
   case noForm(EngineTense)
 }

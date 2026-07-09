@@ -9,8 +9,7 @@
 // The engine-side tense model; the UI's `DisplayTense` vocabulary maps onto it
 // via `TenseBridge`.
 //
-// Scope: the ten simple / non-finite tenses the verified oracle covers
-// (spanish_models.md slot vocabulary §2). The nine compound tenses (haber +
+// Scope: the ten simple / non-finite tenses. The nine compound tenses (haber +
 // participle) are mechanical and are composed outside the engine by
 // `CompoundTense`.
 nonisolated enum EngineTense: Equatable {

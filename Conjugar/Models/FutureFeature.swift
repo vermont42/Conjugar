@@ -6,13 +6,13 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// Taxonomy §4.7 — irregular future / conditional. One future-stem override drives
-// the **whole** future *and* conditional (the §1 "future stem" derivation rule):
+// Irregular future / conditional. One future-stem override drives
+// the **whole** future *and* conditional (the "future stem" derivation rule):
 // they share the stem and differ only in the endings. Because `RegularRoot`'s
 // FU/CO endings bake in the theme vowel (`-eré`, `-ería`, …), the lowest-risk
 // realization is an **ending rewrite** over `FU{all}` + `CO{all}` that strips the
-// theme vowel and emits the irregular connector — uniform with how §4.6 rewrites
-// preterite endings. The stem stays the regular base (which, in FU/CO, is never
+// theme vowel and emits the irregular connector — uniform with how the strong
+// preterites rewrite their endings. The stem stays the regular base (which, in FU/CO, is never
 // touched by a diphthong/raise — STR/WK exclude the future system):
 //
 //   - `f-drope` (drop the theme -e-, -er → -r): connector "" → hab+**ré** = habré,

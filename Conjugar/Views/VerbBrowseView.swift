@@ -5,8 +5,7 @@
 //  The SwiftUI Browse Verbs list, replacing the UIKit BrowseVerbsVC/BrowseVerbsUIV/
 //  VerbCell. All ~4,811 mapped verbs, sortable Frequency / Alphabetical (persisted
 //  via Settings.verbSort), with a verb-count banner, animated sort + selection
-//  haptic (audit §6), and two-line serif rows with a frequency-rank badge.
-//  Ported/adapted from Konjugieren's VerbBrowseView.
+//  haptic, and two-line serif rows with a frequency-rank badge.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -31,7 +30,7 @@ struct VerbBrowseView: View {
   private var verbs: [VerbMapEntry] { Self.verbsBySort[sort] ?? [] }
 
   /// The current sort filtered by the search query, materialized into `@State` and
-  /// recomputed only when `searchText` or `sort` changes (item 3) — rather than as a
+  /// recomputed only when `searchText` or `sort` changes — rather than as a
   /// computed property `body` scanned twice per render. Seeded to the initial sort's
   /// full list so the first frame isn't a "0 verbs" flash.
   @State private var filteredVerbs: [VerbMapEntry] = Self.verbsBySort[Current.settings.verbSort] ?? []
@@ -80,7 +79,7 @@ struct VerbBrowseView: View {
             } else {
               LazyVStack(spacing: 0) {
                 ForEach(Array(filteredVerbs.enumerated()), id: \.element.infinitive) { index, entry in
-                  // A real `NavigationLink` (item 18): `.isButton` trait, press
+                  // A real `NavigationLink`: `.isButton` trait, press
                   // highlight, and stronger VoiceOver semantics than the old
                   // `.onTapGesture`. The stack's `navigationDestination(for: String)`
                   // already renders the pushed `VerbView`.

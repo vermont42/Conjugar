@@ -4,8 +4,8 @@
 //
 //  The SwiftUI quiz-results screen, replacing the UIKit ResultsVC/ResultsUIV/
 //  ResultCell. A hero score numeral color-coded by accuracy over a carded
-//  difficulty/region/time summary, then a labeled, color-coded row per question
-//  (audit §3). Reads the finished `Current.quiz`.
+//  difficulty/region/time summary, then a labeled, color-coded row per question.
+//  Reads the finished `Current.quiz`.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

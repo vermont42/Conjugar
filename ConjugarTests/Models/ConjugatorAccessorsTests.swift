@@ -15,8 +15,6 @@ import Testing
 // label.
 @Suite("Conjugator app-facing accessors")
 struct ConjugatorAccessorsTests {
-  // MARK: - futureRoot (raíz futura)
-
   @Test("futureRoot is the stem of the future system", arguments: [
     ("hablar", "hablar"),
     ("comer", "comer"),
@@ -33,8 +31,6 @@ struct ConjugatorAccessorsTests {
     #expect(Conjugator.futureRoot(infinitive: infinitive) == .success(expected))
   }
 
-  // MARK: - isDefective
-
   @Test("isDefective is true exactly for verbs with formless slots")
   func isDefective() {
     #expect(Conjugator.isDefective(infinitive: "abolir"))
@@ -44,8 +40,6 @@ struct ConjugatorAccessorsTests {
     #expect(!Conjugator.isDefective(infinitive: "gustar"))
     #expect(!Conjugator.isDefective(infinitive: "soler"))
   }
-
-  // MARK: - verbType (class number → four-way classification)
 
   @Test("verbType derives from the mapped class number", arguments: [
     ("hablar", VerbType.regularAr),
@@ -60,8 +54,6 @@ struct ConjugatorAccessorsTests {
   func verbType(infinitive: String, expected: VerbType) {
     #expect(Conjugator.verbType(infinitive: infinitive) == expected)
   }
-
-  // MARK: - ModelCatalog.exemplar
 
   @Test("exemplar names the model verb for a class", arguments: [
     ("1", "cantar"),

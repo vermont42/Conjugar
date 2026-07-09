@@ -3,8 +3,8 @@
 //  ConjugarTests
 //
 //  Swift Testing for the etymology renderer used by the Verb screen's etymology
-//  card. The markup is the `~…~`-bold / `\n\n`-paragraph vocabulary the pipeline in
-//  `prompts/etymology-pipeline.md` emits, with a literal `*` before a bold run for
+//  card. The markup is the `~…~`-bold / `\n\n`-paragraph vocabulary the etymology
+//  pipeline emits, with a literal `*` before a bold run for
 //  reconstructed forms (`*~steh₂-~`).
 //
 //  Copyright © 2026 Josh Adams. All rights reserved.

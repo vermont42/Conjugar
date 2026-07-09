@@ -5,7 +5,7 @@
 //  Renders a conjugated form as SwiftUI Text with its irregular span in
 //  `customRed` — the SwiftUI equivalent of the legacy `String.conjugatedString`
 //  (uppercase letters = irregular). Shared by the Verb, Model, Quiz, and Results
-//  screens. Set in a serif face to mark it as linguistic content (audit K9).
+//  screens. Set in a serif face to mark it as linguistic content.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -24,7 +24,7 @@ struct ConjugationText: View {
 
   /// Build the attributed form: irregular runs red, the rest `regularColor`,
   /// everything lowercased for display. The whole string is tagged
-  /// `languageIdentifier = "es"` (item 18) so VoiceOver pronounces the Spanish forms
+  /// `languageIdentifier = "es"` so VoiceOver pronounces the Spanish forms
   /// with Spanish rules instead of reading *hablo* as English — restoring what the
   /// retired UIKit `setAccessibilityLabelInSpanish` did.
   static func attributedString(for form: String, regularColor: Color = .customForeground) -> AttributedString {

@@ -3090,3 +3090,38 @@ contested), `respirar`'s `spīrāre` (onomatopoeic per De Vaan vs. a debated PIE
 catches the agents flagged rather than asserted: English `flow` is *not* cognate with `fluere`,
 and `have` is *not* cognate with `haber`-family words. The lone friction (a subagent's `—perdón—`
 self-edit surviving into the JSON) got written back to the pipeline's Lessons.
+
+## Comment sweep — stripping the modernization project's provenance citations
+
+The modernization work left a paper trail in the comments: pointers to the Fable audit's
+numbered suggestions (`item 19`), the build plan's phases (`Phase 6A`), the Spanish-verb
+reference book and its taxonomy (`taxonomy §4.5`, `oracle §3`, `Annex B`, "the 2010 book"),
+the cross-app UI audit codes (`audit §4`, `K11 / C15`), and "ported from Conjuguer /
+Konjugieren" sibling-app notes. Useful while the project was in flight; noise in a shipping
+codebase, coupling the code to documents that don't live in the repo. `AccentFeature.swift`
+had already been done by hand as the worked example: strip the citation token, then judge the
+residual comment on its own merits — keep it (trimmed) if what's left is real domain knowledge
+or durable rationale, delete the whole thing if all that remains is "a past edit happened."
+
+The sweep touched **89 files** — every engine feature file, the model catalog and vocabulary,
+the Utils service seam, all the SwiftUI views, the Supporting layer, the test suites, and
+(after a scope check) the widget extension and its Shared code. It was comment-only by
+construction: the final `git diff` gate confirmed the only non-`//` lines that changed were two
+`case str`/`case wk` trailing comments, code tokens untouched. Both the app+widget build and
+the test-target build stayed green; SwiftLint clean.
+
+The judgment split roughly as the spec predicted. The **engine files trimmed, rarely deleted** —
+those `taxonomy §4.7` comments carry genuine grammatical mechanics ("one future-stem override
+drives the whole future *and* conditional"), so the section number came off and the linguistics
+stayed. **Utils skewed toward deletion** — "Straightened per item 19: …" and "Off-main (item 14):
+…" were pure change-narration once the citation left, so they went entirely. Every `// MARK:`
+was deleted outright (a blanket rule, ~150 of them), and "the book" got rephrased where it was
+load-bearing (`book class number` → `class number`, `book's row order` → `canonical order`)
+rather than left dangling. Two scope calls went to Josh: the widget/`Shared` directories (outside
+the spec's stated glob but full of "Ported from Conjuguer" headers) got swept in, and the
+external-book references in the test comments (`Annex B` as the canonical verb-set name, "the
+2010 book") got the book citations stripped and `Annex B` rephrased to "the class taxonomy" while
+the in-repo `_build_verbmap.py` generator reference — legitimate data provenance for how the
+shipped resource is built — stayed. In-repo cross-references ("Mirrors VerbBrowseView"), legacy
+old-engine comparisons, and `(see CLAUDE.md)` were left alone: those point *inside* the repo,
+which is the whole distinction the sweep is drawing.

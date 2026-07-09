@@ -2,10 +2,10 @@
 //  LanguageModelServiceReal.swift
 //  Conjugar
 //
-//  The Spanish conjugation tutor, ported from Conjuguer's French tutor. Wraps
-//  Apple's on-device `SystemLanguageModel` / `LanguageModelSession` and grounds it
-//  with `ConjugationTool`, which conjugates real forms through the app's own
-//  `TenseBridge`/`Conjugator` engine so the model never invents conjugations.
+//  The Spanish conjugation tutor. Wraps Apple's on-device `SystemLanguageModel` /
+//  `LanguageModelSession` and grounds it with `ConjugationTool`, which conjugates
+//  real forms through the app's own `TenseBridge`/`Conjugator` engine so the model
+//  never invents conjugations.
 //
 //  The system prompt is localized to the *system language*: Spanish instructions
 //  when the device language is Spanish, English otherwise. This is independent of
@@ -32,7 +32,7 @@ class LanguageModelServiceReal: LanguageModelService {
 
   private var tutorSession: LanguageModelSession?
   // One tool instance, reused across sessions, so its per-instance call counter is
-  // reset per message rather than shared through a global static (item 6).
+  // reset per message rather than shared through a global static.
   private let conjugationTool = ConjugationTool()
   private var availabilityMonitor: Task<Void, Never>?
 
@@ -47,7 +47,7 @@ class LanguageModelServiceReal: LanguageModelService {
 
   // Availability can flip after launch (user enables Apple Intelligence, the model
   // finishes downloading). Poll so the Info-tab entry point reacts live — but only
-  // while that screen is on view, and stop once the model is available (item 15).
+  // while that screen is on view, and stop once the model is available.
   // `@Observable` drives the SwiftUI update.
   func startAvailabilityMonitoring() {
     guard availabilityMonitor == nil, !isAvailable else {
@@ -246,7 +246,7 @@ struct ConjugationTool: Tool {
 
   // Per-instance, lock-protected call counter. The FoundationModels runtime may
   // invoke `call` from off the MainActor, so the count must be synchronized rather
-  // than a `nonisolated(unsafe)` static shared across every session (item 6).
+  // than a `nonisolated(unsafe)` static shared across every session.
   // `OSAllocatedUnfairLock` has reference semantics, so the count survives the
   // struct being copied by the runtime.
   private let callState = OSAllocatedUnfairLock(initialState: 0)
@@ -284,13 +284,11 @@ struct ConjugationTool: Tool {
     }
     lmsLogger.info("Tool call: infinitivo=\(arguments.infinitivo) tense=\(arguments.tense)")
     // Conjugar's engine (`TenseBridge`/`Conjugator`/`VerbMap`) is `nonisolated`, so
-    // it can be called directly here — no MainActor hop needed (unlike Conjuguer).
+    // it can be called directly here — no MainActor hop needed.
     let result = Self.performLookup(infinitive: arguments.infinitivo, tenseName: arguments.tense)
     lmsLogger.info("Tool result: \(result)")
     return result
   }
-
-  // MARK: - Grounded lookup through the app's engine
 
   private static let regularPersons: [DisplayPersonNumber] = [
     .firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural

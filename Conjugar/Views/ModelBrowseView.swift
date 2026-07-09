@@ -5,8 +5,7 @@
 //  The SwiftUI Models list, replacing the UIKit BrowseModelsVC/BrowseModelsUIV/
 //  ModelCell. Every verb model with a tinted irregularity-percent badge, sortable
 //  Irregularity / Alphabetical / Number (persisted via Settings.modelSort), with a
-//  count banner and animated sort + selection haptic (audit §11). Mirrors
-//  VerbBrowseView.
+//  count banner and animated sort + selection haptic. Mirrors VerbBrowseView.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -29,14 +28,14 @@ struct ModelBrowseView: View {
   private var models: [ModelInfo] { Self.modelsBySort[sort] ?? [] }
 
   /// The current sort filtered by the search query, materialized into `@State` and
-  /// recomputed only when `searchText` or `sort` changes (item 3). Seeded to the initial
+  /// recomputed only when `searchText` or `sort` changes. Seeded to the initial
   /// sort's full list so the first frame isn't a "0 models" flash.
   @State private var filteredModels: [ModelInfo] = Self.modelsBySort[Current.settings.modelSort] ?? []
 
   /// Refilter for the current `searchText` + `sort`, firing the no-results sad trombone
   /// here — the one-shot search transition — instead of inside `body`. Matches the exemplar
   /// **or** the class number case- and diacritic-insensitively (so `28` or `4B` finds a
-  /// model by its book number, `hacer` finds it by exemplar).
+  /// model by its class number, `hacer` finds it by exemplar).
   private func recomputeFilteredModels() {
     let results = BrowseSearch.results(in: models, query: searchText) { model, query in
       model.exemplar.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
@@ -73,7 +72,7 @@ struct ModelBrowseView: View {
             } else {
               LazyVStack(spacing: 0) {
                 ForEach(Array(filteredModels.enumerated()), id: \.element.classNumber) { index, model in
-                  // A real `NavigationLink` (item 18) — button semantics + press
+                  // A real `NavigationLink` — button semantics + press
                   // highlight; the stack's `navigationDestination(for: ModelInfo)`
                   // renders the pushed `ModelView`.
                   NavigationLink(value: model) {
@@ -125,7 +124,7 @@ struct ModelBrowseView: View {
 }
 
 /// The visual content of a model row — serif gold exemplar + class number with a
-/// tinted irregularity-percent capsule badge (audit §11 / C15).
+/// tinted irregularity-percent capsule badge.
 struct ModelRowLabel: View {
   let model: ModelInfo
 
@@ -152,7 +151,7 @@ struct ModelRowLabel: View {
 }
 
 /// Shared tint for an irregularity percentage: green (regular) → yellow → red
-/// (highly irregular), so the badge's color scales with the number (audit §10/§11).
+/// (highly irregular), so the badge's color scales with the number.
 enum ModelPalette {
   static func tint(forPercent percent: Int) -> Color {
     switch percent {

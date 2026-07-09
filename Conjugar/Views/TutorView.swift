@@ -2,8 +2,8 @@
 //  TutorView.swift
 //  Conjugar
 //
-//  The conjugation-tutor chat screen, ported from Conjuguer and adapted to
-//  Conjugar's design system (card colors, `SoundPlayer`, analytics). Talks to
+//  The conjugation-tutor chat screen, adapted to Conjugar's design system (card
+//  colors, `SoundPlayer`, analytics). Talks to
 //  `Current.languageModelService`; a non-streaming `respond(to:)` drives a typing
 //  indicator while awaiting. History persists via `TutorChatHistory`.
 //

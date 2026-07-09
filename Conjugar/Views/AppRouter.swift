@@ -5,7 +5,7 @@
 //  Tab selection + deeplink routing for the widgets and control-center controls. A
 //  `conjugar://` URL (from a widget tap) or a drained control-widget deeplink is turned
 //  into a tab switch plus a pending navigation the destination screen consumes. Added
-//  with the widget port (July 2026), mirroring Conjuguer's World.handleURL.
+//  with the widget port (July 2026).
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

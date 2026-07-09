@@ -4,7 +4,7 @@
 //
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
-//  Pins the corrected Game Center opt-in gating (Phase 3, item 1 + item 19). The
+//  Pins the corrected Game Center opt-in gating. The
 //  inline guard this replaced was inverted for years — it authenticated *only*
 //  users who had said No, and never prompted a fresh install — so these cases are
 //  the guard-rail against a silent re-inversion. The suite is nonisolated (the

@@ -2,8 +2,7 @@
 //  RandomVerbControl.swift
 //  ConjugarWidget
 //
-//  A Control Center / Lock Screen control that opens a random Spanish verb. Ported
-//  from Conjuguer.
+//  A Control Center / Lock Screen control that opens a random Spanish verb.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

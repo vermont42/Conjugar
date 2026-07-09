@@ -2,8 +2,7 @@
 //  QuickQuizControl.swift
 //  ConjugarWidget
 //
-//  A Control Center / Lock Screen control that starts a Conjugar quiz. Ported from
-//  Conjuguer.
+//  A Control Center / Lock Screen control that starts a Conjugar quiz.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

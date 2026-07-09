@@ -9,14 +9,12 @@
 import Foundation
 import Observation
 
-// `@MainActor @Observable` (Phase 4 / item 11): views that read a setting now
-// invalidate automatically when it changes, so the Quiz briefing pills track the
-// Settings tab live and `SettingsView` binds its pickers straight to this object —
-// the old `SelectionStore` bridge is gone. Persistence is funneled through the two
-// `read`/`persist` helper families below, collapsing what used to be ~90 lines of
-// clone-stamped `didSet`/`init` stanzas. The helpers are `static` so the `read`
-// calls are legal during `init` (calling an instance method on a not-yet-fully-
-// initialized `self` is not).
+// `@MainActor @Observable`: views that read a setting invalidate automatically when
+// it changes, so the Quiz briefing pills track the Settings tab live and
+// `SettingsView` binds its pickers straight to this object. Persistence is funneled
+// through the two `read`/`persist` helper families below. The helpers are `static`
+// so the `read` calls are legal during `init` (calling an instance method on a
+// not-yet-fully-initialized `self` is not).
 @MainActor
 @Observable
 final class Settings {
@@ -111,12 +109,9 @@ final class Settings {
     lastCommunIdentifierShown = Settings.read(getterSetter, Settings.lastCommunIdentifierShownKey, default: Settings.lastCommunIdentifierShownDefault)
   }
 
-  // MARK: - Persistence helpers
-
   // Read a value for `key`, seeding (and persisting) `defaultValue` the first time
   // the key is absent so the store always reflects the effective setting. A
-  // present-but-unparseable value falls back to the default without a rewrite,
-  // matching the pre-Phase-4 behavior.
+  // present-but-unparseable value falls back to the default without a rewrite.
 
   private static func read<T: RawRepresentable<String>>(_ getterSetter: GetterSetter, _ key: String, default defaultValue: T) -> T {
     guard let raw = getterSetter.get(key: key) else {

@@ -88,8 +88,6 @@ nonisolated enum TenseBridge {
     }
   }
 
-  // MARK: - The unmarked conjugation
-
   private static func unmarkedConjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, ConjugatorError> {
     switch tense {
     case .infinitivo, .translation:
@@ -128,8 +126,6 @@ nonisolated enum TenseBridge {
       return CompoundTense.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber)
     }
   }
-
-  // MARK: - The regular baseline (what irregularity marking diffs against)
 
   /// The same slot conjugated with a **feature-less** regular model — the
   /// baseline whose differing span is the verb's irregularity.
@@ -188,8 +184,6 @@ nonisolated enum TenseBridge {
       return auxiliary + " " + participle
     }
   }
-
-  // MARK: - Futuro de subjuntivo
 
   /// Futuro de subjuntivo = the -ra imperfect subjunctive with the ending's -a-
   /// swapped for -e- (hablara → hablare, tuvieran → tuvieren, habláramos →

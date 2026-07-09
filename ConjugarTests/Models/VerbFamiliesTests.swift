@@ -48,8 +48,6 @@ struct VerbFamiliesTests {
     ("irregularGerundioVerbs", VerbFamilies.irregularGerundioVerbs)
   ]
 
-  // MARK: - (a) Every listed verb resolves in the map
-
   // An unmapped verb conjugates on the regular fallback model, so a quiz can demand
   // a form of a verb that does not exist ("manecer" → "maneza").
   @Test("every quiz-list verb resolves in VerbMap")
@@ -62,8 +60,6 @@ struct VerbFamiliesTests {
     }
     #expect(unmapped.isEmpty, "unmapped verbs: \(unmapped)")
   }
-
-  // MARK: - (b) Regular lists really are that regular class
 
   static let regularLists: [(name: String, verbs: [String], expectedClass: Int)] = [
     ("regularArVerbs", VerbFamilies.regularArVerbs, 1),
@@ -88,8 +84,6 @@ struct VerbFamiliesTests {
     }
     #expect(misfiled.isEmpty, "misfiled regular verbs: \(misfiled)")
   }
-
-  // MARK: - (c) No list repeats an entry
 
   // A duplicate ("esconder" twice) over-weights that verb in the round-robin cycle.
   @Test("no quiz list repeats an entry")

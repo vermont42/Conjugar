@@ -30,8 +30,6 @@ struct TenseBridgeTests {
     return nil
   }
 
-  // MARK: - Simple tenses ride the case-for-case mapping
-
   @Test("simple tenses map case-for-case onto EngineTense", arguments: [
     ("hablar", DisplayTense.presenteDeIndicativo, DisplayPersonNumber.firstSingular, "hablo"),
     ("pensar", .presenteDeIndicativo, .firstSingular, "pIenso"),
@@ -53,8 +51,6 @@ struct TenseBridgeTests {
     #expect(Self.form(infinitive, tense, personNumber) == expected, "\(infinitive) \(tense.displayName) \(personNumber.pronoun)")
   }
 
-  // MARK: - Compound tenses: haber in the matching simple tense + participle
-
   @Test("compound tenses compose haber + participle", arguments: [
     ("hablar", DisplayTense.perfectoDeIndicativo, DisplayPersonNumber.firstSingular, "hE hablado"),
     ("comer", .pretéritoAnterior, .secondSingularTú, "hUbiste comido"),
@@ -71,8 +67,6 @@ struct TenseBridgeTests {
     #expect(Self.form(infinitive, tense, personNumber) == expected, "\(infinitive) \(tense.displayName) \(personNumber.pronoun)")
   }
 
-  // MARK: - Futuro de subjuntivo: derived from the -ra imperfect subjunctive
-
   @Test("futuro de subjuntivo derives from the -ra form", arguments: [
     ("hablar", DisplayPersonNumber.firstSingular, "hablare"),
     ("hablar", .secondSingularTú, "hablares"),
@@ -88,8 +82,6 @@ struct TenseBridgeTests {
   func futuroDeSubjuntivo(infinitive: String, personNumber: DisplayPersonNumber, expected: String) {
     #expect(Self.form(infinitive, .futuroDeSubjuntivo, personNumber) == expected, "\(infinitive) \(personNumber.pronoun)")
   }
-
-  // MARK: - Imperativo negativo: "no" + presente de subjuntivo
 
   @Test("imperativo negativo is no + presente de subjuntivo", arguments: [
     ("hablar", DisplayPersonNumber.secondSingularTú, "no hables"),
@@ -109,8 +101,6 @@ struct TenseBridgeTests {
     #expect(Self.form("hablar", .imperativoNegativo, .firstSingular) == nil)
   }
 
-  // MARK: - Defective slots surface as .noForm; existing slots still conjugate
-
   @Test("defective slots surface as .noForm")
   func defectiveSlots() {
     #expect(TenseBridge.conjugate(infinitive: "abolir", tense: .presenteDeIndicativo, personNumber: .firstSingular) == .failure(.noForm(.presenteDeIndicativo(.firstSingular))))
@@ -119,8 +109,6 @@ struct TenseBridgeTests {
     #expect(Self.form("abolir", .perfectoDeIndicativo, .firstSingular) == "hE abolido")
     #expect(Self.form("abolir", .futuroDeSubjuntivo, .firstSingular) == "aboliere")
   }
-
-  // MARK: - Pseudo-tense affordances the Verb screen uses
 
   @Test("gerundio, participio, and raíz futura bridge with irregularity marks")
   func pseudoTenses() {

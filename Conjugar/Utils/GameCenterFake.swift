@@ -13,9 +13,6 @@ class GameCenterFake: GameCenter {
     self.isAuthenticated = isAuthenticated
   }
 
-  // Straightened per item 19: authenticating is idempotent — it authenticates the
-  // player. The old fake's "return false when already authenticated" semantics were
-  // a surprising artifact of the removed `-> Bool` return value.
   func authenticate() {
     isAuthenticated = true
   }

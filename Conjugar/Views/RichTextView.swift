@@ -3,10 +3,9 @@
 //  Conjugar
 //
 //  Renders the parsed Info markup (`[RichTextBlock]`, see RichText.swift) as
-//  native SwiftUI Text. Ported and adapted from Konjugieren's `RichTextView`.
-//  Body copy is set in the adaptive `customForeground` (audit §8: "reconsider the
-//  all-gold body text"); subheadings are serif gold; irregular conjugation spans
-//  are `customRed`; links route through the environment's `openURL` action.
+//  native SwiftUI Text. Body copy is set in the adaptive `customForeground`;
+//  subheadings are serif gold; irregular conjugation spans are `customRed`; links
+//  route through the environment's `openURL` action.
 //
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //

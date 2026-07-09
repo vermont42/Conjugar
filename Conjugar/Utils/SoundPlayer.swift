@@ -16,13 +16,13 @@ class SoundPlayer {
   private static let soundPlayer = SoundPlayer()
   private var sounds: [String: AVAudioPlayer]
   private static let soundExtension = "mp3"
-  /// Minimum gap between two debounced plays. Mirrors Conjuguer's SoundPlayerReal.
+  /// Minimum gap between two debounced plays.
   private static let minSoundInterval: TimeInterval = 1.0
   private var instantOfLastPlay: TimeInterval = 0.0
 
   // The shared `AVAudioSession` is owned and configured once at launch by
-  // `Utterer.setup` (item 16: a single owner, `.ambient` — respect the silent
-  // switch and mix with other audio). `SoundPlayer` no longer sets a category, so
+  // `Utterer.setup` (a single owner, `.ambient` — respect the silent switch and mix
+  // with other audio). `SoundPlayer` no longer sets a category, so
   // the last-writer-wins conflict that stopped the user's music is gone.
   private init () {
     sounds = Dictionary()

@@ -2,10 +2,9 @@
 //  LanguageModelService.swift
 //  Conjugar
 //
-//  The conjugation-tutor service seam, ported from Conjuguer (French) and adapted
-//  for Spanish. `LanguageModelServiceReal` wraps Apple's on-device
-//  `SystemLanguageModel`; `LanguageModelServiceDummy` is the test/unavailable
-//  double. `TutorView` talks to `Current.languageModelService`.
+//  The conjugation-tutor service seam. `LanguageModelServiceReal` wraps Apple's
+//  on-device `SystemLanguageModel`; `LanguageModelServiceDummy` is the
+//  test/unavailable double. `TutorView` talks to `Current.languageModelService`.
 //
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
@@ -48,7 +47,7 @@ protocol LanguageModelService {
   func sendTutorMessage(_ message: String) async throws -> String
   func resetTutorSession()
   // Start/stop the live availability poll. Scoped to when the Info-tab tutor entry
-  // point is on screen, rather than running for the whole app lifetime (item 15):
+  // point is on screen, rather than running for the whole app lifetime:
   // `InfoBrowseView` starts it on appear and stops it on disappear.
   func startAvailabilityMonitoring()
   func stopAvailabilityMonitoring()

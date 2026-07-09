@@ -3,7 +3,7 @@
 //  ConjugarWidget
 //
 //  The extension's @main entry point: every widget, control, and Live Activity the
-//  extension vends. Ported from Conjuguer.
+//  extension vends.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

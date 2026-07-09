@@ -32,7 +32,7 @@ nonisolated enum DisplayPersonNumber: String, CaseIterable {
       return "vosotros"
     // Deliberately mixed gender: `él` (masculine) for third singular, `ellas`
     // (feminine) for third plural, so the displayed pronouns show both grammatical
-    // genders across the paradigm rather than reading as a copy/paste typo (item 20).
+    // genders across the paradigm rather than reading as a copy/paste typo.
     case .thirdPlural:
       return "ellas"
     case .none:

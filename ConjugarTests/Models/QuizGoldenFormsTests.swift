@@ -2,7 +2,7 @@
 //  QuizGoldenFormsTests.swift
 //  ConjugarTests
 //
-//  Golden-form coverage for the quiz (item 19). `QuizTests` proves the quiz is
+//  Golden-form coverage for the quiz. `QuizTests` proves the quiz is
 //  self-consistent — it scores a run by comparing each answer to the *same* engine
 //  output the quiz asked for — but it cannot prove that output is correct Spanish.
 //  `VerbFamiliesTests` pins the quiz lists to the verb map (every entry resolves and
@@ -15,7 +15,7 @@
 //  engine output is lowercased (which strips the `IrregularityMarker` encoding,
 //  leaving the plain letters) before comparison. A failure means either the engine
 //  conjugates the verb wrong or a bad list entry slipped past the guard-rail — exactly
-//  the "quiz teaches wrong Spanish" class of bug (item 2).
+//  the "quiz teaches wrong Spanish" class of bug.
 //
 //  Nonisolated, like the engine it exercises, so it runs in parallel.
 //

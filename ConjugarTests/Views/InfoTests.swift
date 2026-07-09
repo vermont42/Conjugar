@@ -2,7 +2,7 @@
 //  InfoTests.swift
 //  ConjugarTests
 //
-//  Swift Testing suite for the SwiftUI Info migration (Step 4): the rich-text
+//  Swift Testing suite for the SwiftUI Info migration: the rich-text
 //  parser (RichText.swift) and the Info model. Replaces the deleted XCTest suites
 //  BrowseInfoVCTests / InfoVCTests / InfoCellTests.
 //
@@ -15,8 +15,6 @@ import Testing
 
 @MainActor
 @Suite struct InfoTests {
-  // MARK: - Model
-
   @Test func infosCount() {
     #expect(Info.infos.count == 28)
   }
@@ -53,8 +51,6 @@ import Testing
     }
   }
 
-  // MARK: - Parser: subheadings
-
   @Test func subheadingBecomesOwnBlock() {
     let blocks = "before ^A Heading^\nafter".richTextBlocks
     #expect(blocks.count == 3)
@@ -65,8 +61,6 @@ import Testing
     guard case .body(let post) = blocks[2] else { Issue.record("expected trailing body"); return }
     #expect(post.plainText == "after")
   }
-
-  // MARK: - Parser: inline segments
 
   @Test func boldSegment() {
     let segments = "plain ~bold~ tail".parseBodyToSegments()

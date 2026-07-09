@@ -5,7 +5,7 @@
 //  systemLarge Verb of the Day: the verb header, every paradigm the snapshot carries
 //  (presente + pretérito + futuro), and the gerundio / participio.
 //
-//  TODO: Conjuguer's large widget shows an etymology snippet and an example sentence
+//  TODO: the large widget could show an etymology snippet and an example sentence
 //  under the presente paradigm. When Spanish etymology/example data exists (see
 //  WidgetSnapshot's TODO), replace the extra paradigms here with that richer content.
 //  Copyright © 2026 Josh Adams. All rights reserved.

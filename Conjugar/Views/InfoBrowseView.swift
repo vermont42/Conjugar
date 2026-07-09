@@ -3,10 +3,9 @@
 //  Conjugar
 //
 //  The SwiftUI Info topic list, replacing the UIKit BrowseInfoVC/BrowseInfoUIV/
-//  InfoCell. Left-aligned rows in a sectioned List (audit §7: "About" vs
-//  "Tenses"), with the difficulty filter moved into the Tenses section header so
-//  its relationship to what it filters is explicit. Ported/adapted from
-//  Konjugieren's InfoBrowseView.
+//  InfoCell. Left-aligned rows in a sectioned List, with the difficulty filter
+//  moved into the Tenses section header so its relationship to what it filters is
+//  explicit.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

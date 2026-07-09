@@ -6,48 +6,35 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// Phase 6A — the **model catalog**: the single source of truth mapping each book
-// class number (`"1"`, `"1-1"`, `"4B-1"`, `"7A"`, `"31-1"`, …) to its
-// `VerbModel` (taxonomy §1: base + ordered features). Until now these ~95 models
-// lived only as test `static let`s; promoting them here makes the catalog the
-// thing the tests exercise and the lookup the Phase-6 resolver will consult
-// (verb → class number → catalog model → conjugate).
+// The **model catalog**: the single source of truth mapping each class number
+// (`"1"`, `"1-1"`, `"4B-1"`, `"7A"`, `"31-1"`, …) to its `VerbModel` (base +
+// ordered features). The catalog is what the tests exercise and what the resolver
+// consults (verb → class number → catalog model → conjugate).
 //
-// The builds are the **canonical, complete** Phase-5/5b versions, copied verbatim
-// from the proven, oracle-verified exemplars — never the Phase-4 scaffold partials
-// (tenerSpEnd, decirSpJend, …), which stay test-only.
-//
-// Four classes were never built as test exemplars and are assembled here against
-// the oracle (taxonomy §5): **4B-1 trocar**, **4B-5 desosar**, **4B-6
-// avergonzar**, and **10 oír**. Four more — the prefix-accent compounds **29-2
-// satisfacer / 30-1 suponer / 31-1 obtener / 32-1 convenir** — need no distinct
-// model: they are byte-identical to their parents (29 hacer / 30 poner / 31 tener
-// / 32 venir) because `ApocopatedImperative` already derives the accented
-// imperative (satisfaz/supón/obtén/convén) and every other feature is
-// prefix-invariant (§1 "ride for free"). Their class numbers alias the parent.
+// The prefix-accent compounds **29-2 satisfacer / 30-1 suponer / 31-1 obtener /
+// 32-1 convenir** need no distinct model: they are byte-identical to their parents
+// (29 hacer / 30 poner / 31 tener / 32 venir) because `ApocopatedImperative`
+// already derives the accented imperative (satisfaz/supón/obtén/convén) and every
+// other feature is prefix-invariant. Their class numbers alias the parent.
 nonisolated enum ModelCatalog {
-  // MARK: - Lookup
-
-  /// The `VerbModel` for a book class number, or `nil` if the number is unknown.
+  /// The `VerbModel` for a class number, or `nil` if the number is unknown.
   static func model(forClass classNumber: String) -> VerbModel? {
     byClassNumber[classNumber]
   }
 
   /// Every class number the catalog resolves (the keys of the map). Used by the
-  /// completeness test to assert Annex B's 106 numbers all resolve.
+  /// completeness test to assert all 106 numbers resolve.
   static var classNumbers: Set<String> {
     Set(byClassNumber.keys)
   }
 
-  /// The exemplar (model verb) for a book class number — the human-readable name
+  /// The exemplar (model verb) for a class number — the human-readable name
   /// the Verb screen shows in place of the legacy "parent verb" concept
   /// (reconocer → 7A → "conocer"). The prefix-accent alias classes (29-2, 30-1,
   /// 31-1, 32-1) name the parent exemplar they ride.
   static func exemplar(forClass classNumber: String) -> String? {
     exemplarByClassNumber[classNumber]
   }
-
-  // MARK: - Shared build helpers (mirrors the test exemplars' helpers)
 
   /// Build a `LiteralSlotOverride` from `(slot, form)` pairs (the catch-all residue).
   private static func residue(_ pairs: [(EngineTense, String)]) -> LiteralSlotOverride {
@@ -60,17 +47,15 @@ nonisolated enum ModelCatalog {
     StemFeature(operation: .replaceWhole(whole), slots: Slot.isPresentSubjunctive)
   }
 
-  /// `y-add` restricted to the §4.5 subj-from-1s slots (PI 1s + PS{all}) — the
+  /// `y-add` restricted to the subj-from-1s slots (PI 1s + PS{all}) — the
   /// raer/roer **alternate** paradigm (rayo/raya, royo/roya).
   private static let yAddSubjunctive = StemFeature(operation: .append("y"), slots: Slot.isSubjFrom1s)
-
-  // MARK: - Perfectly regular (1 / 2 / 3) and their orthographic sub-classes
 
   static let cantar = VerbModel(base: .ar)
   static let comer = VerbModel(base: .er)
   static let subir = VerbModel(base: .ir)
 
-  // 1-x: -ar orthographic (§4.1) and accent (§4.2)
+  // 1-x: -ar orthographic and accent sub-classes
   static let tocar = VerbModel(base: .ar, features: [StemFinalConsonant.oCar])
   static let pagar = VerbModel(base: .ar, features: [StemFinalConsonant.oGar])
   static let averiguar = VerbModel(base: .ar, features: [StemFinalConsonant.oGuar])
@@ -111,8 +96,6 @@ nonisolated enum ModelCatalog {
   static let pudrir = VerbModel(base: .ir, features: [IrregularParticiple("pudr", "podrido")])
   static let abolir = VerbModel(base: .ir, features: [DefectiveFeature.abolir])
 
-  // MARK: - Diphthongs (§4.3): 4A / 4B / 5A / 5B
-
   static let pensar = VerbModel(base: .ar, features: [StemVowel.dIe])
   static let negar = VerbModel(base: .ar, features: [StemVowel.dIe, StemFinalConsonant.oGar])
   static let empezar = VerbModel(base: .ar, features: [StemVowel.dIe, StemFinalConsonant.oZar])
@@ -136,8 +119,6 @@ nonisolated enum ModelCatalog {
   static let resolver = VerbModel(base: .er, features: [StemVowel.dUe, IrregularParticiple("solv", "suelto")])
   static let volver = VerbModel(base: .er, features: [StemVowel.dUe, IrregularParticiple("volv", "vuelto")])
 
-  // MARK: - Diphthongs and/or umlauts (§4.3/§4.4): 6A / 6B / 6C
-
   static let sentir = VerbModel(base: .ir, features: [StemVowel.dIe, StemVowel.rEiWk])
   // 6A-1 erguir = two co-equal paradigms (ye / raise) in the stressed slots.
   static let erguir = VerbModel(base: .ir,
@@ -157,7 +138,7 @@ nonisolated enum ModelCatalog {
   // instead of gliding (*riyó); o-yhiatus then supplies the hiatus accents on the
   // unraised-stem slots (reí­ste/reímos/reísteis/reído, plus reímos PI-1p / reíd
   // IMP-2p from its extended accent set). (The preferred frito/sofrito/refrito PP
-  // variants are per-verb data, out of scope — Annex B fn15/22/24; freír now yields
+  // variants are per-verb data, out of scope; freír now yields
   // the accepted regular freído.)
   static let reir = VerbModel(base: .ir, features: [
     StemVowel.rEiStr, StemVowel.rEiWk,
@@ -168,8 +149,6 @@ nonisolated enum ModelCatalog {
 
   static let dormir = VerbModel(base: .ir, features: [StemVowel.dUe, StemVowel.rOuWk])
   static let morir = VerbModel(base: .ir, features: [StemVowel.dUe, StemVowel.rOuWk, IrregularParticiple("mor", "muerto")])
-
-  // MARK: - 1st-singular -zco (§4.5): 7A / 7B
 
   static let conocer = VerbModel(base: .er, features: [StemFeature.zc])
   // 7A-1 yacer = zc primary + c→zg (yazgo) and c→g (yago, with apocopated yaz) alternates.
@@ -191,15 +170,11 @@ nonisolated enum ModelCatalog {
     ])
   static let lucir = VerbModel(base: .ir, features: [StemFeature.zc])
 
-  // MARK: - "Add -y except before -i" (§4.5): 8 / 18
-
   static let construir = VerbModel(base: .ir, features: [StemFeature.yAdd, IYHiatus.oYhiatus])
   // 18 argüir = construir + güy→guy (a single paradigm; the "alternate" is orthographic).
   static let arguir = VerbModel(base: .ir, features: [
     StemFeature.yAdd, IYHiatus.oYhiatus, DiaeresisDropBeforeY.güyGuy
   ])
-
-  // MARK: - Irregular 1st-singular -go (§4.5): 9 / 10 / 11 / 12 / 13
 
   static let caer = VerbModel(base: .er, features: [StemFeature.g1ig, IYHiatus.oYhiatus])
   // 9-1 raer = caer-build primary + a y-add alternate stack (rayo/raya).
@@ -218,8 +193,8 @@ nonisolated enum ModelCatalog {
   // PI{2s,3s,3p}/IMP-2s (oyes/oye/oyen/oye). o-yhiatus's extended accent set now
   // supplies the present-1p / imperative-2p hiatus accents (oímos / oíd) directly —
   // they used to be literal residue, which broke the prefix (oímos rode desoír).
-  // (Taxonomy §5 lists an `a-stem`, but oír's stem "o" has no i/u for it to accent —
-  // it would be inert — so it is omitted to keep the irregularity score honest.)
+  // (An `a-stem` would be inert here — oír's stem "o" has no i/u for it to accent —
+  // so it is omitted to keep the irregularity score honest.)
   static let oir = VerbModel(base: .ir, features: [
     StemFeature.yAdd,
     StemFeature.g1ig,
@@ -229,8 +204,6 @@ nonisolated enum ModelCatalog {
   static let salir = VerbModel(base: .ir, features: [StemFeature.g1g, FutureEndings.fDr, ApocopatedImperative()])
   static let valer = VerbModel(base: .er, features: [StemFeature.g1g, FutureEndings.fDr])
   static let asir = VerbModel(base: .ir, features: [StemFeature.g1g])
-
-  // MARK: - Mixed patterns: 14 / 15 / 16 / 17
 
   // 14 ver = comer + wp-i + residue (veo/vea-, veía-, monosyllable veis).
   static let ver = VerbModel(base: .er, features: [
@@ -258,8 +231,6 @@ nonisolated enum ModelCatalog {
   static let discernir = VerbModel(base: .ir, features: [StemVowel.dIe])
   static let jugar = VerbModel(base: .ar, features: [StemVowel.dUUe, StemFinalConsonant.oGar])
   static let adquirir = VerbModel(base: .ir, features: [StemVowel.dIIe])
-
-  // MARK: - Fundamentally irregular: 19–35
 
   // 19 ser = comer + pret-fue + residue (suppletive PI/IM, PS sea-, IMP sé).
   static let ser = VerbModel(base: .er, features: [
@@ -437,7 +408,7 @@ nonisolated enum ModelCatalog {
 
   // 34 conducir (-ducir) = subir + zc + sp-jend(-duj). The strong-preterite swap
   // anchors on the shared "duc" tail (not "conduc") so every -ducir verb rides it
-  // (aducir → aduje, traducir → traduje) — the §1 end-anchored payoff.
+  // (aducir → aduje, traducir → traduje) — the end-anchored payoff.
   static let conducir = VerbModel(base: .ir, features: [
     StemFeature.zc,
     StemFeature.strongPreterite(from: "duc", to: "duj"), PreteriteEndings.spJend
@@ -448,11 +419,9 @@ nonisolated enum ModelCatalog {
     StemFeature.strongPreterite(from: "and", to: "anduv"), PreteriteEndings.spEnd
   ])
 
-  // MARK: - The class-number → model map
-
-  // 106 entries: every distinct Model # in `docs/annex_b_verb_models.md`. The
-  // prefix-accent compounds 29-2/30-1/31-1/32-1 alias their parents (no distinct
-  // model — they ride hacer/poner/tener/venir by prefix-invariance).
+  // 106 entries, one per distinct class number. The prefix-accent compounds
+  // 29-2/30-1/31-1/32-1 alias their parents (no distinct model — they ride
+  // hacer/poner/tener/venir by prefix-invariance).
   private static let byClassNumber: [String: VerbModel] = [
     "1": cantar,
     "1-1": tocar, "1-2": pagar, "1-3": averiguar, "1-4": cazar,
@@ -498,8 +467,6 @@ nonisolated enum ModelCatalog {
     "32": venir, "32-1": venir,                     // 32-1 convenir aliases venir
     "33": traer, "34": conducir, "35": andar
   ]
-
-  // MARK: - The class-number → exemplar-name map
 
   // Mirrors `byClassNumber` key-for-key (a test asserts every class number has an
   // exemplar), naming each model's exemplar verb with its dictionary spelling

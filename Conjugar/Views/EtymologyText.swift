@@ -2,20 +2,18 @@
 //  EtymologyText.swift
 //  Conjugar
 //
-//  Renders an etymology body (from `Etymology.text(for:)`, produced by the pipeline
-//  in `prompts/etymology-pipeline.md`) as SwiftUI Text. The markup is intentionally
-//  minimal and has its **own** parser — independent of the Info `richTextBlocks`
-//  markup — so etymology prose can freely contain `%`, `$`, `^`, etc. without a stray
-//  character being misread as Info markup:
+//  Renders an etymology body (from `Etymology.text(for:)`) as SwiftUI Text. The
+//  markup is intentionally minimal and has its **own** parser — independent of the
+//  Info `richTextBlocks` markup — so etymology prose can freely contain `%`, `$`,
+//  `^`, etc. without a stray character being misread as Info markup:
 //
 //    ~…~   bold — every cited word-form, ancestral form, cognate, affix, or root
 //    \n\n  paragraph break
 //    *     a literal asterisk before a bold run marks a reconstructed form
 //          (`*~steh₂-~`); it passes through untouched.
 //
-//  Mirrors Conjuguer's `String.etymologyAttributedString`. Set in the reading face
-//  (not the serif linguistic face) since it is running prose, with the bolded forms
-//  carrying the "language" emphasis.
+//  Set in the reading face (not the serif linguistic face) since it is running
+//  prose, with the bolded forms carrying the "language" emphasis.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

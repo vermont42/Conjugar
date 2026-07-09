@@ -26,15 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return true
   }
 
-  // The empty lifecycle hooks and `applicationDidBecomeActive` were removed in
-  // Phase 4 / item 4: under the SwiftUI scene lifecycle UIKit delivers activation
-  // to the scene, not the app delegate, so those callbacks never fired. The
-  // became-active analytics now ride `MainTabView`'s `scenePhase == .active`
-  // observer, which actually runs.
-
   // Conjugar styles its segmented controls (Browse/Models sort, Settings pickers) with
   // yellow titles — the one global UIKit appearance the SwiftUI screens still rely on.
-  // Set once at launch (item 13) rather than from `SettingsView.init`, which re-ran it
+  // Set once at launch rather than from `SettingsView.init`, which re-ran it
   // on every `MainTabView` body evaluation. The pre-iOS-13 tab-/nav-bar `barTintColor`
   // + `tintColor` + `titleTextAttributes` config that used to live here was verified
   // inert on iOS 26's Liquid-Glass bars (selected tab stayed system-blue, large titles

@@ -5,7 +5,6 @@
 //  The Codable payload the app precomputes (via the conjugation engine) and hands
 //  to the widget as JSON in the App Group container. The widget is a pure renderer:
 //  it never runs the engine or loads verbModelMap.xml — it only decodes this.
-//  Ported from Conjuguer and adapted for Spanish, July 2026.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -22,7 +21,7 @@ nonisolated struct WidgetSnapshot: Codable, Equatable, Sendable {
   /// large widget shows the rest. Forms carry the engine's UPPERCASE irregularity
   /// marking so `Text(mixedCase:)` can color them.
   ///
-  /// TODO: Conjuguer's Verb of the Day fills the large widget with an etymology
+  /// TODO: the large widget could show an etymology
   /// snippet and an example sentence instead of extra tenses. Spanish verbs don't
   /// carry that data yet. When they do, add `etymologySnippet` / `exampleSpanish` /
   /// `exampleEnglish` fields here, trim `paradigms` back to just the presente, and

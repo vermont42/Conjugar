@@ -5,7 +5,6 @@
 //  The interactive daily-quiz widget. Shows the snapshot's quiz question with
 //  tap-to-answer buttons (AnswerQuizIntent); once answered (state stored in the shared
 //  defaults suite, keyed to the question id) it flips to a correct/incorrect result.
-//  Ported from Conjuguer.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

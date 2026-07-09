@@ -4,7 +4,7 @@
 //
 //  The Quiz widget's UI: an unanswered state with tappable answer buttons, and an
 //  answered state showing correct/incorrect. Answer order is shuffled deterministically
-//  from the question id so it stays stable across timeline reloads. Ported from Conjuguer.
+//  from the question id so it stays stable across timeline reloads.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

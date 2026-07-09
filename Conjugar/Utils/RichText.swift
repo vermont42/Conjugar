@@ -3,8 +3,7 @@
 //  Conjugar
 //
 //  SwiftUI-native rich-text model + parser for the Info articles (and, later,
-//  any other marked-up body copy). Ported and adapted from Konjugieren's
-//  `Utils/StringExtensions.swift` during the SwiftUI migration (Step 4).
+//  any other marked-up body copy).
 //
 //  It replaces the legacy `String.infoString` NSAttributedString pipeline: rather
 //  than build an attributed string for a UITextView, it parses Conjugar's Info

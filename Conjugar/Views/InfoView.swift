@@ -3,7 +3,7 @@
 //  Conjugar
 //
 //  The SwiftUI Info-article detail screen, replacing the UIKit InfoVC/InfoUIV.
-//  Serif gold title over reading-width body copy (audit §8). A tapped `%…%` term
+//  Serif gold title over reading-width body copy. A tapped `%…%` term
 //  either opens an external URL or drills into the referenced Info article via the
 //  `navigate` closure; the old pop-then-push cross-link becomes a push.
 //  Copyright © 2026 Josh Adams. All rights reserved.

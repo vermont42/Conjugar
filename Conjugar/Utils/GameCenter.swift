@@ -6,11 +6,10 @@
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
 
-// The last UIKit type left the service seam with the July 2026 Game Center
-// rewrite (Phase 3): authentication is now fire-and-forget — GameKit's
-// `authenticateHandler` presents its own login sheet against the live window,
-// so no caller has to hand in a view controller, and `isAuthenticated` is an
-// observable published state rather than the return value of a one-shot call.
+// Authentication is fire-and-forget — GameKit's `authenticateHandler` presents its
+// own login sheet against the live window, so no caller has to hand in a view
+// controller, and `isAuthenticated` is an observable published state rather than the
+// return value of a one-shot call.
 protocol GameCenter {
   var isAuthenticated: Bool { get }
   func authenticate()

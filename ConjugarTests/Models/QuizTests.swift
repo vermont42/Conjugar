@@ -5,7 +5,7 @@
 //  Created by Joshua Adams on 12/3/18.
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
-//  Rewritten as Swift Testing during the SwiftUI migration (Step 4): the quiz is
+//  Rewritten as Swift Testing during the SwiftUI migration: the quiz is
 //  now a delegate-free @Observable model, so the test drives it by answering the
 //  current question correctly in a loop and asserting the maxed-out final score.
 //
@@ -28,7 +28,7 @@ import Testing
       (.latinAmerica, .easy, 208)
     ]
 
-    // Iterate both shuffle modes (item 19): `false` gives a deterministic, reproducible
+    // Iterate both shuffle modes: `false` gives a deterministic, reproducible
     // run (the same verbs every time, so a regression can't hide behind randomness —
     // exactly how `manecer` dodged CI); `true` also exercises the shuffle path. Both
     // must score the maximum for a perfect run.

@@ -4,7 +4,7 @@
 //
 //  The interactive App Intent behind the Quiz widget's answer buttons. Records the
 //  result in the shared defaults suite (keyed to the current question) and reloads the
-//  Quiz widget's timeline so it flips to the answered state. Ported from Conjuguer.
+//  Quiz widget's timeline so it flips to the answered state.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

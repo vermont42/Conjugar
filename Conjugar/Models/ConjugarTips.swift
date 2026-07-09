@@ -2,10 +2,9 @@
 //  ConjugarTips.swift
 //  Conjugar
 //
-//  TipKit onboarding tips, ported from the sibling app Conjuguer (French) and
-//  adapted for Spanish (July 2026). Four tips nudge new users toward the quiz,
-//  the verb models, higher quiz difficulty (rule-gated on a completed quiz), and
-//  Game Center. See `TipDisplay.tipsEnabled` for the screenshot kill switch.
+//  TipKit onboarding tips. Four tips nudge new users toward the quiz, the verb
+//  models, higher quiz difficulty (rule-gated on a completed quiz), and Game
+//  Center. See `TipDisplay.tipsEnabled` for the screenshot kill switch.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

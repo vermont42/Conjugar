@@ -3,10 +3,10 @@
 //  Conjugar
 //
 //  The SwiftUI quiz screen, replacing the UIKit QuizVC/QuizUIV. It observes the
-//  Step-0 `@MainActor @Observable Quiz` directly (the QuizDelegate is gone). A
-//  briefing + primary Start CTA when idle (audit §1); an in-progress card with a
-//  hero question, a visible focus-ringed answer field, a progress bar, haptics +
-//  an unmissable answer flash, and a de-emphasized status strip (audit §2).
+//  `@MainActor @Observable Quiz` directly (the QuizDelegate is gone). A briefing +
+//  primary Start CTA when idle; an in-progress card with a hero question, a visible
+//  focus-ringed answer field, a progress bar, haptics + an unmissable answer flash,
+//  and a de-emphasized status strip.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -71,8 +71,6 @@ struct QuizView: View {
     }
   }
 
-  // MARK: - Briefing (not started / finished)
-
   private var briefing: some View {
     VStack(spacing: Layout.tripleDefaultSpacing) {
       Spacer()
@@ -105,9 +103,9 @@ struct QuizView: View {
     .frame(maxWidth: .infinity)
   }
 
-  /// The primary Start CTA, borrowing Conjuguer's subtle "breathing" pulse: the
-  /// button gently scales 1.0 ↔ 1.1 to draw the eye without the jarring >1.5×
-  /// jumps the design skill warns against. Suppressed under Reduce Motion.
+  /// The primary Start CTA has a subtle "breathing" pulse: the button gently
+  /// scales 1.0 ↔ 1.1 to draw the eye without jarring >1.5× jumps. Suppressed
+  /// under Reduce Motion.
   @ViewBuilder
   private var startButton: some View {
     let base = Button(L.Quiz.start) { startQuiz() }
@@ -123,8 +121,6 @@ struct QuizView: View {
       }
     }
   }
-
-  // MARK: - In progress
 
   private var inProgress: some View {
     VStack(spacing: Layout.doubleDefaultSpacing) {
@@ -244,8 +240,6 @@ struct QuizView: View {
     .labelStyle(.titleAndIcon)
   }
 
-  // MARK: - Actions
-
   private func startQuiz() {
     TryQuizTip().invalidate(reason: .actionPerformed)
     SoundPlayer.play(.gun)
@@ -295,8 +289,6 @@ struct QuizView: View {
     fieldFocused = false
     lastResult = nil
   }
-
-  // MARK: - Game Center
 
   private func maybePromptGameCenter() {
     switch GameCenterPrompt.decision(

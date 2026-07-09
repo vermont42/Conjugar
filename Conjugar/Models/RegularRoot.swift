@@ -7,9 +7,8 @@
 //
 
 // The three regular roots the engine composes onto: cantar (-ar), comer (-er),
-// subir (-ir). These ending tables are the ground truth, transcribed from the
-// verified oracle (spanish_models.md §3 / classes 1, 2, 3) plus the voseo
-// supplement. Features (Phase 2+) override individual slots on top of these.
+// subir (-ir). These ending tables are the ground truth for classes 1, 2, 3, plus
+// the voseo supplement. Features override individual slots on top of these.
 //
 // -er and -ir differ only in PI 1p/2p, IMP 2p, and the future/conditional theme
 // vowel; they are kept as separate roots for tradition and clarity.
@@ -34,7 +33,7 @@ nonisolated enum RegularRoot {
 
   /// The regular ending for a slot, or nil when the regular paradigm has no such
   /// form (e.g. an affirmative imperative for usted/nosotros/ustedes, which are
-  /// derived from the subjunctive in a later phase).
+  /// derived from the subjunctive).
   func ending(for tense: EngineTense) -> String? {
     switch tense {
     case .participioPasado:
@@ -67,8 +66,6 @@ nonisolated enum RegularRoot {
     }
   }
 
-  // MARK: - Lookup
-
   private func ending(_ endings: [EnginePersonNumber: String], _ pn: EnginePersonNumber, vosFallsBackToTú: Bool = true) -> String? {
     if let ending = endings[pn] {
       return ending
@@ -78,8 +75,6 @@ nonisolated enum RegularRoot {
     }
     return nil
   }
-
-  // MARK: - Ending tables (oracle §3 + voseo)
 
   private var presenteDeIndicativo: [EnginePersonNumber: String] {
     switch self {

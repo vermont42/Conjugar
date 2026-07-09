@@ -27,9 +27,8 @@ struct RatingsFetcher {
     return reviewURL
   }
 
-  /// The iTunes lookup response, decoded via `Codable` (item 20) rather than the old
-  /// untyped `JSONSerialization` dictionary spelunking. Only the one field the row
-  /// needs is modeled; everything else in the payload is ignored.
+  /// The iTunes lookup response. Only the one field the row needs is modeled;
+  /// everything else in the payload is ignored.
   private struct LookupResponse: Decodable {
     let results: [Entry]
 
@@ -39,9 +38,8 @@ struct RatingsFetcher {
   }
 
   /// The localized ratings sentence for the current app version, or `nil` when the
-  /// lookup fails or returns an unexpected shape. `async`/`await` + `Codable` replace
-  /// the old completion-handler + `JSONSerialization` (item 20); returning an optional
-  /// lets the caller surface the failure instead of leaving the row silently empty.
+  /// lookup fails or returns an unexpected shape. Returning an optional lets the
+  /// caller surface the failure instead of leaving the row silently empty.
   static func ratingsDescription() async -> String? {
     let request = URLRequest(url: RatingsFetcher.iTunesURL)
 
@@ -57,9 +55,9 @@ struct RatingsFetcher {
 
     switch ratingsCount {
     case 0:
-      // The Spanish exhortation used to be a hardcoded literal here; it now lives in
-      // the catalog (item 20) so the deliberate mixed-language flavor is visible to
-      // translation. It stays Spanish in both localizations by design.
+      // This Spanish exhortation lives in the catalog so the deliberate mixed-language
+      // flavor is visible to translation. It stays Spanish in both localizations by
+      // design.
       return L.Settings.noRating + " " + L.Settings.beFirst
     default:
       return L.Settings.ratings(count: ratingsCount) + " " + L.Settings.addYours

@@ -13,11 +13,9 @@ import TipKit
 
 nonisolated private let quizLogger = Logger(subsystem: "com.racecondition.Conjugar", category: "Quiz")
 
-/// A shuffle-on-start, wrap-around cursor over one verb list. Replaces the 13
-/// hand-copied cycling accessors + parallel index vars the quiz used to carry
-/// (item 12). `next()` preserves the original stepping exactly: it advances the
-/// index first, so the first call returns element 1 and element 0 is reached only
-/// after a full wrap.
+/// A shuffle-on-start, wrap-around cursor over one verb list. `next()` advances
+/// the index first, so the first call returns element 1 and element 0 is reached
+/// only after a full wrap.
 private final class Cycler {
   private var elements: [String]
   private var index = 0

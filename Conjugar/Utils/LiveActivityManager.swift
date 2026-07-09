@@ -4,7 +4,7 @@
 //
 //  Starts / updates / ends the quiz Live Activity, driven from Quiz.swift. The widget
 //  extension only renders QuizActivityAttributes (see QuizLiveActivity); all lifecycle
-//  lives here. Ported from Conjuguer.
+//  lives here.
 //
 //  Live Activities are unavailable in the simulator and when the user has disabled them,
 //  so every entry point is a guarded no-op in those cases — safe to call from tests.

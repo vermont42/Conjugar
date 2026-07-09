@@ -4,8 +4,7 @@
 //
 //  The action behind the Quick Quiz control-center widget. Opens the app and stashes
 //  a deeplink the app drains on activation (control widgets can't navigate directly).
-//  Lives in Shared so the app can also resolve the intent's metadata. Ported from
-//  Conjuguer.
+//  Lives in Shared so the app can also resolve the intent's metadata.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
