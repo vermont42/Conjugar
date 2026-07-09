@@ -2569,3 +2569,47 @@ parallel Swift Testing suite would not. The diacritic-identifier cleanup stays o
 `expectatiön` in the rewritten test file, left the rest where they sit until those files are touched.
 
 Build green, 412 tests / 0 failures, SwiftLint clean. Phase 7 is complete.
+
+## Etymology pipeline scaffolding (Spanish)
+
+Stood up the data pipeline for per-verb etymologies, mirroring the sibling apps Conjuguer
+(French) and Konjugieren (German) — a `VerbView` feature that shows a short, bilingual
+etymology below the conjugations. This checkpoint lays the *foundation*: it populates no
+etymologies yet, it creates the machinery to generate and load them.
+
+- **Work-list** (`prompts/etymology-verbs.json`, 988 verbs): built straight from the
+  frequency ranks already baked into `verbModelMap.xml` (the `fr` attribute, sourced from
+  `docs/SpanishVerbFrequencyRanks.txt`). One entry per infinitive, `gloss` from the `tn`
+  display-gloss, homonyms (e.g. `apostar` — *bet; station*) collapsed to a single row. The
+  1..1000 rank sequence has gaps, hence 988, not 1000.
+- **`Etymology.swift`**: a `nonisolated`, load-once cache (an `NSLock`-guarded
+  `@unchecked Sendable` class, the `VerbMap` pattern — kept engine-adjacent rather than
+  `@MainActor` like Conjuguer's, so the lookup composes with the nonisolated engine). Reads
+  the bundled `Etymologies.json`, keyed language → infinitive → text, device language with
+  English fallback. `Models/` is a synchronized root group, so the new `.swift` and `.json`
+  needed no `project.pbxproj` edit and the JSON auto-bundles.
+- **`Etymologies.json`**: seeded with one hand-authored, tilde-parity-checked entry
+  (`estar` — the direct Spanish reflex of the `stāre`/`*steh₂-` chain used as Conjuguer's
+  vetted worked example), so the pipeline has a file to accumulate into.
+- **`prompts/etymology-pipeline.md`** + **`run-etymology-pipeline.md`**: the Spanish port of
+  Conjuguer's generation pipeline — parallel `general-purpose` subagents, transcript
+  extraction, a markup validator (even tilde counts, en/es parity, no ASCII quotes, recon
+  asterisk placement), merge-through-`json.dumps`, progress reporting. Spanish-specific
+  adaptations: `en`/`es` (not `fr`), pretérito indefinido register, `« »` guillemets,
+  es.Wiktionary/DLE/Corominas as primary sources with en.Wiktionary for the PIE chain, an
+  Arabism accuracy note, and a select set of rare defectives (yacer, abolir, placer, asir,
+  balbucir, atañer) beyond the ranked 988.
+
+The pipeline also carries **deep-dive guidance for `ser` and `haber`** — the two most-used
+verbs get the fuller three-paragraph treatment Conjuguer gives `être`/`avoir`, and since the
+Latin origins align, most of the reference text lifts whole-cloth. `haber` reuses `avoir`'s
+`habēre` chain, the "English *have* is not a cognate" point, and the German-`haben` /
+`*keh₂p-` / Sprachbund payoff, then pivots on the Spanish-specific twist (Spanish ceded
+possession to `tener` and leveled the old `ser`/`haber` auxiliary split, generalizing `haber`
+— `hay` < `ha` + locative `y`). `ser` keeps `être`'s suppletion framing but swaps the donor
+verbs: `esse` (present/imperfect), `sedēre` "to sit" (the infinitive `ser` itself + future/
+subjunctive), and `fuī` (the preterite it shares wholesale with `ir`).
+
+Remaining lifecycle step (deliberately not in this checkpoint): wiring the `~…~`→bold
+renderer and an etymology card into `VerbView`, then running the pipeline across sessions to
+fill the 988. Build green, JSON valid.
