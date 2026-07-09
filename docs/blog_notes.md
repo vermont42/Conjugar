@@ -2710,3 +2710,44 @@ rest). Five `general-purpose` subagents × 10, launched in parallel, each return
   validation, and the merge all ran without incident.
 
 Next: `intentar` (rank 102).
+
+## Etymology pipeline — batch 3 (ranks 102–151)
+
+Third generation batch: 50 verbs, ranks 102–151 (`intentar`, `servir`, `aplicar`,
+`compartir`, `referir`, `mirar`, `alcanzar`, `continuar`, `elegir`, `iniciar`, `sacar`,
+`construir`, `enviar`, `cerrar`, `preguntar`, `aprender`, `celebrar`, `desear`, `caer`,
+`morir`, `nacer`, `sufrir`, `escuchar`, `responder`, `vender`, `proponer`, and the rest).
+Five `general-purpose` subagents × 10, launched in parallel, each returning a bilingual
+(en/es) JSON block. `Etymologies.json` now holds **151/988** ranked verbs in both languages.
+
+- **Step 4 markup validation passed clean on the first try yet again** — all 100 (verb, lang)
+  values: even tilde counts, en/es parity, no ASCII quotes, real paragraph breaks, no
+  misplaced reconstruction asterisks. No re-dispatches needed.
+- **Disputed origins hedged, not laundered**, as the pipeline demands: `sacar` (Corominas'
+  favored Gothic `sakan` "to quarrel/sue" vs. the competing `saccus` "sack" account — the
+  vivid win-by-lawsuit image explicitly flagged as hypothesis); `alcanzar` (Vulgar Latin
+  `*incalciāre` "tread on the heels," with the `al-` prefix reshaping itself uncertain —
+  Latin `ad`, the contraction `al`, or Arabic `al-`); `cerrar`'s `s-` > `c-` shift (Corominas'
+  proposal via `cercar`, not settled fact); `preguntar`'s sailor's-sounding-pole image
+  (`contus`, the traditional-but-not-certain account); `celebrar`/`celeber` (the appealing
+  link to `celer` "swift" is *not* established — origin left unknown); `desear`/`dēsīderāre`
+  (the charming "star" etymology, `dē-` + `sīdus`, offered as one proposal since some reject
+  the `sīdus` connection); and `proponer`, where the entry declines to claim French `proposer`
+  / English `propose` descend phonologically from `prōpōnere` (they belong to the `poser` <
+  `pausāre` family that merely merged in sense) and flags the `po-` + `sinere` split as a
+  reconstruction.
+- **Memorable payoffs that are actually settled**: `aplicar`/`plicāre` "to fold" — the same
+  root that, via folding a ship's sails on nearing shore, gave `llegar` "to arrive";
+  `mirar` < `mīrārī` "to marvel," a blood relative of English *smile*, its wonder drained
+  into plain "to look" but preserved in `milagro`/`maravilla`; `acompañar` < `companio`, the
+  "bread-fellow" (`com-` + `pānis`); `responder` < `spondēre`, a pledge sworn over a
+  libation, source of `esposo`/`esposa` *and* `esposas` "handcuffs" (both the bound ones);
+  `añadir`'s doubly-redundant "to it" (`in-` piled on `ad-` + `dare`, both already "to");
+  `informar` = literally "to put into form," with the `forma`/`horma` doublet; and `caer` <
+  `cāsus` "a falling," behind `caso`, `casualidad`, `ocaso`, and grammatical "case."
+- **No pipeline friction this run.** One agent (group 5) appended a prose "notes" block after
+  its JSON, tripping `json.loads` with `Extra data`; the documented `raw_decode` recovery
+  grabbed the first object cleanly. The `strict=False` fix again absorbed agents' literal
+  newlines. Otherwise Step 3 extraction, Step 4 validation, and the merge ran without incident.
+
+Next: `definir` (rank 152).
