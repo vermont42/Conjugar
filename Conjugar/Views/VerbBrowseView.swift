@@ -165,6 +165,12 @@ struct VerbRowLabel: View {
     }
     .padding(.horizontal)
     .padding(.vertical, 12)
+    // Make the *entire* row a tap target. Without this, SwiftUI hit-tests only the
+    // drawn glyphs (infinitive/gloss/rank), so taps on the transparent Spacer gap and
+    // padding fall through — the row felt only partly tappable (and defeated
+    // ios-build-verify's tap-to-drill-down on a verb). A content shape over the padded
+    // frame claims the whole cell.
+    .contentShape(Rectangle())
   }
 }
 

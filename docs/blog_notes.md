@@ -2751,3 +2751,18 @@ Five `general-purpose` subagents × 10, launched in parallel, each returning a b
   newlines. Otherwise Step 3 extraction, Step 4 validation, and the merge ran without incident.
 
 Next: `definir` (rank 152).
+
+7/9/26: Fixed a partial-tap-target bug in Browse Verbs.
+
+- **Symptom.** Only the drawn glyphs of a verb row (infinitive, gloss, rank badge)
+  were tappable; the transparent `Spacer` gap and the row's padding fell through, so
+  the cell felt only partly tappable and drilling into a verb sometimes missed.
+- **Cause.** `VerbRowLabel`'s `HStack` had no explicit content shape, so SwiftUI
+  hit-tested only its opaque subviews — the `NavigationLink` wrapping it inherited the
+  same holey target.
+- **Fix.** One line: `.contentShape(Rectangle())` on the padded row frame in
+  `VerbBrowseView.swift`, declaring the whole cell as the tap area.
+- **Verified in the simulator.** Tapping the previously-dead empty right-of-center gap
+  of the "poder" row now `describe_ui`-resolves to a full-width `Button "poder, can"`
+  (frame x:0, width:402) and navigates to the Poder detail screen. This also unblocks
+  ios-build-verify's tap-to-drill-down on a verb.
