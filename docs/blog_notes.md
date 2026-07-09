@@ -2912,3 +2912,20 @@ of five, each returning a bilingual (en/es) JSON block. `Etymologies.json` now h
   `*captiāre`; `satisfacer` = `satis` + `facere`, kin to English `sad` ("sated, full") via `*seh₂-`.
 
 Next: `fallecer` (rank 453).
+
+---
+
+## Deleting the device-model table (DeviceUtility) ahead of TelemetryDeck
+
+The old analytics stack hand-maintained a ~100-line `switch` that mapped raw device
+identifiers (`iPhone17,3`) to marketing names (`iPhone 16`) — `Analytics/DeviceUtility.swift`,
+a `UIDevice.modelName` extension. Its *only* consumer was `AnalyticsService.recordBecameActive()`,
+which stuffed the model name into the became-active event payload. Every new iPhone/iPad
+generation meant another manual edit to keep the table current.
+
+TelemetryDeck (the planned analytics backend) reports device model identifiers natively, so
+the table is redundant the moment that integration lands. Deleted it now, ahead of the
+integration: removed `DeviceUtility.swift`, its `DeviceUtilityTests.swift`, and the
+`modelKey: modelName` parameter from `recordBecameActive()`, which now sends only the locale.
+Dropping the lone `UIDevice` use also let `AnalyticsService.swift` shed its `import UIKit`.
+Both files lived in a synchronized group, so no `project.pbxproj` edit was needed. Build green.

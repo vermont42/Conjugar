@@ -132,7 +132,7 @@ var Current = World.device  // Production
 ```
 
 Services provided by World:
-- `analytics: AnalyticsService` - no-op spy (AWS Pinpoint removed; TelemetryDeck planned). **When TelemetryDeck lands, delete `Utils/DeviceUtility.swift`** — its ~100-line hand-maintained device-model table exists only to build the became-active analytics payload (`AnalyticsService.recordBecameActive()`), and TelemetryDeck reports model identifiers natively.
+- `analytics: AnalyticsService` - no-op spy (AWS Pinpoint removed; TelemetryDeck planned). The hand-maintained device-model table (`Analytics/DeviceUtility.swift`) that fed the became-active analytics payload was deleted July 2026 ahead of the TelemetryDeck integration, which reports model identifiers natively; `recordBecameActive()` now sends only the locale.
 - `gameCenter: GameCenter` - Game Center integration
 - `reviewPrompter: ReviewPrompter` - App Store review prompting
 - `settings: Settings` - User preferences (wraps UserDefaults)

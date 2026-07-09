@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import UIKit
 
 protocol AnalyticsService {
   func recordEvent(_ eventName: String, parameters: [String: String]?, metrics: [String: Double]?)
@@ -77,13 +76,11 @@ extension AnalyticsService {
 
   func recordBecameActive() {
     let becameActive = "becameActive"
-    let modelKey = "model"
     let localeKey = "locale"
 
-    let modelName = UIDevice.current.modelName
     let locale = Current.locale.locale
 
-    recordEvent(becameActive, parameters: [modelKey: modelName, localeKey: locale], metrics: nil)
+    recordEvent(becameActive, parameters: [localeKey: locale], metrics: nil)
   }
 
   var visited: String {
