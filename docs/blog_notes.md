@@ -2929,3 +2929,33 @@ integration: removed `DeviceUtility.swift`, its `DeviceUtilityTests.swift`, and 
 `modelKey: modelName` parameter from `recordBecameActive()`, which now sends only the locale.
 Dropping the lone `UIDevice` use also let `AnalyticsService.swift` shed its `import UIKit`.
 Both files lived in a synchronized group, so no `project.pbxproj` edit was needed. Build green.
+
+## Auditing the cold-launch widget-deeplink race (no fix needed)
+
+Conjuguer, the French sibling, had a bug: force-quit the app, tap a Verb-of-the-Day widget,
+and it opened the verb *browse* list instead of the individual verb. It happened because
+Conjuguer loads its ~6,300 verbs asynchronously (`Task.detached`), so on a cold launch the
+widget's deeplink reached the router *before* the parse finished; the router then switched the
+tab unconditionally, landing on the Verbs list with a nil verb. Two ingredients were required:
+(a) an async verb load that can still be in flight when the deeplink arrives, and (b) a router
+that changes navigation state even when the entity lookup fails.
+
+Audited Conjugar for the same defect and found it structurally immune on both axes:
+
+- **No observable-empty window (a absent).** Conjugar's `VerbMap.shared` is a *synchronous*
+  lazy static — `static let shared = VerbMap()` whose `private init()` parses `verbModelMap.xml`
+  inline with `XMLParser`. Swift initializes a lazy `static let` exactly once, on first access,
+  blocking until done, so the map is never seen empty. There is no `Task.detached` fill-later
+  step for the deeplink to outrun.
+- **Guarded routing (b absent).** `AppRouter.handle(url:)` calls `open(verb:)` only inside the
+  `verb/random`-non-nil or `entry(for:) != nil` branches; a miss changes neither `selectedTab`
+  nor `pendingVerb`.
+- **Race-free consumer.** `VerbBrowseView` reads `router.pendingVerb` via
+  `.onChange(of:initial: true)`, so a deeplink that set it before the view existed (the cold-launch
+  case) is still consumed on first appearance, and the pushed verb resolved against the same
+  synchronous `VerbMap.shared`.
+
+Because the race requires a verb store that can be observed empty — which a synchronous lazy
+static cannot be — the Conjuguer symptom can't reproduce here. The lazy-synchronous `VerbMap`
+plus guarded routing is already the robust design, so no code change was made; recorded the
+outcome and stopped.
