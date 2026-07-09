@@ -619,6 +619,24 @@ file.
   against `Etymologies.json`.
 - **3–5 subagents × ~8 verbs.** Bigger batches risk compaction mid-run. If compaction
   happens, the agent transcripts persist on disk and Step 3 recovers the results.
+  **Batch 4 pushed this to 10 × 10 = 100 verbs** (split across two parallel-launch messages
+  of five agents each) with zero compaction and zero lost transcripts, so the 3–5 guidance is
+  conservative — a full 100 is safe when you split the launch into 2–3 messages.
+- **Paste REAL curly quotes / guillemets into the worked example, not ASCII.** In batch 4,
+  3 of 10 agents (30 English entries) emitted straight `"…"` glosses instead of curly `“…”`
+  — because the worked-example block *in the Agent-tool prompt string* had its quotes
+  flattened to ASCII when composed (this pipeline file's example is correct; the flattening
+  happened at paste time). Agents mirror whatever they literally see in the example. The
+  Step 4 `ASCII " in prose` check caught all 30; the mechanical fix is a paired-quote
+  substitution on the `/tmp/etym_g*.json` files before merging:
+  `re.sub(r'"([^"]*)"', lambda m: "“"+m.group(1)+"”", t)` for `en`, guillemets for `es`.
+  Cheaper still: verify the example's quotes are curly `“ ”` / `« »` before launching.
+- **Make `strict=False` the DEFAULT in the Step 3 scan-all-objects extractor, not a
+  fallback.** `json.JSONDecoder()` (the `Extra data` recovery snippet) defaults to *strict*
+  mode, which rejects the real literal newlines agents routinely emit — in batch 4 that
+  silently produced "0 verbs" for 4 of 10 agents until re-run with
+  `json.JSONDecoder(strict=False)`. Construct the decoder as `json.JSONDecoder(strict=False)`
+  up front so every agent parses on the first pass regardless of newline style.
 
 ## Reminders
 

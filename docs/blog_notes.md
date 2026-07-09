@@ -2752,6 +2752,53 @@ Five `general-purpose` subagents × 10, launched in parallel, each returning a b
 
 Next: `definir` (rank 152).
 
+## Etymology pipeline — batch 4 (ranks 152–251)
+
+Fourth generation batch, and the first to scale up to a **full 100 verbs**: ranks 152–251
+(`definir`, `interesar`, `observar`, `entregar`, `contener`, `declarar`, `ocupar`,
+`constituir`, `descubrir`, `sentar`, `subir`, `soler`, `significar`, `tocar`, `marcar`,
+`crecer`, `avanzar`, `resolver`, `suceder`, `traer`, `comer`, `obligar`, `adquirir`,
+`lanzar`, `proteger`, `cubrir`, `exponer`, `faltar`, `correr`, `comprender`, `controlar`,
+`defender`, `poseer`, `bajar`, `mover`, `imponer`, `surgir`, `elevar`, `diseñar`, `meter`,
+`valer`, `levantar`, `otorgar`, and the rest). Ten `general-purpose` subagents × 10,
+launched in two parallel messages of five, each returning a bilingual (en/es) JSON block.
+`Etymologies.json` now holds **251/988** ranked verbs in both languages.
+
+- **Batch size doubled without incident.** Ten agents ran cleanly in parallel; no compaction,
+  no lost transcripts. Confirms the pipeline's "3–5 × ~8" guidance is conservative — 10 × 10
+  works when the batch is split across two send messages.
+- **New friction: half the agents copied ASCII quotes from the worked example.** Groups 1, 6,
+  and 7 (30 English entries) used straight `"…"` for glosses instead of the required curly
+  `"…"`, because the subagent-prompt's worked example itself rendered them as ASCII (the
+  pipeline file's example uses real curly quotes, but they flattened when pasted into the
+  Agent-tool prompt string). The Step 4 `ASCII " in prose` check caught all 30; a mechanical
+  paired-quote substitution (`"([^"]*)"` → `"…"`) fixed them and re-validation passed clean.
+  **Lesson for next run: paste real curly quotes `" "` / guillemets `« »` into the worked
+  example, or the agents mirror whatever they see.**
+- **Extraction gotcha re-confirmed:** the Step 3 default `raw_decode` runs in *strict* mode,
+  which silently drops any agent that emitted real literal newlines (4 of 10 this batch →
+  "0 verbs"). Re-running just those with `json.JSONDecoder(strict=False)` recovered all of
+  them. The scan-all-objects extractor needs `strict=False` **by default**, not as a fallback.
+- **Disputed origins hedged, not laundered:** `soler` (De Vaan rejects the traditional
+  `*swe-dʰh₁-` "set as one's own" for a phonological reason — a following `ē` should block
+  `swe-` > `so-`; origin left unsettled); `tocar` (Germanic *or* onomatopoeic, no secure PIE
+  root); `marcar` (native denominal vs. Italian loan, both over a Germanic `*markō`); `planta`
+  (`*pleh₂-` "flat" vs. `*pleh₂k-` "to strike", unresolved); `causa` (possibly non-IE, perhaps
+  Etruscan); `bassus` behind `bajar` ("of uncertain origin" — Oscan? Celtic? Greek `bathýs`?);
+  `frons` behind `enfrentar` (De Vaan: "no plausible etymology"); `fallere` behind `faltar`;
+  and `obligar`'s coda on the ancient `religiō` dispute (Lactantius' `religāre` "to bind" vs.
+  Cicero's `relegere` "to reread", never settled).
+- **Memorable payoffs that are actually settled:** `ser`-relative `sedēre` "to sit" surfacing
+  under `sentar`, `poseer` (`potis` "master" + `sedēre` = "to sit as master over"), and
+  `situar`; `ocupar`/`aceptar`/`comer` all riding the `capere`/`have`-is-not-`habēre` false-
+  cognate note; `elevar`/`llevar` and `colocar`/`colgar` as learned/inherited doublets from
+  one Latin verb; `avanzar`'s intrusive English `d` (`advance`, a scribal misreading of `av-`
+  as `ad-`); `declarar`'s `clārus`, a *sound* word ("loud, ringing") that crossed to light
+  ("clear, bright"); `depender`/`pesar`/`pensar` all hanging from `pendēre`; and `controlar` <
+  `contre-rôle`, the counter-register wheel (`rota`) that also spun off `role`.
+
+Next: `invitar` (rank 252).
+
 7/9/26: Fixed a partial-tap-target bug in Browse Verbs.
 
 - **Symptom.** Only the drawn glyphs of a verb row (infinitive, gloss, rank badge)
