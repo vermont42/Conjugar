@@ -2676,3 +2676,37 @@ strict=False)`, which accepts control characters inside strings; the re-serializ
 `/tmp/etym_g*.json` then normalizes them to `\n`. Added this to the pipeline's Lessons.
 
 Next: `necesitar` (rank 52).
+
+## Etymology pipeline — batch 2 (ranks 52–101)
+
+Second generation batch: 50 verbs, ranks 52–101 — the next tier of high-frequency verbs
+(`necesitar`, `mostrar`, `lograr`, `comenzar`, `establecer`, `leer`, `pedir`, `producir`,
+`obtener`, `gustar`, `convertir`, `escribir`, `recordar`, `entender`, `sentir`, `terminar`,
+`decidir`, `formar`, `jugar`, `reconocer`, `entrar`, `comprar`, `pagar`, `dirigir`, and the
+rest). Five `general-purpose` subagents × 10, launched in parallel, each returning a bilingual
+(en/es) JSON block. `Etymologies.json` now holds **101/988** ranked verbs in both languages.
+
+- **Step 4 markup validation passed clean on the first try again** — all 100 (verb, lang)
+  values: even tilde counts, en/es parity, no ASCII quotes, real paragraph breaks, no
+  misplaced reconstruction asterisks. No re-dispatches needed; every agent returned both
+  languages for all ten verbs.
+- **Disputed origins hedged, not laundered**, as the pipeline demands: `ganar` (Corominas'
+  Gothic `*ganan` "to covet" — explicitly *not* the same word as `guadagnare` < Frankish
+  `*waidanjan`, a distinction Corominas insists on); `perder`'s `-dere` (the traditional
+  `dare` < PIE `*deh₃-` vs. the newer `*dʰeh₁-` analysis); `señalar`/`signum` (PIE `*sek-`
+  "cut" vs. `*sekʷ-` "follow"); `cambiar`'s Celtic `*kambos` "curved" semantic bridge;
+  `forma`'s contested link to Greek `morphḗ` by metathesis; and `evitar`, whose `vītāre` the
+  entry honestly lands as genuinely uncertain ("an honest etymology sometimes ends in a
+  shrug").
+- **Memorable payoffs that are actually settled**: `empezar`'s Celtic heart (`pieza` <
+  Gaulish `*pettyā`), `recordar` = "to bring back through the heart" (`cor`, cognate with
+  English *heart*), `desarrollar` = literally "un-roll a scroll," `pedir` < `petere` where
+  "to ask" and "to attack" were one verb (launch yourself at what you want), `pagar` <
+  `pācāre` "to pacify" (appease a creditor → pay him; and `apagar` = "make peace with a
+  flame"), `acabar` < `cabo` < `caput` "head" (cognate with English *head*), and `mejorar`'s
+  suppletion (`mejor` < `melior`, unrelated to `bueno`, like English good/better).
+- **No pipeline friction this run.** The `strict=False` fix from batch 1 handled the couple of
+  agents that again used literal newlines in their JSON values; Step 3 extraction, Step 4
+  validation, and the merge all ran without incident.
+
+Next: `intentar` (rank 102).
