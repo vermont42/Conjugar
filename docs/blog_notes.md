@@ -3040,3 +3040,26 @@ hedged rather than laundered throughout — `quemar` (Corominas rejects a straig
 descent), `regalar` (French *gale* vs. the seductive-but-contested *regalis* "treat like a
 king"), `bailar`, `gritar` (the *Quirites* folk etymology flagged as such), `marchar`,
 `derrotar` — exactly the cases the pipeline's confident-voice warning targets.
+
+## Spanish etymology pipeline — batch 9 (ranks 656–757)
+
+Another 100-verb batch of the Spanish etymology generator: 10 parallel general-purpose
+subagents × 10 verbs, launched in a single message. Zero context compaction, zero lost
+transcripts, and — for the second batch running — the Step 4 markup validator reported **OK on
+the first pass**: no odd/mismatched tildes, no `~~`/`~*` slips, no stray ASCII quotes (every
+agent used curly `“ ”` / guillemets `« »`), no missing-language returns. All 100 en/es tilde
+counts matched. `Etymologies.json` now holds **751 / 988 ranked verbs** in both languages; next
+up is `apretar` (rank 758).
+
+The batch turned up a fine set of the surprising-detail payoffs this feature exists for:
+`enamorar`'s `amāre` traced to an expressive nursery *Lallwort* rather than a secure PIE root;
+`apartar` → `apartheid` (the same small "to a part" word behind a grim political coinage);
+`felicitar`'s `fēlīx` meaning "fruitful/suckling" (root *~dʰeh₁(y)-~*) before it meant "happy",
+kin to `hembra` and `hijo`; `respaldar` hiding a Greek `spáthē` ("broad blade") in the flat of
+the shoulder; `apagar`/`pagar` as doublets both meaning "to bring to peace" (`pācāre`); and the
+`sancionar` auto-antonym ("ratify" and "penalize" at once). Disputed origins were hedged rather
+than laundered throughout — `aguantar` (RAE's "quizá" Italian-glove nautical route), `dibujar`
+(irregular phonology on the Old French wood-carving etymon), `retomar`/`tomar` (Rajna–Corominas
+`autumāre`, explicitly unproven), `embarazar` (pre-Roman `baraça`, DLE "quizá"), `optimizar`
+(`ops` vs. de Vaan's `ob`), `alegrar` (`alacer`'s disputed PIE root), `perdonar` (which side
+calqued `forgive`/`vergeben`) — exactly the cases the pipeline's confident-voice warning targets.
