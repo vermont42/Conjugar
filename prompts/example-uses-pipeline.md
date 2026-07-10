@@ -36,12 +36,11 @@ Work from the repo root: `/Users/josh/Desktop/workspace/Conjugar.mig`. Commits g
 
 A. ✅ **DONE** — `grokked/` medieval prep (see "A. …" below for what was built + learnings).
 B. ✅ **DONE** — `build_corpus_index.py` + `build_medieval_index.py` (see "B. …" below).
-C. **← NEXT.** Mining workflow — subagents select + translate → `ExampleUses.json` /
-   `MedievalExamples.json`. **Read the "C. Mining workflow" section below first — it has the exact
-   input schemas the indices now emit, the `os`-cleaning requirement, and the homograph/leak
-   rejection rules that were discovered building A & B.**
-D. Tail rescue + authored (Claude) residue.
-E. App-side Swift loaders + `VerbView` cards (mirror the etymology feature).
+C. ✅ **DONE** — Mining workflow: subagents selected + translated → `ExampleUses.json` (888) /
+   `MedievalExamples.json` (695 verbs, 2,139 lines), both dual-written.
+D. ✅ **DONE** — Tail rescue + authored (Claude) residue → **988/988 ranked verbs** now have a
+   modern example (61 corpus-rescued + 39 Claude-authored). See "D. …" below for what was built.
+E. **← NEXT.** App-side Swift loaders + `VerbView` cards (mirror the etymology feature).
 F. "Future plans": non-ranked verbs that have a medieval example also get a modern example
    (fabricated if none in corpus) + an etymology.
 
@@ -259,16 +258,31 @@ persisted JSONL transcripts with `strict=False`, validate, merge via `json.dumps
    19th-c. novels; still modern-matchable, but prefer a 19th-c. work's candidate when one exists
    (the round-robin already spreads leads, so this is usually automatic).
 
-## D. Tail rescue + authored residue
+## D. Tail rescue + authored residue  ✅ DONE
 
-- **Tail rescue** (`build_tail_index.py` port): verbs whose surface form collides with a common noun
-  (*cena, vino, cuenta, firma*) come back null because noun uses crowd out verbal ones. Re-mine just
-  the uncovered verbs from the government + technology tiers only, ranking candidates by how
-  distinctively-verbal the token is (infinitive/participle/gerund over the bare noun-stem).
-- **Authored residue:** verbs no open corpus uses verbally get an original **Claude-authored**
-  sentence, flagged `"source": "Claude (Opus 4.8)"`, `"line": null`, so AI authorship is explicit
-  and never attributed to a corpus. Document authored entries (mirror Conjuguer's
-  `docs/authored-examples.md`).
+> **Result: 988/988 ranked verbs have a modern example** = 949 corpus-sourced (888 step C + 61 tail
+> rescue) + 39 Claude-authored. The 100 step-C nulls split 89 (had noun-only candidates) + 11 (no
+> candidate); tail rescue placed 61, and 39 (9 tail-nulls + 30 never-verbal) were authored. Both
+> `ExampleUses.json` copies are complete. Scripts committed; the design below is what was built.
+
+- **Tail rescue** (`build_tail_index.py`, ported from Conjuguer): verbs whose surface form collides
+  with a common noun/adjective (*cocinar*→*cocina*, *dudar*→*duda*, *sumar*→*suma*, *forzar*→*fuerza*,
+  *viajar*→*viaje*) came back null because the literature-first index drained all five slots with
+  noun uses. Re-mines just the uncovered ranked verbs across all three modern tiers, ranking each
+  candidate by a Spanish `verbalness` score (infinitive/gerund highest, participle next, the
+  noun-shaped present forms score 0 and sink). **Learning:** a single per-doc gather cap let a
+  hyper-frequent score-0 collision (the article *una*, which the engine maps to *unir*) fill the
+  quota before the rare verbal form was scanned — fixed with a *split cap* (score-0 ≤2/doc, verbal
+  ≤20/doc). Emits `tail_index.json` + `shards/tail_NNN.json`. Three `general-purpose` subagents mined
+  the shards with a stricter rejection rule (a top-ranked candidate that's still a noun/homograph is
+  a red flag); output `mined_tail_*.json`.
+- **Authored residue** (`write_authored.py` → `mined_authored.json`): the 39 verbs with no clean
+  verbal corpus use get an original **Claude (Opus 4.8)** sentence, flagged `"source": "Claude (Opus
+  4.8)"`, `"line": null`, so AI authorship is explicit and never attributed to a corpus. Each is
+  asserted to contain its `token` verbally and to carry no ASCII double-quote. Documented in
+  `docs/authored-examples.md` (mirrors Conjuguer).
+- **Merge:** `build_examples.py aggregate modern` now globs `mined_modern_*` + `mined_tail_*` +
+  `mined_authored*` (disjoint key-sets) and re-merges — idempotent, rebuilds all 988 from shards.
 
 ## E. App-side integration (mirror the etymology feature)
 

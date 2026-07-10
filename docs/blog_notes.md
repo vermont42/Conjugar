@@ -3465,3 +3465,50 @@ pause (five-hour window exhausted) resumed by simply re-launching the shards wit
 one Sonnet shard that died on a mid-response API error was re-run in isolation. Remaining: D (tail
 rescue + authored residue), E (app-side `Example`/`MedievalExample` models + `VerbView` cards), F
 (future-plans verbs).
+
+## Example-uses — step D: tail rescue + authored residue COMPLETE (988/988 modern coverage)
+
+Step D closes the modern tier: it places the 100 ranked verbs that step C left null. The split
+turned out clean — **89 had corpus candidates but all were wrong-POS, 11 had no candidate at all** —
+and D resolved to **61 rescued from the corpus + 39 Claude-authored = 988/988 ranked verbs with a
+modern example**, dual-written to `corpus/json/ExampleUses.json` + `Conjugar/Models/ExampleUses.json`.
+
+**Tail rescue (`build_tail_index.py`, ported from Conjuguer).** The main index fills each verb's
+five slots *literature-first, in line order*, so a verb whose surface form equals a common noun
+drains all five with noun uses (*cocinar*→*cocina*, *dudar*→*duda*, *sumar*→*suma*, *forzar*→*fuerza*,
+*viajar*→*viaje*) and comes back null even when genuine verbal uses exist elsewhere. The tail builder
+re-mines exactly the uncovered verbs, ranking candidates by a Spanish `verbalness` score: infinitive
+and gerund (`-ando/-iendo`, incl. enclitic `-ándolo`) score highest, participles next, the
+noun-shaped present forms score 0 and sink. The **key fix over a naïve port** was a *split per-doc
+cap*: the article *una* (a form the engine legitimately maps to *unir*) appears hundreds of times per
+novel and, under a single gather cap, filled the whole quota before the rare *unir/uniendo* was ever
+scanned — so *unir*, a rank-43 verb, looked absent. Capping score-0 collisions at 2/doc while
+gathering verbal forms generously (20/doc) surfaced the real uses. Result: **70 verbs got a
+distinctively-verbal candidate; 30 had none** (their only corpus occurrences are adjectival
+participles the engine doesn't emit, like *documentada* / *archivados*, or substring artifacts).
+
+The 70 rescuable verbs were sharded (3 × ≤30) and mined by three parallel `general-purpose`
+subagents with a *stricter* rejection rule than step C — because the candidate list is pre-ranked
+verbal-first, a lingering noun/adjective/homograph at the top is a red flag. The subagents correctly
+nulled **9** where every candidate was a decoy: *jamar*←*jamás* (adverb), *salgar*←*salga* (of
+*salir*), *hacendar*←*haciendo* (of *hacer*), *regular*/*violado* (adjectives), *licenciado* (noun),
+*acondicionado* / *especializado* (lexicalized participles), and an English *catalogue* in a quoted
+passage. **61 placed** (e.g. *unir*, *viajar*, *comer*, *cocinar*, *curar*, *secar*, *forzar*,
+*caminar*, *sumar*, *argumentar* — mostly infinitives/gerunds pulled from the novels, plus
+administrative infinitives from the gov/tech tiers).
+
+**Authored residue (39).** The 9 tail-nulls + 30 never-verbal verbs get an **original Claude (Opus
+4.8) sentence**, each flagged `"source": "Claude (Opus 4.8)"`, `"line": null` so AI authorship is
+explicit and never attributed to a corpus, documented in `docs/authored-examples.md` (mirroring
+Conjuguer). Every authored sentence uses a genuinely verbal form and an assert in `write_authored.py`
+checks the `token` actually occurs in the sentence and that no ASCII double-quote can corrupt the
+JSON. These are the app's rarer verbs — *adir* (accept an inheritance), *salgar* (salt livestock),
+*rodrigar* (stake vines), *seriar* (mass-produce), *hacendar*, *respectar* — plus common verbs whose
+corpus form is only ever the noun (*documentar*, *entrevistar*, *archivar*, *donar*, *numerar*).
+
+Mechanics: the tail and authored files (`mined_tail_*.json`, `mined_authored.json`) share the mined
+shard schema, so `build_examples.py aggregate modern` just globs them alongside the step-C
+`mined_modern_*.json` and re-merges — the union is clean because the three key-sets are disjoint
+(modern-placed / tail-rescued / authored). Re-running aggregation is idempotent and rebuilds all 988
+from the shards. Remaining: E (app-side `Example`/`MedievalExample` models + `VerbView` cards), F
+(future-plans verbs).

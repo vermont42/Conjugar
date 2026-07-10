@@ -136,9 +136,15 @@ def _dual_write(basename, data):
 
 
 def aggregate_modern():
-    """Merge mined_modern_*.json shards into ExampleUses.json (placed entries only)."""
+    """Merge mined_modern_*.json AND mined_tail_*.json shards into ExampleUses.json (placed entries
+    only). The tail shards (step D tail rescue) re-mine the verbs the main modern pass returned null
+    for; their keys are disjoint from the modern-placed set, so this is a clean union. The
+    remaining null verbs are handled by the Claude-authored residue (merge_authored)."""
     merged, nulls, warnings = {}, [], []
-    for path in sorted(glob.glob(os.path.join(HERE, "mined_modern_*.json"))):
+    shards = (sorted(glob.glob(os.path.join(HERE, "mined_modern_*.json")))
+              + sorted(glob.glob(os.path.join(HERE, "mined_tail_*.json")))
+              + sorted(glob.glob(os.path.join(HERE, "mined_authored*.json"))))
+    for path in shards:
         for verb, ex in json.load(open(path, encoding="utf-8")).items():
             if not ex or ex.get("es") is None:
                 nulls.append(verb)

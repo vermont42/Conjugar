@@ -132,6 +132,13 @@
     "line": 702,
     "token": "acompañando"
   },
+  "acondicionar": {
+    "es": "Antes de la mudanza, los operarios acondicionaron el local para que sirviera de oficina.",
+    "en": "Before the move, the workers fitted out the premises so it could serve as an office.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "acondicionaron"
+  },
   "aconsejar": {
     "es": "Es un ángel, señorito; todo se le vuelve aconsejar bien a las hermanas.",
     "en": "She's an angel, young sir; all she ever does is give her sisters good advice.",
@@ -159,6 +166,13 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 5827,
     "token": "acreditaba"
+  },
+  "activar": {
+    "es": "El Plan Estratégico Estatal del Patrimonio Natural y de la Biodiversidad a 2030, el Plan Forestal Español, así como el Plan Nacional de Adaptación al Cambio Climático, entre otros, están activando diferentes herramientas al objeto de asegurar que las actuaciones vinculadas a la descarbonización tengan un despliegue compatible con los objetivos de conservación y restauración del patrimonio natural de España.",
+    "en": "The State Strategic Plan for Natural Heritage and Biodiversity to 2030, the Spanish Forestry Plan, as well as the National Plan for Adaptation to Climate Change, among others, are activating various tools in order to ensure that the actions linked to decarbonization are deployed in a way compatible with the objectives of conservation and restoration of Spain's natural heritage.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 436,
+    "token": "activando"
   },
   "actualizar": {
     "es": "En el año 2019 inició el proceso de rediseño de la GEIH con el fin de actualizar los diseños muestrales, operativos y conceptuales de la encuesta.",
@@ -202,6 +216,13 @@
     "line": 14746,
     "token": "adaptaban"
   },
+  "adecuar": {
+    "es": "El marco regulatorio se debe adecuar a este nuevo contexto para atraer el capital necesario, y así garantizar el cumplimiento de los objetivos de transición energética.",
+    "en": "The regulatory framework must be adapted to this new context in order to attract the necessary capital and thus ensure the fulfillment of the energy transition objectives.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 1537,
+    "token": "adecuar"
+  },
   "adelantar": {
     "es": "Adelantaban poco a poco, y ya salían de las estrecheces a senda más desahogada, abierta entre pinos nuevos y montes poblados de aliaga.",
     "en": "They advanced little by little, and were already emerging from the narrow passage onto a more open path, cut through young pines and hillsides covered with gorse.",
@@ -209,12 +230,26 @@
     "line": 83,
     "token": "adelantaban"
   },
+  "adentrar": {
+    "es": "Los excursionistas se adentraron en el bosque hasta perder de vista el sendero.",
+    "en": "The hikers ventured deep into the forest until they lost sight of the trail.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "adentraron"
+  },
   "adherir": {
     "es": "Era como un perrillo que prontamente distingue a su amo entre todas las personas que le rodean, y se adhiere a él y le mima y acaricia.",
     "en": "He was like a puppy that quickly picks its master out among all the people around him, and clings to him, fussing over him and nuzzling him.",
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 9707,
     "token": "adhiere"
+  },
+  "adir": {
+    "es": "El único heredero decidió adir la herencia pese a las deudas que la gravaban.",
+    "en": "The sole heir decided to accept the inheritance despite the debts burdening it.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "adir"
   },
   "adjudicar": {
     "es": "A la pobre víctima le sacó Torquemada mucho más, porque se adjudicó sus muebles riquísimos por un pedazo de pan.",
@@ -411,6 +446,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 6010,
     "token": "Alentado"
+  },
+  "alertar": {
+    "es": "El vigía alertó a la aldea en cuanto divisó las velas enemigas en el horizonte.",
+    "en": "The lookout alerted the village as soon as he spotted the enemy sails on the horizon.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "alertó"
   },
   "alimentar": {
     "es": "Aquello eran tierras: siempre verdes, con las entrañas incansables engendrando una cosecha tras otra, circulando el agua roja á todas horas como vivificante sangre por las innumerables acequias y regadoras que surcaban su superficie como una complicada red de venas y arterias; fecundas hasta alimentar familias enteras con cuadros que, por lo pequeños, parecían pañuelos de follaje.",
@@ -671,6 +713,20 @@
     "line": 5051,
     "token": "apuntaban"
   },
+  "archivar": {
+    "es": "La secretaria archivó los expedientes por orden alfabético antes de cerrar la oficina.",
+    "en": "The secretary filed the records in alphabetical order before closing the office.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "archivó"
+  },
+  "argumentar": {
+    "es": "Doña Lupe discutía con ella violentamente, argumentando con crueles pellizcos, y añadiendo que estaba autorizada por la madre para descuartizarla si preciso era.",
+    "en": "Doña Lupe argued with her violently, reasoning with cruel pinches, and adding that she was authorized by the mother to tear her apart if necessary.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 12917,
+    "token": "argumentando"
+  },
   "armar": {
     "es": "Juanito se reunía con otros cachorros en la casa del chico de Tellería (Gustavito) y allí armaban grandes peloteras.",
     "en": "Juanito used to get together with other young pups at the house of the Tellería boy (Gustavito), and there they would stir up great rows.",
@@ -740,6 +796,13 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 1964,
     "token": "asegurado"
+  },
+  "asentar": {
+    "es": "Quise ir a asentar mi plaza al Piamonte.",
+    "en": "I wanted to go and enlist for service in Piedmont.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 13442,
+    "token": "asentar"
   },
   "asesinar": {
     "es": "Unas botas de montar carcomidas, asomando por entre papeles y trapos, despertaban en la fantasía la idea de un hombre asesinado y oculto allí.",
@@ -923,6 +986,13 @@
     "line": 11,
     "token": "bajar"
   },
+  "basar": {
+    "es": "Se trata de un codificador automático para las CNAE 2009 y 2025, basado en técnicas de procesamiento del lenguaje natural y entrenado con cientos de miles de registros.",
+    "en": "It is an automatic coder for the CNAE 2009 and 2025 classifications, based on natural language processing techniques and trained with hundreds of thousands of records.",
+    "source": "es-ine-informe-anual-2024.txt",
+    "line": 784,
+    "token": "basado"
+  },
   "bastar": {
     "es": "Pero esto importa poco a nuestro cuento; basta que en la narración dél no se salga un punto de la verdad.",
     "en": "But this matters little to our story; suffice it that the narrative not stray a bit from the truth.",
@@ -957,6 +1027,13 @@
     "source": "la-regenta-clarin-1885.txt",
     "line": 18831,
     "token": "bendecían"
+  },
+  "beneficiar": {
+    "es": "El Fondo Social para el Clima tiene por objeto mitigar el impacto del aumento del precio de los combustibles fósiles, beneficiando a los hogares, las microempresas y los usuarios del transporte vulnerables.",
+    "en": "The Social Climate Fund aims to mitigate the impact of the rise in fossil fuel prices, benefiting households, micro-enterprises and vulnerable transport users.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 19548,
+    "token": "beneficiando"
   },
   "besar": {
     "es": "Poco duró la contemplación, y a punto estuvo el clérigo de besar la tierra, merced a la huida que pegó el rocín, con las orejas enhiestas, loco de terror.",
@@ -1056,6 +1133,13 @@
     "line": 444,
     "token": "cambiando"
   },
+  "caminar": {
+    "es": "Érales difícil a las tres mujeres andar aprisa, por la mucha gente que venía calle abajo, caminando presurosa con la querencia del hogar próximo.",
+    "en": "It was hard for the three women to walk fast, because of all the people coming down the street, hurrying along with the pull of the nearby home.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 9200,
+    "token": "caminando"
+  },
   "cancelar": {
     "es": "Y no obstante trascendía a clérigo, revelándose el sello formidable de la ordenación, que ni aun las llamas del infierno consiguen cancelar, en no sé qué expresión de la fisonomía, en el aire y posturas del cuerpo, en el mirar, en el andar, en todo.",
     "en": "And yet he still reeked of the clergyman, the formidable mark of his ordination showing through in some indefinable expression of his face — a mark not even the flames of hell could erase — in his bearing and posture, in his gaze, his walk, in everything.",
@@ -1119,12 +1203,26 @@
     "line": 108,
     "token": "cargado"
   },
+  "casar": {
+    "es": "Cuando mis padres me hablaron, a boca de jarro, de que me iba a casar contigo, me corrió un frío por todo el espinazo.",
+    "en": "When my parents told me, point-blank, that I was going to marry you, a chill ran down my whole spine.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 301,
+    "token": "casar"
+  },
   "castigar": {
     "es": "Señor caballero, este muchacho que estoy castigando es un mi criado, que me sirve de guardar una manada de ovejas que tengo en estos contornos, el cual es tan descuidado, que cada día me falta una.",
     "en": "Sir knight, this boy I am punishing is a servant of mine, who tends a flock of sheep I keep hereabouts, and he is so careless that I lose one every day.",
     "source": "quijote-cervantes-1605.txt",
     "line": 1646,
     "token": "castigando"
+  },
+  "catalogar": {
+    "es": "El bibliotecario tardó meses en catalogar los manuscritos recién donados al archivo.",
+    "en": "The librarian took months to catalog the manuscripts newly donated to the archive.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "catalogar"
   },
   "causar": {
     "es": "Allí vivían, en el centro de la hermosa y cuidada vega, formando mundo aparte, devorándose unos á otros; y aunque causasen algún daño á los vecinos, estos los respetaban con cierta veneración.",
@@ -1146,6 +1244,13 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 5808,
     "token": "celebraban"
+  },
+  "centrar": {
+    "es": "El objetivo es que los investigadores y tecnólogos puedan centrar sus esfuerzos en la consecución de los objetivos de I+D+I.",
+    "en": "The aim is for researchers and technologists to be able to focus their efforts on achieving the R&D&I objectives.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 16153,
+    "token": "centrar"
   },
   "cerrar": {
     "es": "Retirada la botella, los ojos del niño se cerraron, se aflojaron sus brazos, y no ya descolorido, sino con la palidez de la muerte en el rostro, hubiera caído redondo sobre la mesa, a no sostenerlo Primitivo.",
@@ -1210,6 +1315,13 @@
     "line": 2370,
     "token": "cobraba"
   },
+  "cocinar": {
+    "es": "Doña Anuncia no cocinaba, pero iba a la compra con la criada y traía lo mejor de lo más barato.",
+    "en": "Doña Anuncia did not cook, but she went shopping with the maid and brought back the best of the cheapest.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 4402,
+    "token": "cocinaba"
+  },
   "coger": {
     "es": "En un instante puede uno coger un gran ramo de violetas.",
     "en": "In an instant one can gather a great bunch of violets.",
@@ -1273,6 +1385,13 @@
     "line": 5,
     "token": "comenzaba"
   },
+  "comer": {
+    "es": "El abrigo propiamente español resiste a todas las modas de vestir, como el garbanzo resiste a todas las modas de comer.",
+    "en": "The truly Spanish overcoat resists all the fashions of dress, just as the chickpea resists all the fashions of eating.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 399,
+    "token": "comer"
+  },
   "comercializar": {
     "es": "Dado que una parte significativa del equipamiento energético doméstico y, en particular, del parque de electrodomésticos se renueva al finalizar su periodo de vida útil, éste se considera un momento adecuado para estimular entre los compradores su sustitución por otros con la mejor clase de eficiencia energética de entre los que se comercializan en el mercado.",
     "en": "Given that a significant share of domestic energy equipment, and in particular the stock of household appliances, is renewed at the end of its useful life, this is considered a suitable moment to encourage buyers to replace it with equipment of the best energy-efficiency class among those marketed.",
@@ -1315,6 +1434,13 @@
     "line": 3114,
     "token": "compite"
   },
+  "complementar": {
+    "es": "Esta operación permitirá también ofrecer una visión ampliada del comercio internacional de servicios, de mucha utilidad para complementar los datos de la Balanza de Pagos y de la Cuenta del resto del mundo de la Contabilidad Nacional.",
+    "en": "This operation will also make it possible to offer a broader view of international trade in services, very useful for complementing the Balance of Payments data and the Rest of the World Account of the National Accounts.",
+    "source": "es-ine-informe-anual-2024.txt",
+    "line": 297,
+    "token": "complementar"
+  },
   "completar": {
     "es": "--¡A ver, hombre! ¡Deja el paso libre!--añadió ésta, pasando casi sobre su marido, y despidiendo a todo el mundo con la mayor finura; es decir, con la cabeza ladeada, cogiéndose la falda con la punta de los dedos, y agachándose graciosamente, hasta completar la reverencia que a la sazón estaba de moda, y que se llamaba _la pompa_.",
     "en": "«Come now! Clear the way!» she added, almost stepping over her husband, and dismissing everyone with the utmost refinement — that is, with her head tilted, gathering her skirt with her fingertips, and bending gracefully until she completed the curtsy that was fashionable at the time, called «la pompa».",
@@ -1335,6 +1461,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 2333,
     "token": "componían"
+  },
+  "comportar": {
+    "es": "Los niños se comportaron ejemplarmente durante toda la ceremonia.",
+    "en": "The children behaved impeccably throughout the entire ceremony.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "comportaron"
   },
   "comprar": {
     "es": "En mis establos hay un rebaño de bueyes y terneros que jamás se uncen para labrar mis tierras; se compran con mi dinero, eso sí, pero luego se dan a parcería y no se me rinden cuentas jamás.",
@@ -1420,6 +1553,13 @@
     "line": 1455,
     "token": "condena"
   },
+  "condicionar": {
+    "es": "Este eje se considera un eje transversal por condicionar todos los demás ejes.",
+    "en": "This axis is considered a cross-cutting axis because it conditions all the other axes.",
+    "source": "es-mitma-movilidad-2030.txt",
+    "line": 1674,
+    "token": "condicionar"
+  },
   "conducir": {
     "es": "Primeramente, conducía a él un camino carretero, menos intransitable que los restantes de aquellos contornos.",
     "en": "In the first place, a cart road, less impassable than the others in that area, led to it.",
@@ -1482,6 +1622,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 1477,
     "token": "confundían"
+  },
+  "congelar": {
+    "es": "El invierno fue tan crudo que se congelaron las cañerías de toda la casa.",
+    "en": "The winter was so harsh that the pipes throughout the house froze.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "congelaron"
   },
   "conllevar": {
     "es": "Todo eso se puede llevar y conllevar —dijo el del Bosque—, con la esperanza que tenemos del premio.",
@@ -1594,6 +1741,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 11011,
     "token": "consumía"
+  },
+  "contactar": {
+    "es": "Se designarán puntos de contacto, que guiarán y ayudarán a los solicitantes a lo largo de todo el proceso de solicitud y concesión de autorizaciones, no teniendo que contactar con más de un punto de contacto en todo el proceso.",
+    "en": "Contact points will be designated to guide and help applicants throughout the whole process of applying for and granting authorizations, so that they do not have to contact more than one point of contact in the entire process.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 9081,
+    "token": "contactar"
   },
   "contaminar": {
     "es": "Esta afeminada pasión de ánimo, ya que existe en mí, importando desecharla, celebra Vd. que no se mezcle con la oración y la meditación y las contamine.",
@@ -1861,6 +2015,13 @@
     "line": 317,
     "token": "cumplido"
   },
+  "curar": {
+    "es": "Para curar añejos defectos es conveniente permitirlos de vez en cuando con mucha medida.",
+    "en": "To cure long-standing faults it is advisable to allow them from time to time in great moderation.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 17322,
+    "token": "curar"
+  },
   "cursar": {
     "es": "—Bien parece —respondió don Quijote— que no estás cursado en esto de las aventuras: ellos son gigantes.",
     "en": "“It is plain,” replied Don Quixote, “that you are not well versed in the matter of adventures: they are giants.”",
@@ -1909,6 +2070,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 924,
     "token": "debilitado"
+  },
+  "debutar": {
+    "es": "La joven soprano debutó en el teatro de la ópera con un papel exigente.",
+    "en": "The young soprano made her debut at the opera house in a demanding role.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "debutó"
   },
   "decidir": {
     "es": "Clarín, obligado en el asunto a escoger entre dos males, se decide por el mal seglar, que siempre es menos odioso que el mal eclesiástico.",
@@ -2218,6 +2386,13 @@
     "line": 1273,
     "token": "desvió"
   },
+  "detallar": {
+    "es": "Destaca la infografía para detallar el número de nacimientos que se han producido a lo largo de estas décadas el día 29 de febrero de los años bisiestos.",
+    "en": "Notable is the infographic detailing the number of births that have occurred over these decades on February 29 of leap years.",
+    "source": "es-ine-informe-anual-2024.txt",
+    "line": 419,
+    "token": "detallar"
+  },
   "detectar": {
     "es": "El proyecto permite la cuantificación de los objetivos marcados y proporciona plena flexibilidad para incorporar nuevos indicadores, a medida que se detecten nuevas fuentes de datos, dada la rápida evolución de las necesidades ambientales.",
     "en": "The project allows for the quantification of the set targets and provides full flexibility to incorporate new indicators as new data sources are detected, given the rapid evolution of environmental needs.",
@@ -2407,6 +2582,13 @@
     "line": 1272,
     "token": "doblar"
   },
+  "documentar": {
+    "es": "El periodista documentó cada denuncia con fotografías y testimonios firmados.",
+    "en": "The journalist documented each accusation with photographs and signed testimonies.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "documentó"
+  },
   "doler": {
     "es": "Creemos que se nos va la cabeza, que nos duele el corazón y que se nos vicia la sangre.",
     "en": "We come to believe that we are losing our minds, that our heart aches, and that our blood is being poisoned.",
@@ -2420,6 +2602,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 1353,
     "token": "domina"
+  },
+  "donar": {
+    "es": "Al morir, el coleccionista donó todos sus cuadros al museo de la ciudad.",
+    "en": "Upon his death, the collector donated all his paintings to the city museum.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "donó"
   },
   "dorar": {
     "es": "Tal vez entendió que casarse con aquel viejo era consagrar su vida a cuidarle, a ser su enfermera, a dulcificar los últimos años de su vida, a no dejarle en soledad y abandono, cercado sólo de achaques y asistido por manos mercenarias, y a iluminar y dorar, por último, sus postrimerías con el rayo esplendente y suave de su hermosura y de su juventud, como ángel que toma forma humana.",
@@ -2441,6 +2630,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 8905,
     "token": "dotado"
+  },
+  "dudar": {
+    "es": "Otras veces dudaba o aparentaba dudar si tenía lo que le pedían.",
+    "en": "Other times he doubted, or pretended to doubt, whether he had what they were asking for.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 1575,
+    "token": "dudar"
   },
   "duplicar": {
     "es": "En concreto se duplica la reducción de dependencia exterior a lo largo de la década prevista en el Plan: esta dependencia se reduce drásticamente en 23 puntos en el periodo.",
@@ -2483,6 +2679,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 17072,
     "token": "efectuase"
+  },
+  "egresar": {
+    "es": "Miles de estudiantes egresan cada año de las universidades públicas del país.",
+    "en": "Thousands of students graduate each year from the country's public universities.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "egresan"
   },
   "ejecutar": {
     "es": "Pero Barbarita, con aquella seguridad del talento superior que en un punto inicia y ejecuta las resoluciones salvadoras, se encaró con Juanito, y de buenas a primeras le dijo: «Mañana mismo nos vamos a Plencia».",
@@ -2547,6 +2750,20 @@
     "line": 6810,
     "token": "emitir"
   },
+  "emocionar": {
+    "es": "El discurso del anciano emocionó hasta las lágrimas a todos los presentes.",
+    "en": "The old man's speech moved everyone present to tears.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "emocionó"
+  },
+  "empatar": {
+    "es": "Los dos equipos empataron a un gol en el último minuto del partido.",
+    "en": "The two teams tied one goal apiece in the last minute of the match.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "empataron"
+  },
   "empezar": {
     "es": "Julián, que empezaba a descalzarse los guantes, se compadeció del chiquillo, y, bajándose, le tomó en brazos, pudiendo ver que a pesar del mugre, la roña, el miedo y el llanto, era el más hermoso angelote del mundo.",
     "en": "Julián, who was starting to take off his gloves, felt sorry for the little boy, and bending down, picked him up, able to see that despite the grime, the filth, the fear, and the crying, he was the most beautiful little angel in the world.",
@@ -2581,6 +2798,13 @@
     "source": "sombrero-tres-picos-alarcon-1874.txt",
     "line": 273,
     "token": "enamoró"
+  },
+  "encabezar": {
+    "es": "El general encabezaba la columna montado en un caballo blanco.",
+    "en": "The general led the column mounted on a white horse.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "encabezaba"
   },
   "encajar": {
     "es": "El naturalismo cambió de fisonomía en manos francesas: lo que perdió en gracia y donosura, lo ganó en fuerza analítica y en extensión, aplicándose a estados psicológicos que no encajan fácilmente en la forma picaresca.",
@@ -2638,6 +2862,20 @@
     "line": 1618,
     "token": "enfatiza"
   },
+  "enfocar": {
+    "es": "Para ello, hay que enfocar las actividades a posibles proyectos de demostración que generen conocimiento y experiencia en un entorno marino real.",
+    "en": "To this end, the activities must be focused on possible demonstration projects that generate knowledge and experience in a real marine environment.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 4846,
+    "token": "enfocar"
+  },
+  "enfrentar": {
+    "es": "La singularidad no solo corresponde a proyectos innovadores, sino que se refiere también a los retos a enfrentar.",
+    "en": "The distinctiveness does not correspond only to innovative projects, but also refers to the challenges to be faced.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 8208,
+    "token": "enfrentar"
+  },
   "engañar": {
     "es": "Y su padre le ha engañado a usted como a un chino, vamos.",
     "en": "And your father has completely deceived you, mind you.",
@@ -2680,6 +2918,13 @@
     "line": 213,
     "token": "entiende"
   },
+  "enterar": {
+    "es": "Pues entra usted y pregunta por el guarda de la obra, que se llama Pacheco... ¿Se va usted enterando?",
+    "en": "So you go in and ask for the site watchman, who is called Pacheco... Are you following me?",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 6972,
+    "token": "enterando"
+  },
   "enterrar": {
     "es": "Un día, tres o cuatro después de enterrado su padre, Ana quiso levantarse y no pudo.",
     "en": "One day, three or four days after her father was buried, Ana tried to get up and could not.",
@@ -2715,6 +2960,13 @@
     "line": 1522,
     "token": "entretenido"
   },
+  "entrevistar": {
+    "es": "La reportera entrevistó a los supervivientes pocas horas después del rescate.",
+    "en": "The reporter interviewed the survivors just hours after the rescue.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "entrevistó"
+  },
   "enumerar": {
     "es": "El Magistral volvía a enumerar los sacrificios de amor propio, pundonor y otras muchas cosas que exigía la religión a un buen cristiano a quien su mujer engañaba.",
     "en": "The Magistral went back to listing the sacrifices of self-esteem, honor, and many other things that religion demanded of a good Christian whose wife was being unfaithful to him.",
@@ -2742,6 +2994,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 1018,
     "token": "equilibraban"
+  },
+  "equipar": {
+    "es": "El ayuntamiento equipó las escuelas con ordenadores y conexión a internet.",
+    "en": "The town council equipped the schools with computers and internet access.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "equipó"
   },
   "equivaler": {
     "es": "El esquilón de la Catedral tocaba a vísperas, lo cual equivale a decir que ya habían comido todas las personas principales de la ciudad.",
@@ -2791,6 +3050,20 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 5224,
     "token": "escuchaba"
+  },
+  "esforzar": {
+    "es": "Nuestro barbero, que a todo estaba presente, como tenía tan bien conocido el humor de don Quijote, quiso esforzar su desatino y llevar adelante la burla para que todos riesen.",
+    "en": "Our barber, who was present for everything, since he knew Don Quixote's temper so well, wanted to reinforce his madness and carry the joke further so that everyone would laugh.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 15596,
+    "token": "esforzar"
+  },
+  "especializar": {
+    "es": "Tras terminar la carrera, decidió especializarse en cirugía cardiovascular.",
+    "en": "After finishing her degree, she decided to specialize in cardiovascular surgery.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "especializarse"
   },
   "especificar": {
     "es": "Y con todo, debió haber especificado más en aquella parte de la confesión.",
@@ -2848,6 +3121,13 @@
     "line": 189,
     "token": "estrenar"
   },
+  "estructurar": {
+    "es": "Se plantea la conveniencia de estructurar las políticas de movilidad de acuerdo con criterios de rentabilidad social de proyectos.",
+    "en": "The advisability is raised of structuring mobility policies according to criteria of the social profitability of projects.",
+    "source": "es-mitma-movilidad-2030.txt",
+    "line": 2482,
+    "token": "estructurar"
+  },
   "estudiar": {
     "es": "Cuando el niño estudiaba los últimos años de su carrera, verificose en él uno de esos cambiazos críticos que tan comunes son en la edad juvenil.",
     "en": "When the boy was studying the last years of his degree, one of those critical transformations so common in youth came over him.",
@@ -2861,6 +3141,13 @@
     "source": "es-ine-informe-anual-2024.txt",
     "line": 756,
     "token": "evaluar"
+  },
+  "evidenciar": {
+    "es": "Así las cosas, se puede evidenciar que la adopción, uso y aprovechamiento de tecnologías y herramientas TIC no ocupan un lugar relevante en el modelo de negocio en las empresas del sector.",
+    "en": "That being so, it can be shown that the adoption, use and exploitation of ICT technologies and tools do not occupy a relevant place in the business model of companies in the sector.",
+    "source": "co-conpes-3975-transformacion-digital-ia.txt",
+    "line": 1257,
+    "token": "evidenciar"
   },
   "evitar": {
     "es": "Se avenía a esta ley, cuyos efectos procuraba evitar.",
@@ -3107,6 +3394,13 @@
     "line": 492,
     "token": "firmado"
   },
+  "fluir": {
+    "es": "Se había entusiasmado con aquel fluir de palabras dulces, nuevas, llenas de una alegría celestial.",
+    "en": "She had grown enraptured with that flow of sweet, new words, full of a heavenly joy.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 8338,
+    "token": "fluir"
+  },
   "fomentar": {
     "es": "Tú eres responsable de que se chifle por completo, porque le fomentas el tema del edificio.",
     "en": "You're responsible for her going completely mad, because you encourage her obsession with the building.",
@@ -3135,6 +3429,13 @@
     "line": 21052,
     "token": "fortalecían"
   },
+  "forzar": {
+    "es": "Y así, forzado deste deseo, él mismo ensilló a Rocinante y enalbardó al jumento de su escudero.",
+    "en": "And so, compelled by this desire, he himself saddled Rocinante and put the packsaddle on his squire's donkey.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 4967,
+    "token": "forzado"
+  },
   "fracasar": {
     "es": "Ansí que, me es a mí más fácil imitarle en esto que no en hender gigantes, descabezar serpientes, matar endriagos, desbaratar ejércitos, fracasar armadas y deshacer encantamentos.",
     "en": "So it is easier for me to imitate him in this than in splitting giants, decapitating serpents, killing dragons, routing armies, wrecking fleets, and undoing enchantments.",
@@ -3142,12 +3443,33 @@
     "line": 7830,
     "token": "fracasar"
   },
+  "frenar": {
+    "es": "Las medidas de reducción de emisión de gases contempladas en el PNIEC contribuyen a frenar los efectos del cambio climático (subida del nivel del mar, acidificación, fenómenos meteorológicos extremos, etc.).",
+    "en": "The greenhouse-gas emission reduction measures set out in the PNIEC help to curb the effects of climate change (sea level rise, acidification, extreme weather events, etc.).",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 39391,
+    "token": "frenar"
+  },
   "fumar": {
     "es": "Sin permitirse el lujo de casarse, ni de tener hijos, ni de fumar siquiera, llegó D. Gumersindo a la edad que he dicho.",
     "en": "Without allowing himself the luxury of marrying, having children, or even smoking, Don Gumersindo reached the age I have mentioned.",
     "source": "pepita-jimenez-valera-1874.txt",
     "line": 179,
     "token": "fumar"
+  },
+  "funcionar": {
+    "es": "Creeríase que había en la casa tres o cuatro viudas de Jáuregui funcionando a un tiempo.",
+    "en": "One would think there were three or four widows of Jáuregui operating at once in the house.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 19390,
+    "token": "funcionando"
+  },
+  "fundamentar": {
+    "es": "En el caso del sector eléctrico se está experimentando un profundo cambio de paradigma evolucionando desde un sistema de generación centralizado fundamentado en una generación de tipo base y punta con una demanda dominantemente pasiva, a un nuevo modelo.",
+    "en": "In the case of the electricity sector, a profound paradigm shift is being experienced, evolving from a centralized generation system founded on base-load and peak-load generation with a predominantly passive demand, toward a new model.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 6322,
+    "token": "fundamentado"
   },
   "fundar": {
     "es": "La chiquilla de Moreno fundaba su vanidad en llevar papelejos con figuritas y letras de colores, en los cuales se hablaba de píldoras, de barnices o de ingredientes para teñirse el pelo.",
@@ -3303,6 +3625,13 @@
     "line": 67,
     "token": "hablar"
   },
+  "hacendar": {
+    "es": "Con lo que ganó en las Indias, se hacendó en un valle fértil cerca de su pueblo natal.",
+    "en": "With what he earned in the Indies, he set himself up with an estate in a fertile valley near his native town.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "hacendó"
+  },
   "hacer": {
     "es": "Zalamero, juicioso y circunspecto como pocos, era de los que se ponen en la primera fila de bancos, mirando con faz complacida al profesor mientras explica, y haciendo con la cabeza discretas señales de asentimiento a todo lo que dice.",
     "en": "Zalamero, as sensible and circumspect as few others, was one of those who sit in the front row of benches, watching the professor with a pleased expression while he lectures, and nodding discreetly in agreement with everything he says.",
@@ -3380,6 +3709,13 @@
     "line": 430,
     "token": "iluminar"
   },
+  "ilustrar": {
+    "es": "Leía todos los artículos de su novio, que este le llevaba recortados de los periódicos y pegados en cuartillas, y con esta lectura se iba ilustrando considerablemente.",
+    "en": "She read all her boyfriend's articles, which he brought her clipped from the newspapers and pasted onto sheets of paper, and with this reading she was becoming considerably more educated.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 31314,
+    "token": "ilustrando"
+  },
   "imaginar": {
     "es": "No imaginaba Julián riesgos inmediatos, pero presentía algo amenazador para lo porvenir.",
     "en": "Julián did not imagine any immediate risks, but he sensed something threatening for the future.",
@@ -3393,6 +3729,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 2424,
     "token": "imitaste"
+  },
+  "impactar": {
+    "es": "También ha sido determinante el efecto de los acontecimientos de los últimos años, como la pandemia provocada por el COVID-19, que impactó sobre el crecimiento económico y el consumo energético.",
+    "en": "The effect of the events of recent years has also been decisive, such as the pandemic caused by COVID-19, which impacted economic growth and energy consumption.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 217,
+    "token": "impactó"
   },
   "impartir": {
     "es": "El seminario fue impartido por el director del Gabinete de Presidencia, y los subdirectores de Estadísticas Coyunturales, Estadísticas del Mercado Laboral, Estadísticas Sociodemográficas, Difusión y Comunicación, la directora del Departamento de Cuentas Nacionales y el director de comunicación.",
@@ -3478,6 +3821,13 @@
     "line": 9693,
     "token": "inauguren"
   },
+  "incentivar": {
+    "es": "En segundo lugar, el mercado debe incentivar las inversiones necesarias en renovables que permitan cumplir con los objetivos de descarbonización de la forma más eficiente posible.",
+    "en": "Secondly, the market must incentivize the necessary investments in renewables that make it possible to meet the decarbonization objectives in the most efficient way possible.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 1175,
+    "token": "incentivar"
+  },
   "incidir": {
     "es": "La construcción de escenarios y el diseño de políticas y medidas requiere un profundo conocimiento del punto de partida, para así disponer de una imagen fiel de todos los sectores de la economía que permita determinar dónde y de qué modo es más necesario incidir en aras de lograr los objetivos globales de descarbonización con los mejores resultados socioeconómicos.",
     "en": "Building scenarios and designing policies and measures requires a thorough understanding of the starting point, so as to have a faithful picture of every sector of the economy that makes it possible to determine where and how it is most necessary to have an impact in order to achieve the overall decarbonization goals with the best socioeconomic results.",
@@ -3540,6 +3890,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 8881,
     "token": "induciendo"
+  },
+  "infectar": {
+    "es": "La herida se infectó por no haberla limpiado a tiempo.",
+    "en": "The wound became infected because it had not been cleaned in time.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "infectó"
   },
   "influir": {
     "es": "Acaso influya en esto la vanidad.",
@@ -3737,12 +4094,26 @@
     "line": 16,
     "token": "iban"
   },
+  "jamar": {
+    "es": "Llegó del campo muerto de hambre y se jamó medio pan de una sentada.",
+    "en": "He came in from the fields starving and wolfed down half a loaf in one sitting.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "jamó"
+  },
   "jugar": {
     "es": "Lo cierto es que de niño jugaba a cantar misa, y de grande no paró hasta conseguirlo.",
     "en": "The truth is that as a child he used to play at saying Mass, and as an adult he did not stop until he achieved it.",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 609,
     "token": "jugaba"
+  },
+  "juntar": {
+    "es": "Quererte yo y ser tú como a ti mismo te pintas son dos cosas que no puedo juntar.",
+    "en": "For me to love you and for you to be as you paint yourself are two things that I cannot bring together.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 2870,
+    "token": "juntar"
   },
   "jurar": {
     "es": "Puede usted creerme, y se lo juraría si fuese lícito jurar: bien sabe Dios que la tal mujer hasta me es aborrecible.",
@@ -3764,6 +4135,13 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 555,
     "token": "juzga"
+  },
+  "laborar": {
+    "es": "Los campesinos laboraban la tierra de sol a sol sin descanso.",
+    "en": "The peasants worked the land from dawn to dusk without rest.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "laboraban"
   },
   "lamentar": {
     "es": "Batiste se detuvo, lamentando en su interior no llevar consigo ni una mala navaja, ni una hoz.",
@@ -3793,6 +4171,13 @@
     "line": 886,
     "token": "leyó"
   },
+  "lesionar": {
+    "es": "El delantero se lesionó la rodilla en el primer entrenamiento de la temporada.",
+    "en": "The forward injured his knee in the first training session of the season.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "lesionó"
+  },
   "levantar": {
     "es": "Posee una distinción natural que la levanta y separa de cuanto la rodea.",
     "en": "She possesses a natural distinction that elevates her and sets her apart from everything around her.",
@@ -3806,6 +4191,20 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 18760,
     "token": "liberar"
+  },
+  "librar": {
+    "es": "Para librar su cabeza de las corrientes frías de la iglesia, llevaba en el bolsillo un gorro negro, y se lo calaba al entrar.",
+    "en": "To protect his head from the cold drafts of the church, he carried a black cap in his pocket, and he pulled it on as he entered.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 1804,
+    "token": "librar"
+  },
+  "licenciar": {
+    "es": "Al terminar el servicio militar, licenciaron a toda la quinta el mismo día.",
+    "en": "When their military service ended, they discharged the entire draft class on the same day.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "licenciaron"
   },
   "liderar": {
     "es": "El Plan de actuación 2024 define cinco objetivos estratégicos: mejorar la accesibilidad y utilidad de la información, liderar la transformación de la estadística pública en todas las administraciones, fomentar la innovación, impulsar la integración y aprovechamiento de fuentes y desarrollo de recursos humanos más proactivos y formados.",
@@ -3975,6 +4374,20 @@
     "line": 2208,
     "token": "matar"
   },
+  "mediar": {
+    "es": "No mediando ningún pagaré, daba gusto de tratar con aquella señora.",
+    "en": "With no promissory note in between, it was a pleasure to deal with that lady.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 14483,
+    "token": "mediando"
+  },
+  "medicar": {
+    "es": "El veterinario medicó al caballo para aliviarle el dolor de la pata.",
+    "en": "The vet medicated the horse to ease the pain in its leg.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "medicó"
+  },
   "medir": {
     "es": "La situación duró pocos instantes: estaban frente a frente dos adversarios dignos de medir sus fuerzas.",
     "en": "The situation lasted only a few moments: face to face stood two adversaries worthy of matching their strength.",
@@ -4101,6 +4514,13 @@
     "line": 315,
     "token": "mostraba"
   },
+  "motivar": {
+    "es": "Se trata de movilizar los recursos sociales existentes con el objetivo de que la transición optimice el talento para la innovación y la búsqueda de soluciones y encuentre el apoyo necesario para sortear las dificultades que se irán presentando en el camino, así como para motivar los importantes cambios de comportamiento que se precisan y hacer partícipe al conjunto de la sociedad de las oportunidades que supone.",
+    "en": "It is a matter of mobilizing the existing social resources so that the transition optimizes talent for innovation and the search for solutions and finds the support needed to overcome the difficulties that will arise along the way, as well as to motivate the important changes in behavior that are required and to make society as a whole a participant in the opportunities it entails.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 4746,
+    "token": "motivar"
+  },
   "mover": {
     "es": "Procurad también que, leyendo vuestra historia, el melancólico se mueva a risa.",
     "en": "See to it also that, in reading your story, the melancholy man may be moved to laughter.",
@@ -4157,6 +4577,27 @@
     "line": 554,
     "token": "negar"
   },
+  "negociar": {
+    "es": "Feijoo abordó la cuestión, y por zancas y barrancas, soltando lo primero que se le ocurría, llegó a decir que él se había propuesto, por pura caridad, negociar la reconciliación.",
+    "en": "Feijoo took up the matter, and through thick and thin, blurting out the first thing that occurred to him, he came to say that he had resolved, out of pure charity, to negotiate the reconciliation.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 25302,
+    "token": "negociar"
+  },
+  "nombrar": {
+    "es": "No puede olvidar que ha sido ministro de la Gobernación, es decir, que lo quisieron nombrar.",
+    "en": "He cannot forget that he was Minister of the Interior, that is, that they wanted to appoint him.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 8357,
+    "token": "nombrar"
+  },
+  "nominar": {
+    "es": "La academia nominó su primera novela a varios premios internacionales.",
+    "en": "The academy nominated her first novel for several international awards.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "nominó"
+  },
   "notar": {
     "es": "Esto ya lo había notado el Palomo, empleado laico de la Catedral, perrero, según mal nombre de su oficio.",
     "en": "This had already been noticed by Palomo, a lay employee of the Cathedral, its dog-catcher, as his post was unkindly nicknamed.",
@@ -4170,6 +4611,13 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 10598,
     "token": "notifiqué"
+  },
+  "numerar": {
+    "es": "El escribano numeró todas las páginas del legajo antes de sellarlo.",
+    "en": "The clerk numbered every page of the file before sealing it.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "numeró"
   },
   "nutrir": {
     "es": "A manera de pajarito posado en grueso tronco, venía la inocente criatura recostada en el magno seno que la nutría.",
@@ -4205,6 +4653,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 396,
     "token": "obtuvo"
+  },
+  "ocasionar": {
+    "es": "Asimismo, esta protección se extiende a cualesquiera versiones sucesivas del programa así como a los programas derivados, salvo aquellas creadas con el fin de ocasionar efectos nocivos a un sistema informático.",
+    "en": "Likewise, this protection extends to any successive versions of the program as well as to derivative programs, except for those created for the purpose of causing harmful effects to a computer system.",
+    "source": "es-trlpi-ley-propiedad-intelectual.txt",
+    "line": 1707,
+    "token": "ocasionar"
   },
   "ocultar": {
     "es": "O la señora no había atesorado más desde el robo, o lo había ocultado tan bien, que no diera con ello el mismo diablo.",
@@ -4311,6 +4766,13 @@
     "line": 20428,
     "token": "organizó"
   },
+  "orientar": {
+    "es": "Desde la publicación del primer PNIEC en el año 2021, este ejercicio de planificación ha facilitado anticipación y la coherencia tanto de las políticas públicas sectoriales, como de las decisiones de inversión, sirviendo para orientar la toma de decisiones ante escenarios coyunturales en el corto plazo.",
+    "en": "Since the publication of the first PNIEC in 2021, this planning exercise has facilitated anticipation and coherence in both sectoral public policies and investment decisions, serving to guide decision-making in the face of short-term cyclical scenarios.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 39,
+    "token": "orientar"
+  },
   "originar": {
     "es": "Su matrimonio había originado al coronel un rompimiento con su familia.",
     "en": "His marriage had caused a break between the colonel and his family.",
@@ -4339,6 +4801,13 @@
     "line": 137,
     "token": "oído"
   },
+  "pactar": {
+    "es": "A reserva de lo pactado entre los coautores de la obra en colaboración, éstos podrán explotar separadamente sus aportaciones, salvo que causen perjuicio a la explotación común.",
+    "en": "Subject to what has been agreed among the co-authors of a collaborative work, they may exploit their contributions separately, provided they do not harm the common exploitation.",
+    "source": "es-trlpi-ley-propiedad-intelectual.txt",
+    "line": 112,
+    "token": "pactado"
+  },
   "padecer": {
     "es": "Vivir es relacionarse, gozar y padecer, desear, aborrecer y amar.",
     "en": "To live is to relate to others, to enjoy and to suffer, to desire, to hate, and to love.",
@@ -4352,6 +4821,13 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 501,
     "token": "pagar"
+  },
+  "paginar": {
+    "es": "El editor paginó el manuscrito para calcular cuántos pliegos necesitaría la imprenta.",
+    "en": "The editor paginated the manuscript to work out how many sheets the press would need.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "paginó"
   },
   "paralizar": {
     "es": "Rafaela quiso salir a llamar; pero su propio temor le había paralizado las piernas.",
@@ -4374,12 +4850,26 @@
     "line": 23,
     "token": "pareciera"
   },
+  "parir": {
+    "es": "En 1845, cuando nació Juanito, ya había tenido ella cinco, y siguió pariendo con la puntualidad de los vegetales que dan fruto cada año.",
+    "en": "In 1845, when Juanito was born, she had already had five, and she kept on giving birth with the punctuality of plants that bear fruit each year.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 1294,
+    "token": "pariendo"
+  },
   "participar": {
     "es": "Como dice el mismo señor mío, del dolor de la cabeza han de participar los miembros.",
     "en": "As my own master says, the limbs must share in the pain of the head.",
     "source": "quijote-cervantes-1605.txt",
     "line": 18873,
     "token": "participar"
+  },
+  "partir": {
+    "es": "Aparisi y Casa-Muñoz se fueron al Bolsín a saber noticias, no sin que antes de partir dieran una nueva muestra de su rivalidad.",
+    "en": "Aparisi and Casa-Muñoz went off to the Bolsín to get news, but not without giving a fresh display of their rivalry before departing.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 5143,
+    "token": "partir"
   },
   "pasar": {
     "es": "Santa Cruz y Villalonga se ponían siempre en la grada más alta, y allí pasaban el rato charlando por lo bajo, leyendo novelas y dibujando caricaturas.",
@@ -4563,6 +5053,13 @@
     "line": 1834,
     "token": "plasmó"
   },
+  "poblar": {
+    "es": "Mientras se amaestraban infiriendo cortes o poblando las cabezas de trasquilones y peladuras, el amo daba conversación a los parroquianos sentados en el banco del paseo, o leía en alta voz un periódico a este auditorio.",
+    "en": "While they trained themselves by inflicting cuts or covering heads with botched shearing and bald patches, the master chatted with the customers seated on the bench of the promenade, or read a newspaper aloud to this audience.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 4237,
+    "token": "poblando"
+  },
   "poder": {
     "es": "Al acabarse el repecho, volvió el jaco a la sosegada andadura habitual, y pudo el jinete enderezarse sobre el aparejo redondo, cuya anchura inconmensurable le había descoyuntado los huesos todos de la región sacro-ilíaca.",
     "en": "As the slope ended, the nag returned to its calm, usual gait, and the rider was able to straighten up on the round pack-saddle, whose immense width had dislocated every bone in his sacroiliac region.",
@@ -4612,12 +5109,33 @@
     "line": 79,
     "token": "posicionando"
   },
+  "postular": {
+    "es": "El candidato se postuló para el cargo con un programa de reformas ambicioso.",
+    "en": "The candidate ran for the office on an ambitious platform of reforms.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "postuló"
+  },
+  "potenciar": {
+    "es": "La presidenta del INE inauguró las jornadas destacando que una de las principales líneas de actuación es potenciar la labor de coordinación y cooperación con los responsables de la producción estadística autonómica.",
+    "en": "The president of the INE opened the conference, stressing that one of the main lines of action is to strengthen the work of coordination and cooperation with those responsible for regional statistical production.",
+    "source": "es-ine-informe-anual-2024.txt",
+    "line": 669,
+    "token": "potenciar"
+  },
   "practicar": {
     "es": "La columpiaba en el líquido transparente, imitando con religioso esmero lo que había visto practicar a Nucha.",
     "en": "He rocked her in the clear water, imitating with reverent care what he had seen Nucha do.",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 6469,
     "token": "practicar"
+  },
+  "precisar": {
+    "es": "Se sentía mal, sin poder precisar lo que era.",
+    "en": "He felt unwell, without being able to pinpoint what it was.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 11048,
+    "token": "precisar"
   },
   "preferir": {
     "es": "La gran mayoría de los ciudadanos pacíficos no iba a ellos, prefiriendo charlar en las tiendas.",
@@ -4724,6 +5242,13 @@
     "line": 5471,
     "token": "priva"
   },
+  "privilegiar": {
+    "es": "La EDN centra su razón de ser en la necesidad de orientar el uso y el desarrollo de las TIC al bienestar social del pueblo mexicano con una visión humanista del uso de estas tecnologías y guardando estrictamente los principios de austeridad republicana, transparencia, privilegiando lo público y el uso o desarrollo nacional de tecnologías de acceso abierto.",
+    "en": "The EDN centers its purpose on the need to steer the use and development of ICT toward the social well-being of the Mexican people, with a humanistic vision of the use of these technologies and strictly observing the principles of republican austerity and transparency, prioritizing what is public and the national use or development of open-access technologies.",
+    "source": "mx-estrategia-digital-nacional.txt",
+    "line": 116,
+    "token": "privilegiando"
+  },
   "probar": {
     "es": "Es verdad que para probar si era fuerte y podía estar al riesgo de una cuchillada, sacó su espada y le dio dos golpes.",
     "en": "It is true that, to test whether it was strong and could withstand the risk of a sword blow, he drew his sword and struck it twice.",
@@ -4737,6 +5262,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 3686,
     "token": "procedía"
+  },
+  "procesar": {
+    "es": "Las entidades de gestión que concedan autorizaciones multiterritoriales no exclusivas de derechos en línea sobre obras musicales dispondrán de capacidad suficiente para procesar por vía electrónica, de manera eficiente y transparente, los datos necesarios para la administración de tales autorizaciones.",
+    "en": "The management entities that grant multi-territorial non-exclusive licenses of online rights over musical works shall have sufficient capacity to process electronically, in an efficient and transparent manner, the data necessary for the administration of such licenses.",
+    "source": "es-trlpi-ley-propiedad-intelectual.txt",
+    "line": 3336,
+    "token": "procesar"
   },
   "proclamar": {
     "es": "Los desolados campos eran el talismán que mantenía íntimamente unidos á los huertanos, en continuo tacto de codos: un monumento que proclamaba su poder sobre los dueños.",
@@ -4765,6 +5297,13 @@
     "source": "pepita-jimenez-valera-1874.txt",
     "line": 672,
     "token": "profundizando"
+  },
+  "programar": {
+    "es": "Es bajo el pilar 2, en el ámbito de FEADER, donde se siguen programando las forestaciones de tierras agrarias o la agricultura ecológica que tienen efecto positivo como sumideros de carbono.",
+    "en": "It is under pillar 2, within the framework of the EAFRD, that the afforestation of farmland or organic agriculture, which have a positive effect as carbon sinks, continues to be programmed.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 10241,
+    "token": "programando"
   },
   "prohibir": {
     "es": "Puesto que iba contra el decreto del Santo Concilio, que prohíbe los tales desafíos, no quiso llevar por todo rigor aquel trance tan fuerte.",
@@ -4808,6 +5347,13 @@
     "line": 136,
     "token": "pronunció"
   },
+  "propiciar": {
+    "es": "Se realizarán acuerdos voluntarios con determinados subsectores industriales para propiciar el aumento del consumo de energía renovable.",
+    "en": "Voluntary agreements will be made with certain industrial subsectors to foster the increase in the consumption of renewable energy.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 7031,
+    "token": "propiciar"
+  },
   "proponer": {
     "es": "Para que engorde se proponen no dejarme estudiar ni leer un papel mientras aquí permanezca.",
     "en": "So that I'll gain weight, they've resolved not to let me study or read so much as a page while I stay here.",
@@ -4821,6 +5367,13 @@
     "source": "pepita-jimenez-valera-1874.txt",
     "line": 263,
     "token": "proporcionar"
+  },
+  "protagonizar": {
+    "es": "La actriz protagonizó la película que se llevó todos los premios aquel año.",
+    "en": "The actress starred in the film that swept every award that year.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "protagonizó"
   },
   "proteger": {
     "es": "Algunos meses me veo tan agonizada que no sé qué hacer. Dios me protege, que si no...",
@@ -4870,6 +5423,20 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 3937,
     "token": "publique"
+  },
+  "pulsar": {
+    "es": "Juncal la pulsaba atentamente, le ordenaba alimentos muy nutritivos, la miraba con alarmante insistencia.",
+    "en": "Juncal took her pulse attentively, prescribed her very nourishing foods, and looked at her with alarming insistence.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 5242,
+    "token": "pulsaba"
+  },
+  "puntualizar": {
+    "es": "El ministro puntualizó que la medida solo afectaría a las grandes empresas.",
+    "en": "The minister clarified that the measure would affect only large companies.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "puntualizó"
   },
   "quebrar": {
     "es": "Pretendía escurrirse, huir de la terrible hoz, en cuya hoja se quebraba un rayo de sol y se reproducía el azul del cielo.",
@@ -5144,6 +5711,13 @@
     "line": 229,
     "token": "regresar"
   },
+  "regular": {
+    "es": "Una ley reciente regula el uso de los drones sobre las ciudades.",
+    "en": "A recent law regulates the use of drones over cities.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "regula"
+  },
   "reiterar": {
     "es": "El hombre de bronce no se inmutó al reiterar fríamente.",
     "en": "The bronze-faced man did not flinch as he coldly repeated himself.",
@@ -5298,6 +5872,13 @@
     "line": 27099,
     "token": "rescatar"
   },
+  "reservar": {
+    "es": "El buen señor conservaba, entre ciertos hábitos tenaces del antiguo hortera, el de reservar los cigarros mejores para los domingos.",
+    "en": "The good gentleman kept, among certain stubborn habits of the old shop clerk, that of saving the best cigars for Sundays.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 4543,
+    "token": "reservar"
+  },
   "residir": {
     "es": "En la primera comían el principal y su señora, las niñas, el dependiente más antiguo y algún pariente, como Primitivo Cordero cuando venía a Madrid de su finca de Toledo, donde residía.",
     "en": "At the first table ate the head of the house and his wife, the girls, the most senior clerk, and the occasional relative, like Primitivo Cordero when he came to Madrid from his estate in Toledo, where he lived.",
@@ -5318,6 +5899,20 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 467,
     "token": "resolviese"
+  },
+  "respaldar": {
+    "es": "Dos años más tarde, la necesidad de incorporar el almacenamiento se ha visto reforzada con la Recomendación de la Comisión de 14 de marzo de 2023, relativa al almacenamiento de energía y para respaldar un sistema energético de la UE descarbonizado y seguro.",
+    "en": "Two years later, the need to incorporate storage was reinforced by the Commission Recommendation of 14 March 2023, concerning energy storage and to support a decarbonized and secure EU energy system.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 3347,
+    "token": "respaldar"
+  },
+  "respectar": {
+    "es": "Por lo que respecta a los gastos de viaje, la empresa los reembolsará íntegramente.",
+    "en": "As regards travel expenses, the company will reimburse them in full.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "respecta"
   },
   "respetar": {
     "es": "Orlando soy, Quijote, que, perdido por Angélica, vi remotos mares, ofreciendo a la Fama en sus altares aquel valor que respetó el olvido.",
@@ -5466,6 +6061,13 @@
     "line": 738,
     "token": "rodeado"
   },
+  "rodrigar": {
+    "es": "En primavera el viñador rodriga las cepas para que los sarmientos no se arrastren por el suelo.",
+    "en": "In spring the vine-grower stakes the vines so the shoots do not trail along the ground.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "rodriga"
+  },
   "romper": {
     "es": "La voz argentina de Pepita rompió el silencio, y, sacándome de mis meditaciones, dijo:",
     "en": "Pepita's silvery voice broke the silence, and, rousing me from my thoughts, she said:",
@@ -5493,6 +6095,20 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 1600,
     "token": "sacrifica"
+  },
+  "salar": {
+    "es": "Esta Dulcinea del Toboso, tantas veces en esta historia referida, dicen que tuvo la mejor mano para salar puercos que otra mujer de toda la Mancha.",
+    "en": "This Dulcinea del Toboso, so many times referred to in this history, they say had the best hand for salting pork of any woman in all La Mancha.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 2848,
+    "token": "salar"
+  },
+  "salgar": {
+    "es": "Los pastores salgaban las reses en los apriscos para mantenerlas sanas.",
+    "en": "The shepherds gave salt to the cattle in the pens to keep them healthy.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "salgaban"
   },
   "salir": {
     "es": "De las techumbres de paja de las barracas salían las bandadas de gorriones como un tropel de pilluelos perseguidos.",
@@ -5535,6 +6151,13 @@
     "source": "sombrero-tres-picos-alarcon-1874.txt",
     "line": 3755,
     "token": "satisfacen"
+  },
+  "secar": {
+    "es": "Vi unos refajos encarnados puestos a secar en un arbusto.",
+    "en": "I saw some red flannel petticoats put out to dry on a bush.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 3115,
+    "token": "secar"
   },
   "secuestrar": {
     "es": "Siendo ambos de muy corta edad (ella tenía un año y meses menos que él) habían dormido juntos, y habían derramado lágrimas y acusádose mutuamente por haber secuestrado él las muñecas de ella, y haber ella arrojado a la lumbre, para que se derritieran, los soldaditos de él.",
@@ -5606,6 +6229,13 @@
     "line": 13,
     "token": "fue"
   },
+  "seriar": {
+    "es": "La fábrica empezó a seriar los motores para abaratar los costes de producción.",
+    "en": "The factory began mass-producing the engines to bring down production costs.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "seriar"
+  },
   "servir": {
     "es": "--¿Y usted se llama Julián Álvarez?--interrogó el marqués. --Para servir a usted muchos años.",
     "en": "“And your name is Julián Álvarez?” the marquis asked. “At your service, for many years.”",
@@ -5641,6 +6271,13 @@
     "line": 16296,
     "token": "situado"
   },
+  "sobrar": {
+    "es": "Hallábanse amuebladas con lo que iba sobrando de los aposentos que se ponían de nuevo, y su aspecto era por demás heterogéneo.",
+    "en": "They were furnished with what was left over from the rooms being redone, and their appearance was exceedingly heterogeneous.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 4049,
+    "token": "sobrando"
+  },
   "sobrevivir": {
     "es": "No sólo se trata de echar sobre sí la enorme carga de mantener, y creo que hasta vestir y calzar, a una persona que las sobrevivirá, según todas las probabilidades, carga que es de por vida o vitalicia por consiguiente.",
     "en": "It is not just a matter of taking on the enormous burden of supporting — and I believe even clothing and shoeing — a person who, in all likelihood, will outlive them, a burden that is therefore for life.",
@@ -5668,6 +6305,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 228,
     "token": "soltó"
+  },
+  "solucionar": {
+    "es": "Los mercados locales de electricidad buscan proveer de soluciones de flexibilidad para la gestión de la red de distribución, que permitan solucionar congestiones puntuales o persistentes.",
+    "en": "Local electricity markets seek to provide flexibility solutions for managing the distribution grid, so as to resolve occasional or persistent congestion.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 15441,
+    "token": "solucionar"
   },
   "someter": {
     "es": "Jacinta empezó a sentir el desconsuelo de no someter también el pasado de su marido, haciéndose dueña de cuanto este había sentido y pensado antes de casarse.",
@@ -5766,6 +6410,13 @@
     "source": "pepita-jimenez-valera-1874.txt",
     "line": 990,
     "token": "sujeto"
+  },
+  "sumar": {
+    "es": "No le quedaba más que el dominó, que le era antipático por el ruido de las fichas y por aquello de estar sumando sin parar.",
+    "en": "He had nothing left but dominoes, which he disliked because of the noise of the tiles and that business of adding up without stopping.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 23132,
+    "token": "sumando"
   },
   "sumergir": {
     "es": "Fue tanto el pesar que sintió de ver que os dejaba, que se sumergió en las entrañas de la tierra.",
@@ -5892,6 +6543,13 @@
     "source": "sombrero-tres-picos-alarcon-1874.txt",
     "line": 59,
     "token": "termina"
+  },
+  "timar": {
+    "es": "Se llamaba Joaquín Orgaz y se timaba con todas las niñas casaderas de la población, lo cual quiere decir que las miraba con insistencia y tenía el gusto de ser mirado por ellas.",
+    "en": "His name was Joaquín Orgaz and he flirted with all the marriageable girls in town, which is to say that he stared at them insistently and enjoyed being stared at by them.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 5865,
+    "token": "timaba"
   },
   "tirar": {
     "es": "Y tirando del ronzal de una vaca rubia, que llevaba pegado al rabo como amoroso satélite un ternerillo juguetón, volvía á la ciudad con la varita bajo el brazo.",
@@ -6040,12 +6698,26 @@
     "line": 183,
     "token": "ubicó"
   },
+  "ultimar": {
+    "es": "Los diplomáticos ultimaron los detalles del tratado en una última sesión nocturna.",
+    "en": "The diplomats finalized the details of the treaty in a final late-night session.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "ultimaron"
+  },
   "unificar": {
     "es": "Con el objetivo de facilitar la aplicación de los trámites existentes tanto para promotores como para los distintos organismos públicos que intervienen en ellos, desde el IDAE se publicará una guía que unifique en un solo documento la distinta normativa aplicable a la tramitación de proyectos de energía renovable.",
     "en": "With the aim of making it easier to apply existing procedures for both developers and the various public bodies involved, the IDAE will publish a guide that unifies, in a single document, the various regulations applicable to the processing of renewable energy projects.",
     "source": "es-miteco-pniec-2023-2030.txt",
     "line": 9047,
     "token": "unifique"
+  },
+  "unir": {
+    "es": "Fortunata, que sabía perdonar las ofensas, no habría tenido inconveniente en unir sus votos a los de todo el personal de la casa.",
+    "en": "Fortunata, who knew how to forgive offenses, would have had no objection to joining her prayers to those of the entire household staff.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 17431,
+    "token": "unir"
   },
   "usar": {
     "es": "No sólo realizó contratos con las fábricas de Béjar y Alcoy para dar mejor salida a los productos nacionales, sino que introdujo los famosos Sedanes para levitas, y las telas que tanto se usaron del 45 al 55.",
@@ -6067,6 +6739,13 @@
     "source": "la-regenta-clarin-1885.txt",
     "line": 14,
     "token": "valen"
+  },
+  "validar": {
+    "es": "El cometido principal de los análisis realizados por ambos modelos ha sido, precisamente, validar que la seguridad del suministro eléctrico del mix de generación presentado está garantizada en las condiciones más exigentes.",
+    "en": "The main purpose of the analyses carried out by both models has been, precisely, to validate that the security of the electricity supply of the presented generation mix is guaranteed under the most demanding conditions.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 4280,
+    "token": "validar"
   },
   "valorar": {
     "es": "El jurado, compuesto por ocho expertos en estadística y comunicación, valoró la creatividad de los videos, dirigidos a población joven, pero también el rigor técnico de los datos utilizados y la capacidad de comunicación a través de la historia creada.",
@@ -6145,6 +6824,13 @@
     "line": 137,
     "token": "vestía"
   },
+  "viajar": {
+    "es": "El único español que se permitía viajar era el duque de Osuna, D. Pedro.",
+    "en": "The only Spaniard who allowed himself to travel was the Duke of Osuna, Don Pedro.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 2404,
+    "token": "viajar"
+  },
   "vigilar": {
     "es": "Resolviose la insigne señora a tener carácter y a vigilar a su hijo.",
     "en": "The noble lady resolved to show some backbone and to keep watch over her son.",
@@ -6158,6 +6844,20 @@
     "source": "es-miteco-pniec-2023-2030.txt",
     "line": 11995,
     "token": "vincula"
+  },
+  "violar": {
+    "es": "Al construir sin licencia, la empresa violó la normativa urbanística del municipio.",
+    "en": "By building without a permit, the company violated the town's planning regulations.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "violó"
+  },
+  "visar": {
+    "es": "El cónsul visó los pasaportes de los emigrantes antes de que embarcaran.",
+    "en": "The consul stamped the emigrants' passports before they boarded.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "visó"
   },
   "visitar": {
     "es": "Señorito y capellán emparejaron y, alabando la hermosura del día, acabaron de visitar el huerto al pormenor.",
