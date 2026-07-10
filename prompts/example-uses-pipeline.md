@@ -34,13 +34,32 @@ Work from the repo root: `/Users/josh/Desktop/workspace/Conjugar.mig`. Commits g
 
 ## What REMAINS (this plan)
 
-A. `grokked/` medieval prep — isolate medieval verse from modern apparatus + Old→Modern normalizer.
-B. `build_corpus_index.py` — index the modern tiers; a medieval index via the normalizer.
-C. Mining workflow — subagents select + translate → `ExampleUses.json` / `MedievalExamples.json`.
+A. ✅ **DONE** — `grokked/` medieval prep (see "A. …" below for what was built + learnings).
+B. ✅ **DONE** — `build_corpus_index.py` + `build_medieval_index.py` (see "B. …" below).
+C. **← NEXT.** Mining workflow — subagents select + translate → `ExampleUses.json` /
+   `MedievalExamples.json`. **Read the "C. Mining workflow" section below first — it has the exact
+   input schemas the indices now emit, the `os`-cleaning requirement, and the homograph/leak
+   rejection rules that were discovered building A & B.**
 D. Tail rescue + authored (Claude) residue.
 E. App-side Swift loaders + `VerbView` cards (mirror the etymology feature).
 F. "Future plans": non-ranked verbs that have a medieval example also get a modern example
    (fabricated if none in corpus) + an etymology.
+
+> **Status after A & B (2026-07-10).** All build scripts committed to `migration`. Artifacts that
+> now exist and feed step C:
+> - `corpus/working/corpus_index.json` (regenerable; gitignored) — modern candidates, **977/988
+>   ranked verbs**, ≤5 per verb.
+> - `corpus/working/medieval_index.json` (regenerable; gitignored) — reflex-matched medieval
+>   candidates, **1,048 verbs** (444 ranked + 604 medieval-only special), ≤20 per verb.
+> - `corpus/grokked/{cantar-de-mio-cid,milagros-berceo,libro-de-buen-amor}.txt` +
+>   `medieval_verses.json` (tracked).
+> - `corpus/working/oldspanish.py` (tracked) — the canonicalizer, importable by any verify script.
+>
+> Regenerate (from `corpus/working/`, in any order after the form-dump): `python3
+> build_corpus_index.py` and `python3 build_medieval_index.py`. Both are idempotent; the medieval
+> builder imports `oldspanish.py`. **The two `*_index.json` are gitignored** (regenerable) — a
+> fresh clone must rebuild them, which also requires `corpus/originals/` to be present (re-fetch
+> via `corpus/working/fetch_corpus.sh` + `clean_corpus.py` if missing — see the note in §C).
 
 ---
 
@@ -92,7 +111,15 @@ Claude translation (English; keep parallel to the modern example's `en`).
 
 ---
 
-## A. `grokked/` medieval prep (do this before the medieval index)
+## A. `grokked/` medieval prep (do this before the medieval index)  ✅ DONE
+
+> **Built by `corpus/working/grok_medieval.py`** (verse isolation) **+ `corpus/working/oldspanish.py`**
+> (the canonicalizer). Outputs: `corpus/grokked/{cantar-de-mio-cid,milagros-berceo,libro-de-buen-amor}.txt`
+> (verse-only, for inspection) + `corpus/grokked/medieval_verses.json` (the `[{work, ref, text,
+> cantar?}]` map). Counts: **3242 Cid + 3652 Berceo + 7271 LBA** verse lines; **Berceo 912 stanzas**
+> (vs canonical 911), **LBA 1725 coplas** (vs 1728). The narrative below is the design that was
+> implemented; how it actually turned out (block-classification approach, ~87% Cid recall traded for
+> zero apparatus leakage, monotonic verse-number snapping) is in the code comments and `docs/blog_notes.md`.
 
 The three medieval editions still contain their **modern editorial matter**, which must NOT feed
 the medieval index (it would inject modern Spanish forms into "medieval example" lookups):
@@ -137,7 +164,15 @@ top-1000 (these are the "medieval-only special verbs", Conjuguer's Chanson-only 
 
 ---
 
-## B. `build_corpus_index.py` (modern tiers) + medieval index
+## B. `build_corpus_index.py` (modern tiers) + medieval index  ✅ DONE
+
+> **Modern:** `corpus/working/build_corpus_index.py` → `corpus_index.json` (**977/988 ranked verbs,
+> 98.9%**). **Medieval:** `corpus/working/build_medieval_index.py` → `medieval_index.json` (**1,048
+> verbs = 444 ranked + 604 medieval-only special**). Both regenerable/gitignored. The medieval
+> builder's precision guard: canonical keys shared by >8 verbs are dropped as over-merged; a
+> per-verse-line hit keeps the longest matching token. Reflex fidelity verified (`connusco→conocer`,
+> `priso→prender`, `firiendo→herir`, `aduxieron→aducir`, `oviéronla→haber`). The design below is
+> what was implemented.
 
 Port `../Conjuguer/corpus/working/build_corpus_index.py`. One tokenizing pass per source `.txt`
 (NFC, lowercased, apostrophe/hyphen split), look each token up in `forms.json`, write
@@ -153,22 +188,76 @@ Port `../Conjuguer/corpus/working/build_corpus_index.py`. One tokenizing pass pe
   verb; a token mapping to several verbs (homographs: *vino* → venir + noun; *fue* → ir + ser) is
   recorded under each — the mining step disambiguates from context.
 
-## C. Mining workflow (select + translate)
+## C. Mining workflow (select + translate)  ← NEXT STEP
 
 Shard the index (~30 verbs/shard) so each subagent reads only its slice. Fan out one subagent per
-shard (use the `Workflow` tool or parallel `Agent` calls — mirror `mine_examples.workflow.js` and
-`prompts/etymology-pipeline.md`'s parallel-subagent pattern). Each subagent, per verb:
-- pick the **earliest candidate that is a genuine *verbal* use** (reject same-spelled nouns/
-  adjectives, e.g. *vino* the noun, *cena* the noun; reject glossary/list fragments),
-- re-open the source at that line for the full **clean single sentence**,
-- **translate** it (English), and return a schema-validated object.
-Schema per verb: `{ es, en, source, line, token }` (modern) or, for medieval,
-`{ work, ref, os, tr }[]`. Aggregate → `ExampleUses.json` / `MedievalExamples.json`; dual-write the
-bundled copies. Then a report pass prints author/source balance and the uncovered tail.
+shard (parallel `Agent` calls, or the `Workflow` tool **only if the user has opted into multi-agent
+orchestration** — a fresh context does not have that opt-in by default). Mirror
+`mine_examples.workflow.js` and `prompts/etymology-pipeline.md`'s parallel-subagent pattern. Each
+subagent, per verb: pick the **earliest candidate that is a genuine *verbal* use** (reject
+same-spelled nouns/adjectives — *vino* the noun, *cena* the noun; reject glossary/list fragments),
+re-open the source for the full **clean single sentence**, **translate** it (English), return a
+schema-validated object. Aggregate → `ExampleUses.json` / `MedievalExamples.json`; **dual-write**
+the bundled copies (`corpus/json/` + `Conjugar/Models/`). Then a report pass prints author/source
+balance and the uncovered tail.
 
 Batch sizing and transcript-extraction gotchas are the same as the etymology pipeline — reuse the
 mechanics in `prompts/etymology-pipeline.md` (Steps 2–5: launch parallel, read results from the
 persisted JSONL transcripts with `strict=False`, validate, merge via `json.dumps`).
+
+### What the indices actually emit (verified building B — the mining INPUT)
+
+- **`corpus/working/corpus_index.json`** = `{ "<infinitive>": [ {doc, line, token, text}, … ] }`.
+  `doc` is the **repo-relative path** to the on-disk original
+  (`corpus/originals/literature/fortunata-y-jacinta-galdos-1887.txt`); `line` is its **physical
+  1-based line number**; `text` is a ≤200-char preview snippet centered on `token` (may be
+  `…`-truncated mid-sentence — re-open `doc`:`line` for the real sentence). Candidates are already
+  author-balanced and ordered, so "earliest" = first in the list. → produces the **modern** entry
+  `{ es, en, source, line, token }`, where `source` is `os.path.basename(doc)` (the filename only,
+  e.g. `fortunata-y-jacinta-galdos-1887.txt`) to match `ExampleSource`'s filename→attribution map.
+- **`corpus/working/medieval_index.json`** = `{ "<infinitive>": [ {work, ref, os, token}, … ] }`,
+  ≤20 candidates/verb, ranked most-distinctively-verbal first. `work` ∈ `cid` | `berceo` | `lba`;
+  `ref` is already the final citation string (`"Cantar I, v. 330"`, `"estrofa 470"`, `"copla 900"`).
+  → produces the **medieval** array entry `{ work, ref, os, tr }` (add `tr`, **clean** `os`, drop
+  `token`).
+
+### Gotchas discovered building A & B (read before mining)
+
+1. **Line numbers reference `corpus/originals/` (gitignored, re-fetchable).** The mining step
+   re-opens `doc`:`line`, so the originals must be present. On a fresh clone they won't be — run
+   `corpus/working/fetch_corpus.sh` then `python3 corpus/working/clean_corpus.py` to restore them
+   (the line numbers are physical lines in the *cleaned* files, which is what the indices were
+   built against). On this machine they already exist.
+2. **Clean the medieval `os` before writing it.** The grokked verse is *match-quality, not
+   display-quality* — especially the Cid, whose OCR leaves garble (`£id`/`Qid` for "Cid", caesura
+   artifacts like `… ondrada, [nancias;`, stray marginal-number fragments at line head). Berceo and
+   LBA `os` lines are clean. The subagent must normalize the Cid `os` to a readable verse line
+   (fix the garbled Cid, undo the caesura bracket re-ordering) when producing the final `os`. Do
+   **not** modernize the spelling — keep it medieval (*ferir, dixo, cavalgar*); that is the point of
+   the card.
+3. **Do not "correct" the medieval `ref`.** Berceo `estrofa N` and LBA `copla N` are exact. Cid
+   `v. N` is a running counter snapped to the OCR's marginal numbers — accurate at the poem's end
+   (v. 3718 ≈ true 3730) but **approximate near the two internal cantar boundaries**; leave it as
+   emitted (it is an illustrative citation, not a scholarly one).
+4. **Reject the ~2 residual Cid modern-prose lines + spurious canonical collisions.** The
+   canonicalizer is lossy, so a medieval token can attach to several verbs (homographs) *and* a
+   rare footnote line can survive as a candidate. The subagent must confirm the `os` line genuinely
+   realizes **that verb's own reflex** (reflex-only policy) and reject a line that reads as modern
+   editorial prose or where the token is really a different verb/POS. This is the medieval analogue
+   of the modern noun-rejection rule.
+5. **Mine the full medieval set, including the 604 medieval-only special verbs.** `medieval_index.json`
+   is keyed by bare infinitive over *all* 4,811 verbs; the 604 unranked "special" verbs (e.g.
+   *yantar, aducir, catar, trovar, lidiar*) are exactly step F's set — produce their
+   `MedievalExamples.json` arrays now so F only has to add the modern example + etymology.
+6. **The 11 zero-coverage modern verbs go straight to step D.** They are absent from
+   `corpus_index.json` (no verbal use in the modern corpus): *comportar, congelar, debutar, egresar,
+   empatar, encabezar, medicar, postular, protagonizar, puntualizar, ultimar*. Don't wait on a
+   corpus candidate for them.
+7. **Sharding sizes:** modern = 977 verbs (~33 shards of 30); medieval = 1,048 verbs (~35 shards).
+   Keep the two mines separate (different schemas, different rejection rules).
+8. **Cervantes is 17th-c.** *quijote-cervantes-1605.txt* candidates use older orthography than the
+   19th-c. novels; still modern-matchable, but prefer a 19th-c. work's candidate when one exists
+   (the round-robin already spreads leads, so this is usually automatic).
 
 ## D. Tail rescue + authored residue
 
