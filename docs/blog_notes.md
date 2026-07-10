@@ -3091,6 +3091,41 @@ catches the agents flagged rather than asserted: English `flow` is *not* cognate
 and `have` is *not* cognate with `haber`-family words. The lone friction (a subagent's `—perdón—`
 self-edit surviving into the JSON) got written back to the pipeline's Lessons.
 
+## Spanish etymology pipeline — batch 11 (ranks 810–913)
+
+A full 100-verb batch: 10 parallel general-purpose subagents × 10 verbs, launched in a single
+message. To keep the orchestrator's context lean, each subagent's fully self-contained prompt
+was written to a `/tmp` file and the Agent tool simply told it to *read* its file and follow it —
+so the 10 KB rules-and-worked-example block was never held in the main context ten times over.
+Zero context compaction, zero lost transcripts. Step 4 flagged **nothing at all** — all 100
+verbs passed on the first pass: matched en/es tilde counts across the board, curly quotes /
+guillemets throughout, no missing-language returns, no reconstruction-asterisk slips. Cleanest
+batch yet. `Etymologies.json` now holds **901 / 988 ranked verbs** in both languages; next up is
+`reconstruir` (rank 914).
+
+The payoff details this batch clustered on **doublets and semantic drift**: `hundir` and `fundir`
+are the same Latin `fundere` ("to pour") inherited twice — the popular `f-`→`h-` "to sink" beside
+the semi-learned "to melt/cast"; likewise `doblar`/`duplicar` (from `duplāre`/`duplicāre`),
+`librar`/`liberar`, `nombrar`/`nominar`, and `rezar`/`recitar` — the humble prayer-verb and the
+theatrical one are twins, both from `recitāre`. Standout narratives: `emocionar` — when `emotion`
+first appeared it named not a feeling but a *public disturbance*, even a riot, and only later
+migrated inward; `brillar` "to shine" literally *began as the name of a gemstone* (`beryl`, from
+an Indian source), the same `bēryllus` giving German `Brille` "eyeglasses"; `apellido` (surname)
+and `apelar` (to appeal) both spring from `appellāre`, calling someone by name; Spanish
+`desesperado` sailed abroad to become English `desperado`; a `contraste` was once the official
+assayer who tested gold and silver against a standard; and `secuestrar` drifted from a Roman
+legal term (property held by a neutral third party) to "kidnap" — the violent sense only recorded
+by the Academy in 1884. Disputed origins were hedged not laundered — `susto`/`asustar` (the
+Academy's `suscitāre` vs. Corominas's onomatopoeic `¡sst!`), `callar` (Greek `khalân`, via Greek
+not inherited Latin), `chocar` (French `choquer` vs. an echoic origin), `avalar` (`à val` "at the
+foot" vs. Arabic `ḥawāla`), `riesgo`/`arriesgar` (Corominas rejects Arabic `rizq`, favors the
+cliff `risco`), `fracasar` (the `conquassāre`+`fra-` blend flagged as proposed), plus `charlar`,
+`picar` (and its uncertain `pícaro` link), and `largus`/`alargar` (no confident PIE root) marked
+expressive-or-uncertain. Two clean false-friend catches the agents surfaced rather than asserted:
+Spanish `libro` is **not** from `līber` "free" but from a homonym meaning tree-bark, and the
+`draw`↔`trahere` link behind `trazar` is judged phonetically impossible. Nothing fed back to the
+pipeline's Lessons — the run hit no new friction.
+
 ## Comment sweep — stripping the modernization project's provenance citations
 
 The modernization work left a paper trail in the comments: pointers to the Fable audit's

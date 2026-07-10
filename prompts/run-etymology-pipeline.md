@@ -5,7 +5,7 @@ It works verbatim every time — resume is automatic (progress is derived by dif
 work-list against the keys already in `Etymologies.json`; there is no stored "next verb").
 
 ```
-Read @prompts/etymology-pipeline.md and run one batch of the Spanish etymology pipeline. Resume from where the last session stopped: per Step 1, the next verbs are the smallest-numbered ranks (rank 1 = most-used first) in prompts/etymology-verbs.json (plus the select verbs) not yet keyed in Conjugar/Models/Etymologies.json. Do ~50 verbs (5 parallel general-purpose subagents × ~10). Then extract from the subagent transcripts, validate markup (Step 4), merge (Step 5), validate the JSON, and report progress (Step 7). Delegate all etymology writing to subagents — write none yourself. Push to migration branch when done.
+Read @prompts/etymology-pipeline.md and run one batch of the Spanish etymology pipeline. Resume from where the last session stopped: per Step 1, the next verbs are the smallest-numbered ranks (rank 1 = most-used first) in prompts/etymology-verbs.json (plus the select verbs) not yet keyed in Conjugar/Models/Etymologies.json. Do ~100 verbs (10 parallel general-purpose subagents × ~10). Then extract from the subagent transcripts, validate markup (Step 4), merge (Step 5), validate the JSON, and report progress (Step 7). Delegate all etymology writing to subagents — write none yourself. Push to migration branch when done.
 ```
 
 ## Knobs
