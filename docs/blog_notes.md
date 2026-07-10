@@ -3160,3 +3160,25 @@ the in-repo `_build_verbmap.py` generator reference — legitimate data provenan
 shipped resource is built — stayed. In-repo cross-references ("Mirrors VerbBrowseView"), legacy
 old-engine comparisons, and `(see CLAUDE.md)` were left alone: those point *inside* the repo,
 which is the whole distinction the sweep is drawing.
+
+## Etymology content batch 12 (ranks 914–953)
+
+Ran another pass of the Spanish etymology pipeline (`prompts/etymology-pipeline.md`): 40 verbs
+(ranks 914–953 — `reconstruir` through `adorar`), five parallel `general-purpose` subagents of
+eight verbs each, each researching from es.Wiktionary / DLE / Corominas for the Spanish descent
+and en.Wiktionary for the PIE chain and cognates, and writing parallel English + Spanish entries.
+Every entry cleared the Step 4 markup validator on the first pass (even tilde counts, en/es
+tilde parity, curly-quote/guillemet discipline, no stray emphasis asterisks) — no re-dispatch
+needed. `Etymologies.json` now covers **941/988** ranked verbs; next up is `decretar` (rank 954),
+leaving 47 ranked plus the six select verbs.
+
+A batch highlight was how many of these carry a hidden physical image: `recalcar` ("to stress")
+is literally to tamp a point in underfoot (from `calx`, "heel"); `exagerar` is to heap earth ever
+higher into a mound (`agger`); `penetrar` reaches the innermost storeroom the household gods
+guarded. The subagents also held the line on disputed origins — `pillar`, `batir`, `secar`,
+`desestimar`, and `adorar` all hedge their contested etymons ("the leading guess rather than a
+proven fact," "of uncertain origin") instead of laundering them into confident narrative, which
+is the pipeline's single biggest accuracy risk. One process note: stale `/tmp/etym_g*.json` files
+from the previous session's batch 11 were still on disk and got swept into the glob-driven merge,
+but the re-merge was fully idempotent (the `git diff` showed exactly 80 insertions = 40 verbs ×
+2 languages, no existing entry touched) since those files were batch 11's own source.
