@@ -1,0 +1,11 @@
+# Track only durable artifacts (mirrors Conjuguer's corpus policy).
+# Source originals are large and re-fetchable; regenerable intermediates are rebuilt by scripts.
+originals/
+working/*.md
+working/forms*.json
+working/*_index.json
+working/shards/
+working/mined_*.json
+# ...but always keep the tracked build scripts and finished/hand-built artifacts:
+!working/*.py
+!working/*.js

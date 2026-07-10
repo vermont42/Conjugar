@@ -3207,3 +3207,166 @@ French `saisir` account, a refutation the subagent carried into both languages r
 laundering. This batch merged with no stale-file interference (the previous session's `/tmp`
 leftovers had been cleaned up), and the git diff was exactly 53 verbs added with the sole
 incidental change being the former last-key `vulnerar` gaining a trailing comma.
+
+## Example-uses corpus — source identification & licensing (step 1)
+
+Kicked off the "example uses" feature, Conjugar's port of the per-verb example sentences that
+Conjuguer and Konjugieren already ship. The Conjuguer model (see `~/Desktop/VerbView.png`) is the
+target: each usage-ranked verb shows one modern-prose example, and — where one genuinely exists —
+a nested *medieval* example with a tap-through to all medieval examples for that verb (Conjuguer
+nests *Chanson de Roland* lines). The Conjuguer pipeline is the one to copy because it moved the
+expensive work off the LLM: pre-conjugate every verb with the app's own engine, index the corpus
+deterministically by whole generated word-form, and let subagents do only the select/translate
+judgment (`../Conjuguer/docs/literature-example-corpus.md`).
+
+Step 1 was pure research: identify the sources and nail down licensing before fetching anything.
+Four parallel `general-purpose` subagents each took a tier (medieval / literature / government /
+technology) and came back with PD-verified, URL-level source lists. Findings, now written up in
+`docs/example-corpus-sources.md`:
+
+- **Medieval — the *Chanson de Roland* analogue is the *Cantar de Mio Cid* (c. 1200).** Same role
+  (Castilian national epic, ~3,730 verses, anonymous), PD worldwide. Clean plain text: the
+  Menéndez Pidal 1913 *normalized* edition on the Internet Archive (`poemademiocid00men`, full-text
+  TXT) — the normalized layer keeps medieval morphology (*ferir*, *aduxo*, *connusco*) but with
+  consistent spelling, the sweet spot for form-matching. Delightful bonus: there's a literal
+  Iberian *Roland* cousin, the ~100-line *Roncesvalles* fragment (Navarro-Aragonese, PD via
+  Menéndez Pidal's 1917 *RFE* article) — too short to carry coverage, perfect as a "Roland cousin"
+  garnish. The engineering wrinkle is Old→Modern Castilian normalization (f-→h-, ç→c/z, u↔v/i↔j,
+  apocope + enclitic splitting, and a hand table for strong preterites *sopo→supo, ovo→hubo,
+  dixo→dijo*) — and the payoff lands exactly where matching is hardest, on the vivid irregulars the
+  app already models richly.
+- **Literature — an 8-work PD starter set**, weighted to 19th-c. peninsular realism (Galdós
+  *Fortunata y Jacinta* as anchor, plus Clarín, Pardo Bazán, Valera, Alarcón, Blasco Ibáñez) whose
+  forms match modern Spanish best, with *Don Quijote* kept as a flagged supplement (17th-c.
+  orthography). All clear in both US and Spain (life+80) by decades; Project Gutenberg `.txt.utf-8`
+  is the clean channel.
+- **Government — official texts are statutorily PD**: Spain Art. 13 TRLPI and Mexico Art. 14 LFDA
+  both exclude laws/decrees/official acts from copyright (the exact analogue of the Swiss Art. 5
+  URG basis the French app used), so any BOE/DOF legal text is zero-obligation. Agency reports add
+  attribution-only reuse (INE = CC BY 4.0, Spain PSI regime, Argentina CC BY 4.0).
+- **Technology — the one gap.** Unlike Switzerland's PD NCSC guides, Spain's best consumer how-to
+  (INCIBE/OSI, AEPD) is CC BY-**NC**-SA — the NC clause blocks a shipped commercial app, and
+  CCN-CERT is all-rights-reserved. Commercial-safe fallbacks are CC BY-SA community/vendor docs
+  (Mozilla SUMO, GNOME/Ubuntu, Wikilibros) and attribution-only PSI gov tech prose (España Digital
+  2026), with the mitigation that short utilitarian instructions ("Haga clic en Aceptar") fall
+  below the originality threshold anyway.
+
+The feature slots cleanly onto existing infrastructure: `VerbMap.frequencyRank` already supplies
+the 989-verb ranked set, and the etymology feature (`Etymologies.json` + the `nonisolated`
+load-once `EtymologyCache`, with its card pending in `VerbView`) is the exact template for the
+examples' bundled JSON, loader, and UI placement. Left four owner-level decisions open in the
+manifest (tech-tier risk posture, medieval supplements beyond the Cid, Latin American inclusion,
+and whether to fetch + build the pipeline next) rather than presuming them.
+
+## Example-uses corpus — fetch + form-dump backbone (step 1 build)
+
+With the sources chosen (Cid + Berceo *Milagros* + *Libro de buen amor* for the medieval tier;
+8-work PD literature set; PD/CC-BY government; digital-policy + planned CC-BY-SA vendor docs for
+technology; LatAm included), fetched the corpus and stood up the deterministic backbone of the
+pipeline.
+
+A fifth research pass nailed down Latin American government attribution and produced one useful
+correction: DANE (Colombia) is **CC BY 4.0**, *not* BY-SA — so all three LatAm sources (Mexico
+Libre Uso MX, Colombia DANE, Argentina argentina.gob.ar/INDEC) are attribution-only and
+commercial-friendly, no share-alike anywhere. A single paste-ready credits page satisfies every
+obligation across Spain + the three countries; it lives in `docs/example-corpus-sources.md`.
+
+**Fetched 21 source texts** into `corpus/originals/` (gitignored, re-fetchable, mirroring
+Conjuguer's corpus policy): 3 medieval, 8 literature, 5 government, 5 technology. Project
+Gutenberg's `.txt.utf-8` endpoint gave clean literature; the Cid came from the archive.org
+Menéndez Pidal 1913 OCR and Berceo from a PDF (both need apparatus-stripping later); the
+government/technology PDFs were `pdftotext`'d. Three fetches missed (Fernán González — only
+lending-restricted editions; INEGI/INDEC stats PDFs — non-extractable) and are noted as
+gaps to backfill.
+
+The backbone is the **form-dump**: `ConjugarTests/Models/CorpusFormsDumpTests.swift`, a disabled
+build-time tool (Conjugar's port of Conjuguer's `CorpusFormsDumpTests`) that rides the test target
+to reuse the app's authoritative engine. It conjugates every verb through `TenseBridge` across all
+20 conjugatable tenses × 7 persons (both tú and vos, so voseo is harvested), lowercases the
+`IrregularityMarker` UPPERCASE red-highlight encoding back to the plain surface form, and — for
+compounds and imperativo negativo — keeps only the last word (participle / subjunctive), so the
+dropped `haber`/"no" don't turn every "he …" into a false hit. It writes
+`corpus/working/forms.json` (**ranked: 52,166 forms → 988 verbs**) and `forms_all.json` (**all:
+254,328 forms → 4,811 verbs**). Both tests pass in ~26 s. The payoff of matching whole *generated*
+forms rather than stem-grepping is immediate in the spot-checks: `voy→ir`, `supe→saber`,
+`dicho→decir`, `tuviéramos→tener`, and — the vivid one — `fue`/`fui` correctly map to **both**
+`ir` and `ser`, the shared-suppletion detail the `ser` etymology makes a point of. Homographs get
+recorded under every candidate verb; context-disambiguation is the mining step's job.
+
+The SourceKit `No such module 'Testing'` diagnostic on the new file is the usual stale-index false
+positive — `xcodebuild` compiled and ran it cleanly. Next: the `grokked/` Old→Modern Castilian
+canonicalizer for the medieval tier, the Python index builder, the subagent mining workflow, and
+the `ExampleUses.swift` loader + `VerbView` cards.
+
+## Example-uses corpus — cruft removal
+
+Josh flagged that the retrieved sources carried the classic boilerplate — Project Gutenberg's
+license header/footer, and the running headers/footers/page-numbers that PDFs repeat on every
+page — the kind of thing that derails a mining agent. Wrote a tracked, idempotent cleaner
+(`corpus/working/clean_corpus.py`, fed by a now-tracked `fetch_corpus.sh` so raw→clean is
+reproducible) and swept all 21 files. Handlers by source type: Gutenberg (slice between the
+`*** START ***`/end markers — including the *older* `End of Project Gutenberg's <title>` footer
+form that a first pass missed on two Galdós files); PDF-paginated (frequency-detect the recurring
+per-page running headers/footers and drop them, plus `Página N`, bare page numbers, and dotted
+TOC leaders); and the Cid OCR (slice to the poem body, drop the modern intro, the `CANTAR DEL
+DESTIERRO` running headers, the back índice, the Internet Archive front matter, and the printer's
+colophon).
+
+Two surprises surfaced along the way, both real pollution rather than mere boilerplate. First,
+**Doña Perfecta (PG 15725)** — the edition the literature research had picked as "the Spanish
+one" — turned out to be a *Heath annotated student edition*: pervasive inline `=markup=`, margin
+line-numbers, an English critical introduction, and a huge English `NOTES`+`VOCABULARY` apparatus
+(the `=11= 17 =a más de largo=: 'besides being long.'` glossary). Not worth salvaging, so it was
+dropped for clean Spanish-only **Marianela (48818)** — still Galdós, so no loss of coverage.
+Second, **El sombrero de tres picos (PG 29506)** is annotated the same way, but its Spanish story
+body is pristine, so the cleaner slices the body out from between the English front and back
+matter — keeping Alarcón in the set. The one bug worth remembering: the first slice cut *El
+sombrero* down to three lines, because the edition's own contents page near the top lists
+"NOTES"/"VOCABULARY", so "first NOTES" matched the table-of-contents entry, not the real
+back-matter section — fixed by cutting at the *last* occurrence, with a sanity guard against ever
+slicing a body down to nothing.
+
+A global grep now finds zero Gutenberg boilerplate, zero English annotated-apparatus, and zero
+PDF running-header/`Página N` cruft across the corpus. What deliberately remains is *content*, not
+cruft, and belongs to the next (`grokked/`) stage: the medieval editions still carry their modern
+editorial introductions and footnotes, which must be fenced off from the medieval index so they
+don't feed modern Spanish forms into the "Cid example" lookups.
+
+## Example-uses corpus — credits (creditsText)
+
+Added an `^Example Uses^` / `^Ejemplos de Uso^` section to the app's credits
+(`Info.creditsText` in `Localizable.xcstrings`, both `en` and `es`), inspired by Conjuguer's
+example-sentence credits block but reflecting Conjugar's actual corpus and Conjugar's own markup
+(`^heading^`, `~emphasis~`, `%url%` rather than Conjuguer's backtick/`‡` conventions). It is
+organized by license, exactly matching the 21 sources assembled: the eight public-domain literary
+works (Galdós, Clarín, Pardo Bazán, Valera, Alarcón, Blasco Ibáñez, Cervantes) via Project
+Gutenberg; the three public-domain medieval works (Cid via the Internet Archive, Berceo, Libro de
+buen amor); Spain/Mexico/Colombia official texts that statute excludes from copyright (Art. 13
+TRLPI, Art. 14 LFDA, Art. 41 Ley 23/1982); and the attribution-licensed government reports (INE
+and DANE under CC BY 4.0 with the license URL, Spain's Ley 37/2007 reuse for MITECO/Mitma/España
+Digital, Argentina's argentina.gob.ar under CC BY 4.0). A final `~AI-authored examples and
+translations.~` paragraph credits Claude (Opus 4.8) as the author of the translations and of the
+fallback example sentences for verbs no open corpus uses verbally — set up now so the attribution
+ships with the feature. Every fetched source is PD, CC BY 4.0, or open public-sector reuse
+(attribution-only) — none carry NC or share-alike — so the credits need no copyleft caveat; if the
+deferred CC BY-SA vendor how-to docs (Mozilla SUMO, GNOME/Ubuntu) are later added for the
+consumer-imperative register, a share-alike credit gets added with them.
+
+Edited the catalog through `python3`/`json.dump` (never the Edit tool, per the `.xcstrings`
+ASCII-quote foot-gun), inserted before the `^Icons^` section in each language, verified balanced
+`^`/`~`/`%` markup with no stray ASCII quotes, validated the JSON, and confirmed a clean
+`build_app.sh`.
+
+## Example-uses — session handoff plan
+
+Wrote `prompts/example-uses-pipeline.md`, a self-contained plan a fresh session can execute to
+finish the feature without this session's context. It records the starting state (sources chosen,
+21-text corpus fetched + cleaned, form-dump done, credits done) and lays out the six remaining
+chunks: the `grokked/` medieval prep (isolate verse from modern apparatus + the Old→Modern
+canonicalizer with the strong-preterite exception table + the reflex-only attachment policy), the
+`build_corpus_index.py` port plus a medieval index over `forms_all.json`, the subagent
+select/translate mining workflow with its output schemas, tail rescue + Claude-authored residue,
+and the app-side integration (Example/MedievalExample models + loaders mirroring
+`Etymology`/`EtymologyCache`, and the two `VerbView` cards in the same slot as the now-wired
+etymology card). It points at Conjuguer's build scripts and app models as working templates and at
+`docs/example-corpus-sources.md` for the full source/license/attribution detail.
