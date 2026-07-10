@@ -3424,3 +3424,44 @@ a modern example + etymology). Spot-checks confirm the reflex fidelity: *connusc
 priso→prender, firiendo→herir, aduxieron→aducir, oviéronla→haber* all resolve correctly. Both
 index JSONs are regenerable intermediates (gitignored); the scripts and the hand-verified
 `grokked/` verse are tracked. Remaining: steps C (mining), D (tail rescue), E (app UI), F (future).
+
+## Example-uses — step C: mining (select + translate) COMPLETE
+
+Step C is the LLM middle of the example-uses pipeline: turn the deterministic candidate indices
+(built in step B) into finished, translated example entries. Following the etymology pipeline's
+parallel-subagent pattern, both indices were sharded ~30 verbs/shard
+(`build_examples.py shard {modern|medieval}` → gitignored `corpus/working/shards/`) and one
+`general-purpose` subagent (Sonnet) mined each shard, reading only its slice and writing its own
+`mined_*.json`. **33 modern shards + 35 medieval shards = ~68 subagents.** Each subagent's job was
+judgment the deterministic index can't do: pick the earliest genuinely *verbal* candidate (rejecting
+same-spelled nouns/adjectives — *vino* the wine, *cena* the dinner, *como* the adverb), re-open the
+source to recover the clean full sentence, and translate it.
+
+**Modern (`ExampleUses.json`, dual-written to `corpus/json/` + `Conjugar/Models/`): 888 of 977
+verbs placed.** Source balance came out literature-dominant with government/technology as fallback,
+spread across all eight novels (Galdós's *Fortunata* 191 + *Marianela*, Clarín's *Regenta*, Pardo
+Bazán's *Pazos*, Valera's *Pepita* 101, Cervantes 91, Alarcón's *Sombrero* 67, Blasco Ibáñez's
+*Barraca*; ~69 from the gov/tech tiers). The 89 unplaced verbs are **not** step-C failures — they
+are the noun-collision tail the plan routes to step D: the index's tokenizer surfaced only the
+dominant wrong-POS homograph (*comer*→*como*, *caminar*→*camino*, *partir*→*parte*, *viajar*→*viaje*,
+*juntar*→*junto*), and the subagents correctly refused to pass a noun off as a verb. Those go to
+tail rescue (re-mine gov/tech tiers) + authored residue in step D.
+
+**Medieval (`MedievalExamples.json`, same dual-home): 695 verbs with ≥1 example, 2,139 verse lines**
+(LBA 1047 / Berceo 658 / Cid 434), arrays capped at 5 best-per-verb for the tap-through. The
+subagents enforced the reflex-only rule a second time (dropping *ferir*-attaches-to-*herir* look-alikes
+that were really a different verb/noun), cleaned the Cid's residual OCR garble (*£id/Qid*→*Cid*,
+stray marginal-number fragments, caesura-bracket artifacts) **without** modernizing spelling, and
+left the citations untouched. Final spot-checks are clean: *cavalgan→cabalgar, Feridlos→herir,
+yantando→yantar, Trobáronlo→trovar, aduxieron→aducir, Díxoles→decir, ovieron→haber*, and zero
+residual Cid garble across all 434 kept Cid lines. Crucially this includes the 604 "medieval-only
+special" verbs, so step F already has its `MedievalExamples.json` arrays and only needs to add a
+modern example + etymology.
+
+Mechanics worth keeping: subagents *writing their own* `mined_*.json` (rather than returning JSON
+for transcript extraction) made aggregation a trivial `build_examples.py aggregate` glob-and-merge
+with markup/quote validation, and made the whole mine **idempotent and shard-resumable** — a mid-run
+pause (five-hour window exhausted) resumed by simply re-launching the shards with no file yet, and
+one Sonnet shard that died on a mid-response API error was re-run in isolation. Remaining: D (tail
+rescue + authored residue), E (app-side `Example`/`MedievalExample` models + `VerbView` cards), F
+(future-plans verbs).
