@@ -3182,3 +3182,28 @@ is the pipeline's single biggest accuracy risk. One process note: stale `/tmp/et
 from the previous session's batch 11 were still on disk and got swept into the glob-driven merge,
 but the re-merge was fully idempotent (the `git diff` showed exactly 80 insertions = 40 verbs ×
 2 languages, no existing entry touched) since those files were batch 11's own source.
+
+## Etymology content batch 13 (ranks 954–1000 + the six select verbs) — pipeline COMPLETE
+
+The final etymology pass: the last 47 ranked verbs (`decretar` through the tail of the top-1000)
+plus the six rare-but-wanted **select verbs** (`yacer`, `abolir`, `placer`, `asir`, `balbucir`,
+`atañer`) — 53 in all, seven parallel `general-purpose` subagents (six of eight, one of five),
+launched in two messages of four and three. Every one of the 53 cleared the Step 4 markup
+validator on the first pass again — 106 values, zero tilde-parity or quote defects — so no
+re-dispatch. With this merge **`Etymologies.json` covers all 988 ranked verbs and all 6 select
+verbs: 994 entries in each of `en` and `es`. The generation pipeline is done.** What remains is
+the separate UI task the pipeline doc flagged: `Etymology.swift` already loads the file, but
+nothing yet renders it under the conjugations in `VerbView` (a `~…~`→bold attributed-string
+renderer plus an etymology card).
+
+The select verbs were the most fun to end on, because their defectiveness *is* the story and the
+subagent wove it in: `abolir` was historically defective (only the `-i-`-initial endings, so never
+*`abole`*); `placer` still surfaces its archaic strong preterite `plugo`/`pluguieron` in fossils
+like `pluguiera a Dios`; `asir` technically has the `-g-` present `asgo` but speakers dodge it for
+`agarrar`/`coger`; `balbucir` is propped up by regular `balbucear`; `atañer` lives almost only in
+the third person (`eso no te atañe`). `asir` also gave the batch its sharpest disputed-origin note
+— Corominas derives it from `asa` (« handle », Latin `ansa`) and explicitly *rejects* the Old
+French `saisir` account, a refutation the subagent carried into both languages rather than
+laundering. This batch merged with no stale-file interference (the previous session's `/tmp`
+leftovers had been cleaned up), and the git diff was exactly 53 verbs added with the sole
+incidental change being the former last-key `vulnerar` gaining a trailing comma.
