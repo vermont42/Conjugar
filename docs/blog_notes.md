@@ -3370,3 +3370,57 @@ and the app-side integration (Example/MedievalExample models + loaders mirroring
 `Etymology`/`EtymologyCache`, and the two `VerbView` cards in the same slot as the now-wired
 etymology card). It points at Conjuguer's build scripts and app models as working templates and at
 `docs/example-corpus-sources.md` for the full source/license/attribution detail.
+
+## Example-uses — steps A & B: medieval prep + corpus indices
+
+Executed steps A and B of `prompts/example-uses-pipeline.md`: the deterministic *retrieval* half
+of the example-mining pipeline, so the later subagent mining step only has to select + translate
+pre-found candidate lines rather than read whole novels and medieval epics.
+
+**A3 — the Old→Modern Castilian canonicalizer (`corpus/working/oldspanish.py`).** Medieval verse
+is spelled in 12th–14th-c. Castilian (*ferir, fazer, dixo, ovo, auer, connusco*), which never
+matches the engine's modern conjugation tables directly, so the canonicalizer reduces *both* the
+corpus token and every generated modern form to a shared, deliberately-lossy key and compares
+canonical↔canonical. Symmetric letter rules (f-→h-, then initial h-→∅, ç→z, ss→s, intervocalic
+consonantal u→b, x→j, j/y→i, v→b, accent-stripping while preserving ñ) plus a hand-built
+strong-preterite/suppletive exception table (~150 high-frequency entries — *sopo→supo, ovo→hubo,
+dixo→dijo, tovo→tuvo, priso→prendió, connusco→conocer, cavalgar→cabalgar*) and enclitic/apocope
+splitting (`díxol`→`díxo`, `tornós`→`tornó`, `diz`→`dize`). A built-in self-test confirms 18/18
+reflex pairs collide.
+
+**A1/A2 — verse isolation (`corpus/working/grok_medieval.py` → tracked `corpus/grokked/`).** The
+three editions still carried their modern editorial apparatus, which had to be kept out of the
+medieval index (injecting modern forms into "medieval example" lookups is the tier's single
+biggest correctness risk). The Cid (a messy Menéndez-Pidal-1913 OCR with footnotes and headings
+interleaved line-by-line) is separated block-by-block: drop any blank-separated block that carries
+a modern-scholarly apparatus marker (`v. N`, `p. N`, `comp.`, a 4-digit cross-ref, a single-quoted
+gloss, a clean editorial "Cid"), *and* require every kept block to show at least one
+medieval-orthography marker (the positive test that catches marker-less footnote *continuation*
+prose), with a final per-line modern-lexeme filter. Verse numbers come from a running counter
+snapped monotonically to the OCR's own marginal numbering, with cantar assignment by
+Menéndez-Pidal range → `Cantar {I,II,III}, v. N` (endpoint lands on v. 3718 vs the true 3730).
+Berceo's clean cuaderna vía is grouped into blank-separated stanzas → `estrofa N` (912 stanzas vs
+the canonical 911); the Libro de buen amor's Cejador edition prints its own `[N]` copla markers,
+read straight off → `copla N` (1725 of 1728). Result: 3242 Cid + 3652 Berceo + 7271 LBA verse
+lines, zero detectable modern-prose leaks, emitted as `<slug>.txt` for inspection plus a combined
+`medieval_verses.json` ref map.
+
+**B1 — modern-tier index (`build_corpus_index.py` → `corpus_index.json`).** Port of Conjuguer's
+builder: one tokenizing pass per literature/government/technology source, whole-token lookup in
+`forms.json`, candidates gathered per work then merged round-robin with a per-verb rotating lead
+work so the first candidate is spread across the eight novels (Galdós/Clarín/Pardo Bazán/…), with
+government then technology as fallback. **977 of 988 ranked verbs covered (98.9%)**; the 11
+zero-coverage verbs are modern journalism/sport lexemes (*debutar, empatar, protagonizar*) bound
+for tail rescue / authored residue.
+
+**B2 — medieval index (`build_medieval_index.py` → `medieval_index.json`).** Reflex-only matching
+over the grokked verse using the canonicalizer + `forms_all.json` (all 4,811 verbs, since medieval
+reflexes routinely fall outside the ranked 988): a verse line attaches to a verb only when it
+genuinely contains that verb's own ancestor form. Over-merged canonical keys (shared by >8 verbs)
+are dropped; candidates are ranked most-distinctively-verbal first and capped per verb. **1,048
+verbs get ≥1 medieval example — 444 usage-ranked plus 604 "medieval-only special" verbs** (the
+unranked archaic reflexes, e.g. *yantar, aducir, catar, trovar, lidiar*, that step F will also give
+a modern example + etymology). Spot-checks confirm the reflex fidelity: *connusco→conocer,
+priso→prender, firiendo→herir, aduxieron→aducir, oviéronla→haber* all resolve correctly. Both
+index JSONs are regenerable intermediates (gitignored); the scripts and the hand-verified
+`grokked/` verse are tracked. Remaining: steps C (mining), D (tail rescue), E (app UI), F (future).
