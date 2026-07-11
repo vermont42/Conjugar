@@ -21,6 +21,13 @@ struct GameView: View {
   private static let dirButtonSize: CGFloat = 40
   private static let jumpButtonSize: CGFloat = 51   // 64 shrunk by 20%
 
+  // Real rendered dancer walk sprite (tools/blender → Assets.xcassets/Game).
+  // Frames are 109×169 px; the visual overhangs the 44×30 collision box, with
+  // the feet aligned to the box's bottom edge via dancerFeetOffset.
+  private static let dancerVisualHeight: CGFloat = 56
+  private static let dancerVisualWidth: CGFloat = 56 * 109 / 169   // preserve aspect
+  private static let dancerFeetOffset: CGFloat = -(56 - GameState.playerHeight) / 2
+
   var body: some View {
     GeometryReader { geo in
       TimelineView(.animation) { timeline in
@@ -83,12 +90,24 @@ struct GameView: View {
 
   private var playerSprite: some View {
     ZStack {
-      RoundedRectangle(cornerRadius: 6)
-        .fill(Color.customRed)
-      Text(verbatim: "\(gameState.playerFrame)")
-        .font(.system(size: 18, weight: .bold, design: .monospaced))
-        .foregroundStyle(.white)
-      facingChevron(gameState.playerFacing, tint: .white)
+      if gameState.playerAction == .walk {
+        // Real rendered walk cycle (dancer_walk_1…6). The sprite is rendered
+        // facing left, so mirror it when the player faces right.
+        Image("dancer_walk_\(gameState.playerFrame)")
+          .resizable()
+          .scaledToFit()
+          .frame(width: Self.dancerVisualWidth, height: Self.dancerVisualHeight)
+          .scaleEffect(x: gameState.playerFacing >= 0 ? -1 : 1, y: 1)
+          .offset(y: Self.dancerFeetOffset)
+      } else {
+        // Placeholder numbered flipbook for the not-yet-rendered actions.
+        RoundedRectangle(cornerRadius: 6)
+          .fill(Color.customRed)
+        Text(verbatim: "\(gameState.playerFrame)")
+          .font(.system(size: 18, weight: .bold, design: .monospaced))
+          .foregroundStyle(.white)
+        facingChevron(gameState.playerFacing, tint: .white)
+      }
       if gameState.isCapeVisible {
         Text(GameState.capeEmoji)
           .font(.system(size: 22))

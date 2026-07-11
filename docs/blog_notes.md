@@ -3857,3 +3857,48 @@ story). The recipe, from Conjuguer commits **`9bb4f3e`** (perf) and **`270052a`*
   Symbol** (8,539 in the on-device manifest; that isn't one), so it rendered blank. Swapped to
   `figure.dance` (a dancer — on-theme for flamenco, and distinct from the Game Center card's
   `gamecontroller.fill`).
+
+---
+
+## Blender → 2D-sprite toolchain, proven on the dancer walk cycle (July 2026)
+
+Stood up the 3D→2D-sprite pipeline that replaces the game prototype's numbered-frame
+placeholders with real rendered animation, and proved it end-to-end on **one action** —
+the player's **walk cycle** — now animating in the running app.
+
+- **Toolchain (`tools/blender/`).** `brew`-installed Blender 4.5 LTS, ImageMagick, uv.
+  `render_sprites.py` is a headless Blender script: imports a Mixamo FBX, clears the
+  default scene, frames the character with an **auto-fitting orthographic side camera**
+  (mesh bounds sampled across the *action's* frame range so a stride/jump never clips),
+  lights it (key sun + world ambient), sets **EEVEE Next + transparent film + RGBA PNG**,
+  and renders **N evenly-sampled frames** (half-open `[start,end)` so the loop-closing
+  duplicate is dropped). Parameterized `--actor/--action/--frames/--size/--view/--ortho/
+  --toon`. `pack_or_rename.sh` crops every frame to one **common bounding box** (union of
+  content across frames — tight, drift-free) and renames to the game's 1-based
+  `dancer_walk_N.png` convention (or packs a sheet). Full `README.md`; renders + raw FBX
+  are git-ignored (Mixamo's raw-asset restriction, public/AGPL repo).
+- **blender-mcp (bonus).** Registered `uvx blender-mcp`, vendored the addon under
+  `tools/blender/blender-mcp/`, and smoke-tested a cube render both via the addon socket
+  and the in-session MCP tools. Not needed for the dancer (headless CLI suffices); it
+  earns its keep later for sourcing the bull (Sketchfab/image-to-3D).
+- **The asset.** Mixamo stock **X Bot** + **Walking** clip (In-Place, 30 fps, With Skin),
+  driven in-browser via Claude-in-Chrome; rendered to **6** side-profile frames (matching
+  `playerFrameCounts[.walk]`), cropped to 109×169, dropped into a new
+  `Assets.xcassets/Game/` group. Logged in `asset-licenses/`.
+- **The seam swap.** `GameView.playerSprite` now renders
+  `Image("dancer_walk_\(playerFrame)")` for the `.walk` action (kept the numbered-box
+  fallback for the other, not-yet-rendered actions and for the bull). The sprite overhangs
+  the 44×30 collision box, feet aligned to its bottom, and mirrors by `playerFacing`
+  (native render faces left → mirror when walking right). Verified in the simulator: the
+  dancer walks with real frames, correct facing both directions, while every other actor
+  still shows numbers — the whole pipeline proven on one action.
+- **Fixed a pre-existing, simulator-only crash surfaced along the way.**
+  `URLProtocolStub.startLoading()` delivered response *data* but never a `URLResponse`;
+  under the async `URLSession.data(for:)` path the simulator's task-metrics collection
+  (`didFinishCollectingMetrics`) then trapped with **SIGILL**, crashing the Settings tab
+  (its ratings lookup uses the stub session) — and thus blocking the game's only entry
+  point. Added the missing `client?.urlProtocol(self, didReceive:…)` (the canonical
+  Paul-Hudson stub shape). Device was never affected (`World.device` uses the real
+  `URLSession.shared`); `RatingsFetcherTests` stay green.
+
+Next: fill out the dancer's other actions (idle/climb/jump/cape/victory), then the bull.

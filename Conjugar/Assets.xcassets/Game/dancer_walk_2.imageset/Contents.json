@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "dancer_walk_2.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

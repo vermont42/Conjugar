@@ -23,6 +23,18 @@ license under which it is reused. App-facing credits live in `Info.creditsText`
   commercial use OK, **no attribution required** (the app's "Game Sounds" credit is a
   courtesy). See `game-sounds-pixabay.txt`.
 
+## Game sprites
+
+- **`Conjugar/Assets.xcassets/Game/dancer_walk_1…6`** — the player's walk-cycle
+  sprite frames, rendered from a **Mixamo** "Walking" mocap clip on the stock
+  **"X Bot"** character (FBX → Blender orthographic render via
+  `tools/blender/render_sprites.py`). **Mixamo/Adobe license** — royalty-free for
+  commercial use, **no attribution required**; only the raw assets may not be
+  resold standalone (shipping rendered sprites in-app is fine). The source FBX is
+  **git-ignored** (raw-asset restriction + public/AGPL repo); only the 2D sprites
+  ship. See `mixamo-dancer-walk.txt`. The X Bot mannequin is a placeholder for the
+  eventual custom flamenco dancer.
+
 ## Original app sounds
 
 - `applause1-3`, `buzz`, `chime`, `chirp`, `gun`, `sadTrombone1-4`, `silence` —

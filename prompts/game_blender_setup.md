@@ -6,13 +6,29 @@ action** (the flamenco dancer's **walk cycle**). Success = a real rendered walk 
 animating in the running Conjugar prototype, plus a repeatable, documented render harness.
 Fresh-session task; read the context first.
 
+## Current state (already complete — this plan is the next step)
+- **The prototype is done and playable** (`Settings → Play`): platforms/ladders/gravity, a
+  short (can't-reach-next-platform) jump, the contextual D-pad + jump controls, flag
+  "barrels", cape pickup, 4-pip health, quit, and the **numbered-frame flipbook** for the
+  player and bull. It lives in `Conjugar/Models/Game/{GameState, GameModels,
+  GameState+Animation, GameState+Physics, GameState+Flags}.swift` and
+  `Conjugar/Views/GameView.swift`.
+- **Sound & music are also done** — the audio system was ported from Conjuguer,
+  `Conjugar/flamencoLoop.mp3` loops in-game, SFX are wired, and the credits +
+  `asset-licenses/` are populated. **Don't touch audio in this plan.**
+- **So this plan is purely the *visual* asset pipeline:** render real animation frames and
+  drop them into the flipbook seam that already exists (§ Phase 4).
+
 ## Read first
 1. `docs/game_design_research.md` — **§3 (asset-generation & animation pipeline)** is the
    spec this plan operationalizes. Especially **§3.3** (dancer via Mixamo), **§3.6**
    (Blender role, automation, concrete render settings), **§3.7** (Xcode integration).
-2. `prompts/game.md` (spec) and `prompts/game_prototype.md` (what we're feeding frames
-   into — the walk action currently renders `Text("\(i)")`; the end-to-end test swaps that
-   for `Image("dancer_walk_\(i)")`).
+2. `prompts/game.md` (spec) and `prompts/game_prototype.md` (the now-**completed**
+   prototype). The frame seam you'll feed is in
+   `Conjugar/Models/Game/GameState+Animation.swift` (`playerFrame` / `bullFrame`, 1-based
+   indices) and rendered as `Text(verbatim: "\(gameState.playerFrame)")` in
+   `Conjugar/Views/GameView.swift` (~line 88); the end-to-end test swaps that `Text` for an
+   `Image`.
 3. The **decided pipeline** (from research): concept art (**Gemini**) → 3D mesh (**stock
    Mixamo character** first; **image-to-3D** for the custom dancer later) → rig + mocap
    (**Mixamo**, free/royalty-free) → **Blender** orthographic render to transparent PNG
@@ -110,10 +126,12 @@ Create `tools/blender/`:
 - Copy the rendered `dancer_walk_1..N.png` (with @2x/@3x or a single 3× asset) into a new
   **`Conjugar/Assets.xcassets/Game/`** imageset group (auto-adds — the catalog is in a
   synchronized group).
-- In the prototype's `GameView`, **swap the walk action's placeholder** from
-  `Text("\(currentFrame)")` to `Image("dancer_walk_\(currentFrame)").resizable()
-  .interpolation(.none)` — a one-line change if the prototype kept the frame-index seam
-  (it should; see `game_prototype.md` "Notes").
+- In `Conjugar/Views/GameView.swift` (~line 88), **swap the player's placeholder** —
+  `Text(verbatim: "\(gameState.playerFrame)")` — for
+  `Image("dancer_walk_\(gameState.playerFrame)").resizable().interpolation(.none)` when
+  `gameState.playerAction == .walk`, keeping the `Text` fallback for the not-yet-rendered
+  actions. The seam is confirmed present (the `GameState+Animation.swift` header even
+  anticipates this swap), so it's the one-line change the whole pipeline exists to enable.
 - **Pre-decode** the frames once at load (see research §2.2) so there's no per-frame decode
   hitch. Build + run (`ios-build-verify`), open **Settings → Play**, and confirm the dancer
   **walks with real frames** while every other actor still shows numbers. That single
@@ -121,10 +139,13 @@ Create `tools/blender/`:
 
 ## Phase 5 — Document & scaffold  [Claude]
 - Commit `tools/blender/` (script + README).
-- Create **`asset-licenses/`** with a short `README.md` (per the CC-BY decision in research
-  §4): one entry per sourced asset — Mixamo animation, any Sketchfab model, CC-BY track/SFX
-  — recording Title / Author / Source-URL / License, plus the downloaded license
-  certificate/deed. (These will be surfaced in the app's future Credits screen.)
+- **`asset-licenses/` already exists** (the sound/music work populated it — `README.md`,
+  `flamencoLoop-vaguely-spanish-guitar.txt`, `cc-by-3.0-deed.txt`, `game-sounds-pixabay.txt`).
+  **Add** an entry for each asset this pipeline sources — the Mixamo animation (royalty-free,
+  no attribution, can't resell), any Sketchfab bull model (verify its per-model license), any
+  Gemini-seeded mesh — recording Title / Author / Source-URL / License + the deed. The app's
+  **Credits screen already exists** (Info tab → Credits, with `Game Music` / `Game Sounds`
+  blocks); add an art/`Icons`-style credit line there for any rendered asset that needs one.
 - Add a `docs/blog_notes.md` entry summarizing the toolchain (per CLAUDE.md).
 
 ---
@@ -155,14 +176,17 @@ mesh.
   headlessly, documented in `tools/blender/README.md`.
 - The **prototype shows a real rendered dancer walk cycle** (walk action only) in place of
   the numbers — pipeline proven end-to-end.
-- `asset-licenses/` scaffolded; blog note added.
+- `asset-licenses/` entries **added** for the pipeline's sourced assets (the folder already
+  exists); blog note added.
 
 ## Gotchas
 - blender-mcp executes arbitrary Python and needs the GUI "Connected" — **save before
   driving it**, and prefer the **headless CLI** for batch renders (robust, unattended).
 - Mixamo export: pick **30 fps + frame reduction** (or sample every k-th frame) to land ~6–8
   clean cycle frames; a raw 30-frame walk is more than the flipbook needs.
-- Match the **frame-index seam** the prototype already uses, so real art is a one-line swap
-  (`Text` → `Image`). Keep the numbered-frame fallback for un-rendered actions.
+- Match the **existing frame-index seam** — `gameState.playerFrame` / `.bullFrame` (1-based,
+  in `GameState+Animation.swift`), rendered as `Text(verbatim:)` in `GameView.swift`
+  (~lines 88 and 106). Real art is a one-line `Text` → `Image` swap; keep the numbered-frame
+  fallback for actions you haven't rendered yet.
 - Log **every** sourced asset in `asset-licenses/` as you go — cheap now, painful to
   reconstruct later.
