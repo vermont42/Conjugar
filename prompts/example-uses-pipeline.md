@@ -40,7 +40,8 @@ C. ✅ **DONE** — Mining workflow: subagents selected + translated → `Exampl
    `MedievalExamples.json` (695 verbs, 2,139 lines), both dual-written.
 D. ✅ **DONE** — Tail rescue + authored (Claude) residue → **988/988 ranked verbs** now have a
    modern example (61 corpus-rescued + 39 Claude-authored). See "D. …" below for what was built.
-E. **← NEXT.** App-side Swift loaders + `VerbView` cards (mirror the etymology feature).
+E. ✅ **DONE** — App-side Swift loaders + `VerbView` cards (mirror the etymology feature). See
+   "E. …" below for what was built.
 F. "Future plans": non-ranked verbs that have a medieval example also get a modern example
    (fabricated if none in corpus) + an etymology.
 
@@ -284,7 +285,19 @@ persisted JSONL transcripts with `strict=False`, validate, merge via `json.dumps
 - **Merge:** `build_examples.py aggregate modern` now globs `mined_modern_*` + `mined_tail_*` +
   `mined_authored*` (disjoint key-sets) and re-merges — idempotent, rebuilds all 988 from shards.
 
-## E. App-side integration (mirror the etymology feature)
+## E. App-side integration (mirror the etymology feature)  ✅ DONE
+
+> **Built.** Models `Conjugar/Models/{Example,ExampleSource,MedievalExample,ExampleData,MedievalData}.swift`
+> (all `nonisolated`; the two loaders are `NSLock`-guarded load-once `@unchecked Sendable` caches,
+> carbon copies of `EtymologyCache`). `VerbView` gained an `exampleCard` in the etymology slot
+> (modern sentence + attribution) with a nested `medievalSection` (blue heading, citation, Old-Spanish
+> verse, translation, and a red `arrow.forward.circle` cycle button when >1 attestation; starts on a
+> random index). `ExampleSource` maps the source filename → attribution: literature + Claude get a
+> fixed `— Author, Title (year)`, gov/stats get a localized `Fuente:/Source: <body>`. Six new
+> `L.Verb` strings (both `en`/`es`) added to `Localizable.xcstrings` via `python3`. Both JSONs
+> auto-bundled via the synchronized `Models/` group (no pbxproj edit). Tests: `ExampleDataTests`
+> (8, Swift Testing) + full suite **427/0**. Verified in the simulator (*ser*: modern *La Regenta*
+> example + cycling Cid medieval examples). The design below is what was implemented.
 
 The etymology feature is the exact template and is **already wired into `VerbView`**
 (`Conjugar/Views/VerbView.swift`: `etymology = Etymology.text(for: verb)` in `init`, rendered by
@@ -305,13 +318,44 @@ The etymology feature is the exact template and is **already wired into `VerbVie
   `VerbView.exampleUses`, medieval heading, "next example", the `ref` format) — both `en` and `es`.
   Follow `docs/example-corpus-sources.md` / CLAUDE.md localization rules.
 
-## F. Future plans (non-ranked verbs with a medieval example)
+## F. Future plans (non-ranked verbs with a medieval example)  ✅ DONE
 
 Per `prompts/example_uses.md`: a verb **outside** the ranked group that has a medieval example
 should get not only the medieval example but also a **more-recent example** (fabricate one, Claude,
 if the corpus has none) **and an etymology** (run the etymology pipeline for that verb —
 `prompts/etymology-pipeline.md`, "Select verbs" mechanism). The medieval index (built over
 `forms_all.json`) surfaces exactly this set.
+
+> **Result (2026-07-10).** All **352** step-F verbs now carry a modern example + an etymology
+> (their medieval examples already shipped). `ExampleUses.json` went **988 → 1340** (1231
+> corpus-sourced + 109 Claude-authored: 39 from step D + 70 new); `Etymologies.json` went **994 →
+> 1345** (both `en`/`es`). Modern split: **282** mined from the corpus by 11 shard subagents +
+> **70** Claude-authored (`write_authored_special.py`: 47 noun/adjective-homograph nulls + 23
+> zero-coverage). Etymologies: **351** verbs across 44 subagent groups (yacer was already a select
+> verb), 0 markup problems on the Step-4 validator. Build **Succeeded**, full suite **427/0**,
+> `ExampleDataTests` green; spot-checked *yantar/aducir/heder/trovar* (modern + medieval + etymology
+> all present). Both `ExampleUses.json` copies identical.
+
+> **The step-F set = 352 verbs** = the medieval-example verbs (`MedievalExamples.json`, 695 keys)
+> minus the ranked 988. Their medieval examples already ship (step C mined the full medieval set,
+> §C gotcha 5); step F adds the **modern example** + the **etymology** for each. Work-list:
+> `prompts/example-uses-stepF-verbs.json` (`{infinitive, gloss, medieval_count}`, 352 entries;
+> `yacer` already had an etymology as a select verb).
+>
+> **Modern examples.** `corpus/working/build_special_index.py` (step-F analogue of
+> `build_corpus_index.py`, but keyed off `forms_all.json` since these verbs are unranked) →
+> `special_index.json` (**329/352 covered, 23 zero-coverage → authored**). `build_examples.py`
+> gained a `special` shard kind and globs `mined_special_*` / `mined_special_authored*` into
+> `aggregate modern`, so the merge re-unions the 988 ranked + 352 special into `ExampleUses.json`
+> (dual-write). Mining subagents (`corpus/working/mine_special_prompt.md`) select the earliest
+> genuine *verbal* use (reject noun/adjective homographs — many candidates are Cervantes/archaic),
+> re-open the source for a clean sentence, translate; nulls fall to the authored residue.
+>
+> **Etymologies.** The etymology pipeline (`prompts/etymology-pipeline.md`) run over the 351
+> remaining special verbs (44 groups of 8), `corpus/working/etym_special/INSTRUCTIONS.md` +
+> `group_NNN.json` → `etym_NNN.json`, validated (tilde/quote checks) and merged into
+> `Etymologies.json` (both `en`/`es`, dual copies). Same markup/quote/register rules as the ranked
+> run.
 
 ---
 

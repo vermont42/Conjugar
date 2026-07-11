@@ -37,6 +37,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 MODERN_INDEX = os.path.join(HERE, "corpus_index.json")
 MEDIEVAL_INDEX = os.path.join(HERE, "medieval_index.json")
+SPECIAL_INDEX = os.path.join(HERE, "special_index.json")  # step F: unranked medieval verbs' modern index
 SHARDS_DIR = os.path.join(HERE, "shards")
 SHARD_SIZE = 30
 
@@ -55,7 +56,8 @@ def _load_done(output_path):
 
 
 def shard(kind, output_path=None):
-    index_path = MODERN_INDEX if kind == "modern" else MEDIEVAL_INDEX
+    index_path = {"modern": MODERN_INDEX, "medieval": MEDIEVAL_INDEX,
+                  "special": SPECIAL_INDEX}[kind]
     with open(index_path, encoding="utf-8") as handle:
         index = json.load(handle)
     done = _load_done(output_path)
@@ -143,7 +145,9 @@ def aggregate_modern():
     merged, nulls, warnings = {}, [], []
     shards = (sorted(glob.glob(os.path.join(HERE, "mined_modern_*.json")))
               + sorted(glob.glob(os.path.join(HERE, "mined_tail_*.json")))
-              + sorted(glob.glob(os.path.join(HERE, "mined_authored*.json"))))
+              + sorted(glob.glob(os.path.join(HERE, "mined_authored*.json")))
+              + sorted(glob.glob(os.path.join(HERE, "mined_special_*.json")))
+              + sorted(glob.glob(os.path.join(HERE, "mined_special_authored*.json"))))
     for path in shards:
         for verb, ex in json.load(open(path, encoding="utf-8")).items():
             if not ex or ex.get("es") is None:
@@ -199,7 +203,7 @@ def aggregate_medieval():
 
 def main():
     argv = sys.argv
-    if len(argv) >= 3 and argv[1] == "shard" and argv[2] in ("modern", "medieval"):
+    if len(argv) >= 3 and argv[1] == "shard" and argv[2] in ("modern", "medieval", "special"):
         shard(argv[2], argv[3] if len(argv) >= 4 else None)
     elif len(argv) >= 3 and argv[1] == "aggregate" and argv[2] == "modern":
         aggregate_modern()

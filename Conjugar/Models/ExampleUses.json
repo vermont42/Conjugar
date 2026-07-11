@@ -1,4 +1,18 @@
 {
+  "abajar": {
+    "es": "El criado abajó la cabeza en señal de respeto ante su señor.",
+    "en": "The servant lowered his head in a sign of respect before his lord.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "abajó"
+  },
+  "aballar": {
+    "es": "El zagal aballó el rebaño hacia el abrevadero antes de que cayera la tarde.",
+    "en": "The shepherd boy drove the flock toward the watering trough before evening fell.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "aballó"
+  },
   "abandonar": {
     "es": "Hasta que allá por Mayo del 70, Juanito empezó a abandonar aquellos mismos hábitos groseros que tanto disgustaban a su madre.",
     "en": "Until around May of [18]70, Juanito began to abandon those same coarse habits that so displeased his mother.",
@@ -12,6 +26,20 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 5438,
     "token": "abarcar"
+  },
+  "abatir": {
+    "es": "Pero pronto se abatía el vuelo de su imaginación y el alma de D. Luis tocaba a la tierra.",
+    "en": "But soon the flight of his imagination sank down, and Don Luis's soul touched the earth.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 3410,
+    "token": "abatía"
+  },
+  "ablandar": {
+    "es": "Y, cuando todo esto no mueva ni ablande ese duro corazón, muévale el pensar y creer.",
+    "en": "And when all this neither moves nor softens that hard heart, let thinking and believing move him.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 5811,
+    "token": "ablande"
   },
   "abonar": {
     "es": "—Cuando no lo fuera —dijo el cura—, yo le abono y salgo por él, que en este caso no hablará más que un mudo, so pena de pagar lo juzgado y sentenciado.",
@@ -33,6 +61,20 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 2395,
     "token": "abrazó"
+  },
+  "abrevar": {
+    "es": "El pastor llevó las ovejas al río para abrevar el ganado al mediodía.",
+    "en": "The shepherd took the sheep to the river to water the livestock at midday.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "abrevar"
+  },
+  "abreviar": {
+    "es": "Y así, fatigado deste pensamiento, abrevió su venteril y limitada cena.",
+    "en": "And so, wearied by this thought, he cut short his meager innkeeper's supper.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 1390,
+    "token": "abrevió"
   },
   "abrir": {
     "es": "En las ciudades populosas, en los grandes centros de civilización, hay otras distinciones que se ambicionan tanto o más que el dinero, porque abren camino y dan crédito y consideración en el mundo.",
@@ -61,6 +103,20 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 202,
     "token": "acabó"
+  },
+  "acaecer": {
+    "es": "Dígame vuestra merced si suceden muy a menudo, o si tienen sus tiempos limitados en que acaecen.",
+    "en": "Tell me, your grace, whether they happen very often, or whether they have their set times in which they occur.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 4409,
+    "token": "acaecen"
+  },
+  "acampar": {
+    "es": "Otras monjas históricas, las que recogieron y guardaron los huesos de D. Pedro el Cruel, acampan allá sobre las alturas del barrio de Salamanca.",
+    "en": "Other historic nuns, the ones who gathered and kept the bones of Don Pedro the Cruel, are encamped up there on the heights of the Salamanca district.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 16266,
+    "token": "acampan"
   },
   "acceder": {
     "es": "Prefirió retirarse a su quinta de Loreto, accediendo a las súplicas de Anita que se lo pedía con las manos en cruz.",
@@ -104,6 +160,20 @@
     "line": 693,
     "token": "acertare"
   },
+  "achacar": {
+    "es": "Achacaba el mayor de los Rubín su desgracia a la disparidad entre sus aptitudes innatas y los medios de exteriorizarse.",
+    "en": "The eldest of the Rubín brothers blamed his misfortune on the mismatch between his innate abilities and the means of expressing them.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 11238,
+    "token": "Achacaba"
+  },
+  "aclamar": {
+    "es": "Aclamaron todos la vitoria por don Quijote, y los más quedaron tristes y melancólicos.",
+    "en": "They all acclaimed the victory for Don Quixote, and most were left sad and melancholy.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 32815,
+    "token": "Aclamaron"
+  },
   "aclarar": {
     "es": "Ved por dónde aquella señora se convirtió en sibila, intérprete de toda la ciencia humana, pues le descifraba al niño los puntos oscuros que en los libros había, y aclaraba todas sus dudas.",
     "en": "So it was that this lady turned into a sibyl, an interpreter of all human knowledge, for she would decipher for the boy the obscure points in his books and clear up all his doubts.",
@@ -117,6 +187,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 14324,
     "token": "acoja"
+  },
+  "acometer": {
+    "es": "Con esto cobró, a su parecer, tanto ánimo, que si le acometieran todos los arrieros del mundo, no volviera el pie atrás.",
+    "en": "With this he gained, in his own estimation, such courage that, had all the muleteers in the world attacked him, he would not have drawn back a foot.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 1521,
+    "token": "acometieran"
   },
   "acomodar": {
     "es": "Para realizarlo se acomodaba en la vasta mesa, no lejos del fuego del hogar, cebado por Sabel con gruesos troncos.",
@@ -153,12 +230,33 @@
     "line": 1759,
     "token": "acuerda"
   },
+  "acortar": {
+    "es": "Sin que añadas o mientas por darme gusto, ni menos te acortes por no quitármele.",
+    "en": "Without adding or lying to please me, and without cutting yourself short so as not to deprive me of it.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 10322,
+    "token": "acortes"
+  },
+  "acostar": {
+    "es": "En esta maldita cama se acostó don Quijote.",
+    "en": "On this cursed bed Don Quixote lay down.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 4549,
+    "token": "acostó"
+  },
   "acostumbrar": {
     "es": "Son bastantes a infundir miedo, temor y espanto en el pecho del mesmo Marte, cuanto más en aquel que no está acostumbrado a semejantes acontecimientos y aventuras.",
     "en": "They are enough to strike fear, dread, and terror into the very breast of Mars himself, all the more so into one who is not accustomed to such happenings and adventures.",
     "source": "quijote-cervantes-1605.txt",
     "line": 5788,
     "token": "acostumbrado"
+  },
+  "acotar": {
+    "es": "De todo esto ha de carecer mi libro, porque ni tengo qué acotar en el margen, ni qué anotar en el fin.",
+    "en": "My book must lack all of this, because I have nothing to note in the margin, nor anything to annotate at the end.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 595,
+    "token": "acotar"
   },
   "acreditar": {
     "es": "No, señora; no podía pagar porque estaba sin un cuarto. Sabía que con esto se acreditaba de pillo.",
@@ -244,6 +342,13 @@
     "line": 9707,
     "token": "adhiere"
   },
+  "adiestrar": {
+    "es": "¿Qué no debo temer yo, mísero pecador, tan joven, tan inexperto de las astucias del demonio, y tan poco firme y adiestrado en las peleas de la virtud?",
+    "en": "What should I not fear, wretched sinner that I am, so young, so inexperienced in the wiles of the devil, and so little firm and trained in the battles of virtue?",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 1260,
+    "token": "adiestrado"
+  },
   "adir": {
     "es": "El único heredero decidió adir la herencia pese a las deudas que la gravaban.",
     "en": "The sole heir decided to accept the inheritance despite the debts burdening it.",
@@ -279,6 +384,13 @@
     "line": 463,
     "token": "admitía"
   },
+  "adobar": {
+    "es": "Tenía para aquella noche una magnífica lombarda, lomo adobado y el besugo correspondiente.",
+    "en": "She had for that night a magnificent red cabbage, marinated pork loin, and the requisite sea bream.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 9101,
+    "token": "adobado"
+  },
   "adoptar": {
     "es": "Por eso le he dicho ayer a nuestro pariente Ramón Trujillo... ya sabéis que me le han hecho conde... le he dicho que adopte por escudo un frontil y una jáquima con un letrero que diga: «Pertenecí a Babieca».",
     "en": "That's why I told our relative Ramón Trujillo yesterday—you know they've made him a count—I told him to adopt as his coat of arms a horse's browband and halter with a motto reading: “I belonged to Babieca.”",
@@ -300,6 +412,13 @@
     "line": 2067,
     "token": "adquirían"
   },
+  "aducir": {
+    "es": "Bedoya, al que le aducía este argumento en casa de Vegallana, le llamaba aparte.",
+    "en": "Bedoya, to whom he put forward this argument at the Vegallana house, would call him aside.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 7322,
+    "token": "aducía"
+  },
   "advertir": {
     "es": "Aunque cubierto de amarillo polvo que levantaba el trote del jaco, bien se advertía que el traje del mozo era de paño negro liso, cortado con la flojedad y poca gracia que distingue a las prendas de ropa de seglar vestidas por clérigos.",
     "en": "Although covered in yellow dust kicked up by the pony's trot, one could clearly tell that the young man's suit was of plain black cloth, cut with the looseness and lack of grace typical of lay clothing worn by clergymen.",
@@ -307,12 +426,33 @@
     "line": 25,
     "token": "advertía"
   },
+  "afanar": {
+    "es": "Pronto volvía la fe, que se afanaba en conservar y hasta fortificar.",
+    "en": "Soon her faith returned, which she strove to preserve and even to fortify.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 16456,
+    "token": "afanaba"
+  },
   "afectar": {
     "es": "«Bien decían en el Seminario —murmuró con despecho— que soy muy apocado y muy... así..., como las mujeres, que por todo se afectan.»",
     "en": "“They were right at the Seminary,” he muttered bitterly, “that I'm very timid and, well... like that, like women, who get upset about everything.”",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 5467,
     "token": "afectan"
+  },
+  "afinar": {
+    "es": "Oír cantar a los que afinaban más que él era su delicia por aquella temporada.",
+    "en": "Hearing those who sang more in tune than he did was his delight during that season.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 30096,
+    "token": "afinaban"
+  },
+  "afincar": {
+    "es": "La familia se afincó en un pueblo de la sierra tras vender la casa de la ciudad.",
+    "en": "The family settled in a mountain village after selling their house in the city.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "afincó"
   },
   "afirmar": {
     "es": "No hay que afirmar que pasamos por la de Pepita, quien de algún tiempo a esta parte se va haciendo algo ventanera y estaba a la reja, en una ventana baja, detrás de la verde celosía.",
@@ -356,6 +496,13 @@
     "line": 11119,
     "token": "agravaba"
   },
+  "agraviar": {
+    "es": "El fallo del juez agravió a la acusada, que se sintió tratada con injusticia.",
+    "en": "The judge's ruling wronged the defendant, who felt she had been treated unjustly.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "agravió"
+  },
   "agregar": {
     "es": "Sosegóse no obstante muy luego, y agregó: —No me pasmo de nada de eso, ni digo que don Eugenio mienta; pero usted es un papanatas, un infeliz, porque aquí no se trata de Sabel, sino de su padre.",
     "en": "He calmed down again soon enough, and added: “None of that surprises me, and I'm not saying don Eugenio is lying; but you're a fool, a poor wretch, because this isn't about Sabel, but about her father.”",
@@ -377,6 +524,20 @@
     "line": 894,
     "token": "aguantar"
   },
+  "aguardar": {
+    "es": "Pepita mostraba impaciencia; aguardaba a alguien.",
+    "en": "Pepita showed impatience; she was waiting for someone.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 2856,
+    "token": "aguardaba"
+  },
+  "ahondar": {
+    "es": "¿Para qué quieres ahondar la tierra y buscar nuevas vetas de nuevo y nunca visto tesoro?",
+    "en": "Why do you want to dig deep into the earth and seek new veins of fresh and never-before-seen treasure?",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 11478,
+    "token": "ahondar"
+  },
   "ahorrar": {
     "es": "Diéronselos, que eran muchos, y ella ahorró la escalera y dio con ellos por la ventana abajo.",
     "en": "They gave them to her, and there were many, and she saved herself the stairs and threw them down through the window.",
@@ -391,12 +552,26 @@
     "line": 6943,
     "token": "aislado"
   },
+  "ajuntar": {
+    "es": "En medio a medio de la calle caíme al suelo, y los chiquillos se me ajuntaron a la redonda.",
+    "en": "Right in the middle of the street I fell to the ground, and the kids clustered all around me.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 16871,
+    "token": "ajuntaron"
+  },
   "ajustar": {
     "es": "Tenía el director que trabajar hasta la madrugada, ó sea hasta que, redactados los últimos telegramas y ajustado el diario en páginas, entraba finalmente en máquina.",
     "en": "The editor had to work until dawn, that is, until, with the last telegrams drafted and the newspaper laid out in pages, it finally went to press.",
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 504,
     "token": "ajustado"
+  },
+  "alabar": {
+    "es": "No había más remedio que resignarse, alabando la mano del que lo mismo muestra su omnipotencia dando que quitando.",
+    "en": "There was nothing to do but resign oneself, praising the hand of the One who shows his omnipotence as much in giving as in taking away.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 3791,
+    "token": "alabando"
   },
   "alargar": {
     "es": "Aquel animal alargando su manso hocico había visto venir al mundo á casi todos sus hijos.",
@@ -411,6 +586,13 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 7349,
     "token": "albergan"
+  },
+  "alborozar": {
+    "es": "Don Quijote salió de la venta, tan contento, tan gallardo, tan alborozado por verse ya armado caballero, que el gozo le reventaba por las cinchas del caballo.",
+    "en": "Don Quixote left the inn so happy, so dashing, so overjoyed at seeing himself now dubbed a knight, that his joy burst out through the horse's girths.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 1602,
+    "token": "alborozado"
   },
   "alcanzar": {
     "es": "Quiero alcanzar el fin sin poner los medios; quiero llegar al término de la jornada sin andar antes paso a paso el áspero camino.",
@@ -475,12 +657,26 @@
     "line": 3716,
     "token": "aliviarás"
   },
+  "allegar": {
+    "es": "Pareciéndole que si aquel fiero animal allí allegaba le podía alcanzar, comenzó a dar tantos gritos.",
+    "en": "Thinking that if that fierce animal reached that spot it could catch him, he began to cry out loudly.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 27142,
+    "token": "allegaba"
+  },
   "almacenar": {
     "es": "En su pucho roto y agujereado almacenaba lagartijas, mariposas y mariquitas de Dios; en sus bolsillos y seno, nidos, frutos y gusanos.",
     "en": "In his torn, holed pouch he stored lizards, butterflies, and ladybugs; in his pockets and shirt front, nests, fruit, and worms.",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 6424,
     "token": "almacenaba"
+  },
+  "almorzar": {
+    "es": "Tendidos sobre la verde yerba, con la salsa de su hambre, almorzaron, comieron, merendaron y cenaron a un mesmo punto.",
+    "en": "Stretched out on the green grass, with hunger as their sauce, they had breakfast, lunch, an afternoon snack, and supper all at one and the same moment.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 5733,
+    "token": "almorzaron"
   },
   "alojar": {
     "es": "Vamos luego en busca de algún castillo donde alojemos esta noche y hagamos el bálsamo que te he dicho.",
@@ -517,12 +713,40 @@
     "line": 1864,
     "token": "alzaban"
   },
+  "amanecer": {
+    "es": "Tú amaneces sobre justos y pecadores, y derramas sobre todos la lluvia fecunda de tus inexhaustas bondades.",
+    "en": "You dawn upon the just and sinners alike, and you pour upon all the fertile rain of your inexhaustible bounty.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 3605,
+    "token": "amaneces"
+  },
+  "amansar": {
+    "es": "Está considerando cómo, salva su honestidad y grandeza, ha de amansar la tormenta que por ella este mi cuitado corazón padece.",
+    "en": "She is pondering how, with her honor and greatness kept safe, she is to calm the storm that this my grieving heart suffers on her account.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 15079,
+    "token": "amansar"
+  },
   "amar": {
     "es": "Amaba, pues, locamente la señá Frasquita al tío Lucas, y considerábase la mujer más feliz del mundo al verse adorada por él.",
     "en": "Señá Frasquita, then, loved tío Lucas madly, and considered herself the happiest woman in the world to find herself adored by him.",
     "source": "sombrero-tres-picos-alarcon-1874.txt",
     "line": 359,
     "token": "Amaba"
+  },
+  "amargar": {
+    "es": "Iba á casa de sus amos á contarles lo ocurrido, la mala voluntad de aquella gente, empeñada en amargar su existencia.",
+    "en": "He was going to his masters' house to tell them what had happened, the ill will of those people, bent on embittering his existence.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 2504,
+    "token": "amargar"
+  },
+  "amasar": {
+    "es": "También recordó el nacimiento de Perucho, un día que Sabel estaba amasando.",
+    "en": "He also recalled the birth of Perucho, one day when Sabel was kneading dough.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 4685,
+    "token": "amasando"
   },
   "amenazar": {
     "es": "Quedóse el jinete frío de espanto, agarrado al arzón, sin atreverse ni a registrar la maleza para averiguar dónde estarían ocultos los agresores; mas su angustia fue corta, porque ya del ribazo situado a espaldas del crucero descendía un grupo de tres hombres, antecedido por otros tantos canes perdigueros, cuya presencia bastaba para demostrar que las escopetas de sus amos no amenazaban sino a las alimañas monteses.",
@@ -580,6 +804,13 @@
     "line": 3459,
     "token": "anticipó"
   },
+  "antojar": {
+    "es": "Sintió mucho Arnaiz que Estupiñá dejara la casa en 1837, cuando se le antojó establecerse con los dineros de una pequeña herencia.",
+    "en": "Arnaiz was quite sorry that Estupiñá left the house in 1837, when he took a fancy to setting up on his own with the money from a small inheritance.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 1550,
+    "token": "antojó"
+  },
   "anular": {
     "es": "Aquel hato de bribones se contentaría con explotar al señorito y a la casa, con hacer rancho de ella, con mandar anulando en su dignidad y poderío doméstico a la señorita.",
     "en": "That bunch of rascals would be content with exploiting the young master and the house, with taking it over, with ruling by crushing the young lady's dignity and domestic authority.",
@@ -608,6 +839,13 @@
     "line": 13780,
     "token": "aparecido"
   },
+  "aparejar": {
+    "es": "Con todo este trabajo aparejó su asno, que también había andado algo destraído con la demasiada libertad de aquel día.",
+    "en": "With all this effort he saddled his donkey, which had also grown somewhat unruly from the excessive freedom of that day.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 4508,
+    "token": "aparejó"
+  },
   "apartar": {
     "es": "Si antes sus oraciones fueron pararrayos puestos sobre la cabeza de Juanito para apartar de ella el tifus y las viruelas, después intentaban librarle de otros enemigos no menos atroces.",
     "en": "If before her prayers had been lightning rods placed over Juanito's head to keep typhus and smallpox away from it, afterward they tried to free him from other, no less terrible enemies.",
@@ -622,6 +860,27 @@
     "line": 5530,
     "token": "apasionaba"
   },
+  "apear": {
+    "es": "Allí se apeó don Fermín entre lamentos de doña Petronila.",
+    "en": "There don Fermín dismounted amid the laments of doña Petronila.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 14285,
+    "token": "apeó"
+  },
+  "apedrear": {
+    "es": "Todos los pillos de cinco á diez años que en días de fiesta apedreaban á los pájaros, robaban la fruta y perseguían á los perros en los caminos de la huerta.",
+    "en": "All the rascals from five to ten years old who on holidays threw stones at the birds, stole the fruit, and chased the dogs along the paths of the farmland.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 3710,
+    "token": "apedreaban"
+  },
+  "apegar": {
+    "es": "Este documento se apega a lo establecido en el Plan Nacional de Desarrollo 2019-2024.",
+    "en": "This document adheres to what is laid out in the National Development Plan 2019-2024.",
+    "source": "mx-estrategia-digital-nacional.txt",
+    "line": 621,
+    "token": "apega"
+  },
   "apelar": {
     "es": "Una tarde, la pobre mujer de Batiste apeló á gritos á Dios y á los santos viendo el estado en que llegaban sus pequeños.",
     "en": "One afternoon, Batiste's poor wife cried out to God and the saints, appealing to them at the sight of the state her little ones came home in.",
@@ -629,12 +888,26 @@
     "line": 4055,
     "token": "apeló"
   },
+  "apellidar": {
+    "es": "La gente lo apellidaba el Sabio por la prudencia de sus consejos.",
+    "en": "People called him the Wise One for the prudence of his counsel.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "apellidaba"
+  },
   "aplicar": {
     "es": "Estas apreciaciones de carácter general, sugeridas por una situación especialísima de la raza española, las aplico a las cosas literarias.",
     "en": "These observations of a general nature, suggested by a very particular situation of the Spanish race, I apply to literary matters.",
     "source": "la-regenta-clarin-1885.txt",
     "line": 64,
     "token": "aplico"
+  },
+  "apoderar": {
+    "es": "Por no dar entrada en mi corazón a la hipocresía y vanagloria, enemigos que blandamente se apoderan del corazón más recatado.",
+    "en": "So as not to let hypocrisy and vainglory into my heart, enemies that gently take hold of even the most guarded heart.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 22010,
+    "token": "apoderan"
   },
   "aportar": {
     "es": "Ansí que, de cualquiera manera que responda, saldré del conflito y trabajo en que me dejares, gozando el bien que me trujeres, por cuerdo, o no sintiendo el mal que me aportares, por loco.",
@@ -663,6 +936,13 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 19763,
     "token": "aprecie"
+  },
+  "apremiar": {
+    "es": "El tiempo apremiaba y doña Lupe podía venir.",
+    "en": "Time was pressing and doña Lupe might come.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 12042,
+    "token": "apremiaba"
   },
   "aprender": {
     "es": "Juanito acabó por declararse a sí mismo que más sabe el que vive sin querer saber que el que quiere saber sin vivir, o sea aprendiendo en los libros y en las aulas.",
@@ -713,12 +993,33 @@
     "line": 5051,
     "token": "apuntaban"
   },
+  "aquejar": {
+    "es": "Una compasión loca, insana, me aqueja a veces.",
+    "en": "A wild, insane compassion afflicts me at times.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 1030,
+    "token": "aqueja"
+  },
+  "arar": {
+    "es": "Andan medio en cueros, luciendo sus fornidas y recias carnazas; aran, cavan, siegan, cargan carros de rama y esquilmo.",
+    "en": "They go about half naked, showing off their sturdy, robust flesh; they plough, dig, reap, and load carts with brushwood and crops.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 5268,
+    "token": "aran"
+  },
   "archivar": {
     "es": "La secretaria archivó los expedientes por orden alfabético antes de cerrar la oficina.",
     "en": "The secretary filed the records in alphabetical order before closing the office.",
     "source": "Claude (Opus 4.8)",
     "line": null,
     "token": "archivó"
+  },
+  "arder": {
+    "es": "La Regenta sintió que se sofocaba, sus mejillas ardían.",
+    "en": "The Regenta felt herself suffocating, her cheeks were burning.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 2712,
+    "token": "ardían"
   },
   "argumentar": {
     "es": "Doña Lupe discutía con ella violentamente, argumentando con crueles pellizcos, y añadiendo que estaba autorizada por la madre para descuartizarla si preciso era.",
@@ -734,6 +1035,13 @@
     "line": 82,
     "token": "armaban"
   },
+  "arraigar": {
+    "es": "Está tan arraigado en la plebe el sentimiento del color, que la seriedad no ha podido establecer su imperio sino transigiendo.",
+    "en": "The feeling for color is so deeply rooted in the common people that solemnity has been unable to establish its rule except by compromising.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 1130,
+    "token": "arraigado"
+  },
   "arrancar": {
     "es": "Pero cuando llegó el momento de las declaraciones, todo el distrito desfiló ante el juez afirmando la inocencia de Pimentó, sin que á aquellos rústicos socarrones se les pudiera arrancar una palabra contradictoria.",
     "en": "But when the time came for statements, the whole district filed before the judge affirming Pimentó's innocence, without a single contradictory word being wrung out of those sly countryfolk.",
@@ -748,12 +1056,61 @@
     "line": 106,
     "token": "arrastrar"
   },
+  "arrear": {
+    "es": "Llegó Sancho a su amo marchito y desmayado; tanto, que no podía arrear a su jumento.",
+    "en": "Sancho reached his master withered and faint, so much so that he could not drive his donkey along.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 5099,
+    "token": "arrear"
+  },
+  "arrebatar": {
+    "es": "Y, diciendo y haciendo, arrebató de un pan que junto a sí tenía, y dio con él al cabrero en todo el rostro.",
+    "en": "And, suiting the action to the word, he snatched up a loaf he had beside him and struck the goatherd full in the face with it.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 17422,
+    "token": "arrebató"
+  },
+  "arredrar": {
+    "es": "No le arredraba el miedo de ser vencido, porque su amor y su misión le darían seguramente coraje.",
+    "en": "The fear of being defeated did not daunt him, because his love and his mission would surely give him courage.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 12964,
+    "token": "arredraba"
+  },
   "arreglar": {
     "es": "¡Ya tiene usted aquí quien le ayude a arreglar la parroquia!",
     "en": "Now you have someone here to help you put the parish in order!",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 190,
     "token": "arreglar"
+  },
+  "arremangar": {
+    "es": "Deogracias se volvió a poner en cuatro pies, se arremangó el brazo y lo metió por aquel hueco.",
+    "en": "Deogracias got back down on all fours, rolled up his sleeve, and stuck his arm into that hole.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 4268,
+    "token": "arremangó"
+  },
+  "arremeter": {
+    "es": "Apurado ya de razones, sacó la espada y arremetió contra ellos para acabar de convertirlos.",
+    "en": "Out of arguments at last, he drew his sword and charged at them to finish converting them.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 1779,
+    "token": "arremetió"
+  },
+  "arrendar": {
+    "es": "A este paso no le arriendo la ganancia, porque no va a sacar para disgustos.",
+    "en": "At this rate I do not envy him his lot, because he is not going to get anything but grief out of it.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 1707,
+    "token": "arriendo"
+  },
+  "arrepentir": {
+    "es": "Se arrepintió de haberse aventurado sin luz en aquella estancia que no tenía un pie cuadrado libre de estorbos.",
+    "en": "She regretted having ventured without a light into that room, which did not have a single square foot free of clutter.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 9297,
+    "token": "arrepintió"
   },
   "arribar": {
     "es": "No es difícil inventar un buen naufragio, en el cual don Luis hubiera salvado a Pepita, arribando a una isla desierta o a otro lugar poético y apartado.",
@@ -769,6 +1126,13 @@
     "line": 157,
     "token": "arriesgaba"
   },
+  "arrimar": {
+    "es": "El cazador se arrimó al cura.",
+    "en": "The hunter drew close to the priest.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 262,
+    "token": "arrimó"
+  },
   "arrojar": {
     "es": "No se curó el arriero destas razones (y fuera mejor que se curara, porque fuera curarse en salud); antes, trabando de las correas, las arrojó gran trecho de sí.",
     "en": "The mule driver paid no heed to these words (though it would have been wiser if he had, as that would have been a wise precaution); instead, grabbing the straps, he flung them far away from himself.",
@@ -782,6 +1146,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 2014,
     "token": "articulando"
+  },
+  "asar": {
+    "es": "Sacando del bolsillo castañas, las ponían a asar entre el rescoldo.",
+    "en": "Taking chestnuts out of their pockets, they set them to roast among the embers.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 1159,
+    "token": "asar"
   },
   "ascender": {
     "es": "Cuando vinieron los años bonancibles y el capitalito de la viuda ascendió a dos mil duros, iniciose un periodo de buena suerte que debía de ser pronto increíble prosperidad.",
@@ -839,6 +1210,20 @@
     "line": 13948,
     "token": "asociaba"
   },
+  "asolar": {
+    "es": "Fue particular gracia y merced que el cielo hizo a España en permitir que se asolase aquella oficina y capa de maldades.",
+    "en": "It was a singular grace and favor that heaven granted Spain in allowing that workshop and cloak of wickedness to be razed.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 13553,
+    "token": "asolase"
+  },
+  "asomar": {
+    "es": "Estando en estas razones, asomaron por el camino dos frailes de la orden de San Benito.",
+    "en": "While they were in this conversation, two friars of the order of Saint Benedict appeared along the road.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 2625,
+    "token": "asomaron"
+  },
   "aspirar": {
     "es": "El amor aspira a dominar en el tiempo como en todo, y cuando se siente victorioso en lo presente, anhela hacerse dueño de lo pasado.",
     "en": "Love aspires to dominate over time as it does over everything else, and once it feels victorious in the present, it longs to also possess the past.",
@@ -867,6 +1252,13 @@
     "line": 1328,
     "token": "atacado"
   },
+  "atajar": {
+    "es": "Yo he faltado o voy a faltar, o puede que falte si no me atajan.",
+    "en": "I have done wrong, or I am about to, or perhaps I will if they do not stop me.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 30371,
+    "token": "atajan"
+  },
   "atar": {
     "es": "Tu corazón es red engañosa, y tus manos, redes que atan.",
     "en": "Your heart is a deceitful net, and your hands are snares that bind.",
@@ -880,6 +1272,34 @@
     "source": "pepita-jimenez-valera-1874.txt",
     "line": 261,
     "token": "atiende"
+  },
+  "atener": {
+    "es": "Si quieren solutamente socorrerme por que me quitan a mi piojín de mi arma, me atengo al honorario.",
+    "en": "If they truly want to help me because they are taking my little darling from my soul, I will settle for the fee.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 8369,
+    "token": "atengo"
+  },
+  "aterrar": {
+    "es": "Más que la muerte de su padre le dolía entonces su abandono, que la aterraba.",
+    "en": "More than her father's death, what pained her then was her abandonment, which terrified her.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 3998,
+    "token": "aterraba"
+  },
+  "atizar": {
+    "es": "¿Quiés que l'atice al señor Magistral que entra ahora?",
+    "en": "D'you want me to give a whack to the Magistral coming in right now?",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 475,
+    "token": "atice"
+  },
+  "atormentar": {
+    "es": "Esta duda me asalta y me atormenta a veces.",
+    "en": "This doubt assails me and torments me at times.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 441,
+    "token": "atormenta"
   },
   "atraer": {
     "es": "Su afabilidad y hermosura atrae los corazones de los que la tratan a servirla y a amarla, pero su desdén y desengaño los conduce a términos de desesperarse.",
@@ -916,6 +1336,27 @@
     "line": 1984,
     "token": "atribuía"
   },
+  "atribular": {
+    "es": "Si los muertos los habían espantado, no menos los atribularon más de cuarenta bandoleros vivos que de improviso les rodearon.",
+    "en": "If the dead men had frightened them, no less did more than forty living bandits distress them, suddenly surrounding them.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 33794,
+    "token": "atribularon"
+  },
+  "atronar": {
+    "es": "Y así dijo, con voz que atronaba la venta.",
+    "en": "And so he spoke, with a voice that thundered through the inn.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 15739,
+    "token": "atronaba"
+  },
+  "aullar": {
+    "es": "Luego había oído gritos de desesperación; el perro aullaba.",
+    "en": "Then he had heard cries of despair; the dog was howling.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 4787,
+    "token": "aullaba"
+  },
   "aumentar": {
     "es": "Julián creyó al pronto que se había aumentado el número de canes, tres antes y cuatro ahora.",
     "en": "Julián thought at first that the number of dogs had increased, three before and four now.",
@@ -944,6 +1385,27 @@
     "line": 1308,
     "token": "avanzando"
   },
+  "avenir": {
+    "es": "A los tres días se me hicieron insoportables las exigencias de la fiera, y me avine a todo.",
+    "en": "After three days the beast's demands became unbearable to me, and I gave in to everything.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 10105,
+    "token": "avine"
+  },
+  "aventar": {
+    "es": "Las chispas de los ojos de la jamona saltaron como las de un brasero aventado.",
+    "en": "The sparks from the buxom woman's eyes leapt like those of a fanned brazier.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 7925,
+    "token": "aventado"
+  },
+  "aventurar": {
+    "es": "«La edad de Nuestro Señor Jesucristo», decía él, creyendo haber aventurado un chiste respetuoso, pero algo mundano.",
+    "en": "«The age of Our Lord Jesus Christ», he would say, believing he had ventured a respectful, though somewhat worldly, joke.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 1186,
+    "token": "aventurado"
+  },
   "averiguar": {
     "es": "Creo que se trata de averiguar algo de brujería, o de moneda falsa.",
     "en": "I think it's a matter of finding out something about witchcraft, or counterfeit money.",
@@ -958,12 +1420,33 @@
     "line": 3409,
     "token": "avisé"
   },
+  "avivar": {
+    "es": "El carácter de Pepita, en quien los obstáculos recrudecían y avivaban más los anhelos, se mostró entonces con notable violencia y rompiendo todo freno.",
+    "en": "Pepita's character, in whom obstacles only worsened and kindled her longings all the more, showed itself then with remarkable violence, breaking every restraint.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 4254,
+    "token": "avivaban"
+  },
   "ayudar": {
     "es": "Era un pobre carro de labranza, tirado por un rocín viejo y huesudo, al que ayudaba en los baches difíciles un hombre alto que marchaba junto a él.",
     "en": "It was a poor farm cart, pulled by an old, bony nag that a tall man walking alongside helped over the difficult ruts.",
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 969,
     "token": "ayudaba"
+  },
+  "ayunar": {
+    "es": "¡Pues, a fe que si me conociese, que me ayunase!",
+    "en": "Well, by my faith, if he really knew me, he would fast for me!",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 8226,
+    "token": "ayunase"
+  },
+  "azotar": {
+    "es": "Como vuelvas te azoto, ¿entiendes?, ¡te azoto!",
+    "en": "If you come back I'll whip you, understand?, I'll whip you!",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 6491,
+    "token": "azoto"
   },
   "añadir": {
     "es": "Y añadió: ¡Bien sabe Dios que siento la profanación a que se me invita!",
@@ -985,6 +1468,20 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 11,
     "token": "bajar"
+  },
+  "barrer": {
+    "es": "La señá Frasquita, la pulcra, hacendosa, fuerte y saludable navarra, sabía, quería y podía guisar, coser, bordar, barrer, hacer dulces.",
+    "en": "Señá Frasquita, the tidy, industrious, strong and healthy Navarrese woman, knew how, wanted, and was able to cook, sew, embroider, sweep, and make sweets.",
+    "source": "sombrero-tres-picos-alarcon-1874.txt",
+    "line": 386,
+    "token": "barrer"
+  },
+  "barruntar": {
+    "es": "Imaginándose lo que iba a pasar, la turbación del infiel, el perdón suyo, y mil cosas y pormenores novelescos que barruntaba, producíase en su alma un goce semejante al del artista que crea o compone.",
+    "en": "Imagining what was going to happen, the unfaithful one's dismay, her forgiveness of him, and a thousand novelistic details that she sensed, there arose in her soul a delight like that of the artist who creates or composes.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 8764,
+    "token": "barruntaba"
   },
   "basar": {
     "es": "Se trata de un codificador automático para las CNAE 2009 y 2025, basado en técnicas de procesamiento del lenguaje natural y entrenado con cientos de miles de registros.",
@@ -1013,6 +1510,13 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 3396,
     "token": "bautizando"
+  },
+  "bañar": {
+    "es": "Había un estanque encerrado en una especie de kiosko de jazmines, donde se bañaban en verano el tío Lucas y la señá Frasquita.",
+    "en": "There was a pond enclosed in a kind of jasmine kiosk, where in summer Uncle Lucas and Señá Frasquita bathed.",
+    "source": "sombrero-tres-picos-alarcon-1874.txt",
+    "line": 417,
+    "token": "bañaban"
   },
   "beber": {
     "es": "Miraba con envidia a los que podían beber una taza de café para combatir el fresco matinal.",
@@ -1049,6 +1553,13 @@
     "line": 6777,
     "token": "bloqueado"
   },
+  "bogar": {
+    "es": "Las nubecillas que bogaban por el cielo coloreábanse como madejas de seda carmesí.",
+    "en": "The little clouds that drifted across the sky took on color like skeins of crimson silk.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 730,
+    "token": "bogaban"
+  },
   "borrar": {
     "es": "Y así, después de muchos nombres que formó, borró y quitó, añadió, deshizo y tornó a hacer en su memoria e imaginación, al fin le vino a llamar Rocinante.",
     "en": "And so, after many names that he formed, erased, discarded, added, undid, and made over again in his memory and imagination, he finally came to call him Rocinante.",
@@ -1070,12 +1581,26 @@
     "line": 9592,
     "token": "brindó"
   },
+  "bullir": {
+    "es": "Si grata es la tarea de fabricar género humano recreándonos en ver cuánto superan las ideales figurillas, por toscas que sean, a las vivas figuronas que a nuestro lado bullen, el regocijo es más intenso cuando visitamos los talleres ajenos.",
+    "en": "If pleasant is the task of fashioning humankind, delighting in seeing how far the ideal little figures, however crude they may be, surpass the lively big figures that bustle beside us, the joy is more intense when we visit other people's workshops.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 23,
+    "token": "bullen"
+  },
   "buscar": {
     "es": "Ella se lo había buscado, casándose contra los consejos de todo el mundo.",
     "en": "She had brought it on herself, marrying against everyone's advice.",
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 855,
     "token": "buscado"
+  },
+  "cabalgar": {
+    "es": "Si Vd. va a Persia, o a China, allí no hay ferro-carriles aún, y hará Vd. una triste figura cabalgando mal.",
+    "en": "If you go to Persia, or to China, there are no railways there yet, and you will cut a sorry figure riding badly.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 1649,
+    "token": "cabalgando"
   },
   "caber": {
     "es": "La torre de la catedral, poema romántico de piedra, delicado himno, de dulces líneas de belleza muda y perenne, era obra del siglo diez y seis, aunque antes comenzada, de estilo gótico, pero, cabe decir, moderado por un instinto de prudencia y armonía que modificaba las vulgares exageraciones de esta arquitectura.",
@@ -1090,6 +1615,20 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 42,
     "token": "caían"
+  },
+  "calar": {
+    "es": "Los guantes, despellejados ya por la tosca brida, eran asimismo negros y nuevecitos, igual que el hongo, que llevaba calado hasta las cejas.",
+    "en": "The gloves, already scuffed by the coarse bridle, were likewise black and brand-new, just like the derby hat, which he wore pulled down to his eyebrows.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 29,
+    "token": "calado"
+  },
+  "calcar": {
+    "es": "El dibujante calcó el mapa antiguo sobre una hoja transparente para reproducirlo.",
+    "en": "The draftsman traced the old map onto a transparent sheet to reproduce it.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "calcó"
   },
   "calcular": {
     "es": "¡Estamos frescos!, pensó el viajero, que si no acertaba a calcular lo que anda un can en una carrera, barruntaba que debe ser bastante para un caballo.",
@@ -1125,6 +1664,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 1629,
     "token": "calmado"
+  },
+  "calzar": {
+    "es": "Reconoció su bocacha, o sea un enorme trabuco que calzaba balas de a media libra.",
+    "en": "He recognized his blunderbuss, that is, a huge musket that took half-pound balls.",
+    "source": "sombrero-tres-picos-alarcon-1874.txt",
+    "line": 1609,
+    "token": "calzaba"
   },
   "cambiar": {
     "es": "Perseguido por la autoridad militar como presunto autor de este suceso, viví escondido algunos días, cambiando varias veces de refugio, mientras mis amigos me preparaban el embarque secreto en un vapor que iba á zarpar para Italia.",
@@ -1217,12 +1763,26 @@
     "line": 1646,
     "token": "castigando"
   },
+  "castrar": {
+    "es": "El veterinario castró a los lechones en cuanto cumplieron las semanas necesarias.",
+    "en": "The vet castrated the piglets as soon as they were old enough.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "castró"
+  },
   "catalogar": {
     "es": "El bibliotecario tardó meses en catalogar los manuscritos recién donados al archivo.",
     "en": "The librarian took months to catalog the manuscripts newly donated to the archive.",
     "source": "Claude (Opus 4.8)",
     "line": null,
     "token": "catalogar"
+  },
+  "catar": {
+    "es": "Para que los jóvenes adquieran energía contra el vicio, es preciso que lo conozcan, que lo caten.",
+    "en": "For young men to gain strength against vice, it is necessary that they know it, that they taste it.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 331,
+    "token": "caten"
   },
   "causar": {
     "es": "Allí vivían, en el centro de la hermosa y cuidada vega, formando mundo aparte, devorándose unos á otros; y aunque causasen algún daño á los vecinos, estos los respetaban con cierta veneración.",
@@ -1231,12 +1791,47 @@
     "line": 922,
     "token": "causasen"
   },
+  "cavar": {
+    "es": "Teresa la mujer y Roseta la hija mayor, con las faldas recogidas entre las piernas y azadón en mano, cavaban con más ardor que un jornalero.",
+    "en": "Teresa the wife and Roseta the eldest daughter, with their skirts tucked between their legs and hoe in hand, dug with more zeal than a day laborer.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 1942,
+    "token": "cavaban"
+  },
+  "cazar": {
+    "es": "Metido en tan peligroso empeño, hasta abandonó sus campos, pasando los días en los senderos de la huerta con pretexto de cazar.",
+    "en": "Caught up in such a dangerous undertaking, he even abandoned his fields, spending his days on the paths of the orchard on the pretext of hunting.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 6167,
+    "token": "cazar"
+  },
+  "cebar": {
+    "es": "Se acomodaba en la vasta mesa, no lejos del fuego del hogar, cebado por Sabel con gruesos troncos.",
+    "en": "He would settle at the vast table, not far from the hearth fire, stoked by Sabel with thick logs.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 1142,
+    "token": "cebado"
+  },
   "ceder": {
     "es": "Como se habían ido las capas rojas, se fueron los pañuelos de Manila. La aristocracia los cedía con desdén a la clase media.",
     "en": "Just as the red capes had gone out of fashion, so had the Manila shawls. The aristocracy handed them down disdainfully to the middle class.",
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 1113,
     "token": "cedía"
+  },
+  "cegar": {
+    "es": "El difunto Arnaiz no había visto claro al hacer tantos pedidos; se cegó, deslumbrado por cierta alucinación mercantil.",
+    "en": "The late Arnaiz had not seen clearly when placing so many orders; he was blinded, dazzled by a certain mercantile delusion.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 746,
+    "token": "cegó"
+  },
+  "celar": {
+    "es": "El viejo celaba a su hija y no la dejaba salir sin compañía.",
+    "en": "The old man kept a jealous watch over his daughter and would not let her go out unaccompanied.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "celaba"
   },
   "celebrar": {
     "es": "Los admiradores de Pimentó le hacían repetir el procedimiento de que se valía todos los años para no pagar á la dueña de sus tierras, y lo celebraban con grandes risotadas, con estremecimientos de maligna alegría.",
@@ -1251,6 +1846,13 @@
     "source": "es-miteco-pniec-2023-2030.txt",
     "line": 16153,
     "token": "centrar"
+  },
+  "cercar": {
+    "es": "Tal vez entendió que casarse con aquel viejo era consagrar su vida a cuidarle, a ser su enfermera, a no dejarle en soledad y abandono, cercado sólo de achaques y asistido por manos mercenarias.",
+    "en": "Perhaps she understood that marrying that old man meant devoting her life to caring for him, to being his nurse, to not leaving him in solitude and abandonment, hemmed in only by ailments and attended by mercenary hands.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 271,
+    "token": "cercado"
   },
   "cerrar": {
     "es": "Retirada la botella, los ojos del niño se cerraron, se aflojaron sus brazos, y no ya descolorido, sino con la palidez de la muerte en el rostro, hubiera caído redondo sobre la mesa, a no sostenerlo Primitivo.",
@@ -1300,6 +1902,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 1588,
     "token": "citaré"
+  },
+  "clamar": {
+    "es": "«¡Un conejo!» clamaron media docena de voces.",
+    "en": "«A rabbit!» half a dozen voices cried out.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 8061,
+    "token": "clamaron"
   },
   "clasificar": {
     "es": "Además, las colecciones botánicas, mineralógicas y entomológicas yacían en un desorden caótico, y la pereza de emprender la tarea penosa de volver a clasificar tantas yerbas y mosquitos también le alejaba de su casa.",
@@ -1370,6 +1979,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 8221,
     "token": "combinar"
+  },
+  "comedir": {
+    "es": "La huérfana tuvo «un retraso en su convalecencia», según el médico de la casa, que era comedido y no llamaba las cosas por su nombre.",
+    "en": "The orphan had «a setback in her convalescence», according to the house doctor, who was restrained and did not call things by their names.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 4065,
+    "token": "comedido"
   },
   "comentar": {
     "es": "Únicamente le consolaban los desatinados amoríos de Carmen; celebraba la gracia, frotándose las manos, siempre que en el Casino se comentaba la procacidad del estudiante y el descaro de la chiquilla.",
@@ -1497,6 +2113,13 @@
     "line": 3773,
     "token": "comprometer"
   },
+  "comulgar": {
+    "es": "Creía Barbarita que contenían algo así como el Viático para los enfermos, o lo que se da a las personas en la iglesia cuando comulgan.",
+    "en": "Barbarita believed they contained something like the Viaticum for the sick, or what is given to people in church when they take communion.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 607,
+    "token": "comulgan"
+  },
   "comunicar": {
     "es": "Y casi que en nuestros días vimos y comunicamos y oímos al invencible y valeroso caballero don Belianís de Grecia.",
     "en": "And it was almost within our own lifetime that we saw, conversed with, and heard tell of the invincible and valiant knight Don Belianís de Grecia.",
@@ -1532,6 +2155,13 @@
     "line": 1600,
     "token": "concluyó"
   },
+  "concordar": {
+    "es": "Sentía que las insinuaciones de su compañera concordaban con sentimientos que ella tenía muy guardados, como se guardan las armas peligrosas.",
+    "en": "She felt that her companion's insinuations agreed with feelings she kept well hidden, as one keeps dangerous weapons.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 17731,
+    "token": "concordaban"
+  },
   "concretar": {
     "es": "Hermoso es que las obras literarias vivan, que el gusto de leerlas, la estimación de sus cualidades, y aun las controversias ocasionadas por su asunto, no se concreten a los días más o menos largos de su aparición.",
     "en": "It is a fine thing for literary works to live on, for the pleasure of reading them, the appreciation of their qualities, and even the controversies caused by their subject matter, not to be confined to the more or less long days of their appearance.",
@@ -1559,6 +2189,13 @@
     "source": "es-mitma-movilidad-2030.txt",
     "line": 1674,
     "token": "condicionar"
+  },
+  "condonar": {
+    "es": "El banco condonó parte de la deuda a las familias más afectadas por la crisis.",
+    "en": "The bank forgave part of the debt for the families hardest hit by the crisis.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "condonó"
   },
   "conducir": {
     "es": "Primeramente, conducía a él un camino carretero, menos intransitable que los restantes de aquellos contornos.",
@@ -1616,6 +2253,13 @@
     "line": 1792,
     "token": "conformasen"
   },
+  "confortar": {
+    "es": "Don Luis confortó su espíritu con la esperanza de que iba a tener mucha serenidad y de que Dios iba a poner en sus labios un raudal de elocuencia.",
+    "en": "Don Luis comforted his spirit with the hope that he would have great serenity and that God would place on his lips a torrent of eloquence.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 3877,
+    "token": "confortó"
+  },
   "confundir": {
     "es": "Iba un fraile muy flaco que era el padre Alelí, un señor pequeñito con anteojos, que era el papá de Isabel, algunos militares y otros tipos que se confundían en su mente con las figuras de los dos mandarines.",
     "en": "There was a very thin friar who was Father Alelí, a tiny gentleman with spectacles who was Isabel's father, some military men, and other figures who became blurred together in her mind with the images of the two mandarins.",
@@ -1629,6 +2273,13 @@
     "source": "Claude (Opus 4.8)",
     "line": null,
     "token": "congelaron"
+  },
+  "conjurar": {
+    "es": "¡Sabel casada, alejada de allí; el peligro conjurado; las cosas en orden, la salvación segura!",
+    "en": "Sabel married, sent away from there; the danger averted; things in order, salvation assured!",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 3549,
+    "token": "conjurado"
   },
   "conllevar": {
     "es": "Todo eso se puede llevar y conllevar —dijo el del Bosque—, con la esperanza que tenemos del premio.",
@@ -1665,6 +2316,13 @@
     "line": 331,
     "token": "conseguiría"
   },
+  "consentir": {
+    "es": "Ha querido enseñarme la esgrima, y después a fumar y a tirar la pistola y a la barra; pero en nada de esto he consentido yo.",
+    "en": "He has wanted to teach me fencing, and then to smoke and to fire the pistol and the bar; but to none of this have I consented.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 1888,
+    "token": "consentido"
+  },
   "conservar": {
     "es": "Y esa palma de Ingalaterra se guarde y se conserve como a cosa única, y se haga para ello otra caja como la que halló Alejandro en los despojos de Darío, que la diputó para guardar en ella las obras del poeta Homero.",
     "en": "And let that palm of England be kept and preserved as a thing unique, and let another box be made for it like the one Alexander found among the spoils of Darius, which he set aside to keep in it the works of the poet Homer.",
@@ -1692,6 +2350,13 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 482,
     "token": "consistió"
+  },
+  "consolar": {
+    "es": "Dios, que me ha puesto en corazón de acometer ahora esta tan no vista y tan temerosa aventura, tendrá cuidado de mirar por mi salud y de consolar tu tristeza.",
+    "en": "God, who has put in my heart the will to undertake now this unheard-of and fearsome adventure, will take care to look after my health and to console your sorrow.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 5838,
+    "token": "consolar"
   },
   "consolidar": {
     "es": "En poco tiempo se consolidó la fama de aquella hermosura y Anita Ozores fue por aclamación la muchacha más bonita del pueblo.",
@@ -1770,6 +2435,13 @@
     "line": 5594,
     "token": "contemplando"
   },
+  "contender": {
+    "es": "Los dos abogados contendieron durante horas sobre la interpretación del contrato.",
+    "en": "The two lawyers contended for hours over the interpretation of the contract.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "contendieron"
+  },
   "contener": {
     "es": "Contiene el legajo tres partes.",
     "en": "The bundle of papers contains three parts.",
@@ -1826,6 +2498,13 @@
     "line": 12659,
     "token": "controla"
   },
+  "conturbar": {
+    "es": "No me juzgo perdido; pero me siento conturbado.",
+    "en": "I do not judge myself lost; but I feel troubled.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 2218,
+    "token": "conturbado"
+  },
   "convencer": {
     "es": "Porque lo que es con plena conciencia estoy convencido de que esta mujer no es coqueta ni sueña en ganarse voluntades para satisfacer su vanagloria.",
     "en": "For, in full conscience, I am convinced that this woman is not a flirt, nor does she dream of winning people's affections merely to satisfy her vanity.",
@@ -1853,6 +2532,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 1034,
     "token": "convirtió"
+  },
+  "convidar": {
+    "es": "Y si bebía, era cuando alguno de los gananciosos convidaba á todos los presentes.",
+    "en": "And if he drank, it was when one of the winners would treat everyone present.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 1109,
+    "token": "convidaba"
   },
   "convivir": {
     "es": "Los procedimientos administrativos actuales no se encuentran, en general, adaptados y diseñados para contemplar el despliegue de instalaciones híbridas en las que convivan distintas tecnologías de generación de energía renovable.",
@@ -1909,6 +2595,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 1316,
     "token": "correspondían"
+  },
+  "corromper": {
+    "es": "No pensó más en aquellos años en que había una calumnia capaz de corromper la más pura inocencia.",
+    "en": "She thought no more of those years in which there was a slander capable of corrupting the purest innocence.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 3081,
+    "token": "corromper"
   },
   "cortar": {
     "es": "Entre las cortinas de árboles enanos que ensombrecían los caminos vibraban cencerros y campanillas, y cortando este alegre cascabeleo sonaba el enérgico «¡arre, aca!» animando á las bestias reacias.",
@@ -2001,6 +2694,13 @@
     "line": 250,
     "token": "culminaron"
   },
+  "culpar": {
+    "es": "No puedes culpar al mensajero de una noticia que él no ha provocado.",
+    "en": "You cannot blame the messenger for news he did not bring about.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "culpar"
+  },
   "cultivar": {
     "es": "El tío Lucas sabía, quería y podía dirigir la molienda, cultivar el campo, cazar, pescar, trabajar de carpintero, de herrero y de albañil, ayudar a su mujer en todos los quehaceres de la casa, leer, escribir, contar, etc.",
     "en": "Uncle Lucas knew how, was willing, and was able to run the mill, farm the land, hunt, fish, work as a carpenter, blacksmith, and mason, help his wife with all the household chores, read, write, do sums, etc.",
@@ -2015,6 +2715,13 @@
     "line": 317,
     "token": "cumplido"
   },
+  "cundir": {
+    "es": "No parece sino que la excesiva indulgencia de usted para conmigo ha hecho cundir aquí mi fama de hombre de consejo.",
+    "en": "It seems that your excessive indulgence toward me has made my reputation as a man of counsel spread here.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 622,
+    "token": "cundir"
+  },
   "curar": {
     "es": "Para curar añejos defectos es conveniente permitirlos de vez en cuando con mucha medida.",
     "en": "To cure long-standing faults it is advisable to allow them from time to time in great moderation.",
@@ -2028,6 +2735,13 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 2496,
     "token": "cursado"
+  },
+  "danzar": {
+    "es": "Si el coche que les llevaba a la Cartuja iba danzando en los baches del camino, risas.",
+    "en": "If the carriage that carried them to the Cartuja went dancing over the potholes of the road, laughter.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 2454,
+    "token": "danzando"
   },
   "dar": {
     "es": "Nadie se atreve a dar un paso, por miedo de caerse.",
@@ -2077,6 +2791,13 @@
     "source": "Claude (Opus 4.8)",
     "line": null,
     "token": "debutó"
+  },
+  "decaer": {
+    "es": "El género de China decaía visiblemente.",
+    "en": "Chinese cloth was visibly declining.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 1107,
+    "token": "decaía"
   },
   "decidir": {
     "es": "Clarín, obligado en el asunto a escoger entre dos males, se decide por el mal seglar, que siempre es menos odioso que el mal eclesiástico.",
@@ -2141,12 +2862,26 @@
     "line": 4763,
     "token": "definir"
   },
+  "degollar": {
+    "es": "Se va al matadero por las tardes, cuando degüellan.",
+    "en": "He goes off to the slaughterhouse in the afternoons, when they do the slaughtering.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 6842,
+    "token": "degüellan"
+  },
   "dejar": {
     "es": "Convendría, pues, que los censores disciplentes se callarán por algún tiempo, dejando que alzasen la voz los que repartan el oxígeno, la alegría, la admiración, los que alientan todo esfuerzo útil, toda iniciativa fecunda, toda idea feliz, todo acierto artístico, o de cualquier orden que sea.",
     "en": "It would be well, then, for the disagreeable critics to hold their tongues for a while, letting those who dispense oxygen, joy, and admiration raise their voices instead — those who encourage every useful effort, every fruitful initiative, every happy idea, every artistic achievement, of whatever kind it may be.",
     "source": "la-regenta-clarin-1885.txt",
     "line": 58,
     "token": "dejando"
+  },
+  "deleitar": {
+    "es": "Y sin saber por qué, se deleitaba contemplando sus ojos de un verde claro.",
+    "en": "And without knowing why, he delighted in gazing at her light-green eyes.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 3187,
+    "token": "deleitaba"
   },
   "demandar": {
     "es": "La resistencia más tenaz y briosa, la protesta más desesperada, unas manitas de acero que no podía cautivar, un cuerpo nervioso que se sacudía rehuyendo toda presión, y al mismo tiempo varias exclamaciones de profunda y verdadera congoja, dos o tres gritos ahogados que demandaban socorro.",
@@ -2162,12 +2897,33 @@
     "line": 33,
     "token": "Demostraba"
   },
+  "demudar": {
+    "es": "De tal modo se demudó el rostro del joven, que Fortunata, que ya empezaba a decir algunas bromas sobre aquel asunto, se recogió en sí.",
+    "en": "The young man's face changed so utterly that Fortunata, who was already beginning to make a few jokes about the matter, withdrew into herself.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 20602,
+    "token": "demudó"
+  },
+  "denegar": {
+    "es": "El Registrador calificará las solicitudes presentadas y la legalidad de los actos y contratos relativos a los derechos inscribibles, pudiendo denegar o suspender la práctica de los asientos correspondientes.",
+    "en": "The Registrar shall assess the applications submitted and the legality of the acts and contracts relating to the registrable rights, and may deny or suspend the making of the corresponding entries.",
+    "source": "es-trlpi-ley-propiedad-intelectual.txt",
+    "line": 2582,
+    "token": "denegar"
+  },
   "denominar": {
     "es": "Esta obra... se denominaba «la señá Frasquita.»",
     "en": "This work... was called «la señá Frasquita.»",
     "source": "sombrero-tres-picos-alarcon-1874.txt",
     "line": 207,
     "token": "denominaba"
+  },
+  "denostar": {
+    "es": "Un mozo que iba a pie, viendo caer al encamisado, comenzó a denostar a don Quijote.",
+    "en": "A lad who was on foot, seeing the shrouded man fall, began to revile Don Quixote.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 5574,
+    "token": "denostar"
   },
   "denunciar": {
     "es": "--Dos, señora, dos--dijo Plácido corroborando con igual número de dedos muy estirados lo que la voz denunciaba--. No les pude ver las estampas.",
@@ -2176,12 +2932,26 @@
     "line": 2124,
     "token": "denunciaba"
   },
+  "departir": {
+    "es": "Aunque departiendo con Julián acerca de la sorpresa que se le preparaba a la familia de la Lage, no descuidaba el marqués observar algo que debía interesarle muchísimo.",
+    "en": "Although chatting with Julián about the surprise being prepared for the Lage family, the marquis did not neglect to observe something that must have interested him greatly.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 2291,
+    "token": "departiendo"
+  },
   "depender": {
     "es": "--¡De ti depende, amor mío!",
     "en": "«It depends on you, my love!»",
     "source": "sombrero-tres-picos-alarcon-1874.txt",
     "line": 1050,
     "token": "depende"
+  },
+  "deportar": {
+    "es": "Un día que tío y sobrino se deportaban, según costumbre, a cuatro o seis leguas de distancia de los Pazos.",
+    "en": "One day when uncle and nephew were disporting themselves, as was their custom, four or six leagues away from the Pazos.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 994,
+    "token": "deportaban"
   },
   "depositar": {
     "es": "Depositaría su hallazgo en casa de su hermana Candelaria hasta ponerle presentable.",
@@ -2197,6 +2967,27 @@
     "line": 16098,
     "token": "derivaba"
   },
+  "derramar": {
+    "es": "Los juramentos de don Fernando, los testigos que ponía, las lágrimas que derramaba, y, finalmente, su dispusición y gentileza, que, acompañada con tantas muestras de verdadero amor, pudieran rendir a otro tan libre y recatado corazón como el mío.",
+    "en": "Don Fernando's oaths, the witnesses he called, the tears he shed, and, finally, his bearing and gentleness, which, joined with so many signs of true love, could conquer even a heart as free and demure as mine.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 9417,
+    "token": "derramaba"
+  },
+  "derribar": {
+    "es": "«Vuestra Merced me va a dar una puertecilla vieja de la casa que ha derribado», decíale a uno.",
+    "en": "Your Grace is going to give me a little old door from the house you have torn down, he would say to one of them.",
+    "source": "sombrero-tres-picos-alarcon-1874.txt",
+    "line": 166,
+    "token": "derribado"
+  },
+  "derrocar": {
+    "es": "El levantamiento derrocó al gobierno en apenas tres días.",
+    "en": "The uprising overthrew the government in barely three days.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "derrocó"
+  },
   "derrotar": {
     "es": "También en el tribunal de la penitencia había derrotado el Provisor al Obispo.",
     "en": "In the tribunal of penance too, the Provisor had defeated the Bishop.",
@@ -2204,12 +2995,40 @@
     "line": 12007,
     "token": "derrotado"
   },
+  "desafiar": {
+    "es": "Aquel hombre que le había desafiado, insultándole impunemente mientras le tenía metido en su barraca como una gallina.",
+    "en": "That man who had challenged him, insulting him with impunity while he kept him shut up in his hut like a hen.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 4956,
+    "token": "desafiado"
+  },
+  "desaliñar": {
+    "es": "Y, desaliñando al rucio, le dio pasto abundoso y libre.",
+    "en": "And, unharnessing the donkey, he gave it abundant and unrestricted pasture.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 20928,
+    "token": "desaliñando"
+  },
+  "desamparar": {
+    "es": "Se había arrimado a pared más sólida, a gente que no desampara a sus amigos.",
+    "en": "He had leaned against a more solid wall, against people who do not forsake their friends.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 6740,
+    "token": "desampara"
+  },
   "desaparecer": {
     "es": "Era Sabel la reina de aquella pequeña corte: sofocada por la llama, con los brazos arremangados, los ojos húmedos, recibía el incienso de las adulaciones, hundía el cucharón de hierro en el pote, llenaba cuencos de caldo, y al punto una mujer desaparecía del círculo, refugiábase en la esquina o en un banco, donde se la oía mascar ansiosamente, soplar el hirviente bodrio y lengüetear contra la cuchara.",
     "en": "Sabel was the queen of that little court: flushed by the fire, sleeves rolled up, eyes moist, she basked in the incense of flattery, plunged the iron ladle into the pot, filled bowls with broth, and at once some woman would slip away from the circle and take refuge in a corner or on a bench, where she could be heard eagerly chewing, blowing on the scalding stew, and lapping at it with her spoon.",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 1164,
     "token": "desaparecía"
+  },
+  "desarmar": {
+    "es": "Al cual estaban desarmando las doncellas, que ya se habían reconciliado con él.",
+    "en": "The maidens, who had already made their peace with him, were unarming him.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 1324,
+    "token": "desarmando"
   },
   "desarrollar": {
     "es": "A Julián le ayudaba en su triunfo, amén de la gracia de Dios que él solicitaba muy de veras, la endeblez de su temperamento linfático-nervioso, puramente femenino, sin ardores ni rebeldías, propenso a la ternura, dulce y benigno como las propias malvas, pero no exento, en ocasiones, de esas energías súbitas que también se observan en la mujer, el ser que posee menos fuerza en estado normal, y más cantidad de ella desarrolla en las crisis convulsivas.",
@@ -2224,6 +3043,41 @@
     "source": "pepita-jimenez-valera-1874.txt",
     "line": 20,
     "token": "desatar"
+  },
+  "desayunar": {
+    "es": "Don Quijote se apeó con mucha dificultad y trabajo, como aquel que en todo aquel día no se había desayunado.",
+    "en": "Don Quixote dismounted with great difficulty and effort, like one who had not broken his fast the whole day.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 1318,
+    "token": "desayunado"
+  },
+  "desbaratar": {
+    "es": "Era cosa de ver con la presteza que los acometía y desbarataba.",
+    "en": "It was a sight to see with what swiftness he attacked and routed them.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 5578,
+    "token": "desbarataba"
+  },
+  "descabalgar": {
+    "es": "El jinete descabalgó de un salto y ató las riendas a la cerca.",
+    "en": "The rider dismounted with a leap and tied the reins to the fence.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "descabalgó"
+  },
+  "descabezar": {
+    "es": "Sentadas en las banquetas, apoyando en la pared su espalda, o rezaban con somnolencia, o descabezaban un sueñecillo.",
+    "en": "Seated on the benches, resting their backs against the wall, they either prayed drowsily or snatched a little nap.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 17934,
+    "token": "descabezaban"
+  },
+  "descalabrar": {
+    "es": "Dio a don Quijote con él en la cabeza, de suerte que le dejó muy bien descalabrado.",
+    "en": "He struck Don Quixote on the head with it, so that he left him thoroughly cracked open.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 4883,
+    "token": "descalabrado"
   },
   "descansar": {
     "es": "Por eso, y porque ansiaba retirarse y descansar, traspasó su establecimiento a los Chicos que habían sido deudos y dependientes suyos durante veinte años.",
@@ -2253,12 +3107,33 @@
     "line": 4265,
     "token": "descendiendo"
   },
+  "descolgar": {
+    "es": "Vio que un hombre que parecía muy largo se descolgaba, sujeto a las barras y buscando con los pies la reja de una ventana del piso bajo.",
+    "en": "He saw that a man who seemed very tall was lowering himself down, gripping the bars and feeling with his feet for the grating of a ground-floor window.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 31584,
+    "token": "descolgaba"
+  },
   "desconocer": {
     "es": "Recibimos, pues, con mermas y adiciones (y no nos asustemos del símil comercial) la mercancía que habíamos exportado, y casi desconocíamos la sangre nuestra y el aliento del alma española que aquel ser literario conservaba después de las alteraciones ocasionadas por sus viajes.",
     "en": "We received back, then, with losses and additions (let us not shy from the commercial comparison) the merchandise we had exported, and we scarcely recognized our own blood and the breath of the Spanish soul that literary creation still retained after the changes brought on by its travels.",
     "source": "la-regenta-clarin-1885.txt",
     "line": 163,
     "token": "desconocíamos"
+  },
+  "descoser": {
+    "es": "No habiéndose descosido jamás de las faldas de su madre sino para asistir a cátedra en el Seminario, sabía de la vida lo que enseñan los libros piadosos.",
+    "en": "Never having unstitched himself from his mother's skirts except to attend classes at the Seminary, he knew of life only what the pious books teach.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 602,
+    "token": "descosido"
+  },
+  "descreer": {
+    "es": "Comencé a dudar en ellos, y aun a descreer de la fe de don Fernando.",
+    "en": "I began to doubt them, and even to disbelieve in Don Fernando's faith.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 9449,
+    "token": "descreer"
   },
   "describir": {
     "es": "Julián se acostumbra a vivir como los paisanos, entrando en el ritmo acompasado, narcótico y perenne de la vida agrícola, tan inflexible como la vuelta de las golondrinas en primavera y el girar eterno de nuestro globo, describiendo la misma elipse, al través del espacio.",
@@ -2267,12 +3142,33 @@
     "line": 8784,
     "token": "describiendo"
   },
+  "descuajar": {
+    "es": "Los labradores descuajaron los viejos olivos para plantar viña en su lugar.",
+    "en": "The farmhands uprooted the old olive trees to plant vines in their place.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "descuajaron"
+  },
   "descubrir": {
     "es": "Quiso la desgracia que al otro día Primitivo descubriese en un maizal próximo un bando entero de perdices entretenido en comerse la espiga madura.",
     "en": "As ill luck would have it, the next day Primitivo discovered, in a nearby cornfield, an entire covey of partridges busy eating the ripe ears.",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 847,
     "token": "descubriese"
+  },
+  "desdecir": {
+    "es": "Buscándole nombre que no desdijese mucho del suyo, y que tirase y se encaminase al de princesa y gran señora, vino a llamarla Dulcinea del Toboso.",
+    "en": "Seeking a name for her that would not depart much from his own, and that leaned and pointed toward that of a princess and great lady, he came to call her Dulcinea del Toboso.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 1162,
+    "token": "desdijese"
+  },
+  "desdeñar": {
+    "es": "Un texto desdeñado de puro sabido vuelve a interesar cuando la memoria principia a perderle y la curiosidad se estimula.",
+    "en": "A text disdained for being too well known becomes interesting again when memory begins to lose it and curiosity is stirred.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 5260,
+    "token": "desdeñado"
   },
   "desear": {
     "es": "Yo mismo siento lo que dice Pepita; yo mismo deseo que mi padre, en su edad provecta, venga a mejor vida, olvide y no renueve las agitaciones y pasiones de su mocedad, y llegue a una vejez tranquila, dichosa y honrada.",
@@ -2281,12 +3177,26 @@
     "line": 327,
     "token": "deseo"
   },
+  "desechar": {
+    "es": "Entonces sí que, sin poder él desechar aquellos recuerdos, se le presentaba su infancia en los puertos.",
+    "en": "Then indeed, unable to dismiss those memories, his childhood in the ports would come back to him.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 849,
+    "token": "desechar"
+  },
   "desempeñar": {
     "es": "Se hablaba aún de talegas, y la operación de contar cualquier cantidad era obra para que la desempeñara Pitágoras u otro gran aritmético, pues con los doblones y ochentines, las pesetas catalanas, los duros españoles, los de veintiuno y cuartillo, las onzas, las pesetas columnarias y las monedas macuquinas, se armaba un belén espantoso.",
     "en": "People still spoke of money sacks, and counting any sum was a task fit for Pythagoras or some other great mathematician to carry out, since between doubloons and ochentines, Catalan pesetas, Spanish duros, twenty-one-and-a-quarter coins, gold ounces, columnar pesetas, and crudely minted coins, a dreadful muddle was created.",
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 1069,
     "token": "desempeñara"
+  },
+  "desencantar": {
+    "es": "El que desencantó al Gran Mameluco de Persia del largo encantamento en que había estado casi novecientos años.",
+    "en": "The one who disenchanted the Great Mameluke of Persia from the long enchantment in which he had lain for almost nine hundred years.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 6433,
+    "token": "desencantó"
   },
   "desesperar": {
     "es": "El Delfín no tenía paciencia para soportar las molestias de un simple catarro, y se desesperaba cuando le venía uno de esos rosarios de estornudos que no se acaban nunca.",
@@ -2316,6 +3226,48 @@
     "line": 43,
     "token": "designan"
   },
+  "deslizar": {
+    "es": "Más que anduvo se deslizó sobre el mármol del pavimento que figuraba juego de damas, blanco y negro.",
+    "en": "More than walking, he glided over the marble of the pavement that formed a checkerboard, black and white.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 1066,
+    "token": "deslizó"
+  },
+  "desmentir": {
+    "es": "Por ser joven y de miembros delicados, y por no tener pelo de barba, pareciera un niño, a no desmentir la presunción sus trazas sacerdotales.",
+    "en": "Being young and of delicate limbs, and having no beard, he would have looked like a child, had his priestly bearing not belied the presumption.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 24,
+    "token": "desmentir"
+  },
+  "desnudar": {
+    "es": "La enfermera desnudó al herido para examinarle las costillas.",
+    "en": "The nurse undressed the injured man to examine his ribs.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "desnudó"
+  },
+  "desollar": {
+    "es": "No, señor, ni por pienso; porque, en viéndose solo, me desuelle como a un San Bartolomé.",
+    "en": "No, sir, not on any account; because, once he finds himself alone, he will flay me like a Saint Bartholomew.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 1677,
+    "token": "desuelle"
+  },
+  "desorejar": {
+    "es": "Cada día ahorcaba el suyo, empalaba a éste, desorejaba aquél.",
+    "en": "Each day he hanged one man, impaled this one, cut off the ears of that one.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 13727,
+    "token": "desorejaba"
+  },
+  "despedazar": {
+    "es": "La despedazaría sin compasión ninguna.",
+    "en": "She would tear her to pieces without any compassion.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 39899,
+    "token": "despedazaría"
+  },
   "despedir": {
     "es": "Demostraba el jinete escasa maestría hípica: inclinado sobre el arzón, con las piernas encogidas y a dos dedos de salir despedido por las orejas, leíase en su rostro tanto miedo al cuartago como si fuese algún corcel indómito rebosando fiereza y bríos.",
     "en": "The rider showed scant equestrian skill: leaning over the saddlebow, legs drawn up, and within an inch of being sent flying over the horse's ears, his face betrayed as much fear of the old nag as if it had been some untamed steed brimming with fierceness and spirit.",
@@ -2323,12 +3275,26 @@
     "line": 35,
     "token": "despedido"
   },
+  "despegar": {
+    "es": "Tonet, halagado por el servicio que prestaba á la joven, despegó los labios al fin, para decirla que la acompañaría con frecuencia.",
+    "en": "Tonet, flattered by the service he was rendering the young woman, finally parted his lips to tell her that he would often accompany her.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 3130,
+    "token": "despegó"
+  },
   "despertar": {
     "es": "Despertó Julián cuando entraba de lleno en la habitación un sol de otoño dorado y apacible.",
     "en": "Julián woke as a golden, gentle autumn sun poured fully into the room.",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 581,
     "token": "Despertó"
+  },
+  "despeñar": {
+    "es": "¡Que nos despeñamos de vez!",
+    "en": "We are plunging headlong to our ruin all at once!",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 1602,
+    "token": "despeñamos"
   },
   "desplazar": {
     "es": "El despliegue del hidrógeno renovable que desplace combustibles fósiles en distintos sectores.",
@@ -2344,6 +3310,34 @@
     "line": 6208,
     "token": "despliegue"
   },
+  "despoblar": {
+    "es": "La emigración despobló muchas aldeas del interior durante el siglo pasado.",
+    "en": "Emigration depopulated many inland villages over the last century.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "despobló"
+  },
+  "despojar": {
+    "es": "Dijo que por entonces no quería ni debía ir a Sevilla, hasta que hubiese despojado todas aquellas sierras de ladrones malandrines.",
+    "en": "He said that for the present he neither wished nor ought to go to Seville, until he had cleared all those mountains of villainous thieves.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 4243,
+    "token": "despojado"
+  },
+  "desposar": {
+    "es": "La noche que don Fernando se desposó con Luscinda, después de haber ella dado el sí de ser su esposa, le había tomado un recio desmayo.",
+    "en": "The night that Don Fernando married Luscinda, after she had given her consent to be his wife, she was seized by a deep faint.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 9491,
+    "token": "desposó"
+  },
+  "despreciar": {
+    "es": "El corazón se sentirá lleno de afectos humanos, y no despreciará, sino valuará en mucho el mérito de las cosas y de las personas.",
+    "en": "The heart will feel full of human affections, and will not despise, but rather greatly value the merit of things and of people.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 675,
+    "token": "despreciará"
+  },
   "desprender": {
     "es": "Desprendido de las manos de su mujer, que como tenazas le sujetaban, Ido volvió a sus mímicas.",
     "en": "Freed from his wife's hands, which held him like pincers, Ido went back to his antics.",
@@ -2358,6 +3352,20 @@
     "line": 3185,
     "token": "destacaban"
   },
+  "destellar": {
+    "es": "El faro destellaba en la oscuridad para guiar a los barcos hacia el puerto.",
+    "en": "The lighthouse flashed in the darkness to guide the ships toward the harbor.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "destellaba"
+  },
+  "desterrar": {
+    "es": "Esta prenda hermosa se va desterrando, y sólo el pueblo la conserva con admirable instinto.",
+    "en": "This beautiful garment is being cast aside, and only the common people keep it with admirable instinct.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 550,
+    "token": "desterrando"
+  },
   "destinar": {
     "es": "Él estaba destinado a cierta heredera tan escuálida como virtuosa, y había puesto por condición, para comprometer su mano, que le dejaran muchos años de libertad en la que se prepararía a ser un buen marido.",
     "en": "He was intended for a certain heiress as sickly as she was virtuous, and had made it a condition, before committing his hand, that he be left many years of freedom in which to prepare himself to be a good husband.",
@@ -2371,6 +3379,13 @@
     "source": "la-regenta-clarin-1885.txt",
     "line": 16563,
     "token": "destruía"
+  },
+  "desusar": {
+    "es": "Muchas palabras antiguas se desusaron al cambiar las costumbres.",
+    "en": "Many old words fell out of use as customs changed.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "desusaron"
   },
   "desvelar": {
     "es": "Estas nuevas dieron en qué pensar a don Pedro, que desveló a Julián algunas noches más.",
@@ -2420,6 +3435,13 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 612,
     "token": "devolvían"
+  },
+  "devorar": {
+    "es": "Devoraban los vecinos su rabia en silencio.",
+    "en": "The neighbors devoured their rage in silence.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 2067,
+    "token": "Devoraban"
   },
   "diagnosticar": {
     "es": "Incorporación y explotación de herramientas centralizadas de gestión energética inteligente representadas por algoritmos que analicen, diagnostiquen y predigan las condiciones de la red y la demanda de energía prevista.",
@@ -2533,6 +3555,13 @@
     "line": 1090,
     "token": "disparando"
   },
+  "dispensar": {
+    "es": "¡Soy cuerno! señor mío; y usted dispense.",
+    "en": "I am a blockhead, my dear sir; and do forgive me.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 4973,
+    "token": "dispense"
+  },
   "disponer": {
     "es": "Si mi mujer supiera que sólo puedo disponer de dos horas y media de descanso, me dejaría volver a la cama.",
     "en": "If my wife knew that I could only spare two and a half hours of rest, she would let me go back to bed.",
@@ -2596,6 +3625,13 @@
     "line": 49,
     "token": "duele"
   },
+  "domar": {
+    "es": "Mas serlo has mío, si al soberbio moro y cita fiero domas, que hoy nos llama iguales en amor con mal suceso.",
+    "en": "But mine you shall be, if you tame the proud Moor and the fierce Scythian, who today calls us equals in love, with ill fortune.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 945,
+    "token": "domas"
+  },
   "dominar": {
     "es": "No tardó mucho en llegar al cerro que domina el caserío de Naya, tan oportunamente que vino a caer en medio del baile.",
     "en": "It did not take him long to reach the hill that overlooks the hamlet of Naya, arriving just in time to come upon the dance in full swing.",
@@ -2623,6 +3659,13 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 583,
     "token": "duermo"
+  },
+  "dormitar": {
+    "es": "Finalmente, Sancho se quedó dormido al pie de un alcornoque, y don Quijote dormitando al de una robusta encina.",
+    "en": "Finally, Sancho fell asleep at the foot of a cork oak, and Don Quijote dozing at that of a sturdy holm oak.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 20969,
+    "token": "dormitando"
   },
   "dotar": {
     "es": "Julián, que sufría la inquietud, el hormigueo en la planta de los pies que nos causa la sensación de hollar algo blando, algo viviente, o que por lo menos estuvo dotado de sensibilidad y vida, experimentó de pronto gran turbación.",
@@ -2743,6 +3786,27 @@
     "line": 21647,
     "token": "embarazado"
   },
+  "embargar": {
+    "es": "El contento de verlos y de hablar con ellos, después de tantos años de ausencia, me ha embargado el ánimo y me ha robado el tiempo.",
+    "en": "The joy of seeing them and talking with them, after so many years of absence, has overwhelmed my spirit and stolen my time.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 68,
+    "token": "embargado"
+  },
+  "embeber": {
+    "es": "El cura y el barbero se despidieron de don Quijote, de cuya salud desesperaron, viendo cuán puesto estaba en sus desvariados pensamientos, y cuán embebido en la simplicidad de sus malandantes caballerías.",
+    "en": "The priest and the barber took their leave of Don Quijote, of whose sanity they despaired, seeing how fixed he was in his deranged thoughts, and how absorbed in the simplicity of his knight-errant follies.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 18596,
+    "token": "embebido"
+  },
+  "embragar": {
+    "es": "Antes de arrancar en la cuesta, embragó con suavidad para no calar el motor.",
+    "en": "Before pulling away on the slope, he engaged the clutch gently so as not to stall the engine.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "embragó"
+  },
   "emitir": {
     "es": "Ido abrió la boca para emitir pronta y juiciosa respuesta a esta pregunta; pero su mujer tomó rápidamente la palabra, quedándose él un buen rato con la boca abierta.",
     "en": "Ido opened his mouth to give a prompt and sensible answer to this question, but his wife quickly took the floor, leaving him with his mouth hanging open for quite a while.",
@@ -2763,6 +3827,13 @@
     "source": "Claude (Opus 4.8)",
     "line": null,
     "token": "empataron"
+  },
+  "empeorar": {
+    "es": "Aquel día, que era el 22, empeoró el Delfín a causa de su impaciencia y por aquel afán de querer anticiparse a la naturaleza.",
+    "en": "That day, which was the 22nd, the Delfín worsened because of his impatience and that eagerness to get ahead of nature.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 8510,
+    "token": "empeoró"
   },
   "empezar": {
     "es": "Julián, que empezaba a descalzarse los guantes, se compadeció del chiquillo, y, bajándose, le tomó en brazos, pudiendo ver que a pesar del mugre, la roña, el miedo y el llanto, era el más hermoso angelote del mundo.",
@@ -2791,6 +3862,13 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 12914,
     "token": "empujaba"
+  },
+  "enajenar": {
+    "es": "Bien podemos esperar que el cielo nos restituya lo que es nuestro, pues está todavía en ser, y no se ha enajenado ni deshecho.",
+    "en": "We may well hope that heaven will restore to us what is ours, for it still exists, and has neither been given away nor undone.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 9630,
+    "token": "enajenado"
   },
   "enamorar": {
     "es": "En Estella conoció a la señá Frasquita, que entonces sólo se llamaba Frasquita; la enamoró; se casó con ella, y se la llevó a Andalucía.",
@@ -2848,6 +3926,34 @@
     "line": 3163,
     "token": "encierra"
   },
+  "enclavar": {
+    "es": "Los carpinteros enclavaron las tablas al armazón con largos clavos de hierro.",
+    "en": "The carpenters nailed the planks to the frame with long iron nails.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "enclavaron"
+  },
+  "encoger": {
+    "es": "Sabel se encogió de hombros.",
+    "en": "Sabel shrugged her shoulders.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 693,
+    "token": "encogió"
+  },
+  "encomendar": {
+    "es": "Julián aceptó la comisión, y entonces el señorito mostró remordimientos o escrúpulos de habérsela encomendado.",
+    "en": "Julián accepted the commission, and then the young master showed remorse or scruples at having entrusted it to him.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 3400,
+    "token": "encomendado"
+  },
+  "enconar": {
+    "es": "¿Quién pudiera imaginar que don Fernando, caballero ilustre, se había de enconar, como suele decirse, en tomarme a mí una sola oveja, que aún no poseía?",
+    "en": "Who could imagine that Don Fernando, an illustrious gentleman, would set himself, as the saying goes, upon taking from me a single ewe that I did not yet possess?",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 8801,
+    "token": "enconar"
+  },
   "encontrar": {
     "es": "¡Dichosísimo tiempo, digo..., para los poetas especialmente, que encontraban un entremés, un sainete, una comedia, un drama, un auto sacramental o una epopeya detrás de cada esquina, en vez de esta prosaica uniformidad y desabrido realismo que nos legó al cabo la Revolución Francesa!",
     "en": "Most fortunate the age, I say, especially for poets, who found a farce, a skit, a comedy, a drama, a sacred play, or an epic behind every corner, instead of this prosaic uniformity and flavorless realism that the French Revolution ultimately bequeathed us!",
@@ -2855,12 +3961,47 @@
     "line": 101,
     "token": "encontraban"
   },
+  "encordar": {
+    "es": "El luthier encordó la guitarra con cuerdas nuevas antes del concierto.",
+    "en": "The luthier strung the guitar with new strings before the concert.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "encordó"
+  },
+  "encubrir": {
+    "es": "Lo que yo no puedo explicarme es que usted consienta esto y lo encubra y me quiera matar.",
+    "en": "What I cannot explain to myself is that you should consent to this and cover it up and want to kill me.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 30962,
+    "token": "encubra"
+  },
+  "enderezar": {
+    "es": "Allí la enderezarán... Crea usted que hacen milagros...",
+    "en": "There they will straighten her out... Believe me, they work miracles...",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 8077,
+    "token": "enderezarán"
+  },
+  "enervar": {
+    "es": "Tendida en la pila, con la mano en el grifo, dejo que el agua tibia me enerve, y la fantasía como en sopor se detiene en imágenes plásticas tranquilas y suaves.",
+    "en": "Lying in the tub, with my hand on the faucet, I let the warm water enervate me, and my fancy, as if in a doze, lingers on tranquil, gentle, tangible images.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 28718,
+    "token": "enerve"
+  },
   "enfatizar": {
     "es": "Enfatiza la necesidad de acelerar la normalización de las infraestructuras eléctricas para minimizar las perturbaciones de las cadenas de suministro y asegurar que los componentes de la red estén disponibles en Europa.",
     "en": "It emphasizes the need to speed up the standardization of electrical infrastructure in order to minimize disruptions to supply chains and ensure that grid components are available in Europe.",
     "source": "es-miteco-pniec-2023-2030.txt",
     "line": 1618,
     "token": "enfatiza"
+  },
+  "enfermar": {
+    "es": "Temía que el adorado hijo enfermara de la noche a la mañana y se muriera como tantos otros de menos mérito físico y moral.",
+    "en": "She feared that her beloved son might fall ill overnight and die like so many others of lesser physical and moral worth.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 151,
+    "token": "enfermara"
   },
   "enfocar": {
     "es": "Para ello, hay que enfocar las actividades a posibles proyectos de demostración que generen conocimiento y experiencia en un entorno marino real.",
@@ -2883,12 +4024,33 @@
     "line": 3902,
     "token": "engañado"
   },
+  "engendrar": {
+    "es": "Fastidiábale vivir allí donde tres gotas de lluvia meten en casa a todo el mundo y engendran instantáneamente una triste vegetación de hongos de seda, de enormes paraguas.",
+    "en": "It annoyed him to live where three drops of rain drive everyone indoors and instantly breed a dismal vegetation of silk mushrooms, of enormous umbrellas.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 3618,
+    "token": "engendran"
+  },
+  "enjalbegar": {
+    "es": "Las grietas desaparecieron, y terminado el enlucido de las paredes, la mujer y la hija las enjalbegaron de un blanco deslumbrante.",
+    "en": "The cracks disappeared, and once the plastering of the walls was finished, the wife and daughter whitewashed them a dazzling white.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 2055,
+    "token": "enjalbegaron"
+  },
   "enlazar": {
     "es": "O bien porque en esta mujer todo es cálculo, sin elevarse su mente a superiores esferas, o bien porque enlaza la prosa del vivir y la poesía de sus ensueños en una perfecta armonía, no hay en ella nada que desentone del cuadro general en que está colocada.",
     "en": "Either because in this woman everything is calculation, her mind never rising to higher spheres, or because she binds together the prose of daily life and the poetry of her dreams in perfect harmony, there is nothing about her that clashes with the overall picture in which she is placed.",
     "source": "pepita-jimenez-valera-1874.txt",
     "line": 510,
     "token": "enlaza"
+  },
+  "enloquecer": {
+    "es": "Como apenas se sonreía, faltábale aquel rasgo hechicero de la contracción de los labios, que enloquecía a su amante.",
+    "en": "Since she scarcely smiled, she lacked that bewitching feature of the pursing of her lips, which drove her lover mad.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 16640,
+    "token": "enloquecía"
   },
   "enmarcar": {
     "es": "El director general de Planificación Estadística y Procesos, que preside la Comisión Permanente de la CIME, fue el encargado de dar la bienvenida a los asistentes, que siguieron la jornada tanto de forma presencial como por videoconferencia, enmarcando estas jornadas dentro del Plan de mejora del Peer Review.",
@@ -2897,6 +4059,20 @@
     "line": 627,
     "token": "enmarcando"
   },
+  "enmendar": {
+    "es": "Se les da término ultramarino, y como se enmendaren, así se usará con ellos de misericordia o de justicia.",
+    "en": "They are given an overseas term, and as they mend their ways, so shall they be treated with mercy or with justice.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 2158,
+    "token": "enmendaren"
+  },
+  "enojar": {
+    "es": "No, si no me enojaba; me reía, créelo, me divertía viéndote entre esa aristocracia, hecho un caballero.",
+    "en": "No, I wasn't getting angry; I laughed, believe me, I had fun watching you among that aristocracy, turned into a gentleman.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 2667,
+    "token": "enojaba"
+  },
   "enriquecer": {
     "es": "Pienso hacer batalla y quitarles a todos las vidas, con cuyos despojos comenzaremos a enriquecer.",
     "en": "I intend to do battle and take all their lives, with whose spoils we shall begin to grow rich.",
@@ -2904,12 +4080,33 @@
     "line": 2483,
     "token": "enriquecer"
   },
+  "ensayar": {
+    "es": "Ni una sola vez trató de ensayar sus recursos y prefirió creer a su tía: aquellos aristócratas interesados no eran maridos posibles.",
+    "en": "Not once did she try to test out her wiles, and she preferred to believe her aunt: those self-interested aristocrats were not possible husbands.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 4812,
+    "token": "ensayar"
+  },
+  "ensañar": {
+    "es": "Perdulario, cobarde, que te ensañas con los débiles de cuerpo, con los enfermos que no se pueden tener.",
+    "en": "Scoundrel, coward, you who vent your cruelty on the weak of body, on the sick who cannot even hold themselves up.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 36900,
+    "token": "ensañas"
+  },
   "enseñar": {
     "es": "Había enseñado a bailar a un perro, domesticado una culebra, y hecho que un loro diese la hora por medio de gritos, según las iba marcando un reloj de sol que el molinero había trazado en una pared.",
     "en": "He had taught a dog to dance, tamed a snake, and gotten a parrot to call out the hour with cries, following a sundial that the miller had drawn on a wall.",
     "source": "sombrero-tres-picos-alarcon-1874.txt",
     "line": 408,
     "token": "enseñado"
+  },
+  "ensillar": {
+    "es": "Ya he mandado a Primitivo que ensille la yegua y ponga el aparejo a la borrica.",
+    "en": "I have already ordered Primitivo to saddle the mare and put the harness on the she-donkey.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 2164,
+    "token": "ensille"
   },
   "entender": {
     "es": "Decía que entre estas dos maneras de vivir, observaba él la diferencia que hay entre comerse una chuleta y que le vengan a contar a uno cómo y cuándo se la ha comido otro, haciendo el cuento muy a lo vivo, se entiende, y describiendo la cara que ponía, el gusto que le daba la masticación, la gana con que tragaba y el reposo con que digería.",
@@ -2945,6 +4142,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 221,
     "token": "entregó"
+  },
+  "entremeter": {
+    "es": "Sólo sé que la Santa Hermandad tiene que ver con los que pelean en el campo, y en esotro no me entremeto.",
+    "en": "I only know that the Holy Brotherhood deals with those who fight out in the fields, and in that other business I do not meddle.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 2999,
+    "token": "entremeto"
   },
   "entrenar": {
     "es": "Se trata un codificador automático para las CNAE 2009 y 2025, basado en técnicas de Natural Language Processing (NLP) –Procesamiento del Lenguaje Natural– y ‘entrenado’ con cientos de miles de registros.",
@@ -3016,12 +4220,54 @@
     "line": 2220,
     "token": "equivocado"
   },
+  "errar": {
+    "es": "Este sujeto se jactaba de poder decir, sin errar punto ni coma, lo que disfrutaban de renta las veinte o treinta familias de viso.",
+    "en": "This fellow boasted of being able to tell, without missing a jot or comma, what income the twenty or thirty prominent families enjoyed.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 2981,
+    "token": "errar"
+  },
   "escapar": {
     "es": "--¡Hola! ¡Hola! ¿Temes que me escape?",
     "en": "—Ha! Ha! Are you afraid I'll escape?",
     "source": "sombrero-tres-picos-alarcon-1874.txt",
     "line": 1677,
     "token": "escape"
+  },
+  "escarbar": {
+    "es": "No quisiera quedar con un escrúpulo que me roe y escarba la conciencia, nacido de lo que aquí el señor don Quijote ha dicho.",
+    "en": "I would not wish to be left with a scruple that gnaws and digs at my conscience, born of what the lord Don Quixote has said here.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 18458,
+    "token": "escarba"
+  },
+  "escardar": {
+    "es": "Menester es que este libro se escarde y limpie de algunas bajezas que entre sus grandezas tiene.",
+    "en": "It is necessary that this book be weeded and cleansed of some base things it holds among its grandeurs.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 2249,
+    "token": "escarde"
+  },
+  "escarmentar": {
+    "es": "Conviene perseguir y escarmentar a todos los que van a la política a hacer chanchullos.",
+    "en": "It is fitting to pursue and make an example of all those who go into politics to work their shady schemes.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 5329,
+    "token": "escarmentar"
+  },
+  "escarnecer": {
+    "es": "Cuando le salía mal alguna de las bajezas con que se procuraba dinero, se escarnecía sinceramente.",
+    "en": "When one of the base tricks by which he scraped up money went wrong, he sincerely mocked himself.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 7370,
+    "token": "escarnecía"
+  },
+  "esclarecer": {
+    "es": "Y señalaba a un velón de Lucena, que apenas si esclarecía la octava parte del salón.",
+    "en": "And he pointed to a Lucena oil lamp, which scarcely lit up an eighth of the hall.",
+    "source": "sombrero-tres-picos-alarcon-1874.txt",
+    "line": 1333,
+    "token": "esclarecía"
   },
   "escoger": {
     "es": "Barbarita examinaba las cajas y sus marcas, las regateaba, olía el tabaco, escogía lo que le parecía mejor y pagaba muy bien.",
@@ -3037,6 +4283,13 @@
     "line": 1149,
     "token": "escondiendo"
   },
+  "escotar": {
+    "es": "La modista escotó el vestido para que luciera más elegante en la fiesta.",
+    "en": "The dressmaker cut the dress with a low neckline so it would look more elegant at the party.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "escotó"
+  },
   "escribir": {
     "es": "Así, cuando el editor de La Regenta me propuso escribir este prólogo, no esperé a que me lo dijera dos veces, creyéndome muy honrado con tal encomienda.",
     "en": "So when the editor of La Regenta suggested that I write this prologue, I did not wait to be asked twice, considering myself greatly honored by such a charge.",
@@ -3051,12 +4304,47 @@
     "line": 5224,
     "token": "escuchaba"
   },
+  "escudar": {
+    "es": "Se escudó tras el muro para protegerse de la granizada de piedras.",
+    "en": "He shielded himself behind the wall to protect himself from the hail of stones.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "escudó"
+  },
+  "escupir": {
+    "es": "Tardó aún cosa de dos minutos en recobrar la expedición de la lengua y en poder escupir al ventarrón una retahíla de injurias.",
+    "en": "It took him a good two minutes more to recover the readiness of his tongue and to be able to spit a string of insults into the gale.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 7323,
+    "token": "escupir"
+  },
+  "escurrir": {
+    "es": "No sé qué decía de salud y de enfermedad que le enviaba, y por aquí iba escurriendo, hasta que acababa la carta.",
+    "en": "I don't know what it said about the health and illness he was sending her, and it went trailing along here until the letter ended.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 8474,
+    "token": "escurriendo"
+  },
   "esforzar": {
     "es": "Nuestro barbero, que a todo estaba presente, como tenía tan bien conocido el humor de don Quijote, quiso esforzar su desatino y llevar adelante la burla para que todos riesen.",
     "en": "Our barber, who was present for everything, since he knew Don Quixote's temper so well, wanted to reinforce his madness and carry the joke further so that everyone would laugh.",
     "source": "quijote-cervantes-1605.txt",
     "line": 15596,
     "token": "esforzar"
+  },
+  "esmerar": {
+    "es": "La cocinera se esmeró en preparar un banquete digno de la ocasión.",
+    "en": "The cook took great pains to prepare a banquet worthy of the occasion.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "esmeró"
+  },
+  "espantar": {
+    "es": "Allí estaba él, ayudando á su amo, dándole pedazos de carnero desollado y espantando las nubes de moscas que cubrían la carne.",
+    "en": "There he was, helping his master, handing him pieces of skinned mutton and shooing away the clouds of flies that covered the meat.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 3207,
+    "token": "espantando"
   },
   "especializar": {
     "es": "Tras terminar la carrera, decidió especializarse en cirugía cardiovascular.",
@@ -3078,6 +4366,27 @@
     "source": "sombrero-tres-picos-alarcon-1874.txt",
     "line": 178,
     "token": "espero"
+  },
+  "espulgar": {
+    "es": "Acudieron los bandoleros a espulgar al rucio, y a no dejarle ninguna cosa de cuantas en las alforjas y la maleta traía.",
+    "en": "The bandits set about picking the donkey clean, leaving it none of the things it carried in its saddlebags and pack.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 33802,
+    "token": "espulgar"
+  },
+  "esquilmar": {
+    "es": "La pesca industrial esquilmó los bancos de sardinas de aquella costa.",
+    "en": "Industrial fishing depleted the sardine shoals off that coast.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "esquilmó"
+  },
+  "esquivar": {
+    "es": "Horas antes esquivaba quedarse a solas con él de miedo a que le reprendiese por su condescendencia con las señoras.",
+    "en": "Hours earlier he had been avoiding being left alone with him for fear he would reprimand him for his indulgence toward the ladies.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 14648,
+    "token": "esquivaba"
   },
   "establecer": {
     "es": "Está tan arraigado en la plebe el sentimiento del color, que la seriedad no ha podido establecer su imperio sino transigiendo.",
@@ -3113,6 +4422,20 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 5095,
     "token": "estimula"
+  },
+  "estorbar": {
+    "es": "Julián no podía dudar que estorbaba en los Pazos: ¿por qué?",
+    "en": "Julián could not doubt that he was in the way at the Pazos: but why?",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 1320,
+    "token": "estorbaba"
+  },
+  "estragar": {
+    "es": "¡Será posible que la inmundicia misma del pecado sea un aperitivo, como las guindillas rabiosas, para el paladar estragado de los esclavos del vicio!",
+    "en": "Can it be that the very filth of sin should be an appetizer, like fiery chili peppers, for the jaded palate of the slaves of vice!",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 5514,
+    "token": "estragado"
   },
   "estrenar": {
     "es": "A veces se interrogaban en balde las gentes unas a otras a ver si alguien le había visto estrenar una prenda.",
@@ -3169,6 +4492,13 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 8828,
     "token": "exageraba"
+  },
+  "exaltar": {
+    "es": "¡No te exaltes, hija mía!, interrumpió el padre vicario.",
+    "en": "Do not work yourself up, my daughter!, interrupted the vicar father.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 3018,
+    "token": "exaltes"
   },
   "examinar": {
     "es": "Lo examino detenidamente y no hallo un átomo de rencor en mi pecho.",
@@ -3352,6 +4682,13 @@
     "line": 8640,
     "token": "felicitar"
   },
+  "fiar": {
+    "es": "Poniendo los ojos la prudencia de Vuestra Excelencia en mi buen deseo, fío que no desdeñará la cortedad de tan humilde servicio.",
+    "en": "With Your Excellency's prudence setting its eyes upon my good intention, I trust that you will not disdain the smallness of so humble a service.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 535,
+    "token": "fío"
+  },
   "figurar": {
     "es": "Ocúltate tú bien entre los pámpanos, que nos vamos a reír más de lo que te figuras.",
     "en": "Hide yourself well among the vine leaves, because we're going to laugh more than you imagine.",
@@ -3485,6 +4822,13 @@
     "line": 314,
     "token": "fundido"
   },
+  "galardonar": {
+    "es": "Tales fueron los preclaros varones que galardonaron con el alboroque de ricas preseas, envidiables privilegios y pías fundaciones a esta Santa Iglesia de Vetusta.",
+    "en": "Such were the illustrious men who rewarded this Holy Church of Vetusta with the bounty of rich treasures, enviable privileges and pious foundations.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 1603,
+    "token": "galardonaron"
+  },
   "ganar": {
     "es": "Las personas crédulas y sencillas no ganan para sustos en los días en que se hizo moda hablar de aquel sistema, como de una rara novedad y de un peligro para el arte.",
     "en": "Credulous, simple people could scarcely recover from one fright before the next in the days when it became fashionable to talk about that system, as a strange novelty and a danger to art.",
@@ -3534,6 +4878,13 @@
     "line": 1860,
     "token": "girando"
   },
+  "glorificar": {
+    "es": "Los fieles glorificaron a la Virgen con himnos durante la procesión.",
+    "en": "The faithful glorified the Virgin with hymns during the procession.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "glorificaron"
+  },
   "gobernar": {
     "es": "Lo que es Nucha no le hacía a él peso en casa, pues la gobernaba a las mil maravillas.",
     "en": "As for Nucha, she was no burden to him in the household, for she was managed marvelously well.",
@@ -3569,6 +4920,13 @@
     "line": 1895,
     "token": "graduar"
   },
+  "granar": {
+    "es": "El trigo granó pronto aquel verano gracias a las lluvias de primavera.",
+    "en": "The wheat filled out its grain early that summer thanks to the spring rains.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "granó"
+  },
   "gritar": {
     "es": "El cual, determinándose a escuchar atentamente, creyó que alguna nueva aventura le venía, hasta que claramente conoció que el que gritaba era su escudero.",
     "en": "Resolving to listen closely, he believed some new adventure was coming to him, until he clearly recognized that the one shouting was his squire.",
@@ -3583,12 +4941,33 @@
     "line": 627,
     "token": "guardado"
   },
+  "guerrear": {
+    "es": "Los reinos vecinos guerrearon durante décadas por el control del río.",
+    "en": "The neighboring kingdoms warred for decades over control of the river.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "guerrearon"
+  },
   "guiar": {
     "es": "Juan solía tener por temporadas un faetón o un tílburi, que guiaba muy bien, y también tenía caballo de silla.",
     "en": "Juan would at times have a phaeton or a tilbury, which he drove very well, and he also had a riding horse.",
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 4065,
     "token": "guiaba"
+  },
+  "guisar": {
+    "es": "La abuela guisó un cocido que llenó toda la casa de buen olor.",
+    "en": "Grandmother cooked a stew that filled the whole house with a fine smell.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "guisó"
+  },
+  "guiñar": {
+    "es": "El abad, guiñando picarescamente el ojo izquierdo, escancióle otro vaso, que él tomó a dos manos.",
+    "en": "The abbot, roguishly winking his left eye, poured him another glass, which he took with both hands.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 484,
+    "token": "guiñando"
   },
   "gustar": {
     "es": "Esto le gustaba: ¡que reventasen, que se hiciesen la santísima los hijos del pillo don Salvador!",
@@ -3639,12 +5018,54 @@
     "line": 22,
     "token": "haciendo"
   },
+  "halagar": {
+    "es": "Tonet, halagado por el servicio que prestaba á la joven, despegó los labios al fin, para decirla que la acompañaría con frecuencia.",
+    "en": "Tonet, flattered by the service he was rendering the young woman, finally opened his lips to tell her that he would accompany her often.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 3129,
+    "token": "halagado"
+  },
   "hallar": {
     "es": "Sobre las existencias de pañolería no se hallaron datos ciertos en los libros de la tienda, y al contarlas apareció más de lo que se creía.",
     "en": "Regarding the shawl stock, no reliable figures were found in the shop's books, and when they were counted, there turned out to be more than had been thought.",
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 722,
     "token": "hallaron"
+  },
+  "hartar": {
+    "es": "los más brutos, los más feos y los perversos son los que se hartan de vivir, y parece que la misma muerte no quiere nada con ellos.",
+    "en": "the most brutish, the ugliest and the wicked are the ones who have their fill of living, and it seems that death itself wants nothing to do with them.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 154,
+    "token": "hartan"
+  },
+  "heder": {
+    "es": "El pescado olvidado en la cesta empezó a heder al cabo de dos días.",
+    "en": "The fish forgotten in the basket began to stink after two days.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "heder"
+  },
+  "helar": {
+    "es": "Yace aquí de un amador el mísero cuerpo helado, que fue pastor de ganado, perdido por desamor.",
+    "en": "Here lies the wretched frozen body of a lover, who was a herder of livestock, undone by unrequited love.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 4228,
+    "token": "helado"
+  },
+  "henchir": {
+    "es": "así las almas se hinchen de Dios, y en todo son Dios, penetradas por donde quiera de Dios.",
+    "en": "thus souls are filled with God, and in everything they are God, pervaded everywhere by God.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 4542,
+    "token": "hinchen"
+  },
+  "hendir": {
+    "es": "el arcángel san Miguel, el caballero de la ardiente espada, siempre dispuesto a rajar y hendir a Satanás.",
+    "en": "the archangel Saint Michael, the knight of the flaming sword, always ready to slash and cleave Satan.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 8219,
+    "token": "hendir"
   },
   "heredar": {
     "es": "Ésta sólo interesaba á los muchachos, que, heredando el odio de sus padres, se metían por entre las ortigas de los campos yermos para acribillar á pedradas la abandonada vivienda.",
@@ -3660,12 +5081,68 @@
     "line": 5054,
     "token": "herido"
   },
+  "herrar": {
+    "es": "El herrero herró el caballo antes de que amaneciera.",
+    "en": "The blacksmith shod the horse before daybreak.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "herró"
+  },
+  "hervir": {
+    "es": "sendos bancos brindaban asiento cómodo para calentarse oyendo hervir el negro pote.",
+    "en": "two benches offered a comfortable seat for warming oneself while listening to the black pot boil.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 288,
+    "token": "hervir"
+  },
+  "hincar": {
+    "es": "D. Luis se quitó su sombrero, se hincó de rodillas al pie de la cruz y rezó con profunda devoción el Angelus Domini.",
+    "en": "Don Luis took off his hat, knelt down at the foot of the cross and recited the Angelus Domini with deep devotion.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 3974,
+    "token": "hincó"
+  },
+  "hinchar": {
+    "es": "doblar un crespón era tarea tan difícil como hinchar un perro.",
+    "en": "folding a crepe shawl was a task as difficult as inflating a dog.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 1273,
+    "token": "hinchar"
+  },
+  "holgar": {
+    "es": "Se juntan allí por la noche, y están holgando y de tertulia hasta que los señores se recogen.",
+    "en": "They gather there at night, idling and chatting until the masters retire.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 3816,
+    "token": "holgando"
+  },
   "honrar": {
     "es": "Fueron tomando asiento los padres curas, porfiando bastante para ceder los asientos de preferencia, que al cabo tocaron al obeso Arcipreste de Loiro, y a Julián, en quien don Eugenio honraba a la ilustre casa de Ulloa.",
     "en": "The parish priests took their seats, arguing at length over who should yield the seats of honor, which in the end fell to the stout Archpriest of Loiro, and to Julián, in whom don Eugenio was honoring the illustrious house of Ulloa.",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 1488,
     "token": "honraba"
+  },
+  "horadar": {
+    "es": "un rayo que atraviesa las nubes y momentáneamente las horada, las ilumina con sus refulgentes dobleces.",
+    "en": "a lightning bolt that crosses the clouds and momentarily pierces them, illuminating them with its resplendent folds.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 34524,
+    "token": "horada"
+  },
+  "hospedar": {
+    "es": "Se convino en que el primo se quedaba hospedado allí, y se envió por la maleta a la posada.",
+    "en": "It was agreed that the cousin would stay lodged there, and someone was sent to the inn for his suitcase.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 2507,
+    "token": "hospedado"
+  },
+  "hostigar": {
+    "es": "Pero el otro, queriendo divertirse un rato, hostigó la demencia de aquel pobre hombre para que saltara.",
+    "en": "But the other man, wanting to amuse himself for a while, goaded the madness of that poor man to make him lash out.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 5825,
+    "token": "hostigó"
   },
   "huir": {
     "es": "¿Soy estúpido acaso para no ver que esa desvergonzada huye de mí, y cada día tengo que cazarla como a una liebre?",
@@ -3680,6 +5157,13 @@
     "source": "pepita-jimenez-valera-1874.txt",
     "line": 2306,
     "token": "hundo"
+  },
+  "hurtar": {
+    "es": "pero ella, hurtando el cuerpo, le tendió una manecita fresca, recién lavada con agua y colonia.",
+    "en": "but she, drawing her body away, held out to him a cool little hand, freshly washed with water and cologne.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 2389,
+    "token": "hurtando"
   },
   "identificar": {
     "es": "El objetivo de este indicador es identificar el grado de eficacia en el que se encuentra la investigación con respecto al proceso operativo de la recolección.",
@@ -3862,6 +5346,13 @@
     "source": "es-ine-informe-anual-2024.txt",
     "line": 363,
     "token": "incrementar"
+  },
+  "increpar": {
+    "es": "De nuevo la increpó airadamente el marqués: ¿Y los perros, vamos a ver?",
+    "en": "Once again the marquis rebuked her angrily: And the dogs, let us see?",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 322,
+    "token": "increpó"
   },
   "incumplir": {
     "es": "La Ley 13/2021 ha modificado el régimen sancionador de los servicios de VTC para adecuarlo a las condiciones de prestación de este servicio establecidas en el Real Decreto-ley 13/2018, creando nuevos tipos infractores, como la realización de los servicios fuera del ámbito territorial en que legalmente han de desarrollarse o incumpliendo las específicas condiciones establecidas legal o reglamentariamente.",
@@ -4143,6 +5634,20 @@
     "line": null,
     "token": "laboraban"
   },
+  "labrar": {
+    "es": "quiero, ¡oh amigo Lotario!, que te dispongas a ser el instrumento que labre aquesta obra de mi gusto.",
+    "en": "I want, oh friend Lotario, that you prepare to be the instrument that fashions this work of my pleasure.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 11073,
+    "token": "labre"
+  },
+  "ladrar": {
+    "es": "El tren se lanzaba por aquel campo triste, como inmenso lebrel, olfateando la vía y ladrando a la noche tarda.",
+    "en": "The train hurled itself across that dreary plain, like an immense hound, sniffing the track and barking at the late-falling night.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 3271,
+    "token": "ladrando"
+  },
   "lamentar": {
     "es": "Batiste se detuvo, lamentando en su interior no llevar consigo ni una mala navaja, ni una hoz.",
     "en": "Batiste stopped, lamenting inwardly that he was not carrying so much as a poor knife or a sickle.",
@@ -4150,12 +5655,26 @@
     "line": 2127,
     "token": "lamentando"
   },
+  "lamer": {
+    "es": "los mocosos pobres, envueltos en bayeta amarilla, sucios, con caspa en la cabeza y en la mano un pedazo de pan lamido.",
+    "en": "the poor little brats, wrapped in yellow flannel, dirty, with dandruff on their heads and a piece of licked bread in their hands.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 4145,
+    "token": "lamido"
+  },
   "lanzar": {
     "es": "Lanzaban los perros alaridos entrecortados, de interrogación y deseo, sin atreverse aún a tomar posesión de la pitanza.",
     "en": "The dogs let out broken howls, full of question and longing, not yet daring to take possession of the food.",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 342,
     "token": "lanzaban"
+  },
+  "lastimar": {
+    "es": "Se había acostumbrado de tal modo Jacinta a la idea de hacer suyo a Juanín, que le lastimaba al sentirlo arrancado de sí.",
+    "en": "Jacinta had grown so accustomed to the idea of making Juanín her own that it pained her to feel him torn away from her.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 10008,
+    "token": "lastimaba"
   },
   "lavar": {
     "es": "Después de bien lavado iba a misa sin falta, a buscar el hombre nuevo que pide el Evangelio.",
@@ -4185,6 +5704,20 @@
     "line": 513,
     "token": "levanta"
   },
+  "levar": {
+    "es": "El capitán mandó levar anclas en cuanto sopló viento favorable.",
+    "en": "The captain ordered the anchor weighed as soon as a favorable wind blew.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "levar"
+  },
+  "liar": {
+    "es": "el abad picaba con la uña una tagarnina para liar un pitillo.",
+    "en": "the abbot was shredding a cheap cigar with his fingernail to roll a cigarette.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 223,
+    "token": "liar"
+  },
   "liberar": {
     "es": "Las papeletas de alhajas y ropas de lujo que estaban empeñadas quedaron en poder del joven, que hizo propósito de liberar aquellos objetos en cuanto tuviese medios para ello.",
     "en": "The pawn tickets for the jewelry and fine clothing that had been pawned stayed in the young man's keeping, and he resolved to redeem those items as soon as he had the means to do so.",
@@ -4213,6 +5746,13 @@
     "line": 328,
     "token": "liderar"
   },
+  "lidiar": {
+    "es": "Y el capellán lidió con ellos a brazo partido, sin tregua, tres o cuatro horas todas las mañanas.",
+    "en": "And the chaplain struggled with them hand to hand, without respite, three or four hours every morning.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 854,
+    "token": "lidió"
+  },
   "ligar": {
     "es": "Parecióle que las cadenas de dolor que ligaban a la pobre virgencita se rompían de golpe, dejándola libre, gozosa y radiante, con la más feliz maternidad.",
     "en": "It seemed to him that the chains of pain binding the poor young woman broke apart all at once, leaving her free, joyful, and radiant, with the happiest of motherhoods.",
@@ -4240,6 +5780,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 33974,
     "token": "liquidar"
+  },
+  "llagar": {
+    "es": "Yo pelearé como Israel en el silencio de la noche, y Dios me llagará en el muslo y me quebrantará en ese combate, para que yo sea vencedor siendo vencido.",
+    "en": "I will fight like Israel in the silence of the night, and God will wound me in the thigh and break me in that combat, so that I may be victor by being vanquished.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 1979,
+    "token": "llagará"
   },
   "llamar": {
     "es": "No quería tampoco profanar, haciéndolo público, aquel encanto íntimo, aquel himno de la conciencia que podemos llamar los misterios gozosos de Barbarita.",
@@ -4283,6 +5830,13 @@
     "line": 2292,
     "token": "llover"
   },
+  "loar": {
+    "es": "cuando algún amante loa a su dama de hermosa y la nota de cruel, ningún oprobrio hace a su buen crédito.",
+    "en": "when some lover praises his lady as beautiful and marks her as cruel, he does no dishonor to her good name.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 11682,
+    "token": "loa"
+  },
   "localizar": {
     "es": "La biomasa utilizada en España es mayoritariamente de origen residual y se localiza próxima a los puntos de consumo, existiendo un alto número de operadores de pequeño tamaño a lo largo de la cadena de valor.",
     "en": "The biomass used in Spain is mostly of residual origin and is located close to the points of consumption, with a large number of small-scale operators along the value chain.",
@@ -4310,6 +5864,62 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 3681,
     "token": "lucía"
+  },
+  "madrugar": {
+    "es": "no puede dormir del dolor de la partida, madruga muy de mañana, vase a despedir del rey y de la reina y de la infanta.",
+    "en": "he cannot sleep for the grief of departure, he rises very early, and goes off to bid farewell to the king and the queen and the princess.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 6483,
+    "token": "madruga"
+  },
+  "madurar": {
+    "es": "Su boca se fue desellando poquito a poco hasta que rompió, como un erizo de castaña que madura y se abre, dejando ver el sazonado fruto.",
+    "en": "His mouth gradually unsealed little by little until it burst open, like a chestnut burr that ripens and opens, revealing the ripened fruit.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 866,
+    "token": "madura"
+  },
+  "magnificar": {
+    "es": "El poeta magnificó las hazañas del héroe hasta convertirlo en leyenda.",
+    "en": "The poet magnified the hero's deeds until he became a legend.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "magnificó"
+  },
+  "majar": {
+    "es": "Esa tunanta me aborrece y se va de mejor gana con cualquier gañán de los que acuden descalzos a alquilarse para majar el centeno.",
+    "en": "That hussy detests me and would rather run off with any farmhand of those who come barefoot to hire themselves out to thresh the rye.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 1990,
+    "token": "majar"
+  },
+  "malcasar": {
+    "es": "Sus padres la malcasaron con un hombre al que nunca llegó a querer.",
+    "en": "Her parents married her off badly to a man she never came to love.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "malcasaron"
+  },
+  "maldecir": {
+    "es": "La madre se desesperaba, rabiaba, maldecía de sí y de su destino con paciencia poco evangélica.",
+    "en": "The mother despaired, raged, and cursed herself and her fate with rather un-evangelical patience.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 218,
+    "token": "maldecía"
+  },
+  "mamar": {
+    "es": "A la puerta una mujer daba de mamar a una criatura.",
+    "en": "At the door a woman was breastfeeding a baby.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 90,
+    "token": "mamar"
+  },
+  "manar": {
+    "es": "De la roca manaba un hilo de agua fresca que nunca se secaba.",
+    "en": "A trickle of fresh water flowed from the rock and never ran dry.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "manaba"
   },
   "mandar": {
     "es": "Primero se le ocurrió encargar muchas misas al cura de San Ginés, y no pareciéndole esto bastante, discurrió mandar poner de Manifiesto la Divina Majestad todo el tiempo que el niño estuviese en París.",
@@ -4353,6 +5963,13 @@
     "line": 3676,
     "token": "maquinando"
   },
+  "maravillar": {
+    "es": "Esto de que yo no sepa jugar al tresillo, siquiera al tresillo, le tiene maravillado.",
+    "en": "The fact that I do not know how to play tresillo, not even tresillo, leaves him astonished.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 1876,
+    "token": "maravillado"
+  },
   "marcar": {
     "es": "Los cabellos, que en alguna manera tiraban a crines, él los marcó por hebras de lucidísimo oro de Arabia, cuyo resplandor al del mesmo sol escurecía.",
     "en": "Her hair, which somewhat resembled a horse's mane, he took to be strands of the most brilliant Arabian gold, whose splendor eclipsed that of the sun itself.",
@@ -4373,6 +5990,13 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 2208,
     "token": "matar"
+  },
+  "mecer": {
+    "es": "Si despierta el niño, le arrullas y le meces, diciéndole que yo vendré en seguidita.",
+    "en": "If the child wakes up, you lull him and rock him, telling him that I will come back right away.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 38306,
+    "token": "meces"
   },
   "mediar": {
     "es": "No mediando ningún pagaré, daba gusto de tratar con aquella señora.",
@@ -4395,6 +6019,13 @@
     "line": 2334,
     "token": "medir"
   },
+  "medrar": {
+    "es": "Los que quieren medrar salen del pueblo.",
+    "en": "Those who want to get ahead leave the town.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 5253,
+    "token": "medrar"
+  },
   "mejorar": {
     "es": "Habló conmigo de las cosas del lugar, de la labranza, de la última cosecha de vino y de aceite y del modo de mejorar la elaboración del vino.",
     "en": "She spoke with me about local matters, farming, the last wine and olive-oil harvest, and how to improve the wine-making process.",
@@ -4409,6 +6040,27 @@
     "line": 17571,
     "token": "mencionar"
   },
+  "menear": {
+    "es": "Claro, bobo; le conozco en el menear los manteos.",
+    "en": "Of course, silly; I recognize him by the swishing of his cassock.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 479,
+    "token": "menear"
+  },
+  "menguar": {
+    "es": "La total inocencia, que se pintaba en sus ojos vagos y como perdidos en contemplaciones de un mundo interior, no había menguado con el matrimonio.",
+    "en": "The utter innocence that shone in her vague eyes, as if lost in contemplation of an inner world, had not diminished with marriage.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 3974,
+    "token": "menguado"
+  },
+  "menoscabar": {
+    "es": "La justicia se estaba en sus proprios términos, sin que la osasen turbar ni ofender los del favor y los del interese, que tanto ahora la menoscaban, turban y persiguen.",
+    "en": "Justice kept to its own bounds, undisturbed and unoffended by those of favor and self-interest, who now so greatly diminish, disturb, and persecute it.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 3235,
+    "token": "menoscaban"
+  },
   "mentir": {
     "es": "Dice que lo hago de miserable, por no pagalle la soldada que le debo, y en Dios y en mi ánima que miente.",
     "en": "He says I do it out of stinginess, for not paying him the wages I owe him, and by God and my soul, he lies.",
@@ -4416,12 +6068,33 @@
     "line": 1650,
     "token": "miente"
   },
+  "mercar": {
+    "es": "Fue al mercado a mercar telas para coser el ajuar de la boda.",
+    "en": "She went to the market to buy cloth to sew the wedding trousseau.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "mercar"
+  },
   "merecer": {
     "es": "Hablando de esto con su marido, D. Baldomero, en quien lo progresista no quitaba lo autoritario (emblema de los tiempos), propuso un plan defensivo que mereció la aprobación de ella.",
     "en": "Discussing this with her husband, D. Baldomero — in whom being progressive did not rule out being authoritarian, an emblem of the times — he proposed a defensive plan that won her approval.",
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 2190,
     "token": "mereció"
+  },
+  "mesar": {
+    "es": "La viuda se mesaba los cabellos junto al lecho del difunto.",
+    "en": "The widow tore at her hair beside the dead man's bed.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "mesaba"
+  },
+  "mesurar": {
+    "es": "Conviene mesurar las palabras antes de responder con enojo.",
+    "en": "It is wise to measure one's words before answering in anger.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "mesurar"
   },
   "meter": {
     "es": "Todos ellos, a excepción de Miquis que se murió en el 64 soñando con la gloria de Schiller, metieron infernal bulla en el célebre alboroto de la noche de San Daniel.",
@@ -4465,12 +6138,26 @@
     "line": 760,
     "token": "modificó"
   },
+  "modular": {
+    "es": "Hasta Primitivo modulaba una risa opaca y turbia.",
+    "en": "Even Primitivo let out a dull, murky sort of laugh.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 6101,
+    "token": "modulaba"
+  },
   "mojar": {
     "es": "Aprisita, que nos mojamos.",
     "en": "Hurry up, we're getting wet.",
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 2893,
     "token": "mojamos"
+  },
+  "moler": {
+    "es": "Si no la has de comprar, si todo es gana de moler, ¿para qué quieres verla?",
+    "en": "If you are not going to buy it, if it is all just an urge to pester me, why do you want to see it?",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 1602,
+    "token": "moler"
   },
   "molestar": {
     "es": "Aunque Barbarita era desenfadada en el pensar, pronta en el responder, y sabía sacudirse una mosca que le molestase, en caso tan grave se quedó algo mortecina y tuvo vergüenza de decir a su mamá que no quería maldita cosa al chico de Santa Cruz.",
@@ -4535,6 +6222,13 @@
     "line": 258,
     "token": "movilizando"
   },
+  "mudar": {
+    "es": "Su vida pasada era un continuo cambio de profesión, siempre dentro del círculo de la miseria rural, mudando cada año de oficio, sin encontrar para su familia el bienestar mezquino que constituía toda su aspiración.",
+    "en": "His past life had been a continual change of profession, always within the circle of rural poverty, changing his trade every year, without finding for his family the meager well-being that was his whole aspiration.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 1827,
+    "token": "mudando"
+  },
   "multiplicar": {
     "es": "La mujer aquella multiplicaba el tiempo, y como quisiera, todo lo hacia con facilidad y prontitud.",
     "en": "That woman made time multiply, and however she wished, she did everything with ease and speed.",
@@ -4548,6 +6242,13 @@
     "source": "la-regenta-clarin-1885.txt",
     "line": 106,
     "token": "nacer"
+  },
+  "nadar": {
+    "es": "Los niños nadaban en el río durante las tardes calurosas de agosto.",
+    "en": "The children swam in the river during the hot August afternoons.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "nadaban"
   },
   "narrar": {
     "es": "El Arcipreste narraba las aventuras de la dama como lo hubiera hecho Marcial, salvo el latín.",
@@ -4583,6 +6284,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 25302,
     "token": "negociar"
+  },
+  "nevar": {
+    "es": "Aquel invierno nevó tanto que los caminos quedaron cortados durante semanas.",
+    "en": "That winter it snowed so much that the roads were cut off for weeks.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "nevó"
   },
   "nombrar": {
     "es": "No puede olvidar que ha sido ministro de la Gobernación, es decir, que lo quisieron nombrar.",
@@ -4639,6 +6347,13 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 1576,
     "token": "obligado"
+  },
+  "obrar": {
+    "es": "Hay que obrar con prudencia cuando están en juego los intereses de todos.",
+    "en": "One must act with prudence when everyone's interests are at stake.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "obrar"
   },
   "observar": {
     "es": "«Es una estatua de la antigüedad helénica,» observaba un Abogado muy erudito, Académico correspondiente de la Historia.",
@@ -4780,12 +6495,26 @@
     "line": 3164,
     "token": "originado"
   },
+  "osar": {
+    "es": "Muchas cosas que a la luz del día no osara decir, decíalas en la intimidad y soledad conyugales.",
+    "en": "Many things that she would not dare to say in the light of day, she said in the intimacy and solitude of married life.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 4313,
+    "token": "osara"
+  },
   "ostentar": {
     "es": "¡Es que a veces ostentaba una desenvoltura!",
     "en": "Sometimes she would display such boldness!",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 2930,
     "token": "ostentaba"
+  },
+  "otear": {
+    "es": "El señorito podía otear fácilmente a derecha e izquierda todo cuanto sucediese.",
+    "en": "The young master could easily scan to the right and left everything that might happen.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 2289,
+    "token": "otear"
   },
   "otorgar": {
     "es": "El hidalgo otorgó testamento, legando a tres hijos que tenía sus bienes y caudal, sin dejar al sobrino don Pedro ni el reloj en memoria.",
@@ -4829,6 +6558,13 @@
     "line": null,
     "token": "paginó"
   },
+  "palpar": {
+    "es": "Se asomaba a las fétidas alcobas, daba vueltas sobre un tacón, palpaba las paredes, miraba debajo de las sillas.",
+    "en": "He would peer into the fetid bedrooms, spin around on one heel, feel along the walls, and look under the chairs.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 7499,
+    "token": "palpaba"
+  },
   "paralizar": {
     "es": "Rafaela quiso salir a llamar; pero su propio temor le había paralizado las piernas.",
     "en": "Rafaela wanted to go out and call for help, but her own fear had paralyzed her legs.",
@@ -4856,6 +6592,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 1294,
     "token": "pariendo"
+  },
+  "parlar": {
+    "es": "Parle vosté, dijo avanzando un pie la acequia más vieja.",
+    "en": "Speak, sir, said the oldest irrigation channel, advancing one foot forward.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 2408,
+    "token": "Parle"
   },
   "participar": {
     "es": "Como dice el mismo señor mío, del dolor de la cabeza han de participar los miembros.",
@@ -4885,6 +6628,20 @@
     "line": 3381,
     "token": "pasear"
   },
+  "pecar": {
+    "es": "En adelante escribiré a Vd. a menudo y tan por extenso como me tiene encargado, si bien no tanto como hoy, para no pecar de prolijo.",
+    "en": "From now on I will write to you often and at as much length as you have asked of me, though not as much as today, so as not to sin by being tedious.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 447,
+    "token": "pecar"
+  },
+  "pechar": {
+    "es": "Al final tuvo que pechar con las consecuencias de su descuido.",
+    "en": "In the end he had to shoulder the consequences of his carelessness.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "pechar"
+  },
   "pedir": {
     "es": "Después de bien lavado iba a misa sin falta, a buscar el hombre nuevo que pide el Evangelio.",
     "en": "Once thoroughly washed, he went to mass without fail, seeking the new man that the Gospel calls for.",
@@ -4899,12 +6656,33 @@
     "line": 141,
     "token": "pegó"
   },
+  "pelar": {
+    "es": "La cocinera peló las patatas y las echó al puchero.",
+    "en": "The cook peeled the potatoes and threw them into the pot.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "peló"
+  },
   "pelear": {
     "es": "La cencerrada proseguía, implacable, frenética, azotando y arañando el aire como una multitud de gatos en celo el tejado donde pelean.",
     "en": "The mock serenade went on, relentless and frenzied, lashing and clawing the air like a multitude of cats in heat fighting on the roof.",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 7675,
     "token": "pelean"
+  },
+  "peligrar": {
+    "es": "La cosecha peligraba por la falta de lluvia en pleno verano.",
+    "en": "The harvest was in danger because of the lack of rain in midsummer.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "peligraba"
+  },
+  "penar": {
+    "es": "Ya te lo dije yo hace tiempo... Pero ¡déjalo que pene!",
+    "en": "I told you so a while ago... But let him suffer!",
+    "source": "sombrero-tres-picos-alarcon-1874.txt",
+    "line": 671,
+    "token": "pene"
   },
   "penetrar": {
     "es": "¿Cómo penetrar en lo íntimo del corazón, en el secreto escondido de la mente juvenil de una doncella, criada tal vez con recogimiento exquisito e ignorante de todo, y saber qué idea podía ella formarse del matrimonio?",
@@ -4941,12 +6719,26 @@
     "line": 1079,
     "token": "perdonaba"
   },
+  "perecer": {
+    "es": "Digo, pues, salvo vuestro buen parecer, señor maese Nicolás, que éste y Amadís de Gaula queden libres del fuego, y todos los demás, sin hacer más cala y cata, perezcan.",
+    "en": "I say, then, saving your better judgment, master Nicolás, that this one and Amadís de Gaula be spared the fire, and all the rest, without further sifting and scrutiny, perish.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 2149,
+    "token": "perezcan"
+  },
   "perjudicar": {
     "es": "Se contentaría con un castigo de carácter reservado, que en nada perjudicaría la fama del clérigo, gran elector, y muy buen partidario de la causa óptima.",
     "en": "He would be satisfied with a private punishment, one that would not damage the priest's reputation in the least, the priest being a powerful elector and a staunch supporter of the good cause.",
     "source": "la-regenta-clarin-1885.txt",
     "line": 12262,
     "token": "perjudicaría"
+  },
+  "perjurar": {
+    "es": "Primitivo me juró y perjuró que la muchacha se iba a casar con el gaitero de Naya.",
+    "en": "Primitivo swore up and down to me that the girl was going to marry the bagpiper from Naya.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 3866,
+    "token": "perjuró"
   },
   "permanecer": {
     "es": "Como el jinete permanecía indeciso, el cazador añadió:",
@@ -4968,6 +6760,13 @@
     "source": "pepita-jimenez-valera-1874.txt",
     "line": 3610,
     "token": "persiguieren"
+  },
+  "perseverar": {
+    "es": "Media semana estuvo en esta lucha, ya queriendo ceder para oficiar de maestra, ya perseverando en sus primitivos temores e inclinándose a no intervenir para nada.",
+    "en": "Half a week she spent in this struggle, now wishing to give in and act as teacher, now persevering in her original fears and leaning toward not intervening at all.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 16114,
+    "token": "perseverando"
   },
   "personalizar": {
     "es": "Sus temores de marras empezaban a condensarse, y atando cabos y observando pormenores, trataba de personalizar las distracciones de su marido.",
@@ -5053,12 +6852,26 @@
     "line": 1834,
     "token": "plasmó"
   },
+  "plegar": {
+    "es": "Le arregló y plegó el vestido sobre el cuerpo, entornó las ventanas para dejar el cuarto a media luz y se salió de puntillas.",
+    "en": "She arranged and folded the dress over her body, half-closed the windows to leave the room in dim light, and tiptoed out.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 3311,
+    "token": "plegó"
+  },
   "poblar": {
     "es": "Mientras se amaestraban infiriendo cortes o poblando las cabezas de trasquilones y peladuras, el amo daba conversación a los parroquianos sentados en el banco del paseo, o leía en alta voz un periódico a este auditorio.",
     "en": "While they trained themselves by inflicting cuts or covering heads with botched shearing and bald patches, the master chatted with the customers seated on the bench of the promenade, or read a newspaper aloud to this audience.",
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 4237,
     "token": "poblando"
+  },
+  "podar": {
+    "es": "En febrero el hortelano podó los frutales para que dieran mejor fruto.",
+    "en": "In February the gardener pruned the fruit trees so they would bear better fruit.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "podó"
   },
   "poder": {
     "es": "Al acabarse el repecho, volvió el jaco a la sosegada andadura habitual, y pudo el jinete enderezarse sobre el aparejo redondo, cuya anchura inconmensurable le había descoyuntado los huesos todos de la región sacro-ilíaca.",
@@ -5073,6 +6886,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 227,
     "token": "ponía"
+  },
+  "porfiar": {
+    "es": "Fueron tomando asiento los padres curas, porfiando bastante para ceder los asientos de preferencia.",
+    "en": "The priest fathers took their seats, insisting quite a bit on yielding the places of honor to one another.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 1484,
+    "token": "porfiando"
   },
   "portar": {
     "es": "Lo que estás maquinando contra mi niña es una maldad. Te estás portando como un tuno.",
@@ -5109,6 +6929,13 @@
     "line": 79,
     "token": "posicionando"
   },
+  "posponer": {
+    "es": "Mira si te convendrá querer levantar a igualar a ti mismo a la que, pospuesto todo inconveniente, confirmada en su verdad y firmeza, delante de tus ojos tiene los suyos.",
+    "en": "See whether it would suit you to want to raise and make your equal the woman who, every obstacle set aside, firm and confirmed in her truth, before your eyes keeps her own eyes fixed.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 12758,
+    "token": "pospuesto"
+  },
   "postular": {
     "es": "El candidato se postuló para el cargo con un programa de reformas ambicioso.",
     "en": "The candidate ran for the office on an ambitious platform of reforms.",
@@ -5130,12 +6957,33 @@
     "line": 6469,
     "token": "practicar"
   },
+  "preciar": {
+    "es": "Se preciaba de conocer a fondo la historia de su comarca.",
+    "en": "He prided himself on knowing the history of his region thoroughly.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "preciaba"
+  },
   "precisar": {
     "es": "Se sentía mal, sin poder precisar lo que era.",
     "en": "He felt unwell, without being able to pinpoint what it was.",
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 11048,
     "token": "precisar"
+  },
+  "predecir": {
+    "es": "Lejos de caer en la adoración y en la locura que Vd. predice, tal vez sea un desengaño lo que reciba.",
+    "en": "Far from falling into the adoration and the madness that you predict, perhaps what I will receive is a disappointment.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 4363,
+    "token": "predice"
+  },
+  "predicar": {
+    "es": "Se sentía con vivas ansias de devolverlas por medio de la propaganda; o predicaba o reventaba.",
+    "en": "He felt an intense yearning to give them back through propaganda; either he preached or he burst.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 22300,
+    "token": "predicaba"
   },
   "preferir": {
     "es": "La gran mayoría de los ciudadanos pacíficos no iba a ellos, prefiriendo charlar en las tiendas.",
@@ -5157,6 +7005,20 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 1832,
     "token": "premió"
+  },
+  "prendar": {
+    "es": "La música lo prendó desde el primer compás de la pieza.",
+    "en": "The music captivated him from the very first bar of the piece.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "prendó"
+  },
+  "prender": {
+    "es": "Quería prender fuego á la paja de la techumbre.",
+    "en": "He wanted to set fire to the straw of the roof.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 1466,
+    "token": "prender"
   },
   "preocupar": {
     "es": "Las dos bestias siguieron su marcha tranquilamente, como quien no se preocupa de las cosas ajenas y tiene el establo seguro.",
@@ -5291,6 +7153,20 @@
     "line": 363,
     "token": "produjeron"
   },
+  "profesar": {
+    "es": "Doña Águeda era muy buena cocinera; conocía el empirismo del arte, y además lo profesaba por principios.",
+    "en": "Doña Águeda was a very good cook; she knew the empiricism of the art, and moreover she practiced it on principle.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 4383,
+    "token": "profesaba"
+  },
+  "profetizar": {
+    "es": "A bien que el cinco del mismo palo profetizaba después unión feliz.",
+    "en": "Luckily the five of the same suit then foretold a happy union.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 5620,
+    "token": "profetizaba"
+  },
   "profundizar": {
     "es": "Profundizando con valor en el fondo de nuestra conciencia para descubrir todas nuestras faltas y pecados, y adquiriendo la santa humildad y el menosprecio de uno mismo, el corazón se sentirá lleno de afectos humanos.",
     "en": "By delving bravely into the depths of our conscience to discover all our faults and sins, and acquiring holy humility and self-disregard, the heart will feel full of human affection.",
@@ -5424,6 +7300,20 @@
     "line": 3937,
     "token": "publique"
   },
+  "pudrir": {
+    "es": "Con las antiguallas que allí se pudrían, pudiera escribirse la historia de las costumbres y ocupaciones de la nobleza gallega.",
+    "en": "With the old relics that were rotting there, one could write the history of the customs and pursuits of the Galician nobility.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 3047,
+    "token": "pudrían"
+  },
+  "pujar": {
+    "es": "Los tres valentones pujaban en brutalidad, ansioso cada uno de alcanzar renombre sobre los otros.",
+    "en": "The three bullies vied in brutality, each one eager to win renown over the others.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 5492,
+    "token": "pujaban"
+  },
   "pulsar": {
     "es": "Juncal la pulsaba atentamente, le ordenaba alimentos muy nutritivos, la miraba con alarmante insistencia.",
     "en": "Juncal took her pulse attentively, prescribed her very nourishing foods, and looked at her with alarming insistence.",
@@ -5437,6 +7327,20 @@
     "source": "Claude (Opus 4.8)",
     "line": null,
     "token": "puntualizó"
+  },
+  "purgar": {
+    "es": "Tienen necesidad de un poco de ruibarbo para purgar la demasiada cólera suya.",
+    "en": "They are in need of a little rhubarb to purge their excessive choler.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 2155,
+    "token": "purgar"
+  },
+  "quebrantar": {
+    "es": "Tuvieron que pasar por el inconveniente de las morosidades e insolvencias que tanto quebrantan al comercio.",
+    "en": "They had to endure the drawback of the late payments and insolvencies that so badly damage commerce.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 458,
+    "token": "quebrantan"
   },
   "quebrar": {
     "es": "Pretendía escurrirse, huir de la terrible hoz, en cuya hoja se quebraba un rayo de sol y se reproducía el azul del cielo.",
@@ -5466,6 +7370,13 @@
     "line": 6736,
     "token": "quemase"
   },
+  "querellar": {
+    "es": "El vecino se querelló contra la empresa por los daños causados a su finca.",
+    "en": "The neighbor filed suit against the company for the damage done to his land.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "querelló"
+  },
   "querer": {
     "es": "Yo imaginé en un principio que tal vez el señor deán quiso ejercitar su ingenio componiéndola en algunos ratos de ocio.",
     "en": "At first I imagined that the dean perhaps wanted to exercise his wit by composing it in some idle hours.",
@@ -5480,6 +7391,13 @@
     "line": 1123,
     "token": "quitó"
   },
+  "rabiar": {
+    "es": "El hidalgo se trasladó a vivir, mejor dicho a rabiar, en la villita.",
+    "en": "The nobleman moved to live, or rather to rage, in the little town.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 1039,
+    "token": "rabiar"
+  },
   "radicar": {
     "es": "En el piso principal radicaba una casa de préstamos con farolón a la calle.",
     "en": "On the main floor was a pawnshop with a lantern facing the street.",
@@ -5487,12 +7405,40 @@
     "line": 12539,
     "token": "radicaba"
   },
+  "raer": {
+    "es": "Mientras se raía con la navaja de barba los contados pelos rubios que brotaban en sus carrillos, Julián maduraba un proyecto.",
+    "en": "While he scraped off with his razor the few blond hairs sprouting on his cheeks, Julián was mulling over a plan.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 2125,
+    "token": "raía"
+  },
+  "rascar": {
+    "es": "Registró precipitadamente sus bolsillos, rascó un fósforo, miró alrededor, encendió una vela puesta en un candelabro.",
+    "en": "He hurriedly searched his pockets, struck a match, looked around, and lit a candle set in a candelabra.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 3169,
+    "token": "rascó"
+  },
   "ratificar": {
     "es": "Sí señor, me ratifico: es la casta Susana, mujer que antes se dejaría descuartizar que mirarle a la cara a un hombre.",
     "en": "Yes sir, I stand by it: she is the chaste Susana, a woman who would sooner be torn to pieces than look a man in the face.",
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 31225,
     "token": "ratifico"
+  },
+  "rayar": {
+    "es": "El niño rayó la mesa nueva con la punta del compás.",
+    "en": "The child scratched the new table with the point of the compass.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "rayó"
+  },
+  "razonar": {
+    "es": "El profesor razonó su respuesta con ejemplos claros y sencillos.",
+    "en": "The teacher reasoned out his answer with clear and simple examples.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "razonó"
   },
   "reaccionar": {
     "es": "Su ejecución bajo la lógica de la experimentación permite ver y evaluar el impacto de estas actuaciones en tiempos muy breves, lo que permite reaccionar en consecuencia, perfeccionando la intervención.",
@@ -5508,6 +7454,20 @@
     "line": 188,
     "token": "realizar"
   },
+  "rebuznar": {
+    "es": "Se prohíbe rebuznar, digo yo.",
+    "en": "Braying is forbidden, I say.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 7097,
+    "token": "rebuznar"
+  },
+  "recabar": {
+    "es": "Se recabaron aportaciones, observaciones y propuestas del conjunto de agentes interesados con carácter previo a la elaboración del documento definitivo.",
+    "en": "Contributions, observations, and proposals were gathered from the whole set of interested parties prior to drawing up the final document.",
+    "source": "es-miteco-pniec-2023-2030.txt",
+    "line": 373,
+    "token": "recabaron"
+  },
   "recaer": {
     "es": "Pero recae sobre mí exclusivamente la responsabilidad de cuanto ocurra.",
     "en": "But the responsibility for whatever happens falls exclusively on me.",
@@ -5522,12 +7482,26 @@
     "line": 1633,
     "token": "recalcaba"
   },
+  "recatar": {
+    "es": "Echole una buena reprimenda porque no se recataba del crudísimo viento seco del Norte que en aquellos días reinaba.",
+    "en": "She gave him a good scolding because he was not guarding himself against the bitter dry north wind that prevailed in those days.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 11062,
+    "token": "recataba"
+  },
   "recaudar": {
     "es": "Doña Petronila Rianzares había recaudado veinte duros en la mesa de petitorio de San Isidro.",
     "en": "Doña Petronila Rianzares had collected twenty duros at the collection table of San Isidro.",
     "source": "la-regenta-clarin-1885.txt",
     "line": 27513,
     "token": "recaudado"
+  },
+  "recelar": {
+    "es": "Mas don Fernando, como astuto y discreto, se receló y temió desto.",
+    "en": "But don Fernando, being shrewd and discreet, grew wary and afraid of this.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 7555,
+    "token": "receló"
   },
   "rechazar": {
     "es": "Feliz entre todos los mortales se creía el buen estudiante de Farmacia, viendo que su querida no rechazaba la idea de dar por concluida la cuarentena y apresurar el casamiento.",
@@ -5550,6 +7524,13 @@
     "line": 15683,
     "token": "reciclar"
   },
+  "recitar": {
+    "es": "El arqueólogo recitó, fingiendo el pícaro que improvisaba, los capítulos 1.º, 2.º, 3.º y 4.º de una de sus Vetustas.",
+    "en": "The archaeologist recited, the rascal pretending he was improvising, chapters 1, 2, 3, and 4 of one of his Vetustas.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 1592,
+    "token": "recitó"
+  },
   "reclamar": {
     "es": "Cierto que primero faltaba el sol que don Saturnino a misa de ocho; pero esta devoción, así como el comulgar dos veces al mes, en nada empecía a los títulos de hombre de mundo que él reclamaba.",
     "en": "It was true that the sun would fail before Don Saturnino would miss eight o'clock Mass; but this devotion, along with taking communion twice a month, in no way undermined the reputation as a man of the world that he claimed for himself.",
@@ -5571,6 +7552,13 @@
     "line": 704,
     "token": "recomendado"
   },
+  "reconciliar": {
+    "es": "El señor vicario me va reconciliando mucho con el clero español, a quien algunas veces he tildado yo de poco ilustrado.",
+    "en": "The vicar is reconciling me greatly with the Spanish clergy, whom I have sometimes branded as not very enlightened.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 1060,
+    "token": "reconciliando"
+  },
   "reconocer": {
     "es": "El de Naya aprobó con la cabeza como quien reconoce la fuerza de una observación.",
     "en": "The man from Naya nodded in approval, like someone who acknowledges the force of an observation.",
@@ -5584,6 +7572,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 37790,
     "token": "reconstruí"
+  },
+  "reconvenir": {
+    "es": "El maestro reconvino al alumno por llegar tarde un día más.",
+    "en": "The teacher reproached the pupil for arriving late yet again.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "reconvino"
   },
   "recopilar": {
     "es": "Se elaborará una herramienta para recopilar la información sobre la evolución del despliegue de los proyectos de generación de energías renovables y sistemas de almacenamiento.",
@@ -5683,12 +7678,40 @@
     "line": 4771,
     "token": "reforzó"
   },
+  "refrenar": {
+    "es": "El aprecio que le tenía, la gratitud, y aquella conmiseración inexplicable eran causa de que refrenase su repugnancia.",
+    "en": "The esteem she had for him, the gratitude, and that inexplicable compassion were the cause of her restraining her repugnance.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 13413,
+    "token": "refrenase"
+  },
+  "refrescar": {
+    "es": "Presintió la traída de aguas del Lozoya, en aquellos veranos ardorosos en que el Ayuntamiento refrescaba y alimentaba las fuentes del Berro y de la Teja con cubas de agua.",
+    "en": "She foresaw the bringing of the Lozoya waters, in those scorching summers when the City Council cooled and fed the fountains of Berro and Teja with barrels of water.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 1236,
+    "token": "refrescaba"
+  },
   "regalar": {
     "es": "Al instruir estas diligencias se hizo bastante burla de don Pedro y del señor de la Lage, a quien se acusaba de haber bordado la corona de marquesa en un juego de sábanas regalado a su hija.",
     "en": "In carrying out these inquiries, plenty of fun was made of Don Pedro and of the lord of Lage, who was accused of having embroidered a marchioness's coronet onto a set of sheets given as a gift to his daughter.",
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 3756,
     "token": "regalado"
+  },
+  "regar": {
+    "es": "la señá Frasquita regaba y barría cuidadosamente la plazoletilla empedrada que servía de atrio o compás al molino.",
+    "en": "Mistress Frasquita was watering and carefully sweeping the little cobbled square that served as atrium or courtyard to the mill.",
+    "source": "sombrero-tres-picos-alarcon-1874.txt",
+    "line": 659,
+    "token": "regaba"
+  },
+  "regañar": {
+    "es": "los perdigueros, convertidos en fieras por el primer impulso del hambre, le miraban de reojo, regañando los dientes y exhalando ronquidos amenazadores.",
+    "en": "the pointers, turned into wild beasts by the first pang of hunger, eyed him sidelong, baring their teeth and letting out threatening growls.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 348,
+    "token": "regañando"
   },
   "regir": {
     "es": "Pagadle luego sin más réplica; si no, por el Dios que nos rige, que os concluya y aniquile en este punto.",
@@ -5717,6 +7740,13 @@
     "source": "Claude (Opus 4.8)",
     "line": null,
     "token": "regula"
+  },
+  "reinar": {
+    "es": "El monarca reinó cuarenta años con mano firme y prudente.",
+    "en": "The monarch reigned for forty years with a firm and prudent hand.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "reinó"
   },
   "reiterar": {
     "es": "El hombre de bronce no se inmutó al reiterar fríamente.",
@@ -5766,6 +7796,27 @@
     "source": "es-mitma-movilidad-2030.txt",
     "line": 7831,
     "token": "remarcar"
+  },
+  "rematar": {
+    "es": "el alguacil se colocó, rígido y majestuoso, junto al mástil rematado por un gancho de bronce, símbolo de la acuática justicia.",
+    "en": "the constable placed himself, rigid and majestic, beside the pole topped by a bronze hook, symbol of the aquatic justice.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 2298,
+    "token": "rematado"
+  },
+  "remendar": {
+    "es": "ando siempre bien vestido, y jamás remendado; roto, bien podría ser; y el roto, más de las armas que del tiempo.",
+    "en": "I always go well dressed, and never mended; torn, that could well be; and the tear, more from arms than from time.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 18685,
+    "token": "remendado"
+  },
+  "remeter": {
+    "es": "La madre remetió las sábanas bajo el colchón para abrigar al niño.",
+    "en": "The mother tucked the sheets under the mattress to keep the child warm.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "remetió"
   },
   "remitir": {
     "es": "Para el vino, Plácido se entendía con los vinateros de la Cava Baja, que van a hacer sus compras a Arganda, Tarancón o a la Sagra, y se ponía de acuerdo con un medidor para que le tomase una partida de tantos o cuantos cascos, y la remitiese por conducto de un carromatero ya conocido.",
@@ -5830,6 +7881,13 @@
     "line": 2461,
     "token": "repetía"
   },
+  "repicar": {
+    "es": "Tiene asimesmo maheridas danzas, así de espadas como de cascabel menudo, que hay en su pueblo quien los repique y sacuda por estremo.",
+    "en": "He has likewise arranged dances, both of swords and of little bells, for there is in his town someone who can ring and shake them to perfection.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 22918,
+    "token": "repique"
+  },
   "reportar": {
     "es": "No tenía valor, ni aun deseo de mandar a don Álvaro que se callase, que se reportase, que mirase quién era ella.",
     "en": "She had neither the courage nor even the desire to order don Álvaro to be quiet, to restrain himself, to consider who she was.",
@@ -5850,6 +7908,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 4722,
     "token": "reproducir"
+  },
+  "reptar": {
+    "es": "El soldado reptó entre la maleza para no ser descubierto por el centinela.",
+    "en": "The soldier crawled through the undergrowth so as not to be spotted by the sentry.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "reptó"
   },
   "requerir": {
     "es": "Rompió la moza a llorar amarguísimamente, y el marqués, requiriendo su escopeta, rechinaba los dientes de cólera, dispuesto ya a hacer alguna barrabasada notable, cuando un nuevo personaje entró en escena.",
@@ -5977,6 +8042,20 @@
     "line": 1013,
     "token": "retiene"
   },
+  "retentar": {
+    "es": "La duda lo retentó justo cuando creía haber tomado una decisión firme.",
+    "en": "Doubt tempted him again just when he thought he had made a firm decision.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "retentó"
+  },
+  "reteñir": {
+    "es": "Llevó el abrigo a la tintorería para reteñir la tela descolorida.",
+    "en": "She took the coat to the dry cleaner's to redye the faded fabric.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "reteñir"
+  },
   "retirar": {
     "es": "—¡Dirás que le abra al borrachón del Alguacil!—repuso el Molinero, retirando la tranca.",
     "en": "“You mean I should open up for that drunkard the constable!”—replied the Miller, drawing back the bolt.",
@@ -5990,6 +8069,20 @@
     "source": "es-ine-informe-anual-2024.txt",
     "line": 550,
     "token": "retomó"
+  },
+  "retozar": {
+    "es": "En los labios le retozaba esta pregunta.",
+    "en": "This question was playing about on his lips.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 10908,
+    "token": "retozaba"
+  },
+  "retraer": {
+    "es": "Que únicamente le retrae el juramento.",
+    "en": "That the only thing holding him back is the oath.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 21209,
+    "token": "retrae"
   },
   "retrasar": {
     "es": "El esposo se hizo repetir la pregunta, sin otro objeto que retrasar la respuesta, que debía ser muy pensada.",
@@ -6026,6 +8119,20 @@
     "line": 1387,
     "token": "revisar"
   },
+  "revocar": {
+    "es": "en lugar de testamento y codicilo que no se pueda revocar, creyó todo lo que dél había leído.",
+    "en": "instead of testament and codicil that cannot be revoked, he believed everything he had read about him.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 19867,
+    "token": "revocar"
+  },
+  "revolver": {
+    "es": "luego se dio prisa a revolver y destapar tarteras, y tomó del vasar una sopera magna.",
+    "en": "then she hurried to stir and uncover the pots, and took a great soup tureen from the shelf.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 321,
+    "token": "revolver"
+  },
   "rezar": {
     "es": "Cuando rezo, padezco distracciones.",
     "en": "When I pray, I suffer from distractions.",
@@ -6039,6 +8146,20 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 273,
     "token": "reír"
+  },
+  "reñir": {
+    "es": "no tuve ánimo, o no se me acordó, de reñir a mi doncella por la traición cometida.",
+    "en": "I had not the heart, nor did it occur to me, to scold my maid for the treachery she had committed.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 9439,
+    "token": "reñir"
+  },
+  "rimar": {
+    "es": "El poeta rimó los versos con una musicalidad sorprendente.",
+    "en": "The poet rhymed the lines with a surprising musicality.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "rimó"
   },
   "robar": {
     "es": "¿Se la habrían robado?",
@@ -6068,12 +8189,26 @@
     "line": null,
     "token": "rodriga"
   },
+  "rogar": {
+    "es": "No se hacía de rogar el Pituso.",
+    "en": "The Pituso did not need to be begged.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 7859,
+    "token": "rogar"
+  },
   "romper": {
     "es": "La voz argentina de Pepita rompió el silencio, y, sacándome de mis meditaciones, dijo:",
     "en": "Pepita's silvery voice broke the silence, and, rousing me from my thoughts, she said:",
     "source": "pepita-jimenez-valera-1874.txt",
     "line": 1607,
     "token": "rompió"
+  },
+  "rumiar": {
+    "es": "la cara se oprimía contra la almohada, y en tal postura rumiaba expresiones oscuras que se apagaban resolviéndose en ronquidos.",
+    "en": "his face pressed against the pillow, and in that posture he muttered obscure phrases that faded away, dissolving into snores.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 7539,
+    "token": "rumiaba"
   },
   "saber": {
     "es": "Los viandantes, al pasarlo, sacudían la cabeza murmurando que tenía bastante más declive del no sé cuántos por ciento marcado por la ley.",
@@ -6095,6 +8230,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 1600,
     "token": "sacrifica"
+  },
+  "sacudir": {
+    "es": "por el cual tiende nuestra raza a sacudir su pesimismo.",
+    "en": "through which our race tends to shake off its pessimism.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 381,
+    "token": "sacudir"
   },
   "salar": {
     "es": "Esta Dulcinea del Toboso, tantas veces en esta historia referida, dicen que tuvo la mejor mano para salar puercos que otra mujer de toda la Mancha.",
@@ -6124,6 +8266,13 @@
     "line": 31,
     "token": "saltar"
   },
+  "saltear": {
+    "es": "un silbido ahogado, preludio de ronquido, anunciaba que también le salteaba la gana de dormir.",
+    "en": "a muffled whistle, prelude to a snore, announced that the urge to sleep was overtaking him too.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 4987,
+    "token": "salteaba"
+  },
   "saludar": {
     "es": "Las mozuelas le sonríen y la saludan con amor.",
     "en": "The young girls smile at her and greet her with affection.",
@@ -6138,12 +8287,33 @@
     "line": 993,
     "token": "salvado"
   },
+  "sanar": {
+    "es": "La herida sanó por completo al cabo de unas semanas.",
+    "en": "The wound healed completely after a few weeks.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "sanó"
+  },
   "sancionar": {
     "es": "En tales días el Provisor era un huracán eclesiástico, un castigo bíblico, un azote de Dios sancionado por su ilustrísima.",
     "en": "On such days the Provisor was an ecclesiastical hurricane, a biblical scourge, a punishment from God sanctioned by his lordship the Bishop.",
     "source": "la-regenta-clarin-1885.txt",
     "line": 787,
     "token": "sancionado"
+  },
+  "sangrar": {
+    "es": "La nariz le sangró a causa del golpe recibido en el partido.",
+    "en": "His nose bled because of the blow he took during the match.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "sangró"
+  },
+  "santiguar": {
+    "es": "apenas puse mano a mi tizona, cuando me santiguaron los hombros con sus pinos.",
+    "en": "scarcely had I laid a hand on my sword when they blessed my shoulders with their staves.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 4444,
+    "token": "santiguaron"
   },
   "satisfacer": {
     "es": "¡Yo estoy, en cambio, deseando ponérmelo, para ahorcarte a ti y a medio mundo, si no me satisfacen las exculpaciones de mi mujer!",
@@ -6165,6 +8335,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 2286,
     "token": "secuestrado"
+  },
+  "segar": {
+    "es": "sobrevino la guerra de 1870, que tantas esperanzas había de segar en flor.",
+    "en": "the war of 1870 broke out, which was to cut down so many hopes in the bud.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 31375,
+    "token": "segar"
   },
   "seguir": {
     "es": "Á la traducción francesa siguieron otras y otras, en todos los idiomas de Europa.",
@@ -6193,6 +8370,13 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 3448,
     "token": "sembrad"
+  },
+  "semejar": {
+    "es": "cuando los dependientes desplegaban sobre el mostrador centenares de pañuelos, la lóbrega tienda semejaba un jardín.",
+    "en": "when the clerks spread hundreds of handkerchiefs over the counter, the gloomy shop resembled a garden.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 574,
+    "token": "semejaba"
   },
   "sentar": {
     "es": "El tío Lucas, que a la muerte de Su Ilustrísima no estaba ordenado más que de menores, ahorcó los hábitos en aquel punto y hora, y sentó plaza de soldado, más ganoso de ver mundo y correr aventuras que de decir misa o de moler trigo.",
@@ -6257,6 +8441,13 @@
     "line": 1782,
     "token": "significáis"
   },
+  "silbar": {
+    "es": "Esto fue dicho en el tren, que corría y silbaba por las angosturas de Pancorvo.",
+    "en": "This was said on the train, which raced and whistled through the narrows of Pancorvo.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 2512,
+    "token": "silbaba"
+  },
   "simplificar": {
     "es": "En concreto, mediante el Real Decreto-ley 23/2020, de 23 de junio, se simplificó y agilizó la tramitación de proyectos renovables y la infraestructura eléctrica asociada, eliminando barreras para su puesta en marcha.",
     "en": "Specifically, through Royal Decree-Law 23/2020 of 23 June, the processing of renewable energy projects and the associated electrical infrastructure was simplified and streamlined, removing barriers to getting them up and running.",
@@ -6271,6 +8462,13 @@
     "line": 16296,
     "token": "situado"
   },
+  "sobar": {
+    "es": "Seguramente, a fuerza de sobar los libros, le habría salido el talento.",
+    "en": "Surely, by dint of poring over the books, his talent would have come out.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 11385,
+    "token": "sobar"
+  },
   "sobrar": {
     "es": "Hallábanse amuebladas con lo que iba sobrando de los aposentos que se ponían de nuevo, y su aspecto era por demás heterogéneo.",
     "en": "They were furnished with what was left over from the rooms being redone, and their appearance was exceedingly heterogeneous.",
@@ -6284,6 +8482,13 @@
     "source": "la-regenta-clarin-1885.txt",
     "line": 4102,
     "token": "sobrevivirá"
+  },
+  "socavar": {
+    "es": "Tiempo hacía que las deudas socavaban la casa, y se sostenía apuntalada por las consideraciones personales de los acreedores.",
+    "en": "For a long time the debts had been undermining the house, and it kept standing propped up by the creditors' personal regard.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 11123,
+    "token": "socavaban"
   },
   "soler": {
     "es": "Nadie por aquí le critica de usurero, antes bien le califican de caritativo, porque siendo moderado en todo, hasta en la usura lo era, y no solía llevar más de un 10 por 100 al año, mientras que en toda esta comarca llevan un 20 y hasta un 30 por 100, y aún parece poco.",
@@ -6334,6 +8539,13 @@
     "line": 2603,
     "token": "sonreía"
   },
+  "sopesar": {
+    "es": "Antes de aceptar la oferta, sopesó con cuidado las ventajas y los riesgos.",
+    "en": "Before accepting the offer, he carefully weighed up the advantages and the risks.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "sopesó"
+  },
   "soportar": {
     "es": "Su compasiva simpatía por las burlas de las hilanderas, que él soportaba cabizbajo y tímido, como si estas arpías en banda le inspirasen miedo.",
     "en": "Her compassionate sympathy for the spinners' taunts, which he endured with his head down and timidly, as if that gang of harpies frightened him.",
@@ -6348,6 +8560,20 @@
     "line": 31,
     "token": "sorprender"
   },
+  "sortear": {
+    "es": "avanzaba con suma precaución, tanteando con el casco, para sortear cautelosamente las zanjas producidas por la llanta de los carros.",
+    "en": "it advanced with the utmost caution, feeling with its hoof, to skirt carefully the ruts made by the wheels of the carts.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 81,
+    "token": "sortear"
+  },
+  "sosegar": {
+    "es": "Las palabras del médico sosegaron a la familia que aguardaba noticias.",
+    "en": "The doctor's words calmed the family who were waiting for news.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "sosegaron"
+  },
   "sospechar": {
     "es": "--A fe, no sospechaba nada, nada, nada.",
     "en": "“Honestly, I didn't suspect a thing, nothing at all.”",
@@ -6361,6 +8587,13 @@
     "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
     "line": 223,
     "token": "sostenía"
+  },
+  "soterrar": {
+    "es": "El municipio decidió soterrar el cableado para despejar las calles.",
+    "en": "The town council decided to bury the cabling underground to clear the streets.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "soterrar"
   },
   "soñar": {
     "es": "Todos ellos, a excepción de Miquis que se murió en el 64 soñando con la gloria de Schiller, metieron infernal bulla en el célebre alboroto de la noche de San Daniel.",
@@ -6389,6 +8622,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 1466,
     "token": "sucedieron"
+  },
+  "sudar": {
+    "es": "¡Conozco que voy a sudar!",
+    "en": "I can tell I am going to sweat!",
+    "source": "sombrero-tres-picos-alarcon-1874.txt",
+    "line": 2597,
+    "token": "sudar"
   },
   "sufrir": {
     "es": "Estuve encerrado más de doce meses, sufriendo los rigores de una severidad intencionada y cruel.",
@@ -6432,6 +8672,13 @@
     "line": 7572,
     "token": "suministrado"
   },
+  "sumir": {
+    "es": "La noticia lo sumió en una tristeza de la que tardó en salir.",
+    "en": "The news plunged him into a sadness he was slow to emerge from.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "sumió"
+  },
   "superar": {
     "es": "Sus labios rojos sobre aquel chapapote superaban al coral más puro.",
     "en": "His red lips against that black grime outdid the purest coral.",
@@ -6445,6 +8692,13 @@
     "source": "es-miteco-pniec-2023-2030.txt",
     "line": 14644,
     "token": "supervisará"
+  },
+  "suplir": {
+    "es": "su espíritu se había empapado allí de la pasión de escuela, que suple muchas veces al entusiasmo de la verdadera fe.",
+    "en": "his spirit had steeped there in the passion of the school, which often stands in for the enthusiasm of true faith.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 11907,
+    "token": "suple"
   },
   "suponer": {
     "es": "En la huerta valenciana es impudor que las solteras no oculten los seductores adornos de la Naturaleza para que nadie pueda pecaminosamente suponer en la virgen la futura maternidad.",
@@ -6502,6 +8756,27 @@
     "line": 23491,
     "token": "sustituye"
   },
+  "tachar": {
+    "es": "Tachó algunas palabras; meditó y volvió a escribirlas encima de lo tachado.",
+    "en": "She crossed out some words; she pondered and then wrote them again over what she had crossed out.",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 28346,
+    "token": "Tachó"
+  },
+  "tajar": {
+    "es": "De un golpe seco tajó la soga que sujetaba la barca.",
+    "en": "With one sharp blow he cut through the rope that held the boat.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "tajó"
+  },
+  "tantear": {
+    "es": "Avanzaba con suma precaución, cabizbajo, tanteando con el casco, para sortear cautelosamente las zanjas producidas por la llanta de los carros.",
+    "en": "It advanced with the utmost caution, head lowered, feeling its way with its hoof to carefully skirt the ruts made by the cart wheels.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 80,
+    "token": "tanteando"
+  },
   "tapar": {
     "es": "Vivían en la vieja barraca lo mismo que los náufragos que se aguantan sobre un buque destrozado: tapando un agujero aquí, apuntalando allá, haciendo verdaderos prodigios para que se sostuviera la techumbre de paja.",
     "en": "They lived in the old hut just like shipwreck survivors clinging to a wrecked vessel: plugging one hole here, propping up another there, working real miracles to keep the straw roof standing.",
@@ -6515,6 +8790,20 @@
     "source": "quijote-cervantes-1605.txt",
     "line": 1259,
     "token": "tardaban"
+  },
+  "tañer": {
+    "es": "No sería mucho que se le antojase de hacerse pastor y andarse por los bosques y prados cantando y tañendo.",
+    "en": "It would be no wonder if he took a fancy to becoming a shepherd and wandering through the woods and meadows, singing and playing music.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 2202,
+    "token": "tañendo"
+  },
+  "tejer": {
+    "es": "La señá Frasquita sabía, quería y podía guisar, coser, bordar, amasar, tejer, hacer media, cantar y bailar.",
+    "en": "Señá Frasquita knew how, wanted to, and was able to cook, sew, embroider, knead dough, weave, knit, sing, and dance.",
+    "source": "sombrero-tres-picos-alarcon-1874.txt",
+    "line": 388,
+    "token": "tejer"
   },
   "temer": {
     "es": "Lleno de recelo, mira hacia todas partes, teme que le roben en las tiendas, no se fía de nadie, no acierta a conciliar el sueño en la posada.",
@@ -6544,12 +8833,26 @@
     "line": 59,
     "token": "termina"
   },
+  "testimoniar": {
+    "es": "Varios vecinos testimoniaron ante el juez sobre lo que habían visto.",
+    "en": "Several neighbors testified before the judge about what they had seen.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "testimoniaron"
+  },
   "timar": {
     "es": "Se llamaba Joaquín Orgaz y se timaba con todas las niñas casaderas de la población, lo cual quiere decir que las miraba con insistencia y tenía el gusto de ser mirado por ellas.",
     "en": "His name was Joaquín Orgaz and he flirted with all the marriageable girls in town, which is to say that he stared at them insistently and enjoyed being stared at by them.",
     "source": "la-regenta-clarin-1885.txt",
     "line": 5865,
     "token": "timaba"
+  },
+  "tintar": {
+    "es": "El artesano tintó la lana de rojo con tintes naturales.",
+    "en": "The craftsman dyed the wool red with natural dyes.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "tintó"
   },
   "tirar": {
     "es": "Y tirando del ronzal de una vaca rubia, que llevaba pegado al rabo como amoroso satélite un ternerillo juguetón, volvía á la ciudad con la varita bajo el brazo.",
@@ -6565,6 +8868,13 @@
     "line": 962,
     "token": "titulaba"
   },
+  "tiznar": {
+    "es": "Templos del Espíritu Santo son nuestros cuerpos, mas si se arrima fuego a sus paredes, aunque no ardan, se tiznan.",
+    "en": "Our bodies are temples of the Holy Spirit, but if fire is brought near their walls, even if they do not burn, they get blackened.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 2205,
+    "token": "tiznan"
+  },
   "tocar": {
     "es": "Bismarck, que en el campanario adulaba a Celedonio y en la calle le trataba a puntapiés, le arrancaba a viva fuerza las llaves para subir a tocar las oraciones.",
     "en": "Bismarck, who fawned over Celedonio in the bell tower but kicked him around in the street, would forcibly snatch the keys from him so he could go up and ring the prayer bells.",
@@ -6579,6 +8889,20 @@
     "line": 274,
     "token": "toma"
   },
+  "topar": {
+    "es": "Ver el portal fue para la prójima, como para el pájaro que ciego y disparado vuela, topar violentamente contra un muro.",
+    "en": "Seeing the doorway was for the woman, as for a bird that flies blind and hurtling, like smashing violently into a wall.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 23720,
+    "token": "topar"
+  },
+  "torcer": {
+    "es": "Luego le cumple torcer a mano izquierda, y luego le cumple bajar a mano derecha por un atajito, hasta el crucero.",
+    "en": "Then you must turn to the left, and then you must go down to the right along a little shortcut, as far as the crossroads.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 61,
+    "token": "torcer"
+  },
   "tornar": {
     "es": "Tornó don Eugenio a reír hasta el extremo de tener que limpiarse los lagrimales con el pañuelo de cuadros.",
     "en": "Don Eugenio burst out laughing again, so hard that he had to wipe his eyes with his checkered handkerchief.",
@@ -6586,12 +8910,26 @@
     "line": 1747,
     "token": "tornó"
   },
+  "tornear": {
+    "es": "Para que reluciese, bajo la nebulosa velatura, lo blanco y sonrosado del bien torneado cuerpo.",
+    "en": "So that the whiteness and rosiness of the well-shaped body might shine beneath the misty veil.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 4430,
+    "token": "torneado"
+  },
   "trabajar": {
     "es": "El tío Lucas sabía, quería y podía dirigir la molienda, cultivar el campo, cazar, pescar, trabajar de carpintero, de herrero y de albañil, ayudar a su mujer en todos los quehaceres de la casa, leer, escribir y contar.",
     "en": "Uncle Lucas knew how, was willing, and was able to run the mill, work the fields, hunt, fish, work as a carpenter, a blacksmith, and a mason, help his wife with all the household chores, read, write, and do arithmetic.",
     "source": "sombrero-tres-picos-alarcon-1874.txt",
     "line": 394,
     "token": "trabajar"
+  },
+  "trabar": {
+    "es": "Antes, trabando de las correas, las arrojó gran trecho de sí.",
+    "en": "Instead, seizing hold of the straps, he flung them a good distance away from himself.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 1495,
+    "token": "trabando"
   },
   "traducir": {
     "es": "Le truje a mi casa, donde en poco más de mes y medio la tradujo toda, del mesmo modo que aquí se refiere.",
@@ -6606,6 +8944,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 78,
     "token": "traía"
+  },
+  "tragar": {
+    "es": "Recordaba, como si hubiera sido el día anterior, la espantosa tragedia que se tragó al tío Barret con toda su familia.",
+    "en": "She remembered, as if it had happened the day before, the dreadful tragedy that swallowed up old Barret along with his whole family.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 886,
+    "token": "tragó"
   },
   "tramitar": {
     "es": "Por otra parte, el Gobierno está tramitando el anteproyecto de Ley de Industria y Autonomía Estratégica, la cual promoverá la reindustrialización de España y una mayor autonomía estratégica.",
@@ -6670,6 +9015,34 @@
     "line": 10773,
     "token": "trasladado"
   },
+  "trasnochar": {
+    "es": "No gustaba la familia de trasnochar, y por tanto, caía dentro de la jurisdicción de la vigilia más rigurosa.",
+    "en": "The family did not care to stay up late, and so it fell within the jurisdiction of the strictest fast.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 9549,
+    "token": "trasnochar"
+  },
+  "traspasar": {
+    "es": "Retirose de los negocios con un capital sano y limpio de quince millones de reales, después de traspasar la casa a dos muchachos que servían en ella.",
+    "en": "He retired from business with a sound, clean capital of fifteen million reales, after transferring the firm to two young men who worked in it.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 379,
+    "token": "traspasar"
+  },
+  "trasponer": {
+    "es": "Cuando vio que había traspuesto del bosque y que ya no parecía, volvióse a su criado Andrés.",
+    "en": "When he saw that the man had disappeared behind the wood and was no longer in sight, he turned back to his servant Andrés.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 1709,
+    "token": "traspuesto"
+  },
+  "trastornar": {
+    "es": "Comenzaba a temer que su venida lo trastornara: idea dictada por su nativa timidez.",
+    "en": "He began to fear that his arrival might upset it all: a notion dictated by his native timidity.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 3514,
+    "token": "trastornara"
+  },
   "tratar": {
     "es": "¿Por qué había de someterse, cuando no se trataba de robar, sino de la salvación de su cosecha, de lo que era muy suyo?",
     "en": "Why should he submit, when it was not a matter of stealing, but of saving his own harvest, something that was very much his?",
@@ -6684,12 +9057,40 @@
     "line": 3928,
     "token": "trazó"
   },
+  "trillar": {
+    "es": "Podría ser que estuviese ella rastrillando lino, o trillando en las eras.",
+    "en": "It could be that she might be combing flax, or threshing on the threshing floor.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 8093,
+    "token": "trillando"
+  },
   "triunfar": {
     "es": "Y déste y de aquél, y de aquéllos y de éstos, libre y desenfadadamente triunfa la hermosa Marcela.",
     "en": "And over this one and that one, and over those and these, the beautiful Marcela triumphs freely and unabashedly.",
     "source": "quijote-cervantes-1605.txt",
     "line": 3571,
     "token": "triunfa"
+  },
+  "trocar": {
+    "es": "Una ráfaga de alegría juvenil trocaba la vetusta casa en alborotada pajarera.",
+    "en": "A gust of youthful joy turned the ancient house into a noisy aviary.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 3016,
+    "token": "trocaba"
+  },
+  "trotar": {
+    "es": "La lucida cabalgata caracolearía, correría, trotaría y haría mil evoluciones y escarceos.",
+    "en": "The splendid cavalcade would prance, gallop, trot, and perform a thousand maneuvers and caracoles.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 1510,
+    "token": "trotaría"
+  },
+  "trovar": {
+    "es": "El juglar trovaba coplas de amor en las plazas de los pueblos.",
+    "en": "The minstrel composed love verses in the village squares.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "trovaba"
   },
   "ubicar": {
     "es": "La tasa global de participación se ubicó en 64,6%, mientras que en julio de 2024 fue 64,2%.",
@@ -6719,6 +9120,20 @@
     "line": 17431,
     "token": "unir"
   },
+  "untar": {
+    "es": "Era tristeza consoladora, bálsamo que se extendía suavemente untado por una mano celestial.",
+    "en": "It was a consoling sadness, a balm that spread gently, smeared on by a heavenly hand.",
+    "source": "fortunata-y-jacinta-galdos-1887.txt",
+    "line": 34248,
+    "token": "untado"
+  },
+  "urdir": {
+    "es": "Todo es calumnia... ¡Y qué pronto la han urdido!",
+    "en": "It is all slander... And how quickly they have concocted it!",
+    "source": "la-regenta-clarin-1885.txt",
+    "line": 15234,
+    "token": "urdido"
+  },
   "usar": {
     "es": "No sólo realizó contratos con las fábricas de Béjar y Alcoy para dar mejor salida a los productos nacionales, sino que introdujo los famosos Sedanes para levitas, y las telas que tanto se usaron del 45 al 55.",
     "en": "He not only made contracts with the factories of Béjar and Alcoy to give domestic products a better market, but also introduced the famous Sedan cloths for frock coats, and the fabrics so widely used from '45 to '55.",
@@ -6732,6 +9147,13 @@
     "source": "la-barraca-blasco-ibanez-1898.txt",
     "line": 2053,
     "token": "utilizar"
+  },
+  "vagar": {
+    "es": "Vagué tres meses por Italia, volví á España, y un consejo de guerra me condenó á varios años de presidio.",
+    "en": "I wandered for three months through Italy, returned to Spain, and a court-martial sentenced me to several years in prison.",
+    "source": "la-barraca-blasco-ibanez-1898.txt",
+    "line": 473,
+    "token": "Vagué"
   },
   "valer": {
     "es": "Creo que fue Wieland quien dijo que los pensamientos de los hombres valen más que sus acciones, y las buenas novelas más que el género humano.",
@@ -6761,6 +9183,13 @@
     "line": 2087,
     "token": "variar"
   },
+  "vedar": {
+    "es": "Un orgullo de raza tan exaltado que no sólo le vedaba descender a ningún ardid de los usuales en padres casamenteros.",
+    "en": "A pride of lineage so heightened that it not only forbade him from stooping to any of the tricks common among matchmaking fathers.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 2487,
+    "token": "vedaba"
+  },
   "velar": {
     "es": "Según eso, las camas de vuestra merced serán duras peñas, y su dormir, siempre velar.",
     "en": "By that reckoning, your grace's beds must be hard rocks, and your sleep must always be a keeping of vigil.",
@@ -6781,6 +9210,13 @@
     "source": "fortunata-y-jacinta-galdos-1887.txt",
     "line": 422,
     "token": "vende"
+  },
+  "vendimiar": {
+    "es": "El tiempo desapacible y metido en agua casi no había consentido majar, ni segar el maíz, ni vendimiar como Dios manda.",
+    "en": "The foul, rain-soaked weather had hardly allowed them to thresh, to reap the corn, or to harvest the grapes as they ought.",
+    "source": "pazos-de-ulloa-pardo-bazan-1886.txt",
+    "line": 3485,
+    "token": "vendimiar"
   },
   "vengar": {
     "es": "Toda la huerta que tenía agravios que vengar estaba allí, gesticulante y ceñuda, hablando de sus derechos.",
@@ -6873,6 +9309,13 @@
     "line": 5020,
     "token": "visualizar"
   },
+  "vivificar": {
+    "es": "El aire fresco de la montaña vivificó a los excursionistas cansados.",
+    "en": "The fresh mountain air revived the weary hikers.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "vivificó"
+  },
   "vivir": {
     "es": "Por lo demás, nuestros mayores seguían viviendo a la antigua española, sumamente despacio, apegados a sus rancias costumbres.",
     "en": "Besides, our elders went on living in the old Spanish way, extremely slowly, clinging to their outdated customs.",
@@ -6914,5 +9357,26 @@
     "source": "es-trlpi-ley-propiedad-intelectual.txt",
     "line": 1129,
     "token": "vulneren"
+  },
+  "yacer": {
+    "es": "Vio con cierta pena que las flores yacían marchitas.",
+    "en": "She saw with a certain sorrow that the flowers lay withered.",
+    "source": "pepita-jimenez-valera-1874.txt",
+    "line": 4165,
+    "token": "yacían"
+  },
+  "yantar": {
+    "es": "Cualquiera yantaría yo, respondió don Quijote, porque, a lo que entiendo, me haría mucho al caso.",
+    "en": "I would eat anything at all, replied Don Quixote, because, as I understand it, it would do me a great deal of good.",
+    "source": "quijote-cervantes-1605.txt",
+    "line": 1352,
+    "token": "yantaría"
+  },
+  "yermar": {
+    "es": "La larga sequía yermó los campos que antes habían sido fértiles.",
+    "en": "The long drought laid waste to the fields that had once been fertile.",
+    "source": "Claude (Opus 4.8)",
+    "line": null,
+    "token": "yermó"
   }
 }

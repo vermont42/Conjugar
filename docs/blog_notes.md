@@ -3512,3 +3512,88 @@ shard schema, so `build_examples.py aggregate modern` just globs them alongside 
 (modern-placed / tail-rescued / authored). Re-running aggregation is idempotent and rebuilds all 988
 from the shards. Remaining: E (app-side `Example`/`MedievalExample` models + `VerbView` cards), F
 (future-plans verbs).
+
+---
+
+## Example uses, step E: app-side Swift integration (the cards ship)
+
+The corpus work from steps A–D produced two bundled JSONs — `ExampleUses.json` (988/988 ranked
+verbs, one modern-prose example each) and `MedievalExamples.json` (695 verbs → 2,139 Old-Spanish
+lines). Step E wired them into the app, mirroring the etymology feature exactly (the same
+`nonisolated`, load-once, `@unchecked Sendable` cache pattern used by `EtymologyCache`/`VerbMap`).
+
+**Models** (`Conjugar/Models/`, all `nonisolated`): `Example` (`es`/`en`/`source`/`token`/`line`,
+with a `provenance` computed property), `MedievalExample` (`work`/`ref`/`os`/`tr`, plus `workTitle`
+and a `reference` that prepends the poem title to the emitted citation), and `ExampleSource` — an
+enum that maps a raw source filename onto its attribution. Public-domain literature and the
+AI-authored tail get a fixed `— Author, Title (year)` credit (proper nouns, not localized);
+government/statistics sources get a localized `Fuente:/Source: <body>` line naming the issuing body.
+The source list and wording track the `^Example Uses^` credits already in the string catalog.
+
+**Loaders** `ExampleData.example(for:)` / `MedievalData.examples(for:)` are carbon copies of
+`Etymology`/`EtymologyCache`: `NSLock`-guarded, load-once, `nonisolated` so the MainActor `VerbView`
+reads them synchronously in `init`. Both JSONs sit in `Conjugar/Models/`, which is a
+`PBXFileSystemSynchronizedRootGroup` — so, like `Etymologies.json`, they were auto-bundled with no
+`project.pbxproj` edit.
+
+**`VerbView`** gained one `exampleCard` in the same slot as `etymologyCard`, shown when the verb has
+either a modern or a medieval example. It renders the Spanish sentence in the serif "language" face
+(speaks on tap), the muted English translation, and a right-aligned attribution. When a medieval
+example exists, a nested `medievalSection` follows a divider: a blue "Medieval Spanish" heading, the
+citation (`Cantar de mio Cid, Cantar I, v. 14`), the Old-Spanish verse (medieval spelling kept
+intact — *sodes*, *ferir*, *dixo*), and its translation. Verbs with more than one medieval
+attestation get a red cycle button (`arrow.forward.circle`) that advances through them; the view
+starts on a random index so each visit varies, like Conjuguer's chanson section. The three ways
+Conjugar differs from Conjuguer are all handled: bare-infinitive keys (no `extraLetters`), the
+`TenseBridge`/`Conjugator` engine, and three medieval works rather than one poem (hence the `work`
+field and `workTitle` mapping).
+
+**Localization**: six new `L.Verb` accessors (`exampleUse`/`exampleUses`, `medievalExample`,
+`nextMedievalExample`, `exampleSource(body:)`, `exampleSourceClaude`) with `en`+`es` entries added to
+`Localizable.xcstrings` via `python3`/`json.dump` (never the Edit tool — the ASCII-quote foot-gun).
+
+**Verification**: `ExampleDataTests` (Swift Testing, `nonisolated`, 8 tests) covers JSON decode +
+lookup, the reference/work-title formatting, and every `ExampleSource` branch (literature /
+government / Claude / unknown-fallback). Full suite: **427 tests, 0 failures.** Drove the built app
+in the simulator — opened *ser* (modern example from *La Regenta* + 5 medieval Cid attestations),
+confirmed the card renders correctly in dark mode and the cycle button advances the medieval example
+(*v. 14 → v. 69*, "…sodes ardida lança!"). Remaining: F (non-ranked verbs with a medieval example
+also get a modern example + etymology).
+
+---
+
+## Example uses, step F — non-ranked medieval verbs get a modern example + an etymology (2026-07-10)
+
+Step F closes out the example-uses feature. The `MedievalExamples.json` file covers **695** verbs,
+but only **343** of those are in the usage-ranked 988 — the other **352** are *medieval-only* verbs
+(mostly archaic: *yantar, aducir, heder, trovar, cabalgar, guerrear, esquilmar*…). They already
+showed a medieval attestation in `VerbView`, but had no modern example and no etymology. F fills
+both gaps for all 352, reusing the machinery from steps C–E and the etymology pipeline unchanged.
+
+**Modern examples.** These verbs are *unranked*, so they never entered `corpus_index.json` (built
+off `forms.json`, ranked-only). A step-F analogue, `build_special_index.py`, keys off
+`forms_all.json` (all 4,811 verbs) instead, restricted to the 352-verb work-list
+(`prompts/example-uses-stepF-verbs.json`) — one tokenizing pass over the same modern corpus, same
+round-robin author balance. It found candidates for **329/352** (23 zero-coverage). Eleven
+`general-purpose` subagents (30-verb shards, `mine_special_prompt.md`) each picked the earliest
+genuine *verbal* use — rejecting the many noun/adjective homographs these archaic verbs collide with
+(*culpa* not *culpar*, *razón* not *razonar*, *peligro* not *peligrar*) — re-opened the source for a
+clean sentence, and translated it. **282** landed; **47** came back null (homograph-only) and joined
+the 23 zero-coverage as the **70** Claude-authored residue (`write_authored_special.py`, flagged
+`source: "Claude (Opus 4.8)"`, `line: null`, exactly like step D's 39). `build_examples.py` grew a
+`special` shard-kind and now globs `mined_special_*` / `mined_special_authored*` into its modern
+aggregate, so one re-run rebuilds **988 → 1340** verbs (1231 corpus + 109 authored), dual-written.
+
+**Etymologies.** The 351 not-yet-covered verbs (yacer was already a select verb) ran straight
+through `prompts/etymology-pipeline.md`: 44 groups of 8, one subagent each (four launch waves), each
+writing a validated `etym_NNN.json`. Three agents died on a transient *connection-closed* API error
+mid-write and were simply relaunched — the per-group files make that a clean retry. The Step-4
+markup validator (even tilde counts, en/es tilde parity, no ASCII quotes, `*~root~` order,
+paragraph breaks) passed **0 problems** across all 351, and the merge took `Etymologies.json`
+**994 → 1345** (`en` and `es`).
+
+**No app-side work.** Step E already wired `ExampleData` / `MedievalData` / `Etymology` into
+`VerbView` keyed by bare infinitive, and Browse Verbs lists all 4,811 verbs — so the 352 new rows
+just appear. Build **Succeeded**, full suite **427 tests / 0 failures**, and a data spot-check
+confirmed *yantar / aducir / heder / trovar* each resolve a modern example, their medieval
+attestations, and an etymology. The example-uses pipeline (A–F) is now complete.

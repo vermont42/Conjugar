@@ -1593,22 +1593,6 @@
         }
       }
     },
-    "Settings.ratingsUnavailable": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ratings are currently unavailable."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Las valoraciones no están disponibles en este momento."
-          }
-        }
-      }
-    },
     "Settings.quiz": {
       "localizations": {
         "en": {
@@ -1709,6 +1693,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Valoraciones y Reseñas"
+          }
+        }
+      }
+    },
+    "Settings.ratingsUnavailable": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ratings are currently unavailable."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las valoraciones no están disponibles en este momento."
           }
         }
       }
@@ -2113,6 +2113,70 @@
         }
       }
     },
+    "Verb.exampleSource %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fuente: %@"
+          }
+        }
+      }
+    },
+    "Verb.exampleSourceClaude": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "— Example by Claude (Opus 4.8)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "— Ejemplo de Claude (Opus 4.8)"
+          }
+        }
+      }
+    },
+    "Verb.exampleUse": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Example Use"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ejemplo de Uso"
+          }
+        }
+      }
+    },
+    "Verb.exampleUses": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Example Uses"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ejemplos de Uso"
+          }
+        }
+      }
+    },
     "Verb.irregular": {
       "localizations": {
         "en": {
@@ -2141,6 +2205,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "Irreg. ☛ %@"
+          }
+        }
+      }
+    },
+    "Verb.medievalExample": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medieval Spanish"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Español medieval"
+          }
+        }
+      }
+    },
+    "Verb.nextMedievalExample": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next example"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siguiente ejemplo"
           }
         }
       }

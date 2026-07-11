@@ -23,6 +23,9 @@ struct VerbView: View {
   private let isDefective: Bool
   private let sections: [ConjugationSection]
   private let etymology: String?
+  private let example: Example?
+  private let medievalExamples: [MedievalExample]
+  @State private var medievalIndex: Int
 
   init(verb: String) {
     self.verb = verb
@@ -35,6 +38,15 @@ struct VerbView: View {
     typeOrParent = Self.typeOrParent(verb: verb, entry: entry)
     sections = Self.buildSections(verb: verb)
     etymology = Etymology.text(for: verb)
+    example = ExampleData.example(for: verb)
+    let medieval = MedievalData.examples(for: verb)
+    medievalExamples = medieval
+    // Start on a random attestation so each visit varies; the cycle button advances from here.
+    _medievalIndex = State(initialValue: medieval.indices.randomElement() ?? 0)
+  }
+
+  private var medievalExample: MedievalExample? {
+    medievalExamples.indices.contains(medievalIndex) ? medievalExamples[medievalIndex] : nil
   }
 
   var body: some View {
@@ -46,6 +58,9 @@ struct VerbView: View {
         }
         if let etymology {
           etymologyCard(etymology)
+        }
+        if example != nil || medievalExample != nil {
+          exampleCard
         }
       }
       .padding()
@@ -104,6 +119,83 @@ struct VerbView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .card()
+  }
+
+  private var exampleCard: some View {
+    VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
+      Text(example != nil && medievalExample != nil ? L.Verb.exampleUses : L.Verb.exampleUse)
+        .font(.headline)
+        .fontDesign(.serif)
+        .foregroundStyle(Color.customYellow)
+        .accessibilityAddTraits(.isHeader)
+
+      if let example {
+        Text(example.es)
+          .font(.body)
+          .fontDesign(.serif)
+          .foregroundStyle(Color.customForeground)
+          .speakOnTapFlash(example.es)
+
+        Text(example.en)
+          .font(.callout)
+          .foregroundStyle(.secondary)
+
+        Text(example.provenance.attribution)
+          .font(.caption)
+          .foregroundStyle(.secondary)
+          .frame(maxWidth: .infinity, alignment: .trailing)
+      }
+
+      if let medieval = medievalExample {
+        medievalSection(medieval, showDivider: example != nil)
+      }
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .card()
+  }
+
+  private func medievalSection(_ medieval: MedievalExample, showDivider: Bool) -> some View {
+    VStack(alignment: .leading, spacing: 6) {
+      if showDivider {
+        Divider()
+          .padding(.vertical, 4)
+      }
+
+      HStack {
+        Text(L.Verb.medievalExample)
+          .font(.subheadline.weight(.semibold))
+          .foregroundStyle(Color.customBlue)
+          .accessibilityAddTraits(.isHeader)
+        Spacer()
+        if medievalExamples.count > 1 {
+          Button {
+            withAnimation {
+              medievalIndex = (medievalIndex + 1) % medievalExamples.count
+            }
+          } label: {
+            Image(systemName: "arrow.forward.circle")
+              .foregroundStyle(Color.customRed)
+          }
+          .buttonStyle(.plain)
+          .accessibilityLabel(Text(L.Verb.nextMedievalExample))
+        }
+      }
+
+      Text(medieval.reference)
+        .font(.caption)
+        .foregroundStyle(.secondary)
+
+      Text(medieval.os)
+        .font(.body)
+        .fontDesign(.serif)
+        .foregroundStyle(Color.customForeground)
+        .speakOnTapFlash(medieval.os)
+
+      Text(medieval.tr)
+        .font(.callout)
+        .foregroundStyle(.secondary)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
   }
 
   private func conjugationCard(_ section: ConjugationSection) -> some View {

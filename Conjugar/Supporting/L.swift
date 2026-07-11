@@ -490,6 +490,30 @@ nonisolated enum L {
     static var etymology: String {
       String(localized: "Verb.etymology")
     }
+
+    static var exampleUse: String {
+      String(localized: "Verb.exampleUse")
+    }
+
+    static var exampleUses: String {
+      String(localized: "Verb.exampleUses")
+    }
+
+    static var medievalExample: String {
+      String(localized: "Verb.medievalExample")
+    }
+
+    static var nextMedievalExample: String {
+      String(localized: "Verb.nextMedievalExample")
+    }
+
+    static func exampleSource(body: String) -> String {
+      String(localized: "Verb.exampleSource \(body)")
+    }
+
+    static var exampleSourceClaude: String {
+      String(localized: "Verb.exampleSourceClaude")
+    }
   }
 
   enum Tutor {

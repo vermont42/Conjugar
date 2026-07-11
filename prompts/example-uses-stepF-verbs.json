@@ -1,0 +1,1766 @@
+{
+ "count": 352,
+ "note": "Step F set: medieval-example verbs outside the ranked 988. Each needs a modern example + etymology.",
+ "verbs": [
+  {
+   "infinitive": "abajar",
+   "gloss": "lower",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "aballar",
+   "gloss": "drive",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "abatir",
+   "gloss": "knock down",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "ablandar",
+   "gloss": "soften",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "abrevar",
+   "gloss": "water",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "abreviar",
+   "gloss": "abbreviate",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "acaecer",
+   "gloss": "happen",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "acampar",
+   "gloss": "camp",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "achacar",
+   "gloss": "attribute",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "aclamar",
+   "gloss": "acclaim",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "acometer",
+   "gloss": "attack",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "acortar",
+   "gloss": "shorten",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "acostar",
+   "gloss": "put to bed",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "acotar",
+   "gloss": "demarcate",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "adiestrar",
+   "gloss": "train",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "adobar",
+   "gloss": "marinate",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "aducir",
+   "gloss": "adduce",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "afanar",
+   "gloss": "toil",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "afinar",
+   "gloss": "tune",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "afincar",
+   "gloss": "settle",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "agraviar",
+   "gloss": "wrong",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "aguardar",
+   "gloss": "await",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "ahondar",
+   "gloss": "deepen",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "ajuntar",
+   "gloss": "join",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "alabar",
+   "gloss": "praise",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "alborozar",
+   "gloss": "delight",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "allegar",
+   "gloss": "gather",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "almorzar",
+   "gloss": "lunch",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "amanecer",
+   "gloss": "dawn",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "amansar",
+   "gloss": "tame",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "amargar",
+   "gloss": "embitter",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "amasar",
+   "gloss": "knead",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "antojar",
+   "gloss": "fancy",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "aparejar",
+   "gloss": "rig",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "apear",
+   "gloss": "dismount",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "apedrear",
+   "gloss": "stone",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "apegar",
+   "gloss": "grow attached",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "apellidar",
+   "gloss": "name",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "apoderar",
+   "gloss": "empower",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "apremiar",
+   "gloss": "urge",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "aquejar",
+   "gloss": "afflict",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "arar",
+   "gloss": "plow",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "arder",
+   "gloss": "burn",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "arraigar",
+   "gloss": "take root",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "arrear",
+   "gloss": "drive",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "arrebatar",
+   "gloss": "snatch",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "arredrar",
+   "gloss": "intimidate",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "arremangar",
+   "gloss": "roll up sleeves",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "arremeter",
+   "gloss": "charge",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "arrendar",
+   "gloss": "rent",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "arrepentir",
+   "gloss": "repent",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "arrimar",
+   "gloss": "bring close",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "asar",
+   "gloss": "roast",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "asolar",
+   "gloss": "raze; scorch",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "asomar",
+   "gloss": "show",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "atajar",
+   "gloss": "cut off",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "atener",
+   "gloss": "abide",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "aterrar",
+   "gloss": "terrify; demolish",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "atizar",
+   "gloss": "stoke",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "atormentar",
+   "gloss": "torment",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "atribular",
+   "gloss": "afflict",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "atronar",
+   "gloss": "thunder",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "aullar",
+   "gloss": "howl",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "avenir",
+   "gloss": "reconcile",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "aventar",
+   "gloss": "winnow",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "aventurar",
+   "gloss": "venture",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "avivar",
+   "gloss": "enliven",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "ayunar",
+   "gloss": "fast",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "azotar",
+   "gloss": "whip",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "barrer",
+   "gloss": "sweep",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "barruntar",
+   "gloss": "suspect",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "bañar",
+   "gloss": "bathe",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "bogar",
+   "gloss": "row",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "bullir",
+   "gloss": "boil",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "cabalgar",
+   "gloss": "ride",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "calar",
+   "gloss": "soak",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "calcar",
+   "gloss": "trace",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "calzar",
+   "gloss": "shoe",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "castrar",
+   "gloss": "castrate",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "catar",
+   "gloss": "taste",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "cavar",
+   "gloss": "dig",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "cazar",
+   "gloss": "hunt",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "cebar",
+   "gloss": "fatten",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "cegar",
+   "gloss": "blind",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "celar",
+   "gloss": "watch",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "cercar",
+   "gloss": "enclose",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "clamar",
+   "gloss": "cry out",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "comedir",
+   "gloss": "restrain",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "comulgar",
+   "gloss": "commune",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "concordar",
+   "gloss": "agree",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "condonar",
+   "gloss": "forgive",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "confortar",
+   "gloss": "comfort",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "conjurar",
+   "gloss": "conjure",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "consentir",
+   "gloss": "consent",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "consolar",
+   "gloss": "console",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "contender",
+   "gloss": "contend",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "conturbar",
+   "gloss": "perturb",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "convidar",
+   "gloss": "invite",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "corromper",
+   "gloss": "corrupt",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "culpar",
+   "gloss": "blame",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "cundir",
+   "gloss": "spread",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "danzar",
+   "gloss": "dance",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "decaer",
+   "gloss": "decline",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "degollar",
+   "gloss": "behead",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "deleitar",
+   "gloss": "delight",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "demudar",
+   "gloss": "alter",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "denegar",
+   "gloss": "deny",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "denostar",
+   "gloss": "revile",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "departir",
+   "gloss": "chat",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "deportar",
+   "gloss": "deport",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "derramar",
+   "gloss": "spill",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "derribar",
+   "gloss": "knock down",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "derrocar",
+   "gloss": "overthrow",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "desafiar",
+   "gloss": "challenge",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "desaliñar",
+   "gloss": "dishevel",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "desamparar",
+   "gloss": "abandon",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "desarmar",
+   "gloss": "disarm",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "desayunar",
+   "gloss": "breakfast",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "desbaratar",
+   "gloss": "wreck",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "descabalgar",
+   "gloss": "dismount",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "descabezar",
+   "gloss": "behead",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "descalabrar",
+   "gloss": "wound",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "descolgar",
+   "gloss": "take down",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "descoser",
+   "gloss": "unstitch",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "descreer",
+   "gloss": "disbelieve",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "descuajar",
+   "gloss": "uproot",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "desdecir",
+   "gloss": "retract",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "desdeñar",
+   "gloss": "disdain",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "desechar",
+   "gloss": "discard",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "desencantar",
+   "gloss": "disenchant",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "deslizar",
+   "gloss": "slide",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "desmentir",
+   "gloss": "deny",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "desnudar",
+   "gloss": "undress",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "desollar",
+   "gloss": "skin",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "desorejar",
+   "gloss": "cut ears",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "despedazar",
+   "gloss": "tear apart",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "despegar",
+   "gloss": "take off",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "despeñar",
+   "gloss": "hurl",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "despoblar",
+   "gloss": "depopulate",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "despojar",
+   "gloss": "strip",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "desposar",
+   "gloss": "wed",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "despreciar",
+   "gloss": "despise",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "destellar",
+   "gloss": "sparkle",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "desterrar",
+   "gloss": "exile",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "desusar",
+   "gloss": "disuse",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "devorar",
+   "gloss": "devour",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "dispensar",
+   "gloss": "dispense",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "domar",
+   "gloss": "tame",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "dormitar",
+   "gloss": "doze",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "embargar",
+   "gloss": "seize",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "embeber",
+   "gloss": "soak",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "embragar",
+   "gloss": "engage clutch",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "empeorar",
+   "gloss": "worsen",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "enajenar",
+   "gloss": "alienate",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "enclavar",
+   "gloss": "nail",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "encoger",
+   "gloss": "shrink",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "encomendar",
+   "gloss": "entrust",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "enconar",
+   "gloss": "inflame",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "encordar",
+   "gloss": "string",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "encubrir",
+   "gloss": "conceal",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "enderezar",
+   "gloss": "straighten",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "enervar",
+   "gloss": "enervate",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "enfermar",
+   "gloss": "sicken",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "engendrar",
+   "gloss": "beget",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "enjalbegar",
+   "gloss": "whitewash",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "enloquecer",
+   "gloss": "madden",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "enmendar",
+   "gloss": "amend",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "enojar",
+   "gloss": "anger",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "ensayar",
+   "gloss": "rehearse",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "ensañar",
+   "gloss": "be cruel",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "ensillar",
+   "gloss": "saddle",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "entremeter",
+   "gloss": "insert",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "errar",
+   "gloss": "err",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "escarbar",
+   "gloss": "scratch",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "escardar",
+   "gloss": "weed",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "escarmentar",
+   "gloss": "learn a lesson",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "escarnecer",
+   "gloss": "mock",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "esclarecer",
+   "gloss": "clarify",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "escotar",
+   "gloss": "lower neckline",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "escudar",
+   "gloss": "shield",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "escupir",
+   "gloss": "spit",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "escurrir",
+   "gloss": "drain",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "esmerar",
+   "gloss": "take care",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "espantar",
+   "gloss": "scare",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "espulgar",
+   "gloss": "delouse",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "esquilmar",
+   "gloss": "deplete",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "esquivar",
+   "gloss": "dodge",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "estorbar",
+   "gloss": "hinder",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "estragar",
+   "gloss": "ruin",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "exaltar",
+   "gloss": "exalt",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "fiar",
+   "gloss": "trust",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "galardonar",
+   "gloss": "award",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "glorificar",
+   "gloss": "glorify",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "granar",
+   "gloss": "seed",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "guerrear",
+   "gloss": "wage war",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "guisar",
+   "gloss": "cook",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "guiñar",
+   "gloss": "wink",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "halagar",
+   "gloss": "flatter",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "hartar",
+   "gloss": "fill",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "heder",
+   "gloss": "stink",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "helar",
+   "gloss": "freeze, get cold",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "henchir",
+   "gloss": "fill",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "hendir",
+   "gloss": "cleave",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "herrar",
+   "gloss": "shoe",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "hervir",
+   "gloss": "boil",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "hincar",
+   "gloss": "thrust",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "hinchar",
+   "gloss": "inflate",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "holgar",
+   "gloss": "rest",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "horadar",
+   "gloss": "pierce",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "hospedar",
+   "gloss": "lodge",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "hostigar",
+   "gloss": "harass",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "hurtar",
+   "gloss": "steal",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "increpar",
+   "gloss": "rebuke",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "labrar",
+   "gloss": "till",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "ladrar",
+   "gloss": "bark",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "lamer",
+   "gloss": "lick",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "lastimar",
+   "gloss": "hurt",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "levar",
+   "gloss": "weigh anchor",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "liar",
+   "gloss": "bundle",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "lidiar",
+   "gloss": "fight",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "llagar",
+   "gloss": "wound",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "loar",
+   "gloss": "praise",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "madrugar",
+   "gloss": "rise early",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "madurar",
+   "gloss": "mature",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "magnificar",
+   "gloss": "magnify",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "majar",
+   "gloss": "crush",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "malcasar",
+   "gloss": "mismarry",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "maldecir",
+   "gloss": "curse",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "mamar",
+   "gloss": "suckle",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "manar",
+   "gloss": "drip with, flow",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "maravillar",
+   "gloss": "amaze",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "mecer",
+   "gloss": "rock",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "medrar",
+   "gloss": "prosper",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "menear",
+   "gloss": "wiggle",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "menguar",
+   "gloss": "wane",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "menoscabar",
+   "gloss": "diminish",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "mercar",
+   "gloss": "buy",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "mesar",
+   "gloss": "tear hair",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "mesurar",
+   "gloss": "moderate",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "modular",
+   "gloss": "modulate",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "moler",
+   "gloss": "grind",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "mudar",
+   "gloss": "move",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "nadar",
+   "gloss": "swim",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "nevar",
+   "gloss": "snow",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "obrar",
+   "gloss": "work",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "osar",
+   "gloss": "dare",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "otear",
+   "gloss": "scan",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "palpar",
+   "gloss": "feel",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "parlar",
+   "gloss": "chatter",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "pecar",
+   "gloss": "sin",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "pechar",
+   "gloss": "shoulder",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "pelar",
+   "gloss": "peel",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "peligrar",
+   "gloss": "be in danger",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "penar",
+   "gloss": "punish",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "perecer",
+   "gloss": "perish",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "perjurar",
+   "gloss": "swear",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "perseverar",
+   "gloss": "persevere",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "plegar",
+   "gloss": "fold",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "podar",
+   "gloss": "prune",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "porfiar",
+   "gloss": "insist",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "posponer",
+   "gloss": "postpone",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "preciar",
+   "gloss": "value",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "predecir",
+   "gloss": "predict",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "predicar",
+   "gloss": "preach",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "prendar",
+   "gloss": "captivate",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "prender",
+   "gloss": "seize",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "profesar",
+   "gloss": "profess",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "profetizar",
+   "gloss": "prophesy",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "pudrir",
+   "gloss": "putrefy",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "pujar",
+   "gloss": "bid",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "purgar",
+   "gloss": "purge",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "quebrantar",
+   "gloss": "break",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "querellar",
+   "gloss": "sue",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "rabiar",
+   "gloss": "rage",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "raer",
+   "gloss": "wear away",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "rascar",
+   "gloss": "scratch",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "rayar",
+   "gloss": "scratch",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "razonar",
+   "gloss": "reason",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "rebuznar",
+   "gloss": "bray",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "recabar",
+   "gloss": "obtain",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "recatar",
+   "gloss": "conceal",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "recelar",
+   "gloss": "suspect",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "recitar",
+   "gloss": "recite",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "reconciliar",
+   "gloss": "reconcile",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "reconvenir",
+   "gloss": "reproach",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "refrenar",
+   "gloss": "restrain",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "refrescar",
+   "gloss": "refresh",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "regar",
+   "gloss": "water",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "regañar",
+   "gloss": "scold",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "reinar",
+   "gloss": "reign",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "rematar",
+   "gloss": "finish off",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "remendar",
+   "gloss": "mend",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "remeter",
+   "gloss": "tuck",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "repicar",
+   "gloss": "ring",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "reptar",
+   "gloss": "crawl",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "retentar",
+   "gloss": "tempt again",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "reteñir",
+   "gloss": "redye",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "retozar",
+   "gloss": "frolic",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "retraer",
+   "gloss": "retract",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "revocar",
+   "gloss": "revoke",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "revolver",
+   "gloss": "stir",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "reñir",
+   "gloss": "quarrel",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "rimar",
+   "gloss": "rhyme",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "rogar",
+   "gloss": "beg",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "rumiar",
+   "gloss": "ruminate",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "sacudir",
+   "gloss": "shake",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "saltear",
+   "gloss": "sauté",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "sanar",
+   "gloss": "heal",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "sangrar",
+   "gloss": "bleed",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "santiguar",
+   "gloss": "bless",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "segar",
+   "gloss": "mow",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "semejar",
+   "gloss": "resemble",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "silbar",
+   "gloss": "whistle",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "sobar",
+   "gloss": "rub",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "socavar",
+   "gloss": "undermine",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "sopesar",
+   "gloss": "weigh up",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "sortear",
+   "gloss": "raffle",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "sosegar",
+   "gloss": "calm",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "soterrar",
+   "gloss": "bury",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "sudar",
+   "gloss": "sweat",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "sumir",
+   "gloss": "plunge",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "suplir",
+   "gloss": "substitute",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "tachar",
+   "gloss": "cross out",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "tajar",
+   "gloss": "slice",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "tantear",
+   "gloss": "test",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "tañer",
+   "gloss": "play (a musical instrument)",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "tejer",
+   "gloss": "knit",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "testimoniar",
+   "gloss": "testify",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "tintar",
+   "gloss": "dye",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "tiznar",
+   "gloss": "smudge",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "topar",
+   "gloss": "bump",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "torcer",
+   "gloss": "twist",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "tornear",
+   "gloss": "turn",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "trabar",
+   "gloss": "bind",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "tragar",
+   "gloss": "swallow",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "trasnochar",
+   "gloss": "stay up",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "traspasar",
+   "gloss": "transfer",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "trasponer",
+   "gloss": "transpose",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "trastornar",
+   "gloss": "upset",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "trillar",
+   "gloss": "thresh",
+   "medieval_count": 4
+  },
+  {
+   "infinitive": "trocar",
+   "gloss": "exchange",
+   "medieval_count": 2
+  },
+  {
+   "infinitive": "trotar",
+   "gloss": "trot",
+   "medieval_count": 3
+  },
+  {
+   "infinitive": "trovar",
+   "gloss": "versify",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "untar",
+   "gloss": "smear",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "urdir",
+   "gloss": "scheme",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "vagar",
+   "gloss": "wander",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "vedar",
+   "gloss": "prohibit",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "vendimiar",
+   "gloss": "harvest",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "vivificar",
+   "gloss": "revive",
+   "medieval_count": 1
+  },
+  {
+   "infinitive": "yacer",
+   "gloss": "lie (at rest)",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "yantar",
+   "gloss": "dine",
+   "medieval_count": 5
+  },
+  {
+   "infinitive": "yermar",
+   "gloss": "lay waste",
+   "medieval_count": 1
+  }
+ ]
+}
