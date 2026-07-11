@@ -3609,3 +3609,27 @@ two-sense glosses (`come, turn to`; `admit, accept`), rather than a two-line hom
 homonym split (as for *apostar*/*asolar*/*aterrar*) exists to give senses *different conjugation
 classes*; both senses of *desvelar* are regular class-1, so a comma gloss is the right encoding and
 `glosses[0]` still defaults to "reveal," correct for modern usage.
+
+**Etymology copy-edit sweep — throat-clearing removed.** A pass over all 1,345 etymologies
+(en + es) to delete *method* throat-clearing while preserving genuine acknowledgments of
+uncertainty. The distinction: "the deeper root is uncertain / disputed / debated" stays; the
+editorial tail that follows it — "so it is best to stop the firm chain at Latin rather than force a
+root onto it," "so the deeper root is best left open," "así que conviene dejarla abierta," "es más
+prudente no fijarla," "so enjoy it as a possibility, not a fact" — goes. A tightened detector (with
+`conviene notar` / `conviene no confundir` factual notes excluded) found **~52 verbs** carrying it;
+each trailing recommendation clause was trimmed with a per-edit regex asserted to match exactly once,
+keeping the preceding uncertainty statement and fixing punctuation (dangling em-dashes, spaced
+guillemets) at the cut. Two fully-meta sentences (*despertar*'s "The tangled Latin ancestry is a
+caution worth stating plainly…", *trocar*'s "…is best held as a hypothesis, not a fact") were deleted
+outright as redundant with the uncertainty already stated; two ("*The safest statement is that* the
+second half is uncertain", "Because the accounts diverge, the deep root *is best left open*") were
+minimally reworded to plain uncertainty. A re-run of the detector after the edits reported **0**
+residual instances. **101 throat-clearing edits.**
+
+**Small etymology fixes (same pass).** *desvelar*-adjacent tidy-ups requested by Josh: *empatar*'s
+`en.Wiktionary` → "English Wiktionary" (and the Spanish body's `en.Wiktionary` → "el Wiktionary en
+inglés"); the analogous `es.Wiktionary` in *tomar* → "the Spanish Wiktionary" / "el Wiktionary en
+español"; *disolver*'s second English sentence capitalized (`~solvere~` → `~Solvere~` at sentence
+start, same class of fix as *visar*'s *Viser*); and *repasar* gained the closer French cognate
+`~repasser~` — the exact re-+passer compound, which even shares the "go back over / iron" senses with
+Spanish *repasar* — beside the English *repass*.
