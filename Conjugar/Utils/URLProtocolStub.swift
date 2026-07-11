@@ -21,6 +21,13 @@ nonisolated class URLProtocolStub: URLProtocol {
   override func startLoading() {
     if let url = request.url {
       if let data = URLProtocolStub.testURLs[url] {
+        // Deliver a URLResponse *before* the data. Without it, the task has no
+        // response, and URLSession's metrics collection (didFinishCollectingMetrics)
+        // traps with SIGILL on the async `data(for:)` path in the simulator — which
+        // crashed the Settings tab (its ratings lookup uses the stub session).
+        if let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: nil) {
+          self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        }
         self.client?.urlProtocol(self, didLoad: data)
       }
     }
