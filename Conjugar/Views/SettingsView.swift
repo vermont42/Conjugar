@@ -26,6 +26,7 @@ struct SettingsView: View {
   @Bindable private var settings = Current.settings
   @State private var isGameCenterUIHidden = false
   @State private var rateReviewDescription = ""
+  @State private var showingGame = false
   private let changeDifficultyTip = ChangeDifficultyTip()
   private let enableGameCenterTip = EnableGameCenterTip()
 
@@ -36,6 +37,7 @@ struct SettingsView: View {
           regionCard
           quizCard
           browseCard
+          gameCard
           actionsCard
           aboutFooter
         }
@@ -45,6 +47,7 @@ struct SettingsView: View {
       }
       .frame(maxWidth: .infinity)
       .background(Color.customBackground.ignoresSafeArea())
+      .fullScreenCover(isPresented: $showingGame) { GameView() }
       .navigationTitle(L.Settings.localizedTitle)
       .onAppear {
         isGameCenterUIHidden = Current.gameCenter.isAuthenticated
@@ -144,6 +147,20 @@ struct SettingsView: View {
         .pickerStyle(.segmented)
         .selectionFeedback(trigger: settings.secondSingularBrowse)
         .accessibilityLabel(L.Settings.browse)
+      }
+    }
+  }
+
+  private var gameCard: some View {
+    settingsCard {
+      settingSection(
+        icon: "figure.dance",
+        tint: .customRed,
+        heading: L.Game.title,
+        description: L.Game.description
+      ) {
+        Button(L.Game.play) { showingGame = true }
+          .buttonStyle(TintedCapsuleButtonStyle(tint: .customRed))
       }
     }
   }

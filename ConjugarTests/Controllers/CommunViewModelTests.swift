@@ -30,7 +30,8 @@ class CommunViewModelTests: XCTestCase {
       communGetter: communGetter,
       locale: AnalyticsLocaleStub(languageCode: "en", regionCode: "US"),
       languageModelService: LanguageModelServiceDummy(),
-      getterSetter: GetterSetterFake()
+      getterSetter: GetterSetterFake(),
+      soundPlayer: SoundPlayerDummy()
     )
 
     let actionType = Commun.CommunType.website(actionTitle: ["en": "🐬"], cancelTitle: ["en": "🐉"], action: { didTapAction = true })

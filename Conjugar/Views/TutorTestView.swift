@@ -200,7 +200,7 @@ struct TutorTestView: View {
         response: "Language model is not available.",
         isError: true
       ))
-      SoundPlayer.play(.chirp)
+      Current.soundPlayer.play(.chirp, shouldDebounce: false)
       return
     }
 
@@ -216,7 +216,7 @@ struct TutorTestView: View {
           response: response,
           isError: false
         ))
-        SoundPlayer.play(.chirp)
+        Current.soundPlayer.play(.chirp, shouldDebounce: false)
       } catch {
         results.append(TutorTestResult(
           index: index + 1,
@@ -224,7 +224,7 @@ struct TutorTestView: View {
           response: "Error: \(error.localizedDescription)",
           isError: true
         ))
-        SoundPlayer.play(.chirp)
+        Current.soundPlayer.play(.chirp, shouldDebounce: false)
       }
     }
 

@@ -3644,3 +3644,216 @@ tracking, and skipping reconstructed forms (`*~weyd-~`, lowercase by convention)
 leak-check for capitalizations landing after an abbreviation returned **0** real hits (one flagged
 case was verified a correct boundary — the period after "…i.e. competent." legitimately ends its
 sentence). Accent-preserving (`~ánimo~` → `~Ánimo~`). Data-only; display-decoupled.
+
+7/11/26: Kicked off the **built-in game** — a Donkey-Kong-inspired flamenco/bull game
+(spec in `prompts/game.md`): a flamenco dancer ascends ladder-linked platforms toward a
+bull that hurls country-flag "barrels" and holds a kidnapped bullfighter; capes are the
+"hammer" power-up. Launched from Settings like the sibling apps. This session was
+**research + design only** — no game code yet.
+
+- **Studied all three in-house games.** RaceRunner (2017, SpriteKit) is the only one with
+  real **frame animation** — arrays of `SKTexture` cycled by
+  `SKAction.animate(timePerFrame: 0.1)` at 10 fps, 10 jogger / 11 horse frames in east/west
+  sets, the horses **traced from Muybridge's "The Horse in Motion."** Konjugieren and
+  Conjuguer (2026) share one **pure-SwiftUI "house architecture"** — `@Observable GameState`,
+  a `TimelineView(.animation)` → `.onChange(of: timeline.date)` **delta-time loop**,
+  value-type `Codable` structs, AABB `rectsIntersect`, `GameState+*` mechanic files,
+  `.fullScreenCover` from Settings — and, notably, **neither has any frame animation**
+  (static `Image`/emoji/`Shape` moved with `.position()` + `scaleEffect(x: ±1)` facing
+  mirror + `sin(sineTime)` pulse). Conjuguer's **press-and-hold buttons**
+  (`DragGesture(minimumDistance: 0)` → intent booleans consumed by the loop as `speed·dt`)
+  are the control model to extend to 4 directions + jump + cape.
+
+- **Answered the three research questions** (`docs/game_design_research.md`): (1) **Blender
+  is the right tool**, as the render stage of a **pre-rendered-3D-sprite** pipeline
+  (model → rig → animate → orthographic render → sprite sheet), scriptable and
+  Claude-drivable via **blender-mcp**. (2) Animation = **skeletal rigging** (an *armature*
+  is the "wireframe" Josh half-remembered; *ragdoll* is physics, not authored dance) — the
+  dancer gets near-free motion from **Mixamo** (auto-rig + free, royalty-free walk/jump/**dance**
+  mocap), while the **bull is the quadruped cost-center** (Rigify or a pre-rigged Sketchfab
+  bull, hand-keyed). (3) **Gemini can't do frame-exact cycles** (no alpha channel, proportion
+  drift between calls, non-uniform grids — confirmed by a first-hand Nano-Banana-Pro
+  write-up), so it's for **stills** (bullfighter, capes, backgrounds, HUD), concept/turnaround
+  sheets, and seeding image-to-3D; the flags are real flags, not generated.
+
+- **Recommended architecture:** stay **pure SwiftUI** (match the siblings) and add frame
+  animation, which drops into the ZStack model as an `Image(frames[i])` indexed by a
+  dt-advanced phase — RaceRunner's flipbook idea in the sibling idiom. The new Donkey-Kong
+  systems (platforms/gravity/ladders/jump, flag "barrels", cape "hammer", 5-ascent + final
+  bullfight) are all simple dt-integration + AABB.
+
+- **Stack settled (Josh's follow-up).** **Pure SwiftUI, SpriteKit dropped** — it's not de
+  jure deprecated (SceneKit was soft-deprecated at WWDC 2025 → RealityKit; SpriteKit wasn't
+  named) but it's neglected and shipped **iOS 26 framerate regressions**, so Josh's "de
+  facto deprecated" read is fair. His key question — does SwiftUI stay performant with frame
+  animation? — is **yes**: the game frame-animates only ~2 actors at once (dancer + bull),
+  and the sole real cost is image *decode*, removed by pre-decoding frames or drawing
+  `context.resolve()`-cached images in a `Canvas`. The escalation ladder (ZStack →
+  `Canvas`+`TimelineView` → `.drawingGroup()`) is all pure SwiftUI — OctopusKit hits 5,000
+  sprites at 60 fps on a 2018 iPhone XS, orders of magnitude beyond this game. §2.2 of the
+  research doc was rewritten from a "when to use SpriteKit" section into this analysis.
+
+- **Palette is a gift.** Conjugar's existing `customRed` **#C1001D** + gold `customYellow`
+  **#CDA51B** map almost one-to-one onto a matador/bull/flamenco theme; art-direct the whole
+  game around red + gold, rendered with a flat/toon shader tuned to the app's hex.
+
+- **Music & SFX.** Music: CC0 **Signature Sounds "Spanish Guitar Loops"** (zero friction, no
+  credit) or CC-BY **casimps1 "Vaguely Spanish Guitar"** (one credit line) — CC0/CC-BY are
+  App-Store- and AGPL-safe; avoid CC-BY-NC. **SFX reuse the siblings' `Current.soundPlayer`
+  sets**, gap-filled from **Pixabay** (commercial-OK, no-attribution license). **Josh then
+  chose CC-BY** as the *project-wide* asset bar (not just music): it leads with a composed
+  CC-BY flamenco track (casimps1 / BFCMUSIC) over CC0 loops, and also unlocks a pre-rigged
+  CC-BY Sketchfab bull and CC-BY sound effects — at the cost of one **Credits/Acknowledgements
+  screen** (TASL lines) plus an **`asset-licenses/`** paper-trail folder in the repo.
+
+- **Deliverable:** `docs/game_design_research.md` — codebase synthesis, the asset/animation
+  pipeline, phased plan, open decisions, and sources. Next step: a **placeholder-art SwiftUI
+  prototype** to de-risk the Donkey-Kong feel, then a one-action end-to-end pipeline test
+  (dancer walk cycle: Gemini concept → image-to-3D → Mixamo → Blender render → imagesets).
+
+## The game — phase 1: placeholder-art prototype ships (2026-07-11)
+
+Built the **playable placeholder-art prototype** (plan in `prompts/game_prototype.md`) — the
+Donkey-Kong feel is proven with zero real art, and, crucially, so is the **frame-animation
+machinery** that this whole game exists to add over the siblings.
+
+- **Architecture mirrors the siblings exactly.** `@MainActor @Observable final class GameState`
+  driven by `GeometryReader → TimelineView(.animation) → ZStack`, tick via
+  `.onChange(of: timeline.date) { update(currentTime:) }`, with the Conjuguer dt guard
+  (`rawDt > 0, rawDt < 1`) + `min(rawDt, 1/30)` clamp. Entities are value-type structs;
+  logic is split across `GameState+Physics/+Flags/+Animation` extensions (so state they touch
+  is internal, not private). Files: `Conjugar/Models/Game/{GameModels,GameState,
+  GameState+Physics,GameState+Flags,GameState+Animation}.swift` + `Views/GameView.swift`.
+  Models/ and Views/ are `PBXFileSystemSynchronizedRootGroup`s, so no `project.pbxproj` edit.
+
+- **The point of the prototype — the flipbook works.** Player and bull "sprites" render as their
+  **current frame *number*** in a tinted box: `currentFrame = Int(phase·fps) % count + 1`,
+  fps 10, advanced by dt. On screen you literally watch the bull's number cycle **1→6** as it
+  paces (walk cycle) and the player's cycle **1↔2** idle / **1→6** walking — the exact index
+  logic real sprite frames plug into later (`Text("\(frame)")` → `Image(frames[frame-1])`, a
+  one-line swap). Per-action counts: player idle 2 / walk 6 / climb 4 / jump 3 / cape 4; bull
+  idle 2 / walk 6 / throw 5. Facing is a `◀`/`▶` chevron (never mirror a digit).
+
+- **Donkey-Kong systems, all dt-integration + AABB.** 6 red girders with **staggered zig-zag
+  blue ladders** (SwiftUI primitives, Conjugar palette on black); gravity + platform-snap;
+  ladder climb (press up/down at a ladder → `climbing`, gravity off); jump as a one-shot
+  impulse (re-armed on release). The bull throws **flag "barrels"** every 2 s that tumble and
+  cascade platform-to-platform in the DK zig-zag (alternating roll direction + drop point per
+  level). **Cape pickups** cape the player for 8 s (flag contact smashes instead of hurting).
+  **4-pip heart health**, −1 per flag hit (25 %, 1 s i-frames); health 0 **or** reaching the
+  bull → `reset()`. Quit (`xmark.circle.fill`) dismisses the `.fullScreenCover`. Controls are
+  Conjuguer's press-and-hold idiom: a 4-way D-pad + jump, each a `DragGesture(minimumDistance:
+  0)` flipping an intent boolean the loop consumes.
+
+- **Launch + L10n.** A **Game** card in `SettingsView` (existing `settingSection` +
+  `TintedCapsuleButtonStyle`) → `.fullScreenCover { GameView() }`. Added `enum L.Game`
+  (title/description/play/quit/health/jump/move·) + `Game.*` keys to `Localizable.xcstrings`
+  (en+es, via `python3` per the ASCII-quote foot-gun; validated).
+
+- **Verified in the simulator** (build → Settings → Play → drive it): platforms/ladders,
+  bull pacing + cycling frames + facing flips, player walk/idle + movement + **ladder climb**
+  (caught mid-ascent), flags cascading every level, and health→reset all confirmed. One tuning
+  fix fell out of play-testing: `climbTolerance` 26 → **34** pt, because the player kept
+  overshooting the ladder and couldn't grab it. **13 Swift Testing cases**
+  (`ConjugarTests/Models/GameStateTests.swift`, `@MainActor @Suite`) cover frame wrapping,
+  AABB, platform snap, jump gating, ladder enter/climb, flag damage, cape smash/pickup, and
+  bull-reset — all green. Build green, SwiftLint clean.
+
+- **Simulator gotcha (not a bug):** country-flag emoji and 🧣 render as tofu `?` boxes in the
+  iOS simulator (no glyphs); they show as real flags/scarf on device. The bullfighter 🤺
+  renders fine. Doesn't affect the mechanic — the flags still spawn, tumble, and collide.
+
+- **Also noted (pre-existing, unrelated):** the Settings tab crashes in the simulator via the
+  ratings `.task` → stub-`URLSession` metrics collection (SIGILL, zero Conjugar frames in the
+  stack) — independent of the game; worked around only to screenshot, then reverted.
+
+- **Next:** phase 2 — the one-action end-to-end asset pipeline (dancer walk cycle) to validate
+  the toolchain, then swap `Text("\(frame)")` for `Image(...)`.
+
+### Game prototype — feel tweaks (round 2)
+
+After play-testing the prototype, a pass of control/feel fixes:
+
+- **Controls slimmed and pushed clear of the field.** D-pad buttons 52 → 40 pt and the whole
+  cluster dropped to a `Layout.defaultSpacing` bottom margin, so the up arrow no longer overlaps
+  the bottom girder. **Jump moved to the inverse corner** (bottom-trailing) and vertically
+  centered against the D-pad via an `HStack(alignment: .center)` + `Spacer()`; shrunk 20 %
+  (64 → 51 pt). Restyled from a solid red disc to the **same translucent fill as the D-pad
+  (0.18) with a solid yellow ring**, so it reads as one control family.
+- **Contextual climb arrows.** The up/down buttons now appear only when a climb is actually
+  possible — new `GameState.canClimbUp`/`canClimbDown` (grounded & within `climbTolerance` of a
+  ladder whose base/top is on the player's level, or already climbing). Absent buttons collapse
+  to a clear same-size slot so the cross never reflows. A defensive `if !canClimbUp { movingUp =
+  false }` in the tick clears a stranded intent when a held button vanishes mid-press (its
+  gesture may never fire `.onEnded`). Verified on device-sim: walking onto the bottom ladder
+  makes the up arrow pop in, down stays hidden (player is at the ladder's foot).
+- **Player halved vertically** (`playerHeight` 60 → 30; number font 26 → 18 to fit the flatter
+  box) — reads more like a sprite, less like a domino.
+- **Jump is dodge-only.** `jumpImpulse` 520 → 360, dropping the max hop to ≈ v²/2g ≈ 46 pt —
+  comfortably under the ~80–105 pt inter-platform gap on every screen size, so you can hop a
+  rolling flag but never skip a level (climbing stays the only way up).
+- All 13 `GameStateTests` still green; build + SwiftLint clean. (Same simulator gotchas as
+  before: flag/scarf emoji render as tofu, and the Settings ratings `.task` still SIGILLs — the
+  latter only worked around to reach the game for screenshots, then reverted.)
+
+### Game sound & music — porting Conjuguer's freeze-proof audio architecture
+
+Wired sound effects + looping flamenco music into the game, but the real work was porting
+Conjuguer's **performance-safe** audio stack so the app never reintroduces the launch stall /
+in-game freeze that Conjuguer already debugged and fixed (the "AI Doomers Are Wrong" blog
+story). The recipe, from Conjuguer commits **`9bb4f3e`** (perf) and **`270052a`** (debounce):
+
+- **Replaced the static, main-thread `SoundPlayer`** — which lazily created each `AVAudioPlayer`
+  *on the main thread on first play* (literally the anti-pattern the blog describes) — with a
+  **protocol-injected** `Current.soundPlayer` seam: `SoundPlayer` (protocol) + `SoundPlayerReal`
+  + `SoundPlayerDummy`, wired into `World` (Real on device/simulator, **Dummy** in
+  unitTest/uiTest so tests never touch CoreAudio). Migrated every existing call site
+  (`Utterer`, `GameCenterReal`, `QuizView`, the browse views, the tutor views, `CommunView`)
+  and deleted the static class.
+- **Everything expensive is off-main.** The audio stack is warmed at launch via
+  `Task.detached` (a silent primer player — the first `AVAudioPlayer` cold-starts the whole
+  process-wide audio stack ~1.5 s); SFX are pre-decoded + `prepareToPlay`'d off-main at game
+  start (`warmUpSounds`, keyed off `Sound: CaseIterable`); the blocking `play()` (~20–80 ms
+  audio-server round trip) is dispatched to a concurrent `playbackQueue`; and per-sound debounce
+  clocks (`instantOfLastPlayBySound`) keep a chatty non-debounced SFX from resetting a debounced
+  one's window. Ported `GlyphWarmer` too — the first draw of a large **flag emoji** stalls the
+  render thread ~0.5 s, and this game *rains* flag emoji, so they're pre-rasterized off-main at
+  game start.
+- **Decision B — one session owner.** Unlike Conjuguer, `Utterer` remains the single
+  `AVAudioSession` owner (configured once as `.ambient` — respect the silent switch, mix with
+  the user's music), so the ported `SoundPlayerReal.setup()` **drops** Conjuguer's
+  `AudioSession.configure()` and only warms the stack; `Current.soundPlayer.setup()` runs
+  *after* `Utterer.setup` at launch.
+- **Reused SFX from the siblings** (Pixabay-sourced, no attribution required): `pop` (jump),
+  `soccerKick` (flag hit), `chomp` (cape smash), `shieldActivate` (cape pickup), `cow` (bull
+  bellow on throw); plus existing `chirp` (debounced low-volume rung-tick while climbing),
+  `randomApplause` (reach the bull), `randomSadTrombone` (health 0). Music is a gapless
+  `numberOfLoops = -1` player with a 2 s fade-in, started in `GameState.configure()` and stopped
+  in `GameView.onDisappear`.
+- **Music track:** *"Vaguely Spanish Guitar"* by Clarence Simpson (casimps1), ccMixter, **CC BY
+  3.0**. Credited in `Info.creditsText` (en + es, new **Game Music** TASL block + **Game
+  Sounds** courtesy note; the "Sound Jay" block's "all sounds" was corrected to "original
+  sounds"), with deeds in a new **`asset-licenses/`** folder. The audio DI seam was landed with
+  a silent placeholder `flamencoLoop.mp3` (ffmpeg `anullsrc`) so the build was green and the
+  mechanism fully wired independently of the asset; Josh then dropped the real 2:55 track in
+  place (same path, no Xcode/pbxproj change) and it loops gaplessly via `numberOfLoops = -1`.
+- Added a Swift Testing `SoundPlayer` suite (Current uses the Dummy in the test world; the Dummy
+  absorbs every call; `Sound.allCases` covers the new game cases). Build + SwiftLint green.
+
+**Follow-up tuning & fixes (audio + game feel):**
+
+- **Mix balance:** music bumped 0.25 → 0.30 (+20 %); the bull's `cow` bellow dropped to
+  `volume: 0.5` (it fires every ~2 s, so half-volume keeps it from dominating).
+- **Cape expiry telegraph.** The cape power-up now runs **5 s solid, then a 2 s blink** before
+  expiring (`capeDuration` 8 → 7; new `isCapeVisible` flashes the overlay ~5×/s during the final
+  `capeBlinkDuration` seconds while `isCaped` — and thus the flag-smashing gameplay — stays true
+  the whole time). Classic "invincibility about to end" flicker.
+- **Honest flag hitbox.** Flag↔player collision now uses a tighter `flagHitSize` (20 vs the 30 pt
+  drawn box) — flag emoji sit inside transparent glyph padding, so the full box registered
+  phantom hits on jumps that had visually cleared the flag. Now a jump whose arc doesn't touch
+  the flag costs no health, exactly as it looks. (Jump impulse unchanged, so you still can't skip
+  a level.) Covered by two new `GameStateTests`.
+- **SF Symbol fix.** The Settings "Game" card's icon was `figure.flamenco` — **not a real SF
+  Symbol** (8,539 in the on-device manifest; that isn't one), so it rendered blank. Swapped to
+  `figure.dance` (a dancer — on-theme for flamenco, and distinct from the Game Center card's
+  `gamecontroller.fill`).

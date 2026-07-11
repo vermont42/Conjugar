@@ -106,7 +106,7 @@ struct CommunView: View {
 
   private func action() {
     Current.analytics.recordActionTap(identifier: viewModel.identifier)
-    SoundPlayer.playRandomApplause()
+    Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
     onDismiss()
     viewModel.action()
   }

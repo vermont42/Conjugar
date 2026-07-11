@@ -21,7 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       Current = World.uiTest(launchArguments: CommandLine.arguments)
     }
 
+    // Order matters: Utterer configures the shared AVAudioSession (`.ambient`); the
+    // sound player then warms the audio stack off-main against that session.
     Utterer.setup(settings: Current.settings)
+    Current.soundPlayer.setup()
 
     return true
   }

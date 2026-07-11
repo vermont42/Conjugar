@@ -24,6 +24,7 @@ class World {
   var locale: AnalyticsLocale
   var languageModelService: LanguageModelService
   var getterSetter: GetterSetter
+  var soundPlayer: SoundPlayer
 
   private static let fakeRatingsCount = 42
 
@@ -37,7 +38,8 @@ class World {
     communGetter: CommunGetter,
     locale: AnalyticsLocale,
     languageModelService: LanguageModelService,
-    getterSetter: GetterSetter
+    getterSetter: GetterSetter,
+    soundPlayer: SoundPlayer
   ) {
     self.analytics = analytics
     self.reviewPrompter = reviewPrompter
@@ -49,6 +51,7 @@ class World {
     self.locale = locale
     self.languageModelService = languageModelService
     self.getterSetter = getterSetter
+    self.soundPlayer = soundPlayer
   }
 
   // Under the SwiftUI App lifecycle there is no custom main.swift to select a
@@ -84,7 +87,8 @@ class World {
       communGetter: CommunGetterReal(),
       locale: AnalyticsLocaleReal(),
       languageModelService: LanguageModelServiceReal(),
-      getterSetter: getterSetter
+      getterSetter: getterSetter,
+      soundPlayer: SoundPlayerReal()
     )
   }()
 
@@ -103,7 +107,8 @@ class World {
       communGetter: CommunGetterStub(),
       locale: AnalyticsLocaleStub(languageCode: "en", regionCode: "US"),
       languageModelService: LanguageModelServiceReal(),
-      getterSetter: getterSetter
+      getterSetter: getterSetter,
+      soundPlayer: SoundPlayerReal()
     )
   }()
 
@@ -122,7 +127,8 @@ class World {
       communGetter: CommunGetterStub(),
       locale: AnalyticsLocaleStub(),
       languageModelService: LanguageModelServiceDummy(),
-      getterSetter: getterSetter
+      getterSetter: getterSetter,
+      soundPlayer: SoundPlayerDummy()
     )
   }()
 
@@ -162,7 +168,8 @@ class World {
       communGetter: CommunGetterStub(),
       locale: AnalyticsLocaleStub(),
       languageModelService: LanguageModelServiceDummy(),
-      getterSetter: getterSetter
+      getterSetter: getterSetter,
+      soundPlayer: SoundPlayerDummy()
     )
   }
 }

@@ -12,6 +12,11 @@
 		AA01B2C3D4E5F60718293A02 /* sadTrombone2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A01 /* sadTrombone2.mp3 */; };
 		AA01B2C3D4E5F60718293A04 /* sadTrombone3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A03 /* sadTrombone3.mp3 */; };
 		AA01B2C3D4E5F60718293A06 /* sadTrombone4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A05 /* sadTrombone4.mp3 */; };
+		AA10B2C3D4E5F60718293B02 /* pop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA10B2C3D4E5F60718293B01 /* pop.mp3 */; };
+		AA10B2C3D4E5F60718293B04 /* chomp.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA10B2C3D4E5F60718293B03 /* chomp.mp3 */; };
+		AA10B2C3D4E5F60718293B06 /* cow.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA10B2C3D4E5F60718293B05 /* cow.mp3 */; };
+		AA10B2C3D4E5F60718293B08 /* shieldActivate.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA10B2C3D4E5F60718293B07 /* shieldActivate.mp3 */; };
+		AA10B2C3D4E5F60718293B0A /* soccerKick.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA10B2C3D4E5F60718293B09 /* soccerKick.mp3 */; };
 		E11CE1021F48867400E74E10 /* sadTrombone1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */; };
 		E14271371F01CA98001D19E1 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E14271361F01CA98001D19E1 /* GameKit.framework */; };
 		E1483FAD1EF5A2200052C436 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1483FAC1EF5A2200052C436 /* Assets.xcassets */; };
@@ -20,6 +25,7 @@
 		E1483FC91EF89C710052C436 /* applause2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC61EF89C710052C436 /* applause2.mp3 */; };
 		E1483FCA1EF89C710052C436 /* applause3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC71EF89C710052C436 /* applause3.mp3 */; };
 		E1483FCC1EF89D4E0052C436 /* chirp.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCB1EF89D4E0052C436 /* chirp.mp3 */; };
+		AA10B2C3D4E5F60718293C02 /* flamencoLoop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA10B2C3D4E5F60718293C01 /* flamencoLoop.mp3 */; };
 		E1483FCE1EF89DAD0052C436 /* buzz.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCD1EF89DAD0052C436 /* buzz.mp3 */; };
 		E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E18F7F3D1ECA7E3700633200 /* silence.mp3 */; };
 		E19794342073D0C90015D490 /* gun.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E19794332073D0C90015D490 /* gun.mp3 */; };
@@ -76,6 +82,11 @@
 		AA01B2C3D4E5F60718293A01 /* sadTrombone2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone2.mp3; sourceTree = "<group>"; };
 		AA01B2C3D4E5F60718293A03 /* sadTrombone3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone3.mp3; sourceTree = "<group>"; };
 		AA01B2C3D4E5F60718293A05 /* sadTrombone4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone4.mp3; sourceTree = "<group>"; };
+		AA10B2C3D4E5F60718293B01 /* pop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pop.mp3; sourceTree = "<group>"; };
+		AA10B2C3D4E5F60718293B03 /* chomp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chomp.mp3; sourceTree = "<group>"; };
+		AA10B2C3D4E5F60718293B05 /* cow.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cow.mp3; sourceTree = "<group>"; };
+		AA10B2C3D4E5F60718293B07 /* shieldActivate.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shieldActivate.mp3; sourceTree = "<group>"; };
+		AA10B2C3D4E5F60718293B09 /* soccerKick.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = soccerKick.mp3; sourceTree = "<group>"; };
 		E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone1.mp3; sourceTree = "<group>"; };
 		E14271361F01CA98001D19E1 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		E1483FAC1EF5A2200052C436 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -84,6 +95,7 @@
 		E1483FC61EF89C710052C436 /* applause2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause2.mp3; sourceTree = "<group>"; };
 		E1483FC71EF89C710052C436 /* applause3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause3.mp3; sourceTree = "<group>"; };
 		E1483FCB1EF89D4E0052C436 /* chirp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chirp.mp3; sourceTree = "<group>"; };
+		AA10B2C3D4E5F60718293C01 /* flamencoLoop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = flamencoLoop.mp3; sourceTree = "<group>"; };
 		E1483FCD1EF89DAD0052C436 /* buzz.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = buzz.mp3; sourceTree = "<group>"; };
 		E18F7F3D1ECA7E3700633200 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silence.mp3; sourceTree = "<group>"; };
 		E19794332073D0C90015D490 /* gun.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gun.mp3; sourceTree = "<group>"; };
@@ -185,6 +197,12 @@
 				AA01B2C3D4E5F60718293A03 /* sadTrombone3.mp3 */,
 				AA01B2C3D4E5F60718293A05 /* sadTrombone4.mp3 */,
 				E18F7F3D1ECA7E3700633200 /* silence.mp3 */,
+				AA10B2C3D4E5F60718293C01 /* flamencoLoop.mp3 */,
+				AA10B2C3D4E5F60718293B01 /* pop.mp3 */,
+				AA10B2C3D4E5F60718293B03 /* chomp.mp3 */,
+				AA10B2C3D4E5F60718293B05 /* cow.mp3 */,
+				AA10B2C3D4E5F60718293B07 /* shieldActivate.mp3 */,
+				AA10B2C3D4E5F60718293B09 /* soccerKick.mp3 */,
 			);
 			name = Sounds;
 			sourceTree = "<group>";
@@ -364,6 +382,12 @@
 			files = (
 				E1483FC01EF746D70052C436 /* chime.mp3 in Resources */,
 				E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */,
+				AA10B2C3D4E5F60718293C02 /* flamencoLoop.mp3 in Resources */,
+				AA10B2C3D4E5F60718293B02 /* pop.mp3 in Resources */,
+				AA10B2C3D4E5F60718293B04 /* chomp.mp3 in Resources */,
+				AA10B2C3D4E5F60718293B06 /* cow.mp3 in Resources */,
+				AA10B2C3D4E5F60718293B08 /* shieldActivate.mp3 in Resources */,
+				AA10B2C3D4E5F60718293B0A /* soccerKick.mp3 in Resources */,
 				038A31ED2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy in Resources */,
 				E1F06AE21E8F05F300ADD2E1 /* LaunchScreen.storyboard in Resources */,
 				E19794342073D0C90015D490 /* gun.mp3 in Resources */,

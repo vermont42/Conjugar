@@ -122,6 +122,48 @@ nonisolated enum L {
     }
   }
 
+  enum Game {
+    static var title: String {
+      String(localized: "Game.title")
+    }
+
+    static var description: String {
+      String(localized: "Game.description")
+    }
+
+    static var play: String {
+      String(localized: "Game.play")
+    }
+
+    static var quit: String {
+      String(localized: "Game.quit")
+    }
+
+    static var health: String {
+      String(localized: "Game.health")
+    }
+
+    static var jump: String {
+      String(localized: "Game.jump")
+    }
+
+    static var moveUp: String {
+      String(localized: "Game.moveUp")
+    }
+
+    static var moveDown: String {
+      String(localized: "Game.moveDown")
+    }
+
+    static var moveLeft: String {
+      String(localized: "Game.moveLeft")
+    }
+
+    static var moveRight: String {
+      String(localized: "Game.moveRight")
+    }
+  }
+
   enum GameCenter {
     static var failure: String {
       String(localized: "GameCenter.failure")

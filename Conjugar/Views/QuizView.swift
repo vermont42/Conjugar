@@ -61,7 +61,7 @@ struct QuizView: View {
       }
       .alert(L.Quiz.gameCenter, isPresented: $showingGameCenterPrompt) {
         Button(L.Quiz.no, role: .destructive) {
-          SoundPlayer.playRandomSadTrombone()
+          Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)
           Current.settings.userRejectedGameCenter = true
         }
         Button(L.Quiz.yes) { authenticateGameCenter() }
@@ -242,7 +242,7 @@ struct QuizView: View {
 
   private func startQuiz() {
     TryQuizTip().invalidate(reason: .actionPerformed)
-    SoundPlayer.play(.gun)
+    Current.soundPlayer.play(.gun, shouldDebounce: false)
     Current.quiz.start()
     answer = ""
     lastProposed = nil
@@ -257,9 +257,9 @@ struct QuizView: View {
     let proposed = answer
     let (result, correct) = Current.quiz.process(proposedAnswer: proposed)
     switch result {
-    case .totalMatch: SoundPlayer.play(.chime)
-    case .partialMatch: SoundPlayer.play(.chirp)
-    case .noMatch: SoundPlayer.play(.buzz)
+    case .totalMatch: Current.soundPlayer.play(.chime, shouldDebounce: false)
+    case .partialMatch: Current.soundPlayer.play(.chirp, shouldDebounce: false)
+    case .noMatch: Current.soundPlayer.play(.buzz, shouldDebounce: false)
     }
     withAnimation(.snappy) {
       lastProposed = proposed
@@ -276,7 +276,7 @@ struct QuizView: View {
   }
 
   private func finish() {
-    SoundPlayer.playRandomApplause()
+    Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
     Current.gameCenter.showLeaderboard()
     Current.analytics.recordQuizCompletion(score: Current.quiz.score)
     showingResults = true
@@ -284,7 +284,7 @@ struct QuizView: View {
 
   private func quit() {
     Current.quiz.quit()
-    SoundPlayer.playRandomSadTrombone()
+    Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)
     Current.analytics.recordQuizQuit(currentQuestionIndex: Current.quiz.currentQuestionIndex, score: Current.quiz.score)
     fieldFocused = false
     lastResult = nil

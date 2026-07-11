@@ -45,7 +45,7 @@ struct VerbBrowseView: View {
         || entry.gloss.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
     }
     if results.isEmpty && !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-      SoundPlayer.playRandomSadTrombone()
+      Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)
     }
     filteredVerbs = results
   }

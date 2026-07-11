@@ -53,7 +53,7 @@ final class GameCenterReal: GameCenter {
       self.isAuthenticated = GKLocalPlayer.local.isAuthenticated
       if becameAuthenticated {
         Current.analytics.recordGameCenterAuth()
-        SoundPlayer.playRandomApplause()
+        Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
       }
     }
   }

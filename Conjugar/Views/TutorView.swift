@@ -287,7 +287,7 @@ struct TutorView: View {
     messages.append(userMessage)
     inputText = ""
     isGenerating = true
-    SoundPlayer.play(.chirp)
+    Current.soundPlayer.play(.chirp, shouldDebounce: false)
     saveMessages()
 
     Task {
@@ -297,7 +297,7 @@ struct TutorView: View {
       } catch {
         messages.append(TutorMessage(role: .assistant, content: L.Tutor.unavailable))
       }
-      SoundPlayer.play(.chirp)
+      Current.soundPlayer.play(.chirp, shouldDebounce: false)
       isGenerating = false
       saveMessages()
     }

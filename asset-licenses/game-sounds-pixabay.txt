@@ -1,0 +1,12 @@
+Assets:   Conjugar/pop.mp3, chomp.mp3, cow.mp3, shieldActivate.mp3, soccerKick.mp3
+          (reused game sound effects: jump, cape-smash, bull bellow, cape pickup,
+          flag-hit)
+Source:   Reused from the sibling apps Konjugieren and Conjuguer, which sourced them
+          from Pixabay — https://pixabay.com/sound-effects/
+License:  Pixabay Content License — https://pixabay.com/service/license-summary/
+          Commercial use permitted; NO attribution required. Only restriction:
+          don't redistribute the raw sound file as a standalone download (embedding
+          it in the app satisfies this).
+
+Reuse:    Bundled as game SFX. No attribution legally required; the app's Credits
+          screen ("Game Sounds") includes a courtesy note.

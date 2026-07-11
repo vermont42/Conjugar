@@ -1,0 +1,132 @@
+//
+//  GameState+Physics.swift
+//  Conjugar
+//
+//  Player physics: horizontal move from intent booleans, gravity + platform snap,
+//  ladder climbing, jump impulse, and the "reached the bull" check.
+//
+
+import CoreGraphics
+
+extension GameState {
+  /// One frame of player motion.
+  func updatePlayer(dt: CGFloat) {
+    // Facing follows the last horizontal intent.
+    if movingRight && !movingLeft {
+      playerFacing = 1
+    } else if movingLeft && !movingRight {
+      playerFacing = -1
+    }
+
+    if playerClimbing {
+      updateClimb(dt: dt)
+      return
+    }
+
+    // Grab a ladder if standing at one and pressing up/down.
+    if (movingUp || movingDown) && tryEnterLadder() {
+      return
+    }
+
+    // Horizontal move from intent (both pressed cancels), clamped to the beam.
+    let dir: CGFloat = (movingRight ? 1 : 0) - (movingLeft ? 1 : 0)
+    playerX += dir * Self.playerSpeed * dt
+    let halfW = Self.playerWidth / 2
+    playerX = min(max(playerX, Self.sideMargin + halfW), screenSize.width - Self.sideMargin - halfW)
+
+    // Gravity + integrate vertical position.
+    let prevFeet = playerY + Self.playerHeight / 2
+    playerVelocityY += Self.gravity * dt
+    playerY += playerVelocityY * dt
+    let newFeet = playerY + Self.playerHeight / 2
+
+    // Platform snap: when falling and the feet cross a beam's top face while
+    // horizontally over it, land on that beam.
+    playerGrounded = false
+    if playerVelocityY >= 0 {
+      for platform in platforms {
+        let top = platform.surfaceY
+        let overlapsX = playerX >= platform.rect.minX - halfW && playerX <= platform.rect.maxX + halfW
+        if overlapsX && prevFeet <= top + 1 && newFeet >= top {
+          playerY = top - Self.playerHeight / 2
+          playerVelocityY = 0
+          playerGrounded = true
+          playerLevel = platform.level
+          break
+        }
+      }
+    }
+  }
+
+  /// Jump impulse — the one control that's a press, not a held intent.
+  func jump() {
+    guard playerGrounded, !playerClimbing else { return }
+    playerVelocityY = -Self.jumpImpulse
+    playerGrounded = false
+    Current.soundPlayer.play(.pop, shouldDebounce: false)
+  }
+
+  /// If the player is standing at a ladder and pressing toward it, enter climbing.
+  private func tryEnterLadder() -> Bool {
+    guard playerGrounded else { return false }
+    for ladder in ladders where abs(playerX - ladder.x) < Self.climbTolerance {
+      let goingUp = movingUp && ladder.lowerLevel == playerLevel
+      let goingDown = movingDown && ladder.upperLevel == playerLevel
+      if goingUp || goingDown {
+        playerClimbing = true
+        climbingLadder = ladder.id
+        playerX = ladder.x
+        playerVelocityY = 0
+        playerGrounded = false
+        return true
+      }
+    }
+    return false
+  }
+
+  /// One frame of ladder climbing. Exits (and lands) at either end.
+  private func updateClimb(dt: CGFloat) {
+    guard let lid = climbingLadder, let ladder = ladders.first(where: { $0.id == lid }) else {
+      playerClimbing = false
+      return
+    }
+
+    let dir: CGFloat = (movingDown ? 1 : 0) - (movingUp ? 1 : 0)   // +y is down
+    playerY += dir * Self.climbSpeed * dt
+
+    // A quiet, retriggered rung-tick while actually climbing. Debounced (~1/sec) and
+    // low-volume so the per-frame call can't machine-gun the effect.
+    if dir != 0 {
+      Current.soundPlayer.play(.chirp, shouldDebounce: true, volume: 0.4)
+    }
+
+    let topCenter = ladder.topY - Self.playerHeight / 2       // player center at upper platform
+    let bottomCenter = ladder.bottomY - Self.playerHeight / 2 // player center at lower platform
+
+    if playerY <= topCenter {
+      land(on: ladder.upperLevel, centerY: topCenter)
+    } else if playerY >= bottomCenter {
+      land(on: ladder.lowerLevel, centerY: bottomCenter)
+    }
+  }
+
+  private func land(on level: Int, centerY: CGFloat) {
+    playerY = centerY
+    playerClimbing = false
+    climbingLadder = nil
+    playerGrounded = true
+    playerLevel = level
+    playerVelocityY = 0
+  }
+
+  /// Reaching the bull restarts the level (no win/lose in the prototype).
+  func checkReachedBull() {
+    if rectsIntersect(
+      playerX, playerY, Self.playerWidth, Self.playerHeight,
+      bullX, bullY, Self.bullSize, Self.bullSize
+    ) {
+      Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
+      reset()
+    }
+  }
+}
