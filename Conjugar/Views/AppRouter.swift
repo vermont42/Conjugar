@@ -26,9 +26,13 @@ final class AppRouter {
   var pendingVerb: String?
   /// A one-shot request for the Quiz tab to start a quiz. `QuizView` consumes it.
   var pendingQuizStart = false
+  /// Drives a full-screen `GameView` cover from `MainTabView`, tab-independent so a
+  /// `conjugar://game` deeplink jumps straight to the game from any screen. (The
+  /// Settings tab's Play button presents the game via its own state; both are fine.)
+  var showGame = false
 
-  /// Route a `conjugar://` deeplink. Hosts: `verb/<infinitive>` (or `verb/random`) and
-  /// `quiz/start`. Unknown or unmapped verbs are ignored.
+  /// Route a `conjugar://` deeplink. Hosts: `verb/<infinitive>` (or `verb/random`),
+  /// `quiz/start`, and `game`. Unknown or unmapped verbs are ignored.
   func handle(url: URL) {
     guard url.scheme == "conjugar", let host = url.host() else { return }
     switch host {
@@ -42,6 +46,8 @@ final class AppRouter {
     case "quiz":
       selectedTab = .quiz
       pendingQuizStart = true
+    case "game":
+      showGame = true
     default:
       break
     }

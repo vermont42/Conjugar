@@ -73,6 +73,29 @@ S=~/.claude/skills/ios-build-verify/scripts
 "$S/describe_ui.sh" --point 200,540   # inspect the element under a logical-points coordinate
 ```
 
+### Deeplinks (jump straight to a screen)
+
+The app registers the **`conjugar://`** URL scheme (`Conjugar/Info.plist`), routed by
+`AppRouter.handle(url:)` (`Views/AppRouter.swift`). Open one with `simctl` to skip manual
+navigation — it cold-launches the app and routes on arrival:
+
+```bash
+UDID=$(xcrun simctl list devices booted -j | python3 -c "import sys,json;print(json.load(sys.stdin)['devices'].popitem()[1][0]['udid'])")
+xcrun simctl openurl "$UDID" conjugar://game            # → full-screen game (Settings ▸ Play, skipped)
+xcrun simctl openurl "$UDID" conjugar://quiz/start      # → Quiz tab, starts a quiz
+xcrun simctl openurl "$UDID" conjugar://verb/hablar     # → Browse tab, pushes a verb (or verb/random)
+```
+
+**`conjugar://game`** is the fast path to the game: it presents `GameView` full-screen via
+`AppRouter.showGame` from `MainTabView` (tab-independent), so no Settings→scroll→Play dance.
+Then hold a direction button to trigger the `.walk` action and the dancer sprite (idle shows
+the placeholder box). Example hold-and-capture (logical points; right arrow ≈ `131,767`):
+
+```bash
+axe touch -x 131 -y 767 --down --up --delay 2.5 --udid "$UDID" &   # hold right ~2.5 s
+sleep 1.1; "$S/screenshot.sh" walking                              # capture mid-walk
+```
+
 Conjugar-specific config facts baked into `.claude/ios-build-verify.config.sh`:
 
 - **Launch anchor** `FIRST_SCREEN_ID = browse_verb_count` — the `.accessibilityIdentifier`

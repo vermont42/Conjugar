@@ -78,6 +78,8 @@ struct MainTabView: View {
     .fullScreenCover(item: $commun) { commun in
       CommunView(commun: commun) { self.commun = nil }
     }
+    // A `conjugar://game` deeplink jumps straight to the game from any tab.
+    .fullScreenCover(isPresented: $router.showGame) { GameView() }
   }
 
   /// Control-center controls can't navigate, so they stash a deeplink in the shared
