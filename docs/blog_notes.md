@@ -3633,3 +3633,14 @@ español"; *disolver*'s second English sentence capitalized (`~solvere~` → `~S
 start, same class of fix as *visar*'s *Viser*); and *repasar* gained the closer French cognate
 `~repasser~` — the exact re-+passer compound, which even shares the "go back over / iron" senses with
 Spanish *repasar* — beside the English *repass*.
+
+**Etymology sweep — sentence-initial capitalization.** Every etymology (en + es) routinely opens
+sentences with a lowercase italic headword ("~bajar~ descends…", "~velar~ es la forma…"), the same
+slip caught earlier one-off in *visar* (*Viser*) and *disolver* (*Solvere*). A sweep capitalized the
+first letter inside the markup at every genuine sentence start — **929 fixes (439 en / 490 es)**. The
+work was in the segmenter: split only on real boundaries, suppressing abbreviations (`i.e.`, `e.g.`,
+`a. C.`, siglo `s. III`, single-letter initials) and interior `¡…!` / `¿…?` via balanced-punctuation
+tracking, and skipping reconstructed forms (`*~weyd-~`, lowercase by convention). An independent
+leak-check for capitalizations landing after an abbreviation returned **0** real hits (one flagged
+case was verified a correct boundary — the period after "…i.e. competent." legitimately ends its
+sentence). Accent-preserving (`~ánimo~` → `~Ánimo~`). Data-only; display-decoupled.
