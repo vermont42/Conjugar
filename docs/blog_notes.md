@@ -3597,3 +3597,15 @@ paragraph breaks) passed **0 problems** across all 351, and the merge took `Etym
 just appear. Build **Succeeded**, full suite **427 tests / 0 failures**, and a data spot-check
 confirmed *yantar / aducir / heder / trovar* each resolve a modern example, their medieval
 attestations, and an etymology. The example-uses pipeline (A–F) is now complete.
+
+**Gloss fix — *desvelar* homonymy.** Reading the freshly written *desvelar* etymology surfaced a
+mismatch: the etymology's second paragraph stresses that *desvelar* is a homonym with two unrelated
+etyma — "reveal/unveil" (from *des-* + *velar* ← Latin *vēlum*) and "keep awake/lose sleep" (from
+Latin *ēvigilāre*) — yet the shipped gloss showed only "reveal." The phase-1 gloss adjudication had
+already flagged this (`verdicts_af.tsv:193` note "reveal / keep awake") but it never reached the
+slice or the XML. Fixed the `tn` in `verbModelMap.xml` and the `slice_af.tsv` row to
+**"reveal, keep awake"** — a single comma gloss, matching the house style of the 24 existing
+two-sense glosses (`come, turn to`; `admit, accept`), rather than a two-line homonym split. The
+homonym split (as for *apostar*/*asolar*/*aterrar*) exists to give senses *different conjugation
+classes*; both senses of *desvelar* are regular class-1, so a comma gloss is the right encoding and
+`glosses[0]` still defaults to "reveal," correct for modern usage.
