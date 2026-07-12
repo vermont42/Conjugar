@@ -27,8 +27,14 @@ struct GameView: View {
   // dancerFeetOffset. All actions are held to one visual HEIGHT and given their
   // own rendered aspect ratio (widths differ with limb spread), so the character
   // stays one size with feet aligned as the action changes.
-  private static let dancerVisualHeight: CGFloat = 56
-  private static let dancerFeetOffset: CGFloat = -(56 - GameState.playerHeight) / 2
+  // Bumped 56 → 57.3 with the cel outline: the Freestyle edge added ~4px to every
+  // crop's HEIGHT (169→173) without changing the body's rendered px (the outline is
+  // a post-process line outside the mesh bounds), so scaling the taller crop by that
+  // same ratio (56 × 173/169) holds the character BODY at its prior on-screen size —
+  // consistent with the bull, whose unchanged bullScale likewise keeps its body one
+  // size while the outline just adds a thin margin around it.
+  private static let dancerVisualHeight: CGFloat = 57.3
+  private static let dancerFeetOffset: CGFloat = -(dancerVisualHeight - GameState.playerHeight) / 2
 
   /// Player actions backed by real rendered sprites (`dancer_<action>_<frame>`).
   /// All five are rendered; the numbered-box fallback stays only as a safety net.
@@ -46,17 +52,17 @@ struct GameView: View {
   }
 
   /// Displayed width for an action, from its rendered union-crop aspect ratio
-  /// (pixel dims, all ~169 tall) at the constant `dancerVisualHeight`. Keeping
-  /// height fixed and width per-action means `.scaledToFit()` never letterboxes
-  /// and the feet stay glued to the frame's bottom edge across actions.
+  /// (cel + outline pixel dims, all ~173 tall) at the constant `dancerVisualHeight`.
+  /// Keeping height fixed and width per-action means `.scaledToFit()` never
+  /// letterboxes and the feet stay glued to the frame's bottom edge across actions.
   private static func dancerWidth(_ action: PlayerAction) -> CGFloat {
     let aspect: CGFloat
     switch action {
-    case .idle: aspect = 34.0 / 170.0
-    case .walk: aspect = 109.0 / 169.0
-    case .climb: aspect = 70.0 / 169.0
-    case .jump: aspect = 119.0 / 169.0
-    case .cape: aspect = 109.0 / 169.0
+    case .idle: aspect = 38.0 / 174.0
+    case .walk: aspect = 113.0 / 173.0
+    case .climb: aspect = 74.0 / 173.0
+    case .jump: aspect = 123.0 / 173.0
+    case .cape: aspect = 113.0 / 173.0
     }
     return dancerVisualHeight * aspect
   }
@@ -75,21 +81,23 @@ struct GameView: View {
   //
   // Unlike the dancer (all crops the same pixel height → constant on-screen
   // height), the bull's THROW rears the head up, so its union crop is much taller
-  // (114 px) than the walk's (92 px). But `render_sprites.py` auto-fits ortho by
-  // the bull's constant body LENGTH (every action crops to 170 px wide), so one
+  // (118 px) than the walk's (97 px). But `render_sprites.py` auto-fits ortho by
+  // the bull's constant body LENGTH (every action crops to ~174 px wide), so one
   // render pixel is the SAME world size in every action. We therefore map crop
   // pixels to screen at one constant `bullScale` — width, height, and the feet
   // offset all derived per action from its crop dims. That keeps the body a
   // constant size while the reared head genuinely extends upward on a throw
-  // (a fixed on-screen height would instead shrink the body ~19% mid-throw).
+  // (a fixed on-screen height would instead shrink the body ~18% mid-throw).
+  // The cel outline added ~4px to every crop dim; bullScale is unchanged, so the
+  // body stays one size and the outline just adds a thin margin around it.
   private static let bullScale: CGFloat = 0.653   // screen pt per render crop px
 
-  /// Union-crop pixel dims (W, H) per action, from `pack_or_rename.sh`.
+  /// Union-crop pixel dims (W, H) per action, from `pack_or_rename.sh` (cel + outline).
   private static func bullCrop(_ action: BullAction) -> (w: CGFloat, h: CGFloat) {
     switch action {
-    case .idle:  return (164, 87)
-    case .walk:  return (170, 92)
-    case .throw: return (170, 114)
+    case .idle:  return (168, 91)
+    case .walk:  return (174, 97)
+    case .throw: return (174, 118)
     }
   }
 

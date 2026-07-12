@@ -73,9 +73,16 @@ def parse_args():
                    choices=["eevee", "workbench", "cycles"],
                    help="Render engine (EEVEE default; auto-falls back to Workbench).")
     p.add_argument("--toon", action="store_true",
-                   help="Apply a flat palette material (see --color).")
+                   help="Apply a banded cel palette material (see --color). EEVEE only.")
     p.add_argument("--color", default="gold", choices=["gold", "red", "none"],
                    help="Palette color for --toon: gold #CDA51B or red #C1001D.")
+    p.add_argument("--bands", type=int, default=2, choices=[2, 3],
+                   help="Cel shading bands: 2 (shadow+lit) or 3 (adds a highlight).")
+    p.add_argument("--outline", action="store_true",
+                   help="Add a black Freestyle silhouette outline. EEVEE only. "
+                        "NOTE: inflates every silhouette -> GameView crop constants change.")
+    p.add_argument("--outline-width", type=float, default=2.0,
+                   help="Freestyle outline thickness in output px (at --size; 2 ≈ 1px on-screen).")
     p.add_argument("--start", type=int, default=-1, help="Override frame_start.")
     p.add_argument("--end", type=int, default=-1, help="Override frame_end.")
     p.add_argument("--out", default="tools/blender/renders",
@@ -277,29 +284,115 @@ def setup_light(args):
 # --------------------------------------------------------------------------- toon
 
 
-def apply_flat_material(meshes, color_rgba):
-    """Replace materials with one flat, palette-colored Principled material.
+def _scaled(color_rgba, factor):
+    """Multiply the RGB of an sRGB-float color by `factor`, clamped to 1.0."""
+    r, g, b, a = color_rgba
+    return (min(r * factor, 1.0), min(g * factor, 1.0), min(b * factor, 1.0), a)
 
-    A deliberately simple v1 (the plan: 'render the raw model first, add toon
-    once it works'). To upgrade to a true cel look, insert a Shader-to-RGB →
-    ColorRamp (constant interpolation) between the BSDF and the material output —
-    see README. EEVEE only.
+
+def _srgb_to_linear(color_rgba):
+    """Convert an sRGB-float RGBA to linear, as Blender color sockets expect.
+
+    PALETTE stores plain sRGB hex fractions; a Blender color input is linear, so
+    an emission fed the raw sRGB value renders too bright (the red drifts to hot
+    pink). Converting here means the Standard view transform's linear→sRGB output
+    lands back on the exact palette hex (#CDA51B / #C1001D)."""
+    def lin(c):
+        return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+    r, g, b, a = color_rgba
+    return (lin(r), lin(g), lin(b), a)
+
+
+def apply_cel_material(meshes, color_rgba, bands=2):
+    """Replace materials with one cel-shaded (banded) emission material. EEVEE only.
+
+    Node graph:
+        Diffuse BSDF (white) → Shader to RGB → ColorRamp (Constant) → Emission
+        → Material Output
+
+    The white Diffuse + Shader-to-RGB turn the scene lighting into a 0–1
+    luminance that the *Constant*-interpolation ColorRamp quantizes into flat
+    bands; the ramp's stops carry the palette colors, so the whole mesh is one
+    hue and only the bands do the shaping (deliberate — the silhouette stays
+    uniform, matching the flat-color intent of the original v1). Shader to RGB
+    is an EEVEE-only node, so this look requires EEVEE.
+
+    Bands (from the `--color` base):
+      shadow    = base × 0.55   (threshold at fac ≥ 0.33 becomes lit)
+      lit       = base
+      highlight = min(base × 1.2, 1.0)   (3-band only, fac ≥ 0.66)
     """
-    mat = bpy.data.materials.new("ConjugarFlat")
+    mat = bpy.data.materials.new("ConjugarCel")
     mat.use_nodes = True
-    bsdf = mat.node_tree.nodes.get("Principled BSDF")
-    if bsdf:
-        bsdf.inputs["Base Color"].default_value = color_rgba
-        if "Roughness" in bsdf.inputs:
-            bsdf.inputs["Roughness"].default_value = 1.0
-        # Specular input renamed across versions; set whichever exists.
-        for key in ("Specular IOR Level", "Specular"):
-            if key in bsdf.inputs:
-                bsdf.inputs[key].default_value = 0.0
-                break
+    nt = mat.node_tree
+    nt.nodes.clear()
+
+    diffuse = nt.nodes.new("ShaderNodeBsdfDiffuse")
+    diffuse.inputs["Color"].default_value = (1.0, 1.0, 1.0, 1.0)
+    diffuse.inputs["Roughness"].default_value = 1.0
+
+    to_rgb = nt.nodes.new("ShaderNodeShaderToRGB")
+
+    ramp = nt.nodes.new("ShaderNodeValToRGB")
+    cr = ramp.color_ramp
+    cr.interpolation = "CONSTANT"
+    els = cr.elements
+    els[0].position = 0.0
+    els[0].color = _srgb_to_linear(_scaled(color_rgba, 0.55))   # shadow
+    els[1].position = 0.33
+    els[1].color = _srgb_to_linear(color_rgba)                  # lit
+    if bands >= 3:
+        hi = els.new(0.66)
+        hi.color = _srgb_to_linear(_scaled(color_rgba, 1.2))    # highlight
+
+    emission = nt.nodes.new("ShaderNodeEmission")
+    output = nt.nodes.new("ShaderNodeOutputMaterial")
+
+    links = nt.links
+    links.new(diffuse.outputs["BSDF"], to_rgb.inputs["Shader"])
+    links.new(to_rgb.outputs["Color"], ramp.inputs["Fac"])
+    links.new(ramp.outputs["Color"], emission.inputs["Color"])
+    links.new(emission.outputs["Emission"], output.inputs["Surface"])
+
     for obj in meshes:
         obj.data.materials.clear()
         obj.data.materials.append(mat)
+    return mat
+
+
+def setup_outline(width_px=2.0):
+    """Add a black cel outline via Blender's Freestyle silhouette line renderer.
+
+    Freestyle draws a pixel-width line along the model's outer silhouette (and the
+    view-contour of overlapping limbs), which gives a crisp, deterministic drawn
+    edge over the cel fill. It renders into the transparent PNG, so the outline is
+    part of the sprite's alpha silhouette.
+
+    Chosen over the inverted-hull Solidify trick: under this build's EEVEE-Next the
+    flipped-normal + backface-cull shell either culled the rim away or swallowed
+    the whole figure (verified on a probe pass) — Freestyle is deterministic and
+    its thickness is directly in output pixels, which is what we tune against.
+
+    IMPORTANT: the line extends ~half its width past the mesh silhouette, so it
+    inflates every union-crop box — the GameView dancer/bull size constants keyed
+    to those crops must be re-derived after enabling this (see the plan's Phase 4).
+    """
+    scene = bpy.context.scene
+    scene.render.use_freestyle = True
+    scene.render.line_thickness_mode = "ABSOLUTE"   # width in px, not scaled by DPI
+    scene.render.line_thickness = width_px
+
+    view_layer = scene.view_layers[0]
+    view_layer.use_freestyle = True
+    fs = view_layer.freestyle_settings
+    lineset = fs.linesets[0]
+    lineset.select_silhouette = True   # the outer contour — the actual outline
+    lineset.select_border = True       # open-mesh boundary edges
+    lineset.select_contour = True      # view-contour of overlapping limbs (hand-drawn read)
+    lineset.select_crease = False      # skip interior crease clutter
+    lineset.select_edge_mark = False
+    lineset.linestyle.color = (0.0, 0.0, 0.0)
+    lineset.linestyle.thickness = width_px
 
 
 # -------------------------------------------------------------------------- render
@@ -309,6 +402,14 @@ def configure_output(args, engine_id):
     scene = bpy.context.scene
     scene.render.engine = engine_id
     scene.render.film_transparent = True
+    # A cel render wants the palette's *literal* hex, so bypass the default AgX
+    # view transform (it shifts saturated reds toward pink and mutes the gold).
+    # Standard passes the emission colors through, keeping #CDA51B / #C1001D true.
+    if args.toon:
+        try:
+            scene.view_settings.view_transform = "Standard"
+        except (AttributeError, TypeError):
+            pass
     img = scene.render.image_settings
     img.file_format = "PNG"
     img.color_mode = "RGBA"
@@ -356,16 +457,27 @@ def main():
         meshes = mesh_objects()
 
     engine_id = resolve_engine(args.engine)
+    # The cel material's Shader-to-RGB node and the outline are EEVEE-only, and a
+    # silent Workbench fallback would erase the toon look entirely — so require
+    # EEVEE up front and fail loudly rather than degrade.
+    if args.toon and not engine_id.startswith("BLENDER_EEVEE"):
+        sys.exit(f"[render_sprites] --toon requires EEVEE (Shader to RGB is EEVEE-only), "
+                 f"but the resolved engine is {engine_id}. Aborting instead of falling "
+                 f"back to Workbench (which would silently ruin the cel look).")
+
     setup_camera(args, meshes)
     setup_light(args)
 
     if args.toon and args.color != "none":
-        apply_flat_material(meshes, PALETTE[args.color])
+        apply_cel_material(meshes, PALETTE[args.color], bands=args.bands)
+        if args.outline:
+            setup_outline(width_px=args.outline_width)
 
     try:
         written, out_dir = render_frames(args, engine_id)
     except Exception as exc:  # EEVEE can fail headless on some GPUs; fall back.
-        if engine_id.startswith("BLENDER_EEVEE"):
+        # Never fall back for a toon render — Workbench can't do the cel graph.
+        if engine_id.startswith("BLENDER_EEVEE") and not args.toon:
             print(f"[render_sprites] {engine_id} render failed ({exc}); "
                   f"falling back to Workbench.", file=sys.stderr)
             written, out_dir = render_frames(args, "BLENDER_WORKBENCH")
@@ -373,8 +485,13 @@ def main():
         else:
             raise
 
+    # Belt-and-suspenders: a toon render must have run on EEVEE.
+    if args.toon and not engine_id.startswith("BLENDER_EEVEE"):
+        sys.exit(f"[render_sprites] toon render ended on {engine_id}, not EEVEE. Aborting.")
+
     print(f"[render_sprites] engine={engine_id} size={args.size} "
-          f"view={args.view} frames={len(written)} -> {out_dir}")
+          f"view={args.view} frames={len(written)} toon={args.toon} "
+          f"outline={args.outline} -> {out_dir}")
     for w in written:
         print("  wrote", w)
 

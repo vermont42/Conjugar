@@ -4037,3 +4037,68 @@ flipping at each turn; the throw plays windup→release when it hurls a flag; an
 numbered box anywhere** — both actors are sprites. Credited Leo_Aguiar under a new
 `^Game Art^` / `^Arte del Juego^` section in the Credits screen (Info ▸ Credits), CC BY 4.0
 with the model URL.
+
+7/11/26: Cel/toon palette pass — re-shaded the dancer and bull sprites from
+photoreal-grey to a drawn cel look in Conjugar's palette, so both actors read as one
+hand-styled game.
+
+- **Decision baked in up front: dancer = GOLD, bull = RED, black outline on both.**
+  The dancer is the hero, so it pops gold (`customYellow` #CDA51B) on the dark field;
+  the bull is the antagonist, red (`customRed` #C1001D). The bull sits *on* the red
+  girders, so a black cel outline is required to separate it — and the same outline
+  goes on the dancer so the two match. No new frames, no new imagesets, no new source
+  models: this was a pure re-render + re-shade of the 8 actions (32 frames) already
+  shipping, swapping the PNGs inside the existing imagesets.
+
+- **Flat → real cel material.** `render_sprites.py`'s `--toon` used to apply a flat,
+  single-colour Principled material. I upgraded it to the cel node graph the plan
+  called for: `Diffuse (white) → Shader to RGB → ColorRamp (Constant, 2 stops) →
+  Emission → Output`. The white diffuse + Shader-to-RGB turn scene lighting into a 0–1
+  luminance the constant-interpolation ramp quantizes into flat bands; the ramp *stops*
+  carry the palette (shadow = base × 0.55, lit = base), so the whole mesh stays one hue
+  and only the bands do the shaping. EEVEE-only (Shader-to-RGB is an EEVEE node), so
+  `--toon` now aborts loudly if the engine isn't EEVEE instead of silently falling back
+  to Workbench (which would erase the look).
+
+- **A flat cel exposes colour bugs a photoreal render hides.** First red bull came out
+  hot magenta-pink, not #C1001D. Two fixes, both about colour management. (1) Blender
+  4.5 defaults to the **AgX** view transform, which desaturates/shifts saturated reds —
+  I set **Standard** for toon renders so the palette hex passes through. (2) The
+  `PALETTE` fractions are **sRGB**, but a Blender colour socket is **linear**, so feeding
+  the raw value renders it too bright (0.757 sRGB → 0.89 on output = pink). Converting
+  sRGB→linear before assigning the ramp stops means Standard's linear→sRGB output lands
+  back on the exact hex. After both, the bull's lit band samples to **(193, 0, 29) =
+  #C1001D** on the nose, gold to #CDA51B.
+
+- **The outline is Freestyle, not the Solidify inverted-hull the plan sketched.** The
+  plan's `--outline` was a flipped-normal Solidify shell with a black back-face material.
+  Under this build's **EEVEE-Next** it just wouldn't behave — a 4-variant probe
+  (flip×cull, offset ±1, thickness sweep) either culled the silhouette rim away (no
+  outline at all) or swallowed the whole figure in black. Rather than keep fighting the
+  culling/offset ambiguity I switched to **Freestyle** silhouette line rendering:
+  deterministic, and its thickness is directly in **output pixels** — which is exactly
+  what you tune against. 2px reads as a crisp cel edge; 3.5px merges the interior contour
+  lines into a black blob. I confirmed 2px holds by downscaling the 192px render to the
+  real ~168px on-screen size (56pt × 3×) and to a worst-case 60px.
+
+- **The #1 trap the plan flagged is real: the outline moves the crop boxes.** But not the
+  way you'd fear. Freestyle draws the line *outside* the mesh bounds, so the renderer's
+  ortho auto-fit — and therefore the **body's** rendered pixel size — is unchanged; the
+  union-crop just grew a uniform **~+4px** on every dimension from the line poking past
+  the silhouette. `pack_or_rename.sh` re-cropped all 8 actions; I recorded every new
+  `WxH` and re-derived the `GameView.swift` constants: each `dancerWidth(_:)` aspect
+  refreshed to its new `cropW/cropH`, `dancerVisualHeight` bumped **56 → 57.3** (× 173/169)
+  to hold the character *body* at its prior on-screen size, and `bullCrop(_:)` updated to
+  the new dims with `bullScale` left alone (the bull was already body-constant; the +4px
+  is just outline margin). Both actors end up body-constant with a thin outline around —
+  consistent, feet still planted (the outline wraps under the shoe).
+
+- **Verified live in `conjugar://game`** (flags on, `CONJUGAR_GAME_TIME_SCALE=0.2`): gold
+  dancer and red bull, both cel-shaded with a crisp black edge; the bull's outline cleanly
+  separates it from the red girders (the whole point). Drove the dancer live through idle,
+  walk (correctly mirrored to face travel), jump (airborne pose), and up a ladder (climb,
+  back-view, non-mirrored); the bull's throw cycled windup→gore. No clipping from the
+  fatter silhouette, sizes right relative to each other and the platforms.
+
+- **No credits/license change** — same source models (dancer = Mixamo X Bot, bull =
+  Leo_Aguiar CC BY 4.0), just re-shaded. `asset-licenses/` untouched.

@@ -186,19 +186,58 @@ All five player actions now ship as rendered sprites — `idle` (Breathing Idle,
   a `CONJUGAR_GAME_DISABLE_FLAGS` flag — both default off, no effect on normal play.
   Launch with them set to freeze-frame a jump's apex or a climb pose.
 
-## Upgrading `--toon` to a real cel look (later)
+## `--toon` cel look + `--outline` (done, 2026-07-11)
 
-`--toon` currently applies a flat, palette-colored Principled material — enough
-to prove the palette reads. For a drawn/cel look (EEVEE only), insert between the
-BSDF and the Material Output:
+`--toon` now renders a real **banded cel** material (not the old flat fill), and
+`--outline` adds a black drawn edge. Both actors were re-shaded through this in one
+pass: **dancer = gold** (`--color gold` #CDA51B), **bull = red** (`--color red`
+#C1001D) — hero/villain contrast, the outline separating the red bull from the red
+girders. EEVEE only (Shader-to-RGB is an EEVEE node); `--toon` now **aborts** if the
+engine resolves to anything but EEVEE rather than silently falling back to Workbench
+(which would erase the look).
+
+**The cel material** (`apply_cel_material`) is the node graph the plan called for:
 
 ```
-Diffuse/Principled → Shader to RGB → ColorRamp (Constant interpolation, 2–3 stops)
-→ Emission → Material Output
+Diffuse BSDF (white) → Shader to RGB → ColorRamp (Constant, 2 stops) → Emission → Output
 ```
 
-and optionally add a Solidify modifier with a flipped-normal black material for
-an outline. Do this *after* the raw render is validated (the plan's order).
+The white Diffuse + Shader-to-RGB turn scene lighting into a 0–1 luminance the
+*Constant*-interpolation ramp quantizes into flat bands; the ramp **stops carry the
+palette** (shadow = base × 0.55 at pos 0.0, lit = base at pos 0.33), so the whole mesh
+is one hue and only the bands shape it. `--bands 3` adds a `base × 1.2` highlight stop.
+
+**Two colour-pipeline fixes were needed for true palette hex** (a flat cel exposes
+what a photoreal render hides): the toon path sets the **Standard** view transform
+(the 4.5 default AgX shifts saturated reds → pink, mutes gold), and the ramp colours
+are **sRGB→linear converted** before assignment (Blender colour sockets are linear;
+feeding raw sRGB renders the red as hot pink). With both, the bull's lit band samples
+back to exactly **#C1001D** and the gold to **#CDA51B**.
+
+**The outline is Freestyle, not the inverted-hull Solidify trick the plan sketched.**
+Under this build's **EEVEE-Next**, a flipped-normal + backface-cull Solidify shell was
+unreliable (a 4-variant probe: it either culled the rim away → no outline, or swallowed
+the whole figure in black). **Freestyle** silhouette line rendering is deterministic and
+its thickness is directly in output px — `setup_outline` enables silhouette + border +
+contour lines, black, at `--outline-width` px (default **2**, ≈ 1px on-screen at the 3×
+sprite size). Bonus: it renders into the alpha, so the crop-box growth Phase 4 expects
+still happens.
+
+**The gotcha the plan warned about — the outline moves the crop boxes** — is real and
+was handled. Freestyle draws the line *outside* the mesh bounds, so the ortho auto-fit
+(hence the **body's** rendered px) is unchanged; the union-crop just grew a uniform
+**~+4px** on every dim from the line. The `GameView.swift` size constants were re-derived
+from the new crops: each `dancerWidth(_:)` aspect refreshed to the new `cropW/cropH`,
+`dancerVisualHeight` bumped **56 → 57.3** (× 173/169) to hold the character *body* at its
+prior on-screen size, and `bullCrop(_:)` updated to the new dims with `bullScale`
+unchanged (the bull body was already body-constant; the +4px is just outline margin).
+Don't reuse the old crop numbers — re-capture all 8 `WxH` boxes from `pack_or_rename.sh`
+whenever the outline width changes.
+
+To *later* pivot toward a rendered-realistic look (Vainglory-style) instead of flat cel,
+this is the wrong material — that path wants real PBR textures + 3-point/rim lighting +
+Cycles AO/soft-shadow + compositor bloom, and **no** outline (rim light separates figures).
+That's a separate `--realistic` mode and an art-direction fork, not an extension of `--toon`.
 
 ## The bull (done, 2026-07-11)
 
