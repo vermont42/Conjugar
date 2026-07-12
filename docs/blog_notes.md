@@ -3981,3 +3981,59 @@ then the bull (the quadruped cost-center).
   and drops Rigify's constraints/drivers, so the imported control rig is a bone hierarchy
   without live IK — but the intact metarig means Phase 2 can just *regenerate* a working
   Rigify rig if direct DEF-bone keying gets awkward.
+
+## The bull is a real bull now — idle/walk/throw hand-keyed, the last numbered box is gone (2026-07-11)
+
+Phases 2–7 of the bull plan: turn Phase 1's rigged Sketchfab bull ("Simple Rigged
+Bull" by Leo_Aguiar, CC BY 4.0, a Rigify Basic Quadruped) into the game's three
+flipbooks — **idle (2), walk (6), throw (5)** — and wire them into
+`GameView.bullSprite`, retiring the game's **last numbered-box placeholder**. Player
+*and* bull are rendered sprites now.
+
+- **The dead-controls discovery, confirmed.** Phase 1 warned that FBX transport drops
+  Rigify's constraints/drivers; in Blender the imported control rig indeed has **0 bone
+  constraints, 0 drivers, 0 widgets** — posing the `*_ik`/`torso`/`hips` "controls" moves
+  nothing. But the mesh is skinned to the `DEF-` bones and the model's baked clip keys them
+  *directly*, which is why the baked idle still deforms the mesh. So I keyed the **`DEF-`
+  deform bones** directly (Path B), quaternion channels, and never touched the Rigify
+  regeneration path (Path A) — it wasn't needed for three short, 60-px-tall actions.
+
+- **idle was free; walk + throw were hand-keyed.** The model's baked `rigAction` (frames
+  1–105) is a subtle **standing sway**, not a walk — so idle is just two samples of it. There
+  was **no bonus baked walk** the master plan had hoped for. The **walk** is a cyclic
+  diagonal quadruped gait: sinusoidal thigh swing on the four `DEF-*thigh` bones (rear and
+  `front`), with a phase-offset knee bend on the `DEF-*shin` bones, all In-Place. The
+  **throw** is a bespoke 5-frame head-toss: the `DEF-spine.008..011` neck→head chain rears
+  the head **up** (windup) then thrusts it **down/forward** (a goring release), timed to the
+  0.5 s `bullThrowDuration`, with a front-leg brace for weight.
+
+- **Authoring in the render's own view.** Blender's **Right Ortho** = `render_sprites.py`'s
+  `--view side` (head-left; the game mirrors the sprite by `bullFacing`), so what I posed is
+  exactly what shipped. One FBX per action (exported with that action active) sidesteps
+  multi-action export ambiguity; the harness's half-open `[start,end)` sampling meant nudging
+  the walk to a 7-frame loop-close and the throw to a 6-frame hold so the 6 and 5 *distinct*
+  frames land cleanly (and the throw's **release frame** survives the crop).
+
+- **The subtlety that bit once: constant scale, not constant height.** The dancer keeps a
+  constant on-screen *height* because all its crops are the same pixel height. The bull's
+  throw rears the head up, so its union crop is much taller (114 px vs the walk's 92). My
+  first wiring pinned a constant `bullVisualHeight` — and the bull visibly **shrank ~19 %
+  every time it threw**, because the taller crop scaled the whole body down. The fix keys off
+  a fact about the renderer: it auto-fits ortho by the bull's constant body *length* (every
+  action crops ~170 px wide), so **one render pixel is the same world size in every action**.
+  `GameView` now maps crop-px → screen at one constant `bullScale`, deriving per-action
+  width, height, *and* feet-offset — the body stays one size while the reared head genuinely
+  extends upward on a throw.
+
+- **First render was too polite.** The initial throw's head motion was so subtle that on the
+  device it was nearly indistinguishable from the walk (the crop was only ~2 px taller). I
+  roughly doubled the head-pitch amplitude — full windup ≈ 58° up, release ≈ 65° down — and
+  re-ran just the throw through the pipeline. Now it reads unmistakably as a windup-then-gore
+  in the running game, in sync with each flag the bull hurls.
+
+Verified live via `conjugar://game` (flags **on**, `CONJUGAR_GAME_TIME_SCALE=0.2` to catch
+the 0.5 s throw): the bull patrols the top girder as a rendered bull, feet planted, mirror
+flipping at each turn; the throw plays windup→release when it hurls a flag; and there is **no
+numbered box anywhere** — both actors are sprites. Credited Leo_Aguiar under a new
+`^Game Art^` / `^Arte del Juego^` section in the Credits screen (Info ▸ Credits), CC BY 4.0
+with the model URL.

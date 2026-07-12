@@ -200,10 +200,41 @@ Diffuse/Principled → Shader to RGB → ColorRamp (Constant interpolation, 2–
 and optionally add a Solidify modifier with a flipped-normal black material for
 an outline. Do this *after* the raw render is validated (the plan's order).
 
-## The bull (later)
+## The bull (done, 2026-07-11)
 
-No Mixamo for quadrupeds. Source a pre-rigged bull (Sketchfab "Simple Rigged
-Bull" — **verify its per-model license**, log it) or rig with Blender Rigify's
-quadruped meta-rig, hand-key walk/climb/throw/defeat, then render through **this
-same `render_sprites.py`** (`--actor bull --action walk …`). blender-mcp's
-image-to-3D + Sketchfab integration helps source the mesh.
+No Mixamo for quadrupeds, so the bull was sourced pre-rigged: Sketchfab's
+**"Simple Rigged Bull" by Leo_Aguiar (CC BY 4.0)**, a Blender **Rigify Basic
+Quadruped**. License logged at `asset-licenses/sketchfab-bull.txt`; raw
+`.blend`/`.fbx` stay git-ignored (only PNGs ship). Three actions were authored on
+its rig and rendered side-view through **this same `render_sprites.py`**
+(`--actor bull --view side`), N matched to `GameState.bullFrameCounts`
+(idle 2 / walk 6 / throw 5):
+
+- **idle (2)** — free: two samples of the model's own baked standing-sway clip.
+- **walk (6)** — hand-keyed cyclic diagonal quadruped gait (thigh swing + knee bend).
+- **throw (5)** — hand-keyed head-toss one-shot: head rears up (windup) then thrusts
+  down (goring release), timed to `bullThrowDuration` (0.5 s).
+
+**Gotcha that shaped the authoring:** the FBX round-trip strips Rigify's control
+logic — the imported control rig has **0 constraints / 0 drivers**, so posing the
+`*_ik`/`torso` "controls" does nothing. The mesh is skinned to the `DEF-` bones and
+the baked clip keys them directly, so walk/throw were keyed **on the `DEF-` deform
+bones** (rear `DEF-thigh/shin`, `DEF-front_thigh/shin`, and the `DEF-spine.008..011`
+neck→head chain), quaternion channels, In-Place. Author actions in Blender's **Right
+Ortho** view = the render's `--view side` (head-left; the game mirrors for facing).
+
+**Per-action framing matters.** `render_sprites.py` auto-fits ortho by the bull's
+constant body *length* (every action crops ~170 px wide), so **one render pixel is
+the same world size in every action** — the throw's reared head just makes a taller
+crop (114 px vs walk's 92). `GameView` maps crop px → screen at one constant
+`bullScale`, deriving per-action width/height/feet-offset, so the body stays one size
+while the head genuinely extends up on a throw (a fixed on-screen *height* would
+instead shrink the body ~19 % mid-throw).
+
+Example actor invocations (one FBX per action, exported from `bull.blend` with that
+action active — sidesteps multi-action ambiguity):
+
+```bash
+blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_walk.fbx  --actor bull --action walk  --frames 6 --size 192 --view side
+blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_throw.fbx --actor bull --action throw --frames 5 --size 192 --view side
+```

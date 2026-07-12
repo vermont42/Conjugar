@@ -1,8 +1,14 @@
 Asset:    The game's BULL sprite frames (rendered 3D model) — one flipbook per bull
-          action, to live at Conjugar/Assets.xcassets/Game/bull_<action>_<i>.imageset:
+          action, at Conjugar/Assets.xcassets/Game/bull_<action>_<i>.imageset.
+          STATUS: SHIPPED (Phases 2–7 done, 2026-07-11). 13 rendered frames:
             bull_idle_1..2     bull_walk_1..6     bull_throw_1..5
-          STATUS: source model acquired + rigged .blend saved (Phase 1 done). Frames
-          not yet rendered — finalize this file with the shipped-frame list in Phase 7.
+          Authored on the model's Rigify rig and rendered side-view via
+          tools/blender/render_sprites.py (--actor bull --view side): idle came free
+          from the model's baked standing-sway clip (2 samples); walk (6-frame diagonal
+          quadruped gait) and throw (5-frame head-toss, windup→goring release) were
+          hand-keyed on the DEF/FK deform bones, because the FBX round-trip stripped
+          Rigify's control constraints (see Note below). Wired into GameView.bullSprite,
+          retiring the game's last numbered-box placeholder (player + bull now sprites).
 
 Source:   Sketchfab — "Simple Rigged Bull"
           Model page:  https://sketchfab.com/3d-models/simple-rigged-bull-c1984e43c4014dc5bc332a8fd6b15280
@@ -39,9 +45,10 @@ Attribution (required — canonical Sketchfab credit line):
           "Simple Rigged Bull" (https://sketchfab.com/3d-models/simple-rigged-bull-c1984e43c4014dc5bc332a8fd6b15280)
           by Leo_Aguiar (https://sketchfab.com/Leo_Aguiar) licensed under Creative
           Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-          TODO (Phase 6/7): surface this credit in the app's Credits screen
-          (Info ▸ Credits), alongside the existing "Game Music"/"Game Sounds" entries,
-          under a "Game Art — Bull" line.
+          DONE (Phase 7, 2026-07-11): this credit is surfaced in the app's Credits
+          screen (Info ▸ Credits) under a "^Game Art^" section (Spanish "^Arte del
+          Juego^"), alongside the existing "Game Music"/"Game Sounds" entries — see
+          the Info.creditsText key in Conjugar/Supporting/Localizable.xcstrings.
 
 Reuse:    The raw mesh/rig (tools/blender/source/bull.fbx and the working
           tools/blender/source/bull.blend) are git-ignored (tools/blender/.gitignore) —

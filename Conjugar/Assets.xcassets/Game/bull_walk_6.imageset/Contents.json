@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "bull_walk_6.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

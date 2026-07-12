@@ -69,6 +69,60 @@ struct GameView: View {
     return facing >= 0 ? -1 : 1
   }
 
+  // Real rendered bull sprites (`bull_<action>_<frame>`), same visual/collision
+  // split as the dancer: the bull is wider than tall (a quadruped), so its visual
+  // overhangs the square `bullSize` collision box, feet aligned to the box bottom.
+  //
+  // Unlike the dancer (all crops the same pixel height → constant on-screen
+  // height), the bull's THROW rears the head up, so its union crop is much taller
+  // (114 px) than the walk's (92 px). But `render_sprites.py` auto-fits ortho by
+  // the bull's constant body LENGTH (every action crops to 170 px wide), so one
+  // render pixel is the SAME world size in every action. We therefore map crop
+  // pixels to screen at one constant `bullScale` — width, height, and the feet
+  // offset all derived per action from its crop dims. That keeps the body a
+  // constant size while the reared head genuinely extends upward on a throw
+  // (a fixed on-screen height would instead shrink the body ~19% mid-throw).
+  private static let bullScale: CGFloat = 0.653   // screen pt per render crop px
+
+  /// Union-crop pixel dims (W, H) per action, from `pack_or_rename.sh`.
+  private static func bullCrop(_ action: BullAction) -> (w: CGFloat, h: CGFloat) {
+    switch action {
+    case .idle:  return (164, 87)
+    case .walk:  return (170, 92)
+    case .throw: return (170, 114)
+    }
+  }
+
+  /// Bull actions backed by real rendered sprites. The numbered-box fallback in
+  /// `bullSprite` stays only as a defensive safety net (all three are covered).
+  private static let bullSpriteActions: Set<BullAction> = [.idle, .walk, .throw]
+
+  /// The asset-name stem for each bull action: `bull_<name>_<frame>`.
+  private static func bullActionName(_ action: BullAction) -> String {
+    switch action {
+    case .idle: return "idle"
+    case .walk: return "walk"
+    case .throw: return "throw"
+    }
+  }
+
+  private static func bullWidth(_ action: BullAction) -> CGFloat { bullCrop(action).w * bullScale }
+  private static func bullHeight(_ action: BullAction) -> CGFloat { bullCrop(action).h * bullScale }
+
+  /// Shift the visual so its bottom edge (the bull's feet — the union crop's lowest
+  /// foot sits at the crop bottom) aligns with the collision box bottom, i.e. the
+  /// platform. The reared-head throw is taller than the box, so its offset is
+  /// negative (nudged up); the shorter walk/idle sit slightly down.
+  private static func bullFeetOffset(_ action: BullAction) -> CGFloat {
+    -(bullHeight(action) - GameState.bullSize) / 2
+  }
+
+  /// Horizontal scale for the bull's facing. Like the player's non-climb actions,
+  /// the renders face LEFT, so mirror (−1) when the bull faces right.
+  private static func bullMirror(_ facing: CGFloat) -> CGFloat {
+    facing >= 0 ? -1 : 1
+  }
+
   var body: some View {
     GeometryReader { geo in
       TimelineView(.animation) { timeline in
@@ -161,12 +215,25 @@ struct GameView: View {
 
   private var bullSprite: some View {
     ZStack {
-      RoundedRectangle(cornerRadius: 10)
-        .fill(Color.customYellow)
-      Text(verbatim: "\(gameState.bullFrame)")
-        .font(.system(size: 32, weight: .bold, design: .monospaced))
-        .foregroundStyle(Color.customBackground)
-      facingChevron(gameState.bullFacing, tint: Color.customBackground)
+      if Self.bullSpriteActions.contains(gameState.bullAction) {
+        // Real rendered flipbook for this action (bull_<action>_<frame>).
+        let action = gameState.bullAction
+        Image("bull_\(Self.bullActionName(action))_\(gameState.bullFrame)")
+          .resizable()
+          .interpolation(.none)
+          .scaledToFit()
+          .frame(width: Self.bullWidth(action), height: Self.bullHeight(action))
+          .scaleEffect(x: Self.bullMirror(gameState.bullFacing), y: 1)
+          .offset(y: Self.bullFeetOffset(action))
+      } else {
+        // Numbered-box fallback (safety net; all three bull actions are covered).
+        RoundedRectangle(cornerRadius: 10)
+          .fill(Color.customYellow)
+        Text(verbatim: "\(gameState.bullFrame)")
+          .font(.system(size: 32, weight: .bold, design: .monospaced))
+          .foregroundStyle(Color.customBackground)
+        facingChevron(gameState.bullFacing, tint: Color.customBackground)
+      }
     }
     .frame(width: GameState.bullSize, height: GameState.bullSize)
     .position(x: gameState.bullX, y: gameState.bullY)
