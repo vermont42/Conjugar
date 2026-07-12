@@ -38,6 +38,18 @@ This is the one game-asset job where the **interactive blender-mcp path earns it
   The MCP exposes `execute_blender_code`, `get_scene_info`/`get_viewport_screenshot`,
   **Sketchfab** search/download, and **Hyper3D/Hunyuan** text/image→3D. Unlike the dancer,
   this plan will likely use it.
+- **Claude-in-Chrome MCP is available — Claude should drive it wherever it can.** The
+  dancer plan drove **Mixamo** through it (search a clip → apply → check In Place → download
+  FBX). The same applies here for **Sketchfab**: Claude can browse the site, audition models,
+  **read the exact per-model license on the model page** (the authoritative source, more
+  reliable than an API license field), and initiate downloads directly in the browser. Load
+  the tools with one `ToolSearch` (`tabs_context_mcp`, `navigate`, `read_page`/`get_page_text`,
+  `computer`, `tabs_create_mcp`), start with `tabs_context_mcp`, and prefer a new tab.
+  **Josh can and will create accounts / authenticate** (Sketchfab, Adobe, any gated
+  download) whenever a step needs a login — hand off to him for the auth step, then resume
+  driving. Between the browser MCP and the blender-mcp Sketchfab tools, prefer whichever
+  gets a clean, license-verified download; the browser is best for *judging + license*, the
+  blender-mcp for *pulling the asset into the scene*.
 
 ## The bull's exact seam (authoritative — match N to this)
 From `Conjugar/Models/Game/GameState+Animation.swift` and `GameModels.swift`:
@@ -97,8 +109,12 @@ So render **idle → 2, walk → 6, throw → 5** frames. Two subtleties:
 Pick **one** path (audition cheapest first; escalate only if it reads badly). Whatever the
 source, the deliverable of this phase is **a rigged bull in a `.blend`** you can pose.
 
-- **(A) Sketchfab, already rigged (try first).** `search_sketchfab_models` for a rigged
-  bull; `get_sketchfab_model_preview` to eyeball; `download_sketchfab_model` the best.
+- **(A) Sketchfab, already rigged (try first).** **Drive this in Claude-in-Chrome** —
+  browse Sketchfab (filter *Animated* + *Downloadable*), audition candidates on the model
+  page, and **read the license right off the page**. Fall back to the blender-mcp tools
+  (`search_sketchfab_models` → `get_sketchfab_model_preview` → `download_sketchfab_model`)
+  when they give a cleaner pull into the scene. If a **download or account is gated, hand
+  the auth/login step to Josh** (he'll create the account / sign in), then resume driving.
   **Bonus win:** some Sketchfab bulls ship *with baked animations* (walk/idle) — if so,
   those render straight through `render_sprites.py` via the clip's frame range, and only
   **throw** needs hand-keying. **License gate (blocking):** read the model's individual
