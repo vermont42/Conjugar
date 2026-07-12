@@ -99,6 +99,8 @@ blender -b -P tools/blender/render_sprites.py -- --actor test --action cube --fr
 | `--engine E` | `eevee` | `eevee` / `workbench` / `cycles` (EEVEE→Workbench fallback). |
 | `--toon` | off | Apply a flat palette material (see `--color`). |
 | `--color C` | `gold` | `--toon` color: `gold` #CDA51B, `red` #C1001D, `none`. |
+| `--accents` | off | **Bull-only.** Partition the cel skin into muzzle/hooves/horn/eye regions (needs `--toon`). See *The bull* below. |
+| `--horn-style S` | `ivory` | With `--accents`: horn color — `ivory` (bone) or `dark` (maroon). |
 | `--start N` / `--end N` | auto | Override the sampled frame range. |
 | `--out DIR` | `tools/blender/renders` | Output root. |
 
@@ -276,4 +278,67 @@ action active — sidesteps multi-action ambiguity):
 ```bash
 blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_walk.fbx  --actor bull --action walk  --frames 6 --size 192 --view side
 blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_throw.fbx --actor bull --action throw --frames 5 --size 192 --view side
+```
+
+### Bull cel accents — `--accents` (done, 2026-07-12; paid-asset spike Phase 0 Part A)
+
+The flat single-material `--toon` renders the bull as one flat red mass — it reads as
+a bull-shaped **blob**. `--accents` (bull-only; requires `--toon`) partitions the mesh
+into a few cel regions so it reads as a bull **with character**, staying in the same
+banded-cel language as the dancer:
+
+- **body** — the `--color` base (red), rendered `--bands 3` so a lit highlight band
+  gives the back/shoulder volume (biggest "not-flat" win). The **head is body-red
+  too** (see the black-bg note below).
+- **horn** — `--horn-style ivory` (bone; **shipped** — the one *light* accent that
+  pops on the black field and is *the* bull signifier) or `dark` (maroon; cohesive
+  all-red villain, but the horn then relies on the silhouette outline).
+- **eye** — a near-black dot on each flank, sitting *interior* to the red head so it
+  reads dark-on-red (not at the silhouette edge).
+- **hooves** — base × 0.35 (deep maroon): grounds the legs when on a red platform.
+
+> **Black-background constraint (learned the hard way).** The bull lives against the
+> game's near-pure-black field, over which the black Freestyle **outline is invisible**
+> — the silhouette is defined *only* where a light/red fill meets black. A first pass
+> darkened the **muzzle** (base × 0.35); at a silhouette *edge* against black it
+> vanished, taking the whole front of the head with it (the ivory horn then floated in
+> a void — "the northwest corner of Oregon, flipped"). Rule: silhouette-**edge**
+> regions (muzzle/snout, horn, back) stay **red or light**; only **interior** regions
+> (the eye) may go dark. So the head is kept red and the ivory horn is the lone light
+> accent. (On a *light/red* background a dark muzzle would help — but the bull is never
+> on one.)
+
+**The accents are materials-only** (the silhouette is unchanged), so at a *fixed* render
+size they'd leave the crop boxes untouched. But a separate legibility pass **did** move
+the `GameView` constants — see the resolution note below — so the shipped crops are the
+512-render values (idle 436×230 / walk 452×248 / throw 452×306), not the old 192 ones.
+
+> **Resolution matters more than the shape (a device-only bug).** On a physical iPhone the
+> ivory horn read as a blocky/smudgy speck even after the shape was right. Cause: the bull
+> is *displayed large* (~137 pt ≈ 410 px @3x wide) but was rendered at `--size 192` (~168 px
+> crop), so it was upscaled ~2.4× and the small horn turned to mush. Fixes, all needed
+> together: render the **bull at `--size 512`** (source ≈ the @3x display, so the horn is
+> crisp); draw the bull `Image` with **`.interpolation(.high)`** in `GameView` (nearest-
+> neighbor frays the outline into spikes on the 512→display *downscale*); and keep the
+> **default `--outline-width 2`** (at 512 a wider outline makes Freestyle draw hair-like
+> contour spikes). `GameView.bullScale` was re-derived to hold the on-screen size (also +25 %
+> per Josh): 436 px × 0.314 ≈ 137 pt. Only the **bull** needs 512 — the dancer displays near
+> 1:1 from its 192 render, so it stays at 192 with `.interpolation(.none)`.
+
+**How the regions are selected (and the one fragility):** region membership is tested
+on each polygon's **rest-pose local centroid** (`vertices[i].co`, the undeformed basis
+— stable across every animation frame; the armature deforms at eval time, so the ivory
+horn and dark muzzle correctly *follow* the head as it rears in the throw). The boxes
+are hardcoded in `_bull_region()` from `bull_idle.fbx` geometry: bull runs along **Y**
+(muzzle at −Y ≈ −1.68, rear at +Y), **Z** up (hooves z ≈ 0, back ridge z ≈ 1.6), **X**
+left/right (±0.5); `--view side` shows the +X flank. **If the bull mesh is ever
+replaced, re-measure these boxes** (the spike's Phase-0 probe scripts print the coords).
+
+```bash
+# The shipped bull re-skin — ivory horn, all three actions (512 for a crisp horn):
+A="--toon --color red --bands 3 --accents --horn-style ivory --outline --size 512 --view side"
+blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_idle.fbx  --actor bull --action idle  --frames 2 $A
+blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_walk.fbx  --actor bull --action walk  --frames 6 $A
+blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_throw.fbx --actor bull --action throw --frames 5 $A
+# then: pack_or_rename.sh rename bull <action>  ->  copy PNGs into Assets.xcassets/Game/
 ```

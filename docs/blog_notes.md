@@ -4175,3 +4175,92 @@ if a real mesh is commissioned. Reasons below.
 Raw meshes + concept/hero PNGs stay under `tools/blender/source/` (git-ignored). The
 `--realistic` code and the comparison artifact are the only keepers, and only if Josh wants the
 experiment retained.
+
+## 2026-07-12 — Bull cel accents ($0, no purchase): flat-red blob → bull with character (paid-asset spike, Phase 0 Part A)
+
+Phase 0 Part A of the paid-asset spike (`prompts/game_paid_dancer_bull_spike.md`): give the
+bull character *for free*, before spending anything on the dancer. The bull's *shape* was never
+the problem — it only read as a red blob because `--toon` filled the whole 30k-vert mesh with
+**one flat material** (`apply_cel_material` clears every slot and appends a single cel material).
+The fix is a **re-skin, not a new asset**: partition that one material into a few cel regions.
+
+- **`--accents` (bull-only) added to `render_sprites.py`.** Refactored the cel node-graph into a
+  reusable `build_cel_material(name, rgba, bands)`; `apply_bull_accents` builds a **body + muzzle
+  + hooves + horn + eye** palette and assigns each polygon a material slot by region. Body stays
+  red (rendered `--bands 3` so a lit highlight band gives the back/shoulder volume — the biggest
+  "not-flat" win); muzzle / hooves / eye are base × 0.35 deep-maroon (a shadowed snout, grounded
+  hooves, a small eye dot per flank); the **horn** is the fork.
+- **Region selection = rest-pose local centroid boxes.** Membership is tested on each poly's
+  undeformed `vertices[i].co` (stable across frames — the armature deforms at eval time), so the
+  ivory horn and dark muzzle correctly **follow the head as it rears in the throw**, and the dark
+  hooves follow the legs mid-stride. Boxes were measured from `bull_idle.fbx` with throwaway probe
+  scripts (bull runs along Y: muzzle at −Y ≈ −1.68, rear +Y; Z up: hooves z ≈ 0, back z ≈ 1.6;
+  `--view side` shows the +X flank). Documented as the one fragility if the mesh is ever swapped.
+- **Art-direction fork, decided by Josh: ivory horn.** Rendered baseline / ivory-horn / all-dark
+  variants and downscaled to 64 & 96 px. The verdict was unambiguous — at on-screen size the
+  **ivory (bone) horn is the only accent that clearly reads**, and it's *the* bull signifier; the
+  dark muzzle + hooves add a face and grounded feet; the highlight band adds volume. The all-dark
+  variant is a more cohesive pure-red villain but loses the horn. Ivory it is (on-brand — the app
+  icon likewise puts a non-body accent, gold, on red). Both ship behind `--horn-style ivory|dark`.
+- **Zero `GameView` changes — a true re-skin.** Accents touch only materials, not the silhouette,
+  so the union-crop boxes are byte-identical to the shipped bull (idle 168×91 / walk 174×97 /
+  throw 174×118). Re-rendered all three actions, copied the 13 PNGs into `Assets.xcassets/Game/`,
+  built, and **live-verified** via `conjugar://game` (flags-off, time-scale 0.2): the bull reads
+  with real form — ivory horn, lit back, dark muzzle/hooves. Screenshot in `docs/screenshots/`.
+
+- **Horn-box correction (the "Oregon" bug).** The first horn region (`y<-1.15, z>1.25`, no X
+  gate) flooded the whole central forehead, so the ivory read as a ragged amorphous patch on the
+  brow — Josh's words: "the northwest corner of Oregon, flipped." A focused re-probe showed the
+  actual horns are the **two side protrusions** at |x| ≈ 0.45 (y ≈ −1.55, z ≈ 1.30), sweeping
+  forward+down to a point. The fix is an **off-center gate**: `y<-1.38 ∧ z>1.15 ∧ |x|>0.28` — the
+  |x| test is what separates the horns from the central muzzle/brow (1829 horn polys vs 7906
+  before). Now the ivory lands on the thin forward horn and reads as an unmistakable horn tip at
+  64 px, on the black field, and correctly tracks the head down into the goring pose on the throw.
+
+- **Black-background correction (the real legibility bug).** Live on device the head *still*
+  read poorly — Josh: "lack of contrast between the black horn and black background." The dark
+  muzzle (base × 0.35) sat at the head's silhouette **edge**, and against the game's near-pure-
+  black field — over which the black Freestyle outline is itself invisible — the whole front of
+  the head vanished into the void, horn and all. The rule this taught: the silhouette is defined
+  *only* where a light/red fill meets black, so **edge** regions (muzzle, horn, back) must stay
+  red/light and only **interior** regions (the eye, on the red cheek) may go dark. Fix: **dropped
+  the dark muzzle — the head stays body-red** (reads on black like the body), the **ivory horn is
+  the lone light accent** (pops on black, made slightly bolder), and the **dark eye** moved to
+  interior-on-red so it reads as a face. Verified live: the head is now a clearly-defined red bull
+  head with an eye + horn, not a black void. (A dark muzzle *would* help on a light/red bg — but
+  the bull is never on one; the accent scheme is background-specific.)
+- **Polish pass on Josh's high-res look.** Two more device notes: the eye had been over-enlarged
+  (radius 0.12 → 553 polys) into a black *blob* ("what is that dot?") — shrunk to radius 0.085 (14
+  polys), a small neat eye. And the hooves at base × 0.35 read as near-black against the field —
+  lightened to **base × 0.60**, clearly darker than the body but still visibly maroon, not black.
+- **Horn-reads-as-a-speck fix + a 25% bigger bull.** On a *real iPhone* (not the sim) the
+  tip-only ivory horn rendered as a lone ~3 px white speck at the game's ~60 pt bull height —
+  it read as a glitch, not a horn (my 200–400 % sim zooms had flattered it). Two changes: (1)
+  widened the horn region back+down to the **whole horn base** (`y<−1.22 ∧ z>1.08 ∧ |x|>0.24`,
+  4053 polys vs 2251) so the ivory is a clear **pair of horns**, not a dot — the |x| gate still
+  keeps it off the central forehead; (2) Josh spotted headroom in the top gap, so **`GameView.
+  bullScale` 0.653 → 0.816 (+25 %)** — a bigger bull that gives the small-geometry horn + eye the
+  pixels to read. That's visual-only: collision is `GameState.bullSize`, and the per-action feet
+  offset re-derives from `bullHeight`, so the feet stay planted. Live-verified on the bigger bull:
+  the horns and eye now read at play size, feet on the platform, clear of the HUD.
+- **The real horn fix was RESOLUTION, not shape (device-only bug).** The bigger bull exposed that
+  the horn still read as a blocky/smudgy speck *on a physical iPhone* — because the sprites were
+  rendered at `--size 192` (a ~168 px-wide crop) but the enlarged bull displays at ~410 px @3x, so
+  `.interpolation(.none)` was upscaling ~2.4× and turning the few horn pixels to mush. Fix: render
+  the **bull at `--size 512`** (source ≈ the @3x display size → crisp horns) and switch the bull
+  `Image` to **`.interpolation(.high)`** (the dancer already used smooth; nearest-neighbor *frays
+  the outline into spikes* when downscaling 512→display). One more trap: bumping `--outline-width`
+  to 5 to keep the on-screen edge thickness made Freestyle draw **hair-like contour spikes** at 512
+  — kept the default width 2 (a thinner but clean edge). Re-derived the crop constants for the
+  512/width-2 render (idle 436×230, walk 452×248, throw 452×306) and dropped `bullScale` 0.816 →
+  **0.314** to hold the +25 % on-screen size (436 × 0.314 ≈ 137 pt, = old 168 × 0.816). Only the
+  bull needed 512: the dancer displays near 1:1 from its 192 render, so it stays. Live-verified: a
+  crisp bull, two clear ivory horns, no spikes.
+
+**Outcome / spike status:** the bull half of the Definition of Done ("reads as *a bull with
+character* at 57 pt, Phase 0 free-fix") is **met for $0** — no marketplace bull or commission
+needed (Phase 0 Part C not triggered). `--toon`/`--realistic` code unchanged elsewhere. Still
+open: the **dancer** (the real point of the spike — Phase 1 marketplace shortlist + Phase 2
+paid-AI lottery). For those, the plan is free accounts on CGTrader / TurboSquid / Sketchfab / Fab
+now, buy per-asset only on a winner; defer any paid-AI (Meshy/Tripo/Rodin-Pro) until Phase 1
+stalls, since rig topology — not texture — is the failure mode AI-gen keeps hitting.

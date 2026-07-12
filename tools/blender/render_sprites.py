@@ -78,6 +78,13 @@ def parse_args():
                    help="Palette color for --toon: gold #CDA51B or red #C1001D.")
     p.add_argument("--bands", type=int, default=2, choices=[2, 3],
                    help="Cel shading bands: 2 (shadow+lit) or 3 (adds a highlight).")
+    p.add_argument("--accents", action="store_true",
+                   help="Bull-only: partition the cel skin into muzzle/hooves/horn/eye "
+                        "regions so the bull reads as a bull with character, not a flat "
+                        "red blob. Requires --toon. Materials only — silhouette unchanged.")
+    p.add_argument("--horn-style", default="ivory", choices=["ivory", "dark"],
+                   help="With --accents: horn color — ivory/bone (strongest 'bull' cue) "
+                        "or dark maroon (cohesive all-red villain).")
     p.add_argument("--outline", action="store_true",
                    help="Add a black Freestyle silhouette outline. EEVEE only. "
                         "NOTE: inflates every silhouette -> GameView crop constants change.")
@@ -469,8 +476,8 @@ def _srgb_to_linear(color_rgba):
     return (lin(r), lin(g), lin(b), a)
 
 
-def apply_cel_material(meshes, color_rgba, bands=2):
-    """Replace materials with one cel-shaded (banded) emission material. EEVEE only.
+def build_cel_material(name, color_rgba, bands=2):
+    """Build ONE cel-shaded (banded) emission material and return it. EEVEE only.
 
     Node graph:
         Diffuse BSDF (white) → Shader to RGB → ColorRamp (Constant) → Emission
@@ -479,16 +486,15 @@ def apply_cel_material(meshes, color_rgba, bands=2):
     The white Diffuse + Shader-to-RGB turn the scene lighting into a 0–1
     luminance that the *Constant*-interpolation ColorRamp quantizes into flat
     bands; the ramp's stops carry the palette colors, so the whole mesh is one
-    hue and only the bands do the shaping (deliberate — the silhouette stays
-    uniform, matching the flat-color intent of the original v1). Shader to RGB
-    is an EEVEE-only node, so this look requires EEVEE.
+    hue and only the bands do the shaping. Shader to RGB is an EEVEE-only node,
+    so this look requires EEVEE.
 
-    Bands (from the `--color` base):
+    Bands (from `color_rgba`):
       shadow    = base × 0.55   (threshold at fac ≥ 0.33 becomes lit)
       lit       = base
       highlight = min(base × 1.2, 1.0)   (3-band only, fac ≥ 0.66)
     """
-    mat = bpy.data.materials.new("ConjugarCel")
+    mat = bpy.data.materials.new(name)
     mat.use_nodes = True
     nt = mat.node_tree
     nt.nodes.clear()
@@ -519,11 +525,121 @@ def apply_cel_material(meshes, color_rgba, bands=2):
     links.new(to_rgb.outputs["Color"], ramp.inputs["Fac"])
     links.new(ramp.outputs["Color"], emission.inputs["Color"])
     links.new(emission.outputs["Emission"], output.inputs["Surface"])
+    return mat
 
+
+def apply_cel_material(meshes, color_rgba, bands=2):
+    """Replace every mesh's materials with ONE flat cel material (the whole mesh is
+    one hue, only the light bands shape it — the original v1 flat-color intent)."""
+    mat = build_cel_material("ConjugarCel", color_rgba, bands=bands)
     for obj in meshes:
         obj.data.materials.clear()
         obj.data.materials.append(mat)
     return mat
+
+
+# ---- bull cel accents (Phase 0 Part A of the paid-asset spike) --------------
+#
+# The flat single-material cel above renders the bull as one flat red mass — it
+# reads as a bull-shaped *blob*. This partitions the bull mesh into a few cel
+# regions so it reads as a bull *with character* (horn, eye, hooves) while staying
+# in the same banded-cel language as the dancer. Materials only: the
+# silhouette/outline (hence the GameView crop constants) are unchanged.
+#
+# THE BLACK-BACKGROUND CONSTRAINT (learned the hard way, 2026-07-12). The bull
+# lives against the game's near-pure-black field, over which the black Freestyle
+# outline is invisible — so the silhouette is defined ONLY where a LIGHT/red fill
+# meets the black. A first pass darkened the muzzle (base × 0.35, near-black): at
+# a silhouette *edge* against black it vanished, taking the whole front of the
+# head with it (the ivory horn then floated in a void). The rule this enforces:
+#   • silhouette-EDGE regions (muzzle/snout, horn, back) must stay RED or LIGHT;
+#   • only INTERIOR regions (the eye, sitting on the red cheek) may go dark.
+# So the head is kept RED and the IVORY horn is the one light accent that pops on
+# black; the eye is a dark dot interior to the red. (On a light/red background a
+# dark muzzle would help — but the bull is never on one.)
+#
+# The region boxes are in the bull mesh's REST-pose LOCAL coordinates, which are
+# stable across animation frames (armature deforms at eval time; `vertices[i].co`
+# is the undeformed basis). Coordinates were measured from bull_idle.fbx (see the
+# spike's Phase-0 probes): the bull runs along Y (head/muzzle at −Y ≈ −1.68, rear
+# at +Y ≈ +1.5), Z is up (hooves at z ≈ 0, back ridge at z ≈ 1.6), X is left/right
+# (±0.5). Render `--view side` shows the +X flank. If the bull mesh is ever
+# replaced, re-measure these with the probe scripts before trusting them.
+
+BULL_EYE_TARGETS = ((0.30, -1.32, 1.15), (-0.30, -1.32, 1.15))  # +X and −X flank
+BULL_EYE_RADIUS = 0.085   # a small neat dot; a bigger radius reads as a black hole
+
+
+def _bull_region(centroid):
+    """Classify a polygon (by its rest-pose local centroid) into a bull cel region.
+    Priority order matters: eye → horn → hoof → body (no dark muzzle — see above)."""
+    x, y, z = centroid.x, centroid.y, centroid.z
+    for tx, ty, tz in BULL_EYE_TARGETS:
+        dx, dy, dz = x - tx, y - ty, z - tz
+        if dx * dx + dy * dy + dz * dz < BULL_EYE_RADIUS * BULL_EYE_RADIUS:
+            return "eye"
+    # horns: the TWO side horns sweep forward+up to a point at |x| ≈ 0.45, y ≈ −1.55,
+    # z ≈ 1.30. Being off-center in X (|x| > 0.24) is what separates them from the
+    # central muzzle/brow — a looser box with no |x| gate floods the whole forehead
+    # and the ivory reads as an amorphous patch. The box reaches back+down to the
+    # horn BASE (y < −1.22, z > 1.08) on purpose: this bull's horns are small, and a
+    # tip-only ivory rendered as a lone ~3 px white speck at the game's ~60 pt sprite
+    # size (reads as a glitch, not a horn) — grabbing the whole horn makes a clear
+    # ivory pair. Don't widen |x| below ~0.22 or the forehead floods back in.
+    if y < -1.22 and z > 1.08 and abs(x) > 0.24:
+        return "horn"
+    if z < 0.24:                        # bottom of the legs: hooves
+        return "hoof"
+    return "body"
+
+
+def apply_bull_accents(meshes, base_rgba, bands=3, horn_style="ivory"):
+    """Multi-material cel skin for the bull: red body + a light horn + a dark eye.
+
+    Tuned for the game's black background (see the module note above — a dark
+    muzzle vanishes into black, so the head stays red):
+
+    - body   : the `--color` base (red), full bands (highlight gives volume). The
+               head is body-red too, so it reads against black.
+    - horn   : ivory/bone (`horn_style="ivory"`, the one light accent that pops on
+               black and the strongest "bull" cue) or base × 0.35 (`"dark"`, a
+               cohesive all-red villain whose horn then relies on the silhouette).
+    - eye    : a small near-black dot on each flank — INTERIOR to the red head, so it
+               reads (dark-on-red) without touching the black-vs-silhouette edge.
+    - hoof   : base × 0.60 — clearly darker than the body but still visibly red (a
+               base × 0.35 hoof read as near-black, indistinguishable from the field).
+
+    Returns the region→poly count dict (for logging / verification).
+    """
+    dark = _scaled(base_rgba, 0.35)          # the "dark" horn style
+    hoof_rgba = _scaled(base_rgba, 0.60)     # lighter than near-black, still < body
+    horn_rgba = (0.92, 0.88, 0.74, 1.0) if horn_style == "ivory" else dark
+    palette = {
+        "body":   base_rgba,
+        "horn":   horn_rgba,
+        "hoof":   hoof_rgba,
+        "eye":    (0.05, 0.05, 0.05, 1.0),
+    }
+    order = ["body", "horn", "hoof", "eye"]
+    slot = {name: i for i, name in enumerate(order)}
+    mats = {name: build_cel_material(f"BullCel_{name}", palette[name], bands=bands)
+            for name in order}
+
+    counts = {name: 0 for name in order}
+    for obj in meshes:
+        obj.data.materials.clear()
+        for name in order:
+            obj.data.materials.append(mats[name])
+        verts = obj.data.vertices
+        for poly in obj.data.polygons:
+            c = mathutils.Vector((0.0, 0.0, 0.0))
+            for vi in poly.vertices:
+                c += verts[vi].co
+            c /= len(poly.vertices)
+            region = _bull_region(c)
+            poly.material_index = slot[region]
+            counts[region] += 1
+    return counts
 
 
 def setup_outline(width_px=2.0):
@@ -662,9 +778,17 @@ def main():
     else:
         setup_light(args)
         if args.toon and args.color != "none":
-            apply_cel_material(meshes, PALETTE[args.color], bands=args.bands)
+            if args.accents:
+                counts = apply_bull_accents(meshes, PALETTE[args.color],
+                                            bands=args.bands, horn_style=args.horn_style)
+                print(f"[render_sprites] bull accents ({args.horn_style} horn): {counts}")
+            else:
+                apply_cel_material(meshes, PALETTE[args.color], bands=args.bands)
             if args.outline:
                 setup_outline(width_px=args.outline_width)
+        elif args.accents:
+            print("[render_sprites] --accents ignored (needs --toon with a --color).",
+                  file=sys.stderr)
 
     try:
         written, out_dir = render_frames(args, engine_id)

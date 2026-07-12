@@ -88,16 +88,28 @@ struct GameView: View {
   // offset all derived per action from its crop dims. That keeps the body a
   // constant size while the reared head genuinely extends upward on a throw
   // (a fixed on-screen height would instead shrink the body ~18% mid-throw).
-  // The cel outline added ~4px to every crop dim; bullScale is unchanged, so the
-  // body stays one size and the outline just adds a thin margin around it.
-  private static let bullScale: CGFloat = 0.653   // screen pt per render crop px
+  // The cel outline adds a fixed pixel margin to every crop dim; bullScale absorbs
+  // it so the body stays one size and the outline is just a thin edge.
+  // 2026-07-12: two coupled changes. (1) Bumped the on-screen bull +25% (headroom in
+  // the top gap; a bigger bull lets the small-geometry ivory horn + eye read). (2)
+  // Re-rendered the bull sprites at --size 512 (was 192): at 192 the ~168 px-wide crop
+  // was upscaled ~2.4× to the on-screen ~410 px and the small horn turned to blocky
+  // mush. 512 makes the source ≈ the @3x display size, so the horns render crisp — but
+  // it needs SMOOTH interpolation (see bullSprite; nearest-neighbor frays the outline
+  // into spikes when downscaling) and the DEFAULT --outline-width 2 (at 512, a wider
+  // outline makes Freestyle draw hair-like contour spikes). bullScale drops to hold the
+  // same on-screen size (137 pt idle width): 512-crop 436 px × 0.314 ≈ 137 pt, the same
+  // as the old 168 px × 0.816. VISUAL only — collision is `GameState.bullSize`, and the
+  // per-action feet offset re-derives from `bullHeight`, so feet stay planted.
+  private static let bullScale: CGFloat = 0.314   // screen pt per render crop px (512-render, +25%)
 
-  /// Union-crop pixel dims (W, H) per action, from `pack_or_rename.sh` (cel + outline).
+  /// Union-crop pixel dims (W, H) per action, from `pack_or_rename.sh` (512-render,
+  /// cel + ivory-horn accents + outline-width 2).
   private static func bullCrop(_ action: BullAction) -> (w: CGFloat, h: CGFloat) {
     switch action {
-    case .idle:  return (168, 91)
-    case .walk:  return (174, 97)
-    case .throw: return (174, 118)
+    case .idle:  return (436, 230)
+    case .walk:  return (452, 248)
+    case .throw: return (452, 306)
     }
   }
 
@@ -228,7 +240,11 @@ struct GameView: View {
         let action = gameState.bullAction
         Image("bull_\(Self.bullActionName(action))_\(gameState.bullFrame)")
           .resizable()
-          .interpolation(.none)
+          // Smooth interpolation (like the dancer): the bull is displayed large, so
+          // its 512-render sprite must SCALE to the ~410 px @3x display. `.none`
+          // (nearest-neighbor) frayed the outline into spikes on that downscale;
+          // smooth resampling keeps the cel edges + ivory horn clean.
+          .interpolation(.high)
           .scaledToFit()
           .frame(width: Self.bullWidth(action), height: Self.bullHeight(action))
           .scaleEffect(x: Self.bullMirror(gameState.bullFacing), y: 1)
