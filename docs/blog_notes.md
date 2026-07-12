@@ -4102,3 +4102,76 @@ hand-styled game.
 
 - **No credits/license change** — same source models (dancer = Mixamo X Bot, bull =
   Leo_Aguiar CC BY 4.0), just re-shaded. `asset-licenses/` untouched.
+
+---
+
+## Rendered-realistic dancer spike — a go/no-go art decision (2026-07-11)
+
+A deliberately-throwaway spike (not a ship): before committing further to the flat
+gold/red cel look, answer with *two pictures* whether a **Vainglory-style
+rendered-realistic** dancer is enough better — **at the game's real ~57pt sprite size**
+(`GameView.dancerVisualHeight = 57.3`) — to justify pivoting the whole art direction.
+Deliverable = one honest comparison artifact + a go/no-go. Result published as an HTML
+Artifact; nothing wired, `--toon` untouched, no imageset swaps.
+
+**Recommendation: NO-GO on a full pivot; the look wins but the pivot isn't worth it yet.**
+Bank the realistic render as a menu/marketing hero; keep the cel look in-game; revisit only
+if a real mesh is commissioned. Reasons below.
+
+- **The look genuinely wins at 57pt — and it survives shrinking.** I baked a *true-pixel*
+  comparison (not DPI-dependent CSS scaling): cel dancer vs realistic dancer at exactly 57
+  and 114px tall. Even at 57px the realistic dancer is a legible, colourful, posed figure on
+  a warm ground; the cel dancer is a flat gold silhouette. The plan's size-truth held: what
+  carries at 57pt is **rim/back light, colour-blocking + clean AA, silhouette/pose, and the
+  lit atmospheric ground** — *not* fine texture, which vanishes anyway. Honest caveat baked
+  into the artifact: today's cel dancer is a bare gold **mannequin** (X Bot), so part of the
+  gap is that the shipped art is minimal — a *costumed* cel would close some of it, but not
+  the lighting/ground part.
+
+- **Sourcing the mesh is where it breaks — the load-bearing finding.** All three free-tier
+  Rodin generations produced unusable blobs: text-to-3D (dance pose) → an incoherent
+  boot+ruffle column; text-to-3D (A-pose) → a ruffle ring where the head goes; **image-to-3D**
+  from a clean Gemini concept → right gold/red colours with a real head/arms, but single-image
+  reconstruction has no side/back data so it extruded a **flat cardboard slab** — and the game
+  renders *side-on*, where a slab is a plank. A shippable realistic dancer therefore needs a
+  hand-made/commissioned mesh (or paid higher-fidelity gen) — a real, un-budgeted line item,
+  not a free step. *(Blender MCP gotcha: Rodin/Sketchfab/PolyHaven are all off by default in
+  the BlenderMCP sidebar panel; each needs its checkbox + a key. Rodin's "Set Free Trial API
+  Key" button unblocks text/image-to-3D with no account.)*
+
+- **The concept image, by contrast, is trivial and excellent.** One `gemini-image` prompt
+  (gold gown, red ruffle trim, dynamic pose, warm key + cool rim, bloom, moody lit plaza with
+  bokeh + haze + contact shadow) produced a premium, on-brand hero on the first try. It *is* a
+  legitimate exemplar of the target look — but it's a **2D render, not a riggable asset**, so it
+  can't become the 8 in-game actions. That gap (look is cheap, riggable character is dear) is the
+  whole cost story.
+
+- **`--realistic` mode added to `render_sprites.py`** — the near-inverse of `--toon`, kept a
+  separate flag: **keeps** the mesh's PBR materials (doesn't clear slots), a 3-point + **rim**
+  rig (warm key / cool fill / bright rim-back, area lights for soft shadow; the rim replaces the
+  cel outline), **AgX** view transform (the opposite of the cel path's Standard), EEVEE-Next
+  raytracing/AO/soft-shadow, a **compositor Glare (Bloom)** node (EEVEE-Next removed
+  `eevee.use_bloom`, so bloom is strictly a compositor pass now — which is what the plan wanted),
+  **no** Freestyle outline, 512px. Guarded so it never silently lands on Workbench (no PBR) and
+  never falls back mid-render. Tuned the rig on one frame: first pass blew out (key 1400W →
+  600W, key:fill ~6:1, rim 1500W).
+
+- **Engine reality re-confirmed: only `BLENDER_EEVEE_NEXT` headless — no Cycles** (the engine
+  enum has exactly one entry on this build). EEVEE-Next is enough to decide (AO, soft shadow,
+  raytraced GI, compositor bloom), but every frame is a full lit render, not a flat blit.
+
+- **Bull bonus (a pivot is both actors).** The bull is already a real mesh, so I ran
+  `bull_idle.fbx` through `--realistic`: clear step up — sculpted form, soft contact shadow, cool
+  rim — even though the FBX carried no texture (reads as marble; a red PBR skin would put it
+  on-brand). Confirms both the look direction *and* that the bull, too, would need re-lighting +
+  re-rendering across idle/walk/throw.
+
+- **If "go" (out of scope here):** discard the cel/outline work; source a real costumed mesh; rig
+  + animate all 8 actions (dancer idle/walk/climb/jump/cape + bull idle/walk/throw), each re-lit
+  and re-rendered; **restyle the whole environment** — load-bearing, not optional, since premium
+  characters orphaned on the flat-black red-girder field would look *worse* than the cel sprites.
+  So a "go" is really "go on characters **and** world."
+
+Raw meshes + concept/hero PNGs stay under `tools/blender/source/` (git-ignored). The
+`--realistic` code and the comparison artifact are the only keepers, and only if Josh wants the
+experiment retained.

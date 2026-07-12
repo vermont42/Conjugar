@@ -83,6 +83,18 @@ def parse_args():
                         "NOTE: inflates every silhouette -> GameView crop constants change.")
     p.add_argument("--outline-width", type=float, default=2.0,
                    help="Freestyle outline thickness in output px (at --size; 2 ≈ 1px on-screen).")
+    p.add_argument("--realistic", action="store_true",
+                   help="Rendered-realistic mode (the inverse of --toon): KEEP the mesh's "
+                        "PBR materials, light with a 3-point + rim rig, AgX view transform, "
+                        "AO/soft shadows/raytraced GI, and compositor bloom — NO cel bands, "
+                        "NO outline. Use --size 512. A Vainglory-style art-direction spike.")
+    p.add_argument("--hdri", default=None,
+                   help="Optional .hdr/.exr for image-based lighting in --realistic mode "
+                        "(adds natural rim + reflections on top of the 3-point rig).")
+    p.add_argument("--samples", type=int, default=64,
+                   help="Render samples for --realistic (EEVEE TAA / Cycles); higher = cleaner.")
+    p.add_argument("--bloom", type=float, default=0.5,
+                   help="Compositor bloom strength for --realistic (0 = off; ~0.5 subtle glow).")
     p.add_argument("--start", type=int, default=-1, help="Override frame_start.")
     p.add_argument("--end", type=int, default=-1, help="Override frame_end.")
     p.add_argument("--out", default="tools/blender/renders",
@@ -281,6 +293,160 @@ def setup_light(args):
     bpy.context.scene.world = world
 
 
+# ---------------------------------------------------------------------- realistic
+#
+# The --realistic path is the deliberate near-inverse of --toon (below): it keeps
+# the mesh's own PBR materials, lights for form + separation with a 3-point + rim
+# rig (the rim/back light replaces the cel outline — it's how a premium render
+# separates a figure from the ground), tonemaps through AgX with a compositor
+# bloom for the warm HDR glow, and renders no Freestyle line. It exists to answer
+# the Vainglory-style art-direction question at the game's real ~60pt sprite size.
+
+
+def ensure_pbr_materials(meshes):
+    """Guarantee every mesh has *some* Principled material so --realistic never
+    renders a raw grey default. Meshes sourced with textures (Rodin/Sketchfab)
+    keep theirs untouched — this only fills a genuinely empty slot list."""
+    for obj in meshes:
+        if obj.data.materials and any(m is not None for m in obj.data.materials):
+            continue
+        mat = bpy.data.materials.new("RealisticPBR")
+        mat.use_nodes = True
+        bsdf = mat.node_tree.nodes.get("Principled BSDF")
+        if bsdf:
+            bsdf.inputs["Base Color"].default_value = (0.80, 0.62, 0.10, 1.0)  # gold-ish
+            bsdf.inputs["Roughness"].default_value = 0.55
+            # A little subsurface so bare skin/cloth doesn't read plastic.
+            try:
+                bsdf.inputs["Subsurface Weight"].default_value = 0.05
+            except KeyError:
+                pass
+        obj.data.materials.append(mat)
+
+
+def setup_light_3point(args, meshes):
+    """Cinematic 3-point rig for --realistic: warm key, cool fill, bright rim/back.
+
+    All three are *area* lights (soft, form-defining shadows) aimed at the subject
+    centre. Positions are derived from the camera axis so the rig follows --view:
+      - key  : camera side, high, offset left — warm, dominant.
+      - fill : camera side, low, offset right — cool, dim (lifts the shadow side).
+      - rim  : BEHIND the subject, high — bright, cool-white; rims the silhouette
+               and separates the figure from the ground (the outline's job in cel).
+    Energies are a tuned starting point; iterate on one frame per the spike plan."""
+    scene = bpy.context.scene
+    fstart, fend = effective_range(args)
+    lo, hi, center = bounds_over_range(meshes, fstart, fend)
+    size = max(max(hi - lo), 0.5)
+    view_dir, _ = VIEWS[args.view]
+    cam_side = (-view_dir).normalized()               # subject → camera
+    up = mathutils.Vector((0.0, 0.0, 1.0))
+    side_axis = cam_side.cross(up).normalized()       # horizontal, ⟂ camera axis
+    dist = max(size * 2.2, 2.0)
+
+    def add_area(name, direction, energy, color, area_size):
+        d = bpy.data.lights.new(name, type="AREA")
+        d.energy = energy
+        d.color = color
+        d.size = max(size * area_size, 0.4)
+        obj = bpy.data.objects.new(name, d)
+        scene.collection.objects.link(obj)
+        obj.location = center + direction.normalized() * dist
+        aim = (center - obj.location).normalized()
+        obj.rotation_euler = aim.to_track_quat("-Z", "Y").to_euler()
+        return obj
+
+    # Key:fill ~6:1 for dramatic, form-defining shadow (not flat); rim dominant so
+    # the back edge separates the figure from a dark ground. Energies tuned down
+    # from a first overexposed pass — AgX rolls off highlights, so keep it moderate.
+    add_area("KeyLight",  cam_side + up * 0.9 + side_axis * 0.8,
+             energy=600, color=(1.0, 0.85, 0.62), area_size=0.9)
+    add_area("FillLight", cam_side + up * 0.2 - side_axis * 1.0,
+             energy=100, color=(0.60, 0.72, 1.0), area_size=1.4)
+    add_area("RimLight",  -cam_side + up * 1.1 + side_axis * 0.3,
+             energy=1500, color=(0.85, 0.90, 1.0), area_size=0.5)
+
+    # A dark, low world so the rim reads as separation and the render keeps HDR
+    # contrast (the opposite of the cel path's bright white ambient). An HDRI, if
+    # supplied, replaces this for natural image-based rim + reflections.
+    world = bpy.data.worlds.get("RealWorld") or bpy.data.worlds.new("RealWorld")
+    world.use_nodes = True
+    nt = world.node_tree
+    nt.nodes.clear()
+    out = nt.nodes.new("ShaderNodeOutputWorld")
+    if args.hdri and os.path.exists(os.path.abspath(args.hdri)):
+        env = nt.nodes.new("ShaderNodeTexEnvironment")
+        env.image = bpy.data.images.load(os.path.abspath(args.hdri))
+        bg = nt.nodes.new("ShaderNodeBackground")
+        bg.inputs["Strength"].default_value = 1.0
+        nt.links.new(env.outputs["Color"], bg.inputs["Color"])
+        nt.links.new(bg.outputs["Background"], out.inputs["Surface"])
+    else:
+        bg = nt.nodes.new("ShaderNodeBackground")
+        bg.inputs["Color"].default_value = (0.02, 0.02, 0.03, 1.0)
+        bg.inputs["Strength"].default_value = 0.3
+        nt.links.new(bg.outputs["Background"], out.inputs["Surface"])
+    scene.world = world
+
+
+def setup_realistic_engine(scene, engine_id, args):
+    """Turn on the realism features the look depends on: raytraced GI/AO + soft
+    shadows on EEVEE-Next (or samples/denoise on Cycles), and the AgX HDR view
+    transform (the inverse of the cel path's Standard). Every attribute is set
+    defensively — EEVEE-Next's property names shift between Blender versions."""
+    def _try(obj, attr, val):
+        try:
+            setattr(obj, attr, val)
+            return True
+        except (AttributeError, TypeError):
+            return False
+
+    # AgX filmic tonemapping + a touch of contrast (realistic WANTS this; cel bans it).
+    _try(scene.view_settings, "view_transform", "AgX")
+    _try(scene.view_settings, "look", "AgX - Medium High Contrast")
+
+    if engine_id.startswith("BLENDER_EEVEE"):
+        ee = scene.eevee
+        _try(ee, "taa_render_samples", args.samples)
+        _try(ee, "use_shadows", True)
+        _try(ee, "use_raytracing", True)   # EEVEE-Next: SSGI + raytraced reflections/AO
+        _try(ee, "use_gtao", True)         # legacy EEVEE ambient occlusion (harmless if absent)
+        try:
+            rt = ee.ray_tracing_options
+            _try(rt, "use_denoise", True)
+        except AttributeError:
+            pass
+    elif engine_id == "CYCLES":
+        _try(scene.cycles, "samples", max(args.samples, 128))
+        _try(scene.cycles, "use_denoising", True)
+
+
+def setup_bloom(scene, strength):
+    """Compositor Glare (Bloom) node for the warm HDR glow. EEVEE-Next removed the
+    old `eevee.use_bloom`, so bloom is now strictly a compositor pass — which is
+    also what the spike plan calls for. `strength` maps to the Glare mix (subtle)."""
+    if strength <= 0.0:
+        return
+    scene.use_nodes = True
+    nt = scene.node_tree
+    nt.nodes.clear()
+    rl = nt.nodes.new("CompositorNodeRLayers")
+    glare = nt.nodes.new("CompositorNodeGlare")
+    types = {i.identifier for i in glare.bl_rna.properties["glare_type"].enum_items}
+    glare.glare_type = "BLOOM" if "BLOOM" in types else "FOG_GLOW"
+    for attr, val in (("quality", "HIGH"), ("threshold", 1.0), ("size", 8),
+                      # Glare mix: -1 = image only, +1 = glare only. Bias toward the
+                      # image and add a little glow on top.
+                      ("mix", -1.0 + min(max(strength, 0.0), 1.0))):
+        try:
+            setattr(glare, attr, val)
+        except (AttributeError, TypeError):
+            pass
+    comp = nt.nodes.new("CompositorNodeComposite")
+    nt.links.new(rl.outputs["Image"], glare.inputs["Image"])
+    nt.links.new(glare.outputs["Image"], comp.inputs["Image"])
+
+
 # --------------------------------------------------------------------------- toon
 
 
@@ -410,6 +576,12 @@ def configure_output(args, engine_id):
             scene.view_settings.view_transform = "Standard"
         except (AttributeError, TypeError):
             pass
+    elif args.realistic:
+        # Realistic wants HDR filmic tonemapping — the opposite of the cel path.
+        try:
+            scene.view_settings.view_transform = "AgX"
+        except (AttributeError, TypeError):
+            pass
     img = scene.render.image_settings
     img.file_format = "PNG"
     img.color_mode = "RGBA"
@@ -465,19 +637,41 @@ def main():
                  f"but the resolved engine is {engine_id}. Aborting instead of falling "
                  f"back to Workbench (which would silently ruin the cel look).")
 
-    setup_camera(args, meshes)
-    setup_light(args)
+    # Realistic needs a shading engine (EEVEE-Next or Cycles); Workbench has no
+    # PBR/AO/GI and would flatten the look. If `--engine` resolved to Workbench,
+    # fall back to EEVEE rather than render a look-test that proves nothing.
+    if args.realistic and not (engine_id.startswith("BLENDER_EEVEE") or engine_id == "CYCLES"):
+        eevee = resolve_engine("eevee")
+        if eevee.startswith("BLENDER_EEVEE"):
+            print(f"[render_sprites] --realistic: {engine_id} can't shade PBR; "
+                  f"using {eevee} instead.", file=sys.stderr)
+            engine_id = eevee
+        else:
+            sys.exit(f"[render_sprites] --realistic needs EEVEE or Cycles, but only "
+                     f"{engine_id} is available. Aborting.")
 
-    if args.toon and args.color != "none":
-        apply_cel_material(meshes, PALETTE[args.color], bands=args.bands)
-        if args.outline:
-            setup_outline(width_px=args.outline_width)
+    setup_camera(args, meshes)
+
+    if args.realistic:
+        # Inverse of --toon: keep PBR materials, 3-point + rim rig, AgX + bloom,
+        # AO/soft shadows, NO cel bands, NO outline.
+        ensure_pbr_materials(meshes)
+        setup_light_3point(args, meshes)
+        setup_realistic_engine(bpy.context.scene, engine_id, args)
+        setup_bloom(bpy.context.scene, args.bloom)
+    else:
+        setup_light(args)
+        if args.toon and args.color != "none":
+            apply_cel_material(meshes, PALETTE[args.color], bands=args.bands)
+            if args.outline:
+                setup_outline(width_px=args.outline_width)
 
     try:
         written, out_dir = render_frames(args, engine_id)
     except Exception as exc:  # EEVEE can fail headless on some GPUs; fall back.
-        # Never fall back for a toon render — Workbench can't do the cel graph.
-        if engine_id.startswith("BLENDER_EEVEE") and not args.toon:
+        # Never fall back for a toon OR realistic render — Workbench has neither the
+        # cel node graph nor PBR/AO/GI, so a silent Workbench render would ruin both.
+        if engine_id.startswith("BLENDER_EEVEE") and not args.toon and not args.realistic:
             print(f"[render_sprites] {engine_id} render failed ({exc}); "
                   f"falling back to Workbench.", file=sys.stderr)
             written, out_dir = render_frames(args, "BLENDER_WORKBENCH")
@@ -491,7 +685,7 @@ def main():
 
     print(f"[render_sprites] engine={engine_id} size={args.size} "
           f"view={args.view} frames={len(written)} toon={args.toon} "
-          f"outline={args.outline} -> {out_dir}")
+          f"realistic={args.realistic} outline={args.outline} -> {out_dir}")
     for w in written:
         print("  wrote", w)
 
