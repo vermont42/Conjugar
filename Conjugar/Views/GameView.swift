@@ -59,7 +59,7 @@ struct GameView: View {
     let aspect: CGFloat
     switch action {
     case .idle: aspect = 38.0 / 174.0
-    case .walk: aspect = 113.0 / 173.0
+    case .walk: aspect = 122.0 / 226.0
     case .climb: aspect = 74.0 / 173.0
     case .jump: aspect = 123.0 / 173.0
     case .cape: aspect = 113.0 / 173.0

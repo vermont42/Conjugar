@@ -4264,3 +4264,174 @@ open: the **dancer** (the real point of the spike — Phase 1 marketplace shortl
 paid-AI lottery). For those, the plan is free accounts on CGTrader / TurboSquid / Sketchfab / Fab
 now, buy per-asset only on a winner; defer any paid-AI (Meshy/Tripo/Rodin-Pro) until Phase 1
 stalls, since rig topology — not texture — is the failure mode AI-gen keeps hitting.
+
+## 2026-07-12 — Dancer spike Phase 1: marketplace shortlist (the flamenco mesh)
+
+- **Drove CGTrader / TurboSquid / Sketchfab / Fab via Claude-in-Chrome** to shortlist a
+  game-usable **flamenco-dancer** mesh that clears the app-icon floor (female + red ruffled
+  dress + dynamic pose at 57 pt). Full shortlist in `docs/dancer_shortlist.md`.
+- **The whole market has exactly one game-usable flamenco character:** Animod's "Flamenco
+  Dancer" — a woman in a tiered **red ruffled dress**, hair-in-a-bun-with-a-flower, cream
+  skin, clean **A-pose**; textured FBX (+MAX), 21k tris, **Royalty-Free (no AI)** so it's
+  app-embeddable. It shows up on all three stores (CGTrader **$6.99** sale / TurboSquid
+  $9.99 / Sketchfab). It is **not pre-rigged**, so Phase 3 = Mixamo auto-rig, and the
+  floor-length tiered skirt is the one deform risk to watch. **Recommended buy.**
+- **Everything else is a non-starter:** 3D-print STL figurines (`.stl`, no rig/topology),
+  dress-only assets, statues/decor, or mocap **animation** packs (Fab was *all* mocap, no
+  mesh). A few rigged "female dancer" hits sit behind CGTrader's **18+ gate** — but on
+  inspection that's *not* erotic content: they're **Adobe Fuse** base figures (nude base body
+  under separate garments) whose preview set includes a base-body topology render, which the
+  store auto-flags. The clean "RIGGED Ballerina" is wholesome and well-rigged; its real
+  disqualifier is the **tutu (wrong costume)**, not the rating.
+- **No pre-rigged flamenco/Spanish female dancer in a dress exists** — exactly the scarcity
+  the spike predicted. The rig-de-risk path (buy a rigged base + retexture) only offers
+  ballerina/cheerleader costumes that won't read as a gown, so it's dispreferred; the
+  documented backup is the **$5 "Bustier Ruffled Flamenco Spanish Skirt Dress"** (FBX/OBJ,
+  PBR, derivative-retexture explicitly licensed) skinned onto a base rig, else Fiverr.
+- **Handoff:** Josh buys Candidate A (I don't run checkout), drops the FBX in
+  `tools/blender/source/`, then Phase 3 runs the cheap 57 pt `--toon` idle acceptance render
+  against `icon1024.png` before any animation/rigging investment.
+
+## 2026-07-12 — Dancer spike Phase 2: paid-AI lottery (free-trial pull = same failure)
+
+- **Fired one image-to-3D pull** feeding the clean `dancer_concept_front.png` (gold gown, red
+  ruffles, A-pose) to **Rodin** via BlenderMCP — the key is still the **free-trial** tier
+  (paid needs Josh to paste a paid key or auth Meshy/Tripo, which I can't do). Added a
+  `bbox_condition [1,2,5]` hint to bias an upright figure and counter the prior "flat slab."
+- **Textures improved, topology did not.** Framed head-on it *looks* like a coherent dancer in
+  a gold gown with red trim — much better skin/cloth than the prior blobs. But the side profile
+  exposed the truth: a **detached lower body floating beside the dress, a long needle-spike
+  artifact, and stray floating bits** (a red ball by the head). Non-manifold, fragmented, limbs
+  not attached → **would fail Mixamo auto-rig.** Deleted it.
+- **Verdict: the lottery came up empty, same failure mode as the prior spike** — exactly the
+  risk the plan named ("paid gen has better textures but rig topology is still the failure
+  mode"). Two independent AI-gen attempts on a ruffled-dress figure now both die on riggable
+  topology. Strong evidence the *paid* tier would buy nicer textures on the same broken mesh.
+- **Recommendation:** don't spend on paid AI; put the money into **Candidate A** (the $6.99
+  Animod marketplace mesh) + Mixamo. Left open for Josh: if he still wants the paid shot, he'd
+  need to auth Meshy.ai / Tripo3D in Chrome or paste a paid Rodin key, and I'd drive it.
+
+## 2026-07-12 — Dancer spike Phase 3 gate: the 57 pt acceptance test PASSES
+
+- **Bought + landed Candidate A.** Josh purchased the Animod "Flamenco Dancer" on CGTrader
+  ($6.99, Royalty-Free no-AI); extracted `Flamenco_Dancer.fbx` (single mesh, 21k tris) + its
+  39-file texture set into `tools/blender/source/` (git-ignored). License logged in
+  `asset-licenses/cgtrader-flamenco-dancer.txt`.
+- **Ran the cheap gate first (no rig needed).** The FBX ships in ~A-pose, so one frame through
+  the *existing* pipeline — `render_sprites.py --toon --color gold --outline --frames 1
+  --size 192` (front & side) — is the whole acceptance test. `--toon` overrides materials, so
+  the missing-texture-path warnings are irrelevant; this is a silhouette/read test.
+- **Result: PASS.** At true 57 pt (and 8× zoom) the render reads **unmistakably as a woman in
+  a tiered flamenco dress** — bodice, cinched waist, flared ruffled skirt, dark hair — vs the
+  genderless X-Bot mannequin it replaces. Side-by-side vs the app icon saved to
+  `docs/screenshots/dancer_accept_57pt_vs_icon.png`. Differences from the icon are the intended
+  ones: **gold** (established hero color) not the icon's red, and a static A-pose (dynamic pose
+  arrives with Mixamo). **The spike's core thesis is confirmed: fix the mesh, keep the pipeline
+  — one good riggable dancer through `--toon` clears the floor.**
+- **Still ahead (full Phase 3):** Mixamo auto-rig → animate the 8 actions (idle/walk/climb/
+  jump/cape) → re-derive `pack_or_rename.sh` crop constants → wire into `GameView`. The open
+  risk stays the **floor-length tiered skirt through Mixamo** (weights to the legs; may split on
+  walk/climb) — that's the next gate, tested once rigged. Optional polish: add **red ruffle
+  trim** to hit the "gold gown + red ruffle" target from the palette note.
+
+## 2026-07-12 — Dancer Phase 3 rigging: Mixamo auto-rig FAILS, but the mesh is already rigged
+
+- **Mixamo auto-rig can't rig the dancer** — and the failure was instructive. Three uploads
+  died with *"unable to map your existing skeleton"* before I found the real cause: (1) the
+  vendor FBX ships **with its own skeleton**, so Mixamo took the "map a rigged character" path
+  and failed; (2) after stripping the skeleton the first clean FBX still carried **57
+  blend-shape (facial-morph) deformers** that Mixamo also read as a rig; (3) even a truly bare
+  FBX failed — **Blender's binary FBX is misread by Mixamo**. An **OBJ** finally reached the
+  Auto-Rigger. Then the auto-rigger itself **bounced off the marker step**: the **floor-length
+  tiered skirt gives the legs no separate silhouette**, so it can't resolve two legs. (Lesson:
+  Mixamo needs leg separation; a full skirt defeats marker-based auto-rig. OBJ > FBX for
+  Blender→Mixamo.)
+- **The reprieve: the model is ALREADY rigged, Mixamo-compatibly.** Inspecting the vendor
+  skeleton: **63 bones with exact Mixamo names** (`Hips, Spine1-3, LeftUpLeg, LeftLeg,
+  LeftFoot, RightUpLeg, …`) — and **the skirt mesh (`MASkirt_03`) is skinned to the hip + leg
+  bones** (vgroups Hips/LeftUpLeg/LeftLeg/RightUpLeg/RightLeg). So we never needed Mixamo's
+  auto-rigger; we can pose/animate the existing rig directly, and Mixamo mocap can be
+  **retargeted** onto it because the bone names already match.
+- **Skirt walk test = PASS (the spike's biggest unknown, resolved).** Posed the legs into a
+  full mid-stride split on the existing rig and rendered `--toon` front + side
+  (`docs/screenshots/dancer_stride_skirt_test.png`). The tiered skirt **swings and stretches as
+  a coherent gown — it does NOT tear into "pants" between the legs.** The floor-length dress is
+  viable for locomotion. So the dancer path is a go; remaining work is producing the 8 action
+  clips on the existing rig (retarget Mixamo mocap, or hand-key like the bull) — no auto-rig.
+
+## 2026-07-12 — Dancer walk cycle: retargeted Mixamo mocap → PASS
+
+- **Path that worked:** don't auto-rig — retarget onto the vendor's existing Mixamo-named rig.
+  Drove Mixamo (in-browser) to download **"Walking (In Place)"** on the X Bot, then in Blender
+  retargeted it onto the dancer's rig. Because rest poses differ (dancer = A-pose, Mixamo =
+  T-pose), a naive local-rotation copy would break the arms; instead used **world-space
+  COPY_ROTATION constraints per bone (+ COPY_LOCATION on Hips) then `nla.bake`** — robust to
+  rest-pose mismatch, no bone stretch. 52 bones baked across the 32-frame cycle.
+- **Result: a clean walking flamenco dancer.** Rendered through the existing `--toon --color
+  gold --outline` side view: the gown reads as a dancer walking in profile and **the
+  floor-length tiered skirt sways as a coherent mass** — the spike's central risk, now shown
+  working in actual motion, not just a static pose. Filmstrip + GIF in
+  `docs/screenshots/dancer_walk_filmstrip.png` / `dancer_walk.gif`.
+- **Two integration notes for the full pass:** (1) frame 1 of the render is the FBX **bind/rest
+  pose** (T-pose) bleeding in — skip it (render frames 2-N or trim the action's first frame);
+  (2) `render_sprites --start/--end` mis-sampled (re-showed the rest pose) — investigate before
+  the final multi-action render; default-range sampling works.
+- **Perf gotchas hit:** macOS has no `timeout` binary (silently no-ops a wrapped command — use
+  the tool timeout); and a per-frame/per-bone `view_layer.update()` retarget is too slow (2 min
+  timeout) — the constraint+`nla.bake` route is the fast, correct one.
+- **Status:** walk validated. Remaining Phase 3: retarget idle/climb/jump/cape the same way,
+  render all, re-derive `pack_or_rename.sh` crop constants, wire into `GameView`, verify live.
+
+## 2026-07-12 — Dancer walk, CORRECTED: retarget was a mirage; hand-keyed walk is the real one
+
+- **The earlier "retargeted walk PASS" was wrong** (caught by Josh: every frame looked
+  identical). Diagnosing revealed *two* traps: (1) the exported action range was **[1,1557]**,
+  not [1,32] — the vendor rig carried its own long baked animation, so `nla.bake` with
+  `use_current_action=True` kept frames 33-1557 as a **static hold**; `render_sprites` then
+  sampled 8 frames across all 1557 and landed almost entirely in that hold → identical frames.
+  Fixed by `animation_data_clear()` + `use_current_action=False` → clean [1,32]. (2) With a
+  clean range the real retarget frames were **broken** — arms splayed into a T-pose — because
+  world-space `COPY_ROTATION` assumes matching rest poses, but the dancer rests in **A-pose**
+  and Mixamo in **T-pose**. Restricting the retarget to legs/spine (same in A & T) and leaving
+  arms at rest *still* misaligned the root (the two armatures have different base orientations).
+- **Resolution: hand-key the walk** (like the bull). Reused the proven `worldX_rot` leg-swing
+  from the stride test — swing `LeftUpLeg/RightUpLeg` about world-X in opposite phase, bend the
+  shins, subtle hip bob; arms stay at the elegant A-pose rest. A **6-frame** cycle (matching
+  `playerFrameCounts[.walk]`). First pass over-strode (shoes flew out past the hem as detached
+  blobs); dropped thigh swing 25°→14°, shin 48°→26° for a graceful glide where the feet just
+  peek at the hem. Renders through `--toon --color gold --outline` as a clean walking flamenco
+  dancer; the floor-length skirt sways as a coherent mass. `docs/screenshots/dancer_walk_*`.
+- **Takeaway for the remaining actions:** Mixamo mocap **retarget is not viable** onto this
+  A-pose-rest rig without proper rest-pose correction; **hand-keying on the existing rig is the
+  reliable path** (idle/climb/jump/cape next), exactly as the bull was done.
+
+## 2026-07-12 — Dancer walk finalized: "animate the gown" (feet hidden)
+
+- **Detached-feet problem = inherent to a floor-length gown side-on.** The legs live inside
+  the skirt, so only the *shoes* poke below the hem; any real stride swings a shoe past the hem
+  and it reads as a detached blob (Josh flagged this). A subtle stride hid it but read as a
+  gentle glide.
+- **Direction decided by Josh: hide the feet, animate the gown.** Removed the shoe mesh
+  (`HeA_MltherShoesA_01`); the walk is now a clean **gown + torso** — subtle leg motion still
+  drives the skirt (skinned to the legs) so the hem swishes + a small body bob, but nothing
+  pokes out below the hem and nothing detaches. This is the **house style for all dancer
+  actions** now (a stylized floating-gown dancer). 6-frame cycle,
+  `docs/screenshots/dancer_walk_*`.
+- **Remaining Phase 3:** hand-key idle/climb/jump/cape in the same gown style (no feet), render
+  all through `--toon`, re-derive `pack_or_rename.sh` crop constants, wire into `GameView`,
+  verify live. Climb/jump will be gown-and-body gestures (no legs on rungs) — consistent with
+  the chosen stylization.
+
+## 2026-07-12 — Walk wired into GameView + verified live
+
+- Rendered the feet-hidden gown walk as 6 `dancer_walk_*` frames, union-cropped via
+  `pack_or_rename.sh` (**box 122×226**), installed into the `dancer_walk_1..6.imageset`s, and
+  updated `GameView.dancerWidth(.walk)` aspect **113/173 → 122/226**. Build succeeds; the
+  SourceKit "cannot find GameState/PlayerAction" spam is the usual same-module false positive.
+- **Live-verified** via `conjugar://game` (time-scale env, flags off): holding right, the player
+  now renders as the **gold flamenco gown dancer** walking on the platform, correctly planted
+  and sized (~57 pt), replacing the X-Bot mannequin. Screenshot `20260712-111531-walk-a.png`.
+  Idle/climb/jump/cape still show the old mannequin (only walk was wired, per Josh's request) —
+  so idle↔walk visibly swaps figure until those are done.
+- **Remaining:** hand-key idle/climb/jump/cape in the feet-hidden gown style, render + crop +
+  wire each, then a consistency pass so standing and moving match.

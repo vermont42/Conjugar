@@ -1,0 +1,18 @@
+Asset:    "Flamenco Dancer" (game dancer mesh)
+Source:   CGTrader — https://www.cgtrader.com/3d-models/character/woman/flamenco-dancer-c7f4bf5a-7c34-4b81-8242-d5d99ab08413
+Model ID: #5463042
+Author:   aaanimod / Animod
+License:  CGTrader Royalty Free License (no AI)
+Price:    $6.99 (Weekend Sale, -30% from $9.99), purchased 2026-07-12
+Formats:  FBX (Flamenco_Dancer.fbx) + MAX (3ds Max 2016+, V-Ray) + 39 textures (Co/Nr/Sp maps)
+Geometry: 21,049 faces / 13,299 verts, UV-mapped, single mesh
+
+Usage rights (CGTrader Royalty Free License):
+  - May be embedded in and distributed as part of a commercial product
+    (here: the Conjugar iOS app, rendered to 2D sprites), royalty-free.
+  - May NOT be resold or redistributed as a standalone 3D asset.
+  Our use — Mixamo-rig -> render to flat sprites baked into the app binary — is
+  covered: the model is not distributed in a usable 3D form.
+
+Raw FBX/MAX/textures kept git-ignored under tools/blender/source/ (only PNGs +
+this license file are committed), per the spike's asset-handling rule.
