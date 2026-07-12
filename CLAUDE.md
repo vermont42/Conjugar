@@ -88,13 +88,34 @@ xcrun simctl openurl "$UDID" conjugar://verb/hablar     # → Browse tab, pushes
 
 **`conjugar://game`** is the fast path to the game: it presents `GameView` full-screen via
 `AppRouter.showGame` from `MainTabView` (tab-independent), so no Settings→scroll→Play dance.
-Then hold a direction button to trigger the `.walk` action and the dancer sprite (idle shows
-the placeholder box). Example hold-and-capture (logical points; right arrow ≈ `131,767`):
+All five **player** actions are rendered sprites now (`idle`/`walk`/`climb`/`jump`/`cape`);
+hold a direction button to walk, tap jump, hold up at a ladder to climb, etc. (only the
+**bull** still shows a numbered placeholder box). Example hold-and-capture (logical points;
+right arrow ≈ `131,767`):
 
 ```bash
 axe touch -x 131 -y 767 --down --up --delay 2.5 --udid "$UDID" &   # hold right ~2.5 s
 sleep 1.1; "$S/screenshot.sh" walking                              # capture mid-walk
 ```
+
+**Freeze-framing a fast animation (jump apex, climb/cape pose).** The game loop honors two
+**launch environment variables**, both default-off so **normal play is unaffected** —
+`CONJUGAR_GAME_TIME_SCALE` scales the loop's `dt` (`0.2` = 5× slow, `0.1` = 10×, so a
+~0.5 s jump lasts several seconds and is trivially screenshot-able) and
+`CONJUGAR_GAME_DISABLE_FLAGS` stops the bull throwing flags (a calm field). They're read via
+`ProcessInfo` in `GameState` (`debugTimeScale` / `debugFlagsDisabled`). `openurl` can't pass
+env, so launch the process **with** them, then route via the deeplink:
+
+```bash
+APP=$(ls -d ~/Library/Developer/Xcode/DerivedData/Conjugar-*/Build/Products/Debug-iphonesimulator/Conjugar.app | head -1)
+xcrun simctl terminate "$UDID" biz.joshadams.Conjugar 2>/dev/null; xcrun simctl install "$UDID" "$APP"
+SIMCTL_CHILD_CONJUGAR_GAME_TIME_SCALE=0.2 SIMCTL_CHILD_CONJUGAR_GAME_DISABLE_FLAGS=1 \
+  xcrun simctl launch "$UDID" biz.joshadams.Conjugar
+sleep 2; xcrun simctl openurl "$UDID" conjugar://game
+```
+
+To reach the climb state, the D-pad **up** button only appears when the player is aligned at
+a ladder base — poll `describe_ui.sh` for the `Move up` label to know you're on it.
 
 Conjugar-specific config facts baked into `.claude/ios-build-verify.config.sh`:
 
