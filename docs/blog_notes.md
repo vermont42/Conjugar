@@ -3954,3 +3954,30 @@ the bull still shows one).
 
 Next: the custom flamenco-dancer mesh (replace the X Bot mannequin), the toon/palette pass,
 then the bull (the quadruped cost-center).
+
+- **The bull, Phase 1: sourcing the quadruped (no Mixamo this time).** The player went
+  fully sprite-animated for free because Mixamo hands you a rigged biped plus royalty-free
+  mocap. None of that exists for a four-legged bull — Mixamo is biped-only — so the bull's
+  first job was just *finding a rigged mesh we're allowed to ship*. Drove Sketchfab through
+  Claude-in-Chrome: filtered to Downloadable + Animated, then tightened the license facet to
+  **CC BY / CC BY-SA / CC0 only** — which was the important move, because it instantly
+  dropped several nice-looking cow/bull models that turned out to be CC-BY-**ND** (no
+  derivatives) or Sketchfab "Standard"/"Editorial" — none of which permit re-posing-and-
+  rendering inside a public AGPL app. Read each finalist's license *off its own model page*
+  (the authoritative source), and shortlisted three CC-BY quadrupeds spanning a real
+  trade-off: a stylized low-poly "Spanish Bull" (best game look, but one baked clip), a
+  realistic "Bull" (clean, low-poly), and **Leo_Aguiar's "Simple Rigged Bull"** — realistic,
+  heavier (60.7k tris), but explicitly built on **Blender's Rigify Basic Quadruped meta-rig**.
+  Presented all three (previews + license) and Josh picked the Rigify one — the safe bet,
+  since the hard part of Phase 2 is a *bespoke hand-keyed throw* and a real editable
+  quadruped rig removes the rigging risk. Download needs a (free) Sketchfab login; Josh
+  authenticated with an Epic Games account (the auth step is deliberately his — Claude
+  doesn't create accounts or type credentials). The "Original format" FBX pull was a happy
+  surprise: it preserved **both** the source metarig (49 bones) *and* the full generated
+  Rigify control rig (381 bones — IK/FK, tweak/DEF/ORG/MCH) plus the baked `rigAction`
+  (frames 1–105). Saved as the git-ignored `tools/blender/source/bull.blend`; logged full
+  provenance + the required CC-BY attribution in `asset-licenses/sketchfab-bull.txt` before
+  a single frame gets rendered. One caveat noted for Phase 2: FBX bakes animation per-frame
+  and drops Rigify's constraints/drivers, so the imported control rig is a bone hierarchy
+  without live IK — but the intact metarig means Phase 2 can just *regenerate* a working
+  Rigify rig if direct DEF-bone keying gets awkward.
