@@ -27,6 +27,8 @@ extension GameState {
     }
     bullFacing = bullDirection
 
+    if Self.debugFlagsDisabled { return }
+
     flagSpawnTimer -= Double(dt)
     if flagSpawnTimer <= 0 {
       spawnFlag()

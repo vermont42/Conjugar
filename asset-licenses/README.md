@@ -25,15 +25,17 @@ license under which it is reused. App-facing credits live in `Info.creditsText`
 
 ## Game sprites
 
-- **`Conjugar/Assets.xcassets/Game/dancer_walk_1…6`** — the player's walk-cycle
-  sprite frames, rendered from a **Mixamo** "Walking" mocap clip on the stock
-  **"X Bot"** character (FBX → Blender orthographic render via
+- **`Conjugar/Assets.xcassets/Game/dancer_{idle,walk,climb,jump,cape}_*`** — the
+  player's sprite-animation frames (one flipbook per action), rendered from
+  **Mixamo** mocap clips (Breathing Idle / Walking / Climbing Ladder / Jump /
+  Taunt) on the stock **"X Bot"** character — the same character across all five,
+  so scale matches (FBX → Blender orthographic render via
   `tools/blender/render_sprites.py`). **Mixamo/Adobe license** — royalty-free for
   commercial use, **no attribution required**; only the raw assets may not be
-  resold standalone (shipping rendered sprites in-app is fine). The source FBX is
-  **git-ignored** (raw-asset restriction + public/AGPL repo); only the 2D sprites
-  ship. See `mixamo-dancer-walk.txt`. The X Bot mannequin is a placeholder for the
-  eventual custom flamenco dancer.
+  resold standalone (shipping rendered sprites in-app is fine). The source FBX
+  files are **git-ignored** (raw-asset restriction + public/AGPL repo); only the 2D
+  sprites ship. See `mixamo-dancer.txt`. The X Bot mannequin is a placeholder for
+  the eventual custom flamenco dancer.
 
 ## Original app sounds
 

@@ -15,6 +15,7 @@
 //  real sprite art later is a one-line change — `Text("\(frame)")` → `Image(...)`.
 //
 
+import Foundation
 import Observation
 import SwiftUI
 
@@ -61,6 +62,22 @@ final class GameState {
 
   /// Placeholder flipbook speed (RaceRunner's rate).
   static let fps = 10
+
+  /// Global time multiplier for the game loop — 1 in normal play. Setting the
+  /// `CONJUGAR_GAME_TIME_SCALE` launch environment variable (e.g. `0.1`) slows
+  /// the whole simulation down uniformly, so individual animation frames (a
+  /// jump's apex, a climb/cape pose) can be caught in a screenshot.
+  static let debugTimeScale: CGFloat = {
+    if let raw = ProcessInfo.processInfo.environment["CONJUGAR_GAME_TIME_SCALE"],
+       let value = Double(raw), value > 0 {
+      return CGFloat(value)
+    }
+    return 1
+  }()
+
+  /// When the `CONJUGAR_GAME_DISABLE_FLAGS` launch environment variable is set,
+  /// the bull throws no flags — a calmer field for capturing player animations.
+  static let debugFlagsDisabled = ProcessInfo.processInfo.environment["CONJUGAR_GAME_DISABLE_FLAGS"] != nil
 
   // MARK: Placeholder art
 
@@ -296,7 +313,7 @@ final class GameState {
 
     // Clamp so a sub-second hitch isn't applied in one giant step (prevents
     // tunneling through platform/flag collision tests).
-    let dt = min(rawDt, 1.0 / 30.0)
+    let dt = min(rawDt, 1.0 / 30.0) * Self.debugTimeScale
 
     if damageCooldown > 0 { damageCooldown = max(0, damageCooldown - Double(dt)) }
     if capedRemaining > 0 { capedRemaining = max(0, capedRemaining - Double(dt)) }

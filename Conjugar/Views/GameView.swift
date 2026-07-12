@@ -21,12 +21,53 @@ struct GameView: View {
   private static let dirButtonSize: CGFloat = 40
   private static let jumpButtonSize: CGFloat = 51   // 64 shrunk by 20%
 
-  // Real rendered dancer walk sprite (tools/blender → Assets.xcassets/Game).
-  // Frames are 109×169 px; the visual overhangs the 44×30 collision box, with
-  // the feet aligned to the box's bottom edge via dancerFeetOffset.
+  // Real rendered dancer sprites (tools/blender → Assets.xcassets/Game). Every
+  // player action is a rendered flipbook now (idle/walk/climb/jump/cape); the
+  // visual overhangs the collision box, feet aligned to its bottom edge via
+  // dancerFeetOffset. All actions are held to one visual HEIGHT and given their
+  // own rendered aspect ratio (widths differ with limb spread), so the character
+  // stays one size with feet aligned as the action changes.
   private static let dancerVisualHeight: CGFloat = 56
-  private static let dancerVisualWidth: CGFloat = 56 * 109 / 169   // preserve aspect
   private static let dancerFeetOffset: CGFloat = -(56 - GameState.playerHeight) / 2
+
+  /// Player actions backed by real rendered sprites (`dancer_<action>_<frame>`).
+  /// All five are rendered; the numbered-box fallback stays only as a safety net.
+  private static let spriteActions: Set<PlayerAction> = [.idle, .walk, .climb, .jump, .cape]
+
+  /// The asset-name stem for each action: `dancer_<name>_<frame>`.
+  private static func actionName(_ action: PlayerAction) -> String {
+    switch action {
+    case .idle: return "idle"
+    case .walk: return "walk"
+    case .climb: return "climb"
+    case .jump: return "jump"
+    case .cape: return "cape"
+    }
+  }
+
+  /// Displayed width for an action, from its rendered union-crop aspect ratio
+  /// (pixel dims, all ~169 tall) at the constant `dancerVisualHeight`. Keeping
+  /// height fixed and width per-action means `.scaledToFit()` never letterboxes
+  /// and the feet stay glued to the frame's bottom edge across actions.
+  private static func dancerWidth(_ action: PlayerAction) -> CGFloat {
+    let aspect: CGFloat
+    switch action {
+    case .idle: aspect = 34.0 / 170.0
+    case .walk: aspect = 109.0 / 169.0
+    case .climb: aspect = 82.0 / 169.0
+    case .jump: aspect = 119.0 / 169.0
+    case .cape: aspect = 109.0 / 169.0
+    }
+    return dancerVisualHeight * aspect
+  }
+
+  /// Horizontal scale for facing. The renders face LEFT, so mirror (−1) when the
+  /// player faces right. Climb is a symmetric, near-front ladder pose — never
+  /// mirror it, or the lean flips to the wrong side.
+  private static func dancerMirror(_ action: PlayerAction, facing: CGFloat) -> CGFloat {
+    if action == .climb { return 1 }
+    return facing >= 0 ? -1 : 1
+  }
 
   var body: some View {
     GeometryReader { geo in
@@ -90,17 +131,17 @@ struct GameView: View {
 
   private var playerSprite: some View {
     ZStack {
-      if gameState.playerAction == .walk {
-        // Real rendered walk cycle (dancer_walk_1…6). The sprite is rendered
-        // facing left, so mirror it when the player faces right.
-        Image("dancer_walk_\(gameState.playerFrame)")
+      if Self.spriteActions.contains(gameState.playerAction) {
+        // Real rendered flipbook for this action (dancer_<action>_<frame>).
+        let action = gameState.playerAction
+        Image("dancer_\(Self.actionName(action))_\(gameState.playerFrame)")
           .resizable()
           .scaledToFit()
-          .frame(width: Self.dancerVisualWidth, height: Self.dancerVisualHeight)
-          .scaleEffect(x: gameState.playerFacing >= 0 ? -1 : 1, y: 1)
+          .frame(width: Self.dancerWidth(action), height: Self.dancerVisualHeight)
+          .scaleEffect(x: Self.dancerMirror(action, facing: gameState.playerFacing), y: 1)
           .offset(y: Self.dancerFeetOffset)
       } else {
-        // Placeholder numbered flipbook for the not-yet-rendered actions.
+        // Numbered-box fallback (safety net; unused for the player today).
         RoundedRectangle(cornerRadius: 6)
           .fill(Color.customRed)
         Text(verbatim: "\(gameState.playerFrame)")

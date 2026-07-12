@@ -3902,3 +3902,39 @@ the player's **walk cycle** — now animating in the running app.
   `URLSession.shared`); `RatingsFetcherTests` stay green.
 
 Next: fill out the dancer's other actions (idle/climb/jump/cape/victory), then the bull.
+
+## The dancer's other four actions — the player is fully sprite-animated (2026-07-11)
+
+Ran the proven toolchain across the dancer's remaining four actions, so **every** player
+state now renders real frames — no numbered-box placeholder is left for the player (only
+the bull still shows one).
+
+- **Four more Mixamo clips, same X Bot.** Exported `idle` ("Breathing Idle"), `climb`
+  ("Climbing Ladder"), `jump` ("Jump"), `cape` ("Taunt") — all In-Place / 30 fps / With
+  Skin, driven in-browser via Claude-in-Chrome — onto the *same* X Bot character as the
+  walk, so scale matches. Rendered through `render_sprites.py` at `--frames` matching
+  `playerFrameCounts` exactly (idle 2, climb 4, jump 3, cape 4), side view, `--size 192`,
+  then `pack_or_rename.sh` union-cropped each. 13 new imagesets in `Assets.xcassets/Game/`.
+- **One height, per-action width.** Every action's union crop came out ~169 px tall
+  (In-Place keeps the figure the same height); only width varies with limb spread (idle
+  34, cape/walk 109, jump 119). So `GameView` was generalized to hold **one visual height**
+  and derive each action's **width** from its own aspect ratio — the character stays one
+  size with feet aligned as the action changes. The `.walk`-only special-case became a
+  `spriteActions` set + `actionName`/`dancerWidth`/`dancerMirror` helpers; the numbered box
+  survives only as a safety net.
+- **Climb doesn't mirror.** The renders face left and mirror when facing right — except
+  `climb`, which stays un-mirrored (a symmetric ladder pose shouldn't flip). Side view was
+  enough for all five; the ladder climb reads fine in profile, so no front/back special-case.
+- **A human debugging trick made verification tractable.** Driving the running game to
+  screenshot each action, the fast ones were nearly impossible to catch — a jump's airborne
+  window is ~0.5 s and every capture landed a frame late. Josh's idea: **slow the whole
+  simulation down.** Added a `CONJUGAR_GAME_TIME_SCALE` launch env var (a single multiplier
+  on the loop's `dt`) — at 10× slow the half-second jump lasts five seconds, trivially
+  caught; refined to 5× plus a `CONJUGAR_GAME_DISABLE_FLAGS` flag for a calm field. Both
+  default off (no effect on normal play) and ship as debug affordances. With them, all five
+  actions were verified live via `conjugar://game`: idle stands, walk strides (both
+  facings), jump hangs mid-arc, climb grips the ladder, cape strikes the fists-up
+  smash-ready stance.
+
+Next: the custom flamenco-dancer mesh (replace the X Bot mannequin), the toon/palette pass,
+then the bull (the quadruped cost-center).

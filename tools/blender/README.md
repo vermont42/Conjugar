@@ -159,6 +159,27 @@ tools/blender/pack_or_rename.sh sheet dancer walk "" "" 96
 3. `pack_or_rename.sh rename dancer climb` → add to `Assets.xcassets/Game/`.
 4. Extend the `GameView` swap to that action.
 
+### The dancer's full action set (done)
+
+All five player actions now ship as rendered sprites — `idle` (Breathing Idle, 2),
+`walk` (Walking, 6), `climb` (Climbing Ladder, 4), `jump` (Jump, 3), `cape` (Taunt,
+4) — all on the same **X Bot** character. Notes that held across the set:
+
+- **The default side view (`--view side`) was enough for every action**, including
+  the ladder climb: the "Climbing Ladder" clip reads clearly in profile (stepping
+  legs, reaching arms), so no `--view front/back` special-case was needed.
+- **Union-crop heights all landed at ~169 px** (idle 34×170, climb 82×169, jump
+  119×169, cape 109×169, walk 109×169) because In-Place keeps the figure the same
+  height. `GameView` holds one visual **height** and derives each action's **width**
+  from its own aspect ratio, so the character stays one size with feet aligned.
+- **Facing/mirror:** the renders face **left**; `GameView` mirrors when the player
+  faces right — *except* `climb`, which is left un-mirrored (a symmetric ladder pose
+  shouldn't flip). See `GameView.dancerMirror(_:facing:)`.
+- **Catching a fast action in a screenshot:** the game loop honors a
+  `CONJUGAR_GAME_TIME_SCALE` launch env var (e.g. `0.2` = 5× slow, `0.1` = 10×) and
+  a `CONJUGAR_GAME_DISABLE_FLAGS` flag — both default off, no effect on normal play.
+  Launch with them set to freeze-frame a jump's apex or a climb pose.
+
 ## Upgrading `--toon` to a real cel look (later)
 
 `--toon` currently applies a flat, palette-colored Principled material — enough
