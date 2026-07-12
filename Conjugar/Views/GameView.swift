@@ -54,7 +54,7 @@ struct GameView: View {
     switch action {
     case .idle: aspect = 34.0 / 170.0
     case .walk: aspect = 109.0 / 169.0
-    case .climb: aspect = 82.0 / 169.0
+    case .climb: aspect = 70.0 / 169.0
     case .jump: aspect = 119.0 / 169.0
     case .cape: aspect = 109.0 / 169.0
     }
@@ -62,8 +62,8 @@ struct GameView: View {
   }
 
   /// Horizontal scale for facing. The renders face LEFT, so mirror (−1) when the
-  /// player faces right. Climb is a symmetric, near-front ladder pose — never
-  /// mirror it, or the lean flips to the wrong side.
+  /// player faces right. Climb is a back-view ladder pose (camera behind the
+  /// figure) — left–right symmetric, so never mirror it, or the lean flips.
   private static func dancerMirror(_ action: PlayerAction, facing: CGFloat) -> CGFloat {
     if action == .climb { return 1 }
     return facing >= 0 ? -1 : 1

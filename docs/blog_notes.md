@@ -3936,5 +3936,21 @@ the bull still shows one).
   facings), jump hangs mid-arc, climb grips the ladder, cape strikes the fists-up
   smash-ready stance.
 
+- **Re-angling the climb to a back view.** The first pass rendered all five actions in
+  side profile, and the climb *worked* — but a side-on figure on a vertical ladder reads
+  oddly, like it's clinging to the rungs sideways. The conventional platformer read is the
+  character's **back** as they climb *away* up the ladder. The render harness already had a
+  `--view back` flag (camera on −Y looking +Y), so this was a one-flag re-render:
+  `--view side` → `--view back`, still 4 frames. The "Climbing Ladder" clip reads cleanly
+  from behind — back of the head and shoulders, arms reaching up alternately to the rungs,
+  legs stepping — no off-axis three-quarter nudge needed. Two surprises: (1) the back
+  silhouette is *narrower* than the side one (70 px vs 82 px union-crop width) because the
+  arms tuck up close to the body instead of reaching out in a side stride, so the single
+  code change was `dancerWidth(.climb)`'s aspect `82/169 → 70/169`; and (2) the
+  un-mirrored rule still holds — a back view is left–right symmetric just as the profile
+  was, so `dancerMirror` still returns `1` for climb. Verified live via `conjugar://game`
+  (walk to the bottom-right ladder, hold up): the dancer now climbs the rungs seen from
+  behind, feet on the ladder, same character size; walk and jump unchanged.
+
 Next: the custom flamenco-dancer mesh (replace the X Bot mannequin), the toon/palette pass,
 then the bull (the quadruped cost-center).

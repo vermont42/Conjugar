@@ -165,16 +165,22 @@ All five player actions now ship as rendered sprites — `idle` (Breathing Idle,
 `walk` (Walking, 6), `climb` (Climbing Ladder, 4), `jump` (Jump, 3), `cape` (Taunt,
 4) — all on the same **X Bot** character. Notes that held across the set:
 
-- **The default side view (`--view side`) was enough for every action**, including
-  the ladder climb: the "Climbing Ladder" clip reads clearly in profile (stepping
-  legs, reaching arms), so no `--view front/back` special-case was needed.
-- **Union-crop heights all landed at ~169 px** (idle 34×170, climb 82×169, jump
-  119×169, cape 109×169, walk 109×169) because In-Place keeps the figure the same
+- **The default side view (`--view side`) suits four of the five actions.** The one
+  exception is **climb**, rendered **`--view back`** (camera behind the figure): a
+  side-on climb reads oddly on a vertical ladder, whereas watching the character's
+  back as they climb *away* up the rungs is the conventional platformer read. The
+  "Climbing Ladder" clip reads clearly from behind (back of the head/shoulders, arms
+  reaching up alternately, legs stepping). Pure `--view back` was enough — no
+  off-axis three-quarter nudge to the camera-placement block was needed.
+- **Union-crop heights all landed at ~169 px** (idle 34×170, climb 70×169 *(back view)*,
+  jump 119×169, cape 109×169, walk 109×169) because In-Place keeps the figure the same
   height. `GameView` holds one visual **height** and derives each action's **width**
-  from its own aspect ratio, so the character stays one size with feet aligned.
+  from its own aspect ratio, so the character stays one size with feet aligned. (The
+  back-view climb silhouette is *narrower* than the old side profile — 70 vs 82 px —
+  since the arms tuck up close to the body instead of reaching out in a side stride.)
 - **Facing/mirror:** the renders face **left**; `GameView` mirrors when the player
-  faces right — *except* `climb`, which is left un-mirrored (a symmetric ladder pose
-  shouldn't flip). See `GameView.dancerMirror(_:facing:)`.
+  faces right — *except* `climb`, which is left un-mirrored (a back-view ladder pose is
+  left–right symmetric, so it shouldn't flip). See `GameView.dancerMirror(_:facing:)`.
 - **Catching a fast action in a screenshot:** the game loop honors a
   `CONJUGAR_GAME_TIME_SCALE` launch env var (e.g. `0.2` = 5× slow, `0.1` = 10×) and
   a `CONJUGAR_GAME_DISABLE_FLAGS` flag — both default off, no effect on normal play.

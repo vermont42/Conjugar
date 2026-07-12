@@ -15,8 +15,10 @@ Source:   Adobe Mixamo — https://www.mixamo.com
             cape  — "Taunt"            (an aggressive fists-up stance — reads as the
                                         "powered-up / smash-ready" caped state)
           Each FBX was rendered to transparent orthographic PNG frames in Blender
-          via tools/blender/render_sprites.py (side view; N frames matched to
-          GameState.playerFrameCounts), then union-cropped by pack_or_rename.sh.
+          via tools/blender/render_sprites.py (side view — except climb, which is a
+          back view / camera behind the figure, the conventional read for a vertical
+          ladder; N frames matched to GameState.playerFrameCounts), then union-cropped
+          by pack_or_rename.sh.
 
 License:  Mixamo / Adobe license — royalty-free for commercial use, NO attribution
           required. Only restriction: you may not sell or redistribute the raw
