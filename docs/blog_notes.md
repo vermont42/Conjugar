@@ -4435,3 +4435,32 @@ stalls, since rig topology — not texture — is the failure mode AI-gen keeps 
   so idle↔walk visibly swaps figure until those are done.
 - **Remaining:** hand-key idle/climb/jump/cape in the feet-hidden gown style, render + crop +
   wire each, then a consistency pass so standing and moving match.
+
+## 2026-07-12 — Dancer finished: idle / jump / cape / climb hand-keyed in the gown style
+
+- **The last four player actions are now the flamenco gown, not the X-Bot mannequin.** Wrote
+  `tools/blender/gen_dancer_action.py` — one parametrized generator that imports the purchased
+  gown, deletes the feet, hand-keys an action on the vendor's own 63-bone Mixamo-named rig, and
+  bakes `source/dancer_<action>_gown.fbx`. Rendered each through the same `--toon --color gold
+  --outline` path as the walk, union-cropped, installed, and updated `GameView.dancerWidth`.
+  - **idle** (2, side) — gentle breathe/hip-bob; **jump** (3, side) — crouch → rise → apex with
+    a Hips-Z lift, gown trailing as a cone; **cape** (4, side) — overhead flamenco arm flourish
+    with a skirt sway; **climb** (4, **back view**) — arm-over-arm reach from behind.
+- **Two bugs paid for, now documented in the blender README so they don't regress:**
+  1. **Rotating a leg bone pushed the bare-legs mesh out below the hem as thin gold strands.**
+     The skirt is skinned to the leg *bones*, not the leg *mesh*, so deleting `YF7_Leg_02` (on
+     top of the shoe mesh) keeps the hem sway but removes the strands. Feet fully hidden.
+  2. **The rotation helper pivoted about the world origin, not the bone's head** — invisible at
+     the walk's ~15° leg angles, catastrophic at the cape/climb's 125–155° arm raises (the hand
+     swung on a huge arc through the body → the arm rendered as a long dangling strand). Fixed by
+     preserving each bone's translation so it rotates about its own head (proper FK).
+  3. **Climb frames 1 and 3 were identical** (opposite-phase `sin`, and `sin 0 == sin π`), so the
+     arm-over-arm only showed in half the frames — quarter-phased the two arms (`sin` vs `cos`)
+     so all four frames differ.
+- **Consistency pass holds.** All five gown crops land at ~225–229 px tall (vs the old
+  mannequin's ~173), so at the constant `dancerVisualHeight = 57.3` they read at one size with
+  the hem glued to the platform — standing ↔ walking ↔ climbing no longer pops between figures.
+- **Live-verified all five in `conjugar://game`** (slowed 5×, flags off): idle standing, walk
+  mid-stride (mirrored), jump airborne as a cone, climb from behind on a ladder, and cape (after
+  collecting the 🧣 pickup) as the arms-raised flourish. Build green. Raw FBX/textures stay
+  git-ignored; only the 13 PNGs + `gen_dancer_action.py` ship.

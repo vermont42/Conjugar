@@ -163,23 +163,26 @@ tools/blender/pack_or_rename.sh sheet dancer walk "" "" 96
 
 ### The dancer's full action set (done)
 
-All five player actions now ship as rendered sprites — `idle` (Breathing Idle, 2),
-`walk` (Walking, 6), `climb` (Climbing Ladder, 4), `jump` (Jump, 3), `cape` (Taunt,
-4) — all on the same **X Bot** character. Notes that held across the set:
+All five player actions ship as rendered sprites — `idle` (2), `walk` (6), `climb`
+(4), `jump` (3), `cape` (4). They are **no longer Mixamo mocap on the X Bot
+mannequin**: the dancer is now the purchased **flamenco-gown** mesh (Animod, CGTrader
+— `asset-licenses/cgtrader-flamenco-dancer.txt`), hand-keyed on its own 63-bone
+Mixamo-named rig by `gen_dancer_action.py` (see **Hand-keying the gown dancer** below).
+Notes that held across the set:
 
 - **The default side view (`--view side`) suits four of the five actions.** The one
   exception is **climb**, rendered **`--view back`** (camera behind the figure): a
   side-on climb reads oddly on a vertical ladder, whereas watching the character's
   back as they climb *away* up the rungs is the conventional platformer read. The
-  "Climbing Ladder" clip reads clearly from behind (back of the head/shoulders, arms
-  reaching up alternately, legs stepping). Pure `--view back` was enough — no
-  off-axis three-quarter nudge to the camera-placement block was needed.
-- **Union-crop heights all landed at ~169 px** (idle 34×170, climb 70×169 *(back view)*,
-  jump 119×169, cape 109×169, walk 109×169) because In-Place keeps the figure the same
-  height. `GameView` holds one visual **height** and derives each action's **width**
-  from its own aspect ratio, so the character stays one size with feet aligned. (The
-  back-view climb silhouette is *narrower* than the old side profile — 70 vs 82 px —
-  since the arms tuck up close to the body instead of reaching out in a side stride.)
+  gown climb sells the reach from behind (back of the head/hair, arms alternating
+  overhead, skirt swaying). Pure `--view back` was enough — no off-axis three-quarter
+  nudge to the camera-placement block was needed.
+- **Union-crop heights all land at ~226 px** (idle 104×225, walk 122×226, jump
+  108×225, cape 106×229, climb 172×228 *(back view, arms spread wide)*) — the full
+  floor-length gown, feet hidden. `GameView` holds one visual **height**
+  (`dancerVisualHeight = 57.3`) and derives each action's **width** from its own aspect
+  ratio, so the character stays one size with the hem glued to the platform. (Climb is
+  the widest — 172 — because the arms reach up and out in a V.)
 - **Facing/mirror:** the renders face **left**; `GameView` mirrors when the player
   faces right — *except* `climb`, which is left un-mirrored (a back-view ladder pose is
   left–right symmetric, so it shouldn't flip). See `GameView.dancerMirror(_:facing:)`.
@@ -187,6 +190,34 @@ All five player actions now ship as rendered sprites — `idle` (Breathing Idle,
   `CONJUGAR_GAME_TIME_SCALE` launch env var (e.g. `0.2` = 5× slow, `0.1` = 10×) and
   a `CONJUGAR_GAME_DISABLE_FLAGS` flag — both default off, no effect on normal play.
   Launch with them set to freeze-frame a jump's apex or a climb pose.
+
+### Hand-keying the gown dancer (`gen_dancer_action.py`)
+
+Because a floor-length gown can't be Mixamo-mocapped (the auto-rigger needs separated
+legs, and a leg stride pokes shoes/legs past the hem), each action is **hand-keyed on
+the vendor's own rig** with world-space bone rotations, then baked to
+`source/dancer_<action>_gown.fbx` for `render_sprites.py`. Run it per action:
+
+```bash
+blender -b -P tools/blender/gen_dancer_action.py -- --action idle   # idle|jump|cape|climb
+```
+
+House style: **animate the gown + torso, feet hidden.** Two fixes that were paid for
+the hard way and must not regress:
+
+- **Delete the shoe *and* the bare-legs mesh** (`Sho`/`HeA_M`/`Leg`). The skirt
+  (`MASkirt_03`) is skinned to the hip+leg **bones**, not the leg mesh — so rotating
+  the leg bones still sways the hem, but with the leg mesh gone nothing pokes below
+  the hem (otherwise a rotated leg shows as thin gold strands dangling under the skirt).
+- **Rotate each bone about its own head, not the world origin.** The rotation helper
+  preserves the bone's translation (`m.translation = cur.translation`); a plain
+  pre-multiplied `Matrix.Rotation @ matrix` pivots about the world origin — fine for the
+  walk's tiny leg angles, but a 125–155° arm raise then swings the hand on a huge arc
+  through the body (cape/climb arms fly off into strands). Keep parent-before-child
+  order with a `view_layer.update()` between so children inherit correctly (FK).
+- **The `[1,1557]` trap:** the vendor FBX ships a long baked clip; `animation_data_clear()`
+  before keying and export with `bake_anim_use_all_actions=False`, or every frame samples
+  a static tail.
 
 ## `--toon` cel look + `--outline` (done, 2026-07-11)
 

@@ -52,17 +52,18 @@ struct GameView: View {
   }
 
   /// Displayed width for an action, from its rendered union-crop aspect ratio
-  /// (cel + outline pixel dims, all ~173 tall) at the constant `dancerVisualHeight`.
+  /// (cel + outline pixel dims, all ~226 tall — the full flamenco gown) at the
+  /// constant `dancerVisualHeight`. Climb is wider (172) for the arms-raised reach.
   /// Keeping height fixed and width per-action means `.scaledToFit()` never
   /// letterboxes and the feet stay glued to the frame's bottom edge across actions.
   private static func dancerWidth(_ action: PlayerAction) -> CGFloat {
     let aspect: CGFloat
     switch action {
-    case .idle: aspect = 38.0 / 174.0
+    case .idle: aspect = 104.0 / 225.0
     case .walk: aspect = 122.0 / 226.0
-    case .climb: aspect = 74.0 / 173.0
-    case .jump: aspect = 123.0 / 173.0
-    case .cape: aspect = 113.0 / 173.0
+    case .climb: aspect = 172.0 / 228.0
+    case .jump: aspect = 108.0 / 225.0
+    case .cape: aspect = 106.0 / 229.0
     }
     return dancerVisualHeight * aspect
   }
