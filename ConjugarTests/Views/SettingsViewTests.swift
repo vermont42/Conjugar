@@ -24,7 +24,7 @@ import Testing
   // real signal is that neither `init` nor `body` traps. `_ = body` keeps that signal
   // without the tautological `#expect`.
   @Test func bodyEvaluatesWithoutTrapping() {
-    let settingsView = SettingsView()
+    let settingsView = SettingsView(router: AppRouter())
     _ = settingsView.body
   }
 }

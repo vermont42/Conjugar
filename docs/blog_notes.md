@@ -4612,3 +4612,39 @@ cel look. He is a **static, single-frame GOAL figure** — no animation, no in-g
   argument-less `startMusic()` (never updated when the API was generalized to
   `startMusic(_ music: Music)` in the prior session) — updated to `startMusic(.gameLoop)`. Full
   suite green: 445 tests, 25 suites. Game verified live via `conjugar://game`.
+
+## Onboarding flow (July 2026)
+
+Ported Conjuguer's first-launch onboarding tour to Conjugar and adapted it to the app's
+yellow design system and Spanish content.
+
+- **`OnboardingView`** — a paged `TabView(.page)` cover with the auto page-dots, a
+  bounce-on-appear icon, a yellow heading, body copy, and a per-sheet CTA. Sheets: a
+  welcome sheet keyed by the **custom `bull` symbol** (the Quiz tab's icon, standing in for
+  Conjuguer's wineglass), the four content sheets (Browse 4,811 verbs / Verb Models / Quiz /
+  Deep-Dive Articles — the last now naming Spanish-language works, from the *Cantar de mío
+  Cid* to García Márquez), a **conditional AI-tutor sheet** shown only when
+  `languageModelService.isAvailable` (never in the simulator), and a new **game-preview
+  sheet** keyed by the **custom `dancer` symbol** whose "Play the Game" CTA launches the
+  under-development matador game. The final sheet shows the animated **"Get Started"** button
+  below the dots. Top-right **Skip** (first run) / **Dismiss** (reshow). Styled yellow
+  throughout — gradient, headings, buttons — per the brand.
+- **Presentation.** First launch: `MainTabView` trips a `router.showOnboarding` cover once,
+  gated by a new `Settings.hasSeenOnboarding` flag and the `OnboardingDisplay.onboardingEnabled`
+  screenshot kill switch (mirroring `TipDisplay.tipsEnabled`). Reshow: a yellow **"Show
+  Onboarding"** card on the Settings tab presents it with `isReshow: true` (never touching the
+  flag). The game-preview CTA defers the game launch to each cover's `onDismiss` so two
+  full-screen covers never contend for the anchor.
+- **Music.** Wired the long-staged `Music.onboarding` ("Spanish Tension"): it starts on the
+  view's `.onAppear` and **fades out** on dismiss via a new `SoundPlayer.stopMusic(fadeDuration:)`
+  — the graceful counterpart to `startMusic`'s existing fade-in (the old `stopMusic()` hard-stop
+  remains for the game). The delayed hard-stop captures the fading player so a game loop started
+  right after onboarding is never cut off.
+- **The `@Environment(AppRouter.self)`-in-a-cover trap.** `OnboardingView` first read the router
+  from the environment like the sibling tab screens — which **crashed at runtime** ("No Observable
+  object of type AppRouter found") because a `.fullScreenCover`'s content does *not* inherit a
+  custom `.environment(_:)` object the way a direct tab child does. Fix: pass `AppRouter` in
+  explicitly (to `OnboardingView`, and to `SettingsView` so it can forward it). Tab children
+  (`InfoBrowseView`'s tutor deep-link) still read it from the environment, matching
+  `VerbBrowseView`/`QuizView`. Verified end-to-end in the simulator: first-launch present, all
+  page CTAs, the Settings reshow (the reported crash), and the game launch.

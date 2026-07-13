@@ -13,6 +13,10 @@ import SwiftUI
 struct MainTabView: View {
   @State private var commun: Commun?
   @State private var router = AppRouter()
+  // Records that the onboarding game sheet's CTA was tapped so the game cover is
+  // presented in the onboarding cover's `onDismiss` — never over the still-dismissing
+  // onboarding cover (two covers can't share the anchor at once).
+  @State private var pendingGameAfterOnboarding = false
   @Environment(\.scenePhase) private var scenePhase
 
   var body: some View {
@@ -51,7 +55,7 @@ struct MainTabView: View {
       }
 
       Tab(value: AppTab.settings) {
-        SettingsView()
+        SettingsView(router: router)
       } label: {
         Label(L.Settings.localizedTitle, systemImage: "gearshape")
           .environment(\.symbolVariants, .none)
@@ -64,6 +68,9 @@ struct MainTabView: View {
       // Off-main: refresh() parses verbModelMap.xml + runs ~50 conjugations;
       // everything it touches is nonisolated/Sendable, so it belongs off the launch path.
       Task.detached { WidgetSnapshotWriter.refresh() }
+      // First-launch onboarding wins the launch-time cover; skip the commun prompt this
+      // launch so two covers don't contend for the anchor.
+      guard !presentOnboardingIfNeeded() else { return }
       await presentCommunIfNeeded()
     }
     .onOpenURL { router.handle(url: $0) }
@@ -80,6 +87,28 @@ struct MainTabView: View {
     }
     // A `conjugar://game` deeplink jumps straight to the game from any tab.
     .fullScreenCover(isPresented: $router.showGame) { GameView() }
+    // First-launch welcome tour. Its game-preview CTA defers the game launch to this
+    // cover's onDismiss so the two covers never overlap.
+    .fullScreenCover(isPresented: $router.showOnboarding, onDismiss: launchGameAfterOnboardingIfRequested) {
+      OnboardingView(router: router, requestGame: { pendingGameAfterOnboarding = true })
+    }
+  }
+
+  /// Trip the first-launch onboarding cover, unless already seen or disabled for
+  /// screenshots. Returns whether it was presented, so the caller can skip the commun
+  /// prompt for this launch.
+  private func presentOnboardingIfNeeded() -> Bool {
+    guard OnboardingDisplay.onboardingEnabled, !Current.settings.hasSeenOnboarding else {
+      return false
+    }
+    router.showOnboarding = true
+    return true
+  }
+
+  private func launchGameAfterOnboardingIfRequested() {
+    guard pendingGameAfterOnboarding else { return }
+    pendingGameAfterOnboarding = false
+    router.showGame = true
   }
 
   /// Control-center controls can't navigate, so they stash a deeplink in the shared

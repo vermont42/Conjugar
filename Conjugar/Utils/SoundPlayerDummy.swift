@@ -7,10 +7,13 @@
 //  passed to fill the slot, never exercised.
 //
 
+import Foundation
+
 class SoundPlayerDummy: SoundPlayer {
   func setup() {}
   func play(_ sound: Sound, shouldDebounce: Bool, volume: Float) {}
   func warmUpSounds() {}
   func startMusic(_ music: Music) {}
   func stopMusic() {}
+  func stopMusic(fadeDuration: TimeInterval) {}
 }

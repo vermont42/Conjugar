@@ -127,10 +127,6 @@ nonisolated enum L {
       String(localized: "Game.title")
     }
 
-    static var description: String {
-      String(localized: "Game.description")
-    }
-
     static var play: String {
       String(localized: "Game.play")
     }
@@ -321,6 +317,112 @@ nonisolated enum L {
 
     static var classNumber: String {
       String(localized: "ModelSort.classNumber")
+    }
+  }
+
+  enum Onboarding {
+    static var onboarding: String {
+      String(localized: "Onboarding.onboarding")
+    }
+
+    static var skip: String {
+      String(localized: "Onboarding.skip")
+    }
+
+    static var dismiss: String {
+      String(localized: "Onboarding.dismiss")
+    }
+
+    static var getStarted: String {
+      String(localized: "Onboarding.getStarted")
+    }
+
+    static var showOnboarding: String {
+      String(localized: "Onboarding.showOnboarding")
+    }
+
+    static var showOnboardingDescription: String {
+      String(localized: "Onboarding.showOnboardingDescription")
+    }
+
+    static var welcomeTitle: String {
+      String(localized: "Onboarding.welcomeTitle")
+    }
+
+    static var welcomeBody: String {
+      String(localized: "Onboarding.welcomeBody")
+    }
+
+    static var browseTitle: String {
+      String(localized: "Onboarding.browseTitle")
+    }
+
+    static var browseBody: String {
+      String(localized: "Onboarding.browseBody")
+    }
+
+    static var browseVerbsButton: String {
+      String(localized: "Onboarding.browseVerbsButton")
+    }
+
+    static var modelsTitle: String {
+      String(localized: "Onboarding.modelsTitle")
+    }
+
+    static var modelsBody: String {
+      String(localized: "Onboarding.modelsBody")
+    }
+
+    static var exploreModelsButton: String {
+      String(localized: "Onboarding.exploreModelsButton")
+    }
+
+    static var quizTitle: String {
+      String(localized: "Onboarding.quizTitle")
+    }
+
+    static var quizBody: String {
+      String(localized: "Onboarding.quizBody")
+    }
+
+    static var startQuizButton: String {
+      String(localized: "Onboarding.startQuizButton")
+    }
+
+    static var aiTitle: String {
+      String(localized: "Onboarding.aiTitle")
+    }
+
+    static var aiBody: String {
+      String(localized: "Onboarding.aiBody")
+    }
+
+    static var meetTutorButton: String {
+      String(localized: "Onboarding.meetTutorButton")
+    }
+
+    static var learnTitle: String {
+      String(localized: "Onboarding.learnTitle")
+    }
+
+    static var learnBody: String {
+      String(localized: "Onboarding.learnBody")
+    }
+
+    static var readArticlesButton: String {
+      String(localized: "Onboarding.readArticlesButton")
+    }
+
+    static var gameTitle: String {
+      String(localized: "Onboarding.gameTitle")
+    }
+
+    static var gameBody: String {
+      String(localized: "Onboarding.gameBody")
+    }
+
+    static var playGameButton: String {
+      String(localized: "Onboarding.playGameButton")
     }
   }
 

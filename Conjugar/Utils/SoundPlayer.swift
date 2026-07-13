@@ -6,6 +6,8 @@
 //  Copyright © 2015 Josh Adams. All rights reserved.
 //
 
+import Foundation
+
 // The audio seam. Ported from the sibling app Conjuguer's protocol-injected,
 // performance-safe design (commit 9bb4f3e: off-main audio-stack warm-up, off-main
 // SFX pre-decode, and a background playback queue that absorbs the blocking
@@ -19,6 +21,10 @@ protocol SoundPlayer {
   func warmUpSounds()
   func startMusic(_ music: Music)
   func stopMusic()
+  /// Stop the looping music, ramping its volume to zero over `fadeDuration` first —
+  /// the graceful counterpart to `startMusic`'s fade-in, used when a scene (e.g. the
+  /// onboarding flow) dismisses. `stopMusic()` remains the immediate hard stop.
+  func stopMusic(fadeDuration: TimeInterval)
 }
 
 extension SoundPlayer {

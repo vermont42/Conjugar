@@ -433,22 +433,6 @@
         }
       }
     },
-    "Game.description": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Climb the girders to the bull, dodging flags. Grab a cape to smash them."
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sube por las vigas hasta el toro, esquivando banderas. Toma una capa para destrozarlas."
-          }
-        }
-      }
-    },
     "Game.health": {
       "localizations": {
         "en": {
@@ -582,13 +566,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Game"
+            "value": "Toreo por Amor"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Juego"
+            "value": "Toreo por Amor"
           }
         }
       }
@@ -1221,6 +1205,422 @@
           "stringUnit": {
             "state": "translated",
             "value": "Irregularidad"
+          }
+        }
+      }
+    },
+    "Onboarding.aiBody": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conjugar uses Apple Intelligence to power a personal conjugation tutor. Ask it anything about Spanish verbs—it is grounded in the app's own engine, so it never invents forms."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conjugar usa Apple Intelligence para ofrecer un tutor de conjugación personal. Pregúntale lo que quieras sobre los verbos en español: se basa en el motor de la propia app, así que nunca inventa formas."
+          }
+        }
+      }
+    },
+    "Onboarding.aiTitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your AI-Powered Tutor"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu tutor con inteligencia artificial"
+          }
+        }
+      }
+    },
+    "Onboarding.browseBody": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explore 4,811 verbs across every conjugation pattern. Tap any verb to see its full conjugation table with irregularities highlighted. Sort verbs by frequency of use for study purposes."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explora 4811 verbos de todos los patrones de conjugación. Toca cualquier verbo para ver su tabla de conjugación completa con las irregularidades resaltadas. Ordena los verbos por frecuencia de uso para estudiar."
+          }
+        }
+      }
+    },
+    "Onboarding.browseTitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Browse 4,811 Spanish Verbs"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explora 4811 verbos en español"
+          }
+        }
+      }
+    },
+    "Onboarding.browseVerbsButton": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Browse Verbs"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explorar verbos"
+          }
+        }
+      }
+    },
+    "Onboarding.dismiss": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dismiss"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cerrar"
+          }
+        }
+      }
+    },
+    "Onboarding.exploreModelsButton": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explore Verb Models"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explorar modelos"
+          }
+        }
+      }
+    },
+    "Onboarding.gameBody": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conjugar has a built-in, family-friendly game called Toreo por Amor. As a plucky flamenco dancer, climb the girders to reach the bull and rescue the matador. Use a muleta (cape) to smash enemies sent by the bull."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conjugar tiene un juego integrado y apto para toda la familia llamado Toreo por Amor. Como una intrépida bailaora de flamenco, sube por las vigas hasta llegar al toro y rescata al matador. Usa una muleta (capa) para destrozar a los enemigos que envía el toro."
+          }
+        }
+      }
+    },
+    "Onboarding.gameTitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play Toreo por Amor"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Juega a Toreo por Amor"
+          }
+        }
+      }
+    },
+    "Onboarding.getStarted": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get Started"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comenzar"
+          }
+        }
+      }
+    },
+    "Onboarding.learnBody": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read in-depth treatises on every Spanish tense, illustrated with examples from Spanish-language literature—from the Cantar de mío Cid to Cervantes and García Márquez."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lee tratados detallados sobre cada tiempo verbal del español, ilustrados con ejemplos de la literatura en lengua española: desde el Cantar de mío Cid hasta Cervantes y García Márquez."
+          }
+        }
+      }
+    },
+    "Onboarding.learnTitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deep-Dive Articles"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Artículos a fondo"
+          }
+        }
+      }
+    },
+    "Onboarding.meetTutorButton": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meet the Tutor"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conocer al tutor"
+          }
+        }
+      }
+    },
+    "Onboarding.modelsBody": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discover the conjugation models that Spanish verbs follow. Each model captures a distinct pattern of stem changes and endings, from the regular -ar, -er, and -ir verbs to irregulars like tener and ir."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descubre los modelos de conjugación que siguen los verbos en español. Cada modelo recoge un patrón distinto de cambios en la raíz y de terminaciones, desde los verbos regulares en -ar, -er e -ir hasta irregulares como tener e ir."
+          }
+        }
+      }
+    },
+    "Onboarding.modelsTitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explore Verb Models"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explora los modelos de verbos"
+          }
+        }
+      }
+    },
+    "Onboarding.onboarding": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Onboarding"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Introducción"
+          }
+        }
+      }
+    },
+    "Onboarding.playGameButton": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jugar"
+          }
+        }
+      }
+    },
+    "Onboarding.quizBody": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take timed quizzes, earn points, and compete on the Game Center leaderboard. Choose from three difficulty levels as your skills grow."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haz cuestionarios cronometrados, gana puntos y compite en la tabla de clasificación de Game Center. Elige entre tres niveles de dificultad a medida que mejoras."
+          }
+        }
+      }
+    },
+    "Onboarding.quizTitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test Your Knowledge"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pon a prueba tus conocimientos"
+          }
+        }
+      }
+    },
+    "Onboarding.readArticlesButton": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read Articles"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leer artículos"
+          }
+        }
+      }
+    },
+    "Onboarding.showOnboarding": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Onboarding"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ver introducción"
+          }
+        }
+      }
+    },
+    "Onboarding.showOnboardingDescription": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revisit the welcome tour at any time."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vuelve al recorrido de bienvenida cuando quieras."
+          }
+        }
+      }
+    },
+    "Onboarding.skip": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Omitir"
+          }
+        }
+      }
+    },
+    "Onboarding.startQuizButton": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take a Quiz"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hacer un cuestionario"
+          }
+        }
+      }
+    },
+    "Onboarding.welcomeBody": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conjugar helps you learn and practice Spanish verb conjugations across every tense."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conjugar te ayuda a aprender y practicar la conjugación de los verbos en español en todos los tiempos."
+          }
+        }
+      }
+    },
+    "Onboarding.welcomeTitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Master Spanish-Verb Conjugation"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Domina la conjugación de verbos en español"
           }
         }
       }

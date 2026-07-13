@@ -23,10 +23,17 @@ import TipKit
 struct SettingsView: View {
   static let englishTitle = "Settings"
 
+  // Passed in from `MainTabView` so it can be handed to the onboarding cover, whose
+  // content can't reliably read `@Environment(AppRouter.self)` (see `OnboardingView`).
+  let router: AppRouter
   @Bindable private var settings = Current.settings
   @State private var isGameCenterUIHidden = false
   @State private var rateReviewDescription = ""
   @State private var showingGame = false
+  @State private var showingOnboarding = false
+  // See MainTabView: the onboarding game CTA defers the game launch to the cover's
+  // onDismiss so the two covers never overlap.
+  @State private var pendingGameAfterOnboarding = false
   private let changeDifficultyTip = ChangeDifficultyTip()
   private let enableGameCenterTip = EnableGameCenterTip()
 
@@ -38,6 +45,7 @@ struct SettingsView: View {
           quizCard
           browseCard
           gameCard
+          onboardingCard
           actionsCard
           aboutFooter
         }
@@ -48,6 +56,9 @@ struct SettingsView: View {
       .frame(maxWidth: .infinity)
       .background(Color.customBackground.ignoresSafeArea())
       .fullScreenCover(isPresented: $showingGame) { GameView() }
+      .fullScreenCover(isPresented: $showingOnboarding, onDismiss: launchGameAfterOnboardingIfRequested) {
+        OnboardingView(router: router, isReshow: true, requestGame: { pendingGameAfterOnboarding = true })
+      }
       .navigationTitle(L.Settings.localizedTitle)
       .onAppear {
         isGameCenterUIHidden = Current.gameCenter.isAuthenticated
@@ -154,13 +165,28 @@ struct SettingsView: View {
   private var gameCard: some View {
     settingsCard {
       settingSection(
-        icon: "figure.dance",
+        icon: "dancer",
+        isSystemSymbol: false,
         tint: .customRed,
         heading: L.Game.title,
-        description: L.Game.description
+        description: L.Onboarding.gameBody
       ) {
         Button(L.Game.play) { showingGame = true }
           .buttonStyle(TintedCapsuleButtonStyle(tint: .customRed))
+      }
+    }
+  }
+
+  private var onboardingCard: some View {
+    settingsCard {
+      settingSection(
+        icon: "hand.wave.fill",
+        tint: .customYellow,
+        heading: L.Onboarding.onboarding,
+        description: L.Onboarding.showOnboardingDescription
+      ) {
+        Button(L.Onboarding.showOnboarding) { showingOnboarding = true }
+          .buttonStyle(TintedCapsuleButtonStyle(tint: .customYellow))
       }
     }
   }
@@ -224,6 +250,7 @@ struct SettingsView: View {
 
   private func settingSection<Content: View>(
     icon: String,
+    isSystemSymbol: Bool = true,
     tint: Color,
     heading: String,
     description: String,
@@ -235,7 +262,9 @@ struct SettingsView: View {
           .font(.title3.weight(.bold))
           .foregroundStyle(Color.customYellow)
       } icon: {
-        Image(systemName: icon)
+        // `isSystemSymbol == false` renders a custom symbol set (e.g. the "dancer"
+        // line-art icon) rather than an SF Symbol.
+        (isSystemSymbol ? Image(systemName: icon) : Image(icon))
           .font(.title3)
           .foregroundStyle(tint)
       }
@@ -251,6 +280,12 @@ struct SettingsView: View {
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
+  }
+
+  private func launchGameAfterOnboardingIfRequested() {
+    guard pendingGameAfterOnboarding else { return }
+    pendingGameAfterOnboarding = false
+    showingGame = true
   }
 
   private func enableGameCenter() {

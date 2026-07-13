@@ -16,4 +16,6 @@ Localize to Spanish.
 
 During onboarding, play Music.onboarding . Fade that out when onboarding is dismissed.
 
+I believe that the TipKit integration has a kill switch used during screenshot creation. Include a similar killswitch for onboarding.
+
 Ask any questions you have before beginning work.

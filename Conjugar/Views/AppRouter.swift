@@ -30,6 +30,12 @@ final class AppRouter {
   /// `conjugar://game` deeplink jumps straight to the game from any screen. (The
   /// Settings tab's Play button presents the game via its own state; both are fine.)
   var showGame = false
+  /// Drives the first-launch onboarding cover from `MainTabView`. Tripped once at
+  /// launch when `Settings.hasSeenOnboarding` is false (and the kill switch is on).
+  var showOnboarding = false
+  /// A one-shot request for the Info tab to push the conjugation tutor, set by the
+  /// onboarding "Meet the Tutor" CTA. `InfoBrowseView` consumes and clears it.
+  var pendingTutor = false
 
   /// Route a `conjugar://` deeplink. Hosts: `verb/<infinitive>` (or `verb/random`),
   /// `quiz/start`, and `game`. Unknown or unmapped verbs are ignored.

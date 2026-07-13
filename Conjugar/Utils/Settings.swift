@@ -92,6 +92,15 @@ final class Settings {
   static let lastCommunIdentifierShownKey = "lastCommunIdentifierShown"
   static let lastCommunIdentifierShownDefault = -1
 
+  // Flipped true the first time the onboarding flow is dismissed, so it auto-presents
+  // exactly once. The Settings "Show Onboarding" button re-shows it without touching
+  // this flag (see `OnboardingView(isReshow:)`).
+  var hasSeenOnboarding: Bool {
+    didSet { Settings.persist(getterSetter, Settings.hasSeenOnboardingKey, hasSeenOnboarding, oldValue) }
+  }
+  static let hasSeenOnboardingKey = "hasSeenOnboarding"
+  static let hasSeenOnboardingDefault = false
+
   init(getterSetter: GetterSetter) {
     self.getterSetter = getterSetter
 
@@ -107,6 +116,7 @@ final class Settings {
     userRejectedGameCenter = Settings.read(getterSetter, Settings.userRejectedGameCenterKey, default: Settings.userRejectedGameCenterDefault)
     didShowGameCenterDialog = Settings.read(getterSetter, Settings.didShowGameCenterDialogKey, default: Settings.didShowGameCenterDialogDefault)
     lastCommunIdentifierShown = Settings.read(getterSetter, Settings.lastCommunIdentifierShownKey, default: Settings.lastCommunIdentifierShownDefault)
+    hasSeenOnboarding = Settings.read(getterSetter, Settings.hasSeenOnboardingKey, default: Settings.hasSeenOnboardingDefault)
   }
 
   // Read a value for `key`, seeding (and persisting) `defaultValue` the first time

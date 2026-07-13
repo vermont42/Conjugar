@@ -15,8 +15,12 @@ import UIKit
 struct InfoBrowseView: View {
   static let englishTitle = "Info"
 
+  @Environment(AppRouter.self) private var router
   @State private var navigationPath = NavigationPath()
   @State private var infoDifficulty: Difficulty = Current.settings.infoDifficulty
+  // Programmatic push of the tutor, triggered by the onboarding "Meet the Tutor" CTA
+  // via `router.pendingTutor` (the in-list NavigationLink handles manual taps).
+  @State private var showTutor = false
 
   private var aboutInfos: [Info] {
     Info.infos.filter { $0.section == .about && isWithinFilter($0) }
@@ -65,6 +69,16 @@ struct InfoBrowseView: View {
       .navigationTitle(L.BrowseInfo.localizedTitle)
       .navigationDestination(for: Info.self) { info in
         InfoView(info: info) { target in navigationPath.append(target) }
+      }
+      .navigationDestination(isPresented: $showTutor) { TutorView() }
+      // Consume the onboarding tutor deep-link: `.task(id:)` runs both when the Info
+      // tab first appears with the flag already set and when it flips while visible.
+      .task(id: router.pendingTutor) {
+        guard router.pendingTutor else { return }
+        router.pendingTutor = false
+        if Current.languageModelService.isAvailable {
+          showTutor = true
+        }
       }
       .onAppear {
         Current.analytics.recordVisitation(viewController: "\(InfoBrowseView.self)")
@@ -145,4 +159,5 @@ struct InfoBrowseView: View {
 
 #Preview {
   InfoBrowseView()
+    .environment(AppRouter())
 }

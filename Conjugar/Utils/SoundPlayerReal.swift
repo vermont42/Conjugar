@@ -120,6 +120,26 @@ class SoundPlayerReal: SoundPlayer {
     musicPlayer?.stop()
   }
 
+  func stopMusic(fadeDuration: TimeInterval) {
+    guard fadeDuration > 0, let player = musicPlayer, player.isPlaying else {
+      stopMusic()
+      return
+    }
+    savedMusicTime = player.currentTime
+    player.setVolume(0, fadeDuration: fadeDuration)
+    // Hard-stop once the ramp completes. Capture the player so that if a different
+    // track is started meanwhile (e.g. the game loop begins right after onboarding
+    // dismisses), `startMusic` has already replaced `musicPlayer` and this no-ops —
+    // it must not stop the newly-started track.
+    let fadingPlayer = player
+    Task { @MainActor in
+      try? await Task.sleep(for: .seconds(fadeDuration))
+      if self.musicPlayer === fadingPlayer {
+        fadingPlayer.stop()
+      }
+    }
+  }
+
   func warmUpSounds() {
     // Pre-decode + prepare every effect's AVAudioPlayer off the main thread, then
     // hand them back to the main actor, so the first play of each sound never

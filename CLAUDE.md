@@ -123,19 +123,20 @@ The game's looping background music is the `Music` enum (`Models/Music.swift`), 
 bundled MP3 base name that `SoundPlayerReal.startMusic(_:)` loops via `numberOfLoops = -1`.
 Gameplay plays `Music.gameLoop` from `GameState` — bundled as `flamencoLoop.mp3` (legacy
 name) but holding Pond5's "Flamenco Adventure" since July 2026. Two more Pond5 tracks are
-**bundled but unwired** in the synchronized `Conjugar/Audio/` group: `spanishTension.mp3`
-(`Music.onboarding`) and `spanishGuitarStandoff.mp3` (`Music.bossFight`). The WAV masters
+**bundled** in the synchronized `Conjugar/Audio/` group: `spanishTension.mp3`
+(`Music.onboarding`, now wired into the onboarding flow — see below) and
+`spanishGuitarStandoff.mp3` (`Music.bossFight`, still unwired). The WAV masters
 live in git-ignored `audio-sources/`; only the 192 kbps MP3s are committed. Pond5's Content
 License requires no attribution (the game-music credit in `Localizable.xcstrings` is a
 courtesy note).
 
-> **Planned onboarding music.** Conjugar has no onboarding flow yet (the sibling apps
-> Conjuguer and Konjugieren do). When one is built, it should play `Music.onboarding`
-> (Pond5's "Spanish Tension", bundled at `Conjugar/Audio/spanishTension.mp3`) as a looping
-> bed — `Current.soundPlayer.startMusic(.onboarding)` on the onboarding view's `.onAppear`
-> and `Current.soundPlayer.stopMusic()` on `.onDisappear`. The same track is also the
-> intended game-end-scene music. The future boss fight should likewise use `Music.bossFight`
-> ("Spanish Guitar Standoff").
+> **Onboarding music.** The onboarding flow (`Views/OnboardingView.swift`, added July 2026 —
+> see **Onboarding** below) plays `Music.onboarding` (Pond5's "Spanish Tension",
+> `Conjugar/Audio/spanishTension.mp3`) as a looping bed: `Current.soundPlayer.startMusic(.onboarding)`
+> on the view's `.onAppear`, faded out on dismiss via `Current.soundPlayer.stopMusic(fadeDuration:)`
+> (the graceful counterpart to `startMusic`'s fade-in; the plain `stopMusic()` hard-stop is still
+> what the game uses). The same track is also the intended game-end-scene music. The future boss
+> fight should likewise use `Music.bossFight` ("Spanish Guitar Standoff").
 
 Conjugar-specific config facts baked into `.claude/ios-build-verify.config.sh`:
 
@@ -257,6 +258,33 @@ The mapped UI audit that drove the migration is `docs/conjugar-ui-issues.md`.
 
 `CommunView` (the CloudKit message) is a `.fullScreenCover` presented from `MainTabView`,
 not a tab.
+
+### Onboarding
+
+A first-launch welcome tour ported from Conjuguer (July 2026), styled to Conjugar's yellow
+design system. Files: `Views/OnboardingView.swift`, the `OnboardingDisplay` kill switch in
+`Models/ConjugarTips.swift`, `Settings.hasSeenOnboarding`, `L.Onboarding` +
+`Localizable.xcstrings` (`Onboarding.*`). Things to know:
+
+- **A paged `.fullScreenCover`** (`TabView(.page)` with auto page-dots). Sheets: a welcome
+  sheet using the custom **`bull`** symbol, four content sheets (Browse/Models/Quiz/Articles,
+  each keeping its CTA → tab), a **conditional AI-tutor sheet** shown only when
+  `Current.languageModelService.isAvailable` (so never in the simulator), and a **game-preview
+  sheet** using the custom **`dancer`** symbol whose CTA launches the game. The final sheet
+  shows the animated **"Get Started"** button below the dots; the top-right button reads
+  **Skip** (first run) / **Dismiss** (reshow).
+- **Presented from two places.** First launch: `MainTabView` trips `router.showOnboarding` once
+  in its launch `.task`, gated by `!Settings.hasSeenOnboarding` **and**
+  `OnboardingDisplay.onboardingEnabled` (the screenshot kill switch, mirroring
+  `TipDisplay.tipsEnabled`; the Settings "Show Onboarding" reshow ignores it). Reshow:
+  `SettingsView`'s onboarding card presents it with `isReshow: true`, which does **not** touch
+  the flag. Music `Music.onboarding` plays on appear and **fades out** on dismiss.
+- **`AppRouter` is passed in explicitly, not via `@Environment`.** A `.fullScreenCover`'s
+  content does not inherit a custom `.environment(router)` object (a direct tab child does), so
+  `OnboardingView`/`SettingsView` take an explicit `router:` — reading it from the environment
+  in the cover traps with "No Observable object of type AppRouter found". Tab-navigation CTAs
+  set `router.selectedTab` (and `router.pendingTutor` for the tutor, consumed by
+  `InfoBrowseView`); the game CTA defers to each cover's `onDismiss` so two covers never overlap.
 
 ### Core Models
 

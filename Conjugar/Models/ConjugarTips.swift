@@ -21,6 +21,17 @@ enum TipDisplay {
   static let tipsEnabled = true
 }
 
+enum OnboardingDisplay {
+  /// Master switch for the first-launch onboarding flow, mirroring `TipDisplay.tipsEnabled`.
+  /// Ordinarily `true`. Set to `false` before generating screenshots (then restore to
+  /// `true`) so the welcome tour never auto-presents over a screen being captured.
+  ///
+  /// Only the automatic first-launch presentation (`MainTabView`) consults this. The
+  /// Settings "Show Onboarding" button ignores it, so the flow is always manually
+  /// reachable for review.
+  static let onboardingEnabled = true
+}
+
 struct TryQuizTip: Tip {
   var title: Text {
     Text(L.Tips.tryQuizTitle)
