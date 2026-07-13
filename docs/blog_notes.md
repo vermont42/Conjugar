@@ -4689,3 +4689,59 @@ dress and the matador's suit.
   the guard confirms `supportsAlternateIcons` is true and the plist/asset config is correct, so the
   live swap needs a **real device** to confirm end-to-end (identical to Conjuguer's shipping mechanism).
   New `en`/`es` strings for the card title, description, and the four icon names.
+
+## Boss-fight ideation: the dance-off (July 2026)
+
+The game's finale was always going to be a confrontation with the bull, but Toreo por
+Amor is family-friendly — so the fifth-summit boss became a **dance-off**: out-dance the
+bull and he releases the matador, impressed. This session was pure ideation — three
+candidate mechanics written up in `docs/boss_fight_ideas.md`, plus a visual pitch with
+in-world mock screens published as a Claude artifact
+(https://claude.ai/code/artifact/b03c6684-7748-43d8-8e99-ba8bcd10f6f8) — for Josh to
+pick a winner before any implementation.
+
+- **Research first.** Drove `conjugar://game` live via ios-build-verify; cataloged the
+  sibling games with subagents (Konjugieren's four special mechanics, Conjuguer's five
+  threats and its RobotBoss "telegraph → phases → celebratory payoff" template — the
+  house recipe is *recognizable arcade trope × cultural theme × juicy feedback*);
+  studied the dance-battle canon (Bust a Groove's button-sequence dancing and
+  Enthusiasm meter, Space Channel 5's call-and-response verbs, Rhythm Heaven's
+  audio-first "teach the beat before testing it" lessons); and mined flamenco itself,
+  whose own vocabulary names the mechanics better than game jargon: the **llamada**
+  (the stomp that means "your turn!"), **jaleo** (¡Olé!/¡Bien!/¡Uy! crowd shouts as the
+  judgment tiers), **zapateado** (percussive footwork), and **duende** — the win meter.
+  Also measured the staged boss track: "Spanish Guitar Standoff" is a 42.7 s seamless
+  loop, which shaped all three round structures.
+- **The three concepts.** **1 · La Llamada** — an echo duel (Simon × Space Channel 5):
+  the bull dances a phrase move by move, cue icons popping above him, and the player
+  dances it back on the D-pad, which morphs into a "dance pad" during the boss (its
+  up/down slots are free — no ladders on the tablao). **2 · Lluvia de Rosas** — a pocket
+  DDR: the crowd rains 🌹🎵👏 down three lanes toward a stage line, charted to the track
+  and judged against the *music playhead* rather than the frame clock (drift-free), with
+  an occasional 🔥 rest-note you must let pass. **3 · El Tablao** — lit-floor footwork:
+  tiles flash under the bull's hooves as he walks his pattern, and the player answers
+  the path with the walk/jump controls she's practiced for five levels — zero new
+  buttons, cheapest art.
+- **Shared staging** so the choice blocks nothing else: girders cross-fade to a tablao
+  stage, a tug-of-war **Duende meter** (dancer vs. bull) replaces hearts, floating jaleo
+  pops give feedback, nobody ever gets hurt (a failed round just rewinds while the bull
+  showboats), and every concept ends with the bull's **bow** → matador freed → the
+  planned end scene on `Music.onboarding`.
+- **Recommended La Llamada** — the truest dance-*off* (an opponent who can lose
+  graciously, on a track literally named a standoff), with an upgrade path: graft
+  Concept 2's on-beat judgment into round 3 as hard mode, repurpose El Tablao's tiles as
+  a level-5 climb gimmick, and ship a cheap first playable (big cue icons + reused bull
+  bursts) before hand-keying the bull's two new dance actions in Blender.
+
+**Update, same day:** Josh picked **La Llamada** ("funner, codes more as a dance-off" —
+he'd been leaning Concept 2 before the mocks). Sixteen open questions were answered in
+one pass — the notable calls: full bull fidelity up front (hand-keyed stomp/rear/bow
+rather than an icon-led v1), a minimal end scene *included* and scored by
+`Music.onboarding` (pulling a slice of item 4 forward), boss gated on the *first* summit
+until the five-level escape structure exists, relaxed compás-bar timing (memory is the
+challenge; on-beat bonuses deferred to a future hard mode), hearts hidden during the
+duel with free retries and no lose state, a new Pixabay SFX pack (castanets, palmas,
+crowd olé, snort), and Spanish jaleo strings in **both** localizations — the words are
+the lesson. The fresh-session implementation plan is `prompts/game_boss_llamada.md`:
+seven phases, mechanic-first on reused art (prove the fun before Blender), then bull and
+dancer dance sprites, end scene, localization, and docs.
