@@ -8,6 +8,10 @@
 
 import Foundation
 import Observation
+import UIKit
+import os
+
+nonisolated private let settingsLogger = Logger(subsystem: "com.racecondition.Conjugar", category: "Settings")
 
 // `@MainActor @Observable`: views that read a setting invalidate automatically when
 // it changes, so the Quiz briefing pills track the Settings tab live and
@@ -101,6 +105,19 @@ final class Settings {
   static let hasSeenOnboardingKey = "hasSeenOnboarding"
   static let hasSeenOnboardingDefault = false
 
+  // The user-selected app icon. On change, persists the choice AND swaps the live
+  // home-screen icon via `setAlternateIconName`. `classic` is the primary AppIcon
+  // (nil alternate), so selecting it restores the original flat-vector dancer.
+  var appIcon: AppIcon {
+    didSet {
+      Settings.persist(getterSetter, Settings.appIconKey, appIcon, oldValue)
+      guard appIcon != oldValue else { return }
+      setAppIcon(appIcon)
+    }
+  }
+  static let appIconKey = "appIcon"
+  static let appIconDefault: AppIcon = .classic
+
   init(getterSetter: GetterSetter) {
     self.getterSetter = getterSetter
 
@@ -117,6 +134,22 @@ final class Settings {
     didShowGameCenterDialog = Settings.read(getterSetter, Settings.didShowGameCenterDialogKey, default: Settings.didShowGameCenterDialogDefault)
     lastCommunIdentifierShown = Settings.read(getterSetter, Settings.lastCommunIdentifierShownKey, default: Settings.lastCommunIdentifierShownDefault)
     hasSeenOnboarding = Settings.read(getterSetter, Settings.hasSeenOnboardingKey, default: Settings.hasSeenOnboardingDefault)
+    appIcon = Settings.read(getterSetter, Settings.appIconKey, default: Settings.appIconDefault)
+  }
+
+  // Swap the live home-screen icon. No-op when the requested icon already matches
+  // (avoids the system "You have changed the icon" alert on a redundant set) or when
+  // the device doesn't support alternate icons. `didSet`, not `init`, drives this, so
+  // it never fires at launch; iOS persists the chosen alternate icon across launches.
+  private func setAppIcon(_ icon: AppIcon) {
+    guard UIApplication.shared.supportsAlternateIcons else { return }
+    let desiredName = icon.alternateIconName
+    guard UIApplication.shared.alternateIconName != desiredName else { return }
+    UIApplication.shared.setAlternateIconName(desiredName) { error in
+      if let error {
+        settingsLogger.error("Could not set alternate app icon: \(error.localizedDescription, privacy: .public)")
+      }
+    }
   }
 
   // Read a value for `key`, seeding (and persisting) `defaultValue` the first time

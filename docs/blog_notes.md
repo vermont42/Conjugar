@@ -4648,3 +4648,44 @@ yellow design system and Spanish content.
   (`InfoBrowseView`'s tutor deep-link) still read it from the environment, matching
   `VerbBrowseView`/`QuizView`. Verified end-to-end in the simulator: first-launch present, all
   page CTAs, the Settings reshow (the reported crash), and the game launch.
+
+## Alternate app icons: a bull, a dancer, and a matador (July 2026)
+
+Ported Conjuguer's alternate-app-icon feature to Conjugar and gave it a Spanish cast.
+The Settings tab grew an **App Icon** card — a 2×2 grid of tappable thumbnails — offering
+four icons: three new **photorealistic** icons (a fearsome **bull**, a **flamenco dancer**
+mid-*zapateado* with castanets, and a **matador** in his gold-embroidered *traje de luces*,
+hands on hips), plus the original flat-vector dancer retained as **Classic** for nostalgia.
+Each new icon has a **light and a dark appearance variant**, on a subtly yellow-tinged field
+(charcoal for dark, cream for light) with the Spanish red-and-gold carried bold on the dancer's
+dress and the matador's suit.
+
+- **How the images were made.** Drafted six Gemini-image prompts (bull/dancer/matador × light/dark)
+  with explicit hex palettes, ran each three times, and picked winners. The dancer prompts fed a
+  **cropped reference photo** (a Sevilla flamenco performance, arms raised, eyes closed) through
+  Gemini's image-conditioned `--edit` mode — borrowing the *pose and ecstatic expression* while
+  rendering a new, non-identifiable dancer. All three concepts ended up **tightly cropped** (bull
+  head, dancer upper-body, matador waist-up), which reads far better than a full figure at ~120px
+  and gives the set visual cohesion. Two framing lessons from the human in the loop: cropping the
+  matador's *legs* is deliberate and fine, but cropping his *hands or hat* looks amputated — so the
+  final matador prompt explicitly demands the full montera and both hands stay inside the frame.
+- **Corner cleanup.** Gemini intermittently renders "iOS app-icon composition" as a literal
+  rounded-rectangle with **white corners**. Rather than reroll good images, a small
+  `numpy`/`scipy` script flood-fills the corner-connected bright blob and inpaints it with the
+  neighboring background via a nearest-neighbour EDT — with a **background-adaptive threshold**
+  (`(bg_brightness + 255) / 2`, ≈131 on the dark field, ≈215 on cream) so it catches the pure-white
+  corners without eating the cream background, and a size guard that no-ops on full-bleed images.
+- **The wiring** mirrors Conjuguer: an `AppIcon` enum (`bull`/`dancer`/`matador`/`classic`) maps each
+  case to its `.appiconset` name (`alternateIconName`, nil for the primary) and a preview imageset;
+  `ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES` exposes the three alternate iconsets (Xcode
+  auto-generates the `CFBundleAlternateIcons` plist entries); `Settings.appIcon` persists the choice
+  and calls `UIApplication.setAlternateIconName` on change (guarded to no-op when already correct, so
+  no spurious system alert). Because the app icon isn't loadable by name at runtime, each icon ships a
+  separate **preview imageset** (light/dark) for the Settings thumbnail; the app can't reuse the
+  appiconset for the picker.
+- **Verified** in the simulator: the card renders all four thumbnails with correct light/dark variants
+  and localized labels, and tapping a thumbnail moves the yellow selection ring reactively.
+  `setAlternateIconName` itself throws `Input/output error` on the **Simulator** (a known limitation) —
+  the guard confirms `supportsAlternateIcons` is true and the plist/asset config is correct, so the
+  live swap needs a **real device** to confirm end-to-end (identical to Conjuguer's shipping mechanism).
+  New `en`/`es` strings for the card title, description, and the four icon names.

@@ -598,6 +598,32 @@ nonisolated enum L {
     static func ratings(count: Int) -> String {
       String(localized: "Settings.ratings \(count)")
     }
+
+    static var appIcon: String {
+      String(localized: "Settings.appIcon")
+    }
+
+    static var appIconDescription: String {
+      String(localized: "Settings.appIconDescription")
+    }
+  }
+
+  enum AppIcon {
+    static var bull: String {
+      String(localized: "AppIcon.bull")
+    }
+
+    static var dancer: String {
+      String(localized: "AppIcon.dancer")
+    }
+
+    static var matador: String {
+      String(localized: "AppIcon.matador")
+    }
+
+    static var classic: String {
+      String(localized: "AppIcon.classic")
+    }
   }
 
   enum VerbSort {

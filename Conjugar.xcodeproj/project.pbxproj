@@ -17,6 +17,7 @@
 		AA10B2C3D4E5F60718293B06 /* cow.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA10B2C3D4E5F60718293B05 /* cow.mp3 */; };
 		AA10B2C3D4E5F60718293B08 /* shieldActivate.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA10B2C3D4E5F60718293B07 /* shieldActivate.mp3 */; };
 		AA10B2C3D4E5F60718293B0A /* soccerKick.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA10B2C3D4E5F60718293B09 /* soccerKick.mp3 */; };
+		AA10B2C3D4E5F60718293C02 /* flamencoLoop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA10B2C3D4E5F60718293C01 /* flamencoLoop.mp3 */; };
 		E11CE1021F48867400E74E10 /* sadTrombone1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */; };
 		E14271371F01CA98001D19E1 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E14271361F01CA98001D19E1 /* GameKit.framework */; };
 		E1483FAD1EF5A2200052C436 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E1483FAC1EF5A2200052C436 /* Assets.xcassets */; };
@@ -25,7 +26,6 @@
 		E1483FC91EF89C710052C436 /* applause2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC61EF89C710052C436 /* applause2.mp3 */; };
 		E1483FCA1EF89C710052C436 /* applause3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FC71EF89C710052C436 /* applause3.mp3 */; };
 		E1483FCC1EF89D4E0052C436 /* chirp.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCB1EF89D4E0052C436 /* chirp.mp3 */; };
-		AA10B2C3D4E5F60718293C02 /* flamencoLoop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA10B2C3D4E5F60718293C01 /* flamencoLoop.mp3 */; };
 		E1483FCE1EF89DAD0052C436 /* buzz.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E1483FCD1EF89DAD0052C436 /* buzz.mp3 */; };
 		E18F7F3E1ECA7E3700633200 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E18F7F3D1ECA7E3700633200 /* silence.mp3 */; };
 		E19794342073D0C90015D490 /* gun.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E19794332073D0C90015D490 /* gun.mp3 */; };
@@ -87,6 +87,7 @@
 		AA10B2C3D4E5F60718293B05 /* cow.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cow.mp3; sourceTree = "<group>"; };
 		AA10B2C3D4E5F60718293B07 /* shieldActivate.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shieldActivate.mp3; sourceTree = "<group>"; };
 		AA10B2C3D4E5F60718293B09 /* soccerKick.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = soccerKick.mp3; sourceTree = "<group>"; };
+		AA10B2C3D4E5F60718293C01 /* flamencoLoop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = flamencoLoop.mp3; sourceTree = "<group>"; };
 		E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone1.mp3; sourceTree = "<group>"; };
 		E14271361F01CA98001D19E1 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		E1483FAC1EF5A2200052C436 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -95,7 +96,6 @@
 		E1483FC61EF89C710052C436 /* applause2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause2.mp3; sourceTree = "<group>"; };
 		E1483FC71EF89C710052C436 /* applause3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = applause3.mp3; sourceTree = "<group>"; };
 		E1483FCB1EF89D4E0052C436 /* chirp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chirp.mp3; sourceTree = "<group>"; };
-		AA10B2C3D4E5F60718293C01 /* flamencoLoop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = flamencoLoop.mp3; sourceTree = "<group>"; };
 		E1483FCD1EF89DAD0052C436 /* buzz.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = buzz.mp3; sourceTree = "<group>"; };
 		E18F7F3D1ECA7E3700633200 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silence.mp3; sourceTree = "<group>"; };
 		E19794332073D0C90015D490 /* gun.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gun.mp3; sourceTree = "<group>"; };
@@ -130,9 +130,9 @@
 		0353B3372FDCE50E00FF069B /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
 		0353B3632FDCE50E00FF069B /* Analytics */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Analytics; sourceTree = "<group>"; };
 		0353B36B2FDCE50E00FF069B /* Supporting */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Supporting; sourceTree = "<group>"; };
-		0353B41100000000000AD100 /* Audio */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Audio; sourceTree = "<group>"; };
 		0353B3782FDCE50E00FF069B /* Controllers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Controllers; sourceTree = "<group>"; };
 		0353B3B12FDCE54000FF069B /* ConjugarTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0353B3D82FDCE54000FF069B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ConjugarTests; sourceTree = "<group>"; };
+		0353B41100000000000AD100 /* Audio */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Audio; sourceTree = "<group>"; };
 		F1D6E7000000000000000003 /* ConjugarWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F1D6E7000000000000000010 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ConjugarWidget; sourceTree = "<group>"; };
 		F1D6E7000000000000000004 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -626,6 +626,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
 				CURRENT_PROJECT_VERSION = 2.8;
 				INFOPLIST_FILE = Conjugar/Info.plist;
@@ -651,6 +652,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Conjugar/Conjugar.entitlements;
 				CURRENT_PROJECT_VERSION = 2.8;
 				INFOPLIST_FILE = Conjugar/Info.plist;

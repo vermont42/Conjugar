@@ -49,6 +49,70 @@
         }
       }
     },
+    "AppIcon.bull": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bull"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toro"
+          }
+        }
+      }
+    },
+    "AppIcon.classic": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classic"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clásico"
+          }
+        }
+      }
+    },
+    "AppIcon.dancer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dancer"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bailaora"
+          }
+        }
+      }
+    },
+    "AppIcon.matador": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matador"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matador"
+          }
+        }
+      }
+    },
     "Both.feminine": {
       "localizations": {
         "en": {
@@ -2005,6 +2069,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "¡Añade la tuya!"
+          }
+        }
+      }
+    },
+    "Settings.appIcon": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Icon"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ícono de la app"
+          }
+        }
+      }
+    },
+    "Settings.appIconDescription": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the icon Conjugar wears on your Home Screen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige el ícono que Conjugar muestra en tu pantalla de inicio."
           }
         }
       }

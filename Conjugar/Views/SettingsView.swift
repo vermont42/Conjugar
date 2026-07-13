@@ -44,6 +44,7 @@ struct SettingsView: View {
           regionCard
           quizCard
           browseCard
+          appIconCard
           gameCard
           onboardingCard
           actionsCard
@@ -158,6 +159,59 @@ struct SettingsView: View {
         .pickerStyle(.segmented)
         .selectionFeedback(trigger: settings.secondSingularBrowse)
         .accessibilityLabel(L.Settings.browse)
+      }
+    }
+  }
+
+  private var appIconCard: some View {
+    settingsCard {
+      settingSection(
+        icon: "apps.iphone",
+        tint: .customRed,
+        heading: L.Settings.appIcon,
+        description: L.Settings.appIconDescription
+      ) {
+        LazyVGrid(
+          columns: Array(
+            repeating: GridItem(.flexible(), spacing: Layout.doubleDefaultSpacing),
+            count: 2
+          ),
+          spacing: Layout.doubleDefaultSpacing
+        ) {
+          ForEach(AppIcon.allCases, id: \.self) { appIcon in
+            Button {
+              settings.appIcon = appIcon
+            } label: {
+              VStack(spacing: Layout.defaultSpacing) {
+                Image(appIcon.previewAssetName)
+                  .resizable()
+                  .aspectRatio(1, contentMode: .fit)
+                  .frame(width: 96, height: 96)
+                  .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                  .overlay(
+                    RoundedRectangle(cornerRadius: 22, style: .continuous)
+                      .strokeBorder(
+                        settings.appIcon == appIcon ? Color.customYellow : Color.clear,
+                        lineWidth: 3
+                      )
+                  )
+                  .accessibilityHidden(true)
+
+                Text(appIcon.localizedName)
+                  .font(.callout)
+                  .foregroundStyle(Color.customRed)
+                  .multilineTextAlignment(.center)
+              }
+              .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("app_icon_\(appIcon.rawValue)")
+            .accessibilityLabel(appIcon.localizedName)
+            .accessibilityAddTraits(settings.appIcon == appIcon ? .isSelected : [])
+          }
+        }
+        .accessibilityIdentifier("grid_settings_appIcon")
+        .selectionFeedback(trigger: settings.appIcon)
       }
     }
   }
