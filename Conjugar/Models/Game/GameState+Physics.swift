@@ -119,14 +119,22 @@ extension GameState {
     playerVelocityY = 0
   }
 
-  /// Reaching the bull restarts the level (no win/lose in the prototype).
+  /// Reaching the bull counts a summit. At `summitsToBoss` the boss fight begins
+  /// (La Llamada — GameState+BossFight.swift); earlier summits restart the level.
   func checkReachedBull() {
     if rectsIntersect(
       playerX, playerY, Self.playerWidth, Self.playerHeight,
       bullX, bullY, Self.bullSize, Self.bullSize
     ) {
-      Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
-      reset()
+      summitCount += 1
+      if summitCount >= Self.summitsToBoss {
+        enterBossIntro()
+      } else {
+        // TODO(escape beats): when summitsToBoss rises to 5, this branch becomes the
+        // bull's escape-upward beat rather than a plain reset (see prompts/game.md).
+        Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
+        reset()
+      }
     }
   }
 }

@@ -4745,3 +4745,43 @@ crowd olé, snort), and Spanish jaleo strings in **both** localizations — the 
 the lesson. The fresh-session implementation plan is `prompts/game_boss_llamada.md`:
 seven phases, mechanic-first on reused art (prove the fun before Blender), then bull and
 dancer dance sprites, end scene, localization, and docs.
+
+## Boss fight Phase 1 — La Llamada's mechanic core, playable on reused art (2026-07-13)
+
+The dance-off duel from `prompts/game_boss_llamada.md` is now a playable state machine,
+built deliberately before any new Blender work: every dance animation is a reused
+flipbook (ole ≈ cape, stomp ≈ jump; bull stomp/rear ≈ throw, bow ≈ idle), so the fun
+could be proven — and tuned — before hand-keying a single bone. The shape: reaching the
+bull no longer resets the level but counts a summit (`summitsToBoss = 1` for now, a TODO
+until the five-level escape structure exists), and the summit crossfades the girders
+into a tablao stage (`bossTransition` fades scenery both ways while the actors lerp to
+their marks), swaps the music to Pond5's "Spanish Guitar Standoff", and opens with a
+tap-skippable "¡El duelo!" llamada beat — stomp, screen shake (Conjuguer's sin-decay
+idiom), the works. The duel itself is Simon-with-sabor: the bull demos a phrase as cue
+chips accumulate above him (they vanish at ¡Tu turno! — memory is the challenge), the
+D-pad morphs into a five-button dance pad (taps with a re-arm bool, never held intents),
+a compás bar sweeps the generous echo budget, and a six-notch Duende meter *is* the
+progression — banked phrases derive the round, so a failure's slide-back genuinely
+demotes you, tug-of-war style. Round 3 injects the 🔥 freeze fake-out (input NOTHING for
+1.2 s — inputting fails). Winning plays the bow (held on its final frame by capping the
+flipbook phase), rains Konjugieren's 40-ellipse Canvas confetti, and hands off to a
+minimal end scene on `Music.onboarding` — the track's long-planned first in-game use —
+where the matador slides off his pedestal to the dancer. No lose state anywhere; score
+quietly accumulates (undisplayed) for the later scoring work item.
+
+Testing taught the session two things. First, the state machine is *very* testable: 19
+Swift Testing cases drive it deterministically with a seeded `SplitMix64` injected into
+`bossRNG` (scripted phrases, scripted failures, exact score arithmetic, the freeze both
+ways, reset()-restores-the-climb). Second, live-driving a rhythm game over the AXe
+tap/screenshot loop is a latency battle: even at `CONJUGAR_GAME_TIME_SCALE=0.1` the
+demo kept outrunning the read-chips-then-tap cycle, and the reliable pattern turned out
+to be background *burst* screenshots every few seconds plus batched taps in one shell
+command. Mid-session Josh called time on grinding all six phrases and asked for a debug
+shortcut instead — hence `CONJUGAR_GAME_BOSS_BANKED` (composes with
+`CONJUGAR_GAME_START_BOSS`), which pre-fills the meter; `=5` starts one phrase from
+victory and made the win/end-scene beats trivially verifiable (freeze survived live,
+victory → confetti → slide → tap-to-exit → clean dismissal, plus `conjugar://game/boss`
+on a vanilla launch and a mid-duel ✕ quit). Strings are hardcoded `Text(verbatim:)`
+Spanish for now — Phase 6 moves them into the catalog per the
+Spanish-jaleo-in-both-locales decision. Next up: the Pixabay SFX pack (Phase 2), then
+the real bull stomp/rear/bow and dancer ole/stomp sprites (Phases 3–4).

@@ -63,6 +63,38 @@ final class GameState {
   /// Placeholder flipbook speed (RaceRunner's rate).
   static let fps = 10
 
+  // MARK: Boss-fight tuning (La Llamada — see prompts/game_boss_llamada.md)
+
+  /// Summits before the boss triggers. TODO: raise to 5 when the five-level climb +
+  /// four escape beats land (separate roadmap item).
+  static let summitsToBoss = 1
+  static let bossTransitionDuration = 0.8
+  static let introDuration = 2.0
+  /// Bull-demo seconds per move, indexed by round (0-based) — playback speeds up.
+  static let demoStepDurations = [0.9, 0.75, 0.6]
+  static let echoTimePerMove = 1.5
+  static let echoGrace = 2.0
+  static let freezeHold = 1.2
+  static let phraseResultHold = 0.9
+  static let showboatDuration = 2.0
+  /// The shorter strut after a failed phrase.
+  static let showboatLiteDuration = 1.0
+  static let meterNotches = 6
+  /// Phrase length per round (0-based). Round 3 (index 2) is freeze-eligible.
+  static let phraseLengths = [3, 4, 5]
+  static let movePoints = 50
+  static let phraseBonus = 200
+  static let bossClearBonus = 2_000
+  /// How long an actor holds a commanded dance burst before falling back to idle.
+  static let danceBurstDuration = 0.5
+  static let screenShakeDuration = 0.25
+  static let screenShakeMagnitude: CGFloat = 9
+  static let jaleoPopDuration = 1.2
+  static let victoryHold = 1.5
+  static let matadorSlideDuration = 2.0
+  static let endSceneMusicFade = 1.0
+  static let bossPedestalSize = CGSize(width: 48, height: 12)
+
   /// Global time multiplier for the game loop — 1 in normal play. Setting the
   /// `CONJUGAR_GAME_TIME_SCALE` launch environment variable (e.g. `0.1`) slows
   /// the whole simulation down uniformly, so individual animation frames (a
@@ -78,6 +110,23 @@ final class GameState {
   /// When the `CONJUGAR_GAME_DISABLE_FLAGS` launch environment variable is set,
   /// the bull throws no flags — a calmer field for capturing player animations.
   static let debugFlagsDisabled = ProcessInfo.processInfo.environment["CONJUGAR_GAME_DISABLE_FLAGS"] != nil
+
+  /// When the `CONJUGAR_GAME_START_BOSS` launch environment variable is set, the
+  /// game jumps straight to the boss intro on configure — the fast path for driving
+  /// the duel in the simulator (composes with `CONJUGAR_GAME_TIME_SCALE`).
+  static let debugStartAtBoss = ProcessInfo.processInfo.environment["CONJUGAR_GAME_START_BOSS"] != nil
+
+  /// With `CONJUGAR_GAME_START_BOSS`, the `CONJUGAR_GAME_BOSS_BANKED` launch
+  /// environment variable pre-fills the Duende meter (clamped to 0…5) — e.g. `5`
+  /// starts the duel one phrase from victory, for testing the win/end-scene beats
+  /// without playing the whole fight.
+  static let debugBossBanked: Int? = {
+    guard let raw = ProcessInfo.processInfo.environment["CONJUGAR_GAME_BOSS_BANKED"],
+          let value = Int(raw) else {
+      return nil
+    }
+    return value
+  }()
 
   static let flagEmojis = [
     "🇪🇸", "🇲🇽", "🇦🇷", "🇨🇴", "🇵🇪", "🇨🇱", "🇻🇪", "🇪🇨", "🇬🇹", "🇨🇺",
@@ -159,6 +208,60 @@ final class GameState {
 
   var bullfighterX: CGFloat = 0
   var bullfighterY: CGFloat = 0
+  /// The matador's climb-phase perch beside the bull (set by `buildLevel`); the boss
+  /// moves him to a pedestal, and `reset()` restores him here.
+  var bullfighterHomeX: CGFloat = 0
+  var bullfighterHomeY: CGFloat = 0
+
+  // MARK: Boss-fight state (La Llamada — mechanics in GameState+BossFight.swift)
+
+  var phase: GamePhase = .climb
+  var summitCount = 0
+  /// Accumulating score (decision 3: undisplayed for now; +50/move, +200×round/phrase,
+  /// +2,000 boss clear). The scoring work item adds display/persistence later.
+  var score = 0
+  /// Banked phrases 0…meterNotches — the Duende meter AND the fight's progress.
+  var banked = 0
+  var duelState: DuelState = .bullDemo(step: 0)
+  var phraseSequence: [DanceMove] = []
+  /// 0→1 progress of the climb→stage crossfade (view fades scenery by it).
+  var bossTransition: Double = 0
+  /// Counts down the intro card + llamada beat; any tap skips.
+  var introTimer: Double = 0
+  /// Whether the llamada beat (stomp + shake + music start) has fired this intro.
+  var didLlamada = false
+  /// Generic countdown for the current duel sub-state (demo step, result hold, showboat).
+  var duelTimer: Double = 0
+  /// The compás bar: seconds remaining / total budget for the current echo.
+  var echoRemaining: Double = 0
+  var echoTotal: Double = 1
+  /// Counts down the freeze fake-out's hold window while its slot is current.
+  var freezeTimer: Double = 0
+  /// One rear-up flourish per showboat, fired at its midpoint.
+  var showboatDidRear = false
+  /// One-shot dance-burst countdowns (the `bullThrowTimer` pattern): while > 0 the
+  /// commanded action plays, then the actor falls back to idle.
+  var playerMoveTimer: Double = 0
+  var bullMoveTimer: Double = 0
+  var screenShake: Double = 0
+  /// Monotonic clock for deterministic sin-decay shake (the Conjuguer idiom).
+  var sineTime: Double = 0
+  var jaleoPops: [JaleoPop] = []
+  var jaleoCounter = 0
+  var victoryTimer: Double = 0
+  var endSceneTime: Double = 0
+  var bossMusicStarted = false
+  var endSceneMusicStarted = false
+  var endSceneBurstDone = false
+  /// Intro lerp anchors: where each actor stood when the boss triggered.
+  var introFromPlayerX: CGFloat = 0
+  var introFromPlayerY: CGFloat = 0
+  var introFromBullX: CGFloat = 0
+  var introFromBullY: CGFloat = 0
+  var introFromMatadorX: CGFloat = 0
+  var introFromMatadorY: CGFloat = 0
+  /// Injectable RNG so tests can script exact phrases (seeded `SplitMix64`).
+  var bossRNG: any RandomNumberGenerator = SystemRandomNumberGenerator()
 
   // MARK: Loop bookkeeping
 
@@ -174,6 +277,12 @@ final class GameState {
     reset()
     didConfigure = true
     startAudio()
+    if Self.debugStartAtBoss {
+      enterBossIntro()
+      if let prefill = Self.debugBossBanked {
+        banked = min(max(prefill, 0), Self.meterNotches - 1)
+      }
+    }
   }
 
   // MARK: Audio
@@ -199,9 +308,14 @@ final class GameState {
   }
 
   /// Stop the looping music. Called from `GameView.onDisappear` when the player
-  /// leaves the game (the playhead is saved so a later entry resumes it).
+  /// leaves the game (the playhead is saved so a later entry resumes it). Leaving
+  /// from the boss's end scene fades gracefully instead of hard-stopping.
   func stopAudio() {
-    Current.soundPlayer.stopMusic()
+    if phase == .endScene {
+      Current.soundPlayer.stopMusic(fadeDuration: Self.endSceneMusicFade)
+    } else {
+      Current.soundPlayer.stopMusic()
+    }
   }
 
   private func buildLevel() {
@@ -246,15 +360,47 @@ final class GameState {
     ]
 
     // Bullfighter: one static frame beside the bull on the top platform.
-    bullfighterX = w * 0.72
-    bullfighterY = platforms[Self.levelCount - 1].surfaceY - Self.bullfighterSize / 2
+    bullfighterHomeX = w * 0.72
+    bullfighterHomeY = platforms[Self.levelCount - 1].surfaceY - Self.bullfighterSize / 2
+    bullfighterX = bullfighterHomeX
+    bullfighterY = bullfighterHomeY
   }
 
   /// Return the player and bull to their starting state, clear flags, restore all
-  /// health, and re-arm the cape pickups. Keeps platforms/ladders geometry.
+  /// health, and re-arm the cape pickups. Keeps platforms/ladders geometry. Also
+  /// clears any boss-fight state back to `.climb` (re-showing the hearts) — but
+  /// deliberately keeps `summitCount` and `score`, which persist across deaths.
   func reset() {
     let w = screenSize.width
     let top = Self.levelCount - 1
+
+    // If we were in a boss phase, return the music to the gameplay loop.
+    if phase != .climb && didConfigure {
+      Current.soundPlayer.startMusic(.gameLoop)
+    }
+    phase = .climb
+    banked = 0
+    duelState = .bullDemo(step: 0)
+    phraseSequence = []
+    bossTransition = 0
+    introTimer = 0
+    didLlamada = false
+    duelTimer = 0
+    echoRemaining = 0
+    echoTotal = 1
+    freezeTimer = 0
+    showboatDidRear = false
+    playerMoveTimer = 0
+    bullMoveTimer = 0
+    screenShake = 0
+    jaleoPops.removeAll()
+    victoryTimer = 0
+    endSceneTime = 0
+    bossMusicStarted = false
+    endSceneMusicStarted = false
+    endSceneBurstDone = false
+    bullfighterX = bullfighterHomeX
+    bullfighterY = bullfighterHomeY
 
     playerX = w * 0.15
     playerY = platforms[0].surfaceY - Self.playerHeight / 2
@@ -309,6 +455,16 @@ final class GameState {
     // Clamp so a sub-second hitch isn't applied in one giant step (prevents
     // tunneling through platform/flag collision tests).
     let dt = min(rawDt, 1.0 / 30.0) * Self.debugTimeScale
+
+    sineTime += Double(dt)
+
+    // The original climb pipeline runs only in `.climb`; every boss phase is
+    // driven by `updateBoss` (GameState+BossFight.swift) instead, so derived
+    // actions never stomp the boss's commanded dance bursts.
+    guard phase == .climb else {
+      updateBoss(dt: dt)
+      return
+    }
 
     if damageCooldown > 0 { damageCooldown = max(0, damageCooldown - Double(dt)) }
     if capedRemaining > 0 { capedRemaining = max(0, capedRemaining - Double(dt)) }

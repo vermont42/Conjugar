@@ -14,9 +14,18 @@
 import SwiftUI
 
 struct GameView: View {
+  /// Passed in explicitly (cover content does not inherit a custom `.environment`
+  /// router — the OnboardingView lesson) so the `conjugar://game/boss` deeplink's
+  /// `pendingBossEntry` can be consumed after configure. The Settings-tab Play
+  /// button presents `GameView()` with no router; that path never starts at the boss.
+  var router: AppRouter?
+
   @Environment(\.dismiss) private var dismiss
   @State private var gameState = GameState()
   @State private var jumpHeld = false
+  /// Touch-down re-arm for the boss dance buttons (the jump idiom, per-move so a
+  /// held paso can't fire twice).
+  @State private var heldDanceMoves: Set<DanceMove> = []
 
   private static let dirButtonSize: CGFloat = 40
   private static let jumpButtonSize: CGFloat = 51   // 64 shrunk by 20%
@@ -37,8 +46,11 @@ struct GameView: View {
   private static let dancerFeetOffset: CGFloat = -(dancerVisualHeight - GameState.playerHeight) / 2
 
   /// Player actions backed by real rendered sprites (`dancer_<action>_<frame>`).
-  /// All five are rendered; the numbered-box fallback stays only as a safety net.
-  private static let spriteActions: Set<PlayerAction> = [.idle, .walk, .climb, .jump, .cape, .capeWalk]
+  /// All are rendered; the numbered-box fallback stays only as a safety net. The
+  /// boss dance actions reuse existing flipbooks for now (ole ≈ cape, stomp ≈ jump);
+  /// boss plan Phase 4 swaps in hand-keyed `dancer_ole_*`/`dancer_stomp_*` imagesets
+  /// by changing only these mappings (+ the frame counts).
+  private static let spriteActions: Set<PlayerAction> = [.idle, .walk, .climb, .jump, .cape, .capeWalk, .ole, .stomp]
 
   /// The asset-name stem for each action: `dancer_<name>_<frame>`.
   private static func actionName(_ action: PlayerAction) -> String {
@@ -49,6 +61,8 @@ struct GameView: View {
     case .jump: return "jump"
     case .cape: return "cape"
     case .capeWalk: return "capeWalk"
+    case .ole: return "cape"    // Phase-1 reuse; Phase 4 → "ole"
+    case .stomp: return "jump"  // Phase-1 reuse; Phase 4 → "stomp"
     }
   }
 
@@ -66,6 +80,8 @@ struct GameView: View {
     case .jump: aspect = 108.0 / 225.0
     case .cape: aspect = 152.0 / 225.0        // wider: muleta held out in front
     case .capeWalk: aspect = 155.0 / 227.0
+    case .ole: aspect = 152.0 / 225.0         // Phase-1 reuse of cape's crop
+    case .stomp: aspect = 108.0 / 225.0       // Phase-1 reuse of jump's crop
     }
     return dancerVisualHeight * aspect
   }
@@ -130,12 +146,18 @@ struct GameView: View {
     case .idle:  return (436, 230)
     case .walk:  return (452, 248)
     case .throw: return (452, 306)
+    case .stomp: return (452, 306)  // Phase-1 reuse of throw's crop
+    case .rear:  return (452, 306)  // Phase-1 reuse of throw's crop
+    case .bow:   return (436, 230)  // Phase-1 reuse of idle's crop
     }
   }
 
   /// Bull actions backed by real rendered sprites. The numbered-box fallback in
-  /// `bullSprite` stays only as a defensive safety net (all three are covered).
-  private static let bullSpriteActions: Set<BullAction> = [.idle, .walk, .throw]
+  /// `bullSprite` stays only as a defensive safety net (every action is covered).
+  /// The boss actions reuse existing flipbooks for now; boss plan Phase 3 swaps in
+  /// hand-keyed `bull_stomp/rear/bow` imagesets by changing only these mappings
+  /// (+ the frame counts and crops).
+  private static let bullSpriteActions: Set<BullAction> = [.idle, .walk, .throw, .stomp, .rear, .bow]
 
   /// The asset-name stem for each bull action: `bull_<name>_<frame>`.
   private static func bullActionName(_ action: BullAction) -> String {
@@ -143,6 +165,9 @@ struct GameView: View {
     case .idle: return "idle"
     case .walk: return "walk"
     case .throw: return "throw"
+    case .stomp: return "throw"  // Phase-1 reuse; Phase 3 → "stomp"
+    case .rear: return "throw"   // Phase-1 reuse; Phase 3 → "rear"
+    case .bow: return "idle"     // Phase-1 reuse; Phase 3 → "bow"
     }
   }
 
@@ -191,7 +216,15 @@ struct GameView: View {
             gameState.update(currentTime: now)
           }
       }
-      .onAppear { gameState.configure(screenSize: geo.size) }
+      .onAppear {
+        gameState.configure(screenSize: geo.size)
+        // The conjugar://game/boss deeplink: consume the one-shot flag after
+        // configure and jump straight to the boss intro.
+        if router?.pendingBossEntry == true {
+          router?.pendingBossEntry = false
+          gameState.enterBossIntro()
+        }
+      }
       .onDisappear { gameState.stopAudio() }
     }
     .background(Color.customBackground.ignoresSafeArea())
@@ -201,57 +234,83 @@ struct GameView: View {
     ZStack {
       Color.customBackground.ignoresSafeArea()
 
-      ForEach(gameState.platforms) { platform in
-        Group {
-          RoundedRectangle(cornerRadius: 3)
-            .fill(Color.customRed)
-            .frame(width: platform.rect.width, height: platform.rect.height)
-            .position(x: platform.rect.midX, y: platform.rect.midY)
-          // A thin dotted yellow "mortar" line along the platform's TOP edge, so the
-          // red girder reads as a course of brick. An explicitly-framed shape + a
-          // .position places it reliably (an .overlay(alignment:) on the flexible
-          // rectangle ignored .top, and a bare Path in the ZStack didn't render).
-          HLine()
-            .stroke(Color.customYellow,
-                    style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [2, 4]))
-            .frame(width: platform.rect.width - 6, height: 2)
-            .position(x: platform.rect.midX, y: platform.rect.minY + 1)
+      // The playfield proper — everything that should judder on a llamada screen
+      // shake. HUD/controls/cards sit outside the shaken group.
+      ZStack {
+        ForEach(gameState.platforms) { platform in
+          Group {
+            RoundedRectangle(cornerRadius: 3)
+              .fill(Color.customRed)
+              .frame(width: platform.rect.width, height: platform.rect.height)
+              .position(x: platform.rect.midX, y: platform.rect.midY)
+            // A thin dotted yellow "mortar" line along the platform's TOP edge, so the
+            // red girder reads as a course of brick. An explicitly-framed shape + a
+            // .position places it reliably (an .overlay(alignment:) on the flexible
+            // rectangle ignored .top, and a bare Path in the ZStack didn't render).
+            HLine()
+              .stroke(Color.customYellow,
+                      style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [2, 4]))
+              .frame(width: platform.rect.width - 6, height: 2)
+              .position(x: platform.rect.midX, y: platform.rect.minY + 1)
+          }
+          // The bottom girder is the boss's tablao floor; everything above fades out.
+          .opacity(platform.level == 0 ? 1 : 1 - gameState.bossTransition)
         }
-      }
 
-      ForEach(gameState.ladders) { ladder in
-        ladderView(ladder)
-      }
-
-      ForEach(gameState.capes) { cape in
-        if !cape.collected {
-          // The pickup is the same red muleta the dancer carries (rendered sprite,
-          // was a 🧣 emoji). Drawn at 60% of capeSize so it matches the carried cape's
-          // apparent size, with its hem sitting on the platform surface (the collision
-          // box stays the full capeSize, centered on cape.y).
-          let pickupHeight = GameState.capeSize * 0.6
-          Image("cape_pickup")
-            .resizable()
-            .scaledToFit()
-            .frame(width: pickupHeight * (188.0 / 229.0), height: pickupHeight)
-            .position(x: cape.x, y: cape.y + GameState.capeSize * 0.2)
+        ForEach(gameState.ladders) { ladder in
+          ladderView(ladder)
+            .opacity(1 - gameState.bossTransition)
         }
+
+        ForEach(gameState.capes) { cape in
+          if !cape.collected {
+            // The pickup is the same red muleta the dancer carries (rendered sprite,
+            // was a 🧣 emoji). Drawn at 60% of capeSize so it matches the carried cape's
+            // apparent size, with its hem sitting on the platform surface (the collision
+            // box stays the full capeSize, centered on cape.y).
+            let pickupHeight = GameState.capeSize * 0.6
+            Image("cape_pickup")
+              .resizable()
+              .scaledToFit()
+              .frame(width: pickupHeight * (188.0 / 229.0), height: pickupHeight)
+              .position(x: cape.x, y: cape.y + GameState.capeSize * 0.2)
+              .opacity(1 - gameState.bossTransition)
+          }
+        }
+
+        ForEach(gameState.flags) { flag in
+          Text(flag.emoji)
+            .font(.system(size: 28))
+            .rotationEffect(.degrees(flag.rotation))
+            .position(x: flag.x, y: flag.y)
+            .opacity(1 - gameState.bossTransition)
+        }
+
+        stageDressing
+
+        matadorSprite
+
+        bullSprite
+        playerSprite
+
+        cueChips
+        jaleoPopViews
+      }
+      .offset(shakeOffset)
+
+      if gameState.phase == .victory || gameState.phase == .endScene {
+        confetti
       }
 
-      ForEach(gameState.flags) { flag in
-        Text(flag.emoji)
-          .font(.system(size: 28))
-          .rotationEffect(.degrees(flag.rotation))
-          .position(x: flag.x, y: flag.y)
-      }
-
-      matadorSprite
-
-      bullSprite
-      playerSprite
+      bossTapLayer
 
       quitButton
-      healthPips
+      if gameState.phase == .climb {
+        healthPips
+      } else {
+        bossHUD
+      }
+      bossCards
       controls
     }
     .accessibilityIdentifier("game_root")
@@ -369,6 +428,300 @@ struct GameView: View {
     .position(x: ladder.x, y: midY)
   }
 
+  // MARK: Boss fight — La Llamada (strings are hardcoded Spanish/English for now;
+  // boss plan Phase 6 moves them into L.Game/Localizable.xcstrings)
+
+  /// A brief deterministic sin-decay judder on llamadas (the Conjuguer idiom —
+  /// driven by the game clock, so no per-frame randomness in the view).
+  private var shakeOffset: CGSize {
+    let shake = gameState.screenShake
+    guard shake > 0 else { return .zero }
+    let intensity = CGFloat(shake / GameState.screenShakeDuration)
+    let magnitude = GameState.screenShakeMagnitude * intensity
+    return CGSize(
+      width: CGFloat(sin(gameState.sineTime * 47)) * magnitude,
+      height: CGFloat(cos(gameState.sineTime * 53)) * magnitude
+    )
+  }
+
+  /// The tablao set: the matador's pedestal and an emoji crowd row just below the
+  /// floor. Fades in with `bossTransition` as the climb scenery fades out.
+  private var stageDressing: some View {
+    Group {
+      RoundedRectangle(cornerRadius: 3)
+        .fill(Color.customRed)
+        .frame(width: GameState.bossPedestalSize.width, height: GameState.bossPedestalSize.height)
+        .overlay(
+          HLine()
+            .stroke(Color.customYellow, style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [2, 4]))
+            .frame(height: 2), alignment: .top
+        )
+        .position(x: gameState.pedestalCenterX, y: gameState.pedestalTopY + GameState.bossPedestalSize.height / 2)
+
+      Text(verbatim: "👒 🌹 👏 💃 🕺 👏 🌹")
+        .font(.system(size: 20))
+        .position(x: gameState.screenSize.width / 2, y: gameState.stageFloorY + 40)
+    }
+    .opacity(gameState.bossTransition)
+  }
+
+  /// The bull-demo step, when the duel is in its call half (drives the cue chips).
+  private var demoStep: Int? {
+    guard gameState.phase == .duel, case .bullDemo(let step) = gameState.duelState else { return nil }
+    return step
+  }
+
+  /// SC5-style cue chips accumulating left→right above the bull as he demos the
+  /// phrase. They vanish at ¡Tu turno! — echoing is from memory.
+  private var cueChips: some View {
+    Group {
+      if let step = demoStep, !gameState.phraseSequence.isEmpty {
+        HStack(spacing: 4) {
+          ForEach(0...min(step, gameState.phraseSequence.count - 1), id: \.self) { index in
+            moveChip(gameState.phraseSequence[index])
+          }
+        }
+        .position(x: gameState.bullX, y: gameState.bullY - 74)
+      }
+    }
+  }
+
+  private func moveChip(_ move: DanceMove) -> some View {
+    ZStack {
+      switch move {
+      case .pasoLeft:
+        Image(systemName: "arrowtriangle.left.fill")
+      case .pasoRight:
+        Image(systemName: "arrowtriangle.right.fill")
+      case .ole:
+        Image(systemName: "figure.arms.open")
+      case .stomp:
+        Image(systemName: "shoeprints.fill")
+      case .cape:
+        Image("cape_pickup")
+          .resizable()
+          .scaledToFit()
+          .frame(width: 16, height: 16)
+      case .freeze:
+        Text(verbatim: "🔥")
+          .font(.system(size: 14))
+      }
+    }
+    .font(.system(size: 13, weight: .bold))
+    .foregroundStyle(Color.customYellow)
+    .frame(width: 26, height: 26)
+    .background(Color.customRed.opacity(0.4), in: RoundedRectangle(cornerRadius: 6))
+    .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.customYellow.opacity(0.5), lineWidth: 1))
+  }
+
+  /// Floating, fading jaleo shouts (¡Olé! ¡Uy! ¡Eso!…) — the sibling score-pop idiom.
+  private var jaleoPopViews: some View {
+    ForEach(gameState.jaleoPops) { pop in
+      let age = pop.initialTTL - pop.ttl
+      Text(verbatim: pop.text)
+        .font(.system(size: 22, weight: .heavy, design: .rounded))
+        .foregroundStyle(Color.customYellow)
+        .shadow(color: .black.opacity(0.4), radius: 1, y: 1)
+        .opacity(pop.ttl / pop.initialTTL)
+        .position(x: pop.x, y: pop.y - CGFloat(age) * 26)
+    }
+  }
+
+  /// Duende meter (the tug-of-war progress bar) + the compás bar while echoing.
+  /// Replaces the hearts whenever `phase != .climb`.
+  private var bossHUD: some View {
+    VStack(spacing: 6) {
+      HStack(spacing: 5) {
+        Image("dancer")
+          .font(.system(size: 16))
+          .foregroundStyle(Color.customYellow)
+        ForEach(0..<GameState.meterNotches, id: \.self) { index in
+          RoundedRectangle(cornerRadius: 3)
+            .fill(index < gameState.banked ? Color.customYellow : Color.customYellow.opacity(0.15))
+            .frame(width: 20, height: 10)
+            .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder(Color.customYellow.opacity(0.4), lineWidth: 1))
+        }
+        Image("bull")
+          .font(.system(size: 18))
+          .foregroundStyle(Color.customYellow)
+      }
+      .accessibilityLabel(Text(verbatim: "Duende"))
+
+      if gameState.isEchoActive {
+        let fraction = max(0, min(1, gameState.echoRemaining / gameState.echoTotal))
+        ZStack(alignment: .leading) {
+          Capsule().fill(Color.customYellow.opacity(0.15))
+          Capsule().fill(Color.customRed).frame(width: 160 * CGFloat(fraction))
+        }
+        .frame(width: 160, height: 7)
+      }
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+    .padding(.top, Layout.doubleDefaultSpacing)
+    .opacity(gameState.bossTransition)
+  }
+
+  /// The intro / victory / end-scene title cards. Hit-testing off — the full-screen
+  /// tap layer underneath handles skip/advance.
+  private var bossCards: some View {
+    Group {
+      switch gameState.phase {
+      case .bossIntro:
+        bossTitle("¡El duelo!")
+      case .victory:
+        bossTitle("¡Victoria!")
+      case .endScene:
+        VStack(spacing: Layout.defaultSpacing) {
+          bossTitle("¡Victoria!")
+          Text(verbatim: "The bull is impressed — the matador is free!")
+            .font(.system(size: 17, weight: .semibold, design: .rounded))
+            .foregroundStyle(Color.customYellow)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, Layout.doubleDefaultSpacing)
+          Text(verbatim: "Tap to continue")
+            .font(.system(size: 14, weight: .medium))
+            .foregroundStyle(Color.customYellow.opacity(0.8))
+        }
+      case .climb, .duel:
+        EmptyView()
+      }
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+    .padding(.top, 110)
+    .allowsHitTesting(false)
+  }
+
+  private func bossTitle(_ text: String) -> some View {
+    Text(verbatim: text)
+      .font(.system(size: 44, weight: .black, design: .rounded))
+      .foregroundStyle(Color.customYellow)
+      .padding(.horizontal, Layout.doubleDefaultSpacing)
+      .padding(.vertical, Layout.defaultSpacing)
+      .background(Color.customRed.opacity(0.75), in: RoundedRectangle(cornerRadius: Layout.cornerRadius))
+      .shadow(radius: 4)
+  }
+
+  /// Victory confetti — Konjugieren's 40-ellipse Canvas, in Conjugar's palette.
+  private var confetti: some View {
+    TimelineView(.animation) { timeline in
+      let time = timeline.date.timeIntervalSince1970
+      Canvas { context, size in
+        for i in 0..<40 {
+          let seed = Double(i) * 137.508
+          let baseX = (seed.truncatingRemainder(dividingBy: 1.0) + Double(i) * 0.025).truncatingRemainder(dividingBy: 1.0) * size.width
+          let baseY = (seed * 0.618).truncatingRemainder(dividingBy: 1.0) * size.height
+          let floatOffset = sin(time * 1.5 + seed) * 20
+          let radius = 3.0 + (seed * 0.3).truncatingRemainder(dividingBy: 5.0)
+          let rect = CGRect(x: baseX - radius, y: baseY + floatOffset - radius, width: radius * 2, height: radius * 2)
+          context.fill(Path(ellipseIn: rect), with: .color(i.isMultiple(of: 2) ? .customRed : .customYellow))
+        }
+      }
+    }
+    .allowsHitTesting(false)
+    .ignoresSafeArea()
+  }
+
+  /// Full-screen tap catcher for the boss's skippable beats: intro → duel,
+  /// victory → end scene, end scene → dismiss. Sits under the quit button and
+  /// controls so those stay tappable.
+  private var bossTapLayer: some View {
+    Group {
+      if gameState.phase == .bossIntro || gameState.phase == .victory || gameState.phase == .endScene {
+        Color.clear
+          .contentShape(Rectangle())
+          .ignoresSafeArea()
+          .onTapGesture {
+            if gameState.phase == .endScene {
+              dismiss()
+            } else {
+              gameState.handleBossTap()
+            }
+          }
+      }
+    }
+  }
+
+  // MARK: Boss controls (taps, not held intents — the jump touch-down/re-arm idiom)
+
+  /// The boss d-pad: paso left/right where the walk buttons were, olé in the
+  /// always-visible up slot, down slot retired.
+  private var bossPad: some View {
+    VStack(spacing: Layout.defaultSpacing / 2) {
+      danceButton(.ole, label: "Olé") {
+        Image(systemName: "figure.arms.open")
+      }
+      HStack(spacing: Layout.defaultSpacing / 2) {
+        danceButton(.pasoLeft, label: "Paso left") {
+          Image(systemName: "arrowtriangle.left.fill")
+        }
+        dPadSlot
+        danceButton(.pasoRight, label: "Paso right") {
+          Image(systemName: "arrowtriangle.right.fill")
+        }
+      }
+      dPadSlot
+    }
+  }
+
+  /// The cape button beside the stomp circle (the stomp is the relabeled jump button).
+  private var bossActionCluster: some View {
+    HStack(spacing: Layout.defaultSpacing) {
+      danceButton(.cape, label: "Cape", size: Self.dirButtonSize, isCircle: true) {
+        Image("cape_pickup")
+          .resizable()
+          .scaledToFit()
+          .frame(width: 22, height: 22)
+      }
+      danceButton(.stomp, label: "Stomp", size: Self.jumpButtonSize, isCircle: true) {
+        Image(systemName: "shoeprints.fill")
+          .font(.system(size: 24, weight: .bold))
+      }
+    }
+  }
+
+  /// A boss dance button: fires once on touch-down, re-arms on lift (a held paso
+  /// must not fire twice). Dimmed while input is locked (demo/result/showboat);
+  /// `danceInput` also guards, so a dimmed tap is harmless.
+  private func danceButton<Icon: View>(
+    _ move: DanceMove,
+    label: String,
+    size: CGFloat = GameView.dirButtonSize,
+    isCircle: Bool = false,
+    @ViewBuilder icon: () -> Icon
+  ) -> some View {
+    icon()
+      .font(.system(size: 22, weight: .bold))
+      .foregroundStyle(Color.customYellow)
+      .frame(width: size, height: size)
+      .background {
+        if isCircle {
+          Circle().fill(Color.customRed.opacity(0.18))
+        } else {
+          RoundedRectangle(cornerRadius: 10).fill(Color.customYellow.opacity(0.18))
+        }
+      }
+      .overlay {
+        if isCircle {
+          Circle().strokeBorder(Color.customYellow, lineWidth: 2)
+        } else {
+          RoundedRectangle(cornerRadius: 10).strokeBorder(Color.customYellow.opacity(0.35), lineWidth: 1)
+        }
+      }
+      .contentShape(Rectangle())
+      .opacity(gameState.isEchoActive ? 1 : 0.35)
+      .gesture(
+        DragGesture(minimumDistance: 0)
+          .onChanged { _ in
+            if !heldDanceMoves.contains(move) {
+              heldDanceMoves.insert(move)
+              gameState.danceInput(move)
+            }
+          }
+          .onEnded { _ in heldDanceMoves.remove(move) }
+      )
+      .accessibilityLabel(Text(verbatim: label))
+  }
+
   // MARK: HUD & controls
 
   private var quitButton: some View {
@@ -401,11 +754,22 @@ struct GameView: View {
   private var controls: some View {
     // D-pad at bottom-leading, jump at the inverse (bottom-trailing) position, with
     // the jump button's center vertically aligned to the D-pad's center. Pushed low
-    // (small bottom padding) so the cross clears the field of play.
+    // (small bottom padding) so the cross clears the field of play. During the duel
+    // the whole cluster morphs into the dance pad; the boss's other phases (intro,
+    // victory, end scene) have no controls at all — taps go to the tap layer.
     HStack(alignment: .center) {
-      dPad
-      Spacer()
-      jumpButton
+      switch gameState.phase {
+      case .climb:
+        dPad
+        Spacer()
+        jumpButton
+      case .duel:
+        bossPad
+        Spacer()
+        bossActionCluster
+      case .bossIntro, .victory, .endScene:
+        Spacer()
+      }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
     .padding(.horizontal, Layout.tripleDefaultSpacing)

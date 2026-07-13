@@ -201,15 +201,17 @@ struct GameStateTests {
     #expect(gameState.isCaped)            // gameplay unaffected during the blink
   }
 
-  @Test func reachingBullResetsTheLevel() {
+  @Test func reachingBullTriggersTheBossFight() {
+    // The summit seam changed with La Llamada: the gated summit (summitsToBoss = 1
+    // for now) enters the boss intro instead of resetting the level. The boss
+    // machinery itself is covered in GameBossTests.
     let gameState = configured()
     gameState.playerX = gameState.bullX
     gameState.playerY = gameState.bullY
-    gameState.health = 2
     gameState.flags.append(flagOnPlayer(gameState))
     gameState.checkReachedBull()
-    #expect(gameState.health == GameState.maxHealth)   // restored
-    #expect(gameState.playerLevel == 0)                // back to start
-    #expect(gameState.flags.isEmpty)                   // cleared
+    #expect(gameState.summitCount == 1)
+    #expect(gameState.phase == .bossIntro)
+    #expect(gameState.flags.isEmpty)                   // field cleared for the stage
   }
 }

@@ -85,8 +85,10 @@ struct MainTabView: View {
     .fullScreenCover(item: $commun) { commun in
       CommunView(commun: commun) { self.commun = nil }
     }
-    // A `conjugar://game` deeplink jumps straight to the game from any tab.
-    .fullScreenCover(isPresented: $router.showGame) { GameView() }
+    // A `conjugar://game` deeplink jumps straight to the game from any tab. The
+    // router is passed explicitly (cover content doesn't inherit the custom
+    // environment object) so GameView can consume a `conjugar://game/boss` entry.
+    .fullScreenCover(isPresented: $router.showGame) { GameView(router: router) }
     // First-launch welcome tour. Its game-preview CTA defers the game launch to this
     // cover's onDismiss so the two covers never overlap.
     .fullScreenCover(isPresented: $router.showOnboarding, onDismiss: launchGameAfterOnboardingIfRequested) {
