@@ -1380,7 +1380,7 @@ with the irregularity highlighting and `RF: tendr-` intact.
 
 ---
 
-## SwiftUI migration, Step 0: the app skeleton and state model (July 2026)
+## SwiftUI migration, Step 0: the app skeleton and state model (2026-07-06)
 
 Before touching a single color or screen, the migration's real risk had to be
 retired: the app's *entry point*, *test-World injection*, *coexistence strategy*,
@@ -3860,7 +3860,7 @@ story). The recipe, from Conjuguer commits **`9bb4f3e`** (perf) and **`270052a`*
 
 ---
 
-## Blender → 2D-sprite toolchain, proven on the dancer walk cycle (July 2026)
+## Blender → 2D-sprite toolchain, proven on the dancer walk cycle (2026-07-11)
 
 Stood up the 3D→2D-sprite pipeline that replaces the game prototype's numbered-frame
 placeholders with real rendered animation, and proved it end-to-end on **one action** —
@@ -4613,7 +4613,7 @@ cel look. He is a **static, single-frame GOAL figure** — no animation, no in-g
   `startMusic(_ music: Music)` in the prior session) — updated to `startMusic(.gameLoop)`. Full
   suite green: 445 tests, 25 suites. Game verified live via `conjugar://game`.
 
-## Onboarding flow (July 2026)
+## Onboarding flow (2026-07-13)
 
 Ported Conjuguer's first-launch onboarding tour to Conjugar and adapted it to the app's
 yellow design system and Spanish content.
@@ -4649,7 +4649,7 @@ yellow design system and Spanish content.
   `VerbBrowseView`/`QuizView`. Verified end-to-end in the simulator: first-launch present, all
   page CTAs, the Settings reshow (the reported crash), and the game launch.
 
-## Alternate app icons: a bull, a dancer, and a matador (July 2026)
+## Alternate app icons: a bull, a dancer, and a matador (2026-07-13)
 
 Ported Conjuguer's alternate-app-icon feature to Conjugar and gave it a Spanish cast.
 The Settings tab grew an **App Icon** card — a 2×2 grid of tappable thumbnails — offering
@@ -4690,7 +4690,7 @@ dress and the matador's suit.
   live swap needs a **real device** to confirm end-to-end (identical to Conjuguer's shipping mechanism).
   New `en`/`es` strings for the card title, description, and the four icon names.
 
-## Boss-fight ideation: the dance-off (July 2026)
+## Boss-fight ideation: the dance-off (2026-07-13)
 
 The game's finale was always going to be a confrontation with the bull, but Toreo por
 Amor is family-friendly — so the fifth-summit boss became a **dance-off**: out-dance the

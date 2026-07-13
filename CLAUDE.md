@@ -15,8 +15,9 @@ As of 2026, a project is underway to modernize and improve Conjugar. The engine 
 
 As you, Claude, complete chunks of work on the modernization/improvement project, append
 a note to docs/blog_notes.md. Give each entry a `##` heading that includes the date —
-`## <Title> (YYYY-MM-DD)` — with newest entries at the bottom (entries before July 2026
-are month-dated; use full dates from here on). Write narrative for a future reader (what
+`## <Title> (YYYY-MM-DD)` — with newest entries at the bottom (the earliest entries use
+a leading `## YYYY-MM-DD — <Title>` form; write new ones in the trailing form). Write
+narrative for a future reader (what
 was tried, what failed, why decisions changed), not a bare changelog: Josh will
 eventually generate blog posts from these notes, and future Claude sessions rely on them
 as dated project memory — when older docs conflict, the journal shows which truth is
