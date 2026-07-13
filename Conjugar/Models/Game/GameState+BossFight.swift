@@ -203,7 +203,7 @@ extension GameState {
     bullAction = .idle
     bullFacing = 1
     prepareEchoSlot(0)
-    spawnJaleo("¡Tu turno!", x: playerX, y: playerY - 54)
+    spawnJaleo("¡Tu turno!", x: playerX, y: playerY - 84, size: 36)
   }
 
   private func prepareEchoSlot(_ step: Int) {
@@ -246,7 +246,7 @@ extension GameState {
   private func succeedPhrase() {
     score += Self.phraseBonus * (bossRound + 1)
     banked += 1
-    spawnJaleo("¡Olé!", x: playerX, y: playerY - 70)
+    spawnJaleo("¡Olé!", x: playerX, y: playerY - 90, size: 40)
     // Placeholder phrase-success cue (Phase 2: palmas + crowd olé).
     Current.soundPlayer.play(.chime, shouldDebounce: false)
     duelState = .phraseResult(success: true)
@@ -256,7 +256,7 @@ extension GameState {
   private func failPhrase() {
     banked = max(0, banked - 1)
     Current.soundPlayer.play(.buzz, shouldDebounce: false)
-    spawnJaleo("¡Uy!", x: playerX, y: playerY - 54)
+    spawnJaleo("¡Uy!", x: playerX, y: playerY - 74, size: 32)
     // The bull snorts and stomps smugly (Phase 2: the real snort).
     Current.soundPlayer.play(.cow, shouldDebounce: true, volume: 0.2)
     commandBullMove(.stomp, duration: Self.danceBurstDuration)
@@ -307,7 +307,7 @@ extension GameState {
         if freezeTimer <= 0 {
           // Survived the fake-out: sparkle and auto-advance.
           score += Self.movePoints
-          spawnJaleo("✨", x: playerX, y: playerY - 54)
+          spawnJaleo("✨", x: playerX, y: playerY - 64, size: 30)
           Current.soundPlayer.play(.chirp, shouldDebounce: false, volume: 0.4)
           advanceEcho(from: step)
           return
@@ -400,8 +400,8 @@ extension GameState {
     if slide >= 1 && !endSceneBurstDone {
       endSceneBurstDone = true
       let midX = (playerX + targetX) / 2
-      spawnJaleo("❤️", x: midX - 14, y: playerY - 64)
-      spawnJaleo("🌹", x: midX + 14, y: playerY - 76)
+      spawnJaleo("❤️", x: midX - 16, y: playerY - 70, size: 30)
+      spawnJaleo("🌹", x: midX + 16, y: playerY - 86, size: 30)
       Current.soundPlayer.play(.chime, shouldDebounce: false, volume: 0.5)
     }
   }
@@ -514,10 +514,10 @@ extension GameState {
     screenShake = Self.screenShakeDuration
   }
 
-  func spawnJaleo(_ text: String, x: CGFloat, y: CGFloat) {
+  func spawnJaleo(_ text: String, x: CGFloat, y: CGFloat, size: CGFloat = 24) {
     jaleoCounter += 1
     jaleoPops.append(
-      JaleoPop(id: jaleoCounter, text: text, x: x, y: y, ttl: Self.jaleoPopDuration, initialTTL: Self.jaleoPopDuration)
+      JaleoPop(id: jaleoCounter, text: text, x: x, y: y, ttl: Self.jaleoPopDuration, initialTTL: Self.jaleoPopDuration, size: size)
     )
   }
 

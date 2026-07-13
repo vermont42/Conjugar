@@ -99,6 +99,8 @@ enum DuelState: Equatable {
 
 /// A floating, fading feedback shout (¡Olé! / ¡Uy! / ¡Eso!…) — the sibling apps'
 /// score-pop idiom. Spawned by the boss judge, rendered as drifting `Text`.
+/// `size` is the font point size: per-move jaleos are modest, phrase-level events
+/// (¡Tu turno!, ¡Olé!) render big so they carry the dark mid-screen on device.
 struct JaleoPop: Identifiable {
   let id: Int
   let text: String
@@ -106,6 +108,7 @@ struct JaleoPop: Identifiable {
   let y: CGFloat
   var ttl: Double
   let initialTTL: Double
+  let size: CGFloat
 }
 
 /// A tiny seedable RNG (SplitMix64) so boss tests can script exact dance phrases.

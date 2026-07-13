@@ -4785,3 +4785,13 @@ on a vanilla launch and a mid-duel ✕ quit). Strings are hardcoded `Text(verbat
 Spanish for now — Phase 6 moves them into the catalog per the
 Spanish-jaleo-in-both-locales decision. Next up: the Pixabay SFX pack (Phase 2), then
 the real bull stomp/rear/bow and dancer ole/stomp sprites (Phases 3–4).
+
+**Feedback round, same day:** the planning session reviewed a device screenshot and
+flagged two things. The "green bow-tie artifact" on the olé button turned out not to be
+a symbol-rendering issue at all — on 812-pt-class devices the crowd row's 👒 emoji
+overlapped the button (the sim's taller screen had hidden it), so the crowd now tucks
+under the floor's lip at a smaller size. And the jaleo pops were sized up to carry the
+dark mid-screen on device: per-move shouts stay modest, but ¡Tu turno! and the
+phrase-¡Olé! now render 36–40 pt and spawn higher, so the judgment beat reads from
+across the room. A useful reminder that the simulator's tofu-box emoji hide real
+layout truths — the device screenshot caught both.

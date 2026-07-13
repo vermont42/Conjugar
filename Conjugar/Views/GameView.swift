@@ -458,9 +458,14 @@ struct GameView: View {
         )
         .position(x: gameState.pedestalCenterX, y: gameState.pedestalTopY + GameState.bossPedestalSize.height / 2)
 
+      // Tucked close under the floor's lip: on 812-pt-class devices the gap between
+      // the floor and the boss pad's up (olé) button is tight, and at +40 the crowd's
+      // 👒 overlapped the button (its green ribbon read as a glyph artifact on
+      // device). +26 at size 17 clears the button on all current screens.
       Text(verbatim: "👒 🌹 👏 💃 🕺 👏 🌹")
-        .font(.system(size: 20))
-        .position(x: gameState.screenSize.width / 2, y: gameState.stageFloorY + 40)
+        .font(.system(size: 17))
+        .fixedSize()
+        .position(x: gameState.screenSize.width / 2, y: gameState.stageFloorY + 26)
     }
     .opacity(gameState.bossTransition)
   }
@@ -519,7 +524,7 @@ struct GameView: View {
     ForEach(gameState.jaleoPops) { pop in
       let age = pop.initialTTL - pop.ttl
       Text(verbatim: pop.text)
-        .font(.system(size: 22, weight: .heavy, design: .rounded))
+        .font(.system(size: pop.size, weight: .heavy, design: .rounded))
         .foregroundStyle(Color.customYellow)
         .shadow(color: .black.opacity(0.4), radius: 1, y: 1)
         .opacity(pop.ttl / pop.initialTTL)
