@@ -27,7 +27,10 @@ class SoundPlayerReal: SoundPlayer {
   private var instantOfLastPlayBySound: [Sound: TimeInterval] = [:]
   private var musicPlayer: AVAudioPlayer?
   private var savedMusicTime: TimeInterval?
-  private static let musicName = "flamencoLoop"
+  // The track currently loaded into `musicPlayer`, so `startMusic(_:)` knows whether a
+  // request is a resume of the same track (reuse the player, honor the saved playhead)
+  // or a switch to a different one (rebuild, drop the stale playhead).
+  private var currentMusic: Music?
   private static let musicVolume: Float = 0.4
   private static let musicFadeDuration: TimeInterval = 2.0
 
@@ -82,12 +85,19 @@ class SoundPlayerReal: SoundPlayer {
     warmUpPlayer?.play()
   }
 
-  func startMusic() {
-    if musicPlayer == nil {
-      if let url = Bundle.main.url(forResource: Self.musicName, withExtension: soundExtension) {
+  func startMusic(_ music: Music) {
+    // (Re)build the player on first start or when switching to a different track. A
+    // switch discards any saved playhead — resuming a position only makes sense for the
+    // same track (the game pausing and being re-entered), not when moving between, say,
+    // an onboarding bed and the gameplay loop.
+    if musicPlayer == nil || currentMusic != music {
+      musicPlayer?.stop()
+      savedMusicTime = nil
+      if let url = Bundle.main.url(forResource: music.rawValue, withExtension: soundExtension) {
         musicPlayer = try? AVAudioPlayer(contentsOf: url)
         musicPlayer?.numberOfLoops = -1
       }
+      currentMusic = music
     }
     guard let player = musicPlayer else {
       return

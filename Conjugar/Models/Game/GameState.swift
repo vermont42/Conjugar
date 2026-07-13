@@ -195,7 +195,7 @@ final class GameState {
       GlyphWarmer.warm(glyphs)
     }
 
-    Current.soundPlayer.startMusic()
+    Current.soundPlayer.startMusic(.gameLoop)
   }
 
   /// Stop the looping music. Called from `GameView.onDisappear` when the player
