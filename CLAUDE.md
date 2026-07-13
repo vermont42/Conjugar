@@ -13,7 +13,14 @@ Conjugar is an iOS app for learning Spanish verb conjugations. It conjugates reg
 
 As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. Every screen is now a native SwiftUI view (`Views/`), the app shell is a `MainTabView` `TabView`, and no `UIViewController` subclass remains in the app target. A **Spanish conjugation tutor** backed by Apple's on-device `SystemLanguageModel` (Foundation Models) was added July 2026 — a chat screen reached from the Info tab, grounded in the app's own engine so it never invents forms (see **Conjugation Tutor** below). The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
 
-As you, Claude, complete chunks of work on the modernization/improvement project, please add a note to docs/blog_notes.md . Eventually, Josh will generate a blog post from this work.
+As you, Claude, complete chunks of work on the modernization/improvement project, append
+a note to docs/blog_notes.md. Give each entry a `##` heading that includes the date —
+`## <Title> (YYYY-MM-DD)` — with newest entries at the bottom (entries before July 2026
+are month-dated; use full dates from here on). Write narrative for a future reader (what
+was tried, what failed, why decisions changed), not a bare changelog: Josh will
+eventually generate blog posts from these notes, and future Claude sessions rely on them
+as dated project memory — when older docs conflict, the journal shows which truth is
+current.
 
 ## Build and Test Commands
 
