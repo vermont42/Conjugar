@@ -93,6 +93,10 @@ def parse_args():
     p.add_argument("--cape", action="store_true",
                    help="Dancer two-material cel: meshes named Muleta/Cape render as RED "
                         "cel, every other mesh as --color (gold). For the held-cape actions.")
+    p.add_argument("--matador", action="store_true",
+                   help="Matador multi-material cel: each garment mesh (jacket/pants=blue, "
+                        "vest/hat=gold, socks=pink, shoes=dark-red, shirt=cream, body=skin) "
+                        "gets its own cel color. Requires --toon. Per-OBJECT split by name.")
     p.add_argument("--realistic", action="store_true",
                    help="Rendered-realistic mode (the inverse of --toon): KEEP the mesh's "
                         "PBR materials, light with a 3-point + rim rig, AgX view transform, "
@@ -120,6 +124,11 @@ def parse_args():
 PALETTE = {
     "gold": (0xCD / 255, 0xA5 / 255, 0x1B / 255, 1.0),  # customYellow (dark) #CDA51B
     "red":  (0xC1 / 255, 0x00 / 255, 0x1D / 255, 1.0),  # customRed        #C1001D
+    # Extra hues for the matador's multi-garment suit (see apply_matador_materials).
+    "blue": (0x3A / 255, 0x6F / 255, 0xE0 / 255, 1.0),  # customBlue-family royal blue
+    "pink": (0xE8 / 255, 0x90 / 255, 0xB5 / 255, 1.0),  # matador's rosa medias (socks)
+    "skin": (0xE0 / 255, 0xB4 / 255, 0x8C / 255, 1.0),  # bare skin (face, hands)
+    "cream": (0xED / 255, 0xE3 / 255, 0xC8 / 255, 1.0),  # shirt / tie
 }
 
 
@@ -150,8 +159,11 @@ def resolve_engine(name):
 
 
 def mesh_objects(subset=None):
+    """Renderable meshes. Skips `hide_render` objects so a mesh hidden for a
+    given actor (e.g. the matador's vendor hair/brows, which the montera covers,
+    or its stashed cape) neither renders nor inflates the camera auto-fit."""
     src = subset if subset else list(bpy.data.objects)
-    return [o for o in src if o.type == "MESH"]
+    return [o for o in src if o.type == "MESH" and not o.hide_render]
 
 
 def clear_scene():
@@ -554,6 +566,54 @@ def apply_dancer_cape_materials(meshes, body_rgba, cape_rgba, bands=2):
         obj.data.materials.append(cape if is_cape else body)
 
 
+# The matador is the game's kidnapped-bullfighter goal figure (one static front
+# frame). Its purchased Genesis-8 mesh ships each garment as a SEPARATE object, so —
+# like the dancer's cape — coloring is a per-OBJECT split by name, one cel material
+# per garment. The recolor (spec in prompts/matador.md) is deliberately NOT mostly-gold
+# (the dancer) or mostly-red (the bull): a blue suit is the dominant hue, with the shoes
+# quoting the bull's dark-red hooves. Colors carried in Conjugar's palette where one
+# exists (blue/gold), invented where the costume needs them (pink socks, skin, cream).
+MATADOR_MESH_COLORS = (
+    # (name substring, PALETTE key)  — first match wins; body is the fallback.
+    ("MJacket", "blue"),        # bolero jacket + sleeves
+    ("Jacket_Pads", "blue"),    # epaulettes / side strips / tassels (part of the jacket)
+    ("Pants", "blue"),          # taleguilla trousers
+    ("Vest", "gold"),           # chaleco (incl. VestButton meshes)
+    ("Hat", "gold"),            # montera — dark-yellow, not pure black (stands off the bg)
+    ("Socks", "pink"),          # rosa medias
+    ("Shoes", "_darkred"),      # zapatillas — the bull-hoof dark red (special, computed)
+    ("Shirt", "cream"),         # camisa + tie
+    ("Brows", "_hair"),
+    ("Hair", "_hair"),
+)
+
+
+def apply_matador_materials(meshes, bands=2):
+    """Per-garment cel skin for the matador. Every mesh whose name matches an entry
+    in MATADOR_MESH_COLORS gets that color; anything else (the Genesis-8 body) is
+    skin. Returns a {color_key: mesh_count} dict for logging/verification."""
+    dark_red = _scaled(PALETTE["red"], 0.60)       # the bull's hoof red
+    hair = (0x2E / 255, 0x20 / 255, 0x16 / 255, 1.0)
+    specials = {"_darkred": dark_red, "_hair": hair}
+
+    def rgba_for(name):
+        for sub, key in MATADOR_MESH_COLORS:
+            if sub in name:
+                return key, (specials[key] if key in specials else PALETTE[key])
+        return "skin", PALETTE["skin"]
+
+    cache = {}
+    counts = {}
+    for obj in meshes:
+        key, rgba = rgba_for(obj.name)
+        if key not in cache:
+            cache[key] = build_cel_material(f"MatadorCel_{key.strip('_')}", rgba, bands=bands)
+        obj.data.materials.clear()
+        obj.data.materials.append(cache[key])
+        counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
 # ---- bull cel accents (Phase 0 Part A of the paid-asset spike) --------------
 #
 # The flat single-material cel above renders the bull as one flat red mass — it
@@ -802,6 +862,9 @@ def main():
                 apply_dancer_cape_materials(meshes, PALETTE[args.color], PALETTE["red"],
                                             bands=args.bands)
                 print("[render_sprites] dancer cape: gold body + red muleta")
+            elif args.matador:
+                counts = apply_matador_materials(meshes, bands=args.bands)
+                print(f"[render_sprites] matador garments: {counts}")
             else:
                 apply_cel_material(meshes, PALETTE[args.color], bands=args.bands)
             if args.outline:

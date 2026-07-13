@@ -1,0 +1,7 @@
+It's time to work on the game's matador. As I see it, there are two orthogonal questions.
+
+1. How the matador should look. I'm thinking along the lines of ~/Desktop/matador.jpg , with some changes. Blue sleeves and pants, pink socks, dark-red shoes (like the bull's hooves), yellow vest, black belt, dark-yellow hat. The matador can't be mostly yellow or mostly red because the dancer and bull, respectively, already are. The matador's hat and shoes can't be pure black because they won't stand out against the background. As far as posture, feet shoulder-width apart, hands on hips, facing viewer. No muleta.
+
+2. How to make the matador. I see two options, each with advantages. One, we could use gemini-image. This would be extremely easy, technically speaking. Two downsides: matching the bull's and dancer's looks would be difficult, and later animation, if any, would be tricky. Two, we could use models, as we did with the bull and dancer. This would be more difficult and would perhaps involve payment of money, but the look would likely match the dancer and bull, and, if we ever decided to animate the matador, that would be more straightforward.
+
+I welcome your input on both questions. Any others to consider?
