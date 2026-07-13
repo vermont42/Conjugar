@@ -4510,3 +4510,18 @@ stalls, since rig topology — not texture — is the failure mode AI-gen keeps 
   coords in the `ZStack` silently didn't render (a `Shape` only lays out reliably inside its
   own frame), and `.overlay(alignment: .top)` on the flexible rectangle ignored the alignment
   (kept drawing at the bottom) — an explicit `.frame` + `.position` is what works.
+
+## 2026-07-12 — Dancer walk "gait bob": a 1-pixel per-frame lift so she's not a ghost
+
+- **Problem (Josh):** the walking dancer glides with zero vertical motion, reading as a
+  ghost. Real bipeds trace a shallow arc while walking, but the platform gap is too short
+  for a true parabola — and the feet are glued to the platform, so a large vertical
+  excursion would visibly lift her off the brick. **A parabola isn't practical here; a
+  small per-frame nudge is.**
+- **Implemented** in `GameView.dancerWalkBob(_:frame:)`: a lift profile indexed by the
+  1-based walk frame, added to `dancerFeetOffset` (negative y = up). Starting profile is
+  **`0 0 0 1 1 1`** (frames 1–3 flat, 4–6 raised `dancerWalkBobHeight = 1` pt). The
+  alternate to try if this reads wrong is `[0, 1, 0, 1, 0, 1]` — just edit
+  `dancerWalkBobProfile`. Applies to both `.walk` and `.capeWalk` (shared 6-frame cadence).
+- Build green; live-verified the walk still renders planted and correctly sized. The bob is
+  1 pt (3 device px) — deliberately subtle, judged in motion rather than a static frame.

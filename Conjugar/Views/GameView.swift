@@ -78,6 +78,23 @@ struct GameView: View {
     return facing >= 0 ? -1 : 1
   }
 
+  /// A subtle per-frame vertical "gait bob" for the walk cycles. With no vertical
+  /// motion the gliding dancer reads as a ghost. A biped's body really traces a
+  /// shallow arc while walking, but the platform gap is too short for a true
+  /// parabola (and the feet are glued to the platform), so instead selected frames
+  /// of the 6-frame walk are nudged up by `dancerWalkBobHeight`. The lift profile is
+  /// indexed by 1-based frame; the current profile is "0 0 0 1 1 1" — frames 1–3 flat,
+  /// frames 4–6 raised one unit. (An alternate to try: [0, 1, 0, 1, 0, 1].) Returns a
+  /// y offset in points, negative = up. Applies to both the plain and caped walks,
+  /// which share the 6-frame leg cadence.
+  private static let dancerWalkBobHeight: CGFloat = 1
+  private static let dancerWalkBobProfile: [CGFloat] = [0, 0, 0, 1, 1, 1]
+  private static func dancerWalkBob(_ action: PlayerAction, frame: Int) -> CGFloat {
+    guard action == .walk || action == .capeWalk else { return 0 }
+    guard (1...dancerWalkBobProfile.count).contains(frame) else { return 0 }
+    return -dancerWalkBobProfile[frame - 1] * dancerWalkBobHeight   // negative = up
+  }
+
   // Real rendered bull sprites (`bull_<action>_<frame>`), same visual/collision
   // split as the dancer: the bull is wider than tall (a quadruped), so its visual
   // overhangs the square `bullSize` collision box, feet aligned to the box bottom.
@@ -234,7 +251,7 @@ struct GameView: View {
           .scaledToFit()
           .frame(width: Self.dancerWidth(action), height: Self.dancerVisualHeight)
           .scaleEffect(x: Self.dancerMirror(action, facing: gameState.playerFacing), y: 1)
-          .offset(y: Self.dancerFeetOffset)
+          .offset(y: Self.dancerFeetOffset + Self.dancerWalkBob(action, frame: gameState.playerFrame))
           // The muleta is part of the caped sprite now, so the about-to-expire
           // warning is a flash of the whole caped pose (was a separate 🧣 emoji):
           // during the expiry blink `isCaped` stays true but `isCapeVisible` toggles.
