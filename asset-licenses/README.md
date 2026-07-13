@@ -7,13 +7,15 @@ license under which it is reused. App-facing credits live in `Info.creditsText`
 
 ## Game music
 
-- **`Conjugar/flamencoLoop.mp3`** — *"Vaguely Spanish Guitar"* by Clarence Simpson
-  (casimps1), via **ccMixter**. Licensed **CC BY 3.0**
-  (<https://creativecommons.org/licenses/by/3.0/>). Instrumental nylon-string
-  Spanish/flamenco guitar. See `flamencoLoop-vaguely-spanish-guitar.txt`.
-  Attribution is given in the app's Credits screen ("Game Music" block). The real
-  track (2:55 stereo mp3) is in place and loops gaplessly in-game via
-  `numberOfLoops = -1`.
+- **`Conjugar/flamencoLoop.mp3`** (gameplay), **`Conjugar/Audio/spanishTension.mp3`**
+  and **`Conjugar/Audio/spanishGuitarStandoff.mp3`** (both bundled but unwired) — three
+  royalty-free **Pond5** tracks: *"Flamenco Adventure"*, *"Spanish Tension"*, and
+  *"Spanish Guitar Standoff"*. **Pond5 Content License** — commercial use OK, **no
+  attribution required** (the app's "Game Music" credit is a courtesy). Encoded from the
+  WAV masters to 192 kb/s / 44.1 kHz stereo MP3; masters live in the git-ignored
+  `audio-sources/` folder. See `pond5-game-music.txt`. Gameplay loops
+  `flamencoLoop.mp3` (holds "Flamenco Adventure") via `numberOfLoops = -1`; the other two
+  are staged for future onboarding / game-end / boss-fight scenes.
 
 ## Game sound effects
 

@@ -117,6 +117,26 @@ sleep 2; xcrun simctl openurl "$UDID" conjugar://game
 To reach the climb state, the D-pad **up** button only appears when the player is aligned at
 a ladder base — poll `describe_ui.sh` for the `Move up` label to know you're on it.
 
+### Game music (`Music` enum + `SoundPlayer`)
+
+The game's looping background music is the `Music` enum (`Models/Music.swift`), each case a
+bundled MP3 base name that `SoundPlayerReal.startMusic(_:)` loops via `numberOfLoops = -1`.
+Gameplay plays `Music.gameLoop` from `GameState` — bundled as `flamencoLoop.mp3` (legacy
+name) but holding Pond5's "Flamenco Adventure" since July 2026. Two more Pond5 tracks are
+**bundled but unwired** in the synchronized `Conjugar/Audio/` group: `spanishTension.mp3`
+(`Music.onboarding`) and `spanishGuitarStandoff.mp3` (`Music.bossFight`). The WAV masters
+live in git-ignored `audio-sources/`; only the 192 kbps MP3s are committed. Pond5's Content
+License requires no attribution (the game-music credit in `Localizable.xcstrings` is a
+courtesy note).
+
+> **Planned onboarding music.** Conjugar has no onboarding flow yet (the sibling apps
+> Conjuguer and Konjugieren do). When one is built, it should play `Music.onboarding`
+> (Pond5's "Spanish Tension", bundled at `Conjugar/Audio/spanishTension.mp3`) as a looping
+> bed — `Current.soundPlayer.startMusic(.onboarding)` on the onboarding view's `.onAppear`
+> and `Current.soundPlayer.stopMusic()` on `.onDisappear`. The same track is also the
+> intended game-end-scene music. The future boss fight should likewise use `Music.bossFight`
+> ("Spanish Guitar Standoff").
+
 Conjugar-specific config facts baked into `.claude/ios-build-verify.config.sh`:
 
 - **Launch anchor** `FIRST_SCREEN_ID = browse_verb_count` — the `.accessibilityIdentifier`

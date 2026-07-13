@@ -1,0 +1,33 @@
+Assets:   Conjugar/flamencoLoop.mp3                 (gameplay background loop)
+          Conjugar/Audio/spanishTension.mp3         (staged: onboarding + game-end scene)
+          Conjugar/Audio/spanishGuitarStandoff.mp3  (staged: boss fight)
+Source:   Pond5 (https://www.pond5.com) — royalty-free purchased tracks.
+License:  Pond5 Content License — commercial use permitted, NO attribution required.
+          The app's Credits "Game Music" block is a courtesy note, not a requirement.
+
+Tracks:
+  "Flamenco Adventure"       -> flamencoLoop.mp3
+       (filename is legacy — it replaced the prior placeholder in place, so the
+        Music.gameLoop raw value and GameState call did not have to change.)
+  "Spanish Tension"          -> spanishTension.mp3        (Music.onboarding — unwired)
+  "Spanish Guitar Standoff"  -> spanishGuitarStandoff.mp3 (Music.bossFight  — unwired)
+
+Optimization (per committed MP3):
+  All encoded from the purchased WAV masters to 192 kb/s CBR, 44.1 kHz stereo, metadata
+  stripped, via ffmpeg/libmp3lame. Only the MP3s are committed; the WAV masters live in
+  the git-ignored audio-sources/ folder.
+
+  flamencoLoop.mp3            142.6 s  3,423,178 bytes  md5 5621230e22dda1d7ac1e90bb2446991a
+        (WAV master ~25.1 MB, 44.1 kHz/16-bit stereo)
+  spanishTension.mp3         129.0 s  3,097,797 bytes  md5 163dd9b2d187e8f0b1fab79ee9cc5db0
+        (WAV master ~38.9 MB, 48 kHz/24-bit stereo; ~6 s of trailing silence trimmed —
+         audible content ends at 2:08.7, cut at 129 s and resampled to 44.1 kHz.)
+  spanishGuitarStandoff.mp3   42.7 s  1,025,764 bytes  md5 f922399037c388c0735b65cbbc331f3a
+        (WAV master ~7.5 MB, 44.1 kHz/16-bit stereo)
+
+Reuse:    Played as looping background music via AVAudioPlayer numberOfLoops = -1. Only
+          gameplay (flamencoLoop.mp3) is wired today; the other two are bundled for future
+          onboarding / game-end / boss-fight scenes that do not exist yet.
+
+History:  These replaced a prior placeholder track (removed 2026-07-13, along with its
+          CC-BY deed snapshot, which applied only to that track).

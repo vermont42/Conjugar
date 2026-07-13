@@ -4575,3 +4575,40 @@ cel look. He is a **static, single-frame GOAL figure** — no animation, no in-g
   escape — and the fight — is later work. Today he's a static goal figure. He's also fully
   rigged, so a future *animated* matador can restore the Daz IK targets (`lHand_IK`/`rHand_IK`)
   or hand-key FK like the dancer, then render N frames through `render_sprites.py --matador`.
+
+## 2026-07-13 — Real flamenco game music: three Pond5 tracks in, placeholder out
+
+- **The bland placeholder is gone.** The game's background loop was "Vaguely Spanish Guitar"
+  (Clarence Simpson / casimps1, CC-BY via ccMixter). Replaced with three purchased **Pond5**
+  royalty-free flamenco tracks — Pond5's Content License permits commercial use with **no
+  attribution required**, so the CC-BY credit block was swapped for a short courtesy note (both
+  `en` and `es` in `Localizable.xcstrings`).
+- **Gameplay now loops "Flamenco Adventure."** The 25.1 MB / 2:22 WAV master was encoded to a
+  192 kbps / 44.1 kHz stereo MP3 (~3.4 MB) and **overwritten in place** at
+  `Conjugar/flamencoLoop.mp3` — the enum raw value `Music.gameLoop = "flamencoLoop"` and the
+  existing `GameState → startMusic(.gameLoop)` call are unchanged, so gameplay music swapped with
+  **zero project-file churn**. The filename is now legacy (holds Flamenco Adventure), documented
+  in the `Music.swift` comment.
+- **Two more tracks staged for features that don't exist yet.** "Spanish Tension" (→
+  `Music.onboarding`, for the future onboarding flow *and* game-end scene) and "Spanish Guitar
+  Standoff" (→ `Music.bossFight`) are bundled but **unwired** — those scenes aren't built. Spanish
+  Tension's WAV had ~6 s of trailing silence (audio ends at 2:08.7, confirmed via
+  `silencedetect`); trimmed to 129 s during encode. All three at 192 kbps: masters 25/39/7.5 MB →
+  MP3 3.4/3.1/1.0 MB.
+- **New synchronized `Conjugar/Audio/` group.** The root `Conjugar/` folder isn't a
+  `PBXFileSystemSynchronizedRootGroup` (its MP3s are explicit pbxproj refs), so the two staged
+  tracks went into a new synchronized `Audio/` group (fresh UUID registered in the group section,
+  the app target's `fileSystemSynchronizedGroups`, and the `Conjugar` navigator group). Verified
+  both land in the built `.app` bundle.
+- **Masters kept out of git.** Pristine WAVs copied to a git-ignored `audio-sources/` folder;
+  only the committed MP3s ship. CLAUDE.md gained a "Game music" section documenting the enum, the
+  bundled-but-unwired tracks, and the planned onboarding wiring
+  (`startMusic(.onboarding)`/`stopMusic()` on the onboarding view's appear/disappear).
+- **Toolchain gotcha (this machine).** `ffmpeg` was DYLD-broken — linked against
+  `libx265.215.dylib` (x265 4.1) after a Homebrew upgrade to 4.2 (`.216`). Ran it with
+  `DYLD_LIBRARY_PATH=/usr/local/Cellar/x265/4.1/lib` (dyld matches the missing lib by leaf name)
+  — no Homebrew surgery. `ffprobe` still aborts; `afinfo` handled probing.
+- **Fixed a stale test.** `SoundPlayerTests.dummyAbsorbsEveryCall` still called the old
+  argument-less `startMusic()` (never updated when the API was generalized to
+  `startMusic(_ music: Music)` in the prior session) — updated to `startMusic(.gameLoop)`. Full
+  suite green: 445 tests, 25 suites. Game verified live via `conjugar://game`.

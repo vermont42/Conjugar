@@ -130,6 +130,7 @@
 		0353B3372FDCE50E00FF069B /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
 		0353B3632FDCE50E00FF069B /* Analytics */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Analytics; sourceTree = "<group>"; };
 		0353B36B2FDCE50E00FF069B /* Supporting */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Supporting; sourceTree = "<group>"; };
+		0353B41100000000000AD100 /* Audio */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Audio; sourceTree = "<group>"; };
 		0353B3782FDCE50E00FF069B /* Controllers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Controllers; sourceTree = "<group>"; };
 		0353B3B12FDCE54000FF069B /* ConjugarTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0353B3D82FDCE54000FF069B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ConjugarTests; sourceTree = "<group>"; };
 		F1D6E7000000000000000003 /* ConjugarWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F1D6E7000000000000000010 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ConjugarWidget; sourceTree = "<group>"; };
@@ -235,6 +236,7 @@
 			children = (
 				03FF1744258C17E500BA447D /* Conjugar.entitlements */,
 				0353B3632FDCE50E00FF069B /* Analytics */,
+				0353B41100000000000AD100 /* Audio */,
 				E107B0901EB66E9F004C5E91 /* Assets */,
 				0353B3782FDCE50E00FF069B /* Controllers */,
 				0353B2D62FDCE50E00FF069B /* Models */,
@@ -273,6 +275,7 @@
 				0353B3632FDCE50E00FF069B /* Analytics */,
 				0353B36B2FDCE50E00FF069B /* Supporting */,
 				0353B3782FDCE50E00FF069B /* Controllers */,
+				0353B41100000000000AD100 /* Audio */,
 				F1D6E7000000000000000004 /* Shared */,
 			);
 			name = Conjugar;

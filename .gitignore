@@ -23,3 +23,6 @@ docs/glosses/phase1/phase2/consensus/
 # ios-build-verify
 build.log
 .claude/ios-build-verify.*
+
+# Original purchased audio (Pond5 WAV masters — converted MP3s are committed instead)
+audio-sources/

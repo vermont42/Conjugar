@@ -25,7 +25,7 @@ struct SoundPlayerTests {
     let dummy = SoundPlayerDummy()
     dummy.setup()
     dummy.warmUpSounds()
-    dummy.startMusic()
+    dummy.startMusic(.gameLoop)
     dummy.play(.pop, shouldDebounce: false, volume: 1.0)
     dummy.play(.chirp)                       // protocol-extension convenience
     dummy.play(Sound.randomApplause, shouldDebounce: true)
