@@ -79,10 +79,6 @@ final class GameState {
   /// the bull throws no flags — a calmer field for capturing player animations.
   static let debugFlagsDisabled = ProcessInfo.processInfo.environment["CONJUGAR_GAME_DISABLE_FLAGS"] != nil
 
-  // MARK: Placeholder art
-
-  static let capeEmoji = "🧣"
-  static let bullfighterEmoji = "🤺"
   static let flagEmojis = [
     "🇪🇸", "🇲🇽", "🇦🇷", "🇨🇴", "🇵🇪", "🇨🇱", "🇻🇪", "🇪🇨", "🇬🇹", "🇨🇺",
     "🇧🇴", "🇩🇴", "🇭🇳", "🇵🇾", "🇸🇻", "🇳🇮", "🇨🇷", "🇺🇾", "🇵🇦"
@@ -192,10 +188,9 @@ final class GameState {
     Current.soundPlayer.warmUpSounds()
 
     // Pre-rasterize the emoji this game rains (flags are the worst first-draw
-    // offender) into the process-wide glyph cache, off the main actor.
-    var glyphs: [(String, CGFloat)] = Self.flagEmojis.map { ($0, 28) }
-    glyphs.append((Self.capeEmoji, 28))
-    glyphs.append((Self.bullfighterEmoji, 34))
+    // offender) into the process-wide glyph cache, off the main actor. The cape and
+    // bullfighter are rendered sprites now, so only the flags remain as emoji.
+    let glyphs: [(String, CGFloat)] = Self.flagEmojis.map { ($0, 28) }
     Task.detached(priority: .userInitiated) {
       GlyphWarmer.warm(glyphs)
     }

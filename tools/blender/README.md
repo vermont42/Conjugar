@@ -382,3 +382,53 @@ blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull
 blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_throw.fbx --actor bull --action throw --frames 5 $A
 # then: pack_or_rename.sh rename bull <action>  ->  copy PNGs into Assets.xcassets/Game/
 ```
+
+## The matador (done, 2026-07-12)
+
+The game's **matador** is the kidnapped bullfighter — a **static, single-frame GOAL figure**
+standing beside the bull on the top platform (the player rescues him to win). No animation, no
+in-game rig: one `Image("matador")` in `GameView.matadorSprite`. Same store/license lane as the
+dancer: CGTrader vfxsinghbu **"Matador - Bullfighter Rigged"** (#5905689, CGTrader Royalty-Free /
+no-AI, `asset-licenses/cgtrader-matador.txt`), a Daz **Genesis 8 Male**. Only the rendered PNG
+ships; the raw `.blend/.fbx/.rar` stay git-ignored.
+
+### Pipeline: `gen_matador.py` → `render_sprites.py --matador`
+
+```bash
+# 1. raw purchase -> posed blend (clean scene + pose arms + place montera)
+blender -b tools/blender/source/matador.blend -P tools/blender/gen_matador.py
+# 2. posed blend -> one sprite PNG.  --view back = the FACE (the model faces -Y).
+blender -b tools/blender/source/matador_posed.blend -P tools/blender/render_sprites.py -- \
+    --actor matador --action idle --frames 1 --size 512 --view back \
+    --toon --matador --outline --out tools/blender/renders
+# 3. crop + name -> dist/matador_idle_1.png (records the WxH crop box)
+tools/blender/pack_or_rename.sh rename matador idle
+# 4. -> Conjugar/Assets.xcassets/Game/matador.imageset/matador.png  (single universal asset)
+```
+
+- **`gen_matador.py`** cleans the raw scene (drops ~25 junk objects + the cape, hides the heavy
+  vendor hair — hidden `hide_render` meshes are now skipped by the renderer so they neither draw
+  nor inflate the auto-fit), then poses the figure. **The Daz rig has IK constraints that
+  override FK**, so posing the arms does nothing until the script **clears all 255 pose-bone
+  constraints** and re-poses the arms **hands-on-hips in pure FK**. It also **repositions/scales
+  the montera** (a vertex-level reposition) onto the head, raised so the eyes + a little forehead
+  show. Output: `source/matador_posed.blend`.
+- **`--matador`** is a per-garment cel mode (requires `--toon`). Because Genesis-8 splits the
+  outfit into separate garment meshes, `MATADOR_MESH_COLORS` maps mesh-name substrings to colors:
+  jacket/pants **blue**, vest/hat **gold**, socks **pink**, shoes **dark-red** (= `red × 0.60`,
+  the bull's hoof color), shirt **cream**, body **skin**. The **Cape mesh is deleted** in
+  `gen_matador.py`, not colored. Marked forms are lowercased before the model (irrelevant here —
+  that's the tutor path — but the palette added the `blue/pink/skin/cream` hues).
+- **`--view back` shows the FACE** — the Genesis-8 model faces **−Y** (so `--view front` shows
+  his back). He renders **front-on**, hands on hips; unlike the side-rendered dancer/bull he is
+  therefore **never mirrored** in `GameView`.
+- **Resolution: 512 + `.interpolation(.high)`** (the bull lesson) — he displays fairly large
+  beside the bull, so a 512 render downscaled with smooth interpolation keeps the face/montera
+  and the Freestyle outline crisp; nearest-neighbor frays the outline.
+- **Crop box → `GameView` constants** (the recurring coupling): the union crop is **188×452**;
+  `GameView` holds a constant `matadorVisualHeight` and derives width from `188/452`, with a feet
+  offset planting his shoes on `Platform.surfaceY`. Re-capture the box from `pack_or_rename.sh` if
+  he's ever re-rendered — don't reuse the dancer/bull numbers.
+- **For a future animated matador** (Josh asked): the mesh is fully rigged. Restore/drive the Daz
+  IK targets (`lHand_IK` / `rHand_IK`) or hand-key FK like `gen_dancer_action.py`, then render N
+  frames through `render_sprites.py --matador` and extend `matadorSprite` to a flipbook.

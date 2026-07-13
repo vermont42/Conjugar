@@ -163,6 +163,26 @@ struct GameView: View {
     facing >= 0 ? -1 : 1
   }
 
+  // The matador — the kidnapped bullfighter, a STATIC one-frame goal figure standing
+  // beside the bull on the top platform (`Image("matador")`). Same visual/collision
+  // split as the dancer and bull: the rendered sprite is taller than the 40pt
+  // `bullfighterSize` collision box, so it overhangs upward with its feet (the crop's
+  // lowest pixel) aligned to the box bottom — which `GameState` sits on the platform
+  // surface. Rendered front-on (`--view back` = the face), hands on hips, so — unlike
+  // the dancer/bull side renders — he is NEVER mirrored.
+  //
+  // Union-crop pixel dims (W, H) from `pack_or_rename.sh` (512-render, --matador cel +
+  // outline-width 2). Displayed at a constant visual height, width from the aspect —
+  // the same crop-px→pt discipline as the bull; don't guess, re-capture if re-rendered.
+  private static let matadorCrop: (w: CGFloat, h: CGFloat) = (188, 452)
+  /// A standing man reads a touch taller than the bull's back (bull idle ≈ 72pt tall on
+  /// screen), planted beside it. Tuned by eye against the bull in `conjugar://game`.
+  private static let matadorVisualHeight: CGFloat = 74
+  private static var matadorWidth: CGFloat { matadorVisualHeight * (matadorCrop.w / matadorCrop.h) }
+  /// Align the tall sprite's bottom (his shoes) with the collision box bottom (the
+  /// platform surface), mirroring `bullFeetOffset` / `dancerFeetOffset`.
+  private static let matadorFeetOffset: CGFloat = -(matadorVisualHeight - GameState.bullfighterSize) / 2
+
   var body: some View {
     GeometryReader { geo in
       TimelineView(.animation) { timeline in
@@ -225,9 +245,7 @@ struct GameView: View {
           .position(x: flag.x, y: flag.y)
       }
 
-      Text(GameState.bullfighterEmoji)
-        .font(.system(size: 34))
-        .position(x: gameState.bullfighterX, y: gameState.bullfighterY)
+      matadorSprite
 
       bullSprite
       playerSprite
@@ -298,6 +316,25 @@ struct GameView: View {
     }
     .frame(width: GameState.bullSize, height: GameState.bullSize)
     .position(x: gameState.bullX, y: gameState.bullY)
+  }
+
+  // TODO(matador escape beat): the full design has the bull escape UPWARD with the
+  // bullfighter the first four times the player summits (see prompts/game.md). Wiring
+  // the matador to ride along with that escape — and the final fight scene — is a
+  // follow-up; today he's a static goal figure.
+  /// The captive matador — a single static frame beside the bull on the top platform.
+  /// Displayed at a constant height with width from the render aspect (like the dancer),
+  /// feet planted on the girder; front-facing, so no mirroring. `.interpolation(.high)`
+  /// smooths the 512→display downscale (nearest-neighbor frays the cel outline — the
+  /// bull lesson).
+  private var matadorSprite: some View {
+    Image("matador")
+      .resizable()
+      .interpolation(.high)
+      .scaledToFit()
+      .frame(width: Self.matadorWidth, height: Self.matadorVisualHeight)
+      .offset(y: Self.matadorFeetOffset)
+      .position(x: gameState.bullfighterX, y: gameState.bullfighterY)
   }
 
   /// A small facing indicator at the top edge — we don't mirror the number (a

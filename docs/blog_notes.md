@@ -4525,3 +4525,53 @@ stalls, since rig topology — not texture — is the failure mode AI-gen keeps 
   `dancerWalkBobProfile`. Applies to both `.walk` and `.capeWalk` (shared 6-frame cadence).
 - Build green; live-verified the walk still renders planted and correctly sized. The bob is
   1 pt (3 device px) — deliberately subtle, judged in motion rather than a static frame.
+
+## 2026-07-12 — Matador goal figure: the kidnapped bullfighter is a sprite now
+
+The game is Donkey-Kong-shaped: the flamenco **dancer** is the player, the **bull** is the
+antagonist on the top platform, and — per `prompts/game.md` — "next to the bull is a
+bullfighter that the bull kidnapped." That bullfighter had been a placeholder **🤺 fencer
+emoji**. He's now a real rendered sprite standing beside the bull, matching the dancer/bull's
+cel look. He is a **static, single-frame GOAL figure** — no animation, no in-game rig, just one
+`Image("matador")`.
+
+- **Sourced the male counterpart to the dancer.** CGTrader vfxsinghbu **"Matador - Bullfighter
+  Rigged"** (#5905689, $42.50, CGTrader Royalty-Free / no-AI) — a Daz **Genesis 8 Male**, same
+  store/license lane as the dancer. Because Genesis-8 separates the outfit into distinct garment
+  meshes, the render needed a new **`--matador` per-garment cel mode** in `render_sprites.py`
+  (`MATADOR_MESH_COLORS`): jacket/pants **blue** (dominant — so he's neither the gold dancer nor
+  the red bull), vest/montera **gold**, socks **pink**, shoes **dark-red = the bull's hoof color**
+  (a deliberate quote), shirt cream, body skin. New palette hues `blue/pink/skin/cream` joined
+  the existing `gold/red`.
+- **The pose fought the rig.** The Daz figure ships with **IK constraints** that override FK, so
+  posing the arms did nothing until `gen_matador.py` **cleared all 255 pose-bone constraints**
+  and re-posed the arms **hands-on-hips in pure FK**. Same script drops ~25 junk objects + the
+  cape, hides the heavy vendor hair, and repositions/scales the **montera** onto the head. Three
+  tweak rounds with Josh to land it: hands-on-hips (not "holding reins"), a solid montera, and
+  the montera raised so the eyes + a little forehead show.
+- **`--view back` = the FACE.** The Genesis-8 model faces **−Y**, so the front-on render is
+  `--view back` (front-facing goal figure — hence, unlike the side-rendered dancer/bull, he is
+  **never mirrored** in `GameView`).
+- **Rendered at `--size 512`** (the bull's resolution lesson: he displays fairly large next to
+  the bull, so 512 + `.interpolation(.high)` keeps the face/montera/outline crisp on device).
+  Union-crop **188×452** from `pack_or_rename.sh` → `matador.imageset`. As always the crop box
+  drives the `GameView` size constants — don't guess.
+- **Placement (`GameView`).** Replaced the `Text(GameState.bullfighterEmoji)` block with a
+  `matadorSprite`: constant `matadorVisualHeight = 74` pt, width from the render aspect (like the
+  dancer), a feet offset so his shoes plant on the top girder's surface. He sits at the existing
+  `bullfighterX = w*0.72`, to the right of the bull (`w*0.4`) — captive beside captor. Verified
+  live in `conjugar://game` (screenshot: `docs/screenshots/matador-beside-bull.png`).
+- **Emoji cleanup.** With the matador and cape both rendered sprites now, the placeholder-art
+  constants `bullfighterEmoji` (🤺) and `capeEmoji` (🧣) and their glyph-warms were deleted;
+  only the flag emojis remain as emoji (the "Placeholder art" MARK is gone).
+- **Credits: none, by design.** The bull is credited in the Info ▸ Credits "Game Art" section
+  *because CC BY requires it*. The matador — like the **dancer**, its CGTrader Royalty-Free
+  sibling — requires **no attribution**, so it gets no credit line, matching the dancer's
+  treatment exactly. License logged at `asset-licenses/cgtrader-matador.txt` with the Genesis-8
+  render-only note; raw `.blend/.fbx/.rar` stay git-ignored (only the PNG ships).
+- **Follow-ups, deliberately not built here** (a `// TODO(matador escape beat)` marks the spot):
+  the full design has the bull **escape upward carrying the bullfighter** the first four times
+  the player summits, then a final fight scene. Wiring the matador to ride along with the bull's
+  escape — and the fight — is later work. Today he's a static goal figure. He's also fully
+  rigged, so a future *animated* matador can restore the Daz IK targets (`lHand_IK`/`rHand_IK`)
+  or hand-key FK like the dancer, then render N frames through `render_sprites.py --matador`.
