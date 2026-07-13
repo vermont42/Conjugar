@@ -38,7 +38,7 @@ struct GameView: View {
 
   /// Player actions backed by real rendered sprites (`dancer_<action>_<frame>`).
   /// All five are rendered; the numbered-box fallback stays only as a safety net.
-  private static let spriteActions: Set<PlayerAction> = [.idle, .walk, .climb, .jump, .cape]
+  private static let spriteActions: Set<PlayerAction> = [.idle, .walk, .climb, .jump, .cape, .capeWalk]
 
   /// The asset-name stem for each action: `dancer_<name>_<frame>`.
   private static func actionName(_ action: PlayerAction) -> String {
@@ -48,6 +48,7 @@ struct GameView: View {
     case .climb: return "climb"
     case .jump: return "jump"
     case .cape: return "cape"
+    case .capeWalk: return "capeWalk"
     }
   }
 
@@ -63,7 +64,8 @@ struct GameView: View {
     case .walk: aspect = 122.0 / 226.0
     case .climb: aspect = 172.0 / 228.0
     case .jump: aspect = 108.0 / 225.0
-    case .cape: aspect = 106.0 / 229.0
+    case .cape: aspect = 152.0 / 225.0        // wider: muleta held out in front
+    case .capeWalk: aspect = 155.0 / 227.0
     }
     return dancerVisualHeight * aspect
   }
@@ -163,10 +165,21 @@ struct GameView: View {
       Color.customBackground.ignoresSafeArea()
 
       ForEach(gameState.platforms) { platform in
-        RoundedRectangle(cornerRadius: 3)
-          .fill(Color.customRed)
-          .frame(width: platform.rect.width, height: platform.rect.height)
-          .position(x: platform.rect.midX, y: platform.rect.midY)
+        Group {
+          RoundedRectangle(cornerRadius: 3)
+            .fill(Color.customRed)
+            .frame(width: platform.rect.width, height: platform.rect.height)
+            .position(x: platform.rect.midX, y: platform.rect.midY)
+          // A thin dotted yellow "mortar" line along the platform's TOP edge, so the
+          // red girder reads as a course of brick. An explicitly-framed shape + a
+          // .position places it reliably (an .overlay(alignment:) on the flexible
+          // rectangle ignored .top, and a bare Path in the ZStack didn't render).
+          HLine()
+            .stroke(Color.customYellow,
+                    style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [2, 4]))
+            .frame(width: platform.rect.width - 6, height: 2)
+            .position(x: platform.rect.midX, y: platform.rect.minY + 1)
+        }
       }
 
       ForEach(gameState.ladders) { ladder in
@@ -175,9 +188,16 @@ struct GameView: View {
 
       ForEach(gameState.capes) { cape in
         if !cape.collected {
-          Text(GameState.capeEmoji)
-            .font(.system(size: 28))
-            .position(x: cape.x, y: cape.y)
+          // The pickup is the same red muleta the dancer carries (rendered sprite,
+          // was a 🧣 emoji). Drawn at 60% of capeSize so it matches the carried cape's
+          // apparent size, with its hem sitting on the platform surface (the collision
+          // box stays the full capeSize, centered on cape.y).
+          let pickupHeight = GameState.capeSize * 0.6
+          Image("cape_pickup")
+            .resizable()
+            .scaledToFit()
+            .frame(width: pickupHeight * (188.0 / 229.0), height: pickupHeight)
+            .position(x: cape.x, y: cape.y + GameState.capeSize * 0.2)
         }
       }
 
@@ -215,6 +235,10 @@ struct GameView: View {
           .frame(width: Self.dancerWidth(action), height: Self.dancerVisualHeight)
           .scaleEffect(x: Self.dancerMirror(action, facing: gameState.playerFacing), y: 1)
           .offset(y: Self.dancerFeetOffset)
+          // The muleta is part of the caped sprite now, so the about-to-expire
+          // warning is a flash of the whole caped pose (was a separate 🧣 emoji):
+          // during the expiry blink `isCaped` stays true but `isCapeVisible` toggles.
+          .opacity(gameState.isCaped && !gameState.isCapeVisible ? 0.4 : 1)
       } else {
         // Numbered-box fallback (safety net; unused for the player today).
         RoundedRectangle(cornerRadius: 6)
@@ -223,11 +247,6 @@ struct GameView: View {
           .font(.system(size: 18, weight: .bold, design: .monospaced))
           .foregroundStyle(.white)
         facingChevron(gameState.playerFacing, tint: .white)
-      }
-      if gameState.isCapeVisible {
-        Text(GameState.capeEmoji)
-          .font(.system(size: 22))
-          .offset(y: -GameState.playerHeight / 2 - 4)
       }
     }
     .frame(width: GameState.playerWidth, height: GameState.playerHeight)
@@ -411,5 +430,17 @@ struct GameView: View {
           .onEnded { _ in jumpHeld = false }
       )
       .accessibilityLabel(L.Game.jump)
+  }
+}
+
+/// A horizontal line across its frame's width (used as the dotted "mortar" line on
+/// each brick platform). A plain `Shape` draws reliably inside its own frame, unlike a
+/// `Path` with absolute coordinates dropped into a `ZStack`.
+private struct HLine: Shape {
+  func path(in rect: CGRect) -> Path {
+    var path = Path()
+    path.move(to: CGPoint(x: rect.minX, y: rect.midY))
+    path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+    return path
   }
 }

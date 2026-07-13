@@ -4464,3 +4464,49 @@ stalls, since rig topology — not texture — is the failure mode AI-gen keeps 
   mid-stride (mirrored), jump airborne as a cone, climb from behind on a ladder, and cape (after
   collecting the 🧣 pickup) as the arms-raised flourish. Build green. Raw FBX/textures stay
   git-ignored; only the 13 PNGs + `gen_dancer_action.py` ship.
+
+## 2026-07-12 — Cape reworked: a held muleta (swing while still, hold-in-front while walking)
+
+- **Reframed the cape from a worn overlay to a held prop** (Josh's vision): the dancer holds
+  a red muleta in front of her — **swinging it up and down while standing still**, and
+  **holding it out in front while walking**. Replaced the earlier arms-raised "flourish" cape.
+- **Two new caped animations, hand-keyed** (`gen_dancer_action.py`): `cape` (4, standing swing)
+  and a new `capeWalk` (6, hold-in-front over the shipped walk's leg cadence). Added a
+  scripted **muleta** mesh — a flared red cloth that hangs down+forward — that is **keyframed to
+  the hand midpoint each frame** (not skinned), so the arm swing carries the cape up and down.
+- **Two-material cel render:** `render_sprites.py --cape` paints the `Muleta` mesh **red** and
+  everything else **gold** (same trick as the bull accents), so the cape stays in the cel look
+  and moves with her hands. `pack_or_rename` boxes: cape **152×225**, capeWalk **155×227** —
+  wider than the other actions (the muleta juts forward), same ~226 height.
+- **Axis gotcha:** the arms first swung the cape *behind* her. Probed the rig — front is **−Y**,
+  and **negative** world-X swings the arm up-and-**forward** (positive throws it back). Flipped
+  the sign; measured, didn't guess.
+- **Game state:** added `PlayerAction.capeWalk` (`playerFrameCounts` 6) and a branch in
+  `derivedPlayerAction` — `isCaped && walking → .capeWalk`, else `walking → .walk`; standing +
+  caped → `.cape`. Retired the little 🧣-emoji overlay on the player (the cape is in the sprite
+  now); the about-to-expire warning is now a **flash of the whole caped pose** (`isCaped &&
+  !isCapeVisible → opacity 0.4`), preserving the blink signal without a separate glyph.
+- **Live-verified** in `conjugar://game`: collected the pickup, stood → muleta swings in front;
+  walked → muleta held out front, correctly mirrored by facing; let it lapse → reverts to the
+  plain gown walk (expiry works). Build green. The platform 🧣 pickup stays an emoji for now.
+
+## 2026-07-12 — Cape pickup: the muleta replaces the 🧣 "ribbon" on the map
+
+- Swapped the platform cape pickup from the 🧣 emoji to a **rendered red muleta** (new
+  `gen_muleta_pickup.py` builds the standalone cloth; `render_sprites.py --cape` paints it
+  red), so the collectible matches the muleta the dancer carries. Standalone it needed real
+  cloth character to read (a flat trapezoid looked like a flag), so the mesh got a flared body,
+  a top fold, a forward curl, and a scalloped hem.
+- Drawn at **60% of capeSize, sitting on the platform** (per Josh) so it matches the carried
+  cape's apparent size; the collision box stays the full capeSize centered on `cape.y`, so
+  collection is unchanged.
+
+## 2026-07-12 — Brick platforms: a dotted gold "mortar" line
+
+- Added a thin **dotted yellow line along each platform's top edge** (the walking surface, per
+  Josh) so the red girders read as courses of brick rather than flat bars. Implemented as an
+  explicitly-framed `HLine` shape `.position`ed at `platform.rect.minY`, dashed gold
+  (`customYellow`, `dash [2,4]`, round cap). Two dead ends first: a bare `Path` with absolute
+  coords in the `ZStack` silently didn't render (a `Shape` only lays out reliably inside its
+  own frame), and `.overlay(alignment: .top)` on the flexible rectangle ignored the alignment
+  (kept drawing at the bottom) — an explicit `.frame` + `.position` is what works.

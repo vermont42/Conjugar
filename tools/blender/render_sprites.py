@@ -90,6 +90,9 @@ def parse_args():
                         "NOTE: inflates every silhouette -> GameView crop constants change.")
     p.add_argument("--outline-width", type=float, default=2.0,
                    help="Freestyle outline thickness in output px (at --size; 2 ≈ 1px on-screen).")
+    p.add_argument("--cape", action="store_true",
+                   help="Dancer two-material cel: meshes named Muleta/Cape render as RED "
+                        "cel, every other mesh as --color (gold). For the held-cape actions.")
     p.add_argument("--realistic", action="store_true",
                    help="Rendered-realistic mode (the inverse of --toon): KEEP the mesh's "
                         "PBR materials, light with a 3-point + rim rig, AgX view transform, "
@@ -538,6 +541,19 @@ def apply_cel_material(meshes, color_rgba, bands=2):
     return mat
 
 
+def apply_dancer_cape_materials(meshes, body_rgba, cape_rgba, bands=2):
+    """Two-material cel for the caped dancer: the muleta mesh renders RED, the gown
+    and body render gold (`--color`). Per-OBJECT split by name (the cape is a separate
+    mesh the generator adds), which is simpler than the bull's per-polygon partition.
+    Same banded-cel language for both, so the held cape stays in the cel look."""
+    body = build_cel_material("DancerCelBody", body_rgba, bands=bands)
+    cape = build_cel_material("DancerCelCape", cape_rgba, bands=bands)
+    for obj in meshes:
+        is_cape = any(k in obj.name for k in ("Muleta", "Cape"))
+        obj.data.materials.clear()
+        obj.data.materials.append(cape if is_cape else body)
+
+
 # ---- bull cel accents (Phase 0 Part A of the paid-asset spike) --------------
 #
 # The flat single-material cel above renders the bull as one flat red mass — it
@@ -782,6 +798,10 @@ def main():
                 counts = apply_bull_accents(meshes, PALETTE[args.color],
                                             bands=args.bands, horn_style=args.horn_style)
                 print(f"[render_sprites] bull accents ({args.horn_style} horn): {counts}")
+            elif args.cape:
+                apply_dancer_cape_materials(meshes, PALETTE[args.color], PALETTE["red"],
+                                            bands=args.bands)
+                print("[render_sprites] dancer cape: gold body + red muleta")
             else:
                 apply_cel_material(meshes, PALETTE[args.color], bands=args.bands)
             if args.outline:

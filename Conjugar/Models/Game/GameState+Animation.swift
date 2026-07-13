@@ -14,7 +14,7 @@ import CoreGraphics
 extension GameState {
   /// Reasonable placeholder frame counts per action.
   static let playerFrameCounts: [PlayerAction: Int] = [
-    .idle: 2, .walk: 6, .climb: 4, .jump: 3, .cape: 4
+    .idle: 2, .walk: 6, .climb: 4, .jump: 3, .cape: 4, .capeWalk: 6
   ]
   static let bullFrameCounts: [BullAction: Int] = [
     .idle: 2, .walk: 6, .throw: 5
@@ -48,7 +48,8 @@ extension GameState {
   private func derivedPlayerAction() -> PlayerAction {
     if playerClimbing { return .climb }
     if !playerGrounded { return .jump }
-    if movingLeft != movingRight { return .walk }   // exactly one horizontal held
+    // Caped: hold the muleta out in front while walking, swing it up/down while still.
+    if movingLeft != movingRight { return isCaped ? .capeWalk : .walk }
     if isCaped { return .cape }
     return .idle
   }

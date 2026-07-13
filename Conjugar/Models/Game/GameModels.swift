@@ -56,7 +56,7 @@ struct CapePickup: Identifiable {
 
 /// Which frame-count table the player's placeholder flipbook cycles through.
 enum PlayerAction {
-  case idle, walk, climb, jump, cape
+  case idle, walk, climb, jump, cape, capeWalk
 }
 
 /// Which frame-count table the bull's placeholder flipbook cycles through.

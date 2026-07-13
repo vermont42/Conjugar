@@ -163,9 +163,10 @@ tools/blender/pack_or_rename.sh sheet dancer walk "" "" 96
 
 ### The dancer's full action set (done)
 
-All five player actions ship as rendered sprites — `idle` (2), `walk` (6), `climb`
-(4), `jump` (3), `cape` (4). They are **no longer Mixamo mocap on the X Bot
-mannequin**: the dancer is now the purchased **flamenco-gown** mesh (Animod, CGTrader
+The player actions ship as rendered sprites — `idle` (2), `walk` (6), `climb` (4),
+`jump` (3), and the two **held-muleta** cape actions `cape` (4, standing swing) and
+`capeWalk` (6, hold-in-front while walking). They are **no longer Mixamo mocap on the
+X Bot mannequin**: the dancer is now the purchased **flamenco-gown** mesh (Animod, CGTrader
 — `asset-licenses/cgtrader-flamenco-dancer.txt`), hand-keyed on its own 63-bone
 Mixamo-named rig by `gen_dancer_action.py` (see **Hand-keying the gown dancer** below).
 Notes that held across the set:
@@ -218,6 +219,14 @@ the hard way and must not regress:
 - **The `[1,1557]` trap:** the vendor FBX ships a long baked clip; `animation_data_clear()`
   before keying and export with `bake_anim_use_all_actions=False`, or every frame samples
   a static tail.
+- **The held muleta (cape actions).** For `cape`/`capeWalk`, `make_muleta()` builds a flared
+  red cloth (hangs down+forward, in the Y-Z plane so the side camera sees its face) and the
+  frame loop **keyframes its LOCATION to the hand midpoint** (not skinned) — the arm swing
+  then carries it up/down. Render with `render_sprites.py --cape`, which paints the `Muleta`
+  mesh **red** and every other mesh **gold** (a two-material cel, like the bull accents). The
+  boxes are wider than the other actions (the muleta juts forward): cape 152, capeWalk 155.
+  **Front is −Y; NEGATIVE world-X swings the arms up-and-forward** (positive throws them
+  back — which first put the cape behind her). Measure with a probe, don't guess the sign.
 
 ## `--toon` cel look + `--outline` (done, 2026-07-11)
 

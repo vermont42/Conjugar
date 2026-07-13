@@ -9,13 +9,16 @@ HIDDEN (shoe mesh deleted), animate the gown+torso with world-space bone rotatio
 keyed from rest each frame. Skeleton is the vendor's own 63-bone Mixamo-named rig;
 the skirt (MASkirt_03) is skinned to hips+legs, so subtle leg motion sways the hem.
 """
-import bpy, math, sys
-from mathutils import Matrix
+import bpy, bmesh, math, sys
+from mathutils import Matrix, Vector
 
 argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 ACTION = argv[argv.index("--action") + 1] if "--action" in argv else "idle"
 
-FRAMES = {"idle": 2, "jump": 3, "cape": 4, "climb": 4}[ACTION]
+FRAMES = {"idle": 2, "jump": 3, "cape": 4, "capeWalk": 6, "climb": 4}[ACTION]
+# Actions where the dancer holds a red muleta in front of her (rendered by
+# render_sprites.py --cape as a second, red cel material on the "Muleta" mesh).
+CAPE_ACTIONS = {"cape", "capeWalk"}
 SRC = "tools/blender/source/Flamenco_Dancer.fbx"
 OUT = f"tools/blender/source/dancer_{ACTION}_gown.fbx"
 
@@ -75,6 +78,40 @@ def hipZ(dz):
     bpy.context.view_layer.update()
 
 
+def hand_world(bone):
+    """World-space position of a hand bone head (armature carries a 0.0254 scale +
+    90°-X import rotation, so go through matrix_world, not the pose matrix alone)."""
+    return (arm.matrix_world @ PB[bone].matrix).translation
+
+
+def make_muleta():
+    """A stylized red muleta (matador's cape): a flared cloth that hangs DOWN (−Z) and
+    FORWARD (−Y, the way she faces) from its origin, so placing the origin at her hands
+    each frame drapes the cape in front of her. Built in the Y-Z plane (normal ±X) so
+    the side camera sees its full face; a tiny X billow keeps the cel shading from
+    reading as a degenerate edge. Not skinned — the frame loop keyframes its LOCATION
+    to follow the hands, so the arm swing carries the cape up and down."""
+    me = bpy.data.meshes.new("Muleta")
+    obj = bpy.data.objects.new("Muleta", me)
+    scene.collection.objects.link(obj)
+    bm = bmesh.new()
+    nx, nz, W, H = 4, 6, 0.30, 0.62
+    grid = [[None] * (nz + 1) for _ in range(nx + 1)]
+    for i in range(nx + 1):
+        for k in range(nz + 1):
+            fy, fz = i / nx, k / nz
+            y = -W * fy * (0.65 + 0.6 * fz)     # flare wider toward the hanging bottom
+            z = -H * fz
+            x = 0.03 * math.sin(fz * math.pi)   # slight billow so it isn't edge-on flat
+            grid[i][k] = bm.verts.new((x, y, z))
+    for i in range(nx):
+        for k in range(nz):
+            bm.faces.new((grid[i][k], grid[i + 1][k], grid[i + 1][k + 1], grid[i][k + 1]))
+    bm.to_mesh(me)
+    bm.free()
+    return obj
+
+
 # Per-action driven-bone sets + angle logic. All rotations absolute-from-rest.
 if ACTION == "idle":
     driven = ['Spine', 'Spine1', 'Hips']
@@ -108,25 +145,41 @@ elif ACTION == "jump":
         hipZ(s['hipz'])
 
 elif ACTION == "cape":
-    driven = ['Spine', 'Spine1', 'Spine2',
-              'LeftArm', 'LeftForeArm', 'RightArm', 'RightForeArm',
-              'LeftUpLeg', 'RightUpLeg']
+    # Standing still, holding the muleta in front and SWINGING it up and down (a
+    # veronica-style pass). Arms sweep fore/up so the hands — and the cape keyframed
+    # to follow them — rise and fall. Legs neutral (she's planted).
+    driven = ['Spine', 'LeftArm', 'LeftForeArm', 'RightArm', 'RightForeArm']
 
     def pose(i):
         p = 2 * math.pi * (i - 1) / FRAMES
-        # torso rock
-        worldX('Spine', 4 * math.sin(p))
-        worldX('Spine1', 3 * math.sin(p))
-        worldX('Spine2', 2 * math.sin(p))
-        # flamenco arm flourish: both arms raised overhead, curved forearms, sweeping
-        araise = 125 + 22 * math.sin(p)
-        worldX('LeftArm', araise)
-        worldX('LeftForeArm', 40)
-        worldX('RightArm', araise - 18)
-        worldX('RightForeArm', 40)
-        # skirt sway (opposite-phase legs → hem swings fore/aft in profile)
-        worldX('LeftUpLeg', 7 * math.sin(p))
-        worldX('RightUpLeg', -7 * math.sin(p))
+        # NEGATIVE worldX swings the arms up-and-FORWARD (−Y, the way she faces);
+        # positive would throw them up-and-back. Sweep ~−40°..−110° = cape low↔high.
+        swing = -(46 + 30 * math.sin(p))    # arms held forward, sweep ~−16°..−76°
+        worldX('LeftArm', swing)
+        worldX('LeftForeArm', -50)
+        worldX('RightArm', swing)
+        worldX('RightForeArm', -50)
+        worldX('Spine', -3 * math.sin(p))   # slight torso follow-through
+
+elif ACTION == "capeWalk":
+    # Walking while holding the muleta out in front (steadier than the swing). Arms
+    # hold forward with a small bob; legs reuse the shipped walk's subtle sway so the
+    # skirt hem swishes exactly like the capeless walk (they must read as one gait).
+    driven = ['LeftArm', 'LeftForeArm', 'RightArm', 'RightForeArm',
+              'LeftUpLeg', 'LeftLeg', 'RightUpLeg', 'RightLeg', 'Hips']
+
+    def pose(i):
+        p = 2 * math.pi * (i - 1) / FRAMES
+        hold = -(70 + 6 * math.sin(p))      # arms forward (−Y), small bob
+        worldX('LeftArm', hold)
+        worldX('LeftForeArm', -35)
+        worldX('RightArm', hold)
+        worldX('RightForeArm', -35)
+        worldX('LeftUpLeg', 10 * math.sin(p))
+        worldX('LeftLeg', 18 * max(0.0, math.sin(p - math.pi / 2)))
+        worldX('RightUpLeg', 10 * math.sin(p + math.pi))
+        worldX('RightLeg', 18 * max(0.0, math.sin(p + math.pi / 2)))
+        hipZ(-0.025 * abs(math.sin(p)))
 
 elif ACTION == "climb":
     driven = ['LeftArm', 'LeftForeArm', 'RightArm', 'RightForeArm',
@@ -149,6 +202,8 @@ elif ACTION == "climb":
 else:
     sys.exit(f"unknown action {ACTION}")
 
+muleta = make_muleta() if ACTION in CAPE_ACTIONS else None
+
 for i in range(1, FRAMES + 1):
     scene.frame_set(i)
     reset(driven)
@@ -156,6 +211,13 @@ for i in range(1, FRAMES + 1):
     for b in driven:
         PB[b].keyframe_insert('rotation_quaternion', frame=i)
         PB[b].keyframe_insert('location', frame=i)
+    if muleta is not None:
+        # Drape the cape from the hands: origin at the hand midpoint, nudged forward
+        # (−Y) so it hangs clearly in front of the gown. Follows the arm swing.
+        hold = (hand_world('LeftHand') + hand_world('RightHand')) / 2
+        hold += Vector((0.0, -0.06, 0.02))
+        muleta.location = hold
+        muleta.keyframe_insert('location', frame=i)
 
 bpy.ops.object.mode_set(mode='OBJECT')
 scene.frame_start = 1
