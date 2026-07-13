@@ -239,6 +239,9 @@ final class GameState {
   var freezeTimer: Double = 0
   /// One rear-up flourish per showboat, fired at its midpoint.
   var showboatDidRear = false
+  /// The 🔥 freeze fake-out's correct input is *nothing*, and no button says so —
+  /// so the first freeze slot of each boss run pops a "🔥 = ¡quieta!" hint.
+  var didShowFreezeHint = false
   /// One-shot dance-burst countdowns (the `bullThrowTimer` pattern): while > 0 the
   /// commanded action plays, then the actor falls back to idle.
   var playerMoveTimer: Double = 0
@@ -390,6 +393,7 @@ final class GameState {
     echoTotal = 1
     freezeTimer = 0
     showboatDidRear = false
+    didShowFreezeHint = false
     playerMoveTimer = 0
     bullMoveTimer = 0
     screenShake = 0

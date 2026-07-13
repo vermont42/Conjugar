@@ -206,6 +206,36 @@ struct GameBossTests {
     #expect(gameState.banked == 3)
   }
 
+  /// Echo correct moves until the freeze slot is the current one (the moment the
+  /// hint would pop), without consuming the freeze itself.
+  private func playUntilFreezeCurrent(_ gameState: GameState) {
+    var safety = 0
+    while case .playerEcho(let step) = gameState.duelState, safety < 10 {
+      safety += 1
+      if gameState.phraseSequence[step] == .freeze { return }
+      gameState.danceInput(gameState.phraseSequence[step])
+    }
+  }
+
+  @Test func firstFreezeSlotPopsTheQuietaHintOnce() {
+    let gameState = duelReady()
+    gameState.banked = 4
+    gameState.startPhrase()
+    advanceToEcho(gameState)
+    playUntilFreezeCurrent(gameState)
+    #expect(gameState.jaleoPops.contains { $0.text.contains("¡quieta!") })
+    #expect(gameState.didShowFreezeHint)
+
+    // A later freeze phrase relies on memory — no second hint.
+    completeEcho(gameState)                                 // finish this phrase
+    gameState.jaleoPops.removeAll()
+    gameState.banked = 4
+    gameState.startPhrase()
+    advanceToEcho(gameState)
+    playUntilFreezeCurrent(gameState)
+    #expect(!gameState.jaleoPops.contains { $0.text.contains("¡quieta!") })
+  }
+
   @Test func waitingOutFreezePassesAndBanks() {
     let gameState = duelReady()
     gameState.banked = 4

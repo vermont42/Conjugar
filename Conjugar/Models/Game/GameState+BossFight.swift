@@ -209,6 +209,12 @@ extension GameState {
   private func prepareEchoSlot(_ step: Int) {
     if phraseSequence[step] == .freeze {
       freezeTimer = Self.freezeHold
+      // Teach the fake-out at the moment it's actionable: the first freeze slot a
+      // player ever faces (per boss run) says what to do — nothing.
+      if !didShowFreezeHint {
+        didShowFreezeHint = true
+        spawnJaleo("🔥 = ¡quieta!", x: playerX, y: playerY - 84, size: 30)
+      }
     }
   }
 
