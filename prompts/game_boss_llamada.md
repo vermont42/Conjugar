@@ -225,7 +225,7 @@ boss clear. Tests assert the arithmetic; the scoring work item adds display/pers
 
 ---
 
-## Phase 1 — Mechanic core on existing art  [Claude]
+## Phase 1 — Mechanic core on existing art  [Claude] ✅ DONE (2026-07-13, commit 0ced969)
 
 The whole state machine, playable end-to-end with **reused animations only** (paso =
 walk bursts, ole ≈ cape, stomp ≈ jump pose, bull demos = walk/throw bursts) and SF-symbol
@@ -261,6 +261,14 @@ chips. This proves the fun before any Blender work.
   behavior untouched when `phase == .climb` (existing `GameStateTests` still green).
 - Build + tests via ios-build-verify; drive `CONJUGAR_GAME_START_BOSS=1` in the sim and
   play a full duel with axe taps. **Commit** ("Boss fight: La Llamada mechanic core").
+
+> **Done 2026-07-13** (commit `0ced969`, all of the above + 19-test `GameBossTests`
+> green with the full suite). One addition beyond spec: a third debug entry,
+> **`CONJUGAR_GAME_BOSS_BANKED`** (composes with `CONJUGAR_GAME_START_BOSS`), pre-fills
+> the Duende meter — `=5` starts one phrase from victory, which is how the win/end-scene
+> beats were verified live (grinding all six phrases over the AXe tap loop was too
+> slow even at `TIME_SCALE=0.1`). Session story + verification screenshots:
+> `docs/blog_notes.md` (2026-07-13 entry), `docs/screenshots/*boss-*`.
 
 ## Phase 2 — SFX pack + juice polish  [Claude, Josh auditions]
 
