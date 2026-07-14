@@ -86,9 +86,12 @@ extension GameState {
       spawnBullSpeech(L.Game.zombieAnnouncement)
       Current.soundPlayer.play(.zombieGroan, shouldDebounce: false)
     case .encierro:
-      // Announce only for now — Phase 4 spawns the 🐂 charger stampede in this window.
+      // El Encierro: a stampede of 🐂 chargers runs across the girders (updateChargers
+      // spawns them while this window is open, then lets stragglers finish crossing).
       spawnBullSpeech(L.Game.encierroAnnouncement)
       Current.soundPlayer.play(.stampede, shouldDebounce: false)
+      chargerSpawnTimer = 0                // the first charger enters on the next frame
+      encierroCoveredPlayerLevel = false   // guarantee one down the player's girder
     case .apagon:
       // Announce only for now — Phase 5 drives the lights-out spotlight in this window.
       spawnBullSpeech(L.Game.apagonAnnouncement)
@@ -104,9 +107,12 @@ extension GameState {
   }
 
   /// Cancel the active window WITHOUT re-arming — used by escape, boss entry, and
-  /// respawn (each rebuilds or re-arms the scheduler on its own).
+  /// respawn (each rebuilds or re-arms the scheduler on its own). Unlike a natural
+  /// window end (`endMechanic`), a cancel also clears any 🐂 chargers still crossing:
+  /// they belong to the interrupted climb, not the next stage / respawn.
   func cancelActiveMechanic() {
     finishActiveMechanic()
+    chargers.removeAll()
   }
 
   /// Shared teardown: undo a mechanic's live effects and clear the active state. The
@@ -193,5 +199,82 @@ extension GameState {
     obstacle.level = target.level + 1
     obstacle.falling = true
     obstacle.velocityY = 0
+  }
+
+  // MARK: El Encierro (the 🐂 charger stampede)
+
+  /// One frame of the charger stampede: spawn a fresh charger on its interval while the
+  /// encierro window is open (stragglers from a just-closed window keep crossing —
+  /// spawning stops but movement doesn't), then run every charger straight across its
+  /// girder at 2× the stage's obstacle speed, despawning any that clear a screen edge.
+  func updateChargers(dt: CGFloat) {
+    if activeMechanic == .encierro {
+      chargerSpawnTimer -= Double(dt)
+      if chargerSpawnTimer <= 0 {
+        spawnCharger()
+        chargerSpawnTimer = Self.chargerSpawnInterval
+      }
+    }
+
+    guard !chargers.isEmpty else { return }
+    let speed = obstacleSpeed * Self.chargerSpeedFactor
+    for i in chargers.indices {
+      chargers[i].x += chargers[i].direction * speed * dt
+    }
+    let margin = Self.chargerSize
+    chargers.removeAll { $0.x < -margin || $0.x > screenSize.width + margin }
+  }
+
+  /// Spawn one charger for the open encierro window. It targets the player's girder the
+  /// first time (so the stampede always threatens the player at least once), then random
+  /// girders (levels 0…top−1, never the bull's), entering from the screen edge opposite
+  /// its travel and snorting as it charges.
+  private func spawnCharger() {
+    let top = Self.levelCount - 1
+    let level: Int
+    if !encierroCoveredPlayerLevel && (0..<top).contains(playerLevel) {
+      level = playerLevel
+      encierroCoveredPlayerLevel = true
+    } else {
+      level = Int.random(in: 0..<top, using: &bossRNG)
+    }
+    let direction: CGFloat = Bool.random(using: &bossRNG) ? 1 : -1
+    let y = platforms[level].surfaceY - Self.chargerSize / 2
+    // Enter from the edge opposite the travel direction (rightward → from the left).
+    let startX = direction > 0 ? -Self.chargerSize / 2 : screenSize.width + Self.chargerSize / 2
+    chargers.append(Charger(id: chargerCounter, x: startX, y: y, level: level, direction: direction))
+    chargerCounter += 1
+    Current.soundPlayer.play(.snort, shouldDebounce: true, volume: 0.3)
+  }
+
+  /// Charger↔player collisions (called from `resolveCollisions`): the obstacle rules
+  /// with a tight `chargerHitSize` box — a cape smashes the 🐂 (chomp), otherwise it
+  /// costs a pip (soccer-kick) unless the damage cooldown is still up, and a lethal hit
+  /// soft-respawns. Returns `true` iff it respawned (so the caller can bail early).
+  func resolveChargerCollisions() -> Bool {
+    for i in chargers.indices {
+      let c = chargers[i]
+      guard rectsIntersect(
+        playerX, playerY, Self.playerWidth, Self.playerHeight,
+        c.x, c.y, Self.chargerHitSize, Self.chargerHitSize
+      ) else { continue }
+
+      if isCaped {
+        chargers[i].despawn = true                             // caped: smash the charger
+        Current.soundPlayer.play(.chomp, shouldDebounce: true)
+      } else if damageCooldown <= 0 {
+        health -= 1
+        damageCooldown = Self.damageCooldownDuration
+        chargers[i].despawn = true
+        if health <= 0 {
+          Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: false)
+          respawn()
+          return true
+        }
+        Current.soundPlayer.play(.soccerKick, shouldDebounce: false)
+      }
+    }
+    chargers.removeAll { $0.despawn }
+    return false
   }
 }

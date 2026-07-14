@@ -694,4 +694,118 @@ struct GameStateTests {
     #expect(gameState.activeMechanic == nil)
     #expect(GameState.mechanicFirstDelay.contains(gameState.mechanicCountdown))
   }
+
+  // MARK: El Encierro (Phase 4 — the 🐂 charger stampede)
+
+  /// A charger placed on the player, so it registers a hit in `resolveCollisions`.
+  private func chargerOnPlayer(_ gameState: GameState) -> Charger {
+    Charger(id: 0, x: gameState.playerX, y: gameState.playerY, level: 0, direction: 1)
+  }
+
+  @Test func encierroFirstChargerTargetsThePlayersGirder() {
+    let gameState = configured()
+    gameState.assignedMechanic = .encierro
+    gameState.playerLevel = 2
+    gameState.startMechanic()
+    gameState.updateChargers(dt: 1.0 / 60.0)   // window open → the first charger enters
+    #expect(gameState.chargers.count == 1)
+    #expect(gameState.chargers[0].level == 2)   // biased onto the player's girder
+  }
+
+  @Test func chargerCrossesAtDoubleStageObstacleSpeed() {
+    let gameState = configured()
+    gameState.stage = 3
+    // No active mechanic → `updateChargers` only moves the existing charger (no spawn).
+    gameState.chargers = [Charger(id: 0, x: 100, y: 200, level: 0, direction: 1)]
+    let dt: CGFloat = 1.0 / 60.0
+    let x0 = gameState.chargers[0].x
+    gameState.updateChargers(dt: dt)
+    let dx = gameState.chargers[0].x - x0
+    let expected = gameState.obstacleSpeed * GameState.chargerSpeedFactor * dt
+    #expect(abs(dx - expected) < 0.01)
+  }
+
+  @Test func chargerDespawnsAfterCrossingOffScreen() {
+    let gameState = configured()
+    gameState.chargers = [
+      Charger(id: 0, x: gameState.screenSize.width + GameState.chargerSize + 5, y: 200, level: 0, direction: 1)
+    ]
+    gameState.updateChargers(dt: 1.0 / 60.0)
+    #expect(gameState.chargers.isEmpty)
+  }
+
+  @Test func chargerHitCostsOnePipAndConsumesTheCharger() {
+    let gameState = configured()
+    gameState.damageCooldown = 0
+    let start = gameState.health
+    gameState.chargers = [chargerOnPlayer(gameState)]
+    gameState.resolveCollisions()
+    #expect(gameState.health == start - 1)
+    #expect(gameState.chargers.isEmpty)
+  }
+
+  @Test func chargerHitRespectsDamageCooldown() {
+    let gameState = configured()
+    gameState.damageCooldown = 0.5             // still cooling down from a prior hit
+    let start = gameState.health
+    gameState.chargers = [chargerOnPlayer(gameState)]
+    gameState.resolveCollisions()
+    #expect(gameState.health == start)         // no second hit during the cooldown
+    #expect(gameState.chargers.count == 1)     // and the charger keeps going
+  }
+
+  @Test func capedPlayerSmashesChargerWithoutDamage() {
+    let gameState = configured()
+    gameState.capedRemaining = 5
+    let start = gameState.health
+    gameState.chargers = [chargerOnPlayer(gameState)]
+    gameState.resolveCollisions()
+    #expect(gameState.health == start)
+    #expect(gameState.chargers.isEmpty)        // smashed
+  }
+
+  @Test func jumpClearingAChargerCostsNoHealth() {
+    let gameState = configured()
+    gameState.damageCooldown = 0
+    let start = gameState.health
+    // A charger below the honest hit box — a jump-arc's clearance the full box would
+    // have wrongly counted (mirrors `jumpClearingAnObstacleCostsNoHealth`).
+    let clearance = (GameState.playerHeight + GameState.chargerHitSize) / 2 + 2
+    gameState.chargers = [
+      Charger(id: 0, x: gameState.playerX, y: gameState.playerY + clearance, level: 0, direction: 1)
+    ]
+    gameState.resolveCollisions()
+    #expect(gameState.health == start)         // cleared — no damage
+    #expect(gameState.chargers.count == 1)     // charger untouched
+  }
+
+  @Test func encierroEndStopsSpawnsButStragglersKeepCrossing() {
+    let gameState = configured()
+    gameState.assignedMechanic = .encierro
+    gameState.startMechanic()
+    gameState.updateChargers(dt: 1.0 / 60.0)   // spawn the window's first charger
+    let strays = gameState.chargers.count
+    #expect(strays >= 1)
+
+    gameState.endMechanic()                    // window closes naturally
+    #expect(gameState.activeMechanic == nil)
+    #expect(gameState.chargers.count == strays)   // stragglers are NOT cleared
+
+    // With the window closed, no new chargers spawn — the field only empties as the
+    // stragglers cross off-screen.
+    gameState.chargers.removeAll()
+    for _ in 0..<120 { gameState.updateChargers(dt: 1.0 / 60.0) }
+    #expect(gameState.chargers.isEmpty)
+  }
+
+  @Test func cancelingEncierroClearsChargers() {
+    // A cancel path (here: respawn) clears in-flight chargers, unlike a natural end.
+    let gameState = configured()
+    gameState.assignedMechanic = .encierro
+    gameState.startMechanic()
+    gameState.updateChargers(dt: 1.0 / 60.0)
+    #expect(!gameState.chargers.isEmpty)
+    gameState.respawn()
+    #expect(gameState.chargers.isEmpty)
+  }
 }

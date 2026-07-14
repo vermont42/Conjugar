@@ -62,6 +62,20 @@ struct Obstacle: Identifiable {
   var despawn: Bool = false
 }
 
+/// A 🐂 charger in the El Encierro stampede (see GameState+Mechanics.swift, Phase 4):
+/// it runs straight across a single girder at 2× the stage's obstacle speed and
+/// despawns off-screen — no falling. Same damage/cape rules as an obstacle, with a
+/// tight `chargerHitSize` box. `direction` is +1 (moving right) / −1 (moving left);
+/// the glyph (left-facing) mirrors to face its travel.
+struct Charger: Identifiable {
+  let id: Int
+  var x: CGFloat
+  let y: CGFloat
+  let level: Int
+  let direction: CGFloat
+  var despawn: Bool = false
+}
+
 /// Which of La Subida's three power-ups a pickup grants (one kind per stage, drawn
 /// from a shuffle bag — see `GameState.powerUpBag`). `cape` is the original muleta
 /// (invulnerability + smash); `speed` doubles walk AND climb speed; `serenata` makes

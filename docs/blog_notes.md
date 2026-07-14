@@ -5546,3 +5546,56 @@ Phases 1–2 the obstacles render as "?" tofu (the iOS-sim single-/multi-scalar-
 flags are regional-indicator pairs), so glyph rendering is Josh's on-device check; geometry, homing,
 announcement, and recovery all render correctly. Holding all commits until he blesses it, per the
 plan's device-test rule.
+
+## La Subida Phase 4 — El Encierro, the running of the bulls (2026-07-14)
+
+Phase 4 wires the second challenge mechanic: **El Encierro**, a stampede of 🐂 chargers that run
+straight across the girders while the window is open. It slots cleanly into the framework Phase 3
+laid down — the `mechanicBag` already drew `encierro`, and Phase 3's version merely *announced* it
+and no-op'd; Phase 4 gives that announcement teeth.
+
+**The `Charger` entity.** A minimal value type (`id`, `x`, `y`, `level`, `direction`, `despawn`),
+distinct from `Obstacle` because a charger's physics are so much simpler: no roll/fall state
+machine, no drop points, no per-set render style — it just runs straight across one girder at 2×
+the stage's obstacle speed and despawns when it clears a screen edge. All the encierro logic lives
+in `GameState+Mechanics.swift` next to the zombie code: `updateChargers(dt:)` (called each climb
+frame from `update`) spawns on a 0.8 s interval *only while the window is open*, then moves every
+charger and culls the ones off-screen; `spawnCharger` picks the girder; `resolveChargerCollisions`
+(called from `resolveCollisions`) applies the hit rules.
+
+**Two design details worth recording.** First, the **player-girder bias**. The spec wanted the
+stampede to threaten the player "at least once per window", and I made that a guarantee rather than
+a probability: an `encierroCoveredPlayerLevel` flag (reset at each window start) sends the window's
+*first* charger down the player's current girder, and only then do subsequent spawns pick random
+girders (levels 0…top−1, never the bull's top girder). It's simpler to reason about and trivially
+testable. Second, the **straggler rule**: a *natural* window end (`endMechanic`) stops new spawns
+but lets chargers already crossing finish their run — so I did **not** clear `chargers` in
+`finishActiveMechanic`. But a *cancel* (escape / boss entry / respawn — `cancelActiveMechanic`)
+belongs to an interrupted climb, so that path clears the array. That's the one place the
+end-vs-cancel distinction (previously identical) actually diverges.
+
+Collision reuses the honest-hitbox discipline from the obstacles: the drawn 🐂 is `chargerSize`
+(30) but the hit test is the tighter `chargerHitSize` (20), so a jump that visually clears the bull
+costs no health. A cape smashes it (`chomp`); otherwise it's −1 pip + `soccerKick`, gated by the
+damage cooldown, and a lethal hit soft-respawns. `resolveChargerCollisions` returns a `Bool` so the
+caller bails after a respawn rather than touching a just-cleared array — the same guard the obstacle
+loop uses inline.
+
+**Always-dark game (Josh's mid-phase ask).** While testing, Josh noted the game should never
+respect light mode — it's a night scene (flamenco stage, spotlights coming in Phase 5), and the
+adaptive `Color.custom*` assets were resolving to their light variants when the phone was in light
+mode. Fixed by pinning `.environment(\.colorScheme, .dark)` on `GameView`'s whole subtree (applied
+after the `.background` so that resolves dark too). The Phase 4 verification screenshot is the proof:
+the simulator was in **light** mode (the onboarding screen behind it is light-beige), yet the game
+renders on solid black.
+
+**Verification.** Build + SwiftLint clean; the full suite is green at **503 tests** (8 new encierro
+tests in `GameStateTests`: the first charger targeting the player's girder, 2× crossing speed,
+off-screen despawn, a hit costing one pip and being consumed, the damage-cooldown gate, caped
+smash, the jump-clears-a-charger honest-hitbox case, and end-keeps-stragglers vs cancel-clears). In
+the simulator with `CONJUGAR_GAME_MECHANIC=encierro` I watched the "¡El encierro!" bull-speech
+announcement pop and the chargers spawn and cross the girders. As in the earlier phases the emoji
+render as tofu (the iOS-sim emoji bug — 🐂 shows as a small red shape, the stage-1 flags as "?"
+boxes), so the actual glyphs are Josh's on-device check; spawning, crossing, the announcement, the
+player-girder bias, and the now-always-dark background all render correctly. Holding all commits
+until Josh blesses it on device, per the plan's device-test rule.

@@ -562,7 +562,23 @@ obstacles are the known iOS-sim emoji bug (Josh's on-device check). See
 
 **DoD:** standard.
 
-## Phase 4 — El Encierro 🐂  [Claude; Josh plays]
+## Phase 4 — El Encierro 🐂  [Claude; Josh plays]  ✅ DONE (2026-07-14)
+
+**Complete.** `Charger` entity (id/x/y/level/direction/despawn) + the whole stampede in
+`GameState+Mechanics.swift`: `updateChargers(dt:)` (spawns on the 0.8 s interval only while the
+window is open, then runs every charger straight across its girder at 2× the stage's obstacle
+speed and culls off-screen ones), `spawnCharger` (the window's FIRST charger targets the player's
+girder — a guaranteed threat via `encierroCoveredPlayerLevel` — the rest pick random girders
+0…top−1), and `resolveChargerCollisions` (obstacle hit rules with the tight `chargerHitSize` box;
+cape → chomp smash, else −1 pip + soccerKick gated by the cooldown, lethal → soft respawn; returns
+a `Bool` so the caller bails after a respawn). End-vs-cancel diverges: a natural `endMechanic` lets
+stragglers finish crossing, a cancel (escape/boss/respawn) clears them. Rendered `Text("🐂")`
+mirrored by direction. Also (Josh mid-phase): the game is now pinned always-dark
+(`.environment(\.colorScheme, .dark)` on `GameView`) so the `Color.custom*` assets never resolve
+light. Build + SwiftLint clean; 503 tests (8 new encierro tests); committed + pushed to `migration`.
+Simulator (`CONJUGAR_GAME_MECHANIC=encierro`) confirms the "¡El encierro!" announcement + chargers
+crossing on a black background even in light mode; the "?"/red-shape tofu emoji are the known
+iOS-sim bug (Josh's on-device check). See `docs/blog_notes.md`, "La Subida Phase 4 — El Encierro".
 
 1. `Charger` entity + spawn/update/collision loops + window lifecycle + `stampede`/`snort`
    sounds + render (`Text("🐂")`, mirrored by direction) per the spec.

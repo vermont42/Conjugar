@@ -96,8 +96,17 @@ final class GameState {
   /// obstacle slows to `zombieSpeedFactor`× and homes toward the player.
   static let zombieDuration: Double = 3
   static let zombieSpeedFactor: CGFloat = 0.5
-  /// El Encierro window (Phase 4 wires the charger stampede).
+  /// El Encierro window: 🐂 chargers stampede across the girders for this long.
   static let encierroDuration: Double = 4
+  /// A charger crosses at this multiple of the stage's obstacle speed (2× — fast).
+  static let chargerSpeedFactor: CGFloat = 2
+  static let chargerSize: CGFloat = 30
+  /// Collision size for a charger — deliberately smaller than its drawn box (the
+  /// honest-hitbox rule, mirroring `obstacleHitSize`): a jump that visually clears the
+  /// 🐂 costs no health.
+  static let chargerHitSize: CGFloat = 20
+  /// A fresh charger enters this often while the encierro window is open.
+  static let chargerSpawnInterval: Double = 0.8
   /// El Apagón window (Phase 5 wires the lights-out spotlight overlay).
   static let apagonDuration: Double = 3.5
 
@@ -300,6 +309,18 @@ final class GameState {
   var mechanicCountdown: Double = 0
   /// Seconds left in the active mechanic's window (ticks only while one is active).
   var mechanicRemaining: Double = 0
+
+  // El Encierro (Phase 4): the 🐂 charger stampede. Chargers run straight across a
+  // girder; they spawn only while the window is open but stragglers keep crossing
+  // after it closes (see GameState+Mechanics.swift).
+  var chargers: [Charger] = []
+  var chargerCounter = 0
+  /// Countdown to the next charger spawn (ticks only while the encierro window is open).
+  var chargerSpawnTimer: Double = 0
+  /// Whether this encierro window has already sent a charger down the player's girder
+  /// — the window's first charger targets it (the stampede must threaten the player at
+  /// least once), the rest pick a random girder. Reset at each window start.
+  var encierroCoveredPlayerLevel = false
 
   // MARK: Player state
 
@@ -629,6 +650,8 @@ final class GameState {
     mechanicBag.removeAll()
     activeMechanic = nil
     mechanicRemaining = 0
+    chargers.removeAll()
+    chargerCounter = 0
     assignStagePowerUp()
     assignStageMechanic()
 
@@ -698,6 +721,8 @@ final class GameState {
     // obstacles move — an active zombie window re-routes `updateObstacles` to homing.
     updateMechanicScheduler(dt: dt)
     updateObstacles(dt: dt)
+    // El Encierro: spawn (while the window is open) and advance the 🐂 chargers.
+    updateChargers(dt: dt)
     advanceAnimations(dt: dt)
     // Age any drifting jaleo pops during the climb too (the "¡Nivel N!" stage banner
     // is spawned here) — otherwise they never fade and stack across stages.

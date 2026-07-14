@@ -237,6 +237,11 @@ struct GameView: View {
       .onDisappear { gameState.stopAudio() }
     }
     .background(Color.customBackground.ignoresSafeArea())
+    // The game is always a night scene (spotlights, flamenco stage): pin its whole
+    // subtree to dark so the adaptive `Color.custom*` assets never resolve to their
+    // light variants, even when the rest of the app is in light mode. Applied last so
+    // the background above resolves dark too.
+    .environment(\.colorScheme, .dark)
   }
 
   private func gameField(size: CGSize) -> some View {
@@ -288,6 +293,16 @@ struct GameView: View {
             .rotationEffect(obstacle.style == .spin ? .degrees(obstacle.rotation) : .zero)
             .scaleEffect(x: obstacle.style == .face && obstacle.facing > 0 ? -1 : 1, y: 1)
             .position(x: obstacle.x, y: obstacle.y)
+            .opacity(1 - gameState.bossTransition)
+        }
+
+        // El Encierro: 🐂 chargers running across the girders. The glyph faces LEFT, so
+        // mirror it (−1) when it charges right — the obstacle/dancer/bull convention.
+        ForEach(gameState.chargers) { charger in
+          Text(verbatim: "🐂")
+            .font(.system(size: 28))
+            .scaleEffect(x: charger.direction > 0 ? -1 : 1, y: 1)
+            .position(x: charger.x, y: charger.y)
             .opacity(1 - gameState.bossTransition)
         }
 
