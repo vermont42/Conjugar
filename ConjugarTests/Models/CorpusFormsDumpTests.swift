@@ -42,7 +42,7 @@ struct CorpusFormsDumpTests {
   // Every real person-number (both 2S tú and vos, so LatAm voseo forms are harvested too).
   private static let persons: [DisplayPersonNumber] = [
     .firstSingular, .secondSingularTú, .secondSingularVos, .thirdSingular,
-    .firstPlural, .secondPlural, .thirdPlural,
+    .firstPlural, .secondPlural, .thirdPlural
   ]
 
   @Test func testDumpUsageRankedVerbForms() throws {
