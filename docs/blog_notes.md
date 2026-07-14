@@ -5287,3 +5287,44 @@ fallout: `bowHoldsItsFinalFrame` ticked 6 s expecting a frozen bow, but the bull
 dance at ~2.6 s (post-reunion); narrowed it to 30×0.1 s (the pre-reunion window) so it still verifies
 `capBullBowHold` without colliding with the new dance. Full suite green (466), 0 lint. Per Josh's
 instruction I did **not** drive the sim — he'll verify the visuals himself.
+
+## Main-game finalization: suggestions, sounds, and the La Subida plan (2026-07-14)
+
+Josh declared the main part of the game ready to finalize (`prompts/main_game.md`): four more
+levels, two more power-ups, four more obstacle sets, three challenge mechanics, no lose state,
+boss at the top of level five. He specified speed (2× player, cape-style envelope) and the
+zombie-attack mechanic (obstacles half-speed but homing, 3 s), and asked for researched
+suggestions for the rest.
+
+The research pass (WebSearch; Chrome MCP not needed) grounded the picks in genre history: Donkey
+Kong's own hazard vocabulary (barrels/fireballs/springs/conveyors, hammer-as-power-up), the
+classic power-up taxonomy (defense/speed/recovery/offense), DKC's Blackout Basement for
+darkness-in-the-DK-lineage, VS. Ice Climber's wind gusts, and whole games built on the encierro
+(Extreme Pamplona). Rejected along the way: slow-time (mathematically ~redundant with 2× player
+speed), super-jump (the code deliberately keeps `jumpImpulse` too weak to skip ladders), wind
+(classic, but on a D-pad with a 34 pt ladder-alignment tolerance it reads as frustration).
+
+What Josh approved: **La Serenata** 🎸 (the third power-up — the bull stops throwing and
+*dances* for the cape envelope, reusing the end scene's dance-burst machinery; it foreshadows
+the dance-off boss and the dancing-bull ending), **El Encierro** 🐂 (chargers stampede across
+random girders at 2× stage speed — the DK barrel turned wave event), and **El Apagón** 💡
+(spotlight blackout; one masked overlay, huge drama; the bull's throw-moo becomes a sonar cue
+for free). The five-for-four obstacle question (his prompt listed five categories for levels
+2–5) went to an AskUserQuestion: faces dropped, so the climb reads countryside → street → road →
+sky: animals (Konjugieren's set), sports balls, vehicles, clouds & sun.
+
+Sounds: per Josh's instruction, sourced from Pixabay **via Claude-in-Chrome** — searched five
+concepts, shortlisted by title/duration/uploader (DRAGON-STUDIO and freesound_community already
+anchor the boss pack), extracted the CDN mp3 URLs by fetching each detail page in-page and
+regexing the `download/audio/...?filename=` link, then curled ten files (five primaries + five
+audition alternates) into git-ignored `audio-sources/pixabay-mpg/`. Notable: Pixabay's
+"stampede" search is nearly empty (2 hits) — "galloping" is the productive query.
+
+The plan itself is `prompts/game_la_subida.md`, seven session-sized phases (SFX pack → rename +
+stages + escape beat + soft respawn → power-ups → mechanic framework + zombie → encierro →
+apagón → balance/docs), mirroring the boss plan's structure. The stage transition implements the
+**escape beats** from `prompts/game.md` decision 1 — the TODOs at `checkReachedBull` and the
+matador sprite have been waiting for exactly this. One post-review addition: Josh noticed
+Apple's animal/vehicle glyphs face LEFT, which surfaced that the barrel spin would hide facing
+entirely — so obstacle sets now declare a style (`.spin` flags/balls, `.face` animals/vehicles
+with dancer-convention mirroring, `.upright` clouds/sun).
