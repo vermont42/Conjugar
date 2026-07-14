@@ -498,7 +498,19 @@ screenshot the bull+matador mid-escape.
 **DoD:** build+tests+`swiftlint` green, per-stage screenshots captured, blog notes appended,
 committed.
 
-## Phase 2 — Power-up system: speed ⚡ + La Serenata 🎸  [Claude; Josh plays]
+## Phase 2 — Power-up system: speed ⚡ + La Serenata 🎸  [Claude; Josh plays]  ✅ DONE (2026-07-14)
+
+**Complete.** `CapePickup`/`capes` → `PowerUp`/`powerUps` with `kind`
+(cape/speed/serenata); `powerUpBag` no-repeat shuffle bag through `bossRNG`, assigned
+in `reset()` (stage 1) + `advanceToNextStage()`; new `GameState+PowerUps.swift`. Speed
+⚡ (`speedFactorNow` ×2 into walk + climb; ⚡ badge with generalized
+`powerUpVisible(remaining:)` blink) and La Serenata 🎸 (bull dances `endSceneDanceMoves`
+bursts instead of pacing/throwing — reuses `commandBullMove`, now internal; `snort` on
+expiry). Decision 12 wired: power-ups carry across the escape beat, clear on death.
+`CONJUGAR_GAME_POWERUP` override. Build + SwiftLint clean; 485 tests (7 new, 2 updated);
+committed + pushed to `migration` (f7a89bc). Simulator confirms pickup placement; the
+⚡/🎸 glyphs + serenata bull-dance are Josh's on-device check (sim renders single-scalar
+emoji as "?" tofu). See `docs/blog_notes.md`, "La Subida Phase 2".
 
 1. `CapePickup` → `PowerUp(kind:)`; `capes` → `powerUps`; view renders by kind (cape sprite /
    `Text("⚡")` / `Text("🎸")`).
