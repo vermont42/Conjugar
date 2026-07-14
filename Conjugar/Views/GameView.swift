@@ -76,7 +76,7 @@ struct GameView: View {
     case .idle: aspect = 104.0 / 225.0
     case .walk: aspect = 122.0 / 226.0
     case .climb: aspect = 172.0 / 228.0
-    case .jump: aspect = 108.0 / 225.0
+    case .jump: aspect = 116.0 / 226.0     // apex raises the arms (wider than the old rise-dup crop)
     case .cape: aspect = 152.0 / 225.0        // wider: muleta held out in front
     case .capeWalk: aspect = 155.0 / 227.0
     case .ole: aspect = 116.0 / 229.0         // arms-up V (Phase 4 crop)

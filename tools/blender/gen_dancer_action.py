@@ -264,13 +264,16 @@ else:
 
 muleta = make_muleta() if ACTION in CAPE_ACTIONS else None
 
-# One-shot bursts (ole/stomp) hold their PEAK on the final authored frame, but
-# render_sprites samples the range half-open [start, end) — which would drop that peak
-# (and the FBX exporter can shift the action's start frame too). So author a trailing
-# DUPLICATE of the last pose (the shipped bull idiom): with FRAMES+1 keys, a render at
-# --frames FRAMES samples the FRAMES real poses and drops only the duplicate. Cyclic
-# actions (walk/idle/climb/cape…) tile seamlessly and don't need the guard.
-ONESHOT = {"ole", "stomp"}
+# One-shot bursts (jump/ole/stomp) hold their PEAK on the final authored frame (jump's
+# apex, ole's desplante, stomp's strike/settle), but render_sprites samples the range
+# half-open [start, end) — which would drop that peak (and the FBX exporter can shift the
+# action's start frame too). So author a trailing DUPLICATE of the last pose (the shipped
+# bull idiom): with FRAMES+1 keys, a render at --frames FRAMES samples the FRAMES real
+# poses and drops only the duplicate. Cyclic actions (walk/idle/climb/cape…) genuinely
+# WANT the closing frame dropped (it equals the opening frame) so the loop tiles
+# seamlessly — they must stay OUT of this set. (jump was mistakenly cyclic-sampled before
+# 2026-07-13, which silently dropped its apex and duplicated the rise frame.)
+ONESHOT = {"jump", "ole", "stomp"}
 NKEYS = FRAMES + 1 if ACTION in ONESHOT else FRAMES
 
 for i in range(1, NKEYS + 1):

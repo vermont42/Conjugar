@@ -5084,3 +5084,24 @@ cadence is unchanged and only the memorize-the-whole-thing moment gets longer. T
 `demoStepDuration` to the per-step timer, and a new `demoHoldsFinalSequenceOneBeatBeforeEcho`
 locks the behavior: after the last move's own time elapses we're *still* in demo (chips up,
 echo locked), and only after the recall hold does the echo unlock.
+
+## Boss fight follow-up: the dancer's jump apex was being dropped (2026-07-13)
+
+Wiring the new ole/stomp one-shots surfaced that the dancer's **jump** had the exact bug the
+trailing-duplicate idiom exists to prevent — and had shipped with it. `jump` is a one-shot
+(crouch → rise → **apex**) whose payoff pose is the *last* frame, but it wasn't in the generator's
+`ONESHOT` set, so `render_sprites`' half-open `[start, end)` sampling dropped the apex and
+duplicated the rise. Confirmed with `magick compare`: shipped `dancer_jump_2` and `dancer_jump_3`
+were **pixel-identical** — the jump was really [crouch, rise, rise], no apex. Josh asked to fix it
+alongside the boss work.
+
+The fix was one line — add `jump` to `ONESHOT` — plus a regenerate/render/crop/install pass. The
+cyclic actions (walk/idle/climb/cape/capeWalk) deliberately stay *out*: their closing frame equals
+their opening frame, so the half-open drop is what makes the loop tile seamlessly. Only true
+one-shots want the trailing-duplicate guard. After the fix the three frames are all distinct and the
+apex (arms raised, body extended) is back; the union crop grew **108×225 → 116×226** (the raised
+arms widen it), so `dancerWidth(.jump)` was updated to match. Live-verified in the climb game at 5×
+slow: tapped jump and caught her at the top of the arc in the arms-up apex — a pose the shipped
+build literally could not render. Frame counts didn't change (still 3), so no seam edits beyond the
+aspect. The bull's actions were always authored with the duplicate, so only the dancer's jump was
+affected; ole/stomp were born correct.
