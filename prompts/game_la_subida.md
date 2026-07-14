@@ -396,7 +396,13 @@ changes near ASCII quotes; validate with `python3 -c "import json; json.load(ope
 
 ---
 
-## Phase 0 — SFX pack: process, bundle, wire `Sound` cases  [Claude; Josh auditions]
+## Phase 0 — SFX pack: process, bundle, wire `Sound` cases  [Claude; Josh auditions]  ✅ DONE (2026-07-14)
+
+**Complete.** All five primaries processed into `Conjugar/Audio/` at 192 kb/s / 44.1 kHz,
+peak −1 dBFS (no alternate substituted — Josh auditioned and approved all five primaries);
+`Sound` cases wired; `asset-licenses/pixabay-mpg-sfx.txt` written; build + 466 tests green;
+blog note appended; committed to `migration` (b402022). See `docs/blog_notes.md`, "La Subida
+Phase 0 — the SFX pack".
 
 Small, standalone, everything later depends on it.
 
