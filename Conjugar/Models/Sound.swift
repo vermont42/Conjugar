@@ -43,6 +43,15 @@ enum Sound: String, CaseIterable {
   case capeWhoosh
   case tensionSting
 
+  // La Subida — main-game SFX (Pixabay, `Conjugar/Audio/`). Serenata pickup strum,
+  // zombie-attack groan, El Encierro stampede, speed-pickup whoosh, and El Apagón
+  // lights-cut (see `asset-licenses/pixabay-mpg-sfx.txt`).
+  case guitarStrum
+  case zombieGroan
+  case stampede
+  case speedWhoosh
+  case lightsOut
+
   static var randomApplause: Sound {
     [.applause1, .applause2, .applause3].randomElement() ?? .applause1
   }

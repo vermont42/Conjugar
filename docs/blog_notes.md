@@ -5328,3 +5328,32 @@ matador sprite have been waiting for exactly this. One post-review addition: Jos
 Apple's animal/vehicle glyphs face LEFT, which surfaced that the barrel spin would hide facing
 entirely — so obstacle sets now declare a style (`.spin` flags/balls, `.face` animals/vehicles
 with dancer-convention mirroring, `.upright` clouds/sun).
+
+## La Subida Phase 0 — the SFX pack (2026-07-14)
+
+The main-game finalization plan (`prompts/game_la_subida.md`) opens with a small,
+standalone phase that everything downstream leans on: bundle and wire the five new sound
+effects the power-ups and challenge mechanics will need. Doing it first means Phases 1–5
+can just reference `Sound.guitarStrum` and friends without the audio pipeline blocking a
+feature commit.
+
+Josh had already sourced the raw MP3s from Pixabay (a primary plus one audition alternate
+per slot) into the git-ignored `audio-sources/pixabay-mpg/`. Processing followed the same
+recipe the boss-fight "La Llamada" pack used: a two-pass `ffmpeg` — measure `max_volume`
+with `volumedetect`, then trim/fade and apply `volume=(-1 − max_volume)dB` to land the peak
+at −1 dBFS, re-encoding to 192 kb/s / 44.1 kHz stereo.
+
+The gotcha this pass surfaced: `max_volume` is measured on the *whole* source, but the
+loudest transient often sits *outside* the trimmed window, so the naïve gain leaves the
+shipped clip quiet. guitarStrum came out at −2.1 and lightsOut at −4.3 on the first pass
+(lightsOut's source was a very quiet −21 dBFS "turning down power" clip, needing ~+23 dB of
+makeup gain). I re-ran those two with a window-aware bump so all five now peak at ~−1.0 dBFS
+for loudness consistency across the pack. Every clip stayed *under* −1 on the first pass —
+conservative, never clipping — which is the safe direction to err.
+
+Files landed in the synchronized `Conjugar/Audio/` group (no pbxproj edit needed), the five
+`Sound` cases were added under a `// La Subida` comment block (CaseIterable warm-up picks
+them up automatically), lookup is by `rawValue` so the case name must equal the filename,
+and `asset-licenses/pixabay-mpg-sfx.txt` records per-file provenance in the boss-pack format
+(noting that all five shipped the primary pick, no alternate substituted — Josh's audition
+may still change that). Build + all 466 tests green; nothing behavioral changed yet.
