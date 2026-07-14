@@ -11,6 +11,13 @@ building, testing green, and committable to the `migration` branch. Do them in o
 can be a fresh session (each has its own "read first" pointers). Build/test/drive via the
 `ios-build-verify` skill per CLAUDE.md.
 
+> **⚠️ DO NOT COMMIT OR PUSH until Josh says so (2026-07-14).** Josh tests each phase on a real
+> device before it's blessed, and device testing may surface fixes. Leave completed work in the
+> working tree — build green, tests green, blog note written — and **wait for Josh's explicit
+> go-ahead** before running `git commit`/`git push`. (Phases 0 and 1 were committed before this
+> rule; from Phase 2 on, hold all commits.) This overrides the "commit per phase" line in
+> **Gotchas** below.
+
 ---
 
 ## Decisions (locked with Josh 2026-07-14 — do not relitigate)
@@ -606,5 +613,7 @@ everything on `migration`.
 - New emoji must be glyph-warmed or the first spawn stutters (the flags lesson).
 - The overlay/mask `compositingGroup` + `destinationOut` idiom is required — a plain overlay
   can't punch a soft hole.
-- Commit per phase; push to `migration`; blog-notes entry per session (dated `##` heading,
-  trailing-form title).
+- **Do NOT commit or push until Josh says so** (see the ⚠️ note at the top — he device-tests
+  each phase first and fixes may be needed). Finish a phase in the working tree with a
+  blog-notes entry per session (dated `##` heading, trailing-form title), then wait for his
+  go-ahead before `git commit`/`git push` to `migration`.
