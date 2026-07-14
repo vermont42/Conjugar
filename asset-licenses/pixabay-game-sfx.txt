@@ -1,7 +1,8 @@
 Assets:   Conjugar/Audio/castanetLow.mp3, castanetHigh.mp3, palmas.mp3,
-          crowdOle.mp3, snort.mp3, stompThud.mp3, capeWhoosh.mp3
+          crowdOle.mp3, snort.mp3, stompThud.mp3, capeWhoosh.mp3, tensionSting.mp3
           (the boss fight "La Llamada" dance-off SFX pack — paso left/right cues,
-          olé palmas, crowd olé, bull snort, stomp thud, cape whoosh)
+          olé palmas, crowd olé, bull snort, stomp thud, cape whoosh, and the
+          freeze fake-out's tension sting)
 Source:   Downloaded from Pixabay Sound Effects — https://pixabay.com/sound-effects/
 License:  Pixabay Content License — https://pixabay.com/service/license-summary/
           Commercial use permitted; NO attribution required. Only restriction:
@@ -24,6 +25,9 @@ Per-file provenance (Pixabay sound-effect id · uploader · original title):
                       https://pixabay.com/sound-effects/stomp2-93279/
   capeWhoosh.mp3      382724 · DRAGON-STUDIO · "Simple Whoosh"
                       https://pixabay.com/sound-effects/simple-whoosh-382724/
+  tensionSting.mp3    96911  · freesound_community · "tension sting"
+                      https://pixabay.com/sound-effects/tension-sting-96911/
+                      The freeze fake-out's demo cue — trimmed to its ominous onset.
 
 Processing: Each source mp3 was trimmed to its transient, faded, peak-normalized to
           -1 dBFS, and re-encoded to 192 kb/s / 44.1 kHz stereo MP3 (ffmpeg). The

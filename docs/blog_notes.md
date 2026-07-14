@@ -4883,3 +4883,33 @@ and the sibling apps' `HapticPlayer` port — both nice-to-haves, not blockers. 
 swiftlint clean, all 20 `GameBossTests` pass, and a live `CONJUGAR_GAME_START_BOSS=1` run
 drove the intro + a full bull demo through every new cue without incident. The actual mix
 feel is Josh's on-device audition (the phase's `Josh auditions` beat).
+
+## Boss fight — the two deferred bits: tension sting + haptics (2026-07-13)
+
+Circled back for the two Phase-2 nice-to-haves I'd punted on. Both landed.
+
+**Tension sting.** Sourced a fourth-and-final Pixabay clip — freesound_community's
+"tension sting" (Heavy/Tension/Bass, id 96911) — trimmed to its ~1.5 s ominous onset,
+faded, normalized, and bundled as `tensionSting.mp3`. Wired it as `freeze`'s `cueSound`,
+which means it plays on the *bull's demo* of the 🔥 chip: the fake-out slot now announces
+itself with a low dread note instead of being silent. I kept the *echo* freeze silent by
+design (the correct response is to hold still) — the `.warning` haptic (below) marks that
+"hold!" beat instead. So freeze reads as: ominous sound when the bull shows it, physical
+buzz when you have to resist it, sparkle + medium pop when you survive.
+
+**HapticPlayer.** Built it as a proper DI service mirroring `SoundPlayer`: a `Haptic`
+enum (Models/), a `@MainActor` `HapticPlayer` protocol, `HapticPlayerReal` (held UIKit
+feedback generators, re-`prepare()`d after each fire per Apple's low-latency pattern), and
+a no-op `HapticPlayerDummy`. Wired into all four `World`s — Real on device/simulator (it
+no-ops harmlessly where there's no Taptic Engine, matching how `SoundPlayerReal` runs on
+sim), Dummy in the unit/UI-test worlds. The generators warm on `enterBossIntro` so the
+llamada's first pulse has no cold-start lag. Taps on the judgments: `impactHeavy` on the
+llamada stomp, `impactLight` per correct move, `success` on a banked phrase and the win,
+`error` on a fail, `warning` entering a freeze hold, `impactMedium` on surviving it.
+
+One gotcha the app build hid: adding a required `hapticPlayer:` param to `World.init`
+compiled fine for the app (whose four factories I'd updated) but `CommunViewModelTests`
+constructs `World(...)` directly — that only surfaced when the *test* target compiled.
+Fixed. Full suite green (465 tests), swiftlint clean, and a live round-3 run drove the
+freeze demo (tension sting) and the whole judged echo without incident. Haptic *feel* and
+the sting's level under `Music.bossFight` are Josh's on-device audition.

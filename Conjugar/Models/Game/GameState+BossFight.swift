@@ -67,6 +67,8 @@ extension GameState {
     bossTransition = 0
     didLlamada = false
     bossMusicStarted = false
+    // Warm the Taptic Engine so the llamada's first pulse fires without latency.
+    Current.hapticPlayer.prepare()
 
     movingLeft = false
     movingRight = false
@@ -128,6 +130,7 @@ extension GameState {
     triggerScreenShake()
     // The stomp thud that opens the duel.
     Current.soundPlayer.play(.stompThud, shouldDebounce: false, volume: 0.5)
+    Current.hapticPlayer.play(.impactHeavy)
     if !bossMusicStarted {
       bossMusicStarted = true
       Current.soundPlayer.startMusic(.bossFight)
@@ -213,6 +216,9 @@ extension GameState {
   private func prepareEchoSlot(_ step: Int) {
     if phraseSequence[step] == .freeze {
       freezeTimer = Self.freezeHold
+      // A warning buzz marks the "hold!" moment — the physical counterpart to the
+      // demo's ominous tension sting.
+      Current.hapticPlayer.play(.warning)
       // Teach the fake-out at the moment it's actionable: the first freeze slot a
       // player ever faces (per boss run) says what to do — nothing.
       if !didShowFreezeHint {
@@ -239,6 +245,7 @@ extension GameState {
       if let cue = move.cueSound {
         Current.soundPlayer.play(cue, shouldDebounce: false, volume: 0.4)
       }
+      Current.hapticPlayer.play(.impactLight)
       spawnJaleo(["¡Eso!", "¡Bien!", "¡Vamos!"].randomElement() ?? "¡Eso!", x: playerX, y: playerY - 54)
       advanceEcho(from: step)
     } else {
@@ -263,6 +270,7 @@ extension GameState {
     // A banked phrase earns palmas and a crowd olé.
     Current.soundPlayer.play(.palmas, shouldDebounce: false, volume: 0.45)
     Current.soundPlayer.play(.crowdOle, shouldDebounce: false, volume: 0.4)
+    Current.hapticPlayer.play(.success)
     duelState = .phraseResult(success: true)
     duelTimer = Self.phraseResultHold
   }
@@ -273,6 +281,7 @@ extension GameState {
     spawnJaleo("¡Uy!", x: playerX, y: playerY - 74, size: 32)
     // The bull snorts and stomps smugly.
     Current.soundPlayer.play(.snort, shouldDebounce: true, volume: 0.4)
+    Current.hapticPlayer.play(.error)
     commandBullMove(.stomp, duration: Self.danceBurstDuration)
     duelState = .phraseResult(success: false)
     duelTimer = Self.phraseResultHold
@@ -324,6 +333,7 @@ extension GameState {
           score += Self.movePoints
           spawnJaleo("✨", x: playerX, y: playerY - 64, size: 30)
           Current.soundPlayer.play(.chirp, shouldDebounce: false, volume: 0.4)
+          Current.hapticPlayer.play(.impactMedium)
           advanceEcho(from: step)
           return
         }
@@ -364,6 +374,7 @@ extension GameState {
     playerAction = .idle
     playerMoveTimer = 0
     Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
+    Current.hapticPlayer.play(.success)
     triggerScreenShake()
   }
 

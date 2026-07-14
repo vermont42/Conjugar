@@ -25,9 +25,10 @@ license under which it is reused. App-facing credits live in `Info.creditsText`
   commercial use OK, **no attribution required** (the app's "Game Sounds" credit is a
   courtesy). See `game-sounds-pixabay.txt`.
 
-- **`Conjugar/Audio/{castanetLow,castanetHigh,palmas,crowdOle,snort,stompThud,capeWhoosh}.mp3`**
+- **`Conjugar/Audio/{castanetLow,castanetHigh,palmas,crowdOle,snort,stompThud,capeWhoosh,tensionSting}.mp3`**
   — the boss fight **"La Llamada"** dance-off SFX pack (paso-left/right castanet cues,
-  olé palmas, crowd olé, bull snort, stomp thud, cape whoosh), downloaded fresh from
+  olé palmas, crowd olé, bull snort, stomp thud, cape whoosh, freeze-slot tension sting),
+  downloaded fresh from
   **Pixabay** and trimmed/normalized to 192 kb/s MP3. The two paso cues are one
   castanet click pitch-shifted low/high. **Pixabay Content License** — commercial use
   OK, **no attribution required** (courtesy "Game Sounds" credit). Per-file provenance

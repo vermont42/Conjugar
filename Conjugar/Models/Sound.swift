@@ -41,6 +41,7 @@ enum Sound: String, CaseIterable {
   case snort
   case stompThud
   case capeWhoosh
+  case tensionSting
 
   static var randomApplause: Sound {
     [.applause1, .applause2, .applause3].randomElement() ?? .applause1

@@ -25,6 +25,7 @@ class World {
   var languageModelService: LanguageModelService
   var getterSetter: GetterSetter
   var soundPlayer: SoundPlayer
+  var hapticPlayer: HapticPlayer
 
   private static let fakeRatingsCount = 42
 
@@ -39,7 +40,8 @@ class World {
     locale: AnalyticsLocale,
     languageModelService: LanguageModelService,
     getterSetter: GetterSetter,
-    soundPlayer: SoundPlayer
+    soundPlayer: SoundPlayer,
+    hapticPlayer: HapticPlayer
   ) {
     self.analytics = analytics
     self.reviewPrompter = reviewPrompter
@@ -52,6 +54,7 @@ class World {
     self.languageModelService = languageModelService
     self.getterSetter = getterSetter
     self.soundPlayer = soundPlayer
+    self.hapticPlayer = hapticPlayer
   }
 
   // Under the SwiftUI App lifecycle there is no custom main.swift to select a
@@ -88,7 +91,8 @@ class World {
       locale: AnalyticsLocaleReal(),
       languageModelService: LanguageModelServiceReal(),
       getterSetter: getterSetter,
-      soundPlayer: SoundPlayerReal()
+      soundPlayer: SoundPlayerReal(),
+      hapticPlayer: HapticPlayerReal()
     )
   }()
 
@@ -108,7 +112,8 @@ class World {
       locale: AnalyticsLocaleStub(languageCode: "en", regionCode: "US"),
       languageModelService: LanguageModelServiceReal(),
       getterSetter: getterSetter,
-      soundPlayer: SoundPlayerReal()
+      soundPlayer: SoundPlayerReal(),
+      hapticPlayer: HapticPlayerReal()
     )
   }()
 
@@ -128,7 +133,8 @@ class World {
       locale: AnalyticsLocaleStub(),
       languageModelService: LanguageModelServiceDummy(),
       getterSetter: getterSetter,
-      soundPlayer: SoundPlayerDummy()
+      soundPlayer: SoundPlayerDummy(),
+      hapticPlayer: HapticPlayerDummy()
     )
   }()
 
@@ -169,7 +175,8 @@ class World {
       locale: AnalyticsLocaleStub(),
       languageModelService: LanguageModelServiceDummy(),
       getterSetter: getterSetter,
-      soundPlayer: SoundPlayerDummy()
+      soundPlayer: SoundPlayerDummy(),
+      hapticPlayer: HapticPlayerDummy()
     )
   }
 }

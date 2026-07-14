@@ -90,8 +90,10 @@ enum DanceMove: CaseIterable, Hashable {
 
   /// The Pixabay SFX that punctuates this move — played on the bull's demo cue and
   /// again on the dancer's correct echo, so each move has its own voice (the two
-  /// pasos are one castanet click pitched low/high). `freeze` is silent: its
-  /// tension is the *absence* of sound. Pack logged in
+  /// pasos are one castanet click pitched low/high). `freeze`'s cue is an ominous
+  /// tension sting on the bull's demo, warning the player this slot is different;
+  /// the *echo* freeze is silent by design (the response is to hold still — the
+  /// `.warning` haptic marks the hold). Pack logged in
   /// `asset-licenses/pixabay-game-sfx.txt`.
   var cueSound: Sound? {
     switch self {
@@ -100,7 +102,7 @@ enum DanceMove: CaseIterable, Hashable {
     case .ole: return .palmas
     case .stomp: return .stompThud
     case .cape: return .capeWhoosh
-    case .freeze: return nil
+    case .freeze: return .tensionSting
     }
   }
 }
