@@ -434,7 +434,18 @@ Small, standalone, everything later depends on it.
 **DoD:** five MP3s in `Conjugar/Audio/`, `Sound` cases compile, license log written, build+tests
 green, `docs/blog_notes.md` entry appended, committed to `migration`.
 
-## Phase 1 — Rename, stage system, escape beat, soft respawn  [Claude]
+## Phase 1 — Rename, stage system, escape beat, soft respawn  [Claude]  ✅ DONE (2026-07-14)
+
+**Complete.** Flag→Obstacle rename (file `GameState+Flags.swift`→`+Obstacles.swift`);
+`stage` (1…5) driving per-stage emoji set, compounding speed, and `ObstacleStyle`
+(spin/face/upright with `Obstacle.facing`); `summitsToBoss`→5; `GamePhase.escape` +
+`GameState+Stages.swift` (`enterEscape`/`updateEscape` — bull+matador flee upward, both
+escape-beat TODOs resolved); soft `respawn()` replacing the death `reset()`;
+`CONJUGAR_GAME_STAGE` debug entry; `L.Game.nivel` + xcstrings. Ten new tests; build +
+SwiftLint + all 476 tests green; committed to `migration` (bb8b748). Power-ups and
+mechanics keep cape pickups / no mechanic until Phases 2–5. Simulator screenshots show the
+new emoji sets as "?" tofu (known iOS-sim emoji bug — verify on device); geometry/actors/
+escape render correctly. See `docs/blog_notes.md`, "La Subida Phase 1".
 
 The foundation. Three commit-sized steps:
 
