@@ -17,20 +17,29 @@ nonisolated struct WidgetSnapshot: Codable, Equatable, Sendable {
   let gloss: String
   /// 1-based frequency rank (1 = most common), or nil if outside the top ~1000.
   let frequencyRank: Int?
-  /// One entry per displayed tense. `[0]` is always presente de indicativo; the
-  /// large widget shows the rest. Forms carry the engine's UPPERCASE irregularity
-  /// marking so `Text(mixedCase:)` can color them.
-  ///
-  /// TODO: the large widget could show an etymology
-  /// snippet and an example sentence instead of extra tenses. Spanish verbs don't
-  /// carry that data yet. When they do, add `etymologySnippet` / `exampleSpanish` /
-  /// `exampleEnglish` fields here, trim `paradigms` back to just the presente, and
-  /// update `LargeWidgetView` / `WidgetSnapshotWriter` to match the French layout.
+  /// One entry per displayed tense. `[0]` is always presente de indicativo. The
+  /// small/medium sizes show only `[0]`; the large size now shows just the presente
+  /// too (freeing room for the example + etymology below), so in practice this holds
+  /// a single paradigm — it stays an array so a future size can carry more. Forms
+  /// carry the engine's UPPERCASE irregularity marking so `Text(mixedCase:)` can
+  /// color them.
   let paradigms: [WidgetParadigm]
   /// The gerundio (present participle), UPPERCASE-marked.
   let gerundio: String
   /// The participio (past participle), UPPERCASE-marked.
   let participio: String
+  /// A modern example sentence for the verb (Spanish), or nil if none is on file.
+  /// Shown by the large widget. Optional so pre-example snapshots still decode.
+  let exampleSpanish: String?
+  /// The example's English translation.
+  let exampleEnglish: String?
+  /// A human-readable attribution for the example — "— Author, Title (year)" for
+  /// literature, "Fuente:/Source: …" for statistics, the Claude credit otherwise
+  /// (never a raw corpus filename). Baked by the app via `ExampleSource.attribution`.
+  let exampleAttribution: String?
+  /// A short etymology snippet in `~bold~` markup, truncated to a sentence boundary,
+  /// or nil if none is on file. Shown by the large widget.
+  let etymologySnippet: String?
   /// A tap-to-answer quiz question over the same verb.
   let quizQuestion: WidgetQuizQuestion
   /// The yyyy-MM-dd this snapshot was generated for.

@@ -4795,3 +4795,45 @@ dark mid-screen on device: per-move shouts stay modest, but ¡Tu turno! and the
 phrase-¡Olé! now render 36–40 pt and spawn higher, so the judgment beat reads from
 across the room. A useful reminder that the simulator's tofu-box emoji hide real
 layout truths — the device screenshot caught both.
+
+## Large Widget: Example Uses and Etymologies (2026-07-13)
+
+The systemLarge Verb of the Day widget used to spend its extra vertical space on two
+more paradigms — pretérito and futuro — stacked under the presente. That predated the
+app growing example sentences and etymologies. Both sibling apps' large widgets (French
+Conjuguer, German Konjugieren) had already made the trade: drop the surplus paradigms,
+spend the room on a modern example sentence plus an etymology snippet. This brings
+Conjugar's large widget in line.
+
+The shape of the change: `WidgetSnapshot` gained four optional fields —
+`exampleSpanish` / `exampleEnglish` / `exampleAttribution` / `etymologySnippet`. Optional
+so an old on-disk snapshot still decodes (the synthesized `init(from:)` reads absent keys
+as nil); the app rewrites tomorrow's snapshot anyway. `WidgetSnapshotWriter` now trims its
+paradigm list to just `[.presenteDeIndicativo]` (the small/medium sizes only ever read
+`paradigms.first`, so they're unaffected) and pulls the example via
+`ExampleData.example(for:)` and the etymology via `Etymology.text(for:)`, truncated to a
+500-char sentence boundary with the tilde-rebalance guard ported from the siblings (a
+mid-string cut mustn't leave a dangling `~` opener that bolds the whole tail).
+
+The attribution is the interesting bit. Konjugieren's reference screenshot shows
+"— Luther — Bibel" — author and work, not a filename — and Josh flagged that Conjuguer's
+widget still surfaced the raw corpus filename ("zola-lassommoir-1877.txt"). Conjugar
+already had the fix latent: `ExampleSource.attribution` maps a source filename onto
+"— Author, Title (year)" for the eight Project Gutenberg works, a localized "Fuente:/
+Source: <body>" for the statistics corpora, and the Claude credit for the AI-authored
+tail. The writer bakes that string into the snapshot, so the widget renders a real book
+title and never a filename — and it's richer than Konjugieren's, carrying the year too.
+
+Layout mirrors Konjugieren, adapted: header (infinitive — gloss, frequency rank at the
+trailing edge), a compact ger/part non-finite row (Konjugieren's "pp:" line), a divider,
+the presente grid, then the example (Spanish italic serif up to 3 lines, English
+translation up to 2, attribution right-aligned) and the etymology with **no** line limit
+so it fills the remaining space and clips at the widget edge. Josh asked for more room for
+both example and etymology than Conjuguer gave (2 / 3 lines), hence the 3-line Spanish and
+the unbounded etymology. A new `WidgetEtymologyText` in the widget target parses the
+`~…~` bold markup standalone (the app's `EtymologyText` isn't visible to the extension).
+
+Coverage check before shipping: all 989 frequency-ranked verbs — the entire verb-of-the-
+day rotation pool — have both an example and an etymology on file, so the two new blocks
+are never empty for a real snapshot. Build is green; Josh will eyeball the rendered widget
+on device.

@@ -24,14 +24,12 @@ nonisolated enum WidgetSnapshotWriter {
     .firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural
   ]
 
-  /// The tenses shown as paradigms in the Verb of the Day widget. `[0]` (presente) is
-  /// the one the small/medium sizes show; the large size shows them all.
-  ///
-  /// TODO: When Spanish etymology / example-sentence data exists, trim this back to
-  /// `[.presenteDeIndicativo]` and surface the richer content instead (see the TODOs in
-  /// WidgetSnapshot and LargeWidgetView).
+  /// The tenses shown as paradigms in the Verb of the Day widget. Only presente de
+  /// indicativo now: every size (small/medium show it in a grid, large shows it plus
+  /// the example sentence + etymology below). The array shape is retained so a future
+  /// size can carry more paradigms without a model change.
   private static let paradigmTenses: [DisplayTense] = [
-    .presenteDeIndicativo, .pretérito, .futuroDeIndicativo
+    .presenteDeIndicativo
   ]
 
   /// The tense families a daily quiz question can be drawn from.
@@ -103,6 +101,13 @@ nonisolated enum WidgetSnapshotWriter {
     let participio = markedForm(infinitive: infinitive, tense: .participio, personNumber: .none) ?? infinitive
     let quizQuestion = makeQuizQuestion(infinitive: infinitive, dayOffset: dayOffset, dateString: dateString)
 
+    // Richer large-widget content: a modern example sentence (with a real, human-readable
+    // attribution — a book title, statistics body, or the Claude credit, never a raw
+    // corpus filename) and a truncated etymology snippet. Both are `nil` when the verb
+    // has no data on file, in which case the large widget simply omits that block.
+    let example = ExampleData.example(for: infinitive)
+    let etymology = Etymology.text(for: infinitive).map { truncateToSentenceBoundary($0, maxLength: 500) }
+
     return WidgetSnapshot(
       infinitive: infinitive,
       gloss: entry.gloss,
@@ -110,9 +115,41 @@ nonisolated enum WidgetSnapshotWriter {
       paradigms: paradigms,
       gerundio: gerundio,
       participio: participio,
+      exampleSpanish: example?.es,
+      exampleEnglish: example?.en,
+      exampleAttribution: example?.provenance.attribution,
+      etymologySnippet: etymology,
       quizQuestion: quizQuestion,
       dateString: dateString
     )
+  }
+
+  /// Trim an etymology body to at most `maxLength` characters, preferring to cut at the
+  /// last sentence boundary; otherwise hard-cut and append an ellipsis. Ported from the
+  /// sibling apps. Always rebalances the `~bold~` markers so a cut can't leave a dangling
+  /// opener that would render the whole tail bold in the widget's parser.
+  static func truncateToSentenceBoundary(_ text: String, maxLength: Int) -> String {
+    guard text.count > maxLength else {
+      return rebalanceTildes(text)
+    }
+    let prefix = String(text.prefix(maxLength))
+    if let lastPeriod = prefix.lastIndex(of: ".") {
+      return rebalanceTildes(String(prefix[...lastPeriod]))
+    }
+    return rebalanceTildes(prefix) + "…"
+  }
+
+  /// Etymology snippets use `~…~` bold markup. A mid-string cut can leave an unclosed
+  /// `~` opener, which the widget's parser (splitting on `~`) would render as bold
+  /// running to the end of the snippet. Drop the dangling opener so the tail stays plain.
+  static func rebalanceTildes(_ text: String) -> String {
+    guard !text.filter({ $0 == "~" }).count.isMultiple(of: 2) else {
+      return text
+    }
+    guard let lastTilde = text.lastIndex(of: "~") else {
+      return text
+    }
+    return String(text[..<lastTilde]) + String(text[text.index(after: lastTilde)...])
   }
 
   /// Frequency-ranked verbs only (the ~1000 with a rank), most common first. Sorted

@@ -39,21 +39,14 @@ nonisolated enum SnapshotReader {
             WidgetConjugation(pronoun: "vosotros", form: "tenéis"),
             WidgetConjugation(pronoun: "ellos", form: "tiEnen")
           ]
-        ),
-        WidgetParadigm(
-          tenseDisplay: "Pretérito",
-          conjugations: [
-            WidgetConjugation(pronoun: "yo", form: "tUVE"),
-            WidgetConjugation(pronoun: "tú", form: "tUVIste"),
-            WidgetConjugation(pronoun: "él", form: "tUVo"),
-            WidgetConjugation(pronoun: "nosotros", form: "tUVImos"),
-            WidgetConjugation(pronoun: "vosotros", form: "tUVIsteis"),
-            WidgetConjugation(pronoun: "ellos", form: "tUVIeron")
-          ]
         )
       ],
       gerundio: "teniendo",
       participio: "tenido",
+      exampleSpanish: "No tengo tiempo que perder en estas discusiones.",
+      exampleEnglish: "I have no time to lose on these arguments.",
+      exampleAttribution: "— Benito Pérez Galdós, Fortunata y Jacinta (1887)",
+      etymologySnippet: "Spanish ~tener~ comes from Latin ~tenēre~ (“to hold, keep, grasp”), from the Proto-Indo-European root *~ten-~ (“to stretch”) — holding conceived as keeping something taut in the hand.",
       quizQuestion: WidgetQuizQuestion(
         infinitive: "tener",
         tenseDisplay: "Presente de Indicativo",
