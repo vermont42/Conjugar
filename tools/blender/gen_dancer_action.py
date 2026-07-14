@@ -15,7 +15,8 @@ from mathutils import Matrix, Vector
 argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 ACTION = argv[argv.index("--action") + 1] if "--action" in argv else "idle"
 
-FRAMES = {"idle": 2, "jump": 3, "cape": 4, "capeWalk": 6, "climb": 4}[ACTION]
+FRAMES = {"idle": 2, "jump": 3, "cape": 4, "capeWalk": 6, "climb": 4,
+          "ole": 3, "stomp": 3}[ACTION]
 # Actions where the dancer holds a red muleta in front of her (rendered by
 # render_sprites.py --cape as a second, red cel material on the "Muleta" mesh).
 CAPE_ACTIONS = {"cape", "capeWalk"}
@@ -199,15 +200,83 @@ elif ACTION == "climb":
         worldX('RightUpLeg', -6 * math.sin(p))
         hipZ(0.03 * math.sin(2 * p))        # vertical bob = climbing
 
+elif ACTION == "ole":
+    # Boss-fight desplante (boss plan Phase 4): arms sweep UP into a wide V + back
+    # ARCH + gown FLARE — a proud "¡olé!". The PEAK was dialled INTERACTIVELY through
+    # blender-mcp with Josh's live per-pose sign-off (2026-07-13): the shoulders are
+    # raised alongside the arms (worldX 30) so the deltoid travels with the arm and
+    # doesn't tear from the torso — the gap that a bare 165° arm raise opened. Lead-in
+    # frames are fractions of the approved peak (a scaled-down clean pose stays clean),
+    # so only the peak needed scrutiny. Ops are PARENT-FIRST (spine → shoulder → arm →
+    # forearm) so children inherit correctly under the world-space FK rotations.
+    driven = ['LeftUpLeg', 'LeftLeg', 'RightUpLeg',
+              'Spine', 'Spine1', 'Spine2', 'Spine3',
+              'LeftShoulder', 'RightShoulder',
+              'LeftArm', 'RightArm', 'LeftForeArm', 'RightForeArm']
+    OLE_PEAK = [
+        ('LeftUpLeg', 16), ('LeftLeg', 10), ('RightUpLeg', -8),   # gown flare (contrapposto)
+        ('Spine', -5), ('Spine1', -6), ('Spine2', -7), ('Spine3', -4),  # back arch
+        ('LeftShoulder', 30), ('RightShoulder', 30),              # raise sockets (no gap)
+        ('LeftArm', 135), ('RightArm', 135),                      # arms up
+        ('LeftForeArm', 40), ('RightForeArm', 40),                # curved flamenco hands
+    ]
+    OLE_SCALES = [0.30, 0.65, 1.0]                                # rise -> rise -> held peak
+
+    def pose(i):
+        f = OLE_SCALES[i - 1]
+        for b, deg in OLE_PEAK:
+            worldX(b, deg * f)
+
+elif ACTION == "stomp":
+    # Boss-fight zapateado (boss plan Phase 4): a percussive weight DROP + asymmetric
+    # flamenco braceo + hem KICK. Feet are hidden, so the gown and the audio thud sell
+    # the stamp; the pose sells the marcaje. Three explicit stages — anticipation (hips
+    # UP, arms gathering) -> STRIKE (approved peak: hips dropped -0.09, one hand marking
+    # high, the other curling forward, front leg kicking the hem) -> settle (near-peak,
+    # hips easing up). The peak was dialled INTERACTIVELY with Josh's sign-off; the back
+    # arm was curled forward (not left sticking straight out) per his call. Parent-first
+    # ops; hipZ (root translation, weight drop) applied last so children follow.
+    driven = ['Hips', 'Spine', 'LeftUpLeg', 'LeftLeg', 'RightUpLeg',
+              'LeftShoulder', 'RightShoulder',
+              'LeftArm', 'RightArm', 'LeftForeArm', 'RightForeArm']
+    ANTIC = {'ops': [('LeftUpLeg', 10), ('LeftLeg', 7), ('RightUpLeg', -4), ('Spine', -2),
+                     ('LeftShoulder', 12), ('LeftArm', 70), ('LeftForeArm', 30),
+                     ('RightShoulder', 3), ('RightArm', -12), ('RightForeArm', -25)],
+             'hipz': 0.02}
+    STRIKE = {'ops': [('LeftUpLeg', 24), ('LeftLeg', 18), ('RightUpLeg', -10), ('Spine', 3),
+                      ('LeftShoulder', 22), ('LeftArm', 120), ('LeftForeArm', 48),
+                      ('RightShoulder', 6), ('RightArm', -30), ('RightForeArm', -55)],
+              'hipz': -0.09}
+    SETTLE = {'ops': [('LeftUpLeg', 20), ('LeftLeg', 15), ('RightUpLeg', -9), ('Spine', 2),
+                      ('LeftShoulder', 20), ('LeftArm', 112), ('LeftForeArm', 46),
+                      ('RightShoulder', 6), ('RightArm', -28), ('RightForeArm', -52)],
+              'hipz': -0.06}
+    STOMP_STAGES = [ANTIC, STRIKE, SETTLE]
+
+    def pose(i):
+        s = STOMP_STAGES[i - 1]
+        for b, deg in s['ops']:
+            worldX(b, deg)
+        hipZ(s['hipz'])
+
 else:
     sys.exit(f"unknown action {ACTION}")
 
 muleta = make_muleta() if ACTION in CAPE_ACTIONS else None
 
-for i in range(1, FRAMES + 1):
+# One-shot bursts (ole/stomp) hold their PEAK on the final authored frame, but
+# render_sprites samples the range half-open [start, end) — which would drop that peak
+# (and the FBX exporter can shift the action's start frame too). So author a trailing
+# DUPLICATE of the last pose (the shipped bull idiom): with FRAMES+1 keys, a render at
+# --frames FRAMES samples the FRAMES real poses and drops only the duplicate. Cyclic
+# actions (walk/idle/climb/cape…) tile seamlessly and don't need the guard.
+ONESHOT = {"ole", "stomp"}
+NKEYS = FRAMES + 1 if ACTION in ONESHOT else FRAMES
+
+for i in range(1, NKEYS + 1):
     scene.frame_set(i)
     reset(driven)
-    pose(i)
+    pose(min(i, FRAMES))                    # trailing dup repeats the last real pose
     for b in driven:
         PB[b].keyframe_insert('rotation_quaternion', frame=i)
         PB[b].keyframe_insert('location', frame=i)
@@ -221,7 +290,7 @@ for i in range(1, FRAMES + 1):
 
 bpy.ops.object.mode_set(mode='OBJECT')
 scene.frame_start = 1
-scene.frame_end = FRAMES
+scene.frame_end = NKEYS
 objs = [o for o in bpy.data.objects if o.type in ('MESH', 'ARMATURE')]
 bpy.ops.object.select_all(action='DESELECT')
 for o in objs:

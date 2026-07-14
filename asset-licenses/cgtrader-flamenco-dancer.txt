@@ -16,3 +16,10 @@ Usage rights (CGTrader Royalty Free License):
 
 Raw FBX/MAX/textures kept git-ignored under tools/blender/source/ (only PNGs +
 this license file are committed), per the spike's asset-handling rule.
+
+Rendered sprites shipped (hand-keyed on the vendor rig via gen_dancer_action.py,
+cel-shaded gold + Freestyle outline, feet hidden; `dancer_<action>_<frame>` in
+Assets.xcassets/Game/):
+  idle (2), walk (6), climb (4), jump (3), cape (4), capeWalk (6),
+  ole (3), stomp (3)   ← ole/stomp added for the La Llamada boss fight (2026-07-13),
+                         hand-keyed interactively via blender-mcp with per-pose sign-off.

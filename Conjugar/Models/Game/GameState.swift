@@ -72,6 +72,10 @@ final class GameState {
   static let introDuration = 2.0
   /// Bull-demo seconds per move, indexed by round (0-based) — playback speeds up.
   static let demoStepDurations = [0.9, 0.75, 0.6]
+  /// After the bull demos the LAST move, the full sequence of cue chips lingers this
+  /// much longer before "¡Tu turno!" clears them — a recall beat so the final step is
+  /// memorable, which matters most for the 5-step round-3 phrases.
+  static let demoRecallHold = 1.0
   static let echoTimePerMove = 1.5
   static let echoGrace = 2.0
   static let freezeHold = 1.2

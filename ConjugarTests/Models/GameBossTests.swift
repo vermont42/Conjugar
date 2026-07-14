@@ -117,13 +117,34 @@ struct GameBossTests {
     #expect(length == 3)                                   // round 1
     for expectedStep in 0..<length {
       #expect(gameState.duelState == .bullDemo(step: expectedStep))
-      gameState.updateBoss(dt: CGFloat(gameState.demoStepDuration) + 0.05)
+      // Per-step timer, so the final step's recall hold is waited out too.
+      gameState.updateBoss(dt: CGFloat(gameState.demoStepTimer(forStep: expectedStep)) + 0.05)
     }
     #expect(gameState.isEchoActive)
     #expect(gameState.duelState == .playerEcho(step: 0))
     // Compás budget: moves × 1.5 s + 2 s grace.
     let expectedBudget = Double(length) * GameState.echoTimePerMove + GameState.echoGrace
     #expect(abs(gameState.echoTotal - expectedBudget) < 0.001)
+  }
+
+  @Test func demoHoldsFinalSequenceOneBeatBeforeEcho() {
+    let gameState = duelReady()
+    let length = gameState.phraseSequence.count
+    // Step through every move but the last at the normal per-move cadence.
+    for step in 0..<(length - 1) {
+      #expect(gameState.duelState == .bullDemo(step: step))
+      gameState.updateBoss(dt: CGFloat(gameState.demoStepDuration) + 0.05)
+    }
+    #expect(gameState.duelState == .bullDemo(step: length - 1))
+    // The final move's own step time elapses — but the recall hold keeps the whole
+    // sequence of cue chips on screen, so we're still demoing, not yet echoing.
+    gameState.updateBoss(dt: CGFloat(gameState.demoStepDuration) + 0.05)
+    #expect(gameState.duelState == .bullDemo(step: length - 1))
+    #expect(!gameState.isEchoActive)
+    // Only after the recall hold do the chips clear and the echo unlock.
+    gameState.updateBoss(dt: CGFloat(GameState.demoRecallHold))
+    #expect(gameState.isEchoActive)
+    #expect(gameState.duelState == .playerEcho(step: 0))
   }
 
   // MARK: Judging

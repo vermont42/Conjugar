@@ -36,6 +36,15 @@ extension GameState {
     Self.demoStepDurations[bossRound]
   }
 
+  /// How long to hold `.bullDemo` on a given step before advancing. The LAST step
+  /// gets an extra `demoRecallHold` so the whole sequence of cue chips stays on
+  /// screen a beat longer before `beginEcho()` clears them (the final move was
+  /// vanishing too fast to memorize, especially in the 5-step round-3 phrases).
+  func demoStepTimer(forStep step: Int) -> Double {
+    let isLast = step == phraseSequence.count - 1
+    return demoStepDuration + (isLast ? Self.demoRecallHold : 0)
+  }
+
   /// Whether the boss control cluster should accept (and brightly render) input.
   var isEchoActive: Bool {
     guard phase == .duel, case .playerEcho = duelState else { return false }
@@ -171,7 +180,7 @@ extension GameState {
   func startPhrase() {
     rollPhrase()
     duelState = .bullDemo(step: 0)
-    duelTimer = demoStepDuration
+    duelTimer = demoStepTimer(forStep: 0)
     performBullDemo(move: phraseSequence[0])
   }
 
@@ -317,7 +326,7 @@ extension GameState {
         let next = step + 1
         if next < phraseSequence.count {
           duelState = .bullDemo(step: next)
-          duelTimer = demoStepDuration
+          duelTimer = demoStepTimer(forStep: next)
           performBullDemo(move: phraseSequence[next])
         } else {
           beginEcho()

@@ -12,13 +12,12 @@
 import CoreGraphics
 
 extension GameState {
-  /// Frame counts per action. The bull's boss dance actions (stomp/rear/bow) now
-  /// have their own hand-keyed sprites (boss plan Phase 3, `gen_bull_action.py`) —
-  /// counts 3/4/4. The player's boss actions still reuse existing flipbooks for now
-  /// (ole ≈ cape/4, stomp ≈ jump/3); boss plan Phase 4 swaps in hand-keyed dancer
-  /// imagesets and updates those counts.
+  /// Frame counts per action. Both actors' boss dance actions now have their own
+  /// hand-keyed sprites: the bull's stomp/rear/bow (boss plan Phase 3,
+  /// `gen_bull_action.py`) at 3/4/4, and the dancer's ole/stomp (Phase 4,
+  /// `gen_dancer_action.py`) at 3/3 — one-shot bursts whose peak is the last frame.
   static let playerFrameCounts: [PlayerAction: Int] = [
-    .idle: 2, .walk: 6, .climb: 4, .jump: 3, .cape: 4, .capeWalk: 6, .ole: 4, .stomp: 3
+    .idle: 2, .walk: 6, .climb: 4, .jump: 3, .cape: 4, .capeWalk: 6, .ole: 3, .stomp: 3
   ]
   static let bullFrameCounts: [BullAction: Int] = [
     .idle: 2, .walk: 6, .throw: 5, .stomp: 3, .rear: 4, .bow: 4

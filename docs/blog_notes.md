@@ -5017,3 +5017,70 @@ per-pose sign-off, modest rotations, a final game-size filmstrip review before c
 the boss plan's **Phase 4** callout so the dancer's `ole`/`stomp` (next session) start there
 instead of relearning it. And the commit was **amended**, not piled onto, once Josh approved the
 redo.
+
+## Boss fight Phase 4: the dancer's olé and stomp (2026-07-13)
+
+With the bull's three boss actions rendered (Phase 3), the matador's opponent still needed her
+two dance moves: **olé** (a proud arms-up desplante) and **stomp** (a percussive zapateado). This
+was the first action-authoring session to run the collaboration workflow *by design* rather than
+discovering it mid-crisis — Phase 3 had baked the bull's poses blind, shipped a Picasso, and only
+then switched to a live-viewport-with-Josh loop; Phase 4's plan callout said "do it that way from
+the start," and we did.
+
+The mechanics carried straight over: drive Blender live through blender-mcp, pose one bone group
+at a time with `execute_blender_code`, `get_viewport_screenshot` after every change, and get Josh's
+eye before moving on. Two things bit us anyway. First, `read_factory_settings()` — my reflex for a
+clean import — **resets Blender's preferences and disables the MCP add-on**, dropping the socket
+mid-session; Josh had to re-enable and re-Connect. The fix was to never factory-reset: clear the
+scene objects manually and, because the FBX importer's internal EDIT-mode switch needs an active
+object when driven through MCP (it doesn't headless), drop a throwaway cube in first so there's a
+context to switch. Second, and more interesting as animation: raising the upper-arm bone 165° to
+get the arms overhead **tore the deltoid off the torso** — a dark gap at the armpit that Josh spotted
+immediately (he sent a cropped screenshot). The cause is the same continuous-mesh shear that
+giraffe-necked the bull: skin weights can't stretch that far. The fix is anatomical — **raise the
+shoulder/clavicle bone too** so the socket travels with the arm, which lets the arm bone rotate less
+(135° instead of 165°) for the same hand height and closes the gap. That's now baked into the `ole`
+peak. Josh also asked for "gown flare," so a contrapposto leg stagger kicks the front hem out (the
+skirt is skinned to the leg bones, so a subtle stance sways it) — and, when I offered head-up and
+more arch, he pulled the classic director's move of asking for exactly one more notch of back-arch
+and nothing else. The `stomp` peak he shaped too: I'd left the back arm sticking straight out
+horizontally and he'd have curled it forward into a rounded braceo — which I did before he had to say
+it. His summary of the whole exercise: "I'm not making a Pixar movie. I just don't want her to look
+like a Picasso, which the bull did until we came up with this workflow. She doesn't."
+
+The approved peaks were baked into `gen_dancer_action.py` as new `ole`/`stomp` branches: `ole` is a
+single peak scaled 0.30 → 0.65 → 1.0 (a scaled-down clean pose stays clean, so only the peak needed
+sign-off), `stomp` is three explicit stages (anticipation with the hips *up*, strike with the hips
+dropped −0.09 and the hem kicked, settle). Both are **3-frame one-shots** — Josh asked "don't we need
+more frames?" and the answer is no: the whole game is low-frame (idle 2, jump 3, cape 4, the bull's
+3/4/4), the moves play as ~0.6–0.9 s bursts at 10 fps, and 3 is the plan's spec. The one non-obvious
+render detail: `render_sprites.py` samples the frame range **half-open `[start, end)`**, which drops
+the last authored frame — fatal for a one-shot whose *peak* is the last frame. So both actions use the
+bull's trailing-duplicate idiom (author N+1 keys, render `--frames N`; the duplicate is what gets
+dropped, the peak survives — robust even to the FBX exporter shifting the action's start frame). The
+dancer generator's *existing* one-shots (jump) don't do this and may quietly drop their apex; I left
+them alone rather than widen the blast radius.
+
+Union crops came out **ole 116×229, stomp 108×229** — both 229 tall, matching the other actions' hem
+baseline, so the character stays one on-screen size. Installed as `dancer_ole_1..3`/`dancer_stomp_1..3`
+imagesets, wired `actionName` (ole→"ole", stomp→"stomp"), `dancerWidth` aspects, and `playerFrameCounts`
+(`.ole` 4→3). Build green, SwiftLint clean, and the boss stage renders the idle dancer as a proper gold
+sprite (not a numbered box) at the right size. The one thing I *couldn't* verify cleanly was the dancer
+performing ole/stomp *in the duel*: she only animates a move on a correct echo, and the phrase sequence
+is `SystemRandomNumberGenerator` in the shipping build (only tests inject a seeded `SplitMix64`), so
+catching a specific move meant grinding random echo windows via AXe taps — exactly the slog Phase 1
+flagged. Josh, reasonably, said "you are sadly not good at playing the game, I'll test it" and took the
+in-motion check on device. Both new sprites share the identical, already-working render path, so the
+risk there is low; the game-size filmstrip he signed off on is the real proof the poses read.
+
+**Post-test tuning (same day):** Josh played the finished duel and hit a real readability
+snag — when the bull demos a **5-step** phrase, the last cue chip vanished the instant the
+sequence ended, too fast to commit to memory before the echo. The fix is a **recall beat**:
+the final `.bullDemo` step now holds an extra `demoRecallHold` (1.0 s) with the whole chip
+row still on screen before `beginEcho()` clears it and "¡Tu turno!" fires. Implemented as a
+`demoStepTimer(forStep:)` that adds the hold only to the last step, so the per-move demo
+cadence is unchanged and only the memorize-the-whole-thing moment gets longer. The existing
+`demoStepsThroughPhraseThenUnlocksEcho` test had to switch from stepping by a flat
+`demoStepDuration` to the per-step timer, and a new `demoHoldsFinalSequenceOneBeatBeforeEcho`
+locks the behavior: after the last move's own time elapses we're *still* in demo (chips up,
+echo locked), and only after the recall hold does the echo unlock.

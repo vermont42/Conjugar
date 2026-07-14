@@ -47,9 +47,8 @@ struct GameView: View {
 
   /// Player actions backed by real rendered sprites (`dancer_<action>_<frame>`).
   /// All are rendered; the numbered-box fallback stays only as a safety net. The
-  /// boss dance actions reuse existing flipbooks for now (ole ≈ cape, stomp ≈ jump);
-  /// boss plan Phase 4 swaps in hand-keyed `dancer_ole_*`/`dancer_stomp_*` imagesets
-  /// by changing only these mappings (+ the frame counts).
+  /// boss dance actions ole/stomp now have their own hand-keyed sprites (boss plan
+  /// Phase 4, `gen_dancer_action.py`) — no longer reusing cape/jump.
   private static let spriteActions: Set<PlayerAction> = [.idle, .walk, .climb, .jump, .cape, .capeWalk, .ole, .stomp]
 
   /// The asset-name stem for each action: `dancer_<name>_<frame>`.
@@ -61,8 +60,8 @@ struct GameView: View {
     case .jump: return "jump"
     case .cape: return "cape"
     case .capeWalk: return "capeWalk"
-    case .ole: return "cape"    // Phase-1 reuse; Phase 4 → "ole"
-    case .stomp: return "jump"  // Phase-1 reuse; Phase 4 → "stomp"
+    case .ole: return "ole"        // boss desplante (arms-up V + back arch)
+    case .stomp: return "stomp"    // boss zapateado (weight drop + braceo)
     }
   }
 
@@ -80,8 +79,8 @@ struct GameView: View {
     case .jump: aspect = 108.0 / 225.0
     case .cape: aspect = 152.0 / 225.0        // wider: muleta held out in front
     case .capeWalk: aspect = 155.0 / 227.0
-    case .ole: aspect = 152.0 / 225.0         // Phase-1 reuse of cape's crop
-    case .stomp: aspect = 108.0 / 225.0       // Phase-1 reuse of jump's crop
+    case .ole: aspect = 116.0 / 229.0         // arms-up V (Phase 4 crop)
+    case .stomp: aspect = 108.0 / 229.0       // weight drop + braceo (Phase 4 crop)
     }
     return dancerVisualHeight * aspect
   }
@@ -476,7 +475,8 @@ struct GameView: View {
   }
 
   /// SC5-style cue chips accumulating left→right above the bull as he demos the
-  /// phrase. They vanish at ¡Tu turno! — echoing is from memory.
+  /// phrase. The full sequence lingers a recall beat (`demoRecallHold`) after the
+  /// last move, then vanishes at ¡Tu turno! — echoing is from memory.
   private var cueChips: some View {
     Group {
       if let step = demoStep, !gameState.phraseSequence.isEmpty {
