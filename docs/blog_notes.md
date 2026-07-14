@@ -5142,3 +5142,30 @@ delay-plus-duration slide window and to assert the ≥3-glyph burst, and added
 `endSceneHintIsWithheldThenShown`. Full `GameBossTests` suite green (22 tests). Live-verified end to
 end in the sim (`CONJUGAR_GAME_START_BOSS=1 CONJUGAR_GAME_BOSS_BANKED=5`, echo the final phrase to
 win) — Josh signed off on the whole beat: title, delayed walk, reunion burst, gated hint.
+
+## Boss fight: strings localized + emoji crowd removed (2026-07-13)
+
+The strings half of Phase 6 (`prompts/game_boss_llamada.md`) — the testing/full-arc half stays for
+later. Every user-facing boss string moved out of hardcoded `Text(verbatim:)`/literal `spawnJaleo`
+calls into `L.Game` + `Localizable.xcstrings` (17 new keys, en + es both `"translated"`), added via
+`python3`/`json` so the catalog stayed valid and key-sorted (272-line insert, zero churn). Per
+decision 16 the split is deliberate:
+
+- **Spanish in *both* localizations** (the jaleo shouts and title cards, which are the game's flamenco
+  voice): `duelTitle` "¡El duelo!", `tuTurno` "¡Tu turno!", `freezeHint` "🔥 = ¡quieta!",
+  `jaleoOle/Uy/Eso/Bien/Vamos`, `victoria` "¡Victoria!". (`freezeHint` wasn't in the plan's list but
+  is user-visible and clearly belongs with the Spanish-in-both group; the `¡quieta!` hint test still
+  passes because the value is identical in both locales.)
+- **Localized normally en/es**: `bullImpressed` ("The bull is impressed — the matador is free!" /
+  "El toro está impresionado — ¡el matador está libre!"), `tapToContinue`, and the accessibility
+  labels. The plan named `oleMove`/`stompMove`/`capeMove`/`duendeMeter`; I also added
+  `pasoLeftMove`/`pasoRightMove` for parity (all five dance buttons + the meter now have localized
+  VoiceOver labels rather than a mix of English and just-four-of-them). The a11y labels are
+  *descriptive* rather than the bare move word — e.g. `stompMove` is "Stomp"/"Zapateado",
+  `capeMove` "Cape flourish"/"Capote", `duendeMeter` "Duende meter"/"Medidor de duende".
+
+Also, per Josh: **removed the emoji crowd row** (👒🌹👏💃🕺…) that sat just below the tablao floor.
+Its flat-emoji style clashed with the rendered cel-shaded bull/dancer/matador sprites. `stageDressing`
+is now just the matador's pedestal; the jaleo pops carry the crowd's voice. Trimmed the crowd-only
+glyphs from the `GlyphWarmer` list too (only 🔥/✨/🌹/❤️ are still rendered in the boss). Full
+`GameBossTests` green (22), swiftlint clean, verified in the sim (clean floor, Spanish jaleo intact).

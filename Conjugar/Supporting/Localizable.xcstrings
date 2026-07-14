@@ -497,6 +497,86 @@
         }
       }
     },
+    "Game.bullImpressed": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The bull is impressed — the matador is free!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El toro está impresionado — ¡el matador está libre!"
+          }
+        }
+      }
+    },
+    "Game.capeMove": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cape flourish"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capote"
+          }
+        }
+      }
+    },
+    "Game.duelTitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡El duelo!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡El duelo!"
+          }
+        }
+      }
+    },
+    "Game.duendeMeter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duende meter"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medidor de duende"
+          }
+        }
+      }
+    },
+    "Game.freezeHint": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🔥 = ¡quieta!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🔥 = ¡quieta!"
+          }
+        }
+      }
+    },
     "Game.health": {
       "localizations": {
         "en": {
@@ -509,6 +589,86 @@
           "stringUnit": {
             "state": "translated",
             "value": "Salud"
+          }
+        }
+      }
+    },
+    "Game.jaleoBien": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Bien!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Bien!"
+          }
+        }
+      }
+    },
+    "Game.jaleoEso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Eso!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Eso!"
+          }
+        }
+      }
+    },
+    "Game.jaleoOle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Olé!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Olé!"
+          }
+        }
+      }
+    },
+    "Game.jaleoUy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Uy!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Uy!"
+          }
+        }
+      }
+    },
+    "Game.jaleoVamos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Vamos!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Vamos!"
           }
         }
       }
@@ -593,6 +753,54 @@
         }
       }
     },
+    "Game.oleMove": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Olé pose"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Postura olé"
+          }
+        }
+      }
+    },
+    "Game.pasoLeftMove": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step left"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paso a la izquierda"
+          }
+        }
+      }
+    },
+    "Game.pasoRightMove": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step right"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paso a la derecha"
+          }
+        }
+      }
+    },
     "Game.play": {
       "localizations": {
         "en": {
@@ -625,6 +833,38 @@
         }
       }
     },
+    "Game.stompMove": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stomp"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zapateado"
+          }
+        }
+      }
+    },
+    "Game.tapToContinue": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to continue"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca para continuar"
+          }
+        }
+      }
+    },
     "Game.title": {
       "localizations": {
         "en": {
@@ -637,6 +877,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toreo por Amor"
+          }
+        }
+      }
+    },
+    "Game.tuTurno": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Tu turno!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Tu turno!"
+          }
+        }
+      }
+    },
+    "Game.victoria": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Victoria!"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¡Victoria!"
           }
         }
       }

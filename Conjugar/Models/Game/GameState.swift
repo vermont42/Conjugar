@@ -312,9 +312,11 @@ final class GameState {
     // Pre-rasterize the emoji this game rains (flags are the worst first-draw
     // offender) into the process-wide glyph cache, off the main actor. The cape and
     // bullfighter are rendered sprites now, so only the flags remain as emoji during
-    // the climb; the boss fight adds its jaleo pops, freeze/success bursts, and the
-    // emoji crowd row — warm those too so the first duel frame is a cache hit.
-    let bossGlyphs: [(String, CGFloat)] = ["🔥", "🎵", "✨", "🌹", "👏", "❤️", "👒", "💃", "🕺"].map { ($0, 30) }
+    // the climb; the boss fight adds the freeze chip (🔥), the survive sparkle (✨),
+    // and the reunion burst (🌹/❤️) — warm those so the first duel frame is a cache
+    // hit. (The jaleo pops are Spanish words, not emoji; the clashing emoji crowd row
+    // was removed.)
+    let bossGlyphs: [(String, CGFloat)] = ["🔥", "✨", "🌹", "❤️"].map { ($0, 30) }
     let glyphs: [(String, CGFloat)] = Self.flagEmojis.map { ($0, 28) } + bossGlyphs
     Task.detached(priority: .userInitiated) {
       GlyphWarmer.warm(glyphs)

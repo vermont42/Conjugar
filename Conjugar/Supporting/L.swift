@@ -158,6 +158,77 @@ nonisolated enum L {
     static var moveRight: String {
       String(localized: "Game.moveRight")
     }
+
+    // Boss fight — La Llamada. The jaleo shouts and title cards stay Spanish in BOTH
+    // localizations (decision 16); the narrative line and accessibility labels
+    // localize normally en/es.
+    static var duelTitle: String {
+      String(localized: "Game.duelTitle")
+    }
+
+    static var tuTurno: String {
+      String(localized: "Game.tuTurno")
+    }
+
+    static var freezeHint: String {
+      String(localized: "Game.freezeHint")
+    }
+
+    static var jaleoOle: String {
+      String(localized: "Game.jaleoOle")
+    }
+
+    static var jaleoUy: String {
+      String(localized: "Game.jaleoUy")
+    }
+
+    static var jaleoEso: String {
+      String(localized: "Game.jaleoEso")
+    }
+
+    static var jaleoBien: String {
+      String(localized: "Game.jaleoBien")
+    }
+
+    static var jaleoVamos: String {
+      String(localized: "Game.jaleoVamos")
+    }
+
+    static var victoria: String {
+      String(localized: "Game.victoria")
+    }
+
+    static var bullImpressed: String {
+      String(localized: "Game.bullImpressed")
+    }
+
+    static var tapToContinue: String {
+      String(localized: "Game.tapToContinue")
+    }
+
+    static var pasoLeftMove: String {
+      String(localized: "Game.pasoLeftMove")
+    }
+
+    static var pasoRightMove: String {
+      String(localized: "Game.pasoRightMove")
+    }
+
+    static var oleMove: String {
+      String(localized: "Game.oleMove")
+    }
+
+    static var stompMove: String {
+      String(localized: "Game.stompMove")
+    }
+
+    static var capeMove: String {
+      String(localized: "Game.capeMove")
+    }
+
+    static var duendeMeter: String {
+      String(localized: "Game.duendeMeter")
+    }
   }
 
   enum GameCenter {

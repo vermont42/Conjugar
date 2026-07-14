@@ -426,8 +426,9 @@ struct GameView: View {
     .position(x: ladder.x, y: midY)
   }
 
-  // MARK: Boss fight — La Llamada (strings are hardcoded Spanish/English for now;
-  // boss plan Phase 6 moves them into L.Game/Localizable.xcstrings)
+  // MARK: Boss fight — La Llamada. User-facing strings are in `L.Game` /
+  // Localizable.xcstrings: the jaleo shouts + title cards stay Spanish in both
+  // localizations (decision 16), the narrative line + a11y labels localize en/es.
 
   /// A brief deterministic sin-decay judder on llamadas (the Conjuguer idiom —
   /// driven by the game clock, so no per-frame randomness in the view).
@@ -442,30 +443,21 @@ struct GameView: View {
     )
   }
 
-  /// The tablao set: the matador's pedestal and an emoji crowd row just below the
-  /// floor. Fades in with `bossTransition` as the climb scenery fades out.
+  /// The tablao set: the matador's pedestal. Fades in with `bossTransition` as the
+  /// climb scenery fades out. (An emoji crowd row once sat just below the floor, but
+  /// its glyph style clashed with the rendered bull/dancer/matador sprites, so it
+  /// was removed — the jaleo pops carry the crowd's voice instead.)
   private var stageDressing: some View {
-    Group {
-      RoundedRectangle(cornerRadius: 3)
-        .fill(Color.customRed)
-        .frame(width: GameState.bossPedestalSize.width, height: GameState.bossPedestalSize.height)
-        .overlay(
-          HLine()
-            .stroke(Color.customYellow, style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [2, 4]))
-            .frame(height: 2), alignment: .top
-        )
-        .position(x: gameState.pedestalCenterX, y: gameState.pedestalTopY + GameState.bossPedestalSize.height / 2)
-
-      // Tucked close under the floor's lip: on 812-pt-class devices the gap between
-      // the floor and the boss pad's up (olé) button is tight, and at +40 the crowd's
-      // 👒 overlapped the button (its green ribbon read as a glyph artifact on
-      // device). +26 at size 17 clears the button on all current screens.
-      Text(verbatim: "👒 🌹 👏 💃 🕺 👏 🌹")
-        .font(.system(size: 17))
-        .fixedSize()
-        .position(x: gameState.screenSize.width / 2, y: gameState.stageFloorY + 26)
-    }
-    .opacity(gameState.bossTransition)
+    RoundedRectangle(cornerRadius: 3)
+      .fill(Color.customRed)
+      .frame(width: GameState.bossPedestalSize.width, height: GameState.bossPedestalSize.height)
+      .overlay(
+        HLine()
+          .stroke(Color.customYellow, style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [2, 4]))
+          .frame(height: 2), alignment: .top
+      )
+      .position(x: gameState.pedestalCenterX, y: gameState.pedestalTopY + GameState.bossPedestalSize.height / 2)
+      .opacity(gameState.bossTransition)
   }
 
   /// The bull-demo step, when the duel is in its call half (drives the cue chips).
@@ -549,7 +541,7 @@ struct GameView: View {
           .font(.system(size: 18))
           .foregroundStyle(Color.customYellow)
       }
-      .accessibilityLabel(Text(verbatim: "Duende"))
+      .accessibilityLabel(Text(verbatim: L.Game.duendeMeter))
 
       if gameState.isEchoActive {
         let fraction = max(0, min(1, gameState.echoRemaining / gameState.echoTotal))
@@ -571,13 +563,13 @@ struct GameView: View {
     Group {
       switch gameState.phase {
       case .bossIntro:
-        bossTitle("¡El duelo!")
+        bossTitle(L.Game.duelTitle)
       case .victory:
         victoryTitle
       case .endScene:
         VStack(spacing: Layout.doubleDefaultSpacing) {
           victoryTitle
-          Text(verbatim: "The bull is impressed — the matador is free!")
+          Text(verbatim: L.Game.bullImpressed)
             .font(.system(size: 18, weight: .semibold, design: .rounded))
             .foregroundStyle(Color.customYellow)
             .multilineTextAlignment(.center)
@@ -585,7 +577,7 @@ struct GameView: View {
             .padding(.horizontal, Layout.tripleDefaultSpacing)
           // Held back until the reunion beat has read (endSceneHintDelay), then
           // fades up so it doesn't rush the player out of the scene.
-          Text(verbatim: "Tap to continue")
+          Text(verbatim: L.Game.tapToContinue)
             .font(.system(size: 14, weight: .medium))
             .foregroundStyle(Color.customYellow.opacity(0.8))
             .opacity(gameState.showEndSceneHint ? 1 : 0)
@@ -615,7 +607,7 @@ struct GameView: View {
   /// distinct from the intro plate — a taller, tighter cut that reads as a curtain
   /// call. Gold on the red plate, with a soft glow.
   private var victoryTitle: some View {
-    Text(verbatim: "¡Victoria!")
+    Text(verbatim: L.Game.victoria)
       .font(.system(size: 54, weight: .black, design: .rounded))
       .fontWidth(.condensed)
       .foregroundStyle(Color.customYellow)
@@ -672,15 +664,15 @@ struct GameView: View {
   /// always-visible up slot, down slot retired.
   private var bossPad: some View {
     VStack(spacing: Layout.defaultSpacing / 2) {
-      danceButton(.ole, label: "Olé") {
+      danceButton(.ole, label: L.Game.oleMove) {
         Image(systemName: "figure.arms.open")
       }
       HStack(spacing: Layout.defaultSpacing / 2) {
-        danceButton(.pasoLeft, label: "Paso left") {
+        danceButton(.pasoLeft, label: L.Game.pasoLeftMove) {
           Image(systemName: "arrowtriangle.left.fill")
         }
         dPadSlot
-        danceButton(.pasoRight, label: "Paso right") {
+        danceButton(.pasoRight, label: L.Game.pasoRightMove) {
           Image(systemName: "arrowtriangle.right.fill")
         }
       }
@@ -691,13 +683,13 @@ struct GameView: View {
   /// The cape button beside the stomp circle (the stomp is the relabeled jump button).
   private var bossActionCluster: some View {
     HStack(spacing: Layout.defaultSpacing) {
-      danceButton(.cape, label: "Cape", size: Self.dirButtonSize, isCircle: true) {
+      danceButton(.cape, label: L.Game.capeMove, size: Self.dirButtonSize, isCircle: true) {
         Image("cape_pickup")
           .resizable()
           .scaledToFit()
           .frame(width: 22, height: 22)
       }
-      danceButton(.stomp, label: "Stomp", size: Self.jumpButtonSize, isCircle: true) {
+      danceButton(.stomp, label: L.Game.stompMove, size: Self.jumpButtonSize, isCircle: true) {
         Image(systemName: "shoeprints.fill")
           .font(.system(size: 24, weight: .bold))
       }

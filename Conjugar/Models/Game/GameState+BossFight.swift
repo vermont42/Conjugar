@@ -226,7 +226,7 @@ extension GameState {
     bullAction = .idle
     bullFacing = 1
     prepareEchoSlot(0)
-    spawnJaleo("¡Tu turno!", x: playerX, y: playerY - 84, size: 36)
+    spawnJaleo(L.Game.tuTurno, x: playerX, y: playerY - 84, size: 36)
   }
 
   private func prepareEchoSlot(_ step: Int) {
@@ -239,7 +239,7 @@ extension GameState {
       // player ever faces (per boss run) says what to do — nothing.
       if !didShowFreezeHint {
         didShowFreezeHint = true
-        spawnJaleo("🔥 = ¡quieta!", x: playerX, y: playerY - 84, size: 30)
+        spawnJaleo(L.Game.freezeHint, x: playerX, y: playerY - 84, size: 30)
       }
     }
   }
@@ -262,7 +262,7 @@ extension GameState {
         Current.soundPlayer.play(cue, shouldDebounce: false, volume: 0.4)
       }
       Current.hapticPlayer.play(.impactLight)
-      spawnJaleo(["¡Eso!", "¡Bien!", "¡Vamos!"].randomElement() ?? "¡Eso!", x: playerX, y: playerY - 54)
+      spawnJaleo([L.Game.jaleoEso, L.Game.jaleoBien, L.Game.jaleoVamos].randomElement() ?? L.Game.jaleoEso, x: playerX, y: playerY - 54)
       advanceEcho(from: step)
     } else {
       failPhrase()
@@ -282,7 +282,7 @@ extension GameState {
   private func succeedPhrase() {
     score += Self.phraseBonus * (bossRound + 1)
     banked += 1
-    spawnJaleo("¡Olé!", x: playerX, y: playerY - 90, size: 40)
+    spawnJaleo(L.Game.jaleoOle, x: playerX, y: playerY - 90, size: 40)
     // A banked phrase earns palmas and a crowd olé.
     Current.soundPlayer.play(.palmas, shouldDebounce: false, volume: 0.45)
     Current.soundPlayer.play(.crowdOle, shouldDebounce: false, volume: 0.4)
@@ -294,7 +294,7 @@ extension GameState {
   private func failPhrase() {
     banked = max(0, banked - 1)
     Current.soundPlayer.play(.buzz, shouldDebounce: false)
-    spawnJaleo("¡Uy!", x: playerX, y: playerY - 74, size: 32)
+    spawnJaleo(L.Game.jaleoUy, x: playerX, y: playerY - 74, size: 32)
     // The bull snorts and stomps smugly.
     Current.soundPlayer.play(.snort, shouldDebounce: true, volume: 0.4)
     Current.hapticPlayer.play(.error)
