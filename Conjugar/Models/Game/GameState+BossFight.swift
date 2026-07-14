@@ -561,10 +561,7 @@ extension GameState {
       }
     }
 
-    for i in jaleoPops.indices {
-      jaleoPops[i].ttl -= dt
-    }
-    jaleoPops.removeAll { $0.ttl <= 0 }
+    advanceJaleoPops(dt: dt)
   }
 
   private var isShowboating: Bool {

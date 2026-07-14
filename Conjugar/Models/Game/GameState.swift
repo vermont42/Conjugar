@@ -598,8 +598,20 @@ final class GameState {
     updateBull(dt: dt)
     updateObstacles(dt: dt)
     advanceAnimations(dt: dt)
+    // Age any drifting jaleo pops during the climb too (the "¡Nivel N!" stage banner
+    // is spawned here) — otherwise they never fade and stack across stages.
+    advanceJaleoPops(dt: Double(dt))
     resolveCollisions()
     checkReachedBull()
+  }
+
+  /// Drift-age the jaleo pops toward expiry and drop the dead ones. Shared by the
+  /// climb pipeline and the boss cosmetics so a pop fades wherever it was spawned.
+  func advanceJaleoPops(dt: Double) {
+    for i in jaleoPops.indices {
+      jaleoPops[i].ttl -= dt
+    }
+    jaleoPops.removeAll { $0.ttl <= 0 }
   }
 
   // MARK: Collision helper

@@ -347,6 +347,23 @@ struct GameStateTests {
     #expect(abs(gameState.playerX - gameState.screenSize.width * 0.15) < 0.5)
   }
 
+  @Test func nivelBannerFadesDuringTheClimb() {
+    let gameState = configured()
+    gameState.summitCount = 1
+    gameState.enterEscape()
+    var safety = 0
+    while gameState.phase == .escape && safety < 1000 {
+      safety += 1
+      gameState.updateEscape(dt: 1.0 / 60.0)
+    }
+    // A "¡Nivel 2!" banner is present the moment the stage rebuilds…
+    #expect(gameState.jaleoPops.count == 1)
+    #expect(gameState.phase == .climb)
+    // …and the climb pipeline ages it out (banner ttl is 2 s).
+    gameState.advanceJaleoPops(dt: 2.1)
+    #expect(gameState.jaleoPops.isEmpty)
+  }
+
   // MARK: Soft respawn
 
   @Test func deathSoftRespawnsKeepingProgress() {

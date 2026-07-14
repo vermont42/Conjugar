@@ -125,8 +125,8 @@ extension GameState {
     obstacleSpawnTimer = Self.obstacleSpawnInterval
     for i in capes.indices { capes[i].collected = false }
 
-    // The between-stage banner, centered mid-field.
-    spawnJaleo(L.Game.nivel(stage), x: w / 2, y: screenSize.height * 0.4, size: 44)
+    // The between-stage banner, centered mid-field; fades out over two seconds.
+    spawnJaleo(L.Game.nivel(stage), x: w / 2, y: screenSize.height * 0.4, size: 44, ttl: 2.0)
 
     phase = .climb
   }
