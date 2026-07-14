@@ -4837,3 +4837,49 @@ Coverage check before shipping: all 989 frequency-ranked verbs — the entire ve
 day rotation pool — have both an example and an etymology on file, so the two new blocks
 are never empty for a real snapshot. Build is green; Josh will eyeball the rendered widget
 on device.
+
+## Boss fight Phase 2 — the SFX pack + juice (2026-07-13)
+
+Phase 1 shipped La Llamada playable on reused art and placeholder sounds (soccerKick for
+the llamada stomp, a generic chirp for every bull demo cue, chime/cow for the reactions).
+Phase 2 replaces the placeholders with a real seven-sound pack sourced fresh from Pixabay
+and wires each move to its own voice.
+
+Sourcing was Chrome-driven (Claude in Chrome, Josh authenticated to Pixabay): one clean
+single **castanet** click, a rhythmic **hand clap** (palmas), a **short crowd cheer**, an
+**animalistic snort** for the bull, a single **foot-stomp** hit, and a **simple whoosh**
+for the cape. Pixabay's Content License is commercial-OK / no-attribution, so the paper
+trail (`asset-licenses/pixabay-game-sfx.txt`, id · uploader · title per file) is a courtesy
+plus a raw-file-not-redistributed note. The one non-obvious call: rather than hunt for two
+tonally-distinct castanets, I took a single click and pitch-shifted it ~-3 st / ~+3 st with
+ffmpeg `asetrate` into **castanetLow** (paso left) and **castanetHigh** (paso right), which
+guarantees the two pasos read as a matched low/high pair instead of two unrelated samples.
+Everything was trimmed to its transient, faded, peak-normalized to -1 dBFS, and re-encoded
+to 192 kb/s MP3 into the synchronized `Conjugar/Audio/` group (zero pbxproj edits).
+
+Toolchain snag: `ffmpeg`/`ffprobe` aborted on launch — `libx265.215.dylib` not found. Homebrew
+had bumped x265 4.1 → 4.2 (which ships `libx265.216.dylib`) but ffmpeg 8.0.1 was still linked
+against 215. The 4.1 Cellar dir still held the real 215 dylib, so a one-line symlink
+(`.../4.2/lib/libx265.215.dylib` → `.../4.1/lib/libx265.215.dylib`) restored an exact-ABI
+match without a full `brew reinstall ffmpeg`. (x265 is HEVC video, which the audio work never
+touches, so even a mismatch would've been harmless — but the real 215 was right there.)
+
+Wiring: a new `DanceMove.cueSound` maps each move to its Sound (freeze → nil, silent by
+design — its tension is the *absence* of sound), played both on the bull's demo and on the
+dancer's correct echo so a move sounds the same coming and going. The per-move cues are
+**non-debounced** on purpose: SoundPlayer's debounce window is 1 s, but demo steps are
+0.6–0.9 s apart and a phrase can repeat a move, so debouncing would swallow the second
+castanet. The reaction sounds that *can* stack (snort on fail, crowd murmur under a
+showboat) keep `shouldDebounce: true`. Volumes stay in the established low band (0.15–0.5).
+The victory/end-scene applause and the ✨ freeze-survival sparkle keep existing app sounds —
+they aren't part of the flamenco pack.
+
+Also warmed the boss's emoji (🔥 🎵 ✨ 🌹 👏 ❤️ 👒 💃 🕺) in `GlyphWarmer` alongside the flags,
+so the first duel frame's jaleo pops / crowd row are a glyph-cache hit rather than a
+render-thread stall.
+
+Deferred: the optional tension sting for the freeze slot (the existing chime/chirp cover it)
+and the sibling apps' `HapticPlayer` port — both nice-to-haves, not blockers. Build green,
+swiftlint clean, all 20 `GameBossTests` pass, and a live `CONJUGAR_GAME_START_BOSS=1` run
+drove the intro + a full bull demo through every new cue without incident. The actual mix
+feel is Josh's on-device audition (the phase's `Josh auditions` beat).

@@ -1,0 +1,33 @@
+Assets:   Conjugar/Audio/castanetLow.mp3, castanetHigh.mp3, palmas.mp3,
+          crowdOle.mp3, snort.mp3, stompThud.mp3, capeWhoosh.mp3
+          (the boss fight "La Llamada" dance-off SFX pack — paso left/right cues,
+          olé palmas, crowd olé, bull snort, stomp thud, cape whoosh)
+Source:   Downloaded from Pixabay Sound Effects — https://pixabay.com/sound-effects/
+License:  Pixabay Content License — https://pixabay.com/service/license-summary/
+          Commercial use permitted; NO attribution required. Only restriction:
+          don't redistribute the raw sound file as a standalone download (embedding
+          it in the app satisfies this).
+
+Per-file provenance (Pixabay sound-effect id · uploader · original title):
+
+  castanetLow.mp3   ┐ 97475  · freesound_community · "castanets attack 2"
+  castanetHigh.mp3  ┘        https://pixabay.com/sound-effects/castanets-attack-2-97475/
+                      One castanet click, pitch-shifted ~-3 st (low) and ~+3 st
+                      (high) so paso-left and paso-right read as distinct voices.
+  palmas.mp3          106596 · freesound_community · "hand clap"
+                      https://pixabay.com/sound-effects/hand-clap-106596/
+  crowdOle.mp3        236776 · Driken5482 (Driken Stan) · "Short crowd cheer"
+                      https://pixabay.com/sound-effects/short-crowd-cheer-236776/
+  snort.mp3           463205 · DRAGON-STUDIO · "Animalistic Snort"
+                      https://pixabay.com/sound-effects/animalistic-snort-463205/
+  stompThud.mp3       93279  · freesound_community · "stomp2"
+                      https://pixabay.com/sound-effects/stomp2-93279/
+  capeWhoosh.mp3      382724 · DRAGON-STUDIO · "Simple Whoosh"
+                      https://pixabay.com/sound-effects/simple-whoosh-382724/
+
+Processing: Each source mp3 was trimmed to its transient, faded, peak-normalized to
+          -1 dBFS, and re-encoded to 192 kb/s / 44.1 kHz stereo MP3 (ffmpeg). The
+          raw downloads are not committed; only the processed pack ships.
+
+Reuse:    Bundled as game SFX. No attribution legally required; the app's Credits
+          screen ("Game Sounds") includes a courtesy note.

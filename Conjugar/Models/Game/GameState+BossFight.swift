@@ -126,8 +126,8 @@ extension GameState {
     playerAction = .idle
     commandBullMove(.stomp, duration: Self.danceBurstDuration)
     triggerScreenShake()
-    // Placeholder stomp thud (Phase 2: the Pixabay stompThud).
-    Current.soundPlayer.play(.soccerKick, shouldDebounce: false, volume: 0.5)
+    // The stomp thud that opens the duel.
+    Current.soundPlayer.play(.stompThud, shouldDebounce: false, volume: 0.5)
     if !bossMusicStarted {
       bossMusicStarted = true
       Current.soundPlayer.startMusic(.bossFight)
@@ -192,8 +192,12 @@ extension GameState {
     case .pasoRight: bullFacing = 1
     default: bullFacing = 1
     }
-    // Placeholder cue note (Phase 2: per-move castanets/palmas/whoosh).
-    Current.soundPlayer.play(.chirp, shouldDebounce: false, volume: 0.3)
+    // Each move speaks in its own voice — castanets (paso l/r), palmas (olé),
+    // thud (stomp), whoosh (cape). Non-debounced: the cues are deliberately spaced
+    // and a phrase may repeat a move within the 1 s debounce window.
+    if let cue = move.cueSound {
+      Current.soundPlayer.play(cue, shouldDebounce: false, volume: 0.3)
+    }
   }
 
   private func beginEcho() {
@@ -231,7 +235,10 @@ extension GameState {
     if move == expected {
       score += Self.movePoints
       commandPlayerMove(move)
-      Current.soundPlayer.play(.pop, shouldDebounce: false, volume: 0.5)
+      // The dancer echoes the move in the same voice the bull demoed it in.
+      if let cue = move.cueSound {
+        Current.soundPlayer.play(cue, shouldDebounce: false, volume: 0.4)
+      }
       spawnJaleo(["¡Eso!", "¡Bien!", "¡Vamos!"].randomElement() ?? "¡Eso!", x: playerX, y: playerY - 54)
       advanceEcho(from: step)
     } else {
@@ -253,8 +260,9 @@ extension GameState {
     score += Self.phraseBonus * (bossRound + 1)
     banked += 1
     spawnJaleo("¡Olé!", x: playerX, y: playerY - 90, size: 40)
-    // Placeholder phrase-success cue (Phase 2: palmas + crowd olé).
-    Current.soundPlayer.play(.chime, shouldDebounce: false)
+    // A banked phrase earns palmas and a crowd olé.
+    Current.soundPlayer.play(.palmas, shouldDebounce: false, volume: 0.45)
+    Current.soundPlayer.play(.crowdOle, shouldDebounce: false, volume: 0.4)
     duelState = .phraseResult(success: true)
     duelTimer = Self.phraseResultHold
   }
@@ -263,8 +271,8 @@ extension GameState {
     banked = max(0, banked - 1)
     Current.soundPlayer.play(.buzz, shouldDebounce: false)
     spawnJaleo("¡Uy!", x: playerX, y: playerY - 74, size: 32)
-    // The bull snorts and stomps smugly (Phase 2: the real snort).
-    Current.soundPlayer.play(.cow, shouldDebounce: true, volume: 0.2)
+    // The bull snorts and stomps smugly.
+    Current.soundPlayer.play(.snort, shouldDebounce: true, volume: 0.4)
     commandBullMove(.stomp, duration: Self.danceBurstDuration)
     duelState = .phraseResult(success: false)
     duelTimer = Self.phraseResultHold
@@ -287,8 +295,9 @@ extension GameState {
     duelTimer = duration
     showboatDidRear = false
     commandBullMove(.walk, duration: duration)
-    // Crowd murmur placeholder (Phase 2: real crowd bed).
-    Current.soundPlayer.play(.cow, shouldDebounce: true, volume: 0.15)
+    // A low crowd murmur under the strut (debounced so back-to-back showboats
+    // don't stack it).
+    Current.soundPlayer.play(.crowdOle, shouldDebounce: true, volume: 0.15)
   }
 
   private func updateDuel(dt: Double) {

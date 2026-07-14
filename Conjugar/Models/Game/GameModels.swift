@@ -87,6 +87,22 @@ enum DanceMove: CaseIterable, Hashable {
   /// The moves a phrase is rolled from — everything but `freeze`, which round 3
   /// injects into exactly one non-first slot.
   static let phraseMoves: [DanceMove] = [.pasoLeft, .pasoRight, .ole, .stomp, .cape]
+
+  /// The Pixabay SFX that punctuates this move — played on the bull's demo cue and
+  /// again on the dancer's correct echo, so each move has its own voice (the two
+  /// pasos are one castanet click pitched low/high). `freeze` is silent: its
+  /// tension is the *absence* of sound. Pack logged in
+  /// `asset-licenses/pixabay-game-sfx.txt`.
+  var cueSound: Sound? {
+    switch self {
+    case .pasoLeft: return .castanetLow
+    case .pasoRight: return .castanetHigh
+    case .ole: return .palmas
+    case .stomp: return .stompThud
+    case .cape: return .capeWhoosh
+    case .freeze: return nil
+    }
+  }
 }
 
 /// Sub-state while `phase == .duel`.
