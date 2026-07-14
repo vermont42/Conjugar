@@ -66,7 +66,7 @@ struct GameStateTests {
     let gameState = configured()
     #expect(gameState.platforms.count == GameState.levelCount)
     #expect(gameState.ladders.count == GameState.levelCount - 1)
-    #expect(gameState.capes.count == 2)
+    #expect(gameState.powerUps.count == 2)
     #expect(gameState.playerGrounded)
     #expect(gameState.playerLevel == 0)
     let feet = gameState.playerY + GameState.playerHeight / 2
@@ -161,13 +161,13 @@ struct GameStateTests {
 
   @Test func capePickupCapesThePlayer() {
     let gameState = configured()
-    let cape = gameState.capes[0]
-    gameState.playerX = cape.x
-    gameState.playerY = cape.y
+    // Force a cape pickup under the player (a stage's kind is otherwise random).
+    let cape = PowerUp(id: 0, x: gameState.playerX, y: gameState.playerY, kind: .cape, collected: false)
+    gameState.powerUps = [cape]
     #expect(!gameState.isCaped)
     gameState.resolveCollisions()
     #expect(gameState.isCaped)
-    #expect(gameState.capes[0].collected)
+    #expect(gameState.powerUps[0].collected)
   }
 
   @Test func jumpClearingAnObstacleCostsNoHealth() {
@@ -398,5 +398,135 @@ struct GameStateTests {
     #expect(gameState.stage == 2)                        // stage NOT reset to 1
     #expect(gameState.summitCount == 1)
     #expect(gameState.phase == .climb)
+  }
+
+  // MARK: Power-ups (La Subida — cape / speed ⚡ / serenata 🎸)
+
+  @Test func powerUpBagExhaustsAllKindsBeforeRepeating() {
+    let gameState = configured()
+    // Seed a deterministic RNG and empty the bag so the draws are reproducible.
+    gameState.bossRNG = SplitMix64(seed: 0xC0FFEE)
+    gameState.powerUpBag.removeAll()
+    var draws: [PowerUpKind] = []
+    for _ in 0..<6 { draws.append(gameState.drawStagePowerUpKind()) }
+    // Each consecutive run of three is a full permutation — no kind repeats until the
+    // bag exhausts and reshuffles.
+    #expect(Set(draws[0..<3]) == Set(PowerUpKind.allCases))
+    #expect(Set(draws[3..<6]) == Set(PowerUpKind.allCases))
+  }
+
+  @Test func speedPickupDoublesWalkDisplacement() {
+    func walkDelta(speed: Double) -> CGFloat {
+      let gameState = configured()
+      gameState.movingRight = true
+      gameState.speedRemaining = speed
+      let x0 = gameState.playerX
+      gameState.updatePlayer(dt: 1.0 / 60.0)
+      return gameState.playerX - x0
+    }
+    let base = walkDelta(speed: 0)
+    let fast = walkDelta(speed: GameState.speedDuration)
+    #expect(base > 0)
+    #expect(abs(fast - base * GameState.speedFactor) < 0.001)
+  }
+
+  @Test func speedPickupDoublesClimbDisplacement() {
+    func climbDelta(speed: Double) -> CGFloat {
+      let gameState = configured()
+      let ladder = gameState.ladders.first { $0.lowerLevel == 0 }!
+      gameState.playerX = ladder.x
+      gameState.playerLevel = 0
+      gameState.playerGrounded = true
+      gameState.movingUp = true
+      gameState.updatePlayer(dt: 1.0 / 60.0)   // enters the ladder (no vertical move yet)
+      #expect(gameState.playerClimbing)
+      gameState.speedRemaining = speed
+      let y0 = gameState.playerY
+      gameState.updatePlayer(dt: 1.0 / 60.0)   // one climb tick
+      return y0 - gameState.playerY            // upward is positive
+    }
+    let base = climbDelta(speed: 0)
+    let fast = climbDelta(speed: GameState.serenataDuration)
+    #expect(base > 0)
+    #expect(abs(fast - base * GameState.speedFactor) < 0.001)
+  }
+
+  @Test func speedFactorDropsBackWhenExpired() {
+    let gameState = configured()
+    gameState.speedRemaining = 3
+    #expect(gameState.speedFactorNow == GameState.speedFactor)
+    gameState.speedRemaining = 0
+    #expect(gameState.speedFactorNow == 1)
+  }
+
+  @Test func serenataFreezesPacingAndThrowingThenResumes() {
+    let gameState = configured()
+    gameState.serenataRemaining = GameState.serenataDuration
+    let bullX0 = gameState.bullX
+    let spawnTimer0 = gameState.obstacleSpawnTimer
+    // Run well past a spawn interval: the bull neither paces nor throws.
+    for _ in 0..<300 { gameState.updateBull(dt: 1.0 / 60.0) }
+    #expect(gameState.obstacles.isEmpty)              // no new obstacles
+    #expect(gameState.obstacleSpawnTimer == spawnTimer0)   // spawn timer frozen
+    #expect(gameState.bullX == bullX0)                // stopped pacing
+    // Serenata over: pacing (and, on its own timer, throwing) resume.
+    gameState.serenataRemaining = 0
+    gameState.updateBull(dt: 1.0 / 60.0)
+    gameState.advanceAnimations(dt: 1.0 / 60.0)
+    #expect(gameState.bullX != bullX0)                // pacing again
+    #expect(gameState.bullAction == .walk)            // back to the working stance
+  }
+
+  @Test func collectingEachPowerUpAppliesItsEffect() {
+    for kind in PowerUpKind.allCases {
+      let gameState = configured()
+      gameState.powerUps = [PowerUp(id: 0, x: gameState.playerX, y: gameState.playerY, kind: kind, collected: false)]
+      gameState.resolveCollisions()
+      #expect(gameState.powerUps[0].collected)
+      switch kind {
+      case .cape:
+        #expect(gameState.capedRemaining == GameState.capeDuration)
+      case .speed:
+        #expect(gameState.speedRemaining == GameState.speedDuration)
+      case .serenata:
+        #expect(gameState.serenataRemaining == GameState.serenataDuration)
+      }
+    }
+  }
+
+  @Test func advancingToNextStageDrawsAndArmsPowerUps() {
+    let gameState = configured()
+    gameState.summitCount = 1
+    gameState.enterEscape()
+    var safety = 0
+    while gameState.phase == .escape && safety < 1000 {
+      safety += 1
+      gameState.updateEscape(dt: 1.0 / 60.0)
+    }
+    // The next stage re-armed both pickups, all sharing the drawn kind, uncollected.
+    #expect(gameState.powerUps.count == 2)
+    #expect(gameState.powerUps.allSatisfy { !$0.collected })
+    #expect(gameState.powerUps.allSatisfy { $0.kind == gameState.stagePowerUpKind })
+  }
+
+  @Test func deathClearsPowerUpsButEscapeKeepsThem() {
+    // Death clears every active power-up (respawn)…
+    let dying = configured()
+    dying.capedRemaining = 4
+    dying.speedRemaining = 4
+    dying.serenataRemaining = 4
+    dying.respawn()
+    #expect(dying.capedRemaining == 0)
+    #expect(dying.speedRemaining == 0)
+    #expect(dying.serenataRemaining == 0)
+
+    // …but a summit's escape beat carries them across into the next stage.
+    let summiting = configured()
+    summiting.summitCount = 1
+    summiting.capedRemaining = 4
+    summiting.speedRemaining = 4
+    summiting.enterEscape()
+    #expect(summiting.capedRemaining == 4)
+    #expect(summiting.speedRemaining == 4)
   }
 }

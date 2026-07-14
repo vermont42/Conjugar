@@ -5423,3 +5423,65 @@ sets as missing-glyph "?" boxes. That is a known iOS-simulator emoji-rendering b
 defect — flags (regional-indicator pairs) render, the single-scalar animal/ball/vehicle/sky
 glyphs don't. Josh will confirm the sets on a real device; the geometry, actors, ladders,
 hearts, and escape all render correctly in the simulator.
+
+## La Subida Phase 2 — power-ups: speed ⚡ and La Serenata 🎸 (2026-07-14)
+
+With the stage/escape/respawn foundation from Phase 1 in place, Phase 2 turned the single
+existing power-up — the cape — into a three-kind system, one kind per stage, drawn without
+repeats.
+
+**The model rename.** `CapePickup`/`capes` became `PowerUp`/`powerUps`, and the struct grew a
+`kind: PowerUpKind` (`cape` / `speed` / `serenata`). A stage spawns only its drawn kind at the
+same two mid-platform spawn points the cape always used. Because the pickup positions depend on
+the built platforms, I moved their creation out of `buildLevel` and into a new
+`rebuildPowerUps(kind:)` (in the new `GameState+PowerUps.swift`), called through
+`assignStagePowerUp()` from both `reset()` (stage 1) and `advanceToNextStage()` (every later
+stage) — both of which run after the geometry exists.
+
+**The shuffle bag.** Per-stage kinds come from a `powerUpBag` following Konjugieren's
+`mechanicBag` idiom: drained one per stage, refilled and reshuffled through the injectable
+`bossRNG` when empty. With three kinds that means stages 1–3 are a full permutation, stage 4
+reshuffles, and so on — no kind repeats until the bag exhausts. Routing it through `bossRNG`
+(the same seedable `SplitMix64` the boss fight uses) let the bag test assert deterministic
+draws: seed, empty the bag, draw six, and check each run of three is `Set(PowerUpKind.allCases)`.
+
+**Speed ⚡.** A `speedFactorNow` computed property returns `speedFactor` (×2) while
+`speedRemaining > 0`, else 1, and is multiplied into exactly two lines: the walk displacement in
+`updatePlayer` and the climb displacement in `updateClimb`. The visual is a `⚡` badge floating
+above the dancer, sharing the cape's last-2-seconds expiry blink. That blink was previously
+inline in `isCapeVisible`; I generalized it into `powerUpVisible(remaining:)` so the cape overlay
+and the speed badge blink identically rather than copy-pasting the `Int(remaining * 10) % 2`
+trick.
+
+**La Serenata 🎸.** The most fun one: while it plays, the bull stops pacing *and* throwing and
+instead dances random bursts from the end-scene repertoire (`endSceneDanceMoves`) —
+foreshadowing both the dance-off boss and the dancing-bull end scene. `updateBull` early-returns
+into `updateSerenataDance` when `serenataRemaining > 0`; obstacles already in flight keep rolling
+because `updateObstacles` still runs. The dance reuses the boss fight's `commandBullMove` (which
+I made non-private for this), and `derivedBullAction` returns the commanded move while the burst
+runs, `.idle` between bursts. The one subtlety the plan flagged: `bullMoveTimer` only ticked in
+the boss update path, so the serenata dance has to decrement it itself in the climb path. On
+expiry the bull snorts — annoyed the song is over — and gets back to work.
+
+**Carry-across-vs-clear.** Decision 12 says active power-up timers *carry across* an escape beat
+but *clear on death*. Phase 1's `enterEscape` had a leftover `capedRemaining = 0` (correct then,
+when the cape was the only power-up and escape cleared the field wholesale); I removed it so all
+three timers now survive a summit into the next stage, while `respawn` explicitly zeros all
+three. A test pins both halves: `respawn` clears cape+speed+serenata, `enterEscape` keeps them.
+
+**Effects.** New env var `CONJUGAR_GAME_POWERUP=cape|speed|serenata` forces every stage's draw
+(bypassing the bag) for fast verification. Seven new Swift Testing cases cover the bag's
+no-repeat exhaustion, speed doubling both walk and climb displacement (and dropping back on
+expiry), serenata freezing pacing/throwing then resuming, per-kind collection effects, and the
+next-stage re-arm. Two existing tests moved off `capes` — `capePickupCapesThePlayer` now forces a
+cape `PowerUp` since a stage's kind is otherwise random. Build green, SwiftLint clean, all 485
+tests pass.
+
+**Simulator check + its limit.** `CONJUGAR_GAME_POWERUP=serenata` + `conjugar://game` launches
+cleanly and renders both pickups at their correct spawn points, and driving the dancer around
+confirmed movement/pacing all work. But the `⚡`/`🎸` pickup glyphs (and the `⚡` badge) render
+as missing-glyph "?" boxes — the same iOS-simulator single-scalar-emoji bug Phase 1 hit with the
+obstacle sets. So the *placement* is verified in the simulator, but the pickup and badge
+*glyphs* and the serenata bull-dance will get their real visual confirmation from Josh on a
+device (Phase 2 is a "Josh plays" phase). Holding all commits until he blesses it, per the plan's
+device-test rule.

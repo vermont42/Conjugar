@@ -18,6 +18,14 @@ extension GameState {
   func updateBull(dt: CGFloat) {
     if bullThrowTimer > 0 { bullThrowTimer -= Double(dt) }
 
+    // La Serenata: the bull stops pacing AND throwing and dances instead (obstacles
+    // already in flight keep rolling — `updateObstacles` still runs). See
+    // GameState+PowerUps.swift.
+    if serenataRemaining > 0 {
+      updateSerenataDance(dt: dt)
+      return
+    }
+
     // Pace left/right along the top platform, staying left of the bullfighter.
     let half = Self.bullSize / 2
     let minX = screenSize.width * 0.15 + half
@@ -123,17 +131,16 @@ extension GameState {
     obstacles.removeAll { $0.despawn || $0.y > screenSize.height + 120 }
   }
 
-  /// Cape pickups and obstacle hits.
+  /// Power-up pickups and obstacle hits.
   func resolveCollisions() {
-    // Cape pickups.
-    for i in capes.indices where !capes[i].collected {
+    // Power-up pickups (this stage's drawn kind — cape / speed / serenata).
+    for i in powerUps.indices where !powerUps[i].collected {
       if rectsIntersect(
         playerX, playerY, Self.playerWidth, Self.playerHeight,
-        capes[i].x, capes[i].y, Self.capeSize, Self.capeSize
+        powerUps[i].x, powerUps[i].y, Self.capeSize, Self.capeSize
       ) {
-        capes[i].collected = true
-        capedRemaining = Self.capeDuration
-        Current.soundPlayer.play(.shieldActivate, shouldDebounce: false)   // cape power-up
+        powerUps[i].collected = true
+        collectPowerUp(powerUps[i].kind)
       }
     }
 

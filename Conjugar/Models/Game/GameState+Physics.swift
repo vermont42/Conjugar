@@ -28,9 +28,10 @@ extension GameState {
       return
     }
 
-    // Horizontal move from intent (both pressed cancels), clamped to the beam.
+    // Horizontal move from intent (both pressed cancels), clamped to the beam. The
+    // speed power-up (⚡) doubles the walk rate via `speedFactorNow`.
     let dir: CGFloat = (movingRight ? 1 : 0) - (movingLeft ? 1 : 0)
-    playerX += dir * Self.playerSpeed * dt
+    playerX += dir * Self.playerSpeed * speedFactorNow * dt
     let halfW = Self.playerWidth / 2
     playerX = min(max(playerX, Self.sideMargin + halfW), screenSize.width - Self.sideMargin - halfW)
 
@@ -92,7 +93,7 @@ extension GameState {
     }
 
     let dir: CGFloat = (movingDown ? 1 : 0) - (movingUp ? 1 : 0)   // +y is down
-    playerY += dir * Self.climbSpeed * dt
+    playerY += dir * Self.climbSpeed * speedFactorNow * dt         // ⚡ doubles the climb too
 
     // A quiet, retriggered rung-tick while actually climbing. Debounced (~1/sec) and
     // low-volume so the per-frame call can't machine-gun the effect.

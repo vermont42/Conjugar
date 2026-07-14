@@ -271,18 +271,9 @@ struct GameView: View {
             .opacity(1 - gameState.bossTransition)
         }
 
-        ForEach(gameState.capes) { cape in
-          if !cape.collected {
-            // The pickup is the same red muleta the dancer carries (rendered sprite,
-            // was a 🧣 emoji). Drawn at 60% of capeSize so it matches the carried cape's
-            // apparent size, with its hem sitting on the platform surface (the collision
-            // box stays the full capeSize, centered on cape.y).
-            let pickupHeight = GameState.capeSize * 0.6
-            Image("cape_pickup")
-              .resizable()
-              .scaledToFit()
-              .frame(width: pickupHeight * (188.0 / 229.0), height: pickupHeight)
-              .position(x: cape.x, y: cape.y + GameState.capeSize * 0.2)
+        ForEach(gameState.powerUps) { powerUp in
+          if !powerUp.collected {
+            powerUpView(powerUp)
               .opacity(1 - gameState.bossTransition)
           }
         }
@@ -306,6 +297,7 @@ struct GameView: View {
 
         bullSprite
         playerSprite
+        speedBadge
 
         cueChips
         jaleoPopViews
@@ -414,6 +406,45 @@ struct GameView: View {
       .frame(width: Self.matadorWidth, height: Self.matadorVisualHeight)
       .offset(y: Self.matadorFeetOffset)
       .position(x: gameState.bullfighterX, y: gameState.bullfighterY)
+  }
+
+  /// A stage's power-up pickup, rendered by kind: the cape keeps its rendered muleta
+  /// sprite (was a 🧣 emoji), while speed ⚡ and La Serenata 🎸 are `Text` glyphs at
+  /// capeSize scale. The collision box stays the full `capeSize` centered on `y`.
+  @ViewBuilder
+  private func powerUpView(_ powerUp: PowerUp) -> some View {
+    switch powerUp.kind {
+    case .cape:
+      // Drawn at 60% of capeSize so it matches the carried cape's apparent size, hem
+      // sitting on the platform surface.
+      let pickupHeight = GameState.capeSize * 0.6
+      Image("cape_pickup")
+        .resizable()
+        .scaledToFit()
+        .frame(width: pickupHeight * (188.0 / 229.0), height: pickupHeight)
+        .position(x: powerUp.x, y: powerUp.y + GameState.capeSize * 0.2)
+    case .speed:
+      Text(verbatim: "⚡")
+        .font(.system(size: GameState.capeSize))
+        .position(x: powerUp.x, y: powerUp.y)
+    case .serenata:
+      Text(verbatim: "🎸")
+        .font(.system(size: GameState.capeSize))
+        .position(x: powerUp.x, y: powerUp.y)
+    }
+  }
+
+  /// A ⚡ badge floating just above the dancer while the speed power-up is active,
+  /// sharing the cape's last-2 s expiry blink (`isSpeedBadgeVisible`).
+  private var speedBadge: some View {
+    Group {
+      if gameState.speedRemaining > 0 {
+        Text(verbatim: "⚡")
+          .font(.system(size: 20))
+          .opacity(gameState.isSpeedBadgeVisible ? 1 : 0.25)
+          .position(x: gameState.playerX, y: gameState.playerY - GameState.playerHeight)
+      }
+    }
   }
 
   /// A small facing indicator at the top edge — we don't mirror the number (a

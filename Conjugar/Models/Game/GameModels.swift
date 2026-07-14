@@ -62,11 +62,21 @@ struct Obstacle: Identifiable {
   var despawn: Bool = false
 }
 
-/// A pickup that capes the player for a few seconds (smashes flags on contact).
-struct CapePickup: Identifiable {
+/// Which of La Subida's three power-ups a pickup grants (one kind per stage, drawn
+/// from a shuffle bag — see `GameState.powerUpBag`). `cape` is the original muleta
+/// (invulnerability + smash); `speed` doubles walk AND climb speed; `serenata` makes
+/// the bull drop its guard and dance instead of throwing.
+enum PowerUpKind: CaseIterable {
+  case cape, speed, serenata
+}
+
+/// A collectable power-up sitting on a platform. A stage spawns only its drawn
+/// `kind` (`GameState.stagePowerUpKind`); collecting it starts that kind's timer.
+struct PowerUp: Identifiable {
   let id: Int
   let x: CGFloat
   let y: CGFloat
+  let kind: PowerUpKind
   var collected: Bool
 }
 

@@ -58,6 +58,11 @@ extension GameState {
   }
 
   private func derivedBullAction() -> BullAction {
-    bullThrowTimer > 0 ? .throw : .walk
+    // During La Serenata the bull dances: show the commanded burst while it runs
+    // (`bullMoveTimer > 0`, set by `updateSerenataDance`), idle between bursts.
+    if serenataRemaining > 0 {
+      return bullMoveTimer > 0 ? bullAction : .idle
+    }
+    return bullThrowTimer > 0 ? .throw : .walk
   }
 }

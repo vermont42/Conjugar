@@ -73,6 +73,17 @@ final class GameState {
   static let maxHealth = 4
   static let damageCooldownDuration: Double = 1.0
 
+  // MARK: Power-ups (La Subida — speed ⚡ + La Serenata 🎸; see GameState+PowerUps.swift)
+
+  /// Speed pickup lasts the same 7 s (5 s solid + 2 s expiry blink) as the cape.
+  static let speedDuration: Double = 7
+  /// Speed pickup multiplier: walk AND climb speed ×2 while active.
+  static let speedFactor: CGFloat = 2
+  /// La Serenata lasts the same envelope: the bull dances instead of throwing.
+  static let serenataDuration: Double = 7
+  /// Seconds between the bull's serenata dance bursts.
+  static let serenataDanceInterval: Double = 1.2
+
   /// Placeholder flipbook speed (RaceRunner's rate).
   static let fps = 10
 
@@ -191,6 +202,18 @@ final class GameState {
     return value
   }()
 
+  /// When the `CONJUGAR_GAME_POWERUP` launch environment variable is set to
+  /// `cape` / `speed` / `serenata`, every stage's power-up draw is forced to that
+  /// kind (the shuffle bag is bypassed) — the fast path for verifying one effect.
+  static let debugForcedPowerUp: PowerUpKind? = {
+    switch ProcessInfo.processInfo.environment["CONJUGAR_GAME_POWERUP"] {
+    case "cape": return .cape
+    case "speed": return .speed
+    case "serenata": return .serenata
+    default: return nil
+    }
+  }()
+
   // The five stages' obstacle sets (decision 2). Stage 1 is the original flags; the
   // rest were locked with Josh 2026-07-14. Avoid plain ⚡ anywhere — it's the speed
   // pickup. `stageObstacleEmojis` indexes these by `stage - 1`.
@@ -216,8 +239,15 @@ final class GameState {
   var platforms: [Platform] = []
   var ladders: [Ladder] = []
   var obstacles: [Obstacle] = []
-  var capes: [CapePickup] = []
+  var powerUps: [PowerUp] = []
   var obstacleCounter = 0
+  /// The kind of power-up this stage spawns, drawn from `powerUpBag` at each stage
+  /// transition (and the initial stage). All of a stage's pickups share this kind.
+  var stagePowerUpKind: PowerUpKind = .cape
+  /// Shuffle bag for the per-stage power-up kinds (Konjugieren's `mechanicBag`
+  /// idiom): drawn one per stage, refilled + reshuffled through `bossRNG` when empty,
+  /// so a kind never repeats until all three have appeared.
+  var powerUpBag: [PowerUpKind] = []
   /// The current stage, 1…`stageCount`. Invariant during the climb: `stage ==
   /// summitCount + 1`. Drives the obstacle set (`stageEmojis`), speed
   /// (`obstacleSpeed`), and render style (`stageObstacleStyle`).
@@ -243,6 +273,13 @@ final class GameState {
   var movingDown = false
 
   var capedRemaining: Double = 0
+  /// Seconds of the speed power-up (⚡) remaining — while > 0, walk + climb double.
+  var speedRemaining: Double = 0
+  /// Seconds of La Serenata (🎸) remaining — while > 0, the bull dances instead of
+  /// pacing/throwing (see GameState+PowerUps.swift).
+  var serenataRemaining: Double = 0
+  /// Countdown to the bull's next serenata dance burst (the `bullThrowTimer` idiom).
+  var serenataDanceTimer: Double = 0
   var health = GameState.maxHealth
   var damageCooldown: Double = 0
 
@@ -251,12 +288,9 @@ final class GameState {
   /// Whether the cape overlay should be drawn this frame. Gameplay (`isCaped`) stays
   /// true for the whole `capeDuration`; only the *visual* blinks. During the power-up's
   /// final `capeBlinkDuration` seconds it flashes ~5×/s to warn the player it's about
-  /// to expire, then "blinks out of existence" when the cape ends.
-  var isCapeVisible: Bool {
-    guard isCaped else { return false }
-    guard capedRemaining <= Self.capeBlinkDuration else { return true }
-    return Int(capedRemaining * 10) % 2 == 0
-  }
+  /// to expire, then "blinks out of existence" when the cape ends. Shares the blink
+  /// envelope with the speed badge via `powerUpVisible(remaining:)`.
+  var isCapeVisible: Bool { powerUpVisible(remaining: capedRemaining) }
 
   /// Whether the up control should be shown: the player is standing in front of a
   /// ladder whose base is on this level (so pressing up would start a climb), or is
@@ -458,11 +492,9 @@ final class GameState {
       )
     }
 
-    // Cape pickups on two mid platforms, away from the ladders.
-    capes = [
-      CapePickup(id: 0, x: w * 0.4, y: platforms[1].surfaceY - Self.capeSize / 2, collected: false),
-      CapePickup(id: 1, x: w * 0.6, y: platforms[3].surfaceY - Self.capeSize / 2, collected: false)
-    ]
+    // Power-up pickups are placed (and their kind drawn from the bag) in `reset()` /
+    // `advanceToNextStage` via `assignStagePowerUp()` — the two spawn points live in
+    // `rebuildPowerUps` (GameState+PowerUps.swift), which needs the platforms above.
 
     // Bullfighter: one static frame beside the bull on the top platform.
     bullfighterHomeX = w * 0.72
@@ -534,13 +566,18 @@ final class GameState {
     movingDown = false
 
     capedRemaining = 0
+    speedRemaining = 0
+    serenataRemaining = 0
+    serenataDanceTimer = 0
     health = Self.maxHealth
     damageCooldown = 0
 
     obstacles.removeAll()
     obstacleCounter = 0
     obstacleSpawnTimer = Self.obstacleSpawnInterval
-    for i in capes.indices { capes[i].collected = false }
+    // Fresh game: empty the bag and draw stage 1's power-up (rearms the pickups).
+    powerUpBag.removeAll()
+    assignStagePowerUp()
 
     bullX = w * 0.4
     bullY = platforms[top].surfaceY - Self.bullSize / 2
@@ -588,6 +625,14 @@ final class GameState {
 
     if damageCooldown > 0 { damageCooldown = max(0, damageCooldown - Double(dt)) }
     if capedRemaining > 0 { capedRemaining = max(0, capedRemaining - Double(dt)) }
+    if speedRemaining > 0 { speedRemaining = max(0, speedRemaining - Double(dt)) }
+    if serenataRemaining > 0 {
+      serenataRemaining = max(0, serenataRemaining - Double(dt))
+      if serenataRemaining == 0 {
+        // The bull, annoyed the song is over, snorts and gets back to work.
+        Current.soundPlayer.play(.snort, shouldDebounce: false, volume: 0.4)
+      }
+    }
 
     // The up/down buttons vanish when not at a ladder; if one is removed mid-press
     // its gesture may never fire `.onEnded`, so clear a stranded climb intent here.

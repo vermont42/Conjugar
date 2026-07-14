@@ -581,7 +581,10 @@ extension GameState {
     }
   }
 
-  private func commandBullMove(_ action: BullAction, duration: Double) {
+  /// Command a one-shot bull dance burst: play `action` for `duration`, then fall back
+  /// to idle (via `advanceBossCosmetics` in the boss path, or `updateSerenataDance`'s
+  /// `derivedBullAction` in the climb path). Internal so the serenata dance can reuse it.
+  func commandBullMove(_ action: BullAction, duration: Double) {
     bullAction = action
     bullPhase = 0
     bullMoveTimer = duration

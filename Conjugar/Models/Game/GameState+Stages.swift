@@ -55,8 +55,10 @@ extension GameState {
     climbingLadder = nil
     playerVelocityY = 0
     playerGrounded = true
-    capedRemaining = 0
     damageCooldown = 0
+    // Active power-up timers (cape/speed/serenata) are deliberately NOT cleared here:
+    // they carry across the escape beat into the next stage (decision 12). Death
+    // clears them (`respawn`), a summit does not.
     obstacles.removeAll()
     obstacleSpawnTimer = Self.obstacleSpawnInterval
     bullThrowTimer = 0
@@ -119,11 +121,13 @@ extension GameState {
     bullfighterX = bullfighterHomeX
     bullfighterY = bullfighterHomeY
 
-    // Fresh field: obstacles cleared, pickups re-armed (Phase 2 rebuilds by kind).
+    // Fresh field: obstacles cleared, and the next stage's power-up drawn from the
+    // bag + its pickups re-armed. Active power-up timers (cape/speed/serenata) carry
+    // across the escape beat by design (decision 12) — they're never cleared here.
     obstacles.removeAll()
     obstacleCounter = 0
     obstacleSpawnTimer = Self.obstacleSpawnInterval
-    for i in capes.indices { capes[i].collected = false }
+    assignStagePowerUp()
 
     // The between-stage banner, centered mid-field; fades out over two seconds.
     spawnJaleo(L.Game.nivel(stage), x: w / 2, y: screenSize.height * 0.4, size: 44, ttl: 2.0)
@@ -161,7 +165,11 @@ extension GameState {
     obstacles.removeAll()
     obstacleSpawnTimer = Self.obstacleSpawnInterval
 
+    // Death clears every active power-up (the escape beat, by contrast, carries them).
     capedRemaining = 0
+    speedRemaining = 0
+    serenataRemaining = 0
+    serenataDanceTimer = 0
     damageCooldown = Self.respawnGrace
   }
 }
