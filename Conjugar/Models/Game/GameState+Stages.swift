@@ -62,6 +62,8 @@ extension GameState {
     obstacles.removeAll()
     obstacleSpawnTimer = Self.obstacleSpawnInterval
     bullThrowTimer = 0
+    // A summit interrupts any active mechanic window (the next stage re-arms its own).
+    cancelActiveMechanic()
 
     // The summit's celebration: applause + a triumphant moo as the bull turns to flee.
     Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
@@ -128,6 +130,8 @@ extension GameState {
     obstacleCounter = 0
     obstacleSpawnTimer = Self.obstacleSpawnInterval
     assignStagePowerUp()
+    // Draw the new stage's challenge mechanic and arm its first-appearance countdown.
+    assignStageMechanic()
 
     // The between-stage banner, centered mid-field; fades out over two seconds.
     spawnJaleo(L.Game.nivel(stage), x: w / 2, y: screenSize.height * 0.4, size: 44, ttl: 2.0)
@@ -164,6 +168,11 @@ extension GameState {
 
     obstacles.removeAll()
     obstacleSpawnTimer = Self.obstacleSpawnInterval
+
+    // Death cancels any active mechanic window and re-arms a fresh first-appearance
+    // countdown (the same mechanic is kept — it's still this stage's assignment).
+    cancelActiveMechanic()
+    armMechanicCountdown(firstDelay: true)
 
     // Death clears every active power-up (the escape beat, by contrast, carries them).
     capedRemaining = 0

@@ -91,6 +91,8 @@ extension GameState {
     damageCooldown = 0
     obstacles.removeAll()
     bullThrowTimer = 0
+    // The boss interrupts any active climb mechanic (zombie/encierro/apagón).
+    cancelActiveMechanic()
 
     introFromPlayerX = playerX
     introFromPlayerY = playerY

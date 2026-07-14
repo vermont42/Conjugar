@@ -529,6 +529,54 @@
         }
       }
     },
+    "Game.apagonAnnouncement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Apagón!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Apagón!"
+          }
+        }
+      }
+    },
+    "Game.encierroAnnouncement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡El encierro!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡El encierro!"
+          }
+        }
+      }
+    },
+    "Game.zombieAnnouncement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your obstacles are now zombies!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Tus obstáculos ahora son zombis!"
+          }
+        }
+      }
+    },
     "Game.duelTitle" : {
       "localizations" : {
         "en" : {

@@ -529,4 +529,169 @@ struct GameStateTests {
     #expect(summiting.capedRemaining == 4)
     #expect(summiting.speedRemaining == 4)
   }
+
+  // MARK: Challenge mechanics (La Subida — framework + zombie attack)
+
+  /// Put a single homing-able obstacle on a girder near the top, mid-field.
+  private func obstacleMidField(_ gameState: GameState, style: ObstacleStyle = .spin) -> Obstacle {
+    let level = GameState.levelCount - 1
+    return Obstacle(
+      id: 1, x: gameState.screenSize.width * 0.5,
+      y: gameState.platforms[level].surfaceY - GameState.obstacleSize / 2,
+      velocityX: 60, velocityY: 0, falling: false, level: level,
+      emoji: "🇪🇸", rotation: 0, style: style
+    )
+  }
+
+  @Test func mechanicBagExhaustsAllKindsBeforeRepeating() {
+    let gameState = configured()
+    gameState.bossRNG = SplitMix64(seed: 0xF00D)
+    gameState.mechanicBag.removeAll()
+    var draws: [ChallengeMechanic] = []
+    for _ in 0..<6 { draws.append(gameState.drawStageMechanic()) }
+    #expect(Set(draws[0..<3]) == Set(ChallengeMechanic.allCases))
+    #expect(Set(draws[3..<6]) == Set(ChallengeMechanic.allCases))
+  }
+
+  @Test func schedulerFiresWithinTheDelayWindowThenReArms() {
+    let gameState = configured()
+    gameState.assignedMechanic = .zombie
+    // Arm a first-appearance countdown inside `mechanicFirstDelay` (10…18 s).
+    gameState.armMechanicCountdown(firstDelay: true)
+    #expect(GameState.mechanicFirstDelay.contains(gameState.mechanicCountdown))
+    #expect(gameState.activeMechanic == nil)
+
+    // Tick past the countdown: the mechanic fires and its window opens.
+    var elapsed = 0.0
+    let dt = 1.0 / 60.0
+    while gameState.activeMechanic == nil && elapsed < GameState.mechanicFirstDelay.upperBound + 1 {
+      gameState.updateMechanicScheduler(dt: dt)
+      elapsed += dt
+    }
+    #expect(gameState.activeMechanic == .zombie)
+    #expect(elapsed <= GameState.mechanicFirstDelay.upperBound + 0.5)
+
+    // Tick past the window: it ends and re-arms at the repeat delay.
+    while gameState.activeMechanic != nil {
+      gameState.updateMechanicScheduler(dt: dt)
+    }
+    #expect(gameState.activeMechanic == nil)
+    #expect(abs(gameState.mechanicCountdown - GameState.mechanicRepeatDelay) < 0.1)
+  }
+
+  @Test func startingAMechanicSpawnsAnAnnouncementAtTheBull() {
+    let gameState = configured()
+    gameState.assignedMechanic = .zombie
+    gameState.jaleoPops.removeAll()
+    gameState.startMechanic()
+    #expect(gameState.activeMechanic == .zombie)
+    #expect(gameState.jaleoPops.count == 1)
+    // The bull "speaks": the pop sits just below the bull.
+    let pop = gameState.jaleoPops[0]
+    #expect(abs(pop.x - gameState.bullX) < 0.5)
+    #expect(pop.y > gameState.bullY)
+  }
+
+  @Test func zombieDriftsObstaclesTowardThePlayerAtHalfSpeed() {
+    let gameState = configured()
+    gameState.assignedMechanic = .zombie
+    gameState.stage = 1
+    // Player at bottom-left; an obstacle up and to the right of it.
+    var obstacle = obstacleMidField(gameState)
+    obstacle.x = gameState.playerX + 100
+    gameState.obstacles = [obstacle]
+    gameState.startMechanic()
+
+    let before = gameState.obstacles[0]
+    let dt: CGFloat = 1.0 / 60.0
+    gameState.updateZombieObstacles(dt: dt)
+    let after = gameState.obstacles[0]
+
+    // Moved toward the player: leftward (player is to the left) and downward.
+    #expect(after.x < before.x)
+    #expect(after.y > before.y)
+    // Total displacement is (obstacleSpeed × 0.5) × dt, not the full obstacle speed.
+    let dx = after.x - before.x
+    let dy = after.y - before.y
+    let moved = (dx * dx + dy * dy).squareRoot()
+    let expected = gameState.obstacleSpeed * GameState.zombieSpeedFactor * dt
+    #expect(abs(moved - expected) < 0.01)
+  }
+
+  @Test func zombieFacesAFaceObstacleTowardItsDrift() {
+    let gameState = configured()
+    gameState.assignedMechanic = .zombie
+    // A `.face` obstacle to the RIGHT of the player drifts left → faces left (−1); one
+    // to the LEFT drifts right → faces right (+1).
+    var right = obstacleMidField(gameState, style: .face)
+    right.x = gameState.playerX + 120
+    right.facing = 1
+    gameState.obstacles = [right]
+    gameState.startMechanic()
+    gameState.updateZombieObstacles(dt: 1.0 / 60.0)
+    #expect(gameState.obstacles[0].facing == -1)
+    #expect(gameState.obstacles[0].rotation == 0)   // .face never spins, even homing
+  }
+
+  @Test func zombieEndReintegratesObstaclesOntoGirders() {
+    let gameState = configured()
+    gameState.assignedMechanic = .zombie
+    gameState.startMechanic()
+    // An obstacle floating in a gap (between girders) is relevel'd to fall onto the
+    // nearest girder below its feet; one below the bottom girder despawns.
+    let midGapY = (gameState.platforms[2].surfaceY + gameState.platforms[1].surfaceY) / 2
+    var floating = obstacleMidField(gameState)
+    floating.y = midGapY
+    floating.level = 5
+    var belowFloor = obstacleMidField(gameState)
+    belowFloor.y = gameState.platforms[0].surfaceY + 200   // past the bottom girder
+    gameState.obstacles = [floating, belowFloor]
+    gameState.endMechanic()
+
+    #expect(gameState.activeMechanic == nil)
+    #expect(gameState.obstacles.count == 1)               // the below-floor one despawned
+    let survivor = gameState.obstacles[0]
+    #expect(survivor.falling)                             // dropping onto the girder below
+    #expect(survivor.level == 2)                          // nearest girder below its feet, + 1
+  }
+
+  @Test func respawnCancelsAnActiveMechanicAndReArms() {
+    let gameState = configured()
+    gameState.assignedMechanic = .zombie
+    gameState.startMechanic()
+    #expect(gameState.activeMechanic != nil)
+    gameState.respawn()
+    #expect(gameState.activeMechanic == nil)
+    #expect(gameState.mechanicRemaining == 0)
+    #expect(GameState.mechanicFirstDelay.contains(gameState.mechanicCountdown))
+  }
+
+  @Test func escapeAndBossEntryCancelAnActiveMechanic() {
+    let escaping = configured()
+    escaping.summitCount = 1
+    escaping.assignedMechanic = .zombie
+    escaping.startMechanic()
+    escaping.enterEscape()
+    #expect(escaping.activeMechanic == nil)
+
+    let bossing = configured()
+    bossing.assignedMechanic = .zombie
+    bossing.startMechanic()
+    bossing.enterBossIntro()
+    #expect(bossing.activeMechanic == nil)
+  }
+
+  @Test func advancingToNextStageAssignsAFreshMechanic() {
+    let gameState = configured()
+    gameState.summitCount = 1
+    gameState.enterEscape()
+    var safety = 0
+    while gameState.phase == .escape && safety < 1000 {
+      safety += 1
+      gameState.updateEscape(dt: 1.0 / 60.0)
+    }
+    // A fresh stage has no active window and an armed first-appearance countdown.
+    #expect(gameState.activeMechanic == nil)
+    #expect(GameState.mechanicFirstDelay.contains(gameState.mechanicCountdown))
+  }
 }

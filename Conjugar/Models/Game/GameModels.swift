@@ -80,6 +80,18 @@ struct PowerUp: Identifiable {
   var collected: Bool
 }
 
+/// One of La Subida's three challenge mechanics — a timed disruption that fires once
+/// (then periodically) within a stage, drawn per stage from a shuffle bag (see
+/// `GameState.mechanicBag`), exactly like the power-ups:
+///
+///   • zombie   — obstacles slow to half speed and home toward the player (they keep
+///                their own emojis — no 🧟 swap; see GameState+Mechanics.swift).
+///   • encierro — 🐂 chargers stampede across the girders (Phase 4).
+///   • apagon   — the lights cut to a spotlight on the dancer (Phase 5).
+enum ChallengeMechanic: CaseIterable {
+  case zombie, encierro, apagon
+}
+
 /// Which frame-count table the player's placeholder flipbook cycles through.
 /// `ole`/`stomp` are the boss fight's dance moves — mapped to reused rendered
 /// frames for now (ole ≈ cape, stomp ≈ jump); Phase 4 of the boss plan swaps in

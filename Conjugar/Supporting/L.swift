@@ -231,6 +231,21 @@ nonisolated enum L {
     static func nivel(_ n: Int) -> String {
       String(localized: "Game.nivel \(n)")
     }
+
+    // La Subida — challenge-mechanic announcements (the bull "speaks" them). The zombie
+    // line is a narrative sentence and localizes en/es; "¡El encierro!" / "¡Apagón!"
+    // stay Spanish in BOTH localizations (title-card policy — boss-plan decision 16).
+    static var zombieAnnouncement: String {
+      String(localized: "Game.zombieAnnouncement")
+    }
+
+    static var encierroAnnouncement: String {
+      String(localized: "Game.encierroAnnouncement")
+    }
+
+    static var apagonAnnouncement: String {
+      String(localized: "Game.apagonAnnouncement")
+    }
   }
 
   enum GameCenter {

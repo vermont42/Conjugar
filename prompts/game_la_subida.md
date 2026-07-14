@@ -527,7 +527,23 @@ emoji as "?" tofu). See `docs/blog_notes.md`, "La Subida Phase 2".
 
 **DoD:** as Phase 1 (build/tests/lint/screenshots/blog/commit).
 
-## Phase 3 — Mechanic framework + Zombie attack  [Claude; Josh plays]
+## Phase 3 — Mechanic framework + Zombie attack  [Claude; Josh plays]  ✅ DONE (2026-07-14)
+
+**Complete.** `ChallengeMechanic { zombie, encierro, apagon }` + a new
+`GameState+Mechanics.swift` owning the whole framework: a `mechanicBag` no-repeat shuffle
+bag (through `bossRNG`), per-stage `assignedMechanic`, and a scheduler
+(`updateMechanicScheduler`, ticks only in `.climb`) that fires once after a random
+`mechanicFirstDelay` (10–18 s) then re-fires every `mechanicRepeatDelay` (25 s). Lifecycle
+seams wired to match Phases 1–2: `reset()`/`advanceToNextStage()` draw a fresh mechanic;
+escape, boss entry, and death-respawn all `cancelActiveMechanic()` (respawn re-arms). Zombie
+attack live (obstacles home at half speed keeping their own emoji + spin/face style;
+`relevel` re-integration onto the nearest girder below when the window ends);
+encierro/apagón announce-only until Phases 4/5. `spawnBullSpeech` announcements (zombie line
+localizes en/es; "¡El encierro!"/"¡Apagón!" stay Spanish both locales).
+`CONJUGAR_GAME_MECHANIC` override. Build + SwiftLint clean; 494 tests (12 new); committed +
+pushed to `migration`. Simulator confirms announcement/homing/recovery; the "?" tofu
+obstacles are the known iOS-sim emoji bug (Josh's on-device check). See
+`docs/blog_notes.md`, "La Subida Phase 3".
 
 1. `ChallengeMechanic` + `mechanicBag` + scheduler + `spawnBullSpeech` + L strings
    (`zombieAnnouncement`, `encierroAnnouncement`, `apagonAnnouncement`, `nivel` — add all four

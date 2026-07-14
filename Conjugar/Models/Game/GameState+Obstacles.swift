@@ -85,6 +85,14 @@ extension GameState {
 
   /// Move every obstacle: descend + land, or roll + fall off at the drop point.
   func updateObstacles(dt: CGFloat) {
+    // Zombie attack: obstacles abandon the roll/fall state machine and home toward the
+    // player at half speed (GameState+Mechanics.swift). `endMechanic` re-integrates
+    // them onto the girders afterward.
+    if activeMechanic == .zombie {
+      updateZombieObstacles(dt: dt)
+      return
+    }
+
     let half = Self.obstacleSize / 2
     for i in obstacles.indices {
       var f = obstacles[i]

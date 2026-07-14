@@ -5485,3 +5485,64 @@ obstacle sets. So the *placement* is verified in the simulator, but the pickup a
 *glyphs* and the serenata bull-dance will get their real visual confirmation from Josh on a
 device (Phase 2 is a "Josh plays" phase). Holding all commits until he blesses it, per the plan's
 device-test rule.
+
+## La Subida Phase 3 — the mechanic framework + the zombie attack (2026-07-14)
+
+Phase 3 gives the climb its first *challenge mechanic* — a timed disruption that fires within a
+stage — and the framework the other two (El Encierro, El Apagón) will slot into. The design is a
+deliberate mirror of Phase 2's power-up bag: one mechanic is **assigned per stage** by drawing
+from a `mechanicBag` shuffle bag (through the seedable `bossRNG`, so a mechanic never repeats
+until all three have appeared and tests can script the draws), a scheduler fires it once after a
+random first delay, and it re-fires periodically for the rest of the stage. All of it lives in a
+new `GameState+Mechanics.swift`, with the mechanic enum (`ChallengeMechanic { zombie, encierro,
+apagon }`) next to `PowerUpKind` in `GameModels.swift`.
+
+**The scheduler.** `updateMechanicScheduler(dt:)` ticks only in `.climb` (added to the climb
+pipeline in `update`, right before `updateObstacles` so an active zombie window can re-route the
+obstacle motion). Two countdowns, only ever one running: while no mechanic is active,
+`mechanicCountdown` winds down toward the next firing; while one is active, `mechanicRemaining`
+winds down toward the window's end. `armMechanicCountdown(firstDelay:)` sets the first appearance
+to a random point in `mechanicFirstDelay` (10–18 s — a fresh climb gets breathing room) and the
+re-arm to a flat `mechanicRepeatDelay` (25 s). The cancel/rebuild plumbing follows the Phase 1/2
+lifecycle exactly: a summit's escape beat, boss entry, and a death-respawn all `cancelActiveMechanic()`
+(respawn also re-arms a fresh first-delay), and `advanceToNextStage()`/`reset()` draw a new
+mechanic. Getting those seams right was most of the work — the boss fight and the escape beat both
+depend on the climb pipeline being *byte-identical* when no feature is active, so every new effect
+guards on its own `> 0` / `!= nil` check rather than restructuring the loop.
+
+**The zombie attack** (Josh's original spec) is the one behavior wired this phase. When its window
+opens, `updateObstacles` short-circuits to `updateZombieObstacles`: each obstacle abandons the
+roll/fall state machine and drifts *straight at the player* at half the stage's obstacle speed
+(`zombieSpeedFactor = 0.5`), normalizing `(playerX − x, playerY − y)`. Two deliberate choices from
+the plan held up well on screen: obstacles **keep their own emojis** — no 🧟 swap (Josh was
+explicit, and homing barrels reading as their normal selves is eerier than a costume change) — and
+the per-set render style is preserved mid-homing, so the `.spin` sets keep tumbling and the
+`.face` sets turn to face their drift. When the 3-second window ends, `reintegrateZombieObstacles`
+drops every obstacle back onto the field via `relevel(_:)`: it finds the nearest girder *at or
+below* the obstacle's feet, sets `level` one above it and `falling = true`, and lets the ordinary
+landing code snap it down and re-roll its horizontal speed — so the barrels seamlessly resume the
+DK zig-zag. An obstacle that drifted below the bottom girder just despawns. Encierro and apagón
+*announce* (the bull "speaks" the title card, with its SFX) but otherwise no-op until Phases 4/5;
+the bag still draws them, so the rotation is already correct.
+
+**Announcements as bull speech.** Decision 9 wanted the mechanic call-outs to ride the boss
+fight's jaleo-pop idiom ("Note how speech is animated in the boss fight" — Josh's prompt), so
+`spawnBullSpeech` pops a big jaleo just below the bull that rises gently and fades. Following the
+title-card localization policy, the zombie line is a *narrative* sentence that localizes ("Your
+obstacles are now zombies!" / "¡Tus obstáculos ahora son zombis!"), while "¡El encierro!" and
+"¡Apagón!" stay Spanish in both locales. New env var `CONJUGAR_GAME_MECHANIC=zombie|encierro|apagon`
+forces every stage's draw and shortens both countdowns to ~2 s so a mechanic fires almost at once
+and loops for fast verification.
+
+**Verification.** Build + SwiftLint clean; the full suite is green at 494 tests (12 new mechanic
+tests in `GameStateTests`: bag exhaustion, the scheduler firing-within-window-then-rearming, the
+announcement popping at the bull, half-speed homing displacement, `.face` obstacles facing their
+drift, `relevel` re-integration onto the nearest girder below / despawn-below-floor, and the three
+cancel paths). In the simulator with `CONJUGAR_GAME_MECHANIC=zombie` I watched the full cycle: the
+"Your obstacles are now zombies!" jaleo pops from the bull, the obstacles converge on the dancer
+(tilted, since stage 1's flags are a `.spin` set), and when the window closes they re-seat onto the
+girders and resume rolling — the player even took a hit from a homing barrel (4→3 hearts). As in
+Phases 1–2 the obstacles render as "?" tofu (the iOS-sim single-/multi-scalar-emoji bug — stage 1's
+flags are regional-indicator pairs), so glyph rendering is Josh's on-device check; geometry, homing,
+announcement, and recovery all render correctly. Holding all commits until he blesses it, per the
+plan's device-test rule.

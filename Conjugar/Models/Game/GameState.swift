@@ -84,6 +84,23 @@ final class GameState {
   /// Seconds between the bull's serenata dance bursts.
   static let serenataDanceInterval: Double = 1.2
 
+  // MARK: Challenge mechanics (La Subida — one kind per stage; see GameState+Mechanics.swift)
+
+  /// A mechanic's first appearance within a stage lands at a random point in this
+  /// window (a fresh climb has a little breathing room before the first disruption).
+  static let mechanicFirstDelay: ClosedRange<Double> = 10...18
+  /// After a mechanic's window ends it re-arms this many seconds later (it re-fires
+  /// through the rest of the stage).
+  static let mechanicRepeatDelay: Double = 25
+  /// Zombie attack (Josh's spec): for `zombieDuration` seconds every on-screen
+  /// obstacle slows to `zombieSpeedFactor`× and homes toward the player.
+  static let zombieDuration: Double = 3
+  static let zombieSpeedFactor: CGFloat = 0.5
+  /// El Encierro window (Phase 4 wires the charger stampede).
+  static let encierroDuration: Double = 4
+  /// El Apagón window (Phase 5 wires the lights-out spotlight overlay).
+  static let apagonDuration: Double = 3.5
+
   /// Placeholder flipbook speed (RaceRunner's rate).
   static let fps = 10
 
@@ -214,6 +231,20 @@ final class GameState {
     }
   }()
 
+  /// When the `CONJUGAR_GAME_MECHANIC` launch environment variable is set to
+  /// `zombie` / `encierro` / `apagon`, every stage's challenge-mechanic draw is forced
+  /// to that mechanic (the shuffle bag is bypassed) AND its countdowns are shortened
+  /// to ~2 s (both the first delay and the re-arm) so the effect fires almost at once
+  /// and loops quickly — the fast path for verifying one mechanic in the simulator.
+  static let debugForcedMechanic: ChallengeMechanic? = {
+    switch ProcessInfo.processInfo.environment["CONJUGAR_GAME_MECHANIC"] {
+    case "zombie": return .zombie
+    case "encierro": return .encierro
+    case "apagon": return .apagon
+    default: return nil
+    }
+  }()
+
   // The five stages' obstacle sets (decision 2). Stage 1 is the original flags; the
   // rest were locked with Josh 2026-07-14. Avoid plain ⚡ anywhere — it's the speed
   // pickup. `stageObstacleEmojis` indexes these by `stage - 1`.
@@ -252,6 +283,23 @@ final class GameState {
   /// summitCount + 1`. Drives the obstacle set (`stageEmojis`), speed
   /// (`obstacleSpeed`), and render style (`stageObstacleStyle`).
   var stage = 1
+
+  // MARK: Challenge-mechanic state (see GameState+Mechanics.swift)
+
+  /// This stage's challenge mechanic, drawn from `mechanicBag` at each stage
+  /// transition (and the initial stage). It's what `startMechanic` fires.
+  var assignedMechanic: ChallengeMechanic = .zombie
+  /// Shuffle bag for the per-stage mechanics (Konjugieren's `mechanicBag` idiom):
+  /// drawn one per stage, refilled + reshuffled through `bossRNG` when empty, so a
+  /// mechanic never repeats until all three have appeared.
+  var mechanicBag: [ChallengeMechanic] = []
+  /// The mechanic currently disrupting the climb, or nil when none is active. While
+  /// non-nil the scheduler counts down `mechanicRemaining` instead of `mechanicCountdown`.
+  var activeMechanic: ChallengeMechanic?
+  /// Seconds until the next mechanic fires (ticks only while `activeMechanic == nil`).
+  var mechanicCountdown: Double = 0
+  /// Seconds left in the active mechanic's window (ticks only while one is active).
+  var mechanicRemaining: Double = 0
 
   // MARK: Player state
 
@@ -575,9 +623,14 @@ final class GameState {
     obstacles.removeAll()
     obstacleCounter = 0
     obstacleSpawnTimer = Self.obstacleSpawnInterval
-    // Fresh game: empty the bag and draw stage 1's power-up (rearms the pickups).
+    // Fresh game: empty both shuffle bags and draw stage 1's power-up (rearms the
+    // pickups) and challenge mechanic (arms the first-appearance countdown).
     powerUpBag.removeAll()
+    mechanicBag.removeAll()
+    activeMechanic = nil
+    mechanicRemaining = 0
     assignStagePowerUp()
+    assignStageMechanic()
 
     bullX = w * 0.4
     bullY = platforms[top].surfaceY - Self.bullSize / 2
@@ -641,6 +694,9 @@ final class GameState {
 
     updatePlayer(dt: dt)
     updateBull(dt: dt)
+    // Fire / age the stage's challenge mechanic (zombie/encierro/apagón) before the
+    // obstacles move — an active zombie window re-routes `updateObstacles` to homing.
+    updateMechanicScheduler(dt: dt)
     updateObstacles(dt: dt)
     advanceAnimations(dt: dt)
     // Age any drifting jaleo pops during the climb too (the "¡Nivel N!" stage banner
