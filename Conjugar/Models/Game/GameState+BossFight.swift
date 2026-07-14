@@ -51,6 +51,13 @@ extension GameState {
     return true
   }
 
+  /// Whether the end scene's "tap to continue" hint should be shown yet — gated so
+  /// the reunion beat (matador walking over, hearts/roses) plays before we invite
+  /// the player to leave.
+  var showEndSceneHint: Bool {
+    phase == .endScene && endSceneTime >= Self.endSceneHintDelay
+  }
+
   // MARK: Stage geometry (portrait tablao on the bottom girder)
 
   var stageFloorY: CGFloat { platforms.isEmpty ? 0 : platforms[0].surfaceY }
@@ -419,13 +426,16 @@ extension GameState {
     capBullBowHold()
     endSceneTime += dt
 
+    // The boss track finished fading on `enterEndScene`; the onboarding bed rises as
+    // it clears, so the two never talk over each other (its own fade-in is gentle).
     if !endSceneMusicStarted && endSceneTime >= Self.endSceneMusicFade {
       endSceneMusicStarted = true
       Current.soundPlayer.startMusic(.onboarding)
     }
 
-    // The matador slides from his pedestal to the dancer's side.
-    let slide = min(1.0, endSceneTime / Self.matadorSlideDuration)
+    // The freed matador holds a beat (applause + confetti land), then walks from his
+    // pedestal to the dancer's side, decelerating into place (smoothstep easing).
+    let slide = min(1.0, max(0.0, (endSceneTime - Self.matadorSlideDelay) / Self.matadorSlideDuration))
     let t = Self.smoothstep(CGFloat(slide))
     let targetX = dancerStageX + 36
     let targetY = stageFloorY - Self.bullfighterSize / 2
@@ -434,10 +444,23 @@ extension GameState {
 
     if slide >= 1 && !endSceneBurstDone {
       endSceneBurstDone = true
-      let midX = (playerX + targetX) / 2
-      spawnJaleo("❤️", x: midX - 16, y: playerY - 70, size: 30)
-      spawnJaleo("🌹", x: midX + 16, y: playerY - 86, size: 30)
+      spawnReunionBurst(midX: (playerX + targetX) / 2)
       Current.soundPlayer.play(.chime, shouldDebounce: false, volume: 0.5)
+      Current.hapticPlayer.play(.success)
+    }
+  }
+
+  /// The reunion payoff: a small fan of hearts and roses blooming over the pair as
+  /// the matador arrives. Deterministic spread (indexed, not RNG) so it reads the
+  /// same every win and the tests stay stable.
+  private func spawnReunionBurst(midX: CGFloat) {
+    let glyphs = ["❤️", "🌹", "❤️", "🌹", "❤️"]
+    for (index, glyph) in glyphs.enumerated() {
+      // Fan out from the center: −2…+2 columns, alternating heights.
+      let column = CGFloat(index - glyphs.count / 2)
+      let dx = column * 22
+      let dy = CGFloat(index.isMultiple(of: 2) ? -78 : -94)
+      spawnJaleo(glyph, x: midX + dx, y: playerY + dy, size: index == 0 ? 34 : 28)
     }
   }
 

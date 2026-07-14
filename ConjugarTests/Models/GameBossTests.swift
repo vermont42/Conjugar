@@ -320,14 +320,33 @@ struct GameBossTests {
     #expect(gameState.phase == .endScene)
     #expect(gameState.bullAction == .bow)                   // bow held through the scene
 
-    // The matador slides from his pedestal to the dancer's side.
+    // The matador holds a beat, then slides from his pedestal to the dancer's side.
+    let slideEnd = GameState.matadorSlideDelay + GameState.matadorSlideDuration
     var safety = 0
-    while gameState.endSceneTime < GameState.matadorSlideDuration && safety < 100 {
+    while gameState.endSceneTime < slideEnd + 0.2 && safety < 100 {
       safety += 1
       gameState.updateBoss(dt: 0.1)
     }
     #expect(abs(gameState.bullfighterX - (gameState.dancerStageX + 36)) < 0.5)
     #expect(gameState.endSceneBurstDone)
+    // The reunion burst spawns a fan of hearts and roses over the pair.
+    #expect(gameState.jaleoPops.filter { $0.text == "❤️" || $0.text == "🌹" }.count >= 3)
+  }
+
+  @Test func endSceneHintIsWithheldThenShown() {
+    let gameState = duelReady()
+    gameState.banked = 5
+    gameState.startPhrase()
+    advanceToEcho(gameState)
+    completeEcho(gameState)
+    gameState.updateBoss(dt: CGFloat(GameState.phraseResultHold) + 0.05)
+    gameState.updateBoss(dt: CGFloat(GameState.victoryHold) + 0.05)
+    #expect(gameState.phase == .endScene)
+    #expect(!gameState.showEndSceneHint)                    // withheld at first
+    // The matador holds his beat, walks over — the slide finishes before the hint
+    // is due, so it is still hidden mid-walk (the delay is intentionally short).
+    gameState.updateBoss(dt: GameState.endSceneHintDelay + 0.05)
+    #expect(gameState.showEndSceneHint)                     // shown once it can read
   }
 
   @Test func victoryTapSkipsToEndScene() {

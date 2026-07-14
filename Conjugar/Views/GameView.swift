@@ -573,28 +573,34 @@ struct GameView: View {
       case .bossIntro:
         bossTitle("¡El duelo!")
       case .victory:
-        bossTitle("¡Victoria!")
+        victoryTitle
       case .endScene:
-        VStack(spacing: Layout.defaultSpacing) {
-          bossTitle("¡Victoria!")
+        VStack(spacing: Layout.doubleDefaultSpacing) {
+          victoryTitle
           Text(verbatim: "The bull is impressed — the matador is free!")
-            .font(.system(size: 17, weight: .semibold, design: .rounded))
+            .font(.system(size: 18, weight: .semibold, design: .rounded))
             .foregroundStyle(Color.customYellow)
             .multilineTextAlignment(.center)
-            .padding(.horizontal, Layout.doubleDefaultSpacing)
+            .shadow(color: .black.opacity(0.35), radius: 1, y: 1)
+            .padding(.horizontal, Layout.tripleDefaultSpacing)
+          // Held back until the reunion beat has read (endSceneHintDelay), then
+          // fades up so it doesn't rush the player out of the scene.
           Text(verbatim: "Tap to continue")
             .font(.system(size: 14, weight: .medium))
             .foregroundStyle(Color.customYellow.opacity(0.8))
+            .opacity(gameState.showEndSceneHint ? 1 : 0)
+            .animation(.easeIn(duration: 0.5), value: gameState.showEndSceneHint)
         }
       case .climb, .duel:
         EmptyView()
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-    .padding(.top, 110)
+    .padding(.top, 100)
     .allowsHitTesting(false)
   }
 
+  /// The intro card ("¡El duelo!"): a bold rounded plate in the game's playful voice.
   private func bossTitle(_ text: String) -> some View {
     Text(verbatim: text)
       .font(.system(size: 44, weight: .black, design: .rounded))
@@ -603,6 +609,21 @@ struct GameView: View {
       .padding(.vertical, Layout.defaultSpacing)
       .background(Color.customRed.opacity(0.75), in: RoundedRectangle(cornerRadius: Layout.cornerRadius))
       .shadow(radius: 4)
+  }
+
+  /// The win payoff title ("¡Victoria!"): a grander, condensed gold display treatment
+  /// distinct from the intro plate — a taller, tighter cut that reads as a curtain
+  /// call. Gold on the red plate, with a soft glow.
+  private var victoryTitle: some View {
+    Text(verbatim: "¡Victoria!")
+      .font(.system(size: 54, weight: .black, design: .rounded))
+      .fontWidth(.condensed)
+      .foregroundStyle(Color.customYellow)
+      .shadow(color: Color.customYellow.opacity(0.5), radius: 8)
+      .padding(.horizontal, Layout.tripleDefaultSpacing)
+      .padding(.vertical, Layout.defaultSpacing)
+      .background(Color.customRed.opacity(0.8), in: RoundedRectangle(cornerRadius: Layout.cornerRadius))
+      .shadow(radius: 5)
   }
 
   /// Victory confetti — Konjugieren's 40-ellipse Canvas, in Conjugar's palette.

@@ -95,8 +95,14 @@ final class GameState {
   static let screenShakeMagnitude: CGFloat = 9
   static let jaleoPopDuration = 1.2
   static let victoryHold = 1.5
+  /// A held beat after the end scene opens before the freed matador starts walking
+  /// over — the applause + confetti land first, then he moves.
+  static let matadorSlideDelay = 0.6
   static let matadorSlideDuration = 2.0
   static let endSceneMusicFade = 1.0
+  /// The tap-to-exit hint fades in only after the scene has had a moment to read
+  /// (the reunion beat plays out before we invite the player to leave).
+  static let endSceneHintDelay = 2.0
   static let bossPedestalSize = CGSize(width: 48, height: 12)
 
   /// Global time multiplier for the game loop — 1 in normal play. Setting the

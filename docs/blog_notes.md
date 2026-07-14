@@ -5105,3 +5105,40 @@ slow: tapped jump and caught her at the top of the arc in the arms-up apex — a
 build literally could not render. Frame counts didn't change (still 3), so no seam edits beyond the
 aspect. The bull's actions were always authored with the duplicate, so only the dancer's jump was
 affected; ole/stomp were born correct.
+
+## Boss fight: end scene polish (2026-07-13)
+
+Phase 5 of the La Llamada boss plan (`prompts/game_boss_llamada.md`). Phase 1 had shipped a
+working-but-skeletal end scene — the matador slid to the dancer the instant victory resolved, a
+lone ❤️ + 🌹 popped, the "Tap to continue" hint was on screen immediately, and the win title
+reused the same rounded plate as the "¡El duelo!" intro card. It *functioned*, but the reunion beat
+didn't breathe. This phase finished the choreography without adding any new view-state (item 4 of
+the roadmap will replace/extend this scene later, so the seam stayed a single `.endScene`).
+
+Changes, all small and mostly about *timing*:
+
+- **The matador now holds a beat before walking over.** Added `matadorSlideDelay = 0.6` so the
+  applause + confetti land first, *then* he crosses (still smoothstep-eased, decelerating into
+  place). The `updateEndScene` slide progress became
+  `(endSceneTime − matadorSlideDelay) / matadorSlideDuration`, clamped ≥ 0.
+- **The ❤️🌹 payoff became a fan, not a pair.** `spawnReunionBurst(midX:)` blooms five hearts and
+  roses in a deterministic −2…+2 column spread at alternating heights (indexed, not RNG, so it
+  reads identically every win and the tests stay stable). A `.success` haptic joins the chime.
+- **The tap-to-exit hint is withheld ~2 s.** New `endSceneHintDelay = 2.0` gates a computed
+  `showEndSceneHint`; the view fades the hint up with `.easeIn` once it fires, so the scene isn't
+  rushing the player out the moment it opens.
+- **"¡Victoria!" got its own display treatment.** A dedicated `victoryTitle` — 54 pt, `.black`,
+  `.fontWidth(.condensed)`, gold on the red plate with a soft yellow glow — distinct from the
+  intro's `bossTitle` plate, reading as a curtain call rather than a status line. The intro card
+  keeps its original playful rounded look.
+- **Music/exit fades were already correct** from Phase 1 (onboarding fades in as the boss track
+  clears at `endSceneMusicFade`; `stopAudio()` fades rather than hard-stops when `phase ==
+  .endScene`), so this phase left them alone beyond a clarifying comment.
+
+Strings in the scene stay hardcoded `Text(verbatim:)` English for now — Phase 6 owns moving
+`bullImpressed` / `victoria` / `tapToContinue` into `L.Game` + the string catalog (Spanish-in-both
+per decision 16). Tests: updated `bankedSixWinsThenEndSceneSlidesTheMatador` for the new
+delay-plus-duration slide window and to assert the ≥3-glyph burst, and added
+`endSceneHintIsWithheldThenShown`. Full `GameBossTests` suite green (22 tests). Live-verified end to
+end in the sim (`CONJUGAR_GAME_START_BOSS=1 CONJUGAR_GAME_BOSS_BANKED=5`, echo the final phrase to
+win) — Josh signed off on the whole beat: title, delayed walk, reunion burst, gated hint.
