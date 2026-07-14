@@ -106,18 +106,16 @@ enum ChallengeMechanic: CaseIterable {
   case zombie, encierro, apagon
 }
 
-/// Which frame-count table the player's placeholder flipbook cycles through.
-/// `ole`/`stomp` are the boss fight's dance moves — mapped to reused rendered
-/// frames for now (ole ≈ cape, stomp ≈ jump); Phase 4 of the boss plan swaps in
-/// hand-keyed imagesets without touching the mechanic code.
+/// Which frame-count table the player's sprite flipbook cycles through. Every action
+/// — including the boss fight's `ole`/`stomp` dance moves — has its own hand-keyed
+/// rendered imageset (see GameState+Animation).
 enum PlayerAction {
   case idle, walk, climb, jump, cape, capeWalk, ole, stomp
 }
 
-/// Which frame-count table the bull's placeholder flipbook cycles through.
-/// `stomp`/`rear`/`bow` are boss-fight actions — mapped to reused rendered frames
-/// for now (stomp/rear ≈ throw, bow ≈ idle); Phase 3 of the boss plan swaps in
-/// hand-keyed imagesets without touching the mechanic code.
+/// Which frame-count table the bull's sprite flipbook cycles through. Every action —
+/// including the boss fight's `stomp`/`rear`/`bow` — has its own hand-keyed rendered
+/// imageset (see GameState+Animation).
 enum BullAction {
   case idle, walk, `throw`, stomp, rear, bow
 }

@@ -2,17 +2,23 @@
 //  GameState.swift
 //  Conjugar
 //
-//  The @Observable core of the Donkey-Kong-inspired flamenco/bull game prototype.
-//  Follows the sibling apps' house pattern (Conjuguer/Konjugieren): a single
-//  `@MainActor @Observable final class` holding all state and tuning constants,
-//  driven by `TimelineView(.animation)` via `update(currentTime:)`. Entities are
-//  value-type structs (see GameModels.swift). Mechanic logic is split across
-//  `GameState+Physics`, `GameState+Flags`, and `GameState+Animation`, so any state
-//  those extensions touch is declared internal (not private).
+//  The @Observable core of the Donkey-Kong-inspired flamenco/bull game — the
+//  five-stage climb "La Subida" (per-stage obstacle sets + compounding speed, three
+//  rotating power-ups, three rotating challenge mechanics, and between-stage escape
+//  beats) capped by the "La Llamada" dance-off boss. Follows the sibling apps' house
+//  pattern (Conjuguer/Konjugieren): a single `@MainActor @Observable final class`
+//  holding all state and tuning constants, driven by `TimelineView(.animation)` via
+//  `update(currentTime:)`. Entities are value-type structs (see GameModels.swift).
+//  The logic is split across extensions — `GameState+Physics` (movement/climb/jump),
+//  `GameState+Obstacles` (the rolling obstacle sets), `GameState+Stages` (the five
+//  stages, escape beats, soft respawn), `GameState+PowerUps` (cape/speed/serenata),
+//  `GameState+Mechanics` (zombie/encierro/apagón), `GameState+BossFight` (La Llamada),
+//  and `GameState+Animation` (the sprite flipbook) — so any state those extensions
+//  touch is declared internal (not private).
 //
-//  This is a placeholder-art prototype: the player and bull "sprites" are their
-//  current animation frame *number*, rendered as text (see GameView). Swapping in
-//  real sprite art later is a one-line change — `Text("\(frame)")` → `Image(...)`.
+//  The player and bull are rendered cel-shaded sprite flipbooks (see GameView and
+//  GameState+Animation); a numbered-box fallback survives only as a safety net for an
+//  uncovered action. The matador is a static `Image("matador")`.
 //
 
 import Foundation
@@ -119,7 +125,7 @@ final class GameState {
   /// Radius (pt) of the soft spotlight the overlay punches around the dancer.
   static let apagonSpotlightRadius: CGFloat = 120
 
-  /// Placeholder flipbook speed (RaceRunner's rate).
+  /// Sprite flipbook speed (RaceRunner's rate).
   static let fps = 10
 
   // MARK: Boss-fight tuning (La Llamada — see prompts/game_boss_llamada.md)

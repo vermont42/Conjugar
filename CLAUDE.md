@@ -114,7 +114,8 @@ sleep 1.1; "$S/screenshot.sh" walking                              # capture mid
 **launch environment variables**, both default-off so **normal play is unaffected** —
 `CONJUGAR_GAME_TIME_SCALE` scales the loop's `dt` (`0.2` = 5× slow, `0.1` = 10×, so a
 ~0.5 s jump lasts several seconds and is trivially screenshot-able) and
-`CONJUGAR_GAME_DISABLE_FLAGS` stops the bull throwing flags (a calm field). They're read via
+`CONJUGAR_GAME_DISABLE_FLAGS` stops the bull throwing obstacles (a calm field; the var keeps
+its legacy `FLAGS` name as a documented contract). They're read via
 `ProcessInfo` in `GameState` (`debugTimeScale` / `debugFlagsDisabled`). `openurl` can't pass
 env, so launch the process **with** them, then route via the deeplink:
 
@@ -128,6 +129,57 @@ sleep 2; xcrun simctl openurl "$UDID" conjugar://game
 
 To reach the climb state, the D-pad **up** button only appears when the player is aligned at
 a ladder base — poll `describe_ui.sh` for the `Move up` label to know you're on it.
+
+### The main game — La Subida (the five-stage climb)
+
+The climb is a full five-stage game (`prompts/game_la_subida.md`), split across
+`GameState+Obstacles.swift` (the rolling obstacle sets — formerly `GameState+Flags.swift`),
+`GameState+Stages.swift` (stages, escape beats, soft respawn), `GameState+PowerUps.swift`,
+and `GameState+Mechanics.swift`. Key facts:
+
+- **Five stages** (`stage` 1…5, invariant `stage == summitCount + 1`). Each stage has its own
+  **obstacle set** (flags → animals → balls → vehicles → sky, `stageObstacleEmojis`) and a
+  **render style** (`ObstacleStyle`: `.spin` for flags/balls, `.face` — upright but mirrored to
+  face its travel — for animals/vehicles, `.upright` for sky). Obstacle speed compounds
+  **+5 %/stage** (`obstacleSpeed = obstacleRollSpeed · 1.05^(stage−1)`). The `Flag`→`Obstacle`
+  rename swept the whole family (`flags`→`obstacles`, `spawnFlag`→`spawnObstacle`, …); only the
+  `CONJUGAR_GAME_DISABLE_FLAGS` env var + `debugFlagsDisabled` keep their **legacy names**
+  (documented external contract).
+- **Escape beats (summits 1–4).** Touching the bull on a non-final stage enters
+  `GamePhase.escape` (`enterEscape`/`updateEscape`): the bull flees upward carrying the matador
+  off-screen, then `advanceToNextStage` rebuilds the field (fresh set/speed/pickups, hearts
+  refilled, **"¡Nivel N!"** banner + applause). The **5th** summit triggers the boss.
+- **No lose state.** At 0 health the player **soft-respawns** (`respawn()`) at the bottom of the
+  current stage with full health — `stage`/`summitCount`/`score`/collected pickups persist; a
+  brief `respawnGrace` follows. `reset()` (a full restart to stage 1) is only for
+  configure/boss-exit paths now, not death.
+- **Power-ups (one kind per stage, `PowerUpKind`).** Drawn from a no-repeat shuffle bag
+  (`powerUpBag`, through `bossRNG`): **cape** (invuln + smash, `Image("cape_pickup")`), **speed
+  ⚡** (walk + climb ×2, `Sound.speedWhoosh`, a ⚡ badge over the dancer), **La Serenata 🎸** (the
+  bull stops pacing/throwing and dances the end-scene repertoire instead, `Sound.guitarStrum`,
+  `Sound.snort` on expiry). All share the cape's 7 s (5 solid + 2 blink) envelope.
+- **Challenge mechanics (one per stage, `ChallengeMechanic`).** Also a no-repeat bag
+  (`mechanicBag`); a scheduler fires the stage's mechanic after a random 10–18 s, then re-arms
+  every 25 s. Announcements ride the jaleo idiom as **bull speech** (`spawnBullSpeech`).
+  - **zombie** — 3 s; every obstacle slows to ½ speed and homes on the player (it keeps its own
+    emoji — no 🧟 swap; `relevel`-re-integrates onto girders when the window ends).
+    `Sound.zombieGroan`.
+  - **encierro** — 4 s; 🐂 `Charger`s stampede across the girders at 2× obstacle speed (the
+    window's first charger targets the player's girder). `Sound.stampede`.
+  - **apagón** — 3.5 s; the lights cut to a near-black overlay with a soft spotlight tracking
+    the dancer (an `apagonDim` envelope + a `compositingGroup`/`.destinationOut` mask in
+    `GameView`); HUD/controls stay lit. `Sound.lightsOut` in, `Sound.pop` on a natural end.
+
+The five new SFX (`guitarStrum`, `speedWhoosh`, `zombieGroan`, `stampede`, `lightsOut`) are
+Pixabay MP3s bundled in `Conjugar/Audio/`, logged in `asset-licenses/pixabay-mpg-sfx.txt`.
+
+**Debug env vars** (read via `ProcessInfo`; compose with `CONJUGAR_GAME_TIME_SCALE` /
+`CONJUGAR_GAME_DISABLE_FLAGS` and the `conjugar://game` launch pattern above):
+
+- `CONJUGAR_GAME_STAGE=N` (1…5) — start the climb at stage N (`summitCount = N−1`).
+- `CONJUGAR_GAME_POWERUP=cape|speed|serenata` — force every stage's power-up draw.
+- `CONJUGAR_GAME_MECHANIC=zombie|encierro|apagon` — force every stage's mechanic draw AND
+  shorten its countdowns to ~2 s for fast verification.
 
 ### The boss fight — La Llamada (`GameState+BossFight.swift`)
 

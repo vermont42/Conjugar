@@ -5659,3 +5659,61 @@ center-aligned, so a center-anchored box is mathematically incapable of clipping
 speaks from — while short score-pops sit well inside that bound and lay out exactly as before. The
 short Spanish title-cards ("¡El encierro!", "¡Apagón!", "¡Nivel N!") were never affected; only the
 long localized zombie sentence was wide enough to reach an edge.
+
+## La Subida Phase 6 — polish and docs (the escape-beat TODOs are finally gone) (2026-07-14)
+
+The capstone pass on the five-stage main game: no new behavior, just closing the loop on the
+comments and docs the six prior phases left stale, and a final green-across-the-board
+verification. Balance tuning (the plan's step 1) is Josh's on-device call — the constants table
+is best felt with a controller in hand, not guessed at in the simulator — so this session did the
+sweep-and-document half and left the numbers alone.
+
+**The escape-beat TODOs were already dead; I just confirmed the graves.** The plan (and
+`prompts/game.md` decision 1) had long carried two "resolve me later" markers: one in
+`GameState+Physics.swift` where a non-final summit used to `reset()`, and one in `GameView.swift`
+around the matador render, both anticipating the bull-flees-upward escape beat. Phase 1 actually
+implemented `enterEscape`/`updateEscape` and rewired `checkReachedBull`, so the TODOs were gone
+the moment that landed — a grep for `TODO`/`FIXME` across the game files now comes back empty, and
+the surviving comments *describe* the resolution (`checkReachedBull`: "summits 1–4 trigger the
+escape beat … the bull fleeing upward with the matador") rather than promising it. Nice when the
+polish phase finds the work already done.
+
+**The "placeholder-art prototype" comments outlived the placeholder art by three sprite phases.**
+The real staleness was cosmetic-comment rot. `GameState.swift`'s header still opened with "This is
+a placeholder-art prototype: the player and bull 'sprites' are their current animation frame
+*number*, rendered as text … Swapping in real sprite art later is a one-line change" — written
+before the boss-fight arc hand-keyed full cel-shaded flipbooks for every dancer and bull action.
+The same stale claim was echoed in `GameView.swift`'s header ("placeholder numbered frames … before
+any real sprite art exists"), `GameState+Animation.swift`'s header ("the view renders
+`Text(\"\\(playerFrame)\")` today"), the `PlayerAction`/`BullAction` doc comments in
+`GameModels.swift` ("placeholder flipbook … mapped to reused rendered frames for now"), and a
+"Phase-1 note" in `GameState+BossFight.swift` insisting the dance actions and boss SFX were
+temporary reuses. I refreshed all of them to the truth: the actors render real per-action sprite
+flipbooks, with the numbered-box `RoundedRectangle` kept in `GameView` only as a safety-net
+fallback for an action without art. (The fallback genuinely still exists, so the comments say
+"safety net," not "gone" — a comment that over-claims is as bad as one that under-claims.)
+
+**The worst comment was doubly stale — a rename *and* an omission.** `GameState.swift`'s
+file-overview line read "Mechanic logic is split across `GameState+Physics`, `GameState+Flags`,
+and `GameState+Animation`." Both halves were wrong after La Subida: `GameState+Flags.swift` was
+renamed to `GameState+Obstacles.swift` in Phase 1 (flags became one of five obstacle sets), and
+four whole new extension files — `+Stages`, `+PowerUps`, `+Mechanics`, and the older
+`+BossFight` — weren't listed at all. The header now enumerates the real seven-way split with a
+one-line gloss each, so a future reader gets the map instead of a fossil.
+
+**CLAUDE.md gained a La Subida section.** The project doc had a thorough boss-fight section and a
+game-music section but nothing describing the climb it caps. I added "The main game — La Subida
+(the five-stage climb)": the five stages and their obstacle sets, the `ObstacleStyle`
+spin/face/upright rule, the compounding +5 %/stage speed, the `Flag`→`Obstacle` rename (and the
+deliberately-retained legacy `CONJUGAR_GAME_DISABLE_FLAGS` name), the escape beats, the no-lose
+soft respawn, the three power-ups and three mechanics with their SFX, the five new Pixabay sounds
+and their license log, and the three new debug env vars (`CONJUGAR_GAME_STAGE`,
+`CONJUGAR_GAME_POWERUP`, `CONJUGAR_GAME_MECHANIC`). I also fixed the one stale line in the
+freeze-framing paragraph that still said the disable-flags var "stops the bull throwing flags" —
+now "throwing obstacles," with a note that the var keeps its legacy name as a contract.
+
+**Verification.** SwiftLint: 0 violations in 181 files. Full `run_tests.sh`: **508 tests in 26
+suites, all green** (unchanged count — this pass touched only comments and Markdown). Final
+`build_app.sh`: Build Succeeded. As with every La Subida phase, the commit is held until Josh
+device-tests; this one has nothing behavioral to test, but the plan's whole-arc device pass and
+constant-tuning still gate the final commit + push to `migration`.

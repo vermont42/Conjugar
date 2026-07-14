@@ -617,7 +617,22 @@ Subida Phase 5 — El Apagón". Holding the commit until Josh device-tests.
 
 **DoD:** standard.
 
-## Phase 6 — Balance, polish, docs  [Claude + Josh on-device]
+## Phase 6 — Balance, polish, docs  [Claude + Josh on-device]  ✅ DONE (2026-07-14)
+
+**Complete.** Steps 2–4 done: confirmed both escape-beat TODOs were already resolved in Phase 1
+(grep-clean; the surviving comments describe the resolution); refreshed the stale
+"placeholder-art prototype" comments across `GameState.swift` (header + the doubly-stale
+file-overview line that still named `GameState+Flags` and omitted the five new extensions),
+`GameView.swift`, `GameState+Animation.swift`, `GameModels.swift`, and `GameState+BossFight.swift`
+to reflect the now-rendered sprite flipbooks. Added a "La Subida" section to CLAUDE.md (five
+stages, obstacle sets/styles, escape beats, soft respawn, power-ups, mechanics, the five new SFX,
+and the three new debug env vars), fixed the stale "throwing flags" prose, and appended the
+capstone `docs/blog_notes.md` entry. Also fixed a device-caught bug: the olé cue chip now uses the
+button's `figure.mind.and.body` yoga-pose glyph instead of `figure.arms.open`. SwiftLint 0
+violations; full suite green at **508 tests**; `build_app.sh` Build Succeeded; committed + pushed
+to `migration`. Step 1 (constant tuning) is Josh's ongoing on-device call — the constants table
+is best felt with a controller, not guessed in the simulator. See `docs/blog_notes.md`, "La Subida
+Phase 6 — polish and docs".
 
 1. Full-game playthrough (Josh on device if possible; Claude in simulator): tune the constants
    table (speeds, delays, durations, dim opacity, spotlight radius) to taste. Check stage-5 +

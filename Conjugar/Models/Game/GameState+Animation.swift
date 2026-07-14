@@ -2,11 +2,10 @@
 //  GameState+Animation.swift
 //  Conjugar
 //
-//  The placeholder-flipbook machinery: a per-action frame-count table, the phase
-//  advance, action derivation, and the `currentFrame` helper. This is the exact
-//  index logic real sprite frames will later plug into — the view renders
-//  `Text("\(playerFrame)")` today; `Image(frames[playerFrame - 1])` swaps in later
-//  with no change to this file.
+//  The sprite-flipbook machinery: a per-action frame-count table, the phase advance,
+//  action derivation, and the `frame(phase:count:)` helper. The view indexes the
+//  rendered per-action sprite frames (`Image("bull_<action>_<playerFrame>")` etc.) off
+//  this logic; a numbered-box fallback in GameView covers any action without art.
 //
 
 import CoreGraphics

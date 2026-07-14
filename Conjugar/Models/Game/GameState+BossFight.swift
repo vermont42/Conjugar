@@ -12,10 +12,9 @@
 //  fresh phrase — the bull never harms the dancer; there is no lose state.
 //
 //  `update(currentTime:)` routes every non-`.climb` phase here, so the climb
-//  pipeline's derived actions never stomp the commanded dance bursts. Phase-1 note:
-//  the dance actions reuse existing rendered flipbooks (ole ≈ cape, stomp ≈ jump;
-//  bull stomp/rear ≈ throw, bow ≈ idle), and the boss SFX are placeholder reuses of
-//  existing `Sound` cases — boss plan Phases 2–4 swap in the real pack and sprites.
+//  pipeline's derived actions never stomp the commanded dance bursts. The dance
+//  actions (dancer ole/stomp; bull stomp/rear/bow) render their own hand-keyed
+//  sprite flipbooks, and the duel is scored by its own SFX/music pack.
 //
 
 import CoreGraphics

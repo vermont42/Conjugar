@@ -6,9 +6,9 @@
 //  from the Settings tab. Pure SwiftUI, matching the sibling apps' loop pattern:
 //  `GeometryReader → TimelineView(.animation) → ZStack`, with the tick driven by
 //  `.onChange(of: timeline.date)`. Platforms/ladders are drawn with SwiftUI
-//  primitives in Conjugar's palette; the player and bull are placeholder numbered
-//  frames (their current flipbook index) so the animation machinery is visible
-//  before any real sprite art exists.
+//  primitives in Conjugar's palette; the player and bull are rendered cel-shaded
+//  sprite flipbooks (indexed by their current frame), with a numbered-box fallback
+//  kept only as a safety net for an uncovered action.
 //
 
 import SwiftUI
@@ -594,7 +594,9 @@ struct GameView: View {
       case .pasoRight:
         Image(systemName: "arrowtriangle.right.fill")
       case .ole:
-        Image(systemName: "figure.arms.open")
+        // Match the olé button's glyph exactly (design: the cue must show the same
+        // symbol the player will tap — the figure.mind.and.body "yoga" pose).
+        Image(systemName: "figure.mind.and.body")
       case .stomp:
         Image(systemName: "shoeprints.fill")
       case .cape:
