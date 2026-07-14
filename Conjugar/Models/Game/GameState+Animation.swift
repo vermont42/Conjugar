@@ -12,15 +12,16 @@
 import CoreGraphics
 
 extension GameState {
-  /// Reasonable placeholder frame counts per action. The boss dance actions reuse
-  /// existing rendered flipbooks for now (their counts MUST match the reused assets:
-  /// ole ≈ cape/4, stomp ≈ jump/3; bull stomp/rear ≈ throw/5, bow ≈ idle/2) — boss
-  /// plan Phases 3–4 swap in hand-keyed imagesets and update these counts.
+  /// Frame counts per action. The bull's boss dance actions (stomp/rear/bow) now
+  /// have their own hand-keyed sprites (boss plan Phase 3, `gen_bull_action.py`) —
+  /// counts 3/4/4. The player's boss actions still reuse existing flipbooks for now
+  /// (ole ≈ cape/4, stomp ≈ jump/3); boss plan Phase 4 swaps in hand-keyed dancer
+  /// imagesets and updates those counts.
   static let playerFrameCounts: [PlayerAction: Int] = [
     .idle: 2, .walk: 6, .climb: 4, .jump: 3, .cape: 4, .capeWalk: 6, .ole: 4, .stomp: 3
   ]
   static let bullFrameCounts: [BullAction: Int] = [
-    .idle: 2, .walk: 6, .throw: 5, .stomp: 5, .rear: 5, .bow: 2
+    .idle: 2, .walk: 6, .throw: 5, .stomp: 3, .rear: 4, .bow: 4
   ]
 
   /// Map a flipbook phase (seconds into the cycle) to a 1-based frame index that

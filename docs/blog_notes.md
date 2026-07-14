@@ -4913,3 +4913,107 @@ constructs `World(...)` directly — that only surfaced when the *test* target c
 Fixed. Full suite green (465 tests), swiftlint clean, and a live round-3 run drove the
 freeze demo (tension sting) and the whole judged echo without incident. Haptic *feel* and
 the sting's level under `Music.bossFight` are Josh's on-device audition.
+
+## Boss fight Phase 3 — hand-keying the bull's stomp, rear, and bow (2026-07-13)
+
+With the mechanic core (Phase 1) and the SFX/juice (Phase 2) shipped on *reused* art, the
+bull was still faking its three new dance moves: `stomp`/`rear` borrowed the throw's
+flipbook, `bow` borrowed idle. Phase 3 gives them real sprites, hand-keyed in Blender on
+the Simple Rigged Bull's DEF bones — the same Path-B approach the base bull plan established
+(the FBX round-trip strips Rigify's control constraints, so you key the deform bones the
+mesh is actually skinned to, not the dead `*_ik`/`torso` controls).
+
+**No live Blender this time — headless, with rendered-PNG feedback.** The base bull's
+idle/walk/throw were authored interactively through blender-mcp, but that needs the GUI
+open and connected. Rather than block on it, I mirrored the *dancer's* pipeline instead:
+a reusable headless script, `tools/blender/gen_bull_action.py` (sibling of
+`gen_dancer_action.py`), that opens `bull.blend`, keys one action on the DEF bones, and
+exports a per-action FBX — driven entirely by `blender -b -P`, with correctness judged by
+rendering the frames and *reading the PNGs* in place of an interactive viewport. **This was
+a mistake** — see the coda: the render-only loop missed distortions a live viewport (and
+Josh's eyes) caught immediately, and I committed the result without review. The redo was
+interactive. The pipeline mechanics below (local-X idiom, trailing-dup, sizing) all still
+hold; the *authoring* method is what changed.
+
+**The rig made it easy in one respect: everything is a rotation about the bone's local X.**
+The bull is a pure side actor, so all motion lives in the sagittal (Y-Z) plane, and — as the
+throw already demonstrated — that means every keyframe is a single local-X rotation, L and R
+legs keyed identically so the profile silhouette stays clean. I dumped the shipped
+`bull_throw` action to learn the sign convention (positive local-X on the `DEF-spine.006..011`
+neck chain = head thrusts down/forward, the goring; negative = reared up/back, the windup)
+and the withers-pitch pivot (`DEF-spine.004/.005`, − = chest/head up, + = chest down). The
+front legs hang off `ORG-shoulder`, *not* the DEF spine, so they're keyed independently to
+paw (rear) or fold (bow). With that map, the poses are just angle tables:
+
+- **stomp (3):** first pass tried a literal "front-hoof raise → strike," but the raised hoof
+  didn't read at sprite scale (the neck motion dominates the silhouette and both forelegs
+  overlap, so a leg-lift looked like a small rear). Reframed it as a percussive *head* beat —
+  chest/head-up anticipation, then a sharp head-slam with a foreleg stamp, then settle. The
+  strong up→down contrast is what sells "stomp" on a ~140-pt sprite.
+- **rear (4):** gather → the whole front pitches up off the withers while the forelegs swing
+  up and paw → held flourish. Reads immediately as a rear; the crop goes taller-than-wide.
+- **bow (4):** front legs fold, chest drops, the neck curls the head/horns to the floor, and
+  the final frame duplicates the deep pose as a *held* bow (it freezes during `.victory`).
+
+**Two pipeline gotchas, both about the last frame surviving.** (1) `render_sprites.py`
+samples half-open `[start, end)` — right for a *cyclic* walk (drops the loop-closing dup),
+wrong for a *one-shot* whose final pose is the payoff (a held bow, a settle). The shipped
+throw solved this by authoring N+1 frames where frame N+1 duplicates the last real pose;
+`gen_bull_action.py` now does that automatically, so `--frames N` at the default range
+samples the N real poses and drops only the duplicate. (2) The FBX exporter shifts the
+action to start at frame 2, not 1 — the trailing-dup trick is robust to that too, since
+half-open sampling is relative to the action's own range. Chasing an explicit `--start/--end`
+override instead (my first instinct) silently rendered `[up, up, down]` for the stomp because
+the real poses had slid one frame over. Reading the muzzle's evaluated world-Z per frame is
+what caught it.
+
+**Sizing stayed on the rails.** The ortho auto-fit uses `max(Y, Z)·margin`, so I worried the
+vertical rear would drive the fit by height and shrink the body relative to idle/walk. It
+doesn't matter in practice: a bull on its hind legs is about as tall as it is long, so
+`max(Y,Z)` lands at roughly the same world size either way — the body stays ~constant and the
+existing `bullScale` (0.314, crop-px→screen-pt) applies unchanged. (The final *moderate*
+poses crop 452×306 / 452×294 / 452×232 — the giraffe-tall 452-height crops belonged to the
+distorted first pass.) `bullFrameCounts` for the three went from the Phase-1 reuse values
+(5/5/2) to the real 3/4/4, and `bullActionName` now points at the real stems.
+
+**Verification.** stomp and rear — the two actions the boss *commands via the sprite path* —
+were confirmed live in the simulator: the intro llamada renders the head-slam stomp, and an
+`ole` demo renders the full vertical rear, both with correct facing (mirrored right toward the
+matador), feet planted on the tablao floor, and no numbered-box fallback. The bow only fires
+at victory, which means correctly echoing a round-3 length-5 phrase (freeze slot and all) —
+impractical to drive reliably by screenshot-timed taps — so it's verified via its rendered
+PNG plus the identical `bullSprite` code path; the live win→bow→end-scene arc belongs to
+Phase 5/6 anyway. Build green, swiftlint clean.
+
+**Coda — the blind-authoring mistake, and the interactive redo.** Everything above shipped a
+commit ("Boss fight: bull stomp/rear/bow sprites") that I made *without asking Josh* — and
+several cells were badly distorted: the rear and stomp-anticipation stretched the neck into a
+thin giraffe column, the rear's forelegs came up as one rigid straight bar, and the bow folded
+the front into a tangled, interpenetrating knot. Josh caught it immediately ("certain cells are
+unacceptably distorted"). Two failures compounded: (1) **judging only rendered PNGs** hid mesh
+shearing that a live viewport shows at a glance, and (2) **committing before review** on an
+art deliverable that's inherently subjective.
+
+Root cause of the tearing: I applied *large* FK rotations to the DEF bones. The imported rig's
+DEF spine is **fragmented** — `DEF-spine.004` parents to `root`, not to `.003` — so there is no
+single bone that rigidly pivots the whole front of the body about the hips. Any big FK pitch
+therefore shears the continuous mesh at the keyed joint instead of rotating the front as a unit.
+The throw stayed clean only because its angles are small.
+
+The fix, at Josh's direction, was to **redo it interactively** through blender-mcp with him in
+the loop: open `bull.blend` in the GUI, Connect the addon, set Right-Ortho, and pose one bone
+group at a time — `execute_blender_code` then `get_viewport_screenshot`, with Josh signing off
+(or vetoing) each step. That loop is what produced the shipped poses, and it's why they're
+*moderate*: a distributed ~21° front-lift instead of a 30°+ single-joint kink; forelegs lifted
+**and folded** (bent knee) rather than a straight bar; a head-slam that only dips to chest level
+(Josh: "nose below feet" → dialled back); a bow that's a clean **kneel** (front knees fold,
+head to knee height) rather than a head-to-floor sweep that crossed the legs. The lesson
+generalizes: keep FK rotations modest and spread across joints, and only the *peak* pose of each
+action needs scrutiny — the lead-in/hold frames are generated as scaled fractions of an approved
+peak (a gentler version of a clean pose is clean), so `gen_bull_action.py` now stores approved
+PEAK dicts + per-frame scale factors. The interactive session *finds* the angles; the headless
+generator + render pipeline still *bakes* them. I folded this whole workflow — live viewport,
+per-pose sign-off, modest rotations, a final game-size filmstrip review before committing — into
+the boss plan's **Phase 4** callout so the dancer's `ole`/`stomp` (next session) start there
+instead of relearning it. And the commit was **amended**, not piled onto, once Josh approved the
+redo.

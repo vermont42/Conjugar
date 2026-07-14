@@ -1,14 +1,27 @@
 Asset:    The game's BULL sprite frames (rendered 3D model) — one flipbook per bull
           action, at Conjugar/Assets.xcassets/Game/bull_<action>_<i>.imageset.
-          STATUS: SHIPPED (Phases 2–7 done, 2026-07-11). 13 rendered frames:
+          STATUS: SHIPPED. 24 rendered frames:
+            base bull plan (2026-07-11):
             bull_idle_1..2     bull_walk_1..6     bull_throw_1..5
+            boss fight "La Llamada" Phase 3 (2026-07-13):
+            bull_stomp_1..3    bull_rear_1..4     bull_bow_1..4
           Authored on the model's Rigify rig and rendered side-view via
           tools/blender/render_sprites.py (--actor bull --view side): idle came free
           from the model's baked standing-sway clip (2 samples); walk (6-frame diagonal
           quadruped gait) and throw (5-frame head-toss, windup→goring release) were
           hand-keyed on the DEF/FK deform bones, because the FBX round-trip stripped
-          Rigify's control constraints (see Note below). Wired into GameView.bullSprite,
-          retiring the game's last numbered-box placeholder (player + bull now sprites).
+          Rigify's control constraints (see Note below). The three boss dance actions —
+          stomp (3-frame: gentle head/chest-up anticipation → chest-level head-slam +
+          foreleg stamp → settle), rear (4-frame: gather → moderate pawing rear, forelegs
+          lifted and folded → held), and bow (4-frame: chest dips, front knees fold into a
+          kneel, head to knee level → held bow) — were likewise hand-keyed on the DEF bones
+          by the reusable tools/blender/gen_bull_action.py, using the same local-X-rotation
+          idiom as the throw (all motion in the side-view sagittal plane, L/R keyed
+          identically). The angles were dialled in INTERACTIVELY through blender-mcp with
+          live viewport feedback and per-pose sign-off — a first blind headless pass had
+          torn the mesh on big rotations (see the boss plan's Phase 4 note).
+          Wired into GameView.bullSprite, retiring the game's last numbered-box
+          placeholder (player + bull now sprites).
 
 Source:   Sketchfab — "Simple Rigged Bull"
           Model page:  https://sketchfab.com/3d-models/simple-rigged-bull-c1984e43c4014dc5bc332a8fd6b15280
@@ -56,8 +69,9 @@ Reuse:    The raw mesh/rig (tools/blender/source/bull.fbx and the working
           raw 3D asset. The bull is re-posed/animated (idle/walk + a bespoke hand-keyed
           throw) on its Rigify rig, then rendered to transparent orthographic PNG frames
           via tools/blender/render_sprites.py (--actor bull, side view), N matched to
-          GameState.bullFrameCounts (idle 2 / walk 6 / throw 5), and union-cropped by
-          pack_or_rename.sh — the same pipeline as the dancer.
+          GameState.bullFrameCounts (idle 2 / walk 6 / throw 5 / stomp 3 / rear 4 /
+          bow 4), and union-cropped by pack_or_rename.sh — the same pipeline as the
+          dancer.
 
 Note:     FBX transport bakes animation per-frame and does not carry Rigify's bone
           constraints/drivers, so the imported control `rig` is a bone hierarchy without

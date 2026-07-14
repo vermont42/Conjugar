@@ -308,7 +308,7 @@ Verify each in the sim with `CONJUGAR_GAME_START_BOSS=1 CONJUGAR_GAME_TIME_SCALE
 freeze-framing. Extend `asset-licenses/sketchfab-bull.txt`'s shipped-frame list.
 **Commit** ("Boss fight: bull stomp/rear/bow sprites").
 
-## Phase 4 — Dancer dance actions in Blender  [Claude]
+## Phase 4 — Dancer dance actions in Blender  [Claude + Josh, collaborative]
 
 Follow `prompts/game_dancer_finish_actions.md`'s house style (hand-key the gown rig via
 the world-space-rotation script skeleton; shoes stay deleted; subtle leg keys drive the
@@ -323,6 +323,41 @@ Render with the dancer's existing toon/gold/outline settings, crop, install
 `spriteActions`, `actionName`, and `dancerWidth` aspects from the recorded crops
 (constant `dancerVisualHeight`; widths differ). Extend the CGTrader license note's
 frame list. Freeze-frame verify. **Commit** ("Boss fight: dancer ole/stomp sprites").
+
+> **Author the poses the way Phase 3 learned to — INTERACTIVELY, with Josh in the loop.**
+> Phase 3's first attempt hand-keyed the bull's actions *blind* (headless
+> `blender -b -P gen_bull_action.py`, judging only rendered PNGs) and committed without
+> review; several frames were badly distorted (a giraffe-stretched neck, straight-bar
+> forelegs, a tangled interpenetrating bow) because big FK rotations shear a continuous
+> mesh. The redo, which shipped, used this workflow — **use it for the dancer too:**
+>
+> 1. **Drive Blender live through blender-mcp, not headless.** Josh opens
+>    `tools/blender/source/Flamenco_Dancer.fbx`'s working blend in the Blender GUI,
+>    installs/enables `tools/blender/blender-mcp/addon.py`, and clicks **Connect** (N-panel
+>    → BlenderMCP tab, port 9876). Then pose with `execute_blender_code` and **check every
+>    step with `get_viewport_screenshot`** — you can see the mesh deform in real time
+>    instead of guessing. Set the viewport to the render's view axis first (for the dancer's
+>    side actions, **Right Ortho**; overlays off for a clean silhouette read).
+> 2. **Go one small step at a time and ASK JOSH after each.** Apply a single change (one
+>    bone group), screenshot, and get his explicit sign-off before the next. He caught
+>    "neck too stretched," "nose below the feet," etc. that the render-only loop missed.
+>    Keep rotations **modest and spread across joints** — a scaled-down clean pose stays
+>    clean, so only the *peak* pose of each action needs real scrutiny; lead-in / hold
+>    frames are generated as fractions of the approved peak.
+> 3. **Bake the approved angles into a reusable generator, then render headless.** The
+>    interactive session is for *finding* the angles; once Josh approves the peaks, record
+>    them in a `gen_dancer_action.py`-style script (the bull's `gen_bull_action.py` is the
+>    template — approved PEAK dicts + per-frame scale factors + the trailing-duplicate
+>    one-shot idiom so the held frame survives half-open sampling and the FBX start-frame
+>    shift), regenerate FBXs, and render through the existing pipeline.
+> 4. **Show the final cel-shaded, game-size filmstrip for a last sign-off** (a montage PNG
+>    in `docs/screenshots/`) — the downscaled shaded sprite is the true test — **before**
+>    installing imagesets and committing. Amend rather than pile on commits if iterating.
+>
+> The dancer's gown rig differs from the bull's DEF chain (world-space arm rotations, the
+> `[1,1557]` baked-clip trap, the hidden-feet rule), but the *collaboration* discipline —
+> live viewport, per-pose approval, modest rotations, final game-size review — is the part
+> that must carry over.
 
 ## Phase 5 — End-scene polish  [Claude]
 

@@ -146,17 +146,16 @@ struct GameView: View {
     case .idle:  return (436, 230)
     case .walk:  return (452, 248)
     case .throw: return (452, 306)
-    case .stomp: return (452, 306)  // Phase-1 reuse of throw's crop
-    case .rear:  return (452, 306)  // Phase-1 reuse of throw's crop
-    case .bow:   return (436, 230)  // Phase-1 reuse of idle's crop
+    case .stomp: return (452, 306)  // hand-keyed (Phase 3): up → head-slam → settle
+    case .rear:  return (452, 294)  // hand-keyed (Phase 3): gather → pawing rear → hold
+    case .bow:   return (452, 232)  // hand-keyed (Phase 3): dip → kneeling bow → held
     }
   }
 
   /// Bull actions backed by real rendered sprites. The numbered-box fallback in
   /// `bullSprite` stays only as a defensive safety net (every action is covered).
-  /// The boss actions reuse existing flipbooks for now; boss plan Phase 3 swaps in
-  /// hand-keyed `bull_stomp/rear/bow` imagesets by changing only these mappings
-  /// (+ the frame counts and crops).
+  /// All six are now hand-keyed/rendered: idle/walk/throw from the base bull plan,
+  /// and stomp/rear/bow from boss plan Phase 3 (`gen_bull_action.py`).
   private static let bullSpriteActions: Set<BullAction> = [.idle, .walk, .throw, .stomp, .rear, .bow]
 
   /// The asset-name stem for each bull action: `bull_<name>_<frame>`.
@@ -165,9 +164,9 @@ struct GameView: View {
     case .idle: return "idle"
     case .walk: return "walk"
     case .throw: return "throw"
-    case .stomp: return "throw"  // Phase-1 reuse; Phase 3 → "stomp"
-    case .rear: return "throw"   // Phase-1 reuse; Phase 3 → "rear"
-    case .bow: return "idle"     // Phase-1 reuse; Phase 3 → "bow"
+    case .stomp: return "stomp"
+    case .rear: return "rear"
+    case .bow: return "bow"
     }
   }
 
