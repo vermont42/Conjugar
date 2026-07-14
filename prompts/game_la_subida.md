@@ -590,7 +590,22 @@ iOS-sim bug (Josh's on-device check). See `docs/blog_notes.md`, "La Subida Phase
 
 **DoD:** standard.
 
-## Phase 5 — El Apagón 💡  [Claude; Josh plays]
+## Phase 5 — El Apagón 💡  [Claude; Josh plays]  ✅ DONE (2026-07-14)
+
+**Complete.** El Apagón is live: for `apagonDuration` (3.5 s) the lights cut to a near-black
+overlay with a soft spotlight tracking the dancer, HUD/controls staying lit. `apagonDim` (0…1)
+is derived state — a pure function of the window's `mechanicRemaining` (`apagonFadeIn` 0.3 in,
+hold, `apagonFadeOut` 0.4 out; never accumulates, self-corrects to 0 at both ends) — driven by a
+new `updateApagon()` called from `updateMechanicScheduler`. `Sound.lightsOut` on the way in;
+`Sound.pop` on a *natural* window end only (`endMechanic` captures the ending mechanic; a
+cancel via escape/boss/respawn snaps the darkness to 0 through `finishActiveMechanic` but plays no
+pop). The overlay (`GameView.apagonOverlay`) is the required `compositingGroup` + `.destinationOut`
+soft-hole mask, placed after the sprites but before the cue chips/jaleo pops, `allowsHitTesting(false)`.
+New tuning constants (`apagonFadeIn`/`apagonFadeOut`/`apagonDimOpacity`/`apagonSpotlightRadius`) on
+`GameState`. Build + SwiftLint clean; 508 tests (5 new apagón tests). Simulator
+(`CONJUGAR_GAME_MECHANIC=apagon` + `TIME_SCALE=0.2`) confirms the dark hold with the spotlight on
+the dancer and a lit HUD, and the lights returning on fade-out. See `docs/blog_notes.md`, "La
+Subida Phase 5 — El Apagón". Holding the commit until Josh device-tests.
 
 1. `apagonDim` envelope in the update loop; `lightsOut`/`pop` sounds; the spotlight overlay in
    `GameView` per the spec (verify layer order: obstacles/sprites darken, jaleo announcement

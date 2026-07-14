@@ -314,6 +314,11 @@ struct GameView: View {
         playerSprite
         speedBadge
 
+        // El Apagón: the lights-out overlay. Placed after the sprites (so they darken)
+        // but before the cue chips + jaleo pops (so an announcement floats above the
+        // darkness); the HUD/controls live outside this shaken group and stay lit.
+        apagonOverlay
+
         cueChips
         jaleoPopViews
       }
@@ -462,6 +467,37 @@ struct GameView: View {
     }
   }
 
+  /// El Apagón's lights-out overlay: a near-black wash with a soft radial spotlight
+  /// punched around the dancer, its darkness scaled by `apagonDim` so it fades in and
+  /// out with the mechanic's envelope. The `compositingGroup` + `.destinationOut`
+  /// blend is required — a plain overlay can't cut a *soft* hole (the mask idiom). Sits
+  /// inside the shaken playfield so it moves with the field; `allowsHitTesting(false)`
+  /// keeps the controls beneath it responsive.
+  @ViewBuilder
+  private var apagonOverlay: some View {
+    if gameState.apagonDim > 0 {
+      Color.black.opacity(GameState.apagonDimOpacity * Double(gameState.apagonDim))
+        .mask {
+          ZStack {
+            Rectangle()
+            RadialGradient(
+              colors: [.black, .clear], center: .center,
+              startRadius: GameState.apagonSpotlightRadius * 0.55,
+              endRadius: GameState.apagonSpotlightRadius
+            )
+            .frame(
+              width: GameState.apagonSpotlightRadius * 2,
+              height: GameState.apagonSpotlightRadius * 2
+            )
+            .position(x: gameState.playerX, y: gameState.playerY)
+            .blendMode(.destinationOut)
+          }
+          .compositingGroup()
+        }
+        .allowsHitTesting(false)
+    }
+  }
+
   /// A small facing indicator at the top edge — we don't mirror the number (a
   /// mirrored digit looks wrong), so facing is shown with a chevron.
   private func facingChevron(_ facing: CGFloat, tint: Color) -> some View {
@@ -579,12 +615,23 @@ struct GameView: View {
   }
 
   /// Floating, fading jaleo shouts (¡Olé! ¡Uy! ¡Eso!…) — the sibling score-pop idiom.
+  /// Also carries the mechanic bull-speech announcements, which can be long (the
+  /// two-line "Your obstacles are now zombies!"). Those are `.position`-centered at the
+  /// bull, so a wide line would overflow whichever edge the bull is nearer. Bounding
+  /// each pop's wrap width to twice the distance from its center to the NEARER edge (less
+  /// a margin) keeps the center-aligned box fully on-screen wherever the bull speaks from;
+  /// short shouts sit well inside that bound, so their single-line layout is unchanged.
   private var jaleoPopViews: some View {
     ForEach(gameState.jaleoPops) { pop in
       let age = pop.initialTTL - pop.ttl
+      let margin = Layout.defaultHorizontalMargin
+      let halfRoom = max(0, min(pop.x, gameState.screenSize.width - pop.x) - margin)
       Text(verbatim: pop.text)
         .font(.system(size: pop.size, weight: .heavy, design: .rounded))
         .foregroundStyle(Color.customYellow)
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: max(1, halfRoom * 2))
+        .fixedSize(horizontal: false, vertical: true)
         .shadow(color: .black.opacity(0.4), radius: 1, y: 1)
         .opacity(pop.ttl / pop.initialTTL)
         .position(x: pop.x, y: pop.y - CGFloat(age) * pop.riseRate)

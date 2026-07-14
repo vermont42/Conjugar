@@ -12,8 +12,11 @@
 //                 `zombieSpeedFactor`× and homes toward the player (keeping its own
 //                 emoji — no 🧟 swap, per Josh); when the window ends the obstacles are
 //                 re-integrated onto the nearest girder below them via `relevel`.
-//    • encierro — announces only for now; Phase 4 spawns the 🐂 charger stampede.
-//    • apagon   — announces only for now; Phase 5 drives the lights-out spotlight.
+//    • encierro — a stampede of 🐂 chargers runs across the girders (see
+//                 `updateChargers` / `resolveChargerCollisions`).
+//    • apagon   — the lights cut to a near-black overlay with a soft spotlight
+//                 tracking the dancer; `updateApagon` drives the `apagonDim` envelope
+//                 and `GameView` renders the mask.
 //
 //  The scheduler ticks only in `.climb` (from `update`); escape, boss entry, and
 //  respawn all cancel an active window (`cancelActiveMechanic`).
@@ -73,6 +76,9 @@ extension GameState {
         startMechanic()
       }
     }
+    // Refresh the apagón spotlight from the (just-updated) window state, so the darkness
+    // tracks `mechanicRemaining` and a natural/cancelled end leaves it at 0.
+    updateApagon()
   }
 
   /// Fire this stage's mechanic: open its window and play its announcement (a bull
@@ -93,16 +99,24 @@ extension GameState {
       chargerSpawnTimer = 0                // the first charger enters on the next frame
       encierroCoveredPlayerLevel = false   // guarantee one down the player's girder
     case .apagon:
-      // Announce only for now — Phase 5 drives the lights-out spotlight in this window.
+      // El Apagón: the lights cut. `updateApagon` ramps `apagonDim` up from 0 over
+      // this window (GameView renders the spotlight mask); `endMechanic` pops the
+      // lights back on.
       spawnBullSpeech(L.Game.apagonAnnouncement)
       Current.soundPlayer.play(.lightsOut, shouldDebounce: false)
     }
   }
 
   /// Close the active window cleanly (re-integrate zombie obstacles onto the girders)
-  /// and re-arm the countdown so the mechanic re-fires later in the stage.
+  /// and re-arm the countdown so the mechanic re-fires later in the stage. A natural
+  /// apagón end pops the lights back on (`Sound.pop`); a *cancel* (escape/boss/respawn)
+  /// does not, so a between-stage or death transition isn't punctuated by the pop.
   func endMechanic() {
+    let ending = activeMechanic
     finishActiveMechanic()
+    if ending == .apagon {
+      Current.soundPlayer.play(.pop, shouldDebounce: false)
+    }
     armMechanicCountdown(firstDelay: false)
   }
 
@@ -124,6 +138,7 @@ extension GameState {
     }
     activeMechanic = nil
     mechanicRemaining = 0
+    apagonDim = 0   // the lights come back on (updateApagon's guard then leaves it 0)
   }
 
   /// The window length for each mechanic.
@@ -276,5 +291,26 @@ extension GameState {
     }
     chargers.removeAll { $0.despawn }
     return false
+  }
+
+  // MARK: El Apagón (the lights-out spotlight)
+
+  /// Drive the blackout envelope from the active window's remaining time: the darkness
+  /// (`apagonDim`, 0…1) fades in over `apagonFadeIn`, holds at full for the middle of
+  /// the window, then fades back out over the last `apagonFadeOut`. It's purely a
+  /// function of `mechanicRemaining` — no per-frame randomness, no `dt` accumulation —
+  /// so it's deterministic and self-correcting. When no apagón is active the guard
+  /// leaves `apagonDim` alone (kept at 0 by `finishActiveMechanic`). Called from
+  /// `updateMechanicScheduler` after the window state has been ticked.
+  func updateApagon() {
+    guard activeMechanic == .apagon else { return }
+    let elapsed = Self.apagonDuration - mechanicRemaining
+    if elapsed < Self.apagonFadeIn {
+      apagonDim = CGFloat(max(0, elapsed) / Self.apagonFadeIn)
+    } else if mechanicRemaining < Self.apagonFadeOut {
+      apagonDim = CGFloat(max(0, mechanicRemaining) / Self.apagonFadeOut)
+    } else {
+      apagonDim = 1
+    }
   }
 }

@@ -107,8 +107,17 @@ final class GameState {
   static let chargerHitSize: CGFloat = 20
   /// A fresh charger enters this often while the encierro window is open.
   static let chargerSpawnInterval: Double = 0.8
-  /// El Apagón window (Phase 5 wires the lights-out spotlight overlay).
+  /// El Apagón window: for `apagonDuration` seconds the lights cut to a near-black
+  /// overlay with a soft spotlight tracking the dancer (`updateApagon` drives the
+  /// envelope; `GameView` renders the mask). HUD/controls stay lit.
   static let apagonDuration: Double = 3.5
+  /// The darkness fades in over this long, holds, then fades back out over `apagonFadeOut`.
+  static let apagonFadeIn: Double = 0.3
+  static let apagonFadeOut: Double = 0.4
+  /// Peak opacity of the blackout overlay (0.88 = near-black, a sliver of ambience left).
+  static let apagonDimOpacity: Double = 0.88
+  /// Radius (pt) of the soft spotlight the overlay punches around the dancer.
+  static let apagonSpotlightRadius: CGFloat = 120
 
   /// Placeholder flipbook speed (RaceRunner's rate).
   static let fps = 10
@@ -321,6 +330,11 @@ final class GameState {
   /// — the window's first charger targets it (the stampede must threaten the player at
   /// least once), the rest pick a random girder. Reset at each window start.
   var encierroCoveredPlayerLevel = false
+
+  // El Apagón (Phase 5): the lights-out spotlight. `apagonDim` is the 0…1 darkness of
+  // the blackout overlay, driven by `updateApagon` from the active window's remaining
+  // time and snapped to 0 whenever the window ends or is cancelled.
+  var apagonDim: CGFloat = 0
 
   // MARK: Player state
 
@@ -650,6 +664,7 @@ final class GameState {
     mechanicBag.removeAll()
     activeMechanic = nil
     mechanicRemaining = 0
+    apagonDim = 0
     chargers.removeAll()
     chargerCounter = 0
     assignStagePowerUp()

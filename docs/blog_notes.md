@@ -5599,3 +5599,63 @@ render as tofu (the iOS-sim emoji bug — 🐂 shows as a small red shape, the s
 boxes), so the actual glyphs are Josh's on-device check; spawning, crossing, the announcement, the
 player-girder bias, and the now-always-dark background all render correctly. Holding all commits
 until Josh blesses it on device, per the plan's device-test rule.
+
+## La Subida Phase 5 — El Apagón, the lights-out spotlight (2026-07-14)
+
+The last of the three challenge mechanics, and the one the plan flagged as "the money shot":
+**El Apagón**. For ~3.5 s the lights cut — the whole playfield washes to near-black under a soft
+spotlight that tracks the dancer, while the HUD and controls stay lit. It's the Donkey Kong Country
+"Blackout Basement" lineage, adapted to the flamenco climb.
+
+**The envelope is derived state, not integrated.** The temptation was to ramp `apagonDim` up by
+`dt` each frame toward a target and back down. But an accumulate-toward-target integrator drifts and
+needs clamping, and the boss/mechanic code already leans on a discipline of *deriving* per-frame
+visuals from a single countdown (the compás bar, the screen shake). So `apagonDim` (0…1) is a pure
+function of the window's `mechanicRemaining`: it's `elapsed / apagonFadeIn` while `elapsed <
+apagonFadeIn` (0.3 s), then a flat `1` through the hold, then `mechanicRemaining / apagonFadeOut`
+(0.4 s) as the window runs out. No randomness, no accumulation, self-correcting — and it hits
+exactly 0 at both ends. I moved the driver into `updateMechanicScheduler` (a new `updateApagon()`
+called after the window state ticks) rather than the climb pipeline, so any test that ticks the
+scheduler sees the darkness update, and there's one obvious owner of the mechanic's whole lifecycle.
+
+**Cancel vs. natural end diverge on the pop, converge on the darkness.** `finishActiveMechanic`
+snaps `apagonDim` to 0 unconditionally — so escape, boss entry, and death-respawn all bring the
+lights instantly back on (each already routes through `cancelActiveMechanic`). But only a *natural*
+window end plays `Sound.pop` ("lights back on"): `endMechanic` captures the ending mechanic before
+teardown and pops only for apagón, so a between-stage flee or a death isn't punctuated by an
+incongruous click. `startMechanic` plays `Sound.lightsOut` on the way in. (Free irony the plan
+noted: when stage 5's clouds/sun set draws an apagón, the sun goes out — no code needed.)
+
+**The overlay is a soft-hole mask, which a plain overlay can't do.** The render (in `GameView`,
+inside the shaken playfield ZStack, after the sprites so they darken but before the cue chips + jaleo
+pops so an announcement floats above the dark) is a `Color.black` at `apagonDimOpacity × apagonDim`,
+`.mask`ed by a full `Rectangle` with a `RadialGradient` (`.black`→`.clear`) `.blendMode(.destinationOut)`
+punching the spotlight hole around `(playerX, playerY)`, wrapped in `.compositingGroup()`. The
+compositing group is load-bearing: without it `destinationOut` composites against the window instead
+of the mask's rectangle and the hole doesn't cut. `allowsHitTesting(false)` keeps the D-pad beneath
+it live. Everything HUD-side (quit ✕, hearts, D-pad, jump) lives *outside* the shaken group, so it
+stays at full brightness — which the verification screenshot proves.
+
+**Verification.** Build + SwiftLint clean; the full suite is green at **508 tests** (5 new apagón
+tests in `GameStateTests`: the envelope rises→holds→falls on schedule and re-arms; `apagonDim` never
+leaves [0, 1] across a full window sweep; respawn zeroes it mid-hold; escape and boss entry zero it;
+and the bull-speech announcement pops at the bull). In the simulator with
+`CONJUGAR_GAME_MECHANIC=apagon` + `CONJUGAR_GAME_TIME_SCALE=0.2`, the first screenshot caught the
+full-dark hold — playfield near-black, a bright pool around the dancer on the bottom girder, and the
+✕/hearts/D-pad fully lit — and a later screenshot caught the lights back on, confirming the fade-out
+returns everything to full brightness. As before the pickup emoji render as "?" tofu (the iOS-sim
+single-scalar-emoji bug), so the ⚡/🎸 glyphs are still Josh's on-device check; the darkness,
+spotlight tracking, layering, and lit HUD all render correctly. Holding all commits until Josh
+blesses it on device, per the plan's device-test rule.
+
+**Incidental fix — the zombie announcement clipped off the left edge.** Device-testing the
+mechanics, Josh caught that "Your obstacles are now zombies!" (the one long, two-line bull-speech
+announcement) was cut off on the left — its leading "Y" and the "n" of "now" ran off-screen. The
+cause: `spawnBullSpeech` anchors every announcement at `bullX` (decision 9, "just below the bull"),
+and the bull sits left-of-center (~0.4·w), so a `.position`-centered wide box overflowed the near
+edge. Fixed purely in the view (`jaleoPopViews`) with no model or test change: each pop's wrap width
+is now bounded to *twice the distance from its center to the nearer screen edge* (less a margin) and
+center-aligned, so a center-anchored box is mathematically incapable of clipping wherever the bull
+speaks from — while short score-pops sit well inside that bound and lay out exactly as before. The
+short Spanish title-cards ("¡El encierro!", "¡Apagón!", "¡Nivel N!") were never affected; only the
+long localized zombie sentence was wide enough to reach an edge.

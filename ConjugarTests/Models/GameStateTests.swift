@@ -808,4 +808,92 @@ struct GameStateTests {
     gameState.respawn()
     #expect(gameState.chargers.isEmpty)
   }
+
+  // MARK: El Apagón (Phase 5 — the lights-out spotlight)
+
+  @Test func apagonEnvelopeRisesHoldsAndFallsOnSchedule() {
+    let gameState = configured()
+    gameState.assignedMechanic = .apagon
+    gameState.startMechanic()
+    #expect(gameState.activeMechanic == .apagon)
+    #expect(gameState.apagonDim == 0)          // starts dark-off; ramps from here
+
+    let dt = 1.0 / 60.0
+
+    // Fade-in: partway through `apagonFadeIn` the darkness is between 0 and 1.
+    gameState.updateMechanicScheduler(dt: GameState.apagonFadeIn / 2)
+    #expect(gameState.apagonDim > 0 && gameState.apagonDim < 1)
+
+    // Hold: once past the fade-in (and well before the fade-out) it's fully dark.
+    gameState.updateMechanicScheduler(dt: GameState.apagonFadeIn)
+    #expect(abs(gameState.apagonDim - 1) < 0.0001)
+
+    // Tick into the fade-out tail: the darkness comes back down below full.
+    while gameState.mechanicRemaining > GameState.apagonFadeOut * 0.5 && gameState.activeMechanic != nil {
+      gameState.updateMechanicScheduler(dt: dt)
+    }
+    if gameState.activeMechanic != nil {
+      #expect(gameState.apagonDim < 1)
+    }
+
+    // Run the window out: the lights come fully back on and the scheduler re-arms.
+    while gameState.activeMechanic != nil {
+      gameState.updateMechanicScheduler(dt: dt)
+    }
+    #expect(gameState.apagonDim == 0)
+    #expect(abs(gameState.mechanicCountdown - GameState.mechanicRepeatDelay) < 0.1)
+  }
+
+  @Test func apagonNeverExceedsFullDarkness() {
+    let gameState = configured()
+    gameState.assignedMechanic = .apagon
+    gameState.startMechanic()
+    // Sweep the whole window: `apagonDim` stays within [0, 1] every frame.
+    while gameState.activeMechanic != nil {
+      gameState.updateMechanicScheduler(dt: 1.0 / 60.0)
+      #expect(gameState.apagonDim >= 0 && gameState.apagonDim <= 1)
+    }
+  }
+
+  @Test func cancelingApagonZeroesTheDarkness() {
+    let gameState = configured()
+    gameState.assignedMechanic = .apagon
+    gameState.startMechanic()
+    // Drive into the full-dark hold, then cancel via respawn: the lights snap back on.
+    gameState.updateMechanicScheduler(dt: GameState.apagonFadeIn + 0.1)
+    #expect(gameState.apagonDim > 0)
+    gameState.respawn()
+    #expect(gameState.activeMechanic == nil)
+    #expect(gameState.apagonDim == 0)
+  }
+
+  @Test func escapeAndBossEntryZeroApagonDarkness() {
+    let escaping = configured()
+    escaping.summitCount = 1
+    escaping.assignedMechanic = .apagon
+    escaping.startMechanic()
+    escaping.updateMechanicScheduler(dt: GameState.apagonFadeIn + 0.1)
+    #expect(escaping.apagonDim > 0)
+    escaping.enterEscape()
+    #expect(escaping.apagonDim == 0)
+
+    let bossing = configured()
+    bossing.assignedMechanic = .apagon
+    bossing.startMechanic()
+    bossing.updateMechanicScheduler(dt: GameState.apagonFadeIn + 0.1)
+    #expect(bossing.apagonDim > 0)
+    bossing.enterBossIntro()
+    #expect(bossing.apagonDim == 0)
+  }
+
+  @Test func apagonAnnouncesAtTheBull() {
+    let gameState = configured()
+    gameState.assignedMechanic = .apagon
+    gameState.jaleoPops.removeAll()
+    gameState.startMechanic()
+    #expect(gameState.jaleoPops.count == 1)
+    let pop = gameState.jaleoPops[0]
+    #expect(abs(pop.x - gameState.bullX) < 0.5)
+    #expect(pop.y > gameState.bullY)
+  }
 }
