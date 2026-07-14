@@ -5357,3 +5357,69 @@ them up automatically), lookup is by `rawValue` so the case name must equal the 
 and `asset-licenses/pixabay-mpg-sfx.txt` records per-file provenance in the boss-pack format
 (noting that all five shipped the primary pick, no alternate substituted — Josh's audition
 may still change that). Build + all 466 tests green; nothing behavioral changed yet.
+
+## La Subida Phase 1 — stages, the escape beat, and the soft respawn (2026-07-14)
+
+Phase 1 turns the single-screen climb into the skeleton of a five-stage game. It is
+deliberately the *foundation* phase: no power-ups or challenge mechanics yet (those are
+Phases 2–5), just the three structural pieces everything later hangs off — a stage system,
+the between-stage escape beat, and a real respawn to replace the old hard reset.
+
+**1a — the rename.** Flags stopped being *the* obstacle and became one of five sets, so
+`Flag` → `Obstacle`, `flags` → `obstacles`, `spawnFlag`/`updateFlags` → `spawnObstacle`/
+`updateObstacles`, and the file `GameState+Flags.swift` → `GameState+Obstacles.swift` (a
+`git mv`; the synchronized folder means no pbxproj edit). The four `flag…` tuning constants
+became `obstacle…`. The one thing that kept its old name on purpose is the
+`CONJUGAR_GAME_DISABLE_FLAGS` env var / `debugFlagsDisabled` flag — it's a documented
+external contract that tooling references, so renaming it would break more than it tidies; a
+comment notes the intentional mismatch.
+
+**1b — stages.** `var stage` (1…5) drives everything per-stage: the obstacle emoji set
+(`stageObstacleEmojis` indexed by `stage − 1`), a compounding speed
+(`obstacleRollSpeed × 1.05^(stage−1)`, wired into both spawn and the landing re-roll), and a
+render style. That last piece came from a design note I almost missed: Apple's animal and
+vehicle glyphs face LEFT, and the barrel *spin* the flags use would hide any facing entirely.
+So each set declares an `ObstacleStyle` — `.spin` (flags, balls — rotation is the point),
+`.face` (animals, vehicles — stay upright, mirror to face travel), `.upright` (sun/clouds —
+neither). `.face` obstacles carry a `facing` updated from the sign of horizontal motion; the
+view mirrors with `scaleEffect(x: −1)` when moving right, the same left-facing convention the
+dancer and bull sprites already use. Rotation now only *accumulates* for `.spin`, so the
+tests can assert `.face`/`.upright` sets never tumble.
+
+**The escape beat.** Summits 1–4 no longer restart the level — they enter a new
+`GamePhase.escape` (`GameState+Stages.swift`): the bull flees UPWARD carrying the matador off
+the top of the screen (`updateEscape` lifts `bullY` and `bullfighterY` in lockstep), and once
+both clear the top edge the field rebuilds for the next stage — player back at the start,
+hearts refilled, a faster obstacle set, and a Spanish "¡Nivel N!" banner riding the existing
+jaleo-pop idiom. This finally resolves the two long-standing escape-beat TODOs (one in
+`checkReachedBull`, one on the matador sprite) that `prompts/game.md` decision 1 always
+anticipated. `summitsToBoss` rose 1 → 5, so the 5th summit is now the boss. The routing in
+`update(currentTime:)` splits cleanly: `.climb` runs the original pipeline, `.escape` →
+`updateEscape`, everything else → `updateBoss`.
+
+**1c — the soft respawn.** The old death path called `reset()`, which rebuilt the whole
+world; with five stages that would throw away all progress on a single 0-health. So death now
+calls `respawn()` — full health, back to the bottom-left of the *current* stage, obstacles
+cleared and power-up timers zeroed, with a `respawnGrace` damage cooldown so a lingering
+obstacle can't immediately re-kill. `stage`/`summitCount`/`score` and the bull all persist;
+there is no lose state in the climb, only re-climb time. Freed from the death path, `reset()`
+became a true full-restart (used by `configure` and the boss→climb exit) and now zeros
+`stage`/`summitCount`/`score` — the "deliberately keeps summitCount" comment was written for
+the death path and was stale the moment death stopped using it.
+
+Ten new Swift Testing cases cover the speed compounding, per-stage set/style selection,
+`.face` facing (and its flip at a landing reversal) vs `.spin` rotation, the escape
+enter/complete cycle, and the respawn's keep-vs-reset split; `reachingBullTriggersTheBossFight`
+and the boss suite's `summitTriggersBossIntro` were updated to pre-set `summitCount = 4` since
+the 5th summit is now the gate. One test I wrote failed first time for an instructive reason:
+I gave a `.face` obstacle a rightward velocity on a girder that naturally rolls *left*, so the
+drop-point check fired on the very first tick and the obstacle fell instead of rolling —
+facing never updated. The fix was to make the test's motion agree with the level's roll
+direction, which is also the only state the real spawner ever produces. Build green, SwiftLint
+clean, all 476 tests pass. A debug env var `CONJUGAR_GAME_STAGE=N` jumps straight to any stage.
+
+One verification footnote: the per-stage screenshots in the simulator show the new obstacle
+sets as missing-glyph "?" boxes. That is a known iOS-simulator emoji-rendering bug, not a code
+defect — flags (regional-indicator pairs) render, the single-scalar animal/ball/vehicle/sky
+glyphs don't. Josh will confirm the sets on a real device; the geometry, actors, ladders,
+hearts, and escape all render correctly in the simulator.

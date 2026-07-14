@@ -1,15 +1,20 @@
 //
-//  GameState+Flags.swift
+//  GameState+Obstacles.swift
 //  Conjugar
 //
-//  The bull's behavior (pacing the top girder + throwing flag "barrels"), flag
-//  descent/rolling down the platforms, and the flag↔player / cape-pickup collisions.
+//  The bull's behavior (pacing the top girder + throwing obstacle "barrels"),
+//  obstacle descent/rolling down the platforms, and the obstacle↔player /
+//  cape-pickup collisions. "Obstacles" are the per-stage thrown glyphs (flags,
+//  animals, balls, vehicles, sky — see `GameState.stageObstacleEmojis`); the file
+//  and its symbols were renamed from `Flag`/`updateFlags` when flags became one of
+//  five sets (La Subida). The `CONJUGAR_GAME_DISABLE_FLAGS` env var keeps its name —
+//  it's a documented external contract (see `debugFlagsDisabled`).
 //
 
 import CoreGraphics
 
 extension GameState {
-  /// One frame of bull AI: pace the top girder, and throw a flag on a timer.
+  /// One frame of bull AI: pace the top girder, and throw an obstacle on a timer.
   func updateBull(dt: CGFloat) {
     if bullThrowTimer > 0 { bullThrowTimer -= Double(dt) }
 
@@ -29,32 +34,35 @@ extension GameState {
 
     if Self.debugFlagsDisabled { return }
 
-    flagSpawnTimer -= Double(dt)
-    if flagSpawnTimer <= 0 {
-      spawnFlag()
+    obstacleSpawnTimer -= Double(dt)
+    if obstacleSpawnTimer <= 0 {
+      spawnObstacle()
       Current.soundPlayer.play(.moo, shouldDebounce: false, volume: 0.15)   // the bull bellows as it throws (kept low)
-      flagSpawnTimer = Self.flagSpawnInterval
+      obstacleSpawnTimer = Self.obstacleSpawnInterval
       bullThrowTimer = Self.bullThrowDuration
     }
   }
 
-  private func spawnFlag() {
+  private func spawnObstacle() {
     let top = Self.levelCount - 1
-    let emoji = Self.flagEmojis[flagCounter % Self.flagEmojis.count]
-    flags.append(
-      Flag(
-        id: flagCounter,
+    let emoji = stageEmojis[obstacleCounter % stageEmojis.count]
+    let dir = rollDirection(top)
+    obstacles.append(
+      Obstacle(
+        id: obstacleCounter,
         x: bullX,
-        y: platforms[top].surfaceY - Self.flagSize / 2,
-        velocityX: Self.flagRollSpeed * rollDirection(top),
+        y: platforms[top].surfaceY - Self.obstacleSize / 2,
+        velocityX: obstacleSpeed * dir,
         velocityY: 0,
         falling: false,
         level: top,
         emoji: emoji,
-        rotation: 0
+        rotation: 0,
+        style: stageObstacleStyle,
+        facing: dir
       )
     )
-    flagCounter += 1
+    obstacleCounter += 1
   }
 
   /// Alternating roll direction per level, producing the DK barrel zig-zag.
@@ -62,16 +70,16 @@ extension GameState {
     level % 2 == 0 ? 1 : -1
   }
 
-  /// The x at which a rolling flag falls off its girder toward the level below.
+  /// The x at which a rolling obstacle falls off its girder toward the level below.
   private func dropX(_ level: Int) -> CGFloat {
     rollDirection(level) > 0 ? screenSize.width * 0.85 : screenSize.width * 0.15
   }
 
-  /// Move every flag: descend + land, or roll + fall off at the drop point.
-  func updateFlags(dt: CGFloat) {
-    let half = Self.flagSize / 2
-    for i in flags.indices {
-      var f = flags[i]
+  /// Move every obstacle: descend + land, or roll + fall off at the drop point.
+  func updateObstacles(dt: CGFloat) {
+    let half = Self.obstacleSize / 2
+    for i in obstacles.indices {
+      var f = obstacles[i]
 
       if f.falling {
         f.velocityY += Self.gravity * dt
@@ -86,12 +94,17 @@ extension GameState {
             f.velocityY = 0
             f.falling = false
             f.level = target
-            f.velocityX = Self.flagRollSpeed * rollDirection(target)
+            f.velocityX = obstacleSpeed * rollDirection(target)
+            f.facing = f.velocityX > 0 ? 1 : -1
           }
         }
       } else {
         f.x += f.velocityX * dt
-        f.rotation += Double(f.velocityX) * Double(dt) * 0.6
+        // Only `.spin` sets accumulate the barrel tumble; `.face`/`.upright` stay level.
+        if f.style == .spin {
+          f.rotation += Double(f.velocityX) * Double(dt) * 0.6
+        }
+        f.facing = f.velocityX > 0 ? 1 : -1
         let dx = dropX(f.level)
         let reachedDrop = f.velocityX > 0 ? f.x >= dx : f.x <= dx
         if reachedDrop {
@@ -104,13 +117,13 @@ extension GameState {
         }
       }
 
-      flags[i] = f
+      obstacles[i] = f
     }
 
-    flags.removeAll { $0.despawn || $0.y > screenSize.height + 120 }
+    obstacles.removeAll { $0.despawn || $0.y > screenSize.height + 120 }
   }
 
-  /// Cape pickups and flag hits.
+  /// Cape pickups and obstacle hits.
   func resolveCollisions() {
     // Cape pickups.
     for i in capes.indices where !capes[i].collected {
@@ -124,30 +137,30 @@ extension GameState {
       }
     }
 
-    // Flag hits.
-    for i in flags.indices {
-      let f = flags[i]
+    // Obstacle hits.
+    for i in obstacles.indices {
+      let f = obstacles[i]
       guard rectsIntersect(
         playerX, playerY, Self.playerWidth, Self.playerHeight,
-        f.x, f.y, Self.flagHitSize, Self.flagHitSize
+        f.x, f.y, Self.obstacleHitSize, Self.obstacleHitSize
       ) else { continue }
 
       if isCaped {
-        flags[i].despawn = true     // caped: smash the flag
+        obstacles[i].despawn = true     // caped: smash the obstacle
         Current.soundPlayer.play(.chomp, shouldDebounce: true)   // cape smash
       } else if damageCooldown <= 0 {
         health -= 1                 // otherwise: −25% health
         damageCooldown = Self.damageCooldownDuration
-        flags[i].despawn = true
+        obstacles[i].despawn = true
         if health <= 0 {
-          Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: false)   // game over → reset
-          reset()
+          Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: false)   // 0 health → soft respawn
+          respawn()
           return
         }
         Current.soundPlayer.play(.soccerKick, shouldDebounce: false)   // took a hit
       }
     }
 
-    flags.removeAll { $0.despawn }
+    obstacles.removeAll { $0.despawn }
   }
 }

@@ -119,8 +119,10 @@ extension GameState {
     playerVelocityY = 0
   }
 
-  /// Reaching the bull counts a summit. At `summitsToBoss` the boss fight begins
-  /// (La Llamada — GameState+BossFight.swift); earlier summits restart the level.
+  /// Reaching the bull counts a summit. The 5th summit (`summitsToBoss`) begins the
+  /// boss fight (La Llamada — GameState+BossFight.swift); summits 1–4 trigger the
+  /// escape beat (`enterEscape` — GameState+Stages.swift), the bull fleeing upward
+  /// with the matador before the next stage rebuilds.
   func checkReachedBull() {
     if rectsIntersect(
       playerX, playerY, Self.playerWidth, Self.playerHeight,
@@ -130,10 +132,7 @@ extension GameState {
       if summitCount >= Self.summitsToBoss {
         enterBossIntro()
       } else {
-        // TODO(escape beats): when summitsToBoss rises to 5, this branch becomes the
-        // bull's escape-upward beat rather than a plain reset (see prompts/game.md).
-        Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
-        reset()
+        enterEscape()
       }
     }
   }

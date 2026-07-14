@@ -753,6 +753,22 @@
         }
       }
     },
+    "Game.nivel %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Nivel %lld!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Nivel %lld!"
+          }
+        }
+      }
+    },
     "Game.oleMove" : {
       "localizations" : {
         "en" : {

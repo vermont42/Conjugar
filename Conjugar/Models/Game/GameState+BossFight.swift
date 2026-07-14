@@ -89,7 +89,7 @@ extension GameState {
     playerGrounded = true
     capedRemaining = 0
     damageCooldown = 0
-    flags.removeAll()
+    obstacles.removeAll()
     bullThrowTimer = 0
 
     introFromPlayerX = playerX
@@ -518,7 +518,9 @@ extension GameState {
     advanceBossCosmetics(dt: dtSeconds)
 
     switch phase {
-    case .climb:
+    case .climb, .escape:
+      // `.escape` is driven by `updateEscape` (GameState+Stages.swift), never routed
+      // here; the case is defensive so the switch stays exhaustive.
       return
     case .bossIntro:
       updateIntro(dt: dtSeconds)

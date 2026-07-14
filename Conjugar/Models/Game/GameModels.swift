@@ -31,9 +31,19 @@ struct Ladder: Identifiable {
   let bottomY: CGFloat
 }
 
-/// A country-flag "barrel" thrown by the bull. Either rolling along `level`'s
-/// girder or `falling` toward `level - 1`.
-struct Flag: Identifiable {
+/// How an obstacle glyph is oriented as it travels (see the "Per-set rendering"
+/// spec in prompts/game_la_subida.md). Apple's animal/vehicle emoji face LEFT and
+/// would hide any facing under the barrel tumble, so each stage's set declares a
+/// style: flags/balls spin like barrels, animals/vehicles stay upright and mirror to
+/// face their travel, sky glyphs (sun/clouds) neither spin nor mirror.
+enum ObstacleStyle {
+  case spin, face, upright
+}
+
+/// An obstacle "barrel" thrown by the bull — a country flag, animal, ball, vehicle,
+/// or sky glyph depending on the stage (see `GameState.stageObstacleEmojis`). Either
+/// rolling along `level`'s girder or `falling` toward `level - 1`.
+struct Obstacle: Identifiable {
   let id: Int
   var x: CGFloat
   var y: CGFloat
@@ -43,6 +53,12 @@ struct Flag: Identifiable {
   var level: Int
   let emoji: String
   var rotation: Double
+  /// The stage set's render style, fixed at spawn (all obstacles on screen share a
+  /// stage, so a set's style never mixes).
+  var style: ObstacleStyle = .spin
+  /// Which way the glyph faces (+1 right / −1 left) for `.face` sets, updated from the
+  /// sign of horizontal motion. A purely vertical fall keeps the last facing.
+  var facing: CGFloat = -1
   var despawn: Bool = false
 }
 
@@ -73,10 +89,11 @@ enum BullAction {
 // MARK: Boss fight — La Llamada (the dance-off duel)
 
 /// The game's top-level phase. `climb` is the whole original prototype — its update
-/// pipeline runs only there. Everything else is the boss fight, driven by
-/// `GameState+BossFight.swift`.
+/// pipeline runs only there. `escape` is the between-stage beat (the bull flees
+/// upward carrying the matador; see `GameState+Stages.swift`). Everything else is the
+/// boss fight, driven by `GameState+BossFight.swift`.
 enum GamePhase {
-  case climb, bossIntro, duel, victory, endScene
+  case climb, escape, bossIntro, duel, victory, endScene
 }
 
 /// The dance vocabulary of the duel. `freeze` is the round-3 fake-out: the correct

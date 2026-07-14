@@ -287,11 +287,16 @@ struct GameView: View {
           }
         }
 
-        ForEach(gameState.flags) { flag in
-          Text(flag.emoji)
+        ForEach(gameState.obstacles) { obstacle in
+          // Per-set rendering: `.spin` sets tumble like barrels; `.face` sets stay
+          // upright and mirror to face their travel (glyphs render facing LEFT, so a
+          // rightward mover flips to −1 — the dancer/bull convention); `.upright`
+          // sets neither spin nor mirror.
+          Text(obstacle.emoji)
             .font(.system(size: 28))
-            .rotationEffect(.degrees(flag.rotation))
-            .position(x: flag.x, y: flag.y)
+            .rotationEffect(obstacle.style == .spin ? .degrees(obstacle.rotation) : .zero)
+            .scaleEffect(x: obstacle.style == .face && obstacle.facing > 0 ? -1 : 1, y: 1)
+            .position(x: obstacle.x, y: obstacle.y)
             .opacity(1 - gameState.bossTransition)
         }
 
@@ -318,7 +323,8 @@ struct GameView: View {
       bossTapLayer
 
       quitButton
-      if gameState.phase == .climb {
+      if gameState.phase == .climb || gameState.phase == .escape {
+        // Hearts stay up through the escape beat so the pips don't blink out mid-flee.
         healthPips
       } else if !gameState.hasWon {
         // The Duende meter shows through the intro + duel, then is retired the moment
@@ -393,11 +399,9 @@ struct GameView: View {
     .position(x: gameState.bullX, y: gameState.bullY)
   }
 
-  // TODO(matador escape beat): the full design has the bull escape UPWARD with the
-  // bullfighter the first four times the player summits (see prompts/game.md). Wiring
-  // the matador to ride along with that escape — and the final fight scene — is a
-  // follow-up; today he's a static goal figure.
   /// The captive matador — a single static frame beside the bull on the top platform.
+  /// During an escape beat (summits 1–4) he rides upward with the bull off the top of
+  /// the screen (`GameState.updateEscape`); the boss end scene later frees him.
   /// Displayed at a constant height with width from the render aspect (like the dancer),
   /// feet planted on the girder; front-facing, so no mirroring. `.interpolation(.high)`
   /// smooths the 512→display downscale (nearest-neighbor frays the cel outline — the
@@ -594,7 +598,7 @@ struct GameView: View {
             .shadow(color: .black.opacity(0.35), radius: 1, y: 1)
             .padding(.horizontal, Layout.tripleDefaultSpacing)
         }
-      case .climb, .duel:
+      case .climb, .escape, .duel:
         EmptyView()
       }
     }
@@ -817,7 +821,8 @@ struct GameView: View {
         dPad
         Spacer()
         jumpButton
-      case .duel, .bossIntro, .victory, .endScene:
+      case .escape, .duel, .bossIntro, .victory, .endScene:
+        // No player controls during the escape beat (the bull flees on its own).
         Spacer()
       }
     }

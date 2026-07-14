@@ -225,6 +225,12 @@ nonisolated enum L {
     static var duendeMeter: String {
       String(localized: "Game.duendeMeter")
     }
+
+    // La Subida — the between-stage banner. Stays Spanish in BOTH localizations
+    // (title-card policy — boss-plan decision 16).
+    static func nivel(_ n: Int) -> String {
+      String(localized: "Game.nivel \(n)")
+    }
   }
 
   enum GameCenter {

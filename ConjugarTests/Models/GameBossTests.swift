@@ -76,15 +76,16 @@ struct GameBossTests {
 
   @Test func summitTriggersBossIntro() {
     let gameState = configured()
-    gameState.flags.append(
-      Flag(id: 1, x: 0, y: 0, velocityX: 0, velocityY: 0, falling: false, level: 0, emoji: "🏳️", rotation: 0)
+    gameState.summitCount = 4                  // the 5th summit is the boss (summitsToBoss)
+    gameState.obstacles.append(
+      Obstacle(id: 1, x: 0, y: 0, velocityX: 0, velocityY: 0, falling: false, level: 0, emoji: "🏳️", rotation: 0)
     )
     gameState.playerX = gameState.bullX
     gameState.playerY = gameState.bullY
     gameState.checkReachedBull()
-    #expect(gameState.summitCount == 1)
+    #expect(gameState.summitCount == 5)
     #expect(gameState.phase == .bossIntro)
-    #expect(gameState.flags.isEmpty)          // field cleared for the stage
+    #expect(gameState.obstacles.isEmpty)       // field cleared for the stage
     #expect(gameState.capedRemaining == 0)
   }
 

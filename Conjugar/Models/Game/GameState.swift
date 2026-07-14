@@ -33,12 +33,13 @@ final class GameState {
   static let playerHeight: CGFloat = 30
   static let bullSize: CGFloat = 70
   static let bullfighterSize: CGFloat = 40
-  static let flagSize: CGFloat = 30
-  /// Collision size for a flag — deliberately smaller than its drawn box. Flag emoji
-  /// sit inside transparent glyph padding, so the full 30 pt box registers "phantom"
-  /// hits when a jump has visually cleared the flag. This tighter box makes the rule
-  /// honest: if the player's arc doesn't touch the flag, it doesn't cost health.
-  static let flagHitSize: CGFloat = 20
+  static let obstacleSize: CGFloat = 30
+  /// Collision size for an obstacle — deliberately smaller than its drawn box.
+  /// Obstacle emoji sit inside transparent glyph padding, so the full 30 pt box
+  /// registers "phantom" hits when a jump has visually cleared the obstacle. This
+  /// tighter box makes the rule honest: if the player's arc doesn't touch the
+  /// obstacle, it doesn't cost health.
+  static let obstacleHitSize: CGFloat = 20
   static let capeSize: CGFloat = 34
 
   static let gravity: CGFloat = 1400
@@ -49,10 +50,22 @@ final class GameState {
   static let jumpImpulse: CGFloat = 360
   static let climbTolerance: CGFloat = 34
 
-  static let flagRollSpeed: CGFloat = 95
-  static let flagSpawnInterval: Double = 2.0
+  /// Stage-1 obstacle roll speed; each later stage multiplies by `stageSpeedFactor`
+  /// (see `obstacleSpeed`).
+  static let obstacleRollSpeed: CGFloat = 95
+  static let obstacleSpawnInterval: Double = 2.0
   static let bullThrowDuration: Double = 0.5
   static let bullPaceSpeed: CGFloat = 42
+
+  // MARK: Stage system (La Subida — five stages; see GameState+Stages.swift)
+
+  static let stageCount = 5
+  /// Obstacle speed grows +5% per stage, compounding (`obstacleSpeed`).
+  static let stageSpeedFactor: CGFloat = 1.05
+  /// Upward flee speed of the bull + matador during a between-stage escape beat.
+  static let escapeRiseSpeed: CGFloat = 260
+  /// Post-respawn damage grace so the player isn't hit again the instant it reappears.
+  static let respawnGrace: Double = 1.0
 
   // 5 s solid, then a 2 s expiry blink that ends the power-up (see `isCapeVisible`).
   static let capeDuration: Double = 7
@@ -65,9 +78,9 @@ final class GameState {
 
   // MARK: Boss-fight tuning (La Llamada — see prompts/game_boss_llamada.md)
 
-  /// Summits before the boss triggers. TODO: raise to 5 when the five-level climb +
-  /// four escape beats land (separate roadmap item).
-  static let summitsToBoss = 1
+  /// Summits before the boss triggers: five stages, so summits 1–4 are escape beats
+  /// (the bull flees upward carrying the matador) and the 5th triggers La Llamada.
+  static let summitsToBoss = 5
   static let bossTransitionDuration = 0.8
   static let introDuration = 2.0
   /// Bull-demo seconds per move, indexed by round (0-based) — playback speeds up.
@@ -166,10 +179,35 @@ final class GameState {
     return value
   }()
 
+  /// When the `CONJUGAR_GAME_STAGE` launch environment variable is set (1…`stageCount`),
+  /// the climb starts at that stage — `configure` sets `summitCount = N − 1` and
+  /// `stage = N` so the stage's obstacle set/speed take effect immediately. Composes
+  /// with `CONJUGAR_GAME_TIME_SCALE` / `CONJUGAR_GAME_DISABLE_FLAGS`.
+  static let debugStartStage: Int? = {
+    guard let raw = ProcessInfo.processInfo.environment["CONJUGAR_GAME_STAGE"],
+          let value = Int(raw), (1...stageCount).contains(value) else {
+      return nil
+    }
+    return value
+  }()
+
+  // The five stages' obstacle sets (decision 2). Stage 1 is the original flags; the
+  // rest were locked with Josh 2026-07-14. Avoid plain ⚡ anywhere — it's the speed
+  // pickup. `stageObstacleEmojis` indexes these by `stage - 1`.
   static let flagEmojis = [
     "🇪🇸", "🇲🇽", "🇦🇷", "🇨🇴", "🇵🇪", "🇨🇱", "🇻🇪", "🇪🇨", "🇬🇹", "🇨🇺",
     "🇧🇴", "🇩🇴", "🇭🇳", "🇵🇾", "🇸🇻", "🇳🇮", "🇨🇷", "🇺🇾", "🇵🇦"
   ]
+  static let animalEmojis = ["🐎", "🐖", "🐑", "🐐", "🐄"]
+  static let ballEmojis = ["⚽", "🏀", "🎾", "⚾", "🏐", "🏉"]
+  static let vehicleEmojis = ["🚗", "🚕", "🚌", "🏎️", "🛵", "🚜"]
+  static let skyEmojis = ["☀️", "⛅", "☁️", "🌧️", "🌩️", "🌪️"]
+
+  /// Per-stage obstacle emoji, indexed by `stage - 1`.
+  static let stageObstacleEmojis: [[String]] = [flagEmojis, animalEmojis, ballEmojis, vehicleEmojis, skyEmojis]
+  /// Per-stage render style (decision "Per-set rendering"): flags/balls spin like
+  /// barrels, animals/vehicles face their travel, sky glyphs stay upright.
+  static let stageObstacleStyles: [ObstacleStyle] = [.spin, .face, .spin, .face, .upright]
 
   // MARK: World
 
@@ -177,9 +215,13 @@ final class GameState {
   var didConfigure = false
   var platforms: [Platform] = []
   var ladders: [Ladder] = []
-  var flags: [Flag] = []
+  var obstacles: [Obstacle] = []
   var capes: [CapePickup] = []
-  var flagCounter = 0
+  var obstacleCounter = 0
+  /// The current stage, 1…`stageCount`. Invariant during the climb: `stage ==
+  /// summitCount + 1`. Drives the obstacle set (`stageEmojis`), speed
+  /// (`obstacleSpeed`), and render style (`stageObstacleStyle`).
+  var stage = 1
 
   // MARK: Player state
 
@@ -242,7 +284,7 @@ final class GameState {
   var bullPhase: Double = 0
   var bullAction: BullAction = .idle
   var bullThrowTimer: Double = 0
-  var flagSpawnTimer: Double = GameState.flagSpawnInterval
+  var obstacleSpawnTimer: Double = GameState.obstacleSpawnInterval
 
   var bullfighterX: CGFloat = 0
   var bullfighterY: CGFloat = 0
@@ -325,6 +367,10 @@ final class GameState {
     self.screenSize = screenSize
     buildLevel()
     reset()
+    if let startStage = Self.debugStartStage {
+      summitCount = startStage - 1
+      stage = startStage
+    }
     didConfigure = true
     startAudio()
     if Self.debugStartAtEnd {
@@ -348,15 +394,17 @@ final class GameState {
     // Pre-decode every SFX off-main (skips ones already prepared).
     Current.soundPlayer.warmUpSounds()
 
-    // Pre-rasterize the emoji this game rains (flags are the worst first-draw
-    // offender) into the process-wide glyph cache, off the main actor. The cape and
-    // bullfighter are rendered sprites now, so only the flags remain as emoji during
-    // the climb; the boss fight adds the freeze chip (🔥), the survive sparkle (✨),
-    // and the reunion burst (🌹/❤️) — warm those so the first duel frame is a cache
-    // hit. (The jaleo pops are Spanish words, not emoji; the clashing emoji crowd row
-    // was removed.)
+    // Pre-rasterize the emoji this game rains (obstacles are the worst first-draw
+    // offender) into the process-wide glyph cache, off the main actor. All five
+    // stages' obstacle sets are warmed up front (~40 glyphs, cheap), plus the
+    // encierro charger (🐂) and the speed/serenata pickup glyphs (⚡/🎸). The boss
+    // fight adds the freeze chip (🔥), the survive sparkle (✨), and the reunion
+    // burst (🌹/❤️) — warm those so the first duel frame is a cache hit. (The jaleo
+    // pops are Spanish words, not emoji; the clashing emoji crowd row was removed.)
+    let obstacleGlyphs = Self.stageObstacleEmojis.flatMap { $0 }
+    let subidaGlyphs = obstacleGlyphs + ["🐂", "⚡", "🎸"]
     let bossGlyphs: [(String, CGFloat)] = ["🔥", "✨", "🌹", "❤️"].map { ($0, 30) }
-    let glyphs: [(String, CGFloat)] = Self.flagEmojis.map { ($0, 28) } + bossGlyphs
+    let glyphs: [(String, CGFloat)] = subidaGlyphs.map { ($0, 28) } + bossGlyphs
     Task.detached(priority: .userInitiated) {
       GlyphWarmer.warm(glyphs)
     }
@@ -423,13 +471,18 @@ final class GameState {
     bullfighterY = bullfighterHomeY
   }
 
-  /// Return the player and bull to their starting state, clear flags, restore all
-  /// health, and re-arm the cape pickups. Keeps platforms/ladders geometry. Also
-  /// clears any boss-fight state back to `.climb` (re-showing the hearts) — but
-  /// deliberately keeps `summitCount` and `score`, which persist across deaths.
+  /// Full restart to a fresh game: return the player and bull to their starting
+  /// state, clear obstacles, restore all health, re-arm the cape pickups, and reset
+  /// the stage back to 1. Keeps platforms/ladders geometry. Also clears any
+  /// boss-fight state back to `.climb` (re-showing the hearts). Used by `configure()`
+  /// (and the boss→climb exit path). Death no longer routes here — it soft-respawns
+  /// via `respawn()`, which keeps `stage`/`summitCount`/`score`.
   func reset() {
     let w = screenSize.width
     let top = Self.levelCount - 1
+    stage = 1
+    summitCount = 0
+    score = 0
 
     // If we were in a boss phase, return the music to the gameplay loop.
     if phase != .climb && didConfigure {
@@ -484,9 +537,9 @@ final class GameState {
     health = Self.maxHealth
     damageCooldown = 0
 
-    flags.removeAll()
-    flagCounter = 0
-    flagSpawnTimer = Self.flagSpawnInterval
+    obstacles.removeAll()
+    obstacleCounter = 0
+    obstacleSpawnTimer = Self.obstacleSpawnInterval
     for i in capes.indices { capes[i].collected = false }
 
     bullX = w * 0.4
@@ -520,11 +573,16 @@ final class GameState {
 
     sineTime += Double(dt)
 
-    // The original climb pipeline runs only in `.climb`; every boss phase is
-    // driven by `updateBoss` (GameState+BossFight.swift) instead, so derived
-    // actions never stomp the boss's commanded dance bursts.
+    // The original climb pipeline runs only in `.climb`; the between-stage escape
+    // beat is driven by `updateEscape` (GameState+Stages.swift), and every boss phase
+    // by `updateBoss` (GameState+BossFight.swift) — so the climb's derived actions
+    // never stomp the escape rise or the boss's commanded dance bursts.
     guard phase == .climb else {
-      updateBoss(dt: dt)
+      if phase == .escape {
+        updateEscape(dt: dt)
+      } else {
+        updateBoss(dt: dt)
+      }
       return
     }
 
@@ -538,7 +596,7 @@ final class GameState {
 
     updatePlayer(dt: dt)
     updateBull(dt: dt)
-    updateFlags(dt: dt)
+    updateObstacles(dt: dt)
     advanceAnimations(dt: dt)
     resolveCollisions()
     checkReachedBull()
