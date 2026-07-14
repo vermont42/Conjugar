@@ -1,4 +1,4 @@
-Assets:   Conjugar/pop.mp3, chomp.mp3, cow.mp3, shieldActivate.mp3, soccerKick.mp3
+Assets:   Conjugar/pop.mp3, chomp.mp3, moo.mp3, shieldActivate.mp3, soccerKick.mp3
           (reused game sound effects: jump, cape-smash, bull bellow, cape pickup,
           flag-hit)
 Source:   Reused from the sibling apps Konjugieren and Conjuguer, which sourced them

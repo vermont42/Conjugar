@@ -333,22 +333,6 @@ struct GameBossTests {
     #expect(gameState.jaleoPops.filter { $0.text == "❤️" || $0.text == "🌹" }.count >= 3)
   }
 
-  @Test func endSceneHintIsWithheldThenShown() {
-    let gameState = duelReady()
-    gameState.banked = 5
-    gameState.startPhrase()
-    advanceToEcho(gameState)
-    completeEcho(gameState)
-    gameState.updateBoss(dt: CGFloat(GameState.phraseResultHold) + 0.05)
-    gameState.updateBoss(dt: CGFloat(GameState.victoryHold) + 0.05)
-    #expect(gameState.phase == .endScene)
-    #expect(!gameState.showEndSceneHint)                    // withheld at first
-    // The matador holds his beat, walks over — the slide finishes before the hint
-    // is due, so it is still hidden mid-walk (the delay is intentionally short).
-    gameState.updateBoss(dt: GameState.endSceneHintDelay + 0.05)
-    #expect(gameState.showEndSceneHint)                     // shown once it can read
-  }
-
   @Test func victoryTapSkipsToEndScene() {
     let gameState = duelReady()
     gameState.banked = 5
@@ -369,7 +353,10 @@ struct GameBossTests {
     completeEcho(gameState)
     gameState.updateBoss(dt: CGFloat(GameState.phraseResultHold) + 0.05)
     let bowFrames = GameState.bullFrameCounts[.bow] ?? 1
-    for _ in 0..<60 {
+    // Through victory and the pre-reunion end scene the bow holds its final frame
+    // (30 × 0.1 s stays under the matador's arrival, after which the freed bull breaks
+    // into its celebratory dance loop — no longer a held bow).
+    for _ in 0..<30 {
       gameState.updateBoss(dt: 0.1)
       #expect(gameState.bullFrame <= bowFrames)
     }

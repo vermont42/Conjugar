@@ -5239,3 +5239,51 @@ its bowed frame forever). Four changes gave it a pulse:
 `GameBossTests` still green (22) — the recurring timers only fire after the slide completes, so the
 existing end-scene assertions (which stop at the reunion) are unaffected. Josh signed off on the
 living scene.
+
+## Boss-fight polish pass: rising jaleos, a one-row dance pad, and a dancing bull (2026-07-14)
+
+Josh played the boss fight and end scene and sent an annotated screenshot (`~/Desktop/changes.png`)
+with nine tweaks. Most were small; a few had interesting wrinkles.
+
+**Empty space + rising words (note 1).** The dark upper field above the tablao was dead space, and
+the dancer's jaleo shouts (¡Eso!/¡Bien!/¡Olé!) barely lifted off her head before fading. Gave
+`JaleoPop` a per-pop `riseRate` (pt/s) instead of the hardcoded 26 in the view, and added
+`spawnPlayerSpeech`, which solves the rate so a shout climbs from just above her head to a
+sight-line at 42% of screen height (the green line Josh drew) exactly as it fades over a slower
+2.6 s. Only the dancer's *positive* speech rises (correct-echo jaleo + the phrase-complete ¡Olé!);
+¡Uy! on a miss stays a small local pop, so a failure never reads as a celebration.
+
+**One-row dance pad (note 2).** The duel controls were a split d-pad (paso l/r + olé stacked) on the
+left and a cape/stomp cluster on the right — Josh (rightly) called the arrangement illogical.
+Replaced both with a single `bossControlRow`: five equal circular buttons (pasoLeft · olé · stomp ·
+cape · pasoRight — pasos at the ends for spatial sense) positioned by the *stage floor*
+(`stageFloorY + gap`) rather than pinned to the screen bottom, so they tuck just under the platform
+the dancers stand on, matching the boxes he drew.
+
+**The "jump" icon that wasn't (note 3).** Josh flagged a "human SF Symbol that's supposed to be a
+jump." There is no jump in the boss fight — the climb's jump button already uses `figure.jump`. The
+human glyph he saw was the *olé* button's `figure.arms.open` (a jumping-jack-ish pose he read as a
+jump). Asked him; he wanted an arms-*raised* figure, so the olé desplante is now
+`figure.mind.and.body` (standing, both arms up in a V) — reads as olé, not a jump.
+
+**Blue success burst / tricolor end-scene confetti (notes 4 & 6).** Refactored the 40-ellipse
+`confetti` into `confetti(count:colors:)`. The end scene's diagonal rows now cycle
+red/yellow/**blue** (was red/yellow); a phrase landing fires a **blue-only** (the matador's color)
+burst at **half** the count (20), gated on a new `isPhraseSuccess` (the brief `phraseResult(success:
+true)` hold).
+
+**End-scene beats (notes 5, 7, 8, 9).** The dancer now flips right to face the matador 2 s in
+(`endSceneDancerTurnDelay`; she starts facing the bowing bull, set in `enterVictory`). Reworded the
+narrative line to "The bull is impressed with your dancing and has freed the matador!" (Josh's draft
+said "The bulls is" — corrected the number agreement) and localized it. Dropped the "Tap to
+continue" hint entirely — text + `L`/xcstrings keys + the `showEndSceneHint`/`endSceneHintDelay`
+machinery and its now-obsolete test — since users figure out the tap and it only added clutter.
+
+The meatiest was **note 9: a dancing bull.** After the reunion, the freed bull now loops a
+celebration — every 2 s it picks a random move from `endSceneDanceMoves` (walk/stomp/rear/bow/throw,
+walk danced *in place*) held 1.6 s, and moos (`Sound.moo`, which maps to the bundled `moo.mp3`)
+every 4–8 s — until the player leaves. This replaced the old "re-bow every 1–3 s" loop. One test
+fallout: `bowHoldsItsFinalFrame` ticked 6 s expecting a frozen bow, but the bull now breaks into the
+dance at ~2.6 s (post-reunion); narrowed it to 30×0.1 s (the pre-reunion window) so it still verifies
+`capBullBowHold` without colliding with the new dance. Full suite green (466), 0 lint. Per Josh's
+instruction I did **not** drive the sim — he'll verify the visuals himself.

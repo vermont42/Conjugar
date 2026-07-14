@@ -127,6 +127,10 @@ struct JaleoPop: Identifiable {
   var ttl: Double
   let initialTTL: Double
   let size: CGFloat
+  /// Upward drift speed in points/second (the pop's y decreases by `age * riseRate`).
+  /// The default is a gentle score-pop drift; the dancer's spoken jaleos use a much
+  /// larger rate so they climb all the way to the sight-line high in the empty field.
+  let riseRate: CGFloat
 }
 
 /// A tiny seedable RNG (SplitMix64) so boss tests can script exact dance phrases.

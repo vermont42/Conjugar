@@ -19,7 +19,7 @@ license under which it is reused. App-facing credits live in `Info.creditsText`
 
 ## Game sound effects
 
-- **`pop.mp3`, `chomp.mp3`, `cow.mp3`, `shieldActivate.mp3`, `soccerKick.mp3`** —
+- **`pop.mp3`, `chomp.mp3`, `moo.mp3`, `shieldActivate.mp3`, `soccerKick.mp3`** —
   reused from the sibling apps **Konjugieren** and **Conjuguer**, where they were
   sourced from **Pixabay** (<https://pixabay.com>). **Pixabay Content License** —
   commercial use OK, **no attribution required** (the app's "Game Sounds" credit is a

@@ -36,7 +36,7 @@ struct SoundPlayerTests {
   @Test func soundCoversGameCasesAndRandomHelpers() {
     // The reused game SFX must be present so warmUpSounds()/play(...) can find them.
     let names = Set(Sound.allCases.map(\.rawValue))
-    #expect(names.isSuperset(of: ["pop", "chomp", "cow", "shieldActivate", "soccerKick"]))
+    #expect(names.isSuperset(of: ["pop", "chomp", "moo", "shieldActivate", "soccerKick"]))
 
     #expect([.applause1, .applause2, .applause3].contains(Sound.randomApplause))
     #expect([.sadTrombone1, .sadTrombone2, .sadTrombone3, .sadTrombone4].contains(Sound.randomSadTrombone))

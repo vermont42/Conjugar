@@ -202,10 +202,6 @@ nonisolated enum L {
       String(localized: "Game.bullImpressed")
     }
 
-    static var tapToContinue: String {
-      String(localized: "Game.tapToContinue")
-    }
-
     static var pasoLeftMove: String {
       String(localized: "Game.pasoLeftMove")
     }

@@ -94,19 +94,36 @@ final class GameState {
   static let screenShakeDuration = 0.25
   static let screenShakeMagnitude: CGFloat = 9
   static let jaleoPopDuration = 1.2
+  /// Default jaleo drift speed (pt/s) — the gentle score-pop rise.
+  static let jaleoDriftRise: CGFloat = 26
+  /// The dancer's spoken jaleos (¡Eso!/¡Bien!/¡Olé!…) float from just above her head up
+  /// to this fraction of the screen height (the sight-line marked in the design
+  /// annotation) over `jaleoSpeechDuration`, filling the otherwise-dead upper field.
+  static let jaleoRiseTargetFraction: CGFloat = 0.42
+  /// The slower fade for the dancer's spoken jaleos, so a word stays legible the whole
+  /// long climb to the sight-line.
+  static let jaleoSpeechDuration = 2.6
   static let victoryHold = 1.5
   /// A held beat after the end scene opens before the freed matador starts walking
   /// over — the applause + confetti land first, then he moves.
   static let matadorSlideDelay = 0.6
   static let matadorSlideDuration = 2.0
   static let endSceneMusicFade = 1.0
-  /// The tap-to-exit hint fades in only after the scene has had a moment to read
-  /// (the reunion beat plays out before we invite the player to leave).
-  static let endSceneHintDelay = 2.0
-  /// The end scene keeps living after the couple reunites: the bull re-bows at a
-  /// random cadence in this range, and hearts/roses fly up from the pair at a random
-  /// cadence in the other. Both re-roll each firing so the loop never feels metronomic.
-  static let endSceneBowIntervalRange = 1.0...3.0
+  /// Two seconds into the end scene the dancer turns to face the matador sliding in
+  /// from her right.
+  static let endSceneDancerTurnDelay = 2.0
+  /// The end scene keeps living after the couple reunites: the freed bull dances —
+  /// every `endSceneDanceInterval` it performs one randomly-chosen animated move (its
+  /// position never changes; one option is walking in place) held for
+  /// `endSceneDanceMoveDuration`, and moos at a random cadence in `endSceneMooIntervalRange`.
+  /// Hearts/roses keep flying up from the pair at a random cadence in
+  /// `endSceneBurstIntervalRange` (re-rolled each firing so the loop never feels metronomic).
+  static let endSceneDanceInterval = 2.0
+  static let endSceneDanceMoveDuration = 1.6
+  static let endSceneMooIntervalRange = 4.0...8.0
+  /// The bull's celebratory-dance repertoire: every animated move he has, including
+  /// `walk` (danced in place). Re-rolled each `endSceneDanceInterval`.
+  static let endSceneDanceMoves: [BullAction] = [.walk, .stomp, .rear, .bow, .throw]
   static let endSceneBurstIntervalRange = 2.0...4.0
   static let bossPedestalSize = CGSize(width: 48, height: 12)
 
@@ -277,9 +294,10 @@ final class GameState {
   var bossMusicStarted = false
   var endSceneMusicStarted = false
   var endSceneBurstDone = false
-  /// Countdowns for the living end scene's recurring bull bow and heart/rose burst
-  /// (re-rolled to a fresh random interval each firing).
-  var endSceneBowTimer: Double = 0
+  /// Countdowns for the living end scene's recurring bull dance move, moo, and
+  /// heart/rose burst (re-rolled each firing).
+  var endSceneDanceTimer: Double = 0
+  var endSceneMooTimer: Double = 0
   var endSceneBurstTimer: Double = 0
   /// Latches true the moment the player wins, hiding the Duende meter for the rest of
   /// the boss sequence (victory + end scene) — a cleaner curtain call. Cleared by
@@ -439,7 +457,8 @@ final class GameState {
     bossMusicStarted = false
     endSceneMusicStarted = false
     endSceneBurstDone = false
-    endSceneBowTimer = 0
+    endSceneDanceTimer = 0
+    endSceneMooTimer = 0
     endSceneBurstTimer = 0
     hasWon = false
     bullfighterX = bullfighterHomeX

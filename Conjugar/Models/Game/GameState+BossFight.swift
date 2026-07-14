@@ -51,13 +51,6 @@ extension GameState {
     return true
   }
 
-  /// Whether the end scene's "tap to continue" hint should be shown yet — gated so
-  /// the reunion beat (matador walking over, hearts/roses) plays before we invite
-  /// the player to leave.
-  var showEndSceneHint: Bool {
-    phase == .endScene && endSceneTime >= Self.endSceneHintDelay
-  }
-
   // MARK: Stage geometry (portrait tablao on the bottom girder)
 
   var stageFloorY: CGFloat { platforms.isEmpty ? 0 : platforms[0].surfaceY }
@@ -262,7 +255,7 @@ extension GameState {
         Current.soundPlayer.play(cue, shouldDebounce: false, volume: 0.4)
       }
       Current.hapticPlayer.play(.impactLight)
-      spawnJaleo([L.Game.jaleoEso, L.Game.jaleoBien, L.Game.jaleoVamos].randomElement() ?? L.Game.jaleoEso, x: playerX, y: playerY - 54)
+      spawnPlayerSpeech([L.Game.jaleoEso, L.Game.jaleoBien, L.Game.jaleoVamos].randomElement() ?? L.Game.jaleoEso)
       advanceEcho(from: step)
     } else {
       failPhrase()
@@ -282,7 +275,7 @@ extension GameState {
   private func succeedPhrase() {
     score += Self.phraseBonus * (bossRound + 1)
     banked += 1
-    spawnJaleo(L.Game.jaleoOle, x: playerX, y: playerY - 90, size: 40)
+    spawnPlayerSpeech(L.Game.jaleoOle, size: 44)
     // A banked phrase earns palmas and a crowd olé.
     Current.soundPlayer.play(.palmas, shouldDebounce: false, volume: 0.45)
     Current.soundPlayer.play(.crowdOle, shouldDebounce: false, volume: 0.4)
@@ -391,6 +384,9 @@ extension GameState {
     bullMoveTimer = 0
     playerAction = .idle
     playerMoveTimer = 0
+    // Face the bowing bull for now; the dancer turns to the arriving matador two
+    // seconds into the end scene (`endSceneDancerTurnDelay`).
+    playerFacing = -1
     Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
     Current.hapticPlayer.play(.success)
     triggerScreenShake()
@@ -421,7 +417,8 @@ extension GameState {
     endSceneTime = 0
     endSceneMusicStarted = false
     endSceneBurstDone = false
-    endSceneBowTimer = Double.random(in: Self.endSceneBowIntervalRange, using: &bossRNG)
+    endSceneDanceTimer = Self.endSceneDanceInterval
+    endSceneMooTimer = Double.random(in: Self.endSceneMooIntervalRange, using: &bossRNG)
     endSceneBurstTimer = Double.random(in: Self.endSceneBurstIntervalRange, using: &bossRNG)
     Current.soundPlayer.stopMusic(fadeDuration: Self.endSceneMusicFade)
   }
@@ -429,6 +426,11 @@ extension GameState {
   private func updateEndScene(dt: Double) {
     capBullBowHold()
     endSceneTime += dt
+
+    // Two seconds in, the dancer turns to face the matador sliding in from her right.
+    if endSceneTime >= Self.endSceneDancerTurnDelay {
+      playerFacing = 1
+    }
 
     // The boss track finished fading on `enterEndScene`; the onboarding bed rises as
     // it clears, so the two never talk over each other (its own fade-in is gentle).
@@ -456,13 +458,26 @@ extension GameState {
       Current.hapticPlayer.play(.success)
     }
 
-    // The bull re-bows on a random cadence (replaying the bow flipbook from frame 0;
-    // `capBullBowHold` freezes it again at the bottom until the next dip).
-    endSceneBowTimer -= dt
-    if endSceneBowTimer <= 0 {
-      endSceneBowTimer = Double.random(in: Self.endSceneBowIntervalRange, using: &bossRNG)
-      bullAction = .bow
-      bullPhase = 0
+    // The freed bull celebrates with a loop of dance: every `endSceneDanceInterval` it
+    // performs one randomly-chosen animated move (walk is danced in place — its
+    // position never changes), held its burst duration then returning to idle via
+    // `advanceBossCosmetics` (a bow instead freezes at the bottom until the next move).
+    endSceneDanceTimer -= dt
+    if endSceneDanceTimer <= 0 {
+      endSceneDanceTimer = Self.endSceneDanceInterval
+      let move = Self.endSceneDanceMoves.randomElement(using: &bossRNG) ?? .walk
+      commandBullMove(move, duration: Self.endSceneDanceMoveDuration)
+    }
+
+    // …and vocalizes every few seconds while it dances — an equal-odds choice of a
+    // snort, a moo, a stomp, or (nil) staying quiet.
+    endSceneMooTimer -= dt
+    if endSceneMooTimer <= 0 {
+      endSceneMooTimer = Double.random(in: Self.endSceneMooIntervalRange, using: &bossRNG)
+      let vocalizations: [Sound?] = [.snort, .moo, .stompThud, nil]
+      if let sound = vocalizations.randomElement(using: &bossRNG) ?? nil {
+        Current.soundPlayer.play(sound, shouldDebounce: false, volume: 0.5)
+      }
     }
 
     // Hearts and roses keep flying up from the couple on their own random cadence.
@@ -602,11 +617,35 @@ extension GameState {
     screenShake = Self.screenShakeDuration
   }
 
-  func spawnJaleo(_ text: String, x: CGFloat, y: CGFloat, size: CGFloat = 24) {
+  func spawnJaleo(
+    _ text: String,
+    x: CGFloat,
+    y: CGFloat,
+    size: CGFloat = 24,
+    riseRate: CGFloat = GameState.jaleoDriftRise,
+    ttl: Double = GameState.jaleoPopDuration
+  ) {
     jaleoCounter += 1
     jaleoPops.append(
-      JaleoPop(id: jaleoCounter, text: text, x: x, y: y, ttl: Self.jaleoPopDuration, initialTTL: Self.jaleoPopDuration, size: size)
+      JaleoPop(id: jaleoCounter, text: text, x: x, y: y, ttl: ttl, initialTTL: ttl, size: size, riseRate: riseRate)
     )
+  }
+
+  /// The dancer *speaking* (¡Eso!/¡Bien!/¡Olé!…): the shout rises from just above her
+  /// head all the way to the sight-line high in the empty upper field, fading slowly as
+  /// it climbs so the words fill the otherwise-dead space above the tablao (design note
+  /// 1). The rise rate is solved so the pop reaches the sight-line exactly as it fades.
+  func spawnPlayerSpeech(_ text: String, size: CGFloat = 30) {
+    let spawnY = playerY - Self.playerHeight
+    let targetY = screenSize.height * Self.jaleoRiseTargetFraction
+    let travel = max(80, spawnY - targetY)
+    spawnJaleo(text, x: playerX, y: spawnY, size: size, riseRate: travel / Self.jaleoSpeechDuration, ttl: Self.jaleoSpeechDuration)
+  }
+
+  /// True during the brief hold after a phrase is echoed correctly — drives the blue
+  /// success particle burst (design note 4).
+  var isPhraseSuccess: Bool {
+    phase == .duel && duelState == .phraseResult(success: true)
   }
 
   /// Tap routing for the boss's full-screen tap layer: skip the intro, or skip the

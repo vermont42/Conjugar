@@ -29,6 +29,13 @@ struct GameView: View {
 
   private static let dirButtonSize: CGFloat = 40
   private static let jumpButtonSize: CGFloat = 51   // 64 shrunk by 20%
+  /// The boss dance pad is one horizontal row of equal circular buttons sitting just
+  /// below the tablao floor (design note 2).
+  private static let bossMoveButtonSize: CGFloat = 52
+  private static let bossRowFloorGap: CGFloat = 52
+  /// Top of the phrase-success confetti band (field coordinates) — below the Duende
+  /// meter and close button.
+  private static let bossSuccessConfettiTop: CGFloat = 72
 
   // Real rendered dancer sprites (tools/blender → Assets.xcassets/Game). Every
   // player action is a rendered flipbook now (idle/walk/climb/jump/cape); the
@@ -301,7 +308,11 @@ struct GameView: View {
       .offset(shakeOffset)
 
       if gameState.phase == .victory || gameState.phase == .endScene {
-        confetti
+        confetti(count: 40, colors: [.customRed, .customYellow, .customBlue])
+      } else if gameState.isPhraseSuccess {
+        // A blue (the matador's color) half-density burst when a phrase lands, filling
+        // the mid-field between the bull and the top HUD.
+        confetti(count: 20, colors: [.customBlue], yRange: successConfettiRange)
       }
 
       bossTapLayer
@@ -316,6 +327,7 @@ struct GameView: View {
       }
       bossCards
       controls
+      bossControlRow
     }
     .accessibilityIdentifier("game_root")
   }
@@ -525,7 +537,7 @@ struct GameView: View {
         .foregroundStyle(Color.customYellow)
         .shadow(color: .black.opacity(0.4), radius: 1, y: 1)
         .opacity(pop.ttl / pop.initialTTL)
-        .position(x: pop.x, y: pop.y - CGFloat(age) * 26)
+        .position(x: pop.x, y: pop.y - CGFloat(age) * pop.riseRate)
     }
   }
 
@@ -581,13 +593,6 @@ struct GameView: View {
             .multilineTextAlignment(.center)
             .shadow(color: .black.opacity(0.35), radius: 1, y: 1)
             .padding(.horizontal, Layout.tripleDefaultSpacing)
-          // Held back until the reunion beat has read (endSceneHintDelay), then
-          // fades up so it doesn't rush the player out of the scene.
-          Text(verbatim: L.Game.tapToContinue)
-            .font(.system(size: 14, weight: .medium))
-            .foregroundStyle(Color.customYellow.opacity(0.8))
-            .opacity(gameState.showEndSceneHint ? 1 : 0)
-            .animation(.easeIn(duration: 0.5), value: gameState.showEndSceneHint)
         }
       case .climb, .duel:
         EmptyView()
@@ -624,24 +629,50 @@ struct GameView: View {
       .shadow(radius: 5)
   }
 
-  /// Victory confetti — Konjugieren's 40-ellipse Canvas, in Conjugar's palette.
-  private var confetti: some View {
-    TimelineView(.animation) { timeline in
+  /// Confetti — Konjugieren's golden-angle ellipse Canvas (the seed spreads the dots
+  /// into the diagonal rows the design calls out), in Conjugar's palette. `colors`
+  /// cycles by index down those rows: the end scene alternates red/yellow/blue
+  /// (design note 6); the per-phrase success burst is blue-only at half the count
+  /// (design note 4). `yRange` (in the field's coordinate space) bounds the dots to a
+  /// vertical band — the success burst fills only the mid-field between the bull and
+  /// the top HUD; nil means the full-screen celebration.
+  private func confetti(count: Int, colors: [Color], yRange: ClosedRange<CGFloat>? = nil) -> some View {
+    let field = TimelineView(.animation) { timeline in
       let time = timeline.date.timeIntervalSince1970
       Canvas { context, size in
-        for i in 0..<40 {
+        let minY = yRange?.lowerBound ?? 0
+        let spanY = max(1, (yRange?.upperBound ?? size.height) - minY)
+        for i in 0..<count {
           let seed = Double(i) * 137.508
           let baseX = (seed.truncatingRemainder(dividingBy: 1.0) + Double(i) * 0.025).truncatingRemainder(dividingBy: 1.0) * size.width
-          let baseY = (seed * 0.618).truncatingRemainder(dividingBy: 1.0) * size.height
+          let baseY = minY + (seed * 0.618).truncatingRemainder(dividingBy: 1.0) * spanY
           let floatOffset = sin(time * 1.5 + seed) * 20
           let radius = 3.0 + (seed * 0.3).truncatingRemainder(dividingBy: 5.0)
           let rect = CGRect(x: baseX - radius, y: baseY + floatOffset - radius, width: radius * 2, height: radius * 2)
-          context.fill(Path(ellipseIn: rect), with: .color(i.isMultiple(of: 2) ? .customRed : .customYellow))
+          context.fill(Path(ellipseIn: rect), with: .color(colors[i % colors.count]))
         }
       }
     }
     .allowsHitTesting(false)
-    .ignoresSafeArea()
+
+    // The full-screen celebration ignores the safe area; the banded success burst stays
+    // in the field's coordinate space so its bounds line up with the bull and the HUD.
+    return Group {
+      if yRange == nil {
+        field.ignoresSafeArea()
+      } else {
+        field
+      }
+    }
+  }
+
+  /// The vertical band the phrase-success burst fills: from just below the top HUD
+  /// (Duende meter + close button) down to just above the bull's head — the empty
+  /// mid-field, rather than the whole screen (design follow-up).
+  private var successConfettiRange: ClosedRange<CGFloat> {
+    let top = Self.bossSuccessConfettiTop
+    let bottom = max(top + 1, gameState.stageFloorY - Self.bullHeight(.idle) - 8)
+    return top...bottom
   }
 
   /// Full-screen tap catcher for the boss's skippable beats: intro → duel,
@@ -666,38 +697,37 @@ struct GameView: View {
 
   // MARK: Boss controls (taps, not held intents — the jump touch-down/re-arm idiom)
 
-  /// The boss d-pad: paso left/right where the walk buttons were, olé in the
-  /// always-visible up slot, down slot retired.
-  private var bossPad: some View {
-    VStack(spacing: Layout.defaultSpacing / 2) {
-      danceButton(.ole, label: L.Game.oleMove) {
-        Image(systemName: "figure.arms.open")
-      }
-      HStack(spacing: Layout.defaultSpacing / 2) {
-        danceButton(.pasoLeft, label: L.Game.pasoLeftMove) {
-          Image(systemName: "arrowtriangle.left.fill")
+  /// The boss dance pad: all five moves in one horizontal row of equal circular
+  /// buttons, positioned just below the tablao floor (design note 2). The pasos sit at
+  /// the ends (spatially left/right); olé, stomp, and cape fill the middle. Placed by
+  /// the stage floor so it tucks right under the platform the dancers stand on.
+  private var bossControlRow: some View {
+    Group {
+      if gameState.phase == .duel {
+        HStack(spacing: Layout.defaultSpacing) {
+          danceButton(.pasoLeft, label: L.Game.pasoLeftMove, size: Self.bossMoveButtonSize, isCircle: true) {
+            Image(systemName: "arrowtriangle.left.fill")
+          }
+          danceButton(.ole, label: L.Game.oleMove, size: Self.bossMoveButtonSize, isCircle: true) {
+            // An arms-raised figure for the olé desplante (not a jump — design note 3).
+            Image(systemName: "figure.mind.and.body")
+          }
+          danceButton(.stomp, label: L.Game.stompMove, size: Self.bossMoveButtonSize, isCircle: true) {
+            Image(systemName: "shoeprints.fill")
+              .font(.system(size: 24, weight: .bold))
+          }
+          danceButton(.cape, label: L.Game.capeMove, size: Self.bossMoveButtonSize, isCircle: true) {
+            Image("cape_pickup")
+              .resizable()
+              .scaledToFit()
+              .frame(width: 24, height: 24)
+          }
+          danceButton(.pasoRight, label: L.Game.pasoRightMove, size: Self.bossMoveButtonSize, isCircle: true) {
+            Image(systemName: "arrowtriangle.right.fill")
+          }
         }
-        dPadSlot
-        danceButton(.pasoRight, label: L.Game.pasoRightMove) {
-          Image(systemName: "arrowtriangle.right.fill")
-        }
-      }
-      dPadSlot
-    }
-  }
-
-  /// The cape button beside the stomp circle (the stomp is the relabeled jump button).
-  private var bossActionCluster: some View {
-    HStack(spacing: Layout.defaultSpacing) {
-      danceButton(.cape, label: L.Game.capeMove, size: Self.dirButtonSize, isCircle: true) {
-        Image("cape_pickup")
-          .resizable()
-          .scaledToFit()
-          .frame(width: 22, height: 22)
-      }
-      danceButton(.stomp, label: L.Game.stompMove, size: Self.jumpButtonSize, isCircle: true) {
-        Image(systemName: "shoeprints.fill")
-          .font(.system(size: 24, weight: .bold))
+        .position(x: gameState.screenSize.width / 2,
+                  y: gameState.stageFloorY + Self.bossRowFloorGap)
       }
     }
   }
@@ -777,20 +807,17 @@ struct GameView: View {
   private var controls: some View {
     // D-pad at bottom-leading, jump at the inverse (bottom-trailing) position, with
     // the jump button's center vertically aligned to the D-pad's center. Pushed low
-    // (small bottom padding) so the cross clears the field of play. During the duel
-    // the whole cluster morphs into the dance pad; the boss's other phases (intro,
-    // victory, end scene) have no controls at all — taps go to the tap layer.
+    // (small bottom padding) so the cross clears the field of play. The duel's dance
+    // pad is `bossControlRow`, placed by the stage floor rather than pinned to the
+    // bottom edge; the boss's other phases (intro, victory, end scene) have no controls
+    // at all — taps go to the tap layer.
     HStack(alignment: .center) {
       switch gameState.phase {
       case .climb:
         dPad
         Spacer()
         jumpButton
-      case .duel:
-        bossPad
-        Spacer()
-        bossActionCluster
-      case .bossIntro, .victory, .endScene:
+      case .duel, .bossIntro, .victory, .endScene:
         Spacer()
       }
     }

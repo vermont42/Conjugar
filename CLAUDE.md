@@ -166,9 +166,13 @@ SIMCTL_CHILD_CONJUGAR_GAME_START_BOSS=1 SIMCTL_CHILD_CONJUGAR_GAME_BOSS_BANKED=5
 sleep 2; xcrun simctl openurl "$UDID" conjugar://game    # tap to skip the intro, then echo the phrase
 ```
 
-The **end scene is a living loop**, not a still: once the freed matador reaches the dancer, the
-bull re-bows every 1–3 s (random) and hearts/roses fly up from the couple every 2–4 s (random),
-and the Duende meter is hidden the moment the player wins (`GameState.hasWon`).
+The **end scene is a living loop**, not a still: two seconds in, the dancer turns right to face
+the matador sliding in from her pedestal; once he reaches her, the freed **bull breaks into a
+dance** — every 2 s it performs a randomly-chosen animated move (`endSceneDanceMoves` = walk /
+stomp / rear / bow / throw, walk danced *in place* so its position never changes) and moos
+(`Sound.moo`) every 4–8 s — while hearts/roses fly up from the couple every 2–4 s (random). The
+Duende meter is hidden the moment the player wins (`GameState.hasWon`). There is no "tap to
+continue" prompt (removed July 2026 as noise — any tap still dismisses).
 
 ### Game music (`Music` enum + `SoundPlayer`)
 

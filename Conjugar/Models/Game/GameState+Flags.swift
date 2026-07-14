@@ -32,7 +32,7 @@ extension GameState {
     flagSpawnTimer -= Double(dt)
     if flagSpawnTimer <= 0 {
       spawnFlag()
-      Current.soundPlayer.play(.cow, shouldDebounce: false, volume: 0.15)   // the bull bellows as it throws (kept low)
+      Current.soundPlayer.play(.moo, shouldDebounce: false, volume: 0.15)   // the bull bellows as it throws (kept low)
       flagSpawnTimer = Self.flagSpawnInterval
       bullThrowTimer = Self.bullThrowDuration
     }

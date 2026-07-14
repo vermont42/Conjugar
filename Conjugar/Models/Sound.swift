@@ -8,7 +8,7 @@
 
 // `CaseIterable` so `SoundPlayerReal.warmUpSounds()` can pre-decode every effect
 // off-main at game start (a case with no bundled mp3 is simply skipped). The game
-// cases (`chomp`, `cow`, `pop`, `shieldActivate`, `soccerKick`) were reused from the
+// cases (`chomp`, `moo`, `pop`, `shieldActivate`, `soccerKick`) were reused from the
 // sibling apps Konjugieren/Conjuguer for the flamenco/bull game; the boss-fight pack
 // (`castanetHigh`…`capeWhoosh`) is the La Llamada dance-off duel's SFX, sourced from
 // Pixabay (see `asset-licenses/pixabay-game-sfx.txt`); the rest are the app's
@@ -21,7 +21,7 @@ enum Sound: String, CaseIterable {
   case chime
   case chirp
   case chomp
-  case cow
+  case moo
   case gun
   case pop
   case sadTrombone1
