@@ -146,11 +146,15 @@ touch-down (the jump idiom), not held intents. Strings live in `L.Game` — the 
 title cards stay Spanish in **both** localizations, the narrative line + a11y labels localize
 en/es.
 
-Two debug entries jump straight to the boss (both compose with `CONJUGAR_GAME_TIME_SCALE` for
+Debug entries jump straight into the boss (all compose with `CONJUGAR_GAME_TIME_SCALE` for
 freeze-framing the `stomp`/`rear`/`bow`/`ole` bursts):
 
 - **`conjugar://game/boss`** deeplink — `AppRouter.handle` sets `pendingBossEntry`, consumed by
   `GameView` after configure to call `enterBossIntro()`.
+- **`conjugar://game/end`** deeplink (and the **`CONJUGAR_GAME_START_END=1`** env var) — jumps
+  all the way to the **end scene** (couple reunited, bull bowing on a random cadence,
+  hearts/roses flying up, onboarding music) via `debugJumpToEndScene()`, the fast path for
+  tuning the end-scene loop.
 - **`CONJUGAR_GAME_START_BOSS=1`** launch env var — jumps to `.bossIntro` on configure. Its
   companion **`CONJUGAR_GAME_BOSS_BANKED=N`** (0…5) pre-fills the Duende meter, so `=5` starts
   one phrase from victory (the fast path for verifying the win / end-scene beats without
@@ -161,6 +165,10 @@ SIMCTL_CHILD_CONJUGAR_GAME_START_BOSS=1 SIMCTL_CHILD_CONJUGAR_GAME_BOSS_BANKED=5
   xcrun simctl launch "$UDID" biz.joshadams.Conjugar
 sleep 2; xcrun simctl openurl "$UDID" conjugar://game    # tap to skip the intro, then echo the phrase
 ```
+
+The **end scene is a living loop**, not a still: once the freed matador reaches the dancer, the
+bull re-bows every 1–3 s (random) and hearts/roses fly up from the couple every 2–4 s (random),
+and the Duende meter is hidden the moment the player wins (`GameState.hasWon`).
 
 ### Game music (`Music` enum + `SoundPlayer`)
 

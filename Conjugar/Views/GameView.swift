@@ -217,10 +217,14 @@ struct GameView: View {
       .onAppear {
         gameState.configure(screenSize: geo.size)
         // The conjugar://game/boss deeplink: consume the one-shot flag after
-        // configure and jump straight to the boss intro.
+        // configure and jump straight to the boss intro. `conjugar://game/end`
+        // jumps all the way to the end scene.
         if router?.pendingBossEntry == true {
           router?.pendingBossEntry = false
           gameState.enterBossIntro()
+        } else if router?.pendingEndScene == true {
+          router?.pendingEndScene = false
+          gameState.debugJumpToEndScene()
         }
       }
       .onDisappear { gameState.stopAudio() }
@@ -305,7 +309,9 @@ struct GameView: View {
       quitButton
       if gameState.phase == .climb {
         healthPips
-      } else {
+      } else if !gameState.hasWon {
+        // The Duende meter shows through the intro + duel, then is retired the moment
+        // the player wins (victory + end scene) for a cleaner curtain call.
         bossHUD
       }
       bossCards

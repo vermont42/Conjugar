@@ -103,6 +103,11 @@ final class GameState {
   /// The tap-to-exit hint fades in only after the scene has had a moment to read
   /// (the reunion beat plays out before we invite the player to leave).
   static let endSceneHintDelay = 2.0
+  /// The end scene keeps living after the couple reunites: the bull re-bows at a
+  /// random cadence in this range, and hearts/roses fly up from the pair at a random
+  /// cadence in the other. Both re-roll each firing so the loop never feels metronomic.
+  static let endSceneBowIntervalRange = 1.0...3.0
+  static let endSceneBurstIntervalRange = 2.0...4.0
   static let bossPedestalSize = CGSize(width: 48, height: 12)
 
   /// Global time multiplier for the game loop — 1 in normal play. Setting the
@@ -125,6 +130,12 @@ final class GameState {
   /// game jumps straight to the boss intro on configure — the fast path for driving
   /// the duel in the simulator (composes with `CONJUGAR_GAME_TIME_SCALE`).
   static let debugStartAtBoss = ProcessInfo.processInfo.environment["CONJUGAR_GAME_START_BOSS"] != nil
+
+  /// When the `CONJUGAR_GAME_START_END` launch environment variable is set, the game
+  /// jumps straight to the boss's end scene on configure (the couple reunited, bull
+  /// bowing) — the fast path for tuning the end-scene loop. Also reachable via the
+  /// `conjugar://game/end` deeplink.
+  static let debugStartAtEnd = ProcessInfo.processInfo.environment["CONJUGAR_GAME_START_END"] != nil
 
   /// With `CONJUGAR_GAME_START_BOSS`, the `CONJUGAR_GAME_BOSS_BANKED` launch
   /// environment variable pre-fills the Duende meter (clamped to 0…5) — e.g. `5`
@@ -266,6 +277,14 @@ final class GameState {
   var bossMusicStarted = false
   var endSceneMusicStarted = false
   var endSceneBurstDone = false
+  /// Countdowns for the living end scene's recurring bull bow and heart/rose burst
+  /// (re-rolled to a fresh random interval each firing).
+  var endSceneBowTimer: Double = 0
+  var endSceneBurstTimer: Double = 0
+  /// Latches true the moment the player wins, hiding the Duende meter for the rest of
+  /// the boss sequence (victory + end scene) — a cleaner curtain call. Cleared by
+  /// `reset()`.
+  var hasWon = false
   /// Intro lerp anchors: where each actor stood when the boss triggered.
   var introFromPlayerX: CGFloat = 0
   var introFromPlayerY: CGFloat = 0
@@ -290,7 +309,9 @@ final class GameState {
     reset()
     didConfigure = true
     startAudio()
-    if Self.debugStartAtBoss {
+    if Self.debugStartAtEnd {
+      debugJumpToEndScene()
+    } else if Self.debugStartAtBoss {
       enterBossIntro()
       if let prefill = Self.debugBossBanked {
         banked = min(max(prefill, 0), Self.meterNotches - 1)
@@ -418,6 +439,9 @@ final class GameState {
     bossMusicStarted = false
     endSceneMusicStarted = false
     endSceneBurstDone = false
+    endSceneBowTimer = 0
+    endSceneBurstTimer = 0
+    hasWon = false
     bullfighterX = bullfighterHomeX
     bullfighterY = bullfighterHomeY
 

@@ -33,6 +33,9 @@ final class AppRouter {
   /// A one-shot request to start the game at the boss fight, set by the
   /// `conjugar://game/boss` debug deeplink. `GameView` consumes it after configure.
   var pendingBossEntry = false
+  /// A one-shot request to jump straight to the boss's end scene, set by the
+  /// `conjugar://game/end` debug deeplink. `GameView` consumes it after configure.
+  var pendingEndScene = false
   /// Drives the first-launch onboarding cover from `MainTabView`. Tripped once at
   /// launch when `Settings.hasSeenOnboarding` is false (and the kill switch is on).
   var showOnboarding = false
@@ -56,10 +59,13 @@ final class AppRouter {
       selectedTab = .quiz
       pendingQuizStart = true
     case "game":
-      // `conjugar://game/boss` is the boss fight's debug entry (same host, one
+      // `conjugar://game/boss` is the boss fight's debug entry and
+      // `conjugar://game/end` jumps straight to its end scene (same host, one
       // path component); plain `conjugar://game` starts the climb as always.
-      if url.lastPathComponent == "boss" {
-        pendingBossEntry = true
+      switch url.lastPathComponent {
+      case "boss": pendingBossEntry = true
+      case "end": pendingEndScene = true
+      default: break
       }
       showGame = true
     default:

@@ -383,6 +383,8 @@ extension GameState {
     phase = .victory
     victoryTimer = Self.victoryHold
     score += Self.bossClearBonus
+    // Hide the Duende meter for the rest of the boss sequence — a cleaner curtain call.
+    hasWon = true
     // The bull — impressed — bows and holds the final frame (capped each tick).
     bullAction = .bow
     bullPhase = 0
@@ -419,6 +421,8 @@ extension GameState {
     endSceneTime = 0
     endSceneMusicStarted = false
     endSceneBurstDone = false
+    endSceneBowTimer = Double.random(in: Self.endSceneBowIntervalRange, using: &bossRNG)
+    endSceneBurstTimer = Double.random(in: Self.endSceneBurstIntervalRange, using: &bossRNG)
     Current.soundPlayer.stopMusic(fadeDuration: Self.endSceneMusicFade)
   }
 
@@ -442,12 +446,38 @@ extension GameState {
     bullfighterX = Self.lerp(matadorStageX, targetX, t)
     bullfighterY = Self.lerp(matadorStageY, targetY, t)
 
-    if slide >= 1 && !endSceneBurstDone {
+    guard slide >= 1 else { return }
+
+    // The couple has reunited — the scene now *lives* rather than freezing on a still.
+    if !endSceneBurstDone {
       endSceneBurstDone = true
-      spawnReunionBurst(midX: (playerX + targetX) / 2)
+      spawnReunionBurst(midX: coupleMidX)
       Current.soundPlayer.play(.chime, shouldDebounce: false, volume: 0.5)
       Current.hapticPlayer.play(.success)
     }
+
+    // The bull re-bows on a random cadence (replaying the bow flipbook from frame 0;
+    // `capBullBowHold` freezes it again at the bottom until the next dip).
+    endSceneBowTimer -= dt
+    if endSceneBowTimer <= 0 {
+      endSceneBowTimer = Double.random(in: Self.endSceneBowIntervalRange, using: &bossRNG)
+      bullAction = .bow
+      bullPhase = 0
+    }
+
+    // Hearts and roses keep flying up from the couple on their own random cadence.
+    endSceneBurstTimer -= dt
+    if endSceneBurstTimer <= 0 {
+      endSceneBurstTimer = Double.random(in: Self.endSceneBurstIntervalRange, using: &bossRNG)
+      spawnReunionBurst(midX: coupleMidX)
+      Current.soundPlayer.play(.chime, shouldDebounce: false, volume: 0.35)
+    }
+  }
+
+  /// The x-midpoint of the reunited pair (dancer + freed matador) — the origin the
+  /// hearts and roses fly up from.
+  private var coupleMidX: CGFloat {
+    (playerX + bullfighterX) / 2
   }
 
   /// The reunion payoff: a small fan of hearts and roses blooming over the pair as
@@ -590,6 +620,22 @@ extension GameState {
     default:
       break
     }
+  }
+
+  // MARK: Debug
+
+  /// Jump straight from the climb to the boss's end scene (couple reunited, bull
+  /// bowing, onboarding music) — the `CONJUGAR_GAME_START_END` env var and the
+  /// `conjugar://game/end` deeplink both land here. Reuses the real entry points so
+  /// the debug path exercises the same setup the played-through path does.
+  func debugJumpToEndScene() {
+    guard phase == .climb else { return }
+    enterBossIntro()          // freeze the climb, clear the field, set intro anchors
+    bossTransition = 1
+    snapActorsToStage()       // bull/dancer at their marks, matador on his pedestal
+    banked = Self.meterNotches
+    enterVictory()            // → .victory (bull bows, status bar latches)
+    enterEndScene()           // → .endScene (the living reunion loop)
   }
 
   // MARK: Math helpers

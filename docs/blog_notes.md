@@ -5212,3 +5212,30 @@ entries, the `conjugar://game/boss` deeplink, the updated actors-are-all-rendere
 `Music.bossFight`/`Music.onboarding` now wired); `tools/blender/README.md` (the three bull + two
 dancer boss actions added to both done-records, with crops/frame-counts and the live-authoring
 note); and this entry. Everything on `migration`.
+
+## Boss fight: the end scene comes alive (2026-07-13)
+
+Josh's feedback on the shipped end scene: "I love the scene, but it just stops." It did — the
+matador walked over, one heart + rose popped, and then everything froze on a still (the bull held
+its bowed frame forever). Four changes gave it a pulse:
+
+- **The bull re-bows on a random 1–3 s cadence.** Rather than freezing the bow flipbook, a
+  `endSceneBowTimer` (re-rolled each firing via the injectable `bossRNG`) replays the bow from
+  frame 0; `capBullBowHold()` still catches it at the bottom, so each dip reads as rise → bow →
+  hold-until-next-dip.
+- **Hearts and roses keep flying up from the couple every 2–4 s (random).** The one-shot reunion
+  burst became recurring on its own `endSceneBurstTimer`; both timers start counting only once the
+  matador's walk completes (`slide >= 1`), so the reunion beat still lands first. Spawn origin is a
+  new `coupleMidX` (dancer + freed matador midpoint).
+- **The Duende meter is hidden the moment the player wins.** A `hasWon` latch (set in
+  `enterVictory`, cleared by `reset()`) gates `bossHUD` off for victory + end scene — a cleaner
+  curtain call. (Terminology footnote: Josh calls it "the status bar"; it's the 6-segment gold
+  tug-of-war bar with the dancer/bull end-caps. I first mishid the *iOS* status bar — reverted.)
+- **A straight-to-end-scene debug entry.** `conjugar://game/end` (and `CONJUGAR_GAME_START_END`)
+  → `debugJumpToEndScene()`, which chains the real entry points (enterBossIntro → snap actors →
+  bank to full → enterVictory → enterEndScene) so the debug path exercises the same setup as a
+  played-through win. Made tuning the new loop a two-second round-trip instead of a full duel.
+
+`GameBossTests` still green (22) — the recurring timers only fire after the slide completes, so the
+existing end-scene assertions (which stop at the reunion) are unaffected. Josh signed off on the
+living scene.
