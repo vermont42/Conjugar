@@ -164,14 +164,16 @@ tools/blender/pack_or_rename.sh sheet dancer walk "" "" 96
 ### The dancer's full action set (done)
 
 The player actions ship as rendered sprites — `idle` (2), `walk` (6), `climb` (4),
-`jump` (3), and the two **held-muleta** cape actions `cape` (4, standing swing) and
-`capeWalk` (6, hold-in-front while walking). They are **no longer Mixamo mocap on the
+`jump` (3), the two **held-muleta** cape actions `cape` (4, standing swing) and
+`capeWalk` (6, hold-in-front while walking), and the two **boss dance-off** actions
+`ole` (3, arms-up desplante + back arch) and `stomp` (3, weight-drop zapateado with a
+braceo) added for La Llamada (boss plan Phase 4). They are **no longer Mixamo mocap on the
 X Bot mannequin**: the dancer is now the purchased **flamenco-gown** mesh (Animod, CGTrader
 — `asset-licenses/cgtrader-flamenco-dancer.txt`), hand-keyed on its own 63-bone
 Mixamo-named rig by `gen_dancer_action.py` (see **Hand-keying the gown dancer** below).
 Notes that held across the set:
 
-- **The default side view (`--view side`) suits four of the five actions.** The one
+- **The default side view (`--view side`) suits every action but climb.** The one
   exception is **climb**, rendered **`--view back`** (camera behind the figure): a
   side-on climb reads oddly on a vertical ladder, whereas watching the character's
   back as they climb *away* up the rungs is the conventional platformer read. The
@@ -179,7 +181,8 @@ Notes that held across the set:
   overhead, skirt swaying). Pure `--view back` was enough — no off-axis three-quarter
   nudge to the camera-placement block was needed.
 - **Union-crop heights all land at ~226 px** (idle 104×225, walk 122×226, jump
-  108×225, cape 106×229, climb 172×228 *(back view, arms spread wide)*) — the full
+  116×226, cape 152×225, capeWalk 155×227, ole 116×229, stomp 108×229, climb
+  172×228 *(back view, arms spread wide)*) — the full
   floor-length gown, feet hidden. `GameView` holds one visual **height**
   (`dancerVisualHeight = 57.3`) and derives each action's **width** from its own aspect
   ratio, so the character stays one size with the hem glued to the platform. (Climb is
@@ -200,7 +203,7 @@ the vendor's own rig** with world-space bone rotations, then baked to
 `source/dancer_<action>_gown.fbx` for `render_sprites.py`. Run it per action:
 
 ```bash
-blender -b -P tools/blender/gen_dancer_action.py -- --action idle   # idle|jump|cape|climb
+blender -b -P tools/blender/gen_dancer_action.py -- --action idle   # idle|jump|cape|climb|ole|stomp
 ```
 
 House style: **animate the gown + torso, feet hidden.** Two fixes that were paid for
@@ -289,12 +292,27 @@ Quadruped**. License logged at `asset-licenses/sketchfab-bull.txt`; raw
 `.blend`/`.fbx` stay git-ignored (only PNGs ship). Three actions were authored on
 its rig and rendered side-view through **this same `render_sprites.py`**
 (`--actor bull --view side`), N matched to `GameState.bullFrameCounts`
-(idle 2 / walk 6 / throw 5):
+(idle 2 / walk 6 / throw 5, plus the three **boss dance-off** actions stomp 3 /
+rear 4 / bow 4, added for La Llamada by `gen_bull_action.py` — boss plan Phase 3):
 
 - **idle (2)** — free: two samples of the model's own baked standing-sway clip.
 - **walk (6)** — hand-keyed cyclic diagonal quadruped gait (thigh swing + knee bend).
 - **throw (5)** — hand-keyed head-toss one-shot: head rears up (windup) then thrusts
   down (goring release), timed to `bullThrowDuration` (0.5 s).
+- **stomp (3)** — front-hoof raise → strike + head nod (union crop 452×306). Used for
+  the intro llamada, the demo-stomp cue, and the smug fail/showboat accent.
+- **rear (4)** — rear up on the hind legs, forelegs pawing (452×294; seed poses from
+  `throw`'s raised head/neck keys) — the ole demo and the showboat flourish.
+- **bow (4)** — front legs fold, head sweeps low (452×232). The win payoff: the final
+  frame reads as a **held** bow and `GameState.capBullBowHold()` freezes the flipbook
+  there through `.victory`/`.endScene` (an uncapped phase would loop the bow forever).
+
+Authored **interactively** through blender-mcp (live viewport + per-pose sign-off from
+Josh), *not* headless-and-blind — the first blind attempt sheared the continuous mesh
+(giraffe neck, straight-bar forelegs, a tangled bow) because big FK rotations distort a
+one-piece body. The approved peak angles were then baked into `gen_bull_action.py` (peak
+dicts + per-frame scale factors + a trailing-duplicate so the held pose survives the
+half-open `[start,end)` one-shot sampling) and rendered headless.
 
 **Gotcha that shaped the authoring:** the FBX round-trip strips Rigify's control
 logic — the imported control rig has **0 constraints / 0 drivers**, so posing the
@@ -318,6 +336,10 @@ action active — sidesteps multi-action ambiguity):
 ```bash
 blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_walk.fbx  --actor bull --action walk  --frames 6 --size 192 --view side
 blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_throw.fbx --actor bull --action throw --frames 5 --size 192 --view side
+# Boss dance-off actions — the shipped bull is re-rendered at --size 512 (crisp horn):
+blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_stomp.fbx --actor bull --action stomp --frames 3 --size 512 --view side
+blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_rear.fbx  --actor bull --action rear  --frames 4 --size 512 --view side
+blender -b -P tools/blender/render_sprites.py -- --fbx tools/blender/source/bull_bow.fbx   --actor bull --action bow   --frames 4 --size 512 --view side
 ```
 
 ### Bull cel accents — `--accents` (done, 2026-07-12; paid-asset spike Phase 0 Part A)

@@ -90,15 +90,19 @@ navigation — it cold-launches the app and routes on arrival:
 ```bash
 UDID=$(xcrun simctl list devices booted -j | python3 -c "import sys,json;print(json.load(sys.stdin)['devices'].popitem()[1][0]['udid'])")
 xcrun simctl openurl "$UDID" conjugar://game            # → full-screen game (Settings ▸ Play, skipped)
+xcrun simctl openurl "$UDID" conjugar://game/boss       # → jump straight to the boss fight (La Llamada)
 xcrun simctl openurl "$UDID" conjugar://quiz/start      # → Quiz tab, starts a quiz
 xcrun simctl openurl "$UDID" conjugar://verb/hablar     # → Browse tab, pushes a verb (or verb/random)
 ```
 
 **`conjugar://game`** is the fast path to the game: it presents `GameView` full-screen via
 `AppRouter.showGame` from `MainTabView` (tab-independent), so no Settings→scroll→Play dance.
-All five **player** actions are rendered sprites now (`idle`/`walk`/`climb`/`jump`/`cape`);
-hold a direction button to walk, tap jump, hold up at a ladder to climb, etc. (only the
-**bull** still shows a numbered placeholder box). Example hold-and-capture (logical points;
+Every actor is a rendered cel-shaded sprite now — no numbered placeholder boxes remain. The
+**dancer** has eight actions (`idle`/`walk`/`climb`/`jump`/`cape`/`capeWalk` from the climb,
+plus `ole`/`stomp` for the boss dance-off) and the **bull** has six (`idle`/`walk`/`throw`
+from the climb, plus `stomp`/`rear`/`bow` for the boss); the **matador** is a static
+front-facing `Image("matador")`. During the climb, hold a direction button to walk, tap jump,
+hold up at a ladder to climb, etc. Example hold-and-capture (logical points;
 right arrow ≈ `131,767`):
 
 ```bash
@@ -125,6 +129,39 @@ sleep 2; xcrun simctl openurl "$UDID" conjugar://game
 To reach the climb state, the D-pad **up** button only appears when the player is aligned at
 a ladder base — poll `describe_ui.sh` for the `Move up` label to know you're on it.
 
+### The boss fight — La Llamada (`GameState+BossFight.swift`)
+
+Summiting (touching the bull) triggers a call-and-response flamenco **dance-off** (see
+`prompts/game_boss_llamada.md`): the bull dances a phrase move-by-move (cue chips accumulate),
+the player echoes it from memory on a morphed dance pad while a compás bar sweeps, and a
+6-notch **Duende meter** (banked phrases) is both a tug-of-war and the fight's progression —
+banked 0–1 round 1 (length 3), 2–3 round 2 (length 4), 4–5 round 3 (length 5, with a 🔥
+**freeze** fake-out where the correct input is *nothing*), 6 → victory → an end scene on
+`Music.onboarding`. Failure slides the meter back a notch and rerolls a fresh phrase; there is
+**no lose state**. All boss logic is in `GameState+BossFight.swift` (`update(currentTime:)`
+routes every non-`.climb` phase to `updateBoss`); the climb pipeline is byte-identical when
+`phase == .climb`. Hearts are hidden off-climb (the meter is the only currency). Six dance
+moves (`DanceMove`): paso left/right, ole, stomp, cape, freeze. Boss buttons fire on
+touch-down (the jump idiom), not held intents. Strings live in `L.Game` — the jaleo shouts and
+title cards stay Spanish in **both** localizations, the narrative line + a11y labels localize
+en/es.
+
+Two debug entries jump straight to the boss (both compose with `CONJUGAR_GAME_TIME_SCALE` for
+freeze-framing the `stomp`/`rear`/`bow`/`ole` bursts):
+
+- **`conjugar://game/boss`** deeplink — `AppRouter.handle` sets `pendingBossEntry`, consumed by
+  `GameView` after configure to call `enterBossIntro()`.
+- **`CONJUGAR_GAME_START_BOSS=1`** launch env var — jumps to `.bossIntro` on configure. Its
+  companion **`CONJUGAR_GAME_BOSS_BANKED=N`** (0…5) pre-fills the Duende meter, so `=5` starts
+  one phrase from victory (the fast path for verifying the win / end-scene beats without
+  grinding all six phrases). `openurl` can't pass env, so launch **with** the vars, then route:
+
+```bash
+SIMCTL_CHILD_CONJUGAR_GAME_START_BOSS=1 SIMCTL_CHILD_CONJUGAR_GAME_BOSS_BANKED=5 \
+  xcrun simctl launch "$UDID" biz.joshadams.Conjugar
+sleep 2; xcrun simctl openurl "$UDID" conjugar://game    # tap to skip the intro, then echo the phrase
+```
+
 ### Game music (`Music` enum + `SoundPlayer`)
 
 The game's looping background music is the `Music` enum (`Models/Music.swift`), each case a
@@ -132,8 +169,10 @@ bundled MP3 base name that `SoundPlayerReal.startMusic(_:)` loops via `numberOfL
 Gameplay plays `Music.gameLoop` from `GameState` — bundled as `flamencoLoop.mp3` (legacy
 name) but holding Pond5's "Flamenco Adventure" since July 2026. Two more Pond5 tracks are
 **bundled** in the synchronized `Conjugar/Audio/` group: `spanishTension.mp3`
-(`Music.onboarding`, now wired into the onboarding flow — see below) and
-`spanishGuitarStandoff.mp3` (`Music.bossFight`, still unwired). The WAV masters
+(`Music.onboarding`, wired into both the onboarding flow — see below — and the boss fight's
+end scene) and `spanishGuitarStandoff.mp3` (`Music.bossFight`, now wired: it crossfades in on
+the boss intro's llamada and loops the duel, then fades out into `Music.onboarding` at the end
+scene). The WAV masters
 live in git-ignored `audio-sources/`; only the 192 kbps MP3s are committed. Pond5's Content
 License requires no attribution (the game-music credit in `Localizable.xcstrings` is a
 courtesy note).
@@ -143,8 +182,9 @@ courtesy note).
 > `Conjugar/Audio/spanishTension.mp3`) as a looping bed: `Current.soundPlayer.startMusic(.onboarding)`
 > on the view's `.onAppear`, faded out on dismiss via `Current.soundPlayer.stopMusic(fadeDuration:)`
 > (the graceful counterpart to `startMusic`'s fade-in; the plain `stopMusic()` hard-stop is still
-> what the game uses). The same track is also the intended game-end-scene music. The future boss
-> fight should likewise use `Music.bossFight` ("Spanish Guitar Standoff").
+> what the climb uses). The same track now also scores the boss fight's **end scene**, faded in as
+> `Music.bossFight` ("Spanish Guitar Standoff") fades out on victory — and `GameState.stopAudio()`
+> fades (rather than hard-stops) when the player exits from `.endScene`.
 
 Conjugar-specific config facts baked into `.claude/ios-build-verify.config.sh`:
 

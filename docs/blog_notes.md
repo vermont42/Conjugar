@@ -5169,3 +5169,46 @@ Its flat-emoji style clashed with the rendered cel-shaded bull/dancer/matador sp
 is now just the matador's pedestal; the jaleo pops carry the crowd's voice. Trimmed the crowd-only
 glyphs from the `GlyphWarmer` list too (only 🔥/✨/🌹/❤️ are still rendered in the boss). Full
 `GameBossTests` green (22), swiftlint clean, verified in the sim (clean floor, Spanish jaleo intact).
+
+## Boss fight Phase 7 — docs, and what the whole La Llamada arc taught (2026-07-13)
+
+Closing out `prompts/game_boss_llamada.md`. The feature shipped across seven phases over a
+single day; this last one is documentation — but it's also the moment to write down the arc's
+shape while it's fresh, since the per-phase entries above tell the *what* and this one is the
+*why it went the way it did*.
+
+**The single best decision was mechanic-first on reused art (Phase 1).** The entire state machine
+— summit gate → intro → the demo/echo/judge duel loop → the 6-notch tug-of-war Duende meter →
+victory → end scene, plus the freeze fake-out and compás expiry — was built and made *playable*
+against nothing but the existing climb sprites (paso = walk burst, ole ≈ cape, stomp ≈ jump, bull
+demos = walk/throw). That proved the fun (and shook out the timing constants) before a single hour
+of Blender. Every later phase then swapped one layer without touching the mechanic: Phase 2 the
+SFX/juice, Phase 3 the bull's stomp/rear/bow, Phase 4 the dancer's ole/stomp, Phase 5 the
+end-scene polish, Phase 6 the strings. `GameBossTests` (22, seeded `SplitMix64` + scripted dates)
+was written in Phase 1 and only *grew* after — it never had to be rewritten, because the mechanic
+never moved under it.
+
+**The recurring lesson was the same in three different guises: don't author blind.** Phase 3's bull
+actions were first hand-keyed headless and committed without review — and several frames were
+grotesque (a giraffe neck, straight-bar forelegs, a self-intersecting bow) because large FK
+rotations shear a one-piece mesh. The redo drove Blender *live* through blender-mcp with Josh
+signing off each pose, then baked the approved angles into a generator. Phase 4's dancer followed
+that discipline from the start. And even a shipped sprite hid a bug (the follow-up entry): the
+dancer's jump apex frame was being dropped by half-open `[start,end)` sampling until a
+trailing-duplicate fixed it. Rendering is not verifying; the game-size cel-shaded sprite in motion
+is the only real test.
+
+**Smaller things that stuck:** the tug-of-war meter doubling as *both* the HUD and the progression
+counter (banked 0…6 = the whole fight) kept the state model tiny; commanded one-shot bursts
+(`playerMoveTimer`/`bullMoveTimer`, the `bullThrowTimer` idiom) had to be fenced off from the
+climb's *derived* actions, so `update` routes every non-`.climb` phase to `updateBoss` and the
+climb stays byte-identical; and the held bow needed an explicit `capBullBowHold()` cap or the
+flipbook loops the bow forever. Post-ship, Josh pulled the emoji crowd row — a good reminder that
+flat glyphs and rendered cel sprites don't mix, and the jaleo pops were already carrying the
+crowd's voice anyway.
+
+**This phase's edits:** `CLAUDE.md` (new "The boss fight — La Llamada" section with the two debug
+entries, the `conjugar://game/boss` deeplink, the updated actors-are-all-rendered inventory, and
+`Music.bossFight`/`Music.onboarding` now wired); `tools/blender/README.md` (the three bull + two
+dancer boss actions added to both done-records, with crops/frame-counts and the live-authoring
+note); and this entry. Everything on `migration`.
