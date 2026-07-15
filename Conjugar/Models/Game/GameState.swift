@@ -520,14 +520,29 @@ final class GameState {
     if phase == .climb {
       respawn()
       rebuildPowerUps(kind: stagePowerUpKind)
+      reseatClimbBull()
     } else {
       reseatForResize()
     }
   }
 
-  /// Off-climb the actors stand on the bottom tablao floor at fixed fractional marks
-  /// (the boss stage-geometry computed properties). Re-assert them for the new width
-  /// and drop the old-width obstacles/chargers (they respawn on their own timers).
+  /// Re-seat the pacing bull onto the rebuilt top platform. `respawn()` and
+  /// `buildLevel()` re-place the player and the matador, but the bull's stored
+  /// `bullX`/`bullY` are only set per-stage — so after a resize its Y is stale (it
+  /// hangs below the new platform). Restore Y to the top girder and clamp X into the
+  /// new pacing range (`updateBull`'s bounds), keeping its horizontal progress.
+  private func reseatClimbBull() {
+    let top = Self.levelCount - 1
+    let half = Self.bullSize / 2
+    bullY = platforms[top].surfaceY - half
+    bullX = min(max(bullX, screenSize.width * 0.15 + half), screenSize.width * 0.6)
+  }
+
+  /// Off-climb the actors stand on the bottom tablao floor at their boss stage marks
+  /// (the boss stage-geometry computed properties, all derived from the new
+  /// `screenSize`). Re-assert them and drop the old-width obstacles/chargers (they
+  /// respawn on their own timers). The matador sits on his pedestal (`matadorStage`),
+  /// not the climb home.
   private func reseatForResize() {
     obstacles.removeAll()
     chargers.removeAll()
@@ -535,8 +550,8 @@ final class GameState {
     playerY = dancerStageY
     bullX = bullStageX
     bullY = bullStageY
-    bullfighterX = bullfighterHomeX
-    bullfighterY = bullfighterHomeY
+    bullfighterX = matadorStageX
+    bullfighterY = matadorStageY
   }
 
   // MARK: Audio

@@ -96,6 +96,29 @@ struct GameStateTests {
     // Pickups are re-placed for the new width (both back to uncollected).
     #expect(gameState.powerUps.count == 2)
     #expect(gameState.powerUps.allSatisfy { $0.x <= wider.width })
+    // The pacing bull re-seats onto the rebuilt top platform (not left hanging
+    // below it), within the new pacing bounds.
+    let top = GameState.levelCount - 1
+    #expect(abs(gameState.bullY - (gameState.platforms[top].surfaceY - GameState.bullSize / 2)) < 0.5)
+    #expect(gameState.bullX >= wider.width * 0.15)
+    #expect(gameState.bullX <= wider.width * 0.6)
+  }
+
+  @Test func reconfigureDuringBossReseatsMatadorOnItsPedestal() {
+    let gameState = configured()
+    gameState.enterBossIntro()
+    gameState.handleBossTap()   // skip the intro → actors settle at stage marks
+
+    let wider = CGSize(width: 700, height: 500)
+    gameState.reconfigure(screenSize: wider)
+
+    // The matador belongs on his pedestal (matadorStage), not the climb home on the
+    // top platform — regression guard for the landscape-rotation bug.
+    #expect(abs(gameState.bullfighterX - gameState.matadorStageX) < 0.5)
+    #expect(abs(gameState.bullfighterY - gameState.matadorStageY) < 0.5)
+    // And the bull/dancer sit on the rebuilt bottom tablao floor.
+    #expect(abs(gameState.bullY - gameState.bullStageY) < 0.5)
+    #expect(abs(gameState.playerY - gameState.dancerStageY) < 0.5)
   }
 
   @Test func reconfigureIsANoOpForAnUnchangedSize() {

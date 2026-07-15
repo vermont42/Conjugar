@@ -6157,3 +6157,33 @@ alongside the iPhone `AppIcon60x60@2x.png` (120²). The universal source covers 
 actool needs (including the 167px iPad-Pro icon) without a declared slot to go missing — which is
 exactly why the warnings can't come back. The alternate app icons (Bull/Dancer/Matador/Classic) are
 independent image sets and were untouched (no warnings for them). Net: 28 files in the iconset → 2.
+
+## iPad Rotation: Re-seating the Bull and the Matador (2026-07-15)
+
+Two more landscape-rotation position bugs Josh caught on the real iPad, both the same root
+cause the earlier re-deal note only partly addressed: a handful of actor positions are *stored*
+(`bullX/bullY`, `bullfighterX/bullfighterY`) rather than recomputed each frame, so `reconfigure`
+has to re-derive every one of them — and I'd missed two.
+
+1. **Climb: the bull hung below the top platform.** `respawn()` (my climb re-deal path) re-places
+   the player, and `buildLevel()` re-places the matador (`bullfighterX/Y`), but neither touches
+   `bullX/bullY` — those are set once per stage. So after a landscape rebuild the bull kept its
+   old-platform Y and sank below the new (higher, shorter-field) top girder. Fix: a
+   `reseatClimbBull()` that restores `bullY` to the top platform surface and clamps `bullX` into
+   the new pacing range (`updateBull`'s bounds), preserving its horizontal progress.
+
+2. **Boss: the matador floated to the top instead of standing on his pedestal.** `reseatForResize()`
+   re-seated the boss actors, but for the matador it used `bullfighterHomeX/Y` — the *climb* home
+   on the top platform — instead of `matadorStageX/matadorStageY`, his boss mark on the pedestal.
+   In landscape the top-platform Y is way up high, so he appeared floating mid-air. One-line fix:
+   seat him at `matadorStage`. (The pedestal graphic itself is a computed property off `screenSize`,
+   so it had already reflowed correctly — the matador was just placed on the wrong shelf.)
+
+The through-line: anything positioned by a *stored* coordinate needs an explicit re-seat in
+`reconfigure`; only the computed-property positions (the pedestal, the stage-X fractions) self-heal.
+Added a boss-rotation regression test (`reconfigureDuringBossReseatsMatadorOnItsPedestal`) and
+extended the climb test to assert the bull lands on the top platform within its pacing bounds.
+Verified on the iPad Pro 11" sim: rotate mid-climb → bull stands on the girder; rotate mid-duel →
+matador stands on his pedestal. Full suite 521 green. (The M-series sim still only hands the app a
+portrait window even in landscape, but the height change on rotation is enough to fire `reconfigure`
+and exercise the re-seats — the bug reproduced and the fix holds.)
