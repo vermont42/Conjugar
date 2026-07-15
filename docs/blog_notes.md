@@ -5750,3 +5750,62 @@ affordance rather than a button, so it stays put.
 **Verification.** `build_app.sh`: Build Succeeded. The post-edit SourceKit swarm on
 SettingsView (`Cannot find 'Current'`, `'any Layout' has no member…`) was the usual
 same-module stale-index noise — xcodebuild compiles it clean.
+
+## Onboarding: making the pages scroll at large Dynamic Type (2026-07-14)
+
+The game preview — the last onboarding sheet — has by far the longest body copy plus a
+CTA button *inside* the page, and each page was a fixed, non-scrolling `VStack` with
+`Spacer()`s. Josh flagged (from a screenshot) that the body was cut off ("…zombified-and-
+stampe…") and the "Play" CTA was jammed against the paged-`TabView` dots. Crucially he then
+added that he runs **large Dynamic Type** — which is exactly why it reproduced for him and
+not at the simulator's default size. Constraint: fix it **without trimming the copy**.
+
+This one took three tries; the dead ends are the interesting part.
+
+**Attempt 1 — the textbook "scroll-if-needed, else center" pattern.** `GeometryReader` →
+`ScrollView` → VStack `.frame(minHeight: proxy.size.height)`, keeping the `Spacer()`s for
+centering. At the simulator's default size the game page now showed the full body — looked
+fixed. But set the sim to `accessibility-extra-large` (Settings ▸ or `xcrun simctl ui <udid>
+content_size accessibility-extra-large`) and the body **still truncated**. The AX tree
+(`describe_ui.sh`) was the smoking gun: the body `StaticText` carried the *full* string in
+its `AXLabel` but its frame was clamped to ~184 pt. Cause: **flexible `Spacer()`s inside a
+`ScrollView` + `.frame(minHeight:)` make the ScrollView treat the content as exactly one
+page tall** and hand the leftover to the Spacers, squeezing the Text until it truncates
+instead of growing.
+
+**Attempt 2 — drop the Spacers, center via the frame.** `content.frame(minHeight:
+proxy.size.height, alignment: .center)`, no Spacers. The body height grew (184 → 230 →,
+on the game page, 1104 pt — full text, no truncation). *But it would not scroll.* A manual
+`axe touch` down-move-up drag left the off-screen "Play" button pinned at y=1456. Inside a
+horizontally-paging `TabView(.page)`, the `GeometryReader` makes the ScrollView size to its
+*content* rather than act as a bounded, scrollable viewport — so tall pages just overflow
+(colliding with the dots / Get Started) and there's nothing to scroll.
+
+**Attempt 3 — the fix that shipped.** Two changes:
+1. **A bare, page-filling `ScrollView`** — no `GeometryReader`, no `minHeight`, no Spacers.
+   It fills the TabView page as a real viewport and scrolls correctly. Verified on the
+   Articles/game pages at accessibility-XL: the whole body scrolls in and the CTA clears
+   everything. The cost is that short pages are now **top-aligned** instead of vertically
+   centered — an acceptable trade for a layout that never truncates. (Restoring "center
+   when it fits" is the `GeometryReader` trick that broke scrolling, so it stays out.)
+2. **Took the page dots out of the overlay.** `TabView(.page)`'s indicator is composited
+   *over* each page and reserves no space, so at large type a long body scrolling underneath
+   collided with it mid-page. Switched to `.page(indexDisplayMode: .never)` and drew an
+   explicit row of `Circle`s (on-brand `customYellow`) as a real sibling below the TabView.
+   Now every page's ScrollView clips cleanly above the dots, and on the last page the
+   dots sit in their own row between the scrollable "Play" CTA and the outer "Get Started".
+
+**Debugging notes for next time.** (a) `axe swipe`/`touch` synthetic gestures *do* drive
+SwiftUI — horizontal paging worked — but coordinates matter: `y > ~820` lands on the home-
+indicator edge and `y=1400` is off a ~874-pt-tall screen, so those "failed swipes" were bad
+coords, not a dead app. (b) `describe_ui.sh` + a tiny Python walk over the AX JSON is the
+reliable oracle here — `AXLabel` always holds the *full* string, so a truncated view shows
+up as a full label on an undersized frame, which is how Attempt 1's squeeze was caught. (c)
+`xcrun simctl ui <udid> content_size <size>` toggles Dynamic Type without touching Settings.
+
+**Verification.** `build_app.sh`: Build Succeeded (the OnboardingView SourceKit swarm —
+`Cannot find 'L'/'Current'/'AppRouter'`, `Color has no member customBackground` — is the
+usual same-module stale-index noise; xcodebuild compiles clean). Exercised at both default
+and accessibility-XL: game page renders the full body through "…whether love wins.", "Play"
+has clear space, the custom dot row is in its own lane, and "Get Started" is separated
+below. No string changes.

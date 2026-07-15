@@ -149,7 +149,22 @@ struct OnboardingView: View {
           )
           .tag(lastPageTag)
         }
-        .tabViewStyle(.page)
+        // The built-in page dots are hidden and re-drawn below as an explicit row so
+        // they reserve real layout space instead of compositing *over* each page. With
+        // the overlay indicator, long bodies scrolling under it collided with the dots
+        // at large Dynamic Type sizes; a dedicated row lets each page's ScrollView clip
+        // cleanly above it.
+        .tabViewStyle(.page(indexDisplayMode: .never))
+
+        HStack(spacing: Layout.defaultSpacing) {
+          ForEach(0 ..< (lastPageTag + 1), id: \.self) { index in
+            Circle()
+              .fill(Color.customYellow.opacity(index == currentPage ? 1 : 0.3))
+              .frame(width: 8, height: 8)
+          }
+        }
+        .padding(.vertical, Layout.defaultSpacing)
+        .accessibilityHidden(true)
 
         if currentPage == lastPageTag {
           Button(L.Onboarding.getStarted) {
@@ -234,34 +249,40 @@ private struct OnboardingPageView: View {
   }
 
   var body: some View {
-    VStack(spacing: Layout.doubleDefaultSpacing) {
-      Spacer()
-        .frame(maxHeight: 100)
+    // A plain, page-filling ScrollView so long bodies (and large Dynamic Type / the
+    // wordier Spanish strings) scroll instead of truncating. Earlier attempts wrapped
+    // this in a `GeometryReader` + `.frame(minHeight:)` to keep short pages centered,
+    // but inside the horizontally-paging `TabView(.page)` that made the ScrollView size
+    // to its content rather than act as a bounded viewport — so tall pages overflowed
+    // (colliding with the dots / Get Started) and would not scroll. A bare ScrollView
+    // fills the page and scrolls correctly; short pages simply sit below a top pad.
+    ScrollView {
+      VStack(spacing: Layout.doubleDefaultSpacing) {
+        symbolImage
+          .font(.system(size: 80))
+          .foregroundStyle(Color.customYellow)
+          .symbolEffect(.bounce, value: bounceValue)
+          .accessibilityHidden(true)
 
-      symbolImage
-        .font(.system(size: 80))
-        .foregroundStyle(Color.customYellow)
-        .symbolEffect(.bounce, value: bounceValue)
-        .accessibilityHidden(true)
+        Text(title)
+          .font(.title.weight(.bold))
+          .foregroundStyle(Color.customYellow)
+          .multilineTextAlignment(.center)
+          .padding(.horizontal, Layout.doubleDefaultSpacing)
 
-      Text(title)
-        .font(.title.weight(.bold))
-        .foregroundStyle(Color.customYellow)
-        .multilineTextAlignment(.center)
-        .padding(.horizontal, Layout.doubleDefaultSpacing)
+        Text(bodyText)
+          .font(.callout)
+          .foregroundStyle(Color.customForeground)
+          .multilineTextAlignment(.center)
+          .padding(.horizontal, Layout.tripleDefaultSpacing)
 
-      Text(bodyText)
-        .font(.callout)
-        .foregroundStyle(Color.customForeground)
-        .multilineTextAlignment(.center)
-        .padding(.horizontal, Layout.tripleDefaultSpacing)
-
-      if let ctaTitle {
-        Button(ctaTitle) { onCTA() }
-          .buttonStyle(PrimaryButtonStyle())
+        if let ctaTitle {
+          Button(ctaTitle) { onCTA() }
+            .buttonStyle(PrimaryButtonStyle())
+        }
       }
-
-      Spacer()
+      .frame(maxWidth: .infinity)
+      .padding(.vertical, Layout.tripleDefaultSpacing)
     }
     .offset(y: animateContent ? contentOffset : 0)
     .opacity(animateContent ? contentOpacity : 1)
