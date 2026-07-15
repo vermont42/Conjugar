@@ -13,7 +13,7 @@ Items are ranked highest impact → lowest, same rubric as round 1: user-visible
 
 ---
 
-## 1. The game's jump button has no icon — `figure.jump` is not an SF Symbol · **bug (user-visible)** · confirmed
+## ✅ 1. The game's jump button has no icon — `figure.jump` is not an SF Symbol · **bug (user-visible)** · confirmed
 
 `GameView.jumpButton` renders `Image(systemName: "figure.jump")` (`Conjugar/Views/GameView.swift:983`). That symbol does not exist in the system symbol set — SwiftUI logs a **Fault** at runtime (`No symbol named 'figure.jump' found in system symbol set`, captured from the simulator console during this review) and renders nothing, so the button is an empty yellow ring on a dark circle. This is not simulator-only: the symbol set is the OS's, so devices show the same empty ring. It evaded notice because the ring still *reads* as a button, the `accessibilityLabel(L.Game.jump)` is correct (so the AX tree looks fine), and everyone testing already knew what the circle did.
 
@@ -27,7 +27,7 @@ A sweep of all 23 distinct `systemName:`/`systemImage:` strings in the app, widg
 
 **Fix:** the cells already live in a `Grid` — drop the fixed frame and let the column size itself, keeping right alignment via `.gridColumnAlignment(.trailing)` on the pronoun (or, if the tight look is wanted, keep a frame but add `.lineLimit(1).minimumScaleFactor(0.5)`). Re-check with a device/gallery screenshot.
 
-## 3. Speed/serenata power-up state survives into the boss fight — a permanent ⚡ badge over the dancer · **bug (user-visible, conditional)** · confirmed by trace
+## ✅ 3. Speed/serenata power-up state survives into the boss fight — a permanent ⚡ badge over the dancer · **bug (user-visible, conditional)** · confirmed by trace
 
 `enterBossIntro` clears the cape (`capedRemaining = 0`, `GameState+BossFight.swift:89`) but **not** `speedRemaining` / `serenataRemaining` / `serenataDanceTimer`. Those timers tick only inside the `.climb` branch of the frame tick (`GameState.swift:714-732` — the `guard phase == .climb` at :714 returns before the decrements at :723-732), so a power-up active at the triggering summit is *frozen* for the entire boss sequence. The visible consequence: `speedBadge` is in the playfield unconditionally (`GameView.swift:315`, definition :459-468) and draws whenever `speedRemaining > 0` — so a player who grabs ⚡ on stage 5 and summits within its 7 s wears a solid, never-expiring ⚡ badge through the intro, duel, victory, and end scene. (Serenata's frozen timer has no visual in the boss, and the deliberate escape-beat carry-over — decision 12 — is unaffected; during the brief escape the badge showing is consistent with "carries across.")
 
@@ -66,7 +66,7 @@ The monitor is a single task, not refcounted: `startAvailabilityMonitoring` guar
 
 **Fix (decide the policy first):** cheapest is to treat a size change as a re-deal — `.onChange(of: geo.size)` → rebuild geometry and soft-respawn to safe marks (stage/score survive, like `respawn()`); fullest is proportional remapping of every entity. Worth seeing on an iPad before choosing — it may also be acceptable to defer with a known-issue note, since the game is reachable but clearly phone-shaped.
 
-## 9. Deeplink one-shot flags go stale if they arrive while the game is open · **bug (debug surface)** · confirmed (reproduced live)
+## ✅ 9. Deeplink one-shot flags go stale if they arrive while the game is open · **bug (debug surface)** · confirmed (reproduced live)
 
 `AppRouter.handle` sets `pendingBossEntry`/`pendingEndScene` and `showGame = true` for every `conjugar://game/...` URL (`Conjugar/Views/AppRouter.swift:61-70`), but `GameView` consumes the flags only in `onAppear` (`GameView.swift:229-235`). If a `game/boss` deeplink arrives while the game is already presented, nothing consumes the flag — and the **next** plain `conjugar://game` (or Settings-independent router-path open) jumps straight to the boss. Reproduced in the simulator during this review: `openurl conjugar://game/boss` with the game up, quit, `openurl conjugar://game` → boss intro. Debug-only surface (these deeplinks are development tools), so ranked low, but it will eventually cost someone a confused ten minutes.
 
@@ -87,9 +87,9 @@ The monitor is a single task, not refcounted: `startAvailabilityMonitoring` guar
 
 ## 13. Micro cleanups · **polish (grab-bag)** · confirmed unless noted
 
-- **Unseeded RNG in the boss's judged path:** the dancer's spoken jaleo picks with plain `.randomElement()` (`GameState+BossFight.swift:259`) while every other boss/climb draw routes through `bossRNG` (`:193, :469, :479`). Cosmetic-only today, but it's the one hole in the otherwise-complete "tests can script the fight" story — pass `using: &bossRNG` for consistency.
+- ✅ **Unseeded RNG in the boss's judged path:** the dancer's spoken jaleo picks with plain `.randomElement()` (`GameState+BossFight.swift:259`) while every other boss/climb draw routes through `bossRNG` (`:193, :469, :479`). Cosmetic-only today, but it's the one hole in the otherwise-complete "tests can script the fight" story — pass `using: &bossRNG` for consistency.
 - **Scene beds start at a random playhead:** `startMusic` seeks a fresh track to a random position (`SoundPlayerReal.swift:109`). Great for the gameplay loop's variety; for the *composed* beds (`.onboarding`, `.bossFight`) it means entering mid-phrase. If that's deliberate, a comment saying so would stop it reading as an oversight; if not, start those two at 0 (a `Music` property, e.g. `startsAtRandomPosition`).
-- **`resolveCollisions` ends with `if resolveChargerCollisions() { return }`** (`GameState+Obstacles.swift:183`) — the `return` is the last statement, so the conditional is a no-op costume; call it plainly and keep the explanatory comment (or move the call earlier if the early-out is meant to guard future code).
+- ✅ **`resolveCollisions` ends with `if resolveChargerCollisions() { return }`** (`GameState+Obstacles.swift:183`) — the `return` is the last statement, so the conditional is a no-op costume; call it plainly and keep the explanatory comment (or move the call earlier if the early-out is meant to guard future code).
 - **Simulator aside (not an app bug):** stage 1's flag obstacles render as "?" tofu boxes in the iOS Simulator — the sim's emoji font ships without regional-indicator flags; devices render them fine. Worth remembering when generating App Store screenshots (stage 1 will look broken from the sim; capture device screenshots or use `CONJUGAR_GAME_STAGE=2+`).
 
 ## 14. Create (or, less likely, source) a real olé glyph for the boss dance pad · **polish (game UI)** · follow-up from review discussion
@@ -114,7 +114,7 @@ Deep-read with no findings: the climb physics/collision pipeline (`GameState+Phy
 
 Every step ships green (build + 508 tests + lint); bugs land before refactors; one behavior-decision item is isolated at the end.
 
-1. **One-line fixes + guard tests** *(items 1, 3, 9, 13's RNG + return-idiom nits)* — swap the jump symbol and add the symbol-validity sweep test; clear speed/serenata state in `enterBossIntro` + extend the boss-entry test; consume-or-ignore the deeplink flags; seed the jaleo pick. All mechanical, each independently verifiable in the simulator (the game bits by deeplink, no play-through needed).
+1. ✅ **One-line fixes + guard tests** *(items 1, 3, 9, 13's RNG + return-idiom nits)* — swap the jump symbol and add the symbol-validity sweep test; clear speed/serenata state in `enterBossIntro` + extend the boss-entry test; consume-or-ignore the deeplink flags; seed the jaleo pick. All mechanical, each independently verifiable in the simulator (the game bits by deeplink, no play-through needed).
 2. **Docs + dead code** *(item 10)* — delete `reset()`'s unreachable music branch, fix the CLAUDE.md sentence, drop `Etymology.swift`'s stale NOTE. Zero behavior change.
 3. **Audio-stack pass** *(item 4 + 13's playhead decision)* — the cancellable fade-stop task, plus decide/document the random-start policy for scene beds. One file; verify by ear with the onboarding reshow double-open.
 4. **Onboarding/tutor pass** *(items 5, 6, then 11)* — snapshot availability at onboarding appear, make monitor ownership refcounted/task-scoped, then collapse the duplicated game-after-onboarding plumbing into the router. These three touch the same seams; doing them together avoids re-testing the flow twice.
@@ -124,5 +124,7 @@ Every step ships green (build + 508 tests + lint); bugs land before refactors; o
 8. **Olé glyph** *(item 14)* — independent of everything above; slot it whenever the symbol/sprite pipeline is warm (it pairs naturally with item 1's jump swap if done early, but nothing blocks on it). Asset work first, then the two-site (button + chip) swap and the optional `DanceMove` glyph-property hoist.
 
 Steps 1–2 are an easy morning; steps 3–5 are each an hour or two with verification; step 6 is bounded by the decision, not the code; step 8 is mostly art time. Independently of this list, round 1's one still-open external item — the Game Center physical-device pass — remains outstanding.
+
+As each item and each implementation-sequence step is completed, prefix its heading with ✅ (a grab-bag item finished only in part gets the ✅ on the individual completed bullets, not the item heading). Keep these markers current so a future session can see at a glance what remains.
 
 When deciding whether to add a comment in new or modified code, be mindful of Josh's preference that comments be used sparingly, typically only for hacks and todos. Do not, under any circumstance, add a comment referencing the code audit or the process of implementing its suggestions.
