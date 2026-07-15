@@ -21,7 +21,7 @@ A sweep of all 23 distinct `systemName:`/`systemImage:` strings in the app, widg
 
 **Fix (one line + a guard test):** use a real symbol: `figure.gymnastics` exists and reads as "jump". Then add a small Swift Testing case that greps the source tree for `systemName: "…"` literals (the `#filePath`-relative idiom `CorpusFormsDumpTests` already uses) and asserts `UIImage(systemName:) != nil` for each — ~25 lines, and this class of bug can never ship again.
 
-## 2. Large widget: the pronoun column is too narrow for *nosotros*/*vosotros* · **UI bug (daily surface)** · confirmed mechanism, visual outcome needs the device eyeball
+## ✅ 2. Large widget: the pronoun column is too narrow for *nosotros*/*vosotros* · **UI bug (daily surface)** · confirmed mechanism, visual outcome needs the device eyeball
 
 `LargeWidgetView.conjugationCell` (`ConjugarWidget/Views/LargeWidgetView.swift:133-146`) pins the pronoun to `.frame(width: 28, alignment: .trailing)` at `.caption2` with no `lineLimit`/`minimumScaleFactor`. Measured at the 11 pt system font, **"nosotros" is 46.0 pt and "vosotros" 45.3 pt wide** — neither can fit 28 pt, so rows 1p/2p of the presente grid will wrap or truncate on every systemLarge render. The blog note for this feature ends "Josh will eyeball the rendered widget on device," so this may simply not have been seen yet. The medium widget is unaffected (its `ParadigmGrid` gives pronouns natural width, `MediumWidgetView.swift:50-53`).
 
@@ -54,7 +54,7 @@ The monitor is a single task, not refcounted: `startAvailabilityMonitoring` guar
 
 **Fix:** make the pairing robust rather than choreographed — a refcount in the service (`monitorClients += 1` / `-= 1`, cancel at zero), or replace onAppear/onDisappear with a per-view `.task { await service.monitorWhileVisible() }` (auto-cancelling, safe under multiple concurrent owners). Either folds neatly into item 5's change.
 
-## 7. First verb visit parses ~4 MB of content JSON on the main thread · **performance** · confirmed mechanism, magnitude suspected
+## ✅ 7. First verb visit parses ~4 MB of content JSON on the main thread · **performance** · confirmed mechanism, magnitude suspected
 
 `VerbView.init` synchronously loads all three content caches on first touch (`Conjugar/Views/VerbView.swift:40-45`): `Etymologies.json` (**3.0 MB**), `ExampleUses.json` (553 KB), and `MedievalExamples.json` (411 KB) — `Data(contentsOf:)` + `JSONDecoder` on the main actor, inside a NavigationStack push. This is the same shape round 1 flagged for the verb-map parse (item 14 there). The launch-time widget refresh *would* pre-warm these caches off-main (`WidgetSnapshotWriter.makeSnapshot` reads both) — but `refresh()` is **date-gated before it ever builds a snapshot** (`WidgetSnapshotWriter.swift:47-52`), so on every launch after the day's first, nothing warms and the first verb push eats the full parse. Expect a perceptible hitch on the first Browse→verb tap of a session (tens of ms decode plus dictionary bridging; unmeasured — hence "suspected" on magnitude).
 
@@ -118,7 +118,7 @@ Every step ships green (build + 508 tests + lint); bugs land before refactors; o
 2. ✅ **Docs + dead code** *(item 10)* — delete `reset()`'s unreachable music branch, fix the CLAUDE.md sentence, drop `Etymology.swift`'s stale NOTE. Zero behavior change.
 3. ✅ **Audio-stack pass** *(item 4 + 13's playhead decision)* — the cancellable fade-stop task, plus decide/document the random-start policy for scene beds. One file; verify by ear with the onboarding reshow double-open.
 4. ✅ **Onboarding/tutor pass** *(items 5, 6, then 11)* — snapshot availability at onboarding appear, make monitor ownership refcounted/task-scoped, then collapse the duplicated game-after-onboarding plumbing into the router. These three touch the same seams; doing them together avoids re-testing the flow twice.
-5. **Perf + widget** *(items 7, 2)* — warm the content caches in the launch task (verify: first verb push after a warm launch has no hitch); fix the pronoun column and re-eyeball the large widget on device. Independent of everything else.
+5. ✅ **Perf + widget** *(items 7, 2)* — warm the content caches in the launch task (verify: first verb push after a warm launch has no hitch); fix the pronoun column and re-eyeball the large widget on device. Independent of everything else.
 6. **iPad geometry policy** *(item 8)* — the one item with a real design decision (re-deal vs. remap vs. documented limitation). Needs an iPad look first; keep it last so it can't block the mechanical wins.
 7. **Content normalization** *(item 12)* — the guillemet pass over `Etymologies.json` + the convention-pinning data test. Mechanical but a large diff; isolate it in its own commit so `git blame` on the content stays readable.
 8. **Olé glyph** *(item 14)* — independent of everything above; slot it whenever the symbol/sprite pipeline is warm (it pairs naturally with item 1's jump swap if done early, but nothing blocks on it). Asset work first, then the two-site (button + chip) swap and the optional `DanceMove` glyph-property hoist.

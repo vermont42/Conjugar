@@ -30,11 +30,20 @@ struct LargeWidgetView: View {
       // short/defective paradigm can't crash the widget process.
       if let presente, presente.conjugations.count >= 6 {
         Divider()
-        Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 2) {
+        // Four columns (pronoun | form | pronoun | form). The pronoun columns self-size
+        // and right-align, so "nosotros"/"vosotros" get natural width instead of being
+        // wrapped/truncated by a fixed frame; the .leading pad on the second pronoun keeps
+        // the two pairs visually separated.
+        Grid(alignment: .leading, horizontalSpacing: 4, verticalSpacing: 2) {
           ForEach(0 ..< 3, id: \.self) { row in
             GridRow {
-              conjugationCell(presente.conjugations[row])
-              conjugationCell(presente.conjugations[row + 3])
+              pronounCell(presente.conjugations[row].pronoun)
+                .gridColumnAlignment(.trailing)
+              formCell(presente.conjugations[row].form)
+              pronounCell(presente.conjugations[row + 3].pronoun)
+                .gridColumnAlignment(.trailing)
+                .padding(.leading, 8)
+              formCell(presente.conjugations[row + 3].form)
             }
           }
         }
@@ -130,18 +139,20 @@ struct LargeWidgetView: View {
     }
   }
 
-  private func conjugationCell(_ conjugation: WidgetConjugation) -> some View {
-    HStack(spacing: 4) {
-      Text(conjugation.pronoun)
-        .font(.caption2)
-        .foregroundStyle(.secondary)
-        .frame(width: 28, alignment: .trailing)
-      Text(mixedCase: conjugation.form)
-        .font(.caption)
-        .fontWeight(.medium)
-        .fontDesign(.serif)
-        .lineLimit(1)
-        .minimumScaleFactor(0.6)
-    }
+  private func pronounCell(_ pronoun: String) -> some View {
+    Text(pronoun)
+      .font(.caption2)
+      .foregroundStyle(.secondary)
+      .lineLimit(1)
+      .minimumScaleFactor(0.6)
+  }
+
+  private func formCell(_ form: String) -> some View {
+    Text(mixedCase: form)
+      .font(.caption)
+      .fontWeight(.medium)
+      .fontDesign(.serif)
+      .lineLimit(1)
+      .minimumScaleFactor(0.6)
   }
 }

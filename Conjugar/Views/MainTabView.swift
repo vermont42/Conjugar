@@ -64,6 +64,9 @@ struct MainTabView: View {
       // Off-main: refresh() parses verbModelMap.xml + runs ~50 conjugations;
       // everything it touches is nonisolated/Sendable, so it belongs off the launch path.
       Task.detached { WidgetSnapshotWriter.refresh() }
+      // Warm the ~4 MB content caches off-main so the first verb push isn't a main-thread
+      // decode. refresh() is date-gated and often no-ops, so it can't be relied on to warm.
+      Task.detached { ContentCaches.warm() }
       // First-launch onboarding wins the launch-time cover; skip the commun prompt this
       // launch so two covers don't contend for the anchor.
       guard !presentOnboardingIfNeeded() else { return }

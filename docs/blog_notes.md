@@ -5995,3 +5995,40 @@ Build green; full suite 518 tests / 28 suites / 0 failures; SwiftLint 0. The dev
 (the mid-download page-count freeze, the Info-tab live flip after enabling Apple Intelligence)
 can't be exercised in the simulator, where the model is always unavailable; verified by trace +
 the router/service unit tests.
+
+## Round-2 review step 5: perf + widget pass (items 7, 2) (2026-07-15)
+
+Two independent fixes that both touch surfaces a user hits daily.
+
+**Warm the content caches off the launch path (item 7).** `VerbView.init` loads all three
+bundled content caches on first touch — `Etymologies.json` (3.0 MB), `ExampleUses.json`
+(553 KB), `MedievalExamples.json` (411 KB) — via `Data(contentsOf:)` + `JSONDecoder` on the
+main actor, inside a NavigationStack push. The launch-time `WidgetSnapshotWriter.refresh()`
+*would* have pre-warmed two of them, but `refresh()` is date-gated and no-ops on every launch
+after the day's first, so in practice the first Browse→verb tap of a session ate the full
+parse. Added `Models/ContentCaches.swift` — a `nonisolated enum` with a single `warm()` that
+touches `Etymology.text(for:)`, `ExampleData.example(for:)`, and `MedievalData.examples(for:)`
+with a sentinel key (any key works: each cache loads its whole file on first access regardless
+of the key). Wired a second `Task.detached { ContentCaches.warm() }` beside the existing widget
+refresh in `MainTabView`'s launch `.task`. The caches are `@unchecked Sendable` + `NSLock`-guarded
+— off-main warming is exactly what they were built for — so `VerbView.init` now costs three
+dictionary lookups on the warm path. Kept the date gate on the *write* path untouched.
+
+**Large-widget pronoun column (item 2).** `LargeWidgetView.conjugationCell` pinned the pronoun
+to `.frame(width: 28)` at `.caption2` with no line handling; "nosotros"/"vosotros" measure
+~46 pt, so rows 1p/2p of the presente grid wrapped or truncated on every systemLarge render.
+Rather than shrink the text (the `minimumScaleFactor` alternative), restructured the two-column
+`Grid` into four columns — `pronoun | form | pronoun | form` — split `conjugationCell` into
+`pronounCell`/`formCell`, and let the pronoun columns self-size with `.gridColumnAlignment(.trailing)`.
+The forms stay aligned because the pronoun cells now share a real grid column (the whole reason
+the fixed frame existed). Tightened `horizontalSpacing` to 4 and added `.padding(.leading, 8)`
+on the second pronoun to keep the two pairs visually separated. This is a widget target with no
+simulator preview harness here, so the code fix is done but the pixel outcome still wants Josh's
+device/gallery eyeball — the mechanism (self-sizing column) is the reviewer's preferred fix.
+
+Verification: build green, SwiftLint 0, full suite **518 tests / 28 suites / 0 failures**. Drove
+the app in the simulator and confirmed the verb screen renders correctly through the warmed
+caches (hablar: metadata pills, both paradigms, correct forms). The "no perceptible hitch" feel
+and the widget pixels are the two device-eyeball bits; the data itself is unchanged (`warm()`
+only pre-triggers the same loads `VerbView.init` already did), and the engine/content suites
+cover correctness.
