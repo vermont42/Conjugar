@@ -595,9 +595,9 @@ final class GameState {
   /// Full restart to a fresh game: return the player and bull to their starting
   /// state, clear obstacles, restore all health, re-arm the cape pickups, and reset
   /// the stage back to 1. Keeps platforms/ladders geometry. Also clears any
-  /// boss-fight state back to `.climb` (re-showing the hearts). Used by `configure()`
-  /// (and the boss→climb exit path). Death no longer routes here — it soft-respawns
-  /// via `respawn()`, which keeps `stage`/`summitCount`/`score`.
+  /// boss-fight state back to `.climb` (re-showing the hearts). Used by `configure()`.
+  /// Death no longer routes here — it soft-respawns via `respawn()`, which keeps
+  /// `stage`/`summitCount`/`score`.
   func reset() {
     let w = screenSize.width
     let top = Self.levelCount - 1
@@ -605,10 +605,6 @@ final class GameState {
     summitCount = 0
     score = 0
 
-    // If we were in a boss phase, return the music to the gameplay loop.
-    if phase != .climb && didConfigure {
-      Current.soundPlayer.startMusic(.gameLoop)
-    }
     phase = .climb
     banked = 0
     duelState = .bullDemo(step: 0)

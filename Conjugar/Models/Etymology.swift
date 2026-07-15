@@ -14,10 +14,6 @@ import Foundation
 // `\n\n` paragraph breaks. Entries are produced, a batch per session, by an offline
 // generation pipeline (English + Spanish for every verb). English is the
 // fallback: `text(for:)` returns the `"en"` entry when the device language has no table.
-//
-// NOTE (wiring): this reads the JSON but is not yet displayed. Rendering it under the
-// conjugations in `VerbView` (a `~…~`→bold attributed-string renderer + an etymology card)
-// is the remaining lifecycle step.
 nonisolated enum Etymology {
   private static let cache = EtymologyCache()
 

@@ -5886,3 +5886,29 @@ prints (`◇ Suite … / ✔ Test … passed`) and the run shows **27 tests in 3
 the xcbeautify/XCTest summary line ("Executed 0 tests") reports only the XCTest side — Swift
 Testing has its own reporter, so grep for `✔ Test`/`Suite "…"` (or pipe raw `xcodebuild`) to
 confirm a Swift Testing suite actually ran. Build green, SwiftLint 0/183.
+
+## Round-2 review step 2: docs + dead code (2026-07-15)
+
+Step 2 of the round-2 sequence — the "zero behavior change" cleanup of item 10. Three edits,
+no logic touched.
+
+**`GameState.reset()`'s unreachable music-restart branch, deleted.** The function opened with
+`if phase != .climb && didConfigure { Current.soundPlayer.startMusic(.gameLoop) }` — a leftover
+from when leaving the boss re-entered the climb. That path is gone: `reset()` is now called only
+from `configure()` (and one test). At the `configure()` call site `didConfigure` is still
+`false` (it's set `true` *after* `reset()` returns), so the `&& didConfigure` conjunct can never
+hold — the branch was dead. Removed it and trimmed the doc comment's "(and the boss→climb exit
+path)" clause to match. `resetRestoresTheClimb` (which never asserted on music) still passes, and
+the whole `GameBossTests` suite is green at 21 tests.
+
+**`Etymology.swift`'s stale wiring NOTE, dropped.** The header still carried a
+`NOTE (wiring): this reads the JSON but is not yet displayed … the remaining lifecycle step` —
+but the etymology card shipped in `VerbView` (and the widget snippet) some commits ago. Deleted
+the paragraph; the rest of the header (keying, `~bold~` markup, English fallback) stays accurate.
+
+**CLAUDE.md corrected.** The concurrency/game section claimed `reset()` "is only for
+configure/boss-exit paths now" — there is no boss-exit path anymore (leaving the boss dismisses
+the game and discards the `GameState`). Now reads "only for the configure path now, not death,"
+so the next session isn't sent looking for a caller that doesn't exist.
+
+Build green, GameBossTests 21/21.

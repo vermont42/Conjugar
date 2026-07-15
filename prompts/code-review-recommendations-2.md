@@ -72,7 +72,7 @@ The monitor is a single task, not refcounted: `startAvailabilityMonitoring` guar
 
 **Fix (one line either way):** consume-or-ignore at the router (`case "boss": if !showGame { pendingBossEntry = true }`), or clear both flags in `GameView.onDisappear`.
 
-## 10. Dead code + stale docs around the game/content lifecycle · **code health** · confirmed
+## ✅ 10. Dead code + stale docs around the game/content lifecycle · **code health** · confirmed
 
 - **`GameState.reset()`'s music-restart branch is unreachable in production.** `reset()` is called only from `configure()` (fresh state, `phase == .climb`, `didConfigure` false — the condition at `GameState.swift:609-611` can't hold) and from a test. There is no boss→climb exit path anymore (leaving the boss = dismissing the game, which discards the `GameState`). Delete the branch — and correct **CLAUDE.md's** claim that `reset()` serves "configure/boss-exit paths," which will otherwise mislead the next session.
 - **`Etymology.swift`'s header still says the data "is not yet displayed"** (`Conjugar/Models/Etymology.swift:18-20` — "Rendering it under the conjugations in `VerbView` … is the remaining lifecycle step"). That step shipped (VerbView's etymology card, the widget snippet). Delete the NOTE paragraph.
@@ -115,7 +115,7 @@ Deep-read with no findings: the climb physics/collision pipeline (`GameState+Phy
 Every step ships green (build + 508 tests + lint); bugs land before refactors; one behavior-decision item is isolated at the end.
 
 1. ✅ **One-line fixes + guard tests** *(items 1, 3, 9, 13's RNG + return-idiom nits)* — swap the jump symbol and add the symbol-validity sweep test; clear speed/serenata state in `enterBossIntro` + extend the boss-entry test; consume-or-ignore the deeplink flags; seed the jaleo pick. All mechanical, each independently verifiable in the simulator (the game bits by deeplink, no play-through needed).
-2. **Docs + dead code** *(item 10)* — delete `reset()`'s unreachable music branch, fix the CLAUDE.md sentence, drop `Etymology.swift`'s stale NOTE. Zero behavior change.
+2. ✅ **Docs + dead code** *(item 10)* — delete `reset()`'s unreachable music branch, fix the CLAUDE.md sentence, drop `Etymology.swift`'s stale NOTE. Zero behavior change.
 3. **Audio-stack pass** *(item 4 + 13's playhead decision)* — the cancellable fade-stop task, plus decide/document the random-start policy for scene beds. One file; verify by ear with the onboarding reshow double-open.
 4. **Onboarding/tutor pass** *(items 5, 6, then 11)* — snapshot availability at onboarding appear, make monitor ownership refcounted/task-scoped, then collapse the duplicated game-after-onboarding plumbing into the router. These three touch the same seams; doing them together avoids re-testing the flow twice.
 5. **Perf + widget** *(items 7, 2)* — warm the content caches in the launch task (verify: first verb push after a warm launch has no hitch); fix the pronoun column and re-eyeball the large widget on device. Independent of everything else.

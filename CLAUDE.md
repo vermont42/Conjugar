@@ -153,8 +153,8 @@ and `GameState+Mechanics.swift`. Key facts:
   refilled, **"¡Nivel N!"** banner + applause). The **5th** summit triggers the boss.
 - **No lose state.** At 0 health the player **soft-respawns** (`respawn()`) at the bottom of the
   current stage with full health — `stage`/`summitCount`/`score`/collected pickups persist; a
-  brief `respawnGrace` follows. `reset()` (a full restart to stage 1) is only for
-  configure/boss-exit paths now, not death.
+  brief `respawnGrace` follows. `reset()` (a full restart to stage 1) is only for the
+  configure path now, not death.
 - **Power-ups (one kind per stage, `PowerUpKind`).** Drawn from a no-repeat shuffle bag
   (`powerUpBag`, through `bossRNG`): **cape** (invuln + smash, `Image("cape_pickup")`), **speed
   ⚡** (walk + climb ×2, `Sound.speedWhoosh`, a ⚡ badge over the dancer), **La Serenata 🎸** (the
