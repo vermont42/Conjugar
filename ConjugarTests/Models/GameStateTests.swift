@@ -73,6 +73,38 @@ struct GameStateTests {
     #expect(abs(feet - gameState.platforms[0].surfaceY) < 0.5)
   }
 
+  @Test func reconfigureRebuildsGeometryForNewSizeAndReseatsPlayer() {
+    let gameState = configured()
+    let oldPlatformWidth = gameState.platforms[0].rect.width
+
+    // Simulate an iPad rotation to a wider, shorter field.
+    let wider = CGSize(width: 700, height: 500)
+    gameState.reconfigure(screenSize: wider)
+
+    #expect(gameState.screenSize == wider)
+    #expect(gameState.platforms.count == GameState.levelCount)
+    #expect(gameState.ladders.count == GameState.levelCount - 1)
+    // Platforms span the new width (minus the side margins), not the old.
+    #expect(abs(gameState.platforms[0].rect.width - (wider.width - 2 * GameState.sideMargin)) < 0.5)
+    #expect(gameState.platforms[0].rect.width != oldPlatformWidth)
+    // The climbing player soft-respawns to the bottom platform, within the new bounds.
+    #expect(gameState.playerGrounded)
+    #expect(gameState.playerLevel == 0)
+    #expect(gameState.playerX <= wider.width - GameState.sideMargin)
+    let feet = gameState.playerY + GameState.playerHeight / 2
+    #expect(abs(feet - gameState.platforms[0].surfaceY) < 0.5)
+    // Pickups are re-placed for the new width (both back to uncollected).
+    #expect(gameState.powerUps.count == 2)
+    #expect(gameState.powerUps.allSatisfy { $0.x <= wider.width })
+  }
+
+  @Test func reconfigureIsANoOpForAnUnchangedSize() {
+    let gameState = configured()
+    gameState.playerX = 123   // a marker the reposition would overwrite
+    gameState.reconfigure(screenSize: Self.size)
+    #expect(gameState.playerX == 123)
+  }
+
   // MARK: Physics
 
   @Test func playerFallsUnderGravityAndSnapsToPlatform() {

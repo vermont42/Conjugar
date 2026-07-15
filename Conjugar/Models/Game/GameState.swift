@@ -506,6 +506,39 @@ final class GameState {
     }
   }
 
+  /// Re-deal the level for a new field size (device rotation, Split View / Stage
+  /// Manager resize on iPad — the field is portrait-locked on iPhone). Rebuilds
+  /// platforms/ladders/bull-home for the new size, then re-seats the actors: a
+  /// climbing player soft-respawns to the bottom of the current stage (stage, summit,
+  /// and score survive), off-climb phases re-assert their fixed tablao marks. A no-op
+  /// before the first `configure` and when the size hasn't meaningfully changed.
+  func reconfigure(screenSize newSize: CGSize) {
+    guard didConfigure, newSize.width > 0, newSize.height > 0 else { return }
+    guard abs(newSize.width - screenSize.width) >= 1 || abs(newSize.height - screenSize.height) >= 1 else { return }
+    self.screenSize = newSize
+    buildLevel()
+    if phase == .climb {
+      respawn()
+      rebuildPowerUps(kind: stagePowerUpKind)
+    } else {
+      reseatForResize()
+    }
+  }
+
+  /// Off-climb the actors stand on the bottom tablao floor at fixed fractional marks
+  /// (the boss stage-geometry computed properties). Re-assert them for the new width
+  /// and drop the old-width obstacles/chargers (they respawn on their own timers).
+  private func reseatForResize() {
+    obstacles.removeAll()
+    chargers.removeAll()
+    playerX = dancerStageX
+    playerY = dancerStageY
+    bullX = bullStageX
+    bullY = bullStageY
+    bullfighterX = bullfighterHomeX
+    bullfighterY = bullfighterHomeY
+  }
+
   // MARK: Audio
 
   /// Kick off the game's audio at entry: warm every SFX player and the flag/cape

@@ -27,6 +27,17 @@ struct GameView: View {
   /// held paso can't fire twice).
   @State private var heldDanceMoves: Set<DanceMove> = []
 
+  /// The play field is capped to a portrait column (width ≤ height × this) so the
+  /// vertical climb never stretches into a wide, wrong-aspect field on iPad landscape
+  /// or a resized window. Chosen above every iPhone aspect (~0.46–0.56) so phones are
+  /// untouched, low enough to keep iPad any-orientation a phone-shaped column.
+  private static let maxFieldAspect: CGFloat = 0.62
+  private static func fieldSize(in available: CGSize) -> CGSize {
+    guard available.width > 0, available.height > 0 else { return available }
+    let cappedWidth = min(available.width, available.height * maxFieldAspect)
+    return CGSize(width: cappedWidth, height: available.height)
+  }
+
   private static let dirButtonSize: CGFloat = 40
   private static let jumpButtonSize: CGFloat = 51   // 64 shrunk by 20%
   /// The boss dance pad is one horizontal row of equal circular buttons sitting just
@@ -215,14 +226,22 @@ struct GameView: View {
 
   var body: some View {
     GeometryReader { geo in
+      let field = Self.fieldSize(in: geo.size)
       TimelineView(.animation) { timeline in
-        gameField(size: geo.size)
+        gameField(size: field)
           .onChange(of: timeline.date) { _, now in
             gameState.update(currentTime: now)
           }
       }
+      // Portrait-lock the play field to a phone-shaped column, centered in the
+      // available space (iPhone is already portrait and narrower than the cap, so
+      // it is untouched; iPad — any orientation — and Split View / Stage Manager
+      // get dark side margins instead of stretched, wrong-aspect geometry).
+      .frame(width: field.width, height: field.height)
+      .clipped()
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
       .onAppear {
-        gameState.configure(screenSize: geo.size)
+        gameState.configure(screenSize: field)
         // The conjugar://game/boss deeplink: consume the one-shot flag after
         // configure and jump straight to the boss intro. `conjugar://game/end`
         // jumps all the way to the end scene.
@@ -233,6 +252,10 @@ struct GameView: View {
           router?.pendingEndScene = false
           gameState.debugJumpToEndScene()
         }
+      }
+      // Rotation / resize: re-deal the level geometry for the new column size.
+      .onChange(of: geo.size) { _, newSize in
+        gameState.reconfigure(screenSize: Self.fieldSize(in: newSize))
       }
       .onDisappear { gameState.stopAudio() }
     }

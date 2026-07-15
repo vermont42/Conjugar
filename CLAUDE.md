@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Conjugar is an iOS app for learning Spanish verb conjugations. It conjugates regular and irregular Spanish verbs in all tenses with quiz mode (3 difficulty levels), verb browsing, tense information, and Game Center integration.
 
 **Developer:** Josh Adams (vermontcoder@gmail.com), who released the app in 2017.
-**Target:** iOS 26+ (raised from 17 in July 2026 to match Konjugieren, ahead of the SwiftUI migration)
+**Target:** iOS 26+ (raised from 17 in July 2026 to match Konjugieren, ahead of the SwiftUI migration). **Universal (device family `1,2`)** as of 2026-07-15 — the app target was iPhone-only (family `1`, running letterboxed in iPad compatibility mode) until the round-2 review's item 8 surfaced it; it's now a native iPad app. The per-screen iPad-layout audit/fix is round-2 review **item 15** (tracked, done in separate sessions like the sibling apps Conjuguer/Konjugieren). `Info.plist`'s `UISupportedInterfaceOrientations~ipad` already allows all four iPad orientations.
 **Language:** Swift 6 language mode, `SWIFT_STRICT_CONCURRENCY = complete`, `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` (see **Concurrency model** below)
 **License:** GNU Affero General Public License
 

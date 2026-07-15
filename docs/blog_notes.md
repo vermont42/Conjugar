@@ -6032,3 +6032,105 @@ caches (hablar: metadata pills, both paradigms, correct forms). The "no percepti
 and the widget pixels are the two device-eyeball bits; the data itself is unchanged (`warm()`
 only pre-triggers the same loads `VerbView.init` already did), and the engine/content suites
 cover correctness.
+
+## iPad Geometry: Re-deal the Climb + Letterbox It to a Portrait Column (2026-07-15)
+
+Round-2 review item 8, step 6 — the one item flagged as a real design decision rather than a
+mechanical fix. The game's level geometry (`GameState.buildLevel`) is built once from the
+first-appear size and hard-locked behind `guard !didConfigure`. Everything downstream —
+platforms, ladders, the D-pad, `respawn()`'s player placement, the boss tablao marks — reads
+`screenSize` live. iPhone is portrait-locked so this never bites, but the app targets iPad with
+all four orientations allowed (plus Split View / Stage Manager resizes). Rotate an iPad
+mid-climb and you'd get portrait geometry stranded inside a landscape window: platforms sized to
+the old width, the player clamped to old bounds, controls positioned off a stale `screenSize`.
+
+The review laid out three options: cheapest re-deal (rebuild + soft-respawn), fullest
+proportional remap of every entity, or defer-with-a-known-issue. I went with the re-deal, but
+paired it with a second change that's the part I think actually matters: **a portrait
+letterbox.** The reasoning: even a *perfect* re-deal to a landscape iPad produces a short,
+wide, ugly climb — the platforms would stretch edge-to-edge across a landscape width at
+16%–78% of a short height. So rather than make the engine cope with landscape aspect ratios at
+all, I cap the play field to a phone-shaped column (`GameView.fieldSize(in:)`, `maxFieldAspect =
+0.62`) centered in whatever space the OS hands us. The engine then only ever deals with a
+portrait rect; rotation just changes the dark margins around the column. `0.62` sits above every
+iPhone aspect (~0.46–0.56) so phones are completely untouched (the field fills the width exactly
+as before), and low enough that iPad — any orientation — gets a proper column.
+
+The re-deal itself is `GameState.reconfigure(screenSize:)`, driven from
+`.onChange(of: geo.size)`. It no-ops before the first `configure` and for sub-1pt jitter, then
+rebuilds the level and re-seats the actors by phase: a climbing player soft-respawns to the
+bottom of the current stage (`respawn()` — stage/summit/score survive, health refills, the field
+clears) and the pickups are re-placed for the new width (`rebuildPowerUps`); off-climb phases
+(boss intro/duel/victory/end, escape) re-assert their fixed tablao marks via a small
+`reseatForResize()` and drop the old-width obstacles/chargers, which respawn on their own timers.
+Reusing `respawn()` for the climb case is exactly what the review suggested ("soft-respawn to
+safe marks") — it's a touch punishing (you lose an active cape on a rotate) but a rotate is rare
+and precise remapping was the option I deliberately rejected as overkill.
+
+Why not lock the game to portrait instead? It's conceptually cleaner but (a) needs `AppDelegate`
+orientation plumbing driven by a game-visible flag, which fights the "no `UIViewController`,
+geometry-lives-in-SwiftUI" architecture the migration worked to reach, and (b) does nothing for
+Split View / Stage Manager resizes, which aren't rotations. The letterbox gets the same visual
+result (always a portrait column) without either drawback.
+
+Verification was interesting. On an iPad Pro 11" (M5, iOS 26.3) simulator, the app launches in an
+iPadOS-26 *floating window* that's itself portrait-shaped — so its aspect never exceeds the cap
+and the field just fills the window in both orientations. That confirmed the below-cap branch
+(iPhone-identical behavior) and, crucially, that `reconfigure` re-deals cleanly: I rotated the
+device to landscape and back twice, and each time the platforms rebuilt evenly, ladders
+reconnected, the bull/matador re-seated at the top and the dancer respawned to the bottom
+platform — no stale, clipped, or drifted geometry, no crash. What the sim *couldn't* show is the
+above-cap branch's actual margins, because the M-series windowing never gives the app a
+landscape-*wide* frame; that needs a true fullscreen-landscape size, which is what Josh will
+eyeball on a real iPad. (Amusing side note: `simctl io screenshot` captures the raw display
+buffer, so a rotated sim comes out sideways in the PNG — had to `sips -r 90` to read it.)
+
+Tests: added `reconfigureRebuildsGeometryForNewSizeAndReseatsPlayer` (rotate to a wider/shorter
+field → platforms span the new width, player re-seated in-bounds on the bottom platform, pickups
+re-placed) and `reconfigureIsANoOpForAnUnchangedSize` to `GameStateTests`. Full suite green.
+
+## Plot Twist: Conjugar Wasn't a Native iPad App at All (2026-07-15)
+
+Follow-up to the iPad-geometry note above, and a good lesson in trusting docs over a
+convenient simulator result. After I shipped the re-deal + letterbox fix and "verified" it on an
+iPad Pro M5 simulator, Josh loaded a build on his *real* iPad and sent a screenshot: the game
+sat in a small centered rectangle with fat black bars all around and a **zoom button** (the
+diagonal-arrows control) in the corner. That's the unmistakable signature of an **iPhone app
+running in iPad compatibility mode** — not a native iPad app.
+
+Digging into `project.pbxproj`: the app target `biz.joshadams.Conjugar` had
+`TARGETED_DEVICE_FAMILY = 1` (iPhone only). The `1,2` values I'd have found with a naive grep
+belong to the *project-level default* and the *widget extension*, not the app. So CLAUDE.md's
+framing and the round-2 review's item 8 both asserted "the app targets iPad (device family 1,2)"
+— and both were wrong about the app target. In compatibility mode iOS hands an iPhone-only app a
+**fixed iPhone-sized canvas**; rotating the iPad just re-letterboxes it. The app never receives a
+native iPad orientation change, so the stale-geometry bug item 8 describes literally cannot
+occur on the shipping app. My fix, however correct, was solving a problem the real app didn't
+have.
+
+Why did the *simulator* fool me? iPadOS 26's new windowing ran the iPhone-only app in a
+*resizable window* that genuinely resized on rotation — so `reconfigure` fired and the level
+re-dealt, exactly as if it were native. The sim showed dynamic behavior the real device (classic
+fixed compat mode) never would. Two different iPad app-compat models, and I happened to test on
+the one that masked the issue. (Amusingly, `simctl io screenshot` also captures the raw portrait
+display buffer regardless of device orientation, so my landscape shots came out sideways and no
+amount of `sips -r` rotation put the status bar where it belonged — I finally gave up on pixels
+and read the truth out of the accessibility tree, which reports frames in real points:
+`AXFrame {{0,0},{680,1210}}` told me unambiguously the app window was portrait.)
+
+Presented Josh the fork: stay iPhone-only (revert my fix as inert, correct the docs) or go
+native iPad (keep the fix, but every screen needs work). He chose native — he's already done the
+per-screen iPad audit for the sibling apps Conjuguer and Konjugieren and will mirror it here in
+separate sessions. So: flipped the app target's `TARGETED_DEVICE_FAMILY` to `1,2` (both Debug
+and Release, app target only — the widget was already `1,2`). Rebuilt and reinstalled on the sim:
+the app now launches with a **native iPad layout** (Browse renders as a proper iPad list, no zoom
+button, no compat letterbox) and the AX window frame is a real resizable geometry rather than a
+fixed iPhone canvas. Full suite still green (520 tests). The game's letterbox + `reconfigure`
+are now genuinely load-bearing.
+
+Logged the whole arc as review **item 15** (the cross-cutting native-iPad screens audit) and
+corrected item 8's premise inline. The wide-area letterbox — a centered portrait column with big
+side margins on a true fullscreen-landscape iPad — still awaits a real-device eyeball, because
+the M-series sim only ever hands the app a portrait window (aspect 0.56, below my 0.62 cap, so
+the field just fills the width and the cap never triggers). The math is deterministic; Josh has
+the hardware.
