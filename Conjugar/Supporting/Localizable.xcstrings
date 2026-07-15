@@ -1710,13 +1710,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjugar has a built-in, family-friendly game called Toreo por Amor. As a plucky flamenco dancer, climb the girders to reach the bull and rescue the matador. Use a muleta (cape) to smash enemies sent by the bull."
+            "value" : "Conjugar has a built-in, family-friendly game called Toreo por Amor. As a plucky flamenco dancer, climb the girders to reach the bull and rescue the matador. Climb five escalating stages, dodging rolling hazards and grabbing power-ups like the smash-happy muleta (cape). Survive surprises along the way, from zombified-and-stampeding enemies to sudden blackouts. Reach the top of the final stage, and a flamenco dance-off with the bull decides whether love wins."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjugar tiene un juego integrado y apto para toda la familia llamado Toreo por Amor. Como una intrépida bailaora de flamenco, sube por las vigas hasta llegar al toro y rescata al matador. Usa una muleta (capa) para destrozar a los enemigos que envía el toro."
+            "value" : "Conjugar tiene un juego integrado y apto para toda la familia llamado Toreo por Amor. Como una intrépida bailaora de flamenco, sube por las vigas hasta llegar al toro y rescata al matador. Sube por cinco niveles cada vez más difíciles, esquivando obstáculos y recogiendo mejoras como la muleta que destroza enemigos. Sobrevive a las sorpresas del camino, desde enemigos zombificados y en estampida hasta apagones repentinos. Llega a la cima del nivel final, y un duelo de flamenco con el toro decide si triunfa el amor."
           }
         }
       }

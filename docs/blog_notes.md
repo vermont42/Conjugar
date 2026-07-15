@@ -5717,3 +5717,36 @@ suites, all green** (unchanged count — this pass touched only comments and Mar
 `build_app.sh`: Build Succeeded. As with every La Subida phase, the commit is held until Josh
 device-tests; this one has nothing behavioral to test, but the plan's whole-arc device pass and
 constant-tuning still gate the final commit + push to `migration`.
+
+## Settings-tab game blurb refresh + clean color cycle (2026-07-14)
+
+Two small polish changes to the Settings tab, both prompted by the game having outgrown its
+old description.
+
+**The game blurb was a fossil.** `Onboarding.gameBody` — the string shared by the Settings
+game card and the onboarding game sheet — still ended with "Use a muleta (cape) to smash
+enemies sent by the bull," which described the game back when smashing flags was the whole
+loop. La Subida is now a five-stage climb with power-ups, challenge mechanics (zombies,
+encierro stampedes, apagón blackouts), escape beats, and a flamenco boss dance-off, none of
+which the copy hinted at. Josh iterated the replacement line-by-line: it grew from one sentence
+to three, dropped its em dashes in favor of full stops, renamed "zombie enemies" to
+"zombified-and-stampeding enemies" (folding in the encierro mechanic), and shed the `(capa)`
+parenthetical in the Spanish only (redundant there — "muleta" already reads as the cape to a
+Spanish speaker). Final shape: the two intro sentences stay, then "Climb five escalating
+stages… Survive surprises… Reach the top of the final stage, and a flamenco dance-off with the
+bull decides whether love wins." Both en and es updated in the catalog; `json.load` validates.
+
+**The Settings icons now cycle colors cleanly.** The nine SF Symbol tints down the tab had
+accreted into an arbitrary order (blue, yellow, green, blue, red, red, yellow, blue, yellow) —
+two reds in a row, no pattern. Retinted to a clean four-color cycle: blue, yellow, green, red,
+blue, yellow, green, red, blue. Josh's follow-up — "each button should have its associated
+symbol color" — meant this wasn't just the heading glyphs: each card's `TintedCapsuleButtonStyle`
+button (Game, Onboarding, Game Center, Ratings) and the App Icon card's label text were recolored
+to match their new symbol tint, so a card reads as one color instead of a glyph in one hue and a
+button in another. The one holdout is the App Icon card's *selection ring*, left `customYellow`:
+it's the app's brand selection highlight (the same yellow as every section heading), an
+affordance rather than a button, so it stays put.
+
+**Verification.** `build_app.sh`: Build Succeeded. The post-edit SourceKit swarm on
+SettingsView (`Cannot find 'Current'`, `'any Layout' has no member…`) was the usual
+same-module stale-index noise — xcodebuild compiles it clean.

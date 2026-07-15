@@ -145,7 +145,7 @@ struct SettingsView: View {
     settingsCard {
       settingSection(
         icon: "books.vertical.fill",
-        tint: .customBlue,
+        tint: .customRed,
         heading: L.Settings.browse,
         description: L.Settings.browseDescription
       ) {
@@ -167,7 +167,7 @@ struct SettingsView: View {
     settingsCard {
       settingSection(
         icon: "apps.iphone",
-        tint: .customRed,
+        tint: .customBlue,
         heading: L.Settings.appIcon,
         description: L.Settings.appIconDescription
       ) {
@@ -199,7 +199,7 @@ struct SettingsView: View {
 
                 Text(appIcon.localizedName)
                   .font(.callout)
-                  .foregroundStyle(Color.customRed)
+                  .foregroundStyle(Color.customBlue)
                   .multilineTextAlignment(.center)
               }
               .frame(maxWidth: .infinity)
@@ -221,12 +221,12 @@ struct SettingsView: View {
       settingSection(
         icon: "dancer",
         isSystemSymbol: false,
-        tint: .customRed,
+        tint: .customYellow,
         heading: L.Game.title,
         description: L.Onboarding.gameBody
       ) {
         Button(L.Game.play) { showingGame = true }
-          .buttonStyle(TintedCapsuleButtonStyle(tint: .customRed))
+          .buttonStyle(TintedCapsuleButtonStyle(tint: .customYellow))
       }
     }
   }
@@ -235,12 +235,12 @@ struct SettingsView: View {
     settingsCard {
       settingSection(
         icon: "hand.wave.fill",
-        tint: .customYellow,
+        tint: .customGreen,
         heading: L.Onboarding.onboarding,
         description: L.Onboarding.showOnboardingDescription
       ) {
         Button(L.Onboarding.showOnboarding) { showingOnboarding = true }
-          .buttonStyle(TintedCapsuleButtonStyle(tint: .customYellow))
+          .buttonStyle(TintedCapsuleButtonStyle(tint: .customGreen))
       }
     }
   }
@@ -250,12 +250,12 @@ struct SettingsView: View {
       if !isGameCenterUIHidden {
         settingSection(
           icon: "gamecontroller.fill",
-          tint: .customBlue,
+          tint: .customRed,
           heading: L.Quiz.gameCenter,
           description: L.Settings.enableDescription
         ) {
           Button(L.Settings.enable) { enableGameCenter() }
-            .buttonStyle(TintedCapsuleButtonStyle(tint: .customBlue))
+            .buttonStyle(TintedCapsuleButtonStyle(tint: .customRed))
             .popoverTip(enableGameCenterTip)
         }
 
@@ -264,14 +264,14 @@ struct SettingsView: View {
 
       settingSection(
         icon: "star.fill",
-        tint: .customYellow,
+        tint: .customBlue,
         heading: L.Settings.ratingsAndReviews,
         description: rateReviewDescription
       ) {
         Button(L.Settings.rateOrReview) {
           UIApplication.shared.open(RatingsFetcher.reviewURL)
         }
-        .buttonStyle(TintedCapsuleButtonStyle(tint: .customYellow))
+        .buttonStyle(TintedCapsuleButtonStyle(tint: .customBlue))
       }
     }
   }
