@@ -42,6 +42,24 @@ final class AppRouter {
   /// A one-shot request for the Info tab to push the conjugation tutor, set by the
   /// onboarding "Meet the Tutor" CTA. `InfoBrowseView` consumes and clears it.
   var pendingTutor = false
+  /// Records that an onboarding game-preview CTA was tapped, so the presenting cover's
+  /// `onDismiss` launches the game rather than the CTA itself — the game cover must
+  /// never open over the still-dismissing onboarding cover (two covers can't share the
+  /// anchor at once). Both onboarding presenters (`MainTabView`, `SettingsView`) route
+  /// through this one flag + helper.
+  var pendingGameAfterOnboarding = false
+
+  /// Called by an onboarding game CTA just before it dismisses the tour.
+  func requestGameAfterOnboarding() {
+    pendingGameAfterOnboarding = true
+  }
+
+  /// Run from the onboarding cover's `onDismiss`: presents the game if a CTA requested it.
+  func launchGameAfterOnboardingIfRequested() {
+    guard pendingGameAfterOnboarding else { return }
+    pendingGameAfterOnboarding = false
+    showGame = true
+  }
 
   /// Route a `conjugar://` deeplink. Hosts: `verb/<infinitive>` (or `verb/random`),
   /// `quiz/start`, and `game`. Unknown or unmapped verbs are ignored.

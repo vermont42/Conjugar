@@ -46,11 +46,11 @@ protocol LanguageModelService {
   var unavailabilityReason: LanguageModelUnavailability? { get }
   func sendTutorMessage(_ message: String) async throws -> String
   func resetTutorSession()
-  // Start/stop the live availability poll. Scoped to when the Info-tab tutor entry
-  // point is on screen, rather than running for the whole app lifetime:
-  // `InfoBrowseView` starts it on appear and stops it on disappear.
-  func startAvailabilityMonitoring()
-  func stopAvailabilityMonitoring()
+  // Poll availability until the model becomes available or the calling task is
+  // cancelled. Driven from a view's `.task` (the Info-tab tutor entry point), so it is
+  // scoped to that screen's lifetime and auto-cancels on disappear — safe to run from
+  // more than one view at once, with no start/stop pairing to get wrong.
+  func monitorAvailability() async
 }
 
 enum LanguageModelServiceError: Error {

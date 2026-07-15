@@ -57,4 +57,27 @@ struct AppRouterTests {
     #expect(!router.pendingEndScene)
     #expect(router.showGame)
   }
+
+  // The onboarding game-preview CTA defers the launch to the cover's onDismiss, unified
+  // here so both presenters (MainTabView, SettingsView) share one flag + helper.
+  @Test func requestGameAfterOnboardingArmsTheFlagWithoutLaunching() {
+    let router = AppRouter()
+    router.requestGameAfterOnboarding()
+    #expect(router.pendingGameAfterOnboarding)
+    #expect(!router.showGame)                    // launch waits for onDismiss
+  }
+
+  @Test func launchAfterOnboardingPresentsAndClearsWhenArmed() {
+    let router = AppRouter()
+    router.requestGameAfterOnboarding()
+    router.launchGameAfterOnboardingIfRequested()
+    #expect(router.showGame)
+    #expect(!router.pendingGameAfterOnboarding)  // one-shot: cleared
+  }
+
+  @Test func launchAfterOnboardingIsNoOpWhenNotArmed() {
+    let router = AppRouter()
+    router.launchGameAfterOnboardingIfRequested()
+    #expect(!router.showGame)
+  }
 }

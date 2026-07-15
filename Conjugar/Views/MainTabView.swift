@@ -13,10 +13,6 @@ import SwiftUI
 struct MainTabView: View {
   @State private var commun: Commun?
   @State private var router = AppRouter()
-  // Records that the onboarding game sheet's CTA was tapped so the game cover is
-  // presented in the onboarding cover's `onDismiss` — never over the still-dismissing
-  // onboarding cover (two covers can't share the anchor at once).
-  @State private var pendingGameAfterOnboarding = false
   @Environment(\.scenePhase) private var scenePhase
 
   var body: some View {
@@ -91,8 +87,8 @@ struct MainTabView: View {
     .fullScreenCover(isPresented: $router.showGame) { GameView(router: router) }
     // First-launch welcome tour. Its game-preview CTA defers the game launch to this
     // cover's onDismiss so the two covers never overlap.
-    .fullScreenCover(isPresented: $router.showOnboarding, onDismiss: launchGameAfterOnboardingIfRequested) {
-      OnboardingView(router: router, requestGame: { pendingGameAfterOnboarding = true })
+    .fullScreenCover(isPresented: $router.showOnboarding, onDismiss: router.launchGameAfterOnboardingIfRequested) {
+      OnboardingView(router: router, requestGame: router.requestGameAfterOnboarding)
     }
   }
 
@@ -105,12 +101,6 @@ struct MainTabView: View {
     }
     router.showOnboarding = true
     return true
-  }
-
-  private func launchGameAfterOnboardingIfRequested() {
-    guard pendingGameAfterOnboarding else { return }
-    pendingGameAfterOnboarding = false
-    router.showGame = true
   }
 
   /// Control-center controls can't navigate, so they stash a deeplink in the shared

@@ -19,7 +19,5 @@ class LanguageModelServiceDummy: LanguageModelService {
 
   func resetTutorSession() {}
 
-  func startAvailabilityMonitoring() {}
-
-  func stopAvailabilityMonitoring() {}
+  func monitorAvailability() async {}
 }

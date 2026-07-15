@@ -82,9 +82,11 @@ struct InfoBrowseView: View {
       }
       .onAppear {
         Current.analytics.recordVisitation(viewController: "\(InfoBrowseView.self)")
-        Current.languageModelService.startAvailabilityMonitoring()
       }
-      .onDisappear { Current.languageModelService.stopAvailabilityMonitoring() }
+      // Poll the on-device model's availability while this screen is visible; SwiftUI
+      // cancels the task on disappear, so the tutor row flips live without any manual
+      // start/stop pairing.
+      .task { await Current.languageModelService.monitorAvailability() }
       .onChange(of: infoDifficulty) { _, newValue in
         Current.settings.infoDifficulty = newValue
       }

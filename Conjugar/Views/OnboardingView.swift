@@ -39,10 +39,15 @@ struct OnboardingView: View {
   @State private var currentPage = 0
   @State private var getStartedOffset: CGFloat = 100
   @State private var getStartedOpacity: Double = 0
+  // Snapshotted once at construction rather than derived live from the service, so the
+  // tutor page can't insert (and renumber the articles/game pages, the dots, and the
+  // "Get Started" trigger) mid-tour if availability flips while the tour is open — the
+  // worst possible moment, since onboarding auto-presents on first launch, exactly when
+  // Apple Intelligence assets may still be downloading. The Info tab stays the live surface.
+  @State private var includeTutorPage: Bool
 
-  private var isTutorAvailable: Bool { Current.languageModelService.isAvailable }
-  private var articlesTag: Int { isTutorAvailable ? 5 : 4 }
-  private var lastPageTag: Int { isTutorAvailable ? 6 : 5 }
+  private var articlesTag: Int { includeTutorPage ? 5 : 4 }
+  private var lastPageTag: Int { includeTutorPage ? 6 : 5 }
 
   fileprivate static let entranceAnimation = Animation.spring(response: 0.6, dampingFraction: 0.7).delay(0.3)
   private static let musicFadeDuration: TimeInterval = 1.5
@@ -51,6 +56,7 @@ struct OnboardingView: View {
     self.router = router
     self.isReshow = isReshow
     self.requestGame = requestGame
+    _includeTutorPage = State(initialValue: Current.languageModelService.isAvailable)
   }
 
   var body: some View {
@@ -116,7 +122,7 @@ struct OnboardingView: View {
           )
           .tag(3)
 
-          if isTutorAvailable {
+          if includeTutorPage {
             OnboardingPageView(
               symbol: .system("brain.head.profile.fill"),
               title: L.Onboarding.aiTitle,
@@ -180,11 +186,9 @@ struct OnboardingView: View {
     .sensoryFeedback(.impact(weight: .light), trigger: currentPage)
     .onAppear {
       Current.analytics.recordVisitation(viewController: "\(OnboardingView.self)")
-      Current.languageModelService.startAvailabilityMonitoring()
       Current.soundPlayer.startMusic(.onboarding)
     }
     .onDisappear {
-      Current.languageModelService.stopAvailabilityMonitoring()
       Current.soundPlayer.stopMusic(fadeDuration: Self.musicFadeDuration)
     }
     .onChange(of: currentPage) { oldValue, newValue in

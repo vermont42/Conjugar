@@ -5947,3 +5947,51 @@ it runs in the unit-test world where the real player never does.
 Build green; `SoundPlayerTests` 4/4, SwiftLint 0 violations. The by-ear check (onboarding reshow
 double-open, boss end-scene→onboarding within ~1 s) needs the app running with audio and is left
 for a device/simulator pass.
+
+## Onboarding/tutor pass: snapshot availability, task-scope the monitor, unify the game deferral (2026-07-15)
+
+Round-2 review step 4 — items 5, 6, 11, all clustered on the onboarding ↔ tutor-availability ↔
+game-launch seams, done together so the flow gets re-tested once.
+
+**Onboarding no longer renumbers mid-tour (item 5).** `OnboardingView` derived `articlesTag`/
+`lastPageTag` (and the `if …` that inserts the tutor page) *live* from
+`Current.languageModelService.isAvailable`, and the view itself started the 5 s availability
+poll on appear. First launch is exactly when Apple Intelligence assets may still be downloading,
+and onboarding auto-presents on first launch — so an unavailable→available flip mid-tour would
+insert the tutor page at tag 4, renumber the articles/game pages, grow the dots row, and yank
+"Get Started" out from under a user sitting on the last page. Fixed by snapshotting once:
+`@State private var includeTutorPage`, seeded in `init` via `State(initialValue:)` rather than
+`.onAppear`. Init-time is strictly better than the reviewer's suggested onAppear here — the count
+is correct from the very first frame (no one-page settle), and `State(initialValue:)` is only
+honored on first construction for a given view identity, which is exactly "snapshot once" and
+survives the parent re-inflating the cover's content closure. Monitoring was removed from
+onboarding entirely; the Info tab stays the live surface.
+
+**The availability monitor is now task-scoped, not a hand-paired start/stop (item 6).** The old
+`startAvailabilityMonitoring()`/`stopAvailabilityMonitoring()` were a single non-refcounted task:
+`InfoBrowseView` started on appear / stopped on disappear, and so did onboarding. The "Read the
+Articles" CTA interleaved them — `router.selectedTab = .info` fired Info's onAppear *start* while
+the cover was still up, then the cover's onDisappear *stop* cancelled it, landing the user on a
+live Info tab with no monitor. Replaced the pair with one `func monitorAvailability() async` that
+loops `Task.sleep(5s)` + `refreshAvailability()` until available or cancelled, driven from
+`InfoBrowseView`'s `.task { await Current.languageModelService.monitorAvailability() }`. SwiftUI
+owns the task's lifetime and cancels it on disappear, so there's no pairing to interleave, and it
+is safe to run from several views at once (each `.task` is independent). Chose this over the
+reviewer's refcount option — it deletes state (`availabilityMonitor` is gone) rather than adding a
+counter, and item 5 already removed the only second caller.
+
+**One game-after-onboarding deferral, in the router (item 11).** `MainTabView` and `SettingsView`
+each carried an identical `pendingGameAfterOnboarding` `@State` + `launchGameAfterOnboardingIfRequested()`
++ onDismiss wiring. Moved the flag and both helpers (`requestGameAfterOnboarding()`,
+`launchGameAfterOnboardingIfRequested()`) onto `AppRouter`; both covers now pass
+`requestGame: router.requestGameAfterOnboarding` and `onDismiss: router.launchGameAfterOnboardingIfRequested`.
+The helper presents through `router.showGame`, so the Settings *reshow* game path now rides
+MainTabView's tab-independent game cover; Settings keeps its own local `showingGame` only for the
+direct "Play" button (the two parallel presentation mechanisms were explicitly blessed by the
+review — only the deferral plumbing was worth unifying). Pinned the router helper with three
+Swift Testing cases in `AppRouterTests` (arm-without-launch, launch-and-clear, no-op-when-unarmed).
+
+Build green; full suite 518 tests / 28 suites / 0 failures; SwiftLint 0. The device-only bits
+(the mid-download page-count freeze, the Info-tab live flip after enabling Apple Intelligence)
+can't be exercised in the simulator, where the model is always unavailable; verified by trace +
+the router/service unit tests.

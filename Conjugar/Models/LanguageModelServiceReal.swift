@@ -34,7 +34,6 @@ class LanguageModelServiceReal: LanguageModelService {
   // One tool instance, reused across sessions, so its per-instance call counter is
   // reset per message rather than shared through a global static.
   private let conjugationTool = ConjugationTool()
-  private var availabilityMonitor: Task<Void, Never>?
 
   private(set) var isAvailable: Bool
   private(set) var unavailabilityReason: LanguageModelUnavailability?
@@ -47,30 +46,18 @@ class LanguageModelServiceReal: LanguageModelService {
 
   // Availability can flip after launch (user enables Apple Intelligence, the model
   // finishes downloading). Poll so the Info-tab entry point reacts live — but only
-  // while that screen is on view, and stop once the model is available.
-  // `@Observable` drives the SwiftUI update.
-  func startAvailabilityMonitoring() {
-    guard availabilityMonitor == nil, !isAvailable else {
-      return
-    }
-    availabilityMonitor = Task { [weak self] in
-      while !Task.isCancelled {
-        try? await Task.sleep(for: .seconds(5))
-        guard let self else {
-          return
-        }
-        self.refreshAvailability()
-        if self.isAvailable {
-          break
-        }
+  // while that screen is on view, and stop once the model is available. Owned by the
+  // caller's `.task`, so cancellation (disappear) ends the loop; `@Observable` drives
+  // the SwiftUI update.
+  func monitorAvailability() async {
+    while !isAvailable {
+      do {
+        try await Task.sleep(for: .seconds(5))
+      } catch {
+        return
       }
-      self?.availabilityMonitor = nil
+      refreshAvailability()
     }
-  }
-
-  func stopAvailabilityMonitoring() {
-    availabilityMonitor?.cancel()
-    availabilityMonitor = nil
   }
 
   private func refreshAvailability() {

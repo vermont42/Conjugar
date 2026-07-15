@@ -31,9 +31,6 @@ struct SettingsView: View {
   @State private var rateReviewDescription = ""
   @State private var showingGame = false
   @State private var showingOnboarding = false
-  // See MainTabView: the onboarding game CTA defers the game launch to the cover's
-  // onDismiss so the two covers never overlap.
-  @State private var pendingGameAfterOnboarding = false
   private let changeDifficultyTip = ChangeDifficultyTip()
   private let enableGameCenterTip = EnableGameCenterTip()
 
@@ -57,8 +54,8 @@ struct SettingsView: View {
       .frame(maxWidth: .infinity)
       .background(Color.customBackground.ignoresSafeArea())
       .fullScreenCover(isPresented: $showingGame) { GameView() }
-      .fullScreenCover(isPresented: $showingOnboarding, onDismiss: launchGameAfterOnboardingIfRequested) {
-        OnboardingView(router: router, isReshow: true, requestGame: { pendingGameAfterOnboarding = true })
+      .fullScreenCover(isPresented: $showingOnboarding, onDismiss: router.launchGameAfterOnboardingIfRequested) {
+        OnboardingView(router: router, isReshow: true, requestGame: router.requestGameAfterOnboarding)
       }
       .navigationTitle(L.Settings.localizedTitle)
       .onAppear {
@@ -334,12 +331,6 @@ struct SettingsView: View {
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
-  }
-
-  private func launchGameAfterOnboardingIfRequested() {
-    guard pendingGameAfterOnboarding else { return }
-    pendingGameAfterOnboarding = false
-    showingGame = true
   }
 
   private func enableGameCenter() {
