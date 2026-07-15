@@ -5809,3 +5809,31 @@ usual same-module stale-index noise; xcodebuild compiles clean). Exercised at bo
 and accessibility-XL: game page renders the full body through "…whether love wins.", "Play"
 has clear space, the custom dot row is in its own lane, and "Get Started" is separated
 below. No string changes.
+
+## Code review, round 2 — first look at the post-July-7 code (2026-07-15)
+
+A fresh Fable session ran the second code review (`prompts/code_review_2.md`): the 96
+commits since `f8d5714` — La Subida, La Llamada, onboarding, the audio/haptics stack, app
+icons, the etymology/example-uses subsystems, and the large-widget rework. The engine
+diff was verified comment-only (the citation sweep), so the correctness lens shifted to
+the new content: mechanical integrity checks over all three JSONs came back clean
+(balanced `~` markup, en/es key parity, every key resolving in the verb map, 988/988
+ranked coverage, every example token a whole word of its sentence, no unattributed
+sources). Baseline: build green, **508 tests / 26 suites / 0 failures**, SwiftLint 0.
+
+The deliverable is `prompts/code-review-recommendations-2.md`: thirteen ranked items,
+each labeled confirmed vs. suspected. The headline was found *without* playing the game:
+the jump button's `Image(systemName: "figure.jump")` names a symbol that does not exist —
+SwiftUI logs a Fault and draws an empty ring, on device too. It survived a week of play
+testing because the ring still looks like a button and the a11y label is correct; a sweep
+of all 23 symbol names found no other offender, and the fix ships with a guard test.
+Behind it: the large widget's 28 pt pronoun column vs. a measured 46 pt "nosotros";
+speed/serenata state frozen (⚡ badge and all) into the boss because `enterBossIntro`
+clears only the cape; a fade-stop task in `SoundPlayerReal` that kills a same-track
+restart inside its window (reachable via onboarding reshow); onboarding page tags that
+renumber if tutor availability flips mid-tour; and a stale-deeplink-flag edge that was
+reproduced live in the simulator (a `game/boss` URL sent while the game is open fires on
+the *next* plain `conjugar://game`). Two review-methodology notes for next time: the
+simulator renders flag emoji as "?" tofu (stage 1 looks broken there; devices are fine),
+and Josh is handling play testing — the review's game findings were all provable by
+deeplink + trace, no AXe choreography needed.
