@@ -6134,3 +6134,26 @@ side margins on a true fullscreen-landscape iPad — still awaits a real-device 
 the M-series sim only ever hands the app a portrait window (aspect 0.56, below my 0.62 cap, so
 the field just fills the width and the cap never triggers). The math is deterministic; Josh has
 the hardware.
+
+## App Icon: Collapsed to a Single 1024 (iPad Warnings Fix) (2026-07-15)
+
+Immediate fallout from making the app universal (family `1,2`): Xcode threw two asset warnings —
+"A 76x76@2x app icon is required for iPad" and "A 83.5x83.5@2x app icon is required for iPad."
+The `AppIcon.appiconset` was the classic all-sizes layout: 27 explicit PNGs, every one declared
+`"idiom" : "iphone"`, plus the 1024 marketing icon. No iPad-idiom slots → actool flags the two
+missing iPad primary sizes the moment the target gains the iPad idiom.
+
+Two ways to fix it: hand-generate the iPad PNGs and add `ipad`-idiom entries, or switch to Xcode's
+**single-size app icon** — one 1024×1024 image (`"idiom" : "universal", "platform" : "ios"`) that
+actool downsizes to every slot for every idiom at build time. Checked the existing set first: the
+"left-to-right" / "right-to-left" language-direction variants were **byte-identical** to their base
+images (same md5 — an artifact of whatever generator made them 9 years ago), so they carried no
+information to preserve. That made the single-size route a pure win. Rewrote `Contents.json` to the
+lone universal entry pointing at the existing `icon1024.png` (already 1024², no alpha, App Store
+clean) and `git rm`'d the 26 now-unreferenced PNGs.
+
+Result: build is warning-free (was 2), and the bundle now ships `AppIcon76x76@2x~ipad.png` (152²)
+alongside the iPhone `AppIcon60x60@2x.png` (120²). The universal source covers every other size
+actool needs (including the 167px iPad-Pro icon) without a declared slot to go missing — which is
+exactly why the warnings can't come back. The alternate app icons (Bull/Dancer/Matador/Classic) are
+independent image sets and were untouched (no warnings for them). Net: 28 files in the iconset → 2.
