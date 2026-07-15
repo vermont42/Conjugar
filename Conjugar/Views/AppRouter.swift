@@ -62,10 +62,14 @@ final class AppRouter {
       // `conjugar://game/boss` is the boss fight's debug entry and
       // `conjugar://game/end` jumps straight to its end scene (same host, one
       // path component); plain `conjugar://game` starts the climb as always.
-      switch url.lastPathComponent {
-      case "boss": pendingBossEntry = true
-      case "end": pendingEndScene = true
-      default: break
+      // The flags are consumed only by `GameView.onAppear`, so ignore them when the
+      // game is already up — otherwise one lingers and hijacks the next plain `game`.
+      if !showGame {
+        switch url.lastPathComponent {
+        case "boss": pendingBossEntry = true
+        case "end": pendingEndScene = true
+        default: break
+        }
       }
       showGame = true
     default:

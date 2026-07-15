@@ -5837,3 +5837,52 @@ the *next* plain `conjugar://game`). Two review-methodology notes for next time:
 simulator renders flag emoji as "?" tofu (stage 1 looks broken there; devices are fine),
 and Josh is handling play testing — the review's game findings were all provable by
 deeplink + trace, no AXe choreography needed.
+
+## Round-2 review, step 1 — the one-line fixes + guard tests (2026-07-15)
+
+First implementation pass against `prompts/code-review-recommendations-2.md`: the
+mechanical, independently-verifiable items batched as "step 1" (review items 1, 3, 9, and
+two of the item-13 nits). Each is small; the interesting part is the guard tests.
+
+**The jump symbol (item 1).** `GameView.jumpButton` drew `Image(systemName: "figure.jump")`
+— not a real SF Symbol, so an empty ring. Swapped to `figure.gymnastics` (exists, reads as
+"jump"). The durable fix is the *guard test*: `SymbolValidityTests` sweeps the whole source
+tree (`Conjugar`, `ConjugarWidget`, `Shared`) with a Swift `Regex` literal for every
+`systemName:`/`systemImage:` string literal and asserts `UIImage(systemName:) != nil` for
+each. It reuses `CorpusFormsDumpTests`'s `#filePath`-relative repo-root idiom (up three from
+`ConjugarTests/Views/` → repo root, then recurse). It found the 22 distinct literals, all now
+valid (0.25 s to scan). Custom asset-catalog symbols dodge the sweep for free: they go through
+`Image("bull")` / `.custom("dancer")`, never `systemName:`. First draft used
+`try! NSRegularExpression(...)` and SwiftLint's `force_try` rightly rejected it — the Swift
+`Regex` literal `/(?:systemName|systemImage):\s*"([^"]+)"/` is compile-checked, no `try` at
+all, and reads better.
+
+**Power-up leak into the boss (item 3).** `enterBossIntro` cleared `capedRemaining` but not
+`speedRemaining`/`serenataRemaining`/`serenataDanceTimer`, whose timers only decrement inside
+the `.climb` branch of the frame tick — so a ⚡ grabbed on stage 5 and summited within its 7 s
+froze on as a permanent badge through the whole duel. Zeroed all three beside the cape; extended
+`summitTriggersBossIntro` to arm every power-up field before the summit and assert all four clear.
+
+**Stale deeplink flags (item 9).** `AppRouter.handle` now only arms `pendingBossEntry`/
+`pendingEndScene` when `!showGame` — a `game/boss` URL arriving while the game is already up is
+ignored instead of lingering to hijack the next plain `conjugar://game`. `AppRouter` had *no*
+tests, so added `AppRouterTests` (5 cases) covering plain-game, boss, end, and the two
+already-presented regression guards.
+
+**Two item-13 nits.** The boss's spoken-jaleo pick used bare `.randomElement()` while every
+other boss draw routes through `bossRNG` — now `randomElement(using: &bossRNG)`, closing the one
+hole in the "tests can script the fight" story. And `resolveCollisions` ended with
+`if resolveChargerCollisions() { return }` where the `return` is the last statement anyway — a
+no-op costume; replaced with a plain `_ = resolveChargerCollisions()` and a comment saying the
+did-respawn flag is intentionally discarded.
+
+**Landmine for future sessions — `-only-testing` uses the *type* name, not the `@Suite`
+display name.** My first "passing" test runs were a lie: I passed `ConjugarTests/GameBoss`
+(the `@Suite("GameBoss")` display string) and got "Test Succeeded" with *zero* tests executed
+— xcodebuild silently matched nothing and trivially passed, exactly the Swift-Testing
+zero-tests trap CLAUDE.md warns about for the missing `()`. The selector wants the Swift
+*type* name: `ConjugarTests/GameBossTests`. With that fixed, the native Swift Testing reporter
+prints (`◇ Suite … / ✔ Test … passed`) and the run shows **27 tests in 3 suites passed**. Note
+the xcbeautify/XCTest summary line ("Executed 0 tests") reports only the XCTest side — Swift
+Testing has its own reporter, so grep for `✔ Test`/`Suite "…"` (or pipe raw `xcodebuild`) to
+confirm a Swift Testing suite actually ran. Build green, SwiftLint 0/183.

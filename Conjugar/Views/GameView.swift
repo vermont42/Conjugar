@@ -980,7 +980,8 @@ struct GameView: View {
 
   /// Jump is an impulse, not a held intent: fire once on touch-down, re-arm on lift.
   private var jumpButton: some View {
-    Image(systemName: "figure.jump")
+    // `figure.jump` is not a real SF Symbol (renders nothing); `figure.gymnastics` reads as "jump".
+    Image(systemName: "figure.gymnastics")
       .font(.system(size: 26, weight: .bold))
       .foregroundStyle(Color.customYellow)
       .frame(width: Self.jumpButtonSize, height: Self.jumpButtonSize)

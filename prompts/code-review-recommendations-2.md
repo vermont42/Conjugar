@@ -124,3 +124,5 @@ Every step ships green (build + 508 tests + lint); bugs land before refactors; o
 8. **Olé glyph** *(item 14)* — independent of everything above; slot it whenever the symbol/sprite pipeline is warm (it pairs naturally with item 1's jump swap if done early, but nothing blocks on it). Asset work first, then the two-site (button + chip) swap and the optional `DanceMove` glyph-property hoist.
 
 Steps 1–2 are an easy morning; steps 3–5 are each an hour or two with verification; step 6 is bounded by the decision, not the code; step 8 is mostly art time. Independently of this list, round 1's one still-open external item — the Game Center physical-device pass — remains outstanding.
+
+When deciding whether to add a comment in new or modified code, be mindful of Josh's preference that comments be used sparingly, typically only for hacks and todos. Do not, under any circumstance, add a comment referencing the code audit or the process of implementing its suggestions.

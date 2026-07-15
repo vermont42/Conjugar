@@ -180,6 +180,6 @@ extension GameState {
 
     // El Encierro: the 🐂 chargers hit by the same rules (a lethal one respawns and
     // bails, so we don't touch a cleared array afterward).
-    if resolveChargerCollisions() { return }
+    _ = resolveChargerCollisions()
   }
 }

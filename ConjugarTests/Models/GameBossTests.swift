@@ -80,6 +80,12 @@ struct GameBossTests {
     gameState.obstacles.append(
       Obstacle(id: 1, x: 0, y: 0, velocityX: 0, velocityY: 0, falling: false, level: 0, emoji: "🏳️", rotation: 0)
     )
+    // Power-ups active at the summit must not leak into the duel (their timers tick only
+    // in the `.climb` branch, so a survivor would freeze on — e.g. a permanent ⚡ badge).
+    gameState.capedRemaining = 3
+    gameState.speedRemaining = 3
+    gameState.serenataRemaining = 3
+    gameState.serenataDanceTimer = 1
     gameState.playerX = gameState.bullX
     gameState.playerY = gameState.bullY
     gameState.checkReachedBull()
@@ -87,6 +93,9 @@ struct GameBossTests {
     #expect(gameState.phase == .bossIntro)
     #expect(gameState.obstacles.isEmpty)       // field cleared for the stage
     #expect(gameState.capedRemaining == 0)
+    #expect(gameState.speedRemaining == 0)
+    #expect(gameState.serenataRemaining == 0)
+    #expect(gameState.serenataDanceTimer == 0)
   }
 
   @Test func introTransitionCompletesIntoDuel() {

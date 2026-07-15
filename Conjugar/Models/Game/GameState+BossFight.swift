@@ -86,7 +86,12 @@ extension GameState {
     climbingLadder = nil
     playerVelocityY = 0
     playerGrounded = true
+    // Climb power-ups' timers only tick in the `.climb` branch, so any left active at the
+    // summit would freeze on (e.g. a permanent ⚡ badge) — clear them all here.
     capedRemaining = 0
+    speedRemaining = 0
+    serenataRemaining = 0
+    serenataDanceTimer = 0
     damageCooldown = 0
     obstacles.removeAll()
     bullThrowTimer = 0
@@ -256,7 +261,7 @@ extension GameState {
         Current.soundPlayer.play(cue, shouldDebounce: false, volume: 0.4)
       }
       Current.hapticPlayer.play(.impactLight)
-      spawnPlayerSpeech([L.Game.jaleoEso, L.Game.jaleoBien, L.Game.jaleoVamos].randomElement() ?? L.Game.jaleoEso)
+      spawnPlayerSpeech([L.Game.jaleoEso, L.Game.jaleoBien, L.Game.jaleoVamos].randomElement(using: &bossRNG) ?? L.Game.jaleoEso)
       advanceEcho(from: step)
     } else {
       failPhrase()
