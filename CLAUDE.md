@@ -231,8 +231,9 @@ continue" prompt (removed July 2026 as noise — any tap still dismisses).
 The game's looping background music is the `Music` enum (`Models/Music.swift`), each case a
 bundled MP3 base name that `SoundPlayerReal.startMusic(_:)` loops via `numberOfLoops = -1`.
 Gameplay plays `Music.gameLoop` from `GameState` — bundled as `flamencoLoop.mp3` (legacy
-name) but holding Pond5's "Flamenco Adventure" since July 2026. Two more Pond5 tracks are
-**bundled** in the synchronized `Conjugar/Audio/` group: `spanishTension.mp3`
+name) but holding Pond5's "Flamenco Adventure" since July 2026. This one file sits at the
+target root (`Conjugar/flamencoLoop.mp3`), **not** in the `Conjugar/Audio/` group. Two more
+Pond5 tracks *are* in the synchronized `Conjugar/Audio/` group: `spanishTension.mp3`
 (`Music.onboarding`, wired into both the onboarding flow — see below — and the boss fight's
 end scene) and `spanishGuitarStandoff.mp3` (`Music.bossFight`, now wired: it crossfades in on
 the boss intro's llamada and loops the duel, then fades out into `Music.onboarding` at the end
