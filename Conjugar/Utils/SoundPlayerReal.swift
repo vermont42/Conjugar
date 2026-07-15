@@ -27,6 +27,11 @@ class SoundPlayerReal: SoundPlayer {
   private var instantOfLastPlayBySound: [Sound: TimeInterval] = [:]
   private var musicPlayer: AVAudioPlayer?
   private var savedMusicTime: TimeInterval?
+  // The pending hard-stop that ends a fade-out (see `stopMusic(fadeDuration:)`). Held so
+  // any restart — `startMusic` or a plain `stopMusic()` — can cancel it; without this a
+  // same-track restart inside the fade window is killed seconds in, because the guard the
+  // task uses only catches a switch to a *different* track (which rebuilds `musicPlayer`).
+  private var fadeStopTask: Task<Void, Never>?
   // The track currently loaded into `musicPlayer`, so `startMusic(_:)` knows whether a
   // request is a resume of the same track (reuse the player, honor the saved playhead)
   // or a switch to a different one (rebuild, drop the stale playhead).
@@ -86,6 +91,9 @@ class SoundPlayerReal: SoundPlayer {
   }
 
   func startMusic(_ music: Music) {
+    // Cancel any pending fade-out hard-stop so a restart during a fade isn't killed.
+    fadeStopTask?.cancel()
+    fadeStopTask = nil
     // (Re)build the player on first start or when switching to a different track. A
     // switch discards any saved playhead — resuming a position only makes sense for the
     // same track (the game pausing and being re-entered), not when moving between, say,
@@ -105,8 +113,10 @@ class SoundPlayerReal: SoundPlayer {
     if let saved = savedMusicTime {
       player.currentTime = saved
       savedMusicTime = nil
-    } else {
+    } else if music.startsAtRandomPosition {
       player.currentTime = player.duration > 0 ? TimeInterval.random(in: 0 ..< player.duration) : 0
+    } else {
+      player.currentTime = 0
     }
     player.volume = 0
     player.play()
@@ -114,6 +124,8 @@ class SoundPlayerReal: SoundPlayer {
   }
 
   func stopMusic() {
+    fadeStopTask?.cancel()
+    fadeStopTask = nil
     if let player = musicPlayer, player.isPlaying {
       savedMusicTime = player.currentTime
     }
@@ -125,18 +137,22 @@ class SoundPlayerReal: SoundPlayer {
       stopMusic()
       return
     }
+    fadeStopTask?.cancel()
     savedMusicTime = player.currentTime
     player.setVolume(0, fadeDuration: fadeDuration)
     // Hard-stop once the ramp completes. Capture the player so that if a different
     // track is started meanwhile (e.g. the game loop begins right after onboarding
     // dismisses), `startMusic` has already replaced `musicPlayer` and this no-ops —
-    // it must not stop the newly-started track.
+    // it must not stop the newly-started track. A same-track restart reuses the same
+    // player, so the identity check alone wouldn't catch it; `startMusic`/`stopMusic()`
+    // cancel this task, and the cancellation check below honors that.
     let fadingPlayer = player
-    Task { @MainActor in
+    fadeStopTask = Task { @MainActor in
       try? await Task.sleep(for: .seconds(fadeDuration))
-      if self.musicPlayer === fadingPlayer {
-        fadingPlayer.stop()
+      guard !Task.isCancelled, self.musicPlayer === fadingPlayer else {
+        return
       }
+      fadingPlayer.stop()
     }
   }
 

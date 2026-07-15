@@ -33,6 +33,14 @@ struct SoundPlayerTests {
     // Reaching here without a crash (and without audio) is the assertion.
   }
 
+  @Test func onlyGameLoopStartsAtRandomPosition() {
+    // The gameplay loop varies its entry point per session; the through-composed beds
+    // must start at 0 so they never open mid-phrase.
+    #expect(Music.gameLoop.startsAtRandomPosition)
+    #expect(!Music.onboarding.startsAtRandomPosition)
+    #expect(!Music.bossFight.startsAtRandomPosition)
+  }
+
   @Test func soundCoversGameCasesAndRandomHelpers() {
     // The reused game SFX must be present so warmUpSounds()/play(...) can find them.
     let names = Set(Sound.allCases.map(\.rawValue))

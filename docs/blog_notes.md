@@ -5912,3 +5912,38 @@ the game and discards the `GameState`). Now reads "only for the configure path n
 so the next session isn't sent looking for a caller that doesn't exist.
 
 Build green, GameBossTests 21/21.
+
+## Audio-stack pass: cancellable fade-out + a random-start policy (2026-07-15)
+
+Round-2 review step 3 — items 4 and 13's playhead decision, both living in
+`SoundPlayerReal.swift`.
+
+**The fade-out hard-stop could kill a music restart (item 4).** `stopMusic(fadeDuration:)`
+ramps the volume to zero, then a detached task hard-stops the player once the ramp finishes.
+That task guarded on `self.musicPlayer === fadingPlayer` — which was written for the
+*track-switch* case: starting a different track rebuilds `musicPlayer`, so the identity check
+no-ops and the stale fade task harmlessly stops the old player. But `startMusic` **reuses the
+same player for the same track** (the rebuild branch runs only when `currentMusic != music`), so
+a *same-track* restart inside the fade window leaves the identity equal and the pending task
+hard-stops the freshly restarted music seconds in. Reachable today: dismiss the onboarding reshow
+and re-tap "Show Onboarding" within the ~1.5 s fade — the re-shown tour's bed dies mid-play.
+
+Fix: a held `fadeStopTask: Task<Void, Never>?`. `startMusic` and the plain `stopMusic()` both
+cancel it up front; the fade task checks `!Task.isCancelled` (alongside the existing identity
+guard) before calling `stop()`. So any restart — same track or different — cancels the pending
+kill, and the redundant post-`stopMusic()` fire the review also noted is covered by the same
+cancellation. Chose an explicit cancellable task over a bumped-generation integer; the review
+floated both and the task reads more directly.
+
+**Scene beds no longer open mid-phrase (item 13 playhead).** `startMusic` seeded every fresh
+player to a random playhead — lovely variety for the gameplay loop, but the *through-composed*
+beds (`.onboarding`, `.bossFight`) entered mid-phrase. Rather than bury the intent in a comment,
+made it a property: `Music.startsAtRandomPosition`, true only for `.gameLoop`. The random-seek
+branch is now gated on it; the composed beds start at 0. A resumed playhead (`savedMusicTime`,
+the game pausing/re-entering) still wins over both. Pinned the policy with a Swift Testing case
+(`onlyGameLoopStartsAtRandomPosition`) in `SoundPlayerTests` — pure value logic, no CoreAudio, so
+it runs in the unit-test world where the real player never does.
+
+Build green; `SoundPlayerTests` 4/4, SwiftLint 0 violations. The by-ear check (onboarding reshow
+double-open, boss end-scene→onboarding within ~1 s) needs the app running with audio and is left
+for a device/simulator pass.

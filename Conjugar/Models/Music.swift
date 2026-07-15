@@ -18,4 +18,16 @@ enum Music: String {
 
   /// Spanish Guitar Standoff (Pond5) — the boss-fight loop.
   case bossFight = "spanishGuitarStandoff"
+
+  /// Whether `startMusic` should seek a fresh player to a random playhead. True for the
+  /// gameplay loop (a fresh entry point each session keeps the bed from feeling repetitive);
+  /// false for the through-composed beds, which must start at 0 rather than mid-phrase.
+  var startsAtRandomPosition: Bool {
+    switch self {
+    case .gameLoop:
+      return true
+    case .onboarding, .bossFight:
+      return false
+    }
+  }
 }
