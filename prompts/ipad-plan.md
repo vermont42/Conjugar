@@ -213,16 +213,16 @@ collection body.
   preserved. The tip banner was left uncapped for now — cap it if it looks bad in a later
   QA pass. Verified rendering on iPadOS 26.3 (portrait, two columns); landscape reflow is
   guaranteed by the adaptive grid but not yet screenshot-verified (sim-rotation tooling).
-- **`ModelBrowseView`** — ✅ **DONE (2026-07-16, Phase 2b, uncommitted — awaiting
-  Josh's go-ahead).** Shipped as the exact mirror of `VerbBrowseView`: `horizontalSizeClass`
+- **`ModelBrowseView`** — ✅ **DONE (2026-07-16, Phase 2b, `0c5ab81`).** Shipped as the
+  exact mirror of `VerbBrowseView`: `horizontalSizeClass`
   env, a `LazyVGrid(columns: BrowseLayout.listColumns)` of `NavigationLink { ModelGridCell(model).card() }`
   on regular width, the compact `LazyVStack + Divider + zebra` path byte-identical to before,
   and `.readingWidth()` on the bottom 3-segment sort `Picker`. New `ModelGridCell` view
   (exemplar + irregularity-percent pill pulled up beside it, class number below) added
   alongside `ModelRowLabel`. Verified on iPadOS 26 (iPad Pro 11" M4, portrait): two columns
   of carded cells, pills aligned top-right, sort picker centered.
-- **`InfoBrowseView`** — ✅ **DONE (2026-07-16, Phase 2c, uncommitted — awaiting Josh's
-  go-ahead).** Took the **reading-width grouped list** (Konjugieren) direction, not the
+- **`InfoBrowseView`** — ✅ **DONE (2026-07-16, Phase 2c, `796fd26`).** Took the
+  **reading-width grouped list** (Konjugieren) direction, not the
   section-card grid — the grouped `List` gets `.readingWidth()` + a
   `.background(Color(.systemGroupedBackground).ignoresSafeArea())` so the sections sit in a
   centered ~680 column with the grouped background filling the surround seamlessly, rather
@@ -236,22 +236,40 @@ collection body.
 landscape via adaptive sizing; half-width Split View falls back to the single-column list;
 search still filters; sort still animates + haptics.
 
-### Phase 3 — Detail screens: Verb, Model
+### Phase 3 — Detail screens: Verb, Model — ✅ DONE (2026-07-16, uncommitted — awaiting Josh's go-ahead)
 
-- **`VerbView`** — header block (title, gloss, metadata pills) stays single-column and
-  should be `.readableWidth(alignment: .leading)`-capped so the pills don't drift miles
-  right. The **conjugation cards** switch to the fixed two-up:
-  `if horizontalSizeClass == .regular { LazyVGrid(columns: BrowseLayout.detailColumns, alignment: .leading, spacing: Layout.tripleDefaultSpacing) { conjugationCards } } else { VStack { conjugationCards } }`
-  where `conjugationCards` is one `@ViewBuilder` var emitting every `ConjugationText`
-  card, reused by both branches. The etymology / example-use / medieval cards below stay
-  full single cards but capped to reading width (or spanned across — decide visually).
-- **`ModelView`** — same 2-up treatment for its rule/paradigm cards; keep the "verbs using
-  this model" list (which reuses `VerbRowLabel`) as its own size-class grid switch
-  (Konjugieren re-applies the list grid inside detail sub-lists).
+Both screens shipped, with one deliberate deviation from the draft: rather than cap the
+header to reading width and let the card grid span full iPad width, **the whole content
+column is capped to `.readingWidth()` (680) and centered** on both screens. Full-width
+conjugation cards read badly on a 13" iPad — a pronoun|form pair uses ~30 % of a 650 pt
+card and marooned the rest as dead space — so a centered reading-width column (header,
+2-up card grid, and prose all sharing one tidy measure) is the better look and keeps every
+left/right edge aligned. The `.readingWidth()` cap is a no-op on iPhone (narrower than 680),
+so the compact layout is untouched.
 
-**Verify:** `ser`, `haber`, a regular verb, and a compound-heavy verb in both
-orientations; confirm the 2-column masonry aligns and no card is clipped; rotate
-mid-screen (the geometry is grid-driven so it should reflow cleanly, unlike the game).
+- **`VerbView`** — ✅ added `@Environment(\.horizontalSizeClass)`; the conjugation cards now
+  switch to a fixed two-up `LazyVGrid(columns: BrowseLayout.detailColumns, alignment: .leading, spacing: Layout.doubleDefaultSpacing)`
+  on regular width and the plain single column on compact, both fed from one shared
+  `conjugationCards` `@ViewBuilder` var so they can't drift. `metadataHeader` (leading-aligned
+  via the VStack) and the etymology / example / medieval cards ride inside the same
+  reading-width column. Verified on iPadOS 26.3 (iPad Pro 11" M5, portrait) with `ser`: two
+  columns of accent-bar cards (Presente | Pretérito, …), irregular red highlights intact.
+- **`ModelView`** — ✅ added `@Environment(\.horizontalSizeClass)`. ModelView has no stack of
+  tense cards (it has a single horizontally-scrollable pronoun-by-tense **grid card**), so the
+  2-up treatment lands on the **"verbs using this model"** list instead: a new
+  `verbsUsingList` `@ViewBuilder` switches between the adaptive
+  `LazyVGrid(columns: BrowseLayout.listColumns)` of `VerbGridCell().card()` (regular) and the
+  bare zebra/divider `LazyVStack` of `VerbRowLabel` (compact) — mirroring Browse Verbs. The
+  header card, grid card, and list all sit in the centered reading-width column. Verified with
+  `rehacer` (2 verbs → `contrahacer` | `rehacer` side by side) and `decir` (1 verb → single
+  cell). Note: the reading-width cap makes the grid card's rightmost person column scroll into
+  view a touch sooner on long-stemmed models (e.g. `rehiciéramos`); the card was already a
+  visible-indicator horizontal `ScrollView` by design, so this is expected, not a clip.
+
+**Verify:** ✅ `ser` and the `rehacer`/`decir` models in portrait on iPad Pro 11" M5
+(iPadOS 26.3); the 2-column card masonry aligns and no card is clipped. Landscape/rotate
+reflow is guaranteed by the grid geometry (adaptive/flexible columns) but not yet
+screenshot-verified — deferred to the Phase 5 QA sweep.
 
 ### Phase 4 — Reading / form / modal screens
 
@@ -325,9 +343,9 @@ working around it.
 
 1. ✅ Phase 0 shared components (`BrowseLayout`, `readingWidth(alignment:)`, grid cell) — no UI change. (`fb08e9b`)
 2. ✅ Phase 2a — `VerbBrowseView` grid (the flagship visual win). (`1b45fe8`)
-3. ✅ Phase 2b — `ModelBrowseView` grid. (done 2026-07-16, uncommitted — awaiting go-ahead)
-4. ✅ Phase 2c — `InfoBrowseView` reading-width grouped list. (done 2026-07-16, uncommitted — awaiting go-ahead)
-5. Phase 3 — `VerbView` + `ModelView` detail 2-up.
+3. ✅ Phase 2b — `ModelBrowseView` grid. (`0c5ab81`)
+4. ✅ Phase 2c — `InfoBrowseView` reading-width grouped list. (`796fd26`)
+5. ✅ Phase 3 — `VerbView` + `ModelView` detail 2-up. (done 2026-07-16, uncommitted — awaiting go-ahead)
 6. Phase 4 — reading-width caps across Info/Quiz/Results/Settings/Tutor/Onboarding/Commun.
 7. Phase 1 shell decision (sidebarAdaptable or not) — small, can land anytime.
 8. Phase 5 — QA sweep + screenshots (no code, or tiny fixups).

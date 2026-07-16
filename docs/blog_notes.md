@@ -6417,3 +6417,50 @@ background seamless). Green throughout: build, **524 tests / 29 suites**, swiftl
 violations. The usual bogus SourceKit noise (`No such module 'UIKit'`, `Cannot find type
 'ModelSort'`) showed up and was ignored per CLAUDE.md — `build_app.sh` is authoritative.
 Not committed — holding for Josh's explicit go-ahead per the plan's no-auto-commit rule.
+
+## iPad Phase 3 — Verb/Model detail two-up (2026-07-16)
+
+The detail screens were the last phone-shaped holdout after the Phase-2 list passes.
+`VerbView` stacked ~14 full-width conjugation cards in one column; `ModelView` did the same
+with its header/grid card plus a full-width verbs-using list. Both stretched edge-to-edge on
+iPad, each pronoun|form pair using maybe a third of a 650 pt card.
+
+**The width decision.** The plan's draft said to cap only the header to reading width and let
+the conjugation-card grid span full iPad width. I built it the other way: cap the *whole*
+content column to `.readingWidth()` (680) and center it on both screens. The reason is the
+cards themselves — a "yo hablo / tú hablas …" card is short, low-density content that reads
+*worse* the wider it gets. At full 13" width a two-up grid gives ~650 pt cards that are mostly
+empty; at a centered 680 column the two columns are ~328 pt each — essentially the same width
+as a single phone card, just two abreast, halving the vertical scroll. That's the actual
+Konjugieren look, and it has the bonus that header, card grid, and prose cards all share one
+left/right measure instead of the header floating narrower than a full-width grid. The cap is a
+documented no-op below 680, so iPhone is byte-identical.
+
+**VerbView.** Added `@Environment(\.horizontalSizeClass)`; extracted the per-tense cards into
+one `conjugationCards` `@ViewBuilder` so the compact `VStack` path and the regular
+`LazyVGrid(columns: BrowseLayout.detailColumns)` path emit the exact same cards and can't
+drift — the same single-content-builder discipline Phase 2 used. Etymology / example-use /
+medieval cards ride along inside the same reading-width column.
+
+**ModelView is not symmetric with VerbView.** It has no stack of tense cards to reflow — its
+conjugation display is a *single* horizontally-scrollable pronoun-by-tense grid card. So the
+"two-up" idea had nowhere to land there except the **verbs-using-this-model list**, which I
+switched (via a new `verbsUsingList` `@ViewBuilder`) to the same adaptive
+`LazyVGrid(columns: BrowseLayout.listColumns)` of carded `VerbGridCell`s that Browse Verbs
+uses on regular width, falling back to the bare zebra/divider `LazyVStack` on compact. One
+wrinkle worth noting: capping the column at 680 makes the grid card's rightmost person column
+(`rehiciéramos`, `rehicierais` on long-stemmed models) scroll into view slightly sooner. It's
+not a clip — the card was always a visible-indicator horizontal `ScrollView` — just a narrower
+viewport, and it behaves the same as on a phone.
+
+**Verification.** Both this-session iPad sims were iPadOS 18 (they reject the iPadOS-26-only
+install), and a third was in an upside-down orientation that made `simctl` screenshots and AXe
+taps land in a rotated coordinate space — the "Cool, I Have It" CommunView cover swallowed
+every navigation attempt until I raised the correct M5 window by name via `osascript` and
+rotated it upright. Once upright on an **iPadOS 26.3 iPad Pro 11" (M5)**: `ser` shows the two
+columns of accent-bar cards with irregular red highlights intact; the `rehacer` model shows its
+two verbs (`contrahacer` | `rehacer`) side by side and `decir` its single cell. Green
+throughout: build, **524 tests / 29 suites**, swiftlint 0 violations. The usual same-module
+SourceKit false positives (`Cannot find 'VerbMap' in scope`, etc.) appeared and were ignored
+per CLAUDE.md — `build_app.sh` is authoritative. Not committed — holding for Josh's explicit
+go-ahead per the plan's no-auto-commit rule.

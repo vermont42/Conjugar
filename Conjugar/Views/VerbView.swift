@@ -26,6 +26,7 @@ struct VerbView: View {
   private let example: Example?
   private let medievalExamples: [MedievalExample]
   @State private var medievalIndex: Int
+  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
   init(verb: String) {
     self.verb = verb
@@ -53,8 +54,15 @@ struct VerbView: View {
     ScrollView {
       VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
         metadataHeader
-        ForEach(sections) { section in
-          conjugationCard(section)
+        if horizontalSizeClass == .regular {
+          // iPad / regular width: two columns of conjugation cards side by side,
+          // halving the vertical scroll. `conjugationCards` is the single content
+          // builder shared with the compact path, so the two layouts can't drift.
+          LazyVGrid(columns: BrowseLayout.detailColumns, alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
+            conjugationCards
+          }
+        } else {
+          conjugationCards
         }
         if let etymology {
           etymologyCard(etymology)
@@ -64,7 +72,11 @@ struct VerbView: View {
         }
       }
       .padding()
-      .frame(maxWidth: .infinity, alignment: .leading)
+      // Cap the whole column to reading width and center it: the conjugation cards
+      // are short, pronoun-keyed rows that read badly stretched across a 13" iPad,
+      // and capping keeps the header/pills, the 2-up card grid, and the prose cards
+      // sharing one tidy column. A no-op on iPhone (narrower than the cap).
+      .readingWidth()
     }
     .background(Color.customBackground.ignoresSafeArea())
     .navigationTitle(verb.capitalized)
@@ -196,6 +208,16 @@ struct VerbView: View {
         .foregroundStyle(.secondary)
     }
     .frame(maxWidth: .infinity, alignment: .leading)
+  }
+
+  /// Every tense's conjugation card, in order — the single content builder reused
+  /// by the compact single column and the regular-width 2-up grid so they can never
+  /// diverge.
+  @ViewBuilder
+  private var conjugationCards: some View {
+    ForEach(sections) { section in
+      conjugationCard(section)
+    }
   }
 
   private func conjugationCard(_ section: ConjugationSection) -> some View {

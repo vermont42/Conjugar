@@ -34,6 +34,8 @@ struct ModelView: View {
   /// The grid's person columns, in canonical order.
   static let gridPersons: [DisplayPersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
 
+  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
   private let gloss: String
   private let isDefective: Bool
   private let participio: String
@@ -73,26 +75,13 @@ struct ModelView: View {
           .foregroundStyle(.secondary)
           .frame(maxWidth: .infinity, alignment: .leading)
 
-        LazyVStack(spacing: 0) {
-          ForEach(Array(entries.enumerated()), id: \.element.infinitive) { index, entry in
-            // A `Button` wrapper gives these rows `.isButton` semantics and
-            // a press highlight; the closure-based navigation (rather than
-            // `NavigationLink(value:)`) is kept because appending to the enclosing
-            // stack's path from this pushed view reliably reaches the String
-            // destination.
-            Button {
-              onSelectVerb(entry.infinitive)
-            } label: {
-              VerbRowLabel(entry: entry)
-            }
-            .buttonStyle(.plain)
-            .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
-            Divider().padding(.leading)
-          }
-        }
+        verbsUsingList
       }
       .padding()
-      .frame(maxWidth: .infinity, alignment: .leading)
+      // Cap the whole column to reading width and center it so the header, the
+      // (already horizontally-scrollable) grid card, and the verbs list sit in one
+      // tidy column instead of stretching across a 13" iPad. No-op on iPhone.
+      .readingWidth()
     }
     .background(Color.customBackground.ignoresSafeArea())
     .navigationTitle(model.exemplar.capitalized)
@@ -100,6 +89,44 @@ struct ModelView: View {
     .onAppear {
       ExploreModelsTip().invalidate(reason: .actionPerformed)
       Current.analytics.recordVisitation(viewController: "\(ModelView.self)")
+    }
+  }
+
+  /// The "verbs using this model" list. On regular width (iPad) it reflows into an
+  /// adaptive grid of carded cells mirroring Browse Verbs; on compact width it stays
+  /// the bare zebra-striped, divider-separated single column. Both paths keep the
+  /// closure-based navigation (rather than `NavigationLink(value:)`) because appending
+  /// to the enclosing stack's path from this pushed view reliably reaches the String
+  /// destination.
+  @ViewBuilder
+  private var verbsUsingList: some View {
+    if horizontalSizeClass == .regular {
+      LazyVGrid(columns: BrowseLayout.listColumns, spacing: Layout.doubleDefaultSpacing) {
+        ForEach(entries, id: \.infinitive) { entry in
+          Button {
+            onSelectVerb(entry.infinitive)
+          } label: {
+            VerbGridCell(entry: entry)
+              .card()
+          }
+          .buttonStyle(.plain)
+        }
+      }
+    } else {
+      LazyVStack(spacing: 0) {
+        ForEach(Array(entries.enumerated()), id: \.element.infinitive) { index, entry in
+          // A `Button` wrapper gives these rows `.isButton` semantics and a press
+          // highlight.
+          Button {
+            onSelectVerb(entry.infinitive)
+          } label: {
+            VerbRowLabel(entry: entry)
+          }
+          .buttonStyle(.plain)
+          .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
+          Divider().padding(.leading)
+        }
+      }
     }
   }
 
