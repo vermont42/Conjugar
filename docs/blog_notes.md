@@ -6515,3 +6515,39 @@ same-module SourceKit false positives (`Cannot find 'L' in scope`, `Type 'Color'
 `build_app.sh` is authoritative. Not committed — holding for Josh's explicit go-ahead per the
 plan's no-auto-commit rule. Remaining: Phase 1 (the sidebarAdaptable shell decision) and Phase 5
 (the orientation/multitasking QA sweep + App Store screenshots).
+
+## iPad Phase 1: the shell decision — leaving well enough alone (2026-07-16)
+
+Phase 1 of the iPad plan was never really an implementation task; it was a *decision* with a
+tiny bit of code attached. The plan had already established that on iPadOS 26 the plain
+`TabView { Tab(...) }` in `MainTabView` auto-promotes to the centered top-bar pill for free, so
+the only open question was whether to pin `.tabViewStyle(.sidebarAdaptable)` on it — the sibling
+Conjuguer does (giving a collapsible sidebar), the sibling Konjugieren doesn't, and the plan
+declared both "parity." Josh said to just decide, no opinion either way.
+
+I tried it empirically rather than deciding blind: added the modifier, flipped the
+`OnboardingDisplay.onboardingEnabled` kill switch so the welcome tour wouldn't cover the shell,
+built green, and launched on an iPad Pro 11" M5. The simulator promptly reminded me why the
+sibling-app sessions kept complaining about it — with onboarding suppressed, the CloudKit
+"New Version" CommunView cover fired in its place, and the M5 sim was sitting in a rotated
+orientation that turns every `simctl` screenshot on its side. That cover, at least, gave a free
+bonus: it confirmed Phase 4's CommunView reading-width cap works visually — the "New Version"
+card sits in a tidy centered column, not stretched across the iPad.
+
+Rather than wrestle the rotation-plus-cover state to force the sidebar into a clean screenshot —
+exactly the rabbit hole the plan and CLAUDE.md warn about — I made the call on the merits, which
+pointed one way decisively: **don't adopt `.sidebarAdaptable`; keep the plain top-bar TabView.**
+Four reasons. The shell already renders correctly and was verified in prior sessions, so the
+burden of proof is on *changing* it. The custom `dancer`/`bull` line-art tabs were hand-tuned
+for the top bar with `.symbolVariants(.none)`; a sidebar renders icons larger and left-aligned
+next to the stock SF Symbols, precisely the context where thin outline bitmaps look rough — a
+real regression risk for no functional gain. Conjugar is explicitly kept in parity with
+Konjugieren, which ships without the modifier and looks the same — that's the tie-breaker the
+plan itself hands you. And a sidebar earns its keep by organizing hierarchy; five flat peer tabs
+have none to organize, so it would only add collapse-state and dual-context-bitmap QA surface.
+
+So Phase 1 ships as a decision with **zero code change**: the experimental modifier was reverted,
+`git diff` came back empty against the committed shell, and the build is green. The only artifacts
+are these doc updates. The full five-tab tap-through and `conjugar://` deeplink regression sweep
+fold into the Phase 5 QA pass, since the shell chrome is unchanged — a re-check, not new behavior.
+Remaining on the plan: just Phase 5 (orientation/multitasking QA + App Store screenshots).

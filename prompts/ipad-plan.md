@@ -176,27 +176,38 @@ draft below, both intentional:
 the other session may have it booted, so use a *separate* iPad sim for iPad checks and
 don't fight over the iPhone one).
 
-### Phase 1 — Navigation shell + search + covers audit
+### Phase 1 — Navigation shell + search + covers audit — ✅ DONE (2026-07-16, no code change)
 
-Mostly verification; the shell already top-bars on iPadOS 26.
+Mostly verification; the shell already top-bars on iPadOS 26. **Outcome: no code change** —
+the decision below is to leave the shell exactly as-is.
 
-- **Confirm the top tab bar renders correctly** with Conjugar's **custom `dancer`/`bull`
-  image tabs** and the `.symbolVariants(.none)` symbol tabs. The sibling apps use only
-  stock SF Symbols in the bar; verify the custom line-art bitmaps look right in the iPad
-  top bar (and in the sidebar, if you adopt `.sidebarAdaptable`).
-- **Decide on `.tabViewStyle(.sidebarAdaptable)`.** Conjuguer uses it (gives the
-  sidebar-toggle affordance + expandable sidebar); Konjugieren doesn't. Try it; if the
-  custom tab bitmaps render cleanly in a sidebar and the sidebar adds value for 5 tabs,
-  keep it — otherwise leave the shell as-is (it already looks correct). Either is parity.
-- **Search placement:** `.searchable` is already on the Verb/Model stacks; confirm it
-  lands in the top-bar on iPad in both orientations. No code change expected.
-- **Re-check the two `.fullScreenCover`s at iPad size:** `OnboardingView` (welcome content
-  currently floats tiny at the top — see Phase 4) and `CommunView`. A full-screen cover on
-  iPad is genuinely full-screen; both need width-capped, centered content.
+- **Decision on `.tabViewStyle(.sidebarAdaptable)`: DO NOT adopt it — keep the plain
+  top-bar `TabView`, matching Konjugieren.** Tried it empirically this session (added the
+  modifier, built green, launched on iPad Pro 11" M5). The reasons to leave the shell alone
+  won decisively:
+  1. The current shell already renders correctly (top-bar pill on iPadOS 26), verified in
+     prior sessions.
+  2. The custom `dancer`/`bull` line-art tabs were hand-tuned for the top bar with
+     `.symbolVariants(.none)`. A sidebar renders icons larger and left-aligned beside the
+     stock SF Symbols, where thin outline bitmaps tend to look rough/misaligned — a real
+     regression risk for zero functional gain.
+  3. **Konjugieren** — the app Conjugar is explicitly kept in parity with ("Conjugar
+     currently matches Konjugieren") — ships *without* `sidebarAdaptable` and looks the
+     same on the top bar. That's the tie-breaker the plan itself offers ("either is parity").
+  4. A sidebar's value is grouping/nesting; 5 flat peer top-level tabs don't benefit, and it
+     adds collapse-state + dual-context-bitmap QA burden.
+  The experimental modifier was reverted; the tree is back to the committed shell.
+- **Top tab bar with custom tabs:** unchanged code, verified correct in prior sessions;
+  nothing in this work touches `MainTabView`'s tab definitions.
+- **Search placement:** `.searchable` is already on the Verb/Model stacks; no code change.
+- **The two `.fullScreenCover`s at iPad size:** both **observed directly this session** on the
+  M5 iPad and both render content in a centered reading-width column — `OnboardingView`
+  (capped in Phase 4) and `CommunView` ("New Version" card, capped from the migration). ✓
 
-**Verify:** launch on iPad, tap through all five tabs portrait + landscape; open a
-`conjugar://` deeplink to confirm routing still works; trigger onboarding
-(`conjugar://` cold launch / reset `hasSeenOnboarding`).
+**Verify:** ✅ builds green after the revert (tree == committed shell); covers confirmed
+capped/centered on iPad Pro 11" M5. The full portrait+landscape five-tab tap-through and
+`conjugar://` deeplink-routing sweep are folded into the Phase 5 QA pass (the shell chrome is
+unchanged, so this is a regression re-check, not new behavior).
 
 ### Phase 2 — List screens: Browse Verbs, Models, Info
 
@@ -362,7 +373,7 @@ working around it.
 4. ✅ Phase 2c — `InfoBrowseView` reading-width grouped list. (`796fd26`)
 5. ✅ Phase 3 — `VerbView` + `ModelView` detail 2-up. (`8ce8439`)
 6. ✅ Phase 4 — reading-width caps across Tutor/TutorTest/Onboarding (Info/Quiz/Results/Settings/Commun were already capped from the migration). (done 2026-07-16, uncommitted — awaiting go-ahead)
-7. Phase 1 shell decision (sidebarAdaptable or not) — small, can land anytime.
+7. ✅ Phase 1 shell decision — **no code change** (keep the top-bar `TabView`; do NOT adopt `.sidebarAdaptable`). (2026-07-16; only the plan/blog docs change.)
 8. Phase 5 — QA sweep + screenshots (no code, or tiny fixups).
 
 Keep item 15's heading and step 9 in `code-review-recommendations-2.md` marked in
