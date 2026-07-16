@@ -610,33 +610,34 @@ struct GameView: View {
   }
 
   private func moveChip(_ move: DanceMove) -> some View {
-    ZStack {
-      switch move {
-      case .pasoLeft:
-        Image(systemName: "arrowtriangle.left.fill")
-      case .pasoRight:
-        Image(systemName: "arrowtriangle.right.fill")
-      case .ole:
-        // Match the olé button's glyph exactly (design: the cue must show the same
-        // symbol the player will tap — the figure.mind.and.body "yoga" pose).
-        Image(systemName: "figure.mind.and.body")
-      case .stomp:
-        Image(systemName: "shoeprints.fill")
-      case .cape:
-        Image("cape_pickup")
-          .resizable()
-          .scaledToFit()
-          .frame(width: 16, height: 16)
-      case .freeze:
-        Text(verbatim: "🔥")
-          .font(.system(size: 14))
-      }
+    moveIcon(move, spriteSide: 16)
+      .font(.system(size: 13, weight: .bold))
+      .foregroundStyle(Color.customYellow)
+      .frame(width: 26, height: 26)
+      .background(Color.customRed.opacity(0.4), in: RoundedRectangle(cornerRadius: 6))
+      .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.customYellow.opacity(0.5), lineWidth: 1))
+  }
+
+  /// A move's glyph for a cue chip or pad button, identity-routed through
+  /// `DanceMove.glyph`: symbols arrive unstyled so the site's font applies; the
+  /// cape sprite is framed to `spriteSide`; the freeze flame keeps its own fixed
+  /// size (it has no pad button).
+  @ViewBuilder
+  private func moveIcon(_ move: DanceMove, spriteSide: CGFloat) -> some View {
+    switch move.glyph {
+    case .systemSymbol(let name):
+      Image(systemName: name)
+    case .customSymbol(let name):
+      Image(name)
+    case .sprite(let name):
+      Image(name)
+        .resizable()
+        .scaledToFit()
+        .frame(width: spriteSide, height: spriteSide)
+    case .emoji(let text):
+      Text(verbatim: text)
+        .font(.system(size: 14))
     }
-    .font(.system(size: 13, weight: .bold))
-    .foregroundStyle(Color.customYellow)
-    .frame(width: 26, height: 26)
-    .background(Color.customRed.opacity(0.4), in: RoundedRectangle(cornerRadius: 6))
-    .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.customYellow.opacity(0.5), lineWidth: 1))
   }
 
   /// Floating, fading jaleo shouts (¡Olé! ¡Uy! ¡Eso!…) — the sibling score-pop idiom.
@@ -828,24 +829,20 @@ struct GameView: View {
       if gameState.phase == .duel {
         HStack(spacing: Layout.defaultSpacing) {
           danceButton(.pasoLeft, label: L.Game.pasoLeftMove, size: Self.bossMoveButtonSize, isCircle: true) {
-            Image(systemName: "arrowtriangle.left.fill")
+            moveIcon(.pasoLeft, spriteSide: 24)
           }
           danceButton(.ole, label: L.Game.oleMove, size: Self.bossMoveButtonSize, isCircle: true) {
-            // An arms-raised figure for the olé desplante (not a jump — design note 3).
-            Image(systemName: "figure.mind.and.body")
+            moveIcon(.ole, spriteSide: 24)
           }
           danceButton(.stomp, label: L.Game.stompMove, size: Self.bossMoveButtonSize, isCircle: true) {
-            Image(systemName: "shoeprints.fill")
+            moveIcon(.stomp, spriteSide: 24)
               .font(.system(size: 24, weight: .bold))
           }
           danceButton(.cape, label: L.Game.capeMove, size: Self.bossMoveButtonSize, isCircle: true) {
-            Image("cape_pickup")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 24, height: 24)
+            moveIcon(.cape, spriteSide: 24)
           }
           danceButton(.pasoRight, label: L.Game.pasoRightMove, size: Self.bossMoveButtonSize, isCircle: true) {
-            Image(systemName: "arrowtriangle.right.fill")
+            moveIcon(.pasoRight, spriteSide: 24)
           }
         }
         .position(x: gameState.screenSize.width / 2,

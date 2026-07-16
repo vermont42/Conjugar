@@ -51,6 +51,28 @@ struct SymbolValidityTests {
     }
   }
 
+  /// `DanceMove.glyph` names live outside the `systemName:` sweep (the model stores
+  /// them label-free), so resolve each one directly: system symbols against the SF
+  /// set, custom symbols and sprites against the app's asset catalog.
+  @Test func everyDanceMoveGlyphResolves() {
+    for move in DanceMove.allCases {
+      switch move.glyph {
+      case .systemSymbol(let name):
+        #expect(
+          UIImage(systemName: name) != nil,
+          "\(move)'s glyph \(name) is not a valid SF Symbol — it will render nothing."
+        )
+      case .customSymbol(let name), .sprite(let name):
+        #expect(
+          UIImage(named: name) != nil,
+          "\(move)'s glyph \(name) is missing from the asset catalog."
+        )
+      case .emoji(let text):
+        #expect(!text.isEmpty, "\(move)'s emoji glyph is empty.")
+      }
+    }
+  }
+
   /// Every `.swift` file under `directory`, recursively. Skips unreadable trees gracefully.
   private static func swiftFiles(under directory: URL) -> [URL] {
     guard let enumerator = FileManager.default.enumerator(

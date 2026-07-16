@@ -195,8 +195,12 @@ banked 0–1 round 1 (length 3), 2–3 round 2 (length 4), 4–5 round 3 (length
 **no lose state**. All boss logic is in `GameState+BossFight.swift` (`update(currentTime:)`
 routes every non-`.climb` phase to `updateBoss`); the climb pipeline is byte-identical when
 `phase == .climb`. Hearts are hidden off-climb (the meter is the only currency). Six dance
-moves (`DanceMove`): paso left/right, ole, stomp, cape, freeze. Boss buttons fire on
-touch-down (the jump idiom), not held intents. Strings live in `L.Game` — the jaleo shouts and
+moves (`DanceMove`): paso left/right, ole, stomp, cape, freeze. Each move's pad-button/cue-chip
+glyph is single-sourced by `DanceMove.glyph` and rendered by `GameView.moveIcon`; the olé
+glyph is the custom **`ole`** symbol (`Assets.xcassets/ole.symbolset` — a solid arms-up-V
+dancer silhouette derived from the `dancer_ole_3` sprite, on the same SF-template scaffold as
+the `dancer`/`bull` symbols, so it tints and font-scales like a system symbol). Boss buttons
+fire on touch-down (the jump idiom), not held intents. Strings live in `L.Game` — the jaleo shouts and
 title cards stay Spanish in **both** localizations, the narrative line + a11y labels localize
 en/es.
 

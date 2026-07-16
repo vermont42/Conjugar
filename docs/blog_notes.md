@@ -6229,3 +6229,51 @@ Swift Testing reporter's `✔ Test run with N tests …` line: absent on the fir
 (`2 tests in 1 suite`) once the selector was right. Full suite **523 green**, SwiftLint clean.
 Left `en`'s 60-entry mixed-convention count as the review noted it and did not chase the English
 paragraphs that legitimately vary prose — only the quote glyphs were normalized.
+
+## An olé glyph drawn in code — round-2 review item 14 / step 8 (2026-07-15)
+
+The boss pad's olé button (and its cue chip) had been wearing `figure.mind.and.body` —
+a seated-meditation pose that prompted a "what does this button mean?" during the round-2
+review. Item 14's plan: a custom symbol of the arms-up-V desplante, ideally derived from
+the game's own `dancer_ole_3` peak frame. Josh asked whether Claude could draw the icon
+directly or would need a raster tool (GIMP MCP, or Blender as with the game sprites). It
+turned out no external tool was needed: a custom SF Symbol is an SVG *template* — text —
+and the repo's `dancer`/`bull` symbolsets already established the exact scaffold (one
+`<defs>` art group of filled paths + 27 per-weight/scale `<use>` transforms).
+
+The naive route failed informatively. A marching-squares trace of the sprite's alpha
+channel (pure numpy/PIL, subpixel-interpolated, Douglas-Peucker-simplified) produced a
+faithful silhouette that was **unreadable at glyph size**: dancer_ole_3's arms join
+overhead against the hair, so a solid silhouette has no negative space — at 34 px (the cue
+chip's on-device glyph height) it read as a melting chess pawn. The shipped fix is a
+*sculpted* glyph in the SF `figure.*` idiom — detached head dot (plus bun), uniform-width
+round-capped arms opened into the V the review specified, and the sprite's measured
+proportions everywhere else (the hips-left/head-right sway, the waist, the three-tier
+skirt with its left-sweeping train, scalloped hem). Parts are authored as Catmull-Rom
+outlines and offset ribbons, rasterized, unioned, and re-traced into clean contours —
+topology headaches (arm/torso overlaps, head+bun union) dissolve in the raster round-trip.
+Iteration was visual: PIL renders at 34/58/120/260 px on chip-colored mocks, eyeballed
+frame by frame (v1 blob → v2 fused head → v3 crisp tiers → v4 buried arm roots).
+
+The final art is normalized into the dancer art group's exact bounding box, so splicing
+it into a copy of dancer.svg inherits every variant's transform and the family metrics
+(≈117 % of cap height, small baseline descent) untouched — `ole.symbolset` is that one
+generated file plus Contents.json; actool accepted it first try. In code, the review's
+"hoist" suggestion became `DanceGlyph` + `DanceMove.glyph` (identity single-sourced in the
+model, beside `cueSound`) and one `GameView.moveIcon(_:spriteSide:)` builder consumed by
+both `moveChip` and the pad row — the two sites can no longer diverge. A companion
+`SymbolValidityTests` case resolves every move's glyph (`UIImage(named:)` for the catalog
+assets, which the item-1 `systemName:` sweep can't see; a missing asset fails with exactly
+the silent-empty-render the sweep was built against). A second session reviewing the
+preview sheet suggested a plain template imageset instead of the symbolset ("the
+multi-weight pipeline is overkill for fixed styling") — kept the symbolset anyway: it *is*
+a template asset, but one that font-scales, so the call sites treat olé identically to the
+SF symbols beside it, no per-site frame sizing.
+
+Verified in the iPhone 17 sim via `CONJUGAR_GAME_START_BOSS=1` + the game deeplink: the
+pad renders the new figure at parity with its triangle/shoeprint neighbors, and a
+screenshot burst across reroll-sampled phrases (ignored echoes reroll fresh demos) caught
+an olé cue chip live — chip and button showing the same figure, which is the whole point:
+the cue now literally previews the pose the dancer strikes. Full suite 524 green,
+SwiftLint 0. The glyph pipeline scripts live only in the session scratchpad; the shipped
+SVG is the artifact, and this note plus the sprite are enough to regenerate.

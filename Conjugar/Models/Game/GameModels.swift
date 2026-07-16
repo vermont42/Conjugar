@@ -130,6 +130,15 @@ enum GamePhase {
   case climb, escape, bossIntro, duel, victory, endScene
 }
 
+/// How a `DanceMove` is drawn — the glyph vocabulary of the dance pad and its cue
+/// chips. Identity only; the two rendering sites apply their own sizes and styles.
+enum DanceGlyph {
+  case systemSymbol(String)
+  case customSymbol(String)
+  case sprite(String)
+  case emoji(String)
+}
+
 /// The dance vocabulary of the duel. `freeze` is the round-3 fake-out: the correct
 /// response is to input *nothing* for its hold window.
 enum DanceMove: CaseIterable, Hashable {
@@ -138,6 +147,23 @@ enum DanceMove: CaseIterable, Hashable {
   /// The moves a phrase is rolled from — everything but `freeze`, which round 3
   /// injects into exactly one non-first slot.
   static let phraseMoves: [DanceMove] = [.pasoLeft, .pasoRight, .ole, .stomp, .cape]
+
+  /// The glyph the pad button and the cue chip both render for this move. The echo
+  /// is from memory — the pad must show exactly what the cue showed — so the
+  /// identity lives here and the two sites can't diverge. `ole` is the custom `ole`
+  /// symbol (Assets.xcassets), a solid arms-up desplante silhouette derived from
+  /// the `dancer_ole_3` sprite's peak frame. `freeze` appears only in cues: the
+  /// correct echo is no input, so it has no pad button.
+  var glyph: DanceGlyph {
+    switch self {
+    case .pasoLeft: return .systemSymbol("arrowtriangle.left.fill")
+    case .pasoRight: return .systemSymbol("arrowtriangle.right.fill")
+    case .ole: return .customSymbol("ole")
+    case .stomp: return .systemSymbol("shoeprints.fill")
+    case .cape: return .sprite("cape_pickup")
+    case .freeze: return .emoji("🔥")
+    }
+  }
 
   /// The Pixabay SFX that punctuates this move — played on the bull's demo cue and
   /// again on the dancer's correct echo, so each move has its own voice (the two
