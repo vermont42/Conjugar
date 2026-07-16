@@ -6551,3 +6551,44 @@ So Phase 1 ships as a decision with **zero code change**: the experimental modif
 are these doc updates. The full five-tab tap-through and `conjugar://` deeplink regression sweep
 fold into the Phase 5 QA pass, since the shell chrome is unchanged — a re-check, not new behavior.
 Remaining on the plan: just Phase 5 (orientation/multitasking QA + App Store screenshots).
+
+## iPad Phase 5: the iPhone regression — proving the caps are inert on compact width (2026-07-16)
+
+Phase 5 is the QA-and-screenshots pass, and most of it — the iPad device matrix across four
+models in both orientations, Split View / Stage Manager multitasking, the widget gallery, and
+the device-captured App Store screenshots — is inherently physical-device or human-eye work that
+belongs to Josh. But one slice is squarely Claude's and worth doing before any of that: the
+iPhone regression. Every iPad change across phases 2–4 was deliberately gated so it *couldn't*
+touch the phone — either behind `horizontalSizeClass == .regular` (the grid branches) or behind
+`.readingWidth()`, a cap that's a no-op below its 680 pt threshold, and iPhone is narrower than
+that. The regression's whole job is to prove that gating actually holds on a real compact screen,
+not just in my head.
+
+So I fresh-installed on an iPhone 17 (iOS 26) and walked every screen the iPad work touched.
+The result is a clean pass: every size-class branch and reading-width cap is inert at compact
+width, and the phone layout is byte-identical to before. `VerbBrowseView` and `ModelBrowseView`
+render their single-column lists with dividers and zebra striping, not grids; `VerbView` shows a
+single column of full-width conjugation cards, not the 2-up masonry; `InfoBrowseView` keeps its
+grouped list and the E/E&M/E,M&D tense control at normal width; `OnboardingView`, `QuizView`, and
+`SettingsView` all fill the compact width exactly as they did pre-change. The bottom tab bar
+renders the custom `dancer`/`bull` line-art tabs correctly throughout, and the Info tab's Tutor
+row honestly reports "Apple Intelligence is still getting ready" — the expected unavailable state
+in a simulator.
+
+Two things I couldn't tick off directly, neither a defect. `ModelView` wouldn't open under AXe's
+synthetic taps — the model-list rows ignored three separate tap attempts even though AXe reported
+success and even though the *verb*-list rows navigated fine on the same run. That's an AXe/HID
+quirk with that particular list, not an app bug (real fingers navigate it every day), and the
+screen is covered by pattern anyway: it shares `VerbView`'s exact `.readingWidth()`/size-class
+idiom and its "verbs using this model" list mirrors the `VerbBrowseView` compact path I did
+confirm. And `TutorView` stays unreachable in the simulator because the on-device model is
+unavailable there — the same real-device caveat that has followed the tutor since it was built.
+
+A couple of simulator gremlins ate a few screenshots along the way and are worth noting for the
+next session: a system "Apple Account Verification" springboard alert covered the app on first
+launch (dismiss with "Not Now"), and the Quiz tab's on-appear Game Center prompt is modal, so a
+tab-switch tap issued while it's up lands on the alert instead of switching tabs — dismiss it
+first, then navigate. No code changed this turn; the suite was already green at 524 tests. This
+was pure verification, so the only artifacts are the plan/blog status updates marking Phase 5
+done *with respect to Claude*, with the device matrix, multitasking, widgets, and App Store
+screenshots explicitly flagged as Josh's remaining device work.

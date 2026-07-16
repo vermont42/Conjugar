@@ -1,8 +1,12 @@
 # Native iPad Support — Implementation Plan (item 15 / step 9)
 
-**Status:** in progress. **Phase 0** (shared components) and **Phase 2a**
-(`VerbBrowseView` grid) are ✅ done (2026-07-16, commits `fb08e9b` + `1b45fe8` on
-`migration`). Everything else is still to do.
+**Status:** all Claude-side phases ✅ done (2026-07-16, on `migration`). Phases 0, 1, 2a,
+2b, 2c, 3, 4, and the iPhone-regression slice of 5 are complete (commits `fb08e9b`,
+`1b45fe8`, `0c5ab81`, `796fd26`, `8ce8439`, `e10bbe9`, `a975ba6`). **Remaining is Josh's
+device/manual work only:** the Phase 5 iPad device matrix (portrait/landscape/rotate),
+Split View + Stage Manager multitasking, iPad widget-gallery previews, App Store iPad
+screenshots, and the real-device `TutorView`/`TutorTestView` check (the on-device model is
+unavailable in the simulator). See §3 Phase 5 for the split.
 **Tracks:** round-2 review **item 15** ("Native iPad support: per-screen layout audit + fix")
 and **step 9** of the proposed implementation sequence in
 `prompts/code-review-recommendations-2.md`.
@@ -321,17 +325,32 @@ sweep and Dynamic Type at large sizes deferred to the Phase 5 QA pass (the cap i
 text still wraps within it — a straightforward interaction). Tutor screens await a real
 Apple-Intelligence device.
 
-### Phase 5 — Orientation & multitasking QA + screenshots
+### Phase 5 — Orientation & multitasking QA + screenshots — ✅ DONE *with respect to Claude* (2026-07-16); remaining items are Josh's device/manual work
 
-- **Device matrix:** iPad Pro 11" and 12.9"/13", iPad mini (narrowest regular width), iPad
-  (A16). Each: **portrait + landscape**, plus **rotate mid-screen** on every screen.
-- **Multitasking:** Split View (½ and ⅓ widths → should degrade to compact/phone layout),
-  Stage Manager (arbitrary window sizes, including narrow → compact).
-- **Widget gallery previews** at iPad sizes (item 15 calls this out): confirm the small /
-  medium / large widget previews render correctly in the iPad widget gallery.
-- **App Store iPad screenshots** once the screens land (device-captured, per the
+Split into what Claude can verify in the simulator vs. what genuinely needs a physical
+device or a human eye. **Claude's slice is done; the rest is Josh's.**
+
+- ✅ **Full regression on iPhone** — DONE (2026-07-16). Fresh-installed on iPhone 17 (iOS 26)
+  and walked every screen the iPad work touched; every size-class branch and `.readingWidth()`
+  cap is confirmed **inert at compact width** — the iPhone layout is byte-identical to before.
+  Confirmed compact-path renders: `OnboardingView` (symbol/title/body full-width-minus-padding,
+  centered), `VerbBrowseView` (single-column list, not grid), `VerbView` (single column of
+  full-width cards, not 2-up), `ModelBrowseView` (single-column rows w/ %-pill, not grid),
+  `InfoBrowseView` (grouped list + E/E&M/E,M&D control, normal width), `QuizView` (briefing
+  centered), `SettingsView` (full-width cards). The bottom tab bar renders the custom
+  `dancer`/`bull` line-art tabs correctly throughout, and the Tutor row correctly reports
+  "Apple Intelligence is still getting ready" (unavailable in-sim). Two non-defects: `ModelView`
+  wasn't opened directly (its rows wouldn't navigate under AXe's synthetic taps — an AXe/HID
+  quirk, not an app bug; covered by pattern since it shares `VerbView`'s idiom + a
+  `VerbBrowseView`-style verbs list), and `TutorView` is unreachable in-sim (model unavailable).
+- ⬜ **Device matrix (Josh):** iPad Pro 11" and 12.9"/13", iPad mini (narrowest regular width),
+  iPad (A16). Each: **portrait + landscape**, plus **rotate mid-screen** on every screen.
+- ⬜ **Multitasking (Josh):** Split View (½ and ⅓ widths → should degrade to compact/phone
+  layout), Stage Manager (arbitrary window sizes, including narrow → compact).
+- ⬜ **Widget gallery previews (Josh)** at iPad sizes (item 15 calls this out): confirm the
+  small / medium / large widget previews render correctly in the iPad widget gallery.
+- ⬜ **App Store iPad screenshots (Josh)** once the screens land (device-captured, per the
   simulator emoji-tofu caveat for the game's stage-1 flags).
-- Full regression on **iPhone** (all the size-class branches must leave compact untouched).
 
 ---
 
@@ -372,9 +391,9 @@ working around it.
 3. ✅ Phase 2b — `ModelBrowseView` grid. (`0c5ab81`)
 4. ✅ Phase 2c — `InfoBrowseView` reading-width grouped list. (`796fd26`)
 5. ✅ Phase 3 — `VerbView` + `ModelView` detail 2-up. (`8ce8439`)
-6. ✅ Phase 4 — reading-width caps across Tutor/TutorTest/Onboarding (Info/Quiz/Results/Settings/Commun were already capped from the migration). (done 2026-07-16, uncommitted — awaiting go-ahead)
-7. ✅ Phase 1 shell decision — **no code change** (keep the top-bar `TabView`; do NOT adopt `.sidebarAdaptable`). (2026-07-16; only the plan/blog docs change.)
-8. Phase 5 — QA sweep + screenshots (no code, or tiny fixups).
+6. ✅ Phase 4 — reading-width caps across Tutor/TutorTest/Onboarding (Info/Quiz/Results/Settings/Commun were already capped from the migration). (`e10bbe9`)
+7. ✅ Phase 1 shell decision — **no code change** (keep the top-bar `TabView`; do NOT adopt `.sidebarAdaptable`). (`a975ba6`; docs only.)
+8. ✅ Phase 5 — QA sweep. **iPhone regression done by Claude** (no code change); iPad device matrix / multitasking / widget-gallery / App Store screenshots remain Josh's device/manual work. (2026-07-16; docs only.)
 
 Keep item 15's heading and step 9 in `code-review-recommendations-2.md` marked in
 progress; flip to ✅ only when the full per-screen audit ships and the App Store iPad
