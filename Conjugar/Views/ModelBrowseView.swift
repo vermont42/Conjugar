@@ -18,6 +18,7 @@ struct ModelBrowseView: View {
   @State private var sort: ModelSort = Current.settings.modelSort
   @State private var navigationPath = NavigationPath()
   @State private var searchText = ""
+  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   private let exploreModelsTip = ExploreModelsTip()
 
   private static let modelsBySort: [ModelSort: [ModelInfo]] = {
@@ -69,6 +70,21 @@ struct ModelBrowseView: View {
             if !searchText.isEmpty && filteredModels.isEmpty {
               ContentUnavailableView(L.BrowseModels.searchNoResults, systemImage: "magnifyingglass")
                 .padding(.top, Layout.tripleDefaultSpacing)
+            } else if horizontalSizeClass == .regular {
+              // iPad / regular width: reflow the rows into an adaptive grid of
+              // carded cells (≈2 columns portrait, ≈3–4 landscape). The same
+              // `navigationDestination(for: ModelInfo)` renders the pushed `ModelView`.
+              LazyVGrid(columns: BrowseLayout.listColumns, spacing: Layout.doubleDefaultSpacing) {
+                ForEach(filteredModels, id: \.classNumber) { model in
+                  NavigationLink(value: model) {
+                    ModelGridCell(model: model)
+                      .card()
+                  }
+                  .buttonStyle(.plain)
+                }
+              }
+              .padding(.horizontal)
+              .padding(.top, Layout.defaultSpacing)
             } else {
               LazyVStack(spacing: 0) {
                 ForEach(Array(filteredModels.enumerated()), id: \.element.classNumber) { index, model in
@@ -103,6 +119,7 @@ struct ModelBrowseView: View {
           }
         }
         .pickerStyle(.segmented)
+        .readingWidth()
         .padding()
       }
       .background(Color.customBackground.ignoresSafeArea())
@@ -147,6 +164,36 @@ struct ModelRowLabel: View {
     }
     .padding(.horizontal)
     .padding(.vertical, 12)
+  }
+}
+
+/// The carded grid variant of a model row for the iPad (regular-width) grid: the
+/// same serif gold exemplar + class number + irregularity-percent pill as
+/// `ModelRowLabel`, but laid out to fill a `.card()` cell (pill pulled up beside the
+/// exemplar, no row padding — the card supplies it).
+struct ModelGridCell: View {
+  let model: ModelInfo
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 2) {
+      HStack(alignment: .firstTextBaseline) {
+        Text(model.exemplar)
+          .font(.title3)
+          .fontDesign(.serif)
+          .foregroundStyle(Color.customYellow)
+
+        Spacer(minLength: Layout.defaultSpacing)
+
+        Text(verbatim: "\(model.irregularityPercent)%")
+          .metadataPill(tint: ModelPalette.tint(forPercent: model.irregularityPercent))
+      }
+
+      Text(model.classNumber)
+        .font(.subheadline)
+        .foregroundStyle(Color.customForeground)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .contentShape(Rectangle())
   }
 }
 
