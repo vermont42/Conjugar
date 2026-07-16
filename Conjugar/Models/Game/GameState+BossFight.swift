@@ -261,7 +261,11 @@ extension GameState {
         Current.soundPlayer.play(cue, shouldDebounce: false, volume: 0.4)
       }
       Current.hapticPlayer.play(.impactLight)
-      spawnPlayerSpeech([L.Game.jaleoEso, L.Game.jaleoBien, L.Game.jaleoVamos].randomElement(using: &bossRNG) ?? L.Game.jaleoEso)
+      // A per-move shout — but not on the final move, whose succeedPhrase ¡Olé!
+      // spawns at this same spot an instant later and would overlap it.
+      if step + 1 < phraseSequence.count {
+        spawnPlayerSpeech([L.Game.jaleoEso, L.Game.jaleoBien, L.Game.jaleoVamos].randomElement(using: &bossRNG) ?? L.Game.jaleoEso)
+      }
       advanceEcho(from: step)
     } else {
       failPhrase()

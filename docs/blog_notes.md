@@ -6315,3 +6315,17 @@ an olé cue chip live — chip and button showing the same figure, which is the 
 the cue now literally previews the pose the dancer strikes. Full suite 524 green,
 SwiftLint 0. The glyph pipeline scripts live only in the session scratchpad; the shipped
 SVG is the artifact, and this note plus the sprite are enough to regenerate.
+
+## Boss-fight shout overlap: ¡Vamos! under ¡Olé! (2026-07-15)
+
+A screenshot from the boss fight (`overlap.png`) showed two jaleo shouts stacked directly
+on top of each other — a per-move "¡Vamos!" sitting under the phrase-success "¡Olé!",
+rendered as an illegible smear. Root cause was a spawn collision in
+`handlePlayerMove`/`succeedPhrase` (`GameState+BossFight.swift`): completing the *last*
+move of a phrase first spawned a per-move shout (one of ¡Eso!/¡Bien!/¡Vamos!) via
+`spawnPlayerSpeech` at `(playerX, playerY − …)`, then `advanceEcho` immediately routed to
+`succeedPhrase`, which spawned "¡Olé!" via the *same* `spawnPlayerSpeech` at the *same*
+anchor. Two pops, same position, same instant → they float up as one overlapping blob.
+Fix: suppress the per-move shout on the final move (`step + 1 < phraseSequence.count`) and
+let the ¡Olé! carry the celebration. Non-final moves are unchanged; no test touched the
+per-move shout, so nothing to update. Build green.
