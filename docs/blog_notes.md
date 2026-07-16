@@ -6464,3 +6464,54 @@ throughout: build, **524 tests / 29 suites**, swiftlint 0 violations. The usual 
 SourceKit false positives (`Cannot find 'VerbMap' in scope`, etc.) appeared and were ignored
 per CLAUDE.md — `build_app.sh` is authoritative. Not committed — holding for Josh's explicit
 go-ahead per the plan's no-auto-commit rule.
+
+## iPad Phase 4: reading-width caps — but most of the work was already done (2026-07-16)
+
+Phase 4 of the iPad plan was, on paper, the biggest-sounding of the screen passes: "cap and
+center the reading/form/modal screens" — Info, Quiz, Results, Settings, Tutor, Onboarding, and
+the Commun cover, seven screens in all. In practice it was the smallest, because opening each
+file revealed that **five of the seven were already reading-width-capped** — a happy accident of
+how they were built during the original SwiftUI migration. `InfoView` had long carried
+`.frame(maxWidth: Layout.readingWidth, alignment: .leading)` on its RichTextView body;
+`QuizView` (both the idle briefing and the in-progress card), `ResultsView`, and `CommunView`'s
+message column all used the same older literal idiom
+(`.frame(maxWidth: Layout.readingWidth).frame(maxWidth: .infinity)`); and `SettingsView` had
+already been ported to the newer `.readingWidth()` modifier. That literal idiom is functionally
+identical to the modifier — an inner cap, an outer infinity-frame to center it — so there was
+nothing to fix. I deliberately left them alone rather than re-wrap working, already-verified
+screens just to unify the call-site spelling; Phase 0 had flagged that unification as *optional*,
+and churning shipped layout code for zero visible gain is how you introduce regressions.
+
+So the real change landed on the three screens that genuinely stretched edge-to-edge on iPad:
+the two Tutor screens and Onboarding. `TutorView` got `.readingWidth()` on its chat scroll
+column, the blue divider rule, and the input bar. The input bar was the only one with a wrinkle
+worth noting: its cap has to sit *before* the `.background(Color.customBackground)` so the text
+field and send button cap to 680 while the footer background still fills the full width — a
+capped bar floating in a stripe of bare background would have looked broken. With the column
+capped, the message bubbles' `Spacer(minLength: 60)` now shove user/assistant bubbles to the
+right/left edges *of the reading column* instead of the full iPad width, which is exactly the
+chat look you want. `TutorTestView` (the hidden triple-tap batch harness) got the same one-liner
+on its results stack. Neither Tutor screen is reachable in the simulator — the on-device
+Foundation Models model reports unavailable there — so those two are a code-review + real-device
+check; they mirror the other caps exactly, which is the best assurance available short of an
+Apple-Intelligence device.
+
+`OnboardingView` was the one with a visible payoff. Its paged `OnboardingPageView` content
+`VStack` had only a bare `.frame(maxWidth: .infinity)`, so on iPad the welcome/feature copy ran
+to absurd line lengths. Swapping that for `.readingWidth()` drops each sheet's symbol, title,
+body, and CTA into a centered ~680 column. The page dots, Skip/Dismiss, and the animated
+Get-Started button all live in the parent `OnboardingView` body and were already centered — the
+dots in a centered `HStack`, the CTAs as `PrimaryButtonStyle` capsules that hug their content —
+so they needed nothing. Verified first-launch on an iPadOS 26.3 iPad Pro 11" (M5): the welcome
+sheet's body wraps at a comfortable measure, centered, no longer edge-to-edge. (The `simctl`
+screenshot came back rotated because the sim was physically in landscape; the rounded-corner
+inset around the cover is iPadOS 26's new concentric cover chrome, not something in the app.)
+
+Every `.readingWidth()` cap is a no-op on iPhone, whose width is below the 680 threshold, so the
+compact layout is byte-identical — this is the same free-lunch property every prior phase relied
+on. Green throughout: build, **524 tests / 29 suites**, swiftlint 0 violations. The usual
+same-module SourceKit false positives (`Cannot find 'L' in scope`, `Type 'Color' has no member
+'customBackground'`, etc.) fired on every edited view and were ignored per CLAUDE.md —
+`build_app.sh` is authoritative. Not committed — holding for Josh's explicit go-ahead per the
+plan's no-auto-commit rule. Remaining: Phase 1 (the sidebarAdaptable shell decision) and Phase 5
+(the orientation/multitasking QA sweep + App Store screenshots).

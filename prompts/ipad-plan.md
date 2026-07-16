@@ -271,29 +271,44 @@ so the compact layout is untouched.
 reflow is guaranteed by the grid geometry (adaptive/flexible columns) but not yet
 screenshot-verified — deferred to the Phase 5 QA sweep.
 
-### Phase 4 — Reading / form / modal screens
+### Phase 4 — Reading / form / modal screens — ✅ DONE (2026-07-16, uncommitted — awaiting Josh's go-ahead)
 
-Cap and center; no grids needed.
+Cap and center; no grids needed. **Key finding on starting this phase:** five of the seven
+target screens were *already* reading-width-capped during the original SwiftUI migration —
+`InfoView` (RichTextView `.frame(maxWidth: Layout.readingWidth, alignment: .leading)`),
+`QuizView` (both `briefing` + `inProgress`), `ResultsView`, `SettingsView` (already on the
+`.readingWidth()` modifier), and `CommunView`'s message column all carry the cap (mostly via
+the older `.frame(maxWidth: Layout.readingWidth).frame(maxWidth: .infinity)` literal idiom,
+which is functionally identical to `.readingWidth()`). Those were left untouched — they're
+already verified and shipped, and re-wrapping working screens just to unify the idiom risked
+regressions for no visible gain (Phase 0 item 4 lists that unification as *optional*). So the
+actual Phase-4 code change was confined to the three screens that were **not** capped:
 
-- **`InfoView`** — the rich-text article body → `.readableWidth(alignment: .leading)`
-  (this is the single most important reading-width fix; Info bodies are the longest text).
-- **`QuizView` + `ResultsView`** — cap the prompt / text field / results to reading width
-  and center; on iPad the answer field currently stretches full-width. Keep the keyboard
-  behavior working in both orientations.
-- **`SettingsView`** — cap the form/cards column to reading width and center so toggles
-  and the app-icon picker aren't a 1366-pt-wide row.
-- **`TutorView`** (+ `TutorTestView`) — cap the chat column to reading width, centered
-  (chat bubbles at full iPad width read badly). *Not reachable in the simulator* (model
-  unavailable), so this is a code-review + real-device check; keep it minimal and mirror
-  the other reading-width caps.
-- **`OnboardingView` cover** — center the paged content and cap its width so the welcome /
-  feature sheets sit in a centered column instead of pinned to the top of an empty canvas;
-  keep the page dots + Skip/Get-Started. Verify the conditional AI-tutor page and the
-  game-preview CTA still work.
-- **`CommunView` cover** — cap + center the message.
+- **`TutorView`** — ✅ capped the chat scroll column (`.readingWidth()` on the messages
+  `VStack`), the blue divider rule, and the input bar to a centered reading-width measure. The
+  input bar's `.readingWidth()` sits **before** its `.background(Color.customBackground)` so
+  the controls cap to 680 while the footer background still fills the full width edge-to-edge.
+  Chat bubbles' `Spacer(minLength: 60)` now push user/assistant bubbles to the right/left
+  edges *of the 680 column* rather than the full iPad width. *Not reachable in the simulator*
+  (model unavailable) — code-review + real-device check; mirrors the other caps exactly.
+- **`TutorTestView`** — ✅ `.readingWidth()` on the batch-results `VStack`. Same sim caveat.
+- **`OnboardingView`** — ✅ `.readingWidth()` on `OnboardingPageView`'s content `VStack`
+  (replacing its bare `.frame(maxWidth: .infinity)`), so each welcome/feature sheet's symbol,
+  title, body, and CTA sit in a centered ~680 column instead of stretching across the iPad
+  canvas. Page dots, Skip/Dismiss, and the animated Get-Started button live in the parent
+  `OnboardingView` body and are already centered (dots in a centered `HStack`; the CTAs are
+  `PrimaryButtonStyle` capsules that hug their content), so they needed no change. The
+  conditional AI-tutor page and game-preview CTA are untouched. Verified first-launch on
+  iPad Pro 11" M5 (iPadOS 26.3): the welcome sheet's body copy wraps at a comfortable measure,
+  centered, no longer edge-to-edge.
+- **`InfoView` / `QuizView` / `ResultsView` / `SettingsView` / `CommunView`** — already capped
+  during the migration; no change this phase.
 
-**Verify:** each screen portrait + landscape; Dynamic Type at a large size (reading-width
-cap must coexist with larger text — the cap is a max, text still wraps within it).
+**Verify:** ✅ builds green; **swiftlint 0 violations**; full suite **524 tests / 29 suites
+passed**; onboarding visually confirmed capped on iPad Pro 11" M5. Portrait+landscape rotation
+sweep and Dynamic Type at large sizes deferred to the Phase 5 QA pass (the cap is a `max`, so
+text still wraps within it — a straightforward interaction). Tutor screens await a real
+Apple-Intelligence device.
 
 ### Phase 5 — Orientation & multitasking QA + screenshots
 
@@ -345,8 +360,8 @@ working around it.
 2. ✅ Phase 2a — `VerbBrowseView` grid (the flagship visual win). (`1b45fe8`)
 3. ✅ Phase 2b — `ModelBrowseView` grid. (`0c5ab81`)
 4. ✅ Phase 2c — `InfoBrowseView` reading-width grouped list. (`796fd26`)
-5. ✅ Phase 3 — `VerbView` + `ModelView` detail 2-up. (done 2026-07-16, uncommitted — awaiting go-ahead)
-6. Phase 4 — reading-width caps across Info/Quiz/Results/Settings/Tutor/Onboarding/Commun.
+5. ✅ Phase 3 — `VerbView` + `ModelView` detail 2-up. (`8ce8439`)
+6. ✅ Phase 4 — reading-width caps across Tutor/TutorTest/Onboarding (Info/Quiz/Results/Settings/Commun were already capped from the migration). (done 2026-07-16, uncommitted — awaiting go-ahead)
 7. Phase 1 shell decision (sidebarAdaptable or not) — small, can land anytime.
 8. Phase 5 — QA sweep + screenshots (no code, or tiny fixups).
 

@@ -114,6 +114,9 @@ struct TutorTestView: View {
           }
         }
         .padding(Layout.doubleDefaultSpacing)
+        // Cap the batch-results column to a reading-width measure, centered. No-op on
+        // iPhone (narrower than the cap).
+        .readingWidth()
       }
       .background(Color.customBackground)
       .navigationTitle(Text(verbatim: "Tutor Tests"))

@@ -97,6 +97,9 @@ struct TutorView: View {
               }
             }
             .padding(Layout.doubleDefaultSpacing)
+            // Cap the chat column to a reading-width measure, centered — full-iPad-width
+            // bubbles read badly. No-op on iPhone (narrower than the cap).
+            .readingWidth()
           }
           .safeAreaInset(edge: .bottom) {
             if showingHint {
@@ -121,6 +124,7 @@ struct TutorView: View {
           .fill(Color.customBlue)
           .frame(height: 1)
           .padding(.horizontal, Layout.doubleDefaultSpacing)
+          .readingWidth()
 
         inputBar
       }
@@ -274,6 +278,9 @@ struct TutorView: View {
       .accessibilityLabel(L.Tutor.send)
     }
     .padding(Layout.doubleDefaultSpacing)
+    // Cap the input controls to the same reading-width column as the chat, but let the
+    // background fill the full width so the bar still reads as a footer edge-to-edge.
+    .readingWidth()
     .background(Color.customBackground)
   }
 

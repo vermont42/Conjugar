@@ -285,7 +285,10 @@ private struct OnboardingPageView: View {
             .buttonStyle(PrimaryButtonStyle())
         }
       }
-      .frame(maxWidth: .infinity)
+      // Cap the welcome/feature content to a reading-width column, centered, so it
+      // sits in a tidy measure on iPad instead of stretching edge-to-edge across a
+      // vast empty canvas. No-op on iPhone (narrower than the cap).
+      .readingWidth()
       .padding(.vertical, Layout.tripleDefaultSpacing)
     }
     .offset(y: animateContent ? contentOffset : 0)
