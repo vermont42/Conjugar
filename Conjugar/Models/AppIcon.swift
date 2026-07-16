@@ -10,8 +10,10 @@
 // dancer, and a matador, each with a light and dark appearance variant — plus the
 // original flat-vector dancer, retained as `classic` for nostalgia. The enum drives
 // both the runtime icon swap (`alternateIconName`) and the Settings picker thumbnails
-// (`previewAssetName`). `classic` is the primary `AppIcon` asset, so its
-// `alternateIconName` is nil. `CaseIterable` order is the grid order (classic last).
+// (`previewAssetName`). `dancer` is the primary `DancerIcon` asset
+// (`ASSETCATALOG_COMPILER_APPICON_NAME`), so its `alternateIconName` is nil and fresh
+// installs default to it; the original flat-vector icon is the `ClassicIcon` alternate.
+// `CaseIterable` order is the grid order (classic last).
 enum AppIcon: String, CaseIterable {
   case bull
   case dancer
@@ -19,18 +21,18 @@ enum AppIcon: String, CaseIterable {
   case classic
 
   // The name of the alternate-icon set in the asset catalog, or nil for the primary
-  // AppIcon. Must match the `.appiconset` name (exposed as an alternate icon via
+  // DancerIcon. Must match the `.appiconset` name (exposed as an alternate icon via
   // ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES).
   var alternateIconName: String? {
     switch self {
     case .bull:
       return "BullIcon"
     case .dancer:
-      return "DancerIcon"
+      return nil
     case .matador:
       return "MatadorIcon"
     case .classic:
-      return nil
+      return "ClassicIcon"
     }
   }
 

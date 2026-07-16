@@ -6230,6 +6230,44 @@ Swift Testing reporter's `✔ Test run with N tests …` line: absent on the fir
 Left `en`'s 60-entry mixed-convention count as the review noted it and did not chase the English
 paragraphs that legitimately vary prose — only the quote glyphs were normalized.
 
+## Default app icon → photoreal DancerIcon; legacy becomes ClassicIcon (2026-07-15)
+
+Fresh installs were still defaulting to the original flat-vector dancer (the primary
+`AppIcon` asset). Josh asked to promote the photorealistic flamenco `DancerIcon` to the
+default and keep the old flat-vector art around under a new name.
+
+The app already had a full alternate-icon feature (ported from Conjuguer): an `AppIcon`
+enum (`bull`/`dancer`/`matador`/`classic`) driving `UIApplication.setAlternateIconName`,
+a Settings picker with per-icon preview imagesets, and
+`ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES` so every `.appiconset` ships as
+an alternate. The *primary* icon is whichever set `ASSETCATALOG_COMPILER_APPICON_NAME`
+names — it was `AppIcon`, and the enum case whose `alternateIconName` is `nil`
+(`.classic`) mapped to it.
+
+So the swap was four coordinated edits, no new art needed (`DancerIcon.appiconset`
+already existed with light/dark variants):
+
+1. `git mv AppIcon.appiconset → ClassicIcon.appiconset` (Josh chose *ClassicIcon*, not
+   *LegacyIcon* — it lines up with the existing `.classic` case). The nested
+   `Contents.json` references only `icon1024.png`, so no edit inside it, and appiconsets
+   aren't individually listed in `project.pbxproj`, so the rename needs no pbxproj churn.
+2. `ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon → DancerIcon` (both Debug + Release).
+3. `AppIcon.swift`: `.dancer.alternateIconName` → `nil` (it's the primary now),
+   `.classic.alternateIconName` → `"ClassicIcon"`.
+4. `Settings.appIconDefault` `.classic → .dancer` so fresh installs pick the new primary.
+
+Build confirms the swap the clean way: the asset compiler emplaces the DancerIcon PNGs
+under iOS's fixed primary filenames (`AppIcon60x60@2x.png`, `AppIcon76x76@2x~ipad.png`)
+*and* under the `DancerIcon*`/`ClassicIcon*` alternate names — the canonical "AppIcon*"
+output name is just iOS's slot for whatever the primary happens to be, not our asset.
+
+One nuance left alone by design: `setAppIcon` runs only from `didSet`, never at launch
+(a deliberate choice to avoid the system "you changed your icon" alert), so an *existing*
+user who was on `classic` with a nil OS alternate will now see DancerIcon until they
+re-pick. Reconciling that at launch would trip the alert, so not worth it — the request
+was specifically about fresh-install default. No test pinned the old default; full build
+green, SwiftLint clean.
+
 ## An olé glyph drawn in code — round-2 review item 14 / step 8 (2026-07-15)
 
 The boss pad's olé button (and its cue chip) had been wearing `figure.mind.and.body` —

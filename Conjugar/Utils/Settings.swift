@@ -106,8 +106,9 @@ final class Settings {
   static let hasSeenOnboardingDefault = false
 
   // The user-selected app icon. On change, persists the choice AND swaps the live
-  // home-screen icon via `setAlternateIconName`. `classic` is the primary AppIcon
-  // (nil alternate), so selecting it restores the original flat-vector dancer.
+  // home-screen icon via `setAlternateIconName`. `dancer` is the primary DancerIcon
+  // (nil alternate) and the fresh-install default; selecting `classic` restores the
+  // original flat-vector dancer (the `ClassicIcon` alternate).
   var appIcon: AppIcon {
     didSet {
       Settings.persist(getterSetter, Settings.appIconKey, appIcon, oldValue)
@@ -116,7 +117,7 @@ final class Settings {
     }
   }
   static let appIconKey = "appIcon"
-  static let appIconDefault: AppIcon = .classic
+  static let appIconDefault: AppIcon = .dancer
 
   init(getterSetter: GetterSetter) {
     self.getterSetter = getterSetter
