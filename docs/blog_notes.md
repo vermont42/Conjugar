@@ -6377,3 +6377,43 @@ landscape reflow to 3–4 columns is mechanically guaranteed by the `.adaptive(m
 grid but wasn't screenshot-verified because `simctl` can't rotate and the AppleScript
 rotate needs Accessibility permission this session didn't have. Green all the way: build,
 **524 tests / 29 suites**, swiftlint 0 violations.
+
+## iPad Support Phases 2b + 2c — Models Grid & Info Reading-Width (2026-07-16)
+
+Continued the per-screen iPad layout pass (`prompts/ipad-plan.md`), landing the last two
+list screens after Phase 2a's verb grid.
+
+**Phase 2b (ModelBrowseView grid).** A near-mechanical mirror of Phase 2a. Added the
+`horizontalSizeClass` env and the same size-class split: on regular width the model rows
+reflow into a `LazyVGrid(columns: BrowseLayout.listColumns)` of `.card()`-skinned
+`ModelGridCell`s; the compact `LazyVStack + Divider + zebra` path is byte-identical, so
+iPhone is untouched. `ModelGridCell` (new, alongside `ModelRowLabel`) carries the same
+serif-gold exemplar + tinted irregularity-percent pill + class number, but laid out for a
+card — pill pulled up beside the exemplar via a `Spacer(minLength:)`, class number below,
+no row padding since the card supplies it. The bottom 3-segment sort picker
+(Irregularity/Alphabetical/Number) got `.readingWidth()` like the verb one. Keeping the two
+browse screens structurally parallel matters — the round-2 review's Browse/Model mirroring
+carve-out expects them to stay in lockstep, and now the iPad grid does too.
+
+**Phase 2c (InfoBrowseView reading-width).** The plan offered two directions for Info — a
+Conjuguer-style grid of section cards, or a Konjugieren-style reading-width grouped list.
+Chose the grouped list: the existing sectioned `List` gets `.readingWidth()` plus a
+`.background(Color(.systemGroupedBackground).ignoresSafeArea())`, so the About/Tenses
+sections sit in a centered ~680 column with the grouped background filling the surround
+seamlessly instead of stretching edge-to-edge. Picked it over the card grid on a
+risk/reward basis: it's a pure cap that leaves every interactive bit — the live Tutor
+availability row, the `E / E&M / E,M&D` difficulty segmented control in the Tenses header,
+the difficulty filter — completely untouched, and it reads well because the native
+grouped-inset look is preserved, just no longer absurdly wide. The added background is
+invisible on iPhone (List already draws `systemGroupedBackground`) and `.readingWidth()` is
+a no-op below the 680 cap, so compact is genuinely unchanged.
+
+**Verification.** Both booted iPad sims were iPadOS **18** (they reject the install —
+"Requires a Newer Version of iPadOS"); booted a fresh **iPadOS 26** iPad Pro 11" (M4) and
+installed there. Dismissed the CommunView "New Version" cover, then screenshotted all three
+list tabs: verb grid (2a), model grid (2b, two columns with pills aligned top-right and the
+sort picker centered), and Info (2c, sections centered in a reading-width column, grouped
+background seamless). Green throughout: build, **524 tests / 29 suites**, swiftlint 0
+violations. The usual bogus SourceKit noise (`No such module 'UIKit'`, `Cannot find type
+'ModelSort'`) showed up and was ignored per CLAUDE.md — `build_app.sh` is authoritative.
+Not committed — holding for Josh's explicit go-ahead per the plan's no-auto-commit rule.

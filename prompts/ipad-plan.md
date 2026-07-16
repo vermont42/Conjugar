@@ -213,16 +213,24 @@ collection body.
   preserved. The tip banner was left uncapped for now — cap it if it looks bad in a later
   QA pass. Verified rendering on iPadOS 26.3 (portrait, two columns); landscape reflow is
   guaranteed by the adaptive grid but not yet screenshot-verified (sim-rotation tooling).
-- **`ModelBrowseView`** — same treatment (it mirrors `VerbBrowseView`; the review's
-  Browse/Model mirroring carve-out means keep them structurally parallel).
-- **`InfoBrowseView`** — the grouped sections (About / Concepts-Voseo / Tenses + the
-  Conjugation-Tutor row + the tense-detail `E / E&M / E,M&D` segmented control). Two
-  viable directions, pick per how it looks:
-  - **Grid of section cards** (Conjuguer's Info approach): each section a `LazyVGrid` of
-    tappable cards under a section header. Richer, fills the width.
-  - **Reading-width grouped list** (Konjugieren's Info approach): keep the grouped `List`
-    but cap it to `.readableWidth()` so rows aren't absurdly long.
-  Keep the Tutor availability row behavior and the tense segmented control intact.
+- **`ModelBrowseView`** — ✅ **DONE (2026-07-16, Phase 2b, uncommitted — awaiting
+  Josh's go-ahead).** Shipped as the exact mirror of `VerbBrowseView`: `horizontalSizeClass`
+  env, a `LazyVGrid(columns: BrowseLayout.listColumns)` of `NavigationLink { ModelGridCell(model).card() }`
+  on regular width, the compact `LazyVStack + Divider + zebra` path byte-identical to before,
+  and `.readingWidth()` on the bottom 3-segment sort `Picker`. New `ModelGridCell` view
+  (exemplar + irregularity-percent pill pulled up beside it, class number below) added
+  alongside `ModelRowLabel`. Verified on iPadOS 26 (iPad Pro 11" M4, portrait): two columns
+  of carded cells, pills aligned top-right, sort picker centered.
+- **`InfoBrowseView`** — ✅ **DONE (2026-07-16, Phase 2c, uncommitted — awaiting Josh's
+  go-ahead).** Took the **reading-width grouped list** (Konjugieren) direction, not the
+  section-card grid — the grouped `List` gets `.readingWidth()` + a
+  `.background(Color(.systemGroupedBackground).ignoresSafeArea())` so the sections sit in a
+  centered ~680 column with the grouped background filling the surround seamlessly, rather
+  than stretching edge-to-edge. Chosen over the card grid because it's a pure cap (zero risk
+  to the Tutor availability row, the tense `E / E&M / E,M&D` segmented control, or the
+  difficulty filter — all left untouched) and reads well: the About / Tenses sections keep
+  their native grouped-inset look, just no longer absurdly wide. No-op on iPhone (narrower
+  than the cap; the identical background is invisible). Verified on iPadOS 26.
 
 **Verify:** all three lists in both orientations; confirm ≈2 columns portrait / ≈3–4
 landscape via adaptive sizing; half-width Split View falls back to the single-column list;
@@ -317,8 +325,8 @@ working around it.
 
 1. ✅ Phase 0 shared components (`BrowseLayout`, `readingWidth(alignment:)`, grid cell) — no UI change. (`fb08e9b`)
 2. ✅ Phase 2a — `VerbBrowseView` grid (the flagship visual win). (`1b45fe8`)
-3. Phase 2b — `ModelBrowseView` grid.
-4. Phase 2c — `InfoBrowseView`.
+3. ✅ Phase 2b — `ModelBrowseView` grid. (done 2026-07-16, uncommitted — awaiting go-ahead)
+4. ✅ Phase 2c — `InfoBrowseView` reading-width grouped list. (done 2026-07-16, uncommitted — awaiting go-ahead)
 5. Phase 3 — `VerbView` + `ModelView` detail 2-up.
 6. Phase 4 — reading-width caps across Info/Quiz/Results/Settings/Tutor/Onboarding/Commun.
 7. Phase 1 shell decision (sidebarAdaptable or not) — small, can land anytime.

@@ -66,6 +66,12 @@ struct InfoBrowseView: View {
           }
         }
       }
+      // iPad / regular width: cap the grouped list to a comfortable measure and
+      // center it, filling the surround with the same grouped background so the
+      // sections sit in a centered column instead of stretching edge-to-edge. A
+      // no-op on iPhone (narrower than the cap).
+      .readingWidth()
+      .background(Color(.systemGroupedBackground).ignoresSafeArea())
       .navigationTitle(L.BrowseInfo.localizedTitle)
       .navigationDestination(for: Info.self) { info in
         InfoView(info: info) { target in navigationPath.append(target) }
