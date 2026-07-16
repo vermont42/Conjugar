@@ -23,6 +23,10 @@ eventually generate blog posts from these notes, and future Claude sessions rely
 as dated project memory — when older docs conflict, the journal shows which truth is
 current.
 
+When you create a new plan (typically in the `prompts/` folder), open it in Visual Studio
+Code so Josh can read it immediately: `code <path-to-plan>` (the VS Code CLI binary is
+`code`).
+
 ## Build and Test Commands
 
 This is an Xcode project (project `Conjugar.xcodeproj`, scheme `Conjugar`). Build and
