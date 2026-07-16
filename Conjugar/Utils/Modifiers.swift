@@ -41,10 +41,13 @@ extension View {
     fontDesign(.serif)
   }
 
-  /// Constrain long-form reading content to a comfortable measure, centered, so
-  /// Info articles and conjugation columns don't sprawl on iPad / large type.
-  func readingWidth(_ maxWidth: CGFloat = Layout.readingWidth) -> some View {
-    frame(maxWidth: maxWidth)
+  /// Constrain long-form reading content to a comfortable measure and center the
+  /// capped block, so Info articles, conjugation columns, chat bubbles, and form
+  /// cards don't sprawl on iPad / large type. `alignment` positions the content
+  /// *within* the capped width (`.leading` for left-aligned article bodies);
+  /// iPhone is narrower than the cap, so this is a no-op there.
+  func readingWidth(_ maxWidth: CGFloat = Layout.readingWidth, alignment: Alignment = .center) -> some View {
+    frame(maxWidth: maxWidth, alignment: alignment)
       .frame(maxWidth: .infinity)
   }
 
