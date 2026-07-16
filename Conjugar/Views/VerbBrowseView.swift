@@ -19,6 +19,7 @@ struct VerbBrowseView: View {
   @State private var navigationPath = NavigationPath()
   @State private var searchText = ""
   @Environment(AppRouter.self) private var router
+  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   private let tryQuizTip = TryQuizTip()
 
   /// Both sort orders, computed once (mirrors the UIKit VC's `verbsBySort`).
@@ -76,6 +77,21 @@ struct VerbBrowseView: View {
             if !searchText.isEmpty && filteredVerbs.isEmpty {
               ContentUnavailableView(L.BrowseVerbs.searchNoResults, systemImage: "magnifyingglass")
                 .padding(.top, Layout.tripleDefaultSpacing)
+            } else if horizontalSizeClass == .regular {
+              // iPad / regular width: reflow the rows into an adaptive grid of
+              // carded cells (≈2 columns portrait, ≈3–4 landscape). The same
+              // `navigationDestination(for: String)` renders the pushed `VerbView`.
+              LazyVGrid(columns: BrowseLayout.listColumns, spacing: Layout.doubleDefaultSpacing) {
+                ForEach(filteredVerbs, id: \.infinitive) { entry in
+                  NavigationLink(value: entry.infinitive) {
+                    VerbGridCell(entry: entry)
+                      .card()
+                  }
+                  .buttonStyle(.plain)
+                }
+              }
+              .padding(.horizontal)
+              .padding(.top, Layout.defaultSpacing)
             } else {
               LazyVStack(spacing: 0) {
                 ForEach(Array(filteredVerbs.enumerated()), id: \.element.infinitive) { index, entry in
@@ -111,6 +127,7 @@ struct VerbBrowseView: View {
           }
         }
         .pickerStyle(.segmented)
+        .readingWidth()
         .padding()
       }
       .background(Color.customBackground.ignoresSafeArea())
@@ -169,6 +186,42 @@ struct VerbRowLabel: View {
     // padding fall through — the row felt only partly tappable (and defeated
     // ios-build-verify's tap-to-drill-down on a verb). A content shape over the padded
     // frame claims the whole cell.
+    .contentShape(Rectangle())
+  }
+}
+
+/// The carded grid variant of a verb row for the iPad (regular-width) grid: the
+/// same serif gold infinitive + gloss + rank as `VerbRowLabel`, but laid out to
+/// fill a `.card()` cell (rank pulled up beside the infinitive, no row padding —
+/// the card supplies it).
+struct VerbGridCell: View {
+  let entry: VerbMapEntry
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 2) {
+      HStack(alignment: .firstTextBaseline) {
+        Text(entry.infinitive)
+          .font(.title3)
+          .fontDesign(.serif)
+          .foregroundStyle(Color.customYellow)
+
+        Spacer(minLength: Layout.defaultSpacing)
+
+        if let rank = entry.frequencyRank {
+          Text(verbatim: "#\(rank)")
+            .font(.caption.monospacedDigit())
+            .foregroundStyle(Color.customBlue)
+            .accessibilityHidden(true)
+        }
+      }
+
+      if !entry.gloss.isEmpty {
+        Text(entry.gloss)
+          .font(.subheadline)
+          .foregroundStyle(Color.customForeground)
+      }
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
     .contentShape(Rectangle())
   }
 }

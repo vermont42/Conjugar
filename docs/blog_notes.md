@@ -6329,3 +6329,51 @@ anchor. Two pops, same position, same instant → they float up as one overlappi
 Fix: suppress the per-move shout on the final move (`step + 1 < phraseSequence.count`) and
 let the ¡Olé! carry the celebration. Non-final moves are unchanged; no test touched the
 per-move shout, so nothing to update. Build green.
+
+## Native iPad, phase 0 + first list grid (2026-07-16)
+
+Kicked off the per-screen iPad layout work (round-2 review item 15). The plan is
+`prompts/ipad-plan.md`; this session took the recommended first bite — the shared
+foundation plus the flagship visual win — leaving the rest of the screen passes for
+later sessions.
+
+The sibling apps (Conjuguer, Konjugieren) were the blueprint: no `NavigationSplitView`,
+no idiom/`UIDevice` gating, no custom top bar. On iPadOS 26 the plain `TabView { Tab }`
+already promotes itself to the centered top pill for free — the only real work is
+per-screen content that reads `@Environment(\.horizontalSizeClass)` and swaps a
+single-column list for a `LazyVGrid` on regular width, with long-form text capped to a
+reading measure. Konjugieren is the closest structural match to Conjugar's Browse (same
+`ScrollViewReader` + zebra `LazyVStack` + bottom sort picker + count banner), so its
+`VerbBrowseView` was the direct model.
+
+**Phase 0 (shared components).** New `Views/BrowseLayout.swift` holds the three column
+sets the later phases will share — `listColumns` (adaptive min 260, a touch wider than the
+siblings' 250 because Conjugar's rows carry a serif infinitive *and* a gloss line),
+`infoColumns` (320), and `detailColumns` (fixed two-up for the verb/model conjugation-card
+masonry). Rather than add the plan's proposed second `readableWidth` modifier, I extended
+the *existing* `readingWidth` in `Utils/Modifiers.swift` with an `alignment:` parameter
+(default `.center`, pass `.leading` for article bodies) — one modifier, one source of
+truth, and the lone existing call site (`SettingsView`) keeps working. Deviating from the
+plan's name here was the cleaner call; noted so a future session doesn't go looking for
+`readableWidth`.
+
+**Phase 2a (VerbBrowseView grid).** Added the size-class split: on regular width the rows
+reflow into a `LazyVGrid` of `.card()`-skinned `VerbGridCell`s (new view, same serif-gold
+infinitive + gloss + blue rank as `VerbRowLabel` but laid out for a card — rank pulled up
+beside the infinitive, no row padding since the card supplies it); the compact `else`
+branch is byte-identical to before, so iPhone is untouched. The bottom sort picker got
+`.readingWidth()` so it stops stretching to the full iPad width (a no-op on iPhone, which
+is narrower than the 680 cap). The `browse_verb_count` launch anchor and the
+`ScrollViewReader`/`scrollTo("top")` sort-reset are preserved.
+
+**Landmines.** Editing view files spammed the usual bogus SourceKit diagnostics
+(`No such module 'UIKit'`, `Cannot find type 'VerbSort'`, and — new one — `Type 'any
+Layout' has no member` because the app's `struct Layout` shows up alongside
+`SwiftUI.Layout` in the stale index); `build_app.sh` compiled all of it cleanly, as
+CLAUDE.md promises. Verified on a real **iPadOS 26.3** sim (iPad Pro 11" M5) — the
+iPadOS-18 sims reject the install ("Requires a Newer Version of iPadOS"). The portrait
+grid renders exactly as intended (two columns of carded cells filling the width);
+landscape reflow to 3–4 columns is mechanically guaranteed by the `.adaptive(minimum:)`
+grid but wasn't screenshot-verified because `simctl` can't rotate and the AppleScript
+rotate needs Accessibility permission this session didn't have. Green all the way: build,
+**524 tests / 29 suites**, swiftlint 0 violations.
