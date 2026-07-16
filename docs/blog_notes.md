@@ -6187,3 +6187,45 @@ Verified on the iPad Pro 11" sim: rotate mid-climb → bull stands on the girder
 matador stands on his pedestal. Full suite 521 green. (The M-series sim still only hands the app a
 portrait window even in landscape, but the height change on rotation is enough to fire `reconfigure`
 and exercise the re-seats — the bug reproduced and the fix holds.)
+
+## Round-2 review step 7: guillemet normalization + a convention-pinning test (item 12) (2026-07-15)
+
+Item 12 was pure content hygiene: the offline etymology-generation pipeline had been setting
+Spanish glosses with *French*-style guillemet spacing — `« ser »` with inner padding — where
+Spanish typography wants them closed, `«ser»`. It sat directly under the conjugations on every
+verb screen and in the widget, so a Spanish-reading eye would register it the way an English eye
+registers « this ». The counts matched the review exactly: **1,335 of 1,345** `es` entries had the
+spaced form; the `en` table had its own smaller wobble — **61** entries reached for guillemets
+where the rest of the table uses curly double quotes (60 spaced + 1 unspaced), and **1** `es` entry
+(`alimentar`) used curly quotes where the rest of Spanish uses guillemets.
+
+The normalization rule split by language: `es` folds onto **closed guillemets** (`«\s+`→`«`,
+`\s+»`→`»`, and stray `“…”`→`«…»`); `en` folds onto **curly double quotes** (`«\s*`→`“`, `\s*»`→`”`),
+dropping the inner padding as it converts. Net: 1,335 `es` + 61 `en` entries rewritten.
+
+The care went into *proving the diff touched nothing but quotes and quote-adjacent whitespace*,
+since it's a ~24 KB shrink across a 2.9 MB file and `git blame` will live with it. Method that paid
+off: before any edit, a no-op `json.dumps(..., ensure_ascii=False, indent=2)` round-trip reproduced
+the file **byte-for-byte**, which locked in the exact serialization settings (raw UTF-8, 2-space
+indent, no trailing newline) — so the real diff couldn't smuggle in a re-encoding. After the edit,
+a "letters" check (strip all four quote glyphs *and* all whitespace, compare) confirmed **zero**
+actual-text changes, and a space-integrity check confirmed no double-spaces or grown space counts
+crept in. Balance held (guillemets/curly quotes matched per entry) and every `~bold~` marker stayed
+paired.
+
+A first skeleton check *looked* alarming — 1,376 entries "differing" — but that was the check being
+too crude: it counted the legitimately-removed inner-padding space (`fault »:` → `fault”:`) as a
+change. The whitespace-blind "letters" check is the honest one, and it came back clean.
+
+Pinned it with `EtymologyQuoteConventionTests` (`ConjugarTests/Models/`, reads the source-tree JSON
+via the `#filePath`-relative repo-root idiom `SymbolValidityTests`/`CorpusFormsDumpTests` already
+use): `es` must have no inner-padded guillemets and no curly quotes; `en` must have no guillemets.
+Now a future generation batch that drifts back to `« ser »` fails a test instead of shipping.
+
+Re-learned the test-runner trap the hard way: the first `--only-testing ConjugarTests/EtymologyQuoteConvention`
+(the `@Suite("…")` *display* name) printed `Test Succeeded` while running **zero** tests — the
+selector segment must be the Swift **type** name, `EtymologyQuoteConventionTests`. The tell is the
+Swift Testing reporter's `✔ Test run with N tests …` line: absent on the first try, present
+(`2 tests in 1 suite`) once the selector was right. Full suite **523 green**, SwiftLint clean.
+Left `en`'s 60-entry mixed-convention count as the review noted it and did not chase the English
+paragraphs that legitimately vary prose — only the quote glyphs were normalized.
