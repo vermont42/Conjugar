@@ -60,6 +60,9 @@ extension GameState {
     // they carry across the escape beat into the next stage (decision 12). Death
     // clears them (`respawn`), a summit does not.
     obstacles.removeAll()
+    // Any in-flight ❤️ missiles have no targets once the field clears; the flechazo
+    // *timer* itself carries across the escape beat like the other power-ups.
+    heartMissiles.removeAll()
     obstacleSpawnTimer = Self.obstacleSpawnInterval
     bullThrowTimer = 0
     // A summit interrupts any active mechanic window (the next stage re-arms its own).
@@ -179,6 +182,10 @@ extension GameState {
     speedRemaining = 0
     serenataRemaining = 0
     serenataDanceTimer = 0
+    flechazoRemaining = 0
+    flechazoCooldown = 0
+    heartMissiles.removeAll()
+    cortejoCharges = 0
     damageCooldown = Self.respawnGrace
   }
 }

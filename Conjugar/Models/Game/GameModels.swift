@@ -60,6 +60,77 @@ struct Obstacle: Identifiable {
   /// sign of horizontal motion. A purely vertical fall keeps the last facing.
   var facing: CGFloat = -1
   var despawn: Bool = false
+
+  // MARK: La Subida — extra power-up / mechanic state (see the game-powerups plan)
+  // Value-type fields so babies (`camada`) and chasers (`cortejo`) reuse the existing
+  // obstacle render + collision path instead of introducing a new entity type.
+
+  /// Render/collision scale — 1 = full obstacle, `GameState.babyScale` = a `camada` baby.
+  var scale: CGFloat = 1
+  /// A `camada` baby's parent obstacle id (nil for a normal obstacle). A baby mirrors
+  /// its parent's motion after a short birth slide.
+  var parentID: Int?
+  /// Seconds left in a baby's birth-slide animation (0 once it has settled behind its parent).
+  var birthRemaining: Double = 0
+  /// The locked trailing offset a baby slides out to, then holds relative to its parent.
+  var birthOffset: CGSize = .zero
+  /// Sympathetic / catch fade-out (`camada` baby-hit, `cortejo` catch): non-colliding
+  /// while > 0, removed when it reaches 0.
+  var fadeRemaining: Double = 0
+  /// A `cortejo` chaser's pre-chase shiver-in-place window (0 once it starts pursuing).
+  var vibrateRemaining: Double = 0
+  /// True once a `cortejo`-possessed obstacle begins pursuing its target.
+  var isChaser: Bool = false
+  /// The obstacle a `cortejo` chaser is pursuing (retargeted if it despawns).
+  var chaseTargetID: Int?
+  /// True while an obstacle is arcing over a finished `terremoto` gap (lands back on the
+  /// same girder rather than falling to the level below).
+  var hopping: Bool = false
+
+  /// Obstacles driven by the power-up / mechanic subsystems rather than the ordinary
+  /// roll/fall pipeline — `updateObstacles` (and the zombie homing) skip their motion so
+  /// `updateBabies` / `updateCortejo` / the fade ager own them.
+  var isSpecial: Bool {
+    parentID != nil || isChaser || fadeRemaining > 0 || vibrateRemaining > 0
+  }
+}
+
+/// A homing ❤️ projectile fired by a qualifying jump while the `flechazo` power-up is
+/// active — it pursues the nearest obstacle and destroys it on contact (see
+/// `GameState.updateHeartMissiles`). Rendered at half scale in `GameView`.
+struct HeartMissile: Identifiable {
+  let id: Int
+  var x: CGFloat
+  var y: CGFloat
+  var velocityX: CGFloat
+  var velocityY: CGFloat
+  var targetID: Int
+  var lifeRemaining: Double
+}
+
+/// A small yellow particle in the burst thrown off when an obstacle is destroyed
+/// (see `GameState.spawnHitParticles` / `updateHitParticles`). Scatters outward under
+/// gravity and fades over its short life; rendered as a yellow dot in `GameView`.
+struct HitParticle: Identifiable {
+  let id: Int
+  var x: CGFloat
+  var y: CGFloat
+  var velocityX: CGFloat
+  var velocityY: CGFloat
+  var ttl: Double
+  let initialTTL: Double
+  let size: CGFloat
+}
+
+/// A hole punched in a girder by the `terremoto` (earthquake) mechanic. It fades in over
+/// `fadeRemaining` seconds and is **still solid to stand/cross while it fades**; only once
+/// `fadeRemaining` reaches 0 is it a true hole an entity falls through (see
+/// `GameState.openPlatformGaps` / `hasFinishedGap`).
+struct PlatformGap: Identifiable {
+  let id: Int
+  let level: Int
+  let xRange: ClosedRange<CGFloat>
+  var fadeRemaining: Double
 }
 
 /// A 🐂 charger in the El Encierro stampede (see GameState+Mechanics.swift, Phase 4):
@@ -81,7 +152,7 @@ struct Charger: Identifiable {
 /// (invulnerability + smash); `speed` doubles walk AND climb speed; `serenata` makes
 /// the bull drop its guard and dance instead of throwing.
 enum PowerUpKind: CaseIterable {
-  case cape, speed, serenata
+  case cape, speed, serenata, flechazo, cortejo
 }
 
 /// A collectable power-up sitting on a platform. A stage spawns only its drawn
@@ -103,7 +174,7 @@ struct PowerUp: Identifiable {
 ///   • encierro — 🐂 chargers stampede across the girders (Phase 4).
 ///   • apagon   — the lights cut to a spotlight on the dancer (Phase 5).
 enum ChallengeMechanic: CaseIterable {
-  case zombie, encierro, apagon
+  case zombie, encierro, apagon, terremoto, camada
 }
 
 /// Which frame-count table the player's sprite flipbook cycles through. Every action
@@ -208,6 +279,10 @@ struct JaleoPop: Identifiable {
   /// The default is a gentle score-pop drift; the dancer's spoken jaleos use a much
   /// larger rate so they climb all the way to the sight-line high in the empty field.
   let riseRate: CGFloat
+  /// Seconds the pop holds fully-opaque and stationary before it begins fading and
+  /// rising (0 = start at once). Bull speech uses a 1 s hold so its announcement is
+  /// readable before it drifts off.
+  var hold: Double = 0
 }
 
 /// A tiny seedable RNG (SplitMix64) so boss tests can script exact dance phrases.

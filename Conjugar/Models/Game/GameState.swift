@@ -125,7 +125,61 @@ final class GameState {
   /// Radius (pt) of the soft spotlight the overlay punches around the dancer.
   static let apagonSpotlightRadius: CGFloat = 120
 
-  /// Sprite flipbook speed (RaceRunner's rate).
+  // MARK: New mechanics/power-ups (see prompts/game-powerups-mechanics-plan.md)
+
+  /// El Terremoto (earthquake): for this long the screen jiggles vertically, haptics
+  /// pulse, and ~`earthquakeGapFraction` of each girder vanishes as fading holes.
+  static let terremotoDuration: Double = 5
+  /// Peak vertical jiggle amplitude (pt) of the quake — `earthquakeShakeOffsetY`.
+  static let earthquakeJiggle: CGFloat = 5
+  /// How fast the jiggle phase advances (rad/s) — ~5 Hz.
+  static let earthquakeJiggleRate: Double = 32
+  /// Fraction of each girder's width removed as holes, split across `earthquakeGapCount`
+  /// gaps (both tunable per the plan).
+  static let earthquakeGapFraction: CGFloat = 0.10
+  static let earthquakeGapCount = 2
+  /// A fresh gap fades in over this long; it stays SOLID (traversable) until fully faded.
+  static let earthquakeGapFade: Double = 1.0
+  /// The quake pulses this discrete impact haptic on this interval (no CoreHaptics here).
+  static let quakeHapticInterval: Double = 0.18
+  /// Upward launch given to a rolling obstacle so it arcs over a finished gap (tuned to
+  /// clear a `earthquakeGapFraction / earthquakeGapCount`-width gap).
+  static let gapHopImpulse: CGFloat = 300
+
+  /// La Camada (obstacles multiply): the one-shot "window" is just long enough for the
+  /// babies' birth slide before the scheduler re-arms; the babies then live on their own.
+  static let camadaDuration: Double = 0.6
+  /// A `camada` baby's render/collision scale and its birth-slide length.
+  static let babyScale: CGFloat = 0.5
+  static let babyBirthSlide: Double = 0.5
+  /// Sympathetic / catch fade-out length for babies (`camada`) and caught pairs (`cortejo`).
+  static let obstacleFadeDuration: Double = 1.0
+
+  /// Yellow particle burst thrown off when an obstacle is destroyed: count, lifetime,
+  /// outward speed (pt/s), the gravity pulling the bits back down, and the dot size.
+  static let hitParticleCount = 10
+  static let hitParticleLife: Double = 0.5
+  static let hitParticleSpeed: CGFloat = 180
+  static let hitParticleGravity: CGFloat = 520
+  static let hitParticleSize: CGFloat = 6
+
+  /// El Flechazo (heart missiles): same 7 s (5 solid + 2 blink) envelope as the cape/speed.
+  static let flechazoDuration: Double = 7
+  /// Minimum seconds between fired missiles — a jump inside this window fires none.
+  static let flechazoCooldownDuration: Double = 1.0
+  static let heartMissileSpeed: CGFloat = 400
+  static let heartMissileLife: Double = 1.5
+  /// Distance (pt) at which a missile counts as striking its target.
+  static let heartMissileHitDistance: CGFloat = 22
+
+  /// El Cortejo (mushroom chaser): the possessed obstacle shivers in place this long,
+  /// then pursues its quarry at `cortejoChaseFactor`× obstacle speed until it catches it.
+  static let cortejoVibrateDuration: Double = 1.5
+  static let cortejoChaseFactor: CGFloat = 1.5
+  /// Distance (pt) at which a chaser catches its quarry (both then fade + confetti).
+  static let cortejoCatchDistance: CGFloat = 24
+
+  /// Sprite flipbook speed.
   static let fps = 10
 
   // MARK: Boss-fight tuning (La Llamada — see prompts/game_boss_llamada.md)
@@ -251,6 +305,8 @@ final class GameState {
     case "cape": return .cape
     case "speed": return .speed
     case "serenata": return .serenata
+    case "flechazo": return .flechazo
+    case "cortejo": return .cortejo
     default: return nil
     }
   }()
@@ -265,6 +321,8 @@ final class GameState {
     case "zombie": return .zombie
     case "encierro": return .encierro
     case "apagon": return .apagon
+    case "terremoto": return .terremoto
+    case "camada", "multiply": return .camada
     default: return nil
     }
   }()
@@ -342,6 +400,33 @@ final class GameState {
   // time and snapped to 0 whenever the window ends or is cancelled.
   var apagonDim: CGFloat = 0
 
+  // El Terremoto (earthquake): fading holes in the girders + a vertical screen jiggle +
+  // pulsed haptics, all live only while the window is open (see GameState+Mechanics.swift).
+  var platformGaps: [PlatformGap] = []
+  var platformGapCounter = 0
+  /// Advancing phase for the vertical jiggle; `earthquakeShakeOffsetY` reads it.
+  var earthquakePhase: Double = 0
+  /// Countdown to the next pulsed rumble haptic while the quake is active.
+  var quakeHapticTimer: Double = 0
+
+  // El Flechazo (heart missiles): a 7 s envelope like the cape/speed, plus the in-flight
+  // ❤️ projectiles a qualifying jump fires (see GameState+PowerUps.swift).
+  var flechazoRemaining: Double = 0
+  /// Per-missile creation cooldown — a jump inside this window fires nothing.
+  var flechazoCooldown: Double = 0
+  var heartMissiles: [HeartMissile] = []
+  var heartMissileCounter = 0
+
+  // Yellow particle bursts thrown off when an obstacle is destroyed (visual only).
+  var hitParticles: [HitParticle] = []
+  var hitParticleCounter = 0
+
+  // El Cortejo (mushroom chaser): banked jump-retrigger charges. A pickup grants 3 (one
+  // spent at once if idle, the rest on later jumps once each chase finishes); a second
+  // pickup banks onto the remainder. Persist across stage summits like the power-up timers;
+  // cleared on death/new game.
+  var cortejoCharges = 0
+
   // MARK: Player state
 
   var playerX: CGFloat = 0
@@ -380,6 +465,15 @@ final class GameState {
   /// to expire, then "blinks out of existence" when the cape ends. Shares the blink
   /// envelope with the speed badge via `powerUpVisible(remaining:)`.
   var isCapeVisible: Bool { powerUpVisible(remaining: capedRemaining) }
+
+  /// Whether the ❤️ heart-missile power-up is armed (a qualifying jump fires a missile).
+  var isFlechazoActive: Bool { flechazoRemaining > 0 }
+
+  /// The vertical offset the whole climb field is shaken by during El Terremoto — a sine
+  /// jiggle while the quake is active, snapping to 0 the instant the window ends.
+  var earthquakeShakeOffsetY: CGFloat {
+    activeMechanic == .terremoto ? CGFloat(sin(earthquakePhase)) * Self.earthquakeJiggle : 0
+  }
 
   /// Whether the up control should be shown: the player is standing in front of a
   /// ladder whose base is on this level (so pressing up would start a climb), or is
@@ -573,7 +667,9 @@ final class GameState {
     // burst (🌹/❤️) — warm those so the first duel frame is a cache hit. (The jaleo
     // pops are Spanish words, not emoji; the clashing emoji crowd row was removed.)
     let obstacleGlyphs = Self.stageObstacleEmojis.flatMap { $0 }
-    let subidaGlyphs = obstacleGlyphs + ["🐂", "⚡", "🎸"]
+    // ❤️ (flechazo pickup/missile) + 🍄 (cortejo pickup) join the encierro 🐂 and the
+    // speed/serenata pickups; ❤️ is also in `bossGlyphs`, harmlessly warmed twice.
+    let subidaGlyphs = obstacleGlyphs + ["🐂", "⚡", "🎸", "❤️", "🍄"]
     let bossGlyphs: [(String, CGFloat)] = ["🔥", "✨", "🌹", "❤️"].map { ($0, 30) }
     let glyphs: [(String, CGFloat)] = subidaGlyphs.map { ($0, 28) } + bossGlyphs
     Task.detached(priority: .userInitiated) {
@@ -717,6 +813,14 @@ final class GameState {
     apagonDim = 0
     chargers.removeAll()
     chargerCounter = 0
+    platformGaps.removeAll()
+    earthquakePhase = 0
+    quakeHapticTimer = 0
+    flechazoRemaining = 0
+    flechazoCooldown = 0
+    heartMissiles.removeAll()
+    hitParticles.removeAll()
+    cortejoCharges = 0
     assignStagePowerUp()
     assignStageMechanic()
 
@@ -767,6 +871,8 @@ final class GameState {
     if damageCooldown > 0 { damageCooldown = max(0, damageCooldown - Double(dt)) }
     if capedRemaining > 0 { capedRemaining = max(0, capedRemaining - Double(dt)) }
     if speedRemaining > 0 { speedRemaining = max(0, speedRemaining - Double(dt)) }
+    if flechazoRemaining > 0 { flechazoRemaining = max(0, flechazoRemaining - Double(dt)) }
+    if flechazoCooldown > 0 { flechazoCooldown = max(0, flechazoCooldown - Double(dt)) }
     if serenataRemaining > 0 {
       serenataRemaining = max(0, serenataRemaining - Double(dt))
       if serenataRemaining == 0 {
@@ -786,6 +892,15 @@ final class GameState {
     // obstacles move — an active zombie window re-routes `updateObstacles` to homing.
     updateMechanicScheduler(dt: dt)
     updateObstacles(dt: dt)
+    // La Camada babies mirror their parents' post-move positions; El Cortejo chasers steer;
+    // the ❤️ missiles home + kill; then age the sympathetic/catch fades and the quake's
+    // gaps/jiggle/haptics. All no-op cheaply when their subsystem is idle.
+    updateBabies(dt: dt)
+    updateCortejo(dt: dt)
+    updateHeartMissiles(dt: dt)
+    updateObstacleFades(dt: dt)
+    updateTerremoto(dt: dt)
+    updateHitParticles(dt: dt)
     // El Encierro: spawn (while the window is open) and advance the 🐂 chargers.
     updateChargers(dt: dt)
     advanceAnimations(dt: dt)
@@ -813,5 +928,49 @@ final class GameState {
     _ bx: CGFloat, _ by: CGFloat, _ bw: CGFloat, _ bh: CGFloat
   ) -> Bool {
     abs(ax - bx) < (aw + bw) / 2 && abs(ay - by) < (ah + bh) / 2
+  }
+
+  /// Squared distance between two points — used by the homing subsystems (missiles,
+  /// chasers) so nearest-target picks and hit tests avoid a `squareRoot` per comparison.
+  func distSq(_ ax: CGFloat, _ ay: CGFloat, _ bx: CGFloat, _ by: CGFloat) -> CGFloat {
+    let dx = ax - bx
+    let dy = ay - by
+    return dx * dx + dy * dy
+  }
+
+  // MARK: Obstacle-destruction yellow particle burst
+
+  /// Throw off a fan of yellow particles at `(x, y)` — the feedback when an obstacle is
+  /// destroyed. A deterministic radial spread (with a slight upward bias) so it needs no
+  /// RNG and stays reproducible under test.
+  func spawnHitParticles(x: CGFloat, y: CGFloat) {
+    for i in 0..<Self.hitParticleCount {
+      let angle = 2 * Double.pi * Double(i) / Double(Self.hitParticleCount)
+      let speed = Self.hitParticleSpeed * (i % 2 == 0 ? 1.0 : 0.65)   // two rings for a fuller pop
+      hitParticles.append(
+        HitParticle(
+          id: hitParticleCounter,
+          x: x, y: y,
+          velocityX: CGFloat(cos(angle)) * speed,
+          velocityY: CGFloat(sin(angle)) * speed - Self.hitParticleSpeed * 0.3,   // slight upward kick
+          ttl: Self.hitParticleLife,
+          initialTTL: Self.hitParticleLife,
+          size: Self.hitParticleSize
+        )
+      )
+      hitParticleCounter += 1
+    }
+  }
+
+  /// Advance the red hit-particles: integrate under gravity and drop the expired ones.
+  func updateHitParticles(dt: CGFloat) {
+    guard !hitParticles.isEmpty else { return }
+    for i in hitParticles.indices {
+      hitParticles[i].velocityY += Self.hitParticleGravity * dt
+      hitParticles[i].x += hitParticles[i].velocityX * dt
+      hitParticles[i].y += hitParticles[i].velocityY * dt
+      hitParticles[i].ttl -= Double(dt)
+    }
+    hitParticles.removeAll { $0.ttl <= 0 }
   }
 }

@@ -194,14 +194,18 @@ struct GameStateTests {
     )
   }
 
-  @Test func obstacleHitCostsOnePipAndConsumesTheObstacle() {
+  @Test func obstacleHitCostsOnePipAndFadesTheObstacle() {
     let gameState = configured()
     let start = gameState.health
     gameState.damageCooldown = 0
     gameState.obstacles.append(obstacleOnPlayer(gameState))
     gameState.resolveCollisions()
     #expect(gameState.health == start - 1)
-    #expect(gameState.obstacles.isEmpty)
+    // The struck obstacle now fades out over 1 s (non-colliding while it fades) instead of
+    // vanishing instantly, and throws a yellow particle burst at its position.
+    #expect(gameState.obstacles.count == 1)
+    #expect(gameState.obstacles[0].fadeRemaining == GameState.obstacleFadeDuration)
+    #expect(!gameState.hitParticles.isEmpty)
   }
 
   @Test func capedPlayerSmashesObstacleWithoutDamage() {
@@ -462,12 +466,13 @@ struct GameStateTests {
     // Seed a deterministic RNG and empty the bag so the draws are reproducible.
     gameState.bossRNG = SplitMix64(seed: 0xC0FFEE)
     gameState.powerUpBag.removeAll()
+    let bag = PowerUpKind.allCases.count
     var draws: [PowerUpKind] = []
-    for _ in 0..<6 { draws.append(gameState.drawStagePowerUpKind()) }
-    // Each consecutive run of three is a full permutation — no kind repeats until the
-    // bag exhausts and reshuffles.
-    #expect(Set(draws[0..<3]) == Set(PowerUpKind.allCases))
-    #expect(Set(draws[3..<6]) == Set(PowerUpKind.allCases))
+    for _ in 0..<(bag * 2) { draws.append(gameState.drawStagePowerUpKind()) }
+    // Each consecutive run of `bag` draws is a full permutation — no kind repeats until
+    // the bag exhausts and reshuffles.
+    #expect(Set(draws[0..<bag]) == Set(PowerUpKind.allCases))
+    #expect(Set(draws[bag..<(bag * 2)]) == Set(PowerUpKind.allCases))
   }
 
   @Test func speedPickupDoublesWalkDisplacement() {
@@ -545,6 +550,12 @@ struct GameStateTests {
         #expect(gameState.speedRemaining == GameState.speedDuration)
       case .serenata:
         #expect(gameState.serenataRemaining == GameState.serenataDuration)
+      case .flechazo:
+        #expect(gameState.flechazoRemaining == GameState.flechazoDuration)
+      case .cortejo:
+        // Cortejo starts no timer — it possesses an obstacle. With none present here the
+        // collection is a graceful no-op; its behavior is covered by the cortejo tests.
+        break
       }
     }
   }
@@ -602,10 +613,11 @@ struct GameStateTests {
     let gameState = configured()
     gameState.bossRNG = SplitMix64(seed: 0xF00D)
     gameState.mechanicBag.removeAll()
+    let bag = ChallengeMechanic.allCases.count
     var draws: [ChallengeMechanic] = []
-    for _ in 0..<6 { draws.append(gameState.drawStageMechanic()) }
-    #expect(Set(draws[0..<3]) == Set(ChallengeMechanic.allCases))
-    #expect(Set(draws[3..<6]) == Set(ChallengeMechanic.allCases))
+    for _ in 0..<(bag * 2) { draws.append(gameState.drawStageMechanic()) }
+    #expect(Set(draws[0..<bag]) == Set(ChallengeMechanic.allCases))
+    #expect(Set(draws[bag..<(bag * 2)]) == Set(ChallengeMechanic.allCases))
   }
 
   @Test func schedulerFiresWithinTheDelayWindowThenReArms() {
@@ -950,5 +962,365 @@ struct GameStateTests {
     let pop = gameState.jaleoPops[0]
     #expect(abs(pop.x - gameState.bullX) < 0.5)
     #expect(pop.y > gameState.bullY)
+  }
+
+  // MARK: El Terremoto (earthquake mechanic)
+
+  @Test func terremotoOpensGapsRoughlyTenPercentOfEachGirder() {
+    let gameState = configured()
+    gameState.assignedMechanic = .terremoto
+    gameState.startMechanic()
+    #expect(gameState.activeMechanic == .terremoto)
+    #expect(!gameState.platformGaps.isEmpty)
+    // Each girder's holes sum to ~earthquakeGapFraction of its width.
+    for platform in gameState.platforms {
+      let gapsHere = gameState.platformGaps.filter { $0.level == platform.level }
+      guard !gapsHere.isEmpty else { continue }
+      let removed = gapsHere.reduce(CGFloat(0)) { $0 + ($1.xRange.upperBound - $1.xRange.lowerBound) }
+      let fraction = removed / platform.rect.width
+      #expect(abs(fraction - GameState.earthquakeGapFraction) < 0.01)
+    }
+  }
+
+  @Test func terremotoNeverOpensAGapUnderALadderMouth() {
+    let gameState = configured()
+    gameState.assignedMechanic = .terremoto
+    gameState.startMechanic()
+    #expect(!gameState.platformGaps.isEmpty)
+    let clearance = GameState.ladderWidth / 2 + GameState.playerWidth / 2
+    // No hole may straddle a ladder that rises from or arrives at that girder — the climb
+    // route must stay intact and the player must be able to stand at every ladder base.
+    for gap in gameState.platformGaps {
+      let mouths = gameState.ladders
+        .filter { $0.lowerLevel == gap.level || $0.upperLevel == gap.level }
+        .map { ($0.x - clearance)...($0.x + clearance) }
+      #expect(!mouths.contains { $0.overlaps(gap.xRange) })
+    }
+  }
+
+  @Test func terremotoSparesAStandingStillPlayersFootprint() {
+    let gameState = configured()
+    // Idle player on the bottom girder — no horizontal intent, grounded, not climbing.
+    gameState.playerLevel = 0
+    gameState.playerGrounded = true
+    gameState.playerClimbing = false
+    gameState.movingLeft = false
+    gameState.movingRight = false
+    gameState.assignedMechanic = .terremoto
+    gameState.startMechanic()
+    let clearance = GameState.playerWidth / 2 + 4
+    let footprint = (gameState.playerX - clearance)...(gameState.playerX + clearance)
+    // No hole on her girder may open under a standing-still dancer.
+    for gap in gameState.platformGaps where gap.level == 0 {
+      #expect(!gap.xRange.overlaps(footprint))
+    }
+  }
+
+  @Test func fadingGapIsSolidButAFinishedGapDropsThePlayer() {
+    let gameState = configured()
+    gameState.assignedMechanic = .terremoto
+    gameState.startMechanic()
+    // Put a gap directly under the player on the bottom girder.
+    gameState.playerLevel = 0
+    let px = gameState.playerX
+    gameState.platformGaps = [
+      PlatformGap(id: 0, level: 0, xRange: (px - 15)...(px + 15), fadeRemaining: 1.0)
+    ]
+    // While the gap is still fading it is SOLID — the player stays grounded over it.
+    gameState.playerGrounded = true
+    gameState.playerVelocityY = 0
+    gameState.playerY = gameState.platforms[0].surfaceY - GameState.playerHeight / 2
+    gameState.updatePlayer(dt: 1.0 / 60.0)
+    #expect(gameState.playerGrounded)
+
+    // Once the gap finishes fading it is a true hole — the player falls through it.
+    gameState.platformGaps[0].fadeRemaining = 0
+    gameState.playerGrounded = true
+    gameState.playerVelocityY = 0
+    gameState.playerY = gameState.platforms[0].surfaceY - GameState.playerHeight / 2
+    gameState.updatePlayer(dt: 1.0 / 60.0)
+    #expect(!gameState.playerGrounded)   // no support over the finished hole
+  }
+
+  @Test func fallingThroughTheFloorCostsExactlyOnePipAndRepositions() {
+    let gameState = configured()
+    gameState.damageCooldown = 0
+    let start = gameState.health
+    // Drop the player below the bottom girder through a finished gap.
+    gameState.platformGaps = [PlatformGap(id: 0, level: 0, xRange: 0...400, fadeRemaining: 0)]
+    gameState.playerGrounded = false
+    gameState.playerY = gameState.platforms[0].surfaceY + 40
+    gameState.fellThroughFloor()
+    #expect(gameState.health == start - 1)              // exactly one heart
+    #expect(gameState.playerGrounded)                   // back on the bottom platform
+    #expect(gameState.playerLevel == 0)
+    #expect(gameState.damageCooldown == GameState.respawnGrace)
+    let feet = gameState.playerY + GameState.playerHeight / 2
+    #expect(abs(feet - gameState.platforms[0].surfaceY) < 0.5)
+  }
+
+  @Test func terremotoEndHealsTheGirders() {
+    let gameState = configured()
+    gameState.assignedMechanic = .terremoto
+    gameState.startMechanic()
+    #expect(!gameState.platformGaps.isEmpty)
+    gameState.endMechanic()
+    #expect(gameState.activeMechanic == nil)
+    #expect(gameState.platformGaps.isEmpty)             // beams restored
+    #expect(gameState.earthquakeShakeOffsetY == 0)      // jiggle stops with the window
+  }
+
+  @Test func obstacleHopsOverAFinishedGapStayingOnItsGirder() {
+    let gameState = configured()
+    let level = GameState.levelCount - 1
+    let surface = gameState.platforms[level].surfaceY
+    let gapX = gameState.screenSize.width * 0.5
+    // A finished hole on the obstacle's girder, with the obstacle rolling into it.
+    gameState.platformGaps = [PlatformGap(id: 0, level: level, xRange: (gapX - 10)...(gapX + 10), fadeRemaining: 0)]
+    let obstacle = Obstacle(
+      id: 1, x: gapX, y: surface - GameState.obstacleSize / 2,
+      velocityX: gameState.obstacleSpeed, velocityY: 0, falling: false, level: level,
+      emoji: "🇪🇸", rotation: 0, style: .spin
+    )
+    gameState.obstacles.append(obstacle)
+    gameState.updateObstacles(dt: 1.0 / 60.0)
+    // It launched into a hop rather than falling to the girder below.
+    #expect(gameState.obstacles[0].hopping)
+    #expect(gameState.obstacles[0].velocityY < 0)       // arcing upward
+    #expect(gameState.obstacles[0].level == level)       // still bound to the same girder
+    #expect(!gameState.obstacles[0].falling)
+  }
+
+  // MARK: La Camada (obstacles multiply)
+
+  private func fullObstacleMidField(_ gameState: GameState) -> Obstacle {
+    let level = GameState.levelCount - 1
+    return Obstacle(
+      id: 42, x: gameState.screenSize.width * 0.5,
+      y: gameState.platforms[level].surfaceY - GameState.obstacleSize / 2,
+      velocityX: gameState.obstacleSpeed, velocityY: 0, falling: false, level: level,
+      emoji: "🐎", rotation: 0, style: .face, facing: 1
+    )
+  }
+
+  @Test func camadaSpawnsOneHalfSizeBabyPerEligibleParent() {
+    let gameState = configured()
+    gameState.assignedMechanic = .camada
+    gameState.obstacles = [fullObstacleMidField(gameState)]
+    gameState.obstacleCounter = 100
+    gameState.startMechanic()
+    let babies = gameState.obstacles.filter { $0.parentID != nil }
+    #expect(babies.count == 1)                            // one baby for the one parent
+    #expect(babies[0].parentID == 42)
+    #expect(babies[0].scale == GameState.babyScale)       // half size
+    #expect(babies[0].birthRemaining == GameState.babyBirthSlide)
+    // A baby is NOT itself eligible to breed: a re-fire spawns more children of the FULL
+    // parent (42), never a grandchild whose parent is a baby.
+    gameState.startMechanic()
+    #expect(gameState.obstacles.filter { $0.parentID != nil }.allSatisfy { $0.parentID == 42 })
+  }
+
+  @Test func babyMirrorsItsParentAfterTheBirthSlide() {
+    let gameState = configured()
+    gameState.assignedMechanic = .camada
+    var parent = fullObstacleMidField(gameState)
+    parent.velocityX = gameState.obstacleSpeed   // rolling right → baby slides left
+    gameState.obstacles = [parent]
+    gameState.startMechanic()
+    // Finish the birth slide, then move the parent and confirm the baby tracks it.
+    guard let bi = gameState.obstacles.firstIndex(where: { $0.parentID != nil }) else {
+      Issue.record("no baby spawned"); return
+    }
+    gameState.obstacles[bi].birthRemaining = 0
+    gameState.updateBabies(dt: 1.0 / 60.0)
+    let baby = gameState.obstacles.first { $0.parentID != nil }!
+    let parentNow = gameState.obstacles.first { $0.parentID == nil }!
+    // Locked to the trailing offset (opposite the parent's rightward travel → to its left).
+    #expect(baby.x < parentNow.x)
+    #expect(abs(baby.x - (parentNow.x + baby.birthOffset.width)) < 0.5)
+  }
+
+  @Test func aBabyHitFadesAllBabiesButNotTheParents() {
+    let gameState = configured()
+    gameState.damageCooldown = 0
+    let level = GameState.levelCount - 1
+    let surface = gameState.platforms[level].surfaceY - GameState.obstacleSize / 2
+    // A full-size parent plus two babies (children of it); one baby sits on the player.
+    let parent = Obstacle(id: 10, x: 150, y: surface, velocityX: 0, velocityY: 0, falling: false, level: level, emoji: "⚽", rotation: 0)
+    let babyOnPlayer = Obstacle(id: 11, x: gameState.playerX, y: gameState.playerY, velocityX: 0, velocityY: 0, falling: false, level: 0, emoji: "⚽", rotation: 0, scale: GameState.babyScale, parentID: 10)
+    let babyElsewhere = Obstacle(id: 12, x: 250, y: surface, velocityX: 0, velocityY: 0, falling: false, level: level, emoji: "⚽", rotation: 0, scale: GameState.babyScale, parentID: 10)
+    gameState.obstacles = [parent, babyOnPlayer, babyElsewhere]
+    gameState.resolveCollisions()
+    let babies = gameState.obstacles.filter { $0.parentID != nil }
+    let parents = gameState.obstacles.filter { $0.parentID == nil }
+    #expect(!babies.isEmpty)                               // the un-hit baby survives (fading)
+    #expect(babies.allSatisfy { $0.fadeRemaining > 0 })   // every remaining baby is fading
+    #expect(parents.allSatisfy { $0.fadeRemaining == 0 }) // the parent is untouched
+  }
+
+  // MARK: El Flechazo (heart missiles on jump)
+
+  @Test func armedJumpFiresAHeartMissileWithOneSecondCooldown() {
+    let gameState = configured()
+    gameState.flechazoRemaining = GameState.flechazoDuration
+    gameState.flechazoCooldown = 0
+    gameState.obstacles = [fullObstacleMidField(gameState)]
+    gameState.jump()
+    #expect(gameState.heartMissiles.count == 1)
+    #expect(gameState.flechazoCooldown == GameState.flechazoCooldownDuration)
+
+    // A jump within the cooldown window fires no second missile.
+    gameState.playerGrounded = true
+    gameState.playerClimbing = false
+    gameState.jump()
+    #expect(gameState.heartMissiles.count == 1)
+  }
+
+  @Test func armedJumpWithNoTargetConsumesNoCooldown() {
+    let gameState = configured()
+    gameState.flechazoRemaining = GameState.flechazoDuration
+    gameState.flechazoCooldown = 0
+    gameState.obstacles.removeAll()
+    gameState.jump()
+    #expect(gameState.heartMissiles.isEmpty)
+    #expect(gameState.flechazoCooldown == 0)   // no target → no cooldown spent
+  }
+
+  @Test func heartMissileFadesItsTargetOnContact() {
+    let gameState = configured()
+    var target = fullObstacleMidField(gameState)
+    target.velocityX = 0
+    gameState.obstacles = [target]
+    // A missile essentially on top of the target.
+    gameState.heartMissiles = [
+      HeartMissile(id: 0, x: target.x, y: target.y, velocityX: 0, velocityY: 0, targetID: target.id, lifeRemaining: GameState.heartMissileLife)
+    ]
+    gameState.updateHeartMissiles(dt: 1.0 / 60.0)
+    // The target now fades out over 1 s (non-colliding while it fades) with a yellow particle
+    // burst, rather than vanishing instantly; the missile is consumed.
+    #expect(gameState.obstacles.count == 1)
+    #expect(gameState.obstacles[0].fadeRemaining == GameState.obstacleFadeDuration)
+    #expect(!gameState.hitParticles.isEmpty)
+    #expect(gameState.heartMissiles.isEmpty)    // missile consumed
+  }
+
+  // MARK: El Cortejo (mushroom chaser)
+
+  @Test func cortejoPossessesThenChasesAfterTheVibrateWindow() {
+    let gameState = configured()
+    gameState.bossRNG = SplitMix64(seed: 0x5EED)
+    let level = GameState.levelCount - 1
+    let surface = gameState.platforms[level].surfaceY - GameState.obstacleSize / 2
+    gameState.obstacles = [
+      Obstacle(id: 1, x: 120, y: surface, velocityX: 40, velocityY: 0, falling: false, level: level, emoji: "⚽", rotation: 0),
+      Obstacle(id: 2, x: 300, y: surface, velocityX: -40, velocityY: 0, falling: false, level: level, emoji: "⚽", rotation: 0)
+    ]
+    gameState.collectPowerUp(.cortejo)
+    // One obstacle is now shivering (velocity zeroed, vibrate window running).
+    let possessed = gameState.obstacles.first { $0.vibrateRemaining > 0 }
+    #expect(possessed != nil)
+    #expect(possessed?.isChaser == false)
+    // Run out the vibrate window: it becomes a chaser.
+    gameState.obstacles.indices.forEach { gameState.obstacles[$0].vibrateRemaining = min(gameState.obstacles[$0].vibrateRemaining, 0.001) }
+    gameState.updateCortejo(dt: 1.0 / 60.0)
+    #expect(gameState.obstacles.contains { $0.isChaser })
+  }
+
+  @Test func cortejoCatchFadesBothChaserAndQuarry() {
+    let gameState = configured()
+    let level = GameState.levelCount - 1
+    let surface = gameState.platforms[level].surfaceY - GameState.obstacleSize / 2
+    // A chaser essentially on top of its quarry → an immediate catch.
+    gameState.obstacles = [
+      Obstacle(id: 1, x: 200, y: surface, velocityX: 0, velocityY: 0, falling: false, level: level, emoji: "⚽", rotation: 0, isChaser: true, chaseTargetID: 2),
+      Obstacle(id: 2, x: 205, y: surface, velocityX: 0, velocityY: 0, falling: false, level: level, emoji: "⚽", rotation: 0)
+    ]
+    gameState.updateCortejo(dt: 1.0 / 60.0)
+    #expect(gameState.obstacles.first { $0.id == 1 }?.fadeRemaining ?? 0 > 0)
+    #expect(gameState.obstacles.first { $0.id == 2 }?.fadeRemaining ?? 0 > 0)
+    // Red confetti (jaleo-pop emoji) blooms at the meeting point.
+    #expect(!gameState.jaleoPops.isEmpty)
+  }
+
+  @Test func cortejoFizzlesGracefullyWithFewerThanTwoObstacles() {
+    let gameState = configured()
+    let level = GameState.levelCount - 1
+    let surface = gameState.platforms[level].surfaceY - GameState.obstacleSize / 2
+    gameState.obstacles = [
+      Obstacle(id: 1, x: 200, y: surface, velocityX: 40, velocityY: 0, falling: false, level: level, emoji: "⚽", rotation: 0)
+    ]
+    gameState.collectPowerUp(.cortejo)
+    // The lone obstacle is possessed but has no quarry — after its vibrate it despawns.
+    gameState.obstacles.indices.forEach { gameState.obstacles[$0].vibrateRemaining = 0.001 }
+    gameState.updateCortejo(dt: 1.0 / 60.0)   // vibrate → chaser
+    gameState.updateCortejo(dt: 1.0 / 60.0)   // chaser with no target → fizzle
+    #expect(gameState.obstacles.isEmpty)
+  }
+
+  private func twoObstacles(_ gameState: GameState) -> [Obstacle] {
+    let level = GameState.levelCount - 1
+    let surface = gameState.platforms[level].surfaceY - GameState.obstacleSize / 2
+    return [
+      Obstacle(id: 1, x: 120, y: surface, velocityX: 40, velocityY: 0, falling: false, level: level, emoji: "⚽", rotation: 0),
+      Obstacle(id: 2, x: 300, y: surface, velocityX: -40, velocityY: 0, falling: false, level: level, emoji: "⚽", rotation: 0)
+    ]
+  }
+
+  @Test func cortejoPickupGrantsThreeChargesSpendingOneWhenIdle() {
+    let gameState = configured()
+    gameState.obstacles = twoObstacles(gameState)
+    gameState.collectPowerUp(.cortejo)
+    // Three granted, one spent immediately (the field was idle) → two banked for later jumps.
+    #expect(gameState.cortejoCharges == 2)
+    #expect(gameState.obstacles.contains { $0.vibrateRemaining > 0 })   // a possession started
+  }
+
+  @Test func cortejoJumpSpendsAChargeOnlyWhenNoChaseIsActive() {
+    let gameState = configured()
+    let level = GameState.levelCount - 1
+    let surface = gameState.platforms[level].surfaceY - GameState.obstacleSize / 2
+    gameState.cortejoCharges = 1
+    // A chase in flight → a jump must NOT spend the charge (the chase time is the cooldown).
+    gameState.obstacles = [
+      Obstacle(id: 9, x: 200, y: surface, velocityX: 0, velocityY: 0, falling: false, level: level, emoji: "⚽", rotation: 0, isChaser: true)
+    ]
+    gameState.playerGrounded = true
+    gameState.playerClimbing = false
+    gameState.jump()
+    #expect(gameState.cortejoCharges == 1)   // debounced by the active chase
+
+    // Field idle again with targetable obstacles → the next jump spends the charge.
+    gameState.obstacles = twoObstacles(gameState)
+    gameState.playerGrounded = true
+    gameState.playerClimbing = false
+    gameState.jump()
+    #expect(gameState.cortejoCharges == 0)
+    #expect(gameState.obstacles.contains { $0.vibrateRemaining > 0 })   // re-possession started
+  }
+
+  @Test func cortejoSecondPickupBanksChargesOntoTheRemainder() {
+    let gameState = configured()
+    gameState.obstacles = twoObstacles(gameState)
+    gameState.collectPowerUp(.cortejo)     // +3, fires one (idle) → 2 left, chase now active
+    #expect(gameState.cortejoCharges == 2)
+    #expect(gameState.isCortejoActive)
+    // A second mushroom mid-chase banks its 3 onto the remaining 2 (debounced — no immediate fire).
+    gameState.collectPowerUp(.cortejo)
+    #expect(gameState.cortejoCharges == 5)
+  }
+
+  @Test func cortejoChargesPersistAcrossAStageSummit() {
+    let gameState = configured()
+    gameState.summitCount = 1
+    gameState.cortejoCharges = 2
+    // Drive a real summit (escape beat → next stage rebuild), as `escapeCompletesIntoTheNextStage`.
+    gameState.enterEscape()
+    var safety = 0
+    while gameState.phase == .escape && safety < 1000 {
+      safety += 1
+      gameState.updateEscape(dt: 1.0 / 60.0)
+    }
+    #expect(gameState.stage == 2)
+    #expect(gameState.cortejoCharges == 2)   // banked charges survive a summit (death clears them)
   }
 }

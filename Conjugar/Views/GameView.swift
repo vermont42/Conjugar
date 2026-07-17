@@ -224,6 +224,14 @@ struct GameView: View {
   /// platform surface), mirroring `bullFeetOffset` / `dancerFeetOffset`.
   private static let matadorFeetOffset: CGFloat = -(matadorVisualHeight - GameState.bullfighterSize) / 2
 
+  /// The small horizontal shiver a `cortejo`-possessed obstacle makes before it starts
+  /// chasing — a deterministic sine of its own `vibrateRemaining` (phase-varied by id), 0
+  /// once the chase begins.
+  private static func vibrateJitter(_ obstacle: Obstacle) -> CGFloat {
+    guard obstacle.vibrateRemaining > 0 else { return 0 }
+    return CGFloat(sin(obstacle.vibrateRemaining * 40 + Double(obstacle.id))) * 2
+  }
+
   var body: some View {
     GeometryReader { geo in
       let field = Self.fieldSize(in: geo.size)
@@ -294,6 +302,19 @@ struct GameView: View {
           .opacity(platform.level == 0 ? 1 : 1 - gameState.bossTransition)
         }
 
+        // El Terremoto: holes punched in the girders. Each is drawn as a background-colored
+        // notch whose opacity ramps up as the gap fades in (fadeRemaining 1→0 → opacity 0→1),
+        // so the beam appears to open into a true hole.
+        ForEach(gameState.platformGaps) { gap in
+          let level = min(max(gap.level, 0), gameState.platforms.count - 1)
+          let rect = gameState.platforms.isEmpty ? .zero : gameState.platforms[level].rect
+          Rectangle()
+            .fill(Color.customBackground)
+            .frame(width: gap.xRange.upperBound - gap.xRange.lowerBound, height: rect.height + 2)
+            .position(x: (gap.xRange.lowerBound + gap.xRange.upperBound) / 2, y: rect.midY)
+            .opacity((1 - gap.fadeRemaining) * (1 - gameState.bossTransition))
+        }
+
         ForEach(gameState.ladders) { ladder in
           ladderView(ladder)
             .opacity(1 - gameState.bossTransition)
@@ -311,12 +332,15 @@ struct GameView: View {
           // upright and mirror to face their travel (glyphs render facing LEFT, so a
           // rightward mover flips to −1 — the dancer/bull convention); `.upright`
           // sets neither spin nor mirror.
+          // A `camada` baby renders at half size (`scale`); a caught/sympathetic obstacle
+          // fades by `fadeRemaining`; a `cortejo` obstacle shivering before its chase jitters.
           Text(obstacle.emoji)
-            .font(.system(size: 28))
+            .font(.system(size: 28 * obstacle.scale))
             .rotationEffect(obstacle.style == .spin ? .degrees(obstacle.rotation) : .zero)
             .scaleEffect(x: obstacle.style == .face && obstacle.facing > 0 ? -1 : 1, y: 1)
+            .offset(x: Self.vibrateJitter(obstacle))
             .position(x: obstacle.x, y: obstacle.y)
-            .opacity(1 - gameState.bossTransition)
+            .opacity((obstacle.fadeRemaining > 0 ? obstacle.fadeRemaining : 1) * (1 - gameState.bossTransition))
         }
 
         // El Encierro: 🐂 chargers running across the girders. The glyph faces LEFT, so
@@ -333,9 +357,13 @@ struct GameView: View {
 
         matadorSprite
 
+        heartMissileViews
+        hitParticleViews
         bullSprite
         playerSprite
         speedBadge
+        flechazoBadge
+        cortejoBadge
 
         // El Apagón: the lights-out overlay. Placed after the sprites (so they darken)
         // but before the cue chips + jaleo pops (so an announcement floats above the
@@ -346,6 +374,8 @@ struct GameView: View {
         jaleoPopViews
       }
       .offset(shakeOffset)
+      // El Terremoto's vertical jiggle rides on top of the boss shake (climb-only; 0 otherwise).
+      .offset(y: gameState.earthquakeShakeOffsetY)
 
       if gameState.phase == .victory || gameState.phase == .endScene {
         confetti(count: 40, colors: [.customRed, .customYellow, .customBlue])
@@ -474,6 +504,14 @@ struct GameView: View {
       Text(verbatim: "🎸")
         .font(.system(size: GameState.capeSize))
         .position(x: powerUp.x, y: powerUp.y)
+    case .flechazo:
+      Text(verbatim: "❤️")
+        .font(.system(size: GameState.capeSize))
+        .position(x: powerUp.x, y: powerUp.y)
+    case .cortejo:
+      Text(verbatim: "🍄")
+        .font(.system(size: GameState.capeSize))
+        .position(x: powerUp.x, y: powerUp.y)
     }
   }
 
@@ -485,8 +523,63 @@ struct GameView: View {
         Text(verbatim: "⚡")
           .font(.system(size: 20))
           .opacity(gameState.isSpeedBadgeVisible ? 1 : 0.25)
-          .position(x: gameState.playerX, y: gameState.playerY - GameState.playerHeight)
+          // Hovers on her LEADING side (the way she faces), like the muleta — off her
+          // front edge at the dancer sprite's VERTICAL center (playerY is the short
+          // collision box's center, ~13.6 pt below the sprite's; per Josh).
+          .position(x: gameState.playerX + gameState.playerFacing * (GameState.playerWidth / 2), y: gameState.playerY + Self.dancerFeetOffset)
       }
+    }
+  }
+
+  /// A ❤️ badge above the dancer while El Flechazo is armed, sharing the cape's expiry
+  /// blink (`isFlechazoBadgeVisible`) exactly like the speed badge.
+  private var flechazoBadge: some View {
+    Group {
+      if gameState.flechazoRemaining > 0 {
+        Text(verbatim: "❤️")
+          .font(.system(size: 18))
+          .opacity(gameState.isFlechazoBadgeVisible ? 1 : 0.25)
+          // Hovers on her LEADING side (the way she faces), like the muleta — off her
+          // front edge at the dancer sprite's VERTICAL center (playerY is the short
+          // collision box's center, ~13.6 pt below the sprite's; per Josh).
+          .position(x: gameState.playerX + gameState.playerFacing * (GameState.playerWidth / 2), y: gameState.playerY + Self.dancerFeetOffset)
+      }
+    }
+  }
+
+  /// A small 🍄 badge on her leading side while El Cortejo has banked charges — same
+  /// leading-side / body-center placement as the speed and flechazo badges. No expiry blink:
+  /// cortejo is a charge COUNT, not a timed envelope, so it shows solid until spent.
+  private var cortejoBadge: some View {
+    Group {
+      if gameState.cortejoCharges > 0 {
+        Text(verbatim: "🍄")
+          .font(.system(size: 18))
+          .position(x: gameState.playerX + gameState.playerFacing * (GameState.playerWidth / 2), y: gameState.playerY + Self.dancerFeetOffset)
+      }
+    }
+  }
+
+  /// The yellow particle burst thrown off when an obstacle is destroyed
+  /// (`GameState.spawnHitParticles`) — small dots scattering under gravity and fading.
+  private var hitParticleViews: some View {
+    ForEach(gameState.hitParticles) { particle in
+      Circle()
+        .fill(Color.customYellow)
+        .frame(width: particle.size, height: particle.size)
+        .opacity((particle.ttl / particle.initialTTL) * (1 - gameState.bossTransition))
+        .position(x: particle.x, y: particle.y)
+    }
+  }
+
+  /// The in-flight ❤️ heart missiles fired by qualifying jumps — half-size glyphs homing
+  /// on a random obstacle (`GameState.updateHeartMissiles`).
+  private var heartMissileViews: some View {
+    ForEach(gameState.heartMissiles) { missile in
+      Text(verbatim: "❤️")
+        .font(.system(size: 14))
+        .position(x: missile.x, y: missile.y)
+        .opacity(1 - gameState.bossTransition)
     }
   }
 
@@ -650,6 +743,11 @@ struct GameView: View {
   private var jaleoPopViews: some View {
     ForEach(gameState.jaleoPops) { pop in
       let age = pop.initialTTL - pop.ttl
+      // During the `hold` window the pop stays fully opaque and stationary; afterward it
+      // fades + rises over the remaining span, so a held announcement is readable first.
+      let fadeAge = max(0, age - pop.hold)
+      let fadeSpan = max(0.0001, pop.initialTTL - pop.hold)
+      let opacity = min(1, max(0, (pop.initialTTL - age) / fadeSpan))
       let margin = Layout.defaultHorizontalMargin
       let halfRoom = max(0, min(pop.x, gameState.screenSize.width - pop.x) - margin)
       Text(verbatim: pop.text)
@@ -659,8 +757,8 @@ struct GameView: View {
         .frame(maxWidth: max(1, halfRoom * 2))
         .fixedSize(horizontal: false, vertical: true)
         .shadow(color: .black.opacity(0.4), radius: 1, y: 1)
-        .opacity(pop.ttl / pop.initialTTL)
-        .position(x: pop.x, y: pop.y - CGFloat(age) * pop.riseRate)
+        .opacity(opacity)
+        .position(x: pop.x, y: pop.y - CGFloat(fadeAge) * pop.riseRate)
     }
   }
 

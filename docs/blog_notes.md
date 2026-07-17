@@ -6592,3 +6592,145 @@ first, then navigate. No code changed this turn; the suite was already green at 
 was pure verification, so the only artifacts are the plan/blog status updates marking Phase 5
 done *with respect to Claude*, with the device matrix, multitasking, widgets, and App Store
 screenshots explicitly flagged as Josh's remaining device work.
+
+## Two new power-ups + two new mechanics — killing the per-run repetition (2026-07-16)
+
+The climb (La Subida) has five stages, but the power-up and challenge draws each came from a
+no-repeat shuffle bag of only **three** (`PowerUpKind` / `ChallengeMechanic`). A 3-item bag drawn
+five times gives a clean permutation for stages 1–3, then reshuffles and hands out two more — so
+**every run guaranteed two repeats in each family**. Growing each bag to five (bag-size ==
+stage-count) makes each run a clean permutation: all five appear once, in pure-random order, zero
+repetition. No draw-logic change was needed — `drawStagePowerUpKind` / `drawStageMechanic` already
+do `allCases.shuffled(using:&bossRNG).removeLast()`, so a five-case enum just works. The two old
+bag tests hard-coded windows of three (`Set(draws[0..<3]) == allCases`); I generalized them to
+`PowerUpKind.allCases.count` so they never rot against a future bag resize.
+
+The four new items all reuse the existing `Obstacle` render + collision path rather than
+introducing new entity types (Josh's call) — the struct grew a handful of value-type fields
+(`scale`, `parentID`, `birthOffset`, `fadeRemaining`, `vibrateRemaining`, `isChaser`,
+`chaseTargetID`, `hopping`) plus an `isSpecial` flag so `updateObstacles` and the zombie homing
+skip the ones their own subsystems drive. Two genuinely new tiny structs: `PlatformGap` (a fading
+hole in a girder) and `HeartMissile` (a homing projectile).
+
+- **terremoto** (earthquake mechanic): 5 s of vertical screen jiggle + pulsed haptics + ~10 % of
+  each girder vanishing as two fading holes. The main engineering was that girders were single
+  continuous `CGRect` spans with no gap concept — so I added `platformGaps`, made the player's
+  landing snap skip a *finished* gap (a still-fading one stays solid and traversable, per Josh),
+  added `fellThroughFloor()` (a light −1-heart reposition, not a full `respawn()`), and taught
+  rolling obstacles to **hop** a finished gap on a parabolic arc (a `hopping` flag so they land
+  back on the same girder instead of falling through). Haptics are pulsed `.impactMedium` on a
+  0.18 s timer — there's no CoreHaptics here, only UIKit discrete generators, so a continuous
+  rumble is faked by pulsing (noted as future polish).
+- **camada** (obstacles multiply): a one-shot that spawns a half-size baby at each eligible
+  obstacle's center; the baby slides one emoji-width out opposite the parent's travel over 0.5 s,
+  then mirrors it exactly and rides it off the bottom girder. Any baby hit fades **all** babies
+  (the parents untouched). Babies aren't eligible to breed, so a re-fire makes more children of
+  the full parents, never grandchildren.
+- **flechazo** (heart missiles on jump): a ❤️ pickup that, for the standard 7 s envelope, fires a
+  half-size homing ❤️ on each qualifying jump (1 s creation cooldown; a jump with no target on
+  screen consumes no cooldown). New `HeartMissile` entity, a ❤️ dancer badge mirroring the ⚡ speed
+  badge.
+- **cortejo** (mushroom chaser): a 🍄 pickup possesses a random obstacle — it shivers in place
+  1.5 s, then pursues another at 1.5× speed (upward allowed) until it catches it; both fade out
+  and red confetti blooms. The confetti **reuses the boss end-scene emitter idiom** (`spawnJaleo`
+  emoji pops — emoji keep their own red regardless of the jaleo tint), so no new particle type.
+  Fewer than two obstacles → a graceful fizzle (possess one, despawn after its shiver).
+
+One implementation gotcha worth recording: the homing subsystems (missiles, chasers) look up their
+target *in the same `obstacles` array they're mutating*. Passing `&obstacles[i]` while reading
+`obstacles.first { … }` would trip Swift's exclusive-access trap, so those loops read targets from
+a **snapshot** copy taken at the top of the frame and write only through indices. One-frame-stale
+target positions are imperceptible.
+
+SFX: two upgrades copied from the siblings — `brainLockOn.mp3` (Conjuguer) for the flechazo
+lock-on and `coin.mp3` (Konjugieren) for the cortejo catch — dropped into the synchronized
+`Conjugar/Audio/` group (auto-added to the target), new `Sound` cases, logged in
+`asset-licenses/game-sounds-pixabay.txt`. terremoto reuses `.stampede` (literally a rumble, shared
+with encierro); camada uses `.chirp`. Only the two mechanics needed strings (pickups are silent):
+`Game.earthquakeAnnouncement` / `Game.multiplyAnnouncement`, both narrative bull sentences that
+localize en/es following the `zombieAnnouncement` precedent (not the Spanish-in-both title-card
+pattern).
+
+Per the plan I stopped at a green unit-test run and did **not** launch the simulator — Josh will
+hard-code specific power-up + mechanic combinations (`CONJUGAR_GAME_POWERUP` /
+`CONJUGAR_GAME_MECHANIC`, both extended to accept the new cases) and play-test each himself. Build
+succeeds, `swiftlint` clean, and the full suite is green at 538 tests (was 524; +26 new game tests,
+−12 net after removing two duplicate bag tests I'd briefly added alongside the generalized
+originals).
+
+## Playtesting the four new items — the tuning pass a plan couldn't hold (2026-07-17)
+
+The prior entry landed terremoto/camada/flechazo/cortejo functionally correct and green, and
+*explicitly* stopped before the simulator: game feel was Josh's to play-test. This is that pass —
+a long back-and-forth where Josh played on his iPhone, sent a screenshot or a sentence, and I
+adjusted. It's the clearest demonstration I've hit that a plan can pin down *structure* (which
+entities exist, what state they carry, where the render/collision seams are) but not *feel* — you
+only learn the answer once photons hit your eye at 60 fps. Josh's own words at the end: "I have a
+new respect for the contributions of videogame playtesters." Roughly **14 distinct tweaks** came
+out of it, none of which were foreseeable on paper.
+
+**The device-rig detour (and its teardown).** First surprise: the `CONJUGAR_GAME_POWERUP` /
+`CONJUGAR_GAME_MECHANIC` env overrides only reach the process through `simctl`'s `SIMCTL_CHILD_*`
+prefixes. A build run on a real iPhone from Xcode never sees them, so the game fell back to
+*random* draws — Josh reported "not seeing flechazo/terremoto," and an earlier screenshot that
+looked alarmingly like a bug (flags **and** animal obstacles on one screen) was just a normal
+random run I over-read. The fix was a hard-coded device fallback: `riggedPowerUp` /
+`riggedMechanic` constants that `debugForced*` return when no env var is set, **gated OFF under
+`NSClassFromString("XCTest")`** (the same signal `World.chooseWorld()` uses) so the bag/mechanic
+unit tests keep asserting real randomness, not the rig. Two more rig-only knobs rode along: a 10 s
+pickup respawn (collect the same power-up repeatedly) and — later — a tripled forced-mechanic
+delay (2 s → 6 s) so a forced mechanic loops on a watchable cadence. All of it was torn out at the
+end when Josh said "restore randomization" then "full teardown"; the game is back to shipping
+behavior (shuffle-bag draws, once-per-stage pickups, real 25 s mechanic cadence).
+
+**The badge saga — a plan can faithfully reproduce an existing flaw.** The new ⚡/❤️ power-up
+badges took *three* separate corrections. The plan had said "mirror `speedBadge`," and the
+implementation did exactly that — including its placement a full `playerHeight` above center,
+which put the badge squarely over the dancer's face. The plan propagated a latent flaw nobody had
+noticed until a second badge made it obvious. Fixes, in order Josh caught them: center on the body
+→ hover on her *leading* side like the muleta (offset by `playerFacing · playerWidth/2`) → and
+finally anchor to the sprite's *vertical* center, once we pinned down that `playerY` is the center
+of the short 30 pt collision box, ~13.6 pt below the tall dancer sprite's visual center
+(`dancerFeetOffset`). Excluding the per-frame walk bob from the anchor kept the badge from
+bouncing with her gait.
+
+**Two latent/unspecifiable things in terremoto.** (1) Random holes could open on top of a ladder
+mouth, severing a climb route — a correctness bug that only exists in the *interaction* of two
+independently-specified systems (random gaps × ladders), invisible until you watch it happen. Fix:
+treat each ladder mouth on a girder as a forbidden zone (half-ladder + half-dancer clearance). (2)
+A hole opening under a *standing-still* player is unfair — she has no input to step off it — so an
+idle dancer's footprint became a forbidden zone too, but only while idle (a moving player can
+dodge). Both are pure "watch it and react" findings.
+
+**Obstacle-destruction feedback grew in three moves.** Josh wanted a struck obstacle to fade over
+1 s + throw a particle burst instead of vanishing. I wired it into the damage collision — then he
+reported "not seeing it when hit by *hearts*," because I'd only done the player-collision path, not
+the flechazo missile kill (still an instant despawn). Extended it there. Then the color: red →
+Conjugar yellow.
+
+**Cortejo — "underwhelming" became a small resource system.** This was the biggest single change,
+and it arrived over four messages, each refining feel. The pickup used to be fire-and-forget. Now
+a 🍄 grants **three charges**: one fires immediately if the field's idle, the other two spend on
+the *next two jumps* — but only once the prior chase/obliteration has finished, so the chase time
+is a natural debounce (`isCortejoActive` gate). Charges **persist across level summits** (not
+death); a second mushroom collected mid-chase **banks** its three onto the remainder rather than
+force-firing; a 🍄 badge sits on her leading side while charged; and — last touch — a banked
+pickup plays a distinct **castanet click** so it registers audibly even when it doesn't fire (the
+possession keeps its `.chime`). The shared trigger logic (`maybeTriggerCortejo` returning whether
+it fired) serves both the pickup and the jump. That a "boring" power-up turned into a banked,
+debounced, cross-level charge economy is itself the lesson: none of that was in any plan.
+
+**Smaller ones:** flechazo now targets a *random* obstacle at jump time rather than the nearest
+(nearest survives only as the mid-flight retarget fallback) — Josh found homing-the-closest
+unsatisfying. And a mechanic announcement (the bull's speech) now **holds 1 s fully opaque and
+stationary before it fades/rises** (a new `JaleoPop.hold` field), so "¡Invoco un terremoto!" is
+readable before it drifts off — it used to start fading the instant it appeared.
+
+The plan was still worth every line: because it got the bones right (value-type obstacle fields, a
+shared fade ager, single render/collision seams), all 14 tweaks were one-file, one-seam edits, not
+rearchitecting. The plan's real product wasn't the feature — it was a codebase *cheap to tune*,
+which is exactly what an empirical, playtest-driven phase needs. The `GameState` suite grew to
+**80** tests (six net new this pass: a ladder-clearance gap test, a standing-still-footprint test,
+and four cortejo-charge tests; two existing hit tests renamed/rewritten from instant-despawn to
+fade-out). Build succeeds, `swiftlint` clean. Nothing committed or pushed — Josh is playtesting the
+now-derigged, fully-random build.

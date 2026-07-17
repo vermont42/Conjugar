@@ -52,6 +52,12 @@ enum Sound: String, CaseIterable {
   case speedWhoosh
   case lightsOut
 
+  // La Subida — extra power-up SFX copied from the sibling apps (see
+  // `asset-licenses/game-sounds-pixabay.txt`): El Flechazo's homing "lock-on"
+  // (Conjuguer's `brainLockOn`) and El Cortejo's celebratory catch (Konjugieren's `coin`).
+  case brainLockOn
+  case coin
+
   static var randomApplause: Sound {
     [.applause1, .applause2, .applause3].randomElement() ?? .applause1
   }

@@ -545,6 +545,38 @@
         }
       }
     },
+    "Game.earthquakeAnnouncement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I summon an earthquake!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Invoco un terremoto!"
+          }
+        }
+      }
+    },
+    "Game.multiplyAnnouncement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The obstacles multiply!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Los obstáculos se multiplican!"
+          }
+        }
+      }
+    },
     "Game.encierroAnnouncement" : {
       "localizations" : {
         "en" : {

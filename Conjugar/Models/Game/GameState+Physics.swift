@@ -42,13 +42,16 @@ extension GameState {
     let newFeet = playerY + Self.playerHeight / 2
 
     // Platform snap: when falling and the feet cross a beam's top face while
-    // horizontally over it, land on that beam.
+    // horizontally over it, land on that beam. During El Terremoto a FINISHED gap
+    // (fully faded) at the landing x is a true hole — skip the landing so she falls
+    // through to the level below (a still-fading gap is solid and lands normally).
     playerGrounded = false
     if playerVelocityY >= 0 {
       for platform in platforms {
         let top = platform.surfaceY
         let overlapsX = playerX >= platform.rect.minX - halfW && playerX <= platform.rect.maxX + halfW
         if overlapsX && prevFeet <= top + 1 && newFeet >= top {
+          if hasFinishedGap(level: platform.level, x: playerX) { continue }   // fall through the hole
           playerY = top - Self.playerHeight / 2
           playerVelocityY = 0
           playerGrounded = true
@@ -56,6 +59,12 @@ extension GameState {
           break
         }
       }
+    }
+
+    // Fell through a hole in the bottom girder: dock a heart + reposition (terremoto only —
+    // the player is never below the bottom platform otherwise).
+    if !platformGaps.isEmpty && !playerGrounded && newFeet > platforms[0].surfaceY + 4 {
+      fellThroughFloor()
     }
   }
 
@@ -65,6 +74,11 @@ extension GameState {
     playerVelocityY = -Self.jumpImpulse
     playerGrounded = false
     Current.soundPlayer.play(.pop, shouldDebounce: false)
+    // El Flechazo: a qualifying jump fires a homing ❤️ missile (no-op unless armed).
+    fireHeartMissileIfArmed()
+    // El Cortejo: a jump spends a banked charge to re-possess, once the prior chase has
+    // finished (no-op while a chase is in flight or with no charges).
+    maybeTriggerCortejo()
   }
 
   /// If the player is standing at a ladder and pressing toward it, enter climbing.

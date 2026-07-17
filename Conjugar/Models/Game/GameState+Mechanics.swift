@@ -104,6 +104,22 @@ extension GameState {
       // lights back on.
       spawnBullSpeech(L.Game.apagonAnnouncement)
       Current.soundPlayer.play(.lightsOut, shouldDebounce: false)
+    case .terremoto:
+      // El Terremoto: the ground shakes. Open the fading girder gaps, start the jiggle
+      // phase, and warm + arm the pulsed rumble haptics (no CoreHaptics here — see the plan).
+      spawnBullSpeech(L.Game.earthquakeAnnouncement)
+      Current.soundPlayer.play(.stampede, shouldDebounce: false)   // shared w/ encierro: literally a rumble
+      Current.hapticPlayer.prepare()
+      earthquakePhase = 0
+      quakeHapticTimer = 0
+      openPlatformGaps()
+    case .camada:
+      // La Camada: the obstacles multiply. A one-shot — spawn one baby per eligible parent
+      // right now; `camadaDuration` is just long enough for the birth slide before the
+      // scheduler re-arms, after which the babies live on independently.
+      spawnBullSpeech(L.Game.multiplyAnnouncement)
+      Current.soundPlayer.play(.chirp, shouldDebounce: false)      // a light "poof" (not .pop — the jump cue)
+      spawnBabies()
     }
   }
 
@@ -133,8 +149,13 @@ extension GameState {
   /// zombie's homing obstacles are re-integrated onto the nearest girder below them
   /// (callers that also clear `obstacles` make this a cheap no-op).
   private func finishActiveMechanic() {
-    if activeMechanic == .zombie {
+    switch activeMechanic {
+    case .zombie:
       reintegrateZombieObstacles()
+    case .terremoto:
+      platformGaps.removeAll()   // heal: the girders are whole again (jiggle stops with the window)
+    default:
+      break
     }
     activeMechanic = nil
     mechanicRemaining = 0
@@ -147,6 +168,8 @@ extension GameState {
     case .zombie: return Self.zombieDuration
     case .encierro: return Self.encierroDuration
     case .apagon: return Self.apagonDuration
+    case .terremoto: return Self.terremotoDuration
+    case .camada: return Self.camadaDuration
     }
   }
 
@@ -157,7 +180,9 @@ extension GameState {
   /// fight"). Localization follows the title-card policy: the zombie line is narrative
   /// and localizes en/es, while "¡El encierro!"/"¡Apagón!" stay Spanish in both.
   func spawnBullSpeech(_ text: String) {
-    spawnJaleo(text, x: bullX, y: bullY + Self.bullSize, size: 30, riseRate: Self.jaleoDriftRise, ttl: 2.0)
+    // Hold the announcement fully-opaque and stationary for 1 s (so it's readable),
+    // then fade + rise over the usual 2 s — total ttl 3 s.
+    spawnJaleo(text, x: bullX, y: bullY + Self.bullSize, size: 30, riseRate: Self.jaleoDriftRise, ttl: 3.0, hold: 1.0)
   }
 
   // MARK: Zombie attack
@@ -169,6 +194,7 @@ extension GameState {
     let speed = obstacleSpeed * Self.zombieSpeedFactor
     for i in obstacles.indices {
       var f = obstacles[i]
+      if f.isSpecial { continue }   // babies/chasers/fading are owned by their own subsystems
       let dx = playerX - f.x
       let dy = playerY - f.y
       let dist = max(1, (dx * dx + dy * dy).squareRoot())
@@ -312,5 +338,197 @@ extension GameState {
     } else {
       apagonDim = 1
     }
+  }
+
+  // MARK: El Terremoto (the earthquake)
+
+  /// Per-frame quake upkeep, ticked every climb frame: advance the jiggle phase, pulse the
+  /// rumble haptic on its interval (both only while the window is open), and fade the gaps
+  /// in — a gap stays SOLID while it fades and becomes a true hole only at `fadeRemaining == 0`.
+  func updateTerremoto(dt: CGFloat) {
+    guard activeMechanic == .terremoto || !platformGaps.isEmpty else { return }
+
+    if activeMechanic == .terremoto {
+      earthquakePhase += Double(dt) * Self.earthquakeJiggleRate
+      quakeHapticTimer -= Double(dt)
+      if quakeHapticTimer <= 0 {
+        quakeHapticTimer = Self.quakeHapticInterval
+        Current.hapticPlayer.play(.impactMedium)   // pulsed rumble (no CoreHaptics continuous)
+      }
+    }
+
+    for i in platformGaps.indices where platformGaps[i].fadeRemaining > 0 {
+      platformGaps[i].fadeRemaining = max(0, platformGaps[i].fadeRemaining - Double(dt))
+    }
+  }
+
+  /// Remove `earthquakeGapFraction` of every girder's width, split across `earthquakeGapCount`
+  /// non-overlapping holes at random x positions. Each starts fully faded-in (still solid) and
+  /// opens over `earthquakeGapFade`.
+  func openPlatformGaps() {
+    platformGaps.removeAll()
+    let gapWidth = (Self.earthquakeGapFraction / CGFloat(Self.earthquakeGapCount))
+    // Keep every hole clear of a ladder mouth (a ladder rising FROM or arriving AT this
+    // girder), so the quake never severs a climb route and the player can always stand at
+    // a ladder base. Clearance = half the ladder + half the dancer, so she fits at the foot.
+    let ladderClearance = Self.ladderWidth / 2 + Self.playerWidth / 2
+    // A dancer standing still can't step off a hole that opens under her, so keep the holes
+    // clear of her footprint on her girder (only while idle — a moving player can dodge).
+    let standingStill = playerGrounded && !playerClimbing && !movingLeft && !movingRight
+    let playerClearance = Self.playerWidth / 2 + 4
+    for platform in platforms {
+      let rect = platform.rect
+      let width = gapWidth * rect.width
+      var forbidden = ladders
+        .filter { $0.lowerLevel == platform.level || $0.upperLevel == platform.level }
+        .map { ($0.x - ladderClearance)...($0.x + ladderClearance) }
+      if standingStill && platform.level == playerLevel {
+        forbidden.append((playerX - playerClearance)...(playerX + playerClearance))
+      }
+      var placed: [ClosedRange<CGFloat>] = []
+      for _ in 0..<Self.earthquakeGapCount {
+        let minX = rect.minX + width
+        let maxX = rect.maxX - width * 2
+        guard maxX > minX else { continue }
+        // A few attempts to land a hole that clears both other holes and every ladder
+        // mouth on this girder; give up quietly if the beam is too crowded to place one.
+        for _ in 0..<12 {
+          let start = CGFloat.random(in: minX...maxX, using: &bossRNG)
+          let range = start...(start + width)
+          if placed.contains(where: { $0.overlaps(range) }) { continue }
+          if forbidden.contains(where: { $0.overlaps(range) }) { continue }
+          placed.append(range)
+          platformGaps.append(
+            PlatformGap(id: platformGapCounter, level: platform.level, xRange: range, fadeRemaining: Self.earthquakeGapFade)
+          )
+          platformGapCounter += 1
+          break
+        }
+      }
+    }
+  }
+
+  /// Whether `x` on `level` sits inside a **finished** gap (a true hole) — the traversability
+  /// test for the player's landing snap and the obstacles' gap-hop. A still-fading gap
+  /// (`fadeRemaining > 0`) is solid and returns false.
+  func hasFinishedGap(level: Int, x: CGFloat) -> Bool {
+    platformGaps.contains { $0.level == level && $0.fadeRemaining <= 0 && $0.xRange.contains(x) }
+  }
+
+  /// The player fell through a finished hole in the **bottom** girder: dock one heart
+  /// (respecting the damage cooldown so one fall = one pip), then reposition to a safe spot
+  /// on the bottom platform with a grace window. Lighter than `respawn()` — it keeps the
+  /// obstacles, power-ups, and stage state. A lethal fall routes to the full `respawn()`.
+  func fellThroughFloor() {
+    let w = screenSize.width
+    if damageCooldown <= 0 {
+      health -= 1
+      if health <= 0 {
+        Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: false)
+        respawn()
+        return
+      }
+      Current.soundPlayer.play(.soccerKick, shouldDebounce: false)
+    }
+    playerX = w * 0.15
+    playerY = platforms[0].surfaceY - Self.playerHeight / 2
+    playerVelocityY = 0
+    playerGrounded = true
+    playerLevel = 0
+    playerClimbing = false
+    climbingLadder = nil
+    damageCooldown = Self.respawnGrace
+  }
+
+  // MARK: La Camada (the obstacles multiply)
+
+  /// Spawn one half-size baby at the center of each eligible on-screen obstacle. Eligible =
+  /// a full-size, non-fading, non-chaser obstacle at trigger time (babies and chasers are
+  /// excluded, so a baby can't beget a baby). Each baby slides one obstacle-width out
+  /// opposite its parent's travel over `babyBirthSlide`, then locks to that trailing offset.
+  func spawnBabies() {
+    let parents = obstacles.filter { $0.parentID == nil && !$0.isChaser && $0.fadeRemaining <= 0 && $0.vibrateRemaining <= 0 }
+    for parent in parents {
+      let offset = babyBirthOffset(for: parent)
+      obstacles.append(
+        Obstacle(
+          id: obstacleCounter,
+          x: parent.x,
+          y: parent.y,
+          velocityX: parent.velocityX,
+          velocityY: parent.velocityY,
+          falling: parent.falling,
+          level: parent.level,
+          emoji: parent.emoji,
+          rotation: parent.rotation,
+          style: parent.style,
+          facing: parent.facing,
+          scale: Self.babyScale,
+          parentID: parent.id,
+          birthRemaining: Self.babyBirthSlide,
+          birthOffset: offset
+        )
+      )
+      obstacleCounter += 1
+    }
+  }
+
+  /// The trailing offset a baby slides out to: one obstacle-width in the direction OPPOSITE
+  /// the parent's travel (rolling right → baby left; rolling left → baby right; falling → up).
+  private func babyBirthOffset(for parent: Obstacle) -> CGSize {
+    let magnitude = Self.obstacleSize
+    if parent.falling {
+      return CGSize(width: 0, height: -magnitude)   // opposite a downward fall → up
+    }
+    let sign: CGFloat = parent.velocityX >= 0 ? -1 : 1
+    return CGSize(width: sign * magnitude, height: 0)
+  }
+
+  /// Advance the babies: slide each out from its parent over the birth window, then mirror the
+  /// parent exactly (locked trailing offset), riding along until the parent despawns.
+  func updateBabies(dt: CGFloat) {
+    guard obstacles.contains(where: { $0.parentID != nil }) else { return }
+    // Snapshot so a baby can read its (already-moved) parent without overlapping access.
+    let snapshot = obstacles
+    for i in obstacles.indices where obstacles[i].parentID != nil {
+      var baby = obstacles[i]
+      if baby.fadeRemaining > 0 { continue }   // caught in a sympathetic fade — left to the ager
+      if baby.birthRemaining > 0 {
+        baby.birthRemaining = max(0, baby.birthRemaining - Double(dt))
+      }
+      guard let parent = snapshot.first(where: { $0.id == baby.parentID }) else {
+        baby.despawn = true
+        obstacles[i] = baby
+        continue
+      }
+      let progress: CGFloat = baby.birthRemaining > 0 ? CGFloat(1 - baby.birthRemaining / Self.babyBirthSlide) : 1
+      baby.x = parent.x + baby.birthOffset.width * progress
+      baby.y = parent.y + baby.birthOffset.height * progress
+      obstacles[i] = baby
+    }
+    obstacles.removeAll { $0.despawn }
+  }
+
+  /// When a baby is hit, ALL babies fade out sympathetically (the parents are untouched).
+  /// Called from `resolveCollisions`.
+  func startBabyFade() {
+    for i in obstacles.indices where obstacles[i].parentID != nil {
+      obstacles[i].fadeRemaining = Self.obstacleFadeDuration
+      obstacles[i].velocityX = 0
+      obstacles[i].velocityY = 0
+    }
+  }
+
+  // MARK: Shared fade ager (camada babies + cortejo catches)
+
+  /// Age the sympathetic/catch fade-outs and drop the fully-faded obstacles. Vibrate windows
+  /// (cortejo pre-chase) are owned by `updateCortejo`, not here.
+  func updateObstacleFades(dt: CGFloat) {
+    guard obstacles.contains(where: { $0.fadeRemaining > 0 }) else { return }
+    for i in obstacles.indices where obstacles[i].fadeRemaining > 0 {
+      obstacles[i].fadeRemaining = max(0, obstacles[i].fadeRemaining - Double(dt))
+      if obstacles[i].fadeRemaining == 0 { obstacles[i].despawn = true }
+    }
+    obstacles.removeAll { $0.despawn }
   }
 }

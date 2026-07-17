@@ -10,3 +10,14 @@ License:  Pixabay Content License — https://pixabay.com/service/license-summar
 
 Reuse:    Bundled as game SFX. No attribution legally required; the app's Credits
           screen ("Game Sounds") includes a courtesy note.
+
+Assets:   Conjugar/Audio/brainLockOn.mp3, coin.mp3
+          (La Subida power-up SFX added 2026-07-16: El Flechazo's homing lock-on and
+          El Cortejo's celebratory catch)
+Source:   Copied from the sibling apps — brainLockOn.mp3 from Conjuguer, coin.mp3 from
+          Konjugieren — both originally sourced from Pixabay
+          (https://pixabay.com/sound-effects/)
+License:  Pixabay Content License — https://pixabay.com/service/license-summary/
+          Commercial use permitted; NO attribution required. Only restriction: don't
+          redistribute the raw sound file as a standalone download (embedding it in the
+          app satisfies this).

@@ -92,10 +92,14 @@ extension GameState {
     speedRemaining = 0
     serenataRemaining = 0
     serenataDanceTimer = 0
+    flechazoRemaining = 0
+    flechazoCooldown = 0
+    heartMissiles.removeAll()
+    cortejoCharges = 0
     damageCooldown = 0
     obstacles.removeAll()
     bullThrowTimer = 0
-    // The boss interrupts any active climb mechanic (zombie/encierro/apagón).
+    // The boss interrupts any active climb mechanic (zombie/encierro/apagón/terremoto/camada).
     cancelActiveMechanic()
 
     introFromPlayerX = playerX
@@ -635,11 +639,12 @@ extension GameState {
     y: CGFloat,
     size: CGFloat = 24,
     riseRate: CGFloat = GameState.jaleoDriftRise,
-    ttl: Double = GameState.jaleoPopDuration
+    ttl: Double = GameState.jaleoPopDuration,
+    hold: Double = 0
   ) {
     jaleoCounter += 1
     jaleoPops.append(
-      JaleoPop(id: jaleoCounter, text: text, x: x, y: y, ttl: ttl, initialTTL: ttl, size: size, riseRate: riseRate)
+      JaleoPop(id: jaleoCounter, text: text, x: x, y: y, ttl: ttl, initialTTL: ttl, size: size, riseRate: riseRate, hold: hold)
     )
   }
 

@@ -246,6 +246,16 @@ nonisolated enum L {
     static var apagonAnnouncement: String {
       String(localized: "Game.apagonAnnouncement")
     }
+
+    // La Subida — the two newer mechanic announcements (the bull "speaks" them). Both are
+    // narrative sentences and localize en/es, following the `zombieAnnouncement` precedent.
+    static var earthquakeAnnouncement: String {
+      String(localized: "Game.earthquakeAnnouncement")
+    }
+
+    static var multiplyAnnouncement: String {
+      String(localized: "Game.multiplyAnnouncement")
+    }
   }
 
   enum GameCenter {
