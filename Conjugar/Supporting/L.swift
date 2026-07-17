@@ -131,6 +131,10 @@ nonisolated enum L {
       String(localized: "Game.play")
     }
 
+    static var settingsDescription: String {
+      String(localized: "Game.settingsDescription")
+    }
+
     static var quit: String {
       String(localized: "Game.quit")
     }

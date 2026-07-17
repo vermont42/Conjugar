@@ -220,7 +220,7 @@ struct SettingsView: View {
         isSystemSymbol: false,
         tint: .customYellow,
         heading: L.Game.title,
-        description: L.Onboarding.gameBody
+        description: L.Game.settingsDescription
       ) {
         Button(L.Game.play) { showingGame = true }
           .buttonStyle(TintedCapsuleButtonStyle(tint: .customYellow))

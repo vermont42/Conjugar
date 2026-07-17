@@ -6734,3 +6734,18 @@ which is exactly what an empirical, playtest-driven phase needs. The `GameState`
 and four cortejo-charge tests; two existing hit tests renamed/rewritten from instant-despawn to
 fade-out). Build succeeds, `swiftlint` clean. Nothing committed or pushed — Josh is playtesting the
 now-derigged, fully-random build.
+
+## Settings-tab game blurb: a shorter sibling to Onboarding.gameBody (2026-07-17)
+
+The onboarding flow's `Onboarding.gameBody` string reads well on its full-screen sheet but ran
+too long on the Settings tab's game card, which reused it verbatim. Split them: a new
+`L.Game.settingsDescription` (`Game.settingsDescription` in the catalog) carries a trimmed
+version for Settings — it drops the power-up specifics (no "smash-happy muleta (cape)") and the
+surprise catalog ("from zombified-and-stampeding enemies to sudden blackouts"), keeping just
+"grabbing power-ups" and "Survive surprises along the way." `SettingsView`'s game section now
+points at the new string instead of `L.Onboarding.gameBody`.
+
+While there, tweaked the closing line of both strings from "…a flamenco dance-off with the bull
+decides whether love wins." to "…determines whether love conquers all." (es: "…decide si triunfa
+el amor." → "…determina si el amor todo lo vence."). Both en/es translated in the catalog; build
+succeeds.
