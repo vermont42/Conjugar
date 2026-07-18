@@ -81,6 +81,13 @@ struct ModelBrowseView: View {
                       .card()
                   }
                   .buttonStyle(.plain)
+                  // Screenshot-driver anchor (scripts/take_screenshots.sh taps
+                  // `model_row_decir` / `model_row_haber`). Keyed by *exemplar*,
+                  // not by `id`/`classNumber`: class numbers contain hyphens
+                  // ("29-2"), and the driver's id predicate treats "-" as its
+                  // prefix boundary, so `model_row_29` would match
+                  // `model_row_29-2`. Both size-class branches carry it.
+                  .accessibilityIdentifier("model_row_\(model.exemplar)")
                 }
               }
               .padding(.horizontal)
@@ -95,6 +102,7 @@ struct ModelBrowseView: View {
                     ModelRowLabel(model: model)
                   }
                   .buttonStyle(.plain)
+                  .accessibilityIdentifier("model_row_\(model.exemplar)")
                   .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
                   Divider().padding(.leading)
                 }

@@ -6889,3 +6889,190 @@ demonstrated nothing the network evidence hadn't already settled.
 Spanish translation replacing the French one, an event list matching the new schema, and a
 new section on the on-device tutor stating plainly that message *content* never leaves the
 device — only the fact that a message was sent.
+
+## Porting Conjuguer's screenshot harness — and the anchors it assumed (2026-07-18)
+
+The App Store screenshot machinery came over from Conjuguer: a plan (nine views, light/dark
+alternating, en/es × iPhone 17 Pro Max + iPad Pro 13-inch, 36 PNGs), a driver, and a
+playbook. Josh had already adapted the plan to Spanish — ser on top of Browse, the decir
+model, haber for ModelView, Presente de Indicativo for the Info article. The driver and
+playbook were still French.
+
+The mechanical half was dull and quick: bundle id, `LANGS=( en fr )` → `( en es )`,
+`Passer` → `Omitir`, `Conjuguer.xcodeproj` → `Conjugar.xcodeproj`. The interesting part was
+what the port *assumed*. Conjuguer's driver navigates entirely by accessibility identifier,
+and Conjugar had four of them. Seven of the nine screens would have failed at the first tap.
+So the honest answer to "can we start shooting?" was no, and the real work was the
+instrumentation landing: `verb_row_<infinitive>`, `model_row_<exemplar>`,
+`info_row_<stableKey>`, `quiz_start_button`, `input_quiz_conjugation`, `results_score`.
+
+Three decisions worth recording.
+
+**Model rows are keyed by exemplar, not by `ModelInfo.id`.** The id is the `classNumber`,
+and class numbers contain hyphens (`29-2`, `30-1`). The driver's jq predicate matches an id
+exactly *or* as a `$id + "-"` prefix — a deliberate hack for SwiftUI rolling a row's
+identifier onto its `NavigationLink` wrapper — so `model_row_29` would have silently matched
+`model_row_29-2`. Exemplars are what the spec names anyway; a quick check confirmed all 102
+non-alias rows have unique, hyphen-free exemplars.
+
+**`Info` gained a `stableKey`.** Tense headings are hardcoded Spanish literals, but the
+About headings are localized, so a heading-derived identifier would differ between the `en`
+and `es` passes of the same sweep. Keying half the list one way and half another seemed
+worse than spelling out 27 snake_case keys.
+
+**The quiz fixture is a fixed list, not a generator.** Conjuguer generates 30 questions;
+Conjugar's `Quiz.screenshotFixture` is 12 hand-picked ones. Fixed means the per-question
+review rows on the results screen are byte-identical across all four device × language
+cells, and 12 rather than 30 cuts the paste loop from ~40 s to ~15 s per cell. Two
+constraints are load-bearing enough to be comments in the source: no second-person slots
+(tú/vos is a user setting and vosotros is region-suppressed, so the question would render
+differently depending on state the driver doesn't control), and every slot must conjugate
+(a blank answer would desynchronize the paste loop from the on-screen questions and every
+later answer would miss).
+
+Two claims written into the playbook before verification turned out to be wrong, which is
+the argument for verifying rather than reasoning. The first: I asserted that answers had to
+be lowercased or they'd score as misses, because `TenseBridge` returns marked forms (`soY`,
+`habRá`) where uppercase flags the irregular part. `ConjugationResult.compare` lowercases
+both sides before comparing, so it never mattered. The export still lowercases — for
+legibility when a human debugs a bad cell — but the playbook now says so, and says the
+earlier claim was wrong.
+
+The second was found by running it. Driving the fixture on a fresh install, the Quiz tab had
+no `quiz_start_button` at all: `QuizView.onAppear` calls `maybePromptGameCenter()`, which
+raises a Game Center alert that opaques the AXTree. Conjuguer has no equivalent prompt, so
+nothing in the ported playbook hinted at it. `seed_defaults` now pre-seeds
+`didShowGameCenterDialog` and `userRejectedGameCenter`. Josh then asked whether the playbook
+should suppress Game Center UI more broadly; tracing it showed no — `GameCenterReal.authenticate()`
+is the only thing that installs `GKLocalPlayer.local.authenticateHandler`, it's called from
+exactly two user taps the driver never makes, and nothing authenticates at launch, so
+GameKit's login sheet and welcome banner are unreachable during a sweep. That reasoning is
+now a table in the playbook rather than something the next session has to rediscover.
+
+Verified end-to-end on iPhone 17 Pro Max: every anchor resolves, `ser` sits at the top of
+the frequency-sorted list, all 12 fixture answers conjugate correctly and score as total
+matches, and the results screen comes out all-green with the elapsed-time pill the spec
+wants. 550 tests pass, SwiftLint is clean. Shooting can begin.
+
+### Addendum: verifying the tab coordinates (2026-07-18)
+
+The one thing I'd flagged as unverified in the port was the tab-bar calibration, inherited
+wholesale from Conjuguer. Checking it turned up three things, none of which reading the code
+would have surfaced.
+
+First, the two devices need different treatment. The iPhone's pill exposes no children — the
+whole bar reports as a single `Tab Bar` group, frame `{0,873},{440,83}` — so there is nothing
+to measure and the only available proof is behavioral: tap each coordinate, assert the
+destination screen's anchor appears. The iPad's top bar, by contrast, exposes each tab as an
+`AXRadioButton` with its own frame, so the centers are exact. Conjuguer's inherited iPad
+values did work — every one landed inside the correct tab — but were 3–6 pt off-center. The
+driver now carries the measured centers. An off-center-but-working tap is worth fixing
+precisely because it's the early warning: it means the geometry has drifted, and the next
+device or SwiftUI change may push it out of the tab entirely.
+
+Second, the Settings tab "failed" on the first iPhone pass, and the reason was the *tip
+system*, not the coordinate. The "Change Quiz Difficulty" tip is rule-gated on having
+completed a quiz — and the probe had just completed one, exactly as the real sweep does at
+screen 8 before shooting Settings at screen 9. So a sweep with tips left enabled would have
+put a popover over the Settings screenshot, in the precise order the driver runs. The
+playbook already said to flip `TipDisplay.tipsEnabled`; this was that instruction earning its
+place, and a reminder that the tip fires from *state accumulated during the run*, not from
+first-launch conditions a fresh install would avoid.
+
+Third, the iPad install failed outright: this machine has four simulators named `iPad Pro
+13-inch (M4)` — iOS 18.0, 18.1, 18.4, 26.0 — and `udid_for()` returns the first by list
+order, which is 18.0. Since the deployment target is iOS 26 the failure is at least loud
+("Requires a Newer Version of iPadOS … Have 18.0; need 26.0") rather than a subtly wrong
+screenshot. The ported playbook described this hazard generically; it is now written up as a
+concrete precondition with a snippet that lists the duplicates and names the survivor.
+
+A methodological note worth keeping: two of the three findings came from *running* the thing
+under the conditions the sweep actually creates, not from inspecting it. The Settings/tip
+interaction in particular is invisible to any amount of code reading, because it depends on
+quiz-completion state that only exists partway through a real sweep.
+
+### Addendum: the soft keyboard, and a guard that never fired (2026-07-18)
+
+With Accessibility permission granted to `osascript`, the last unverified piece was screen
+5's keyboard. Verifying it turned up a bug that had been sitting in the ported driver the
+whole time, invisible to inspection.
+
+The first run of `ensure_soft_keyboard`'s AppleScript failed with *"Can't get window 1 of
+process Simulator whose title contains iPhone. Invalid index" (-1719)* — which reads exactly
+like a permission problem, and the driver's own warning message says as much ("grant
+osascript Accessibility permission"). It wasn't. Permission was fine; the window list is
+briefly unenumerable right after `activate`, and the script's `delay 0.2` wasn't enough. Five
+consecutive runs afterward all succeeded. The delay is now 0.5 s, and the playbook says
+plainly that -1719 is not a permission failure — otherwise the next person burns an hour in
+System Settings.
+
+The real bug was underneath. After the toggle succeeded the keyboard was plainly visible in a
+screenshot, yet the AXTree reported **zero** elements labelled `space` — which is what
+`ensure_soft_keyboard` counted to decide whether to send Cmd+K. The keyboard runs in its own
+process and simply does not appear in `axe describe-ui`'s output at all; a full-tree dump of
+that screen has nothing below y=1250. So the guard could never fire. And because Cmd+K is a
+*toggle* whose state persists in Simulator across app launches, the second `quiz_mid` cell of
+a sweep would have switched the keyboard back off, the third on, the fourth off — two of the
+four quiz screenshots silently keyboard-less, in a sweep that otherwise reports success.
+
+The fix came from a trick the ported playbook already contained: workaround #12 dismisses the
+StoreKit modal using `describe-ui --point`, because `--point` can see system UI the full tree
+can't. The same applies to the keyboard — probing a mid-keyboard coordinate returns the key
+under it (`g`), while the same probe with the keyboard down returns the app's own content. A
+one-or-two-character label is the discriminator. Not the space bar, though: it reports a blank
+label, indistinguishable from "nothing found". `ensure_soft_keyboard` now also re-checks after
+toggling and warns if it didn't land, since `osascript` returns 0 whether or not Simulator
+acted.
+
+Verified both directions: four consecutive calls with the keyboard already up leave it up, and
+a call with it down turns it on and subsequent calls keep it on.
+
+The pattern from the earlier addendum repeated exactly. Reading the driver would never have
+surfaced this — the guard looks perfectly reasonable, and the failure only manifests on the
+*second* invocation within a run. It took driving the real thing and comparing a screenshot
+against what the accessibility tree claimed.
+
+Housekeeping in the same session: the simulator inventory was down to 123 GB of accumulated
+devices. All 46 iOS 18 devices were deleted (24 iPhones, 22 iPads), reclaiming 25 GB. Worth
+noting that unlike the iPad Pro 13-inch duplicates deleted earlier, none of these collided
+with a sweep target name — that was cleanup, not a fix, and the distinction was worth stating
+before deleting 46 things.
+
+### Addendum: migrating the sweep targets from iOS 26.0 to 26.3 (2026-07-18)
+
+Josh asked whether the iOS 26.0 runtime could go — he builds against the newest runtime and
+never reaches for 26.0 deliberately. The answer was no, but not for a reason visible in the
+runtime list: **both screenshot targets happened to live on 26.0**, and worse, iOS 26.3 had no
+`iPad Pro 13-inch (M4)` at all (only an M5), so deleting 26.0 would have left `udid_for()`
+matching nothing and the driver exiting at `apply_device_state`. The sweep had landed on 26.0
+by accident — the playbook's own Simulator Setup section says to create targets on 26.3 — so
+the right fix was to make reality match the document rather than to keep 26.0 alive.
+
+Migrating meant re-verifying everything runtime-sensitive, which the playbook's *Sim Runtime
+Drift* section already demanded. Results: the iPad tab centers were identical to within 0.1 pt
+(a first pass flagged them as "different" only because the comparison threshold was 0.05 pt —
+sub-pixel noise against tabs 62–97 pt wide), all ten tab taps landed, the keyboard probe points
+held, and the fixture played through to an all-green results screen on both devices. Two
+incidental discoveries: the device-type id is now `…iPad-Pro-13-inch-M4-8GB` (Xcode 26 split
+the M4 into 8/16 GB variants and the bare id no longer resolves), and the M4 type is still
+offered on 26.3 even though a fresh install seeds only an M5.
+
+The interesting failure came from the migration itself. With four simulators booted — the old
+26.0 pair and the new 26.3 pair — `ensure_soft_keyboard` failed on the iPad. Workaround #10
+raises the target window by matching the device-*family* substring (`iPad`), which is
+unambiguous only while exactly one sim per family is booted. Four windows meant two matching
+`iPad`, and the keystroke went somewhere useless. A normal sweep never creates that situation,
+so this isn't a latent sweep bug — but it is an easy state to wander into while testing, and
+the failure is silent in the sense that the screenshot still gets taken, just without a
+keyboard.
+
+Which is the second time in two sessions that the post-toggle check earned its keep: it logged
+`soft keyboard still not visible after Cmd+K` and turned what would have been a puzzling bad
+screenshot into a pointed diagnostic. Worth remembering that the check was added almost as an
+afterthought while fixing the guard that never fired.
+
+Cleanup ledger for the session, since three separate deletions happened for three different
+reasons: three iOS-18 `iPad Pro 13-inch (M4)` duplicates (a real bug — they shadowed the sweep
+target by name), 46 iOS 18 devices and then 305 devices on uninstalled runtimes (housekeeping,
+no correctness impact), and finally 13 iOS 26.0 devices (consolidating onto one runtime). 354
+devices and 123 GB became 37 devices and 35 GB.

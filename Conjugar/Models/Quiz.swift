@@ -123,6 +123,13 @@ class Quiz {
     questions.removeAll()
     proposedAnswers.removeAll()
     correctAnswers.removeAll()
+
+    #if DEBUG
+    if Quiz.isScreenshotFixtureRun {
+      startScreenshotFixture()
+      return
+    }
+    #endif
     for cycler in allCyclers {
       cycler.restart(shuffle: shouldShuffle)
     }
@@ -269,6 +276,13 @@ class Quiz {
     if shouldShuffle {
       questions.shuffle()
     }
+    beginQuiz()
+  }
+
+  /// Reset the per-run counters and start the clock. Split out of `start()` so the
+  /// screenshot fixture can build its own question list and then enter the quiz
+  /// through exactly the same door.
+  private func beginQuiz() {
     score = 0
     correctCount = 0
     currentQuestionIndex = 0
@@ -402,3 +416,104 @@ class Quiz {
     }
   }
 }
+
+// MARK: - App Store screenshot fixture (DEBUG only)
+
+#if DEBUG
+extension Quiz {
+  /// Launch-argument switch that puts the quiz into deterministic screenshot mode:
+  /// `xcrun simctl launch … -CONJUGAR_QUIZ_FIXTURE screenshot`. Used by
+  /// `scripts/take_screenshots.sh` for screens 5 (quiz mid-question) and 8
+  /// (results); see `docs/screenshot-playbook.md`.
+  ///
+  /// DEBUG-gated, so it cannot be triggered in a release build no matter what
+  /// arguments the process is launched with.
+  static var isScreenshotFixtureRun: Bool {
+    UserDefaults.standard.string(forKey: "CONJUGAR_QUIZ_FIXTURE") == "screenshot"
+  }
+
+  /// Where `exportFixtureAnswers()` writes the answer key the driver types back in.
+  static var fixtureAnswersURL: URL? {
+    FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?
+      .appendingPathComponent("screenshot_fixture_answers.json")
+  }
+
+  /// A fixed, curated question plan for App Store screenshots.
+  ///
+  /// Deliberately *not* derived from `start()`'s difficulty-driven generators: those
+  /// draw from shuffled `Cycler`s, so the verbs — and therefore the per-question
+  /// review rows on the results screen — would differ every run and between the
+  /// `en` and `es` passes of the same sweep. A hand-picked list keeps the listing
+  /// screenshots identical across all four device × language cells, and lets the
+  /// rows show off a spread of tenses with verbs a browsing shopper recognizes.
+  ///
+  /// Two constraints on anything added here:
+  /// - **No second-person slots.** `tú` vs. `vos` is a user setting
+  ///   (`Settings.secondSingularQuiz`), and `vosotros` is suppressed in the Latin
+  ///   America region — a second-person question would render differently depending
+  ///   on settings the driver does not control.
+  /// - **Every slot must conjugate.** `exportFixtureAnswers()` fails loudly rather
+  ///   than exporting a blank answer, because a blank would be typed as an empty
+  ///   string and scored as a miss, quietly ruining the results screenshot.
+  static let screenshotFixture: [(String, DisplayTense, DisplayPersonNumber)] = [
+    ("ser", .presenteDeIndicativo, .firstSingular),
+    ("hablar", .presenteDeIndicativo, .thirdSingular),
+    ("tener", .pretérito, .firstSingular),
+    ("comer", .imperfectoDeIndicativo, .thirdPlural),
+    ("hacer", .futuroDeIndicativo, .firstSingular),
+    ("vivir", .condicional, .thirdSingular),
+    ("ir", .presenteDeSubjuntivo, .firstPlural),
+    ("poder", .pretérito, .thirdPlural),
+    ("decir", .participio, .none),
+    ("estar", .gerundio, .none),
+    ("saber", .futuroDeIndicativo, .thirdSingular),
+    ("querer", .perfectoDeIndicativo, .firstSingular)
+  ]
+
+  /// Build the fixed question plan, export its answer key, and start the quiz.
+  func startScreenshotFixture() {
+    questions = Quiz.screenshotFixture
+    exportFixtureAnswers()
+    beginQuiz()
+  }
+
+  /// Write `[{ "verb", "tense", "personNumber", "answer" }]` to
+  /// `Documents/screenshot_fixture_answers.json`, which the driver reads via
+  /// `simctl get_app_container … data` and types back one question at a time.
+  ///
+  /// Answers are lowercased to strip the engine's UPPERCASE irregularity encoding
+  /// (`TenseBridge` returns `soY`, `habRá` — uppercase flags the irregular part).
+  /// `ConjugationResult.compare` lowercases both sides before comparing, so this is
+  /// not required for the answer to score as a `totalMatch`; it is here so the
+  /// exported JSON is legible when a human debugs a bad cell, and so the typed text
+  /// matches what a real learner would enter.
+  func exportFixtureAnswers() {
+    guard let url = Quiz.fixtureAnswersURL else {
+      quizLogger.error("Screenshot fixture: no Documents directory")
+      return
+    }
+    var payload: [[String: String]] = []
+    for (verb, tense, personNumber) in questions {
+      switch TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber) {
+      case let .success(answer):
+        payload.append([
+          "verb": verb,
+          "tense": tense.rawValue,
+          "personNumber": personNumber.rawValue,
+          "answer": answer.lowercased()
+        ])
+      case let .failure(error):
+        // Loud on purpose: a silently-skipped slot would desynchronize the driver's
+        // paste loop from the on-screen questions and every later answer would miss.
+        quizLogger.error("Screenshot fixture: \(verb) / \(tense.displayName) failed to conjugate: \(String(describing: error))")
+      }
+    }
+    do {
+      try JSONSerialization.data(withJSONObject: payload, options: [.prettyPrinted]).write(to: url)
+      quizLogger.info("Screenshot fixture: exported \(payload.count) answers to \(url.path)")
+    } catch {
+      quizLogger.error("Screenshot fixture: could not write \(url.path): \(String(describing: error))")
+    }
+  }
+}
+#endif

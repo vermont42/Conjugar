@@ -56,6 +56,7 @@ struct ResultsView: View {
         .foregroundStyle(scoreColor)
         .contentTransition(.numericText())
         .accessibilityLabel(L.Quiz.score + " \(quiz.score)")
+        .accessibilityIdentifier("results_score")  // screenshot-driver anchor
 
       HStack(spacing: Layout.defaultSpacing) {
         Text(quiz.lastDifficulty.localizedDifficulty).metadataPill(tint: .customYellow)

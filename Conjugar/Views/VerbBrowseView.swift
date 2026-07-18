@@ -84,6 +84,10 @@ struct VerbBrowseView: View {
                       .card()
                   }
                   .buttonStyle(.plain)
+                  // Screenshot-driver anchor (scripts/take_screenshots.sh taps
+                  // `verb_row_ser`). Both size-class branches carry it — the iPad
+                  // renders this grid, the iPhone the stack below.
+                  .accessibilityIdentifier("verb_row_\(entry.infinitive)")
                 }
               }
               .padding(.horizontal)
@@ -99,6 +103,7 @@ struct VerbBrowseView: View {
                     VerbRowLabel(entry: entry)
                   }
                   .buttonStyle(.plain)
+                  .accessibilityIdentifier("verb_row_\(entry.infinitive)")
                   .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
                   Divider().padding(.leading)
                 }

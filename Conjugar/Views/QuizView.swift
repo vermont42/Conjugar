@@ -105,6 +105,7 @@ struct QuizView: View {
   private var startButton: some View {
     let base = Button(L.Quiz.start) { startQuiz() }
       .buttonStyle(PrimaryButtonStyle())
+      .accessibilityIdentifier("quiz_start_button")  // screenshot-driver anchor
 
     if reduceMotion {
       base
@@ -175,6 +176,7 @@ struct QuizView: View {
       Text(verbatim: "")
     }
       .accessibilityLabel(L.Quiz.conjugation)
+      .accessibilityIdentifier("input_quiz_conjugation")  // screenshot-driver anchor
       .textInputAutocapitalization(.never)
       .autocorrectionDisabled()
       .submitLabel(.next)

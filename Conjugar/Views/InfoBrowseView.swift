@@ -108,6 +108,9 @@ struct InfoBrowseView: View {
         .fontDesign(.serif)
         .foregroundStyle(Color.customForeground)
     }
+    // Screenshot-driver anchor. Keyed by `stableKey`, not `heading`, so the id is
+    // identical under `en` and `es` — see `Info.stableKey`.
+    .accessibilityIdentifier("info_row_\(info.stableKey)")
   }
 
   // The conjugation-tutor entry point. Reads the `@Observable` service's live
