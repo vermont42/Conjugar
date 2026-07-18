@@ -95,14 +95,18 @@ for line in sys.stdin:
 # in the AXTree (the pill reports as one "Tab Bar" group, frame {0,873},{440,83}),
 # so these cannot be measured, only confirmed by tapping. They are.
 #
-# iPad values were *measured* rather than inherited: unlike the iPhone pill, the
-# iPad's top bar exposes each tab as an AXRadioButton, so the centers are exact.
-# Conjuguer's inherited values (355/441.5/523/587.75/667.25) also worked — each
-# landed inside the right tab — but were 3-6 pt off-center; these are the real
-# centers, from frames {313.2,36,90,36} / {403.2,…,89} / {492.2,…,67.5} /
-# {559.8,…,62} / {621.8,…,97}. Re-measure with:
-#   axe describe-ui --udid <UDID> | jq '[.. | objects |
-#     select(.role? == "AXRadioButton")] | .[] | {AXLabel, AXFrame}'
+# iPad values below are ENGLISH fallbacks only — the live path is measurement.
+# The iPad's top segmented bar sizes each tab to its *label*, so every center
+# moves when the UI language changes: in Spanish the bar reads Explorar/Modelos/
+# Test/Información/Configuración and the real centers are 300.25/398.25/480.5/
+# 575.75/709.25 — the English "quiz" value (526) lands inside *Información*, and
+# the English "models" value (447.7) sits 0.05 pt inside the Modelos tab. That
+# bit in July 2026: the iPad/es quiz_mid and quiz_results cells both failed with
+# "no element with id 'quiz_start_button'" because tap_tab quiz had opened Info.
+# So tap_tab MEASURES the centers at run time on iPad (measured_tab_centers) and
+# only falls back to this table when measurement fails. The iPhone pill exposes
+# no children (one "Tab Bar" group, frame {0,873},{440,83}), so it always uses
+# the table — its pill divides evenly and is label-width independent.
 tab_coords_for() {
   case "$1" in
     "iPhone 17 Pro Max")     echo "67,899.3 142.7,899.3 220,899.3 296.2,899.3 372.6,899.3" ;;
@@ -379,6 +383,25 @@ type_via_pasteboard() {
   axe key-combo --modifiers 227 --key 25 --udid "$UDID" >/dev/null  # Cmd+V
 }
 
+# Measure the five tab centers from the live AXTree, left to right. Only the
+# iPad's top segmented bar exposes its tabs (as AXRadioButton); the iPhone pill
+# reports as a single group, so this prints nothing there and tap_tab falls back
+# to tab_coords_for's table. Emits "x,y" per tab, space-separated, or nothing if
+# the tree does not hold exactly five radio buttons (wrong screen, mid-animation,
+# a modal on top) — an all-or-nothing result, so a partial read can never be
+# mistaken for a good one.
+measured_tab_centers() {
+  axe describe-ui --udid "$UDID" 2>/dev/null | jq -r '
+    [ .. | objects
+      | select(.role? == "AXRadioButton")
+      | (.AXFrame | capture("\\{\\{(?<x>[-0-9.]+), (?<y>[-0-9.]+)\\}, \\{(?<w>[-0-9.]+), (?<h>[-0-9.]+)\\}\\}"))
+      | { x: ((.x | tonumber) + (.w | tonumber) / 2),
+          y: ((.y | tonumber) + (.h | tonumber) / 2) } ]
+    | sort_by(.x)
+    | if length == 5 then map("\(.x),\(.y)") | join(" ") else empty end
+  ' 2>/dev/null
+}
+
 tap_tab() {
   local tab_name="$1" index
   case "$tab_name" in
@@ -389,7 +412,16 @@ tap_tab() {
     settings) index=4 ;;
     *) log "unknown tab: $tab_name"; return 1 ;;
   esac
-  local center="${CURRENT_TAB_CENTERS[$index]}"
+  # Prefer live-measured centers (iPad, where labels resize the tabs per language);
+  # fall back to the calibrated table (iPhone, or any state that fails to measure).
+  local measured
+  measured=$(measured_tab_centers)
+  local centers=( "${CURRENT_TAB_CENTERS[@]}" )
+  if [[ -n "$measured" ]]; then
+    # shellcheck disable=SC2206
+    centers=( $measured )
+  fi
+  local center="${centers[$index]}"
   axe tap -x "${center%,*}" -y "${center#*,}" --udid "$UDID" >/dev/null
   sleep 0.7
 }
@@ -473,6 +505,12 @@ nav_model_browse() {
 
 nav_model_view() {
   tap_tab models
+  # Settle on the list before tapping into it, exactly as nav_model_browse does.
+  # Without this the tap fires during the tab-switch transition and is swallowed:
+  # on iPhone (July 2026) all four model_view cells silently captured the *list*
+  # in light mode instead of the haber detail. The iPad masked it — its slower
+  # render meant tap_tab's 0.7 s sleep had already covered the transition.
+  verify_screen_loaded model_row_haber
   # Spec: haber, and no horizontal scrolling — the driver never scrolls sideways.
   tap_id_first model_row_haber
 }
@@ -572,6 +610,15 @@ dismiss_review_prompt() {
 
 nav_settings() {
   tap_tab settings
+  # Settle on a Settings anchor, then let the tab crossfade finish. This was the
+  # only recipe with no settle at all, and on iPad it showed: both settings cells
+  # (July 2026) captured the Browse grid ghosted through the Settings cards at
+  # partial opacity — the crossfade was still running when axe grabbed the frame.
+  # The other tab-switching recipes get this for free from their
+  # verify_screen_loaded poll; the extra sleep covers the animation itself, which
+  # an anchor's mere presence does not.
+  verify_screen_loaded app_icon_bull
+  sleep 1.5
   # Spec: Region at top. Region is the first settingSection in SettingsView
   # (before Difficulty), so no scroll is needed.
 }

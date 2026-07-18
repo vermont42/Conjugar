@@ -7076,3 +7076,93 @@ reasons: three iOS-18 `iPad Pro 13-inch (M4)` duplicates (a real bug — they sh
 target by name), 46 iOS 18 devices and then 305 devices on uninstalled runtimes (housekeeping,
 no correctness impact), and finally 13 iOS 26.0 devices (consolidating onto one runtime). 354
 devices and 123 GB became 37 devices and 35 GB.
+
+## The First Real Screenshot Sweep, and What It Caught (2026-07-18)
+
+The screenshot harness had been verified cell-by-cell for weeks, so running all 36 for the
+first time felt like a formality. It was not. The driver reported eight problems' worth of
+trouble, but only two of them as failures — the other six were cheerful successes that had
+photographed the wrong screen. That asymmetry is the whole lesson of this session.
+
+The two honest failures were the iPad's Spanish quiz cells, which died looking for
+`quiz_start_button` on a screen that plainly had one. The cause turned out to be geometry:
+the iPad's top segmented tab bar sizes each tab to its label, so the tab centers move when
+the UI language changes. `Test` and `Información` are not the same width as `Quiz` and
+`Info`, and the English-calibrated x for the quiz tab (526) lands squarely inside
+*Información* in Spanish. `tap_tab quiz` had been opening the Info tab and the driver was,
+in a sense, right to complain. The unsettling part was what measurement revealed next: the
+English "models" coordinate sat **0.05 pt** inside the Spanish Modelos tab. Those two cells
+had been passing on a rounding error. The fix was to stop hardcoding and start measuring —
+`measured_tab_centers` reads the five `AXRadioButton` frames out of the live AXTree and
+computes centers per language, falling back to the table only when nothing is exposed
+(always the case on iPhone, whose pill has no children and divides evenly anyway).
+
+The six silent ones were worse, and one of them wasn't a harness problem at all. All four
+iPhone `model_view` cells had captured the Models *list* in light mode instead of the
+`haber` detail. My first theory was timing, so I added a settle before the tap; the shot
+came back identical. Tapping the row by hand in the simulator did nothing either — while
+tapping the sort control on the same screen worked fine. The answer was in a diff between
+two sibling views: `VerbRowLabel` ends with `.contentShape(Rectangle())` and a comment
+explaining that without it SwiftUI hit-tests only the drawn glyphs. `ModelRowLabel` never
+got that line. A model row is an exemplar on the left, a percent pill on the right, and a
+`Spacer` between — so the entire middle of every row, which is most of it, was dead to
+touch. The iPad had been fine because its grid branch wraps each cell in `.card()`, whose
+fill hit-tests on its own. This was a real user-facing bug that had shipped, and the
+screenshot harness found it precisely because a script taps the geometric center of a row
+where a human would unconsciously aim at the word.
+
+The remaining two silent cells were the iPad's settings shots, which showed the Browse grid
+ghosted through the Settings cards — you could read `ser`/`be` behind the Region section.
+`nav_settings` was the only recipe that tapped a tab and immediately screenshotted; every
+other tab-switching recipe inherits a delay from its `verify_screen_loaded` poll. Anchoring
+on `app_icon_bull` plus an explicit 1.5 s covers the crossfade, since an anchor being
+mounted says nothing about whether the animation finished. A final iPad cell lost its tap to
+a mid-render layout shift and was fixed by simply re-running it — the per-cell retry loop
+exists for exactly that, and the failure mode is a reminder that a swallowed tap yields a
+plausible PNG rather than an error.
+
+Josh also asked mid-run for the "Apple Intelligence is still preparing" row to disappear
+from screen 6. Apple Intelligence is never available in a simulator, so the tutor section
+can only ever render as a reason row there — honest on a device, but it reads as a defect in
+a store listing. Rather than a temporary local edit, this became a third documented kill
+switch, `TutorDisplay.tutorUnavailableRowEnabled`, alongside the tips and onboarding ones.
+It suppresses only the unavailability row, never the working `NavigationLink`, so it cannot
+hide a real feature by accident.
+
+Two Spanish content bugs surfaced in the `presente de indicativo` article while reviewing
+the shots, both of which will ship in a screenshot if not fixed: the second bullet is a
+duplicate of the first ("Accion que se realiza en el momento…", also missing its accent)
+where it should describe habitual action, and the `comer` example reads "como, come, come"
+instead of "como, comes, come". Left for Josh to decide on, since they're prose.
+
+The bundle is `docs/screenshots/version_1/` — Conjugar's first, where the sibling apps are
+already at version_2 and version_3. The playbook gained workarounds #18–20 and a blunter
+warning at the top: budget time for re-shoots, and read every PNG, because the exit code
+cannot tell you that a screenshot is of the wrong screen.
+
+## Fixing the Two Spanish Content Bugs (2026-07-18)
+
+Both bugs the screenshot review surfaced turned out to live in one string,
+`Info.presenteDeIndicativoText`, and both were copy-paste damage rather than translation
+errors. The second bullet of the Spanish "Usos" list was a verbatim duplicate of the first —
+"Accion que se realiza en el momento en el que se está hablando", missing the accent on
+*Acción* into the bargain — where the English reads "Habitual action" and the example
+directly beneath it glosses the habitual sense. It is now "• Acción habitual:". The `comer`
+example read "como, come, come, comemos, coméis, comen", with the 2S slot duplicating 3S;
+English had it right. Now "como, comes, come, …". Nice irony for an app whose entire purpose
+is conjugating verbs correctly.
+
+The editing method matters more than the edit. CLAUDE.md warns that the Edit tool corrupts
+`.xcstrings` values containing ASCII quotes, and this value is full of them
+("Malteamos." = "We are malting."), so the fix had to go through Python. My first attempt
+round-tripped the catalog through `json.load`/`json.dump`, which produced a **2,223-line
+diff** — a whole-file reformat that would have buried two real changes in noise and made the
+next merge miserable. Reverted, and replaced the two substrings in the **raw file text**
+instead. Neither target contains a quote or a backslash, so the escaping cannot break, and
+the diff is one line. General rule for this catalog: parse it to *find* things, but patch it
+as text.
+
+Verified twice — once by re-parsing the JSON and printing the Spanish body, and once by
+driving the app in Spanish to the Presente de Indicativo article and reading both corrected
+lines off the screen. The two Spanish `info_view` screenshots were then re-shot, since the
+already-assembled bundle was carrying the old text; `version_1` now matches the app.
