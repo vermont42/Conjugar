@@ -129,7 +129,7 @@ struct InfoBrowseView: View {
             .foregroundStyle(Color.customForeground)
         }
       }
-    } else if let reason = service.unavailabilityReason {
+    } else if let reason = service.unavailabilityReason, TutorDisplay.tutorUnavailableRowEnabled {
       Section(L.Tutor.section) {
         tutorUnavailableRow(reason)
       }
