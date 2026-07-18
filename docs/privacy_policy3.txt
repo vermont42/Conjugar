@@ -1,0 +1,207 @@
+PRIVACY POLICY FOR CONJUGUER
+
+Effective Date: June 30, 2026
+Developer: Josh Adams
+
+
+1. INTRODUCTION
+
+Conjuguer is an iOS app for learning French verb conjugations. This privacy policy explains what information the app collects, how that information is used, and what choices you have.
+
+
+2. INFORMATION WE COLLECT
+
+Conjuguer collects anonymized usage analytics to help improve the app. These analytics record:
+
+- Which screens you visit (verbs, verb models, quiz, info articles, settings, and the tutor)
+- Quiz lifecycle events (starting, quitting, or completing a quiz)
+- Quiz difficulty level (regular or ridiculous) when you quit or complete a quiz
+- How far you progressed in a quiz if you quit early (the question number reached)
+- Your quiz score and the elapsed time when you complete or quit a quiz
+- Certain in-app actions, such as opening the game or reshowing the onboarding, and whether Game Center sign-in succeeded
+
+Your quiz score and elapsed time are collected, but, like all of these analytics, they are anonymized and are not tied to your identity (see Section 4). The app does not record your quiz answers, the verbs you look up, or any text you type.
+
+
+3. HOW WE USE THIS INFORMATION
+
+Anonymized analytics help us understand which features are engaging and where the app can be improved. For example, if most users quit quizzes early, that suggests the quiz experience needs work.
+
+
+4. TELEMETRYDECK AND ANONYMIZATION
+
+Analytics are processed by TelemetryDeck, a privacy-focused analytics provider based in Germany.
+
+TelemetryDeck uses a two-stage hashing process to ensure anonymity:
+
+- On your device, any identifiers are salted and hashed before leaving the app.
+- On TelemetryDeck's servers, the already-hashed data is hashed again.
+
+This means neither the developer nor TelemetryDeck can reconstruct original user identifiers or trace analytics data back to any individual.
+
+TelemetryDeck is GDPR compliant, does not use third-party cookies, and encrypts all data in transit with SSL/TLS.
+
+For more information, visit TelemetryDeck's privacy page:
+https://telemetrydeck.com/privacy/
+
+
+5. WHAT WE DO NOT COLLECT
+
+Conjuguer does not collect:
+
+- Names, email addresses, or other personal identifiers
+- Location data
+- Device identifiers that can be traced back to you
+- Advertising identifiers (the app contains no advertising)
+- Quiz answers or any text you type
+- Photos, contacts, or other on-device data
+- Browsing history or data from other apps
+
+
+6. GAME CENTER
+
+Conjuguer integrates with Apple Game Center for quiz leaderboards. When you submit a score, Game Center handles that data according to Apple's privacy policy. The developer does not have access to your Game Center identity or personal information through this integration.
+
+Apple's privacy policy is available at:
+https://www.apple.com/legal/privacy/
+
+
+7. THIRD-PARTY SERVICES
+
+The app uses two third-party services:
+
+TelemetryDeck (anonymized analytics)
+Privacy policy: https://telemetrydeck.com/privacy/
+
+Apple Game Center (leaderboards)
+Privacy policy: https://www.apple.com/legal/privacy/
+
+
+8. CHILDREN'S PRIVACY
+
+Conjuguer does not knowingly collect personal information from children under 13 (as defined by the U.S. Children's Online Privacy Protection Act) or under 16 (as defined by the EU General Data Protection Regulation). Because the app collects only anonymized, non-personal analytics, no age-identifiable data is stored.
+
+
+9. DATA RETENTION
+
+Anonymized analytics data is retained by TelemetryDeck in accordance with their data-retention policy. Because the data is anonymized and cannot be linked to individual users, deletion requests for specific users cannot be fulfilled -- there is nothing to delete.
+
+
+10. CHANGES TO THIS POLICY
+
+If this privacy policy changes, the updated version will be posted with a new effective date. Continued use of the app after changes are posted constitutes acceptance of the revised policy.
+
+
+11. CONTACT
+
+If you have questions about this privacy policy, contact:
+
+Josh Adams
+vermontcoder@gmail.com
+
+
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+TRADUCTION FRANÃ‡AISE / FRENCH TRANSLATION
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+
+POLITIQUE DE CONFIDENTIALITÃ‰ DE CONJUGUER
+
+Date d'entrÃ©e en vigueur : 30 juin 2026
+DÃ©veloppeur : Josh Adams
+
+
+1. INTRODUCTION
+
+Conjuguer est une application iOS pour apprendre la conjugaison des verbes franÃ§ais. Cette politique de confidentialitÃ© explique quelles informations l'application collecte, comment ces informations sont utilisÃ©es et quels choix s'offrent Ã  vous.
+
+
+2. INFORMATIONS QUE NOUS COLLECTONS
+
+Conjuguer collecte des statistiques d'utilisation anonymisÃ©es afin d'amÃ©liorer l'application. Ces statistiques enregistrent :
+
+- Les Ã©crans que vous consultez (verbes, modÃ¨les de verbes, quiz, articles d'information, paramÃ¨tres et le tuteur)
+- Les Ã©vÃ©nements du cycle de vie d'un quiz (dÃ©marrage, abandon ou achÃ¨vement d'un quiz)
+- Le niveau de difficultÃ© du quiz (ordinaire ou ridicule) lorsque vous abandonnez ou terminez un quiz
+- Votre progression dans un quiz si vous l'abandonnez prÃ©maturÃ©ment (le numÃ©ro de la question atteinte)
+- Votre score au quiz et le temps Ã©coulÃ© lorsque vous terminez ou abandonnez un quiz
+- Certaines actions dans l'application, comme l'ouverture du jeu ou le rÃ©affichage de l'introduction, ainsi que la rÃ©ussite ou l'Ã©chec de la connexion Ã  Game Center
+
+Votre score au quiz et le temps Ã©coulÃ© sont collectÃ©s, mais, comme toutes ces statistiques, ils sont anonymisÃ©s et ne sont pas liÃ©s Ã  votre identitÃ© (voir la section 4). L'application n'enregistre pas vos rÃ©ponses au quiz, les verbes que vous consultez, ni aucun texte que vous saisissez.
+
+
+3. COMMENT NOUS UTILISONS CES INFORMATIONS
+
+Les statistiques anonymisÃ©es nous aident Ã  comprendre quelles fonctionnalitÃ©s sont attrayantes et oÃ¹ l'application peut Ãªtre amÃ©liorÃ©e. Par exemple, si la plupart des utilisateurs abandonnent les quiz prÃ©maturÃ©ment, cela suggÃ¨re que l'expÃ©rience du quiz doit Ãªtre retravaillÃ©e.
+
+
+4. TELEMETRYDECK ET ANONYMISATION
+
+Les statistiques sont traitÃ©es par TelemetryDeck, un fournisseur d'analyse axÃ© sur la confidentialitÃ© et basÃ© en Allemagne.
+
+TelemetryDeck utilise un processus de hachage en deux Ã©tapes pour garantir l'anonymat :
+
+- Sur votre appareil, tout identifiant est salÃ© et hachÃ© avant de quitter l'application.
+- Sur les serveurs de TelemetryDeck, les donnÃ©es dÃ©jÃ  hachÃ©es sont hachÃ©es une nouvelle fois.
+
+Cela signifie que ni le dÃ©veloppeur ni TelemetryDeck ne peuvent reconstituer les identifiants d'utilisateur d'origine ni relier les donnÃ©es d'analyse Ã  une personne en particulier.
+
+TelemetryDeck est conforme au RGPD, n'utilise pas de cookies tiers et chiffre toutes les donnÃ©es en transit avec SSL/TLS.
+
+Pour plus d'informations, consultez la page de confidentialitÃ© de TelemetryDeck :
+https://telemetrydeck.com/privacy/
+
+
+5. CE QUE NOUS NE COLLECTONS PAS
+
+Conjuguer ne collecte pas :
+
+- De noms, d'adresses e-mail ou d'autres identifiants personnels
+- De donnÃ©es de localisation
+- D'identifiants d'appareil pouvant Ãªtre reliÃ©s Ã  vous
+- D'identifiants publicitaires (l'application ne contient aucune publicitÃ©)
+- De rÃ©ponses au quiz ni aucun texte que vous saisissez
+- De photos, de contacts ou d'autres donnÃ©es prÃ©sentes sur votre appareil
+- D'historique de navigation ou de donnÃ©es d'autres applications
+
+
+6. GAME CENTER
+
+Conjuguer s'intÃ¨gre Ã  Apple Game Center pour les classements des quiz. Lorsque vous soumettez un score, Game Center traite ces donnÃ©es conformÃ©ment Ã  la politique de confidentialitÃ© d'Apple. Le dÃ©veloppeur n'a pas accÃ¨s Ã  votre identitÃ© Game Center ni Ã  vos informations personnelles par le biais de cette intÃ©gration.
+
+La politique de confidentialitÃ© d'Apple est disponible Ã  l'adresse suivante :
+https://www.apple.com/legal/privacy/
+
+
+7. SERVICES TIERS
+
+L'application utilise deux services tiers :
+
+TelemetryDeck (statistiques anonymisÃ©es)
+Politique de confidentialitÃ© : https://telemetrydeck.com/privacy/
+
+Apple Game Center (classements)
+Politique de confidentialitÃ© : https://www.apple.com/legal/privacy/
+
+
+8. CONFIDENTIALITÃ‰ DES ENFANTS
+
+Conjuguer ne collecte pas sciemment d'informations personnelles auprÃ¨s d'enfants de moins de 13 ans (tels que dÃ©finis par le Children's Online Privacy Protection Act des Ã‰tats-Unis) ou de moins de 16 ans (tels que dÃ©finis par le RÃ¨glement gÃ©nÃ©ral sur la protection des donnÃ©es de l'UE). Ã‰tant donnÃ© que l'application ne collecte que des statistiques anonymisÃ©es et non personnelles, aucune donnÃ©e permettant d'identifier l'Ã¢ge n'est stockÃ©e.
+
+
+9. CONSERVATION DES DONNÃ‰ES
+
+Les donnÃ©es d'analyse anonymisÃ©es sont conservÃ©es par TelemetryDeck conformÃ©ment Ã  leur politique de conservation des donnÃ©es. Ã‰tant donnÃ© que les donnÃ©es sont anonymisÃ©es et ne peuvent pas Ãªtre liÃ©es Ã  des utilisateurs individuels, les demandes de suppression pour des utilisateurs spÃ©cifiques ne peuvent pas Ãªtre satisfaites â€” il n'y a rien Ã  supprimer.
+
+
+10. MODIFICATIONS DE CETTE POLITIQUE
+
+Si cette politique de confidentialitÃ© est modifiÃ©e, la version mise Ã  jour sera publiÃ©e avec une nouvelle date d'entrÃ©e en vigueur. L'utilisation continue de l'application aprÃ¨s la publication des modifications constitue une acceptation de la politique rÃ©visÃ©e.
+
+
+11. CONTACT
+
+Si vous avez des questions concernant cette politique de confidentialitÃ©, contactez :
+
+Josh Adams
+vermontcoder@gmail.com

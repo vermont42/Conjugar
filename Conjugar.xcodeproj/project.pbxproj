@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		031AD50D300BD22A008686BB /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 031AD50C300BD22A008686BB /* TelemetryDeck */; };
 		038A31ED2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */; };
 		03FF1748258C17E900BA447D /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03FF1747258C17E900BA447D /* CloudKit.framework */; };
 		AA01B2C3D4E5F60718293A02 /* sadTrombone2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A01 /* sadTrombone2.mp3 */; };
@@ -144,6 +145,7 @@
 			files = (
 				E14271371F01CA98001D19E1 /* GameKit.framework in Frameworks */,
 				03FF1748258C17E900BA447D /* CloudKit.framework in Frameworks */,
+				031AD50D300BD22A008686BB /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,6 +369,9 @@
 				es,
 			);
 			mainGroup = E1F06ACB1E8F05F200ADD2E1;
+			packageReferences = (
+				031AD50B300BD22A008686BB /* XCRemoteSwiftPackageReference "SwiftSDK" */,
+			);
 			productRefGroup = E1F06AD51E8F05F300ADD2E1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -819,6 +824,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		031AD50B300BD22A008686BB /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.14.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		031AD50C300BD22A008686BB /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 031AD50B300BD22A008686BB /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E1F06ACC1E8F05F200ADD2E1 /* Project object */;
 }
