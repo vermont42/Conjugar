@@ -88,7 +88,7 @@ struct ModelView: View {
     .navigationBarTitleDisplayMode(.large)
     .onAppear {
       ExploreModelsTip().invalidate(reason: .actionPerformed)
-      Current.analytics.recordVisitation(viewController: "\(ModelView.self)")
+      Current.analytics.signal(name: .viewModelView)
     }
   }
 

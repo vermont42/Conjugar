@@ -2,14 +2,6 @@
 //  GameState+Obstacles.swift
 //  Conjugar
 //
-//  The bull's behavior (pacing the top girder + throwing obstacle "barrels"),
-//  obstacle descent/rolling down the platforms, and the obstacle↔player /
-//  cape-pickup collisions. "Obstacles" are the per-stage thrown glyphs (flags,
-//  animals, balls, vehicles, sky — see `GameState.stageObstacleEmojis`); the file
-//  and its symbols were renamed from `Flag`/`updateFlags` when flags became one of
-//  five sets (La Subida). The `CONJUGAR_GAME_DISABLE_FLAGS` env var keeps its name —
-//  it's a documented external contract (see `debugFlagsDisabled`).
-//
 
 import CoreGraphics
 

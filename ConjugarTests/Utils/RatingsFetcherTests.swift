@@ -5,10 +5,11 @@
 //  Created by Joshua Adams on 4/26/19.
 //  Copyright © 2019 Josh Adams. All rights reserved.
 //
-//  Kept as XCTest (rather than converted to Swift Testing) on purpose: it reassigns
-//  the global `Current`, and XCTest's serial execution keeps that mutation from
-//  racing the other `Current`-reassigning suite (CommunViewModelTests) — which a
-//  parallel Swift Testing suite would not.
+//  Kept as XCTest (rather than converted to Swift Testing) on purpose: it mutates the
+//  global `Current`, and XCTest's serial execution keeps that write from racing the many
+//  suites that *read* `Current`. A Swift Testing suite runs in parallel with the others by
+//  default, so the same code there would be a data race on a global. (`.serialized`
+//  wouldn't save it — that trait orders tests within a suite, not across suites.)
 //
 
 import XCTest
@@ -16,7 +17,12 @@ import XCTest
 
 @MainActor
 class RatingsFetcherTests: XCTestCase {
-  override func setUp() {
+  // The *async* setUp, deliberately: a non-async `override func setUp()` inherits
+  // XCTestCase's nonisolated isolation (an override has nowhere to hop, so it cannot
+  // add `@MainActor`), which makes assigning the MainActor-isolated `Current` a Swift 6
+  // concurrency warning. An async override can be isolated to the class's actor,
+  // because the caller awaits it.
+  override func setUp() async throws {
     Current = World.unitTest
   }
 

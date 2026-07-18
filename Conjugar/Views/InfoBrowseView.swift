@@ -87,7 +87,7 @@ struct InfoBrowseView: View {
         }
       }
       .onAppear {
-        Current.analytics.recordVisitation(viewController: "\(InfoBrowseView.self)")
+        Current.analytics.signal(name: .viewInfoBrowseView)
       }
       // Poll the on-device model's availability while this screen is visible; SwiftUI
       // cancels the task on disappear, so the tutor row flips live without any manual

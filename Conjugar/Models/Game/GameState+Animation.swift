@@ -2,11 +2,6 @@
 //  GameState+Animation.swift
 //  Conjugar
 //
-//  The sprite-flipbook machinery: a per-action frame-count table, the phase advance,
-//  action derivation, and the `frame(phase:count:)` helper. The view indexes the
-//  rendered per-action sprite frames (`Image("bull_<action>_<playerFrame>")` etc.) off
-//  this logic; a numbered-box fallback in GameView covers any action without art.
-//
 
 import CoreGraphics
 

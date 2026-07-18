@@ -6749,3 +6749,125 @@ While there, tweaked the closing line of both strings from "…a flamenco dance-
 decides whether love wins." to "…determines whether love conquers all." (es: "…decide si triunfa
 el amor." → "…determina si el amor todo lo vence."). Both en/es translated in the catalog; build
 succeeds.
+
+## TelemetryDeck, and the analytics schema Conjugar had outgrown (2026-07-18)
+
+Conjugar's analytics had been a ghost for years. AWS Pinpoint was ripped out long ago, but
+the *shape* it imposed survived: an `AnalyticsService` protocol whose one real method was
+`recordEvent(_:parameters:metrics:)`, a dozen `record*` convenience wrappers, and — the
+detail that dates it — event-name constants that dodged parameter-name collisions with
+umlauts (`scöre`, `viewContröller`, `cürrentQuestionIndex`, `identifīer`). The only
+conformer was `AnalyticsServiceSpy`, which printed a flattened string to the console and
+sent nothing anywhere. Every call site had been faithfully maintained through the whole
+SwiftUI migration, feeding a service that did nothing.
+
+The sibling apps had already moved on. Conjuguer and Konjugieren both use TelemetryDeck
+behind a much smaller protocol: `initialize(appID:)` + `signal(name:parameters:)`, with
+names in an `AnalyticsName` enum and keys in a `ParameterKey` enum. So the real question
+wasn't "how do I add TelemetryDeck" but "how much of the old vocabulary is worth keeping."
+Josh's answer was: none of it. Full convergence — three apps that read identically.
+
+That turned out to be the right call for a reason I didn't anticipate when scoping it. The
+`metrics: [String: Double]?` parameter, threaded through every call site, has no
+TelemetryDeck analogue at all (its parameters are `[String: String]`), and no caller had
+ever passed a non-nil value. Keeping the old protocol would have meant carrying a parameter
+that could never do anything.
+
+### What got deleted along the way
+
+Two abstractions fell out as dead weight rather than being targeted. TelemetryDeck reports
+country and language natively, which made the locale parameter on `recordBecameActive()`
+redundant — and that parameter was the *only* consumer of the `AnalyticsLocale` protocol
+and its `Real`/`Stub` pair. (The `becameActive` event went too: TelemetryDeck records
+launches and sessions itself.) That protocol had been renamed from a plain `Locale` at some
+point because it shadowed `Foundation.Locale` module-wide; it's now simply gone.
+
+The bigger removal was **Commun**, the CloudKit-backed "message from the developer"
+feature. Asked which Commun events the new schema should carry, Josh's answer was that he
+hasn't used it once in the years since building it — delete all of it. That took out
+`Commun`, `CommunViewModel`, `CommunView`, `CommunGetter`/`Real`/`Stub`, its test suite,
+the `.fullScreenCover` in `MainTabView`, `Settings.lastCommunIdentifierShown`, and the
+`communGetter` slot in `World`. It also simplified the launch path: `MainTabView`'s launch
+task used to present onboarding *or* await the commun fetch, with a comment explaining that
+two covers must not contend for the anchor. Now it just presents onboarding, and
+`presentOnboardingIfNeeded()` no longer needs to return a Bool nobody else uses.
+
+Removing Commun stranded CloudKit — it was the framework's only client — so the dead
+`CloudKit.framework` link came out of the target too. The iCloud **entitlements** were held
+back initially, since those touch provisioning; Josh asked, and they went too once verified
+safe. The check that mattered: nothing else reaches for the container —
+`GetterSetterReal` is plain `UserDefaults.standard` rather than `NSUbiquitousKeyValueStore`,
+there's no `ubiquity-kvstore-identifier` entitlement, no `NSUbiquitousContainers` in either
+Info.plist, and the widget's entitlements never had iCloud at all. The app-group entitlement
+stays — that's what the widget and App Intents share defaults through.
+
+Removing an entitlement is a *narrowing* operation, which is why it's safe: codesign checks
+that requested entitlements are a subset of what the provisioning profile allows, so
+requesting less always still validates. Deliberately **not** done: disabling the iCloud
+capability on the App ID in the developer portal (unnecessary, and the step that would
+actually invalidate profiles), and deleting the `iCloud.biz.Conjugar` container itself
+(irreversible). Checking the deleted `CommunGetterReal` in git history settles what that
+container actually holds: a `publicCloudDatabase` query for record type `"Communs"`, with no
+write path anywhere in the app. So it stores only Josh's own authored announcement records —
+title, content, button titles, a `CKAsset` image, identifier, `isCurrent` — and no user data
+at all. Deleting it would destroy nothing but his own message history, but an idle public
+database costs nothing to keep, and the entitlement removal already severs the app from it
+permanently.
+
+### The isolation surprise
+
+The new files compiled and the app built green, and the whole thing looked done. Then the
+first test failed to compile: *"call to main actor-isolated instance method 'signal(name:)'
+in a synchronous nonisolated context."* Both conformers are declared `nonisolated`, so this
+was confusing for a minute.
+
+The cause is witness inference. `Analytics.swift` carried no isolation annotation, so under
+`SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` the *protocol* became MainActor-isolated, and
+conforming methods inherited that isolation regardless of the `nonisolated` on the class.
+Which is not a cosmetic problem: `AnalyticsReal` exists precisely to get TelemetryDeck's
+blocking `DispatchQueue.sync` calls *off* the main thread, and an implicitly-MainActor
+protocol quietly contradicts that design.
+
+The fix was to mark the protocol, its extension, and both enums `nonisolated`, matching how
+the engine and `enum L` are already handled in this codebase. Worth noting that Conjuguer
+has the same latent annotation gap and doesn't trip on it — only because nothing over there
+calls the spy from a nonisolated test suite. The bug was always there; Conjugar just has a
+test that looks.
+
+### Secrets, and one signal that didn't survive review
+
+The app ID follows Konjugieren's pattern: gitignored `Conjugar/Secrets.xcconfig` holding
+`TELEMETRY_DECK_APP_ID`, wired as the app target's `baseConfigurationReference` for Debug
+and Release, surfaced via the `TelemetryDeckAppID` Info.plist key, read in
+`ConjugarApp.init()`. An empty ID leaves the service uninitialized and dropping signals, so
+a clone without the file still builds. Verified the chain end-to-end by reading
+`TelemetryDeckAppID` out of the *built* `Conjugar.app/Info.plist` — the interpolation is
+exactly the kind of thing that silently yields an empty string if the xcconfig isn't
+actually attached to the target.
+
+Conjugar gained the sibling-parity taps (`tapPlayGame`, `tapShowOnboarding`,
+`tapRateOrReview`, `tapSendTutorMessage`) and four game signals the siblings don't have —
+`startGame`, `completeStage` (with stage number), `enterBossFight`, `winBossFight` — which
+suit La Subida's five-stage arc better than Konjugieren's wave-based `completeWave`.
+
+One planned signal got cut mid-implementation. I'd added `tapViewLeaderboard` for parity,
+but Conjugar has no leaderboard *button*: `showLeaderboard()` fires automatically inside
+`finish()` when a quiz ends. The signal would have been a misnomer and 1:1 redundant with
+`completeQuiz` on every emission. Removed the case and the call.
+
+Quiz signals now also carry `difficulty` and `elapsedTime`, which the old schema tracked in
+`Results` but never reported.
+
+### Verification
+
+550 tests pass (30 suites, up from 544 — the six new ones are `AnalyticsTests`, replacing
+the deleted `AnalyticsServiceTests` that asserted on the old spy's printed string).
+`swiftlint` clean at 177 files. Built and driven in the simulator through all five tabs to
+confirm the reworked launch path survives Commun's removal. Real signal *delivery* can't be
+checked from the simulator — `World.simulator` gets the spy — so that needs a device run
+before Josh trusts the dashboard.
+
+`docs/privacy_policy3.txt` was rewritten from the staged Conjuguer draft: Spanish app,
+Spanish translation replacing the French one, an event list matching the new schema, and a
+new section on the on-device tutor stating plainly that message *content* never leaves the
+device — only the fact that a message was sent.

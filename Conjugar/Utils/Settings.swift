@@ -90,12 +90,6 @@ final class Settings {
   static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
   static let didShowGameCenterDialogDefault = false
 
-  var lastCommunIdentifierShown: Int {
-    didSet { Settings.persist(getterSetter, Settings.lastCommunIdentifierShownKey, lastCommunIdentifierShown, oldValue) }
-  }
-  static let lastCommunIdentifierShownKey = "lastCommunIdentifierShown"
-  static let lastCommunIdentifierShownDefault = -1
-
   // Flipped true the first time the onboarding flow is dismissed, so it auto-presents
   // exactly once. The Settings "Show Onboarding" button re-shows it without touching
   // this flag (see `OnboardingView(isReshow:)`).
@@ -133,7 +127,6 @@ final class Settings {
     lastReviewPromptDate = Settings.read(getterSetter, Settings.lastReviewPromptDateKey, default: Settings.lastReviewPromptDateDefault)
     userRejectedGameCenter = Settings.read(getterSetter, Settings.userRejectedGameCenterKey, default: Settings.userRejectedGameCenterDefault)
     didShowGameCenterDialog = Settings.read(getterSetter, Settings.didShowGameCenterDialogKey, default: Settings.didShowGameCenterDialogDefault)
-    lastCommunIdentifierShown = Settings.read(getterSetter, Settings.lastCommunIdentifierShownKey, default: Settings.lastCommunIdentifierShownDefault)
     hasSeenOnboarding = Settings.read(getterSetter, Settings.hasSeenOnboardingKey, default: Settings.hasSeenOnboardingDefault)
     appIcon = Settings.read(getterSetter, Settings.appIconKey, default: Settings.appIconDefault)
   }

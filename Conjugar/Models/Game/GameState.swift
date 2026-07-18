@@ -2,24 +2,6 @@
 //  GameState.swift
 //  Conjugar
 //
-//  The @Observable core of the Donkey-Kong-inspired flamenco/bull game — the
-//  five-stage climb "La Subida" (per-stage obstacle sets + compounding speed, three
-//  rotating power-ups, three rotating challenge mechanics, and between-stage escape
-//  beats) capped by the "La Llamada" dance-off boss. Follows the sibling apps' house
-//  pattern (Conjuguer/Konjugieren): a single `@MainActor @Observable final class`
-//  holding all state and tuning constants, driven by `TimelineView(.animation)` via
-//  `update(currentTime:)`. Entities are value-type structs (see GameModels.swift).
-//  The logic is split across extensions — `GameState+Physics` (movement/climb/jump),
-//  `GameState+Obstacles` (the rolling obstacle sets), `GameState+Stages` (the five
-//  stages, escape beats, soft respawn), `GameState+PowerUps` (cape/speed/serenata),
-//  `GameState+Mechanics` (zombie/encierro/apagón), `GameState+BossFight` (La Llamada),
-//  and `GameState+Animation` (the sprite flipbook) — so any state those extensions
-//  touch is declared internal (not private).
-//
-//  The player and bull are rendered cel-shaded sprite flipbooks (see GameView and
-//  GameState+Animation); a numbered-box fallback survives only as a safety net for an
-//  uncovered action. The matador is a static `Image("matador")`.
-//
 
 import Foundation
 import Observation
@@ -589,6 +571,7 @@ final class GameState {
       stage = startStage
     }
     didConfigure = true
+    Current.analytics.signal(name: .startGame)
     startAudio()
     if Self.debugStartAtEnd {
       debugJumpToEndScene()
@@ -712,7 +695,7 @@ final class GameState {
     }
 
     // Ladders: one per gap, staggered left/right so the player must traverse each
-    // level to reach the next ladder (the Donkey-Kong zig-zag).
+    // level to reach the next ladder.
     ladders = (0..<(Self.levelCount - 1)).map { gap in
       let x = w * (gap % 2 == 0 ? 0.75 : 0.25)
       return Ladder(

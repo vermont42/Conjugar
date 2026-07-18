@@ -11,7 +11,6 @@
 import SwiftUI
 
 struct MainTabView: View {
-  @State private var commun: Commun?
   @State private var router = AppRouter()
   @Environment(\.scenePhase) private var scenePhase
 
@@ -67,22 +66,13 @@ struct MainTabView: View {
       // Warm the ~4 MB content caches off-main so the first verb push isn't a main-thread
       // decode. refresh() is date-gated and often no-ops, so it can't be relied on to warm.
       Task.detached { ContentCaches.warm() }
-      // First-launch onboarding wins the launch-time cover; skip the commun prompt this
-      // launch so two covers don't contend for the anchor.
-      guard !presentOnboardingIfNeeded() else { return }
-      await presentCommunIfNeeded()
+      presentOnboardingIfNeeded()
     }
     .onOpenURL { router.handle(url: $0) }
     .onChange(of: scenePhase) { _, phase in
       guard phase == .active else { return }
-      // The scene lifecycle — not AppDelegate.applicationDidBecomeActive, which
-      // never fires under WindowGroup — is where became-active analytics live now.
-      Current.analytics.recordBecameActive()
       Task.detached { WidgetSnapshotWriter.refresh() }
       drainPendingDeeplink()
-    }
-    .fullScreenCover(item: $commun) { commun in
-      CommunView(commun: commun) { self.commun = nil }
     }
     // A `conjugar://game` deeplink jumps straight to the game from any tab. The
     // router is passed explicitly (cover content doesn't inherit the custom
@@ -95,15 +85,12 @@ struct MainTabView: View {
     }
   }
 
-  /// Trip the first-launch onboarding cover, unless already seen or disabled for
-  /// screenshots. Returns whether it was presented, so the caller can skip the commun
-  /// prompt for this launch.
-  private func presentOnboardingIfNeeded() -> Bool {
+  /// Trip the first-launch onboarding cover, unless already seen or disabled for screenshots.
+  private func presentOnboardingIfNeeded() {
     guard OnboardingDisplay.onboardingEnabled, !Current.settings.hasSeenOnboarding else {
-      return false
+      return
     }
     router.showOnboarding = true
-    return true
   }
 
   /// Control-center controls can't navigate, so they stash a deeplink in the shared
@@ -118,16 +105,5 @@ struct MainTabView: View {
     }
     defaults.removeObject(forKey: WidgetConstants.pendingDeeplinkKey)
     router.handle(url: url)
-  }
-
-  /// The launch-time "new communication" presentation MainTabBarVC used to do in
-  /// viewDidLoad: fetch the latest commun and present it once if it is newer than
-  /// the last one shown and no quiz is in progress.
-  private func presentCommunIfNeeded() async {
-    guard let commun = await Current.communGetter.getCommunication() else { return }
-    guard Current.quiz.quizState != .inProgress,
-          commun.identifier > Current.settings.lastCommunIdentifierShown else { return }
-    Current.settings.lastCommunIdentifierShown = commun.identifier
-    self.commun = commun
   }
 }

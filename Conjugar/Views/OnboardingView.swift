@@ -2,15 +2,6 @@
 //  OnboardingView.swift
 //  Conjugar
 //
-//  The first-launch welcome tour, ported from the sibling app Conjuguer and adapted
-//  for Conjugar (July 2026). A paged `TabView` of sheets — welcome, the four content
-//  tabs, the on-device tutor (only when Apple Intelligence is available), the deep-dive
-//  articles, and finally a preview of the under-development game whose CTA launches it.
-//  Presented as a `.fullScreenCover`: once at first launch from `MainTabView` (gated by
-//  `Settings.hasSeenOnboarding` + the `OnboardingDisplay.onboardingEnabled` kill switch),
-//  and on demand from the Settings tab with `isReshow: true`. Styled to Conjugar's yellow
-//  design system rather than Conjuguer's blue. `Music.onboarding` plays for the duration
-//  and fades out on dismiss.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -185,7 +176,7 @@ struct OnboardingView: View {
     }
     .sensoryFeedback(.impact(weight: .light), trigger: currentPage)
     .onAppear {
-      Current.analytics.recordVisitation(viewController: "\(OnboardingView.self)")
+      Current.analytics.signal(name: .viewOnboardingView)
       Current.soundPlayer.startMusic(.onboarding)
     }
     .onDisappear {
@@ -253,13 +244,6 @@ private struct OnboardingPageView: View {
   }
 
   var body: some View {
-    // A plain, page-filling ScrollView so long bodies (and large Dynamic Type / the
-    // wordier Spanish strings) scroll instead of truncating. Earlier attempts wrapped
-    // this in a `GeometryReader` + `.frame(minHeight:)` to keep short pages centered,
-    // but inside the horizontally-paging `TabView(.page)` that made the ScrollView size
-    // to its content rather than act as a bounded viewport — so tall pages overflowed
-    // (colliding with the dots / Get Started) and would not scroll. A bare ScrollView
-    // fills the page and scrolls correctly; short pages simply sit below a top pad.
     ScrollView {
       VStack(spacing: Layout.doubleDefaultSpacing) {
         symbolImage
@@ -285,9 +269,6 @@ private struct OnboardingPageView: View {
             .buttonStyle(PrimaryButtonStyle())
         }
       }
-      // Cap the welcome/feature content to a reading-width column, centered, so it
-      // sits in a tidy measure on iPad instead of stretching edge-to-edge across a
-      // vast empty canvas. No-op on iPhone (narrower than the cap).
       .readingWidth()
       .padding(.vertical, Layout.tripleDefaultSpacing)
     }

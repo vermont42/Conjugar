@@ -2,19 +2,6 @@
 //  GameState+PowerUps.swift
 //  Conjugar
 //
-//  La Subida — the three-kind power-up system (see prompts/game_la_subida.md,
-//  Phase 2). Each stage spawns exactly one kind, drawn from a shuffle bag so no kind
-//  repeats until all three have appeared:
-//
-//    • cape     — the original muleta: invulnerability + smash (GameState+Obstacles).
-//    • speed ⚡ — walk AND climb speed ×2 for the same 7 s + expiry-blink envelope.
-//    • serenata 🎸 — the bull drops its guard and DANCES instead of pacing/throwing;
-//                    in-flight obstacles keep rolling, but no new ones spawn.
-//
-//  This file owns the bag, the per-stage assignment, the collection effects, and the
-//  serenata dance loop. The stored timers (`speedRemaining` / `serenataRemaining` /
-//  `serenataDanceTimer`) and the bag live on `GameState`; they tick in `update`.
-//
 
 import CoreGraphics
 

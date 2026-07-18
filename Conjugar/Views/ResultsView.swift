@@ -2,10 +2,6 @@
 //  ResultsView.swift
 //  Conjugar
 //
-//  The SwiftUI quiz-results screen, replacing the UIKit ResultsVC/ResultsUIV/
-//  ResultCell. A hero score numeral color-coded by accuracy over a carded
-//  difficulty/region/time summary, then a labeled, color-coded row per question.
-//  Reads the finished `Current.quiz`.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -50,7 +46,7 @@ struct ResultsView: View {
     .background(Color.customBackground.ignoresSafeArea())
     .navigationTitle(L.Results.title)
     .navigationBarTitleDisplayMode(.inline)
-    .onAppear { Current.analytics.recordVisitation(viewController: "\(ResultsView.self)") }
+    .onAppear { Current.analytics.signal(name: .viewResultsView) }
   }
 
   private var summaryCard: some View {

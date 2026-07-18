@@ -2,20 +2,6 @@
 //  GameState+BossFight.swift
 //  Conjugar
 //
-//  Boss fight — **La Llamada**, the call-and-response dance-off duel
-//  (see prompts/game_boss_llamada.md). After summiting, the bull dances a phrase
-//  move by move (cue chips accumulate), the player echoes it from memory on the
-//  morphed control pad while a compás bar sweeps, and a 6-notch Duende meter
-//  (banked phrases) is both the tug-of-war and the fight's progression: banked 0–1
-//  round 1 (length 3), 2–3 round 2 (length 4), 4–5 round 3 (length 5, with a 🔥
-//  freeze fake-out), 6 victory. Failure slides the meter back a notch and rerolls a
-//  fresh phrase — the bull never harms the dancer; there is no lose state.
-//
-//  `update(currentTime:)` routes every non-`.climb` phase here, so the climb
-//  pipeline's derived actions never stomp the commanded dance bursts. The dance
-//  actions (dancer ole/stomp; bull stomp/rear/bow) render their own hand-keyed
-//  sprite flipbooks, and the duel is scored by its own SFX/music pack.
-//
 
 import CoreGraphics
 import Foundation
@@ -70,6 +56,7 @@ extension GameState {
   /// fades in when the transition completes (the llamada beat).
   func enterBossIntro() {
     guard phase == .climb else { return }
+    Current.analytics.signal(name: .enterBossFight)
     phase = .bossIntro
     introTimer = Self.introDuration
     bossTransition = 0
@@ -387,6 +374,7 @@ extension GameState {
   // MARK: Victory & end scene
 
   private func enterVictory() {
+    Current.analytics.signal(name: .winBossFight)
     phase = .victory
     victoryTimer = Self.victoryHold
     score += Self.bossClearBonus

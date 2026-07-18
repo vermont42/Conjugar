@@ -2,13 +2,6 @@
 //  GameState+Stages.swift
 //  Conjugar
 //
-//  La Subida — the five-stage climb (see prompts/game_la_subida.md). This file owns
-//  the stage system (per-stage obstacle set, compounding speed, render style), the
-//  between-stage **escape beat** (summits 1–4: the bull flees upward carrying the
-//  matador, then the next stage rebuilds), and the **soft respawn** (0 health returns
-//  the player to the bottom of the current stage with full health — there is no lose
-//  state in the climb). Power-up and challenge-mechanic bags land in later phases.
-//
 
 import CoreGraphics
 import Foundation
@@ -100,6 +93,11 @@ extension GameState {
     let w = screenSize.width
     let top = Self.levelCount - 1
     stage = summitCount + 1
+    // `summitCount` is the number of stages cleared, so it names the stage just finished.
+    Current.analytics.signal(
+      name: .completeStage,
+      parameters: [ParameterKey.stage.rawValue: "\(summitCount)"]
+    )
 
     // Player back to the bottom-left start.
     playerX = w * 0.15

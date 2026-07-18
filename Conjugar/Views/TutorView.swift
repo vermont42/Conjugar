@@ -2,11 +2,6 @@
 //  TutorView.swift
 //  Conjugar
 //
-//  The conjugation-tutor chat screen, adapted to Conjugar's design system (card
-//  colors, `SoundPlayer`, analytics). Talks to
-//  `Current.languageModelService`; a non-streaming `respond(to:)` drives a typing
-//  indicator while awaiting. History persists via `TutorChatHistory`.
-//
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -148,7 +143,7 @@ struct TutorView: View {
     }
     .onAppear {
       messages = TutorChatHistory.load(getterSetter: Current.getterSetter)
-      Current.analytics.recordVisitation(viewController: "\(TutorView.self)")
+      Current.analytics.signal(name: .viewTutorView)
     }
     .task {
       hasLoadedHistory = true
@@ -290,6 +285,7 @@ struct TutorView: View {
       return
     }
 
+    Current.analytics.signal(name: .tapSendTutorMessage)
     let userMessage = TutorMessage(role: .user, content: trimmed)
     messages.append(userMessage)
     inputText = ""

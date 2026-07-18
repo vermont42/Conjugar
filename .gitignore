@@ -1,3 +1,7 @@
+# TelemetryDeck app ID — copy Conjugar/Secrets.example.xcconfig to
+# Conjugar/Secrets.xcconfig and fill in your app ID. Never commit Secrets.xcconfig.
+Conjugar/Secrets.xcconfig
+
 # Other
 .DS_Store
 docs/screenshots/

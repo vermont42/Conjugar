@@ -133,7 +133,7 @@ struct ModelBrowseView: View {
         VerbView(verb: verb)
       }
       .onAppear {
-        Current.analytics.recordVisitation(viewController: "\(ModelBrowseView.self)")
+        Current.analytics.signal(name: .viewModelBrowseView)
         Current.reviewPrompter.promptableActionHappened()
       }
     }

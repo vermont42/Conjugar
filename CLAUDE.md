@@ -67,7 +67,7 @@ in `~/.claude/skills/ios-build-verify/SKILL.md`.
 > xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/ConjugatorTests/oirPresent\(\)
 > ```
 
-> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`, `TenseBridgeTests`) the migrated service suites (`SettingsTests`, `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests`), and the SwiftUI-migration suites (`InfoTests`, `ConjugationTextTests`, `QuizTests`, `SettingsViewTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The remaining lower-level suites like `ConjugationCellTests` / `AnalyticsServiceTests` are still **XCTest**, whose method names take **no** parentheses (e.g. `testConjugationCell`). New tests should be Swift Testing — see **XCTest + MainActor: the isolated-deinit crash** below.
+> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`, `TenseBridgeTests`) the migrated service suites (`SettingsTests`, `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests`), and the SwiftUI-migration suites (`InfoTests`, `ConjugationTextTests`, `QuizTests`, `SettingsViewTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The remaining lower-level suites like `ConjugationCellTests` / `RatingsFetcherTests` are still **XCTest**, whose method names take **no** parentheses (e.g. `testConjugationCell`). New tests should be Swift Testing — see **XCTest + MainActor: the isolated-deinit crash** below.
 >
 > **The `Suite` segment is the Swift *type* name, never the `@Suite("…")` display name.** `struct GameBossTests` decorated `@Suite("GameBoss")` is selected as `ConjugarTests/GameBossTests` — passing the display string `ConjugarTests/GameBoss` matches **nothing**, and (same failure mode as an omitted `()`) xcodebuild prints **`Test Succeeded` while running zero tests**. This is the single most dangerous test-runner trap here: a green run that tested nothing. **Always confirm real execution by the count line** — Swift Testing prints `✔ Test run with N tests in M suites passed` (its own reporter; the XCTest summary's `Executed 0 tests … passed` is only the XCTest half and says nothing about Swift Testing). `run_tests.sh` echoes that `Test run with N tests …` line when tests run, so its **absence after a `--only-testing` filter means the selector matched nothing** — treat that as a failure, not a pass, and re-check the suite is spelled as its type name.
 
@@ -320,33 +320,69 @@ var Current = World.device  // Production
 ```
 
 Services provided by World:
-- `analytics: AnalyticsService` - no-op spy (AWS Pinpoint removed; TelemetryDeck planned). The hand-maintained device-model table (`Analytics/DeviceUtility.swift`) that fed the became-active analytics payload was deleted July 2026 ahead of the TelemetryDeck integration, which reports model identifiers natively; `recordBecameActive()` now sends only the locale.
+- `analytics: Analytics` - TelemetryDeck-backed usage analytics (see **Analytics (TelemetryDeck)** below)
 - `gameCenter: GameCenter` - Game Center integration
 - `reviewPrompter: ReviewPrompter` - App Store review prompting
 - `settings: Settings` - User preferences (wraps UserDefaults)
-- `communGetter: CommunGetter` - CloudKit-based messaging
-- `locale: AnalyticsLocale` - language/region codes
 - `languageModelService: LanguageModelService` - the on-device conjugation tutor (see **Conjugation Tutor** below)
 - `getterSetter: GetterSetter` - shared string key-value store (same instance `Settings` wraps); the tutor persists chat history through it
+
+### Analytics (TelemetryDeck)
+
+Adopted July 2026, replacing the no-op spy that stood in for the long-removed AWS
+Pinpoint integration and converging Conjugar on the schema the sibling apps Conjuguer
+and Konjugieren already use. Files: `Analytics/Analytics.swift` (the `Analytics`
+protocol plus the `AnalyticsName` / `ParameterKey` enums), `AnalyticsReal.swift`,
+`AnalyticsSpy.swift`.
+
+- **Event names are an enum, not strings.** `Current.analytics.signal(name: .viewVerbView)`;
+  parameters are `[String: String]` keyed by `ParameterKey.…rawValue`. The old
+  Pinpoint-shaped `AnalyticsService` (`recordEvent(_:parameters:metrics:)` plus a dozen
+  `record*` wrappers and umlaut-disambiguated key vars like `scöre`) is gone. **A raw
+  value is a wire name** — renaming a case orphans its dashboard history, which is why
+  `AnalyticsTests` pins the parameter-carrying ones.
+- **The whole family is `nonisolated`,** like the engine. Without it the module's default
+  MainActor isolation would make the protocol — and by witness inference every conformer's
+  methods — MainActor-isolated, contradicting `AnalyticsReal`'s off-main design and making
+  the spy unusable from a nonisolated test suite.
+- **`AnalyticsReal` funnels every TelemetryDeck call onto a serial GCD queue.** TelemetryDeck
+  2.14.1 uses blocking `DispatchQueue.sync` internally, so calling it from a `@MainActor`
+  call site would run that blocking work on the main thread. The queue also orders
+  `initialize` ahead of signals and confines `isInitialized` to one thread.
+- **The app ID is kept out of the working tree.** It lives in gitignored
+  `Conjugar/Secrets.xcconfig` as `TELEMETRY_DECK_APP_ID` (copy `Secrets.example.xcconfig`),
+  reaches the bundle through the `TelemetryDeckAppID` Info.plist key — the xcconfig is the
+  app target's `baseConfigurationReference` for both Debug and Release — and is read in
+  `ConjugarApp.init()` → `Current.analytics.initialize(appID:)`. An empty ID leaves the
+  service uninitialized so it silently drops signals; **a fresh clone with no
+  `Secrets.xcconfig` still builds and runs.**
+- **Only `World.device` gets `AnalyticsReal`;** simulator/unit-test/UI-test worlds get
+  `AnalyticsSpy`, which records `signalNames`/`signalParameters` for assertions. So
+  **signals never reach the dashboard from the simulator** — verifying real delivery needs
+  a device run.
+- **No `becameActive` signal.** TelemetryDeck records launches and sessions itself, and
+  reports app version, device model, and country/language natively — which is why the
+  `AnalyticsLocale` abstraction that fed the old event a locale parameter was deleted.
+
+The published policy describing what is collected is `docs/privacy_policy3.txt` (English
+plus a Spanish translation); **update it when you add or remove a signal.**
 
 ### Protocol-Based Abstractions
 
 All external services have protocol abstractions with production and test implementations, named in the Fowler test-double convention — `…Real` for the production conformer, `…Fake`/`…Stub`/`…Spy` for the double:
-- `AnalyticsService` → `AnalyticsServiceSpy` (the only implementation, a spy; a TelemetryDeck-backed `AnalyticsServiceReal` is planned)
+- `Analytics` → `AnalyticsReal` (TelemetryDeck) / `AnalyticsSpy`
 - `GameCenter` → `GameCenterReal` / `GameCenterFake`
 - `ReviewPrompter` → `ReviewPrompterReal` / `ReviewPrompterStub`
 - `GetterSetter` → `GetterSetterReal` / `GetterSetterFake`
-- `CommunGetter` → `CommunGetterReal` / `CommunGetterStub`
-- `AnalyticsLocale` → `AnalyticsLocaleReal` / `AnalyticsLocaleStub` (protocol renamed from `Locale` to avoid shadowing `Foundation.Locale`)
 - `LanguageModelService` → `LanguageModelServiceReal` / `LanguageModelServiceDummy` (the double is a `Dummy` — always reports unavailable and is never exercised; the test/UI-test worlds must not touch the on-device model)
 
-> **Convention — adding a new behavior protocol with real + test-double conformances.** Name the protocol a **plain role noun** — no `-able`/`-Protocol`/`-ing` suffix (`GetterSetter`, `CommunGetter`, `GameCenter`). Name the production conformer `<Protocol>Real` and the test double `<Protocol><Role>`, where `<Role>` is the [Fowler test-double type](https://martinfowler.com/bliki/TestDouble.html) that matches what the double actually *does*:
+> **Convention — adding a new behavior protocol with real + test-double conformances.** Name the protocol a **plain role noun** — no `-able`/`-Protocol`/`-ing` suffix (`GetterSetter`, `Analytics`, `GameCenter`). Name the production conformer `<Protocol>Real` and the test double `<Protocol><Role>`, where `<Role>` is the [Fowler test-double type](https://martinfowler.com/bliki/TestDouble.html) that matches what the double actually *does*:
 > - **`Fake`** — a working implementation with a production-unsuitable shortcut, e.g. an in-memory store (`GetterSetterFake`).
-> - **`Stub`** — returns canned answers, no real logic (`CommunGetterStub`).
-> - **`Spy`** — a stub that *also records* how it was called, for assertions (`AnalyticsServiceSpy`).
+> - **`Stub`** — returns canned answers, no real logic (`ReviewPrompterStub`).
+> - **`Spy`** — a stub that *also records* how it was called, for assertions (`AnalyticsSpy`).
 > - **`Mock`** — pre-programmed with expectations it verifies. **`Dummy`** — passed to fill a slot but never exercised.
 >
-> Because the protocol and all its conformers share a prefix, they **sort together in Xcode's Project Navigator** — the point of the convention (and consistent with the `CatFancy-final` app). One type per file, filename = type name. **Check for a system-API collision** before settling on the protocol name: `Locale` had to become `AnalyticsLocale` because it shadowed `Foundation.Locale` module-wide. Wire the real conformer into `World.device` and the double into `World.simulator` / `.unitTest` / `.uiTest`.
+> Because the protocol and all its conformers share a prefix, they **sort together in Xcode's Project Navigator** — the point of the convention (and consistent with the `CatFancy-final` app). One type per file, filename = type name. **Check for a system-API collision** before settling on the protocol name: the since-deleted `AnalyticsLocale` was so named because a plain `Locale` shadowed `Foundation.Locale` module-wide. Wire the real conformer into `World.device` and the double into `World.simulator` / `.unitTest` / `.uiTest`.
 
 ### View Architecture
 
@@ -379,8 +415,6 @@ The mapped UI audit that drove the migration is `docs/conjugar-ui-issues.md`.
 4. **Info** — `InfoBrowseView` → `InfoView` (and → `TutorView`, the conjugation tutor, from a section at the top of the list)
 5. **Settings** — `SettingsView`
 
-`CommunView` (the CloudKit message) is a `.fullScreenCover` presented from `MainTabView`,
-not a tab.
 
 ### Onboarding
 
@@ -470,7 +504,7 @@ Test infrastructure:
   XCTest runtime loaded gets `World.unitTest`) — the SwiftUI `@main App` lifecycle replaced
   the old custom `main.swift`/`TestingAppDelegate` selection during the migration.
 - `URLProtocolStub` for network mocking
-- Stub classes (`AnalyticsLocaleStub`, `CommunGetterStub`) for isolation
+- Test doubles (`AnalyticsSpy`, `GetterSetterFake`, `GameCenterFake`) for isolation
 
 ### XCTest + MainActor: the isolated-deinit crash (write new tests in Swift Testing)
 

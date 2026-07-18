@@ -52,7 +52,7 @@ struct InfoView: View {
       }
       .navigationBarTitleDisplayMode(.inline)
     }
-    .onAppear { Current.analytics.recordVisitation(viewController: "\(InfoView.self)") }
+    .onAppear { Current.analytics.signal(name: .viewInfoView) }
     .environment(\.openURL, OpenURLAction { url in handleInfoLink(url) })
   }
 

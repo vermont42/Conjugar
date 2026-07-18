@@ -2,11 +2,6 @@
 //  QuizView.swift
 //  Conjugar
 //
-//  The SwiftUI quiz screen, replacing the UIKit QuizVC/QuizUIV. It observes the
-//  `@MainActor @Observable Quiz` directly (the QuizDelegate is gone). A briefing +
-//  primary Start CTA when idle; an in-progress card with a hero question, a visible
-//  focus-ringed answer field, a progress bar, haptics + an unmissable answer flash,
-//  and a de-emphasized status strip.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -49,7 +44,7 @@ struct QuizView: View {
         }
       }
       .onAppear {
-        Current.analytics.recordVisitation(viewController: "\(QuizView.self)")
+        Current.analytics.signal(name: .viewQuizView)
         maybePromptGameCenter()
       }
       .onChange(of: router.pendingQuizStart, initial: true) { _, shouldStart in
@@ -249,7 +244,10 @@ struct QuizView: View {
     lastCorrect = nil
     lastResult = nil
     fieldFocused = true
-    Current.analytics.recordQuizStart()
+    Current.analytics.signal(
+      name: .startQuiz,
+      parameters: [ParameterKey.difficulty.rawValue: Current.quiz.lastDifficulty.rawValue]
+    )
   }
 
   private func submit() {
@@ -278,14 +276,29 @@ struct QuizView: View {
   private func finish() {
     Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
     Current.gameCenter.showLeaderboard()
-    Current.analytics.recordQuizCompletion(score: Current.quiz.score)
+    Current.analytics.signal(
+      name: .completeQuiz,
+      parameters: [
+        ParameterKey.difficulty.rawValue: Current.quiz.lastDifficulty.rawValue,
+        ParameterKey.elapsedTime.rawValue: "\(Current.quiz.elapsedTime)",
+        ParameterKey.score.rawValue: "\(Current.quiz.score)"
+      ]
+    )
     showingResults = true
   }
 
   private func quit() {
     Current.quiz.quit()
     Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)
-    Current.analytics.recordQuizQuit(currentQuestionIndex: Current.quiz.currentQuestionIndex, score: Current.quiz.score)
+    Current.analytics.signal(
+      name: .quitQuiz,
+      parameters: [
+        ParameterKey.difficulty.rawValue: Current.quiz.lastDifficulty.rawValue,
+        ParameterKey.elapsedTime.rawValue: "\(Current.quiz.elapsedTime)",
+        ParameterKey.questionNumber.rawValue: "\(Current.quiz.currentQuestionIndex + 1)",
+        ParameterKey.score.rawValue: "\(Current.quiz.score)"
+      ]
+    )
     fieldFocused = false
     lastResult = nil
   }

@@ -5,15 +5,6 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// The user-selectable app icons, ported from Conjuguer's alternate-icon feature and
-// adapted for Conjugar (July 2026). Three photoreal Spanish icons — a bull, a flamenco
-// dancer, and a matador, each with a light and dark appearance variant — plus the
-// original flat-vector dancer, retained as `classic` for nostalgia. The enum drives
-// both the runtime icon swap (`alternateIconName`) and the Settings picker thumbnails
-// (`previewAssetName`). `dancer` is the primary `DancerIcon` asset
-// (`ASSETCATALOG_COMPILER_APPICON_NAME`), so its `alternateIconName` is nil and fresh
-// installs default to it; the original flat-vector icon is the `ClassicIcon` alternate.
-// `CaseIterable` order is the grid order (classic last).
 enum AppIcon: String, CaseIterable {
   case bull
   case dancer

@@ -14,14 +14,12 @@ import SwiftUI
 @MainActor var Current = World.chooseWorld()
 
 class World {
-  var analytics: AnalyticsService
+  var analytics: Analytics
   var reviewPrompter: ReviewPrompter
   var gameCenter: GameCenter
   var settings: Settings
   var quiz: Quiz
   var session: URLSession
-  var communGetter: CommunGetter
-  var locale: AnalyticsLocale
   var languageModelService: LanguageModelService
   var getterSetter: GetterSetter
   var soundPlayer: SoundPlayer
@@ -30,14 +28,12 @@ class World {
   private static let fakeRatingsCount = 42
 
   init(
-    analytics: AnalyticsService,
+    analytics: Analytics,
     reviewPrompter: ReviewPrompter,
     gameCenter: GameCenter,
     settings: Settings,
     quiz: Quiz,
     session: URLSession,
-    communGetter: CommunGetter,
-    locale: AnalyticsLocale,
     languageModelService: LanguageModelService,
     getterSetter: GetterSetter,
     soundPlayer: SoundPlayer,
@@ -49,8 +45,6 @@ class World {
     self.settings = settings
     self.quiz = quiz
     self.session = session
-    self.communGetter = communGetter
-    self.locale = locale
     self.languageModelService = languageModelService
     self.getterSetter = getterSetter
     self.soundPlayer = soundPlayer
@@ -80,15 +74,12 @@ class World {
     let gameCenter = GameCenterReal.shared
 
     return World(
-      // TODO: swap in a TelemetryDeck-backed AnalyticsService once integrated.
-      analytics: AnalyticsServiceSpy(),
+      analytics: AnalyticsReal(),
       reviewPrompter: ReviewPrompterReal(settings: settings),
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: true),
       session: URLSession.shared,
-      communGetter: CommunGetterReal(),
-      locale: AnalyticsLocaleReal(),
       languageModelService: LanguageModelServiceReal(),
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerReal(),
@@ -102,14 +93,12 @@ class World {
     let gameCenter = GameCenterFake()
 
     return World(
-      analytics: AnalyticsServiceSpy(),
+      analytics: AnalyticsSpy(),
       reviewPrompter: ReviewPrompterStub(),
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: true),
       session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
-      communGetter: CommunGetterStub(),
-      locale: AnalyticsLocaleStub(languageCode: "en", regionCode: "US"),
       languageModelService: LanguageModelServiceReal(),
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerReal(),
@@ -123,14 +112,12 @@ class World {
     let gameCenter = GameCenterFake()
 
     return World(
-      analytics: AnalyticsServiceSpy(),
+      analytics: AnalyticsSpy(),
       reviewPrompter: ReviewPrompterStub(),
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false),
       session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
-      communGetter: CommunGetterStub(),
-      locale: AnalyticsLocaleStub(),
       languageModelService: LanguageModelServiceDummy(),
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerDummy(),
@@ -165,14 +152,12 @@ class World {
     let gameCenter = GameCenterFake()
 
     return World(
-      analytics: AnalyticsServiceSpy(),
+      analytics: AnalyticsSpy(),
       reviewPrompter: ReviewPrompterStub(),
       gameCenter: gameCenter,
       settings: settings,
       quiz: Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false),
       session: URLSession.stubSession(ratingsCount: fakeRatingsCount),
-      communGetter: CommunGetterStub(),
-      locale: AnalyticsLocaleStub(),
       languageModelService: LanguageModelServiceDummy(),
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerDummy(),

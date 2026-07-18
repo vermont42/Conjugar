@@ -2,8 +2,7 @@
 //  GameView.swift
 //  Conjugar
 //
-//  The Donkey-Kong-inspired flamenco/bull game prototype, launched full-screen
-//  from the Settings tab. Pure SwiftUI, matching the sibling apps' loop pattern:
+//  The flamenco/bull game, launched full-screen from the Settings tab. Pure SwiftUI:
 //  `GeometryReader → TimelineView(.animation) → ZStack`, with the tick driven by
 //  `.onChange(of: timeline.date)`. Platforms/ladders are drawn with SwiftUI
 //  primitives in Conjugar's palette; the player and bull are rendered cel-shaded

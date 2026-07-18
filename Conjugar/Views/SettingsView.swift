@@ -5,17 +5,6 @@
 //  Created by Joshua Adams on 11/3/19.
 //  Copyright © 2019 Josh Adams. All rights reserved.
 //
-//  Rebuilt for the SwiftUI migration to match the app's card-based design system:
-//  a NavigationStack with a scroll of grouped `card()`s, each a settings section
-//  with a tinted SF Symbol heading, a segmented control or a
-//  `TintedCapsuleButtonStyle` action, and a `.callout` explanation, split by
-//  `GradientDivider`s. Segmented changes fire a selection haptic; the whole
-//  measure is reading-width-constrained for iPad. Because `Settings` is
-//  `@Observable`, the pickers bind straight to `Current.settings` via `@Bindable`
-//  — the old `SelectionStore` bridge and its `onAppear` copy-in are gone. The
-//  global segmented-control appearance (yellow titles) lives in AppDelegate, so
-//  this view needs no `init`.
-//
 
 import SwiftUI
 import TipKit
@@ -60,7 +49,7 @@ struct SettingsView: View {
       .navigationTitle(L.Settings.localizedTitle)
       .onAppear {
         isGameCenterUIHidden = Current.gameCenter.isAuthenticated
-        Current.analytics.recordVisitation(viewController: "\(SettingsView.self)")
+        Current.analytics.signal(name: .viewSettingsView)
       }
       .task {
         // Surface the failure: show an unavailable message rather than
@@ -222,7 +211,10 @@ struct SettingsView: View {
         heading: L.Game.title,
         description: L.Game.settingsDescription
       ) {
-        Button(L.Game.play) { showingGame = true }
+        Button(L.Game.play) {
+          Current.analytics.signal(name: .tapPlayGame)
+          showingGame = true
+        }
           .buttonStyle(TintedCapsuleButtonStyle(tint: .customYellow))
       }
     }
@@ -236,7 +228,10 @@ struct SettingsView: View {
         heading: L.Onboarding.onboarding,
         description: L.Onboarding.showOnboardingDescription
       ) {
-        Button(L.Onboarding.showOnboarding) { showingOnboarding = true }
+        Button(L.Onboarding.showOnboarding) {
+          Current.analytics.signal(name: .tapShowOnboarding)
+          showingOnboarding = true
+        }
           .buttonStyle(TintedCapsuleButtonStyle(tint: .customGreen))
       }
     }
@@ -266,6 +261,7 @@ struct SettingsView: View {
         description: rateReviewDescription
       ) {
         Button(L.Settings.rateOrReview) {
+          Current.analytics.signal(name: .tapRateOrReview)
           UIApplication.shared.open(RatingsFetcher.reviewURL)
         }
         .buttonStyle(TintedCapsuleButtonStyle(tint: .customBlue))

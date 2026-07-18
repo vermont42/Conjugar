@@ -2,25 +2,6 @@
 //  GameState+Mechanics.swift
 //  Conjugar
 //
-//  La Subida — the challenge-mechanic framework (see prompts/game_la_subida.md,
-//  Phase 3) and the first mechanic, the **zombie attack**. Each stage is assigned one
-//  mechanic, drawn from a shuffle bag so no kind repeats until all three have appeared
-//  (the same idiom as the power-up bag). A scheduler fires the mechanic once after a
-//  random first delay, then re-fires periodically through the rest of the stage:
-//
-//    • zombie   — for `zombieDuration` seconds every on-screen obstacle slows to
-//                 `zombieSpeedFactor`× and homes toward the player (keeping its own
-//                 emoji — no 🧟 swap, per Josh); when the window ends the obstacles are
-//                 re-integrated onto the nearest girder below them via `relevel`.
-//    • encierro — a stampede of 🐂 chargers runs across the girders (see
-//                 `updateChargers` / `resolveChargerCollisions`).
-//    • apagon   — the lights cut to a near-black overlay with a soft spotlight
-//                 tracking the dancer; `updateApagon` drives the `apagonDim` envelope
-//                 and `GameView` renders the mask.
-//
-//  The scheduler ticks only in `.climb` (from `update`); escape, boss entry, and
-//  respawn all cancel an active window (`cancelActiveMechanic`).
-//
 
 import CoreGraphics
 

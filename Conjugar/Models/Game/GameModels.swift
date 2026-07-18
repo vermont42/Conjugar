@@ -2,10 +2,6 @@
 //  GameModels.swift
 //  Conjugar
 //
-//  Value-type entities and action enums for the Donkey-Kong-inspired flamenco/bull
-//  game prototype. Kept as plain structs (no Sendable needed — they live on the
-//  `@MainActor` `GameState`), mirroring the sibling apps' `GameModels.swift`.
-//
 
 import CoreGraphics
 

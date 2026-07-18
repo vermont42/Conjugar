@@ -2,10 +2,6 @@
 //  VerbBrowseView.swift
 //  Conjugar
 //
-//  The SwiftUI Browse Verbs list, replacing the UIKit BrowseVerbsVC/BrowseVerbsUIV/
-//  VerbCell. All ~4,811 mapped verbs, sortable Frequency / Alphabetical (persisted
-//  via Settings.verbSort), with a verb-count banner, animated sort + selection
-//  haptic, and two-line serif rows with a frequency-rank badge.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -143,7 +139,7 @@ struct VerbBrowseView: View {
         router.pendingVerb = nil
       }
       .onAppear {
-        Current.analytics.recordVisitation(viewController: "\(VerbBrowseView.self)")
+        Current.analytics.signal(name: .viewVerbBrowseView)
         Current.reviewPrompter.promptableActionHappened()
       }
     }

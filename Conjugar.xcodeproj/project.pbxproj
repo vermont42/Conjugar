@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		031AD50D300BD22A008686BB /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 031AD50C300BD22A008686BB /* TelemetryDeck */; };
 		038A31ED2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */; };
-		03FF1748258C17E900BA447D /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03FF1747258C17E900BA447D /* CloudKit.framework */; };
 		AA01B2C3D4E5F60718293A02 /* sadTrombone2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A01 /* sadTrombone2.mp3 */; };
 		AA01B2C3D4E5F60718293A04 /* sadTrombone3.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A03 /* sadTrombone3.mp3 */; };
 		AA01B2C3D4E5F60718293A06 /* sadTrombone4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA01B2C3D4E5F60718293A05 /* sadTrombone4.mp3 */; };
@@ -79,7 +78,6 @@
 		035EF5C3245F299900F29894 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		038A31EC2CFBEC150069E5D8 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		03FF1744258C17E500BA447D /* Conjugar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Conjugar.entitlements; sourceTree = "<group>"; };
-		03FF1747258C17E900BA447D /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		AA01B2C3D4E5F60718293A01 /* sadTrombone2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone2.mp3; sourceTree = "<group>"; };
 		AA01B2C3D4E5F60718293A03 /* sadTrombone3.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone3.mp3; sourceTree = "<group>"; };
 		AA01B2C3D4E5F60718293A05 /* sadTrombone4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone4.mp3; sourceTree = "<group>"; };
@@ -89,6 +87,8 @@
 		AA10B2C3D4E5F60718293B07 /* shieldActivate.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shieldActivate.mp3; sourceTree = "<group>"; };
 		AA10B2C3D4E5F60718293B09 /* soccerKick.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = soccerKick.mp3; sourceTree = "<group>"; };
 		AA10B2C3D4E5F60718293C01 /* flamencoLoop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = flamencoLoop.mp3; sourceTree = "<group>"; };
+		AA20B2C3D4E5F60718293D01 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		AA20B2C3D4E5F60718293D03 /* Secrets.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.example.xcconfig; sourceTree = "<group>"; };
 		E11CE1011F48867400E74E10 /* sadTrombone1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sadTrombone1.mp3; sourceTree = "<group>"; };
 		E14271361F01CA98001D19E1 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		E1483FAC1EF5A2200052C436 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -131,7 +131,6 @@
 		0353B3372FDCE50E00FF069B /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
 		0353B3632FDCE50E00FF069B /* Analytics */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Analytics; sourceTree = "<group>"; };
 		0353B36B2FDCE50E00FF069B /* Supporting */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Supporting; sourceTree = "<group>"; };
-		0353B3782FDCE50E00FF069B /* Controllers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Controllers; sourceTree = "<group>"; };
 		0353B3B12FDCE54000FF069B /* ConjugarTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (0353B3D82FDCE54000FF069B /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ConjugarTests; sourceTree = "<group>"; };
 		0353B41100000000000AD100 /* Audio */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Audio; sourceTree = "<group>"; };
 		F1D6E7000000000000000003 /* ConjugarWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F1D6E7000000000000000010 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ConjugarWidget; sourceTree = "<group>"; };
@@ -144,7 +143,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E14271371F01CA98001D19E1 /* GameKit.framework in Frameworks */,
-				03FF1748258C17E900BA447D /* CloudKit.framework in Frameworks */,
 				031AD50D300BD22A008686BB /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -179,7 +177,6 @@
 		E14271351F01CA98001D19E1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				03FF1747258C17E900BA447D /* CloudKit.framework */,
 				E14271361F01CA98001D19E1 /* GameKit.framework */,
 			);
 			name = Frameworks;
@@ -240,13 +237,14 @@
 				0353B3632FDCE50E00FF069B /* Analytics */,
 				0353B41100000000000AD100 /* Audio */,
 				E107B0901EB66E9F004C5E91 /* Assets */,
-				0353B3782FDCE50E00FF069B /* Controllers */,
 				0353B2D62FDCE50E00FF069B /* Models */,
 				0353B36B2FDCE50E00FF069B /* Supporting */,
 				0353B2F62FDCE50E00FF069B /* Views */,
 				0353B3372FDCE50E00FF069B /* Utils */,
 				E1F06AE31E8F05F300ADD2E1 /* Info.plist */,
 				E1F06AE01E8F05F300ADD2E1 /* LaunchScreen.storyboard */,
+				AA20B2C3D4E5F60718293D03 /* Secrets.example.xcconfig */,
+				AA20B2C3D4E5F60718293D01 /* Secrets.xcconfig */,
 			);
 			path = Conjugar;
 			sourceTree = "<group>";
@@ -276,7 +274,6 @@
 				0353B3372FDCE50E00FF069B /* Utils */,
 				0353B3632FDCE50E00FF069B /* Analytics */,
 				0353B36B2FDCE50E00FF069B /* Supporting */,
-				0353B3782FDCE50E00FF069B /* Controllers */,
 				0353B41100000000000AD100 /* Audio */,
 				F1D6E7000000000000000004 /* Shared */,
 			);
@@ -628,6 +625,7 @@
 		};
 		E1F06AF21E8F05F400ADD2E1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA20B2C3D4E5F60718293D01 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = DancerIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -654,6 +652,7 @@
 		};
 		E1F06AF31E8F05F400ADD2E1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA20B2C3D4E5F60718293D01 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = DancerIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;

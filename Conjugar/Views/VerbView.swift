@@ -2,11 +2,6 @@
 //  VerbView.swift
 //  Conjugar
 //
-//  The SwiftUI verb-detail screen, replacing the UIKit VerbVC/VerbUIV. Metadata
-//  pills over conjugation-section cards with leading accent bars and a two-column
-//  pronoun | form grid; irregular spans render red, Spanish forms are
-//  serif, and every form speaks on tap. Reuses `ConjugationDataSource` to build
-//  the exact same rows the UIKit screen showed.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -81,7 +76,7 @@ struct VerbView: View {
     .background(Color.customBackground.ignoresSafeArea())
     .navigationTitle(verb.capitalized)
     .navigationBarTitleDisplayMode(.large)
-    .onAppear { Current.analytics.recordVisitation(viewController: "\(VerbView.self)") }
+    .onAppear { Current.analytics.signal(name: .viewVerbView) }
   }
 
   private var metadataHeader: some View {
