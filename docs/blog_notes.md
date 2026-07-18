@@ -6863,9 +6863,27 @@ Quiz signals now also carry `difficulty` and `elapsedTime`, which the old schema
 550 tests pass (30 suites, up from 544 — the six new ones are `AnalyticsTests`, replacing
 the deleted `AnalyticsServiceTests` that asserted on the old spy's printed string).
 `swiftlint` clean at 177 files. Built and driven in the simulator through all five tabs to
-confirm the reworked launch path survives Commun's removal. Real signal *delivery* can't be
-checked from the simulator — `World.simulator` gets the spy — so that needs a device run
-before Josh trusts the dashboard.
+confirm the reworked launch path survives Commun's removal.
+
+Delivery took a further round to confirm, and the detour is worth recording. The app ran
+fine on Josh's iPhone but the dashboard stayed empty, which is ambiguous: it could mean
+signals never left the phone, or that they arrived and weren't displayed. `World.simulator`
+gets the spy, so the obvious check was unavailable.
+
+Two things resolved it. First, the mundane cause: the SDK's
+`TelemetryDeck.Config.testMode` defaults to the `DEBUG` flag, so **every signal from an
+Xcode build is tagged `isTestMode == true` and is hidden until you flip the dashboard's Test
+Mode toggle**. Nothing was broken; the data was one control away. Second, to settle
+send-side independently of the dashboard, a throwaway probe drove `AnalyticsReal` directly
+(bypassing `World`) while streaming the simulator's unified log. The SDK's own `logHandler`
+turned out to be useless here — it appears to log only on failure paths, so a *successful*
+send says nothing — but the system log was decisive: a completed TLS handshake to
+`nom.telemetrydeck.com`, and no signal cache left on disk afterward (the SDK persists
+undelivered signals for retry, so an empty cache means everything went out).
+
+Worth remembering that the proof came from the OS rather than from the library's own
+diagnostics. A debug `logHandler` was briefly added for this and then discarded, since it
+demonstrated nothing the network evidence hadn't already settled.
 
 `docs/privacy_policy3.txt` was rewritten from the staged Conjuguer draft: Spanish app,
 Spanish translation replacing the French one, an event list matching the new schema, and a

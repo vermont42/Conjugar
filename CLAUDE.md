@@ -358,8 +358,15 @@ protocol plus the `AnalyticsName` / `ParameterKey` enums), `AnalyticsReal.swift`
   `Secrets.xcconfig` still builds and runs.**
 - **Only `World.device` gets `AnalyticsReal`;** simulator/unit-test/UI-test worlds get
   `AnalyticsSpy`, which records `signalNames`/`signalParameters` for assertions. So
-  **signals never reach the dashboard from the simulator** — verifying real delivery needs
-  a device run.
+  **signals never reach the dashboard from a normal simulator run** — the spy is a dead end
+  by design.
+- **Debug builds land in the dashboard's Test Mode, not the live view.** The SDK's
+  `TelemetryDeck.Config.testMode` defaults to the `DEBUG` flag, so everything from Xcode —
+  device or simulator — is tagged `isTestMode == true` and is **invisible until you flip the
+  Test Mode toggle** (top-left of the dashboard, above the sidebar; a "Test Data" banner
+  confirms it). This is the first thing to check when signals seem missing; it is not a bug.
+  TestFlight and App Store builds go to the live view with no code change. Delivery was
+  confirmed end-to-end in July 2026.
 - **No `becameActive` signal.** TelemetryDeck records launches and sessions itself, and
   reports app version, device model, and country/language natively — which is why the
   `AnalyticsLocale` abstraction that fed the old event a locale parameter was deleted.
