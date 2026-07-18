@@ -172,6 +172,16 @@ struct ModelRowLabel: View {
     }
     .padding(.horizontal)
     .padding(.vertical, 12)
+    // Make the *entire* row a tap target — the same fix VerbRowLabel carries, and
+    // for the same reason. Without it SwiftUI hit-tests only the drawn glyphs
+    // (exemplar/class number on the left, percent pill on the right), so a tap
+    // anywhere in the Spacer gap between them — most of the row — falls through and
+    // the NavigationLink never fires. On iPhone that made model rows effectively
+    // untappable except on their text; the iPad was unaffected because its grid
+    // branch wraps each cell in `.card()`, whose fill hit-tests on its own. Found in
+    // July 2026 when all four iPhone `model_view` screenshots silently captured the
+    // list instead of the haber detail.
+    .contentShape(Rectangle())
   }
 }
 
