@@ -28,6 +28,33 @@ the detail. That last one was a real user-facing bug, fixed in
 `Conjugar/Views/ModelBrowseView.swift`. All four are addressed; the driver is in better
 shape than before the sweep.
 
+**`docs/screenshots/version_1` must not be uploaded, and the driver has not been re-run
+since it was last changed (2026-07-26).** Two independent reasons:
+
+1. **All 36 files carry an alpha channel** and fail `scripts/verify_store_media.sh` 36/36.
+   `axe` writes RGBA and nothing flattened it at the time; Apple rejects on format, so a
+   visual review could never have caught this. Flattening the existing bundle would clear
+   the upload block, but see #2.
+2. **It is a hand-patched bundle, not the output of one clean run.** The raw timestamps in
+   `docs/screenshots/` tell the story: the sweep ran 15:03–15:23, then ~14 individual cells
+   were re-shot one at a time through 16:14, and the folder was assembled at 16:15 — before
+   the fixes in `17faf79` (16:27) were even committed. So part of it is pre-fix output from
+   the run that *found* those defects. It also predates `32c1746` (model rows tappable) and
+   `e128b47` (the Purpose & Use rewrite).
+
+On **2026-07-26** five fixes were ported in from the sibling apps — workarounds #21–#23,
+`resolve_ibv_scripts` narrowed to the marketplace clone, `scripts/verify_store_media.sh`,
+and the `rm -rf` in the `latest/` assembly snippet.
+
+`STABLE_PIXEL_TOLERANCE` was then **measured on Conjugar** the same day and the settle gate
+verified against a live cross-fade: a gated capture is byte-identical to the settled screen
+where an ungated one reproduces the workaround #19 ghosting exactly. `resolve_ibv_scripts`
+was confirmed to resolve to the marketplace clone at run time. The remaining three fixes —
+alpha flattening, largest-area `frame_of`, and the `latest/` clear — are **verified in
+isolation but have not run inside a full sweep**; the next sweep is their first end-to-end
+test. Budget for it, and review every PNG regardless: none of the failures these prevent
+announces itself.
+
 ## Running it from a fresh Claude session
 
 One thing you must do yourself first — it needs a click in System Settings and a session can't do it: grant **Accessibility permission to `/usr/bin/osascript`** (System Settings → Privacy & Security → Accessibility → add it). Without it the soft-keyboard Cmd+K toggle fails, so the `quiz_mid` shot comes out keyboard-less (the driver treats this as non-fatal and the run still completes). Then paste this to the session:
@@ -42,7 +69,19 @@ Before running:
   TipDisplay.tipsEnabled, OnboardingDisplay.onboardingEnabled, and
   TutorDisplay.tutorUnavailableRowEnabled — and restore all three to true when all
   screenshots are captured.
-- Confirm both simulators exist (see "Simulator Setup") and that jq + axe are on PATH.
+- Confirm both simulators exist (see "Simulator Setup") and that jq + axe are on PATH,
+  and that ImageMagick (magick) is installed — without it the settle gate and the
+  alpha flattening both degrade to no-ops with only a log line.
+- The iPad simulator's SYSTEM language was left on French (from Conjuguer work) as of
+  2026-07-26 — its status bar reads "Dimanche 26 juillet". That ships in the iPad
+  screenshots. Fix it per "Clean Status Bar" (system-language change + reboot, per
+  language) before the iPad sweep. This is workaround #14 and it is easy to miss because
+  the app's own UI localizes correctly regardless.
+- Set the status bar override on BOTH simulators, not just the iPad. The playbook treats
+  the iPhone override as optional because it isn't worth re-shooting a device for on its
+  own — but this sweep re-shoots everything anyway, so uniformity is free. version_1 has
+  the iPad pinned at 9:41 and the iPhone on the live clock (14:31, plus one stray 15:31).
+  See "Clean Status Bar".
 
 After running:
 - Visually review every captured PNG (Read each one). Re-run any bad cell with the
@@ -50,6 +89,9 @@ After running:
   targets (the 200/400 values in scroll_until_top) — they were calibrated on iPhone only.
 - Assemble docs/screenshots/latest/ and the numbered version_<N>/ upload bundle per the
   playbook (this is the next release, so use the next version_N).
+- Run scripts/verify_store_media.sh docs/screenshots/version_<N> and fix anything it
+  reports BEFORE uploading. Visual review cannot see an alpha channel or a wrong
+  display-size slot; this catches both.
 ```
 
 **Budget time for re-shoots, and never skip the visual review.** The first full sweep
@@ -70,8 +112,14 @@ App Store screenshots only — 9 views × 2 languages × 2 devices = 36 PNGs. No
 - `axe` CLI on PATH (see `ios-build-verify` SKILL.md for installation).
 - `ios-build-verify` skill installed; resolve its scripts directory once per session:
   ```bash
-  export IBV_SCRIPTS=$(dirname "$(find ~/.claude -path '*ios-build-verify*' -name build_app.sh 2>/dev/null | head -1)")
+  export IBV_SCRIPTS=$(dirname "$(find ~/.claude/plugins/marketplaces -path '*ios-build-verify*' -name build_app.sh 2>/dev/null | head -1)")
   ```
+  **Search `plugins/marketplaces`, not `~/.claude` broadly.** The plugin cache
+  (`~/.claude/plugins/cache/ios-build-verify/<version>/`) holds several versions at once
+  and `find`'s directory order is unspecified, so the broad glob picked an arbitrary
+  release to build App Store screenshots with — on this machine, 2026-07-26, it matched
+  three paths (cache 0.3.1, cache 0.2.1, and the marketplace clone). The marketplace clone
+  has no version segment and yields exactly one match. (Ported from Conjuguer `c51e223`.)
 - macOS Accessibility permission granted to `osascript`. System Settings → Privacy & Security → Accessibility → add `/usr/bin/osascript`. The driver depends on this for the soft-keyboard Cmd+K toggle (workaround #6). **Granted and verified on this machine, 2026-07-18.** Note that a *missing* permission is not the only way the AXRaise step fails: a freshly-activated Simulator briefly reports no windows, and the resulting `-1719 "Invalid index"` looks just like a permission problem. The driver now waits 0.5 s after `activate` (was 0.2 s) for that reason.
 - Two simulators named `iPhone 17 Pro Max` and `iPad Pro 13-inch (M4)` (see "Simulator Setup"). The driver resolves their UDIDs by name at run time — no hardcoding. **Confirm there is exactly one iOS-26 device matching each name before running** (`udid_for()` takes the first match by list order, so a stale-runtime duplicate silently wins); see *iPad reliability*. Verified clean on 2026-07-18.
 - **All three kill switches off (then restored).** See the next section — this is the
@@ -179,7 +227,7 @@ The driver writes timestamped PNGs to `docs/screenshots/<timestamp>-<device>-<la
 For App Store Connect upload, copy the latest version of each cell to `docs/screenshots/latest/`:
 
 ```bash
-mkdir -p docs/screenshots/latest && \
+rm -rf docs/screenshots/latest && mkdir -p docs/screenshots/latest && \
 for view in verb_browse verb_view model_browse model_view quiz_mid \
             info_browse info_view quiz_results settings; do
   for device in "iPhone-17-Pro-Max" "iPad-Pro-13-inch-(M4)"; do
@@ -192,6 +240,8 @@ done
 ```
 
 `ls -t` orders by modification time; the timestamp embedded in the filename matches mtime to the second, so the two ordering schemes agree.
+
+**The `rm -rf` is load-bearing.** Without it a re-shoot leaves the previous release's files sitting alongside the new ones — every name is unique because it carries a timestamp, so nothing is overwritten and nothing looks wrong. The numbered-bundle snippet below then matches two candidates per slot and resolves the tie by glob order, which is how a stale cell reaches App Store Connect looking perfectly plausible. (Ported from Conjuguer `c51e223`.)
 
 ### Per-Release Upload Bundles
 
@@ -505,6 +555,110 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
     this is exactly what the per-cell retry loop in *iPad reliability* is for. **The
     lesson is that a swallowed tap produces a plausible-looking wrong screenshot rather
     than an error**, so the visual review of every PNG is not optional.
+
+21. **`frame_of` takes the largest-area match, not the first** (`take_screenshots.sh::frame_of`)
+    *Symptom (in Konjugieren, not yet seen here):* four Info cells captured the Info list
+    instead of the article, with no error. *Cause:* an iPad Info row exposed its heading as
+    a non-interactive `AXStaticText` *above* the tappable `AXButton` in the tree, and the
+    depth-first `[0]` picked the static text — tapping which does nothing at all.
+    *Fix:* choose the match with the largest `AXFrame` area. Preferring `AXButton` is the
+    obvious alternative and is **wrong**: on iPad a verb row exposes its *translation* as a
+    button while the infinitive is static text, so that rule taps the translation. Area is
+    what actually distinguishes a row from a label inside it. **This is a safety net in
+    Conjugar, not a fix** — as of the 2026-07-18 sweep every tap site on both devices in
+    both languages had exactly one match, so old and new behavior agree everywhere in this
+    app today. Ported from Konjugieren `4fd2d93` / Conjuguer `c51e223`.
+
+22. **Every capture waits for the image to stop moving** (`take_screenshots.sh::wait_for_stable_screen`)
+    *Symptom:* the generalized form of #19 — any capture can land mid-transition.
+    *Cause:* no accessibility wait can prevent it. AX state answers "has the hierarchy
+    changed", a screenshot is graded on "has the image stopped moving", and the two
+    diverge: the outgoing screen's anchor leaves the AX tree within ~0.3 s of a tap while
+    an iPad cross-fade is still plainly visible. *Fix:* `take_screenshot` now samples the
+    screen up to 8× at 0.35 s and captures once two consecutive frames differ by less than
+    `STABLE_PIXEL_TOLERANCE` (ImageMagick `-metric AE`). It never blocks the capture — a
+    screen that won't settle logs a warning and is shot anyway. **The tolerance is
+    currently Conjuguer's number, not Conjugar's** — see *Measure `STABLE_PIXEL_TOLERANCE`*
+    below and do that before the next sweep. Ported from Konjugieren `4fd2d93` /
+    Conjuguer `c51e223`.
+
+23. **Captures are flattened to remove the alpha channel** (`take_screenshots.sh::take_screenshot`)
+    *Symptom:* App Store Connect rejects the upload — "Images can't include alpha channels
+    or transparencies." *Cause:* `axe screenshot` writes RGBA. This is a **format** check
+    on Apple's side, not a content check, so a fully opaque RGBA capture is rejected too —
+    which means nothing in a visual review can ever reveal it. *Fix:* `magick … -alpha
+    remove -alpha off` at the point of capture, plus `scripts/verify_store_media.sh` as the
+    backstop before upload. **`docs/screenshots/version_1` predates this and fails 36/36.**
+    Ported from Konjugieren `bbfee8d`.
+
+## Measure `STABLE_PIXEL_TOLERANCE`
+
+`STABLE_PIXEL_TOLERANCE` (in `take_screenshots.sh`, next to `wait_for_stable_screen`) is
+the largest frame-to-frame `-metric AE` difference still treated as "settled".
+
+**Measured on Conjugar 2026-07-26 (iOS 26.3, both sim targets): `75000000`.** Re-measure
+only if the animations change, or if the "still changing after 8 samples" warning starts
+appearing. Do not port this number to Conjuguer or Konjugieren — and note that theirs were
+both tried against Conjugar's data and both are too tight for this app (Conjuguer's 5e7
+sits 1.08× above our worst benign frame; Konjugieren's 1e8 sits 1.16× below our smallest
+observed transition).
+
+| | measured |
+|---|---|
+| Static screen (Settings, Browse) | exactly `0` |
+| Quiz screen, 112 samples, both devices | median 9.8e6 · p95 1.9e7 · **max 4.6e7** |
+| iPad tab transition, first delta, 21 samples | **min 1.2e8** · typical 8.3e9–2.5e10 |
+| **Chosen** — geometric middle | **7.5e7** (1.6× above floor, 1.5× below ceiling) |
+
+Why it can't just be zero: `QuizView`'s elapsed-time counter ticks and the answer field's
+cursor blinks, so the quiz screen never fully settles. `-metric AE` reports summed channel
+error in quantum units, not a count of differing pixels — only the ratios are meaningful.
+
+**Verified end to end**, three rounds each on the iPad: a gated capture taken immediately
+after a tab tap is **byte-identical** (delta `0`) to a reference of the same screen taken
+three seconds later, while the same capture *without* the gate lands 8.0e9–1.2e10 away —
+visibly the workaround #19 artifact, with the Browse verb list ghosted through the Settings
+cards. On the quiz screen the gate settles in ~1.9–2.1 s and does not warn.
+
+**Known limit, recorded honestly.** An iPad cross-fade's *tail* scores 7.7e6–1.1e7, which
+is below the quiz screen's own noise, so no single threshold can separate a late-fade frame
+from benign motion. It does not matter in practice: in every observed case the frame after
+such a delta was byte-identical to the settled screen, so the gate still yields a correct
+capture. If a ghosted screenshot ever reappears, this is the assumption that broke.
+
+### Re-measuring
+
+```bash
+UDID=$(xcrun simctl list devices booted -j | python3 -c "import sys,json;print(json.load(sys.stdin)['devices'].popitem()[1][0]['udid'])")
+# Sample a screen repeatedly and print consecutive-frame deltas.
+sample() {  # usage: sample <label> <count>
+  local prev cur; prev=$(mktemp).png; cur=$(mktemp).png
+  axe screenshot --udid "$UDID" --output "$prev" >/dev/null
+  for _ in $(seq "$2"); do
+    sleep 0.35
+    axe screenshot --udid "$UDID" --output "$cur" >/dev/null
+    echo "$1 $(magick compare -metric AE "$prev" "$cur" null: 2>&1 | awk '{print $1}')"
+    mv "$cur" "$prev"
+  done
+}
+```
+
+1. **Noise floor.** Park on Settings (nothing animates) — expect exactly `0`. Then park on
+   the quiz mid-answer and run `sample quiz 18`. Take the **maximum**; that is the floor.
+2. **Ceiling.** Tap an iPad tab and sample immediately across the cross-fade. Take the
+   **minimum** value observed while the fade is still visible.
+3. **Pick the geometric middle** of floor↔ceiling and record both measured numbers in the
+   comment above the constant, with the date and device — the next reader needs to know
+   how much headroom there is.
+
+Err **low**. Too low degrades to "sample 8 times (~2.8 s), warn, capture anyway", which is
+still more settling than the driver did before this existed. Too high captures a
+mid-cross-fade frame silently, which is the failure this whole mechanism exists to prevent.
+Conjugar's floor↔ceiling gap is only ~2.5×, so if the "still changing after 8 samples"
+warning starts appearing, **re-measure rather than nudging the number upward.**
+
+Then re-run the end-to-end check: tap a tab, run `wait_for_stable_screen`, capture, and
+compare against a reference of the same screen taken three seconds later. It should be `0`.
 
 ## Per-View Navigation Recipes
 

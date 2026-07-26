@@ -268,12 +268,27 @@ verify_screen_loaded() {
   wait_for_render "$1"
 }
 
-# Return the AXFrame "x y w h" of the first element whose AXUniqueId matches $1,
-# or empty string if none is currently rendered.
+# Return the AXFrame "x y w h" of the LARGEST-AREA element whose AXUniqueId
+# matches $1, or empty string if none is currently rendered.
+#
+# Largest-area, not depth-first [0]: ported from Konjugieren, where an iPad Info
+# row exposed its heading as a zero-interaction AXStaticText *above* the tappable
+# AXButton in the tree, so [0] tapped the static text, nothing happened, and four
+# cells captured the Info list instead of the article — with no error anywhere.
+# Preferring AXButton is the obvious fix and is wrong: on iPad a verb row exposes
+# its translation as a button while the infinitive is static text, so that rule
+# taps the translation. Area is the property that actually distinguishes the row
+# from a label inside it.
+#
+# This is a SAFETY NET here, not a fix for an observed Conjugar failure: as of the
+# 2026-07-18 sweep every tap site on both devices in both languages had exactly one
+# match, so old and new behavior agree everywhere in this app today. Keep it anyway
+# — the failure it prevents is silent. (workaround #21)
 frame_of() {
   axe_tree | jq -r --arg id "$1" \
-    "[.. | objects | $ID_MATCH][0].AXFrame // \"\"" \
-    | sed -E 's/[{},]/ /g; s/  +/ /g'
+    "[.. | objects | $ID_MATCH | select(.AXFrame? != null)] | .[] | .AXFrame" \
+    | sed -E 's/[{},]/ /g; s/  +/ /g' \
+    | awk 'NF >= 4 { area = $3 * $4; if (area > best) { best = area; line = $0 } } END { if (line != "") print line }'
 }
 
 # SwiftUI propagates accessibilityIdentifier to child elements, so `axe tap --id`
@@ -469,13 +484,100 @@ read_fixture_answers_path() {
   echo "$data_dir/Documents/screenshot_fixture_answers.json"
 }
 
+# Largest frame-to-frame difference (ImageMagick -metric AE) still considered "settled".
+#
+# MEASURED ON CONJUGAR, 2026-07-26, iOS 26.3, both sim targets. These are this app's own
+# numbers — do not port them to Conjuguer or Konjugieren, and re-measure here if the
+# animations change. Note `-metric AE` reports summed channel error in quantum units, not
+# a count of differing pixels; only the ratios below are meaningful.
+#
+#   Benign motion (must be BELOW this constant), 112 consecutive-frame samples on the quiz
+#   screen across both devices — QuizView's elapsed counter ticks and the answer cursor
+#   blinks, so it never fully settles:
+#       median 9.8e6 · p95 1.9e7 · max 4.6e7
+#     A genuinely static screen (Settings, Browse) scores exactly 0.
+#
+#   A real transition (must be ABOVE this constant), first delta after an iPad tab tap:
+#       21 samples, min 1.2e8, typical 8.3e9–2.5e10
+#
+# 7.5e7 is the geometric middle of 4.6e7 ↔ 1.2e8: 1.6x above the worst benign frame,
+# 1.5x below the smallest real transition. That gap is only ~2.5x, so if the "still
+# changing after 8 samples" warning starts appearing, RE-MEASURE — do not nudge this up.
+#
+# Both siblings' values were tried against this data and both are too tight for Conjugar:
+# Conjuguer's 5e7 sits 1.08x above our worst benign frame (the quiz screen would trip it),
+# and Konjugieren's 1e8 sits only 1.16x below our smallest observed transition.
+#
+# Known limit, recorded honestly: an iPad cross-fade's *tail* scores 7.7e6–1.1e7, below the
+# quiz screen's own noise, so no single threshold separates a late-fade frame from benign
+# motion. It does not matter in practice — in every observed case the frame after such a
+# delta was byte-identical to the settled screen (the following delta was 0), so the gate
+# still yields a correct capture. If a ghosted screenshot ever reappears, this is the
+# assumption that broke.
+STABLE_PIXEL_TOLERANCE=75000000
+
+# Block until two consecutive screenshots stop differing, so a capture can't land
+# mid-transition.
+#
+# No accessibility wait substitutes for this. AX state answers "has the hierarchy
+# changed", but a screenshot is graded on "has the image stopped moving", and those
+# diverge: the outgoing screen's anchor leaves the AX tree within ~0.3 s of a tap while
+# an iPad cross-fade is still plainly visible. That is exactly how both iPad settings
+# cells shipped a frame with the Browse grid ghosted through the cards (fixed narrowly in
+# 17faf79 by anchoring nav_settings on app_icon_bull and sleeping; this generalizes it to
+# every capture). (workaround #22)
+wait_for_stable_screen() {
+  local dir previous current differing i
+  if ! command -v magick >/dev/null 2>&1; then
+    sleep 1.0
+    return 0
+  fi
+  dir=$(mktemp -d)
+  previous="$dir/previous.png"
+  current="$dir/current.png"
+  if ! axe screenshot --udid "$UDID" --output "$previous" >/dev/null 2>&1; then
+    rm -rf "$dir"
+    sleep 1.0
+    return 0
+  fi
+  for i in 1 2 3 4 5 6 7 8; do
+    sleep 0.35
+    axe screenshot --udid "$UDID" --output "$current" >/dev/null 2>&1 || break
+    # `|| true` is load-bearing: `magick compare` exits 1 whenever the images differ,
+    # which is the normal case here, and under `set -o pipefail` (:19) that makes the
+    # assignment fail and `set -e` abort the whole sweep.
+    differing=$(magick compare -metric AE "$previous" "$current" null: 2>&1 | awk '{print $1}' || true)
+    # awk, not [[ -le ]]: the metric comes back in scientific notation (1.80683e+10).
+    if [[ -n "$differing" ]] \
+       && awk -v d="$differing" -v t="$STABLE_PIXEL_TOLERANCE" 'BEGIN { exit !(d + 0 <= t + 0) }'; then
+      rm -rf "$dir"
+      return 0
+    fi
+    mv "$current" "$previous"
+  done
+  log "wait_for_stable_screen: screen still changing after 8 samples on $DEVICE"
+  rm -rf "$dir"
+  return 0
+}
+
 take_screenshot() {
   local slug="$1"
+  wait_for_stable_screen
   mkdir -p "$REPO_ROOT/docs/screenshots"
   local ts out
   ts=$(date +%Y%m%d-%H%M%S)
   out="$REPO_ROOT/docs/screenshots/${ts}-${slug}.png"
   axe screenshot --udid "$UDID" --output "$out" >/dev/null
+  # axe writes RGBA; App Store Connect rejects any screenshot with an alpha channel
+  # ("Images can't include alpha channels or transparencies"), so flatten at capture
+  # rather than discovering it at upload time. This is a FORMAT check on Apple's side,
+  # not a content check — every one of version_1's 36 fully-opaque files fails it.
+  # `scripts/verify_store_media.sh` is the backstop before upload. (workaround #23)
+  if command -v magick >/dev/null 2>&1; then
+    magick "$out" -background white -alpha remove -alpha off "$out"
+  else
+    log "WARNING: magick not found; $out keeps its alpha channel and will be rejected"
+  fi
   log "captured: $out"
 }
 
@@ -629,7 +731,12 @@ nav_settings() {
 
 resolve_ibv_scripts() {
   local path
-  path=$(find ~/.claude -path '*ios-build-verify*' -name build_app.sh 2>/dev/null | head -1)
+  # Search only the marketplace clone, never ~/.claude broadly: the plugin cache
+  # (~/.claude/plugins/cache/ios-build-verify/<version>/) holds several versions at
+  # once, shared across apps, and `find`'s directory order is unspecified — so the
+  # broad glob picked an arbitrary release to build App Store screenshots with. The
+  # marketplace clone has no version segment and yields exactly one match.
+  path=$(find ~/.claude/plugins/marketplaces -path '*ios-build-verify*' -name build_app.sh 2>/dev/null | head -1)
   [[ -n "$path" ]] || { log "ios-build-verify scripts not found"; exit 2; }
   echo "$(dirname "$path")"
 }

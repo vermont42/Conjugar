@@ -7271,3 +7271,141 @@ Verification: `Build Succeeded`, `** TEST SUCCEEDED **` (550 Swift Testing tests
 plus the XCTest half, 0 failures), the article screenshotted at the top of both localizations,
 all four new section headings present in the AXTree in both, and the Spanish `%terminología%`
 link tapped through to the Terminología article. Not pushed — Josh is verifying on-device first.
+
+## Screenshot pipeline: port five fixes from the sibling apps (2026-07-26)
+
+Josh asked whether the screenshot-pipeline improvements made in Conjuguer and Konjugieren
+since Conjugar's own sweep argued for re-shooting Conjugar's screenshots. They do, and the
+investigation turned up a second, independent reason that had nothing to do with the
+siblings.
+
+**All 36 files in `docs/screenshots/version_1` carry an alpha channel.** `axe screenshot`
+writes RGBA, and Apple's rule — "Images can't include alpha channels or transparencies" —
+is a check on the file *format*, not on its contents, so a fully opaque RGBA capture is
+rejected exactly like a transparent one. Every file measures `alphamean=1`, i.e. opaque in
+every pixel, which is precisely why no amount of looking at the PNGs would ever have
+revealed it. Konjugieren hit this on 2026-07-25 (`bbfee8d`) and both siblings now flatten
+inside `take_screenshot`; Conjugar did not. Running Conjuguer's `verify_store_media.sh`
+against the bundle returns `9 blocking` for each of the four folders.
+
+The second reason is worse and is Conjugar's own. `version_1` is not the output of one
+clean run. The raw timestamps under `docs/screenshots/` show the sweep running 15:03–15:23
+on 2026-07-18, then roughly fourteen individual cells being re-shot one at a time through
+16:14, with the folder assembled at 16:15 — twelve minutes *before* `17faf79` committed the
+fixes for the defects that same sweep had just exposed. So part of the shipped-looking
+bundle is pre-fix output from the run whose commit message reads "two hard failures and six
+wrong-but-plausible screenshots." It also predates `32c1746` (model rows tappable) and
+`e128b47` (the Purpose & Use rewrite). Flattening it in place would clear the upload block
+while leaving all of that in.
+
+Josh's call: port the fixes now, re-shoot in a fresh session — then, once the port was in,
+he cleared me to drive the simulator far enough to lock in the one number I had left open.
+
+Five things landed.
+
+**`take_screenshot` flattens the capture** (`magick -alpha remove -alpha off`), with a
+warning if ImageMagick is absent rather than a silent pass.
+
+**`wait_for_stable_screen` gates every capture.** It samples the screen up to eight times
+at 0.35 s and shoots once two consecutive frames differ by less than a tolerance. The
+reason no accessibility wait substitutes for this is the interesting part: AX state answers
+"has the hierarchy changed" while a screenshot is graded on "has the image stopped moving,"
+and the two diverge — the outgoing screen's anchor leaves the AX tree within ~0.3 s of a
+tap while an iPad cross-fade is still plainly visible. `17faf79` had already fixed the one
+instance of this we caught (ghosted Browse content behind the iPad Settings cards) by
+anchoring `nav_settings` on `app_icon_bull` and sleeping; this generalizes it.
+
+The tolerance was the one loose end, and it turned out to be worth the trip to the
+simulator. Both siblings say in writing not to port their value, and they disagree with
+each other — Conjuguer 5e7, Konjugieren 1e8 — because each measured its own app. Conjugar's
+answer is **7.5e7**, and the interesting part is that *both* sibling numbers are wrong for
+this app, in opposite directions.
+
+The floor is benign motion: 112 consecutive-frame samples on the quiz screen across both
+devices, whose elapsed counter ticks and whose answer cursor blinks. Median 9.8e6, p95
+1.9e7, max 4.6e7. A genuinely static screen scores exactly 0. The ceiling is a real
+transition: 21 first-deltas after an iPad tab tap, minimum 1.2e8, typically 8.3e9 to
+2.5e10. Conjuguer's 5e7 sits 1.08x above our worst benign frame — the quiz screen would
+trip it. Konjugieren's 1e8 sits 1.16x below our smallest observed transition. 7.5e7 is the
+geometric middle, 1.6x above the floor and 1.5x below the ceiling. A ~2.5x gap is narrower
+than I would like, which is why the comment says re-measure rather than nudge.
+
+`-metric AE` turned out not to mean what its name suggests, incidentally: two totally
+different screens scored 2.4e9 on a 3.8-megapixel image, so it is summing channel error in
+quantum units, not counting differing pixels. Only the ratios matter.
+
+Then the part that actually justified the exercise — verifying the gate rather than
+trusting the arithmetic. Three rounds on the iPad: tap a tab, run `wait_for_stable_screen`,
+capture, and compare against a reference of the same screen taken three seconds later. All
+three came back **byte-identical, delta 0**. The control — the old behavior, tap and shoot
+— landed 8.0e9 to 1.2e10 away, and the frame is *exactly* the workaround #19 artifact: the
+Browse verb list, `ser`/`be`, `poder`/`can`, `decir`/`say`, ghosted straight through the
+Settings cards. That bug had been diagnosed from a bad screenshot in July; this is the
+first time it has been reproduced on demand and then watched to disappear. On the quiz
+screen the gate settles in ~1.9–2.1 s and does not warn.
+
+One limit is recorded rather than smoothed over. An iPad cross-fade's *tail* scores
+7.7e6–1.1e7 — below the quiz screen's own noise — so no single threshold separates a
+late-fade frame from benign motion, and I could not make one exist. It does not matter in
+practice, because in every observed case the frame following such a delta was byte-identical
+to the settled screen; the fade at a 0.35 s cadence is effectively binary. But that is an
+assumption, not a proof, so it is written down in both the constant's comment and the
+playbook as the thing to suspect if ghosting ever comes back.
+
+**`frame_of` takes the largest-area match instead of the depth-first first one.** In
+Konjugieren an iPad Info row exposed its heading as a non-interactive `AXStaticText` above
+the tappable `AXButton`, so `[0]` tapped the static text, nothing happened, and four cells
+captured the Info list instead of the article. Preferring `AXButton` is the obvious fix and
+is wrong — on iPad a verb row exposes its *translation* as a button while the infinitive is
+static text, so that rule taps the translation. Checked whether Conjugar needs it at all:
+as of the July sweep every tap site on both devices in both languages has exactly one
+match, so old and new agree everywhere in this app today. Kept as a safety net and
+labelled as one, in the code and in the playbook, rather than dressed up as a fix.
+
+**`resolve_ibv_scripts` searches `~/.claude/plugins/marketplaces`, not `~/.claude`.** The
+broad glob matched three paths on this machine — plugin-cache copies of 0.3.1 and 0.2.1
+plus the marketplace clone — and `find`'s directory order is unspecified, so which release
+of `ios-build-verify` built the App Store screenshots was luck. The marketplace clone has
+no version segment and yields exactly one match. The same glob was in the playbook's
+Prerequisites and is fixed there too.
+
+**`scripts/verify_store_media.sh`** is new, copied byte-for-byte from Conjuguer apart from
+its header comment. Konjugieren's `post-release-features.md` already names Conjugar as the
+third consumer this file is waiting on. It checks dimensions against Apple's accepted
+screenshot and preview sizes, alpha, and — for videos — SAR, duration, codec, level, stream
+count, frame rate, and audio bit rate, graded in blocking and advisory tiers. Conjugar has
+no app previews, so the video half is inert; it was kept rather than stripped so the three
+repos stay diffable. Self-tested four ways: the known-bad bundle (exit 1, nine blocking), a
+flattened copy of three of those same files (exit 0, all clear), an empty directory (exit
+2), and a nonexistent path (exit 2).
+
+Also: the playbook's `latest/` assembly snippet now begins `rm -rf`. Without it a re-shoot
+leaves the previous release's files beside the new ones — every filename carries a
+timestamp so nothing is overwritten and nothing looks wrong — and the numbered-bundle
+snippet downstream then matches two candidates per slot and breaks the tie by glob order.
+
+Two smaller notes recorded for the re-shoot session. `version_1`'s iPhone shots carry the
+live simulator clock (seventeen at 14:31, one re-shot cell at 15:31) while the iPad shots
+carry the pinned 9:41; the playbook already treated the iPhone override as optional because
+it isn't worth re-shooting a device for on its own, but a full re-shoot makes uniformity
+free. And in the light-mode slots (2, 4, 6, 8) the status-bar text renders white on white,
+so the clock, wifi, and battery are effectively invisible — worth a look during the
+re-shoot. The light/dark alternation itself is correct and specified in
+`docs/screenshot-plan.md`; that one had me suspicious for a while before I read the spec.
+
+Two incidental findings for the re-shoot session, both now in the playbook. The iPad
+simulator's **system language is still French** from Conjuguer work — its status bar reads
+"Dimanche 26 juillet", which would have shipped in the iPad screenshots. The app's own UI
+localizes correctly regardless, which is exactly why it is easy to miss. And a stray
+`⌘K` I sent to toggle the soft keyboard did not land on Simulator and launched the Fitness
+app on Josh's Mac instead — which is workaround #10, "multi-sim window focus", reproduced
+live. The driver already raises the Simulator window before sending the keystroke; what it
+does not do is *verify* Simulator is frontmost before firing. Worth considering, though the
+existing `keyboard_is_visible` check does catch the consequence after the fact.
+
+No app code changed, so there is nothing to build or test. Both scripts pass `bash -n`, the
+driver's `resolve_ibv_scripts` was confirmed to resolve to the marketplace path at run time,
+the `frame_of` pipeline was unit-tested against a synthetic AX tree in which the small label
+precedes the large row, and the no-match path still returns empty so `tap_id_first` keeps
+logging its error. The alpha flattening, the largest-area `frame_of`, and the `latest/`
+clear are verified in isolation but have not yet run inside a full sweep.
