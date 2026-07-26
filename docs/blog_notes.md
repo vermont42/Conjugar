@@ -7166,3 +7166,108 @@ Verified twice — once by re-parsing the JSON and printing the Spanish body, an
 driving the app in Spanish to the Presente de Indicativo article and reading both corrected
 lines off the screen. The two Spanish `info_view` screenshots were then re-shot, since the
 already-assembled bundle was carrying the old text; `version_1` now matches the app.
+
+## Rewriting "Purpose & Use", and a Briefing That Lied (2026-07-26)
+
+The Info tab's "Purpose & Use" article is the app's own description of itself, and it had
+quietly gone stale: it described three tabs (Browse, Quiz, Settings) when there are five,
+promised "thousands of Spanish verbs" when the engine ships 4,811, placed the Info
+difficulty filter "near the bottom of the screen" in red when it now sits in the Tenses
+section header, and knew nothing of Models, the tutor, etymologies, literary examples,
+widgets, or the game. Josh asked for a plain-text draft in `docs/` — written in Conjugar's
+own `^…^ ~…~ $…$ %…%` markup, not localized — that he could edit before any of it reaches
+`L.swift` and the catalog. That is `docs/purpose_and_use_proposed.txt`.
+
+The interesting editorial question was what *not* to touch. The article's first half is a
+personal story — the developer in a previous job knowing that "ir" means "to go" and saying
+"va a la oficina" to baffled colleagues, until he learned it is "$voY$ a la oficina" — and
+it is the best writing in the app. It got kept verbatim, along with the three
+difficulty-class paragraphs and the accented-letter long-press instructions. Everything
+after it was rebuilt: a section per tab, plus new sections for the game, for the widgets and
+Control Center controls and quiz Live Activity, and for accessibility. The draft carries a
+`====` fence with change notes underneath — kept / corrected / added / reversible decisions
+— so the reasoning is inspectable and the notes can be deleted in one stroke.
+
+Reading the code to write the draft turned up a string that lies. `Quiz.briefing` told every
+user "Conjugate 50 Spanish verbs against the clock. Your score rewards both speed and
+accuracy." It does not. `Quiz.swift` sums the per-answer values and multiplies by the region
+and difficulty modifiers; `elapsedTime` is displayed on the HUD, shown on the results card,
+and reported to analytics and Game Center, but it never enters the score. So the app was
+telling learners to hurry for points that do not exist. Josh chose to fix the string rather
+than add a time term, and both localizations now read "Your score rewards accuracy, and
+harder difficulty and region settings earn more points." Worth noticing *how* the bug
+surfaced: not from a test or a bug report, but from writing documentation carefully enough
+to have to check whether a sentence was true.
+
+And a lesson relearned the hard way, one entry after it was first written down. Editing
+`Quiz.briefing` through `json.load`/`json.dump` reformatted the entire catalog — a 2,223-line
+diff for a two-line change, exactly the failure the previous session recorded. Reverted, then
+patched the raw file text by substring with a `count == 1` assertion on each target. Two lines
+changed. The rule from last time holds and deserves louder placement: **parse the catalog to
+find things, patch it as text.** Knowing a rule and reaching for it under momentum are
+different skills.
+
+## Shipping the New "Purpose & Use", and the Bug It Found (2026-07-26)
+
+The rewritten article went into the app today, in both languages, along with the app change
+it turned up. Sequence: Josh edited the draft (`docs/purpose_and_use_proposed.txt`), asked
+for a typo pass, accepted the fixes, then asked for the whole thing to be localized and
+inserted.
+
+The proofread was more useful than a proofread has any right to be. There were **no typos** —
+but five factual errors, four of them mine, surfaced only because writing a sentence forces
+you to check whether it is true:
+
+- **"like `llover`"** as the example of a defective verb. It isn't one. `Conjugator.isDefective`
+  is true only where the resolved model declares formless slots, which in practice means
+  **abolir**; `docs/def_worklist.md` lists eleven semantically defective verbs the engine
+  deliberately does not enforce yet, and `ConjugatorAccessorsTests` pins `!isDefective("soler")`
+  precisely so nobody assumes otherwise. Swapped to abolir.
+- **"and about a hundred others"** for pedir's family. Class 6B has **22** verbs. (conocer's 7A
+  has 108; buscar's 1-1 has 285.) Now "a score of others".
+- **"pull down on the list to reveal the search field."** A screenshot said otherwise: the
+  search field is visible on launch, under the Browse title. This is the one claim that
+  survived code-reading and died on contact with the running app — a good argument for
+  verifying UI prose against pixels rather than source.
+- **"tap Return."** The answer field sets `.submitLabel(.next)`, so the key reads *next*
+  (*siguiente* in Spanish, which the translation reflects).
+- **"on the Browse and Models tabs"** for the vos setting — see below.
+
+That last one was not a documentation error at all. `Settings.secondSingularBrowse` was read
+only by `VerbView`; `ModelView.gridPersons` was a `static let` hardcoded to `.secondSingularTú`.
+A learner who asked for vos everywhere still got tú in every model grid. Josh chose to fix the
+app rather than the sentence, so `gridPersons` became `static func gridPersons(for:)` mirroring
+`VerbView.buildSections`'s tú/vos/both logic, with the resolved columns stored per instance and
+`gridForms` mapped over the same local array so the precomputed matrix and the rendered columns
+cannot drift. Verified on the simulator: model 28 (decir) now shows **vos → decís / decí** where
+it showed *dices / di*. Under "Both" the grid becomes seven columns, which the card's horizontal
+`ScrollView` already handles.
+
+Also normalized a three-way spelling split. The medieval reference line renders
+`"Cantar de mio Cid"` from `MedievalExample.swift`, the Spanish credits agreed, but the English
+credits said *Mio Cid* and the onboarding said *mío Cid*. All now match the code's form, which
+is also the scholarly one.
+
+Localization was hand-written rather than machine-translated, and reused the existing Spanish
+wherever the old article survived — the origin story, the difficulty classes, the vosotros and
+voseo paragraphs, the accent instructions. The new material had to respect vocabulary the app
+already ships: the tabs are *Explorar / Modelos / Test / Información / Configuración*, the
+cross-reference targets must be the **Spanish** headings (`%terminología%`, `%créditos%`) because
+`Info.info(forHeading:)` matches localized headings, and RAE says a four-digit number takes no
+separator, so it is "4811 verbos" against English's "4,811". A validator checked all ten `%…%`
+refs resolve per language and that every `^ ~ $ %` marker is balanced — 20/268/8/20 in English,
+20/258/8/20 in Spanish.
+
+Two process notes worth keeping. First, the catalog patch again went in as **raw-text
+substring replacement** with a `count == 1` assertion, not a JSON round-trip: 7 lines changed
+across four keys in a 215-key file. Second, two simulator lessons. `_resolve_udid.sh` is a
+**sourced** helper that sets `UDID` — `UDID=$(_resolve_udid.sh)` captures nothing, which is how
+a deeplink got fired at the wrong booted sim earlier in the session. And `simctl spawn defaults
+write` did **not** take on an app that had already run this boot; the setting had to be toggled
+through the UI, after an `axe swipe` to lift the picker clear of the tab bar. Worth remembering
+before trusting a seeded default in a verification run.
+
+Verification: `Build Succeeded`, `** TEST SUCCEEDED **` (550 Swift Testing tests in 30 suites,
+plus the XCTest half, 0 failures), the article screenshotted at the top of both localizations,
+all four new section headings present in the AXTree in both, and the Spanish `%terminología%`
+link tapped through to the Terminología article. Not pushed — Josh is verifying on-device first.

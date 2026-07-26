@@ -31,8 +31,24 @@ struct ModelView: View {
     ("Subj. Imperfecto", .imperfectoDeSubjuntivo1)
   ]
 
-  /// The grid's person columns, in canonical order.
-  static let gridPersons: [DisplayPersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+  /// The grid's person columns, in canonical order, for a given second-singular
+  /// preference. The second-singular column follows `Settings.secondSingularBrowse`
+  /// exactly as `VerbView`'s rows do — tú, vos, or both — so a vos learner is not
+  /// shown tú forms here after asking for vos everywhere else. `.both` yields a
+  /// seven-column grid, which the card already scrolls horizontally.
+  static func gridPersons(for secondSingular: SecondSingularBrowse) -> [DisplayPersonNumber] {
+    var persons: [DisplayPersonNumber] = [.firstSingular]
+    switch secondSingular {
+    case .tu:
+      persons.append(.secondSingularTú)
+    case .vos:
+      persons.append(.secondSingularVos)
+    case .both:
+      persons.append(contentsOf: [.secondSingularTú, .secondSingularVos])
+    }
+    persons.append(contentsOf: [.thirdSingular, .firstPlural, .secondPlural, .thirdPlural])
+    return persons
+  }
 
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -41,9 +57,12 @@ struct ModelView: View {
   private let participio: String
   private let gerundio: String
   private let entries: [VerbMapEntry]
-  /// The 6×6 grid's conjugated forms, precomputed once in `init` — indexed
+  /// The person columns this instance renders, resolved from the browse setting in
+  /// `init` — like `VerbView`'s row set, so both screens agree on tú/vos/both.
+  private let gridPersons: [DisplayPersonNumber]
+  /// The grid's conjugated forms, precomputed once in `init` — indexed
   /// `[tenseIndex][personIndex]` to parallel `gridTenses` / `gridPersons`, `nil` where a
-  /// slot has no form. Previously `gridCell` re-conjugated all 36 slots on every `body`.
+  /// slot has no form. Previously `gridCell` re-conjugated every slot on each `body`.
   private let gridForms: [[String?]]
 
   init(model: ModelInfo, onSelectVerb: @escaping (String) -> Void) {
@@ -54,8 +73,10 @@ struct ModelView: View {
     participio = Self.form(model.exemplar, .participio)
     gerundio = Self.form(model.exemplar, .gerundio)
     entries = model.verbs.compactMap { VerbMap.shared.entry(for: $0) }
+    let persons = Self.gridPersons(for: Current.settings.secondSingularBrowse)
+    gridPersons = persons
     gridForms = Self.gridTenses.map { gridTense in
-      Self.gridPersons.map { person in
+      persons.map { person in
         if case .success(let form) = TenseBridge.conjugate(infinitive: model.exemplar, tense: gridTense.tense, personNumber: person) {
           return form
         }
@@ -173,7 +194,7 @@ struct ModelView: View {
       Grid(alignment: .leadingFirstTextBaseline, horizontalSpacing: Layout.doubleDefaultSpacing, verticalSpacing: 6) {
         GridRow {
           Text(verbatim: "")
-          ForEach(Self.gridPersons, id: \.self) { person in
+          ForEach(gridPersons, id: \.self) { person in
             Text(person.pronoun)
               .font(.caption.weight(.semibold))
               .foregroundStyle(Color.customBlue)
@@ -185,7 +206,7 @@ struct ModelView: View {
               .font(.caption.weight(.semibold))
               .foregroundStyle(Color.customBlue)
               .gridColumnAlignment(.leading)
-            ForEach(Array(Self.gridPersons.enumerated()), id: \.element) { personIndex, _ in
+            ForEach(Array(gridPersons.enumerated()), id: \.element) { personIndex, _ in
               gridCell(form: gridForms[tenseIndex][personIndex])
             }
           }
