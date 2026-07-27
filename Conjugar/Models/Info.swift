@@ -76,6 +76,7 @@ struct Info: Hashable, Identifiable {
     Info(heading: "Futuro Perfecto de Subjuntivo", stableKey: "futuro_perfecto_de_subjuntivo", difficulty: .difficult, section: .tenses, text: L.Info.futuroPerfectoDeSubjuntivoText),
     Info(heading: L.Info.questionsAndAnswersHeading, stableKey: "questions_and_answers", difficulty: .easy, section: .about, text: L.Info.questionsAndAnswersText),
     Info(heading: "Voseo", stableKey: "voseo", difficulty: .easy, section: .about, text: L.Info.voseoText),
+    Info(heading: L.Info.verbHistoryHeading, stableKey: "verb_history", difficulty: .easy, section: .about, text: L.Info.verbHistoryText),
     Info(heading: L.Info.creditsHeading, stableKey: "credits", difficulty: .easy, section: .about, text: L.Info.creditsText)
   ]
 

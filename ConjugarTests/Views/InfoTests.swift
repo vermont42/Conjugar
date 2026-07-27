@@ -16,19 +16,20 @@ import Testing
 @MainActor
 @Suite struct InfoTests {
   @Test func infosCount() {
-    #expect(Info.infos.count == 28)
+    #expect(Info.infos.count == 29)
   }
 
-  /// The difficulty filter thresholds, preserved from the old BrowseInfoVCTests:
-  /// Easy → 9, Easy+Moderate → 17, all → 28.
+  /// The difficulty filter thresholds, preserved from the old BrowseInfoVCTests
+  /// (each About article added since bumps every tier, all of them being `.easy`):
+  /// Easy → 10, Easy+Moderate → 18, all → 29.
   @Test func difficultyFilterCounts() {
     func rank(_ d: Difficulty) -> Int { Difficulty.allCases.firstIndex(of: d) ?? 0 }
     func count(upTo d: Difficulty) -> Int {
       Info.infos.filter { rank($0.difficulty) <= rank(d) }.count
     }
-    #expect(count(upTo: .easy) == 9)
-    #expect(count(upTo: .moderate) == 17)
-    #expect(count(upTo: .difficult) == 28)
+    #expect(count(upTo: .easy) == 10)
+    #expect(count(upTo: .moderate) == 18)
+    #expect(count(upTo: .difficult) == 29)
   }
 
   @Test func sectionsPartitionAllInfos() {

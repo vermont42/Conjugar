@@ -7694,3 +7694,36 @@ booting it via `simctl` with Simulator running, which is exactly what produced i
 window back every subsequent try. So three apps now carry code whose detection path is
 verified and whose repair path has never run. That is worth stating plainly rather than
 letting a future session infer from the absence of a caveat that it was tested.
+
+## App Store preview script, ported from Conjuguer (2026-07-26)
+
+`docs/video_script.md` now exists for Conjugar, adapted from Conjuguer's. The scaffolding is
+the part that was already hard-won and needed no thought: 32 seconds of footage across five
+clips, minus four half-second transitions to land at the 30 the store wants; the preview size
+table that is emphatically *not* the screenshot size table (886 × 1920 iPhone, 1200 × 1600
+iPad — conflating the two got all four of Conjuguer's 2.0 previews rejected); and a final
+`scripts/verify_store_media.sh` pass, which Conjugar already carries verbatim.
+
+What had to change was every number and one whole premise. The counts came from the app
+rather than from memory: 4,811 verbs and 102 models read off the `version_2` capture bundle's
+own banners (the XML holds 4,815 verb elements — homonyms collapse), 20 entries in
+`DisplayTense.conjugatedTenses`, and 50 quiz questions, which I counted out of `Quiz.start`'s
+per-difficulty appends and then found confirmed in `Quiz.briefing`'s own copy. Alphabetical
+endpoints are abajar and zurrar. The premise that broke is Conjuguer's second clip, which
+opens by noting that "Show Compound Tenses" is selected — Conjugar has no such setting, so
+that clip just starts at the top of `ser`'s VerbView and the script says explicitly why there
+is nothing to set up, so a future reader does not go hunting for a missing toggle. Exemplars
+follow the screenshot plan rather than a literal translation of Conjuguer's: `ser` for the
+verb detail, `haber` for the model detail, which happens to sit second under the default
+Irregularity sort the way `avoir` does in the French app.
+
+One label is a judgment call worth flagging. "Fifty timed questions" is inherited phrasing:
+Conjugar's quiz does run a clock and reports elapsed time on the results screen, but elapsed
+time does not feed the score — only accuracy, difficulty, and region do. Timed, not scored on
+time. If that reads as overclaiming when the preview is actually cut, the fix is the label,
+not the app.
+
+Labels are given in English then Spanish, and the script says to shoot the sweep once per
+language, matching how the screenshot bundles are already organized. The tutor and the game
+are deliberately absent from the five clips; there is no room in 32 seconds, and the cut
+Conjuguer proved out is the one to copy first.

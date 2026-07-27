@@ -285,6 +285,10 @@ nonisolated enum L {
       String(localized: "Info.creditsHeading")
     }
 
+    static var verbHistoryHeading: String {
+      String(localized: "Info.verbHistoryHeading")
+    }
+
     static var purposeAndUseText: String {
       String(localized: "Info.purposeAndUseText")
     }
@@ -391,6 +395,10 @@ nonisolated enum L {
 
     static var voseoText: String {
       String(localized: "Info.voseoText")
+    }
+
+    static var verbHistoryText: String {
+      String(localized: "Info.verbHistoryText")
     }
 
     static var creditsText: String {
