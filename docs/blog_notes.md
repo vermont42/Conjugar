@@ -7727,3 +7727,83 @@ Labels are given in English then Spanish, and the script says to shoot the sweep
 language, matching how the screenshot bundles are already organized. The tutor and the game
 are deliberately absent from the five clips; there is no room in 32 seconds, and the cut
 Conjuguer proved out is the one to copy first.
+
+## A History of the Spanish Verb System (2026-07-26)
+
+Conjuguer and Konjugieren each carry a `verbHistoryText` essay tracing their language's
+verb system from the formation of the solar system to the present, and Josh asked for a
+Spanish one. It sits in the About section between Voseo and Credits, as
+`L.Info.verbHistoryHeading` / `verbHistoryText`, stableKey `verb_history`, `.easy` like
+every other About article.
+
+The two siblings were the model but not the template. Their opening move — supernova
+nucleosynthesis, the Yamnaya on the Pontic-Caspian steppe, Proto-Indo-European aspect and
+ablaut — is shared inheritance and carries over nearly verbatim, because it *is* shared:
+Spanish, French, and German are all downstream of the same steppe. Everything after Italic
+splits. The French essay's spine is loss (endings erode, the subject pronoun becomes
+compulsory, the passé simple dies); the German one's is Germanic innovation (weak verbs,
+the consonant shift, preterite-presents). Spanish needed a third spine, and the app itself
+supplied it: the article set has entries the siblings have no equivalent for, and each one
+is a historical accident worth explaining.
+
+So the essay is organized to pay off Conjugar's own tense list. Why are there **two**
+imperfect subjunctives? Because `cantase` descends from the Latin pluperfect *subjunctive*
+and `cantara` from the Latin pluperfect *indicative*, two different tenses that drifted onto
+the same job — which is also why journalists still write `el gol que marcara en la final`.
+Why is there a **futuro de subjuntivo** nobody speaks? Because it retreated into statutes
+and proverbs. Why is there a **raíz futura** at all? Because `cantare habeo` fused into
+`cantaré`, and when the two halves ran together fast enough the infinitive's vowel got
+squeezed out, propping up `saldré` and `pondré` with an epenthetic d. The Voseo article
+directly above gets an explicit handoff: it observes that vos forms do not diphthongize, and
+the stress section explains that the vos endings pull stress off the stem so the old
+diphthongization law never fires. The distinctively Spanish material — the f- to h- loss on
+the Basque frontier that silenced the h of `hacer`, `hablar`, and `haber`; eight centuries of
+Arabic that gave four thousand words and left the conjugations untouched except for `ojalá`,
+which still governs the subjunctive; `ir` assembled out of three separate Latin verbs — has
+no counterpart in either sibling.
+
+Two mechanical things future sessions should know.
+
+**The markup differs from the siblings.** Conjuguer and Konjugieren mark section headings
+with backticks; Conjugar's parser wants `^…^`. Emphasis is `~…~`, cross-references and URLs
+are `%…%`, irregular spans are `$…$`.
+
+**`parseBodyToSegments` cannot nest inline markers, and fails silently rather than loudly.**
+A `$…$` inside a `~…~` clobbers the shared `markupStart` index: the conjugation segment comes
+out right, but the enclosing bold then emits its text from the conjugation's start index,
+duplicating a run and leaking a literal `$` into the rendered body. The draft hit this three
+times, in the future-subjunctive proverbs (`~Adonde $FUeres$, haz lo que vieres~`). Nothing
+crashes, no assertion fires, and the markers all balance, so a marker-count check passes
+happily. What caught it was porting `richTextBlocks` and `parseBodyToSegments` to Python and
+round-tripping the essay: strip the markers from the source, render the parsed blocks, and
+compare. The fix is to close the emphasis before the conjugation and reopen after —
+`~Adonde~ $FUeres$~, haz lo que vieres~`. Worth doing that round-trip for any long body copy
+added here; the existing articles happen to avoid nesting, so the bug had never surfaced.
+
+The `$…$` spans were not eyeballed either. `IrregularityMarker.markedWord` uppercases the
+span between the common prefix and common suffix of the real form and its *regular*
+composition, so each highlight in the essay was computed the same way the engine computes
+it — `$tenGo$` (the g is all that separates it from a regular *teno*), `$habRé$`, `$pUEde$`,
+`$FUI$` for the no-common-affix case. The red letters in the essay therefore match the red
+letters the reader will see in Browse Verbs for the same form.
+
+`InfoTests` pins the article count, so `.easy` additions bump all three filter tiers: 28 → 29
+infos, and 9/17/28 → 10/18/29. The comment there now says why.
+
+The catalog entries are **English only**. Josh asked for a draft he expects to edit, so the
+`es` translation waits until the English settles; until then a Spanish run falls back to
+English for this one article.
+
+Which raised the obvious problem: 5,500 words on one JSON line is not an editing surface.
+So the prose lives in `docs/verb_history.txt` — header block, dashed separator, then the
+article verbatim, following the shape `docs/purpose_and_use_proposed.txt` already
+established — and `scripts/sync_verb_history.py` pushes it back into the catalog, replacing
+just the `en` value line so the diff stays one line and Xcode's formatting survives. The
+script is where the nesting rule now lives permanently, alongside three other checks the
+parser will not make: markers balance, every non-URL `%…%` names a real article (headings
+read out of `Info.swift` for the Spanish tense literals and out of the catalog for the
+localized About ones), and no `$…$` span starts with a lone capital, since a capital there
+means "irregular, shown red" and would silently redden the first letter of a sentence.
+Each validator was negative-tested by corrupting a copy of the file and confirming the
+specific message fires. Two sources of truth is a drift risk, but the alternative was
+editing JSON by hand, and `--check` makes the drift detectable.

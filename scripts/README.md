@@ -1,5 +1,37 @@
 # scripts
 
+## `sync_verb_history.py` — the verb-history essay, edited as prose
+
+Pushes [`docs/verb_history.txt`](../docs/verb_history.txt) into `Localizable.xcstrings` as
+`Info.verbHistoryText` (`en`). The essay is ~5,500 words on a single JSON line in the
+catalog, which makes it miserable to edit in place and easy to corrupt — an ASCII quote
+written unescaped breaks the file. The `docs/` copy is the editing surface; the catalog is
+what ships.
+
+```bash
+python3 scripts/sync_verb_history.py            # validate, then write
+python3 scripts/sync_verb_history.py --check    # validate only
+```
+
+The article body is everything after the dashed separator line in the source file; the
+header above it is instructions and is never shipped.
+
+### What it validates
+
+`RichText.swift`'s parser fails *silently* on bad markup — nothing crashes, no assertion
+fires, and the marker counts still balance — so the checks matter:
+
+| Check | Why |
+|-------|-----|
+| markers balance | an unterminated `~`/`%`/`$`/`^` swallows the rest of the block |
+| markers do not **nest** | a `$…$` inside a `~…~` clobbers the shared `markupStart`, so the emphasis run is emitted from the conjugation's index: text duplicated, literal `$` leaked. Close and reopen instead — `~Adonde~ $FUeres$~, haz lo que vieres~` |
+| every non-URL `%…%` names a real article | headings come from `Info.swift` (Spanish tense literals) plus the catalog (localized About headings); a miss makes the tap a no-op |
+| no lone leading capital inside `$…$` | uppercase there means "irregular letter, shown red", not "start of sentence" |
+
+The `$…$` spans in the shipped draft were computed the way `IrregularityMarker` computes
+them — uppercase the difference between the real form and its regular composition — so the
+red letters match what Browse Verbs shows for the same form.
+
 ## `make_symbols.py` — tab-bar custom SF Symbols
 
 Generates the `dancer` and `bull` custom SF Symbols used by the Browse and Quiz tabs
