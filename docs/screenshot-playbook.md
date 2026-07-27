@@ -28,8 +28,40 @@ the detail. That last one was a real user-facing bug, fixed in
 `Conjugar/Views/ModelBrowseView.swift`. All four are addressed; the driver is in better
 shape than before the sweep.
 
-**`docs/screenshots/version_1` must not be uploaded, and the driver has not been re-run
-since it was last changed (2026-07-26).** Two independent reasons:
+**Second full 36-shot sweep: 2026-07-26 — clean, then deliberately discarded.** All 36 cells
+captured on the first attempt: zero retries, zero driver warnings, zero re-shoots after
+visual review of every PNG, and `verify_store_media.sh` reported **0 blocking, 0 advisory**
+on the assembled bundle. **That output no longer exists.** The review turned up the
+light-mode status-bar defect described below, Josh chose to fix it, and the fix is an
+`Info.plist` change — so every one of those 36 files predates the current build and was
+deleted rather than left on disk to be mistaken for current. `version_2` is therefore an
+**unused number**: the next sweep should claim it.
+
+The run still counts as the driver's first clean pass, and its findings stand. Everything
+the previous sweep shook out stayed fixed, and the three fixes that had only ever been
+verified in isolation all held up end to end:
+
+- **Alpha flattening (#23)** — every capture was `hasAlpha: no`; version_1 still fails the
+  same check 36/36, so the contrast is real rather than a vacuous pass.
+- **Settle gate (#22) + `nav_settings` anchor (#19)** — both iPad settings cells are fully
+  opaque, with none of version_1's Browse-grid ghosting.
+- **Largest-area `frame_of` (#21)** — no wrong-element taps anywhere.
+- **Measured iPad tab centers (#18)** — iPad/es `quiz_mid` and `quiz_results`, the cells that
+  hard-failed version_1, both landed on **Test** rather than Información.
+- **Model-row tappability (`32c1746`)** — all four `model_view` cells show the `Haber`
+  *detail*, not the list.
+- **iPad system language (#14)** — the French leftover is gone; iPad status bars read
+  `Sun Jul 26` / `Domingo 26 de julio` per language.
+
+Two new findings came out of it, both folded in below: the pinned clock is **locale-formatted**,
+which makes the status-bar language dance an iPhone concern too (see *Clean Status Bar*), and
+the `Cmd+K` misfire has a root cause the AXRaise never covered (see workaround #10).
+
+**`docs/screenshots/version_1` must not be uploaded.** It is the only numbered bundle
+currently on disk, which makes it the thing a hurried session might reach for — don't. Two
+independent reasons, both still true of it, and a third as of 2026-07-26: it predates the
+status-bar fix, so its 16 light cells show the white-on-white status bar described in
+*Known Gotchas*.
 
 1. **All 36 files carry an alpha channel** and fail `scripts/verify_store_media.sh` 36/36.
    `axe` writes RGBA and nothing flattened it at the time; Apple rejects on format, so a
@@ -50,10 +82,14 @@ and the `rm -rf` in the `latest/` assembly snippet.
 verified against a live cross-fade: a gated capture is byte-identical to the settled screen
 where an ungated one reproduces the workaround #19 ghosting exactly. `resolve_ibv_scripts`
 was confirmed to resolve to the marketplace clone at run time. The remaining three fixes —
-alpha flattening, largest-area `frame_of`, and the `latest/` clear — are **verified in
-isolation but have not run inside a full sweep**; the next sweep is their first end-to-end
-test. Budget for it, and review every PNG regardless: none of the failures these prevent
-announces itself.
+alpha flattening, largest-area `frame_of`, and the `latest/` clear — were verified in
+isolation that day and then **exercised end to end by the 2026-07-26 sweep hours later**; all
+three held (see *Status* above). The settle gate never once logged
+`screen still changing after 8 samples`, so `7.5e7` has adequate headroom on both devices.
+
+**Review every PNG anyway.** A clean run is evidence the known failure modes stayed fixed,
+not that the next one cannot fail differently — and every failure this driver has ever had
+produced a plausible-looking screenshot with an exit code of 0.
 
 ## Running it from a fresh Claude session
 
@@ -72,33 +108,40 @@ Before running:
 - Confirm both simulators exist (see "Simulator Setup") and that jq + axe are on PATH,
   and that ImageMagick (magick) is installed — without it the settle gate and the
   alpha flattening both degrade to no-ops with only a log line.
-- The iPad simulator's SYSTEM language was left on French (from Conjuguer work) as of
-  2026-07-26 — its status bar reads "Dimanche 26 juillet". That ships in the iPad
-  screenshots. Fix it per "Clean Status Bar" (system-language change + reboot, per
-  language) before the iPad sweep. This is workaround #14 and it is easy to miss because
-  the app's own UI localizes correctly regardless.
-- Set the status bar override on BOTH simulators, not just the iPad. The playbook treats
-  the iPhone override as optional because it isn't worth re-shooting a device for on its
-  own — but this sweep re-shoots everything anyway, so uniformity is free. version_1 has
-  the iPad pinned at 9:41 and the iPhone on the live clock (14:31, plus one stray 15:31).
-  See "Clean Status Bar".
+- Per "Clean Status Bar", run the sweep ONE LANGUAGE PER BOOT on BOTH devices, in this
+  order per language: set the sim's system language -> reboot -> RE-APPLY the
+  simctl status_bar override -> shoot all 9 views. The reboot clears the override, so
+  applying it first silently ships a live wall-clock. The system language matters on the
+  iPhone too, not just the iPad: it sets the DATE language on iPad, and on both devices
+  it decides whether the pinned time renders "9:41" (en_US) or "09:41" (es_ES).
+  Don't assume either sim's current language — run prep_screenshot_sim.sh for every
+  (device, language) pass and read the verification lines it prints.
 
 After running:
 - Visually review every captured PNG (Read each one). Re-run any bad cell with the
-  --device/--lang/--view filters. Pay special attention to the two iPad Info scroll
-  targets (the 200/400 values in scroll_until_top) — they were calibrated on iPhone only.
+  --device/--lang/--view filters. The two iPad Info scroll targets (the 200/400 values
+  in scroll_until_top) were calibrated on iPhone but verified correct on iPad in the
+  2026-07-26 sweep — re-check them, but they are not expected to need tuning.
 - Assemble docs/screenshots/latest/ and the numbered version_<N>/ upload bundle per the
-  playbook (this is the next release, so use the next version_N).
+  playbook. Use version_2: the 2026-07-26 sweep was captured and then discarded when the
+  status-bar plist fix landed after it, so that number was never used. Confirm with
+  `ls -d docs/screenshots/version_*` before choosing.
 - Run scripts/verify_store_media.sh docs/screenshots/version_<N> and fix anything it
   reports BEFORE uploading. Visual review cannot see an alpha channel or a wrong
   display-size slot; this catches both.
 ```
 
 **Budget time for re-shoots, and never skip the visual review.** The first full sweep
-(July 2026) produced **six** bad cells that the driver reported as successes — four from a
+(2026-07-18) produced **six** bad cells that the driver reported as successes — four from a
 real app bug, two from animation timing — plus two hard failures. A swallowed tap or a
 mid-transition capture yields a *plausible* screenshot of the wrong screen, which no exit
 code can catch. See workarounds #18–20 and *Known Gotchas*.
+
+The second sweep (2026-07-26) then produced **zero** bad cells, so the fixes work — but note
+what that actually licenses. It justifies expecting a smooth run; it does not justify
+skipping the review, because a clean run and a run with six silent failures are
+indistinguishable from the exit codes alone. Budget the review time either way. Reading 36
+PNGs costs far less than shipping one wrong screen to the App Store.
 
 Gotchas the session should keep in mind (also covered below): the machine may have **duplicate simulators** with those two names on older runtimes — `udid_for()` takes the first match by list order, which is oldest-runtime-first, so a stale duplicate silently wins. Note `xcrun simctl delete unavailable` does **not** help: those duplicates are perfectly *available*, just on an old iOS, so they survive that command. Delete or rename them by UDID instead (see *iPad reliability*). The full sweep is ~30–45 min and the iPad's first boot can block ~70s — that's `bootstatus -b` working, not a hang.
 
@@ -255,7 +298,8 @@ docs/screenshots/version_<N>/
 └── iPad_Spanish/{1..9}.png
 ```
 
-`<N>` increments per release (`version_3`, `version_4`, …). The row number is the `#` column in the "Per-View Navigation Recipes" table below (1 = VerbBrowseView … 9 = SettingsView). To regenerate after a re-shoot:
+`<N>` increments per release (`version_2`, `version_3`, …; `version_2` is still unclaimed —
+see *Status*). The row number is the `#` column in the "Per-View Navigation Recipes" table below (1 = VerbBrowseView … 9 = SettingsView). To regenerate after a re-shoot:
 
 ```bash
 cd docs/screenshots && \
@@ -307,8 +351,48 @@ The driver itself never touches the status bar, so by default every shot carries
 simulator's live clock, battery, and signal state — and on **iPad** the status bar also
 shows a **date**, rendered in the simulator's **system language** (independent of the
 app's `-AppleLanguages` override). A sim whose system language is German thus stamps
-`Freitag 26. Juni` onto otherwise-English/Spanish iPad screenshots. iPhone shots are
-unaffected — the notch shows only the time, no date.
+`Freitag 26. Juni` onto otherwise-English/Spanish iPad screenshots.
+
+> **This is no longer iPad-only (revised 2026-07-26).** Earlier revisions said the
+> language/reboot dance was needed only on iPad, reasoning that the iPhone notch shows no
+> date. That reasoning is incomplete: **the pinned clock itself renders per-locale.** With
+> the identical `--time "9:41"` override, an `en_US` device shows `9:41` (12-hour) and an
+> `es_ES` device shows `09:41` (24-hour). So if you set the system language on only one
+> device, or on neither, the iPhone and iPad clocks disagree *within the same language*.
+> The 2026-07-26 sweep therefore ran the language dance on **both** devices, and the
+> resulting set is internally consistent: English shots read `9:41` everywhere, Spanish
+> shots read `09:41` everywhere. Do the same. The *date* handling below is still iPad-only.
+
+**Ordering matters and it fails silently.** `status_bar override` is cleared by every
+shutdown/reboot but survives `uninstall`/`install`/relaunch. Since changing the system
+language *requires* a reboot, an override set before the language change is wiped by it.
+The sequence is always:
+
+```
+set system language → reboot → RE-APPLY the override → shoot all 9 views of that language
+```
+
+Get it backwards and that language's shots carry a live wall-clock — which is exactly the
+version_1 defect being re-shot, and nothing in a visual review flags it unless you compare
+the clock across languages.
+
+**Use [`scripts/prep_screenshot_sim.sh`](../scripts/prep_screenshot_sim.sh)**, which does the
+four steps in that order and then prints the resulting override state *and* `AppleLanguages`
+so you can see both landed rather than assume it:
+
+```bash
+scripts/prep_screenshot_sim.sh "iPhone 17 Pro Max"     en   # then shoot --lang en
+scripts/prep_screenshot_sim.sh "iPad Pro 13-inch (M4)" es   # then shoot --lang es
+```
+
+It resolves the UDID by exact device name the same way the driver does, so the iPad's
+paren-bearing default name needs no escaping. Added 2026-07-26 after the ordering trap was
+hit-adjacent twice in one day.
+
+Because each language needs its own boot, **the driver's default one-boot-per-device flow
+no longer applies** — it shoots both languages in a single boot. Invoke it one `--lang` per
+boot instead (`--device "iPhone 17 Pro Max" --lang en`, then the Spanish pass after the
+next reboot).
 
 Fixing this is two independent pieces:
 
@@ -357,20 +441,19 @@ Fixing this is two independent pieces:
    repeat for the other language. This is orthogonal to the per-cell reliability loop below,
    which also runs the iPad a language at a time.
 
-> **Consider overriding the iPhone's clock too, for consistency.** iPhone needs none of the
-> *date* handling above — the notch shows only the time — which is why this section is
-> written as iPad-only. But the iPhone shots do carry the sim's **live clock**, so a sweep
-> that spans an hour boundary ships a set whose times disagree: the July 2026 run has
-> seventeen iPhone shots at `14:31` and one re-shot cell at `15:31`. Nobody is likely to
-> notice, and it is not worth re-shooting a whole device for. If you want them uniform,
-> apply the same `status_bar override --time "9:41" …` to the iPhone UDID before its sweep
-> (and re-apply after any reboot); the language/reboot dance is still iPad-only.
+> **Override the iPhone's clock too — this is now required, not optional.** Older revisions
+> called it a nicety on the grounds that the iPhone notch shows only a time. Two things make
+> it mandatory in practice. First, an un-overridden iPhone carries the sim's **live clock**,
+> so a sweep spanning an hour boundary ships disagreeing times (version_1: seventeen shots at
+> `14:31`, one re-shot cell at `15:31`). Second, per the note above, the *pinned* clock is
+> itself locale-formatted, so the iPhone needs the same system-language treatment as the iPad
+> for `9:41` / `09:41` to match across devices within a language.
 
 > **Why not bake this into the driver?** The override is trivial to script, but the
-> per-language *reboot* (needed for the date) doesn't fit the driver's one-boot-per-device
-> loop (it shoots both languages in a single boot). Keeping the status-bar setup as an
-> operator step above avoids restructuring the driver around reboots. iPhone needs none of
-> this.
+> per-language *reboot* doesn't fit the driver's one-boot-per-device loop (it shoots both
+> languages in a single boot). Keeping the status-bar setup as an operator step above avoids
+> restructuring the driver around reboots — at the cost of remembering to drive it one
+> `--lang` per boot.
 
 ## iPad reliability — duplicate sims, render budget, per-cell fallback
 
@@ -481,6 +564,30 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
     `soft keyboard still not visible after Cmd+K` — if you see that warning, check
     `osascript -e 'tell application "System Events" to tell process "Simulator" to get name of every window'`
     and shut down any extra sims of that family.
+
+    **Frontmost guard (added 2026-07-26).** The AXRaise above is not sufficient on its own,
+    and the failure it misses is worse than a wrong *window*: when the raise silently fails
+    to take focus at all, `keystroke` still **succeeds** — it lands in whichever application
+    is frontmost on the host Mac. Observed the same day, when a stray Cmd+K launched
+    **Fitness** on Josh's Mac while the sweep reported nothing wrong. `osascript` returns 0
+    either way, and `keyboard_is_visible` can only report that the keyboard is *missing*,
+    never that the keystroke went somewhere else — so a *bare* retry does not help, because
+    the retry misfires identically. `ensure_soft_keyboard` therefore asks System Events for
+    the frontmost process name and **never sends the keystroke unless Simulator owns focus**,
+    logging `attempt N: frontmost is 'X', not Simulator; not sending the keystroke`.
+
+    **The whole raise → check → keystroke sequence is a 3× retry loop** (adopted from
+    Konjugieren, 2026-07-26; all three apps now share this shape, differing only in how each
+    derives `window_match` — Conjugar and Konjugieren use a device-family substring, Conjuguer
+    the whole `$DEVICE` string). Putting the frontmost check *inside* the loop is what makes
+    it more than a safety valve: a **transient** steal — Simulator still coming forward,
+    another app briefly frontmost — recovers on attempt 2 rather than costing the cell, which
+    is what the earlier single-attempt version did. A **persistent** steal burns all three
+    attempts, sends **zero** keystrokes, and ends in `AppleScript Cmd+K failed 3x
+    (accessibility permission …, or Simulator never came frontmost)`. The loop also absorbs
+    the -1719 race noted above, which is a race rather than a steady state and so usually
+    clears by the next attempt. Control flow verified in Conjugar and Conjuguer against a
+    stubbed harness across all three cases (clean / transient / persistent).
 
 11. **Localized onboarding labels** (`take_screenshots.sh::ONBOARDING_LABELS`)
     *Symptom:* the onboarding-Skip button label is localized (`Skip` / `Omitir`). *Fix:* array of all known labels; the wait-for-render loop tries each (fallback to workaround #2's pre-seed and the `onboardingEnabled` switch).
@@ -863,6 +970,32 @@ Visual review will surface bad cells. Re-run any single one via the `--device` /
 - **Default sorts drive screens 1 and 3.** Screen 1 relies on `Settings.verbSortDefault == .frequency` (ser on top); screen 3 on `Settings.modelSortDefault == .irregularity` (the decir model at top). The driver does not change sorts — segmented pickers render with empty AXTree children on iOS 26 and aren't individually addressable by id. A fresh install starts at the defaults, so this holds; if either default changes, re-spec those screens. Both defaults were verified in `Conjugar/Utils/Settings.swift` in July 2026.
 - **The Info scrolls are calibration-sensitive.** Screen 6 wants the About section header at the top; screen 7 parks *Presente de Indicativo* in the safe middle band (`scroll_until_top … 400`) before tapping. Tune the target y values if a header is clipped or a row lands under the tab bar.
 - **Apple Intelligence Tutor surfaces are availability-gated.** The Tutor section in InfoBrowseView (and the AI page in OnboardingView) render as a live `NavigationLink` only when `Current.languageModelService.isAvailable`. On a simulator — where the model is always unavailable — it would show a reason row instead, which is why `TutorDisplay.tutorUnavailableRowEnabled` exists: with it `false`, screen 6 shows the About header cleanly with no tutor section at all. Either way the App Store shots will never show the Tutor *entry point*. If you want it in the listing, that shot has to be taken by hand on a real Apple-Intelligence device.
+- **The light-mode status bar was white-on-white until 2026-07-26 — FIXED, and it is why
+  the clean sweep was thrown away.** In the four light slots (`verb_view`, `model_view`,
+  `info_browse`, `quiz_results`) the clock and Wi-Fi glyph were drawn in white on a
+  white/near-white background, ranging from faint to invisible; on `verb_view` the green
+  battery appeared to float alone with no time beside it. Cause: **`Conjugar/Info.plist` set
+  `UIStatusBarStyle = UIStatusBarStyleLightContent` with
+  `UIViewControllerBasedStatusBarAppearance = false`** — a UIKit-era holdover from the 2017
+  app that forced light status-bar content app-wide regardless of appearance. Correct in the
+  five dark slots, wrong in the four light ones, and wrong for every light-mode *user*, not
+  just for screenshots. **Both keys were removed** at Josh's direction; with neither present
+  the system picks the style from the appearance, so the status bar is dark-on-light in light
+  mode and light-on-dark in dark mode. The app builds clean and the built
+  `Conjugar.app/Info.plist` carries neither key.
+
+  Two consequences for whoever shoots next. **All 36 cells need re-shooting from the new
+  build** — the fix changes the light cells and the sweep that preceded it was deleted, so
+  there is nothing to patch into. And **do not re-add either key**: if a future change makes
+  the status bar look wrong, the fix belongs in SwiftUI (a `.preferredColorScheme` or
+  `.toolbarColorScheme` at the relevant view), not in a global plist override.
+- **The soft keyboard is the *English* layout even in the Spanish shots.** The `es` cells of
+  `quiz_mid` show a QWERTY keyboard with `EN` on the space bar and no `ñ` key, because the
+  simulator's installed-keyboard list (`AppleKeyboards`) is a separate preference from
+  `AppleLanguages` and the language dance does not touch it. The plan only requires that the
+  keyboard be *visible*, so version_2 ships this way rather than churning two good cells. If
+  a future sweep wants a Spanish keyboard for authenticity, set `AppleKeyboards` on the sim
+  before the `es` pass and re-shoot `--view quiz_mid --lang es` on both devices.
 - **Review-prompt cooldown is per-install.** `seed_defaults` pre-seeds `lastReviewPromptDate` for in-run prompts, but a manual screenshot capture of the StoreKit modal would still require uninstalling/reinstalling first.
 - **iPad first-boot is ~70s on a fresh sim.** Data-migration plugins initialize on first boot; subsequent boots are ~22s. The `xcrun simctl bootstatus -b` step can block for ~70s during that initial boot. Don't kill the sweep thinking it's hung — `bootstatus -b` is doing the right thing.
 </content>

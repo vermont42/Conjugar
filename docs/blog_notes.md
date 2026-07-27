@@ -7409,3 +7409,165 @@ the `frame_of` pipeline was unit-tested against a synthetic AX tree in which the
 precedes the large row, and the no-match path still returns empty so `tap_id_first` keeps
 logging its error. The alpha flattening, the largest-area `frame_of`, and the `latest/`
 clear are verified in isolation but have not yet run inside a full sweep.
+
+## The First Clean Sweep: 36 Screenshots, Zero Re-shoots (2026-07-26)
+
+The screenshot driver has been fixed in pieces across three sessions without anyone ever
+watching it run all the way through. This session ran it: 9 views × en/es × iPhone 17 Pro
+Max + iPad Pro 13-inch (M4), the `version_2` upload bundle. Every one of the 36 cells
+landed on the first attempt — no retries, no driver warnings, and after reading all 36 PNGs
+by eye, no re-shoots. That has never happened before. The first full sweep (2026-07-18)
+shipped six silently-wrong cells and two hard failures.
+
+Worth being precise about what a clean run proves, because it is easy to over-read. It
+confirms the known failure modes stayed fixed. It does not prove the driver is correct, and
+it emphatically does not retire the visual review: every failure this driver has ever had
+produced a plausible screenshot and an exit code of 0. A clean run and a six-failure run
+look identical from the outside. The playbook now says so in those terms.
+
+The three fixes that had only ever been verified in isolation all held up end to end. Alpha
+flattening (workaround #23) is the big one — `version_2` is `hasAlpha: no` across all 36
+files and passes `verify_store_media.sh` with 0 blocking and 0 advisory, while `version_1`
+still fails the identical check 36/36. That contrast matters: it means the check is
+discriminating, not vacuously passing. The settle gate (#22) plus the `nav_settings` anchor
+(#19) produced two fully opaque iPad settings cells with none of `version_1`'s Browse-grid
+ghosting, and the gate never once logged "still changing after 8 samples", so the measured
+`7.5e7` tolerance has real headroom on both devices. Largest-area `frame_of` (#21) caused no
+wrong-element taps. The iPad/es `quiz_mid` and `quiz_results` cells — the ones that hard-failed
+`version_1` because the hardcoded English tab centers put "quiz" inside *Información* — both
+landed on **Test**, so live tab measurement (#18) works.
+
+Two things came out of the run that were not on the list.
+
+**The pinned clock is locale-formatted, which makes the status-bar dance an iPhone problem
+too.** The playbook had always framed the system-language + reboot ritual as iPad-only, on
+the reasoning that only the iPad status bar shows a date. That reasoning is incomplete. With
+the *identical* `--time "9:41"` override, an `en_US` device renders `9:41` and an `es_ES`
+device renders `09:41` — 12-hour versus 24-hour. So setting the system language on only one
+device leaves the iPhone and iPad clocks disagreeing inside the same language, which is
+precisely the kind of defect nobody notices until it is on the store. I ran the language
+dance on both devices; the English shots read `9:41` everywhere and the Spanish `09:41`
+everywhere. A parallel session flagged the ordering trap mid-run — the reboot clears the
+override, so an override applied *before* the language change is wiped — which my helper
+already handled, but the near-miss was real enough that the ordering is now encoded in
+`scripts/prep_screenshot_sim.sh` rather than left as four prose steps. It prints the override
+state and the resulting `AppleLanguages` afterward so a future reader can *see* both landed.
+
+**The `Cmd+K` misfire has a root cause the AXRaise never covered.** Same parallel session
+reported that a stray `Cmd+K` had launched Fitness on the host Mac while a run reported
+nothing wrong. The existing workaround #10 raises the target Simulator window first, but that
+is not sufficient in the way that matters: when the raise silently fails to take focus,
+`keystroke` still *succeeds* — it just lands wherever the frontmost app happens to be.
+`osascript` returns 0 either way, and the post-toggle `keyboard_is_visible` check can only
+report that the keyboard is missing, never that the keystroke went somewhere else. Retrying
+is useless because the retry misfires identically. `ensure_soft_keyboard` now asks System
+Events for the frontmost process and **skips** the keystroke rather than sending it to the
+wrong application. All four `quiz_mid` cells in this sweep had visible keyboards, so the
+misfire was situational rather than systemic — but the guard costs nothing and the failure
+was silent.
+
+One app-side defect found and deliberately **not** fixed. In the four light-mode slots
+(`verb_view`, `model_view`, `info_browse`, `quiz_results`) the status-bar clock is white on a
+white background and effectively invisible; on `verb_view` the green battery appears to float
+alone with no time and no Wi-Fi glyph beside it. A previous session had flagged this as "worth
+a look during the re-shoot" without diagnosing it. The cause is `Conjugar/Info.plist` lines
+49–50 and 62–63: `UIStatusBarStyle = UIStatusBarStyleLightContent` with
+`UIViewControllerBasedStatusBarAppearance = false`, a UIKit-era holdover from the 2017 app
+that forces light status-bar content app-wide regardless of appearance. Correct in the five
+dark slots, wrong in the four light ones — and wrong for every light-mode *user*, not just for
+screenshots. I left it alone: changing it alters the shipping app's appearance, which is
+outside "produce the screenshots", and the light/dark alternation itself is specified in
+`docs/screenshot-plan.md` and is correct. It is written up in *Known Gotchas* with the fix and
+the cost of acting on it (one plist edit plus a re-shoot of the 16 light cells, ~15 minutes).
+Josh's call, not mine to make mid-sweep.
+
+Two smaller observations recorded rather than acted on. The Spanish `quiz_mid` shots show an
+**English** keyboard — `EN` on the space bar, no `ñ` key — because the simulator's installed
+keyboard list is a separate preference from `AppleLanguages` that the language dance does not
+touch; the plan only requires the keyboard be visible, so churning two good cells for it
+seemed the wrong trade. And the Spanish verb count renders `4811 VERBOS` where English renders
+`4,811 VERBS`; Spanish would normally group as `4.811`. That is app number formatting, not a
+capture problem.
+
+No app code changed, so there is nothing to build or test. Both scripts pass `bash -n`, the
+new `prep_screenshot_sim.sh` was run live against the iPhone sim and printed the expected
+`Time: 09:41` / `(es)` verification, and the frontmost-process query the new guard depends on
+was confirmed to return `Simulator`. All three kill switches are restored to `true` and
+`git diff --stat Conjugar/Models/ConjugarTips.swift` is empty.
+
+## Addendum: the status-bar fix, and throwing away a clean sweep (2026-07-26)
+
+The entry above ends with the light-mode status-bar defect written up as found-but-not-fixed,
+on the reasoning that changing the shipping app's appearance was outside the remit of
+"produce the screenshots". Josh read that and made the call: remove both keys, support light
+mode properly. So `UIStatusBarStyle = UIStatusBarStyleLightContent` and
+`UIViewControllerBasedStatusBarAppearance = false` are gone from `Conjugar/Info.plist`. With
+neither present the system derives the style from the appearance — dark-on-light in light
+mode, light-on-dark in dark mode. The app builds clean and the built `Conjugar.app/Info.plist`
+carries neither key.
+
+The consequence was that the 36 screenshots I had just finished were obsolete: the fix changes
+all 16 light cells, and a bundle assembled half from the old build and half from the new would
+be exactly the "hand-patched, not the output of one clean run" artifact this playbook already
+criticizes `version_1` for being. Josh's instruction was to delete rather than re-shoot and let
+a fresh session redo it, so the 36 timestamped PNGs, `latest/`, and `version_2/` are gone.
+`version_1` and the unrelated calibration shots from earlier in the day survive. **`version_2`
+is now an unclaimed number** — the playbook says so in three places, because the natural
+assumption on seeing `version_1` alone on disk is that the next bundle is `version_2`, and this
+time that assumption happens to be right for the wrong reason.
+
+Some honest bookkeeping about a prediction I got wrong. Having removed the global override, I
+reasoned that the game would regress in light mode: `GameView` pins its subtree dark with
+`.environment(\.colorScheme, .dark)`, and that modifier governs how descendants resolve
+adaptive colors — it is `.preferredColorScheme(_:)` that drives the status bar. On that
+reasoning a light-mode user opening the game would get dark status-bar text over the game's
+forced-dark night scene, relocating the invisibility rather than fixing it. I flagged it with a
+one-line fix and, because Josh had said he would check it himself, deliberately did not edit
+`GameView.swift` under him. He checked: the game looks correct in both modes, no change needed.
+The reason the theory failed is placement — the `.environment` override is the *outermost*
+modifier on `GameView`'s body (the existing comment even says "applied last" so the background
+resolves dark), which makes it the root environment of the full-screen cover's hosting
+controller, and `UIHostingController` derives `preferredStatusBarStyle` from its root view's
+resolved scheme. The environment override does reach the status bar in that arrangement. Worth
+recording because the general rule — "`.environment(\.colorScheme,)` doesn't set the status bar,
+`.preferredColorScheme` does" — is true often enough to be worth knowing and wrong here, and the
+distinction is placement, not the modifier.
+
+Net state: no screenshots on disk from this session, one real app fix that improves light mode
+for every user, a driver that has now demonstrably completed a clean 36-cell run, and a playbook
+that describes all of it accurately for whoever shoots next.
+
+## Converging the three drivers on one Cmd+K retry loop (2026-07-26)
+
+Josh asked whether the siblings would benefit from the frontmost guard I had just added.
+They would not — they already had it; Conjugar was the last of the three, and the code I
+applied came from Conjuguer in the first place. But checking turned up an asymmetry worth
+fixing. Conjuguer and Conjugar each did one raise, one frontmost check, and gave up if the
+check failed. Konjugieren had folded the same check into a 3× retry loop, which is
+meaningfully better for a reason that is easy to miss: the guard's failure mode is not
+always permanent. A *transient* steal — Simulator still coming forward, some other app
+momentarily frontmost — is exactly the kind of thing that clears in a second, and the
+single-attempt shape turned it into a keyboard-less `quiz_mid` cell. So Konjugieren's shape
+went into the other two.
+
+The distinction the loop has to preserve is that retrying does not fix the *original* bug.
+When AXRaise fails to take focus, `keystroke` still succeeds and lands in whatever is
+frontmost, so a bare retry just misfires three times instead of once. What makes the loop
+correct is that the frontmost check sits *inside* it: each attempt re-raises, re-checks, and
+only then types. A persistent steal therefore burns all three attempts and sends **zero**
+keystrokes.
+
+Verified rather than assumed. I extracted `ensure_soft_keyboard` from both repos into a
+harness with stubbed `osascript`/`log`/`sleep` and a scripted sequence of frontmost answers,
+then counted attempts and keystrokes across three cases. Clean: 1 attempt, 1 keystroke.
+Persistent steal: 3 attempts, 0 keystrokes, then the 3× warning. Transient steal (wrong on
+attempt 1, right on attempt 2): 2 attempts, 1 keystroke — the recovery the port exists for.
+Both repos produced identical output. Stripping comments, Conjugar's function is now
+line-for-line identical to Konjugieren's, and Conjuguer differs only in the one intentional
+line: it matches its Simulator window on the whole `$DEVICE` string where the other two use a
+device-family substring. That difference is deliberate and documented in each playbook —
+Conjuguer needs the full name because a bare "iPhone" match there can select the wrong
+window.
+
+No app code touched in any repo; both drivers pass `bash -n`, and workaround #10 is updated
+in Conjugar's and Conjuguer's playbooks to describe the loop rather than the single attempt.
