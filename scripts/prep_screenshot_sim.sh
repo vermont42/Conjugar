@@ -76,6 +76,49 @@ xcrun simctl shutdown "$UDID"
 xcrun simctl boot "$UDID"
 xcrun simctl bootstatus "$UDID" -b >/dev/null
 
+# A `simctl boot` does not always give the device a Simulator.app WINDOW. When the
+# reboot above lands while Simulator.app is already running, the device can come back
+# booted-but-windowless: simctl and axe keep working (they talk to the device, not the
+# UI), so nothing looks wrong — but take_screenshots.sh's ensure_soft_keyboard raises
+# `first window whose title contains "iPad"`, finds no such window, and fails all three
+# attempts with -1719 "Invalid index". The only visible symptom is one keyboard-less
+# quiz_mid screenshot. Hit on 2026-07-26 on the iPad/es pass (workaround #24).
+#
+# `open -a Simulator --args -CurrentDeviceUDID` does NOT fix it once Simulator is
+# already running (verified — the args are ignored), and neither does File > Open
+# Simulator. Quitting and relaunching does: on launch Simulator attaches a window to
+# every already-booted device. This runs BEFORE the override because a quit can take
+# the device down with it, and a re-boot would clear the override.
+ensure_simulator_window() {
+  local match="$1" attempt front
+  windows() {
+    osascript -e 'tell application "System Events" to tell process "Simulator" to get name of every window' 2>/dev/null || true
+  }
+  if [[ "$(windows)" == *"$match"* ]]; then
+    log "Simulator window for '$match' is present"
+    return 0
+  fi
+  log "no Simulator window for '$match' — relaunching Simulator.app to attach one"
+  osascript -e 'tell application "Simulator" to quit' >/dev/null 2>&1 || true
+  sleep 3
+  # A quit may have taken the device with it; bring it back before asking for a window.
+  xcrun simctl bootstatus "$UDID" -b >/dev/null 2>&1 || {
+    xcrun simctl boot "$UDID"
+    xcrun simctl bootstatus "$UDID" -b >/dev/null
+  }
+  open -a Simulator
+  for attempt in 1 2 3 4 5 6 7 8 9 10; do
+    sleep 2
+    if [[ "$(windows)" == *"$match"* ]]; then
+      log "Simulator window for '$match' attached (attempt $attempt)"
+      return 0
+    fi
+  done
+  log "warning: still no Simulator window for '$match' — the quiz_mid soft keyboard"
+  log "         (Cmd+K) will fail for this device; see workaround #24 in the playbook"
+}
+ensure_simulator_window "$DEVICE_NAME"
+
 log "re-applying status bar override"
 # --time takes a bare clock string: "9:41 AM" and ISO strings are both rejected as
 # "Invalid, non-ISO date/time string" on this runtime. The system renders AM/PM (or

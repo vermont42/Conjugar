@@ -7571,3 +7571,126 @@ window.
 
 No app code touched in any repo; both drivers pass `bash -n`, and workaround #10 is updated
 in Conjugar's and Conjuguer's playbooks to describe the loop rather than the single attempt.
+
+## Version_2: the 36 App Store screenshots, and a booted simulator with no window (2026-07-26)
+
+The third full sweep, and the first whose output is meant to be uploaded. The second sweep,
+hours earlier, had been clean and was then thrown away on purpose: reviewing it turned up the
+white-on-white light-mode status bar, the fix was an `Info.plist` change, and 36 files that
+predate the build they claim to show are worth less than nothing on disk. So `version_2` was
+an unclaimed number, and this run claimed it.
+
+The mechanics went the way the playbook says they should. Both kill switches — all three,
+rather: tips, onboarding, and the tutor's unavailability row — off before the build, restored
+after, with `git diff --stat` clean at the end. Four passes, one language per boot per device,
+each preceded by `prep_screenshot_sim.sh` so the system language is set *before* the reboot and
+the status-bar override *after* it. The verification lines that script prints earned their keep
+immediately: the iPhone's pinned clock came back `9:41` on the English pass and `09:41` on the
+Spanish one, which is the locale-formatting quirk the last sweep discovered, visible as data
+rather than as a thing to remember.
+
+One cell out of 36 came out wrong, and the interesting part is why the driver's error message
+was misleading. iPad/es `quiz_mid` captured without the soft keyboard, and the log said
+`AppleScript Cmd+K failed 3x (accessibility permission …, or Simulator never came frontmost)`.
+Neither was true — the permission is granted, and Simulator was frontmost. The real cause was a
+third thing the message does not mention: the iPad had come back from the prep reboot **booted
+but with no Simulator window**. `simctl` and `axe` never noticed, because they talk to the
+device rather than to the UI; the whole sweep ran fine for eight more cells. Only the AppleScript
+path needs a window, and `first window whose title contains "iPad"` fails with `-1719 "Invalid
+index"` when there isn't one — which is exactly what a missing accessibility permission looks
+like.
+
+Getting the window back was harder than expected, which is worth recording so nobody re-derives
+it. `open -a Simulator --args -CurrentDeviceUDID <udid>` does nothing when Simulator is already
+running; the argument is simply ignored. Simulator's own **File ▸ Open Simulator ▸ iOS 26.3 ▸
+iPad Pro 13-inch (M4)** menu item clicks successfully and produces no window. What works is
+quitting Simulator.app and relaunching it: on launch it attaches a window to every already-booted
+device. So `prep_screenshot_sim.sh` now checks for a window titled with the device name after the
+reboot and does that quit-and-relaunch if there is none, re-booting the device first in case the
+quit took it down — and it runs before the status-bar override, because a re-boot would clear it.
+
+Honest about the verification: the detection path is confirmed (it correctly reports the window
+present), and the manual recovery is confirmed (quit + relaunch did attach both windows). The
+recovery *branch* has not run end to end, because the windowless state turned out to be
+intermittent and would not reproduce on demand afterward — shutting the device down and booting
+it via `simctl` with Simulator running, which is what produced it the first time, gave a window
+back every subsequent try.
+
+Everything else held. All 16 light cells now show a legible dark-on-light status bar, which is
+the entire reason the previous sweep was discarded. No ghosted iPad Settings, no wrong-element
+taps, `Haber` detail in all four `model_view` cells, alpha-free captures, and the settle gate
+never once warned. `verify_store_media.sh docs/screenshots/version_2` reports 0 blocking, 0
+advisory across all 36.
+
+Two cosmetic things were reviewed and shipped rather than churned. The Spanish `quiz_mid`
+keyboard is the English layout, because the simulator's installed-keyboard list is a separate
+preference from `AppleLanguages` and the plan only asks that a keyboard be visible. And on iPad
+in Spanish, Browse and Models collapse their search field into a magnifying-glass button, because
+`Explorar/Modelos/Test/Información/Configuración` is a wider tab bar than the English one — that
+is the app adapting correctly, not a capture defect, and it is the same width pressure that made
+the iPad tab centers language-dependent back in workaround #18.
+
+The habit that keeps paying off is reading all 36 PNGs. The keyboard-less cell exited 0 and
+looked entirely plausible; nothing but a human eye on the image was going to catch it.
+
+## The windowless-simulator fix, ported to all three apps (2026-07-26)
+
+The `version_2` sweep lost one cell to a simulator that was booted but had no Simulator
+*window*, and the fix went into `prep_screenshot_sim.sh` because that is where the reboot
+that causes it happens. Josh asked whether the siblings would want it. They would, and
+answering the question properly changed the shape of the fix.
+
+Neither Conjuguer nor Konjugieren has a prep script at all — it is a Conjugar invention from
+earlier the same day. But both drivers carry the identical `ensure_soft_keyboard`, both have
+a `quiz_mid` cell that needs the soft keyboard, and both `simctl boot` a cold device from
+inside the driver, which is the same call that can come back windowless. Conjuguer is the
+more exposed of the two: its playbook prescribes exactly the set-language → shutdown → boot
+dance that triggered this, as hand-typed commands with nowhere for a guard to live.
+Konjugieren has no status-bar handling whatsoever, which means no reboot step — and also
+means its screenshots have been shipping with the simulator's live wall clock, the very
+defect Conjugar spent two sweeps eliminating.
+
+The placement question turned out to be the interesting part. Recovery belongs in prep, but
+*detection* belongs in the driver, because `ensure_soft_keyboard` is what actually needs the
+window and it was the thing emitting a message naming two causes that were both false. So
+the check went into all three drivers, inside the existing 3× retry loop, immediately before
+the AXRaise — the same position the frontmost guard occupies, for the same reason. The window
+list is briefly unenumerable just after Simulator activates, so a pre-loop gate would turn a
+transient into a lost cell; inside the loop, a transient recovers on attempt 2 and a real
+windowless device burns three attempts, sends zero keystrokes, and says so three times. The
+driver does not try to recover, and that is deliberate: recovery means quitting and
+relaunching Simulator.app, which is reasonable at reboot time in prep and much too blunt in
+the middle of a sweep.
+
+Two porting details were not copy-paste. Conjuguer matches its Simulator window on the full
+`$DEVICE` string rather than a family substring — a deliberate difference dating from the day
+a stray `iPhone 17` stole its Cmd+K — so its prep script matches the same way. Konjugieren
+needed two changes: its sweep sims are *renamed*, so the prep script carries the driver's
+hardcoded UDID map rather than resolving by name, and its window check matches the family
+substring `iPad`, because the renamed sim's window is titled `Konjugieren iPad Screenshots`
+and contains no trace of the `iPad Pro 13-inch (M4)` label the driver takes on `--device`.
+Get that one wrong and prep relaunches Simulator on every run while the driver is perfectly
+content — a self-inflicted version of the same class of bug.
+
+Verified rather than assumed, reusing the harness idea from the earlier `ensure_soft_keyboard`
+port: stub `osascript`, feed it a scripted window list, count raises and keystrokes. Window
+present: 1 raise, 1 keystroke, no complaint. Persistently missing: 3 attempts, 0 keystrokes,
+three accurate log lines, and the 3× warning, which now names three causes instead of two.
+Missing on the first query and present on the second: one log line, then recovery — 1 raise,
+1 keystroke. Identical output in all three repos. The first draft of the harness reported the
+transient case as a failure, which was the harness's fault, not the driver's: the window query
+runs inside a command substitution, so the stub's counter increments were happening in a
+subshell and evaporating. Moving the counters into files fixed it. Worth recording because a
+stubbed harness that lies to you is worse than no harness.
+
+Then a live `--view quiz_mid` cell in Conjugar against a real Simulator, to check the new
+query does not false-positive mid-sweep: no window warning, keyboard present in the capture.
+That test PNG was deleted afterward so the reviewed archive stays as reviewed — `version_2`
+was already assembled and frozen.
+
+What is still unproven, in all three repos, is the recovery branch. The windowless state was
+intermittent and would not reproduce on demand afterward; shutting the device down and
+booting it via `simctl` with Simulator running, which is exactly what produced it, gave a
+window back every subsequent try. So three apps now carry code whose detection path is
+verified and whose repair path has never run. That is worth stating plainly rather than
+letting a future session infer from the absence of a caveat that it was tested.

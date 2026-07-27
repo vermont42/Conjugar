@@ -381,10 +381,27 @@ ensure_soft_keyboard() {
   # into a log line naming the app that caught it — and because the check sits INSIDE
   # the loop, a transient focus steal recovers on the next attempt instead of costing
   # the cell. (workaround #10)
+  # A device can be BOOTED yet have no Simulator WINDOW: `xcrun simctl boot` does not
+  # always make Simulator.app attach one when Simulator is already running, and a
+  # per-language reboot is the usual way in. Nothing else in the sweep notices, because
+  # simctl and axe talk to the device rather than to the UI — but AXRaise then has no
+  # window to raise and fails with -1719 "Invalid index", which is indistinguishable from
+  # the missing-permission failure the 3x warning blames. Checking first turns that into a
+  # log line naming the real cause. Like the frontmost guard, this sits INSIDE the loop:
+  # the window list is also briefly unenumerable just after Simulator activates, and that
+  # transient recovers on the next attempt. Recovery is deliberately NOT attempted here —
+  # restoring a window means quitting and relaunching Simulator.app, too blunt mid-sweep;
+  # prep_screenshot_sim.sh does it at reboot time, where a relaunch costs nothing.
+  # (workaround #24)
   local attempt
   local raised=false
   local front
   for attempt in 1 2 3; do
+    if [[ "$(osascript -e 'tell application "System Events" to tell process "Simulator" to get name of every window' 2>/dev/null || true)" != *"$window_match"* ]]; then
+      log "AppleScript Cmd+K attempt $attempt: no Simulator window matching '$window_match' (device booted but windowless? see prep_screenshot_sim.sh); not sending the keystroke"
+      sleep 1.0
+      continue
+    fi
     if osascript -e 'tell application "Simulator" to activate' \
               -e 'delay 0.5' \
               -e "tell application \"System Events\" to tell process \"Simulator\" to perform action \"AXRaise\" of (first window whose title contains \"$window_match\")" \
@@ -405,7 +422,7 @@ ensure_soft_keyboard() {
     sleep 1.0
   done
   if [[ "$raised" != true ]]; then
-    log "warning: AppleScript Cmd+K failed 3x (accessibility permission for /usr/bin/osascript, or Simulator never came frontmost)"
+    log "warning: AppleScript Cmd+K failed 3x (accessibility permission for /usr/bin/osascript, Simulator never came frontmost, or the device has no Simulator window)"
     return 0
   fi
   sleep 0.9  # let keyboard slide-up animation complete

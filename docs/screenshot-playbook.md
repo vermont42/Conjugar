@@ -57,11 +57,35 @@ Two new findings came out of it, both folded in below: the pinned clock is **loc
 which makes the status-bar language dance an iPhone concern too (see *Clean Status Bar*), and
 the `Cmd+K` misfire has a root cause the AXRaise never covered (see workaround #10).
 
-**`docs/screenshots/version_1` must not be uploaded.** It is the only numbered bundle
-currently on disk, which makes it the thing a hurried session might reach for — don't. Two
-independent reasons, both still true of it, and a third as of 2026-07-26: it predates the
-status-bar fix, so its 16 light cells show the white-on-white status bar described in
-*Known Gotchas*.
+**Third full 36-shot sweep: 2026-07-26 (later the same day) — shipped as `version_2`.** This
+is the sweep that re-shot everything against the status-bar fix, and it is the bundle on disk
+to upload. 35 of 36 cells were right on the first attempt; the one defect was **iPad/es
+`quiz_mid`, captured without the soft keyboard** because the iPad had come back from the
+prep reboot **booted but with no Simulator window**, so `ensure_soft_keyboard`'s AXRaise had
+nothing to raise (new workaround #24 — the driver reported it honestly as
+`AppleScript Cmd+K failed 3x`, which is what made it a five-minute fix rather than a shipped
+defect). After attaching a window the cell was re-shot correctly. Every PNG was then reviewed
+by eye and `verify_store_media.sh docs/screenshots/version_2` reported **0 blocking, 0
+advisory**.
+
+Everything the earlier sweeps fixed stayed fixed: alpha-free captures, no ghosted iPad
+Settings, no wrong-element taps, `Haber` detail in all four `model_view` cells, and — new
+this time — the **light-mode status bar is legible in all 16 light cells**, dark-on-light,
+which is the whole reason the second sweep was thrown away. Clocks agree across devices
+within a language (`9:41` in English, `09:41` in Spanish) and the iPad date reads
+`Sun Jul 26` / `Domingo 26 de julio`. The settle gate never logged
+`screen still changing after 8 samples`, so `7.5e7` still has headroom.
+
+Two cosmetic differences were reviewed and deliberately shipped: the Spanish `quiz_mid`
+keyboard is the English layout (documented under *Known Gotchas*), and the iPad's Spanish
+Browse/Models screens collapse the search field to a magnifying-glass button because the
+Spanish tab labels are wider — genuine adaptive layout, not a capture defect. The next
+sweep should claim **`version_3`**.
+
+**`docs/screenshots/version_1` must not be uploaded.** `version_2` is now beside it on disk
+and is the current bundle; reach for that one. Three reasons version_1 is dead, all still
+true of it — the third being that it predates the status-bar fix, so its 16 light cells show
+the white-on-white status bar described in *Known Gotchas*.
 
 1. **All 36 files carry an alpha channel** and fail `scripts/verify_store_media.sh` 36/36.
    `axe` writes RGBA and nothing flattened it at the time; Apple rejects on format, so a
@@ -123,9 +147,8 @@ After running:
   in scroll_until_top) were calibrated on iPhone but verified correct on iPad in the
   2026-07-26 sweep — re-check them, but they are not expected to need tuning.
 - Assemble docs/screenshots/latest/ and the numbered version_<N>/ upload bundle per the
-  playbook. Use version_2: the 2026-07-26 sweep was captured and then discarded when the
-  status-bar plist fix landed after it, so that number was never used. Confirm with
-  `ls -d docs/screenshots/version_*` before choosing.
+  playbook. Use version_3: version_1 and version_2 are both on disk (version_2 is the
+  2026-07-26 shipped bundle). Confirm with `ls -d docs/screenshots/version_*` before choosing.
 - Run scripts/verify_store_media.sh docs/screenshots/version_<N> and fix anything it
   reports BEFORE uploading. Visual review cannot see an alpha channel or a wrong
   display-size slot; this catches both.
@@ -298,8 +321,8 @@ docs/screenshots/version_<N>/
 └── iPad_Spanish/{1..9}.png
 ```
 
-`<N>` increments per release (`version_2`, `version_3`, …; `version_2` is still unclaimed —
-see *Status*). The row number is the `#` column in the "Per-View Navigation Recipes" table below (1 = VerbBrowseView … 9 = SettingsView). To regenerate after a re-shoot:
+`<N>` increments per release (`version_3`, `version_4`, …; `version_2` was claimed by the
+2026-07-26 sweep — see *Status*). The row number is the `#` column in the "Per-View Navigation Recipes" table below (1 = VerbBrowseView … 9 = SettingsView). To regenerate after a re-shoot:
 
 ```bash
 cd docs/screenshots && \
@@ -584,7 +607,10 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
     another app briefly frontmost — recovers on attempt 2 rather than costing the cell, which
     is what the earlier single-attempt version did. A **persistent** steal burns all three
     attempts, sends **zero** keystrokes, and ends in `AppleScript Cmd+K failed 3x
-    (accessibility permission …, or Simulator never came frontmost)`. The loop also absorbs
+    (accessibility permission …, or Simulator never came frontmost)`. **That message names
+    two causes and there is a third, which is the one that actually bit on 2026-07-26: the
+    device has no Simulator window at all** — see workaround #24 before chasing permissions.
+    The loop also absorbs
     the -1719 race noted above, which is a race rather than a steady state and so usually
     clears by the next attempt. Control flow verified in Conjugar and Conjuguer against a
     stubbed harness across all three cases (clean / transient / persistent).
@@ -697,6 +723,46 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
     remove -alpha off` at the point of capture, plus `scripts/verify_store_media.sh` as the
     backstop before upload. **`docs/screenshots/version_1` predates this and fails 36/36.**
     Ported from Konjugieren `bbfee8d`.
+
+24. **A booted simulator can have no Simulator *window*, which silently kills Cmd+K**
+    (`prep_screenshot_sim.sh::ensure_simulator_window`,
+    `take_screenshots.sh::ensure_soft_keyboard`)
+    *Symptom:* iPad/es `quiz_mid` came out **keyboard-less**, with the driver logging
+    `AppleScript Cmd+K attempt 1/2/3 failed` and then
+    `AppleScript Cmd+K failed 3x (accessibility permission …, or Simulator never came
+    frontmost)`. Both named causes were false: the permission was granted and Simulator did
+    come frontmost. *Cause:* the language reboot left the iPad **booted but windowless** —
+    `xcrun simctl boot` does not always make Simulator.app attach a window when Simulator is
+    already running. Everything else keeps working, because `simctl` and `axe` talk to the
+    device rather than to the UI; only the AppleScript path needs a window, and
+    `first window whose title contains "iPad"` then fails with `-1719 "Invalid index"` —
+    indistinguishable from the missing-permission failure the message blames. *Fix, in two
+    places:* `prep_screenshot_sim.sh` checks for a window titled with the device name after
+    the reboot and, if there is none, quits and relaunches Simulator.app (on launch it
+    attaches a window to every already-booted device), re-booting the device first if the quit
+    took it down. It runs **before** the status-bar override, since a re-boot would clear it.
+    And `ensure_soft_keyboard` checks for the window **inside** its existing 3× loop, before
+    each AXRaise — placed there, beside the frontmost guard, for the same reason that one is
+    inside the loop: the window list is *also* briefly unenumerable right after Simulator
+    activates, and that transient recovers on the next attempt, while a genuinely windowless
+    device burns all three attempts, sends zero keystrokes, and logs the true cause each time.
+    The driver deliberately does **not** attempt recovery — restoring a window means quitting
+    and relaunching Simulator.app, which is fine at reboot time in prep and far too blunt
+    mid-sweep — so this converts a mystery into one reviewable screenshot plus an accurate
+    log line. The 3× warning now names all three causes rather than two.
+    *Verification:* the detection path and the manual relaunch recovery were both confirmed on
+    2026-07-26; the windowless state itself is **intermittent** and did not reproduce on
+    demand afterward, so the recovery branch has not been exercised end to end by the script.
+    The driver-side check was verified with a stubbed-`osascript` harness across all three
+    cases (window present → 1 raise, 1 keystroke; persistently missing → 3 attempts, **0**
+    keystrokes, then the warning; missing-then-present → recovers on attempt 2), and by a live
+    `--view quiz_mid` cell that captured the keyboard with no false alarm. The same check is
+    now in Conjuguer (#19) and Konjugieren (#16); the executable body of
+    `ensure_soft_keyboard` remains byte-identical across Conjugar and Konjugieren, with
+    Conjuguer differing only in the one intentional `window_match` line.
+    Two things that do **not** work once Simulator is already running, both tried:
+    `open -a Simulator --args -CurrentDeviceUDID <udid>` (the argument is ignored) and
+    Simulator's own **File ▸ Open Simulator ▸ …** menu item (it clicks, and nothing appears).
 
 ## Measure `STABLE_PIXEL_TOLERANCE`
 
