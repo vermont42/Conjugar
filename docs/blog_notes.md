@@ -7871,3 +7871,202 @@ Operational lessons, since a future session will do this again for Conjuguer and
 
 Narrative notes toward a blog post about the ultracode experience itself are in
 `~/Desktop/workspace/ideation/ultracode-verb-history-fact-check.md`.
+
+## Verb history: apply the fact-check's errors and hedges (2026-07-28)
+
+Applied every finding `docs/history_corrections.md` graded **factual error** (20) or
+**needs hedging** (24) to `docs/verb_history.txt`. The 40 nitpicks were deliberately left
+for Josh to rule on. The suggested revision was the default in every case and none of them
+had to be departed from; the corrections document had already been through an adversarial
+pass that rewrote the fixes it found faulty, so what was left was directly usable prose.
+Whoever writes the sibling apps' version of this should note that the *fixes* needed as much
+review as the findings, which is where the second pass earned its keep.
+
+Four spots were resolved as a single edit rather than two, because the document files by
+line and quote and some lines carry more than one finding:
+
+- **line 160** — `$dIJeron$` is not stem-stressed and `anduve` is exactly the irregularity
+  Spanish invented. One rewrite swaps in `$dIJE$`, softens "That is not an irregularity
+  Spanish invented" to "Mostly that is not", and adds the `andUVE`/`~andé~` sentence.
+- **line 172** — the `-eo` road into the `-go` verbs does not exist (Portuguese `tenho` is
+  the expected outcome Spanish threw away), and the velar runs through the whole present
+  subjunctive rather than hiding in the first person singular. Both land in one paragraph,
+  which now names `%presente de subjuntivo%` as a tappable term.
+- **line 196** — Nebrija's grammar is the first *printed* of a living European language, the
+  companion-of-empire line is Nebrija's own rather than the bishop of Ávila's answer, and
+  Alfonso X finished a chancery shift Fernando III had begun.
+- **lines 104 and 219** — "took two hundred years more" and "stayed four hundred years" are
+  the same claim about the Roman presence. Only 219 changed, to "six hundred years"; 104's
+  "in all" rewording is a nitpick and would have been a second edit for one fact.
+
+Two of the nitpicks turned out to be consequential rather than optional, because applying a
+finding elsewhere left them out of step with the corrected text, and Josh accepted both on
+the spot: "supernova-gifted" at line 32 echoed the single-source attribution the line 30 fix
+had just removed and became "star-forged", and "one pronoun was left behind" at line 219
+re-asserted the vosotros error that line 200 no longer makes and became "was later
+abandoned". The corrections document says in as many words that the second stands or falls
+with line 200. Worth remembering for the sibling apps: a severity grade describes a finding
+in isolation, and a nitpick can be promoted by an edit made three sections away, so the
+dependency notes buried in the verification paragraphs are the ones to read before deciding
+what to skip.
+
+Checked marker balance, nesting and section count by hand (25 sections, no nested `$…$`
+inside `~…~`) rather than running `scripts/sync_verb_history.py`, which is Josh's to run
+after he has hand-edited the file and ruled on the nitpicks. The one em-dash in the body,
+at line 44, is pre-existing prose and was left alone.
+
+Josh then took the whole nitpick tier except two, so 36 more edits landed in a second pass.
+The two declined are the ones the corrections document itself was least sure of: hedging
+"which the Romans took from the Carthaginians" to "most likely took", which the adversarial
+reviewer graded low-confidence and leaning-refuted, and rewording line 104's "two hundred
+years more" to "in all", which was already resolved by the line 219 fix and would have been
+a second edit for one fact.
+
+Three of the accepted nitpicks needed care beyond transcription:
+
+- **The corrections document contains a typo in one of its own revisions and says so.** The
+  voseo endings fix prints "-és beside -és"; the verification paragraph directly underneath
+  warns that the second member is "-éis" and that an editor copying the line should check the
+  diphthong survives. Applied as "-és beside -éis". A fact-check document is still prose
+  written by an agent, and the place it is likeliest to slip is inside a quoted paradigm.
+- **The Arabic word-count fix was relocated rather than dropped in place.** As proposed it
+  read "somewhere between two and four thousand words from it, depending on who counts
+  derivatives and place names, among them ~aceite~ …", which garden-paths into reading
+  ~aceite~ as a place name. The count and the caveat both survive; the caveat became its own
+  short sentence after the list.
+- **The macron fix at line 70 is deliberately incomplete.** `~egi~` and `~feci~` became
+  `~ēgī~` and `~fēcī~`, but `~Feci~ became $hICE$` two sentences later is untouched, and so
+  are `~cepi~` at line 90 and `~amabo~`/`~amatur~` at line 96. The document calls that a
+  copy-edit decision rather than a correction, on the reasoning that quantity is marked where
+  the argument turns on quantity and line 70 is the only sentence where it does. Flagged for
+  Josh rather than silently extended.
+
+The body's one em-dash, at line 44, predated
+all of this and was split into two sentences rather than recast with commas, since the
+surrounding prose already leans on short declaratives.
+
+Running total: 44 findings plus 38 nitpicks applied, 2 nitpicks declined, essay unvalidated
+by `scripts/sync_verb_history.py` because Josh runs that himself after his own hand-edit.
+
+### Finishing the `$…$` sweep the fact-check only gestured at (2026-07-28)
+
+Cluster P's line 180 nitpick fixed `ir`'s present but noted in passing that two neighbouring
+sentences "take the same repair" without ever writing revision prose for them. Deciding what
+to do needed a rule, and the rule turned out to be already latent in the essay and in the
+cluster's own six dismissals:
+
+> A form cited **as a paradigm slot** carries engine marking. A form inside a cited phrase
+> (`~ojalá venga~`, `~he escrito~`, `~es venido~`), one column of a parallel (`~he~, ~has~,
+> ~ha~` against `~cantaré~, ~cantarás~`), or a **discursive mention** in running prose stays
+> in plain `~…~`.
+
+That rule settles the cases the document argued about individually, and it also explains why
+`~fui~` at the end of line 180 and `~Fui~` at line 219 are correctly plain while `$FUI$` ten
+words earlier is red: the first two are mentions, the third is a paradigm citation. Not the
+same defect as the `$FUere$`/`$vIniere$` inconsistency at 150 against 152, where both
+instances were citations.
+
+Rather than guess the spans, the forms went through the real engine, reusing cluster P's
+method: a throwaway Swift Testing suite calling `TenseBridge.conjugate`, the same call
+`VerbView.swift:318` makes, then delete and assert `git status` is back to the expected
+files. Two notes for the next session that does this. First, `print()` inside a Swift Testing
+test is not recoverable from the run: xcbeautify drops it, `xcresulttool get log --type
+console` fails on this toolchain's bundle, and an `#expect(Bool(false), "…")` comment string
+is not echoed either. What does work is putting the payload in the *expression*, as
+`#expect(dump == "SHOW_ME")`, because the failure line prints the evaluated subexpression.
+Second, SourceKit spends the whole exercise insisting `No such module 'Testing'`, which is
+the usual stale-index noise; `run_tests.sh` compiled and ran the file without complaint.
+
+The engine's answer improved the edit. `ser`'s `seré` and `siendo` and `ir`'s `iré` come back
+**unmarked**, so their plain type was already principled rather than an oversight, and the
+only addition to that sentence is `$sEa$`. The mixture in "the infinitive ~ser~ itself, along
+with ~seré~, $sEa$, and ~siendo~" is now meaningful in exactly the way `~cantare~` staying
+plain beside `$FUere$` and `$vIniere$` is. The rest went as the evidence block predicted:
+`$ES$`, `$sOn$`, `$ERes$` beside the existing `$ERa$`, and `$FUiste$`, `$FUE$` beside `$FUI$`.
+
+Worth remembering: a nitpick that says two neighbours "take the same repair" is not a spec.
+Half the value here came from running the engine instead of transcribing the rationale, since
+three of the six candidate forms turned out not to need touching at all.
+
+### Sweeping vowel quantity across every Latin citation (2026-07-28)
+
+Cluster D's line 70 nitpick added macrons to `~ēgī~` and `~fēcī~` on the narrow principle
+that the essay marks quantity where the argument turns on quantity. Cluster F, declining the
+same fix for `~cepi~` at line 90, called extending it "a copy-edit decision rather than a
+correction." Josh took the wider option, so all 36 remaining Latin citations were swept.
+
+The interesting consequence is that the sweep **inverts what silence means**. Before it, an
+unmarked Latin vowel said nothing; the essay simply wasn't in the business of marking length.
+After it, an unmarked vowel asserts shortness, which is a claim the text is now making about
+`~agere~`, `~facere~`, `~esse~`, `~ferrum~`, `~canis~`, `~Satelles~`, `~Populus~`, `~flamma~`,
+`~factum~` and `~noctem~`. All of those are genuinely short and the claim holds. The one that
+does not is `~arrugia~`, Pliny's mining word, which is pre-Roman and whose quantities are not
+attested anywhere; it is left bare and is the sweep's single overclaim. Worth knowing before
+the sibling apps run the same exercise: a consistency pass on notation is not cost-free, it
+converts absence into assertion.
+
+Scope drawn at **Latin forms cited as words**, meaning etyma and paradigm forms. Excluded:
+narrative place names (`~Latium~`, `~Carthago Nova~`), grammatical labels functioning as
+English (`~infectum~`, `~perfectum~`), titles (`~Appendix Probi~`), the taxonomic
+`~Homo sapiens~`, and everything non-Latin. Two of those exclusions are invisible because the
+words happen to be short anyway, `Lătium` and `Homo sapiens` by convention; two would visibly
+change if Josh later widens the scope, `Carthāgō Nova` and `Appendix Probī`.
+
+A note on method, since this is the kind of edit where a single wrong macron is worse than
+none. Thirty-six replacements is too many for individual Edit calls, so it went through one
+Python pass that asserted every search string occurs **exactly once** before writing anything,
+which is what keeps a bare `~vos~` replacement from hitting the four Spanish `~vos~` spans on
+lines 168 and 202. Only the one explicitly labelled "Late Latin ~vos~" became `~vōs~`.
+`~cantare~` at line 150 is likewise Spanish, the futuro de subjuntivo form, and a careless
+global rule would have Latinized it.
+
+The convention went into the file header, but not under its existing "Three rules the app
+will not warn you about, all checked by the sync script" list, because the quantity
+convention is precisely the thing the script does not check. Filing it there would have made
+that preamble false. It sits in its own block headed "One convention the sync script does NOT
+check, so nothing will catch a slip."
+
+Adding it had a consequence worth recording, because it will bite the sibling apps too:
+**the header is above the body, so growing it renumbers the entire article.** The block cost
+17 lines, which means every line citation in `docs/history_corrections.md` now points 17
+lines high. The first draft of the bullet cited "line 166" and "line 150" for its own
+examples and was stale the moment it was written; those became positional references to the
+section titles instead. The corrections document was deliberately left alone rather than
+renumbered, for two reasons: it quotes the offending text above every finding, so the quotes
+still locate everything, and `scratchpad/gen_corrections.py` regenerates the file from the
+workflow journals, so a hand-edit would be overwritten. The header now says so.
+
+The general lesson for anything that cites line numbers into a file it also lives in: cite
+by quote, or keep the citation and the target in different files.
+
+### A pronoun sweep, prompted by an aside about "it" (2026-07-28)
+
+Josh mentioned in passing that he watches for overused "it", having known a legal-writing
+professor who banned the word outright on clarity grounds. A blanket ban is the wrong tool,
+because it conflates referential "it" with dummy "it" ("it should be said", "it is this
+system that"), and this essay's best sentences lean on the good kind: "It is a sound law
+caught in the act", "It is a map of where the stress falls", and the Castile anaphora, "It
+lost initial f-. It turned Latin pl-, cl-, and fl- into ll-. It turned -ct- into -ch-." Those
+three were explicitly left alone.
+
+Of 83 instances in the body, nine were worth fixing, in three grades. Contestable antecedent:
+the Nebrija beat, where the line 196 correction had put two candidates in front of an "It"
+that previously had one, plus a trailing "it" in the same sentence, now "The bishop was
+unusually candid about what a grammar book is for, and events did not contradict him";
+"Latin buried nearly all of it", which reached back across a paragraph break to "a linguistic
+thicket"; "most of it kept the monophthongs", a partitive resting on a pronoun; and "It is the
+oldest account", whose nearest noun was the adverb rather than the account. Paragraph-opening
+"It", clear but reachy: "It kept one fossil" and "It did not disappear, though". Density
+rather than ambiguity: three "it"s in twenty words in the Italo-Celtic sentence, the
+"which makes it look like" whose antecedent Josh's own edit had pushed further away, and
+"Formal Portuguese does it to this day".
+
+Four of the nine were prose written in this session rather than Josh's original, which is
+about the rate to expect when splicing corrections into an established voice: a correction is
+written to be locally true and is not always written to be locally clear, and a pronoun that
+was unambiguous before an insertion may not be after it. The Nebrija case is the sharpest
+example, since the ambiguity was noted when the correction was applied and left standing on
+the grounds that both readings were true. True and clear are different tests.
+
+Count went 83 to 73. The sweep changed no facts, so nothing in `docs/history_corrections.md`
+is affected.
