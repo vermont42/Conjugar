@@ -7807,3 +7807,67 @@ means "irregular, shown red" and would silently redden the first letter of a sen
 Each validator was negative-tested by corrupting a copy of the file and confirming the
 specific message fires. Two sources of truth is a drift risk, but the alternative was
 editing JSON by hand, and `--check` makes the drift detectable.
+
+## Fact-checking the verb-history essay with a fan-out (2026-07-28)
+
+The essay shipped, and then Josh asked the obvious next question: is any of it true? The
+answer is now `docs/history_corrections.md`. **84 findings kept, 20 of them factual errors,
+across all fifteen clusters — and 104 proposed corrections dismissed.** Nothing in the essay
+has been changed. The document is a set of proposals with replacement prose; Josh decides
+what lands.
+
+The shape of the run matters more than the numbers. The essay was cut into fifteen clusters
+**by claim-domain rather than by line count** — cosmos, the steppe, PIE morphology, Latin,
+the substrate, the analytic future, the future subjunctive, the -go verbs, Arabic and
+Castile, the Americas — and each got a researcher told to check every date, name, etymology
+and quoted verb form in its range at ten to fifteen searches. Then every cluster went to a
+second agent instructed to **refute** the first one's findings, researching each proposed
+correction independently rather than re-reading the researcher's sources.
+
+That second pass is the whole ballgame, and the ratio proves it: **104 of 188 proposals did
+not survive.** A fact-checker with a search engine and no self-skepticism will confidently
+"correct" a careful hedge into a mistake, and this essay hedges deliberately in a lot of
+places. The most instructive single case: the researcher for cluster I flagged "the *Cantar
+de mio Cid* is full of such forms" (mesoclitic futures) as a factual error, and it was
+graded as one and written into an earlier draft of the document. The adversarial pass
+**overturned it** — the charge rested on a corpus sweep that undercounted. It would have
+shipped as a correction. Dismissed items are kept per cluster in the document precisely
+because knowing what was checked and found sound is as useful as knowing what was wrong.
+
+Sample of what did survive: *taberna* is not an Etruscan loan; Etruscan is not quite a
+language isolate as stated; the augment was not PIE's chief past marker; *anduve* **is** an
+irregularity Spanish invented, against the essay's claim that the strong preterites are
+Latin stress preserved intact; the velar of *tengo* is analogy, not a hardened yod, and
+Portuguese *tenho* is the form Spanish threw away; the -go pattern is not "confined almost
+entirely to the first person singular", since the entire present subjunctive carries the
+same g; Nebrija's grammar has rivals for "first of a living European language"; and the
+Isabella-and-the-bishop anecdote is not in Nebrija's prologue.
+
+Operational lessons, since a future session will do this again for Conjuguer and Konjugieren
+(prompts are already written at `../Conjuguer/prompts/verify-verb-history.md` and
+`../Konjugieren/prompts/verify-verb-history.md`):
+
+- **Workflow `args` did not deserialize.** Paths passed through `args` reached the agents as
+  the literal string `undefined`, and one agent wrote a working file into the repo root
+  before anyone noticed. Every later workflow embedded absolute paths **inline in each agent
+  prompt**. The agents recovered gracefully only because they had been told to report broken
+  instructions rather than guess.
+- **`CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION` is per session and does not reset with the
+  usage window.** The first fan-out exhausted the 200-call default and the remaining
+  researchers silently ran dry. Restarting with it set to 600 was the fix.
+- **The resume cache is same-session.** The run was stopped twice on cost and resumed once
+  across a quit; rather than gamble on a cross-restart cache replaying seven finished agents,
+  the completed output was dumped to `~/Desktop/workspace/verb-history-check/leads-*.json`
+  and a fresh workflow ran only the nine agents that never completed. Cheaper and
+  deterministic.
+- **Generate the deliverable, don't transcribe it.** `scratchpad/gen_corrections.py` builds
+  the 56,000-word document by merging the four workflow journals, so quotes and citations
+  come straight from the agents' structured output. It also rewrites its own framing based on
+  what is actually complete — the three-tier confidence preamble and the "Outstanding work"
+  section disappear on their own once nothing is left unverified.
+- **Give the app-internal agent an explicit clean-tree assertion.** It stands up a temporary
+  Swift Testing file to run the real engine against the essay's `$…$` spans, and twice left
+  it behind until the prompt named the three files allowed to be dirty.
+
+Narrative notes toward a blog post about the ultracode experience itself are in
+`~/Desktop/workspace/ideation/ultracode-verb-history-fact-check.md`.
