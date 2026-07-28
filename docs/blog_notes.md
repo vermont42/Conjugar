@@ -8070,3 +8070,21 @@ the grounds that both readings were true. True and clear are different tests.
 
 Count went 83 to 73. The sweep changed no facts, so nothing in `docs/history_corrections.md`
 is affected.
+
+**Follow-up, same day.** Josh caught a real constraint the header had only gestured at. The
+`$andUVE$` sentence added by cluster K's correction opened with a `$…$` span, and a span can
+never open a sentence when its first letter is irregular: sentence position demands a capital,
+and inside `$…$` a capital *is* the irregularity encoding, so the capital would render as one
+more red letter and claim an irregularity the form does not have. The sentence became "The
+exception in that list is $andUVE$, which Spanish built for itself…", which also fixes a vague
+"the one" and, incidentally, scopes the claim properly: Spanish remodelled the strong class
+more widely than this one verb, so "the one Spanish built for itself" read as a universal
+would have overclaimed. Tying it to the six forms just cited keeps it true.
+
+The header bullet said only "Never capitalize a sentence-initial word there," which states the
+symptom without the mechanism and does not tell you what to do. It now distinguishes the two
+cases: a span whose first letter is irregular cannot lead a sentence at all and the prose must
+be recast, while a span whose first letter is regular may lead and renders lowercase, which is
+deliberate rather than a typo. An audit of the body finds exactly one span that genuinely opens
+a sentence, `$pUEdo$`, and it is the safe kind. The check is cheap enough to be worth rerunning
+after any edit that moves a marked form to the front of a sentence.

@@ -12,10 +12,16 @@ Three rules the app will not warn you about, all checked by the sync script:
     inside a `~…~` clobbers the emphasis span's start index, so the bold run comes out
     duplicated with a literal `$` in it. Close and reopen instead:
     `~Adonde~ $FUeres$~, haz lo que vieres~`.
-  • Inside `$…$`, every uppercase letter is an irregular letter shown red. Never
-    capitalize a sentence-initial word there. The spans in this draft were computed the
-    way IrregularityMarker computes them — uppercase the difference between the real form
-    and its regular composition — so the red letters match what Browse Verbs shows.
+  • Inside `$…$`, every uppercase letter is an irregular letter shown red. A span's
+    capitalization is therefore data, not orthography, and cannot be adjusted to suit its
+    position. So a form whose FIRST letter is irregular, such as `$andUVE$`, `$FUere$` or
+    `$VOY$`, can never open a sentence: the sentence would demand a capital, and that
+    capital would render as one more red letter, claiming an irregularity the form does
+    not have. Recast so something else leads. A form whose first letter is regular may
+    open a sentence and renders lowercase, as `$pUEdo$` does, which is deliberate rather
+    than a typo. The spans in this draft were computed the way IrregularityMarker computes
+    them, uppercasing the difference between the real form and its regular composition, so
+    the red letters match what Browse Verbs shows.
   • Every `%…%` that is not a URL must match an Info heading exactly (case-insensitive),
     or the tap goes nowhere.
 
@@ -64,7 +70,7 @@ What they could not do was digest unprocessed milk. Dozens of Yamnaya individual
 
 The Yamnaya spoke what linguists reconstruct as ~Proto-Indo-European~, the ancestor of languages spoken by nearly half of humanity today. Its descendants include Hindi, Persian, Ukrainian, Greek, German, English, and, by a long road through Latin, Spanish.
 
-The language name ~Spanish~ may originate outside the Iberian Peninsula. ~España~ descends from Latin ~Hispānia~, which the Romans took from the Carthaginians, and one popular reading of the Punic original is that it described a coast overrun by hyraxes, the animals Phoenician sailors apparently took Iberian rabbits to be. The adjective ~español~ is, on the usual account, not even a native formation: a Castilian word built on ~España~ would more likely have come out ~españón~, which is in fact what medieval Castilian said for a while, and what we have looks borrowed from Occitan, carried down the pilgrim road to Santiago by speakers from the other side of the Pyrenees. The alternative name, ~castellano~, is at least homegrown. It means ‘of the castles’, after a frontier county bristling with fortifications. A language descended from Latin is therefore called, by one of its names, after a Carthaginian mistake about rabbits relayed by pilgrims from beyond the Pyrenees, and by the other, after a construction project.
+The language name ~Spanish~ may originate outside the Iberian Peninsula. ~España~ descends from Latin ~Hispānia~, which the Romans took from the Carthaginians, and one popular reading of the Punic original is that it described a coast overrun by hyraxes, the animals Phoenician sailors apparently took Iberian rabbits to be. The adjective ~español~ is, on the usual account, not even a native formation: a Castilian word built on ~España~ would more likely have come out ~españón~, which is in fact what medieval Castilian used for a while, and ~español~ appears borrowed from Occitan, carried down the pilgrim road to Santiago by speakers from the other side of the Pyrenees. The alternative name, ~castellano~, is at least homegrown. It means ‘of the castles’, after a frontier county bristling with fortifications. A language descended from Latin is therefore called, by one of its names, after a Carthaginian mistake about rabbits relayed by pilgrims from beyond the Pyrenees, and by the other, after a construction project.
 
 ^The Verb System of Proto-Indo-European^
 
@@ -102,7 +108,7 @@ Several everyday Latin words are thought to be Etruscan, and some are still in d
 
 ^Early Latin and Its Verbs^
 
-Latin began as the local speech of ~Latium~, the small region around Rome, one Italic dialect among several and not an obviously promising one. In passing from Proto-Indo-European to Latin, the verb was thoroughly reorganized. The old three-way aspect system collapsed. Latin kept a present system, descended from the imperfective, and built a ~perfect~ system beside it.
+Latin began as the local speech of ~Latium~, the small region around Rome, one Italic dialect among many and not an obviously promising one. In passing from Proto-Indo-European to Latin, the verb was thoroughly reorganized. The old three-way aspect system collapsed. Latin kept a present system, descended from the imperfective, and built a ~perfect~ system beside it.
 
 That Latin perfect was a genuine merger. It fused the inherited Proto-Indo-European perfect, with its stative meaning, and the old aorist, with its meaning of simple completed action. This is why a single Latin perfect such as ~cēpī~ can be translated both ‘I have taken’ and ‘I took’. Hold on to that double value. Two thousand years later, Spanish would pull those two meanings apart again into ~tomé~ and ~he tomado~, and then the Spanish-speaking world would fail to agree on where the line between them falls.
 
@@ -112,13 +118,13 @@ By the first century BC, the Latin of Cicero and Caesar had a verb system of for
 
 The passive was ~synthetic~ in the unfinished tenses, formed not with a helping verb but with special endings, that same r inheritance shared with Celtic. ~Amātur~ meant ‘he is loved’ in a single word. The finished tenses needed a helper, and ~amātus est~, a participle beside the verb ‘to be’, is how Latin said ‘he was loved’. The future was synthetic too, built with endings such as -bo, as in ~amābō~, ‘I will love’. Verbs sorted themselves into ~four conjugations~ according to the vowel of their stem.
 
-Almost none of this survived the trip. The r passive is gone. The -bo future is gone. The four conjugations became three, as Latin’s second and third classes, the ~habēre~ type and the ~facere~ type, collapsed together into the Spanish -er class, though a good many of them slid into -ir instead, which is where ~decir~ and ~pedir~ ended up. Spanish did not so much inherit the Latin verb as salvage it.
+Almost none of this survived the evolution of Spanish. The r passive is gone. The -bo future is gone. The four conjugations became three, as Latin’s second and third classes, the ~habēre~ type and the ~facere~ type, collapsed together into the Spanish -er class, though a good many of them slid into -ir instead, which is where ~decir~ and ~pedir~ ended up. Spanish did not so much inherit the Latin verb as salvage it.
 
 ^Scipio in Iberia^
 
 Rome did not come to Spain in order to have Spain. In 218 BC, in the opening moves of the Second Punic War, Roman armies landed in the northeast to cut Hannibal off from his Carthaginian base at ~Qart Hadasht~, the city whose Punic name Rome latinized as ~Carthago Nova~ and Spanish now calls Cartagena. A younger Scipio, the future Africanus, took it in 209 BC. The Carthaginians were expelled from the peninsula by 206 BC, twelve years after the landing.
 
-Subduing the peninsula took two hundred years more. Celtiberian Numantia held out until 133 BC, then fired the city before its last survivors surrendered. The Lusitanians under Viriathus humiliated Roman armies for the better part of a decade. Not until 19 BC, under Augustus, did the ~Cantabrian Wars~ finally bring the northern mountains under Roman control, and even that was a military result more than a cultural one.
+Subduing the peninsula took two hundred years more. Celtiberian Numantia held out until 133 BC, then burned the city before its last survivors surrendered. The Lusitanians under Viriathus humiliated Roman armies for the better part of a decade. Not until 19 BC, under Augustus, did the ~Cantabrian Wars~ finally bring the northern mountains under Roman control, and even that was a military result more than a cultural one.
 
 The contrast is worth noticing. Caesar took Gaul in eight years. Rome never took Germania at all. Hispania took two centuries, and it was Romanized unevenly, thoroughly in the south and along the Mediterranean, thinly and late in the northern mountains. That unevenness matters enormously, because the dialect that became Spanish was not born in the comfortable Romanized south. It was born in the north, in the last corner Rome reached, next door to a language that was not Indo-European at all.
 
@@ -136,7 +142,7 @@ The Latin that ordinary people spoke had always differed from the literary stand
 
 The sound changes struck the verb where it lived, at the end of the word. Final m, already weak in Cicero’s day, went silent. Final t weakened and fell. Unstressed vowels blurred together and sometimes vanished. Because Latin packed its grammar into its endings, the wearing away of those endings forced the language to find new ways to do old work. The elaborate case system, which had shown who did what to whom, collapsed into prepositions and word order. The same erosion was, at that moment, eating into the tenses.
 
-Spanish, it should be said, got off lightly. Its final -s and -n survived where French lost nearly everything, which is why Spanish still has six audible endings in ~hablo~, ~hablas~, ~habla~, ~hablamos~, ~habláis~, ~hablan~, while four of French’s six forms share three spellings and a single sound. That accident of erosion is the usual explanation for why Spanish never had to hire pronouns and French did, though some blame the collapse of French’s old word order instead.
+Spanish, it should be said, got off lightly. Its final -s and -n survived where French lost nearly everything, which is why Spanish still has six audible endings in ~hablo~, ~hablas~, ~habla~, ~hablamos~, ~habláis~, ~hablan~, while four of French’s six forms share three spellings and a single sound. That accident of erosion is the usual explanation for why subject pronouns are optional in Spanish but obligatory in French, though some blame the collapse of French’s old word order instead.
 
 ^Inventing a New Future^
 
@@ -174,7 +180,7 @@ French all but killed its simple past. The ~passé simple~ is now a written tens
 
 The %pretérito% is alive everywhere, but the border it shares with ~he cantado~ shifts depending on where you are standing. In much of Spain, ~hoy he comido~ is what you say about lunch, and ~comí~ is reserved for finished stretches of time. In most of Latin America, ~hoy comí~ is simply what one says, and the compound tense is comparatively rare. Two continents inherited the same double-valued Latin perfect, split it into two Spanish tenses, and drew the line in different places. Neither is wrong. Both are the second century still arguing with itself.
 
-The preterite also preserves a rhythm from Latin that nothing else in Spanish does. Most Spanish tenses stress the ending, as in ~cantó~ and ~comió~. But a small class of very common verbs has ~pretéritos fuertes~, strong preterites, which stress the ~stem~ instead: $tUVE$, $sUPE$, $hICE$, $quISO$, $dIJE$, $andUVE$. Mostly that is not an irregularity Spanish invented. It is the stress pattern of the Latin perfect, kept by the verbs used often enough to resist tidying, and it is why those forms carry no written accent when the regular ones do. $andUVE$ is the one Spanish built for itself, on the model of ~hube~ and ~tuve~, where Latin would have handed over a tidy ~andé~.
+The preterite also preserves a rhythm from Latin that nothing else in Spanish does. Most Spanish tenses stress the ending, as in ~cantó~ and ~comió~. But a small class of very common verbs has ~pretéritos fuertes~, strong preterites, which stress the ~stem~ instead: $tUVE$, $sUPE$, $hICE$, $quISO$, $dIJE$, $andUVE$. Mostly that is not an irregularity Spanish invented. It is the stress pattern of the Latin perfect, kept by the verbs used often enough to resist tidying, and it is why those forms carry no written accent when the regular ones do. The exception in that list is $andUVE$, which Spanish built for itself on the model of ~hube~ and ~tuve~, where Latin would have handed over a tidy ~andé~.
 
 ^Stem Changes and the Tyranny of Stress^
 
@@ -194,7 +200,7 @@ Then there are the four verbs that end in a letter meaning ‘there’: $soY$, $
 
 ~Ser~ is two Latin verbs. The forms $ES$, $sOn$, $ERa$, and $ERes$ come from ~esse~, ‘to be’. But the infinitive ~ser~ itself, along with ~seré~, $sEa$, and ~siendo~, comes from ~sedēre~, ‘to sit’, being having drifted in late Latin from existing toward being seated, settled, situated. ~Estar~ arrived the same way, from ~stāre~, ‘to stand’. Spanish’s two verbs for ‘to be’ are, underneath, a chair and a pair of feet.
 
-~Ir~ is worse, or better. Its present tense, $VOY$, $VAs$, $VA$, $VAmos$, $VAn$, comes from Latin ~vādere~, ‘to advance’. Its infinitive, future, and imperfect, ~ir~, ~iré~, and $íBamos$, come from ~īre~, ‘to go’. And its preterite, $FUI$, $FUiste$, $FUE$, comes from ~esse~, borrowed wholesale from ~ser~. The Spanish verb for ‘to go’ is three Latin verbs in a trench coat, and the one on the bottom is not a verb of motion at all, which is why ~fui~ means both ‘I was’ and ‘I went’ and only context can tell you which.
+~Ir~ is worse, or better. Its present tense, $VOY$, $VAs$, $VA$, $VAmos$, $VAn$, comes from Latin ~vādere~, ‘to advance’. Its infinitive, future, and imperfect, ~ir~, ~iré~, and $íBamos$, come from ~īre~, ‘to go’. And its preterite, $FUI$, $FUiste$, $FUE$, comes from ~esse~, borrowed wholesale from ~ser~. The Spanish verb for ‘to go’ is three Latin verbs in a trench coat, and the one on the bottom is not a verb of motion at all, which is why ~fui~ means both ‘I was’ and ‘I went’, and only context can tell you which.
 
 ^Goths, Arabic, and the Wedge of Castile^
 
