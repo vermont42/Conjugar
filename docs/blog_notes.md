@@ -8088,3 +8088,89 @@ be recast, while a span whose first letter is regular may lead and renders lower
 deliberate rather than a typo. An audit of the body finds exactly one span that genuinely opens
 a sentence, `$pUEdo$`, and it is the safe kind. The check is cheap enough to be worth rerunning
 after any edit that moves a marked form to the front of a sentence.
+
+## The Verb History Goes to Spanish (2026-07-28)
+
+The verb-history essay shipped in English only, and worse, the copy in the string catalog was
+the *pre*-correction draft: 34,961 characters against the corrected file's 38,746. So step one
+was not translation at all but noticing that `sync_verb_history.py` had not been run since the
+fact-check landed. It is now, and the lesson is that a script whose whole purpose is to keep two
+representations in sync is worthless if nobody runs it after the interesting edit. A pre-commit
+hook would have caught this; a note in the plan caught it instead.
+
+**Teaching the script a second language.** `write()` used to find the `"en" : {` line by scanning
+a fixed eight-line window after the key and then replace the one `"value" : ` line beneath it.
+That is fine when the localization is guaranteed to exist. It is useless for `es`, which did not.
+The rewrite walks the `"localizations"` block by indentation, collecting `(lang, first, last)` for
+each child, and then either replaces the value line or splices a whole new block in alphabetical
+position — because Xcode sorts localizations, and a hand-placed `es` before `en` would get churned
+on the next save. The comma bookkeeping is the fiddly part: the block before the insertion point
+has to gain a comma, and the inserted block only ends without one if nothing follows it. Both
+branches are exercised; `--lang en` round-trips byte-identically, which is the regression test.
+
+`headings()`, which builds the legal set of `%…%` targets, now follows `--lang` for the localized
+half. This changes nothing today, since all 11 link targets in the essay resolve to Spanish string
+literals in `Info.swift` rather than to localized headings. It would matter the moment somebody
+links the essay to an About article, and the failure mode without it — validating Spanish prose
+against English headings — is the silent kind.
+
+**What the translation had to preserve.** The 58 `$…$` irregularity spans and the 14 `%…%` links
+are character-identical across the two languages, verified by comparing multisets rather than
+counts. That is not a discipline imposed on the translation; it falls out of what those markers
+contain. The spans are Spanish verb forms with `IrregularityMarker`'s per-letter uppercase
+encoding, and the links are Spanish tense names pointing at Info articles. Only the prose around
+them is English. Twenty-five headings on both sides, 94 paragraphs on both sides, and 41,848
+characters of Spanish against 38,746 of English — a 1.08 ratio, right in the middle of what the
+sibling articles run.
+
+The one rule that genuinely needed re-checking in translation is that a `$…$` span whose first
+letter is irregular can never open a sentence, because Spanish word order moves things around.
+A throwaway script found zero violations, but only because the risky spans were consciously kept
+mid-sentence: "La excepción de esa lista es $andUVE$", "Luego están los cuatro verbos que terminan
+en una letra que significa ‘allí’: $soY$, $doY$, $estoY$, $VOY$".
+
+**What did not survive contact with Spanish: the glosses.** The English body carried 47
+single-quoted glosses; the Spanish carries 35. Sorting them by the language of the *glossed* form
+does all the work. A Latin or Arabic form glossed in English simply changes target language —
+`~agere~, ‘to drive’` becomes `~agere~, ‘conducir’`. A Spanish form glossed in English is a
+different animal, because glossing Spanish into Spanish is either tautological or faintly
+insulting. `~vuestras mercedes~, ‘your graces’` needs nothing. The two futuro-de-subjuntivo
+proverbs need nothing; a Spanish reader parses `~Adonde~ $FUeres$~, haz lo que vieres~` without
+help. The better move, wherever the form is archaic, is to replace the translation with a modern
+equivalent, which is *more* informative than the English gloss was: `~dar vos he~, ‘os daré’`,
+`~es venido~, ‘ha venido’`, `~son idos~, ‘se han ido’`. The archaism is the point of the sentence,
+and putting the modern form beside it shows the reader exactly what changed.
+
+`~Hay~, ‘there is’` was the awkward one, because the gloss sets up the ~ibī~ fossil two clauses
+later and could not simply vanish. It became a recast: "Es decir que ~hay~ dice, literalmente,
+‘ha allí’", which keeps the etymological payload and drops the tautology. Same trick at the end
+of the ~ir~ paragraph, where `~fui~` glossed as both ‘I was’ and ‘I went’ would have been circular
+in Spanish; it became "~fui~ vale a la vez para el ser y para el ir, y solo el contexto puede decir
+cuál de los dos es".
+
+A note for anyone extending the plan's invariant table: it predicted the `~…~` emphasis count would
+*fall* as glosses were dropped. It rose by one, 321 to 322, because glosses are delimited by curly
+quotes, not tildes. Dropping a gloss removes no emphasis span at all.
+
+**Register.** Josh settled this before the session: keep the learner framing, drop the presupposition
+that the reader *is* a learner. The essay was already built that way — its learner references are
+third person ("la razón de que un estudiante tenga que memorizar…") and most of its second person is
+generic-speaker or app-user address. The app's existing Spanish is impersonal with light *usted*, so
+the translation matches: "Si las dos formas le suenan sutilmente distintas, no se lo está imaginando",
+"Recuerde esa pequeña ~y~", and the closing "Cuando conjuga un verbo español, cuando dice ~hablo~…".
+One passage was deliberately generalized rather than kept in the second person: "~hoy he comido~ is
+what you say about lunch" became "es lo que se dice del almuerzo", because the sentence is about a
+line that falls in different places on two continents and the impersonal does not seat the reader on
+one side of it.
+
+The ablaut section's "the pattern still audible in English sing, sang, sung" was kept, since it is
+doing comparative-linguistic work rather than assuming an anglophone, but it now names the alternation
+for a reader who does not hear it: "donde la vocal de la raíz, y solo ella, marca el tiempo".
+
+**Verified on device.** Both languages read end to end in the simulator, with the red irregularity
+letters rendering (sal**d**ré, pon**d**ré, hab**r**é, d**i**ré, ha**r**é in one paragraph), no stray
+`$` or `%` anywhere — a stray marker means the parser gave up, which it does silently — and four link
+taps confirmed landing on the right article: `%futuro de subjuntivo%` in English, and `%voseo%`,
+`%raíz futura%`, `%imperfecto de subjuntivo 1%` in Spanish. Launching the simulator in Spanish is a
+one-liner worth remembering: `xcrun simctl launch "$UDID" biz.joshadams.Conjugar -AppleLanguages '(es)'
+-AppleLocale es_ES`.
