@@ -58,5 +58,5 @@ Modo test: cincuenta preguntas cronometradas para afinar tus conjugaciones.
 Fifth Clip - seven seconds
 Starts out at top of InfoBrowseView. Scroll down so that Presente de Indicativo is centered. Tap it. Slowly scroll down.
 Label:
-Everything you need to know about every tense.
-Todo lo que hay que saber sobre cada tiempo verbal.
+From Proto-Indo-European to modern Spanish — the story behind every tense.
+Del protoindoeuropeo al español moderno: la historia de cada tiempo verbal.
