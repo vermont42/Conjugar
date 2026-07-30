@@ -8174,3 +8174,73 @@ taps confirmed landing on the right article: `%futuro de subjuntivo%` in English
 `%raíz futura%`, `%imperfecto de subjuntivo 1%` in Spanish. Launching the simulator in Spanish is a
 one-liner worth remembering: `xcrun simctl launch "$UDID" biz.joshadams.Conjugar -AppleLanguages '(es)'
 -AppleLocale es_ES`.
+
+## video_script.md gains the simctl recording commands (2026-07-30)
+
+Work started in the sibling app Conjuguer, where Josh asked which simulator to record
+app-preview clips on. Conjuguer answers that in `docs/app-store-preview-videos.md`;
+Conjugar has no such document, so its `video_script.md` — already an adaptation of
+Conjuguer's — is now the single place the recording procedure lives, with a pointer back
+to the sibling doc for the narrative.
+
+Added: the device table (`iPhone 17 Pro Max` → 1320 × 2868 for the 886 × 1920 project,
+Spatial Conform **Fill**; `iPad Pro 13-inch (M5)` → 2064 × 2752 for 1200 × 1600, exactly
+3:4), a UDID resolver, build/install/launch by explicit destination (the
+`ios-build-verify` config is pinned to `iPhone 17`, so the recording devices need one),
+the `prep_screenshot_sim.sh` language/status-bar pass for the en/es double sweep, the
+`recordVideo` invocations, and an `ffprobe` size check.
+
+UDIDs are resolved by name rather than pasted — Konjugieren's screenshot driver already
+demonstrates the rot, hardcoding a UDID under the label `iPad Pro 13-inch (M4)` for a
+device since renamed `Konjugieren iPad Screenshots`:
+
+```bash
+udid() { xcrun simctl list devices available | sed -n "s/^ *$1 (\([0-9A-F-]\{36\}\)) .*/\1/p" | head -1; }
+```
+
+Tested, including the prefix hazard: `iPhone 17` is a prefix of `iPhone 17 Pro Max`, and
+the trailing ` (` in the pattern keeps them distinct.
+
+Two flags that aren't defaults: `--codec h264` (simctl defaults to HEVC) and `--mask
+black` (otherwise the unmasked framebuffer is written; Apple rejects alpha).
+
+One local addition worth keeping: the `-AppleLanguages '(es)' -AppleLocale es_ES` launch
+trick recorded in an earlier entry is now in the script, but explicitly scoped — it
+switches the app without a reboot, which is fine for rehearsing a clip and wrong for a
+take, because the status bar stays in the old language and on iPad renders a date.
+
+**Follow-up the same day: rewritten around hand recording.** Josh records by hand rather
+than from the shell, and asked whether the invocation affects App Store Connect at all or
+whether conformance is purely post-processing. Purely post — only two capture-time facts
+matter, and neither is a flag: *which device* you record (that fixes the native pixel size,
+hence the aspect and the Spatial Conform) and that the capture is the device framebuffer
+rather than the Mac screen. Everything ASC enforces — 886 × 1920, SAR 1:1, H.264 High
+≤ L4.0, ≤ 30 fps, 15–30 s, an AAC track — is imposed by Final Cut and the export, and the
+master violates nearly all of it by construction (Simulator writes HEVC, variable frame
+rate up to 60, at native size).
+
+The section is now: `open -a Simulator`, Run from Xcode to install,
+`prep_screenshot_sim.sh` for the en/es language + 9:41 pass, then **Simulator ▸ File ▸
+Record Screen** / **Stop Recording** (both menu items verified present in Xcode 26.3 by
+reading `Simulator.app/Contents/Resources/Base.lproj/MainMenu.nib`). `simctl io recordVideo`
+remains as one sentence, framed as scriptable-but-equivalent, and the `-AppleLanguages
+'(es)'` launch trick keeps its rehearsal-only scoping.
+
+One hazard specific to the hand path is now called out: **macOS screen recording is the
+trap**. ⌘⇧5 or QuickTime ▸ New Screen Recording aimed at the Simulator *window* captures
+at point size × display scale with chrome baked in, roughly 860 × 1864 instead of
+1320 × 2868, unrecoverable without upscaling — Simulator's own Record Screen is
+framebuffer-based and immune.
+
+A second warning — that a silent capture carries no audio stream, which
+`verify_store_media.sh` grades as blocking — was written and then cut at Josh's direction:
+the previews always carry a music track and he always exports video and audio. The check
+is real; the scenario isn't.
+
+**Correction, from real captures in the sibling app.** Conjuguer's five English iPhone
+clips were recorded with Simulator's built-in Record Screen, and probing them disproved a
+claim I had asserted in all three scripts without checking: the recordings are **H.264
+High, Level 5.0**, not HEVC. The HEVC default belongs to `simctl io recordVideo` (per its
+`--help`); the GUI recorder differs. Corrected here too. The rest matched the playbook
+exactly — native size, SAR 1:1, no audio track, variable frame rate with static stretches
+that carry no frames at all, which is capture working as designed rather than a fault.

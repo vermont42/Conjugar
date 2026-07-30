@@ -31,6 +31,72 @@ Verify before uploading:
 scripts/verify_store_media.sh ~/Desktop/Final/Conjugar
 ```
 
+## Recording the clips
+
+**Nothing about how the simulator is launched or recorded affects App Store Connect.**
+Two capture-time facts matter: *which device* you record — that alone fixes the native
+pixel size, and therefore the aspect and the Spatial Conform the clip needs — and that the
+capture is the device *framebuffer*, not the Mac screen. Everything ASC enforces
+(886 × 1920, SAR 1:1, H.264 High ≤ L4.0, ≤ 30 fps, 15–30 s, an AAC track) is imposed in
+Final Cut and the export, and the capture satisfies none of it — Simulator's Record Screen writes
+H.264 High at **Level 5.0**, variable frame rate, at native 1320 × 2868, with no audio
+track. That is fine and expected.
+
+Both recording simulators ship with the current Xcode and are already installed
+(iOS 26.3). The sibling app's `../Conjuguer/docs/app-store-preview-videos.md` carries the
+narrative behind the choices.
+
+| Deliverable | Simulator | Native capture | On the timeline |
+|---|---|---|---|
+| iPhone — 886 × 1920 | `iPhone 17 Pro Max` | 1320 × 2868 | Spatial Conform **Fill** (crops the 0.24% aspect difference instead of letterboxing) |
+| iPad — 1200 × 1600 | `iPad Pro 13-inch (M5)` | 2064 × 2752 | exactly 3:4 — no crop, no letterbox |
+
+### Launch and record
+
+1. `open -a Simulator`, then **File ▸ Open Simulator ▸ iOS 26.3 ▸ iPhone 17 Pro Max**
+   (or `xcrun simctl boot 'iPhone 17 Pro Max' && open -a Simulator`).
+2. Install the current build by pressing **Run** in Xcode with that simulator selected as
+   the destination.
+3. Set the language and pin the 9:41 status bar **once per (device, language) pass**, not
+   between takes — this is also how the English/Spanish double sweep above is set up, the
+   status bar is in frame for every second of every clip, and changing the system language
+   requires a reboot:
+   ```bash
+   scripts/prep_screenshot_sim.sh 'iPhone 17 Pro Max' en    # then again with es
+   scripts/prep_screenshot_sim.sh 'iPad Pro 13-inch (M5)' en
+   ```
+   `xcrun simctl launch "$UDID" biz.joshadams.Conjugar -AppleLanguages '(es)' -AppleLocale
+   es_ES` switches only the *app* without a reboot. Fine for rehearsing a clip, wrong for a
+   take: the status bar stays in the old language, and on iPad it renders a date.
+4. Record with **Simulator ▸ File ▸ Record Screen**; stop with **File ▸ Stop Recording**.
+   The file lands on the Desktop as `Simulator Screen Recording …`.
+
+Record Screen captures the framebuffer at **native pixel resolution**; the window zoom
+(Physical Size / Point Accurate / Pixel Accurate) does not change the output. If a
+scripted capture is ever wanted instead, `xcrun simctl io <udid> recordVideo --codec h264
+--mask black <file>` produces an equally acceptable master — the choice is convenience,
+never conformance. (`--codec h264` is worth passing there because `simctl`'s default is
+HEVC, unlike Record Screen's.)
+
+### The one way hand-recording ruins a preview
+
+Do **not** use macOS screen recording (⌘⇧5, or QuickTime ▸ New Screen Recording) aimed at
+the Simulator window. That captures the *window* at point size × display scale, with
+chrome and rounded window corners baked in — on the order of 860 × 1864 instead of
+1320 × 2868 — and no Spatial Conform recovers it without upscaling. Simulator's own
+Record Screen is framebuffer-based and immune.
+
+### Check each capture before editing
+
+```bash
+ffprobe -v error -select_streams v:0 \
+  -show_entries stream=width,height,sample_aspect_ratio -of csv=p=0 \
+  ~/Desktop/'Simulator Screen Recording iPhone 17 Pro Max ….mov'   # expect 1320,2868,1:1
+```
+
+Dimensions are the one defect the export cannot repair, and wrong dimensions are exactly
+what got Conjuguer's four 2.0 previews rejected.
+
 First Clip - six seconds
 Starts out at top of VerbBrowseView. Sort by frequency (ser on top). Slowly scroll down for five seconds.
 Label:
