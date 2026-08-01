@@ -79,13 +79,40 @@ within a language (`9:41` in English, `09:41` in Spanish) and the iPad date read
 Two cosmetic differences were reviewed and deliberately shipped: the Spanish `quiz_mid`
 keyboard is the English layout (documented under *Known Gotchas*), and the iPad's Spanish
 Browse/Models screens collapse the search field to a magnifying-glass button because the
-Spanish tab labels are wider — genuine adaptive layout, not a capture defect. The next
-sweep should claim **`version_3`**.
+Spanish tab labels are wider — genuine adaptive layout, not a capture defect.
 
-**`docs/screenshots/version_1` must not be uploaded.** `version_2` is now beside it on disk
-and is the current bundle; reach for that one. Three reasons version_1 is dead, all still
-true of it — the third being that it predates the status-bar fix, so its 16 light cells show
-the white-on-white status bar described in *Known Gotchas*.
+**Fourth full 36-shot sweep: 2026-08-01 — shipped as `version_3`.** Occasioned by the
+**Browse → Verbs tab rename** (commit `37368a1`), which put a stale label in all 36 of
+version_2's cells. Two things changed with it: the iPad target moved from the **M4 to the
+M5** (per [`docs/screenshot-plan.md`](screenshot-plan.md); same 13-inch geometry and the same
+2064×2752 capture, so it is a rename in six `case` arms and nothing more), and the
+**soft-keyboard mechanism was rebuilt** because Cmd+K stopped working on this toolchain —
+see workaround #25, the one substantial finding of this sweep.
+
+Cost of that discovery: the first cell of the sweep shipped a keyboard-less `quiz_mid` with an
+honest warning, and the fix took three iterations to get right, each one visible in a
+re-shot cell — Cmd+K inert → hardware keyboard detached but the paste silently dropped (axe's
+Cmd+V needs it *attached*) → an edit callout sitting over the question card. The final shape
+orders the two states instead of choosing between them.
+
+Everything the earlier sweeps fixed stayed fixed: alpha-free captures (`verify_store_media.sh
+docs/screenshots/version_3` → **0 blocking, 0 advisory**), no ghosted iPad Settings, no
+wrong-element taps, `Haber` detail in all four `model_view` cells, legible light-mode status
+bars, and clocks agreeing within a language (`9:41` / `09:41`, iPad dating `Sat Aug 1` /
+`Sábado 1 de agosto`). The settle gate never warned, so `7.5e7` still has headroom on the M5.
+
+One cell needed a re-shoot for a reason the driver got right: iPad/es `quiz_mid` twice logged
+`frontmost is 'Safari'` / `'Code'` and **refused to send the menu click**, which is workaround
+#10's frontmost guard doing exactly its job — the machine was in use. It landed on the third
+try. Both cosmetic differences from version_2 persist and were again deliberately shipped:
+the English keyboard layout in the Spanish `quiz_mid` cells, and the iPad's collapsed Spanish
+search field. The next sweep should claim **`version_4`**.
+
+**`docs/screenshots/version_1` must not be uploaded, and `version_2` is now stale too** — all
+36 of its cells show the old **Browse** tab label. `version_3` is the current bundle; reach
+for that one. Three reasons version_1 is dead, all still true of it — the third being that it
+predates the status-bar fix, so its 16 light cells show the white-on-white status bar
+described in *Known Gotchas*.
 
 1. **All 36 files carry an alpha channel** and fail `scripts/verify_store_media.sh` 36/36.
    `axe` writes RGBA and nothing flattened it at the time; Apple rejects on format, so a
@@ -117,12 +144,12 @@ produced a plausible-looking screenshot with an exit code of 0.
 
 ## Running it from a fresh Claude session
 
-One thing you must do yourself first — it needs a click in System Settings and a session can't do it: grant **Accessibility permission to `/usr/bin/osascript`** (System Settings → Privacy & Security → Accessibility → add it). Without it the soft-keyboard Cmd+K toggle fails, so the `quiz_mid` shot comes out keyboard-less (the driver treats this as non-fatal and the run still completes). Then paste this to the session:
+One thing you must do yourself first — it needs a click in System Settings and a session can't do it: grant **Accessibility permission to `/usr/bin/osascript`** (System Settings → Privacy & Security → Accessibility → add it). Without it the driver cannot drive Simulator's menu bar, so it cannot detach the hardware keyboard and the `quiz_mid` shot comes out keyboard-less (the driver treats this as non-fatal and the run still completes; see workaround #25). Then paste this to the session:
 
 ```
 Create the 36 App Store screenshots for this release. Read docs/screenshot-playbook.md
 and docs/screenshot-plan.md first, then drive scripts/take_screenshots.sh to produce all
-36 (9 views × en/es × iPhone 17 Pro Max + iPad Pro 13-inch (M4)).
+36 (9 views × en/es × iPhone 17 Pro Max + iPad Pro 13-inch (M5)).
 
 Before running:
 - Set ALL THREE kill switches to false in Conjugar/Models/ConjugarTips.swift —
@@ -147,8 +174,8 @@ After running:
   in scroll_until_top) were calibrated on iPhone but verified correct on iPad in the
   2026-07-26 sweep — re-check them, but they are not expected to need tuning.
 - Assemble docs/screenshots/latest/ and the numbered version_<N>/ upload bundle per the
-  playbook. Use version_3: version_1 and version_2 are both on disk (version_2 is the
-  2026-07-26 shipped bundle). Confirm with `ls -d docs/screenshots/version_*` before choosing.
+  playbook. Use version_4: version_1, version_2 and version_3 are all on disk (version_3
+  is the 2026-08-01 shipped bundle). Confirm with `ls -d docs/screenshots/version_*` first.
 - Run scripts/verify_store_media.sh docs/screenshots/version_<N> and fix anything it
   reports BEFORE uploading. Visual review cannot see an alpha channel or a wrong
   display-size slot; this catches both.
@@ -186,8 +213,20 @@ App Store screenshots only — 9 views × 2 languages × 2 devices = 36 PNGs. No
   release to build App Store screenshots with — on this machine, 2026-07-26, it matched
   three paths (cache 0.3.1, cache 0.2.1, and the marketplace clone). The marketplace clone
   has no version segment and yields exactly one match. (Ported from Conjuguer `c51e223`.)
-- macOS Accessibility permission granted to `osascript`. System Settings → Privacy & Security → Accessibility → add `/usr/bin/osascript`. The driver depends on this for the soft-keyboard Cmd+K toggle (workaround #6). **Granted and verified on this machine, 2026-07-18.** Note that a *missing* permission is not the only way the AXRaise step fails: a freshly-activated Simulator briefly reports no windows, and the resulting `-1719 "Invalid index"` looks just like a permission problem. The driver now waits 0.5 s after `activate` (was 0.2 s) for that reason.
-- Two simulators named `iPhone 17 Pro Max` and `iPad Pro 13-inch (M4)` (see "Simulator Setup"). The driver resolves their UDIDs by name at run time — no hardcoding. **Confirm there is exactly one iOS-26 device matching each name before running** (`udid_for()` takes the first match by list order, so a stale-runtime duplicate silently wins); see *iPad reliability*. Verified clean on 2026-07-18.
+- macOS Accessibility permission granted to `osascript`. System Settings → Privacy & Security → Accessibility → add `/usr/bin/osascript`. The driver depends on this to click **I/O ▸ Keyboard ▸ Connect Hardware Keyboard** for the `quiz_mid` keyboard (workaround #25; it was a Cmd+K keystroke through version_2, workaround #6). **Granted and verified on this machine, 2026-07-18.** Note that a *missing* permission is not the only way the AXRaise step fails: a freshly-activated Simulator briefly reports no windows, and the resulting `-1719 "Invalid index"` looks just like a permission problem. The driver now waits 0.5 s after `activate` (was 0.2 s) for that reason.
+- **You can use the Mac during a sweep — with one caveat.** Taps, swipes, captures,
+  launches and the pasteboard copy all go through `simctl`/`axe`, which talk to the
+  **device**, so they do not care what is frontmost on the host. The exception is the
+  keyboard step: Simulator's **menu bar** is the only way to attach/detach the hardware
+  keyboard, and AppleScript can only click the menu of the frontmost app. That is a few
+  seconds inside `quiz_mid` and `quiz_results` — 4 of the 36 cells, so roughly 8 short
+  windows per full sweep. Steal focus during one and the driver logs
+  `frontmost is 'X', not Simulator; not touching the menu` and that cell needs a re-shoot.
+  It **refuses to act rather than clicking blind**, so the cost is a retry, never a stray
+  click into your own app — the guard exists because a stray Cmd+K once launched Fitness on
+  the host Mac. It also retries 3×, so a momentary steal usually recovers by itself.
+  Observed for real in Conjugar's 2026-08-01 sweep (Safari, then VS Code).
+- Two simulators named `iPhone 17 Pro Max` and `iPad Pro 13-inch (M5)` (see "Simulator Setup"). The driver resolves their UDIDs by name at run time — no hardcoding. **Confirm there is exactly one iOS-26 device matching each name before running** (`udid_for()` takes the first match by list order, so a stale-runtime duplicate silently wins); see *iPad reliability*. Verified clean on 2026-07-18.
 - **All three kill switches off (then restored).** See the next section — this is the
   single easiest step to forget and it silently ruins screenshots.
 - **Clean the iPad status bar (App Store polish).** The driver does *not* manage the status bar, so iPad shots ship with whatever the simulator's clock and **system language** produce — and the iPad status bar shows a *date* (e.g. a German `Freitag 26. Juni` if the sim's system language is German), which looks unprofessional on an EN/ES listing. iPhone shots are unaffected (the notch shows only the time). Set a clean status bar before the iPad sweep — see **"Clean Status Bar"** below. (Not needed for iPhone.)
@@ -296,7 +335,7 @@ For App Store Connect upload, copy the latest version of each cell to `docs/scre
 rm -rf docs/screenshots/latest && mkdir -p docs/screenshots/latest && \
 for view in verb_browse verb_view model_browse model_view quiz_mid \
             info_browse info_view quiz_results settings; do
-  for device in "iPhone-17-Pro-Max" "iPad-Pro-13-inch-(M4)"; do
+  for device in "iPhone-17-Pro-Max" "iPad-Pro-13-inch-(M5)"; do
     for lang in en es; do
       latest=$(ls -t docs/screenshots/*"${device}-${lang}-${view}.png" 2>/dev/null | head -1)
       [[ -n "$latest" ]] && cp "$latest" "docs/screenshots/latest/$(basename "$latest")"
@@ -321,8 +360,8 @@ docs/screenshots/version_<N>/
 └── iPad_Spanish/{1..9}.png
 ```
 
-`<N>` increments per release (`version_3`, `version_4`, …; `version_2` was claimed by the
-2026-07-26 sweep — see *Status*). The row number is the `#` column in the "Per-View Navigation Recipes" table below (1 = VerbBrowseView … 9 = SettingsView). To regenerate after a re-shoot:
+`<N>` increments per release (`version_4`, `version_5`, …; `version_3` was claimed by the
+2026-08-01 sweep — see *Status*). The row number is the `#` column in the "Per-View Navigation Recipes" table below (1 = VerbBrowseView … 9 = SettingsView). To regenerate after a re-shoot:
 
 ```bash
 cd docs/screenshots && \
@@ -330,7 +369,7 @@ mkdir -p version_<N>/iPhone_English version_<N>/iPhone_Spanish \
          version_<N>/iPad_English  version_<N>/iPad_Spanish && \
 for src in latest/*.png; do
   rest="${src##*/}"; base="${rest#????????-??????-}"; base="${base%.png}"
-  [[ "$base" =~ ^(iPhone-17-Pro-Max|iPad-Pro-13-inch-\(M4\))-(en|es)-(.+)$ ]] || continue
+  [[ "$base" =~ ^(iPhone-17-Pro-Max|iPad-Pro-13-inch-\(M5\))-(en|es)-(.+)$ ]] || continue
   case "${BASH_REMATCH[3]}" in
     verb_browse) n=1 ;; verb_view) n=2 ;; model_browse) n=3 ;; model_view) n=4 ;;
     quiz_mid) n=5 ;; info_browse) n=6 ;; info_view) n=7 ;; quiz_results) n=8 ;; settings) n=9 ;;
@@ -354,17 +393,29 @@ xcrun simctl create "iPhone 17 Pro Max" \
   com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max \
   "$RUNTIME"
 
-xcrun simctl create "iPad Pro 13-inch (M4)" \
-  com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M4-8GB \
+xcrun simctl create "iPad Pro 13-inch (M5)" \
+  com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB \
   "$RUNTIME"
 ```
 
-Note the device-type id is `…iPad-Pro-13-inch-M4-8GB`, not `…iPad-Pro-13-inch-M4` — Xcode 26
-splits the M4 into 8 GB and 16 GB variants and the bare id no longer resolves. The M4 type
-*is* still offered on the 26.3 runtime even though a fresh Xcode install seeds only an M5, so
-creating it by hand is the way to get the name the driver expects.
+Note the device-type id carries a RAM suffix — `…iPad-Pro-13-inch-M5-12GB`, not
+`…iPad-Pro-13-inch-M5`. Xcode 26 splits each iPad Pro into two memory variants (M5: 12 GB and
+16 GB; M4: 8 GB and 16 GB) and the bare id no longer resolves. Only the 12 GB / 8 GB variant
+gets the plain `iPad Pro 13-inch (M5)` / `(M4)` name the driver matches; the 16 GB one is
+named `… (16GB)` and would not match.
 
-**No sim renaming needed.** Konjugieren's driver hardcoded UDIDs and renamed the iPad to dodge `_resolve_udid.sh`'s regex-special-char bug (parens in `TARGET_SIM`). Conjugar's driver (like Conjuguer's) bypasses `_resolve_udid.sh` entirely and matches the device name as a Python string literal, so `iPad Pro 13-inch (M4)` works unchanged.
+> **The iPad target moved M4 → M5 on 2026-08-01**, when the `version_3` sweep re-shot
+> everything after the Browse→Verbs tab rename, following
+> [`docs/screenshot-plan.md`](screenshot-plan.md), which names the M5. The two devices are
+> interchangeable for this purpose — same 13-inch geometry, same **2064×2752** capture, same
+> iOS 26.3 runtime — so nothing in the driver changed but the name in `DEVICES`,
+> `tab_coords_for`, `wait_budget_for`, `keyboard_is_visible`, `set_keyboard_state`, and
+> `dismiss_review_prompt`. The M4 sim still exists on this machine; it is simply no longer
+> the target. If you ever point the driver back at it, change all six sites — a `case` arm
+> that misses just falls through to its `*)` default and fails somewhere far away
+> (`wait_budget_for` would return empty, `keyboard_is_visible` would return 1 forever).
+
+**No sim renaming needed.** Konjugieren's driver hardcoded UDIDs and renamed the iPad to dodge `_resolve_udid.sh`'s regex-special-char bug (parens in `TARGET_SIM`). Conjugar's driver (like Conjuguer's) bypasses `_resolve_udid.sh` entirely and matches the device name as a Python string literal, so `iPad Pro 13-inch (M5)` works unchanged.
 
 > **Note on `iPhone 17 Pro Max` vs. Conjugar's usual sim.** `.claude/ios-build-verify.config.sh` targets a plain **iPhone 17** and carries hand-set 5-tab coordinates for it (`63,822 …`). Those are **not** the Pro Max values — the screenshot driver has its own `tab_coords_for()` table. Don't cross-copy them.
 
@@ -405,7 +456,7 @@ so you can see both landed rather than assume it:
 
 ```bash
 scripts/prep_screenshot_sim.sh "iPhone 17 Pro Max"     en   # then shoot --lang en
-scripts/prep_screenshot_sim.sh "iPad Pro 13-inch (M4)" es   # then shoot --lang es
+scripts/prep_screenshot_sim.sh "iPad Pro 13-inch (M5)" es   # then shoot --lang es
 ```
 
 It resolves the UDID by exact device name the same way the driver does, so the iPad's
@@ -427,7 +478,7 @@ Fixing this is two independent pieces:
 
    ```bash
    UDID=$(xcrun simctl list devices available | \
-     awk -F '[()]' '/iPad Pro 13-inch \(M4\) \(/{print $4; exit}')   # the iOS-26 one
+     awk -F '[()]' '/iPad Pro 13-inch \(M5\) \(/{print $4; exit}')   # the iOS-26 one
    xcrun simctl status_bar "$UDID" override \
      --time "9:41" \
      --dataNetwork wifi --wifiMode active --wifiBars 3 \
@@ -484,14 +535,14 @@ Three iPad-specific failure modes surfaced in practice (none affect iPhone):
 
 - **Wrong duplicate simulator / old iPadOS.** `udid_for()` returns the *first* name match
   in `simctl list` order, which is grouped by runtime ascending — so if the machine has
-  `iPad Pro 13-inch (M4)` instances on iOS 18.x *and* 26.x, it picks an **18.x** one and
+  `iPad Pro 13-inch (M5)` instances on iOS 18.x *and* 26.x, it picks an **18.x** one and
   the install dies with *"Requires a Newer Version of iPadOS … Have 18.0; need 26.0"*. Fix by
   removing the stale-OS duplicates from the name's match set — **rename** them out of the way
   if you may want them back (reversible), or **delete** them outright:
   ```bash
-  xcrun simctl rename <UDID-of-iOS18-iPad> "iPad Pro 13-inch (M4) iOS18-PARKED"
+  xcrun simctl rename <UDID-of-iOS18-iPad> "iPad Pro 13-inch (M5) iOS18-PARKED"
   # …re-run sweep…  then restore:
-  xcrun simctl rename <UDID> "iPad Pro 13-inch (M4)"
+  xcrun simctl rename <UDID> "iPad Pro 13-inch (M5)"
   ```
   Confirm the survivor with the `udid_for` Python snippet (workaround #13) before running.
   Conjugar's deployment target is **iOS 26**, so a stale-runtime sim fails at install, not
@@ -512,7 +563,7 @@ Three iPad-specific failure modes surfaced in practice (none affect iPhone):
       m=re.match(r"-- (.*) --", line.strip())
       if m: runtime=m.group(1); continue
       m=re.match(r"\s+(.*?) \(([0-9A-Fa-f-]{36})\) \(", line.rstrip())
-      if m and "iPad Pro 13-inch (M4)" in m.group(1):
+      if m and "iPad Pro 13-inch (M5)" in m.group(1):
           print(f"{runtime:20s} {m.group(2)}")
   '
   ```
@@ -525,7 +576,7 @@ Three iPad-specific failure modes surfaced in practice (none affect iPhone):
   which is why deleting was safe.
 - **Render budget.** The iPad cold-parses 4,811 verbs (`verbModelMap.xml`) in a regular-size-class
   grid on every launch; render time is variable and intermittently exceeds the original 20 s
-  budget, so `wait_budget_for "iPad Pro 13-inch (M4)"` is **45 s**. A *single*
+  budget, so `wait_budget_for "iPad Pro 13-inch (M5)"` is **45 s**. A *single*
   `wait_for_render` timeout still aborts the whole sweep (`set -e`), so generous headroom
   matters.
 - **Per-cell fallback.** The *first* launch after a fresh `install` has never hung; only
@@ -537,7 +588,7 @@ Three iPad-specific failure modes surfaced in practice (none affect iPhone):
   for view in verb_browse verb_view model_browse model_view quiz_mid \
               info_browse info_view quiz_results settings; do
     for attempt in 1 2 3; do
-      scripts/take_screenshots.sh --device "iPad Pro 13-inch (M4)" --lang en --view "$view" && break
+      scripts/take_screenshots.sh --device "iPad Pro 13-inch (M5)" --lang en --view "$view" && break
     done
   done
   ```
@@ -562,8 +613,8 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
 5. **Unicode typing via pasteboard** (`take_screenshots.sh::type_via_pasteboard`)
    *Symptom:* `axe type` lacks HID-keycode mappings for Spanish accents (á é í ó ú ñ ü). *Fix:* paste via `simctl pbcopy` + Cmd+V (`axe key-combo --modifiers 227 --key 25`). Conjugated Spanish answers are full of accents (`sé`, `habré`, `oí`, `añadió`), so every quiz answer routes through this.
 
-6. **Soft keyboard suppression** (`take_screenshots.sh::ensure_soft_keyboard`)
-   *Symptom:* Simulator forwards host hardware-keyboard events; the soft keyboard is suppressed by default. *Fix:* send Cmd+K via `osascript` (Simulator's "Toggle Software Keyboard"); idempotent — checks the AXTree for a "space" key first.
+6. **Soft keyboard suppression** (`take_screenshots.sh::set_keyboard_state`)
+   *Symptom:* Simulator forwards host hardware-keyboard events; the soft keyboard is suppressed by default. *Fix (through version_2):* send Cmd+K via `osascript` (Simulator's "Toggle Software Keyboard"). **Superseded on 2026-08-01 — Cmd+K no longer does anything on this toolchain; the driver now attaches/detaches the hardware keyboard instead. See workaround #25**, which is where the current mechanism is documented.
 
 7. **StoreKit review-prompt suppression** (`take_screenshots.sh::seed_defaults`)
    *Symptom:* the StoreKit review modal (`ReviewPrompterReal`, used even in the simulator World config) opaques the AXTree mid-loop. It fires when `promptActionCount % promptModulo == 0` **and** ≥`promptInterval` since `lastReviewPromptDate`. *Fix:* pre-seed `lastReviewPromptDate` to now via `simctl spawn defaults write`, so the cooldown blocks every prompt this run. (Fallback: workaround #12.)
@@ -574,7 +625,7 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
 9. **`axe --id` typeMismatch on iPad** (`take_screenshots.sh::tap_id`)
    *Symptom:* `axe tap --id` / `--label` throw a Swift `typeMismatch` decoding error in some iPad screen states (e.g., QuizView pre-Start). *Fix:* route all `tap_id` calls through `tap_id_first` (describe-ui + coord-tap) — same path as workaround #3.
 
-10. **Multi-sim window focus** (`take_screenshots.sh::ensure_soft_keyboard`)
+10. **Multi-sim window focus** (`take_screenshots.sh::set_keyboard_state`)
     *Symptom:* with both sims booted, Cmd+K hits whichever Simulator window is frontmost. *Fix:* AXRaise the target sim's window by title-substring match before sending the keystroke.
 
     **The match is by device *family* substring (`iPhone` / `iPad`), so it is only unambiguous
@@ -595,7 +646,7 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
     **Fitness** on Josh's Mac while the sweep reported nothing wrong. `osascript` returns 0
     either way, and `keyboard_is_visible` can only report that the keyboard is *missing*,
     never that the keystroke went somewhere else — so a *bare* retry does not help, because
-    the retry misfires identically. `ensure_soft_keyboard` therefore asks System Events for
+    the retry misfires identically. `set_keyboard_state` therefore asks System Events for
     the frontmost process name and **never sends the keystroke unless Simulator owns focus**,
     logging `attempt N: frontmost is 'X', not Simulator; not sending the keystroke`.
 
@@ -646,8 +697,8 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
     switch the keyboard back **off**. Four `quiz_mid` shots would alternate
     keyboard/no-keyboard, silently. *Fix:* `describe-ui --point` **can** see the keyboard (the
     same trick workaround #12 uses on the StoreKit modal), so probe a mid-keyboard coordinate
-    and treat a ≤2-character label ("g") as keys-present. `ensure_soft_keyboard` now also
-    re-checks after the toggle and warns if it did not land. Probe points are per-device in
+    and treat a ≤2-character label ("g") as keys-present. The caller — `set_keyboard_state`
+    since the 2026-08-01 rewrite — re-checks after the toggle and warns if it did not land. Probe points are per-device in
     `keyboard_is_visible`; deliberately **not** the space bar, whose blank label is
     indistinguishable from "nothing found". Found by verification in July 2026.
 
@@ -726,7 +777,7 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
 
 24. **A booted simulator can have no Simulator *window*, which silently kills Cmd+K**
     (`prep_screenshot_sim.sh::ensure_simulator_window`,
-    `take_screenshots.sh::ensure_soft_keyboard`)
+    `take_screenshots.sh::set_keyboard_state`)
     *Symptom:* iPad/es `quiz_mid` came out **keyboard-less**, with the driver logging
     `AppleScript Cmd+K attempt 1/2/3 failed` and then
     `AppleScript Cmd+K failed 3x (accessibility permission …, or Simulator never came
@@ -741,7 +792,7 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
     the reboot and, if there is none, quits and relaunches Simulator.app (on launch it
     attaches a window to every already-booted device), re-booting the device first if the quit
     took it down. It runs **before** the status-bar override, since a re-boot would clear it.
-    And `ensure_soft_keyboard` checks for the window **inside** its existing 3× loop, before
+    And `set_keyboard_state` checks for the window **inside** its existing 3× loop, before
     each AXRaise — placed there, beside the frontmost guard, for the same reason that one is
     inside the loop: the window list is *also* briefly unenumerable right after Simulator
     activates, and that transient recovers on the next attempt, while a genuinely windowless
@@ -758,11 +809,53 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
     keystrokes, then the warning; missing-then-present → recovers on attempt 2), and by a live
     `--view quiz_mid` cell that captured the keyboard with no false alarm. The same check is
     now in Conjuguer (#19) and Konjugieren (#16); the executable body of
-    `ensure_soft_keyboard` remains byte-identical across Conjugar and Konjugieren, with
-    Conjuguer differing only in the one intentional `window_match` line.
+    `set_keyboard_state` (then `ensure_soft_keyboard`) remains byte-identical across Conjugar
+    and Konjugieren, with Conjuguer differing only in the one intentional `window_match` line
+    — still true after the 2026-08-01 rewrite, which was ported to both siblings the same day.
     Two things that do **not** work once Simulator is already running, both tried:
     `open -a Simulator --args -CurrentDeviceUDID <udid>` (the argument is ignored) and
     Simulator's own **File ▸ Open Simulator ▸ …** menu item (it clicks, and nothing appears).
+
+25. **Cmd+K is dead; the keyboard is now a two-state machine**
+    (`take_screenshots.sh::set_keyboard_state, keyboard_state_is, toggle_hardware_keyboard,
+    paste_into_quiz_field`)
+    *Symptom:* the first cell of the version_3 sweep logged
+    `soft keyboard still not visible after Cmd+K` and `quiz_mid` came out keyboard-less —
+    the same visible defect as workaround #24, but with none of its causes: the
+    accessibility permission was granted, Simulator came frontmost, and the window was
+    there. *Cause:* on this toolchain (Xcode 26.3, 2026-08-01) Cmd+K — Simulator's
+    **Toggle Software Keyboard** — no longer surfaces the keyboard while a hardware
+    keyboard is attached. Clicking that menu item directly via AppleScript is equally
+    inert, so it is not a keystroke-delivery problem. What governs the keyboard is
+    **I/O ▸ Keyboard ▸ Connect Hardware Keyboard**: iOS shows the software keyboard for a
+    focused field exactly when no hardware keyboard is attached, and unchecking it raises
+    the keyboard instantly.
+    *The trap that makes this more than a one-line fix:* every quiz answer is pasted with
+    Cmd+V (workaround #5 — `axe type` still has no keycode for `é`, re-verified), and axe
+    injects that combo as **hardware** key events, which the device **ignores while the
+    hardware keyboard is detached**. So the two requirements are mutually exclusive at any
+    instant: pasting needs it attached, photographing the keyboard needs it detached.
+    Detaching does not disturb the field's contents, so the driver orders them —
+    `set_keyboard_state hidden` → paste → `set_keyboard_state visible` → capture — and
+    `nav_quiz_results`, which submits 12 answers and never photographs a keyboard, holds
+    `hidden` throughout. `set_keyboard_state` keeps #24's window / frontmost / 3× retry
+    guards verbatim; it never reads the menu's checkmark (only readable while the menu is
+    open) but clicks and then asks the screen, which is also what makes it idempotent
+    across cells.
+    *Second-order defect, fixed with it:* with the keyboard up, the driver's
+    `tap_id input_quiz_conjugation` was tapping a field that **already had focus** (QuizView
+    auto-focuses after Start), which raises iOS's **"Paste | AutoFill" edit callout** — it
+    swallowed the Cmd+V *and* sat in the middle of the screenshot. The tap is gone from both
+    quiz recipes, and `paste_into_quiz_field` now confirms the field actually holds the
+    answer before moving on, falling back to tap / Cmd+A-replace only when it does not. In
+    `nav_quiz_results` that check earns its keep differently: a silently missed paste there
+    desynchronizes every later answer from its question.
+    *Note on the empty-field read:* the field's `AXValue` reports the **placeholder**
+    (`conjugation`) when empty, not `""` — so the check compares against the expected answer
+    rather than testing for emptiness.
+    *Verification:* iPhone/en `quiz_mid` re-shot clean (answer `soy` in the field, keyboard
+    up, no callout, no warnings) and `quiz_results` re-shot all-green from the detached
+    state, so both directions of the state machine ran end to end.
 
 ## Measure `STABLE_PIXEL_TOLERANCE`
 
@@ -841,7 +934,7 @@ compare against a reference of the same screen taken three seconds later. It sho
 | 2 | VerbView | light | `nav_verb_view` | `tap_id_first verb_row_ser`. |
 | 3 | ModelBrowseView | dark | `nav_model_browse` | `tap_tab models` → settle on `model_row_decir`. Irregularity sort is the default (`Settings.modelSortDefault == .irregularity`) → the **decir** model at top. |
 | 4 | ModelView | light | `nav_model_view` | `tap_tab models` → settle on `model_row_haber` → `tap_id_first model_row_haber`. Spec: don't scroll horizontally — the driver never does. |
-| 5 | QuizView (mid) | dark | `nav_quiz_mid` | `tap_tab quiz` → `quiz_start_button` → `input_quiz_conjugation` → paste fixture answer 0 → `ensure_soft_keyboard`. Captured before submit (keyboard visible per spec). |
+| 5 | QuizView (mid) | dark | `nav_quiz_mid` | `tap_tab quiz` → `quiz_start_button` → `set_keyboard_state hidden` → paste fixture answer 0 → `set_keyboard_state visible`. Captured before submit (keyboard visible per spec). The field is not tapped — it is already focused, and tapping it raises an edit callout (workaround #25). |
 | 6 | InfoBrowseView | light | `nav_info_browse` | `tap_tab info` → settle on `info_row_purpose_and_use` → `scroll_until_top info_row_purpose_and_use` (scrolls the Tutor section off, pinning the **About** header at top). |
 | 7 | InfoView | dark | `nav_info_view` | `tap_tab info` → `scroll_until_top info_row_presente_de_indicativo 400` → tap it. |
 | 8 | ResultsView | light | `nav_quiz_results` | `tap_tab quiz` → `quiz_start_button` → N× (paste + Return + sleep 0.3) → `dismiss_review_prompt` if needed → `verify_screen_loaded results_score`. |
@@ -976,7 +1069,7 @@ The `info_row_<stableKey>` keys are locale-independent ASCII (e.g. `presente_de_
 If the iOS 26.3 simulator runtime is replaced by 26.4+, the AXTree shape may shift slightly — especially for system-controlled surfaces like the StoreKit review prompt. Recreate the sims on the new runtime, re-verify workarounds #7 and #12 still match, and re-run a single test cell:
 
 ```bash
-scripts/take_screenshots.sh --device "iPad Pro 13-inch (M4)" --lang en --view quiz_results
+scripts/take_screenshots.sh --device "iPad Pro 13-inch (M5)" --lang en --view quiz_results
 ```
 
 ### Identifier Renames in App Code

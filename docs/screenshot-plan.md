@@ -12,7 +12,7 @@ There are nine categories of screenshot:
 8: ResultsView: show quiz results with a score, elapsed time, and per-question review visible; LIGHT
 9: SettingsView: show settings screen with Region at top; DARK
 
-Create iPhone 6.9" screenshots using iPhone 17 Pro Max simulator. Create iPad 13" screenshots using iPad Pro 13-inch (M4) simulator.
+Create iPhone 6.9" screenshots using iPhone 17 Pro Max simulator. Create iPad 13" screenshots using iPad Pro 13-inch (M5) simulator.
 
 Create all screenshots with the iPhone and iPad running in both English and Spanish modes.
 

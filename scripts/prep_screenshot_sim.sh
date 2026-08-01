@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Prepare one simulator for one language of an App Store screenshot sweep.
 #
-#   scripts/prep_screenshot_sim.sh "iPad Pro 13-inch (M4)" es
+#   scripts/prep_screenshot_sim.sh "iPad Pro 13-inch (M5)" es
 #   scripts/prep_screenshot_sim.sh "iPhone 17 Pro Max" en
 #
 # Does the four steps of docs/screenshot-playbook.md "Clean Status Bar" IN THE ORDER
@@ -79,7 +79,7 @@ xcrun simctl bootstatus "$UDID" -b >/dev/null
 # A `simctl boot` does not always give the device a Simulator.app WINDOW. When the
 # reboot above lands while Simulator.app is already running, the device can come back
 # booted-but-windowless: simctl and axe keep working (they talk to the device, not the
-# UI), so nothing looks wrong — but take_screenshots.sh's ensure_soft_keyboard raises
+# UI), so nothing looks wrong — but take_screenshots.sh's set_keyboard_state raises
 # `first window whose title contains "iPad"`, finds no such window, and fails all three
 # attempts with -1719 "Invalid index". The only visible symptom is one keyboard-less
 # quiz_mid screenshot. Hit on 2026-07-26 on the iPad/es pass (workaround #24).

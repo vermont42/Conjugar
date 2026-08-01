@@ -43,7 +43,7 @@ APP_BUNDLE_ID='biz.joshadams.Conjugar'
 # PNGs by eye.
 ONBOARDING_LABELS=( "Skip" "Omitir" )
 
-DEVICES=( "iPhone 17 Pro Max" "iPad Pro 13-inch (M4)" )
+DEVICES=( "iPhone 17 Pro Max" "iPad Pro 13-inch (M5)" )
 LANGS=( en es )
 VIEWS=( verb_browse verb_view model_browse model_view quiz_mid \
         info_browse info_view quiz_results settings )
@@ -69,7 +69,7 @@ appearance_for() {
 # Resolve a simulator UDID by its exact device name. Unlike Konjugieren's driver
 # (which hardcoded UDIDs to dodge _resolve_udid.sh's paren-in-name regex bug),
 # this matches the name as a literal in Python, so the iPad's Apple-default name
-# "iPad Pro 13-inch (M4)" works unchanged — no sim renaming needed.
+# "iPad Pro 13-inch (M5)" works unchanged — no sim renaming needed.
 udid_for() {
   xcrun simctl list devices available | python3 -c '
 import sys, re
@@ -110,7 +110,7 @@ for line in sys.stdin:
 tab_coords_for() {
   case "$1" in
     "iPhone 17 Pro Max")     echo "67,899.3 142.7,899.3 220,899.3 296.2,899.3 372.6,899.3" ;;
-    "iPad Pro 13-inch (M4)") echo "358.2,54 447.7,54 526,54 590.8,54 670.3,54" ;;
+    "iPad Pro 13-inch (M5)") echo "358.2,54 447.7,54 526,54 590.8,54 670.3,54" ;;
   esac
 }
 
@@ -119,7 +119,7 @@ tab_coords_for() {
 wait_budget_for() {
   case "$1" in
     "iPhone 17 Pro Max")     echo 10 ;;
-    "iPad Pro 13-inch (M4)") echo 45 ;;
+    "iPad Pro 13-inch (M5)") echo 45 ;;
   esac
 }
 
@@ -330,7 +330,7 @@ keyboard_is_visible() {
   local probe labels
   case "$DEVICE" in
     "iPhone 17 Pro Max")     probe="220,760"  ;;
-    "iPad Pro 13-inch (M4)") probe="516,1120" ;;
+    "iPad Pro 13-inch (M5)") probe="516,1120" ;;
     *) return 1 ;;
   esac
   labels=$(axe describe-ui --point "$probe" --udid "$UDID" 2>/dev/null \
@@ -338,67 +338,88 @@ keyboard_is_visible() {
   [[ -n "$labels" && ${#labels} -le 2 ]]
 }
 
-# The soft keyboard is suppressed by default because Simulator.app forwards host
-# hardware-keyboard events. Cmd+K is Simulator's "Toggle Software Keyboard" —
-# sent via AppleScript. Raises the target sim's window before the keystroke so
-# the right window catches it when both sims are booted.
+# Put the target device's keyboard into a known state.
 #
-# Cmd+K is a TOGGLE and its state persists in Simulator across app launches and
-# across cells, so the visibility guard is load-bearing, not an optimization:
-# without it the second quiz_mid cell of a sweep would toggle the keyboard back
-# OFF, and the four quiz_mid shots would alternate keyboard/no-keyboard. The
-# original guard counted AXTree elements labelled "space", which on iOS 26 is
-# always zero (see keyboard_is_visible), so it never fired — the bug this
-# replaces. (workarounds #6, #10 and #16)
-ensure_soft_keyboard() {
-  local window_match
-  if keyboard_is_visible; then
+#   set_keyboard_state visible  -> hardware keyboard DETACHED, soft keyboard on screen
+#   set_keyboard_state hidden   -> hardware keyboard ATTACHED, no soft keyboard
+#
+# The two are one setting, not two: iOS shows the software keyboard for a focused field
+# exactly when no hardware keyboard is attached, and Simulator's
+# "I/O > Keyboard > Connect Hardware Keyboard" menu item is what attaches/detaches it.
+# The menu acts on the FRONTMOST device window, hence the raise/frontmost guards below.
+#
+# Why the sweep needs BOTH states, which is the whole shape of this function
+# (found 2026-08-01, workaround #25):
+#
+#   - Screen 5 must SHOW the keyboard, so it needs the hardware keyboard detached.
+#   - Every quiz answer is pasted with Cmd+V (workaround #5: axe type has no keycodes for
+#     Spanish accents — `axe type "habré"` still fails with "No keycode found for
+#     character: 'é'", re-verified 2026-08-01). axe injects that combo as HARDWARE key
+#     events, which the device ignores while the hardware keyboard is detached: with it
+#     off, Cmd+V silently does nothing and the field keeps its placeholder, while
+#     `axe type` (software-keyboard path) still works. Verified by hand on the live quiz
+#     screen, both directions.
+#
+# So the answer is pasted with the keyboard attached and the hardware keyboard is detached
+# afterwards, purely to raise the soft keyboard for the capture. Detaching does not
+# disturb the field's contents. nav_quiz_results wants the opposite state throughout: it
+# submits 12 answers with Cmd+V and Return and never photographs a keyboard.
+#
+# Cmd+K ("Toggle Software Keyboard") was what this did through the version_2 sweep. As of
+# Xcode 26.3 / 2026-08-01 it no longer surfaces the keyboard on this machine — the
+# keystroke lands (Simulator frontmost, osascript exit 0) and nothing happens, and
+# clicking that menu item directly is equally inert, while toggling Connect Hardware
+# Keyboard works instantly. It is gone rather than kept as a fallback: it cannot help, and
+# a stray toggle of a second keyboard setting makes this state machine harder to reason
+# about.
+#
+# The menu item is a TOGGLE whose checkmark is only readable while the menu is open, so
+# this never reads the setting — it clicks and then asks the screen whether the keyboard
+# is where it should be, which is the property that actually matters. That check is also
+# what makes the function idempotent across cells: the setting persists across app
+# launches, so without it the second quiz_mid cell would toggle the keyboard back off and
+# the four quiz_mid shots would alternate. (workarounds #6, #10, #16, #24 and #25)
+set_keyboard_state() {
+  local want="$1" window_match attempt front
+  if keyboard_state_is "$want"; then
     return 0
   fi
   case "$DEVICE" in
     "iPhone 17 Pro Max")     window_match="iPhone" ;;
-    "iPad Pro 13-inch (M4)") window_match="iPad" ;;
+    "iPad Pro 13-inch (M5)") window_match="iPad" ;;
     *) window_match="" ;;
   esac
-  # `delay 0.5` after activate, not 0.2: with a freshly-activated Simulator the
-  # window list is briefly unenumerable and the AXRaise fails with a -1719
-  # "Invalid index", which reads exactly like a missing-permission failure and
-  # sends you chasing the wrong thing. Observed once at 0.2 s, never at 0.5 s.
+  # `delay 0.5` after activate, not 0.2: with a freshly-activated Simulator the window
+  # list is briefly unenumerable and the AXRaise fails with a -1719 "Invalid index", which
+  # reads exactly like a missing-permission failure and sends you chasing the wrong thing.
+  # Observed once at 0.2 s, never at 0.5 s.
   #
-  # Retried, and never fatal. That unenumerable window list is a race, not a steady
-  # state, and the first quiz_mid cell of a sweep runs moments after a fresh install,
-  # which is exactly when it loses. A genuine permission failure fails all three
-  # attempts and still gets a warning, and the keyboard_is_visible check below reports
-  # the real outcome either way, so continuing costs at most one reviewable screenshot.
+  # Retried, and never fatal. That unenumerable window list is a race, not a steady state,
+  # and the first quiz cell of a sweep runs moments after a fresh install, which is exactly
+  # when it loses. A genuine permission failure fails all three attempts and still gets a
+  # warning, and the state check reports the real outcome either way, so continuing costs
+  # at most one reviewable screenshot.
   #
-  # The keystroke is gated on Simulator actually being frontmost, and that guard is
-  # NOT redundant with the AXRaise above. When the raise silently fails to take focus,
-  # `keystroke` still SUCCEEDS — it just lands in whichever app *is* frontmost. Observed
+  # The menu click is gated on Simulator actually being frontmost, and that guard is NOT
+  # redundant with the AXRaise above. When the raise silently fails to take focus, a
+  # keystroke still SUCCEEDS — it just lands in whichever app *is* frontmost. Observed
   # 2026-07-26, where a stray Cmd+K launched Fitness on the host Mac while the sweep
-  # reported nothing wrong. osascript returns 0 in that case, so a bare retry loop sees
-  # a success, and keyboard_is_visible reports only that the keyboard is missing, never
-  # that the keystroke went elsewhere. Checking frontmost first turns a silent misfire
-  # into a log line naming the app that caught it — and because the check sits INSIDE
-  # the loop, a transient focus steal recovers on the next attempt instead of costing
-  # the cell. (workaround #10)
+  # reported nothing wrong. Checking frontmost first turns a silent misfire into a log line
+  # naming the app that caught it — and because the check sits INSIDE the loop, a transient
+  # focus steal recovers on the next attempt instead of costing the cell. (workaround #10)
+  #
   # A device can be BOOTED yet have no Simulator WINDOW: `xcrun simctl boot` does not
   # always make Simulator.app attach one when Simulator is already running, and a
   # per-language reboot is the usual way in. Nothing else in the sweep notices, because
   # simctl and axe talk to the device rather than to the UI — but AXRaise then has no
-  # window to raise and fails with -1719 "Invalid index", which is indistinguishable from
-  # the missing-permission failure the 3x warning blames. Checking first turns that into a
-  # log line naming the real cause. Like the frontmost guard, this sits INSIDE the loop:
-  # the window list is also briefly unenumerable just after Simulator activates, and that
-  # transient recovers on the next attempt. Recovery is deliberately NOT attempted here —
-  # restoring a window means quitting and relaunching Simulator.app, too blunt mid-sweep;
-  # prep_screenshot_sim.sh does it at reboot time, where a relaunch costs nothing.
-  # (workaround #24)
-  local attempt
-  local raised=false
-  local front
+  # window to raise and fails with -1719 "Invalid index", indistinguishable from the
+  # missing-permission failure. Checking first turns that into a log line naming the real
+  # cause. Recovery is deliberately NOT attempted here — restoring a window means quitting
+  # and relaunching Simulator.app, too blunt mid-sweep; prep_screenshot_sim.sh does it at
+  # reboot time, where a relaunch costs nothing. (workaround #24)
   for attempt in 1 2 3; do
     if [[ "$(osascript -e 'tell application "System Events" to tell process "Simulator" to get name of every window' 2>/dev/null || true)" != *"$window_match"* ]]; then
-      log "AppleScript Cmd+K attempt $attempt: no Simulator window matching '$window_match' (device booted but windowless? see prep_screenshot_sim.sh); not sending the keystroke"
+      log "keyboard($want) attempt $attempt: no Simulator window matching '$window_match' (device booted but windowless? see prep_screenshot_sim.sh); not touching the menu"
       sleep 1.0
       continue
     fi
@@ -409,29 +430,37 @@ ensure_soft_keyboard() {
               >/dev/null 2>&1; then
       front=$(osascript -e 'tell application "System Events" to name of first process whose frontmost is true' 2>/dev/null || true)
       if [[ "$front" != "Simulator" ]]; then
-        log "AppleScript Cmd+K attempt $attempt: frontmost is '${front:-unknown}', not Simulator; not sending the keystroke"
+        log "keyboard($want) attempt $attempt: frontmost is '${front:-unknown}', not Simulator; not touching the menu"
         sleep 1.0
         continue
       fi
-      if osascript -e 'tell application "System Events" to keystroke "k" using {command down}' >/dev/null 2>&1; then
-        raised=true
-        break
+      if toggle_hardware_keyboard && keyboard_state_is "$want"; then
+        return 0
       fi
     fi
-    log "AppleScript Cmd+K attempt $attempt failed; retrying"
+    log "keyboard($want) attempt $attempt did not land; retrying"
     sleep 1.0
   done
-  if [[ "$raised" != true ]]; then
-    log "warning: AppleScript Cmd+K failed 3x (accessibility permission for /usr/bin/osascript, Simulator never came frontmost, or the device has no Simulator window)"
-    return 0
+  log "warning: could not put the keyboard in state '$want' on $DEVICE (accessibility permission for /usr/bin/osascript, Simulator never came frontmost, or the device has no Simulator window)"
+}
+
+keyboard_state_is() {
+  if [[ "$1" == visible ]]; then
+    keyboard_is_visible
+  else
+    ! keyboard_is_visible
   fi
-  sleep 0.9  # let keyboard slide-up animation complete
-  # Confirm the toggle actually landed. Cmd+K is fire-and-forget — osascript
-  # returns 0 whether or not Simulator acted on it — so without this check a
-  # keyboard-less quiz_mid shot is silent.
-  if ! keyboard_is_visible; then
-    log "warning: soft keyboard still not visible after Cmd+K on $DEVICE"
-  fi
+}
+
+# Click Simulator's "I/O > Keyboard > Connect Hardware Keyboard" for the frontmost
+# device window. Callers must have raised the right window first — the menu acts on
+# whichever device is frontmost, which is the same reason set_keyboard_state raises
+# before touching it. Returns non-zero only if the click itself failed (missing
+# accessibility permission, menu path renamed by a future Xcode).
+toggle_hardware_keyboard() {
+  osascript -e 'tell application "System Events" to tell process "Simulator" to click menu item "Connect Hardware Keyboard" of menu 1 of menu item "Keyboard" of menu 1 of menu bar item "I/O" of menu bar 1' \
+    >/dev/null 2>&1 || return 1
+  sleep 1.2  # keyboard slide-up animation
 }
 
 # axe type lacks HID-keycode mappings for non-ASCII characters (Spanish accents
@@ -445,6 +474,51 @@ type_via_pasteboard() {
   printf '%s' "$text" | xcrun simctl pbcopy "$UDID"
   sleep 0.15
   axe key-combo --modifiers 227 --key 25 --udid "$UDID" >/dev/null  # Cmd+V
+}
+
+# Current contents of the quiz answer field, or empty string.
+quiz_field_value() {
+  axe_tree | jq -r --arg id input_quiz_conjugation \
+    "[.. | objects | $ID_MATCH | .AXValue] | map(select(. != null and . != \"\")) | .[0] // \"\"" \
+    2>/dev/null
+}
+
+# Paste one answer into the quiz field and CONFIRM it landed.
+#
+# The confirmation is not belt-and-braces; it covers a real failure introduced by the
+# soft-keyboard fix. QuizView auto-focuses the answer field after Start and re-focuses
+# after each submit, so the driver's old `tap_id input_quiz_conjugation` was tapping a
+# field that already had focus. With the hardware keyboard connected that was harmless.
+# With it detached (see set_keyboard_state) the same tap raises iOS's edit callout
+# — "Paste | AutoFill" — which both swallows the Cmd+V that follows AND sits in the
+# middle of the screenshot. Observed 2026-08-01: an otherwise perfect quiz_mid cell with
+# a placeholder-empty field and the callout over the question card.
+#
+# So attempt 1 does NOT tap: it relies on the auto-focus, which is the state the app
+# actually leaves behind. Only if the value fails to land does it fall back to tapping
+# the field (attempt 2) and to Cmd+A-then-replace (attempt 3), each of which can raise
+# the callout — a defect in the capture, but a visible one, and better than an empty
+# field. In nav_quiz_results the check matters for a different reason: a silently missed
+# paste there would desynchronize every later answer from its question.
+paste_into_quiz_field() {
+  local answer="$1" attempt value
+  for attempt in 1 2 3; do
+    case "$attempt" in
+      2) tap_id_first input_quiz_conjugation || true ;;
+      3) tap_id_first input_quiz_conjugation || true
+         axe key-combo --modifiers 227 --key 4 --udid "$UDID" >/dev/null 2>&1 || true  # Cmd+A
+         sleep 0.2 ;;
+    esac
+    type_via_pasteboard "$answer"
+    sleep 0.35
+    value=$(quiz_field_value)
+    if [[ "$value" == "$answer" ]]; then
+      return 0
+    fi
+    log "paste attempt $attempt: field reads '${value:-<empty>}', expected '$answer'"
+  done
+  log "warning: could not paste '$answer' into the quiz field on $DEVICE"
+  return 0
 }
 
 # Measure the five tab centers from the live AXTree, left to right. Only the
@@ -674,10 +748,15 @@ nav_quiz_mid() {
   fixture=$(read_fixture_answers_path)
   first_answer=$(jq -r '.[0].answer // empty' "$fixture")
   [[ -n "$first_answer" ]] || { log "no fixture answer at $fixture — is the app built with -CONJUGAR_QUIZ_FIXTURE support?"; return 1; }
-  tap_id input_quiz_conjugation
-  type_via_pasteboard "$first_answer"
-  ensure_soft_keyboard
-  sleep 0.3  # let the keyboard settle before the screenshot
+  # Paste FIRST, with the hardware keyboard attached, because Cmd+V only works in that
+  # state; then detach it so the soft keyboard rises for the capture. Detaching leaves the
+  # field's contents alone. The field is already focused (QuizView auto-focuses after
+  # Start), which is why nothing taps it here — see paste_into_quiz_field.
+  # (workaround #25)
+  set_keyboard_state hidden
+  paste_into_quiz_field "$first_answer"
+  set_keyboard_state visible
+  sleep 0.5  # let the keyboard slide-up finish before the screenshot
 }
 
 nav_info_browse() {
@@ -715,11 +794,16 @@ nav_quiz_results() {
   # many questions there are.
   count=$(jq 'length' "$fixture")
   [[ "$count" -gt 0 ]] || { log "fixture at $fixture is empty — is the app built with -CONJUGAR_QUIZ_FIXTURE support?"; return 1; }
+  # Cmd+V needs the hardware keyboard attached; this screen never shows a keyboard, so
+  # keep it attached throughout. A preceding quiz_mid cell leaves it detached.
+  # (workaround #25)
+  set_keyboard_state hidden
   log "answering $count fixture questions"
-  tap_id input_quiz_conjugation
+  # No tap: the field is auto-focused after Start and re-focused after each submit, and
+  # tapping it raises the edit callout that eats the paste (see paste_into_quiz_field).
   for i in $(seq 0 $((count - 1))); do
     answer=$(jq -r ".[$i].answer" "$fixture")
-    type_via_pasteboard "$answer"
+    paste_into_quiz_field "$answer"
     axe key 40 --udid "$UDID" >/dev/null   # Return; submitAnswer() re-focuses the field
     sleep 0.3
   done
@@ -741,7 +825,7 @@ dismiss_review_prompt() {
   local x_center y last_button_y=""
   case "$DEVICE" in
     "iPhone 17 Pro Max")     x_center=220 ;;
-    "iPad Pro 13-inch (M4)") x_center=512 ;;
+    "iPad Pro 13-inch (M5)") x_center=512 ;;
     *) return 0 ;;
   esac
   for y in 540 575 610 645 680 715; do

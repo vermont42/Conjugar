@@ -8287,3 +8287,66 @@ separators=(',', ' : '))`, which round-trips Xcode's formatting exactly: `git di
 replacement asserted `count(old) == 1` first, so an ambiguous match would have failed loudly
 rather than silently hitting the wrong sentence. Build succeeded; the simulator shows
 **Verbs** in both the tab bar and the large title.
+
+## Re-shooting the App Store screenshots after the Verbs rename — and the day Cmd+K died (2026-08-01)
+
+The Browse → Verbs tab rename (`37368a1`) invalidated every one of `version_2`'s 36 App
+Store screenshots: the stale label is in the tab bar of all of them, and in the large title
+of four. So: another full sweep, the fourth, shipped as `docs/screenshots/version_3`.
+
+Two changes went in before the first cell ran. `docs/screenshot-plan.md` names the **iPad Pro
+13-inch (M5)** and Josh had just installed that simulator, so the driver moved off the M4 —
+a rename in six `case` arms (`DEVICES`, `tab_coords_for`, `wait_budget_for`,
+`keyboard_is_visible`, `ensure_soft_keyboard`, `dismiss_review_prompt`) and nothing more,
+since the two devices share the 13-inch geometry and the same 2064×2752 capture. The other
+was mundane: `OnboardingDisplay.onboardingEnabled` was still `true` in the working tree while
+the other two kill switches were already off. And one environment fix that turned out to
+matter later — two iPhone simulators were booted, which makes `ensure_soft_keyboard`'s
+`first window whose title contains "iPhone"` ambiguous (workaround #10), so the spare got
+shut down.
+
+Then the interesting part. The first cell of the sweep logged `soft keyboard still not
+visible after Cmd+K` and `quiz_mid` came out keyboard-less — the same *symptom* as workaround
+#24, with none of its causes: permission granted, Simulator frontmost, window present.
+Driving Simulator's menu bar by hand showed why. **Cmd+K ("Toggle Software Keyboard") does
+nothing on this toolchain** (Xcode 26.3) while a hardware keyboard is attached; clicking that
+menu item directly is equally inert. What actually governs the keyboard is
+**I/O ▸ Keyboard ▸ Connect Hardware Keyboard** — iOS hides the software keyboard for exactly
+as long as one is attached, and unchecking it raises the keyboard instantly.
+
+That fix then broke the paste, which is the part worth remembering. Every quiz answer goes
+through the pasteboard because `axe type` has no keycode for `é` (workaround #5 — still true:
+`axe type "habré"` fails outright). But axe injects Cmd+V as **hardware** key events, and the
+device ignores those while the hardware keyboard is detached. So the two requirements are
+mutually exclusive at any instant: pasting needs it attached, photographing the keyboard needs
+it detached. Detaching doesn't disturb the field, so the driver now *orders* them —
+`set_keyboard_state hidden` → paste → `set_keyboard_state visible` → capture — and
+`nav_quiz_results`, which submits twelve answers and never photographs a keyboard, holds
+`hidden` throughout. Each state verifies by asking the screen rather than by reading the menu's
+checkmark, which is only readable while the menu is open; that also makes it idempotent across
+cells.
+
+A third defect fell out of the second: with the keyboard up, the driver's
+`tap_id input_quiz_conjugation` was tapping a field that already had focus (QuizView
+auto-focuses after Start), and iOS answered with a **"Paste | AutoFill" edit callout** that
+both swallowed the Cmd+V and sat in the middle of the screenshot. The tap is gone from both
+quiz recipes now, and `paste_into_quiz_field` confirms the field holds the answer before
+moving on — which in `nav_quiz_results` guards something worse than a bad picture, since a
+silently missed paste desynchronizes every later answer from its question. One wrinkle found
+while writing that check: an empty answer field reports its **placeholder** (`conjugation`) as
+its `AXValue`, not `""`, so the test compares against the expected answer rather than testing
+for emptiness.
+
+Three iterations, each verified by a re-shot cell rather than by reasoning — which is the only
+reason the second and third defects were caught at all, since both produced plausible-looking
+PNGs and an exit code of 0.
+
+The rest was quiet. 36 cells, all reviewed by eye; `verify_store_media.sh` reported 0
+blocking, 0 advisory. One cell needed a re-shoot for a reason the driver got *right*: iPad/es
+`quiz_mid` twice logged `frontmost is 'Safari'` and then `'Code'` and refused to send the menu
+click — workaround #10's frontmost guard, correctly declining to fire a click into whatever
+app Josh was using at that moment. It landed on the third try. Both known cosmetic quirks were
+re-reviewed and deliberately shipped again: the Spanish `quiz_mid` cells show an English
+keyboard layout (`AppleKeyboards` is a separate preference from `AppleLanguages`), and the
+iPad's Spanish Browse/Models screens collapse the search field to a magnifying glass because
+the Spanish tab labels are wider — adaptive layout, not a capture defect.
