@@ -8244,3 +8244,46 @@ High, Level 5.0**, not HEVC. The HEVC default belongs to `simctl io recordVideo`
 `--help`); the GUI recorder differs. Corrected here too. The rest matched the playbook
 exactly — native size, SAR 1:1, no audio track, variable frame rate with static stretches
 that carry no frames at all, which is capture working as designed rather than a fault.
+
+## The Browse tab becomes Verbs (2026-08-01)
+
+A one-word rename with a long tail. Conjugar's first tab had always been **Browse** (es
+*Explorar*), but the sibling apps Konjugieren and Conjuguer both call theirs **Verbs**
+(`Navigation.verbs` → de *Verben*), and the noun beats the verb: the other four tabs are
+nouns already (Models, Quiz, Info, Settings), and "Browse" reads as an instruction sitting
+in a row of labels. So: en **Verbs**, es **Verbos**, matching how the siblings translate it.
+
+The label itself is one catalog value, `BrowseVerbs.localizedTitle`, which feeds both the
+tab and the screen's `navigationTitle`. The interesting part was everything that *names*
+the tab in prose. Conjugar's Info bodies talk to the reader about navigation constantly —
+four tense articles end with "Tap the ~Browse~ tab for translations and conjugations", the
+Purpose-and-Use article lists all five tabs, gives Browse its own `^Browse^` section
+heading, and mentions the tab three more times, the FAQ answers a question about "the
+~Browse~ list", and Terminology says dictionaries and "~Conjugar~'s Browse tab" list
+infinitivo forms. Seventeen values in all, en and es, every one of them updated.
+
+Two occurrences were deliberately **left alone**, and they are the reason this wasn't a
+blind find-and-replace:
+
+- Purpose-and-Use's "In the ~Browse~ section, tap ~Vos~…" refers to the *Settings* card
+  titled "Browse Tú and/or Vos" (`Settings.browse`), not to the tab. The Spanish text makes
+  this obvious — it quotes the card by name, `"Explorar Tú y/o Vos"` — but the English
+  sentence goes on to say "…on the ~Browse~ and ~Models~ tabs" eleven words later, where
+  the *same word* does mean the tab. One sentence, two referents, one renamed.
+- Onboarding's `browseTitle` / `browseVerbsButton` ("Browse 4,811 Spanish Verbs", "Browse
+  Verbs") are verb phrases, not tab names. Konjugieren keeps `Onboarding.browseVerbsButton`
+  = "Browse Verbs" alongside its "Verbs" tab, so Conjugar matches.
+
+Identifiers stayed put by design, at Josh's instruction for the view and by the usual
+wire-name rule for the rest: `VerbBrowseView`, the `L.BrowseVerbs` scope and its catalog
+keys, the `.viewVerbBrowseView` analytics case (renaming it would orphan its dashboard
+history), the `browse_verb_count` accessibility identifier that `ios-build-verify` uses as
+its launch anchor, and `tap_tab.sh browse`. Only `VerbBrowseView.englishTitle` — an
+unreferenced English-name constant each screen carries — moved to "Verbs".
+
+Mechanically, the catalog edit went through `python3` with `json.dump(indent=2,
+separators=(',', ' : '))`, which round-trips Xcode's formatting exactly: `git diff
+--numstat` came back **17 insertions, 17 deletions**, no reflowed neighbors. Each
+replacement asserted `count(old) == 1` first, so an ambiguous match would have failed loudly
+rather than silently hitting the wrong sentence. Build succeeded; the simulator shows
+**Verbs** in both the tab bar and the large title.

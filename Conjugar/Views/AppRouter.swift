@@ -22,7 +22,7 @@ enum AppTab: Hashable {
 @Observable
 final class AppRouter {
   var selectedTab: AppTab = .browseVerbs
-  /// A verb the Browse tab should push. `VerbBrowseView` consumes and clears it.
+  /// A verb the Verbs tab should push. `VerbBrowseView` consumes and clears it.
   var pendingVerb: String?
   /// A one-shot request for the Quiz tab to start a quiz. `QuizView` consumes it.
   var pendingQuizStart = false

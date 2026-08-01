@@ -416,7 +416,7 @@ The mapped UI audit that drove the migration is `docs/conjugar-ui-issues.md`.
 
 ### Tab Structure (`MainTabView`)
 
-1. **Browse Verbs** — `VerbBrowseView` → `VerbView`
+1. **Verbs** — `VerbBrowseView` → `VerbView` (the tab was labeled *Browse* / *Explorar* until August 2026, when it was renamed **Verbs** / **Verbos** to match Konjugieren and Conjuguer; only the displayed label changed — `VerbBrowseView`, the `L.BrowseVerbs` scope and its catalog keys, the `.viewVerbBrowseView` analytics case, the `browse_verb_count` anchor, and `tap_tab.sh browse` all keep their names)
 2. **Models** — `ModelBrowseView` → `ModelView` (→ `VerbView`)
 3. **Quiz** — `QuizView` → `ResultsView`
 4. **Info** — `InfoBrowseView` → `InfoView` (and → `TutorView`, the conjugation tutor, from a section at the top of the list)

@@ -9,7 +9,7 @@ import SwiftUI
 import TipKit
 
 struct VerbBrowseView: View {
-  static let englishTitle = "Browse"
+  static let englishTitle = "Verbs"
 
   @State private var sort: VerbSort = Current.settings.verbSort
   @State private var navigationPath = NavigationPath()
