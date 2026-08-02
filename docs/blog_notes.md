@@ -8350,3 +8350,103 @@ re-reviewed and deliberately shipped again: the Spanish `quiz_mid` cells show an
 keyboard layout (`AppleKeyboards` is a separate preference from `AppleLanguages`), and the
 iPad's Spanish Browse/Models screens collapse the search field to a magnifying glass because
 the Spanish tab labels are wider — adaptive layout, not a capture defect.
+
+## The kill switches move out of ConjugarTips.swift (2026-08-02)
+
+A small filing change with a documentation tail. The three screenshot kill switches —
+`TipDisplay.tipsEnabled`, `OnboardingDisplay.onboardingEnabled`,
+`TutorDisplay.tutorUnavailableRowEnabled` — had all accreted into
+`Conjugar/Models/ConjugarTips.swift`, for no better reason than that the first of them
+genuinely belonged there. `TipDisplay` is about TipKit, so it moved in with the four `Tip`
+structs; then onboarding needed the same mechanism and was described in its own doc comment as
+"mirroring `TipDisplay.tipsEnabled`", so it landed next to the thing it mirrored; then the
+tutor row followed the same logic. By the third one the file's name had stopped describing
+half its contents, and an operator looking for the onboarding switch had to already know it
+lived in a file about tips. They now live in `Conjugar/Utils/KillSwitches.swift`, moved
+verbatim — same three enums, same doc comments, no behavior change and no logic touched.
+
+The move itself was free: `Utils/` is a `PBXFileSystemSynchronizedRootGroup`, so the new file
+joined the target without a `project.pbxproj` edit, and the build confirmed it. (Xcode's
+SourceKit index, predictably, spat eight `Cannot find 'L' in scope` errors at the *untouched*
+remainder of `ConjugarTips.swift` the moment its header comment changed. Same false positive
+the project notes already warn about; `xcodebuild` compiled it clean.)
+
+What actually took the work was everything pointing at the old path. Seven references in
+`docs/screenshot-playbook.md`, one in `CLAUDE.md`, one in the moved-from file's own header. Two
+of the seven were the interesting ones, because they were *executable*: the playbook's
+before/after `sed -i ''` incantations that flip all three switches. Those would not have
+errored after the move — `sed` on a file that no longer contains the pattern succeeds and
+changes nothing — so the failure mode was a screenshot sweep run with all three switches
+silently still `true`, which is exactly the class of bug the playbook's own gotcha list already
+records happening (2026-07-26: a tip card in the frame; a later entry: `onboardingEnabled` left
+`true` in the working tree). Worse, the line right after them is
+`git diff --stat <file>   # must be empty when you are done`, the restore check — pointed at
+the old path it would have reported empty for the most vacuous possible reason, an all-clear
+that confirms nothing. A stale path in prose is a nuisance; a stale path in a verification
+command is an actively lying test.
+
+Deliberately left alone: the seven hits in this file. They were accurate when written, and
+rewriting them would erase the record of where the switches used to be — which is the whole
+point of a dated journal. `scripts/take_screenshots.sh` needed nothing either; it names the
+switches but never their file, which in hindsight is the more durable way to write a comment.
+
+Also folded in here, from the same session: `docs/video_script.md` picked up a pre-flight
+paragraph before the clip list (language/region set to English/US or Spanish/Spain, hardware
+keyboard disconnected, kill switches `false` — now naming the new full path) and four small
+clip-direction corrections learned from actually recording them. Clip 2 lost a parenthetical
+about Conjugar having no compound-tense toggle, which was reassurance aimed at someone
+cross-reading Conjuguer's script rather than a direction. Clip 3's "slowly scroll down for
+three seconds" became "slowly scroll conjugation table (iPhone)" — the useful instruction is
+*what* to scroll, not for how long. Clip 5 now parks *Presente de Indicativo* near the top of
+the screen rather than centered, and scrolls to the bottom rather than vaguely "down."
+
+## Consuming ios-build-verify without a hand-made symlink (2026-08-02)
+
+Fixing the kill-switch doc references surfaced a bigger problem: the build command
+`CLAUDE.md` documented did not work. `~/.claude/skills/ios-build-verify/scripts/build_app.sh`
+resolved to nothing, because the symlink it depended on had silently vanished. Seven
+references in `CLAUDE.md` pointed through that link.
+
+The interesting part is that the project had *already* solved this, twice, and forgotten to
+tell `CLAUDE.md`. `scripts/take_screenshots.sh` has a `resolve_ibv_scripts()` that searches
+`~/.claude/plugins/marketplaces` and carries a comment explaining that the versioned plugin
+cache holds several releases at once, is shared across the other apps, and is enumerated by
+`find` in unspecified order — so a broad `~/.claude` glob once picked an arbitrary release to
+build App Store screenshots with. `docs/screenshot-playbook.md` documents the same one-liner,
+and Konjugieren's `CLAUDE.md` carries it verbatim. Only this file was still on the symlink.
+
+The symlink was worse than it looked. The skill documents three install shapes; this was a
+hybrid of two — a manual-install *path* (`~/.claude/skills/…`) pointing into the *versioned
+cache* (`…/cache/ios-build-verify/ios-build-verify/0.3.2/…`). So it pinned 0.3.2 and needed
+re-pointing on every release, and since `~/.claude/plugins/.last_inuse_sweep` suggests unused
+cache versions get collected, the eventual failure mode was worse than the one just hit: once
+the sibling apps all move to 0.3.3, the pinned directory can disappear and leave a *dangling*
+link, which fails more confusingly than a missing one.
+
+Its one real virtue was that `~/.claude/skills/` registration is what puts the skill in the
+Skill-tool listing — and `installed_plugins.json` showed why that mattered here: the plugin was
+installed at project scope for Konjugieren, Calculator3, and Conjuguer, but **not** for
+Conjugar.mig, which was reaching it entirely through the link. `claude plugin install` fixed
+that properly. Worth noting it landed at **user** scope, not the project scope the siblings
+use — that is the CLI default, and arguably the better shape, since it covers every iOS
+project including the next one, from a single record.
+
+That left the real question, which is why the setup was awkward to begin with: the skill is
+developed at `~/Desktop/workspace/ios-build-verify` but consumed from GitHub, so both the cache
+and the marketplace clone hold the *published* code. Testing an unpublished change meant
+publishing it. But since every call site now resolves a scripts directory instead of hardcoding
+one, `IBV_SCRIPTS` is already the dev/prod switch — export it at the dev repo to exercise local
+edits, unset it to go back. No second marketplace, no publish-to-test loop. The only change
+needed was in `take_screenshots.sh`, which called the resolver unconditionally and so ignored
+an override.
+
+The obvious way to write that override is `: "${IBV_SCRIPTS:=$(resolve_ibv_scripts)}"`, and it
+is wrong. Under `set -euo pipefail` the `:` builtin always succeeds, so the resolver's
+`exit 2` — it runs in a command substitution, where `exit` leaves only the subshell — gets
+swallowed, and the sweep proceeds with an *empty* `IBV_SCRIPTS`, invoking `/build_app.sh`. A
+probe confirmed it: `SURVIVED with X=[]`, exit 0. The plain `IBV_SCRIPTS=$(resolve_ibv_scripts)`
+it replaced did abort correctly, because a failing command substitution in an assignment does
+trip errexit. So the guard is a boring `if [[ -z "${IBV_SCRIPTS:-}" ]]`, which keeps the abort
+and honors the override; both paths were tested in isolation before the edit landed. A
+one-character-looking idiom that quietly converts a hard failure into a bad screenshot sweep is
+exactly the kind of thing this project keeps rediscovering.

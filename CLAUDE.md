@@ -34,29 +34,49 @@ test go through the **`ios-build-verify`** Claude Code skill, which pipes `xcode
 through `xcbeautify` (concise output, raw `build.log` fallback) and disables parallel
 testing. The per-project config lives at `.claude/ios-build-verify.config.sh` (sourced
 by every script; hand-editable). The skill is installed via Claude Code's plugin
-marketplace; a stable symlink (`~/.claude/skills/ios-build-verify`) points at the
-versioned cache so the terminal path survives plugin updates.
+marketplace from [vermont42/ios-build-verify](https://github.com/vermont42/ios-build-verify).
+
+**Resolve the scripts directory once per session**, then invoke through `$IBV_SCRIPTS`:
+
+```bash
+export IBV_SCRIPTS=$(dirname "$(find ~/.claude/plugins/marketplaces -path '*ios-build-verify*' -name build_app.sh 2>/dev/null | head -1)")
+```
+
+Search `plugins/marketplaces`, **not `~/.claude` broadly**. The marketplace clone is a
+single git checkout with no version segment, refreshed to the latest release by
+`claude plugin marketplace update`, so it yields exactly one match. The broader glob also
+reaches the per-version `plugins/cache/ios-build-verify/<version>/` directories, which are
+shared with Josh's other apps and can pin older releases — an unsorted `head -1` there
+resolves nondeterministically to a stale version. (`scripts/take_screenshots.sh` carries
+the same resolver, for the same reason; see `docs/screenshot-playbook.md`.)
 
 ```bash
 # Build the app — this is the COMPILE step
-~/.claude/skills/ios-build-verify/scripts/build_app.sh
+"$IBV_SCRIPTS/build_app.sh"
 
 # Run all tests
-~/.claude/skills/ios-build-verify/scripts/run_tests.sh
+"$IBV_SCRIPTS/run_tests.sh"
 
 # Run a single test suite
-~/.claude/skills/ios-build-verify/scripts/run_tests.sh --only-testing ConjugarTests/ConjugatorTests
+"$IBV_SCRIPTS/run_tests.sh" --only-testing ConjugarTests/ConjugatorTests
 
 # Run a single test method (Swift Testing — note the trailing, shell-escaped parentheses)
-~/.claude/skills/ios-build-verify/scripts/run_tests.sh --only-testing ConjugarTests/ConjugatorTests/oirPresent\(\)
+"$IBV_SCRIPTS/run_tests.sh" --only-testing ConjugarTests/ConjugatorTests/oirPresent\(\)
 
 # Lint
 swiftlint
 ```
 
+> **Testing an unpublished change to the skill itself.** The skill is developed locally at
+> `~/Desktop/workspace/ios-build-verify` but consumed from GitHub, so the resolved copy is
+> always the *published* one. To exercise local edits, point the variable at the dev repo —
+> `export IBV_SCRIPTS=~/Desktop/workspace/ios-build-verify/skills/ios-build-verify/scripts` —
+> and unset it to return to the published copy. `take_screenshots.sh` honors a pre-set
+> `IBV_SCRIPTS` too, so one export covers both.
+
 The skill also drives the running app in the simulator (launch, tap, screenshot, verify)
 — see **Running the App in the Simulator** below. Its full operation surface is documented
-in `~/.claude/skills/ios-build-verify/SKILL.md`.
+in `$IBV_SCRIPTS/../SKILL.md`.
 
 > **Diagnostic fallback — raw `xcodebuild`.** When `xcbeautify`'s lossy filter drops an
 > early-stage error, or the skill scripts are unavailable, the underlying commands still
@@ -79,7 +99,7 @@ in July 2026 (build → launch → per-tab tap-and-screenshot). It wraps the `si
 lifecycle plus **AXe** for observation and HID dispatch.
 
 ```bash
-S=~/.claude/skills/ios-build-verify/scripts
+S="$IBV_SCRIPTS"                  # resolved once per session — see Build and Test Commands
 "$S/build_app.sh"                 # COMPILE (launch_app.sh does NOT compile — run this first)
 "$S/launch_app.sh"                # install last build + launch; polls FIRST_SCREEN_ID for render
 "$S/screenshot.sh" my-label       # PNG into docs/screenshots/ (pixels, 3× — AXe taps use points)
@@ -427,7 +447,7 @@ The mapped UI audit that drove the migration is `docs/conjugar-ui-issues.md`.
 
 A first-launch welcome tour ported from Conjuguer (July 2026), styled to Conjugar's yellow
 design system. Files: `Views/OnboardingView.swift`, the `OnboardingDisplay` kill switch in
-`Models/ConjugarTips.swift`, `Settings.hasSeenOnboarding`, `L.Onboarding` +
+`Utils/KillSwitches.swift`, `Settings.hasSeenOnboarding`, `L.Onboarding` +
 `Localizable.xcstrings` (`Onboarding.*`). Things to know:
 
 - **A paged `.fullScreenCover`** (`TabView(.page)` with auto page-dots). Sheets: a welcome

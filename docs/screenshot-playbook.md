@@ -152,7 +152,7 @@ and docs/screenshot-plan.md first, then drive scripts/take_screenshots.sh to pro
 36 (9 views × en/es × iPhone 17 Pro Max + iPad Pro 13-inch (M5)).
 
 Before running:
-- Set ALL THREE kill switches to false in Conjugar/Models/ConjugarTips.swift —
+- Set ALL THREE kill switches to false in Conjugar/Utils/KillSwitches.swift —
   TipDisplay.tipsEnabled, OnboardingDisplay.onboardingEnabled, and
   TutorDisplay.tutorUnavailableRowEnabled — and restore all three to true when all
   screenshots are captured.
@@ -234,7 +234,7 @@ App Store screenshots only — 9 views × 2 languages × 2 devices = 36 PNGs. No
 ## Disable tips, onboarding, and the tutor row first (then restore)
 
 Conjugar has **three** compile-time master switches, all in
-[`Conjugar/Models/ConjugarTips.swift`](../Conjugar/Models/ConjugarTips.swift). All are
+[`Conjugar/Utils/KillSwitches.swift`](../Conjugar/Utils/KillSwitches.swift). All are
 ordinarily `true`. **Set all three to `false` before running the driver and restore all
 three to `true` afterward.** The driver builds once at start, so the flags must be flipped
 *before* you launch it — flipping them mid-sweep does nothing.
@@ -250,15 +250,15 @@ three to `true` afterward.** The driver builds once at start, so the flags must 
 sed -i '' 's/static let tipsEnabled = true/static let tipsEnabled = false/; \
            s/static let onboardingEnabled = true/static let onboardingEnabled = false/; \
            s/static let tutorUnavailableRowEnabled = true/static let tutorUnavailableRowEnabled = false/' \
-  Conjugar/Models/ConjugarTips.swift
+  Conjugar/Utils/KillSwitches.swift
 
 # after the sweep — restore
 sed -i '' 's/static let tipsEnabled = false/static let tipsEnabled = true/; \
            s/static let onboardingEnabled = false/static let onboardingEnabled = true/; \
            s/static let tutorUnavailableRowEnabled = false/static let tutorUnavailableRowEnabled = true/' \
-  Conjugar/Models/ConjugarTips.swift
+  Conjugar/Utils/KillSwitches.swift
 
-git diff --stat Conjugar/Models/ConjugarTips.swift   # must be empty when you are done
+git diff --stat Conjugar/Utils/KillSwitches.swift   # must be empty when you are done
 ```
 
 > **Why the tutor switch exists at all.** Apple Intelligence is *never* available in a
@@ -1054,7 +1054,7 @@ The driver depends on these app-side touchpoints. Renaming any one silently brea
 | `Quiz.screenshotFixture` + `startScreenshotFixture()` + `exportFixtureAnswers()` | DEBUG-gated fixture; JSON written to `Documents/screenshot_fixture_answers.json` when launched with `-CONJUGAR_QUIZ_FIXTURE screenshot` | `Conjugar/Models/Quiz.swift` |
 | `didShowGameCenterDialog` / `userRejectedGameCenter` keys | `seed_defaults` pre-seeds both so `maybePromptGameCenter()` stays quiet (workaround #15) | `Conjugar/Utils/Settings.swift` + `Conjugar/Views/QuizView.swift` |
 | `results_score` identifier | `verify_screen_loaded results_score` after the answer loop | `Conjugar/Views/ResultsView.swift` |
-| `TipDisplay.tipsEnabled` / `OnboardingDisplay.onboardingEnabled` / `TutorDisplay.tutorUnavailableRowEnabled` | operator flips all three to `false` before the sweep | `Conjugar/Models/ConjugarTips.swift` |
+| `TipDisplay.tipsEnabled` / `OnboardingDisplay.onboardingEnabled` / `TutorDisplay.tutorUnavailableRowEnabled` | operator flips all three to `false` before the sweep | `Conjugar/Utils/KillSwitches.swift` |
 | `app_icon_bull` identifier | `nav_settings` settles on it before capturing (workaround #19) | `Conjugar/Views/SettingsView.swift` |
 | `AXRadioButton` tab frames (iPad) | `measured_tab_centers` reads all five live, per language (workaround #18) | `Conjugar/Views/MainTabView.swift` |
 
@@ -1119,7 +1119,7 @@ Visual review will surface bad cells. Re-run any single one via the `--device` /
 
 - **Flip *all three* switches off before the run.** `TipDisplay.tipsEnabled`,
   `OnboardingDisplay.onboardingEnabled`, and `TutorDisplay.tutorUnavailableRowEnabled`, all
-  in `Conjugar/Models/ConjugarTips.swift`. See *Disable tips, onboarding, and the tutor row
+  in `Conjugar/Utils/KillSwitches.swift`. See *Disable tips, onboarding, and the tutor row
   first*. The driver builds once at start, so they must be set first — and restored to
   `true` when the sweep is done.
 - **A "successful" run can still contain wrong screenshots.** The driver only fails when an
