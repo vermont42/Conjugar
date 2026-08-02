@@ -99,32 +99,42 @@ what got Conjuguer's four 2.0 previews rejected.
 
 Ensure that language and region are English and United States or Spanish and Spain. Ensure that hardware keyboard is disconnected. Ensure that values in `Conjugar/Utils/KillSwitches.swift` are `false`.
 
+Each clip carries an **IPA** line for the Spanish label. Broad transcription, **Latin
+American** (seseo, yeísmo); for a Peninsular read, swap [s] → [θ] in ⟨z⟩ and ⟨ce/ci⟩ only.
+`‖` is the phrase break at the colon. Sandhi is transcribed as spoken, so *once verbos* →
+[ˈon.se ˈβeɾ.βos] but *un vistazo* → [um bisˈta.so].
+
 First Clip - six seconds
 Starts out at top of VerbBrowseView. Sort by frequency (ser on top). Slowly scroll down for five seconds.
 Label:
 4,811 Spanish verbs — from abajar to zurrar, sorted alphabetically or by frequency.
-4811 verbos españoles: de abajar a zurrar, ordenados alfabéticamente o por frecuencia.
+cuatro mil ochocientos once verbos españoles: de abajar a zurrar, ordenados alfabéticamente o por frecuencia.
+IPA: [ˈkwa.tɾo mil o.t͡ʃoˈsjen.tos ˈon.se ˈβeɾ.βos es.paˈɲo.les ‖ de a.βaˈxaɾ a suˈrar ‖ oɾ.ðeˈna.ðos al.faˌβe.ti.kaˈmen.te o poɾ fɾeˈkwen.sja]
 
 Second Clip - six seconds
 Starts out at top of ser's VerbView. Slowly scroll down for five seconds.
 Label:
 Every conjugation of every verb — twenty tenses at a glance.
 Todas las conjugaciones de cada verbo: veinte tiempos de un vistazo.
+IPA: [ˈto.ðas las koŋ.xu.ɣaˈsjo.nes de ˈka.ða ˈβeɾ.βo ‖ ˈbejn.te ˈtjem.pos de um bisˈta.so]
 
 Third Clip - six seconds
 Starts out on ModelBrowseView, default Irregularity sort (decir on top). Wait two seconds. Tap haber, the second row. Wait one second. Slowly scroll conjugation table (iPhone).
 Label:
 All 102 Spanish conjugation models.
 Los 102 modelos de conjugación del español.
+IPA: [los ˈsjen.to ðos moˈðe.los de koŋ.xu.ɣaˈsjon del es.paˈɲol]
 
 Fourth Clip - seven seconds
 Starts out on QuizView. Start. Type answer. Submit. Repeat once.
 Label:
 Quiz mode: fifty timed questions to sharpen your conjugation skills.
 Modo test: cincuenta preguntas cronometradas para afinar tus conjugaciones.
+IPA: [ˈmo.ðo ˈtes(t) ‖ siŋˈkwen.ta pɾeˈɣun.tas kɾo.no.meˈtɾa.ðas ˈpa.ɾa a.fiˈnaɾ tus koŋ.xu.ɣaˈsjo.nes]
 
 Fifth Clip - seven seconds
 Starts out at top of InfoBrowseView. Scroll down so that Presente de Indicativo is near top of screen. Tap it. Slowly scroll down to bottom.
 Label:
 From Proto-Indo-European to modern Spanish — the story behind every tense.
 Del protoindoeuropeo al español moderno: la historia de cada tiempo verbal.
+IPA: [del ˌpɾo.to.in.do.ew.ɾoˈpe.o al es.paˈɲol moˈðeɾ.no ‖ la isˈto.ɾja ðe ˈka.ða ˈtjem.po βeɾˈβal]
