@@ -8450,3 +8450,39 @@ trip errexit. So the guard is a boring `if [[ -z "${IBV_SCRIPTS:-}" ]]`, which k
 and honors the override; both paths were tested in isolation before the edit landed. A
 one-character-looking idiom that quietly converts a hard failure into a bad screenshot sweep is
 exactly the kind of thing this project keeps rediscovering.
+
+## Porting Konjugieren's annotated directory tree (2026-08-02)
+
+Konjugieren carries a `docs/project-structure.md` — one big fenced tree, one line of
+annotation per file — plus a short CLAUDE.md section pointing at it and a maintenance rule.
+Josh asked for the same in Conjugar, so this was a port of a *format*, not of content: every
+line had to be derived from Conjugar's actual tree.
+
+The useful discovery was that the repo largely documents itself already. Conjugar's Swift files
+carry a header-comment convention — after the `// Created by` / `// Copyright` boilerplate, most
+files open with a paragraph explaining what the type is for and why it exists that way. A
+fifteen-line Python script that strips the boilerplate and joins the remaining leading `//`
+lines produced usable prose for about two-thirds of the 144 Swift files in the app, widget, and
+Shared targets, and for most of the test suites. The engine files in particular were nearly
+free: `AccentFeature.swift` already explains that the three stress-accent patterns are
+mechanically one operation, `StemVowelFeature.swift` that diphthongs and -ir raising are the
+same operation in different slot sets. The remaining third — mostly small enums (`Difficulty`,
+`Region`, `VerbType`) and the older UIKit-era utilities — got read directly; they're short.
+
+Two judgment calls shaped the result. First, the tree lists *categories* where a literal listing
+would be noise: `Assets.xcassets/Game/` holds well over a hundred sprite PNGs, and naming them
+individually would bury the fact that they're `dancer_<action>_N` / `bull_<action>_N` flipbooks.
+Same for the legacy one-shot MP3s still sitting at the app-target root — the interesting fact
+isn't their names, it's that they're at the root while the newer SFX live in the synchronized
+`Audio/` group. Second, `prompts/` is grouped by feature rather than listed alphabetically. It
+holds 78 files, many of them phases of one effort; alphabetical order scatters
+`game_dancer_actions` / `game_dancer_finish_actions` / `game_climb_back_view` across the list
+when they're one story. The engine's `phase-2` through `phase-6` briefs are collapsed onto a
+single line for the same reason.
+
+The CLAUDE.md section is a verbatim port, including the maintenance note's asymmetry argument:
+a missing entry costs a session one `find`, because the session can see the gap; a wrong entry
+gets believed. That's the reason to prioritize renames over additions when the tree drifts —
+and Conjugar has already done a lot of renaming (`Tense`→`DisplayTense`, `Flag`→`Obstacle`,
+`GameState+Flags`→`GameState+Obstacles`, the whole `*2`-suffix drop), so the failure mode is
+not hypothetical here.

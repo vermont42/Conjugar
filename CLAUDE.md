@@ -299,6 +299,12 @@ Conjugar-specific config facts baked into `.claude/ios-build-verify.config.sh`:
   `has no member` diagnostics for same-module symbols; `build_app.sh` is authoritative —
   trust it, don't "fix" the SourceKit-only noise.
 
+## Project Structure
+
+See [`docs/project-structure.md`](docs/project-structure.md) for the full annotated directory tree.
+
+**Cache maintenance:** When you add, remove, or rename a source file, update `docs/project-structure.md` to match. This doc is a cache. Future contexts rely on it to orient quickly, so staleness has a real cost. The two staleness modes are not equally bad: a *missing* entry costs a session one `find`, because it sees the gap and reads the file, while a *wrong* entry gets believed. Prioritize renames and repurposed files.
+
 ## Architecture
 
 ### Concurrency model (Swift 6 / strict concurrency)
