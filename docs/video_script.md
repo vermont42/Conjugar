@@ -126,7 +126,7 @@ Los 102 modelos de conjugación del español.
 IPA: [los ˈsjen.to ðos moˈðe.los de koŋ.xu.ɣaˈsjon del es.paˈɲol]
 
 Fourth Clip - seven seconds
-Starts out on QuizView. Start. Type answer. Submit. Repeat once.
+Starts out on QuizView. Start. Type answer. Submit.
 Label:
 Quiz mode: fifty timed questions to sharpen your conjugation skills.
 Modo test: cincuenta preguntas cronometradas para afinar tus conjugaciones.
