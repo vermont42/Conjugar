@@ -2,7 +2,7 @@
 
 Adapted from the sibling app Conjuguer (French), `../Conjuguer/docs/video_script.md`, for
 Conjugar's Spanish content: Spanish verbs and exemplars, Conjugar's own counts (4,811 verbs,
-102 models, 20 conjugated tenses, 50 quiz questions), and Spanish rather than French label
+102 models, 20 conjugated tenses, 30 quiz questions), and Spanish rather than French label
 copy. The structure — five clips, 32 seconds, the size table, the preflight — is unchanged.
 
 Ensure that videos are exactly 32 seconds *without* transitions. There are 5 clips, so 4 half-second transitions between them shrink the length by two seconds, to 30. (FCP's default transition duration is 1 second; this assumes it has been set to 0.5 second in Settings ▸ Editing.)
