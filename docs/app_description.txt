@@ -76,7 +76,7 @@ WIDGETS Y CONTROLES
 - El Verbo del Día en la pantalla de inicio y en la pantalla bloqueada.
 - Un widget de test que puedes responder sin abrir la app.
 - Botones en el centro de control para un test rápido o un verbo al azar.
-- Una actividad en vivo que sigue el test en curso.
+- Una actividad en directo que sigue el test en curso.
 
 TOREO POR AMOR
 Conjugar alberga un juego arcade: una subida de cinco fases por una fiesta española, con obstáculos que esquivar, potenciadores que recoger y, en lo alto, un duelo de baile flamenco con un toro simpático. Toreo por Amor no tiene nada que ver con la gramática, y te va a encantar.
