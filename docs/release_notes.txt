@@ -1,3 +1,38 @@
 3.0
 
-TODO
+Conjugar 3.0 is a rebuild. Every screen is new, the conjugation engine underneath is new, and the app now knows more than twenty times as many verbs as it did before.
+
+A NEW CONJUGATION ENGINE
+Conjugar now conjugates 4,811 verbs, up from about 200, in all 20 conjugated tenses. Browse or search the whole list, sorted by frequency or alphabetically.
+
+MODELS
+A new Models tab sorts the language into 102 conjugation models. Open one to see its pattern, its model verb, and every verb that follows it.
+
+WHERE THE WORDS CAME FROM
+Verb screens now include etymologies for more than 1,300 verbs, an example sentence for more than 1,300 verbs, each with an English translation, and more than 2,100 quotations from medieval Spanish texts, including the Poema de mio Cid and the Libro de buen amor.
+
+CONJUGATION TUTOR
+Ask a Spanish conjugation tutor how a tense works or how a verb is conjugated. It runs entirely on your device, and its answers are grounded in Conjugar's own conjugation engine. Nothing you type leaves your iPhone or iPad. Requires a device with Apple Intelligence enabled.
+
+WIDGETS AND CONTROLS
+Verb of the Day on the Home Screen and the Lock Screen. A Daily Quiz widget you can answer without opening the app. Control Center buttons for a quick quiz or a random verb. A Live Activity that follows a quiz in progress.
+
+TOREO POR AMOR
+Conjugar now hosts an arcade game: a five-stage climb through a Spanish festival, ending in a flamenco dance-off with a bull.
+
+BUILT FOR iPAD
+Conjugar is a native iPad app for the first time, with layouts made for the larger screen, rather than an iPhone app shown in a box.
+
+REDESIGNED
+Every screen was rebuilt in SwiftUI. Conjugar now supports Dark Mode, Dynamic Type, and VoiceOver, and offers four app icons to choose from. A welcome tour introduces the app on first launch and can be replayed from Settings.
+
+QUIZ
+Quizzes are now 30 questions rather than 50, a length people actually finish, and the three difficulty levels were rebalanced around it. Scores are scaled to the old 50-question range, so your existing Game Center leaderboard entries remain comparable.
+
+ARTICLES
+A new article traces the history of the Spanish verb system from Latin to today, the Purpose and Use article was rewritten, and the article list can be filtered by difficulty.
+
+SPANISH
+Everything new in this release is fully localized in Spanish, including the verb history, the etymologies, the medieval quotations, the tutor, the game, and the widgets.
+
+Conjugar 3.0 requires iOS 26.
