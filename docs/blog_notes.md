@@ -8537,3 +8537,90 @@ Verifying a real reset is not possible: the simulator delegates audio to the hos
 `mediaserverd` to kill, and a device will not restart one. Konjugieren's port of this code was
 verified by posting the notification synthetically and watching the rebuild run, the category return
 to `Playback`, and playback resume. 550 tests in 30 suites pass here.
+
+## The 30.015-second trap: how a lossless remux breaks an App Store preview (2026-08-03)
+
+The four App Store preview videos came out of Final Cut and Compressor in good shape.
+`scripts/verify_store_media.sh` graded all four at zero blocking issues: 886 × 1920 for
+iPhone and 1200 × 1600 for iPad, square pixels, H.264 High Level 4.0, 30 fps, stereo AAC at
+48 kHz, and a duration of exactly 30.000000 seconds. Three advisories per file remained,
+all cosmetic — a stray timecode track that Final Cut writes and `-map 0:v:0 -map 0:a:0`
+does not remove, AAC at 128 kbps against a 256 kbps spec, and a note that landing exactly
+on the 30-second cap leaves no rounding margin.
+
+That last one turned out to be bad advice, inherited from Konjugieren, and Josh overruled
+it immediately: the cap is inclusive, the App Store accepts 30.000, and a preview's every
+second is precious. The "aim for 29 s" guidance has been struck from all three sibling
+docs and from all three copies of the verify script. What the advisory had misdiagnosed as
+a margin problem was actually a delivery-pipeline bug, which is what the rest of this entry
+is about.
+
+The obvious way to clear the other two advisories is a pure remux — copy both streams
+untouched, drop the data track, done:
+
+```
+ffmpeg -i in.mov -map 0:v:0 -map 0:a:0 -c copy -dn -sn -movflags +faststart out.mov
+```
+
+Every file came out at **30.015 seconds**. Over the cap. From a master that measured
+exactly 30.000. All four gained the same 15 milliseconds, which is the kind of uniformity
+that means a systematic cause rather than a rounding wobble.
+
+The cause is the QuickTime edit list. Compressor's AAC track physically contains 1409
+frames, and 1409 × 1024 ÷ 48000 = 30.058 seconds of samples — the encoder cannot end
+mid-frame, so it overshoots the last video frame by design. The edit list is the atom that
+says "present only the first 30.000 seconds of this track," and `ffprobe` on the master
+duly reports both streams as 30.000000. `ffmpeg -c copy` discards edit lists. Once the edit
+list is gone, the full audio track is what defines the container duration, and the file
+grows to fit its own tail.
+
+`-t 30` does not rescue it, which was the genuinely surprising part — Conjuguer's copy of
+the verify script had asserted for months that it would. Under `-c copy` ffmpeg can only
+cut on packet boundaries, and an AAC frame is 1024 ÷ 48000 = 21.33 ms, so 30.000 seconds is
+1406.25 packets. There is no boundary there to cut on. Both `-t 30` and `-t 29.9999`
+produced 30.015 s output, unchanged.
+
+The fix is to stop copying the audio:
+
+```
+ffmpeg -i in.mov -map 0:v:0 -map 0:a:0 \
+  -c:v copy -c:a aac -b:a 256k -ar 48000 -ac 2 \
+  -dn -sn -shortest -map_metadata -1 -movflags +faststart out.mov
+```
+
+`-shortest` stops the AAC encoder when the 900th video frame does. The output holds 1407
+audio frames and a container duration of exactly **30.000000**. The video is still
+stream-copied, so the H.264 bitstream is untouched — confirmed by running
+`ffmpeg -i x.mov -map 0:v:0 -f md5 -` against master and delivery and getting identical
+hashes for all four files. Only the audio takes a generation of loss, and going from
+128 kbps to 256 kbps on a voiceover-plus-music-bed is inaudible.
+
+One more trap surfaced while testing: `-dn` alone does *not* reliably drop the timecode
+track. The mov muxer re-creates one from the video stream's metadata, so `-map_metadata -1`
+has to be there too. An intermediate test run without it came back with three streams
+despite `-dn` being present.
+
+The best part of this is retroactive. Konjugieren's script doc has carried, since its 1.2
+delivery, an unexplained note that `English iPad 2 - 1200x1600.mov` shipped at 30.015 s
+while its siblings sat between 29.93 and 30.00. Same file type, same 15 milliseconds, same
+normalize step. That was never a rounding error; it was one file that went through a
+copy-based pass while the others were re-encoded. A year-old mystery in a sibling app,
+solved by an unrelated failure in this one.
+
+All of this is now written into `docs/video_script.md` in Conjugar, Conjuguer, and
+Konjugieren, under a "Delivering the files" section with a "The 30.015 s trap" subsection,
+and the blocking-failure message in all three verify scripts now names the real cause
+instead of recommending flags that cannot work. The delivered files live in
+`~/Desktop/Final/Conjugar/upload/` and grade zero blocking, zero advisory.
+
+Retiming the four cuts to hit 30 seconds was the other half of this work. Each clip gets a
+6, 6, 6, 7, 7-second slot, and the speed to get there is just source frames ÷ target frames
+at 30 fps — 180 frames for a six-second slot, 210 for a seven. Two things learned by doing
+it wrong first. Enter the **duration** in Final Cut's Custom Speed dialog, never the rate:
+a percentage computed against one take silently becomes wrong when the take is retrimmed,
+which is exactly how the Spanish iPhone quiz clip ended up running at 339% of a
+46-second source and showing 22 seconds of action in 6.5. And legibility, not duration, is
+the binding constraint — the quiz clip has to show a prompt, a finished answer, and the
+correct/incorrect feedback, and each of those needs to sit near real time to register. That
+is why the script was cut from two quiz questions to one; two cannot fit in seven seconds
+at any speed a viewer can read.

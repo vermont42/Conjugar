@@ -7,6 +7,11 @@ copy. The structure — five clips, 32 seconds, the size table, the preflight �
 
 Ensure that videos are exactly 32 seconds *without* transitions. There are 5 clips, so 4 half-second transitions between them shrink the length by two seconds, to 30. (FCP's default transition duration is 1 second; this assumes it has been set to 0.5 second in Settings ▸ Editing.)
 
+**Target 30.000 s exactly.** 30 s is the App Store's hard *maximum* and it is inclusive — a
+file measuring 30.000000 s is accepted. Every second of a preview is precious, so spend all
+thirty. What is *not* accepted is 30.015 s, which is what a careless delivery pass produces
+from a perfectly good 30.000 s master: see **The 30.015 s trap** below.
+
 ## App Store preview specifications
 
 Sizes, which are **not** the screenshot sizes — conflating the two got all four of
@@ -29,6 +34,58 @@ Verify before uploading:
 
 ```bash
 scripts/verify_store_media.sh ~/Desktop/Final/Conjugar
+```
+
+## Delivering the files
+
+Compressor's export already conforms on everything App Store Connect enforces — 886 × 1920
+/ 1200 × 1600, SAR 1:1, H.264 High ≤ L4.0, 30 fps, an AAC track, and exactly 30.000 s. The
+delivery pass is cleanup for two cosmetic advisories: Final Cut writes a stray timecode
+track (3 streams instead of 2), and Compressor's AAC lands near 128 kbps against the
+256 kbps spec. Both shipped fine on Konjugieren 1.2, so this is polish, not a blocker.
+
+```bash
+cd ~/Desktop/Final/Conjugar && mkdir -p upload
+for f in *.mov; do
+  ffmpeg -v error -y -i "$f" \
+    -map 0:v:0 -map 0:a:0 \
+    -c:v copy -c:a aac -b:a 256k -ar 48000 -ac 2 \
+    -dn -sn -shortest -map_metadata -1 -movflags +faststart \
+    "upload/$f"
+done
+```
+
+The video is **stream-copied**, so the H.264 bitstream stays bit-identical to the master —
+no generational loss, and no risk of disturbing the profile/level. Confirm it with
+`ffmpeg -v error -i in.mov -map 0:v:0 -f md5 -` run against both files; the hashes must
+match. Only the audio is transcoded. `-map_metadata -1` is not optional: with `-dn` alone,
+the mov muxer re-creates a timecode track from the video stream's metadata.
+
+### The 30.015 s trap
+
+The obvious delivery pass is a pure remux — `-c copy` for *both* streams — and it is
+**wrong**. It yields **30.015 s**, over the cap, from a master that measures exactly
+30.000 s. Every file gains the same silent 15 ms.
+
+Compressor writes a QuickTime **edit list** that trims the audio track back to the last
+video frame. The AAC track physically holds 1409 frames — 1409 × 1024 ÷ 48000 = 30.058 s of
+samples — and the edit list is the only thing hiding that tail. `ffmpeg -c copy` discards
+edit lists, so the full audio track redefines the container duration.
+
+`-t 30` does not rescue it. Under `-c copy` ffmpeg can only cut on AAC packet boundaries,
+and 30.000 s is 1406.25 packets — there is no packet to cut on, so the output stays
+30.015 s.
+
+**Re-encoding the audio is what fixes it.** `-shortest` stops the AAC encoder when the
+900th video frame does, giving 1407 frames and a container duration of exactly
+**30.000000**. This also explains the previously unattributed 30.015 s file in the sibling
+app Konjugieren's 1.2 delivery: same symptom, same 15 ms, same step.
+
+Always re-probe after any delivery pass — the failure is invisible in the picture:
+
+```bash
+ffprobe -v error -show_entries format=duration,nb_streams -of csv=p=0 upload/file.mov
+# expect 2,30.000000
 ```
 
 ## Recording the clips
