@@ -8743,10 +8743,24 @@ A comment enumerating four files is duplicated code that rots the first time one
 moves, and it would not have caught this bug anyway, because the bug was that the copy was
 already wrong before the comment existed.
 
-Still outstanding and Josh's call: `docs/video_script.md` line 188 says "Quiz mode: fifty
-timed questions to sharpen your conjugation skills," and that video is already produced and
-delivered. Editing the script would make the doc misdescribe the shipped asset, so it stays
-as it is until there is a re-record.
+Left open at the time: `docs/video_script.md` said "Quiz mode: fifty timed questions to
+sharpen your conjugation skills," and that video was already produced and delivered, so
+editing the script would have made the doc misdescribe the shipped asset.
+
+**Resolved the same day, and this paragraph is the stale part of the note.** It went in
+three steps, which is worth spelling out because the middle one caught me repeating an
+out-of-date journal entry back at Josh. `f5445d9` updated the fourth clip's label in all
+three forms — English, Spanish, and the IPA, which had transcribed *cincuenta* as
+[siŋˈkwen.ta] and now reads [ˈtɾejn.ta] — treating the script as the spec for the next
+re-record rather than as a description of the delivered asset. `a137749` then fixed the
+parenthetical at the top of the file that `f5445d9` had missed, the one listing "4,811
+verbs, 102 models, 20 conjugated tenses, 50 quiz questions." And then Josh **re-recorded and
+re-exported the previews** with the correct counts, which dissolves the dilemma entirely:
+script and shipped asset agree again, and neither says fifty.
+
+No occurrence of the old count survives anywhere in the file. The remaining thirties there
+are all about the video rather than the quiz: the 32-second timeline, the App Store's
+30.000 s cap, and 30 fps.
 
 ## The App Store Description, and Three Names That Were Wrong (2026-08-03)
 
