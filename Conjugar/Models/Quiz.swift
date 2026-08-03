@@ -111,6 +111,17 @@ class Quiz {
     }
   }
 
+  /// The question count every final score is normalized to, so that a run's length
+  /// does not change what a score is worth.
+  ///
+  /// The quiz ran 50 questions from 2017 until August 2026, when it was cut to 30 —
+  /// long enough that few players finished one. Scaling the raw score by
+  /// `scoreScale / questions.count` keeps a perfect run worth the same 500 points
+  /// before the region and difficulty modifiers as it was at 50 questions, so the
+  /// Game Center leaderboard's existing entries stay comparable with new ones
+  /// instead of becoming permanently unbeatable.
+  private static let scoreScale = 50.0
+
   init(settings: Settings, gameCenter: GameCenter, shouldShuffle: Bool = true) {
     self.settings = settings
     self.gameCenter = gameCenter
@@ -137,139 +148,121 @@ class Quiz {
     switch lastDifficulty {
     case .easy:
 //      questions.append((allRegular.next(), .presenteDeIndicativo, personNumber())) // useful for testing
-      [regularAr.next(), regularAr.next(), regularAr.next(), regularIr.next(), regularIr.next(), regularIr.next(), regularEr.next(), regularEr.next(), regularEr.next()].forEach {
+      // Ten questions per tense, five regular and five irregular in each.
+      [regularAr.next(), regularAr.next(), regularEr.next(), regularEr.next(), regularIr.next()].forEach {
         questions.append(($0, .presenteDeIndicativo, personNumber()))
       }
-      for _ in 0...8 {
+      for _ in 0..<5 {
         questions.append((irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber()))
       }
-      for _ in 0...7 {
-        questions.append((irregularRaizFutura.next(), .futuroDeIndicativo, personNumber()))
-      }
-      [regularAr.next(), regularAr.next(), regularAr.next(), regularIr.next(), regularIr.next(), regularEr.next(), regularEr.next()].forEach {
+      [regularAr.next(), regularAr.next(), regularEr.next(), regularEr.next(), regularIr.next()].forEach {
         questions.append(($0, .futuroDeIndicativo, personNumber()))
       }
-      for _ in 0...7 {
-        questions.append((irregularPreterito.next(), .pretérito, personNumber()))
+      for _ in 0..<5 {
+        questions.append((irregularRaizFutura.next(), .futuroDeIndicativo, personNumber()))
       }
-      for _ in 0...8 {
+      for _ in 0..<5 {
         questions.append((allRegular.next(), .pretérito, personNumber()))
       }
+      for _ in 0..<5 {
+        questions.append((irregularPreterito.next(), .pretérito, personNumber()))
+      }
     case .moderate:
-      [regularAr.next(), regularAr.next(), regularIr.next(), regularEr.next()].forEach {
+      // The same ten tenses as before, thinned to 30: presente 5, pretérito 4,
+      // three each for the middle six, two each for the last three.
+      [regularAr.next(), regularEr.next(), regularIr.next()].forEach {
         questions.append(($0, .presenteDeIndicativo, personNumber()))
       }
-      for _ in 0...3 {
+      for _ in 0..<2 {
         questions.append((irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber()))
       }
-      for _ in 0...2 {
-        questions.append((irregularRaizFutura.next(), .futuroDeIndicativo, personNumber()))
+      [allRegular.next(), allRegular.next()].forEach {
+        questions.append(($0, .pretérito, personNumber()))
+      }
+      for _ in 0..<2 {
+        questions.append((irregularPreterito.next(), .pretérito, personNumber()))
       }
       [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .futuroDeIndicativo, personNumber()))
+        questions.append(($0, .imperfectoDeIndicativo, personNumber()))
       }
-      for _ in 0...2 {
+      // One draw, not three: only three verbs are irregular in the imperfecto, so
+      // three draws showed the whole list every run.
+      questions.append((irregularImperfecto.next(), .imperfectoDeIndicativo, personNumber()))
+      questions.append((allRegular.next(), .futuroDeIndicativo, personNumber()))
+      for _ in 0..<2 {
+        questions.append((irregularRaizFutura.next(), .futuroDeIndicativo, personNumber()))
+      }
+      questions.append((allRegular.next(), .condicional, personNumber()))
+      for _ in 0..<2 {
         questions.append((irregularRaizFutura.next(), .condicional, personNumber()))
       }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .condicional, personNumber()))
-      }
-      for _ in 0...2 {
+      questions.append((allRegular.next(), .perfectoDeIndicativo, personNumber()))
+      for _ in 0..<2 {
         questions.append((irregularParticipio.next(), .perfectoDeIndicativo, personNumber()))
       }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .perfectoDeIndicativo, personNumber()))
-      }
-      for _ in 0...2 {
-        questions.append((irregularImperfecto.next(), .imperfectoDeIndicativo, personNumber()))
-      }
-      [allRegular.next(), allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .imperfectoDeIndicativo, personNumber()))
-      }
-      for _ in 0...2 {
-        questions.append((irregularPreterito.next(), .pretérito, personNumber()))
-      }
-      [regularAr.next(), regularIr.next(), regularEr.next()].forEach {
-        questions.append(($0, .pretérito, personNumber()))
-      }
-      for _ in 0...2 {
+      questions.append((allRegular.next(), .presenteDeSubjuntivo, personNumber()))
+      for _ in 0..<2 {
         questions.append((irregularPresenteDeSubjuntivo.next(), .presenteDeSubjuntivo, personNumber()))
       }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .presenteDeSubjuntivo, personNumber()))
-      }
-      for _ in 0...1 {
-        questions.append((irregularGerundio.next(), .gerundio, .none))
-      }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .gerundio, .none))
-      }
-      for _ in 0...1 {
-        if settings.secondSingularQuiz == .tu {
-          questions.append((irregularTuImperativo.next(), .imperativoPositivo, .secondSingularTú))
-        } else {
-          questions.append((irregularVosImperativo.next(), .imperativoPositivo, .secondSingularVos))
-        }
-      }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .imperativoPositivo, personNumber(skipYo: true, skipTu: true)))
-      }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
-      }
-    case .difficult:
-      for _ in 0...1 {
-        questions.append((irregularGerundio.next(), .gerundio, .none))
-      }
-      [regularAr.next(), regularIr.next(), regularEr.next()].forEach {
-        questions.append(($0, .gerundio, .none))
-      }
-      [regularAr.next(), regularIr.next(), regularEr.next()].forEach {
-        questions.append(($0, .presenteDeIndicativo, personNumber()))
-      }
-      for _ in 0...2 {
-        questions.append((irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber()))
-      }
-      for _ in 0...2 {
-        questions.append((irregularPreterito.next(), .pretérito, personNumber()))
-      }
-      [regularAr.next(), regularIr.next(), regularEr.next()].forEach {
-        questions.append(($0, .pretérito, personNumber()))
-      }
-      for _ in 0...1 {
-        questions.append((irregularImperfecto.next(), .imperfectoDeIndicativo, personNumber()))
-      }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .imperfectoDeIndicativo, personNumber()))
-      }
-      for _ in 0...1 {
-        questions.append((irregularRaizFutura.next(), .futuroDeIndicativo, personNumber()))
-      }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .futuroDeIndicativo, personNumber()))
-      }
-      for _ in 0...1 {
-        questions.append((allRegular.next(), .condicional, personNumber()))
-      }
-      questions.append((irregularRaizFutura.next(), .condicional, personNumber()))
-      for _ in 0...2 {
-        questions.append((irregularPresenteDeSubjuntivo.next(), .presenteDeSubjuntivo, personNumber()))
-      }
-      [regularAr.next(), regularIr.next(), regularEr.next()].forEach {
-        questions.append(($0, .presenteDeSubjuntivo, personNumber()))
-      }
-      questions.append((irregularPreterito.next(), .imperfectoDeSubjuntivo1, personNumber()))
-      questions.append((allRegular.next(), .imperfectoDeSubjuntivo2, personNumber()))
-      questions.append((irregularPreterito.next(), .futuroDeSubjuntivo, personNumber()))
-      questions.append((allRegular.next(), .futuroDeSubjuntivo, personNumber()))
+      questions.append((allRegular.next(), .gerundio, .none))
+      questions.append((irregularGerundio.next(), .gerundio, .none))
       if settings.secondSingularQuiz == .tu {
         questions.append((irregularTuImperativo.next(), .imperativoPositivo, .secondSingularTú))
       } else {
         questions.append((irregularVosImperativo.next(), .imperativoPositivo, .secondSingularVos))
       }
       questions.append((allRegular.next(), .imperativoPositivo, personNumber(skipYo: true, skipTu: true)))
+      [allRegular.next(), allRegular.next()].forEach {
+        questions.append(($0, .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
+      }
+    case .difficult:
+      // 25 simple-tense questions plus five of the nine compound tenses.
+      [allRegular.next(), allRegular.next()].forEach {
+        questions.append(($0, .presenteDeIndicativo, personNumber()))
+      }
+      for _ in 0..<2 {
+        questions.append((irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber()))
+      }
+      [allRegular.next(), allRegular.next()].forEach {
+        questions.append(($0, .pretérito, personNumber()))
+      }
+      for _ in 0..<2 {
+        questions.append((irregularPreterito.next(), .pretérito, personNumber()))
+      }
+      [allRegular.next(), allRegular.next()].forEach {
+        questions.append(($0, .presenteDeSubjuntivo, personNumber()))
+      }
+      for _ in 0..<2 {
+        questions.append((irregularPresenteDeSubjuntivo.next(), .presenteDeSubjuntivo, personNumber()))
+      }
+      [regularAr.next(), regularEr.next()].forEach {
+        questions.append(($0, .gerundio, .none))
+      }
+      questions.append((irregularGerundio.next(), .gerundio, .none))
+      questions.append((allRegular.next(), .imperfectoDeIndicativo, personNumber()))
+      questions.append((irregularImperfecto.next(), .imperfectoDeIndicativo, personNumber()))
+      questions.append((allRegular.next(), .futuroDeIndicativo, personNumber()))
+      questions.append((irregularRaizFutura.next(), .futuroDeIndicativo, personNumber()))
+      questions.append((irregularPreterito.next(), .imperfectoDeSubjuntivo1, personNumber()))
+      questions.append((allRegular.next(), .imperfectoDeSubjuntivo2, personNumber()))
+      questions.append((irregularRaizFutura.next(), .condicional, personNumber()))
+      questions.append((irregularPreterito.next(), .futuroDeSubjuntivo, personNumber()))
+      if settings.secondSingularQuiz == .tu {
+        questions.append((irregularTuImperativo.next(), .imperativoPositivo, .secondSingularTú))
+      } else {
+        questions.append((irregularVosImperativo.next(), .imperativoPositivo, .secondSingularVos))
+      }
       questions.append((allRegular.next(), .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
-      [.perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo].forEach {
+      // Five of the nine compound tenses per run rather than all nine, which would
+      // otherwise be 30% of a 30-question quiz. Drawn without replacement, so a
+      // single quiz stays varied and repeat play still covers the whole set.
+      let compoundTenses: [DisplayTense] = [
+        .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo,
+        .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo,
+        .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo
+      ]
+      let chosenCompounds = shouldShuffle ? compoundTenses.shuffled() : compoundTenses
+      chosenCompounds.prefix(5).forEach {
         questions.append((regularOrIrregularParticipioVerb, $0, personNumber()))
       }
     }
@@ -337,7 +330,7 @@ class Quiz {
       currentQuestionIndex += 1
       LiveActivityManager.update(liveActivityState(isFinished: false))
     } else {
-      score = Int(Double(score) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
+      score = Int(Double(score) * Quiz.scoreScale / Double(max(questions.count, 1)) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
       timer?.invalidate()
       quizState = .finished
       // Unlocks the "Change Quiz Difficulty" tip, which is rule-gated on having

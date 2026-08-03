@@ -8624,3 +8624,83 @@ the binding constraint — the quiz clip has to show a prompt, a finished answer
 correct/incorrect feedback, and each of those needs to sit near real time to register. That
 is why the script was cut from two quiz questions to one; two cannot fit in seven seconds
 at any speed a viewer can read.
+
+## The Quiz Drops from 50 Questions to 30 (2026-08-03)
+
+The quiz has run 50 questions since 2017. Nobody finishes 50 questions. That was the whole
+diagnosis, and the fix is the obvious one — cut it to 30, matching the sibling apps
+Conjuguer and Konjugieren, both of which have always been 30.
+
+Confirming the sibling counts turned out to be less trivial than expected, because the
+three apps encode the number in three different ways. Konjugieren is honest about it:
+`static let questionCount = 30`, referenced everywhere a progress label or a generation
+loop needs it. Conjuguer has no constant at all — its regular difficulty is eight `forEach`
+blocks that happen to sum to 30, and its `ridiculous` difficulty is a literal 30-entry
+array of hand-picked verb/tense pairs. Conjugar was the same shape as Conjuguer, only more
+so: three difficulty branches, each a hand-tuned sequence of `for _ in 0...8` loops and
+inline verb arrays, each independently summing to 50. Nothing named 50. Nothing asserted it
+except one line in `QuizTests`.
+
+That accounting style is worth a note on its own, because `for _ in 0...8` means *nine*
+questions, and a branch built from a dozen of those is genuinely hard to audit by eye. The
+rewrite switched every count to half-open `0..<N`, which says what it means. The counts are
+the entire point of this change; they should be readable.
+
+### The mixes
+
+The trim was an opportunity to fix balance problems that had accumulated in the old counts,
+not just to scale everything by 0.6.
+
+**Easy** was three tenses (presente, futuro, pretérito) at an even 25 regular / 25
+irregular but lopsided by tense — 18 presente, 15 futuro, 17 pretérito, for no reason
+anyone would defend. It is now ten questions per tense, five regular and five irregular in
+each. Same 50/50 regular-to-irregular ratio, but now stateable in one sentence.
+
+**Moderate**'s identity is breadth: ten tenses, including one compound. All ten survive.
+Dropping a tense would have been the most visible possible loss, so the thinning went into
+depth instead — presente 5, pretérito 4, three each for the middle six tenses, two each for
+gerundio and the two imperatives. A side benefit fell out of this: `VerbFamilies`
+`irregularImperfectivoVerbs` holds exactly three verbs (*ir*, *ser*, *ver*), and Moderate
+was drawing three irregular imperfecto questions, which meant every single run showed the
+entire list. At one draw the pick actually varies.
+
+**Difficult** was where the real design decision sat. Its signature has been a complete
+sweep of all nine compound tenses, one question each. Nine of 50 is 18% of a quiz; nine of
+30 is 30%, which would have made a third of the hardest level into *haber* + participle. So
+Difficult now draws **five of the nine per run, without replacement** — a single quiz stays
+varied, and repeat play still covers the whole set. The other 25 slots are simple tenses,
+weighted toward the ones that reward practice (presente, pretérito, and presente de
+subjuntivo at four each) and holding one slot apiece for the exotics that make the level
+what it is: both imperfecto de subjuntivo forms, futuro de subjuntivo, condicional on an
+irregular raíz futura.
+
+### The part that would have been a silent regression
+
+Score is `questions × 10`, then multiplied by region and difficulty modifiers. Cutting to
+30 drops every maximum by 40% — Spain/Difficult from 750 to 450 — and Conjugar reports
+scores to a Game Center leaderboard that has years of 50-question entries on it. Ship the
+cut alone and every existing high score becomes permanently unbeatable by every new player.
+Nothing would have failed; the leaderboard would just have quietly frozen.
+
+The fix is one line and one constant: normalize the raw score to a fixed 50-question scale
+before applying the modifiers. `Quiz.scoreScale = 50.0`, and the final score is
+`raw × scoreScale / questions.count × region × difficulty`. A perfect 30-question run is
+worth exactly what a perfect 50-question run was.
+
+Two details made this land cleanly. Multiply before dividing — `Double(score) * 50.0 /
+Double(count)` evaluates 300 × 50 = 15000, then ÷ 30 = 500.0 exactly, whereas computing the
+`50.0/30.0` factor first gives 1.6666666666666667 and risks 499.99999999999994 truncating
+to 499 through the `Int()` conversion. And divide by `max(questions.count, 1)`, because the
+DEBUG screenshot fixture builds a 12-question quiz through the same door.
+
+The payoff shows up in `QuizTests`, where all six region × difficulty maxima — 750, 624,
+500, 416, 250, 208 — are **unchanged**. The only edit the test needed was `questionCount ==
+50` becoming `== 30`. The float rounding on the Latin America modifier (0.833) lands
+identically to before, because the normalized raw score reaching the modifiers is the same
+500 it always was.
+
+Full suite green: 550 Swift Testing tests in 30 suites, `** TEST SUCCEEDED **`, SwiftLint
+clean. Worth recording that no user-facing string ever named the number — no `.xcstrings`
+entry, no Info article, no onboarding copy said "50 questions" — so the change is contained
+to `Quiz.swift` and one line of its test. The only place 50 survives is `Quiz.scoreScale`,
+where it is no longer a question count at all, just the scale a score is denominated in.

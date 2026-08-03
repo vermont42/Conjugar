@@ -16,8 +16,11 @@ import Testing
 
 @MainActor
 @Suite struct QuizTests {
-  /// A perfect run (every answer a total match) yields the maximum score, which
-  /// is `50 questions × 10 × region modifier × difficulty modifier`.
+  /// A perfect run (every answer a total match) yields the maximum score. Every
+  /// question is worth 10, and the raw total is normalized to `Quiz.scoreScale`
+  /// (50) questions before the region and difficulty modifiers — so the maxima
+  /// below are unchanged by the August 2026 cut from 50 questions to 30, which is
+  /// the point of the normalization.
   @Test func perfectRunScoresTheMaximum() {
     let cases: [(region: Region, difficulty: Difficulty, maxScore: Int)] = [
       (.spain, .difficult, 750),
@@ -42,7 +45,7 @@ import Testing
         quiz.start()
 
         let questionCount = quiz.questionCount
-        #expect(questionCount == 50)
+        #expect(questionCount == 30)
 
         while quiz.quizState == .inProgress {
           #expect(quiz.currentQuestionIndex >= 0 && quiz.currentQuestionIndex < questionCount)
