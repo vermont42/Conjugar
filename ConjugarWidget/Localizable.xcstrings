@@ -47,7 +47,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Responder Prueba"
+            "value" : "Responder Test"
           }
         }
       }
@@ -64,7 +64,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abrir Prueba"
+            "value" : "Abrir Test"
           }
         }
       }
@@ -98,7 +98,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prueba"
+            "value" : "Test"
           }
         }
       }
@@ -115,7 +115,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comienza una prueba de Conjugar."
+            "value" : "Comienza un test de Conjugar."
           }
         }
       }
@@ -132,7 +132,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prueba Rápida"
+            "value" : "Test Rápido"
           }
         }
       }
@@ -200,7 +200,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prueba Diaria"
+            "value" : "Test Diario"
           }
         }
       }
