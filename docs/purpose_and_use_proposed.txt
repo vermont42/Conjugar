@@ -46,13 +46,13 @@ Tap a model to see a compact grid of its conjugations, pronoun by tense, with ir
 
 ^Quiz^
 
-Tap ~Quiz~ in the tab bar to start a quiz. Tap ~Start~. ~Conjugar~ will then present you a set of fifty Spanish verbs to conjugate. Conjugate.
+Tap ~Quiz~ in the tab bar to start a quiz. Tap ~Start~. ~Conjugar~ will then present you a set of thirty Spanish verbs to conjugate. Conjugate.
 
 Each question shows the verb, its English translation, and the pronoun and tense you must produce. Type the conjugation and tap the keyboard's ~Next~ key. ~Conjugar~ tells you immediately whether you were right, showing the correct conjugation whenever you were not. A progress bar, your running score, and elapsed time appear on the screen throughout. To abandon a quiz, tap ~Quit~ in the upper-left corner.
 
 If a letter in a word like "habló" requires an accent mark and you input, for example, "hablo", you will receive partial credit for that conjugation. To input an accented letter, hold your finger on ("long press") the letter you want to accent, "o" in this example, swipe to the accented letter, "ó" in this example, and release.
 
-When you are done with the quiz, ~Conjugar~ will report and score your results, uploading the score to Game Center if it represents a personal best. The results screen lists all fifty questions with your answer and, where you erred, the correct conjugation, so a quiz doubles as a study session. Tap ~Quiz~ in the top-left corner to return to the ~Quiz~ tab. You can then start a new quiz.
+When you are done with the quiz, ~Conjugar~ will report and score your results, uploading the score to Game Center if it represents a personal best. The results screen lists all thirty questions with your answer and, where you erred, the correct conjugation, so a quiz doubles as a study session. Tap ~Quiz~ in the top-left corner to return to the ~Quiz~ tab. You can then start a new quiz.
 
 ^Info^
 

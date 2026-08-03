@@ -128,6 +128,7 @@ class Quiz {
     self.shouldShuffle = shouldShuffle
   }
 
+  /// Build a difficulty's question plan and start the clock.
   func start() {
     lastRegion = settings.region
     lastDifficulty = settings.difficulty

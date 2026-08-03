@@ -8704,3 +8704,46 @@ clean. Worth recording that no user-facing string ever named the number — no `
 entry, no Info article, no onboarding copy said "50 questions" — so the change is contained
 to `Quiz.swift` and one line of its test. The only place 50 survives is `Quiz.scoreScale`,
 where it is no longer a question count at all, just the scale a score is denominated in.
+
+## The Question Count Was in the Copy Too (2026-08-03)
+
+A footnote to the 50-to-30 cut, and a lesson about how a search can lie to you.
+
+When I made that change I checked whether any user-facing string named the number,
+concluded none did, and wrote that into both the commit message and the note above. Wrong.
+Josh opened the app and the Quiz tab said "Conjugate 50 Spanish verbs."
+
+The failure was in the search, not the codebase. Grep is useless inside `.xcstrings` —
+every value is one enormous JSON line, so the tool truncates matches to `[Omitted long
+matching line]`, which is why the project's CLAUDE.md says to reach for Python instead. I
+did reach for Python, and then wrote a bad regex: `.{60}50.{60}`, meant to print the number
+with context around it. That requires sixty characters *on both sides* of the match. The
+briefing string opens with "Conjugate 50 Spanish verbs" — the number sits at character ten,
+so the pattern could not match, and the search returned one irrelevant hit about the age of
+the Earth. A search that returns something feels like a search that worked.
+
+Re-running it with a length filter instead of a context window found `Quiz.briefing`
+immediately, and then a wider sweep for `fifty|cincuenta|\b50\b` found two more occurrences
+per language inside `Info.purposeAndUseText`, the long Purpose-and-Use article: "a set of
+fifty Spanish verbs to conjugate" and "the results screen lists all fifty questions", with
+"cincuenta verbos en español" and "las cincuenta preguntas" in the Spanish. Six user-facing
+statements of the count altogether, across two keys and two languages, plus
+`docs/purpose_and_use_proposed.txt`, the doc the Info body was written from. All now say
+thirty. Worth noting the number is spelled out as a word in the Info prose and as digits in
+the briefing, which is another reason a single search pattern was never going to find
+everything.
+
+Two things I'd take forward. First, when a search is meant to prove a *negative* — "no
+string mentions this" — the cost of a false negative is the whole conclusion, so the pattern
+needs to be the loosest one that still returns a readable result. Match the term, then slice
+context around the match; never require the context in the pattern itself. Second, the
+verification gap was real: `QuizTests` pins the count in code, and nothing pins the prose.
+I briefly wrote a doc comment on `start()` listing every location, and Josh cut it — fairly.
+A comment enumerating four files is duplicated code that rots the first time one of them
+moves, and it would not have caught this bug anyway, because the bug was that the copy was
+already wrong before the comment existed.
+
+Still outstanding and Josh's call: `docs/video_script.md` line 188 says "Quiz mode: fifty
+timed questions to sharpen your conjugation skills," and that video is already produced and
+delivered. Editing the script would make the doc misdescribe the shipped asset, so it stays
+as it is until there is a re-record.
