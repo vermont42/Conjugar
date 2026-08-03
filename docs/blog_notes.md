@@ -8747,3 +8747,83 @@ Still outstanding and Josh's call: `docs/video_script.md` line 188 says "Quiz mo
 timed questions to sharpen your conjugation skills," and that video is already produced and
 delivered. Editing the script would make the doc misdescribe the shipped asset, so it stays
 as it is until there is a re-record.
+
+## The App Store Description, and Three Names That Were Wrong (2026-08-03)
+
+Version 2.8's App Store description is four sentences long and describes an app that no
+longer exists: "95 irregular and 112 regular Spanish verbs," a quiz, and tense
+descriptions. Everything the migration added — 4,811 verbs, the models browser, the
+etymologies and the corpora, the tutor, the widgets, the game, native iPad — is invisible
+to anyone reading the store listing. So: a new English description for 3.0, written by
+surveying the code rather than the old copy, plus its Spanish translation.
+
+The limit is **4,000 characters**, which turns out to be roomy. The English lands at ~3.0k
+and the Spanish at ~3.4k (Spanish runs longer, as always). For the record, the sibling
+fields are much tighter and are not written yet: subtitle 30, promotional text 170,
+keywords 100.
+
+**The counts came from the code, and one of them was wrong.** Most claims verified cleanly:
+20 conjugated tenses from `DisplayTense`, 102 models from `ModelInfo.all`, 30-question quiz
+from `Quiz.swift`, four app icons from `AppIcon`, 1,345 etymologies, 2,139 medieval
+quotations. But the first draft claimed **6,700 example sentences**, which was nonsense
+born of a bad one-liner: `sum(len(v) for v in json.load(...).values())` over
+`ExampleUses.json`, where each verb maps to a *single example object* with five keys
+(`es`, `en`, `source`, `line`, `token`). The script counted keys and multiplied 1,340 verbs
+by 5. The real figure is **1,340 sentences, one per verb**. The same one-liner was right for
+`MedievalExamples.json`, whose values genuinely are lists — which is exactly why the error
+survived a glance. Lesson: when one file's count looks suspiciously round next to another's,
+print the value's *type* before printing its length.
+
+Provenance needed hedging too. Of the 1,340 examples, 1,130 are from the literature tier,
+101 from the government/technical tier, and **109 are Claude-authored** originals for verbs
+with no clean corpus hit (`docs/authored-examples.md`). "Drawn from real Spanish literature"
+was therefore an overclaim; the line now says "most of them drawn from Spanish literature."
+
+**Josh caught the second error before it shipped.** A draft line said the medieval quotations
+show verbs "as they were written 800 years ago," and he pushed back: are they all from
+exactly 800 years ago? They are not. The corpus is three works spanning 130 years — *Libro de
+buen amor* (c. 1330, 1,047 quotations), Berceo's *Milagros* (c. 1246–60, 658), and the *Cantar
+de mio Cid* (c. 1200, 434). The largest share is the *youngest*, at about 695 years, so "800
+years ago" overstated half the corpus. It now reads "in the 1200s and 1300s" / "en los siglos
+XIII y XIV," which is true of all three. The line also named only the Cid, the *smallest*
+source; it now names the *Libro de buen amor* as well, covering 69% of the quotations between
+them.
+
+**The third wrong name was the game's.** The draft headed a section `LA SUBIDA`, which is
+what the code and `prompts/game_la_subida.md` call the five-stage climb — but grepping the
+string catalog for "Subida" returns *nothing*. The name users see, in both localizations, is
+**Toreo por Amor** (`Game.title`, `Onboarding.gameTitle`). A store listing advertising a
+feature by its internal codename is a small trap for a reader who then goes looking for it.
+Both descriptions now say Toreo por Amor. Worth remembering generally: internal names and
+user-facing names drift, and the string catalog is the authority on which is which.
+
+**Prueba → Test, everywhere.** Translating the description surfaced an inconsistency between
+the two string catalogs: the app localizes Quiz as **Test** (`Quiz.localizedTitle`, and
+`Settings.difficultyDescription`'s "los tests"), while `ConjugarWidget/Localizable.xcstrings`
+independently used **Prueba** — so the same feature was "Test" in the tab bar and "Prueba
+Diaria" in the widget gallery. Josh's call: align on Test. That is six values in each catalog
+(both hold the `Widget.*` keys), plus the two inline references in `Info.purposeAndUseText`
+where the Purpose & Use article names the widget and the control. The rename is not a
+find-and-replace, because *prueba* is feminine and *test* is masculine: `Prueba Rápida` →
+`Test Rápido`, `Prueba Diaria` → `Test Diario`, `Comienza una prueba` → `Comienza un test`.
+The seven *other* Spanish uses of "prueba" in the catalog are ordinary vocabulary and were
+left alone — the verb (`~Fácil~ prueba los tres tiempos`), the idiom (`Pon a prueba tus
+conocimientos`), "evidence" in the verb-history essay, and `Prueba de Unidad` in the credits.
+
+**A `.xcstrings` editing note, learned the expensive way.** The first attempt did the rename
+by `json.load` → mutate → `json.dump`, which produced a **4,484-line diff** on a 12-line
+change. Xcode writes the catalog with `"value" : "..."` — a space *before* the colon — and
+Python's serializer writes `"value": "..."`, so every line in the file churns. `git checkout`
+and redo as raw-text replacement on the exact `"value" : "…"` lines: 12 lines changed, 12
+insertions, 12 deletions. CLAUDE.md already warns that the Edit tool mangles ASCII quotes in
+`.xcstrings`; the corollary is that a full reserialize is just as destructive in a quieter
+way. Surgical string replacement plus a `json.load` validation is the move. `build_app.sh`
+succeeds.
+
+**And one bug found by accident.** Grepping the catalog for terminology turned up
+`Quiz.gameCenterMessage`, the body of the Game Center alert on the Quiz tab: "¿Te gustaría
+que Conjugar **suiera** tus futuras puntuaciones a Game Center...?" *Suiera* is not a word.
+The verb is *subir* and `¿Te gustaría que…?` governs the imperfect subjunctive, so it wants
+**subiera** — a dropped `b`, shipped and visible to every Spanish-language user who has not
+yet enabled Game Center. Fixed in the same pass. A reminder that a translation audit for one
+purpose is a decent way to find defects of an entirely different kind.
