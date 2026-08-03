@@ -185,9 +185,9 @@ IPA: [los ˈsjen.to ðos moˈðe.los de koŋ.xu.ɣaˈsjon del es.paˈɲol]
 Fourth Clip - seven seconds
 Starts out on QuizView. Start. Type answer. Submit.
 Label:
-Quiz mode: fifty timed questions to sharpen your conjugation skills.
-Modo test: cincuenta preguntas cronometradas para afinar tus conjugaciones.
-IPA: [ˈmo.ðo ˈtes(t) ‖ siŋˈkwen.ta pɾeˈɣun.tas kɾo.no.meˈtɾa.ðas ˈpa.ɾa a.fiˈnaɾ tus koŋ.xu.ɣaˈsjo.nes]
+Quiz mode: thirty timed questions to sharpen your conjugation skills.
+Modo test: treinta preguntas cronometradas para afinar tus conjugaciones.
+IPA: [ˈmo.ðo ˈtes(t) ‖ ˈtɾejn.ta pɾeˈɣun.tas kɾo.no.meˈtɾa.ðas ˈpa.ɾa a.fiˈnaɾ tus koŋ.xu.ɣaˈsjo.nes]
 
 Fifth Clip - seven seconds
 Starts out at top of InfoBrowseView. Scroll down so that Presente de Indicativo is near top of screen. Tap it. Slowly scroll down to bottom.
