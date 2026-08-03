@@ -108,7 +108,7 @@ First Clip - six seconds
 Starts out at top of VerbBrowseView. Sort by frequency (ser on top). Slowly scroll down for five seconds.
 Label:
 4,811 Spanish verbs — from abajar to zurrar, sorted alphabetically or by frequency.
-cuatro mil ochocientos once verbos españoles: de abajar a zurrar, ordenados alfabéticamente o por frecuencia.
+4811 verbos españoles: de abajar a zurrar, ordenados alfabéticamente o por frecuencia.
 IPA: [ˈkwa.tɾo mil o.t͡ʃoˈsjen.tos ˈon.se ˈβeɾ.βos es.paˈɲo.les ‖ de a.βaˈxaɾ a suˈrar ‖ oɾ.ðeˈna.ðos al.faˌβe.ti.kaˈmen.te o poɾ fɾeˈkwen.sja]
 
 Second Clip - six seconds

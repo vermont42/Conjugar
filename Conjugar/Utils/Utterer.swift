@@ -26,14 +26,24 @@ class Utterer {
   // last-writer-wins race that silenced other audio.
   static func setup(settings: Settings) {
     Utterer.settings = settings
+    configureSession()
+    utter("")
+  }
 
+  // Extracted from `setup` because the session outlives its configuration: a media-services reset
+  // reverts the category to the system-default `.soloAmbient`, and an interruption deactivates the
+  // session, with nothing re-establishing either on its own. `.soloAmbient` would also break the
+  // contract above by silencing the user's music rather than mixing with it. `SoundPlayerReal`
+  // calls this from its recovery path instead of touching the session itself, so this type remains
+  // the single owner.
+  static func configureSession() {
     let session = AVAudioSession.sharedInstance()
     do {
       try session.setCategory(.ambient)
+      try session.setActive(true)
     } catch {
       uttererLogger.error("Could not set audio-session category: \(error.localizedDescription)")
     }
-    utter("")
   }
 
   static func utter(_ thingToUtter: String, locale: String? = nil) {

@@ -8486,3 +8486,54 @@ gets believed. That's the reason to prioritize renames over additions when the t
 and Conjugar has already done a lot of renaming (`Tense`→`DisplayTense`, `Flag`→`Obstacle`,
 `GameState+Flags`→`GameState+Obstacles`, the whole `*2`-suffix drop), so the failure mode is
 not hypothetical here.
+
+## Recovering from a media-services reset, and Conjugar's part in causing one (2026-08-02)
+
+This one arrived by an unusual route. Josh reported silent quiz sounds in Konjugieren, on his
+iPhone, with audio feedback on and the phone unmuted. Instrumenting that app's `play` and running it
+on the device caught the cause in one line: the session category read
+`AVAudioSessionCategorySoloAmbient` and `AVAudioPlayer.play()` returned `false`. `.soloAmbient` is
+the system default, which none of these three apps ever sets. That pair is the signature of an
+`AVAudioSession` media-services reset: `mediaserverd` restarts, the session reverts to defaults, and
+every existing `AVAudioPlayer` becomes an orphan that refuses to play. Konjugieren's
+`docs/blog_notes.md` entry "The quiz went silent, and the audio session was the reason" has the full
+trace.
+
+The trigger was Conjugar. Josh's son had been playing this app's game on the same phone, and
+Konjugieren's launch line recorded `otherAudio=true`. Two audio-heavy apps trading the session is an
+ordinary way to provoke a reset. So Conjugar caused the reset in a sibling app, and was equally
+defenseless against one itself: nothing here observed `mediaServicesWereResetNotification` or
+`interruptionNotification`, `Utterer.setup` set a category but never activated the session, and
+`sounds` caches an `AVAudioPlayer` per effect for the life of the process.
+
+Conjugar's version of the bug is worse than Konjugieren's, and the reason is the category. Konjugieren
+runs `.playback` and loses only its own audio. `Utterer` here documents `.ambient` as a deliberate
+contract for a study app: mix with the user's music or podcast, and respect the silent switch. A
+reset reverts that to `.soloAmbient`, which *stops* other audio rather than mixing with it. So a
+reset in this app both silences its own effects and kills whatever the user was listening to, while
+the comment in `Utterer` still describes the behavior the code no longer has.
+
+A near-defense worth naming, since it looks like protection and is not: `warmUpSounds()` runs at
+every game start from `GameState`, but it filters to names *absent* from `sounds`, so orphaned
+players are skipped rather than replaced. Nothing short of a relaunch would have recovered.
+
+The fix respects the session ownership this file's header goes out of its way to establish.
+`SoundPlayerReal` still does not touch the session: the category-and-activate step was extracted
+from `Utterer.setup` into `Utterer.configureSession`, and the recovery path calls that. Delegating
+rather than duplicating also keeps the order deterministic, since the session has to be back before
+the rebuilt players are prepared against it. `SoundPlayerReal.setup` registers for both
+notifications: a reset triggers `rebuildAudio`, and an interruption ending calls
+`Utterer.configureSession`.
+
+Two details specific to this file. The `play()` `Bool` is the only in-band signal a reset produces,
+and it was being discarded because `play()` is dispatched to `playbackQueue` to keep the blocking
+audio-server round trip off the game loop; it is now checked on the queue, and a `false` hops back
+to the main actor to rebuild, throttled to one rebuild per five seconds. And the music playhead is
+deliberately *not* carried across a rebuild: `startMusic` drops `savedMusicTime` whenever it has to
+rebuild the player, which is exactly this case, so saving it would only have looked like it worked.
+A resumed track restarts per its `startsAtRandomPosition` rule.
+
+Verifying a real reset is not possible: the simulator delegates audio to the host Mac and has no
+`mediaserverd` to kill, and a device will not restart one. Konjugieren's port of this code was
+verified by posting the notification synthetically and watching the rebuild run, the category return
+to `Playback`, and playback resume. 550 tests in 30 suites pass here.
