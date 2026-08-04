@@ -203,6 +203,12 @@ App Store screenshots only — 9 views × 2 languages × 2 devices = 36 PNGs. No
 
 - macOS with Xcode 26+ and the **iOS 26.3** simulator runtime installed. (The deployment target is iOS 26, so 26.0 would also run, and everything here was first verified on 26.0; the targets were migrated to 26.3 on 2026-07-18 and re-verified. Tab geometry proved identical between the two to within 0.1 pt.)
 - `axe` CLI on PATH (see `ios-build-verify` SKILL.md for installation).
+- **Simulator.app running — the driver now handles this itself.** `ensure_simulator_app`
+  launches it when absent, and `assert_framebuffer_live` refuses to run against a device that
+  renders black (workaround #26). Both run in a preflight pass *before* `build_app.sh`, so a
+  dead simulator costs seconds instead of a wasted build. You no longer have to remember to open
+  Simulator first; leaving it open is still the best state to run in, since the keyboard steps
+  need its menu bar.
 - `ios-build-verify` skill installed; resolve its scripts directory once per session:
   ```bash
   export IBV_SCRIPTS=$(dirname "$(find ~/.claude/plugins/marketplaces -path '*ios-build-verify*' -name build_app.sh 2>/dev/null | head -1)")
@@ -856,6 +862,38 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
     *Verification:* iPhone/en `quiz_mid` re-shot clean (answer `soy` in the field, keyboard
     up, no callout, no warnings) and `quiz_results` re-shot all-green from the detached
     state, so both directions of the state machine ran end to end.
+
+26. **A booted simulator can render pure black while every other signal says it is fine**
+    (`take_screenshots.sh::ensure_simulator_app, assert_framebuffer_live`)
+    *Symptom:* `xcrun simctl bootstatus -b` reports success, `axe describe-ui` returns a
+    complete home-screen accessibility tree with icons — and every capture is a mean-0 black
+    PNG, from both `axe screenshot` and `simctl io screenshot`. In the run where this was
+    found, `simctl launch` also hung for 21 minutes against the same device.
+    *Why it is dangerous:* `wait_for_render` polls the **accessibility tree**, which stays
+    perfectly healthy throughout. Nothing in the driver's wait path can see this, so the sweep
+    runs to completion, reports success, and writes a full set of black screenshots. A live AX
+    tree proves the device is *running*, not that it is *rendering* — those are different
+    claims, and only the pixels can settle the second one.
+    *Fix:* `assert_framebuffer_live` captures a probe frame and requires `magick`'s `%[mean]`
+    above 1 (a threshold, not `!= 0` — a nearly-black frame is just as dead, while a live
+    dark-mode screen clears it easily on status-bar text alone). It retries 10× at 3 s, because
+    a just-booted device legitimately renders black while SpringBoard comes up, then exits 2
+    with a diagnostic. `ensure_simulator_app` launches Simulator.app when it is not running.
+    Both are called from `ensure_booted`, and `main` runs a **preflight pass over every target
+    device before the build**, so this fails in seconds rather than after a ~10-minute
+    `build_app.sh`.
+    *Cause never established — read this before chasing it.* Simulator.app being absent was the
+    most visible anomaly, but **launching it did not clear the condition**, so the tempting
+    "headless boot breaks rendering" story is a correlation that was never earned. Quitting and
+    relaunching Simulator.app, `simctl shutdown all`, and `launchctl remove
+    com.apple.CoreSimulator.CoreSimulatorService` all failed too. **Only a host reboot worked.**
+    If you hit this, reboot rather than working down that list. A stray `screencapture`
+    permission dialog was also sitting on the host and is worth dismissing first, since a modal
+    there can stall host-side capture indefinitely.
+    *Observed in Conjuguer on 2026-08-04; the guard is ported to all three apps. The failing
+    state is not reproducible on demand, so the abort path was verified by pointing
+    `assert_framebuffer_live` at a shut-down device (exits 2 with the diagnostic) and the pass
+    path against a live one (returns in ~1 s).*
 
 ## Measure `STABLE_PIXEL_TOLERANCE`
 

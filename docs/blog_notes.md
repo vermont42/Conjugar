@@ -8841,3 +8841,37 @@ The verb is *subir* and `¿Te gustaría que…?` governs the imperfect subjuncti
 **subiera** — a dropped `b`, shipped and visible to every Spanish-language user who has not
 yet enabled Game Center. Fixed in the same pass. A reminder that a translation audit for one
 purpose is a decent way to find defects of an entirely different kind.
+
+## Screenshot driver gains a framebuffer preflight, ported from Conjuguer (2026-08-04)
+
+Conjuguer hit a simulator failure on 2026-08-04 that this driver is equally exposed to, because
+`ensure_booted` was byte-identical across all three apps. Recording it here so the guard is not
+mistaken for speculative hardening.
+
+A booted device served a **complete accessibility tree** — `bootstatus -b` success, `axe
+describe-ui` returning the full home screen with icons — while every framebuffer capture came back
+pure black from both `axe screenshot` and `simctl io screenshot`. `simctl launch` also hung for 21
+minutes against it. The dangerous part is that `wait_for_render` polls the *accessibility tree*, so
+nothing in the wait path can observe this: a sweep in that state runs to completion, reports
+success, and writes a full set of black screenshots. A live AX tree proves the device is running,
+not that it is rendering, and only the pixels can settle the second claim.
+
+Two new functions. `assert_framebuffer_live` captures a probe frame and requires `magick`'s
+`%[mean]` above 1 — a threshold, not `!= 0`, since a nearly-black frame is just as dead while a live
+dark-mode screen clears it on status-bar text alone — retrying 10× at 3 s to tolerate the moment
+after boot when SpringBoard is legitimately black, then exiting 2. `ensure_simulator_app` launches
+Simulator.app when it is not running. Both are called from `ensure_booted`, and `main` now runs a
+preflight pass over every target device **before** `build_app.sh`, since `ensure_booted` was
+otherwise only reachable after the build, which is roughly ten wasted minutes before the problem
+surfaces.
+
+What the guard deliberately does *not* claim: that booting headless caused it. Simulator.app being
+absent was the most visible anomaly, but launching it did not clear the condition, and neither did
+quitting and relaunching it, `simctl shutdown all`, or `launchctl remove
+com.apple.CoreSimulator.CoreSimulatorService`. Only a host reboot worked. If this appears here,
+reboot rather than working down that list. Cause never established.
+
+Not verified against the real fault in this repo — the condition did not reproduce after the reboot
+that cleared it. The abort path was verified by substitution in Conjuguer (a shut-down device exits
+2 with the diagnostic; a live one returns in about a second) and this port is byte-identical, plus
+`bash -n` clean here.

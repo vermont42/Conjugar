@@ -168,12 +168,81 @@ apply_device_state() {
   IFS=' ' read -ra CURRENT_TAB_CENTERS <<< "$(tab_coords_for "$DEVICE")"
 }
 
+# Simulator.app must be up before anything drives a device. One proven reason and
+# one precautionary:
+#   - The keyboard steps click Simulator's menu bar through AppleScript, which needs
+#     a real window. A booted-but-windowless device fails them with a -1719 that
+#     reads exactly like a missing Accessibility permission.
+#   - A run that began with Simulator.app absent has been seen to boot a device whose
+#     framebuffer never rendered (see assert_framebuffer_live). Launching the app did
+#     not by itself clear that, so this is NOT a known fix for it — it removes the
+#     cheapest variable before a long run, nothing more.
+ensure_simulator_app() {
+  if pgrep -f 'Simulator.app/Contents/MacOS/Simulator' >/dev/null 2>&1; then
+    return 0
+  fi
+  log "Simulator.app is not running — launching it"
+  open -a Simulator
+  local waited=0
+  until pgrep -f 'Simulator.app/Contents/MacOS/Simulator' >/dev/null 2>&1; do
+    sleep 1
+    waited=$((waited + 1))
+    if [[ $waited -ge 30 ]]; then
+      log "WARNING: Simulator.app did not come up within 30s; continuing anyway"
+      return 0
+    fi
+  done
+}
+
+# A booted device can serve a complete accessibility tree while every framebuffer
+# capture comes back pure black. Seen 2026-08-04: `bootstatus -b` reported success,
+# `axe describe-ui` returned the full home screen with icons, and both `axe
+# screenshot` and `simctl io screenshot` produced mean-0 images.
+#
+# This matters because `wait_for_render` polls the AX tree, so it is structurally
+# blind to the condition: the sweep runs to completion, reports success, and writes
+# a full set of black PNGs. Assert on the pixels instead, which is the only channel
+# that can see it.
+#
+# Only a host reboot cleared it. Quitting and relaunching Simulator.app, `simctl
+# shutdown all`, and `launchctl remove com.apple.CoreSimulator.CoreSimulatorService`
+# all failed, so do not treat those as remedies. Cause never established.
+#
+# Retries because a device that has just booted legitimately renders black for a
+# moment while SpringBoard comes up.
+assert_framebuffer_live() {
+  if ! command -v magick >/dev/null 2>&1; then
+    log "magick not found; skipping framebuffer check"
+    return 0
+  fi
+  local probe mean
+  probe="${TMPDIR:-/tmp}/take_screenshots_fb_$$.png"
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    xcrun simctl io "$UDID" screenshot "$probe" >/dev/null 2>&1 || true
+    mean=$(magick "$probe" -format '%[mean]' info: 2>/dev/null || echo 0)
+    # Threshold rather than != 0: a nearly-black frame is just as dead, and a live
+    # dark-mode screen still carries white status-bar text well above this.
+    if awk -v m="${mean:-0}" 'BEGIN { exit !(m > 1) }'; then
+      rm -f "$probe"
+      return 0
+    fi
+    sleep 3
+  done
+  rm -f "$probe"
+  log "FATAL: $DEVICE ($UDID) is booted but renders a black framebuffer."
+  log "  Every capture this run would be a black PNG, and the AX-tree waits cannot"
+  log "  detect that. A host reboot is the only fix known to work."
+  exit 2
+}
+
 ensure_booted() {
+  ensure_simulator_app
   if ! xcrun simctl list devices booted | grep -q "$UDID"; then
     log "booting $DEVICE ($UDID) — iPad first-boot can take ~70s"
     xcrun simctl boot "$UDID"
   fi
   xcrun simctl bootstatus "$UDID" -b >/dev/null
+  assert_framebuffer_live
 }
 
 set_appearance() {
@@ -908,6 +977,18 @@ main() {
     IBV_SCRIPTS=$(resolve_ibv_scripts)
   fi
   log "ibv scripts: $IBV_SCRIPTS"
+
+  # Preflight every target device BEFORE the build. Both failure modes below are
+  # otherwise discovered ~10 minutes later, after build_app.sh has run for nothing:
+  # a device that renders black, and a simulator name that resolves to nothing.
+  # ensure_booted is idempotent, so the per-device loop below just re-confirms.
+  ensure_simulator_app
+  for device in "${DEVICES[@]}"; do
+    if filter_skip "$device" "$DEVICE_FILTER"; then continue; fi
+    apply_device_state "$device"
+    log "preflight: $device"
+    ensure_booted
+  done
 
   log "building once (install per device after)"
   "$IBV_SCRIPTS/build_app.sh"
