@@ -9,8 +9,8 @@ Conjugar/
 ├── flamencoLoop.mp3            # Music.gameLoop — Pond5 "Flamenco Adventure" (legacy filename); the one music file NOT in Audio/
 ├── *.mp3                       # Legacy one-shot SFX at the target root (applause1-3, buzz, chime, chirp, chomp, gun,
 │                               #   moo, pop, sadTrombone1-4, shieldActivate, silence, soccerKick) — see Models/Sound.swift
-├── *.png                       # README/App Store imagery kept in the target (browse, browseInfo, info, launch,
-│                               #   leaderboard, quiz, verb, GameCenter)
+├── *.png                       # Legacy UIKit-era screenshots (browse, browseInfo, info, launch, leaderboard, quiz,
+│                               #   verb, GameCenter). No longer referenced by README.md — it uses Images/ now
 ├── Analytics/
 │   ├── Analytics.swift         # Analytics protocol + AnalyticsName / ParameterKey enums; nonisolated throughout
 │   ├── AnalyticsReal.swift     # TelemetryDeck conformer; funnels every SDK call onto a serial GCD queue
@@ -384,6 +384,8 @@ Conjugar.xcodeproj/             # The Xcode project (scheme `Conjugar`)
 ConjugarWidget.entitlements     # Widget entitlements (App Groups)
 .swiftlint.yml                  # SwiftLint configuration
 unused.rb                       # Legacy helper: finds unreferenced assets
-apple.png                       # README imagery
+apple.png                       # README imagery: the App Store download badge
+Images/                         # README imagery: Splash.png (the DancerIcon hero) plus the ten 800 px-wide
+                                #   screenshots of the shipping app. Regenerate from docs/screenshots/ (gitignored)
 build.log                       # Raw xcodebuild output from the last ios-build-verify run (gitignored)
 ```

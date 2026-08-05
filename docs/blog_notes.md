@@ -8875,3 +8875,84 @@ Not verified against the real fault in this repo — the condition did not repro
 that cleared it. The abort path was verified by substitution in Conjuguer (a shut-down device exits
 2 with the diagnostic; a live one returns in about a second) and this port is byte-identical, plus
 `bash -n` clean here.
+
+## The README rewrite: from 2017 artifact to shipping-app front door (2026-08-05)
+
+`README.md` had gone stale in the way that a README does when the app under it changes but the
+prose does not. It described a UIKit app built to demonstrate programmatic layout, linked seven
+screenshots of the 2017 UI, and — the part that was actively wrong rather than merely dated —
+claimed analytics flowed through a no-op `TestAnalyticsService` "pending a planned TelemetryDeck
+integration." TelemetryDeck shipped in July. The type it named (`AnalyticsServiceable`,
+`TestAnalyticsService`) had been deleted in the same pass that shipped it. The AWS Pinpoint
+sentence was thus doubly stale: it corrected a fact nobody was likely to assert anymore, and it
+promised a future that had already happened.
+
+The rewrite follows the sibling app Conjuguer's README, which had converged on a shape worth
+copying: hero icon, one-sentence pitch, App Store badge, a bulleted feature list, a two-row 5×2
+screenshot table, a build-from-source section, license. Adopting that shape here mostly meant
+writing an honest feature list, which is a useful exercise in its own right — the app has
+accumulated a tutor, widgets, controls, a Live Activity, alternate icons, a five-stage minigame
+with a flamenco boss fight, and iPad support since anyone last summarized it.
+
+Two things I decided not to paper over. The first is the programmatic-layout story. The old README
+sold the repo as example code for PL, and the two racecondition.software tutorials it links are
+still the reason some people find this repo. That claim is now false — no `UIViewController`
+subclass remains. Deleting the links would orphan the incoming traffic; leaving them unqualified
+would lie. The paragraph now says both things in order: released in 2017 to demonstrate DI and PL,
+the DI half survives in `World`, the PL half does not, rewritten in SwiftUI in 2026. The second is
+the license anecdote, which I kept nearly verbatim. It is the most-quoted paragraph in the repo, it
+explains the AGPL switch better than a neutral sentence would, and "some dirtbag released a clone"
+is Josh's voice, not something to sand down. I moved it to past tense where it referred to the PL
+demonstration, and left the rest alone.
+
+Images now live in a new top-level `Images/` folder, matching Conjuguer. This matters more than it
+sounds: `docs/screenshots/` is **gitignored**, so the current screenshots — the ones the screenshot
+driver produces — are invisible to anyone who clones the repo. `Images/` is the tracked copy.
+Source was `docs/screenshots/version_3/iPhone_English/{1..9}.png` (the 9:41-status-bar App Store
+set) plus `~/Downloads/Conjugar_game.png` for the minigame, renamed from ordinals to what they
+actually show (`verb-browse`, `model`, `quiz-results`, …) so a future session does not have to open
+nine files to find one.
+
+Optimization: no `pngquant`, `oxipng`, or `optipng` on this machine, and installing one for a
+one-time job seemed like the wrong trade. Pillow 12 does the same two operations that matter —
+LANCZOS downscale to 800 px wide (Conjuguer's width), then `quantize(colors=256,
+MEDIANCUT, dither=FLOYDSTEINBERG)`. Flat UI screenshots are exactly the case that survives 256
+colors intact; the ten came out 47–140 KB, about 1 MB total, down from 2.2 MB of full-resolution
+3× PNGs. The one image where this failed is the hero. `DancerIcon-light.png` is a *photograph* of a
+flamenco dancer, and quantizing a photo's cream gradient bands visibly while barely paying for
+itself — 485 KB at 1024 px, worse than the RGB original per unit of quality. So the hero skips
+quantization and is simply a 400 px RGB downscale (209 KB), displayed at 180 px. Worth remembering
+as a rule: quantize flat UI, downscale photographs.
+
+Verification was done in Chrome rather than by eye, because the failure mode that matters in a
+README is a broken image path, and that is invisible in the source. `curl`ing the file through
+GitHub's `/markdown/raw` API produces GitHub's own HTML, which — served from a
+`python3 -m http.server` at the repo root, so relative `Images/…` paths resolve exactly as they will
+on github.com — renders the real thing. All ten screenshots, the hero, and the App Store badge
+loaded. A local markdown previewer would not have proven the paths, since most resolve relative to
+the previewer rather than the repo.
+
+That left the eight legacy PNGs in `Conjugar/` (`browse.png`, `verb.png`, `GameCenter.png`, …),
+which the new README no longer references. I guessed in a first draft of this entry that they were
+probably shipping inside the bundle, since they sit in the app target's directory and this project
+leans on synchronized groups. That guess was wrong, and the way it was wrong is worth writing down:
+`Conjugar/` itself is **not** a `PBXFileSystemSynchronizedRootGroup`. Only its *subfolders* are
+(`Models`, `Views`, `Utils`, `Analytics`, `Supporting`, `Audio`), along with `ConjugarTests`,
+`ConjugarWidget`, and `Shared`. Files at the `Conjugar/` root are therefore ordinary explicit
+references, and these eight appear nowhere in `project.pbxproj`. They were never in the bundle;
+they were just sitting in the folder. The rule to carry forward: "it's in the target's directory"
+does not imply "it's in the target" here, and the pbxproj settles it in one grep.
+
+Removed them anyway, since nothing referenced them, and `build_app.sh` succeeded afterward. The
+build was never really in doubt once the pbxproj came back empty, but running it is cheap and the
+alternative is trusting a grep about a file format with more than one way to reference a resource.
+The related thing the search *did* turn up, and which I have not touched: `LaunchScreen.storyboard`
+references an image named `Dancer`, and no such asset exists in `Assets.xcassets`. Not one of the
+eight, not caused by this change, but somebody should look at what the launch screen is actually
+drawing.
+
+Last pass: Josh asked for no em dashes in the README, so the nine feature bullets went from
+`**Term** — text` to `**Term**: text`, and the three prose em dashes became a semicolon, a
+sentence break, and a colon. The `World` sentence reads better for it. It had been a pair of
+parenthetical dashes wrapping a clause, which is exactly the construction that tempts you to keep
+extending a sentence instead of ending it.
