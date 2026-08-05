@@ -9003,3 +9003,48 @@ Worth internalizing as a general rule: **resources referenced by string from a n
 plist, or asset name are invisible to every "unused symbol" tool.** When a commit deletes an asset
 because nothing in Swift refers to it, the storyboards are exactly where the surviving reference
 hides.
+
+## Two traps in one small fix: the symbol collision and the cached launch screen (2026-08-05)
+
+The launch-screen fix above shipped with a warning I did not look for, and then appeared to break
+in a way it had not actually broken. Both are worth recording, because both punish the same habit:
+treating "Build Succeeded" as the end of verification.
+
+**The symbol collision.** Naming the new imageset `Dancer` seemed elegant — the storyboard already
+asked for `Dancer`, so the storyboard needed no edit at all, which I wrote up as a virtue. Xcode
+disagreed, twice:
+
+    warning: The "dancer" image asset name resolves to the symbol "dancer" which already exists.
+    Try renaming the asset.
+
+Generated asset symbols lowercase the first letter, so `Dancer.imageset` and the existing
+`dancer.symbolset` both want to be `ImageResource.dancer`. The irony is exact: the case-sensitivity
+that hid the original bug (a `dancer` existed, but `Dancer` did not, so the storyboard silently
+resolved nothing) is the same case-insensitivity-after-lowercasing that made my chosen name
+collide. Renaming to `LaunchDancer` fixes it and costs the storyboard edit I had been pleased to
+avoid — three string replacements, and the `<resources>` entry's stale `width="512" height="512"`
+corrected to the 200 pt it actually renders at.
+
+I only saw the warning because Josh sent a screenshot of Xcode's issue navigator. My build check had
+been `tail -3` of the log, looking for "Build Succeeded". It was there, and two warnings were also
+there. The build script's output is not a pass/fail oracle; `rg -c 'warning:' build.log` is now part
+of the check.
+
+**The cached launch screen.** After the rename, the launch screen came back with the label and no
+dancers — visually identical to the original bug. The obvious reading is that the rename broke
+image resolution. It had not. Both halves verified clean: the compiled nib in
+`Base.lproj/LaunchScreen.storyboardc` had `LaunchDancer` baked in, and `assetutil` showed
+`LaunchDancer` in `Assets.car` at 600×600 (only the @3x rendition, since Xcode thins to the target
+device's scale — normal, not a missing asset).
+
+The tell was the clock. Every launch-screen capture read 11:43, including ones taken at 11:45 and
+12:01, while a screenshot of the running app read the true 12:01. The launch screen was not being
+rendered at all; a snapshot of it was being replayed. TN3118 documents exactly this as the first
+failure mode — "iOS displays an outdated launch screen" — and the remedy is to remove the app and
+rebuild. `simctl uninstall` plus reinstall was *not* enough here; the simulator needed a full
+`shutdown`/`boot`. After that, both dancers, and a live 12:04 clock.
+
+The generalizable bit: a stale launch screen is indistinguishable from a broken one by looking at
+it. What separates them is a timestamp, or any other piece of the frame that should have changed
+and didn't. When a launch screen misbehaves, check whether you are looking at a render or a
+photograph of an old render before you go debugging the asset pipeline.
