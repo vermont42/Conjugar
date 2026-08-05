@@ -8956,3 +8956,50 @@ Last pass: Josh asked for no em dashes in the README, so the nine feature bullet
 sentence break, and a colon. The `World` sentence reads better for it. It had been a pair of
 parenthetical dashes wrapping a clause, which is exactly the construction that tempts you to keep
 extending a sentence instead of ending it.
+
+## The launch screen had been blank for weeks (2026-08-05)
+
+A footnote in the README work turned into a real bug. While checking whether the eight legacy
+PNGs in `Conjugar/` were referenced anywhere, the search over `LaunchScreen.storyboard` turned up
+`image="Dancer"` on two image views, and `Assets.xcassets` has no `Dancer`. The tempting move is to
+call that a stale storyboard attribute and move on. It was not. It meant the launch screen had been
+rendering a black rectangle with a gold "Conjugar" label and two empty 200×200 holes where the
+artwork belonged.
+
+Two things made this findable, and both are worth repeating. First, `assetutil` settles the
+question that grep only suggests: `xcrun --sdk iphonesimulator assetutil --info
+<App>/Assets.car` dumps every compiled asset, and `Dancer` was absent from the 78 names. The
+near-miss is the interesting part — a `dancer` **does** exist, but it is the lowercase symbolset
+for the tab bar, and asset-catalog lookup is case-sensitive, so it never matched. A sloppier check
+("is there a dancer asset? yes") would have cleared the storyboard and left the bug in place.
+Second, `git log --all --diff-filter=D` named the commit: `215d073`, the tab-bar modernization that
+swapped bitmap tab icons for SF Symbols. It deleted `Dancer.imageset` as a now-unused tab icon. It
+was unused *as a tab icon*. The launch screen still wanted it, and a storyboard's `image=` string
+is invisible to the "find usages" instinct that governs Swift symbols.
+
+The fix keeps the storyboard untouched: recreate the asset under the name the storyboard already
+asks for. Josh chose the new photographic dancer icon, and the appearance variant matters here.
+`DancerIcon-light` sits on cream, which would read as a bright square pasted onto the launch
+screen's hardcoded black. `DancerIcon-dark` already carries a black background with rounded
+corners, so it dissolves into the backdrop and reads as intended artwork. Rendered at 200 pt in the
+storyboard, so the imageset ships 200/400/600 px for 1x/2x/3x rather than a 1024 px master.
+
+The light-mode check was worth running even though the answer was predictable. The storyboard
+hardcodes `backgroundColor` to black, so the launch screen is appearance-independent, and light and
+dark captures came back pixel-identical. That is the fact that makes shipping only the *dark* icon
+variant correct rather than lucky: there is no light-mode case where a dark-backed image would be
+wrong, because there is no light-mode launch screen.
+
+The rest of the storyboard is old but inert, and I left it alone. It is still in Xcode 8 format
+(`toolsVersion 13178.6`, `<device id="retina4_7">`), it declares top/bottom `layoutGuides` that no
+constraint actually references, and it registers `AvenirNext-DemiBold` as a custom font when Avenir
+Next has long been a system face. None of that affects rendering — the label draws in Avenir Next
+today. `es.lproj/LaunchScreen.strings` is a genuine curiosity: it exists to translate the label
+"Conjugar" into Spanish as "Conjugar". It is a no-op, but it is an explicit variant-group reference
+in the pbxproj rather than a synchronized file, so removing it costs a project edit to delete a
+file that harms nothing. Left in place.
+
+Worth internalizing as a general rule: **resources referenced by string from a nib, storyboard,
+plist, or asset name are invisible to every "unused symbol" tool.** When a commit deletes an asset
+because nothing in Swift refers to it, the storyboards are exactly where the surviving reference
+hides.

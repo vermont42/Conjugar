@@ -18,6 +18,9 @@ Conjugar/
 ├── Assets.xcassets/
 │   ├── *.colorset/             # Adaptive palette: customBackground/Blue/CardBackground/CardBorder/Foreground/Green/Red/Yellow
 │   ├── bull|dancer|ole.symbolset/  # Custom SF Symbols (tab bar, onboarding, boss-fight olé glyph); see scripts/make_symbols.py
+│   ├── Dancer.imageset/        # The launch screen's artwork, referenced by name from LaunchScreen.storyboard.
+│                               #   Derived from DancerIcon-dark (the launch background is hardcoded black, so the
+│                               #   dark variant blends). NOT the same as the `dancer` symbolset — case matters
 │   ├── *Icon.appiconset/       # App icons: DancerIcon (primary), BullIcon, MatadorIcon, ClassicIcon
 │   ├── *IconPreview.imageset/  # Tappable thumbnails for the Settings icon picker (icons aren't loadable by name)
 │   └── Game/                   # Cel-shaded sprite flipbooks: dancer_<action>_N, bull_<action>_N, matador, cape_pickup
