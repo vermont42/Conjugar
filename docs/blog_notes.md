@@ -9082,3 +9082,70 @@ at `docs/project-structure.md`.
 
 Worth naming as a pattern: a doc that is too long to reread is a doc whose errors nobody notices.
 Shortening it was what made the errors findable.
+
+## Moving 906 MB that git could not carry (2026-08-06)
+
+The migration branch merged as PR #11 this morning, which meant every *tracked* file of the
+2026 modernization reached `~/Desktop/workspace/Conjugar` with a `git pull`. What it did not
+mean was that the directory was usable. The real work had been done in a separate clone,
+`Conjugar.mig`, and 906 MB across 515 files lived only in that clone's working tree because
+`.gitignore` says so: the purchased Flamenco dancer FBX and the 23 other rigs every game sprite
+renders from, the three Pond5 WAV masters behind the committed 192 kbps MP3s, the government and
+medieval corpora behind every example sentence, the `mined_*.json` outputs that only a full
+re-run of the mining pipeline could reproduce, and `Secrets.xcconfig` with the TelemetryDeck app
+ID. None of it recoverable from the remote, most of it not recoverable at all.
+
+The plan that drove this (now `prompts/conjugar-migration-copy-plan.md`) got one ordering
+decision exactly right, and it is worth preserving the reasoning because the failure mode is
+silent and public. **Pull before copying, never after.** This working copy was sitting on the
+pre-migration `master`, whose `.gitignore` predates entries like `audio-sources/`. Copy first
+and 906 MB of purchased, license-restricted material lands as *untracked* files in a repo whose
+ignore rules do not yet cover them — one reflexive `git add -A` and the Pond5 masters and a
+licensed FBX rig are committed to a public AGPL repository, in history, forever. Pulling first
+costs nothing and makes the material invisible before it arrives. `git status --short` printing
+nothing after the copy was not a formality; it was the check that the ordering had worked.
+
+### `du` is the wrong instrument, and it says so quietly
+
+The plan's verification step compared `du -sk` totals and file counts per path. Two of the eight
+paths came back `*** MISMATCH ***`: `tools/blender/source` was **12 MB larger** at the
+destination, `corpus/working` 4 KB smaller. File counts matched exactly. A `diff` of the two
+`find` listings was empty — same files, same names, both directions.
+
+Apparent bytes settled it: 760,080,610 on both sides for the blender sources, 19,008,927 on both
+for the corpus. Then a SHA over every file in all eight paths — identical, all eight. The data
+was fine. What differed was *blocks allocated*, almost certainly APFS transparent compression on
+the source volume that `rsync` writes out decompressed on arrival.
+
+The lesson is not "APFS is surprising." It is that `du` answers a question about storage when the
+question being asked is about content, and the two answers diverge for reasons that have nothing
+to do with whether the copy succeeded. A verification step that cries wolf on a *correct* copy is
+worse than no verification, because the next person to see `*** MISMATCH ***` will have learned
+to shrug at it. Notably the plan's own second check — `rsync -an --itemize-changes` — was silent
+throughout, and silence there is a real content comparison. The size check should be replaced by
+the checksum comparison outright; it is barely slower and it answers the actual question.
+
+### A popover that made a passing check look like a failing one
+
+Step 5 was meant to prove the *config* survived relocation, since size arithmetic cannot catch a
+stale path. Build succeeded, 550 tests in 30 suites passed, and the gloss pipeline's `REPO`
+resolved to a path with no `.mig` in it. Then `tap_tab.sh settings` reported a successful tap and
+`verify_label_visible.sh Settings` replied `'Settings' not present in AXTree`.
+
+That looked like the hand-measured `MAIN_TABS_COORDS` had failed. It had not. Dumping the
+accessibility tree showed the entire screen occupied by a TipKit popover — "Compete on Game
+Center", a full-screen `PopoverDismissRegion`, and a close button — with the Settings screen
+underneath it and entirely unreachable to the label query. Dismissing the tip revealed Region,
+Difficulty, App Icon, Game Center, `Conjugar, v2.8`: the tab tap had worked the whole time. The
+coordinates were never in question; a modal was simply sitting on top of the evidence.
+
+One genuine finding fell out of the detour. `tap_id.sh xmark.circle.fill` *refused* to tap the
+tip's own close button, warning that it renders at y≈792 — underneath the floating five-tab pill
+— so a HID tap there would land on the pill instead and silently switch tabs while the close
+button got nothing. That is the skill's documented adaptive-height-vs-floating-pill hazard,
+firing on a real screen. The tip is dismissable by tapping its background region, so nothing is
+stuck, but the placement is worth fixing: a tip whose close affordance sits under the tab bar is
+a tip some fraction of users will fight with.
+
+`Conjugar.mig` is now `Conjugar.mig.retired` — renamed, not deleted, so the rollback stays whole
+until Josh has gone a few sessions without reaching for it.
