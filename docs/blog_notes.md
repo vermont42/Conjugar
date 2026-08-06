@@ -9149,3 +9149,40 @@ a tip some fraction of users will fight with.
 
 `Conjugar.mig` is now `Conjugar.mig.retired` — renamed, not deleted, so the rollback stays whole
 until Josh has gone a few sessions without reaching for it.
+
+## The Game Center tip was anchored to a button nobody could see (2026-08-06)
+
+Fallout from verifying the `Conjugar.mig` move. While proving the hand-measured
+`MAIN_TABS_COORDS` still worked from the new directory, `tap_id.sh xmark.circle.fill`
+refused to tap the "Compete on Game Center" tip's close button, warning it renders at
+y≈792 — under the floating five-tab pill — so a HID tap there would switch tabs and leave
+the close button untouched.
+
+The warning was about tappability, but the actual bug was worse than that. Measuring the
+popover's frames showed the message text at `{{104, 842}, {221, 78}}` on an 874-point
+screen: the tip was hanging 46 points off the bottom edge. The cause is placement.
+`.popoverTip(_:)` was attached to the **Enable** button in `actionsCard`, the seventh of
+eight stacked cards in a scroll view about 2,280 points tall. At the default scroll
+position that button sits at y≈1933 — nowhere near the screen. TipKit anchored the popover
+to it anyway and clamped the result to the bottom edge, which is precisely where the tab
+pill lives. So the first thing a new user saw on the Settings tab was a tip pointing at
+nothing, half off-screen, with its dismiss affordance buried under the tab bar.
+
+The fix was not to nudge the anchor. It was to notice the app had already solved this twice:
+`TryQuizTip` and `ExploreModelsTip` are inline `TipView`s in the browse screens, not
+popovers. A popover is the right tool when the anchor is reliably on screen and the tip
+needs to point at it — which is true of `ChangeDifficultyTip`, still a `.popoverTip` on the
+difficulty picker in the *second* card, at y≈417 and visible whenever Settings opens. It is
+the wrong tool for a control seven cards down. Swapping the Game Center tip to an inline
+`TipView` above its section makes it scroll with the content: always fully visible when
+reached, never clipped, close button at a sane place.
+
+The rule worth carrying forward: **`.popoverTip(_:)` is only safe on an anchor that is
+on-screen when the tip becomes eligible.** In a long `ScrollView` that is a real constraint,
+not a detail, and SwiftUI will not warn about violating it — the popover just quietly
+renders somewhere useless. The `ios-build-verify` pill-overlap check is what surfaced it,
+which is a nice argument for running the verify ops on screens you think are fine.
+
+Verified on a fresh install (uninstall first — `MaxDisplayCount(1)` means the TipKit
+datastore has to be cleared or the tip never shows again): close button at screen y=275,
+`tap_id.sh` taps it with no warning, tip dismisses. 550 tests, SwiftLint clean.

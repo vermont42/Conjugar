@@ -240,6 +240,14 @@ struct SettingsView: View {
   private var actionsCard: some View {
     settingsCard {
       if !isGameCenterUIHidden {
+        // Inline rather than `.popoverTip(_:)` on the button: this card sits near the
+        // bottom of a long scroll, so at the default scroll position the button is
+        // below the fold. TipKit anchors a popover to the (offscreen) button and
+        // clamps it to the screen's bottom edge, which puts the popover — including
+        // its close button — underneath the floating tab pill. An inline `TipView`
+        // scrolls with the content, matching `TryQuizTip`/`ExploreModelsTip`.
+        TipView(enableGameCenterTip)
+
         settingSection(
           icon: "gamecontroller.fill",
           tint: .customRed,
@@ -248,7 +256,6 @@ struct SettingsView: View {
         ) {
           Button(L.Settings.enable) { enableGameCenter() }
             .buttonStyle(TintedCapsuleButtonStyle(tint: .customRed))
-            .popoverTip(enableGameCenterTip)
         }
 
         GradientDivider()
