@@ -1,0 +1,77 @@
+3.0
+
+Conjugar 3.0 is a rebuild. Every screen is new, the conjugation engine underneath is new, and the app now conjugates more than twenty times as many verbs as it did before.
+
+A NEW CONJUGATION ENGINE
+Conjugar now conjugates 4,811 verbs, up from about 200, in all 20 conjugated tenses. Browse or search the whole list, sorted by frequency or alphabetically.
+
+MODELS
+A new Models tab sorts the language into 102 conjugation models. Open one to see its pattern, its model verb, and every verb that follows it.
+
+WHERE THE WORDS CAME FROM
+Verb screens now include etymologies for more than 1,300 verbs, an example sentence for more than 1,300 verbs, each with an English translation, and more than 2,100 quotations from medieval Spanish texts, including the Poema de mio Cid and the Libro de buen amor.
+
+CONJUGATION TUTOR
+Ask a Spanish conjugation tutor how a tense works or how a verb is conjugated. It runs entirely on your device, and its answers are grounded in Conjugar's own conjugation engine. Nothing you type leaves your iPhone or iPad. Requires a device with Apple Intelligence enabled.
+
+WIDGETS AND CONTROLS
+Verb of the Day on the Home Screen and the Lock Screen. A Daily Quiz widget you can answer without opening the app. Control Center buttons for a quick quiz or a random verb. A Live Activity that follows a quiz in progress.
+
+TOREO POR AMOR
+Conjugar now hosts an arcade game: a five-stage climb through a Spanish festival, ending in a flamenco dance-off with a bull.
+
+BUILT FOR iPAD
+Conjugar is a native iPad app for the first time, with layouts made for the larger screen, rather than an iPhone app shown in a box.
+
+REDESIGNED
+Every screen was rebuilt in SwiftUI. Conjugar now supports Dark Mode, Dynamic Type, and VoiceOver, and offers four app icons to choose from. A welcome tour introduces the app on first launch and can be replayed from Settings.
+
+QUIZ
+Quizzes are now 30 questions rather than 50, a length people actually finish, and the three difficulty levels were rebalanced around it. Scores are scaled to the old 50-question range, so your existing Game Center leaderboard entries remain comparable.
+
+ARTICLES
+A new article traces the history of the Spanish verb system from Latin to today, the Purpose and Use article was rewritten, and the article list can be filtered by difficulty.
+
+SPANISH
+Everything new in this release is fully localized in Spanish, including the verb history, the etymologies, the medieval quotations, the tutor, the game, and the widgets.
+
+Conjugar 3.0 requires iOS 26.
+
+Spanish
+
+Conjugar 3.0 es una reconstrucción. Todas las pantallas son nuevas, el motor de conjugación que hay debajo es nuevo y la app conjuga más de veinte veces más verbos que antes.
+
+UN NUEVO MOTOR DE CONJUGACIÓN
+Conjugar ya conjuga 4.811 verbos, frente a unos 200, en los 20 tiempos conjugados. Explora o busca en toda la lista, ordenada por frecuencia o alfabéticamente.
+
+MODELOS
+Una nueva pestaña, Modelos, ordena la lengua en 102 modelos de conjugación. Entra en uno para ver su patrón, su verbo modelo y todos los verbos que lo siguen.
+
+DE DÓNDE VIENEN LAS PALABRAS
+Las pantallas de verbo ahora incluyen etimologías de más de 1.300 verbos, una frase de ejemplo para más de 1.300 verbos, cada una con su traducción al inglés, y más de 2.100 citas de textos medievales españoles, entre ellos el Poema de mio Cid y el Libro de buen amor.
+
+TUTOR DE CONJUGACIÓN
+Pregúntale a un tutor de conjugación cómo funciona un tiempo verbal o cómo se conjuga un verbo. Funciona por completo en tu dispositivo y sus respuestas se basan en el propio motor de conjugación de Conjugar. Nada de lo que escribas sale de tu iPhone o de tu iPad. Requiere un dispositivo con Apple Intelligence activado.
+
+WIDGETS Y CONTROLES
+El Verbo del Día en la pantalla de inicio y en la pantalla bloqueada. Un widget de Test Diario que puedes responder sin abrir la app. Botones en el centro de control para un test rápido o un verbo al azar. Una actividad en directo que sigue el test en curso.
+
+TOREO POR AMOR
+Conjugar ahora alberga un juego arcade: una subida de cinco fases por una fiesta española que termina en un duelo de baile flamenco con un toro.
+
+HECHA PARA iPAD
+Conjugar es por primera vez una app nativa para iPad, con diseños pensados para la pantalla grande, en lugar de una app de iPhone mostrada dentro de un recuadro.
+
+REDISEÑADA
+Todas las pantallas se han reconstruido en SwiftUI. Conjugar ahora es compatible con el modo oscuro, el texto dinámico y VoiceOver, y ofrece cuatro iconos de app a elegir. Una introducción de bienvenida presenta la app en el primer inicio y se puede repetir desde Ajustes.
+
+TEST
+Los tests ahora tienen 30 preguntas en lugar de 50, una duración que la gente sí termina, y los tres niveles de dificultad se han reequilibrado en torno a esa cifra. Las puntuaciones se ajustan a la escala anterior de 50 preguntas, así que tus entradas actuales en las tablas de clasificación de Game Center siguen siendo comparables.
+
+ARTÍCULOS
+Un artículo nuevo recorre la historia del sistema verbal español desde el latín hasta hoy, el artículo Valor y Uso se ha reescrito y la lista de artículos se puede filtrar por dificultad.
+
+ESPAÑOL
+Todo lo nuevo de esta versión está localizado por completo en español: la historia del verbo, las etimologías, las citas medievales, el tutor, el juego y los widgets.
+
+Conjugar 3.0 requiere iOS 26.

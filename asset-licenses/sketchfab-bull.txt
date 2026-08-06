@@ -1,0 +1,80 @@
+Asset:    The game's BULL sprite frames (rendered 3D model) — one flipbook per bull
+          action, at Conjugar/Assets.xcassets/Game/bull_<action>_<i>.imageset.
+          STATUS: SHIPPED. 24 rendered frames:
+            base bull plan (2026-07-11):
+            bull_idle_1..2     bull_walk_1..6     bull_throw_1..5
+            boss fight "La Llamada" Phase 3 (2026-07-13):
+            bull_stomp_1..3    bull_rear_1..4     bull_bow_1..4
+          Authored on the model's Rigify rig and rendered side-view via
+          tools/blender/render_sprites.py (--actor bull --view side): idle came free
+          from the model's baked standing-sway clip (2 samples); walk (6-frame diagonal
+          quadruped gait) and throw (5-frame head-toss, windup→goring release) were
+          hand-keyed on the DEF/FK deform bones, because the FBX round-trip stripped
+          Rigify's control constraints (see Note below). The three boss dance actions —
+          stomp (3-frame: gentle head/chest-up anticipation → chest-level head-slam +
+          foreleg stamp → settle), rear (4-frame: gather → moderate pawing rear, forelegs
+          lifted and folded → held), and bow (4-frame: chest dips, front knees fold into a
+          kneel, head to knee level → held bow) — were likewise hand-keyed on the DEF bones
+          by the reusable tools/blender/gen_bull_action.py, using the same local-X-rotation
+          idiom as the throw (all motion in the side-view sagittal plane, L/R keyed
+          identically). The angles were dialled in INTERACTIVELY through blender-mcp with
+          live viewport feedback and per-pose sign-off — a first blind headless pass had
+          torn the mesh on big rotations (see the boss plan's Phase 4 note).
+          Wired into GameView.bullSprite, retiring the game's last numbered-box
+          placeholder (player + bull now sprites).
+
+Source:   Sketchfab — "Simple Rigged Bull"
+          Model page:  https://sketchfab.com/3d-models/simple-rigged-bull-c1984e43c4014dc5bc332a8fd6b15280
+          Author:      Leo_Aguiar (@Leo_Aguiar) — https://sketchfab.com/Leo_Aguiar
+          Published:   ~5 years ago (FBX internal date 2021-10-12).
+          Geometry:    mesh "bull 01" — 30,339 vertices / ~60,666 triangles, 1 material,
+                       51 vertex groups (skinned).
+          Rig:         Built with Blender's Rigify "Basic Quadruped" meta-rig (per the
+                       author's own description). The downloaded FBX preserved BOTH the
+                       source `metarig` (49 bones) AND the generated Rigify control `rig`
+                       (381 bones: IK/FK controls, tweak/ORG/DEF/MCH bones), plus one
+                       baked animation action `rigAction` (frames 1..105).
+          Downloaded:  2026-07-11, "Original format" FBX (the only source format Sketchfab
+                       offered; also available: converted USDZ / glTF / GLB). Requires a
+                       (free) Sketchfab login to download; Josh authenticated via an Epic
+                       Games account for this pull.
+                       zip:  simple-rigged-bull.zip
+                         size: 4,313,502 bytes   md5: 329e3e99e37c97d4fc826d491d232d7c
+                         contents: source/bull1.fbx (no separate texture files — the
+                         mesh ships untextured / single flat material)
+                       extracted FBX (repo path tools/blender/source/bull.fbx):
+                         size: 4,313,372 bytes   md5: 8e66cff7acf19aa35d5d5993179ae12f
+
+License:  Creative Commons Attribution (CC BY 4.0)
+          Deed:   https://creativecommons.org/licenses/by/4.0/
+          As shown in Sketchfab's download dialog: "CC Attribution — Author must be
+          credited. Commercial use is allowed." Compatible with redistribution inside
+          this public AGPL app: CC BY permits commercial use and derivative works
+          (here, re-posing/rendering the model to 2D sprites) provided the author is
+          credited. (Rejected during sourcing: any CC-BY-ND / -NC variant, Sketchfab
+          "Standard"/"Editorial" licenses — none permit this use.)
+
+Attribution (required — canonical Sketchfab credit line):
+          "Simple Rigged Bull" (https://sketchfab.com/3d-models/simple-rigged-bull-c1984e43c4014dc5bc332a8fd6b15280)
+          by Leo_Aguiar (https://sketchfab.com/Leo_Aguiar) licensed under Creative
+          Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+          DONE (Phase 7, 2026-07-11): this credit is surfaced in the app's Credits
+          screen (Info ▸ Credits) under a "^Game Art^" section (Spanish "^Arte del
+          Juego^"), alongside the existing "Game Music"/"Game Sounds" entries — see
+          the Info.creditsText key in Conjugar/Supporting/Localizable.xcstrings.
+
+Reuse:    The raw mesh/rig (tools/blender/source/bull.fbx and the working
+          tools/blender/source/bull.blend) are git-ignored (tools/blender/.gitignore) —
+          this repo is public/AGPL and we ship only the rendered 2D sprite PNGs, not the
+          raw 3D asset. The bull is re-posed/animated (idle/walk + a bespoke hand-keyed
+          throw) on its Rigify rig, then rendered to transparent orthographic PNG frames
+          via tools/blender/render_sprites.py (--actor bull, side view), N matched to
+          GameState.bullFrameCounts (idle 2 / walk 6 / throw 5 / stomp 3 / rear 4 /
+          bow 4), and union-cropped by pack_or_rename.sh — the same pipeline as the
+          dancer.
+
+Note:     FBX transport bakes animation per-frame and does not carry Rigify's bone
+          constraints/drivers, so the imported control `rig` is a bone hierarchy without
+          live IK. The intact `metarig` lets Phase 2 regenerate a fully functional Rigify
+          control rig (Rigify ▸ Generate) for clean hand-keying if direct DEF-bone/FK
+          keying proves awkward.

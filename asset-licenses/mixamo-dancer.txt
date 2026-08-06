@@ -1,0 +1,34 @@
+Assets:   Conjugar/Assets.xcassets/Game/dancer_<action>_<i>.imageset — the
+          player's sprite-animation frames (a rendered 3D character), one flipbook
+          per action:
+            dancer_idle_1..2     dancer_walk_1..6     dancer_climb_1..4
+            dancer_jump_1..3     dancer_cape_1..4
+
+Source:   Adobe Mixamo — https://www.mixamo.com
+          Character:  "X Bot" (a stock Mixamo character — the SAME character across
+                      every action, so proportions/scale match).
+          Animations (all exported In-Place, 30 fps, With Skin):
+            idle  — "Breathing Idle"   (standing/breathing rest pose)
+            walk  — "Walking"          (the walk cycle)
+            climb — "Climbing Ladder"  (ladder-climb cycle)
+            jump  — "Jump"             (a vertical jump-up in place)
+            cape  — "Taunt"            (an aggressive fists-up stance — reads as the
+                                        "powered-up / smash-ready" caped state)
+          Each FBX was rendered to transparent orthographic PNG frames in Blender
+          via tools/blender/render_sprites.py (side view — except climb, which is a
+          back view / camera behind the figure, the conventional read for a vertical
+          ladder; N frames matched to GameState.playerFrameCounts), then union-cropped
+          by pack_or_rename.sh.
+
+License:  Mixamo / Adobe license — royalty-free for commercial use, NO attribution
+          required. Only restriction: you may not sell or redistribute the raw
+          Mixamo assets (mesh/animation) as standalone files. Shipping them baked
+          into an application — here, as pre-rendered 2D sprite frames — is
+          expressly permitted.
+          Ref: https://helpx.adobe.com/creative-cloud/faq/mixamo-faq.html
+
+Reuse:    The source FBX files (tools/blender/source/dancer_*.fbx) are deliberately
+          NOT committed (see tools/blender/.gitignore) — this repo is public/AGPL,
+          and committing the raw FBX would be redistributing a raw Mixamo asset.
+          Only the rendered 2D sprites ship. No attribution legally required; the
+          X Bot mannequin is a stand-in for the eventual custom flamenco dancer.

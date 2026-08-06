@@ -1,0 +1,87 @@
+Version 2.8
+
+Conjugar is an app for learning Spanish verb conjugations. Conjugar conjugates 95 irregular and 112 regular Spanish verbs in _all_ Spanish verb tenses. Conjugar allows you to study vosotros conjugations, useful in Spain, and vos conjugations, useful in parts of Latin America. Conjugar has a quiz mode with three difficulty levels. Results from quizzes are available in Game Center®. Conjugar has descriptions of all the tenses with example uses.
+
+Version 3.0
+
+Conjugar is the fastest way to look up, hear, and master Spanish verb conjugations. Every form is produced by a conjugation engine built into the app, so Conjugar works offline, with no account, no ads, and nothing to buy.
+
+4,811 VERBS, EVERY TENSE
+Browse or search 4,811 Spanish verbs, sorted by frequency or alphabetically. Each verb shows all 20 conjugated tenses, from presente de indicativo to futuro perfecto de subjuntivo, plus the participio, gerundio, and raíz futura. Irregular parts are highlighted inside each form, so you can see at a glance what makes a verb tricky. Tap any form to hear it spoken in a Spanish or Latin American voice.
+
+VOSOTROS AND VOS
+Study vosotros, used in Spain, and vos, used in much of Latin America. Choose which second-person forms appear when you browse and which ones the quiz asks about.
+
+102 CONJUGATION MODELS
+Conjugar conjugates Spanish verbs using 102 distinct conjugation models. Drill down on a conjugation model to see its pattern, its exemplar verb, and every verb that uses it. Irregularity stops being something to memorize and starts being a system.
+
+WHERE THE WORDS CAME FROM
+Conjugar goes deeper than a conjugation table.
+- Etymologies for more than 1,300 verbs, tracing them to Latin, Greek, Germanic, Arabic, Celtic, and Basque roots.
+- An example sentence for more than 1,300 verbs, most of them drawn from Spanish literature, each with an English translation.
+- More than 2,100 quotations from medieval Spanish texts, including the Poema de mio Cid and the Libro de buen amor, with translations, showing the verbs as they were written in the 1200s and 1300s.
+
+QUIZ AND GAME CENTER
+A 30-question quiz in three difficulty levels, timed and scored, with your results reported to Game Center leaderboards.
+
+ASK THE TUTOR
+A Spanish conjugation tutor that runs entirely on your device. Ask how a tense works or how a verb is conjugated, and get an answer grounded in Conjugar's own conjugation engine. Nothing you type leaves your iPhone or iPad. Requires a device with Apple Intelligence enabled.
+
+ARTICLES
+Clear descriptions of every tense with example uses, an explanation of voseo, a glossary of grammatical terminology, and an essay on the history of the Spanish verb system from Latin to today. Filter the articles by difficulty as you progress.
+
+WIDGETS AND CONTROLS
+- Verb of the Day on the Home Screen and the Lock Screen.
+- A quiz widget you can answer without opening the app.
+- Control Center buttons for a quick quiz or a random verb.
+- A Live Activity that follows a quiz in progress.
+
+TOREO POR AMOR
+Conjugar hosts an arcade game: a five-stage climb through a Spanish festival, with obstacles to dodge, power-ups to grab, and a flamenco dance-off with a friendly bull. Toreo por Amor has nothing to do with grammar, and you will love it.
+
+BUILT FOR iPHONE AND iPAD
+Native iPad layouts, dark mode, Dynamic Type, VoiceOver support, and four app icons to choose from. The whole app, articles included, is available in English and Spanish.
+
+Conjugar is free, ad-free, and open source under the GNU Affero General Public License.
+
+Spanish
+
+Conjugar es la forma más rápida de consultar, escuchar y dominar la conjugación de los verbos españoles. Cada forma la genera un motor de conjugación integrado en la app, así que Conjugar funciona sin conexión, sin cuenta, sin anuncios y sin nada que comprar.
+
+4.811 VERBOS, TODOS LOS TIEMPOS
+Explora o busca entre 4.811 verbos españoles, ordenados por frecuencia o alfabéticamente. Cada verbo muestra sus 20 tiempos conjugados, desde el presente de indicativo hasta el futuro perfecto de subjuntivo, además del participio, el gerundio y la raíz futura. Las partes irregulares aparecen resaltadas dentro de cada forma, así que ves de un vistazo qué tiene de difícil cada verbo. Toca cualquier forma para escucharla con voz de España o de Latinoamérica.
+
+VOSOTROS Y VOS
+Estudia el vosotros, que se usa en España, y el vos, que se usa en buena parte de Latinoamérica. Elige qué formas de segunda persona aparecen al explorar los verbos y cuáles te pregunta el test.
+
+102 MODELOS DE CONJUGACIÓN
+Conjugar conjuga los verbos españoles con 102 modelos de conjugación distintos. Entra en un modelo para ver su patrón, su verbo modelo y todos los verbos que lo siguen. La irregularidad deja de ser algo que memorizar y pasa a ser un sistema.
+
+DE DÓNDE VIENEN LAS PALABRAS
+Conjugar va más allá de una tabla de conjugación.
+- Etimologías de más de 1.300 verbos, con sus raíces latinas, griegas, germánicas, árabes, celtas y vascas.
+- Una frase de ejemplo para más de 1.300 verbos, la mayoría tomadas de la literatura española, cada una con su traducción al inglés.
+- Más de 2.100 citas de textos medievales españoles, entre ellos el Poema de mio Cid y el Libro de buen amor, con traducción, que muestran los verbos tal como se escribían en los siglos XIII y XIV.
+
+TEST Y GAME CENTER
+Un test de 30 preguntas con tres niveles de dificultad, cronometrado y puntuado, con tus resultados publicados en las tablas de clasificación de Game Center.
+
+PREGUNTA AL TUTOR
+Un tutor de conjugación que funciona por completo en tu dispositivo. Pregúntale cómo funciona un tiempo verbal o cómo se conjuga un verbo, y obtén una respuesta basada en el propio motor de conjugación de Conjugar. Nada de lo que escribas sale de tu iPhone o de tu iPad. Requiere un dispositivo con Apple Intelligence activado.
+
+ARTÍCULOS
+Descripciones claras de cada tiempo verbal con ejemplos de uso, una explicación del voseo, un glosario de terminología gramatical y un ensayo sobre la historia del sistema verbal español desde el latín hasta hoy. Filtra los artículos por dificultad a medida que avanzas.
+
+WIDGETS Y CONTROLES
+- El Verbo del Día en la pantalla de inicio y en la pantalla bloqueada.
+- Un widget de test que puedes responder sin abrir la app.
+- Botones en el centro de control para un test rápido o un verbo al azar.
+- Una actividad en directo que sigue el test en curso.
+
+TOREO POR AMOR
+Conjugar alberga un juego arcade: una subida de cinco fases por una fiesta española, con obstáculos que esquivar, potenciadores que recoger y, en lo alto, un duelo de baile flamenco con un toro simpático. Toreo por Amor no tiene nada que ver con la gramática, y te va a encantar.
+
+HECHA PARA iPHONE Y iPAD
+Diseños nativos para iPad, modo oscuro, texto dinámico, compatibilidad con VoiceOver y cuatro iconos de app a elegir. Toda la app, artículos incluidos, está disponible en español e inglés.
+
+Conjugar es gratis, sin anuncios y de código abierto bajo la Licencia Pública General Affero de GNU.

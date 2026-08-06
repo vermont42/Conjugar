@@ -1,0 +1,258 @@
+TEXTO FUENTE DE Info.verbHistoryText (es) — «Historia del sistema verbal español»
+Traducción del original inglés de docs/verb_history.txt. Edítese aquí y ejecútese luego
+`python3 scripts/sync_verb_history.py --lang es` para devolver el artículo a
+Conjugar/Supporting/Localizable.xcstrings, que es lo que se distribuye. El catálogo
+guarda el ensayo entero en una sola línea JSON, así que editarlo allí a mano es una
+trampa; este archivo existe para que la prosa pueda editarse como prosa.
+
+Marcado nativo de Info en Conjugar:
+  ^…^ encabezado   ~…~ énfasis   $…$ resalte de irregularidad   %…% término o URL
+
+Tres reglas de las que la aplicación no avisa, todas comprobadas por el script:
+  • Los marcadores no se anidan. `~Adonde $FUeres$, haz lo que vieres~` se renderiza mal:
+    un `$` dentro de un `~…~` estropea el índice inicial del tramo de énfasis, y el tramo
+    sale duplicado y con un `$` literal dentro. Hay que cerrar y volver a abrir:
+    `~Adonde~ $FUeres$~, haz lo que vieres~`.
+  • Dentro de `$…$`, cada letra mayúscula es una letra irregular que se muestra en rojo.
+    La capitalización de un tramo es, por tanto, dato y no ortografía, y no puede ajustarse
+    a su posición. Así que una forma cuya PRIMERA letra sea irregular, como `$andUVE$`,
+    `$FUere$` o `$VOY$`, no puede abrir nunca una oración: la oración exigiría una
+    mayúscula, y esa mayúscula se renderizaría como una letra roja más, reclamando una
+    irregularidad que la forma no tiene. Hay que reformular para que abra otra cosa. Una
+    forma cuya primera letra es regular sí puede abrir oración y se renderiza en
+    minúscula, como hace `$pUEdo$`, lo cual es deliberado y no una errata. Los tramos de
+    este borrador son los mismos del original inglés, calculados como los calcula
+    IrregularityMarker, poniendo en mayúscula la diferencia entre la forma real y su
+    composición regular, de modo que las letras rojas coinciden con lo que muestra
+    Explorar verbos.
+  • Todo `%…%` que no sea una URL tiene que coincidir exactamente con un encabezado de
+    Info (sin distinguir mayúsculas), o el toque no lleva a ninguna parte.
+
+Invariantes respecto del inglés, comprobadas al traducir:
+  • Los 25 encabezados `^…^` se traducen libremente: no son destinos de enlace.
+  • Los 58 tramos `$…$` y los 14 enlaces `%…%` se copian carácter a carácter del inglés.
+    Ya están en español: los tramos son formas verbales españolas y los enlaces son
+    nombres españoles de tiempos, y ambos apuntan a artículos de Info que existen. No se
+    traducen, ni se recapitalizan, ni se reajustan.
+  • Los tramos `~…~` sí varían, y bajan: muchas glosas del inglés glosaban formas
+    españolas al inglés y en español son redundantes, así que se han eliminado o
+    sustituido por un equivalente moderno (`~es venido~, ‘ha venido’`).
+
+Una convención que el script NO comprueba, de modo que nada detectará un desliz:
+  • La cantidad vocálica va marcada en las palabras latinas citadas como palabras, es
+    decir, étimos y formas de paradigma: `~habēre~`, `~cantāre habeō~`, `~vādere~`,
+    `~fēcī~`. Las breves aparecen solo donde la brevedad es el argumento, como en
+    `~pĕtra~` y `~pŏtet~` en el párrafo de la diptongación de «Los cambios de raíz y la
+    tiranía del acento». La cantidad se omite en topónimos narrativos como `~Latium~`, en
+    etiquetas gramaticales que hacen de sustantivo común como `~infectum~` y
+    `~perfectum~`, en títulos como `~Appendix Probi~` y en todo lo que no sea latín. El
+    barrido está completo, así que una vocal sin marcar afirma ahora que es breve: hay que
+    poner macron a toda forma latina que se añada, o se estará afirmando en silencio que
+    es breve. La única excepción consciente es `~arrugia~`, prerromana y de cantidades no
+    atestiguadas. Cuidado con las formas españolas que parecen latinas: en «El tiempo que
+    se fue con los abogados», `~cantare~` es el futuro de subjuntivo español, y todo
+    `~vos~` salvo el presentado como latín tardío es el pronombre español. Esos van sin
+    marcar.
+  • Se prefieren las comillas curvas `‘ ’` para las glosas, como en el original: no
+    necesitan escape en JSON y la herramienta de edición no puede corromperlas.
+
+Todo lo que va debajo de la línea de guiones es el cuerpo del artículo, literal: las
+líneas en blanco separan párrafos y la primera línea es el encabezado `^…^` inicial. No
+se añade título ni notas al final: el script envía todo el resto del archivo.
+
+--------------------------------------------------------------------------------
+
+^Del polvo de estrellas al habla^
+
+Hace aproximadamente 4600 millones de años, una vasta nube de gas y polvo empezó a colapsar en un rincón de la Vía Láctea. Aquella nebulosa primordial no era una colección corriente de hidrógeno y helio. Generaciones de estrellas moribundas habían sembrado la nube de elementos pesados forjados en hornos estelares, unos desprendidos sin estrépito en los vientos de gigantes envejecidas y el resto lanzados hacia fuera por supernovas, las muertes explosivas de las estrellas. Entre ellos estaban el carbono, columna vertebral de la química orgánica; el oxígeno, imprescindible para el agua y la respiración; el nitrógeno, elemento constitutivo de las proteínas y del ADN; el hierro, que se hundiría para formar el núcleo de la Tierra y correría más tarde por la sangre humana; el calcio, destinado a huesos y conchas; el fósforo, sin el cual ninguna célula puede pagar nada; y el azufre, el oro, el uranio y decenas de elementos más que ninguna estrella fabrica en su larga madurez, forjados en cambio en el aplastamiento del colapso, en los vientos de las gigantes moribundas y, los más pesados, en la colisión de dos estrellas de neutrones.
+
+A medida que la gravedad reunía ese material enriquecido, el Sol se encendió en el centro mientras los restos se agregaban en planetas. La Tierra se formó hace unos 4500 millones de años. Su hierro se hundió, sus silicatos más ligeros ascendieron hasta formar una corteza y aquellos elementos forjados en las estrellas se repartieron por todas partes, a la espera, durante miles de millones de años, de la aparición de una vida que un día los usaría para hablar, para escribir y para conjugar verbos españoles.
+
+^El largo camino hasta el lenguaje^
+
+La vida surgió en la Tierra quizá hace 3800 millones de años, pero el camino hasta las criaturas dotadas de lenguaje fue larguísimo. El ser humano moderno, ~Homo sapiens~, evolucionó en África hace unos 300 000 años, y durante casi todo ese tiempo nuestros antepasados vivieron como cazadores-recolectores, montando poco a poco el equipamiento cognitivo que exige un lenguaje complejo.
+
+A partir de hace unos 70 000 años, oleadas de seres humanos salieron de África y se extendieron por el planeta. Unos viajaron al norte y al oeste, hacia Europa; otros se desplazaron al este por Asia. Hace 40 000 años, y muy posiblemente antes, los humanos habían llegado a la estepa póntico-caspiana, las vastas praderas que van desde lo que hoy son Rumanía y Ucrania hasta Kazajistán. Aquella región, al norte de los mares Negro y Caspio, sería el crisol de uno de los desarrollos lingüísticos más trascendentales de la historia y, con el tiempo, la razón de que un estudiante tenga que memorizar que el pretérito de ~hacer~ es $hICE$.
+
+^Los yamnaya y el protoindoeuropeo^
+
+Entre aproximadamente el 3300 y el 2500 a. C., un pueblo al que llamamos ~yamnaya~ habitó la estepa póntico-caspiana. Su nombre procede de la palabra rusa que significa ‘fosa’, por su costumbre funeraria. Puede que los yamnaya estuvieran entre los primeros en montar a caballo, lectura que algunos de sus esqueletos respaldan y que otros especialistas discuten, y montaran o no, la rueda, recién inventada, les dio una movilidad de la que ningún pueblo anterior había disfrutado. Eran pastores seminómadas de vacas, ovejas y cabras, y vivían en grupos pequeños que seguían a sus animales hacia los pastos de cada estación.
+
+Su sociedad parece haber sido patriarcal y jerárquica. Enterraban a sus muertos en fosas bajo túmulos de tierra llamados ~kurganes~, a menudo con ajuares que anunciaban el rango. Vivían de sus rebaños, con la caza como complemento, y las proteínas lácteas recuperadas del sarro de sus dientes muestran que bebían leche de vaca, de oveja, de cabra y de yegua. La práctica aparece de golpe. Los lácteos están casi ausentes de las muestras eneolíticas que los preceden y presentes en todos menos uno de los individuos analizados del Bronce Antiguo, lo que hace que la explotación lechera parezca una de las cosas que hicieron posible la expansión.
+
+Lo que no podían hacer era digerir la leche sin procesar. Decenas de individuos yamnaya han sido genotipados directamente para el alelo europeo de persistencia de la lactasa, y ninguno portaba una copia. Eran pastores lecheros intolerantes a la lactosa, que es la razón habitual para suponer que la leche les llegaba fermentada y curada, en forma de yogur y de queso, con la lactosa ya descompuesta por las bacterias. La tolerancia llegó después, y no de ellos: seguía siendo rara en la Europa de la Edad del Bronce más de mil años más tarde, y solo alcanzó la tasa moderna del norte de Europa, por encima del noventa por ciento en Escandinavia y las islas británicas, bajo una selección que aún estaba en marcha hace tres mil años.
+
+Los yamnaya hablaban lo que los lingüistas reconstruyen como ~protoindoeuropeo~, el antepasado de las lenguas que habla hoy casi la mitad de la humanidad. Entre sus descendientes están el hindi, el persa, el ucraniano, el griego, el alemán, el inglés y, por un largo camino a través del latín, el español.
+
+El nombre de la lengua, ~español~, puede tener origen fuera de la península ibérica. ~España~ desciende del latín ~Hispānia~, que los romanos tomaron de los cartagineses, y una lectura popular del original púnico es que describía una costa invadida por damanes, los animales por los que al parecer los marineros fenicios tomaron a los conejos ibéricos. El adjetivo ~español~ no es, según la explicación habitual, ni siquiera una formación patrimonial: una palabra castellana construida sobre ~España~ habría dado más bien ~españón~, que es de hecho lo que el castellano medieval usó durante un tiempo, y ~español~ parece un préstamo del occitano, traído por el camino de peregrinación a Santiago por hablantes del otro lado de los Pirineos. El otro nombre, ~castellano~, es al menos de cosecha propia: alude a los castillos de un condado fronterizo erizado de fortificaciones. Una lengua descendiente del latín se llama, pues, por uno de sus nombres, según un error cartaginés sobre unos conejos transmitido por peregrinos de más allá de los Pirineos, y por el otro, según un proyecto de obras.
+
+^El sistema verbal del protoindoeuropeo^
+
+El verbo protoindoeuropeo era una máquina magnífica e intrincada, mucho más rica que nada de lo que conservarían sus lenguas hijas. Los verbos se construían sobre ~raíces~, núcleos compactos de significado, sobre los que los hablantes superponían prefijos, sufijos e infijos para expresar de una sola vez gran cantidad de información gramatical.
+
+El corazón del sistema era el ~aspecto~, la forma de una acción en el tiempo más que su posición en el tiempo. La lengua distinguía tres:
+
+• el ~imperfectivo~, una acción en curso o repetida
+• el ~perfectivo~, llamado también aoristo, una acción acabada vista como un todo
+• el ~estativo~, llamado también perfecto, un estado resultante de una acción acabada
+
+Cada aspecto tenía su propio tema, de modo que una misma raíz podía aparecer con tres formas bastante distintas.
+
+El ~tiempo~ era secundario respecto del aspecto. El pasado se marcaba sobre todo con las desinencias ~secundarias~, a las que sencillamente les faltaba el sufijo que anclaba una acción al aquí y ahora. Algunas ramas añadían además un prefijo llamado ~aumento~, reconstruido como *e-, pero era opcional ya en los textos más antiguos, y se discute si se remonta siquiera al protoindoeuropeo. El ~modo~ estaba ricamente desarrollado, con un indicativo para las afirmaciones de hecho, un subjuntivo para las intenciones y lo que estaba por venir, un optativo para los deseos y las posibilidades y un imperativo para las órdenes. La ~voz~ distinguía una activa de una ~media~, que marcaba una acción que afectaba al sujeto o hecha en interés del propio sujeto. Una de las desinencias de la media llevaba la letra r. Resultó que el anatolio y el tocario tenían la misma desinencia, así que no es la prueba que un día pareció, pero el itálico y el céltico fueron los únicos en extender esa r a toda la voz media, y ese paso compartido es una señal real de que las dos familias estuvieron especialmente próximas. Ese hecho importará dos veces, porque los celtas llegaron también a Iberia.
+
+^La apofonía y por qué el español casi la pierde^
+
+Quizá ningún rasgo del protoindoeuropeo resultó más duradero que la ~apofonía~, la alternancia sistemática de vocales dentro de raíces y desinencias para marcar diferencias gramaticales. La apofonía no era aleatoria. Funcionaba por grados regulares, un grado e, un grado o y un grado cero en el que la vocal desaparecía del todo, junto con variantes alargadas, y el presente de un verbo podía usar un grado mientras el perfecto usaba otro.
+
+Las lenguas germánicas convirtieron estas alternancias en los cambios vocálicos de sus verbos fuertes, el patrón que aún se oye en el inglés sing, sang, sung, donde la vocal de la raíz, y solo ella, marca el tiempo. El itálico fue por el otro lado y en gran medida ~niveló~ la apofonía, limando las viejas alternancias hacia la uniformidad, de modo que un verbo latino regular mantiene casi siempre una única vocal temática estable. Aun así quedaron rastros. El perfecto del latín ~agere~, ‘conducir’, es ~ēgī~; el perfecto de ~facere~, ‘hacer’, es ~fēcī~, y esa e larga desciende directamente de un grado apofónico. El español todavía la tiene. ~Fēcī~ se convirtió en $hICE$, y la vocal que separa $hICE$ de ~hacer~ lleva haciendo trabajo gramatical desde antes de que Roma existiera.
+
+El español desarrollaría más tarde una alternancia vocálica propia, la que convierte ~poder~ en $pUEde$, pero esa nació del acento latino y no de la estepa. La costumbre de dejar que una vocal cargue con peso gramatical, en cambio, es una herencia.
+
+^El camino hacia Italia^
+
+A partir del 3000 a. C. aproximadamente, los descendientes de los yamnaya se expandieron en oleada tras oleada. Unos se movieron al norte, hacia los bosques que acabarían siendo germanohablantes. Otros giraron al oeste y al sur, y entre ellos estaban los antepasados de los pueblos ~itálicos~, que a finales del segundo milenio a. C. habían llevado sus dialectos a la península italiana.
+
+Las lenguas itálicas comparten un número llamativo de rasgos con las lenguas ~célticas~ vecinas. Las dos convirtieron aquella desinencia en r, que heredaron en lugar de inventar, en la marca general de sus verbos pasivos y deponentes. Las dos construyeron un subjuntivo marcado por una a larga. Las dos rehicieron sus superlativos por vías parecidas. Las coincidencias son numerosas y lo bastante específicas como para que muchos lingüistas postulen una etapa ~italocéltica~, un periodo posterior a la separación de los migrantes occidentales del resto del indoeuropeo pero anterior a la divergencia entre el itálico y el céltico. Si esa rama existió, entonces el latín y el celtibérico, la lengua céltica de la meseta española, escrita en un signario ibérico y comprendida todavía solo a medias, eran primos que se habían visto por última vez dos mil años antes de volver a encontrarse en Hispania.
+
+^Los que ya estaban allí^
+
+Los recién llegados itálicos no entraron en una península vacía. En Italia se cultivaba desde hacía milenios, y los agricultores hablaban lenguas no indoeuropeas. La más trascendental de esas lenguas fue el ~etrusco~, cuyos hablantes construyeron al norte de Roma una civilización que marcó profundamente la cultura romana temprana. El etrusco no tenía parentesco con el latín ni con ninguna lengua hablada hoy en Europa, y sus parientes más probables son el ~rético~ de los Alpes orientales y el ~lemnio~ del Egeo, extintos ambos desde hace mucho; y aunque el latín acabó suplantando al etrusco, el etrusco dejó rastros.
+
+Se cree que varias palabras latinas cotidianas son etruscas, y algunas siguen en uso diario en español. ~Persōna~, en origen una máscara teatral, luego un personaje y luego un ser humano, se considera ampliamente etrusca, y es el ~persona~ español. ~Histriō~, un actor, da ~histrión~. ~Satelles~, un guardaespaldas, da ~satélite~, que es la razón de que una luna y un guardaespaldas sean la misma palabra. ~Populus~, un pueblo, da ~pueblo~. Ninguna de estas atribuciones es segura, porque el etrusco sigue comprendiéndose de manera imperfecta, pero el patrón resulta sugerente. Cuando un hispanohablante menciona a una persona, puede que estén sonando en la palabra ecos tenues de una lengua perdida, no indoeuropea, de la Italia antigua.
+
+^El latín primitivo y sus verbos^
+
+El latín empezó como el habla local del ~Latium~, la pequeña región en torno a Roma, un dialecto itálico entre muchos y no precisamente prometedor. En el paso del protoindoeuropeo al latín, el verbo se reorganizó a fondo. El viejo sistema aspectual de tres términos se vino abajo. El latín conservó un sistema de presente, descendiente del imperfectivo, y construyó a su lado un sistema de ~perfecto~.
+
+Aquel perfecto latino fue una fusión genuina. Amalgamó el perfecto protoindoeuropeo heredado, con su valor estativo, y el viejo aoristo, con su valor de acción simple acabada. Por eso un único perfecto latino como ~cēpī~ puede traducirse tanto por ‘he tomado’ como por ‘tomé’. Retenga ese doble valor. Dos mil años después, el español volvería a separar esos dos significados en ~tomé~ y ~he tomado~, y luego el mundo hispanohablante no lograría ponerse de acuerdo sobre dónde cae la frontera entre ellos.
+
+^El verbo del latín clásico^
+
+Para el siglo I a. C., el latín de Cicerón y de César tenía un sistema verbal de una regularidad formidable, y es ese sistema el que el español heredó y fue rehaciendo despacio. Todo verbo latino se organizaba en torno a dos temas. El ~infectum~ llevaba los tiempos inacabados, el presente, el imperfecto y el futuro. El ~perfectum~ llevaba los acabados, el perfecto, el pluscuamperfecto y el futuro perfecto. Sobre ellos corrían tres modos, indicativo, subjuntivo e imperativo, y dos voces.
+
+La pasiva era ~sintética~ en los tiempos inacabados, formada no con un verbo auxiliar sino con desinencias especiales, aquella misma herencia en r compartida con el céltico. ~Amātur~ significaba ‘es amado’ en una sola palabra. Los tiempos acabados necesitaban un auxiliar, y ~amātus est~, un participio junto al verbo ‘ser’, es como el latín decía ‘fue amado’. El futuro también era sintético, construido con desinencias como -bo, como en ~amābō~, ‘amaré’. Los verbos se repartían en ~cuatro conjugaciones~ según la vocal de su tema.
+
+Casi nada de esto sobrevivió a la evolución del español. La pasiva en r ha desaparecido. El futuro en -bo ha desaparecido. Las cuatro conjugaciones quedaron en tres, cuando la segunda y la tercera clases latinas, el tipo ~habēre~ y el tipo ~facere~, se fundieron en la clase española en -er, aunque unas cuantas se deslizaron más bien al -ir, que es donde acabaron ~decir~ y ~pedir~. El español no heredó tanto el verbo latino como lo rescató de un naufragio.
+
+^Escipión en Iberia^
+
+Roma no vino a España para tener España. En el 218 a. C., en los primeros movimientos de la Segunda Guerra Púnica, los ejércitos romanos desembarcaron en el nordeste para aislar a Aníbal de su base cartaginesa de ~Qart Hadasht~, la ciudad cuyo nombre púnico Roma latinizó como ~Carthago Nova~ y que el español llama hoy Cartagena. Un Escipión más joven, el futuro Africano, la tomó en el 209 a. C. Los cartagineses fueron expulsados de la península en el 206 a. C., doce años después del desembarco.
+
+Someter la península costó doscientos años más. La Numancia celtibérica resistió hasta el 133 a. C. y luego quemó la ciudad antes de que se rindieran sus últimos supervivientes. Los lusitanos de Viriato humillaron a los ejércitos romanos durante casi una década. Hasta el 19 a. C., bajo Augusto, las ~guerras cántabras~ no pusieron por fin las montañas del norte bajo control romano, y aun eso fue un resultado militar más que cultural.
+
+Merece la pena reparar en el contraste. César tomó la Galia en ocho años. Roma no llegó a tomar Germania nunca. Hispania costó dos siglos, y se romanizó de forma desigual, a fondo en el sur y a lo largo del Mediterráneo, poco y tarde en las montañas del norte. Esa desigualdad importa enormemente, porque el dialecto que llegó a ser el español no nació en el cómodo sur romanizado. Nació en el norte, en el último rincón al que llegó Roma, pared con pared con una lengua que no era indoeuropea en absoluto.
+
+^Las lenguas que Iberia ya hablaba^
+
+Cuando llegaron las legiones, la península era una espesura lingüística. El ~celtibérico~ y otras lenguas célticas ocupaban el centro y el noroeste. El ~ibero~, no indoeuropeo y todavía sin descifrar pese a tener un signario legible, se extendía por la costa mediterránea. Del ~tartesio~ en el suroeste y del ~lusitano~ en el oeste apenas se sabe nada. Colonos fenicios habían fundado ~Gadir~, hoy Cádiz, hacia el 1100 a. C. según la tradición, lo que la convierte en candidata a ciudad habitada de manera continua más antigua de Europa occidental. Los griegos comerciaban en ~Emporion~. Y en el Pirineo occidental, entonces como ahora, se hablaba ~vasco~, la única lengua preindoeuropea de Europa occidental que ha llegado hasta hoy, emparentada con nada.
+
+El latín sepultó casi todas esas lenguas, pero el ~sustrato~ se transparenta. ~Izquierdo~ es vasco. ~Perro~ desplazó al perfectamente útil ~can~, heredado del latín ~canis~, y nadie sabe de dónde salió el recién llegado. ~Páramo~, ~vega~, ~barranco~, ~arroyo~ y ~cama~ son prerromanos, y ~arroyo~ se remonta a ~arrugia~, que Plinio registra como el nombre que daban los mineros a una galería en las minas de oro de Hispania. ~Camino~, ~carro~ y ~cerveza~ son célticos. ~Camisa~ se discute: lo más probable es que sea de origen germánico y céltico solo en la transmisión.
+
+La huella más honda quizá esté en el verbo, y es invisible. Las palabras latinas que empezaban por f- perdieron ese sonido en el dialecto del norte central que llegó a ser el castellano, salvo ante r, ante l y ante el ue de ~fuego~ y ~fuerte~. ~Facere~ dio ~hacer~, ~fīlius~ dio ~hijo~, ~ferrum~ dio ~hierro~, ~fābulārī~ dio ~hablar~, y ~habēre~ tenía una h propia, una letra que el latín llevaba mucho sin pronunciar y que el castellano antiguo dejó caer en ~aver~ antes de que los eruditos la repusieran. Hoy la h es muda. El cambio no lo es. El vasco no tenía f, la mudanza se irradió precisamente desde el corredor de Burgos, La Rioja y Cantabria donde hablantes de castellano y hablantes de vasco vivían codo con codo, y la explicación habitual es que allí el latín lo aprendió gente con acento vasco. La prueba es circunstancial y la discusión no está cerrada. Pero dos de los verbos más usados de la lengua, ~hacer~ y ~hablar~, empiezan por una letra que es la cicatriz de una frontera.
+
+^El latín vulgar y el desgaste de las desinencias^
+
+El latín que hablaba la gente corriente siempre se había apartado del estándar literario, y después de la caída del Imperio de Occidente en el siglo V, la lengua hablada, que los estudiosos llaman ~latín vulgar~, se fue alejando cada vez más de la norma escrita, congelada. La vislumbramos en faltas de ortografía, en pintadas y en listas de correcciones como el ~Appendix Probi~, que riñe a los escribientes justamente por las pronunciaciones que llegarían a ser romances.
+
+Los cambios fonéticos golpearon al verbo donde vivía, en el final de la palabra. La m final, ya débil en tiempos de Cicerón, enmudeció. La t final se debilitó y cayó. Las vocales átonas se confundieron entre sí y a veces desaparecieron. Como el latín empaquetaba su gramática en las desinencias, el desgaste de esas desinencias obligó a la lengua a buscar maneras nuevas de hacer un trabajo viejo. El elaborado sistema de casos, que había señalado quién hacía qué a quién, se derrumbó en preposiciones y orden de palabras. La misma erosión estaba, en ese mismo momento, comiéndose los tiempos verbales.
+
+Hay que decir que el español salió bien parado. Su -s y su -n finales sobrevivieron donde el francés lo perdió casi todo, y por eso el español sigue teniendo seis desinencias audibles en ~hablo~, ~hablas~, ~habla~, ~hablamos~, ~habláis~, ~hablan~, mientras que cuatro de las seis formas francesas comparten tres grafías y un solo sonido. Ese accidente de la erosión es la explicación habitual de que los pronombres sujeto sean opcionales en español y obligatorios en francés, aunque algunos culpan más bien al hundimiento del viejo orden de palabras del francés.
+
+^La invención de un futuro nuevo^
+
+El futuro del latín estaba en apuros. ~Amābō~ dependía de unas desinencias que el cambio fonético estaba destruyendo y, peor aún, empezaban a chocar con otras formas. ~Amābit~, ‘amará’, resbalaba hacia ~amāvit~, ‘amó’, y una lengua no se puede permitir eso, así que el latín hablado abandonó calladamente el viejo futuro y montó uno nuevo con piezas de las que se fiaba: un infinitivo y el verbo ~habēre~, ‘haber, tener’.
+
+Para decir ‘tengo que cantar’, un hablante podía decir ~cantāre habeō~, literalmente ‘cantar he’. Aplicada a lo que estaba por venir, la expresión pasó a significar sencillamente ‘cantaré’, y con los siglos las dos palabras se fundieron en una. ~Cantāre habeō~ dio ~cantaré~. El %futuro de indicativo% de todo verbo español regular se sigue construyendo así, y ~haber~ sigue estando visible dentro: junto a ~he~, ~has~, ~ha~, ~hemos~, ~han~ están ~cantaré~, ~cantarás~, ~cantará~, ~cantaremos~, ~cantarán~. La misma receta con el imperfecto de ~haber~ produjo el %condicional%: ~cantāre habēbam~ dio ~cantaría~.
+
+Sabemos que la fusión fue una vez dos palabras separadas porque el español medieval todavía podía separarlas. El castellano antiguo escribía ~dar vos he~, ‘os daré’, colando el pronombre entre el infinitivo y el auxiliar, y el ~Cantar de mio Cid~ está lleno de formas así. El portugués formal todavía hoy separa las dos: ~dar-te-ei~. El español soldó la juntura, pero la soldadura dejó marcas. Cuando el habla juntaba las dos palabras a suficiente velocidad, la vocal propia del infinitivo se quedaba fuera. ~Salir~ más ~he~ no dio un pulcro ~saliré~; dio $salDré$, con una d apuntalando la sílaba hundida. ~Poner~ dio $ponDré$ y ~haber~ dio $habRé$; ~decir~ y ~hacer~ perdieron además una consonante de la raíz y dieron $dIré$ y $haRé$. No son irregularidades arbitrarias. Son una contracción de mil años, y son la razón de que esta aplicación enseñe siquiera una %raíz futura%.
+
+^Un pasado construido con haber^
+
+El mismo auxiliar reconstruyó el pasado. El latín ~habeō litterās scrīptās~, ‘tengo escritas las cartas’, se reinterpretó como un tiempo compuesto. Las cartas dejaron de ser lo poseído y el escribir pasó a ser lo importante, y el español obtuvo ~he escrito~ y toda la familia de tiempos compuestos, de la cual el %perfecto de indicativo% es el miembro cotidiano.
+
+Luego el español hizo algo que el francés y el italiano no hicieron nunca. Le dio a ~haber~ el trabajo entero. El castellano antiguo, como esos dos hoy, usaba ~ser~ de auxiliar con los verbos de movimiento y de cambio: ~es venido~, ‘ha venido’, ~son idos~, ‘se han ido’. A finales del siglo XVII ~haber~ se había hecho del todo con el puesto, y el español moderno dice ~ha venido~ sin excepción. Entretanto ~haber~ le cedió a ~tener~, del latín ~tenēre~, ‘sujetar’, su significado original. El verbo que un día quiso decir ‘poseer’ ya casi no significa nada por sí solo, más allá de anunciar que algo existe, como en ~había un problema~. Por lo demás existe para sostener a otros verbos.
+
+~Haber~ conservó un fósil. ~Hay~ es ~ha~ más un diminuto adverbio varado, ~y~, del latín ~ibī~, ‘allí’, el mismo truco locativo que el francés mantiene a la vista en ~il y a~ y el catalán en ~hi ha~. Es decir que ~hay~ dice, literalmente, ‘ha allí’. El español lo pegó y se olvidó del asunto, y por eso ~hay~ no se parece en nada al resto de su propio paradigma. Recuerde esa pequeña ~y~. Va a volver.
+
+^Dos imperfectos de subjuntivo, y por qué^
+
+Conjugar recoge dos imperfectos de subjuntivo, %imperfecto de subjuntivo 1% e %imperfecto de subjuntivo 2%, ~cantara~ y ~cantase~, y le dice que son intercambiables. Ahora lo son. No empezaron siendo el mismo tiempo, ni siquiera el mismo modo.
+
+~Cantase~ desciende del pluscuamperfecto de subjuntivo latino ~cantāvissem~. ~Cantara~ desciende del pluscuamperfecto de ~indicativo~ latino ~cantāveram~, una afirmación llana de hecho que significaba ‘había cantado’. Cuando los tiempos compuestos se hicieron cargo del trabajo del pluscuamperfecto, ~cantara~ se quedó sin empleo, derivó hacia el modo y aterrizó encima de ~cantase~. Así llegó el español a tener dos formas para un solo oficio: desmontando dos tiempos latinos distintos y dejando que las piezas se asentaran en el mismo sitio.
+
+El viejo indicativo nunca ha dejado del todo de rondar la forma en -ra. Periodistas y novelistas siguen escribiendo ~el gol que marcara en la final~, usando ~marcara~ como un pasado sin más. Y ~quisiera~ y ~debiera~ funcionan como condicionales de cortesía, como en ~quisiera un café~, que es una forma de subjuntivo haciendo trabajo de indicativo en una cafetería. Si las dos formas le suenan sutilmente distintas, no se lo está imaginando. Está oyendo una juntura de dos mil años.
+
+^El tiempo que se fue con los abogados^
+
+El %futuro de subjuntivo%, ~cantare~, $FUere$, $vIniere$, es el superviviente más extraño del paradigma. También él es una fusión, esta vez del futuro perfecto de indicativo latino ~cantāverō~ y del perfecto de subjuntivo ~cantāverim~, dos tiempos cuyas formas habían coincidido casi por completo. El español medieval lo usaba constantemente. Hacia 1700 agonizaba, y hoy casi nadie lo usa al hablar; las excepciones de las que se ha informado son unos pocos rincones rurales de Canarias y del Caribe.
+
+El tiempo no desapareció, sin embargo. Se replegó a los dos registros que no tiran nunca nada, el derecho y el refranero. Las leyes y las constituciones están llenas de él, como en ~el que infringiere lo dispuesto~, porque al lenguaje jurídico le gusta una condición futura que pueda enunciar con precisión. Los refranes también lo conservaron: ~Adonde~ $FUeres$~, haz lo que vieres~; ~sea lo que~ $FUere$; ~venga de donde~ $vIniere$. Conjugar enseña el tiempo porque los fósiles siguen andando por ahí, y porque quien aprende acabará encontrándose uno en un contrato de alquiler.
+
+^El pretérito que se negó a morir^
+
+El francés estuvo a punto de matar su pasado simple. El ~passé simple~ es hoy un tiempo escrito que la mayoría de los francófonos lee pero no dice, y su trabajo lo ha asumido el pasado compuesto en todas partes menos en unos pocos rincones conservadores, como la Nueva Escocia acadiana. Al español se le ofreció el mismo trato y en general lo rechazó.
+
+El %pretérito% está vivo en todas partes, pero la frontera que comparte con ~he cantado~ se desplaza según dónde esté uno. En buena parte de España, ~hoy he comido~ es lo que se dice del almuerzo, y ~comí~ queda reservado para tramos de tiempo ya cerrados. En casi toda Hispanoamérica, ~hoy comí~ es sencillamente lo que se dice, y el tiempo compuesto resulta comparativamente raro. Dos continentes heredaron el mismo perfecto latino de doble valor, lo partieron en dos tiempos españoles y trazaron la raya en sitios distintos. Ninguno de los dos se equivoca. Los dos son el siglo II discutiendo todavía consigo mismo.
+
+El pretérito conserva además un ritmo del latín que ninguna otra cosa del español conserva. La mayoría de los tiempos españoles acentúan la desinencia, como en ~cantó~ y ~comió~. Pero una clase pequeña de verbos muy frecuentes tiene ~pretéritos fuertes~, que acentúan en cambio la ~raíz~: $tUVE$, $sUPE$, $hICE$, $quISO$, $dIJE$, $andUVE$. Eso, en su mayor parte, no es una irregularidad inventada por el español. Es el patrón acentual del perfecto latino, conservado por los verbos que se usan lo bastante como para resistirse al ordenamiento, y es la razón de que esas formas no lleven tilde cuando las regulares sí la llevan. La excepción de esa lista es $andUVE$, que el español se fabricó a sí mismo sobre el modelo de ~hube~ y ~tuve~, allí donde el latín habría entregado un pulcro ~andé~.
+
+^Los cambios de raíz y la tiranía del acento^
+
+Lo que quien aprende llama irregularidad con más frecuencia en el %presente de indicativo% no es una irregularidad en absoluto. Es una ley fonética sorprendida en flagrante.
+
+La ĕ y la ŏ breves latinas, cuando iban acentuadas, solían romperse en diptongos en español: ~pĕtra~ dio ~piedra~, ~pŏrta~ dio ~puerta~. En los verbos se aplicó la misma ley y, como el acento se mueve por el paradigma del verbo español, se aplicó solo a algunas de las formas. El latín ~sĕntit~ dio $sIente$ y el latín vulgar ~pŏtet~ dio $pUEde$, pero ~sentīmus~ acentuaba en cambio la desinencia y se quedó en ~sentimos~, y el antepasado de ~podemos~ hizo lo mismo. En eso consiste casi todo el misterio del verbo con cambio de raíz. $pUEdo$, $pUEdes$, $pUEde$, podemos, podéis, $pUEden$ no es una lista de excepciones. Es un mapa de dónde cae el acento. La analogía le entregó más tarde el mismo mapa a ~pensar~ y a ~regar~, cuyas vocales latinas no les daban ningún derecho a él.
+
+El artículo %voseo% señala que las formas de ~vos~ no diptongan: ~vos podés~, ~vos movés~, ~vos perdés~. Ahora la razón está a la vista. Las desinencias de ~vos~ arrastran el acento fuera de la raíz, de modo que la vieja ley no llega a dispararse. El español argentino no está siendo irregular aquí. Está ejecutando la misma ley latina desde el otro lado, sobre una desinencia que Madrid le sigue dando a ~vosotros~.
+
+^Los verbos en -go y cuatro fantasmas mudos^
+
+El español tiene un conjunto famoso de primeras personas terminadas en -go: $tenGo$, $ponGo$, $salGo$, $venGo$, $haGo$, $dIGo$, $oIGo$, $caIGo$, $traIGo$. Llegaron ahí por más de un camino. Solo ~digo~ obtuvo su g por cambio fonético, del latín ~dīcō~ al sonorizar su c entre vocales. El -eo de ~teneō~ debería haber dado en cambio una palatal, y el portugués ~tenho~ es la forma que el español tiró. Y luego la analogía, la gran ordenadora y desordenadora de las lenguas, le entregó el patrón a verbos que no tenían ningún derecho histórico a él. La conspiración recorre la primera persona del singular y todo el %presente de subjuntivo%, y por eso $tenGa$, $haGa$ y $dIGa$ llevan la misma g.
+
+Luego están los cuatro verbos que terminan en una letra que significa ‘allí’: $soY$, $doY$, $estoY$, $VOY$. El castellano antiguo tenía ~so~, ~do~, ~estó~ y ~vo~. La explicación habitual de la y es ese mismo ~ibī~ varado que vive dentro de ~hay~, un adverbio que significaba ‘allí’ y que se pegó a cuatro verbos frecuentísimos y luego se olvidó. Esa derivación es la explicación más antigua, no la resuelta, porque las rivales van desde un ~yo~ engullido hasta la analogía con el pretérito ~fui~, y nadie sabe decir por qué ~doy~ habría de significar ‘doy allí’. Si la explicación del ~ibī~ es correcta, un hispanohablante que dice ~yo soy~ está diciendo algo más cercano, etimológicamente, a ‘soy allí’.
+
+^Ser, estar y un verbo hecho con tres^
+
+~Ser~ son dos verbos latinos. Las formas $ES$, $sOn$, $ERa$ y $ERes$ vienen de ~esse~, ‘ser’. Pero el infinitivo ~ser~ mismo, junto con ~seré~, $sEa$ y ~siendo~, viene de ~sedēre~, ‘estar sentado’, tras derivar el ser, en latín tardío, desde el existir hacia el estar sentado, asentado, situado. ~Estar~ llegó por el mismo camino, desde ~stāre~, ‘estar de pie’. Los dos verbos con que el español dice el ser son, por debajo, una silla y un par de pies.
+
+~Ir~ es peor, o mejor. Su presente, $VOY$, $VAs$, $VA$, $VAmos$, $VAn$, viene del latín ~vādere~, ‘avanzar’. Su infinitivo, su futuro y su imperfecto, ~ir~, ~iré~ y $íBamos$, vienen de ~īre~, ‘ir’. Y su pretérito, $FUI$, $FUiste$, $FUE$, viene de ~esse~, tomado en bloque de ~ser~. El verbo español del ir son tres verbos latinos dentro de una gabardina, y el de abajo no es un verbo de movimiento en absoluto, y por eso ~fui~ vale a la vez para el ser y para el ir, y solo el contexto puede decir cuál de los dos es.
+
+^Godos, árabe y la cuña de Castilla^
+
+Al hundirse el poder romano, los ~visigodos~ tomaron Hispania y la gobernaron durante tres siglos, desde Toledo una vez que sus reyes se instalaron allí en el siglo VI. Como los francos en la Galia, eran una minoría germanohablante que acabó adoptando el romance de sus súbditos. Dejaron un ~superestrato~: ~guerra~, ~guardar~, ~ganar~, ~ropa~, ~rico~, ~blanco~, ~ganso~ y muchísimos nombres de persona, entre ellos Rodrigo, Fernando, Álvaro y Elvira, más una parte en la costumbre románica general de rehacer como gu la w germánica inicial, que es la razón de que ~werra~ diera aquí ~guerra~ y ~guerre~ en Francia. Lo que no dejaron fue un sistema verbal. Casi todos los verbos germánicos que el español tomó prestados se pusieron a conjugarse como ~cantar~, y los pocos que no, entre ellos ~escarnir~ y ~guarir~, se fueron a la clase en -ir.
+
+En 711 un ejército omeya cruzó por Gibraltar, y durante los ocho siglos siguientes alguna parte de la península fue ~al-Ándalus~. El árabe fue la lengua de la administración, de la ciencia y del prestigio en la mayor parte de la península durante los tres primeros de esos siglos, y el español le tomó entre dos mil y cuatro mil palabras, entre ellas ~aceite~, ~alcalde~, ~almohada~, ~ajedrez~, ~azúcar~, ~albañil~ y ~naranja~, más que de ninguna otra fuente salvo el latín. Cuál de los dos extremos de esa horquilla se tome depende de quién cuente los derivados y los topónimos.
+
+Al sistema verbal le dio igual. Ocho siglos del contacto lingüístico más intenso de la Europa medieval, y las conjugaciones apenas se inmutaron. Los verbos árabes tomados en préstamo fueron reclutados sin más para la clase en -ar, donde se han portado bien desde entonces. Hay una excepción gloriosa, y ni siquiera es un verbo. ~Ojalá~ es el árabe ~law šā’ Allāh~, ‘si Dios quisiera’, tragado entero y reanalizado como una sola palabra española, y conservó al llegar su fuerza irreal. ~Ojalá~ pide subjuntivo, ~ojalá venga~, ~ojalá viniera~, aunque también lo pide cualquier deseo patrimonial español. Una oración condicional árabe está, en este mismo momento, fijando el modo de los verbos españoles.
+
+Mientras tanto, en el extremo norte, el condado de ~Castilla~ hacía algo raro. Su romance era el más innovador de la península. Perdió la f- inicial. Convirtió el pl-, el cl- y el fl- latinos en ll-, de modo que ~plōrāre~ dio ~llorar~, ~clāmāre~ dio ~llamar~ y ~flamma~ dio ~llama~. Convirtió el -ct- en -ch-, de modo que ~noctem~ dio ~noche~ y ~factum~ dio ~hecho~. Y a medida que la Reconquista empujaba hacia el sur, Castilla empujaba con ella. Ramón Menéndez Pidal describió el resultado como una ~cuña~: el castellano bajó clavándose por el medio del viejo continuo románico, separando el leonés del aragonés, alcanzando a la vez el Mediterráneo y el Atlántico y llevando sus peculiares innovaciones a los dos. El español no es la media del romance ibérico. Es el dialecto del extraño condado fronterizo del norte que ganó.
+
+^El primer español escrito y una gramática para un imperio^
+
+Hacia el año 1000, un monje del monasterio de San Millán de la Cogolla, en La Rioja, trabajaba sobre un sermón en latín y escribía notitas en los márgenes para explicar las palabras más difíciles. Las escribió en la lengua que hablaba de verdad, un romance riojano que los estudiosos agrupan hoy con el navarroaragonés y no con el castellano. Esas notas, las ~Glosas Emilianenses~, están entre el romance escrito más antiguo que se conserva de la península, y dos de ellas son el vasco escrito más antiguo conservado en un manuscrito. Existen porque un erudito que leía latín había llegado al punto de necesitar que le tradujeran el latín. El momento en que el latín se volvió lengua extranjera para sus propios herederos es el momento en que puede decirse que empieza el español.
+
+Dos siglos y medio más tarde, Alfonso X de Castilla terminó de pasar la cancillería real a la lengua vulgar, un cambio que había iniciado su padre, y encargó en ella historias, códigos legales y tratados astronómicos, haciendo más que ninguna otra persona por fijar el aspecto que tenía el castellano sobre una página. Y en 1492, el año en que cayó Granada y zarpó Colón, Antonio de Nebrija publicó la ~Gramática de la lengua castellana~, la primera gramática de una lengua europea viva que llegó a imprimirse. Se cuenta que la reina Isabel, a quien años antes se le había enseñado una muestra en Salamanca, preguntó para qué servía. El obispo de Ávila respondió por el autor: los pueblos conquistados han de tomar las leyes del vencedor, y con ellas su lengua. La primera línea del propio Nebrija ya había dicho que la lengua fue siempre compañera del imperio. El obispo fue insólitamente franco sobre para qué sirve un libro de gramática, y los hechos no lo desmintieron.
+
+^Un sistema verbal cruza un océano^
+
+El español llegó a América con un paradigma de seis personas y se asentó con cinco. ~Vosotros~, el plural que España sigue guardando para los amigos, cruzó el océano con todo el mundo y allí murió: salió del habla americana corriente en el siglo XVIII, justo cuando el occidente de Andalucía lo estaba dejando también. ~Ustedes~, que es ~vuestras mercedes~ desgastado hasta convertirse en un pronombre que rige verbos en tercera persona, se hizo cargo del plural formal y del informal en toda Hispanoamérica. Una fila entera de la tabla de conjugación dejó sin más de ser usada por la mayoría de los hispanohablantes del mundo, y por eso Conjugar le muestra el ~vosotros~ y le deja decidir qué hacer con él.
+
+La otra mitad de la historia es el %voseo%. El ~vōs~ del latín tardío era un plural que pasó a dirigirse a una sola persona como marca de respeto, exactamente como el francés sigue usando ~vous~. En España aquel ~vos~ respetuoso se fue devaluando, apretado entre el ~tú~ por debajo y la ~vuestra merced~ por encima, y desapareció. En América, lejos de la corte, sobrevivió, y la mayoría de las variedades conservaron los monoptongos que convivían con las desinencias propias del plural desde el siglo XV: -ás junto a -áis, -és junto a -éis, e -ís sin cambio. Maracaibo conservó los diptongos y todavía dice ~vos cantáis~. Cuando un hablante de Buenos Aires dice ~vos hablás~, esa desinencia es un plural del siglo XV que ya iba bajando por la escala social, todavía en servicio cuatrocientos años después de que Madrid lo soltara.
+
+^El sistema verbal hoy^
+
+El español moderno conserva el armazón que heredó del latín, un indicativo, un subjuntivo y un imperativo tendidos sobre el presente, el pasado y el futuro, pero casi todas las piezas de dentro se han rehecho:
+
+• el ~futuro~ y el ~condicional~ son el viejo infinitivo fundido con ~haber~, de modo que ~cantaré~ lleva un auxiliar dentro de su desinencia
+• los tiempos compuestos son ~haber~ más un participio, y ~haber~ hace el trabajo entero, tras haber desalojado de él a ~ser~
+• la pasiva es ~ser~ más un participio, o mucho más a menudo la construcción con ~se~, y la pasiva de una sola palabra del latín ha desaparecido
+• el %pretérito% sobrevivió, a diferencia de su primo francés, pero comparte terreno con ~he cantado~ en unos términos que varían según el país
+• el %futuro de subjuntivo% se retiró al derecho y al refranero
+• el pronombre sujeto siguió siendo opcional, porque la mayoría de las desinencias que nombran al sujeto no enmudecieron nunca
+
+Ese último punto es la gran divergencia. El francés, según la explicación habitual, perdió sus desinencias por erosión y se vio obligado a hacer obligatorios sus pronombres sujeto, aunque algunos historiadores del francés culpan más bien al hundimiento de su viejo orden de palabras. El español conservó sus desinencias y conservó su libertad. ~Hablo~ no necesita ningún ~yo~, y añadir uno es una decisión sobre el énfasis y no una exigencia de la gramática. No es un arreglo definitivo. En el Caribe y en buena parte de Andalucía, la -s final se aspira o se pierde, lo que puede confundir calladamente ~hablas~ con ~habla~, y los hablantes caribeños sí recurren a los pronombres sujeto mucho más a menudo que nadie. Si lo uno causa lo otro se discute, porque los andaluces pierden la misma -s y no usan más pronombres que Madrid. La maquinaria que rehízo el francés puede estar funcionando ahora mismo, en otras costas, en tiempo real.
+
+^De la estepa a la pantalla^
+
+Cuando conjuga un verbo español, cuando dice ~hablo~, ~hablaré~, ~he hablado~, está manejando piezas de una antigüedad enorme. La desinencia de ~hablaré~ es un ~haber~ desgastado, soldado ahí por gente que había dejado de poder leer a Cicerón. La h muda de ~hablar~ es una f latina que una frontera bilingüe de las montañas del norte probablemente borró. El ~ue~ de $pUEde$ es una vocal romana que se rompe bajo el acento. ~Fui~ es un verbo latino que en origen significaba ‘creció’ y que ahora hace de pasado de dos verbos distintos a la vez. Los huesos de las palabras son latinos, llevados a Iberia por soldados que vinieron a combatir a Aníbal y se quedaron seiscientos años, teñidos por lenguas que nadie sabe leer, bautizados por marineros fenicios y rebautizados por peregrinos, normalizados por un rey y un gramático, y embarcados hacia el otro lado de un océano donde más tarde se abandonaría un pronombre y se rescataría otro.
+
+Detrás del latín está la estepa, los yamnaya con sus caballos y su protoindoeuropeo. Detrás de la estepa está el lento encenderse de la vida en un planeta hecho de polvo de estrellas. Conjugar ~hablar~ es poner en marcha una máquina que se lleva cinco mil años construyendo, montada en las praderas al norte del mar Negro, llevada a un pueblecito del Latium, marchada hacia Iberia contra Cartago, rehecha en las bocas de monjes, pastores y marineros, y todavía, en las lenguas de quinientos millones de personas, hablando.

@@ -1,0 +1,596 @@
+# Gloss verification report (B2) — Phases 1–3
+
+Audited trail of the multi-agent gloss-verification pass over the 4,556 authored glosses in `docs/glosses/slice_*.tsv`. Phase 1 blind-glossed every verb (anti-anchoring) and flagged a 549-verb contested∪flagged set; Phase 2 ran 3 independent diverse-lens, web-grounded checkers per verb (RAE / Wiktionary / morphology) + a consensus reconciliation (≥2/3 same sense with ≥1 dictionary citation); Phase 3 applied the result to the slices. Written for a bilingual auditor — Josh cannot vet the Spanish himself.
+
+## Summary
+
+- Authored glosses swept: **4,556**
+- Contested∪flagged set verified by 3-checker consensus: **549**
+- Glosses **changed** (replace): **80**
+- Previously-flagged glosses **confirmed** (flag cleared): **460**
+- Flags before → after: **522 → 1**
+- Consensus strength: 517/549 unanimous (3/3), 32/549 at 2/3
+- Out-of-bounds findings (report-only, not auto-edited): **24**
+
+## Changes applied (80 replacements)
+
+Each: `infinitive: old → new` · consensus N/3 · citation · rationale.
+
+- **abalar**: `move` → `hurl` · 2/3 · medium · https://es.wiktionary.org/wiki/abalar : arrojar lanzar (throw hurl); current move too vague
+- **abordar**: `tackle` → `board` · 2/3 · high · https://es.wiktionary.org/wiki/abordar : tocar una embarcacion con otra (board a vessel primary)
+- **aborregar**: `curdle` → `become fleecy` · 3/3 · high · https://dle.rae.es/aborregarse : cielo cubrirse de nubes a modo de vellones (sky becoming fleecy)
+- **achispar**: `tipsy` → `make tipsy` · 3/3 · high · https://es.wiktionary.org/wiki/achispar : bring near drunken state; reflexive get tipsy
+- **acorchar**: `cork` → `go numb` · 2/3 · medium · https://es.wiktionary.org/wiki/acorchar : lose sensation/go numb
+- **afelpar**: `plush` → `make plush` · 3/3 · high · https://es.wiktionary.org/wiki/afelpar : dar apariencia de felpa a una tela
+- **aflautar**: `pipe` → `make shrill` · 3/3 · high · https://es.wiktionary.org/wiki/aflautar : elevar el tono de la voz haciendola mas aguda
+- **albardar**: `bard` → `saddle` · 2/3 · high · https://dle.rae.es/albardar : enalbardar poner la albarda (primary; bard is secondary culinary)
+- **almendrar**: `almond-flavor` → `decorate with almonds` · 2/3 · medium · https://es.wiktionary.org/wiki/almendrar : anadir almendras o mandorlas a modo de decoracion (arq)
+- **amanerar**: `mannerism` → `make mannered` · 3/3 · high · https://es.wiktionary.org/wiki/amanerar: adopt affected/mannered style (current is a noun)
+- **amartelar**: `woo` → `enamor` · 3/3 · high · https://www.rae.es/drae2001/amartelar: enamorar (primary sense)
+- **amojamar**: `cure` → `dry out` · 2/3 · medium · https://dle.rae.es/amojamar: ponerse enjuto y seco como la mojama = dry/shrivel
+- **anarquizar**: `anarchize` → `spread anarchy` · 3/3 · high · https://es.wiktionary.org/wiki/anarquizar: llevar a la anarquia (anarchize not standard English)
+- **anatomizar**: `anatomize` → `dissect` · 3/3 · high · https://es.wiktionary.org/wiki/anatomizar: hacer la diseccion anatomica = dissect
+- **apellidar**: `surname` → `name` · 2/3 · medium · https://es.wiktionary.org/wiki/apellidar: llamar = call/name (surname-as-verb awkward)
+- **aplatanar**: `enervate` → `make listless` · 3/3 · high · https://dle.rae.es/aplatanar: entregarse a la indolencia = make indolent/listless
+- **asalariar**: `salary` → `put on salary` · 3/3 · high · https://dle.rae.es/asalariar : senalar salario a alguien
+- **aureolar**: `haloe` → `halo` · 3/3 · high · https://dle.rae.es/aureolar : rodear como una aureola
+- **banderillear**: `stab` → `place banderillas` · 3/3 · high · https://dle.rae.es/banderillear : poner banderillas al toro place banderillas
+- **barrar**: `bar` → `smear with mud` · 3/3 · high · https://es.wiktionary.org/wiki/barrar : untar cubrir o manchar con barro from barro mud not barra bar
+- **biografiar**: `biograph` → `write biography` · 3/3 · high · https://es.wiktionary.org/wiki/biografiar : elaborar la biografia de alguien write biography
+- **bribonear**: `cheat` → `act roguishly` · 2/3 · medium · https://dle.rae.es/bribonear : hacer vida de bribon / hacer bribonadas (act roguishly)
+- **caligrafiar**: `calligraph` → `do calligraphy` · 3/3 · high · https://es.wiktionary.org/wiki/caligrafiar : escribir a mano con trazos artisticos (do calligraphy)
+- **centuplicar**: `multiply` → `multiply hundredfold` · 3/3 · high · https://es.wiktionary.org/wiki/centuplicar : multiplicar por 100 / cien veces mayor
+- **chaquetear**: `turncoat` → `switch sides` · 2/3 · high · https://es.wiktionary.org/wiki/chaquetear : cambiar de bando / turn coat (from chaqueta)
+- **chistar**: `speak` → `speak up` · 2/3 · high · https://es.wiktionary.org/wiki/chistar : empezar a hablar (sin chistar) = speak up
+- **clarear**: `brighten` → `dawn` · 3/3 · high · https://es.wiktionary.org/wiki/clarear : empezar a amanecer = dawn
+- **contrapear**: `plywood` → `cross-laminate` · 3/3 · high · https://dle.rae.es/contrapear : aplicar unas piezas de madera contra otras con fibras cruzadas
+- **coscar**: `annoy` → `catch on` · 3/3 · high · https://dle.rae.es/coscarse : coloq. darse cuenta percatarse
+- **cumplimentar**: `complete` → `fill out` · 2/3 · high · https://es.wiktionary.org/wiki/cumplimentar : rellenar completar un formulario
+- **depilar**: `depilate` → `remove hair` · 3/3 · high · https://es.wiktionary.org/wiki/depilar : quitar el vello o pelo
+- **desapasionar**: `dispassion` → `lose passion` · 3/3 · high · https://es.wiktionary.org/wiki/desapasionar : remove passion / become dispassionate (pronominal)
+- **desarrendar**: `unrent` → `end lease` · 2/3 · medium · https://es.wiktionary.org/wiki/desarrendar : dejar una heredad que se tenia arrendada
+- **descaperuzar**: `uncover` → `remove hood` · 3/3 · high · https://dle.rae.es/descaperuzar : quitar de la cabeza la caperuza
+- **desempapelar**: `unpaper` → `strip wallpaper` · 3/3 · high · https://es.wiktionary.org/wiki/desempapelar (des-+empapelar = remove wallpaper)
+- **desempotrar**: `unbuild` → `remove built-in` · 2/3 · high · https://es.wiktionary.org/wiki/desempotrar (extraer una cosa empotrada)
+- **desencapotar**: `uncover` → `clear up` · 2/3 · medium · https://es.wiktionary.org/wiki/desencapotar (el cielo despejarse/aclararse)
+- **desfasar**: `mismatch` → `throw out of phase` · 3/3 · high · https://es.wiktionary.org/wiki/desfasar (hacer variar la fase de una senal)
+- **desforrar**: `unwrap` → `remove lining` · 3/3 · high · https://es.thefreedictionary.com/desforrar : quitar el forro a una cosa
+- **desmandar**: `disobey` → `get out of control` · 3/3 · high · https://dle.rae.es/desmandar : desmandarse descomedirse propasarse desordenarse
+- **despistar**: `mislead` → `throw off the track` · 3/3 · high · https://es.wiktionary.org/wiki/despistar : hacer perder la pista (throw off the track)
+- **despreocupar**: `relax` → `stop worrying` · 3/3 · high · https://es.wiktionary.org/wiki/despreocupar : despreocuparse = dejar de preocuparse (stop worrying)
+- **desubicar**: `misplace` → `disorient` · 2/3 · high · https://es.wiktionary.org/wiki/desubicar : poner fuera de lugar (put out of place/disorient)
+- **embazar**: `dye` → `confuse` · 3/3 · medium · https://es.wiktionary.org/wiki/embazar : pasmar confundir (astound/confuse); dye is rare etym-2
+- **embotijar**: `bottle` → `store in jars` · 3/3 · high · https://dle.rae.es/embotijar : echar y guardar algo en botijos (store in earthenware jugs)
+- **empavonar**: `burnish` → `blue steel` · 2/3 · medium · https://dle.rae.es/pavonar : dar pavón al hierro o acero (blue/coat steel)
+- **enmudecer**: `silence` → `fall silent` · 2/3 · high · https://dle.rae.es/enmudecer : intr. quedar mudo o guardar silencio (fall silent)
+- **ennoviar**: `get engaged` → `start dating` · 3/3 · high · https://dle.rae.es/ennoviarse : echarse novio / entablar noviazgo = start dating not engaged
+- **ensañar**: `rage` → `be cruel` · 3/3 · high · https://www.rae.es/dpd/ensañar : deleitarse en causar daño = be cruel
+- **entoldar**: `awning` → `cover with awning` · 3/3 · high · https://es.wiktionary.org/wiki/entoldar : cubrir con toldos = cover with awnings
+- **entrelucir**: `glimmer` → `show through` · 2/3 · medium · https://dle.rae.es/entrelucir : divisarse entremedias de otra = show through partially
+- **entubar**: `tube` → `intubate` · 3/3 · high · https://es.wiktionary.org/wiki/entubar : insert a tube (medical intubation)
+- **erisipelar**: `infect` → `cause erysipelas` · 3/3 · high · https://es.wiktionary.org/wiki/erisipelar : producir erisipela
+- **estenografiar**: `stenograph` → `take shorthand` · 3/3 · high · https://es.wiktionary.org/wiki/estenografiar : escribir por medio de la estenografía (taquigrafiar)
+- **foguear**: `fire` → `season` · 3/3 · high · https://es.wiktionary.org/wiki/foguear:acostumbrar a alguien a las penalidades de un trabajo
+- **guarrear**: `mess up` → `grunt` · 3/3 · high · https://dle.rae.es/guarrear : gruñir dicho del jabali (primary RAE sense; mess up secondary)
+- **mensualizar**: `monthly bill` → `pay monthly` · 3/3 · high · asale.org/damer/mensualizar: proceder al pago mensual de salarios
+- **militar**: `militate` → `serve in military` · 3/3 · high · dle.rae.es/militar: servir en la guerra / profesar la milicia
+- **opositar**: `compete` → `sit competitive exam` · 3/3 · high · https://dle.rae.es/opositar: hacer oposiciones a un cargo o empleo
+- **parabolizar**: `parabolize` → `speak in parables` · 2/3 · medium · https://dicionario.priberam.org/parabolizar : expor por meio de parabolas (speak in parables)
+- **peligrar**: `endanger` → `be in danger` · 3/3 · high · https://dle.rae.es/peligrar : intr. estar en peligro (be in danger)
+- **plantificar**: `plant` → `plonk down` · 2/3 · high · https://dle.rae.es/plantificar : put something (esp unsuitable) somewhere
+- **prevaricar**: `prevaricate` → `abuse one's office` · 3/3 · high · https://dpej.rae.es/lema/prevaricacion : official issues knowingly unjust ruling; prevaricate is false friend
+- **prosificar**: `prosify` → `turn into prose` · 2/3 · high · https://dle.rae.es/prosificar : put a poetic work into prose
+- **redundar**: `result` → `result in` · 3/3 · high · https://es.wiktionary.org/wiki/redundar : resultar / venir a parar en beneficio o daño = result in
+- **reenganchar**: `rehook` → `reenlist` · 3/3 · high · https://es.wiktionary.org/wiki/reenganchar : reengancharse en el ejercito = re-enlist
+- **reensayar**: `rehearse` → `rehearse again` · 3/3 · high · https://dle.rae.es/reensayar : volver a ensayar = rehearse again
+- **reflorecer**: `reflower` → `bloom again` · 3/3 · high · https://es.wiktionary.org/wiki/reflorecer : volver a echar flores = bloom again
+- **remansar**: `pool` → `form a pool` · 3/3 · high · https://es.wiktionary.org/wiki/remansar : remansarse = water forming a still pool
+- **remorder**: `cause remorse` → `gnaw at` · 3/3 · high · https://es.wiktionary.org/wiki/remorder : la conciencia me remuerde = gnaws at
+- **repeinar**: `recomb` → `comb again` · 3/3 · high · https://es.wiktionary.org/wiki/repeinar : re- + peinar = comb again
+- **repescar**: `refish` → `readmit` · 3/3 · medium · https://es.wiktionary.org/wiki/repescar : re-accept someone previously rejected (resit/recovery)
+- **reverdecer**: `regreen` → `turn green again` · 3/3 · high · https://es.wiktionary.org/wiki/reverdecer : ponerse verde otra vez
+- **sesear**: `lisp` → `pronounce s for c` · 3/3 · high · https://dle.rae.es/sesear : pronunciar z o c como s (seseo not lisp)
+- **taquigrafiar**: `stenograph` → `write shorthand` · 3/3 · high · https://es.wiktionary.org/wiki/taquigrafiar : write in shorthand
+- **tarjetear**: `card` → `hand out cards` · 2/3 · medium · https://es.wiktionary.org/wiki/tarjetear : distribute promotional cards
+- **testar**: `bequeath` → `make a will` · 3/3 · high · https://dle.rae.es/testar : hacer testamento make a will
+- **toldar**: `awning` → `cover with awning` · 3/3 · high · https://dle.rae.es/toldar : cubrir con toldo
+- **triptongar**: `triphthong` → `form triphthong` · 3/3 · high · https://es.wiktionary.org/wiki/triptongar:form a triphthong
+- **zorrear**: `prowl` → `act cunningly` · 3/3 · medium · https://dle.rae.es/zorrear : obrar con la cautela o la astucia propias del zorro
+
+## Previously-flagged glosses now confirmed (flag cleared)
+
+460 glosses that were self-flagged low-confidence by the single-pass author, now confirmed correct by ≥2/3 grounded consensus. Flag cleared.
+
+- **abajar**: `lower` ✓ · 3/3 · everyday (3/3); https://es.wiktionary.org/wiki/abajar mover de posicion mas elevada a menos
+- **abalizar**: `mark` ✓ · 3/3 · https://es.wiktionary.org/wiki/abalizar : senalar con balizas (mark with buoys)
+- **aballar**: `drive` ✓ · 3/3 · https://es.wiktionary.org/wiki/aballar : llevar o conducir el ganado (drive cattle)
+- **abanar**: `fan` ✓ · 3/3 · everyday (3/3); https://es.wiktionary.org/wiki/abanar abanicar cribar
+- **abetunar**: `polish` ✓ · 3/3 · https://es.wiktionary.org/wiki/abetunar : cubrir con betun (coat polish)
+- **abigarrar**: `variegate` ✓ · 3/3 · https://es.wiktionary.org/wiki/abigarrar : dar varios colores mal combinados (variegate)
+- **abocar**: `pour` ✓ · 3/3 · https://es.wiktionary.org/wiki/abocar : volcar el contenido de un recipiente en otro (pour decant)
+- **abocinar**: `flare` ✓ · 3/3 · https://es.wiktionary.org/wiki/abocinar : dar forma de bocina (flare tube mouth)
+- **abotargar**: `bloat` ✓ · 3/3 · https://dle.rae.es/abotargarse : hincharse abotagarse (become bloated)
+- **abovedar**: `vault` ✓ · 3/3 · https://es.wiktionary.org/wiki/abovedar : cubrir con boveda (cover with vault)
+- **abrevar**: `water` ✓ · 3/3 · https://es.wiktionary.org/wiki/abrevar : proporcionar agua para beber al ganado (water animals)
+- **acendrar**: `purify` ✓ · 3/3 · https://es.wiktionary.org/wiki/acendrar : depurar purificar (purify refine metals)
+- **acerar**: `steel` ✓ · 3/3 · https://es.wiktionary.org/wiki/acerar : give iron the properties of steel
+- **achabacanar**: `vulgarize` ✓ · 3/3 · https://es.wiktionary.org/wiki/achabacanar : make vulgar/crude
+- **achantar**: `intimidate` ✓ · 3/3 · https://es.wiktionary.org/wiki/achantar : intimidate/silence someone
+- **achaparrar**: `stunt` ✓ · 3/3 · https://es.wiktionary.org/wiki/achaparrar : become stunted/squat
+- **acharolar**: `varnish` ✓ · 3/3 · https://es.wiktionary.org/wiki/acharolar : varnish with charol
+- **achinar**: `slant` ✓ · 3/3 · https://es.wiktionary.org/wiki/achinar : give East Asian/slanted features
+- **achuchar**: `squeeze` ✓ · 3/3 · https://es.wiktionary.org/wiki/achuchar : crush/squeeze
+- **acidular**: `acidulate` ✓ · 3/3 · https://es.wiktionary.org/wiki/acidular : make slightly acidic
+- **acodar**: `bend` ✓ · 3/3 · everyday (3/3) a+codo bend at an angle
+- **acogotar**: `throttle` ✓ · 3/3 · https://es.wiktionary.org/wiki/acogotar : compress throat to suffocate/strangle
+- **acompasar**: `pace` ✓ · 3/3 · https://es.wiktionary.org/wiki/acompasar : keep in time/measure
+- **acoquinar**: `intimidate` ✓ · 3/3 · https://es.wiktionary.org/wiki/acoquinar : intimidate/discourage
+- **acrisolar**: `refine` ✓ · 3/3 · https://es.wiktionary.org/wiki/acrisolar : purify/refine metal in a crucible
+- **acuartelar**: `quarter` ✓ · 3/3 · https://es.wiktionary.org/wiki/acuartelar : place troops in barracks/quarters
+- **adinerar**: `enrich` ✓ · 3/3 · https://es.wiktionary.org/wiki/adinerarse : aumentar la fortuna, enriquecerse
+- **adjetivar**: `adjectivize` ✓ · 3/3 · https://es.wiktionary.org/wiki/adjetivar : hacer de un sustantivo adjetivo
+- **adocenar**: `make common` ✓ · 3/3 · https://es.wiktionary.org/wiki/adocenar : volver vulgar o mediocre
+- **adverbializar**: `adverbialize` ✓ · 3/3 · https://es.wiktionary.org/wiki/adverbializar : usar como adverbio
+- **afeminar**: `effeminate` ✓ · 3/3 · https://es.wiktionary.org/wiki/afeminar : hacer adquirir cualidades femeninas
+- **afincar**: `settle` ✓ · 3/3 · https://es.wiktionary.org/wiki/afincar : establecer residencia en un lugar
+- **afofar**: `soften` ✓ · 3/3 · https://es.wiktionary.org/wiki/afofar : poner fofa una cosa
+- **afrancesar**: `frenchify` ✓ · 3/3 · https://es.wiktionary.org/wiki/afrancesar : hacer que se imite lo frances
+- **agavillar**: `bundle` ✓ · 3/3 · https://es.wiktionary.org/wiki/agavillar : juntar en gavillas las cosechas
+- **agitanar**: `gypsify` ✓ · 3/3 · https://es.wiktionary.org/wiki/agitanar : conferir aspecto o caracter gitano
+- **agostar**: `parch` ✓ · 3/3 · https://es.wiktionary.org/wiki/agostar : secar o abrasar el calor las plantas
+- **agremiar**: `unionize` ✓ · 3/3 · https://es.wiktionary.org/wiki/agremiar : reunir formando gremios
+- **agrisar**: `gray` ✓ · 3/3 · https://es.wiktionary.org/wiki/agrisar : darle a algo color gris
+- **agusanar**: `get wormy` ✓ · 3/3 · https://es.wiktionary.org/wiki/agusanarse : llenarse de gusanos
+- **aherrojar**: `shackle` ✓ · 3/3 · https://dle.rae.es/aherrojar : poner a alguien prisiones de hierro
+- **ahornar**: `bake` ✓ · 3/3 · https://es.wiktionary.org/wiki/ahornar : meter en el horno
+- **ahuevar**: `egg-shape` ✓ · 3/3 · https://dle.rae.es/ahuevar : dar forma de huevo
+- **aindiar**: `go native` ✓ · 3/3 · https://es.wiktionary.org/wiki/aindiar : tomar tradiciones y costumbres de los indios
+- **alambicar**: `distill` ✓ · 3/3 · https://dle.rae.es/alambicar : destilar
+- **alcahuetear**: `pander` ✓ · 3/3 · everyday (3/3) : servir de alcahuete
+- **alcantarillar**: `sewer` ✓ · 3/3 · https://dle.rae.es/alcantarillar : hacer o poner alcantarillas
+- **alcoholizar**: `alcoholize` ✓ · 3/3 · https://es.wiktionary.org/wiki/alcoholizar : anadir alcohol a una sustancia
+- **algodonar**: `pad` ✓ · 3/3 · https://dle.rae.es/algodonar : estofar o rellenar de algodon
+- **alhajar**: `bejewel` ✓ · 3/3 · https://dle.rae.es/alhajar : adornar con alhajas
+- **alicatar**: `tile` ✓ · 3/3 · https://dle.rae.es/alicatar : revestir de azulejos
+- **alicortar**: `clip wings` ✓ · 3/3 · https://dle.rae.es/alicortar : cortar las alas a un ave
+- **allegar**: `gather` ✓ · 3/3 · https://dle.rae.es/allegar : juntar o reunir
+- **almohazar**: `curry` ✓ · 3/3 · https://dle.rae.es/almohazar : estregar a las caballerias con la almohaza
+- **alocar**: `madden` ✓ · 3/3 · everyday (3/3): a-+loco+-ar = drive mad
+- **amorriñar**: `mope` ✓ · 3/3 · everyday (3/3): from morrina (melancholy/homesickness) = mope
+- **animalizar**: `animalize` ✓ · 3/3 · everyday (3/3): -izar denominal from animal = make brutish/animalize
+- **anisar**: `flavor with anise` ✓ · 3/3 · everyday (3/3): RAE anisar = anadir anis
+- **apocopar**: `apocopate` ✓ · 3/3 · https://es.wiktionary.org/wiki/apocopar: suprimir sonidos finales (apocopate is standard linguistic term)
+- **apostrofar**: `apostrophize` ✓ · 3/3 · https://es.wiktionary.org/wiki/apostrofar: dirigir apostrofes = address rhetorically
+- **arbolar**: `hoist` ✓ · 3/3 · https://es.wiktionary.org/wiki/arbolar: levantar en mastil o asta = hoist
+- **arracimar**: `cluster` ✓ · 3/3 · https://es.wiktionary.org/wiki/arracimar: disponer en forma de racimo = cluster
+- **arramplar**: `sweep away` ✓ · 3/3 · https://dle.rae.es/arramplar : llevar algo codiciosamente
+- **arrebolar**: `redden` ✓ · 3/3 · https://dle.rae.es/arrebolar : poner de color de arrebol (rojo)
+- **arrumbar**: `discard` ✓ · 3/3 · https://dle.rae.es/arrumbar : apartar o retirar algo por inutil
+- **asaetear**: `shoot arrows` ✓ · 3/3 · https://dle.rae.es/asaetear : disparar saetas contra alguien
+- **aspar**: `reel` ✓ · 3/3 · https://dle.rae.es/aspar : hacer madejas el hilo en el aspa
+- **asperjar**: `sprinkle` ✓ · 3/3 · https://dle.rae.es/asperjar : rociar o hisopear
+- **atarugar**: `wedge` ✓ · 3/3 · https://dle.rae.es/atarugar : asegurar con tarugos o cunas
+- **atildar**: `primp` ✓ · 3/3 · https://dle.rae.es/atildar : componer asear
+- **atiplar**: `raise pitch` ✓ · 3/3 · https://es.wiktionary.org/wiki/atiplar : levantar el tono hasta tiple
+- **atocinar**: `cure pork` ✓ · 3/3 · https://www.rae.es/drae2001/atocinar : partir el cerdo hacer los tocinos y salarlos
+- **atontolinar**: `stupefy` ✓ · 3/3 · https://dle.rae.es/atontolinar : atontar aturdir
+- **atufar**: `annoy` ✓ · 3/3 · https://dle.rae.es/atufar : enfadar enojar
+- **aturullar**: `confuse` ✓ · 3/3 · https://dle.rae.es/aturullar : turbar a alguien de modo que no sepa que decir
+- **autosugestionar**: `autosuggest` ✓ · 3/3 · https://es.wiktionary.org/wiki/autosugestionar : sugestionarse a si mismo
+- **avezar**: `accustom` ✓ · 3/3 · everyday (3/3): a-+vezo "get used to/accustom"
+- **aviejar**: `age` ✓ · 3/3 · everyday (3/3): a-+viejo+ar "make old/age"
+- **avispar**: `liven` ✓ · 3/3 · everyday (3/3): avivar/espabilar liven rouse
+- **azarar**: `fluster` ✓ · 3/3 · everyday (3/3): provocar desasosiego o inquietud repentina
+- **azufrar**: `sulfur` ✓ · 3/3 · https://es.wiktionary.org/wiki/azufrar : tratar con azufre treat with sulfur
+- **babosear**: `slobber` ✓ · 3/3 · everyday (3/3): llenar de baba drool slobber
+- **bailotear**: `dance` ✓ · 3/3 · everyday (3/3): bailar mucho sin gracia dance about
+- **bandear**: `cross` ✓ · 3/3 · https://es.wiktionary.org/wiki/bandear : cruzar un rio a la otra orilla cross
+- **baquetear**: `wear out` ✓ · 3/3 · https://es.wiktionary.org/wiki/baquetear : danar un objeto por usarlo reiteradamente wear out
+- **bisar**: `encore` ✓ · 3/3 · https://es.wiktionary.org/wiki/bisar : repetir a peticion del publico encore
+- **bobear**: `fool around` ✓ · 3/3 · everyday (3/3): hacer o decir boberias act foolishly
+- **bracear**: `flail` ✓ · 3/3 · everyday (3/3): mover repetidamente los brazos move arms flail
+- **brear**: `thrash` ✓ · 3/3 · https://es.wiktionary.org/wiki/brear : maltratar atosigar thrash mistreat
+- **brujulear**: `scheme` ✓ · 3/3 · https://es.wiktionary.org/wiki/brujulear : averiguar por indicios / hacer diligencias (scheme maneuver)
+- **buzonear**: `leaflet` ✓ · 3/3 · https://www.rae.es/diccionario-estudiante/buzonear : repartir publicidad por los buzones (deliver leaflets)
+- **cablegrafiar**: `cable` ✓ · 3/3 · https://es.wiktionary.org/wiki/cablegrafiar : enviar mensajes por cable telegrafico (cable)
+- **cabrillear**: `shimmer` ✓ · 3/3 · https://es.wiktionary.org/wiki/cabrillear : el mar forma pequeñas olas (ripple shimmer)
+- **calcografiar**: `engrave` ✓ · 3/3 · https://es.wiktionary.org/wiki/calcografiar : grabar en metal una imagen (engrave)
+- **campar**: `camp` ✓ · 3/3 · https://es.wiktionary.org/wiki/campar : instalarse para pernoctar (camp)
+- **campear**: `graze` ✓ · 3/3 · https://es.wiktionary.org/wiki/campear : salir un animal a pacer (graze)
+- **cañonear**: `shell` ✓ · 3/3 · https://es.wiktionary.org/wiki/cañonear : atacar con muchos cañonazos (shell bombard)
+- **capotar**: `overturn` ✓ · 3/3 · https://dle.rae.es/capotar : volcar un vehiculo quedando invertido (overturn)
+- **capotear**: `dodge` ✓ · 3/3 · https://es.wiktionary.org/wiki/capotear : evadir mañosamente dificultades (dodge evade)
+- **caracolear**: `caper` ✓ · 3/3 · https://es.wiktionary.org/wiki/caracolear : caballo que da giros y movimientos circulares (prance caper)
+- **carburar**: `carburet` ✓ · 3/3 · https://es.wiktionary.org/wiki/carburar : mezclar los gases carburantes con el aire (carburet)
+- **carear**: `confront` ✓ · 3/3 · https://es.wiktionary.org/wiki/carear : poner personas cara a cara para apurar la verdad (confront)
+- **cartear**: `correspond` ✓ · 3/3 · https://es.wiktionary.org/wiki/cartear : corresponder por cartas (correspond by letters)
+- **cascabelear**: `jingle` ✓ · 3/3 · https://es.wiktionary.org/wiki/cascabelear : denominal of cascabel (bell), literal jingle
+- **catalanizar**: `catalanize` ✓ · 3/3 · https://es.wiktionary.org/wiki/catalanizar : confer Catalan attributes / make Catalan
+- **censar**: `census` ✓ · 3/3 · https://es.wiktionary.org/wiki/censar : registrar algo en un censo / take a census
+- **chalar**: `madden` ✓ · 3/3 · https://es.wiktionary.org/wiki/chalar : hacer perder el juicio / drive crazy
+- **chancear**: `joke` ✓ · 3/3 · https://es.wiktionary.org/wiki/chancear : usar de chanzas / bromear
+- **chancletear**: `shuffle` ✓ · 3/3 · https://es.wiktionary.org/wiki/chancletear : walk dragging chancletas / shuffle in slippers
+- **chapucear**: `botch` ✓ · 3/3 · https://es.wiktionary.org/wiki/chapucear : do shoddy careless work / bungle
+- **chapurrear**: `speak badly` ✓ · 3/3 · https://es.wiktionary.org/wiki/chapurrear : hablar mal un idioma / speak a language poorly
+- **chapuzar**: `dunk` ✓ · 3/3 · https://es.wiktionary.org/wiki/chapuzar : arrojar de cabeza en el agua / plunge in water
+- **charlatanear**: `prattle` ✓ · 3/3 · https://es.wiktionary.org/wiki/charlatanear : hablar de asuntos superfluos vanos e insustanciales
+- **charlotear**: `chatter` ✓ · 3/3 · https://es.wiktionary.org/wiki/charlotear : conversar sin sustancia / idle chat
+- **charolar**: `varnish` ✓ · 3/3 · https://es.wiktionary.org/wiki/charolar : barnizar con charol / apply glossy finish
+- **chascar**: `crack` ✓ · 3/3 · https://es.wiktionary.org/wiki/chascar : producir sonido crujiente abrupto / crack snap
+- **chicolear**: `flirt` ✓ · 3/3 · https://es.wiktionary.org/wiki/chicolear : decir piropos/cumplidos = flirt
+- **chinchorrear**: `gossip` ✓ · 3/3 · https://dle.rae.es/chinchorrear : traer y llevar chismes = gossip
+- **chirigotear**: `jest` ✓ · 3/3 · https://es.wiktionary.org/wiki/chirigotear : de chirigota broma = jest
+- **choricear**: `pilfer` ✓ · 3/3 · https://es.wiktionary.org/wiki/choricear : variante de chorizar robar = pilfer
+- **chotear**: `mock` ✓ · 3/3 · https://es.wiktionary.org/wiki/chotear : gastar bromas/burlarse = mock
+- **chulear**: `swagger` ✓ · 3/3 · https://www.rae.es/diccionario-estudiante/chulear : jactarse o presumir = swagger
+- **churruscar**: `scorch` ✓ · 3/3 · https://es.wiktionary.org/wiki/churruscar : sobrepasar coccion ennegrecida = scorch
+- **cicatear**: `skimp` ✓ · 3/3 · https://dle.rae.es/cicatear : escatimar = skimp
+- **cimbrear**: `sway` ✓ · 3/3 · https://es.wiktionary.org/wiki/cimbrear : mover algo flexible vibrando = sway
+- **cinematografiar**: `film` ✓ · 3/3 · https://dle.rae.es/cinematografiar : sinonimo de filmar = film
+- **ciscar**: `soil` ✓ · 3/3 · https://es.wiktionary.org/wiki/ciscar : ensuciar una cosa = soil
+- **cizañar**: `sow discord` ✓ · 3/3 · https://es.wiktionary.org/wiki/cizañar : causar disension sembrando cizaña = sow discord
+- **clavetear**: `stud` ✓ · 3/3 · https://es.wiktionary.org/wiki/clavetear : adornar con clavos = stud
+- **clocar**: `cluck` ✓ · 3/3 · https://es.wiktionary.org/wiki/clocar : emitir la gallina su voz = cluck
+- **cloquear**: `cluck` ✓ · 3/3 · everyday (3/3); onomatopoeic hen sound
+- **cloroformizar**: `chloroform` ✓ · 3/3 · https://es.wiktionary.org/wiki/cloroformizar : emplear cloroformo para anestesiar
+- **coadyuvar**: `assist` ✓ · 3/3 · https://es.wiktionary.org/wiki/coadyuvar : contribuir a la realizacion de algo
+- **cocear**: `kick` ✓ · 3/3 · everyday (3/3); coz (kick) + -ear
+- **coheredar**: `co-inherit` ✓ · 3/3 · https://es.wiktionary.org/wiki/coheredar : heredar conjuntamente
+- **colacionar**: `collate` ✓ · 3/3 · https://dle.rae.es/colacionar : cotejar (collate/compare)
+- **colear**: `wag` ✓ · 3/3 · everyday (3/3); cola (tail) + -ear
+- **colegiar**: `register` ✓ · 3/3 · https://es.wiktionary.org/wiki/colegiar : incorporar a un profesional en el colegio de su profesion
+- **colindar**: `border` ✓ · 3/3 · https://es.wiktionary.org/wiki/colindar : tener limites comunes
+- **columbrar**: `glimpse` ✓ · 3/3 · https://es.wiktionary.org/wiki/columbrar : percibir o divisar desde lejos sin distinguir bien
+- **comadrear**: `gossip` ✓ · 3/3 · https://es.wiktionary.org/wiki/comadrear : contar y difundir chismes
+- **comedir**: `restrain` ✓ · 3/3 · https://es.wiktionary.org/wiki/comedir : comedirse moderarse/contenerse
+- **compendiar**: `summarize` ✓ · 3/3 · https://es.wiktionary.org/wiki/compendiar : producir un compendio o resumen
+- **compenetrar**: `bond` ✓ · 3/3 · https://dle.rae.es/compenetrarse : identificarse en ideas y sentimientos dos personas
+- **competer**: `concern` ✓ · 3/3 · https://es.wiktionary.org/wiki/competer : pertenecer tocar o incumbir a uno
+- **compulsar**: `collate` ✓ · 3/3 · https://es.wiktionary.org/wiki/compulsar : comparar un documento con su copia para cotejar
+- **comulgar**: `commune` ✓ · 3/3 · https://es.wiktionary.org/wiki/comulgar : give/receive holy communion
+- **concelebrar**: `concelebrate` ✓ · 3/3 · https://en.wiktionary.org/wiki/concelebrar : to concelebrate
+- **conceptuar**: `conceptualize` ✓ · 2/3 · https://es.wiktionary.org/wiki/conceptuar : formar o producir un concepto
+- **conchabar**: `scheme` ✓ · 3/3 · https://es.wiktionary.org/wiki/conchabar : conchabarse unirse/conspire
+- **concitar**: `incite` ✓ · 3/3 · https://en.wiktionary.org/wiki/concitar : instigate stir up incite
+- **conculcar**: `violate` ✓ · 3/3 · https://es.wiktionary.org/wiki/conculcar : irrespetar una norma ley o derecho
+- **concurrir**: `converge` ✓ · 3/3 · https://en.wiktionary.org/wiki/concurrir : to converge gather flock
+- **condoler**: `sympathize` ✓ · 3/3 · https://es.wiktionary.org/wiki/condoler : condolerse compadecer commiserate
+- **conexionar**: `connect` ✓ · 3/3 · https://es.wiktionary.org/wiki/conexionar : connect/become connected
+- **confabular**: `conspire` ✓ · 3/3 · https://en.wiktionary.org/wiki/confabularse : to conspire plot scheme
+- **conferenciar**: `confer` ✓ · 3/3 · https://es.wiktionary.org/wiki/conferenciar : to confer discuss
+- **confitar**: `candy` ✓ · 3/3 · https://en.wiktionary.org/wiki/confitar : to candy cook in sugar
+- **conflagrar**: `set ablaze` ✓ · 3/3 · https://es.wiktionary.org/wiki/conflagrar : hacer arder algo set on fire
+- **confraternizar**: `fraternize` ✓ · 3/3 · https://en.wiktionary.org/wiki/confraternizar : to fraternise
+- **congraciar**: `ingratiate` ✓ · 3/3 · https://es.wiktionary.org/wiki/congraciar : congraciarse ganar el favor de alguien
+- **conjuntar**: `combine` ✓ · 3/3 · https://en.wiktionary.org/wiki/conjuntar : to join bring together combine
+- **conmensurar**: `commensurate` ✓ · 2/3 · https://es.wiktionary.org/wiki/conmensurar : medir con igualdad o debida proporcion
+- **conminar**: `threaten` ✓ · 3/3 · everyday (3/3)
+- **connotar**: `connote` ✓ · 3/3 · everyday (3/3)
+- **consensuar**: `agree` ✓ · 3/3 · https://dle.rae.es/consensuar : adoptar decisiones de comun acuerdo
+- **consonantizar**: `consonantize` ✓ · 3/3 · https://dle.rae.es/consonantizar : convertir en consonante
+- **contabilizar**: `account` ✓ · 3/3 · https://dle.rae.es/contabilizar : apuntar en los libros de cuentas
+- **contemporizar**: `temporize` ✓ · 3/3 · https://dle.rae.es/contemporizar : acomodarse al gusto o dictamen ajeno
+- **contonear**: `sway` ✓ · 3/3 · https://dle.rae.es/contonearse : movimientos con hombros y caderas al andar
+- **contrahacer**: `counterfeit` ✓ · 3/3 · https://dle.rae.es/contrahacer : copiar imitar falsificar
+- **contristar**: `sadden` ✓ · 3/3 · https://dle.rae.es/contristar : afligir entristecer
+- **conturbar**: `perturb` ✓ · 3/3 · https://dle.rae.es/conturbar : intranquilizar alterar turbar
+- **copar**: `corner` ✓ · 3/3 · https://dle.rae.es/copar : conseguir en una competicion todos los puestos
+- **copear**: `drink` ✓ · 3/3 · https://dle.rae.es/copear : tomar copas
+- **cristianar**: `baptize` ✓ · 3/3 · https://dle.rae.es/cristianar : coloq. bautizar
+- **cuadricular**: `grid` ✓ · 3/3 · https://es.wiktionary.org/wiki/cuadricular : mark with/into grid squares
+- **cuartear**: `crack` ✓ · 3/3 · https://es.wiktionary.org/wiki/cuartear : agrietarse = crack/split
+- **culturizar**: `educate` ✓ · 3/3 · https://es.wiktionary.org/wiki/culturizar : educar en valores de una cultura
+- **currar**: `work` ✓ · 3/3 · https://es.wiktionary.org/wiki/currar : coloquial trabajar = work
+- **cursar**: `study` ✓ · 2/3 · https://es.wiktionary.org/wiki/cursar : seguir un curso o materia
+- **damnificar**: `harm` ✓ · 3/3 · https://es.wiktionary.org/wiki/damnificar : causar daño a alguien o algo
+- **decorticar**: `husk` ✓ · 3/3 · https://es.wiktionary.org/wiki/decorticar : eliminar capas externas de granos semillas
+- **demacrar**: `waste away` ✓ · 3/3 · https://es.wiktionary.org/wiki/demacrar : demacrarse become emaciated
+- **demarrar**: `pull away` ✓ · 3/3 · https://es.wiktionary.org/wiki/demarrar : cycling accelerate to break from peloton
+- **derechizar**: `make rightwing` ✓ · 3/3 · https://es.wiktionary.org/wiki/derechizar : convertir en adepto a la derecha
+- **desabollar**: `undent` ✓ · 3/3 · https://dle.rae.es/desabollar : quitar las abolladuras de piezas de metal
+- **desaclimatar**: `deacclimatize` ✓ · 3/3 · https://dle.rae.es/desaclimatar : destruir el hábito de la aclimatación
+- **desacuartelar**: `withdraw` ✓ · 3/3 · https://dle.rae.es/desacuartelar : sacar las tropas de los cuarteles
+- **desamortizar**: `disentail` ✓ · 3/3 · https://www.rae.es/diccionario-estudiante/desamortizar : privar de bienes de manos muertas y ponerlos en venta
+- **desarrimar**: `move away` ✓ · 3/3 · https://es.wiktionary.org/wiki/desarrimar : separar quitar lo que esta arrimado
+- **desbarrancar**: `push off cliff` ✓ · 3/3 · https://es.wiktionary.org/wiki/desbarrancar : arrojar barranca abajo
+- **descabalar**: `leave incomplete` ✓ · 3/3 · https://dle.rae.es/descabalar : quitar parte de un conjunto cabal
+- **descabellar**: `kill bull` ✓ · 3/3 · https://es.wiktionary.org/wiki/descabellar : matar al toro de una estocada
+- **descacharrar**: `smash` ✓ · 3/3 · https://es.wiktionary.org/wiki/descacharrar : romper danar un cacharro
+- **descambiar**: `exchange back` ✓ · 3/3 · https://es.wiktionary.org/wiki/descambiar : deshacer un cambio devolver lo intercambiado
+- **descasar**: `annul marriage` ✓ · 3/3 · https://es.wiktionary.org/wiki/descasar : anular el matrimonio
+- **descerebrar**: `decerebrate` ✓ · 3/3 · https://es.wiktionary.org/wiki/descerebrar : extirparle el cerebro a un animal
+- **descompasar**: `throw off` ✓ · 2/3 · https://es.wiktionary.org/wiki/descompasar : des- + compas = lose measure/rhythm
+- **descuajar**: `uproot` ✓ · 3/3 · https://dle.rae.es/descuajar : arrancar de raiz o de cuajo plantas
+- **descuajeringar**: `break apart` ✓ · 3/3 · https://es.wiktionary.org/wiki/descuajeringar : desarmar algo en las partes que lo constituyen
+- **desembarrar**: `clean mud` ✓ · 3/3 · https://dle.rae.es/desembarrar : limpiar quitar el barro
+- **desembrujar**: `disenchant` ✓ · 3/3 · https://es.wiktionary.org/wiki/desembrujar : quitarle a alguien un hechizo
+- **desempalmar**: `disconnect` ✓ · 3/3 · https://es.wiktionary.org/wiki/desempalmar (des-+empalmar splice/connect reversed)
+- **desempedrar**: `unpave` ✓ · 3/3 · https://es.wiktionary.org/wiki/desempedrar (arrancar las piedras de un empedrado)
+- **desencajonar**: `unbox` ✓ · 3/3 · https://es.wiktionary.org/wiki/desencajonar (sacar lo del interior de un cajon)
+- **desencasquillar**: `unjam` ✓ · 3/3 · https://es.thefreedictionary.com/desencasquillar (clear jammed cartridge in firearm)
+- **desenclavar**: `dislodge` ✓ · 3/3 · https://es.wiktionary.org/wiki/desenclavar (sacar con violencia del sitio)
+- **desencorvar**: `straighten` ✓ · 3/3 · https://es.wiktionary.org/wiki/desencorvar (poner recto lo que estaba curvo)
+- **desenfadar**: `calm` ✓ · 3/3 · https://es.wiktionary.org/wiki/desenfadar (quitar el enfado)
+- **desenfurruñar**: `cheer up` ✓ · 3/3 · https://es.wiktionary.org/wiki/desenfurru%C3%B1ar (reverse of enfurruñarse to sulk)
+- **desenladrillar**: `remove bricks` ✓ · 3/3 · https://es.wiktionary.org/wiki/desenladrillar (des-+enladrillar brick/tile reversed)
+- **desentablillar**: `unsplint` ✓ · 3/3 · https://es.wiktionary.org/wiki/desentablillar (des-+entablillar splint a limb reversed)
+- **desentoldar**: `remove awning` ✓ · 3/3 · https://es.wiktionary.org/wiki/desentoldar (des-+toldo awning reversed)
+- **desertizar**: `desertify` ✓ · 3/3 · https://es.wiktionary.org/wiki/desertizar (convertir en desierto)
+- **desflecar**: `fray` ✓ · 3/3 · https://dle.rae.es/desflecar : sacar flecos destejiendo las orillas de una tela = fray
+- **desguarnecer**: `strip` ✓ · 3/3 · https://es.wiktionary.org/wiki/desguarnecer : quitar guarniciones o adornos
+- **desimantar**: `demagnetize` ✓ · 3/3 · https://es.wiktionary.org/wiki/desimantar : reducir la fuerza magnetica de un iman
+- **desinsectar**: `fumigate` ✓ · 3/3 · https://es.wiktionary.org/wiki/desinsectar : suprimir la presencia de ciertos insectos
+- **deslavazar**: `wash out` ✓ · 3/3 · https://es.wiktionary.org/wiki/deslavazar : lavar algo de modo superficial
+- **deslomar**: `break back` ✓ · 3/3 · https://es.wiktionary.org/wiki/deslomar : quebrantar o romper los lomos
+- **desmadejar**: `weaken` ✓ · 3/3 · https://es.wiktionary.org/wiki/desmadejar : causar flojedad en el cuerpo debilitar
+- **desmadrar**: `wean` ✓ · 3/3 · https://es.wiktionary.org/wiki/desmadrar : separar de la madre las crias del ganado
+- **desnortar**: `disorient` ✓ · 3/3 · https://www.rae.es/diccionario-estudiante/desnortarse : desorientarse o perder el norte
+- **desojar**: `strain eyes` ✓ · 3/3 · https://dle.rae.es/desojar : desojarse esforzar la vista mirando o buscando algo
+- **desorejar**: `cut ears` ✓ · 3/3 · https://es.wiktionary.org/wiki/desorejar : des + oreja cortar las orejas
+- **despanzurrar**: `gut` ✓ · 3/3 · https://es.wiktionary.org/wiki/despanzurrar : romper la panza de una persona o animal
+- **despechugar**: `bare chest` ✓ · 3/3 · https://es.wiktionary.org/wiki/despechugar : despechugarse mostrar el pecho descubierto
+- **despelotar**: `strip` ✓ · 3/3 · https://www.rae.es/diccionario-estudiante/despelotarse : desnudarse (strip naked)
+- **despendolar**: `go wild` ✓ · 3/3 · https://dle.rae.es/despendolarse : behave without restraint
+- **desplanchar**: `wrinkle` ✓ · 3/3 · https://es.wiktionary.org/wiki/desplanchar : des+planchar un-iron wrinkle
+- **desriñonar**: `overwork` ✓ · 3/3 · https://es.wiktionary.org/wiki/desriñonar : causar fatiga extrema (overwork to exhaustion)
+- **desusar**: `disuse` ✓ · 3/3 · everyday (3/3) : stop using / fall into disuse
+- **desvencijar**: `break apart` ✓ · 3/3 · https://es.wiktionary.org/wiki/desvencijar : loosen disunite parts
+- **desvergonzar**: `be brazen` ✓ · 3/3 · https://dle.rae.es/desvergonzarse : become insolent shameless
+- **desvitalizar**: `devitalize` ✓ · 3/3 · everyday (3/3) : remove vitality / sap vitality
+- **empitonar**: `gore` ✓ · 3/3 · https://es.wiktionary.org/wiki/empitonar : coger el toro con los pitones (gore with horns)
+- **emplastecer**: `plaster` ✓ · 3/3 · https://es.wiktionary.org/wiki/emplastecer : eliminar irregularidades para pintarla (plaster/smooth)
+- **encanar**: `jail` ✓ · 3/3 · https://es.wiktionary.org/wiki/encanar : lunfardo encanar = encarcelar/jail
+- **encanutar**: `roll` ✓ · 3/3 · https://dle.rae.es/encanutar : poner algo en forma de canuto (tube/roll)
+- **engarabitar**: `climb` ✓ · 2/3 · https://www.rae.es/drae2001/engarabitar : intr. trepar (climb); curl numb fingers secondary
+- **enguachinar**: `soak` ✓ · 3/3 · https://dle.rae.es/enguachinar : enaguachar/llenar de agua (waterlog/soak)
+- **enquistar**: `encyst` ✓ · 3/3 · everyday (3/3) medical term en-+quiste
+- **enrocar**: `castle` ✓ · 3/3 · everyday (3/3) chess term
+- **enronquecer**: `make hoarse` ✓ · 3/3 · everyday (3/3) en-+ronco
+- **enseñorear**: `take over` ✓ · 3/3 · https://dle.rae.es/enseñorear : dominar algo / hacerse dueño = take over
+- **ensoberbecer**: `make arrogant` ✓ · 3/3 · everyday (3/3) inchoative -ecer on soberbio
+- **entarimar**: `floor` ✓ · 3/3 · https://dle.rae.es/entarimar : cubrir el suelo con tablas o tarima (floor)
+- **entelar**: `cover` ✓ · 3/3 · https://dle.rae.es/entelar : cubrir con tela (cover with fabric)
+- **entenebrecer**: `darken` ✓ · 3/3 · https://dle.rae.es/entenebrecer : oscurecer/llenar de tinieblas (darken)
+- **escachifollar**: `smash` ✓ · 3/3 · https://www.rae.es/diccionario-estudiante/escachifollar : estropear = damage/ruin (coloq)
+- **escaquear**: `dodge` ✓ · 3/3 · https://es.wiktionary.org/wiki/escaquear : escaquearse = shirk/dodge a duty
+- **esclerosar**: `harden` ✓ · 3/3 · https://es.wiktionary.org/wiki/esclerosar : medical, harden (sclerose)
+- **esclerotizar**: `harden` ✓ · 3/3 · https://es.wiktionary.org/wiki/esclerotizar : harden via sclerotization
+- **escorar**: `list` ✓ · 3/3 · https://es.wiktionary.org/wiki/escorar : ship list/heel to one side
+- **escotar**: `lower neckline` ✓ · 3/3 · https://es.wiktionary.org/wiki/escotar : cut/trim a garment (neckline)
+- **escriturar**: `deed` ✓ · 3/3 · https://es.wiktionary.org/wiki/escriturar : hacer constar con escritura publica = execute by public deed
+- **españolear**: `flaunt Spanishness` ✓ · 3/3 · https://es.wiktionary.org/wiki/españolear : excessively promote/boast of Spain
+- **espichar**: `die` ✓ · 3/3 · https://es.wiktionary.org/wiki/espichar : espicharla colloquial = die
+- **espurrear**: `spray` ✓ · 3/3 · https://es.wiktionary.org/wiki/espurrear : rociar con liquido expelido por la boca
+- **esquejar**: `take cuttings` ✓ · 3/3 · https://es.wiktionary.org/wiki/esquejar : propagate plants from cuttings
+- **estabular**: `stable` ✓ · 3/3 · https://es.wiktionary.org/wiki/estabular : keep/raise livestock in stables
+- **estatuir**: `decree` ✓ · 3/3 · https://es.wiktionary.org/wiki/estatuir : determinar/ordenar cómo debe ejecutarse algo (decree/establish synonymous)
+- **estirajar**: `stretch` ✓ · 3/3 · https://dle.rae.es/estirajar : estirar deformando algo
+- **estocar**: `thrust` ✓ · 3/3 · https://www.rae.es/dhle/estocar : herir con la punta de espada o estoque
+- **estomagar**: `annoy` ✓ · 3/3 · https://es.wiktionary.org/wiki/estomagar : fastidiar
+- **estoquear**: `thrust` ✓ · 3/3 · https://dle.rae.es/estoquear : herir o matar al toro con el estoque
+- **estraperlear**: `black-market` ✓ · 3/3 · https://es.wiktionary.org/wiki/estraperlear : comerciar en estraperlo (mercado negro)
+- **estuchar**: `case` ✓ · 3/3 · https://dle.rae.es/estuchar : meter en estuche
+- **exclaustrar**: `secularize` ✓ · 3/3 · https://dle.rae.es/exclaustrar : hacer salir a un religioso del claustro
+- **expedientar**: `investigate` ✓ · 3/3 · https://dle.rae.es/expedientar : someter a expediente para enjuiciar su actuación
+- **explicotear**: `explain at length` ✓ · 3/3 · https://es.wiktionary.org/wiki/explicotear : coloquial frecuentativo de explicar
+- **expugnar**: `storm` ✓ · 3/3 · https://es.wiktionary.org/wiki/expugnar : tomar a fuerza de armas una plaza o fortaleza
+- **extractar**: `abstract` ✓ · 3/3 · https://dle.rae.es/extractar : reducir a extracto resumir un escrito (abstract/summarize synonymous)
+- **extranjerizar**: `foreignize` ✓ · 3/3 · https://dle.rae.es/extranjerizar : introducir costumbres o elementos extranjeros dar carácter extranjero
+- **extremar**: `maximize` ✓ · 3/3 · https://www.wordreference.com/es/en/translation.asp?spen=extremar : take to the extreme / maximize
+- **faenar**: `fish` ✓ · 3/3 · https://es.wiktionary.org/wiki/faenar : realizar las labores de la pesca en el mar
+- **fajar**: `wrap` ✓ · 3/3 · https://dle.rae.es/fajar:rodear o envolver con faja una parte del cuerpo
+- **faldear**: `skirt` ✓ · 3/3 · https://dle.rae.es/faldear:caminar por la falda de un monte
+- **fanatizar**: `fanaticize` ✓ · 3/3 · https://dle.rae.es/fanatizar:volver fanatico a alguien
+- **feriar**: `trade` ✓ · 3/3 · https://dle.rae.es/feriar:vender comprar o permutar algo en la feria
+- **festonear**: `festoon` ✓ · 3/3 · https://dle.rae.es/festonear:adornar con feston
+- **filiar**: `enroll` ✓ · 3/3 · https://dle.rae.es/filiar:tomar los datos personales o sentar en el registro militar
+- **florear**: `adorn` ✓ · 3/3 · https://dle.rae.es/florear:adornar y guarnecer con flores
+- **fluidificar**: `fluidify` ✓ · 3/3 · https://www.spanishdict.com/translate/fluidificar : make fluid
+- **fluorar**: `fluoridate` ✓ · 3/3 · https://dle.rae.es/fluorar:anadir fluoruros al agua o dentifricos
+- **foliar**: `foliate` ✓ · 3/3 · https://dle.rae.es/foliar:numerar los folios de un libro o cuaderno
+- **fregotear**: `scrub` ✓ · 3/3 · https://dle.rae.es/fregotear:fregar deprisa y mal
+- **gallardear**: `flaunt` ✓ · 3/3 · https://dle.rae.es/gallardear:mostrar gallardia y donaire al hacer algo
+- **gallear**: `strut` ✓ · 3/3 · https://dle.rae.es/gallear:pretender sobresalir con presuncion o jactancia
+- **gansear**: `clown` ✓ · 3/3 · https://dle.rae.es/gansear:hacer o decir gansadas
+- **garrapatear**: `scribble` ✓ · 3/3 · https://dle.rae.es/garrapatear : hacer garrapatos / garabatear (make scribbles)
+- **garrapiñar**: `candy` ✓ · 3/3 · https://www.rae.es/diccionario-estudiante/garrapi%C3%B1ar : banar fruto seco en almibar que forma grumos
+- **gibar**: `annoy` ✓ · 3/3 · https://dle.rae.es/gibar : coloq. fastidiar molestar (primary; corcovar=hunch secondary)
+- **gitanear**: `wheedle` ✓ · 3/3 · https://dle.rae.es/gitanear : halagar con zalameria para conseguir lo que se desea
+- **golfear**: `loaf` ✓ · 3/3 · https://dle.rae.es/golfear : vivir como un golfo (holgazanear callejear)
+- **golosear**: `nibble` ✓ · 3/3 · https://dle.rae.es/golosear : andar comiendo golosinas (nibble sweets)
+- **gorgoritear**: `trill` ✓ · 3/3 · https://dle.rae.es/gorgoritear : hacer gorgoritos quiebros de la voz (trinar)
+- **granar**: `seed` ✓ · 3/3 · https://www.rae.es/diccionario-estudiante/granar : producir y desarrollar grano una planta
+- **grillar**: `sprout` ✓ · 3/3 · https://dle.rae.es/grillarse : entallecer el trigo tuberculo (sprout shoots)
+- **grisear**: `gray` ✓ · 3/3 · https://dle.rae.es/grisear : ir tomando color gris
+- **guarnicionar**: `garrison` ✓ · 3/3 · https://dle.rae.es/guarnicionar : poner guarnicion en una plaza fuerte
+- **guerrillear**: `wage guerrilla war` ✓ · 3/3 · https://es.thefreedictionary.com/guerrillear : fight as guerrillas
+- **guipar**: `see` ✓ · 3/3 · https://dle.rae.es/guipar : coloq. ver percibir descubrir (jergal)
+- **gulusmear**: `snoop` ✓ · 3/3 · https://dle.rae.es/gulusmear : curiosear husmear (golosinear is sense 1)
+- **hebraizar**: `hebraize` ✓ · 3/3 · https://dle.rae.es/hebraizar : dar caracter hebraico / usar giros de la lengua hebrea
+- **heñir**: `knead` ✓ · 3/3 · https://es.wiktionary.org/wiki/heñir : knead dough with fists
+- **himplar**: `snarl` ✓ · 3/3 · https://es.wiktionary.org/wiki/himplar : big-cat roar/snarl
+- **hocicar**: `root` ✓ · 3/3 · https://es.wiktionary.org/wiki/hocicar : animals lift earth with the snout
+- **hojaldrar**: `puff` ✓ · 3/3 · https://es.wiktionary.org/wiki/hojaldrar : shape dough into puff pastry
+- **hondear**: `sound` ✓ · 3/3 · https://es.wiktionary.org/wiki/hondear : recognize the bottom with a sounding line
+- **hostiar**: `wallop` ✓ · 3/3 · https://dle.rae.es/hostiar : hit or strike someone (vulgar, Spain)
+- **hozar**: `root` ✓ · 3/3 · https://es.wiktionary.org/wiki/hozar : move earth with the snout (pigs)
+- **humar**: `smoke` ✓ · 3/3 · https://dle.rae.es/humar : echar humo / emit smoke
+- **huronear**: `pry` ✓ · 3/3 · https://dle.rae.es/huronear : colloquial pry into others' affairs
+- **interviuvar**: `interview` ✓ · 3/3 · https://es.wiktionary.org/wiki/interviuvar : entrevistar / interview
+- **loquear**: `act crazy` ✓ · 3/3 · https://es.wiktionary.org/wiki/loquear : estar loco / hacer locuras
+- **lucubrar**: `ponder` ✓ · 3/3 · https://es.wiktionary.org/wiki/lucubrar : elucubrar / work studiously and ponder
+- **malcasar**: `mismarry` ✓ · 3/3 · https://dle.rae.es/malcasar : marry badly / without conditions for happy marriage
+- **malmeter**: `incite` ✓ · 3/3 · https://www.rae.es/diccionario-estudiante/malmeter : inducir a hacer cosas malas / incite
+- **maltraer**: `mistreat` ✓ · 3/3 · https://es.wiktionary.org/wiki/maltraer : maltratar / mistreat
+- **mancipar**: `enslave` ✓ · 3/3 · https://es.wiktionary.org/wiki/mancipar : subjugate / make a slave
+- **manducar**: `eat` ✓ · 3/3 · everyday (3/3)
+- **mantear**: `toss` ✓ · 3/3 · dle.rae.es/mantear: levantar a alguien en una manta entre varios
+- **maridar**: `marry` ✓ · 3/3 · dle.rae.es/maridar: casarse o unirse en matrimonio
+- **maternizar**: `humanize milk` ✓ · 3/3 · rae.es/diccionario-estudiante/maternizar: dotar a una leche de las propiedades de la materna
+- **matrimoniar**: `marry` ✓ · 3/3 · dle.rae.es/matrimoniar: contraer matrimonio
+- **mechar**: `lard` ✓ · 3/3 · dle.rae.es/mechar: introducir mechas de tocino en la carne
+- **menudear**: `occur often` ✓ · 3/3 · dle.rae.es/menudear: suceder algo con frecuencia
+- **mesar**: `tear hair` ✓ · 3/3 · dle.rae.es/mesar: arrancar el cabello o la barba con las manos
+- **metaforizar**: `metaphorize` ✓ · 3/3 · dle.rae.es/metaforizar: usar metaforas o alegorias
+- **meteorizar**: `bloat` ✓ · 3/3 · dle.rae.es/meteorizar: causar meteorismo en el ganado
+- **migar**: `crumble` ✓ · 3/3 · dle.rae.es/migar: desmenuzar el pan en pedazos pequenos
+- **ministrar**: `administer` ✓ · 3/3 · dle.rae.es/ministrar: administrar o suministrar
+- **mocar**: `blow nose` ✓ · 3/3 · dle.rae.es/mocar: sonar y limpiar los mocos
+- **moldar**: `mold` ✓ · 3/3 · dle.rae.es/moldar: amoldar o sacar molde
+- **monoptongar**: `monophthongize` ✓ · 3/3 · https://es.wiktionary.org/wiki/monoptongar: linguistics turn into a monophthong
+- **monumentalizar**: `monumentalize` ✓ · 3/3 · https://es.wiktionary.org/wiki/monumentalizar: make monumental
+- **morigerar**: `temper` ✓ · 3/3 · https://es.wiktionary.org/wiki/morigerar: moderar contener la intensidad de un sentimiento
+- **mosconear**: `pester` ✓ · 3/3 · https://dle.rae.es/mosconear: importunar con impertinencia y pesadez
+- **motear**: `speckle` ✓ · 3/3 · https://es.wiktionary.org/wiki/motear: salpicar de motas
+- **motejar**: `nickname` ✓ · 3/3 · https://dle.rae.es/motejar: llamar a alguien con apodo o mote
+- **murar**: `wall` ✓ · 3/3 · https://es.wiktionary.org/wiki/murar: encircle and fortify with a wall
+- **mustiar**: `wither` ✓ · 3/3 · https://es.wiktionary.org/wiki/mustiar: ajar quitar frescura a flores y plantas
+- **negrear**: `turn black` ✓ · 3/3 · https://es.wiktionary.org/wiki/negrear: blacken show black
+- **neurotizar**: `neuroticize` ✓ · 3/3 · https://es.wiktionary.org/wiki/neurotizar: volver neurotico a alguien
+- **niñear**: `act childish` ✓ · 3/3 · https://dle.rae.es/niñear: hacer niñerias portarse como un niño
+- **nuclearizar**: `nuclearize` ✓ · 3/3 · https://es.wiktionary.org/wiki/nuclearizar: equip with nuclear capacity
+- **obcecar**: `blind` ✓ · 3/3 · https://es.wiktionary.org/wiki/obcecar: cegar ofuscar volver incapaz de pensar racionalmente
+- **obstar**: `hinder` ✓ · 3/3 · https://es.wiktionary.org/wiki/obstar: poner dificultades o impedimentos
+- **ociar**: `idle` ✓ · 3/3 · https://es.wiktionary.org/wiki/ociar: dejar el trabajo darse al ocio
+- **optimar**: `optimize` ✓ · 3/3 · https://es.wiktionary.org/wiki/optimar : optimizar (to optimize)
+- **orear**: `air` ✓ · 3/3 · https://es.wiktionary.org/wiki/orear : expose to air to dry/ventilate
+- **orillar**: `skirt` ✓ · 3/3 · https://es.wiktionary.org/wiki/orillar : approach the edge
+- **orlar**: `border` ✓ · 3/3 · https://es.wiktionary.org/wiki/orlar : adorn with edging/border
+- **otear**: `scan` ✓ · 3/3 · https://es.wiktionary.org/wiki/otear : survey from a height
+- **ovalar**: `make oval` ✓ · 3/3 · https://es.wiktionary.org/wiki/ovalar : dar forma de ovalo
+- **ovar**: `lay eggs` ✓ · 3/3 · https://es.wiktionary.org/wiki/ovar : poner huevos
+- **ovillar**: `wind up` ✓ · 3/3 · https://es.wiktionary.org/wiki/ovillar : hacer ovillos (wind into a ball)
+- **parcializar**: `bias` ✓ · 3/3 · https://es.wiktionary.org/wiki/parcializar : apply favorably to one over another by bias
+- **pedorrear**: `fart` ✓ · 3/3 · https://es.wiktionary.org/wiki/pedorrear : expel intestinal gas
+- **pegotear**: `scrounge` ✓ · 3/3 · https://es.wiktionary.org/wiki/pegotear : enter homes at mealtime uninvited (freeload)
+- **pendonear**: `gallivant` ✓ · 3/3 · https://es.wiktionary.org/wiki/pendonear : gad about (intransitive)
+- **peraltar**: `bank` ✓ · 3/3 · https://es.wiktionary.org/wiki/peraltar : give superelevation to a curve/road
+- **pergeñar**: `contrive` ✓ · 3/3 · https://es.wiktionary.org/wiki/perge%C3%B1ar : devise/sketch out a plan with skill
+- **periclitar**: `decline` ✓ · 3/3 · https://es.wiktionary.org/wiki/periclitar : sense 2 decaer/declinar
+- **perlar**: `bead` ✓ · 3/3 · https://dle.rae.es/perlar : cover with droplets like pearls
+- **pespuntear**: `backstitch` ✓ · 3/3 · https://dle.rae.es/pespunte : backstitch sewing
+- **petar**: `please` ✓ · 3/3 · https://es.wiktionary.org/wiki/petar : give pleasure/please (coloq Spain)
+- **petardear**: `backfire` ✓ · 3/3 · https://dle.rae.es/petardear : engine firecracker-like sounds = backfire
+- **piafar**: `paw` ✓ · 3/3 · https://dle.rae.es/piafar : horse strikes ground with front hooves
+- **pimplar**: `booze` ✓ · 3/3 · https://dle.rae.es/pimplar : drink alcohol to excess (coloq)
+- **pirrar**: `love` ✓ · 3/3 · https://dle.rae.es/pirrar : pirrarse be crazy about/love
+- **policromar**: `polychrome` ✓ · 3/3 · https://es.wiktionary.org/wiki/policromar : apply multiple colors to sculpture
+- **positivar**: `develop` ✓ · 3/3 · https://dle.rae.es/positivar : obtain photographic positive = develop
+- **postinear**: `show off` ✓ · 3/3 · https://dle.rae.es/postinear : darse postin presumir = show off
+- **predatar**: `predate` ✓ · 3/3 · https://www.um.es/neologismos/index.php/v/neologismo/1890/predatar : assign earlier date
+- **presintonizar**: `preset` ✓ · 3/3 · https://es.wikipedia.org/wiki/Sintonizador : presintonizar radio stations = preset
+- **racanear**: `skimp` ✓ · 3/3 · https://dle.rae.es/racanear : escatimar/ser racano con el dinero = skimp
+- **radiotelegrafiar**: `radiotelegraph` ✓ · 3/3 · https://dle.rae.es/radiotelegrafiar : transmitir algo por radiotelegrafia
+- **ramonear**: `browse` ✓ · 3/3 · https://es.wiktionary.org/wiki/ramonear : animals eat leaf/branch tips = browse
+- **rarificar**: `rarefy` ✓ · 3/3 · https://es.wiktionary.org/wiki/rarificar : transitive verb rarefy (make less dense)
+- **rastrojar**: `clear stubble` ✓ · 3/3 · https://dle.rae.es/rastrojar : arrancar el rastrojo = clear stubble
+- **rebañar**: `scrape clean` ✓ · 3/3 · https://es.wiktionary.org/wiki/rebañar : scrape/lick clean leftover food = scrape clean
+- **rebordear**: `edge` ✓ · 3/3 · https://dle.rae.es/rebordear : hacer o formar un reborde = edge
+- **recalar**: `make landfall` ✓ · 3/3 · https://es.wiktionary.org/wiki/recalar : buque llega a la vista de punto conocido = make landfall
+- **recamar**: `embroider` ✓ · 3/3 · https://es.wiktionary.org/wiki/recamar : related to bordar = embroider
+- **recatar**: `conceal` ✓ · 3/3 · https://es.wiktionary.org/wiki/recatar : impedir que algo se vea/perciba = conceal
+- **recauchutar**: `retread` ✓ · 3/3 · https://dle.rae.es/recauchutar : volver a cubrir de caucho un neumatico = retread
+- **recidivar**: `relapse` ✓ · 3/3 · https://es.wiktionary.org/wiki/recidivar : repetirse una enfermedad = relapse
+- **recochinear**: `gloat` ✓ · 3/3 · https://dle.rae.es/recochinearse : burlarse con malicia / regodearse = gloat
+- **recomer**: `fret` ✓ · 3/3 · https://es.wiktionary.org/wiki/recomer : molestia interior continuada que consume = fret
+- **reconcomer**: `fret` ✓ · 3/3 · https://es.wiktionary.org/wiki/reconcomer : reconcomerse = be consumed inwardly / fret
+- **recuadrar**: `frame` ✓ · 3/3 · https://es.wiktionary.org/wiki/recuadrar : cortar o dividir en cuadros = frame
+- **refocilar**: `delight` ✓ · 3/3 · https://es.wiktionary.org/wiki/refocilar : recrear / alegrar / causar deleite = delight
+- **regodear**: `delight` ✓ · 3/3 · https://es.wiktionary.org/wiki/regodear : regodearse = take delight
+- **rehumedecer**: `remoisten` ✓ · 3/3 · https://es.wiktionary.org/wiki/rehumedecer : humedecer de nuevo = remoisten
+- **rehundir**: `sink` ✓ · 3/3 · https://dle.rae.es/rehundir : hundir / sumergir a lo mas hondo = sink
+- **rejonear**: `spear bull` ✓ · 3/3 · https://es.wiktionary.org/wiki/rejonear : herir al toro con el rejon = spear bull
+- **religar**: `rebind` ✓ · 3/3 · https://es.wiktionary.org/wiki/religar : volver a atar = rebind
+- **repatear**: `annoy` ✓ · 3/3 · https://dle.rae.es/repatear : fastidiar / molestar mucho = annoy
+- **resinar**: `tap resin` ✓ · 3/3 · https://www.rae.es/drae2001/resinar : sacar resina a ciertos arboles haciendo incisiones
+- **sobetear**: `paw` ✓ · 3/3 · https://dle.rae.es/sobetear : sobar manosear (coloquial)
+- **soflamar**: `scorch` ✓ · 3/3 · https://dle.rae.es/soflamar : tostarse requemarse con la llama
+- **subvenir**: `defray` ✓ · 3/3 · https://dle.rae.es/subvenir : ayudar a algo o costear sus gastos
+- **sulfatar**: `sulfate` ✓ · 3/3 · https://es.wiktionary.org/wiki/sulfatar : tratar/rociar con sulfato (agricultura)
+- **sumariar**: `summarize` ✓ · 3/3 · https://es.wiktionary.org/wiki/sumario : formar sumario; compendiar/resumir
+- **superabundar**: `overabound` ✓ · 3/3 · everyday (3/3) : super- + abundar
+- **sustantivar**: `nominalize` ✓ · 3/3 · https://es.wiktionary.org/wiki/sustantivar : dar caracter y funcion de sustantivo
+- **tabicar**: `wall up` ✓ · 3/3 · https://dle.rae.es/tabicar : cerrar con tabique un vano
+- **tablear**: `plank` ✓ · 3/3 · https://es.wiktionary.org/wiki/tablear : dividir un madero en tablas
+- **taconear**: `tap heels` ✓ · 3/3 · https://es.wiktionary.org/wiki/taconear : pisar haciendo ruido con el tacon
+- **tanguear**: `tango` ✓ · 3/3 · everyday (3/3) : bailar tango (denominal)
+- **tapear**: `snack` ✓ · 3/3 · https://es.wiktionary.org/wiki/tapear : eat tapas / ir de tapas
+- **taracear**: `inlay` ✓ · 3/3 · https://es.wiktionary.org/wiki/taracear : decorate with marquetry inlay
+- **tarar**: `tare` ✓ · 3/3 · https://es.wiktionary.org/wiki/tarar : indicate tare weight
+- **tarifar**: `price` ✓ · 3/3 · https://dle.rae.es/tarifar : set tariff or rates
+- **tartajear**: `stammer` ✓ · 3/3 · everyday (3/3) : stammer/stutter
+- **tatarear**: `hum` ✓ · 3/3 · https://es.wiktionary.org/wiki/tatarear : hum a tune
+- **tecnificar**: `modernize` ✓ · 3/3 · https://dle.rae.es/tecnificar : introduce modern technical procedures
+- **temblequear**: `shiver` ✓ · 3/3 · everyday (3/3) : tremble/shiver
+- **teologizar**: `theologize` ✓ · 3/3 · https://es.wiktionary.org/wiki/teologizar : discourse on theology
+- **terraplenar**: `embank` ✓ · 3/3 · https://es.wiktionary.org/wiki/terraplenar : fill with earth
+- **tersar**: `smooth` ✓ · 3/3 · https://dle.rae.es/tersar : make smooth and glossy
+- **titularizar**: `tenure` ✓ · 3/3 · https://dle.rae.es/titularizar : grant titular permanent status
+- **tonsurar**: `tonsure` ✓ · 3/3 · https://es.wiktionary.org/wiki/tonsurar : give the tonsure
+- **tornasolar**: `iridesce` ✓ · 3/3 · https://es.wiktionary.org/wiki/tornasolar:make iridescent
+- **torrar**: `roast` ✓ · 3/3 · https://es.wiktionary.org/wiki/torrar:tostar toast or roast
+- **trajear**: `dress` ✓ · 3/3 · https://es.wiktionary.org/wiki/trajear:dress someone in a suit
+- **trapacear**: `cheat` ✓ · 3/3 · https://dle.rae.es/trapacear:deceive or defraud
+- **trapichear**: `deal` ✓ · 3/3 · https://dle.rae.es/trapichear:retail or trade in small quantities
+- **trashumar**: `migrate` ✓ · 3/3 · https://es.wiktionary.org/wiki/trashumar:seasonal livestock migration
+- **trastabillar**: `stumble` ✓ · 3/3 · https://es.wiktionary.org/wiki/trastabillar:dar traspies stumble
+- **tremolar**: `wave` ✓ · 3/3 · https://es.wiktionary.org/wiki/tremolar:wave a flag in the air
+- **trepanar**: `trepan` ✓ · 3/3 · https://es.wiktionary.org/wiki/trepanar:drill the skull
+- **trizar**: `shatter` ✓ · 3/3 · https://es.wiktionary.org/wiki/trizar:break into pieces
+- **trompetear**: `trumpet` ✓ · 3/3 · https://es.wiktionary.org/wiki/trompetear:play the trumpet
+- **troquelar**: `stamp` ✓ · 3/3 · https://es.wiktionary.org/wiki/troquelar:stamp with a die
+- **trovar**: `versify` ✓ · 3/3 · https://es.wiktionary.org/wiki/trovar:write poetry
+- **trufar**: `stuff` ✓ · 3/3 · https://es.wiktionary.org/wiki/trufar:stuff with truffles
+- **tullir**: `cripple` ✓ · 3/3 · https://es.wiktionary.org/wiki/tullir:cause loss of limb movement
+- **tundir**: `shear` ✓ · 3/3 · https://es.wiktionary.org/wiki/tundir : recortar el pelo del paño (shear cloth)
+- **tupir**: `pack` ✓ · 3/3 · https://es.wiktionary.org/wiki/tupir : llenar o cerrar poros apretándolo hacer denso (pack densely)
+- **uncir**: `yoke` ✓ · 3/3 · https://es.wiktionary.org/wiki/uncir : colocar el yugo a animales de tiro (yoke)
+- **usufructuar**: `usufruct` ✓ · 3/3 · https://es.wiktionary.org/wiki/usufructuar : exercise usufruct use property of another
+- **vacar**: `be vacant` ✓ · 3/3 · https://es.wiktionary.org/wiki/vacar : quedar un cargo sin persona (be vacant)
+- **vaguear**: `loaf` ✓ · 3/3 · https://dle.rae.es/vaguear : coloquial holgazanear (loaf)
+- **vampirizar**: `vampirize` ✓ · 3/3 · https://dle.rae.es/vampirizar : abusar o aprovecharse (prey on; denominal vampirize)
+- **ventajear**: `outdo` ✓ · 3/3 · https://www.asale.org/damer/ventajear : sacar ventaja (gain advantage outdo)
+- **ventear**: `air` ✓ · 3/3 · https://es.wiktionary.org/wiki/ventear : sacar o arrojar al viento (air out)
+- **ventiscar**: `blizzard` ✓ · 3/3 · https://es.wiktionary.org/wiki/ventiscar : nevar con viento fuerte (snow heavily with wind)
+- **ventosear**: `pass wind` ✓ · 3/3 · https://es.wiktionary.org/wiki/ventosear : expeler los gases del tracto digestivo (break wind)
+- **verdear**: `green` ✓ · 3/3 · https://es.wiktionary.org/wiki/verdear : mostrar el color verde volverse verde (turn green)
+- **vetear**: `streak` ✓ · 3/3 · https://es.wiktionary.org/wiki/vetear : pintar o hacer vetas (vein streak)
+- **vidriar**: `glaze` ✓ · 3/3 · https://es.wiktionary.org/wiki/vidriar : aplicar barniz vidriado a cerámica (glaze)
+- **virilizar**: `virilize` ✓ · 3/3 · https://es.wiktionary.org/wiki/virilizar : denominal viril + -izar (make virile)
+- **xerografiar**: `xerograph` ✓ · 3/3 · https://es.thefreedictionary.com/xerografiar : reproducir por medio de la xerografía (xerograph photocopy)
+- **yermar**: `lay waste` ✓ · 3/3 · https://es.wiktionary.org/wiki/yermar : dejar un terreno sin cultivar ni habitar
+- **yodurar**: `iodize` ✓ · 3/3 · https://dle.rae.es/yodurar : someter a la accion del yoduro
+- **zascandilear**: `bustle about` ✓ · 3/3 · https://es.wiktionary.org/wiki/zascandilear : andar de un lado a otro sin hacer nada de provecho
+
+## Residual flags (genuinely unresolved)
+
+- **chamullar**: current `mumble`; candidate `deceptive persuasive talk` — candidates jabber (rae) vs mumble (wikt) vs sweet-talk (morph); no clean majority sense (rare regional verb, deceptive-talk sense competes with mumble)
+
+## Needs human decision — out-of-bounds (old `verbs.xml`-sourced, NOT auto-edited)
+
+These glosses come from the legacy `Conjugar.mig/Conjugar/Models/verbs.xml` (source 2, read-only); a slice edit would be a no-op. They carry a **comma / second sense**, which the gloss convention prefers single-sense. They are **correct** multi-sense glosses — the single-sense choice is an English phrasing call (note `deber: owe, must` — the *second* clause is the more common sense), so this is a legitimate human decision, not a Spanish one. Options: terse-ify in `verbs.xml`, or extend `terse()` to the old-xml path (risks dropping the better sense). Left as-is for now.
+
+- **acudir**: `come, turn to`
+- **admitir**: `admit, accept`
+- **buscar**: `look for, seek`
+- **colegir**: `infer, deduce`
+- **conducir**: `lead, drive`
+- **deber**: `owe, must`
+- **desear**: `want, wish`
+- **discutir**: `argue, discuss`
+- **empinar**: `tip up, raise`
+- **esperar**: `wait for, hope`
+- **ganar**: `win, earn`
+- **golpear**: `hit, punch`
+- **helar**: `freeze, get cold`
+- **llegar**: `arrive, come`
+- **manar**: `drip with, flow`
+- **partir**: `cut, split`
+- **ponderar**: `praise, consider`
+- **procesar**: `prosecute, process`
+- **recibir**: `receive, welcome`
+- **recoger**: `pick up, gather`
+- **responder**: `answer, reply`
+- **sacar**: `take out, remove`
+- **someter**: `submit, subdue`
+- **tomar**: `drink, take`

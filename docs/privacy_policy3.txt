@@ -1,0 +1,229 @@
+PRIVACY POLICY FOR CONJUGAR
+
+Effective Date: July 18, 2026
+Developer: Josh Adams
+
+
+1. INTRODUCTION
+
+Conjugar is an iOS app for learning Spanish verb conjugations. This privacy policy explains what information the app collects, how that information is used, and what choices you have.
+
+
+2. INFORMATION WE COLLECT
+
+Conjugar collects anonymized usage analytics to help improve the app. These analytics record:
+
+- Which screens you visit (verbs, verb models, quiz, quiz results, info articles, settings, the onboarding tour, and the tutor)
+- Quiz lifecycle events (starting, quitting, or completing a quiz)
+- Quiz difficulty level (easy, moderate, or difficult) when you start, quit, or complete a quiz
+- Your quiz score and the elapsed time when you complete or quit a quiz
+- How far you progressed in a quiz if you quit early (the question number reached)
+- Whether Game Center sign-in succeeded
+- Certain in-app actions: opening the game, reshowing the onboarding tour, tapping to rate or review the app, and sending a message to the tutor
+- Progress in the app's minigame, Toreo por Amor: starting the game, completing a stage (with the stage number), entering the boss fight, and winning the boss fight
+
+Your quiz score and elapsed time are collected, but, like all of these analytics, they are anonymized and are not tied to your identity (see Section 4). The app does not record your quiz answers, the verbs you look up, or any text you type.
+
+
+3. HOW WE USE THIS INFORMATION
+
+Anonymized analytics help us understand which features are engaging and where the app can be improved. For example, if most users quit quizzes early, that suggests the quiz experience needs work.
+
+
+4. TELEMETRYDECK AND ANONYMIZATION
+
+Analytics are processed by TelemetryDeck, a privacy-focused analytics provider based in Germany.
+
+TelemetryDeck uses a two-stage hashing process to ensure anonymity:
+
+- On your device, any identifiers are salted and hashed before leaving the app.
+- On TelemetryDeck's servers, the already-hashed data is hashed again.
+
+This means neither the developer nor TelemetryDeck can reconstruct original user identifiers or trace analytics data back to any individual.
+
+Alongside the events listed in Section 2, TelemetryDeck records app launches and, in aggregate, app version, device model, and the country and language of your device.
+
+TelemetryDeck is GDPR compliant, does not use third-party cookies, and encrypts all data in transit with SSL/TLS.
+
+For more information, visit TelemetryDeck's privacy page:
+https://telemetrydeck.com/privacy/
+
+
+5. THE CONJUGATION TUTOR
+
+Conjugar includes a Spanish conjugation tutor powered by Apple Intelligence. The tutor runs entirely on your device using Apple's on-device language model. Your questions and the tutor's replies are never sent to the developer, to TelemetryDeck, or to any server. Your conversation is stored only on your device, and you can clear it at any time.
+
+Analytics record that a tutor message was sent, but never its content.
+
+
+6. WHAT WE DO NOT COLLECT
+
+Conjugar does not collect:
+
+- Names, email addresses, or other personal identifiers
+- Location data
+- Device identifiers that can be traced back to you
+- Advertising identifiers (the app contains no advertising)
+- Quiz answers or any text you type, including messages to the tutor
+- Photos, contacts, or other on-device data
+- Browsing history or data from other apps
+
+
+7. GAME CENTER
+
+Conjugar integrates with Apple Game Center for quiz leaderboards. When you submit a score, Game Center handles that data according to Apple's privacy policy. The developer does not have access to your Game Center identity or personal information through this integration.
+
+Apple's privacy policy is available at:
+https://www.apple.com/legal/privacy/
+
+
+8. THIRD-PARTY SERVICES
+
+The app uses two third-party services:
+
+TelemetryDeck (anonymized analytics)
+Privacy policy: https://telemetrydeck.com/privacy/
+
+Apple Game Center (leaderboards)
+Privacy policy: https://www.apple.com/legal/privacy/
+
+
+9. CHILDREN'S PRIVACY
+
+Conjugar does not knowingly collect personal information from children under 13 (as defined by the U.S. Children's Online Privacy Protection Act) or under 16 (as defined by the EU General Data Protection Regulation). Because the app collects only anonymized, non-personal analytics, no age-identifiable data is stored.
+
+
+10. DATA RETENTION
+
+Anonymized analytics data is retained by TelemetryDeck in accordance with their data-retention policy. Because the data is anonymized and cannot be linked to individual users, deletion requests for specific users cannot be fulfilled -- there is nothing to delete.
+
+
+11. CHANGES TO THIS POLICY
+
+If this privacy policy changes, the updated version will be posted with a new effective date. Continued use of the app after changes are posted constitutes acceptance of the revised policy.
+
+
+12. CONTACT
+
+If you have questions about this privacy policy, contact:
+
+Josh Adams
+vermontcoder@gmail.com
+
+
+───────────────────────────────────────────────────
+TRADUCCIÓN AL ESPAÑOL / SPANISH TRANSLATION
+───────────────────────────────────────────────────
+
+
+POLÍTICA DE PRIVACIDAD DE CONJUGAR
+
+Fecha de entrada en vigor: 18 de julio de 2026
+Desarrollador: Josh Adams
+
+
+1. INTRODUCCIÓN
+
+Conjugar es una aplicación de iOS para aprender la conjugación de los verbos españoles. Esta política de privacidad explica qué información recopila la aplicación, cómo se utiliza esa información y qué opciones tiene usted.
+
+
+2. INFORMACIÓN QUE RECOPILAMOS
+
+Conjugar recopila estadísticas de uso anonimizadas para ayudar a mejorar la aplicación. Estas estadísticas registran:
+
+- Las pantallas que usted visita (verbos, modelos de verbos, cuestionario, resultados del cuestionario, artículos informativos, ajustes, la introducción y el tutor)
+- Los eventos del ciclo de vida de un cuestionario (comenzar, abandonar o terminar un cuestionario)
+- El nivel de dificultad del cuestionario (fácil, moderado o difícil) al comenzar, abandonar o terminar un cuestionario
+- Su puntuación y el tiempo transcurrido al terminar o abandonar un cuestionario
+- Su progreso en el cuestionario si lo abandona antes de tiempo (el número de pregunta alcanzado)
+- Si el inicio de sesión en Game Center tuvo éxito
+- Ciertas acciones dentro de la aplicación: abrir el juego, volver a mostrar la introducción, tocar para valorar o reseñar la aplicación y enviar un mensaje al tutor
+- El progreso en el minijuego de la aplicación, Toreo por Amor: comenzar el juego, completar un nivel (con el número de nivel), entrar en la lucha contra el jefe final y ganarla
+
+Su puntuación y el tiempo transcurrido se recopilan, pero, como todas estas estadísticas, están anonimizados y no están vinculados a su identidad (véase la sección 4). La aplicación no registra sus respuestas del cuestionario, los verbos que consulta ni ningún texto que escriba.
+
+
+3. CÓMO UTILIZAMOS ESTA INFORMACIÓN
+
+Las estadísticas anonimizadas nos ayudan a comprender qué funciones resultan atractivas y en qué aspectos se puede mejorar la aplicación. Por ejemplo, si la mayoría de los usuarios abandonan los cuestionarios antes de tiempo, eso sugiere que la experiencia del cuestionario necesita mejoras.
+
+
+4. TELEMETRYDECK Y ANONIMIZACIÓN
+
+Las estadísticas son procesadas por TelemetryDeck, un proveedor de análisis centrado en la privacidad con sede en Alemania.
+
+TelemetryDeck utiliza un proceso de hash en dos etapas para garantizar el anonimato:
+
+- En su dispositivo, cualquier identificador recibe una sal y un hash antes de salir de la aplicación.
+- En los servidores de TelemetryDeck, los datos ya procesados reciben un segundo hash.
+
+Esto significa que ni el desarrollador ni TelemetryDeck pueden reconstruir los identificadores originales de usuario ni relacionar los datos analíticos con ninguna persona concreta.
+
+Junto con los eventos enumerados en la sección 2, TelemetryDeck registra los inicios de la aplicación y, de forma agregada, la versión de la aplicación, el modelo del dispositivo y el país y el idioma de su dispositivo.
+
+TelemetryDeck cumple el RGPD, no utiliza cookies de terceros y cifra todos los datos en tránsito mediante SSL/TLS.
+
+Para más información, consulte la página de privacidad de TelemetryDeck:
+https://telemetrydeck.com/privacy/
+
+
+5. EL TUTOR DE CONJUGACIÓN
+
+Conjugar incluye un tutor de conjugación española basado en Apple Intelligence. El tutor funciona íntegramente en su dispositivo mediante el modelo de lenguaje local de Apple. Sus preguntas y las respuestas del tutor nunca se envían al desarrollador, a TelemetryDeck ni a ningún servidor. Su conversación se almacena únicamente en su dispositivo y usted puede borrarla en cualquier momento.
+
+Las estadísticas registran que se ha enviado un mensaje al tutor, pero nunca su contenido.
+
+
+6. LO QUE NO RECOPILAMOS
+
+Conjugar no recopila:
+
+- Nombres, direcciones de correo electrónico u otros identificadores personales
+- Datos de ubicación
+- Identificadores de dispositivo que puedan relacionarse con usted
+- Identificadores publicitarios (la aplicación no contiene publicidad)
+- Respuestas del cuestionario ni ningún texto que escriba, incluidos los mensajes al tutor
+- Fotos, contactos u otros datos presentes en su dispositivo
+- Historial de navegación ni datos de otras aplicaciones
+
+
+7. GAME CENTER
+
+Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
+
+La política de privacidad de Apple está disponible en:
+https://www.apple.com/legal/privacy/
+
+
+8. SERVICIOS DE TERCEROS
+
+La aplicación utiliza dos servicios de terceros:
+
+TelemetryDeck (estadísticas anonimizadas)
+Política de privacidad: https://telemetrydeck.com/privacy/
+
+Apple Game Center (clasificaciones)
+Política de privacidad: https://www.apple.com/legal/privacy/
+
+
+9. PRIVACIDAD DE LOS MENORES
+
+Conjugar no recopila conscientemente información personal de menores de 13 años (según la definición de la Children's Online Privacy Protection Act de los Estados Unidos) ni de menores de 16 años (según la definición del Reglamento General de Protección de Datos de la UE). Dado que la aplicación solo recopila estadísticas anonimizadas y no personales, no se almacena ningún dato que permita identificar la edad.
+
+
+10. CONSERVACIÓN DE LOS DATOS
+
+TelemetryDeck conserva los datos analíticos anonimizados conforme a su política de conservación de datos. Dado que los datos están anonimizados y no pueden vincularse a usuarios individuales, no es posible atender solicitudes de eliminación de usuarios concretos: no hay nada que eliminar.
+
+
+11. MODIFICACIONES DE ESTA POLÍTICA
+
+Si esta política de privacidad se modifica, se publicará la versión actualizada con una nueva fecha de entrada en vigor. El uso continuado de la aplicación tras la publicación de los cambios constituye la aceptación de la política revisada.
+
+
+12. CONTACTO
+
+Si tiene preguntas sobre esta política de privacidad, póngase en contacto con:
+
+Josh Adams
+vermontcoder@gmail.com

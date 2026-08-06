@@ -1,0 +1,244 @@
+SOURCE TEXT FOR Info.verbHistoryText — "A History of the Spanish Verb System"
+Draft, English only. Edit here, then run `python3 scripts/sync_verb_history.py` to push
+the article back into Conjugar/Supporting/Localizable.xcstrings, which is what ships.
+The catalog holds the whole essay on one JSON line, so hand-editing it there is a
+foot-gun; this file exists so the prose can be edited like prose.
+
+Conjugar's native Info markup:
+  ^…^ heading   ~…~ emphasis   $…$ irregularity highlight   %…% tappable term or URL
+
+Three rules the app will not warn you about, all checked by the sync script:
+  • Markers do not nest. `~Adonde $FUeres$, haz lo que vieres~` renders wrong — a `$`
+    inside a `~…~` clobbers the emphasis span's start index, so the bold run comes out
+    duplicated with a literal `$` in it. Close and reopen instead:
+    `~Adonde~ $FUeres$~, haz lo que vieres~`.
+  • Inside `$…$`, every uppercase letter is an irregular letter shown red. A span's
+    capitalization is therefore data, not orthography, and cannot be adjusted to suit its
+    position. So a form whose FIRST letter is irregular, such as `$andUVE$`, `$FUere$` or
+    `$VOY$`, can never open a sentence: the sentence would demand a capital, and that
+    capital would render as one more red letter, claiming an irregularity the form does
+    not have. Recast so something else leads. A form whose first letter is regular may
+    open a sentence and renders lowercase, as `$pUEdo$` does, which is deliberate rather
+    than a typo. The spans in this draft were computed the way IrregularityMarker computes
+    them, uppercasing the difference between the real form and its regular composition, so
+    the red letters match what Browse Verbs shows.
+  • Every `%…%` that is not a URL must match an Info heading exactly (case-insensitive),
+    or the tap goes nowhere.
+
+One convention the sync script does NOT check, so nothing will catch a slip:
+  • Vowel quantity is marked on Latin words cited as words, meaning etyma and paradigm
+    forms: `~habēre~`, `~cantāre habeō~`, `~vādere~`, `~fēcī~`. Breves appear only where
+    shortness is the argument, as with `~pĕtra~` and `~pŏtet~` in the diphthongization
+    paragraph of "Stem Changes and the Tyranny of Stress". Quantity is left
+    off narrative place names such as `~Latium~` and `~Carthago Nova~`, grammatical labels
+    doing duty as English such as `~infectum~` and `~perfectum~`, titles such as
+    `~Appendix Probi~`, and anything that is not Latin. The sweep is complete, so an
+    unmarked vowel now asserts shortness: macron any Latin form you add, or you are
+    silently claiming it is short. The one knowing exception is `~arrugia~`, which is
+    pre-Roman and whose quantities are unattested. Beware Spanish forms that look Latin.
+    In "The Tense That Went to the Lawyers", `~cantare~` is the Spanish futuro de
+    subjuntivo, and every `~vos~` except the one introduced as "Late Latin" is the Spanish
+    pronoun. Those stay bare. Note also that adding to this header shifts every body line
+    number, so `docs/history_corrections.md` cites findings by quote as well as by line;
+    locate them by the quoted text.
+
+Everything below the dashed line is the article body, verbatim: blank lines separate
+paragraphs, and the first line is the opening `^…^` heading. Do not add a title or any
+trailing notes below it — the sync script ships the entire remainder of the file.
+
+--------------------------------------------------------------------------------
+
+^From Stardust to Speech^
+
+Approximately 4.6 billion years ago, a vast cloud of gas and dust began to collapse in a corner of the Milky Way galaxy. This primordial nebula was no ordinary collection of hydrogen and helium. Generations of dying stars had seeded the cloud with heavy elements forged in stellar furnaces, some shed quietly on the winds of aging giants, the rest blasted outward by supernovae, the explosive deaths of stars. Among them were carbon, the backbone of organic chemistry; oxygen, essential to water and respiration; nitrogen, a building block of proteins and DNA; iron, which would sink to form Earth’s core and later run through human blood; calcium, destined for bones and shells; phosphorus, without which no cell can pay for anything; and sulfur, gold, uranium, and dozens of other elements that no star makes in its long middle age, forged instead in the crush of collapse, in the winds of dying giants, and, for the heaviest, in the collision of two neutron stars.
+
+As gravity drew this enriched material together, the Sun ignited at the center while the remaining debris coalesced into planets. Earth formed roughly 4.5 billion years ago. Its iron sank, its lighter silicates rose into a crust, and those star-forged elements distributed themselves throughout, awaiting, across billions of years, the emergence of life that would one day use them to speak, to write, and to conjugate Spanish verbs.
+
+^The Long Road to Language^
+
+Life emerged on Earth perhaps 3.8 billion years ago, but the road to language-bearing creatures was immensely long. Modern humans, ~Homo sapiens~, evolved in Africa approximately 300,000 years ago, and for most of that span our ancestors lived as hunter-gatherers, slowly assembling the cognitive equipment that complex language requires.
+
+Beginning around 70,000 years ago, waves of humans left Africa and spread across the globe. Some traveled north and west into Europe; others moved east across Asia. By 40,000 years ago, and quite possibly earlier, humans had reached the Pontic-Caspian steppe, the vast grasslands running from what is now Romania and Ukraine east to Kazakhstan. That region, lying north of the Black and Caspian Seas, would become the crucible of one of history’s most consequential linguistic developments, and, eventually, the reason a student has to memorize that the preterite of ~hacer~ is $hICE$.
+
+^The Yamnaya and Proto-Indo-European^
+
+Between roughly 3300 and 2500 BC, a people we call the ~Yamnaya~ inhabited the Pontic-Caspian steppe. Their name comes from the Russian word for ‘pit’, after their burial custom. The Yamnaya may have been among the first to ride the horse, a reading some of their skeletons support and other specialists dispute, and whether or not they rode, the recently invented wheel gave them a mobility no earlier people had enjoyed. They were semi-nomadic herders of cattle, sheep, and goats, living in small groups that followed their animals to seasonal pasture.
+
+Their society appears to have been patriarchal and hierarchical. They buried their dead in pit graves beneath earthen mounds called ~kurgans~, often with grave goods that advertised rank. They lived off their herds, supplemented by hunting, and milk proteins recovered from their dental calculus show they drank the milk of cattle, sheep, goats, and horses. The practice arrives abruptly. Dairy is nearly absent from the Eneolithic samples that precede them and present in all but one of the Early Bronze Age individuals tested, which makes dairying look like one of the things that made the expansion possible.
+
+What they could not do was digest unprocessed milk. Dozens of Yamnaya individuals have been genotyped directly for the European lactase-persistence allele, and not one carried a copy. They were dairy pastoralists who were lactose intolerant, which is the usual reason to suppose their milk reached them fermented and cured, as yogurt and cheese, with the lactose already broken down by bacteria. Tolerance came later, and not from them: it was still rare in Bronze Age Europe more than a thousand years afterward, and it only reached the modern northern European rate, above ninety percent in Scandinavia and the British Isles, under selection that was still running three thousand years ago.
+
+The Yamnaya spoke what linguists reconstruct as ~Proto-Indo-European~, the ancestor of languages spoken by nearly half of humanity today. Its descendants include Hindi, Persian, Ukrainian, Greek, German, English, and, by a long road through Latin, Spanish.
+
+The language name ~Spanish~ may originate outside the Iberian Peninsula. ~España~ descends from Latin ~Hispānia~, which the Romans took from the Carthaginians, and one popular reading of the Punic original is that it described a coast overrun by hyraxes, the animals Phoenician sailors apparently took Iberian rabbits to be. The adjective ~español~ is, on the usual account, not even a native formation: a Castilian word built on ~España~ would more likely have come out ~españón~, which is in fact what medieval Castilian used for a while, and ~español~ appears borrowed from Occitan, carried down the pilgrim road to Santiago by speakers from the other side of the Pyrenees. The alternative name, ~castellano~, is at least homegrown. It means ‘of the castles’, after a frontier county bristling with fortifications. A language descended from Latin is therefore called, by one of its names, after a Carthaginian mistake about rabbits relayed by pilgrims from beyond the Pyrenees, and by the other, after a construction project.
+
+^The Verb System of Proto-Indo-European^
+
+The Proto-Indo-European verb was a magnificent and intricate machine, far richer than anything its daughter languages would keep. Verbs were built on ~roots~, compact cores of meaning, onto which speakers layered prefixes, suffixes, and infixes to express a great deal of grammatical information at once.
+
+The heart of the system was ~aspect~, the shape of an action in time rather than its position in time. The language distinguished three:
+
+• ~imperfective~, an ongoing or repeated action
+• ~perfective~, also called the aorist, a completed action viewed whole
+• ~stative~, also called the perfect, a state resulting from a completed action
+
+Each aspect had its own stem, so a single root might appear in three quite different shapes.
+
+~Tense~ was secondary to aspect. Past time was marked chiefly by the ~secondary~ endings, which simply lacked the suffix that pinned an action to the here and now. A few branches also added a prefix called the ~augment~, reconstructed as *e-, but it was optional even in the oldest texts, and whether it goes back to Proto-Indo-European at all is disputed. ~Mood~ was richly developed, with an indicative for statements of fact, a subjunctive for intentions and things still to come, an optative for wishes and possibilities, and an imperative for orders. ~Voice~ distinguished an active from a ~middle~, which marked an action affecting the subject or done in the subject’s own interest. One of the middle’s endings carried the letter r. Anatolian and Tocharian turned out to have the same ending, so it is not the proof it once seemed, but Italic and Celtic alone spread that r across the whole middle, and that shared step is one real sign the two families were once especially close. That fact will matter twice, because Celts reached Iberia too.
+
+^Ablaut, and Why Spanish Nearly Lost It^
+
+Perhaps no feature of Proto-Indo-European proved more durable than ~ablaut~, the systematic alternation of vowels inside roots and endings to mark grammatical differences. Ablaut was not random. It ran in regular grades, an e-grade, an o-grade, and a zero-grade in which the vowel disappeared entirely, along with lengthened variants, and the present of a verb might use one grade while the perfect used another.
+
+The Germanic languages turned these alternations into the vowel changes of their strong verbs, the pattern still audible in English sing, sang, sung. Italic went the other way and largely ~leveled~ ablaut, smoothing the old alternations toward uniformity, so that a regular Latin verb keeps one stable stem vowel nearly throughout. Traces survived anyway. The perfect of Latin ~agere~, ‘to drive’, is ~ēgī~; the perfect of ~facere~, ‘to make’, is ~fēcī~, and that long e descends directly from an ablaut grade. Spanish still has it. ~Fēcī~ became $hICE$, and the vowel that separates $hICE$ from ~hacer~ has been doing grammatical work since before Rome existed.
+
+Spanish would later develop a vowel alternation of its own, the one that turns ~poder~ into $pUEde$, but that arose from Latin stress rather than from the steppe. The habit of letting a vowel carry grammatical weight, though, is an inheritance.
+
+^The Road to Italy^
+
+Beginning around 3000 BC, the descendants of the Yamnaya spread outward in wave after wave. Some moved north into the forests that would become Germanic-speaking. Others turned west and south, and among these were the ancestors of the ~Italic~ peoples, who by the late second millennium BC had carried their dialects into the Italian peninsula.
+
+The Italic languages share a striking number of features with the neighboring ~Celtic~ languages. Both turned that r ending, which they inherited rather than invented, into the general mark of their passive and deponent verbs. Both built a subjunctive marked by a long a. Both reshaped their superlatives along similar lines. The agreements are numerous and specific enough that many linguists posit an ~Italo-Celtic~ stage, a period after the western migrants had split from the rest of Indo-European but before Italic and Celtic diverged from each other. If that branch existed, then Latin and Celtiberian, the Celtic language of the Spanish meseta, written in an Iberian script and still only half understood, were cousins who had last seen each other two thousand years before they met again in Hispania.
+
+^The People Already There^
+
+The Italic newcomers did not enter an empty peninsula. Italy had been farmed for millennia, and the farmers spoke non-Indo-European languages. The most consequential of these languages was ~Etruscan~, whose speakers built a civilization north of Rome that shaped early Roman culture profoundly. Etruscan was unrelated to Latin and to every language spoken in Europe today, its likeliest kin being ~Raetic~ in the eastern Alps and ~Lemnian~ in the Aegean, both long extinct, and although Latin eventually supplanted Etruscan, Etruscan left traces.
+
+Several everyday Latin words are thought to be Etruscan, and some are still in daily Spanish use. ~Persōna~, originally a theatrical mask, then a character, then a human being, is widely believed to be Etruscan, and it is Spanish ~persona~. ~Histriō~, an actor, gives ~histrión~. ~Satelles~, a bodyguard, gives ~satélite~, which is why a moon and a bodyguard are the same word. ~Populus~, a people, gives ~pueblo~. None of these attributions is certain, because Etruscan remains imperfectly understood, but the pattern is suggestive. When a Spanish speaker mentions a person, faint echoes of a lost, non-Indo-European language of ancient Italy may be sounding in the word.
+
+^Early Latin and Its Verbs^
+
+Latin began as the local speech of ~Latium~, the small region around Rome, one Italic dialect among many and not an obviously promising one. In passing from Proto-Indo-European to Latin, the verb was thoroughly reorganized. The old three-way aspect system collapsed. Latin kept a present system, descended from the imperfective, and built a ~perfect~ system beside it.
+
+That Latin perfect was a genuine merger. It fused the inherited Proto-Indo-European perfect, with its stative meaning, and the old aorist, with its meaning of simple completed action. This is why a single Latin perfect such as ~cēpī~ can be translated both ‘I have taken’ and ‘I took’. Hold on to that double value. Two thousand years later, Spanish would pull those two meanings apart again into ~tomé~ and ~he tomado~, and then the Spanish-speaking world would fail to agree on where the line between them falls.
+
+^The Classical Latin Verb^
+
+By the first century BC, the Latin of Cicero and Caesar had a verb system of formidable regularity, and it is this system that Spanish inherited and slowly rebuilt. Every Latin verb was organized around two stems. The ~infectum~ carried the unfinished tenses, the present, the imperfect, and the future. The ~perfectum~ carried the finished ones, the perfect, the pluperfect, and the future perfect. Across these ran three moods, indicative, subjunctive, and imperative, and two voices.
+
+The passive was ~synthetic~ in the unfinished tenses, formed not with a helping verb but with special endings, that same r inheritance shared with Celtic. ~Amātur~ meant ‘he is loved’ in a single word. The finished tenses needed a helper, and ~amātus est~, a participle beside the verb ‘to be’, is how Latin said ‘he was loved’. The future was synthetic too, built with endings such as -bo, as in ~amābō~, ‘I will love’. Verbs sorted themselves into ~four conjugations~ according to the vowel of their stem.
+
+Almost none of this survived the evolution of Spanish. The r passive is gone. The -bo future is gone. The four conjugations became three, as Latin’s second and third classes, the ~habēre~ type and the ~facere~ type, collapsed together into the Spanish -er class, though a good many of them slid into -ir instead, which is where ~decir~ and ~pedir~ ended up. Spanish did not so much inherit the Latin verb as salvage it.
+
+^Scipio in Iberia^
+
+Rome did not come to Spain in order to have Spain. In 218 BC, in the opening moves of the Second Punic War, Roman armies landed in the northeast to cut Hannibal off from his Carthaginian base at ~Qart Hadasht~, the city whose Punic name Rome latinized as ~Carthago Nova~ and Spanish now calls Cartagena. A younger Scipio, the future Africanus, took it in 209 BC. The Carthaginians were expelled from the peninsula by 206 BC, twelve years after the landing.
+
+Subduing the peninsula took two hundred years more. Celtiberian Numantia held out until 133 BC, then burned the city before its last survivors surrendered. The Lusitanians under Viriathus humiliated Roman armies for the better part of a decade. Not until 19 BC, under Augustus, did the ~Cantabrian Wars~ finally bring the northern mountains under Roman control, and even that was a military result more than a cultural one.
+
+The contrast is worth noticing. Caesar took Gaul in eight years. Rome never took Germania at all. Hispania took two centuries, and it was Romanized unevenly, thoroughly in the south and along the Mediterranean, thinly and late in the northern mountains. That unevenness matters enormously, because the dialect that became Spanish was not born in the comfortable Romanized south. It was born in the north, in the last corner Rome reached, next door to a language that was not Indo-European at all.
+
+^The Tongues Iberia Already Spoke^
+
+When the legions arrived, the peninsula was a linguistic thicket. ~Celtiberian~ and other Celtic languages held the center and the northwest. ~Iberian~, non-Indo-European and still undeciphered despite a legible script, ran along the Mediterranean coast. ~Tartessian~ in the southwest and ~Lusitanian~ in the west are barely known at all. Phoenician colonists had founded ~Gadir~, now Cádiz, around 1100 BC by tradition, making it a candidate for the oldest continuously inhabited city in western Europe. Greeks traded at ~Emporion~. And in the western Pyrenees, then as now, people spoke ~Basque~, the only pre-Indo-European language of western Europe to survive to the present, related to nothing.
+
+Latin buried nearly all of those languages, but the ~substrate~ shows through. ~Izquierdo~ is Basque. ~Perro~ displaced the perfectly serviceable ~can~, inherited from Latin ~canis~, and nobody knows where the newcomer came from. ~Páramo~, ~vega~, ~barranco~, ~arroyo~, and ~cama~ are pre-Roman, and ~arroyo~ goes back to ~arrugia~, which Pliny records as the miners’ name for a gallery in the gold mines of Spain. ~Camino~, ~carro~, and ~cerveza~ are Celtic. ~Camisa~ is disputed, most likely Germanic in origin and Celtic only in transmission.
+
+The deepest mark may be on the verb, and it is invisible. Latin words beginning with f- lost that sound in the north-central dialect that became Castilian, except before r, l, and the ue of ~fuego~ and ~fuerte~. ~Facere~ became ~hacer~, ~fīlius~ became ~hijo~, ~ferrum~ became ~hierro~, ~fābulārī~ became ~hablar~, and ~habēre~ had an h of its own, a letter Latin had long since stopped pronouncing and Old Spanish ~aver~ dropped before scholars put it back. The h is silent today. The change is not. Basque had no f, the shift radiated outward from precisely the corridor of Burgos, La Rioja, and Cantabria where Castilian speakers and Basque speakers lived side by side, and the usual explanation is that Latin was learned there by people with a Basque accent. The evidence is circumstantial and the argument is not settled. But two of the most-used verbs in the language, ~hacer~ and ~hablar~, begin with a letter that is the scar of a frontier.
+
+^Vulgar Latin and the Wearing of Endings^
+
+The Latin that ordinary people spoke had always differed from the literary standard, and after the Western Empire fell in the fifth century, the spoken language, which scholars call ~Vulgar Latin~, drifted ever further from the frozen written norm. We catch glimpses of it in misspellings, in graffiti, and in correction lists such as the ~Appendix Probi~, which scolds writers for exactly the pronunciations that would become Romance.
+
+The sound changes struck the verb where it lived, at the end of the word. Final m, already weak in Cicero’s day, went silent. Final t weakened and fell. Unstressed vowels blurred together and sometimes vanished. Because Latin packed its grammar into its endings, the wearing away of those endings forced the language to find new ways to do old work. The elaborate case system, which had shown who did what to whom, collapsed into prepositions and word order. The same erosion was, at that moment, eating into the tenses.
+
+Spanish, it should be said, got off lightly. Its final -s and -n survived where French lost nearly everything, which is why Spanish still has six audible endings in ~hablo~, ~hablas~, ~habla~, ~hablamos~, ~habláis~, ~hablan~, while four of French’s six forms share three spellings and a single sound. That accident of erosion is the usual explanation for why subject pronouns are optional in Spanish but obligatory in French, though some blame the collapse of French’s old word order instead.
+
+^Inventing a New Future^
+
+Latin’s future was in trouble. ~Amābō~ depended on endings that sound change was destroying, and worse, they were beginning to collide with other forms. ~Amābit~, ‘he will love’, was sliding toward ~amāvit~, ‘he loved’, and a language cannot afford that, so spoken Latin quietly abandoned the old future and assembled a new one out of parts it trusted: an infinitive and the verb ~habēre~, ‘to have’.
+
+To say ‘I have to sing’, a speaker could say ~cantāre habeō~, literally ‘to sing I have’. Used of things still to come, the phrase came to mean simply ‘I will sing’, and over the centuries the two words fused into one. ~Cantāre habeō~ became ~cantaré~. The %futuro de indicativo% of every regular Spanish verb is still built this way, and ~haber~ is still visible inside it: beside ~he~, ~has~, ~ha~, ~hemos~, ~han~ stand ~cantaré~, ~cantarás~, ~cantará~, ~cantaremos~, ~cantarán~. The same recipe with the imperfect of ~haber~ produced the %condicional%, as ~cantāre habēbam~ became ~cantaría~.
+
+We know the fusion was once two separate words because medieval Spanish could still pull them apart. Old Spanish wrote ~dar vos he~, ‘I will give you’, slipping the pronoun in between the infinitive and the auxiliary, and the ~Cantar de mio Cid~ is full of such forms. Formal Portuguese still splits the two to this day: ~dar-te-ei~. Spanish welded the seam shut, but the weld left marks. When speech ran the two words together fast enough, the infinitive’s own vowel got squeezed out. ~Salir~ plus ~he~ did not give a tidy ~saliré~; it gave $salDré$, with a d propped in to hold up the collapsed syllable. ~Poner~ gave $ponDré$ and ~haber~ gave $habRé$; ~decir~ and ~hacer~ shed a stem consonant as well and gave $dIré$ and $haRé$. Those are not arbitrary irregularities. They are a thousand-year-old contraction, and they are the reason this app teaches a %raíz futura% at all.
+
+^Building a Past out of Having^
+
+The same helper rebuilt the past. Latin ~habeō litterās scrīptās~, ‘I have the letters written’, was reinterpreted as a compound tense. The letters stopped being possessed and the writing became the point, and Spanish got ~he escrito~ and the whole family of compound tenses, of which the %perfecto de indicativo% is the everyday member.
+
+Spanish then did something French and Italian never did. It gave ~haber~ the entire job. Old Spanish, like those two today, used ~ser~ as the auxiliary for verbs of motion and change: ~es venido~, ‘he has come’, ~son idos~, ‘they have gone’. By the end of the seventeenth century ~haber~ had taken over completely, and modern Spanish says ~ha venido~ without exception. Meanwhile ~haber~ surrendered its original meaning, ‘to possess’, to ~tener~, from Latin ~tenēre~, ‘to hold’. The verb that once meant ‘have’ now means almost nothing by itself, beyond announcing that something exists, as in ~había un problema~. Otherwise it exists to hold up other verbs.
+
+~Haber~ kept one fossil. ~Hay~, ‘there is’, is ~ha~ plus a tiny stranded adverb ~y~, from Latin ~ibī~, ‘there’, the same locative trick French keeps in plain view in ~il y a~ and Catalan in ~hi ha~. Spanish glued it on and forgot about it, which is why ~hay~ looks nothing like the rest of its own paradigm. Remember that little ~y~. It comes back.
+
+^Two Imperfect Subjunctives, and Why^
+
+Conjugar lists two imperfect subjunctives, %imperfecto de subjuntivo 1% and %imperfecto de subjuntivo 2%, ~cantara~ and ~cantase~, and tells you they are interchangeable. They are, now. They did not begin as the same tense, or even as the same mood.
+
+~Cantase~ descends from the Latin pluperfect subjunctive ~cantāvissem~. ~Cantara~ descends from the Latin pluperfect ~indicative~ ~cantāveram~, a flat statement of fact meaning ‘I had sung’. As the compound tenses took over the pluperfect’s work, ~cantara~ was left unemployed, drifted moodward, and landed on top of ~cantase~. Spanish thus arrived at two forms for one job by dismantling two different Latin tenses and letting the parts settle in the same place.
+
+The old indicative has never entirely stopped haunting the -ra form. Journalists and novelists still write ~el gol que marcara en la final~, ‘the goal he scored in the final’, using ~marcara~ as a plain past. And ~quisiera~ and ~debiera~ serve as polite conditionals, as in ~quisiera un café~, which is a subjunctive form doing indicative work in a coffee shop. If the two forms feel subtly different to you, you are not imagining it. You are hearing a two-thousand-year-old seam.
+
+^The Tense That Went to the Lawyers^
+
+The %futuro de subjuntivo%, ~cantare~, $FUere$, $vIniere$, is the strangest survivor in the paradigm. It, too, is a merger, this time of the Latin future perfect indicative ~cantāverō~ and the perfect subjunctive ~cantāverim~, two tenses whose forms had fallen together almost completely. Medieval Spanish used it constantly. By 1700 it was dying, and today almost nobody uses it in conversation, the reported exceptions being a few rural corners of the Canaries and the Caribbean.
+
+The tense did not disappear, though. It retreated into the two registers that never throw anything away, law and proverbs. Statutes and constitutions are full of it, as in ~el que infringiere lo dispuesto~, because legal language likes a future condition it can state with precision. The sayings kept it too: ~Adonde~ $FUeres$~, haz lo que vieres~, ‘wherever you go, do as you see’; ~sea lo que~ $FUere$, ‘be it as it may’; ~venga de donde~ $vIniere$. Conjugar teaches the tense because the fossils are still walking around, and because a learner will eventually meet one on a lease.
+
+^The Preterite That Refused to Die^
+
+French all but killed its simple past. The ~passé simple~ is now a written tense that most French speakers read but do not say, its work taken over by the compound past everywhere except a few conservative corners such as Acadian Nova Scotia. Spanish was offered the same trade and mostly declined.
+
+The %pretérito% is alive everywhere, but the border it shares with ~he cantado~ shifts depending on where you are standing. In much of Spain, ~hoy he comido~ is what you say about lunch, and ~comí~ is reserved for finished stretches of time. In most of Latin America, ~hoy comí~ is simply what one says, and the compound tense is comparatively rare. Two continents inherited the same double-valued Latin perfect, split it into two Spanish tenses, and drew the line in different places. Neither is wrong. Both are the second century still arguing with itself.
+
+The preterite also preserves a rhythm from Latin that nothing else in Spanish does. Most Spanish tenses stress the ending, as in ~cantó~ and ~comió~. But a small class of very common verbs has ~pretéritos fuertes~, strong preterites, which stress the ~stem~ instead: $tUVE$, $sUPE$, $hICE$, $quISO$, $dIJE$, $andUVE$. Mostly that is not an irregularity Spanish invented. It is the stress pattern of the Latin perfect, kept by the verbs used often enough to resist tidying, and it is why those forms carry no written accent when the regular ones do. The exception in that list is $andUVE$, which Spanish built for itself on the model of ~hube~ and ~tuve~, where Latin would have handed over a tidy ~andé~.
+
+^Stem Changes and the Tyranny of Stress^
+
+The commonest thing learners call an irregularity in the %presente de indicativo% is not an irregularity at all. It is a sound law caught in the act.
+
+Latin short ĕ and ŏ, when stressed, usually broke into diphthongs in Spanish: ~pĕtra~ gave ~piedra~, ~pŏrta~ gave ~puerta~. In verbs the same law applied, and because stress moves around a Spanish verb’s paradigm, it applied only to some of the forms. Latin ~sĕntit~ gave $sIente$ and Vulgar Latin ~pŏtet~ gave $pUEde$, but ~sentīmus~ stressed its ending instead and stayed ~sentimos~, and the ancestor of ~podemos~ did the same. That is most of the mystery of the stem-changing verb. $pUEdo$, $pUEdes$, $pUEde$, podemos, podéis, $pUEden$ is not a list of exceptions. It is a map of where the stress falls. Analogy later handed the same map to ~pensar~ and ~regar~, whose Latin vowels gave them no claim on it.
+
+The %voseo% article notes that ~vos~ forms do not diphthongize: ~vos podés~, ~vos movés~, ~vos perdés~. Now the reason is visible. The ~vos~ endings pull the stress off the stem, so the old law never fires. Argentine Spanish is not being irregular here. It is running the same Latin law from the other side, on an ending that Madrid still gives to ~vosotros~.
+
+^The -go Verbs and Four Silent Ghosts^
+
+Spanish has a famous set of first-person forms ending in -go: $tenGo$, $ponGo$, $salGo$, $venGo$, $haGo$, $dIGo$, $oIGo$, $caIGo$, $traIGo$. They got there by more than one road. Only ~digo~ got its g by sound change, from Latin ~dīcō~ voicing its c between vowels. The -eo of ~teneō~ should have given a palatal instead, and Portuguese ~tenho~ is the form Spanish threw away. And then analogy, the great tidier and untidier of languages, handed the pattern to verbs that had no historical claim on it. The conspiracy runs through the first person singular and the whole %presente de subjuntivo%, which is why $tenGa$, $haGa$, and $dIGa$ carry the same g.
+
+Then there are the four verbs that end in a letter meaning ‘there’: $soY$, $doY$, $estoY$, $VOY$. Old Spanish had ~so~, ~do~, ~estó~, and ~vo~. The usual explanation for the y is the same stranded ~ibī~ that lives inside ~hay~, an adverb meaning ‘there’ that attached itself to four extremely common verbs and was then forgotten. That derivation is the oldest account rather than a settled one, since rivals run from a swallowed ~yo~ to analogy with the preterite ~fui~, and nobody can say why ~doy~ would mean ‘I give there’. If the ~ibī~ account is right, a Spanish speaker saying ~yo soy~ is saying something closer, etymologically, to ‘I am there’.
+
+^Ser, Estar, and a Verb Assembled from Three^
+
+~Ser~ is two Latin verbs. The forms $ES$, $sOn$, $ERa$, and $ERes$ come from ~esse~, ‘to be’. But the infinitive ~ser~ itself, along with ~seré~, $sEa$, and ~siendo~, comes from ~sedēre~, ‘to sit’, being having drifted in late Latin from existing toward being seated, settled, situated. ~Estar~ arrived the same way, from ~stāre~, ‘to stand’. Spanish’s two verbs for ‘to be’ are, underneath, a chair and a pair of feet.
+
+~Ir~ is worse, or better. Its present tense, $VOY$, $VAs$, $VA$, $VAmos$, $VAn$, comes from Latin ~vādere~, ‘to advance’. Its infinitive, future, and imperfect, ~ir~, ~iré~, and $íBamos$, come from ~īre~, ‘to go’. And its preterite, $FUI$, $FUiste$, $FUE$, comes from ~esse~, borrowed wholesale from ~ser~. The Spanish verb for ‘to go’ is three Latin verbs in a trench coat, and the one on the bottom is not a verb of motion at all, which is why ~fui~ means both ‘I was’ and ‘I went’, and only context can tell you which.
+
+^Goths, Arabic, and the Wedge of Castile^
+
+As Roman power collapsed, the ~Visigoths~ took Hispania and ruled it for three centuries, from Toledo once their kings settled there in the sixth century. Like the Franks in Gaul, they were a Germanic-speaking minority who ended by adopting the Romance of their subjects. They left a ~superstrate~: ~guerra~, ~guardar~, ~ganar~, ~ropa~, ~rico~, ~blanco~, ~ganso~, and a great many personal names, among them Rodrigo, Fernando, Álvaro, and Elvira, plus a share in the general Romance habit of reshaping a Germanic initial w into gu, which is why ~werra~ became ~guerra~ here and ~guerre~ in France. What they did not leave was a verb system. Almost every Germanic verb Spanish borrowed was made to conjugate like ~cantar~, and the few that were not, ~escarnir~ and ~guarir~ among them, went into the -ir class instead.
+
+In 711 an Umayyad army crossed at Gibraltar, and for the next eight centuries some part of the peninsula was ~al-Andalus~. Arabic became the language of administration, science, and prestige across most of the peninsula for the first three of those centuries, and Spanish took somewhere between two and four thousand words from it, among them ~aceite~, ~alcalde~, ~almohada~, ~ajedrez~, ~azúcar~, ~albañil~, and ~naranja~, more than from any source but Latin. Which end of that range you take depends on who counts derivatives and place names.
+
+The verb system did not care. Eight centuries of the most intense language contact in medieval Europe, and the conjugations barely twitched. Borrowed Arabic verbs were simply drafted into the -ar class, where they have behaved themselves ever since. There is one glorious exception, and it is not even a verb. ~Ojalá~ is the Arabic ~law šā’ Allāh~, ‘if God should will’, swallowed whole and reanalyzed as a single Spanish word, and it kept its irrealis force when it came. ~Ojalá~ takes the subjunctive, ~ojalá venga~, ~ojalá viniera~, though so does any native Spanish wish. An Arabic conditional clause is, at this moment, setting the mood of Spanish verbs.
+
+Meanwhile, in the far north, the county of ~Castile~ was doing something odd. Its Romance was the most innovative on the peninsula. It lost initial f-. It turned Latin pl-, cl-, and fl- into ll-, so ~plōrāre~ became ~llorar~, ~clāmāre~ became ~llamar~, and ~flamma~ became ~llama~. It turned -ct- into -ch-, so ~noctem~ became ~noche~ and ~factum~ became ~hecho~. And as the Reconquista pushed south, Castile pushed with it. Ramón Menéndez Pidal described the result as a ~wedge~: Castilian drove down through the middle of the old Romance continuum, splitting Leonese from Aragonese, reaching both the Mediterranean and the Atlantic, and carrying its peculiar innovations to both. Spanish is not the average of Iberian Romance. It is the dialect of the strange northern frontier county that won.
+
+^The First Written Spanish, and a Grammar for an Empire^
+
+Around the year 1000, a monk at the monastery of San Millán de la Cogolla, in La Rioja, was working through a Latin sermon and writing small notes in the margins to explain the harder words. He wrote them in the language he actually spoke, a Riojan Romance that scholars now group with Navarro-Aragonese rather than with Castilian. Those notes, the ~Glosas Emilianenses~, are among the earliest surviving written Romance of the peninsula, and two of them are the earliest written Basque to survive in a manuscript. They exist because a Latin-reading scholar had reached the point of needing Latin translated. The moment Latin became a foreign language to its own heirs is the moment Spanish can be said to begin.
+
+Two and a half centuries later, Alfonso X of Castile finished turning the royal chancery over to the vernacular, a change his father had begun, and commissioned histories, law codes, and astronomical treatises in it, doing more than any other single person to fix what Castilian looked like on a page. And in 1492, the year Granada fell and Columbus sailed, Antonio de Nebrija published the ~Gramática de la lengua castellana~, the first grammar of a living European language ever to be printed. Shown a sample of it at Salamanca years earlier, Queen Isabella is said to have asked what it was for. The bishop of Ávila answered for the author: conquered peoples must take the victor’s laws, and with them his language. Nebrija’s own first line had already said that language was always the companion of empire. The bishop was unusually candid about what a grammar book is for, and events did not contradict him.
+
+^A Verb System Crosses an Ocean^
+
+Spanish arrived in the Americas with a paradigm of six persons and settled down with five. ~Vosotros~, the plural Spain still keeps for friends, crossed the ocean with everyone else and then died there, dropping out of ordinary American speech in the eighteenth century just as western Andalusia was dropping it too. ~Ustedes~, which is ~vuestras mercedes~, ‘your graces’, worn down into a pronoun that takes third-person verbs, took over both formal and informal plural duty everywhere in Latin America. An entire row of the conjugation table simply stopped being used by most of the world’s Spanish speakers, which is why Conjugar shows you ~vosotros~ and lets you decide what to do about it.
+
+The other half of the story is %voseo%. Late Latin ~vōs~ was a plural that came to be addressed to a single person as a mark of respect, exactly as French still uses ~vous~. In Spain that respectful ~vos~ was gradually devalued, squeezed between ~tú~ from below and ~vuestra merced~ from above, and it vanished. In the Americas, far from the court, it survived, and most varieties kept the monophthongs that had stood beside the plural’s own endings since the fifteenth century: -ás beside -áis, -és beside -éis, and -ís unchanged. Maracaibo kept the diphthongs and still says ~vos cantáis~. When a speaker in Buenos Aires says ~vos hablás~, that ending is a fifteenth-century plural already sliding down the social scale, still in service four hundred years after Madrid let it go.
+
+^The Verb System Today^
+
+Modern Spanish keeps the frame it inherited from Latin, an indicative, a subjunctive, and an imperative laid across present, past, and future, but nearly every piece inside has been rebuilt:
+
+• the ~futuro~ and ~condicional~ are the old infinitive fused with ~haber~, so ~cantaré~ carries an auxiliary inside its ending
+• the compound tenses are ~haber~ plus a participle, and ~haber~ does the whole job, having evicted ~ser~ from it
+• the passive is ~ser~ plus a participle, or far more often the ~se~ construction, and Latin’s one-word passive is gone
+• the %pretérito% survived, unlike its French cousin, but shares its ground with ~he cantado~ on terms that vary by country
+• the %futuro de subjuntivo% retired into law and proverb
+• the subject pronoun stayed optional, because most of the endings that name the subject never fell silent
+
+That last point is the great divergence. French, on the usual account, lost its endings to erosion and was obliged to make its subject pronouns compulsory, though some historians of French blame the collapse of its old word order instead. Spanish kept its endings and kept its freedom. ~Hablo~ needs no ~yo~, and adding one is a decision about emphasis rather than a requirement of grammar. This is not a permanent settlement. In the Caribbean and in much of Andalusia, final -s is aspirated or dropped, which can quietly merge ~hablas~ with ~habla~, and Caribbean speakers do reach for subject pronouns far more often than anyone else. Whether the one causes the other is disputed, because Andalusians drop the same -s and use no more pronouns than Madrid. The machinery that reshaped French may be running right now, on other coasts, in real time.
+
+^From the Steppe to Your Screen^
+
+When you conjugate a Spanish verb, when you say ~hablo~, ~hablaré~, ~he hablado~, you are handling parts of enormous age. The ending of ~hablaré~ is a worn-down ~haber~, welded on by people who had stopped being able to read Cicero. The silent h of ~hablar~ is a Latin f that a bilingual frontier in the northern mountains probably rubbed away. The ~ue~ of $pUEde$ is a Roman vowel breaking under stress. ~Fui~ is a Latin verb that originally meant ‘grew’ and now means both ‘was’ and ‘went’, holding down two jobs for two different verbs. The bones of the words are Latin, carried to Iberia by soldiers who came to fight Hannibal and stayed six hundred years, colored by languages nobody can read, named by Phoenician sailors and renamed by pilgrims, standardized by a king and a grammarian, and shipped across an ocean where one pronoun was later abandoned and another was rescued.
+
+Behind the Latin lies the steppe, the Yamnaya with their horses and their Proto-Indo-European. Behind the steppe lies the slow kindling of life on a planet made of stardust. To conjugate ~hablar~ is to set in motion a machine five thousand years in the building, assembled on the grasslands north of the Black Sea, carried to a small town in Latium, marched into Iberia against Carthage, rebuilt in the mouths of monks and herders and sailors, and still, on the tongues of half a billion people, talking.

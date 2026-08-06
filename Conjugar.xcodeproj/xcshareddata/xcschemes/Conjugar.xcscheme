@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1510"
+   LastUpgradeVersion = "2630"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -46,17 +46,6 @@
                BlueprintIdentifier = "E1F06AE71E8F05F400ADD2E1"
                BuildableName = "ConjugarTests.xctest"
                BlueprintName = "ConjugarTests"
-               ReferencedContainer = "container:Conjugar.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E16004C921BC863500909ED1"
-               BuildableName = "ConjugarUITests.xctest"
-               BlueprintName = "ConjugarUITests"
                ReferencedContainer = "container:Conjugar.xcodeproj">
             </BuildableReference>
          </TestableReference>

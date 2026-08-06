@@ -9,6 +9,7 @@
 import XCTest
 @testable import Conjugar
 
+@MainActor
 class IntExtensionTests: XCTestCase {
   func testShort() {
     let time = 42

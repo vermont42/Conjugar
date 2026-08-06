@@ -26,7 +26,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Dancer" translatesAutoresizingMaskIntoConstraints="NO" id="Vtz-5s-UMk">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchDancer" translatesAutoresizingMaskIntoConstraints="NO" id="Vtz-5s-UMk">
                                 <rect key="frame" x="87" y="362" width="200" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="7Hy-Y7-kJx"/>
@@ -39,7 +39,7 @@
                                 <color key="textColor" red="0.78560894727706909" green="0.6286589503288269" blue="0.087981067597866058" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Dancer" translatesAutoresizingMaskIntoConstraints="NO" id="SBb-ho-eXY">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchDancer" translatesAutoresizingMaskIntoConstraints="NO" id="SBb-ho-eXY">
                                 <rect key="frame" x="87" y="105" width="200" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="GPr-3c-cnE"/>
@@ -64,6 +64,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Dancer" width="512" height="512"/>
+        <image name="LaunchDancer" width="200" height="200"/>
     </resources>
 </document>

@@ -5,86 +5,64 @@
 //  Created by Joshua Adams on 12/3/18.
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
+//  Rewritten as Swift Testing during the SwiftUI migration: the quiz is
+//  now a delegate-free @Observable model, so the test drives it by answering the
+//  current question correctly in a loop and asserting the maxed-out final score.
+//
 
-import XCTest
+import Foundation
+import Testing
 @testable import Conjugar
 
-// swiftlint:disable private_over_fileprivate
-fileprivate let difficultSpain = 750
-// swiftlint:enable private_over_fileprivate
+@MainActor
+@Suite struct QuizTests {
+  /// A perfect run (every answer a total match) yields the maximum score. Every
+  /// question is worth 10, and the raw total is normalized to `Quiz.scoreScale`
+  /// (50) questions before the region and difficulty modifiers — so the maxima
+  /// below are unchanged by the August 2026 cut from 50 questions to 30, which is
+  /// the point of the normalization.
+  @Test func perfectRunScoresTheMaximum() {
+    let cases: [(region: Region, difficulty: Difficulty, maxScore: Int)] = [
+      (.spain, .difficult, 750),
+      (.latinAmerica, .difficult, 624),
+      (.spain, .moderate, 500),
+      (.latinAmerica, .moderate, 416),
+      (.spain, .easy, 250),
+      (.latinAmerica, .easy, 208)
+    ]
 
-class QuizTests: XCTestCase {
-  private let testGameCenter = TestGameCenter()
+    // Iterate both shuffle modes: `false` gives a deterministic, reproducible
+    // run (the same verbs every time, so a regression can't hide behind randomness —
+    // exactly how `manecer` dodged CI); `true` also exercises the shuffle path. Both
+    // must score the maximum for a perfect run.
+    for shouldShuffle in [false, true] {
+      for testCase in cases {
+        let settings = Settings(getterSetter: GetterSetterFake(dictionary: [
+          Settings.difficultyKey: testCase.difficulty.rawValue,
+          Settings.regionKey: testCase.region.rawValue
+        ]))
+        let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: shouldShuffle)
+        quiz.start()
 
-  func testQuiz() {
-    let spain = Region.spain.rawValue
-    let latinAmerica = Region.latinAmerica.rawValue
-    let difficult = Difficulty.difficult.rawValue
-    let moderate = Difficulty.moderate.rawValue
-    let easy = Difficulty.easy.rawValue
+        let questionCount = quiz.questionCount
+        #expect(questionCount == 30)
 
-    let difficultLatinAmerica = 624
-    let moderateSpain = 500
-    let moderateLatinAmerica = 416
-    let easySpain = 250
-    let easyLatinAmerica = 208
+        while quiz.quizState == .inProgress {
+          #expect(quiz.currentQuestionIndex >= 0 && quiz.currentQuestionIndex < questionCount)
+          let result = TenseBridge.conjugate(infinitive: quiz.verb, tense: quiz.tense, personNumber: quiz.currentPersonNumber)
+          guard case .success(let correct) = result else {
+            Issue.record("Conjugation failed for \(quiz.verb) in \(testCase.region)/\(testCase.difficulty) (shuffle \(shouldShuffle)).")
+            break
+          }
+          _ = quiz.process(proposedAnswer: correct)
+          #expect(quiz.score >= 0 && quiz.score <= 750)
+        }
 
-    [(spain, difficult, difficultSpain),
-     (latinAmerica, difficult, difficultLatinAmerica),
-     (spain, moderate, moderateSpain),
-     (latinAmerica, moderate, moderateLatinAmerica),
-     (spain, easy, easySpain),
-     (latinAmerica, easy, easyLatinAmerica)
-    ].forEach { region, difficulty, maxScore in
-      let settings = Settings(getterSetter: DictionaryGetterSetter(dictionary: [Settings.difficultyKey: difficulty, Settings.regionKey: region]))
-      let quiz = Quiz(settings: settings, gameCenter: testGameCenter, shouldShuffle: true)
-      _ = TestQuizDelegate(quiz: quiz, onFinish: { score in
-        XCTAssertEqual(score, maxScore)
-      })
+        #expect(quiz.quizState == .finished)
+        #expect(quiz.score == testCase.maxScore, "Wrong max for \(testCase.region)/\(testCase.difficulty) (shuffle \(shouldShuffle)).")
+        #expect(quiz.proposedAnswers.count == questionCount)
+        #expect(quiz.correctAnswers.count == questionCount)
+      }
     }
-  }
-}
-
-class TestQuizDelegate: QuizDelegate {
-  let quiz: Quiz
-  let onFinish: (Int) -> ()
-  private var score = 0
-
-  init(quiz: Quiz, onFinish: @escaping (Int) -> ()) {
-    self.quiz = quiz
-    self.onFinish = onFinish
-    quiz.delegate = self
-    quiz.start()
-  }
-
-  func questionDidChange(verb: String, tense: Tense, personNumber: PersonNumber) {
-    let conjugationResult = Conjugator.shared.conjugate(infinitive: verb, tense: tense, personNumber: personNumber)
-    switch conjugationResult {
-    case let .success(value):
-      _ = quiz.process(proposedAnswer: value)
-    default:
-      fatalError("Conjugation failed during unit test.")
-    }
-  }
-
-  func quizDidFinish() {
-    onFinish(quiz.score)
-  }
-
-  func scoreDidChange(newScore: Int) {
-    score = newScore
-    XCTAssert(score >= 0 && score <= difficultSpain)
-  }
-
-  func timeDidChange(newTime: Int) {
-    // Note: The time is always 0, so I'm not going to bother testing it.
-    // I could slow down the test so it takes longer than 0 second, but
-    // that would be contrary to the quickness goal of unit tests.
-  }
-
-  func progressDidChange(current: Int, total: Int) {
-    let questionCount = 50
-    XCTAssert(current >= 0 && current < questionCount)
-    XCTAssertEqual(total, questionCount)
   }
 }

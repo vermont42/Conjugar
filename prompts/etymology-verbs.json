@@ -1,0 +1,4945 @@
+{
+  "count": 988,
+  "verbs": [
+    {
+      "rank": 1,
+      "infinitive": "ser",
+      "gloss": "be"
+    },
+    {
+      "rank": 2,
+      "infinitive": "haber",
+      "gloss": "have"
+    },
+    {
+      "rank": 3,
+      "infinitive": "tener",
+      "gloss": "have"
+    },
+    {
+      "rank": 4,
+      "infinitive": "poder",
+      "gloss": "can"
+    },
+    {
+      "rank": 5,
+      "infinitive": "estar",
+      "gloss": "be"
+    },
+    {
+      "rank": 6,
+      "infinitive": "hacer",
+      "gloss": "do"
+    },
+    {
+      "rank": 7,
+      "infinitive": "decir",
+      "gloss": "say"
+    },
+    {
+      "rank": 8,
+      "infinitive": "ir",
+      "gloss": "go"
+    },
+    {
+      "rank": 9,
+      "infinitive": "dar",
+      "gloss": "give"
+    },
+    {
+      "rank": 10,
+      "infinitive": "ver",
+      "gloss": "see"
+    },
+    {
+      "rank": 11,
+      "infinitive": "deber",
+      "gloss": "owe, must"
+    },
+    {
+      "rank": 12,
+      "infinitive": "pasar",
+      "gloss": "pass"
+    },
+    {
+      "rank": 13,
+      "infinitive": "querer",
+      "gloss": "want"
+    },
+    {
+      "rank": 14,
+      "infinitive": "encontrar",
+      "gloss": "find"
+    },
+    {
+      "rank": 15,
+      "infinitive": "realizar",
+      "gloss": "carry out"
+    },
+    {
+      "rank": 16,
+      "infinitive": "saber",
+      "gloss": "know"
+    },
+    {
+      "rank": 17,
+      "infinitive": "llegar",
+      "gloss": "arrive, come"
+    },
+    {
+      "rank": 18,
+      "infinitive": "seguir",
+      "gloss": "follow"
+    },
+    {
+      "rank": 19,
+      "infinitive": "poner",
+      "gloss": "put"
+    },
+    {
+      "rank": 20,
+      "infinitive": "llevar",
+      "gloss": "take"
+    },
+    {
+      "rank": 21,
+      "infinitive": "contar",
+      "gloss": "count"
+    },
+    {
+      "rank": 22,
+      "infinitive": "dejar",
+      "gloss": "leave"
+    },
+    {
+      "rank": 23,
+      "infinitive": "conocer",
+      "gloss": "know"
+    },
+    {
+      "rank": 24,
+      "infinitive": "quedar",
+      "gloss": "stay"
+    },
+    {
+      "rank": 25,
+      "infinitive": "permitir",
+      "gloss": "allow"
+    },
+    {
+      "rank": 26,
+      "infinitive": "presentar",
+      "gloss": "present"
+    },
+    {
+      "rank": 27,
+      "infinitive": "creer",
+      "gloss": "believe"
+    },
+    {
+      "rank": 28,
+      "infinitive": "parecer",
+      "gloss": "seem"
+    },
+    {
+      "rank": 29,
+      "infinitive": "tratar",
+      "gloss": "treat"
+    },
+    {
+      "rank": 30,
+      "infinitive": "utilizar",
+      "gloss": "use"
+    },
+    {
+      "rank": 31,
+      "infinitive": "tomar",
+      "gloss": "drink, take"
+    },
+    {
+      "rank": 32,
+      "infinitive": "hablar",
+      "gloss": "speak"
+    },
+    {
+      "rank": 33,
+      "infinitive": "llamar",
+      "gloss": "call"
+    },
+    {
+      "rank": 34,
+      "infinitive": "buscar",
+      "gloss": "look for, seek"
+    },
+    {
+      "rank": 35,
+      "infinitive": "ofrecer",
+      "gloss": "offer"
+    },
+    {
+      "rank": 36,
+      "infinitive": "esperar",
+      "gloss": "wait for, hope"
+    },
+    {
+      "rank": 37,
+      "infinitive": "trabajar",
+      "gloss": "work"
+    },
+    {
+      "rank": 38,
+      "infinitive": "incluir",
+      "gloss": "include"
+    },
+    {
+      "rank": 39,
+      "infinitive": "pensar",
+      "gloss": "think"
+    },
+    {
+      "rank": 40,
+      "infinitive": "existir",
+      "gloss": "exist"
+    },
+    {
+      "rank": 41,
+      "infinitive": "considerar",
+      "gloss": "consider"
+    },
+    {
+      "rank": 42,
+      "infinitive": "recibir",
+      "gloss": "receive, welcome"
+    },
+    {
+      "rank": 43,
+      "infinitive": "unir",
+      "gloss": "join"
+    },
+    {
+      "rank": 44,
+      "infinitive": "volver",
+      "gloss": "turn"
+    },
+    {
+      "rank": 45,
+      "infinitive": "salir",
+      "gloss": "exit"
+    },
+    {
+      "rank": 46,
+      "infinitive": "usar",
+      "gloss": "use"
+    },
+    {
+      "rank": 47,
+      "infinitive": "venir",
+      "gloss": "come"
+    },
+    {
+      "rank": 48,
+      "infinitive": "vivir",
+      "gloss": "live"
+    },
+    {
+      "rank": 49,
+      "infinitive": "mantener",
+      "gloss": "maintain"
+    },
+    {
+      "rank": 50,
+      "infinitive": "abrir",
+      "gloss": "open"
+    },
+    {
+      "rank": 51,
+      "infinitive": "crear",
+      "gloss": "create"
+    },
+    {
+      "rank": 52,
+      "infinitive": "necesitar",
+      "gloss": "need"
+    },
+    {
+      "rank": 53,
+      "infinitive": "mostrar",
+      "gloss": "show"
+    },
+    {
+      "rank": 54,
+      "infinitive": "lograr",
+      "gloss": "achieve"
+    },
+    {
+      "rank": 55,
+      "infinitive": "comenzar",
+      "gloss": "begin"
+    },
+    {
+      "rank": 56,
+      "infinitive": "desarrollar",
+      "gloss": "develop"
+    },
+    {
+      "rank": 57,
+      "infinitive": "establecer",
+      "gloss": "establish"
+    },
+    {
+      "rank": 58,
+      "infinitive": "leer",
+      "gloss": "read"
+    },
+    {
+      "rank": 59,
+      "infinitive": "conseguir",
+      "gloss": "obtain"
+    },
+    {
+      "rank": 60,
+      "infinitive": "perder",
+      "gloss": "lose"
+    },
+    {
+      "rank": 61,
+      "infinitive": "pedir",
+      "gloss": "request"
+    },
+    {
+      "rank": 62,
+      "infinitive": "producir",
+      "gloss": "produce"
+    },
+    {
+      "rank": 63,
+      "infinitive": "obtener",
+      "gloss": "obtain"
+    },
+    {
+      "rank": 64,
+      "infinitive": "gustar",
+      "gloss": "be pleasing to"
+    },
+    {
+      "rank": 65,
+      "infinitive": "convertir",
+      "gloss": "convert"
+    },
+    {
+      "rank": 66,
+      "infinitive": "explicar",
+      "gloss": "explain"
+    },
+    {
+      "rank": 67,
+      "infinitive": "partir",
+      "gloss": "cut, split"
+    },
+    {
+      "rank": 68,
+      "infinitive": "suponer",
+      "gloss": "suppose"
+    },
+    {
+      "rank": 69,
+      "infinitive": "empezar",
+      "gloss": "begin"
+    },
+    {
+      "rank": 70,
+      "infinitive": "escribir",
+      "gloss": "write"
+    },
+    {
+      "rank": 71,
+      "infinitive": "recordar",
+      "gloss": "remember"
+    },
+    {
+      "rank": 72,
+      "infinitive": "cambiar",
+      "gloss": "change"
+    },
+    {
+      "rank": 73,
+      "infinitive": "ayudar",
+      "gloss": "help"
+    },
+    {
+      "rank": 74,
+      "infinitive": "destacar",
+      "gloss": "stand out"
+    },
+    {
+      "rank": 75,
+      "infinitive": "entender",
+      "gloss": "understand"
+    },
+    {
+      "rank": 76,
+      "infinitive": "señalar",
+      "gloss": "point out"
+    },
+    {
+      "rank": 77,
+      "infinitive": "publicar",
+      "gloss": "publish"
+    },
+    {
+      "rank": 78,
+      "infinitive": "ganar",
+      "gloss": "win, earn"
+    },
+    {
+      "rank": 79,
+      "infinitive": "cumplir",
+      "gloss": "carry out"
+    },
+    {
+      "rank": 80,
+      "infinitive": "indicar",
+      "gloss": "indicate"
+    },
+    {
+      "rank": 81,
+      "infinitive": "sentir",
+      "gloss": "feel"
+    },
+    {
+      "rank": 82,
+      "infinitive": "pesar",
+      "gloss": "weigh"
+    },
+    {
+      "rank": 83,
+      "infinitive": "terminar",
+      "gloss": "finish"
+    },
+    {
+      "rank": 84,
+      "infinitive": "participar",
+      "gloss": "participate"
+    },
+    {
+      "rank": 85,
+      "infinitive": "resultar",
+      "gloss": "result"
+    },
+    {
+      "rank": 86,
+      "infinitive": "generar",
+      "gloss": "generate"
+    },
+    {
+      "rank": 87,
+      "infinitive": "asegurar",
+      "gloss": "assure"
+    },
+    {
+      "rank": 88,
+      "infinitive": "decidir",
+      "gloss": "decide"
+    },
+    {
+      "rank": 89,
+      "infinitive": "formar",
+      "gloss": "form"
+    },
+    {
+      "rank": 90,
+      "infinitive": "aparecer",
+      "gloss": "appear"
+    },
+    {
+      "rank": 91,
+      "infinitive": "jugar",
+      "gloss": "play"
+    },
+    {
+      "rank": 92,
+      "infinitive": "reconocer",
+      "gloss": "recognize"
+    },
+    {
+      "rank": 93,
+      "infinitive": "entrar",
+      "gloss": "enter"
+    },
+    {
+      "rank": 94,
+      "infinitive": "determinar",
+      "gloss": "determine"
+    },
+    {
+      "rank": 95,
+      "infinitive": "disponer",
+      "gloss": "make available"
+    },
+    {
+      "rank": 96,
+      "infinitive": "acabar",
+      "gloss": "finish"
+    },
+    {
+      "rank": 97,
+      "infinitive": "mejorar",
+      "gloss": "improve"
+    },
+    {
+      "rank": 98,
+      "infinitive": "comprar",
+      "gloss": "buy"
+    },
+    {
+      "rank": 99,
+      "infinitive": "pagar",
+      "gloss": "pay"
+    },
+    {
+      "rank": 100,
+      "infinitive": "evitar",
+      "gloss": "avoid"
+    },
+    {
+      "rank": 101,
+      "infinitive": "dirigir",
+      "gloss": "direct"
+    },
+    {
+      "rank": 102,
+      "infinitive": "intentar",
+      "gloss": "try"
+    },
+    {
+      "rank": 103,
+      "infinitive": "servir",
+      "gloss": "serve"
+    },
+    {
+      "rank": 104,
+      "infinitive": "aplicar",
+      "gloss": "apply"
+    },
+    {
+      "rank": 105,
+      "infinitive": "compartir",
+      "gloss": "share"
+    },
+    {
+      "rank": 106,
+      "infinitive": "relacionar",
+      "gloss": "relate"
+    },
+    {
+      "rank": 107,
+      "infinitive": "referir",
+      "gloss": "refer"
+    },
+    {
+      "rank": 108,
+      "infinitive": "acercar",
+      "gloss": "bring near"
+    },
+    {
+      "rank": 109,
+      "infinitive": "ocurrir",
+      "gloss": "happen"
+    },
+    {
+      "rank": 110,
+      "infinitive": "mirar",
+      "gloss": "look at"
+    },
+    {
+      "rank": 111,
+      "infinitive": "informar",
+      "gloss": "inform"
+    },
+    {
+      "rank": 112,
+      "infinitive": "afectar",
+      "gloss": "affect"
+    },
+    {
+      "rank": 113,
+      "infinitive": "alcanzar",
+      "gloss": "reach"
+    },
+    {
+      "rank": 114,
+      "infinitive": "continuar",
+      "gloss": "continue"
+    },
+    {
+      "rank": 115,
+      "infinitive": "requerir",
+      "gloss": "require"
+    },
+    {
+      "rank": 116,
+      "infinitive": "representar",
+      "gloss": "represent"
+    },
+    {
+      "rank": 117,
+      "infinitive": "elegir",
+      "gloss": "elect"
+    },
+    {
+      "rank": 118,
+      "infinitive": "iniciar",
+      "gloss": "begin"
+    },
+    {
+      "rank": 119,
+      "infinitive": "dedicar",
+      "gloss": "dedicate"
+    },
+    {
+      "rank": 120,
+      "infinitive": "privar",
+      "gloss": "deprive"
+    },
+    {
+      "rank": 121,
+      "infinitive": "organizar",
+      "gloss": "organize"
+    },
+    {
+      "rank": 122,
+      "infinitive": "sacar",
+      "gloss": "take out, remove"
+    },
+    {
+      "rank": 123,
+      "infinitive": "solicitar",
+      "gloss": "request"
+    },
+    {
+      "rank": 124,
+      "infinitive": "disfrutar",
+      "gloss": "enjoy"
+    },
+    {
+      "rank": 125,
+      "infinitive": "construir",
+      "gloss": "construct"
+    },
+    {
+      "rank": 126,
+      "infinitive": "reducir",
+      "gloss": "reduce"
+    },
+    {
+      "rank": 127,
+      "infinitive": "enviar",
+      "gloss": "send"
+    },
+    {
+      "rank": 128,
+      "infinitive": "demostrar",
+      "gloss": "demonstrate"
+    },
+    {
+      "rank": 129,
+      "infinitive": "añadir",
+      "gloss": "add"
+    },
+    {
+      "rank": 130,
+      "infinitive": "cerrar",
+      "gloss": "close"
+    },
+    {
+      "rank": 131,
+      "infinitive": "preguntar",
+      "gloss": "ask"
+    },
+    {
+      "rank": 132,
+      "infinitive": "aprender",
+      "gloss": "learn"
+    },
+    {
+      "rank": 133,
+      "infinitive": "afirmar",
+      "gloss": "affirm"
+    },
+    {
+      "rank": 134,
+      "infinitive": "celebrar",
+      "gloss": "celebrate"
+    },
+    {
+      "rank": 135,
+      "infinitive": "desear",
+      "gloss": "want, wish"
+    },
+    {
+      "rank": 136,
+      "infinitive": "consultar",
+      "gloss": "consult"
+    },
+    {
+      "rank": 137,
+      "infinitive": "aumentar",
+      "gloss": "increase"
+    },
+    {
+      "rank": 138,
+      "infinitive": "caer",
+      "gloss": "fall"
+    },
+    {
+      "rank": 139,
+      "infinitive": "morir",
+      "gloss": "die"
+    },
+    {
+      "rank": 140,
+      "infinitive": "preparar",
+      "gloss": "prepare"
+    },
+    {
+      "rank": 141,
+      "infinitive": "ubicar",
+      "gloss": "locate"
+    },
+    {
+      "rank": 142,
+      "infinitive": "basar",
+      "gloss": "base"
+    },
+    {
+      "rank": 143,
+      "infinitive": "escuchar",
+      "gloss": "listen"
+    },
+    {
+      "rank": 144,
+      "infinitive": "nacer",
+      "gloss": "be born"
+    },
+    {
+      "rank": 145,
+      "infinitive": "sufrir",
+      "gloss": "suffer"
+    },
+    {
+      "rank": 146,
+      "infinitive": "funcionar",
+      "gloss": "work"
+    },
+    {
+      "rank": 147,
+      "infinitive": "acompañar",
+      "gloss": "accompany"
+    },
+    {
+      "rank": 148,
+      "infinitive": "expresar",
+      "gloss": "express"
+    },
+    {
+      "rank": 149,
+      "infinitive": "responder",
+      "gloss": "answer, reply"
+    },
+    {
+      "rank": 150,
+      "infinitive": "vender",
+      "gloss": "sell"
+    },
+    {
+      "rank": 151,
+      "infinitive": "proponer",
+      "gloss": "propose"
+    },
+    {
+      "rank": 152,
+      "infinitive": "definir",
+      "gloss": "define"
+    },
+    {
+      "rank": 153,
+      "infinitive": "interesar",
+      "gloss": "interest"
+    },
+    {
+      "rank": 154,
+      "infinitive": "mencionar",
+      "gloss": "mention"
+    },
+    {
+      "rank": 155,
+      "infinitive": "observar",
+      "gloss": "observe"
+    },
+    {
+      "rank": 156,
+      "infinitive": "visitar",
+      "gloss": "visit"
+    },
+    {
+      "rank": 157,
+      "infinitive": "entregar",
+      "gloss": "deliver"
+    },
+    {
+      "rank": 158,
+      "infinitive": "comentar",
+      "gloss": "comment"
+    },
+    {
+      "rank": 159,
+      "infinitive": "contener",
+      "gloss": "contain"
+    },
+    {
+      "rank": 160,
+      "infinitive": "declarar",
+      "gloss": "declare"
+    },
+    {
+      "rank": 161,
+      "infinitive": "ocupar",
+      "gloss": "occupy"
+    },
+    {
+      "rank": 162,
+      "infinitive": "integrar",
+      "gloss": "integrate"
+    },
+    {
+      "rank": 163,
+      "infinitive": "constituir",
+      "gloss": "constitute"
+    },
+    {
+      "rank": 164,
+      "infinitive": "descubrir",
+      "gloss": "discover"
+    },
+    {
+      "rank": 165,
+      "infinitive": "registrar",
+      "gloss": "register"
+    },
+    {
+      "rank": 166,
+      "infinitive": "prestar",
+      "gloss": "lend"
+    },
+    {
+      "rank": 167,
+      "infinitive": "plantear",
+      "gloss": "pose"
+    },
+    {
+      "rank": 168,
+      "infinitive": "sentar",
+      "gloss": "sit"
+    },
+    {
+      "rank": 169,
+      "infinitive": "analizar",
+      "gloss": "analyze"
+    },
+    {
+      "rank": 170,
+      "infinitive": "subir",
+      "gloss": "raise"
+    },
+    {
+      "rank": 171,
+      "infinitive": "aceptar",
+      "gloss": "accept"
+    },
+    {
+      "rank": 172,
+      "infinitive": "apoyar",
+      "gloss": "support"
+    },
+    {
+      "rank": 173,
+      "infinitive": "adecuar",
+      "gloss": "adapt"
+    },
+    {
+      "rank": 174,
+      "infinitive": "soler",
+      "gloss": "usually do"
+    },
+    {
+      "rank": 175,
+      "infinitive": "estudiar",
+      "gloss": "study"
+    },
+    {
+      "rank": 176,
+      "infinitive": "significar",
+      "gloss": "mean"
+    },
+    {
+      "rank": 177,
+      "infinitive": "tocar",
+      "gloss": "touch"
+    },
+    {
+      "rank": 178,
+      "infinitive": "marcar",
+      "gloss": "mark"
+    },
+    {
+      "rank": 179,
+      "infinitive": "crecer",
+      "gloss": "grow"
+    },
+    {
+      "rank": 180,
+      "infinitive": "avanzar",
+      "gloss": "advance"
+    },
+    {
+      "rank": 181,
+      "infinitive": "sumar",
+      "gloss": "add"
+    },
+    {
+      "rank": 182,
+      "infinitive": "superar",
+      "gloss": "surpass"
+    },
+    {
+      "rank": 183,
+      "infinitive": "corresponder",
+      "gloss": "correspond"
+    },
+    {
+      "rank": 184,
+      "infinitive": "resolver",
+      "gloss": "resolve"
+    },
+    {
+      "rank": 185,
+      "infinitive": "situar",
+      "gloss": "situate"
+    },
+    {
+      "rank": 186,
+      "infinitive": "anunciar",
+      "gloss": "announce"
+    },
+    {
+      "rank": 187,
+      "infinitive": "prever",
+      "gloss": "foresee"
+    },
+    {
+      "rank": 188,
+      "infinitive": "aportar",
+      "gloss": "contribute"
+    },
+    {
+      "rank": 189,
+      "infinitive": "pretender",
+      "gloss": "intend"
+    },
+    {
+      "rank": 190,
+      "infinitive": "agregar",
+      "gloss": "add"
+    },
+    {
+      "rank": 191,
+      "infinitive": "suceder",
+      "gloss": "happen"
+    },
+    {
+      "rank": 192,
+      "infinitive": "aprobar",
+      "gloss": "approve"
+    },
+    {
+      "rank": 193,
+      "infinitive": "identificar",
+      "gloss": "identify"
+    },
+    {
+      "rank": 194,
+      "infinitive": "colocar",
+      "gloss": "place"
+    },
+    {
+      "rank": 195,
+      "infinitive": "garantizar",
+      "gloss": "guarantee"
+    },
+    {
+      "rank": 196,
+      "infinitive": "actuar",
+      "gloss": "act"
+    },
+    {
+      "rank": 197,
+      "infinitive": "depender",
+      "gloss": "depend"
+    },
+    {
+      "rank": 198,
+      "infinitive": "traer",
+      "gloss": "bring"
+    },
+    {
+      "rank": 199,
+      "infinitive": "comer",
+      "gloss": "eat"
+    },
+    {
+      "rank": 200,
+      "infinitive": "provocar",
+      "gloss": "provoke"
+    },
+    {
+      "rank": 201,
+      "infinitive": "obligar",
+      "gloss": "oblige"
+    },
+    {
+      "rank": 202,
+      "infinitive": "adquirir",
+      "gloss": "acquire"
+    },
+    {
+      "rank": 203,
+      "infinitive": "aprovechar",
+      "gloss": "use"
+    },
+    {
+      "rank": 204,
+      "infinitive": "olvidar",
+      "gloss": "forget"
+    },
+    {
+      "rank": 205,
+      "infinitive": "lanzar",
+      "gloss": "throw"
+    },
+    {
+      "rank": 206,
+      "infinitive": "recomendar",
+      "gloss": "recommend"
+    },
+    {
+      "rank": 207,
+      "infinitive": "proteger",
+      "gloss": "protect"
+    },
+    {
+      "rank": 208,
+      "infinitive": "probar",
+      "gloss": "test"
+    },
+    {
+      "rank": 209,
+      "infinitive": "sostener",
+      "gloss": "hold"
+    },
+    {
+      "rank": 210,
+      "infinitive": "cubrir",
+      "gloss": "cover"
+    },
+    {
+      "rank": 211,
+      "infinitive": "incorporar",
+      "gloss": "incorporate"
+    },
+    {
+      "rank": 212,
+      "infinitive": "exponer",
+      "gloss": "expose"
+    },
+    {
+      "rank": 213,
+      "infinitive": "enfrentar",
+      "gloss": "confront"
+    },
+    {
+      "rank": 214,
+      "infinitive": "instalar",
+      "gloss": "install"
+    },
+    {
+      "rank": 215,
+      "infinitive": "faltar",
+      "gloss": "lack"
+    },
+    {
+      "rank": 216,
+      "infinitive": "manifestar",
+      "gloss": "show"
+    },
+    {
+      "rank": 217,
+      "infinitive": "exigir",
+      "gloss": "demand"
+    },
+    {
+      "rank": 218,
+      "infinitive": "limitar",
+      "gloss": "limit"
+    },
+    {
+      "rank": 219,
+      "infinitive": "correr",
+      "gloss": "run"
+    },
+    {
+      "rank": 220,
+      "infinitive": "comprender",
+      "gloss": "understand"
+    },
+    {
+      "rank": 221,
+      "infinitive": "controlar",
+      "gloss": "control"
+    },
+    {
+      "rank": 222,
+      "infinitive": "confirmar",
+      "gloss": "confirm"
+    },
+    {
+      "rank": 223,
+      "infinitive": "atender",
+      "gloss": "attend"
+    },
+    {
+      "rank": 224,
+      "infinitive": "defender",
+      "gloss": "defend"
+    },
+    {
+      "rank": 225,
+      "infinitive": "reunir",
+      "gloss": "reunite"
+    },
+    {
+      "rank": 226,
+      "infinitive": "citar",
+      "gloss": "cite"
+    },
+    {
+      "rank": 227,
+      "infinitive": "proporcionar",
+      "gloss": "provide"
+    },
+    {
+      "rank": 228,
+      "infinitive": "implicar",
+      "gloss": "involve"
+    },
+    {
+      "rank": 229,
+      "infinitive": "poseer",
+      "gloss": "have"
+    },
+    {
+      "rank": 230,
+      "infinitive": "bajar",
+      "gloss": "lower"
+    },
+    {
+      "rank": 231,
+      "infinitive": "recuperar",
+      "gloss": "recover"
+    },
+    {
+      "rank": 232,
+      "infinitive": "mover",
+      "gloss": "move"
+    },
+    {
+      "rank": 233,
+      "infinitive": "recoger",
+      "gloss": "pick up, gather"
+    },
+    {
+      "rank": 234,
+      "infinitive": "causar",
+      "gloss": "cause"
+    },
+    {
+      "rank": 235,
+      "infinitive": "imponer",
+      "gloss": "impose"
+    },
+    {
+      "rank": 236,
+      "infinitive": "surgir",
+      "gloss": "emerge"
+    },
+    {
+      "rank": 237,
+      "infinitive": "detener",
+      "gloss": "stop"
+    },
+    {
+      "rank": 238,
+      "infinitive": "promover",
+      "gloss": "promote"
+    },
+    {
+      "rank": 239,
+      "infinitive": "elevar",
+      "gloss": "raise"
+    },
+    {
+      "rank": 240,
+      "infinitive": "facilitar",
+      "gloss": "facilitate"
+    },
+    {
+      "rank": 241,
+      "infinitive": "diseñar",
+      "gloss": "design"
+    },
+    {
+      "rank": 242,
+      "infinitive": "meter",
+      "gloss": "put"
+    },
+    {
+      "rank": 243,
+      "infinitive": "valer",
+      "gloss": "be worth"
+    },
+    {
+      "rank": 244,
+      "infinitive": "elaborar",
+      "gloss": "produce"
+    },
+    {
+      "rank": 245,
+      "infinitive": "eliminar",
+      "gloss": "eliminate"
+    },
+    {
+      "rank": 246,
+      "infinitive": "asumir",
+      "gloss": "assume"
+    },
+    {
+      "rank": 247,
+      "infinitive": "levantar",
+      "gloss": "lift"
+    },
+    {
+      "rank": 248,
+      "infinitive": "acceder",
+      "gloss": "access"
+    },
+    {
+      "rank": 249,
+      "infinitive": "firmar",
+      "gloss": "sign"
+    },
+    {
+      "rank": 250,
+      "infinitive": "otorgar",
+      "gloss": "grant"
+    },
+    {
+      "rank": 251,
+      "infinitive": "denominar",
+      "gloss": "name"
+    },
+    {
+      "rank": 252,
+      "infinitive": "invitar",
+      "gloss": "invite"
+    },
+    {
+      "rank": 253,
+      "infinitive": "importar",
+      "gloss": "import"
+    },
+    {
+      "rank": 254,
+      "infinitive": "armar",
+      "gloss": "arm"
+    },
+    {
+      "rank": 255,
+      "infinitive": "concluir",
+      "gloss": "conclude"
+    },
+    {
+      "rank": 256,
+      "infinitive": "modificar",
+      "gloss": "modify"
+    },
+    {
+      "rank": 257,
+      "infinitive": "destinar",
+      "gloss": "assign"
+    },
+    {
+      "rank": 258,
+      "infinitive": "brindar",
+      "gloss": "toast"
+    },
+    {
+      "rank": 259,
+      "infinitive": "describir",
+      "gloss": "describe"
+    },
+    {
+      "rank": 260,
+      "infinitive": "seleccionar",
+      "gloss": "select"
+    },
+    {
+      "rank": 261,
+      "infinitive": "asociar",
+      "gloss": "associate"
+    },
+    {
+      "rank": 262,
+      "infinitive": "encargar",
+      "gloss": "order"
+    },
+    {
+      "rank": 263,
+      "infinitive": "apuntar",
+      "gloss": "point"
+    },
+    {
+      "rank": 264,
+      "infinitive": "viajar",
+      "gloss": "travel"
+    },
+    {
+      "rank": 265,
+      "infinitive": "repetir",
+      "gloss": "repeat"
+    },
+    {
+      "rank": 266,
+      "infinitive": "echar",
+      "gloss": "throw"
+    },
+    {
+      "rank": 267,
+      "infinitive": "componer",
+      "gloss": "compose"
+    },
+    {
+      "rank": 268,
+      "infinitive": "negar",
+      "gloss": "deny"
+    },
+    {
+      "rank": 269,
+      "infinitive": "acudir",
+      "gloss": "come, turn to"
+    },
+    {
+      "rank": 270,
+      "infinitive": "asistir",
+      "gloss": "attend"
+    },
+    {
+      "rank": 271,
+      "infinitive": "encantar",
+      "gloss": "enchant"
+    },
+    {
+      "rank": 272,
+      "infinitive": "quitar",
+      "gloss": "remove"
+    },
+    {
+      "rank": 273,
+      "infinitive": "conectar",
+      "gloss": "connect"
+    },
+    {
+      "rank": 274,
+      "infinitive": "romper",
+      "gloss": "break"
+    },
+    {
+      "rank": 275,
+      "infinitive": "estimar",
+      "gloss": "esteem"
+    },
+    {
+      "rank": 276,
+      "infinitive": "separar",
+      "gloss": "separate"
+    },
+    {
+      "rank": 277,
+      "infinitive": "agradecer",
+      "gloss": "thank"
+    },
+    {
+      "rank": 278,
+      "infinitive": "contribuir",
+      "gloss": "contribute"
+    },
+    {
+      "rank": 279,
+      "infinitive": "fijar",
+      "gloss": "fix"
+    },
+    {
+      "rank": 280,
+      "infinitive": "emitir",
+      "gloss": "emit"
+    },
+    {
+      "rank": 281,
+      "infinitive": "adaptar",
+      "gloss": "adapt"
+    },
+    {
+      "rank": 282,
+      "infinitive": "conducir",
+      "gloss": "lead, drive"
+    },
+    {
+      "rank": 283,
+      "infinitive": "cuidar",
+      "gloss": "care"
+    },
+    {
+      "rank": 284,
+      "infinitive": "consistir",
+      "gloss": "consist of"
+    },
+    {
+      "rank": 285,
+      "infinitive": "preocupar",
+      "gloss": "worry"
+    },
+    {
+      "rank": 286,
+      "infinitive": "costar",
+      "gloss": "cost"
+    },
+    {
+      "rank": 287,
+      "infinitive": "abandonar",
+      "gloss": "abandon"
+    },
+    {
+      "rank": 288,
+      "infinitive": "ordenar",
+      "gloss": "order"
+    },
+    {
+      "rank": 289,
+      "infinitive": "andar",
+      "gloss": "walk"
+    },
+    {
+      "rank": 290,
+      "infinitive": "caber",
+      "gloss": "fit"
+    },
+    {
+      "rank": 291,
+      "infinitive": "conformar",
+      "gloss": "conform"
+    },
+    {
+      "rank": 292,
+      "infinitive": "emplear",
+      "gloss": "use"
+    },
+    {
+      "rank": 293,
+      "infinitive": "pertenecer",
+      "gloss": "belong"
+    },
+    {
+      "rank": 294,
+      "infinitive": "preferir",
+      "gloss": "prefer"
+    },
+    {
+      "rank": 295,
+      "infinitive": "especializar",
+      "gloss": "specialize"
+    },
+    {
+      "rank": 296,
+      "infinitive": "proceder",
+      "gloss": "proceed"
+    },
+    {
+      "rank": 297,
+      "infinitive": "enseñar",
+      "gloss": "teach"
+    },
+    {
+      "rank": 298,
+      "infinitive": "comunicar",
+      "gloss": "communicate"
+    },
+    {
+      "rank": 299,
+      "infinitive": "impedir",
+      "gloss": "prevent"
+    },
+    {
+      "rank": 300,
+      "infinitive": "extender",
+      "gloss": "extend"
+    },
+    {
+      "rank": 301,
+      "infinitive": "introducir",
+      "gloss": "insert"
+    },
+    {
+      "rank": 302,
+      "infinitive": "centrar",
+      "gloss": "center"
+    },
+    {
+      "rank": 303,
+      "infinitive": "ejercer",
+      "gloss": "exercise"
+    },
+    {
+      "rank": 304,
+      "infinitive": "denunciar",
+      "gloss": "denounce"
+    },
+    {
+      "rank": 305,
+      "infinitive": "finalizar",
+      "gloss": "finish"
+    },
+    {
+      "rank": 306,
+      "infinitive": "guardar",
+      "gloss": "keep"
+    },
+    {
+      "rank": 307,
+      "infinitive": "imaginar",
+      "gloss": "imagine"
+    },
+    {
+      "rank": 308,
+      "infinitive": "cobrar",
+      "gloss": "charge"
+    },
+    {
+      "rank": 309,
+      "infinitive": "notar",
+      "gloss": "notice"
+    },
+    {
+      "rank": 310,
+      "infinitive": "matar",
+      "gloss": "kill"
+    },
+    {
+      "rank": 311,
+      "infinitive": "desaparecer",
+      "gloss": "disappear"
+    },
+    {
+      "rank": 312,
+      "infinitive": "valorar",
+      "gloss": "value"
+    },
+    {
+      "rank": 313,
+      "infinitive": "permanecer",
+      "gloss": "remain"
+    },
+    {
+      "rank": 314,
+      "infinitive": "derivar",
+      "gloss": "derive"
+    },
+    {
+      "rank": 315,
+      "infinitive": "revisar",
+      "gloss": "revise"
+    },
+    {
+      "rank": 316,
+      "infinitive": "adoptar",
+      "gloss": "adopt"
+    },
+    {
+      "rank": 317,
+      "infinitive": "efectuar",
+      "gloss": "carry out"
+    },
+    {
+      "rank": 318,
+      "infinitive": "impulsar",
+      "gloss": "propel"
+    },
+    {
+      "rank": 319,
+      "infinitive": "ingresar",
+      "gloss": "enter"
+    },
+    {
+      "rank": 320,
+      "infinitive": "mandar",
+      "gloss": "send"
+    },
+    {
+      "rank": 321,
+      "infinitive": "comprobar",
+      "gloss": "verify"
+    },
+    {
+      "rank": 322,
+      "infinitive": "animar",
+      "gloss": "encourage"
+    },
+    {
+      "rank": 323,
+      "infinitive": "practicar",
+      "gloss": "practice"
+    },
+    {
+      "rank": 324,
+      "infinitive": "merecer",
+      "gloss": "deserve"
+    },
+    {
+      "rank": 325,
+      "infinitive": "regresar",
+      "gloss": "return"
+    },
+    {
+      "rank": 326,
+      "infinitive": "ejecutar",
+      "gloss": "execute"
+    },
+    {
+      "rank": 327,
+      "infinitive": "trasladar",
+      "gloss": "move"
+    },
+    {
+      "rank": 328,
+      "infinitive": "operar",
+      "gloss": "operate"
+    },
+    {
+      "rank": 329,
+      "infinitive": "evaluar",
+      "gloss": "evaluate"
+    },
+    {
+      "rank": 330,
+      "infinitive": "amar",
+      "gloss": "love"
+    },
+    {
+      "rank": 331,
+      "infinitive": "interpretar",
+      "gloss": "interpret"
+    },
+    {
+      "rank": 332,
+      "infinitive": "retirar",
+      "gloss": "withdraw"
+    },
+    {
+      "rank": 333,
+      "infinitive": "vincular",
+      "gloss": "link"
+    },
+    {
+      "rank": 334,
+      "infinitive": "revelar",
+      "gloss": "reveal"
+    },
+    {
+      "rank": 335,
+      "infinitive": "advertir",
+      "gloss": "warn"
+    },
+    {
+      "rank": 336,
+      "infinitive": "sorprender",
+      "gloss": "surprise"
+    },
+    {
+      "rank": 337,
+      "infinitive": "ampliar",
+      "gloss": "expand"
+    },
+    {
+      "rank": 338,
+      "infinitive": "variar",
+      "gloss": "vary"
+    },
+    {
+      "rank": 339,
+      "infinitive": "completar",
+      "gloss": "complete"
+    },
+    {
+      "rank": 340,
+      "infinitive": "cometer",
+      "gloss": "commit"
+    },
+    {
+      "rank": 341,
+      "infinitive": "someter",
+      "gloss": "submit, subdue"
+    },
+    {
+      "rank": 342,
+      "infinitive": "reflejar",
+      "gloss": "reflect"
+    },
+    {
+      "rank": 343,
+      "infinitive": "colaborar",
+      "gloss": "collaborate"
+    },
+    {
+      "rank": 344,
+      "infinitive": "manejar",
+      "gloss": "handle"
+    },
+    {
+      "rank": 345,
+      "infinitive": "recorrer",
+      "gloss": "travel"
+    },
+    {
+      "rank": 346,
+      "infinitive": "luchar",
+      "gloss": "fight"
+    },
+    {
+      "rank": 347,
+      "infinitive": "transformar",
+      "gloss": "transform"
+    },
+    {
+      "rank": 348,
+      "infinitive": "comprometer",
+      "gloss": "commit"
+    },
+    {
+      "rank": 349,
+      "infinitive": "medir",
+      "gloss": "measure"
+    },
+    {
+      "rank": 350,
+      "infinitive": "respetar",
+      "gloss": "respect"
+    },
+    {
+      "rank": 351,
+      "infinitive": "desconocer",
+      "gloss": "not know"
+    },
+    {
+      "rank": 352,
+      "infinitive": "contemplar",
+      "gloss": "contemplate"
+    },
+    {
+      "rank": 353,
+      "infinitive": "comparar",
+      "gloss": "compare"
+    },
+    {
+      "rank": 354,
+      "infinitive": "complicar",
+      "gloss": "complicate"
+    },
+    {
+      "rank": 355,
+      "infinitive": "incrementar",
+      "gloss": "increase"
+    },
+    {
+      "rank": 356,
+      "infinitive": "dormir",
+      "gloss": "sleep"
+    },
+    {
+      "rank": 357,
+      "infinitive": "actualizar",
+      "gloss": "update"
+    },
+    {
+      "rank": 358,
+      "infinitive": "divertir",
+      "gloss": "amuse"
+    },
+    {
+      "rank": 359,
+      "infinitive": "investigar",
+      "gloss": "investigate"
+    },
+    {
+      "rank": 360,
+      "infinitive": "invertir",
+      "gloss": "invest"
+    },
+    {
+      "rank": 361,
+      "infinitive": "hallar",
+      "gloss": "find"
+    },
+    {
+      "rank": 362,
+      "infinitive": "detectar",
+      "gloss": "detect"
+    },
+    {
+      "rank": 363,
+      "infinitive": "combinar",
+      "gloss": "combine"
+    },
+    {
+      "rank": 364,
+      "infinitive": "acordar",
+      "gloss": "agree"
+    },
+    {
+      "rank": 366,
+      "infinitive": "votar",
+      "gloss": "vote"
+    },
+    {
+      "rank": 367,
+      "infinitive": "aclarar",
+      "gloss": "clarify"
+    },
+    {
+      "rank": 368,
+      "infinitive": "conservar",
+      "gloss": "preserve"
+    },
+    {
+      "rank": 369,
+      "infinitive": "contratar",
+      "gloss": "hire"
+    },
+    {
+      "rank": 370,
+      "infinitive": "admitir",
+      "gloss": "admit, accept"
+    },
+    {
+      "rank": 371,
+      "infinitive": "coincidir",
+      "gloss": "coincide"
+    },
+    {
+      "rank": 372,
+      "infinitive": "rechazar",
+      "gloss": "reject"
+    },
+    {
+      "rank": 373,
+      "infinitive": "tirar",
+      "gloss": "throw"
+    },
+    {
+      "rank": 374,
+      "infinitive": "transmitir",
+      "gloss": "transmit"
+    },
+    {
+      "rank": 375,
+      "infinitive": "convocar",
+      "gloss": "convene"
+    },
+    {
+      "rank": 376,
+      "infinitive": "abordar",
+      "gloss": "board"
+    },
+    {
+      "rank": 377,
+      "infinitive": "vestir",
+      "gloss": "dress"
+    },
+    {
+      "rank": 378,
+      "infinitive": "acusar",
+      "gloss": "accuse"
+    },
+    {
+      "rank": 379,
+      "infinitive": "cargar",
+      "gloss": "load"
+    },
+    {
+      "rank": 380,
+      "infinitive": "reclamar",
+      "gloss": "claim"
+    },
+    {
+      "rank": 381,
+      "infinitive": "disminuir",
+      "gloss": "decrease"
+    },
+    {
+      "rank": 382,
+      "infinitive": "caracterizar",
+      "gloss": "characterize"
+    },
+    {
+      "rank": 383,
+      "infinitive": "oír",
+      "gloss": "hear"
+    },
+    {
+      "rank": 384,
+      "infinitive": "nombrar",
+      "gloss": "name"
+    },
+    {
+      "rank": 385,
+      "infinitive": "dividir",
+      "gloss": "divide"
+    },
+    {
+      "rank": 386,
+      "infinitive": "rodear",
+      "gloss": "surround"
+    },
+    {
+      "rank": 387,
+      "infinitive": "experimentar",
+      "gloss": "experience"
+    },
+    {
+      "rank": 388,
+      "infinitive": "orientar",
+      "gloss": "orient"
+    },
+    {
+      "rank": 389,
+      "infinitive": "justificar",
+      "gloss": "justify"
+    },
+    {
+      "rank": 390,
+      "infinitive": "autorizar",
+      "gloss": "authorize"
+    },
+    {
+      "rank": 391,
+      "infinitive": "cruzar",
+      "gloss": "cross"
+    },
+    {
+      "rank": 392,
+      "infinitive": "regular",
+      "gloss": "regulate"
+    },
+    {
+      "rank": 393,
+      "infinitive": "parar",
+      "gloss": "stop"
+    },
+    {
+      "rank": 394,
+      "infinitive": "caminar",
+      "gloss": "walk"
+    },
+    {
+      "rank": 395,
+      "infinitive": "cortar",
+      "gloss": "cut"
+    },
+    {
+      "rank": 396,
+      "infinitive": "detallar",
+      "gloss": "detail"
+    },
+    {
+      "rank": 397,
+      "infinitive": "satisfacer",
+      "gloss": "satisfy"
+    },
+    {
+      "rank": 398,
+      "infinitive": "ajustar",
+      "gloss": "adjust"
+    },
+    {
+      "rank": 399,
+      "infinitive": "salvar",
+      "gloss": "save"
+    },
+    {
+      "rank": 400,
+      "infinitive": "conceder",
+      "gloss": "grant"
+    },
+    {
+      "rank": 401,
+      "infinitive": "apreciar",
+      "gloss": "appreciate"
+    },
+    {
+      "rank": 402,
+      "infinitive": "fabricar",
+      "gloss": "manufacture"
+    },
+    {
+      "rank": 403,
+      "infinitive": "intervenir",
+      "gloss": "intervene"
+    },
+    {
+      "rank": 404,
+      "infinitive": "fundar",
+      "gloss": "found"
+    },
+    {
+      "rank": 405,
+      "infinitive": "consumir",
+      "gloss": "consume"
+    },
+    {
+      "rank": 406,
+      "infinitive": "atacar",
+      "gloss": "attack"
+    },
+    {
+      "rank": 407,
+      "infinitive": "descargar",
+      "gloss": "download"
+    },
+    {
+      "rank": 408,
+      "infinitive": "sugerir",
+      "gloss": "suggest"
+    },
+    {
+      "rank": 409,
+      "infinitive": "alejar",
+      "gloss": "move away"
+    },
+    {
+      "rank": 410,
+      "infinitive": "dudar",
+      "gloss": "doubt"
+    },
+    {
+      "rank": 411,
+      "infinitive": "gestionar",
+      "gloss": "manage"
+    },
+    {
+      "rank": 412,
+      "infinitive": "precisar",
+      "gloss": "specify"
+    },
+    {
+      "rank": 413,
+      "infinitive": "casar",
+      "gloss": "marry"
+    },
+    {
+      "rank": 414,
+      "infinitive": "favorecer",
+      "gloss": "favor"
+    },
+    {
+      "rank": 415,
+      "infinitive": "calificar",
+      "gloss": "grade"
+    },
+    {
+      "rank": 416,
+      "infinitive": "convencer",
+      "gloss": "convince"
+    },
+    {
+      "rank": 417,
+      "infinitive": "dictar",
+      "gloss": "dictate"
+    },
+    {
+      "rank": 418,
+      "infinitive": "beneficiar",
+      "gloss": "benefit"
+    },
+    {
+      "rank": 419,
+      "infinitive": "grabar",
+      "gloss": "record"
+    },
+    {
+      "rank": 420,
+      "infinitive": "involucrar",
+      "gloss": "involve"
+    },
+    {
+      "rank": 421,
+      "infinitive": "constar",
+      "gloss": "consist"
+    },
+    {
+      "rank": 422,
+      "infinitive": "sonar",
+      "gloss": "sound"
+    },
+    {
+      "rank": 423,
+      "infinitive": "percibir",
+      "gloss": "perceive"
+    },
+    {
+      "rank": 424,
+      "infinitive": "destruir",
+      "gloss": "destroy"
+    },
+    {
+      "rank": 425,
+      "infinitive": "insistir",
+      "gloss": "insist"
+    },
+    {
+      "rank": 426,
+      "infinitive": "adelantar",
+      "gloss": "advance"
+    },
+    {
+      "rank": 427,
+      "infinitive": "contestar",
+      "gloss": "answer"
+    },
+    {
+      "rank": 428,
+      "infinitive": "cantar",
+      "gloss": "sing"
+    },
+    {
+      "rank": 429,
+      "infinitive": "llenar",
+      "gloss": "fill"
+    },
+    {
+      "rank": 430,
+      "infinitive": "condenar",
+      "gloss": "condemn"
+    },
+    {
+      "rank": 431,
+      "infinitive": "criticar",
+      "gloss": "criticize"
+    },
+    {
+      "rank": 432,
+      "infinitive": "implementar",
+      "gloss": "implement"
+    },
+    {
+      "rank": 433,
+      "infinitive": "durar",
+      "gloss": "last"
+    },
+    {
+      "rank": 434,
+      "infinitive": "montar",
+      "gloss": "mount"
+    },
+    {
+      "rank": 435,
+      "infinitive": "recurrir",
+      "gloss": "resort"
+    },
+    {
+      "rank": 436,
+      "infinitive": "clasificar",
+      "gloss": "classify"
+    },
+    {
+      "rank": 437,
+      "infinitive": "distribuir",
+      "gloss": "distribute"
+    },
+    {
+      "rank": 438,
+      "infinitive": "confiar",
+      "gloss": "trust"
+    },
+    {
+      "rank": 439,
+      "infinitive": "vencer",
+      "gloss": "vanquish"
+    },
+    {
+      "rank": 440,
+      "infinitive": "saltar",
+      "gloss": "jump"
+    },
+    {
+      "rank": 441,
+      "infinitive": "concentrar",
+      "gloss": "concentrate"
+    },
+    {
+      "rank": 442,
+      "infinitive": "calcular",
+      "gloss": "calculate"
+    },
+    {
+      "rank": 443,
+      "infinitive": "prohibir",
+      "gloss": "prohibit"
+    },
+    {
+      "rank": 444,
+      "infinitive": "oponer",
+      "gloss": "oppose"
+    },
+    {
+      "rank": 445,
+      "infinitive": "coger",
+      "gloss": "grasp"
+    },
+    {
+      "rank": 446,
+      "infinitive": "optar",
+      "gloss": "opt"
+    },
+    {
+      "rank": 447,
+      "infinitive": "parir",
+      "gloss": "give birth"
+    },
+    {
+      "rank": 448,
+      "infinitive": "devolver",
+      "gloss": "return"
+    },
+    {
+      "rank": 449,
+      "infinitive": "corregir",
+      "gloss": "correct"
+    },
+    {
+      "rank": 450,
+      "infinitive": "pintar",
+      "gloss": "paint"
+    },
+    {
+      "rank": 451,
+      "infinitive": "liberar",
+      "gloss": "free"
+    },
+    {
+      "rank": 452,
+      "infinitive": "asignar",
+      "gloss": "assign"
+    },
+    {
+      "rank": 453,
+      "infinitive": "fallecer",
+      "gloss": "die"
+    },
+    {
+      "rank": 454,
+      "infinitive": "discutir",
+      "gloss": "argue, discuss"
+    },
+    {
+      "rank": 455,
+      "infinitive": "acumular",
+      "gloss": "accumulate"
+    },
+    {
+      "rank": 456,
+      "infinitive": "robar",
+      "gloss": "steal"
+    },
+    {
+      "rank": 457,
+      "infinitive": "acreditar",
+      "gloss": "accredit"
+    },
+    {
+      "rank": 458,
+      "infinitive": "disputar",
+      "gloss": "dispute"
+    },
+    {
+      "rank": 459,
+      "infinitive": "fortalecer",
+      "gloss": "strengthen"
+    },
+    {
+      "rank": 460,
+      "infinitive": "escoger",
+      "gloss": "choose"
+    },
+    {
+      "rank": 461,
+      "infinitive": "formular",
+      "gloss": "formulate"
+    },
+    {
+      "rank": 462,
+      "infinitive": "reforzar",
+      "gloss": "reinforce"
+    },
+    {
+      "rank": 463,
+      "infinitive": "demandar",
+      "gloss": "demand"
+    },
+    {
+      "rank": 464,
+      "infinitive": "titular",
+      "gloss": "title"
+    },
+    {
+      "rank": 465,
+      "infinitive": "hacendar",
+      "gloss": "give property"
+    },
+    {
+      "rank": 466,
+      "infinitive": "editar",
+      "gloss": "edit"
+    },
+    {
+      "rank": 467,
+      "infinitive": "figurar",
+      "gloss": "figure"
+    },
+    {
+      "rank": 468,
+      "infinitive": "resaltar",
+      "gloss": "highlight"
+    },
+    {
+      "rank": 469,
+      "infinitive": "escapar",
+      "gloss": "escape"
+    },
+    {
+      "rank": 470,
+      "infinitive": "sustituir",
+      "gloss": "substitute"
+    },
+    {
+      "rank": 471,
+      "infinitive": "despertar",
+      "gloss": "wake"
+    },
+    {
+      "rank": 472,
+      "infinitive": "distinguir",
+      "gloss": "distinguish"
+    },
+    {
+      "rank": 473,
+      "infinitive": "bastar",
+      "gloss": "suffice"
+    },
+    {
+      "rank": 474,
+      "infinitive": "articular",
+      "gloss": "articulate"
+    },
+    {
+      "rank": 475,
+      "infinitive": "desempeñar",
+      "gloss": "carry out"
+    },
+    {
+      "rank": 476,
+      "infinitive": "traducir",
+      "gloss": "translate"
+    },
+    {
+      "rank": 477,
+      "infinitive": "inscribir",
+      "gloss": "enroll"
+    },
+    {
+      "rank": 478,
+      "infinitive": "pegar",
+      "gloss": "hit"
+    },
+    {
+      "rank": 479,
+      "infinitive": "apostar",
+      "gloss": "bet; station"
+    },
+    {
+      "rank": 480,
+      "infinitive": "tender",
+      "gloss": "spread"
+    },
+    {
+      "rank": 481,
+      "infinitive": "reservar",
+      "gloss": "reserve"
+    },
+    {
+      "rank": 482,
+      "infinitive": "consolidar",
+      "gloss": "consolidate"
+    },
+    {
+      "rank": 483,
+      "infinitive": "beber",
+      "gloss": "drink"
+    },
+    {
+      "rank": 484,
+      "infinitive": "solucionar",
+      "gloss": "solve"
+    },
+    {
+      "rank": 485,
+      "infinitive": "localizar",
+      "gloss": "locate"
+    },
+    {
+      "rank": 486,
+      "infinitive": "renovar",
+      "gloss": "renew"
+    },
+    {
+      "rank": 487,
+      "infinitive": "prometer",
+      "gloss": "promise"
+    },
+    {
+      "rank": 488,
+      "infinitive": "fomentar",
+      "gloss": "foster"
+    },
+    {
+      "rank": 489,
+      "infinitive": "esconder",
+      "gloss": "hide"
+    },
+    {
+      "rank": 490,
+      "infinitive": "lucir",
+      "gloss": "shine"
+    },
+    {
+      "rank": 491,
+      "infinitive": "acoger",
+      "gloss": "welcome"
+    },
+    {
+      "rank": 492,
+      "infinitive": "personalizar",
+      "gloss": "personalize"
+    },
+    {
+      "rank": 493,
+      "infinitive": "gastar",
+      "gloss": "spend"
+    },
+    {
+      "rank": 494,
+      "infinitive": "inspirar",
+      "gloss": "inspire"
+    },
+    {
+      "rank": 495,
+      "infinitive": "liderar",
+      "gloss": "lead"
+    },
+    {
+      "rank": 496,
+      "infinitive": "financiar",
+      "gloss": "finance"
+    },
+    {
+      "rank": 497,
+      "infinitive": "tardar",
+      "gloss": "delay"
+    },
+    {
+      "rank": 498,
+      "infinitive": "mezclar",
+      "gloss": "mix"
+    },
+    {
+      "rank": 499,
+      "infinitive": "atraer",
+      "gloss": "attract"
+    },
+    {
+      "rank": 500,
+      "infinitive": "designar",
+      "gloss": "designate"
+    },
+    {
+      "rank": 501,
+      "infinitive": "activar",
+      "gloss": "activate"
+    },
+    {
+      "rank": 502,
+      "infinitive": "dominar",
+      "gloss": "dominate"
+    },
+    {
+      "rank": 503,
+      "infinitive": "arrancar",
+      "gloss": "pull out"
+    },
+    {
+      "rank": 504,
+      "infinitive": "soportar",
+      "gloss": "endure"
+    },
+    {
+      "rank": 505,
+      "infinitive": "difundir",
+      "gloss": "spread"
+    },
+    {
+      "rank": 506,
+      "infinitive": "enfocar",
+      "gloss": "focus"
+    },
+    {
+      "rank": 507,
+      "infinitive": "competir",
+      "gloss": "compete"
+    },
+    {
+      "rank": 508,
+      "infinitive": "desplazar",
+      "gloss": "displace"
+    },
+    {
+      "rank": 509,
+      "infinitive": "alimentar",
+      "gloss": "feed"
+    },
+    {
+      "rank": 510,
+      "infinitive": "circular",
+      "gloss": "circulate"
+    },
+    {
+      "rank": 511,
+      "infinitive": "prevenir",
+      "gloss": "prevent"
+    },
+    {
+      "rank": 512,
+      "infinitive": "reportar",
+      "gloss": "report"
+    },
+    {
+      "rank": 513,
+      "infinitive": "cuestionar",
+      "gloss": "question"
+    },
+    {
+      "rank": 514,
+      "infinitive": "equivocar",
+      "gloss": "mistake"
+    },
+    {
+      "rank": 515,
+      "infinitive": "atravesar",
+      "gloss": "cross"
+    },
+    {
+      "rank": 516,
+      "infinitive": "contactar",
+      "gloss": "contact"
+    },
+    {
+      "rank": 517,
+      "infinitive": "diferenciar",
+      "gloss": "differentiate"
+    },
+    {
+      "rank": 518,
+      "infinitive": "perseguir",
+      "gloss": "pursue"
+    },
+    {
+      "rank": 519,
+      "infinitive": "impartir",
+      "gloss": "impart"
+    },
+    {
+      "rank": 520,
+      "infinitive": "coordinar",
+      "gloss": "coordinate"
+    },
+    {
+      "rank": 521,
+      "infinitive": "ignorar",
+      "gloss": "ignore"
+    },
+    {
+      "rank": 522,
+      "infinitive": "inaugurar",
+      "gloss": "inaugurate"
+    },
+    {
+      "rank": 523,
+      "infinitive": "estrenar",
+      "gloss": "debut"
+    },
+    {
+      "rank": 524,
+      "infinitive": "rendir",
+      "gloss": "yield"
+    },
+    {
+      "rank": 525,
+      "infinitive": "administrar",
+      "gloss": "administer"
+    },
+    {
+      "rank": 526,
+      "infinitive": "padecer",
+      "gloss": "suffer"
+    },
+    {
+      "rank": 527,
+      "infinitive": "asesinar",
+      "gloss": "murder"
+    },
+    {
+      "rank": 528,
+      "infinitive": "convenir",
+      "gloss": "convene"
+    },
+    {
+      "rank": 529,
+      "infinitive": "motivar",
+      "gloss": "motivate"
+    },
+    {
+      "rank": 530,
+      "infinitive": "ahorrar",
+      "gloss": "save"
+    },
+    {
+      "rank": 532,
+      "infinitive": "influir",
+      "gloss": "influence"
+    },
+    {
+      "rank": 533,
+      "infinitive": "verificar",
+      "gloss": "verify"
+    },
+    {
+      "rank": 534,
+      "infinitive": "acostumbrar",
+      "gloss": "accustom"
+    },
+    {
+      "rank": 535,
+      "infinitive": "encabezar",
+      "gloss": "head"
+    },
+    {
+      "rank": 536,
+      "infinitive": "amenazar",
+      "gloss": "threaten"
+    },
+    {
+      "rank": 537,
+      "infinitive": "juzgar",
+      "gloss": "judge"
+    },
+    {
+      "rank": 538,
+      "infinitive": "suspender",
+      "gloss": "suspend"
+    },
+    {
+      "rank": 539,
+      "infinitive": "enterar",
+      "gloss": "inform"
+    },
+    {
+      "rank": 540,
+      "infinitive": "programar",
+      "gloss": "program"
+    },
+    {
+      "rank": 541,
+      "infinitive": "carecer",
+      "gloss": "lack"
+    },
+    {
+      "rank": 542,
+      "infinitive": "especificar",
+      "gloss": "specify"
+    },
+    {
+      "rank": 543,
+      "infinitive": "mediar",
+      "gloss": "mediate"
+    },
+    {
+      "rank": 544,
+      "infinitive": "proyectar",
+      "gloss": "project"
+    },
+    {
+      "rank": 545,
+      "infinitive": "repartir",
+      "gloss": "distribute"
+    },
+    {
+      "rank": 546,
+      "infinitive": "remitir",
+      "gloss": "send"
+    },
+    {
+      "rank": 547,
+      "infinitive": "opinar",
+      "gloss": "opine"
+    },
+    {
+      "rank": 548,
+      "infinitive": "configurar",
+      "gloss": "configure"
+    },
+    {
+      "rank": 549,
+      "infinitive": "gobernar",
+      "gloss": "govern"
+    },
+    {
+      "rank": 550,
+      "infinitive": "pronunciar",
+      "gloss": "pronounce"
+    },
+    {
+      "rank": 551,
+      "infinitive": "combatir",
+      "gloss": "fight"
+    },
+    {
+      "rank": 552,
+      "infinitive": "atribuir",
+      "gloss": "attribute"
+    },
+    {
+      "rank": 553,
+      "infinitive": "dotar",
+      "gloss": "endow"
+    },
+    {
+      "rank": 554,
+      "infinitive": "temer",
+      "gloss": "fear"
+    },
+    {
+      "rank": 555,
+      "infinitive": "imprimir",
+      "gloss": "print"
+    },
+    {
+      "rank": 556,
+      "infinitive": "regalar",
+      "gloss": "give"
+    },
+    {
+      "rank": 557,
+      "infinitive": "reiterar",
+      "gloss": "reiterate"
+    },
+    {
+      "rank": 558,
+      "infinitive": "disparar",
+      "gloss": "shoot"
+    },
+    {
+      "rank": 559,
+      "infinitive": "subrayar",
+      "gloss": "underline"
+    },
+    {
+      "rank": 560,
+      "infinitive": "ceder",
+      "gloss": "yield"
+    },
+    {
+      "rank": 561,
+      "infinitive": "poblar",
+      "gloss": "populate"
+    },
+    {
+      "rank": 562,
+      "infinitive": "provenir",
+      "gloss": "come from"
+    },
+    {
+      "rank": 563,
+      "infinitive": "ultimar",
+      "gloss": "finalize"
+    },
+    {
+      "rank": 564,
+      "infinitive": "anotar",
+      "gloss": "note"
+    },
+    {
+      "rank": 565,
+      "infinitive": "extraer",
+      "gloss": "extract"
+    },
+    {
+      "rank": 566,
+      "infinitive": "golpear",
+      "gloss": "hit, punch"
+    },
+    {
+      "rank": 567,
+      "infinitive": "guiar",
+      "gloss": "guide"
+    },
+    {
+      "rank": 568,
+      "infinitive": "volar",
+      "gloss": "fly"
+    },
+    {
+      "rank": 569,
+      "infinitive": "limpiar",
+      "gloss": "clean"
+    },
+    {
+      "rank": 570,
+      "infinitive": "certificar",
+      "gloss": "certify"
+    },
+    {
+      "rank": 571,
+      "infinitive": "entrenar",
+      "gloss": "train"
+    },
+    {
+      "rank": 572,
+      "infinitive": "afrontar",
+      "gloss": "confront"
+    },
+    {
+      "rank": 573,
+      "infinitive": "ligar",
+      "gloss": "bind"
+    },
+    {
+      "rank": 574,
+      "infinitive": "ascender",
+      "gloss": "ascend"
+    },
+    {
+      "rank": 575,
+      "infinitive": "llorar",
+      "gloss": "cry"
+    },
+    {
+      "rank": 576,
+      "infinitive": "interponer",
+      "gloss": "interpose"
+    },
+    {
+      "rank": 577,
+      "infinitive": "despedir",
+      "gloss": "dismiss"
+    },
+    {
+      "rank": 578,
+      "infinitive": "apropiar",
+      "gloss": "appropriate"
+    },
+    {
+      "rank": 579,
+      "infinitive": "habilitar",
+      "gloss": "enable"
+    },
+    {
+      "rank": 580,
+      "infinitive": "descartar",
+      "gloss": "discard"
+    },
+    {
+      "rank": 581,
+      "infinitive": "proveer",
+      "gloss": "provide"
+    },
+    {
+      "rank": 582,
+      "infinitive": "albergar",
+      "gloss": "house"
+    },
+    {
+      "rank": 583,
+      "infinitive": "juntar",
+      "gloss": "gather"
+    },
+    {
+      "rank": 584,
+      "infinitive": "gozar",
+      "gloss": "enjoy"
+    },
+    {
+      "rank": 585,
+      "infinitive": "aislar",
+      "gloss": "isolate"
+    },
+    {
+      "rank": 587,
+      "infinitive": "abarcar",
+      "gloss": "encompass"
+    },
+    {
+      "rank": 588,
+      "infinitive": "soñar",
+      "gloss": "dream"
+    },
+    {
+      "rank": 589,
+      "infinitive": "reproducir",
+      "gloss": "reproduce"
+    },
+    {
+      "rank": 590,
+      "infinitive": "emprender",
+      "gloss": "undertake"
+    },
+    {
+      "rank": 591,
+      "infinitive": "atrever",
+      "gloss": "dare"
+    },
+    {
+      "rank": 592,
+      "infinitive": "excluir",
+      "gloss": "exclude"
+    },
+    {
+      "rank": 593,
+      "infinitive": "concretar",
+      "gloss": "specify"
+    },
+    {
+      "rank": 594,
+      "infinitive": "sobrevivir",
+      "gloss": "survive"
+    },
+    {
+      "rank": 595,
+      "infinitive": "molestar",
+      "gloss": "bother"
+    },
+    {
+      "rank": 596,
+      "infinitive": "equipar",
+      "gloss": "equip"
+    },
+    {
+      "rank": 597,
+      "infinitive": "confundir",
+      "gloss": "confuse"
+    },
+    {
+      "rank": 598,
+      "infinitive": "suscribir",
+      "gloss": "subscribe"
+    },
+    {
+      "rank": 599,
+      "infinitive": "ocultar",
+      "gloss": "hide"
+    },
+    {
+      "rank": 600,
+      "infinitive": "girar",
+      "gloss": "turn"
+    },
+    {
+      "rank": 601,
+      "infinitive": "quemar",
+      "gloss": "burn"
+    },
+    {
+      "rank": 602,
+      "infinitive": "protagonizar",
+      "gloss": "star"
+    },
+    {
+      "rank": 603,
+      "infinitive": "dañar",
+      "gloss": "damage"
+    },
+    {
+      "rank": 604,
+      "infinitive": "explorar",
+      "gloss": "explore"
+    },
+    {
+      "rank": 605,
+      "infinitive": "habitar",
+      "gloss": "inhabit"
+    },
+    {
+      "rank": 606,
+      "infinitive": "explotar",
+      "gloss": "exploit"
+    },
+    {
+      "rank": 607,
+      "infinitive": "sonreír",
+      "gloss": "smile"
+    },
+    {
+      "rank": 608,
+      "infinitive": "derrotar",
+      "gloss": "defeat"
+    },
+    {
+      "rank": 609,
+      "infinitive": "resumir",
+      "gloss": "summarize"
+    },
+    {
+      "rank": 610,
+      "infinitive": "cansar",
+      "gloss": "tire"
+    },
+    {
+      "rank": 611,
+      "infinitive": "jamar",
+      "gloss": "scoff"
+    },
+    {
+      "rank": 612,
+      "infinitive": "forzar",
+      "gloss": "force"
+    },
+    {
+      "rank": 613,
+      "infinitive": "negociar",
+      "gloss": "negotiate"
+    },
+    {
+      "rank": 614,
+      "infinitive": "acelerar",
+      "gloss": "accelerate"
+    },
+    {
+      "rank": 615,
+      "infinitive": "renunciar",
+      "gloss": "resign"
+    },
+    {
+      "rank": 616,
+      "infinitive": "ocasionar",
+      "gloss": "cause"
+    },
+    {
+      "rank": 617,
+      "infinitive": "colgar",
+      "gloss": "hang"
+    },
+    {
+      "rank": 618,
+      "infinitive": "huir",
+      "gloss": "flee"
+    },
+    {
+      "rank": 619,
+      "infinitive": "encender",
+      "gloss": "light"
+    },
+    {
+      "rank": 620,
+      "infinitive": "examinar",
+      "gloss": "examine"
+    },
+    {
+      "rank": 621,
+      "infinitive": "marchar",
+      "gloss": "march"
+    },
+    {
+      "rank": 622,
+      "infinitive": "descansar",
+      "gloss": "rest"
+    },
+    {
+      "rank": 623,
+      "infinitive": "arreglar",
+      "gloss": "fix"
+    },
+    {
+      "rank": 624,
+      "infinitive": "presidir",
+      "gloss": "preside"
+    },
+    {
+      "rank": 625,
+      "infinitive": "planear",
+      "gloss": "plan"
+    },
+    {
+      "rank": 626,
+      "infinitive": "capturar",
+      "gloss": "capture"
+    },
+    {
+      "rank": 627,
+      "infinitive": "archivar",
+      "gloss": "file"
+    },
+    {
+      "rank": 628,
+      "infinitive": "fallar",
+      "gloss": "fail"
+    },
+    {
+      "rank": 629,
+      "infinitive": "regir",
+      "gloss": "govern"
+    },
+    {
+      "rank": 630,
+      "infinitive": "argumentar",
+      "gloss": "argue"
+    },
+    {
+      "rank": 631,
+      "infinitive": "potenciar",
+      "gloss": "boost"
+    },
+    {
+      "rank": 632,
+      "infinitive": "concebir",
+      "gloss": "conceive"
+    },
+    {
+      "rank": 633,
+      "infinitive": "avisar",
+      "gloss": "warn"
+    },
+    {
+      "rank": 634,
+      "infinitive": "prolongar",
+      "gloss": "prolong"
+    },
+    {
+      "rank": 635,
+      "infinitive": "residir",
+      "gloss": "reside"
+    },
+    {
+      "rank": 636,
+      "infinitive": "aconsejar",
+      "gloss": "advise"
+    },
+    {
+      "rank": 637,
+      "infinitive": "dorar",
+      "gloss": "brown"
+    },
+    {
+      "rank": 638,
+      "infinitive": "gritar",
+      "gloss": "shout"
+    },
+    {
+      "rank": 639,
+      "infinitive": "borrar",
+      "gloss": "erase"
+    },
+    {
+      "rank": 640,
+      "infinitive": "anticipar",
+      "gloss": "anticipate"
+    },
+    {
+      "rank": 641,
+      "infinitive": "bailar",
+      "gloss": "dance"
+    },
+    {
+      "rank": 642,
+      "infinitive": "reemplazar",
+      "gloss": "replace"
+    },
+    {
+      "rank": 643,
+      "infinitive": "resistir",
+      "gloss": "resist"
+    },
+    {
+      "rank": 644,
+      "infinitive": "complementar",
+      "gloss": "complement"
+    },
+    {
+      "rank": 645,
+      "infinitive": "imputar",
+      "gloss": "impute"
+    },
+    {
+      "rank": 646,
+      "infinitive": "rescatar",
+      "gloss": "rescue"
+    },
+    {
+      "rank": 647,
+      "infinitive": "alegar",
+      "gloss": "allege"
+    },
+    {
+      "rank": 648,
+      "infinitive": "reír",
+      "gloss": "laugh"
+    },
+    {
+      "rank": 650,
+      "infinitive": "paginar",
+      "gloss": "paginate"
+    },
+    {
+      "rank": 651,
+      "infinitive": "estimular",
+      "gloss": "stimulate"
+    },
+    {
+      "rank": 652,
+      "infinitive": "transportar",
+      "gloss": "transport"
+    },
+    {
+      "rank": 653,
+      "infinitive": "originar",
+      "gloss": "originate"
+    },
+    {
+      "rank": 654,
+      "infinitive": "almacenar",
+      "gloss": "store"
+    },
+    {
+      "rank": 655,
+      "infinitive": "lavar",
+      "gloss": "wash"
+    },
+    {
+      "rank": 656,
+      "infinitive": "educar",
+      "gloss": "educate"
+    },
+    {
+      "rank": 657,
+      "infinitive": "alterar",
+      "gloss": "alter"
+    },
+    {
+      "rank": 658,
+      "infinitive": "reflexionar",
+      "gloss": "reflect"
+    },
+    {
+      "rank": 659,
+      "infinitive": "herir",
+      "gloss": "wound"
+    },
+    {
+      "rank": 660,
+      "infinitive": "inventar",
+      "gloss": "invent"
+    },
+    {
+      "rank": 661,
+      "infinitive": "enamorar",
+      "gloss": "enamor"
+    },
+    {
+      "rank": 662,
+      "infinitive": "procesar",
+      "gloss": "prosecute, process"
+    },
+    {
+      "rank": 663,
+      "infinitive": "arrojar",
+      "gloss": "throw"
+    },
+    {
+      "rank": 664,
+      "infinitive": "transcurrir",
+      "gloss": "elapse"
+    },
+    {
+      "rank": 665,
+      "infinitive": "confesar",
+      "gloss": "confess"
+    },
+    {
+      "rank": 666,
+      "infinitive": "captar",
+      "gloss": "capture"
+    },
+    {
+      "rank": 667,
+      "infinitive": "aproximar",
+      "gloss": "approximate"
+    },
+    {
+      "rank": 668,
+      "infinitive": "depositar",
+      "gloss": "deposit"
+    },
+    {
+      "rank": 669,
+      "infinitive": "conllevar",
+      "gloss": "entail"
+    },
+    {
+      "rank": 670,
+      "infinitive": "procurar",
+      "gloss": "procure"
+    },
+    {
+      "rank": 671,
+      "infinitive": "pelear",
+      "gloss": "fight"
+    },
+    {
+      "rank": 672,
+      "infinitive": "frenar",
+      "gloss": "brake"
+    },
+    {
+      "rank": 673,
+      "infinitive": "evidenciar",
+      "gloss": "show"
+    },
+    {
+      "rank": 674,
+      "infinitive": "radicar",
+      "gloss": "reside"
+    },
+    {
+      "rank": 675,
+      "infinitive": "evolucionar",
+      "gloss": "evolve"
+    },
+    {
+      "rank": 676,
+      "infinitive": "soltar",
+      "gloss": "release"
+    },
+    {
+      "rank": 677,
+      "infinitive": "relatar",
+      "gloss": "recount"
+    },
+    {
+      "rank": 678,
+      "infinitive": "violar",
+      "gloss": "violate"
+    },
+    {
+      "rank": 679,
+      "infinitive": "relajar",
+      "gloss": "relax"
+    },
+    {
+      "rank": 680,
+      "infinitive": "bloquear",
+      "gloss": "block"
+    },
+    {
+      "rank": 681,
+      "infinitive": "debatir",
+      "gloss": "debate"
+    },
+    {
+      "rank": 682,
+      "infinitive": "profundizar",
+      "gloss": "deepen"
+    },
+    {
+      "rank": 683,
+      "infinitive": "cesar",
+      "gloss": "cease"
+    },
+    {
+      "rank": 684,
+      "infinitive": "apartar",
+      "gloss": "separate"
+    },
+    {
+      "rank": 685,
+      "infinitive": "exhibir",
+      "gloss": "exhibit"
+    },
+    {
+      "rank": 686,
+      "infinitive": "desplegar",
+      "gloss": "deploy"
+    },
+    {
+      "rank": 687,
+      "infinitive": "planificar",
+      "gloss": "plan"
+    },
+    {
+      "rank": 688,
+      "infinitive": "engañar",
+      "gloss": "deceive"
+    },
+    {
+      "rank": 689,
+      "infinitive": "capacitar",
+      "gloss": "train"
+    },
+    {
+      "rank": 690,
+      "infinitive": "ratificar",
+      "gloss": "ratify"
+    },
+    {
+      "rank": 691,
+      "infinitive": "cancelar",
+      "gloss": "cancel"
+    },
+    {
+      "rank": 692,
+      "infinitive": "desprender",
+      "gloss": "detach"
+    },
+    {
+      "rank": 693,
+      "infinitive": "quejar",
+      "gloss": "complain"
+    },
+    {
+      "rank": 694,
+      "infinitive": "apagar",
+      "gloss": "turn off"
+    },
+    {
+      "rank": 695,
+      "infinitive": "decorar",
+      "gloss": "decorate"
+    },
+    {
+      "rank": 696,
+      "infinitive": "atrapar",
+      "gloss": "trap"
+    },
+    {
+      "rank": 697,
+      "infinitive": "cultivar",
+      "gloss": "cultivate"
+    },
+    {
+      "rank": 698,
+      "infinitive": "presionar",
+      "gloss": "press"
+    },
+    {
+      "rank": 699,
+      "infinitive": "aguantar",
+      "gloss": "endure"
+    },
+    {
+      "rank": 700,
+      "infinitive": "cursar",
+      "gloss": "study"
+    },
+    {
+      "rank": 701,
+      "infinitive": "culminar",
+      "gloss": "culminate"
+    },
+    {
+      "rank": 702,
+      "infinitive": "dibujar",
+      "gloss": "draw"
+    },
+    {
+      "rank": 703,
+      "infinitive": "reaccionar",
+      "gloss": "react"
+    },
+    {
+      "rank": 704,
+      "infinitive": "retomar",
+      "gloss": "resume"
+    },
+    {
+      "rank": 705,
+      "infinitive": "agotar",
+      "gloss": "exhaust"
+    },
+    {
+      "rank": 706,
+      "infinitive": "cocinar",
+      "gloss": "cook"
+    },
+    {
+      "rank": 707,
+      "infinitive": "rodar",
+      "gloss": "roll"
+    },
+    {
+      "rank": 708,
+      "infinitive": "acondicionar",
+      "gloss": "condition"
+    },
+    {
+      "rank": 709,
+      "infinitive": "alegrar",
+      "gloss": "gladden"
+    },
+    {
+      "rank": 710,
+      "infinitive": "sancionar",
+      "gloss": "sanction"
+    },
+    {
+      "rank": 711,
+      "infinitive": "arrastrar",
+      "gloss": "drag"
+    },
+    {
+      "rank": 712,
+      "infinitive": "perdonar",
+      "gloss": "forgive"
+    },
+    {
+      "rank": 713,
+      "infinitive": "acertar",
+      "gloss": "guess right"
+    },
+    {
+      "rank": 714,
+      "infinitive": "premiar",
+      "gloss": "reward"
+    },
+    {
+      "rank": 715,
+      "infinitive": "reparar",
+      "gloss": "repair"
+    },
+    {
+      "rank": 716,
+      "infinitive": "portar",
+      "gloss": "carry"
+    },
+    {
+      "rank": 717,
+      "infinitive": "optimizar",
+      "gloss": "optimize"
+    },
+    {
+      "rank": 718,
+      "infinitive": "notificar",
+      "gloss": "notify"
+    },
+    {
+      "rank": 719,
+      "infinitive": "vengar",
+      "gloss": "avenge"
+    },
+    {
+      "rank": 721,
+      "infinitive": "aspirar",
+      "gloss": "aspire"
+    },
+    {
+      "rank": 722,
+      "infinitive": "lamentar",
+      "gloss": "regret"
+    },
+    {
+      "rank": 723,
+      "infinitive": "comercializar",
+      "gloss": "market"
+    },
+    {
+      "rank": 724,
+      "infinitive": "curar",
+      "gloss": "cure"
+    },
+    {
+      "rank": 725,
+      "infinitive": "consagrar",
+      "gloss": "consecrate"
+    },
+    {
+      "rank": 726,
+      "infinitive": "respaldar",
+      "gloss": "back"
+    },
+    {
+      "rank": 727,
+      "infinitive": "narrar",
+      "gloss": "narrate"
+    },
+    {
+      "rank": 728,
+      "infinitive": "ilustrar",
+      "gloss": "illustrate"
+    },
+    {
+      "rank": 729,
+      "infinitive": "timar",
+      "gloss": "swindle"
+    },
+    {
+      "rank": 730,
+      "infinitive": "descender",
+      "gloss": "descend"
+    },
+    {
+      "rank": 731,
+      "infinitive": "iluminar",
+      "gloss": "illuminate"
+    },
+    {
+      "rank": 732,
+      "infinitive": "concurrir",
+      "gloss": "converge"
+    },
+    {
+      "rank": 733,
+      "infinitive": "sustentar",
+      "gloss": "sustain"
+    },
+    {
+      "rank": 734,
+      "infinitive": "abonar",
+      "gloss": "fertilize"
+    },
+    {
+      "rank": 735,
+      "infinitive": "expulsar",
+      "gloss": "expel"
+    },
+    {
+      "rank": 736,
+      "infinitive": "felicitar",
+      "gloss": "congratulate"
+    },
+    {
+      "rank": 737,
+      "infinitive": "copiar",
+      "gloss": "copy"
+    },
+    {
+      "rank": 738,
+      "infinitive": "suministrar",
+      "gloss": "supply"
+    },
+    {
+      "rank": 739,
+      "infinitive": "constatar",
+      "gloss": "verify"
+    },
+    {
+      "rank": 740,
+      "infinitive": "perjudicar",
+      "gloss": "harm"
+    },
+    {
+      "rank": 741,
+      "infinitive": "propiciar",
+      "gloss": "foster"
+    },
+    {
+      "rank": 742,
+      "infinitive": "conquistar",
+      "gloss": "conquer"
+    },
+    {
+      "rank": 743,
+      "infinitive": "embarazar",
+      "gloss": "impregnate"
+    },
+    {
+      "rank": 744,
+      "infinitive": "doler",
+      "gloss": "hurt"
+    },
+    {
+      "rank": 745,
+      "infinitive": "tramitar",
+      "gloss": "process"
+    },
+    {
+      "rank": 747,
+      "infinitive": "envolver",
+      "gloss": "wrap"
+    },
+    {
+      "rank": 748,
+      "infinitive": "moderar",
+      "gloss": "moderate"
+    },
+    {
+      "rank": 749,
+      "infinitive": "agrupar",
+      "gloss": "group"
+    },
+    {
+      "rank": 750,
+      "infinitive": "encerrar",
+      "gloss": "lock up"
+    },
+    {
+      "rank": 751,
+      "infinitive": "generalizar",
+      "gloss": "generalize"
+    },
+    {
+      "rank": 752,
+      "infinitive": "aludir",
+      "gloss": "allude"
+    },
+    {
+      "rank": 753,
+      "infinitive": "diagnosticar",
+      "gloss": "diagnose"
+    },
+    {
+      "rank": 754,
+      "infinitive": "maquinar",
+      "gloss": "scheme"
+    },
+    {
+      "rank": 755,
+      "infinitive": "numerar",
+      "gloss": "number"
+    },
+    {
+      "rank": 756,
+      "infinitive": "posicionar",
+      "gloss": "position"
+    },
+    {
+      "rank": 757,
+      "infinitive": "pasear",
+      "gloss": "stroll"
+    },
+    {
+      "rank": 758,
+      "infinitive": "apretar",
+      "gloss": "tighten"
+    },
+    {
+      "rank": 759,
+      "infinitive": "agarrar",
+      "gloss": "grab"
+    },
+    {
+      "rank": 761,
+      "infinitive": "atar",
+      "gloss": "tie"
+    },
+    {
+      "rank": 762,
+      "infinitive": "deducir",
+      "gloss": "deduce"
+    },
+    {
+      "rank": 763,
+      "infinitive": "entrevistar",
+      "gloss": "interview"
+    },
+    {
+      "rank": 764,
+      "infinitive": "equilibrar",
+      "gloss": "balance"
+    },
+    {
+      "rank": 765,
+      "infinitive": "respirar",
+      "gloss": "breathe"
+    },
+    {
+      "rank": 766,
+      "infinitive": "pulsar",
+      "gloss": "press"
+    },
+    {
+      "rank": 767,
+      "infinitive": "compensar",
+      "gloss": "compensate"
+    },
+    {
+      "rank": 768,
+      "infinitive": "navegar",
+      "gloss": "navigate"
+    },
+    {
+      "rank": 769,
+      "infinitive": "expedir",
+      "gloss": "dispatch"
+    },
+    {
+      "rank": 770,
+      "infinitive": "salar",
+      "gloss": "salt"
+    },
+    {
+      "rank": 771,
+      "infinitive": "enriquecer",
+      "gloss": "enrich"
+    },
+    {
+      "rank": 772,
+      "infinitive": "transitar",
+      "gloss": "travel"
+    },
+    {
+      "rank": 773,
+      "infinitive": "interrumpir",
+      "gloss": "interrupt"
+    },
+    {
+      "rank": 774,
+      "infinitive": "alzar",
+      "gloss": "raise"
+    },
+    {
+      "rank": 776,
+      "infinitive": "multiplicar",
+      "gloss": "multiply"
+    },
+    {
+      "rank": 777,
+      "infinitive": "tapar",
+      "gloss": "cover"
+    },
+    {
+      "rank": 778,
+      "infinitive": "empujar",
+      "gloss": "push"
+    },
+    {
+      "rank": 779,
+      "infinitive": "enlazar",
+      "gloss": "link"
+    },
+    {
+      "rank": 780,
+      "infinitive": "comportar",
+      "gloss": "behave"
+    },
+    {
+      "rank": 781,
+      "infinitive": "fluir",
+      "gloss": "flow"
+    },
+    {
+      "rank": 782,
+      "infinitive": "aburrir",
+      "gloss": "bore"
+    },
+    {
+      "rank": 783,
+      "infinitive": "alquilar",
+      "gloss": "rent"
+    },
+    {
+      "rank": 784,
+      "infinitive": "rodrigar",
+      "gloss": "stake"
+    },
+    {
+      "rank": 785,
+      "infinitive": "restar",
+      "gloss": "subtract"
+    },
+    {
+      "rank": 786,
+      "infinitive": "absorber",
+      "gloss": "absorb"
+    },
+    {
+      "rank": 787,
+      "infinitive": "entretener",
+      "gloss": "entertain"
+    },
+    {
+      "rank": 788,
+      "infinitive": "transferir",
+      "gloss": "transfer"
+    },
+    {
+      "rank": 789,
+      "infinitive": "expandir",
+      "gloss": "expand"
+    },
+    {
+      "rank": 790,
+      "infinitive": "castigar",
+      "gloss": "punish"
+    },
+    {
+      "rank": 791,
+      "infinitive": "extrañar",
+      "gloss": "miss"
+    },
+    {
+      "rank": 792,
+      "infinitive": "alojar",
+      "gloss": "lodge"
+    },
+    {
+      "rank": 793,
+      "infinitive": "vigilar",
+      "gloss": "watch"
+    },
+    {
+      "rank": 794,
+      "infinitive": "impugnar",
+      "gloss": "contest"
+    },
+    {
+      "rank": 795,
+      "infinitive": "documentar",
+      "gloss": "document"
+    },
+    {
+      "rank": 796,
+      "infinitive": "convivir",
+      "gloss": "coexist"
+    },
+    {
+      "rank": 797,
+      "infinitive": "admirar",
+      "gloss": "admire"
+    },
+    {
+      "rank": 798,
+      "infinitive": "manipular",
+      "gloss": "manipulate"
+    },
+    {
+      "rank": 799,
+      "infinitive": "enmarcar",
+      "gloss": "frame"
+    },
+    {
+      "rank": 800,
+      "infinitive": "restringir",
+      "gloss": "restrict"
+    },
+    {
+      "rank": 801,
+      "infinitive": "anular",
+      "gloss": "annul"
+    },
+    {
+      "rank": 802,
+      "infinitive": "estructurar",
+      "gloss": "structure"
+    },
+    {
+      "rank": 803,
+      "infinitive": "retener",
+      "gloss": "retain"
+    },
+    {
+      "rank": 804,
+      "infinitive": "preservar",
+      "gloss": "preserve"
+    },
+    {
+      "rank": 805,
+      "infinitive": "fumar",
+      "gloss": "smoke"
+    },
+    {
+      "rank": 806,
+      "infinitive": "impactar",
+      "gloss": "impact"
+    },
+    {
+      "rank": 807,
+      "infinitive": "donar",
+      "gloss": "donate"
+    },
+    {
+      "rank": 808,
+      "infinitive": "promocionar",
+      "gloss": "promote"
+    },
+    {
+      "rank": 809,
+      "infinitive": "incidir",
+      "gloss": "affect"
+    },
+    {
+      "rank": 810,
+      "infinitive": "charlar",
+      "gloss": "chat"
+    },
+    {
+      "rank": 811,
+      "infinitive": "redactar",
+      "gloss": "draft"
+    },
+    {
+      "rank": 812,
+      "infinitive": "condicionar",
+      "gloss": "condition"
+    },
+    {
+      "rank": 813,
+      "infinitive": "arriesgar",
+      "gloss": "risk"
+    },
+    {
+      "rank": 814,
+      "infinitive": "saludar",
+      "gloss": "greet"
+    },
+    {
+      "rank": 815,
+      "infinitive": "privilegiar",
+      "gloss": "favor"
+    },
+    {
+      "rank": 816,
+      "infinitive": "abrazar",
+      "gloss": "hug"
+    },
+    {
+      "rank": 817,
+      "infinitive": "visualizar",
+      "gloss": "visualize"
+    },
+    {
+      "rank": 818,
+      "infinitive": "inclinar",
+      "gloss": "tilt"
+    },
+    {
+      "rank": 819,
+      "infinitive": "avalar",
+      "gloss": "guarantee"
+    },
+    {
+      "rank": 820,
+      "infinitive": "accionar",
+      "gloss": "activate"
+    },
+    {
+      "rank": 821,
+      "infinitive": "asentar",
+      "gloss": "settle"
+    },
+    {
+      "rank": 822,
+      "infinitive": "asustar",
+      "gloss": "frighten"
+    },
+    {
+      "rank": 823,
+      "infinitive": "proclamar",
+      "gloss": "proclaim"
+    },
+    {
+      "rank": 824,
+      "infinitive": "movilizar",
+      "gloss": "mobilize"
+    },
+    {
+      "rank": 825,
+      "infinitive": "remontar",
+      "gloss": "go back"
+    },
+    {
+      "rank": 826,
+      "infinitive": "obedecer",
+      "gloss": "obey"
+    },
+    {
+      "rank": 827,
+      "infinitive": "invadir",
+      "gloss": "invade"
+    },
+    {
+      "rank": 828,
+      "infinitive": "exportar",
+      "gloss": "export"
+    },
+    {
+      "rank": 829,
+      "infinitive": "enfatizar",
+      "gloss": "emphasize"
+    },
+    {
+      "rank": 830,
+      "infinitive": "adjudicar",
+      "gloss": "award"
+    },
+    {
+      "rank": 831,
+      "infinitive": "callar",
+      "gloss": "hush"
+    },
+    {
+      "rank": 832,
+      "infinitive": "conversar",
+      "gloss": "converse"
+    },
+    {
+      "rank": 833,
+      "infinitive": "plasmar",
+      "gloss": "embody"
+    },
+    {
+      "rank": 834,
+      "infinitive": "invocar",
+      "gloss": "invoke"
+    },
+    {
+      "rank": 835,
+      "infinitive": "sembrar",
+      "gloss": "sow"
+    },
+    {
+      "rank": 836,
+      "infinitive": "restaurar",
+      "gloss": "restore"
+    },
+    {
+      "rank": 837,
+      "infinitive": "fundamentar",
+      "gloss": "base"
+    },
+    {
+      "rank": 838,
+      "infinitive": "pactar",
+      "gloss": "agree"
+    },
+    {
+      "rank": 839,
+      "infinitive": "hundir",
+      "gloss": "sink"
+    },
+    {
+      "rank": 840,
+      "infinitive": "secuestrar",
+      "gloss": "kidnap"
+    },
+    {
+      "rank": 841,
+      "infinitive": "posibilitar",
+      "gloss": "enable"
+    },
+    {
+      "rank": 842,
+      "infinitive": "egresar",
+      "gloss": "graduate"
+    },
+    {
+      "rank": 843,
+      "infinitive": "calentar",
+      "gloss": "heat"
+    },
+    {
+      "rank": 844,
+      "infinitive": "plantar",
+      "gloss": "plant"
+    },
+    {
+      "rank": 845,
+      "infinitive": "insertar",
+      "gloss": "insert"
+    },
+    {
+      "rank": 846,
+      "infinitive": "besar",
+      "gloss": "kiss"
+    },
+    {
+      "rank": 847,
+      "infinitive": "contraer",
+      "gloss": "contract"
+    },
+    {
+      "rank": 848,
+      "infinitive": "implantar",
+      "gloss": "implant"
+    },
+    {
+      "rank": 849,
+      "infinitive": "librar",
+      "gloss": "free"
+    },
+    {
+      "rank": 850,
+      "infinitive": "incurrir",
+      "gloss": "incur"
+    },
+    {
+      "rank": 851,
+      "infinitive": "reformar",
+      "gloss": "reform"
+    },
+    {
+      "rank": 852,
+      "infinitive": "intercambiar",
+      "gloss": "exchange"
+    },
+    {
+      "rank": 853,
+      "infinitive": "chocar",
+      "gloss": "collide"
+    },
+    {
+      "rank": 854,
+      "infinitive": "adherir",
+      "gloss": "adhere"
+    },
+    {
+      "rank": 855,
+      "infinitive": "jurar",
+      "gloss": "swear"
+    },
+    {
+      "rank": 856,
+      "infinitive": "desviar",
+      "gloss": "divert"
+    },
+    {
+      "rank": 857,
+      "infinitive": "morar",
+      "gloss": "dwell"
+    },
+    {
+      "rank": 858,
+      "infinitive": "dialogar",
+      "gloss": "converse"
+    },
+    {
+      "rank": 859,
+      "infinitive": "licenciar",
+      "gloss": "discharge"
+    },
+    {
+      "rank": 861,
+      "infinitive": "encajar",
+      "gloss": "fit"
+    },
+    {
+      "rank": 862,
+      "infinitive": "encaminar",
+      "gloss": "direct"
+    },
+    {
+      "rank": 863,
+      "infinitive": "emocionar",
+      "gloss": "move"
+    },
+    {
+      "rank": 864,
+      "infinitive": "asesorar",
+      "gloss": "advise"
+    },
+    {
+      "rank": 865,
+      "infinitive": "presumir",
+      "gloss": "presume"
+    },
+    {
+      "rank": 866,
+      "infinitive": "odiar",
+      "gloss": "hate"
+    },
+    {
+      "rank": 867,
+      "infinitive": "instar",
+      "gloss": "urge"
+    },
+    {
+      "rank": 869,
+      "infinitive": "nominar",
+      "gloss": "nominate"
+    },
+    {
+      "rank": 870,
+      "infinitive": "contaminar",
+      "gloss": "contaminate"
+    },
+    {
+      "rank": 871,
+      "infinitive": "ejercitar",
+      "gloss": "exercise"
+    },
+    {
+      "rank": 872,
+      "infinitive": "recaudar",
+      "gloss": "collect"
+    },
+    {
+      "rank": 873,
+      "infinitive": "sobrar",
+      "gloss": "be left over"
+    },
+    {
+      "rank": 874,
+      "infinitive": "apelar",
+      "gloss": "appeal"
+    },
+    {
+      "rank": 875,
+      "infinitive": "congelar",
+      "gloss": "freeze"
+    },
+    {
+      "rank": 876,
+      "infinitive": "postular",
+      "gloss": "postulate"
+    },
+    {
+      "rank": 877,
+      "infinitive": "rezar",
+      "gloss": "pray"
+    },
+    {
+      "rank": 878,
+      "infinitive": "cotizar",
+      "gloss": "quote"
+    },
+    {
+      "rank": 879,
+      "infinitive": "acomodar",
+      "gloss": "accommodate"
+    },
+    {
+      "rank": 881,
+      "infinitive": "picar",
+      "gloss": "sting"
+    },
+    {
+      "rank": 882,
+      "infinitive": "inducir",
+      "gloss": "induce"
+    },
+    {
+      "rank": 883,
+      "infinitive": "fundir",
+      "gloss": "melt"
+    },
+    {
+      "rank": 884,
+      "infinitive": "interactuar",
+      "gloss": "interact"
+    },
+    {
+      "rank": 885,
+      "infinitive": "datar",
+      "gloss": "date"
+    },
+    {
+      "rank": 886,
+      "infinitive": "exceder",
+      "gloss": "exceed"
+    },
+    {
+      "rank": 887,
+      "infinitive": "esforzar",
+      "gloss": "strain"
+    },
+    {
+      "rank": 889,
+      "infinitive": "apasionar",
+      "gloss": "excite"
+    },
+    {
+      "rank": 890,
+      "infinitive": "trazar",
+      "gloss": "trace"
+    },
+    {
+      "rank": 891,
+      "infinitive": "enterrar",
+      "gloss": "bury"
+    },
+    {
+      "rank": 892,
+      "infinitive": "vulnerar",
+      "gloss": "violate"
+    },
+    {
+      "rank": 893,
+      "infinitive": "brillar",
+      "gloss": "shine"
+    },
+    {
+      "rank": 894,
+      "infinitive": "mentir",
+      "gloss": "lie"
+    },
+    {
+      "rank": 895,
+      "infinitive": "igualar",
+      "gloss": "equalize"
+    },
+    {
+      "rank": 896,
+      "infinitive": "recortar",
+      "gloss": "trim"
+    },
+    {
+      "rank": 897,
+      "infinitive": "aliviar",
+      "gloss": "relieve"
+    },
+    {
+      "rank": 898,
+      "infinitive": "contrastar",
+      "gloss": "contrast"
+    },
+    {
+      "rank": 899,
+      "infinitive": "desesperar",
+      "gloss": "despair"
+    },
+    {
+      "rank": 900,
+      "infinitive": "debutar",
+      "gloss": "debut"
+    },
+    {
+      "rank": 901,
+      "infinitive": "liquidar",
+      "gloss": "liquidate"
+    },
+    {
+      "rank": 902,
+      "infinitive": "averiguar",
+      "gloss": "ascertain"
+    },
+    {
+      "rank": 903,
+      "infinitive": "supervisar",
+      "gloss": "supervise"
+    },
+    {
+      "rank": 904,
+      "infinitive": "sospechar",
+      "gloss": "suspect"
+    },
+    {
+      "rank": 905,
+      "infinitive": "minimizar",
+      "gloss": "minimize"
+    },
+    {
+      "rank": 906,
+      "infinitive": "fracasar",
+      "gloss": "fail"
+    },
+    {
+      "rank": 907,
+      "infinitive": "duplicar",
+      "gloss": "duplicate"
+    },
+    {
+      "rank": 908,
+      "infinitive": "heredar",
+      "gloss": "inherit"
+    },
+    {
+      "rank": 909,
+      "infinitive": "deshacer",
+      "gloss": "undo"
+    },
+    {
+      "rank": 910,
+      "infinitive": "trascender",
+      "gloss": "transcend"
+    },
+    {
+      "rank": 911,
+      "infinitive": "doblar",
+      "gloss": "fold"
+    },
+    {
+      "rank": 912,
+      "infinitive": "remarcar",
+      "gloss": "emphasize"
+    },
+    {
+      "rank": 913,
+      "infinitive": "alargar",
+      "gloss": "lengthen"
+    },
+    {
+      "rank": 914,
+      "infinitive": "reconstruir",
+      "gloss": "rebuild"
+    },
+    {
+      "rank": 915,
+      "infinitive": "unificar",
+      "gloss": "unify"
+    },
+    {
+      "rank": 916,
+      "infinitive": "alertar",
+      "gloss": "alert"
+    },
+    {
+      "rank": 917,
+      "infinitive": "pillar",
+      "gloss": "catch"
+    },
+    {
+      "rank": 918,
+      "infinitive": "recaer",
+      "gloss": "relapse"
+    },
+    {
+      "rank": 919,
+      "infinitive": "agravar",
+      "gloss": "aggravate"
+    },
+    {
+      "rank": 920,
+      "infinitive": "sumergir",
+      "gloss": "submerge"
+    },
+    {
+      "rank": 921,
+      "infinitive": "retrasar",
+      "gloss": "delay"
+    },
+    {
+      "rank": 922,
+      "infinitive": "filtrar",
+      "gloss": "filter"
+    },
+    {
+      "rank": 923,
+      "infinitive": "triunfar",
+      "gloss": "triumph"
+    },
+    {
+      "rank": 924,
+      "infinitive": "desatar",
+      "gloss": "untie"
+    },
+    {
+      "rank": 925,
+      "infinitive": "consignar",
+      "gloss": "consign"
+    },
+    {
+      "rank": 926,
+      "infinitive": "amparar",
+      "gloss": "protect"
+    },
+    {
+      "rank": 927,
+      "infinitive": "bendecir",
+      "gloss": "bless"
+    },
+    {
+      "rank": 928,
+      "infinitive": "recopilar",
+      "gloss": "compile"
+    },
+    {
+      "rank": 929,
+      "infinitive": "dificultar",
+      "gloss": "hinder"
+    },
+    {
+      "rank": 930,
+      "infinitive": "criar",
+      "gloss": "raise"
+    },
+    {
+      "rank": 931,
+      "infinitive": "pisar",
+      "gloss": "step"
+    },
+    {
+      "rank": 932,
+      "infinitive": "penetrar",
+      "gloss": "penetrate"
+    },
+    {
+      "rank": 933,
+      "infinitive": "catalogar",
+      "gloss": "catalog"
+    },
+    {
+      "rank": 934,
+      "infinitive": "medicar",
+      "gloss": "medicate"
+    },
+    {
+      "rank": 935,
+      "infinitive": "secar",
+      "gloss": "dry"
+    },
+    {
+      "rank": 936,
+      "infinitive": "recalcar",
+      "gloss": "stress"
+    },
+    {
+      "rank": 937,
+      "infinitive": "velar",
+      "gloss": "watch over"
+    },
+    {
+      "rank": 938,
+      "infinitive": "suprimir",
+      "gloss": "suppress"
+    },
+    {
+      "rank": 939,
+      "infinitive": "quebrar",
+      "gloss": "break"
+    },
+    {
+      "rank": 940,
+      "infinitive": "graduar",
+      "gloss": "graduate"
+    },
+    {
+      "rank": 941,
+      "infinitive": "batir",
+      "gloss": "beat"
+    },
+    {
+      "rank": 942,
+      "infinitive": "conferir",
+      "gloss": "confer"
+    },
+    {
+      "rank": 943,
+      "infinitive": "rellenar",
+      "gloss": "fill"
+    },
+    {
+      "rank": 944,
+      "infinitive": "exagerar",
+      "gloss": "exaggerate"
+    },
+    {
+      "rank": 945,
+      "infinitive": "nutrir",
+      "gloss": "nourish"
+    },
+    {
+      "rank": 946,
+      "infinitive": "reivindicar",
+      "gloss": "claim"
+    },
+    {
+      "rank": 947,
+      "infinitive": "lesionar",
+      "gloss": "injure"
+    },
+    {
+      "rank": 948,
+      "infinitive": "oler",
+      "gloss": "smell"
+    },
+    {
+      "rank": 949,
+      "infinitive": "desestimar",
+      "gloss": "reject"
+    },
+    {
+      "rank": 950,
+      "infinitive": "posar",
+      "gloss": "pose"
+    },
+    {
+      "rank": 951,
+      "infinitive": "mojar",
+      "gloss": "wet"
+    },
+    {
+      "rank": 952,
+      "infinitive": "infectar",
+      "gloss": "infect"
+    },
+    {
+      "rank": 953,
+      "infinitive": "adorar",
+      "gloss": "adore"
+    },
+    {
+      "rank": 954,
+      "infinitive": "decretar",
+      "gloss": "decree"
+    },
+    {
+      "rank": 955,
+      "infinitive": "diferir",
+      "gloss": "differ"
+    },
+    {
+      "rank": 956,
+      "infinitive": "enumerar",
+      "gloss": "enumerate"
+    },
+    {
+      "rank": 957,
+      "infinitive": "arribar",
+      "gloss": "arrive"
+    },
+    {
+      "rank": 958,
+      "infinitive": "imitar",
+      "gloss": "imitate"
+    },
+    {
+      "rank": 959,
+      "infinitive": "simplificar",
+      "gloss": "simplify"
+    },
+    {
+      "rank": 960,
+      "infinitive": "suscitar",
+      "gloss": "provoke"
+    },
+    {
+      "rank": 961,
+      "infinitive": "sentenciar",
+      "gloss": "sentence"
+    },
+    {
+      "rank": 962,
+      "infinitive": "equivaler",
+      "gloss": "equal"
+    },
+    {
+      "rank": 963,
+      "infinitive": "laborar",
+      "gloss": "work"
+    },
+    {
+      "rank": 964,
+      "infinitive": "sellar",
+      "gloss": "seal"
+    },
+    {
+      "rank": 965,
+      "infinitive": "adentrar",
+      "gloss": "go into"
+    },
+    {
+      "rank": 966,
+      "infinitive": "disolver",
+      "gloss": "dissolve"
+    },
+    {
+      "rank": 967,
+      "infinitive": "repasar",
+      "gloss": "review"
+    },
+    {
+      "rank": 968,
+      "infinitive": "ofender",
+      "gloss": "offend"
+    },
+    {
+      "rank": 969,
+      "infinitive": "ostentar",
+      "gloss": "flaunt"
+    },
+    {
+      "rank": 970,
+      "infinitive": "respectar",
+      "gloss": "concern"
+    },
+    {
+      "rank": 971,
+      "infinitive": "empatar",
+      "gloss": "tie"
+    },
+    {
+      "rank": 972,
+      "infinitive": "tornar",
+      "gloss": "return"
+    },
+    {
+      "rank": 973,
+      "infinitive": "alentar",
+      "gloss": "encourage"
+    },
+    {
+      "rank": 974,
+      "infinitive": "visar",
+      "gloss": "endorse"
+    },
+    {
+      "rank": 975,
+      "infinitive": "morder",
+      "gloss": "bite"
+    },
+    {
+      "rank": 976,
+      "infinitive": "reciclar",
+      "gloss": "recycle"
+    },
+    {
+      "rank": 977,
+      "infinitive": "puntualizar",
+      "gloss": "specify"
+    },
+    {
+      "rank": 978,
+      "infinitive": "sacrificar",
+      "gloss": "sacrifice"
+    },
+    {
+      "rank": 979,
+      "infinitive": "calmar",
+      "gloss": "calm"
+    },
+    {
+      "rank": 980,
+      "infinitive": "bautizar",
+      "gloss": "baptize"
+    },
+    {
+      "rank": 981,
+      "infinitive": "protestar",
+      "gloss": "protest"
+    },
+    {
+      "rank": 982,
+      "infinitive": "disculpar",
+      "gloss": "excuse"
+    },
+    {
+      "rank": 983,
+      "infinitive": "estallar",
+      "gloss": "explode"
+    },
+    {
+      "rank": 984,
+      "infinitive": "paralizar",
+      "gloss": "paralyze"
+    },
+    {
+      "rank": 985,
+      "infinitive": "adir",
+      "gloss": "accept inheritance"
+    },
+    {
+      "rank": 986,
+      "infinitive": "incumplir",
+      "gloss": "breach"
+    },
+    {
+      "rank": 987,
+      "infinitive": "revertir",
+      "gloss": "revert"
+    },
+    {
+      "rank": 988,
+      "infinitive": "honrar",
+      "gloss": "honor"
+    },
+    {
+      "rank": 989,
+      "infinitive": "incentivar",
+      "gloss": "incentivize"
+    },
+    {
+      "rank": 990,
+      "infinitive": "volcar",
+      "gloss": "overturn"
+    },
+    {
+      "rank": 991,
+      "infinitive": "sujetar",
+      "gloss": "hold"
+    },
+    {
+      "rank": 992,
+      "infinitive": "alinear",
+      "gloss": "align"
+    },
+    {
+      "rank": 993,
+      "infinitive": "debilitar",
+      "gloss": "weaken"
+    },
+    {
+      "rank": 994,
+      "infinitive": "salgar",
+      "gloss": "salt livestock"
+    },
+    {
+      "rank": 995,
+      "infinitive": "coronar",
+      "gloss": "crown"
+    },
+    {
+      "rank": 996,
+      "infinitive": "verter",
+      "gloss": "pour"
+    },
+    {
+      "rank": 997,
+      "infinitive": "llover",
+      "gloss": "rain"
+    },
+    {
+      "rank": 998,
+      "infinitive": "validar",
+      "gloss": "validate"
+    },
+    {
+      "rank": 999,
+      "infinitive": "seriar",
+      "gloss": "mass-produce"
+    },
+    {
+      "rank": 1000,
+      "infinitive": "desvelar",
+      "gloss": "reveal"
+    }
+  ]
+}

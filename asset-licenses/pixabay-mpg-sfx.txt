@@ -1,0 +1,39 @@
+Assets:   Conjugar/Audio/guitarStrum.mp3, zombieGroan.mp3, stampede.mp3,
+          speedWhoosh.mp3, lightsOut.mp3
+          (the "La Subida" main-game SFX pack — La Serenata power-up strum, the
+          zombie-attack announcement groan, the El Encierro stampede bed, the speed
+          power-up whoosh, and the El Apagón lights-cut cue)
+Source:   Downloaded from Pixabay Sound Effects — https://pixabay.com/sound-effects/
+License:  Pixabay Content License — https://pixabay.com/service/license-summary/
+          Commercial use permitted; NO attribution required. Only restriction:
+          don't redistribute the raw sound file as a standalone download (embedding
+          it in the app satisfies this).
+
+Per-file provenance (Pixabay sound-effect id · uploader · original title):
+
+  guitarStrum.mp3   86108  · freesound_community · "intro_flameco3"
+                    https://pixabay.com/sound-effects/musical-intro-flameco3-86108/
+                    Opening rasgueado trimmed to ~2.3 s.
+  zombieGroan.mp3   450451 · DRAGON-STUDIO · "Zombie Groan SFX"
+                    https://pixabay.com/sound-effects/horror-zombie-groan-sfx-450451/
+  stampede.mp3      359257 · PWLPL · "Horses Galloping Sound Effect"
+                    https://pixabay.com/sound-effects/nature-horses-galloping-sound-effect-359257/
+                    ~4 s gallop bed (from 1.0 s, faded in/out) for the El Encierro window.
+  speedWhoosh.mp3   118248 · StudioKolomna · "Fast Whoosh"
+                    https://pixabay.com/sound-effects/film-special-effects-fast-whoosh-118248/
+  lightsOut.mp3     48657  · freesound_community · "Turning down power"
+                    https://pixabay.com/sound-effects/film-special-effects-turning-down-power-48657/
+                    Trimmed to ~1.6 s; a quiet source, heavily gained to match the pack.
+
+Auditioned alternates (in audio-sources/pixabay-mpg/, NOT shipped): 299648
+          (AhmadMousaviPour · "4)Soleá Rasgueado"), 95051 (freesound_community ·
+          "Zombie Groan"), 102046 (freesound_community · "Horses Galloping"), 352855
+          (Universfield · "Fast Swoosh 02"), 386180 (DRAGON-STUDIO · "Power Off").
+          All five shipped files use the PRIMARY pick; no alternate was substituted.
+
+Processing: Each source mp3 was trimmed to its transient, faded, peak-normalized to
+          -1 dBFS, and re-encoded to 192 kb/s / 44.1 kHz stereo MP3 (ffmpeg). The
+          raw downloads are not committed; only the processed pack ships.
+
+Reuse:    Bundled as game SFX. No attribution legally required; the app's Credits
+          screen ("Game Sounds") includes a courtesy note.

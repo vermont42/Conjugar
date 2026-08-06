@@ -1,0 +1,43 @@
+Asset:    "Matador - Bullfighter Rigged" (game matador / goal-figure mesh)
+Source:   CGTrader — https://www.cgtrader.com/3d-models/character/fantasy-character/matador-bullfighter-rigged
+Model ID: #5905689
+Author:   vfxsinghbu
+License:  CGTrader Royalty Free License (no AI)
+Price:    $42.50 (Weekend Sale, -50% from $85.00), purchased 2026-07-12
+Formats:  OBJ / BLEND / DAE / C4D / GLTF / FBX (+ textures)
+Base:     Daz Genesis 8 Male — the underlying figure the matador is built on.
+
+Usage rights (CGTrader Royalty Free License):
+  - May be embedded in and distributed as part of a commercial product
+    (here: the Conjugar iOS app, rendered to 2D sprites), royalty-free.
+  - May NOT be resold or redistributed as a standalone 3D asset.
+
+  Genesis-8 note: the base figure is Daz Genesis 8 Male, whose EULA restricts
+  redistribution of the 3D mesh but permits 2D renders of it. Our use — render
+  the posed model to a single flat sprite baked into the app binary — is the
+  least-risk use and matches the dancer precedent: the 3D mesh is NEVER
+  redistributed in a usable form; only the rendered 2D PNG ships.
+
+Geometry / prep:
+  The matador is the kidnapped bullfighter — a STATIC one-frame goal figure that
+  stands beside the bull on the game's top platform. tools/blender/gen_matador.py
+  cleans the raw purchase (drops ~25 junk objects + the cape, hides the heavy
+  vendor hair), CLEARS the Daz IK constraints and poses the arms hands-on-hips in
+  pure FK, and repositions/scales the montera onto the head, producing
+  source/matador_posed.blend. That is rendered front-on (--view back = the FACE;
+  the Genesis-8 model faces -Y) via tools/blender/render_sprites.py with the new
+  --matador per-garment cel mode (MATADOR_MESH_COLORS: jacket/pants = blue,
+  vest/hat = gold, socks = pink, shoes = dark-red = the bull's hoof color, shirt =
+  cream, body = skin) + --toon + --outline at --size 512, then union-cropped by
+  pack_or_rename.sh to Conjugar/Assets.xcassets/Game/matador.imageset (188x452).
+
+Reuse / animation:
+  The mesh is fully rigged and animatable — a future animated matador would
+  restore/drive the Daz IK targets (lHand_IK / rHand_IK) or hand-key FK like the
+  dancer (gen_dancer_action.py), then render N frames through render_sprites.py
+  --matador. Today he is a single static frame.
+
+Raw BLEND/FBX/RAR-textures kept git-ignored under tools/blender/source/ (only the
+rendered PNG + this license file are committed), per the spike's asset-handling
+rule. This repo is public/AGPL and ships only the rendered 2D sprite, not the raw
+3D asset.
