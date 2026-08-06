@@ -244,6 +244,9 @@ ConjugarTests/
 docs/
 ├── project-structure.md        # This file — annotated directory tree
 ├── blog_notes.md               # Work journal: dated narrative notes for future blog posts and session memory
+├── game.md                     # Toreo por Amor: La Subida, La Llamada, the Music enum, debug deeplinks and env vars
+├── onboarding.md               # The first-launch welcome tour: sheets, presentation, kill switch, music
+├── conjugation-tutor.md        # The on-device AI tutor: grounding tool, prompts, availability, TutorTestView
 ├── conjugar-ui-issues.md       # The mapped UI audit that drove the SwiftUI migration
 ├── old_engine_assessment.md    # Assessment of the legacy verbs.xml engine as logic reference and differential oracle
 ├── spanish_taxonomy.md         # Conjugar's own composition taxonomy (base + ordered features), not the book's

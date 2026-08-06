@@ -9048,3 +9048,37 @@ The generalizable bit: a stale launch screen is indistinguishable from a broken 
 it. What separates them is a timestamp, or any other piece of the frame that should have changed
 and didn't. When a launch screen misbehaves, check whether you are looking at a render or a
 photograph of an old render before you go debugging the asset pipeline.
+
+## Splitting CLAUDE.md into topic docs (2026-08-06)
+
+In preparation for folding the migration branch into `master`, Josh cut the accumulated
+migration archaeology out of `CLAUDE.md` — the "as of 2026, a project is underway" framing, the
+iPad-family history, the date-stamped notes about which UIKit file was deleted when. Left alone,
+that material had been useful: while the migration was in flight, "the legacy engine was removed
+in July 2026" told a session which of two conflicting truths was current. Once the migration is
+the only truth, it is just noise a reader has to skim past.
+
+The other half of the cleanup was extraction. Three features had grown descriptions inside
+`CLAUDE.md` long enough to dominate it: the game (about a hundred lines, counting sprite actions,
+power-up envelopes, and six debug environment variables), onboarding, and the AI tutor. Those went
+to `docs/game.md`, `docs/onboarding.md`, and `docs/conjugation-tutor.md`, each replaced by a short
+paragraph and a link. `CLAUDE.md` went from 641 lines to 438.
+
+The interesting question is which details survive extraction into the pointer. The rule that
+worked: leave behind whatever a session needs to *know it should go read the file*. The game
+pointer keeps the file paths (`Views/GameView.swift`, `Models/Game/`) and the `L.Game` scope,
+because a session editing an unrelated view will never open `docs/game.md` and should still not be
+confused about where game code lives. It drops the obstacle-speed formula, which nobody needs
+until they are already in the game.
+
+Extraction also surfaced staleness that was invisible while the sections were long. `CLAUDE.md`
+still listed `Controllers/` and `UIViews/` among the test directories (neither exists), named
+`ConjugationCellTests` as a live XCTest suite (deleted with the UIKit cells), described "UIKit VCs"
+as an example of MainActor-isolated types in an app with no view controllers, and listed six of the
+ten services `World` actually vends. It also never mentioned the widget extension at all — a whole
+second target, with its own string catalog and its own copy of the UPPERCASE-means-irregular render
+convention, invisible to anyone reading only `CLAUDE.md`. That gap is now a short section pointing
+at `docs/project-structure.md`.
+
+Worth naming as a pattern: a doc that is too long to reread is a doc whose errors nobody notices.
+Shortening it was what made the errors findable.

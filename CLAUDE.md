@@ -4,24 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Conjugar is an iOS app for learning Spanish verb conjugations. It conjugates regular and irregular Spanish verbs in all tenses with quiz mode (3 difficulty levels), verb browsing, tense information, and Game Center integration.
+Conjugar is a universal iOS app for learning Spanish verb conjugations. It conjugates 4,811 regular and irregular verbs in all tenses, and offers a searchable verb browser, verb-model reference, tense essays, a three-difficulty quiz with Game Center leaderboards and a Live Activity, an on-device AI tutor, Home/Lock Screen widgets and Control Center controls, and an arcade minigame. `README.md` has the user-facing feature list.
 
 **Developer:** Josh Adams (vermontcoder@gmail.com), who released the app in 2017.
-**Target:** iOS 26+ (raised from 17 in July 2026 to match Konjugieren, ahead of the SwiftUI migration). **Universal (device family `1,2`)** as of 2026-07-15 — the app target was iPhone-only (family `1`, running letterboxed in iPad compatibility mode) until the round-2 review's item 8 surfaced it; it's now a native iPad app. The per-screen iPad-layout audit/fix is round-2 review **item 15** (tracked, done in separate sessions like the sibling apps Conjuguer/Konjugieren). `Info.plist`'s `UISupportedInterfaceOrientations~ipad` already allows all four iPad orientations.
+**Target:** iOS 26+
 **Language:** Swift 6 language mode, `SWIFT_STRICT_CONCURRENCY = complete`, `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` (see **Concurrency model** below)
 **License:** GNU Affero General Public License
 
-As of 2026, a project is underway to modernize and improve Conjugar. The engine migration is **done**: the app conjugates exclusively through the new `Conjugator` engine (4,811 verbs from `verbModelMap.xml`, all 16+ tenses — regular and irregular verbs, homonyms, defectives, prefixed compounds, with compound tenses composed in-app by `CompoundTense` and the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary mapped by `TenseBridge`). Browse Verbs is an all-verbs list sortable by Frequency/Alphabetical. Every screen is now a native SwiftUI view (`Views/`), the app shell is a `MainTabView` `TabView`, and no `UIViewController` subclass remains in the app target. A **Spanish conjugation tutor** backed by Apple's on-device `SystemLanguageModel` (Foundation Models) was added July 2026 — a chat screen reached from the Info tab, grounded in the app's own engine so it never invents forms (see **Conjugation Tutor** below). The modernization/improvement work lives in this folder, /Users/josh/Desktop/workspace/Conjugar.mig . Commits in this folder should be pushed to the migration branch. Eventually, the migration branch will be folded into Conjugar's master branch.
-
-As you, Claude, complete chunks of work on the modernization/improvement project, append
-a note to docs/blog_notes.md. Give each entry a `##` heading that includes the date —
-`## <Title> (YYYY-MM-DD)` — with newest entries at the bottom (the earliest entries use
-a leading `## YYYY-MM-DD — <Title>` form; write new ones in the trailing form). Write
-narrative for a future reader (what
-was tried, what failed, why decisions changed), not a bare changelog: Josh will
-eventually generate blog posts from these notes, and future Claude sessions rely on them
-as dated project memory — when older docs conflict, the journal shows which truth is
-current.
+As you, Claude, complete chunks of work on Conjugar, append a note to docs/blog_notes.md. Give each entry a `##` heading
+that includes the date — `## <Title> (YYYY-MM-DD)` — with newest entries at the bottom (the earliest entries use a leading
+`## YYYY-MM-DD — <Title>` form; write new ones in the trailing form). Write narrative for a future reader (what was tried,
+what failed, why decisions changed), not a bare changelog: Josh will eventually generate blog posts from these notes, and
+future Claude sessions may use them as dated project memory. When older docs conflict, the journal shows which truth is
+more current. That said, the current state of the codebase is the ultimate source of truth.
 
 When you create a new plan (typically in the `prompts/` folder), open it in Visual Studio
 Code so Josh can read it immediately: `code <path-to-plan>` (the VS Code CLI binary is
@@ -87,16 +82,15 @@ in `$IBV_SCRIPTS/../SKILL.md`.
 > xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/ConjugatorTests/oirPresent\(\)
 > ```
 
-> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`, `TenseBridgeTests`) the migrated service suites (`SettingsTests`, `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests`), and the SwiftUI-migration suites (`InfoTests`, `ConjugationTextTests`, `QuizTests`, `SettingsViewTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The remaining lower-level suites like `ConjugationCellTests` / `RatingsFetcherTests` are still **XCTest**, whose method names take **no** parentheses (e.g. `testConjugationCell`). New tests should be Swift Testing — see **XCTest + MainActor: the isolated-deinit crash** below.
+> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`, `TenseBridgeTests`) the migrated service suites (`SettingsTests`, `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests`), and the SwiftUI-migration suites (`InfoTests`, `ConjugationTextTests`, `QuizTests`, `SettingsViewTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The handful of older suites still on **XCTest** (`ConjugationResultTests`, `DisplayTenseTests`, `DisplayPersonNumberTests`, `IntExtensionTests`, `RatingsFetcherTests`) take method names with **no** parentheses (e.g. `testFetchRatings`). New tests should be Swift Testing — see **XCTest + MainActor: the isolated-deinit crash** below.
 >
 > **The `Suite` segment is the Swift *type* name, never the `@Suite("…")` display name.** `struct GameBossTests` decorated `@Suite("GameBoss")` is selected as `ConjugarTests/GameBossTests` — passing the display string `ConjugarTests/GameBoss` matches **nothing**, and (same failure mode as an omitted `()`) xcodebuild prints **`Test Succeeded` while running zero tests**. This is the single most dangerous test-runner trap here: a green run that tested nothing. **Always confirm real execution by the count line** — Swift Testing prints `✔ Test run with N tests in M suites passed` (its own reporter; the XCTest summary's `Executed 0 tests … passed` is only the XCTest half and says nothing about Swift Testing). `run_tests.sh` echoes that `Test run with N tests …` line when tests run, so its **absence after a `--only-testing` filter means the selector matched nothing** — treat that as a failure, not a pass, and re-check the suite is spelled as its type name.
 
 ## Running the App in the Simulator
 
 To launch and drive the built app (screenshots, taps, verifying UI behavior — not just
-tests), use the **`ios-build-verify`** skill. It was verified end-to-end against Conjugar
-in July 2026 (build → launch → per-tab tap-and-screenshot). It wraps the `simctl`
-lifecycle plus **AXe** for observation and HID dispatch.
+tests), use the **`ios-build-verify`** skill. It wraps the `simctl` lifecycle plus **AXe**
+for observation and HID dispatch.
 
 ```bash
 S="$IBV_SCRIPTS"                  # resolved once per session — see Build and Test Commands
@@ -107,181 +101,9 @@ S="$IBV_SCRIPTS"                  # resolved once per session — see Build and 
 "$S/describe_ui.sh" --point 200,540   # inspect the element under a logical-points coordinate
 ```
 
-### Deeplinks (jump straight to a screen)
+### Project config for `ios-build-verify`
 
-The app registers the **`conjugar://`** URL scheme (`Conjugar/Info.plist`), routed by
-`AppRouter.handle(url:)` (`Views/AppRouter.swift`). Open one with `simctl` to skip manual
-navigation — it cold-launches the app and routes on arrival:
-
-```bash
-UDID=$(xcrun simctl list devices booted -j | python3 -c "import sys,json;print(json.load(sys.stdin)['devices'].popitem()[1][0]['udid'])")
-xcrun simctl openurl "$UDID" conjugar://game            # → full-screen game (Settings ▸ Play, skipped)
-xcrun simctl openurl "$UDID" conjugar://game/boss       # → jump straight to the boss fight (La Llamada)
-xcrun simctl openurl "$UDID" conjugar://quiz/start      # → Quiz tab, starts a quiz
-xcrun simctl openurl "$UDID" conjugar://verb/hablar     # → Browse tab, pushes a verb (or verb/random)
-```
-
-**`conjugar://game`** is the fast path to the game: it presents `GameView` full-screen via
-`AppRouter.showGame` from `MainTabView` (tab-independent), so no Settings→scroll→Play dance.
-Every actor is a rendered cel-shaded sprite now — no numbered placeholder boxes remain. The
-**dancer** has eight actions (`idle`/`walk`/`climb`/`jump`/`cape`/`capeWalk` from the climb,
-plus `ole`/`stomp` for the boss dance-off) and the **bull** has six (`idle`/`walk`/`throw`
-from the climb, plus `stomp`/`rear`/`bow` for the boss); the **matador** is a static
-front-facing `Image("matador")`. During the climb, hold a direction button to walk, tap jump,
-hold up at a ladder to climb, etc. Example hold-and-capture (logical points;
-right arrow ≈ `131,767`):
-
-```bash
-axe touch -x 131 -y 767 --down --up --delay 2.5 --udid "$UDID" &   # hold right ~2.5 s
-sleep 1.1; "$S/screenshot.sh" walking                              # capture mid-walk
-```
-
-**Freeze-framing a fast animation (jump apex, climb/cape pose).** The game loop honors two
-**launch environment variables**, both default-off so **normal play is unaffected** —
-`CONJUGAR_GAME_TIME_SCALE` scales the loop's `dt` (`0.2` = 5× slow, `0.1` = 10×, so a
-~0.5 s jump lasts several seconds and is trivially screenshot-able) and
-`CONJUGAR_GAME_DISABLE_FLAGS` stops the bull throwing obstacles (a calm field; the var keeps
-its legacy `FLAGS` name as a documented contract). They're read via
-`ProcessInfo` in `GameState` (`debugTimeScale` / `debugFlagsDisabled`). `openurl` can't pass
-env, so launch the process **with** them, then route via the deeplink:
-
-```bash
-APP=$(ls -d ~/Library/Developer/Xcode/DerivedData/Conjugar-*/Build/Products/Debug-iphonesimulator/Conjugar.app | head -1)
-xcrun simctl terminate "$UDID" biz.joshadams.Conjugar 2>/dev/null; xcrun simctl install "$UDID" "$APP"
-SIMCTL_CHILD_CONJUGAR_GAME_TIME_SCALE=0.2 SIMCTL_CHILD_CONJUGAR_GAME_DISABLE_FLAGS=1 \
-  xcrun simctl launch "$UDID" biz.joshadams.Conjugar
-sleep 2; xcrun simctl openurl "$UDID" conjugar://game
-```
-
-To reach the climb state, the D-pad **up** button only appears when the player is aligned at
-a ladder base — poll `describe_ui.sh` for the `Move up` label to know you're on it.
-
-### The main game — La Subida (the five-stage climb)
-
-The climb is a full five-stage game (`prompts/game_la_subida.md`), split across
-`GameState+Obstacles.swift` (the rolling obstacle sets — formerly `GameState+Flags.swift`),
-`GameState+Stages.swift` (stages, escape beats, soft respawn), `GameState+PowerUps.swift`,
-and `GameState+Mechanics.swift`. Key facts:
-
-- **Five stages** (`stage` 1…5, invariant `stage == summitCount + 1`). Each stage has its own
-  **obstacle set** (flags → animals → balls → vehicles → sky, `stageObstacleEmojis`) and a
-  **render style** (`ObstacleStyle`: `.spin` for flags/balls, `.face` — upright but mirrored to
-  face its travel — for animals/vehicles, `.upright` for sky). Obstacle speed compounds
-  **+5 %/stage** (`obstacleSpeed = obstacleRollSpeed · 1.05^(stage−1)`). The `Flag`→`Obstacle`
-  rename swept the whole family (`flags`→`obstacles`, `spawnFlag`→`spawnObstacle`, …); only the
-  `CONJUGAR_GAME_DISABLE_FLAGS` env var + `debugFlagsDisabled` keep their **legacy names**
-  (documented external contract).
-- **Escape beats (summits 1–4).** Touching the bull on a non-final stage enters
-  `GamePhase.escape` (`enterEscape`/`updateEscape`): the bull flees upward carrying the matador
-  off-screen, then `advanceToNextStage` rebuilds the field (fresh set/speed/pickups, hearts
-  refilled, **"¡Nivel N!"** banner + applause). The **5th** summit triggers the boss.
-- **No lose state.** At 0 health the player **soft-respawns** (`respawn()`) at the bottom of the
-  current stage with full health — `stage`/`summitCount`/`score`/collected pickups persist; a
-  brief `respawnGrace` follows. `reset()` (a full restart to stage 1) is only for the
-  configure path now, not death.
-- **Power-ups (one kind per stage, `PowerUpKind`).** Drawn from a no-repeat shuffle bag
-  (`powerUpBag`, through `bossRNG`): **cape** (invuln + smash, `Image("cape_pickup")`), **speed
-  ⚡** (walk + climb ×2, `Sound.speedWhoosh`, a ⚡ badge over the dancer), **La Serenata 🎸** (the
-  bull stops pacing/throwing and dances the end-scene repertoire instead, `Sound.guitarStrum`,
-  `Sound.snort` on expiry). All share the cape's 7 s (5 solid + 2 blink) envelope.
-- **Challenge mechanics (one per stage, `ChallengeMechanic`).** Also a no-repeat bag
-  (`mechanicBag`); a scheduler fires the stage's mechanic after a random 10–18 s, then re-arms
-  every 25 s. Announcements ride the jaleo idiom as **bull speech** (`spawnBullSpeech`).
-  - **zombie** — 3 s; every obstacle slows to ½ speed and homes on the player (it keeps its own
-    emoji — no 🧟 swap; `relevel`-re-integrates onto girders when the window ends).
-    `Sound.zombieGroan`.
-  - **encierro** — 4 s; 🐂 `Charger`s stampede across the girders at 2× obstacle speed (the
-    window's first charger targets the player's girder). `Sound.stampede`.
-  - **apagón** — 3.5 s; the lights cut to a near-black overlay with a soft spotlight tracking
-    the dancer (an `apagonDim` envelope + a `compositingGroup`/`.destinationOut` mask in
-    `GameView`); HUD/controls stay lit. `Sound.lightsOut` in, `Sound.pop` on a natural end.
-
-The five new SFX (`guitarStrum`, `speedWhoosh`, `zombieGroan`, `stampede`, `lightsOut`) are
-Pixabay MP3s bundled in `Conjugar/Audio/`, logged in `asset-licenses/pixabay-mpg-sfx.txt`.
-
-**Debug env vars** (read via `ProcessInfo`; compose with `CONJUGAR_GAME_TIME_SCALE` /
-`CONJUGAR_GAME_DISABLE_FLAGS` and the `conjugar://game` launch pattern above):
-
-- `CONJUGAR_GAME_STAGE=N` (1…5) — start the climb at stage N (`summitCount = N−1`).
-- `CONJUGAR_GAME_POWERUP=cape|speed|serenata` — force every stage's power-up draw.
-- `CONJUGAR_GAME_MECHANIC=zombie|encierro|apagon` — force every stage's mechanic draw AND
-  shorten its countdowns to ~2 s for fast verification.
-
-### The boss fight — La Llamada (`GameState+BossFight.swift`)
-
-Summiting (touching the bull) triggers a call-and-response flamenco **dance-off** (see
-`prompts/game_boss_llamada.md`): the bull dances a phrase move-by-move (cue chips accumulate),
-the player echoes it from memory on a morphed dance pad while a compás bar sweeps, and a
-6-notch **Duende meter** (banked phrases) is both a tug-of-war and the fight's progression —
-banked 0–1 round 1 (length 3), 2–3 round 2 (length 4), 4–5 round 3 (length 5, with a 🔥
-**freeze** fake-out where the correct input is *nothing*), 6 → victory → an end scene on
-`Music.onboarding`. Failure slides the meter back a notch and rerolls a fresh phrase; there is
-**no lose state**. All boss logic is in `GameState+BossFight.swift` (`update(currentTime:)`
-routes every non-`.climb` phase to `updateBoss`); the climb pipeline is byte-identical when
-`phase == .climb`. Hearts are hidden off-climb (the meter is the only currency). Six dance
-moves (`DanceMove`): paso left/right, ole, stomp, cape, freeze. Each move's pad-button/cue-chip
-glyph is single-sourced by `DanceMove.glyph` and rendered by `GameView.moveIcon`; the olé
-glyph is the custom **`ole`** symbol (`Assets.xcassets/ole.symbolset` — a solid arms-up-V
-dancer silhouette derived from the `dancer_ole_3` sprite, on the same SF-template scaffold as
-the `dancer`/`bull` symbols, so it tints and font-scales like a system symbol). Boss buttons
-fire on touch-down (the jump idiom), not held intents. Strings live in `L.Game` — the jaleo shouts and
-title cards stay Spanish in **both** localizations, the narrative line + a11y labels localize
-en/es.
-
-Debug entries jump straight into the boss (all compose with `CONJUGAR_GAME_TIME_SCALE` for
-freeze-framing the `stomp`/`rear`/`bow`/`ole` bursts):
-
-- **`conjugar://game/boss`** deeplink — `AppRouter.handle` sets `pendingBossEntry`, consumed by
-  `GameView` after configure to call `enterBossIntro()`.
-- **`conjugar://game/end`** deeplink (and the **`CONJUGAR_GAME_START_END=1`** env var) — jumps
-  all the way to the **end scene** (couple reunited, bull bowing on a random cadence,
-  hearts/roses flying up, onboarding music) via `debugJumpToEndScene()`, the fast path for
-  tuning the end-scene loop.
-- **`CONJUGAR_GAME_START_BOSS=1`** launch env var — jumps to `.bossIntro` on configure. Its
-  companion **`CONJUGAR_GAME_BOSS_BANKED=N`** (0…5) pre-fills the Duende meter, so `=5` starts
-  one phrase from victory (the fast path for verifying the win / end-scene beats without
-  grinding all six phrases). `openurl` can't pass env, so launch **with** the vars, then route:
-
-```bash
-SIMCTL_CHILD_CONJUGAR_GAME_START_BOSS=1 SIMCTL_CHILD_CONJUGAR_GAME_BOSS_BANKED=5 \
-  xcrun simctl launch "$UDID" biz.joshadams.Conjugar
-sleep 2; xcrun simctl openurl "$UDID" conjugar://game    # tap to skip the intro, then echo the phrase
-```
-
-The **end scene is a living loop**, not a still: two seconds in, the dancer turns right to face
-the matador sliding in from her pedestal; once he reaches her, the freed **bull breaks into a
-dance** — every 2 s it performs a randomly-chosen animated move (`endSceneDanceMoves` = walk /
-stomp / rear / bow / throw, walk danced *in place* so its position never changes) and moos
-(`Sound.moo`) every 4–8 s — while hearts/roses fly up from the couple every 2–4 s (random). The
-Duende meter is hidden the moment the player wins (`GameState.hasWon`). There is no "tap to
-continue" prompt (removed July 2026 as noise — any tap still dismisses).
-
-### Game music (`Music` enum + `SoundPlayer`)
-
-The game's looping background music is the `Music` enum (`Models/Music.swift`), each case a
-bundled MP3 base name that `SoundPlayerReal.startMusic(_:)` loops via `numberOfLoops = -1`.
-Gameplay plays `Music.gameLoop` from `GameState` — bundled as `flamencoLoop.mp3` (legacy
-name) but holding Pond5's "Flamenco Adventure" since July 2026. This one file sits at the
-target root (`Conjugar/flamencoLoop.mp3`), **not** in the `Conjugar/Audio/` group. Two more
-Pond5 tracks *are* in the synchronized `Conjugar/Audio/` group: `spanishTension.mp3`
-(`Music.onboarding`, wired into both the onboarding flow — see below — and the boss fight's
-end scene) and `spanishGuitarStandoff.mp3` (`Music.bossFight`, now wired: it crossfades in on
-the boss intro's llamada and loops the duel, then fades out into `Music.onboarding` at the end
-scene). The WAV masters
-live in git-ignored `audio-sources/`; only the 192 kbps MP3s are committed. Pond5's Content
-License requires no attribution (the game-music credit in `Localizable.xcstrings` is a
-courtesy note).
-
-> **Onboarding music.** The onboarding flow (`Views/OnboardingView.swift`, added July 2026 —
-> see **Onboarding** below) plays `Music.onboarding` (Pond5's "Spanish Tension",
-> `Conjugar/Audio/spanishTension.mp3`) as a looping bed: `Current.soundPlayer.startMusic(.onboarding)`
-> on the view's `.onAppear`, faded out on dismiss via `Current.soundPlayer.stopMusic(fadeDuration:)`
-> (the graceful counterpart to `startMusic`'s fade-in; the plain `stopMusic()` hard-stop is still
-> what the climb uses). The same track now also scores the boss fight's **end scene**, faded in as
-> `Music.bossFight` ("Spanish Guitar Standoff") fades out on victory — and `GameState.stopAudio()`
-> fades (rather than hard-stops) when the player exits from `.endScene`.
-
-Conjugar-specific config facts baked into `.claude/ios-build-verify.config.sh`:
+Conjugar-specific facts baked into `.claude/ios-build-verify.config.sh`:
 
 - **Launch anchor** `FIRST_SCREEN_ID = browse_verb_count` — the `.accessibilityIdentifier`
   on the Browse tab's verb-count banner (`VerbBrowseView.swift`), a stable launch-screen
@@ -299,6 +121,25 @@ Conjugar-specific config facts baked into `.claude/ios-build-verify.config.sh`:
   `has no member` diagnostics for same-module symbols; `build_app.sh` is authoritative —
   trust it, don't "fix" the SourceKit-only noise.
 
+### Deeplinks (jump straight to a screen)
+
+The app registers the **`conjugar://`** URL scheme (`Conjugar/Info.plist`), routed by
+`AppRouter.handle(url:)` (`Views/AppRouter.swift`). Open one with `simctl` to skip manual
+navigation — it cold-launches the app and routes on arrival:
+
+```bash
+UDID=$(xcrun simctl list devices booted -j | python3 -c "import sys,json;print(json.load(sys.stdin)['devices'].popitem()[1][0]['udid'])")
+xcrun simctl openurl "$UDID" conjugar://game            # → full-screen game (Settings ▸ Play, skipped)
+xcrun simctl openurl "$UDID" conjugar://game/boss       # → jump straight to the boss fight (La Llamada)
+xcrun simctl openurl "$UDID" conjugar://quiz/start      # → Quiz tab, starts a quiz
+xcrun simctl openurl "$UDID" conjugar://verb/hablar     # → Browse tab, pushes a verb (or verb/random)
+```
+
+**`conjugar://game`** is the fast path to the game: it presents `GameView` full-screen via
+`AppRouter.showGame` from `MainTabView` (tab-independent), so no Settings→scroll→Play dance.
+The game has its own deeplinks, debug environment variables, and animation freeze-framing
+recipes — see [`docs/game.md`](docs/game.md).
+
 ## Project Structure
 
 See [`docs/project-structure.md`](docs/project-structure.md) for the full annotated directory tree.
@@ -311,13 +152,13 @@ See [`docs/project-structure.md`](docs/project-structure.md) for the full annota
 
 The project builds under **Swift 6** with `SWIFT_STRICT_CONCURRENCY = complete`,
 `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor`, `SWIFT_APPROACHABLE_CONCURRENCY = YES`,
-and `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES` (adopted July 2026 to
-match the sibling app Konjugieren, ahead of the SwiftUI migration). The settings are
-placed like Konjugieren's: strict-concurrency at the **project** level; default-actor
-isolation on the **app** target only; the rest on app + test. Consequences to work with:
+and `SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES`. The settings are
+placed like the sibling app Konjugieren's: strict-concurrency at the **project** level;
+default-actor isolation on the **app** target only; the rest on app + test. Consequences to
+work with:
 
 - **Default isolation is `@MainActor`.** Any type with no explicit annotation is
-  MainActor-isolated. UIKit VCs and the DI services (`World`, `Settings`, `Quiz`, the
+  MainActor-isolated. The SwiftUI views and the DI services (`World`, `Settings`, `Quiz`, the
   `…Real`/`…Fake`/`…Stub` service conformers) live here and want it.
 - **The engine and its vocabulary are `nonisolated` + `Sendable`, on purpose.** The
   whole `Conjugator` engine — the `ConjugationFeature` types, `Slot`, `EngineTense`/
@@ -352,19 +193,19 @@ Services provided by World:
 - `settings: Settings` - User preferences (wraps UserDefaults)
 - `languageModelService: LanguageModelService` - the on-device conjugation tutor (see **Conjugation Tutor** below)
 - `getterSetter: GetterSetter` - shared string key-value store (same instance `Settings` wraps); the tutor persists chat history through it
+- `soundPlayer: SoundPlayer` / `hapticPlayer: HapticPlayer` - SFX, looping music, and haptics
+- `quiz: Quiz` - the shared quiz state model
+- `session: URLSession` - injected so `RatingsFetcher` can be tested through `URLProtocolStub`
 
 ### Analytics (TelemetryDeck)
 
-Adopted July 2026, replacing the no-op spy that stood in for the long-removed AWS
-Pinpoint integration and converging Conjugar on the schema the sibling apps Conjuguer
-and Konjugieren already use. Files: `Analytics/Analytics.swift` (the `Analytics`
+Conjugar uses the same analytics schema as the sibling apps Conjuguer and Konjugieren.
+Files: `Analytics/Analytics.swift` (the `Analytics`
 protocol plus the `AnalyticsName` / `ParameterKey` enums), `AnalyticsReal.swift`,
 `AnalyticsSpy.swift`.
 
 - **Event names are an enum, not strings.** `Current.analytics.signal(name: .viewVerbView)`;
-  parameters are `[String: String]` keyed by `ParameterKey.…rawValue`. The old
-  Pinpoint-shaped `AnalyticsService` (`recordEvent(_:parameters:metrics:)` plus a dozen
-  `record*` wrappers and umlaut-disambiguated key vars like `scöre`) is gone. **A raw
+  parameters are `[String: String]` keyed by `ParameterKey.…rawValue`. **A raw
   value is a wire name** — renaming a case orphans its dashboard history, which is why
   `AnalyticsTests` pins the parameter-carrying ones.
 - **The whole family is `nonisolated`,** like the engine. Without it the module's default
@@ -391,11 +232,9 @@ protocol plus the `AnalyticsName` / `ParameterKey` enums), `AnalyticsReal.swift`
   device or simulator — is tagged `isTestMode == true` and is **invisible until you flip the
   Test Mode toggle** (top-left of the dashboard, above the sidebar; a "Test Data" banner
   confirms it). This is the first thing to check when signals seem missing; it is not a bug.
-  TestFlight and App Store builds go to the live view with no code change. Delivery was
-  confirmed end-to-end in July 2026.
+  TestFlight and App Store builds go to the live view with no code change.
 - **No `becameActive` signal.** TelemetryDeck records launches and sessions itself, and
-  reports app version, device model, and country/language natively — which is why the
-  `AnalyticsLocale` abstraction that fed the old event a locale parameter was deleted.
+  reports app version, device model, and country/language natively.
 
 The published policy describing what is collected is `docs/privacy_policy3.txt` (English
 plus a Spanish translation); **update it when you add or remove a signal.**
@@ -415,7 +254,7 @@ All external services have protocol abstractions with production and test implem
 > - **`Spy`** — a stub that *also records* how it was called, for assertions (`AnalyticsSpy`).
 > - **`Mock`** — pre-programmed with expectations it verifies. **`Dummy`** — passed to fill a slot but never exercised.
 >
-> Because the protocol and all its conformers share a prefix, they **sort together in Xcode's Project Navigator** — the point of the convention (and consistent with the `CatFancy-final` app). One type per file, filename = type name. **Check for a system-API collision** before settling on the protocol name: the since-deleted `AnalyticsLocale` was so named because a plain `Locale` shadowed `Foundation.Locale` module-wide. Wire the real conformer into `World.device` and the double into `World.simulator` / `.unitTest` / `.uiTest`.
+> Because the protocol and all its conformers share a prefix, they **sort together in Xcode's Project Navigator** — the point of the convention (and consistent with the `CatFancy-final` app). One type per file, filename = type name. **Check for a system-API collision** before settling on the protocol name — a type named plainly `Locale`, say, would shadow `Foundation.Locale` module-wide. Wire the real conformer into `World.device` and the double into `World.simulator` / `.unitTest` / `.uiTest`.
 
 ### View Architecture
 
@@ -426,23 +265,17 @@ primitives are in `Utils/Modifiers.swift` (`.card()`, `.metadataPill()`, `.lingu
 `.numeric()`, `.speakOnTapFlash()`, `PrimaryButtonStyle`, …) and read the adaptive color
 assets, so every screen is light/dark correct. Marked-up Info bodies parse via
 `Utils/RichText.swift` → `Views/RichTextView.swift`; conjugation forms (uppercase =
-irregular) render via `Views/ConjugationText.swift`. The old UIKit `*VC`/`*UIV`/`*Cell`
-files, the `MainTabBarVC` shell, and the `NavHostedVC` hosting bridge are all gone; **no
-`UIViewController` subclass remains in the app target.**
+irregular) render via `Views/ConjugationText.swift`. **No `UIViewController` subclass remains
+in the app target.**
 
 Layout constants are in `Layout.swift` (defaultSpacing = 8.0, doubleDefaultSpacing = 16.0,
 tripleDefaultSpacing = 24.0, defaultHorizontalMargin = 16.0, readingWidth = 680,
-cornerRadius = 12). The `@UsesAutoLayout` property wrapper and the rest of the UIKit
-layout/font stratum (`Fonts`, `StringExtensions.conjugatedString`, `UsesAutoLayout`, the
-`titleLabel`/`pulsate`/`yellowfyText` helpers) were deleted in the July 2026 post-migration
-dead-code purge; screen layout is all SwiftUI. The only UIKit that remains is appearance
-config in `AppDelegate` and a shrinking set of service-seam extensions.
-
-The mapped UI audit that drove the migration is `docs/conjugar-ui-issues.md`.
+cornerRadius = 12). Screen layout is all SwiftUI; the only UIKit that remains is appearance
+config in `AppDelegate` and a small set of service-seam extensions.
 
 ### Tab Structure (`MainTabView`)
 
-1. **Verbs** — `VerbBrowseView` → `VerbView` (the tab was labeled *Browse* / *Explorar* until August 2026, when it was renamed **Verbs** / **Verbos** to match Konjugieren and Conjuguer; only the displayed label changed — `VerbBrowseView`, the `L.BrowseVerbs` scope and its catalog keys, the `.viewVerbBrowseView` analytics case, the `browse_verb_count` anchor, and `tap_tab.sh browse` all keep their names)
+1. **Verbs** — `VerbBrowseView` → `VerbView` (the displayed label is *Verbs* / *Verbos*, but the code says *browse* throughout: `VerbBrowseView`, the `L.BrowseVerbs` scope and its catalog keys, the `.viewVerbBrowseView` analytics case, the `browse_verb_count` anchor, and `tap_tab.sh browse`)
 2. **Models** — `ModelBrowseView` → `ModelView` (→ `VerbView`)
 3. **Quiz** — `QuizView` → `ResultsView`
 4. **Info** — `InfoBrowseView` → `InfoView` (and → `TutorView`, the conjugation tutor, from a section at the top of the list)
@@ -451,97 +284,58 @@ The mapped UI audit that drove the migration is `docs/conjugar-ui-issues.md`.
 
 ### Onboarding
 
-A first-launch welcome tour ported from Conjuguer (July 2026), styled to Conjugar's yellow
-design system. Files: `Views/OnboardingView.swift`, the `OnboardingDisplay` kill switch in
-`Utils/KillSwitches.swift`, `Settings.hasSeenOnboarding`, `L.Onboarding` +
-`Localizable.xcstrings` (`Onboarding.*`). Things to know:
+A first-launch welcome tour: a paged `.fullScreenCover` (`Views/OnboardingView.swift`) with a
+Settings-driven reshow, gated by `Settings.hasSeenOnboarding` and the `OnboardingDisplay` kill
+switch. See [`docs/onboarding.md`](docs/onboarding.md).
 
-- **A paged `.fullScreenCover`** (`TabView(.page)` with auto page-dots). Sheets: a welcome
-  sheet using the custom **`bull`** symbol, four content sheets (Browse/Models/Quiz/Articles,
-  each keeping its CTA → tab), a **conditional AI-tutor sheet** shown only when
-  `Current.languageModelService.isAvailable` (so never in the simulator), and a **game-preview
-  sheet** using the custom **`dancer`** symbol whose CTA launches the game. The final sheet
-  shows the animated **"Get Started"** button below the dots; the top-right button reads
-  **Skip** (first run) / **Dismiss** (reshow).
-- **Presented from two places.** First launch: `MainTabView` trips `router.showOnboarding` once
-  in its launch `.task`, gated by `!Settings.hasSeenOnboarding` **and**
-  `OnboardingDisplay.onboardingEnabled` (the screenshot kill switch, mirroring
-  `TipDisplay.tipsEnabled`; the Settings "Show Onboarding" reshow ignores it). Reshow:
-  `SettingsView`'s onboarding card presents it with `isReshow: true`, which does **not** touch
-  the flag. Music `Music.onboarding` plays on appear and **fades out** on dismiss.
-- **`AppRouter` is passed in explicitly, not via `@Environment`.** A `.fullScreenCover`'s
-  content does not inherit a custom `.environment(router)` object (a direct tab child does), so
-  `OnboardingView`/`SettingsView` take an explicit `router:` — reading it from the environment
-  in the cover traps with "No Observable object of type AppRouter found". Tab-navigation CTAs
-  set `router.selectedTab` (and `router.pendingTutor` for the tutor, consumed by
-  `InfoBrowseView`); the game CTA defers to each cover's `onDismiss` so two covers never overlap.
+### Widget extension
+
+The project has a second target, **`ConjugarWidgetExtension`** (`ConjugarWidget/`): a "Verb of
+the Day" widget, an interactive daily-quiz widget, Lock Screen accessories, two Control Center
+controls, and the quiz **Live Activity** / Dynamic Island. The app and the extension share data
+through an **App Group** — `Utils/WidgetSnapshotWriter.swift` picks and conjugates the daily
+verb and quiz question and writes JSON that the widgets read; `Shared/` holds the ActivityKit
+contract and the App Group constants. The widget target has its **own** `Localizable.xcstrings`
+and its own copies of the conjugation- and etymology-rendering helpers, so a change to the app's
+render conventions has to be mirrored there. See
+[`docs/project-structure.md`](docs/project-structure.md) for the file-by-file map.
+
+### The game — Toreo por Amor
+
+Conjugar ships a small arcade game, **Toreo por Amor**: a five-stage climb (*La Subida*)
+followed by a flamenco dance-off boss fight (*La Llamada*). The UI is `Views/GameView.swift`
+and the state machine is `Models/Game/` (`GameState.swift` plus its `GameState+…` extensions);
+strings live in `L.Game`. Full mechanics, sprite/animation notes, the `Music` enum, and the
+debug deeplinks and environment variables are in [`docs/game.md`](docs/game.md).
 
 ### Core Models
 
-- **Conjugator.swift** (+ the feature-file family, `ModelCatalog`, and `VerbMap`) - The conjugation engine: composition of feature rules over a book-class model catalog, resolving each verb's model from `verbModelMap.xml` (4,811 verbs). The app UI conjugates through it via `TenseBridge` (maps the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary to `EngineTense`, the simple-tense-plus-person slots the engine consumes) and `CompoundTense` (composes perfect tenses as *haber* + participle, and imperativo negativo as "no" + subjunctive — the engine itself models only simple tenses). The legacy `Conjugator`/`verbs.xml` engine was removed in July 2026; `DisplayTense.swift`/`DisplayPersonNumber.swift` (formerly `Tense.swift`/`PersonNumber.swift`) remain as the UI's vocabulary, covering the full displayed tense set including compounds.
-- **Quiz.swift** - A `@MainActor @Observable` quiz state model (scoring, closure-based timer, difficulty levels), observed directly by `QuizView`/`ResultsView`. The old `QuizDelegate` was removed in the SwiftUI migration.
+- **Conjugator.swift** (+ the feature-file family, `ModelCatalog`, and `VerbMap`) - The conjugation engine: composition of feature rules over a book-class model catalog, resolving each verb's model from `verbModelMap.xml` (4,811 verbs). The app UI conjugates through it via `TenseBridge` (maps the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary to `EngineTense`, the simple-tense-plus-person slots the engine consumes) and `CompoundTense` (composes perfect tenses as *haber* + participle, and imperativo negativo as "no" + subjunctive — the engine itself models only simple tenses). `DisplayTense.swift`/`DisplayPersonNumber.swift` are the UI's vocabulary, covering the full displayed tense set including compounds.
+- **Quiz.swift** - A `@MainActor @Observable` quiz state model (scoring, closure-based timer, difficulty levels), observed directly by `QuizView`/`ResultsView`.
 - **Settings.swift** - User preferences with GetterSetter protocol abstraction.
 
 ### Conjugation Tutor (on-device LLM)
 
-A Spanish conjugation tutor, ported from the sibling app Conjuguer (French) and adapted for
-Spanish (July 2026). It is a chat screen (`Views/TutorView.swift`) backed by
-`LanguageModelServiceReal`, which wraps Apple's **on-device** `SystemLanguageModel` /
-`LanguageModelSession` from the **Foundation Models** framework. Reached from a section at the
-top of the Info tab (`InfoBrowseView`). Files: `Models/LanguageModelService.swift` (protocol
-+ `TutorMessage` + `LanguageModelUnavailability`), `LanguageModelServiceReal.swift`,
-`LanguageModelServiceDummy.swift`, `TutorChatHistory.swift`, `Views/TutorView.swift`,
-`Views/TutorTestView.swift`. Things to know when working on it:
-
-- **Grounded, never hallucinated.** The model is given one `Tool` (`ConjugationTool`, in
-  `LanguageModelServiceReal.swift`) that looks up real forms through the app's own engine —
-  `VerbMap.shared.entry(for:)` to validate the verb, then `TenseBridge.conjugate(...)` per
-  person. Because the whole engine is `nonisolated`, the tool's `nonisolated` `call` invokes
-  it directly (no `@MainActor` hop; the French original needed one). A tolerant
-  `displayTense(forName:)` maps a Spanish **or** English tense name onto `DisplayTense`,
-  most-specific compound/subjunctive phrases first so "presente de subjuntivo" isn't swallowed
-  by "presente". Marked forms are lowercased to strip the red-irregularity UPPERCASE encoding
-  before they reach the model.
-- **Prompt is localized by *system language*, not the UI locale.** `LanguageModelServiceReal`
-  holds two hand-written instruction blocks and picks Spanish when
-  `Locale.current.language.languageCode == "es"`, English otherwise — this steers what
-  language the model *answers in*, independent of the `.xcstrings` UI localization. **If you
-  change tutor behavior, edit both blocks.**
-- **Over-refusal workaround.** The on-device model sometimes refuses conjugation content, so
-  `sendTutorMessage` retries up to 3× with a fresh session and screens replies through
-  `isLikelyRefusal` (English + Spanish canned-refusal phrases); a persistent refusal falls
-  back to `L.Tutor.unableToAnswer`.
-- **Availability is live.** The service polls `SystemLanguageModel.availability` every 5 s and
-  is `@Observable`, so the Info-tab section flips itself between a tappable `NavigationLink`
-  (→ `TutorView`) and a reason row (the "Apple Intelligence not enabled" reason deep-links to
-  Settings). **In the simulator the model is unavailable**, so the tutor screen isn't even
-  reachable there — the chat and the `TutorTestView` batch harness can only be *exercised* on
-  a real Apple-Intelligence device.
-- **`TutorTestView`** is a batch harness (runs ~30 Spanish/English queries, one per fresh
-  session, `ShareLink`-exports the results) reached by a **triple-tap on the tutor's title**.
-  It is deliberately **not** behind `#if DEBUG` — it ships. Its hardcoded strings use
-  `Text(verbatim:)` to stay out of the string catalog.
-- **iOS 26 only.** The Foundation Models types are guarded `@available(iOS 26, *)` +
-  `#if canImport(FoundationModels)`, but since the deployment target is already iOS 26 the
-  service is instantiated unconditionally in `World`. Editing this code trips a swarm of bogus
-  SourceKit "only available in macOS 26 / cannot find type" diagnostics — all stale-index
-  noise; trust `xcodebuild`, which compiles it cleanly.
+A Spanish conjugation tutor: a chat screen (`Views/TutorView.swift`) backed by
+`LanguageModelServiceReal`, which wraps Apple's **on-device** `SystemLanguageModel` from the
+**Foundation Models** framework. It is grounded in the app's own engine via a `ConjugationTool`,
+so it never invents forms, and it is **unavailable in the simulator**. Reached from a section at
+the top of the Info tab. See [`docs/conjugation-tutor.md`](docs/conjugation-tutor.md).
 
 ## Testing
 
 Tests are in `ConjugarTests/` organized by layer:
-- `Analytics/`, `Controllers/`, `Models/`, `UIViews/`, `Utils/`, `Views/`
+- `Analytics/`, `Models/`, `Utils/`, `Views/`
 
 Test infrastructure:
-- The test environment is selected in `World.chooseWorld()` (a simulator process with the
-  XCTest runtime loaded gets `World.unitTest`) — the SwiftUI `@main App` lifecycle replaced
-  the old custom `main.swift`/`TestingAppDelegate` selection during the migration.
+- The test environment is selected in `World.chooseWorld()`: a simulator process with the
+  XCTest runtime loaded gets `World.unitTest`.
 - `URLProtocolStub` for network mocking
 - Test doubles (`AnalyticsSpy`, `GetterSetterFake`, `GameCenterFake`) for isolation
 
 ### XCTest + MainActor: the isolated-deinit crash (write new tests in Swift Testing)
 
-> **Landmine (Xcode 26.3, seen July 2026).** Under `SWIFT_DEFAULT_ACTOR_ISOLATION =
+> **Landmine (Xcode 26.3).** Under `SWIFT_DEFAULT_ACTOR_ISOLATION =
 > MainActor`, every pure-Swift `@MainActor` class gets an *isolated deinit*, and this
 > toolchain's `swift_task_deinitOnExecutorImpl` **double-frees** (`malloc: pointer being
 > freed was not allocated` → SIGABRT) when **XCTest** deallocates such an object at
@@ -556,10 +350,10 @@ Test infrastructure:
 > are evaluated *outside* the suite's isolation, so any static data they reference must
 > be `nonisolated`.
 >
-> **Status (July 2026):** a full `xcodebuild … test` run is **TEST SUCCEEDED** (all XCTest
-> + Swift Testing, 0 failures). The general rule still stands, since MainActor default
-> isolation remains: a new pure-Swift `@MainActor` object deallocated by XCTest will hit the
-> same double-free — so **write new tests in Swift Testing.**
+> A full `xcodebuild … test` run passes today (all XCTest + Swift Testing, 0 failures), but
+> the rule still stands, since MainActor default isolation remains: a new pure-Swift
+> `@MainActor` object deallocated by XCTest will hit the same double-free — so **write new
+> tests in Swift Testing.**
 
 ## Localization
 
@@ -573,14 +367,12 @@ sibling apps Conjuguer and Konjugieren:
   `String(localized: "Model.numberAndPercent \(model) \(percent)")`, whose runtime key is
   `"Model.numberAndPercent %@ %lld"`.
 - **`Conjugar/Supporting/Localizable.xcstrings`** — one JSON string catalog holding **both**
-  `en` and `es`, `sourceLanguage: en`. This replaced the legacy `NSLocalizedString` calls +
-  the UTF-16 `es.lproj/Localizable.strings` (removed July 2026). `LaunchScreen.strings`
-  stays in `es.lproj` and is unrelated.
+  `en` and `es`, `sourceLanguage: en`. There are no `NSLocalizedString` calls and no
+  `es.lproj/Localizable.strings`. `LaunchScreen.strings` stays in `es.lproj` and is unrelated.
 
 Both files live in `Supporting/`, a **`PBXFileSystemSynchronizedRootGroup`** — new files
 dropped there are auto-added to the target, so adding a catalog or a Swift file needs **no
-`project.pbxproj` edit**. (Removing an *old-style* explicit reference like the legacy
-`.strings` variant group still does — that one wasn't synchronized.)
+`project.pbxproj` edit**. (Removing an *old-style* explicit file reference still does.)
 
 ### Adding / changing a localized string
 
