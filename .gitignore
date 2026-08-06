@@ -25,8 +25,10 @@ docs/glosses/phase1/phase2/chunks/
 docs/glosses/phase1/phase2/checks/
 docs/glosses/phase1/phase2/consensus/
 # ios-build-verify
+# .claude/ios-build-verify.config.sh is deliberately NOT ignored: it holds only project
+# facts (scheme, bundle ID, launch anchor, the hand-measured 5-tab coordinates), and a
+# clone needs it for the documented build path to work.
 build.log
-.claude/ios-build-verify.*
 
 # Claude Code per-machine state (tool allowlist, scheduler lock) — not shared
 .claude/settings.local.json

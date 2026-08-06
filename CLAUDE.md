@@ -28,7 +28,8 @@ This is an Xcode project (project `Conjugar.xcodeproj`, scheme `Conjugar`). Buil
 test go through the **`ios-build-verify`** Claude Code skill, which pipes `xcodebuild`
 through `xcbeautify` (concise output, raw `build.log` fallback) and disables parallel
 testing. The per-project config lives at `.claude/ios-build-verify.config.sh` (sourced
-by every script; hand-editable). The skill is installed via Claude Code's plugin
+by every script; hand-editable, and **committed** — it holds only project facts, so a
+fresh clone builds without re-running the skill's `setup_project.sh`). The skill is installed via Claude Code's plugin
 marketplace from [vermont42/ios-build-verify](https://github.com/vermont42/ios-build-verify).
 
 **Resolve the scripts directory once per session**, then invoke through `$IBV_SCRIPTS`:
