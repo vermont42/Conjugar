@@ -20,7 +20,7 @@ keeps=[r for r in rows if r[2]=='keep']
 flags=[r for r in rows if r[2]=='flag']
 keep_confirmed_flagged=[r for r in keeps if r[0] in flagged_before]
 
-xml=open(os.path.join(os.path.dirname(HERE),'..','Conjugar.mig/Conjugar/Models/verbModelMap.xml'),encoding='utf-8').read()
+xml=open(bvm.OUT_XML,encoding='utf-8').read()
 comma_oldxml=[]
 for m in re.finditer(r'<verb in="([^"]+)"[^>]*tn="([^"]*,[^"]*)"',xml):
     if m.group(1) in oldxml: comma_oldxml.append((m.group(1),m.group(2)))
@@ -65,7 +65,7 @@ for r in flags:
 out.append('')
 
 out.append('## Needs human decision — out-of-bounds (old `verbs.xml`-sourced, NOT auto-edited)\n')
-out.append('These glosses come from the legacy `Conjugar.mig/Conjugar/Models/verbs.xml` (source 2, '
+out.append('These glosses come from the legacy `Conjugar/Models/verbs.xml` (source 2, '
            'read-only); a slice edit would be a no-op. They carry a **comma / second sense**, which the '
            'gloss convention prefers single-sense. They are **correct** multi-sense glosses — the '
            'single-sense choice is an English phrasing call (note `deber: owe, must` — the *second* '

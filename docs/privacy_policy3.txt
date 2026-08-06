@@ -20,7 +20,7 @@ Conjugar collects anonymized usage analytics to help improve the app. These anal
 - How far you progressed in a quiz if you quit early (the question number reached)
 - Whether Game Center sign-in succeeded
 - Certain in-app actions: opening the game, reshowing the onboarding tour, tapping to rate or review the app, and sending a message to the tutor
-- Progress in the app's minigame, La Subida: starting the game, completing a stage (with the stage number), entering the boss fight, and winning the boss fight
+- Progress in the app's minigame, Toreo por Amor: starting the game, completing a stage (with the stage number), entering the boss fight, and winning the boss fight
 
 Your quiz score and elapsed time are collected, but, like all of these analytics, they are anonymized and are not tied to your identity (see Section 4). The app does not record your quiz answers, the verbs you look up, or any text you type.
 
@@ -138,7 +138,7 @@ Conjugar recopila estadísticas de uso anonimizadas para ayudar a mejorar la apl
 - Su progreso en el cuestionario si lo abandona antes de tiempo (el número de pregunta alcanzado)
 - Si el inicio de sesión en Game Center tuvo éxito
 - Ciertas acciones dentro de la aplicación: abrir el juego, volver a mostrar la introducción, tocar para valorar o reseñar la aplicación y enviar un mensaje al tutor
-- El progreso en el minijuego de la aplicación, La Subida: comenzar el juego, completar un nivel (con el número de nivel), entrar en la lucha contra el jefe final y ganarla
+- El progreso en el minijuego de la aplicación, Toreo por Amor: comenzar el juego, completar un nivel (con el número de nivel), entrar en la lucha contra el jefe final y ganarla
 
 Su puntuación y el tiempo transcurrido se recopilan, pero, como todas estas estadísticas, están anonimizados y no están vinculados a su identidad (véase la sección 4). La aplicación no registra sus respuestas del cuestionario, los verbos que consulta ni ningún texto que escriba.
 

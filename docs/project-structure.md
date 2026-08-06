@@ -9,8 +9,6 @@ Conjugar/
 ├── flamencoLoop.mp3            # Music.gameLoop — Pond5 "Flamenco Adventure" (legacy filename); the one music file NOT in Audio/
 ├── *.mp3                       # Legacy one-shot SFX at the target root (applause1-3, buzz, chime, chirp, chomp, gun,
 │                               #   moo, pop, sadTrombone1-4, shieldActivate, silence, soccerKick) — see Models/Sound.swift
-├── *.png                       # Legacy UIKit-era screenshots (browse, browseInfo, info, launch, leaderboard, quiz,
-│                               #   verb, GameCenter). No longer referenced by README.md — it uses Images/ now
 ├── Analytics/
 │   ├── Analytics.swift         # Analytics protocol + AnalyticsName / ParameterKey enums; nonisolated throughout
 │   ├── AnalyticsReal.swift     # TelemetryDeck conformer; funnels every SDK call onto a serial GCD queue

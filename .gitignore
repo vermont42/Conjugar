@@ -28,5 +28,9 @@ docs/glosses/phase1/phase2/consensus/
 build.log
 .claude/ios-build-verify.*
 
+# Claude Code per-machine state (tool allowlist, scheduler lock) — not shared
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+
 # Original purchased audio (Pond5 WAV masters — converted MP3s are committed instead)
 audio-sources/

@@ -33,16 +33,18 @@ import os
 import re
 import glob
 
-HERE = os.path.dirname(os.path.abspath(__file__))                 # .../Conjugar.mig/docs
-WORKSPACE = os.path.dirname(os.path.dirname(HERE))                # .../workspace
+HERE = os.path.dirname(os.path.abspath(__file__))                 # <repo>/docs
+REPO = os.path.dirname(HERE)                                      # <repo>
 
 ANNEX = os.path.join(HERE, "annex_b_verb_models.md")
 ORACLE = os.path.join(HERE, "spanish_models.md")
-OLD_VERBS_XML = os.path.join(WORKSPACE, "Conjugar.mig", "Conjugar", "Models", "verbs.xml")
+# The legacy engine's verb list, removed in the migration. load_old_xml_glosses()
+# returns {} when it is absent, so this stays a soft dependency.
+OLD_VERBS_XML = os.path.join(REPO, "Conjugar", "Models", "verbs.xml")
 GLOSS_DIR = os.path.join(HERE, "glosses")                         # authored slice files
 FREQ_RANKS = os.path.join(HERE, "SpanishVerbFrequencyRanks.txt")  # infinitive,rank (1=top)
 
-OUT_XML = os.path.join(WORKSPACE, "Conjugar.mig", "Conjugar", "Models", "verbModelMap.xml")
+OUT_XML = os.path.join(REPO, "Conjugar", "Models", "verbModelMap.xml")
 OUT_MISSING = os.path.join(HERE, "glosses_missing.txt")
 OUT_REVIEW = os.path.join(HERE, "glosses_to_review.md")
 OUT_DEF = os.path.join(HERE, "def_worklist.md")
@@ -63,7 +65,7 @@ HOMONYMS = {
 }
 
 # Verbs that ship in the legacy Conjugar app
-# (Conjugar.mig/Conjugar/Models/verbs.xml) but are ABSENT from Annex B: neologisms /
+# (Conjugar/Models/verbs.xml) but are ABSENT from Annex B: neologisms /
 # slang that post-date the 2010 book (to google, to go viral, …). Appended after the
 # Annex B rows so the map is a strict superset of BOTH the book's 4,818 and the
 # shipping app's verb list — no app verb regresses in the migration. Each is
