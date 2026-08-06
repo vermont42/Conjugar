@@ -268,7 +268,7 @@ chips. This proves the fun before any Blender work.
 > the Duende meter — `=5` starts one phrase from victory, which is how the win/end-scene
 > beats were verified live (grinding all six phrases over the AXe tap loop was too
 > slow even at `TIME_SCALE=0.1`). Session story + verification screenshots:
-> `docs/blog_notes.md` (2026-07-13 entry), `docs/screenshots/*boss-*`.
+> `docs/blog_notes.md` (2026-07-13 entry), `docs/screenshots/game/boss-*`.
 
 ## Phase 2 — SFX pack + juice polish  [Claude, Josh auditions]
 
@@ -351,7 +351,7 @@ frame list. Freeze-frame verify. **Commit** ("Boss fight: dancer ole/stomp sprit
 >    one-shot idiom so the held frame survives half-open sampling and the FBX start-frame
 >    shift), regenerate FBXs, and render through the existing pipeline.
 > 4. **Show the final cel-shaded, game-size filmstrip for a last sign-off** (a montage PNG
->    in `docs/screenshots/`) — the downscaled shaded sprite is the true test — **before**
+>    in `docs/screenshots/game/`) — the downscaled shaded sprite is the true test — **before**
 >    installing imagesets and committing. Amend rather than pile on commits if iterating.
 >
 > The dancer's gown rig differs from the bull's DEF chain (world-space arm rotations, the

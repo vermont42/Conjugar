@@ -272,7 +272,10 @@ docs/
 ├── dancer_shortlist.md         # Marketplace dancer shortlist from the paid-asset spike
 ├── screenshot-plan.md          # App Store screenshot capture spec: nine view categories × light/dark × en/es × two devices
 ├── screenshot-playbook.md      # Screenshot workflow: prerequisites, driver flags, workarounds, recovery
-├── screenshots/                # Captured App Store screenshots produced by scripts/take_screenshots.sh (gitignored)
+├── screenshots/                # Gitignored capture area. version_<N>/ are the assembled App Store upload bundles
+│                               #   (iPhone/iPad × en/es, 36 cells each; version_3 is current). game/ holds the
+│                               #   sprite-development captures cited by blog_notes.md and prompts/game_boss_llamada.md.
+│                               #   scripts/take_screenshots.sh writes fresh timestamped PNGs to the top level
 ├── video_script.md             # App Store preview script, adapted from Conjuguer's
 ├── SpanishVerbFrequencies.xml  # Sketch Engine frequency export (esTenTen18) — the source of the frequency ranks
 ├── SpanishVerbFrequencyRanks.txt   # infinitive,rank for the 999 ranked verbs
