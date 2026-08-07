@@ -9186,3 +9186,42 @@ which is a nice argument for running the verify ops on screens you think are fin
 Verified on a fresh install (uninstall first — `MaxDisplayCount(1)` means the TipKit
 datastore has to be cleared or the tip never shows again): close button at screen y=275,
 `tap_id.sh` taps it with no warning, tip dismisses. 550 tests, SwiftLint clean.
+
+## Version 3.0, build 1 — and why Xcode's two version fields are named so badly (2026-08-06)
+
+Josh bumped the app to 3.0 for the launch of the rewritten Conjugar and reset the build
+number to 1, then asked the question everyone eventually asks: is `CURRENT_PROJECT_VERSION`
+really the "Build" field and `MARKETING_VERSION` really the "Version" field? Yes, and the
+wiring is explicit in `Conjugar/Info.plist` — `CFBundleShortVersionString` is
+`$(MARKETING_VERSION)`, `CFBundleVersion` is `$(CURRENT_PROJECT_VERSION)`. The widget target
+sets `GENERATE_INFOPLIST_FILE = YES`, so it has no plist of its own to inspect; Xcode
+synthesizes the same two keys from the same two build settings.
+
+The naming is a fossil rather than a design. `CURRENT_PROJECT_VERSION` predates iOS entirely:
+it fed the Mach-O `-current_version` linker flag alongside `DYLIB_COMPATIBILITY_VERSION`, so
+it meant "the current build of this project," not "the release." `MARKETING_VERSION` was
+bolted on later and its name is literal — the number marketing puts on the box. The
+`CFBundle…` keys come from a third naming era, which is how the *short* string ends up being
+the long-lived public version while plain `CFBundleVersion` is the throwaway counter. Three
+generations of naming, one settings pane.
+
+I got a detail wrong in passing and want it recorded correctly here, because it is exactly
+the kind of thing a future session would repeat: I first said App Store Connect compares
+build numbers across the whole app record. It does not. Uniqueness and monotonicity are
+enforced **per version train** — within `CFBundleShortVersionString` 3.0, each upload needs a
+higher `CFBundleVersion` than the previous 3.0 upload, and nothing carries over from 2.8. So
+resetting to 1 on a new marketing version is clean, not a rejection risk.
+
+Resetting is also the better scheme going forward. The project had previously pinned the two
+values together — 2.8 and 2.8 — which reads tidy but leaves nowhere to go when a submission
+needs a second upload. Now a rejected or buggy build just becomes 3.0 (2), 3.0 (3), and the
+Version field stays untouched until 3.1.
+
+The constraint that actually bites on this project is that all four build configs must move
+together: app Debug/Release and widget Debug/Release. An app extension whose
+`CFBundleShortVersionString` or `CFBundleVersion` disagrees with its containing app is a hard
+upload rejection, and Conjugar ships `ConjugarWidgetExtension`. The diff did move all four.
+`xcrun agvtool next-version -all` is the way to keep them in lockstep for future build bumps.
+
+No code changed — this entry exists so the next person to open the version fields knows why
+build and version are no longer the same number.
