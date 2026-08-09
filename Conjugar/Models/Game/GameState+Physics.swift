@@ -74,6 +74,11 @@ extension GameState {
     playerVelocityY = -Self.jumpImpulse
     playerGrounded = false
     Current.soundPlayer.play(.pop, shouldDebounce: false)
+    // The cape swings a quarter-turn for the flight: clockwise facing right,
+    // counter-clockwise facing left (`updateCapeRotation` turns it and unwinds on landing).
+    if isCaped { capeRotationDirection = playerFacing >= 0 ? 1 : -1 }
+    // La Serenata: the jump strums a chord — the "correct!" chime plus a 🎵 to the bull.
+    strumSerenataIfActive()
     // El Flechazo: a qualifying jump fires a homing ❤️ missile (no-op unless armed).
     fireHeartMissileIfArmed()
     // El Cortejo: a jump spends a banked charge to re-possess, once the prior chase has

@@ -18,11 +18,13 @@ extension GameState {
       return
     }
 
-    // Pace left/right along the top platform, staying left of the bullfighter.
+    // Pace left/right along the top platform, staying left of the bullfighter. The
+    // speed power-up (⚡) doubles the pace via `bullSpeedFactorNow` — translation only;
+    // his walk flipbook still runs at the fixed `fps`.
     let half = Self.bullSize / 2
     let minX = screenSize.width * 0.15 + half
     let maxX = screenSize.width * 0.6
-    bullX += bullDirection * Self.bullPaceSpeed * dt
+    bullX += bullDirection * Self.bullPaceSpeed * bullSpeedFactorNow * dt
     if bullX <= minX {
       bullX = minX
       bullDirection = 1

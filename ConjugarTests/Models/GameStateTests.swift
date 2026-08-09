@@ -1323,4 +1323,227 @@ struct GameStateTests {
     #expect(gameState.stage == 2)
     #expect(gameState.cortejoCharges == 2)   // banked charges survive a summit (death clears them)
   }
+
+  // MARK: The carried cape and its jump turn
+
+  /// Turn the cape until it settles (0.25 s at `capeRotationRate`; a generous 20 frames).
+  private func settleCape(_ gameState: GameState) {
+    for _ in 0..<20 { gameState.updateCapeRotation(dt: 1.0 / 60.0) }
+  }
+
+  @Test func aCapedJumpTurnsTheCapeAQuarterTurnAndUnwindsOnLanding() {
+    let gameState = configured()
+    gameState.capedRemaining = GameState.capeDuration
+    gameState.playerFacing = 1
+    gameState.jump()
+    #expect(gameState.capeRotationDirection == 1)   // facing right → clockwise
+    settleCape(gameState)
+    #expect(gameState.capeRotation == GameState.capeJumpRotation)
+    // Landing unwinds it back to the standard orientation.
+    gameState.playerGrounded = true
+    settleCape(gameState)
+    #expect(gameState.capeRotation == 0)
+    #expect(gameState.capeRotationDirection == 0)
+  }
+
+  @Test func aCapedJumpFacingLeftTurnsTheOtherWay() {
+    let gameState = configured()
+    gameState.capedRemaining = GameState.capeDuration
+    gameState.playerFacing = -1
+    gameState.jump()
+    #expect(gameState.capeRotationDirection == -1)   // facing left → counter-clockwise
+    settleCape(gameState)
+    #expect(gameState.capeRotation == -GameState.capeJumpRotation)
+  }
+
+  @Test func anUncapedJumpLeavesTheCapeAlone() {
+    let gameState = configured()
+    gameState.capedRemaining = 0
+    gameState.jump()
+    settleCape(gameState)
+    #expect(gameState.capeRotationDirection == 0)
+    #expect(gameState.capeRotation == 0)
+  }
+
+  @Test func collectingASecondCapeResetsTheRotationToStandard() {
+    let gameState = configured()
+    gameState.capedRemaining = GameState.capeDuration
+    gameState.jump()
+    settleCape(gameState)
+    #expect(gameState.capeRotation == GameState.capeJumpRotation)
+    // A second cape arrives in its standard orientation, cancelling the turn in progress.
+    gameState.collectPowerUp(.cape)
+    #expect(gameState.capeRotation == 0)
+    #expect(gameState.capeRotationDirection == 0)
+    // The NEXT jump turns it again as normal.
+    gameState.playerGrounded = true
+    gameState.jump()
+    settleCape(gameState)
+    #expect(gameState.capeRotation == GameState.capeJumpRotation)
+  }
+
+  @Test func theCarriedCapeFillsInOnlyWhereTheSpriteIsCapeless() {
+    let gameState = configured()
+    gameState.capedRemaining = GameState.capeDuration
+    // Standing/walking: the muleta is baked into the sprite, so no separate cape.
+    gameState.playerAction = .cape
+    #expect(!gameState.isCarriedCapeVisible)
+    gameState.playerAction = .capeWalk
+    #expect(!gameState.isCarriedCapeVisible)
+    // Airborne and climbing render capeless, so the carried cape shows there.
+    gameState.playerAction = .jump
+    #expect(gameState.isCarriedCapeVisible)
+    gameState.playerAction = .climb
+    #expect(gameState.isCarriedCapeVisible)
+    // …and never without the power-up.
+    gameState.capedRemaining = 0
+    #expect(!gameState.isCarriedCapeVisible)
+  }
+
+  // MARK: Speed ⚡ — the bull quickens too
+
+  @Test func speedPickupDoublesBullPacingButNotItsAnimation() {
+    func paceDelta(speed: Double) -> CGFloat {
+      let gameState = configured()
+      gameState.speedRemaining = speed
+      let x0 = gameState.bullX
+      gameState.updateBull(dt: 1.0 / 60.0)
+      return gameState.bullX - x0
+    }
+    let base = paceDelta(speed: 0)
+    let fast = paceDelta(speed: GameState.speedDuration)
+    #expect(base > 0)
+    #expect(abs(fast - base * GameState.speedFactor) < 0.001)
+
+    // The flipbook is on the fixed `fps` clock, so the walk cycle itself is untouched.
+    let plain = configured()
+    let quick = configured()
+    quick.speedRemaining = GameState.speedDuration
+    plain.advanceAnimations(dt: 1.0 / 60.0)
+    quick.advanceAnimations(dt: 1.0 / 60.0)
+    #expect(plain.bullPhase == quick.bullPhase)
+  }
+
+  // MARK: La Serenata — the strummed jump
+
+  @Test func aJumpDuringLaSerenataSendsANoteToTheBull() {
+    let gameState = configured()
+    gameState.serenataRemaining = GameState.serenataDuration
+    gameState.jump()
+    #expect(gameState.serenataNotes.count == 1)
+    #expect(gameState.serenataNotes[0].x == gameState.bullX)
+    // Half a glyph above his center, so it sounds over him rather than out of him.
+    #expect(gameState.serenataNotes[0].y == gameState.bullY - GameState.serenataNoteLift)
+
+    // Without the power-up a jump sends nothing.
+    let silent = configured()
+    silent.jump()
+    #expect(silent.serenataNotes.isEmpty)
+  }
+
+  @Test func aSerenataNoteRidesTheBullThenBurstsYellowAndBlue() {
+    let gameState = configured()
+    gameState.serenataRemaining = GameState.serenataDuration
+    gameState.jump()
+    // The bull dances on; the note tracks him.
+    gameState.bullX += 50
+    gameState.bullY -= 10
+    gameState.updateSerenataNotes(dt: 1.0 / 60.0)
+    #expect(gameState.serenataNotes[0].x == gameState.bullX)
+    #expect(gameState.serenataNotes[0].y == gameState.bullY - GameState.serenataNoteLift)
+    #expect(gameState.hitParticles.isEmpty)   // still ringing
+
+    // A second in, it bursts in the two-color fanfare.
+    gameState.serenataNotes[0].remaining = 0.001
+    gameState.updateSerenataNotes(dt: 1.0 / 60.0)
+    #expect(gameState.serenataNotes.isEmpty)
+    #expect(gameState.hitParticles.contains { $0.tint == .yellow })
+    #expect(gameState.hitParticles.contains { $0.tint == .blue })
+  }
+
+  @Test func anObstacleSmashStaysAllYellow() {
+    let gameState = configured()
+    gameState.spawnHitParticles(x: 100, y: 100)
+    #expect(!gameState.hitParticles.isEmpty)
+    #expect(gameState.hitParticles.allSatisfy { $0.tint == .yellow })
+  }
+
+  // MARK: El Cortejo — the mushroom thrown at the possessed obstacle
+
+  @Test func aCortejoPossessionThrowsAMushroomAtTheClaimedObstacle() {
+    let gameState = configured()
+    gameState.obstacles = twoObstacles(gameState)
+    gameState.collectPowerUp(.cortejo)
+    let possessed = gameState.obstacles.first { $0.vibrateRemaining > 0 }
+    #expect(gameState.cortejoMushrooms.count == 1)
+    #expect(gameState.cortejoMushrooms[0].targetID == possessed?.id)
+    // It leaves from the dancer, as her hearts do.
+    #expect(gameState.cortejoMushrooms[0].x == gameState.playerX)
+    #expect(gameState.cortejoMushrooms[0].y == gameState.playerY)
+  }
+
+  @Test func aCortejoMushroomClosesOnItsTargetThenRetiresHarmlessly() {
+    let gameState = configured()
+    gameState.obstacles = twoObstacles(gameState)
+    let target = gameState.obstacles[0]
+    gameState.cortejoMushrooms = [
+      CortejoMushroom(id: 0, x: target.x - 60, y: target.y, targetID: target.id, lifeRemaining: GameState.cortejoMushroomLife)
+    ]
+    gameState.updateCortejoMushrooms(dt: 1.0 / 60.0)
+    #expect(gameState.cortejoMushrooms.count == 1)
+    #expect(gameState.cortejoMushrooms[0].x > target.x - 60)   // closing on it
+
+    // On arrival it retires — and, being cosmetic, harms nothing.
+    gameState.cortejoMushrooms[0].x = target.x
+    gameState.cortejoMushrooms[0].y = target.y
+    gameState.updateCortejoMushrooms(dt: 1.0 / 60.0)
+    #expect(gameState.cortejoMushrooms.isEmpty)
+    #expect(gameState.obstacles.count == 2)
+    #expect(gameState.obstacles.allSatisfy { $0.fadeRemaining == 0 })
+  }
+
+  // MARK: El Flechazo — the matador's hearts
+
+  @Test func firingAMissileBloomsAHeartBesideTheMatador() {
+    let gameState = configured()
+    gameState.flechazoRemaining = GameState.flechazoDuration
+    gameState.flechazoCooldown = 0
+    gameState.obstacles = [fullObstacleMidField(gameState)]
+    gameState.jump()
+    #expect(gameState.matadorHearts.count == 1)
+    #expect(gameState.matadorHearts[0].missileID == gameState.heartMissiles[0].id)
+    // It grows in from nothing over `matadorHeartGrow`…
+    #expect(gameState.matadorHeartOpacity(gameState.matadorHearts[0]) == 0)
+    gameState.updateMatadorHearts(dt: GameState.matadorHeartGrow)
+    #expect(gameState.matadorHeartOpacity(gameState.matadorHearts[0]) == 1)
+    // …to the matador's right, at his sprite's vertical center (above the box center).
+    let point = gameState.matadorHeartPosition(slot: 0)
+    #expect(point.x > gameState.bullfighterX)
+    #expect(point.y < gameState.bullfighterY)
+  }
+
+  @Test func aMissileStrikePopsTheMatadorHeartYellowAndBlue() {
+    let gameState = configured()
+    var target = fullObstacleMidField(gameState)
+    target.velocityX = 0
+    gameState.obstacles = [target]
+    gameState.heartMissiles = [
+      HeartMissile(id: 0, x: target.x, y: target.y, velocityX: 0, velocityY: 0, targetID: target.id, lifeRemaining: GameState.heartMissileLife)
+    ]
+    gameState.matadorHearts = [MatadorHeart(id: 0, missileID: 0)]
+    gameState.updateHeartMissiles(dt: 1.0 / 60.0)
+    #expect(gameState.matadorHearts.isEmpty)                        // popped by the strike
+    // The obstacle's own smash burst is all yellow, so a blue dot can only be the fanfare.
+    #expect(gameState.hitParticles.contains { $0.tint == .blue })
+  }
+
+  @Test func aMissileThatNeverStrikesRetiresItsHeartQuietly() {
+    let gameState = configured()
+    gameState.matadorHearts = [MatadorHeart(id: 0, missileID: 7)]   // its missile is gone
+    gameState.updateMatadorHearts(dt: 1.0 / 60.0)
+    #expect(gameState.matadorHearts.first?.fadeRemaining != nil)    // fading, not popping
+    #expect(gameState.hitParticles.isEmpty)                         // no burst
+    gameState.updateMatadorHearts(dt: GameState.matadorHeartFade)
+    #expect(gameState.matadorHearts.isEmpty)
+  }
 }

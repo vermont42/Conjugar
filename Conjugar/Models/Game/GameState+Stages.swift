@@ -54,8 +54,13 @@ extension GameState {
     // clears them (`respawn`), a summit does not.
     obstacles.removeAll()
     // Any in-flight ❤️ missiles have no targets once the field clears; the flechazo
-    // *timer* itself carries across the escape beat like the other power-ups.
+    // *timer* itself carries across the escape beat like the other power-ups. Their
+    // matador hearts go with them (the escape pipeline doesn't age them, and he is about
+    // to fly off-screen). The cosmetic 🍄s and 🎵s lose their subjects with the field.
     heartMissiles.removeAll()
+    matadorHearts.removeAll()
+    cortejoMushrooms.removeAll()
+    serenataNotes.removeAll()
     obstacleSpawnTimer = Self.obstacleSpawnInterval
     bullThrowTimer = 0
     // A summit interrupts any active mechanic window (the next stage re-arms its own).
@@ -175,15 +180,21 @@ extension GameState {
     cancelActiveMechanic()
     armMechanicCountdown(firstDelay: true)
 
-    // Death clears every active power-up (the escape beat, by contrast, carries them).
+    // Death clears every active power-up (the escape beat, by contrast, carries them),
+    // along with everything they had in flight.
     capedRemaining = 0
+    capeRotation = 0
+    capeRotationDirection = 0
     speedRemaining = 0
     serenataRemaining = 0
     serenataDanceTimer = 0
+    serenataNotes.removeAll()
     flechazoRemaining = 0
     flechazoCooldown = 0
     heartMissiles.removeAll()
+    matadorHearts.removeAll()
     cortejoCharges = 0
+    cortejoMushrooms.removeAll()
     damageCooldown = Self.respawnGrace
   }
 }

@@ -223,6 +223,11 @@ struct GameView: View {
   /// platform surface), mirroring `bullFeetOffset` / `dancerFeetOffset`.
   private static let matadorFeetOffset: CGFloat = -(matadorVisualHeight - GameState.bullfighterSize) / 2
 
+  /// On-screen height of the cape the dancer carries while the power-up runs (drawn from
+  /// the `cape_pickup` muleta, like the platform pickup) — sized to read as a held cloth
+  /// beside the ~57 pt dancer without crowding her.
+  private static let carriedCapeHeight: CGFloat = 22
+
   /// The small horizontal shiver a `cortejo`-possessed obstacle makes before it starts
   /// chasing — a deterministic sine of its own `vibrateRemaining` (phase-varied by id), 0
   /// once the chase begins.
@@ -355,12 +360,18 @@ struct GameView: View {
         stageDressing
 
         matadorSprite
+        matadorHeartViews
 
         heartMissileViews
+        cortejoMushroomViews
         hitParticleViews
         bullSprite
+        // The serenade notes ride the bull, so they draw over him.
+        serenataNoteViews
         playerSprite
+        carriedCape
         speedBadge
+        serenataBadge
         flechazoBadge
         cortejoBadge
 
@@ -530,6 +541,44 @@ struct GameView: View {
     }
   }
 
+  /// The cape carried beside the dancer whenever her sprite isn't already holding the
+  /// muleta — mid-jump and on a ladder, where the `.jump`/`.climb` renders are capeless
+  /// (`isCarriedCapeVisible`). It hangs in its standard orientation on the ladder and
+  /// swings a quarter-turn through the flight of a jump: clockwise facing right,
+  /// counter-clockwise facing left (SwiftUI's positive `rotationEffect` is clockwise, so
+  /// `capeRotation`'s sign maps straight through). Shares the cape's expiry blink.
+  private var carriedCape: some View {
+    Group {
+      if gameState.isCarriedCapeVisible {
+        Image("cape_pickup")
+          .resizable()
+          .scaledToFit()
+          .frame(width: Self.carriedCapeHeight * (188.0 / 229.0), height: Self.carriedCapeHeight)
+          .rotationEffect(.degrees(gameState.capeRotation))
+          .opacity(gameState.isCapeVisible ? 1 : 0.25)
+          // Her leading side at the sprite's vertical center — the badges' placement.
+          .position(x: gameState.playerX + gameState.playerFacing * (GameState.playerWidth / 2), y: gameState.playerY + Self.dancerFeetOffset)
+      }
+    }
+  }
+
+  /// A 🎸 badge on the dancer's leading side while La Serenata plays, sharing the cape's
+  /// expiry blink like the other badges. Apple draws the guitar diagonally with its neck
+  /// toward the upper RIGHT (confirmed on device), so facing right needs no transform and
+  /// facing left mirrors the glyph — the neck always points up and AWAY from her, out over
+  /// the side she faces.
+  private var serenataBadge: some View {
+    Group {
+      if gameState.serenataRemaining > 0 {
+        Text(verbatim: "🎸")
+          .font(.system(size: 20))
+          .scaleEffect(x: gameState.playerFacing >= 0 ? 1 : -1, y: 1)
+          .opacity(gameState.isSerenataBadgeVisible ? 1 : 0.25)
+          .position(x: gameState.playerX + gameState.playerFacing * (GameState.playerWidth / 2), y: gameState.playerY + Self.dancerFeetOffset)
+      }
+    }
+  }
+
   /// A ❤️ badge above the dancer while El Flechazo is armed, sharing the cape's expiry
   /// blink (`isFlechazoBadgeVisible`) exactly like the speed badge.
   private var flechazoBadge: some View {
@@ -559,12 +608,14 @@ struct GameView: View {
     }
   }
 
-  /// The yellow particle burst thrown off when an obstacle is destroyed
+  /// The particle burst thrown off when an obstacle is destroyed
   /// (`GameState.spawnHitParticles`) — small dots scattering under gravity and fading.
+  /// The love/serenade bursts (`spawnFanfareParticles`) reuse the same dots in
+  /// alternating yellow and blue, carried per particle by `tint`.
   private var hitParticleViews: some View {
     ForEach(gameState.hitParticles) { particle in
       Circle()
-        .fill(Color.customYellow)
+        .fill(particle.tint == .blue ? Color.customBlue : Color.customYellow)
         .frame(width: particle.size, height: particle.size)
         .opacity((particle.ttl / particle.initialTTL) * (1 - gameState.bossTransition))
         .position(x: particle.x, y: particle.y)
@@ -578,6 +629,43 @@ struct GameView: View {
       Text(verbatim: "❤️")
         .font(.system(size: 14))
         .position(x: missile.x, y: missile.y)
+        .opacity(1 - gameState.bossTransition)
+    }
+  }
+
+  /// The ❤️s piled beside the captive matador — one per fired missile, growing in over
+  /// `matadorHeartGrow` and bursting when its missile strikes. Position comes from
+  /// `GameState.matadorHeartPosition(slot:)` (his live position, so the pile rides him).
+  private var matadorHeartViews: some View {
+    ForEach(Array(gameState.matadorHearts.enumerated()), id: \.element.id) { slot, heart in
+      let point = gameState.matadorHeartPosition(slot: slot)
+      Text(verbatim: "❤️")
+        .font(.system(size: GameState.matadorHeartSize))
+        .opacity(gameState.matadorHeartOpacity(heart) * (1 - gameState.bossTransition))
+        .position(x: point.x, y: point.y)
+    }
+  }
+
+  /// The cosmetic 🍄s flying from the dancer to an obstacle El Cortejo just possessed
+  /// (`GameState.updateCortejoMushrooms`) — the heart missiles' idiom, no collision.
+  private var cortejoMushroomViews: some View {
+    ForEach(gameState.cortejoMushrooms) { mushroom in
+      Text(verbatim: "🍄")
+        .font(.system(size: 14))
+        .position(x: mushroom.x, y: mushroom.y)
+        .opacity(1 - gameState.bossTransition)
+    }
+  }
+
+  /// The 🎵s a jump sends to the serenaded bull. Each is re-seated on him every frame (half
+  /// a glyph above his center — the lift is in `GameState`, so the burst blooms where the
+  /// note was), so it tracks his dance, then bursts into yellow-and-blue particles after a
+  /// second (`GameState.updateSerenataNotes`).
+  private var serenataNoteViews: some View {
+    ForEach(gameState.serenataNotes) { note in
+      Text(verbatim: "🎵")
+        .font(.system(size: GameState.serenataNoteSize))
+        .position(x: note.x, y: note.y)
         .opacity(1 - gameState.bossTransition)
     }
   }

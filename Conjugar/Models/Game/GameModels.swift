@@ -104,9 +104,16 @@ struct HeartMissile: Identifiable {
   var lifeRemaining: Double
 }
 
-/// A small yellow particle in the burst thrown off when an obstacle is destroyed
+/// Which palette color a `HitParticle` renders in. The obstacle-destruction burst is
+/// all `yellow`; the love/serenade bursts (`GameState.spawnFanfareParticles`) alternate
+/// yellow and blue around the fan.
+enum ParticleTint {
+  case yellow, blue
+}
+
+/// A small particle in the burst thrown off when an obstacle is destroyed
 /// (see `GameState.spawnHitParticles` / `updateHitParticles`). Scatters outward under
-/// gravity and fades over its short life; rendered as a yellow dot in `GameView`.
+/// gravity and fades over its short life; rendered as a `tint`-colored dot in `GameView`.
 struct HitParticle: Identifiable {
   let id: Int
   var x: CGFloat
@@ -116,6 +123,44 @@ struct HitParticle: Identifiable {
   var ttl: Double
   let initialTTL: Double
   let size: CGFloat
+  let tint: ParticleTint
+}
+
+/// A 🎵 serenade note spawned by a jump while La Serenata plays. It rides the bull —
+/// its position is re-read from the bull every frame, so it tracks him as he dances —
+/// and after `GameState.serenataNoteLife` bursts into yellow-and-blue particles.
+struct SerenataNote: Identifiable {
+  let id: Int
+  var x: CGFloat
+  var y: CGFloat
+  var remaining: Double
+}
+
+/// A cosmetic 🍄 thrown from the dancer to the obstacle El Cortejo just possessed —
+/// the visible link between the jump and the possession, mirroring the way El Flechazo's
+/// hearts fly. It homes on its target and vanishes on arrival; it does no damage and
+/// carries no state the possession depends on (see `GameState.updateCortejoMushrooms`).
+struct CortejoMushroom: Identifiable {
+  let id: Int
+  var x: CGFloat
+  var y: CGFloat
+  var targetID: Int
+  var lifeRemaining: Double
+}
+
+/// A ❤️ that blooms beside the captive matador each time El Flechazo fires a missile
+/// (growing in over `GameState.matadorHeartGrow`), then bursts into yellow-and-blue
+/// particles when that missile strikes an enemy. A missile whose life expires without a
+/// strike retires its heart quietly instead (`fadeRemaining`). Its screen position is
+/// derived from the matador each frame — see `GameState.matadorHeartPosition(slot:)`.
+struct MatadorHeart: Identifiable {
+  let id: Int
+  /// The heart missile this heart is bound to; the pop fires when that missile connects.
+  let missileID: Int
+  /// Seconds since it appeared — the first `GameState.matadorHeartGrow` are its grow-in.
+  var age: Double = 0
+  /// Non-nil once the heart is retiring un-popped (its missile expired): fade seconds left.
+  var fadeRemaining: Double?
 }
 
 /// A hole punched in a girder by the `terremoto` (earthquake) mechanic. It fades in over

@@ -65,12 +65,30 @@ final class GameState {
 
   /// Speed pickup lasts the same 7 s (5 s solid + 2 s expiry blink) as the cape.
   static let speedDuration: Double = 7
-  /// Speed pickup multiplier: walk AND climb speed ×2 while active.
+  /// Speed pickup multiplier: the dancer's walk AND climb ×2 — and, per Josh, the
+  /// BULL's pacing ×2 as well (`bullSpeedFactorNow`), so the whole scene quickens.
+  /// Only translation is scaled: both actors' sprite flipbooks run at the fixed `fps`,
+  /// so nobody's animation speeds up.
   static let speedFactor: CGFloat = 2
   /// La Serenata lasts the same envelope: the bull dances instead of throwing.
   static let serenataDuration: Double = 7
   /// Seconds between the bull's serenata dance bursts.
   static let serenataDanceInterval: Double = 1.2
+  /// A jump during La Serenata sends a 🎵 to the bull; it rides him for this long,
+  /// then bursts into yellow-and-blue particles.
+  static let serenataNoteLife: Double = 1.0
+  /// Rendered point size of that note glyph, and the half-glyph it rides ABOVE the bull's
+  /// center (per Josh) so it reads as sounding over him rather than out of him. The lift
+  /// lives here rather than in the view so the burst blooms exactly where the note was.
+  static let serenataNoteSize: CGFloat = 22
+  static let serenataNoteLift: CGFloat = serenataNoteSize / 2
+
+  /// The carried cape (drawn beside the dancer whenever her sprite isn't already
+  /// holding the muleta — see `isCarriedCapeVisible`) swings a quarter-turn while she
+  /// is airborne: clockwise facing right, counter-clockwise facing left. `capeRotationRate`
+  /// is how fast (deg/s) it turns toward that target and back to 0 on landing.
+  static let capeJumpRotation: Double = 90
+  static let capeRotationRate: Double = 360
 
   // MARK: Challenge mechanics (La Subida — one kind per stage; see GameState+Mechanics.swift)
 
@@ -154,12 +172,33 @@ final class GameState {
   /// Distance (pt) at which a missile counts as striking its target.
   static let heartMissileHitDistance: CGFloat = 22
 
+  /// El Flechazo's matador hearts: firing a missile blooms a ❤️ beside the captive
+  /// matador over `matadorHeartGrow`; the missile connecting bursts it into
+  /// yellow-and-blue particles, and a missile that expires un-struck retires its heart
+  /// quietly over `matadorHeartFade`.
+  static let matadorHeartGrow: Double = 0.3
+  static let matadorHeartFade: Double = 0.3
+  static let matadorHeartSize: CGFloat = 18
+  /// Where the first heart sits relative to the matador: just off his RIGHT side, at
+  /// his sprite's vertical center. `bullfighterY` is the center of the short
+  /// `bullfighterSize` collision box while the sprite overhangs it upward by
+  /// `GameView.matadorFeetOffset` (−17), so the visual center is that far above it.
+  static let matadorHeartOffset = CGSize(width: 26, height: -17)
+  /// Later hearts stack further right, so two missiles in flight don't overlap.
+  static let matadorHeartSpacing: CGFloat = 16
+
   /// El Cortejo (mushroom chaser): the possessed obstacle shivers in place this long,
   /// then pursues its quarry at `cortejoChaseFactor`× obstacle speed until it catches it.
   static let cortejoVibrateDuration: Double = 1.5
   static let cortejoChaseFactor: CGFloat = 1.5
   /// Distance (pt) at which a chaser catches its quarry (both then fade + confetti).
   static let cortejoCatchDistance: CGFloat = 24
+  /// The cosmetic 🍄 thrown from the dancer to the obstacle a possession just claimed —
+  /// the visible link between the jump and the shiver, at the heart missiles' pace.
+  static let cortejoMushroomSpeed: CGFloat = 400
+  static let cortejoMushroomLife: Double = 1.5
+  /// Distance (pt) at which the flying mushroom counts as having reached its target.
+  static let cortejoMushroomHitDistance: CGFloat = 18
 
   /// Sprite flipbook speed.
   static let fps = 10
@@ -398,6 +437,10 @@ final class GameState {
   var flechazoCooldown: Double = 0
   var heartMissiles: [HeartMissile] = []
   var heartMissileCounter = 0
+  /// The ❤️s piled up beside the captive matador — one per fired missile, popped when
+  /// that missile lands (see `updateMatadorHearts`).
+  var matadorHearts: [MatadorHeart] = []
+  var matadorHeartCounter = 0
 
   // Yellow particle bursts thrown off when an obstacle is destroyed (visual only).
   var hitParticles: [HitParticle] = []
@@ -408,6 +451,9 @@ final class GameState {
   // pickup banks onto the remainder. Persist across stage summits like the power-up timers;
   // cleared on death/new game.
   var cortejoCharges = 0
+  /// The cosmetic 🍄s in flight from the dancer to a freshly-possessed obstacle.
+  var cortejoMushrooms: [CortejoMushroom] = []
+  var cortejoMushroomCounter = 0
 
   // MARK: Player state
 
@@ -429,13 +475,23 @@ final class GameState {
   var movingDown = false
 
   var capedRemaining: Double = 0
-  /// Seconds of the speed power-up (⚡) remaining — while > 0, walk + climb double.
+  /// Degrees the carried cape is rotated right now — 0 is its standard orientation,
+  /// ±`capeJumpRotation` at the top of a jump (see `updateCapeRotation`).
+  var capeRotation: Double = 0
+  /// Which way the current jump turns the cape: +1 clockwise (facing right), −1
+  /// counter-clockwise (facing left), 0 while it is unwinding back to standard.
+  var capeRotationDirection: Double = 0
+  /// Seconds of the speed power-up (⚡) remaining — while > 0, walk + climb double
+  /// (and so does the bull's pacing).
   var speedRemaining: Double = 0
   /// Seconds of La Serenata (🎸) remaining — while > 0, the bull dances instead of
   /// pacing/throwing (see GameState+PowerUps.swift).
   var serenataRemaining: Double = 0
   /// Countdown to the bull's next serenata dance burst (the `bullThrowTimer` idiom).
   var serenataDanceTimer: Double = 0
+  /// The 🎵s a jump sends to the serenaded bull; each rides him, then bursts.
+  var serenataNotes: [SerenataNote] = []
+  var serenataNoteCounter = 0
   var health = GameState.maxHealth
   var damageCooldown: Double = 0
 
@@ -650,9 +706,10 @@ final class GameState {
     // burst (🌹/❤️) — warm those so the first duel frame is a cache hit. (The jaleo
     // pops are Spanish words, not emoji; the clashing emoji crowd row was removed.)
     let obstacleGlyphs = Self.stageObstacleEmojis.flatMap { $0 }
-    // ❤️ (flechazo pickup/missile) + 🍄 (cortejo pickup) join the encierro 🐂 and the
-    // speed/serenata pickups; ❤️ is also in `bossGlyphs`, harmlessly warmed twice.
-    let subidaGlyphs = obstacleGlyphs + ["🐂", "⚡", "🎸", "❤️", "🍄"]
+    // ❤️ (flechazo pickup/missile/matador heart) + 🍄 (cortejo pickup + its flying escort)
+    // join the encierro 🐂 and the speed/serenata pickups, along with 🎵 (the serenade
+    // note a jump sends the bull); ❤️ is also in `bossGlyphs`, harmlessly warmed twice.
+    let subidaGlyphs = obstacleGlyphs + ["🐂", "⚡", "🎸", "❤️", "🍄", "🎵"]
     let bossGlyphs: [(String, CGFloat)] = ["🔥", "✨", "🌹", "❤️"].map { ($0, 30) }
     let glyphs: [(String, CGFloat)] = subidaGlyphs.map { ($0, 28) } + bossGlyphs
     Task.detached(priority: .userInitiated) {
@@ -778,9 +835,12 @@ final class GameState {
     movingDown = false
 
     capedRemaining = 0
+    capeRotation = 0
+    capeRotationDirection = 0
     speedRemaining = 0
     serenataRemaining = 0
     serenataDanceTimer = 0
+    serenataNotes.removeAll()
     health = Self.maxHealth
     damageCooldown = 0
 
@@ -802,8 +862,10 @@ final class GameState {
     flechazoRemaining = 0
     flechazoCooldown = 0
     heartMissiles.removeAll()
+    matadorHearts.removeAll()
     hitParticles.removeAll()
     cortejoCharges = 0
+    cortejoMushrooms.removeAll()
     assignStagePowerUp()
     assignStageMechanic()
 
@@ -870,6 +932,9 @@ final class GameState {
     if !canClimbDown { movingDown = false }
 
     updatePlayer(dt: dt)
+    // The carried cape's quarter-turn tracks `playerGrounded`, so it ages after the
+    // physics step that sets it.
+    updateCapeRotation(dt: dt)
     updateBull(dt: dt)
     // Fire / age the stage's challenge mechanic (zombie/encierro/apagón) before the
     // obstacles move — an active zombie window re-routes `updateObstacles` to homing.
@@ -881,6 +946,12 @@ final class GameState {
     updateBabies(dt: dt)
     updateCortejo(dt: dt)
     updateHeartMissiles(dt: dt)
+    // The three cosmetic escorts: the 🍄 flying to a possessed obstacle, the 🎵 riding
+    // the serenaded bull, and the ❤️s piled beside the matador. Each is visual only —
+    // no collision, no gameplay state — and no-ops cheaply when its array is empty.
+    updateCortejoMushrooms(dt: dt)
+    updateSerenataNotes(dt: dt)
+    updateMatadorHearts(dt: dt)
     updateObstacleFades(dt: dt)
     updateTerremoto(dt: dt)
     updateHitParticles(dt: dt)
@@ -921,12 +992,23 @@ final class GameState {
     return dx * dx + dy * dy
   }
 
-  // MARK: Obstacle-destruction yellow particle burst
+  // MARK: Particle bursts
 
   /// Throw off a fan of yellow particles at `(x, y)` — the feedback when an obstacle is
-  /// destroyed. A deterministic radial spread (with a slight upward bias) so it needs no
-  /// RNG and stays reproducible under test.
+  /// destroyed.
   func spawnHitParticles(x: CGFloat, y: CGFloat) {
+    spawnParticleFan(x: x, y: y) { _ in .yellow }
+  }
+
+  /// The love/serenade burst: the same fan in ALTERNATING yellow and blue. Fires when a
+  /// matador heart pops (its missile struck) and when a serenata note's second is up.
+  func spawnFanfareParticles(x: CGFloat, y: CGFloat) {
+    spawnParticleFan(x: x, y: y) { $0.isMultiple(of: 2) ? .yellow : .blue }
+  }
+
+  /// A deterministic radial spread (with a slight upward bias) so a burst needs no RNG
+  /// and stays reproducible under test. `tint` colors each particle by its index.
+  private func spawnParticleFan(x: CGFloat, y: CGFloat, tint: (Int) -> ParticleTint) {
     for i in 0..<Self.hitParticleCount {
       let angle = 2 * Double.pi * Double(i) / Double(Self.hitParticleCount)
       let speed = Self.hitParticleSpeed * (i % 2 == 0 ? 1.0 : 0.65)   // two rings for a fuller pop
@@ -938,14 +1020,15 @@ final class GameState {
           velocityY: CGFloat(sin(angle)) * speed - Self.hitParticleSpeed * 0.3,   // slight upward kick
           ttl: Self.hitParticleLife,
           initialTTL: Self.hitParticleLife,
-          size: Self.hitParticleSize
+          size: Self.hitParticleSize,
+          tint: tint(i)
         )
       )
       hitParticleCounter += 1
     }
   }
 
-  /// Advance the red hit-particles: integrate under gravity and drop the expired ones.
+  /// Advance the hit-particles: integrate under gravity and drop the expired ones.
   func updateHitParticles(dt: CGFloat) {
     guard !hitParticles.isEmpty else { return }
     for i in hitParticles.indices {

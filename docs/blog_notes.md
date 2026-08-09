@@ -9225,3 +9225,94 @@ upload rejection, and Conjugar ships `ConjugarWidgetExtension`. The diff did mov
 
 No code changed — this entry exists so the next person to open the version fields knows why
 build and version are no longer the same number.
+
+## Power-up polish: the cape turns, the bull quickens, and the matador gets his hearts (2026-08-09)
+
+Josh played the five La Subida power-ups and came back with a list of fixes. Four of the five
+were straightforward once we settled what he actually meant; the interesting part of this
+session was that three of the five bullets, read literally, described a game other than the
+one in the repo — and sorting that out first saved a rewrite.
+
+The first discrepancy: two bullets said "the bull moves twice as fast left or right" (speed)
+and "a note emoji appears in the center of the bull" (serenata). The player character is the
+*dancer*; the bull is the enemy she climbs toward. Speed already doubled the dancer's walk and
+climb, and both flipbooks already ran on a fixed `fps` clock, so "the speeds of the bull
+animations are unaffected" was already true — which made me think he meant the dancer and was
+describing something already shipped. He didn't. He meant the enemy bull, literally, in both
+bullets. So ⚡ now doubles the bull's pacing too (`bullSpeedFactorNow`, multiplied only into
+`updateBull`'s pace line, never into `bullPhase`), and the serenade note rides the *bull* —
+which, on reflection, is the better reading anyway: La Serenata is the power-up where the bull
+stops working and dances, so sending him a 🎵 that tracks his dance and then pops is the whole
+joke. It costs the player something (a faster bull is harder to touch, and touching him is how
+you summit), and Josh took that trade knowingly when asked.
+
+The second discrepancy: the Flechazo and Cortejo bullets were swapped relative to the code.
+Flechazo is the ❤️-missile power-up; Cortejo is the 🍄 possession. His bullets asked for a
+mushroom under Flechazo and a heart under Cortejo. He confirmed the mapping should follow the
+*behavior*, not the names — so the flying mushroom went to Cortejo and the matador's heart to
+Flechazo. Worth recording because the two names are genuinely easy to swap from memory:
+*flechazo* is the arrow-strike (hearts), *cortejo* is the courtship (one obstacle wooing
+another).
+
+The third was the interesting one. Josh asked for the cape to rotate 90° during a jump — but
+there is no cape to rotate. The muleta is baked into the `dancer_cape_*` / `dancer_capeWalk_*`
+sprites, and `derivedPlayerAction()` returns `.jump` the moment she leaves the ground, so
+mid-jump she renders *capeless*. The request was really surfacing a bug he'd been looking at
+without naming it: the cape visually disappears every time you jump. The fix he chose — a
+separate carried-cape overlay drawn from `cape_pickup`, on her leading side like the ⚡/❤️/🍄
+badges — turned out to be the right shape, but only with one addition I made on my own: gate
+it on `isCarriedCapeVisible`, which is true exactly when the sprite *isn't* already holding the
+muleta. Otherwise you'd get two capes whenever she stood still. So the overlay fills in the
+gaps (jump and ladder) and the sprite owns the rest, and the seam is invisible. The quarter-turn
+then rides on the overlay: `updateCapeRotation` walks `capeRotation` toward ±`capeJumpRotation`
+at 360 deg/s while airborne and unwinds it to 0 on landing, direction taken from the facing at
+jump time (SwiftUI's positive `rotationEffect` is clockwise, so the sign maps straight through).
+Josh's "the second cape has standard orientation" clarified to: a re-pickup snaps the rotation
+back to 0 immediately, and the next jump turns it again.
+
+The rest was mechanical. A `ParticleTint` on `HitParticle` and a `spawnFanfareParticles`
+sibling to `spawnHitParticles` gave us the yellow-and-blue burst without a second particle
+system — the fan math is now shared through one private `spawnParticleFan(x:y:tint:)`, with the
+obstacle smash still all yellow (there's a test pinning that, because it would be easy to
+change by accident). The Cortejo mushroom and the Flechazo hearts are both deliberately
+*cosmetic* entities: the mushroom homes on the obstacle the possession already claimed and
+vanishes on arrival without touching it, and the hearts derive their position from
+`bullfighterX`/`bullfighterY` each frame rather than storing one. That last choice matters
+because the matador rides off-screen during an escape beat; a stored position would have left
+hearts hanging in mid-air.
+
+One thing I couldn't verify without playtesting, and Josh is playtesting himself: which way
+Apple draws the 🎸 glyph. He wants the neck pointing up-and-away from the dancer, which means
+mirroring the emoji on exactly one facing. I went with "Apple's guitar has its neck toward the
+upper left" and put that behind a single named constant
+(`GameView.guitarGlyphNeckPointsLeft`) so it's a one-word flip if I guessed wrong.
+
+The un-popped heart's lifecycle needed one small piece of self-healing. A heart is bound to a
+missile by id and pops when that missile strikes; but a missile can also simply expire
+mid-flight without hitting anything. Rather than thread a second signal back from
+`updateHeartMissiles`, `updateMatadorHearts` checks each frame whether its missile is still in
+flight and starts a quiet fade if not — so expiry, and any future path that drops a missile,
+are handled without either having to know hearts exist. (A summit is the one case that doesn't
+go through that: `enterEscape` clears the hearts outright, because the matador is about to fly
+off the top of the screen and the escape beat runs its own pipeline that never ages them.)
+
+564 tests pass, 0 lint violations. 24 new tests cover the five changes.
+
+### Follow-up after Josh's playtest (same day)
+
+Two corrections from the first real play session, both small and both worth recording.
+
+The 🎸 guess was wrong: Apple draws the guitar with its neck toward the upper **right**, not
+left, so the badge was mirroring on exactly the wrong facing and the neck pointed back into the
+dancer. Fixed by flipping the mirror condition. The single-constant hedge I'd left behind
+turned out to be the wrong shape for the fix — inverting `guitarGlyphNeckPointsLeft` to `false`
+would have made the whole `&&` expression dead and stopped mirroring on *either* facing. The
+constant went away in favor of writing the facing test directly with the real orientation in
+the comment. Lesson: a boolean constant that only appears inside a compound condition isn't
+actually a safe one-word flip, however it's documented.
+
+The serenade note also sat too low, centered on the bull rather than sounding over him. It now
+rides half a glyph above his center. The lift went into `GameState` (`serenataNoteLift`,
+derived from `serenataNoteSize`) rather than being an offset in the view, because
+`updateSerenataNotes` spawns the burst at the note's stored position — a view-only offset would
+have made the particles bloom half a glyph below where the note visibly was.

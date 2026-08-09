@@ -76,10 +76,34 @@ The climb is split across `GameState+Obstacles.swift` (the rolling obstacle sets
   brief `respawnGrace` follows. `reset()` (a full restart to stage 1) is only for the configure
   path, not death.
 - **Power-ups (one kind per stage, `PowerUpKind`).** Drawn from a no-repeat shuffle bag
-  (`powerUpBag`, through `bossRNG`): **cape** (invuln + smash, `Image("cape_pickup")`), **speed
-  ⚡** (walk + climb ×2, `Sound.speedWhoosh`, a ⚡ badge over the dancer), **La Serenata 🎸** (the
-  bull stops pacing/throwing and dances the end-scene repertoire instead, `Sound.guitarStrum`,
-  `Sound.snort` on expiry). All share the cape's 7 s (5 solid + 2 blink) envelope.
+  (`powerUpBag`, through `bossRNG`); all five share the cape's 7 s (5 solid + 2 blink)
+  envelope, and each shows a badge on the dancer's leading side at her sprite's vertical
+  center. Every jump-triggered effect below hangs off `jump()` in `GameState+Physics.swift`.
+  - **cape** — invuln + smash, `Image("cape_pickup")`. The muleta is baked into the
+    `.cape`/`.capeWalk` sprites, so a **carried cape** overlay fills in exactly where those
+    aren't showing (mid-jump and on a ladder, which render capeless) — `isCarriedCapeVisible`,
+    so the two are never on screen together. It swings a **quarter-turn through a jump**:
+    clockwise facing right, counter-clockwise facing left, unwinding on landing
+    (`updateCapeRotation` at `capeRotationRate` deg/s). Collecting a cape while already caped
+    snaps it back to standard orientation; the next jump turns it again.
+  - **speed ⚡** — the dancer's walk + climb ×2 (`speedFactorNow`) **and the bull's pacing ×2**
+    (`bullSpeedFactorNow`), so the whole scene quickens. Translation only: both flipbooks stay
+    on the fixed `fps` clock, so no animation speeds up. `Sound.speedWhoosh`.
+  - **La Serenata 🎸** — the bull stops pacing/throwing and dances the end-scene repertoire
+    instead (`Sound.guitarStrum`, `Sound.snort` on expiry). A **jump strums a chord**: the
+    quiz's correct-answer `Sound.chime` plus a 🎵 that **rides the bull** (re-seated on him
+    every frame, `serenataNoteLift` = half a glyph above his center) for `serenataNoteLife`,
+    then bursts into yellow-and-blue particles. The lift lives in `GameState`, not the view,
+    so the burst blooms exactly where the note was.
+  - **El Flechazo ❤️** — a jump fires a homing heart missile at a random obstacle (1 s
+    cooldown). Each shot also blooms a ❤️ beside the **captive matador**, growing in over
+    `matadorHeartGrow` off his right side at his sprite's vertical center; when that missile
+    strikes, his heart **bursts yellow-and-blue** (`popMatadorHeart`). A missile that expires
+    un-struck retires its heart quietly instead.
+  - **El Cortejo 🍄** — a jump spends a banked charge to possess an obstacle, which shivers,
+    then chases and annihilates another. A cosmetic 🍄 **flies from the dancer to the obstacle
+    she just claimed** (`updateCortejoMushrooms`), arriving during the shiver — the visible
+    link between jump and possession, mirroring the way her hearts fly.
 - **Challenge mechanics (one per stage, `ChallengeMechanic`).** Also a no-repeat bag
   (`mechanicBag`); a scheduler fires the stage's mechanic after a random 10–18 s, then re-arms
   every 25 s. Announcements ride the jaleo idiom as **bull speech** (`spawnBullSpeech`).
