@@ -32,7 +32,8 @@ Conjugar/
 ├── es.lproj/
 │   └── LaunchScreen.strings    # Spanish launch-screen strings (the only surviving legacy .strings file)
 ├── Models/
-│   ├── verbModelMap.xml        # The verb→model map: 4,811 verbs → class number(s), gloss(es), reflexive flag
+│   ├── verbModelMap.xml        # The verb→model map: 4,811 verbs → class number(s), gloss(es), reflexive flag,
+│   │                           #   frequency counts (hi/gb/hp — see frequency/README.md; the rank is derived, not stored)
 │   ├── Etymologies.json        # Bundled verb etymologies keyed language → infinitive
 │   ├── ExampleUses.json        # Bundled modern-prose example sentences keyed by bare infinitive
 │   ├── MedievalExamples.json   # Bundled Medieval-Spanish attestations keyed infinitive → array
@@ -43,7 +44,8 @@ Conjugar/
 │   ├── ConjugatorError.swift   # Errors from the conjugation engine
 │   ├── ModelCatalog.swift      # Class number ("1", "4B-1", "31-1", …) → VerbModel (base + ordered features)
 │   ├── VerbModel.swift         # One regular base root plus an ordered feature list; also the alternate-paradigm scheme
-│   ├── VerbMap.swift           # VerbMapEntry + the load-once @unchecked Sendable cache over verbModelMap.xml
+│   ├── VerbMap.swift           # VerbMapEntry + the load-once @unchecked Sendable cache over verbModelMap.xml.
+│   │                           #   ranked(_:) derives the dense 1…4,811 frequency rank from the stored counts at parse time
 │   ├── RegularRoot.swift       # The three regular roots (cantar/comer/subir) plus the voseo supplement
 │   ├── EngineTense.swift       # Engine-side tense model — the ten simple / non-finite tenses only
 │   ├── EnginePersonNumber.swift  # Engine-side person model — six standard persons plus vos
@@ -145,7 +147,8 @@ Conjugar/
 │   ├── URLProtocolStub.swift   # URLProtocol subclass for stubbing HTTP responses in tests
 │   ├── URLSessionExtension.swift  # Stubbed URLSession for testing
 │   ├── Utterer.swift           # AVSpeechSynthesizer text-to-speech plus the single .ambient audio-session owner
-│   └── WidgetSnapshotWriter.swift  # Picks the daily verb + quiz question, conjugates them, writes JSON to the App Group
+│   └── WidgetSnapshotWriter.swift  # Picks the daily verb + quiz question, conjugates them, writes JSON to the App Group.
+│                                   #   Draws from the top verbOfTheDayPoolSize (1,000) verbs by frequency
 └── Views/
     ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing, incl. the one-shot game/onboarding/tutor flags
     ├── BrowseLayout.swift      # Shared LazyVGrid column sets for the iPad (regular-width) layouts
@@ -206,6 +209,8 @@ ConjugarTests/
 │   ├── ConjugatorAccessorsTests.swift  # The engine's convenience accessors
 │   ├── ConjugatorResolverTests.swift   # Verb → model resolution, incl. prefixed compounds and the regular fallback
 │   ├── VerbMapTests.swift              # verbModelMap.xml parsing and lookup
+│   ├── VerbMapRankingTests.swift       # Rank derivation on a fixture, the shipped map's invariants, and
+│   │                                   #   line-for-line agreement with docs/frequencies.txt
 │   ├── TenseBridgeTests.swift          # DisplayTense/DisplayPersonNumber → engine mapping, compounds, negative imperative
 │   ├── DisplayTenseTests.swift         # The UI tense vocabulary
 │   ├── DisplayPersonNumberTests.swift  # The UI person vocabulary and its pronouns
@@ -275,14 +280,19 @@ docs/
 │                               #   sprite-development captures cited by blog_notes.md and prompts/game_boss_llamada.md.
 │                               #   scripts/take_screenshots.sh writes fresh timestamped PNGs to the top level
 ├── video_script.md             # App Store preview script, adapted from Conjuguer's
-├── SpanishVerbFrequencies.xml  # Sketch Engine frequency export (esTenTen18) — the source of the frequency ranks
-├── SpanishVerbFrequencyRanks.txt   # infinitive,rank for the 999 ranked verbs
-├── verbs.csv                   # The same ranking as CSV
-├── freq_unmatched.txt          # Ranked verbs with no verbModelMap row (mostly corpus junk; a few genuine gaps)
+├── verb-frequency-sources.md   # 2026-08-28 research behind the frequency/ pipeline: RAE CORPES XXI (CC BY-SA 4.0) as the
+│                               #   primary key, Google Books as tie-breaker, measured coverage, paid options and why they lose.
+│                               #   Shipped 2026-08-30; kept as the record of what was measured, not as a live plan
+├── frequencies.txt             # The app's verb order, `<rank> <infinitive>` × 4,811. Written by
+│                               #   frequency/generate_frequencies_txt.py; VerbMapRankingTests pins the app to it line for line
+├── SpanishVerbFrequencies.xml  # The retired Sketch Engine export (esTenTen18) that ranked the top 988 verbs through
+│                               #   August 2026. Read by nothing; kept as provenance of the ranks users saw then
 ├── spanish_verbs_made_simpler.pdf  # Commercial reference: *Spanish Verbs Made Simple(r)* (gitignored)
 ├── french_verbs_made_simpler.pdf   # Its French companion, consulted for the sibling app (gitignored)
 ├── _extract_annexb.py          # Extracts Annex B from the source PDF into annex_b_verb_models.md
-├── _build_verbmap.py           # Builds Conjugar/Models/verbModelMap.xml from the extracted class index + glosses
+├── _build_verbmap.py           # Builds Conjugar/Models/verbModelMap.xml from the extracted class index + glosses +
+│                               #   frequency/verb-counts.json. Reproduces the shipped file byte-for-byte
+├── glosses/legacy_verbs_xml_glosses.tsv  # The 149 glosses that only the deleted legacy verbs.xml supplied, rescued
 ├── _phase1_prep.py             # Gloss pipeline Phase 1: builds the blind-input files per slice
 ├── _phase3_classify.py         # Gloss pipeline Phase 3: classifies verdicts
 ├── _phase3_apply.py            # Gloss pipeline Phase 3: rewrites slice_*.tsv from the Phase 2 consensus
@@ -292,6 +302,9 @@ prompts/                        # Session plans and task briefs. Each is a self-
 │                               #   fresh session; the finished ones double as a record of how a feature was specified.
 ├── ui.md, ui_claude.md         # The SwiftUI migration ask and its plan
 ├── migrate-app-to-conjugator2-and-sortable-browse.md  # Cutover to the new engine + the all-verbs sortable browse list
+├── freq_prompt.md              # The 2026-08-28 ask: find frequency-of-use data for all 4,811 verbs (→ docs/verb-frequency-sources.md)
+├── frequency-ranks-for-all-verbs.md  # Plan to ship it: fix two bad keys, frequency/ pipeline (CORPES XXI + Google Books),
+│                               #   counts in verbModelMap.xml (`hi`/`gb`/`hp`), ranks derived at parse time, credits, RAE note
 ├── rename-engine-types-drop-2-suffix.md   # Dropping the transitional "2" suffix from the engine types
 ├── migrate-groups-to-synchronized-folders.md  # Xcode groups → PBXFileSystemSynchronizedRootGroups
 ├── phase-2-orthographic-accent-features.md … phase-6-data-entry.md  # The engine build-out, phase by phase
@@ -357,6 +370,24 @@ tools/
     ├── gen_muleta_pickup.py    # Builds the cape pickup
     ├── render_sprites.py       # Renders an action to a numbered PNG sequence
     └── pack_or_rename.sh       # Turns render output into Xcode-ready imagesets
+
+frequency/                      # The frequency-of-use pipeline behind the #rank badge. Only durable artifacts are
+│                               #   tracked (see frequency/.gitignore); both source downloads are re-fetchable.
+├── README.md                   # Provenance: sources, sizes, SHA-256, licences, re-download recipe, the attribute
+│                               #   table, the estimate tiers, the clamp, the gates, the rebuild order
+├── CORPES-LICENSE.txt          # The CORPES zip's own license.txt (CC BY-SA 4.0), so the licence travels with the data
+├── corpes_lemas.zip            # RAE CORPES XXI 1.5 lemma list, 16.3 MB. Browser download only — rae.es answers curl
+│                               #   with a Cloudflare challenge (gitignored)
+├── extract_gbooks_verbs.sh     # Fetches the three Google Books Spanish 1-gram shards, keeps the _VERB rows
+├── gbooks/verb_{0,1,2}.tsv     # Those rows, ~830 MB (gitignored)
+├── aggregate_gbooks.py         # Sums them through corpus/working/forms_all.json, splitting the 264 ambiguous forms by EM
+├── gbooks-verb-lemmas.json     # Per-infinitive 1950–2019 token sums. The only Google Books artifact a rebuild needs
+├── build_counts.py             # CORPES + Google Books + editorial → verb-counts.json + report.md, behind six gates
+├── editorial-counts.json       # The four hand-assigned counts, with a written reason each
+├── verb-counts.json            # One row per infinitive: corpes / corpes_se / gbooks / hits / estimate. What
+│                               #   docs/_build_verbmap.py reads
+├── generate_frequencies_txt.py # verbModelMap.xml → docs/frequencies.txt; --check compares without writing
+└── report.md                   # The last build's report: coverage, the fit, every estimate, the movers, the gaps (gitignored)
 
 corpus/                         # Spanish text corpus for the example-uses pipeline. Only durable artifacts are tracked
 │                               #   (see corpus/.gitignore); originals are re-fetchable and intermediates regenerable.

@@ -28,7 +28,7 @@ The first time you launch ~Conjugar~, a brief welcome tour introduces these tabs
 
 ^Browse^
 
-~Conjugar~ starts on the ~Browse~ tab. This tab lists 4,811 Spanish verbs with their English translations. The most common verbs also show their frequency ranks; "ser", the most commonly used verb, is #1. Sort the verbs by frequency or alphabetically by tapping the control above the tab bar. To find a specific verb, type part of the Spanish infinitive ~or~ part of the English translation in the search field above the list. Search ignores accents and capitalization, so "esta" finds "estar" and "have" finds "haber" and "tener".
+~Conjugar~ starts on the ~Browse~ tab. This tab lists 4,811 Spanish verbs with their English translations. Every verb shows its frequency rank; "ser", the most commonly used verb, is #1. Sort the verbs by frequency or alphabetically by tapping the control above the tab bar. To find a specific verb, type part of the Spanish infinitive ~or~ part of the English translation in the search field above the list. Search ignores accents and capitalization, so "esta" finds "estar" and "have" finds "haber" and "tener".
 
 When you find a verb you would like to know more about, tap it. ~Conjugar~ then displays a screen with ~all~ conjugations of that verb. This screen is helpful for learning because it calls out, by highlighting in $RED$, parts of conjugations that are irregular. For example, the %presente de indicativo%, first-person singular conjugation of "dar" has an irregular "y", so ~Conjugar~ displays this conjugation as "$doY$". Tap any conjugation to hear it spoken.
 

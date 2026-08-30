@@ -18,7 +18,7 @@ I released **Conjugar** in 2017 as a UIKit app with programmatic layout, and I w
 
 ### Features
 
-- **Verb browser**: all 4,811 verbs, searchable and sortable by frequency of use or alphabetically.
+- **Verb browser**: all 4,811 verbs, searchable and sortable by frequency of use or alphabetically. Every verb carries a frequency rank derived from the Real Academia Española's CORPES XXI corpus, from `ser` at #1 to the rarest at #4,811.
 - **Conjugation views**: every tense for a given verb, with the irregular part of each form picked out in red so that the shape of an irregularity is visible at a glance. Many verbs also carry an etymology, a modern example sentence, and an attestation from Medieval Spanish.
 - **Verb models**: the 102 conjugation patterns that the verbs inherit from, ranked by how irregular they are, each with a pronoun-by-tense grid and the list of verbs that follow it.
 - **Tense reference**: an explanation of each Spanish tense, when to use it, and how it is formed, plus essays on terminology, *voseo*, and the history of the Spanish verb system.
@@ -59,6 +59,24 @@ to build the app.
 
 Further documentation lives in [`docs/`](docs), starting with the annotated directory tree in
 [`docs/project-structure.md`](docs/project-structure.md).
+
+### Data sources
+
+The verbs' frequency ranks are derived from the lemma-frequency lists of the Real Academia
+Española's [CORPES XXI](https://www.rae.es/banco-de-datos/corpes-xxi) (version 1.5), published
+under the [Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+licence; ties are ordered with verb counts from the
+[Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) 2020
+release, under [Creative Commons Attribution 3.0](https://creativecommons.org/licenses/by/3.0/).
+Changes were made: pronominal lemmas are merged into their base verb, and a flagged estimate
+stands in where CORPES has no lemma at all. The derived counts in
+`Conjugar/Models/verbModelMap.xml` and `docs/frequencies.txt` are therefore shared under the same
+Attribution-ShareAlike licence, separately from the app's AGPL. The pipeline that produces them,
+with full provenance, is [`frequency/`](frequency).
+
+The app's other content sources — Wikipedia, Project Gutenberg, government open-data portals,
+sound and art licensors — are credited on the Info tab's Credits screen and in
+[`asset-licenses/`](asset-licenses).
 
 ### License
 

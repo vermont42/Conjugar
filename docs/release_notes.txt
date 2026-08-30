@@ -3,7 +3,7 @@
 Conjugar 3.0 is a rebuild. Every screen is new, the conjugation engine underneath is new, and the app now conjugates more than twenty times as many verbs as it did before.
 
 A NEW CONJUGATION ENGINE
-Conjugar now conjugates 4,811 verbs, up from about 200, in all 20 conjugated tenses. Browse or search the whole list, sorted by frequency or alphabetically.
+Conjugar now conjugates 4,811 verbs, up from about 200, in all 20 conjugated tenses. Browse or search the whole list, sorted by frequency or alphabetically. Every verb now carries a frequency rank, from ser at #1 to the rarest at #4,811, based on the Real Academia Española's CORPES XXI corpus.
 
 MODELS
 A new Models tab sorts the language into 102 conjugation models. Open one to see its pattern, its model verb, and every verb that follows it.

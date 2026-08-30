@@ -9316,3 +9316,299 @@ rides half a glyph above his center. The lift went into `GameState` (`serenataNo
 derived from `serenataNoteSize`) rather than being an offset in the view, because
 `updateSerenataNotes` spawns the burst at the note's stored position — a view-only offset would
 have made the particles bloom half a glyph below where the note visibly was.
+
+## Frequency ranks for every verb: the RAE gives the data away (2026-08-28)
+
+Josh asked for research, not code: Conjugar ranks 988 of its 4,811 verbs, because the 2026
+Sketch Engine export was capped at 1,000 items, and he wanted a source for the rest — free or
+cheap, with an email or a modest payment on the table, and Lexical Computing's bespoke quote
+only as a last resort. The Conjuguer session had done the French version the same morning
+(GLÀFF won there), so the shape of the job was known: enumerate sources, measure each one
+against the real verb list, and write it up in `docs/verb-frequency-sources.md`.
+
+The answer turned out to be sitting on `rae.es`. The Real Academia Española has published the
+CORPES XXI frequency statistics as downloadable files since 2021, and — this was the moment —
+the per-country lemma lists open with the line "Este contenido está licenciado bajo CC BY-SA
+4.0", and the full-corpus `corpes_lemas.zip` (version 1.5, June 2026, 455 million forms)
+carries a `license.txt` saying the same thing at length: share and adapt, "para cualquier
+propósito, incluso comercialmente." No permission needed; attribution and share-alike are the
+whole deal. Measured against the verb map it covers 4,691 verbs directly and 4,763 (99.0%)
+once the 72 pronominal verbs the RAE lemmatizes with *-se* (`arrepentirse`, `suicidarse`,
+`adueñarse`) are folded into their bare Conjugar keys; Spearman ρ = 0.894 against the current
+ranks. The verbs it lacks are mostly Conjugar's own oddities: `sobre(e)ntender` (Annex B's
+notation for a spelling pair, transcribed literally), `reeligir` (a misspelling of
+`reelegir`), and DLE variant spellings like `rembolsar` that the corpus normalizes away.
+
+Getting at the data was the day's comedy. `rae.es` sits behind Cloudflare, so `curl` and
+WebFetch got a "Just a moment…" page; the Wayback Machine had the files indexed but answered
+402 "Please contact the site owner" for every one; the Claude-in-Chrome extension refused the
+domain until Josh allowed it ("Remember to use claude-in-chrome MCP for blocked sites"); and
+the browser rules say not to download files without asking. The way through was to not download
+at all: from a `rae.es` tab, `fetch` the 16 MB zip, parse its central directory by hand, pipe
+the second member through `DecompressionStream('deflate-raw')`, and run the coverage and
+correlation code in the page, rendering results into a `<pre>` for `get_page_text` — the
+javascript tool truncates its own return value at about a kilobyte, so the DOM is the wide
+channel. The first two attempts measured nothing because the zip's *first* member is the
+license and the data file is tab-separated where the per-country files use semicolons;
+"total V lemmas 0" is a very clear error message once you stop trusting your own parser.
+
+Two other sources earned a place. Google Books' 2020 Spanish 1-grams are CC BY 3.0 and
+POS-tagged, and Conjugar already has the lemmatizer they need: `corpus/working/forms_all.json`
+from `CorpusFormsDumpTests`. Streaming 3.2 GB of shards through `grep '_VERB'`, summing through
+the paradigms, and splitting `fui`/`fue`/`era` by EM gave counts for 4,800 of 4,811 verbs from
+10 billion verb tokens, ρ = 0.945 with CORPES — and a spectacular contamination list (`versar`
+4.1 million hits from *verso*, `salar` 1.3 million from *sala*, `cristianar` 300,000 from
+*cristiana*), which is why it is the tie-breaker for the CORPES tail and not the primary key.
+The RAE's press-only *Diccionario de frecuencias* agrees with the current ranks even better
+(ρ = 0.917) and knows in how many of 21 countries each verb appears, but 180 million words
+leave 552 verbs at ten hits or fewer.
+
+The paid options lost on terms, not price. Mark Davies's 40,000-lemma Spanish list is $145/$295
+and the purchase agreement forbids showing users "the exact rank order" (bands of twenty, no
+redistribution, fingerprinted copies) — fatal for a `#rank` badge in a public repo. Lexical
+Computing's price list says word lists start at €250 for academics and €2,500 for everyone
+else. SUBTLEX-ESP is CC BY-NC-SA and forms-only; the OpenSubtitles form list summed through the
+paradigms ranks *unir* fifth and *parir* fifteenth (*una*, *para*), the same dead end the French
+session hit with *taire*. Along the way the research also produced a list of 521 verbs with
+100+ CORPES hits that the 2010 book never had (`colmar`, `aflorar`, `monitorear`, `migrar`,
+`empoderar`, `tuitear`), which is somebody else's job.
+
+The doc recommends CORPES counts with the *-se* merge as the primary key, Google Books as the
+tie-breaker, a calibrated and clamped estimate flagged `hp` for the 43 verbs only Google Books
+counts (`log(hi) = −3.94 + 0.920·log(gb)`, R² = 0.884), counts stored in the XML rather than
+ranks (Konjugieren's `hi` pattern), a top-1,000 window kept for the widget's verb of the day,
+and a bilingual Credits paragraph. It also corrects `project-structure.md`, which called
+`verbs.csv` "the same ranking" when it is a different export that never shipped. Nothing was
+sent, bought, or changed in the app.
+
+## A plan to rank every verb (2026-08-30)
+
+Josh read the frequency research and asked for the implementation plan, with the RAE
+courtesy note included and the two data bugs as step one. It is
+`prompts/frequency-ranks-for-all-verbs.md`. Writing it was mostly a matter of looking over the
+fence: Conjuguer shipped the identical design two days ago (`frequency/` folder at the repo
+root, counts in the XML, `VerbParser.ranked(_:)` deriving the rank per launch, estimates
+flagged `hp`, a `docs/frequencies.txt` the app is diffed against), and its journal entry
+records the two bugs worth inheriting as tests rather than as memories — group ranks by the
+dictionary *key*, and check Python's collation against Swift's by diffing, not by assuming.
+
+Two Conjugar-specific wrinkles shaped the plan. `verbModelMap.xml` is generated by
+`docs/_build_verbmap.py`, so there is no `apply_counts.py` step here: the counts table feeds
+the build script and `fr` simply stops being emitted. And `WidgetSnapshotWriter.rankedVerbs()`
+has meant "the ~1,000 verbs with a rank" since the widget was written; once every verb has a
+rank, that pool silently becomes all 4,811 and the verb of the day can be `churruscar`. The
+plan pins a `verbOfTheDayPoolSize = 1000` window (Conjuguer windows by "has an example",
+which here would be 1,340 verbs). The first step stays deliberately small — rename
+`sobre(e)ntender` to `sobrentender` and `reeligir` to `reelegir` through the pipeline, with a
+new invariant test that every infinitive is letters only — because it is the change most
+likely to be reverted if the rest stalls, and it is correct on its own.
+
+## A frequency rank for every verb: CORPES XXI replaces a capped web export (2026-08-30)
+
+The plan from this morning is shipped. Every one of Conjugar's 4,811 verbs now carries a
+frequency rank — `ser` at #1, `presintonizar` at #4,811 — where 988 did before. The badge in
+the Verbs tab is no longer a privilege of the top thousand, and the frequency sort finally
+sorts the whole list instead of ranking a thousand verbs and alphabetizing the rest.
+
+The data is the RAE's. `corpes_lemas.zip` is the CORPES XXI 1.5 lemma-frequency list, 455
+million orthographic forms of 21st-century Spanish from every Spanish-speaking country, and
+the zip carries its own `license.txt` putting the data under CC BY-SA 4.0 — "para cualquier
+propósito, incluso comercialmente." No permission email, no purchase agreement, no ban on
+showing users a rank (which is exactly what Mark Davies's $145 list forbids, and why it lost).
+The one obstacle is mechanical: `www.rae.es` sits behind Cloudflare and answers `curl` with a
+JavaScript challenge, so the download has to happen in a browser. `open -a "Google Chrome"`
+on the URL produced the file in about four seconds, byte-count matching the research to the
+digit, and its SHA-256 is now in `frequency/README.md`.
+
+### The pipeline had rotted, and that had to be fixed first
+
+The plan's step one was "rename two verbs, expect a two-line XML diff." Running
+`docs/_build_verbmap.py` to produce that diff wrote nothing at all: it reported 149 glossless
+verbs and refused. Three separate drifts had accumulated since July.
+
+The migration deleted `Conjugar/Models/verbs.xml`, the legacy engine's verb list, which was
+the script's priority-2 gloss source. `load_old_xml_glosses()` treats it as a soft dependency
+and returns `{}` when it is absent — the kind of graceful degradation that is exactly wrong in
+a build script, because it converted a missing file into 149 silently unglossed verbs rather
+than an error. And commit `1276aa5` had hand-edited the generated XML twice: the G-rating pass
+deleted 16 vulgar verbs from it, and the coverage-gap pass inserted `matear`, `rodrigar`, and
+`salgar` in alphabetical position inside the Annex B block. Neither edit went back into the
+generator, so "reproducible: re-running reproduces the resource byte-for-byte," the promise in
+the script's own docstring, had been false for two months without anyone noticing, because
+nobody had re-run it.
+
+Fixing it was a commit of its own, and worth it. The 149 glosses were rescued out of the
+shipped XML into `docs/glosses/legacy_verbs_xml_glosses.tsv`, deliberately excluding the verbs
+the script glosses inline (the four homonyms, `EXTRA_VERBS`, `FREQ_GAP_VERBS`) so the file
+cannot drift from them. The G-rated sixteen became a `G_RATED` set filtered at emit time,
+rather than deletions from `annex_b_verb_models.md`, which is a faithful transcription of the
+book and must not be edited for editorial reasons. The three inserted verbs became
+`ANNEX_GAP_VERBS`, each carrying the annex row it follows, with a hard failure if an anchor
+ever disappears. After that, `verbModelMap.xml` regenerated byte-for-byte identical: 4,815
+rows, 4,811 distinct infinitives, 988 ranked, 0 glossless.
+
+The lesson to carry: a generator that is not run is not a generator. The `frequency/`
+pipeline's gates exist partly because of this.
+
+### The two verbs that were not verbs
+
+`sobre(e)ntender` and `reeligir` had both shipped as map keys since June. The first is Annex
+B's *notation* for the spelling pair *sobrentender / sobreentender*; the second is simply a
+misspelling of *reelegir*. Both produced a `conjugar://verb/` deeplink nobody could open and a
+key no corpus would ever match.
+
+The plan said to check the source PDF before deciding whether the transcription or the book
+was wrong. The book is wrong — `pdftotext -f 228 -l 285` shows both cells printed exactly as
+transcribed — so `annex_b_verb_models.md` stays faithful and the correction lives in a
+`SPELLING_FIXES` table in the build script with the reason for each. Both keep their class:
+`reelegir` conjugates exactly like `elegir` (6B-1 → *reelijo, reeligió, reelegido*; the
+irregular participle *reelecto* is not on offer and the book does not claim it), `sobrentender`
+like `perder` (5A). Both corrected spellings happen to sort where the old ones did, so the
+regenerated diff really was two lines.
+
+The test that would have caught this in June is four lines long: every infinitive matches
+`^[a-záéíóúüñ]+$`. It is in `VerbMapTests` now. The pattern is worth generalizing — data
+imported from a PDF deserves an invariant on its *shape*, not only on its counts.
+
+### What the corpus actually says
+
+Two CORPES facts are worth writing down because they look like bugs and are not.
+
+**416 of its verb lemmas end in `-se`.** CORPES lemmatizes a pronominal verb with the clitic
+attached; Conjugar keys the same verb bare. Matching naively, `arrepentir` has zero hits.
+Summing `count(inf) + count(inf + "se")` recovers 72 verbs outright — `arrepentirse` 8,541,
+`adentrarse` 7,214, `suicidarse` 5,480 — and six more that exist in both spellings and simply
+add up. That merge is the difference between 97.5% coverage and 99.0%.
+
+**`haber` ranks eighth, not second.** CORPES counts 1,034,648 verb tokens for it against
+`ser`'s 7,661,318, a ratio of 0.135 where esTenTen's is 0.43 and Google Books' 0.44, and there
+is no separate auxiliary lemma anywhere in the file. The only reading consistent with the data
+is that CORPES annotates a compound tense as one verbal element under the participle's lemma,
+so `haber` is counted only in its independent uses (*hay*, *haber de*). It stays measured. For
+a learner's list, eighth is honest: *he hablado* teaches you `hablar`.
+
+### Google Books is a tie-breaker, and only a tie-breaker
+
+A 455-million-form corpus cannot separate the tail. 2,637 of the 4,811 verbs share an `hi`
+with some other verb, in 704 groups. Google Books' Spanish `_VERB` 1-grams, summed through the
+app's own paradigms (`corpus/working/forms_all.json`, 254,328 surface forms), leave six groups
+tied. 10.2 billion tokens from 1950–2019, with the 264 ambiguous forms — `fui`, `fue`, `era`,
+`nada`, `casa` — split by expectation-maximization rather than evenly, because an even split
+hands `unir` the mass of *una*/*uno* and ranks it fifth.
+
+It must not be the primary key, and the reason is instructive: Google's tagger marks a noun
+`_VERB` whenever it coincides with a form of a rare verb. `versar` collects 4.1 million tokens
+from *verso* against CORPES's 1,337; `salar` 1.3 million from *sala* against 649. Used only to
+order verbs CORPES has already tied, that contamination can move a verb inside its tie group
+and no further. Same data, two completely different levels of trustworthiness depending on
+what you ask it.
+
+Downloading it was the only genuinely annoying part of the day: 3.2 GB across three gzip
+shards, and Google reset the connection eleven minutes into the third one. A `curl | gunzip |
+grep` pipeline cannot recover from that — curl's `--retry` restarts the transfer, but gunzip
+has already eaten half a stream — so the script now downloads each shard to a temporary `.gz`
+with `-C -` and filters it afterwards. It costs the disk space of one shard and buys
+resumability, which on a twenty-minute transfer is the right trade.
+
+### Estimates, flagged and clamped
+
+46 verbs have no CORPES lemma in either spelling. 42 of them Google Books counts, and they get
+`hi = min(exp(fit(gb)), clamp)` from a least-squares fit of `log(hi)` on `log(gb)` over the
+4,759 verbs both sources count: `log(hi) = −3.9386 + 0.9200·log(gb)`, R² = 0.884, with the
+middle half of the residuals inside ×0.66…×1.63 of the fit. The clamp is the measured count at
+rank 1,000 — 5,935 — recomputed every run, so no guess can land in the part of the list a
+learner actually reads. `podrir` comes out at 2,764 hits (#1,454), `remplazar` 1,109,
+`trasmutar` 297, down to `yodurar` and `desaclimatar` at 1. Every one is plausible company.
+
+The other four — `aguachicolear`, `desenfurruñar`, `desentablillar`, `presintonizar` — nothing
+anywhere counts, so they take an editorial zero with a written reason in
+`frequency/editorial-counts.json`. Zero is a fine answer; the point is that a human chose it
+and said why. Writing `aguachicolear`'s reason turned up what the plan predicted it might:
+CORPES has no `huachicolear` or `guachicolear` either, so the legacy app's "steal water" verb
+is not a misspelled Mexican neologism, it is a verb no corpus has ever seen. Whether the map
+should carry it at all is the verb-list audit's problem; the reason field is where it got
+noticed, which is the whole argument for having one.
+
+Every estimated row carries `hp="y"`. It affects nothing a user sees. It exists so the
+provisional population stays countable — `VerbMapRankingTests` pins it at 46 — rather than
+quietly becoming permanent.
+
+### Counts in the file, ranks in the app
+
+The old scheme stored `fr`, a rank per verb. The new one stores `hi` and `gb` and derives the
+rank in `VerbMap.ranked(_:)` at parse time, sorting on `(hi desc, gb desc, infinitive in
+Spanish collation)`. The reason is that a rank is a property of the corpus, not of the verb:
+were ranks stored, adding one verb would renumber every verb below it and turn a one-line
+change into a 4,800-line diff. One sort per launch buys an additive file, and the two counts
+travel with the rank as its provenance.
+
+A missing `gb` sorts *below* a measured zero. Zero is a corpus that could have seen the verb
+and did not; absence is a corpus that never had the chance. That distinction is why
+`bookHits` is `Int?` and not `Int`.
+
+Conjuguer's journal warned about two traps here. The first — group ranks by the dictionary
+*key* — turned out not to apply: Conjugar's map is keyed by infinitive and a homonym's two
+`<verb>` rows have already merged into one entry by the time ranking runs, so `apostar` takes
+one rank with no grouping step at all. The second applied in full. `generate_frequencies_txt.py`
+sorts with a hand-rolled imitation of ICU's Spanish collation — enye folded to `n` plus U+007F
+so it lands after every n-word and before every o-word, accents stripped to a primary key with
+the raw word as the secondary — and there is no way to know that imitation is faithful except
+to compare. So `VerbMapRankingTests` reads `docs/frequencies.txt` out of the repo and asserts
+that line *n* names the verb the app ranks *n*, all 4,811 of them. It passed first try, which
+proves nothing about the next change to either side. That is the point of keeping it.
+
+### The widget nearly started teaching `churruscar`
+
+`WidgetSnapshotWriter.rankedVerbs()` meant "the ~1,000 verbs that have a rank," and the filter
+that implemented it was `frequencyRank != nil`. The moment every verb has a rank, that filter
+matches everything and the verb of the day is drawn from all 4,811. It is now
+`verbOfTheDayPool()`, the frequency-sorted entries `.prefix(verbOfTheDayPoolSize)` with
+`verbOfTheDayPoolSize = 1000` and a comment saying why. `CorpusFormsDumpTests` had the same
+`!= nil` idiom for the same reason and got the same treatment.
+
+Worth naming the general shape: **making an optional non-optional turns every `if let` guard
+into a no-op, and the compiler only tells you about the ones that stop compiling.** The two
+badge sites in `VerbBrowseView` were the loud kind. The two filters were the quiet kind, and
+they were the ones that mattered.
+
+The pool changing size from 988 to 1,000 also changes which verb a given day gets, since the
+hash is `abs(dayOffset &* 127) % pool.count`. Today's is `bautizar`, #980. Nothing depends on
+continuity there.
+
+### What moved
+
+Spearman against the retired esTenTen ranks is 0.894 over the 988 verbs both rankings have, so
+the change is visible only in the details. The top thirty is the same list with the web verbs
+demoted and the spoken-and-narrative verbs promoted: `mirar` 110 → 37, `sentir` 81 → 33, `oír`
+383 → 126 up; `consultar` 136 → 426, `descargar` 407 → 806 down. Every one of those is an
+improvement for a learner.
+
+The biggest movers are the interesting ones, because they are all the same bug: `hacendar`
+#465 → #4,069, `adir` #985 → #4,132, `jamar` #611 → #3,574, `paginar` #650 → #3,512, `visar`
+#974 → #3,734, `timar` #729 → #3,254, `salar` #770 → #2,697, `numerar` #755 → #2,234. Every one
+is a common *noun* — *hacienda, página, visa, sala, número* — that FreeLing lemmatized as a
+verb in a web crawl. Three of them (`rodrigar`, `salgar`, `hacendar`) were only ever added to
+the verb map *because* the bad export ranked them highly; they stay, because they are real
+verbs, but they now sit where they belong. The esTenTen ranking had been shipping tagger noise
+as pedagogy for two months and nothing in the app could have told us.
+
+### Kept, retired, and left for later
+
+`docs/SpanishVerbFrequencies.xml` stays as provenance of the ranks users saw in 2026, read by
+nothing. `SpanishVerbFrequencyRanks.txt`, `verbs.csv`, and `freq_unmatched.txt` are gone; the
+last is superseded by the gaps section of `frequency/report.md`, which lists every CORPES verb
+lemma with 100+ hits that has no row in the map. There are 478 of them. `colmar` 3,466,
+`aflorar` 3,295, `monitorear` 3,221, `reinventar` 2,995, `migrar` 2,868, `develar` 2,706,
+`empoderar` 1,132, `tuitear` 825. The 2010 book predates a lot of Spanish. That is a verb-list
+audit, not this project, but the pipeline now produces its input for free on every run.
+
+Also left for later: a "panhispanic" badge from the CORPES *Diccionario de frecuencias*'
+per-country counts (it knows how many of 21 national subcorpora document each verb), and the
+DLE variant pairs — `rembolsar`/`reembolsar`, `podrir`/`pudrir` — where the map lists both
+spellings and only the standard one will ever carry a measured count.
+
+The courtesy note to `corpus@rae.es` is drafted in the plan for Josh to send. The licence does
+not require it; CC BY-SA 4.0 is the whole grant, and the credit, the licence link, and the
+statement of changes are in the Credits screen, `README.md`, and `frequency/README.md`. But the
+RAE published this for free, and the 2021 post that announced the frequency lists invites
+contact.
