@@ -1,0 +1,6 @@
+# Track only durable artifacts (mirrors the corpus/ policy).
+# The two source downloads are large and re-fetchable per README.md; everything derived
+# from them that the app or a rebuild needs is committed.
+corpes_lemas.zip
+gbooks/
+report.md

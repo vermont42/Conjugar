@@ -1,0 +1,18 @@
+{
+  "aguachicolear": {
+    "count": 0,
+    "reason": "Not a dictionary verb. It reached the map through the legacy app's own verb list (EXTRA_VERBS in docs/_build_verbmap.py) glossed \"steal water\", and no source here has heard of it: CORPES XXI lists neither aguachicolear nor huachicolear nor guachicolear (the Mexican verb for siphoning fuel, from huachicol), and Google Books counts no form of it. Whether the map should carry it at all is the verb-list audit's question, not this pipeline's; a stated zero keeps it findable."
+  },
+  "desenfurruñar": {
+    "count": 0,
+    "reason": "Dictionary antonym of enfurruñarse, which CORPES does count (196 hits, pronominal only). The un-sulking direction is recorded but not attested: no CORPES lemma in either spelling, no Google Books tokens."
+  },
+  "desentablillar": {
+    "count": 0,
+    "reason": "The removal counterpart of entablillar (CORPES 67 hits). A dictionary entry with no corpus attestation anywhere: taking a splint off is written about far less often than putting one on."
+  },
+  "presintonizar": {
+    "count": 0,
+    "reason": "Consumer-electronics coinage for presetting a station, formed on sintonizar (CORPES 1,690). It lives in appliance manuals, which neither a reference corpus nor a books corpus indexes."
+  }
+}
