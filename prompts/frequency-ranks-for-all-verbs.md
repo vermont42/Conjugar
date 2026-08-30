@@ -311,6 +311,8 @@ frequency lists invites contact at `corpus@rae.es`, and a note costs nothing. Cl
 mail; Josh sends this from his own account, plain text, once the credit wording in Step 5 is
 final (so the note describes what actually shipped):
 
+Update: Josh sent this email on August 30, 2026.
+
 ```
 Asunto: Uso de las listas de frecuencias del CORPES XXI en una aplicación gratuita
 
