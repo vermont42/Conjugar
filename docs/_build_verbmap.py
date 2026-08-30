@@ -140,6 +140,23 @@ def load_frequency_ranks():
     return ranks
 
 
+# Two Annex B cells are not verbs, and no corpus will ever match them. Both are
+# faithful transcriptions -- the 2010 book really does print them this way (verified
+# against docs/spanish_verbs_made_simpler.pdf, Annex B) -- so the book's text stays as
+# it is in annex_b_verb_models.md and the correction happens here.
+SPELLING_FIXES = {
+    # The book's notation for the spelling pair sobrentender / sobreentender, not a
+    # verb. The DLE lists both spellings; CORPES XXI lemmatizes to sobrentender (253
+    # hits), so that is the one the map keys on. The parenthesis also made a
+    # URL-unfriendly conjugar://verb/ deeplink key.
+    "sobre(e)ntender": "sobrentender",
+    # A misspelling. The DLE has only reelegir (CORPES XXI: 1,613 hits). The class is
+    # unchanged -- 6B-1, the book's "pedir (elegir)" -- because it conjugates exactly
+    # like elegir: reelijo, reeligio, reelegido.
+    "reeligir": "reelegir",
+}
+
+
 def strip_markers(verb_cell):
     """'aborregar(se)' -> ('aborregar', rx=True); 'acaecer (DEF)' -> ('acaecer', def=True)."""
     rx = bool(re.search(r"\(se\)", verb_cell))
@@ -159,6 +176,7 @@ def parse_annex():
             if verb_cell == "Verb":   # header row
                 continue
             bare, rx, defective = strip_markers(verb_cell)
+            bare = SPELLING_FIXES.get(bare, bare)
             is_homonym = bool(re.search(r"\([12]\)", verb_cell))
             rows.append((int(idx), bare, rx, defective, cls, is_homonym))
     return rows

@@ -90,6 +90,36 @@ struct VerbMapTests {
     #expect(glossless.isEmpty, "glossless: \(glossless.prefix(8).map(\.infinitive))")
   }
 
+  // Every key must be a spellable Spanish infinitive: lowercase letters plus the five
+  // accented vowels, the dieresis, and enye -- nothing else. The map is generated from a
+  // literal transcription of the book's Annex B, and the book prints two cells that are
+  // not verbs: "sobre(e)ntender" (its notation for the pair sobrentender /
+  // sobreentender) and the misspelled "reeligir". Both shipped as keys for two months,
+  // matched no corpus, and gave conjugar://verb/ an unopenable deeplink. This is the
+  // test that would have caught them.
+  @Test("every infinitive is spelled with Spanish letters only")
+  func infinitivesAreWellFormed() {
+    let wellFormed = /^[a-záéíóúüñ]+$/
+    let malformed = Self.map.entries.keys.filter { $0.wholeMatch(of: wellFormed) == nil }.sorted()
+    #expect(malformed.isEmpty, "malformed infinitives: \(malformed)")
+  }
+
+  // The two corrections of the malformed keys above. The class is unchanged in both
+  // cases: reelegir conjugates exactly like elegir (6B-1), sobrentender like perder (5A).
+  @Test("the corrected spellings are the keys", arguments: [
+    ("reelegir", "6B-1", "reelect"), ("sobrentender", "5A", "infer")
+  ])
+  func correctedSpellings(infinitive: String, classNumber: String, gloss: String) {
+    let entry = Self.map.entry(for: infinitive)
+    #expect(entry?.classNumber == classNumber)
+    #expect(entry?.gloss == gloss)
+  }
+
+  @Test("the misspellings are NOT keys", arguments: ["reeligir", "sobre(e)ntender"])
+  func misspellingsAreGone(raw: String) {
+    #expect(Self.map.entry(for: raw) == nil, "misspelled key still present: \(raw)")
+  }
+
   @Test("glosses are reused verbatim from the oracle / old verbs.xml", arguments: [
     ("abrir", "open"), ("decir", "say"), ("tener", "have"),
     ("caber", "fit"), ("salir", "exit"), ("hacer", "do")
