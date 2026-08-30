@@ -1,0 +1,159 @@
+# Glosses rescued from the legacy engine's Conjugar/Models/verbs.xml.
+#
+# `verbs.xml` was the old app's verb list and _build_verbmap.py's priority-2
+# gloss source (load_old_xml_glosses). The migration deleted it, which silently
+# unglossed these 149 verbs — the generator then refused to write the map at
+# all. Extracted from the shipped verbModelMap.xml (commit 9f44a6c) so the map
+# regenerates byte-for-byte. Verbs the script glosses inline (the four homonyms,
+# EXTRA_VERBS, FREQ_GAP_VERBS) are deliberately absent.
+#
+# infinitive<TAB>gloss
+abrazar	hug
+absorber	absorb
+acordar	agree
+acudir	come, turn to
+admitir	admit, accept
+aducir	adduce
+amanecer	dawn
+amar	love
+anochecer	get dark
+aprender	learn
+asistir	attend
+ayudar	help
+bailar	dance
+barrer	sweep
+beber	drink
+buscar	look for, seek
+caminar	walk
+ceder	yield
+cenar	have dinner
+charlar	chat
+clonar	clone
+cocinar	cook
+coincidir	coincide
+colegir	infer, deduce
+cometer	commit
+compartir	share
+componer	compose
+comprar	buy
+comprender	understand
+concluir	conclude
+conducir	lead, drive
+consistir	consist of
+contestar	answer
+coproducir	co-produce
+correr	run
+cortar	cut
+coser	sew
+crecer	grow
+cumplir	carry out
+datar	date
+deber	owe, must
+decidir	decide
+declarar	declare
+deducir	deduce
+definir	define
+desear	want, wish
+deshacer	undo
+dibujar	draw
+discutir	argue, discuss
+disponer	make available
+distar	be away from
+distraer	distract
+empinar	tip up, raise
+emprender	undertake
+encalar	whitewash
+enseñar	teach
+escoger	choose
+esconder	hide
+escuchar	listen
+esperar	wait for, hope
+esposar	handcuff
+estudiar	study
+evadir	evade
+exceder	exceed
+exigir	demand
+existir	exist
+extinguir	extinguish
+formar	form
+freír	fry
+ganar	win, earn
+gastar	spend
+glosar	gloss
+golpear	hit, punch
+granizar	hail
+grapar	staple
+gustar	be pleasing to
+hablar	speak
+helar	freeze, get cold
+hervir	boil
+hibernar	hibernate
+huir	flee
+inducir	induce
+insistir	insist
+introducir	insert
+lamer	lick
+lavar	wash
+limpiar	clean
+llegar	arrive, come
+llevar	take
+llorar	cry
+llover	rain
+maltear	malt
+manar	drip with, flow
+medir	measure
+meter	put
+mirar	look at
+morder	bite
+nadar	swim
+necesitar	need
+nevar	snow
+nublar	cloud
+nutrir	nourish
+ocurrir	happen
+ofender	offend
+partir	cut, split
+penar	punish
+permitir	allow
+pintar	paint
+platicar	talk
+ponderar	praise, consider
+poseer	have
+procesar	prosecute, process
+prometer	promise
+promover	promote
+proponer	propose
+quedar	stay
+rasar	skim
+recibir	receive, welcome
+recoger	pick up, gather
+reconducir	redirect
+reconocer	recognize
+recordar	remember
+regresar	return
+relampaguear	flash lightning
+reponer	put back
+reprender	reprimand
+reproducir	reproduce
+responder	answer, reply
+sacar	take out, remove
+seducir	seduce
+sentar	sit
+seriar	mass-produce
+someter	submit, subdue
+sufrir	suffer
+tejer	knit
+temer	fear
+tomar	drink, take
+trabajar	work
+traducir	translate
+trinchar	carve
+tronar	thunder
+tutear	use tú and its conjugations
+unir	join
+usar	use
+vender	sell
+viajar	travel
+visitar	visit
+vivir	live
+vosear	use vos and its conjugations

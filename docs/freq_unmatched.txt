@@ -9,8 +9,6 @@
 746	on
 760	linear
 775	paular
-784	rodrigar
 860	ende
 868	iphone
 888	pilar
-994	salgar

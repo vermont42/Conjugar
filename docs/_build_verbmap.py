@@ -39,7 +39,9 @@ REPO = os.path.dirname(HERE)                                      # <repo>
 ANNEX = os.path.join(HERE, "annex_b_verb_models.md")
 ORACLE = os.path.join(HERE, "spanish_models.md")
 # The legacy engine's verb list, removed in the migration. load_old_xml_glosses()
-# returns {} when it is absent, so this stays a soft dependency.
+# returns {} when it is absent, so this stays a soft dependency -- the 149 glosses
+# only it supplied were rescued into docs/glosses/legacy_verbs_xml_glosses.tsv, which
+# load_authored_glosses() picks up like any other slice.
 OLD_VERBS_XML = os.path.join(REPO, "Conjugar", "Models", "verbs.xml")
 GLOSS_DIR = os.path.join(HERE, "glosses")                         # authored slice files
 FREQ_RANKS = os.path.join(HERE, "SpanishVerbFrequencyRanks.txt")  # infinitive,rank (1=top)
@@ -100,6 +102,26 @@ FREQ_GAP_VERBS = [
 # Of the frequency-gap verbs, those that are DEFECTIVE in standard usage. Listed in
 # def_worklist.md beside the Annex B defectives. Not yet enforced by the engine.
 EXTRA_DEFECTIVE = {"respectar", "adir"}
+
+# The other half of the same top-990 coverage pass (commit 1276aa5), but these three
+# were inserted in ALPHABETICAL position inside the Annex B block rather than appended,
+# so they carry the annex row they follow. (infinitive, class, gloss, reflexive, after).
+ANNEX_GAP_VERBS = [
+    ("matear",   "1",   "drink mate",     False, "matasellar"),  # -ear, Lat. Am.
+    ("rodrigar", "1-2", "stake",          False, "rodear"),      # rank 784, g->gu
+    ("salgar",   "1-2", "salt livestock", False, "saldar"),      # rank 994, g->gu
+]
+
+# Removed from the shipped map by the G-rating pass (commit 1276aa5) so the App Store
+# rating stays 4+: vulgar, sexual, or scatological verbs. Core verbs whose vulgarity is
+# only dialectal slang (coger, correr, tirar, chupar, ...) deliberately stay. Filtered at
+# emit time rather than deleted from annex_b_verb_models.md, which is a faithful
+# transcription of the book and must not be edited for editorial reasons.
+G_RATED = {
+    "cagar", "copular", "desflorar", "desvirgar", "erotizar", "estuprar", "eyacular",
+    "follar", "fornicar", "joder", "manosear", "masturbar", "mear", "prostituir",
+    "putear", "toquetear",
+}
 
 
 def load_frequency_ranks():
@@ -225,7 +247,15 @@ def main():
     seen_homonym = set()
     seen_missing = set()
 
+    # The three coverage-gap verbs ride along at their alphabetical anchors, so the
+    # emitted order matches the annex block they belong to.
+    anchored = {}
+    for inf, cls, tn, rx, after in ANNEX_GAP_VERBS:
+        anchored.setdefault(after, []).append((inf, cls, tn, rx))
+
     for idx, bare, rx, defective, cls, is_homonym in rows:
+        if bare in G_RATED:
+            continue
         if defective:
             defectives.append((bare, cls))
         if is_homonym:
@@ -234,6 +264,8 @@ def main():
             seen_homonym.add(bare)
             for hcls, hgloss in HOMONYMS[bare]:
                 out_rows.append((bare, hcls, hgloss, rx))
+            for row in anchored.pop(bare, ()):
+                out_rows.append(row)
             continue
         g = gloss_for(bare)
         if g is None:
@@ -243,6 +275,8 @@ def main():
                 missing.append((bare, rx))
         else:
             out_rows.append((bare, cls, g, rx))
+        for row in anchored.pop(bare, ()):
+            out_rows.append(row)
 
     # Append legacy-app-only verbs (neologisms absent from the 2010 book's Annex B),
     # skipping any that the book turns out to list after all. These carry their own
@@ -265,6 +299,9 @@ def main():
             freq_added += 1
             if inf in EXTRA_DEFECTIVE:
                 defectives.append((inf, cls))
+
+    if anchored:
+        raise SystemExit(f"ANNEX_GAP_VERBS anchors not found in Annex B: {sorted(anchored)}")
 
     # --- write the worklists ---
     with open(OUT_MISSING, "w", encoding="utf-8") as f:
@@ -325,8 +362,12 @@ def main():
     print(f"annex rows parsed     : {len(rows)} (expect 4818)")
     print(f"legacy-app verbs added: {extra_added} (expect {len(EXTRA_VERBS)})")
     print(f"freq-gap verbs added  : {freq_added} (expect {len(FREQ_GAP_VERBS)})")
-    print(f"verb elements emitted : {len(out_rows)} (expect 4828 = 4818 annex + {len(EXTRA_VERBS)} legacy + {len(FREQ_GAP_VERBS)} freq-gap)")
-    print(f"distinct infinitives  : {len(keys)} (expect 4824 = 4814 annex + {len(EXTRA_VERBS)} legacy + {len(FREQ_GAP_VERBS)} freq-gap)")
+    print(f"G-rated rows dropped  : {len(G_RATED)} (expect {len(G_RATED)})")
+    print(f"annex-gap verbs added : {len(ANNEX_GAP_VERBS)} (expect {len(ANNEX_GAP_VERBS)})")
+    print(f"verb elements emitted : {len(out_rows)} (expect 4815 = 4818 annex - {len(G_RATED)} G-rated"
+          f" + {len(ANNEX_GAP_VERBS)} annex-gap + {len(EXTRA_VERBS)} legacy + {len(FREQ_GAP_VERBS)} freq-gap)")
+    print(f"distinct infinitives  : {len(keys)} (expect 4811 = 4814 annex - {len(G_RATED)} G-rated"
+          f" + {len(ANNEX_GAP_VERBS)} annex-gap + {len(EXTRA_VERBS)} legacy + {len(FREQ_GAP_VERBS)} freq-gap)")
     print(f"glossed from oracle    : {sum(1 for r in out_rows if r[0] in oracle)}")
     print(f"glossed from old xml   : {sum(1 for r in out_rows if r[0] not in oracle and r[0] in oldxml)}")
     print(f"glossed from authored  : {len(authored)} loaded")
