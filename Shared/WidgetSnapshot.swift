@@ -15,7 +15,9 @@ nonisolated struct WidgetSnapshot: Codable, Equatable, Sendable {
   let infinitive: String
   /// Terse English gloss from the verb map, e.g. "to have".
   let gloss: String
-  /// 1-based frequency rank (1 = most common), or nil if outside the top ~1000.
+  /// The verb's 1-based frequency rank (1 = most common) among all 4,811 verbs. Optional
+  /// only so snapshots written before every verb had a rank still decode; the writer always
+  /// supplies one, and it is always inside `WidgetSnapshotWriter.verbOfTheDayPoolSize`.
   let frequencyRank: Int?
   /// One entry per displayed tense. `[0]` is always presente de indicativo. The
   /// small/medium sizes show only `[0]`; the large size now shows just the presente

@@ -159,49 +159,36 @@ struct VerbMapTests {
     #expect(Self.map.entry(for: infinitive)?.isReflexive == false)
   }
 
-  @Test("top-frequency verbs carry their rank", arguments: [
-    ("ser", 1), ("haber", 2), ("tener", 3), ("desvelar", 1000)
+  // `haber` is #8, not #2: CORPES appears to annotate a compound tense as one verbal
+  // element under the participle's lemma, so it counts only haber's independent uses
+  // (hay, haber de). The spot checks further down the list are read off
+  // docs/frequencies.txt, which VerbMapRankingTests pins to the app's own ordering.
+  @Test("verbs carry the rank their counts imply", arguments: [
+    ("ser", 1), ("estar", 2), ("tener", 3), ("ir", 4), ("haber", 8),
+    ("recubrir", 1500), ("propugnar", 2000), ("zonificar", 4000)
   ])
   func frequencyRank(infinitive: String, rank: Int) {
     #expect(Self.map.entry(for: infinitive)?.frequencyRank == rank)
   }
 
-  // A verb outside the top 1000 ships no `fr` and parses to nil.
-  @Test("verbs outside the top 1000 have no rank", arguments: ["abajar", "abdicar"])
-  func unranked(infinitive: String) {
-    #expect(Self.map.entry(for: infinitive)?.frequencyRank == nil)
-  }
-
-  // 988 distinct corpus ranks appear in the map: 980 taxonomy verbs (the original 981
-  // minus `joder`, removed for the app's G rating) + 8 frequency-gap fills (the
-  // original 6 plus rodrigar@784 / salgar@994, added for full top-990 coverage).
-  // Ranks are unique within 1…1000. Homonyms share one rank across their two rows, so
-  // this counts entries, not <verb> elements.
-  @Test("exactly 988 ranked verbs, with distinct ranks")
-  func rankedCount() {
-    let ranks = Self.map.entries.values.compactMap(\.frequencyRank)
-    #expect(ranks.count == 988, "ranked verbs = \(ranks.count)")
-    #expect(Set(ranks).count == 988, "ranks should be unique")
-    #expect(ranks.allSatisfy { (1...1000).contains($0) }, "ranks out of 1…1000 range")
-  }
-
-  // Six real verbs the class taxonomy omits but the frequency list ranks, added
-  // by `_build_verbmap.py`. quejar is reflexive-only; respectar and adir are DEFECTIVE,
-  // so the engine still over-generates their forms here.
-  @Test("frequency-gap verbs are present with expected class/gloss/rx/rank", arguments: [
-    ("circular", "1", "circulate", false, 510),
-    ("quejar", "1", "complain", true, 693),
-    ("egresar", "1", "graduate", false, 842),
-    ("respectar", "1", "concern", false, 970),
-    ("adir", "3", "accept inheritance", false, 985),
-    ("hacendar", "4A", "give property", false, 465)
+  // Six real verbs the class taxonomy omits, added by `_build_verbmap.py` because the
+  // retired esTenTen export ranked them inside its top 1000. quejar is reflexive-only;
+  // respectar and adir are DEFECTIVE, so the engine still over-generates their forms here.
+  // No rank is pinned: the esTenTen ranks that motivated adding them are gone, and CORPES
+  // puts adir and hacendar in the tail (they were tagger artifacts, nouns read as verbs).
+  @Test("frequency-gap verbs are present with expected class/gloss/rx", arguments: [
+    ("circular", "1", "circulate", false),
+    ("quejar", "1", "complain", true),
+    ("egresar", "1", "graduate", false),
+    ("respectar", "1", "concern", false),
+    ("adir", "3", "accept inheritance", false),
+    ("hacendar", "4A", "give property", false)
   ])
-  func freqGapVerbs(infinitive: String, classNumber: String, gloss: String, reflexive: Bool, rank: Int) {
+  func freqGapVerbs(infinitive: String, classNumber: String, gloss: String, reflexive: Bool) {
     let entry = Self.map.entry(for: infinitive)
     #expect(entry?.classNumber == classNumber, "\(infinitive) class")
     #expect(entry?.gloss == gloss, "\(infinitive) gloss")
     #expect(entry?.isReflexive == reflexive, "\(infinitive) rx")
-    #expect(entry?.frequencyRank == rank, "\(infinitive) rank")
   }
 
   @Test("frequency-gap verbs conjugate via the map")

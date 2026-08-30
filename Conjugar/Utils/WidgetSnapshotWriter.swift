@@ -88,7 +88,7 @@ nonisolated enum WidgetSnapshotWriter {
     let dayOffset = daysSinceReference(to: date, calendar: calendar)
     let dateString = Self.dateString(for: date, calendar: calendar)
 
-    let ranked = rankedVerbs()
+    let ranked = verbOfTheDayPool()
     guard !ranked.isEmpty else { return nil }
 
     // Scramble so consecutive days aren't adjacent in the frequency list.
@@ -152,13 +152,21 @@ nonisolated enum WidgetSnapshotWriter {
     return String(text[..<lastTilde]) + String(text[text.index(after: lastTilde)...])
   }
 
-  /// Frequency-ranked verbs only (the ~1000 with a rank), most common first. Sorted
-  /// inline rather than via `VerbSort` so this stays `nonisolated` (`VerbSort` is a
-  /// plain MainActor-isolated enum).
-  private static func rankedVerbs() -> [VerbMapEntry] {
+  /// How many of the most common verbs the widget draws from. Every verb in the map now
+  /// carries a rank, so without a window the verb of the day would eventually be
+  /// `churruscar` and the widget quiz would ask for its pretérito. A thousand is the
+  /// behavior the ranked-verbs-only filter used to give, back when only ~1,000 verbs had a
+  /// rank at all.
+  static let verbOfTheDayPoolSize = 1000
+
+  /// The verbs the widget may serve: the most common `verbOfTheDayPoolSize`, most common
+  /// first. Sorted inline rather than via `VerbSort` so this stays `nonisolated`
+  /// (`VerbSort` is a plain MainActor-isolated enum).
+  private static func verbOfTheDayPool() -> [VerbMapEntry] {
     VerbMap.shared.entries.values
-      .filter { $0.frequencyRank != nil }
-      .sorted { ($0.frequencyRank ?? 0) < ($1.frequencyRank ?? 0) }
+      .sorted { $0.frequencyRank < $1.frequencyRank }
+      .prefix(verbOfTheDayPoolSize)
+      .map { $0 }
   }
 
   private static func paradigm(for infinitive: String, tense: DisplayTense) -> WidgetParadigm? {

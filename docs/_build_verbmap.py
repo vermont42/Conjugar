@@ -29,9 +29,10 @@ the gloss-authoring pass fills); the script fails its 0-glossless check until th
 worklist is emptied. Authored glosses flagged low-confidence are collected into
 docs/glosses_to_review.md.
 """
+import glob
+import json
 import os
 import re
-import glob
 
 HERE = os.path.dirname(os.path.abspath(__file__))                 # <repo>/docs
 REPO = os.path.dirname(HERE)                                      # <repo>
@@ -44,13 +45,12 @@ ORACLE = os.path.join(HERE, "spanish_models.md")
 # load_authored_glosses() picks up like any other slice.
 OLD_VERBS_XML = os.path.join(REPO, "Conjugar", "Models", "verbs.xml")
 GLOSS_DIR = os.path.join(HERE, "glosses")                         # authored slice files
-FREQ_RANKS = os.path.join(HERE, "SpanishVerbFrequencyRanks.txt")  # infinitive,rank (1=top)
+VERB_COUNTS = os.path.join(REPO, "frequency", "verb-counts.json")  # see frequency/README.md
 
 OUT_XML = os.path.join(REPO, "Conjugar", "Models", "verbModelMap.xml")
 OUT_MISSING = os.path.join(HERE, "glosses_missing.txt")
 OUT_REVIEW = os.path.join(HERE, "glosses_to_review.md")
 OUT_DEF = os.path.join(HERE, "def_worklist.md")
-OUT_FREQ_UNMATCHED = os.path.join(HERE, "freq_unmatched.txt")     # ranked verbs absent from the map
 
 ROW_RE = re.compile(r"^\|\s*(\d+)\s*\|\s*(.+?)\s*\|\s*(.+?)\s*\|\s*([\w-]+)\s*\|\s*(.*?)\s*\|$")
 # Strip a marker in parens: (se) reflexive-only, (DEF) defective, (1)/(2) homonym.
@@ -81,15 +81,15 @@ EXTRA_VERBS = [
     ("viralizar",     "1-4", "go viral",    False),
 ]
 
-# Verbs absent from Annex B but present in the top-1000 frequency list
-# (docs/SpanishVerbFrequencyRanks.txt) — genuine gaps the 2010 book omits, surfaced
-# by the frequency pass (docs/freq_unmatched.txt) and confirmed by hand. Added so the
-# map covers the common verbs a user is most likely to look up; they pick up their
-# `fr` automatically on the next run. Same (infinitive, class, gloss, reflexive)
-# shape as EXTRA_VERBS. Three are everyday verbs (circular, quejarse, egresar); three
-# are rare — respectar and adir are DEFECTIVE (see EXTRA_DEFECTIVE → def_worklist.md),
-# hacendar is merely archaic. Full defectivity is NOT enforced yet (a later phase,
-# mirroring Conjuguer); for now the engine over-generates the missing forms.
+# Verbs absent from Annex B, surfaced by the 2026 esTenTen frequency pass as gaps in
+# the top-1000 coverage and confirmed by hand. That export is retired (CORPES XXI now
+# supplies every verb's count — see frequency/README.md), but these six are real verbs
+# and stay. Same (infinitive, class, gloss, reflexive) shape as EXTRA_VERBS; the ranks
+# in the comments below are the retired export's, kept as the reason each was added.
+# Three are everyday verbs (circular, quejarse, egresar); three are rare — respectar
+# and adir are DEFECTIVE (see EXTRA_DEFECTIVE → def_worklist.md), hacendar is merely
+# archaic. Full defectivity is NOT enforced yet (a later phase, mirroring Conjuguer);
+# for now the engine over-generates the missing forms.
 FREQ_GAP_VERBS = [
     ("circular",  "1",  "circulate",          False),  # rank 510, regular -ar
     ("quejar",    "1",  "complain",           True),   # rank 693, reflexive (quejarse)
@@ -124,20 +124,23 @@ G_RATED = {
 }
 
 
-def load_frequency_ranks():
-    """SpanishVerbFrequencyRanks.txt -> {infinitive: rank}. One `infinitive,rank`
-    per line, rank 1 = most frequent. Display-only (like `tn`): a rank can never
-    affect a conjugation, so a misranked or junk line is cosmetically wrong at
-    worst. Verbs absent from this file simply ship without an `fr` attribute."""
-    ranks = {}
-    with open(FREQ_RANKS, encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            inf, rank = line.rsplit(",", 1)
-            ranks[inf.strip()] = int(rank)
-    return ranks
+def load_verb_counts():
+    """frequency/verb-counts.json -> {infinitive: (hi, gb, provisional)}.
+
+    Frequency-of-use counts, not ranks: the app derives the dense 1..n rank from
+    these once per load, so adding a verb never renumbers the others. `hi` is the
+    CORPES XXI lemma count (bare infinitive + its `-se` lemma), `gb` the Google
+    Books tie-breaker, `provisional` true when `hi` is an estimate rather than a
+    measurement. Built by `frequency/build_counts.py`; see frequency/README.md.
+
+    Display-only, like `tn`: a count can never affect a conjugation.
+    """
+    with open(VERB_COUNTS, encoding="utf-8") as f:
+        rows = json.load(f)
+    return {
+        inf: (row["hits"], row.get("gbooks"), "estimate" in row)
+        for inf, row in rows.items()
+    }
 
 
 # Two Annex B cells are not verbs, and no corpus will ever match them. Both are
@@ -248,7 +251,7 @@ def main():
     oracle = load_oracle_glosses()
     oldxml = load_old_xml_glosses()
     authored, flagged = load_authored_glosses()
-    ranks = load_frequency_ranks()
+    counts = load_verb_counts()
 
     def gloss_for(key):
         if key in oracle:
@@ -335,20 +338,6 @@ def main():
         for inf, cls in defectives:
             f.write(f"- {inf} ({cls})\n")
 
-    # Ranked verbs that have no row in the map: mostly junk/non-verbs from the
-    # frequency corpus (también, están, aquí, iphone, …), plus a few real-but-
-    # absent verbs worth a human look (reflexive-only spellings, regionalisms).
-    map_keys = {r[0] for r in out_rows}
-    freq_unmatched = sorted(
-        (inf for inf in ranks if inf not in map_keys), key=lambda i: ranks[i]
-    )
-    with open(OUT_FREQ_UNMATCHED, "w", encoding="utf-8") as f:
-        f.write("# Ranked verbs with no verbModelMap row (rank order)\n")
-        f.write("# These shipped no `fr` attribute. Most are corpus junk/non-verbs;\n")
-        f.write("# a few may be genuine gaps or reflexive spellings worth adding.\n")
-        for inf in freq_unmatched:
-            f.write(f"{ranks[inf]}\t{inf}\n")
-
     with open(OUT_REVIEW, "w", encoding="utf-8") as f:
         f.write("# Authored glosses flagged for human review (B2)\n\n")
         f.write("Model-authored, low-confidence glosses. Display-only; safe to ship, "
@@ -356,20 +345,36 @@ def main():
         for inf, g in flagged:
             f.write(f"- {inf}: {g}\n")
 
+    # The counts table is upstream of the map, so a verb here without a row there is a
+    # build error, not a verb that quietly ships unranked.
+    uncounted = sorted({r[0] for r in out_rows} - set(counts))
+    if uncounted:
+        raise SystemExit(
+            f"{len(uncounted)} infinitives have no row in {VERB_COUNTS}: {uncounted}\n"
+            "Re-run `python3 frequency/build_counts.py` (see frequency/README.md).")
+
     # --- write the XML resource only if every row is glossed ---
     glossless = [r for r in out_rows if r[2] is None]
     lines = ['<?xml version="1.0" encoding="utf-8"?>',
              "<!-- Generated by docs/_build_verbmap.py from docs/annex_b_verb_models.md.",
              "     Do not edit by hand; re-run the script. in=infinitive cl=book class",
-             "     number tn=English gloss rx=reflexive-only fr=frequency rank (1=top,",
-             "     omitted if outside the top 1000, source docs/SpanishVerbFrequencyRanks.txt). -->",
+             "     number tn=English gloss rx=reflexive-only.",
+             "     Frequency of use, from frequency/verb-counts.json (see frequency/README.md):",
+             "     hi=CORPES XXI 1.5 lemma hits, the bare infinitive plus its -se lemma;",
+             "     gb=Google Books 1950-2019 verb-form tokens, the tie-breaker; hp=y when hi is",
+             "     an estimate rather than a measurement. The app derives the 1..n rank from",
+             "     these at parse time, so adding a verb never renumbers the others. -->",
              "<verbs>"]
     for inf, cls, tn, rx in out_rows:
         rxattr = ' rx="1"' if rx else ""
         tnattr = f' tn="{xml_escape(tn)}"' if tn else ' tn=""'
-        # Rank is per spelling, not per sense, so each homonym row gets the same fr.
-        frattr = f' fr="{ranks[inf]}"' if inf in ranks else ""
-        lines.append(f'  <verb in="{xml_escape(inf)}" cl="{cls}"{tnattr}{rxattr}{frattr} />')
+        # Counts belong to the spelling, not the sense, so each homonym row repeats them.
+        hits, book_hits, provisional = counts[inf]
+        hiattr = f' hi="{hits}"'
+        gbattr = f' gb="{book_hits}"' if book_hits is not None else ""
+        hpattr = ' hp="y"' if provisional else ""
+        lines.append(
+            f'  <verb in="{xml_escape(inf)}" cl="{cls}"{tnattr}{rxattr}{hiattr}{gbattr}{hpattr} />')
     lines.append("</verbs>")
     if not glossless:
         with open(OUT_XML, "w", encoding="utf-8") as f:
@@ -391,7 +396,8 @@ def main():
     print(f"glossed from authored  : {len(authored)} loaded")
     print(f"homonym senses         : {len(seen_homonym)*2} ({len(seen_homonym)} verbs)")
     print(f"reflexive-only (rx)    : {sum(1 for r in out_rows if r[3])}")
-    print(f"frequency-ranked (fr)  : {sum(1 for k in keys if k in ranks)} of {len(ranks)} ranked  ({len(freq_unmatched)} unmatched, docs/freq_unmatched.txt)")
+    print(f"counted (hi)           : {sum(1 for k in keys if k in counts)} of {len(keys)}"
+          f"  ({sum(1 for k in keys if counts[k][2])} estimated, hp=\"y\")")
     print(f"defective (DEF) logged : {len(defectives)}")
     print(f"flagged for review     : {len(flagged)}")
     print(f"GLOSSLESS (must be 0)  : {len(glossless)}")

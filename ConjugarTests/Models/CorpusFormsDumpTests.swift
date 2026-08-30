@@ -45,10 +45,15 @@ struct CorpusFormsDumpTests {
     .firstPlural, .secondPlural, .thirdPlural
   ]
 
+  // The "usage-ranked" set the example-uses pipeline mines: the thousand most common verbs.
+  // Was `frequencyRank != nil` back when only ~1,000 verbs carried a rank at all; every verb
+  // has one now, so the window has to be explicit or this would dump the whole map twice.
+  private static let usageRankedCount = 1000
+
   @Test func testDumpUsageRankedVerbForms() throws {
     let ranked = VerbMap.shared.entries.values
-      .filter { $0.frequencyRank != nil }
-      .sorted { ($0.frequencyRank ?? 0) < ($1.frequencyRank ?? 0) }
+      .filter { $0.frequencyRank <= Self.usageRankedCount }
+      .sorted { $0.frequencyRank < $1.frequencyRank }
     #expect(!ranked.isEmpty, "Verb data not loaded — expected the usage-ranked set.")
     try dump(verbs: ranked.map(\.infinitive), to: "corpus/working/forms.json")
   }

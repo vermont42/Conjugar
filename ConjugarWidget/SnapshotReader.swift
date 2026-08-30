@@ -27,7 +27,7 @@ nonisolated enum SnapshotReader {
     WidgetSnapshot(
       infinitive: "tener",
       gloss: "to have",
-      frequencyRank: 8,
+      frequencyRank: 3,
       paradigms: [
         WidgetParadigm(
           tenseDisplay: "Presente de Indicativo",

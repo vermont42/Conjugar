@@ -173,12 +173,10 @@ struct VerbRowLabel: View {
 
       Spacer()
 
-      if let rank = entry.frequencyRank {
-        Text(verbatim: "#\(rank)")
-          .font(.caption.monospacedDigit())
-          .foregroundStyle(Color.customBlue)
-          .accessibilityHidden(true)
-      }
+      Text(verbatim: "#\(entry.frequencyRank)")
+        .font(.caption.monospacedDigit())
+        .foregroundStyle(Color.customBlue)
+        .accessibilityHidden(true)
     }
     .padding(.horizontal)
     .padding(.vertical, 12)
@@ -208,12 +206,10 @@ struct VerbGridCell: View {
 
         Spacer(minLength: Layout.defaultSpacing)
 
-        if let rank = entry.frequencyRank {
-          Text(verbatim: "#\(rank)")
-            .font(.caption.monospacedDigit())
-            .foregroundStyle(Color.customBlue)
-            .accessibilityHidden(true)
-        }
+        Text(verbatim: "#\(entry.frequencyRank)")
+          .font(.caption.monospacedDigit())
+          .foregroundStyle(Color.customBlue)
+          .accessibilityHidden(true)
       }
 
       if !entry.gloss.isEmpty {
