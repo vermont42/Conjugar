@@ -9612,3 +9612,26 @@ not require it; CC BY-SA 4.0 is the whole grant, and the credit, the licence lin
 statement of changes are in the Credits screen, `README.md`, and `frequency/README.md`. But the
 RAE published this for free, and the 2021 post that announced the frequency lists invites
 contact.
+
+## The RAE wrote back (2026-09-02)
+
+Josh sent the courtesy note to `corpus@rae.es` on August 30. Mercedes Sánchez, the CORPES XXI
+coordinator, replied twice. The first reply was warm: thanks for the news, congratulations on the
+app, and a note that she was forwarding it to the RAE's technology department. The second, a
+day or so later, was a polite puzzle: they had downloaded and tried the app and could not find
+any reference to CORPES on the Credits screen or anywhere else. Could Josh send a screenshot or
+the exact link where the attribution appears?
+
+The answer was mundane. The credit, the licence link, and the new ranks were all on the
+`frequency` branch, which had not been merged or shipped, while the courtesy note described the
+credit as if it were already in the App Store build. Josh does not use branches and had not
+noticed the session had created one; `git status` settled it. The branch was fast-forwarded into
+`master` and pushed the same day, so the credit is now at least in the public source, though
+still not in the store.
+
+Josh replied to Mercedes today, in Spanish, apologizing for the confusion and explaining that the
+CORPES attribution and the CORPES-derived ranks will ship in the next version of the app, with
+two screenshots of the Credits screen's "Frecuencias de los verbos" / "Verb frequencies" section
+attached so they could see the wording in both languages. The bilingual draft is
+`docs/rae-reply-draft.md`. The lesson for future courtesy emails: describe what has shipped, not
+what is on disk, or say plainly that it is coming.
