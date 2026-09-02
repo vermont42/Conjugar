@@ -22,6 +22,10 @@ When you create a new plan (typically in the `prompts/` folder), open it in Visu
 Code so Josh can read it immediately: `code <path-to-plan>` (the VS Code CLI binary is
 `code`).
 
+**Do not commit or push, and do not create branches.** Leave changes in the working tree on
+`master`. Josh reviews them and runs his own `/commit-and-push` skill when he is ready; he
+does not use feature branches. Commit only when he asks explicitly in the current message.
+
 ## Build and Test Commands
 
 This is an Xcode project (project `Conjugar.xcodeproj`, scheme `Conjugar`). Build and
