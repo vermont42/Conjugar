@@ -3,7 +3,7 @@
 Conjugar 3.0 is a rebuild. Every screen is new, the conjugation engine underneath is new, and the app now conjugates more than twenty times as many verbs as it did before.
 
 A NEW CONJUGATION ENGINE
-Conjugar now conjugates 4,811 verbs, up from about 200, in all 20 conjugated tenses. Browse or search the whole list, sorted by frequency or alphabetically. Every verb now carries a frequency rank, from ser at #1 to the rarest at #4,811, based on the Real Academia Española's CORPES XXI corpus.
+Conjugar now conjugates 4,811 verbs, up from about 200, in all 20 conjugated tenses. Browse or search the whole list, sorted by frequency or alphabetically.
 
 MODELS
 A new Models tab sorts the language into 102 conjugation models. Open one to see its pattern, its model verb, and every verb that follows it.
@@ -75,3 +75,29 @@ ESPAÑOL
 Todo lo nuevo de esta versión está localizado por completo en español: la historia del verbo, las etimologías, las citas medievales, el tutor, el juego y los widgets.
 
 Conjugar 3.0 requiere iOS 26.
+
+3.1
+
+Conjugar 3.1 gives every verb a frequency rank and corrects the ranks that were wrong.
+
+A RANK FOR EVERY VERB
+Conjugar 3.0 ranked only the 988 most common verbs. Version 3.1 ranks all 4,811, from ser at #1 to presintonizar at #4,811. Every verb screen now shows a rank, and sorting the Verbs tab by frequency now orders the whole list, rather than the top thousand followed by everything else alphabetically.
+
+BETTER DATA
+The ranks now come from the Real Academia Española's CORPES XXI, a corpus of 455 million words of 21st-century Spanish from every Spanish-speaking country, which the RAE publishes under a Creative Commons license. Ties are broken with Google Books data. The previous ranks came from a web corpus whose tagger mistook common nouns for rare verbs, so hacendar, paginar, visar, and salar ranked among the 1,000 most common verbs on the strength of hacienda, página, visa, and sala. They now sit where they belong, and everyday verbs such as mirar, sentir, and oír have moved up. The Credits screen describes the sources.
+
+TWO VERBS CORRECTED
+Two entries in the verb list were not verbs. The misspelling reeligir is now reelegir, and sobre(e)ntender, a dictionary's shorthand for two spellings, is now sobrentender.
+
+Spanish
+
+Conjugar 3.1 da a todos los verbos un rango de frecuencia y corrige los rangos que estaban mal.
+
+UN RANGO PARA CADA VERBO
+Conjugar 3.0 clasificaba solo los 988 verbos más frecuentes. La versión 3.1 clasifica los 4.811, desde ser en el puesto 1 hasta presintonizar en el 4.811. Todas las pantallas de verbo muestran ahora su rango, y ordenar la pestaña Verbos por frecuencia ordena ahora toda la lista, en lugar de los mil primeros seguidos del resto en orden alfabético.
+
+MEJORES DATOS
+Los rangos proceden ahora del CORPES XXI de la Real Academia Española, un corpus de 455 millones de palabras del español del siglo XXI de todos los países hispanohablantes, que la RAE publica bajo una licencia Creative Commons. Los empates se resuelven con datos de Google Books. Los rangos anteriores venían de un corpus web cuyo etiquetador confundía sustantivos comunes con verbos raros, de modo que hacendar, paginar, visar y salar figuraban entre los 1.000 verbos más frecuentes gracias a hacienda, página, visa y sala. Ahora ocupan el lugar que les corresponde, y verbos cotidianos como mirar, sentir y oír han subido. La pantalla de créditos describe las fuentes.
+
+DOS VERBOS CORREGIDOS
+Dos entradas de la lista no eran verbos. La falta de ortografía reeligir es ahora reelegir, y sobre(e)ntender, la abreviatura de un diccionario para dos grafías, es ahora sobrentender.

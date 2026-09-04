@@ -26,6 +26,12 @@ Code so Josh can read it immediately: `code <path-to-plan>` (the VS Code CLI bin
 `master`. Josh reviews them and runs his own `/commit-and-push` skill when he is ready; he
 does not use feature branches. Commit only when he asks explicitly in the current message.
 
+**No em dashes between clauses.** Generated prose (release notes, journal entries, docs,
+Info bodies, drafts of emails) must never use an em dash to separate two clauses that each
+have a subject and a predicate. Start a new sentence instead; that is usually best. Less
+often, a semicolon is appropriate. (Older entries in `docs/blog_notes.md` predate this rule
+and are left as they are.)
+
 ## Build and Test Commands
 
 This is an Xcode project (project `Conjugar.xcodeproj`, scheme `Conjugar`). Build and

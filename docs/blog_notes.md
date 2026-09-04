@@ -9635,3 +9635,28 @@ two screenshots of the Credits screen's "Frecuencias de los verbos" / "Verb freq
 attached so they could see the wording in both languages. The bilingual draft is
 `docs/rae-reply-draft.md`. The lesson for future courtesy emails: describe what has shipped, not
 what is on disk, or say plainly that it is coming.
+
+## Release notes for 3.1 (2026-09-04)
+
+Josh wants to ship 3.1, and asked for its release notes in `docs/release_notes.txt`, English and
+Spanish, no em dashes. The headline is the frequency work: every verb ranked instead of 988, the
+CORPES XXI source, and the tagger-noise verbs (`hacendar`, `paginar`, `visar`, `salar`) falling
+out of the top thousand. The notes name those movers and the everyday verbs that rose, because a
+learner who noticed `hacendar` at #465 deserves to hear it was a bug. One smaller item rides
+along: the `reelegir` / `sobrentender` spelling fixes. A first draft also listed the La Subida
+power-up flourishes from August 9, on the guess that they landed after 3.0 went to the store;
+Josh confirmed 3.0 shipped with them, so that section came out.
+
+One thing to watch: the credits commit on August 30 added the "every verb now carries a
+frequency rank" sentence to the *3.0* English notes on the assumption it would ship in 3.0. It
+did not, so that sentence described 3.1, and the 3.0 Spanish notes never had it. Josh had it
+removed, so the 3.0 entry again records what was published.
+
+## Version 3.1 shipped (2026-09-04)
+
+Conjugar 3.1 is in the App Store. It is the release the RAE was waiting for: every one of the
+4,811 verbs carries a CORPES XXI frequency rank, the tagger-noise ranks are gone, the
+`reelegir` / `sobrentender` spellings are fixed, and the Credits screen's "Verb frequencies" /
+"Frecuencias de los verbos" section is finally in a build the public can see. Josh bumped the
+marketing version to 3.1 in Xcode himself, build 1, since App Store Connect only compares build
+numbers within a version train. The release notes are the 3.1 entry in `docs/release_notes.txt`.
