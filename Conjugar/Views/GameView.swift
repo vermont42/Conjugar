@@ -11,6 +11,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct GameView: View {
   /// Passed in explicitly (cover content does not inherit a custom `.environment`
@@ -20,11 +21,21 @@ struct GameView: View {
   var router: AppRouter?
 
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @State private var gameState = GameState()
   @State private var jumpHeld = false
   /// Touch-down re-arm for the boss dance buttons (the jump idiom, per-move so a
   /// held paso can't fire twice).
   @State private var heldDanceMoves: Set<DanceMove> = []
+  /// The end-scene slideshow's settled horizontal pan of the image on screen (0 =
+  /// centered), plus the live translation of a drag in progress (nil = no finger down).
+  /// The pan resets to center whenever the slide changes.
+  @State private var slidePan: CGFloat = 0
+  @GestureState private var slideDragTranslation: CGFloat?
+  /// The two end-scene images, decoded off the main thread as the end scene opens so
+  /// the first wipe doesn't stall on a 3504×2336 JPEG decode. Until they arrive the
+  /// slides fall back to the asset-catalog `Image`.
+  @State private var preparedSlideImages: [EndSceneSlide: UIImage] = [:]
 
   /// The play field is capped to a portrait column (width ≤ height × this) so the
   /// vertical climb never stretches into a wide, wrong-aspect field on iPad landscape
@@ -270,6 +281,24 @@ struct GameView: View {
         gameState.reconfigure(screenSize: Self.fieldSize(in: newSize))
       }
       .onDisappear { gameState.stopAudio() }
+      // The slideshow's hold pauses while a finger is on an image. Keyed on the gesture
+      // state (which resets on cancellation, not only on a clean lift) so a drag the
+      // system interrupts can't leave the hold paused forever.
+      .onChange(of: slideDragTranslation != nil) { _, dragging in
+        if dragging {
+          gameState.beginEndSceneDrag()
+        } else {
+          gameState.endEndSceneDrag()
+        }
+      }
+      .onChange(of: gameState.endSceneSlide) { _, _ in slidePan = 0 }
+      // Under Reduce Motion the iris wipe becomes a crossfade.
+      .onChange(of: reduceMotion, initial: true) { _, reduce in
+        gameState.endSceneCrossfade = reduce
+      }
+      .task(id: gameState.phase == .endScene) {
+        await prepareSlideImages()
+      }
     }
     .background(Color.customBackground.ignoresSafeArea())
     // The game is always a night scene (spotlights, flamenco stage): pin its whole
@@ -389,10 +418,15 @@ struct GameView: View {
 
       if gameState.phase == .victory || gameState.phase == .endScene {
         confetti(count: 40, colors: [.customRed, .customYellow, .customBlue])
+          .opacity(gameState.phase == .endScene ? gameState.endSceneOverlayOpacity : 1)
       } else if gameState.isPhraseSuccess {
         // A blue (the matador's color) half-density burst when a phrase lands, filling
         // the mid-field between the bull and the top HUD.
         confetti(count: 20, colors: [.customBlue], yRange: successConfettiRange)
+      }
+
+      if gameState.phase == .endScene {
+        endSceneSlideLayer(size: size)
       }
 
       bossTapLayer
@@ -902,6 +936,8 @@ struct GameView: View {
             .shadow(color: .black.opacity(0.35), radius: 1, y: 1)
             .padding(.horizontal, Layout.tripleDefaultSpacing)
         }
+        // The title sits where the portraits' faces are, so it fades with the iris.
+        .opacity(gameState.endSceneOverlayOpacity)
       case .climb, .escape, .duel:
         EmptyView()
       }
@@ -984,23 +1020,222 @@ struct GameView: View {
   }
 
   /// Full-screen tap catcher for the boss's skippable beats: intro → duel,
-  /// victory → end scene, end scene → dismiss. Sits under the quit button and
-  /// controls so those stay tappable.
+  /// victory → end scene. Sits under the quit button and controls so those stay
+  /// tappable. The end scene has none: a tap there does nothing (so dragging a portrait
+  /// can't quit by accident), and only the X button leaves.
   private var bossTapLayer: some View {
     Group {
-      if gameState.phase == .bossIntro || gameState.phase == .victory || gameState.phase == .endScene {
+      if gameState.phase == .bossIntro || gameState.phase == .victory {
         Color.clear
           .contentShape(Rectangle())
           .ignoresSafeArea()
           .onTapGesture {
-            if gameState.phase == .endScene {
-              dismiss()
-            } else {
-              gameState.handleBossTap()
-            }
+            gameState.handleBossTap()
           }
       }
     }
+  }
+
+  // MARK: End-scene slideshow
+
+  /// The portraits are 3:2 landscape (the art is 3504×2336), shown at the column's full
+  /// height, so on iPhone each is about three screens wide.
+  private static let slideAspect: CGFloat = 3.0 / 2.0
+  private static let irisRingWidth: CGFloat = 3
+  /// The ring fades out over this last fraction of the wipe.
+  private static let irisRingFadeSpan = 0.2
+  /// The toast's fade-in and fade-out, and the sway that suggests a drag.
+  private static let toastFadeIn = 0.25
+  private static let toastFadeOut = 0.5
+  private static let toastSway: CGFloat = 8
+  private static let toastSwayHz = 1.5
+
+  private static func slideAssetName(_ slide: EndSceneSlide) -> String? {
+    switch slide {
+    case .live: return nil
+    case .toreros: return "endScene_toreros"
+    case .familia: return "endScene_familia"
+    }
+  }
+
+  /// The slideshow over the live end scene: the current image (draggable), the incoming
+  /// one opening in an iris, the ring riding the iris edge, and the "Drag Me" toast.
+  /// A wipe back to the live scene has nothing to draw on top (the playfield is already
+  /// underneath), so it instead cuts the growing hole out of the outgoing image.
+  private func endSceneSlideLayer(size: CGSize) -> some View {
+    let current = gameState.endSceneSlide
+    let incoming = gameState.endSceneIncomingSlide
+    let eased = gameState.endSceneIrisEased
+    let crossfade = gameState.endSceneCrossfade
+    let diameter = eased * hypot(size.width, size.height)
+    return ZStack {
+      if current.isImage {
+        let isClosing = incoming == .live
+        slideView(current, size: size, pan: clampedPan(slidePan + (slideDragTranslation ?? 0), size: size))
+          .mask {
+            if isClosing && !crossfade {
+              IrisMask(diameter: diameter, inverted: true).fill(style: FillStyle(eoFill: true))
+            } else {
+              Rectangle()
+            }
+          }
+          .opacity(isClosing && crossfade ? 1 - eased : 1)
+          .gesture(slideDrag(size: size))
+          .allowsHitTesting(incoming == nil)
+          .accessibilityElement(children: .ignore)
+          .accessibilityLabel(current == .familia ? L.Game.familyImageLabel : L.Game.torerosImageLabel)
+          .accessibilityAddTraits(.isImage)
+          .accessibilityAdjustableAction { direction in
+            panForAccessibility(direction, size: size)
+          }
+      }
+
+      if let incoming, incoming.isImage {
+        slideView(incoming, size: size, pan: 0)
+          .mask {
+            if crossfade {
+              Rectangle()
+            } else {
+              IrisMask(diameter: diameter, inverted: false).fill(style: FillStyle(eoFill: true))
+            }
+          }
+          .opacity(crossfade ? eased : 1)
+          .allowsHitTesting(false)
+          .accessibilityHidden(true)
+      }
+
+      if incoming != nil && !crossfade {
+        Circle()
+          .stroke(Color.customYellow, lineWidth: Self.irisRingWidth)
+          .frame(width: diameter, height: diameter)
+          .opacity(min(1, (1 - gameState.endSceneIrisProgress) / Self.irisRingFadeSpan))
+          .allowsHitTesting(false)
+          .accessibilityHidden(true)
+      }
+
+      if current.isImage && incoming == nil && gameState.endSceneToastTime > 0 {
+        dragToast
+          .position(x: size.width / 2, y: size.height * 5 / 6)   // centered in the lower third
+      }
+    }
+    .frame(width: size.width, height: size.height)
+  }
+
+  /// One portrait at the column's full height, panned horizontally by `pan`, with La
+  /// familia's caption fixed along the bottom (it stays put while the image moves, and
+  /// it wipes in and out with its slide).
+  private func slideView(_ slide: EndSceneSlide, size: CGSize, pan: CGFloat) -> some View {
+    ZStack(alignment: .bottom) {
+      slideImage(slide)
+        .resizable()
+        .interpolation(.high)
+        .aspectRatio(contentMode: .fill)
+        .frame(width: size.height * Self.slideAspect, height: size.height)
+        .offset(x: pan)
+        .frame(width: size.width, height: size.height)
+      if slide == .familia {
+        familyCaption
+      }
+    }
+    .frame(width: size.width, height: size.height)
+    .clipped()
+    .contentShape(Rectangle())
+  }
+
+  private func slideImage(_ slide: EndSceneSlide) -> Image {
+    if let prepared = preparedSlideImages[slide] {
+      return Image(uiImage: prepared)
+    }
+    return Image(Self.slideAssetName(slide) ?? "")
+  }
+
+  /// Decode both portraits off the main thread once the end scene begins.
+  private func prepareSlideImages() async {
+    guard gameState.phase == .endScene, preparedSlideImages.isEmpty else { return }
+    let slides = EndSceneSlide.allCases.filter(\.isImage)
+    let names = slides.compactMap(Self.slideAssetName)
+    let images = await Task.detached(priority: .userInitiated) {
+      names.map { UIImage(named: $0)?.preparingForDisplay() }
+    }.value
+    for (slide, image) in zip(slides, images) {
+      preparedSlideImages[slide] = image
+    }
+  }
+
+  /// How far the image may pan either way before its edge would pull inside the column.
+  private func maxPan(size: CGSize) -> CGFloat {
+    max(0, (size.height * Self.slideAspect - size.width) / 2)
+  }
+
+  private func clampedPan(_ pan: CGFloat, size: CGSize) -> CGFloat {
+    let limit = maxPan(size: size)
+    return min(max(pan, -limit), limit)
+  }
+
+  /// Horizontal-only drag. The live translation rides `slideDragTranslation` (whose
+  /// transitions pause and restart the hold; see `body`); the lift commits it, clamped.
+  private func slideDrag(size: CGSize) -> some Gesture {
+    DragGesture(minimumDistance: 1)
+      .updating($slideDragTranslation) { value, state, _ in
+        state = value.translation.width
+      }
+      .onEnded { value in
+        slidePan = clampedPan(slidePan + value.translation.width, size: size)
+      }
+  }
+
+  /// VoiceOver can't drag, so swiping up or down on a portrait pans it a third of its
+  /// width (about one screen on iPhone), which reaches every figure. Each pan restarts
+  /// the hold, like a drag.
+  private func panForAccessibility(_ direction: AccessibilityAdjustmentDirection, size: CGSize) {
+    let step = size.height * Self.slideAspect / 3
+    let target: CGFloat
+    switch direction {
+    case .increment: target = slidePan - step
+    case .decrement: target = slidePan + step
+    @unknown default: return
+    }
+    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.3)) {
+      slidePan = clampedPan(target, size: size)
+    }
+    gameState.restartEndSceneHold()
+  }
+
+  /// "Drag Me" in the game's rounded display voice (the `bossTitle` plate, smaller),
+  /// fading in and out over its `endSceneToastDuration` and swaying gently side to side
+  /// to suggest the gesture (still under Reduce Motion). Driven by the game clock, so
+  /// `CONJUGAR_GAME_TIME_SCALE` slows it for screenshots.
+  private var dragToast: some View {
+    let remaining = gameState.endSceneToastTime
+    let elapsed = GameState.endSceneToastDuration - remaining
+    let opacity = min(1, elapsed / Self.toastFadeIn, remaining / Self.toastFadeOut)
+    let sway = reduceMotion ? 0 : CGFloat(sin(elapsed * 2 * .pi * Self.toastSwayHz)) * Self.toastSway
+    return HStack(spacing: Layout.defaultSpacing) {
+      Image(systemName: "arrow.left.and.right")
+        .font(.system(size: 20, weight: .black))
+      Text(verbatim: L.Game.dragMe)
+        .font(.system(size: 28, weight: .black, design: .rounded))
+    }
+    .foregroundStyle(Color.customYellow)
+    .padding(.horizontal, Layout.doubleDefaultSpacing)
+    .padding(.vertical, Layout.defaultSpacing)
+    .background(Color.customRed.opacity(0.75), in: RoundedRectangle(cornerRadius: Layout.cornerRadius))
+    .shadow(radius: 4)
+    .offset(x: sway)
+    .opacity(opacity)
+    .allowsHitTesting(false)
+  }
+
+  /// La familia's caption: who these people are, in a bar along the column's bottom.
+  private var familyCaption: some View {
+    Text(verbatim: L.Game.familyCaption)
+      .font(.system(size: 15, weight: .semibold, design: .rounded))
+      .foregroundStyle(Color.customYellow)
+      .multilineTextAlignment(.center)
+      .padding(.horizontal, Layout.doubleDefaultSpacing)
+      .padding(.vertical, Layout.defaultSpacing)
+      .frame(maxWidth: .infinity)
+      .background(Color.black.opacity(0.55))
   }
 
   // MARK: Boss controls (taps, not held intents — the jump touch-down/re-arm idiom)
@@ -1114,7 +1349,7 @@ struct GameView: View {
     // (small bottom padding) so the cross clears the field of play. The duel's dance
     // pad is `bossControlRow`, placed by the stage floor rather than pinned to the
     // bottom edge; the boss's other phases (intro, victory, end scene) have no controls
-    // at all — taps go to the tap layer.
+    // at all (intro and victory taps go to the tap layer; end-scene taps do nothing).
     HStack(alignment: .center) {
       switch gameState.phase {
       case .climb:
@@ -1204,6 +1439,25 @@ struct GameView: View {
           .onEnded { _ in jumpHeld = false }
       )
       .accessibilityLabel(L.Game.jump)
+  }
+}
+
+/// The end-scene iris: a circle of `diameter` centered in its frame, or (inverted) the
+/// frame with that circle cut out, for the wipe that reveals the live scene beneath an
+/// outgoing portrait. Fill with `eoFill` so the inverted hole stays empty.
+private struct IrisMask: Shape {
+  var diameter: CGFloat
+  var inverted: Bool
+
+  func path(in rect: CGRect) -> Path {
+    var path = inverted ? Path(rect) : Path()
+    path.addEllipse(in: CGRect(
+      x: rect.midX - diameter / 2,
+      y: rect.midY - diameter / 2,
+      width: diameter,
+      height: diameter
+    ))
+    return path
   }
 }
 

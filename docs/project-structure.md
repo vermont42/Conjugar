@@ -22,7 +22,9 @@ Conjugar/
 │                               #   lowercase to `dancer` and collide with the `dancer` symbolset (a build warning)
 │   ├── *Icon.appiconset/       # App icons: DancerIcon (primary), BullIcon, MatadorIcon, ClassicIcon
 │   ├── *IconPreview.imageset/  # Tappable thumbnails for the Settings icon picker (icons aren't loadable by name)
-│   └── Game/                   # Cel-shaded sprite flipbooks: dancer_<action>_N, bull_<action>_N, matador, cape_pickup
+│   └── Game/                   # Cel-shaded sprite flipbooks: dancer_<action>_N, bull_<action>_N, matador, cape_pickup;
+│                               #   plus endScene_toreros / endScene_familia, the end-scene slideshow's two 3504x2336
+│                               #   JPEG portraits (generated with gpt-image; see prompts/end_scene_plan.md, Phase 1)
 ├── Audio/                      # Synchronized-folder audio group: boss-fight + power-up SFX (castanetHigh/Low, palmas,
 │                               #   crowdOle, stompThud, tensionSting, capeWhoosh, brainLockOn, coin, snort, guitarStrum,
 │                               #   speedWhoosh, zombieGroan, stampede, lightsOut) plus spanishTension.mp3 (Music.onboarding)
@@ -107,6 +109,7 @@ Conjugar/
 │       ├── GameState+Obstacles.swift   # Per-stage rolling obstacle sets and spawning (formerly GameState+Flags.swift)
 │       ├── GameState+Physics.swift     # Horizontal move, gravity + platform snap, ladders, jump, "reached the bull"
 │       ├── GameState+PowerUps.swift    # Power-ups (cape / speed / serenata) and their shared 7 s envelope
+│       ├── GameState+Slideshow.swift   # End-scene slideshow: live → Los toreros → La familia iris-wipe cycle, drag hold, toast
 │       └── GameState+Stages.swift      # The five stages, escape beats, stage advance, and soft respawn
 ├── Supporting/                 # A PBXFileSystemSynchronizedRootGroup — files dropped here need no pbxproj edit
 │   ├── AppDelegate.swift       # UIApplicationDelegateAdaptor for the hooks the App lifecycle doesn't cover (appearance config)
@@ -154,7 +157,7 @@ Conjugar/
     ├── BrowseLayout.swift      # Shared LazyVGrid column sets for the iPad (regular-width) layouts
     ├── ConjugationText.swift   # Renders a conjugated form with its irregular span in customRed
     ├── EtymologyText.swift     # Renders etymology prose (its own minimal `~…~` parser, independent of Info markup)
-    ├── GameView.swift          # Toreo por Amor: the full-screen SwiftUI game (climb + boss fight + end scene)
+    ├── GameView.swift          # Toreo por Amor: the full-screen SwiftUI game (climb + boss fight + end scene and its slideshow)
     ├── InfoBrowseView.swift    # The Info topic list, incl. the tutor section and the tense difficulty filter
     ├── InfoView.swift          # Info-article detail; a tapped %…% term opens a URL or pushes another article
     ├── MainTabView.swift       # The app shell: a five-tab TabView, onboarding presentation, game full-screen cover
@@ -222,7 +225,7 @@ ConjugarTests/
 │   ├── QuizTests.swift                 # Quiz logic, scoring, and timer, driven through the @Observable model
 │   ├── QuizGoldenFormsTests.swift      # Golden forms: proves the quiz asks for correct Spanish, not just self-consistent Spanish
 │   ├── GameStateTests.swift            # Climb helpers: flipbook math, AABB overlap, platform snap, ladders, collisions
-│   ├── GameBossTests.swift             # La Llamada: summit gate, demo/echo/judge loop, freeze fake-out, Duende meter, victory
+│   ├── GameBossTests.swift             # La Llamada: summit gate, demo/echo/judge loop, freeze fake-out, Duende meter, victory, end-scene slideshow
 │   ├── ExampleDataTests.swift          # ExampleUses/MedievalExamples decode + ExampleSource attribution mapping
 │   ├── EtymologyQuoteConventionTests.swift  # Pins the gloss-quote convention in the shipped Etymologies.json
 │   └── CorpusFormsDumpTests.swift      # Harness: drives the engine over every verb to emit corpus/working/forms.json
@@ -347,7 +350,11 @@ prompts/                        # Session plans and task briefs. Each is a self-
 ├── matador.md, matador-wire-into-game.md  # The matador sprite and its wiring
 ├── game_toon_palette.md                   # The cel/toon re-render of both actors
 ├── game_sound_music.md                    # Game SFX and music integration
-└── wire-game-music.md                     # Swapping in the three purchased Pond5 tracks
+├── wire-game-music.md                     # Swapping in the three purchased Pond5 tracks
+├── end_scene.md, end_scene_plan.md       # The end-scene slideshow ask and its two-phase plan (images, then game)
+└── end_scene_images/                      # What produced the two end-scene portraits, for exact regeneration:
+    ├── toreros.txt, familia.txt           #   the image prompts (reference order is in the plan)
+    └── recolor_suit.py                    #   the pixel-only navy → royal-blue suit recolor applied to the La familia winner
 
 scripts/
 ├── README.md                   # What each script is for
@@ -414,6 +421,9 @@ asset-licenses/                 # License paper trail for third-party media bund
 └── pond5-game-music.txt        # The three Pond5 music tracks (no attribution required; the in-app credit is a courtesy)
 
 audio-sources/                  # Purchased WAV masters (gitignored); only the 192 kbps MP3s are committed
+
+art-sources/                    # Image-generation working files (gitignored: family photos). end-scene/ holds the seven
+                                #   references, every gpt-image and Gemini candidate, and the local contact sheets
 
 .claude/
 ├── ios-build-verify.config.sh  # Per-project build/verify config: scheme, simulator, FIRST_SCREEN_ID, MAIN_TABS_COORDS

@@ -206,6 +206,22 @@ nonisolated enum L {
       String(localized: "Game.bullImpressed")
     }
 
+    static var dragMe: String {
+      String(localized: "Game.dragMe")
+    }
+
+    static var familyCaption: String {
+      String(localized: "Game.familyCaption")
+    }
+
+    static var torerosImageLabel: String {
+      String(localized: "Game.torerosImageLabel")
+    }
+
+    static var familyImageLabel: String {
+      String(localized: "Game.familyImageLabel")
+    }
+
     static var pasoLeftMove: String {
       String(localized: "Game.pasoLeftMove")
     }

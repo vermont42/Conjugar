@@ -513,6 +513,70 @@
         }
       }
     },
+    "Game.dragMe" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drag Me"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Arrástrame!"
+          }
+        }
+      }
+    },
+    "Game.familyCaption" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Josh (the developer), Amanda, and Vegas"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Josh (el desarrollador), Amanda y Vegas"
+          }
+        }
+      }
+    },
+    "Game.torerosImageLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The dancer, the bull, and the matador, smiling together; the bull wears a garland of white carnations"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La bailaora, el toro y el matador, sonrientes; el toro lleva una guirnalda de claveles blancos"
+          }
+        }
+      }
+    },
+    "Game.familyImageLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Josh, the developer, and Amanda with their horse, Vegas, who wears a garland of white carnations"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Josh, el desarrollador, y Amanda con su caballo, Vegas, que lleva una guirnalda de claveles blancos"
+          }
+        }
+      }
+    },
     "Game.capeMove" : {
       "localizations" : {
         "en" : {

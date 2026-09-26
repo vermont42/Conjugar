@@ -265,6 +265,15 @@ final class GameState {
   /// `walk` (danced in place). Re-rolled each `endSceneDanceInterval`.
   static let endSceneDanceMoves: [BullAction] = [.walk, .stomp, .rear, .bow, .throw]
   static let endSceneBurstIntervalRange = 2.0...4.0
+  /// The end-scene slideshow (`GameState+Slideshow.swift`): each slide holds this long
+  /// once its iris has fully opened (the countdown pauses while the player drags an
+  /// image), the iris wipe to the next slide takes `endSceneIrisDuration` (or
+  /// `endSceneCrossfadeDuration` under Reduce Motion, where the wipe becomes a
+  /// crossfade), and the "Drag Me" toast shows for `endSceneToastDuration`.
+  static let endSceneSlideHold = 5.0
+  static let endSceneIrisDuration = 0.9
+  static let endSceneCrossfadeDuration = 0.4
+  static let endSceneToastDuration = 2.0
   static let bossPedestalSize = CGSize(width: 48, height: 12)
 
   /// Global time multiplier for the game loop — 1 in normal play. Setting the
@@ -596,6 +605,21 @@ final class GameState {
   var endSceneDanceTimer: Double = 0
   var endSceneMooTimer: Double = 0
   var endSceneBurstTimer: Double = 0
+  /// The end-scene slideshow (`GameState+Slideshow.swift`). `endSceneSlide` is the slide
+  /// on screen; `endSceneIncomingSlide` is non-nil while an iris wipe opens onto the next
+  /// one, `endSceneIrisProgress` (linear 0…1) tracking it. `endSceneSlideHold` counts
+  /// down the current slide's time on screen. `endSceneDragActive` is true while a finger
+  /// is on an image; `endSceneHasDragged` latches on the first drag and retires the
+  /// toast; `endSceneToastTime` is the toast's seconds remaining (0 = hidden).
+  /// `endSceneCrossfade` is set by the view under Reduce Motion.
+  var endSceneSlide: EndSceneSlide = .live
+  var endSceneIncomingSlide: EndSceneSlide?
+  var endSceneIrisProgress: Double = 0
+  var endSceneSlideHold: Double = 0
+  var endSceneDragActive = false
+  var endSceneHasDragged = false
+  var endSceneToastTime: Double = 0
+  var endSceneCrossfade = false
   /// Latches true the moment the player wins, hiding the Duende meter for the rest of
   /// the boss sequence (victory + end scene) — a cleaner curtain call. Cleared by
   /// `reset()`.
@@ -814,6 +838,7 @@ final class GameState {
     endSceneDanceTimer = 0
     endSceneMooTimer = 0
     endSceneBurstTimer = 0
+    resetEndSceneSlideshow()
     hasWon = false
     bullfighterX = bullfighterHomeX
     bullfighterY = bullfighterHomeY

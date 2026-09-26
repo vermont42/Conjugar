@@ -9660,3 +9660,124 @@ Conjugar 3.1 is in the App Store. It is the release the RAE was waiting for: eve
 "Frecuencias de los verbos" section is finally in a build the public can see. Josh bumped the
 marketing version to 3.1 in Xcode himself, build 1, since App Store Connect only compares build
 numbers within a version train. The release notes are the 3.1 entry in `docs/release_notes.txt`.
+
+## Two portraits for the end scene: gpt-image against Gemini (2026-09-26)
+
+Phase 1 of `prompts/end_scene_plan.md` needed two 3:2 still images for Toreo por Amor's end
+scene. The first is *Los toreros*: the dancer, the bull, and the matador from the app icons,
+smiling, the bull in a garland of white carnations. The second is *La familia*: Josh, Amanda, and
+their horse Vegas in the same pose, with Josh in the matador's place and Amanda in the dancer's.
+The plan called for about three candidates per tool per image from both gemini-image and
+gpt-image, a cull, and a contact sheet for Josh. It was Josh's first serious use of gpt-image
+after a long run with Gemini, so the session doubled as a bake-off.
+
+**Tooling first.** The Gemini skill accepted only one `--edit` image, and both prompts need
+several references (three icons for Los toreros; five images for La familia, including the Los
+toreros winner as a style anchor). Making `--edit` repeatable was a few lines: each image becomes
+a `Part` ahead of the prompt, and the prompt calls them Image 1, Image 2, and so on. Two surprises
+came out of the first run. Gemini accepts `-a 3:2` even though the skill's help listed only five
+ratios. And it returns JPEG bytes whatever the output filename says, so `toreros-gemini-1.png` was
+really a JPEG. The script now prints the returned MIME type, and later Gemini outputs were named
+`.jpg`. A third constraint shaped La familia: Gemini's inline request limit is about 20 MB, and
+the 13 MB Los toreros PNG plus a 5 MB portrait would not fit once base64-encoded. So the style
+reference went in as a 2400 px JPEG, and both tools got the same five files.
+
+**Los toreros.** gpt-image ran through the API at 3520x2336, above what OpenAI calls
+experimental. It worked on the first try at about $0.14 an image. All six candidates were clean:
+no extra fingers, no text, and every garland intact. The difference was posing. gpt-image's three
+people and bull lean into each other, the dancer's hand on the bull's neck and the matador's
+gloved hand on his shoulder, as if caught in a moment. Gemini's stand side by side like a catalog
+shot. One Gemini attempt turned photographic into airbrushed and added a gold cape; another put a
+horn tip at the matador's face. Josh called the Gemini finalist "stiff and boring" and picked
+gpt-1. Claude recommended it over the near-identical gpt-2 for three reasons: a clearer gap
+between horn and montera, the hand-on-neck pose the prompt asked for, and a pose that models the
+one La familia would ask for.
+
+**La familia and likeness.** This was the real test, because real faces are where AI edits drift
+toward generic good looks. gpt-image held them. Josh's closed-mouth smile and brow line survived,
+and so did Amanda's features; it even borrowed her statement necklace and amber earrings from the
+couple photo without being asked. Gemini gave Josh a broad toothy grin that changes his face (one
+attempt did not read as him at all), enlarged Vegas's small forehead fleck into a star, and posed
+everyone stiffly again. Josh picked gpt-2 and said the Gemini finalist's look on his face was
+"goofy." The five-reference gpt-image calls cost about $0.17 each. Twelve images across both
+rounds came to roughly $2 on the OpenAI side.
+
+**The suit.** gpt-image did miss one instruction: Josh's suit came out navy pinstripe, not the
+matador's royal blue. The likely cause is that his real navy suit in `Josh.jpg` outweighed the
+recolor instruction. A generative edit could fix it, but any edit re-renders the whole frame and
+risks the faces Josh had just approved. So the fix was a pixel recolor in numpy
+(`prompts/end_scene_images/recolor_suit.py`). The suit's hue already matched the matador's
+(0.625 against 0.612); the real gap was brightness, a median value of 0.27 against about 0.48. It
+took three passes. The first masked only clean blue pixels, leaving the shadowed front panel a
+purplish navy and a visible seam. The second widened the window and pulled the hue, which exposed
+dark reddish specks inside the fabric. It also had a subtler bug: it rebuilt the entire image
+through an 8-bit HSV round trip, so even the faces shifted by a rounding step. The third pass
+closes holes in the mask, sets the hue inside it, guards skin, the gold tie, and the white shirt,
+and blends with the original in RGB. A check in code confirms every pixel above the collar and
+left of the suit is byte-identical to the generation. The pinstripes, weave, and folds come
+through untouched. Josh kept gpt-image's embroidered montera rather than asking for the
+matador's plain felt one.
+
+**Result.** Both winners are gpt-image, center-cropped 8 px per side to exact 3:2 and exported
+as JPEG at quality 85: `endScene_toreros` (3504x2336, 1.69 MB) and `endScene_familia`
+(3504x2336, 1.12 MB), universal imagesets in `Assets.xcassets/Game/`. The build passes and
+`assetutil` shows both in `Assets.car`. Every reference, all twelve candidates, and the contact
+sheets are kept in the gitignored `art-sources/end-scene/` for a future blog post, since the
+family photos should not go into the repo. The takeaway from one day's sample: Gemini gives more
+pixels (5056x3392) and follows color instructions more literally, while gpt-image composed
+warmer groups and kept real faces far better. For a portrait of real people, likeness is the
+thing that cannot be fixed afterward. Phase 2, the slideshow and iris wipe, is next, in a fresh
+session.
+
+## The end-scene slideshow and its iris wipe (2026-09-26)
+
+Phase 2 of `prompts/end_scene_plan.md` put the two new portraits into the game. Five seconds
+after the reunion burst, a circle opens from the middle of the play column onto Los toreros,
+then La familia, then the live tablao again, and the cycle repeats until the player taps X. The
+film term for this is an iris wipe. Each slide holds 5 s once its iris has fully opened.
+
+**State in the model, not the view.** Everything else in the end scene is driven by
+`GameState.update(dt:)`, so the slideshow went there too, in a new `GameState+Slideshow.swift`
+with an `EndSceneSlide` enum (live → toreros → familia → live). That choice paid off twice.
+First, `CONJUGAR_GAME_TIME_SCALE=0.2` slowed the iris enough to catch the ring mid-circle in a
+screenshot with no extra debug code. Second, the whole cycle is testable: nine new Swift Testing
+cases in `GameBossTests` cover the cycle waiting for the reunion burst, the first wipe after 5 s,
+the wipe completing on time, the order, a drag pausing the hold and its lift restarting it, the
+toast showing only until the first drag, the shorter Reduce Motion crossfade, and both reset
+paths. The view only reports the drag and draws.
+
+**Drawing the iris.** Opening onto an image is a mask: the incoming portrait drawn over the
+current slide, clipped to a circle whose diameter is the eased progress times the column's
+diagonal, so the corners are covered at 1. The live scene is the odd one out. It is always
+running underneath, so there is nothing to draw on top when the wipe returns to it. Instead the
+outgoing image gets an inverted mask, the column's rectangle with the circle cut out using an
+even-odd fill, and the live stage shows through the growing hole. A 3 pt yellow ring rides the
+edge and fades over the last fifth of the wipe. It looked good in the frames, so it stayed.
+
+**Dragging.** The images fill the column's height, so on an iPhone each is about three screens
+wide. The pan lives in view state, clamped so an edge never pulls inside the column, and resets
+to center on every slide change so the animal is what you see first. The first version would
+have paused the hold in `onChanged` and resumed it in `onEnded`. The trouble is that `onEnded`
+never fires for a gesture the system cancels, which would leave the slideshow paused forever. So
+the live translation is a `@GestureState` (it resets on cancellation too), and an `onChange` on
+whether it is nil tells `GameState` when a finger goes down or lifts. Taps no longer quit: the
+old "any tap dismisses" behavior would have ended the game the first time someone put a finger
+down to drag. Only X leaves now.
+
+**Small touches.** The ¡Victoria! title sits right where the portraits' faces are, so the title,
+the bull's line, and the confetti fade with the iris. The bull's moos and the reunion chimes go
+quiet while an image is up, because they come from things the player can't see. The RNG roll
+still happens, so the random sequence doesn't depend on the slideshow. The two 3504x2336 JPEGs are
+decoded off the main thread with `preparingForDisplay()` as the end scene opens, so the first
+wipe doesn't stall on a 33 MB decode. The "Drag Me" / "¡Arrástrame!" toast sways gently for 2 s
+to suggest the gesture. Under Reduce Motion it stays still and the iris becomes a 0.4 s
+crossfade. VoiceOver users get a descriptive label for each image, and swiping up or down pans
+it a third of its width at a time, which restarts the hold like a drag.
+
+**Verification.** Checked in the simulator on an iPhone 17 and an iPad Pro 11-inch, in English
+and Spanish: the live scene, both images centered, Los toreros dragged to each edge, a mid-wipe
+frame with the ring, the inverse wipe back to live, the toast, the caption, the Reduce Motion
+crossfade, taps doing nothing, and X quitting. The hearts and roses still show as "?" boxes in
+the simulator. That is the old simulator emoji bug, not this change. The temporary Settings ▸
+Play shortcut to the end scene is gone. The full suite passes: 586 Swift Testing tests plus the
+XCTest suites.

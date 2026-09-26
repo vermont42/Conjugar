@@ -242,6 +242,27 @@ enum GamePhase {
   case climb, escape, bossIntro, duel, victory, endScene
 }
 
+/// The end scene's slideshow (`GameState+Slideshow.swift`): once the couple has
+/// reunited, the live scene alternates with two still portraits, each change an iris
+/// wipe. `live` is the running tablao; the other two are full-height images the player
+/// drags sideways.
+enum EndSceneSlide: CaseIterable {
+  case live, toreros, familia
+
+  /// The slide the next wipe opens on: live → toreros → familia → live.
+  var next: EndSceneSlide {
+    switch self {
+    case .live: return .toreros
+    case .toreros: return .familia
+    case .familia: return .live
+    }
+  }
+
+  var isImage: Bool {
+    self != .live
+  }
+}
+
 /// How a `DanceMove` is drawn — the glyph vocabulary of the dance pad and its cue
 /// chips. Identity only; the two rendering sites apply their own sizes and styles.
 enum DanceGlyph {

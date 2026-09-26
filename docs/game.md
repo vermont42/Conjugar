@@ -174,8 +174,30 @@ the matador sliding in from her pedestal; once he reaches her, the freed **bull 
 dance** — every 2 s it performs a randomly-chosen animated move (`endSceneDanceMoves` = walk /
 stomp / rear / bow / throw, walk danced *in place* so its position never changes) and moos
 (`Sound.moo`) every 4–8 s — while hearts/roses fly up from the couple every 2–4 s (random). The
-Duende meter is hidden the moment the player wins (`GameState.hasWon`). There is no "tap to
-continue" prompt — any tap dismisses.
+Duende meter is hidden the moment the player wins (`GameState.hasWon`).
+
+**The slideshow.** Five seconds after the reunion burst, an **iris wipe** (a circle growing from
+the column's center, a 3 pt yellow ring riding its edge) opens on a still portrait, **Los
+toreros** (the dancer, the bull, and the matador), then **La familia** (Josh, Amanda, and their
+horse Vegas, with a caption naming them), then the live scene again, cycling until the player
+quits. Each slide holds 5 s once its iris has fully opened; the wipe takes 0.9 s. The state
+machine is `GameState+Slideshow.swift` (`EndSceneSlide`, advanced from `updateEndScene`, so
+`CONJUGAR_GAME_TIME_SCALE` slows the iris for freeze-framing); `GameView.endSceneSlideLayer`
+draws it. The images fill the column's height (about three screens wide on iPhone) and drag
+horizontally only, clamped at the edges; a drag pauses the hold and its lift restarts it at 5 s.
+Each image opens centered. A **"Drag Me" / "¡Arrástrame!"** toast shows for 2 s when an image
+opens, until the player's first drag. During an image the ¡Victoria! title, the bull line, and the
+confetti fade out, and the bull's moos and the reunion chimes go quiet (the live simulation keeps
+running underneath). A wipe back to the live scene cuts a growing hole in the outgoing image
+instead. Under **Reduce Motion** the iris becomes a 0.4 s crossfade and the toast doesn't sway;
+under **VoiceOver** each image has a descriptive label and swipe up/down pans it a third at a
+time. The two JPEGs are decoded off the main thread as the end scene opens, so the first wipe
+doesn't stall. The art, its prompts, and the generation story are in
+[`prompts/end_scene_plan.md`](../prompts/end_scene_plan.md) (Phase 1) and
+`prompts/end_scene_images/`.
+
+**Only the X button leaves the end scene.** Taps do nothing there (so dragging a portrait can't
+quit by accident); there is no tap layer in `.endScene`.
 
 ## Music (`Music` enum + `SoundPlayer`)
 

@@ -410,9 +410,10 @@ extension GameState {
     bullPhase = min(bullPhase, lastFramePhase)
   }
 
-  /// The minimal end scene (boss plan Phase 5 polishes it): the boss track fades
-  /// out, `Music.onboarding` fades in — its long-intended use — and the freed
-  /// matador slides from his pedestal to the dancer. Any tap dismisses the game.
+  /// The end scene: the boss track fades out, `Music.onboarding` fades in (its
+  /// long-intended use), and the freed matador slides from his pedestal to the dancer.
+  /// Five seconds after the reunion, the slideshow (`GameState+Slideshow.swift`) starts
+  /// cycling two still portraits with the live scene. Only the X button leaves.
   func enterEndScene() {
     guard phase == .victory else { return }
     phase = .endScene
@@ -422,6 +423,7 @@ extension GameState {
     endSceneDanceTimer = Self.endSceneDanceInterval
     endSceneMooTimer = Double.random(in: Self.endSceneMooIntervalRange, using: &bossRNG)
     endSceneBurstTimer = Double.random(in: Self.endSceneBurstIntervalRange, using: &bossRNG)
+    resetEndSceneSlideshow()
     Current.soundPlayer.stopMusic(fadeDuration: Self.endSceneMusicFade)
   }
 
@@ -458,6 +460,9 @@ extension GameState {
       spawnReunionBurst(midX: coupleMidX)
       Current.soundPlayer.play(.chime, shouldDebounce: false, volume: 0.5)
       Current.hapticPlayer.play(.success)
+      armEndSceneSlideshow()
+    } else {
+      advanceEndSceneSlideshow(dt: dt)
     }
 
     // The freed bull celebrates with a loop of dance: every `endSceneDanceInterval` it
@@ -472,22 +477,26 @@ extension GameState {
     }
 
     // …and vocalizes every few seconds while it dances — an equal-odds choice of a
-    // snort, a moo, a stomp, or (nil) staying quiet.
+    // snort, a moo, a stomp, or (nil) staying quiet. Silent while a still image covers
+    // him; the roll still happens, so the RNG sequence doesn't depend on the slideshow.
     endSceneMooTimer -= dt
     if endSceneMooTimer <= 0 {
       endSceneMooTimer = Double.random(in: Self.endSceneMooIntervalRange, using: &bossRNG)
       let vocalizations: [Sound?] = [.snort, .moo, .stompThud, nil]
-      if let sound = vocalizations.randomElement(using: &bossRNG) ?? nil {
+      if let sound = vocalizations.randomElement(using: &bossRNG) ?? nil, !isEndSceneImageUp {
         Current.soundPlayer.play(sound, shouldDebounce: false, volume: 0.5)
       }
     }
 
-    // Hearts and roses keep flying up from the couple on their own random cadence.
+    // Hearts and roses keep flying up from the couple on their own random cadence (the
+    // chime only when the couple is in view).
     endSceneBurstTimer -= dt
     if endSceneBurstTimer <= 0 {
       endSceneBurstTimer = Double.random(in: Self.endSceneBurstIntervalRange, using: &bossRNG)
       spawnReunionBurst(midX: coupleMidX)
-      Current.soundPlayer.play(.chime, shouldDebounce: false, volume: 0.35)
+      if !isEndSceneImageUp {
+        Current.soundPlayer.play(.chime, shouldDebounce: false, volume: 0.35)
+      }
     }
   }
 
@@ -654,7 +663,7 @@ extension GameState {
   }
 
   /// Tap routing for the boss's full-screen tap layer: skip the intro, or skip the
-  /// victory hold into the end scene. (An end-scene tap dismisses in the view.)
+  /// victory hold into the end scene. The end scene has no tap layer; only X leaves it.
   func handleBossTap() {
     switch phase {
     case .bossIntro:

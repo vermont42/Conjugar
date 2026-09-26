@@ -36,3 +36,6 @@ build.log
 
 # Original purchased audio (Pond5 WAV masters — converted MP3s are committed instead)
 audio-sources/
+
+# Image-generation references and candidates (family photos; the chosen JPEGs are committed in Assets.xcassets)
+art-sources/

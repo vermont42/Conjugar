@@ -373,6 +373,167 @@ struct GameBossTests {
     #expect(gameState.bullFrame == bowFrames)               // held, not wrapping
   }
 
+  // MARK: End-scene slideshow
+
+  /// A GameState in the end scene, ticked until the reunion burst has just fired (the
+  /// frame that arms the slideshow).
+  private func reunited() -> GameState {
+    let gameState = configured()
+    gameState.bossRNG = SplitMix64(seed: 7)
+    gameState.debugJumpToEndScene()
+    var safety = 0
+    while !gameState.endSceneBurstDone && safety < 1_000 {
+      safety += 1
+      gameState.updateBoss(dt: 0.05)
+    }
+    return gameState
+  }
+
+  /// Tick the boss loop for `seconds` in small steps.
+  private func run(_ gameState: GameState, seconds: Double, step: Double = 0.05) {
+    for _ in 0..<Int((seconds / step).rounded()) {
+      gameState.updateBoss(dt: CGFloat(step))
+    }
+  }
+
+  /// Run the current slide's hold out and its wipe to completion.
+  private func advanceOneSlide(_ gameState: GameState) {
+    run(gameState, seconds: GameState.endSceneSlideHold + 0.05)
+    run(gameState, seconds: GameState.endSceneIrisDuration + 0.05)
+  }
+
+  @Test func slideshowWaitsForTheReunionBurst() {
+    let gameState = configured()
+    gameState.debugJumpToEndScene()
+    // Just short of the matador's arrival: the burst hasn't fired, so no cycle yet.
+    run(gameState, seconds: GameState.matadorSlideDelay + GameState.matadorSlideDuration - 0.2)
+    #expect(!gameState.endSceneBurstDone)
+    #expect(gameState.endSceneSlide == .live)
+    #expect(gameState.endSceneIncomingSlide == nil)
+    #expect(gameState.endSceneSlideHold == 0)
+  }
+
+  @Test func burstPlusHoldStartsTheWipeToLosToreros() {
+    let gameState = reunited()
+    #expect(gameState.endSceneSlideHold == GameState.endSceneSlideHold)
+    run(gameState, seconds: GameState.endSceneSlideHold - 0.2)
+    #expect(gameState.endSceneIncomingSlide == nil)
+    run(gameState, seconds: 0.3)
+    #expect(gameState.endSceneSlide == .live)
+    #expect(gameState.endSceneIncomingSlide == .toreros)
+    #expect(gameState.isEndSceneImageUp)
+  }
+
+  @Test func wipeCompletesAfterTheIrisDuration() {
+    let gameState = reunited()
+    run(gameState, seconds: GameState.endSceneSlideHold + 0.05)
+    #expect(gameState.endSceneIncomingSlide == .toreros)
+    run(gameState, seconds: GameState.endSceneIrisDuration / 2)
+    #expect(gameState.endSceneIrisProgress > 0.3 && gameState.endSceneIrisProgress < 0.7)
+    #expect(gameState.endSceneOverlayOpacity > 0 && gameState.endSceneOverlayOpacity < 1)
+    run(gameState, seconds: GameState.endSceneIrisDuration / 2 + 0.05)
+    #expect(gameState.endSceneSlide == .toreros)
+    #expect(gameState.endSceneIncomingSlide == nil)
+    #expect(gameState.endSceneIrisProgress == 0)
+    #expect(gameState.endSceneOverlayOpacity == 0)
+    #expect(gameState.endSceneSlideHold > GameState.endSceneSlideHold - 0.2)
+  }
+
+  @Test func crossfadeUsesTheShorterDuration() {
+    let gameState = reunited()
+    gameState.endSceneCrossfade = true
+    run(gameState, seconds: GameState.endSceneSlideHold + 0.05)
+    run(gameState, seconds: GameState.endSceneCrossfadeDuration + 0.05)
+    #expect(gameState.endSceneSlide == .toreros)
+    #expect(gameState.endSceneIncomingSlide == nil)
+  }
+
+  @Test func slidesCycleLiveTorerosFamiliaLive() {
+    let gameState = reunited()
+    var seen: [EndSceneSlide] = [gameState.endSceneSlide]
+    for _ in 0..<4 {
+      advanceOneSlide(gameState)
+      seen.append(gameState.endSceneSlide)
+    }
+    #expect(seen == [.live, .toreros, .familia, .live, .toreros])
+    #expect(EndSceneSlide.allCases.map(\.next) == [.toreros, .familia, .live])
+  }
+
+  @Test func dragPausesTheHoldAndItsEndRestartsIt() {
+    let gameState = reunited()
+    advanceOneSlide(gameState)                              // on Los toreros
+    run(gameState, seconds: 3)
+    let held = gameState.endSceneSlideHold
+    gameState.beginEndSceneDrag()
+    run(gameState, seconds: GameState.endSceneSlideHold * 2)
+    #expect(gameState.endSceneSlideHold == held)            // paused, however long
+    #expect(gameState.endSceneIncomingSlide == nil)
+    gameState.endEndSceneDrag()
+    #expect(!gameState.endSceneDragActive)
+    #expect(gameState.endSceneSlideHold == GameState.endSceneSlideHold)
+    run(gameState, seconds: GameState.endSceneSlideHold - 0.2)
+    #expect(gameState.endSceneIncomingSlide == nil)         // the full 5 s again
+    run(gameState, seconds: 0.3)
+    #expect(gameState.endSceneIncomingSlide == .familia)
+  }
+
+  @Test func toastShowsOnImagesUntilTheFirstDrag() {
+    let gameState = reunited()
+    #expect(gameState.endSceneToastTime == 0)               // not on the live scene
+    advanceOneSlide(gameState)                              // Los toreros opens
+    #expect(gameState.endSceneToastTime > GameState.endSceneToastDuration - 0.2)
+    run(gameState, seconds: GameState.endSceneToastDuration + 0.05)
+    #expect(gameState.endSceneToastTime == 0)               // faded on its own
+    gameState.beginEndSceneDrag()
+    gameState.endEndSceneDrag()
+    #expect(gameState.endSceneHasDragged)
+    advanceOneSlide(gameState)                              // La familia opens
+    #expect(gameState.endSceneSlide == .familia)
+    #expect(gameState.endSceneToastTime == 0)               // retired for the session
+  }
+
+  @Test func dragRetiresAShowingToast() {
+    let gameState = reunited()
+    advanceOneSlide(gameState)
+    #expect(gameState.endSceneToastTime > 0)
+    gameState.beginEndSceneDrag()
+    #expect(gameState.endSceneToastTime == 0)
+  }
+
+  @Test func debugJumpAndResetClearTheSlideshow() {
+    let gameState = reunited()
+    advanceOneSlide(gameState)
+    gameState.beginEndSceneDrag()
+    run(gameState, seconds: 0.5)
+    gameState.endSceneIncomingSlide = .familia
+    gameState.endSceneIrisProgress = 0.5
+    gameState.endSceneToastTime = 1
+    gameState.reset()
+    expectSlideshowCleared(gameState)
+
+    // Dirty it again from the climb, then take the debug jump.
+    gameState.endSceneSlide = .familia
+    gameState.endSceneIncomingSlide = .live
+    gameState.endSceneIrisProgress = 0.4
+    gameState.endSceneSlideHold = 2
+    gameState.endSceneDragActive = true
+    gameState.endSceneHasDragged = true
+    gameState.endSceneToastTime = 1
+    gameState.debugJumpToEndScene()
+    #expect(gameState.phase == .endScene)
+    expectSlideshowCleared(gameState)
+  }
+
+  private func expectSlideshowCleared(_ gameState: GameState) {
+    #expect(gameState.endSceneSlide == .live)
+    #expect(gameState.endSceneIncomingSlide == nil)
+    #expect(gameState.endSceneIrisProgress == 0)
+    #expect(gameState.endSceneSlideHold == 0)
+    #expect(!gameState.endSceneDragActive)
+    #expect(!gameState.endSceneHasDragged)
+    #expect(gameState.endSceneToastTime == 0)
+  }
+
   // MARK: Input gating & reset
 
   @Test func danceInputIgnoredOutsideEcho() {
