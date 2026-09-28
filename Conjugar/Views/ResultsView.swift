@@ -83,7 +83,7 @@ struct ResultsView: View {
           .font(.headline)
           .fontDesign(.serif)
           .foregroundStyle(Color.customYellow)
-        Text(verbatim: "\(tense.displayName), \(person.shortDisplayName)")
+        Text(verbatim: person == .none ? tense.displayName : "\(tense.displayName), \(person.shortDisplayName)")
           .font(.caption)
           .foregroundStyle(.secondary)
 

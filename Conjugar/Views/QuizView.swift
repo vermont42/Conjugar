@@ -118,25 +118,41 @@ struct QuizView: View {
     }
   }
 
+  /// Scrolls rather than compresses: with the keyboard up at a large Dynamic Type size,
+  /// a plain VStack squeezed the question card until the tense name truncated (e.g.
+  /// "presente de ind…"), hiding exactly the words that distinguish subjuntivo 1 from 2.
+  /// SwiftUI's own keyboard avoidance can leave the field half-covered at accessibility
+  /// sizes, so the field is scrolled into view whenever the keyboard or question changes.
   private var inProgress: some View {
-    VStack(spacing: Layout.doubleDefaultSpacing) {
-      ProgressView(value: Double(quiz.currentQuestionIndex), total: Double(max(quiz.questionCount, 1)))
-        .tint(.customYellow)
+    ScrollViewReader { proxy in
+      ScrollView {
+        VStack(spacing: Layout.doubleDefaultSpacing) {
+          ProgressView(value: Double(quiz.currentQuestionIndex), total: Double(max(quiz.questionCount, 1)))
+            .tint(.customYellow)
 
-      questionCard
+          questionCard
 
-      answerField
+          answerField
+            .id(QuizView.answerFieldID)
 
-      feedbackReveal
-        .frame(height: 64)
+          feedbackReveal
+            .frame(minHeight: 64)
 
-      statusStrip
-
-      Spacer()
+          statusStrip
+        }
+        .padding()
+        .frame(maxWidth: Layout.readingWidth)
+        .frame(maxWidth: .infinity)
+      }
+      .scrollDismissesKeyboard(.never)
+      .scrollBounceBehavior(.basedOnSize)
+      .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
+        revealAnswerField(proxy)
+      }
+      .onChange(of: quiz.currentQuestionIndex) {
+        revealAnswerField(proxy)
+      }
     }
-    .padding()
-    .frame(maxWidth: Layout.readingWidth)
-    .frame(maxWidth: .infinity)
     .sensoryFeedback(trigger: answerToken) { _, _ in
       switch lastResult {
       case .totalMatch: return .success
@@ -161,14 +177,27 @@ struct QuizView: View {
           .foregroundStyle(.secondary)
       }
 
-      Text(verbatim: "\(quiz.currentPersonNumber.pronoun) · \(quiz.tense.displayName)")
+      // Gerundio questions have no person; don't show its "none" placeholder.
+      let person = quiz.currentPersonNumber
+      Text(verbatim: person == .none ? quiz.tense.displayName : "\(person.pronoun) · \(quiz.tense.displayName)")
         .font(.title3.weight(.semibold))
         .fontDesign(.serif)
         .foregroundStyle(Color.customForeground)
         .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
     }
     .frame(maxWidth: .infinity)
     .card()
+  }
+
+  private static let answerFieldID = "answerField"
+
+  /// A nil anchor scrolls the minimum distance, so this is a no-op whenever the field is
+  /// already fully visible (the usual case at default text sizes).
+  private func revealAnswerField(_ proxy: ScrollViewProxy) {
+    withAnimation(.snappy) {
+      proxy.scrollTo(QuizView.answerFieldID)
+    }
   }
 
   private var answerField: some View {

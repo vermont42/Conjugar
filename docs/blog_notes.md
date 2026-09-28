@@ -9781,3 +9781,45 @@ crossfade, taps doing nothing, and X quitting. The hearts and roses still show a
 the simulator. That is the old simulator emoji bug, not this change. The temporary Settings ▸
 Play shortcut to the end scene is gone. The full suite passes: 586 Swift Testing tests plus the
 XCTest suites.
+
+## The quiz's truncated tense names (2026-09-27)
+
+A five-star App Store review of 3.1 had one complaint: "during the quiz, longer tense names
+gets omitted towards the end, and this can be a problem for distinguishing subjuntivo 1 or 2."
+At first the code looked innocent. The question card's tense line in `QuizView` has no
+`lineLimit`, and at the default text size it wraps to a second line without trouble. The
+reviewer didn't say what Dynamic Type setting they use, so I tried larger ones.
+
+**Reproducing it.** Two simulator details hid the bug. First, the simulator had a hardware
+keyboard connected, so no software keyboard appeared and the screen had its full height.
+Toggling the software keyboard on (⌘K) cut the available height by about 40%. Second, the
+default quiz difficulty is Easy, which asks only presente, pretérito, and futuro de
+indicativo. With the keyboard up, a feedback row showing, and text at XXXL, the card read
+"nosotros · presente de ind…". The in-progress layout was a plain `VStack` holding a card, a
+field, a fixed 64 pt feedback slot, and a status strip. When the stack couldn't fit, SwiftUI
+took the space from the only flexible thing, the wrapped `Text`, and truncated its tail. That
+tail is exactly the part that tells subjuntivo 1 from 2. The overflow also pushed the progress
+bar up over the large "Quiz" title.
+
+**The fix.** The in-progress content now sits in a `ScrollView` (`.scrollDismissesKeyboard(.never)`,
+so scrolling doesn't interrupt typing), and the tense line has
+`.fixedSize(horizontal: false, vertical: true)`, so it always keeps its full wrapped height. The
+feedback slot changed from `height: 64` to `minHeight: 64`. That keeps the no-jump layout at
+normal sizes and lets it grow at accessibility sizes instead of overlapping the status strip.
+Scrolling brought a new problem. At accessibility-large, SwiftUI's own keyboard avoidance left
+the answer field half-covered. A `ScrollViewReader` now calls `scrollTo` on the field, with a
+nil anchor, on `keyboardDidShowNotification` and on each new question. A nil anchor scrolls the
+minimum distance, so nothing moves when the field is already visible. When it isn't, the field
+lands just above the keyboard with the tense lines directly above it.
+
+**A second bug on the same line.** While stepping through a Difficult quiz, I saw "none ·
+gerundio". Gerund questions use `DisplayPersonNumber.none`, whose `pronoun` is the literal
+string "none", and the results screen likewise showed "gerundio, none". Both call sites now
+show only the tense when the person is `.none`.
+
+**Verification.** On an iPhone 17 simulator with the software keyboard: XXXL shows
+"nosotros · imperfecto de subjuntivo 2" on two lines with no overlap, and accessibility-large
+shows "él · imperfecto de subjuntivo 1" in full with the field visible above the keyboard.
+Gerund questions read just "gerundio". The full suite passes (586 Swift Testing tests plus the
+XCTest suites), and SwiftLint is clean. Afterward I restored the simulator's text size,
+difficulty, and hardware-keyboard setting.
