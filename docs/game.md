@@ -170,7 +170,7 @@ sleep 2; xcrun simctl openurl "$UDID" conjugar://game    # tap to skip the intro
 ```
 
 The **end scene is a living loop**, not a still: two seconds in, the dancer turns right to face
-the matador sliding in from her pedestal; once he reaches her, the freed **bull breaks into a
+the matador sliding in from her pedestal, with a shout of *¡Olé!* (`Sound.ole`, full volume); once he reaches her, the freed **bull breaks into a
 dance** — every 2 s it performs a randomly-chosen animated move (`endSceneDanceMoves` = walk /
 stomp / rear / bow / throw, walk danced *in place* so its position never changes) and moos
 (`Sound.moo`) every 4–8 s — while hearts/roses fly up from the couple every 2–4 s (random). The
@@ -178,26 +178,57 @@ Duende meter is hidden the moment the player wins (`GameState.hasWon`).
 
 **The slideshow.** Five seconds after the reunion burst, an **iris wipe** (a circle growing from
 the column's center, a 3 pt yellow ring riding its edge) opens on a still portrait, **Los
-toreros** (the dancer, the bull, and the matador), then **La familia** (Josh, Amanda, and their
-horse Vegas, with a caption naming them), then the live scene again, cycling until the player
-quits. Each slide holds 5 s once its iris has fully opened; the wipe takes 0.9 s. The state
-machine is `GameState+Slideshow.swift` (`EndSceneSlide`, advanced from `updateEndScene`, so
-`CONJUGAR_GAME_TIME_SCALE` slows the iris for freeze-framing); `GameView.endSceneSlideLayer`
-draws it. The images fill the column's height (about three screens wide on iPhone) and drag
-horizontally only, clamped at the edges; a drag pauses the hold and its lift restarts it at 5 s.
-Each image opens centered. A **"Drag Me" / "¡Arrástrame!"** toast shows for 2 s when an image
-opens, until the player's first drag. During an image the ¡Victoria! title, the bull line, and the
-confetti fade out, and the bull's moos and the reunion chimes go quiet (the live simulation keeps
-running underneath). A wipe back to the live scene cuts a growing hole in the outgoing image
-instead. Under **Reduce Motion** the iris becomes a 0.4 s crossfade and the toast doesn't sway;
-under **VoiceOver** each image has a descriptive label and swipe up/down pans it a third at a
-time. The two JPEGs are decoded off the main thread as the end scene opens, so the first wipe
-doesn't stall. The art, its prompts, and the generation story are in
-[`prompts/end_scene_plan.md`](../prompts/end_scene_plan.md) (Phase 1) and
-`prompts/end_scene_images/`.
+toreros** (the dancer, the bull, and the matador), then **La familia** (Amanda, their horse Vegas,
+and Josh), then the live scene again, cycling until the player quits. The live scene holds 5 s
+once its iris has fully opened; the wipe takes 0.9 s. The state machine is
+`GameState+Slideshow.swift` (`EndSceneSlide`, advanced from `updateEndScene`, so
+`CONJUGAR_GAME_TIME_SCALE` slows the iris and the camera for freeze-framing);
+`GameView.endSceneSlideLayer` draws it.
 
-**Only the X button leaves the end scene.** Taps do nothing there (so dragging a portrait can't
-quit by accident); there is no tap layer in `.endScene`.
+Each portrait gets a **Ken Burns** camera over 9 s: 1 s on the wide shot (the whole 3:2 image,
+letterboxed, with the end scene's confetti floating in the bars), a 2 s push-in that zooms and
+pans together onto the left subject, a 0.75 s dwell, a 1.5 s pan to the animal, a 1 s dwell on
+it, a 1.5 s pan to the right subject, and a 1.25 s dwell before the next wipe. The subjects' positions are
+`EndSceneSlide.subjectFocusX` (fractions of the image's width, measured on the art). The model
+exposes a framing (`EndSceneFraming`: zoom 0 = wide, 1 = full column height, plus a focus point);
+the view interpolates zoom on a log scale and clamps the focus so no edge of the image pulls inside
+the column. Full height is the tightest zoom, because on an iPad Pro the art is already about one
+image pixel per screen pixel there.
+
+**Captions.** Both portraits carry a caption along the column's bottom: *La Bailaora, El Toro, El
+Matador* and *Amanda, Vegas, Josh (The Developer)* (Spanish: *Josh (El Desarrollador)*), one
+`L.Game` string per name. The name the camera is showing is bold, and each handoff trades weight
+between two names over 1 s (`endSceneCaptionBoldness`), using SF's variable weight axis so the
+change is continuous. The left name is bold from the wide shot on; the handoffs fall halfway
+through each pan leg, where the focus crosses halfway between two subjects.
+
+**Subject sounds.** As the camera turns to each subject, it makes a sound
+(`EndSceneSlide.subjectCalls`, played once per showing from `advanceEndSceneSlideshow`): a
+castanet (`castanetPortrait`) for the dancer and Amanda halfway through the push-in, then the
+animal's voice (`moo` for the bull, `neigh` for Vegas) and a shouted *¡Olé!* (`ole`) for the
+matador and Josh at the caption's handoffs. Under Reduce Motion each plays on the cut onto its
+subject. Volumes even out the sources' loudness, then Josh's ear: castanet 1.0, moo 0.5, neigh
+1.0 (a quiet file), olé 0.42. `castanetPortrait.mp3` is `castanetHigh.mp3` made 17% louder with a
+soft limiter, because the castanet wanted more than the 1.0 volume ceiling allows. `neigh.mp3` is Konjugieren's `horse.mp3`. `ole.mp3` is the first of three shouts in a
+Pixabay clip by Ai_mee_Universe, credited in the Info tab's credits. (Don't confuse it with
+`crowdOle`, which despite its name is a generic crowd cheer used in the boss fight.)
+
+During an image the ¡Victoria! title, the bull line, and the playfield confetti fade out, and the
+live bull's moos and the reunion chimes go quiet (the live simulation keeps running underneath). A wipe
+back to the live scene cuts a growing hole in the outgoing image instead. Under **Reduce Motion**
+the iris becomes a 0.4 s crossfade, and the camera becomes four stills (wide, left, middle, and
+right subject, 2.25 s each) joined by the same crossfade, with the bold handing off on the cuts.
+Under **VoiceOver** each image has a descriptive label, and the caption is hidden as redundant.
+The two JPEGs are decoded off the main thread as the end scene opens and held in a small
+`@Observable` `PreparedSlideImages` object, not a plain `@State` dictionary, because the
+slideshow is drawn inside `TimelineView`'s content closure (see the 2026-09-30 journal entry).
+The art, its prompts, and the generation story are in
+[`prompts/end_scene_plan.md`](../prompts/end_scene_plan.md) (Phase 1) and
+`prompts/end_scene_images/`. (The plan's Phase 2 describes the first, draggable version, which
+the Ken Burns camera replaced.)
+
+**Only the X button leaves the end scene.** Taps do nothing there; there is no tap layer in
+`.endScene`.
 
 ## Music (`Music` enum + `SoundPlayer`)
 

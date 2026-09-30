@@ -398,9 +398,16 @@ struct GameBossTests {
 
   /// Run the current slide's hold out and its wipe to completion.
   private func advanceOneSlide(_ gameState: GameState) {
-    run(gameState, seconds: GameState.endSceneSlideHold + 0.05)
+    run(gameState, seconds: GameState.endSceneHold(for: gameState.endSceneSlide) + 0.05)
     run(gameState, seconds: GameState.endSceneIrisDuration + 0.05)
   }
+
+  /// When each camera move starts and ends, seconds after a portrait's wipe finished.
+  private static let pushInEnd = GameState.endSceneWideHold + GameState.endScenePushInDuration
+  private static let panStart = pushInEnd + GameState.endSceneFirstDwell
+  private static let middleArrival = panStart + GameState.endScenePanLegDuration
+  private static let secondPanStart = middleArrival + GameState.endSceneMiddleDwell
+  private static let panEnd = secondPanStart + GameState.endScenePanLegDuration
 
   @Test func slideshowWaitsForTheReunionBurst() {
     let gameState = configured()
@@ -410,13 +417,13 @@ struct GameBossTests {
     #expect(!gameState.endSceneBurstDone)
     #expect(gameState.endSceneSlide == .live)
     #expect(gameState.endSceneIncomingSlide == nil)
-    #expect(gameState.endSceneSlideHold == 0)
+    #expect(gameState.endSceneSlideTime == 0)
   }
 
   @Test func burstPlusHoldStartsTheWipeToLosToreros() {
     let gameState = reunited()
-    #expect(gameState.endSceneSlideHold == GameState.endSceneSlideHold)
-    run(gameState, seconds: GameState.endSceneSlideHold - 0.2)
+    #expect(gameState.endSceneSlideTime == 0)
+    run(gameState, seconds: GameState.endSceneLiveHold - 0.2)
     #expect(gameState.endSceneIncomingSlide == nil)
     run(gameState, seconds: 0.3)
     #expect(gameState.endSceneSlide == .live)
@@ -426,7 +433,7 @@ struct GameBossTests {
 
   @Test func wipeCompletesAfterTheIrisDuration() {
     let gameState = reunited()
-    run(gameState, seconds: GameState.endSceneSlideHold + 0.05)
+    run(gameState, seconds: GameState.endSceneLiveHold + 0.05)
     #expect(gameState.endSceneIncomingSlide == .toreros)
     run(gameState, seconds: GameState.endSceneIrisDuration / 2)
     #expect(gameState.endSceneIrisProgress > 0.3 && gameState.endSceneIrisProgress < 0.7)
@@ -436,13 +443,13 @@ struct GameBossTests {
     #expect(gameState.endSceneIncomingSlide == nil)
     #expect(gameState.endSceneIrisProgress == 0)
     #expect(gameState.endSceneOverlayOpacity == 0)
-    #expect(gameState.endSceneSlideHold > GameState.endSceneSlideHold - 0.2)
+    #expect(gameState.endSceneSlideTime < 0.2)
   }
 
   @Test func crossfadeUsesTheShorterDuration() {
     let gameState = reunited()
     gameState.endSceneCrossfade = true
-    run(gameState, seconds: GameState.endSceneSlideHold + 0.05)
+    run(gameState, seconds: GameState.endSceneLiveHold + 0.05)
     run(gameState, seconds: GameState.endSceneCrossfadeDuration + 0.05)
     #expect(gameState.endSceneSlide == .toreros)
     #expect(gameState.endSceneIncomingSlide == nil)
@@ -459,55 +466,175 @@ struct GameBossTests {
     #expect(EndSceneSlide.allCases.map(\.next) == [.toreros, .familia, .live])
   }
 
-  @Test func dragPausesTheHoldAndItsEndRestartsIt() {
+  @Test func portraitsHoldForTheirWholeCameraMove() {
+    #expect(GameState.endSceneImageHold == Self.panEnd + GameState.endSceneLastDwell)
     let gameState = reunited()
     advanceOneSlide(gameState)                              // on Los toreros
-    run(gameState, seconds: 3)
-    let held = gameState.endSceneSlideHold
-    gameState.beginEndSceneDrag()
-    run(gameState, seconds: GameState.endSceneSlideHold * 2)
-    #expect(gameState.endSceneSlideHold == held)            // paused, however long
-    #expect(gameState.endSceneIncomingSlide == nil)
-    gameState.endEndSceneDrag()
-    #expect(!gameState.endSceneDragActive)
-    #expect(gameState.endSceneSlideHold == GameState.endSceneSlideHold)
-    run(gameState, seconds: GameState.endSceneSlideHold - 0.2)
-    #expect(gameState.endSceneIncomingSlide == nil)         // the full 5 s again
+    run(gameState, seconds: GameState.endSceneImageHold - 0.2)
+    #expect(gameState.endSceneIncomingSlide == nil)         // longer than the live 5 s
     run(gameState, seconds: 0.3)
     #expect(gameState.endSceneIncomingSlide == .familia)
   }
 
-  @Test func toastShowsOnImagesUntilTheFirstDrag() {
-    let gameState = reunited()
-    #expect(gameState.endSceneToastTime == 0)               // not on the live scene
-    advanceOneSlide(gameState)                              // Los toreros opens
-    #expect(gameState.endSceneToastTime > GameState.endSceneToastDuration - 0.2)
-    run(gameState, seconds: GameState.endSceneToastDuration + 0.05)
-    #expect(gameState.endSceneToastTime == 0)               // faded on its own
-    gameState.beginEndSceneDrag()
-    gameState.endEndSceneDrag()
-    #expect(gameState.endSceneHasDragged)
-    advanceOneSlide(gameState)                              // La familia opens
-    #expect(gameState.endSceneSlide == .familia)
-    #expect(gameState.endSceneToastTime == 0)               // retired for the session
+  @Test(arguments: [EndSceneSlide.toreros, .familia])
+  func kenBurnsCameraFollowsTheTimeline(slide: EndSceneSlide) throws {
+    let subjects = try #require(slide.subjectFocusX)
+    let framing = { GameState.endSceneFraming(slide, at: $0) }
+    #expect(subjects.left < subjects.middle && subjects.middle < subjects.right)
+    #expect(framing(0) == .wide)
+    #expect(framing(GameState.endSceneWideHold - 0.01) == .wide)
+
+    let midPushIn = framing(GameState.endSceneWideHold + GameState.endScenePushInDuration / 2)
+    #expect(midPushIn.zoom > 0.3 && midPushIn.zoom < 0.7)   // zooming and panning together
+    #expect(midPushIn.focusX < 0.5 && midPushIn.focusX > subjects.left)
+
+    let onFirst = EndSceneFraming(zoom: 1, focusX: subjects.left)
+    #expect(framing(Self.pushInEnd) == onFirst)
+    #expect(framing(Self.panStart) == onFirst)              // the dwell
+
+    let midFirstLeg = framing(Self.panStart + GameState.endScenePanLegDuration / 2)
+    #expect(midFirstLeg.zoom == 1)
+    #expect(midFirstLeg.focusX > subjects.left && midFirstLeg.focusX < subjects.middle)
+
+    // The camera rests on the animal for a full second.
+    let onMiddle = EndSceneFraming(zoom: 1, focusX: subjects.middle)
+    #expect(framing(Self.middleArrival) == onMiddle)
+    #expect(framing(Self.middleArrival + GameState.endSceneMiddleDwell / 2) == onMiddle)
+    #expect(framing(Self.secondPanStart) == onMiddle)
+    #expect(GameState.endSceneMiddleDwell == 1)
+
+    let midSecondLeg = framing(Self.secondPanStart + GameState.endScenePanLegDuration / 2)
+    #expect(midSecondLeg.focusX > subjects.middle && midSecondLeg.focusX < subjects.right)
+
+    let onSecond = EndSceneFraming(zoom: 1, focusX: subjects.right)
+    #expect(framing(Self.panEnd) == onSecond)
+    #expect(framing(GameState.endSceneImageHold + 1) == onSecond)   // held through the wipe
   }
 
-  @Test func dragRetiresAShowingToast() {
+  @Test func theLiveSceneHasNoCamera() {
+    #expect(EndSceneSlide.live.subjectFocusX == nil)
+    #expect(GameState.endSceneFraming(.live, at: 3) == .wide)
+    #expect(GameState.endSceneStillShots(.live, at: 3).isEmpty)
+    #expect(reunited().endSceneShots(for: .live).isEmpty)
+    #expect(reunited().endSceneCaptionBoldness(for: .live).isEmpty)
+  }
+
+  @Test(arguments: [EndSceneSlide.toreros, .familia])
+  func reduceMotionShowsTheWideShotAndEachSubjectAsStills(slide: EndSceneSlide) throws {
+    let subjects = try #require(slide.subjectFocusX)
+    let shots = { GameState.endSceneStillShots(slide, at: $0) }
+    let stills = [EndSceneFraming.wide] + [subjects.left, subjects.middle, subjects.right].map {
+      EndSceneFraming(zoom: 1, focusX: $0)
+    }
+    let cuts = GameState.endSceneStillCuts
+    #expect(cuts == [2.25, 4.5, 6.75])                      // four stills share the 9 s
+
+    #expect(shots(0) == [EndSceneShot(framing: stills[0], opacity: 1)])
+    for (index, cut) in cuts.enumerated() {
+      #expect(shots(cut - 0.3) == [EndSceneShot(framing: stills[index], opacity: 1)])
+      // Halfway through each crossfade, the next still is half up over the last one.
+      let mid = shots(cut)
+      #expect(mid.map(\.framing) == [stills[index], stills[index + 1]])
+      #expect(abs(mid[1].opacity - 0.5) < 0.001)
+      #expect(shots(cut + 0.3) == [EndSceneShot(framing: stills[index + 1], opacity: 1)])
+    }
+    #expect(shots(GameState.endSceneImageHold) == [EndSceneShot(framing: stills[3], opacity: 1)])
+  }
+
+  @Test(arguments: [EndSceneSlide.toreros, .familia], [false, true])
+  func captionBoldnessHandsOffAcrossTheSubjects(slide: EndSceneSlide, stills: Bool) throws {
+    let handoffs = try #require(GameState.endSceneCaptionHandoffs(slide, stills: stills))
+    let boldness = { GameState.endSceneCaptionBoldness(slide, at: $0, stills: stills) }
+    let fade = GameState.endSceneCaptionFadeDuration
+    // Far enough apart that the middle name reaches full bold between them.
+    #expect(handoffs.second - handoffs.first >= fade)
+
+    #expect(boldness(0) == [1, 0, 0])                       // the left name, from the wide shot
+    #expect(boldness(handoffs.first - fade / 2) == [1, 0, 0])
+    let firstHalf = boldness(handoffs.first)
+    #expect(abs(firstHalf[0] - 0.5) < 0.001 && abs(firstHalf[1] - 0.5) < 0.001 && firstHalf[2] == 0)
+    let quarter = boldness(handoffs.first - fade / 4)
+    #expect(abs(quarter[0] - 0.75) < 0.001)                 // a linear trade over one second
+    let secondHalf = boldness(handoffs.second)
+    #expect(secondHalf[0] == 0 && abs(secondHalf[1] - 0.5) < 0.001 && abs(secondHalf[2] - 0.5) < 0.001)
+    #expect(boldness(handoffs.second + fade / 2) == [0, 0, 1])
+    #expect(boldness(GameState.endSceneImageHold) == [0, 0, 1])
+    for step in 0...80 {
+      #expect(abs(boldness(Double(step) * 0.1).reduce(0, +) - 1) < 0.001)
+    }
+  }
+
+  @Test(arguments: [EndSceneSlide.toreros, .familia])
+  func kenBurnsHandoffsLandHalfwayBetweenSubjects(slide: EndSceneSlide) throws {
+    let subjects = try #require(slide.subjectFocusX)
+    let handoffs = try #require(GameState.endSceneCaptionHandoffs(slide, stills: false))
+    let focus = { GameState.endSceneFraming(slide, at: $0).focusX }
+    #expect(handoffs.first > Self.panStart && handoffs.first < Self.middleArrival)
+    #expect(handoffs.second > Self.secondPanStart && handoffs.second < Self.panEnd)
+    #expect(abs(focus(handoffs.first) - (subjects.left + subjects.middle) / 2) < 0.001)
+    #expect(abs(focus(handoffs.second) - (subjects.middle + subjects.right) / 2) < 0.001)
+    // With the stills, the bold changes on the cuts onto the middle and right subjects.
+    let stillHandoffs = try #require(GameState.endSceneCaptionHandoffs(slide, stills: true))
+    #expect(stillHandoffs.first == GameState.endSceneStillCuts[1])
+    #expect(stillHandoffs.second == GameState.endSceneStillCuts[2])
+  }
+
+  @Test func eachSubjectHasItsOwnSound() {
+    #expect(EndSceneSlide.live.subjectCalls.isEmpty)
+    #expect(EndSceneSlide.toreros.subjectCalls.map(\.sound) == [.castanetPortrait, .moo, .ole])
+    #expect(EndSceneSlide.familia.subjectCalls.map(\.sound) == [.castanetPortrait, .neigh, .ole])
+  }
+
+  @Test(arguments: [EndSceneSlide.toreros, .familia], [false, true])
+  func callTimesFollowTheCamera(slide: EndSceneSlide, stills: Bool) throws {
+    let handoffs = try #require(GameState.endSceneCaptionHandoffs(slide, stills: stills))
+    let times = GameState.endSceneCallTimes(slide, stills: stills)
+    let first = stills ? GameState.endSceneStillCuts[0]
+      : GameState.endSceneWideHold + GameState.endScenePushInDuration / 2
+    #expect(times == [first, handoffs.first, handoffs.second])
+    #expect(GameState.endSceneCallTimes(.live, stills: stills).isEmpty)
+  }
+
+  @Test func subjectSoundsPlayOncePerShowing() throws {
     let gameState = reunited()
-    advanceOneSlide(gameState)
-    #expect(gameState.endSceneToastTime > 0)
-    gameState.beginEndSceneDrag()
-    #expect(gameState.endSceneToastTime == 0)
+    advanceOneSlide(gameState)                              // on Los toreros
+    #expect(gameState.endSceneCallsPlayed == 0)             // the wide shot is quiet
+    let times = GameState.endSceneCallTimes(.toreros, stills: false)
+    for (index, time) in times.enumerated() {
+      run(gameState, seconds: time - gameState.endSceneSlideTime - 0.1)
+      #expect(gameState.endSceneCallsPlayed == index)
+      run(gameState, seconds: 0.2)
+      #expect(gameState.endSceneCallsPlayed == index + 1)
+    }
+    run(gameState, seconds: GameState.endSceneImageHold - gameState.endSceneSlideTime + 0.05)
+    #expect(gameState.endSceneCallsPlayed == 3)             // no repeats before the wipe
+    run(gameState, seconds: GameState.endSceneIrisDuration + 0.05)
+    #expect(gameState.endSceneSlide == .familia)
+    #expect(gameState.endSceneCallsPlayed == 0)             // a fresh set for La familia
+  }
+
+  @Test func shotsFollowTheSlideClockAndTheReduceMotionSetting() {
+    let gameState = reunited()
+    run(gameState, seconds: GameState.endSceneLiveHold + 0.05)
+    // Mid-wipe, the incoming portrait opens on the wide shot, its first name bold.
+    #expect(gameState.endSceneShots(for: .toreros) == [EndSceneShot(framing: .wide, opacity: 1)])
+    #expect(gameState.endSceneCaptionBoldness(for: .toreros) == [1, 0, 0])
+    run(gameState, seconds: GameState.endSceneIrisDuration + 0.05)
+    run(gameState, seconds: Self.panStart + GameState.endScenePanLegDuration / 2)
+    let moving = gameState.endSceneShots(for: .toreros)
+    #expect(moving.count == 1)
+    #expect(moving[0].framing == GameState.endSceneFraming(.toreros, at: gameState.endSceneSlideTime))
+    gameState.endSceneCrossfade = true
+    #expect(gameState.endSceneShots(for: .toreros) ==
+      GameState.endSceneStillShots(.toreros, at: gameState.endSceneSlideTime))
   }
 
   @Test func debugJumpAndResetClearTheSlideshow() {
     let gameState = reunited()
     advanceOneSlide(gameState)
-    gameState.beginEndSceneDrag()
-    run(gameState, seconds: 0.5)
+    run(gameState, seconds: 2)
     gameState.endSceneIncomingSlide = .familia
     gameState.endSceneIrisProgress = 0.5
-    gameState.endSceneToastTime = 1
     gameState.reset()
     expectSlideshowCleared(gameState)
 
@@ -515,10 +642,8 @@ struct GameBossTests {
     gameState.endSceneSlide = .familia
     gameState.endSceneIncomingSlide = .live
     gameState.endSceneIrisProgress = 0.4
-    gameState.endSceneSlideHold = 2
-    gameState.endSceneDragActive = true
-    gameState.endSceneHasDragged = true
-    gameState.endSceneToastTime = 1
+    gameState.endSceneSlideTime = 2
+    gameState.endSceneCallsPlayed = 2
     gameState.debugJumpToEndScene()
     #expect(gameState.phase == .endScene)
     expectSlideshowCleared(gameState)
@@ -528,10 +653,8 @@ struct GameBossTests {
     #expect(gameState.endSceneSlide == .live)
     #expect(gameState.endSceneIncomingSlide == nil)
     #expect(gameState.endSceneIrisProgress == 0)
-    #expect(gameState.endSceneSlideHold == 0)
-    #expect(!gameState.endSceneDragActive)
-    #expect(!gameState.endSceneHasDragged)
-    #expect(gameState.endSceneToastTime == 0)
+    #expect(gameState.endSceneSlideTime == 0)
+    #expect(gameState.endSceneCallsPlayed == 0)
   }
 
   // MARK: Input gating & reset

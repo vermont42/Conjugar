@@ -2,13 +2,11 @@
 //  GameState+Slideshow.swift
 //  Conjugar
 //
-//  The end scene's slideshow. Five seconds after the reunion burst, an iris wipe opens
-//  on a still portrait of the dancer, the bull, and the matador (Los toreros), then one
-//  of the developer's family (La familia), then the live scene again, cycling until the
-//  player quits. Time-driven from `updateEndScene` like the rest of the end scene, so
-//  `CONJUGAR_GAME_TIME_SCALE` slows the iris for freeze-framing and tests can drive it.
-//  The live simulation keeps running underneath every image. GameView draws the images,
-//  the iris, the drag, the toast, and the caption (prompts/end_scene_plan.md).
+//  The end scene's slideshow: the live scene, Los toreros, and La familia, joined by iris
+//  wipes, with a Ken Burns camera, a caption, and subject sounds on each portrait (stills
+//  and crossfades under Reduce Motion). Driven by the game clock from `updateEndScene`,
+//  so `CONJUGAR_GAME_TIME_SCALE` slows it for freeze-framing and tests can step it.
+//  Details are in docs/game.md.
 //
 
 import CoreGraphics
@@ -45,73 +43,151 @@ extension GameState {
     }
   }
 
-  /// Clear the whole slideshow back to the live scene, used by `reset()` and
-  /// `enterEndScene()`. The cycle itself arms when the reunion burst fires.
-  /// `endSceneCrossfade` is the view's Reduce Motion setting, so it survives.
+  static func endSceneHold(for slide: EndSceneSlide) -> Double {
+    slide.isImage ? endSceneImageHold : endSceneLiveHold
+  }
+
+  /// An incoming slide hasn't started its clock, so it opens on the wide shot.
+  private func endSceneClock(for slide: EndSceneSlide) -> Double {
+    slide == endSceneSlide ? endSceneSlideTime : 0
+  }
+
+  func endSceneShots(for slide: EndSceneSlide) -> [EndSceneShot] {
+    guard slide.isImage else { return [] }
+    let time = endSceneClock(for: slide)
+    if endSceneCrossfade {
+      return Self.endSceneStillShots(slide, at: time)
+    }
+    return [EndSceneShot(framing: Self.endSceneFraming(slide, at: time), opacity: 1)]
+  }
+
+  /// Left, middle, right; 0 is regular and 1 is bold.
+  func endSceneCaptionBoldness(for slide: EndSceneSlide) -> [Double] {
+    Self.endSceneCaptionBoldness(slide, at: endSceneClock(for: slide), stills: endSceneCrossfade)
+  }
+
+  static var endScenePanStart: Double {
+    endSceneWideHold + endScenePushInDuration + endSceneFirstDwell
+  }
+
+  static var endSceneSecondPanStart: Double {
+    endScenePanStart + endScenePanLegDuration + endSceneMiddleDwell
+  }
+
+  static var endSceneStillCuts: [Double] {
+    (1...3).map { endSceneImageHold * Double($0) / 4 }
+  }
+
+  /// `time` is seconds since the slide's wipe finished.
+  static func endSceneFraming(_ slide: EndSceneSlide, at time: Double) -> EndSceneFraming {
+    guard let subjects = slide.subjectFocusX else { return .wide }
+    let pushInStart = endSceneWideHold
+    if time < pushInStart + endScenePushInDuration {
+      let t = smoothstep(progress(time, from: pushInStart, duration: endScenePushInDuration))
+      return EndSceneFraming(zoom: t, focusX: lerp(EndSceneFraming.wide.focusX, subjects.left, t))
+    }
+    if time < endSceneSecondPanStart {
+      let t = smoothstep(progress(time, from: endScenePanStart, duration: endScenePanLegDuration))
+      return EndSceneFraming(zoom: 1, focusX: lerp(subjects.left, subjects.middle, t))
+    }
+    let t = smoothstep(progress(time, from: endSceneSecondPanStart, duration: endScenePanLegDuration))
+    return EndSceneFraming(zoom: 1, focusX: lerp(subjects.middle, subjects.right, t))
+  }
+
+  static func endSceneStillShots(_ slide: EndSceneSlide, at time: Double) -> [EndSceneShot] {
+    guard let subjects = slide.subjectFocusX else { return [] }
+    let stills = [EndSceneFraming.wide] + [subjects.left, subjects.middle, subjects.right].map {
+      EndSceneFraming(zoom: 1, focusX: $0)
+    }
+    let halfFade = endSceneCrossfadeDuration / 2
+    for (index, cut) in endSceneStillCuts.enumerated() {
+      if time < cut - halfFade {
+        return [EndSceneShot(framing: stills[index], opacity: 1)]
+      }
+      if time < cut + halfFade {
+        let fade = progress(time, from: cut - halfFade, duration: endSceneCrossfadeDuration)
+        return [
+          EndSceneShot(framing: stills[index], opacity: 1),
+          EndSceneShot(framing: stills[index + 1], opacity: fade)
+        ]
+      }
+    }
+    return [EndSceneShot(framing: stills[stills.count - 1], opacity: 1)]
+  }
+
+  /// Halfway through each pan leg is where the eased focus crosses the midpoint between
+  /// two subjects.
+  static func endSceneCaptionHandoffs(_ slide: EndSceneSlide, stills: Bool) -> (first: Double, second: Double)? {
+    guard slide.subjectFocusX != nil else { return nil }
+    if stills {
+      let cuts = endSceneStillCuts
+      return (cuts[1], cuts[2])
+    }
+    let halfLeg = endScenePanLegDuration / 2
+    return (endScenePanStart + halfLeg, endSceneSecondPanStart + halfLeg)
+  }
+
+  /// The left name is bold from the start, since the push-in is headed for it.
+  static func endSceneCaptionBoldness(_ slide: EndSceneSlide, at time: Double, stills: Bool) -> [Double] {
+    guard let handoffs = endSceneCaptionHandoffs(slide, stills: stills) else { return [] }
+    func ramp(_ handoff: Double) -> Double {
+      let start = handoff - endSceneCaptionFadeDuration / 2
+      return min(1, max(0, (time - start) / endSceneCaptionFadeDuration))
+    }
+    let toMiddle = ramp(handoffs.first)
+    let toRight = ramp(handoffs.second)
+    return [1 - toMiddle, toMiddle - toRight, toRight]
+  }
+
+  static func endSceneCallTimes(_ slide: EndSceneSlide, stills: Bool) -> [Double] {
+    guard let handoffs = endSceneCaptionHandoffs(slide, stills: stills) else { return [] }
+    let first = stills ? endSceneStillCuts[0] : endSceneWideHold + endScenePushInDuration / 2
+    return [first, handoffs.first, handoffs.second]
+  }
+
+  private static func progress(_ time: Double, from start: Double, duration: Double) -> CGFloat {
+    CGFloat(min(1, max(0, (time - start) / duration)))
+  }
+
+  /// `endSceneCrossfade` mirrors the view's Reduce Motion setting, so it isn't reset.
   func resetEndSceneSlideshow() {
     endSceneSlide = .live
     endSceneIncomingSlide = nil
     endSceneIrisProgress = 0
-    endSceneSlideHold = 0
-    endSceneDragActive = false
-    endSceneHasDragged = false
-    endSceneToastTime = 0
+    endSceneSlideTime = 0
+    endSceneCallsPlayed = 0
   }
 
-  /// Start the cycle: the live scene holds for its full beat, then the first wipe.
-  /// Called once, on the frame the reunion burst fires.
-  func armEndSceneSlideshow() {
-    endSceneSlideHold = Self.endSceneSlideHold
-  }
-
-  /// One tick of the slideshow, after the cycle has armed: advance a wipe in progress,
-  /// or count down the current slide's hold (paused while the player drags) and start
-  /// the next wipe at zero.
   func advanceEndSceneSlideshow(dt: Double) {
-    if endSceneToastTime > 0 {
-      endSceneToastTime = max(0, endSceneToastTime - dt)
-    }
-
     if let incoming = endSceneIncomingSlide {
       endSceneIrisProgress = min(1, endSceneIrisProgress + dt / endSceneWipeDuration)
       if endSceneIrisProgress >= 1 {
         endSceneSlide = incoming
         endSceneIncomingSlide = nil
         endSceneIrisProgress = 0
-        endSceneSlideHold = Self.endSceneSlideHold
-        if incoming.isImage && !endSceneHasDragged {
-          endSceneToastTime = Self.endSceneToastDuration
-        }
+        endSceneSlideTime = 0
+        endSceneCallsPlayed = 0
       }
       return
     }
 
-    guard !endSceneDragActive else { return }
-    endSceneSlideHold -= dt
-    if endSceneSlideHold <= 0 {
+    endSceneSlideTime += dt
+    playDueEndSceneCall()
+    if endSceneSlideTime >= Self.endSceneHold(for: endSceneSlide) {
       endSceneIncomingSlide = endSceneSlide.next
       endSceneIrisProgress = 0
     }
   }
 
-  /// A finger went down on an image: pause the hold and retire the toast for the rest of
-  /// the session.
-  func beginEndSceneDrag() {
-    endSceneDragActive = true
-    endSceneHasDragged = true
-    endSceneToastTime = 0
-  }
-
-  /// The finger lifted: the slide gets a fresh full hold from here.
-  func endEndSceneDrag() {
-    endSceneDragActive = false
-    restartEndSceneHold()
-  }
-
-  /// Give the slide on screen a fresh full hold (after a drag, or a VoiceOver pan), so
-  /// someone studying the picture doesn't have it wiped away. A no-op mid-wipe.
-  func restartEndSceneHold() {
-    guard endSceneIncomingSlide == nil else { return }
-    endSceneSlideHold = Self.endSceneSlideHold
+  /// Counting calls rather than watching for a crossing means each plays exactly once per
+  /// showing, even if Reduce Motion flips mid-portrait and moves the times.
+  private func playDueEndSceneCall() {
+    let times = Self.endSceneCallTimes(endSceneSlide, stills: endSceneCrossfade)
+    let calls = endSceneSlide.subjectCalls
+    guard endSceneCallsPlayed < min(times.count, calls.count),
+          endSceneSlideTime >= times[endSceneCallsPlayed] else { return }
+    let call = calls[endSceneCallsPlayed]
+    endSceneCallsPlayed += 1
+    Current.soundPlayer.play(call.sound, shouldDebounce: false, volume: call.volume)
   }
 }

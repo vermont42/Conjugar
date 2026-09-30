@@ -35,3 +35,25 @@ Processing: Each source mp3 was trimmed to its transient, faded, peak-normalized
 
 Reuse:    Bundled as game SFX. No attribution legally required; the app's Credits
           screen ("Game Sounds") includes a courtesy note.
+
+Assets:   Conjugar/Audio/ole.mp3
+          (the end scene's portraits, added 2026-09-30: the shout for the matador and
+          for Josh as the caption names them)
+Source:   Pixabay Sound Effects, uploader Ai_mee_Universe, title "OLE , OLE !!!
+          Spanish SCREAMS" (7.0 s, three shouts). The Pixabay id wasn't recorded.
+          Original and the uploader's info card are kept in the gitignored
+          audio-sources/pixabay-ole/.
+Edit:     Trimmed to the first shout (0.60 to 2.55 s of the source, 1.95 s) with a
+          10 ms fade-in and a 0.35 s fade-out, re-encoded mono 192 kbps with lame.
+License:  Pixabay Content License — https://pixabay.com/service/license-summary/
+          No attribution required; the app's Credits screen ("Game Sounds") credits
+          Ai_mee_Universe at Josh's request.
+
+Assets:   Conjugar/Audio/castanetPortrait.mp3
+          (the end scene's portraits, added 2026-09-30: the castanet for the dancer and
+          Amanda)
+Source:   Derived from castanetHigh.mp3 above (same Pixabay source and license): its
+          samples scaled by 1.17 with a tanh soft limiter above −1 dBFS (13 of 22,204
+          samples touched), re-encoded 192 kbps with lame. A separate file because the
+          portraits wanted it louder than AVAudioPlayer's 1.0 volume ceiling allows, and
+          castanetHigh.mp3 is shared with a power-up.

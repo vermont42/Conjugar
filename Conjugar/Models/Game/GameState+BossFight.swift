@@ -433,6 +433,9 @@ extension GameState {
 
     // Two seconds in, the dancer turns to face the matador sliding in from her right.
     if endSceneTime >= Self.endSceneDancerTurnDelay {
+      if endSceneTime - dt < Self.endSceneDancerTurnDelay {
+        Current.soundPlayer.play(.ole, shouldDebounce: false)
+      }
       playerFacing = 1
     }
 
@@ -460,7 +463,6 @@ extension GameState {
       spawnReunionBurst(midX: coupleMidX)
       Current.soundPlayer.play(.chime, shouldDebounce: false, volume: 0.5)
       Current.hapticPlayer.play(.success)
-      armEndSceneSlideshow()
     } else {
       advanceEndSceneSlideshow(dt: dt)
     }

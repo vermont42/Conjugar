@@ -27,15 +27,10 @@ struct GameView: View {
   /// Touch-down re-arm for the boss dance buttons (the jump idiom, per-move so a
   /// held paso can't fire twice).
   @State private var heldDanceMoves: Set<DanceMove> = []
-  /// The end-scene slideshow's settled horizontal pan of the image on screen (0 =
-  /// centered), plus the live translation of a drag in progress (nil = no finger down).
-  /// The pan resets to center whenever the slide changes.
-  @State private var slidePan: CGFloat = 0
-  @GestureState private var slideDragTranslation: CGFloat?
   /// The two end-scene images, decoded off the main thread as the end scene opens so
   /// the first wipe doesn't stall on a 3504×2336 JPEG decode. Until they arrive the
   /// slides fall back to the asset-catalog `Image`.
-  @State private var preparedSlideImages: [EndSceneSlide: UIImage] = [:]
+  @State private var preparedSlideImages = PreparedSlideImages()
 
   /// The play field is capped to a portrait column (width ≤ height × this) so the
   /// vertical climb never stretches into a wide, wrong-aspect field on iPad landscape
@@ -138,33 +133,12 @@ struct GameView: View {
     return -dancerWalkBobProfile[frame - 1] * dancerWalkBobHeight   // negative = up
   }
 
-  // Real rendered bull sprites (`bull_<action>_<frame>`), same visual/collision
-  // split as the dancer: the bull is wider than tall (a quadruped), so its visual
-  // overhangs the square `bullSize` collision box, feet aligned to the box bottom.
-  //
-  // Unlike the dancer (all crops the same pixel height → constant on-screen
-  // height), the bull's THROW rears the head up, so its union crop is much taller
-  // (118 px) than the walk's (97 px). But `render_sprites.py` auto-fits ortho by
-  // the bull's constant body LENGTH (every action crops to ~174 px wide), so one
-  // render pixel is the SAME world size in every action. We therefore map crop
-  // pixels to screen at one constant `bullScale` — width, height, and the feet
-  // offset all derived per action from its crop dims. That keeps the body a
-  // constant size while the reared head genuinely extends upward on a throw
-  // (a fixed on-screen height would instead shrink the body ~18% mid-throw).
-  // The cel outline adds a fixed pixel margin to every crop dim; bullScale absorbs
-  // it so the body stays one size and the outline is just a thin edge.
-  // 2026-07-12: two coupled changes. (1) Bumped the on-screen bull +25% (headroom in
-  // the top gap; a bigger bull lets the small-geometry ivory horn + eye read). (2)
-  // Re-rendered the bull sprites at --size 512 (was 192): at 192 the ~168 px-wide crop
-  // was upscaled ~2.4× to the on-screen ~410 px and the small horn turned to blocky
-  // mush. 512 makes the source ≈ the @3x display size, so the horns render crisp — but
-  // it needs SMOOTH interpolation (see bullSprite; nearest-neighbor frays the outline
-  // into spikes when downscaling) and the DEFAULT --outline-width 2 (at 512, a wider
-  // outline makes Freestyle draw hair-like contour spikes). bullScale drops to hold the
-  // same on-screen size (137 pt idle width): 512-crop 436 px × 0.314 ≈ 137 pt, the same
-  // as the old 168 px × 0.816. VISUAL only — collision is `GameState.bullSize`, and the
-  // per-action feet offset re-derives from `bullHeight`, so feet stay planted.
-  private static let bullScale: CGFloat = 0.314   // screen pt per render crop px (512-render, +25%)
+  // The bull sprites (`bull_<action>_<frame>`) are drawn at one constant scale rather
+  // than a fixed height. Every action's crop spans the same body length, so a constant
+  // scale keeps the body one size while a throw's reared head extends upward. Width,
+  // height, and feet offset derive per action from `bullCrop`. Visual only; collision is
+  // `GameState.bullSize`.
+  private static let bullScale: CGFloat = 0.314   // screen points per render-crop pixel
 
   /// Union-crop pixel dims (W, H) per action, from `pack_or_rename.sh` (512-render,
   /// cel + ivory-horn accents + outline-width 2).
@@ -281,18 +255,6 @@ struct GameView: View {
         gameState.reconfigure(screenSize: Self.fieldSize(in: newSize))
       }
       .onDisappear { gameState.stopAudio() }
-      // The slideshow's hold pauses while a finger is on an image. Keyed on the gesture
-      // state (which resets on cancellation, not only on a clean lift) so a drag the
-      // system interrupts can't leave the hold paused forever.
-      .onChange(of: slideDragTranslation != nil) { _, dragging in
-        if dragging {
-          gameState.beginEndSceneDrag()
-        } else {
-          gameState.endEndSceneDrag()
-        }
-      }
-      .onChange(of: gameState.endSceneSlide) { _, _ in slidePan = 0 }
-      // Under Reduce Motion the iris wipe becomes a crossfade.
       .onChange(of: reduceMotion, initial: true) { _, reduce in
         gameState.endSceneCrossfade = reduce
       }
@@ -1021,8 +983,8 @@ struct GameView: View {
 
   /// Full-screen tap catcher for the boss's skippable beats: intro → duel,
   /// victory → end scene. Sits under the quit button and controls so those stay
-  /// tappable. The end scene has none: a tap there does nothing (so dragging a portrait
-  /// can't quit by accident), and only the X button leaves.
+  /// tappable. The end scene has none: a tap there does nothing, and only the X button
+  /// leaves.
   private var bossTapLayer: some View {
     Group {
       if gameState.phase == .bossIntro || gameState.phase == .victory {
@@ -1038,17 +1000,11 @@ struct GameView: View {
 
   // MARK: End-scene slideshow
 
-  /// The portraits are 3:2 landscape (the art is 3504×2336), shown at the column's full
-  /// height, so on iPhone each is about three screens wide.
   private static let slideAspect: CGFloat = 3.0 / 2.0
   private static let irisRingWidth: CGFloat = 3
   /// The ring fades out over this last fraction of the wipe.
   private static let irisRingFadeSpan = 0.2
-  /// The toast's fade-in and fade-out, and the sway that suggests a drag.
-  private static let toastFadeIn = 0.25
-  private static let toastFadeOut = 0.5
-  private static let toastSway: CGFloat = 8
-  private static let toastSwayHz = 1.5
+  private static let captionFontSize: CGFloat = 15
 
   private static func slideAssetName(_ slide: EndSceneSlide) -> String? {
     switch slide {
@@ -1058,10 +1014,8 @@ struct GameView: View {
     }
   }
 
-  /// The slideshow over the live end scene: the current image (draggable), the incoming
-  /// one opening in an iris, the ring riding the iris edge, and the "Drag Me" toast.
   /// A wipe back to the live scene has nothing to draw on top (the playfield is already
-  /// underneath), so it instead cuts the growing hole out of the outgoing image.
+  /// underneath), so it cuts a growing hole in the outgoing image instead.
   private func endSceneSlideLayer(size: CGSize) -> some View {
     let current = gameState.endSceneSlide
     let incoming = gameState.endSceneIncomingSlide
@@ -1071,7 +1025,7 @@ struct GameView: View {
     return ZStack {
       if current.isImage {
         let isClosing = incoming == .live
-        slideView(current, size: size, pan: clampedPan(slidePan + (slideDragTranslation ?? 0), size: size))
+        slideView(current, size: size)
           .mask {
             if isClosing && !crossfade {
               IrisMask(diameter: diameter, inverted: true).fill(style: FillStyle(eoFill: true))
@@ -1080,18 +1034,13 @@ struct GameView: View {
             }
           }
           .opacity(isClosing && crossfade ? 1 - eased : 1)
-          .gesture(slideDrag(size: size))
-          .allowsHitTesting(incoming == nil)
           .accessibilityElement(children: .ignore)
           .accessibilityLabel(current == .familia ? L.Game.familyImageLabel : L.Game.torerosImageLabel)
           .accessibilityAddTraits(.isImage)
-          .accessibilityAdjustableAction { direction in
-            panForAccessibility(direction, size: size)
-          }
       }
 
       if let incoming, incoming.isImage {
-        slideView(incoming, size: size, pan: 0)
+        slideView(incoming, size: size)
           .mask {
             if crossfade {
               Rectangle()
@@ -1100,7 +1049,6 @@ struct GameView: View {
             }
           }
           .opacity(crossfade ? eased : 1)
-          .allowsHitTesting(false)
           .accessibilityHidden(true)
       }
 
@@ -1109,133 +1057,109 @@ struct GameView: View {
           .stroke(Color.customYellow, lineWidth: Self.irisRingWidth)
           .frame(width: diameter, height: diameter)
           .opacity(min(1, (1 - gameState.endSceneIrisProgress) / Self.irisRingFadeSpan))
-          .allowsHitTesting(false)
           .accessibilityHidden(true)
-      }
-
-      if current.isImage && incoming == nil && gameState.endSceneToastTime > 0 {
-        dragToast
-          .position(x: size.width / 2, y: size.height * 5 / 6)   // centered in the lower third
       }
     }
     .frame(width: size.width, height: size.height)
   }
 
-  /// One portrait at the column's full height, panned horizontally by `pan`, with La
-  /// familia's caption fixed along the bottom (it stays put while the image moves, and
-  /// it wipes in and out with its slide).
-  private func slideView(_ slide: EndSceneSlide, size: CGSize, pan: CGFloat) -> some View {
+  private func slideView(_ slide: EndSceneSlide, size: CGSize) -> some View {
     ZStack(alignment: .bottom) {
-      slideImage(slide)
-        .resizable()
-        .interpolation(.high)
-        .aspectRatio(contentMode: .fill)
-        .frame(width: size.height * Self.slideAspect, height: size.height)
-        .offset(x: pan)
-        .frame(width: size.width, height: size.height)
-      if slide == .familia {
-        familyCaption
+      Color.customBackground
+      confetti(count: 40, colors: [.customRed, .customYellow, .customBlue])
+      ForEach(Array(gameState.endSceneShots(for: slide).enumerated()), id: \.offset) { _, shot in
+        framedSlideImage(slide, framing: shot.framing, size: size)
+          .opacity(shot.opacity)
       }
+      slideCaption(slide)
     }
     .frame(width: size.width, height: size.height)
     .clipped()
-    .contentShape(Rectangle())
+  }
+
+  /// Zoom is interpolated on a log scale so the push-in feels even rather than rushing at
+  /// the start.
+  private func framedSlideImage(_ slide: EndSceneSlide, framing: EndSceneFraming, size: CGSize) -> some View {
+    let wideHeight = min(size.height, size.width / Self.slideAspect)
+    let fullHeight = max(size.height, size.width / Self.slideAspect)
+    let height = wideHeight * pow(fullHeight / wideHeight, framing.zoom)
+    let width = height * Self.slideAspect
+    let visible = size.width / width
+    let centerX = visible >= 1 ? 0.5 : min(max(framing.focusX, visible / 2), 1 - visible / 2)
+    return slideImage(slide)
+      .resizable()
+      .interpolation(.high)
+      .frame(width: width, height: height)
+      .offset(x: (0.5 - centerX) * width)
+      .frame(width: size.width, height: size.height)
   }
 
   private func slideImage(_ slide: EndSceneSlide) -> Image {
-    if let prepared = preparedSlideImages[slide] {
+    if let prepared = preparedSlideImages.images[slide] {
       return Image(uiImage: prepared)
     }
     return Image(Self.slideAssetName(slide) ?? "")
   }
 
-  /// Decode both portraits off the main thread once the end scene begins.
   private func prepareSlideImages() async {
-    guard gameState.phase == .endScene, preparedSlideImages.isEmpty else { return }
+    guard gameState.phase == .endScene, preparedSlideImages.images.isEmpty else { return }
     let slides = EndSceneSlide.allCases.filter(\.isImage)
     let names = slides.compactMap(Self.slideAssetName)
     let images = await Task.detached(priority: .userInitiated) {
       names.map { UIImage(named: $0)?.preparingForDisplay() }
     }.value
     for (slide, image) in zip(slides, images) {
-      preparedSlideImages[slide] = image
+      preparedSlideImages.images[slide] = image
     }
   }
 
-  /// How far the image may pan either way before its edge would pull inside the column.
-  private func maxPan(size: CGSize) -> CGFloat {
-    max(0, (size.height * Self.slideAspect - size.width) / 2)
+  private static func captionNames(_ slide: EndSceneSlide) -> [String] {
+    switch slide {
+    case .live: return []
+    case .toreros: return [L.Game.dancerName, L.Game.bullName, L.Game.matadorName]
+    case .familia: return [L.Game.amandaName, L.Game.vegasName, L.Game.joshName]
+    }
   }
 
-  private func clampedPan(_ pan: CGFloat, size: CGSize) -> CGFloat {
-    let limit = maxPan(size: size)
-    return min(max(pan, -limit), limit)
+  /// Hidden from VoiceOver: the image's label already names everyone.
+  @ViewBuilder
+  private func slideCaption(_ slide: EndSceneSlide) -> some View {
+    if let caption = captionText(slide) {
+      Text(caption)
+        .font(Self.captionFont(boldness: 0))
+        .foregroundStyle(Color.customYellow)
+        .multilineTextAlignment(.center)
+        .padding(.horizontal, Layout.doubleDefaultSpacing)
+        .padding(.vertical, Layout.defaultSpacing)
+        .frame(maxWidth: .infinity)
+        .background(Color.black.opacity(0.55))
+        .accessibilityHidden(true)
+    }
   }
 
-  /// Horizontal-only drag. The live translation rides `slideDragTranslation` (whose
-  /// transitions pause and restart the hold; see `body`); the lift commits it, clamped.
-  private func slideDrag(size: CGSize) -> some Gesture {
-    DragGesture(minimumDistance: 1)
-      .updating($slideDragTranslation) { value, state, _ in
-        state = value.translation.width
+  private func captionText(_ slide: EndSceneSlide) -> AttributedString? {
+    let names = Self.captionNames(slide)
+    guard !names.isEmpty else { return nil }
+    let boldness = gameState.endSceneCaptionBoldness(for: slide)
+    var caption = AttributedString()
+    for (index, name) in names.enumerated() {
+      if index > 0 {
+        caption += AttributedString(", ")
       }
-      .onEnded { value in
-        slidePan = clampedPan(slidePan + value.translation.width, size: size)
-      }
+      var part = AttributedString(name)
+      part.font = Self.captionFont(boldness: index < boldness.count ? boldness[index] : 0)
+      caption += part
+    }
+    return caption
   }
 
-  /// VoiceOver can't drag, so swiping up or down on a portrait pans it a third of its
-  /// width (about one screen on iPhone), which reaches every figure. Each pan restarts
-  /// the hold, like a drag.
-  private func panForAccessibility(_ direction: AccessibilityAdjustmentDirection, size: CGSize) {
-    let step = size.height * Self.slideAspect / 3
-    let target: CGFloat
-    switch direction {
-    case .increment: target = slidePan - step
-    case .decrement: target = slidePan + step
-    @unknown default: return
-    }
-    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.3)) {
-      slidePan = clampedPan(target, size: size)
-    }
-    gameState.restartEndSceneHold()
-  }
-
-  /// "Drag Me" in the game's rounded display voice (the `bossTitle` plate, smaller),
-  /// fading in and out over its `endSceneToastDuration` and swaying gently side to side
-  /// to suggest the gesture (still under Reduce Motion). Driven by the game clock, so
-  /// `CONJUGAR_GAME_TIME_SCALE` slows it for screenshots.
-  private var dragToast: some View {
-    let remaining = gameState.endSceneToastTime
-    let elapsed = GameState.endSceneToastDuration - remaining
-    let opacity = min(1, elapsed / Self.toastFadeIn, remaining / Self.toastFadeOut)
-    let sway = reduceMotion ? 0 : CGFloat(sin(elapsed * 2 * .pi * Self.toastSwayHz)) * Self.toastSway
-    return HStack(spacing: Layout.defaultSpacing) {
-      Image(systemName: "arrow.left.and.right")
-        .font(.system(size: 20, weight: .black))
-      Text(verbatim: L.Game.dragMe)
-        .font(.system(size: 28, weight: .black, design: .rounded))
-    }
-    .foregroundStyle(Color.customYellow)
-    .padding(.horizontal, Layout.doubleDefaultSpacing)
-    .padding(.vertical, Layout.defaultSpacing)
-    .background(Color.customRed.opacity(0.75), in: RoundedRectangle(cornerRadius: Layout.cornerRadius))
-    .shadow(radius: 4)
-    .offset(x: sway)
-    .opacity(opacity)
-    .allowsHitTesting(false)
-  }
-
-  /// La familia's caption: who these people are, in a bar along the column's bottom.
-  private var familyCaption: some View {
-    Text(verbatim: L.Game.familyCaption)
-      .font(.system(size: 15, weight: .semibold, design: .rounded))
-      .foregroundStyle(Color.customYellow)
-      .multilineTextAlignment(.center)
-      .padding(.horizontal, Layout.doubleDefaultSpacing)
-      .padding(.vertical, Layout.defaultSpacing)
-      .frame(maxWidth: .infinity)
-      .background(Color.black.opacity(0.55))
+  /// SF is a variable font, so an in-between weight renders as a true intermediate weight
+  /// rather than snapping to a named one. That is what lets a name thicken smoothly.
+  private static func captionFont(boldness: Double) -> Font {
+    let weight = UIFont.Weight(rawValue: CGFloat(boldness) * UIFont.Weight.bold.rawValue)
+    let system = UIFont.systemFont(ofSize: captionFontSize, weight: weight)
+    let rounded = system.fontDescriptor.withDesign(.rounded) ?? system.fontDescriptor
+    return Font(UIFont(descriptor: rounded, size: captionFontSize))
   }
 
   // MARK: Boss controls (taps, not held intents — the jump touch-down/re-arm idiom)
@@ -1471,4 +1395,13 @@ private struct HLine: Shape {
     path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
     return path
   }
+}
+
+/// A reference type because the slideshow is drawn inside `TimelineView`'s content
+/// closure, which captures the view value from the `body` pass that built it. A plain
+/// `@State` dictionary read there kept returning its empty initial value. Reads through
+/// this object see the current images, and observation redraws when they land.
+@Observable
+final class PreparedSlideImages {
+  var images: [EndSceneSlide: UIImage] = [:]
 }

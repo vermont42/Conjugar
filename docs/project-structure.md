@@ -27,7 +27,7 @@ Conjugar/
 │                               #   JPEG portraits (generated with gpt-image; see prompts/end_scene_plan.md, Phase 1)
 ├── Audio/                      # Synchronized-folder audio group: boss-fight + power-up SFX (castanetHigh/Low, palmas,
 │                               #   crowdOle, stompThud, tensionSting, capeWhoosh, brainLockOn, coin, snort, guitarStrum,
-│                               #   speedWhoosh, zombieGroan, stampede, lightsOut) plus spanishTension.mp3 (Music.onboarding)
+│                               #   speedWhoosh, zombieGroan, stampede, lightsOut, neigh, ole, castanetPortrait) plus spanishTension.mp3 (Music.onboarding)
 │                               #   and spanishGuitarStandoff.mp3 (Music.bossFight)
 ├── Base.lproj/
 │   └── LaunchScreen.storyboard # Launch screen
@@ -109,7 +109,7 @@ Conjugar/
 │       ├── GameState+Obstacles.swift   # Per-stage rolling obstacle sets and spawning (formerly GameState+Flags.swift)
 │       ├── GameState+Physics.swift     # Horizontal move, gravity + platform snap, ladders, jump, "reached the bull"
 │       ├── GameState+PowerUps.swift    # Power-ups (cape / speed / serenata) and their shared 7 s envelope
-│       ├── GameState+Slideshow.swift   # End-scene slideshow: live → Los toreros → La familia iris-wipe cycle, drag hold, toast
+│       ├── GameState+Slideshow.swift   # End-scene slideshow: live → Los toreros → La familia iris-wipe cycle, Ken Burns camera, caption boldness
 │       └── GameState+Stages.swift      # The five stages, escape beats, stage advance, and soft respawn
 ├── Supporting/                 # A PBXFileSystemSynchronizedRootGroup — files dropped here need no pbxproj edit
 │   ├── AppDelegate.swift       # UIApplicationDelegateAdaptor for the hooks the App lifecycle doesn't cover (appearance config)

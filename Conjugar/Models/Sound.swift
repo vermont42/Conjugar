@@ -58,6 +58,16 @@ enum Sound: String, CaseIterable {
   case brainLockOn
   case coin
 
+  // Konjugieren's `horse`; see `asset-licenses/game-sounds-pixabay.txt`.
+  case neigh
+
+  // `castanetHigh` made louder, because the end-scene portraits want more than the 1.0
+  // volume ceiling allows and the shared file is also used by a power-up.
+  case castanetPortrait
+
+  // Not `crowdOle`, which is a crowd cheer. See `asset-licenses/pixabay-game-sfx.txt`.
+  case ole
+
   static var randomApplause: Sound {
     [.applause1, .applause2, .applause3].randomElement() ?? .applause1
   }

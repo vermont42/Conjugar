@@ -206,12 +206,30 @@ nonisolated enum L {
       String(localized: "Game.bullImpressed")
     }
 
-    static var dragMe: String {
-      String(localized: "Game.dragMe")
+    /// The end-scene captions name each portrait's subjects left to right, one string
+    /// per name so the caption can bold whoever the camera is showing.
+    static var dancerName: String {
+      String(localized: "Game.dancerName")
     }
 
-    static var familyCaption: String {
-      String(localized: "Game.familyCaption")
+    static var bullName: String {
+      String(localized: "Game.bullName")
+    }
+
+    static var matadorName: String {
+      String(localized: "Game.matadorName")
+    }
+
+    static var amandaName: String {
+      String(localized: "Game.amandaName")
+    }
+
+    static var vegasName: String {
+      String(localized: "Game.vegasName")
+    }
+
+    static var joshName: String {
+      String(localized: "Game.joshName")
     }
 
     static var torerosImageLabel: String {

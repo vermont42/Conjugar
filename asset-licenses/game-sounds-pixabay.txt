@@ -21,3 +21,11 @@ License:  Pixabay Content License — https://pixabay.com/service/license-summar
           Commercial use permitted; NO attribution required. Only restriction: don't
           redistribute the raw sound file as a standalone download (embedding it in the
           app satisfies this).
+
+Assets:   Conjugar/Audio/neigh.mp3
+          (the end scene's La familia portrait, added 2026-09-30: Vegas whinnies when
+          the caption names him)
+Source:   Copied from the sibling app Konjugieren, where it is horse.mp3 (the 🐎 call
+          in its game), originally sourced from Pixabay
+          (https://pixabay.com/sound-effects/); Josh confirmed the origin 2026-09-30.
+License:  Pixabay Content License — https://pixabay.com/service/license-summary/

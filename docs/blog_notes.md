@@ -9823,3 +9823,158 @@ shows "él · imperfecto de subjuntivo 1" in full with the field visible above t
 Gerund questions read just "gerundio". The full suite passes (586 Swift Testing tests plus the
 XCTest suites), and SwiftLint is clean. Afterward I restored the simulator's text size,
 difficulty, and hardware-keyboard setting.
+
+## A Ken Burns camera for the end-scene portraits (2026-09-30)
+
+The slideshow shipped on 2026-09-26 opened each portrait centered at full height, which on an
+iPhone meant a close-up of the bull's head. A "Drag Me" toast invited the player to pan to the
+dancer and the matador, but nothing guaranteed they would. Josh proposed a fix: open on the whole
+image, then after a second pan and zoom onto the dancer, then pan across to the matador, and drop
+the drag entirely unless Reduce Motion is on. That is the Ken Burns effect, and Josh said Ken
+Burns's *The Civil War* made a big impression on him as a teenager.
+
+**Refining the proposal.** Claude suggested a few changes before any code was written. The camera
+should rest briefly on each person, so the timeline became 1 s on the wide shot, a 2 s push-in, a
+0.75 s dwell, a 3 s pan, and a 1.25 s dwell before the next wipe. That makes each portrait last 8 s
+instead of 5. The zoom should stop at full column height, because on an iPad Pro the 2336 px art is
+already about one image pixel per screen pixel there. The camera should be a pure function of the
+slide's clock inside `GameState`, not a SwiftUI animation, so the time-scale debug variable and the
+tests keep working. Zoom should be interpolated on a log scale. Finally, Claude argued that Reduce
+Motion users would be better served by a still version of the same sequence than by the old drag.
+Josh agreed, noting that dropping the drag removes a lot of complexity for what is already a corner
+case. The drag, its pause-and-restart hold, the `@GestureState` cancellation guard, the toast and
+its two strings, and VoiceOver's swipe-to-pan all came out.
+
+**The letterbox.** The column is always portrait (width at most 0.62 of height), so the wide shot
+leaves bars above and below. Claude's first idea was a blurred, dimmed copy of the portrait behind
+it, made with Core Image off the main thread. The blur rendered correctly when dumped to a PNG, but
+the view never showed it. Logging at render time showed the view's `@State` image dictionaries were
+still empty after the async task had filled them. That points to a bug from phase 2: the early
+decode of the two JPEGs never takes effect either, and nobody noticed because the view falls back
+to loading the images from the asset catalog. Mid-investigation, Josh redirected. He didn't want
+the blur; the bars should hold the end scene's own confetti. That was simpler and better, since the
+floating dots tie the portraits to the celebration they interrupt. The `@State` bug is still open.
+
+**Captions that follow the camera.** Josh asked for a caption on both portraits, *La Bailaora, El
+Toro, El Matador* and *Amanda, Vegas, Josh (The Developer)*, with the La familia names reordered to
+match the art from left to right. Whoever the camera is showing is bold. Josh had written
+*bailarina* and asked whether there was a better word. There is: *bailarina* suggests ballet, and
+*bailaora* is specifically a flamenco dancer, which the Spanish VoiceOver label and the game's
+Settings description already used. The model decides which name is bold. The left name is bold
+from the wide shot on, because the push-in is headed there. The handoffs fall where the pan's focus
+crosses halfway between two subjects, found by inverting the pan's smoothstep (the inverse is
+0.5 − sin(asin(1 − 2y) / 3)). So the animal gets its turn as the camera passes it.
+
+**Boldness as a fade.** While that was being built, Josh added a flourish: rather than switching,
+each name's weight should fade between bold and regular over one second. `endSceneCaptionBoldness`
+returns three weights that always sum to 1, each handoff a linear trade centered on the crossing
+moment. The view builds each name's font from `UIFont.systemFont(ofSize:weight:)` with a continuous
+weight value and the rounded design. SF is a variable font, so in-between weights render as true
+intermediate weights instead of snapping to named ones. Freeze-frames at half speed show *La
+Bailaora* thinning while *El Toro* thickens. Josh remarked that this is why he doesn't feel
+threatened by AI: taste accumulated over a lifetime steers it to a much better result than it would
+reach alone. The confetti, the captions that follow the camera, and the one-second fade were all his.
+
+**Reduce Motion.** The still sequence became four stills (wide, left, middle, and right subject),
+2 s each, joined by the 0.4 s crossfade that already replaced the iris, with the bold handing off on
+the cuts. Giving the animal its own still means the caption's middle name gets a proper beat there.
+
+**Verification.** Checked in the iPhone 17 simulator by capturing frames every half second at
+`CONJUGAR_GAME_TIME_SCALE=0.5` through both portraits. Reduce Motion was checked by toggling
+`com.apple.Accessibility ReduceMotionEnabled` in the simulator's defaults. The first attempt turned
+it back off while Los toreros was still up, and Josh, watching the simulator, saw La familia move.
+The app follows the setting live, so the second portrait had simply switched to Ken Burns. A rerun
+that left Reduce Motion on through La familia showed its four stills. `GameBossTests` has 34
+slideshow and boss tests, covering the camera timeline, the four stills, the boldness handoffs for
+both modes, and a check that each Ken Burns handoff lands exactly halfway between two subjects. The
+full suite passes (590 Swift Testing tests plus the XCTest suites), and SwiftLint is clean.
+
+## Sounds for each subject, and the decode that never landed (2026-09-30)
+
+Right after the Ken Burns camera, Josh asked for a bull sound when the camera reaches the bull and
+a horse sound when it reaches Vegas, and for the image-loading bug from phase 2 to be fixed. While
+that was underway he added a castanet for the dancer and Amanda, and asked what the matador and
+Josh should get. He guessed he would need an olé from Pixabay. Claude pointed to the boss fight's `crowdOle` and
+suggested reusing it, for a small arc of castanet, animal, olé. That turned out to be wrong; see the
+next entry.
+
+**The horse.** The app had no horse sound. Two of Josh's other apps did. RaceRunner's `neigh.mp3`
+is credited to Orange Free Sounds, whose license is usually non-commercial, so Claude passed on it.
+Konjugieren's `horse.mp3` is the call for the 🐎 in its game. Konjugieren keeps no per-file
+record of where its sounds came from, so Claude asked, and Josh confirmed it is from Pixabay, like
+the other sounds reused from Konjugieren. The entry in `asset-licenses/game-sounds-pixabay.txt`
+records that. It ships as `Audio/neigh.mp3`.
+
+**Timing and balance.** The dancer's castanet plays halfway through the push-in onto her, and the
+other two play at the caption's handoffs, so each sound lands as its name goes bold. Under Reduce
+Motion all three play on the cuts. There was no ffmpeg on the machine, so Claude measured loudness
+by decoding each file to WAV with `afconvert` and computing RMS in Python. The files were far apart:
+the olé at −12 dB RMS, the moo at −16.5, the castanet at −20, and the horse at −24. Rather than
+re-encode anything, the volumes do the balancing (castanet 0.9, moo 0.5, neigh 1.0, olé 0.3),
+aiming at the moo's existing end-scene level. Each portrait counts how many of its calls have
+played rather than watching for a moment to be crossed, so each plays exactly once per showing,
+even if Reduce Motion flips mid-portrait and moves the times.
+
+**The bug.** Phase 2 decoded the two 3504x2336 JPEGs off the main thread into a `@State`
+dictionary so the first wipe wouldn't stall. Earlier today, render-time logging showed that the
+dictionary was still empty after the task had filled it, every frame, so the decoded images were
+never used. The slideshow is drawn inside `TimelineView`'s content closure. That closure captures
+the view value from the `body` pass that built it, and reads of the dictionary there kept returning
+the empty value from before the decode finished. The fix holds the images in a small `@Observable`
+class, `PreparedSlideImages`, kept in `@State`. The closure now captures a reference to live
+storage, and observation redraws when the images land. The same logging then showed both images
+present on every frame. The practical effect is that the first wipe onto each portrait no longer
+waits on a JPEG decode on the main thread.
+
+The full suite passes (593 Swift Testing tests plus the XCTest suites), including new tests for
+each portrait's three sounds, their times in both modes, and the once-per-showing count, and
+SwiftLint is clean. Neither Claude nor the simulator can judge how the sounds mix, so that is for
+Josh's ears.
+
+## The olé that wasn't, and a rest on the animals (2026-09-30)
+
+Josh listened to the new portrait sounds and said the matador's didn't sound right. Claude had
+picked `crowdOle` from its case name alone. The license file says what it really is: Pixabay's
+"Short crowd cheer" (id 236776). In the boss fight it plays as applause after a banked phrase and
+as a murmur under the showboat, where a cheer works. After a castanet and a moo it just sounds like
+a random crowd. The lesson is to check the provenance record before trusting a name, the same
+record that had been one `rg` away the whole time. Josh will choose a real *¡Olé!* from Pixabay;
+Claude suggested a single voice rather than a crowd for a portrait. Until then `crowdOle` stays as
+the placeholder, and `docs/game.md` says so.
+
+Josh also asked for a one-second pause on the bull and on Vegas. The 3 s pan became two 1.5 s legs,
+dancer to animal and animal to matador, with a 1 s dwell between them, so each portrait now runs
+9 s. Each leg eases in and out, so the camera comes to a real stop on the animal. That also retired
+the inverse-smoothstep math from earlier in the day. The caption's handoffs now fall exactly
+halfway through each leg, where the eased focus crosses the midpoint between two subjects, so the
+closed-form inversion is no longer needed. The Reduce Motion stills already hold still, so their
+four shots simply share the longer hold at 2.25 s each. Half-speed frames show the bull held for a
+full second with *El Toro* in bold, and the GameBoss suite (37 tests) passes, including a check
+that the camera sits on the middle subject for the whole dwell.
+
+A little later Josh dropped the olé he had chosen on the Desktop, a Pixabay clip by
+Ai_mee_Universe titled "OLE , OLE !!! Spanish SCREAMS", along with a screenshot of its Pixabay
+card. The clip runs 7 s and holds three shouts, and he wanted only the first, at about 2 s. A 50 ms
+RMS envelope put the first shout at 0.72 s with its tail fading out by 2.25 s, and the second
+starting at 2.62 s. The installed ffmpeg turned out to be broken (Homebrew had left it pointing at
+an x265 library that no longer exists), so the trim was done in Python on a WAV decoded with
+`afconvert`: 0.60 to 2.55 s, a 10 ms fade-in, and a 0.35 s fade-out that reaches silence before
+the second shout would start. `lame` encoded it as mono 192 kbps. The result is 1.99 s at −18 dB
+RMS and plays at 0.6 to sit with the other subject sounds. It ships as `Audio/ole.mp3`, a new
+`Sound.ole` case, replacing the `crowdOle` placeholder in both portraits. No attribution is
+required, but Josh asked for a credit, so the Info tab's Game Sounds section now names
+Ai_mee_Universe in English and Spanish. The original clip and the card are kept in the gitignored
+`audio-sources/pixabay-ole/`.
+
+After listening, Josh asked for the castanet 30% louder and the olé 30% quieter. The olé was simple:
+0.6 became 0.42. The castanet was not, because it already played at 0.9, `AVAudioPlayer` caps
+volume at 1.0, and `castanetHigh.mp3` peaks at −1 dBFS and is shared with a power-up. So the
+portraits got their own copy, `castanetPortrait.mp3`, scaled by 1.17 with a tanh soft limiter
+above −1 dBFS that touched only 13 of its 22,204 samples, and played at 1.0. Measured after
+encoding, that is about 26% louder than before, close to the 30% asked for with the peak just under
+full scale.
+
+Josh then found a second use for the olé: the moment in the end scene, two seconds in, when the
+dancer turns to face the matador sliding toward her. It plays at full volume, once, on the frame
+the turn comes due. The turn itself is set on every frame after that, so the sound needs its own
+crossing check.

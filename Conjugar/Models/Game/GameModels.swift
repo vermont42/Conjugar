@@ -244,10 +244,27 @@ enum GamePhase {
 
 /// The end scene's slideshow (`GameState+Slideshow.swift`): once the couple has
 /// reunited, the live scene alternates with two still portraits, each change an iris
-/// wipe. `live` is the running tablao; the other two are full-height images the player
-/// drags sideways.
+/// wipe.
 enum EndSceneSlide: CaseIterable {
   case live, toreros, familia
+
+  /// Each figure's center as a fraction of the image's width, measured on the art.
+  var subjectFocusX: (left: CGFloat, middle: CGFloat, right: CGFloat)? {
+    switch self {
+    case .live: return nil
+    case .toreros: return (0.25, 0.48, 0.78)
+    case .familia: return (0.29, 0.47, 0.71)
+    }
+  }
+
+  /// Left to right. The volumes even out the files' loudness, then were tuned by ear.
+  var subjectCalls: [(sound: Sound, volume: Float)] {
+    switch self {
+    case .live: return []
+    case .toreros: return [(.castanetPortrait, 1.0), (.moo, 0.5), (.ole, 0.42)]
+    case .familia: return [(.castanetPortrait, 1.0), (.neigh, 1.0), (.ole, 0.42)]
+    }
+  }
 
   /// The slide the next wipe opens on: live → toreros → familia → live.
   var next: EndSceneSlide {
@@ -261,6 +278,22 @@ enum EndSceneSlide: CaseIterable {
   var isImage: Bool {
     self != .live
   }
+}
+
+/// `zoom` 0 shows the whole image, letterboxed; 1 fills the column's height. `focusX` is
+/// the point to center on, as a fraction of the image's width; the view clamps it so no
+/// edge of the image pulls inside the column.
+struct EndSceneFraming: Equatable {
+  var zoom: CGFloat
+  var focusX: CGFloat
+
+  static let wide = EndSceneFraming(zoom: 0, focusX: 0.5)
+}
+
+/// The Reduce Motion stills stack two shots while crossfading; the Ken Burns move is one.
+struct EndSceneShot: Equatable {
+  var framing: EndSceneFraming
+  var opacity: Double
 }
 
 /// How a `DanceMove` is drawn — the glyph vocabulary of the dance pad and its cue
