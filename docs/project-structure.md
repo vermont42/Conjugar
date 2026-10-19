@@ -427,7 +427,13 @@ art-sources/                    # Image-generation working files (gitignored: fa
 
 .claude/
 ├── ios-build-verify.config.sh  # Per-project build/verify config: scheme, simulator, FIRST_SCREEN_ID, MAIN_TABS_COORDS
-└── settings.local.json         # Local Claude Code settings
+├── rules/                      # Claude Code guidance split out of CLAUDE.md. Each file's `paths` frontmatter makes it
+│   │                           #   load only when a session touches a matching file. Kept here, not in docs/, because
+│   │                           #   only this folder gets that automatic loading
+│   ├── analytics.md            # TelemetryDeck gotchas (Conjugar/Analytics/**, ConjugarTests/Analytics/**, privacy policy)
+│   ├── localization.md         # .xcstrings workflow, escaping, percent signs, Info markup table (**/*.xcstrings, L.swift)
+│   └── testing.md              # The XCTest isolated-deinit crash and Swift Testing conventions (ConjugarTests/**)
+└── settings.local.json         # Local Claude Code settings (gitignored; absent unless created)
 
 Conjugar.xcodeproj/             # The Xcode project (scheme `Conjugar`)
 ConjugarWidget.entitlements     # Widget entitlements (App Groups)
