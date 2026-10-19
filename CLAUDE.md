@@ -93,7 +93,7 @@ in `$IBV_SCRIPTS/../SKILL.md`.
 > xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/ConjugatorTests/oirPresent\(\)
 > ```
 
-> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`, `TenseBridgeTests`) the migrated service suites (`SettingsTests`, `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests`), and the SwiftUI-migration suites (`InfoTests`, `ConjugationTextTests`, `QuizTests`, `SettingsViewTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The handful of older suites still on **XCTest** (`ConjugationResultTests`, `DisplayTenseTests`, `DisplayPersonNumberTests`, `IntExtensionTests`, `RatingsFetcherTests`) take method names with **no** parentheses (e.g. `testFetchRatings`). New tests should be Swift Testing — see **XCTest + MainActor: the isolated-deinit crash** below.
+> **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`, `TenseBridgeTests`) the migrated service suites (`SettingsTests`, `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests`), and the SwiftUI-migration suites (`InfoTests`, `ConjugationTextTests`, `QuizTests`, `SettingsViewTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The handful of older suites still on **XCTest** (`ConjugationResultTests`, `DisplayTenseTests`, `DisplayPersonNumberTests`, `IntExtensionTests`, `RatingsFetcherTests`) take method names with **no** parentheses (e.g. `testFetchRatings`). New tests should be Swift Testing; see **Testing** below.
 >
 > **The `Suite` segment is the Swift *type* name, never the `@Suite("…")` display name.** `struct GameBossTests` decorated `@Suite("GameBoss")` is selected as `ConjugarTests/GameBossTests` — passing the display string `ConjugarTests/GameBoss` matches **nothing**, and (same failure mode as an omitted `()`) xcodebuild prints **`Test Succeeded` while running zero tests**. This is the single most dangerous test-runner trap here: a green run that tested nothing. **Always confirm real execution by the count line** — Swift Testing prints `✔ Test run with N tests in M suites passed` (its own reporter; the XCTest summary's `Executed 0 tests … passed` is only the XCTest half and says nothing about Swift Testing). `run_tests.sh` echoes that `Test run with N tests …` line when tests run, so its **absence after a `--only-testing` filter means the selector matched nothing** — treat that as a failure, not a pass, and re-check the suite is spelled as its type name.
 
@@ -197,67 +197,13 @@ var Current = World.device  // Production
 // or World.simulator, World.unitTest, World.uiTest
 ```
 
-Services provided by World:
-- `analytics: Analytics` - TelemetryDeck-backed usage analytics (see **Analytics (TelemetryDeck)** below)
-- `gameCenter: GameCenter` - Game Center integration
-- `reviewPrompter: ReviewPrompter` - App Store review prompting
-- `settings: Settings` - User preferences (wraps UserDefaults)
-- `languageModelService: LanguageModelService` - the on-device conjugation tutor (see **Conjugation Tutor** below)
-- `getterSetter: GetterSetter` - shared string key-value store (same instance `Settings` wraps); the tutor persists chat history through it
-- `soundPlayer: SoundPlayer` / `hapticPlayer: HapticPlayer` - SFX, looping music, and haptics
-- `quiz: Quiz` - the shared quiz state model
-- `session: URLSession` - injected so `RatingsFetcher` can be tested through `URLProtocolStub`
-
 ### Analytics (TelemetryDeck)
 
-Conjugar uses the same analytics schema as the sibling apps Conjuguer and Konjugieren.
-Files: `Analytics/Analytics.swift` (the `Analytics`
-protocol plus the `AnalyticsName` / `ParameterKey` enums), `AnalyticsReal.swift`,
-`AnalyticsSpy.swift`.
-
-- **Event names are an enum, not strings.** `Current.analytics.signal(name: .viewVerbView)`;
-  parameters are `[String: String]` keyed by `ParameterKey.…rawValue`. **A raw
-  value is a wire name** — renaming a case orphans its dashboard history, which is why
-  `AnalyticsTests` pins the parameter-carrying ones.
-- **The whole family is `nonisolated`,** like the engine. Without it the module's default
-  MainActor isolation would make the protocol — and by witness inference every conformer's
-  methods — MainActor-isolated, contradicting `AnalyticsReal`'s off-main design and making
-  the spy unusable from a nonisolated test suite.
-- **`AnalyticsReal` funnels every TelemetryDeck call onto a serial GCD queue.** TelemetryDeck
-  2.14.1 uses blocking `DispatchQueue.sync` internally, so calling it from a `@MainActor`
-  call site would run that blocking work on the main thread. The queue also orders
-  `initialize` ahead of signals and confines `isInitialized` to one thread.
-- **The app ID is kept out of the working tree.** It lives in gitignored
-  `Conjugar/Secrets.xcconfig` as `TELEMETRY_DECK_APP_ID` (copy `Secrets.example.xcconfig`),
-  reaches the bundle through the `TelemetryDeckAppID` Info.plist key — the xcconfig is the
-  app target's `baseConfigurationReference` for both Debug and Release — and is read in
-  `ConjugarApp.init()` → `Current.analytics.initialize(appID:)`. An empty ID leaves the
-  service uninitialized so it silently drops signals; **a fresh clone with no
-  `Secrets.xcconfig` still builds and runs.**
-- **Only `World.device` gets `AnalyticsReal`;** simulator/unit-test/UI-test worlds get
-  `AnalyticsSpy`, which records `signalNames`/`signalParameters` for assertions. So
-  **signals never reach the dashboard from a normal simulator run** — the spy is a dead end
-  by design.
-- **Debug builds land in the dashboard's Test Mode, not the live view.** The SDK's
-  `TelemetryDeck.Config.testMode` defaults to the `DEBUG` flag, so everything from Xcode —
-  device or simulator — is tagged `isTestMode == true` and is **invisible until you flip the
-  Test Mode toggle** (top-left of the dashboard, above the sidebar; a "Test Data" banner
-  confirms it). This is the first thing to check when signals seem missing; it is not a bug.
-  TestFlight and App Store builds go to the live view with no code change.
-- **No `becameActive` signal.** TelemetryDeck records launches and sessions itself, and
-  reports app version, device model, and country/language natively.
-
-The published policy describing what is collected is `docs/privacy_policy3.txt` (English
-plus a Spanish translation); **update it when you add or remove a signal.**
+Analytics goes through the `Analytics` protocol (`Conjugar/Analytics/`). Its gotchas (wire-name enums, the `nonisolated` family, the off-main queue, the gitignored app ID, and why simulator and Debug signals never show in the live dashboard) are in [`.claude/rules/analytics.md`](.claude/rules/analytics.md). **When you add or remove a signal, update `docs/privacy_policy3.txt`.**
 
 ### Protocol-Based Abstractions
 
-All external services have protocol abstractions with production and test implementations, named in the Fowler test-double convention — `…Real` for the production conformer, `…Fake`/`…Stub`/`…Spy` for the double:
-- `Analytics` → `AnalyticsReal` (TelemetryDeck) / `AnalyticsSpy`
-- `GameCenter` → `GameCenterReal` / `GameCenterFake`
-- `ReviewPrompter` → `ReviewPrompterReal` / `ReviewPrompterStub`
-- `GetterSetter` → `GetterSetterReal` / `GetterSetterFake`
-- `LanguageModelService` → `LanguageModelServiceReal` / `LanguageModelServiceDummy` (the double is a `Dummy` — always reports unavailable and is never exercised; the test/UI-test worlds must not touch the on-device model)
+All external services have protocol abstractions with production and test implementations, named in the Fowler test-double convention — `…Real` for the production conformer, `…Fake`/`…Stub`/`…Spy` for the double.
 
 > **Convention — adding a new behavior protocol with real + test-double conformances.** Name the protocol a **plain role noun** — no `-able`/`-Protocol`/`-ing` suffix (`GetterSetter`, `Analytics`, `GameCenter`). Name the production conformer `<Protocol>Real` and the test double `<Protocol><Role>`, where `<Role>` is the [Fowler test-double type](https://martinfowler.com/bliki/TestDouble.html) that matches what the double actually *does*:
 > - **`Fake`** — a working implementation with a production-unsuitable shortcut, e.g. an in-memory store (`GetterSetterFake`).
@@ -278,11 +224,6 @@ assets, so every screen is light/dark correct. Marked-up Info bodies parse via
 `Utils/RichText.swift` → `Views/RichTextView.swift`; conjugation forms (uppercase =
 irregular) render via `Views/ConjugationText.swift`. **No `UIViewController` subclass remains
 in the app target.**
-
-Layout constants are in `Layout.swift` (defaultSpacing = 8.0, doubleDefaultSpacing = 16.0,
-tripleDefaultSpacing = 24.0, defaultHorizontalMargin = 16.0, readingWidth = 680,
-cornerRadius = 12). Screen layout is all SwiftUI; the only UIKit that remains is appearance
-config in `AppDelegate` and a small set of service-seam extensions.
 
 ### Tab Structure (`MainTabView`)
 
@@ -322,8 +263,6 @@ debug deeplinks and environment variables are in [`docs/game.md`](docs/game.md).
 ### Core Models
 
 - **Conjugator.swift** (+ the feature-file family, `ModelCatalog`, and `VerbMap`) - The conjugation engine: composition of feature rules over a book-class model catalog, resolving each verb's model from `verbModelMap.xml` (4,811 verbs). The app UI conjugates through it via `TenseBridge` (maps the UI's `DisplayTense`/`DisplayPersonNumber` vocabulary to `EngineTense`, the simple-tense-plus-person slots the engine consumes) and `CompoundTense` (composes perfect tenses as *haber* + participle, and imperativo negativo as "no" + subjunctive — the engine itself models only simple tenses). `DisplayTense.swift`/`DisplayPersonNumber.swift` are the UI's vocabulary, covering the full displayed tense set including compounds.
-- **Quiz.swift** - A `@MainActor @Observable` quiz state model (scoring, closure-based timer, difficulty levels), observed directly by `QuizView`/`ResultsView`.
-- **Settings.swift** - User preferences with GetterSetter protocol abstraction.
 
 ### Conjugation Tutor (on-device LLM)
 
@@ -335,36 +274,7 @@ the top of the Info tab. See [`docs/conjugation-tutor.md`](docs/conjugation-tuto
 
 ## Testing
 
-Tests are in `ConjugarTests/` organized by layer:
-- `Analytics/`, `Models/`, `Utils/`, `Views/`
-
-Test infrastructure:
-- The test environment is selected in `World.chooseWorld()`: a simulator process with the
-  XCTest runtime loaded gets `World.unitTest`.
-- `URLProtocolStub` for network mocking
-- Test doubles (`AnalyticsSpy`, `GetterSetterFake`, `GameCenterFake`) for isolation
-
-### XCTest + MainActor: the isolated-deinit crash (write new tests in Swift Testing)
-
-> **Landmine (Xcode 26.3).** Under `SWIFT_DEFAULT_ACTOR_ISOLATION =
-> MainActor`, every pure-Swift `@MainActor` class gets an *isolated deinit*, and this
-> toolchain's `swift_task_deinitOnExecutorImpl` **double-frees** (`malloc: pointer being
-> freed was not allocated` → SIGABRT) when **XCTest** deallocates such an object at
-> teardown. It fires mostly through `World.deinit` releasing its `@MainActor` service
-> members when a test reassigns `Current` in `setUp`. It is **test-only** — the shipping
-> app never deallocates `World` (a `Current` singleton) — and **Swift Testing does not
-> trigger it** (Konjugieren's all–Swift Testing suite is why it never hit this).
->
-> **Convention: write new tests as Swift Testing** (`@Suite`/`@Test`/`#expect`), not
-> XCTest. Add `@MainActor` to a suite that touches MainActor types; leave engine suites
-> nonisolated (they touch only the nonisolated engine). `@Test(arguments:)` collections
-> are evaluated *outside* the suite's isolation, so any static data they reference must
-> be `nonisolated`.
->
-> A full `xcodebuild … test` run passes today (all XCTest + Swift Testing, 0 failures), but
-> the rule still stands, since MainActor default isolation remains: a new pure-Swift
-> `@MainActor` object deallocated by XCTest will hit the same double-free — so **write new
-> tests in Swift Testing.**
+**Write new tests in Swift Testing, not XCTest.** Under default MainActor isolation, XCTest double-frees `@MainActor` objects at teardown (Xcode 26.3). The details and the suite-isolation rules are in [`.claude/rules/testing.md`](.claude/rules/testing.md).
 
 ## Localization
 
@@ -385,65 +295,4 @@ Both files live in `Supporting/`, a **`PBXFileSystemSynchronizedRootGroup`** —
 dropped there are auto-added to the target, so adding a catalog or a Swift file needs **no
 `project.pbxproj` edit**. (Removing an *old-style* explicit file reference still does.)
 
-### Adding / changing a localized string
-
-1. Add the accessor to `L.swift` in the right scope (`Feature.purpose`); use a `static func`
-   for parameterized strings.
-2. Add the key + `en`/`es` translations to `Localizable.xcstrings` (both `"state":
-   "translated"` so Xcode doesn't treat `es` as stale and fall back to English).
-3. Use via `L.Feature.name` in code.
-
-### Editing `Localizable.xcstrings` safely (the foot-guns)
-
-- **The Edit tool corrupts `.xcstrings` values with ASCII quotes.** Edit operates on
-  *rendered* text, so JSON's `\"` displays as a plain `"`; any edit adding/removing/changing
-  an ASCII `"` (U+0022) inside a value writes an **unescaped** quote and breaks the catalog.
-  Rule: edit `.xcstrings` values containing ASCII quotes via `python3` on the raw file, not
-  Edit. Unicode curly quotes `" " „` need no escaping and are safe with Edit.
-- **Always validate after any edit:**
-  `python3 -c "import json; json.load(open('Conjugar/Supporting/Localizable.xcstrings'))"`.
-- **Grep is useless inside `.xcstrings`** — each value is one very long JSON line, so the
-  Grep tool truncates matches to `[Omitted long matching line]`. To find a phrase: Grep for
-  the line number, then Read at that offset. To replace: Python with a unique nearby word as
-  an anchor to hit the correct language section (e.g. a Spanish word to target `es`, not
-  `en`).
-
-### `.strings` vs `.xcstrings` escaping & newlines
-
-If you ever re-derive the catalog from a legacy `.strings` file, do **not** hand-translate
-escaping — use real parsers (`plutil -convert json` to read, `json.dump` to write). The
-rules differ:
-
-- **`.strings`** (old, UTF-16, C-style): interior quotes `\"`; **literal newlines allowed**
-  inside a value; a naive UTF-8 read produces garbage.
-- **`.xcstrings`** (new, JSON, UTF-8): interior `"` must be `\"`, backslash `\\`; **literal
-  newlines are illegal** — every newline must be `\n`, so each rich-text block is one
-  physical JSON line. A serializer emits both correctly; string-concatenation does not.
-
-### Percent signs — two different kinds
-
-- **Rich-text markup** like `%terminología%`, `%voseo%`, `%presente de indicativo%` is the
-  Info parser's *tappable-term* syntax, a **single** `%…%` looked up with no format
-  arguments — the `%` passes through literally. Do **not** double it. URLs in Info bodies are
-  also wrapped in single `%…%` (e.g. `%https://…%`).
-- **Format specifiers** (`%@`, `%lld`) are the real ones. Prefer `%lld` over `%d` for `Int`
-  (what the catalog generates). Multi-arg strings use **positional** specifiers so
-  translators can reorder: `Model %1$@ · %2$lld%% irregular` (note `%%` for a literal
-  percent). Pluralized strings use xcstrings plural **variations** (`one`/`other`), provided
-  for both `en` and `es`; where a distinct zero sentence is needed (e.g. ratings), keep it a
-  separate key and pick it at the call site, because CLDR maps `0 → other` for en/es.
-
-### Info rich-text markup (parsed by `StringExtensions`, rendered by the Info screens)
-
-Other markup in the long Info/tense bodies is literal text needing no escaping in either
-format:
-
-| Marker | Purpose | Example |
-|--------|---------|---------|
-| `^…^` | Section heading | `^Purpose^`, `^Conjugation^` |
-| `~…~` | Emphasis/italic | `~Conjugar~`, `~vosotros~` |
-| `$…$` | Irregularity highlight (uppercase letters = the irregular part, shown red) | `$voY$`, `$soY$`, `$habRá$` |
-| `%…%` | Tappable term (links to another tense/terminology) or URL | `%voseo%`, `%https://…%` |
-
-When relocalizing an Info body, preserve every marker in the equivalent position and keep
-example Spanish/English words and irregular-highlight casing intact.
+**Never use the Edit tool to add, remove, or change an ASCII `"` inside an `.xcstrings` value** (the app's catalog or `ConjugarWidget/Localizable.xcstrings`). Edit writes the quote unescaped and breaks the JSON, so use `python3` on the raw file. The workflow for adding a string, the escaping and percent-sign rules, and the Info rich-text markup table are in [`.claude/rules/localization.md`](.claude/rules/localization.md). Read it before editing either catalog.

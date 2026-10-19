@@ -9978,3 +9978,24 @@ Josh then found a second use for the olé: the moment in the end scene, two seco
 dancer turns to face the matador sliding toward her. It plays at full volume, once, on the frame
 the turn comes due. The turn itself is set on every frame after that, so the sound needs its own
 crossing check.
+
+## Slimming CLAUDE.md with path-scoped rules (2026-10-19)
+
+A `/doctor` pass found the project `CLAUDE.md` was the largest thing every session loads, at about
+31k characters (roughly 7.8k tokens). Two kinds of content came out. First, lists a session can read
+straight from the code: the `World` service roster, the protocol-to-conformer list, the `Layout.swift`
+constant values, the `Quiz.swift`/`Settings.swift` one-liners, and the test-directory tour. Second,
+three topic sections that matter only when touching certain files moved into `.claude/rules/` with
+`paths` frontmatter, so they load on demand: `analytics.md` (the TelemetryDeck gotchas), `localization.md`
+(the `.xcstrings` workflow, escaping, percent signs, and the Info markup table), and `testing.md` (the
+XCTest isolated-deinit landmine). The root file keeps a one-line pointer for each, and it still states
+the two rules that must never be missed: write new tests in Swift Testing, and never use Edit to touch
+an ASCII quote inside an `.xcstrings` value.
+
+The first attempt put the moved sections in nested `CLAUDE.md` files under `Conjugar/Analytics/`,
+`Conjugar/Supporting/`, and `ConjugarTests/`. That was wrong for this project. All three are
+`PBXFileSystemSynchronizedRootGroup` folders, so Xcode would have swept the Markdown files into the app
+and test bundles, and two same-named `CLAUDE.md` resources in one target would have collided at build
+time. Rules files under `.claude/` sit outside every synchronized group. The localization rule also
+matches `**/*.xcstrings`, so it covers the widget's catalog too, which a folder-scoped file could not.
+The root file dropped to about 21.9k characters.
