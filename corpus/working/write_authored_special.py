@@ -9,7 +9,7 @@ a same-spelled noun/adjective (these archaic verbs collide heavily with common n
 open-licensed modern corpus, so each sentence below is ORIGINAL, AI-authored content by Claude
 (Opus 4.8) — not sourced from any document — carrying `source = "Claude (Opus 4.8)"`, `line = null`,
 so provenance is explicit and never attributed to a corpus. Every sentence uses the verb in a
-genuinely VERBAL form (the `token`). Mirrors write_authored.py (step D) and docs/authored-examples.md.
+genuinely VERBAL form (the `token`). Mirrors write_authored.py (step D) and docs/authored_examples.md.
 
 The schema matches the mined_*.json shards so build_examples.py's aggregate_modern globs it in
 (via the mined_special_authored* pattern).

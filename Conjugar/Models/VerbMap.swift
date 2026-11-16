@@ -179,7 +179,7 @@ nonisolated private final class VerbMapParser: NSObject, XMLParserDelegate {
     guard let infinitive = attributeDict["in"], let cl = attributeDict["cl"] else { return }
     let gloss = attributeDict["tn"] ?? ""
     let reflexive = attributeDict["rx"] == "1"
-    // `hi` is written on every row by docs/_build_verbmap.py, which refuses to emit a verb
+    // `hi` is written on every row by scripts/_build_verbmap.py, which refuses to emit a verb
     // the counts table has no row for. A missing or non-numeric one is therefore a build
     // error surfacing late: trap it in debug, and in release let the verb rank last rather
     // than take the whole map down over a display-only attribute.

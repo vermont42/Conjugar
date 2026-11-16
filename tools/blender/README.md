@@ -62,7 +62,7 @@ tools/blender/
 
 Mixamo license: royalty-free for commercial use, no attribution; you just can't
 resell the raw asset standalone. Shipping it inside the app is fine — **log it in
-`asset-licenses/`.**
+`asset_licenses/`.**
 
 ## Step 2 — render the frames
 
@@ -169,7 +169,7 @@ The player actions ship as rendered sprites — `idle` (2), `walk` (6), `climb` 
 `ole` (3, arms-up desplante + back arch) and `stomp` (3, weight-drop zapateado with a
 braceo) added for La Llamada (boss plan Phase 4). They are **no longer Mixamo mocap on the
 X Bot mannequin**: the dancer is now the purchased **flamenco-gown** mesh (Animod, CGTrader
-— `asset-licenses/cgtrader-flamenco-dancer.txt`), hand-keyed on its own 63-bone
+— `asset_licenses/cgtrader_flamenco_dancer.txt`), hand-keyed on its own 63-bone
 Mixamo-named rig by `gen_dancer_action.py` (see **Hand-keying the gown dancer** below).
 Notes that held across the set:
 
@@ -288,7 +288,7 @@ That's a separate `--realistic` mode and an art-direction fork, not an extension
 
 No Mixamo for quadrupeds, so the bull was sourced pre-rigged: Sketchfab's
 **"Simple Rigged Bull" by Leo_Aguiar (CC BY 4.0)**, a Blender **Rigify Basic
-Quadruped**. License logged at `asset-licenses/sketchfab-bull.txt`; raw
+Quadruped**. License logged at `asset_licenses/sketchfab_bull.txt`; raw
 `.blend`/`.fbx` stay git-ignored (only PNGs ship). Three actions were authored on
 its rig and rendered side-view through **this same `render_sprites.py`**
 (`--actor bull --view side`), N matched to `GameState.bullFrameCounts`
@@ -411,7 +411,7 @@ The game's **matador** is the kidnapped bullfighter — a **static, single-frame
 standing beside the bull on the top platform (the player rescues him to win). No animation, no
 in-game rig: one `Image("matador")` in `GameView.matadorSprite`. Same store/license lane as the
 dancer: CGTrader vfxsinghbu **"Matador - Bullfighter Rigged"** (#5905689, CGTrader Royalty-Free /
-no-AI, `asset-licenses/cgtrader-matador.txt`), a Daz **Genesis 8 Male**. Only the rendered PNG
+no-AI, `asset_licenses/cgtrader_matador.txt`), a Daz **Genesis 8 Male**. Only the rendered PNG
 ships; the raw `.blend/.fbx/.rar` stay git-ignored.
 
 ### Pipeline: `gen_matador.py` → `render_sprites.py --matador`

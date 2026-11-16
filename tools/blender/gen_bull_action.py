@@ -4,7 +4,7 @@ DEF bones and export a baked FBX for render_sprites.py.
 
     blender -b -P tools/blender/gen_bull_action.py -- --action stomp   # stomp|rear|bow
 
-Why DEF bones (Path B, see prompts/game_bull_actions.md): the FBX round-trip strips
+Why DEF bones (Path B, see plans/game_bull_actions.md): the FBX round-trip strips
 Rigify's control logic (0 constraints/drivers on the imported `rig`), so posing the
 `*_ik`/`torso` controls does nothing. The mesh is skinned to the `DEF-` bones and the
 model's own baked clip keys them directly — so, like the shipped idle/walk/throw, each

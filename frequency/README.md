@@ -12,7 +12,7 @@ user sees. The predecessor scheme stored an `fr` rank per verb and could only ev
 the 988 verbs a capped export happened to include.
 
 The research that chose these sources — including everything that was rejected, and why —
-is [`../docs/verb-frequency-sources.md`](../docs/verb-frequency-sources.md).
+is [`../docs/verb_frequency_sources.md`](../docs/verb_frequency_sources.md).
 
 ## What the app ends up with
 
@@ -40,7 +40,7 @@ about 420,000 documents and 455 million orthographic forms.
 | Size | 16,303,368 bytes |
 | SHA-256 | `68eca9615e06eb7372ad61bd60e1d8a8f248018b5601485107a939cfaefa5ddb` |
 | Contents | `license.txt` (1,798 bytes) and `frecuencia_lemas_corpes_1_5.txt` (53,589,177 bytes) |
-| Licence | **CC BY-SA 4.0**, per the zip's own `license.txt`, copied here as `CORPES-LICENSE.txt` |
+| Licence | **CC BY-SA 4.0**, per the zip's own `license.txt`, copied here as `corpes_license.txt` |
 
 **Download it in a browser.** `www.rae.es` sits behind Cloudflare and answers `curl` with a
 JavaScript challenge (HTTP 403, a "Just a moment…" page), and the Wayback Machine's copies
@@ -73,7 +73,7 @@ paradigms. **CC BY 3.0.**
 |---|---|
 | Source | `http://storage.googleapis.com/books/ngrams/books/20200217/spa/1-0000{0,1,2}-of-00003.gz` |
 | Size | 631 MB + 1,114 MB + 1,478 MB, streamed, never saved |
-| Kept | `gbooks/verb_{0,1,2}.tsv` (**not tracked**) → `gbooks-verb-lemmas.json` (tracked) |
+| Kept | `gbooks/verb_{0,1,2}.tsv` (**not tracked**) → `gbooks_verb_lemmas.json` (tracked) |
 | Licence | CC BY 3.0, `https://creativecommons.org/licenses/by/3.0/` |
 
 CORPES ties thousands of verbs in the tail — a 455-million-form corpus simply cannot
@@ -89,15 +89,15 @@ group and no further.
 | File | Role | Tracked |
 |---|---|---|
 | `README.md` | This file. | yes |
-| `CORPES-LICENSE.txt` | The zip's `license.txt`, copied out so the licence travels with the derived data. | yes |
+| `corpes_license.txt` | The zip's `license.txt`, copied out so the licence travels with the derived data. | yes |
 | `corpes_lemas.zip` | The CORPES download. Re-fetch in a browser per above. | no |
 | `extract_gbooks_verbs.sh` | Streams the three Google Books shards through `gunzip` and a `_VERB` filter into `gbooks/`. | yes |
 | `gbooks/verb_{0,1,2}.tsv` | The filtered `_VERB` rows, ~830 MB. | no |
-| `aggregate_gbooks.py` | `gbooks/*.tsv` + `corpus/working/forms_all.json` → `gbooks-verb-lemmas.json`. | yes |
-| `gbooks-verb-lemmas.json` | Per-infinitive 1950–2019 token sums. The only Google Books artifact a rebuild needs. | yes |
-| `build_counts.py` | `corpes_lemas.zip` + `gbooks-verb-lemmas.json` + `editorial-counts.json` → `verb-counts.json` + `report.md`. | yes |
-| `editorial-counts.json` | The hand-assigned counts, with a reason each. | yes |
-| `verb-counts.json` | One row per distinct infinitive. What `docs/_build_verbmap.py` reads. | yes |
+| `aggregate_gbooks.py` | `gbooks/*.tsv` + `corpus/working/forms_all.json` → `gbooks_verb_lemmas.json`. | yes |
+| `gbooks_verb_lemmas.json` | Per-infinitive 1950–2019 token sums. The only Google Books artifact a rebuild needs. | yes |
+| `build_counts.py` | `corpes_lemas.zip` + `gbooks_verb_lemmas.json` + `editorial_counts.json` → `verb_counts.json` + `report.md`. | yes |
+| `editorial_counts.json` | The hand-assigned counts, with a reason each. | yes |
+| `verb_counts.json` | One row per distinct infinitive. What `scripts/_build_verbmap.py` reads. | yes |
 | `generate_frequencies_txt.py` | `verbModelMap.xml` → `docs/frequencies.txt`; `--check` compares without writing. | yes |
 | `report.md` | The last build's report. Regenerated every run. | no |
 
@@ -108,8 +108,8 @@ group and no further.
 ./frequency/extract_gbooks_verbs.sh
 python3 frequency/aggregate_gbooks.py
 
-python3 frequency/build_counts.py            # -> verb-counts.json + report.md
-python3 docs/_build_verbmap.py               # -> Conjugar/Models/verbModelMap.xml
+python3 frequency/build_counts.py            # -> verb_counts.json + report.md
+python3 scripts/_build_verbmap.py               # -> Conjugar/Models/verbModelMap.xml
 python3 frequency/generate_frequencies_txt.py  # -> docs/frequencies.txt
 xmllint --noout Conjugar/Models/verbModelMap.xml
 ```
@@ -130,10 +130,10 @@ Google Books count.
    `hi = min(exp(fit(gb)), clamp)`, tier `gbooks-fit`. The **clamp** is the measured `hi`
    at rank 1,000, recomputed every run: an estimate is a guess, and a guess must not be
    able to land a verb in the part of the list a learner actually reads.
-5. **Decide.** A verb neither source knows takes a count from `editorial-counts.json`, with
+5. **Decide.** A verb neither source knows takes a count from `editorial_counts.json`, with
    a written reason. Zero is a fine answer; the point is that a human chose it.
 6. **Flag.** Every estimated row, either tier, carries `hp="y"`.
-7. **Gate.** The build refuses to write `verb-counts.json` unless every target has an `hi`,
+7. **Gate.** The build refuses to write `verb_counts.json` unless every target has an `hi`,
    the top three are `ser`/`estar`/`tener`, no estimate exceeds the clamp, the provisional
    population is the expected size, and Spearman against the retired `fr` ranks clears 0.85
    over the verbs both rankings have. A ranking this visible should fail loudly, not

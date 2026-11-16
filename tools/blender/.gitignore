@@ -4,7 +4,7 @@ dist/
 
 # Raw source meshes/animations (e.g. Mixamo FBX). Not committed: Mixamo's license
 # forbids redistributing raw assets standalone, and this repo is public (AGPL).
-# Keep these locally in source/; log provenance in asset-licenses/.
+# Keep these locally in source/; log provenance in asset_licenses/.
 source/
 *.fbx
 *.blend

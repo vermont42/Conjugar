@@ -26,7 +26,7 @@ struct Info: Hashable, Identifiable {
   /// A locale-independent ASCII key for this article, stable across languages and
   /// across `heading` rewordings. `InfoBrowseView` renders it as the row's
   /// `accessibilityIdentifier` (`info_row_<stableKey>`), which is what the App
-  /// Store screenshot driver navigates by — see `docs/screenshot-playbook.md`.
+  /// Store screenshot driver navigates by — see `docs/screenshot_playbook.md`.
   ///
   /// It cannot be derived from `heading`: the About headings are localized
   /// (`L.Info.purposeAndUseHeading` → "Purpose and Use" / "Propósito y uso"), so a

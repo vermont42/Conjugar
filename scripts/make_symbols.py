@@ -8,7 +8,7 @@ thickens it by geometric dilation — the symbol compiler honours `fill`, not `s
 so weight has to come from geometry. The dilated art is defined once in <defs> and
 referenced per slot via <use> to keep each symbol small (~90 KB vs ~3 MB inline).
 
-Inputs live in scripts/symbol-sources/; outputs are written to the asset catalog.
+Inputs live in scripts/symbol_sources/; outputs are written to the asset catalog.
 Regenerate with:  python3 scripts/make_symbols.py
 
 Tunables (env vars): GROW (dilation radius, template units, default 1),
@@ -22,7 +22,7 @@ The SF Symbols template is exported from Apple's SF Symbols.app (gearshape, Stat
 import re, os, json, math
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(HERE, "symbol-sources")
+SRC = os.path.join(HERE, "symbol_sources")
 CATALOG = os.path.join(HERE, os.pardir, "Conjugar", "Assets.xcassets")
 
 GROW = float(os.environ.get("GROW", "1"))    # dilation radius, template units (Regular-M)
@@ -88,7 +88,7 @@ def slot_fit(ref_d, aw, ah, acx, acy, scale):
     return s, tcx - s*acx, tcy - s*acy               # re-centre on the reference bbox
 
 def main(artwork, out_name, scale=1.0):
-    tpl = open(os.path.join(SRC, "gearshape-template.svg"), encoding="utf-8").read()
+    tpl = open(os.path.join(SRC, "gearshape_template.svg"), encoding="utf-8").read()
     art = open(os.path.join(SRC, artwork), encoding="utf-8").read()
     art_ds = re.findall(r'\sd="([^"]+)"', art)
     ax0,ay0,ax1,ay1 = bbox([p for d in art_ds for p in path_points(d)])
@@ -132,5 +132,5 @@ def main(artwork, out_name, scale=1.0):
     print(f"[{out_name}] {n} slots, scale={scale}, GROW={GROW}, sreg={fmt(sreg)} -> {out_dir}")
 
 if __name__ == "__main__":
-    main("noun-flamenco-dance-4581460.svg", "dancer", scale=1.0)
-    main("noun-bull-8280587.svg",           "bull",   scale=1.2)  # 20% larger for legibility
+    main("noun_flamenco_dance_4581460.svg", "dancer", scale=1.0)
+    main("noun_bull_8280587.svg",           "bull",   scale=1.2)  # 20% larger for legibility

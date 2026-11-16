@@ -9,7 +9,7 @@
 #
 # Each shard is downloaded to a temporary `.gz`, filtered, and the `.gz` deleted, so the
 # 3.2 GB of downloads leave only frequency/gbooks/verb_{0,1,2}.tsv behind. Those are
-# gitignored -- the committed artifact is gbooks-verb-lemmas.json, which aggregate_gbooks.py
+# gitignored -- the committed artifact is gbooks_verb_lemmas.json, which aggregate_gbooks.py
 # derives from them. Re-run this only to rebuild that JSON.
 #
 # Downloading rather than piping `curl | gunzip` straight through costs the disk space of one

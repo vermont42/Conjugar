@@ -2,7 +2,7 @@
 # Fetch the example-uses corpus into corpus/originals/ (gitignored, re-fetchable). Run from repo
 # root. After fetching, run `python3 corpus/working/clean_corpus.py` to strip retrieval cruft
 # (Gutenberg boilerplate, PDF running headers, OCR front matter — see that script's header).
-# Provenance + licensing for every source is in docs/example-corpus-sources.md.
+# Provenance + licensing for every source is in docs/example_corpus_sources.md.
 #
 # Known gaps (not fetched here): Poema de Fernán González (only lending-restricted editions found);
 # MX INEGI ENOE + AR INDEC IPC stats PDFs (came down non-extractable) — backfill later.

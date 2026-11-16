@@ -13,7 +13,7 @@ import Foundation
 // NOT a behavioral test — a build-time corpus tool that rides the test target so it can reuse
 // the app's authoritative engine (`TenseBridge`/`Conjugator`/`VerbMap`) and the already-loaded
 // verb data. It is the deterministic backbone of the "example uses" pipeline
-// (`docs/example-corpus-sources.md`): it emits every single-word surface form of the
+// (`docs/example_corpus_sources.md`): it emits every single-word surface form of the
 // usage-ranked verbs to `corpus/working/forms.json` as `{ "<form>": ["<infinitive>", …] }`, so
 // the Python index builder does exact whole-token matching against the corpus instead of fragile
 // per-verb stem-grepping — irregulars (voy/vas/fue → ir; supe/sabré → saber) and false-substring

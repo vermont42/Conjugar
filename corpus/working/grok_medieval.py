@@ -6,7 +6,7 @@ apparatus — Menéndez Pidal's interspersed footnotes and section headings in t
 Cláusicos-Castellanos prose + `[Nota …]` notes in the Libro de buen amor, page-running headers
 in Berceo. That apparatus is modern Castilian; if it fed the medieval index it would inject
 modern verb forms into "medieval example" lookups (the single biggest correctness risk of the
-tier — see prompts/example-uses-pipeline.md §A / Foot-guns). This script isolates the verse and
+tier — see plans/example_uses_pipeline.md §A / Foot-guns). This script isolates the verse and
 emits, per surviving verse line, a citation ref the app can show:
 
   * Cid    → "Cantar {I,II,III}, v. N"   (running verse counter, snapped to the OCR's own
@@ -263,9 +263,9 @@ def grok_lba():
 def main():
     os.makedirs(GROKKED, exist_ok=True)
     combined = []
-    for slug, fn in (("cantar-de-mio-cid", grok_cid),
-                     ("milagros-berceo", grok_berceo),
-                     ("libro-de-buen-amor", grok_lba)):
+    for slug, fn in (("cantar_de_mio_cid", grok_cid),
+                     ("milagros_berceo", grok_berceo),
+                     ("libro_de_buen_amor", grok_lba)):
         verse, records = fn()
         with open(os.path.join(GROKKED, f"{slug}.txt"), "w", encoding="utf-8") as fh:
             fh.write("\n".join(verse) + "\n")

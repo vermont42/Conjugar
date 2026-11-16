@@ -1,6 +1,6 @@
 Both Conjuguer and Konjugieren have example uses of the frequency-ranked verbs plus a few more, in Conjuguer’s case. I’d like to have the same for Conjugar. The Conjuguer implementation is superior to the Konjugieren implementation in two ways that I’d like to preserve for Conjugar.
 
-First, example extraction was much quicker and more token-efficient because I essentially pre-conjugated all verbs and pre-mined the corpora. For Konjugieren, subagents did a lot of duplicated and unnecessary work. ../Conjuguer/docs/literature-example-corpus.md documents the Conjuguer approach.
+First, example extraction was much quicker and more token-efficient because I essentially pre-conjugated all verbs and pre-mined the corpora. For Konjugieren, subagents did a lot of duplicated and unnecessary work. ../Conjuguer/docs/literature_example_corpus.md documents the Conjuguer approach.
 
 Second, Conjuguer has examples not only mostly from literature of the 18th to early 20th centuries but also, in many cases, from La Chanson de Roland. See ~/Desktop/VerbView.png . By tapping the button, the user can see *all* Chanson de Roland examples for certain verbs. 
 

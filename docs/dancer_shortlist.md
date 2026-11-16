@@ -1,6 +1,6 @@
 # Phase 1 — Marketplace dancer shortlist (2026-07-12)
 
-Spike ref: `prompts/game_paid_dancer_bull_spike.md`. Phase 0 (bull) is **done** for $0.
+Spike ref: `plans/game_paid_dancer_bull_spike.md`. Phase 0 (bull) is **done** for $0.
 This is the Phase 1 deliverable: the marketplace shortlist for the **dancer** mesh that
 must clear the app-icon floor (female + flamenco dress + dynamic pose, read at 57 pt).
 
@@ -40,7 +40,7 @@ spike predicted.
 | **Rig** | **Not rigged** (no rig/animation feature listed). Needs **Mixamo auto-rig** in Phase 3. Single upright humanoid in A-pose = a good Mixamo candidate; the wide floor-length **tiered skirt** is the deform risk (Mixamo weights it to the legs). |
 | **Topology / poly** | Polygon mesh, **21,049 faces / 13,299 verts**. UV-mapped, baked texture. Dimensions ~167 cm tall (real-world scale). |
 | **Formats** | **FBX** (embedded, standard material, baked texture) + **MAX** (2016+, V-Ray) + zipped textures. FBX is the one we use. |
-| **License** | **Royalty Free License (no AI)** — permits use/embedding in games & apps (distribution as part of the product; may not be resold as a standalone 3D asset). App-embedding **allowed**. Log in `asset-licenses/` on purchase. |
+| **License** | **Royalty Free License (no AI)** — permits use/embedding in games & apps (distribution as part of the product; may not be resold as a standalone 3D asset). App-embedding **allowed**. Log in `asset_licenses/` on purchase. |
 | **Price** | **CGTrader $6.99** (Weekend Sale, −30% from $9.99) · TurboSquid $9.99 · also on Sketchfab store. **Buy on CGTrader.** |
 | **Seller** | aaanimod / Animod ("professional model production team … for game development and animation"), 38 reviews. |
 | **Link** | https://www.cgtrader.com/3d-models/character/woman/flamenco-dancer-c7f4bf5a-7c34-4b81-8242-d5d99ab08413 |

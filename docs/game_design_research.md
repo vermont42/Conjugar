@@ -418,7 +418,7 @@ and Uppbeat's free tier (needs a paid plan).
 **The one thing CC-BY requires — a Credits screen.** Add a **Credits / Acknowledgements** row
 (Info or Settings tab) listing a **TASL** line per CC-BY asset — *Title, Author, Source-link,
 License-link* (e.g. *"'Vaguely Spanish Guitar' by casimps1 (ccMixter), CC BY 3.0 — trimmed &
-looped"*). Keep an **`asset-licenses/`** folder in the repo with each asset's license deed +
+looped"*). Keep an **`asset_licenses/`** folder in the repo with each asset's license deed +
 source URL. Because CC-BY is now the **project-wide** asset bar (not just music), this same
 screen + folder also covers CC-BY **3D models** (e.g. a pre-rigged Sketchfab bull — verify its
 per-model license) and CC-BY **sound effects** — which usefully widens the asset pool.
@@ -442,7 +442,7 @@ Two sources, in order:
 
 Reuse first, fill gaps from Pixabay (and, now that CC-BY is fine, CC-BY sounds from
 Freesound/ccMixter — credit them on the same Credits screen). Log every grab (download the
-per-asset license certificate) into the shared `asset-licenses/` paper trail.
+per-asset license certificate) into the shared `asset_licenses/` paper trail.
 
 ---
 
@@ -504,7 +504,7 @@ Each phase is independently shippable-to-`migration`-branch and blog-note-worthy
 - **Do you have Blender installed**, and do you want me to set up **blender-mcp** so I can
   drive the render step directly?
 - **Music:** **decided — CC-BY** (which also becomes the project-wide asset bar; adds a
-  Credits screen + `asset-licenses/` folder). Remaining sub-pick is *which* track — I'll
+  Credits screen + `asset_licenses/` folder). Remaining sub-pick is *which* track — I'll
   audition **casimps1 "Vaguely Spanish Guitar"** vs **BFCMUSIC "Luna de Fuego"** when we
   build audio.
 - **Frame rate/counts:** start at RaceRunner's 10 fps / ~8-frame cycles unless you want

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic bookends for the example-mining pass (stage C of example-uses-pipeline.md).
+"""Deterministic bookends for the example-mining pass (stage C of example_uses_pipeline.md).
 
 The LLM middle — selecting the best candidate per verb and translating it — runs as parallel
 `Agent` subagents (one per shard). This script handles the cheap deterministic ends around it:

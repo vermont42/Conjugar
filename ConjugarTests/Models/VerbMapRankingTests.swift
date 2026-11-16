@@ -144,7 +144,7 @@ struct VerbMapRankingTests {
 
   // A count is a number of times a corpus saw the verb, so it cannot be negative. -1 is the
   // parser's sentinel for a row whose `hi` was missing or unparseable, which is a build
-  // error in `docs/_build_verbmap.py`; this is where it would surface in release.
+  // error in `scripts/_build_verbmap.py`; this is where it would surface in release.
   @Test("every verb has a non-negative hit count")
   func hitsAreNonNegative() {
     let negative = Self.map.entries.values.filter { $0.hits < 0 }.map(\.infinitive).sorted()
@@ -152,7 +152,7 @@ struct VerbMapRankingTests {
   }
 
   // 42 verbs CORPES has no lemma for that Google Books counts, estimated through the
-  // log-log fit, plus 4 that nothing counts, taken from frequency/editorial-counts.json.
+  // log-log fit, plus 4 that nothing counts, taken from frequency/editorial_counts.json.
   // Pinned so the provisional population stays visible rather than quietly growing: a
   // future source that measures one of them should make this number go down.
   @Test("exactly 46 verbs rest on an estimated count")

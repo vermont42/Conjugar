@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Drive ios-build-verify (and axe/simctl directly) through the 36 App Store
-# screenshots described in docs/screenshot-plan.md.
+# screenshots described in prompts/screenshot.md.
 #
 # Usage:
 #   scripts/take_screenshots.sh  # all 36
@@ -9,7 +9,7 @@
 #   scripts/take_screenshots.sh --view model_browse  # 4
 #   scripts/take_screenshots.sh --device "iPhone 17 Pro Max" --lang es --view quiz_results  # 1
 #
-# See docs/screenshot-playbook.md for setup, recovery guidance, and a
+# See docs/screenshot_playbook.md for setup, recovery guidance, and a
 # cross-referenced workarounds index. Calibration values and per-view nav
 # functions are inline below.
 #

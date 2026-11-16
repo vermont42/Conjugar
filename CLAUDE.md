@@ -18,7 +18,7 @@ what failed, why decisions changed), not a bare changelog: Josh will eventually 
 future Claude sessions may use them as dated project memory. When older docs conflict, the journal shows which truth is
 more current. That said, the current state of the codebase is the ultimate source of truth.
 
-When you create a new plan (typically in the `prompts/` folder), open it in Visual Studio
+When you create a new plan (in the `plans/` folder), open it in Visual Studio
 Code so Josh can read it immediately: `code <path-to-plan>` (the VS Code CLI binary is
 `code`).
 
@@ -54,7 +54,7 @@ single git checkout with no version segment, refreshed to the latest release by
 reaches the per-version `plugins/cache/ios-build-verify/<version>/` directories, which are
 shared with Josh's other apps and can pin older releases — an unsorted `head -1` there
 resolves nondeterministically to a stale version. (`scripts/take_screenshots.sh` carries
-the same resolver, for the same reason; see `docs/screenshot-playbook.md`.)
+the same resolver, for the same reason; see `docs/screenshot_playbook.md`.)
 
 ```bash
 # Build the app — this is the COMPILE step
@@ -153,9 +153,71 @@ recipes — see [`docs/game.md`](docs/game.md).
 
 ## Project Structure
 
-See [`docs/project-structure.md`](docs/project-structure.md) for the full annotated directory tree.
+See [`docs/project_structure.md`](docs/project_structure.md) for the full annotated directory tree.
 
-**Cache maintenance:** When you add, remove, or rename a source file, update `docs/project-structure.md` to match. This doc is a cache. Future contexts rely on it to orient quickly, so staleness has a real cost. The two staleness modes are not equally bad: a *missing* entry costs a session one `find`, because it sees the gap and reads the file, while a *wrong* entry gets believed. Prioritize renames and repurposed files.
+**Cache maintenance:** When you add, remove, or rename a source file, update `docs/project_structure.md` to match. This doc is a cache. Future contexts rely on it to orient quickly, so staleness has a real cost. The two staleness modes are not equally bad: a *missing* entry costs a session one `find`, because it sees the gap and reads the file, while a *wrong* entry gets believed. Prioritize renames and repurposed files.
+
+## Prompts, Plans, and Documents
+
+Three folders hold the project's prose, sorted by who wrote a file and what it is for:
+
+- **`prompts/`**: what Josh writes to get Claude to do something.
+- **`plans/`**: what Claude writes to get another session to do something. Orchestrator plans,
+  subagent briefs, handoffs, and resume prompts all count. So do prompts Claude writes for
+  another tool, such as an image generator or Claude in Chrome, and a file Josh began that Claude
+  has mostly written since and that still has work to do.
+- **`docs/`**: Claude's output that holds information and is not a plan: research, audits,
+  playbooks, pipeline descriptions, and reference guides.
+
+The reason is how Josh finds files. He often does not remember a filename, only that he wrote a
+prompt, or that Claude wrote a plan, about some subject. So authorship decides the folder, and
+when a file fits two folders, choose the one where he would look first. A review sheet that a
+plan's phase generates stays in `plans/` beside that plan, and a data file that one plan reads
+travels with it, as `plans/end_scene_images/` does. Scripts belong in `scripts/`, not `docs/`.
+
+Save a new file by this rule and list it in `docs/project_structure.md`, whose one-line
+descriptions are what make a file findable by subject. When a file moves, update the references
+to it, and in `docs/blog_notes.md` retarget link targets only, leaving the words as written.
+Decided in Konjugieren and applied here 2026-11-16.
+
+## File Naming
+
+**Name files and directories in snake_case, not kebab-case**: `verb_sources.md`, not
+`verb-sources.md`. Josh prefers it, and since 2026-11-16 everything in `docs/`, `plans/`, and
+`prompts/` follows it, as do `asset_licenses/`, `frequency/`, `images/`, `corpus/grokked/`, and
+`scripts/symbol_sources/`. A script that builds a filename at runtime must build it in snake_case
+too.
+
+**Do not repeat in a filename what the folder already says.** A file in `plans/` is a plan and a
+file in `prompts/` is a prompt, so neither word belongs in the name: `plans/ipad.md`, not
+`plans/ipad-plan.md`. A prompt and the plan it produced may share a name across the two folders,
+as `prompts/ipad.md` and `plans/ipad.md` do. If dropping the word leaves a name that no longer
+identifies the file, name it for its subject instead, as `prompts/frequency.md` was.
+
+Some names are not ours to choose. Swift source files are named for their type. A name that a
+tool dictates, such as `.claude/ios-build-verify.config.sh` or the timestamped captures in
+`docs/screenshots/`, stays as the tool wants it. A downloaded file may keep its publisher's name.
+The Noun Project SVGs in `scripts/symbol_sources/` were renamed on Josh's say but kept their
+numeric IDs, which still say where to get them again.
+
+**Before renaming a file, search `~/Desktop/workspace/Blog` for GitHub URLs that point at it**,
+and stop to ask Josh if a published post links to it, because the link breaks when the rename is
+pushed. A link in an old email is not a reason to stop.
+
+```bash
+grep -rnoE "github\.com/vermont42/Conjugar/(blob|tree|raw)/[A-Za-z0-9_./-]+" ~/Desktop/workspace/Blog/_posts | sort -u
+```
+
+Run that search bare, with no `timeout` (not installed on this Mac) and no `2>/dev/null`, and
+confirm that it prints the links it should find. It prints links to Swift files and branches as
+of 2026-11-16. An empty result from a command whose errors are discarded proves nothing.
+
+**To rename or move a file, use `../Konjugieren/scripts/rename_files.py`**, run from this repo's
+root, which also repairs the references: Markdown link targets, written-out paths, and bare names.
+Its docstring lists what it cannot see. Two more cases bit here: a path split across
+`os.path.join` arguments, as in `os.path.join(ROOT, "prompts", name)`, keeps its old folder; and a
+bare name shared by two different files, such as a downloaded original and the file derived from
+it, is rewritten in both places. Read the diff of every changed script.
 
 ## Architecture
 
@@ -250,7 +312,7 @@ verb and quiz question and writes JSON that the widgets read; `Shared/` holds th
 contract and the App Group constants. The widget target has its **own** `Localizable.xcstrings`
 and its own copies of the conjugation- and etymology-rendering helpers, so a change to the app's
 render conventions has to be mirrored there. See
-[`docs/project-structure.md`](docs/project-structure.md) for the file-by-file map.
+[`docs/project_structure.md`](docs/project_structure.md) for the file-by-file map.
 
 ### The game — Toreo por Amor
 
@@ -270,7 +332,7 @@ A Spanish conjugation tutor: a chat screen (`Views/TutorView.swift`) backed by
 `LanguageModelServiceReal`, which wraps Apple's **on-device** `SystemLanguageModel` from the
 **Foundation Models** framework. It is grounded in the app's own engine via a `ConjugationTool`,
 so it never invents forms, and it is **unavailable in the simulator**. Reached from a section at
-the top of the Info tab. See [`docs/conjugation-tutor.md`](docs/conjugation-tutor.md).
+the top of the Info tab. See [`docs/conjugation_tutor.md`](docs/conjugation_tutor.md).
 
 ## Testing
 

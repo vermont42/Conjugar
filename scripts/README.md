@@ -59,14 +59,14 @@ is set in the `__main__` block (`bull` is rendered at 1.2× for legibility).
 Custom symbols are referenced with `image:` (not `systemImage:`) and are not subject to the
 tab bar's automatic `.fill` substitution, so they render their line art as-is.
 
-### Sources (`symbol-sources/`)
+### Sources (`symbol_sources/`)
 
 | File | Provenance |
 |------|-----------|
-| `gearshape-template.svg` | SF Symbols.app export of `gearshape` (Static template) — used only as the annotated canvas (guides + weight/scale slots). |
-| `noun-bull-8280587.svg` | "bull" by **taash5studio**, [Noun Project](https://thenounproject.com/icon/bull-8280587/), CC BY 3.0. |
-| `noun-flamenco-dance-4581460.svg` | "flamenco dance" by **Amethyst Studio**, [Noun Project](https://thenounproject.com/icon/flamenco-dance-4581460/), CC BY 3.0. |
+| `gearshape_template.svg` | SF Symbols.app export of `gearshape` (Static template) — used only as the annotated canvas (guides + weight/scale slots). |
+| `noun_bull_8280587.svg` | "bull" by **taash5studio**, [Noun Project](https://thenounproject.com/icon/bull-8280587/), CC BY 3.0. |
+| `noun_flamenco_dance_4581460.svg` | "flamenco dance" by **Amethyst Studio**, [Noun Project](https://thenounproject.com/icon/flamenco-dance-4581460/), CC BY 3.0. |
 
 The two Noun Project icons are CC BY 3.0; attribution is carried in the app's Info-tab
 credits (`Localizable.xcstrings` → `Info.creditsText`). To swap in different art, drop a new
-SVG in `symbol-sources/`, point the `__main__` call at it, and re-run.
+SVG in `symbol_sources/`, point the `__main__` call at it, and re-run.

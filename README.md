@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Images/Splash.png" width="250" alt="Conjugar's app icon">
+  <img src="images/splash.png" width="250" alt="Conjugar's app icon">
 </p>
 
 <h1 align="center">Conjugar</h1>
@@ -34,11 +34,11 @@ I released **Conjugar** in 2017 as a UIKit app with programmatic layout, and I w
 
 | Verb List | Verb | Verb-Model List | Verb Model | Quiz |
 | --- | --- | --- | --- | --- |
-| <img src="Images/verb-browse.png" width="190"> | <img src="Images/verb.png" width="190"> | <img src="Images/model-browse.png" width="190"> | <img src="Images/model.png" width="190"> | <img src="Images/quiz.png" width="190"> |
+| <img src="images/verb_browse.png" width="190"> | <img src="images/verb.png" width="190"> | <img src="images/model_browse.png" width="190"> | <img src="images/model.png" width="190"> | <img src="images/quiz.png" width="190"> |
 
 | Quiz Results | Info List | Tense Description | Settings | Minigame |
 | --- | --- | --- | --- | --- |
-| <img src="Images/quiz-results.png" width="190"> | <img src="Images/info-browse.png" width="190"> | <img src="Images/info.png" width="190"> | <img src="Images/settings.png" width="190"> | <img src="Images/game.png" width="190"> |
+| <img src="images/quiz_results.png" width="190"> | <img src="images/info_browse.png" width="190"> | <img src="images/info.png" width="190"> | <img src="images/settings.png" width="190"> | <img src="images/game.png" width="190"> |
 
 ### Building from Source
 
@@ -58,7 +58,7 @@ That integration is long gone, and no analytics backend, framework, or configura
 to build the app.
 
 Further documentation lives in [`docs/`](docs), starting with the annotated directory tree in
-[`docs/project-structure.md`](docs/project-structure.md).
+[`docs/project_structure.md`](docs/project_structure.md).
 
 ### Data sources
 
@@ -76,7 +76,7 @@ with full provenance, is [`frequency/`](frequency).
 
 The app's other content sources — Wikipedia, Project Gutenberg, government open-data portals,
 sound and art licensors — are credited on the Info tab's Credits screen and in
-[`asset-licenses/`](asset-licenses).
+[`asset_licenses/`](asset_licenses).
 
 ### License
 

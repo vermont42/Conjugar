@@ -6,9 +6,9 @@ Konjugieren is a German-verb app that lives in /Users/josh/Desktop/workspace/Kon
 
 The naive approach would be to migrate Conjugar's screens directly to SwiftUI. But, using the skill `ios-design-agent-skill`, I identified many problems with the UIs of Konjugieren and Conjuguer, which were originally similar to that of Conjugar.
 
-Here are sugggestions for improving Conjuguer's UI, all implemented: /Users/josh/Desktop/workspace/Conjuguer/docs/conjuguer-ui-issues.md
+Here are sugggestions for improving Conjuguer's UI, all implemented: /Users/josh/Desktop/workspace/Conjuguer/docs/conjuguer_ui_issues.md
 
-Here are sugggestions for improving Konjugieren's UI, all implemented: /Users/josh/Desktop/workspace/Konjugieren/docs/ui-audit.md
+Here are sugggestions for improving Konjugieren's UI, all implemented: /Users/josh/Desktop/workspace/Konjugieren/docs/ui_audit.md
 
 I documented my use of `ios-design-agent-skill` for Konjugieren [here](https://racecondition.software/blog/ios-design-agent-skill/).
 

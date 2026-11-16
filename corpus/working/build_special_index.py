@@ -5,13 +5,13 @@ medieval-example verbs that fall OUTSIDE the usage-ranked 988 (pipeline step F).
 This is the step-F analogue of build_corpus_index.py. The difference: the ranked index keys
 off forms.json (988 verbs); step F's verbs are unranked, so they only appear in forms_all.json
 (all 4,811 verbs). We therefore tokenize the same modern corpus but restrict the recorded
-verbs to the step-F set (prompts/example-uses-stepF-verbs.json). The medieval examples for
+verbs to the step-F set (plans/example_uses_step_f_verbs.json). The medieval examples for
 these verbs already exist (MedievalExamples.json); step F adds a MODERN example (this index
 feeds the mining) + an etymology (separate etymology pipeline).
 
 Inputs
   - corpus/working/forms_all.json : { "<surface form>": ["<infinitive>", …] } over all 4,811 verbs.
-  - prompts/example-uses-stepF-verbs.json : the 352 special verbs (infinitive + gloss).
+  - plans/example_uses_step_f_verbs.json : the 352 special verbs (infinitive + gloss).
   - corpus/originals/{literature,government,technology}/*.txt : cleaned source texts.
 
 Output
@@ -31,7 +31,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CORPUS = os.path.dirname(HERE)
 ROOT = os.path.dirname(CORPUS)
 FORMS_JSON = os.path.join(HERE, "forms_all.json")
-WORKLIST = os.path.join(ROOT, "prompts", "example-uses-stepF-verbs.json")
+WORKLIST = os.path.join(ROOT, "plans", "example_uses_step_f_verbs.json")
 OUT_JSON = os.path.join(HERE, "special_index.json")
 ORIGINALS = os.path.join(CORPUS, "originals")
 

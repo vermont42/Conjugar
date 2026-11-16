@@ -6,8 +6,8 @@ call-and-response flamenco dance-off against the bull.
 
 Code: `Conjugar/Views/GameView.swift` (the whole UI) and `Conjugar/Models/Game/`
 (`GameModels.swift`, `GameState.swift`, and the `GameState+…` extensions). Strings live in
-`L.Game`. The original design documents are `prompts/game_la_subida.md` and
-`prompts/game_boss_llamada.md`.
+`L.Game`. The original design documents are `plans/game_la_subida.md` and
+`plans/game_boss_llamada.md`.
 
 ## Running the game in the simulator
 
@@ -118,7 +118,7 @@ The climb is split across `GameState+Obstacles.swift` (the rolling obstacle sets
 
 The power-up and mechanic SFX (`guitarStrum`, `speedWhoosh`, `zombieGroan`, `stampede`,
 `lightsOut`) are Pixabay MP3s bundled in `Conjugar/Audio/`, logged in
-`asset-licenses/pixabay-mpg-sfx.txt`.
+`asset_licenses/pixabay_mpg_sfx.txt`.
 
 **Debug env vars** (read via `ProcessInfo`; compose with `CONJUGAR_GAME_TIME_SCALE` /
 `CONJUGAR_GAME_DISABLE_FLAGS` and the `conjugar://game` launch pattern above):
@@ -223,8 +223,8 @@ The two JPEGs are decoded off the main thread as the end scene opens and held in
 `@Observable` `PreparedSlideImages` object, not a plain `@State` dictionary, because the
 slideshow is drawn inside `TimelineView`'s content closure (see the 2026-09-30 journal entry).
 The art, its prompts, and the generation story are in
-[`prompts/end_scene_plan.md`](../prompts/end_scene_plan.md) (Phase 1) and
-`prompts/end_scene_images/`. (The plan's Phase 2 describes the first, draggable version, which
+[`plans/end_scene.md`](../plans/end_scene.md) (Phase 1) and
+`plans/end_scene_images/`. (The plan's Phase 2 describes the first, draggable version, which
 the Ken Burns camera replaced.)
 
 **Only the X button leaves the end scene.** Taps do nothing there; there is no tap layer in

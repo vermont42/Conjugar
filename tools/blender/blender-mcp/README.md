@@ -5,7 +5,7 @@
 render pipeline is reproducible without a fresh download.
 
 It is **dev tooling only** — it is *not* shipped in the app, so it needs no
-`asset-licenses/` entry. It pairs with the MCP server registered via
+`asset_licenses/` entry. It pairs with the MCP server registered via
 `claude mcp add blender -- uvx blender-mcp`.
 
 ## Install into Blender

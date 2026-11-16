@@ -418,7 +418,7 @@ extension Quiz {
   /// Launch-argument switch that puts the quiz into deterministic screenshot mode:
   /// `xcrun simctl launch … -CONJUGAR_QUIZ_FIXTURE screenshot`. Used by
   /// `scripts/take_screenshots.sh` for screens 5 (quiz mid-question) and 8
-  /// (results); see `docs/screenshot-playbook.md`.
+  /// (results); see `docs/screenshot_playbook.md`.
   ///
   /// DEBUG-gated, so it cannot be triggered in a release build no matter what
   /// arguments the process is launched with.

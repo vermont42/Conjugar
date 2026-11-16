@@ -14,7 +14,7 @@
 #
 # Every check corresponds to a real rejection or near-miss in the sibling apps on
 # 2026-07-25 (Conjuguer's 2.0 previews were rejected twice — first for wrong dimensions,
-# then for non-square pixels); see docs/screenshot-playbook.md and docs/screenshot-plan.md
+# then for non-square pixels); see docs/screenshot_playbook.md and prompts/screenshot.md
 # for how it applies here.
 #
 # Conjugar has no app previews yet, so the video half is inert today. It is retained

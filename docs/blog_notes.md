@@ -9999,3 +9999,60 @@ and test bundles, and two same-named `CLAUDE.md` resources in one target would h
 time. Rules files under `.claude/` sit outside every synchronized group. The localization rule also
 matches `**/*.xcstrings`, so it covers the widget's catalog too, which a folder-scoped file could not.
 The root file dropped to about 21.9k characters.
+
+## Prompts, plans, and documents, each in its own folder (2026-11-16)
+
+Konjugieren sorted its prose by authorship this morning, and its session left a plan for doing the
+same here, `plans/location_cleanup.md`. Josh's rule is short. A prompt is what he writes to get
+Claude to do something, a plan is what Claude writes to get another session to do something, and a
+document is Claude's output that holds information and is not a plan. The reason behind it settles
+the borderline files: he finds files by remembering who wrote something about a subject, so a file
+goes where he would look first.
+
+Here the drift was larger than in Konjugieren, because `CLAUDE.md` had told every session to save
+its plans "typically in the `prompts/` folder". Reading the opening of each of the 71 Markdown files
+in `prompts/` sorted them without much doubt. Twenty-four are Josh's: first person, no heading, a
+few paragraphs, the occasional typo. Forty-four are Claude's plans and briefs, with titles, status
+lines, and an audience named in the first paragraph. Three are documents: the two code-review
+reports, which are findings and not instructions, and the etymology pipeline, which is a recipe run
+a batch at a time. Its work-list ran out long ago (1,345 etymologies against 988 verbs), so it sits
+in `docs/` beside the recipes Konjugieren kept there. One file went the other way. The screenshot
+spec in `docs/` is eighteen lines of Josh's own instructions, so it is `prompts/screenshot.md` now.
+
+Three of the plans now share a name with the prompt that asked for them: `ipad.md`, `end_scene.md`,
+and `ui.md`, the last formerly `ui_claude.md`, whose suffix said who wrote it in the way the folder
+now does. Only one file needed a judgment once the role word was gone. `freq_prompt.md` would have
+been `freq.md`, which says too little, so it is `frequency.md`.
+
+Josh ruled on three questions. Claude wrote the round-2 code-review brief, though in his voice, so
+it went to `plans/`. The seven Python scripts in `docs/` moved to `scripts/`. And every kebab-case
+name outside the three folders was renamed too: the license records, the frequency pipeline's JSON,
+the medieval texts in `corpus/grokked/`, the symbol sources, and the README images, whose folder
+lost its capital along the way.
+
+The rename tool repaired 77 files on the first run and was right almost everywhere. It missed three
+things, and each is a pattern worth knowing. `build_special_index.py` builds its work-list path as
+separate arguments to `os.path.join`, folder in one and filename in another, so the tool renamed the
+filename and left the folder pointing at `prompts/`. It rewrote the bare name `milagros-berceo.txt`
+in `grok_medieval.py`, where that name belongs to the downloaded original in the ignored
+`corpus/originals/medieval/`, not to the grokked file that was renamed. The same script names its
+outputs from slugs at runtime, which no search for a filename can find. And on a README line that
+held five image paths, it rewrote only the first. All of these were fixed by hand.
+
+The moved scripts had computed their paths from their own folder, which had been `docs/`. Each now
+names `docs/` explicitly. The proof that this worked is that `scripts/_build_verbmap.py`, run from
+`/tmp`, regenerated `verbModelMap.xml` and the three gloss reports byte for byte. Every Swift change
+was a comment, so no build was run, and SwiftLint passed on the ten changed files.
+
+The search of the Blog repository was run bare first, and it printed nine links to Swift files and
+branches before its silence about `docs/` and `prompts/` meant anything. The thirty mentions of
+`Conjugar.mig`, this checkout's former folder name, needed nothing, since none of them names a file
+that moved. Rebuilding the three trees in `docs/project_structure.md` turned up the App Store
+description, the release notes, and the draft reply to the RAE, none of which had been listed.
+
+The references ran in both directions. Konjugieren's two mentions of the sweep plan were fixed and
+pushed there. Conjuguer turned out to cite nothing here that moved, but this repo cited seven of
+its files by their old names, in thirteen places. Conjuguer had written its own moves file by
+then, though its renames were not yet committed, and the thirteen lines were updated from it. One
+more line was found only by searching for each old filename on its own, because it named
+Konjugieren's `docs/bratwurst-icon-prompts.md` with the app's name on the line above.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""frequency/gbooks/*.tsv + corpus/working/forms_all.json -> gbooks-verb-lemmas.json.
+"""frequency/gbooks/*.tsv + corpus/working/forms_all.json -> gbooks_verb_lemmas.json.
 
 Google Books counts word *forms*, not lemmas, so the tie-breaker has to be summed through
 Conjugar's own paradigms. `corpus/working/forms_all.json` (written by
@@ -36,7 +36,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FREQ = os.path.join(ROOT, "frequency")
 SHARDS = [os.path.join(FREQ, "gbooks", f"verb_{index}.tsv") for index in range(3)]
 FORMS = os.path.join(ROOT, "corpus", "working", "forms_all.json")
-OUT = os.path.join(FREQ, "gbooks-verb-lemmas.json")
+OUT = os.path.join(FREQ, "gbooks_verb_lemmas.json")
 
 FIRST_YEAR = 1950
 EM_PASSES = 15

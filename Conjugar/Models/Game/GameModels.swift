@@ -28,7 +28,7 @@ struct Ladder: Identifiable {
 }
 
 /// How an obstacle glyph is oriented as it travels (see the "Per-set rendering"
-/// spec in prompts/game_la_subida.md). Apple's animal/vehicle emoji face LEFT and
+/// spec in plans/game_la_subida.md). Apple's animal/vehicle emoji face LEFT and
 /// would hide any facing under the barrel tumble, so each stage's set declares a
 /// style: flags/balls spin like barrels, animals/vehicles stay upright and mirror to
 /// face their travel, sky glyphs (sun/clouds) neither spin nor mirror.
@@ -337,7 +337,7 @@ enum DanceMove: CaseIterable, Hashable {
   /// tension sting on the bull's demo, warning the player this slot is different;
   /// the *echo* freeze is silent by design (the response is to hold still — the
   /// `.warning` haptic marks the hold). Pack logged in
-  /// `asset-licenses/pixabay-game-sfx.txt`.
+  /// `asset_licenses/pixabay_game_sfx.txt`.
   var cueSound: Sound? {
     switch self {
     case .pasoLeft: return .castanetLow

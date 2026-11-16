@@ -11,7 +11,7 @@
 // cases (`chomp`, `moo`, `pop`, `shieldActivate`, `soccerKick`) were reused from the
 // sibling apps Konjugieren/Conjuguer for the flamenco/bull game; the boss-fight pack
 // (`castanetHigh`…`capeWhoosh`) is the La Llamada dance-off duel's SFX, sourced from
-// Pixabay (see `asset-licenses/pixabay-game-sfx.txt`); the rest are the app's
+// Pixabay (see `asset_licenses/pixabay_game_sfx.txt`); the rest are the app's
 // original quiz/feedback cues.
 enum Sound: String, CaseIterable {
   case applause1
@@ -45,7 +45,7 @@ enum Sound: String, CaseIterable {
 
   // La Subida — main-game SFX (Pixabay, `Conjugar/Audio/`). Serenata pickup strum,
   // zombie-attack groan, El Encierro stampede, speed-pickup whoosh, and El Apagón
-  // lights-cut (see `asset-licenses/pixabay-mpg-sfx.txt`).
+  // lights-cut (see `asset_licenses/pixabay_mpg_sfx.txt`).
   case guitarStrum
   case zombieGroan
   case stampede
@@ -53,19 +53,19 @@ enum Sound: String, CaseIterable {
   case lightsOut
 
   // La Subida — extra power-up SFX copied from the sibling apps (see
-  // `asset-licenses/game-sounds-pixabay.txt`): El Flechazo's homing "lock-on"
+  // `asset_licenses/game_sounds_pixabay.txt`): El Flechazo's homing "lock-on"
   // (Conjuguer's `brainLockOn`) and El Cortejo's celebratory catch (Konjugieren's `coin`).
   case brainLockOn
   case coin
 
-  // Konjugieren's `horse`; see `asset-licenses/game-sounds-pixabay.txt`.
+  // Konjugieren's `horse`; see `asset_licenses/game_sounds_pixabay.txt`.
   case neigh
 
   // `castanetHigh` made louder, because the end-scene portraits want more than the 1.0
   // volume ceiling allows and the shared file is also used by a power-up.
   case castanetPortrait
 
-  // Not `crowdOle`, which is a crowd cheer. See `asset-licenses/pixabay-game-sfx.txt`.
+  // Not `crowdOle`, which is a crowd cheer. See `asset_licenses/pixabay_game_sfx.txt`.
   case ole
 
   static var randomApplause: Sound {

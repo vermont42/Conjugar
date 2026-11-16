@@ -125,7 +125,7 @@ final class GameState {
   /// Radius (pt) of the soft spotlight the overlay punches around the dancer.
   static let apagonSpotlightRadius: CGFloat = 120
 
-  // MARK: New mechanics/power-ups (see prompts/game-powerups-mechanics-plan.md)
+  // MARK: New mechanics/power-ups (see plans/game_powerups_mechanics.md)
 
   /// El Terremoto (earthquake): for this long the screen jiggles vertically, haptics
   /// pulse, and ~`earthquakeGapFraction` of each girder vanishes as fading holes.
@@ -203,7 +203,7 @@ final class GameState {
   /// Sprite flipbook speed.
   static let fps = 10
 
-  // MARK: Boss-fight tuning (La Llamada — see prompts/game_boss_llamada.md)
+  // MARK: Boss-fight tuning (La Llamada — see plans/game_boss_llamada.md)
 
   /// Summits before the boss triggers: five stages, so summits 1–4 are escape beats
   /// (the bull flees upward carrying the matador) and the 5th triggers La Llamada.

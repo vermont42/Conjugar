@@ -4,7 +4,7 @@
 #   scripts/prep_screenshot_sim.sh "iPad Pro 13-inch (M5)" es
 #   scripts/prep_screenshot_sim.sh "iPhone 17 Pro Max" en
 #
-# Does the four steps of docs/screenshot-playbook.md "Clean Status Bar" IN THE ORDER
+# Does the four steps of docs/screenshot_playbook.md "Clean Status Bar" IN THE ORDER
 # THAT MATTERS, then prints proof that each landed:
 #
 #   set system language -> reboot -> RE-APPLY status bar override -> verify

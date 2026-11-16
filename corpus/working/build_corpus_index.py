@@ -19,7 +19,7 @@ Output
   - corpus/working/corpus_index.json : { "<infinitive>": [ {doc, line, token, text}, … ] }
   - a coverage report to stdout (per-tier split, per-work balance, zero-coverage tail).
 
-Design points (mirrors the Conjuguer flow; see prompts/example-uses-pipeline.md §B)
+Design points (mirrors the Conjuguer flow; see plans/example_uses_pipeline.md §B)
   * ONE tokenizing pass over each document, not 988 passes.
   * Candidates are gathered from each of the 8 LITERATURE works independently, then merged
     round-robin with a per-verb ROTATING LEAD WORK, so the first candidate (the one selectors

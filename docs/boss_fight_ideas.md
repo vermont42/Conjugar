@@ -8,7 +8,7 @@ matador. Josh picks one concept below; the winner gets a full implementation pla
 > questions (full bull fidelity, end scene included on `Music.onboarding`, boss gated on
 > the first summit for now, relaxed compás timing, hearts hidden, Spanish jaleo in both
 > localizations, …). The decisions and the implementation plan live in
-> **`prompts/game_boss_llamada.md`** — Concepts 2 and 3 below are kept for the record
+> **`plans/game_boss_llamada.md`** — Concepts 2 and 3 below are kept for the record
 > (round-3 hard mode and a level-5 tile gimmick may still borrow from them).
 
 > **Research behind this doc:** the game code (`Conjugar/Models/Game/*`,
@@ -78,12 +78,12 @@ Every concept plugs into the same staging, so choosing one doesn't change items 
   deterministically like `GameStateTests` does today. For screenshots/tests, add a debug
   entry — `conjugar://game?boss=1` or a `CONJUGAR_GAME_START_BOSS` launch env var,
   mirroring `CONJUGAR_GAME_TIME_SCALE`.
-- **New SFX** (Pixabay, per the established `asset-licenses/` pipeline): palmas clap,
+- **New SFX** (Pixabay, per the established `asset_licenses/` pipeline): palmas clap,
   castanet click, crowd "¡olé!", bull snort, stomp thud. Reuse today's `chime`/`chirp`/
   `pop`/`buzz`/`randomApplause`. Consider porting the siblings' `HapticPlayer` — every
   judged input wants a tap.
 
-**Animation budget reality check** (from `prompts/game_bull_actions.md`): dancer moves
+**Animation budget reality check** (from `plans/game_bull_actions.md`): dancer moves
 are cheap — Mixamo's mocap library is full of dance clips (samba/salsa/house/jazz
 families; flamenco-specific existence unverified, nearest clip gets hand-picked) and the
 per-action FBX → `render_sprites.py` pipeline is proven. **Bull moves are hand-keyed**
@@ -294,12 +294,12 @@ mechanic proves fun — the state machine doesn't care which sprites play.
 ## Sources
 
 **In-repo:** `Conjugar/Models/Game/*`, `Views/GameView.swift`, `prompts/game.md`,
-`prompts/game_bull_actions.md`, `docs/game_design_research.md`, `Models/Music.swift` +
+`plans/game_bull_actions.md`, `docs/game_design_research.md`, `Models/Music.swift` +
 `afinfo` on `Conjugar/Audio/spanishGuitarStandoff.mp3` (42.71 s); live drive of
 `conjugar://game` (ios-build-verify). Sibling catalogs: Konjugieren
 (`Models/Game/GameState+{Fussball,Bratwurstkette,Geisterstunde,Robot}.swift`,
-`docs/bratwurst-icon-prompts.md`) and Conjuguer (`Models/Game/GameState+*.swift`,
-`prompts/new-game-mechanics.md`, RobotBoss template).
+`plans/bratwurst_icon.md`) and Conjuguer (`Models/Game/GameState+*.swift`,
+`docs/new_game_mechanics.md`, RobotBoss template).
 
 **Web:**
 - Bust a Groove mechanics: [Wikipedia](https://en.wikipedia.org/wiki/Bust_a_Groove), [Bust a Groove Wiki](https://bust-a-groove.fandom.com/wiki/Bust_A_Groove), [Hardcore Gaming 101](https://www.hardcoregaming101.net/bust-a-groove/)

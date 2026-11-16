@@ -1951,8 +1951,8 @@ by merging all four journals.
   the dismissed lists above are its raw material), what the app-internal agent found, whether
   any correction changed the essay's argument rather than its facts, and total cost and
   wall-clock time.
-- `~/Desktop/workspace/Conjuguer/prompts/verify-verb-history.md` and
-  `~/Desktop/workspace/Konjugieren/prompts/verify-verb-history.md` — the same check for the
+- `~/Desktop/workspace/Conjuguer/plans/verify_verb_history.md` and
+  `~/Desktop/workspace/Konjugieren/plans/verify_verb_history.md` — the same check for the
   sibling apps. Both are written and both **depend on this file existing**, because their
   highest-value agent diffs their shared opening sections against Conjugar's corrected
   essay. Conjuguer shares its first nine sections with Conjugar, Konjugieren its first five.

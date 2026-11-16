@@ -7,7 +7,7 @@ different verb (*salga*→salir, *haciendo*→hacer, *jamás*→adverb), or the 
 finitely in the 21-text corpus. Each sentence below is therefore ORIGINAL, AI-authored content by
 Claude (Opus 4.8) — not sourced from any document — and carries `source = "Claude (Opus 4.8)"`,
 `line = null`, so its provenance is explicit and never attributed to a corpus. Every sentence uses
-the verb in a genuinely VERBAL form (the `token`). Documented in docs/authored-examples.md.
+the verb in a genuinely VERBAL form (the `token`). Documented in docs/authored_examples.md.
 
 The schema matches the mined_*.json shards so build_examples.py's aggregate_modern globs it in.
 """

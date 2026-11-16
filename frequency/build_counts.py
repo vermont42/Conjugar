@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""CORPES XXI + Google Books -> frequency/verb-counts.json, one row per distinct infinitive.
+"""CORPES XXI + Google Books -> frequency/verb_counts.json, one row per distinct infinitive.
 
 Reads the two sources downloaded per frequency/README.md and produces the counts that
-`docs/_build_verbmap.py` writes into `verbModelMap.xml` as `hi` / `gb` / `hp`, plus a
+`scripts/_build_verbmap.py` writes into `verbModelMap.xml` as `hi` / `gb` / `hp`, plus a
 report. The app derives its 1…4,811 ranks from those counts at parse time, so nothing here
 assigns a rank that has to be maintained: adding a verb never renumbers the others.
 
@@ -13,7 +13,7 @@ is what recovers them. Tie-breaker, `gb`: Google Books verb-form tokens summed t
 app's own paradigms (see aggregate_gbooks.py). Where CORPES saw nothing at all, `hi` is an
 estimate from `gb` through a log-log fit, flagged `hp` and clamped so an estimate can never
 enter the top of the list; the handful of verbs neither source knows take an editorial
-count from editorial-counts.json.
+count from editorial_counts.json.
 
 Run from the repo root:  python3 frequency/build_counts.py [--dry-run]
 """
@@ -33,9 +33,9 @@ FREQ = os.path.join(ROOT, "frequency")
 VERB_MAP = os.path.join(ROOT, "Conjugar", "Models", "verbModelMap.xml")
 CORPES_ZIP = os.path.join(FREQ, "corpes_lemas.zip")
 CORPES_MEMBER = "frecuencia_lemas_corpes_1_5.txt"
-GBOOKS = os.path.join(FREQ, "gbooks-verb-lemmas.json")
-EDITORIAL = os.path.join(FREQ, "editorial-counts.json")
-OUT = os.path.join(FREQ, "verb-counts.json")
+GBOOKS = os.path.join(FREQ, "gbooks_verb_lemmas.json")
+EDITORIAL = os.path.join(FREQ, "editorial_counts.json")
+OUT = os.path.join(FREQ, "verb_counts.json")
 REPORT = os.path.join(FREQ, "report.md")
 
 # The estimate ceiling is the measured count at this rank, so no estimated verb can rank
@@ -200,7 +200,7 @@ def main():
     if tiers["unresolved"]:
         failures.append(
             f"{len(tiers['unresolved'])} infinitives have neither a measured nor an estimated "
-            f"count; add them to editorial-counts.json: "
+            f"count; add them to editorial_counts.json: "
             f"{', '.join(sorted(tiers['unresolved'], key=spanish_key))}")
     if r_squared < MIN_R_SQUARED:
         failures.append(f"calibration R^2 {r_squared:.3f} is below {MIN_R_SQUARED}")

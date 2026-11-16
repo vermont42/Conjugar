@@ -4,7 +4,7 @@ rig and export a baked FBX for render_sprites.py.
 
     blender -b -P tools/blender/gen_dancer_action.py -- --action idle
 
-House style (see prompts/game_dancer_finish_actions.md): floor-length gown, FEET
+House style (see plans/game_dancer_finish_actions.md): floor-length gown, FEET
 HIDDEN (shoe mesh deleted), animate the gown+torso with world-space bone rotations
 keyed from rest each frame. Skeleton is the vendor's own 63-bone Mixamo-named rig;
 the skirt (MASkirt_03) is skinned to hips+legs, so subtle leg motion sways the hem.

@@ -7,7 +7,7 @@
 //  (year)" credit; government/statistics sources get a localized "Fuente:/Source:"
 //  line naming the issuing body. Port of Conjuguer's enum; the source list and the
 //  attribution wording track the `^Example Uses^` credits in `Localizable.xcstrings`
-//  and the source table in `docs/example-corpus-sources.md`.
+//  and the source table in `docs/example_corpus_sources.md`.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
