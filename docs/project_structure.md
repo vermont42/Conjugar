@@ -48,7 +48,7 @@ Conjugar/
 │   ├── VerbModel.swift         # One regular base root plus an ordered feature list; also the alternate-paradigm scheme
 │   ├── VerbMap.swift           # VerbMapEntry + the load-once @unchecked Sendable cache over verbModelMap.xml.
 │   │                           #   ranked(_:) derives the dense 1…4,811 frequency rank from the stored counts at parse time
-│   ├── VerbSearch.swift        # The one verb-search rule: folding, -se stripping, every gloss, MatchKind ranking by kind then frequency
+│   ├── VerbSearch.swift        # The one verb-search rule: folding, -se stripping, every gloss, MatchKind ranking by kind then frequency; closestVerb's guess for a failed search
 │   ├── RegularRoot.swift       # The three regular roots (cantar/comer/subir) plus the voseo supplement
 │   ├── EngineTense.swift       # Engine-side tense model — the ten simple / non-finite tenses only
 │   ├── EnginePersonNumber.swift  # Engine-side person model — six standard persons plus vos
@@ -114,13 +114,13 @@ Conjugar/
 │       └── GameState+Stages.swift      # The five stages, escape beats, stage advance, and soft respawn
 ├── Supporting/                 # A PBXFileSystemSynchronizedRootGroup — files dropped here need no pbxproj edit
 │   ├── AppDelegate.swift       # UIApplicationDelegateAdaptor for the hooks the App lifecycle doesn't cover (appearance config)
-│   ├── ConjugarApp.swift       # @main App: analytics init, TipKit configure, cache warm, WindowGroup → MainTabView
+│   ├── ConjugarApp.swift       # @main App: analytics init, TipKit configure, cache warm, owns the AppRouter, WindowGroup → MainTabView, VerbSearchCommands
 │   ├── L.swift                 # Type-safe scoped localization accessors backed by String(localized:)
 │   └── Localizable.xcstrings   # The one string catalog holding both en and es
 ├── Utils/
 │   ├── BrowseSearch.swift      # The pure filter the Models tab searches through (the Verbs tab ranks with VerbSearch)
 │   ├── Colors.swift            # Semantic palette bridging the colorsets to UIKit-facing call sites
-│   ├── Emailer.swift           # MFMailComposeViewController wrapper for the Settings feedback link
+│   ├── Emailer.swift           # MFMailComposeViewController wrapper for the Settings feedback link (address from URL.developerEmail)
 │   ├── FontExtensions.swift    # Font.button and Font.heroNumeral
 │   ├── GameCenter.swift        # Protocol for Game Center operations (fire-and-forget auth, observable isAuthenticated)
 │   ├── GameCenterFake.swift    # In-memory double for the test/simulator worlds
@@ -148,14 +148,16 @@ Conjugar/
 │   ├── SoundPlayerDummy.swift  # No-op so the test worlds never touch CoreAudio
 │   ├── SoundPlayerReal.swift   # AVAudioPlayer implementation: off-main warm-up, per-sound debounce, music fades
 │   ├── UIApplicationExtensions.swift  # topViewController / key-window helpers for the remaining UIKit presentations
+│   ├── URLExtension.swift      # URL.developerEmail and URL.mailto(_:subject:body:), for the failed search's request line
 │   ├── URLProtocolStub.swift   # URLProtocol subclass for stubbing HTTP responses in tests
 │   ├── URLSessionExtension.swift  # Stubbed URLSession for testing
 │   ├── Utterer.swift           # AVSpeechSynthesizer text-to-speech plus the single .ambient audio-session owner
+│   ├── VerbSearchArrowKeys.swift  # Hack: priority UIKeyCommands for ↑/↓ through verb results while the search field is focused
 │   ├── ViewControllerTransitions.swift  # Hack: waits for UIKit transitions to end, so an iPad letter key survives search dismissal
 │   └── WidgetSnapshotWriter.swift  # Picks the daily verb + quiz question, conjugates them, writes JSON to the App Group.
 │                                   #   Draws from the top verbOfTheDayPoolSize (1,000) verbs by frequency
 └── Views/
-    ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing, incl. the one-shot game/onboarding/tutor flags
+    ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing, incl. the one-shot game/onboarding/tutor/search-focus flags
     ├── BrowseLayout.swift      # Shared LazyVGrid column sets for the iPad (regular-width) layouts
     ├── ConjugationText.swift   # Renders a conjugated form with its irregular span in customRed
     ├── EtymologyText.swift     # Renders etymology prose (its own minimal `~…~` parser, independent of Info markup)
@@ -173,7 +175,8 @@ Conjugar/
     ├── TutorTestView.swift     # Batch tutor harness (~30 queries, ShareLink export); reached by triple-tapping the tutor title
     ├── TutorView.swift         # The conjugation-tutor chat screen
     ├── SpanishLetterKeyRow.swift  # á é í ó ú ü ñ keys with an insert closure; replaces the Verbs sort picker while search is focused
-    ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); carries the browse_verb_count launch anchor
+    ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; carries the browse_verb_count launch anchor
+    ├── VerbSearchCommands.swift  # Command-F as a top-level menu (Verbs › Find a Verb) that focuses the verb search
     └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples
 
 ConjugarWidget/
@@ -215,7 +218,7 @@ ConjugarTests/
 │   ├── ConjugatorAccessorsTests.swift  # The engine's convenience accessors
 │   ├── ConjugatorResolverTests.swift   # Verb → model resolution, incl. prefixed compounds and the regular fallback
 │   ├── VerbMapTests.swift              # verbModelMap.xml parsing and lookup
-│   ├── VerbSearchTests.swift           # Search ranking (Josh's table of queries), folding, -se stripping, every gloss of a homonym
+│   ├── VerbSearchTests.swift           # Search ranking (Josh's table of queries), folding, -se stripping, every gloss of a homonym, the failed-search guess
 │   ├── VerbMapRankingTests.swift       # Rank derivation on a fixture, the shipped map's invariants, and
 │   │                                   #   line-for-line agreement with docs/frequencies.txt
 │   ├── TenseBridgeTests.swift          # DisplayTense/DisplayPersonNumber → engine mapping, compounds, negative imperative
@@ -242,14 +245,16 @@ ConjugarTests/
 │   ├── RatingsFetcherTests.swift       # iTunes-API parsing — deliberately still XCTest (it mutates the global Current)
 │   ├── ReviewPrompterRealTests.swift   # Review-prompt interval logic
 │   ├── SettingsTests.swift             # Settings persistence and defaults
-│   └── SoundPlayerTests.swift          # The audio DI seam: the test world must get SoundPlayerDummy
+│   ├── SoundPlayerTests.swift          # The audio DI seam: the test world must get SoundPlayerDummy
+│   └── URLExtensionTests.swift         # mailto encoding of a learner's query
 └── Views/
-    ├── AppRouterTests.swift            # Deeplink routing, focused on the one-shot game/boss and game/end flags
+    ├── AppRouterTests.swift            # Deeplink routing, focused on the one-shot game/boss and game/end flags, plus Command-F's search request
     ├── ConjugationTextTests.swift      # The shared conjugation renderer
     ├── EtymologyTextTests.swift        # The etymology markup renderer
     ├── InfoTests.swift                 # The rich-text parser and the Info model
     ├── SettingsViewTests.swift         # Settings-screen state
-    └── SymbolValidityTests.swift       # Every systemName: literal in all three targets resolves to a real SF Symbol
+    ├── SymbolValidityTests.swift       # Every systemName: literal in all three targets resolves to a real SF Symbol
+    └── VerbBrowseKeyboardTests.swift   # How the arrow keys move the highlighted verb result
 
 docs/                           # Claude's output that holds information and is not a plan: research, audits, playbooks,
 │                               #   reference guides, drafts. See CLAUDE.md § Prompts, Plans, and Documents

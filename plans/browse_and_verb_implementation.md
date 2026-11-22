@@ -25,8 +25,8 @@ session, which reads the hash from `git log` once Josh's commit exists.
 
 | Phase | Status | Date | Commit | Ideas |
 |---:|---|---|---|---|
-| 0 | Awaiting Josh | 2026-11-22 | | A1, A2, A3, A8 |
-| 1 | Not started | | | A4, C4 |
+| 0 | Done | 2026-11-22 | f27a7a6 | A1, A2, A3, A8 |
+| 1 | Awaiting Josh | 2026-11-22 | | A4, C4 |
 | 2 | Not started | | | Signals |
 | 3 | Not started | | | B2 (the reflexive analog) |
 | 4 | Not started | | | A5 (the map) |
@@ -278,7 +278,7 @@ The IDs are Konjugieren's, from its ideas document, so its reasoning can be foun
 ## Phase 0: Search Finds What People Type
 
 **Ideas:** A1, A2, A3, A8. **Ports:** Konjugieren Phase 1. **Depends on:** nothing. **Status:**
-Awaiting Josh (2026-11-22).
+Done (2026-11-22, f27a7a6).
 
 - **A1, folding.** Conjugar already folds case and every diacritic. Keep that, but rank a literal
   match above a folded one, so that "sonar" gives sonar before soñar, and "anadir" still finds
@@ -391,8 +391,8 @@ tests pin each case.
 
 ## Phase 1: When Search Finds Nothing, and Keyboard Lookup
 
-**Ideas:** A4, C4. **Ports:** Konjugieren Phase 2. **Depends on:** Phase 0. **Status:** Not
-started.
+**Ideas:** A4, C4. **Ports:** Konjugieren Phase 2. **Depends on:** Phase 0. **Status:**
+Awaiting Josh (2026-11-22).
 
 - **A4.** Keep the sad trombone. Below "No verbs found", offer the single closest verb by fuzzy
   matching over the folded infinitives, and say plainly that it is a guess. Add a line saying that
@@ -429,7 +429,63 @@ anything Phase 5 must revisit.
 **Done when** a misspelling shows a guess, nonsense shows none, the mail line works or copies, and
 Command-F, Return, and the arrows work on the iPad simulator.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **The guess.** `VerbSearch.closestVerb(to:in:)` reads the query as the infinitive search does
+  (so "-se" goes), folds it, and measures optimal-string-alignment distance
+  (`VerbSearch.editDistance`) to each folded infinitive, within one edit per three letters and
+  never more than three (`maxGuessDistance`), as in Konjugieren. Konjugieren breaks a tie by
+  frequency alone, which failed the plan's first test case: "hablr" is one edit from haber as well
+  as from hablar, and haber is the more frequent. So a tie now goes first to the verb that shares
+  more of the query's beginning, then to frequency, because a learner usually gets the start of a
+  word right. "hablr" gives hablar, "tenr" tener, "hbalar" hablar, "anadri" añadir, and "xyzzyq"
+  nothing. `VerbSearchTests` pins these, the tie-breaks, and the distance itself.
+- **The empty state.** Under "No verbs found" (the trombone still plays), "A guess at the verb you
+  meant:" / "Una conjetura sobre el verbo que buscabas:" and the guess as an ordinary verb row,
+  then the mail line: "If you believe that “hablr” is a Spanish verb, please email
+  vermontcoder@gmail.com." / "Si crees que «hablr» es un verbo español, escribe a …". With no
+  guess, only the mail line. The block is held to the reading width, so on iPad it sits centered
+  under the empty-state icon rather than spanning the grid.
+- **`mailto:` rather than `Emailer`.** `Emailer` presents `MFMailComposeViewController`, which
+  needs Apple's Mail app set up with an account; a `mailto:` link opens whatever mail app the
+  learner chose as default. So the address is a link built by the new `URL.mailto`
+  (`Utils/URLExtension.swift`), with subject and body naming the query in the learner's language.
+  The address now lives once, as `URL.developerEmail`, which `Emailer` also reads. A device that
+  cannot open the link copies the address and says so for four seconds, also announced to
+  VoiceOver. Checked on the iPhone simulator, which has no Mail app: the note appeared and the
+  simulator's pasteboard held the address. Not tried on a device with a mail app.
+- **Command-F** is `VerbSearchCommands`, a top-level `CommandMenu` (Verbs › Find a Verb / Verbos ›
+  Buscar un verbo), as Konjugieren found necessary. A menu command needs the router, which
+  `MainTabView` owned, so `ConjugarApp` now owns the `AppRouter` and passes it to `MainTabView`.
+  `AppRouter.openSearch()` selects the Verbs tab and sets a one-shot `pendingSearchFocus`, which
+  `VerbBrowseView` consumes: it pops to the list, waits 500 ms if it popped (Konjugieren's hack),
+  and focuses the field.
+- **Return and the arrows**, as in Konjugieren. Return acts only on the iPad idiom and opens the
+  highlighted row, else the first result, else the guess. `Utils/VerbSearchArrowKeys.swift`
+  installs priority `UIKeyCommand`s for ↑ and ↓ while the field is focused. The highlight is the
+  red tint Konjugieren uses on a list row and on the guess; on the iPad grid's cards it is a red
+  outline, because a tint behind a card does not show. The list scrolls to the highlighted row.
+- **The iPad drawer** was not redone; Phase 0 brought it forward and Josh approved it.
+- **What was tried where.** iPhone, English, light, compact: "hablr" (guess hablar, row opens it),
+  the mail link's copy fallback, and "xyzzyq" (no guess). That check caught the mail line sitting
+  indented when no guess row widened its stack; it now aligns left either way. iPad, Spanish, dark,
+  regular, with AXe hardware keys: ⌘F from the Quiz tab switched tabs and focused the field;
+  "tenr" showed tener, ↓ highlighted it, Return opened it; ⌘F from tener's page popped and
+  focused; "come" with ↓↓↓↑ outlined venir in the grid and Return opened it; "drive" with Return
+  and no highlight opened conducir. Not tried on a Mac or a real iPad.
+- **Tests.** New: the guess cases in `VerbSearchTests`, `URLExtensionTests` (mailto encoding),
+  `VerbBrowseKeyboardTests` (the selection's movement and its stops), and Command-F's request in
+  `AppRouterTests`. The whole suite passes: 624 Swift Testing tests in 34 suites, plus the XCTest
+  suites. No suite slowed; `VerbSearchTests` takes about 1.2 seconds. The simulator language was
+  English.
+- **For Phase 2 (signals).** Konjugieren gives a page opened from the guess its own `source`
+  value (`searchGuess`) and counts a Return or arrow-key open as an ordinary search open. The guess
+  opens through `navigationPath.append` like every other row, so Phase 2 must tell them apart.
+- **For Phase 5 to revisit.** The empty state, and with it the guess, will appear only when the
+  conjugation lookup also fails. `closestVerb` considers infinitives only; decide whether a
+  misspelled conjugation (tenjo) should guess too, as Konjugieren's later `guess(for:)` does.
+  `keyboardTargetCount` and `openKeyboardSelection` in `VerbBrowseView` assume one row per verb,
+  which conjugation rows will change. The placeholder still names only verbs and meanings.
 
 ## Phase 2: Lookup Signals
 

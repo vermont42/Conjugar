@@ -10179,3 +10179,34 @@ field is empty ends the search at touch-down and loses the letter. Konjugieren's
 field to accept programmatic focus, which iPadOS 26's toolbar search button does not, so the
 drawer placement that Konjugieren adopted later came forward into this phase on iPad only. Josh
 looked at the result and kept it.
+
+## When search finds nothing (2026-11-22)
+
+Phase 1 of the browse plan gave the Verbs tab something to say after the sad trombone, and gave
+iPad keyboards a way to search without touching the screen. Both were ports of Konjugieren's
+second phase, and most of the code crossed over unchanged. The guess did not.
+
+Konjugieren guesses the verb a learner meant by edit distance: count the insertions, deletions,
+substitutions, and swapped neighbors between the query and each infinitive, allow one edit per
+three letters, and break a tie by frequency. The plan's first test word was "hablr", and the test
+failed: the guess was haber. Both verbs are one edit away (insert an a, or change the l to an e),
+and haber is the eighth commonest verb in Spanish while hablar is the twenty-second. The fix is a second tie-break ahead of
+frequency: the verb that shares more of the query's beginning wins, since learners usually get the
+start of a word right and slip near the end. Now "hablr" gives hablar, "tenr" gives tener, and
+"xyzzyq" gives nothing at all.
+
+Below the guess, a line asks a learner who believes the verb is real to email Josh. Conjugar
+already had an `Emailer` for Settings, built on Apple's mail composer, but that composer works
+only when Apple's Mail app has an account. A `mailto:` link opens whatever mail app the learner
+uses, so the line got one, with the query in its subject and body. The simulator has no mail app
+at all, and the link's fallback (copy the address, say so for four seconds) proved itself there:
+the note appeared, and the simulator's pasteboard held the address.
+
+The keyboard work was Konjugieren's three hard-won findings, applied in order. Command-F lives in
+a top-level menu, because the system's own Find claims the shortcut anywhere else. The arrow keys
+need UIKit key commands that ask for priority, because a focused text field eats ↑ and ↓ before
+SwiftUI sees them. And the iPad search field had to accept programmatic focus, which Phase 0
+had already arranged. The one Conjugar-specific change was structural: a menu command needs the
+router that switches tabs, and that router lived inside the tab view, so the app itself now owns
+it. AXe's hardware key events drove every check on the iPad simulator: Command-F from the Quiz tab
+and from a verb page, a guess opened with Return, and "come" walked through the grid to venir.

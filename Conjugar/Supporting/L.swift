@@ -107,6 +107,34 @@ nonisolated enum L {
     static var searchNoResults: String {
       String(localized: "BrowseVerbs.searchNoResults")
     }
+
+    /// Introduces the closest verb to a query that found nothing, and says it is a guess.
+    static var guessIntro: String {
+      String(localized: "BrowseVerbs.guessIntro")
+    }
+
+    /// The line under a failed search that asks for a missing verb. The address becomes a link.
+    static func verbRequest(query: String, address: String) -> String {
+      String(localized: "BrowseVerbs.verbRequest \(query) \(address)")
+    }
+
+    static func verbRequestSubject(query: String) -> String {
+      String(localized: "BrowseVerbs.verbRequestSubject \(query)")
+    }
+
+    static func verbRequestBody(query: String) -> String {
+      String(localized: "BrowseVerbs.verbRequestBody \(query)")
+    }
+
+    /// Shown for four seconds when no email app could open the request's link.
+    static var addressCopied: String {
+      String(localized: "BrowseVerbs.addressCopied")
+    }
+
+    /// Command-F's menu item, under Verbs in iPadOS's menu bar.
+    static var findVerb: String {
+      String(localized: "BrowseVerbs.findVerb")
+    }
   }
 
   enum Difficulty {

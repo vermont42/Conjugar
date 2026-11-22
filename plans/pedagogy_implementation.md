@@ -267,6 +267,10 @@ disagree, the note wins.
 - **Folding and edit distance** (browse Phases 0 and 1): search folds ñ along with the accents,
   which is right for search and wrong for grading. Grading needs its own narrower rule (Phase 0 and
   Phase 3 here). An optimal-string-alignment distance exists for the search guess.
+  - *Landed 2026-11-22 (browse Phase 1):* `VerbSearch.editDistance(_:_:)`, over `[Character]`,
+    `nonisolated`, with insertion, deletion, substitution, and an adjacent swap each costing one.
+    It compares whatever it is given, so grading can pass unfolded, accented text. The guess,
+    `VerbSearch.closestVerb(to:in:)`, folds first and is for search only.
 - **The conjugation map** (browse Phase 4) ships in the app, with a function that answers "which
   cells of this verb equal this text", exact by default and folding accents on request. Phases 3,
   13, and 16 here call it.

@@ -166,4 +166,56 @@ import Testing
     #expect(infinitives(for: "frobnicate", in: [invented]) == ["zorglar"])
     #expect(infinitives(for: "zorglar", in: [invented]) == ["zorglar"])
   }
+
+  @Test(arguments: [
+    ("hablr", "hablar"),
+    ("tenr", "tener"),
+    ("hbalar", "hablar"),
+    ("comre", "comer"),
+    ("anadri", "añadir"),
+    ("dormri", "dormir"),
+    ("Hablr", "hablar")
+  ])
+  func guessFindsTheMisspelledVerb(query: String, expected: String) {
+    #expect(VerbSearch.closestVerb(to: query, in: Self.entries)?.infinitive == expected)
+  }
+
+  @Test(arguments: ["xyzzyq", "qqqq", "", "   "])
+  func guessOffersNothingForNonsense(query: String) {
+    #expect(VerbSearch.closestVerb(to: query, in: Self.entries) == nil)
+  }
+
+  @Test func guessPrefersTheVerbThatSharesTheQuerysBeginning() {
+    // "hablr" is one edit from both; haber is the more frequent, but hablar shares "habl".
+    let tied = Self.entries.filter { ["hablar", "haber"].contains($0.infinitive) }
+    #expect(tied.count == 2)
+    #expect(VerbSearch.closestVerb(to: "hablr", in: tied)?.infinitive == "hablar")
+    #expect(VerbSearch.closestVerb(to: "hablr", in: tied.reversed())?.infinitive == "hablar")
+  }
+
+  @Test func guessBreaksATieByFrequency() {
+    // "pagar" and "pegar" are each one edit from "pogar" and share its "p"; the more frequent wins.
+    let tied = Self.entries.filter { ["pagar", "pegar"].contains($0.infinitive) }
+    let expected = tied.min { $0.frequencyRank < $1.frequencyRank }?.infinitive
+    #expect(tied.count == 2)
+    #expect(VerbSearch.closestVerb(to: "pogar", in: tied)?.infinitive == expected)
+    #expect(VerbSearch.closestVerb(to: "pogar", in: tied.reversed())?.infinitive == expected)
+  }
+
+  @Test(arguments: [
+    ("hablar", "hablar", 0),
+    ("hablr", "hablar", 1),
+    ("hbalar", "hablar", 1),
+    ("kitten", "sitting", 3),
+    ("", "abc", 3),
+    ("abc", "", 3)
+  ])
+  func editDistanceCountsASwapAsOneEdit(lhs: String, rhs: String, expected: Int) {
+    #expect(VerbSearch.editDistance(Array(lhs), Array(rhs)) == expected)
+  }
+
+  @Test(arguments: zip([1, 4, 6, 9, 20], [1, 1, 2, 3, 3]))
+  func guessDistanceGrowsWithTheQueryAndIsCapped(length: Int, expected: Int) {
+    #expect(VerbSearch.maxGuessDistance(forQueryLength: length) == expected)
+  }
 }

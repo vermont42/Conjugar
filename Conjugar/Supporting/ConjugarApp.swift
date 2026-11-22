@@ -30,6 +30,8 @@ struct ConjugarApp: App {
   // appearance config, the UI-test-World launch-argument override, and
   // Utterer setup / became-active analytics.
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+  // Owned here rather than by MainTabView so that a menu command, such as Command-F, can route.
+  @State private var router = AppRouter()
 
   init() {
     // The TelemetryDeck app ID is kept out of the working tree: it lives in the
@@ -51,7 +53,10 @@ struct ConjugarApp: App {
 
   var body: some Scene {
     WindowGroup {
-      MainTabView()
+      MainTabView(router: router)
+    }
+    .commands {
+      VerbSearchCommands(router: router)
     }
   }
 }

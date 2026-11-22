@@ -24,6 +24,9 @@ final class AppRouter {
   var selectedTab: AppTab = .browseVerbs
   /// A verb the Verbs tab should push. `VerbBrowseView` consumes and clears it.
   var pendingVerb: String?
+  /// A one-shot request for the Verbs tab to pop to its list and focus the search field, set by
+  /// Command-F. `VerbBrowseView` consumes and clears it.
+  var pendingSearchFocus = false
   /// A one-shot request for the Quiz tab to start a quiz. `QuizView` consumes it.
   var pendingQuizStart = false
   /// Drives a full-screen `GameView` cover from `MainTabView`, tab-independent so a
@@ -93,6 +96,12 @@ final class AppRouter {
     default:
       break
     }
+  }
+
+  /// Command-F: switch to the Verbs tab, pop to its list, and focus the search field.
+  func openSearch() {
+    selectedTab = .browseVerbs
+    pendingSearchFocus = true
   }
 
   private func open(verb: String) {

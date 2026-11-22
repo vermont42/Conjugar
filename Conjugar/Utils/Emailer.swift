@@ -17,7 +17,7 @@ struct Emailer {
       return {
         let mail = MFMailComposeViewController()
         mail.mailComposeDelegate = delegāte
-        mail.setToRecipients(["vermontcoder@gmail.com"])
+        mail.setToRecipients([URL.developerEmail])
         mail.setSubject("Conjugar")
         UIApplication.topViewController()?.present(mail, animated: true)
       }

@@ -80,4 +80,12 @@ struct AppRouterTests {
     router.launchGameAfterOnboardingIfRequested()
     #expect(!router.showGame)
   }
+
+  @Test func openSearchSelectsTheVerbsTabAndAsksForFocus() {
+    let router = AppRouter()
+    router.selectedTab = .quiz
+    router.openSearch()
+    #expect(router.selectedTab == .browseVerbs)
+    #expect(router.pendingSearchFocus)
+  }
 }

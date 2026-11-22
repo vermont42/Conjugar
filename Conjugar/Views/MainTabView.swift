@@ -11,7 +11,7 @@
 import SwiftUI
 
 struct MainTabView: View {
-  @State private var router = AppRouter()
+  @Bindable var router: AppRouter
   @Environment(\.scenePhase) private var scenePhase
 
   var body: some View {

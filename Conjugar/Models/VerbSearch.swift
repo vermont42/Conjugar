@@ -61,6 +61,74 @@ nonisolated enum VerbSearch {
     }
   }
 
+  /// The verb whose folded infinitive is fewest edits from the folded query, for a search that
+  /// found nothing. On a tie, the verb that shares more of the query's beginning wins, because a
+  /// learner usually gets the start of a word right: "hablr" is one edit from haber as well as
+  /// from hablar, but shares four letters with hablar and three with haber. Then the more
+  /// frequent verb wins. Nil when no verb is near enough to be
+  /// a plausible misspelling, so that nonsense guesses nothing. The query is read as the
+  /// infinitive search reads it, so a pronominal "levantarse" is measured as levantar.
+  static func closestVerb(to query: String, in entries: some Sequence<VerbMapEntry>) -> VerbMapEntry? {
+    let foldedQuery = Array(fold(spanishQuery(from: query)))
+    guard !foldedQuery.isEmpty else {
+      return nil
+    }
+    let maxDistance = maxGuessDistance(forQueryLength: foldedQuery.count)
+    // Lower is better in every place: the distance, the letters of the query's beginning that
+    // the candidate lacks, and the frequency rank.
+    var best: (entry: VerbMapEntry, rank: (Int, Int, Int))?
+    for entry in entries {
+      let candidate = Array(keys(for: entry).foldedInfinitive)
+      guard abs(candidate.count - foldedQuery.count) <= maxDistance else {
+        continue
+      }
+      let distance = editDistance(foldedQuery, candidate)
+      guard distance <= maxDistance else {
+        continue
+      }
+      let sharedPrefix = zip(foldedQuery, candidate).prefix { $0 == $1 }.count
+      let rank = (distance, foldedQuery.count - sharedPrefix, entry.frequencyRank)
+      if let current = best, current.rank <= rank {
+        continue
+      }
+      best = (entry, rank)
+    }
+    return best?.entry
+  }
+
+  /// One edit in three letters, and never more than three, keeps a guess recognizable: hablr
+  /// finds hablar, but a four-letter query never "finds" a verb that shares one letter with it.
+  static func maxGuessDistance(forQueryLength length: Int) -> Int {
+    min(3, max(1, length / 3))
+  }
+
+  /// Optimal-string-alignment distance: insertions, deletions, substitutions, and swaps of two
+  /// adjacent letters each cost one, because a swap is the commonest slip on a keyboard (hbalar
+  /// for hablar).
+  static func editDistance(_ lhs: [Character], _ rhs: [Character]) -> Int {
+    guard !lhs.isEmpty else {
+      return rhs.count
+    }
+    guard !rhs.isEmpty else {
+      return lhs.count
+    }
+    var twoRowsBack = [Int](repeating: 0, count: rhs.count + 1)
+    var previousRow = Array(0...rhs.count)
+    var currentRow = [Int](repeating: 0, count: rhs.count + 1)
+    for i in 1...lhs.count {
+      currentRow[0] = i
+      for j in 1...rhs.count {
+        let substitutionCost = lhs[i - 1] == rhs[j - 1] ? 0 : 1
+        currentRow[j] = min(previousRow[j] + 1, currentRow[j - 1] + 1, previousRow[j - 1] + substitutionCost)
+        if i > 1, j > 1, lhs[i - 1] == rhs[j - 2], lhs[i - 2] == rhs[j - 1] {
+          currentRow[j] = min(currentRow[j], twoRowsBack[j - 2] + 1)
+        }
+      }
+      (twoRowsBack, previousRow, currentRow) = (previousRow, currentRow, twoRowsBack)
+    }
+    return previousRow[rhs.count]
+  }
+
   /// Case and every diacritic folded away, ñ to n included, so that a learner without a Spanish
   /// keyboard finds añadir by typing anadir. For matching only: never render it.
   static func fold(_ text: String) -> String {

@@ -345,6 +345,57 @@
         }
       }
     },
+    "BrowseVerbs.addressCopied" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No email app could be opened, so the address has been copied."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo abrir ninguna app de correo, así que se copió la dirección."
+          }
+        }
+      }
+    },
+    "BrowseVerbs.findVerb" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find a Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar un verbo"
+          }
+        }
+      }
+    },
+    "BrowseVerbs.guessIntro" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A guess at the verb you meant:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una conjetura sobre el verbo que buscabas:"
+          }
+        }
+      }
+    },
     "BrowseVerbs.localizedTitle" : {
       "localizations" : {
         "en" : {
@@ -445,6 +496,57 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "BrowseVerbs.verbRequest %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you believe that “%1$@” is a Spanish verb, please email %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si crees que «%1$@» es un verbo español, escribe a %2$@."
+          }
+        }
+      }
+    },
+    "BrowseVerbs.verbRequestBody %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I searched Conjugar for “%@” and believe that it is a Spanish verb."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Busqué «%@» en Conjugar y creo que es un verbo español."
+          }
+        }
+      }
+    },
+    "BrowseVerbs.verbRequestSubject %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar: please add “%@”"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar: por favor, añade «%@»"
           }
         }
       }
