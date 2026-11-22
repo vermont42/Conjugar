@@ -10144,3 +10144,38 @@ find a phase in the plans. Konjugieren's phase numbers were left as they are, so
 phase's "Ports" line now names its Konjugieren counterpart, one number higher, and the pedagogy
 plan no longer says its phases share Konjugieren's numbers. The renumbering went mention by
 mention, because a bare "Phase 16" could mean this plan's phase, the other plan's, or Konjugieren's.
+
+## Search finds what people type (2026-11-22)
+
+Phase 0 of the browse plan ported Konjugieren's search work, and the interesting part was the one
+place where Spanish refused to behave like German. Konjugieren ranks a German infinitive that
+begins with the query above an English gloss that contains it as a word, which is how "eat"
+finds essen ahead of beatmen. Applied to Conjugar, that order fails the commonest English queries
+of all, because they are also Spanish prefixes: "go" listed golpear, gobernar, and gozar above ir,
+"be" listed beber above ser, and "do" listed dormir above hacer.
+
+Before writing any Swift, a forty-line Python model over `verbModelMap.xml` tried four fixes
+against a table of queries. The candidates differed on "come", where English and Spanish collide:
+venir's gloss is exactly "come", llegar's is "arrive, come", and comer begins with it. Josh chose
+the simplest rule: a gloss sense (one comma item of a gloss) that equals the whole query ranks
+just above the infinitive prefix, and frequency settles the rest. So "come" gives llegar, venir,
+and acudir, and then comenzar and comer. The rejected alternative that put venir first also put
+two obscure verbs ahead of conducir for "drive", which is the kind of surprise a single rule with
+frequency inside it avoids.
+
+The rest followed Konjugieren closely. `VerbSearch` folds case and every accent, ñ included, but
+ranks a literal match above its folded twin, so "sonar" gives sonar and then soñar, and "anadir"
+still finds añadir. It strips the "se" of "levantarse" only when what remains looks like an
+infinitive, so "base" is searched as typed, and it searches every gloss of a homonym, so
+"station" finds apostar's second sense. One change was forced by Swift 6: Konjugieren caches each
+verb's search keys in a mutable static, which strict concurrency rejects in Conjugar's
+`nonisolated` engine, so the keys are built once into an immutable static instead.
+
+The letter row, á to ñ, replaces the sort picker while the field is focused, as in Konjugieren,
+because a keyboard toolbar never appears for a navigation-bar search field on iOS 26. Seven
+system-bordered keys overflowed an iPhone, so they got a slimmer style of their own. The iPad then
+reproduced, within a minute, a bug Konjugieren took two phases to find: a key tapped while the
+field is empty ends the search at touch-down and loses the letter. Konjugieren's fix needs the
+field to accept programmatic focus, which iPadOS 26's toolbar search button does not, so the
+drawer placement that Konjugieren adopted later came forward into this phase on iPad only. Josh
+looked at the result and kept it.

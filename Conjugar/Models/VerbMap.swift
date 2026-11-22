@@ -27,7 +27,7 @@ import Foundation
 
 /// One verb's mapping. For non-homonyms `classNumbers`/`glosses` have a single
 /// element; for the 4 homonyms they hold both senses, default sense first.
-nonisolated struct VerbMapEntry {
+nonisolated struct VerbMapEntry: Equatable {
   let infinitive: String
   let classNumbers: [String]
   let glosses: [String]

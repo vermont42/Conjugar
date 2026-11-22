@@ -48,6 +48,7 @@ Conjugar/
 │   ├── VerbModel.swift         # One regular base root plus an ordered feature list; also the alternate-paradigm scheme
 │   ├── VerbMap.swift           # VerbMapEntry + the load-once @unchecked Sendable cache over verbModelMap.xml.
 │   │                           #   ranked(_:) derives the dense 1…4,811 frequency rank from the stored counts at parse time
+│   ├── VerbSearch.swift        # The one verb-search rule: folding, -se stripping, every gloss, MatchKind ranking by kind then frequency
 │   ├── RegularRoot.swift       # The three regular roots (cantar/comer/subir) plus the voseo supplement
 │   ├── EngineTense.swift       # Engine-side tense model — the ten simple / non-finite tenses only
 │   ├── EnginePersonNumber.swift  # Engine-side person model — six standard persons plus vos
@@ -117,7 +118,7 @@ Conjugar/
 │   ├── L.swift                 # Type-safe scoped localization accessors backed by String(localized:)
 │   └── Localizable.xcstrings   # The one string catalog holding both en and es
 ├── Utils/
-│   ├── BrowseSearch.swift      # The pure filter seam shared by the Verb and Model browse screens
+│   ├── BrowseSearch.swift      # The pure filter the Models tab searches through (the Verbs tab ranks with VerbSearch)
 │   ├── Colors.swift            # Semantic palette bridging the colorsets to UIKit-facing call sites
 │   ├── Emailer.swift           # MFMailComposeViewController wrapper for the Settings feedback link
 │   ├── FontExtensions.swift    # Font.button and Font.heroNumeral
@@ -150,6 +151,7 @@ Conjugar/
 │   ├── URLProtocolStub.swift   # URLProtocol subclass for stubbing HTTP responses in tests
 │   ├── URLSessionExtension.swift  # Stubbed URLSession for testing
 │   ├── Utterer.swift           # AVSpeechSynthesizer text-to-speech plus the single .ambient audio-session owner
+│   ├── ViewControllerTransitions.swift  # Hack: waits for UIKit transitions to end, so an iPad letter key survives search dismissal
 │   └── WidgetSnapshotWriter.swift  # Picks the daily verb + quiz question, conjugates them, writes JSON to the App Group.
 │                                   #   Draws from the top verbOfTheDayPoolSize (1,000) verbs by frequency
 └── Views/
@@ -170,7 +172,8 @@ Conjugar/
     ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center, onboarding reshow, Play
     ├── TutorTestView.swift     # Batch tutor harness (~30 queries, ShareLink export); reached by triple-tapping the tutor title
     ├── TutorView.swift         # The conjugation-tutor chat screen
-    ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs; carries the browse_verb_count launch anchor
+    ├── SpanishLetterKeyRow.swift  # á é í ó ú ü ñ keys with an insert closure; replaces the Verbs sort picker while search is focused
+    ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); carries the browse_verb_count launch anchor
     └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples
 
 ConjugarWidget/
@@ -212,6 +215,7 @@ ConjugarTests/
 │   ├── ConjugatorAccessorsTests.swift  # The engine's convenience accessors
 │   ├── ConjugatorResolverTests.swift   # Verb → model resolution, incl. prefixed compounds and the regular fallback
 │   ├── VerbMapTests.swift              # verbModelMap.xml parsing and lookup
+│   ├── VerbSearchTests.swift           # Search ranking (Josh's table of queries), folding, -se stripping, every gloss of a homonym
 │   ├── VerbMapRankingTests.swift       # Rank derivation on a fixture, the shipped map's invariants, and
 │   │                                   #   line-for-line agreement with docs/frequencies.txt
 │   ├── TenseBridgeTests.swift          # DisplayTense/DisplayPersonNumber → engine mapping, compounds, negative imperative

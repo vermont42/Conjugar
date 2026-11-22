@@ -35,12 +35,15 @@ struct ModelBrowseView: View {
 
   /// Refilter for the current `searchText` + `sort`, firing the no-results sad trombone
   /// here — the one-shot search transition — instead of inside `body`. Matches the exemplar
-  /// **or** the class number case- and diacritic-insensitively (so `28` or `4B` finds a
-  /// model by its class number, `hacer` finds it by exemplar).
+  /// **or** the class number after `VerbSearch.fold`, the Verbs tab's folding, which drops case
+  /// and every diacritic, ñ included, so that a query behaves alike in both tabs (`28` or `4B`
+  /// finds a model by its class number, `hacer` by its exemplar). Unlike the Verbs tab, this one
+  /// does not rank.
   private func recomputeFilteredModels() {
     let results = BrowseSearch.results(in: models, query: searchText) { model, query in
-      model.exemplar.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
-        || model.classNumber.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
+      let foldedQuery = VerbSearch.fold(query)
+      return VerbSearch.fold(model.exemplar).contains(foldedQuery)
+        || VerbSearch.fold(model.classNumber).contains(foldedQuery)
     }
     if results.isEmpty && !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
       Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)

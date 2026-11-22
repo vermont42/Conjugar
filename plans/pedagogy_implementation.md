@@ -258,6 +258,12 @@ disagree, the note wins.
 
 - **The accent key row** (browse Phase 0): á, é, í, ó, ú, ü, and ñ, with an `insert` closure so
   this plan's answer field can insert at the cursor. Only the search field shows it.
+  - *Landed 2026-11-22 (browse Phase 0):* `Views/SpanishLetterKeyRow.swift`,
+    `SpanishLetterKeyRow(insert:)`, with `SpanishLetterKeyRow.letters`. In the verb list it takes
+    the sort picker's place while the search is focused, because a keyboard toolbar never
+    appeared for the navigation bar's search field. On iPad, a key tapped while a field is empty
+    can end that field's editing first; see the browse plan's Phase 0 note. Search folding is
+    `VerbSearch.fold`, which drops ñ's tilde, so grading must not reuse it.
 - **Folding and edit distance** (browse Phases 0 and 1): search folds ñ along with the accents,
   which is right for search and wrong for grading. Grading needs its own narrower rule (Phase 0 and
   Phase 3 here). An optimal-string-alignment distance exists for the search guess.

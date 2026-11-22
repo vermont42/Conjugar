@@ -99,8 +99,9 @@ nonisolated enum L {
       String(localized: "BrowseVerbs.verbCount \(count)")
     }
 
-    static var searchPrompt: String {
-      String(localized: "BrowseVerbs.searchPrompt")
+    /// What the field searches, which later phases extend: a conjugation is to find its verb.
+    static var searchPromptVerbOrMeaning: String {
+      String(localized: "BrowseVerbs.searchPromptVerbOrMeaning")
     }
 
     static var searchNoResults: String {

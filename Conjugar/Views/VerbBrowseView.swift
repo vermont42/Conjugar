@@ -14,6 +14,9 @@ struct VerbBrowseView: View {
   @State private var sort: VerbSort = Current.settings.verbSort
   @State private var navigationPath = NavigationPath()
   @State private var searchText = ""
+  @FocusState private var searchIsFocused: Bool
+  /// Follows `searchIsFocused`, but lets go of it a moment later. See `searchFocusChanged`.
+  @State private var searchIsEngaged = false
   @Environment(AppRouter.self) private var router
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   private let tryQuizTip = TryQuizTip()
@@ -33,18 +36,61 @@ struct VerbBrowseView: View {
   @State private var filteredVerbs: [VerbMapEntry] = Self.verbsBySort[Current.settings.verbSort] ?? []
 
   /// Refilter for the current `searchText` + `sort`, firing the no-results sad trombone
-  /// here — the one-shot search transition — instead of inside `body`. Matches infinitive
-  /// **or** gloss case- and diacritic-insensitively (so `esta` finds `está`, `have` finds
-  /// haber/tener).
+  /// here — the one-shot search transition — instead of inside `body`. An empty query lists
+  /// every verb in the chosen sort order. Otherwise `VerbSearch` ranks the matches, by kind and
+  /// then frequency, whatever the sort order.
   private func recomputeFilteredVerbs() {
-    let results = BrowseSearch.results(in: verbs, query: searchText) { entry, query in
-      entry.infinitive.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
-        || entry.gloss.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
+    let isSearching = !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    guard isSearching else {
+      filteredVerbs = verbs
+      return
     }
-    if results.isEmpty && !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+    let results = VerbSearch.matches(for: searchText, in: verbs).map(\.entry)
+    if results.isEmpty {
       Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)
     }
     filteredVerbs = results
+  }
+
+  private static let isPadOrMac = UIDevice.current.userInterfaceIdiom == .pad
+
+  // iPadOS 26 shrinks .automatic search into a toolbar button that ignores a programmatic
+  // .searchFocused, so a letter key could not reopen it. A drawer that stays put accepts it.
+  // The iPhone keeps .automatic and looks as before.
+  private var searchPlacement: SearchFieldPlacement {
+    Self.isPadOrMac ? .navigationBarDrawer(displayMode: .always) : .automatic
+  }
+
+  // Hack, ported from Konjugieren: on iPad, a tap outside an empty search field ends the search at
+  // touch-down, before the tap completes. A letter row that followed the focus vanished under the
+  // finger, so tapping á did nothing. The row follows this instead, which lets go a moment later.
+  private func searchFocusChanged() {
+    guard !searchIsFocused else {
+      searchIsEngaged = true
+      return
+    }
+    Task {
+      try? await Task.sleep(for: Self.searchLingering)
+      if !searchIsFocused {
+        searchIsEngaged = false
+      }
+    }
+  }
+
+  private static let searchLingering = Duration.milliseconds(700)
+
+  // On iPad a key's tap ends an empty search, and the search clears its text as it goes, so a
+  // letter set meanwhile is lost. The letter waits for the search to be gone, then reopens it.
+  private func insertLetter(_ letter: String) {
+    guard !searchIsFocused else {
+      searchText.append(letter)
+      return
+    }
+    Task {
+      await ViewControllerTransitions.waitUntilIdle()
+      searchText.append(letter)
+      searchIsFocused = true
+    }
   }
 
   var body: some View {
@@ -122,17 +168,34 @@ struct VerbBrowseView: View {
 
         Divider()
 
-        Picker(L.BrowseVerbs.sort, selection: $sort.animation(.snappy)) {
-          ForEach(VerbSort.allCases, id: \.self) { order in
-            Text(order.localizedDisplayName).tag(order)
+        // A keyboard toolbar never appears for the navigation bar's search field (iOS 26), so
+        // the letter row takes the sort picker's place while the field is focused, which puts
+        // it directly above the keyboard. Search ignores the sort order, so the picker has
+        // nothing to do meanwhile.
+        if searchIsEngaged {
+          SpanishLetterKeyRow { letter in
+            insertLetter(letter)
           }
+          .padding(.vertical, Layout.defaultSpacing)
+        } else {
+          Picker(L.BrowseVerbs.sort, selection: $sort.animation(.snappy)) {
+            ForEach(VerbSort.allCases, id: \.self) { order in
+              Text(order.localizedDisplayName).tag(order)
+            }
+          }
+          .pickerStyle(.segmented)
+          .readingWidth()
+          .padding()
         }
-        .pickerStyle(.segmented)
-        .readingWidth()
-        .padding()
       }
       .background(Color.customBackground.ignoresSafeArea())
-      .searchable(text: $searchText, prompt: L.BrowseVerbs.searchPrompt)
+      .searchable(text: $searchText, placement: searchPlacement, prompt: L.BrowseVerbs.searchPromptVerbOrMeaning)
+      .searchFocused($searchIsFocused)
+      .onChange(of: searchIsFocused) {
+        searchFocusChanged()
+      }
+      .textInputAutocapitalization(.never)
+      .autocorrectionDisabled()
       .sensoryFeedback(.selection, trigger: sort)
       .navigationTitle(L.BrowseVerbs.localizedTitle)
       .navigationDestination(for: String.self) { verb in

@@ -377,18 +377,18 @@
         }
       }
     },
-    "BrowseVerbs.searchPrompt" : {
+    "BrowseVerbs.searchPromptVerbOrMeaning" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Search verbs"
+            "value" : "Verb or English meaning"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Buscar verbos"
+            "value" : "Verbo o significado en inglés"
           }
         }
       }

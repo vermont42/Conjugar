@@ -2,10 +2,10 @@
 //  BrowseSearch.swift
 //  Conjugar
 //
-//  The one piece the Verb and Model browse screens genuinely share: filter the
-//  current items by the query, returning everything when the query is empty. Each
-//  screen keeps its own `matches` closure, so the rest of its view stays
-//  self-contained. A **pure** function: the no-results sad trombone is now
+//  Filter the current items by the query, returning everything when the query is
+//  empty. The Models tab filters through it with its own `matches` closure. The Verbs
+//  tab, which ranks its matches, has used `VerbSearch` instead since 2026-11-22; the two
+//  share only `VerbSearch.fold`. A **pure** function: the no-results sad trombone is now
 //  fired by the caller from an `.onChange` handler — the one-shot search transition —
 //  rather than as a side effect of view evaluation, so it can't re-fire on unrelated
 //  re-renders.

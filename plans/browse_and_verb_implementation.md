@@ -25,7 +25,7 @@ session, which reads the hash from `git log` once Josh's commit exists.
 
 | Phase | Status | Date | Commit | Ideas |
 |---:|---|---|---|---|
-| 0 | Not started | | | A1, A2, A3, A8 |
+| 0 | Awaiting Josh | 2026-11-22 | | A1, A2, A3, A8 |
 | 1 | Not started | | | A4, C4 |
 | 2 | Not started | | | Signals |
 | 3 | Not started | | | B2 (the reflexive analog) |
@@ -278,7 +278,7 @@ The IDs are Konjugieren's, from its ideas document, so its reasoning can be foun
 ## Phase 0: Search Finds What People Type
 
 **Ideas:** A1, A2, A3, A8. **Ports:** Konjugieren Phase 1. **Depends on:** nothing. **Status:**
-Not started.
+Awaiting Josh (2026-11-22).
 
 - **A1, folding.** Conjugar already folds case and every diacritic. Keep that, but rank a literal
   match above a folded one, so that "sonar" gives sonar before soñar, and "anadir" still finds
@@ -334,7 +334,60 @@ first, and let him choose before writing the tests that pin it.
 its folded twin, every gloss of a homonym is searched, the key row inserts into the field, and
 tests pin each case.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **The ranking (Josh, 2026-11-22).** Josh saw four candidate orders as a table and chose one new
+  kind above the infinitive prefix: a gloss *sense* equal to the whole query, where a sense is a
+  comma item, so llegar's "arrive, come" counts for "come". The order, in
+  `VerbSearch.MatchKind`, is exact infinitive, exact after folding, exact gloss sense, infinitive
+  prefix, whole-word gloss, infinitive substring, folded prefix, folded substring, gloss
+  substring; within a kind, frequency decides. What each table query gives first: go → ir; be →
+  ser, estar; do → hacer; come → llegar, venir, acudir, then comenzar, comer; have → tener,
+  haber; see → ver; ver → ver; comer → comer; sonar → sonar, soñar; levantarse → levantar; to go
+  → ir; drive → conducir. He turned down three alternatives: a whole gloss ahead of a sense (venir
+  before llegar, but rare arrear and aballar before conducir for "drive"), a whole gloss only
+  (llegar falls below every come- prefix), and every whole-word gloss above the prefix (English
+  wins outright, so "be" gives gustar and nacer before beber and comer sinks below provenir).
+  `VerbSearchTests.chosenFirstResults` pins the table.
+- **What the code looks like.** `VerbSearch` (`Models/`, `nonisolated`) owns the matching:
+  `matches(for:in:)` returns one `Match` (entry plus kind) per verb. It caches each verb's
+  lowercased, folded, and split keys once, in a static built from `VerbMap.shared`, because a
+  mutable static cache like Konjugieren's is an error under strict concurrency. `VerbMapEntry`
+  became `Equatable` so that `Match` could be. The Verbs tab no longer goes through
+  `BrowseSearch`; the Models tab still does, now matching through `VerbSearch.fold`.
+- **Pronominal queries.** Besides "levantarse" and "se levantar", "levantar(se)" also searches for
+  levantar, since some word lists write it that way. The gloss side keeps the query as typed, so
+  "sparse" still finds a gloss while its Spanish side is "spar".
+- **The letter row** is `SpanishLetterKeyRow`, seven keys with an `insert` closure. Seven
+  `.bordered` keys would overflow an iPhone, so the keys use a private tinted rounded-rectangle
+  style, 40 points square. Each letter is tagged Spanish (`languageIdentifier = "es"`) so
+  VoiceOver says eñe. As in Konjugieren, it replaces the sort picker while the field is focused.
+- **The iPad drawer came forward from Phase 1, for a different reason.** On "Conjugar iPad Pro
+  11" the key row did appear when the toolbar search button was tapped. But a key tapped while
+  the field was empty ended the search at touch-down, and the letter was lost: Konjugieren's
+  later finding. Its fix sets the letter after the search is gone and then refocuses the field,
+  which needs programmatic focus, and iPadOS 26's `.automatic` search ignores that. So iPad and
+  Mac now use `.navigationBarDrawer(displayMode: .always)`, a field under the title, and the
+  iPhone keeps `.automatic`. Ported with it: the 700 ms lingering `searchIsEngaged` and
+  `Utils/ViewControllerTransitions.swift`. Josh approved the iPad layout on 2026-11-22, from
+  `docs/screenshots/20261122-123044-p0-ipad-drawer-resting.png`. Phase 1 should not redo the
+  drawer; it still owns Command-F, Return, and the arrow keys.
+- **The placeholder** is "Verb or English meaning" / "Verbo o significado en inglés", under the
+  renamed key `BrowseVerbs.searchPromptVerbOrMeaning`. Phase 5 should extend it.
+- **What was tried where.** iPhone, English, light: the "come" table row, the picker returning
+  when the field lost focus, and the ñ key turning "a" into "añ" with añadir first. iPad, Spanish,
+  dark, regular width: the toolbar search, the empty-field key loss, then after the fix the
+  resting drawer and á typed into an empty field with the search reopened. The software keyboard
+  never showed, because the simulators have a hardware keyboard attached, so the row sat above
+  the tab bar rather than the keyboard. Konjugieren checked that placement on the keyboard.
+- **Autocorrection and autocapitalization** are off in code (`.autocorrectionDisabled()`,
+  `.textInputAutocapitalization(.never)`). They could not be checked on a device with an English
+  keyboard.
+- **Tests.** The 18 tests of `VerbSearchTests` (41 cases with the parameterized ones) and the
+  whole suite pass: 611 Swift Testing tests in 32 suites, plus the XCTest suites. The simulator
+  language was English, so no `-testLanguage` was needed.
+- **A data glitch noticed, not fixed:** one gloss in `verbModelMap.xml` reads "wrinkle (brow",
+  with no closing parenthesis.
 
 ## Phase 1: When Search Finds Nothing, and Keyboard Lookup
 
