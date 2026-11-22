@@ -32,6 +32,16 @@ have a subject and a predicate. Start a new sentence instead; that is usually be
 often, a semicolon is appropriate. (Older entries in `docs/blog_notes.md` predate this rule
 and are left as they are.)
 
+## No Release Before 2027
+
+Josh cannot release Conjugar, Conjuguer, or Konjugieren from his present MacBook until he replaces
+it in 2027 (2026-11-10). Work accumulates on `master`. Do not sequence work around a near release,
+or count on shipping a fix or a signal in order to learn from it. When work leaves a task for
+release time, write it down rather than doing it. A release-day step, such as an App Store Connect
+step or a check on a device, goes in [`docs/release.md`](docs/release.md). A privacy-policy line
+goes in `docs/privacy_policy_pending.md`, which Phase 2 of
+`plans/browse_and_verb_implementation.md` creates. Remove this section when the constraint lifts.
+
 ## Build and Test Commands
 
 This is an Xcode project (project `Conjugar.xcodeproj`, scheme `Conjugar`). Build and
@@ -80,6 +90,9 @@ swiftlint
 > and unset it to return to the published copy. `take_screenshots.sh` honors a pre-set
 > `IBV_SCRIPTS` too, so one export covers both.
 
+The skill builds, tests, and runs on Conjugar's own simulator, "Conjugar iPhone 17" (see **Running
+the App in the Simulator** for the project's simulators and the iPad override).
+
 The skill also drives the running app in the simulator (launch, tap, screenshot, verify)
 — see **Running the App in the Simulator** below. Its full operation surface is documented
 in `$IBV_SCRIPTS/../SKILL.md`.
@@ -89,8 +102,8 @@ in `$IBV_SCRIPTS/../SKILL.md`.
 > work directly. Prefer the skill scripts so future sessions exercise them.
 >
 > ```bash
-> xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' build
-> xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/ConjugatorTests/oirPresent\(\)
+> xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=Conjugar iPhone 17' build
+> xcodebuild -project Conjugar.xcodeproj -scheme Conjugar -destination 'platform=iOS Simulator,name=Conjugar iPhone 17' -parallel-testing-enabled NO test -only-testing:ConjugarTests/ConjugatorTests/oirPresent\(\)
 > ```
 
 > **`-only-testing:` format — the suite is mixed.** The path is `Target/Suite/method`. Do **not** include filesystem subdirectories (`Models/`, `Utils/`). The engine suites (`ConjugatorTests`, `ConjugatorAccessorsTests`, `ConjugatorResolverTests`, `VerbMapTests`, `TenseBridgeTests`) the migrated service suites (`SettingsTests`, `GetterSetterRealTests`, `ReviewPrompterRealTests`, `GameCenterFakeTests`), and the SwiftUI-migration suites (`InfoTests`, `ConjugationTextTests`, `QuizTests`, `SettingsViewTests`) use **Swift Testing**, so a method name must end in `()` (e.g. `oirPresent()`, shell-escaped as `oirPresent\(\)`) — omitting it makes xcodebuild silently run zero tests. The handful of older suites still on **XCTest** (`ConjugationResultTests`, `DisplayTenseTests`, `DisplayPersonNumberTests`, `IntExtensionTests`, `RatingsFetcherTests`) take method names with **no** parentheses (e.g. `testFetchRatings`). New tests should be Swift Testing; see **Testing** below.
@@ -111,6 +124,30 @@ S="$IBV_SCRIPTS"                  # resolved once per session — see Build and 
 "$S/tap_tab.sh" settings          # tap a main-tab by name (browse | models | quiz | info | settings)
 "$S/describe_ui.sh" --point 200,540   # inspect the element under a logical-points coordinate
 ```
+
+### Conjugar's own simulators
+
+Conjugar has dedicated iOS 26.3 simulators (2026-11-22), cloned from the device types it always
+used, so layouts and tab coordinates hold. They let a Conjugar session and a Conjuguer session run
+at the same time without colliding.
+
+- **"Conjugar iPhone 17"**, `6318CA93-7FB5-4E19-B318-915010531F76`, the default target:
+  `.claude/ios-build-verify.config.sh` sets `TARGET_SIM="${TARGET_SIM:-Conjugar iPhone 17}"`.
+- **"Conjugar iPad Pro 11"** (an iPad Pro 11-inch (M5)), `3033197E-B596-4C49-AAD8-43373B9D254C`.
+  Prefix a script to use it: `TARGET_SIM="Conjugar iPad Pro 11" "$S/launch_app.sh"`. `tap_tab.sh`
+  uses the config's iPhone coordinates, so on the iPad tap by identifier (`tap_id.sh`) or by
+  `describe_ui.sh` frames. Boot it only for an iPad check and shut it down afterward
+  (`xcrun simctl shutdown 3033197E-B596-4C49-AAD8-43373B9D254C`).
+- **Never use** "Conjuguer iPhone 17" or "Conjuguer iPad Pro 11" (Conjuguer's), or the plain
+  "iPhone 17" and "iPad Pro 11-inch (M5)" (kept for Konjugieren and other work).
+- **Name the UDID in every `simctl` command.** With several simulators booted, `simctl openurl
+  booted` reaches the wrong one.
+- **If a simulator hangs, ask Josh before restarting CoreSimulator** (`killall -9
+  com.apple.CoreSimulator.CoreSimulatorService`), because that stops every simulator, Conjuguer's
+  included.
+
+The App Store screenshot scripts (`scripts/take_screenshots.sh`, `scripts/prep_screenshot_sim.sh`)
+choose their own capture devices; see `docs/screenshot_playbook.md`.
 
 ### Project config for `ios-build-verify`
 
@@ -139,7 +176,7 @@ The app registers the **`conjugar://`** URL scheme (`Conjugar/Info.plist`), rout
 navigation — it cold-launches the app and routes on arrival:
 
 ```bash
-UDID=$(xcrun simctl list devices booted -j | python3 -c "import sys,json;print(json.load(sys.stdin)['devices'].popitem()[1][0]['udid'])")
+UDID=6318CA93-7FB5-4E19-B318-915010531F76   # Conjugar iPhone 17; never `booted` with several simulators up
 xcrun simctl openurl "$UDID" conjugar://game            # → full-screen game (Settings ▸ Play, skipped)
 xcrun simctl openurl "$UDID" conjugar://game/boss       # → jump straight to the boss fight (La Llamada)
 xcrun simctl openurl "$UDID" conjugar://quiz/start      # → Quiz tab, starts a quiz

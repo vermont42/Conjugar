@@ -10056,3 +10056,91 @@ its files by their old names, in thirteen places. Conjuguer had written its own 
 then, though its renames were not yet committed, and the thirteen lines were updated from it. One
 more line was found only by searching for each old filename on its own, because it named
 Konjugieren's `docs/bratwurst-icon-prompts.md` with the app's name on the line above.
+
+## Two plans ported from Konjugieren: browse and pedagogy (2026-11-22)
+
+Konjugieren finished two long plans in November: one rebuilt its Verbs and Families tabs, the
+other rebuilt its quiz around practice rather than examination. Josh asked for Conjugar versions of
+both, written in one session because each informs the other. They are
+`plans/verb_and_browse_implementation.md` (17 phases) and `plans/pedagogy_implementation.md` (24
+phases), meant for fresh sessions that mark their phases done and record how each differed.
+
+The method was to read Konjugieren's two plans in full, including every "How it differed" note, and
+then read Conjugar's code to see where Spanish or the app's history changes the answer. The notes
+mattered more than the phase texts. They record things that only trying the app revealed: a keyboard
+toolbar that never appears for a navigation-bar search field on iOS 26, a `ShareLink` that reports
+no tap, recents that vanished under the finger on iPad, a re-ask that leaked a count of wrong
+answers through `questionNumber`. Each Conjugar phase carries a "From Konjugieren" list of these.
+
+Several findings came from Conjugar's own code. Konjugieren's final search ranking puts an
+infinitive prefix above a whole-word English gloss, which would bury ir, ser, estar, and hacer under
+the 39 Spanish infinitives that begin with "go", "be", or "do", so the browse plan's first phase
+asks Josh to choose a ranking from a table of real queries. The verb map flags 114 reflexive-only
+verbs that the UI never reads, so arrepentir's page conjugates "arrepiento"; the browse plan proposes
+showing them with their pronouns as the Spanish analog of Konjugieren's separable verbs. The search
+reads only a homonym's first gloss. In the quiz, the tú setting never asks a regular tú imperative or
+any tú negative imperative, imperative questions show "él" where usted is asked, and the Info tab's
+filter shares the quiz's `Difficulty` enum, which the levels phase must untangle. Unlike Konjugieren,
+Conjugar's policy already discloses the quiz score, so whether to keep sending it is an open
+question rather than a settled rule.
+
+The cross-plan decision with the most reach is which conjugations count as a verb's key
+conjugations. The browse plan needs them for sharing and the review card; the pedagogy plan builds
+its practice record and an exercise on them. The plans recommend four (tengo, tuve, tendré, tenido),
+one per stem a family of tenses is built on, and leave the choice to Josh before either plan depends
+on it. Konjugieren also taught that the review card's per-verb schedule would later be folded into
+the practice record and restricted to irregular verbs, so the browse plan suggests building it that
+way from the start.
+
+Nothing was built and the simulator was not launched; the session read code, data, and Konjugieren's
+documents.
+
+Later the same day, Josh had the browse plan renamed to `plans/browse_and_verb_implementation.md`,
+the name Konjugieren's plan has.
+
+Josh then accepted every recommendation in both plans' open questions, and they were folded into
+the phases as decisions dated 2026-11-22: reflexive-only verbs and the periphrasis article are
+built, the key conjugations are four, the review card and its schedule cover irregular verbs only,
+collections and quiz draws come from the engine with `VerbFamilies` kept as a test oracle, `score`
+stays only on the default quiz's ranked round while duration bands replace `elapsedTime`, the
+levels migrate Easy, Moderate, and Difficult to Levels 2, 3, and 4, practice sets move to the end,
+and the -ra and -se forms stay apart. Each plan now lists these under "Decided for Conjugar".
+
+## Conjugar gets simulators of its own (2026-11-22)
+
+Josh is about to run the browse plan in Conjugar and in Conjuguer at once, and both sessions need
+an iPhone and an iPad simulator. The Conjuguer session cloned four iOS 26.3 simulators from the
+device types the projects already use, two per project, so layouts and the hand-measured tab
+coordinates still hold: "Conjugar iPhone 17" and "Conjugar iPad Pro 11" here, and a matching pair
+for Conjuguer. The plain "iPhone 17" and "iPad Pro 11-inch (M5)" stay with Konjugieren.
+
+`.claude/ios-build-verify.config.sh` now defaults `TARGET_SIM` to "Conjugar iPhone 17", and a
+`build_app.sh` run confirmed that the name resolves as a destination. The iPad is reached by
+prefixing a script with `TARGET_SIM="Conjugar iPad Pro 11"`. Both plans' finishing steps and
+`CLAUDE.md` now name the two devices and their UDIDs, and they replace the earlier advice to borrow
+another device when one is busy. They also carry the rules that keep two projects from colliding
+on one Intel Mac: tap the iPad by identifier, since `tap_tab.sh` knows only the iPhone's
+coordinates; name the UDID in every `simctl` command, since `openurl booted` picks any booted
+device; boot the iPad only for its check; and ask Josh before restarting CoreSimulator, which
+would stop Conjuguer's simulators too. `CLAUDE.md`'s deeplink snippet had looked up the UDID of
+the first booted device, which is exactly that trap, so it now names the Conjugar iPhone.
+
+## Release-day steps get their own document (2026-11-22)
+
+The Conjuguer session added a "No Release Before 2027" section to Conjugar's `CLAUDE.md` at Josh's
+request, ahead of the browse plan's Phase 3. As first written, it sent App Store Connect steps to
+`docs/privacy_policy_pending.md`, a file named for staged policy lines. Josh chose to keep the two
+apart, as Konjugieren does: release-day steps of every other kind go in a new `docs/release.md`
+(Before Submitting, On Release Day, Afterward), whose only entry so far is to apply the staged
+policy lines, and the policy lines stay in the pending file Phase 3 creates. `CLAUDE.md`, both
+plans, and `docs/project_structure.md` now say so, and Phase 3 only checks the section's wording.
+
+## Both plans now start at Phase 0 (2026-11-22)
+
+Conjuguer's browse plan starts with a Phase 0, so Josh had Conjugar's two plans renumbered to start
+there too: the browse plan now runs from Phase 0 to Phase 16 and the pedagogy plan from Phase 0 to
+Phase 23. The journal entries above, written earlier today, use the old numbers; subtract one to
+find a phase in the plans. Konjugieren's phase numbers were left as they are, so each Conjugar
+phase's "Ports" line now names its Konjugieren counterpart, one number higher, and the pedagogy
+plan no longer says its phases share Konjugieren's numbers. The renumbering went mention by
+mention, because a bare "Phase 16" could mean this plan's phase, the other plan's, or Konjugieren's.

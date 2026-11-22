@@ -271,6 +271,8 @@ docs/                           # Claude's output that holds information and is 
 ├── privacy_policy3.txt         # The published privacy policy (English + Spanish) — update it when signals change
 ├── app_description.txt         # App Store descriptions: the 2.8 text and the 3.0 rewrite, English and Spanish
 ├── release_notes.txt           # App Store release notes, newest version first
+├── release.md                  # The 2027 release: every step left for release day (App Store Connect, device checks,
+│                               #   applying docs/privacy_policy_pending.md). CLAUDE.md § No Release Before 2027 points here
 ├── rae_reply_draft.md          # Draft reply to the CORPES coordinator, who could not find the credit in the shipped app
 ├── etymology_pipeline.md       # How the etymologies were generated, a batch per session, English and Spanish.
 │                               #   The work-list is exhausted; kept as the recipe
@@ -327,6 +329,8 @@ prompts/                        # What Josh writes to get Claude to do something
 ├── settings_view.md            # Redesign SettingsView; borrow Conjuguer's start-button animation
 ├── sound.md                    # Plan the game's sound and music (→ plans/game_sound_music.md)
 ├── tips.md                     # Port Conjuguer's TipKit tips
+├── two_plans.md                # Port Konjugieren's browse and pedagogy plans to Conjugar
+│                               #   (→ plans/browse_and_verb_implementation.md, plans/pedagogy_implementation.md)
 ├── ui.md                       # Migrate to SwiftUI by way of the siblings' UI audits (→ plans/ui.md)
 ├── widget_update.md            # Add etymologies and example uses to the large widget
 └── widgets.md                  # Port Conjuguer's widgets
@@ -381,6 +385,12 @@ plans/                          # What Claude writes to get another session to d
 ├── game_sound_music.md                    # Game SFX and music integration
 ├── wire_game_music.md                     # Swapping in the three purchased Pond5 tracks
 ├── end_scene.md                           # The end-scene slideshow, in two phases: images, then game
+├── browse_and_verb_implementation.md      # Verbs and Models tabs: search ranking, reverse lookup, the conjugation map,
+│                                          #   section order, related verbs, share, Spotlight, My Verbs, review card, collections.
+│                                          #   Ported from Konjugieren's browse plan; 17 phases, run before the pedagogy plan
+├── pedagogy_implementation.md             # The quiz rebuilt for practice: grading, levels, ten-question rounds, a practice
+│                                          #   record, diagnosis, new exercises, hub, streak, achievements. Ported from
+│                                          #   Konjugieren's pedagogy plan; 24 phases
 └── end_scene_images/                      # What produced the two end-scene portraits, for exact regeneration:
     ├── toreros.txt, familia.txt           #   the image prompts (reference order is in the plan)
     └── recolor_suit.py                    #   the pixel-only navy → royal-blue suit recolor applied to the La familia winner
