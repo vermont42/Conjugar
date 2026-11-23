@@ -22,7 +22,7 @@ Conjugar goes deeper than a conjugation table.
 - More than 2,100 quotations from medieval Spanish texts, including the Poema de mio Cid and the Libro de buen amor, with translations, showing the verbs as they were written in the 1200s and 1300s.
 
 QUIZ AND GAME CENTER
-A ten-question quiz in four levels, from the presente, commands, and the 100 most used verbs to every tense and every verb, with ten more whenever you want them. A missed question comes back once, a few questions later. Or choose your own quiz: any tenses, and the verbs to ask, from the most frequent verbs to a pattern such as the -go verbs or a single model. Scored, with an optional clock, and with your results reported to Game Center leaderboards.
+A ten-question quiz in four levels, from the presente, commands, and the 100 most used verbs to every tense and every verb, with ten more whenever you want them. A missed question comes back once, a few questions later. Or choose your own quiz: any tenses, and the verbs to ask, from the most frequent verbs to a pattern such as the -go verbs or a single model, and share it with a class as a link or a QR code. Scored, with an optional clock, and with your results reported to Game Center leaderboards.
 
 ASK THE TUTOR
 A Spanish conjugation tutor that runs entirely on your device. Ask how a tense works or how a verb is conjugated, and get an answer grounded in Conjugar's own conjugation engine. Nothing you type leaves your iPhone or iPad. Requires a device with Apple Intelligence enabled.
@@ -64,7 +64,7 @@ Conjugar va más allá de una tabla de conjugación.
 - Más de 2.100 citas de textos medievales españoles, entre ellos el Poema de mio Cid y el Libro de buen amor, con traducción, que muestran los verbos tal como se escribían en los siglos XIII y XIV.
 
 TEST Y GAME CENTER
-Un test de diez preguntas en cuatro niveles, del presente, el imperativo y los 100 verbos más usados a todos los tiempos y todos los verbos, con diez más cuando quieras. Una pregunta fallada vuelve una vez, unas preguntas después. O elige tu propio test: cualquier tiempo y los verbos que quieras, de los verbos más frecuentes a un patrón como los verbos en -go o un solo modelo. Puntuado, con un reloj opcional y con tus resultados publicados en las tablas de clasificación de Game Center.
+Un test de diez preguntas en cuatro niveles, del presente, el imperativo y los 100 verbos más usados a todos los tiempos y todos los verbos, con diez más cuando quieras. Una pregunta fallada vuelve una vez, unas preguntas después. O elige tu propio test: cualquier tiempo y los verbos que quieras, de los verbos más frecuentes a un patrón como los verbos en -go o un solo modelo, y compártelo con una clase como enlace o código QR. Puntuado, con un reloj opcional y con tus resultados publicados en las tablas de clasificación de Game Center.
 
 PREGUNTA AL TUTOR
 Un tutor de conjugación que funciona por completo en tu dispositivo. Pregúntale cómo funciona un tiempo verbal o cómo se conjuga un verbo, y obtén una respuesta basada en el propio motor de conjugación de Conjugar. Nada de lo que escribas sale de tu iPhone o de tu iPad. Requiere un dispositivo con Apple Intelligence activado.

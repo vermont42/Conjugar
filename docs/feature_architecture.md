@@ -114,6 +114,7 @@ a model's key names the model.
 | `lookup` | Yes | The Look Up a Verb shortcut: for `viewVerbView`, the page it opened when one verb answered; for `finishSearch`, the search it opened otherwise |
 | `model` | Yes | A verb row on a model's page, in the Models tab or reached from a verb page's pill |
 | `myVerbs` | Yes | A row of My Verbs, the verb list's third segment; for the quiz signals, a quiz over My Verbs begun from the Quiz tab |
+| `qrCode` | Yes | `viewPracticeSet` and the quiz signals: a practice set opened from its QR code |
 | `quickAction` | Yes | `finishSearch` only: a search begun from the Find a Verb Home Screen quick action |
 | `quizCorrection` | Yes | A link on a quiz's held correction: for `viewVerbView`, the verb's page; for `viewCollection`, its model's page |
 | `recent` | Yes | A recent verb, listed while the search field is focused and empty |
@@ -122,7 +123,7 @@ a model's key names the model.
 | `reviewCard` | Yes | The review card above the verb list, tapped after its reveal |
 | `search` | Yes | A result of a search that found something |
 | `searchGuess` | Yes | The closest verb offered by a search that found nothing |
-| `sharedLink` | Yes | `viewCollection`: a collection's shared link, which carries `source=sharedLink` |
+| `sharedLink` | Yes | `viewCollection`: a collection's shared link, which carries `source=sharedLink`. `viewPracticeSet` and the quiz signals: a practice set's shared link |
 | `shortcut` | Yes | Open Random Verb run from the Shortcuts app or Siri (`OpenRandomVerbIntent`, offered as the Random Verb shortcut) |
 | `spotlight` | Yes | A tap on a verb's Spotlight entry |
 | `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included. The quiz signals: a quiz over every verb begun with the Quiz tab's Start. `viewCollection`: a collection or a model opened from the Models tab's list |
@@ -412,7 +413,8 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
 | `verb` | An infinitive, bare or with "se" (`arrepentirse` opens arrepentir), or `random` (drawn by `VerbDraw`; see [The Verb of the Day and Random Verbs](#the-verb-of-the-day-and-random-verbs)) | `source`; `match`, a form the page marks as it marks a search's match (`verb/ir?match=fue`) | The Verbs tab's verb page, scrolled to the first marked card |
 | `search` | None | `q`, the text; `source` | The Verbs tab's list with its search field. With text, the results show with the keyboard down; with none, or `q` empty, the field is cleared and focused for typing |
 | `info` | A `stableKey`, or a position in `Info.infos` | None | The Info tab, with the article pushed |
-| `quiz` | Any, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals |
+| `quiz` | Any but `set`, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals |
+| `quiz` | `set` | A custom quiz's stored form (`tenses`, and `verbs` or `infinitives`); `level`, while a part is left to it; `source`, `sharedLink` or `qrCode` | A practice set in a sheet over whatever tab is open, with Start (see [Practice sets](#practice-sets)). A link that names nothing this version knows shows "Practice Set Not Found" |
 | `game` | None, `boss`, or `end` | None | The game, full screen over any tab (see `docs/game.md`) |
 | `list` | A collection's key (`top100`, `goVerbs`, `model-31`, `model-4B`; see [Collections](#collections)) | `source`; a shared collection sends `sharedLink` | The Models tab, with the collection's page pushed, or for a model the model's page. An unknown key, or an alias class's (`model-31-1`), is ignored |
 
@@ -427,18 +429,19 @@ reordered, so app code always builds the key (`Info.info(deeplinkTarget:)`). The
 cross-references go by heading inside `InfoView`, since they never leave it.
 
 **A link replaces what another left pending:** a verb link clears a pending search and a search
-link a pending verb, so the last link wins on a cold launch.
+link a pending verb, so the last link wins on a cold launch. Any link but a practice set's clears a
+pending practice set, whose sheet would otherwise hide what the link opened.
 
 ### Architecture
 
 | File | Purpose |
 |------|---------|
 | `Utils/URLExtension.swift` | The grammar's constants (routes, query-item names), `isDeeplink`, `deeplinkTarget`, `deeplinkQueryValue(named:)`, `analyticsSource`, and the builders |
-| `Views/AppRouter.swift` | `handle(url:)` parses a link and sets the tab and a one-shot request: `pendingVerb` (with its marks), `pendingSearch` (a `SearchRequest`: text and source), `pendingInfo`, `pendingQuizStart`, or the game's flags. `openSearch(text:source:)` is the search route's effect, which Command-F, the control, and the quick action share. `AppRouter.shared` is the one instance, so that the quick action's scene delegate can reach it |
+| `Views/AppRouter.swift` | `handle(url:)` parses a link and sets the tab and a one-shot request: `pendingVerb` (with its marks), `pendingSearch` (a `SearchRequest`: text and source), `pendingInfo`, `pendingQuizStart`, `pendingPracticeSet` (a `PracticeSetRequest`), or the game's flags. `openSearch(text:source:)` is the search route's effect, which Command-F, the control, and the quick action share. `AppRouter.shared` is the one instance, so that the quick action's scene delegate can reach it |
 | `Views/VerbBrowseView.swift` | Consumes `pendingVerb` and `pendingSearch` with `onChange(initial: true)`, since a link can arrive before the tab first appears. A search request pops to the list first, waiting out the pop before it focuses |
 | `Views/InfoBrowseView.swift` | Consumes `pendingInfo` the same way |
 | `Views/ModelBrowseView.swift` | Consumes `pendingCollection` (a `CollectionRequest`: collection and source) the same way, pushing it onto the Models tab's stack |
-| `Views/MainTabView.swift` | Receives URLs via `.onOpenURL`, and drains a control's pending link from the shared defaults when the scene becomes active |
+| `Views/MainTabView.swift` | Receives URLs via `.onOpenURL`, and drains a control's pending link from the shared defaults when the scene becomes active. Shows a practice set's sheet through `AppRouter.presentablePracticeSet`, which holds the set back while the onboarding tour or the game covers the tabs |
 | `Supporting/QuickAction.swift` | The Home Screen quick action and the scene delegate that receives it (below) |
 
 ### Examples
@@ -452,6 +455,8 @@ conjugar://search?source=control                → the verb list with an empty,
 conjugar://info/voseo                           → the Voseo article
 conjugar://info/1                               → the article at position 1 (Terminology, today)
 conjugar://quiz/start                           → the Quiz tab, a quiz started
+conjugar://quiz/set?tenses=preterito&verbs=goVerbs&source=sharedLink
+                                                → a practice set: the -go verbs in the pretérito
 conjugar://list/goVerbs?source=sharedLink       → the Models tab, the -go verbs' page
 conjugar://list/model-31                        → the Models tab, tener's model page
 ```
@@ -908,15 +913,53 @@ Start and never the default.
 - **Never ranked**, with Ten More, a Live Activity (it runs on the tab, so a collection choice starts
   one too), and the tip donation, like any round.
 
+### Practice sets
+
+A custom quiz can be shared as a link or a QR code, so that a teacher can hand a class one practice
+set without accounts or a server. While Start is enabled, the Custom segment shows Share beside
+Change, a menu of Share Link (the system share sheet with a summary, the set's `conjugar://` link,
+and the App Store link; there is no web domain, so no universal link) and Show QR Code
+(`PracticeSetQRView`, full screen). Both are in `Views/PracticeSetView.swift`; the set is
+`PracticeSet` (`Models/PracticeSet.swift`) and the code `QRCode` (`Utils/QRCode.swift`, Core
+Image, made on the device).
+
+- **The link** is `conjugar://quiz/set?` followed by the custom quiz's stored form, then `level`
+  and `source`. `PracticeSetTests` pins its form, since shared links outlive the version that made
+  them.
+- **A shared My Verbs carries its verbs**, as `QuizVerbSet.list`, since the opener's My Verbs are
+  their own. It travels as `infinitives=tener,a%C3%B1adir` in place of `verbs`, so that an
+  infinitive is never read as a set's key, and holds at most `PracticeSet.maximumListCount` (100)
+  verbs, which keeps a projected code coarse enough to scan. An empty My Verbs leaves the verbs to
+  the level. The editor lists a kept list only while it is the choice, since nothing there builds
+  one. A link naming `verbs=myVerbs` drops that part.
+- **The level travels only while a part is left to it**, so that every student is asked the same
+  tenses and verbs whatever their own level. `QuizScope.level` asks at it without touching the
+  learner's setting.
+- **The length does not travel.** Every set is a round of ten, then Ten More.
+- **Opening a set** shows `PracticeSetView` in a sheet over whatever tab is open, page-sized on
+  iPad. It never starts a quiz unasked. Start runs the quiz in a `QuizSheet` over it, never ranked
+  and with no Live Activity (`QuizScope.isPracticeSet`). Keep as My Custom Quiz replaces the
+  learner's custom quiz, only when tapped; a kept set asks the learner's own level for any part left
+  to the level. A list's verbs show as chips, as My Verbs' do.
+- **A link that names nothing** this version knows shows "Practice Set Not Found" with a line that
+  the link may be cut short or need a newer app. Unknown keys, unknown infinitives, and an unknown
+  level are dropped and the rest kept.
+- **The QR view** draws dark modules on white in both appearances, since some scanners misread a
+  light-on-dark code, keeps the screen awake, and shows the set's tenses and verbs beneath the
+  code. Its link says `source=qrCode`; the shared text's says `sharedLink`.
+
 **Signals.** `startQuiz`, `quitQuiz`, `completeQuiz`, and `abandonQuiz` carry `level` (a
 `QuizLevel` raw value, in place of the old `difficulty`) and `source`: `tab`, `myVerbs`, `list`,
-`verbPage`, `custom`, or a `quiz` link's own (`deeplink` by default), so that three-question completions do
+`verbPage`, `custom`, a practice set's `sharedLink` or `qrCode`, or a `quiz` link's own (`deeplink` by default), so that three-question completions do
 not raise a round's completion rate. There is no `tapTestVerb`: the sheet starts its quiz as it
 opens, so `startQuiz` with `verbPage` counts the same taps. Ten More sends no signal of its own.
 
 | Signal | Further parameters | Sent |
 |---|---|---|
-| `startQuiz` | `collection` for a collection's quiz, or a custom quiz over one; `customChoice` (`tenses`, `verbs`, or `both`) for a custom quiz, which says what kind of choice and never which | As a session starts |
+| `startQuiz` | `collection` for a collection's quiz, or a custom quiz over one; `customChoice` (`tenses`, `verbs`, or `both`) for a custom quiz or a practice set, which says what kind of choice and never which | As a session starts |
+| `tapSharePracticeSet` | `method` (`link` or `qrCode`) and `customChoice`, never which tenses or verbs | On Share Link or Show QR Code |
+| `viewPracticeSet` | `outcome` (`opened`, or `invalid` for a link that names nothing) and `source` | Once for each practice-set sheet a link opens |
+| `tapKeepPracticeSet` | None | On Keep as My Custom Quiz |
 | `completeQuiz` | `duration`, `questionCount` (10, 20, …), `score` for a ranked session's first round only | At each round's results |
 | `quitQuiz` | `duration`, `questionNumber`, `score` during a ranked session's first round only | On Quit |
 | `abandonQuiz` | `questionNumber` | At the next launch, for each quiz the app was left during |

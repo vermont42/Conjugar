@@ -27,6 +27,9 @@ nonisolated enum ParameterKey: String {
   /// The quiz's `QuizLevel`, by its raw value, on `startQuiz`, `quitQuiz`, and `completeQuiz`.
   case level
   case matchKind
+  /// How a practice set was shared, on `tapSharePracticeSet`: `link` or `qrCode`.
+  case method
+  /// `finishSearch`'s `SearchOutcome`, or `viewPracticeSet`'s `opened` or `invalid`.
   case outcome
   case queryLength
   /// The questions a session has asked at a round's results, re-asks not counted (10, 20, …),
@@ -58,6 +61,8 @@ nonisolated enum AnalyticsName: String {
   case quitQuiz
   case startGame
   case startQuiz
+  /// Keep as My Custom Quiz on a practice set's sheet. No parameters.
+  case tapKeepPracticeSet
   case tapPlayGame
   case tapRateOrReview
   /// The first tap on the review card above the verb list, which reveals its key conjugations.
@@ -69,6 +74,9 @@ nonisolated enum AnalyticsName: String {
   case tapShareVerb
   /// The share button on a collection's bar. Carries `collection`.
   case tapShareCollection
+  /// Share Link or Show QR Code under the Quiz tab's custom quiz. Carries `method` and
+  /// `customChoice`, never which tenses or verbs.
+  case tapSharePracticeSet
   case tapShowOnboarding
   /// The star in a verb page's navigation bar. Carries `starred`, the state after the tap, and
   /// does not say which verb.
@@ -86,6 +94,9 @@ nonisolated enum AnalyticsName: String {
   case viewModelBrowseView
   case viewModelView
   case viewOnboardingView
+  /// Once for each practice-set sheet a link opens. Carries `outcome`, `opened` or `invalid`
+  /// (a link that names nothing this version knows), and `source`.
+  case viewPracticeSet
   case viewQuizView
   case viewResultsView
   /// Once for each review card shown above the verb list. No parameters, and it does not say
@@ -118,6 +129,8 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case model
   /// A row of My Verbs in the verb list, or a quiz over My Verbs begun from the Quiz tab.
   case myVerbs
+  /// A practice set's QR code, scanned with the Camera app. A shared link says `sharedLink`.
+  case qrCode
   case quickAction
   /// A link on the correction a quiz holds after a wrong answer: to the verb's page or its model's.
   case quizCorrection

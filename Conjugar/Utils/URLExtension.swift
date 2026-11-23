@@ -44,6 +44,9 @@ extension URL {
   nonisolated static let listHost = "list"
   /// The target of `conjugar://verb/random`.
   nonisolated static let randomVerbTarget = "random"
+  /// The target of a practice set's link, `conjugar://quiz/set?…`. The quiz route's other
+  /// targets start a quiz.
+  nonisolated static let practiceSetTarget = "set"
 
   /// The query item a `conjugar://` link names its surface in, as in
   /// `conjugar://verb/hablar?source=widget`. A widget or a control can hand the app only a URL.
@@ -52,6 +55,8 @@ extension URL {
   nonisolated static let searchTextQueryName = "q"
   /// A form a verb page marks, as it marks a search's match: `conjugar://verb/ir?match=fue`.
   nonisolated static let matchQueryName = "match"
+  /// A practice set's level: `conjugar://quiz/set?tenses=futuro&level=beginner`.
+  nonisolated static let levelQueryName = "level"
 
   nonisolated var isDeeplink: Bool {
     scheme == Self.deeplinkScheme
@@ -107,6 +112,17 @@ extension URL {
   /// `conjugar://list/goVerbs?source=sharedLink`, a collection by its key (`VerbCollection.key`).
   nonisolated static func listDeeplink(key: String, source: AnalyticsSource) -> URL? {
     deeplink(host: listHost, target: key, queryItems: [
+      URLQueryItem(name: sourceQueryName, value: source.rawValue)
+    ])
+  }
+
+  /// `conjugar://quiz/set?tenses=preterito&verbs=goVerbs&source=qrCode`, a practice set: the
+  /// custom quiz's stored form as its query, then the level, when one travels, and the source.
+  nonisolated static func practiceSetDeeplink(custom: CustomQuiz, level: QuizLevel?, source: AnalyticsSource) -> URL? {
+    var components = URLComponents()
+    components.percentEncodedQuery = custom.rawValue
+    return deeplink(host: quizHost, target: practiceSetTarget, queryItems: (components.queryItems ?? []) + [
+      level.map { URLQueryItem(name: levelQueryName, value: $0.rawValue) },
       URLQueryItem(name: sourceQueryName, value: source.rawValue)
     ])
   }

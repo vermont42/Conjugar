@@ -700,6 +700,77 @@ nonisolated enum L {
     static var models: String {
       String(localized: "CustomQuiz.models")
     }
+
+    /// A practice set's list of verbs, which a shared My Verbs becomes.
+    static var verbList: String {
+      String(localized: "CustomQuiz.verbList")
+    }
+  }
+
+  enum PracticeSet {
+    static var title: String {
+      String(localized: "PracticeSet.title")
+    }
+
+    static var description: String {
+      String(localized: "PracticeSet.description")
+    }
+
+    static var byLevel: String {
+      String(localized: "PracticeSet.byLevel")
+    }
+
+    static var invalidTitle: String {
+      String(localized: "PracticeSet.invalidTitle")
+    }
+
+    static var invalidDescription: String {
+      String(localized: "PracticeSet.invalidDescription")
+    }
+
+    static var keep: String {
+      String(localized: "PracticeSet.keep")
+    }
+
+    static var keepFooter: String {
+      String(localized: "PracticeSet.keepFooter")
+    }
+
+    static var kept: String {
+      String(localized: "PracticeSet.kept")
+    }
+
+    static var qrCodeLabel: String {
+      String(localized: "PracticeSet.qrCodeLabel")
+    }
+
+    static var scanNote: String {
+      String(localized: "PracticeSet.scanNote")
+    }
+
+    static var scanTitle: String {
+      String(localized: "PracticeSet.scanTitle")
+    }
+
+    static var shareLink: String {
+      String(localized: "PracticeSet.shareLink")
+    }
+
+    static var showQRCode: String {
+      String(localized: "PracticeSet.showQRCode")
+    }
+
+    static var startHint: String {
+      String(localized: "PracticeSet.startHint")
+    }
+
+    static var shareHint: String {
+      String(localized: "PracticeSet.shareHint")
+    }
+
+    static func shareText(summary: String, link: String, appStoreLink: String) -> String {
+      String(localized: "PracticeSet.shareText \(summary) \(link) \(appStoreLink)")
+    }
   }
 
   enum Quiz {

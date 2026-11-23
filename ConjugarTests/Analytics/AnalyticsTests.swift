@@ -44,7 +44,9 @@ struct AnalyticsTests {
     (AnalyticsName.completeQuiz, "completeQuiz"),
     (AnalyticsName.quitQuiz, "quitQuiz"),
     (AnalyticsName.completeStage, "completeStage"),
-    (AnalyticsName.tapViewLeaderboard, "tapViewLeaderboard")
+    (AnalyticsName.tapViewLeaderboard, "tapViewLeaderboard"),
+    (AnalyticsName.tapSharePracticeSet, "tapSharePracticeSet"),
+    (AnalyticsName.viewPracticeSet, "viewPracticeSet")
   ])
   func analyticsNameRawValuesAreStable(name: AnalyticsName, expected: String) {
     #expect(name.rawValue == expected)
@@ -54,6 +56,8 @@ struct AnalyticsTests {
     (ParameterKey.customChoice, "customChoice"),
     (ParameterKey.duration, "duration"),
     (ParameterKey.level, "level"),
+    (ParameterKey.method, "method"),
+    (ParameterKey.outcome, "outcome"),
     (ParameterKey.questionCount, "questionCount"),
     (ParameterKey.questionNumber, "questionNumber"),
     (ParameterKey.score, "score"),

@@ -11412,3 +11412,39 @@ Two things were found by looking rather than by testing. The models in the edito
 the order of an internal table that no screen shows, so a learner looking for tener had no way to
 guess where it was; they now follow the learner's own sort from the Models tab. And the summary card
 was padded twice, once by the card style and once by the view inside it.
+
+## Practice Sets to Share (2026-11-23)
+
+A custom quiz can now leave the phone it was made on. Under the Quiz tab's Custom segment, Share
+sits beside Change, and offers a link or a QR code. Whoever opens either sees the practice set in a
+sheet: what it asks, Start, and Keep as My Custom Quiz. The point is classrooms. A teacher who wants
+a class to drill the -go verbs in the pretérito can build that quiz once, project its code, and let
+thirty students scan it, with no accounts and no server.
+
+The plan had marked this phase to be taken last, if at all, since schools have mostly come to
+Conjuguer rather than Conjugar. Josh chose to build it now, and to keep Konjugieren's three
+decisions: a sheet that never starts a quiz unasked, a shared My Verbs that travels as its verbs,
+and no length in the link.
+
+Most of the work was already done. Phase 8 had stored the custom quiz as a query string with
+permanent keys, so the link is that string after `conjugar://quiz/set?`, and reading it back is the
+same parser. Two things were new. The first is My Verbs. A link that said `verbs=myVerbs` would ask
+each student their own starred verbs, which no teacher means, so sharing My Verbs writes out the
+infinitives themselves, at most a hundred so that a projected code stays coarse enough to scan.
+They travel in their own query item, `infinitives=`, rather than in `verbs=`, so a verb can never be
+mistaken for a set's key. Spanish has no such collision today (German had one, `sein`), but the
+separation costs nothing. The second is the level. A set that leaves its tenses or its verbs to the
+level would ask a beginner and an advanced student different things, so the sharer's level travels
+whenever a part is left to it, and the quiz asks at that level without touching the student's own
+setting.
+
+One problem was Conjugar's own. The likeliest student to open a shared link is one who has just
+installed the app from the App Store link beside it, and on first launch Conjugar shows its welcome
+tour as a full-screen cover. SwiftUI cannot present a sheet beneath a cover, so the set would have
+been lost. The router now holds the set while the tour or the game covers the tabs, and the sheet
+appears once the cover is gone.
+
+The QR code is drawn on the device with Core Image, dark on white in both appearances, and a test
+reads it back with Core Image's own detector to prove the code says what the link says. The one
+thing a simulator cannot show is whether the Camera app offers to open a `conjugar://` code at all,
+since a simulator has no camera. That waits for Josh's phone.

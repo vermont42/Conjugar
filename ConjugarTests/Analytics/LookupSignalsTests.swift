@@ -22,7 +22,7 @@ struct LookupSignalsTests {
 
   @Test func sourceValuesAreStable() {
     #expect(AnalyticsSource.allCases.map(\.rawValue) == [
-      "browse", "control", "custom", "deeplink", "infoLink", "list", "lookup", "model", "myVerbs", "quickAction",
+      "browse", "control", "custom", "deeplink", "infoLink", "list", "lookup", "model", "myVerbs", "qrCode", "quickAction",
       "quizCorrection", "recent", "related", "resume", "reviewCard", "search", "searchGuess", "sharedLink", "shortcut",
       "spotlight", "tab", "verbPage", "widget"
     ])

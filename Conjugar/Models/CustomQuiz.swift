@@ -45,7 +45,7 @@ nonisolated struct CustomQuiz: Equatable, Sendable {
       return level.band
     case .band(let band):
       return band
-    case .all, .collection, .myVerbs:
+    case .all, .collection, .list, .myVerbs:
       return nil
     }
   }
@@ -75,11 +75,14 @@ nonisolated struct CustomQuiz: Equatable, Sendable {
   private static let gerundioKey = "gerundio"
   private static let tensesKey = "tenses"
   private static let verbsKey = "verbs"
+  private static let infinitivesKey = "infinitives"
 }
 
 /// Stored as `tenses=presente_de_indicativo,preterito&verbs=goVerbs`, a form a link's query can
-/// carry unchanged. The keys are permanent, since the choice is kept between launches. A key that
-/// no longer names anything is dropped rather than failing the whole choice.
+/// carry unchanged, as a practice set's link does. The keys are permanent, since the choice is
+/// kept between launches. A list of verbs, which a shared My Verbs becomes, travels as
+/// `infinitives=tener,poner` in place of `verbs`, so that a verb is never read as a set's key. A
+/// key that no longer names anything is dropped rather than failing the whole choice.
 nonisolated extension CustomQuiz: RawRepresentable {
   init?(rawValue: String) {
     var components = URLComponents()
@@ -87,7 +90,11 @@ nonisolated extension CustomQuiz: RawRepresentable {
     let items = components.queryItems ?? []
     let tenseKeys = items.first { $0.name == Self.tensesKey }?.value?.split(separator: ",").map(String.init) ?? []
     tenses = Set(tenseKeys.compactMap(Self.tense(forKey:)))
-    verbSet = items.first { $0.name == Self.verbsKey }?.value.flatMap(QuizVerbSet.init(key:))
+    if let key = items.first(where: { $0.name == Self.verbsKey })?.value {
+      verbSet = QuizVerbSet(key: key)
+    } else if let list = items.first(where: { $0.name == Self.infinitivesKey })?.value {
+      verbSet = QuizVerbSet(infinitives: list.split(separator: ",").map(String.init))
+    }
   }
 
   var rawValue: String {
@@ -95,7 +102,9 @@ nonisolated extension CustomQuiz: RawRepresentable {
     if !tenses.isEmpty {
       items.append(URLQueryItem(name: Self.tensesKey, value: orderedTenses.map(Self.key(for:)).joined(separator: ",")))
     }
-    if let verbSet {
+    if case .list(let infinitives) = verbSet {
+      items.append(URLQueryItem(name: Self.infinitivesKey, value: infinitives.joined(separator: ",")))
+    } else if let verbSet {
       items.append(URLQueryItem(name: Self.verbsKey, value: verbSet.key))
     }
     var components = URLComponents()
@@ -110,6 +119,9 @@ nonisolated enum QuizVerbSet: Hashable, Sendable {
   case band(FrequencyBand)
   /// A pattern list or a model. The top 100 is offered as its band, which holds the same verbs.
   case collection(VerbCollection)
+  /// Bare infinitives, in the sharer's order: a shared My Verbs, which carries its verbs because
+  /// the opener's own would be different ones.
+  case list([String])
   case myVerbs
 
   /// A band or every verb is chosen for its size, not its verbs, so it is mixed as the default
@@ -118,7 +130,7 @@ nonisolated enum QuizVerbSet: Hashable, Sendable {
     switch self {
     case .all, .band:
       return true
-    case .collection, .myVerbs:
+    case .collection, .list, .myVerbs:
       return false
     }
   }
@@ -139,9 +151,24 @@ nonisolated enum QuizVerbSet: Hashable, Sendable {
       return Self.bandKey(band)
     case .collection(let collection):
       return collection.key
+    case .list:
+      return Self.listKey
     case .myVerbs:
       return Self.myVerbsKey
     }
+  }
+
+  /// What `key` says of a list, whose verbs travel apart from it. It reads back as nothing.
+  static let listKey = "list"
+
+  /// Unknown infinitives and repeats are dropped, and a list left empty is no list.
+  init?(infinitives: [String]) {
+    var seen = Set<String>()
+    let known = infinitives.filter { VerbMap.shared.entry(for: $0) != nil && seen.insert($0).inserted }
+    guard !known.isEmpty else {
+      return nil
+    }
+    self = .list(known)
   }
 
   /// The top-100 band and the top-100 collection share the key `top100`, which reads back as the
@@ -171,6 +198,8 @@ nonisolated enum QuizVerbSet: Hashable, Sendable {
       return nil
     case .collection(let collection):
       return collection.infinitives
+    case .list(let infinitives):
+      return infinitives
     case .myVerbs:
       return myVerbs
     }

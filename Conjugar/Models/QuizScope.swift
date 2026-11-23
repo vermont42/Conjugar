@@ -24,6 +24,11 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// A custom quiz over a band or every verb has nil `verbs` and draws as the default quiz does,
   /// from the chosen band.
   let custom: CustomQuiz?
+  /// A practice set's level, so that everyone who opens the set is asked the same tenses and
+  /// verbs. Nil asks at the learner's own level.
+  let level: QuizLevel?
+  /// A shared practice set, whose quiz runs in a sheet over whatever tab is open.
+  let isPracticeSet: Bool
 
   init(
     verbs: [String]?,
@@ -31,7 +36,9 @@ nonisolated struct QuizScope: Equatable, Sendable {
     source: AnalyticsSource,
     title: String? = nil,
     collectionKey: String? = nil,
-    custom: CustomQuiz? = nil
+    custom: CustomQuiz? = nil,
+    level: QuizLevel? = nil,
+    isPracticeSet: Bool = false
   ) {
     self.verbs = verbs
     self.questionCount = questionCount
@@ -39,6 +46,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
     self.title = title
     self.collectionKey = collectionKey
     self.custom = custom
+    self.level = level
+    self.isPracticeSet = isPracticeSet
   }
 
   /// A round's length. The Quiz tab's quiz, a My Verbs quiz, and a collection's ask one round,
@@ -65,9 +74,9 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// Quiz tab's quiz. A three-question quiz in a verb page's sheet is over before one would be
   /// noticed, and a collection's quiz runs in the same sheet, beside a quiz the tab may hold, so
   /// neither starts one, though a collection's is a full round. A custom quiz over a collection
-  /// runs on the tab, and starts one.
+  /// runs on the tab, and starts one. A practice set's runs in a sheet, and does not.
   var startsLiveActivity: Bool {
-    questionCount >= QuizScope.roundLength && (collectionKey == nil || custom != nil)
+    questionCount >= QuizScope.roundLength && !isPracticeSet && (collectionKey == nil || custom != nil)
   }
 
   /// The tenses the quiz asks at a level: the learner's choice, or the level's.

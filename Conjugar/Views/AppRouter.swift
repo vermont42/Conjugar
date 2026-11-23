@@ -42,6 +42,9 @@ final class AppRouter {
   /// A one-shot request for the Quiz tab to start a quiz, with the link's `source` (`deeplink` when
   /// it names none), which the quiz signals carry. `QuizView` consumes it.
   var pendingQuizStart: AnalyticsSource?
+  /// A practice set from a `quiz/set` link, which `MainTabView` shows in a sheet over whatever tab
+  /// is open. Any other link replaces it with nil, so that what the link opens is not hidden.
+  var pendingPracticeSet: PracticeSetRequest?
   /// Drives a full-screen `GameView` cover from `MainTabView`, tab-independent so a
   /// `conjugar://game` deeplink jumps straight to the game from any screen. (The
   /// Settings tab's Play button presents the game via its own state; both are fine.)
@@ -65,6 +68,18 @@ final class AppRouter {
   /// through this one flag + helper.
   var pendingGameAfterOnboarding = false
 
+  /// The practice set `MainTabView`'s sheet shows: none while the tour or the game covers the
+  /// tabs, since a sheet cannot present beneath a cover. The set waits, and shows once the cover
+  /// is gone.
+  var presentablePracticeSet: PracticeSetRequest? {
+    get {
+      showOnboarding || showGame || pendingGameAfterOnboarding ? nil : pendingPracticeSet
+    }
+    set {
+      pendingPracticeSet = newValue
+    }
+  }
+
   /// Called by an onboarding game CTA just before it dismisses the tour.
   func requestGameAfterOnboarding() {
     pendingGameAfterOnboarding = true
@@ -81,13 +96,18 @@ final class AppRouter {
   /// and every route: `verb/<infinitive>` (bare or with "se", so `verb/arrepentirse` opens
   /// arrepentir, or `verb/random`), with `match`, a form the page marks; `search`, with its text
   /// in `q`; `info/<stableKey>` (or a position); `list/<key>`, a collection; `quiz` (any target
-  /// starts a quiz); and `game`.
+  /// starts a quiz, except `quiz/set`, a practice set); and `game`.
   /// A link to a verb page, a search, or a quiz may name the surface it came from in `source`
   /// (`?source=widget`); a link that names none reports `deeplink`. Unknown routes, unknown
   /// verbs, and unknown collections are ignored.
   func handle(url: URL) {
     guard url.isDeeplink, let host = url.host() else { return }
     let source = url.analyticsSource ?? .deeplink
+    if host == URL.quizHost, url.deeplinkTarget == URL.practiceSetTarget {
+      pendingPracticeSet = PracticeSetRequest(practiceSet: PracticeSet(url: url), source: source)
+      return
+    }
+    pendingPracticeSet = nil
     switch host {
     case URL.verbHost:
       guard let target = url.deeplinkTarget else { return }
@@ -114,7 +134,7 @@ final class AppRouter {
       selectedTab = .models
       pendingCollection = CollectionRequest(collection: collection, source: source)
     case URL.quizHost:
-      // Any target, `quiz/start` as the Quick Quiz control sends it, or none, starts a quiz.
+      // Any other target, `quiz/start` as the Quick Quiz control sends it, or none, starts a quiz.
       selectedTab = .quiz
       pendingQuizStart = source
     case URL.gameHost:

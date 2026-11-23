@@ -60,7 +60,7 @@ struct CustomQuizEditor: View {
         }
         .accessibilityIdentifier("custom_quiz_verbs_by_level")
 
-        ForEach(Self.verbSets(showsMyVerbs: !myVerbs.isEmpty || custom.verbSet == .myVerbs), id: \.self) { verbSet in
+        ForEach(Self.verbSets(showsMyVerbs: !myVerbs.isEmpty || custom.verbSet == .myVerbs, keptList: custom.verbSet), id: \.self) { verbSet in
           CustomQuizChoiceRow(
             title: verbSet.title,
             detail: verbSet.detail(myVerbCount: myVerbs.count),
@@ -96,9 +96,14 @@ struct CustomQuizEditor: View {
     .navigationBarTitleDisplayMode(.inline)
   }
 
-  /// The narrowest band first, then every verb, then the lists.
-  private static func verbSets(showsMyVerbs: Bool) -> [QuizVerbSet] {
-    FrequencyBand.allCases.map(QuizVerbSet.band) + [.all] + (showsMyVerbs ? [.myVerbs] : [])
+  /// The narrowest band first, then every verb, then the lists. A practice set's list of verbs,
+  /// which nothing here can build, is listed only while it is the choice.
+  private static func verbSets(showsMyVerbs: Bool, keptList: QuizVerbSet?) -> [QuizVerbSet] {
+    var list: [QuizVerbSet] = []
+    if case .list = keptList, let keptList {
+      list = [keptList]
+    }
+    return FrequencyBand.allCases.map(QuizVerbSet.band) + [.all] + (showsMyVerbs ? [.myVerbs] : []) + list
       + QuizVerbSet.patternCollections.map(QuizVerbSet.collection)
   }
 
@@ -182,20 +187,23 @@ private struct CustomQuizChoiceRow: View {
 struct CustomQuizSummaryCard: View {
   let custom: CustomQuiz
   let level: QuizLevel
+  /// What a part left to the level says: the learner's level, or a practice set's.
+  var byLevelLabel: String?
   var isLarge = false
 
   var body: some View {
+    let byLevel = byLevelLabel ?? L.CustomQuiz.byLevel
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
       row(
         L.CustomQuiz.tenses,
         value: custom.tenses.isEmpty
-          ? AttributedString("\(L.CustomQuiz.byLevel): \(level.localizedName)")
+          ? AttributedString("\(byLevel): \(level.localizedName)")
           : CustomQuizEditor.spanish(custom.orderedTenses.map(\.titleCaseName).joined(separator: ", ")),
         isSpanish: !custom.tenses.isEmpty
       )
       row(
         L.CustomQuiz.verbs,
-        value: AttributedString(custom.verbSet?.title ?? "\(L.CustomQuiz.byLevel): \(CustomQuiz.levelVerbsDescription(level))"),
+        value: AttributedString(custom.verbSet?.title ?? "\(byLevel): \(CustomQuiz.levelVerbsDescription(level))"),
         isSpanish: false
       )
     }
@@ -228,6 +236,8 @@ extension QuizVerbSet {
       return L.CustomQuiz.band(count: band.verbCount)
     case .collection(let collection):
       return collection.title
+    case .list(let infinitives):
+      return "\(L.CustomQuiz.verbList) · \(L.BrowseVerbs.verbCount(count: infinitives.count))"
     case .myVerbs:
       return L.MyVerbs.title
     }
@@ -242,7 +252,7 @@ extension QuizVerbSet {
       return L.BrowseVerbs.verbCount(count: myVerbCount)
     case .collection(let collection):
       return L.BrowseVerbs.verbCount(count: collection.verbs.count)
-    case .band:
+    case .band, .list:
       return nil
     }
   }

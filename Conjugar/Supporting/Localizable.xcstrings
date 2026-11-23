@@ -5812,6 +5812,278 @@
           }
         }
       }
+    },
+    "CustomQuiz.verbList" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb List"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista de verbos"
+          }
+        }
+      }
+    },
+    "PracticeSet.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice Set"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serie de práctica"
+          }
+        }
+      }
+    },
+    "PracticeSet.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Someone shared this choice of tenses and verbs with you. Ten questions, and ten more whenever you like."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alguien ha compartido contigo esta selección de tiempos y verbos. Diez preguntas y diez más cuando quieras."
+          }
+        }
+      }
+    },
+    "PracticeSet.byLevel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set by Level"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Según el nivel"
+          }
+        }
+      }
+    },
+    "PracticeSet.invalidTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice Set Not Found"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serie de práctica no encontrada"
+          }
+        }
+      }
+    },
+    "PracticeSet.invalidDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This link names no tense or verb set that this version of Conjugar knows. It may have been cut short, or it may need a newer version of the app."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este enlace no nombra ningún tiempo ni conjunto de verbos que esta versión de Conjugar conozca. Puede que esté incompleto o que necesite una versión más reciente de la app."
+          }
+        }
+      }
+    },
+    "PracticeSet.keep" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep as My Custom Quiz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar como mi test personalizado"
+          }
+        }
+      }
+    },
+    "PracticeSet.keepFooter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keeping it replaces the custom quiz on your Quiz tab."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al guardarla, reemplaza el test personalizado de tu pestaña Test."
+          }
+        }
+      }
+    },
+    "PracticeSet.kept" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kept as Your Custom Quiz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardada como tu test personalizado"
+          }
+        }
+      }
+    },
+    "PracticeSet.qrCodeLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR code that opens this practice set"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Código QR que abre esta serie de práctica"
+          }
+        }
+      }
+    },
+    "PracticeSet.scanNote" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Point the Camera app at the code to open this practice set in Conjugar."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apunta la app Cámara al código para abrir esta serie de práctica en Conjugar."
+          }
+        }
+      }
+    },
+    "PracticeSet.scanTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan to Practice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanea y practica"
+          }
+        }
+      }
+    },
+    "PracticeSet.shareText %@ %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice set:\n%1$@\n\nOpen it in Conjugar:\n%2$@\n\nGet Conjugar on the App Store:\n%3$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serie de práctica:\n%1$@\n\nÁbrela en Conjugar:\n%2$@\n\nDescarga Conjugar en el App Store:\n%3$@"
+          }
+        }
+      }
+    },
+    "PracticeSet.shareLink" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Link"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir enlace"
+          }
+        }
+      }
+    },
+    "PracticeSet.showQRCode" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show QR Code"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar código QR"
+          }
+        }
+      }
+    },
+    "PracticeSet.startHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts ten questions from this practice set"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza diez preguntas de esta serie de práctica"
+          }
+        }
+      }
+    },
+    "PracticeSet.shareHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shares this custom quiz as a link or a QR code"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparte este test personalizado como enlace o código QR"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

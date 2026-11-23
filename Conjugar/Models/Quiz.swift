@@ -198,14 +198,14 @@ class Quiz {
     }
   }
 
-  /// Build the scope's questions at the learner's level and start the clock. The default scope,
-  /// every verb, is the Quiz tab's quiz. A scope whose verbs give no question (an empty My Verbs,
-  /// or chosen tenses that none of its verbs has) starts nothing, leaves the quiz as it was, and
-  /// returns false.
+  /// Build the scope's questions at the learner's level, or at a practice set's, and start the
+  /// clock. The default scope, every verb, is the Quiz tab's quiz. A scope whose verbs give no
+  /// question (an empty My Verbs, or chosen tenses that none of its verbs has) starts nothing,
+  /// leaves the quiz as it was, and returns false.
   @discardableResult
   func start(scope: QuizScope = .allVerbs) -> Bool {
     let region = settings.region
-    let level = settings.quizLevel
+    let level = scope.level ?? settings.quizLevel
     #if DEBUG
     if let fixture = Quiz.fixtureRun, scope.verbs == nil, scope.custom == nil {
       self.scope = scope

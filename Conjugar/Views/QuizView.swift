@@ -24,6 +24,9 @@ struct QuizView: View {
   @State private var answerToken = 0
   @State private var showingResults = false
   @State private var showingGameCenterPrompt = false
+  @State private var isShowingQRCode = false
+  /// The Share menu's frame in window coordinates, which an iPad's share popover anchors to.
+  @State private var shareButtonFrame = CGRect.zero
   @FocusState private var fieldFocused: Bool
   @AccessibilityFocusState private var correctionHasAccessibilityFocus: Bool
   /// Pages opened from a held correction, pushed over the quiz, which waits beneath them.
@@ -253,18 +256,76 @@ struct QuizView: View {
           .accessibilityIdentifier("custom_quiz_summary")
       }
 
-      NavigationLink(value: CustomQuizDestination.editor) {
-        Label(customQuiz.isEmpty ? L.CustomQuiz.choose : L.CustomQuiz.change, systemImage: "slider.horizontal.3")
-          .font(isLarge ? .title3.bold() : .headline)
-          .padding(.horizontal, Layout.defaultSpacing)
-          .padding(.vertical, 4)
+      HStack(spacing: Layout.defaultSpacing) {
+        NavigationLink(value: CustomQuizDestination.editor) {
+          Label(customQuiz.isEmpty ? L.CustomQuiz.choose : L.CustomQuiz.change, systemImage: "slider.horizontal.3")
+            .font(isLarge ? .title3.bold() : .headline)
+            .padding(.horizontal, Layout.defaultSpacing)
+            .padding(.vertical, 4)
+            .frame(maxHeight: .infinity)
+        }
+        .buttonStyle(.bordered)
+        .tint(.customYellow)
+        .accessibilityHint(L.CustomQuiz.chooseHint)
+        .accessibilityIdentifier("custom_quiz_choose_button")
+
+        if canStart {
+          practiceSetShareMenu
+        }
       }
-      .buttonStyle(.bordered)
-      .tint(.customYellow)
-      .accessibilityHint(L.CustomQuiz.chooseHint)
-      .accessibilityIdentifier("custom_quiz_choose_button")
+      // Equal heights, since a Menu's bordered label sits a little taller than a NavigationLink's.
+      .fixedSize(horizontal: false, vertical: true)
     }
     .transition(.opacity)
+    .fullScreenCover(isPresented: $isShowingQRCode) {
+      PracticeSetQRView(practiceSet: sharedPracticeSet)
+    }
+  }
+
+  /// The custom quiz as a practice set, for a teacher to hand a class.
+  private var sharedPracticeSet: PracticeSet {
+    PracticeSet(sharing: customQuiz, level: Current.settings.quizLevel, myVerbs: myVerbs.map(\.infinitive))
+  }
+
+  private var practiceSetShareMenu: some View {
+    Menu {
+      Button {
+        sharedPracticeSet.signalShare(method: PracticeSet.linkMethod)
+        ShareSheet.present(
+          text: sharedPracticeSet.shareText(levelFallback: Current.settings.quizLevel),
+          title: L.PracticeSet.title,
+          icon: UIImage(named: Current.settings.appIcon.previewAssetName),
+          anchorLabel: L.Verb.share,
+          anchorRect: shareButtonFrame == .zero ? nil : shareButtonFrame
+        )
+      } label: {
+        Label(L.PracticeSet.shareLink, systemImage: "link")
+      }
+      .accessibilityIdentifier("practice_set_share_link")
+
+      Button {
+        sharedPracticeSet.signalShare(method: PracticeSet.qrCodeMethod)
+        isShowingQRCode = true
+      } label: {
+        Label(L.PracticeSet.showQRCode, systemImage: "qrcode")
+      }
+      .accessibilityIdentifier("practice_set_show_qr_code")
+    } label: {
+      Label(L.Verb.share, systemImage: "square.and.arrow.up")
+        .font(isLarge ? .title3.bold() : .headline)
+        .padding(.horizontal, Layout.defaultSpacing)
+        .padding(.vertical, 4)
+        .frame(maxHeight: .infinity)
+    }
+    .buttonStyle(.bordered)
+    .tint(.customYellow)
+    .onGeometryChange(for: CGRect.self) { proxy in
+      proxy.frame(in: .global)
+    } action: { frame in
+      shareButtonFrame = frame
+    }
+    .accessibilityHint(L.PracticeSet.shareHint)
+    .accessibilityIdentifier("custom_quiz_share_button")
   }
 
   /// The scope's symbol, its name, and a line saying what the quiz will ask about.

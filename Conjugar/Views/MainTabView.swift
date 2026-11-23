@@ -98,6 +98,13 @@ struct MainTabView: View {
     .fullScreenCover(isPresented: $router.showOnboarding, onDismiss: router.launchGameAfterOnboardingIfRequested) {
       OnboardingView(router: router, requestGame: router.requestGameAfterOnboarding)
     }
+    // Over whatever tab is open, since a practice set's link can arrive at any time.
+    .sheet(item: $router.presentablePracticeSet) { request in
+      PracticeSetView(request: request)
+        .presentationSizing(.page)
+        // Sheet content does not inherit the custom environment object, and the set's quiz needs it.
+        .environment(router)
+    }
   }
 
   /// Trip the first-launch onboarding cover, unless already seen or disabled for screenshots.
