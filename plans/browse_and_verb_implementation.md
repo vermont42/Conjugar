@@ -20,7 +20,7 @@ extended rather than replaced.
 **The plan is finished** (2026-11-22). Every idea in the [Idea Index](#idea-index) is built, the
 staged privacy-policy lines cover every signal and parameter it added, and the pedagogy plan's
 [What the Browse Plan Leaves for This One](pedagogy_implementation.md#what-the-browse-plan-leaves-for-this-one)
-says what landed. The Closing's own row waits for Josh's commit, like any phase's.
+says what landed.
 
 Each session that finishes a phase fills in its row, changes the **Status** line under the
 phase's heading to match, and writes the phase's **How it differed** note. Leave rows for phases
@@ -47,7 +47,7 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 14 | Done | 2026-11-22 | 52731b3 | D5 |
 | 15 | Done | 2026-11-22 | 52731b3 | D4 |
 | 16 | Done | 2026-11-22 | 81f2973 | D6 |
-| Closing | Awaiting Josh | 2026-11-22 | | Audit, handoff to the pedagogy plan |
+| Closing | Done | 2026-11-22 | 421986a | Audit, handoff to the pedagogy plan |
 
 ## How to Work This Plan
 
@@ -2143,7 +2143,7 @@ collection, every model page has its bar, and tests pin membership and keys.
   or Conjuguer could adopt.
 - Mark this plan finished in its Status section.
 
-**Status:** Awaiting Josh (2026-11-22).
+**Status:** Done (2026-11-22, 421986a).
 
 **How it differed:**
 
@@ -2215,7 +2215,8 @@ item whose need in the sibling was not confirmed in its code.
    activity. Check whether a collection's quiz in a sheet over a quiz in progress leaves two
    activities on the Lock Screen there. Conjuguer already follows Conjugar's rule
    (`startsLiveActivity` is full length and no collection, and `VerbCollectionTests` pins it), its
-   session reported on 2026-11-22, so it needs nothing.
+   session reported on 2026-11-22, so it needs nothing. Konjugieren's session confirmed the bug the
+   same day and took on the fix there.
 7. **Compact collection rows** (Phase 16). A title and three forms with their irregular letters red
    ("tengo · hago · digo") in place of a two-line description kept five collections from pushing
    the models below the fold. Konjugieren, with fewer lists, may not need it; Conjuguer's port will
