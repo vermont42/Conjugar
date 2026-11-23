@@ -51,6 +51,7 @@ struct AnalyticsTests {
   }
 
   @Test(arguments: [
+    (ParameterKey.customChoice, "customChoice"),
     (ParameterKey.duration, "duration"),
     (ParameterKey.level, "level"),
     (ParameterKey.questionCount, "questionCount"),

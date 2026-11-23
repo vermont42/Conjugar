@@ -644,6 +644,64 @@ nonisolated enum L {
     }
   }
 
+  enum CustomQuiz {
+    static var segment: String {
+      String(localized: "CustomQuiz.segment")
+    }
+
+    static var title: String {
+      String(localized: "CustomQuiz.title")
+    }
+
+    static var description: String {
+      String(localized: "CustomQuiz.description")
+    }
+
+    static var emptyDescription: String {
+      String(localized: "CustomQuiz.emptyDescription")
+    }
+
+    static var choose: String {
+      String(localized: "CustomQuiz.choose")
+    }
+
+    static var change: String {
+      String(localized: "CustomQuiz.change")
+    }
+
+    static var chooseHint: String {
+      String(localized: "CustomQuiz.chooseHint")
+    }
+
+    static var tenses: String {
+      String(localized: "CustomQuiz.tenses")
+    }
+
+    static var tensesFooter: String {
+      String(localized: "CustomQuiz.tensesFooter")
+    }
+
+    static var verbs: String {
+      String(localized: "CustomQuiz.verbs")
+    }
+
+    static var byLevel: String {
+      String(localized: "CustomQuiz.byLevel")
+    }
+
+    static func band(count: Int) -> String {
+      String(localized: "CustomQuiz.band \(count)")
+    }
+
+    static func fromLevel(_ level: String) -> String {
+      String(localized: "CustomQuiz.fromLevel \(level)")
+    }
+
+    static var models: String {
+      String(localized: "CustomQuiz.models")
+    }
+  }
+
   enum Quiz {
     static var localizedTitle: String {
       String(localized: "Quiz.localizedTitle")

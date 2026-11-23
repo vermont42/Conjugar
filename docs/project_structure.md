@@ -119,9 +119,10 @@ Conjugar/
 │   ├── AnswerDifference.swift  # Which letters of a wrong answer and of the nearest right one differ, by an edit-distance alignment; QuizQuestion.difference(from:)
 │   ├── AnswerFrame.swift       # The shape of an answer: the words around the blank (yo, (tú) ¡no … !, a reflexive me) and the answer a filled blank gives
 │   ├── QuizLevel.swift         # The four levels (beginner … advanced): each one's tenses (pool, QuizPoolEntry with the persons it leaves out and its weight), frequency band, name, gauge symbol, and the old difficulty each migrates from
-│   ├── QuizDraw.swift          # The default quiz's verbs: the level's frequency band, half the questions in an irregular cell (judged per cell,
+│   ├── QuizDraw.swift          # The default quiz's verbs: the level's frequency band (or a custom quiz's), half the questions in an irregular cell (judged per cell,
 │   │                           #   isIrregular(_:in:)), the core verbs, one to three rare prefixed compounds, regular endings in turn
-│   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, or a collection; question count (a round of ten, or Test Me's three), source, title, isRanked, continues, startsLiveActivity
+│   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, a collection, or a custom choice; question count (a round of ten, or Test Me's three), source, title, isRanked, continues, startsLiveActivity, pool(level:), band(level:)
+│   ├── CustomQuiz.swift        # The Quiz tab's Custom choice: chosen tenses and a QuizVerbSet (all, a band, a collection, My Verbs), each the level's when unchosen; stored as tenses=…&verbs=…; QuizScope.custom
 │   ├── QuizState.swift         # notStarted / inProgress / finished
 │   ├── ConjugationResult.swift # What an answered question earned: totalMatch (10) / secondAttemptMatch (5) / noMatch
 │   ├── AnswerSlip.swift        # Whether a wrong answer is a slip that earns one more attempt (accents only, or one edit in four letters or more), and never another cell of the verb; QuizQuestion.isSlip(_:)
@@ -231,7 +232,8 @@ Conjugar/
     ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, the model's collection bar, and the verbs using the model, by frequency or alphabetically
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
     ├── QuizSheet.swift         # A quiz in a sheet with a Quiz of its own over a QuizScope: Test Me and a collection's Quiz
-    ├── QuizView.swift          # The Quiz tab's start screen (scope symbol, All Verbs / My Verbs picker, fact tiles, chips) and gameplay: prompt, framed answer field, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
+    ├── QuizView.swift          # The Quiz tab's start screen (scope symbol, All Verbs / My Verbs / Custom picker, fact tiles or the custom summary, chips) and gameplay: prompt, framed answer field, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
+    ├── CustomQuizView.swift    # The Custom segment's editor of tenses and verbs, its Models list, and the summary card on the start screen
     ├── QuizCorrectionView.swift # A wrong answer's held correction: the two answers with their differing letters marked, links to the verb's and model's pages, Continue; isBeneathQuiz
     ├── ReviewCardView.swift    # The review card above the verb list: an irregular verb looked up days ago, its key conjugations hidden until tapped
     ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills, Ten More, View Leaderboard (signed in, ranked), and each answer
@@ -338,6 +340,7 @@ ConjugarTests/
 │   ├── QuizVerbMixTests.swift          # The default quiz's verbs under forty seeds: the band, exactly half irregular cells, at most one irregular
 │   │                                   #   imperfecto, the core verbs, rare and frequent compounds, endings, ten questions, scopes unaffected
 │   ├── QuizScopeTests.swift            # The scoped quiz: My Verbs and Test Me draws, defective verbs, region and vos, ranking
+│   ├── CustomQuizTests.swift           # The custom quiz: the stored form and its keys, the scope, never ranked, and sessions over chosen tenses, verbs, or both
 │   ├── QuizGradingTests.swift          # Accepted answers (pronouns, spacing, each standard variant), the 2010 spelling, per-tense person rotation
 │   ├── QuizCorrectionTests.swift       # The held correction's state machine: hold, clock, Continue, the last question
 │   ├── QuizSecondAttemptTests.swift    # One more try: a slip waits with the clock running, half points on a right second attempt, a second slip to the correction

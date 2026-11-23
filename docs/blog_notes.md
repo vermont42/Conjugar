@@ -11373,3 +11373,42 @@ What could not be checked is a real score arriving on a real board. Konjugieren 
 iPhone and found its new boards invisible to a development build, probably because no app version
 held them yet. Conjugar's test is written into the release checklist, to run after the 2027 version
 exists and before it is submitted.
+
+## Choosing What to Practice (2026-11-23)
+
+Until now, a Conjugar learner could narrow the quiz in only two ways: to the verbs they had starred
+or opened (My Verbs), or to one verb from its page. A learner who wanted to drill the pretérito, or
+the -go verbs, or a single model such as tener's, had no way to say so. The Quiz tab now has a third
+segment, Custom, that lets the learner choose tenses, a set of verbs, or both.
+
+The design came from Konjugieren, which built the same feature ten days earlier, and most of its
+decisions carried over unchanged. A part the learner leaves unchosen is filled in by their level, so
+choosing only the condicional still asks a beginner's hundred verbs, and choosing only the -go verbs
+still asks a beginner's tenses. A chosen tense may be above the level, because the choice is the
+learner's. A band of frequent verbs is mixed as the default quiz is, half of its questions in an
+irregular form and the commonest verbs always among them, while a pattern list or a model is a list
+the learner picked and is asked as it stands. None of it ranks on Game Center, since a score over a
+learner's own choice compares with nothing.
+
+One question was Conjugar's own. When the browse plan built the pattern collections, a quiz over
+the -go verbs asked whatever tenses the level held, so a learner could meet tengo's list and be
+asked tuve. The browse plan's Closing left it open whether such a quiz should ask its pattern's
+tenses. The custom quiz settles it the other way: the learner can now choose the presente and the
+presente de subjuntivo beside the -go verbs, and the quiz does not guess on their behalf.
+
+The choice is kept between launches as a short string, `tenses=presente_de_indicativo&verbs=goVerbs`,
+in the form a link's query can carry, so that a later phase can share a practice set without
+changing it. Each tense's key is the stable key of its Info article, which `conjugar://info/` links
+already use and so can never change.
+
+Underneath, the quiz's verb draw had to learn something new. It had kept its frequency bands by
+level, one per level, because only the default quiz used them. A beginner who chooses the thousand
+most frequent verbs needs the Intermediate band without Intermediate's tenses, so the draw now keys
+its bands by the band itself. The per-suite times stayed where they were, which mattered: a refactor
+of this draw in Konjugieren once made a three-second suite take eleven minutes while every test
+passed.
+
+Two things were found by looking rather than by testing. The models in the editor first came in
+the order of an internal table that no screen shows, so a learner looking for tener had no way to
+guess where it was; they now follow the learner's own sort from the Models tab. And the summary card
+was padded twice, once by the card style and once by the view inside it.

@@ -94,7 +94,7 @@ a form is still `guess`. Rows and verbs correspond one to one, so `resultCount` 
 | `viewCollection` | `collection` (a key: `top100`, `goVerbs`, `strongPreterite`, `irregularFuture`, `irregularParticiple`, or `model-<class>`), `source` (`tab`, `verbPage`, `quizCorrection`, `sharedLink`, or `deeplink`) | Once for each opening of a featured collection's page or of a model's page, whose bar makes it a collection. A return from one of its verb pages sends nothing |
 | `tapShareCollection` | `collection` | On each tap of a collection bar's Share button, whether or not the learner then shares |
 
-A collection's quiz adds `collection` to `startQuiz`. A collection names a list, never a verb, though
+A collection's quiz, and a custom quiz over a collection, adds `collection` to `startQuiz`. A collection names a list, never a verb, though
 a model's key names the model.
 
 ### The `source` vocabulary
@@ -107,6 +107,7 @@ a model's key names the model.
 |---|---|---|
 | `browse` | Yes | A row of the verb list with the search field empty |
 | `control` | Yes | The Random Verb control in Control Center (`OpenRandomVerbControlIntent`); for `finishSearch`, the Find a Verb control (`OpenVerbSearchIntent`) |
+| `custom` | Yes | The quiz signals: a custom quiz begun from the Quiz tab's Custom segment |
 | `deeplink` | Yes | A `conjugar://` link with no recognized `source` query item; for `finishSearch`, a `search` link; for the quiz signals, a `quiz` link, which the Quick Quiz control, the Start a Quiz shortcut, and the Live Activity send; for `viewCollection`, a `list` link that names no source |
 | `infoLink` | No | Reserved for a link from an Info article to a verb |
 | `list` | Yes | A verb opened from a featured collection's page (a verb opened from a model's page stays `model`); for the quiz signals, a collection's quiz |
@@ -688,10 +689,13 @@ their sum: no normalization to fifty questions and no multiplier for the region 
 question count, and the `source` its signals carry. `allVerbs` is the Quiz tab's quiz over every
 verb, `allVerbs(source:)` the same begun by a `quiz` link, `myVerbs(_:)` a round over My Verbs,
 `verbPage(_:)` Test Me's three, and `collection(_:title:)` a round over a collection, which also
-carries a `title` for the sheet and a `collectionKey` for `startQuiz`. A round is
+carries a `title` for the sheet and a `collectionKey` for `startQuiz`, and `custom(_:myVerbs:)` a
+round of the learner's own choice (§ Custom quiz below), which carries a `custom`. A round is
 `QuizScope.roundLength`, ten questions. `continues` (a round's length or more) decides whether the
-results offer Ten More, so Test Me's three do not. `isRanked` (every verb, one round) decides
-whether a session's first round posts to Game Center (`Quiz.isRankedRound`). No scoped quiz ranks.
+results offer Ten More, so Test Me's three do not. `isRanked` (every verb, one round, no custom
+choice) decides whether a session's first round posts to Game Center (`Quiz.isRankedRound`). No
+scoped or custom quiz ranks. `pool(level:)` and `band(level:)` give the tenses a quiz asks and the
+band a quiz with nil `verbs` draws from: a custom quiz's choice, else the level's.
 
 **The draw.** `Quiz.start(scope:)` defaults to `.allVerbs`, and returns false, changing nothing,
 when the scope gives no question (an empty My Verbs). Every random choice goes through one
@@ -699,9 +703,11 @@ generator: `Quiz(randomSource:)` takes one (tests pass `SplitMix64`, so a seed d
 in every process); without one, a shuffling quiz uses the system's, and an unshuffled one
 (`shouldShuffle: false`, for tests and UI tests) a fixed seed.
 
-- **Every verb** (`levelQuestions(count:)`) draws each question's tense from the level by weight
-  and its person from the tense's rotation, then hands the cells to `QuizDraw`
-  (`Models/QuizDraw.swift`, `nonisolated`), which chooses the verbs. See **Which verbs** below.
+- **Every verb** (`mixedQuestions(count:pool:band:)`) draws each question's tense from the pool by
+  weight and its person from the tense's rotation, then hands the cells to `QuizDraw`
+  (`Models/QuizDraw.swift`, `nonisolated`), which chooses the verbs from the band. See **Which
+  verbs** below. `QuizDraw` keeps its per-band data by `FrequencyBand?` (nil for every verb), so a
+  custom quiz over a band other than the level's is mixed the same way.
 - **A round over chosen verbs** (My Verbs, a collection) draws tenses by weight the same way and
   puts the scope's verbs into them, preferring a verb not already asked in that cell, then the verb
   asked least, then the next in turn, so a defective verb gets its share of the cells it has. A
@@ -875,15 +881,42 @@ since a popover tip on a view that outlives the tab's first visit would float ov
 results when the quiz finishing met its rule. Start is disabled while My Verbs is empty. The choice is not
 stored. On iPad the symbol, type, and tiles are larger and Start is scaled up.
 
+**Custom quiz.** The picker's third segment, Custom (Personalizado), shows `slider.horizontal.3`,
+"Custom Quiz", a card summarizing the choice (Tenses, Verbs), and Choose or Change, which pushes
+`CustomQuizEditor` (`Views/CustomQuizView.swift`) onto the tab's stack. Its Tenses section is "Set
+by Your Level" and one row per tense in the order the levels add them, each saying the level that
+adds it ("From Intermediate"); its Verbs section is "Set by Your Level", the three bands, All
+Verbs, My Verbs (only while it has verbs or is the stored choice), the four pattern lists, and
+Models, a further push of the Models tab's rows. Empty, the segment says what to choose and Start
+is disabled, as it is when the choice names an empty My Verbs. The choice is `CustomQuiz`
+(`Models/CustomQuiz.swift`, `nonisolated`): a set of tenses and an optional `QuizVerbSet` (`all`, a
+`band`, a `collection`, or `myVerbs`). The tab still opens on All Verbs, so Custom is one tap from
+Start and never the default.
+
+- **A part left unchosen is the level's.** Tenses alone ask the level's band; a verb set alone asks
+  the level's tenses.
+- **A chosen tense is asked as Advanced asks it**, of every person, at any level, and any tense may
+  be chosen, above the level or not.
+- **A band or All Verbs is mixed** as the default quiz is (`QuizDraw`); a collection or My Verbs is
+  a list, drawn as a scoped round is. The top 100 is offered only as its band. A pattern list asks
+  the chosen or the level's tenses, not its pattern's, so -go verbs may be asked their pretérito.
+- **Kept between launches** in `Settings.customQuiz` (key `customQuiz`), not shown in Settings, as
+  `tenses=presente_de_indicativo,preterito&verbs=goVerbs`, a form a link's query can carry. A tense's
+  key is its Info article's stable key (`ConjugationTable.articleKey`), or `gerundio`; a verb set's
+  is `all`, `top100`, `top300`, `top1000`, `myVerbs`, or a collection's key. An unknown key is
+  dropped alone. `CustomQuizTests` pins the form.
+- **Never ranked**, with Ten More, a Live Activity (it runs on the tab, so a collection choice starts
+  one too), and the tip donation, like any round.
+
 **Signals.** `startQuiz`, `quitQuiz`, `completeQuiz`, and `abandonQuiz` carry `level` (a
 `QuizLevel` raw value, in place of the old `difficulty`) and `source`: `tab`, `myVerbs`, `list`,
-`verbPage`, or a `quiz` link's own (`deeplink` by default), so that three-question completions do
+`verbPage`, `custom`, or a `quiz` link's own (`deeplink` by default), so that three-question completions do
 not raise a round's completion rate. There is no `tapTestVerb`: the sheet starts its quiz as it
 opens, so `startQuiz` with `verbPage` counts the same taps. Ten More sends no signal of its own.
 
 | Signal | Further parameters | Sent |
 |---|---|---|
-| `startQuiz` | `collection` for a collection's quiz | As a session starts |
+| `startQuiz` | `collection` for a collection's quiz, or a custom quiz over one; `customChoice` (`tenses`, `verbs`, or `both`) for a custom quiz, which says what kind of choice and never which | As a session starts |
 | `completeQuiz` | `duration`, `questionCount` (10, 20, …), `score` for a ranked session's first round only | At each round's results |
 | `quitQuiz` | `duration`, `questionNumber`, `score` during a ranked session's first round only | On Quit |
 | `abandonQuiz` | `questionNumber` | At the next launch, for each quiz the app was left during |

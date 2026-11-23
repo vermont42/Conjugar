@@ -75,6 +75,13 @@ final class Settings {
   static let quizClockKey = "quizClock"
   static let quizClockDefault: QuizClock = .hide
 
+  /// The Quiz tab's Custom segment's choice, kept between launches but not shown in Settings.
+  var customQuiz: CustomQuiz {
+    didSet { Settings.persist(getterSetter, Settings.customQuizKey, customQuiz, oldValue) }
+  }
+  static let customQuizKey = "customQuiz"
+  static let customQuizDefault = CustomQuiz()
+
   var promptActionCount: Int {
     didSet { Settings.persist(getterSetter, Settings.promptActionCountKey, promptActionCount, oldValue) }
   }
@@ -145,6 +152,7 @@ final class Settings {
     modelSort = Settings.read(getterSetter, Settings.modelSortKey, default: Settings.modelSortDefault)
     secondSingularQuiz = Settings.read(getterSetter, Settings.secondSingularQuizKey, default: Settings.secondSingularQuizDefault)
     quizClock = Settings.read(getterSetter, Settings.quizClockKey, default: Settings.quizClockDefault)
+    customQuiz = Settings.read(getterSetter, Settings.customQuizKey, default: Settings.customQuizDefault)
     promptActionCount = Settings.read(getterSetter, Settings.promptActionCountKey, default: Settings.promptActionCountDefault)
     lastReviewPromptDate = Settings.read(getterSetter, Settings.lastReviewPromptDateKey, default: Settings.lastReviewPromptDateDefault)
     userRejectedGameCenter = Settings.read(getterSetter, Settings.userRejectedGameCenterKey, default: Settings.userRejectedGameCenterDefault)

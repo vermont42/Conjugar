@@ -8,8 +8,8 @@
 import Synchronization
 
 /// Chooses the verbs of the default quiz, whose verbs the learner did not choose, once its cells
-/// are drawn. The verbs come from the level's frequency band (`QuizLevel.band`), and the quiz is
-/// balanced:
+/// are drawn. The verbs come from the level's frequency band (`QuizLevel.band`), or from a band a
+/// custom quiz chose, and the quiz is balanced:
 ///
 /// - Half its questions, rounded down, ask a cell in which the verb is irregular, judged per cell
 ///   (`isIrregular(_:in:)`), since tener is irregular in the presente and regular in the imperfecto.
@@ -38,7 +38,7 @@ nonisolated enum QuizDraw {
 
   /// The verbs a level's default quiz draws from, the most frequent first.
   static func verbs(for level: QuizLevel) -> [VerbMapEntry] {
-    bands[level]?.verbs ?? []
+    bands[level.band]?.verbs ?? []
   }
 
   /// Whether the engine's form of the cell marks an irregular letter, a spelling change (llegué,
@@ -65,9 +65,14 @@ nonisolated enum QuizDraw {
     isCompound(entry.infinitive) && !entry.isIn(frequentCompoundBand)
   }
 
-  /// One question per cell, in the cells' order.
+  /// One question per cell, in the cells' order, from the level's band.
   static func questions(cells: [ConjugationCell], level: QuizLevel, using generator: inout some RandomNumberGenerator) -> [QuizQuestion] {
-    guard let band = bands[level], !cells.isEmpty else {
+    questions(cells: cells, band: level.band, using: &generator)
+  }
+
+  /// One question per cell, in the cells' order, from the band, or from every verb when it is nil.
+  static func questions(cells: [ConjugationCell], band frequencyBand: FrequencyBand?, using generator: inout some RandomNumberGenerator) -> [QuizQuestion] {
+    guard let band = bands[frequencyBand], !cells.isEmpty else {
       return []
     }
     var draw = Draw(band: band)
@@ -89,15 +94,15 @@ nonisolated enum QuizDraw {
   }
 
   private struct Band {
-    let level: QuizLevel
+    let frequencyBand: FrequencyBand?
     let verbs: [VerbMapEntry]
     let reachesRareCompounds: Bool
     /// The band's infinitives by class number, then by kind (`Kind.rawValue`), each list by
     /// frequency.
     let verbsByClass: [String: [[String]]]
 
-    init(level: QuizLevel, verbs: [VerbMapEntry]) {
-      self.level = level
+    init(frequencyBand: FrequencyBand?, verbs: [VerbMapEntry]) {
+      self.frequencyBand = frequencyBand
       self.verbs = verbs
       reachesRareCompounds = verbs.contains(where: QuizDraw.isRareCompound)
       var verbsByClass: [String: [[String]]] = [:]
@@ -131,10 +136,11 @@ nonisolated enum QuizDraw {
     }
   }
 
-  private static let bands: [QuizLevel: Band] = Dictionary(uniqueKeysWithValues: QuizLevel.allCases.map { level in
-    let verbs = level.band.map { VerbMap.shared.entries(in: $0) }
+  /// Each band, and every verb under nil.
+  private static let bands: [FrequencyBand?: Band] = Dictionary(uniqueKeysWithValues: ([nil] + FrequencyBand.allCases).map { frequencyBand in
+    let verbs = frequencyBand.map { VerbMap.shared.entries(in: $0) }
       ?? VerbMap.shared.entries.values.sorted { $0.frequencyRank < $1.frequencyRank }
-    return (level, Band(level: level, verbs: verbs))
+    return (frequencyBand, Band(frequencyBand: frequencyBand, verbs: verbs))
   })
 
   /// A model's features are end-anchored, so the verbs of a class are irregular in the same
@@ -160,24 +166,24 @@ nonisolated enum QuizDraw {
     let verbsByKind: [[String]]
   }
 
-  private struct LevelCell: Hashable {
-    let level: QuizLevel
+  private struct BandCell: Hashable {
+    let frequencyBand: FrequencyBand?
     let cell: ConjugationCell
   }
 
-  private static let classesByLevelCell = Mutex<[LevelCell: [ClassInCell]]>([:])
+  private static let classesByBandCell = Mutex<[BandCell: [ClassInCell]]>([:])
 
   /// The band's classes that can be asked the cell, in a fixed order so that a seed draws the
   /// same quiz in every process.
   private static func classes(of band: Band, in cell: ConjugationCell) -> [ClassInCell] {
-    let key = LevelCell(level: band.level, cell: cell)
-    if let known = classesByLevelCell.withLock({ $0[key] }) {
+    let key = BandCell(frequencyBand: band.frequencyBand, cell: cell)
+    if let known = classesByBandCell.withLock({ $0[key] }) {
       return known
     }
     let computed = classIrregularity(in: cell).compactMap { classNumber, isIrregular in
       band.verbsByClass[classNumber].map { ClassInCell(isIrregular: isIrregular, ending: endingsByClass[classNumber], verbsByKind: $0) }
     }
-    classesByLevelCell.withLock { $0[key] = computed }
+    classesByBandCell.withLock { $0[key] = computed }
     return computed
   }
 

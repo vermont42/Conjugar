@@ -20,13 +20,25 @@ nonisolated struct QuizScope: Equatable, Sendable {
   let title: String?
   /// The collection the quiz is over, which `startQuiz` carries as `collection`.
   let collectionKey: String?
+  /// The learner's own choice of tenses and verbs, which the Quiz tab's Custom segment starts.
+  /// A custom quiz over a band or every verb has nil `verbs` and draws as the default quiz does,
+  /// from the chosen band.
+  let custom: CustomQuiz?
 
-  init(verbs: [String]?, questionCount: Int, source: AnalyticsSource, title: String? = nil, collectionKey: String? = nil) {
+  init(
+    verbs: [String]?,
+    questionCount: Int,
+    source: AnalyticsSource,
+    title: String? = nil,
+    collectionKey: String? = nil,
+    custom: CustomQuiz? = nil
+  ) {
     self.verbs = verbs
     self.questionCount = questionCount
     self.source = source
     self.title = title
     self.collectionKey = collectionKey
+    self.custom = custom
   }
 
   /// A round's length. The Quiz tab's quiz, a My Verbs quiz, and a collection's ask one round,
@@ -36,11 +48,11 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// Test Me's length on a verb's page.
   static let verbPageQuestionCount = 3
 
-  /// Only a quiz over every verb ranks: a score over a learner's own verbs, or over three
-  /// questions, compares with nothing. Of a ranked session, only the first round's score counts
-  /// (`Quiz.firstRoundScore`).
+  /// Only the default quiz over every verb ranks: a score over a learner's own verbs or tenses,
+  /// or over three questions, compares with nothing. Of a ranked session, only the first round's
+  /// score counts (`Quiz.firstRoundScore`).
   var isRanked: Bool {
-    verbs == nil && questionCount == QuizScope.roundLength
+    verbs == nil && custom == nil && questionCount == QuizScope.roundLength
   }
 
   /// Whether the results offer Ten More, which continues the session with another round. Test
@@ -52,9 +64,23 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// Whether the quiz starts the Live Activity, which is one for the whole app and belongs to the
   /// Quiz tab's quiz. A three-question quiz in a verb page's sheet is over before one would be
   /// noticed, and a collection's quiz runs in the same sheet, beside a quiz the tab may hold, so
-  /// neither starts one, though a collection's is a full round.
+  /// neither starts one, though a collection's is a full round. A custom quiz over a collection
+  /// runs on the tab, and starts one.
   var startsLiveActivity: Bool {
-    questionCount >= QuizScope.roundLength && collectionKey == nil
+    questionCount >= QuizScope.roundLength && (collectionKey == nil || custom != nil)
+  }
+
+  /// The tenses the quiz asks at a level: the learner's choice, or the level's.
+  func pool(level: QuizLevel) -> [QuizPoolEntry] {
+    custom?.pool(level: level) ?? level.pool
+  }
+
+  /// The band a quiz with nil `verbs` draws from: a custom quiz's chosen band, or the level's.
+  func band(level: QuizLevel) -> FrequencyBand? {
+    guard let custom else {
+      return level.band
+    }
+    return custom.band(level: level)
   }
 
   static let allVerbs = allVerbs(source: .tab)

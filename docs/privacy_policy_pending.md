@@ -539,3 +539,42 @@ El primer párrafo de la sección 7 queda así:
 ```
 Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios, una para cada nivel. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos, a la clasificación del nivel en que se hizo; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
 ```
+
+## Custom quizzes (pedagogy plan, Phase 8, 2026-11-23)
+
+The Quiz tab's new Custom segment starts a quiz over tenses, verbs, or both that the learner
+chose. Begins sending `custom` as the `source` of the quiz signals, a new kind of surface, and adds
+`customChoice` to `startQuiz`: whether the learner chose tenses, verbs, or both, never which ones. A
+custom quiz over a collection carries `collection`, as a collection's quiz does. A custom quiz
+posts no score to Game Center. This rewrites the quiz-lifecycle bullet that the Collections section
+rewrote, and the Game Center paragraph of section 7 that the Phase 7 section rewrote; this wording
+wins over both. The choice is kept on the device between launches and sent nowhere, like the
+settings, so it needs no line of its own.
+
+### English
+
+The bullet about quiz lifecycle events in section 2 now reads:
+
+```
+- Quiz lifecycle events (starting, quitting, or completing a quiz), where you began the quiz (for example the Quiz tab, My Verbs, a custom quiz of your own choosing, a verb's page, a collection, or a link), for a quiz over a collection, which collection, and, for a custom quiz, whether you chose its tenses, its verbs, or both (but not which ones)
+```
+
+The first paragraph of section 7 now reads:
+
+```
+Conjugar integrates with Apple Game Center for quiz leaderboards, one for each quiz level. When you submit a score, Game Center handles that data according to Apple's privacy policy. Only the score of the first ten questions of a quiz over all verbs is submitted, to the leaderboard of the level the quiz was taken at; the questions after them, and a quiz over My Verbs, a custom quiz, a collection, or a single verb's page, are not. The developer does not have access to your Game Center identity or personal information through this integration.
+```
+
+### Spanish
+
+El punto sobre los eventos del ciclo de vida de un cuestionario, en la sección 2, queda así:
+
+```
+- Los eventos del ciclo de vida de un cuestionario (comenzar, abandonar o terminar un cuestionario), dónde lo empezó (por ejemplo, en la pestaña del cuestionario, en Mis verbos, en un cuestionario personalizado que usted eligió, en la página de un verbo, en una colección o desde un enlace), si el cuestionario es sobre una colección, cuál y, si es personalizado, si usted eligió sus tiempos, sus verbos o ambos (pero no cuáles)
+```
+
+El primer párrafo de la sección 7 queda así:
+
+```
+Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios, una para cada nivel. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos, a la clasificación del nivel en que se hizo; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, de un cuestionario personalizado, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
+```

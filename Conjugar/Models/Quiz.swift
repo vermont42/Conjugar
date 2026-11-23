@@ -199,14 +199,15 @@ class Quiz {
   }
 
   /// Build the scope's questions at the learner's level and start the clock. The default scope,
-  /// every verb, is the Quiz tab's quiz. A scope whose verbs give no question (an empty My Verbs)
-  /// starts nothing, leaves the quiz as it was, and returns false.
+  /// every verb, is the Quiz tab's quiz. A scope whose verbs give no question (an empty My Verbs,
+  /// or chosen tenses that none of its verbs has) starts nothing, leaves the quiz as it was, and
+  /// returns false.
   @discardableResult
   func start(scope: QuizScope = .allVerbs) -> Bool {
     let region = settings.region
     let level = settings.quizLevel
     #if DEBUG
-    if let fixture = Quiz.fixtureRun, scope.verbs == nil {
+    if let fixture = Quiz.fixtureRun, scope.verbs == nil, scope.custom == nil {
       self.scope = scope
       lastRegion = region
       lastLevel = level
@@ -235,12 +236,7 @@ class Quiz {
     // `personNumber(for:)` reads the region and the level, so they are set before the draw.
     lastRegion = region
     lastLevel = level
-    var drawn: [Question]
-    if let verbs = scope.verbs {
-      drawn = scopedQuestions(verbs: verbs, count: scope.questionCount)
-    } else {
-      drawn = levelQuestions(count: scope.questionCount)
-    }
+    var drawn = draw(scope)
     guard !drawn.isEmpty else {
       lastRegion = previousRegion
       lastLevel = previousLevel
@@ -264,18 +260,27 @@ class Quiz {
     firstAttempts.removeAll()
   }
 
-  /// The quiz over every verb: each question's tense drawn from the level by weight and its
-  /// person the next of the tense's rotation, then the verbs from the level's band (`QuizDraw`).
-  private func levelQuestions(count: Int) -> [Question] {
-    let pool = lastLevel.pool
+  /// A round of the scope's questions at `lastLevel`, after the session's questions so far.
+  private func draw(_ scope: QuizScope, after prior: [Question] = []) -> [Question] {
+    let pool = scope.pool(level: lastLevel)
+    if let verbs = scope.verbs {
+      return scopedQuestions(verbs: verbs, count: scope.questionCount, pool: pool, after: prior)
+    }
+    return mixedQuestions(count: scope.questionCount, pool: pool, band: scope.band(level: lastLevel))
+  }
+
+  /// The quiz over a band's verbs, the default quiz's over the level's: each question's tense
+  /// drawn from the pool by weight and its person the next of the tense's rotation, then the
+  /// verbs from the band, balanced (`QuizDraw`).
+  private func mixedQuestions(count: Int, pool: [QuizPoolEntry], band: FrequencyBand?) -> [Question] {
     var cells: [ConjugationCell] = []
     while cells.count < count, let entry = pool.weightedRandomElement(using: &generator) {
       cells.append(ConjugationCell(tense: entry.tense, personNumber: personNumber(for: entry)))
     }
-    return QuizDraw.questions(cells: cells, level: lastLevel, using: &generator)
+    return QuizDraw.questions(cells: cells, band: band, using: &generator)
   }
 
-  /// Questions about the given verbs only, in the level's tenses and never in a cell a verb lacks
+  /// Questions about the given verbs only, in the pool's tenses and never in a cell a verb lacks
   /// (a defective verb's) or vosotros in the Latin America region.
   ///
   /// A full-length quiz draws its tenses by weight as the tab's quiz does and puts the scope's
@@ -286,7 +291,7 @@ class Quiz {
   ///
   /// A later round passes the session's questions so far as `prior`, so that its verbs take
   /// turns with the earlier rounds' and a cell already asked goes to another verb where one fits.
-  private func scopedQuestions(verbs: [String], count: Int, after prior: [Question] = []) -> [Question] {
+  private func scopedQuestions(verbs: [String], count: Int, pool tensePool: [QuizPoolEntry], after prior: [Question]) -> [Question] {
     var pool = verbs.filter { VerbMap.shared.entry(for: $0) != nil }
     guard !pool.isEmpty, count > 0 else {
       return []
@@ -327,7 +332,7 @@ class Quiz {
     }
 
     if count >= QuizScope.roundLength {
-      var entries = lastLevel.pool
+      var entries = tensePool
       while asked.count < target, let entry = entries.weightedRandomElement(using: &generator) {
         // The rotation's person first, then the tense's others, for a verb that lacks it.
         let first = personNumber(for: entry)
@@ -349,7 +354,7 @@ class Quiz {
       return Array(asked.dropFirst(prior.count))
     }
 
-    let entries = shouldShuffle ? lastLevel.pool.weightedShuffled(using: &generator) : lastLevel.pool
+    let entries = shouldShuffle ? tensePool.weightedShuffled(using: &generator) : tensePool
     var cellsByTense: [[DisplayPersonNumber]] = entries.map { entry in
       let personNumbers = personNumbers(for: entry)
       return shouldShuffle ? personNumbers.shuffled(using: &generator) : personNumbers
@@ -442,12 +447,7 @@ class Quiz {
     guard canContinue else {
       return false
     }
-    var drawn: [Question]
-    if let verbs = scope.verbs {
-      drawn = scopedQuestions(verbs: verbs, count: scope.questionCount, after: questions)
-    } else {
-      drawn = levelQuestions(count: scope.questionCount)
-    }
+    var drawn = draw(scope, after: questions)
     guard !drawn.isEmpty else {
       return false
     }

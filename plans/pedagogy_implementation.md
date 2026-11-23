@@ -33,8 +33,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 4 | Done | 2026-11-23 | 17aab3e | T2.3, T2.6, T6.7, M1 |
 | 5 | Done | 2026-11-23 | c4d16e2 | T2.1, T2.2, T2.5 |
 | 6 | Done | 2026-11-23 | dd360ca | T2.7, T3.1, T6.5, M2, M3 |
-| 7 | Awaiting Josh | 2026-11-23 | | Decision 4 |
-| 8 | Not started | | | T2.8 |
+| 7 | Done | 2026-11-23 | bcf9356 | Decision 4 |
+| 8 | Awaiting Josh | 2026-11-23 | | T2.8 |
 | 9 | Not started | | | T2.9, Decision 8 |
 | 10 | Not started | | | T3.3 (the record), T3.4, T3.5, T6.4 |
 | 11 | Not started | | | T3.2, T3.3 (the session) |
@@ -1406,7 +1406,7 @@ fires on the next launch, and tests pin re-ask placement and the continuation.
 ## Phase 7: Leaderboards by Level
 
 **Ports:** Konjugieren Phase 8. **Suggestions:** Decision 4. **Depends on:** Phases 4 and 6.
-**Status:** Awaiting Josh.
+**Status:** Done.
 
 Re-scope the Game Center leaderboard by level: one leaderboard per level, posting the score of a
 default session's first ten questions, so every ranked score has the same ceiling, 100. Scoped
@@ -1515,7 +1515,7 @@ nowhere, the walkthrough exists, and tests pin which sessions rank.
 ## Phase 8: Choosing What to Practice
 
 **Ports:** Konjugieren Phase 9. **Suggestions:** T2.8. **Depends on:** Phases 4 and 5. **Status:**
-Not started.
+Awaiting Josh.
 
 Let the learner choose the scope: tenses, a verb set (a frequency band, a collection or model, My
 Verbs when it has entries), or both. The default remains the classic quiz with this plan's changes.
@@ -1545,7 +1545,77 @@ not.
 **Done when** a learner can start a quiz over chosen tenses, a chosen verb set, or both, the default
 is unchanged, and tests pin scope construction.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh has not judged the layout**, which the phase asks for before polishing. It was built as
+  Konjugieren's and is waiting for his verdict on a phone and an iPad.
+- **The layout.** The Quiz tab's picker gained a third segment, Custom (Personalizado), which fits
+  on the iPhone 17 beside Todos los verbos and Mis verbos. Its start screen shows
+  `slider.horizontal.3`, "Custom Quiz" / "Test personalizado", a summary card (Tenses, Verbs) in
+  place of the three fact tiles, and Choose or Change, which pushes `CustomQuizEditor`
+  (`Views/CustomQuizView.swift`) onto the tab's stack. The editor's Tenses section opens with "Set
+  by Your Level" and lists every tense in the order the levels add them, each with the level that
+  adds it ("From Intermediate" / "Desde Intermedio"), where Konjugieren showed a table's second
+  name. The Verbs section is "Set by Your Level", the three bands, All Verbs, My Verbs, the four
+  pattern lists, and Models, a further push listing the Models tab's rows in the learner's own
+  Models-tab sort (first drawn in `ModelInfo.all`'s order, which no screen uses, and changed after
+  looking). Choosing a model returns to the editor, which names it beside Models. Empty, the
+  segment says what to choose and Start is disabled. The tab still opens on All Verbs.
+- **Decided in the session, as Konjugieren's were, and open to Josh's overrule.** (1) A part left
+  unchosen is the level's. (2) A chosen tense is asked as Advanced asks it, so a chosen imperativo
+  positivo asks nosotros and vosotros at Beginner too. (3) A band or All Verbs is mixed as the
+  default quiz is (half irregular, the core verbs, compounds); a collection or My Verbs is not.
+  (4) The top 100 is offered only as the band. (5) My Verbs is listed only while it has verbs or is
+  the stored choice. (6) One verb set at a time. (7) **A pattern list asks the chosen or the
+  level's tenses, not its pattern's**, the question the browse plan's Closing left for Phases 8
+  and 15. A learner who picks -go verbs can choose the presente and presente de subjuntivo
+  alongside; steering the tenses automatically would hide what the quiz asks. Phase 15 may still
+  decide otherwise for its model practice.
+- **How it works.** `CustomQuiz` (`Models/CustomQuiz.swift`, `nonisolated`) holds a set of tenses
+  and an optional `QuizVerbSet` (`all`, `band`, `collection`, `myVerbs`). `QuizScope` gained
+  `custom`, `pool(level:)`, and `band(level:)`; `isRanked` requires `custom == nil`, and
+  `startsLiveActivity` now lets a custom quiz over a collection start one, since it runs on the tab,
+  not in the collection sheet. `Quiz.start` and `continueSession` share one `draw(_:after:)`, which
+  hands the scope's pool to the scoped draw or to `mixedQuestions(count:pool:band:)` (the old
+  `levelQuestions`). `QuizDraw` now keys its per-band data and caches by `FrequencyBand?` rather
+  than by level, so a Beginner can draw a mixed quiz from the top 1,000; `questions(cells:level:)`
+  stays as a wrapper. The fixtures stay with the default quiz only.
+- **Kept between launches** in `Settings.customQuiz` (key `customQuiz`), not shown in Settings, as
+  `tenses=presente_de_indicativo,preterito&verbs=goVerbs`. A tense's key is its Info article's
+  stable key (`ConjugationTable.articleKey`), already permanent because `conjugar://info/…` links
+  name it, or `gerundio`, which has no article. A verb set's key is `all`, `top100`, `top300`,
+  `top1000`, `myVerbs`, or a collection's (`goVerbs`, `model-31`). Phase 9 can put the string in a
+  link unchanged. Konjugieren's later `infinitives=` list, for a shared My Verbs, is Phase 9's
+  work and was not ported.
+- **Analytics.** A new `source`, `custom`, and a new `startQuiz` parameter, `customChoice`
+  (`tenses`, `verbs`, or `both`). A custom quiz over a collection sends `collection` as a
+  collection's quiz does. Staged in `docs/privacy_policy_pending.md` in both languages (the
+  quiz-lifecycle bullet and section 7's Game Center paragraph), and pinned in `AnalyticsTests` and
+  `LookupSignalsTests`.
+- **Text.** New strings in `L.CustomQuiz`; Josh has not judged the wording. The App Store
+  description (both languages) and the README gained a sentence on the custom quiz. The onboarding
+  page and `TryQuizTip` are still true and were left alone.
+- **VoiceOver.** The summary card reads as one element; each editor row reads its name and detail
+  with the button trait, and `isSelected` when checked; tense names and model exemplars are marked
+  Spanish. Choose / Change has a hint. Not tried by ear.
+- **Tests:** `CustomQuizTests`, 15 tests in 1 second: the stored form pinned and round-tripped,
+  every tense key and every verb-set key (every model included), unknown keys dropped alone, the
+  setting's persistence, the choice parameter, each part left to the level, a chosen tense of every
+  person, never ranked, and sessions over tenses alone, a verb set alone, and both (with Ten More
+  keeping the choice), a band mixed as the default quiz is (exactly five irregular, two core), every
+  tense alone filling a round from every band in Latin America, and an empty My Verbs starting
+  nothing.
+- **Verified:** 1,054 tests in 67 suites in the simulator's default language (English), up from
+  1,039 in 66. `QuizLevelTests` took 5.0 seconds and `QuizVerbMixTests` 3.6, so the `QuizDraw`
+  rekeying cost nothing. On the iPhone, in English and light mode: the three segments, the empty
+  Custom state, the editor, the Models list, choosing a model and a pattern list, the summary, and a
+  quiz over Strong Preterites in the pretérito and imperfecto (poner, andar, traer, producir, venir,
+  tener, introducir, with re-asks). On the iPad, in Spanish and dark mode at Avanzado: Personalizado,
+  the empty state, the editor, the 300 band chosen with the condicional, the summary card, and a
+  quiz that asked only the condicional of top-300 verbs. The summary card first rendered with double
+  padding (`.card()` pads already), fixed after the iPhone check. Not tried: VoiceOver by ear, the
+  Live Activity, a relaunch to see the choice kept (unit-tested), accessibility text sizes, and the
+  Models list in its new sort (built, not opened again).
 
 ## Phase 9: Practice Sets to Share
 

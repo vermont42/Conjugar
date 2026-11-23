@@ -16,6 +16,9 @@ nonisolated enum ParameterKey: String {
   /// A collection's key, such as `top100` or `model-31`, on `viewCollection`, `tapShareCollection`,
   /// and a collection's `startQuiz`. A list, never a verb.
   case collection
+  /// What kind of choice a custom quiz's `startQuiz` was over: `tenses`, `verbs`, or `both`
+  /// (`CustomQuiz.choiceParameter`). Never which tenses or verbs.
+  case customChoice
   case deepestSection
   /// The band of time from a quiz's start to its quit or to a round's results
   /// (`AnalyticsBand.quizDuration`), on `quitQuiz` and `completeQuiz`.
@@ -104,6 +107,8 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case browse
   /// The Random Verb control in Control Center.
   case control
+  /// A custom quiz begun from the Quiz tab's Custom segment.
+  case custom
   /// A `conjugar://` link with no recognized `source` query item.
   case deeplink
   case infoLink

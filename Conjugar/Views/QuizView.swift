@@ -66,6 +66,14 @@ struct QuizView: View {
       .navigationDestination(for: QuizCorrectionModel.self) { destination in
         ModelView(model: destination.model, source: .quizCorrection)
       }
+      .navigationDestination(for: CustomQuizDestination.self) { destination in
+        switch destination {
+        case .editor:
+          CustomQuizEditor()
+        case .models:
+          CustomQuizModelList()
+        }
+      }
       .verbPageDestinations()
       .toolbar {
         if quiz.quizState == .inProgress {
@@ -145,6 +153,28 @@ struct QuizView: View {
       return .allVerbs
     case .myVerbs:
       return .myVerbs(myVerbs.map(\.infinitive))
+    case .custom:
+      return .custom(customQuiz, myVerbs: myVerbs.map(\.infinitive))
+    }
+  }
+
+  private var customQuiz: CustomQuiz {
+    Current.settings.customQuiz
+  }
+
+  /// A custom quiz kept from an earlier launch may name My Verbs after they have been cleared.
+  private var customQuizLacksMyVerbs: Bool {
+    customQuiz.verbSet == .myVerbs && myVerbs.isEmpty
+  }
+
+  private var canStart: Bool {
+    switch tabScope {
+    case .allVerbs:
+      return true
+    case .myVerbs:
+      return !myVerbs.isEmpty
+    case .custom:
+      return !customQuiz.isEmpty && !customQuizLacksMyVerbs
     }
   }
 
@@ -153,8 +183,8 @@ struct QuizView: View {
     sizeClass == .regular
   }
 
-  /// A big symbol for the scope, the picker and Start, three facts about the quiz, and for My
-  /// Verbs, the verbs it will ask about.
+  /// A big symbol for the scope, the picker and Start, three facts about the quiz (for Custom,
+  /// what it asks and the way to change it), and for My Verbs, the verbs it will ask about.
   private var startScreen: some View {
     GeometryReader { geometry in
       ScrollView {
@@ -176,22 +206,15 @@ struct QuizView: View {
               // `PrimaryButtonStyle` fixes its own font, so a scale is the way to enlarge it.
               .scaleEffect(isLarge ? 1.4 : 1)
               .padding(.vertical, isLarge ? Layout.defaultSpacing : 0)
-              .disabled(tabScope == .myVerbs && myVerbs.isEmpty)
-              .opacity(tabScope == .myVerbs && myVerbs.isEmpty ? 0.4 : 1)
+              .disabled(!canStart)
+              .opacity(canStart ? 1 : 0.4)
           }
 
-          HStack(alignment: .top, spacing: Layout.defaultSpacing) {
-            QuizFactTile(systemImage: "list.number", value: "\(QuizScope.roundLength)", label: L.Quiz.questionsLabel, isLarge: isLarge)
-            QuizFactTile(
-              systemImage: Current.settings.quizLevel.systemImage,
-              value: Current.settings.quizLevel.localizedName,
-              label: L.Settings.level,
-              isLarge: isLarge
-            )
-            QuizFactTile(systemImage: "globe.americas.fill", value: Current.settings.region.localizedRegion, label: L.Settings.region, isLarge: isLarge)
+          if tabScope == .custom {
+            customQuizSummary
+          } else {
+            factTiles
           }
-          // Equal heights when one label wraps to two lines.
-          .fixedSize(horizontal: false, vertical: true)
 
           if tabScope == .myVerbs, !myVerbs.isEmpty {
             myVerbChips
@@ -204,6 +227,44 @@ struct QuizView: View {
       }
       .scrollBounceBehavior(.basedOnSize)
     }
+  }
+
+  /// The quiz's length, level, and region.
+  private var factTiles: some View {
+    HStack(alignment: .top, spacing: Layout.defaultSpacing) {
+      QuizFactTile(systemImage: "list.number", value: "\(QuizScope.roundLength)", label: L.Quiz.questionsLabel, isLarge: isLarge)
+      QuizFactTile(
+        systemImage: Current.settings.quizLevel.systemImage,
+        value: Current.settings.quizLevel.localizedName,
+        label: L.Settings.level,
+        isLarge: isLarge
+      )
+      QuizFactTile(systemImage: "globe.americas.fill", value: Current.settings.region.localizedRegion, label: L.Settings.region, isLarge: isLarge)
+    }
+    // Equal heights when one label wraps to two lines.
+    .fixedSize(horizontal: false, vertical: true)
+  }
+
+  /// What a custom quiz will ask, and the way to change it, one tap from Start.
+  private var customQuizSummary: some View {
+    VStack(spacing: Layout.doubleDefaultSpacing) {
+      if !customQuiz.isEmpty {
+        CustomQuizSummaryCard(custom: customQuiz, level: Current.settings.quizLevel, isLarge: isLarge)
+          .accessibilityIdentifier("custom_quiz_summary")
+      }
+
+      NavigationLink(value: CustomQuizDestination.editor) {
+        Label(customQuiz.isEmpty ? L.CustomQuiz.choose : L.CustomQuiz.change, systemImage: "slider.horizontal.3")
+          .font(isLarge ? .title3.bold() : .headline)
+          .padding(.horizontal, Layout.defaultSpacing)
+          .padding(.vertical, 4)
+      }
+      .buttonStyle(.bordered)
+      .tint(.customYellow)
+      .accessibilityHint(L.CustomQuiz.chooseHint)
+      .accessibilityIdentifier("custom_quiz_choose_button")
+    }
+    .transition(.opacity)
   }
 
   /// The scope's symbol, its name, and a line saying what the quiz will ask about.
@@ -219,7 +280,7 @@ struct QuizView: View {
         .frame(height: isLarge ? 220 : 120)
         .accessibilityHidden(true)
 
-      Text(tabScope == .allVerbs ? L.BrowseVerbs.verbCount(count: VerbMap.shared.entries.count) : L.MyVerbs.title)
+      Text(heroTitle)
         .font(isLarge ? .largeTitle.bold() : .title.bold())
         .fontDesign(.serif)
         .foregroundStyle(Color.customForeground)
@@ -241,6 +302,19 @@ struct QuizView: View {
       return "books.vertical.fill"
     case .myVerbs:
       return myVerbs.isEmpty ? "star" : "star.fill"
+    case .custom:
+      return "slider.horizontal.3"
+    }
+  }
+
+  private var heroTitle: String {
+    switch tabScope {
+    case .allVerbs:
+      return L.BrowseVerbs.verbCount(count: VerbMap.shared.entries.count)
+    case .myVerbs:
+      return L.MyVerbs.title
+    case .custom:
+      return L.CustomQuiz.title
     }
   }
 
@@ -250,6 +324,11 @@ struct QuizView: View {
       return L.Quiz.briefing
     case .myVerbs:
       return myVerbs.isEmpty ? L.Quiz.myVerbsEmpty : L.Quiz.myVerbsCount(count: myVerbs.count)
+    case .custom:
+      if customQuiz.isEmpty {
+        return L.CustomQuiz.emptyDescription
+      }
+      return customQuizLacksMyVerbs ? L.Quiz.myVerbsEmpty : L.CustomQuiz.description
     }
   }
 
@@ -581,6 +660,9 @@ struct QuizView: View {
     if let collectionKey = scope.collectionKey {
       parameters[ParameterKey.collection.rawValue] = collectionKey
     }
+    if let custom = scope.custom {
+      parameters[ParameterKey.customChoice.rawValue] = custom.choiceParameter
+    }
     Current.analytics.signal(name: .startQuiz, parameters: parameters)
   }
 
@@ -766,6 +848,7 @@ private struct QuizFactTile: View {
 enum TabQuizScope: CaseIterable {
   case allVerbs
   case myVerbs
+  case custom
 
   var displayName: String {
     switch self {
@@ -773,6 +856,8 @@ enum TabQuizScope: CaseIterable {
       return L.Quiz.allVerbs
     case .myVerbs:
       return L.MyVerbs.title
+    case .custom:
+      return L.CustomQuiz.segment
     }
   }
 }
