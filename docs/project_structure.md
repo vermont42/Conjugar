@@ -10,7 +10,8 @@ Conjugar/
 ├── *.mp3                       # Legacy one-shot SFX at the target root (applause1-3, buzz, chime, chirp, chomp, gun,
 │                               #   moo, pop, sadTrombone1-4, shieldActivate, silence, soccerKick) — see Models/Sound.swift
 ├── Analytics/
-│   ├── Analytics.swift         # Analytics protocol + AnalyticsName / ParameterKey enums; nonisolated throughout
+│   ├── Analytics.swift         # Analytics protocol + AnalyticsName / ParameterKey enums, and every parameter value:
+│   │                           #   AnalyticsSource, SearchOutcome, SearchMatchKind, VerbPageSection, AnalyticsBand; nonisolated throughout
 │   ├── AnalyticsReal.swift     # TelemetryDeck conformer; funnels every SDK call onto a serial GCD queue
 │   └── AnalyticsSpy.swift      # Test spy recording signalNames / signalParameters
 ├── Assets.xcassets/
@@ -48,6 +49,10 @@ Conjugar/
 │   ├── VerbModel.swift         # One regular base root plus an ordered feature list; also the alternate-paradigm scheme
 │   ├── VerbMap.swift           # VerbMapEntry + the load-once @unchecked Sendable cache over verbModelMap.xml.
 │   │                           #   ranked(_:) derives the dense 1…4,811 frequency rank from the stored counts at parse time
+│   ├── VerbVisit.swift         # VerbDestination (infinitive + analytics source, what the tabs push) and VerbVisit (one
+│   │                           #   stretch of a verb page on screen: viewVerbView/leaveVerbView, deepest section, dwell)
+│   ├── SearchReport.swift      # SearchTracker (one search, first letter to its end) and SearchReport (finishSearch's banded
+│   │                           #   parameters); MatchKind.analyticsValue
 │   ├── VerbSearch.swift        # The one verb-search rule: folding, -se stripping, every gloss, MatchKind ranking by kind then frequency; closestVerb's guess for a failed search
 │   ├── RegularRoot.swift       # The three regular roots (cantar/comer/subir) plus the voseo supplement
 │   ├── EngineTense.swift       # Engine-side tense model — the ten simple / non-finite tenses only
@@ -63,7 +68,10 @@ Conjugar/
 │   ├── StemVowelFeature.swift  # Stem-vowel diphthongs (STR) and -ir weak-slot raising (WK) as one parameterized operation
 │   ├── IrregularityMarker.swift  # Recreates the legacy UPPERCASE irregular-span encoding by diffing form vs. regular composition
 │   ├── CompoundTense.swift     # Composes the nine compound (perfect) tenses as haber + participle, outside the engine
-│   ├── TenseBridge.swift       # The seam: DisplayTense/DisplayPersonNumber → EngineTense/EnginePersonNumber (+ compounds, negative imperative)
+│   ├── TenseBridge.swift       # The seam: DisplayTense/DisplayPersonNumber → EngineTense/EnginePersonNumber (+ compounds, negative imperative);
+│   │                           #   `pronoun: .written` adds a reflexive-only verb's pronoun
+│   ├── ReflexivePronoun.swift  # A reflexive-only verb as Spanish writes it: proclitic (me arrepiento), enclitic with the
+│   │                           #   enclisis accent (arrepiéntete, arrepintámonos), citation form (arrepentirse)
 │   ├── DisplayTense.swift      # The UI's tense vocabulary, including the compounds (formerly Tense.swift)
 │   ├── DisplayPersonNumber.swift  # The UI's person vocabulary with localized pronouns (formerly PersonNumber.swift)
 │   ├── AuxiliaryError.swift    # Error type for auxiliary-verb lookup failures
@@ -148,7 +156,7 @@ Conjugar/
 │   ├── SoundPlayerDummy.swift  # No-op so the test worlds never touch CoreAudio
 │   ├── SoundPlayerReal.swift   # AVAudioPlayer implementation: off-main warm-up, per-sound debounce, music fades
 │   ├── UIApplicationExtensions.swift  # topViewController / key-window helpers for the remaining UIKit presentations
-│   ├── URLExtension.swift      # URL.developerEmail and URL.mailto(_:subject:body:), for the failed search's request line
+│   ├── URLExtension.swift      # URL.developerEmail and URL.mailto(_:subject:body:), for the failed search's request line; URL.analyticsSource reads a link's source query item
 │   ├── URLProtocolStub.swift   # URLProtocol subclass for stubbing HTTP responses in tests
 │   ├── URLSessionExtension.swift  # Stubbed URLSession for testing
 │   ├── Utterer.swift           # AVSpeechSynthesizer text-to-speech plus the single .ambient audio-session owner
@@ -157,7 +165,7 @@ Conjugar/
 │   └── WidgetSnapshotWriter.swift  # Picks the daily verb + quiz question, conjugates them, writes JSON to the App Group.
 │                                   #   Draws from the top verbOfTheDayPoolSize (1,000) verbs by frequency
 └── Views/
-    ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing, incl. the one-shot game/onboarding/tutor/search-focus flags
+    ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing, incl. the one-shot game/onboarding/tutor/search-focus flags; a verb link's ?source= becomes the pushed page's source
     ├── BrowseLayout.swift      # Shared LazyVGrid column sets for the iPad (regular-width) layouts
     ├── ConjugationText.swift   # Renders a conjugated form with its irregular span in customRed
     ├── EtymologyText.swift     # Renders etymology prose (its own minimal `~…~` parser, independent of Info markup)
@@ -177,7 +185,7 @@ Conjugar/
     ├── SpanishLetterKeyRow.swift  # á é í ó ú ü ñ keys with an insert closure; replaces the Verbs sort picker while search is focused
     ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; carries the browse_verb_count launch anchor
     ├── VerbSearchCommands.swift  # Command-F as a top-level menu (Verbs › Find a Verb) that focuses the verb search
-    └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples
+    └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples; sends viewVerbView/leaveVerbView per VerbVisit
 
 ConjugarWidget/
 ├── AnswerQuizIntent.swift      # Interactive AppIntent behind the Quiz widget's answer buttons
@@ -191,7 +199,7 @@ ConjugarWidget/
 ├── RandomVerbControl.swift     # Control Center / Lock Screen control that opens a random verb
 ├── SnapshotReader.swift        # Decodes the App-Group JSON snapshot; supplies the gallery placeholder
 ├── VerbOfTheDayWidget.swift    # "Verb of the Day" StaticConfiguration refreshing at the next local midnight
-├── WidgetDeeplink.swift        # Builds the conjugar:// URLs the widgets attach via .widgetURL(_:)
+├── WidgetDeeplink.swift        # Builds the conjugar:// URLs the widgets attach via .widgetURL(_:); verb links carry ?source=widget
 └── Views/
     ├── AccessoryWidgetView.swift    # Lock Screen accessory presentations
     ├── LargeWidgetView.swift        # systemLarge: header, non-finite forms, presente paradigm, example, etymology
@@ -203,7 +211,8 @@ ConjugarWidget/
 
 Shared/                         # Compiled into both the app and the widget extension
 ├── OpenQuizIntent.swift        # Opens the app and stashes a deeplink the app drains on activation
-├── OpenRandomVerbIntent.swift  # Same, for a random verb
+├── OpenRandomVerbIntent.swift  # Same, for a random verb, as Shortcuts and Siri run it (source=shortcut)
+├── OpenRandomVerbControlIntent.swift  # The Random Verb control's own hidden copy of it (source=control)
 ├── QuizActivityAttributes.swift  # The ActivityKit contract shared by LiveActivityManager and QuizLiveActivity
 ├── WidgetConstants.swift       # App Group id, snapshot filename, and the shared-defaults keys
 ├── WidgetL.swift               # Widget-target localization accessors mirroring L, with English defaultValues
@@ -212,7 +221,8 @@ Shared/                         # Compiled into both the app and the widget exte
 ConjugarTests/
 ├── Info.plist
 ├── Analytics/
-│   └── AnalyticsTests.swift            # Signal names and parameters via AnalyticsSpy; pins the wire names
+│   ├── AnalyticsTests.swift            # Signal names and parameters via AnalyticsSpy; pins the wire names
+│   └── LookupSignalsTests.swift        # finishSearch/viewVerbView/leaveVerbView: bands, the search's lifecycle, reports, visits, link sources, no echo of the query
 ├── Models/
 │   ├── ConjugatorTests.swift           # The main engine suite — regular and irregular verbs across all tenses
 │   ├── ConjugatorAccessorsTests.swift  # The engine's convenience accessors
@@ -222,6 +232,8 @@ ConjugarTests/
 │   ├── VerbMapRankingTests.swift       # Rank derivation on a fixture, the shipped map's invariants, and
 │   │                                   #   line-for-line agreement with docs/frequencies.txt
 │   ├── TenseBridgeTests.swift          # DisplayTense/DisplayPersonNumber → engine mapping, compounds, negative imperative
+│   ├── ReflexivePronounTests.swift     # Reflexive-only verbs: arrepentirse in every slot, every rx verb's pronoun placement,
+│   │                                   #   the enclisis accent rule, citation-form search, and quiz grading with and without the pronoun
 │   ├── DisplayTenseTests.swift         # The UI tense vocabulary
 │   ├── DisplayPersonNumberTests.swift  # The UI person vocabulary and its pronouns
 │   ├── ConjugationResultTests.swift    # Answer scoring, incl. the diacritic-folding partial match
@@ -248,7 +260,7 @@ ConjugarTests/
 │   ├── SoundPlayerTests.swift          # The audio DI seam: the test world must get SoundPlayerDummy
 │   └── URLExtensionTests.swift         # mailto encoding of a learner's query
 └── Views/
-    ├── AppRouterTests.swift            # Deeplink routing, focused on the one-shot game/boss and game/end flags, plus Command-F's search request
+    ├── AppRouterTests.swift            # Deeplink routing, focused on the one-shot game/boss and game/end flags, plus Command-F's search request and a verb link's source
     ├── ConjugationTextTests.swift      # The shared conjugation renderer
     ├── EtymologyTextTests.swift        # The etymology markup renderer
     ├── InfoTests.swift                 # The rich-text parser and the Info model
@@ -277,7 +289,9 @@ docs/                           # Claude's output that holds information and is 
 ├── verb_history.txt            # Editable English source of Info.verbHistoryText; sync with scripts/sync_verb_history.py
 ├── verb_history_es.txt         # The Spanish translation of the same, synced with --lang es
 ├── purpose_and_use_proposed.txt    # Draft replacement for Info.purposeAndUseText
-├── privacy_policy3.txt         # The published privacy policy (English + Spanish) — update it when signals change
+├── privacy_policy3.txt         # The published privacy policy (English + Spanish), describing the shipped app
+├── privacy_policy_pending.md   # Policy lines for signals built on master, English + Spanish, waiting for the 2027 release
+├── feature_architecture.md     # How the browse and pedagogy plans' features fit together; § Analytics: signals, the source vocabulary
 ├── app_description.txt         # App Store descriptions: the 2.8 text and the 3.0 rewrite, English and Spanish
 ├── release_notes.txt           # App Store release notes, newest version first
 ├── release.md                  # The 2027 release: every step left for release day (App Store Connect, device checks,

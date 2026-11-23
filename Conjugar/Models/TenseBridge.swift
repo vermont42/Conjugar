@@ -28,7 +28,25 @@
 nonisolated enum TenseBridge {
   /// Conjugate a legacy `(DisplayTense, DisplayPersonNumber)` slot through `Conjugator`,
   /// irregularity-marked for display.
-  static func conjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, ConjugatorError> {
+  ///
+  /// `pronoun` defaults to `.omitted`, the bare form the engine has always returned, which the
+  /// oracle tests, the corpus dumps, and the compound tenses' auxiliary rely on. Every surface
+  /// that shows a form to a learner passes `.written`, so that a reflexive-only verb reads as
+  /// Spanish writes it (me arrepiento, arrepiéntete). See `ReflexivePronoun`.
+  static func conjugate(
+    infinitive: String,
+    tense: DisplayTense,
+    personNumber: DisplayPersonNumber,
+    pronoun: ReflexivePronoun = .omitted
+  ) -> Result<String, ConjugatorError> {
+    let marked = markedConjugate(infinitive: infinitive, tense: tense, personNumber: personNumber)
+    guard pronoun == .written, ReflexivePronoun.isReflexiveOnly(infinitive) else {
+      return marked
+    }
+    return marked.map { ReflexivePronoun.attach(to: $0, tense: tense, personNumber: personNumber) }
+  }
+
+  private static func markedConjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, ConjugatorError> {
     let result = unmarkedConjugate(infinitive: infinitive, tense: tense, personNumber: personNumber)
     guard
       case let .success(form) = result,

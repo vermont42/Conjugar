@@ -23,8 +23,15 @@ struct VerbBrowseView: View {
   /// The closest verb to a query that found nothing, or nil. See `VerbSearch.closestVerb`.
   @State private var guess: VerbMapEntry?
   @State private var addressWasCopied = false
+  /// The ranked matches behind `filteredVerbs` while searching, which say each row's match kind
+  /// for `finishSearch`. Empty when the field is.
+  @State private var searchMatches: [VerbSearch.Match] = []
+  @State private var searchTracker = SearchTracker()
+  /// When the field last lost focus, or nil while it has it. See `push(_:)`.
+  @State private var searchFocusLostAt: Date?
   @Environment(AppRouter.self) private var router
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+  @Environment(\.scenePhase) private var scenePhase
   private let tryQuizTip = TryQuizTip()
 
   /// Both sort orders, computed once (mirrors the UIKit VC's `verbsBySort`).
@@ -48,15 +55,17 @@ struct VerbBrowseView: View {
   private func recomputeFilteredVerbs() {
     guess = nil
     guard isSearching else {
+      searchMatches = []
       filteredVerbs = verbs
       return
     }
-    let results = VerbSearch.matches(for: searchText, in: verbs).map(\.entry)
-    if results.isEmpty {
+    let matches = VerbSearch.matches(for: searchText, in: verbs)
+    if matches.isEmpty {
       Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)
       guess = VerbSearch.closestVerb(to: searchText, in: verbs)
     }
-    filteredVerbs = results
+    searchMatches = matches
+    filteredVerbs = matches.map(\.entry)
   }
 
   private var trimmedSearchText: String {
@@ -82,8 +91,10 @@ struct VerbBrowseView: View {
   private func searchFocusChanged() {
     guard !searchIsFocused else {
       searchIsEngaged = true
+      searchFocusLostAt = nil
       return
     }
+    searchFocusLostAt = .now
     Task {
       try? await Task.sleep(for: Self.searchLingering)
       if !searchIsFocused {
@@ -93,6 +104,55 @@ struct VerbBrowseView: View {
   }
 
   private static let searchLingering = Duration.milliseconds(700)
+
+  // From Konjugieren: a tap that ends an empty search on iPad would push while the search is still
+  // animating away, and UIKit drops such a push; see ViewControllerTransitions. A typed search
+  // does not end on that tap, and on iPhone nothing is animating, so both push at once. The rows
+  // were NavigationLinks, which SwiftUI pushed itself, until they became buttons that report the
+  // open (browse plan, Phase 2).
+  private func push(_ destination: VerbDestination) {
+    guard !isSearching, searchFocusLostAt != nil else {
+      navigationPath.append(destination)
+      return
+    }
+    Task {
+      await ViewControllerTransitions.waitUntilIdle()
+      navigationPath.append(destination)
+    }
+  }
+
+  /// Opens the row at `index` in `filteredVerbs`. `wasSearching` is read when the row is drawn,
+  /// so that a tap that changes the field first cannot change the source.
+  private func openRow(at index: Int, wasSearching: Bool) {
+    guard filteredVerbs.indices.contains(index) else {
+      return
+    }
+    let infinitive = filteredVerbs[index].infinitive
+    guard wasSearching, searchMatches.indices.contains(index) else {
+      push(VerbDestination(infinitive: infinitive, source: .browse))
+      return
+    }
+    if let query = searchTracker.finish() {
+      signal(.opened(query: query, resultCount: searchMatches.count, kind: searchMatches[index].kind, position: index))
+    }
+    push(VerbDestination(infinitive: infinitive, source: .search))
+  }
+
+  private func openGuess(_ guess: VerbMapEntry) {
+    if let query = searchTracker.finish() {
+      signal(.openedGuess(query: query))
+    }
+    push(VerbDestination(infinitive: guess.infinitive, source: .searchGuess))
+  }
+
+  /// A search that ended with nothing opened: cleared, or left in the background.
+  private func signalEndedSearch(query: String) {
+    signal(.ended(query: query, matches: VerbSearch.matches(for: query, in: verbs)))
+  }
+
+  private func signal(_ report: SearchReport) {
+    Current.analytics.signal(name: .finishSearch, parameters: report.parameters)
+  }
 
   // On iPad a key's tap ends an empty search, and the search clears its text as it goes, so a
   // letter set meanwhile is lost. The letter waits for the search to be gone, then reopens it.
@@ -120,7 +180,9 @@ struct VerbBrowseView: View {
           .padding(.horizontal)
           .accessibilityIdentifier("search_guess_intro")
 
-        NavigationLink(value: guess.infinitive) {
+        Button {
+          openGuess(guess)
+        } label: {
           VerbRowLabel(entry: guess)
         }
         .buttonStyle(.plain)
@@ -234,9 +296,9 @@ struct VerbBrowseView: View {
       return
     }
     if filteredVerbs.isEmpty, index == 0, let guess {
-      navigationPath.append(guess.infinitive)
-    } else if filteredVerbs.indices.contains(index) {
-      navigationPath.append(filteredVerbs[index].infinitive)
+      openGuess(guess)
+    } else {
+      openRow(at: index, wasSearching: isSearching)
     }
   }
 
@@ -283,10 +345,13 @@ struct VerbBrowseView: View {
             } else if horizontalSizeClass == .regular {
               // iPad / regular width: reflow the rows into an adaptive grid of
               // carded cells (≈2 columns portrait, ≈3–4 landscape). The same
-              // `navigationDestination(for: String)` renders the pushed `VerbView`.
+              // `navigationDestination(for: VerbDestination)` renders the pushed `VerbView`.
+              let wasSearching = isSearching
               LazyVGrid(columns: BrowseLayout.listColumns, spacing: Layout.doubleDefaultSpacing) {
                 ForEach(Array(filteredVerbs.enumerated()), id: \.element.infinitive) { index, entry in
-                  NavigationLink(value: entry.infinitive) {
+                  Button {
+                    openRow(at: index, wasSearching: wasSearching)
+                  } label: {
                     VerbGridCell(entry: entry)
                       .card()
                       .overlay {
@@ -306,13 +371,16 @@ struct VerbBrowseView: View {
               .padding(.horizontal)
               .padding(.top, Layout.defaultSpacing)
             } else {
+              let wasSearching = isSearching
               LazyVStack(spacing: 0) {
                 ForEach(Array(filteredVerbs.enumerated()), id: \.element.infinitive) { index, entry in
-                  // A real `NavigationLink`: `.isButton` trait, press
-                  // highlight, and stronger VoiceOver semantics than the old
-                  // `.onTapGesture`. The stack's `navigationDestination(for: String)`
-                  // already renders the pushed `VerbView`.
-                  NavigationLink(value: entry.infinitive) {
+                  // A real `Button`, not `.onTapGesture`: `.isButton` trait, press highlight,
+                  // and stronger VoiceOver semantics. It was a `NavigationLink` until the
+                  // open had to report its search (browse plan, Phase 2); the stack's
+                  // `navigationDestination(for: VerbDestination)` renders the pushed `VerbView`.
+                  Button {
+                    openRow(at: index, wasSearching: wasSearching)
+                  } label: {
                     VerbRowLabel(entry: entry)
                   }
                   .buttonStyle(.plain)
@@ -330,6 +398,9 @@ struct VerbBrowseView: View {
           }
           .onChange(of: searchText) { _, _ in
             keyboardSelection = nil
+            if let query = searchTracker.textChanged(to: searchText) {
+              signalEndedSearch(query: query)
+            }
             recomputeFilteredVerbs()
           }
           .onChange(of: keyboardSelection) { _, selection in
@@ -386,13 +457,19 @@ struct VerbBrowseView: View {
       .autocorrectionDisabled()
       .sensoryFeedback(.selection, trigger: sort)
       .navigationTitle(L.BrowseVerbs.localizedTitle)
-      .navigationDestination(for: String.self) { verb in
-        VerbView(verb: verb)
+      .navigationDestination(for: VerbDestination.self) { destination in
+        VerbView(verb: destination.infinitive, source: destination.source)
       }
-      .onChange(of: router.pendingVerb, initial: true) { _, verb in
-        guard let verb else { return }
-        navigationPath.append(verb)
+      .onChange(of: router.pendingVerb, initial: true) { _, destination in
+        guard let destination else { return }
+        navigationPath.append(destination)
         router.pendingVerb = nil
+      }
+      // A search left with text in the field when the app goes to the background has ended.
+      .onChange(of: scenePhase) {
+        if scenePhase == .background, let query = searchTracker.finish() {
+          signalEndedSearch(query: query)
+        }
       }
       .onChange(of: router.pendingSearchFocus, initial: true) { _, requested in
         guard requested else { return }
@@ -418,7 +495,7 @@ struct VerbRowLabel: View {
   var body: some View {
     HStack(alignment: .firstTextBaseline) {
       VStack(alignment: .leading, spacing: 2) {
-        Text(entry.infinitive)
+        Text(entry.citationForm)
           .font(.title3)
           .fontDesign(.serif)
           .foregroundStyle(Color.customYellow)
@@ -457,7 +534,7 @@ struct VerbGridCell: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 2) {
       HStack(alignment: .firstTextBaseline) {
-        Text(entry.infinitive)
+        Text(entry.citationForm)
           .font(.title3)
           .fontDesign(.serif)
           .foregroundStyle(Color.customYellow)

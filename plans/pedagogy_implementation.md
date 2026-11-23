@@ -281,6 +281,16 @@ disagree, the note wins.
 - **The reflexive display** (browse Phase 3, accepted 2026-11-22): the quiz must accept a
   reflexive-only verb's form with and without its pronoun (Phase 0), and the frame shows the
   pronoun (Phase 1).
+  - *Landed 2026-11-22 (browse Phase 3):* `TenseBridge.conjugate(…, pronoun: .written)` returns a
+    reflexive-only verb's form with its pronoun (me arrepiento, arrepiéntete, no te arrepientas);
+    the default `.omitted` stays bare. `ReflexivePronoun` (`Models/`) holds the placement, the
+    enclisis accent rule (`enclitic(_:attachedTo:droppingLast:)`), and `citationForm(of:)`.
+    `Quiz.grade(_:infinitive:tense:personNumber:writtenAnswer:)` already accepts both answers and
+    collapses runs of spaces, and `Quiz.results` holds each grade so the results screen no longer
+    regrades. The quiz question shows the citation form (arrepentirse) and the shown answer has the
+    pronoun. No quiz list holds a reflexive-only verb today, so nothing a learner meets changed;
+    Phase 0 and Phase 1 here should keep calling `grade` and `.written` when they rebuild grading
+    and the frame.
 - **The periphrasis article** (browse Phase 7, on ir a + infinitivo and estar + gerundio), which
   Phase 18's choice between the
   futuro and ir a + infinitivo could link.
@@ -300,7 +310,10 @@ disagree, the note wins.
 - **Collections** (browse Phase 16): fixed lists derived from the engine, and a bar on every model's
   page, shared as
   `conjugar://list/<key>`. Phases 8 and 15 here use them.
-- **`docs/privacy_policy_pending.md` and `docs/feature_architecture.md`** (browse Phase 2).
+- **`docs/privacy_policy_pending.md` and `docs/feature_architecture.md`** (browse Phase 2). Landed
+  2026-11-22: both exist. `AnalyticsSource` in `Analytics.swift` already holds `tab` and
+  `verbPage` for the quiz signals' `source`, and `AnalyticsBand` is where new bands (the quiz's
+  duration bands, pedagogy Phase 6) belong. The quiz signals do not send `source` yet.
 
 ## Suggestion Index
 

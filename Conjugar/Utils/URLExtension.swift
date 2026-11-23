@@ -19,4 +19,17 @@ extension URL {
     let encode = { (text: String) in text.addingPercentEncoding(withAllowedCharacters: mailtoUnreserved) ?? "" }
     return URL(string: "mailto:\(address)?subject=\(encode(subject))&body=\(encode(body))")
   }
+
+  /// The query item a `conjugar://` link names its surface in, as in
+  /// `conjugar://verb/hablar?source=widget`. A widget or a control can hand the app only a URL.
+  nonisolated static let sourceQueryName = "source"
+
+  /// The surface this link says it came from, or nil if it names none that the app knows.
+  nonisolated var analyticsSource: AnalyticsSource? {
+    URLComponents(url: self, resolvingAgainstBaseURL: false)?
+      .queryItems?
+      .first { $0.name == Self.sourceQueryName }?
+      .value
+      .flatMap(AnalyticsSource.init(rawValue:))
+  }
 }

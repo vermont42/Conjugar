@@ -162,6 +162,14 @@ nonisolated enum DisplayTense: String, CaseIterable {
     }
   }
 
+  /// A perfect tense, which the page composes as haber + participle.
+  var isCompound: Bool {
+    if case .success = haberTenseForCompoundTense() {
+      return true
+    }
+    return false
+  }
+
   func haberTenseForCompoundTense() -> Result<DisplayTense, AuxiliaryError> {
     switch self {
     case .perfectoDeIndicativo:

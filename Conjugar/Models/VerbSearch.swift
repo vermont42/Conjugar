@@ -204,6 +204,10 @@ nonisolated enum VerbSearch {
     let rawGlosses: [String]
     let infinitive: String
     let foldedInfinitive: String
+    /// A reflexive-only verb's infinitive with its "se", as the list shows it (arrepentirse), so
+    /// that a query typed toward it ("arrepentirs") keeps finding it. Nil for any other verb.
+    let citation: String?
+    let foldedCitation: String?
     /// Every gloss of every sense of a homonym, lowercased.
     let glosses: [String]
     let glossSenses: Set<String>
@@ -212,6 +216,8 @@ nonisolated enum VerbSearch {
       rawGlosses = entry.glosses
       infinitive = entry.infinitive.lowercased()
       foldedInfinitive = VerbSearch.fold(infinitive)
+      citation = entry.isReflexive ? entry.citationForm.lowercased() : nil
+      foldedCitation = citation.map(VerbSearch.fold)
       glosses = entry.glosses.map { $0.lowercased() }
       glossSenses = Set(glosses.flatMap { VerbSearch.senses(of: $0) })
     }
@@ -240,7 +246,7 @@ nonisolated enum VerbSearch {
     if keys.glossSenses.contains(english) {
       return .exactGlossSense
     }
-    if !spanish.isEmpty && keys.infinitive.hasPrefix(spanish) {
+    if !spanish.isEmpty && (keys.infinitive.hasPrefix(spanish) || keys.citation?.hasPrefix(spanish) == true) {
       return .infinitivePrefix
     }
     if keys.glosses.contains(where: { containsWholeWord(english, in: $0) }) {
@@ -250,7 +256,7 @@ nonisolated enum VerbSearch {
       if keys.infinitive.contains(spanish) {
         return .infinitiveSubstring
       }
-      if keys.foldedInfinitive.hasPrefix(foldedSpanish) {
+      if keys.foldedInfinitive.hasPrefix(foldedSpanish) || keys.foldedCitation?.hasPrefix(foldedSpanish) == true {
         return .foldedInfinitivePrefix
       }
       if keys.foldedInfinitive.contains(foldedSpanish) {

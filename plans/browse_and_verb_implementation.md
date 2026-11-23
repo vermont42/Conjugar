@@ -26,9 +26,9 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | Phase | Status | Date | Commit | Ideas |
 |---:|---|---|---|---|
 | 0 | Done | 2026-11-22 | f27a7a6 | A1, A2, A3, A8 |
-| 1 | Awaiting Josh | 2026-11-22 | | A4, C4 |
-| 2 | Not started | | | Signals |
-| 3 | Not started | | | B2 (the reflexive analog) |
+| 1 | Done | 2026-11-22 | 7c34a17 | A4, C4 |
+| 2 | Awaiting Josh | 2026-11-22 | | Signals |
+| 3 | Awaiting Josh | 2026-11-22 | | B2 (the reflexive analog) |
 | 4 | Not started | | | A5 (the map) |
 | 5 | Not started | | | A5 (the search) |
 | 6 | Not started | | | B3, B5's tip |
@@ -392,7 +392,7 @@ tests pin each case.
 ## Phase 1: When Search Finds Nothing, and Keyboard Lookup
 
 **Ideas:** A4, C4. **Ports:** Konjugieren Phase 2. **Depends on:** Phase 0. **Status:**
-Awaiting Josh (2026-11-22).
+Done (2026-11-22, 7c34a17).
 
 - **A4.** Keep the sad trombone. Below "No verbs found", offer the single closest verb by fuzzy
   matching over the folded infinitives, and say plainly that it is a guess. Add a line saying that
@@ -490,8 +490,8 @@ Command-F, Return, and the arrows work on the iPad simulator.
 ## Phase 2: Lookup Signals
 
 **Ideas:** the three signals in Konjugieren's ideas document, "What to Measure". **Ports:**
-Konjugieren Phase 3. **Depends on:** Phase 0, so that the match kinds exist. **Status:** Not
-started.
+Konjugieren Phase 3. **Depends on:** Phase 0, so that the match kinds exist. **Status:**
+Awaiting Josh (2026-11-22).
 
 - `finishSearch`, sent once per search, with banded `outcome`, `queryLength`, `resultCount`,
   `matchKind`, and `resultPosition`.
@@ -547,12 +547,83 @@ add `tapShareVerb`, `tapStarVerb`, and `tapTestVerb`. Phase 13 adds `source` to 
 simulator world uses `AnalyticsSpy`), tests pin the bands and parameters, and the two documents
 exist.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Where things live.** Every key and value is in `Analytics/Analytics.swift`: the new
+  `ParameterKey` cases, `AnalyticsSource`, `SearchOutcome`, `SearchMatchKind`, `VerbPageSection`,
+  and the bands in `AnalyticsBand`, all `nonisolated` like the rest of the family. `VerbVisit` and
+  `VerbDestination` are in `Models/VerbVisit.swift`; `SearchTracker`, `SearchReport`, and
+  `MatchKind.analyticsValue` in `Models/SearchReport.swift`. `docs/feature_architecture.md`
+  § Analytics has the signal table and the `source` vocabulary, with which values are sent today
+  and which phase sends the rest.
+- **The vocabulary.** `source` has 21 values: the plan's list plus `shortcut`, `tab`, `verbPage`,
+  and `infoLink` (reserved, as Konjugieren has it). Sent today: `browse`, `search`, `searchGuess`,
+  `model`, `widget`, `control`, `shortcut`, `deeplink`, and `resume`. `matchKind` sends the search's
+  nine kinds by name (`exactGlossSense` included, which Konjugieren lacks), plus `guess` and
+  `none`. `conjugation` and `foldedConjugation` wait in the enum for Phase 5, which should check
+  whether its kinds need other names.
+- **`finishSearch` has no `source`.** Konjugieren added one in its Phase 11 (where the search
+  began). Today every search here begins in the Verbs tab, so it would always say `tab`. Phase 10
+  or 11, which build the outside ways in, should add it then, with `SearchTracker` learning the
+  surface that opened the field as Konjugieren's does.
+- **The rows became buttons.** The verb list's rows and the guess were `NavigationLink(value:)`s,
+  which push without a hook, so an open could not send `finishSearch` or tell its match kind. They
+  are now buttons calling `openRow(at:wasSearching:)` and `openGuess(_:)`, which report and then
+  push a `VerbDestination`. `wasSearching` is read as the row is drawn. That reopened Konjugieren's
+  iPad bug, a push dropped while an empty search animates away, which the links had dodged, so
+  `push(_:)` ports Konjugieren's `pushFromSearch` (wait for `ViewControllerTransitions` when the
+  field just lost focus with nothing typed). The Models tab pushes `VerbDestination(…, source:
+  .model)` from `ModelView`'s closure; its stack's destination type changed from `String`.
+- **The sections.** `simple` and `compound` are marked by the first simple and the first compound
+  card in `DisplayTense.conjugatedTenses` (Presente de Indicativo and Perfecto de Indicativo
+  today), found by `VerbView.section(markedBy:)` through a new `DisplayTense.isCompound`, so Phase
+  6's reordering moves the marks with the cards. The threshold is 0.3, as in Konjugieren.
+- **The control's own intent.** `OpenRandomVerbIntent` is discoverable in the Shortcuts app, so the
+  Random Verb control now runs `Shared/OpenRandomVerbControlIntent.swift` (hidden with
+  `isDiscoverable = false`, same title key), which stashes `?source=control`. The original
+  stashes `?source=shortcut`. `WidgetDeeplink.verb(_:)` adds `?source=widget`, which covers every
+  widget, the quiz widget and the Lock Screen accessories included. `AppRouter.pendingVerb` is now
+  a `VerbDestination`.
+- **Documents.** `docs/feature_architecture.md` and `docs/privacy_policy_pending.md` are new. The
+  staged text adds three bullets in each language and rewrites the paragraph after the list, whose
+  "the verbs you look up" stays true but now needs "That you searched is recorded…". `CLAUDE.md`'s
+  No Release Before 2027 section was right except that it spoke of the pending file as future; it
+  now links the file and says that `docs/release.md` applies it. Its analytics line ("update
+  `docs/privacy_policy3.txt`") contradicted the staging rule, so it and
+  `.claude/rules/analytics.md` now say to stage lines instead. `docs/release.md` gained a Before
+  Submitting step: check the signals on a device, since the simulator never sends them.
+- **What was tried where.** iPhone, English, light, compact, with signals logged temporarily
+  (an `NSLog` in `AnalyticsSpy`, since removed): a browse open (`browse`); a leave at `compound`
+  on a tab switch; `resume` on the return; a leave at `example` after scrolling ser to the bottom
+  and backgrounding; `resume` on returning to the foreground; "come" opening venir (`opened`,
+  `exactGlossSense`, `3-5`, `11+`, `2-5`); a second open (llegar) from the same results sending no
+  second `finishSearch`; the guess for "hablr" (`guess`, `0`, `1`, page `searchGuess`); "xyzzyq"
+  cleared (`noResult`, `none`); "tener" left in the background (`abandoned`, `exactInfinitive`);
+  deeplinks with `?source=widget`, with `?source=control` on `verb/random`, and with none
+  (`deeplink`); and a verb from decir's model page (`model`). Over the session the views and
+  leaves paired, ten and ten. iPad, Spanish, dark, regular: a card tapped right after focusing the
+  empty field (pushed, `browse`); ⌘F, "come", ↓↓, Return opening venir from the grid (`2-5`); ⌘F
+  from that page, "tenr", and Return opening the guess; and a leave at `example` on backgrounding.
+  The widgets and the control were tried through their URLs only, not by tapping them, and nothing
+  was tried on a device.
+- **A simulator note.** `simctl openurl` raised an "Open in Conjugar?" prompt every time, even
+  with the app in front, and the prompts queue. The prompt makes the app inactive, not
+  backgrounded, so no visit ends.
+- **Behavior to know.** A search that the background ended is not restarted when the app returns
+  with its text still in the field, so an open from those results sends no `finishSearch` (the
+  page still reports `search`). Konjugieren behaves the same. `viewVerbBrowseView` still fires on
+  every return to the list, as before.
+- **Tests.** New: `LookupSignalsTests` (wire names, the 21 sources, the sections, each match kind
+  sent by name, the four bands, the tracker's lifecycle, every report's parameters, that no
+  parameter can echo the query, visits, the section marks, and link sources) and four cases in
+  `AppRouterTests` (a verb link's source, the fallback, the control's random verb, an unknown
+  verb). The whole suite passes: 652 Swift Testing tests in 35 suites, plus the XCTest suites. No
+  suite slowed; `LookupSignals` takes about half a second. The simulator language was English.
 
 ## Phase 3: Reflexive-Only Verbs with Their Pronouns
 
 **Ideas:** B2, by analogy. **Ports:** Konjugieren Phase 4. **Depends on:** nothing. **Status:**
-Not started. **Accepted** (Josh, 2026-11-22). Konjugieren's ideas document called B2 not
+Awaiting Josh (2026-11-22). **Accepted** (Josh, 2026-11-22). Konjugieren's ideas document called B2 not
 applicable to Spanish and named the reflexive pronoun as "a separate question"; this phase is that
 question's answer.
 
@@ -589,7 +660,69 @@ wrapper, while the oracle tests and the corpus pipelines kept the form they expe
 **Done when** arrepentirse's page reads as Spanish writes it, the enclitic accents are right in
 every slot under test, and the quiz accepts both forms.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **antojarse (Josh, 2026-11-22).** Asked before building: antojar shows the reflexive paradigm
+  like the other 113 (me antojo, te antojas, se antoja), as the RAE's own tables do. A
+  gustar-style table (se me antoja, se te antoja) was offered and declined. pirrar, the other
+  borderline verb, is treated the same way.
+- **The engine's output does not change; its callers' does, as in Konjugieren.**
+  `TenseBridge.conjugate` gained `pronoun: ReflexivePronoun`, defaulting to `.omitted`, the bare
+  form. The oracle tests, `CorpusFormsDumpTests`, and `CompoundTense`'s auxiliary keep it. With
+  `.written`, a verb flagged `isReflexive` gets its pronoun; any other verb is unchanged. That is
+  the function this phase was to add. The placement and the accent rule are in
+  `Models/ReflexivePronoun.swift`, `nonisolated`. The pronoun goes on after the irregularity
+  marking, keeping each letter's case, so arrepIente becomes arrepIéntete with its red I.
+- **The accent rule is general, not a table.** `ReflexivePronoun.enclitic(_:attachedTo:droppingLast:)`
+  finds the bare form's stressed vowel, joins the clitic, and writes an accent only if the
+  general rules then call for one, or to mark a stressed i or u in hiatus (arrepentíos). It
+  syllabifies with diphthongs, hiatus, and the silent u of que/gue. So it also gives deme,
+  estate, dime, ríete, vámonos, and sígueme, which Phase 5's pronoun stripping can reuse in
+  reverse. The nosotros command drops -s before nos and the vosotros command -d before os.
+- **Which surfaces switched.** Every one that shows a form to a learner passes `.written`: the
+  verb page (title "Arrepentirse", every card, the gerund arrepintiéndose; the participle and
+  future stem stay bare), the widget snapshot (paradigm, gerund, quiz answers and distractors),
+  the tutor's `ConjugationTool` (which names the verb arrepentirse in its result), and the quiz's
+  shown answer and screenshot fixture. Rows in the Verbs list, the guess, and a model's verb list
+  show `VerbMapEntry.citationForm` (arrepentirse), and so do the quiz question and results. The
+  Models tab's six-tense grid conjugates only exemplars, and no exemplar is reflexive-only, so it
+  was left alone.
+- **Search.** "arrepentirse" already found arrepentir (Phase 0 strips "se"), but "arrepentirs"
+  partway through typing found nothing. `VerbSearch.Keys` now carries a reflexive-only verb's
+  citation form, and the prefix and folded-prefix kinds also match it. Nothing else in the
+  ranking moved.
+- **Deeplinks.** The widgets now name a reflexive-only verb arrepentirse, so `AppRouter`'s verb
+  route accepts an infinitive with "se" and opens the bare one (`conjugar://verb/arrepentirse`,
+  and also `verb/levantarse` for levantar). `docs/feature_architecture.md` says so for Phase 10.
+- **The quiz.** `Quiz.grade` accepts the written form and the bare one, taking the better result,
+  and collapses runs of spaces. Grades are now kept in `Quiz.results`, because the results screen
+  used to regrade each answer against the shown answer alone and would have marked a correct bare
+  "arrepiento" wrong. **No quiz list holds a reflexive-only verb today**, so a learner meets none
+  of this until the pedagogy plan widens the lists; tests cover it.
+- **No Info article contradicts the display.** None mentions pronominal verbs; the imperative
+  articles' examples (levanten la mano) use levantar transitively.
+- **Often but not only pronominal (levantarse, irse, quedarse): not measurable from the data.**
+  CORPES lemmatizes nearly every such use under the bare verb, so `hi` cannot tell them apart:
+  only 8 verbs outside the 114 have a "-se" lemma in CORPES at all. Six of those have no bare
+  lemma (alcoholizar, encorbatar, descompasar, acorchar, encenagar, adinerar), which makes them
+  candidates for `rx="1"` that Annex B did not mark. They were not changed. How many verbs are often
+  pronominal (levantarse, irse, quedarse, sentarse, llamarse) would need a dictionary source;
+  the map has no field for it.
+- **What was tried where.** iPhone, English, light, compact: `conjugar://verb/arrepentirse`
+  opening arrepentir's page (title, gerund, presente, pretérito, both command cards, perfecto),
+  and "arrepentirs" in the search field finding one row, arrepentirse. iPad, Spanish, dark,
+  regular, with Explorar Tú y/o Vos set to Ambas: arrepentirse's two-column page, then quejarse's
+  with its vos rows (te quejás) and commands (quéjate, quejate, quéjese, quejémonos, quejaos,
+  quéjense). The widgets, the tutor (unavailable in the simulator), and the quiz (no reflexive
+  verb to draw) were checked by tests only. The iPad simulator was left in dark appearance.
+- **VoiceOver.** No new control. The forms are still one `ConjugationText` each, tagged Spanish,
+  so "me arrepiento" is read as one Spanish phrase, and a tap speaks it whole.
+- **Tests.** New: `ReflexivePronounTests` (arrepentirse in every finite and non-finite slot, four
+  verbs' commands and gerunds, all 114 verbs in every slot checked for placement and for at most
+  one accent, the accent rule on 13 words, the marking, the citation round trip, search, and quiz
+  grading) and a pronominal deeplink case in `AppRouterTests`. The whole suite passes: 668 Swift
+  Testing tests in 36 suites, plus the XCTest suites. `ReflexivePronoun` takes about 1.5 seconds,
+  most of it the 114-verb sweep; no other suite slowed. The simulator language was English.
 
 ## Phase 4: The Conjugation Map as a Build Product
 

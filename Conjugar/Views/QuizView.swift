@@ -165,7 +165,7 @@ struct QuizView: View {
 
   private var questionCard: some View {
     VStack(spacing: Layout.defaultSpacing) {
-      Text(quiz.verb)
+      Text(ReflexivePronoun.citationForm(of: quiz.verb))
         .font(.largeTitle.bold())
         .fontDesign(.serif)
         .foregroundStyle(Color.customYellow)

@@ -53,6 +53,10 @@ class Quiz {
   private(set) var lastDifficulty: Difficulty = .moderate
   private(set) var proposedAnswers: [String] = []
   private(set) var correctAnswers: [String] = []
+  /// Each answered question's grade, as `process(proposedAnswer:)` gave it. The results screen
+  /// reads these rather than regrading, because a reflexive-only verb accepts two answers and
+  /// `correctAnswers` holds only the one shown.
+  private(set) var results: [ConjugationResult] = []
   private(set) var questions: [(String, DisplayTense, DisplayPersonNumber)] = []
   private let regularAr = Cycler(VerbFamilies.regularArVerbs)
   private let regularIr = Cycler(VerbFamilies.regularIrVerbs)
@@ -135,6 +139,7 @@ class Quiz {
     questions.removeAll()
     proposedAnswers.removeAll()
     correctAnswers.removeAll()
+    results.removeAll()
 
     #if DEBUG
     if Quiz.isScreenshotFixtureRun {
@@ -307,10 +312,10 @@ class Quiz {
   func process(proposedAnswer: String) -> (ConjugationResult, String?) {
     let correctAnswer: String
     let result: ConjugationResult
-    switch TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: currentPersonNumber) {
+    switch TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: currentPersonNumber, pronoun: .written) {
     case let .success(answer):
       correctAnswer = answer
-      result = ConjugationResult.compare(lhs: proposedAnswer, rhs: correctAnswer)
+      result = Quiz.grade(proposedAnswer, infinitive: verb, tense: tense, personNumber: currentPersonNumber, writtenAnswer: answer)
     case let .failure(error):
       // A quiz slot should always conjugate — VerbFamiliesTests pins every list
       // entry to VerbMap — but degrade gracefully rather than crash a learner
@@ -321,6 +326,7 @@ class Quiz {
     }
     proposedAnswers.append(proposedAnswer)
     correctAnswers.append(correctAnswer)
+    results.append(result)
     if result != .noMatch {
       score += result.rawValue
     }
@@ -347,6 +353,27 @@ class Quiz {
     } else {
       return (result, correctAnswer)
     }
+  }
+
+  /// Grades an answer against every way the slot may be written. A reflexive-only verb's form
+  /// counts with its pronoun (me arrepiento, the form the quiz shows) or without it
+  /// (arrepiento), since a learner may answer either; any other verb has one answer. Runs of
+  /// spaces collapse, now that an answer can be two words.
+  static func grade(
+    _ proposedAnswer: String,
+    infinitive: String,
+    tense: DisplayTense,
+    personNumber: DisplayPersonNumber,
+    writtenAnswer: String
+  ) -> ConjugationResult {
+    let proposed = proposedAnswer.split(whereSeparator: \.isWhitespace).joined(separator: " ")
+    var answers = [writtenAnswer]
+    if case let .success(bare) = TenseBridge.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber), bare != writtenAnswer {
+      answers.append(bare)
+    }
+    return answers
+      .map { ConjugationResult.compare(lhs: proposed, rhs: $0) }
+      .max { $0.rawValue < $1.rawValue } ?? .noMatch
   }
 
   func quit() {
@@ -488,7 +515,7 @@ extension Quiz {
     }
     var payload: [[String: String]] = []
     for (verb, tense, personNumber) in questions {
-      switch TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber) {
+      switch TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber, pronoun: .written) {
       case let .success(answer):
         payload.append([
           "verb": verb,

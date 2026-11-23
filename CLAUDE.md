@@ -39,8 +39,9 @@ it in 2027 (2026-11-10). Work accumulates on `master`. Do not sequence work arou
 or count on shipping a fix or a signal in order to learn from it. When work leaves a task for
 release time, write it down rather than doing it. A release-day step, such as an App Store Connect
 step or a check on a device, goes in [`docs/release.md`](docs/release.md). A privacy-policy line
-goes in `docs/privacy_policy_pending.md`, which Phase 2 of
-`plans/browse_and_verb_implementation.md` creates. Remove this section when the constraint lifts.
+goes in [`docs/privacy_policy_pending.md`](docs/privacy_policy_pending.md), in English and Spanish,
+and `docs/release.md` § On Release Day says when to apply it. Remove this section when the
+constraint lifts.
 
 ## Build and Test Commands
 
@@ -298,7 +299,7 @@ var Current = World.device  // Production
 
 ### Analytics (TelemetryDeck)
 
-Analytics goes through the `Analytics` protocol (`Conjugar/Analytics/`). Its gotchas (wire-name enums, the `nonisolated` family, the off-main queue, the gitignored app ID, and why simulator and Debug signals never show in the live dashboard) are in [`.claude/rules/analytics.md`](.claude/rules/analytics.md). **When you add or remove a signal, update `docs/privacy_policy3.txt`.**
+Analytics goes through the `Analytics` protocol (`Conjugar/Analytics/`). Its gotchas (wire-name enums, the `nonisolated` family, the off-main queue, the gitignored app ID, and why simulator and Debug signals never show in the live dashboard) are in [`.claude/rules/analytics.md`](.claude/rules/analytics.md). **When you add or remove a signal, parameter, or value, stage its policy lines in `docs/privacy_policy_pending.md`** (not `docs/privacy_policy3.txt`, which describes the shipped app until the 2027 release), and keep the vocabulary table in [`docs/feature_architecture.md`](docs/feature_architecture.md#analytics) true. Every signal's parameter keys and values live in `Analytics.swift`.
 
 ### Protocol-Based Abstractions
 

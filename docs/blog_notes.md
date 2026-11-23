@@ -10210,3 +10210,94 @@ had already arranged. The one Conjugar-specific change was structural: a menu co
 router that switches tabs, and that router lived inside the tab view, so the app itself now owns
 it. AXe's hardware key events drove every check on the iPad simulator: Command-F from the Quiz tab
 and from a verb page, a guess opened with Return, and "come" walked through the grid to venir.
+
+## Counting lookups without reading them (2026-11-22)
+
+Phase 2 of the browse plan gave Conjugar three signals for learning how people find verbs: a
+`finishSearch` at the end of each search, a `source` on every verb page's `viewVerbView`, and a
+`leaveVerbView` saying how far down the page the learner got and roughly how long it stayed open.
+None of it can reach a dashboard before the 2027 release, and none of it may carry a verb or a
+letter of what was typed, because the privacy policy promises that. So every value is a name from
+a fixed list or a band: a query of 3 to 5 letters, 2 to 10 results, a dwell of 15 to 60 seconds. A
+test feeds queries such as "opened" and "none", which are themselves parameter values, through
+every report and checks that each value comes from the vocabulary.
+
+Most of the design was Konjugieren's, ported from its third phase, including its answer to a
+question that sounds trivial: what is one view of a verb page? SwiftUI calls `onAppear` again
+whenever a page comes back from another tab, so the old `viewVerbView` already fired several times
+per visit. A visit is now one stretch on screen with the app in the foreground. It ends with
+exactly one `leaveVerbView` when the page leaves the screen or the app goes to the background, and
+a page that comes back begins a new visit whose source is `resume`. In the simulator, after a
+session of tab switches, pushes, backgrounding, and queued deeplinks, the log held ten views and
+ten leaves.
+
+Two pieces of plumbing changed shape for it. The verb list's rows were `NavigationLink`s, which
+push without telling anyone, so a search could not report which row was opened or what kind of
+match had found it. They became buttons that send `finishSearch` and then push a
+`VerbDestination`, an infinitive with its source. That reopened a Konjugieren bug: on iPad, a tap
+that ends an empty search pushes while the search is animating away, and UIKit drops the push.
+The `NavigationLink`s had dodged it, and the buttons now wait out the animation as Konjugieren's
+do. Checked by focusing the empty field on the iPad and tapping tener's card, which opened.
+
+The other piece was the Random Verb control. It ran the same App Intent that the Shortcuts app
+offers, and an intent cannot tell who ran it. The control now runs a hidden copy that names itself
+in the deeplink (`conjugar://verb/random?source=control`), and the original names itself
+`shortcut`. Widgets add `?source=widget` to their verb links, and a link that names nothing reports
+`deeplink`.
+
+The simulator added one obstacle of its own. Every `simctl openurl` raised a system prompt, "Open
+in Conjugar?", even with Conjugar in front, and the prompts queued. My first taps on Open missed,
+because I scaled a screenshot's pixels to points wrongly, so three links waited and then arrived
+in a burst. The prompt made the app inactive without backgrounding it, so no visit ended, which is
+the behavior the design wanted anyway.
+
+The phase also started two documents the later phases will lean on. `docs/feature_architecture.md`
+holds the signal table and the whole `source` vocabulary, marking which values are sent today and
+which phase will send the rest. `docs/privacy_policy_pending.md` holds the new policy bullets in
+English and Spanish until release day, since Josh may deploy the live policy at any time and it
+must describe only what the shipped app sends.
+
+## Arrepentirse, Not Arrepentir (2026-11-22)
+
+Conjugar has always carried 114 verbs that Spanish uses only with a reflexive pronoun:
+arrepentirse, atreverse, quejarse, abstenerse. The verb map flags them with `rx="1"`, and then
+nothing ever read the flag. A learner who looked up arrepentirse found a page titled
+"Arrepentir" that conjugated "arrepiento", a word no one says. Konjugieren's version of this
+phase made separable German verbs read as a main clause writes them (ich stehe auf). This is the
+Spanish counterpart.
+
+The design came straight from Konjugieren. The engine's output stays bare, so the oracle tests
+and the corpus dumps see the forms they always saw, and `TenseBridge.conjugate` gained one
+argument, `pronoun: .written`, that every screen showing a form to a learner now passes. The
+verb page, the widgets, the tutor's lookup tool, and the quiz's shown answer all switched through
+that one argument.
+
+Most forms take the pronoun as a separate word in front: me arrepiento, me he arrepentido, no te
+arrepientas. The interesting cases are the affirmative commands and the gerund, where the pronoun
+joins the end of the verb and the stress has to stay put: arrepiente becomes arrepiéntete, and
+arrepintiendo becomes arrepintiéndose. I could have written a table of endings. Instead the code
+finds the syllable the bare form stresses, joins the pronoun, and asks the general accent rules
+whether the longer word now needs a written accent. That one rule also explains why the vos
+command loses its accent (arrepentí becomes arrepentite) and why the vosotros command keeps one
+(arrepentid drops its d and becomes arrepentíos, where the accent marks the hiatus). To trust it I
+tested it on words outside the 114, such as deme, estate, ríete, vámonos, and sígueme. Then a
+test swept every slot of all 114 verbs and confirmed that each written form is the bare form with
+its pronoun placed and at most one accent.
+
+One question had no Konjugieren answer. Antojarse is really used like gustar ("se me antoja"),
+so a table of me antojo, te antojas reads oddly. Josh chose the reflexive paradigm anyway, which
+is what the RAE's own conjugation tables print.
+
+A few small things followed from the new titles. The verb list shows arrepentirse, so typing
+"arrepentirs" has to keep finding it; search now matches a reflexive verb's citation form as a
+prefix. The widgets name the verb arrepentirse, so the `conjugar://verb/` route now accepts an
+infinitive with "se". And the quiz, which must accept "me arrepiento" and "arrepiento" alike,
+turned up a latent bug: the results screen regraded every answer against the shown answer alone,
+so it would have marked a correct bare answer wrong. The quiz now keeps each grade it gave. No
+quiz list contains a reflexive-only verb yet, so a learner will first meet that when the pedagogy
+plan widens the lists.
+
+The plan asked how many verbs are often, but not only, pronominal, like levantarse and irse. The
+data cannot say: CORPES files nearly all such uses under the bare verb. It did turn up six verbs
+that CORPES knows only with "-se", such as alcoholizarse and encorbatarse, which the source annex
+never marked reflexive. They are noted for Josh, not changed.

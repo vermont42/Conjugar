@@ -109,7 +109,7 @@ nonisolated enum WidgetSnapshotWriter {
     let etymology = Etymology.text(for: infinitive).map { truncateToSentenceBoundary($0, maxLength: 500) }
 
     return WidgetSnapshot(
-      infinitive: infinitive,
+      infinitive: entry.citationForm,
       gloss: entry.gloss,
       frequencyRank: entry.frequencyRank,
       paradigms: paradigms,
@@ -193,7 +193,7 @@ nonisolated enum WidgetSnapshotWriter {
     let wrongAnswers = distractors(infinitive: infinitive, tense: askedTense, correctPerson: askedPerson, correct: correct)
 
     return WidgetQuizQuestion(
-      infinitive: infinitive,
+      infinitive: ReflexivePronoun.citationForm(of: infinitive),
       tenseDisplay: askedTense.titleCaseName,
       pronoun: askedPerson.pronoun,
       correctAnswer: correct,
@@ -228,9 +228,10 @@ nonisolated enum WidgetSnapshotWriter {
     return result
   }
 
-  /// A marked (UPPERCASE-irregular) conjugated form, or nil if the engine can't produce it.
+  /// A marked (UPPERCASE-irregular) conjugated form, with a reflexive-only verb's pronoun, or
+  /// nil if the engine can't produce it.
   private static func markedForm(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> String? {
-    if case let .success(form) = TenseBridge.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber) {
+    if case let .success(form) = TenseBridge.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber, pronoun: .written) {
       return form
     }
     return nil

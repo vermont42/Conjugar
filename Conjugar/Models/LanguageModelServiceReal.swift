@@ -292,26 +292,29 @@ struct ConjugationTool: Tool {
     guard let tense = displayTense(forName: tenseName) else {
       return invalidTenseMessage(rawInfinitive: rawInfinitive, tenseName: tenseName)
     }
+    // A reflexive-only verb is named and conjugated with its pronoun (arrepentirse: me
+    // arrepiento), so the model never repeats the bare forms no one uses.
+    let name = ReflexivePronoun.citationForm(of: infinitive)
 
     if isPersonless(tense) {
-      if case .success(let form) = TenseBridge.conjugate(infinitive: infinitive, tense: tense, personNumber: .none) {
-        return "\(infinitive) — \(tense.titleCaseName): \(form.lowercased())"
+      if case .success(let form) = TenseBridge.conjugate(infinitive: infinitive, tense: tense, personNumber: .none, pronoun: .written) {
+        return "\(name) — \(tense.titleCaseName): \(form.lowercased())"
       }
-      return "Could not conjugate \(infinitive) for the \(tense.titleCaseName)."
+      return "Could not conjugate \(name) for the \(tense.titleCaseName)."
     }
 
     let imperative = (tense == .imperativoPositivo || tense == .imperativoNegativo)
     let persons = imperative ? imperativePersons : regularPersons
     var lines: [String] = []
     for person in persons {
-      if case .success(let form) = TenseBridge.conjugate(infinitive: infinitive, tense: tense, personNumber: person) {
+      if case .success(let form) = TenseBridge.conjugate(infinitive: infinitive, tense: tense, personNumber: person, pronoun: .written) {
         lines.append("\(pronoun(for: person, imperative: imperative)) \(form.lowercased())")
       }
     }
     guard !lines.isEmpty else {
-      return "Could not conjugate \(infinitive) for the \(tense.titleCaseName)."
+      return "Could not conjugate \(name) for the \(tense.titleCaseName)."
     }
-    return "\(infinitive) — \(tense.titleCaseName): \(lines.joined(separator: ", "))"
+    return "\(name) — \(tense.titleCaseName): \(lines.joined(separator: ", "))"
   }
 
   // Textbook pronoun for grounding. Affirmative/negative commands use the usted/

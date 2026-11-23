@@ -13,9 +13,7 @@ struct ResultsView: View {
   private var accuracy: Double {
     let total = quiz.questions.count
     guard total > 0 else { return 0 }
-    let earned = zip(quiz.proposedAnswers, quiz.correctAnswers).reduce(0) { sum, pair in
-      sum + ConjugationResult.compare(lhs: pair.0, rhs: pair.1).rawValue
-    }
+    let earned = quiz.results.reduce(0) { $0 + $1.rawValue }
     return Double(earned) / Double(total * ConjugationResult.totalMatch.rawValue)
   }
 
@@ -71,7 +69,7 @@ struct ResultsView: View {
   private func resultRow(index: Int, verb: String, tense: DisplayTense, person: DisplayPersonNumber) -> some View {
     let proposed = index < quiz.proposedAnswers.count ? quiz.proposedAnswers[index] : ""
     let correct = index < quiz.correctAnswers.count ? quiz.correctAnswers[index] : ""
-    let result = ConjugationResult.compare(lhs: proposed, rhs: correct)
+    let result = index < quiz.results.count ? quiz.results[index] : ConjugationResult.compare(lhs: proposed, rhs: correct)
     let isRight = result == .totalMatch
 
     return HStack(alignment: .top, spacing: Layout.defaultSpacing) {
@@ -79,7 +77,7 @@ struct ResultsView: View {
         .foregroundStyle(isRight ? Color.customGreen : result == .partialMatch ? Color.customYellow : Color.customRed)
 
       VStack(alignment: .leading, spacing: 2) {
-        Text(verb.lowercased())
+        Text(ReflexivePronoun.citationForm(of: verb).lowercased())
           .font(.headline)
           .fontDesign(.serif)
           .foregroundStyle(Color.customYellow)

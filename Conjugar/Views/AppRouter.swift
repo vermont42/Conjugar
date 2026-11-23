@@ -22,8 +22,9 @@ enum AppTab: Hashable {
 @Observable
 final class AppRouter {
   var selectedTab: AppTab = .browseVerbs
-  /// A verb the Verbs tab should push. `VerbBrowseView` consumes and clears it.
-  var pendingVerb: String?
+  /// A verb the Verbs tab should push, with the surface that asked for it. `VerbBrowseView`
+  /// consumes and clears it.
+  var pendingVerb: VerbDestination?
   /// A one-shot request for the Verbs tab to pop to its list and focus the search field, set by
   /// Command-F. `VerbBrowseView` consumes and clears it.
   var pendingSearchFocus = false
@@ -64,17 +65,24 @@ final class AppRouter {
     showGame = true
   }
 
-  /// Route a `conjugar://` deeplink. Hosts: `verb/<infinitive>` (or `verb/random`),
-  /// `quiz/start`, and `game`. Unknown or unmapped verbs are ignored.
+  /// Route a `conjugar://` deeplink. Hosts: `verb/<infinitive>` (the infinitive bare or with
+  /// "se", so `verb/arrepentirse` opens arrepentir; or `verb/random`),
+  /// `quiz/start`, and `game`. Unknown or unmapped verbs are ignored. A verb link may name the
+  /// surface it came from in a `source` query item (`?source=widget`), which the verb page
+  /// reports; a link that names none reports `deeplink`.
   func handle(url: URL) {
     guard url.scheme == "conjugar", let host = url.host() else { return }
     switch host {
     case "verb":
       let last = url.lastPathComponent
+      let source = url.analyticsSource ?? .deeplink
       if last == "random", let random = VerbMap.shared.entries.keys.randomElement() {
-        open(verb: random)
+        open(verb: random, source: source)
       } else if VerbMap.shared.entry(for: last) != nil {
-        open(verb: last)
+        open(verb: last, source: source)
+      } else if let bare = ReflexivePronoun.bareInfinitive(fromCitation: last), VerbMap.shared.entry(for: bare) != nil {
+        // A pronominal citation form, arrepentirse, as the widgets name a reflexive-only verb.
+        open(verb: bare, source: source)
       }
     case "quiz":
       selectedTab = .quiz
@@ -104,8 +112,8 @@ final class AppRouter {
     pendingSearchFocus = true
   }
 
-  private func open(verb: String) {
+  private func open(verb: String, source: AnalyticsSource) {
     selectedTab = .browseVerbs
-    pendingVerb = verb
+    pendingVerb = VerbDestination(infinitive: verb, source: source)
   }
 }

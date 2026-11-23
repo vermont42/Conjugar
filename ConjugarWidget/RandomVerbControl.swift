@@ -15,7 +15,7 @@ struct RandomVerbControl: ControlWidget {
 
   var body: some ControlWidgetConfiguration {
     StaticControlConfiguration(kind: kind) {
-      ControlWidgetButton(action: OpenRandomVerbIntent()) {
+      ControlWidgetButton(action: OpenRandomVerbControlIntent()) {
         Label(WidgetL.RandomVerbControl.name, systemImage: "shuffle")
       }
     }

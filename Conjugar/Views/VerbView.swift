@@ -9,6 +9,9 @@ import SwiftUI
 
 struct VerbView: View {
   let verb: String
+  /// How the learner reached the page, for `viewVerbView`. A later visit to the same page reports
+  /// `resume` instead. See `VerbVisit`.
+  let source: AnalyticsSource
 
   private let gloss: String
   private let typeOrParent: String
@@ -21,10 +24,16 @@ struct VerbView: View {
   private let example: Example?
   private let medievalExamples: [MedievalExample]
   @State private var medievalIndex: Int
+  @State private var visit: VerbVisit?
+  @State private var visibleSections: Set<VerbPageSection> = []
+  @State private var hasAppeared = false
+  @State private var isOnScreen = false
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+  @Environment(\.scenePhase) private var scenePhase
 
-  init(verb: String) {
+  init(verb: String, source: AnalyticsSource) {
     self.verb = verb
+    self.source = source
     let entry = VerbMap.shared.entry(for: verb)
     gloss = entry?.gloss ?? ""
     participio = Self.form(verb, .participio)
@@ -61,9 +70,11 @@ struct VerbView: View {
         }
         if let etymology {
           etymologyCard(etymology)
+            .reportsVisibility { sectionVisibilityChanged(.etymology, isVisible: $0) }
         }
         if example != nil || medievalExample != nil {
           exampleCard
+            .reportsVisibility { sectionVisibilityChanged(.example, isVisible: $0) }
         }
       }
       .padding()
@@ -74,10 +85,72 @@ struct VerbView: View {
       .readingWidth()
     }
     .background(Color.customBackground.ignoresSafeArea())
-    .navigationTitle(verb.capitalized)
+    .navigationTitle(ReflexivePronoun.citationForm(of: verb).capitalized)
     .navigationBarTitleDisplayMode(.large)
-    .onAppear { Current.analytics.signal(name: .viewVerbView) }
+    .onAppear {
+      isOnScreen = true
+      beginVisit(source: hasAppeared ? .resume : source)
+      hasAppeared = true
+    }
+    .onDisappear {
+      isOnScreen = false
+      endVisit()
+    }
+    .onChange(of: scenePhase) {
+      switch scenePhase {
+      case .background:
+        endVisit()
+      case .active:
+        if isOnScreen {
+          beginVisit(source: .resume)
+        }
+      default:
+        break
+      }
+    }
   }
+
+  private func beginVisit(source: AnalyticsSource) {
+    guard visit == nil else {
+      return
+    }
+    let newVisit = VerbVisit(source: source, start: .now, visibleSections: visibleSections)
+    visit = newVisit
+    Current.analytics.signal(name: .viewVerbView, parameters: newVisit.viewParameters)
+  }
+
+  private func endVisit() {
+    guard let visit else {
+      return
+    }
+    Current.analytics.signal(name: .leaveVerbView, parameters: visit.leaveParameters(end: .now))
+    self.visit = nil
+  }
+
+  private func sectionVisibilityChanged(_ section: VerbPageSection, isVisible: Bool) {
+    if isVisible {
+      visibleSections.insert(section)
+      visit?.reach(section)
+    } else {
+      visibleSections.remove(section)
+    }
+  }
+
+  /// The section whose arrival a tense's card marks: the first simple tense's card for `simple`,
+  /// the first compound tense's for `compound`, and nil for every other card. Read from the
+  /// page's own order, so that a reordering (Phase 6) moves the marks with it.
+  nonisolated static func section(markedBy tense: DisplayTense) -> VerbPageSection? {
+    if tense == firstSimpleTense {
+      return .simple
+    }
+    if tense == firstCompoundTense {
+      return .compound
+    }
+    return nil
+  }
+
+  nonisolated private static let firstSimpleTense = DisplayTense.conjugatedTenses.first { !$0.isCompound }
+  nonisolated private static let firstCompoundTense = DisplayTense.conjugatedTenses.first(where: \.isCompound)
 
   private var metadataHeader: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
@@ -236,6 +309,11 @@ struct VerbView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .cardWithAccentBar(.customYellow)
+    .reportsVisibility { isVisible in
+      if let marked = Self.section(markedBy: section.tense) {
+        sectionVisibilityChanged(marked, isVisible: isVisible)
+      }
+    }
   }
 
   @ViewBuilder
@@ -253,7 +331,7 @@ struct VerbView: View {
   }
 
   private static func form(_ verb: String, _ tense: DisplayTense) -> String {
-    if case .success(let value) = TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: .none) {
+    if case .success(let value) = TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: .none, pronoun: .written) {
       return value
     }
     return ""
@@ -315,7 +393,7 @@ struct VerbView: View {
   /// One displayed slot: a defective verb's formless slot renders blank; any other
   /// failure renders blank rather than crash.
   private static func formOrBlank(_ verb: String, _ tense: DisplayTense, _ personNumber: DisplayPersonNumber) -> String {
-    if case .success(let value) = TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber) {
+    if case .success(let value) = TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber, pronoun: .written) {
       return value
     }
     return ""
@@ -347,5 +425,13 @@ struct ConjugationDisplayRow: Identifiable {
       return "\(pronoun) \(form)".lowercased()
     }
     return form.lowercased()
+  }
+}
+
+private extension View {
+  /// A third of a section's first card on screen counts as reaching the section. A higher
+  /// threshold could never be met by an etymology card taller than the screen.
+  func reportsVisibility(_ action: @escaping (Bool) -> Void) -> some View {
+    onScrollVisibilityChange(threshold: 0.3, action)
   }
 }

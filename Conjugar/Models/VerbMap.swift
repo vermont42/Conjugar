@@ -63,6 +63,10 @@ nonisolated struct VerbMapEntry: Equatable {
   var gloss: String { glosses[0] }
   /// Whether this verb carries more than one sense (a homonym).
   var isHomonym: Bool { classNumbers.count > 1 }
+  /// The infinitive as a dictionary cites it and the UI shows it: arrepentirse for a
+  /// reflexive-only verb, the bare infinitive otherwise. The map, the engine, and deeplinks key
+  /// on the bare `infinitive`.
+  var citationForm: String { isReflexive ? infinitive + "se" : infinitive }
 
   func withFrequencyRank(_ rank: Int) -> VerbMapEntry {
     VerbMapEntry(

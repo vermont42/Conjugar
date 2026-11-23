@@ -22,6 +22,12 @@ material for the release notes in `docs/release_notes.txt`.
 ## Before Submitting
 
 1. **Create the new version in App Store Connect.**
+2. **Check the lookup signals on a device.** The simulator never sends signals (its world uses
+   `AnalyticsSpy`), so `finishSearch`, `leaveVerbView`, and `viewVerbView`'s `source` (browse plan,
+   Phase 2) have been seen only in a temporary log. Run a Debug build on a device, flip the
+   TelemetryDeck dashboard's Test Mode toggle, and confirm that a search, a verb page, a widget tap
+   (`source` `widget`), and the Random Verb control (`source` `control`) arrive with the parameters
+   in `docs/feature_architecture.md` § Analytics.
 
 ## On Release Day
 

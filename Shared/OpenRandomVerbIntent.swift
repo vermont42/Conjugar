@@ -2,8 +2,10 @@
 //  OpenRandomVerbIntent.swift
 //  Conjugar
 //
-//  The action behind the Random Verb control-center widget. Opens the app and stashes
-//  a deeplink the app drains on activation.
+//  Open Random Verb, as the Shortcuts app and Siri offer it. Opens the app and stashes a
+//  deeplink the app drains on activation. The Random Verb control runs its own hidden
+//  `OpenRandomVerbControlIntent` instead, because an intent cannot tell which of the two ran it,
+//  and the verb page reports which (`source=shortcut` here, `control` there).
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -15,7 +17,7 @@ nonisolated struct OpenRandomVerbIntent: AppIntent {
   static let openAppWhenRun = true
 
   func perform() async throws -> some IntentResult {
-    WidgetConstants.sharedDefaults?.set("conjugar://verb/random", forKey: WidgetConstants.pendingDeeplinkKey)
+    WidgetConstants.sharedDefaults?.set("conjugar://verb/random?source=shortcut", forKey: WidgetConstants.pendingDeeplinkKey)
     return .result()
   }
 }

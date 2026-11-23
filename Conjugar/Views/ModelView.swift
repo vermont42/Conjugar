@@ -17,7 +17,7 @@ struct ModelView: View {
   let model: ModelInfo
   /// Navigate to a verb (a tapped "verbs using this model" row). A closure rather
   /// than a `NavigationLink(value:)` because appending to the stack's path from the
-  /// enclosing view reliably reaches its String destination from this pushed view.
+  /// enclosing view reliably reaches its `VerbDestination` destination from this pushed view.
   let onSelectVerb: (String) -> Void
 
   /// The grid's tense rows: five core tenses, plus futuro (Spanish concentrates
@@ -117,7 +117,7 @@ struct ModelView: View {
   /// adaptive grid of carded cells mirroring Browse Verbs; on compact width it stays
   /// the bare zebra-striped, divider-separated single column. Both paths keep the
   /// closure-based navigation (rather than `NavigationLink(value:)`) because appending
-  /// to the enclosing stack's path from this pushed view reliably reaches the String
+  /// to the enclosing stack's path from this pushed view reliably reaches the `VerbDestination`
   /// destination.
   @ViewBuilder
   private var verbsUsingList: some View {

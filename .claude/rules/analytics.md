@@ -44,5 +44,14 @@ protocol plus the `AnalyticsName` / `ParameterKey` enums), `AnalyticsReal.swift`
 - **No `becameActive` signal.** TelemetryDeck records launches and sessions itself, and
   reports app version, device model, and country/language natively.
 
+- **Parameter values are enums and bands, never free text.** `AnalyticsSource`,
+  `SearchOutcome`, `SearchMatchKind`, `VerbPageSection`, and `AnalyticsBand` live in
+  `Analytics.swift`; a raw value is a wire name, as with signal names. No parameter may carry a
+  verb or anything typed (`LookupSignalsTests.noParameterCanEchoTheQuery`). The vocabulary, and
+  which phase sends which `source`, is in `docs/feature_architecture.md` § Analytics.
+
 The published policy describing what is collected is `docs/privacy_policy3.txt` (English
-plus a Spanish translation); **update it when you add or remove a signal.**
+plus a Spanish translation). It describes the **shipped** app, so until the 2027 release a new
+signal, parameter, or value **stages its lines in `docs/privacy_policy_pending.md`** instead, and
+`docs/release.md` applies them on release day. Remove a signal's line from the policy itself only
+when the release that stops sending it ships.

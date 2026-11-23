@@ -138,10 +138,10 @@ struct ModelBrowseView: View {
       .sensoryFeedback(.selection, trigger: sort)
       .navigationTitle(L.BrowseModels.localizedTitle)
       .navigationDestination(for: ModelInfo.self) { model in
-        ModelView(model: model) { verb in navigationPath.append(verb) }
+        ModelView(model: model) { verb in navigationPath.append(VerbDestination(infinitive: verb, source: .model)) }
       }
-      .navigationDestination(for: String.self) { verb in
-        VerbView(verb: verb)
+      .navigationDestination(for: VerbDestination.self) { destination in
+        VerbView(verb: destination.infinitive, source: destination.source)
       }
       .onAppear {
         Current.analytics.signal(name: .viewModelBrowseView)

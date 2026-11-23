@@ -11,7 +11,8 @@
 import Foundation
 
 nonisolated struct WidgetSnapshot: Codable, Equatable, Sendable {
-  /// The verb of the day, e.g. "tener".
+  /// The verb of the day as the app shows it, e.g. "tener", or "arrepentirse" for a
+  /// reflexive-only verb. The app's `conjugar://verb/` route accepts that form.
   let infinitive: String
   /// Terse English gloss from the verb map, e.g. "to have".
   let gloss: String
@@ -62,12 +63,13 @@ nonisolated struct WidgetConjugation: Codable, Equatable, Sendable {
 }
 
 nonisolated struct WidgetQuizQuestion: Codable, Equatable, Sendable {
+  /// The verb as the app shows it, "arrepentirse" for a reflexive-only verb.
   let infinitive: String
   /// Title-cased tense name shown as the prompt, e.g. "Pretérito".
   let tenseDisplay: String
   /// The pronoun for the asked person, or nil for personless tenses (gerundio).
   let pronoun: String?
-  /// The correct form, UPPERCASE-marked.
+  /// The correct form, UPPERCASE-marked, with a reflexive-only verb's pronoun.
   let correctAnswer: String
   /// Up to three distractors, UPPERCASE-marked.
   let wrongAnswers: [String]

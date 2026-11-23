@@ -13,10 +13,18 @@
 // contradicts AnalyticsReal's design and makes the spy unusable from a nonisolated
 // test suite. MainActor call sites can call into it synchronously either way.
 nonisolated enum ParameterKey: String {
+  case deepestSection
   case difficulty
+  case dwell
   case elapsedTime
+  case matchKind
+  case outcome
+  case queryLength
   case questionNumber
+  case resultCount
+  case resultPosition
   case score
+  case source
   case stage
 }
 
@@ -24,7 +32,9 @@ nonisolated enum AnalyticsName: String {
   case completeQuiz
   case completeStage
   case enterBossFight
+  case finishSearch
   case gameCenterAuthSucceeded
+  case leaveVerbView
   case quitQuiz
   case startGame
   case startQuiz
@@ -44,6 +54,143 @@ nonisolated enum AnalyticsName: String {
   case viewVerbBrowseView
   case viewVerbView
   case winBossFight
+}
+
+/// How the learner reached a verb page or, once later phases send it, began a search or a quiz.
+/// One vocabulary for every signal that carries `source`, so that a verb page, a search, and a
+/// quiz reached from the same surface carry the same value. It holds the values that later phases
+/// of `plans/browse_and_verb_implementation.md` will send, too; `docs/feature_architecture.md`
+/// § Analytics says which are sent today. A raw value is a wire name.
+nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
+  /// A row of the verb list with the search field empty.
+  case browse
+  /// The Random Verb control in Control Center.
+  case control
+  /// A `conjugar://` link with no recognized `source` query item.
+  case deeplink
+  case infoLink
+  case list
+  case lookup
+  /// A verb row on a model's page.
+  case model
+  case myVerbs
+  case quickAction
+  case recent
+  case related
+  /// The page came back after another tab, a pushed page, or the background. See `VerbVisit`.
+  case resume
+  case reviewCard
+  /// A result of a search that found something.
+  case search
+  /// The closest verb offered by a search that found nothing.
+  case searchGuess
+  case sharedLink
+  /// An App Intent run from the Shortcuts app or Siri, as `OpenRandomVerbIntent` can be.
+  case shortcut
+  case spotlight
+  case tab
+  case verbPage
+  /// A tap on any of the widgets: Verb of the Day, the quiz widget, or a Lock Screen accessory.
+  case widget
+}
+
+nonisolated enum SearchOutcome: String, CaseIterable, Sendable {
+  case abandoned
+  case noResult
+  case opened
+}
+
+/// `VerbSearch.MatchKind`'s cases by name, plus `guess` (the empty state's closest verb) and
+/// `none`. `conjugation` and `foldedConjugation` wait for Phase 5's reverse lookup.
+nonisolated enum SearchMatchKind: String, CaseIterable, Sendable {
+  case conjugation
+  case exactFoldedInfinitive
+  case exactGlossSense
+  case exactInfinitive
+  case foldedConjugation
+  case foldedInfinitivePrefix
+  case foldedInfinitiveSubstring
+  case glossSubstring
+  case guess
+  case infinitivePrefix
+  case infinitiveSubstring
+  case none
+  case wholeWordGloss
+}
+
+/// The parts of a verb page, top to bottom, for `leaveVerbView`'s `deepestSection`.
+nonisolated enum VerbPageSection: String, CaseIterable, Comparable, Sendable {
+  case header
+  case simple
+  case compound
+  case etymology
+  case example
+
+  static func < (lhs: VerbPageSection, rhs: VerbPageSection) -> Bool {
+    let order = allCases
+    return (order.firstIndex(of: lhs) ?? 0) < (order.firstIndex(of: rhs) ?? 0)
+  }
+}
+
+/// Coarse bands for counts and durations. The privacy policy promises that nothing typed is sent,
+/// and an exact query length or dwell time would come closer to identifying what was typed or
+/// read than a band does.
+nonisolated enum AnalyticsBand {
+  static let noPosition = "none"
+
+  static func queryLength(_ length: Int) -> String {
+    switch length {
+    case ...2:
+      return "1-2"
+    case 3...5:
+      return "3-5"
+    case 6...9:
+      return "6-9"
+    default:
+      return "10+"
+    }
+  }
+
+  static func resultCount(_ count: Int) -> String {
+    switch count {
+    case ...0:
+      return "0"
+    case 1:
+      return "1"
+    case 2...10:
+      return "2-10"
+    default:
+      return "11+"
+    }
+  }
+
+  /// `index` counts from zero, as the list does. The band counts from one, as a reader does.
+  static func resultPosition(_ index: Int?) -> String {
+    guard let index else {
+      return noPosition
+    }
+    switch index {
+    case ...0:
+      return "1"
+    case 1...4:
+      return "2-5"
+    default:
+      return "6+"
+    }
+  }
+
+  static func dwell(_ seconds: Double) -> String {
+    switch seconds {
+    case ..<5:
+      return "0-5s"
+    case ..<15:
+      return "5-15s"
+    case ..<60:
+      return "15-60s"
+    default:
+      return "60s+"
+    }
+  }
 }
 
 nonisolated protocol Analytics {
