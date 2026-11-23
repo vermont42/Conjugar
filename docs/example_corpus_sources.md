@@ -112,7 +112,7 @@ modern-form coverage):**
 | 8 | *Don Quijote* | Cervantes (1547–1616) | 1605/15 | 2000 | **supplement only** — flag 17th-c. orthography before mining forms |
 
 **Overflow (same authors, guaranteed-clean modern forms) for verbs still uncovered:** Galdós
-*Misericordia* (21831), *Marianela* (48818), *Episodios Nacionales*/*Trafalgar* (16961); Pardo
+*Misericordia* (21831), *Marianela* (48818: **an English translation**, see the corpus table below), *Episodios Nacionales*/*Trafalgar* (16961); Pardo
 Bazán *La madre naturaleza* (58059); Blasco Ibáñez *Cañas y barro* (57781), *Sangre y arena*
 (26983). Latin American prose (optional regional flavor): Sarmiento *Facundo* (33267). **Skip
 for form-mining:** *Martín Fierro* (verse + gaucho dialect), *Don Segundo Sombra* (1926,
@@ -244,7 +244,7 @@ register — otherwise Mozilla SUMO + GNOME/Ubuntu (CC BY-SA) are the best consu
 | Tier | Files | Notes |
 |---|---|---|
 | medieval (3) | Cantar de Mio Cid (Menéndez Pidal 1913, archive.org OCR), *Libro de buen amor* (PG 16625), Berceo *Milagros* (bibliotecagonzalodeberceo PDF→txt) | Cid OCR + Milagros PDF need front-matter/apparatus stripping in the `grokked/` stage. **Gap:** *Poema de Fernán González* — only lending-restricted critical editions found; to fill later. |
-| literature (8) | Galdós *Fortunata y Jacinta* & *Marianela*, Clarín *La Regenta* (both tomos), Pardo Bazán *Los pazos de Ulloa*, Valera *Pepita Jiménez*, Alarcón *El sombrero de tres picos*, Blasco Ibáñez *La barraca*, Cervantes *Don Quijote* | All PG `.txt.utf-8`. **Doña Perfecta (PG 15725) was dropped** — it is a Heath annotated *student* edition (pervasive inline `=markup=`, margin line-numbers, English intro + NOTES/VOCABULARY) — and replaced with clean Spanish-only **Marianela (48818)**. *El sombrero* (PG 29506) is also annotated but its Spanish body is clean, so the cleaner slices it out of the English apparatus. |
+| literature (7) | Galdós *Fortunata y Jacinta*, Clarín *La Regenta* (both tomos), Pardo Bazán *Los pazos de Ulloa*, Valera *Pepita Jiménez*, Alarcón *El sombrero de tres picos*, Blasco Ibáñez *La barraca*, Cervantes *Don Quijote* | All PG `.txt.utf-8`. **Doña Perfecta (PG 15725) was dropped** — it is a Heath annotated *student* edition (pervasive inline `=markup=`, margin line-numbers, English intro + NOTES/VOCABULARY) — and replaced with **Marianela (48818)**, which turned out to be Clara Bell's 1883 **English translation**, not the Spanish. No example came from it, and it was dropped on 2026-11-22 (removed from `fetch_corpus.sh`, the index builders, `ExampleSource`, and the Info credits). *El sombrero* (PG 29506) is also annotated but its Spanish body is clean, so the cleaner slices it out of the English apparatus. |
 | government (5) | ES: TRLPI (PD legal), INE Informe Anual 2024, PNIEC, Mitma Movilidad 2030; CO: DANE GEIH | **Gaps:** MX INEGI ENOE + AR INDEC IPC PDFs came down non-extractable — retry later. |
 | technology (5) | España Digital 2026; MX Estrategia Digital Nacional; CO CONPES 3975 + MinTIC Gobierno Digital; AR Agenda Digital | Digital-policy tier (tech-domain infinitives). **Deferred:** Mozilla SUMO / GNOME-Ubuntu (CC BY-SA) consumer-imperative how-to — add if the imperative register is thin after mining. |
 

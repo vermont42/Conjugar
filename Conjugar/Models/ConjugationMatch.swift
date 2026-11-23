@@ -25,10 +25,12 @@ nonisolated enum ConjugationMatch {
   }
 
   /// Every cell this verb has: the infinitive, the gerund, the participle, and each conjugated
-  /// tense in each person it has, vos included. In the verb page's tense order.
+  /// tense in each person it has, vos included. In the verb page's tense order, which
+  /// `ConjugationTable` owns, so that a search result names its cells in the order the page shows
+  /// them.
   static let allCells: [ConjugationCell] = {
     var cells = [DisplayTense.infinitivo, .gerundio, .participio].map { ConjugationCell(tense: $0, personNumber: .none) }
-    for tense in DisplayTense.conjugatedTenses {
+    for tense in ConjugationTable.all.map(\.tense) {
       let isImperative = tense == .imperativoPositivo || tense == .imperativoNegativo
       for personNumber in ConjugationCell.finitePersons where !isImperative || personNumber != .firstSingular {
         cells.append(ConjugationCell(tense: tense, personNumber: personNumber))

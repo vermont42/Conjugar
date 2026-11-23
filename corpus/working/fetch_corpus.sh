@@ -20,7 +20,8 @@ pdf medieval "https://www.bibliotecagonzalodeberceo.com/tesis/milagros.pdf" mila
 
 echo "== literature (Project Gutenberg, PD Spanish-original) =="
 pg 17013 literature fortunata-y-jacinta-galdos-1887
-pg 48818 literature marianela-galdos-1878          # clean Spanish-only Galdós (replaces the annotated Doña Perfecta PG 15725)
+# PG 48818, once fetched here as marianela-galdos-1878, is Clara Bell's 1883 English translation, not
+# Galdós's Spanish. No example ever came from it, and it was dropped on 2026-11-22.
 pg 17073 literature la-regenta-clarin-1885
 pg 18005 literature pazos-de-ulloa-pardo-bazan-1886
 pg 17223 literature pepita-jimenez-valera-1874

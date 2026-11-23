@@ -29,9 +29,9 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 1 | Done | 2026-11-22 | 7c34a17 | A4, C4 |
 | 2 | Done | 2026-11-22 | 49b9f19 | Signals |
 | 3 | Done | 2026-11-22 | 49b9f19 | B2 (the reflexive analog) |
-| 4 | Awaiting Josh | 2026-11-22 | | A5 (the map) |
-| 5 | Not started | | | A5 (the search) |
-| 6 | Not started | | | B3, B5's tip |
+| 4 | Done | 2026-11-22 | fe24e92 | A5 (the map) |
+| 5 | Awaiting Josh | 2026-11-22 | | A5 (the search) |
+| 6 | Awaiting Josh | 2026-11-22 | | B3, B5's tip |
 | 7 | Not started | | | B7's article |
 | 8 | Not started | | | B4, A9 |
 | 9 | Not started | | | B6 |
@@ -727,7 +727,7 @@ every slot under test, and the quiz accepts both forms.
 ## Phase 4: The Conjugation Map as a Build Product
 
 **Ideas:** A5, first half. **Ports:** Konjugieren Phase 5. **Depends on:** nothing (Phase 3 only
-if it changes what a form is). **Status:** Awaiting Josh (2026-11-22).
+if it changes what a form is). **Status:** Done (2026-11-22, fe24e92).
 
 - A macOS command-line target that compiles the engine's sources and writes a compact
   form-to-cells map for the app bundle: each single-word form with its infinitives, tenses, and
@@ -862,7 +862,7 @@ version of the test came out at 98.99% for want of one fold.
 ## Phase 5: Reverse Lookup in Search
 
 **Ideas:** A5, second half. **Ports:** Konjugieren Phase 6. **Depends on:** Phases 0 and 4.
-**Status:** Not started.
+**Status:** Awaiting Josh (2026-11-22).
 
 Konjugieren's ideas document rated this highest for Conjugar, whose American learners read Spanish
 and meet forms before infinitives.
@@ -906,12 +906,104 @@ guess should consider forms too (Konjugieren's did: ginng guessed gehen through 
 **Done when** each example above finds its verb, tests pin them, and opening a result lands on the
 marked form.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **The ranking, decided in session rather than asked.** The two new kinds, `conjugation` and
+  `foldedConjugation`, sit after `exactGlossSense` and before `infinitivePrefix`. Below the gloss
+  sense, because 168 English gloss senses are also Spanish forms, and a form above them would have
+  undone Josh's Phase 0 choice for "come" and sent "listen" to listar, "load" to loar, "tire" to
+  tirar, and "dance" to danzar before escuchar, cargar, cansar, and bailar. Above the prefix,
+  because "ve" must find ir and ver before venir and verter. So "come" gives llegar, venir,
+  acudir, then comer (él come, and tú's command), now ahead of comenzar. **Unlike Konjugieren**, a
+  folded form ranks right after a literal one, not below every literal kind: Spanish learners leave
+  accents out, and "se", "de", and "esta" must find saber and ser, dar, and estar before the
+  hundreds of verbs that begin with those letters. Konjugieren's reason for ranking it low (zahl is
+  zahlen's literally, zählen's only folded) still holds, because a literal form still leads. Josh
+  may want to see this; the queries are in `ReverseLookupTests`.
+- **What the code looks like.** `ConjugationIndex` (`Models/`) indexes the map by folded spelling
+  and, for the guess, by first letter and length. `FormLookup` (`Models/`) finds the forms, and
+  `MatchedForm` names them. `VerbSearch.Match` gained `forms`, and `VerbSearch.matches(for:in:index:)`
+  merges conjugation matches into the per-verb best. Rows and verbs still correspond one to one, so
+  Phase 1's keyboard code (`keyboardTargetCount`, `openKeyboardSelection`) needed no change, unlike
+  Konjugieren's folded row. The index is built in a detached task when the Verbs tab appears
+  (about a second); the list already memoized its results in `@State`, recomputing only when the
+  text changes, so no cache type was needed. In a Debug build a search takes about 20 ms, as before
+  Phase 5 (the infinitive scan dominates); a several-word query adds a few milliseconds.
+- **More than the phase named.** Up to two enclitics come off a command, a gerund, or an infinitive,
+  and each candidate is confirmed by rejoining it with Phase 3's `ReflexivePronoun.enclitic`, so the
+  accent rule runs only forward and nothing merely shaped like a form matches: dime finds decir's
+  command, never dar's pretérito di. The nosotros command's dropped -s before nos and se
+  (vámonos, démoselo) and the vosotros command's -d before os (levantaos, but idos) are restored.
+  "dimelo" without its accent finds dímelo as a folded match. A subject pronoun narrows the persons
+  ("ella hable" names only the él and usted cells) unless nothing would remain. A periphrasis that
+  no cell confirms finds the verb of its non-finite last word ("estoy hablando", "voy a comer"),
+  since Phase 7's article is on periphrasis. A reflexive-only verb matches with its pronoun ("me
+  arrepiento") through `ConjugationMatch`. Participle endings are tried always, not only when
+  nothing else matches as in Konjugieren, because the participle check keeps them honest and a word
+  such as "rota" is both a form of one verb (rotar) and a participle of another (romper).
+- **"no hables"** is first confirmed whole, so it is named "no hables: Imperativo Negativo (tú)", not
+  as the presente de subjuntivo; "no hablo" falls back to "hablo".
+- **Naming.** "hablo: Presente de Indicativo (yo)" then, on its own line, "habló: Pretérito (él)":
+  one line per spelling, literal first, tense groups joined by " · ". Every word is Spanish, the
+  tense names being Spanish only in this app, so each line is one element tagged Spanish, simpler
+  than Konjugieren's two. A command's third persons are named usted and ustedes; finite tenses use
+  the page's pronouns (él, ellas). Persons go in parentheses, as Konjugieren found. The lines are
+  caption-sized in the rank badge's blue.
+- **Vos.** The map has a vos cell in every tense, so most tú forms are also vos forms. Where tú and
+  vos share a spelling in a tense, the person the browse setting hides is left out of the name, so a
+  learner who never chose vos does not read "(tú, vos)" everywhere. A folded form all of whose
+  cells are hidden (ver's vé for "ve") is dropped when another form remains. A vos-only form
+  (hablás, sos, or "tenes" for tenés) always shows, and **the page then shows the vos row too**,
+  whatever the setting, so the mark has a row to sit on; likewise tú for a learner who chose vos.
+  The first version dropped "tenes" entirely, which the simulator check caught.
+- **Landing.** `VerbDestination` carries `marks`, a set of `ConjugationCell`s. The page tints marked
+  forms (yellow, as Konjugieren does), VoiceOver reads "Matches your search" / "Coincide con tu
+  búsqueda" as their value, and on first appearance the page scrolls to the first card in its own
+  `sections` order with a marked row. **For Phase 6:** the landing reads the page's actual cards, so
+  a reordering cannot misdirect it; but a row's names, and the order of its lines, follow
+  `ConjugationMatch.allCells`, which is built from `DisplayTense.conjugatedTenses`. If Phase 6
+  reorders the page through a new owner of the order, derive `allCells` from it too.
+- **The guess considers forms**, as Konjugieren's did: "tenjo" guesses tener and shows "tengo:
+  Presente de Indicativo (yo)", and opening it marks tengo. An infinitive wins any tie, so "hablr"
+  and "tenr" keep their Phase 1 guesses. Scanning every form made a nonsense query take 1.8 seconds
+  in Debug, so a form must begin with the query's first letter (Conjugar's guess already assumes a
+  learner gets the start right), forms are compared as bytes, and `editDistance(_:_:limit:)` gives
+  up past the limit: 85 ms for "xyzzyq", 38 ms for "tenjo". Forms are not scanned at all when an
+  infinitive is one edit away. `VerbSearch.guess(for:in:index:)` returns a `Guess`; `closestVerb`
+  remains as its infinitive half.
+- **Phase 1's notes, settled.** The empty state appears only when every lookup fails. The keyboard
+  code needed nothing. The placeholder is now "Verb, conjugation, or English meaning" / "Verbo,
+  conjugación o significado en inglés" (key `BrowseVerbs.searchPromptVerbConjugationOrMeaning`),
+  as Konjugieren's says "conjugation". The Spanish one just fits the iPhone 17's field; "forma"
+  was the fallback if it had not.
+- **Analytics.** `conjugation` and `foldedConjugation` are now sent as `matchKind`. The staged
+  privacy bullet's examples gained "a conjugation such as fue" / "una forma conjugada como fue".
+  No signal or parameter was added.
+- **The example measure.** Every one of `ExampleUses.json`'s 1,340 tokens, typed into the search as
+  it stands, finds the example's verb among the results (1,340 of 1,340). Phase 4's one miss,
+  especializarse, is found by Phase 0's "-se" stripping and by the enclitic split.
+- **What was tried where.** iPhone, English, light, compact: "hablo" (two lines; opening hablar
+  scrolled to the presente with hablo and habló tinted), "tenes" (tenés named; the page added vos
+  rows and tinted tenés), "habria dicho" (condicional compuesto (yo, él), landing far down the page),
+  and "tenjo" (the guess with its tengo line). iPhone, Spanish, dark: the placeholder, "dimelo"
+  (dímelo named, landing on the imperativo positivo with di tinted). iPad, English, dark, regular,
+  with the browse setting at Both: "siento" (sentir and sentar cards, each with its line) and
+  "hubieran dicho" (landing on the grid's pluscuamperfecto de subjuntivo 1 card, at the bottom of
+  the scroll). Once, a tap on the iPhone right after a cold launch and typing opened tener unmarked,
+  because the first search waits for the index and the tap reached the row first; on a second try,
+  and in every later one, the marks arrived. Not tried: VoiceOver, keyboard Return on a form row,
+  and a device.
+- **Tests.** New: `ReverseLookupTests` (32 tests, several parameterized: the plan's
+  examples, naming, the ranking beside Phase 0's table, enclitics forward, vos, participles,
+  periphrasis, the guess, and the example measure). The whole suite passes: 723 Swift Testing
+  tests in 41 suites, plus the XCTest suites, in 36 to 46 seconds over two runs (25 before). `ReverseLookupTests`
+  takes about 8 seconds, 6 of them the example measure; `LookupSignals` went from half a second to
+  3, probably because whichever suite searches first builds the index. The simulator language was English.
 
 ## Phase 6: The Verb Page's Sections
 
 **Ideas:** B3 as Josh amended it, and the tip from B5's verdict. **Ports:** Konjugieren Phase 7.
-**Depends on:** Phase 4 for the count's cells. **Status:** Not started.
+**Depends on:** Phase 4 for the count's cells. **Status:** Awaiting Josh (2026-11-22).
 
 - **Order by frequency within each block.** Keep the simple tenses before the compound ones, and
   within each block order the tenses by how often they occur in Conjugar's corpus:
@@ -963,7 +1055,75 @@ marked form.
 **Done when** the page shows the new order with second names and article buttons, both tips behave
 as described on a fresh install, the doc and script reproduce the count, and tests pin the order.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh's decisions (2026-11-22), asked once the numbers were in.** (1) The order weighs official
+  prose and literature equally ("by register"), not each folder a third. The technology folder is
+  governments' digital strategies, so equal folders let planning prose outvote the novels two to
+  one, which put the futuro second and the pretérito fifth. (2) The two imperatives stay together
+  at the end of the simple block; the counts put the positivo one row higher. (3) The second names
+  as drafted, below. The page now reads Presente de Indicativo, Imperfecto de Indicativo, Pretérito,
+  Presente de Subjuntivo, Futuro de Indicativo, Condicional, Imperfecto de Subjuntivo 1 and 2,
+  Futuro de Subjuntivo, Imperativo Positivo and Negativo; then Perfecto de Indicativo,
+  Pluscuamperfecto de Indicativo, Perfecto de Subjuntivo, Pluscuamperfecto de Subjuntivo 1,
+  Condicional Compuesto, Pluscuamperfecto de Subjuntivo 2, Futuro Perfecto, Pretérito Anterior, and
+  Futuro Perfecto de Subjuntivo.
+- **The count.** `scripts/count_tenses.py` reads `ConjugationMapTool --cells-json` (new,
+  `ConjugationMapTool/CellsJSON.swift`), as Konjugieren's did. No tagger was installed, so Spanish's
+  real problem, verb forms that are also nouns (desarrollo, condiciones, valores), is handled by
+  context rules found by reading samples: the first run gave the imperativo positivo 13% of the
+  government folder, all of it adjectives such as resultados and generales split as a command plus
+  "os" or "les". Enclitics are now confirmed forward by the accent rule, as `FormLookup` does.
+  The doc's two required problems: spellings of two tenses (hablamos) are split by the proportion
+  of unambiguous forms of the same cells, 0.5% of verb words; the old literature, the 1605 Quijote
+  included, was kept, since weighing by register already halves it and dropping the Quijote moves
+  no card under Josh's imperative choice.
+  [`docs/tense_frequency.md`](../docs/tense_frequency.md) has all of it.
+- **A corpus file was English.** `corpus/originals/literature/marianela-galdos-1878.txt` was Clara
+  Bell's 1883 translation, not Galdós's Spanish, though `docs/example_corpus_sources.md` called it
+  "clean Spanish-only". No shipped example came from it. At Josh's word (2026-11-22) it was deleted
+  and dropped from `corpus/working/fetch_corpus.sh`, the two index builders' `LIT_WORKS`,
+  `ExampleSource`'s table, and the Info credits (English and Spanish), which had named *Marianela*
+  as a source. `count_tenses.py` keeps its English-file check as a guard. The gitignored pipeline
+  intermediates in `corpus/working/` still mention it until they are rebuilt.
+- **`ConjugationTable`** (`Models/ConjugationTable.swift`) is a struct over `DisplayTense`, not an
+  enum of its own as in Konjugieren, because Conjugar's cards already correspond one to one with
+  tenses. It owns the order, the second names, and `articleKey`. `ConjugationMatch.allCells` is
+  derived from it, as Phase 5's note asked, so a search row now names tenses in the page's order;
+  `VerbView.section(markedBy:)` reads its first simple and first compound tense.
+  `DisplayTense.conjugatedTenses` is unchanged, because the map's file format depends on it.
+- **Second names follow the interface, not the heading language.** Konjugieren's headings switch
+  language; Conjugar's are always Spanish, so the English interface gets the English textbook name
+  and the RAE name where it differs ("also preterite · pretérito perfecto simple"), and the Spanish
+  one gets the RAE and Bello names ("también pretérito imperfecto · copretérito"). The two presentes
+  have none in Spanish. VoiceOver gets each name as its own element in its own language through
+  `accessibilityRepresentation`, and the heading is now tagged Spanish too.
+- **The article sheet** is Konjugieren's, simpler: Conjugar's articles link only to other articles,
+  so a link pushes inside the sheet and nothing has to leave it. `InfoView` already took a
+  `navigate` closure, so it needed no change. The ⓘ glyph was 17 points; `Layout.tapTargetInset`
+  grows its hit area to about 47 without moving the heading. New signal `tapTenseArticle`, no
+  parameters, with its policy lines staged.
+- **The tips** match Konjugieren's: `RedLettersTip` only on a page with a red letter (the header's
+  forms count, so tener's raíz futura tendr- would do), `ScrollToBottomTip` unlocked on the next
+  page after the first is closed and retired by reaching the etymology or examples.
+- **iPad.** `BrowseLayout.detailColumns` now aligns to the top, so a five-row imperative starts
+  level with the seven-row card beside it. With 20 cards, Imperativo Negativo shares a row with
+  Perfecto de Indicativo, as it shared one before this phase.
+- **What was tried where.** iPhone, English, light, fresh install: tener's page in the new order
+  with second names and the red-letter tip; the Presente de Indicativo article from its ⓘ, closed
+  with Done; closing the tip; hablar's page next showing the scroll tip; scrolling to the bottom;
+  comer's page then showing neither tip. iPhone, Spanish, dark: decir's page ("también pretérito
+  perfecto · antepresente", "también antepospretérito"), the Pluscuamperfecto de Subjuntivo 1
+  article ("Listo"), a link inside it to Condicional Compuesto pushing within the sheet, and Listo
+  returning to decir. iPad, English, dark, regular, vos rows shown: tener's two-column grid with the
+  red-letter tip, and the imperatives' rows aligned to the top. Not tried: VoiceOver itself (the
+  accessibility tree was read with `describe-ui`), the Spanish interface on the iPad, the kill
+  switch off, and a device.
+- **Tests.** New: `ConjugationTableTests` (12 tests: the order, one card per tense, simple first,
+  the other screens' order unchanged, the landing marks, search names in page order, every article,
+  the second names in both interfaces, and the signal's wire name). The whole suite passes: 735
+  Swift Testing tests in 42 suites, plus the XCTest suites, in 39.5 seconds. The simulator language
+  was English.
 
 ## Phase 7: An Article on Periphrasis
 

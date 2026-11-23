@@ -87,6 +87,10 @@ nonisolated extension VerbSearch.MatchKind {
       return .exactFoldedInfinitive
     case .exactGlossSense:
       return .exactGlossSense
+    case .conjugation:
+      return .conjugation
+    case .foldedConjugation:
+      return .foldedConjugation
     case .infinitivePrefix:
       return .infinitivePrefix
     case .wholeWordGloss:

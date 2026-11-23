@@ -42,6 +42,8 @@ nonisolated enum AnalyticsName: String {
   case tapRateOrReview
   case tapSendTutorMessage
   case tapShowOnboarding
+  /// The ⓘ beside a tense's heading on a verb page (browse plan, Phase 6). No parameters.
+  case tapTenseArticle
   case viewInfoBrowseView
   case viewInfoView
   case viewModelBrowseView
@@ -101,7 +103,8 @@ nonisolated enum SearchOutcome: String, CaseIterable, Sendable {
 }
 
 /// `VerbSearch.MatchKind`'s cases by name, plus `guess` (the empty state's closest verb) and
-/// `none`. `conjugation` and `foldedConjugation` wait for Phase 5's reverse lookup.
+/// `none`. `conjugation` and `foldedConjugation` are a form of the verb, such as fue or habló
+/// for "hablo" (browse plan, Phase 5). A guess made from a form is still `guess`.
 nonisolated enum SearchMatchKind: String, CaseIterable, Sendable {
   case conjugation
   case exactFoldedInfinitive

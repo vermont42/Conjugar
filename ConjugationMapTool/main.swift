@@ -14,7 +14,8 @@
 //           forms_all.json (every verb), which the Python pipelines read.
 //
 // Run:      ConjugationMapTool --verb-map <verbModelMap.xml> \
-//             [--map <out.lzfse>] [--forms-json <out.json>] [--forms-all-json <out.json>]
+//             [--map <out.lzfse>] [--forms-json <out.json>] [--forms-all-json <out.json>] \
+//             [--cells-json <out.json>]
 //
 // The app target's "Generate Conjugation Map" build phase runs this with --map, writing straight
 // into the app bundle. Xcode runs that phase only when one of its declared inputs is newer than
@@ -25,6 +26,9 @@
 // For the two JSON files, run scripts/write_forms_json.sh, which builds this target and calls it
 // with the right paths. Until 2026-11-22 they came from a disabled test harness,
 // CorpusFormsDumpTests, which this tool replaced.
+//
+// --cells-json writes every form with its cells (CellsJSON.swift) for scripts/count_tenses.py,
+// which builds this target and runs it itself.
 //
 // The tool compiles the app's own engine sources (the membership exceptions on the Models folder
 // in project.pbxproj list them) plus ConjugationMap.swift, so the map, the app's display, and
@@ -81,8 +85,9 @@ guard let verbMapPath = arguments["--verb-map"] else {
 let mapPath = arguments["--map"]
 let formsJSONPath = arguments["--forms-json"]
 let formsAllJSONPath = arguments["--forms-all-json"]
-if mapPath == nil && formsJSONPath == nil && formsAllJSONPath == nil {
-  fail("Nothing to write. Pass --map, --forms-json, --forms-all-json, or a combination.")
+let cellsJSONPath = arguments["--cells-json"]
+if mapPath == nil && formsJSONPath == nil && formsAllJSONPath == nil && cellsJSONPath == nil {
+  fail("Nothing to write. Pass --map, --forms-json, --forms-all-json, --cells-json, or a combination.")
 }
 
 VerbMap.resourceURLOverride = URL(fileURLWithPath: verbMapPath)
@@ -105,6 +110,9 @@ do {
   }
   if let formsAllJSONPath {
     try formsJSON(map, verbs: Set(verbs.keys)).write(to: URL(fileURLWithPath: formsAllJSONPath))
+  }
+  if let cellsJSONPath {
+    try CellsJSON.data(map).write(to: URL(fileURLWithPath: cellsJSONPath))
   }
 } catch {
   fail("Could not write: \(error)")

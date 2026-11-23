@@ -362,11 +362,13 @@ if the corpus has none) **and an etymology** (run the etymology pipeline for tha
 
 - **medieval (3):** `cantar-de-mio-cid-menendezpidal-1913.txt`, `libro-de-buen-amor-juan-ruiz-1330.txt`,
   `milagros_berceo.txt`. **Gap:** *Poema de Fernán González* (only lending-restricted editions found).
-- **literature (8):** `fortunata-y-jacinta-galdos-1887`, `marianela-galdos-1878`, `la-regenta-clarin-1885`,
+- **literature (8, now 7):** `fortunata-y-jacinta-galdos-1887`, `marianela-galdos-1878`, `la-regenta-clarin-1885`,
   `pazos-de-ulloa-pardo-bazan-1886`, `pepita-jimenez-valera-1874`, `sombrero-tres-picos-alarcon-1874`,
   `la-barraca-blasco-ibanez-1898`, `quijote-cervantes-1605`. (*Doña Perfecta* was dropped as an
   annotated student edition and replaced by *Marianela*; *Quijote* is a supplement — 17th-c.
-  orthography, flag before mining forms.)
+  orthography, flag before mining forms.) **2026-11-22:** the fetched *Marianela* (PG 48818) is
+  Clara Bell's English translation. No example came from it, and it was dropped from the corpus,
+  the fetch script, the index builders, and the credits; see `docs/example_corpus_sources.md`.
 - **government (5):** `es-trlpi-…` (PD, Art. 13), `es-ine-informe-anual-2024` (CC BY 4.0),
   `es-miteco-pniec-2023-2030` + `es-mitma-movilidad-2030` (Ley 37/2007 reuse), `co-dane-geih-jul2025`
   (CC BY 4.0). **Gaps:** MX INEGI + AR INDEC stats PDFs (non-extractable — retry).

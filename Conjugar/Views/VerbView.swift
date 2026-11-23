@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import TipKit
 
 struct VerbView: View {
   let verb: String
   /// How the learner reached the page, for `viewVerbView`. A later visit to the same page reports
   /// `resume` instead. See `VerbVisit`.
   let source: AnalyticsSource
+  /// The cells that the search which opened the page matched, marked on the page. See
+  /// `VerbDestination.marks`.
+  let marks: Set<ConjugationCell>
 
   private let gloss: String
   private let typeOrParent: String
@@ -27,13 +31,19 @@ struct VerbView: View {
   @State private var visit: VerbVisit?
   @State private var visibleSections: Set<VerbPageSection> = []
   @State private var hasAppeared = false
+  @State private var hasScrolledToMark = false
   @State private var isOnScreen = false
+  /// The tense article open in a sheet over the page, from the ⓘ beside a heading.
+  @State private var article: Info?
+  private let redLettersTip = RedLettersTip()
+  private let scrollToBottomTip = ScrollToBottomTip()
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   @Environment(\.scenePhase) private var scenePhase
 
-  init(verb: String, source: AnalyticsSource) {
+  init(verb: String, source: AnalyticsSource, marks: Set<ConjugationCell> = []) {
     self.verb = verb
     self.source = source
+    self.marks = marks
     let entry = VerbMap.shared.entry(for: verb)
     gloss = entry?.gloss ?? ""
     participio = Self.form(verb, .participio)
@@ -41,7 +51,7 @@ struct VerbView: View {
     raizFutura = Self.form(verb, .raízFutura) + "-"
     isDefective = Conjugator.isDefective(infinitive: verb)
     typeOrParent = Self.typeOrParent(verb: verb, entry: entry)
-    sections = Self.buildSections(verb: verb)
+    sections = Self.buildSections(verb: verb, marks: marks)
     etymology = Etymology.text(for: verb)
     example = ExampleData.example(for: verb)
     let medieval = MedievalData.examples(for: verb)
@@ -54,35 +64,67 @@ struct VerbView: View {
     medievalExamples.indices.contains(medievalIndex) ? medievalExamples[medievalIndex] : nil
   }
 
+  /// The first card with a marked row, in the page's own order, which the page scrolls to when
+  /// it opens. Nil when nothing is marked or only the header is.
+  private var markedSectionID: String? {
+    sections.first { $0.rows.contains(where: \.isMarked) }?.id
+  }
+
+  /// Whether any form on the page has a red letter, which the engine marks by writing it in
+  /// uppercase. `RedLettersTip` has nothing to point at on a regular verb's page.
+  private var hasRedLetters: Bool {
+    let forms = sections.flatMap { $0.rows.map(\.form) } + [participio, gerundio, raizFutura]
+    return forms.contains { $0.contains(where: \.isUppercase) }
+  }
+
   var body: some View {
-    ScrollView {
-      VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
-        metadataHeader
-        if horizontalSizeClass == .regular {
-          // iPad / regular width: two columns of conjugation cards side by side,
-          // halving the vertical scroll. `conjugationCards` is the single content
-          // builder shared with the compact path, so the two layouts can't drift.
-          LazyVGrid(columns: BrowseLayout.detailColumns, alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
+    ScrollViewReader { proxy in
+      ScrollView {
+        VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
+          metadataHeader
+          if hasRedLetters {
+            TipView(redLettersTip)
+          }
+          TipView(scrollToBottomTip)
+          if horizontalSizeClass == .regular {
+            // iPad / regular width: two columns of conjugation cards side by side,
+            // halving the vertical scroll. `conjugationCards` is the single content
+            // builder shared with the compact path, so the two layouts can't drift.
+            LazyVGrid(columns: BrowseLayout.detailColumns, alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
+              conjugationCards
+            }
+          } else {
             conjugationCards
           }
-        } else {
-          conjugationCards
+          if let etymology {
+            etymologyCard(etymology)
+              .reportsVisibility { sectionVisibilityChanged(.etymology, isVisible: $0) }
+          }
+          if example != nil || medievalExample != nil {
+            exampleCard
+              .reportsVisibility { sectionVisibilityChanged(.example, isVisible: $0) }
+          }
         }
-        if let etymology {
-          etymologyCard(etymology)
-            .reportsVisibility { sectionVisibilityChanged(.etymology, isVisible: $0) }
+        .padding()
+        // Cap the whole column to reading width and center it: the conjugation cards
+        // are short, pronoun-keyed rows that read badly stretched across a 13" iPad,
+        // and capping keeps the header/pills, the 2-up card grid, and the prose cards
+        // sharing one tidy column. A no-op on iPhone (narrower than the cap).
+        .readingWidth()
+      }
+      .onAppear {
+        // Once only: returning to the page from another tab keeps the learner's place.
+        guard !hasScrolledToMark, let markedSectionID else {
+          return
         }
-        if example != nil || medievalExample != nil {
-          exampleCard
-            .reportsVisibility { sectionVisibilityChanged(.example, isVisible: $0) }
+        hasScrolledToMark = true
+        Task {
+          proxy.scrollTo(markedSectionID, anchor: .top)
         }
       }
-      .padding()
-      // Cap the whole column to reading width and center it: the conjugation cards
-      // are short, pronoun-keyed rows that read badly stretched across a 13" iPad,
-      // and capping keeps the header/pills, the 2-up card grid, and the prose cards
-      // sharing one tidy column. A no-op on iPhone (narrower than the cap).
-      .readingWidth()
+    }
+    .sheet(item: $article) { info in
+      TenseArticleSheet(info: info)
     }
     .background(Color.customBackground.ignoresSafeArea())
     .navigationTitle(ReflexivePronoun.citationForm(of: verb).capitalized)
@@ -91,6 +133,7 @@ struct VerbView: View {
       isOnScreen = true
       beginVisit(source: hasAppeared ? .resume : source)
       hasAppeared = true
+      unlockScrollTipIfDue()
     }
     .onDisappear {
       isOnScreen = false
@@ -127,10 +170,26 @@ struct VerbView: View {
     self.visit = nil
   }
 
+  // The scroll tip waits for a page visit after the red-letter tip was closed, rather than
+  // replacing it in place the moment it closes. With tips switched off for screenshots, TipKit is
+  // never configured, so this leaves its datastore alone.
+  private func unlockScrollTipIfDue() {
+    guard TipDisplay.tipsEnabled else {
+      return
+    }
+    if case .invalidated = redLettersTip.status {
+      ScrollToBottomTip.isUnlocked = true
+    }
+  }
+
   private func sectionVisibilityChanged(_ section: VerbPageSection, isVisible: Bool) {
     if isVisible {
       visibleSections.insert(section)
       visit?.reach(section)
+      // A learner who reaches the etymology or the examples unprompted needs no advice.
+      if section >= .etymology, TipDisplay.tipsEnabled {
+        scrollToBottomTip.invalidate(reason: .actionPerformed)
+      }
     } else {
       visibleSections.remove(section)
     }
@@ -138,19 +197,21 @@ struct VerbView: View {
 
   /// The section whose arrival a tense's card marks: the first simple tense's card for `simple`,
   /// the first compound tense's for `compound`, and nil for every other card. Read from the
-  /// page's own order, so that a reordering (Phase 6) moves the marks with it.
+  /// page's own order, `ConjugationTable`, so that a reordering moves the marks with it.
   nonisolated static func section(markedBy tense: DisplayTense) -> VerbPageSection? {
-    if tense == firstSimpleTense {
+    if tense == ConjugationTable.firstSimple {
       return .simple
     }
-    if tense == firstCompoundTense {
+    if tense == ConjugationTable.firstCompound {
       return .compound
     }
     return nil
   }
 
-  nonisolated private static let firstSimpleTense = DisplayTense.conjugatedTenses.first { !$0.isCompound }
-  nonisolated private static let firstCompoundTense = DisplayTense.conjugatedTenses.first(where: \.isCompound)
+  /// Whether the interface is Spanish, which picks the second names under each heading.
+  private static var spanishInterface: Bool {
+    Locale.current.language.languageCode?.identifier == "es"
+  }
 
   private var metadataHeader: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
@@ -168,21 +229,26 @@ struct VerbView: View {
       }
 
       VStack(alignment: .leading, spacing: 4) {
-        nonFiniteRow(DisplayTense.participio.titleCaseName, form: participio)
-        nonFiniteRow(DisplayTense.gerundio.titleCaseName, form: gerundio)
-        nonFiniteRow(DisplayTense.raízFutura.titleCaseName, form: raizFutura)
+        nonFiniteRow(DisplayTense.participio.titleCaseName, form: participio, isMarked: isMarked(.participio))
+        nonFiniteRow(DisplayTense.gerundio.titleCaseName, form: gerundio, isMarked: isMarked(.gerundio))
+        nonFiniteRow(DisplayTense.raízFutura.titleCaseName, form: raizFutura, isMarked: false)
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
   }
 
-  private func nonFiniteRow(_ label: String, form: String) -> some View {
+  private func isMarked(_ tense: DisplayTense) -> Bool {
+    marks.contains(ConjugationCell(tense: tense, personNumber: .none))
+  }
+
+  private func nonFiniteRow(_ label: String, form: String, isMarked: Bool) -> some View {
     HStack(spacing: Layout.defaultSpacing) {
       Text(label)
         .font(.subheadline)
         .foregroundStyle(.secondary)
       ConjugationText(form: form)
         .font(.body)
+        .searchMark(isMarked)
         .speakOnTapFlash(ConjugationText.plain(form))
     }
   }
@@ -290,11 +356,33 @@ struct VerbView: View {
 
   private func conjugationCard(_ section: ConjugationSection) -> some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
-      Text(section.tense.titleCaseName)
-        .font(.headline)
-        .fontDesign(.serif)
-        .foregroundStyle(Color.customYellow)
-        .accessibilityAddTraits(.isHeader)
+      VStack(alignment: .leading, spacing: 2) {
+        HStack(alignment: .firstTextBaseline, spacing: Layout.defaultSpacing) {
+          Text(Self.spanish(section.tense.titleCaseName))
+            .font(.headline)
+            .fontDesign(.serif)
+            .foregroundStyle(Color.customYellow)
+            .accessibilityAddTraits(.isHeader)
+            .frame(maxWidth: .infinity, alignment: .leading)
+          if let info = section.table.article {
+            Button {
+              Current.analytics.signal(name: .tapTenseArticle)
+              article = info
+            } label: {
+              Image(systemName: "info.circle")
+                .font(.body)
+                .foregroundStyle(Color.customBlue)
+                // A 44-point target around a 17-point glyph, without making the heading taller.
+                .padding(Layout.tapTargetInset)
+                .contentShape(Rectangle())
+                .padding(-Layout.tapTargetInset)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text(L.Verb.aboutThisTense))
+          }
+        }
+        secondNamesLine(section.table)
+      }
 
       Grid(alignment: .leadingFirstTextBaseline, horizontalSpacing: Layout.doubleDefaultSpacing, verticalSpacing: 6) {
         ForEach(section.rows) { row in
@@ -309,11 +397,55 @@ struct VerbView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .cardWithAccentBar(.customYellow)
+    .id(section.id)
     .reportsVisibility { isVisible in
       if let marked = Self.section(markedBy: section.tense) {
         sectionVisibilityChanged(marked, isVisible: isVisible)
       }
     }
+  }
+
+  /// "also preterite · pretérito perfecto simple" under a heading. VoiceOver hears each name as its
+  /// own element, in its own language and without the "also", because one element cannot speak
+  /// both English and Spanish.
+  @ViewBuilder
+  private func secondNamesLine(_ table: ConjugationTable) -> some View {
+    let names = table.secondNames(spanishInterface: Self.spanishInterface)
+    if !names.isEmpty {
+      Text(Self.secondNamesText(names))
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
+        .accessibilityRepresentation {
+          VStack {
+            ForEach(names, id: \.text) { name in
+              Text(Self.attributed(name))
+            }
+          }
+        }
+    }
+  }
+
+  private static func secondNamesText(_ names: [ConjugationTable.SecondName]) -> AttributedString {
+    var line = AttributedString("\(L.Verb.alsoKnownAs) ")
+    for (index, name) in names.enumerated() {
+      if index > 0 {
+        line.append(AttributedString(" · "))
+      }
+      line.append(attributed(name))
+    }
+    return line
+  }
+
+  private static func attributed(_ name: ConjugationTable.SecondName) -> AttributedString {
+    name.isSpanish ? spanish(name.text) : AttributedString(name.text)
+  }
+
+  /// Text that VoiceOver reads with a Spanish voice.
+  private static func spanish(_ text: String) -> AttributedString {
+    var attributed = AttributedString(text)
+    attributed.languageIdentifier = "es"
+    return attributed
   }
 
   @ViewBuilder
@@ -325,6 +457,7 @@ struct VerbView: View {
     } else {
       ConjugationText(form: row.displayForm)
         .font(.body)
+        .searchMark(row.isMarked)
         .speakOnTapFlash(row.spokenText)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -359,10 +492,17 @@ struct VerbView: View {
   /// pronoun-ordered list of rows. Mirrors the row set the legacy
   /// `ConjugationDataSource` produced (yo where the tense has one, the tú/vos/both
   /// second-singular per `Settings.secondSingularBrowse`, then the plural persons),
-  /// with a defective/formless slot rendered blank.
-  private static func buildSections(verb: String) -> [ConjugationSection] {
-    let secondSingular = Current.settings.secondSingularBrowse
-    return DisplayTense.conjugatedTenses.map { tense in
+  /// with a defective/formless slot rendered blank. A page opened from a search for a vos form
+  /// (hablás) shows vos as well as tú, whatever the setting, so that the mark has a row to sit
+  /// on; likewise tú for a learner who chose vos.
+  private static func buildSections(verb: String, marks: Set<ConjugationCell>) -> [ConjugationSection] {
+    var secondSingular = Current.settings.secondSingularBrowse
+    let hidden: [SecondSingularBrowse: DisplayPersonNumber] = [.tu: .secondSingularVos, .vos: .secondSingularTú]
+    if let hiddenPerson = hidden[secondSingular], marks.contains(where: { $0.personNumber == hiddenPerson }) {
+      secondSingular = .both
+    }
+    return ConjugationTable.all.map { table in
+      let tense = table.tense
       let isImperative = tense == .imperativoPositivo || tense == .imperativoNegativo
       var persons: [DisplayPersonNumber] = []
       if tense.hasYoForm {
@@ -383,10 +523,11 @@ struct VerbView: View {
           index: index,
           pronoun: isImperative ? nil : personNumber.pronoun,
           form: formOrBlank(verb, tense, personNumber),
-          isImperative: isImperative
+          isImperative: isImperative,
+          isMarked: marks.contains(ConjugationCell(tense: tense, personNumber: personNumber))
         )
       }
-      return ConjugationSection(tense: tense, rows: rows)
+      return ConjugationSection(table: table, rows: rows)
     }
   }
 
@@ -401,9 +542,39 @@ struct VerbView: View {
 }
 
 struct ConjugationSection: Identifiable {
-  let tense: DisplayTense
+  let table: ConjugationTable
   let rows: [ConjugationDisplayRow]
-  var id: String { tense.rawValue }
+  var tense: DisplayTense { table.tense }
+  var id: String { table.id }
+}
+
+/// A tense's Info article, opened from the ⓘ beside its heading on the verb page. A link to
+/// another article opens that article here, so the learner can follow the thread and still close
+/// the sheet onto the same verb page.
+private struct TenseArticleSheet: View {
+  let info: Info
+  @Environment(\.dismiss) private var dismiss
+  @State private var path: [Info] = []
+
+  var body: some View {
+    NavigationStack(path: $path) {
+      article(info)
+        .navigationDestination(for: Info.self) { next in
+          article(next)
+        }
+    }
+  }
+
+  private func article(_ info: Info) -> some View {
+    InfoView(info: info) { path.append($0) }
+      .toolbar {
+        ToolbarItem(placement: .confirmationAction) {
+          Button(L.Verb.closeArticle) {
+            dismiss()
+          }
+        }
+      }
+  }
 }
 
 struct ConjugationDisplayRow: Identifiable {
@@ -411,6 +582,8 @@ struct ConjugationDisplayRow: Identifiable {
   let pronoun: String?
   let form: String
   let isImperative: Bool
+  /// True for a cell that the search which opened the page matched.
+  let isMarked: Bool
   var id: Int { index }
 
   /// The form as displayed: imperatives are wrapped in ¡…!.
@@ -429,6 +602,22 @@ struct ConjugationDisplayRow: Identifiable {
 }
 
 private extension View {
+  /// A tint behind a form that the search which opened the page matched, which VoiceOver reads
+  /// as a value of the form.
+  @ViewBuilder
+  func searchMark(_ isMarked: Bool) -> some View {
+    if isMarked {
+      background {
+        RoundedRectangle(cornerRadius: 6)
+          .fill(Color.customYellow.opacity(0.25))
+          .padding(-4)
+      }
+      .accessibilityValue(Text(L.Verb.matchesSearch))
+    } else {
+      self
+    }
+  }
+
   /// A third of a section's first card on screen counts as reaching the section. A higher
   /// threshold could never be met by an etymology card taller than the screen.
   func reportsVisibility(_ action: @escaping (Bool) -> Void) -> some View {

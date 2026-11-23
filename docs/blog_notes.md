@@ -10353,3 +10353,109 @@ run caught a nice trap: the engine happily conjugates any made-up infinitive as 
 The acceptance test asked that the map find the verb in at least 99% of the app's 1,340 example
 sentences. It finds 1,339. The one miss is "especializarse", where the pronoun is fused onto the
 infinitive, which is exactly what the next phase's pronoun stripping is for.
+
+## Search Finds "Fue" (2026-11-22)
+
+The Verbs tab now answers the question an American learner reading Spanish actually has: what verb
+is this? Type "fue" and the list shows ser and ir, each with a line under it, "fue: Pretérito
+(él)". Type "hablo" and hablar appears with two lines, "hablo: Presente de Indicativo (yo)" and
+then "habló: Pretérito (él)", because a learner who leaves the accent off may mean either. Opening
+a result lands on the verb's page scrolled to the first matching card, with the matching forms
+tinted. This is the second half of the idea whose first half, the conjugation map built at compile
+time, landed in the previous phase.
+
+A word on a page is not always a form as a conjugation table writes it, so most of the work went
+into undoing what sentences do to forms. Pronouns fuse onto commands, gerunds, and infinitives
+(dímelo, levántate, diciéndole, decírselo), and fusing them moves or adds a written accent. Rather
+than teach the lookup to remove accents by rule, it splits off up to two pronouns, finds every form
+that matches what is left with accents ignored, and then rejoins the pronouns with the accent rule
+that Phase 3 wrote for reflexive verbs. A candidate survives only if rejoining gives back the word
+the learner typed. That made the rule cheap to trust: "dime" finds decir's command di and never
+dar's past tense di, because only a command takes a pronoun on its end. The nosotros and vosotros
+commands lose a letter before nos and os (vámonos, levantaos), with ir's idos as the one exception,
+and those letters are put back before the lookup. Feminine and plural participles (hecha, rotos)
+are read as their -o form, but only if that form really is the verb's participle. Several words get
+their own treatment: a subject pronoun is dropped and narrows the persons, a compound like "habría
+dicho" is confirmed against the verb's own compound forms, "no hables" is recognized whole as a
+negative command, and a periphrasis such as "estoy hablando" falls back to the verb of its last
+word.
+
+Where the new matches rank took some thought, because Spanish and English collide. Of the app's
+English glosses, 168 are also Spanish forms: "come", "listen", "load", "tire", "dance". If a
+Spanish form outranked an English meaning, a learner typing "listen" would get listar before
+escuchar. So a form ranks just below a gloss that equals the query, which also keeps the order Josh
+chose for "come" in the first phase (llegar, venir, acudir), with comer now right after them. The
+other choice departs from Konjugieren. There, a match found only by ignoring umlauts ranks below
+every exact kind of match. Spanish learners drop accents constantly, though, and "se", "de", and
+"esta" have hundreds of verbs beginning with those letters, so under that order saber, dar, and
+estar would have been buried. Here a match found by ignoring accents comes right after an exact one.
+
+Vos needed care too. The map gives every tense a vos form, and in most tenses vos and tú share it,
+so a naive line would say "(tú, vos)" nearly everywhere. The lines now leave out whichever of the
+two the learner's setting hides, unless the form belongs only to vos, as "hablás" does. Then the
+page shows the vos row even for a learner who chose tú only, so the tint has somewhere to sit. The
+simulator caught the first version of this rule hiding "tenes" entirely: its only match, tenés, is
+a vos form found without its accent, and the rule had dropped it.
+
+The guess for a search that finds nothing now considers forms as well, so "tenjo" guesses tener by
+way of tengo. The first version compared the query with all quarter million forms and took nearly
+two seconds on a nonsense word. The guess already assumed that learners get the start of a word
+right, so it now compares only forms that share the query's first letter, works on bytes, and
+stops early once a comparison is hopeless. That brought it under a tenth of a second.
+
+The test that every example sentence's verb can be found by its word now passes for all 1,340
+sentences. Phase 4's one miss, "especializarse", is found two ways: by the first phase's handling of
+a trailing "se", and by the new pronoun split.
+
+## The Verb Page in the Order Spanish Uses It (2026-11-22)
+
+Phase 6 of the browse plan reorders the verb page by how often each tense occurs, gives each
+heading the other names a learner will meet, adds a button that opens the tense's article, and
+adds two tips. It ports Konjugieren's Phase 7, and most of the session went into the count.
+
+Counting tenses in German had one big advantage that Spanish lacks: German capitalizes its nouns,
+so a word like "Leben" in mid-sentence is never a verb. Spanish gives no such signal, and thousands
+of its verb forms are also nouns and adjectives. Desarrollo is "I develop" and "development";
+condiciones is "you condition" and "conditions"; presente is a subjunctive and an adjective. No
+part-of-speech tagger was installed. So the counter reads the app's own list of forms, produced by
+the conjugation map's build tool with a new option, and decides from the words around each one.
+
+The first run was a lesson in reading samples rather than totals. It said that 13% of the verbs in
+the government reports were commands, which is absurd for a statistics agency's annual report. The
+samples were resultados, ambientales, medios, and generales. The counter had peeled "os" and "les"
+off these adjectives and found commands underneath: resultad, genera. Spanish settles this with its
+accent rule, since a real command plus a pronoun usually gains a written accent (genera + les would
+be genérales), so the counter now rebuilds each candidate forward and keeps it only if the spelling
+matches exactly, as the app's search does. Vos commands defeat even that: ambientá plus les really
+is spelled ambientales. So vos commands with pronouns are not counted at all. Later samples turned
+up "así" as a pretérito of asir 1,970 times, "dios" as a command, "podría" split between poder and
+the rare podrir, and "sé" briefly turned into a command of ser by a rule that preferred the commoner
+verb. Each fix came from reading the forms behind a number.
+
+Reading samples also turned up a file that was not Spanish at all. The corpus's Marianela was Clara
+Bell's 1883 English translation, though the example pipeline's notes had called it "clean
+Spanish-only" when it replaced an annotated Doña Perfecta. No example sentence ever came from it,
+which makes sense, since the pipeline searched it for Spanish forms and found none. But the Info
+tab's credits still named Marianela as a source. Josh had the file deleted. It is also gone from
+the fetch script, the two index builders, the table that attributes sources, and the credits in
+both languages, and the earlier notes in this journal that call it Spanish are wrong. The counter
+keeps its check that skips any file in which "the" outnumbers "que".
+
+The plan carried over Konjugieren's way of weighing the corpus: each folder counts a third. Here
+that gave a strange order, with the futuro second and the pretérito fifth, because two of the three
+folders are government plans, which say what will happen and rarely what did. Josh chose instead to
+pool the two folders of official prose and weigh them equally against the novels. That order reads
+presente, imperfecto, pretérito, presente de subjuntivo, futuro, and is close to the order textbooks
+teach. He kept the two imperatives together at the end of the simple block, where they were.
+
+The second names were a different problem than in German. Konjugieren's headings switch between
+German and English, so a German heading gets German textbook names. Conjugar's headings are always
+Spanish. So the line follows the interface: in English, "also preterite · pretérito perfecto
+simple", the textbook name and then the Real Academia's; in Spanish, "también pretérito imperfecto
+· copretérito", the Academia's name and then Andrés Bello's, which Mexican schools teach. VoiceOver
+hears each name separately, in its own language.
+
+Everything about the page's order now lives in one place, ConjugationTable. The previous phase's
+search results name their tenses from it, and the scroll that lands a search on its form reads the
+page's actual cards, so neither had to change when the order did. The rest of the app, including the
+file format of the conjugation map, keeps the old order.

@@ -12,6 +12,16 @@ import Foundation
 nonisolated struct VerbDestination: Hashable, Sendable {
   let infinitive: String
   let source: AnalyticsSource
+
+  /// The cells that the search which opened the page matched. The page scrolls to the first of
+  /// them and marks them all. Empty for any other way in.
+  let marks: Set<ConjugationCell>
+
+  init(infinitive: String, source: AnalyticsSource, marks: Set<ConjugationCell> = []) {
+    self.infinitive = infinitive
+    self.source = source
+    self.marks = marks
+  }
 }
 
 /// One stretch of time during which a verb page is on screen with the app in the foreground. It

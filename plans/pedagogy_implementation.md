@@ -286,8 +286,29 @@ disagree, the note wins.
     forms only) is for search.
 - **Reverse lookup** (browse Phase 5) strips pronouns and handles compounds, which Phase 16's
   prompts and Phase 13's diagnoses can reuse.
+  - *Landed 2026-11-22 (browse Phase 5):* `FormLookup.forms(for:index:)` (`Models/FormLookup.swift`,
+    `nonisolated`) returns, per infinitive, the `MatchedForm`s a text is: the app's spelling, the
+    cells in page order, and whether it matched only after folding. It drops a leading subject
+    pronoun (narrowing the persons), a leading "no", and object pronouns; splits up to two enclitics
+    from a command, gerund, or infinitive (dímelo, vámonos, levantaos), confirming each by rejoining
+    it with `FormLookup.attach(_:to:at:)`; reads hecha, rotos as participles; and confirms
+    compounds through `ConjugationMatch`. Its folding is search's (`VerbSearch.fold`, ñ included),
+    so it suits finding a verb, not grading. `MatchedForm.cellNames(hiding:)` names cells as the
+    result rows do ("Presente de Subjuntivo (yo, él) · Imperativo Positivo (usted)").
+    `VerbSearch.editDistance(_:_:limit:)` is a bounded byte version of the distance.
 - **The tense count** (browse Phase 6, `docs/tense_frequency.md`), which orders the verb page by use
   and is the best evidence for Phase 4's ladder and weights.
+  - *Landed 2026-11-22 (browse Phase 6):* `docs/tense_frequency.md` and `scripts/count_tenses.py`,
+    which reads `ConjugationMapTool --cells-json` (every one-word form with its cells). The table
+    gives each tense's share of verb words per folder (government, literature, technology), by
+    register (official prose and literature weighed equally, the order Josh chose), by folder, and
+    pooled. By register: presente 42.9%, imperfecto 14.4, pretérito 12.3, presente de subjuntivo
+    9.4, futuro 8.6, then condicional, the two imperfectos de subjuntivo, and the imperativo
+    positivo near 1.2 each; the perfecto de indicativo is 4.8 and the pluscuamperfecto 1.5. The
+    folders disagree sharply (the pretérito is 4% of official prose and 21% of the novels), so a
+    ladder should say which register it serves. `ConjugationTable` (`Models/`) holds the page order
+    only; the quiz keeps `DisplayTense.conjugatedTenses`. `ConjugationMatch.allCells`, which
+    `cells(of:equalTo:)` filters, now lists cells in the page's new order.
 - **The reflexive display** (browse Phase 3, accepted 2026-11-22): the quiz must accept a
   reflexive-only verb's form with and without its pronoun (Phase 0), and the frame shows the
   pronoun (Phase 1).

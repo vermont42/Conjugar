@@ -19,10 +19,19 @@ nonisolated enum VerbSearch {
   /// golpear, gobernar, and gozar above ir, "be" beber above ser, and "do" dormir above hacer.
   /// Josh chose this order on 2026-11-22. Below that, the order is Konjugieren's: a literal match
   /// outranks a folded one of the same shape, so sonar leads soñar.
+  ///
+  /// A form of a verb (browse plan, Phase 5) ranks below an exact gloss sense, so that "come"
+  /// keeps Josh's llegar and venir first and "listen" finds escuchar before listar, and above an
+  /// infinitive prefix, so that "ve" finds ir and ver before verter and "come" finds comer before
+  /// comenzar. Unlike Konjugieren's, a form found only by folding ranks right after a literal
+  /// one, not below every literal kind: Spanish learners leave accents out, and "de", "se", and
+  /// "esta" must find dar, saber, and estar before the hundreds of verbs that begin with them.
   enum MatchKind: Int, CaseIterable, Comparable, Sendable {
     case exactInfinitive
     case exactFoldedInfinitive
     case exactGlossSense
+    case conjugation
+    case foldedConjugation
     case infinitivePrefix
     case wholeWordGloss
     case infinitiveSubstring
@@ -38,11 +47,22 @@ nonisolated enum VerbSearch {
   struct Match: Equatable, Sendable {
     let entry: VerbMapEntry
     let kind: MatchKind
+
+    /// For a conjugation match, the forms the query matched, literal ones first: "hablo" gives
+    /// hablo (presente, yo) and then habló (pretérito, él). Empty for any other kind.
+    let forms: [MatchedForm]
+
+    init(entry: VerbMapEntry, kind: MatchKind, forms: [MatchedForm] = []) {
+      self.entry = entry
+      self.kind = kind
+      self.forms = forms
+    }
   }
 
   /// Every verb in `entries` that matches `query`, one match per verb, its best, ranked by kind,
-  /// then frequency, then infinitive. Empty for an empty query.
-  static func matches(for query: String, in entries: some Sequence<VerbMapEntry>) -> [Match] {
+  /// then frequency, then infinitive. Empty for an empty query. A query that is a form of a verb
+  /// finds the verb through `FormLookup`, in `index`.
+  static func matches(for query: String, in entries: some Sequence<VerbMapEntry>, index: ConjugationIndex = .bundled) -> [Match] {
     let spanish = spanishQuery(from: query)
     let english = glossQuery(from: query)
     guard !spanish.isEmpty || !english.isEmpty else {
@@ -50,15 +70,83 @@ nonisolated enum VerbSearch {
     }
     let foldedSpanish = fold(spanish)
 
-    var found: [Match] = []
+    var entriesByInfinitive: [String: VerbMapEntry] = [:]
+    var best: [String: Match] = [:]
     for entry in entries {
+      entriesByInfinitive[entry.infinitive] = entry
       if let kind = kind(of: keys(for: entry), spanish: spanish, foldedSpanish: foldedSpanish, english: english) {
-        found.append(Match(entry: entry, kind: kind))
+        best[entry.infinitive] = Match(entry: entry, kind: kind)
       }
     }
-    return found.sorted {
+
+    for (infinitive, forms) in FormLookup.forms(for: query, index: index) {
+      guard let entry = entriesByInfinitive[infinitive] else {
+        continue
+      }
+      let kind: MatchKind = forms.contains { !$0.isFolded } ? .conjugation : .foldedConjugation
+      if let current = best[infinitive], current.kind <= kind {
+        continue
+      }
+      best[infinitive] = Match(entry: entry, kind: kind, forms: forms)
+    }
+
+    return best.values.sorted {
       ($0.kind, $0.entry.frequencyRank, $0.entry.infinitive) < ($1.kind, $1.entry.frequencyRank, $1.entry.infinitive)
     }
+  }
+
+  /// A verb offered when a search matched nothing, with the form it was guessed from, if it was
+  /// guessed from one.
+  struct Guess: Equatable, Sendable {
+    let entry: VerbMapEntry
+    let form: MatchedForm?
+  }
+
+  /// The verb whose folded infinitive, or one of whose folded forms, is fewest edits from the
+  /// folded query: "hablr" guesses hablar, and "tenjo" guesses tener through tengo. On a tie an
+  /// infinitive beats a form, so only a form nearer than every infinitive is considered. Among
+  /// forms, ties break as `closestVerb` breaks them. A form must begin with the query's first
+  /// letter, as a learner's misspelling usually does, which keeps the comparison to a few
+  /// thousand forms rather than a quarter of a million. Nil when nothing is near enough.
+  static func guess(for query: String, in entries: some Sequence<VerbMapEntry>, index: ConjugationIndex = .bundled) -> Guess? {
+    let entries = Array(entries)
+    let foldedQuery = Array(fold(spanishQuery(from: query)))
+    guard !foldedQuery.isEmpty else {
+      return nil
+    }
+    let infinitiveGuess = closestVerb(to: query, in: entries)
+    let infinitiveDistance = infinitiveGuess.map { editDistance(foldedQuery, Array(keys(for: $0).foldedInfinitive)) }
+    // A form at distance zero would have matched, so a guess one edit away cannot be beaten.
+    guard !foldedQuery.contains(" "), infinitiveDistance.map({ $0 > 1 }) ?? true else {
+      return infinitiveGuess.map { Guess(entry: $0, form: nil) }
+    }
+
+    let maxDistance = min(maxGuessDistance(forQueryLength: foldedQuery.count), (infinitiveDistance ?? Int.max) - 1)
+    let entriesByInfinitive = Dictionary(entries.map { ($0.infinitive, $0) }) { first, _ in first }
+    var best: (guess: Guess, rank: (Int, Int, Int))?
+    let queryLetters = Array(String(foldedQuery).utf8)
+    for folded in index.foldedForms(startingWith: foldedQuery[0], nearLength: foldedQuery.count, distance: maxDistance) {
+      guard let distance = editDistance(queryLetters, Array(folded.utf8), limit: maxDistance) else {
+        continue
+      }
+      let candidate = Array(folded)
+      let sharedPrefix = zip(foldedQuery, candidate).prefix { $0 == $1 }.count
+      for form in index.forms(folding: folded) {
+        for mapEntry in index.map.entries(for: form) {
+          guard let entry = entriesByInfinitive[mapEntry.infinitive] else {
+            continue
+          }
+          let rank = (distance, foldedQuery.count - sharedPrefix, entry.frequencyRank)
+          if let current = best, current.rank <= rank {
+            continue
+          }
+          let cells = mapEntry.cells.filter { $0.tense != .infinitivo }
+          let matched = cells.isEmpty ? nil : MatchedForm(text: form, cells: cells, isFolded: false)
+          best = (Guess(entry: entry, form: matched), rank)
+        }
+      }
+    }
+    return best?.guess ?? infinitiveGuess.map { Guess(entry: $0, form: nil) }
   }
 
   /// The verb whose folded infinitive is fewest edits from the folded query, for a search that
@@ -127,6 +215,39 @@ nonisolated enum VerbSearch {
       (twoRowsBack, previousRow, currentRow) = (previousRow, currentRow, twoRowsBack)
     }
     return previousRow[rhs.count]
+  }
+
+  /// `editDistance` over bytes, which a folded form is, giving up once every alignment costs
+  /// more than `limit`. Nil past the limit. The guess calls this for thousands of forms per
+  /// keystroke, so it must be cheap.
+  static func editDistance(_ lhs: [UInt8], _ rhs: [UInt8], limit: Int) -> Int? {
+    guard abs(lhs.count - rhs.count) <= limit else {
+      return nil
+    }
+    guard !lhs.isEmpty, !rhs.isEmpty else {
+      return max(lhs.count, rhs.count)
+    }
+    var twoRowsBack = [Int](repeating: 0, count: rhs.count + 1)
+    var previousRow = Array(0...rhs.count)
+    var currentRow = [Int](repeating: 0, count: rhs.count + 1)
+    for i in 1...lhs.count {
+      currentRow[0] = i
+      var rowMinimum = i
+      for j in 1...rhs.count {
+        let substitutionCost = lhs[i - 1] == rhs[j - 1] ? 0 : 1
+        currentRow[j] = min(previousRow[j] + 1, currentRow[j - 1] + 1, previousRow[j - 1] + substitutionCost)
+        if i > 1, j > 1, lhs[i - 1] == rhs[j - 2], lhs[i - 2] == rhs[j - 1] {
+          currentRow[j] = min(currentRow[j], twoRowsBack[j - 2] + 1)
+        }
+        rowMinimum = min(rowMinimum, currentRow[j])
+      }
+      if rowMinimum > limit {
+        return nil
+      }
+      (twoRowsBack, previousRow, currentRow) = (previousRow, currentRow, twoRowsBack)
+    }
+    let distance = previousRow[rhs.count]
+    return distance <= limit ? distance : nil
   }
 
   /// Case and every diacritic folded away, ñ to n included, so that a learner without a Spanish

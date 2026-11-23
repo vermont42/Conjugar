@@ -20,8 +20,8 @@ struct VerbBrowseView: View {
   /// The row that Return opens and the arrow keys move, on iPad and Mac keyboards. Nil until an
   /// arrow is pressed, and cleared whenever the query changes.
   @State private var keyboardSelection: Int?
-  /// The closest verb to a query that found nothing, or nil. See `VerbSearch.closestVerb`.
-  @State private var guess: VerbMapEntry?
+  /// The closest verb to a query that found nothing, or nil. See `VerbSearch.guess`.
+  @State private var guess: VerbSearch.Guess?
   @State private var addressWasCopied = false
   /// The ranked matches behind `filteredVerbs` while searching, which say each row's match kind
   /// for `finishSearch`. Empty when the field is.
@@ -62,7 +62,7 @@ struct VerbBrowseView: View {
     let matches = VerbSearch.matches(for: searchText, in: verbs)
     if matches.isEmpty {
       Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)
-      guess = VerbSearch.closestVerb(to: searchText, in: verbs)
+      guess = VerbSearch.guess(for: searchText, in: verbs)
     }
     searchMatches = matches
     filteredVerbs = matches.map(\.entry)
@@ -132,17 +132,44 @@ struct VerbBrowseView: View {
       push(VerbDestination(infinitive: infinitive, source: .browse))
       return
     }
+    let match = searchMatches[index]
     if let query = searchTracker.finish() {
-      signal(.opened(query: query, resultCount: searchMatches.count, kind: searchMatches[index].kind, position: index))
+      signal(.opened(query: query, resultCount: searchMatches.count, kind: match.kind, position: index))
     }
-    push(VerbDestination(infinitive: infinitive, source: .search))
+    push(VerbDestination(infinitive: infinitive, source: .search, marks: marks(of: match.forms)))
   }
 
-  private func openGuess(_ guess: VerbMapEntry) {
+  private func openGuess(_ guess: VerbSearch.Guess) {
     if let query = searchTracker.finish() {
       signal(.openedGuess(query: query))
     }
-    push(VerbDestination(infinitive: guess.infinitive, source: .searchGuess))
+    push(VerbDestination(infinitive: guess.entry.infinitive, source: .searchGuess, marks: marks(of: guess.form.map { [$0] } ?? [])))
+  }
+
+  /// The second-singular person the verb page hides, which a match line leaves out where the
+  /// other person shares its form. See `MatchedForm.shownCells(hiding:)`.
+  private var hiddenPersons: Set<DisplayPersonNumber> {
+    switch Current.settings.secondSingularBrowse {
+    case .tu:
+      return [.secondSingularVos]
+    case .vos:
+      return [.secondSingularTú]
+    case .both:
+      return []
+    }
+  }
+
+  private func marks(of forms: [MatchedForm]) -> Set<ConjugationCell> {
+    Set(MatchedForm.shown(forms, hiding: hiddenPersons).flatMap { $0.shownCells(hiding: hiddenPersons) })
+  }
+
+  /// What the row at `index` matched, one line per form: "hablo: Presente de Indicativo (yo)".
+  /// Empty for a match on the infinitive or a gloss, and for the unsearched list.
+  private func matchLines(at index: Int, wasSearching: Bool) -> [String] {
+    guard wasSearching, searchMatches.indices.contains(index) else {
+      return []
+    }
+    return MatchedForm.shown(searchMatches[index].forms, hiding: hiddenPersons).map { $0.line(hiding: hiddenPersons) }
   }
 
   /// A search that ended with nothing opened: cleared, or left in the background.
@@ -169,8 +196,8 @@ struct VerbBrowseView: View {
   }
 
   /// Under "No verbs found": the guess, if any, then a line asking the learner to email a verb
-  /// that the app lacks. Phase 5's conjugation lookup will make this rarer, since a conjugation
-  /// will then find its verb.
+  /// that the app lacks. It appears only when every lookup failed, a form's included, so the
+  /// guess may come from a form too (tenjo guesses tener through tengo).
   private var failedSearchHelp: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
       if let guess {
@@ -183,10 +210,10 @@ struct VerbBrowseView: View {
         Button {
           openGuess(guess)
         } label: {
-          VerbRowLabel(entry: guess)
+          VerbRowLabel(entry: guess.entry, matchLines: guess.form.map { [$0.line(hiding: hiddenPersons)] } ?? [])
         }
         .buttonStyle(.plain)
-        .accessibilityIdentifier("search_guess_\(guess.infinitive)")
+        .accessibilityIdentifier("search_guess_\(guess.entry.infinitive)")
         .background(keyboardSelection == 0 ? Self.selectionColor : Color.clear)
 
         Divider()
@@ -352,7 +379,7 @@ struct VerbBrowseView: View {
                   Button {
                     openRow(at: index, wasSearching: wasSearching)
                   } label: {
-                    VerbGridCell(entry: entry)
+                    VerbGridCell(entry: entry, matchLines: matchLines(at: index, wasSearching: wasSearching))
                       .card()
                       .overlay {
                         if index == keyboardSelection {
@@ -381,7 +408,7 @@ struct VerbBrowseView: View {
                   Button {
                     openRow(at: index, wasSearching: wasSearching)
                   } label: {
-                    VerbRowLabel(entry: entry)
+                    VerbRowLabel(entry: entry, matchLines: matchLines(at: index, wasSearching: wasSearching))
                   }
                   .buttonStyle(.plain)
                   .accessibilityIdentifier("verb_row_\(entry.infinitive)")
@@ -433,7 +460,7 @@ struct VerbBrowseView: View {
         }
       }
       .background(Color.customBackground.ignoresSafeArea())
-      .searchable(text: $searchText, placement: searchPlacement, prompt: L.BrowseVerbs.searchPromptVerbOrMeaning)
+      .searchable(text: $searchText, placement: searchPlacement, prompt: L.BrowseVerbs.searchPromptVerbConjugationOrMeaning)
       .searchFocused($searchIsFocused)
       .onChange(of: searchIsFocused) {
         searchFocusChanged()
@@ -458,7 +485,7 @@ struct VerbBrowseView: View {
       .sensoryFeedback(.selection, trigger: sort)
       .navigationTitle(L.BrowseVerbs.localizedTitle)
       .navigationDestination(for: VerbDestination.self) { destination in
-        VerbView(verb: destination.infinitive, source: destination.source)
+        VerbView(verb: destination.infinitive, source: destination.source, marks: destination.marks)
       }
       .onChange(of: router.pendingVerb, initial: true) { _, destination in
         guard let destination else { return }
@@ -482,6 +509,13 @@ struct VerbBrowseView: View {
         Current.analytics.signal(name: .viewVerbBrowseView)
         Current.reviewPrompter.promptableActionHappened()
       }
+      // Loading the conjugation map and indexing its forms takes about a second, so it happens
+      // off the main actor before the learner types rather than on the first keystroke.
+      .task {
+        await Task.detached(priority: .utility) {
+          _ = ConjugationIndex.bundled
+        }.value
+      }
     }
   }
 }
@@ -491,6 +525,8 @@ struct VerbBrowseView: View {
 /// "verbs using this model" list.
 struct VerbRowLabel: View {
   let entry: VerbMapEntry
+  /// What a search matched, if it matched a form. See `MatchLines`.
+  var matchLines: [String] = []
 
   var body: some View {
     HStack(alignment: .firstTextBaseline) {
@@ -504,6 +540,7 @@ struct VerbRowLabel: View {
             .font(.subheadline)
             .foregroundStyle(Color.customForeground)
         }
+        MatchLines(lines: matchLines)
       }
 
       Spacer()
@@ -530,6 +567,7 @@ struct VerbRowLabel: View {
 /// the card supplies it).
 struct VerbGridCell: View {
   let entry: VerbMapEntry
+  var matchLines: [String] = []
 
   var body: some View {
     VStack(alignment: .leading, spacing: 2) {
@@ -552,9 +590,32 @@ struct VerbGridCell: View {
           .font(.subheadline)
           .foregroundStyle(Color.customForeground)
       }
+
+      MatchLines(lines: matchLines)
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .contentShape(Rectangle())
+  }
+}
+
+/// The forms a search matched, under a row's gloss: "fue: Pretérito (él)". Every word of a line
+/// is Spanish, the tense names included, so VoiceOver reads each line in a Spanish voice.
+struct MatchLines: View {
+  let lines: [String]
+
+  var body: some View {
+    ForEach(lines, id: \.self) { line in
+      Text(Self.spanish(line))
+        .font(.caption)
+        .foregroundStyle(Color.customBlue)
+        .padding(.top, 2)
+    }
+  }
+
+  private static func spanish(_ line: String) -> AttributedString {
+    var text = AttributedString(line)
+    text.languageIdentifier = "es"
+    return text
   }
 }
 

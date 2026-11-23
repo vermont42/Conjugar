@@ -44,11 +44,10 @@ nonisolated enum ExampleSource: Hashable {
     }
   }
 
-  // The eight public-domain literary sources (Project Gutenberg). Author/title/year are
+  // The seven public-domain literary sources (Project Gutenberg). Author/title/year are
   // proper nouns, identical in every language, so they are not localized.
   private static let literatureTable: [String: (author: String, title: String, year: String)] = [
     "fortunata-y-jacinta-galdos-1887.txt": ("Benito Pérez Galdós", "Fortunata y Jacinta", "1887"),
-    "marianela-galdos-1878.txt": ("Benito Pérez Galdós", "Marianela", "1878"),
     "la-regenta-clarin-1885.txt": ("Leopoldo Alas «Clarín»", "La Regenta", "1884–1885"),
     "pazos-de-ulloa-pardo-bazan-1886.txt": ("Emilia Pardo Bazán", "Los pazos de Ulloa", "1886"),
     "pepita-jimenez-valera-1874.txt": ("Juan Valera", "Pepita Jiménez", "1874"),

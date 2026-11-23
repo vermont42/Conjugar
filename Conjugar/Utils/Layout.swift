@@ -18,4 +18,7 @@ struct Layout {
   static let readingWidth: CGFloat = 680.0
   /// Corner radius shared by cards and pills.
   static let cornerRadius: CGFloat = 12.0
+  /// How far to grow a small glyph's hit area on each side, with `contentShape`, so that it
+  /// reaches the 44-point minimum without changing the layout.
+  static let tapTargetInset: CGFloat = 14.0
 }

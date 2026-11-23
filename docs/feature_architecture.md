@@ -49,8 +49,8 @@ nothing.
 threshold 0.3): the header needs nothing; `simple` is the first simple tense's card (Presente de
 Indicativo); `compound` is the first compound tense's card (Perfecto de Indicativo); then the
 etymology card and the examples card. `VerbView.section(markedBy:)` reads the first of each block
-from `DisplayTense.conjugatedTenses`, so a reordering (Phase 6) moves the marks with it. On an
-iPhone the Presente card shows without scrolling, so `header` alone will be rare.
+from `ConjugationTable` (Phase 6), the page's own order, so a reordering moves the marks with it.
+On an iPhone the Presente card shows without scrolling, so `header` alone will be rare.
 
 **A search** (`Models/SearchReport.swift`, `SearchTracker` and `SearchReport`) begins with the
 first non-blank letter in the Verbs tab's field and ends once. Returning to the results and opening
@@ -60,12 +60,20 @@ top result it passed over. Opening the guess reports `opened`, `resultCount` `0`
 `guess`, and position `1`, and the page reports `searchGuess`. Return and the arrow keys (iPad and
 Mac) count as ordinary opens. The Models tab's search sends nothing.
 
-`matchKind` values are `VerbSearch.MatchKind`'s nine cases by name (`exactInfinitive`,
-`exactFoldedInfinitive`, `exactGlossSense`, `infinitivePrefix`, `wholeWordGloss`,
-`infinitiveSubstring`, `foldedInfinitivePrefix`, `foldedInfinitiveSubstring`, `glossSubstring`),
-plus `guess` and `none`. The mapping (`MatchKind.analyticsValue`) is an exhaustive switch, so a new
-match kind cannot go unnamed. `conjugation` and `foldedConjugation` are in the vocabulary for
-Phase 5's reverse lookup and are not sent yet.
+`matchKind` values are `VerbSearch.MatchKind`'s eleven cases by name (`exactInfinitive`,
+`exactFoldedInfinitive`, `exactGlossSense`, `conjugation`, `foldedConjugation`,
+`infinitivePrefix`, `wholeWordGloss`, `infinitiveSubstring`, `foldedInfinitivePrefix`,
+`foldedInfinitiveSubstring`, `glossSubstring`), plus `guess` and `none`. The mapping
+(`MatchKind.analyticsValue`) is an exhaustive switch, so a new match kind cannot go unnamed.
+`conjugation` and `foldedConjugation` are a form of the verb (Phase 5's reverse lookup); a guess
+made from a form is still `guess`. Rows and verbs correspond one to one, as before, so
+`resultCount` and `resultPosition` mean what they did.
+
+### Other verb-page signals
+
+| Signal | Parameters | Sent |
+|---|---|---|
+| `tapTenseArticle` | None | When the ⓘ beside a tense's heading on a verb page opens that tense's article (Phase 6). The article itself also sends `viewInfoView`. It does not say which tense or which verb |
 
 ### The `source` vocabulary
 
@@ -155,7 +163,8 @@ letters to drop from its end, then the letters to add: hablar's hablo is `2o`, i
 "-" for a defective verb's empty slot. Every regular verb of a conjugation writes the same line,
 so 1.8 MB of text compresses to 43 KB. One line per form, as Konjugieren writes it, came to
 1.4 MB. Loading inverts the paradigms into the form index; `ConjugationMap.bundled` is a
-`nonisolated static let`, so Phase 5 can touch it first from a background task.
+`nonisolated static let`, which Phase 5's `ConjugationIndex.bundled` touches from a background
+task when the Verbs tab appears.
 
 **Which cells of a verb a text is** is `ConjugationMatch.cells(of:equalTo:accents:)`
 (`Models/ConjugationMatch.swift`). It conjugates every displayed cell of the one verb rather than
@@ -164,7 +173,8 @@ exact by default; `.folded` ignores acute accents and the diaeresis but keeps ñ
 an accent slip from an accent that marks another tense (hablo for habló is the presente, a real
 error). Case and runs of spaces never count, a reflexive-only verb matches with its pronoun or
 without, and a verb not in `VerbMap` matches nothing. It makes about 150 engine calls, so call it to
-judge an answer, not per keystroke.
+judge an answer, not per keystroke. The one exception is search's several-word queries ("he
+hablado"), which call it for the one or two verbs whose form the last word is, a few milliseconds.
 
 **The corpus files.** The same tool writes `corpus/working/forms.json` (the 1,000 most common verbs)
 and `forms_all.json` for the Python pipelines, through `scripts/write_forms_json.sh`. It replaced
@@ -174,3 +184,97 @@ byte.
 **Tests.** `ConjugationMapTests` compares the bundled map with a fresh in-process build of every
 verb, which catches an engine dependency the tool does not compile, and measures the map against
 `ExampleUses.json` (see the Phase 4 note in the browse plan for the exact measure).
+
+## Reverse Lookup
+
+Built 2026-11-22 by Phase 5 of the browse plan, porting Konjugieren's Phase 6. A form typed into the
+Verbs tab's search finds its verb, and each result names what it matched.
+
+**The pieces.** `ConjugationIndex` (`Models/ConjugationIndex.swift`) indexes the conjugation map by
+folded spelling (so "hablo" also reaches habló, "sueno" sueño) and by first letter and length (for
+the guess). `ConjugationIndex.bundled` takes about a second to build, so `VerbBrowseView` builds it
+in a detached task when it appears. `FormLookup.forms(for:)` (`Models/FormLookup.swift`) returns,
+for each verb, the `MatchedForm`s a query is: the form as the app spells it, its cells in page order,
+and whether it matched only after folding. `VerbSearch.matches(for:in:index:)` calls it and gives
+each such verb the kind `conjugation` (some form matched as written) or `foldedConjugation`, with
+its forms in `Match.forms`, literal ones first. `VerbSearch.guess(for:in:index:)` replaces
+`closestVerb` as the empty state's guess. Both are `nonisolated` and take the entries to search, so
+Phase 11's intent can call them from outside the view.
+
+**What a query may be.** One word is looked up as written and folded; with up to two enclitic
+pronouns split off a command, gerund, or infinitive (dímelo, levántate, diciéndole, vámonos,
+levantaos, idos, decírselo), each candidate rejoined through `ReflexivePronoun.enclitic` and kept
+only if it gives back the word; and as a participle with a feminine or plural ending (hecha, rotos,
+dichas), only if the -o form is a participle cell. Several words: a leading subject pronoun is
+dropped and narrows the persons ("ella hable"); the whole text is confirmed by `ConjugationMatch`
+for the verbs whose form the last word is ("he hablado", "no hables", "me arrepiento"); failing
+that, a leading "no" and object pronouns are dropped ("se lo dije", "me levanto"); failing that, a
+non-finite last word finds its verb ("estoy hablando", "voy a comer").
+
+**Ranking.** The two conjugation kinds sit after `exactGlossSense` and before `infinitivePrefix`.
+"come" keeps Josh's Phase 0 order (llegar, venir, acudir) and then gives comer, ahead of comenzar;
+"listen" finds escuchar before listar; "ve" finds ir and ver before venir and verter. Unlike
+Konjugieren, `foldedConjugation` comes right after `conjugation` rather than below every literal
+kind, so "de", "se", and "esta" find dar, saber and ser, and estar before the hundreds of verbs that
+begin with those letters.
+
+**Naming.** `MatchedForm.line(hiding:)` gives "hablo: Presente de Indicativo (yo)", groups joined by
+" · ", in the page's Spanish tense names, with a command's third persons as usted and ustedes. Where
+tú and vos share a form in one tense, the person the browse setting hides is left out
+(`shownCells(hiding:)`), and a folded form all of whose cells are hidden is dropped when another form
+remains (`MatchedForm.shown(_:hiding:)`). A vos-only form (hablás, or "tenes") always shows.
+
+**Landing.** `VerbDestination.marks` carries the shown cells. `VerbView` builds its cards with the
+marked rows tinted (VoiceOver reads "Matches your search" as the value), and on first appearance
+scrolls to the first card, in its own `sections` order, that holds a marked row, so a reordering
+cannot misdirect it. The names a result row gives follow `ConjugationMatch.allCells`, which Phase 6
+derived from `ConjugationTable`, so they list tenses in the page's order too. A page opened for a vos form shows vos as well as tú whatever the
+setting, and likewise tú for a learner who chose vos. The gerund and participle in the header are
+tinted when marked; the infinitive has nothing to tint.
+
+**Tests.** `ReverseLookupTests` pins the plan's examples, the naming, the ranking around the Phase 0
+table, the enclitic rules forward, the guess, and that every `ExampleUses.json` token finds its verb
+through search (1,340 of 1,340).
+
+## Verb Page
+
+Built 2026-11-22 by Phase 6 of the browse plan, porting Konjugieren's Phase 7.
+
+**`ConjugationTable`** (`Models/ConjugationTable.swift`) owns the verb page's cards: their order,
+each tense's second names, and its Info article (`articleKey`, an `Info.stableKey`). The page
+builds its cards from `ConjugationTable.all`; `VerbView.section(markedBy:)` and
+`ConjugationMatch.allCells` read it, so the landing scroll, the `leaveVerbView` marks, and a search
+row's names all follow the page. Nothing else uses this order: Info, the quiz, the Models grid, the
+widgets, and the conjugation map keep `DisplayTense.conjugatedTenses`, which the map's file format
+depends on.
+
+**The order** is by corpus frequency within each block, simple tenses first, with the two
+imperatives together at the end of the simple block (Josh, 2026-11-22).
+[`tense_frequency.md`](tense_frequency.md) has the counts and the method, and
+`scripts/count_tenses.py` reproduces them from `ConjugationMapTool --cells-json`. `ConjugationTableTests`
+pins the order; change the doc and the script first.
+
+**Second names** sit under each heading after "also" / "también". The headings are Spanish in
+either interface, so the names follow the interface: English gets the English textbook name and the
+RAE's name where it differs from the heading (Pretérito: "also preterite · pretérito perfecto
+simple"); Spanish gets the RAE's name and Andrés Bello's ("también pretérito imperfecto ·
+copretérito"). The Presente de Indicativo and Presente de Subjuntivo have none in Spanish. The line
+is one `Text` to the eye, but its `accessibilityRepresentation` gives VoiceOver each name as its own
+element in its own language, without the "also". The heading itself is tagged Spanish.
+
+**The ⓘ button** at the right of a heading opens that tense's article in a sheet over the page
+(`TenseArticleSheet`, private to `VerbView.swift`), so closing it returns to the same verb. A
+`%…%` link inside the article pushes the linked article within the sheet. The glyph is 17 points;
+`Layout.tapTargetInset` grows its hit area to about 47 without moving the heading. It sends
+`tapTenseArticle`.
+
+**The tips** (`Models/ConjugarTips.swift`) are inline `TipView`s between the header and the first
+card, and obey `TipDisplay.tipsEnabled`. `RedLettersTip` appears only on a page with a red letter
+(a form with an uppercase letter, header forms included), so hablar's page shows none.
+`ScrollToBottomTip` waits on a persisted `@Parameter`, `isUnlocked`, which the next verb page to
+appear sets once the red-letter tip is closed, so the two never appear one straight after the
+other. Reaching the etymology or the examples invalidates it. Each, once closed, never returns.
+
+**The iPad grid** (`BrowseLayout.detailColumns`) aligns its cells to the top, so that a five-row
+imperative beside a seven-row tense starts level with it.
+

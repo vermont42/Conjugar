@@ -100,8 +100,8 @@ nonisolated enum L {
     }
 
     /// What the field searches, which later phases extend: a conjugation is to find its verb.
-    static var searchPromptVerbOrMeaning: String {
-      String(localized: "BrowseVerbs.searchPromptVerbOrMeaning")
+    static var searchPromptVerbConjugationOrMeaning: String {
+      String(localized: "BrowseVerbs.searchPromptVerbConjugationOrMeaning")
     }
 
     static var searchNoResults: String {
@@ -810,6 +810,25 @@ nonisolated enum L {
   }
 
   enum Verb {
+    static var matchesSearch: String {
+      String(localized: "Verb.matchesSearch")
+    }
+
+    /// Before a tense's other names under its heading: "also preterite".
+    static var alsoKnownAs: String {
+      String(localized: "Verb.alsoKnownAs")
+    }
+
+    /// The accessibility label of the ⓘ beside a tense's heading.
+    static var aboutThisTense: String {
+      String(localized: "Verb.aboutThisTense")
+    }
+
+    /// Closes a tense's article, opened over the verb page.
+    static var closeArticle: String {
+      String(localized: "Verb.closeArticle")
+    }
+
     static var irregular: String {
       String(localized: "Verb.irregular")
     }
@@ -946,6 +965,22 @@ nonisolated enum L {
 
     nonisolated static var enableGameCenterMessage: String {
       String(localized: "Tips.enableGameCenterMessage")
+    }
+
+    nonisolated static var redLettersTitle: String {
+      String(localized: "Tips.redLettersTitle")
+    }
+
+    nonisolated static var redLettersMessage: String {
+      String(localized: "Tips.redLettersMessage")
+    }
+
+    nonisolated static var scrollToBottomTitle: String {
+      String(localized: "Tips.scrollToBottomTitle")
+    }
+
+    nonisolated static var scrollToBottomMessage: String {
+      String(localized: "Tips.scrollToBottomMessage")
     }
   }
 }

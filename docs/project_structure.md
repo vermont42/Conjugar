@@ -49,11 +49,15 @@ Conjugar/
 │   ├── VerbModel.swift         # One regular base root plus an ordered feature list; also the alternate-paradigm scheme
 │   ├── VerbMap.swift           # VerbMapEntry + the load-once @unchecked Sendable cache over verbModelMap.xml.
 │   │                           #   ranked(_:) derives the dense 1…4,811 frequency rank from the stored counts at parse time
-│   ├── VerbVisit.swift         # VerbDestination (infinitive + analytics source, what the tabs push) and VerbVisit (one
+│   ├── VerbVisit.swift         # VerbDestination (infinitive + analytics source + search marks, what the tabs push) and VerbVisit (one
 │   │                           #   stretch of a verb page on screen: viewVerbView/leaveVerbView, deepest section, dwell)
 │   ├── SearchReport.swift      # SearchTracker (one search, first letter to its end) and SearchReport (finishSearch's banded
 │   │                           #   parameters); MatchKind.analyticsValue
-│   ├── VerbSearch.swift        # The one verb-search rule: folding, -se stripping, every gloss, MatchKind ranking by kind then frequency; closestVerb's guess for a failed search
+│   ├── VerbSearch.swift        # The one verb-search rule: folding, -se stripping, every gloss, forms (via FormLookup), MatchKind
+│   │                           #   ranking by kind then frequency; guess(for:) for a failed search, from an infinitive or a form
+│   ├── FormLookup.swift        # Reverse lookup: which verbs' forms a query is (fue, hablo→habló, dímelo, he hablado, hecha),
+│   │                           #   as MatchedForms that name their cells ("fue: Pretérito (él)")
+│   ├── ConjugationIndex.swift  # The conjugation map indexed by folded spelling and by first letter + length (for the guess)
 │   ├── RegularRoot.swift       # The three regular roots (cantar/comer/subir) plus the voseo supplement
 │   ├── EngineTense.swift       # Engine-side tense model — the ten simple / non-finite tenses only
 │   ├── EnginePersonNumber.swift  # Engine-side person model — six standard persons plus vos
@@ -79,6 +83,8 @@ Conjugar/
 │   │                           #   and cells. ConjugationMapTool writes it into the bundle at build time (delta lines, LZFSE)
 │   ├── ConjugationMatch.swift  # Which cells of a verb a text is (hablo → presente yo), exact or accents folded, compounds
 │   │                           #   included; for the quiz's slip-or-error check. Conjugates directly, not through the map
+│   ├── ConjugationTable.swift  # The verb page's cards: their order (by corpus frequency, docs/tense_frequency.md), each
+│   │                           #   tense's second names (preterite · pretérito perfecto simple), and its Info article
 │   │
 │   │  ── content ──
 │   ├── ContentCaches.swift     # Pre-warms Etymology / ExampleData / MedievalData off the main actor at launch
@@ -104,7 +110,8 @@ Conjugar/
 │   ├── VerbType.swift          # verbModelMap `vt` marker: irregular / regular -ar / -er / -ir
 │   ├── VerbFamilies.swift      # The hand-curated verb lists the quiz builds questions from
 │   ├── AppIcon.swift           # Alternate app-icon enum (bull / dancer / matador / classic) + preview asset names
-│   ├── ConjugarTips.swift      # TipKit tips (try the quiz, explore models, change difficulty, enable Game Center)
+│   ├── ConjugarTips.swift      # TipKit tips (try the quiz, explore models, change difficulty, enable Game Center; on the
+│   │                           #   verb page, red letters and keep scrolling)
 │   ├── Sound.swift             # One-shot SFX vocabulary; CaseIterable so SoundPlayerReal can pre-decode off-main
 │   ├── Music.swift             # Looping background tracks (gameLoop / onboarding / bossFight)
 │   ├── Haptic.swift            # Tactile-feedback vocabulary played through Current.hapticPlayer
@@ -216,8 +223,9 @@ ConjugarWidget/
 ConjugationMapTool/             # macOS command-line target, built for the host and run by the app's "Generate Conjugation
 │                               #   Map" build phase. Compiles the engine files that project.pbxproj's membership
 │                               #   exceptions on Models/ list, plus ConjugationMap.swift
-└── main.swift                  # Writes ConjugationMap.lzfse into the app bundle (--map), and forms.json /
-                                #   forms_all.json for the corpus pipelines (via scripts/write_forms_json.sh)
+├── main.swift                  # Writes ConjugationMap.lzfse into the app bundle (--map), and forms.json /
+│                               #   forms_all.json for the corpus pipelines (via scripts/write_forms_json.sh)
+└── CellsJSON.swift             # --cells-json: every form with its cells, for scripts/count_tenses.py
 
 Shared/                         # Compiled into both the app and the widget extension
 ├── OpenQuizIntent.swift        # Opens the app and stashes a deeplink the app drains on activation
@@ -239,6 +247,9 @@ ConjugarTests/
 │   ├── ConjugatorResolverTests.swift   # Verb → model resolution, incl. prefixed compounds and the regular fallback
 │   ├── VerbMapTests.swift              # verbModelMap.xml parsing and lookup
 │   ├── VerbSearchTests.swift           # Search ranking (Josh's table of queries), folding, -se stripping, every gloss of a homonym, the failed-search guess
+│   ├── ConjugationTableTests.swift     # The verb page's order, second names, and articles; search names follow the page
+│   ├── ReverseLookupTests.swift        # A form finds its verb: shared forms, accents, enclitics, compounds, vos, participle endings,
+│   │                                   #   the row's names, the guess from a form, every example's token through search
 │   ├── VerbMapRankingTests.swift       # Rank derivation on a fixture, the shipped map's invariants, and
 │   │                                   #   line-for-line agreement with docs/frequencies.txt
 │   ├── TenseBridgeTests.swift          # DisplayTense/DisplayPersonNumber → engine mapping, compounds, negative imperative
@@ -302,7 +313,9 @@ docs/                           # Claude's output that holds information and is 
 ├── purpose_and_use_proposed.txt    # Draft replacement for Info.purposeAndUseText
 ├── privacy_policy3.txt         # The published privacy policy (English + Spanish), describing the shipped app
 ├── privacy_policy_pending.md   # Policy lines for signals built on master, English + Spanish, waiting for the 2027 release
-├── feature_architecture.md     # How the browse and pedagogy plans' features fit together; § Analytics: signals, the source vocabulary
+├── feature_architecture.md     # How the browse and pedagogy plans' features fit together; § Analytics: signals, the source vocabulary;
+│                               #   § Verb Page: ConjugationTable, second names, the article sheet, the tips
+├── tense_frequency.md          # How often each tense occurs in the corpus, which orders the verb page; method and results
 ├── app_description.txt         # App Store descriptions: the 2.8 text and the 3.0 rewrite, English and Spanish
 ├── release_notes.txt           # App Store release notes, newest version first
 ├── release.md                  # The 2027 release: every step left for release day (App Store Connect, device checks,
@@ -439,6 +452,7 @@ scripts/
 ├── verify_store_media.sh       # Preflight for App Store Connect media: asserts every requirement that has bitten this project
 ├── write_forms_json.sh         # Builds ConjugationMapTool and writes corpus/working/forms.json and forms_all.json (replaced
 │                               #   the CorpusFormsDumpTests harness on 2026-11-22)
+├── count_tenses.py             # Counts each tense in the corpus from ConjugationMapTool --cells-json; docs/tense_frequency.md
 ├── _extract_annexb.py          # Extracts Annex B from docs/spanish_verbs_made_simpler.pdf into docs/annex_b_verb_models.md
 ├── _build_verbmap.py           # Builds Conjugar/Models/verbModelMap.xml from the extracted class index + glosses +
 │                               #   frequency/verb_counts.json. Reproduces the shipped file byte-for-byte

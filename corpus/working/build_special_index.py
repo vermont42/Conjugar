@@ -45,7 +45,6 @@ LIT_WORKS = [
     "fortunata-y-jacinta-galdos-1887",
     "la-barraca-blasco-ibanez-1898",
     "la-regenta-clarin-1885",
-    "marianela-galdos-1878",
     "pazos-de-ulloa-pardo-bazan-1886",
     "pepita-jimenez-valera-1874",
     "quijote-cervantes-1605",

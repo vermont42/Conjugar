@@ -85,3 +85,16 @@ scripts/write_forms_json.sh
 
 It replaced the disabled `CorpusFormsDumpTests` harness on 2026-11-22. Its first
 `forms_all.json` was byte-identical to the harness's last.
+
+## `count_tenses.py`: how often each tense occurs
+
+Counts the tenses in `corpus/originals/government`, `literature`, and `technology`, which orders
+the verb page's cards (`Models/ConjugationTable.swift`). It builds `ConjugationMapTool` and runs it
+with `--cells-json`, so it reads forms exactly as the app does. `docs/tense_frequency.md` has the
+method, the results, and the known errors; update it when the script changes.
+
+```bash
+python3 scripts/count_tenses.py                     # the table
+python3 scripts/count_tenses.py --examples pretérito  # the forms counted most under one tense
+python3 scripts/count_tenses.py --no-quijote        # without the 1605 Quijote
+```

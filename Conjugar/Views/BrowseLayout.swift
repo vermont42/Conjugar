@@ -27,5 +27,7 @@ enum BrowseLayout {
   ]
 
   /// Fixed two-up for the verb / model detail conjugation-card masonry.
-  static let detailColumns = [GridItem(.flexible()), GridItem(.flexible())]
+  /// Aligned to the top, so that a short card (an imperative has no yo row) starts level with the
+  /// card beside it rather than floating in the middle of the row.
+  static let detailColumns = [GridItem(.flexible(), alignment: .top), GridItem(.flexible(), alignment: .top)]
 }

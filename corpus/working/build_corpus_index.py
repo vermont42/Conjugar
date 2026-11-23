@@ -55,14 +55,15 @@ SNIPPET_WIDTH = 200
 # Tier priority for the ranked modern index: literature → government → technology.
 TIERS = ("literature", "government", "technology")
 
-# The 8 literature works are the balancing buckets (each is a distinct "work"; two are Galdós,
-# but we still spread the lead candidate across all eight files). Discovered from the folder at
+# The 7 literature works are the balancing buckets (each is a distinct "work"; we spread the lead
+# candidate across all seven files). An eighth, marianela-galdos-1878, was dropped on 2026-11-22
+# because the fetched file was an English translation; a rerun rotates over seven, so its lead
+# candidates differ from the run that built ExampleUses.json. Discovered from the folder at
 # runtime, but pinned here as the canonical rotation order for reproducibility.
 LIT_WORKS = [
     "fortunata-y-jacinta-galdos-1887",
     "la-barraca-blasco-ibanez-1898",
     "la-regenta-clarin-1885",
-    "marianela-galdos-1878",
     "pazos-de-ulloa-pardo-bazan-1886",
     "pepita-jimenez-valera-1874",
     "quijote-cervantes-1605",
