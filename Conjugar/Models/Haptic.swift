@@ -3,12 +3,11 @@
 //  Conjugar
 //
 //  The vocabulary of tactile feedback, played through `Current.hapticPlayer`
-//  (see `HapticPlayer`). Ported from the sibling apps' game feedback; Conjugar
-//  taps it on the boss fight's dance judgments so a correct echo, a banked phrase,
-//  a fail, and the freeze "hold!" moment each have their own feel. The cases map
-//  onto UIKit's feedback generators: `selection` → `UISelectionFeedbackGenerator`,
-//  the `impact*` → `UIImpactFeedbackGenerator`, and `success`/`warning`/`error` →
-//  `UINotificationFeedbackGenerator`.
+//  (see `HapticPlayer`). The boss fight taps it on its dance judgments so a correct
+//  echo, a banked phrase, a fail, and the freeze "hold!" moment each have their own
+//  feel. The cases map onto UIKit's feedback generators: `selection` →
+//  `UISelectionFeedbackGenerator`, the `impact*` → `UIImpactFeedbackGenerator`, and
+//  `success`/`warning`/`error` → `UINotificationFeedbackGenerator`.
 //
 
 enum Haptic {

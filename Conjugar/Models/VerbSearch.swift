@@ -7,8 +7,7 @@
 
 import Foundation
 
-/// The one matching and ranking rule for verb search. The verb list uses it today, and the
-/// reverse lookup and the search intent of later phases are to call it too, so that what a
+/// The one matching and ranking rule for verb search. Every search calls it, so that what a
 /// learner finds cannot depend on where the learner typed.
 nonisolated enum VerbSearch {
   /// The kinds of match, best first. Within a kind, the more frequent verb ranks first, whatever
@@ -17,15 +16,14 @@ nonisolated enum VerbSearch {
   /// A gloss sense that is the whole query outranks an infinitive that merely begins with it,
   /// because the commonest English queries are also Spanish prefixes: "go" would otherwise list
   /// golpear, gobernar, and gozar above ir, "be" beber above ser, and "do" dormir above hacer.
-  /// Josh chose this order on 2026-11-22. Below that, the order is Konjugieren's: a literal match
-  /// outranks a folded one of the same shape, so sonar leads soñar.
+  /// Below that, a literal match outranks a folded one of the same shape, so sonar leads soñar.
   ///
-  /// A form of a verb (browse plan, Phase 5) ranks below an exact gloss sense, so that "come"
-  /// keeps Josh's llegar and venir first and "listen" finds escuchar before listar, and above an
-  /// infinitive prefix, so that "ve" finds ir and ver before verter and "come" finds comer before
-  /// comenzar. Unlike Konjugieren's, a form found only by folding ranks right after a literal
-  /// one, not below every literal kind: Spanish learners leave accents out, and "de", "se", and
-  /// "esta" must find dar, saber, and estar before the hundreds of verbs that begin with them.
+  /// A form of a verb ranks below an exact gloss sense, so that "come" keeps llegar and venir
+  /// first and "listen" finds escuchar before listar, and above an infinitive prefix, so that "ve"
+  /// finds ir and ver before verter and "come" finds comer before comenzar. A form found only by
+  /// folding ranks right after a literal one, not below every literal kind: Spanish learners leave
+  /// accents out, and "de", "se", and "esta" must find dar, saber, and estar before the hundreds
+  /// of verbs that begin with them.
   enum MatchKind: Int, CaseIterable, Comparable, Sendable {
     case exactInfinitive
     case exactFoldedInfinitive

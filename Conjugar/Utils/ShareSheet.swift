@@ -8,16 +8,15 @@
 import LinkPresentation
 import UIKit
 
-// Workaround, ported from Konjugieren (its Phase 10, 2026-11-12): SwiftUI's ShareLink cannot
-// serve the verb page. In a toolbar it reports no tap, so neither a gesture on it nor one on its
-// label can send tapShareVerb, and giving it a SharePreview for the sheet's header drops Copy from
-// the sheet (both seen on the iOS 26.3 simulator). UIActivityViewController keeps Copy and takes
-// its header from LPLinkMetadata.
+// Workaround: SwiftUI's ShareLink cannot serve the verb page. In a toolbar it reports no tap, so
+// neither a gesture on it nor one on its label can send tapShareVerb, and giving it a SharePreview
+// for the sheet's header drops Copy from the sheet (both seen on the iOS 26.3 simulator).
+// UIActivityViewController keeps Copy and takes its header from LPLinkMetadata.
 enum ShareSheet {
   /// Presents the system share sheet over whatever is on screen. On iPad the sheet is a popover,
   /// anchored to `anchorRect` (in window coordinates) when given, for a button inside the page, as
-  /// a collection's bar has (Phase 16); else to the bar button whose accessibility label or title
-  /// is `anchorLabel`, when one is found; and otherwise to the top of the window.
+  /// a collection's bar has; else to the bar button whose accessibility label or title is
+  /// `anchorLabel`, when one is found; and otherwise to the top of the window.
   static func present(text: String, title: String, icon: UIImage?, anchorLabel: String, anchorRect: CGRect? = nil) {
     guard
       let window = UIApplication.shared.connectedScenes

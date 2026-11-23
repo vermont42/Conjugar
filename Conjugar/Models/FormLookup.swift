@@ -157,8 +157,6 @@ nonisolated enum FormLookup {
     return oneWord(lastWord, index: index, tenses: nonFiniteTenses, includingInfinitive: true)
   }
 
-  // MARK: - One word
-
   private static let nonFiniteTenses: Set<DisplayTense> = [.infinitivo, .gerundio, .participio]
   private static let encliticTenses: Set<DisplayTense> = [.imperativoPositivo, .gerundio, .infinitivo]
 
@@ -211,8 +209,6 @@ nonisolated enum FormLookup {
   }
 
   private static let participleEndings = ["a", "os", "as"]
-
-  // MARK: - Enclitic pronouns
 
   static let clitics: Set<String> = ["me", "te", "se", "nos", "os", "lo", "la", "los", "las", "le", "les"]
 
@@ -267,8 +263,6 @@ nonisolated enum FormLookup {
     return ReflexivePronoun.enclitic(clitics.joined(), attachedTo: form, droppingLast: dropped)
   }
 
-  // MARK: - Several words
-
   /// The cells of each candidate verb that the whole of `text` is, compound tenses and the
   /// imperativo negativo included, by the verb's own conjugations: exactly if any match, else
   /// with accents folded.
@@ -311,8 +305,6 @@ nonisolated enum FormLookup {
     }
     return text
   }
-
-  // MARK: - Pronouns
 
   /// Subject pronouns, written with or without their accents, and the persons each names.
   private static let subjectPersons: [String: Set<DisplayPersonNumber>] = {

@@ -9,9 +9,8 @@ import Foundation
 import Testing
 @testable import Conjugar
 
-/// The draw behind the widget's verb of the day and every random verb (browse plan, Phase 14): the
-/// 1,000 most frequent verbs, weighted toward irregular and unprefixed verbs, with My Verbs given
-/// one draw in three. Nonisolated: it touches only the engine and the verb map.
+/// The draw behind the widget's verb of the day and every random verb: the 1,000 most frequent
+/// verbs, weighted toward irregular and unprefixed verbs, with My Verbs given one draw in three. Nonisolated: it touches only the engine and the verb map.
 struct VerbDrawTests {
   private func entry(_ infinitive: String) throws -> VerbMapEntry {
     try #require(VerbMap.shared.entry(for: infinitive))

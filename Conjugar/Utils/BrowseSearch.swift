@@ -4,11 +4,10 @@
 //
 //  Filter the current items by the query, returning everything when the query is
 //  empty. The Models tab filters through it with its own `matches` closure. The Verbs
-//  tab, which ranks its matches, has used `VerbSearch` instead since 2026-11-22; the two
-//  share only `VerbSearch.fold`. A **pure** function: the no-results sad trombone is now
-//  fired by the caller from an `.onChange` handler — the one-shot search transition —
-//  rather than as a side effect of view evaluation, so it can't re-fire on unrelated
-//  re-renders.
+//  tab, which ranks its matches, uses `VerbSearch` instead; the two share only
+//  `VerbSearch.fold`. A **pure** function: the no-results sad trombone is fired by the
+//  caller from an `.onChange` handler — the one-shot search transition — rather than as
+//  a side effect of view evaluation, so it can't re-fire on unrelated re-renders.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

@@ -82,8 +82,7 @@ extension VerbCollection {
   static let shareSampleCount = 6
 
   /// What the share button sends: the title, the count, the most frequent verbs, a link that opens
-  /// the list for someone who has the app, and the App Store link for someone who does not (Josh's
-  /// choice for Konjugieren, carried over).
+  /// the list for someone who has the app, and the App Store link for someone who does not.
   var shareText: String {
     let verbs = self.verbs
     let sample = verbs.prefix(Self.shareSampleCount).map(\.citationForm)

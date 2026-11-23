@@ -41,8 +41,8 @@ enum VerbSort: String, CaseIterable {
 }
 
 /// What the verb list shows while its search field is empty: every verb in a sort order, or My
-/// Verbs (browse plan, Phase 12). The picker under the list offers all three. Only a sort is saved
-/// in Settings, so the app always opens on the full list, where the launch anchor is.
+/// Verbs. The picker under the list offers all three. Only a sort is saved in Settings, so the app
+/// always opens on the full list, where the launch anchor is.
 enum VerbListMode: Hashable, CaseIterable {
   case frequency
   case alphabetical

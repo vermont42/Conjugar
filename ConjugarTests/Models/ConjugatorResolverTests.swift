@@ -16,7 +16,7 @@ import Testing
 // must conjugate **through the verb name alone** — so here we replay
 // `VerbMapTests`'s samples through the convenience entry points, plus the homonym
 // default, the fallback policy, and the all-forms wiring.
-@Suite("Conjugator resolver (Phase 6 C — conjugate by name)")
+@Suite("Conjugator resolver (conjugate by name)")
 struct ConjugatorResolverTests {
   /// Conjugate by **verb name alone** — the no-`model:` path under test. Returns
   /// the form, or nil on failure (so a failure surfaces as a clear mismatch).

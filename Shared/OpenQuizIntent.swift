@@ -2,10 +2,10 @@
 //  OpenQuizIntent.swift
 //  Conjugar
 //
-//  The action behind the Quick Quiz control-center widget, and since browse Phase 11 the Start
-//  a Quiz App Shortcut (`ConjugarShortcuts`). Opens the app and stashes a deeplink the app
-//  drains on activation (control widgets can't navigate directly). Lives in Shared so the app
-//  can also resolve the intent's metadata.
+//  The action behind the Quick Quiz control-center widget and the Start a Quiz App Shortcut
+//  (`ConjugarShortcuts`). Opens the app and stashes a deeplink the app drains on activation
+//  (control widgets can't navigate directly). Lives in Shared so the app can also resolve the
+//  intent's metadata.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

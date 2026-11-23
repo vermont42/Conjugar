@@ -2,7 +2,7 @@
 //  VerbSpotlight.swift
 //  Conjugar
 //
-//  Conjugar's Spotlight entries (browse plan, Phase 11), ported from Konjugieren's.
+//  Conjugar's Spotlight entries.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -11,9 +11,8 @@ import CoreSpotlight
 
 /// One Spotlight entry per verb, in a named index. Each can be found by its infinitive, by every
 /// sense of its glosses, and by its one-word forms, so that typing fue or "arrive" on the Home
-/// Screen can find ir or llegar. In the iOS 26.3 simulator Spotlight matched titles only
-/// (Konjugieren found the same), so whether the other fields help is a device's question; see
-/// `docs/release.md`.
+/// Screen can find ir or llegar. In the iOS 26.3 simulator Spotlight matched titles only, so
+/// whether the other fields help is a device's question; see `docs/release.md`.
 nonisolated enum VerbSpotlight {
   struct Text: Hashable, Sendable {
     /// The glosses' phrases, then the key conjugations (tengo, tuve, tendré, tenido). Spotlight
@@ -31,12 +30,12 @@ nonisolated enum VerbSpotlight {
 
   static let indexName = "verbs"
 
-  /// Builds every verb's entry and indexes them, at each launch, as Konjugieren does. The engine
-  /// is nonisolated, so all of it runs off the main actor. Building the entries takes about two
-  /// seconds in a Debug build on Josh's Intel Mac, and the indexing call about twenty more, so a
-  /// verb first shows in Spotlight some seconds after the first launch. Conjugar never used the default
-  /// index, so there is nothing to delete first. (Konjugieren found that deleting its entities
-  /// from the default index emptied the named one too.)
+  /// Builds every verb's entry and indexes them, at each launch. The engine is nonisolated, so all
+  /// of it runs off the main actor. Building the entries takes about two seconds in a Debug build
+  /// on an Intel Mac, and the indexing call about twenty more, so a verb first shows in Spotlight
+  /// some seconds after the first launch. Conjugar never used the default index, so there is
+  /// nothing to delete first. (Deleting entities from the default index empties the named one
+  /// too.)
   @concurrent
   static func indexVerbs() async {
     let entities = entities()

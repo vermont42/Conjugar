@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Pushes a value onto whichever navigation stack shows the verb page, so that the page's links work
 /// in the Verbs tab and the Models tab alike. The stack needs a destination for the value's type:
-/// `VerbDestination`, `ModelInfo`, or `RelatedVerbListDestination`. Ported from Konjugieren.
+/// `VerbDestination`, `ModelInfo`, or `RelatedVerbListDestination`.
 struct VerbPagePush {
   let push: (any Hashable) -> Void
 

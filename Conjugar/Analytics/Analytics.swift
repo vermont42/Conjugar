@@ -14,7 +14,7 @@
 // test suite. MainActor call sites can call into it synchronously either way.
 nonisolated enum ParameterKey: String {
   /// A collection's key, such as `top100` or `model-31`, on `viewCollection`, `tapShareCollection`,
-  /// and a collection's `startQuiz` (browse plan, Phase 16). A list, never a verb.
+  /// and a collection's `startQuiz`. A list, never a verb.
   case collection
   case deepestSection
   case difficulty
@@ -29,7 +29,7 @@ nonisolated enum ParameterKey: String {
   case score
   case source
   case stage
-  /// `tapStarVerb`'s state after the tap, `true` or `false` (browse plan, Phase 12).
+  /// `tapStarVerb`'s state after the tap, `true` or `false`.
   case starred
 }
 
@@ -45,23 +45,23 @@ nonisolated enum AnalyticsName: String {
   case startQuiz
   case tapPlayGame
   case tapRateOrReview
-  /// The first tap on the review card above the verb list, which reveals its key conjugations
-  /// (browse plan, Phase 15). No parameters, and it does not say which verb.
+  /// The first tap on the review card above the verb list, which reveals its key conjugations.
+  /// No parameters, and it does not say which verb.
   case tapRevealReviewCard
   case tapSendTutorMessage
-  /// The share button in a verb page's navigation bar (browse plan, Phase 9). No parameters, and
-  /// it does not say which verb. Copying a form sends nothing.
+  /// The share button in a verb page's navigation bar. No parameters, and it does not say which
+  /// verb. Copying a form sends nothing.
   case tapShareVerb
-  /// The share button on a collection's bar (browse plan, Phase 16). Carries `collection`.
+  /// The share button on a collection's bar. Carries `collection`.
   case tapShareCollection
   case tapShowOnboarding
-  /// The star in a verb page's navigation bar (browse plan, Phase 12). Carries `starred`, the
-  /// state after the tap, and does not say which verb.
+  /// The star in a verb page's navigation bar. Carries `starred`, the state after the tap, and
+  /// does not say which verb.
   case tapStarVerb
-  /// The ⓘ beside a tense's heading on a verb page (browse plan, Phase 6). No parameters.
+  /// The ⓘ beside a tense's heading on a verb page. No parameters.
   case tapTenseArticle
   /// Once for each opening of a featured collection's page or of a model's page, whose bar makes
-  /// it a collection (browse plan, Phase 16). Carries `collection` and `source`.
+  /// it a collection. Carries `collection` and `source`.
   case viewCollection
   case viewInfoBrowseView
   case viewInfoView
@@ -70,8 +70,8 @@ nonisolated enum AnalyticsName: String {
   case viewOnboardingView
   case viewQuizView
   case viewResultsView
-  /// Once for each review card shown above the verb list (browse plan, Phase 15). No parameters,
-  /// and it does not say which verb.
+  /// Once for each review card shown above the verb list. No parameters, and it does not say
+  /// which verb.
   case viewReviewCard
   case viewSettingsView
   case viewTutorView
@@ -80,11 +80,10 @@ nonisolated enum AnalyticsName: String {
   case winBossFight
 }
 
-/// How the learner reached a verb page or, once later phases send it, began a search or a quiz.
-/// One vocabulary for every signal that carries `source`, so that a verb page, a search, and a
-/// quiz reached from the same surface carry the same value. It holds the values that later phases
-/// of `plans/browse_and_verb_implementation.md` will send, too; `docs/feature_architecture.md`
-/// § Analytics says which are sent today. A raw value is a wire name.
+/// How the learner reached a verb page or began a search or a quiz. One vocabulary for every
+/// signal that carries `source`, so that a verb page, a search, and a quiz reached from the same
+/// surface carry the same value. Not every value is sent yet; `docs/feature_architecture.md`
+/// § Analytics says which are. A raw value is a wire name.
 nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   /// A row of the verb list with the search field empty.
   case browse
@@ -104,7 +103,7 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case related
   /// The page came back after another tab, a pushed page, or the background. See `VerbVisit`.
   case resume
-  /// The review card above the verb list, tapped after its reveal (browse plan, Phase 15).
+  /// The review card above the verb list, tapped after its reveal.
   case reviewCard
   /// A result of a search that found something.
   case search
@@ -116,7 +115,7 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case spotlight
   /// A search begun in the Verbs tab, or a quiz over every verb begun with the Quiz tab's Start.
   case tab
-  /// Test Me's three questions on a verb's page (browse plan, Phase 13).
+  /// Test Me's three questions on a verb's page.
   case verbPage
   /// A tap on any of the widgets: Verb of the Day, the quiz widget, or a Lock Screen accessory.
   case widget
@@ -130,7 +129,7 @@ nonisolated enum SearchOutcome: String, CaseIterable, Sendable {
 
 /// `VerbSearch.MatchKind`'s cases by name, plus `guess` (the empty state's closest verb) and
 /// `none`. `conjugation` and `foldedConjugation` are a form of the verb, such as fue or habló
-/// for "hablo" (browse plan, Phase 5). A guess made from a form is still `guess`.
+/// for "hablo". A guess made from a form is still `guess`.
 nonisolated enum SearchMatchKind: String, CaseIterable, Sendable {
   case conjugation
   case exactFoldedInfinitive

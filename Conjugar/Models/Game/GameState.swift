@@ -10,8 +10,6 @@ import SwiftUI
 @MainActor
 @Observable
 final class GameState {
-  // MARK: Tuning constants (placeholders — tweak to taste)
-
   static let levelCount = 6
   static let sideMargin: CGFloat = 8
   static let platformThickness: CGFloat = 14
@@ -45,8 +43,6 @@ final class GameState {
   static let bullThrowDuration: Double = 0.5
   static let bullPaceSpeed: CGFloat = 42
 
-  // MARK: Stage system (La Subida — five stages; see GameState+Stages.swift)
-
   static let stageCount = 5
   /// Obstacle speed grows +5% per stage, compounding (`obstacleSpeed`).
   static let stageSpeedFactor: CGFloat = 1.05
@@ -61,12 +57,10 @@ final class GameState {
   static let maxHealth = 4
   static let damageCooldownDuration: Double = 1.0
 
-  // MARK: Power-ups (La Subida — speed ⚡ + La Serenata 🎸; see GameState+PowerUps.swift)
-
   /// Speed pickup lasts the same 7 s (5 s solid + 2 s expiry blink) as the cape.
   static let speedDuration: Double = 7
-  /// Speed pickup multiplier: the dancer's walk AND climb ×2 — and, per Josh, the
-  /// BULL's pacing ×2 as well (`bullSpeedFactorNow`), so the whole scene quickens.
+  /// Speed pickup multiplier: the dancer's walk AND climb ×2 — and the BULL's pacing
+  /// ×2 as well (`bullSpeedFactorNow`), so the whole scene quickens.
   /// Only translation is scaled: both actors' sprite flipbooks run at the fixed `fps`,
   /// so nobody's animation speeds up.
   static let speedFactor: CGFloat = 2
@@ -78,8 +72,8 @@ final class GameState {
   /// then bursts into yellow-and-blue particles.
   static let serenataNoteLife: Double = 1.0
   /// Rendered point size of that note glyph, and the half-glyph it rides ABOVE the bull's
-  /// center (per Josh) so it reads as sounding over him rather than out of him. The lift
-  /// lives here rather than in the view so the burst blooms exactly where the note was.
+  /// center so it reads as sounding over him rather than out of him. The lift lives
+  /// here rather than in the view so the burst blooms exactly where the note was.
   static let serenataNoteSize: CGFloat = 22
   static let serenataNoteLift: CGFloat = serenataNoteSize / 2
 
@@ -90,15 +84,13 @@ final class GameState {
   static let capeJumpRotation: Double = 90
   static let capeRotationRate: Double = 360
 
-  // MARK: Challenge mechanics (La Subida — one kind per stage; see GameState+Mechanics.swift)
-
   /// A mechanic's first appearance within a stage lands at a random point in this
   /// window (a fresh climb has a little breathing room before the first disruption).
   static let mechanicFirstDelay: ClosedRange<Double> = 10...18
   /// After a mechanic's window ends it re-arms this many seconds later (it re-fires
   /// through the rest of the stage).
   static let mechanicRepeatDelay: Double = 25
-  /// Zombie attack (Josh's spec): for `zombieDuration` seconds every on-screen
+  /// Zombie attack: for `zombieDuration` seconds every on-screen
   /// obstacle slows to `zombieSpeedFactor`× and homes toward the player.
   static let zombieDuration: Double = 3
   static let zombieSpeedFactor: CGFloat = 0.5
@@ -125,8 +117,6 @@ final class GameState {
   /// Radius (pt) of the soft spotlight the overlay punches around the dancer.
   static let apagonSpotlightRadius: CGFloat = 120
 
-  // MARK: New mechanics/power-ups (see plans/game_powerups_mechanics.md)
-
   /// El Terremoto (earthquake): for this long the screen jiggles vertically, haptics
   /// pulse, and ~`earthquakeGapFraction` of each girder vanishes as fading holes.
   static let terremotoDuration: Double = 5
@@ -135,7 +125,7 @@ final class GameState {
   /// How fast the jiggle phase advances (rad/s) — ~5 Hz.
   static let earthquakeJiggleRate: Double = 32
   /// Fraction of each girder's width removed as holes, split across `earthquakeGapCount`
-  /// gaps (both tunable per the plan).
+  /// gaps.
   static let earthquakeGapFraction: CGFloat = 0.10
   static let earthquakeGapCount = 2
   /// A fresh gap fades in over this long; it stays SOLID (traversable) until fully faded.
@@ -203,8 +193,6 @@ final class GameState {
   /// Sprite flipbook speed.
   static let fps = 10
 
-  // MARK: Boss-fight tuning (La Llamada — see plans/game_boss_llamada.md)
-
   /// Summits before the boss triggers: five stages, so summits 1–4 are escape beats
   /// (the bull flees upward carrying the matador) and the 5th triggers La Llamada.
   static let summitsToBoss = 5
@@ -237,8 +225,8 @@ final class GameState {
   /// Default jaleo drift speed (pt/s) — the gentle score-pop rise.
   static let jaleoDriftRise: CGFloat = 26
   /// The dancer's spoken jaleos (¡Eso!/¡Bien!/¡Olé!…) float from just above her head up
-  /// to this fraction of the screen height (the sight-line marked in the design
-  /// annotation) over `jaleoSpeechDuration`, filling the otherwise-dead upper field.
+  /// to this fraction of the screen height (the sight-line) over `jaleoSpeechDuration`,
+  /// filling the otherwise-dead upper field.
   static let jaleoRiseTargetFraction: CGFloat = 0.42
   /// The slower fade for the dancer's spoken jaleos, so a word stays legible the whole
   /// long climb to the sight-line.
@@ -361,9 +349,8 @@ final class GameState {
     }
   }()
 
-  // The five stages' obstacle sets (decision 2). Stage 1 is the original flags; the
-  // rest were locked with Josh 2026-07-14. Avoid plain ⚡ anywhere — it's the speed
-  // pickup. `stageObstacleEmojis` indexes these by `stage - 1`.
+  // The five stages' obstacle sets. Avoid plain ⚡ anywhere — it's the speed pickup.
+  // `stageObstacleEmojis` indexes these by `stage - 1`.
   static let flagEmojis = [
     "🇪🇸", "🇲🇽", "🇦🇷", "🇨🇴", "🇵🇪", "🇨🇱", "🇻🇪", "🇪🇨", "🇬🇹", "🇨🇺",
     "🇧🇴", "🇩🇴", "🇭🇳", "🇵🇾", "🇸🇻", "🇳🇮", "🇨🇷", "🇺🇾", "🇵🇦"
@@ -375,11 +362,9 @@ final class GameState {
 
   /// Per-stage obstacle emoji, indexed by `stage - 1`.
   static let stageObstacleEmojis: [[String]] = [flagEmojis, animalEmojis, ballEmojis, vehicleEmojis, skyEmojis]
-  /// Per-stage render style (decision "Per-set rendering"): flags/balls spin like
-  /// barrels, animals/vehicles face their travel, sky glyphs stay upright.
+  /// Per-stage render style: flags/balls spin like barrels, animals/vehicles face
+  /// their travel, sky glyphs stay upright.
   static let stageObstacleStyles: [ObstacleStyle] = [.spin, .face, .spin, .face, .upright]
-
-  // MARK: World
 
   var screenSize: CGSize = .zero
   var didConfigure = false
@@ -391,23 +376,21 @@ final class GameState {
   /// The kind of power-up this stage spawns, drawn from `powerUpBag` at each stage
   /// transition (and the initial stage). All of a stage's pickups share this kind.
   var stagePowerUpKind: PowerUpKind = .cape
-  /// Shuffle bag for the per-stage power-up kinds (Konjugieren's `mechanicBag`
-  /// idiom): drawn one per stage, refilled + reshuffled through `bossRNG` when empty,
-  /// so a kind never repeats until all three have appeared.
+  /// Shuffle bag for the per-stage power-up kinds: drawn one per stage, refilled +
+  /// reshuffled through `bossRNG` when empty, so a kind never repeats until all five
+  /// have appeared.
   var powerUpBag: [PowerUpKind] = []
   /// The current stage, 1…`stageCount`. Invariant during the climb: `stage ==
   /// summitCount + 1`. Drives the obstacle set (`stageEmojis`), speed
   /// (`obstacleSpeed`), and render style (`stageObstacleStyle`).
   var stage = 1
 
-  // MARK: Challenge-mechanic state (see GameState+Mechanics.swift)
-
   /// This stage's challenge mechanic, drawn from `mechanicBag` at each stage
   /// transition (and the initial stage). It's what `startMechanic` fires.
   var assignedMechanic: ChallengeMechanic = .zombie
-  /// Shuffle bag for the per-stage mechanics (Konjugieren's `mechanicBag` idiom):
-  /// drawn one per stage, refilled + reshuffled through `bossRNG` when empty, so a
-  /// mechanic never repeats until all three have appeared.
+  /// Shuffle bag for the per-stage mechanics: drawn one per stage, refilled +
+  /// reshuffled through `bossRNG` when empty, so a mechanic never repeats until all
+  /// five have appeared.
   var mechanicBag: [ChallengeMechanic] = []
   /// The mechanic currently disrupting the climb, or nil when none is active. While
   /// non-nil the scheduler counts down `mechanicRemaining` instead of `mechanicCountdown`.
@@ -417,9 +400,9 @@ final class GameState {
   /// Seconds left in the active mechanic's window (ticks only while one is active).
   var mechanicRemaining: Double = 0
 
-  // El Encierro (Phase 4): the 🐂 charger stampede. Chargers run straight across a
-  // girder; they spawn only while the window is open but stragglers keep crossing
-  // after it closes (see GameState+Mechanics.swift).
+  // El Encierro: the 🐂 charger stampede. Chargers run straight across a girder; they
+  // spawn only while the window is open but stragglers keep crossing after it closes
+  // (see GameState+Mechanics.swift).
   var chargers: [Charger] = []
   var chargerCounter = 0
   /// Countdown to the next charger spawn (ticks only while the encierro window is open).
@@ -429,9 +412,9 @@ final class GameState {
   /// least once), the rest pick a random girder. Reset at each window start.
   var encierroCoveredPlayerLevel = false
 
-  // El Apagón (Phase 5): the lights-out spotlight. `apagonDim` is the 0…1 darkness of
-  // the blackout overlay, driven by `updateApagon` from the active window's remaining
-  // time and snapped to 0 whenever the window ends or is cancelled.
+  // El Apagón: the lights-out spotlight. `apagonDim` is the 0…1 darkness of the
+  // blackout overlay, driven by `updateApagon` from the active window's remaining time
+  // and snapped to 0 whenever the window ends or is cancelled.
   var apagonDim: CGFloat = 0
 
   // El Terremoto (earthquake): fading holes in the girders + a vertical screen jiggle +
@@ -467,8 +450,6 @@ final class GameState {
   /// The cosmetic 🍄s in flight from the dancer to a freshly-possessed obstacle.
   var cortejoMushrooms: [CortejoMushroom] = []
   var cortejoMushroomCounter = 0
-
-  // MARK: Player state
 
   var playerX: CGFloat = 0
   var playerY: CGFloat = 0
@@ -543,8 +524,6 @@ final class GameState {
     return ladders.contains { abs(playerX - $0.x) < Self.climbTolerance && $0.upperLevel == playerLevel }
   }
 
-  // MARK: Bull state
-
   var bullX: CGFloat = 0
   var bullY: CGFloat = 0
   var bullDirection: CGFloat = 1
@@ -561,12 +540,10 @@ final class GameState {
   var bullfighterHomeX: CGFloat = 0
   var bullfighterHomeY: CGFloat = 0
 
-  // MARK: Boss-fight state (La Llamada — mechanics in GameState+BossFight.swift)
-
   var phase: GamePhase = .climb
   var summitCount = 0
-  /// Accumulating score (decision 3: undisplayed for now; +50/move, +200×round/phrase,
-  /// +2,000 boss clear). The scoring work item adds display/persistence later.
+  /// Accumulating score (undisplayed for now; +50/move, +200×round/phrase, +2,000 boss
+  /// clear).
   var score = 0
   /// Banked phrases 0…meterNotches — the Duende meter AND the fight's progress.
   var banked = 0
@@ -595,7 +572,7 @@ final class GameState {
   var playerMoveTimer: Double = 0
   var bullMoveTimer: Double = 0
   var screenShake: Double = 0
-  /// Monotonic clock for deterministic sin-decay shake (the Conjuguer idiom).
+  /// Monotonic clock for deterministic sin-decay shake.
   var sineTime: Double = 0
   var jaleoPops: [JaleoPop] = []
   var jaleoCounter = 0
@@ -633,11 +610,7 @@ final class GameState {
   /// Injectable RNG so tests can script exact phrases (seeded `SplitMix64`).
   var bossRNG: any RandomNumberGenerator = SystemRandomNumberGenerator()
 
-  // MARK: Loop bookkeeping
-
   private var lastUpdateTime: Date?
-
-  // MARK: Lifecycle
 
   /// Build the level geometry from the on-screen size (once) and place entities.
   func configure(screenSize: CGSize) {
@@ -710,8 +683,6 @@ final class GameState {
     bullfighterY = matadorStageY
   }
 
-  // MARK: Audio
-
   /// Kick off the game's audio at entry: warm every SFX player and the flag/cape
   /// emoji glyphs off the main thread (so the first flag thrown never stalls the
   /// render or audio path — see SoundPlayerReal / GlyphWarmer), then start the
@@ -727,7 +698,7 @@ final class GameState {
     // encierro charger (🐂) and the speed/serenata pickup glyphs (⚡/🎸). The boss
     // fight adds the freeze chip (🔥), the survive sparkle (✨), and the reunion
     // burst (🌹/❤️) — warm those so the first duel frame is a cache hit. (The jaleo
-    // pops are Spanish words, not emoji; the clashing emoji crowd row was removed.)
+    // pops are Spanish words, not emoji.)
     let obstacleGlyphs = Self.stageObstacleEmojis.flatMap { $0 }
     // ❤️ (flechazo pickup/missile/matador heart) + 🍄 (cortejo pickup + its flying escort)
     // join the encierro 🐂 and the speed/serenata pickups, along with 🎵 (the serenade
@@ -803,7 +774,7 @@ final class GameState {
   /// state, clear obstacles, restore all health, re-arm the cape pickups, and reset
   /// the stage back to 1. Keeps platforms/ladders geometry. Also clears any
   /// boss-fight state back to `.climb` (re-showing the hearts). Used by `configure()`.
-  /// Death no longer routes here — it soft-respawns via `respawn()`, which keeps
+  /// Death doesn't route here; it soft-respawns via `respawn()`, which keeps
   /// `stage`/`summitCount`/`score`.
   func reset() {
     let w = screenSize.width
@@ -904,8 +875,6 @@ final class GameState {
     lastUpdateTime = nil
   }
 
-  // MARK: Frame tick
-
   func update(currentTime: Date) {
     let rawDt: CGFloat
     if let last = lastUpdateTime {
@@ -924,7 +893,7 @@ final class GameState {
 
     sineTime += Double(dt)
 
-    // The original climb pipeline runs only in `.climb`; the between-stage escape
+    // The climb pipeline runs only in `.climb`; the between-stage escape
     // beat is driven by `updateEscape` (GameState+Stages.swift), and every boss phase
     // by `updateBoss` (GameState+BossFight.swift) — so the climb's derived actions
     // never stomp the escape rise or the boss's commanded dance bursts.
@@ -998,8 +967,6 @@ final class GameState {
     jaleoPops.removeAll { $0.ttl <= 0 }
   }
 
-  // MARK: Collision helper
-
   /// Centered-rectangle AABB overlap test.
   func rectsIntersect(
     _ ax: CGFloat, _ ay: CGFloat, _ aw: CGFloat, _ ah: CGFloat,
@@ -1015,8 +982,6 @@ final class GameState {
     let dy = ay - by
     return dx * dx + dy * dy
   }
-
-  // MARK: Particle bursts
 
   /// Throw off a fan of yellow particles at `(x, y)` — the feedback when an obstacle is
   /// destroyed.

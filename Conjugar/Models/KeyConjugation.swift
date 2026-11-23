@@ -8,11 +8,10 @@
 import Foundation
 
 /// The four conjugations from which a learner can rebuild most of a verb: "tener: tengo · tuve ·
-/// tendré · tenido" (Josh, 2026-11-22). Each is the stem a family of tenses is built on, which is
-/// why these four and not others. They appear with no heading, in the interface or in code names,
-/// because the textbook term for them means little to most learners. The verb page's share text
-/// uses them today; the review card, Spotlight, and the pedagogy plan's practice record and
-/// exercise build on them, so do not change the set without asking Josh.
+/// tendré · tenido". Each is the stem a family of tenses is built on, which is why these four and
+/// not others. They appear with no heading, in the interface or in code names, because the
+/// textbook term for them means little to most learners. The verb page's share text, the review
+/// card, and Spotlight build on them, so do not change the set lightly.
 nonisolated enum KeyConjugation: CaseIterable, Sendable {
   /// tengo. The presente de subjuntivo (tenga) and the usted, nosotros, ustedes, and negative
   /// imperatives follow it.

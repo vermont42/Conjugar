@@ -2,8 +2,7 @@
 //  ConjugationTextTests.swift
 //  ConjugarTests
 //
-//  Swift Testing for the shared conjugation renderer used by the migrated Verb
-//  (and, later, Model / Quiz / Results) SwiftUI screens.
+//  The shared conjugation renderer used by the Verb, Model, Quiz, and Results screens.
 //
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //

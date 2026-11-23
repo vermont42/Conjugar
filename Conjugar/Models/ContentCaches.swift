@@ -21,7 +21,7 @@ nonisolated enum ContentCaches {
     _ = Etymology.text(for: sentinel)
     _ = ExampleData.example(for: sentinel)
     _ = MedievalData.examples(for: sentinel)
-    // The related verbs' index, which the verb page's card reads (browse plan, Phase 8).
+    // The related verbs' index, which the verb page's card reads.
     _ = VerbRelations.shared
   }
 }

@@ -2,8 +2,8 @@
 //  VerbSearchTests.swift
 //  ConjugarTests
 //
-//  Pins the verb search's matching and ranking against the bundled verb map, including the
-//  table of queries whose first results Josh chose on 2026-11-22.
+//  Pins the verb search's matching and ranking against the bundled verb map, including a table
+//  of queries whose first results were chosen deliberately.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -18,7 +18,7 @@ import Testing
     VerbSearch.matches(for: query, in: entries).map(\.entry.infinitive)
   }
 
-  /// The queries Josh judged, and the verbs each must list first, in order.
+  /// The judged queries, and the verbs each must list first, in order.
   @Test(arguments: [
     ("go", ["ir"]),
     ("be", ["ser", "estar"]),

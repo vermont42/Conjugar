@@ -2,16 +2,15 @@
 //  SoundPlayerReal.swift
 //  Conjugar
 //
-//  Ported from Conjuguer (commit 9bb4f3e — the performance commit — plus 270052a's
-//  per-sound debounce). The whole point of this file is to never freeze: the first
-//  AVAudioPlayer cold-starts the process-wide audio stack (~1.5s) on the main thread,
-//  the blocking play() round-trips the audio server (~20-80ms), and mp3 decode is not
-//  free — so all three are pushed off the main thread. See the blog debugging story
-//  "AI Doomers Are Wrong" for the measurements this design is built around.
+//  The whole point of this file is to never freeze: the first AVAudioPlayer
+//  cold-starts the process-wide audio stack (~1.5s) on the main thread, the blocking
+//  play() round-trips the audio server (~20-80ms), and mp3 decode is not free, so all
+//  three are pushed off the main thread. See the blog debugging story "AI Doomers Are
+//  Wrong" for the measurements this design is built around.
 //
-//  Conjugar difference from Conjuguer: `Utterer` is the single owner of the shared
-//  AVAudioSession (configured once as `.ambient`), so setup() here does NOT configure
-//  a session — it only warms the stack off-main. `Utterer.setup` must run first.
+//  `Utterer` is the single owner of the shared AVAudioSession (configured once as
+//  `.ambient`), so setup() here does NOT configure a session; it only warms the stack
+//  off-main. `Utterer.setup` must run first.
 //
 
 import AVFoundation
@@ -88,11 +87,9 @@ class SoundPlayerReal: SoundPlayer {
   }
 
   // Media services reset when `mediaserverd` restarts, which another audio-heavy app on the device
-  // can provoke — Konjugieren hit exactly this, and Conjugar was the app whose game provoked it,
-  // traced in Konjugieren's docs/blog_notes.md entry "The quiz went silent, and the audio session
-  // was the reason". The reset reverts the session to the system-default `.soloAmbient` category
-  // and orphans every existing AVAudioPlayer: play() then returns false and the app is silent for
-  // the rest of the process, with no error surfaced anywhere. `.soloAmbient` also stops the user's
+  // can provoke. The reset reverts the session to the system-default `.soloAmbient` category and
+  // orphans every existing AVAudioPlayer: play() then returns false and the app is silent for the
+  // rest of the process, with no error surfaced anywhere. `.soloAmbient` also stops the user's
   // music instead of mixing with it, so a reset breaks the session contract Utterer documents.
   // Apple's prescribed recovery is to rebuild every audio object and re-establish the session.
   // Interruptions (a phone call, Siri) leave the players intact but deactivate the session, so

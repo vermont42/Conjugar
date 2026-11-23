@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-/// A featured collection's page (browse plan, Phase 16, ported from Konjugieren): its description,
-/// how many of its verbs have been looked up, a quiz on it, a share button, and its verbs, the most
-/// frequent first, each checked once looked up. A model's collection shows on the model's page
-/// instead, as `VerbCollectionBar`.
+/// A featured collection's page: its description, how many of its verbs have been looked up, a quiz
+/// on it, a share button, and its verbs, the most frequent first, each checked once looked up. A
+/// model's collection shows on the model's page instead, as `VerbCollectionBar`.
 struct VerbCollectionView: View {
   let collection: VerbCollection
   let source: AnalyticsSource

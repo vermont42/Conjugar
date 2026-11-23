@@ -256,10 +256,9 @@ struct ConjugatorTests {
     expectForm("oír", model: Self.oir, tense, expected)
   }
 
-  // Prefix-invariance: the 10 model is now fully end-anchored (no literal
-  // residue), so desoír / entreoír conjugate on their own stem — including the two
-  // slots that used to ride the base's literal, PI-1p (desoímos, not oímos) and
-  // IMP-2p (desoíd, not oíd) — while -go/glide/PP ride along (desoigo/desoyó/desoído).
+  // Prefix-invariance: the 10 model is fully end-anchored (no literal residue), so
+  // desoír / entreoír conjugate on their own stem, including PI-1p (desoímos, not oímos)
+  // and IMP-2p (desoíd, not oíd), while -go/glide/PP ride along (desoigo/desoyó/desoído).
   @Test("oír (10) — prefix-invariance (desoír/entreoír)", arguments: [
     ("desoír", EngineTense.presenteDeIndicativo(.firstPlural), "desoímos"),
     ("desoír", .imperativoAfirmativo(.secondPlural), "desoíd"),
@@ -300,10 +299,10 @@ struct ConjugatorTests {
     expectForm(infinitive, model: model, tense, expected)
   }
 
-  // Completeness invariant: every distinct Model # in the taxonomy resolves to
-  // a catalog entry, so no verb can map to a missing model. The count of the
-  // 106 numbers guards the list.
-  static let annexBModelNumbers: [String] = [
+  // Completeness invariant: every distinct class number in the class index
+  // resolves to a catalog entry, so no verb can map to a missing model. The
+  // count of the 106 numbers guards the list.
+  static let classNumbers: [String] = [
     "1", "1-1", "1-2", "1-3", "1-4", "1-5", "1-6", "1-7", "1-8", "1-9",
     "1-10", "1-11", "1-12", "1-13", "1-14", "1-15",
     "2", "2-1", "2-2", "2-3", "2-4", "2-5", "2-6",
@@ -319,13 +318,13 @@ struct ConjugatorTests {
     "32", "32-1", "33", "34", "35"
   ]
 
-  @Test("catalog completeness — Annex B has exactly 106 distinct model numbers")
-  func annexBCount() {
-    #expect(Set(Self.annexBModelNumbers).count == 106, "Annex B distinct model numbers")
+  @Test("catalog completeness — the class index has exactly 106 distinct class numbers")
+  func classNumberCount() {
+    #expect(Set(Self.classNumbers).count == 106, "distinct class numbers")
   }
 
-  @Test("catalog completeness — every Annex B model number resolves", arguments: annexBModelNumbers)
-  func everyAnnexBNumberResolves(classNumber: String) {
+  @Test("catalog completeness — every class number resolves", arguments: classNumbers)
+  func everyClassNumberResolves(classNumber: String) {
     #expect(ModelCatalog.model(forClass: classNumber) != nil, "no catalog entry for class \(classNumber)")
   }
 
@@ -2581,7 +2580,7 @@ struct ConjugatorTests {
     expectForms("placer", model: Self.placer, tense, expected)
   }
 
-  @Test("two-form participles — conjugate returns the book's primary", arguments: [
+  @Test("two-form participles — conjugate returns the primary", arguments: [
     ("imprimir", Self.imprimir, "impreso"),
     ("freír", Self.freir, "frito"),
     ("inscribir", Self.inscribir, "inscrito")

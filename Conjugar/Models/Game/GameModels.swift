@@ -27,11 +27,10 @@ struct Ladder: Identifiable {
   let bottomY: CGFloat
 }
 
-/// How an obstacle glyph is oriented as it travels (see the "Per-set rendering"
-/// spec in plans/game_la_subida.md). Apple's animal/vehicle emoji face LEFT and
-/// would hide any facing under the barrel tumble, so each stage's set declares a
-/// style: flags/balls spin like barrels, animals/vehicles stay upright and mirror to
-/// face their travel, sky glyphs (sun/clouds) neither spin nor mirror.
+/// How an obstacle glyph is oriented as it travels. Apple's animal/vehicle emoji face
+/// LEFT and would hide any facing under the barrel tumble, so each stage's set
+/// declares a style: flags/balls spin like barrels, animals/vehicles stay upright and
+/// mirror to face their travel, sky glyphs (sun/clouds) neither spin nor mirror.
 enum ObstacleStyle {
   case spin, face, upright
 }
@@ -57,7 +56,6 @@ struct Obstacle: Identifiable {
   var facing: CGFloat = -1
   var despawn: Bool = false
 
-  // MARK: La Subida — extra power-up / mechanic state (see the game-powerups plan)
   // Value-type fields so babies (`camada`) and chasers (`cortejo`) reuse the existing
   // obstacle render + collision path instead of introducing a new entity type.
 
@@ -92,7 +90,7 @@ struct Obstacle: Identifiable {
 }
 
 /// A homing ❤️ projectile fired by a qualifying jump while the `flechazo` power-up is
-/// active — it pursues the nearest obstacle and destroys it on contact (see
+/// active — it pursues a random obstacle and destroys it on contact (see
 /// `GameState.updateHeartMissiles`). Rendered at half scale in `GameView`.
 struct HeartMissile: Identifiable {
   let id: Int
@@ -174,7 +172,7 @@ struct PlatformGap: Identifiable {
   var fadeRemaining: Double
 }
 
-/// A 🐂 charger in the El Encierro stampede (see GameState+Mechanics.swift, Phase 4):
+/// A 🐂 charger in the El Encierro stampede (see GameState+Mechanics.swift):
 /// it runs straight across a single girder at 2× the stage's obstacle speed and
 /// despawns off-screen — no falling. Same damage/cape rules as an obstacle, with a
 /// tight `chargerHitSize` box. `direction` is +1 (moving right) / −1 (moving left);
@@ -188,10 +186,11 @@ struct Charger: Identifiable {
   var despawn: Bool = false
 }
 
-/// Which of La Subida's three power-ups a pickup grants (one kind per stage, drawn
-/// from a shuffle bag — see `GameState.powerUpBag`). `cape` is the original muleta
+/// Which of La Subida's five power-ups a pickup grants (one kind per stage, drawn
+/// from a shuffle bag — see `GameState.powerUpBag`). `cape` is the muleta
 /// (invulnerability + smash); `speed` doubles walk AND climb speed; `serenata` makes
-/// the bull drop its guard and dance instead of throwing.
+/// the bull drop its guard and dance instead of throwing; `flechazo` makes a jump fire a
+/// homing ❤️ missile; `cortejo` makes a jump possess an obstacle that chases another.
 enum PowerUpKind: CaseIterable {
   case cape, speed, serenata, flechazo, cortejo
 }
@@ -206,14 +205,16 @@ struct PowerUp: Identifiable {
   var collected: Bool
 }
 
-/// One of La Subida's three challenge mechanics — a timed disruption that fires once
+/// One of La Subida's five challenge mechanics — a timed disruption that fires once
 /// (then periodically) within a stage, drawn per stage from a shuffle bag (see
 /// `GameState.mechanicBag`), exactly like the power-ups:
 ///
 ///   • zombie   — obstacles slow to half speed and home toward the player (they keep
 ///                their own emojis — no 🧟 swap; see GameState+Mechanics.swift).
-///   • encierro — 🐂 chargers stampede across the girders (Phase 4).
-///   • apagon   — the lights cut to a spotlight on the dancer (Phase 5).
+///   • encierro — 🐂 chargers stampede across the girders.
+///   • apagon   — the lights cut to a spotlight on the dancer.
+///   • terremoto — the ground shakes and gaps open in the girders.
+///   • camada   — the obstacles multiply: each eligible one spawns a baby.
 enum ChallengeMechanic: CaseIterable {
   case zombie, encierro, apagon, terremoto, camada
 }
@@ -232,9 +233,7 @@ enum BullAction {
   case idle, walk, `throw`, stomp, rear, bow
 }
 
-// MARK: Boss fight — La Llamada (the dance-off duel)
-
-/// The game's top-level phase. `climb` is the whole original prototype — its update
+/// The game's top-level phase. `climb` is La Subida's platforming; its update
 /// pipeline runs only there. `escape` is the between-stage beat (the bull flees
 /// upward carrying the matador; see `GameState+Stages.swift`). Everything else is the
 /// boss fight, driven by `GameState+BossFight.swift`.
@@ -358,8 +357,8 @@ enum DuelState: Equatable {
   case showboat                        // between rounds / after a fail; bull struts
 }
 
-/// A floating, fading feedback shout (¡Olé! / ¡Uy! / ¡Eso!…) — the sibling apps'
-/// score-pop idiom. Spawned by the boss judge, rendered as drifting `Text`.
+/// A floating, fading feedback shout (¡Olé! / ¡Uy! / ¡Eso!…), a score pop in words.
+/// Spawned by the boss judge, rendered as drifting `Text`.
 /// `size` is the font point size: per-move jaleos are modest, phrase-level events
 /// (¡Tu turno!, ¡Olé!) render big so they carry the dark mid-screen on device.
 struct JaleoPop: Identifiable {

@@ -2,10 +2,8 @@
 //  ConjugarShortcuts.swift
 //  Conjugar
 //
-//  Conjugar's App Shortcuts (browse plan, Phase 11): the shortcuts the Shortcuts app and Siri
-//  offer with no setup. Phrases are English only, Konjugieren's convention, since phrases in the
-//  app's second language were rejected (idea C3). Josh chose on 2026-11-22 to offer the quiz and
-//  random-verb intents, which the Control Center controls already ran, beside Look Up a Verb.
+//  Conjugar's App Shortcuts: the shortcuts the Shortcuts app and Siri offer with no setup.
+//  Phrases are English only; phrases in the app's second language were considered and declined.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

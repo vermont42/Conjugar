@@ -99,7 +99,7 @@ nonisolated enum L {
       String(localized: "BrowseVerbs.verbCount \(count)")
     }
 
-    /// What the field searches, which later phases extend: a conjugation is to find its verb.
+    /// What the field searches: a conjugation is to find its verb.
     static var searchPromptVerbConjugationOrMeaning: String {
       String(localized: "BrowseVerbs.searchPromptVerbConjugationOrMeaning")
     }
@@ -193,8 +193,7 @@ nonisolated enum L {
     }
 
     // Boss fight — La Llamada. The jaleo shouts and title cards stay Spanish in BOTH
-    // localizations (decision 16); the narrative line and accessibility labels
-    // localize normally en/es.
+    // localizations; the narrative line and accessibility labels localize normally en/es.
     static var duelTitle: String {
       String(localized: "Game.duelTitle")
     }
@@ -293,15 +292,15 @@ nonisolated enum L {
       String(localized: "Game.duendeMeter")
     }
 
-    // La Subida — the between-stage banner. Stays Spanish in BOTH localizations
-    // (title-card policy — boss-plan decision 16).
+    // La Subida — the between-stage banner. Stays Spanish in BOTH localizations, as the
+    // title cards do.
     static func nivel(_ n: Int) -> String {
       String(localized: "Game.nivel \(n)")
     }
 
     // La Subida — challenge-mechanic announcements (the bull "speaks" them). The zombie
     // line is a narrative sentence and localizes en/es; "¡El encierro!" / "¡Apagón!"
-    // stay Spanish in BOTH localizations (title-card policy — boss-plan decision 16).
+    // stay Spanish in BOTH localizations, as the title cards do.
     static var zombieAnnouncement: String {
       String(localized: "Game.zombieAnnouncement")
     }
@@ -473,8 +472,8 @@ nonisolated enum L {
     }
   }
 
-  // What the Look Up a Verb shortcut says (browse plan, Phase 11). Nonisolated, as the Tips
-  // accessors are, because `VerbLookup` builds its answer off the main actor.
+  // What the Look Up a Verb shortcut says. Nonisolated, as the Tips accessors are, because
+  // `VerbLookup` builds its answer off the main actor.
   enum Lookup {
     /// "tener, “have”", or in Spanish "tener, «have»".
     nonisolated static func verbWithGloss(infinitive: String, gloss: String) -> String {
@@ -714,7 +713,7 @@ nonisolated enum L {
       String(localized: "Quiz.score")
     }
 
-    /// The label of the start screen's picker (browse plan, Phase 13).
+    /// The label of the start screen's picker.
     static var scope: String {
       String(localized: "Quiz.scope")
     }
@@ -766,8 +765,7 @@ nonisolated enum L {
     }
   }
 
-  /// The card above the verb list that offers an irregular verb looked up some days ago (browse
-  /// plan, Phase 15).
+  /// The card above the verb list that offers an irregular verb looked up some days ago.
   enum ReviewCard {
     static var dismiss: String {
       String(localized: "ReviewCard.dismiss")
@@ -911,7 +909,7 @@ nonisolated enum L {
     }
   }
 
-  /// The learner's starred and recent verbs (browse plan, Phase 12).
+  /// The learner's starred and recent verbs.
   enum MyVerbs {
     static var title: String {
       String(localized: "MyVerbs.title")
@@ -956,8 +954,7 @@ nonisolated enum L {
     }
   }
 
-  /// The collections at the top of the Models tab and the bar on every model's page (browse plan,
-  /// Phase 16).
+  /// The collections at the top of the Models tab and the bar on every model's page.
   enum VerbCollection {
     static var heading: String {
       String(localized: "VerbCollection.heading")
@@ -1042,7 +1039,7 @@ nonisolated enum L {
   }
 
   enum Verb {
-    /// Test Me's button in a verb page's navigation bar (browse plan, Phase 13).
+    /// Test Me's button in a verb page's navigation bar.
     static var testMe: String {
       String(localized: "Verb.testMe")
     }

@@ -2215,8 +2215,18 @@ item whose need in the sibling was not confirmed in its code.
    activity. Check whether a collection's quiz in a sheet over a quiz in progress leaves two
    activities on the Lock Screen there. Conjuguer already follows Conjugar's rule
    (`startsLiveActivity` is full length and no collection, and `VerbCollectionTests` pins it), its
-   session reported on 2026-11-22, so it needs nothing. Konjugieren's session confirmed the bug the
-   same day and took on the fix there.
+   session reported on 2026-11-22, so it needs nothing. **Done in Konjugieren** (2026-11-22,
+   uncommitted when reported), by a different mechanism. The bug was wider than this item said:
+   every full-length sheet quiz qualified (a collection, a practice set from a link, an ablaut
+   group's Verb Essentials), and since each `Quiz` ended only its own activity, ending one left the
+   other showing. The fix is a `private static weak var liveActivityHolder: Quiz?`: the first
+   qualifying quiz takes the place, `quit()` and `finishQuiz()` give it back, a sheet over a quiz in
+   progress gets none, and `deinit` ends a released quiz's activity. Unlike Conjugar's rule, a
+   sheet's quiz there gets an activity when the tab is idle; a scope rule would not do, because a
+   practice set's scope has the shape of the tab's custom quiz. A trap for any port: in a full test
+   run ActivityKit throws `targetMaximumExceeded` (191 times in Konjugieren's suite), so a test
+   that needs a granted activity passes alone and fails in the full run. Konjugieren's quiz takes
+   the place whether or not ActivityKit grants the activity, and its tests check the place.
 7. **Compact collection rows** (Phase 16). A title and three forms with their irregular letters red
    ("tengo · hago · digo") in place of a two-line description kept five collections from pushing
    the models below the fold. Konjugieren, with fewer lists, may not need it; Conjuguer's port will

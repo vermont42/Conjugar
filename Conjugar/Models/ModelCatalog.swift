@@ -28,9 +28,8 @@ nonisolated enum ModelCatalog {
     Set(byClassNumber.keys)
   }
 
-  /// The exemplar (model verb) for a class number — the human-readable name
-  /// the Verb screen shows in place of the legacy "parent verb" concept
-  /// (reconocer → 7A → "conocer"). The prefix-accent alias classes (29-2, 30-1,
+  /// The exemplar (model verb) for a class number, the human-readable name the Verb
+  /// screen shows for a verb's model (reconocer → 7A → "conocer"). The prefix-accent alias classes (29-2, 30-1,
   /// 31-1, 32-1) name the parent exemplar they ride.
   static func exemplar(forClass classNumber: String) -> String? {
     exemplarByClassNumber[classNumber]
@@ -190,9 +189,9 @@ nonisolated enum ModelCatalog {
   // entreoír conjugate on their own stem (desoímos / desoíd, not the base's literal).
   // g1-ig is listed AFTER y-add so it wins in the overlapping subj-from-1s slots: PI
   // 1s oigo (not *oyo) and PS{all} oiga… (not *oya…), while y-add keeps the glide in
-  // PI{2s,3s,3p}/IMP-2s (oyes/oye/oyen/oye). o-yhiatus's extended accent set now
-  // supplies the present-1p / imperative-2p hiatus accents (oímos / oíd) directly —
-  // they used to be literal residue, which broke the prefix (oímos rode desoír).
+  // PI{2s,3s,3p}/IMP-2s (oyes/oye/oyen/oye). o-yhiatus's extended accent set
+  // supplies the present-1p / imperative-2p hiatus accents (oímos / oíd) directly;
+  // as literal residue they would break the prefix (desoír would give oímos).
   // (An `a-stem` would be inert here — oír's stem "o" has no i/u for it to accent —
   // so it is omitted to keep the irregularity score honest.)
   static let oir = VerbModel(base: .ir, features: [
@@ -299,7 +298,7 @@ nonisolated enum ModelCatalog {
       (.presenteDeIndicativo(.thirdSingular), "va"), (.presenteDeIndicativo(.firstPlural), "vamos"),
       (.presenteDeIndicativo(.secondPlural), "vais"), (.presenteDeIndicativo(.thirdPlural), "van"),
       (.presenteDeIndicativo(.secondSingularVos), "vas"),
-      (.imperativoAfirmativo(.secondSingularVos), "andá"),  // voseo avoids *í; andá (per the legacy data)
+      (.imperativoAfirmativo(.secondSingularVos), "andá"),  // voseo avoids *í and borrows andar's andá
       (.imperfectoDeIndicativo(.firstSingular), "iba"), (.imperfectoDeIndicativo(.secondSingular), "ibas"),
       (.imperfectoDeIndicativo(.thirdSingular), "iba"), (.imperfectoDeIndicativo(.firstPlural), "íbamos"),
       (.imperfectoDeIndicativo(.secondPlural), "ibais"), (.imperfectoDeIndicativo(.thirdPlural), "iban"),

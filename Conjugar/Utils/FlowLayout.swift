@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-/// Lays its children out in rows, wrapping to a new row when the next child would not fit. Ported
-/// from Konjugieren. `SwiftUI.Layout` is spelled out because the app has a `Layout` of its own.
+/// Lays its children out in rows, wrapping to a new row when the next child would not fit.
+/// `SwiftUI.Layout` is spelled out because the app has a `Layout` of its own.
 struct FlowLayout: SwiftUI.Layout {
   var spacing: CGFloat = 8
   /// Centers each row in the width offered, as the Quiz tab's chips are, rather than starting it

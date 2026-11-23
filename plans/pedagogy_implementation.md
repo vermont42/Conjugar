@@ -86,6 +86,19 @@ Josh**. Do not guess at them. Ask before building the part that depends on the a
 the answer and its date in **How it differed**. Konjugieren's sessions usually asked with two or
 three mockups and a recommendation; that worked well.
 
+**Comments say why the code is as it is, never how it came to be.** Josh is comment-averse; write a
+comment only for durable, non-obvious rationale or domain knowledge, and lean toward none. Never put
+build provenance in code, test names, or long-lived docs (`docs/project_structure.md`,
+`docs/feature_architecture.md`, `docs/release.md`): no "(pedagogy plan, Phase 6)", "added in Phase
+12", or "browse plan"; no "ported from Konjugieren", "as in Conjuguer", or other sibling-app
+attributions (keep the reason the sibling found, stated as a fact about this code); no "(Josh,
+2026-11-22)" or other decision attributions and change dates (keep the rule, drop who and when); no
+commit hashes, audit item numbers, or pointers to `plans/` or `docs/blog_notes.md`; no `// MARK:`
+lines. A date may stay where it records when a measurement was taken. That history belongs in the
+phase's **How it differed** note and the journal. `plans/sweep_comments.md` has the full rule; on
+2026-11-22 a sweep removed some 180 such citations that the browse plan's phases had left, so do not
+put them back.
+
 **Every phase finishes the same way.**
 
 1. Build and run the tests with the `ios-build-verify` skill, as `CLAUDE.md` describes. New logic

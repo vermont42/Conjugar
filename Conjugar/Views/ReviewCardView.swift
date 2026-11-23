@@ -8,9 +8,9 @@
 import SwiftUI
 
 /// An irregular verb looked up some days ago, offered above the verb list with its key
-/// conjugations hidden (browse plan, Phase 15, ported from Konjugieren). A tap anywhere on the card
-/// reveals them; after that, a tap opens the verb's page. The ✕ dismisses the card. Which verb, and
-/// what each tap does to its schedule, is the caller's.
+/// conjugations hidden. A tap anywhere on the card reveals them; after that, a tap opens the verb's
+/// page. The ✕ dismisses the card. Which verb, and what each tap does to its schedule, is the
+/// caller's.
 struct ReviewCardView: View {
   let entry: VerbMapEntry
   /// Whole days since the verb was last opened, or nil when the record does not know.

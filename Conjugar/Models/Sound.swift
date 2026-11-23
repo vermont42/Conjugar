@@ -8,11 +8,10 @@
 
 // `CaseIterable` so `SoundPlayerReal.warmUpSounds()` can pre-decode every effect
 // off-main at game start (a case with no bundled mp3 is simply skipped). The game
-// cases (`chomp`, `moo`, `pop`, `shieldActivate`, `soccerKick`) were reused from the
-// sibling apps Konjugieren/Conjuguer for the flamenco/bull game; the boss-fight pack
-// (`castanetHigh`…`capeWhoosh`) is the La Llamada dance-off duel's SFX, sourced from
-// Pixabay (see `asset_licenses/pixabay_game_sfx.txt`); the rest are the app's
-// original quiz/feedback cues.
+// cases (`chomp`, `moo`, `pop`, `shieldActivate`, `soccerKick`) serve the flamenco/bull
+// game; the boss-fight pack (`castanetHigh`…`capeWhoosh`) is the La Llamada dance-off
+// duel's SFX, sourced from Pixabay (see `asset_licenses/pixabay_game_sfx.txt`); the
+// rest are the app's original quiz/feedback cues.
 enum Sound: String, CaseIterable {
   case applause1
   case applause2
@@ -52,13 +51,12 @@ enum Sound: String, CaseIterable {
   case speedWhoosh
   case lightsOut
 
-  // La Subida — extra power-up SFX copied from the sibling apps (see
-  // `asset_licenses/game_sounds_pixabay.txt`): El Flechazo's homing "lock-on"
-  // (Conjuguer's `brainLockOn`) and El Cortejo's celebratory catch (Konjugieren's `coin`).
+  // La Subida — extra power-up SFX (see `asset_licenses/game_sounds_pixabay.txt`):
+  // El Flechazo's homing "lock-on" and El Cortejo's celebratory catch.
   case brainLockOn
   case coin
 
-  // Konjugieren's `horse`; see `asset_licenses/game_sounds_pixabay.txt`.
+  // See `asset_licenses/game_sounds_pixabay.txt`.
   case neigh
 
   // `castanetHigh` made louder, because the end-scene portraits want more than the 1.0

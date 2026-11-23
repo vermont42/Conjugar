@@ -7,8 +7,6 @@ import CoreGraphics
 import Foundation
 
 extension GameState {
-  // MARK: Stage config (derived from `stage`)
-
   /// The current stage's obstacle emoji set.
   var stageEmojis: [String] {
     Self.stageObstacleEmojis[stageIndex]
@@ -29,8 +27,6 @@ extension GameState {
     min(max(stage - 1, 0), Self.stageCount - 1)
   }
 
-  // MARK: Escape beat (summits 1–4)
-
   /// A non-final summit: the bull flees UPWARD carrying the matador off the top of the
   /// screen (resolving the long-standing escape-beat TODO), then `advanceToNextStage`
   /// rebuilds the field for the next stage. Guards `.climb` like `enterBossIntro` (a
@@ -50,8 +46,8 @@ extension GameState {
     playerGrounded = true
     damageCooldown = 0
     // Active power-up timers (cape/speed/serenata) are deliberately NOT cleared here:
-    // they carry across the escape beat into the next stage (decision 12). Death
-    // clears them (`respawn`), a summit does not.
+    // they carry across the escape beat into the next stage. Death clears them
+    // (`respawn`), a summit does not.
     obstacles.removeAll()
     // Any in-flight ❤️ missiles have no targets once the field clears; the flechazo
     // *timer* itself carries across the escape beat like the other power-ups. Their
@@ -131,7 +127,7 @@ extension GameState {
 
     // Fresh field: obstacles cleared, and the next stage's power-up drawn from the
     // bag + its pickups re-armed. Active power-up timers (cape/speed/serenata) carry
-    // across the escape beat by design (decision 12) — they're never cleared here.
+    // across the escape beat by design — they're never cleared here.
     obstacles.removeAll()
     obstacleCounter = 0
     obstacleSpawnTimer = Self.obstacleSpawnInterval
@@ -144,8 +140,6 @@ extension GameState {
 
     phase = .climb
   }
-
-  // MARK: Soft respawn (death)
 
   /// 0 health: soft-respawn at the bottom-left of the current stage with full health.
   /// Keeps `stage` / `summitCount` / `score` (and the bull's position/timers, and

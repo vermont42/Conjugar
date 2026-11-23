@@ -9,7 +9,6 @@ import Foundation
 import Testing
 @testable import Conjugar
 
-/// The frequency bands, defined once for this plan and the pedagogy plan.
 struct FrequencyBandTests {
   @Test func eachBandHoldsExactlyItsCount() {
     for band in FrequencyBand.allCases {

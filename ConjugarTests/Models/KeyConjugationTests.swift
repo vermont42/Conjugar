@@ -9,8 +9,8 @@ import Foundation
 import Testing
 @testable import Conjugar
 
-/// The four key conjugations, the verb page's share text, and what a long press copies (browse
-/// plan, Phase 9). MainActor only because the share text reads `L`.
+/// The four key conjugations, the verb page's share text, and what a long press copies. MainActor
+/// only because the share text reads `L`.
 @MainActor
 struct KeyConjugationTests {
   @Test(arguments: [

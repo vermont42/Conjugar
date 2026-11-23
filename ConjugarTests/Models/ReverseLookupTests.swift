@@ -2,8 +2,8 @@
 //  ReverseLookupTests.swift
 //  ConjugarTests
 //
-//  Pins the reverse lookup of browse plan Phase 5: a form typed into the verb search finds its
-//  verb, and each result names the cells it matched.
+//  Pins the reverse lookup: a form typed into the verb search finds its verb, and each result
+//  names the cells it matched.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -33,8 +33,6 @@ import Testing
   private static func cell(_ tense: DisplayTense, _ personNumber: DisplayPersonNumber = .none) -> ConjugationCell {
     ConjugationCell(tense: tense, personNumber: personNumber)
   }
-
-  // MARK: - The plan's examples
 
   /// Each query, and the verbs that must come first, in order.
   @Test(arguments: [
@@ -191,7 +189,7 @@ import Testing
     #expect(match("hablar", "hablar")?.forms.isEmpty == true)
   }
 
-  @Test func thePhaseZeroTableHolds() {
+  @Test func theJudgedQueriesHold() {
     #expect(Array(infinitives("go").prefix(1)) == ["ir"])
     #expect(Array(infinitives("be").prefix(2)) == ["ser", "estar"])
     #expect(infinitives("listen").first == "escuchar")
@@ -213,8 +211,6 @@ import Testing
     #expect(found.map(\.text) == ["hable", "hablé"])
   }
 
-  // MARK: - Enclisis, forward
-
   @Test(arguments: [
     (["me", "lo"], "di", DisplayTense.imperativoPositivo, DisplayPersonNumber.secondSingularTú, "dímelo"),
     (["nos"], "vamos", .imperativoPositivo, .firstPlural, "vámonos"),
@@ -230,8 +226,6 @@ import Testing
     #expect(FormLookup.attach(clitics, to: form, at: Self.cell(tense, person)) == expected)
   }
 
-  // MARK: - Landing
-
   @Test func aFoldedFormOfAHiddenPersonIsNotNamed() {
     let ve = "ve: Presente de Indicativo (él) · Imperativo Positivo (tú)"
     #expect(lines("ve", "ver") == [ve])
@@ -244,8 +238,6 @@ import Testing
     let form = try #require(match("hablaste", "hablar")?.forms.first)
     #expect(Set(form.shownCells(hiding: [.secondSingularVos])) == [Self.cell(.pretérito, .secondSingularTú)])
   }
-
-  // MARK: - The guess
 
   @Test func aMisspelledFormGuessesItsVerb() throws {
     #expect(matches("tenjo").isEmpty)
@@ -266,10 +258,8 @@ import Testing
     #expect(VerbSearch.guess(for: query, in: Self.entries) == nil)
   }
 
-  // MARK: - Examples
-
   // Every example's token, typed into the search as it stands, finds the example's verb among
-  // the results. Phase 4's map-only measure missed especializarse, an infinitive with an
+  // the results. A lookup in the map alone misses especializarse, an infinitive with an
   // enclitic; the search finds it.
   @Test func theSearchFindsTheVerbOfEveryExampleByItsToken() {
     var exampleCount = 0

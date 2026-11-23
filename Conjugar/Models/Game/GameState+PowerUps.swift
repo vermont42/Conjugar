@@ -6,8 +6,6 @@
 import CoreGraphics
 
 extension GameState {
-  // MARK: Shared blink envelope
-
   /// Whether a power-up whose timer is `remaining` should render this frame: solid
   /// until its final `capeBlinkDuration` seconds, then flashing ~5×/s to warn of
   /// imminent expiry, then gone. Shared by the cape overlay (`isCapeVisible`) and the
@@ -31,13 +29,11 @@ extension GameState {
   /// line and `updateClimb`'s climb line.
   var speedFactorNow: CGFloat { speedRemaining > 0 ? Self.speedFactor : 1 }
 
-  /// The BULL's pacing multiplier — ⚡ doubles how fast he crosses the top girder too
-  /// (per Josh), so the whole scene quickens while the power-up runs. Multiplied into
-  /// `updateBull`'s pace line only: his flipbook still runs at the fixed `fps`, so the
-  /// walk animation itself is unaffected.
+  /// The BULL's pacing multiplier — ⚡ doubles how fast he crosses the top girder too,
+  /// so the whole scene quickens while the power-up runs. Multiplied into `updateBull`'s
+  /// pace line only: his flipbook still runs at the fixed `fps`, so the walk animation
+  /// itself is unaffected.
   var bullSpeedFactorNow: CGFloat { speedRemaining > 0 ? Self.speedFactor : 1 }
-
-  // MARK: The carried cape
 
   /// Whether to draw the cape as a separate glyph beside the dancer this frame. The
   /// muleta is baked into the `.cape`/`.capeWalk` sprites, so the carried overlay fills
@@ -62,8 +58,6 @@ extension GameState {
     }
     if playerGrounded && capeRotation == 0 { capeRotationDirection = 0 }
   }
-
-  // MARK: Per-stage assignment (shuffle bag)
 
   /// Draw the next stage's power-up kind: honor the `CONJUGAR_GAME_POWERUP` override
   /// if set, otherwise pull from the shuffle bag (refill + reshuffle through
@@ -92,8 +86,6 @@ extension GameState {
       PowerUp(id: 1, x: w * 0.6, y: platforms[3].surfaceY - Self.capeSize / 2, kind: kind, collected: false)
     ]
   }
-
-  // MARK: Collection
 
   /// Apply the effect of collecting a pickup of `kind` (called from
   /// `resolveCollisions`). Each starts its own timer and plays its cue.
@@ -151,8 +143,6 @@ extension GameState {
     return true
   }
 
-  // MARK: Serenata dance
-
   /// While La Serenata plays the bull stands still and dances random bursts from the
   /// end-scene repertoire (foreshadowing the boss dance-off + the dancing-bull end
   /// scene). Called by `updateBull` in place of pacing/throwing; `bullMoveTimer` is
@@ -201,15 +191,13 @@ extension GameState {
     serenataNotes.removeAll { $0.remaining <= 0 }
   }
 
-  // MARK: El Flechazo (heart missiles on jump)
-
   /// Whether the ❤️ badge above the dancer should be drawn this frame (same blink envelope
   /// as the cape/speed badges).
   var isFlechazoBadgeVisible: Bool { powerUpVisible(remaining: flechazoRemaining) }
 
-  /// Fire a homing ❤️ missile at the nearest obstacle to the player, if the power-up is
+  /// Fire a homing ❤️ missile at a random obstacle, if the power-up is
   /// armed and off cooldown and a target exists. Called from `jump()`. No target → no
-  /// missile and NO cooldown consumed (per the plan).
+  /// missile and NO cooldown consumed.
   func fireHeartMissileIfArmed() {
     guard isFlechazoActive, flechazoCooldown <= 0, let target = randomTargetableObstacle() else { return }
     let dx = target.x - playerX
@@ -233,8 +221,6 @@ extension GameState {
     flechazoCooldown = Self.flechazoCooldownDuration
     Current.soundPlayer.play(.brainLockOn, shouldDebounce: false, volume: 0.6)   // lock-on
   }
-
-  // MARK: El Flechazo — the matador's hearts
 
   /// Where the heart in `slot` (its index in `matadorHearts`) sits: off the matador's
   /// right side at his sprite's vertical center, later hearts stacking further right.
@@ -289,8 +275,8 @@ extension GameState {
   }
 
   /// A RANDOM on-screen obstacle (ignoring ones already fading out), or nil if the field is
-  /// empty — the missile's launch target (per Josh: a jump fires at a random obstacle, not
-  /// the closest). Drawn through `bossRNG` so it stays deterministic under test.
+  /// empty — the missile's launch target (a jump fires at a random obstacle, not the
+  /// closest). Drawn through `bossRNG` so it stays deterministic under test.
   func randomTargetableObstacle() -> Obstacle? {
     obstacles.filter { $0.fadeRemaining <= 0 }.randomElement(using: &bossRNG)
   }
@@ -343,8 +329,6 @@ extension GameState {
     obstacles.removeAll { $0.despawn }
     heartMissiles.removeAll { $0.lifeRemaining <= 0 }
   }
-
-  // MARK: El Cortejo (mushroom chaser)
 
   /// Possess a random on-screen obstacle: it shivers in place for `cortejoVibrateDuration`,
   /// then pursues another random obstacle. With fewer than 2 obstacles it simply fizzles —

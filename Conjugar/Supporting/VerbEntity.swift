@@ -2,7 +2,7 @@
 //  VerbEntity.swift
 //  Conjugar
 //
-//  A verb as App Intents and Spotlight see it (browse plan, Phase 11).
+//  A verb as App Intents and Spotlight see it.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

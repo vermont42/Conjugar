@@ -7,18 +7,16 @@
 
 import Foundation
 
-/// A fixed list of verbs offered as a place to go (browse plan, Phase 16, ported from Konjugieren):
-/// something a self-studier can finish and a teacher can assign. Each shows how many of its verbs
-/// have been opened, starts a quiz on itself, and is shared as `conjugar://list/<key>`.
+/// A fixed list of verbs offered as a place to go: something a self-studier can finish and a
+/// teacher can assign. Each shows how many of its verbs have been opened, starts a quiz on itself,
+/// and is shared as `conjugar://list/<key>`.
 ///
-/// The featured collections sit at the top of the Models tab (Josh, 2026-11-22): the 100 most
-/// frequent verbs and four irregular patterns. Every model of the Models tab is a collection too,
-/// shown as a bar on its page. Membership is derived from the engine, never listed by hand
-/// (Josh, 2026-11-22): a pattern list holds the base verbs among the 1,000 most frequent whose
-/// forms show the pattern, and leaves out prefixed compounds (detener, componer), which follow
-/// their base verbs. `VerbFamilies`' hand-made lists survive as a test that each derivation finds
-/// their verbs. The pattern tests are static, so the pedagogy plan's quiz draw can ask them of any
-/// verb.
+/// The featured collections sit at the top of the Models tab: the 100 most frequent verbs and four
+/// irregular patterns. Every model of the Models tab is a collection too, shown as a bar on its
+/// page. Membership is derived from the engine, never listed by hand: a pattern list holds the
+/// base verbs among the 1,000 most frequent whose forms show the pattern, and leaves out prefixed
+/// compounds (detener, componer), which follow their base verbs. `VerbFamilies`' hand-made lists
+/// survive as a test that each derivation finds their verbs.
 ///
 /// `nonisolated`, like the engine it reads. Its titles and descriptions, which need `L`, are in
 /// `VerbCollection+Text.swift`.
@@ -185,8 +183,6 @@ nonisolated enum VerbCollection: Hashable, Identifiable, Sendable {
   static func isInModel(_ entry: VerbMapEntry, classNumber: String) -> Bool {
     entry.classNumbers.contains { (ModelInfo.parentByAlias[$0] ?? $0) == classNumber }
   }
-
-  // MARK: - The patterns
 
   /// A yo presente in -go whose g the infinitive's stem lacks: tengo, hago, digo, caigo, oigo. A g
   /// already in the stem is no -go verb: sigo (seguir), juego (jugar), pago (pagar), distingo.

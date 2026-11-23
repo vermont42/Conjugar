@@ -2,8 +2,8 @@
 //  LearnerVerbsTests.swift
 //  ConjugarTests
 //
-//  The learner's record of verbs opened and starred, and the app's store over it (browse plan,
-//  Phase 12). MainActor because the store is.
+//  The learner's record of verbs opened and starred, and the app's store over it. MainActor
+//  because the store is.
 //
 
 import Foundation
@@ -17,8 +17,6 @@ struct LearnerVerbsTests {
   private func date(_ days: Double) -> Date {
     Date(timeIntervalSinceReferenceDate: days * day)
   }
-
-  // MARK: - The record
 
   @Test func recordOpenKeepsFirstAndLastDatesAndCount() {
     var record = LearnerVerbs()
@@ -157,8 +155,6 @@ struct LearnerVerbsTests {
     #expect(record == before)
   }
 
-  // MARK: - Encoding
-
   @Test func jsonRoundTrips() throws {
     var record = LearnerVerbs()
     record.recordOpen("ir", at: date(1))
@@ -168,7 +164,7 @@ struct LearnerVerbsTests {
     #expect(LearnerVerbs(json: json) == record)
   }
 
-  /// A field added later, such as Phase 15's due date, must stay optional, so that what an older
+  /// A field added later, such as the review due date, must stay optional, so that what an older
   /// build wrote still decodes. This pins the decoding of an entry that carries only its key and
   /// its count, as an entry written today by `clearRecents` for a starred verb nearly does.
   @Test func anEntryWithoutItsOptionalFieldsDecodes() throws {
@@ -190,8 +186,6 @@ struct LearnerVerbsTests {
   @Test func garbageDoesNotDecode() {
     #expect(LearnerVerbs(json: "not json") == nil)
   }
-
-  // MARK: - The store
 
   @Test func theStoreSavesAndReloads() {
     let getterSetter = GetterSetterFake()
@@ -255,8 +249,6 @@ struct LearnerVerbsTests {
     #expect(store.recentVerbs.map(\.infinitive) == ["ser", "ir"])
     #expect(store.recentUnstarredVerbs.map(\.infinitive) == ["ir"])
   }
-
-  // MARK: - The list's modes and the signal
 
   @Test func listModesMapToSortsAndBack() {
     #expect(VerbListMode.allCases == [.frequency, .alphabetical, .myVerbs])

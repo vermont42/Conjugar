@@ -110,8 +110,6 @@ nonisolated enum ReflexivePronoun: Sendable {
     }
   }
 
-  // MARK: - Enclisis
-
   /// `clitic` joined to the end of `word`, after dropping `droppingLast` letters, with the
   /// written accent the general rules then require on the syllable `word` stressed. Since the
   /// RAE's 2010 orthography, a verb with enclitics follows the general rules like any word, so

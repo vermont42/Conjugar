@@ -3,7 +3,7 @@
 //  ConjugarTests
 //
 //  The review card's schedule, the record's operations on it, and the store's choice of which
-//  verbs it schedules (browse plan, Phase 15). MainActor because the store is.
+//  verbs it schedules. MainActor because the store is.
 //
 
 import Foundation
@@ -28,8 +28,6 @@ struct ReviewScheduleTests {
   private func startOf(_ day: Int) -> Date {
     date(day, hour: 0)
   }
-
-  // MARK: - The schedule
 
   @Test func aLookupIsDueTheNextMorning() {
     let schedule = ReviewSchedule.lookedUp(at: date(10, hour: 23), calendar: calendar)
@@ -61,8 +59,6 @@ struct ReviewScheduleTests {
     #expect(dismissed.box == schedule.box)
     #expect(dismissed.due == startOf(6))
   }
-
-  // MARK: - The record
 
   /// A record whose verbs were each opened with a schedule, as the store opens irregular verbs.
   private func record(opening opens: [(String, Date)]) -> LearnerVerbs {
@@ -201,8 +197,6 @@ struct ReviewScheduleTests {
     #expect(LearnerVerbs(json: json) == record)
   }
 
-  // MARK: - The store
-
   @Test func onlyIrregularVerbsAreReviewable() {
     #expect(LearnerVerbStore.isReviewable("ir"))
     #expect(LearnerVerbStore.isReviewable("tener"))
@@ -260,8 +254,9 @@ struct ReviewScheduleTests {
     #expect(store.record.entries["ir"]?.review?.box == 0)
   }
 
-  /// A record written before Phase 15 has opens but no schedules. The store schedules its
-  /// irregular verbs as it loads, so a card can appear on the first day, and saves the result.
+  /// A record written before review schedules existed has opens but no schedules. The store
+  /// schedules its irregular verbs as it loads, so a card can appear on the first day, and saves
+  /// the result.
   @Test func theStoreSchedulesAnOlderRecordsIrregularVerbsAsItLoads() throws {
     let getterSetter = GetterSetterFake()
     let tenDaysAgo = Date.now.addingTimeInterval(-10 * 86_400).timeIntervalSinceReferenceDate

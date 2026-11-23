@@ -48,7 +48,7 @@ nonisolated enum WidgetSnapshotWriter {
   /// the rewrite and, crucially, the `reloadAllTimelines()` that would otherwise spend
   /// WidgetKit's refresh budget on every foreground activation for unchanged content.
   /// The gate is also what keeps the day's verb fixed while My Verbs changes during the
-  /// day (browse plan, Phase 14): the first activation of a day settles it.
+  /// day: the first activation of a day settles it.
   static func refresh(myVerbs: [String] = []) {
     let today = dateString(for: Date(), calendar: .current)
     if currentSnapshotDateString() == today { return }
@@ -126,9 +126,9 @@ nonisolated enum WidgetSnapshotWriter {
   }
 
   /// Trim an etymology body to at most `maxLength` characters, preferring to cut at the
-  /// last sentence boundary; otherwise hard-cut and append an ellipsis. Ported from the
-  /// sibling apps. Always rebalances the `~bold~` markers so a cut can't leave a dangling
-  /// opener that would render the whole tail bold in the widget's parser.
+  /// last sentence boundary; otherwise hard-cut and append an ellipsis. Always rebalances
+  /// the `~bold~` markers so a cut can't leave a dangling opener that would render the
+  /// whole tail bold in the widget's parser.
   static func truncateToSentenceBoundary(_ text: String, maxLength: Int) -> String {
     guard text.count > maxLength else {
       return rebalanceTildes(text)

@@ -223,9 +223,8 @@ The two JPEGs are decoded off the main thread as the end scene opens and held in
 `@Observable` `PreparedSlideImages` object, not a plain `@State` dictionary, because the
 slideshow is drawn inside `TimelineView`'s content closure (see the 2026-09-30 journal entry).
 The art, its prompts, and the generation story are in
-[`plans/end_scene.md`](../plans/end_scene.md) (Phase 1) and
-`plans/end_scene_images/`. (The plan's Phase 2 describes the first, draggable version, which
-the Ken Burns camera replaced.)
+[`plans/end_scene.md`](../plans/end_scene.md) and `plans/end_scene_images/`. (The plan also
+describes the first, draggable version of the slideshow, which the Ken Burns camera replaced.)
 
 **Only the X button leaves the end scene.** Taps do nothing there; there is no tap layer in
 `.endScene`.

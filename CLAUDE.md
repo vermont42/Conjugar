@@ -223,7 +223,6 @@ travels with it, as `plans/end_scene_images/` does. Scripts belong in `scripts/`
 Save a new file by this rule and list it in `docs/project_structure.md`, whose one-line
 descriptions are what make a file findable by subject. When a file moves, update the references
 to it, and in `docs/blog_notes.md` retarget link targets only, leaving the words as written.
-Decided in Konjugieren and applied here 2026-11-16.
 
 ## File Naming
 

@@ -2,12 +2,9 @@
 //  RichText.swift
 //  Conjugar
 //
-//  SwiftUI-native rich-text model + parser for the Info articles (and, later,
-//  any other marked-up body copy).
+//  SwiftUI-native rich-text model + parser for the Info articles.
 //
-//  It replaces the legacy `String.infoString` NSAttributedString pipeline: rather
-//  than build an attributed string for a UITextView, it parses Conjugar's Info
-//  markup into structured blocks/segments that `RichTextView` renders as native
+//  It parses Conjugar's Info markup into structured blocks/segments that `RichTextView` renders as native
 //  SwiftUI `Text`, so body copy can be adaptive-colored (`customForeground`) with
 //  serif headings and reading-width layout.
 //
@@ -200,8 +197,7 @@ extension String {
   }
 
   /// Split a conjugation string into irregular (uppercase) and regular runs,
-  /// lowercasing everything for display. Mirrors the legacy `conjugatedString`;
-  /// also used directly for the Verb/Model/Quiz conjugation displays, where the
+  /// lowercasing everything for display. Also used directly for the Verb/Model/Quiz conjugation displays, where the
   /// engine marks the irregular span with uppercase letters.
   func parseConjugationToSegment() -> TextSegment {
     guard !isEmpty else { return .conjugation([]) }

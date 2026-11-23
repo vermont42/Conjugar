@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// What the Look Up a Verb shortcut says about a word, and where it then opens the app (browse
-/// plan, Phase 11). It reads the verb list's own `VerbSearch`, so the two cannot disagree.
+/// What the Look Up a Verb shortcut says about a word, and where it then opens the app. It reads
+/// the verb list's own `VerbSearch`, so the two cannot disagree.
 nonisolated struct VerbLookup: Sendable {
   enum Finding: Equatable, Sendable {
     /// The word is this verb's infinitive ("tener", "arrepentirse", "anadir" for añadir), or one
@@ -33,9 +33,9 @@ nonisolated struct VerbLookup: Sendable {
   static let maxNamedVerbs = 4
 
   /// The kinds that answer the question "which verb is this word?". An exact English sense
-  /// answers it as an infinitive does, because the verb list ranks it above a form on Josh's
-  /// order of 2026-11-22: "come" is llegar's and venir's before it is comer's él come, and a
-  /// lookup that named only comer would mislead a learner who meant the English word.
+  /// answers it as an infinitive does, because the verb list ranks it above a form: "come" is
+  /// llegar's and venir's before it is comer's él come, and a lookup that named only comer would
+  /// mislead a learner who meant the English word.
   private static let literalAnswerKinds: Set<VerbSearch.MatchKind> = [.exactInfinitive, .exactFoldedInfinitive, .exactGlossSense, .conjugation]
 
   /// Trimmed.

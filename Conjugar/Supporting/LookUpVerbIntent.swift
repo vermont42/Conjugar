@@ -2,7 +2,7 @@
 //  LookUpVerbIntent.swift
 //  Conjugar
 //
-//  The Look Up a Verb shortcut (browse plan, Phase 11), ported from Konjugieren's.
+//  The Look Up a Verb shortcut.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -21,8 +21,8 @@ struct LookUpVerbIntent: AppIntent {
   static let description = IntentDescription(LocalizedStringResource("Intent.lookUpVerbDescription"))
 
   // A shortcut's phrase can carry only an entity or an enum, not free text, so the shortcut asks
-  // for the word. In Konjugieren an English keyboard's autocorrection turned ging into Going
-  // before the intent saw it, and the default keyboard type, ASCII, offers no accents.
+  // for the word. An English keyboard's autocorrection can rewrite the word before the intent sees
+  // it (ging became Going), and the default keyboard type, ASCII, offers no accents.
   @Parameter(
     title: LocalizedStringResource("Intent.lookUpVerbWord", defaultValue: "Word"),
     inputOptions: String.IntentInputOptions(keyboardType: .default, capitalizationType: .none, autocorrect: false),

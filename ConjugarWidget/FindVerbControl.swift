@@ -3,7 +3,7 @@
 //  ConjugarWidget
 //
 //  A Control Center / Lock Screen control that opens Conjugar's verb search, empty and
-//  focused (browse plan, Phase 10).
+//  focused.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

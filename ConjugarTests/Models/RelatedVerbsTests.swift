@@ -9,8 +9,8 @@ import Foundation
 import Testing
 @testable import Conjugar
 
-/// The relations behind the verb page's Related Verbs card (browse plan, Phase 8). MainActor only
-/// because one test reads `ModelInfo`.
+/// The relations behind the verb page's Related Verbs card. MainActor only because one test reads
+/// `ModelInfo`.
 @MainActor
 struct RelatedVerbsTests {
   private func related(_ infinitive: String) throws -> RelatedVerbs {
@@ -116,8 +116,7 @@ struct RelatedVerbsTests {
     #expect(VerbRelations.related(to: "xyzzy") == nil)
   }
 
-  @Test func theCountsInTheJournalHold() {
-    // docs/blog_notes.md and the plan's note quote these.
+  @Test func theRelationCountsHold() {
     let index = VerbRelations.shared
     #expect(index.baseByVerb.count == 976)
     #expect(index.verbsByRoot.values.filter { $0.count > 1 }.count == 605)

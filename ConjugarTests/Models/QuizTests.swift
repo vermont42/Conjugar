@@ -5,9 +5,8 @@
 //  Created by Joshua Adams on 12/3/18.
 //  Copyright © 2018 Josh Adams. All rights reserved.
 //
-//  Rewritten as Swift Testing during the SwiftUI migration: the quiz is
-//  now a delegate-free @Observable model, so the test drives it by answering the
-//  current question correctly in a loop and asserting the maxed-out final score.
+//  Drives the @Observable quiz by answering the current question correctly in a loop
+//  and asserting the maxed-out final score.
 //
 
 import Foundation

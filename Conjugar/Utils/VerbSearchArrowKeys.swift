@@ -7,13 +7,13 @@
 
 import UIKit
 
-// Hack, ported from Konjugieren: the arrow keys reach a focused search field as cursor
-// movement, which outranks .onKeyPress, .keyboardShortcut, and .commands alike. A UIKeyCommand
-// that asks for priority over system behavior is the one way to see them. It must sit on a
-// responder above the field, so it goes on the window's root view controller, and its action is
-// defined on every view controller because SwiftUI's own controllers are the ones the chain
-// reaches. It is installed only while the verb search field is focused, so that no other text
-// field, such as the quiz's or the tutor's, loses its arrow keys.
+// Hack: the arrow keys reach a focused search field as cursor movement, which outranks
+// .onKeyPress, .keyboardShortcut, and .commands alike. A UIKeyCommand that asks for priority over
+// system behavior is the one way to see them. It must sit on a responder above the field, so it
+// goes on the window's root view controller, and its action is defined on every view controller
+// because SwiftUI's own controllers are the ones the chain reaches. It is installed only while the
+// verb search field is focused, so that no other text field, such as the quiz's or the tutor's,
+// loses its arrow keys.
 enum VerbSearchArrowKeys {
   private static var move: ((Int) -> Void)?
   private static weak var host: UIViewController?

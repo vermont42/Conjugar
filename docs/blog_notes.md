@@ -10934,3 +10934,66 @@ smaller: a misspelling's guess that breaks ties by the shared beginning before f
 schedule that migrates old records once rather than guessing at every read, and a question,
 raised by reading Konjugieren's code during the Closing, of whether a collection's quiz there can
 put a second Live Activity on the Lock Screen beside the tab's.
+
+## The comment sweep, again (2026-11-22)
+
+The first comment sweep, months ago, stripped the modernization project's citations: the audit's
+numbered items, the engine build's phases, and the reference book's section numbers. Josh asked for
+it to be run again, and the search found that the habit had grown back in a new form. The browse
+plan's seventeen phases had left about 180 citations in Swift comments, almost all of one shape:
+"(browse plan, Phase 13)", "ported from Konjugieren", "(Josh, 2026-11-22)". Code comments also
+carried 132 `// MARK:` lines, which Josh does not use. None of the citations told a reader why the
+code is the way it is. They told a reader which session wrote it, and they sent that reader to
+documents that are finished and will never be updated.
+
+The MARKs went first, by a script that deleted each standalone marker and the blank line it left
+behind, and flagged the two whose comment continued on the next line. The rest was judgment work,
+split across four agents by folder (models, views and utilities, the game, the tests), each
+briefed with `plans/sweep_comments.md` plus the new families: plan phases, sibling apps, decision
+attributions with dates, commit hashes. The rule stayed what it was: strip the citation, then keep
+what remains only if it stands on its own. The sibling apps were the interesting case. Many
+"ported from Konjugieren" comments carried a real finding, such as the iPad search field ending a
+search at touch-down, or Spotlight emptying every index when entities were deleted by type. Those
+findings stayed, stated as facts about Conjugar. Comments that only compared the two apps went.
+A date stayed where it dates a measurement ("Measured on 2026-11-22: 4,811 verbs, 1.8 MB"), since
+the number means little without it.
+
+Swift Testing display names were the one place outside comments that changed, because they carried
+the same citations: `@Suite("VerbMap (Phase 6 — verb→model map + glosses)")` became
+`@Suite("VerbMap")`, and "the book's primary" participle became "the primary". The game agent
+found three comments that had gone stale rather than merely chatty. They said La Subida has three
+power-ups and three mechanics (it has five of each) and that the heart missile aims at the nearest
+obstacle (it aims at a random one). Those were corrected.
+
+Josh pointed out that the Markdown had the same problem, with `docs/project_structure.md` as the
+example: its file descriptions ended in "(browse Phase 16)". Those tags came out of the app's file
+tree there, along with "formerly Tense.swift" notes and a "ported from Konjugieren". The entries
+for `plans/` and `prompts/` kept theirs, since describing a historical file by its phase is
+accurate. `docs/feature_architecture.md` was the worst case, at about a hundred citations: a
+"Built 2026-11-22 by Phase N of the browse plan, porting Konjugieren's Phase M" line opened nearly
+every section, and the deeplink table had a column recording which phase added each route. A fifth
+agent rewrote it to describe the app as it is, 836 lines down to 804. `docs/release.md`,
+`docs/game.md`, and the Blender README lost their phase tags too. The screenshot playbook's many
+sibling mentions were left, because that playbook is deliberately shared across the three apps
+and its cross-app notes are operational.
+
+To keep the pedagogy plan's 24 phases from putting it all back, its § How to Work This Plan now
+says that comments explain why the code is as it is, never how it came to be, and that build
+history belongs in the phase's **How it differed** note and in this journal.
+
+Josh then asked for the two things the agents had left as outside their brief. Two test
+functions named for their provenance became `theJudgedQueriesHold` (was `thePhaseZeroTableHolds`)
+and `theRelationCountsHold` (was `theCountsInTheJournalHold`), and `ConjugatorTests`' `annexB…`
+identifiers became `classNumbers`, `classNumberCount`, and `everyClassNumberResolves`. The second
+was a related family that cited nothing but was history all the same: about thirty remarks about
+the migration, such as "mirrors the legacy `conjugatedString`", "the old main.swift's
+TestingAppDelegate trick", "Rewritten as Swift Testing during the SwiftUI migration", and
+`TenseBridge`'s description of `DisplayTense` as "the legacy vocabulary", which it has not been
+since the UIKit screens went. Several had gone false. They named `String.conjugatedString`, which
+no longer exists (`ConjugationText` renders the red span now). `Colors.swift` still promised
+appearance-aware colors "for the not-yet-migrated UIKit screens", and there are none: the only
+`Colors` call site left is the segmented-control appearance in `AppDelegate`. One remark looked
+like history and was not. `ModelCatalog`'s "andá (per the legacy data)" was the only reason given
+for ir's vos imperative, so it now gives the linguistic one: voseo avoids *í and borrows andar's
+form. Where a migration remark carried a reason, such as why the segmented-control appearance is
+set at launch rather than in `SettingsView.init`, the reason stayed in the present tense.

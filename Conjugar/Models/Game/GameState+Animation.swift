@@ -6,10 +6,9 @@
 import CoreGraphics
 
 extension GameState {
-  /// Frame counts per action. Both actors' boss dance actions now have their own
-  /// hand-keyed sprites: the bull's stomp/rear/bow (boss plan Phase 3,
-  /// `gen_bull_action.py`) at 3/4/4, and the dancer's ole/stomp (Phase 4,
-  /// `gen_dancer_action.py`) at 3/3 — one-shot bursts whose peak is the last frame.
+  /// Frame counts per action. The boss dance actions are hand-keyed: the bull's
+  /// stomp/rear/bow (`gen_bull_action.py`) at 3/4/4, and the dancer's ole/stomp
+  /// (`gen_dancer_action.py`) at 3/3 — one-shot bursts whose peak is the last frame.
   static let playerFrameCounts: [PlayerAction: Int] = [
     .idle: 2, .walk: 6, .climb: 4, .jump: 3, .cape: 4, .capeWalk: 6, .ole: 3, .stomp: 3
   ]

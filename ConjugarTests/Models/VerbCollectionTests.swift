@@ -4,9 +4,9 @@
 //
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
-//  The collections of browse Phase 16: their keys, their membership as the engine derives it,
-//  `VerbFamilies`' hand-made lists as an oracle for that derivation, progress, the quiz, the share
-//  text, and the signals' wire names. MainActor because titles, the store, and the quiz are.
+//  The verb collections: their keys, their membership as the engine derives it, `VerbFamilies`'
+//  hand-made lists as an oracle for that derivation, progress, the quiz, the share text, and the
+//  signals' wire names. MainActor because titles, the store, and the quiz are.
 //
 
 import Foundation
@@ -19,8 +19,6 @@ import UIKit
   private static func infinitives(_ collection: VerbCollection) -> [String] {
     collection.infinitives
   }
-
-  // MARK: - Keys
 
   @Test func featuredKeysRoundTrip() {
     #expect(VerbCollection.featured.map(\.key) == ["top100", "goVerbs", "strongPreterite", "irregularFuture", "irregularParticiple"])
@@ -48,8 +46,6 @@ import UIKit
     #expect(VerbCollection(key: key) == nil)
   }
 
-  // MARK: - Membership
-
   @Test func theTop100IsTheBand() {
     let verbs = VerbCollection.top100.verbs
     #expect(verbs.count == 100)
@@ -73,7 +69,7 @@ import UIKit
     }
   }
 
-  /// `VerbFamilies`' list for the quiz, as the oracle Josh asked for: the derivation finds each.
+  /// `VerbFamilies`' list for the quiz, as an oracle: the derivation finds each.
   @Test func irregularFutureFindsVerbFamiliesList() {
     let derived = Set(Self.infinitives(.irregularFuture))
     for verb in VerbFamilies.irregularRaizFuturaVerbs {
@@ -146,8 +142,6 @@ import UIKit
     }
   }
 
-  // MARK: - Progress
-
   @Test func progressCountsOpensNotStarsAndClearResetsIt() {
     let store = LearnerVerbStore(getterSetter: GetterSetterFake())
     let verbs = VerbCollection.goVerbs.verbs
@@ -158,8 +152,6 @@ import UIKit
     store.clearRecents()
     #expect(store.openedCount(of: verbs) == 0)
   }
-
-  // MARK: - The quiz, the link, and the share text
 
   @Test func aCollectionsQuizIsFullLengthUnrankedAndTitled() {
     let scope = QuizScope.collection(.goVerbs, title: "-go Verbs")

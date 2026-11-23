@@ -20,10 +20,9 @@ protocol GameCenter {
 /// The decision the Quiz screen makes on appear about the Game Center opt-in.
 ///
 /// Extracted as a pure, `nonisolated` function so the gating logic is
-/// unit-testable without a live GameKit session. The old inline guard was
-/// inverted for years — it authenticated *only* users who had said No — so
-/// pinning the corrected truth table in a test (see `GameCenterPromptTests`) is
-/// the guard-rail that keeps it from silently re-inverting.
+/// unit-testable without a live GameKit session. `GameCenterPromptTests` pins the
+/// truth table, so an inverted guard (one that authenticates only users who said No)
+/// cannot slip in silently.
 nonisolated enum GameCenterPrompt: Equatable {
   /// Already authenticated, or the user opted out — leave them alone.
   case doNothing

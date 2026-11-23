@@ -22,8 +22,8 @@ class Utterer {
   // The single owner of the shared `AVAudioSession`, configured once at launch.
   // `.ambient` is the deliberate contract for a study app's feedback chirps and
   // spoken forms: mix with the user's music/podcast and respect the silent switch.
-  // `SoundPlayer` no longer touches the session, so there is no more
-  // last-writer-wins race that silenced other audio.
+  // `SoundPlayer` never touches the session, so no last-writer-wins race can silence
+  // other audio.
   static func setup(settings: Settings) {
     Utterer.settings = settings
     configureSession()

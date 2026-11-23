@@ -2,9 +2,7 @@
 //  InfoTests.swift
 //  ConjugarTests
 //
-//  Swift Testing suite for the SwiftUI Info migration: the rich-text
-//  parser (RichText.swift) and the Info model. Replaces the deleted XCTest suites
-//  BrowseInfoVCTests / InfoVCTests / InfoCellTests.
+//  The rich-text parser (RichText.swift) and the Info model.
 //
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
@@ -19,9 +17,8 @@ import Testing
     #expect(Info.infos.count == 30)
   }
 
-  /// The difficulty filter thresholds, preserved from the old BrowseInfoVCTests
-  /// (each About article added since bumps every tier, all of them being `.easy`):
-  /// Easy → 11, Easy+Moderate → 19, all → 30. Perífrasis Verbales, though in Tenses, is easy too.
+  /// The difficulty filter thresholds (each About article is `.easy`, so adding one bumps
+  /// every tier): Easy → 11, Easy+Moderate → 19, all → 30. Perífrasis Verbales, though in Tenses, is easy too.
   @Test func difficultyFilterCounts() {
     func rank(_ d: Difficulty) -> Int { Difficulty.allCases.firstIndex(of: d) ?? 0 }
     func count(upTo d: Difficulty) -> Int {

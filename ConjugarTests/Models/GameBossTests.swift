@@ -72,8 +72,6 @@ struct GameBossTests {
     }
   }
 
-  // MARK: Entry
-
   @Test func summitTriggersBossIntro() {
     let gameState = configured()
     gameState.summitCount = 4                  // the 5th summit is the boss (summitsToBoss)
@@ -119,8 +117,6 @@ struct GameBossTests {
     #expect(gameState.duelState == .bullDemo(step: 0))
   }
 
-  // MARK: Demo → echo
-
   @Test func demoStepsThroughPhraseThenUnlocksEcho() {
     let gameState = duelReady()
     let length = gameState.phraseSequence.count
@@ -156,8 +152,6 @@ struct GameBossTests {
     #expect(gameState.isEchoActive)
     #expect(gameState.duelState == .playerEcho(step: 0))
   }
-
-  // MARK: Judging
 
   @Test func correctEchoBanksPhraseAndScores() {
     let gameState = duelReady()
@@ -205,8 +199,6 @@ struct GameBossTests {
     gameState.updateBoss(dt: CGFloat(gameState.echoTotal) + 0.1)
     #expect(gameState.duelState == .phraseResult(success: false))
   }
-
-  // MARK: The freeze fake-out (round 3)
 
   @Test func roundThreePhraseInjectsOneFreezeAtNonFirstSlot() {
     let gameState = duelReady()
@@ -277,8 +269,6 @@ struct GameBossTests {
     #expect(gameState.banked == 5)
   }
 
-  // MARK: Meter-derived rounds & showboats
-
   @Test func bankedTwoTriggersShowboatAndRoundTwoLength() {
     let gameState = duelReady()
     gameState.banked = 1
@@ -307,8 +297,6 @@ struct GameBossTests {
     gameState.updateBoss(dt: CGFloat(GameState.showboatDuration) + 0.05)
     #expect(gameState.phraseSequence.count == 5)            // round 3 length
   }
-
-  // MARK: Victory & end scene
 
   @Test func bankedSixWinsThenEndSceneSlidesTheMatador() {
     let gameState = duelReady()
@@ -372,8 +360,6 @@ struct GameBossTests {
     }
     #expect(gameState.bullFrame == bowFrames)               // held, not wrapping
   }
-
-  // MARK: End-scene slideshow
 
   /// A GameState in the end scene, ticked until the reunion burst has just fired (the
   /// frame that arms the slideshow).
@@ -656,8 +642,6 @@ struct GameBossTests {
     #expect(gameState.endSceneSlideTime == 0)
     #expect(gameState.endSceneCallsPlayed == 0)
   }
-
-  // MARK: Input gating & reset
 
   @Test func danceInputIgnoredOutsideEcho() {
     let gameState = duelReady()

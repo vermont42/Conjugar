@@ -7,8 +7,6 @@ import CoreGraphics
 import Foundation
 
 extension GameState {
-  // MARK: Derived state
-
   /// The current round, 0-based, derived from the meter: banked 0–1 → 0, 2–3 → 1,
   /// 4–5 → 2. A failure's slide-back can demote the round — the tug-of-war working
   /// as intended.
@@ -36,8 +34,6 @@ extension GameState {
     return true
   }
 
-  // MARK: Stage geometry (portrait tablao on the bottom girder)
-
   var stageFloorY: CGFloat { platforms.isEmpty ? 0 : platforms[0].surfaceY }
   var bullStageX: CGFloat { screenSize.width * 0.28 }
   var bullStageY: CGFloat { stageFloorY - Self.bullSize / 2 }
@@ -47,8 +43,6 @@ extension GameState {
   var pedestalTopY: CGFloat { stageFloorY - Self.bossPedestalSize.height }
   var matadorStageX: CGFloat { pedestalCenterX }
   var matadorStageY: CGFloat { pedestalTopY - Self.bullfighterSize / 2 }
-
-  // MARK: Entry & intro
 
   /// The boss's front door, called from `checkReachedBull()` on the triggering
   /// summit (and by the two debug entries). Freezes climb inputs, clears the field,
@@ -164,8 +158,6 @@ extension GameState {
       startDuel()
     }
   }
-
-  // MARK: The duel loop
 
   private func startDuel() {
     guard phase != .duel else { return }
@@ -371,8 +363,6 @@ extension GameState {
     }
   }
 
-  // MARK: Victory & end scene
-
   private func enterVictory() {
     Current.analytics.signal(name: .winBossFight)
     phase = .victory
@@ -522,8 +512,6 @@ extension GameState {
     }
   }
 
-  // MARK: Boss frame tick
-
   /// The boss counterpart of the climb pipeline, routed from `update(currentTime:)`
   /// for every phase except `.climb`.
   func updateBoss(dt: CGFloat) {
@@ -581,8 +569,6 @@ extension GameState {
     duelState == .showboat
   }
 
-  // MARK: One-shot dance bursts (the `bullThrowTimer` pattern)
-
   private func commandPlayerMove(_ move: DanceMove) {
     playerAction = Self.playerDanceAction(move)
     playerPhase = 0
@@ -603,8 +589,6 @@ extension GameState {
     bullMoveTimer = duration
   }
 
-  /// The dancer's animation for each move (Phase-1 reuse: ole ≈ its own case backed
-  /// by cape frames, stomp by jump frames — see GameView's asset mapping).
   static func playerDanceAction(_ move: DanceMove) -> PlayerAction {
     switch move {
     case .pasoLeft, .pasoRight: return .walk
@@ -625,8 +609,6 @@ extension GameState {
     case .freeze: return .idle
     }
   }
-
-  // MARK: Juice
 
   func triggerScreenShake() {
     screenShake = Self.screenShakeDuration
@@ -649,8 +631,8 @@ extension GameState {
 
   /// The dancer *speaking* (¡Eso!/¡Bien!/¡Olé!…): the shout rises from just above her
   /// head all the way to the sight-line high in the empty upper field, fading slowly as
-  /// it climbs so the words fill the otherwise-dead space above the tablao (design note
-  /// 1). The rise rate is solved so the pop reaches the sight-line exactly as it fades.
+  /// it climbs so the words fill the otherwise-dead space above the tablao. The rise
+  /// rate is solved so the pop reaches the sight-line exactly as it fades.
   func spawnPlayerSpeech(_ text: String, size: CGFloat = 30) {
     let spawnY = playerY - Self.playerHeight
     let targetY = screenSize.height * Self.jaleoRiseTargetFraction
@@ -659,7 +641,7 @@ extension GameState {
   }
 
   /// True during the brief hold after a phrase is echoed correctly — drives the blue
-  /// success particle burst (design note 4).
+  /// success particle burst.
   var isPhraseSuccess: Bool {
     phase == .duel && duelState == .phraseResult(success: true)
   }
@@ -677,8 +659,6 @@ extension GameState {
     }
   }
 
-  // MARK: Debug
-
   /// Jump straight from the climb to the boss's end scene (couple reunited, bull
   /// bowing, onboarding music) — the `CONJUGAR_GAME_START_END` env var and the
   /// `conjugar://game/end` deeplink both land here. Reuses the real entry points so
@@ -692,8 +672,6 @@ extension GameState {
     enterVictory()            // → .victory (bull bows, status bar latches)
     enterEndScene()           // → .endScene (the living reunion loop)
   }
-
-  // MARK: Math helpers
 
   static func lerp(_ a: CGFloat, _ b: CGFloat, _ t: CGFloat) -> CGFloat {
     a + (b - a) * t

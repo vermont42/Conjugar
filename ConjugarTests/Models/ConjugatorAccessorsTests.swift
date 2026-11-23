@@ -10,9 +10,8 @@ import Testing
 @testable import Conjugar
 
 // The engine's app-facing accessors: the Verb screen's raíz futura,
-// defectiveness, and verb-type affordances, plus
-// the class-number → exemplar-verb lookup that replaces the legacy "parent verb"
-// label.
+// defectiveness, and verb-type affordances, plus the class-number → exemplar-verb
+// lookup.
 @Suite("Conjugator app-facing accessors")
 struct ConjugatorAccessorsTests {
   @Test("futureRoot is the stem of the future system", arguments: [
@@ -36,7 +35,7 @@ struct ConjugatorAccessorsTests {
     #expect(Conjugator.isDefective(infinitive: "abolir"))
     #expect(!Conjugator.isDefective(infinitive: "hablar"))
     #expect(!Conjugator.isDefective(infinitive: "tener"))
-    // Defective *by legacy data* only — the new engine conjugates these fully.
+    // Often listed as defective, but the engine gives every slot a form.
     #expect(!Conjugator.isDefective(infinitive: "gustar"))
     #expect(!Conjugator.isDefective(infinitive: "soler"))
   }

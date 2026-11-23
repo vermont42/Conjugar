@@ -3,8 +3,7 @@
 //  Conjugar
 //
 //  Renders a conjugated form as SwiftUI Text with its irregular span in
-//  `customRed` — the SwiftUI equivalent of the legacy `String.conjugatedString`
-//  (uppercase letters = irregular). Shared by the Verb, Model, Quiz, and Results
+//  `customRed` (uppercase letters = irregular). Shared by the Verb, Model, Quiz, and Results
 //  screens. Set in a serif face to mark it as linguistic content.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //

@@ -7,11 +7,11 @@
 
 import Foundation
 
-/// Chooses the widget's verb of the day and every random verb (browse plan, Phase 14, ported from
-/// Konjugieren). Once My Verbs has entries, it supplies one draw in three: every third day for the
-/// widget, and a third of random verbs by chance. The rest come from the 1,000 most frequent verbs,
-/// where an irregular verb counts double, and so does a verb that is not a prefixed compound of
-/// another verb, so ir counts 4, detener and hablar 2, and recobrar 1.
+/// Chooses the widget's verb of the day and every random verb. Once My Verbs has entries, it
+/// supplies one draw in three: every third day for the widget, and a third of random verbs by
+/// chance. The rest come from the 1,000 most frequent verbs, where an irregular verb counts
+/// double, and so does a verb that is not a prefixed compound of another verb, so ir counts 4,
+/// detener and hablar 2, and recobrar 1.
 ///
 /// "My Verbs" is what the verb list's My Verbs segment shows: the starred verbs, then the last 20
 /// opened (`LearnerVerbs.myVerbs`). A random verb opened is a recent verb, so it joins My Verbs and

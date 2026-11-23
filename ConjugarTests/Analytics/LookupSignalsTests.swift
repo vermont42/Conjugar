@@ -2,9 +2,8 @@
 //  LookupSignalsTests.swift
 //  ConjugarTests
 //
-//  The lookup signals of the browse plan's Phase 2: `finishSearch`, `source` on `viewVerbView`,
-//  and `leaveVerbView`. The bands, the search's lifecycle, each report's parameters, the visit,
-//  and the wire names. Nonisolated, like the analytics family.
+//  The lookup signals `finishSearch`, `source` on `viewVerbView`, and `leaveVerbView`. The bands,
+//  the search's lifecycle, each report's parameters, the visit, and the wire names. Nonisolated, like the analytics family.
 //
 
 import Foundation
@@ -13,8 +12,6 @@ import Testing
 
 @Suite("LookupSignals")
 struct LookupSignalsTests {
-  // MARK: - Wire names
-
   @Test func newSignalAndParameterNamesAreStable() {
     #expect(AnalyticsName.finishSearch.rawValue == "finishSearch")
     #expect(AnalyticsName.leaveVerbView.rawValue == "leaveVerbView")
@@ -49,8 +46,6 @@ struct LookupSignalsTests {
     #expect(!values.contains(.none))
   }
 
-  // MARK: - Bands
-
   @Test(arguments: [(1, "1-2"), (2, "1-2"), (3, "3-5"), (5, "3-5"), (6, "6-9"), (9, "6-9"), (10, "10+"), (40, "10+")])
   func queryLengthBands(length: Int, band: String) {
     #expect(AnalyticsBand.queryLength(length) == band)
@@ -70,8 +65,6 @@ struct LookupSignalsTests {
   func dwellBands(seconds: Double, band: String) {
     #expect(AnalyticsBand.dwell(seconds) == band)
   }
-
-  // MARK: - The search's lifecycle
 
   @Test func aSearchBeginsWithTheFirstNonBlankLetter() {
     var tracker = SearchTracker()
@@ -144,8 +137,6 @@ struct LookupSignalsTests {
     #expect(tracker.finish()?.source == .quickAction)
   }
 
-  // MARK: - Reports
-
   @Test func anOpenedResultReportsItsKindAndPosition() {
     let report = SearchReport.opened(query: "come", source: .tab, resultCount: 12, kind: .exactGlossSense, position: 1)
     #expect(report.parameters == [
@@ -210,8 +201,6 @@ struct LookupSignalsTests {
     }
   }
 
-  // MARK: - Visits
-
   @Test func aVisitStartsAtTheHeaderAndOnlyGoesDeeper() {
     var visit = VerbVisit(source: .search, start: .now)
     #expect(visit.deepestSection == .header)
@@ -249,8 +238,6 @@ struct LookupSignalsTests {
     #expect(!DisplayTense.imperativoNegativo.isCompound)
     #expect(!DisplayTense.presenteDeIndicativo.isCompound)
   }
-
-  // MARK: - Sources in links
 
   @Test(arguments: [
     ("conjugar://verb/hablar?source=widget", AnalyticsSource?.some(.widget)),

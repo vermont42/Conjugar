@@ -15,8 +15,8 @@ import TipKit
 
 struct ModelView: View {
   let model: ModelInfo
-  /// Where the page was opened, which `viewCollection` reports (Phase 16): `tab` from the Models
-  /// tab's list, `verbPage` from a verb page's model pill, or a `list` link's source.
+  /// Where the page was opened, which `viewCollection` reports: `tab` from the Models tab's list,
+  /// `verbPage` from a verb page's model pill, or a `list` link's source.
   let source: AnalyticsSource
 
   /// The grid's tense rows: five core tenses, plus futuro (Spanish concentrates
@@ -54,7 +54,7 @@ struct ModelView: View {
   /// The order of the verbs using this model. Not stored: the page always opens alphabetical.
   @State private var verbSort = VerbSort.alphabetical
   @State private var hasSignaledView = false
-  /// The model as a collection (Phase 16), whose bar sits between the grid and the verbs.
+  /// The model as a collection, whose bar sits between the grid and the verbs.
   private let collection: VerbCollection
   /// The collection's verbs, for the bar's count. The same verbs as `entriesBySort`'s.
   private let collectionVerbs: [VerbMapEntry]
@@ -70,7 +70,7 @@ struct ModelView: View {
   private let gridPersons: [DisplayPersonNumber]
   /// The grid's conjugated forms, precomputed once in `init` — indexed
   /// `[tenseIndex][personIndex]` to parallel `gridTenses` / `gridPersons`, `nil` where a
-  /// slot has no form. Previously `gridCell` re-conjugated every slot on each `body`.
+  /// slot has no form, so `body` never re-conjugates.
   private let gridForms: [[String?]]
 
   init(model: ModelInfo, source: AnalyticsSource) {

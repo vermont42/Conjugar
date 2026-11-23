@@ -90,7 +90,7 @@ final class Settings {
   static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
   static let didShowGameCenterDialogDefault = false
 
-  /// Whether the verb list hides the review card (browse plan, Phase 15).
+  /// Whether the verb list hides the review card.
   var reviewCardSuppression: ReviewCardSuppression {
     didSet { Settings.persist(getterSetter, Settings.reviewCardSuppressionKey, reviewCardSuppression, oldValue) }
   }
@@ -190,7 +190,7 @@ final class Settings {
     return Date(timeIntervalSince1970: interval)
   }
 
-  // Persist `value` only when it actually changed, mirroring the old `didSet` guards.
+  // Persist `value` only when it actually changed.
 
   private static func persist(_ getterSetter: GetterSetter, _ key: String, _ value: some RawRepresentable<String>, _ oldValue: some RawRepresentable<String>) {
     guard value.rawValue != oldValue.rawValue else { return }

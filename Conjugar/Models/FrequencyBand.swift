@@ -7,9 +7,8 @@
 
 import Foundation
 
-/// The frequency bands, defined once (browse plan, Phase 14, from Konjugieren): the 100, 300, and
-/// 1,000 most frequent verbs. The verb of the day and random verbs draw from the widest, and the
-/// pedagogy plan's levels will use all three. Narrowest band first.
+/// The frequency bands, defined once: the 100, 300, and 1,000 most frequent verbs. The verb of the
+/// day and random verbs draw from the widest. Narrowest band first.
 nonisolated enum FrequencyBand: Int, CaseIterable, Sendable {
   case top100 = 100
   case top300 = 300

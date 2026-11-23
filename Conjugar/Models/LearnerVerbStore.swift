@@ -27,7 +27,7 @@ final class LearnerVerbStore {
   }
 
   /// Whether the review card offers the verb: only an irregular verb, counted as the verb page's
-  /// pill counts it, so the orthographic classes (buscar, busqué) too (Josh, 2026-11-22).
+  /// pill counts it, so the orthographic classes (buscar, busqué) too.
   static func isReviewable(_ infinitive: String) -> Bool {
     VerbMap.shared.entry(for: infinitive).map(VerbDraw.isIrregular) ?? false
   }
@@ -57,8 +57,8 @@ final class LearnerVerbStore {
     record.hasOpened(infinitive)
   }
 
-  /// How many of the verbs have been opened, a collection's progress (Phase 16). A star alone does
-  /// not count, and Clear resets every collection's progress, since it forgets the opens.
+  /// How many of the verbs have been opened, a collection's progress. A star alone does not count,
+  /// and Clear resets every collection's progress, since it forgets the opens.
   func openedCount(of entries: [VerbMapEntry]) -> Int {
     entries.count { record.hasOpened($0.infinitive) }
   }

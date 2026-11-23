@@ -609,8 +609,6 @@ class Quiz {
   }
 }
 
-// MARK: - App Store screenshot fixture (DEBUG only)
-
 #if DEBUG
 extension Quiz {
   /// Launch-argument switch that puts the quiz into deterministic screenshot mode:

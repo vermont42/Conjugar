@@ -23,23 +23,23 @@ material for the release notes in `docs/release_notes.txt`.
 
 1. **Create the new version in App Store Connect.**
 2. **Check the lookup signals on a device.** The simulator never sends signals (its world uses
-   `AnalyticsSpy`), so `finishSearch`, `leaveVerbView`, and `viewVerbView`'s `source` (browse plan,
-   Phase 2) have been seen only in a temporary log. Run a Debug build on a device, flip the
+   `AnalyticsSpy`), so `finishSearch`, `leaveVerbView`, and `viewVerbView`'s `source` have been
+   seen only in a temporary log. Run a Debug build on a device, flip the
    TelemetryDeck dashboard's Test Mode toggle, and confirm that a search, a verb page, a widget tap
    (`source` `widget`), and the Random Verb control (`source` `control`) arrive with the parameters
    in `docs/feature_architecture.md` § Analytics. A tap of a verb page's share button should send
-   `tapShareVerb` (browse plan, Phase 9), which no log has shown, since the spy does not print.
-3. **Share a verb's page from a device** into Messages and Mail (browse plan, Phase 9). The share
+   `tapShareVerb`, which no log has shown, since the spy does not print.
+3. **Share a verb's page from a device** into Messages and Mail. The share
    sheet, its header, and its Copy were tried only in the simulator. Check that the App Store link
    is tappable in both and that the gloss's quotation marks survive, in English and Spanish.
-4. **Try Find a Verb from Control Center and the Home Screen on a device** (browse plan, Phase 10).
+4. **Try Find a Verb from Control Center and the Home Screen on a device**.
    In the simulator the quick action was tried with the app running and not running, but the
    control was never added to Control Center; only its link was drained. Add the control, tap it
    with the app closed and open, and check that the Verbs tab opens with the search field focused
    and the keyboard up. Check the quick action's title in Spanish ("Buscar un verbo") too. With
    Test Mode on, a search begun from each should send `finishSearch` with `source` `control` or
    `quickAction`.
-5. **Try the shortcuts and Spotlight on a device** (browse plan, Phase 11). In the simulator, Look
+5. **Try the shortcuts and Spotlight on a device**. In the simulator, Look
    Up a Verb opened the right page or search but its answer was never seen or heard first, Siri
    was never tried, and Spotlight matched only titles. On a device: ask Siri "Look up a verb with
    Conjugar", say "tuve", and check that it speaks "tuve: Pretérito (yo) of tener" before opening

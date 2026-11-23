@@ -146,8 +146,8 @@ struct VerbView: View {
     .navigationBarTitleDisplayMode(.large)
     .toolbar {
       // Test Me, the star, and Share sit in the navigation bar, so that the top of the page is
-      // unchanged (browse plan, Phases 12 and 13). The clipboard is Konjugieren's symbol; the
-      // Quiz tab's cap read poorly at this size.
+      // unchanged. Test Me's symbol is a clipboard because the Quiz tab's cap read poorly at this
+      // size.
       ToolbarItem(placement: .topBarTrailing) {
         Button {
           isTestingVerb = true
@@ -577,9 +577,8 @@ struct VerbView: View {
   }
 
   /// Build the displayed conjugation sections — one per tense, each a
-  /// pronoun-ordered list of rows. Mirrors the row set the legacy
-  /// `ConjugationDataSource` produced (yo where the tense has one, the tú/vos/both
-  /// second-singular per `Settings.secondSingularBrowse`, then the plural persons),
+  /// pronoun-ordered list of rows: yo where the tense has one, the tú/vos/both
+  /// second-singular per `Settings.secondSingularBrowse`, then the plural persons,
   /// with a defective/formless slot rendered blank. A page opened from a search for a vos form
   /// (hablás) shows vos as well as tú, whatever the setting, so that the mark has a row to sit
   /// on; likewise tú for a learner who chose vos.

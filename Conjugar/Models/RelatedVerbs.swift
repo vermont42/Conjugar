@@ -40,9 +40,9 @@ nonisolated struct RelatedVerbs: Equatable, Sendable {
 /// How verbs relate through their bases, computed from the verb map.
 ///
 /// The relation is the engine's own: every feature is end-anchored, so a prefixed verb conjugates
-/// on its base's model (detener like tener, reconocer like conocer), and the book gives a compound
-/// its base's class number or a sub-class of it (contener is 31-1 beside tener's 31; predecir is
-/// 28-1 beside decir's 28). A verb's **base** is therefore the longest verb of the map that ends it,
+/// on its base's model (detener like tener, reconocer like conocer), and a compound has its base's
+/// class number or a sub-class of it (contener is 31-1 beside tener's 31; predecir is 28-1 beside
+/// decir's 28). A verb's **base** is therefore the longest verb of the map that ends it,
 /// after a known prefix, and whose class number has the same leading number: con + tener, de +
 /// tener, pre + decir. The class rule keeps presentar (1) off sentar (4A) and andar off dar, since
 /// an irregular base always has its own class. The prefix list keeps llamar off amar.

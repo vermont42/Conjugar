@@ -6,8 +6,8 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-// The seam between the legacy `DisplayTense`/`DisplayPersonNumber` vocabulary the UI is
-// structured around and the new engine (`Conjugator`/`EngineTense`/`EnginePersonNumber`).
+// The seam between the `DisplayTense`/`DisplayPersonNumber` vocabulary the UI is
+// structured around and the engine (`Conjugator`/`EngineTense`/`EnginePersonNumber`).
 // The simple tenses map case-for-case onto `EngineTense`; the tenses `EngineTense`
 // deliberately does not model are composed here:
 //
@@ -15,18 +15,16 @@
 //   - imperativo negativo — "no " + presente de subjuntivo,
 //   - futuro de subjuntivo — derived from the -ra imperfect subjunctive by
 //     swapping the ending's -a- for -e- (hablara → hablare, tuviéramos →
-//     tuviéremos), the same relation the legacy engine exploited via the
-//     preterite 3p stem.
+//     tuviéremos), the same relation as building it from the preterite 3p stem.
 //
 // Every successful form comes back with its irregular span UPPERCASE
 // (`IrregularityMarker`, diffing against the verb's regular composition), the
-// encoding `String.conjugatedString` renders as the red irregularity highlight —
-// exactly the convention the legacy verbs.xml data hand-encoded.
+// encoding `ConjugationText` renders as the red irregularity highlight.
 //
 // A defective verb's formless slot surfaces as `.noForm`, which the UI renders
-// as a blank row (the legacy engine's "df" sentinel played this role).
+// as a blank row.
 nonisolated enum TenseBridge {
-  /// Conjugate a legacy `(DisplayTense, DisplayPersonNumber)` slot through `Conjugator`,
+  /// Conjugate a `(DisplayTense, DisplayPersonNumber)` slot through `Conjugator`,
   /// irregularity-marked for display.
   ///
   /// `pronoun` defaults to `.omitted`, the bare form the engine has always returned, which the
@@ -56,7 +54,7 @@ nonisolated enum TenseBridge {
     return .success(IrregularityMarker.marked(form: form, regular: regular))
   }
 
-  /// The legacy person's `EnginePersonNumber` counterpart, or nil for `.none`.
+  /// The display person's `EnginePersonNumber` counterpart, or nil for `.none`.
   static func enginePersonNumber(for personNumber: DisplayPersonNumber) -> EnginePersonNumber? {
     switch personNumber {
     case .firstSingular:
@@ -78,7 +76,7 @@ nonisolated enum TenseBridge {
     }
   }
 
-  /// The `EngineTense` case for a legacy simple tense, or nil for the tenses `EngineTense`
+  /// The `EngineTense` case for a simple display tense, or nil for the tenses `EngineTense`
   /// does not model (compounds, futuro de subjuntivo, imperativo negativo, and
   /// the pseudo-tenses).
   static func simpleEngineTense(for tense: DisplayTense, personNumber: EnginePersonNumber) -> EngineTense? {

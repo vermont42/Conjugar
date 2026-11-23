@@ -230,7 +230,7 @@ private struct CopyOnLongPress: ViewModifier {
 
   func body(content: Content) -> some View {
     // The margin goes on before the menu and comes off after it, so the lifted preview does not
-    // crop the first and last letters while the layout stays as it was (found in Konjugieren).
+    // crop the first and last letters while the layout stays as it was.
     if let text {
       content
         .padding(.horizontal, Self.previewMargin)

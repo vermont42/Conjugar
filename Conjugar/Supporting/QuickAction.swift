@@ -2,7 +2,7 @@
 //  QuickAction.swift
 //  Conjugar
 //
-//  The Home Screen quick actions, shown on a long press of the app icon (browse plan, Phase 10).
+//  The Home Screen quick actions, shown on a long press of the app icon.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

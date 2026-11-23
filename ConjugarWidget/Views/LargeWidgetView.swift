@@ -5,9 +5,6 @@
 //  systemLarge Verb of the Day: the verb header, its non-finite forms, the presente de
 //  indicativo paradigm, then a modern example sentence (with a real book/source
 //  attribution) and a truncated etymology snippet that fills the remaining space.
-//  The extra paradigms (pretérito / futuro) the large widget used to show were dropped
-//  to make room for this richer content — mirroring the sibling apps Conjuguer and
-//  Konjugieren.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -81,7 +78,6 @@ struct LargeWidgetView: View {
     }
   }
 
-  /// The gerundio / participio, the way Konjugieren shows "pp:" under its header.
   private var nonFiniteRow: some View {
     HStack(spacing: 4) {
       Text(verbatim: "ger")
@@ -128,8 +124,7 @@ struct LargeWidgetView: View {
   }
 
   /// No `lineLimit`: the etymology fills whatever vertical space remains and clips at
-  /// the widget edge, matching Konjugieren. The snapshot writer already truncated it to
-  /// a sentence boundary.
+  /// the widget edge. The snapshot writer already truncated it to a sentence boundary.
   @ViewBuilder private var etymologyBlock: some View {
     if let etymology = snapshot.etymologySnippet {
       Divider()

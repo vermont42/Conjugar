@@ -43,7 +43,7 @@ struct VerbBrowseView: View {
   @Environment(\.scenePhase) private var scenePhase
   private let tryQuizTip = TryQuizTip()
 
-  /// Both sort orders, computed once (mirrors the UIKit VC's `verbsBySort`).
+  /// Both sort orders, computed once.
   private static let verbsBySort: [VerbSort: [VerbMapEntry]] = {
     let entries = VerbMap.shared.entries.values
     return Dictionary(uniqueKeysWithValues: VerbSort.allCases.map { ($0, $0.sorted(entries)) })
@@ -122,9 +122,9 @@ struct VerbBrowseView: View {
     Self.isPadOrMac ? .navigationBarDrawer(displayMode: .always) : .automatic
   }
 
-  // Hack, ported from Konjugieren: on iPad, a tap outside an empty search field ends the search at
-  // touch-down, before the tap completes. A letter row that followed the focus vanished under the
-  // finger, so tapping á did nothing. The row follows this instead, which lets go a moment later.
+  // Hack: on iPad, a tap outside an empty search field ends the search at touch-down, before the
+  // tap completes. A letter row that followed the focus vanished under the finger, so tapping á did
+  // nothing. The row follows this instead, which lets go a moment later.
   private func searchFocusChanged() {
     if !searchIsFocused {
       searchTracker.fieldClosed()
@@ -145,11 +145,9 @@ struct VerbBrowseView: View {
 
   private static let searchLingering = Duration.milliseconds(700)
 
-  // From Konjugieren: a tap that ends an empty search on iPad would push while the search is still
-  // animating away, and UIKit drops such a push; see ViewControllerTransitions. A typed search
-  // does not end on that tap, and on iPhone nothing is animating, so both push at once. The rows
-  // were NavigationLinks, which SwiftUI pushed itself, until they became buttons that report the
-  // open (browse plan, Phase 2).
+  // A tap that ends an empty search on iPad would push while the search is still animating away,
+  // and UIKit drops such a push; see ViewControllerTransitions. A typed search does not end on that
+  // tap, and on iPhone nothing is animating, so both push at once.
   private func push(_ destination: VerbDestination) {
     guard !isSearching, searchFocusLostAt != nil else {
       navigationPath.append(destination)
@@ -388,8 +386,8 @@ struct VerbBrowseView: View {
   private func showSearch(focused: Bool) async {
     if !navigationPath.isEmpty {
       navigationPath = NavigationPath()
-      // Hack, from Konjugieren: focus requested while the pop animates sets the focus state
-      // without making the field first responder, so typing goes nowhere. Wait out the animation.
+      // Hack: focus requested while the pop animates sets the focus state without making the
+      // field first responder, so typing goes nowhere. Wait out the animation.
       try? await Task.sleep(for: .milliseconds(500))
     }
     searchIsFocused = focused
@@ -461,9 +459,9 @@ struct VerbBrowseView: View {
       .accessibilityAddTraits(.isHeader)
   }
 
-  /// The starred verbs, then the recent ones not starred, from Konjugieren. A swipe deletes a
-  /// verb, star and opens alike, so that it leaves the list; a starred verb asks first, since its
-  /// star was put there on purpose. Clear forgets every open and keeps the stars.
+  /// The starred verbs, then the recent ones not starred. A swipe deletes a verb, star and opens
+  /// alike, so that it leaves the list; a starred verb asks first, since its star was put there on
+  /// purpose. Clear forgets every open and keeps the stars.
   @ViewBuilder
   private var myVerbsList: some View {
     let starred = learnerVerbs.starredVerbs
@@ -652,9 +650,9 @@ struct VerbBrowseView: View {
                 LazyVStack(spacing: 0) {
                   ForEach(Array(rows.enumerated()), id: \.element.infinitive) { index, entry in
                     // A real `Button`, not `.onTapGesture`: `.isButton` trait, press highlight,
-                    // and stronger VoiceOver semantics. It was a `NavigationLink` until the
-                    // open had to report its search (browse plan, Phase 2); the stack's
-                    // `navigationDestination(for: VerbDestination)` renders the pushed `VerbView`.
+                    // and stronger VoiceOver semantics. Not a `NavigationLink`, because the open
+                    // reports its search; the stack's `navigationDestination(for:
+                    // VerbDestination)` renders the pushed `VerbView`.
                     Button {
                       openRow(at: index, wasSearching: wasSearching, browseSource: browseSource)
                     } label: {
@@ -814,7 +812,7 @@ struct VerbRowLabel: View {
   let entry: VerbMapEntry
   /// What a search matched, if it matched a form. See `MatchLines`.
   var matchLines: [String] = []
-  /// A collection's rows check the verbs looked up (Phase 16).
+  /// A collection's rows check the verbs looked up.
   var isLookedUp = false
 
   var body: some View {
@@ -896,8 +894,7 @@ struct VerbGridCell: View {
   }
 }
 
-/// The check on a collection's row for a verb looked up (Phase 16), which VoiceOver reads as
-/// "Looked up".
+/// The check on a collection's row for a verb looked up, which VoiceOver reads as "Looked up".
 struct LookedUpCheck: View {
   var body: some View {
     Image(systemName: "checkmark.circle.fill")

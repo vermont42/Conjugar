@@ -22,8 +22,7 @@ final class GameCenterReal: GameCenter {
 
   // GameKit invokes `authenticateHandler` repeatedly for the life of the process
   // (foregrounding, sign-in/out), so it is installed exactly once and never
-  // re-assigned — re-assigning it while an old handler was pending is what made the
-  // continuation-based version crash / hang.
+  // re-assigned; re-assigning it while a handler is pending can crash or hang.
   private var didInstallHandler = false
 
   // Loaded lazily on first score submission and cached; `nil` until then, so there

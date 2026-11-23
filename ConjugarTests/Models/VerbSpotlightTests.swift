@@ -2,7 +2,7 @@
 //  VerbSpotlightTests.swift
 //  ConjugarTests
 //
-//  Pins what each verb's Spotlight entry carries (browse plan, Phase 11).
+//  Pins what each verb's Spotlight entry carries.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

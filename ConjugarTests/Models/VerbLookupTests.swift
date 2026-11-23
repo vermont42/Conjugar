@@ -2,8 +2,8 @@
 //  VerbLookupTests.swift
 //  ConjugarTests
 //
-//  Pins the Look Up a Verb shortcut's answers and destinations (browse plan, Phase 11). The
-//  answers' English wording assumes the test run's language is English.
+//  Pins the Look Up a Verb shortcut's answers and destinations. The answers' English wording
+//  assumes the test run's language is English.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -38,8 +38,6 @@ import Testing
   private func searchLink(_ text: String) -> URL? {
     URL.searchDeeplink(text: text, source: .lookup)
   }
-
-  // MARK: - One verb answers: its page
 
   @Test func anInfinitiveOpensItsPageUnmarked() throws {
     let lookup = lookUp("tener")
@@ -134,8 +132,6 @@ import Testing
     #expect(lookup.destination == searchLink("eat"))
   }
 
-  // MARK: - Several verbs answer: the search
-
   @Test func aFormOfTwoVerbsNamesBothAndOpensTheSearch() {
     let lookup = lookUp("fue")
     #expect(infinitives(lookup) == ["ser", "ir"])
@@ -143,8 +139,8 @@ import Testing
     #expect(lookup.destination == searchLink("fue"))
   }
 
-  // Josh's ranking puts an exact English sense above a form, so the lookup does too: "come" is
-  // not only comer's.
+  // The search ranks an exact English sense above a form, so the lookup does too: "come" is not
+  // only comer's.
   @Test func anEnglishSenseCountsAgainstAForm() {
     let lookup = lookUp("come")
     let named = infinitives(lookup)
@@ -163,8 +159,6 @@ import Testing
   @Test func noMoreThanFourVerbsAreNamed() {
     #expect(infinitives(lookUp("have")).count <= VerbLookup.maxNamedVerbs)
   }
-
-  // MARK: - No verb answers
 
   @Test func aPrefixOfOneVerbNamesItAndOpensTheSearch() throws {
     let lookup = lookUp("habl")
@@ -208,8 +202,6 @@ import Testing
     #expect(lookup.word == "tuve")
     #expect(lookup.destination == URL.verbDeeplink("tener", source: .lookup, match: "tuve"))
   }
-
-  // MARK: - The intents
 
   @MainActor
   @Test func theLookupResultIntentIsHiddenAndOpensTheApp() {

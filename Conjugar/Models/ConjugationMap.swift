@@ -87,8 +87,8 @@ nonisolated struct ConjugationMap: Equatable, Sendable {
 }
 
 // The bundled file is this text, compressed with LZFSE. Measured on 2026-11-22: 4,811 verbs,
-// 254,328 forms, 1.8 MB of text, 43 KB compressed. One line per form, as Konjugieren writes its
-// map, came to 7.1 MB and 1.4 MB, because every line repeated an infinitive and its cell codes.
+// 254,328 forms, 1.8 MB of text, 43 KB compressed. One line per form came to 7.1 MB and 1.4 MB,
+// because every line repeated an infinitive and its cell codes.
 nonisolated extension ConjugationMap {
   /// One line per verb, sorted by infinitive: the infinitive, then a tab before each form of
   /// `oneWordCells` after the first (the infinitive itself), in that order. A form is written as

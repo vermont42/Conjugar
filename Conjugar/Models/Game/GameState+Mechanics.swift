@@ -6,8 +6,6 @@
 import CoreGraphics
 
 extension GameState {
-  // MARK: Per-stage assignment (shuffle bag)
-
   /// Draw the next stage's mechanic: honor the `CONJUGAR_GAME_MECHANIC` override if
   /// set, otherwise pull from the shuffle bag (refill + reshuffle through `bossRNG`
   /// when empty), so a mechanic never repeats until all three have appeared.
@@ -39,8 +37,6 @@ extension GameState {
       mechanicCountdown = Self.mechanicRepeatDelay
     }
   }
-
-  // MARK: Scheduler
 
   /// One frame of the mechanic scheduler (ticks only in `.climb`). While a mechanic is
   /// active its window winds down (`mechanicRemaining`); otherwise the countdown to the
@@ -87,7 +83,7 @@ extension GameState {
       Current.soundPlayer.play(.lightsOut, shouldDebounce: false)
     case .terremoto:
       // El Terremoto: the ground shakes. Open the fading girder gaps, start the jiggle
-      // phase, and warm + arm the pulsed rumble haptics (no CoreHaptics here — see the plan).
+      // phase, and warm + arm the pulsed rumble haptics (no CoreHaptics here).
       spawnBullSpeech(L.Game.earthquakeAnnouncement)
       Current.soundPlayer.play(.stampede, shouldDebounce: false)   // shared w/ encierro: literally a rumble
       Current.hapticPlayer.prepare()
@@ -154,19 +150,15 @@ extension GameState {
     }
   }
 
-  // MARK: Announcements
-
   /// The bull "speaks" a mechanic announcement — a big jaleo popping just below the
-  /// bull and rising gently (decision 9: "Note how speech is animated in the boss
-  /// fight"). Localization follows the title-card policy: the zombie line is narrative
-  /// and localizes en/es, while "¡El encierro!"/"¡Apagón!" stay Spanish in both.
+  /// bull and rising gently, animated like the boss fight's speech. Localization
+  /// follows the title-card policy: the zombie line is narrative and localizes en/es,
+  /// while "¡El encierro!"/"¡Apagón!" stay Spanish in both.
   func spawnBullSpeech(_ text: String) {
     // Hold the announcement fully-opaque and stationary for 1 s (so it's readable),
     // then fade + rise over the usual 2 s — total ttl 3 s.
     spawnJaleo(text, x: bullX, y: bullY + Self.bullSize, size: 30, riseRate: Self.jaleoDriftRise, ttl: 3.0, hold: 1.0)
   }
-
-  // MARK: Zombie attack
 
   /// While the zombie window is open, each obstacle abandons the roll/fall state
   /// machine and drifts straight toward the player at half speed. `.spin` sets keep
@@ -222,8 +214,6 @@ extension GameState {
     obstacle.falling = true
     obstacle.velocityY = 0
   }
-
-  // MARK: El Encierro (the 🐂 charger stampede)
 
   /// One frame of the charger stampede: spawn a fresh charger on its interval while the
   /// encierro window is open (stragglers from a just-closed window keep crossing —
@@ -300,8 +290,6 @@ extension GameState {
     return false
   }
 
-  // MARK: El Apagón (the lights-out spotlight)
-
   /// Drive the blackout envelope from the active window's remaining time: the darkness
   /// (`apagonDim`, 0…1) fades in over `apagonFadeIn`, holds at full for the middle of
   /// the window, then fades back out over the last `apagonFadeOut`. It's purely a
@@ -320,8 +308,6 @@ extension GameState {
       apagonDim = 1
     }
   }
-
-  // MARK: El Terremoto (the earthquake)
 
   /// Per-frame quake upkeep, ticked every climb frame: advance the jiggle phase, pulse the
   /// rumble haptic on its interval (both only while the window is open), and fade the gaps
@@ -421,8 +407,6 @@ extension GameState {
     damageCooldown = Self.respawnGrace
   }
 
-  // MARK: La Camada (the obstacles multiply)
-
   /// Spawn one half-size baby at the center of each eligible on-screen obstacle. Eligible =
   /// a full-size, non-fading, non-chaser obstacle at trigger time (babies and chasers are
   /// excluded, so a baby can't beget a baby). Each baby slides one obstacle-width out
@@ -499,8 +483,6 @@ extension GameState {
       obstacles[i].velocityY = 0
     }
   }
-
-  // MARK: Shared fade ager (camada babies + cortejo catches)
 
   /// Age the sympathetic/catch fade-outs and drop the fully-faded obstacles. Vibrate windows
   /// (cortejo pre-chase) are owned by `updateCortejo`, not here.

@@ -10,9 +10,9 @@
 /// The verb page's order lives here and nowhere else. The simple tenses come first and the compound
 /// ones after them, and each block is ordered by how often its tense occurs in the corpus, weighing
 /// official prose (the government and technology folders) and literature equally, with one
-/// exception that Josh chose (2026-11-22): the two imperatives stay together at the end of the
-/// simple block. docs/tense_frequency.md gives the counts, and scripts/count_tenses.py reproduces
-/// them. Change the order there before changing it here.
+/// deliberate exception: the two imperatives stay together at the end of the simple block.
+/// docs/tense_frequency.md gives the counts, and scripts/count_tenses.py reproduces them. Change
+/// the order there before changing it here.
 ///
 /// Only the verb page uses this order. Info, the quiz, the Models grid, the widgets, and the
 /// conjugation map keep `DisplayTense.conjugatedTenses`, whose order the map's file format depends
@@ -118,11 +118,10 @@ nonisolated struct ConjugationTable: Hashable, Identifiable, Sendable {
   }
 
   /// The names a learner will meet elsewhere, shown under the heading after "also". The headings
-  /// are Spanish in either interface, so the lists follow the interface instead (Josh approved
-  /// the drafts, 2026-11-22). An English interface gets the English textbook name, then the
-  /// RAE's name where it differs from the heading. A Spanish interface gets the RAE's name, then
-  /// Andrés Bello's, which Mexican and other Latin American schools teach. Empty where every
-  /// system agrees with the heading.
+  /// are Spanish in either interface, so the lists follow the interface instead. An English
+  /// interface gets the English textbook name, then the RAE's name where it differs from the
+  /// heading. A Spanish interface gets the RAE's name, then Andrés Bello's, which Mexican and other
+  /// Latin American schools teach. Empty where every system agrees with the heading.
   func secondNames(spanishInterface: Bool) -> [SecondName] {
     spanishInterface ? spanishNames.map { SecondName(text: $0, isSpanish: true) } : englishNames
   }

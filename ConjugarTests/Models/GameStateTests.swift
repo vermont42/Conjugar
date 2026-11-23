@@ -2,7 +2,7 @@
 //  GameStateTests.swift
 //  ConjugarTests
 //
-//  Unit tests for the pure helpers of the game prototype: the placeholder
+//  Unit tests for the pure helpers of the game: the placeholder
 //  flipbook index math, AABB overlap, platform snap, ladder entry/climb, and the
 //  flag/cape/bull collision outcomes. Swift Testing (never XCTest) per the repo's
 //  isolated-deinit landmine; `@MainActor` because `GameState` is MainActor.
@@ -22,8 +22,6 @@ struct GameStateTests {
     gameState.configure(screenSize: Self.size)
     return gameState
   }
-
-  // MARK: Flipbook frame index
 
   @Test func frameCyclesOneToCountAndWraps() {
     // fps == 10, so phase seconds * 10 == frame ordinal.
@@ -51,16 +49,12 @@ struct GameStateTests {
     }
   }
 
-  // MARK: AABB
-
   @Test func aabbDetectsOverlapAndSeparation() {
     let gameState = GameState()
     #expect(gameState.rectsIntersect(0, 0, 10, 10, 5, 5, 10, 10))       // overlapping
     #expect(!gameState.rectsIntersect(0, 0, 10, 10, 100, 100, 10, 10))  // far apart
     #expect(!gameState.rectsIntersect(0, 0, 10, 10, 10, 0, 10, 10))     // just touching edges
   }
-
-  // MARK: Level geometry
 
   @Test func configureBuildsLevelAndPlacesPlayer() {
     let gameState = configured()
@@ -128,8 +122,6 @@ struct GameStateTests {
     #expect(gameState.playerX == 123)
   }
 
-  // MARK: Physics
-
   @Test func playerFallsUnderGravityAndSnapsToPlatform() {
     let gameState = configured()
     gameState.playerGrounded = false
@@ -153,8 +145,6 @@ struct GameStateTests {
     gameState.jump()
     #expect(gameState.playerVelocityY == vy)
   }
-
-  // MARK: Ladders
 
   @Test func pressingUpAtLadderEntersClimb() {
     let gameState = configured()
@@ -184,8 +174,6 @@ struct GameStateTests {
     #expect(gameState.playerLevel == 1)
   }
 
-  // MARK: Collisions
-
   private func obstacleOnPlayer(_ gameState: GameState) -> Obstacle {
     Obstacle(
       id: 999, x: gameState.playerX, y: gameState.playerY,
@@ -201,8 +189,8 @@ struct GameStateTests {
     gameState.obstacles.append(obstacleOnPlayer(gameState))
     gameState.resolveCollisions()
     #expect(gameState.health == start - 1)
-    // The struck obstacle now fades out over 1 s (non-colliding while it fades) instead of
-    // vanishing instantly, and throws a yellow particle burst at its position.
+    // The struck obstacle fades out over 1 s (non-colliding while it fades) and throws a
+    // yellow particle burst at its position.
     #expect(gameState.obstacles.count == 1)
     #expect(gameState.obstacles[0].fadeRemaining == GameState.obstacleFadeDuration)
     #expect(!gameState.hitParticles.isEmpty)
@@ -234,7 +222,7 @@ struct GameStateTests {
     gameState.damageCooldown = 0
     let start = gameState.health
     // Obstacle horizontally aligned but a jump-arc's clearance above the honest hit
-    // box — a gap the old full-size box would have wrongly counted as a hit.
+    // box, a gap a full-size box would wrongly count as a hit.
     let clearance = (GameState.playerHeight + GameState.obstacleHitSize) / 2 + 2
     let obstacle = Obstacle(
       id: 1, x: gameState.playerX, y: gameState.playerY + clearance,
@@ -274,8 +262,6 @@ struct GameStateTests {
     #expect(gameState.phase == .bossIntro)
     #expect(gameState.obstacles.isEmpty)               // field cleared for the stage
   }
-
-  // MARK: Stage system (La Subida)
 
   @Test func obstacleSpeedCompoundsPerStage() {
     let gameState = configured()
@@ -321,8 +307,6 @@ struct GameStateTests {
       #expect(gameState.stageObstacleStyle == expectedStyles[stage - 1])
     }
   }
-
-  // MARK: Per-set rendering (facing / spin)
 
   @Test func faceObstacleFacesTravelWithoutSpinning() {
     let gameState = configured()
@@ -371,8 +355,6 @@ struct GameStateTests {
     gameState.updateObstacles(dt: 1.0 / 60.0)
     #expect(gameState.obstacles[0].rotation != 0)        // .spin tumbles
   }
-
-  // MARK: Escape beat
 
   @Test func nonFinalSummitEntersEscapeAndClearsField() {
     let gameState = configured()
@@ -423,8 +405,6 @@ struct GameStateTests {
     #expect(gameState.jaleoPops.isEmpty)
   }
 
-  // MARK: Soft respawn
-
   @Test func deathSoftRespawnsKeepingProgress() {
     let gameState = configured()
     gameState.stage = 3
@@ -458,8 +438,6 @@ struct GameStateTests {
     #expect(gameState.summitCount == 1)
     #expect(gameState.phase == .climb)
   }
-
-  // MARK: Power-ups (La Subida — cape / speed ⚡ / serenata 🎸)
 
   @Test func powerUpBagExhaustsAllKindsBeforeRepeating() {
     let gameState = configured()
@@ -595,8 +573,6 @@ struct GameStateTests {
     #expect(summiting.capedRemaining == 4)
     #expect(summiting.speedRemaining == 4)
   }
-
-  // MARK: Challenge mechanics (La Subida — framework + zombie attack)
 
   /// Put a single homing-able obstacle on a girder near the top, mid-field.
   private func obstacleMidField(_ gameState: GameState, style: ObstacleStyle = .spin) -> Obstacle {
@@ -762,8 +738,6 @@ struct GameStateTests {
     #expect(GameState.mechanicFirstDelay.contains(gameState.mechanicCountdown))
   }
 
-  // MARK: El Encierro (Phase 4 — the 🐂 charger stampede)
-
   /// A charger placed on the player, so it registers a hit in `resolveCollisions`.
   private func chargerOnPlayer(_ gameState: GameState) -> Charger {
     Charger(id: 0, x: gameState.playerX, y: gameState.playerY, level: 0, direction: 1)
@@ -876,8 +850,6 @@ struct GameStateTests {
     #expect(gameState.chargers.isEmpty)
   }
 
-  // MARK: El Apagón (Phase 5 — the lights-out spotlight)
-
   @Test func apagonEnvelopeRisesHoldsAndFallsOnSchedule() {
     let gameState = configured()
     gameState.assignedMechanic = .apagon
@@ -963,8 +935,6 @@ struct GameStateTests {
     #expect(abs(pop.x - gameState.bullX) < 0.5)
     #expect(pop.y > gameState.bullY)
   }
-
-  // MARK: El Terremoto (earthquake mechanic)
 
   @Test func terremotoOpensGapsRoughlyTenPercentOfEachGirder() {
     let gameState = configured()
@@ -1091,8 +1061,6 @@ struct GameStateTests {
     #expect(!gameState.obstacles[0].falling)
   }
 
-  // MARK: La Camada (obstacles multiply)
-
   private func fullObstacleMidField(_ gameState: GameState) -> Obstacle {
     let level = GameState.levelCount - 1
     return Obstacle(
@@ -1158,8 +1126,6 @@ struct GameStateTests {
     #expect(parents.allSatisfy { $0.fadeRemaining == 0 }) // the parent is untouched
   }
 
-  // MARK: El Flechazo (heart missiles on jump)
-
   @Test func armedJumpFiresAHeartMissileWithOneSecondCooldown() {
     let gameState = configured()
     gameState.flechazoRemaining = GameState.flechazoDuration
@@ -1196,15 +1162,13 @@ struct GameStateTests {
       HeartMissile(id: 0, x: target.x, y: target.y, velocityX: 0, velocityY: 0, targetID: target.id, lifeRemaining: GameState.heartMissileLife)
     ]
     gameState.updateHeartMissiles(dt: 1.0 / 60.0)
-    // The target now fades out over 1 s (non-colliding while it fades) with a yellow particle
-    // burst, rather than vanishing instantly; the missile is consumed.
+    // The target fades out over 1 s (non-colliding while it fades) with a yellow particle
+    // burst; the missile is consumed.
     #expect(gameState.obstacles.count == 1)
     #expect(gameState.obstacles[0].fadeRemaining == GameState.obstacleFadeDuration)
     #expect(!gameState.hitParticles.isEmpty)
     #expect(gameState.heartMissiles.isEmpty)    // missile consumed
   }
-
-  // MARK: El Cortejo (mushroom chaser)
 
   @Test func cortejoPossessesThenChasesAfterTheVibrateWindow() {
     let gameState = configured()
@@ -1324,8 +1288,6 @@ struct GameStateTests {
     #expect(gameState.cortejoCharges == 2)   // banked charges survive a summit (death clears them)
   }
 
-  // MARK: The carried cape and its jump turn
-
   /// Turn the cape until it settles (0.25 s at `capeRotationRate`; a generous 20 frames).
   private func settleCape(_ gameState: GameState) {
     for _ in 0..<20 { gameState.updateCapeRotation(dt: 1.0 / 60.0) }
@@ -1400,8 +1362,6 @@ struct GameStateTests {
     #expect(!gameState.isCarriedCapeVisible)
   }
 
-  // MARK: Speed ⚡ — the bull quickens too
-
   @Test func speedPickupDoublesBullPacingButNotItsAnimation() {
     func paceDelta(speed: Double) -> CGFloat {
       let gameState = configured()
@@ -1423,8 +1383,6 @@ struct GameStateTests {
     quick.advanceAnimations(dt: 1.0 / 60.0)
     #expect(plain.bullPhase == quick.bullPhase)
   }
-
-  // MARK: La Serenata — the strummed jump
 
   @Test func aJumpDuringLaSerenataSendsANoteToTheBull() {
     let gameState = configured()
@@ -1468,8 +1426,6 @@ struct GameStateTests {
     #expect(gameState.hitParticles.allSatisfy { $0.tint == .yellow })
   }
 
-  // MARK: El Cortejo — the mushroom thrown at the possessed obstacle
-
   @Test func aCortejoPossessionThrowsAMushroomAtTheClaimedObstacle() {
     let gameState = configured()
     gameState.obstacles = twoObstacles(gameState)
@@ -1501,8 +1457,6 @@ struct GameStateTests {
     #expect(gameState.obstacles.count == 2)
     #expect(gameState.obstacles.allSatisfy { $0.fadeRemaining == 0 })
   }
-
-  // MARK: El Flechazo — the matador's hearts
 
   @Test func firingAMissileBloomsAHeartBesideTheMatador() {
     let gameState = configured()

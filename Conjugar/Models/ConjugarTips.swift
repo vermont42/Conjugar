@@ -5,8 +5,8 @@
 //  TipKit onboarding tips. Four tips nudge new users toward the quiz, the verb
 //  models, higher quiz difficulty (rule-gated on a completed quiz), and Game
 //  Center, and two on the verb page explain its red letters and point to the
-//  etymology and examples at its bottom (browse plan, Phase 6). See `TipDisplay.tipsEnabled`, in `Utils/KillSwitches.swift`, for the
-//  screenshot kill switch.
+//  etymology and examples at its bottom. See `TipDisplay.tipsEnabled`, in
+//  `Utils/KillSwitches.swift`, for the screenshot kill switch.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

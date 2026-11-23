@@ -14,7 +14,7 @@ import Testing
 // `VerbMap`, and the data path verb → class number → `ModelCatalog` model →
 // conjugate. (Here we drive the equivalent path with an explicit catalog model
 // rather than the no-`model:` resolver, which fully validates the data.)
-@Suite("VerbMap (Phase 6 — verb→model map + glosses)")
+@Suite("VerbMap")
 struct VerbMapTests {
   static let map = VerbMap.shared
 
@@ -30,16 +30,9 @@ struct VerbMapTests {
     return nil
   }
 
-  // 4,815 <verb> elements collapse to 4,811 distinct infinitives. Base build
-  // (`_build_verbmap.py`) produced 4,828 elements → 4,824 distinct: the 4,818 verbs
-  // in the class taxonomy (− 4 homonyms that contribute 2 elements each = 4,814) + 4
-  // legacy-app-only neologisms (googlear/viralizar/ustedear/aguachicolear) + 6
-  // frequency-list gaps (circular/quejar/egresar/respectar/adir/hacendar) absent
-  // from the taxonomy, all appended so the map is a superset of the shipping app and
-  // of the top-1000 verbs. Two hand-edits since: +3 rare top-990 verbs
-  // (matear/rodrigar/salgar) for full frequency coverage, −16 R-rated verbs removed
-  // for the app's G rating → net 4,815 elements / 4,811 distinct. A nonzero count
-  // proves the resource actually shipped in the (test-hosted) bundle.
+  // 4,815 <verb> elements collapse to 4,811 distinct infinitives, because four homonyms
+  // contribute two elements each. A nonzero count proves the resource shipped in the
+  // (test-hosted) bundle.
   @Test("map loads from the bundle: 4,811 distinct infinitives")
   func mapLoads() {
     #expect(Self.map.count == 4811, "loaded \(Self.map.count) entries (resource bundled?)")
@@ -59,11 +52,10 @@ struct VerbMapTests {
     #expect(Self.map.entry(for: raw) == nil, "marker leaked into key: \(raw)")
   }
 
-  // Four neologisms ship in the old Conjugar verbs.xml but are absent from the class
-  // taxonomy; `_build_verbmap.py` appends them so no app verb regresses in the
-  // migration. They must be present, glossed, and conjugate — incl. viralizar's z→c
-  // orthography (class 1-4) via the data path.
-  @Test("legacy-app-only neologisms are present and glossed", arguments: [
+  // Four neologisms absent from the class index, which `_build_verbmap.py` appends. They
+  // must be present, glossed, and conjugate, incl. viralizar's z→c orthography (class 1-4)
+  // via the data path.
+  @Test("neologisms outside the class index are present and glossed", arguments: [
     ("aguachicolear", "1", "steal water"),
     ("googlear", "1", "google"),
     ("ustedear", "1", "use usted"),
@@ -92,11 +84,10 @@ struct VerbMapTests {
 
   // Every key must be a spellable Spanish infinitive: lowercase letters plus the five
   // accented vowels, the dieresis, and enye -- nothing else. The map is generated from a
-  // literal transcription of the book's Annex B, and the book prints two cells that are
-  // not verbs: "sobre(e)ntender" (its notation for the pair sobrentender /
-  // sobreentender) and the misspelled "reeligir". Both shipped as keys for two months,
-  // matched no corpus, and gave conjugar://verb/ an unopenable deeplink. This is the
-  // test that would have caught them.
+  // literal transcription of a printed verb index, which has two cells that are not
+  // verbs: "sobre(e)ntender" (its notation for the pair sobrentender / sobreentender)
+  // and the misspelled "reeligir". A malformed key matches no corpus and gives
+  // conjugar://verb/ an unopenable deeplink.
   @Test("every infinitive is spelled with Spanish letters only")
   func infinitivesAreWellFormed() {
     let wellFormed = /^[a-záéíóúüñ]+$/
@@ -128,8 +119,8 @@ struct VerbMapTests {
     #expect(Self.map.entry(for: infinitive)?.gloss == gloss)
   }
 
-  // The map uses exactly the 106 distinct class numbers in the taxonomy, and every one
-  // resolves to a catalog model — derived from the shipped resource, not a literal.
+  // The map uses exactly 106 distinct class numbers, and every one resolves to a catalog
+  // model — derived from the shipped resource, not a literal.
   @Test("the map uses exactly 106 distinct class numbers")
   func distinctClassCount() {
     let used = Set(Self.map.entries.values.flatMap(\.classNumbers))
@@ -171,7 +162,7 @@ struct VerbMapTests {
     #expect(Self.map.entry(for: infinitive)?.frequencyRank == rank)
   }
 
-  // Six real verbs the class taxonomy omits, added by `_build_verbmap.py` because the
+  // Six real verbs the class index omits, added by `_build_verbmap.py` because the
   // retired esTenTen export ranked them inside its top 1000. quejar is reflexive-only;
   // respectar and adir are DEFECTIVE, so the engine still over-generates their forms here.
   // No rank is pinned: the esTenTen ranks that motivated adding them are gone, and CORPES
@@ -328,7 +319,7 @@ struct VerbMapTests {
     ("freír", .pretérito(.thirdSingular), "frió"),
     ("sonreír", .gerundio, "sonriendo"),
     ("desleír", .presenteDeIndicativo(.firstSingular), "deslío"),
-    // 10 oír family (the two formerly-literal slots now ride the prefix).
+    // 10 oír family (every slot keeps the prefix).
     ("desoír", .presenteDeIndicativo(.firstPlural), "desoímos"),
     ("desoír", .imperativoAfirmativo(.secondPlural), "desoíd"),
     ("desoír", .presenteDeIndicativo(.firstSingular), "desoigo")

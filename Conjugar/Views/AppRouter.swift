@@ -5,8 +5,7 @@
 //  Tab selection + deeplink routing for the widgets, the Control Center controls, the Home
 //  Screen quick action, and Command-F. A `conjugar://` URL (from a widget tap, a quick action,
 //  or `simctl openurl`) or a drained control-widget deeplink is turned into a tab switch plus a
-//  pending navigation the destination screen consumes. Added with the widget port (July 2026);
-//  the grammar in `docs/feature_architecture.md` § Deeplinks since browse Phase 10.
+//  pending navigation the destination screen consumes.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -37,11 +36,11 @@ final class AppRouter {
   /// An article the Info tab should push, from an `info` link. `InfoBrowseView` consumes and
   /// clears it.
   var pendingInfo: Info?
-  /// A collection the Models tab should push, from a `list` link (browse plan, Phase 16).
-  /// `ModelBrowseView` consumes and clears it.
+  /// A collection the Models tab should push, from a `list` link. `ModelBrowseView` consumes and
+  /// clears it.
   var pendingCollection: CollectionRequest?
   /// A one-shot request for the Quiz tab to start a quiz, with the link's `source` (`deeplink` when
-  /// it names none), which the quiz signals carry (browse plan, Phase 13). `QuizView` consumes it.
+  /// it names none), which the quiz signals carry. `QuizView` consumes it.
   var pendingQuizStart: AnalyticsSource?
   /// Drives a full-screen `GameView` cover from `MainTabView`, tab-independent so a
   /// `conjugar://game` deeplink jumps straight to the game from any screen. (The
@@ -81,8 +80,8 @@ final class AppRouter {
   /// Route a `conjugar://` deeplink. `docs/feature_architecture.md` § Deeplinks has the grammar
   /// and every route: `verb/<infinitive>` (bare or with "se", so `verb/arrepentirse` opens
   /// arrepentir, or `verb/random`), with `match`, a form the page marks; `search`, with its text
-  /// in `q`; `info/<stableKey>` (or a position); `list/<key>`, a collection (Phase 16); `quiz` (any
-  /// target starts a quiz); and `game`.
+  /// in `q`; `info/<stableKey>` (or a position); `list/<key>`, a collection; `quiz` (any target
+  /// starts a quiz); and `game`.
   /// A link to a verb page, a search, or a quiz may name the surface it came from in `source`
   /// (`?source=widget`); a link that names none reports `deeplink`. Unknown routes, unknown
   /// verbs, and unknown collections are ignored.
@@ -93,7 +92,7 @@ final class AppRouter {
     case URL.verbHost:
       guard let target = url.deeplinkTarget else { return }
       if target == URL.randomVerbTarget {
-        // From the frequent verbs or My Verbs, as the widget's verb of the day is (Phase 14).
+        // From the frequent verbs or My Verbs, as the widget's verb of the day is.
         if let random = VerbDraw.randomVerb(myVerbs: Current.learnerVerbs.myVerbs) {
           open(verb: random.infinitive, source: source)
         }

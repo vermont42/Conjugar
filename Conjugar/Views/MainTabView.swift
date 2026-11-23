@@ -2,9 +2,7 @@
 //  MainTabView.swift
 //  Conjugar
 //
-//  The SwiftUI-first app shell that replaces the UIKit MainTabBarVC, created
-//  during the SwiftUI migration, July 2026. Every tab is a native SwiftUI screen;
-//  the transitional UIKit-hosting wrapper is gone.
+//  The app shell. Every tab is a native SwiftUI screen.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -69,7 +67,7 @@ struct MainTabView: View {
       // Warm the ~4 MB content caches off-main so the first verb push isn't a main-thread
       // decode. refresh() is date-gated and often no-ops, so it can't be relied on to warm.
       Task.detached { ContentCaches.warm() }
-      // One Spotlight entry per verb (browse plan, Phase 11). Off the main actor.
+      // One Spotlight entry per verb. Off the main actor.
       Task { await VerbSpotlight.indexVerbs() }
       presentOnboardingIfNeeded()
     }

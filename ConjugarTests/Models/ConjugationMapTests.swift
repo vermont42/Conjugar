@@ -54,7 +54,7 @@ struct ConjugationMapTests {
     // example-uses pipeline found in the sentence, lowercased, must be a key whose entries name
     // that verb. No accent is folded and no pronoun is stripped. On 2026-11-22 it found 1,339
     // of 1,340 (99.9%). The one miss is especializar's token "especializarse", an infinitive
-    // with an enclitic pronoun, which the reverse lookup of Phase 5 is to strip.
+    // with an enclitic pronoun, which the reverse lookup strips.
     @Test func findsTheVerbOfNearlyEveryExampleByItsToken() {
       var exampleCount = 0
       var misses: [String] = []
@@ -71,8 +71,8 @@ struct ConjugationMapTests {
       #expect(Double(exampleCount - misses.count) / Double(exampleCount) >= 0.99, "Missed \(misses.count) of \(exampleCount): \(misses.prefix(20))")
     }
 
-    // The same, scanning every word of the sentence rather than trusting the token, which the
-    // pipeline chose with the old harness's forms. Also 1,339 of 1,340 on 2026-11-22.
+    // The same, scanning every word of the sentence rather than trusting the token the
+    // pipeline chose. Also 1,339 of 1,340 on 2026-11-22.
     @Test func findsTheVerbInNearlyEveryExampleSentence() {
       var exampleCount = 0
       var foundCount = 0

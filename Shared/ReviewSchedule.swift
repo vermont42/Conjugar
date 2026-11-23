@@ -8,21 +8,19 @@
 
 import Foundation
 
-/// When a verb is next due on the review card, and which box of the ladder it is in (browse plan,
-/// Phase 15, ported from Konjugieren). This is the Leitner system at its smallest: a lookup puts a
-/// verb in the first box, a revealed card moves it up one, and a later lookup sends it back to the
-/// first. The pedagogy plan's practice record is meant to take it over, moving verbs on right and
-/// wrong answers too, so it is a type of its own rather than fields on `LearnerVerbs.Entry`.
+/// When a verb is next due on the review card, and which box of the ladder it is in. This is the
+/// Leitner system at its smallest: a lookup puts a verb in the first box, a revealed card moves it
+/// up one, and a later lookup sends it back to the first.
 ///
-/// Only irregular verbs are scheduled (Josh, 2026-11-22): a regular verb's key conjugations are
-/// the pattern every verb of its class shares, so its lookup has nothing of its own to review.
-/// `LearnerVerbs` has no verb map and cannot tell, so its caller decides.
+/// Only irregular verbs are scheduled: a regular verb's key conjugations are the pattern every
+/// verb of its class shares, so its lookup has nothing of its own to review. `LearnerVerbs` has no
+/// verb map and cannot tell, so its caller decides.
 ///
 /// Due dates fall at the start of a day, so a verb looked up late in the evening waits until the
 /// next morning rather than an hour.
 nonisolated struct ReviewSchedule: Codable, Equatable, Sendable {
-  /// Days between reviews, box by box. The last box repeats. The pedagogy report proposes these
-  /// numbers and warns against agonizing over them, since the evidence singles out none.
+  /// Days between reviews, box by box. The last box repeats. The evidence singles out no one
+  /// schedule, so these numbers are not worth agonizing over.
   static let intervals = [1, 3, 7, 14, 30]
 
   /// The box of the ladder, from 0, which indexes `intervals`.

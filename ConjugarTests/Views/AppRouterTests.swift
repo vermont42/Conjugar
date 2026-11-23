@@ -2,12 +2,11 @@
 //  AppRouterTests.swift
 //  ConjugarTests
 //
-//  Deeplink routing for `AppRouter.handle(url:)`: the grammar's routes and their round trips
-//  (browse plan, Phase 10), the control's and the quick action's links, and the one-shot game
-//  flags (`pendingBossEntry` / `pendingEndScene`). Those are drained only by
-//  `GameView.onAppear`, so a `game/boss` or `game/end` URL arriving while the game is already
-//  presented must be ignored — otherwise the stale flag would hijack the next plain
-//  `conjugar://game`.
+//  Deeplink routing for `AppRouter.handle(url:)`: the grammar's routes and their round trips,
+//  the control's and the quick action's links, and the one-shot game flags (`pendingBossEntry` /
+//  `pendingEndScene`). Those are drained only by `GameView.onAppear`, so a `game/boss` or
+//  `game/end` URL arriving while the game is already presented must be ignored — otherwise the
+//  stale flag would hijack the next plain `conjugar://game`.
 //  Swift Testing + `@MainActor` (AppRouter is MainActor).
 //
 
@@ -84,8 +83,6 @@ struct AppRouterTests {
     #expect(!router.showGame)
   }
 
-  // MARK: - Search (browse plan, Phase 10)
-
   @Test func commandFShowsTheVerbsTabAndKeepsTheFieldsText() {
     let router = AppRouter()
     router.selectedTab = .quiz
@@ -147,8 +144,6 @@ struct AppRouterTests {
     #expect(router.pendingSearch?.text == "fue")
   }
 
-  // MARK: - A verb's match
-
   @Test func verbDeeplinkMarksItsMatch() throws {
     let router = AppRouter()
     let link = try #require(URL.verbDeeplink("ir", source: .lookup, match: "fue"))
@@ -193,8 +188,6 @@ struct AppRouterTests {
     #expect(router.pendingVerb == nil)
   }
 
-  // MARK: - Info, the quiz, and unknown routes
-
   @Test func infoDeeplinkOpensAnArticleByItsStableKey() throws {
     let router = AppRouter()
     let link = try #require(URL.infoDeeplink(stableKey: "preterito"))
@@ -234,7 +227,7 @@ struct AppRouterTests {
     #expect(router.pendingQuizStart == .deeplink)
   }
 
-  /// A quiz link carries its `source` to the quiz signals (browse plan, Phase 13).
+  /// A quiz link carries its `source` to the quiz signals.
   @Test func quizDeeplinkCarriesItsSource() {
     let router = AppRouter()
     router.handle(url: url("conjugar://quiz/start?source=widget"))
@@ -252,8 +245,6 @@ struct AppRouterTests {
     #expect(router.pendingInfo == nil)
     #expect(router.pendingCollection == nil)
   }
-
-  // MARK: - Collections (Phase 16)
 
   @Test func listDeeplinkOpensACollectionInTheModelsTab() {
     let router = AppRouter()
@@ -276,8 +267,6 @@ struct AppRouterTests {
       #expect(router.pendingCollection?.collection == collection, "\(collection.key)")
     }
   }
-
-  // MARK: - The control and the quick action
 
   // `Shared/` cannot see `AnalyticsSource`, so its intents spell their links as literals. These
   // pin the literals to the routes and the vocabulary.

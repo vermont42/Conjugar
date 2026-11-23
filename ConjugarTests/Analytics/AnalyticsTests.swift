@@ -2,11 +2,8 @@
 //  AnalyticsTests.swift
 //  ConjugarTests
 //
-//  Replaces AnalyticsServiceTests, which exercised the AWS-Pinpoint-shaped
-//  AnalyticsService removed in the July 2026 TelemetryDeck migration. Those tests
-//  asserted on a flattened printed string; the spy now records structured signals,
-//  so these assert on names and parameters directly. Swift Testing (the suite is
-//  nonisolated — Analytics and its spy are nonisolated).
+//  The spy records structured signals, so these assert on names and parameters
+//  directly. The suite is nonisolated, as Analytics and its spy are.
 //
 
 import Testing

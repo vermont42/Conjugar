@@ -57,8 +57,7 @@ struct ModelBrowseView: View {
       VStack(spacing: 0) {
         ScrollViewReader { proxy in
           ScrollView {
-            // The featured collections (browse plan, Phase 16) lead the tab, as Konjugieren's lead
-            // its Families tab, and step aside while a search is typed.
+            // The featured collections lead the tab and step aside while a search is typed.
             if searchText.isEmpty {
               collectionsSection
                 .id("top")
@@ -152,7 +151,7 @@ struct ModelBrowseView: View {
         collectionPage(request)
       }
       .verbPageDestinations()
-      // A `list` link (Phase 16), which can arrive before the tab first appears.
+      // A `list` link, which can arrive before the tab first appears.
       .onChange(of: router.pendingCollection, initial: true) { _, request in
         guard let request else { return }
         navigationPath.append(request)
@@ -249,9 +248,7 @@ struct ModelRowLabel: View {
     // anywhere in the Spacer gap between them — most of the row — falls through and
     // the NavigationLink never fires. On iPhone that made model rows effectively
     // untappable except on their text; the iPad was unaffected because its grid
-    // branch wraps each cell in `.card()`, whose fill hit-tests on its own. Found in
-    // July 2026 when all four iPhone `model_view` screenshots silently captured the
-    // list instead of the haber detail.
+    // branch wraps each cell in `.card()`, whose fill hit-tests on its own.
     .contentShape(Rectangle())
   }
 }

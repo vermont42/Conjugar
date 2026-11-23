@@ -116,14 +116,13 @@ struct QuizView: View {
     }
   }
 
-  /// An iPad's start screen has room for a bigger composition, and at the iPhone's size the old
-  /// briefing left most of the screen empty (Konjugieren, 2026-11-13).
+  /// An iPad's start screen has room for a bigger composition.
   private var isLarge: Bool {
     sizeClass == .regular
   }
 
   /// A big symbol for the scope, the picker and Start, three facts about the quiz, and for My
-  /// Verbs, the verbs it will ask about (browse plan, Phase 13).
+  /// Verbs, the verbs it will ask about.
   private var startScreen: some View {
     GeometryReader { geometry in
       ScrollView {
@@ -451,7 +450,7 @@ struct QuizView: View {
       ParameterKey.difficulty.rawValue: quiz.lastDifficulty.rawValue,
       ParameterKey.source.rawValue: scope.source.rawValue
     ]
-    // A quiz over a collection names it (Phase 16).
+    // A quiz over a collection names it.
     if let collectionKey = scope.collectionKey {
       parameters[ParameterKey.collection.rawValue] = collectionKey
     }

@@ -5,7 +5,7 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 //  A quiz over chosen verbs: My Verbs on the Quiz tab, and Test Me's three questions on a verb's
-//  page (browse plan, Phase 13).
+//  page.
 //
 
 import Foundation

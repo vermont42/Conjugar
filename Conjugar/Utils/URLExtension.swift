@@ -30,8 +30,6 @@ extension URL {
     return URL(string: "mailto:\(address)?subject=\(encode(subject))&body=\(encode(body))")
   }
 
-  // MARK: - Deeplinks
-
   // The grammar is `conjugar://<route>[/<target>][?<item>=<value>&…]`: the route is the host, the
   // target at most one path segment, and text only ever in a query item, because it can hold
   // spaces and slashes. `docs/feature_architecture.md` § Deeplinks lists every route.
@@ -42,7 +40,7 @@ extension URL {
   nonisolated static let infoHost = "info"
   nonisolated static let quizHost = "quiz"
   nonisolated static let gameHost = "game"
-  /// A collection (browse plan, Phase 16): `conjugar://list/top100`, `conjugar://list/model-31`.
+  /// A collection: `conjugar://list/top100`, `conjugar://list/model-31`.
   nonisolated static let listHost = "list"
   /// The target of `conjugar://verb/random`.
   nonisolated static let randomVerbTarget = "random"

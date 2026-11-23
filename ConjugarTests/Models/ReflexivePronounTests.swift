@@ -36,8 +36,6 @@ struct ReflexivePronounTests {
     .map(\.infinitive)
     .sorted()
 
-  // MARK: arrepentirse, every slot
-
   @Test("arrepentirse's page reads as Spanish writes it", arguments: [
     (DisplayTense.presenteDeIndicativo, ["me arrepiento", "te arrepientes", "te arrepentís", "se arrepiente", "nos arrepentimos", "os arrepentís", "se arrepienten"]),
     (.pretérito, ["me arrepentí", "te arrepentiste", "te arrepentiste", "se arrepintió", "nos arrepentimos", "os arrepentisteis", "se arrepintieron"]),
@@ -81,8 +79,6 @@ struct ReflexivePronounTests {
     #expect(ReflexivePronoun.citationForm(of: "arrepentir") == "arrepentirse")
   }
 
-  // MARK: Other reflexive-only verbs' accents
-
   @Test("enclitic accents in -ar, -er, and irregular verbs", arguments: [
     ("quejar", ["quéjate", "quejate", "quéjese", "quejémonos", "quejaos", "quéjense"], "quejándose"),
     ("atrever", ["atrévete", "atrevete", "atrévase", "atrevámonos", "atreveos", "atrévanse"], "atreviéndose"),
@@ -94,8 +90,6 @@ struct ReflexivePronounTests {
     #expect(persons.map { Self.written(infinitive, .imperativoPositivo, $0) } == commands)
     #expect(Self.written(infinitive, .gerundio, .none) == gerund)
   }
-
-  // MARK: Every reflexive-only verb, every slot
 
   /// The written form is the bare form with the pronoun placed: before it, after the "no" of a
   /// negative command, or joined to a command or gerund. Accents aside, nothing else changes.
@@ -153,8 +147,6 @@ struct ReflexivePronounTests {
     #expect(negative == .success("no te arrepIentas"))
   }
 
-  // MARK: The accent rule itself
-
   @Test("enclisis follows the general accent rules", arguments: [
     ("me", "dé", 0, "deme"),
     ("te", "está", 0, "estate"),
@@ -180,8 +172,6 @@ struct ReflexivePronounTests {
     #expect(ReflexivePronoun.bareInfinitive(fromCitation: "base") == nil)
     #expect(ReflexivePronoun.bareInfinitive(fromCitation: "arrepentir") == nil)
   }
-
-  // MARK: Search and the quiz
 
   @Test func searchFindsTheCitationFormAsItIsTyped() {
     let entries = VerbMap.shared.entries.values

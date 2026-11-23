@@ -7,8 +7,6 @@
 //  medieval attestation). `work` names the source poem; `ref` is the ready-made
 //  citation ("Cantar I, v. 330", "estrofa 470", "copla 900"); `os` is the Old-Spanish
 //  verse (medieval spelling, kept intact); `tr` is a Claude English translation.
-//  Analogue of Conjuguer's `ChansonExample`, extended with `work` because Conjugar has
-//  three medieval works rather than one poem.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 

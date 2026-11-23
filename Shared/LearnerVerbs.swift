@@ -8,12 +8,11 @@
 
 import Foundation
 
-/// The learner's own verbs: each verb opened, when and how often, each verb starred (browse plan,
-/// Phase 12, ported from Konjugieren), and when each irregular verb is due on the review card
-/// (Phase 15). It is kept in the App Group's shared defaults, so the
+/// The learner's own verbs: each verb opened, when and how often, each verb starred, and when each
+/// irregular verb is due on the review card. It is kept in the App Group's shared defaults, so the
 /// widget extension can read what the app writes, and it names verbs by infinitive, as
 /// `verbModelMap.xml` keys them (a reflexive-only verb by its bare infinitive), because the widget
-/// has no verb map. Phases 13 to 16 of the browse plan read it, and so will the pedagogy plan.
+/// has no verb map.
 nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
   // A field added later must be optional. Synthesized decoding ignores a default value and
   // requires the key, so any other field would fail to decode every record written before it,
@@ -25,8 +24,8 @@ nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
     var openCount = 0
     var starred: Date?
     /// When the verb is due on the review card. Nil for a verb never scheduled: a regular verb, a
-    /// verb only starred, or an entry written before Phase 15 that `LearnerVerbStore` has not yet
-    /// scheduled.
+    /// verb only starred, or an entry written before reviews existed that `LearnerVerbStore` has
+    /// not yet scheduled.
     var review: ReviewSchedule?
 
     var isStarred: Bool {
@@ -131,9 +130,9 @@ nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
   }
 
   /// Schedules each verb opened but never scheduled that `isReviewable` accepts, as looked up on
-  /// its last open. A record written before Phase 15 thereby offers a card on the first day, as
-  /// Konjugieren's did, without a migration. Returns whether anything changed. A regular verb stays
-  /// unscheduled however often this runs.
+  /// its last open. A record written before reviews existed thereby offers a card on the first
+  /// day, without a migration. Returns whether anything changed. A regular verb stays unscheduled
+  /// however often this runs.
   mutating func scheduleUnscheduledReviews(where isReviewable: (String) -> Bool, calendar: Calendar = .current) -> Bool {
     var changed = false
     for (infinitive, entry) in entries {

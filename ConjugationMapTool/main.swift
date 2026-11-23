@@ -24,8 +24,7 @@
 // leaves it untouched otherwise.
 //
 // For the two JSON files, run scripts/write_forms_json.sh, which builds this target and calls it
-// with the right paths. Until 2026-11-22 they came from a disabled test harness,
-// CorpusFormsDumpTests, which this tool replaced.
+// with the right paths.
 //
 // --cells-json writes every form with its cells (CellsJSON.swift) for scripts/count_tenses.py,
 // which builds this target and runs it itself.

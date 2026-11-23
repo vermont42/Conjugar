@@ -13,7 +13,7 @@ import SwiftUI
 /// verb's full list use it.
 struct VerbEntryList: View {
   let entries: [VerbMapEntry]
-  /// Checks each verb the learner has looked up, as a collection's rows do (Phase 16).
+  /// Checks each verb the learner has looked up, as a collection's rows do.
   var showsLookedUp = false
   let onSelect: (String) -> Void
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass

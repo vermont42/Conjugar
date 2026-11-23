@@ -2,14 +2,13 @@
 //  GlyphWarmer.swift
 //  Conjugar
 //
-//  Ported from Conjuguer (commit 9bb4f3e). Pre-rasterizes emoji glyphs into the
-//  process-wide CoreText/CoreGraphics glyph cache. The first time a large color-emoji
-//  glyph is drawn — especially flag emoji (🇪🇸, 🇲🇽, …) — CoreText loads and
-//  rasterizes its color bitmap synchronously, stalling the SwiftUI render thread
-//  (~0.5s, measured) the frame that glyph first appears. Conjugar's game rains flag
-//  emoji, so warming them off-main at game start turns that stall into a cache hit.
-//  The cache is process-wide, so warming in a throwaway offscreen bitmap benefits
-//  SwiftUI's later Text render.
+//  Pre-rasterizes emoji glyphs into the process-wide CoreText/CoreGraphics glyph
+//  cache. The first time a large color-emoji glyph is drawn — especially flag emoji
+//  (🇪🇸, 🇲🇽, …) — CoreText loads and rasterizes its color bitmap synchronously,
+//  stalling the SwiftUI render thread (~0.5s, measured) the frame that glyph first
+//  appears. Conjugar's game rains flag emoji, so warming them off-main at game start
+//  turns that stall into a cache hit. The cache is process-wide, so warming in a
+//  throwaway offscreen bitmap benefits SwiftUI's later Text render.
 //
 
 import UIKit

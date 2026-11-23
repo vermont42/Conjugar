@@ -46,7 +46,7 @@ struct GameView: View {
   private static let dirButtonSize: CGFloat = 40
   private static let jumpButtonSize: CGFloat = 51   // 64 shrunk by 20%
   /// The boss dance pad is one horizontal row of equal circular buttons sitting just
-  /// below the tablao floor (design note 2).
+  /// below the tablao floor.
   private static let bossMoveButtonSize: CGFloat = 52
   private static let bossRowFloorGap: CGFloat = 52
   /// Top of the phrase-success confetti band (field coordinates) — below the Duende
@@ -70,8 +70,7 @@ struct GameView: View {
 
   /// Player actions backed by real rendered sprites (`dancer_<action>_<frame>`).
   /// All are rendered; the numbered-box fallback stays only as a safety net. The
-  /// boss dance actions ole/stomp now have their own hand-keyed sprites (boss plan
-  /// Phase 4, `gen_dancer_action.py`) — no longer reusing cape/jump.
+  /// boss dance actions ole/stomp are hand-keyed (`gen_dancer_action.py`).
   private static let spriteActions: Set<PlayerAction> = [.idle, .walk, .climb, .jump, .cape, .capeWalk, .ole, .stomp]
 
   /// The asset-name stem for each action: `dancer_<name>_<frame>`.
@@ -99,11 +98,11 @@ struct GameView: View {
     case .idle: aspect = 104.0 / 225.0
     case .walk: aspect = 122.0 / 226.0
     case .climb: aspect = 172.0 / 228.0
-    case .jump: aspect = 116.0 / 226.0     // apex raises the arms (wider than the old rise-dup crop)
+    case .jump: aspect = 116.0 / 226.0     // apex raises the arms
     case .cape: aspect = 152.0 / 225.0        // wider: muleta held out in front
     case .capeWalk: aspect = 155.0 / 227.0
-    case .ole: aspect = 116.0 / 229.0         // arms-up V (Phase 4 crop)
-    case .stomp: aspect = 108.0 / 229.0       // weight drop + braceo (Phase 4 crop)
+    case .ole: aspect = 116.0 / 229.0         // arms-up V
+    case .stomp: aspect = 108.0 / 229.0       // weight drop + braceo
     }
     return dancerVisualHeight * aspect
   }
@@ -147,16 +146,15 @@ struct GameView: View {
     case .idle:  return (436, 230)
     case .walk:  return (452, 248)
     case .throw: return (452, 306)
-    case .stomp: return (452, 306)  // hand-keyed (Phase 3): up → head-slam → settle
-    case .rear:  return (452, 294)  // hand-keyed (Phase 3): gather → pawing rear → hold
-    case .bow:   return (452, 232)  // hand-keyed (Phase 3): dip → kneeling bow → held
+    case .stomp: return (452, 306)  // hand-keyed: up → head-slam → settle
+    case .rear:  return (452, 294)  // hand-keyed: gather → pawing rear → hold
+    case .bow:   return (452, 232)  // hand-keyed: dip → kneeling bow → held
     }
   }
 
   /// Bull actions backed by real rendered sprites. The numbered-box fallback in
   /// `bullSprite` stays only as a defensive safety net (every action is covered).
-  /// All six are now hand-keyed/rendered: idle/walk/throw from the base bull plan,
-  /// and stomp/rear/bow from boss plan Phase 3 (`gen_bull_action.py`).
+  /// All six are hand-keyed/rendered; stomp/rear/bow come from `gen_bull_action.py`.
   private static let bullSpriteActions: Set<BullAction> = [.idle, .walk, .throw, .stomp, .rear, .bow]
 
   /// The asset-name stem for each bull action: `bull_<name>_<frame>`.
@@ -409,8 +407,6 @@ struct GameView: View {
     .accessibilityIdentifier("game_root")
   }
 
-  // MARK: Sprites
-
   private var playerSprite: some View {
     ZStack {
       if Self.spriteActions.contains(gameState.playerAction) {
@@ -531,7 +527,7 @@ struct GameView: View {
           .opacity(gameState.isSpeedBadgeVisible ? 1 : 0.25)
           // Hovers on her LEADING side (the way she faces), like the muleta — off her
           // front edge at the dancer sprite's VERTICAL center (playerY is the short
-          // collision box's center, ~13.6 pt below the sprite's; per Josh).
+          // collision box's center, ~13.6 pt below the sprite's).
           .position(x: gameState.playerX + gameState.playerFacing * (GameState.playerWidth / 2), y: gameState.playerY + Self.dancerFeetOffset)
       }
     }
@@ -585,7 +581,7 @@ struct GameView: View {
           .opacity(gameState.isFlechazoBadgeVisible ? 1 : 0.25)
           // Hovers on her LEADING side (the way she faces), like the muleta — off her
           // front edge at the dancer sprite's VERTICAL center (playerY is the short
-          // collision box's center, ~13.6 pt below the sprite's; per Josh).
+          // collision box's center, ~13.6 pt below the sprite's).
           .position(x: gameState.playerX + gameState.playerFacing * (GameState.playerWidth / 2), y: gameState.playerY + Self.dancerFeetOffset)
       }
     }
@@ -729,12 +725,12 @@ struct GameView: View {
     .position(x: ladder.x, y: midY)
   }
 
-  // MARK: Boss fight — La Llamada. User-facing strings are in `L.Game` /
+  // Boss fight — La Llamada. User-facing strings are in `L.Game` /
   // Localizable.xcstrings: the jaleo shouts + title cards stay Spanish in both
-  // localizations (decision 16), the narrative line + a11y labels localize en/es.
+  // localizations; the narrative line + a11y labels localize en/es.
 
-  /// A brief deterministic sin-decay judder on llamadas (the Conjuguer idiom —
-  /// driven by the game clock, so no per-frame randomness in the view).
+  /// A brief deterministic sin-decay judder on llamadas, driven by the game clock so
+  /// the view has no per-frame randomness.
   private var shakeOffset: CGSize {
     let shake = gameState.screenShake
     guard shake > 0 else { return .zero }
@@ -747,9 +743,9 @@ struct GameView: View {
   }
 
   /// The tablao set: the matador's pedestal. Fades in with `bossTransition` as the
-  /// climb scenery fades out. (An emoji crowd row once sat just below the floor, but
-  /// its glyph style clashed with the rendered bull/dancer/matador sprites, so it
-  /// was removed — the jaleo pops carry the crowd's voice instead.)
+  /// climb scenery fades out. There is no emoji crowd row: its glyph style would clash
+  /// with the rendered bull/dancer/matador sprites, so the jaleo pops carry the crowd's
+  /// voice instead.
   private var stageDressing: some View {
     RoundedRectangle(cornerRadius: 3)
       .fill(Color.customRed)
@@ -816,7 +812,7 @@ struct GameView: View {
     }
   }
 
-  /// Floating, fading jaleo shouts (¡Olé! ¡Uy! ¡Eso!…) — the sibling score-pop idiom.
+  /// Floating, fading jaleo shouts (¡Olé! ¡Uy! ¡Eso!…), a score pop in words.
   /// Also carries the mechanic bull-speech announcements, which can be long (the
   /// two-line "Your obstacles are now zombies!"). Those are `.position`-centered at the
   /// bull, so a wide line would overflow whichever edge the bull is nearer. Bounding
@@ -935,11 +931,10 @@ struct GameView: View {
       .shadow(radius: 5)
   }
 
-  /// Confetti — Konjugieren's golden-angle ellipse Canvas (the seed spreads the dots
-  /// into the diagonal rows the design calls out), in Conjugar's palette. `colors`
-  /// cycles by index down those rows: the end scene alternates red/yellow/blue
-  /// (design note 6); the per-phrase success burst is blue-only at half the count
-  /// (design note 4). `yRange` (in the field's coordinate space) bounds the dots to a
+  /// Confetti — a golden-angle ellipse Canvas (the seed spreads the dots into diagonal
+  /// rows), in Conjugar's palette. `colors` cycles by index down those rows: the end
+  /// scene alternates red/yellow/blue; the per-phrase success burst is blue-only at
+  /// half the count. `yRange` (in the field's coordinate space) bounds the dots to a
   /// vertical band — the success burst fills only the mid-field between the bull and
   /// the top HUD; nil means the full-screen celebration.
   private func confetti(count: Int, colors: [Color], yRange: ClosedRange<CGFloat>? = nil) -> some View {
@@ -974,7 +969,7 @@ struct GameView: View {
 
   /// The vertical band the phrase-success burst fills: from just below the top HUD
   /// (Duende meter + close button) down to just above the bull's head — the empty
-  /// mid-field, rather than the whole screen (design follow-up).
+  /// mid-field, rather than the whole screen.
   private var successConfettiRange: ClosedRange<CGFloat> {
     let top = Self.bossSuccessConfettiTop
     let bottom = max(top + 1, gameState.stageFloorY - Self.bullHeight(.idle) - 8)
@@ -997,8 +992,6 @@ struct GameView: View {
       }
     }
   }
-
-  // MARK: End-scene slideshow
 
   private static let slideAspect: CGFloat = 3.0 / 2.0
   private static let irisRingWidth: CGFloat = 3
@@ -1162,12 +1155,10 @@ struct GameView: View {
     return Font(UIFont(descriptor: rounded, size: captionFontSize))
   }
 
-  // MARK: Boss controls (taps, not held intents — the jump touch-down/re-arm idiom)
-
   /// The boss dance pad: all five moves in one horizontal row of equal circular
-  /// buttons, positioned just below the tablao floor (design note 2). The pasos sit at
-  /// the ends (spatially left/right); olé, stomp, and cape fill the middle. Placed by
-  /// the stage floor so it tucks right under the platform the dancers stand on.
+  /// buttons, positioned just below the tablao floor. The pasos sit at the ends
+  /// (spatially left/right); olé, stomp, and cape fill the middle. Placed by the stage
+  /// floor so it tucks right under the platform the dancers stand on.
   private var bossControlRow: some View {
     Group {
       if gameState.phase == .duel {
@@ -1237,8 +1228,6 @@ struct GameView: View {
       )
       .accessibilityLabel(Text(verbatim: label))
   }
-
-  // MARK: HUD & controls
 
   private var quitButton: some View {
     Button { dismiss() } label: {
@@ -1319,9 +1308,9 @@ struct GameView: View {
     Color.clear.frame(width: Self.dirButtonSize, height: Self.dirButtonSize)
   }
 
-  /// Press-and-hold directional button (the Conjuguer idiom): a `DragGesture`
-  /// with `minimumDistance: 0` sets the intent boolean on touch-down and clears it
-  /// on lift; the game loop reads the boolean each frame.
+  /// Press-and-hold directional button: a `DragGesture` with `minimumDistance: 0`
+  /// sets the intent boolean on touch-down and clears it on lift; the game loop reads
+  /// the boolean each frame.
   private func directionButton(
     _ symbol: String,
     label: String,

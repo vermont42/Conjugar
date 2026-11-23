@@ -5,10 +5,6 @@
 //  Created by Joshua Adams on 7/1/17.
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
-//  Rewritten as a SwiftUI-native model during the SwiftUI migration (Step 4):
-//  the heading renders separately and the body is parsed into `richTextBlocks`
-//  (see RichText.swift) instead of the legacy `infoString` NSAttributedString.
-//
 
 import Foundation
 
@@ -67,7 +63,7 @@ struct Info: Hashable, Identifiable {
     Info(heading: "Raíz Futura", stableKey: "raiz_futura", difficulty: .easy, section: .tenses, text: L.Info.raizFuturaText),
     // Not a tense: ir a + infinitivo and estar + gerundio. It follows the non-finite forms it is
     // built from and precedes the compound tenses, which share its helper-plus-form shape. Easy,
-    // because a beginner needs both constructions (browse plan, Phase 7).
+    // because a beginner needs both constructions.
     Info(heading: "Perífrasis Verbales", stableKey: "perifrasis_verbales", difficulty: .easy, section: .tenses, text: L.Info.perifrasisVerbalesText),
     Info(heading: "Perfecto de Indicativo", stableKey: "perfecto_de_indicativo", difficulty: .moderate, section: .tenses, text: L.Info.perfectoDeIndicativoText),
     Info(heading: "Pretérito Anterior", stableKey: "preterito_anterior", difficulty: .difficult, section: .tenses, text: L.Info.preteritoAnteriorText),

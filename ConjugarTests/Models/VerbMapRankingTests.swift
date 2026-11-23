@@ -31,8 +31,6 @@ struct VerbMapRankingTests {
     .deletingLastPathComponent()
     .deletingLastPathComponent()
 
-  // MARK: - Derivation, on a fixture
-
   /// Six verbs over seven rows, chosen to exercise every step of the sort in one file:
   ///
   /// * `ser` wins outright on `hi`.
@@ -123,8 +121,6 @@ struct VerbMapRankingTests {
     #expect(apostar.frequencyRank == 6)
   }
 
-  // MARK: - Invariants of the shipped map
-
   @Test("ranks are exactly 1...rankCount, each used once")
   func ranksAreDense() {
     let ranks = Self.map.entries.values.map(\.frequencyRank)
@@ -180,8 +176,6 @@ struct VerbMapRankingTests {
       .map { "\($0.infinitive) (\($0.hits)) before \($1.infinitive) (\($1.hits))" }
     #expect(inversions.isEmpty, "hit counts out of order: \(inversions.prefix(5))")
   }
-
-  // MARK: - Agreement with docs/frequencies.txt
 
   // `frequency/generate_frequencies_txt.py` writes that file from the same XML, sorting with
   // a Python imitation of `compare(_:locale:)` under `es` — enye as a letter between n and o,

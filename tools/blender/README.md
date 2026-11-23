@@ -167,7 +167,7 @@ The player actions ship as rendered sprites — `idle` (2), `walk` (6), `climb` 
 `jump` (3), the two **held-muleta** cape actions `cape` (4, standing swing) and
 `capeWalk` (6, hold-in-front while walking), and the two **boss dance-off** actions
 `ole` (3, arms-up desplante + back arch) and `stomp` (3, weight-drop zapateado with a
-braceo) added for La Llamada (boss plan Phase 4). They are **no longer Mixamo mocap on the
+braceo) added for La Llamada. They are **no longer Mixamo mocap on the
 X Bot mannequin**: the dancer is now the purchased **flamenco-gown** mesh (Animod, CGTrader
 — `asset_licenses/cgtrader_flamenco_dancer.txt`), hand-keyed on its own 63-bone
 Mixamo-named rig by `gen_dancer_action.py` (see **Hand-keying the gown dancer** below).
@@ -265,7 +265,7 @@ unreliable (a 4-variant probe: it either culled the rim away → no outline, or 
 the whole figure in black). **Freestyle** silhouette line rendering is deterministic and
 its thickness is directly in output px — `setup_outline` enables silhouette + border +
 contour lines, black, at `--outline-width` px (default **2**, ≈ 1px on-screen at the 3×
-sprite size). Bonus: it renders into the alpha, so the crop-box growth Phase 4 expects
+sprite size). Bonus: it renders into the alpha, so the expected crop-box growth
 still happens.
 
 **The gotcha the plan warned about — the outline moves the crop boxes** — is real and
@@ -293,7 +293,7 @@ Quadruped**. License logged at `asset_licenses/sketchfab_bull.txt`; raw
 its rig and rendered side-view through **this same `render_sprites.py`**
 (`--actor bull --view side`), N matched to `GameState.bullFrameCounts`
 (idle 2 / walk 6 / throw 5, plus the three **boss dance-off** actions stomp 3 /
-rear 4 / bow 4, added for La Llamada by `gen_bull_action.py` — boss plan Phase 3):
+rear 4 / bow 4, added for La Llamada by `gen_bull_action.py`):
 
 - **idle (2)** — free: two samples of the model's own baked standing-sway clip.
 - **walk (6)** — hand-keyed cyclic diagonal quadruped gait (thigh swing + knee bend).

@@ -8,8 +8,8 @@
 @testable import Conjugar
 import Testing
 
-/// The verb page's order, second names, and articles (browse plan, Phase 6). The order comes from
-/// docs/tense_frequency.md; change it there first.
+/// The verb page's order, second names, and articles. The order comes from docs/tense_frequency.md;
+/// change it there first.
 @Suite("ConjugationTable")
 struct ConjugationTableTests {
   @Test func thePageOrderIsTheCountedOrder() {
