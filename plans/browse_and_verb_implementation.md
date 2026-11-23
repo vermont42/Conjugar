@@ -39,9 +39,9 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 11 | Done | 2026-11-22 | 24b45fe | C1 (the intent), C2 |
 | 12 | Done | 2026-11-22 | 998795b | D1, D2 |
 | 13 | Done | 2026-11-22 | 856326b | D2's quiz scope, D3 |
-| 14 | Awaiting Josh | 2026-11-22 | | D5 |
-| 15 | Awaiting Josh | 2026-11-22 | | D4 |
-| 16 | Not started | | | D6 |
+| 14 | Done | 2026-11-22 | 52731b3 | D5 |
+| 15 | Done | 2026-11-22 | 52731b3 | D4 |
+| 16 | Awaiting Josh | 2026-11-22 | | D6 |
 | Closing | Not started | | | Audit, handoff to the pedagogy plan |
 
 ## How to Work This Plan
@@ -1816,7 +1816,7 @@ tests pin the scoped draw.
 ## Phase 14: A Verb of the Day Worth Opening
 
 **Ideas:** D5. **Ports:** Konjugieren Phase 14. **Depends on:** Phase 12 for the My Verbs part.
-**Status:** Awaiting Josh (2026-11-22).
+**Status:** Done (2026-11-22, 52731b3).
 
 Draw the widget's daily verb, and every random verb (the Random Verb control, the `verb/random`
 deeplink, `OpenRandomVerbIntent`), from the 1,000 most frequent verbs, favoring irregular verbs and
@@ -1903,7 +1903,7 @@ or My Verbs with the agreed weights, the widget's verb holds through a day, and 
 ## Phase 15: The Review Card
 
 **Ideas:** D4. **Ports:** Konjugieren Phase 15. **Depends on:** Phases 9 (the key conjugations)
-and 12. **Status:** Awaiting Josh (2026-11-22).
+and 12. **Status:** Done (2026-11-22, 52731b3).
 
 When the app opens, one card above the verb list offers a verb looked up some days earlier, with its
 key conjugations hidden until tapped. One tap reveals them; one dismisses the card. This needs a
@@ -2000,7 +2000,7 @@ decided, a later lookup resets it, the setting hides it, and tests pin the sched
 ## Phase 16: Collections
 
 **Ideas:** D6. **Ports:** Konjugieren Phase 16. **Depends on:** Phases 10 (the grammar), 12, and 13.
-**Status:** Not started.
+**Status:** Awaiting Josh (2026-11-22).
 
 Fixed lists as places to go. A list shows how many of its verbs have been opened, can be shared as a
 link, and can start a quiz on itself. Konjugieren's lists were the 100 most frequent verbs, the modal
@@ -2047,7 +2047,83 @@ the lists above to offer, before building.
 **Done when** the chosen collections show progress, share, and quiz, a shared link opens the
 collection, every model page has its bar, and tests pin membership and keys.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh's answers (2026-11-22), to the proposal made before building.** Collections live at the top
+  of the Models tab. All four pattern lists are offered beside the top 100: -go verbs, strong
+  preterites, irregular futures, and irregular participles. A pattern list holds **base verbs only**,
+  among the 1,000 most frequent: with compounds the lists would hold 33 to 49 verbs, mostly of tener,
+  poner, venir, and traer, and every compound is still on its model's page, which has its own bar.
+  Each list's page says so in a note under the description.
+- **What the code looks like.** `VerbCollection` (`Models/VerbCollection.swift`, `nonisolated`):
+  `.top100`, `.goVerbs`, `.strongPreterite`, `.irregularFuture`, `.irregularParticiple`, and
+  `.model(classNumber)`, keyed `top100`, `goVerbs`, `strongPreterite`, `irregularFuture`,
+  `irregularParticiple`, and `model-<class>` with the class number as written (`model-3-1`,
+  `model-4B`); the prefix ends at the first hyphen, so the number's hyphens are safe, and an alias
+  class (31-1) is no key. The pattern tests are static functions of an infinitive (`hasGoPresent`,
+  `hasStrongPreterite`, `hasIrregularFuture`, `hasIrregularParticiple`) so the pedagogy plan's draw
+  can ask them. Text, symbols, and the share text are in `VerbCollection+Text.swift`, on the main
+  actor. The views are `Views/VerbCollectionView.swift` (the page, `VerbCollectionBar`, the iPhone
+  row, the iPad card). `docs/feature_architecture.md` § Collections has the whole design.
+- **The derivations** and what they leave out: -go is a yo presente in -go whose g the stem lacks
+  (11: not sigo, juego, pago, or distingo); a strong preterite is a yo pretérito ending in an
+  unstressed -e (22: not fui, di, or vi, which `VerbFamilies.irregularPreteritoVerbs` lists); an
+  irregular future is one the engine marks (13); an irregular participle is one that, accents folded,
+  is not stem + -ado or -ido (17: podrido counts, creído and oído do not). satisfacer is in all four,
+  since nothing in the map makes it a compound of hacer. `VerbFamilies`' future, preterite, and
+  participle lists are the oracle in `VerbCollectionTests`; pudrir, beyond the band, is asked of the
+  pattern rather than the list.
+- **Compact rows, a change after the first screenshot.** Konjugieren's rows, a title over a
+  two-line description, filled the iPhone's screen with five collections and pushed every model
+  below the fold. Each row is now the title and three of its forms with the irregular letters red
+  ("tengo · hago · digo", "tendré · haré · podré"; for the top 100, "ser · estar · tener"), and the
+  description waits on the collection's page. The iPad's cards keep the forms and the description.
+  The "102 models" count moved below the collections.
+- **Sources.** `viewCollection` reports `tab` for a collection or a model opened from the Models tab
+  (both now push a `CollectionRequest`), `verbPage` for a model page opened from a verb page's pill
+  (the only push of a bare `ModelInfo`), and a link's source (`sharedLink`, its first use, or
+  `deeplink`). A verb opened from a featured collection's page is `list`; one opened from a model's
+  page stays `model`. Konjugieren's `family` has no analog.
+- **The quiz** is `QuizScope.collection(_:title:)`, thirty unranked questions in `QuizSheet`, titled
+  with the collection's name ("-go Verbs", "Verbs Like tener"). `QuizScope` gained `title` and
+  `collectionKey`. **Unlike Konjugieren, it starts no Live Activity:** Conjugar's Live Activity is one
+  for the app and belongs to the tab's quiz, which may be in progress under the sheet, so
+  `QuizScope.startsLiveActivity` (full length and no collection) replaced the length test. It asks
+  the difficulty's tenses, so a -go verb may be asked its pretérito; the pedagogy plan may want a
+  collection to steer the tenses.
+- **Not built: `quiz/start?list=<key>`**, as in Konjugieren. The `list` route's reservation in
+  `docs/feature_architecture.md` became the route.
+- **Analytics.** `viewCollection` (`collection`, `source`), `tapShareCollection` (`collection`), and
+  `collection` on `startQuiz`; `list` and `sharedLink` are now sent. The staged policy section
+  rewrites the first lookup bullet, the in-app-actions bullet, the quiz-lifecycle bullet, and the
+  Game Center paragraph, and adds a bullet for collections opened.
+- **Strings.** "Collections" / "Colecciones"; "100 Most Frequent Verbs" / "Los 100 verbos más
+  frecuentes"; "-go Verbs" / "Verbos en -go"; "Strong Preterites" / "Pretéritos fuertes"; "Irregular
+  Futures" / "Futuros irregulares"; "Irregular Participles" / "Participios irregulares"; "Verbs Like
+  tener" / "Verbos como tener"; "3 of 11 looked up" / "Consultados: 3 de 11", which spares the
+  Spanish an agreement with a count; the share text's "Open this list in Conjugar" / "Abre esta
+  lista en Conjugar". Quiz is the catalog's "Test" in Spanish.
+- **What was tried where.** iPhone, English, light, compact: the Models tab with the five rows and
+  the models in view; the -go page ("1 of 11 looked up", poner checked); tener opened from it and the
+  count at 2 on return, with its check; Quiz opening a sheet titled "-go Verbs" (traer, él,
+  pretérito), and Quit; `list/model-31?source=sharedLink` from the Quiz tab, opening the Models tab on
+  tener's page with its bar; Share and Copy, whose text read "Verbs Like tener (10 verbs): tener,
+  mantener, obtener, sostener, detener, contener …" with both links. iPad, Spanish (a launch
+  argument), dark, regular: `list/top100` opening "Los 100 verbos más frecuentes" in a two-column grid
+  with tener and ir checked after two verb links; the Models tab's five cards ("Verbos en -go",
+  "tengo · hago · digo"); tener's model page with "Consultados: 1 de 10", and its share sheet as a
+  popover anchored to the bar's Share button. The iPad was set back to light and shut down. Not
+  tried: VoiceOver itself, Dynamic Type at large sizes, finishing a collection's quiz, sharing into
+  Messages, and a device.
+- **Tests.** `VerbCollectionTests`, 20 `@Test` functions (four parameterized): keys and their round
+  trips for all 102 models, unknown and alias keys, the top 100, the pattern lists pinned, the
+  `VerbFamilies` oracles, -go inclusions and exclusions, accent-only participles, compounds left out,
+  every model's collection equal to its page's verbs, the examples line, progress and Clear, the
+  quiz scope and its draw, the share text, the symbols, and the wire names. `AppRouterTests`' test of
+  the reserved route became one of unknown collections, plus three for the route (a link, a shared
+  link, and every collection's round trip). The whole suite passes: 924 Swift Testing tests in 52
+  suites, plus the XCTest suites, in 52 seconds (56 after Phase 15). The new suite takes 0.4 seconds.
+  The simulator language was English.
 
 ## Closing
 

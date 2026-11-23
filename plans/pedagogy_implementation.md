@@ -417,7 +417,18 @@ disagree, the note wins.
   fallback as in Konjugieren. `docs/feature_architecture.md` § The Review Card has the rules.
 - **Collections** (browse Phase 16): fixed lists derived from the engine, and a bar on every model's
   page, shared as
-  `conjugar://list/<key>`. Phases 8 and 15 here use them.
+  `conjugar://list/<key>`. Phases 8 and 15 here use them. *Landed 2026-11-22:* `VerbCollection`
+  (`Models/VerbCollection.swift`, `nonisolated`) holds the top 100, four pattern lists (base verbs of
+  the top 1,000 only: -go, strong preterite, irregular future, irregular participle), and every
+  model (`.model(classNumber)`, key `model-<class>`), most frequent first. The pattern tests are
+  static functions of an infinitive (`hasGoPresent`, `hasStrongPreterite`, `hasIrregularFuture`,
+  `hasIrregularParticiple`), which Phase 5's draw can ask of any verb; `VerbCollectionTests` already
+  uses `VerbFamilies` as their oracle, as Phase 5's decision wants. A collection's quiz is
+  `QuizScope.collection(_:title:)`: thirty unranked questions in `QuizSheet`, in the difficulty's
+  tenses (a -go verb may be asked its pretérito; a collection does not yet steer the tenses), with
+  `title` and `collectionKey` on `QuizScope`. It starts no Live Activity
+  (`QuizScope.startsLiveActivity`), because it runs in a sheet over a quiz the tab may hold; Phase 6's
+  Ten More should keep that. `docs/feature_architecture.md` § Collections has the design.
 - **`docs/privacy_policy_pending.md` and `docs/feature_architecture.md`** (browse Phase 2). Landed
   2026-11-22: both exist. `AnalyticsSource` in `Analytics.swift` already holds `tab` and
   `verbPage` for the quiz signals' `source`, and `AnalyticsBand` is where new bands (the quiz's

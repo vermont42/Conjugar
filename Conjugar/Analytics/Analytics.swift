@@ -13,6 +13,9 @@
 // contradicts AnalyticsReal's design and makes the spy unusable from a nonisolated
 // test suite. MainActor call sites can call into it synchronously either way.
 nonisolated enum ParameterKey: String {
+  /// A collection's key, such as `top100` or `model-31`, on `viewCollection`, `tapShareCollection`,
+  /// and a collection's `startQuiz` (browse plan, Phase 16). A list, never a verb.
+  case collection
   case deepestSection
   case difficulty
   case dwell
@@ -49,12 +52,17 @@ nonisolated enum AnalyticsName: String {
   /// The share button in a verb page's navigation bar (browse plan, Phase 9). No parameters, and
   /// it does not say which verb. Copying a form sends nothing.
   case tapShareVerb
+  /// The share button on a collection's bar (browse plan, Phase 16). Carries `collection`.
+  case tapShareCollection
   case tapShowOnboarding
   /// The star in a verb page's navigation bar (browse plan, Phase 12). Carries `starred`, the
   /// state after the tap, and does not say which verb.
   case tapStarVerb
   /// The ⓘ beside a tense's heading on a verb page (browse plan, Phase 6). No parameters.
   case tapTenseArticle
+  /// Once for each opening of a featured collection's page or of a model's page, whose bar makes
+  /// it a collection (browse plan, Phase 16). Carries `collection` and `source`.
+  case viewCollection
   case viewInfoBrowseView
   case viewInfoView
   case viewModelBrowseView

@@ -9,9 +9,12 @@ import SwiftUI
 
 /// A list of verbs that opens one on a tap: zebra-striped rows on compact width, and an adaptive
 /// grid of carded cells, like the Verbs tab's, on regular width. Lazy in both, because the regular
-/// -ar model alone holds thousands of verbs. A model's page and a related verb's full list use it.
+/// -ar model alone holds thousands of verbs. A model's page, a collection's page, and a related
+/// verb's full list use it.
 struct VerbEntryList: View {
   let entries: [VerbMapEntry]
+  /// Checks each verb the learner has looked up, as a collection's rows do (Phase 16).
+  var showsLookedUp = false
   let onSelect: (String) -> Void
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -22,7 +25,7 @@ struct VerbEntryList: View {
           Button {
             onSelect(entry.infinitive)
           } label: {
-            VerbGridCell(entry: entry)
+            VerbGridCell(entry: entry, isLookedUp: isLookedUp(entry))
               .card()
           }
           .buttonStyle(.plain)
@@ -35,7 +38,7 @@ struct VerbEntryList: View {
           Button {
             onSelect(entry.infinitive)
           } label: {
-            VerbRowLabel(entry: entry)
+            VerbRowLabel(entry: entry, isLookedUp: isLookedUp(entry))
           }
           .buttonStyle(.plain)
           .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
@@ -43,5 +46,9 @@ struct VerbEntryList: View {
         }
       }
     }
+  }
+
+  private func isLookedUp(_ entry: VerbMapEntry) -> Bool {
+    showsLookedUp && Current.learnerVerbs.hasOpened(entry.infinitive)
   }
 }

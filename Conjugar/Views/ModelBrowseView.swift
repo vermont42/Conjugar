@@ -19,6 +19,7 @@ struct ModelBrowseView: View {
   @State private var navigationPath = NavigationPath()
   @State private var searchText = ""
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+  @Environment(AppRouter.self) private var router
   private let exploreModelsTip = ExploreModelsTip()
 
   private static let modelsBySort: [ModelSort: [ModelInfo]] = {
@@ -56,13 +57,20 @@ struct ModelBrowseView: View {
       VStack(spacing: 0) {
         ScrollViewReader { proxy in
           ScrollView {
+            // The featured collections (browse plan, Phase 16) lead the tab, as Konjugieren's lead
+            // its Families tab, and step aside while a search is typed.
+            if searchText.isEmpty {
+              collectionsSection
+                .id("top")
+            }
+
             Text(L.BrowseModels.modelCount(count: filteredModels.count))
               .font(.caption.smallCaps())
               .foregroundStyle(.secondary)
               .frame(maxWidth: .infinity, alignment: .leading)
               .padding(.horizontal)
-              .padding(.top, Layout.defaultSpacing)
-              .id("top")
+              .padding(.top, searchText.isEmpty ? Layout.doubleDefaultSpacing : Layout.defaultSpacing)
+              .id(searchText.isEmpty ? "models" : "top")
 
             if searchText.isEmpty {
               TipView(exploreModelsTip)
@@ -76,10 +84,10 @@ struct ModelBrowseView: View {
             } else if horizontalSizeClass == .regular {
               // iPad / regular width: reflow the rows into an adaptive grid of
               // carded cells (≈2 columns portrait, ≈3–4 landscape). The same
-              // `navigationDestination(for: ModelInfo)` renders the pushed `ModelView`.
+              // `navigationDestination(for: CollectionRequest)` renders the pushed `ModelView`.
               LazyVGrid(columns: BrowseLayout.listColumns, spacing: Layout.doubleDefaultSpacing) {
                 ForEach(filteredModels, id: \.classNumber) { model in
-                  NavigationLink(value: model) {
+                  NavigationLink(value: CollectionRequest(collection: .model(model.classNumber), source: .tab)) {
                     ModelGridCell(model: model)
                       .card()
                   }
@@ -99,9 +107,9 @@ struct ModelBrowseView: View {
               LazyVStack(spacing: 0) {
                 ForEach(Array(filteredModels.enumerated()), id: \.element.classNumber) { index, model in
                   // A real `NavigationLink` — button semantics + press
-                  // highlight; the stack's `navigationDestination(for: ModelInfo)`
+                  // highlight; the stack's `navigationDestination(for: CollectionRequest)`
                   // renders the pushed `ModelView`.
-                  NavigationLink(value: model) {
+                  NavigationLink(value: CollectionRequest(collection: .model(model.classNumber), source: .tab)) {
                     ModelRowLabel(model: model)
                   }
                   .buttonStyle(.plain)
@@ -140,7 +148,16 @@ struct ModelBrowseView: View {
       .navigationDestination(for: VerbDestination.self) { destination in
         VerbView(verb: destination.infinitive, source: destination.source)
       }
+      .navigationDestination(for: CollectionRequest.self) { request in
+        collectionPage(request)
+      }
       .verbPageDestinations()
+      // A `list` link (Phase 16), which can arrive before the tab first appears.
+      .onChange(of: router.pendingCollection, initial: true) { _, request in
+        guard let request else { return }
+        navigationPath.append(request)
+        router.pendingCollection = nil
+      }
       .onAppear {
         Current.analytics.signal(name: .viewModelBrowseView)
         Current.reviewPrompter.promptableActionHappened()
@@ -148,6 +165,57 @@ struct ModelBrowseView: View {
     }
     // A model page, a verb page, and the pages they lead to push onto this stack.
     .environment(\.verbPagePush, VerbPagePush { navigationPath.append($0) })
+  }
+}
+
+extension ModelBrowseView {
+  /// The featured collections: rows on iPhone, cards on iPad.
+  private var collectionsSection: some View {
+    VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
+      Text(L.VerbCollection.heading)
+        .font(.caption.smallCaps())
+        .foregroundStyle(.secondary)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal)
+        .accessibilityAddTraits(.isHeader)
+
+      if horizontalSizeClass == .regular {
+        LazyVGrid(columns: BrowseLayout.listColumns, spacing: Layout.doubleDefaultSpacing) {
+          ForEach(VerbCollection.featured) { collection in
+            NavigationLink(value: CollectionRequest(collection: collection, source: .tab)) {
+              VerbCollectionCard(collection: collection)
+                .card()
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("collection_row_\(collection.key)")
+          }
+        }
+        .padding(.horizontal)
+      } else {
+        LazyVStack(spacing: 0) {
+          ForEach(VerbCollection.featured) { collection in
+            NavigationLink(value: CollectionRequest(collection: collection, source: .tab)) {
+              VerbCollectionRow(collection: collection)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("collection_row_\(collection.key)")
+            Divider().padding(.leading)
+          }
+        }
+      }
+    }
+    .padding(.top, Layout.defaultSpacing)
+  }
+
+  /// A featured collection opens its own page; a model's opens the model's page, whose bar makes
+  /// it a collection.
+  @ViewBuilder
+  private func collectionPage(_ request: CollectionRequest) -> some View {
+    if case .model(let classNumber) = request.collection, let model = ModelInfo.byClassNumber[classNumber] {
+      ModelView(model: model, source: request.source)
+    } else {
+      VerbCollectionView(collection: request.collection, source: request.source)
+    }
   }
 }
 
@@ -235,4 +303,5 @@ enum ModelPalette {
 
 #Preview {
   ModelBrowseView()
+    .environment(AppRouter())
 }

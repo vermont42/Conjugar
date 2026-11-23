@@ -37,6 +37,9 @@ final class AppRouter {
   /// An article the Info tab should push, from an `info` link. `InfoBrowseView` consumes and
   /// clears it.
   var pendingInfo: Info?
+  /// A collection the Models tab should push, from a `list` link (browse plan, Phase 16).
+  /// `ModelBrowseView` consumes and clears it.
+  var pendingCollection: CollectionRequest?
   /// A one-shot request for the Quiz tab to start a quiz, with the link's `source` (`deeplink` when
   /// it names none), which the quiz signals carry (browse plan, Phase 13). `QuizView` consumes it.
   var pendingQuizStart: AnalyticsSource?
@@ -78,10 +81,11 @@ final class AppRouter {
   /// Route a `conjugar://` deeplink. `docs/feature_architecture.md` § Deeplinks has the grammar
   /// and every route: `verb/<infinitive>` (bare or with "se", so `verb/arrepentirse` opens
   /// arrepentir, or `verb/random`), with `match`, a form the page marks; `search`, with its text
-  /// in `q`; `info/<stableKey>` (or a position); `quiz` (any target starts a quiz); and `game`.
+  /// in `q`; `info/<stableKey>` (or a position); `list/<key>`, a collection (Phase 16); `quiz` (any
+  /// target starts a quiz); and `game`.
   /// A link to a verb page, a search, or a quiz may name the surface it came from in `source`
   /// (`?source=widget`); a link that names none reports `deeplink`. Unknown routes, unknown
-  /// verbs, and the `list` route that Phase 16 reserves are ignored.
+  /// verbs, and unknown collections are ignored.
   func handle(url: URL) {
     guard url.isDeeplink, let host = url.host() else { return }
     let source = url.analyticsSource ?? .deeplink
@@ -106,6 +110,10 @@ final class AppRouter {
       guard let target = url.deeplinkTarget, let info = Info.info(deeplinkTarget: target) else { return }
       selectedTab = .info
       pendingInfo = info
+    case URL.listHost:
+      guard let target = url.deeplinkTarget, let collection = VerbCollection(key: target) else { return }
+      selectedTab = .models
+      pendingCollection = CollectionRequest(collection: collection, source: source)
     case URL.quizHost:
       // Any target, `quiz/start` as the Quick Quiz control sends it, or none, starts a quiz.
       selectedTab = .quiz
@@ -177,5 +185,12 @@ struct SearchRequest: Equatable {
   /// Nil keeps what the field holds.
   let text: String?
   /// Where the search began, which `finishSearch` reports.
+  let source: AnalyticsSource
+}
+
+/// A collection to open, from a `list` link or a row of the Models tab, with the surface that asked
+/// for it, which `viewCollection` reports. A model's collection opens as the model's page.
+struct CollectionRequest: Hashable {
+  let collection: VerbCollection
   let source: AnalyticsSource
 }

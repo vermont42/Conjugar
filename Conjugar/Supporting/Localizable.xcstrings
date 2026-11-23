@@ -4884,6 +4884,278 @@
           }
         }
       }
+    },
+    "VerbCollection.heading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collections"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colecciones"
+          }
+        }
+      }
+    },
+    "VerbCollection.top100Title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100 Most Frequent Verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los 100 verbos más frecuentes"
+          }
+        }
+      }
+    },
+    "VerbCollection.top100Description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The verbs that turn up most often in Spanish text, and the first to know."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los verbos que más aparecen en los textos en español, y los primeros que conviene saber."
+          }
+        }
+      }
+    },
+    "VerbCollection.goVerbsTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-go Verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos en -go"
+          }
+        }
+      }
+    },
+    "VerbCollection.goVerbsDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbs whose yo form in the present ends in -go: tengo, hago, salgo. The g carries into the present subjunctive: tenga, haga, salga."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos cuya forma de yo en el presente termina en -go: tengo, hago, salgo. La g pasa al presente de subjuntivo: tenga, haga, salga."
+          }
+        }
+      }
+    },
+    "VerbCollection.strongPreteriteTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strong Preterites"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pretéritos fuertes"
+          }
+        }
+      }
+    },
+    "VerbCollection.strongPreteriteDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbs whose preterite takes a new stem and unstressed endings: tuve, hice, dije, with no accent on yo or él."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos cuyo pretérito toma una raíz nueva y terminaciones átonas: tuve, hice, dije, sin tilde en yo ni en él."
+          }
+        }
+      }
+    },
+    "VerbCollection.irregularFutureTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregular Futures"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Futuros irregulares"
+          }
+        }
+      }
+    },
+    "VerbCollection.irregularFutureDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbs whose future and conditional build on a changed stem: tendré, haré, diré, and tendría, haría, diría."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos cuyo futuro y condicional se forman sobre una raíz cambiada: tendré, haré, diré, y tendría, haría, diría."
+          }
+        }
+      }
+    },
+    "VerbCollection.irregularParticipleTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregular Participles"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participios irregulares"
+          }
+        }
+      }
+    },
+    "VerbCollection.irregularParticipleDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbs whose participle does not end in -ado or -ido: hecho, dicho, visto, puesto, vuelto."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos cuyo participio no termina en -ado ni en -ido: hecho, dicho, visto, puesto, vuelto."
+          }
+        }
+      }
+    },
+    "VerbCollection.patternNote" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From the 1,000 most frequent verbs. Compounds such as detener and componer follow their base verbs and are not listed."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De los 1000 verbos más frecuentes. Los compuestos, como detener y componer, siguen a su verbo base y no se incluyen."
+          }
+        }
+      }
+    },
+    "VerbCollection.modelTitle %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbs Like %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos como %@"
+          }
+        }
+      }
+    },
+    "VerbCollection.progress %lld %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld of %2$lld looked up"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consultados: %1$lld de %2$lld"
+          }
+        }
+      }
+    },
+    "VerbCollection.quizHint %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts a %lld-question quiz on this list’s verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza un test de %lld preguntas sobre los verbos de esta lista."
+          }
+        }
+      }
+    },
+    "VerbCollection.lookedUp" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Looked up"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consultado"
+          }
+        }
+      }
+    },
+    "VerbCollection.shareText %@ %@ %@ %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$@): %3$@\n\nOpen this list in Conjugar:\n%4$@\n\nGet Conjugar on the App Store:\n%5$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$@): %3$@\n\nAbre esta lista en Conjugar:\n%4$@\n\nDescarga Conjugar en el App Store:\n%5$@"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

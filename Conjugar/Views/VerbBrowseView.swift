@@ -814,6 +814,8 @@ struct VerbRowLabel: View {
   let entry: VerbMapEntry
   /// What a search matched, if it matched a form. See `MatchLines`.
   var matchLines: [String] = []
+  /// A collection's rows check the verbs looked up (Phase 16).
+  var isLookedUp = false
 
   var body: some View {
     HStack(alignment: .firstTextBaseline) {
@@ -831,6 +833,10 @@ struct VerbRowLabel: View {
       }
 
       Spacer()
+
+      if isLookedUp {
+        LookedUpCheck()
+      }
 
       Text(verbatim: "#\(entry.frequencyRank)")
         .font(.caption.monospacedDigit())
@@ -855,6 +861,7 @@ struct VerbRowLabel: View {
 struct VerbGridCell: View {
   let entry: VerbMapEntry
   var matchLines: [String] = []
+  var isLookedUp = false
 
   var body: some View {
     VStack(alignment: .leading, spacing: 2) {
@@ -865,6 +872,10 @@ struct VerbGridCell: View {
           .foregroundStyle(Color.customYellow)
 
         Spacer(minLength: Layout.defaultSpacing)
+
+        if isLookedUp {
+          LookedUpCheck()
+        }
 
         Text(verbatim: "#\(entry.frequencyRank)")
           .font(.caption.monospacedDigit())
@@ -882,6 +893,17 @@ struct VerbGridCell: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .contentShape(Rectangle())
+  }
+}
+
+/// The check on a collection's row for a verb looked up (Phase 16), which VoiceOver reads as
+/// "Looked up".
+struct LookedUpCheck: View {
+  var body: some View {
+    Image(systemName: "checkmark.circle.fill")
+      .font(.subheadline)
+      .foregroundStyle(Color.customGreen)
+      .accessibilityLabel(L.VerbCollection.lookedUp)
   }
 }
 

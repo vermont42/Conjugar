@@ -91,6 +91,16 @@ made from a form is still `guess`. Rows and verbs correspond one to one, as befo
 | `viewReviewCard` | None | Once for each review card shown above the verb list (Phase 15): at most once per opening of the app, however often the list redraws. It does not say which verb |
 | `tapRevealReviewCard` | None | When a tap reveals a card's key conjugations (Phase 15), once per card. With `viewReviewCard` it gives the reveals per card shown. A dismissal sends nothing; it is a `viewReviewCard` with no reveal |
 
+### Collection signals
+
+| Signal | Parameters | Sent |
+|---|---|---|
+| `viewCollection` | `collection` (a key: `top100`, `goVerbs`, `strongPreterite`, `irregularFuture`, `irregularParticiple`, or `model-<class>`), `source` (`tab`, `verbPage`, `sharedLink`, or `deeplink`) | Once for each opening of a featured collection's page or of a model's page (Phase 16), whose bar makes it a collection. A return from one of its verb pages sends nothing |
+| `tapShareCollection` | `collection` | On each tap of a collection bar's Share button (Phase 16), whether or not the learner then shares |
+
+A collection's quiz adds `collection` to `startQuiz`. A collection names a list, never a verb, though
+a model's key names the model.
+
 ### The `source` vocabulary
 
 `AnalyticsSource` is one vocabulary for every signal that carries `source`. Today `viewVerbView`
@@ -102,9 +112,9 @@ Quiz).
 |---|---|---|
 | `browse` | Yes | A row of the verb list with the search field empty |
 | `control` | Yes | The Random Verb control in Control Center (`OpenRandomVerbControlIntent`); for `finishSearch`, the Find a Verb control (`OpenVerbSearchIntent`, Phase 10) |
-| `deeplink` | Yes | A `conjugar://` link with no recognized `source` query item; for `finishSearch`, a `search` link; for the quiz signals, a `quiz` link, which the Quick Quiz control, the Start a Quiz shortcut, and the Live Activity send (Phase 13) |
+| `deeplink` | Yes | A `conjugar://` link with no recognized `source` query item; for `finishSearch`, a `search` link; for the quiz signals, a `quiz` link, which the Quick Quiz control, the Start a Quiz shortcut, and the Live Activity send (Phase 13); for `viewCollection`, a `list` link that names no source |
 | `infoLink` | No | Reserved for a link from an Info article to a verb |
-| `list` | No | Phase 16: a verb opened from a collection |
+| `list` | Yes | A verb opened from a featured collection's page (Phase 16; a verb opened from a model's page stays `model`); for the quiz signals, a collection's quiz |
 | `lookup` | Yes | The Look Up a Verb shortcut (Phase 11): for `viewVerbView`, the page it opened when one verb answered; for `finishSearch`, the search it opened otherwise |
 | `model` | Yes | A verb row on a model's page, in the Models tab or reached from a verb page's pill |
 | `myVerbs` | Yes | A row of My Verbs, the verb list's third segment (Phase 12); for the quiz signals, a quiz over My Verbs begun from the Quiz tab (Phase 13) |
@@ -115,11 +125,11 @@ Quiz).
 | `reviewCard` | Yes | The review card above the verb list, tapped after its reveal (Phase 15) |
 | `search` | Yes | A result of a search that found something |
 | `searchGuess` | Yes | The closest verb offered by a search that found nothing |
-| `sharedLink` | No | Phase 16: a shared collection's link |
+| `sharedLink` | Yes | `viewCollection`: a collection's shared link, which carries `source=sharedLink` (Phase 16) |
 | `shortcut` | Yes | Open Random Verb run from the Shortcuts app or Siri (`OpenRandomVerbIntent`, offered as the Random Verb shortcut since Phase 11) |
 | `spotlight` | Yes | A tap on a verb's Spotlight entry (Phase 11) |
-| `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included (Phase 10). The quiz signals: a quiz over every verb begun with the Quiz tab's Start (Phase 13) |
-| `verbPage` | Yes | The quiz signals: Test Me's three questions on a verb's page (Phase 13) |
+| `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included (Phase 10). The quiz signals: a quiz over every verb begun with the Quiz tab's Start (Phase 13). `viewCollection`: a collection or a model opened from the Models tab's list (Phase 16) |
+| `verbPage` | Yes | The quiz signals: Test Me's three questions on a verb's page (Phase 13). `viewCollection`: a model's page opened from a verb page's model pill (Phase 16) |
 | `widget` | Yes | A tap on any widget: Verb of the Day, the quiz widget, or a Lock Screen accessory |
 
 **How the source travels.** The Verbs and Models tabs push a `VerbDestination` (infinitive plus
@@ -402,7 +412,8 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
   names the surface that built the link, from `AnalyticsSource`, because a widget or an intent can
   hand the app nothing but a URL. A missing or unknown value counts as `deeplink`.
 - **Builders, not literals.** App code builds links with `URL.verbDeeplink(_:source:match:)`,
-  `URL.searchDeeplink(text:source:)`, and `URL.infoDeeplink(stableKey:)` (`Utils/URLExtension.swift`),
+  `URL.searchDeeplink(text:source:)`, `URL.infoDeeplink(stableKey:)`, and
+  `URL.listDeeplink(key:source:)` (Phase 16) (`Utils/URLExtension.swift`),
   which percent-encode. Only the widget extension (`WidgetDeeplink`) and `Shared/`'s intents, which
   cannot see `AnalyticsSource`, write literals; each intent keeps its literal in a
   `pendingDeeplink` constant, and `AppRouterTests` pins it to the routes and the vocabulary.
@@ -414,7 +425,7 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
 | `info` | A `stableKey`, or a position in `Info.infos` | None | The Info tab, with the article pushed | Phase 10 |
 | `quiz` | Any, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals (Phase 13) | Before 2026 |
 | `game` | None, `boss`, or `end` | None | The game, full screen over any tab (see `docs/game.md`) | Before 2026 |
-| `list` | Reserved for Phase 16's collections | `source` | Nothing yet: ignored | Reserved Phase 10 |
+| `list` | A collection's key (`top100`, `goVerbs`, `model-31`, `model-4B`; see [Collections](#collections)) | `source`; a shared collection sends `sharedLink` | The Models tab, with the collection's page pushed, or for a model the model's page. An unknown key, or an alias class's (`model-31-1`), is ignored | Phase 16 |
 
 **`match`** goes through `AppRouter.marks(of:on:hiding:)`: `ConjugationMatch.cells(of:equalTo:)`,
 as written, else with accents folded, so several words ("he hablado") and compounds work. Where tú
@@ -437,6 +448,7 @@ link a pending verb, so the last link wins on a cold launch.
 | `Views/AppRouter.swift` | `handle(url:)` parses a link and sets the tab and a one-shot request: `pendingVerb` (with its marks), `pendingSearch` (a `SearchRequest`: text and source), `pendingInfo`, `pendingQuizStart`, or the game's flags. `openSearch(text:source:)` is the search route's effect, which Command-F, the control, and the quick action share. `AppRouter.shared` is the one instance, so that the quick action's scene delegate can reach it |
 | `Views/VerbBrowseView.swift` | Consumes `pendingVerb` and `pendingSearch` with `onChange(initial: true)`, since a link can arrive before the tab first appears. A search request pops to the list first, waiting out the pop before it focuses |
 | `Views/InfoBrowseView.swift` | Consumes `pendingInfo` the same way |
+| `Views/ModelBrowseView.swift` | Consumes `pendingCollection` (a `CollectionRequest`: collection and source) the same way, pushing it onto the Models tab's stack (Phase 16) |
 | `Views/MainTabView.swift` | Receives URLs via `.onOpenURL`, and drains a control's pending link from the shared defaults when the scene becomes active |
 | `Supporting/QuickAction.swift` | The Home Screen quick action and the scene delegate that receives it (below) |
 
@@ -451,6 +463,8 @@ conjugar://search?source=control                → the verb list with an empty,
 conjugar://info/voseo                           → the Voseo article
 conjugar://info/1                               → the article at position 1 (Terminology, today)
 conjugar://quiz/start                           → the Quiz tab, a quiz started
+conjugar://list/goVerbs?source=sharedLink       → the Models tab, the -go verbs' page
+conjugar://list/model-31                        → the Models tab, tener's model page
 ```
 
 ### Control Center controls
@@ -670,7 +684,8 @@ reshapes the quiz and should extend this rather than replace it.
 (nil for every verb, through the curated lists in `VerbFamilies`; otherwise bare infinitives), the
 question count, and the `source` its signals carry. `allVerbs` is the Quiz tab's quiz as it always
 was, `allVerbs(source:)` the same begun by a `quiz` link, `myVerbs(_:)` thirty questions over My
-Verbs, and `verbPage(_:)` Test Me's three. Phase 16's collections should add a constructor.
+Verbs, and `verbPage(_:)` Test Me's three, and `collection(_:title:)` (Phase 16) thirty questions over a
+collection, which also carries a `title` for the sheet and a `collectionKey` for `startQuiz`.
 `QuizScope.fullLength` is 30, and `isRanked` (every verb, full length) decides both whether the score
 goes to Game Center and whether the leaderboard shows at the end. Neither scoped quiz ranks (Josh's
 verdict on Konjugieren, 2026-11-13).
@@ -700,8 +715,11 @@ the results in place of the question with a Done button, closes on Quit, and can
 mid-quiz, so every quiz it starts ends with `quitQuiz` or `completeQuiz`. It skips `viewQuizView`,
 the Game Center prompt, and the router's quiz link.
 
-**A quiz that is not full length** starts no Live Activity (`Quiz.hasLiveActivity`, which also
-keeps a sheet's quiz from ending the tab's), and does not count toward `ChangeDifficultyTip`.
+**A quiz that is not full length** starts no Live Activity, and does not count toward
+`ChangeDifficultyTip`. Nor does a collection's quiz start one, though it is full length, because it
+runs in the sheet beside a quiz the tab may hold, and the Live Activity is one for the app
+(`QuizScope.startsLiveActivity`; `Quiz.hasLiveActivity` keeps a sheet's quiz from ending the tab's).
+A collection's completed quiz does count toward the tip.
 
 **The Quiz tab's start screen** (Josh chose Konjugieren's design, 2026-11-22): a large yellow symbol
 for the scope (`books.vertical.fill`, or a star for My Verbs), the scope's name ("4,811 verbs" or My
@@ -752,4 +770,67 @@ and passes them to the detached refresh, which resolves them only when it writes
 
 **No new signal.** `viewVerbView` with `source` `widget`, `control`, or `shortcut` already counts
 the pages these draws open.
+
+## Collections
+
+Built by browse Phase 16 (2026-11-22), ported from Konjugieren's Phase 16. Fixed lists of verbs as
+places to go: each shows how many of its verbs have been looked up, starts a quiz on itself, and is
+shared as a link.
+
+**`VerbCollection`** (`Models/VerbCollection.swift`, `nonisolated`) is the five featured lists and
+every model: `.top100`, `.goVerbs`, `.strongPreterite`, `.irregularFuture`, `.irregularParticiple`,
+and `.model(classNumber)`. Its key is the `list` link's target and the signals' value: `top100`,
+`goVerbs`, `strongPreterite`, `irregularFuture`, `irregularParticiple`, and `model-<class>` with the
+class number as written (`model-31`, `model-3-1`, `model-4B`). An alias class (31-1) is no
+collection, since its verbs show under its parent's row. A key, once shared, must keep opening the
+same list. Titles, descriptions, symbols, and the share text are in `VerbCollection+Text.swift`,
+on the main actor.
+
+**Membership is derived from the engine** (Josh, 2026-11-22), most frequent first:
+
+| Collection | Verbs | Test, per verb |
+|---|---|---|
+| `top100` | 100 | `FrequencyBand.top100` |
+| `goVerbs` | 11 | `hasGoPresent`: the yo presente ends in -go and the stem has no g of its own, so not sigo, juego, pago, or distingo |
+| `strongPreterite` | 22 | `hasStrongPreterite`: the yo pretérito ends in an unstressed -e (tuve, hice, conduje), so not fui, di, or vi |
+| `irregularFuture` | 13 | `hasIrregularFuture`: the engine marks the yo futuro with capitals (tendré) |
+| `irregularParticiple` | 17 | `hasIrregularParticiple`: the participle, accents folded, is not stem + -ado or -ido, so podrido counts and creído does not |
+| `model-<class>` | The model's page's verbs | `isInModel`: any reading's class, an alias class's under its parent |
+
+A pattern list holds only **base verbs among the 1,000 most frequent** (`isPatternCandidate`: in
+`FrequencyBand.top1000`, and not a compound by `VerbDraw.isCompound`, the Related Verbs relation),
+as Josh chose: compounds such as detener follow their base verbs, and every compound is still on its
+model's page, which has its own bar. With compounds the lists would hold 33 to 49 verbs, mostly of
+tener, poner, venir, and traer. The pattern tests are static and take any infinitive, so the
+pedagogy plan's draw can ask them. `VerbFamilies`' hand-made lists are their oracle in
+`VerbCollectionTests`: each derivation finds their verbs (ser, ir, and dar aside, whose pretéritos
+are irregular but not strong).
+
+**Where they live** (Josh, 2026-11-22): a Collections section at the top of the Models tab, above
+the "102 models" count, hidden while a model search is typed. On iPhone each is a compact row: the
+title, three of its forms with the irregular letters red (`examples`: "tengo · hago · digo"), and
+"opened/total"; five two-line rows with descriptions pushed every model below the fold, so the
+description waits on the collection's page. On iPad each is a card with the forms, the description,
+and a progress bar. A row pushes a `CollectionRequest` (collection and source) onto the tab's stack.
+So does each model row, which is how the model's page learns it came from the tab; a bare
+`ModelInfo`, pushed only by a verb page's model pill, opens the page with source `verbPage`.
+
+**A featured collection's page** (`Views/VerbCollectionView.swift`) shows the description (and, for a
+pattern list, a note on the band and compounds), the bar, a Frequency/Alphabetical control
+(Frequency first, not stored), and the verbs (`VerbEntryList` with `showsLookedUp`). A verb opened
+there reports `list`. **A model's page** gains the same bar between its grid and its verbs, and its
+rows gain the check; a verb opened there still reports `model`.
+
+**The bar** (`VerbCollectionBar`): "3 of 70 looked up", Quiz, Share, and a progress bar. Progress
+counts verbs with a last open (`LearnerVerbStore.openedCount(of:)`); a star alone does not count,
+and Clear in My Verbs resets every collection's progress. Quiz opens `QuizSheet` with
+`QuizScope.collection(_:title:)`: thirty unranked questions over the collection's verbs in the
+difficulty's tenses, titled with the collection's name ("-go Verbs", "Verbs Like tener"). Share
+sends the title, the count, the six most frequent verbs, the `list` link with `source=sharedLink`,
+and the App Store link (Konjugieren Phase 16's choice); on iPad the sheet anchors to the button's
+own frame (`ShareSheet.present(…anchorRect:)`), since the button is in the page, not the navigation
+bar.
+
+**Not built:** `quiz/start?list=<key>`, as in Konjugieren: a shared link opens the collection, where
+Quiz is one tap.
 

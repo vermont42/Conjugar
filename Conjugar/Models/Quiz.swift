@@ -440,9 +440,8 @@ class Quiz {
     elapsedTime = 0
     quizState = .inProgress
     startTimer()
-    // A three-question quiz in a verb page's sheet is over before a Live Activity would be
-    // noticed, and the Live Activity belongs to the tab's quiz.
-    hasLiveActivity = scope.questionCount >= QuizScope.fullLength
+    // The Live Activity belongs to the tab's quiz. See `QuizScope.startsLiveActivity`.
+    hasLiveActivity = scope.startsLiveActivity
     if hasLiveActivity {
       LiveActivityManager.start(
         difficulty: lastDifficulty.rawValue,

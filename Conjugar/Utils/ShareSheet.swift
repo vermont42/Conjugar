@@ -15,9 +15,10 @@ import UIKit
 // its header from LPLinkMetadata.
 enum ShareSheet {
   /// Presents the system share sheet over whatever is on screen. On iPad the sheet is a popover,
-  /// anchored to the bar button whose accessibility label or title is `anchorLabel`, when one is
-  /// found, and otherwise to the top of the window.
-  static func present(text: String, title: String, icon: UIImage?, anchorLabel: String) {
+  /// anchored to `anchorRect` (in window coordinates) when given, for a button inside the page, as
+  /// a collection's bar has (Phase 16); else to the bar button whose accessibility label or title
+  /// is `anchorLabel`, when one is found; and otherwise to the top of the window.
+  static func present(text: String, title: String, icon: UIImage?, anchorLabel: String, anchorRect: CGRect? = nil) {
     guard
       let window = UIApplication.shared.connectedScenes
         .compactMap({ $0 as? UIWindowScene })
@@ -34,7 +35,10 @@ enum ShareSheet {
     let source = ShareTextSource(text: text, title: title, icon: icon)
     let controller = UIActivityViewController(activityItems: [source], applicationActivities: nil)
     if let popover = controller.popoverPresentationController {
-      if let item = barButtonItem(labeled: anchorLabel, in: presenter) {
+      if let anchorRect {
+        popover.sourceView = window
+        popover.sourceRect = anchorRect
+      } else if let item = barButtonItem(labeled: anchorLabel, in: presenter) {
         popover.sourceItem = item
       } else {
         popover.sourceView = window

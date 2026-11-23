@@ -193,7 +193,7 @@ struct AppRouterTests {
     #expect(router.pendingVerb == nil)
   }
 
-  // MARK: - Info, the quiz, and the reserved list route
+  // MARK: - Info, the quiz, and unknown routes
 
   @Test func infoDeeplinkOpensAnArticleByItsStableKey() throws {
     let router = AppRouter()
@@ -241,9 +241,8 @@ struct AppRouterTests {
     #expect(router.pendingQuizStart == .widget)
   }
 
-  // Phase 16 reserves `list/<key>`; until then it does nothing.
-  @Test(arguments: ["conjugar://list/top100", "conjugar://nonsense/hablar", "https://example.com/verb/hablar"])
-  func reservedAndUnknownRoutesAreIgnored(link: String) {
+  @Test(arguments: ["conjugar://list/nonsense", "conjugar://list/model-31-1", "conjugar://list", "conjugar://list/top100/extra", "conjugar://nonsense/hablar", "https://example.com/verb/hablar"])
+  func unknownRoutesAndCollectionsAreIgnored(link: String) {
     let router = AppRouter()
     router.selectedTab = .settings
     router.handle(url: url(link))
@@ -251,6 +250,31 @@ struct AppRouterTests {
     #expect(router.pendingVerb == nil)
     #expect(router.pendingSearch == nil)
     #expect(router.pendingInfo == nil)
+    #expect(router.pendingCollection == nil)
+  }
+
+  // MARK: - Collections (Phase 16)
+
+  @Test func listDeeplinkOpensACollectionInTheModelsTab() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://list/top100"))
+    #expect(router.selectedTab == .models)
+    #expect(router.pendingCollection == CollectionRequest(collection: .top100, source: .deeplink))
+  }
+
+  @Test func aSharedCollectionsLinkSaysSo() throws {
+    let router = AppRouter()
+    router.handle(url: try #require(VerbCollection.model("31").deeplink))
+    #expect(router.pendingCollection == CollectionRequest(collection: .model("31"), source: .sharedLink))
+  }
+
+  @Test func everyCollectionRoundTripsThroughItsLink() throws {
+    let collections = VerbCollection.featured + ModelInfo.all.map { VerbCollection.model($0.classNumber) }
+    for collection in collections {
+      let router = AppRouter()
+      router.handle(url: try #require(URL.listDeeplink(key: collection.key, source: .deeplink)))
+      #expect(router.pendingCollection?.collection == collection, "\(collection.key)")
+    }
   }
 
   // MARK: - The control and the quick action

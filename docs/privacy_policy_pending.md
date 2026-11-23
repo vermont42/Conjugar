@@ -302,3 +302,79 @@ El párrafo sobre la lista guardada en el dispositivo queda así:
 ```
 Para mostrar sus verbos recientes y marcados con una estrella en Mis verbos, y para ofrecerle tarjetas de repaso, la aplicación guarda una lista de los verbos que abre y marca, con la fecha en que los abrió, cuántas veces y cuándo le toca repasar cada uno. La lista se queda en su dispositivo, en un almacenamiento que solo comparte con los widgets de la propia aplicación. Nunca se envía al desarrollador ni a nadie más, y se borra al eliminar la aplicación. En Mis verbos puede borrar los verbos recientes o quitar cualquier verbo de la lista.
 ```
+
+## Collections (browse plan, Phase 16, 2026-11-22)
+
+Adds the signals `viewCollection`, sent when a collection's page or a model's page opens, with
+`collection` (which list: one of five fixed lists, or one of the 102 models, never a verb) and
+`source` (the Models tab, a verb page's model pill, or a link, shared or not); and
+`tapShareCollection`, with `collection`. A collection's quiz adds `collection` to `startQuiz`. Begins
+sending `list` as the `source` of `viewVerbView` (a verb opened from a collection), a new kind of
+surface for the first lookup bullet, and as the `source` of the quiz signals. A collection's quiz
+posts no score to Game Center. These rewrite the first lookup bullet (Phase 2's section), the
+quiz-lifecycle bullet and the Game Center paragraph (Phase 13's), and the in-app-actions bullet
+(Phase 15's), and add one bullet; apply this wording in place of those.
+
+### English
+
+The first bullet of Phase 2's section now reads:
+
+```
+- How you reached a verb's page: for example from a search, the verb list, a model's page, a collection of verbs, another verb's page, a widget, Control Center, a shortcut, or a link
+```
+
+The bullet about in-app actions in section 2 now reads:
+
+```
+- Certain in-app actions: opening the game, reshowing the onboarding tour, tapping to rate or review the app, sending a message to the tutor, opening a tense's article from a verb's page, tapping to share a verb's page, tapping to share a collection of verbs (and which collection), starring or unstarring a verb (whether the verb is starred afterward, but not which verb), and revealing the conjugations on a review card
+```
+
+A new bullet follows the bullet about review cards:
+
+```
+- Which collection of verbs you opened, such as the 100 most frequent verbs or the verbs of one model, and how you reached it (the Models tab, a verb's page, or a link)
+```
+
+The bullet about quiz lifecycle events now reads:
+
+```
+- Quiz lifecycle events (starting, quitting, or completing a quiz), where you began the quiz (for example the Quiz tab, My Verbs, a verb's page, a collection, or a link), and, for a quiz over a collection, which collection
+```
+
+The first paragraph of section 7 now reads:
+
+```
+Conjugar integrates with Apple Game Center for quiz leaderboards. When you submit a score, Game Center handles that data according to Apple's privacy policy. Only the score of a full quiz over all verbs is submitted; a quiz over My Verbs, a collection, or a single verb's page is not. The developer does not have access to your Game Center identity or personal information through this integration.
+```
+
+### Spanish
+
+El primer punto de la sección de la fase 2 queda así:
+
+```
+- Cómo llegó a la página de un verbo: por ejemplo, desde una búsqueda, la lista de verbos, la página de un modelo, una colección de verbos, la página de otro verbo, un widget, el Centro de control, un atajo o un enlace
+```
+
+El punto sobre las acciones dentro de la aplicación, en la sección 2, queda así:
+
+```
+- Ciertas acciones dentro de la aplicación: abrir el juego, volver a mostrar la introducción, tocar para valorar o reseñar la aplicación, enviar un mensaje al tutor, abrir el artículo de un tiempo verbal desde la página de un verbo, tocar para compartir la página de un verbo, tocar para compartir una colección de verbos (y cuál), marcar o desmarcar un verbo con una estrella (si el verbo queda marcado, pero no de qué verbo se trata) y mostrar las conjugaciones de una tarjeta de repaso
+```
+
+Un punto nuevo sigue al de las tarjetas de repaso:
+
+```
+- Qué colección de verbos abrió, como los 100 verbos más frecuentes o los verbos de un modelo, y cómo llegó a ella (la pestaña de modelos, la página de un verbo o un enlace)
+```
+
+El punto sobre los eventos del ciclo de vida de un cuestionario queda así:
+
+```
+- Los eventos del ciclo de vida de un cuestionario (comenzar, abandonar o terminar un cuestionario), dónde lo empezó (por ejemplo, en la pestaña del cuestionario, en Mis verbos, en la página de un verbo, en una colección o desde un enlace) y, si el cuestionario es sobre una colección, cuál
+```
+
+El primer párrafo de la sección 7 queda así:
+
+```
+Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de un cuestionario completo sobre todos los verbos; la de un cuestionario sobre Mis verbos, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
+```

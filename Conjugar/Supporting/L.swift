@@ -956,6 +956,81 @@ nonisolated enum L {
     }
   }
 
+  /// The collections at the top of the Models tab and the bar on every model's page (browse plan,
+  /// Phase 16).
+  enum VerbCollection {
+    static var heading: String {
+      String(localized: "VerbCollection.heading")
+    }
+
+    static var top100Title: String {
+      String(localized: "VerbCollection.top100Title")
+    }
+
+    static var top100Description: String {
+      String(localized: "VerbCollection.top100Description")
+    }
+
+    static var goVerbsTitle: String {
+      String(localized: "VerbCollection.goVerbsTitle")
+    }
+
+    static var goVerbsDescription: String {
+      String(localized: "VerbCollection.goVerbsDescription")
+    }
+
+    static var strongPreteriteTitle: String {
+      String(localized: "VerbCollection.strongPreteriteTitle")
+    }
+
+    static var strongPreteriteDescription: String {
+      String(localized: "VerbCollection.strongPreteriteDescription")
+    }
+
+    static var irregularFutureTitle: String {
+      String(localized: "VerbCollection.irregularFutureTitle")
+    }
+
+    static var irregularFutureDescription: String {
+      String(localized: "VerbCollection.irregularFutureDescription")
+    }
+
+    static var irregularParticipleTitle: String {
+      String(localized: "VerbCollection.irregularParticipleTitle")
+    }
+
+    static var irregularParticipleDescription: String {
+      String(localized: "VerbCollection.irregularParticipleDescription")
+    }
+
+    /// Below a pattern list's description: where its verbs come from, and why compounds are absent.
+    static var patternNote: String {
+      String(localized: "VerbCollection.patternNote")
+    }
+
+    /// A model's collection, which titles its quiz and its shared text: "Verbs Like tener".
+    static func modelTitle(exemplar: String) -> String {
+      String(localized: "VerbCollection.modelTitle \(exemplar)")
+    }
+
+    static func progress(opened: Int, total: Int) -> String {
+      String(localized: "VerbCollection.progress \(opened) \(total)")
+    }
+
+    static func quizHint(questionCount: Int) -> String {
+      String(localized: "VerbCollection.quizHint \(questionCount)")
+    }
+
+    /// VoiceOver's word for a row's check.
+    static var lookedUp: String {
+      String(localized: "VerbCollection.lookedUp")
+    }
+
+    static func shareText(title: String, verbCount: String, sample: String, link: String, appStoreLink: String) -> String {
+      String(localized: "VerbCollection.shareText \(title) \(verbCount) \(sample) \(link) \(appStoreLink)")
+    }
+  }
+
   enum VerbSort {
     static var frequency: String {
       String(localized: "VerbSort.frequency")

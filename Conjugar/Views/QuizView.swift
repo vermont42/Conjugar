@@ -97,9 +97,9 @@ struct QuizView: View {
     }
   }
 
-  /// The sheet's title, the verb Test Me asks about. Nil on the tab.
+  /// The sheet's title: a collection's name, or the verb Test Me asks about. Nil on the tab.
   private var sheetTitle: String? {
-    sheetScope?.verbs?.first.map { ReflexivePronoun.citationForm(of: $0) }
+    sheetScope?.title ?? sheetScope?.verbs?.first.map { ReflexivePronoun.citationForm(of: $0) }
   }
 
   private var myVerbs: [VerbMapEntry] {
@@ -447,13 +447,15 @@ struct QuizView: View {
     lastCorrect = nil
     lastResult = nil
     fieldFocused = true
-    Current.analytics.signal(
-      name: .startQuiz,
-      parameters: [
-        ParameterKey.difficulty.rawValue: quiz.lastDifficulty.rawValue,
-        ParameterKey.source.rawValue: scope.source.rawValue
-      ]
-    )
+    var parameters = [
+      ParameterKey.difficulty.rawValue: quiz.lastDifficulty.rawValue,
+      ParameterKey.source.rawValue: scope.source.rawValue
+    ]
+    // A quiz over a collection names it (Phase 16).
+    if let collectionKey = scope.collectionKey {
+      parameters[ParameterKey.collection.rawValue] = collectionKey
+    }
+    Current.analytics.signal(name: .startQuiz, parameters: parameters)
   }
 
   private func submit() {

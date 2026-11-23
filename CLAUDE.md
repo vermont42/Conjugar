@@ -188,6 +188,7 @@ xcrun simctl openurl "$UDID" conjugar://verb/hablar     # → Browse tab, pushes
 xcrun simctl openurl "$UDID" "conjugar://verb/ir?match=fue"   # → ir's page, fue marked and scrolled to
 xcrun simctl openurl "$UDID" "conjugar://search?q=fue"  # → Browse tab, searched (no q: empty, focused field)
 xcrun simctl openurl "$UDID" conjugar://info/voseo      # → Info tab, an article by its stableKey
+xcrun simctl openurl "$UDID" conjugar://list/goVerbs    # → Models tab, a collection (or list/model-31, a model's page)
 ```
 
 **`conjugar://game`** is the fast path to the game: it presents `GameView` full-screen via

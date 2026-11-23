@@ -57,6 +57,12 @@ final class LearnerVerbStore {
     record.hasOpened(infinitive)
   }
 
+  /// How many of the verbs have been opened, a collection's progress (Phase 16). A star alone does
+  /// not count, and Clear resets every collection's progress, since it forgets the opens.
+  func openedCount(of entries: [VerbMapEntry]) -> Int {
+    entries.count { record.hasOpened($0.infinitive) }
+  }
+
   /// The verb the review card offers: the longest overdue.
   func verbDueForReview(at date: Date = .now) -> VerbMapEntry? {
     record.dueForReview(at: date).lazy

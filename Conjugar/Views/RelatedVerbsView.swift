@@ -25,8 +25,10 @@ extension EnvironmentValues {
 extension View {
   /// The destinations that a verb page, and the pages it leads to, can push.
   func verbPageDestinations() -> some View {
+    // Only a verb page's model pill pushes a bare `ModelInfo`; the Models tab's rows push a
+    // `CollectionRequest`, which names its source.
     navigationDestination(for: ModelInfo.self) { model in
-      ModelView(model: model)
+      ModelView(model: model, source: .verbPage)
     }
     .navigationDestination(for: RelatedVerbListDestination.self) { destination in
       RelatedVerbListView(destination: destination)

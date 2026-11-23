@@ -7,7 +7,7 @@
 
 /// What a quiz asks about, how many questions it asks, and where it was begun (browse plan,
 /// Phase 13). `Quiz.start(scope:)` defaults to `allVerbs`, the Quiz tab's quiz as it always was.
-/// Later scopes, such as Phase 16's collections, are further constructors.
+/// Phase 16's collections add `collection(_:title:)` (`VerbCollection+Text.swift`).
 nonisolated struct QuizScope: Equatable, Sendable {
   /// Nil asks about every verb, through the curated lists in `VerbFamilies`. Otherwise the bare
   /// infinitives the verb map uses (arrepentir, not arrepentirse).
@@ -15,6 +15,19 @@ nonisolated struct QuizScope: Equatable, Sendable {
   let questionCount: Int
   /// `startQuiz`, `quitQuiz`, and `completeQuiz` carry it.
   let source: AnalyticsSource
+  /// What the quiz sheet shows as its title: a collection's name (Phase 16). Nil elsewhere, where
+  /// Test Me's sheet shows its verb.
+  let title: String?
+  /// The collection the quiz is over, which `startQuiz` carries as `collection` (Phase 16).
+  let collectionKey: String?
+
+  init(verbs: [String]?, questionCount: Int, source: AnalyticsSource, title: String? = nil, collectionKey: String? = nil) {
+    self.verbs = verbs
+    self.questionCount = questionCount
+    self.source = source
+    self.title = title
+    self.collectionKey = collectionKey
+  }
 
   /// The length of the Quiz tab's quiz, whatever its scope.
   static let fullLength = 30
@@ -27,6 +40,14 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// over three questions, compares with nothing.
   var isRanked: Bool {
     verbs == nil && questionCount == QuizScope.fullLength
+  }
+
+  /// Whether the quiz starts the Live Activity, which is one for the whole app and belongs to the
+  /// Quiz tab's quiz. A three-question quiz in a verb page's sheet is over before one would be
+  /// noticed, and a collection's quiz (Phase 16) runs in the same sheet, beside a quiz the tab may
+  /// hold, so neither starts one, though a collection's is full length.
+  var startsLiveActivity: Bool {
+    questionCount >= QuizScope.fullLength && collectionKey == nil
   }
 
   static let allVerbs = allVerbs(source: .tab)

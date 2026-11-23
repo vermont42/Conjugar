@@ -10844,3 +10844,54 @@ due in a week. A trip to the Settings app and back brought up ir, which the stor
 it loaded. On the iPad, in Spanish and dark mode, arrepentirse's card read "Consultado hace 4 días"
 and revealed "me arrepiento · me arrepentí · me arrepentiré · arrepentido", with pronouns, as the
 verb page writes them.
+
+## Collections at the Top of the Models Tab (2026-11-22)
+
+Phase 16 of the browse plan, the last before the closing audit, ports Konjugieren's collections:
+fixed lists of verbs that a learner can work through, each with a count of how many of its verbs
+have been looked up, a quiz, and a link to share. Konjugieren's were the 100 most frequent verbs,
+the modal verbs, the verbs that take sein, and each ablaut group. Spanish has no modals in that
+sense and no auxiliary to choose, so the plan offered Josh Spanish lists instead, and he took all of
+them: the top 100, the -go verbs, the strong preterites, the irregular futures, and the irregular
+participles, at the top of the Models tab, with every model also a collection through a bar on its
+page.
+
+Josh had already decided that the lists would be derived from the engine rather than written by
+hand. The derivations turned out to need more care than "the engine marks this form irregular".
+Marking the yo presente catches tengo and hago, but also juego, whose change is in the stem vowel,
+and sigo, whose g was in seguir all along. What makes a -go verb is a g that the infinitive's stem
+does not have. Marking the pretérito catches fui and di, which are irregular but not strong; what
+makes a strong preterite is a yo form ending in an unstressed -e, tuve rather than tuvé. And the
+engine marks creído and oído, whose written accent only keeps the stress, so an irregular
+participle became one that, with its accents folded away, is not stem plus -ado or -ido. That rule
+catches podrido, too, which marks only a vowel. The quiz's hand-made lists in `VerbFamilies` now
+serve as the derivations' oracle: each must find their verbs, and it does, apart from ser, ir, and
+dar in the preterite list, which are there for the quiz and are not strong.
+
+The other choice Josh made was whether the lists include compounds. With them, the irregular
+futures among the 1,000 most frequent verbs run to 37, and most of the additions are detener,
+contener, componer, prevenir, and their siblings. A quiz over that list would mostly ask compounds.
+Josh chose base verbs only, so the lists hold 11 to 22 verbs each, close to what a textbook would
+print, and each list's page says that compounds follow their base verbs. The compounds are not lost:
+each sits on its model's page, which has a bar of its own. satisfacer appears on every pattern list,
+since nothing in the verb map makes it a compound of hacer.
+
+The first screenshot changed the design. Konjugieren's rows put a title over a two-line
+description, and with three lists that left room for the families below. With five lists, the
+iPhone showed nothing but collections, and every model sat below the fold of a tab called Models.
+Each row is now a title and three forms from the list, with the irregular letters in red: "tengo ·
+hago · digo", "tuve · estuve · hice", "hecho · dicho · visto". The forms say what the list is about
+faster than the description did, and they come from the same derivation, so they cannot disagree
+with it. The iPad, with room for cards, keeps both.
+
+One piece of Konjugieren's design could not come across unchanged. There, a collection's quiz was
+full length and so started a Live Activity. Conjugar has one Live Activity for the whole app, owned
+by the Quiz tab's quiz, and a collection's quiz runs in a sheet that may sit over a quiz in progress
+in that tab. So the quiz now asks its scope whether to start one, and a collection's says no.
+
+In the simulator everything worked on the first build: the -go list's count went from 1 of 11 to 2
+of 11 when tener was opened from it, the quiz sheet was titled "-go Verbs", a shared link to model
+31 opened tener's page from the Quiz tab, and Copy produced the list's text with both links. On the
+iPad, in Spanish and dark mode, the cards read "Verbos en -go" and "Futuros irregulares", and the
+share sheet hung from the bar's own button, which needed the rectangle Konjugieren had added for the
+same reason.

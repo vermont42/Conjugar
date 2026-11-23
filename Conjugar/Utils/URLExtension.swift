@@ -42,7 +42,7 @@ extension URL {
   nonisolated static let infoHost = "info"
   nonisolated static let quizHost = "quiz"
   nonisolated static let gameHost = "game"
-  /// Reserved for the collections of the browse plan's Phase 16, and not handled before then.
+  /// A collection (browse plan, Phase 16): `conjugar://list/top100`, `conjugar://list/model-31`.
   nonisolated static let listHost = "list"
   /// The target of `conjugar://verb/random`.
   nonisolated static let randomVerbTarget = "random"
@@ -104,6 +104,13 @@ extension URL {
   /// position does not.
   nonisolated static func infoDeeplink(stableKey: String) -> URL? {
     deeplink(host: infoHost, target: stableKey, queryItems: [])
+  }
+
+  /// `conjugar://list/goVerbs?source=sharedLink`, a collection by its key (`VerbCollection.key`).
+  nonisolated static func listDeeplink(key: String, source: AnalyticsSource) -> URL? {
+    deeplink(host: listHost, target: key, queryItems: [
+      URLQueryItem(name: sourceQueryName, value: source.rawValue)
+    ])
   }
 
   nonisolated private static func deeplink(host: String, target: String?, queryItems: [URLQueryItem?]) -> URL? {

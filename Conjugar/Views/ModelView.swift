@@ -15,6 +15,9 @@ import TipKit
 
 struct ModelView: View {
   let model: ModelInfo
+  /// Where the page was opened, which `viewCollection` reports (Phase 16): `tab` from the Models
+  /// tab's list, `verbPage` from a verb page's model pill, or a `list` link's source.
+  let source: AnalyticsSource
 
   /// The grid's tense rows: five core tenses, plus futuro (Spanish concentrates
   /// irregularity in the future stem).
@@ -50,6 +53,11 @@ struct ModelView: View {
   @Environment(\.verbPagePush) private var push
   /// The order of the verbs using this model. Not stored: the page always opens alphabetical.
   @State private var verbSort = VerbSort.alphabetical
+  @State private var hasSignaledView = false
+  /// The model as a collection (Phase 16), whose bar sits between the grid and the verbs.
+  private let collection: VerbCollection
+  /// The collection's verbs, for the bar's count. The same verbs as `entriesBySort`'s.
+  private let collectionVerbs: [VerbMapEntry]
 
   private let gloss: String
   private let isDefective: Bool
@@ -65,14 +73,17 @@ struct ModelView: View {
   /// slot has no form. Previously `gridCell` re-conjugated every slot on each `body`.
   private let gridForms: [[String?]]
 
-  init(model: ModelInfo) {
+  init(model: ModelInfo, source: AnalyticsSource) {
     self.model = model
+    self.source = source
+    collection = .model(model.classNumber)
     gloss = VerbMap.shared.entry(for: model.exemplar)?.gloss ?? ""
     isDefective = Conjugator.isDefective(infinitive: model.exemplar)
     participio = Self.form(model.exemplar, .participio)
     gerundio = Self.form(model.exemplar, .gerundio)
     let entries = model.verbs.compactMap { VerbMap.shared.entry(for: $0) }
     entriesBySort = Dictionary(uniqueKeysWithValues: VerbSort.allCases.map { ($0, $0.sorted(entries)) })
+    collectionVerbs = entries
     let persons = Self.gridPersons(for: Current.settings.secondSingularBrowse)
     gridPersons = persons
     gridForms = Self.gridTenses.map { gridTense in
@@ -90,6 +101,7 @@ struct ModelView: View {
       VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
         headerCard
         gridCard
+        VerbCollectionBar(collection: collection, title: L.VerbCollection.modelTitle(exemplar: model.exemplar), verbs: collectionVerbs)
 
         Picker(L.BrowseVerbs.sort, selection: $verbSort.animation(.snappy)) {
           ForEach(VerbSort.allCases, id: \.self) { order in
@@ -104,7 +116,7 @@ struct ModelView: View {
           .foregroundStyle(.secondary)
           .frame(maxWidth: .infinity, alignment: .leading)
 
-        VerbEntryList(entries: entriesBySort[verbSort] ?? []) { verb in
+        VerbEntryList(entries: entriesBySort[verbSort] ?? [], showsLookedUp: true) { verb in
           push?(VerbDestination(infinitive: verb, source: .model))
         }
       }
@@ -120,6 +132,11 @@ struct ModelView: View {
     .onAppear {
       ExploreModelsTip().invalidate(reason: .actionPerformed)
       Current.analytics.signal(name: .viewModelView)
+      // A return from one of the model's verb pages is not another opening of the collection.
+      if !hasSignaledView {
+        hasSignaledView = true
+        collection.signalView(source: source)
+      }
     }
   }
 
