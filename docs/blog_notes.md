@@ -11081,3 +11081,34 @@ hardware keyboard had hidden. iPadOS's keyboard shows no toolbar items at all, s
 keys now sit under the answer field, where there is room. And a quiz started by a link focused its
 field before the field was on screen, which left the iPhone's keyboard without the keys until the
 field was focused again. The question view now takes the keyboard once more as it appears.
+
+## The Shape of the Answer (2026-11-23)
+
+Until now the quiz's answer field gave no hint of what belonged in it. A question read "él ·
+imperativo positivo" above an empty box, and a learner had to guess whether to type the pronoun,
+whether the "no" of a negative command was part of the answer (it was, and nothing said so), and
+whom a third-person command addressed (usted, though the screen said él). The second pedagogy
+phase puts the answer's shape around the field: `yo [ ]`, `(usted) ¡[ ]!`, `(tú) ¡no [ ]!`, and
+for a reflexive-only verb, `yo me [ ]`.
+
+Josh chose among three mockups and took the same design as Konjugieren, with the fixed words on the
+field's line. Spanish turned out simpler than German here. Konjugieren needed two blanks for a
+separable verb's Sie command, and with them a rule for where Return goes. Every Spanish question
+has one blank, so that machinery stayed in Konjugieren.
+
+The interesting part was deciding what a filled blank means. The frame supplies some words of the
+answer, the "no" and a reflexive pronoun, and a learner may type them anyway. So the answer is
+composed: drop a typed subject pronoun, then put the frame's words in front, minus any the learner
+already wrote. "hables", "no hables", "te arrepientas", and "no te arrepientas" all come out as the
+right answer. The composed text is also what the quiz records, so the results screen reads "no
+hables" rather than a bare fragment.
+
+Looking at it at the largest text sizes found the one layout problem. "(nosotros) ¡no nos" can fill
+an iPhone's width by itself, so at accessibility sizes the frame's words move to a line above the
+field. Konjugieren's lesson about focus applied in a new form. Its bug came from keying fields by
+position in a ForEach; here the risk was a layout switch rebuilding the field. Swapping
+`HStackLayout` for `VStackLayout` through `AnyLayout` keeps the field's identity, so the keyboard
+stays put.
+
+The run through a fixture of 21 frames scored a perfect 208. It also turned up an older bug: a quiz
+link that arrives while the results screen is showing starts a new quiz underneath it.

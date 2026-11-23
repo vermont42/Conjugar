@@ -60,6 +60,24 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
     return answers
   }
 
+  /// The shape of the answer, with the words the learner does not type around the blank.
+  var frame: AnswerFrame {
+    AnswerFrame.quizFrame(tense: tense, personNumber: personNumber, isReflexiveOnly: ReflexivePronoun.isReflexiveOnly(verb))
+  }
+
+  /// The answer that a filled blank gives, ready for `grade(_:)`: the frame's own words of the
+  /// answer, such as a negative command's "no", then the blank. A subject pronoun of the asked
+  /// person typed into the blank is dropped first, so that "yo me arrepiento" in `yo me [ ]` does
+  /// not become "me yo me arrepiento".
+  func answer(filling blank: String) -> String {
+    var typed = AnswerSpelling.normalized(blank)
+    for pronoun in AnswerSpelling.leadingPronouns(tense: tense, personNumber: personNumber) where typed.hasPrefix(pronoun + " ") {
+      typed = String(typed.dropFirst(pronoun.count + 1))
+      break
+    }
+    return frame.answer(filling: typed)
+  }
+
   /// The grade of an answer as typed. Case and spacing never count, nor does a leading subject
   /// pronoun of the asked person ("yo hablo"). An answer that matches an accepted one but for its
   /// accents earns `.partialMatch`.

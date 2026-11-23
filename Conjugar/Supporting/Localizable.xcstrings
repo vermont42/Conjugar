@@ -2351,6 +2351,22 @@
         }
       }
     },
+    "Quiz.blank" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "blank"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "espacio en blanco"
+          }
+        }
+      }
+    },
     "Quiz.briefing" : {
       "localizations" : {
         "en" : {

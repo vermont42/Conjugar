@@ -690,6 +690,11 @@ nonisolated enum L {
       String(localized: "Quiz.conjugation")
     }
 
+    /// What VoiceOver calls the answer field within its frame: "yo, blank".
+    static var blank: String {
+      String(localized: "Quiz.blank")
+    }
+
     static var verb: String {
       String(localized: "Quiz.verb")
     }

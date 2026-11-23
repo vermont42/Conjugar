@@ -26,8 +26,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 
 | Phase | Status | Date | Commit | Suggestions |
 |---:|---|---|---|---|
-| 0 | Awaiting Josh | 2026-11-22 | | T1.3, T1.4, T1.5, Conjugar's defects |
-| 1 | Not started | | | T1.2 |
+| 0 | Done | 2026-11-22 | 8518921 | T1.3, T1.4, T1.5, Conjugar's defects |
+| 1 | Awaiting Josh | 2026-11-23 | | T1.2 |
 | 2 | Not started | | | T4.1, T4.4, T4.5 |
 | 3 | Not started | | | T1.6 |
 | 4 | Not started | | | T2.3, T2.6, T6.7, M1 |
@@ -598,7 +598,7 @@ lands here, and what differs.
 ## Phase 0: Accept What Is Right
 
 **Ports:** Konjugieren Phase 1. **Suggestions:** T1.3, T1.4, T1.5, and two Conjugar defects.
-**Depends on:** nothing. **Status:** Awaiting Josh.
+**Depends on:** nothing. **Status:** Done.
 
 - **Trim the answer.** Neither sibling trims whitespace, so a trailing space is wrong today. Trim
   and collapse runs of spaces before grading.
@@ -708,8 +708,8 @@ key row inserts at the cursor, tú imperatives are asked, and tests pin each.
 
 ## Phase 1: The Shape of the Answer
 
-**Ports:** Konjugieren Phase 2. **Suggestions:** T1.2. **Depends on:** Phase 0. **Status:** Not
-started.
+**Ports:** Konjugieren Phase 2. **Suggestions:** T1.2. **Depends on:** Phase 0. **Status:** Awaiting
+Josh.
 
 Show the shape of the expected answer around the field, with the fixed words outside it: `yo [ ]`
 for a finite form; `(tú) ¡[ ]!` and `(usted) ¡[ ]!` for an affirmative imperative, naming the
@@ -741,7 +741,55 @@ sentence frames are the same idea at a larger scale.
 field, imperatives name usted and ustedes, VoiceOver reads the frame as one prompt, and tests pin
 the frame for each kind of question.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh chose on 2026-11-23**, from three mockups: the fixed words inline on the field's line, as
+  in Konjugieren (over a fill-in-the-blank caption above today's full-width field, and over the
+  fixed words drawn inside the field's border).
+- **One blank, always.** `AnswerFrame` (`Models/AnswerFrame.swift`, `nonisolated`) holds segments
+  (`addressee`, `pronoun`, `word`, `punctuation`, `blank`) and `quizFrame(tense:personNumber:
+  isReflexiveOnly:)`; `QuizQuestion.frame` builds it. A finite form, compound tenses included,
+  shows its subject pronoun (yo, tú, vos, él, nosotros, vosotros, ellas, as the quiz showed
+  before); a command shows `(tú) ¡[ ]!`, with usted and ustedes named for the third persons
+  (`DisplayPersonNumber.commandAddressee`); a negative command supplies its "no"; the gerundio and
+  participio show the field alone. A reflexive-only verb's pronoun is a supplied word before the
+  blank (`yo me [ ]`, `(usted) ¡no se [ ]!`), and an enclitic is typed (arrepiéntete). Nothing
+  here needed Return to move between blanks, so the multi-blank machinery Konjugieren built was
+  not ported; Phase 14 and Phase 17 add it if they need it.
+- **The answer a blank gives.** `QuizQuestion.answer(filling:)` drops a typed subject pronoun of
+  the asked person, then `AnswerFrame.answer(filling:)` puts the frame's supplied words in front,
+  without doubling any the learner also typed: "hables", "no hables", "te arrepientas", and "no te
+  arrepientas" all become the right answer, and "¡habla!" loses its marks. What the quiz records
+  and shows as "Your answer" is that composed answer (no hables), so the results read whole.
+  "no arrepientas" typed into `¡no te [ ]!` is still wrong; nothing tolerates a frame word typed
+  out of order.
+- **The question card lost its person.** The tense line no longer reads "él · presente de
+  indicativo", since the frame shows the person, so the "él" that misnamed usted's command is gone
+  from the screen. `ResultsView` still labels rows 3S and 3P.
+- **Accessibility text sizes.** At those sizes the frame's words would leave the field no width
+  ("(nosotros) ¡no nos"), so they take a line of their own above the field. The layout switches
+  between `HStackLayout` and `VStackLayout` through `AnyLayout`, and the field keeps its structural
+  identity whether or not words precede it, so focus survives every change of frame. That is the
+  Konjugieren focus bug's lesson; there was no ForEach to key.
+- **VoiceOver.** The field's label reads the frame, its Spanish tagged Spanish: "yo, blank", "tú,
+  no, espacio en blanco" (new `L.Quiz.blank`). A frame with no words keeps the old label,
+  "conjugation". The frame's text is hidden. Read from the accessibility tree, not heard.
+- **A fixture**, `CONJUGAR_QUIZ_FIXTURE frames`: 21 questions, one per kind of frame, each with its
+  answer in a comment.
+- **Verified:** 958 tests in 57 suites, in the simulator's default language (English). One failure,
+  `GameStateTests.terremotoOpensGapsRoughlyTenPercentOfEachGirder`, is random and unrelated; that
+  suite passed twice on rerun. On the iPhone, in English and light mode with a hardware keyboard,
+  the fixture scored a perfect 208, typing only each blank's part (and "no sean" whole into `¡no
+  [ ]!`); at accessibility-extra-large the pronoun sat above the field. On the iPad, in Spanish
+  and dark mode, the frames drew beside the field with the keys under it, and the á key inserted
+  at the cursor in `vos [ ]`. The software keyboard was not tried. `scripts/take_screenshots.sh`
+  was not run: it still finds the field by `input_quiz_conjugation`, and its fixture's answers
+  (he querido among them) still grade right in their frames, but the App Store's quiz screenshot
+  will show the frame when next captured.
+- **Found, not fixed:** a `quiz` link that arrives while the results screen is pushed starts a new
+  quiz behind it, so the results of an unanswered quiz show until the learner goes back. That
+  predates this phase.
+- **Analytics:** none added, so nothing is staged in `docs/privacy_policy_pending.md`.
 
 ## Phase 2: A Correction That Stays
 

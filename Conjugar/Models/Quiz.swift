@@ -117,6 +117,11 @@ class Quiz {
     }
   }
 
+  /// The question on screen, or nil before a quiz has questions.
+  var currentQuestion: Question? {
+    questions.indices.contains(currentQuestionIndex) ? questions[currentQuestionIndex] : nil
+  }
+
   var currentPersonNumber: DisplayPersonNumber {
     if questions.count > 0 {
       return questions[currentQuestionIndex].personNumber
@@ -160,6 +165,9 @@ class Quiz {
         startScreenshotFixture()
       case .grading:
         questions = Quiz.gradingFixture
+        beginQuiz()
+      case .frames:
+        questions = Quiz.framesFixture
         beginQuiz()
       }
       return true
@@ -600,6 +608,10 @@ extension Quiz {
     /// hand. Each comment names an answer beside the shown one; the second-person questions
     /// assume the tú setting.
     case grading
+    /// One question per kind of answer frame, whatever the settings: each person of a finite
+    /// form, a compound tense, every command, the gerundio and participio, and a reflexive-only
+    /// verb's frames.
+    case frames
   }
 
   static var fixtureRun: Fixture? {
@@ -617,6 +629,30 @@ extension Quiz {
     QuizQuestion("huir", .pretérito, .firstSingular),                   // huí
     QuizQuestion("adecuar", .presenteDeIndicativo, .firstSingular),     // adecúo
     QuizQuestion("tener", .presenteDeIndicativo, .thirdPlural)          // ellos tienen, ustedes tienen
+  ]
+
+  static let framesFixture: [Question] = [
+    QuizQuestion("hablar", .presenteDeIndicativo, .firstSingular),           // yo [hablo]
+    QuizQuestion("hablar", .presenteDeIndicativo, .secondSingularTú),        // tú [hablas]
+    QuizQuestion("hablar", .presenteDeIndicativo, .secondSingularVos),       // vos [hablás]
+    QuizQuestion("tener", .pretérito, .thirdSingular),                       // él [tuvo]
+    QuizQuestion("ir", .futuroDeIndicativo, .firstPlural),                   // nosotros [iremos]
+    QuizQuestion("comer", .imperfectoDeIndicativo, .secondPlural),           // vosotros [comíais]
+    QuizQuestion("decir", .perfectoDeIndicativo, .thirdPlural),              // ellas [han dicho]
+    QuizQuestion("hablar", .imperativoPositivo, .secondSingularTú),          // (tú) ¡[habla]!
+    QuizQuestion("tener", .imperativoPositivo, .secondSingularVos),          // (vos) ¡[tené]!
+    QuizQuestion("hacer", .imperativoPositivo, .thirdSingular),              // (usted) ¡[haga]!
+    QuizQuestion("venir", .imperativoPositivo, .firstPlural),                // (nosotros) ¡[vengamos]!
+    QuizQuestion("salir", .imperativoPositivo, .secondPlural),               // (vosotros) ¡[salid]!
+    QuizQuestion("poner", .imperativoPositivo, .thirdPlural),                // (ustedes) ¡[pongan]!
+    QuizQuestion("hablar", .imperativoNegativo, .secondSingularTú),          // (tú) ¡no [hables]!
+    QuizQuestion("ser", .imperativoNegativo, .thirdPlural),                  // (ustedes) ¡no [sean]!
+    QuizQuestion("estar", .gerundio, .none),                                 // [estando]
+    QuizQuestion("escribir", .participio, .none),                            // [escrito]
+    QuizQuestion("arrepentir", .presenteDeIndicativo, .firstSingular),       // yo me [arrepiento]
+    QuizQuestion("arrepentir", .perfectoDeIndicativo, .firstPlural),         // nosotros nos [hemos arrepentido]
+    QuizQuestion("arrepentir", .imperativoPositivo, .secondSingularTú),      // (tú) ¡[arrepiéntete]!
+    QuizQuestion("arrepentir", .imperativoNegativo, .thirdSingular)          // (usted) ¡no se [arrepienta]!
   ]
 
   /// Where `exportFixtureAnswers()` writes the answer key the driver types back in.

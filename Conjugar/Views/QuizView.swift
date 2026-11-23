@@ -365,9 +365,8 @@ struct QuizView: View {
           .foregroundStyle(.secondary)
       }
 
-      // Gerundio questions have no person; don't show its "none" placeholder.
-      let person = quiz.currentPersonNumber
-      Text(verbatim: person == .none ? quiz.tense.displayName : "\(person.pronoun) · \(quiz.tense.displayName)")
+      // The person asked is in the answer's frame, below.
+      Text(verbatim: quiz.tense.displayName)
         .font(.title3.weight(.semibold))
         .fontDesign(.serif)
         .foregroundStyle(Color.customForeground)
@@ -389,25 +388,14 @@ struct QuizView: View {
   }
 
   private var answerField: some View {
-    TextField(text: $answer, selection: $answerSelection, prompt: Text(L.Quiz.conjugation).foregroundStyle(.secondary)) {
-      Text(verbatim: "")
-    }
-      .accessibilityLabel(L.Quiz.conjugation)
-      .accessibilityIdentifier("input_quiz_conjugation")  // screenshot-driver anchor
-      .textInputAutocapitalization(.never)
-      .autocorrectionDisabled()
-      .submitLabel(.next)
-      .focused($fieldFocused)
-      .font(.title3)
-      .fontDesign(.serif)
-      .multilineTextAlignment(.center)
-      .padding()
-      .background(Color.customForeground.opacity(0.06), in: RoundedRectangle(cornerRadius: Layout.cornerRadius))
-      .overlay(
-        RoundedRectangle(cornerRadius: Layout.cornerRadius)
-          .strokeBorder(fieldFocused ? Color.customYellow : Color.customCardBorder, lineWidth: fieldFocused ? 2 : 1)
-      )
-      .onSubmit { submit() }
+    AnswerFrameView(
+      frame: quiz.currentQuestion?.frame ?? AnswerFrame(segments: [.blank]),
+      text: $answer,
+      selection: $answerSelection,
+      isFocused: $fieldFocused,
+      identifier: "input_quiz_conjugation",  // screenshot-driver anchor
+      onSubmit: submit
+    )
   }
 
   private var letterKeys: some View {
@@ -509,8 +497,8 @@ struct QuizView: View {
   }
 
   private func submit() {
-    guard !answer.isEmpty else { return }
-    let proposed = answer
+    guard let question = quiz.currentQuestion, !answer.allSatisfy(\.isWhitespace) else { return }
+    let proposed = question.answer(filling: answer)
     let (result, correct) = quiz.process(proposedAnswer: proposed)
     switch result {
     case .totalMatch: Current.soundPlayer.play(.chime, shouldDebounce: false)
