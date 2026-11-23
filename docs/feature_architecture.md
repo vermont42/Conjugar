@@ -34,7 +34,7 @@ Built 2026-11-22 by Phase 2 of the browse plan.
 |---|---|---|
 | `viewVerbView` | `source` (below) | When a verb page appears: on arrival, and again with `source` `resume` after the page returns from another tab, a pushed page, or the background |
 | `leaveVerbView` | `deepestSection` (`header`, `simple`, `compound`, `etymology`, `example`), `dwell` (`0-5s`, `5-15s`, `15-60s`, `60s+`) | Exactly once for each `viewVerbView`: when the page leaves the screen or the app goes to the background |
-| `finishSearch` | `source` (where the search began: `tab`, `control`, `quickAction`, or `deeplink`; since Phase 10), `outcome` (`opened`, `abandoned`, `noResult`), `queryLength` (`1-2`, `3-5`, `6-9`, `10+`), `resultCount` (`0`, `1`, `2-10`, `11+`), `matchKind` (below), `resultPosition` (`1`, `2-5`, `6+`, `none`) | Once per search of the verb list: when a result or the guess is opened, the field is cleared, or the app goes to the background with text in the field |
+| `finishSearch` | `source` (where the search began: `tab`, `control`, `quickAction`, or `deeplink` since Phase 10, and `lookup` since Phase 11), `outcome` (`opened`, `abandoned`, `noResult`), `queryLength` (`1-2`, `3-5`, `6-9`, `10+`), `resultCount` (`0`, `1`, `2-10`, `11+`), `matchKind` (below), `resultPosition` (`1`, `2-5`, `6+`, `none`) | Once per search of the verb list: when a result or the guess is opened, the field is cleared, or the app goes to the background with text in the field |
 
 **A visit** (`Models/VerbVisit.swift`, `VerbVisit`) is one stretch of a verb page on screen with
 the app in the foreground. `VerbView` begins one in `onAppear` and when the app returns to the

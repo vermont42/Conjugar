@@ -10895,3 +10895,42 @@ of 11 when tener was opened from it, the quiz sheet was titled "-go Verbs", a sh
 iPad, in Spanish and dark mode, the cards read "Verbos en -go" and "Futuros irregulares", and the
 share sheet hung from the bar's own button, which needed the rectangle Konjugieren had added for the
 same reason.
+
+## Closing the Browse Plan (2026-11-22)
+
+The browse plan, ported from Konjugieren that same morning, finished in a day: seventeen phases on
+`master`, from ranked search through collections, and one Closing session to audit them. The suite
+stood at 924 Swift Testing tests in 52 suites, exactly what the last phase left, and every idea in
+the plan's index was built, two of them only to the part Josh had accepted (the scrolling tip from
+B5, the periphrasis article from B7).
+
+The privacy audit was the part worth doing carefully. Each phase had staged its own lines in
+`docs/privacy_policy_pending.md`, and several phases rewrote a bullet an earlier phase had written,
+with the rule that the later wording wins on release day. That rule has a trap: a rewrite made from
+an older version silently undoes whatever came between. Phase 16 had rewritten the first lookup
+bullet, "How you reached a verb's page", starting from Phase 2's wording, and so dropped the
+"Spotlight" that Phase 11 had added. Nothing would have caught it until a reader of the shipped
+policy noticed that Spotlight was missing. Diffing `Analytics.swift` against the commit before Phase
+0 and reading every call site found nine new signals and ten new parameter keys, all staged; the
+Spotlight line was the one hole, and both languages now have it back. The lesson for the pedagogy
+plan, which will rewrite the quiz bullets again: rewrite from the latest section, not the first.
+
+The handoff to the pedagogy plan was less work than expected, because every browse session had
+added a *Landed* line under the piece it built. What the Closing added was the other direction:
+which of the pedagogy plan's expectations did not hold. Some were small. The quiz already trims
+answers, a job the pedagogy plan's Phase 0 still listed, because Phase 3 had to collapse spaces once
+answers could be two words. Others will shape real work. The accent key row was built with an
+`insert` closure so that the quiz could insert at the cursor, but the search only appends, and the
+row has never sat above a keyboard at all; on the verb list it takes the sort picker's place. The
+conjugation map holds one-word forms only, so recognizing "ha hablado" or grading "no hables" goes
+through `ConjugationMatch`, which conjugates a verb's every cell, and never through the map. And the
+Quiz tab cannot yet push a verb's page, so the correction links the pedagogy plan wants need the tab
+to opt into the same navigation the Verbs and Models tabs use.
+
+The plan ends with a list for the sibling apps of what Conjugar did differently for reasons that are
+not Spanish. The map's delta format, which writes hablo as "drop two letters, add o" and took the map
+from 1.41 MB to 43 KB, is the one Conjuguer, with its 6,326 verbs, should take first. Others are
+smaller: a misspelling's guess that breaks ties by the shared beginning before frequency, a review
+schedule that migrates old records once rather than guessing at every read, and a question,
+raised by reading Konjugieren's code during the Closing, of whether a collection's quiz there can
+put a second Live Activity on the Lock Screen beside the tab's.

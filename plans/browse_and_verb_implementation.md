@@ -17,6 +17,11 @@ extended rather than replaced.
 
 ## Status
 
+**The plan is finished** (2026-11-22). Every idea in the [Idea Index](#idea-index) is built, the
+staged privacy-policy lines cover every signal and parameter it added, and the pedagogy plan's
+[What the Browse Plan Leaves for This One](pedagogy_implementation.md#what-the-browse-plan-leaves-for-this-one)
+says what landed. The Closing's own row waits for Josh's commit, like any phase's.
+
 Each session that finishes a phase fills in its row, changes the **Status** line under the
 phase's heading to match, and writes the phase's **How it differed** note. Leave rows for phases
 not yet started as they are. A finished phase is "Awaiting Josh" until Josh has tried it and
@@ -41,8 +46,8 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 13 | Done | 2026-11-22 | 856326b | D2's quiz scope, D3 |
 | 14 | Done | 2026-11-22 | 52731b3 | D5 |
 | 15 | Done | 2026-11-22 | 52731b3 | D4 |
-| 16 | Awaiting Josh | 2026-11-22 | | D6 |
-| Closing | Not started | | | Audit, handoff to the pedagogy plan |
+| 16 | Done | 2026-11-22 | 81f2973 | D6 |
+| Closing | Awaiting Josh | 2026-11-22 | | Audit, handoff to the pedagogy plan |
 
 ## How to Work This Plan
 
@@ -250,30 +255,30 @@ What the code does on 2026-11-22, read for this plan. Line numbers drift; names 
 
 The IDs are Konjugieren's, from its ideas document, so its reasoning can be found by ID.
 
-| ID | Idea | Konjugieren verdict | Conjugar phase |
-|---|---|---|---:|
-| A1 | Fold umlauts and digraphs | Yes | 0 (accents, ñ, and -se) |
-| A2 | Search glosses by default, whole words first | Yes | 0 |
-| A3 | Rank the exact match first | Yes | 0 |
-| A4 | A useful empty state | Yes, trombone kept | 1 |
-| A5 | Reverse lookup from a conjugation | Yes | 4, 5 |
-| A8 | Search-field hygiene and a letter-key row | Yes | 0 |
-| A9 | Browse a family by frequency | Yes | 8 (a model's verbs) |
-| B2 | Separable verbs as a main clause writes them | Yes | 3 (reflexive-only verbs) |
-| B3 | Order sections by use, name them twice, link articles | Yes, amended | 6 |
-| B4 | Related verbs | Yes | 8 |
-| B5 | Bring the etymology and example within reach | Only the tip | 6 |
-| B6 | Copy and share | Yes | 9 |
-| B7 | Sections the page lacks | Only an article | 7 (periphrasis) |
-| C1 | A way to open search from outside | Yes | 10, 11 |
-| C2 | Spotlight that finds conjugations and glosses | Yes | 11 |
-| C4 | Keyboard lookup on iPad and Mac | Yes | 1 |
-| D1 | Recents | Yes | 12 |
-| D2 | My Verbs | Yes | 12, 13 |
-| D3 | "Test me on this verb" | Yes | 13 |
-| D4 | A review card on the landing screen | Yes | 15 |
-| D5 | A verb of the day worth opening | Yes | 14 |
-| D6 | Collections | Yes | 16 |
+| ID | Idea | Konjugieren verdict | Conjugar phase | Built |
+|---|---|---|---:|---|
+| A1 | Fold umlauts and digraphs | Yes | 0 (accents, ñ, and -se) | Yes |
+| A2 | Search glosses by default, whole words first | Yes | 0 | Yes |
+| A3 | Rank the exact match first | Yes | 0 | Yes |
+| A4 | A useful empty state | Yes, trombone kept | 1 | Yes |
+| A5 | Reverse lookup from a conjugation | Yes | 4, 5 | Yes |
+| A8 | Search-field hygiene and a letter-key row | Yes | 0 | Yes |
+| A9 | Browse a family by frequency | Yes | 8 (a model's verbs) | Yes |
+| B2 | Separable verbs as a main clause writes them | Yes | 3 (reflexive-only verbs) | Yes |
+| B3 | Order sections by use, name them twice, link articles | Yes, amended | 6 | Yes |
+| B4 | Related verbs | Yes | 8 | Yes |
+| B5 | Bring the etymology and example within reach | Only the tip | 6 | The tip only, as decided |
+| B6 | Copy and share | Yes | 9 | Yes |
+| B7 | Sections the page lacks | Only an article | 7 (periphrasis) | The article only, as decided |
+| C1 | A way to open search from outside | Yes | 10, 11 | Yes; Konjugieren's Open Verb and Conjugate a Verb shortcuts were not asked for |
+| C2 | Spotlight that finds conjugations and glosses | Yes | 11 | Built; in the simulator only titles matched (release check in `docs/release.md`) |
+| C4 | Keyboard lookup on iPad and Mac | Yes | 1 | Yes |
+| D1 | Recents | Yes | 12 | Yes |
+| D2 | My Verbs | Yes | 12, 13 | Yes |
+| D3 | "Test me on this verb" | Yes | 13 | Yes |
+| D4 | A review card on the landing screen | Yes | 15 | Yes |
+| D5 | A verb of the day worth opening | Yes | 14 | Yes |
+| D6 | Collections | Yes | 16 | Yes; no `quiz/start?list=` route, as in Konjugieren |
 
 ## Phase 0: Search Finds What People Type
 
@@ -2000,7 +2005,7 @@ decided, a later lookup resets it, the setting hides it, and tests pin the sched
 ## Phase 16: Collections
 
 **Ideas:** D6. **Ports:** Konjugieren Phase 16. **Depends on:** Phases 10 (the grammar), 12, and 13.
-**Status:** Awaiting Josh (2026-11-22).
+**Status:** Done (2026-11-22, 81f2973).
 
 Fixed lists as places to go. A list shows how many of its verbs have been opened, can be shared as a
 link, and can start a quiz on itself. Konjugieren's lists were the 100 most frequent verbs, the modal
@@ -2138,5 +2143,91 @@ collection, every model page has its bar, and tests pin membership and keys.
   or Conjuguer could adopt.
 - Mark this plan finished in its Status section.
 
-**How it differed:** _Not started._
+**Status:** Awaiting Josh (2026-11-22).
+
+**How it differed:**
+
+- **The suite.** 924 Swift Testing tests in 52 suites pass, plus the XCTest suites, in 53 seconds:
+  the count Phase 16 left. The slowest suites are ConjugationMap (10.2 seconds), QuizScopeTests
+  (9.6), and ReverseLookupTests (8.2), as the phase notes describe; none slowed. The simulator
+  language was English. No code changed in the Closing, so the suite ran once.
+- **Every idea is built.** All 22 rows of the Idea Index, which gained a **Built** column saying so,
+  with B5 and B7 built to the part Josh accepted. Three pieces were left out, each recorded in its
+  phase: Konjugieren's Open Verb and Conjugate a Verb shortcuts (Phase 11, not asked for; the
+  entity and query they need exist), the `quiz/start?list=<key>` route (Phase 16, as in
+  Konjugieren), and Konjugieren's Python reimplementation of the daily draw (Phase 14, replaced by
+  tests). One idea is built but not yet shown to work as designed: C2's Spotlight matched only
+  titles in the iOS 26.3 simulator, and `docs/release.md` item 5 checks the keywords on a device.
+  The rejected ideas (A6, A7, B1, C3, and the "Smaller and Later Ideas") stay unbuilt.
+- **The privacy audit.** `Analytics/Analytics.swift` was diffed against `5614850`, the commit
+  before Phase 0, and every call site was read. Nine signals (`finishSearch`, `leaveVerbView`,
+  `tapRevealReviewCard`, `tapShareCollection`, `tapShareVerb`, `tapStarVerb`, `tapTenseArticle`,
+  `viewCollection`, `viewReviewCard`) and ten parameter keys (`collection`, `deepestSection`,
+  `dwell`, `matchKind`, `outcome`, `queryLength`, `resultCount`, `resultPosition`, `source`,
+  `starred`) have staged lines, and `source` is staged on each signal that sends it
+  (`viewVerbView`, `finishSearch`, the three quiz signals, `viewCollection`). Of the 21 `source`
+  values, `infoLink` alone is never sent. Konjugieren's `tapTestVerb` has no counterpart here, by
+  Phase 13's choice. **One staged line was wrong.** Phase 16 rewrote the first lookup bullet from
+  Phase 2's wording and lost the "Spotlight" that Phase 11 had added, so on release day the later
+  wording would have dropped it. Both languages now name Spotlight again, and the section says why.
+  `docs/feature_architecture.md`'s `finishSearch` row also left out `lookup`, which Phase 11 sends,
+  and now lists it.
+- **The pedagogy handoff.** The section's per-phase *Landed* lines, which each session wrote,
+  matched the code (every type and function they name was found where they say). The section now
+  opens with a short **Built on `master`** list by code name, in the manner of Konjugieren's, and
+  ends with **Expectations That Did Not Hold**. Its intro no longer calls the lines expectations.
+- **The list for the siblings** is below. Konjugieren's code was read only to check two items, so
+  the rest are inferences from the phase notes and marked so.
+
+### What Konjugieren or Conjuguer Could Adopt
+
+Where Conjugar departed from Konjugieren's design for a reason that is not Spanish. "Check" marks an
+item whose need in the sibling was not confirmed in its code.
+
+1. **The conjugation map's delta format** (Phase 4). Writing each form as a delta from its
+   infinitive (hablo is `2o`: drop two letters, add "o") makes every regular verb's line identical,
+   and took Conjugar's map from 1.41 MB to 43 KB as LZFSE. Conjuguer, with about 6,326 verbs, would
+   gain the most; Konjugieren's map is already small, so it gains less.
+2. **Build the map tool optimized, without coverage** (Phase 4). `-O` whole-module even in Debug
+   cut the tool's run from 9.8 to 2.9 seconds. `ENABLE_CODE_COVERAGE = NO` stopped every build from
+   dropping a `default.profraw` into the repository root when the scheme gathers coverage.
+   Konjugieren's tool builds `-Onone` in Debug and sets no coverage flag. Check whether its scheme
+   gathers coverage.
+3. **A guess's tie goes to the shared beginning** (Phase 1). Breaking a tie by frequency alone sent
+   "hablr" to haber; preferring the verb that shares more of the query's start, then frequency,
+   sends it to hablar. When the guess scans forms, it compares only forms that begin with the
+   query's first letter, as bytes, with a bounded distance: 85 ms rather than 1.8 seconds for a
+   nonsense query (Phase 5). Both apply to any language. Check Konjugieren's guess speed.
+4. **An exact English sense as a match kind** (Phases 0 and 11). `exactGlossSense`, a gloss's comma
+   item equal to the whole query, ranks llegar first for "come" and lets Look Up a Verb answer an
+   English word ("refuel" opens repostar). Konjugieren lacks the kind, and Conjuguer would want it
+   if it gains gloss search.
+5. **Schedule an older record once, not by a read-time fallback** (Phase 15). Konjugieren treats an
+   entry with no `review` as looked up on its last open at every read. Conjugar schedules each
+   unscheduled entry once as the store loads, and only where a predicate allows, so a verb that
+   should never be reviewed is never scheduled. That matters wherever the card is restricted by
+   verb type, as Konjugieren's strong-and-mixed card is.
+6. **A sheet's quiz must not own the Live Activity** (Phases 13 and 16). Conjugar's Live Activity is
+   one per app and belongs to the tab's quiz, so `QuizScope.startsLiveActivity` excludes a
+   collection's quiz, and `Quiz.hasLiveActivity` keeps a sheet's `stop()` from ending the tab's.
+   Konjugieren starts one for a collection's quiz too (`Quiz.startLiveActivity` asks only
+   `scope.continues`, which a full-length collection quiz meets), though each `Quiz` keeps its own
+   activity. Check whether a collection's quiz in a sheet over a quiz in progress leaves two
+   activities on the Lock Screen there. Conjuguer already follows Conjugar's rule
+   (`startsLiveActivity` is full length and no collection, and `VerbCollectionTests` pins it), its
+   session reported on 2026-11-22, so it needs nothing.
+7. **Compact collection rows** (Phase 16). A title and three forms with their irregular letters red
+   ("tengo · hago · digo") in place of a two-line description kept five collections from pushing
+   the models below the fold. Konjugieren, with fewer lists, may not need it; Conjuguer's port will
+   if it offers as many.
+8. **Count tenses by register, and check the corpus's language** (Phase 6). Weighing official prose
+   and literature equally, rather than each folder a third, kept planning prose from outvoting the
+   novels. And one "Spanish" novel in the corpus was an English translation, which
+   `count_tenses.py` now guards against. Conjuguer's count, when it makes one, should do both.
+9. **`mailto:` rather than the Mail composer** for the empty state's address (Phase 1), because a
+   link opens whichever mail app the learner chose, and a device without one copies the address.
+   Check which the siblings use there.
+10. **Key conjugations off the main actor** (Phase 9). Conjugar's `KeyConjugation` is `nonisolated`
+    because Spanish needs no region; Konjugieren's reads `Current.settings` for one. Passing the
+    region as a parameter would let Spotlight and the widget call it off the main actor there too.
 

@@ -251,10 +251,52 @@ Conjugar on 2026-11-13 (its section "Conjugar and Conjuguer").
 
 ## What the Browse Plan Leaves for This One
 
-What the browse plan is expected to build, by the names it suggests. **These are expectations, not
-facts**: each browse session adds a line under the piece it touched saying what actually landed,
-and the browse plan's Closing reconciles the whole section. Where a line here and a browse note
-disagree, the note wins.
+**Reconciled by the browse plan's Closing (2026-11-22).** The browse plan is finished, and every
+piece below is built on `master`. Each bullet's first sentences are what this plan expected; the
+*Landed* lines under it are what the browse session that built it found, checked against the code at
+the Closing. Where an expectation and a *Landed* line disagree, the *Landed* line wins, and
+[Expectations That Did Not Hold](#expectations-that-did-not-hold) at the end of this section lists
+each disagreement. The browse plan's **How it differed** notes have the detail.
+
+**Built on `master`, by code name:**
+
+- **Grading.** `Quiz.grade(_:infinitive:tense:personNumber:writtenAnswer:)` trims, collapses runs of
+  spaces, and accepts a reflexive-only verb's form with or without its pronoun. `Quiz.results`
+  holds each grade, so the results screen does not regrade. A question is still the tuple
+  `Quiz.Question`.
+- **Folding.** `VerbSearch.fold` folds accents and ñ, for search only. `ConjugationMatch`'s
+  `.folded` folds acute accents and the diaeresis and keeps ñ strict, the narrower rule grading
+  wants.
+- **Edit distance.** `VerbSearch.editDistance(_:_:)` (optimal string alignment, over
+  `[Character]`), and a bounded byte version, `editDistance(_:_:limit:)`.
+- **Which cell is this text?** `ConjugationMatch.cells(of:equalTo:accents:)`, over every displayed
+  cell, compounds and negative commands included.
+- **The map and reverse lookup.** `ConjugationMap.bundled` (one-word forms only) and
+  `ConjugationIndex.bundled`, built by `ConjugationMapTool`; `FormLookup.forms(for:index:)` for
+  pronouns, enclitics, and compounds, with search's folding.
+- **Key conjugations.** `KeyConjugation` (four keys, each with its cell), `forms(of:)`, and
+  `line(for:)`, all `nonisolated`.
+- **The verb page's order.** `ConjugationTable`, from `docs/tense_frequency.md`; the quiz keeps
+  `DisplayTense.conjugatedTenses`.
+- **Links into a verb's world.** `VerbPagePush` and `.verbPageDestinations()`;
+  `VerbRelations.shared` (`baseByVerb`, `rootByVerb`); `ModelInfo.row(for:)`.
+- **Deeplinks.** The grammar in `docs/feature_architecture.md` § Deeplinks, with `URL`'s builders,
+  `deeplinkQueryValue(named:)`, and `analyticsSource`.
+- **The learner's record.** `LearnerVerbs` in `Shared/`, read through `Current.learnerVerbs`
+  (`LearnerVerbStore`), with the optional `ReviewSchedule` on each entry for irregular verbs.
+- **Scopes.** `QuizScope` (`verbs`, `questionCount`, `source`, `title`, `collectionKey`) with
+  `.allVerbs`, `.myVerbs`, `.verbPage`, and `.collection`; `isRanked` and `startsLiveActivity`;
+  `QuizSheet` for a scoped quiz in a sheet.
+- **Bands and collections.** `FrequencyBand` (`.top100`, `.top300`, `.top1000`) with
+  `VerbMapEntry.isIn(_:)` and `VerbMap.entries(in:)`; `VerbDraw`; `VerbCollection`, with the
+  pattern tests `hasGoPresent`, `hasStrongPreterite`, `hasIrregularFuture`, and
+  `hasIrregularParticiple`, shared as `conjugar://list/<key>`.
+- **The letter keys.** `SpanishLetterKeyRow(insert:)`. Only the search field shows it.
+- **Thirty is wired in.** `QuizScope.fullLength` (30) gates `isRanked`, `startsLiveActivity`, the
+  `ChangeDifficultyTip` donation, and the full-length scoped draw in `Quiz`. Phases 4, 6, and 7 must
+  revisit each.
+- **Analytics.** `source` on `startQuiz`, `quitQuiz`, and `completeQuiz`, and `collection` on a
+  collection's `startQuiz`, beside the `difficulty` the quiz signals already sent.
 
 - **The accent key row** (browse Phase 0): á, é, í, ó, ú, ü, and ñ, with an `insert` closure so
   this plan's answer field can insert at the cursor. Only the search field shows it.
@@ -433,6 +475,58 @@ disagree, the note wins.
   2026-11-22: both exist. `AnalyticsSource` in `Analytics.swift` already holds `tab` and
   `verbPage` for the quiz signals' `source`, and `AnalyticsBand` is where new bands (the quiz's
   duration bands, pedagogy Phase 6) belong. The quiz signals send `source` since browse Phase 13.
+
+### Expectations That Did Not Hold
+
+Found at the browse plan's Closing (2026-11-22), by comparing the expectations above, and this
+plan's phases that lean on them, with what landed.
+
+- **The key row inserts nowhere by itself.** `SpanishLetterKeyRow` hands its caller the letter, and
+  the search appends it; nothing inserts at a cursor yet. Nor has the row ever sat in a keyboard
+  toolbar: a toolbar never appeared for the navigation bar's search field, so it replaces the sort
+  picker instead. T1.4's row above the quiz's keyboard is therefore new work. The answer field is
+  an ordinary `TextField`, where a keyboard toolbar may behave, and inserting at the cursor needs a
+  text selection binding.
+- **Trimming is already done.** "Where Conjugar's Quiz Starts" says answers are not trimmed, and
+  Phase 0 asks to trim and collapse spaces. Since browse Phase 3, `Quiz.grade` does both. Phase 0
+  keeps the job of stripping a subject pronoun.
+- **The map is not the whole answer for Phases 3, 13, and 16.** The map holds one-word forms only,
+  bare (arrepiento, never me arrepiento), and no compound or negative command. Grading and
+  diagnosis therefore call `ConjugationMatch`, which conjugates the verb's every cell, rather than
+  the map. Phase 16's recognition can draw its forms from the map, but a prompt such as "ha hablado"
+  or "no hables" must come from `ConjugationMatch` or `FormLookup`.
+- **Reverse lookup's folding is not grading's.** `FormLookup` folds ñ, as search does. Phase 13's
+  diagnoses should take a verb from it only when the question's verb is not already known, and
+  otherwise ask `ConjugationMatch` with `.exact`, then `.folded`.
+- **Key conjugations are not always four, and may carry a pronoun.** abolir's set has three, and a
+  reflexive-only verb's set reads "me arrepiento · me arrepentí · me arrepentiré · arrepentido".
+  Phase 14's exercise needs a rule for each: a missing key is not asked, and a bare answer is
+  accepted as `Quiz.grade` accepts one.
+- **The review schedule is narrower than Konjugieren's.** Its operations are `lookedUp`,
+  `revealed`, and `dismissed`; Konjugieren's later `answered(correctly:)` and `new(at:)` were not
+  ported, so Phase 10 adds them. It lives on `LearnerVerbs.Entry`, not in a practice record of its
+  own. Records from before browse Phase 15 were scheduled once as the store loaded, so Phase 10's
+  migration meets only irregular verbs' schedules.
+- **A collection does not steer the tenses.** A collection's quiz asks the difficulty's tenses, so
+  a -go verb may be asked its pretérito. The pattern lists hold base verbs of the top 1,000 only;
+  a model's collection holds every verb of the model. Phases 8 and 15 should decide whether a
+  pattern collection asks its pattern's tenses.
+- **The `VerbFamilies` oracle covers three lists, not all.** `VerbCollectionTests` checks the
+  derivations against the irregular future, preterite, and participle lists. The derivations leave
+  out ser, ir, and dar, which the preterite list holds for the quiz but which are not strong.
+  Phase 5's draw needs its own oracle for the lists it replaces beyond those three.
+- **Correction links need the Quiz tab to opt in.** T4.5's links to a verb's page and its model's
+  page work only under a stack that injects `VerbPagePush` and calls `.verbPageDestinations()`.
+  The Quiz tab's stack does neither yet.
+- **Two quiz surfaces share a source.** The Quick Quiz control and the Start a Quiz shortcut both
+  run `OpenQuizIntent` and report `deeplink`. Telling them apart takes a second intent, as Random
+  Verb has.
+- **`docs/feature_architecture.md` has no § Quiz.** The browse plan wrote § The Scoped Quiz. Phase 4
+  should grow it into § Quiz, or create § Quiz beside it, as step 6 of How to Work This Plan says.
+- **"Where Conjugar's Quiz Starts" predates browse Phases 3 and 13.** Besides trimming, the start
+  screen lost its graduation cap and pills to Konjugieren's redesign (a scope symbol, the All Verbs
+  / My Verbs picker, and three tiles), and the quiz signals now carry `source`. The section's
+  account of the session, the difficulties, the score, and what is never asked still holds.
 
 ## Suggestion Index
 

@@ -313,14 +313,14 @@ sending `list` as the `source` of `viewVerbView` (a verb opened from a collectio
 surface for the first lookup bullet, and as the `source` of the quiz signals. A collection's quiz
 posts no score to Game Center. These rewrite the first lookup bullet (Phase 2's section), the
 quiz-lifecycle bullet and the Game Center paragraph (Phase 13's), and the in-app-actions bullet
-(Phase 15's), and add one bullet; apply this wording in place of those.
+(Phase 15's), and add one bullet; apply this wording in place of those. (The browse plan's Closing, 2026-11-22, restored "Spotlight" to the first bullet in both languages, which this section's first draft had dropped from Phase 11's wording.)
 
 ### English
 
 The first bullet of Phase 2's section now reads:
 
 ```
-- How you reached a verb's page: for example from a search, the verb list, a model's page, a collection of verbs, another verb's page, a widget, Control Center, a shortcut, or a link
+- How you reached a verb's page: for example from a search, the verb list, a model's page, a collection of verbs, another verb's page, a widget, Control Center, a shortcut, Spotlight, or a link
 ```
 
 The bullet about in-app actions in section 2 now reads:
@@ -352,7 +352,7 @@ Conjugar integrates with Apple Game Center for quiz leaderboards. When you submi
 El primer punto de la sección de la fase 2 queda así:
 
 ```
-- Cómo llegó a la página de un verbo: por ejemplo, desde una búsqueda, la lista de verbos, la página de un modelo, una colección de verbos, la página de otro verbo, un widget, el Centro de control, un atajo o un enlace
+- Cómo llegó a la página de un verbo: por ejemplo, desde una búsqueda, la lista de verbos, la página de un modelo, una colección de verbos, la página de otro verbo, un widget, el Centro de control, un atajo, Spotlight o un enlace
 ```
 
 El punto sobre las acciones dentro de la aplicación, en la sección 2, queda así:
