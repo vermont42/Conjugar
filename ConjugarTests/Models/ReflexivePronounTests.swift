@@ -189,7 +189,7 @@ struct ReflexivePronounTests {
     #expect(grade("arrepiento") == .totalMatch)
     #expect(grade("Me  arrepiento ") == .totalMatch)
     #expect(grade("te arrepiento") == .noMatch)
-    #expect(grade("arrepientete", .imperativoPositivo, .secondSingularTú) == .partialMatch)
+    #expect(grade("arrepientete", .imperativoPositivo, .secondSingularTú) == .noMatch)
     #expect(grade("arrepiéntete", .imperativoPositivo, .secondSingularTú) == .totalMatch)
     #expect(grade("arrepiente", .imperativoPositivo, .secondSingularTú) == .totalMatch)
   }

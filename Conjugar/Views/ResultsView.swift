@@ -57,6 +57,8 @@ struct ResultsView: View {
         .accessibilityLabel(L.Quiz.score + " \(quiz.score)")
         .accessibilityIdentifier("results_score")  // screenshot-driver anchor
 
+      countLine
+
       HStack(spacing: Layout.defaultSpacing) {
         Text(quiz.lastDifficulty.localizedDifficulty).metadataPill(tint: .customYellow)
         Text(quiz.lastRegion.localizedRegion).metadataPill(tint: .customBlue)
@@ -67,15 +69,43 @@ struct ResultsView: View {
     .card()
   }
 
+  /// "Correct: 25 / 30 · Second Try: 2", the second part only when an answer was right on its
+  /// second attempt.
+  private var countLine: some View {
+    var line = "\(L.Results.correct): \(quiz.correctCount) / \(quiz.questionCount)"
+    if quiz.secondAttemptCount > 0 {
+      line += " · \(L.Results.secondTry): \(quiz.secondAttemptCount)"
+    }
+    return Text(verbatim: line)
+      .font(.subheadline.monospacedDigit())
+      .foregroundStyle(.secondary)
+      .multilineTextAlignment(.center)
+      .fixedSize(horizontal: false, vertical: true)
+      .accessibilityIdentifier("results_counts")
+  }
+
   private func resultRow(index: Int, verb: String, tense: DisplayTense, person: DisplayPersonNumber) -> some View {
     let proposed = index < quiz.proposedAnswers.count ? quiz.proposedAnswers[index] : ""
     let correct = index < quiz.correctAnswers.count ? quiz.correctAnswers[index] : ""
-    let result = index < quiz.results.count ? quiz.results[index] : ConjugationResult.compare(lhs: proposed, rhs: correct)
-    let isRight = result == .totalMatch
+    let result = index < quiz.results.count ? quiz.results[index] : ConjugationResult.noMatch
+    let isRight = result != .noMatch
+    let firstAttempt = result == .secondAttemptMatch && index < quiz.firstAttempts.count ? quiz.firstAttempts[index] : nil
 
     return HStack(alignment: .top, spacing: Layout.defaultSpacing) {
-      Image(systemName: isRight ? "checkmark.circle.fill" : result == .partialMatch ? "circle.lefthalf.filled" : "xmark.circle.fill")
-        .foregroundStyle(isRight ? Color.customGreen : result == .partialMatch ? Color.customYellow : Color.customRed)
+      Group {
+        switch result {
+        case .totalMatch:
+          Image(systemName: "checkmark.circle.fill")
+            .foregroundStyle(Color.customGreen)
+        case .secondAttemptMatch:
+          Image(systemName: "circle.lefthalf.filled")
+            .foregroundStyle(Color.customYellow)
+            .accessibilityLabel(L.Results.secondTry)
+        case .noMatch:
+          Image(systemName: "xmark.circle.fill")
+            .foregroundStyle(Color.customRed)
+        }
+      }
 
       VStack(alignment: .leading, spacing: 2) {
         Text(ReflexivePronoun.citationForm(of: verb).lowercased())
@@ -92,6 +122,15 @@ struct ResultsView: View {
             .font(.callout)
             .foregroundStyle(isRight ? Color.customForeground : Color.customBlue)
         }
+        if let firstAttempt {
+          HStack(spacing: 4) {
+            Text(L.Results.firstTry + ":").font(.caption).foregroundStyle(Color.customYellow)
+            Text(Self.spanish(firstAttempt.lowercased()))
+              .font(.callout)
+              .foregroundStyle(Color.customYellow)
+          }
+          .accessibilityElement(children: .combine)
+        }
         if !isRight {
           HStack(spacing: 4) {
             Text(L.Quiz.correctAnswer + ":").font(.caption).foregroundStyle(.secondary)
@@ -104,5 +143,12 @@ struct ResultsView: View {
     }
     .padding(.vertical, Layout.defaultSpacing)
     .frame(maxWidth: .infinity, alignment: .leading)
+  }
+
+  /// Spanish text that VoiceOver reads in Spanish, whatever the device's language.
+  private static func spanish(_ text: String) -> AttributedString {
+    var attributed = AttributedString(text)
+    attributed.languageIdentifier = "es"
+    return attributed
   }
 }

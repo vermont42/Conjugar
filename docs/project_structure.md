@@ -112,12 +112,13 @@ Conjugar/
 │   │  ── quiz, settings vocabulary, services ──
 │   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the scoped draw, per-tense person rotation, the held correction (correction, continueAfterCorrection()), DEBUG fixtures (screenshot, grading, frames, corrections)
 │   ├── QuizQuestion.swift      # One question (verb, tense, person): its written answer, every accepted spelling (shownSpellings, acceptedAnswers), grade(_:), its frame, and answer(filling:)
-│   ├── QuizCorrection.swift    # A wrong answer held on its question: its grade and its AnswerDifference
+│   ├── QuizCorrection.swift    # A wrong answer held on its question: its AnswerDifference
 │   ├── AnswerDifference.swift  # Which letters of a wrong answer and of the nearest right one differ, by an edit-distance alignment; QuizQuestion.difference(from:)
 │   ├── AnswerFrame.swift       # The shape of an answer: the words around the blank (yo, (tú) ¡no … !, a reflexive me) and the answer a filled blank gives
 │   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, or a collection; question count, source, title, isRanked, startsLiveActivity
 │   ├── QuizState.swift         # notStarted / inProgress / finished
-│   ├── ConjugationResult.swift # Answer scoring: totalMatch / partialMatch (diacritic-folded) / noMatch
+│   ├── ConjugationResult.swift # What an answered question earned: totalMatch (10) / secondAttemptMatch (5) / noMatch
+│   ├── AnswerSlip.swift        # Whether a wrong answer is a slip that earns one more attempt (accents only, or one edit in four letters or more), and never another cell of the verb; QuizQuestion.isSlip(_:)
 │   ├── AnswerSpelling.swift    # How the quiz reads an answer: case, spacing, and a leading subject pronoun of the asked person
 │   ├── StandardVariants.swift  # The RAE's standard doublets of a cell (frito, satisface, adecúo, vos hablés…), accepted by the quiz only
 │   ├── Difficulty.swift        # Setting enum: easy / moderate / difficult, each with a score modifier
@@ -307,7 +308,6 @@ ConjugarTests/
 │   │                                   #   the enclisis accent rule, citation-form search, and quiz grading with and without the pronoun
 │   ├── DisplayTenseTests.swift         # The UI tense vocabulary
 │   ├── DisplayPersonNumberTests.swift  # The UI person vocabulary and its pronouns
-│   ├── ConjugationResultTests.swift    # Answer scoring, incl. the diacritic-folding partial match
 │   ├── ModelInfoTests.swift            # Models-tab row construction and irregularity percent
 │   ├── ModelSortTests.swift            # Model-list sort orders
 │   ├── RelatedVerbsTests.swift         # Bases and roots (tener, decir, formar), the class and prefix rules, false compounds,
@@ -326,7 +326,9 @@ ConjugarTests/
 │   ├── QuizLiveActivityTests.swift     # Which quizzes start, update, and end the Live Activity, against LiveActivitiesSpy
 │   ├── QuizScopeTests.swift            # The scoped quiz: My Verbs and Test Me draws, defective verbs, region and vos, ranking
 │   ├── QuizGradingTests.swift          # Accepted answers (pronouns, spacing, each standard variant), the 2010 spelling, per-tense person rotation
-│   ├── QuizCorrectionTests.swift       # The held correction's state machine: hold, clock, half points, Continue, the last question
+│   ├── QuizCorrectionTests.swift       # The held correction's state machine: hold, clock, Continue, the last question
+│   ├── QuizSecondAttemptTests.swift    # One more try: a slip waits with the clock running, half points on a right second attempt, a second slip to the correction
+│   ├── AnswerSlipTests.swift           # Which near misses are slips, and which are another cell of the verb (hablo for habló, comio for comí)
 │   ├── AnswerDifferenceTests.swift     # The letters a correction marks (accents, red letters, missing, extra, swapped) and the right answer it shows
 │   ├── AnswerFrameTests.swift          # Each kind of question's frame, and the answer a filled blank gives (supplied no, reflexive pronoun, typed pronoun)
 │   ├── VerbCollectionTests.swift       # Collections: keys, derived membership with VerbFamilies as oracle, progress, quiz, share text

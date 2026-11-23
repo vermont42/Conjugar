@@ -768,9 +768,9 @@ nonisolated enum L {
       String(localized: "Quiz.incorrect")
     }
 
-    /// The correction's line for an answer right but for its accents.
-    static var halfPoints: String {
-      String(localized: "Quiz.halfPoints")
+    /// Under the field after a slip, which earns one more attempt.
+    static var almost: String {
+      String(localized: "Quiz.almost")
     }
 
     /// What VoiceOver says before the letters of the right answer the learner missed.
@@ -795,6 +795,21 @@ nonisolated enum L {
 
     static var time: String {
       String(localized: "Results.time")
+    }
+
+    /// The count of answers right on the first attempt: "Correct: 25 / 30".
+    static var correct: String {
+      String(localized: "Results.correct")
+    }
+
+    /// The count of answers right on the second attempt, after a slip.
+    static var secondTry: String {
+      String(localized: "Results.secondTry")
+    }
+
+    /// Before the slip that a row's answer, right on the second attempt, followed.
+    static var firstTry: String {
+      String(localized: "Results.firstTry")
     }
   }
 

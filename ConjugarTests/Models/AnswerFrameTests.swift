@@ -117,7 +117,7 @@ import Testing
   }
 
   @Test func aMissingAccentIsStillNotRight() {
-    #expect(grade("hableis", "hablar", .imperativoNegativo, .secondPlural) == .partialMatch)
+    #expect(grade("hableis", "hablar", .imperativoNegativo, .secondPlural) == .noMatch)
   }
 
   /// Every cell the quiz can ask has a frame with one blank, and the written answer typed into

@@ -59,12 +59,11 @@ import Testing
     #expect(grade("hablando", "hablar", .gerundio) == .totalMatch)
   }
 
-  /// A missing accent is still not right. The second attempt that makes it a near miss is a
-  /// later change; until then it keeps its half credit.
-  @Test func aMissingAccentIsStillNotRight() {
-    #expect(grade("hable", "hablar", .pretérito, .firstSingular) == .partialMatch)
-    #expect(grade("yo hable", "hablar", .pretérito, .firstSingular) == .partialMatch)
-    #expect(grade("tenes", "tener", .presenteDeIndicativo, .secondSingularVos) == .partialMatch)
+  /// A missing accent is not right. At most it is a slip, which earns one more attempt.
+  @Test func aMissingAccentIsNotRight() {
+    #expect(grade("hable", "hablar", .pretérito, .firstSingular) == .noMatch)
+    #expect(grade("yo hable", "hablar", .pretérito, .firstSingular) == .noMatch)
+    #expect(grade("tenes", "tener", .presenteDeIndicativo, .secondSingularVos) == .noMatch)
     #expect(grade("bano", "bañar", .presenteDeIndicativo, .firstSingular) == .noMatch)
   }
 
@@ -136,7 +135,7 @@ import Testing
 
   @Test func aVariantStaysInItsOwnCell() {
     // The vos subjunctive is not tú's.
-    #expect(grade("hablés", "hablar", .presenteDeSubjuntivo, .secondSingularTú) == .partialMatch)
+    #expect(grade("hablés", "hablar", .presenteDeSubjuntivo, .secondSingularTú) == .noMatch)
     // satisface is a command only; the -deciré future belongs to predecir's family, not decir.
     #expect(grade("satisface", "satisfacer", .presenteDeIndicativo, .secondSingularTú) == .noMatch)
     #expect(grade("deciré", "decir", .futuroDeIndicativo, .firstSingular) == .noMatch)

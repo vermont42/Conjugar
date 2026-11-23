@@ -83,19 +83,13 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
     return frame.answer(filling: typed)
   }
 
-  /// The grade of an answer as typed. Case and spacing never count, nor does a leading subject
-  /// pronoun of the asked person ("yo hablo"). An answer that matches an accepted one but for its
-  /// accents earns `.partialMatch`.
+  /// The grade of one attempt as typed, `.totalMatch` or `.noMatch`. Case and spacing never
+  /// count, nor does a leading subject pronoun of the asked person ("yo hablo"). Accents do: an
+  /// answer right but for them is a slip (`isSlip(_:)`), which earns one more attempt.
   func grade(_ answer: String) -> ConjugationResult {
     let candidates = AnswerSpelling.candidates(for: answer, tense: tense, personNumber: personNumber)
     let accepted = acceptedAnswers
-    if candidates.contains(where: accepted.contains) {
-      return .totalMatch
-    }
-    let isPartial = candidates.contains { candidate in
-      accepted.contains { ConjugationResult.compare(lhs: candidate, rhs: $0) == .partialMatch }
-    }
-    return isPartial ? .partialMatch : .noMatch
+    return candidates.contains(where: accepted.contains) ? .totalMatch : .noMatch
   }
 
   /// The spelling the engine writes, irregularity-marked, of a right answer typed in a spelling

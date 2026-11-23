@@ -28,8 +28,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 |---:|---|---|---|---|
 | 0 | Done | 2026-11-22 | 8518921 | T1.3, T1.4, T1.5, Conjugar's defects |
 | 1 | Done | 2026-11-23 | 30822ac | T1.2 |
-| 2 | Awaiting Josh | 2026-11-23 | | T4.1, T4.4, T4.5 |
-| 3 | Not started | | | T1.6 |
+| 2 | Done | 2026-11-23 | df7633c | T4.1, T4.4, T4.5 |
+| 3 | Awaiting Josh | 2026-11-23 | | T1.6 |
 | 4 | Not started | | | T2.3, T2.6, T6.7, M1 |
 | 5 | Not started | | | T2.1, T2.2, T2.5 |
 | 6 | Not started | | | T2.7, T3.1, T6.5, M2, M3 |
@@ -793,7 +793,7 @@ the frame for each kind of question.
 ## Phase 2: A Correction That Stays
 
 **Ports:** Konjugieren Phase 3. **Suggestions:** T4.1, T4.4, T4.5. **Depends on:** nothing; Phase 1
-preferably. **Status:** Awaiting Josh.
+preferably. **Status:** Done.
 
 Today `Quiz.process` advances before the view redraws, so the correction for question n appears
 under question n + 1 while the clock runs.
@@ -911,8 +911,8 @@ difference is marked accents included, both links work and return, and tests pin
 
 ## Phase 3: One More Try
 
-**Ports:** Konjugieren Phase 4. **Suggestions:** T1.6. **Depends on:** Phase 2. **Status:** Not
-started.
+**Ports:** Konjugieren Phase 4. **Suggestions:** T1.6. **Depends on:** Phase 2. **Status:** Awaiting
+Josh.
 
 Treat a slip as "almost" and allow one more attempt. A right second attempt earns half the points
 (5 where a first attempt earns 10). A wrong second attempt goes to Phase 2's correction. **This
@@ -951,7 +951,64 @@ second try") with its own color; and the first attempt stays in the field to edi
 **Done when** a one-letter slip and an accent-only slip each prompt one more try, hablo for habló
 does not, half points are scored and shown, and tests pin each case.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh chose on 2026-11-23**, taking every recommendation: Konjugieren's wording, "Almost! Try
+  once more." / "¡Casi! Inténtalo una vez más.", with "Second Try" / "Segundo intento" and "First
+  Try" / "Primer intento" in the results; ñ typed as n counts like a missing accent in deciding a
+  slip (enseñaría typed ensenaria earns a second try), though grading stays strict; the
+  four-letter limit applies to a one-letter slip only, so an accent-only slip earns a second try at
+  any length (ire for iré, de for dé), since Spanish has many short accented forms and a missing
+  accent is never a different letter; and a new count line on the results card, "Correct: 8 / 10 ·
+  Second Try: 1", since the card showed no count before. Konjugieren's other two proposals were
+  taken as written: a right second attempt is counted apart, and the first attempt stays in the
+  field to edit.
+- **The rule** (`Models/AnswerSlip.swift`). `AnswerSlip.isSlip(_:of:)` compares a normalized
+  answer with each accepted spelling: equal once accents, the diaeresis, and ñ's tilde are dropped,
+  or, where the accepted spelling has four letters or more (spaces excluded), one edit by
+  `VerbSearch.editDistance`. `QuizQuestion.isSlip(_:)` then refuses any answer that is another
+  cell of the verb, compared with accents and tildes ignored, through a new
+  `ConjugationMatch.Accents.bare`. The cells whose forms are right answers for the question are
+  subtracted first, since esté is yo's and él's presente de subjuntivo and usted's command, and
+  este for esté is a slip of all three. The phase asked for the cells "exact and with accents
+  folded"; the folded comparison is what catches comio for comí (comió, the wrong person), and
+  enseno for enseñó turned out to be enseño, the presente, so the fixture uses the condicional for
+  its ñ example. **Not caught:** a standard variant of another cell is not a cell the engine
+  writes, so hablés (vos) typed for tú's hables is a slip and earns a second try.
+- **The mechanism.** `ConjugationResult.partialMatch` became `.secondAttemptMatch` (still 5), and
+  `ConjugationResult.compare` went, with the XCTest `ConjugationResultTests` that tested only it
+  (`CLAUDE.md`'s list of XCTest suites is updated). `QuizQuestion.grade(_:)` now gives only
+  `.totalMatch` or `.noMatch`. `Quiz.firstAttempt` holds the slip, as `QuizItem.firstAttempt` did
+  in Konjugieren; `process(proposedAnswer:)` returns nil while a question waits for its second
+  attempt and records nothing until the attempt that settles it. `firstAttempts` (parallel to
+  `results`) keeps each slip for the results, and `secondAttemptCount` counts the half-point
+  answers, which `correctCount` (and so the Live Activity's count) leaves out. **Phase 13** should
+  set `firstAttempt` for a diagnosed error too, so the one-attempt limit holds whatever earned it.
+  `QuizCorrection` lost its `result`, and the correction's half-points line and
+  `L.Quiz.halfPoints` went with partial credit.
+- **The progress.** Conjugar's progress is a bar with no per-question marks, so nothing there shows
+  a second attempt. The results do: a half-filled yellow circle (labeled "Second Try" for
+  VoiceOver), the count line, and a yellow "First Try:" line under the row's answer.
+- **Feedback.** A pop and a light impact, not the chime or the buzz. The clock runs on. The line
+  sits where the green check would, with a raised-hand symbol in yellow, and VoiceOver announces
+  it. Return resigns the field, so the view refocuses it as the held correction does
+  (`refocusAnswer(after:)` now serves both).
+- **Phase 2's `corrections` fixture** changed meaning: most of its wrong answers (teno, arepiento,
+  comíamoss, vivne) are now slips, so each must be typed twice to reach its correction. Its
+  comment says so.
+- **A fixture**, `CONJUGAR_QUIZ_FIXTURE slips`: six slips and four near misses that are real
+  errors, each named in a comment. `QuizSecondAttemptTests` checks the fixture against its comments.
+- **Verified:** 985 tests in 61 suites, in the simulator's default language (English), with two new
+  suites (`AnswerSlipTests`, `QuizSecondAttemptTests`), up from 976 in 59. On the iPhone, in English and light
+  mode with a hardware keyboard, the fixture prompted one more try for cantaria, tengp, ire,
+  ensenaria, hablez, and han dicjo, with the slip still in a focused field and the clock running;
+  Left arrow, Backspace, and the í key turned cantaria into cantaría, which scored 5; a second
+  ensenaria went to the correction; hablo, comio, hablé, and sot went to the correction at once.
+  The results read "Correct: 0 / 10 · Second Try: 5" with five First Try lines. On the iPad, in
+  Spanish and dark mode, "¡Casi! Inténtalo una vez más." showed under the key row, the í key fixed
+  the slip, and the results read "Correctas: 0 / 10 · Segundo intento: 2". Not tried: the software
+  keyboard, accessibility text sizes, and VoiceOver by ear.
+- **Analytics:** none added, so nothing is staged in `docs/privacy_policy_pending.md`.
 
 ## Phase 4: Levels
 

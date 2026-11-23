@@ -1017,14 +1017,13 @@ in [`Conjugar/Models/Quiz.swift`](../Conjugar/Models/Quiz.swift)). The driver re
 Each exported `answer` must be a form `ConjugationResult` scores as a **total match**.
 `exportFixtureAnswers()` lowercases every answer to strip the engine's UPPERCASE
 irregularity encoding (`TenseBridge` returns `soY`, `habRá` — uppercase flags the irregular
-part). Note this is a legibility measure, **not** a correctness one: `ConjugationResult.compare`
+part). Note this is a legibility measure, **not** a correctness one: `QuizQuestion.grade(_:)`
 lowercases both sides before comparing, so a marked form would score as a `totalMatch`
-anyway. (An earlier draft of this playbook claimed otherwise; verified against
-`ConjugationResult.swift` in July 2026.)
+anyway.
 
-`compare` also folds diacritics — a missing accent scores `partialMatch`, not `noMatch` —
-but the fixture exports fully-accented forms, so every row scores `totalMatch` and the
-results screen is all green.
+A missing accent is a slip that earns a second attempt, not a match, but the fixture exports
+fully-accented forms, so every row scores `totalMatch` on the first attempt and the results
+screen is all green.
 
 The fixture is **12 hand-picked questions**, not a generated 30 — `Quiz.screenshotFixture`
 is a fixed literal list, so the per-question review rows are identical across all four

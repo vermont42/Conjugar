@@ -2351,6 +2351,22 @@
         }
       }
     },
+    "Quiz.almost" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Almost! Try once more."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Casi! Inténtalo una vez más."
+          }
+        }
+      }
+    },
     "Quiz.blank" : {
       "localizations" : {
         "en" : {
@@ -2555,22 +2571,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "¿Te gustaría que Conjugar subiera tus futuras puntuaciones a Game Center después de tu test? Averigua dónde estás en comparación con la comunidad global de conjugadores."
-          }
-        }
-      }
-    },
-    "Quiz.halfPoints" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Half points: only the accent marks differ."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La mitad de los puntos: solo difieren las tildes."
           }
         }
       }
@@ -2947,6 +2947,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "España"
+          }
+        }
+      }
+    },
+    "Results.correct" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correct"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correctas"
+          }
+        }
+      }
+    },
+    "Results.firstTry" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "First Try"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primer intento"
+          }
+        }
+      }
+    },
+    "Results.secondTry" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Second Try"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Segundo intento"
           }
         }
       }

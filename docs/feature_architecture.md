@@ -692,13 +692,28 @@ satisfaz, adecúo beside adecuo, the Río de la Plata's vos hablés beside hable
 the engine models in `Conjugator.conjugateAll`, which includes the spelling the 2010 *Ortografía*
 retired, rió beside rio). `grade(_:)` reads the answer through `AnswerSpelling`, which ignores case,
 runs of spaces, and a leading subject pronoun of the asked person (yo hablo; tú or tu; él, el, ella,
-or usted), though never before a command, a gerundio, or a participio. An answer right but for its
-accents is still `.partialMatch`, worth half. The -ra and -se imperfect subjunctives never stand in
-for each other.
+or usted), though never before a command, a gerundio, or a participio. `grade(_:)` gives
+`.totalMatch` or `.noMatch`; accents count. The -ra and -se imperfect subjunctives never stand in for
+each other.
 
-**The held correction.** A right answer advances at once. Any other (`.noMatch`, or `.partialMatch`
-with its half points already scored) holds the question: `Quiz.process(proposedAnswer:)` stops the
-clock and sets `Quiz.correction` (a `QuizCorrection`: the grade and an `AnswerDifference`), and
+**One more try.** A wrong first attempt that is a slip (`QuizQuestion.isSlip(_:)`, in
+`AnswerSlip.swift`) earns one more: `Quiz.process(proposedAnswer:)` sets `Quiz.firstAttempt` and
+returns nil, records nothing, and leaves the clock running. A slip differs from an accepted spelling
+only in accents, the diaeresis, and ñ's tilde, however many and at any length (cantaria, ire,
+ensenaria), or, in an answer of four letters or more (spaces excluded), by one insertion, deletion,
+substitution, or swap. It is never another cell of the verb, compared through `ConjugationMatch`
+with accents and tildes ignored (`.bare`) and the cells whose forms are right answers left out: hablo
+for habló is the presente, hable for hablé the presente de subjuntivo, and comio for comí is comió,
+the wrong person. The quiz shows "Almost! Try once more." under the field, which keeps the slip to
+edit, with a pop and a light tap, and VoiceOver announces the line. A right second attempt scores
+`.secondAttemptMatch`, 5 points, and is counted apart from `correctCount` (`secondAttemptCount`);
+`firstAttempts` keeps the slip for the results, which show "Correct: 8 / 10 · Second Try: 1" and a
+"First Try:" line on the row. A wrong second attempt, a second slip included, goes to the
+correction. One more try is all a question gets, whatever earns it.
+
+**The held correction.** A right answer advances at once. A wrong one holds the question:
+`Quiz.process(proposedAnswer:)` stops the clock and sets `Quiz.correction` (a `QuizCorrection`, an
+`AnswerDifference`), and
 `continueAfterCorrection()` clears it, advances or finishes, and restarts the clock. A wrong last
 answer therefore shows its correction before the results. `QuizCorrectionView` sits under the
 answer field: Your Answer and Correct Answer, a link to the verb's page (scrolled to the asked cell

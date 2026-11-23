@@ -11147,3 +11147,38 @@ line about restarting gave it away. The count of tests was the real check: it sh
 Josh has yet to judge the layout on a device. The iPhone and iPad runs covered English and Spanish,
 light and dark, a hardware keyboard, and Test Me's sheet, where the link back to the same verb is
 left out. The software keyboard is still untried against the new layout.
+
+## One More Try in Conjugar's Quiz (2026-11-23)
+
+Until now Conjugar gave half credit for any answer that was right but for its accents, at once and
+with no chance to fix it. Phase 3 of the pedagogy plan replaces that with a second attempt. A slip
+shows "Almost! Try once more." under the field, which keeps what the learner typed, and a right
+second try earns the old half points. A wrong one, or a second slip, goes to the held correction
+that Phase 2 built.
+
+The hard part was deciding what a slip is. Konjugieren's rule, which went first, is one edit, or
+missing umlauts, in an answer of four letters or more. Spanish pushed back on two points, and Josh
+took both recommendations. Short accented forms are everywhere (iré, dé, sé, oí), and a missing
+accent is never a different letter, so the four-letter limit now applies only to a one-letter slip.
+And a learner without a Spanish keyboard types n for ñ, so ñ's tilde counts like an accent when the
+quiz decides whether to offer a second try. It still has to be typed to score.
+
+The rule that matters most came from Konjugieren's experience: an answer that is another cell of
+the verb is a real error, however near. In Spanish the accent is often the tense. hablo for habló is
+the presente, and hable for hablé is the presente de subjuntivo, so neither earns a second try.
+Comparing with accents ignored catches more than I expected. comio for comí is comió without its
+accent, the wrong person. My first example of an ñ slip, enseno for enseñó, turned out to be enseño
+without its tilde, so the fixture now uses the condicional. The one subtlety was the question's own
+cells: esté is yo's and él's subjunctive and usted's command, so este for esté would have looked like
+"another cell" until the cells whose forms are right answers were subtracted.
+
+One gap is known. The vos subjunctive (hablés) is an accepted variant, not a form the engine writes,
+so typed for tú it reads as a slip of hables rather than as the wrong person. It earns a second try,
+which seems a fair price for a rule that otherwise needs no list of exceptions.
+
+Partial credit was the last use of `ConjugationResult.compare`, a 2017 function that folded accents
+on both sides. It is gone, along with the old XCTest suite that tested it. The results screen gained
+a count line it never had ("Correct: 8 / 10 · Second Try: 1") and a "First Try:" line on each row
+that needed one. The iPhone run took six slips and four near misses through the new `slips` fixture;
+the iPad run did the same in Spanish and dark mode. The software keyboard and VoiceOver by ear are
+still untried.

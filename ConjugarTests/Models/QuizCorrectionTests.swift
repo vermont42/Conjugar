@@ -26,17 +26,6 @@ import Testing
     quiz.currentQuestion?.writtenAnswer ?? ""
   }
 
-  /// The right answer with the accent of its first vowel added or removed, which grading counts
-  /// right but for its accents.
-  private func accentSlip(_ quiz: Quiz) -> String {
-    let swaps: [Character: Character] = ["a": "á", "e": "é", "i": "í", "o": "ó", "u": "ú", "á": "a", "é": "e", "í": "i", "ó": "o", "ú": "u"]
-    var characters = Array(rightAnswer(quiz).lowercased())
-    if let index = characters.firstIndex(where: { swaps[$0] != nil }), let swapped = swaps[characters[index]] {
-      characters[index] = swapped
-    }
-    return String(characters)
-  }
-
   @Test func aRightAnswerAdvancesAtOnce() {
     let quiz = startedQuiz()
     #expect(quiz.process(proposedAnswer: rightAnswer(quiz)) == .totalMatch)
@@ -53,7 +42,6 @@ import Testing
     #expect(quiz.currentQuestionIndex == 0)
     #expect(quiz.currentQuestion == question)
     #expect(quiz.isHeld)
-    #expect(quiz.correction?.result == .noMatch)
     #expect(quiz.correction?.difference.given == "zzzz")
     #expect(quiz.correction?.difference.expected == question?.writtenAnswer)
     #expect(!quiz.isClockRunning)
@@ -77,16 +65,6 @@ import Testing
     let quiz = startedQuiz()
     quiz.continueAfterCorrection()
     #expect(quiz.currentQuestionIndex == 0)
-    quiz.quit()
-  }
-
-  @Test func anAnswerRightButForItsAccentsHoldsWithHalfPoints() {
-    let quiz = startedQuiz()
-    #expect(quiz.process(proposedAnswer: accentSlip(quiz)) == .partialMatch)
-    #expect(quiz.isHeld)
-    #expect(quiz.correction?.result == .partialMatch)
-    #expect(quiz.correction?.difference.expectedMarkedLetters.count == 1)
-    #expect(quiz.score == ConjugationResult.partialMatch.rawValue)
     quiz.quit()
   }
 

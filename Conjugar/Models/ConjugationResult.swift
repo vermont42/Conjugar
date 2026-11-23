@@ -8,32 +8,10 @@
 
 import Foundation
 
+/// What an answered question earned, in points.
 nonisolated enum ConjugationResult: Int {
   case totalMatch = 10
-  case partialMatch = 5
+  /// Right on the second attempt, which a slip earns (`QuizQuestion.isSlip(_:)`).
+  case secondAttemptMatch = 5
   case noMatch = 0
-
-  static func compare(lhs: String, rhs: String) -> ConjugationResult {
-    let lhsCount = lhs.count
-    let rhsCount = rhs.count
-    if lhsCount != rhsCount || lhsCount == 0 {
-      return .noMatch
-    }
-    var lhsClean = lhs.lowercased()
-    var rhsClean = rhs.lowercased()
-    if lhsClean == rhsClean {
-      return .totalMatch
-    }
-    // Fold diacritics so a missing/extra accent scores partialMatch, not noMatch —
-    // including ü (averigüé vs. averigue). ñ stays strict: it is a distinct letter.
-    [("á", "a"), ("é", "e"), ("í", "i"), ("ó", "o"), ("ú", "u"), ("ü", "u")].forEach {
-      lhsClean = lhsClean.replacingOccurrences(of: $0.0, with: $0.1)
-      rhsClean = rhsClean.replacingOccurrences(of: $0.0, with: $0.1)
-    }
-    if lhsClean == rhsClean {
-      return .partialMatch
-    } else {
-      return .noMatch
-    }
-  }
 }

@@ -39,12 +39,6 @@ struct QuizCorrectionView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
       VStack(alignment: .leading, spacing: 6) {
-        if correction.result == .partialMatch {
-          Label(L.Quiz.halfPoints, systemImage: "circle.lefthalf.filled")
-            .font(.subheadline)
-            .foregroundStyle(Color.customYellow)
-            .fixedSize(horizontal: false, vertical: true)
-        }
         answerRow(label: L.Quiz.yourAnswer, text: Self.givenText(difference))
         answerRow(label: L.Quiz.correctAnswer, text: Self.expectedText(difference))
       }
@@ -134,8 +128,7 @@ struct QuizCorrectionView: View {
   /// are read in Spanish and the rest in the device's language. The letters are named only while
   /// there are few enough to help.
   private var spokenCorrection: Text {
-    let heading = correction.result == .partialMatch ? L.Quiz.halfPoints : L.Quiz.incorrect
-    var spoken = AttributedString(heading + " " + L.Quiz.yourAnswer + ": ")
+    var spoken = AttributedString(L.Quiz.incorrect + " " + L.Quiz.yourAnswer + ": ")
     spoken += Self.spanish(difference.given)
     spoken += AttributedString(". " + L.Quiz.correctAnswer + ": ")
     spoken += Self.spanish(difference.expected.lowercased())

@@ -17,7 +17,8 @@ struct QuizView: View {
   @State private var tabScope = TabQuizScope.allVerbs
   @State private var answer = ""
   @State private var answerSelection: TextSelection?
-  @State private var lastResult: ConjugationResult?
+  /// The haptic for the last answer: a light tap for a slip, which waits for one more attempt.
+  @State private var lastFeedback: SensoryFeedback?
   /// Whether the check for the last answer, which was right, shows under the next question.
   @State private var showsRightAnswer = false
   @State private var answerToken = 0
@@ -339,7 +340,10 @@ struct QuizView: View {
             letterKeys
           }
 
-          if let question = quiz.currentQuestion, let correction = quiz.correction {
+          if quiz.isAwaitingSecondAttempt {
+            secondAttemptLine
+              .frame(minHeight: 44)
+          } else if let question = quiz.currentQuestion, let correction = quiz.correction {
             QuizCorrectionView(
               question: question,
               correction: correction,
@@ -389,12 +393,7 @@ struct QuizView: View {
       }
     }
     .sensoryFeedback(trigger: answerToken) { _, _ in
-      switch lastResult {
-      case .totalMatch: return .success
-      case .partialMatch: return .warning
-      case .noMatch: return .error
-      case .none: return nil
-      }
+      lastFeedback
     }
   }
 
@@ -498,6 +497,17 @@ struct QuizView: View {
     }
   }
 
+  /// "Almost! Try once more." under the field, which keeps the slip for the learner to edit.
+  private var secondAttemptLine: some View {
+    Label(L.Quiz.almost, systemImage: "hand.raised.fill")
+      .font(.headline)
+      .foregroundStyle(Color.customYellow)
+      .fixedSize(horizontal: false, vertical: true)
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .transition(.opacity.combined(with: .scale(scale: 0.9)))
+      .accessibilityIdentifier("quiz_almost")
+  }
+
   /// The verb's model for a correction's link, or nil in a quiz over that model's own verbs.
   private func correctionModel(for question: QuizQuestion) -> ModelInfo? {
     guard let model = ModelInfo.row(for: question.verb),
@@ -507,24 +517,29 @@ struct QuizView: View {
     return model
   }
 
-  /// Gives the answer field the keyboard while a correction is held, so that Return continues.
-  /// Return resigns the field while the focus state can still read true. Back from a linked page
-  /// gives the field its keyboard again without telling the focus state, which reads false, so
-  /// setting it true then does nothing and the field's border stays unfocused. Either way, the
-  /// state is cleared and set again once the field is back on screen.
+  /// Gives the answer field the keyboard while the question waits, on a held correction so
+  /// that Return continues, or after a slip so that the learner can edit it. Return resigns the
+  /// field while the focus state can still read true. Back from a linked page gives the field its
+  /// keyboard again without telling the focus state, which reads false, so setting it true then
+  /// does nothing and the field's border stays unfocused. Either way, the state is cleared and
+  /// set again once the field is back on screen.
   private func refocusAnswer(after delay: Duration) {
     fieldFocused = false
     Task { @MainActor in
       try? await Task.sleep(for: delay)
-      guard navigationPath.isEmpty, quiz.isHeld else {
+      guard navigationPath.isEmpty, isWaitingOnQuestion else {
         return
       }
       fieldFocused = false
       try? await Task.sleep(for: .milliseconds(50))
-      if navigationPath.isEmpty, quiz.isHeld {
+      if navigationPath.isEmpty, isWaitingOnQuestion {
         fieldFocused = true
       }
     }
+  }
+
+  private var isWaitingOnQuestion: Bool {
+    quiz.quizState == .inProgress && (quiz.isHeld || quiz.isAwaitingSecondAttempt)
   }
 
   private var statusStrip: some View {
@@ -552,7 +567,7 @@ struct QuizView: View {
     }
     Current.soundPlayer.play(.gun, shouldDebounce: false)
     answer = ""
-    lastResult = nil
+    lastFeedback = nil
     showsRightAnswer = false
     navigationPath = NavigationPath()
     fieldFocused = true
@@ -571,13 +586,28 @@ struct QuizView: View {
     guard let question = quiz.currentQuestion, !answer.allSatisfy(\.isWhitespace) else { return }
     let result = quiz.process(proposedAnswer: question.answer(filling: answer))
     switch result {
-    case .totalMatch: Current.soundPlayer.play(.chime, shouldDebounce: false)
-    case .partialMatch: Current.soundPlayer.play(.chirp, shouldDebounce: false)
-    case .noMatch: Current.soundPlayer.play(.buzz, shouldDebounce: false)
+    case .totalMatch, .secondAttemptMatch:
+      Current.soundPlayer.play(.chime, shouldDebounce: false)
+      lastFeedback = .success
+    case .noMatch:
+      Current.soundPlayer.play(.buzz, shouldDebounce: false)
+      lastFeedback = .error
+    case nil:
+      Current.soundPlayer.play(.pop, shouldDebounce: false)
+      lastFeedback = .impact(weight: .light)
     }
-    lastResult = result
     answerToken += 1
-    guard result == .totalMatch else {
+    guard let result else {
+      // A slip: the field keeps it to edit, and Return, which resigned the field, must find it
+      // focused again.
+      withAnimation(reduceMotion ? nil : .snappy) {
+        showsRightAnswer = false
+      }
+      AccessibilityNotification.Announcement(L.Quiz.almost).post()
+      refocusAnswer(after: .milliseconds(50))
+      return
+    }
+    guard result != .noMatch else {
       // The field keeps the answer while its correction holds the question.
       withAnimation(reduceMotion ? nil : .snappy) {
         showsRightAnswer = false
@@ -644,7 +674,7 @@ struct QuizView: View {
       ]
     )
     fieldFocused = false
-    lastResult = nil
+    lastFeedback = nil
     showsRightAnswer = false
     if sheetScope != nil {
       dismiss()

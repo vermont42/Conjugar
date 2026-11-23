@@ -57,6 +57,11 @@ class Quiz {
   /// reads these rather than regrading, because a reflexive-only verb accepts two answers and
   /// `correctAnswers` holds only the one shown.
   private(set) var results: [ConjugationResult] = []
+  /// Each answered question's first attempt when it was a slip that earned a second, else nil.
+  private(set) var firstAttempts: [String?] = []
+  /// The slip that the question on screen waits on for its second attempt. A question gets one
+  /// more attempt at most, so a second slip goes to the correction.
+  private(set) var firstAttempt: String?
   /// The current spelling of the last answer when it was right in a retired one. See
   /// `QuizQuestion.currentSpelling(of:)`.
   private(set) var lastCurrentSpelling: String?
@@ -175,6 +180,9 @@ class Quiz {
       case .corrections:
         questions = Quiz.correctionsFixture
         beginQuiz()
+      case .slips:
+        questions = Quiz.slipsFixture
+        beginQuiz()
       }
       return true
     }
@@ -210,6 +218,7 @@ class Quiz {
     proposedAnswers.removeAll()
     correctAnswers.removeAll()
     results.removeAll()
+    firstAttempts.removeAll()
   }
 
   /// The difficulty's plan over the curated lists in `VerbFamilies`, unshuffled: the full quiz
@@ -452,6 +461,17 @@ class Quiz {
     correction != nil
   }
 
+  /// Whether the question on screen waits for a second attempt after a slip. The clock runs on,
+  /// since the learner is still answering.
+  var isAwaitingSecondAttempt: Bool {
+    firstAttempt != nil
+  }
+
+  /// The answers right on the second attempt, counted apart from `correctCount`.
+  var secondAttemptCount: Int {
+    results.filter { $0 == .secondAttemptMatch }.count
+  }
+
   /// Whether the clock is counting, which it does only while a question waits for its answer.
   var isClockRunning: Bool {
     timer?.isValid ?? false
@@ -466,6 +486,7 @@ class Quiz {
     currentQuestionIndex = 0
     elapsedTime = 0
     correction = nil
+    firstAttempt = nil
     lastCurrentSpelling = nil
     quizState = .inProgress
     startTimer()
@@ -494,17 +515,29 @@ class Quiz {
     }
   }
 
-  /// Grades the answer to the question on screen and records it. A right answer advances at
-  /// once; any other holds the question with its correction and stops the clock.
+  /// Grades the answer to the question on screen. A first attempt that is a slip
+  /// (`QuizQuestion.isSlip(_:)`) records nothing and returns nil, and the question waits for one
+  /// more attempt with the clock running. Any other answer is recorded: a right one advances at
+  /// once, earning half its points on a second attempt, and a wrong one holds the question with
+  /// its correction and stops the clock.
   @discardableResult
-  func process(proposedAnswer: String) -> ConjugationResult {
+  func process(proposedAnswer: String) -> ConjugationResult? {
     let question = questions[currentQuestionIndex]
     let correctAnswer: String
     let result: ConjugationResult
     if let answer = question.writtenAnswer {
+      let isRight = question.grade(proposedAnswer) == .totalMatch
+      if !isRight, firstAttempt == nil, question.isSlip(proposedAnswer) {
+        firstAttempt = proposedAnswer
+        return nil
+      }
       correctAnswer = answer
-      result = question.grade(proposedAnswer)
-      lastCurrentSpelling = result == .totalMatch ? question.currentSpelling(of: proposedAnswer) : nil
+      if isRight {
+        result = firstAttempt == nil ? .totalMatch : .secondAttemptMatch
+      } else {
+        result = .noMatch
+      }
+      lastCurrentSpelling = isRight ? question.currentSpelling(of: proposedAnswer) : nil
     } else {
       // A quiz slot should always conjugate — VerbFamiliesTests pins every list
       // entry to VerbMap — but degrade gracefully rather than crash a learner
@@ -517,15 +550,18 @@ class Quiz {
     proposedAnswers.append(proposedAnswer)
     correctAnswers.append(correctAnswer)
     results.append(result)
-    if result != .noMatch {
-      score += result.rawValue
-    }
-    if result == .totalMatch {
+    firstAttempts.append(firstAttempt)
+    firstAttempt = nil
+    score += result.rawValue
+    switch result {
+    case .totalMatch:
       correctCount += 1
       advance()
-    } else {
+    case .secondAttemptMatch:
+      advance()
+    case .noMatch:
       timer?.invalidate()
-      correction = QuizCorrection(result: result, difference: question.difference(from: proposedAnswer))
+      correction = QuizCorrection(difference: question.difference(from: proposedAnswer))
     }
     return result
   }
@@ -578,6 +614,7 @@ class Quiz {
   func stop() {
     timer?.invalidate()
     correction = nil
+    firstAttempt = nil
     quizState = .finished
     endLiveActivity()
   }
@@ -655,8 +692,12 @@ extension Quiz {
     case frames
     /// Questions whose comments give a wrong answer that shows a kind of marking on the held
     /// correction: an accent, a red letter, a missing or extra letter, a swap, a frame's supplied
-    /// word, and the nearest of two right answers.
+    /// word, and the nearest of two right answers. Most of these answers are slips, so each is
+    /// typed twice to reach its correction.
     case corrections
+    /// Questions whose comments give a near miss: a slip, which earns one more attempt, or an
+    /// answer as near that is another cell of the verb, which goes to the correction at once.
+    case slips
   }
 
   static var fixtureRun: Fixture? {
@@ -700,8 +741,21 @@ extension Quiz {
     QuizQuestion("arrepentir", .imperativoNegativo, .thirdSingular)          // (usted) ¡no se [arrepienta]!
   ]
 
+  static let slipsFixture: [Question] = [
+    QuizQuestion("cantar", .condicional, .firstSingular),               // cantaria: accents only, another try
+    QuizQuestion("tener", .presenteDeIndicativo, .firstSingular),       // tengp: one letter, another try
+    QuizQuestion("ir", .futuroDeIndicativo, .firstSingular),            // ire: accents only, short as it is
+    QuizQuestion("enseñar", .condicional, .thirdSingular),              // ensenaria: ñ and an accent
+    QuizQuestion("hablar", .imperativoNegativo, .secondSingularTú),     // hablez: one letter, beside the frame's "no"
+    QuizQuestion("decir", .perfectoDeIndicativo, .thirdPlural),         // han dicjo: one letter in a compound
+    QuizQuestion("hablar", .pretérito, .thirdSingular),                 // hablo: the presente, so a correction
+    QuizQuestion("comer", .pretérito, .firstSingular),                  // comio: comió, the wrong person
+    QuizQuestion("hablar", .presenteDeSubjuntivo, .firstSingular),      // hablé: the pretérito
+    QuizQuestion("ser", .presenteDeIndicativo, .firstSingular)          // sot: too short for a one-letter slip
+  ]
+
   static let correctionsFixture: [Question] = [
-    QuizQuestion("hablar", .pretérito, .thirdSingular),                 // hablo: an accent, half points
+    QuizQuestion("hablar", .pretérito, .thirdSingular),                 // hablo: an accent, and the presente
     QuizQuestion("tener", .presenteDeIndicativo, .firstSingular),       // teno: a missing red letter
     QuizQuestion("arrepentir", .presenteDeIndicativo, .firstSingular),  // arepiento: a missing letter
     QuizQuestion("comer", .imperfectoDeIndicativo, .firstPlural),       // comíamoss: an extra letter
@@ -762,7 +816,7 @@ extension Quiz {
   ///
   /// Answers are lowercased to strip the engine's UPPERCASE irregularity encoding
   /// (`TenseBridge` returns `soY`, `habRá` — uppercase flags the irregular part).
-  /// `ConjugationResult.compare` lowercases both sides before comparing, so this is
+  /// `QuizQuestion.grade(_:)` lowercases both sides before comparing, so this is
   /// not required for the answer to score as a `totalMatch`; it is here so the
   /// exported JSON is legible when a human debugs a bad cell, and so the typed text
   /// matches what a real learner would enter.

@@ -22,6 +22,9 @@ nonisolated enum ConjugationMatch {
     /// Acute accents and the diaeresis are ignored, so "hablo" also matches habló. The tilde of
     /// ñ is kept, because ñ is a letter of its own, not n with an accent.
     case folded
+    /// As `folded`, and ñ's tilde is ignored too, for judging a typing slip, where a learner
+    /// without a Spanish keyboard types enseno for enseño.
+    case bare
   }
 
   /// Every cell this verb has: the infinitive, the gerund, the participle, and each conjugated
@@ -77,14 +80,26 @@ nonisolated enum ConjugationMatch {
       return collapsed
     case .folded:
       return foldingAccents(collapsed)
+    case .bare:
+      return bareSpelling(collapsed)
     }
   }
 
   private static let foldedMarks: Set<Unicode.Scalar> = ["\u{0301}", "\u{0308}"]
+  private static let bareMarks: Set<Unicode.Scalar> = ["\u{0301}", "\u{0308}", "\u{0303}"]
 
   /// "habló" → "hablo", "pingüino" → "pinguino", "año" unchanged.
   static func foldingAccents(_ text: String) -> String {
-    let scalars = text.decomposedStringWithCanonicalMapping.unicodeScalars.filter { !foldedMarks.contains($0) }
+    removing(foldedMarks, from: text)
+  }
+
+  /// "enseñó" → "enseno": `foldingAccents`, and ñ's tilde dropped as well.
+  static func bareSpelling(_ text: String) -> String {
+    removing(bareMarks, from: text)
+  }
+
+  private static func removing(_ marks: Set<Unicode.Scalar>, from text: String) -> String {
+    let scalars = text.decomposedStringWithCanonicalMapping.unicodeScalars.filter { !marks.contains($0) }
     return String(String.UnicodeScalarView(scalars)).precomposedStringWithCanonicalMapping
   }
 }
