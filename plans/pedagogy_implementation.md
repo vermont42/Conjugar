@@ -377,6 +377,24 @@ disagree, the note wins.
     practice record beside this one, as Konjugieren's `PracticeRecord` is, rather than in it.
 - **A scoped quiz** (browse Phase 13): `QuizScope`, Test Me in a sheet, a My Verbs scope on the Quiz
   tab, `source` on the three quiz signals, and the rule that scoped quizzes do not rank.
+  - *Landed 2026-11-22 (browse Phase 13):* `QuizScope` (`Models/QuizScope.swift`, `nonisolated`):
+    `verbs` (nil for every verb, else bare infinitives), `questionCount`, `source`; `allVerbs`,
+    `allVerbs(source:)` (a `quiz` link), `myVerbs(_:)`, `verbPage(_:)`; `QuizScope.fullLength` is
+    30, and `isRanked` (every verb, full length) gates both the Game Center report and the
+    leaderboard shown at the end. `Quiz.start(scope:)` returns false when a scope gives no question.
+    The difficulty's plan is `Quiz.standardQuestions()`, unshuffled; a full-length scoped quiz keeps
+    its tenses and persons and fills the slots with the scope's verbs in turn, and a shorter one
+    takes distinct cells one tense at a time. Both skip cells the engine does not give (defective
+    verbs) and follow the tab's tú/vos and vosotros rules (`scopedPersonNumbers(for:)`). A question
+    is still a tuple, `Quiz.Question`, so Phase 0's question type replaces it. Test Me opens
+    `QuizSheet` (`Views/QuizSheet.swift`) with its own `Quiz`; `QuizView(quiz:sheetScope:)` and
+    `ResultsView(quiz:)` take their quiz. Only a full-length quiz starts the Live Activity
+    (`Quiz.hasLiveActivity`) or counts toward `ChangeDifficultyTip`. `startQuiz`, `quitQuiz`, and
+    `completeQuiz` carry `source` (`tab`, `myVerbs`, `verbPage`, or a `quiz` link's own, `deeplink`
+    by default; `AppRouter.pendingQuizStart` is an `AnalyticsSource?`). The Quiz tab's start screen
+    is Konjugieren's redesign (scope symbol, picker, three tiles: questions, difficulty, region), which
+    Phases 4 and 8 here will rework when levels replace the difficulties and the learner chooses a
+    scope.
 - **Frequency bands** (browse Phase 14): top 100, 300, and 1,000, defined once.
 - **The review card's schedule** (browse Phase 15): a box and a due date on the 1, 3, 7, 14, and 30
   day ladder, in `Shared/`, for irregular verbs only (Josh, 2026-11-22). Phase 10 here absorbs it.
@@ -386,7 +404,7 @@ disagree, the note wins.
 - **`docs/privacy_policy_pending.md` and `docs/feature_architecture.md`** (browse Phase 2). Landed
   2026-11-22: both exist. `AnalyticsSource` in `Analytics.swift` already holds `tab` and
   `verbPage` for the quiz signals' `source`, and `AnalyticsBand` is where new bands (the quiz's
-  duration bands, pedagogy Phase 6) belong. The quiz signals do not send `source` yet.
+  duration bands, pedagogy Phase 6) belong. The quiz signals send `source` since browse Phase 13.
 
 ## Suggestion Index
 

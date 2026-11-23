@@ -713,6 +713,37 @@ nonisolated enum L {
     static var score: String {
       String(localized: "Quiz.score")
     }
+
+    /// The label of the start screen's picker (browse plan, Phase 13).
+    static var scope: String {
+      String(localized: "Quiz.scope")
+    }
+
+    static var allVerbs: String {
+      String(localized: "Quiz.allVerbs")
+    }
+
+    static func myVerbsCount(count: Int) -> String {
+      String(localized: "Quiz.myVerbsCount \(count)")
+    }
+
+    static var myVerbsEmpty: String {
+      String(localized: "Quiz.myVerbsEmpty")
+    }
+
+    /// After the first twelve of My Verbs' chips: "+3 more".
+    static func moreVerbs(count: Int) -> String {
+      String(localized: "Quiz.moreVerbs \(count)")
+    }
+
+    static var questionsLabel: String {
+      String(localized: "Quiz.questionsLabel")
+    }
+
+    /// Closes Test Me's sheet once its results show.
+    static var done: String {
+      String(localized: "Quiz.done")
+    }
   }
 
   enum Results {
@@ -893,6 +924,11 @@ nonisolated enum L {
   }
 
   enum Verb {
+    /// Test Me's button in a verb page's navigation bar (browse plan, Phase 13).
+    static var testMe: String {
+      String(localized: "Verb.testMe")
+    }
+
     static var matchesSearch: String {
       String(localized: "Verb.matchesSearch")
     }

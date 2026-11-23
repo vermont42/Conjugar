@@ -57,7 +57,9 @@ class Quiz {
   /// reads these rather than regrading, because a reflexive-only verb accepts two answers and
   /// `correctAnswers` holds only the one shown.
   private(set) var results: [ConjugationResult] = []
-  private(set) var questions: [(String, DisplayTense, DisplayPersonNumber)] = []
+  private(set) var questions: [Question] = []
+  /// What the quiz under way, or last finished, asks about. See `QuizScope`.
+  private(set) var scope = QuizScope.allVerbs
   private let regularAr = Cycler(VerbFamilies.regularArVerbs)
   private let regularIr = Cycler(VerbFamilies.regularIrVerbs)
   private let regularEr = Cycler(VerbFamilies.regularErVerbs)
@@ -85,7 +87,15 @@ class Quiz {
   private let personNumbersWithTu: [DisplayPersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private let personNumbersWithVos: [DisplayPersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
   private var personNumbersIndex = 0
-  private var shouldShuffle = true
+  /// False makes every draw deterministic, for tests and UI tests. A quiz made for a verb page's
+  /// sheet copies it from `Current.quiz`.
+  let shouldShuffle: Bool
+  /// Whether this quiz started the Live Activity, which is one for the whole app. A quiz that did
+  /// not, such as Test Me's in a sheet, must not update or end the tab's.
+  @ObservationIgnored private var hasLiveActivity = false
+
+  /// One question: the infinitive, the tense, and the person (`.none` for the gerundio).
+  typealias Question = (String, DisplayTense, DisplayPersonNumber)
 
   var questionCount: Int {
     return questions.count
@@ -132,21 +142,60 @@ class Quiz {
     self.shouldShuffle = shouldShuffle
   }
 
-  /// Build a difficulty's question plan and start the clock.
-  func start() {
-    lastRegion = settings.region
-    lastDifficulty = settings.difficulty
+  /// Build the scope's questions for the current difficulty and start the clock. The default
+  /// scope, every verb, is the Quiz tab's quiz as it has always been. A scope whose verbs give no
+  /// question (an empty My Verbs) starts nothing, leaves the quiz as it was, and returns false.
+  @discardableResult
+  func start(scope: QuizScope = .allVerbs) -> Bool {
+    let region = settings.region
+    let difficulty = settings.difficulty
+    #if DEBUG
+    if Quiz.isScreenshotFixtureRun, scope.verbs == nil {
+      self.scope = scope
+      lastRegion = region
+      lastDifficulty = difficulty
+      clearAnswers()
+      startScreenshotFixture()
+      return true
+    }
+    #endif
+    let previousRegion = lastRegion
+    let previousDifficulty = lastDifficulty
+    // `personNumber()` reads the region, so it is set before the draw.
+    lastRegion = region
+    lastDifficulty = difficulty
+    var drawn: [Question]
+    if let verbs = scope.verbs {
+      drawn = scopedQuestions(verbs: verbs, count: scope.questionCount)
+    } else {
+      drawn = standardQuestions()
+    }
+    guard !drawn.isEmpty else {
+      lastRegion = previousRegion
+      lastDifficulty = previousDifficulty
+      return false
+    }
+    if shouldShuffle {
+      drawn.shuffle()
+    }
+    self.scope = scope
+    clearAnswers()
+    questions = drawn
+    beginQuiz()
+    return true
+  }
+
+  private func clearAnswers() {
     questions.removeAll()
     proposedAnswers.removeAll()
     correctAnswers.removeAll()
     results.removeAll()
+  }
 
-    #if DEBUG
-    if Quiz.isScreenshotFixtureRun {
-      startScreenshotFixture()
-      return
-    }
-    #endif
+  /// The difficulty's plan over the curated lists in `VerbFamilies`, unshuffled: the full quiz
+  /// over every verb, and the tenses and persons a scoped quiz borrows.
+  private func standardQuestions() -> [Question] {
+    var questions: [Question] = []
     for cycler in allCyclers {
       cycler.restart(shuffle: shouldShuffle)
     }
@@ -269,13 +318,116 @@ class Quiz {
       ]
       let chosenCompounds = shouldShuffle ? compoundTenses.shuffled() : compoundTenses
       chosenCompounds.prefix(5).forEach {
-        questions.append((regularOrIrregularParticipioVerb, $0, personNumber()))
+        questions.append((regularOrIrregularParticipioVerb(questionNumber: questions.count), $0, personNumber()))
       }
     }
-    if shouldShuffle {
-      questions.shuffle()
+    return questions
+  }
+
+  /// Questions about the given verbs only, in the tenses the difficulty asks and never in a cell
+  /// a verb lacks (a defective verb's) or vosotros in the Latin America region.
+  ///
+  /// A full-length quiz keeps the difficulty's plan, so its mix of tenses is the tab's, and puts
+  /// the scope's verbs in it in turn, avoiding a repeated question where another verb can take
+  /// the cell. A shorter quiz, such as Test Me's three questions, would get an arbitrary slice of
+  /// that mix, so it asks distinct cells in different tenses instead, one tense at a time.
+  private func scopedQuestions(verbs: [String], count: Int) -> [Question] {
+    var pool = verbs.filter { VerbMap.shared.entry(for: $0) != nil }
+    guard !pool.isEmpty, count > 0 else {
+      return []
     }
-    beginQuiz()
+    if shouldShuffle {
+      pool.shuffle()
+    }
+    let plan = standardQuestions()
+    var asked: [Question] = []
+    var nextVerb = 0
+
+    /// The first verb, from the turn onward, that can be asked in a cell, preferring one not
+    /// already asked there.
+    func verb(for tense: DisplayTense, _ personNumber: DisplayPersonNumber, allowingRepeat: Bool) -> String? {
+      var fallback: String?
+      for offset in 0..<pool.count {
+        let candidate = pool[(nextVerb + offset) % pool.count]
+        guard Quiz.canAsk(candidate, tense, personNumber) else {
+          continue
+        }
+        let isRepeat = asked.contains { $0.0 == candidate && $0.1 == tense && $0.2 == personNumber }
+        if !isRepeat {
+          nextVerb = (nextVerb + offset + 1) % pool.count
+          return candidate
+        }
+        fallback = fallback ?? candidate
+      }
+      return allowingRepeat ? fallback : nil
+    }
+
+    if count >= QuizScope.fullLength {
+      for (_, tense, personNumber) in plan where asked.count < count {
+        if let chosen = verb(for: tense, personNumber, allowingRepeat: true) {
+          asked.append((chosen, tense, personNumber))
+        }
+      }
+      return asked
+    }
+
+    var tenses: [DisplayTense] = []
+    for (_, tense, _) in plan where !tenses.contains(tense) {
+      tenses.append(tense)
+    }
+    if shouldShuffle {
+      tenses.shuffle()
+    }
+    var cellsByTense: [[DisplayPersonNumber]] = tenses.map { tense in
+      let personNumbers = scopedPersonNumbers(for: tense)
+      return shouldShuffle ? personNumbers.shuffled() : personNumbers
+    }
+    var askedInRound = true
+    while asked.count < count, askedInRound {
+      askedInRound = false
+      for index in tenses.indices where asked.count < count {
+        while !cellsByTense[index].isEmpty {
+          let personNumber = cellsByTense[index].removeFirst()
+          if let chosen = verb(for: tenses[index], personNumber, allowingRepeat: false) {
+            asked.append((chosen, tenses[index], personNumber))
+            askedInRound = true
+            break
+          }
+        }
+      }
+    }
+    return asked
+  }
+
+  /// The persons a scoped quiz may ask in a tense, as the tab's plan asks them: tú or vos by the
+  /// setting, no vosotros in the Latin America region, no yo in a command, and no tú or vos in a
+  /// negative one.
+  private func scopedPersonNumbers(for tense: DisplayTense) -> [DisplayPersonNumber] {
+    if tense == .gerundio || tense == .participio {
+      return [.none]
+    }
+    let secondSingular: DisplayPersonNumber = settings.secondSingularQuiz == .tu ? .secondSingularTú : .secondSingularVos
+    var personNumbers: [DisplayPersonNumber]
+    switch tense {
+    case .imperativoPositivo:
+      personNumbers = [secondSingular, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+    case .imperativoNegativo:
+      personNumbers = [.thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+    default:
+      personNumbers = [.firstSingular, secondSingular, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+    }
+    if lastRegion == .latinAmerica {
+      personNumbers.removeAll { $0 == .secondPlural }
+    }
+    return personNumbers
+  }
+
+  /// Whether the engine gives the cell, which a defective verb's missing cells it does not.
+  private static func canAsk(_ verb: String, _ tense: DisplayTense, _ personNumber: DisplayPersonNumber) -> Bool {
+    if case .success = TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber) {
+      return true
+    }
+    return false
   }
 
   /// Reset the per-run counters and start the clock. Split out of `start()` so the
@@ -288,19 +440,24 @@ class Quiz {
     elapsedTime = 0
     quizState = .inProgress
     startTimer()
-    LiveActivityManager.start(
-      difficulty: lastDifficulty.rawValue,
-      totalQuestions: questions.count,
-      state: liveActivityState(isFinished: false)
-    )
+    // A three-question quiz in a verb page's sheet is over before a Live Activity would be
+    // noticed, and the Live Activity belongs to the tab's quiz.
+    hasLiveActivity = scope.questionCount >= QuizScope.fullLength
+    if hasLiveActivity {
+      LiveActivityManager.start(
+        difficulty: lastDifficulty.rawValue,
+        totalQuestions: questions.count,
+        state: liveActivityState(isFinished: false)
+      )
+    }
   }
 
-  private var regularOrIrregularParticipioVerb: String {
+  private func regularOrIrregularParticipioVerb(questionNumber: Int) -> String {
     let diceRoll: Int
     if shouldShuffle {
       diceRoll = Int.random(in: 0..<2)
     } else {
-      diceRoll = questions.count % 2
+      diceRoll = questionNumber % 2
     }
     if diceRoll == 0 {
       return allRegular.next()
@@ -335,17 +492,24 @@ class Quiz {
     }
     if currentQuestionIndex < questions.count - 1 {
       currentQuestionIndex += 1
-      LiveActivityManager.update(liveActivityState(isFinished: false))
+      if hasLiveActivity {
+        LiveActivityManager.update(liveActivityState(isFinished: false))
+      }
     } else {
       score = Int(Double(score) * Quiz.scoreScale / Double(max(questions.count, 1)) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
       timer?.invalidate()
       quizState = .finished
       // Unlocks the "Change Quiz Difficulty" tip, which is rule-gated on having
-      // finished at least one quiz.
-      ChangeDifficultyTip.quizCompleted.sendDonation()
-      LiveActivityManager.end(liveActivityState(isFinished: true))
-      Task {
-        await gameCenter.reportScore(score)
+      // finished at least one quiz. Three questions on a verb's page are not one.
+      if scope.questionCount >= QuizScope.fullLength {
+        ChangeDifficultyTip.quizCompleted.sendDonation()
+      }
+      endLiveActivity()
+      if scope.isRanked {
+        let finalScore = score
+        Task {
+          await gameCenter.reportScore(finalScore)
+        }
       }
     }
     if result == .totalMatch {
@@ -383,6 +547,14 @@ class Quiz {
   func stop() {
     timer?.invalidate()
     quizState = .finished
+    endLiveActivity()
+  }
+
+  private func endLiveActivity() {
+    guard hasLiveActivity else {
+      return
+    }
+    hasLiveActivity = false
     LiveActivityManager.end(liveActivityState(isFinished: true))
   }
 
@@ -476,7 +648,7 @@ extension Quiz {
   /// - **Every slot must conjugate.** `exportFixtureAnswers()` fails loudly rather
   ///   than exporting a blank answer, because a blank would be typed as an empty
   ///   string and scored as a miss, quietly ruining the results screenshot.
-  static let screenshotFixture: [(String, DisplayTense, DisplayPersonNumber)] = [
+  static let screenshotFixture: [Question] = [
     ("ser", .presenteDeIndicativo, .firstSingular),
     ("hablar", .presenteDeIndicativo, .thirdSingular),
     ("tener", .pretérito, .firstSingular),

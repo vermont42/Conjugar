@@ -83,6 +83,7 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case lookup
   /// A verb row on a model's page.
   case model
+  /// A row of My Verbs in the verb list, or a quiz over My Verbs begun from the Quiz tab.
   case myVerbs
   case quickAction
   case recent
@@ -98,7 +99,9 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   /// An App Intent run from the Shortcuts app or Siri, as `OpenRandomVerbIntent` can be.
   case shortcut
   case spotlight
+  /// A search begun in the Verbs tab, or a quiz over every verb begun with the Quiz tab's Start.
   case tab
+  /// Test Me's three questions on a verb's page (browse plan, Phase 13).
   case verbPage
   /// A tap on any of the widgets: Verb of the Day, the quiz widget, or a Lock Screen accessory.
   case widget

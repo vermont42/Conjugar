@@ -103,7 +103,8 @@ Conjugar/
 │   ├── RelatedVerbs.swift      # VerbRelations: each verb's base and root (detener → tener), and the verb page's related verbs
 │   │
 │   │  ── quiz, settings vocabulary, services ──
-│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks
+│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:) and the scoped draw (browse Phase 13)
+│   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, or Test Me's one verb; question count, source, isRanked (browse Phase 13)
 │   ├── QuizState.swift         # notStarted / inProgress / finished
 │   ├── ConjugationResult.swift # Answer scoring: totalMatch / partialMatch (diacritic-folded) / noMatch
 │   ├── Difficulty.swift        # Setting enum: easy / moderate / difficult, each with a score modifier
@@ -165,7 +166,7 @@ Conjugar/
 │   ├── HapticPlayer.swift      # The haptics seam, protocol-injected like SoundPlayer
 │   ├── HapticPlayerDummy.swift # No-op so the test worlds never touch the Taptic Engine
 │   ├── HapticPlayerReal.swift  # UIKit feedback generators, held and re-prepare()d for low latency
-│   ├── FlowLayout.swift        # A Layout that wraps its children into rows (the related-verb chips), ported from Konjugieren
+│   ├── FlowLayout.swift        # A Layout that wraps its children into rows (the related-verb chips, the Quiz tab's My Verbs chips, centered), ported from Konjugieren
 │   ├── IntExtension.swift      # Int.timeString — elapsed seconds as h:mm:ss
 │   ├── KillSwitches.swift      # Compile-time screenshot kill switches: TipDisplay, OnboardingDisplay, TutorDisplay
 │   ├── Layout.swift            # Spacing/geometry constants (8/16/24 pt, readingWidth 680, cornerRadius 12)
@@ -193,7 +194,7 @@ Conjugar/
 │   └── WidgetSnapshotWriter.swift  # Picks the daily verb + quiz question, conjugates them, writes JSON to the App Group.
 │                                   #   Draws from the top verbOfTheDayPoolSize (1,000) verbs by frequency
 └── Views/
-    ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing (verb with match, search, info, quiz, game), the one-shot requests the tabs consume (pendingVerb, pendingSearch, pendingInfo, game/onboarding/tutor flags), openSearch for Command-F, the control, and the quick action; SearchRequest
+    ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing (verb with match, search, info, quiz, game), the one-shot requests the tabs consume (pendingVerb, pendingSearch, pendingInfo, pendingQuizStart with its link's source, game/onboarding/tutor flags), openSearch for Command-F, the control, and the quick action; SearchRequest
     ├── BrowseLayout.swift      # Shared LazyVGrid column sets for the iPad (regular-width) layouts
     ├── ConjugationText.swift   # Renders a conjugated form with its irregular span in customRed
     ├── EtymologyText.swift     # Renders etymology prose (its own minimal `~…~` parser, independent of Info markup)
@@ -204,8 +205,9 @@ Conjugar/
     ├── ModelBrowseView.swift   # Sortable, searchable list of every verb model with irregularity badges
     ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, and the verbs using the model, by frequency or alphabetically
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
-    ├── QuizView.swift          # Quiz gameplay: prompt, answer field, timer, score
-    ├── ResultsView.swift       # Quiz results with the hero score numeral and the leaderboard button
+    ├── QuizSheet.swift         # Test Me's sheet on a verb page: a Quiz of its own over a QuizScope (browse Phase 13; Phase 16's collections reuse it)
+    ├── QuizView.swift          # The Quiz tab's start screen (scope symbol, All Verbs / My Verbs picker, fact tiles, chips) and gameplay: prompt, answer field, timer, score; a sheet mode for QuizSheet
+    ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, difficulty/region/time pills, and each answer
     ├── RelatedVerbsView.swift  # The verb page's Related Verbs card, the full related list, VerbPagePush, and verbPageDestinations()
     ├── RichTextView.swift      # Renders parsed [RichTextBlock] as native SwiftUI Text
     ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center, onboarding reshow, Play
@@ -292,6 +294,7 @@ ConjugarTests/
 │   ├── LearnerVerbsTests.swift         # The learner's record (opens, stars, recents, Clear, delete, older JSON), its store, the list modes
 │   ├── VerbFamiliesTests.swift         # Guard-rail: every hand-curated quiz verb resolves in the verb map
 │   ├── QuizTests.swift                 # Quiz logic, scoring, and timer, driven through the @Observable model
+│   ├── QuizScopeTests.swift            # The scoped quiz: My Verbs and Test Me draws, defective verbs, region and vos, ranking (browse Phase 13)
 │   ├── QuizGoldenFormsTests.swift      # Golden forms: proves the quiz asks for correct Spanish, not just self-consistent Spanish
 │   ├── GameStateTests.swift            # Climb helpers: flipbook math, AABB overlap, platform snap, ladders, collisions
 │   ├── GameBossTests.swift             # La Llamada: summit gate, demo/echo/judge loop, freeze fake-out, Duende meter, victory, end-scene slideshow

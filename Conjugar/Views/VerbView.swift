@@ -39,6 +39,8 @@ struct VerbView: View {
   @State private var isOnScreen = false
   /// The tense article open in a sheet over the page, from the ⓘ beside a heading.
   @State private var article: Info?
+  /// Whether Test Me's three questions are open in a sheet over the page.
+  @State private var isTestingVerb = false
   private let redLettersTip = RedLettersTip()
   private let scrollToBottomTip = ScrollToBottomTip()
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -136,11 +138,24 @@ struct VerbView: View {
     .sheet(item: $article) { info in
       TenseArticleSheet(info: info)
     }
+    .sheet(isPresented: $isTestingVerb) {
+      QuizSheet(scope: .verbPage(verb))
+    }
     .background(Color.customBackground.ignoresSafeArea())
     .navigationTitle(ReflexivePronoun.citationForm(of: verb).capitalized)
     .navigationBarTitleDisplayMode(.large)
     .toolbar {
-      // Beside Share, so that the top of the page is unchanged (browse plan, Phase 12).
+      // Test Me, the star, and Share sit in the navigation bar, so that the top of the page is
+      // unchanged (browse plan, Phases 12 and 13). The clipboard is Konjugieren's symbol; the
+      // Quiz tab's cap read poorly at this size.
+      ToolbarItem(placement: .topBarTrailing) {
+        Button {
+          isTestingVerb = true
+        } label: {
+          Label(L.Verb.testMe, systemImage: "pencil.and.list.clipboard")
+        }
+        .accessibilityIdentifier("verb_test_button")
+      }
       ToolbarItem(placement: .topBarTrailing) {
         let isStarred = Current.learnerVerbs.isStarred(verb)
         Button {

@@ -37,8 +37,9 @@ final class AppRouter {
   /// An article the Info tab should push, from an `info` link. `InfoBrowseView` consumes and
   /// clears it.
   var pendingInfo: Info?
-  /// A one-shot request for the Quiz tab to start a quiz. `QuizView` consumes it.
-  var pendingQuizStart = false
+  /// A one-shot request for the Quiz tab to start a quiz, with the link's `source` (`deeplink` when
+  /// it names none), which the quiz signals carry (browse plan, Phase 13). `QuizView` consumes it.
+  var pendingQuizStart: AnalyticsSource?
   /// Drives a full-screen `GameView` cover from `MainTabView`, tab-independent so a
   /// `conjugar://game` deeplink jumps straight to the game from any screen. (The
   /// Settings tab's Play button presents the game via its own state; both are fine.)
@@ -78,7 +79,7 @@ final class AppRouter {
   /// and every route: `verb/<infinitive>` (bare or with "se", so `verb/arrepentirse` opens
   /// arrepentir, or `verb/random`), with `match`, a form the page marks; `search`, with its text
   /// in `q`; `info/<stableKey>` (or a position); `quiz` (any target starts a quiz); and `game`.
-  /// A link to a verb page or a search may name the surface it came from in `source`
+  /// A link to a verb page, a search, or a quiz may name the surface it came from in `source`
   /// (`?source=widget`); a link that names none reports `deeplink`. Unknown routes, unknown
   /// verbs, and the `list` route that Phase 16 reserves are ignored.
   func handle(url: URL) {
@@ -105,7 +106,7 @@ final class AppRouter {
     case URL.quizHost:
       // Any target, `quiz/start` as the Quick Quiz control sends it, or none, starts a quiz.
       selectedTab = .quiz
-      pendingQuizStart = true
+      pendingQuizStart = source
     case URL.gameHost:
       // `conjugar://game/boss` is the boss fight's debug entry and
       // `conjugar://game/end` jumps straight to its end scene (same host, one

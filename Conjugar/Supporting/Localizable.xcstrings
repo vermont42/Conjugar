@@ -2335,6 +2335,22 @@
         }
       }
     },
+    "Quiz.allVerbs" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All Verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todos los verbos"
+          }
+        }
+      }
+    },
     "Quiz.briefing" : {
       "localizations" : {
         "en" : {
@@ -2379,6 +2395,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Respuesta Correcta"
+          }
+        }
+      }
+    },
+    "Quiz.done" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
           }
         }
       }
@@ -2463,6 +2495,78 @@
         }
       }
     },
+    "Quiz.moreVerbs %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "+%lld more"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "y %lld más"
+          }
+        }
+      }
+    },
+    "Quiz.myVerbsCount %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Questions about %lld verb in My Verbs. The score stays off the leaderboard."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Questions about %lld verbs in My Verbs. The score stays off the leaderboard."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Preguntas sobre %lld verbo de Mis verbos. La puntuación no va a la clasificación."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Preguntas sobre %lld verbos de Mis verbos. La puntuación no va a la clasificación."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Quiz.myVerbsEmpty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Star a verb on its page, or open a few verbs, and the quiz will ask about them."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marca un verbo con una estrella en su página, o abre algunos verbos, y el test te preguntará por ellos."
+          }
+        }
+      }
+    },
     "Quiz.no" : {
       "localizations" : {
         "en" : {
@@ -2511,6 +2615,22 @@
         }
       }
     },
+    "Quiz.questionsLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questions"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preguntas"
+          }
+        }
+      }
+    },
     "Quiz.quit" : {
       "localizations" : {
         "en" : {
@@ -2539,6 +2659,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reiniciar"
+          }
+        }
+      }
+    },
+    "Quiz.scope" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What to Quiz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qué preguntar"
           }
         }
       }
@@ -4385,6 +4521,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Añadir a Mis verbos"
+          }
+        }
+      }
+    },
+    "Verb.testMe" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test Me on This Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ponme a prueba con este verbo"
           }
         }
       }

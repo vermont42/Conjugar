@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ResultsView: View {
-  private let quiz = Current.quiz
+  /// The tab's quiz, or Test Me's own in a verb page's sheet.
+  let quiz: Quiz
 
   private var accuracy: Double {
     let total = quiz.questions.count

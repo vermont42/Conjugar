@@ -5,8 +5,8 @@ and [`plans/pedagogy_implementation.md`](../plans/pedagogy_implementation.md) fi
 each piece is, where it lives, and the rules that keep it true. Created 2026-11-22 by Phase 2 of the
 browse plan, on the model of Konjugieren's document of the same name. Each phase that changes a
 piece described here updates its section, and later phases add theirs: the deeplink grammar
-(browse Phase 10, § Deeplinks), the learner's record (Phase 12), the review card (Phase 15), and the quiz (the
-pedagogy plan). The code is the final authority; this document is a map of it.
+(browse Phase 10, § Deeplinks), the learner's record (Phase 12), the scoped quiz (Phase 13), the review card
+(Phase 15), and the quiz (the pedagogy plan). The code is the final authority; this document is a map of it.
 
 ## Analytics
 
@@ -88,18 +88,19 @@ made from a form is still `guess`. Rows and verbs correspond one to one, as befo
 
 `AnalyticsSource` is one vocabulary for every signal that carries `source`. Today `viewVerbView`
 does, and since Phase 10 `finishSearch` too, where it names the surface that opened the search
-field. Phase 13 adds it to the quiz signals.
+field. Since Phase 13 `startQuiz`, `quitQuiz`, and `completeQuiz` carry it as well (§ The Scoped
+Quiz).
 
 | Value | Sent today? | Meaning |
 |---|---|---|
 | `browse` | Yes | A row of the verb list with the search field empty |
 | `control` | Yes | The Random Verb control in Control Center (`OpenRandomVerbControlIntent`); for `finishSearch`, the Find a Verb control (`OpenVerbSearchIntent`, Phase 10) |
-| `deeplink` | Yes | A `conjugar://` link with no recognized `source` query item; for `finishSearch`, a `search` link |
+| `deeplink` | Yes | A `conjugar://` link with no recognized `source` query item; for `finishSearch`, a `search` link; for the quiz signals, a `quiz` link, which the Quick Quiz control, the Start a Quiz shortcut, and the Live Activity send (Phase 13) |
 | `infoLink` | No | Reserved for a link from an Info article to a verb |
 | `list` | No | Phase 16: a verb opened from a collection |
 | `lookup` | Yes | The Look Up a Verb shortcut (Phase 11): for `viewVerbView`, the page it opened when one verb answered; for `finishSearch`, the search it opened otherwise |
 | `model` | Yes | A verb row on a model's page, in the Models tab or reached from a verb page's pill |
-| `myVerbs` | Yes | A row of My Verbs, the verb list's third segment (Phase 12) |
+| `myVerbs` | Yes | A row of My Verbs, the verb list's third segment (Phase 12); for the quiz signals, a quiz over My Verbs begun from the Quiz tab (Phase 13) |
 | `quickAction` | Yes | `finishSearch` only: a search begun from the Find a Verb Home Screen quick action (Phase 10) |
 | `recent` | Yes | A recent verb, listed while the search field is focused and empty (Phase 12) |
 | `related` | Yes | A chip on a verb page's Related Verbs card, or a row of the full list it opens (Phase 8) |
@@ -110,8 +111,8 @@ field. Phase 13 adds it to the quiz signals.
 | `sharedLink` | No | Phase 16: a shared collection's link |
 | `shortcut` | Yes | Open Random Verb run from the Shortcuts app or Siri (`OpenRandomVerbIntent`, offered as the Random Verb shortcut since Phase 11) |
 | `spotlight` | Yes | A tap on a verb's Spotlight entry (Phase 11) |
-| `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included (Phase 10). Phase 13: a quiz begun from the Quiz tab |
-| `verbPage` | No | Phase 13: a quiz begun from a verb's page |
+| `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included (Phase 10). The quiz signals: a quiz over every verb begun with the Quiz tab's Start (Phase 13) |
+| `verbPage` | Yes | The quiz signals: Test Me's three questions on a verb's page (Phase 13) |
 | `widget` | Yes | A tap on any widget: Verb of the Day, the quiz widget, or a Lock Screen accessory |
 
 **How the source travels.** The Verbs and Models tabs push a `VerbDestination` (infinitive plus
@@ -404,7 +405,7 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
 | `verb` | An infinitive, bare or with "se" (`arrepentirse` opens arrepentir), or `random` | `source`; `match`, a form the page marks as it marks a search's match (`verb/ir?match=fue`) | The Verbs tab's verb page, scrolled to the first marked card | Before 2026; `match` Phase 10 |
 | `search` | None | `q`, the text; `source` | The Verbs tab's list with its search field. With text, the results show with the keyboard down; with none, or `q` empty, the field is cleared and focused for typing | Phase 10 |
 | `info` | A `stableKey`, or a position in `Info.infos` | None | The Info tab, with the article pushed | Phase 10 |
-| `quiz` | Any, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz at once, as the Quick Quiz control and the quiz widget expect | Before 2026 |
+| `quiz` | Any, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals (Phase 13) | Before 2026 |
 | `game` | None, `boss`, or `end` | None | The game, full screen over any tab (see `docs/game.md`) | Before 2026 |
 | `list` | Reserved for Phase 16's collections | `source` | Nothing yet: ignored | Reserved Phase 10 |
 
@@ -591,3 +592,60 @@ a pushed page, or the background is not a new open.
   A row opens with source `myVerbs`.
 - **The star** sits in the verb page's navigation bar beside Share, reads "Add to My Verbs" or
   "Remove from My Verbs", and sends `tapStarVerb` with `starred`.
+
+## The Scoped Quiz
+
+Built by browse Phase 13 (2026-11-22), ported from Konjugieren's Phase 13. The pedagogy plan
+reshapes the quiz and should extend this rather than replace it.
+
+**`QuizScope`** (`Models/QuizScope.swift`, `nonisolated`) says what a quiz asks about: the verbs
+(nil for every verb, through the curated lists in `VerbFamilies`; otherwise bare infinitives), the
+question count, and the `source` its signals carry. `allVerbs` is the Quiz tab's quiz as it always
+was, `allVerbs(source:)` the same begun by a `quiz` link, `myVerbs(_:)` thirty questions over My
+Verbs, and `verbPage(_:)` Test Me's three. Phase 16's collections should add a constructor.
+`QuizScope.fullLength` is 30, and `isRanked` (every verb, full length) decides both whether the score
+goes to Game Center and whether the leaderboard shows at the end. Neither scoped quiz ranks (Josh's
+verdict on Konjugieren, 2026-11-13).
+
+**The draw.** `Quiz.start(scope:)` defaults to `.allVerbs`, and returns false, changing nothing,
+when the scope gives no question (an empty My Verbs). The difficulty's plan over the curated lists
+is `Quiz.standardQuestions()`, unshuffled. A scoped quiz borrows it:
+
+- **Full length** (My Verbs) keeps the plan's tenses and persons, so its mix is the tab's at that
+  difficulty, and puts the scope's verbs into the slots in turn, preferring a verb not already asked
+  in that cell. Two verbs share thirty questions about evenly.
+- **Shorter** (Test Me) takes distinct cells one tense at a time from the plan's tenses, so three
+  questions at Easy are a presente, a futuro, and a pretérito, never three of one tense.
+- **Either** skips a cell the engine does not give for that verb (a defective verb's), asks tú or vos
+  by the quiz setting, no vosotros in the Latin America region, no yo in a command, and no tú or vos
+  in a negative command, as the tab's plan does.
+
+A question is still the `(String, DisplayTense, DisplayPersonNumber)` tuple, named `Quiz.Question`;
+pedagogy Phase 0 may want a type.
+
+**Test Me** is the clipboard (`pencil.and.list.clipboard`) first in a verb page's navigation bar,
+before the star and Share, read by VoiceOver as "Test Me on This Verb". It opens `QuizSheet`
+(`Views/QuizSheet.swift`), which owns a `Quiz` of its own, so a quiz in progress in the tab carries
+on, and shows `QuizView(quiz:sheetScope:)`. In sheet mode the view starts the quiz as it appears
+(something must be on screen for `onAppear` to fire, hence a `Color.clear` before the start), shows
+the results in place of the question with a Done button, closes on Quit, and cannot be swiped away
+mid-quiz, so every quiz it starts ends with `quitQuiz` or `completeQuiz`. It skips `viewQuizView`,
+the Game Center prompt, and the router's quiz link.
+
+**A quiz that is not full length** starts no Live Activity (`Quiz.hasLiveActivity`, which also
+keeps a sheet's quiz from ending the tab's), and does not count toward `ChangeDifficultyTip`.
+
+**The Quiz tab's start screen** (Josh chose Konjugieren's design, 2026-11-22): a large yellow symbol
+for the scope (`books.vertical.fill`, or a star for My Verbs), the scope's name ("4,811 verbs" or My
+Verbs) and a line on what the quiz asks, an All Verbs / My Verbs picker above Start, three tiles
+(30 questions, the difficulty, the region), and for My Verbs the verbs as centered chips, up to
+twelve and "+N more" (`FlowLayout.centersRows`). Conjugar's third tile is the region, where
+Konjugieren's is points per answer, because Conjugar's points depend on both settings and are not a
+whole number. Start is disabled while My Verbs is empty. The choice is not stored. On iPad the
+symbol, type, and tiles are larger and Start is scaled up.
+
+**Signals.** `startQuiz`, `quitQuiz`, and `completeQuiz` carry `source`: `tab`, `myVerbs`,
+`verbPage`, or a `quiz` link's own (`deeplink` by default), so that three-question completions do
+not raise the full quiz's completion rate. No `tapTestVerb` was added, unlike Konjugieren: the sheet
+starts its quiz as it opens, so `startQuiz` with `verbPage` counts the same taps.
+

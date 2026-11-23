@@ -231,7 +231,14 @@ struct AppRouterTests {
     let router = AppRouter()
     router.handle(url: url(link))
     #expect(router.selectedTab == .quiz)
-    #expect(router.pendingQuizStart)
+    #expect(router.pendingQuizStart == .deeplink)
+  }
+
+  /// A quiz link carries its `source` to the quiz signals (browse plan, Phase 13).
+  @Test func quizDeeplinkCarriesItsSource() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://quiz/start?source=widget"))
+    #expect(router.pendingQuizStart == .widget)
   }
 
   // Phase 16 reserves `list/<key>`; until then it does nothing.
@@ -269,7 +276,7 @@ struct AppRouterTests {
   @Test func quickQuizControlStartsAQuiz() {
     let router = AppRouter()
     router.handle(url: url(OpenQuizIntent.pendingDeeplink))
-    #expect(router.pendingQuizStart)
+    #expect(router.pendingQuizStart == .deeplink)
   }
 
   @Test func findAVerbQuickActionOpensAnEmptySearch() {

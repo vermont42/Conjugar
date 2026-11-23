@@ -11,6 +11,9 @@ import SwiftUI
 /// from Konjugieren. `SwiftUI.Layout` is spelled out because the app has a `Layout` of its own.
 struct FlowLayout: SwiftUI.Layout {
   var spacing: CGFloat = 8
+  /// Centers each row in the width offered, as the Quiz tab's chips are, rather than starting it
+  /// at the leading edge.
+  var centersRows = false
 
   func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
     let rows = rows(for: subviews, width: proposal.width ?? .infinity)
@@ -22,7 +25,7 @@ struct FlowLayout: SwiftUI.Layout {
   func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
     var y = bounds.minY
     for row in rows(for: subviews, width: bounds.width) {
-      var x = bounds.minX
+      var x = centersRows ? bounds.minX + max(bounds.width - row.width, 0) / 2 : bounds.minX
       for index in row.indices {
         let size = subviews[index].sizeThatFits(.unspecified)
         subviews[index].place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(size))

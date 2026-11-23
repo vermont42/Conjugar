@@ -215,3 +215,40 @@ Le sigue un párrafo nuevo:
 ```
 Para mostrar sus verbos recientes y marcados con una estrella en Mis verbos, la aplicación guarda una lista de los verbos que abre y marca, con la fecha en que los abrió y cuántas veces. La lista se queda en su dispositivo, en un almacenamiento que solo comparte con los widgets de la propia aplicación. Nunca se envía al desarrollador ni a nadie más, y se borra al eliminar la aplicación. En Mis verbos puede borrar los verbos recientes o quitar cualquier verbo de la lista.
 ```
+
+## Where a quiz began (browse plan, Phase 13, 2026-11-22)
+
+Adds `source` to `startQuiz`, `quitQuiz`, and `completeQuiz`: where the quiz began, which is the
+Quiz tab's Start (`tab`), the tab's My Verbs choice (`myVerbs`), Test Me on a verb's page
+(`verbPage`), or a `quiz` link (`deeplink` unless the link names its surface), so that a
+three-question quiz is not counted with the full one. No signal is added. A quiz over My Verbs or
+over one verb posts no score to Game Center, so section 7 gains a sentence saying which scores are
+submitted. These replace the existing quiz-lifecycle bullet and the Game Center paragraph.
+
+### English
+
+The bullet about quiz lifecycle events in section 2 now reads:
+
+```
+- Quiz lifecycle events (starting, quitting, or completing a quiz), and where you began the quiz (for example the Quiz tab, My Verbs, a verb's page, or a link)
+```
+
+The first paragraph of section 7 now reads:
+
+```
+Conjugar integrates with Apple Game Center for quiz leaderboards. When you submit a score, Game Center handles that data according to Apple's privacy policy. Only the score of a full quiz over all verbs is submitted; a quiz over My Verbs or over a single verb's page is not. The developer does not have access to your Game Center identity or personal information through this integration.
+```
+
+### Spanish
+
+El punto sobre los eventos del ciclo de vida de un cuestionario, en la sección 2, queda así:
+
+```
+- Los eventos del ciclo de vida de un cuestionario (comenzar, abandonar o terminar un cuestionario) y dónde lo empezó (por ejemplo, en la pestaña del cuestionario, en Mis verbos, en la página de un verbo o desde un enlace)
+```
+
+El primer párrafo de la sección 7 queda así:
+
+```
+Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de un cuestionario completo sobre todos los verbos; la de un cuestionario sobre Mis verbos o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
+```

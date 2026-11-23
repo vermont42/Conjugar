@@ -37,8 +37,8 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 9 | Done | 2026-11-22 | c40be1f | B6 |
 | 10 | Done | 2026-11-22 | 43d7b00 | C1 (links, control, quick action) |
 | 11 | Done | 2026-11-22 | 24b45fe | C1 (the intent), C2 |
-| 12 | Awaiting Josh | 2026-11-22 | | D1, D2 |
-| 13 | Not started | | | D2's quiz scope, D3 |
+| 12 | Done | 2026-11-22 | 998795b | D1, D2 |
+| 13 | Awaiting Josh | 2026-11-22 | | D2's quiz scope, D3 |
 | 14 | Not started | | | D5 |
 | 15 | Not started | | | D4 |
 | 16 | Not started | | | D6 |
@@ -1613,7 +1613,7 @@ finds a verb by its title, and the device test is recorded as done or pending.
 ## Phase 12: Recents and My Verbs
 
 **Ideas:** D1, D2 apart from its quiz scope. **Ports:** Konjugieren Phase 12. **Depends on:**
-nothing. **Status:** Awaiting Josh (2026-11-22).
+nothing. **Status:** Done (2026-11-22, 998795b).
 
 - One on-device record of the learner's verbs: each verb opened, with dates and a count, and each
   verb starred. Phases 13 to 16 read it, and the pedagogy plan will. Put it in the App Group
@@ -1705,7 +1705,7 @@ Verbs lists both, Clear and delete work, and tests pin the record's decoding of 
 ## Phase 13: A Quiz over Chosen Verbs
 
 **Ideas:** D2's quiz scope, D3. **Ports:** Konjugieren Phase 13. **Depends on:** Phase 12.
-**Status:** Not started.
+**Status:** Awaiting Josh (2026-11-22).
 
 - A minimal ability for the quiz to take a list of verbs and draw its questions from them.
 - A My Verbs scope on the Quiz tab.
@@ -1746,7 +1746,72 @@ fine, and pedagogy Phase 0 will want one.
 page, a My Verbs quiz draws only those verbs, neither posts a score or shows the leaderboard, and
 tests pin the scoped draw.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh's answer (2026-11-22): Konjugieren's start screen.** Asked whether the Quiz tab should
+  follow Konjugieren's redesign or only gain the picker, Josh first chose the picker alone, then asked
+  for the question again and chose the redesign. The graduation cap and the two pills are gone. In
+  their place: a 96-point yellow symbol for the scope (books, or a star for My Verbs), the scope's
+  name ("4,811 verbs" or My Verbs), a line on what the quiz asks, the All Verbs / My Verbs picker,
+  Start, three tiles, and for My Verbs the verbs as centered chips (up to twelve, then "+N more").
+  The tiles differ from Konjugieren's: questions, difficulty, and **region**, where Konjugieren has
+  points per answer, because a Conjugar answer's points depend on both settings and are not a whole
+  number (about 16.7 at Moderate in Spain). The region was already one of the old pills. On iPad
+  the symbol is 180 points and Start is scaled by 1.4. The briefing text stays, as the All Verbs line.
+- **What the code looks like.** `QuizScope` (`Models/QuizScope.swift`) carries the verbs (nil for
+  every verb), the count, and the source; `allVerbs`, `allVerbs(source:)`, `myVerbs(_:)`,
+  `verbPage(_:)`; `fullLength` is 30 and `isRanked` decides the Game Center report and the
+  leaderboard shown at the end. `Quiz.start(scope:)` returns false and changes nothing when the scope
+  gives no question. The old `start()` body became `standardQuestions()`, unshuffled, which the
+  scoped draw borrows: a full-length scoped quiz keeps the difficulty's tenses and persons and puts
+  the scope's verbs into the slots in turn; a shorter one takes distinct cells one tense at a time, so
+  three questions at Easy are a presente, a futuro, and a pretérito. Cells a defective verb lacks are
+  skipped by asking the engine; vosotros in Latin America and tú/vos follow the tab's rules. The
+  question stayed a tuple, now named `Quiz.Question`. `docs/feature_architecture.md` § The Scoped
+  Quiz has the whole design.
+- **Test Me** is the clipboard first in the navigation bar, as in Konjugieren, opening `QuizSheet`
+  (`Views/QuizSheet.swift`, separate from the verb page so Phase 16 can reuse it) with its own `Quiz`.
+  Konjugieren's sheet popped a results sheet; Conjugar's tab pushes its results, which in a sheet
+  would have left a Back button onto an empty screen, so the sheet shows the results in place of the
+  question with a Done button. `QuizView` and `ResultsView` now take their `Quiz` rather than reading
+  `Current.quiz`.
+- **Two bugs the simulator caught.** The sheet first came up blank: before its quiz starts, the
+  sheet had nothing to show, and SwiftUI does not run `onAppear` on an empty view, so the quiz never
+  started. A `Color.clear` fixed it. And the Live Activity is one for the whole app, so a sheet's
+  `stop()` would have ended the tab's; `Quiz.hasLiveActivity` now guards update and end, and only a
+  full-length quiz starts one.
+- **`source` on all three quiz signals**, as in Konjugieren: `tab`, `myVerbs`, `verbPage`, and,
+  beyond Konjugieren, a `quiz` link's own source, because Conjugar's `quiz` link starts a quiz at once
+  where Konjugieren's only opens the tab. `AppRouter.pendingQuizStart` became an `AnalyticsSource?`.
+  The Quick Quiz control and the Start a Quiz shortcut share `OpenQuizIntent`, so both report
+  `deeplink`; telling them apart would take a second intent, as Random Verb has, and was left out.
+  **No `tapTestVerb`**, unlike Konjugieren: the sheet starts its quiz as it opens, so `startQuiz`
+  with `verbPage` counts the same taps. The staged policy section rewrites the quiz-lifecycle bullet
+  and adds a sentence to the Game Center section saying that only a full quiz over all verbs posts.
+- **Strings.** "Test Me on This Verb" / "Ponme a prueba con este verbo"; "What to Quiz" / "Qué
+  preguntar"; "All Verbs" / "Todos los verbos"; the My Verbs line ends "The score stays off the
+  leaderboard." / "La puntuación no va a la clasificación.", using the catalog's existing word for
+  leaderboard; "Questions" / "Preguntas"; "Done" / "Listo"; "+3 more" / "y 3 más".
+- **What was tried where.** iPhone, English, light, compact: the All Verbs screen; My Verbs with one
+  verb and then two (tener, ir) as chips; Test Me on ir's page (vamos right, ira half right, iban
+  wrong), the results in the sheet at 104 with no leaderboard, Done closing onto ir's page; a swipe
+  down mid-quiz refused; Quit closing onto the page; a My Verbs quiz from the tab (eight questions, on
+  tener and ir only). iPad, Spanish (a launch argument), dark, regular: a `quiz` link starting the
+  tab's quiz (the Game Center prompt appeared and was cancelled), the start screen at iPad size in
+  both scopes, four verbs as chips, Test Me on poner as a form sheet, its results with Listo, and the
+  sheet closing. The iPad was set back to light and shut down; its language had not been changed. Not
+  tried: VoiceOver itself, Game Center signed in, a hardware keyboard on iPad, and the Live Activity
+  on a device.
+- **Tests.** `QuizScopeTests`, 13 `@Test` functions: ranking and sources, the default scope's 30
+  questions, a My Verbs quiz asking only its verbs (each difficulty, shuffled or not), two verbs
+  sharing it evenly, Easy's tenses kept, Test Me's three distinct tenses, a defective verb (abolir)
+  asked only cells it has, no vosotros in Latin America, vos under the vos setting, an empty scope
+  starting nothing and keeping the last results, a perfect Test Me scoring 500 like a perfect full
+  run, and only the ranked quiz reporting to Game Center (a spy). `AppRouterTests` gained a quiz
+  link's source. The whole suite passes: 862 Swift Testing tests in 48 suites, plus the XCTest
+  suites, in 53 seconds (56 after Phase 12); `QuizScopeTests` takes 7 to 10 seconds, the
+  second-slowest after ConjugationMap, mostly because each loop builds 30-question quizzes. The
+  simulator language was English.
 
 ## Phase 14: A Verb of the Day Worth Opening
 

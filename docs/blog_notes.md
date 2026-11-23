@@ -10716,3 +10716,52 @@ asks "¿Quitar la estrella de «tener»?". The privacy policy waiting for the 20
 star's signal, which says whether a verb ended up starred but not which, and loses a sentence that
 the record would have made untrue. It used to say the app "does not record" which verbs you look up.
 It now says the app does not send them, and a new paragraph says the list stays on the device.
+
+## A Quiz over Chosen Verbs (2026-11-22)
+
+Phase 13 of the browse plan let the quiz ask about verbs the learner chose. Until now every question
+came from hand-curated lists, one per tense and kind of irregularity, cycled and shuffled. That
+remains the quiz over every verb. Two new ways in now sit beside it: a My Verbs choice on the Quiz
+tab, which asks thirty questions about the learner's starred and recent verbs, and a Test Me button
+on every verb page, which asks three questions about that verb in a sheet that closes back onto the
+page.
+
+The interesting part was how to draw questions from verbs the curated lists know nothing about. The
+old quiz built its thirty questions by difficulty, as a fixed recipe of tenses: at Moderate, five in
+the presente, four in the pretérito, three in each of six middle tenses, and so on. A scoped quiz
+borrows that recipe. For thirty questions it keeps every tense and person in the recipe and puts the
+learner's verbs into the slots in turn, so a My Verbs quiz feels like the ordinary quiz at the same
+difficulty. For three questions, a slice of the recipe could easily be three questions in the
+presente, so Test Me instead takes distinct cells one tense at a time. At Easy that means a
+presente, a futuro, and a pretérito, which is a fair three-question test of a verb. Both kinds skip
+any cell the engine cannot give, which matters for defective verbs such as abolir, and both follow
+the tab's rules for tú or vos and for vosotros in the Latin America region.
+
+Josh had decided on Konjugieren that a score over one's own verbs, or over three questions, compares
+with nothing, so neither kind posts to Game Center or shows the leaderboard at the end. The My Verbs
+line on the start screen says so plainly: "The score stays off the leaderboard."
+
+One question went to Josh. Konjugieren's Josh had found its start screen too empty once the picker
+arrived, and had it rebuilt around a big yellow symbol, three fact tiles, and the verbs as chips.
+Should Conjugar follow? Josh first chose to keep Conjugar's existing screen and add only the picker,
+then changed his mind and chose the redesign. Conjugar's version differs in one tile. Konjugieren
+shows points per right answer, but a Conjugar answer's points depend on both the difficulty and the
+region and come out as fractions, so the third tile shows the region instead, which was already one
+of the old screen's pills.
+
+The simulator caught two bugs that no test would have. The first time Test Me opened, its sheet was
+blank. The sheet starts its quiz when it appears, but before the quiz starts it had nothing to show,
+and SwiftUI does not run `onAppear` on a view with no content, so the quiz never started. An
+invisible placeholder fixed it. The second was found by reading rather than running: the quiz Live
+Activity is one for the whole app, so a three-question quiz in a sheet that quit or finished would
+have ended the Live Activity of a quiz still running in the tab. Now only a full-length quiz starts
+one, and only the quiz that started it may end it.
+
+The quiz signals now say where a quiz began: the tab's Start, My Verbs, a verb's page, or a link.
+Konjugieren needed that so that three-question completions would not inflate the completion rate of
+the full quiz, and Conjugar needs it for the same reason. Conjugar went one step further, because its
+`quiz` link starts a quiz at once where Konjugieren's only opens the tab. A quiz begun by the Quick
+Quiz control, the Start a Quiz shortcut, or a link therefore reports the link's source rather than
+pretending to be a tap on Start. Konjugieren also added a signal for the Test Me tap; Conjugar did
+not, since the sheet starts its quiz as it opens and the quiz's own start signal counts the same
+taps.
