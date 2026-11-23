@@ -30,9 +30,9 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 2 | Done | 2026-11-22 | 49b9f19 | Signals |
 | 3 | Done | 2026-11-22 | 49b9f19 | B2 (the reflexive analog) |
 | 4 | Done | 2026-11-22 | fe24e92 | A5 (the map) |
-| 5 | Awaiting Josh | 2026-11-22 | | A5 (the search) |
-| 6 | Awaiting Josh | 2026-11-22 | | B3, B5's tip |
-| 7 | Not started | | | B7's article |
+| 5 | Done | 2026-11-22 | 6c0ed97 | A5 (the search) |
+| 6 | Done | 2026-11-22 | 6c0ed97 | B3, B5's tip |
+| 7 | Awaiting Josh | 2026-11-22 | | B7's article |
 | 8 | Not started | | | B4, A9 |
 | 9 | Not started | | | B6 |
 | 10 | Not started | | | C1 (links, control, quick action) |
@@ -862,7 +862,7 @@ version of the test came out at 98.99% for want of one fold.
 ## Phase 5: Reverse Lookup in Search
 
 **Ideas:** A5, second half. **Ports:** Konjugieren Phase 6. **Depends on:** Phases 0 and 4.
-**Status:** Awaiting Josh (2026-11-22).
+**Status:** Done (2026-11-22, 6c0ed97).
 
 Konjugieren's ideas document rated this highest for Conjugar, whose American learners read Spanish
 and meet forms before infinitives.
@@ -1003,7 +1003,7 @@ marked form.
 ## Phase 6: The Verb Page's Sections
 
 **Ideas:** B3 as Josh amended it, and the tip from B5's verdict. **Ports:** Konjugieren Phase 7.
-**Depends on:** Phase 4 for the count's cells. **Status:** Awaiting Josh (2026-11-22).
+**Depends on:** Phase 4 for the count's cells. **Status:** Done (2026-11-22, 6c0ed97).
 
 - **Order by frequency within each block.** Keep the simple tenses before the compound ones, and
   within each block order the tenses by how often they occur in Conjugar's corpus:
@@ -1128,8 +1128,8 @@ as described on a fresh install, the doc and script reproduce the count, and tes
 ## Phase 7: An Article on Periphrasis
 
 **Ideas:** B7's verdict, by analogy. **Ports:** Konjugieren Phase 8. **Depends on:** nothing.
-**Status:** Not started. **Accepted** (Josh, 2026-11-22), on ir a + infinitivo and estar +
-gerundio.
+**Status:** Awaiting Josh (2026-11-22). **Accepted** (Josh, 2026-11-22), on ir a + infinitivo and
+estar + gerundio.
 
 Konjugieren's B7 found the verb page lacking two constructions a learner meets every day (the Futur
 II and the passive). Josh rejected new sections on the page and accepted an Info article that shows
@@ -1153,7 +1153,57 @@ check how articles are addressed before choosing a position in the list.
 
 **Done when** the article exists in both languages, its cross-links work, and the link test passes.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **The heading** is "Perífrasis Verbales", the same in both interfaces, like the tense headings
+  beside it, with the key `perifrasis_verbales`. The Gerundio article already called the progressive
+  a "verbal periphrasis", so the term was the app's own. Since the heading is general, the article
+  ends with a short list of the other periphrases a learner meets first (tener que, haber de, deber,
+  acabar de, volver a, empezar a and ponerse a, dejar de, seguir, llevar, ir, and andar + gerundio).
+  The passive is still left out.
+- **Placement.** Conjugar has no `info` deeplink yet; articles are found by `stableKey` (the
+  screenshot driver, `ConjugationTable.articleKey`) or by heading (the `%…%` links), never by
+  position, so any position was safe. The article sits in the Tenses section after Raíz Futura and
+  before Perfecto de Indicativo: after the non-finite forms it is built from and before the compound
+  tenses, which share its shape of helper plus form. It is `.easy`, because a beginner needs both
+  constructions, so it shows under every filter. The filter counts are now 11, 19, and 30. The
+  screenshot driver's Info shots scroll to the About header, above it, so they are unaffected.
+- **The article** runs about 2,300 words in English and 2,400 in Spanish, between the tense articles
+  (about 250) and the About essays. Sections: the two constructions; ir a, its form (hablar and
+  tener), its uses, and the futuro as its rival (register, conjecture, commands, iba a against the
+  condicional); estar + gerundio, its form (hablar and decir) and uses; what the progressive does not
+  do that English -ing does; where pronouns go; regional variation (voseo, vosotros, the American
+  preference for ir a, the commercial "le estaremos enviando", Ecuador's dar + gerundio, Mexico's
+  "ha de ser"); the other periphrases; and the cantare habeo cycle, linked to the verb history.
+  Irregular letters are marked as the engine marks them (VOY, VAs; estoY, estÁs; dIciendo),
+  checked with a throwaway test that printed the engine's forms. The Spanish version keeps English
+  glosses, as the Spanish tense articles do.
+- **The examples are authentic**, found in `corpus/originals` and translated by Claude: Galdós's
+  *Fortunata y Jacinta* (Fortunata mixing querré, viviré, vamos a ser, and tendremos in one breath;
+  "iba a tener … y adquiriría" in one sentence; Maxi's "la idolatraré... no, que ya la estoy
+  idolatrando"; Juanito's "Te vas a reír de mí … ya te estás riendo", which shows both pronoun
+  placements; "se está vistiendo"), the *Quijote*'s second part (Sancho's "Voy a buscar … a una
+  princesa" and "mientras estoy cavando"), *La Regenta* ("estará rezando"), *Pepita Jiménez* ("iba
+  a venir", and "la hemos de decir" for haber de), Spain's Movilidad 2030 strategy ("va a
+  licitar"), and España Digital 2026 ("están siendo"). Every source was already in the Credits.
+  The register figures were counted from the corpus with rough patterns: official prose has 3,807
+  synthetic futures to 32 ir a, about 120 to one; the novels 5,234 to 508, about ten to one. The
+  article says "more than a hundred" and "about ten".
+- **Cross-links.** The Futuro de Indicativo article's ir a paragraph now ends by pointing to the new
+  article, and the Gerundio article's line about the progressive links it, in both languages. The
+  Futuro paragraph's example was missing its closing quotation mark in both languages, now fixed.
+- **No link was broken.** `InfoTests.everyLinkInAnArticleOpensAnArticle` checks every `%…%` target
+  in both compiled catalogs against that language's headings (the Spanish tense headings plus the
+  localized About headings). Conjugar's links open only articles, never verbs, so the test checks
+  articles only. It passed on its first run, unlike Konjugieren's; a Python check of the catalog
+  confirms that all 136 cross-references in each language resolve, so the pass is not vacuous. Three
+  more tests: unique stable keys, the article's position and difficulty, and the two cross-links.
+- **How it was tested.** 739 Swift Testing tests in 42 suites pass, plus the XCTest suites (43.9
+  seconds; the simulator language was English). iPhone, English, light: the row after Raíz Futura,
+  the article, its tables with red letters, and its links. iPhone, Spanish, dark: the Gerundio
+  article, its new link tapped through to the Spanish article. iPad, Spanish, light, regular width:
+  the row and the article at reading width. Not tried: VoiceOver, every link in the article, and a
+  device.
 
 ## Phase 8: Ways Between Verbs
 

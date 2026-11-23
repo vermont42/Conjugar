@@ -10459,3 +10459,40 @@ Everything about the page's order now lives in one place, ConjugationTable. The 
 search results name their tenses from it, and the scroll that lands a search on its form reads the
 page's actual cards, so neither had to change when the order did. The rest of the app, including the
 file format of the conjugation map, keeps the old order.
+
+## Voy a Hablar, Estoy Hablando (2026-11-22)
+
+Phase 7 of the browse plan added one Info article, on the two constructions that carry much of
+spoken Spanish and that the verb page cannot show, because neither is a tense: ir a + infinitivo and
+estar + gerundio. Konjugieren had done the same for the German Futur II. Its title is "Perífrasis
+Verbales", Spanish in both interfaces like the tense headings around it, and it sits after Raíz
+Futura, between the non-finite forms it is built from and the compound tenses that share its shape
+of helper plus form. It is marked easy, since a beginner needs both constructions on the first day.
+
+The plan asked for authentic examples from the corpus, and the corpus was generous. Galdós's
+characters talk, and they use both futures without a seam. Late in Fortunata y Jacinta, Fortunata
+promises her husband "te querré tanto... No viviré más que para ti... ¡Qué felices vamos a ser!...
+tendremos niños", three synthetic futures and one ir a in a single breath, which says more about
+whether one is "more future" than a paragraph could. Maxi, declaring himself to her, corrects his
+own future into the progressive: "¡Que la idolatraré!... no, que ya la estoy idolatrando." Juanito,
+on his honeymoon, says "Te vas a reír de mí" and a few lines later "ya te estás riendo", which put
+both constructions and the pronoun placement into one quotation. Sancho Panza supplied the motion
+that ir a began with ("Voy a buscar, como quien no dice nada, a una princesa"), and a Spanish
+ministry supplied the register: in the official prose of the corpus the synthetic future outnumbers
+ir a by about 120 to one, against about ten to one in the novels.
+
+The quotations needed checking against the text, not just the search hits. The Quijote file holds
+both parts, so the three Sancho lines are from 1615, not 1605. Fortunata's happy future is spoken in
+the novel's darkest scene, and the article says so rather than borrowing the line as if it were
+tender.
+
+Before writing the tables, a throwaway test printed the engine's own marked forms, so the article
+marks irregular letters exactly as the verb page does: VOY and VAs, estoY and estÁs, dIciendo. The
+test was deleted afterward.
+
+The phase also asked for a test that every link in every article opens something. Konjugieren's
+found three broken links on its first run. Conjugar's found none, which looked too good, so a Python
+pass over the catalog confirmed it: 136 cross-references in each language, every one matching an
+article's heading in that language. Editing the Futuro de Indicativo article to link the new one
+turned up an older slip there, an example sentence missing its closing quotation mark in both
+languages, now fixed.

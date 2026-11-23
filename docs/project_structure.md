@@ -285,7 +285,7 @@ ConjugarTests/
     ├── AppRouterTests.swift            # Deeplink routing, focused on the one-shot game/boss and game/end flags, plus Command-F's search request and a verb link's source
     ├── ConjugationTextTests.swift      # The shared conjugation renderer
     ├── EtymologyTextTests.swift        # The etymology markup renderer
-    ├── InfoTests.swift                 # The rich-text parser and the Info model
+    ├── InfoTests.swift                 # The rich-text parser, the Info model, and every article link in en and es
     ├── SettingsViewTests.swift         # Settings-screen state
     ├── SymbolValidityTests.swift       # Every systemName: literal in all three targets resolves to a real SF Symbol
     └── VerbBrowseKeyboardTests.swift   # How the arrow keys move the highlighted verb result

@@ -65,6 +65,10 @@ struct Info: Hashable, Identifiable {
     Info(heading: "Participio", stableKey: "participio", difficulty: .moderate, section: .tenses, text: L.Info.participioText),
     Info(heading: "Gerundio", stableKey: "gerundio", difficulty: .moderate, section: .tenses, text: L.Info.gerundioText),
     Info(heading: "Raíz Futura", stableKey: "raiz_futura", difficulty: .easy, section: .tenses, text: L.Info.raizFuturaText),
+    // Not a tense: ir a + infinitivo and estar + gerundio. It follows the non-finite forms it is
+    // built from and precedes the compound tenses, which share its helper-plus-form shape. Easy,
+    // because a beginner needs both constructions (browse plan, Phase 7).
+    Info(heading: "Perífrasis Verbales", stableKey: "perifrasis_verbales", difficulty: .easy, section: .tenses, text: L.Info.perifrasisVerbalesText),
     Info(heading: "Perfecto de Indicativo", stableKey: "perfecto_de_indicativo", difficulty: .moderate, section: .tenses, text: L.Info.perfectoDeIndicativoText),
     Info(heading: "Pretérito Anterior", stableKey: "preterito_anterior", difficulty: .difficult, section: .tenses, text: L.Info.preteritoAnteriorText),
     Info(heading: "Pluscuamperfecto de Indicativo", stableKey: "pluscuamperfecto_de_indicativo", difficulty: .difficult, section: .tenses, text: L.Info.pluscuamperfectoDeIndicativoText),

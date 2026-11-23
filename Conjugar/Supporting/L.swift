@@ -416,6 +416,10 @@ nonisolated enum L {
       String(localized: "Info.raizFuturaText")
     }
 
+    static var perifrasisVerbalesText: String {
+      String(localized: "Info.perifrasisVerbalesText")
+    }
+
     static var perfectoDeIndicativoText: String {
       String(localized: "Info.perfectoDeIndicativoText")
     }

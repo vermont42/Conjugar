@@ -325,6 +325,12 @@ disagree, the note wins.
 - **The periphrasis article** (browse Phase 7, on ir a + infinitivo and estar + gerundio), which
   Phase 18's choice between the
   futuro and ir a + infinitivo could link.
+  - *Landed 2026-11-22 (browse Phase 7):* the article is `Info` "Perífrasis Verbales", key
+    `perifrasis_verbales`, in the Tenses section after Raíz Futura. Its section "Ir a or the Futuro?"
+    ("¿Ir a o el futuro?") covers register, conjecture, commands, and iba a against the condicional,
+    which is what Phase 18's choice would link to. Articles are addressed by `stableKey`
+    (`Info.infos.first { $0.stableKey == … }`, as `ConjugationTable.article` does) until browse
+    Phase 10 gives Info a deeplink.
 - **The model link and related verbs** (browse Phase 8), which Phase 2's correction links reuse.
 - **Key conjugations** (browse Phase 9): four, tengo · tuve · tendré · tenido (Josh, 2026-11-22),
   and a function returning them. Phases
