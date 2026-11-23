@@ -8,9 +8,11 @@
 import Foundation
 import Observation
 
-/// The app's view of `LearnerVerbs` (`Current.learnerVerbs`): it records opens and stars, saves
-/// each change, and answers in verb-map entries rather than infinitives. A verb no longer in the
-/// verb map is skipped. Observable, so the verb list and the star redraw when the record changes.
+/// The app's view of `LearnerVerbs` (`Current.learnerVerbs`): it records opens, stars, and the
+/// review card's reveals and dismissals, saves each change, and answers in verb-map entries rather
+/// than infinitives. A verb no longer in the verb map is skipped. It decides which verbs the review
+/// card schedules, which the record cannot, having no verb map. Observable, so the verb list and
+/// the star redraw when the record changes.
 @Observable
 final class LearnerVerbStore {
   private(set) var record: LearnerVerbs
@@ -19,6 +21,15 @@ final class LearnerVerbStore {
   init(getterSetter: GetterSetter) {
     self.getterSetter = getterSetter
     record = getterSetter.get(key: LearnerVerbs.storageKey).flatMap(LearnerVerbs.init(json:)) ?? LearnerVerbs()
+    if record.scheduleUnscheduledReviews(where: Self.isReviewable) {
+      save()
+    }
+  }
+
+  /// Whether the review card offers the verb: only an irregular verb, counted as the verb page's
+  /// pill counts it, so the orthographic classes (buscar, busqué) too (Josh, 2026-11-22).
+  static func isReviewable(_ infinitive: String) -> Bool {
+    VerbMap.shared.entry(for: infinitive).map(VerbDraw.isIrregular) ?? false
   }
 
   var starredVerbs: [VerbMapEntry] {
@@ -46,8 +57,33 @@ final class LearnerVerbStore {
     record.hasOpened(infinitive)
   }
 
-  func recordOpen(_ infinitive: String, at date: Date = .now) {
-    record.recordOpen(infinitive, at: date)
+  /// The verb the review card offers: the longest overdue.
+  func verbDueForReview(at date: Date = .now) -> VerbMapEntry? {
+    record.dueForReview(at: date).lazy
+      .filter(Self.isReviewable)
+      .compactMap { VerbMap.shared.entry(for: $0) }
+      .first
+  }
+
+  func daysSinceOpened(_ infinitive: String, at date: Date = .now) -> Int? {
+    record.daysSinceOpened(infinitive, at: date)
+  }
+
+  /// An open by any route but the review card puts an irregular verb in the first box, or back
+  /// there. An open from the card leaves the schedule its reveal just set.
+  func recordOpen(_ infinitive: String, source: AnalyticsSource, at date: Date = .now) {
+    let schedulesReview = source != .reviewCard && Self.isReviewable(infinitive)
+    record.recordOpen(infinitive, at: date, schedulesReview: schedulesReview)
+    save()
+  }
+
+  func recordReveal(_ infinitive: String, at date: Date = .now) {
+    record.recordReveal(infinitive, at: date)
+    save()
+  }
+
+  func recordDismissal(_ infinitive: String, at date: Date = .now) {
+    record.recordDismissal(infinitive, at: date)
     save()
   }
 

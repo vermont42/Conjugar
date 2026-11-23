@@ -42,6 +42,9 @@ nonisolated enum AnalyticsName: String {
   case startQuiz
   case tapPlayGame
   case tapRateOrReview
+  /// The first tap on the review card above the verb list, which reveals its key conjugations
+  /// (browse plan, Phase 15). No parameters, and it does not say which verb.
+  case tapRevealReviewCard
   case tapSendTutorMessage
   /// The share button in a verb page's navigation bar (browse plan, Phase 9). No parameters, and
   /// it does not say which verb. Copying a form sends nothing.
@@ -59,6 +62,9 @@ nonisolated enum AnalyticsName: String {
   case viewOnboardingView
   case viewQuizView
   case viewResultsView
+  /// Once for each review card shown above the verb list (browse plan, Phase 15). No parameters,
+  /// and it does not say which verb.
+  case viewReviewCard
   case viewSettingsView
   case viewTutorView
   case viewVerbBrowseView
@@ -90,6 +96,7 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case related
   /// The page came back after another tab, a pushed page, or the background. See `VerbVisit`.
   case resume
+  /// The review card above the verb list, tapped after its reveal (browse plan, Phase 15).
   case reviewCard
   /// A result of a search that found something.
   case search

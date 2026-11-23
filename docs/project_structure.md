@@ -101,6 +101,9 @@ Conjugar/
 │   ├── Info.swift              # Info article model: InfoSection + heading/body parsed into richTextBlocks
 │   ├── ModelInfo.swift         # The Models tab's row model: class number, exemplar, verbs, irregularity percent; row(for:) a verb
 │   ├── RelatedVerbs.swift      # VerbRelations: each verb's base and root (detener → tener), and the verb page's related verbs
+│   ├── FrequencyBand.swift     # The frequency bands, defined once: top 100, 300, 1,000; VerbMapEntry.isIn, VerbMap.entries(in:) (browse Phase 14)
+│   ├── VerbDraw.swift          # The verb of the day and every random verb: the top 1,000 weighted toward irregular and
+│   │                           #   unprefixed verbs, My Verbs one draw in three (browse Phase 14)
 │   │
 │   │  ── quiz, settings vocabulary, services ──
 │   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:) and the scoped draw (browse Phase 13)
@@ -111,9 +114,11 @@ Conjugar/
 │   ├── Region.swift            # Setting enum: Spain vs. Latin America (TTS accent + score modifier)
 │   ├── SecondSingularBrowse.swift  # Setting enum: which 2s form(s) the browse screens show
 │   ├── SecondSingularQuiz.swift    # Setting enum: which 2s form the quiz asks for
+│   ├── ReviewCardSuppression.swift # Setting enum: whether the verb list hides the review card (off / on; browse Phase 15)
 │   ├── VerbSort.swift          # Verb-list sort order (frequency / alphabetical) + the Spanish collation locale, and
 │   │                           #   VerbListMode, the picker's three segments (the two sorts and My Verbs)
-│   ├── LearnerVerbStore.swift  # Current.learnerVerbs: records opens and stars in LearnerVerbs, saves to the App Group
+│   ├── LearnerVerbStore.swift  # Current.learnerVerbs: records opens, stars, and review-card reveals and dismissals in
+│   │                           #   LearnerVerbs, saves to the App Group; decides which verbs the review card schedules (irregular ones)
 │   ├── ModelSort.swift         # Model-list sort order (irregularity / alphabetical / class number)
 │   ├── VerbType.swift          # verbModelMap `vt` marker: irregular / regular -ar / -er / -ir
 │   ├── VerbFamilies.swift      # The hand-curated verb lists the quiz builds questions from
@@ -191,8 +196,8 @@ Conjugar/
 │   ├── Utterer.swift           # AVSpeechSynthesizer text-to-speech plus the single .ambient audio-session owner
 │   ├── VerbSearchArrowKeys.swift  # Hack: priority UIKeyCommands for ↑/↓ through verb results while the search field is focused
 │   ├── ViewControllerTransitions.swift  # Hack: waits for UIKit transitions to end, so an iPad letter key survives search dismissal
-│   └── WidgetSnapshotWriter.swift  # Picks the daily verb + quiz question, conjugates them, writes JSON to the App Group.
-│                                   #   Draws from the top verbOfTheDayPoolSize (1,000) verbs by frequency
+│   └── WidgetSnapshotWriter.swift  # Picks the daily verb (VerbDraw, with My Verbs) + quiz question, conjugates them,
+│                                   #   writes JSON to the App Group once a day
 └── Views/
     ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing (verb with match, search, info, quiz, game), the one-shot requests the tabs consume (pendingVerb, pendingSearch, pendingInfo, pendingQuizStart with its link's source, game/onboarding/tutor flags), openSearch for Command-F, the control, and the quick action; SearchRequest
     ├── BrowseLayout.swift      # Shared LazyVGrid column sets for the iPad (regular-width) layouts
@@ -207,6 +212,7 @@ Conjugar/
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
     ├── QuizSheet.swift         # Test Me's sheet on a verb page: a Quiz of its own over a QuizScope (browse Phase 13; Phase 16's collections reuse it)
     ├── QuizView.swift          # The Quiz tab's start screen (scope symbol, All Verbs / My Verbs picker, fact tiles, chips) and gameplay: prompt, answer field, timer, score; a sheet mode for QuizSheet
+    ├── ReviewCardView.swift    # The review card above the verb list: an irregular verb looked up days ago, its key conjugations hidden until tapped (browse Phase 15)
     ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, difficulty/region/time pills, and each answer
     ├── RelatedVerbsView.swift  # The verb page's Related Verbs card, the full related list, VerbPagePush, and verbPageDestinations()
     ├── RichTextView.swift      # Renders parsed [RichTextBlock] as native SwiftUI Text
@@ -215,7 +221,7 @@ Conjugar/
     ├── TutorView.swift         # The conjugation-tutor chat screen
     ├── SpanishLetterKeyRow.swift  # á é í ó ú ü ñ keys with an insert closure; replaces the Verbs sort picker while search is focused
     ├── VerbEntryList.swift     # Lazy verb rows (compact) or carded grid (regular) that open a verb; a model's page and the related list use it
-    ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; recents in the focused empty field; the My Verbs list; carries the browse_verb_count launch anchor
+    ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; recents in the focused empty field; the My Verbs list; the review card above the rows; carries the browse_verb_count launch anchor
     ├── VerbSearchCommands.swift  # Command-F as a top-level menu (Verbs › Find a Verb) that opens the verb search through AppRouter.openSearch
     └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples, related verbs; the pill opens the model; the star and Share in the navigation bar; sends viewVerbView/leaveVerbView per VerbVisit and records each open
 
@@ -255,7 +261,9 @@ Shared/                         # Compiled into both the app and the widget exte
 ├── OpenRandomVerbControlIntent.swift  # The Random Verb control's own hidden copy of it (source=control)
 ├── OpenVerbSearchIntent.swift  # The Find a Verb control's hidden intent: stashes conjugar://search?source=control
 ├── QuizActivityAttributes.swift  # The ActivityKit contract shared by LiveActivityManager and QuizLiveActivity
-├── LearnerVerbs.swift          # The learner's record: verbs opened (dates, count) and starred, as JSON in the App Group (browse Phase 12)
+├── LearnerVerbs.swift          # The learner's record: verbs opened (dates, count) and starred, and each irregular verb's
+│                               #   ReviewSchedule, as JSON in the App Group (browse Phases 12 and 15)
+├── ReviewSchedule.swift        # The review card's Leitner ladder (1, 3, 7, 14, 30 days): a box and a due date (browse Phase 15)
 ├── WidgetConstants.swift       # App Group id, snapshot filename, and the shared-defaults keys
 ├── WidgetL.swift               # Widget-target localization accessors mirroring L, with English defaultValues
 └── WidgetSnapshot.swift        # The Codable payload the app precomputes and the widget renders
@@ -292,6 +300,11 @@ ConjugarTests/
 │   │                                   #   the share text, URL.appStore, and what a long press copies
 │   ├── VerbSortTests.swift             # Verb-list sort orders and Spanish collation
 │   ├── LearnerVerbsTests.swift         # The learner's record (opens, stars, recents, Clear, delete, older JSON), its store, the list modes
+│   ├── VerbDrawTests.swift             # The verb of the day and random verbs: weights, My Verbs every third day in turn, the band,
+│   │                                   #   one in three on demand, the seeded generator's sequence, the widget's next ten days
+│   ├── ReviewScheduleTests.swift       # The review card's ladder, reveals and dismissals, a later lookup restarting it, only
+│   │                                   #   irregular verbs scheduled, an older record scheduled as it loads
+│   ├── FrequencyBandTests.swift        # Each band holds exactly its count, the bands nest, and where one ends
 │   ├── VerbFamiliesTests.swift         # Guard-rail: every hand-curated quiz verb resolves in the verb map
 │   ├── QuizTests.swift                 # Quiz logic, scoring, and timer, driven through the @Observable model
 │   ├── QuizScopeTests.swift            # The scoped quiz: My Verbs and Test Me draws, defective verbs, region and vos, ranking (browse Phase 13)
@@ -310,7 +323,7 @@ ConjugarTests/
 │   ├── IntExtensionTests.swift         # Int.timeString formatting
 │   ├── RatingsFetcherTests.swift       # iTunes-API parsing — deliberately still XCTest (it mutates the global Current)
 │   ├── ReviewPrompterRealTests.swift   # Review-prompt interval logic
-│   ├── SettingsTests.swift             # Settings persistence and defaults
+│   ├── SettingsTests.swift             # Settings persistence and defaults (the verb sort, Suppress Review Card)
 │   ├── SoundPlayerTests.swift          # The audio DI seam: the test world must get SoundPlayerDummy
 │   └── URLExtensionTests.swift         # mailto encoding of a learner's query
 └── Views/

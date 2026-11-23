@@ -381,8 +381,10 @@ struct JaleoPop: Identifiable {
 }
 
 /// A tiny seedable RNG (SplitMix64) so boss tests can script exact dance phrases.
-/// Production uses `SystemRandomNumberGenerator`; tests inject this with a seed.
-struct SplitMix64: RandomNumberGenerator {
+/// Production uses `SystemRandomNumberGenerator`; tests inject this with a seed. `VerbDraw` seeds
+/// one with a day number, so it is `nonisolated` and its sequence must never change: a change would
+/// change which verb a day names.
+nonisolated struct SplitMix64: RandomNumberGenerator {
   private var state: UInt64
 
   init(seed: UInt64) {

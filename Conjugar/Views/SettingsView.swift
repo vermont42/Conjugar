@@ -146,6 +146,27 @@ struct SettingsView: View {
         .selectionFeedback(trigger: settings.secondSingularBrowse)
         .accessibilityLabel(L.Settings.browse)
       }
+
+      GradientDivider()
+
+      settingSection(
+        icon: "rectangle.on.rectangle.slash",
+        tint: .customYellow,
+        heading: L.Settings.reviewCardSuppressionHeading,
+        description: L.Settings.reviewCardSuppressionDescription
+      ) {
+        Picker(selection: $settings.reviewCardSuppression) {
+          ForEach(ReviewCardSuppression.allCases, id: \.self) { suppression in
+            Text(suppression.localizedReviewCardSuppression).tag(suppression)
+          }
+        } label: {
+          Text(verbatim: "")
+        }
+        .pickerStyle(.segmented)
+        .selectionFeedback(trigger: settings.reviewCardSuppression)
+        .accessibilityLabel(L.Settings.reviewCardSuppressionHeading)
+        .accessibilityIdentifier("review_card_suppression_picker")
+      }
     }
   }
 

@@ -5,7 +5,7 @@ and [`plans/pedagogy_implementation.md`](../plans/pedagogy_implementation.md) fi
 each piece is, where it lives, and the rules that keep it true. Created 2026-11-22 by Phase 2 of the
 browse plan, on the model of Konjugieren's document of the same name. Each phase that changes a
 piece described here updates its section, and later phases add theirs: the deeplink grammar
-(browse Phase 10, § Deeplinks), the learner's record (Phase 12), the scoped quiz (Phase 13), the review card
+(browse Phase 10, § Deeplinks), the learner's record (Phase 12), the scoped quiz (Phase 13), the verb of the day (Phase 14), the review card
 (Phase 15), and the quiz (the pedagogy plan). The code is the final authority; this document is a map of it.
 
 ## Analytics
@@ -84,6 +84,13 @@ made from a form is still `guess`. Rows and verbs correspond one to one, as befo
 | `tapShareVerb` | None | On each tap of the share button in a verb page's navigation bar (Phase 9), whether or not the learner then shares. It does not say which verb. Copying a form, by a long press or from the share sheet, sends nothing |
 | `tapStarVerb` | `starred` (`true` or `false`) | On each tap of the star in a verb page's navigation bar (Phase 12). `starred` is the state after the tap, since a count of taps alone cannot tell starring from unstarring. It does not say which verb |
 
+### Review-card signals
+
+| Signal | Parameters | Sent |
+|---|---|---|
+| `viewReviewCard` | None | Once for each review card shown above the verb list (Phase 15): at most once per opening of the app, however often the list redraws. It does not say which verb |
+| `tapRevealReviewCard` | None | When a tap reveals a card's key conjugations (Phase 15), once per card. With `viewReviewCard` it gives the reveals per card shown. A dismissal sends nothing; it is a `viewReviewCard` with no reveal |
+
 ### The `source` vocabulary
 
 `AnalyticsSource` is one vocabulary for every signal that carries `source`. Today `viewVerbView`
@@ -105,7 +112,7 @@ Quiz).
 | `recent` | Yes | A recent verb, listed while the search field is focused and empty (Phase 12) |
 | `related` | Yes | A chip on a verb page's Related Verbs card, or a row of the full list it opens (Phase 8) |
 | `resume` | Yes | A page that came back after another tab, a pushed page, or the background |
-| `reviewCard` | No | Phase 15: the review card |
+| `reviewCard` | Yes | The review card above the verb list, tapped after its reveal (Phase 15) |
 | `search` | Yes | A result of a search that found something |
 | `searchGuess` | Yes | The closest verb offered by a search that found nothing |
 | `sharedLink` | No | Phase 16: a shared collection's link |
@@ -402,7 +409,7 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
 
 | Route | Target | Query items | Opens | Since |
 |---|---|---|---|---|
-| `verb` | An infinitive, bare or with "se" (`arrepentirse` opens arrepentir), or `random` | `source`; `match`, a form the page marks as it marks a search's match (`verb/ir?match=fue`) | The Verbs tab's verb page, scrolled to the first marked card | Before 2026; `match` Phase 10 |
+| `verb` | An infinitive, bare or with "se" (`arrepentirse` opens arrepentir), or `random` (drawn by `VerbDraw`; see [The Verb of the Day and Random Verbs](#the-verb-of-the-day-and-random-verbs)) | `source`; `match`, a form the page marks as it marks a search's match (`verb/ir?match=fue`) | The Verbs tab's verb page, scrolled to the first marked card | Before 2026; `match` Phase 10 |
 | `search` | None | `q`, the text; `source` | The Verbs tab's list with its search field. With text, the results show with the keyboard down; with none, or `q` empty, the field is cleared and focused for typing | Phase 10 |
 | `info` | A `stableKey`, or a position in `Info.infos` | None | The Info tab, with the article pushed | Phase 10 |
 | `quiz` | Any, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals (Phase 13) | Before 2026 |
@@ -593,6 +600,67 @@ a pushed page, or the background is not a new open.
 - **The star** sits in the verb page's navigation bar beside Share, reads "Add to My Verbs" or
   "Remove from My Verbs", and sends `tapStarVerb` with `starred`.
 
+## The Review Card
+
+Built by browse Phase 15 (2026-11-22), ported from Konjugieren's Phase 15. The pedagogy plan's
+practice record is meant to take the schedule over.
+
+**The schedule.** `ReviewSchedule` (`Shared/ReviewSchedule.swift`, `nonisolated`, Codable) is a box
+and a due date on a Leitner ladder of 1, 3, 7, 14, and 30 days, the last repeating. Due dates fall
+at the start of a day, so a verb looked up at 11 p.m. waits for the next morning. Three operations:
+`lookedUp` (box 0, due tomorrow), `revealed` (up one box), and `dismissed` (same box, due
+tomorrow). It is stored as the optional `review` on each `LearnerVerbs.Entry`.
+
+**Only irregular verbs** (Josh, 2026-11-22): a regular verb's key conjugations are the pattern of
+its whole class, so its lookup has nothing of its own to review. Irregular is what the verb page's
+pill says, any class but 1, 2, and 3 (`VerbDraw.isIrregular`), so the orthographic classes count:
+buscar's card shows busqué's red letters. `LearnerVerbs` has no verb map, so
+`LearnerVerbStore.isReviewable` decides, and the record schedules only what its caller asks
+(`recordOpen(_:at:schedulesReview:)`). A regular verb's entry never has a `review`, which spares the
+pedagogy plan a migration.
+
+**What moves it** (Josh's rules for Konjugieren, kept here):
+
+- An open by any route but the card puts the verb in box 0, or back there, since looking a verb up
+  again suggests it was forgotten.
+- A reveal moves it up a box. An open from the card after the reveal (source `reviewCard`) counts
+  as an open for My Verbs but leaves the schedule.
+- The ✕ before a reveal is no review: same box, due tomorrow. The ✕ after a reveal changes nothing.
+- Clear in My Verbs forgets the opens and with them the schedules; a swipe that removes a verb
+  removes its schedule. A starred verb never opened is never due.
+
+**An older record.** An entry written before Phase 15 has opens but no `review`. As it loads, the
+store schedules each such irregular verb as looked up on its last open
+(`LearnerVerbs.scheduleUnscheduledReviews(where:)`) and saves, so a learner with history sees a
+card on the first day. Konjugieren computed the same fallback on every read; here it is written
+once, because a read-time fallback could not tell an old irregular entry from a regular verb opened
+yesterday.
+
+**Which card.** `LearnerVerbStore.verbDueForReview()` takes the longest overdue, ties broken by
+infinitive. `VerbBrowseView` chooses once at launch and again at each return from the background,
+so a reveal does not swap the card for the next verb due. The card hides while anything is typed
+and while the recents show, and is absent from My Verbs, which is a list of its own. On iPad it
+stops at 560 points rather than spanning the grid.
+
+**The card** (`Views/ReviewCardView.swift`) shows "Looked up 3 days ago" ("yesterday" for one,
+counted in calendar days), the citation form (arrepentirse), the gloss, and the key conjugations
+(`KeyConjugation.forms`) under a redacted placeholder, with "Recall its conjugations, then tap to
+check." A tap anywhere reveals them with their red letters; a second tap opens the page, and a
+chevron says so. A reflexive-only verb's forms carry their pronoun (me arrepiento). VoiceOver reads
+the infinitive and forms in Spanish, the forms separated by commas rather than middle dots, and each
+text element carries the tap as its action.
+
+**Suppress Review Card** (`Settings.reviewCardSuppression`, `ReviewCardSuppression`, Off by
+default) sits in the Settings card with Browse Tú and/or Vos. On hides a card at once and chooses
+none at later openings; Off chooses one at once if none shows. The schedule keeps running
+underneath. No signal is sent for the setting.
+
+**Seeding a card in the simulator.** Write the record through `cfprefsd`, not into the plist file,
+which `cfprefsd` would not reread: `xcrun simctl spawn <udid> defaults write <group
+container>/Library/Preferences/group.biz.joshadams.Conjugar learnerVerbs -string '<json>'`, with
+dates as seconds since 2001-01-01, while the app is not running. Without `-string`, `defaults`
+tries to parse the JSON as a plist and fails.
+
 ## The Scoped Quiz
 
 Built by browse Phase 13 (2026-11-22), ported from Konjugieren's Phase 13. The pedagogy plan
@@ -648,4 +716,40 @@ symbol, type, and tiles are larger and Start is scaled up.
 `verbPage`, or a `quiz` link's own (`deeplink` by default), so that three-question completions do
 not raise the full quiz's completion rate. No `tapTestVerb` was added, unlike Konjugieren: the sheet
 starts its quiz as it opens, so `startQuiz` with `verbPage` counts the same taps.
+
+## The Verb of the Day and Random Verbs
+
+Built by browse Phase 14 (2026-11-22), ported from Konjugieren's Phase 14.
+
+**`FrequencyBand`** (`Models/FrequencyBand.swift`, `nonisolated`) defines the bands once: `.top100`,
+`.top300`, and `.top1000`, with `VerbMapEntry.isIn(_:)` and `VerbMap.entries(in:)`, most frequent
+first. The rank has no ties, so each band holds exactly its count. The pedagogy plan's levels use
+them.
+
+**`VerbDraw`** (`Models/VerbDraw.swift`, `nonisolated`) chooses the widget's verb of the day and
+every random verb: the Random Verb control, the Random Verb shortcut, and the `verb/random` link,
+which all reach `AppRouter.handle(url:)`. A draw comes from the 1,000 most frequent verbs, where an
+irregular verb (any class but 1, 2, and 3, as the verb page's pill counts it, so the orthographic
+classes too) weighs 2 and a verb with no base in `VerbRelations` weighs 2, multiplied: ir and tener
+weigh 4, detener and hablar 2, recobrar 1. Frequency inside the band is not weighted. In the band,
+39% of verbs are irregular and 80% unprefixed; in 1,000 simulated days, 58% and 89% of the draws.
+
+**My Verbs** (`LearnerVerbs.myVerbs`: the starred verbs, then the last 20 opened, as the list's
+segment shows them) supplies one draw in three once it has entries (Josh, 2026-11-22, as for
+Konjugieren). The widget gives it the days whose number since 2026-01-01 is a multiple of three and
+takes its verbs in turn, since chance leaves gaps of two weeks and repeats one verb while another
+waits. A random verb on demand goes to My Verbs with a chance of one in three. A random verb opened
+is a recent verb, so it joins My Verbs and can return as a My Verbs draw until it ages out.
+
+**Stable through the day.** A frequent day seeds `SplitMix64` (`Models/Game/GameModels.swift`, made
+`nonisolated` for this) with the day number, so its verb is a function of the day. Its sequence must
+not change; `VerbDrawTests` pins its first outputs. A My Verbs day depends on the list, which can
+change during the day, but `WidgetSnapshotWriter.refresh(myVerbs:)` writes one snapshot per date and
+skips the write when today's is on disk, so the first activation of a day settles the verb. That
+gate already existed; nothing else was needed, unlike Konjugieren's ten-day bundle.
+`MainTabView` reads My Verbs on the main actor (`Current.learnerVerbs.record.myVerbs`, infinitives)
+and passes them to the detached refresh, which resolves them only when it writes.
+
+**No new signal.** `viewVerbView` with `source` `widget`, `control`, or `shortcut` already counts
+the pages these draws open.
 

@@ -8,8 +8,9 @@
 
 import Foundation
 
-/// The learner's own verbs: each verb opened, when and how often, and each verb starred (browse
-/// plan, Phase 12, ported from Konjugieren). It is kept in the App Group's shared defaults, so the
+/// The learner's own verbs: each verb opened, when and how often, each verb starred (browse plan,
+/// Phase 12, ported from Konjugieren), and when each irregular verb is due on the review card
+/// (Phase 15). It is kept in the App Group's shared defaults, so the
 /// widget extension can read what the app writes, and it names verbs by infinitive, as
 /// `verbModelMap.xml` keys them (a reflexive-only verb by its bare infinitive), because the widget
 /// has no verb map. Phases 13 to 16 of the browse plan read it, and so will the pedagogy plan.
@@ -23,6 +24,10 @@ nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
     var lastOpened: Date?
     var openCount = 0
     var starred: Date?
+    /// When the verb is due on the review card. Nil for a verb never scheduled: a regular verb, a
+    /// verb only starred, or an entry written before Phase 15 that `LearnerVerbStore` has not yet
+    /// scheduled.
+    var review: ReviewSchedule?
 
     var isStarred: Bool {
       starred != nil
@@ -79,12 +84,68 @@ nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
     return starred + recent().filter { !starredSet.contains($0) }
   }
 
-  mutating func recordOpen(_ infinitive: String, at date: Date) {
+  /// The verbs due on the review card, the longest overdue first, ties broken by infinitive.
+  func dueForReview(at date: Date) -> [String] {
+    let due: [(infinitive: String, due: Date)] = entries.values.compactMap { entry in
+      guard let review = entry.review, review.isDue(at: date) else {
+        return nil
+      }
+      return (entry.infinitive, review.due)
+    }
+    return due
+      .sorted { lhs, rhs in
+        lhs.due != rhs.due ? lhs.due < rhs.due : lhs.infinitive < rhs.infinitive
+      }
+      .map(\.infinitive)
+  }
+
+  /// Whole days from the verb's last open to `date`, counted by the calendar: 1 for yesterday.
+  func daysSinceOpened(_ infinitive: String, at date: Date, calendar: Calendar = .current) -> Int? {
+    guard let lastOpened = entries[infinitive]?.lastOpened else {
+      return nil
+    }
+    return calendar.dateComponents([.day], from: calendar.startOfDay(for: lastOpened), to: calendar.startOfDay(for: date)).day
+  }
+
+  /// `schedulesReview` puts the verb in the review ladder's first box, or back there, since
+  /// looking a verb up again suggests it was forgotten. The caller passes false for a regular
+  /// verb, which is never scheduled, and for an open from the review card itself, whose reveal
+  /// has just scheduled the verb. False leaves any schedule as it was.
+  mutating func recordOpen(_ infinitive: String, at date: Date, schedulesReview: Bool = false, calendar: Calendar = .current) {
     var entry = entries[infinitive] ?? Entry(infinitive: infinitive)
     entry.firstOpened = entry.firstOpened ?? date
     entry.lastOpened = date
     entry.openCount += 1
+    if schedulesReview {
+      entry.review = .lookedUp(at: date, calendar: calendar)
+    }
     entries[infinitive] = entry
+  }
+
+  mutating func recordReveal(_ infinitive: String, at date: Date, calendar: Calendar = .current) {
+    updateReview(of: infinitive) { $0.revealed(at: date, calendar: calendar) }
+  }
+
+  mutating func recordDismissal(_ infinitive: String, at date: Date, calendar: Calendar = .current) {
+    updateReview(of: infinitive) { $0.dismissed(at: date, calendar: calendar) }
+  }
+
+  /// Schedules each verb opened but never scheduled that `isReviewable` accepts, as looked up on
+  /// its last open. A record written before Phase 15 thereby offers a card on the first day, as
+  /// Konjugieren's did, without a migration. Returns whether anything changed. A regular verb stays
+  /// unscheduled however often this runs.
+  mutating func scheduleUnscheduledReviews(where isReviewable: (String) -> Bool, calendar: Calendar = .current) -> Bool {
+    var changed = false
+    for (infinitive, entry) in entries {
+      guard entry.review == nil, let lastOpened = entry.lastOpened, isReviewable(infinitive) else {
+        continue
+      }
+      var scheduled = entry
+      scheduled.review = .lookedUp(at: lastOpened, calendar: calendar)
+      entries[infinitive] = scheduled
+      changed = true
+    }
+    return changed
   }
 
   mutating func setStarred(_ isStarred: Bool, infinitive: String, at date: Date) {
@@ -99,7 +160,7 @@ nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
     entries[infinitive] = nil
   }
 
-  /// Forgets every verb opened. Stars stay.
+  /// Forgets every verb opened, and with the opens their reviews. Stars stay.
   mutating func clearRecents() {
     for (infinitive, entry) in entries {
       store(Entry(infinitive: infinitive, starred: entry.starred))
@@ -120,6 +181,14 @@ nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
         lhs.date != rhs.date ? lhs.date > rhs.date : lhs.infinitive < rhs.infinitive
       }
       .map(\.infinitive)
+  }
+
+  private mutating func updateReview(of infinitive: String, _ change: (ReviewSchedule) -> ReviewSchedule) {
+    guard var entry = entries[infinitive], let review = entry.review else {
+      return
+    }
+    entry.review = change(review)
+    entries[infinitive] = entry
   }
 
   private mutating func store(_ entry: Entry) {

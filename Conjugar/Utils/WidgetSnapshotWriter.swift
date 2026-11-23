@@ -3,7 +3,8 @@
 //  Conjugar
 //
 //  The one place the conjugation engine is invoked for widget purposes. Deterministically
-//  picks a verb of the day and a daily quiz question (both keyed on the date), conjugates
+//  picks a verb of the day (`VerbDraw`, from the frequent verbs and My Verbs) and a daily
+//  quiz question (both keyed on the date), conjugates
 //  them through the app's own engine (VerbMap + TenseBridge), and writes the result as
 //  JSON into the App Group container for the widget to render.
 //
@@ -38,16 +39,21 @@ nonisolated enum WidgetSnapshotWriter {
     .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo
   ]
 
-  /// Rebuild the snapshot for today and ask WidgetKit to reload every timeline.
+  /// Rebuild the snapshot for today and ask WidgetKit to reload every timeline. `myVerbs` names
+  /// the learner's My Verbs by infinitive (`LearnerVerbs.myVerbs`), which the caller reads on the
+  /// main actor; they are resolved here, off it, and only when a snapshot is written.
   ///
   /// Date-gated: the verb/quiz content changes once a day, so when the
   /// snapshot already on disk is stamped with today's date this is a no-op — skipping
   /// the rewrite and, crucially, the `reloadAllTimelines()` that would otherwise spend
   /// WidgetKit's refresh budget on every foreground activation for unchanged content.
-  static func refresh() {
+  /// The gate is also what keeps the day's verb fixed while My Verbs changes during the
+  /// day (browse plan, Phase 14): the first activation of a day settles it.
+  static func refresh(myVerbs: [String] = []) {
     let today = dateString(for: Date(), calendar: .current)
     if currentSnapshotDateString() == today { return }
-    guard writeSnapshot() else { return }
+    let myVerbEntries = myVerbs.compactMap { VerbMap.shared.entry(for: $0) }
+    guard writeSnapshot(myVerbs: myVerbEntries) else { return }
     WidgetCenter.shared.reloadAllTimelines()
   }
 
@@ -67,10 +73,10 @@ nonisolated enum WidgetSnapshotWriter {
 
   /// Build and persist the snapshot for the given day. Returns whether it was written.
   @discardableResult
-  static func writeSnapshot(for date: Date = Date()) -> Bool {
+  static func writeSnapshot(for date: Date = Date(), myVerbs: [VerbMapEntry] = []) -> Bool {
     guard
       let url = WidgetConstants.snapshotURL,
-      let snapshot = makeSnapshot(for: date),
+      let snapshot = makeSnapshot(for: date, myVerbs: myVerbs),
       let data = try? JSONEncoder().encode(snapshot)
     else {
       return false
@@ -83,17 +89,12 @@ nonisolated enum WidgetSnapshotWriter {
     }
   }
 
-  static func makeSnapshot(for date: Date) -> WidgetSnapshot? {
+  static func makeSnapshot(for date: Date, myVerbs: [VerbMapEntry] = []) -> WidgetSnapshot? {
     let calendar = Calendar.current
     let dayOffset = daysSinceReference(to: date, calendar: calendar)
     let dateString = Self.dateString(for: date, calendar: calendar)
 
-    let ranked = verbOfTheDayPool()
-    guard !ranked.isEmpty else { return nil }
-
-    // Scramble so consecutive days aren't adjacent in the frequency list.
-    let verbIndex = abs(dayOffset &* 127) % ranked.count
-    let entry = ranked[verbIndex]
+    guard let entry = verbOfTheDay(on: date, myVerbs: myVerbs) else { return nil }
     let infinitive = entry.infinitive
 
     let paradigms = paradigmTenses.compactMap { paradigm(for: infinitive, tense: $0) }
@@ -152,21 +153,12 @@ nonisolated enum WidgetSnapshotWriter {
     return String(text[..<lastTilde]) + String(text[text.index(after: lastTilde)...])
   }
 
-  /// How many of the most common verbs the widget draws from. Every verb in the map now
-  /// carries a rank, so without a window the verb of the day would eventually be
-  /// `churruscar` and the widget quiz would ask for its pretérito. A thousand is the
-  /// behavior the ranked-verbs-only filter used to give, back when only ~1,000 verbs had a
-  /// rank at all.
-  static let verbOfTheDayPoolSize = 1000
-
-  /// The verbs the widget may serve: the most common `verbOfTheDayPoolSize`, most common
-  /// first. Sorted inline rather than via `VerbSort` so this stays `nonisolated`
-  /// (`VerbSort` is a plain MainActor-isolated enum).
-  private static func verbOfTheDayPool() -> [VerbMapEntry] {
-    VerbMap.shared.entries.values
-      .sorted { $0.frequencyRank < $1.frequencyRank }
-      .prefix(verbOfTheDayPoolSize)
-      .map { $0 }
+  /// The verb the widget shows on the date's day: from My Verbs every third day once it has
+  /// entries, otherwise drawn from the 1,000 most frequent verbs (`VerbDraw`). Without the band
+  /// the verb of the day would eventually be `churruscar` and the widget quiz would ask for its
+  /// pretérito. A My Verbs day may name a rare verb, since the learner chose it.
+  static func verbOfTheDay(on date: Date, myVerbs: [VerbMapEntry], calendar: Calendar = .current) -> VerbMapEntry? {
+    VerbDraw.verbOfTheDay(dayNumber: daysSinceReference(to: date, calendar: calendar), myVerbs: myVerbs, frequentVerbs: VerbDraw.frequentVerbs)
   }
 
   private static func paradigm(for infinitive: String, tense: DisplayTense) -> WidgetParadigm? {

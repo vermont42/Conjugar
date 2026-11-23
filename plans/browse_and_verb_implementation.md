@@ -38,9 +38,9 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 10 | Done | 2026-11-22 | 43d7b00 | C1 (links, control, quick action) |
 | 11 | Done | 2026-11-22 | 24b45fe | C1 (the intent), C2 |
 | 12 | Done | 2026-11-22 | 998795b | D1, D2 |
-| 13 | Awaiting Josh | 2026-11-22 | | D2's quiz scope, D3 |
-| 14 | Not started | | | D5 |
-| 15 | Not started | | | D4 |
+| 13 | Done | 2026-11-22 | 856326b | D2's quiz scope, D3 |
+| 14 | Awaiting Josh | 2026-11-22 | | D5 |
+| 15 | Awaiting Josh | 2026-11-22 | | D4 |
 | 16 | Not started | | | D6 |
 | Closing | Not started | | | Audit, handoff to the pedagogy plan |
 
@@ -1705,7 +1705,7 @@ Verbs lists both, Clear and delete work, and tests pin the record's decoding of 
 ## Phase 13: A Quiz over Chosen Verbs
 
 **Ideas:** D2's quiz scope, D3. **Ports:** Konjugieren Phase 13. **Depends on:** Phase 12.
-**Status:** Awaiting Josh (2026-11-22).
+**Status:** Done (2026-11-22, 856326b).
 
 - A minimal ability for the quiz to take a list of verbs and draw its questions from them.
 - A My Verbs scope on the Quiz tab.
@@ -1816,7 +1816,7 @@ tests pin the scoped draw.
 ## Phase 14: A Verb of the Day Worth Opening
 
 **Ideas:** D5. **Ports:** Konjugieren Phase 14. **Depends on:** Phase 12 for the My Verbs part.
-**Status:** Not started.
+**Status:** Awaiting Josh (2026-11-22).
 
 Draw the widget's daily verb, and every random verb (the Random Verb control, the `verb/random`
 deeplink, `OpenRandomVerbIntent`), from the 1,000 most frequent verbs, favoring irregular verbs and
@@ -1847,12 +1847,63 @@ The quiz widget's question sampling belongs to the pedagogy plan (its Phase 23) 
 **Done when** the widget's verbs for the next ten days and a run of random verbs come from the band
 or My Verbs with the agreed weights, the widget's verb holds through a day, and tests pin the draw.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh's answers (2026-11-22).** Both of Konjugieren's verdicts hold: My Verbs supplies one draw
+  in three, and "My Verbs" is what the filter shows (starred verbs, then the last 20 opened).
+- **What the code looks like.** `FrequencyBand` (`Models/FrequencyBand.swift`) with
+  `VerbMapEntry.isIn(_:)` and `VerbMap.entries(in:)`, and `VerbDraw` (`Models/VerbDraw.swift`), both
+  `nonisolated`, since the widget writer runs off the main actor. `VerbDraw` is Konjugieren's,
+  working in `VerbMapEntry`s: the widget gives My Verbs the days whose number since 2026-01-01 (the
+  writer's existing reference date) is a multiple of three and takes its verbs in turn; a random
+  verb on demand keeps the chance of one in three. The frequent days seed the game's `SplitMix64`,
+  now `nonisolated`, rather than a new generator; a test pins its first two outputs, since a change
+  to its sequence would change every day's verb. `AppRouter` draws `verb/random` through
+  `VerbDraw.randomVerb(myVerbs:)`, which covers the control, the shortcut, and the link at once.
+  `WidgetSnapshotWriter.verbOfTheDayPoolSize` and its `(days × 127) % 1000` walk are gone.
+- **The weights.** 2 for irregular, counted as the verb page's pill counts it (any class but 1, 2,
+  and 3, so buscar and identificar, whose changes are only spelling, count too), and 2 for a verb
+  that Phase 8's `VerbRelations` gives no base, multiplied: ir 4, detener 2, hablar 2, recobrar 1.
+  In the band 39% of verbs are irregular and 80% unprefixed; in 1,000 simulated days, 58% and 89%
+  of the draws were, and 607 different verbs appeared. Frequency within the band is not weighted.
+  The band and its order are built once (`static let`), because sorting the map on every draw made a
+  random verb cost about 7 ms; it costs about 0.6 ms now.
+- **Stable through the day needed nothing new,** as the phase text guessed. Conjugar writes one
+  snapshot per date and skips the write when today's is on disk, so the first activation of a day
+  settles the verb even when My Verbs changes afterward. A frequent day's verb is a function of the
+  day anyway. `MainTabView` reads My Verbs on the main actor as infinitives and hands them to the
+  detached `refresh(myVerbs:)`, which resolves them only when it writes.
+- **The old rule walked the frequency list.** `(days × 127) % 1000` stepped 127 ranks a day:
+  poseer (#276), apreciar (#403), rendir (#530), temblar (#657), ilustrar (#784), bautizar (#911)
+  from today. The new draw's next ten days from 2026-11-22, with an empty My Verbs, are heredar,
+  remover, sobrar, inscribir, buscar, identificar, alegrar, procesar, observar, diferenciar.
+- **No new signal,** as in Konjugieren: `viewVerbView`'s `widget`, `control`, and `shortcut`
+  sources already count these pages, so nothing is staged for the privacy policy.
+- **Not done: Konjugieren's Python reimplementation.** Reimplementing the rank's tie-breaks and
+  `VerbRelations`' prefix and false-compound lists in Python would have been most of the phase
+  again. The tests pin the draw's rules instead, and the simulator's snapshot matched the day the
+  tests predicted.
+- **What was tried where.** iPhone, English, light: the new build kept the morning's snapshot
+  (poseer, chosen by the old rule) on relaunch; churruscar opened to join My Verbs (with tener
+  starred and ir recent); the snapshot deleted and the app relaunched, writing heredar (#799), the
+  predicted verb, since day 325 is not a My Verbs day; nine `verb/random?source=control` links
+  opened voltear, tener, aburrir, lanzar, pagar, contraer, ir, churruscar, and aburrir again, three
+  of them from My Verbs. The verb page is unchanged, so the iPad was not booted. Not tried: the
+  widget on a Home Screen, a My Verbs day in the simulator (the tests cover days 0, 3, 6, and 9),
+  Spanish, dark mode, and a device.
+- **Tests.** `VerbDrawTests` (13 tests: the band, the weights, a day's verb repeatable, My Verbs every
+  third day in turn and before the reference date, the weights showing in 1,500 days, one in three on
+  demand, the fallbacks, the generator's sequence, a day's verb from 00:01 to 23:59, the widget's next
+  ten days, and the snapshot naming a My Verbs day's reflexive verb as arrepentirse) and
+  `FrequencyBandTests` (3). The whole suite passes: 878 Swift Testing tests in 50 suites, plus the
+  XCTest suites, in 64.5 seconds (53 after Phase 13). The Mac's load average was 13 from other work:
+  the slowest suite, the engine's, took 14 seconds in the run and 6.6 alone. `VerbDrawTests` takes
+  about 2 seconds. The simulator language was English.
 
 ## Phase 15: The Review Card
 
 **Ideas:** D4. **Ports:** Konjugieren Phase 15. **Depends on:** Phases 9 (the key conjugations)
-and 12. **Status:** Not started.
+and 12. **Status:** Awaiting Josh (2026-11-22).
 
 When the app opens, one card above the verb list offers a verb looked up some days earlier, with its
 key conjugations hidden until tapped. One tap reveals them; one dismisses the card. This needs a
@@ -1892,7 +1943,59 @@ lookup, a reveal, and a dismissal), not as fields scattered over the learner rec
 **Done when** a seeded overdue verb appears as a card, reveal and dismissal move its schedule as
 decided, a later lookup resets it, the setting hides it, and tests pin the schedule.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **No question for Josh.** Konjugieren's rules, the irregular-only restriction, and the setting
+  were all decided, so the session asked nothing.
+- **What the code looks like.** `ReviewSchedule` (`Shared/ReviewSchedule.swift`) is Konjugieren's
+  Phase 15 type with its operations named for the card: `lookedUp`, `revealed`, and `dismissed`. It
+  is the optional `review` on `LearnerVerbs.Entry`. `LearnerVerbs` gains `dueForReview(at:)`,
+  `daysSinceOpened`, `recordReveal`, `recordDismissal`, and a `schedulesReview` flag on
+  `recordOpen`, false by default, because the record has no verb map and cannot tell an irregular
+  verb. `LearnerVerbStore.recordOpen` now takes the page's `source` and passes the flag:
+  `isReviewable` (the verb page's pill, any class but 1, 2, and 3, through `VerbDraw.isIrregular`,
+  so buscar and llegar count) and not an open from the card. The card is `ReviewCardView`; the
+  setting is `ReviewCardSuppression` in the Settings card with Browse Tú and/or Vos.
+  `docs/feature_architecture.md` § The Review Card has the whole design.
+- **An older record is scheduled once, not read with a fallback.** Konjugieren treated an entry
+  with no `review` as looked up on its last open, at every read. Here that fallback would also
+  schedule every regular verb opened since this phase, since their entries have no `review` either.
+  Instead the store, as it loads, schedules each unscheduled irregular verb from its last open and
+  saves (`scheduleUnscheduledReviews(where:)`). It runs at every launch and finds nothing after the
+  first. In the simulator it scheduled the verbs Phase 14's session had opened.
+- **The ✕ after a reveal** only hides the card, as in Konjugieren; the reveal has already moved the
+  verb. **The card hides** while anything is typed and while the recents show, and is absent from
+  My Verbs, which is a `List` of its own.
+- **Strings.** "Looked up yesterday" / "Consultado ayer", "Looked up 3 days ago" / "Consultado hace
+  3 días" (a plural variation), "Looked up earlier" / "Consultado antes", "Recall its conjugations,
+  then tap to check." / "Recuerda sus conjugaciones y luego toca para comprobarlas.", "Dismiss" /
+  "Descartar", "Opens the verb’s page." / "Abre la página del verbo.", and the setting "Suppress
+  Review Card" / "Ocultar la tarjeta de repaso", Off / On as "No" / "Sí", with a description that
+  says the card offers an irregular verb.
+- **Signals** `viewReviewCard` and `tapRevealReviewCard`, no parameters; `reviewCard` is now sent as
+  a source. The staged policy section rewrites Phase 12's in-app-actions bullet and its paragraph on
+  the list kept on the device, which now holds due dates.
+- **What was tried where.** iPhone, English, light, with the record seeded through `defaults write
+  … -string` (without `-string`, `defaults` reads the JSON as a plist and refuses it): tener
+  overdue in box 1 and ir with no `review`, opened three days before, plus hablar. The card offered
+  tener ("Looked up 10 days ago"); a reveal showed "tengo · tuve · tendré · tenido" with red letters
+  and wrote box 2, due in seven days; a second tap opened tener's page, counting an open and
+  leaving the schedule; a trip to the Settings app and back offered ir ("Looked up 3 days ago"),
+  scheduled as the store loaded; ✕ before revealing moved ir to the next midnight in box 0; hablar
+  was never scheduled. Suppress Review Card On survived a relaunch with poner due and showed no
+  card; Off brought poner's card back ("Looked up yesterday") without a relaunch. iPad, Spanish (a
+  launch argument), dark, regular width: arrepentirse's card ("Consultado hace 4 días") at 560
+  points beside the grid, revealed as "me arrepiento · me arrepentí · me arrepentiré · arrepentido".
+  The iPad was set back to light and shut down. Not tried: VoiceOver itself, Dynamic Type at large
+  sizes, and a device. `tap_id.sh` failed on the iPad with a decoding error from AXe, so the iPad's
+  taps went by coordinates.
+- **Tests.** `ReviewScheduleTests`, 21 `@Test` functions: the ladder, a reveal, a dismissal, a later
+  lookup restarting, an open that schedules nothing keeping a schedule, stars, Clear and remove,
+  unscheduled verbs untouched by a reveal or dismissal, the older record scheduled where allowed,
+  calendar days, the JSON round trip, which verbs are reviewable, and the store's choice and
+  sources. `SettingsTests` gained the setting's default and persistence. The whole suite passes:
+  901 Swift Testing tests in 51 suites, plus the XCTest suites, in 56 seconds (64.5 after Phase
+  14). `ReviewScheduleTests` takes 0.03 seconds. The simulator language was English.
 
 ## Phase 16: Collections
 

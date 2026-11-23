@@ -34,6 +34,10 @@ struct VerbBrowseView: View {
   @State private var searchTracker = SearchTracker()
   /// When the field last lost focus, or nil while it has it. See `push(_:)`.
   @State private var searchFocusLostAt: Date?
+  /// The review card's verb and state, chosen once per opening of the app. See `chooseReviewCard`.
+  @State private var reviewCard: ReviewCardState?
+  @State private var reviewCardIsChosen = false
+  @State private var appWasInBackground = false
   @Environment(AppRouter.self) private var router
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   @Environment(\.scenePhase) private var scenePhase
@@ -82,6 +86,8 @@ struct VerbBrowseView: View {
   }
 
   private var learnerVerbs: LearnerVerbStore { Current.learnerVerbs }
+
+  private var settings: Settings { Current.settings }
 
   /// The verbs last opened, listed while the field is focused and empty, before anything is typed.
   /// They follow `searchIsEngaged`, not the focus, for the reason `searchFocusChanged` gives.
@@ -389,6 +395,62 @@ struct VerbBrowseView: View {
     searchIsFocused = focused
   }
 
+  private static let reviewCardMaxWidth: CGFloat = 560
+
+  /// Each launch, and each return from the background, offers the irregular verb longest overdue,
+  /// if any. The choice is made once per opening, so revealing a card does not swap it for the next
+  /// verb due.
+  private func chooseReviewCard() {
+    reviewCardIsChosen = true
+    guard settings.reviewCardSuppression == .off else {
+      reviewCard = nil
+      return
+    }
+    reviewCard = learnerVerbs.verbDueForReview().map { entry in
+      ReviewCardState(entry: entry, daysSinceLookup: learnerVerbs.daysSinceOpened(entry.infinitive))
+    }
+  }
+
+  private func signalReviewCardShown() {
+    guard reviewCard?.wasSignaled == false else {
+      return
+    }
+    reviewCard?.wasSignaled = true
+    Current.analytics.signal(name: .viewReviewCard)
+  }
+
+  private func revealReviewCard() {
+    guard let reviewCard, !reviewCard.isRevealed else {
+      return
+    }
+    learnerVerbs.recordReveal(reviewCard.entry.infinitive)
+    Current.analytics.signal(name: .tapRevealReviewCard)
+    withAnimation {
+      self.reviewCard?.isRevealed = true
+    }
+  }
+
+  private func openReviewCard() {
+    guard let reviewCard else {
+      return
+    }
+    navigationPath.append(VerbDestination(infinitive: reviewCard.entry.infinitive, source: .reviewCard))
+  }
+
+  /// A card dismissed before its conjugations were seen was no review, so its verb returns
+  /// tomorrow in the same box.
+  private func dismissReviewCard() {
+    guard let reviewCard else {
+      return
+    }
+    if !reviewCard.isRevealed {
+      learnerVerbs.recordDismissal(reviewCard.entry.infinitive)
+    }
+    withAnimation {
+      self.reviewCard = nil
+    }
+  }
+
   private func listHeading(_ text: String) -> some View {
     Text(text)
       .font(.caption.smallCaps())
@@ -530,6 +592,25 @@ struct VerbBrowseView: View {
                 TipView(tryQuizTip)
                   .padding(.horizontal)
                   .padding(.top, Layout.defaultSpacing)
+              }
+
+              if let reviewCard, searchText.isEmpty, !showsRecents, settings.reviewCardSuppression == .off {
+                ReviewCardView(
+                  entry: reviewCard.entry,
+                  daysSinceLookup: reviewCard.daysSinceLookup,
+                  isRevealed: reviewCard.isRevealed,
+                  reveal: revealReviewCard,
+                  open: openReviewCard,
+                  dismiss: dismissReviewCard
+                )
+                .frame(maxWidth: horizontalSizeClass == .regular ? Self.reviewCardMaxWidth : .infinity)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                .padding(.top, Layout.defaultSpacing)
+                .transition(.opacity)
+                .onAppear {
+                  signalReviewCardShown()
+                }
               }
 
               if !searchText.isEmpty && filteredVerbs.isEmpty {
@@ -675,10 +756,25 @@ struct VerbBrowseView: View {
         navigationPath.append(destination)
         router.pendingVerb = nil
       }
-      // A search left with text in the field when the app goes to the background has ended.
+      // A search left with text in the field when the app goes to the background has ended. A
+      // return from the background is a new opening, which may offer a review card.
       .onChange(of: scenePhase) {
-        if scenePhase == .background, let search = searchTracker.finish() {
-          signalEndedSearch(search)
+        switch scenePhase {
+        case .background:
+          appWasInBackground = true
+          if let search = searchTracker.finish() {
+            signalEndedSearch(search)
+          }
+        case .active where appWasInBackground:
+          appWasInBackground = false
+          chooseReviewCard()
+        default:
+          break
+        }
+      }
+      .onChange(of: settings.reviewCardSuppression) {
+        if settings.reviewCardSuppression == .off, reviewCard == nil {
+          chooseReviewCard()
         }
       }
       .onChange(of: router.pendingSearch, initial: true) {
@@ -687,6 +783,9 @@ struct VerbBrowseView: View {
       .onAppear {
         Current.analytics.signal(name: .viewVerbBrowseView)
         Current.reviewPrompter.promptableActionHappened()
+        if !reviewCardIsChosen {
+          chooseReviewCard()
+        }
       }
       // Loading the conjugation map and indexing its forms takes about a second, so it happens
       // off the main actor before the learner types rather than on the first keystroke.
@@ -698,6 +797,14 @@ struct VerbBrowseView: View {
     }
     .environment(\.verbPagePush, VerbPagePush { navigationPath.append($0) })
   }
+}
+
+/// The review card on screen: its verb, chosen once per opening, and what the learner has done.
+private struct ReviewCardState {
+  let entry: VerbMapEntry
+  let daysSinceLookup: Int?
+  var isRevealed = false
+  var wasSignaled = false
 }
 
 /// The visual content of a verb row — serif gold infinitive + gloss with a blue

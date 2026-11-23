@@ -30,4 +30,19 @@ struct SettingsTests {
     let reloadedSettings = Settings(getterSetter: getterSetter)
     #expect(reloadedSettings.verbSort == .alphabetical)
   }
+
+  @Test func reviewCardSuppressionDefaultsToOff() {
+    let settings = Settings(getterSetter: GetterSetterFake())
+    #expect(settings.reviewCardSuppression == .off)
+  }
+
+  @Test func reviewCardSuppressionPersists() {
+    let getterSetter = GetterSetterFake()
+    let settings = Settings(getterSetter: getterSetter)
+    settings.reviewCardSuppression = .on
+    #expect(getterSetter.get(key: Settings.reviewCardSuppressionKey) == ReviewCardSuppression.on.rawValue)
+
+    let reloadedSettings = Settings(getterSetter: getterSetter)
+    #expect(reloadedSettings.reviewCardSuppression == .on)
+  }
 }

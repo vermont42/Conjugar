@@ -18,7 +18,8 @@ nonisolated struct WidgetSnapshot: Codable, Equatable, Sendable {
   let gloss: String
   /// The verb's 1-based frequency rank (1 = most common) among all 4,811 verbs. Optional
   /// only so snapshots written before every verb had a rank still decode; the writer always
-  /// supplies one, and it is always inside `WidgetSnapshotWriter.verbOfTheDayPoolSize`.
+  /// supplies one. It is inside the 1,000 most frequent verbs except on a My Verbs day
+  /// (`VerbDraw`), when the learner's own verb may be rarer.
   let frequencyRank: Int?
   /// One entry per displayed tense. `[0]` is always presente de indicativo. The
   /// small/medium sizes show only `[0]`; the large size now shows just the presente

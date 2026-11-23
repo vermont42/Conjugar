@@ -766,6 +766,41 @@ nonisolated enum L {
     }
   }
 
+  /// The card above the verb list that offers an irregular verb looked up some days ago (browse
+  /// plan, Phase 15).
+  enum ReviewCard {
+    static var dismiss: String {
+      String(localized: "ReviewCard.dismiss")
+    }
+
+    /// "Looked up yesterday", "Looked up 3 days ago", or, for nil or less than a day, "Looked up
+    /// earlier".
+    static func lookedUp(daysAgo: Int?) -> String {
+      guard let daysAgo, daysAgo > 0 else {
+        return String(localized: "ReviewCard.lookedUpEarlier")
+      }
+      return String(localized: "ReviewCard.lookedUp \(daysAgo)")
+    }
+
+    static var openHint: String {
+      String(localized: "ReviewCard.openHint")
+    }
+
+    static var prompt: String {
+      String(localized: "ReviewCard.prompt")
+    }
+  }
+
+  enum ReviewCardSuppression {
+    static var off: String {
+      String(localized: "ReviewCardSuppression.off")
+    }
+
+    static var on: String {
+      String(localized: "ReviewCardSuppression.on")
+    }
+  }
+
   enum Settings {
     static var localizedTitle: String {
       String(localized: "Settings.localizedTitle")
@@ -793,6 +828,14 @@ nonisolated enum L {
 
     static var browseDescription: String {
       String(localized: "Settings.browseDescription")
+    }
+
+    static var reviewCardSuppressionHeading: String {
+      String(localized: "Settings.reviewCardSuppressionHeading")
+    }
+
+    static var reviewCardSuppressionDescription: String {
+      String(localized: "Settings.reviewCardSuppressionDescription")
     }
 
     static var quiz: String {

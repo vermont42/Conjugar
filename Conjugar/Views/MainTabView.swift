@@ -63,7 +63,9 @@ struct MainTabView: View {
       LiveActivityManager.endAll()
       // Off-main: refresh() parses verbModelMap.xml + runs ~50 conjugations;
       // everything it touches is nonisolated/Sendable, so it belongs off the launch path.
-      Task.detached { WidgetSnapshotWriter.refresh() }
+      // My Verbs is read here, on the main actor, and resolved off it.
+      let myVerbs = Current.learnerVerbs.record.myVerbs
+      Task.detached { WidgetSnapshotWriter.refresh(myVerbs: myVerbs) }
       // Warm the ~4 MB content caches off-main so the first verb push isn't a main-thread
       // decode. refresh() is date-gated and often no-ops, so it can't be relied on to warm.
       Task.detached { ContentCaches.warm() }
@@ -85,7 +87,8 @@ struct MainTabView: View {
     }
     .onChange(of: scenePhase) { _, phase in
       guard phase == .active else { return }
-      Task.detached { WidgetSnapshotWriter.refresh() }
+      let myVerbs = Current.learnerVerbs.record.myVerbs
+      Task.detached { WidgetSnapshotWriter.refresh(myVerbs: myVerbs) }
       drainPendingDeeplink()
     }
     // A `conjugar://game` deeplink jumps straight to the game from any tab. The

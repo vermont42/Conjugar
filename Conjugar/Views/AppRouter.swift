@@ -88,8 +88,11 @@ final class AppRouter {
     switch host {
     case URL.verbHost:
       guard let target = url.deeplinkTarget else { return }
-      if target == URL.randomVerbTarget, let random = VerbMap.shared.entries.keys.randomElement() {
-        open(verb: random, source: source)
+      if target == URL.randomVerbTarget {
+        // From the frequent verbs or My Verbs, as the widget's verb of the day is (Phase 14).
+        if let random = VerbDraw.randomVerb(myVerbs: Current.learnerVerbs.myVerbs) {
+          open(verb: random.infinitive, source: source)
+        }
       } else if let infinitive = Self.infinitive(named: target) {
         let match = url.deeplinkQueryValue(named: URL.matchQueryName)
         let marks = match.map { Self.marks(of: $0, on: infinitive, hiding: Current.settings.secondSingularBrowse.hiddenPersons) } ?? []

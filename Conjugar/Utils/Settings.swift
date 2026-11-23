@@ -90,6 +90,13 @@ final class Settings {
   static let didShowGameCenterDialogKey = "didShowGameCenterDialog"
   static let didShowGameCenterDialogDefault = false
 
+  /// Whether the verb list hides the review card (browse plan, Phase 15).
+  var reviewCardSuppression: ReviewCardSuppression {
+    didSet { Settings.persist(getterSetter, Settings.reviewCardSuppressionKey, reviewCardSuppression, oldValue) }
+  }
+  static let reviewCardSuppressionKey = "reviewCardSuppression"
+  static let reviewCardSuppressionDefault: ReviewCardSuppression = .off
+
   // Flipped true the first time the onboarding flow is dismissed, so it auto-presents
   // exactly once. The Settings "Show Onboarding" button re-shows it without touching
   // this flag (see `OnboardingView(isReshow:)`).
@@ -127,6 +134,7 @@ final class Settings {
     lastReviewPromptDate = Settings.read(getterSetter, Settings.lastReviewPromptDateKey, default: Settings.lastReviewPromptDateDefault)
     userRejectedGameCenter = Settings.read(getterSetter, Settings.userRejectedGameCenterKey, default: Settings.userRejectedGameCenterDefault)
     didShowGameCenterDialog = Settings.read(getterSetter, Settings.didShowGameCenterDialogKey, default: Settings.didShowGameCenterDialogDefault)
+    reviewCardSuppression = Settings.read(getterSetter, Settings.reviewCardSuppressionKey, default: Settings.reviewCardSuppressionDefault)
     hasSeenOnboarding = Settings.read(getterSetter, Settings.hasSeenOnboardingKey, default: Settings.hasSeenOnboardingDefault)
     appIcon = Settings.read(getterSetter, Settings.appIconKey, default: Settings.appIconDefault)
   }

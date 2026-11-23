@@ -10765,3 +10765,82 @@ Quiz control, the Start a Quiz shortcut, or a link therefore reports the link's 
 pretending to be a tap on Start. Konjugieren also added a signal for the Test Me tap; Conjugar did
 not, since the sheet starts its quiz as it opens and the quiz's own start signal counts the same
 taps.
+
+## A Verb of the Day Worth Opening (2026-11-22)
+
+Browse Phase 14 ported Konjugieren's work on the widget's daily verb and on random verbs. Before it,
+the Verb of the Day stepped through the 1,000 most frequent verbs by a fixed stride of 127 ranks a
+day. Today that gave poseer, then apreciar, rendir, temblar, ilustrar, and bautizar: a march down the
+frequency list that favored nothing in particular. A random verb, from the Control Center control,
+the Random Verb shortcut, or a `verb/random` link, came from all 4,811 verbs, so most were verbs no
+learner would look up.
+
+Now one small type, `VerbDraw`, chooses both. It draws from the 1,000 most frequent verbs, where an
+irregular verb counts double, and so does a verb that is not a prefixed compound of another verb.
+Compounds are told apart by the relation Phase 8 built for the Related Verbs card, so detener counts
+less than tener, and recobrar less than hablar. About 39% of the band is irregular, but 58% of the
+draws over a thousand simulated days were. Once the learner has verbs of their own, starred or
+recently opened, those supply one draw in three. Josh confirmed both of Konjugieren's verdicts on
+that: the share, and what "My Verbs" means.
+
+Konjugieren had learned that one in three by chance is a poor rule for a widget. Over ten simulated
+years, chance left gaps of up to 19 days with no verb of the learner's own, and it showed one verb
+twice while another waited. So the widget gives My Verbs every third day and takes its verbs in turn,
+while a random verb asked for on demand keeps the chance. Conjugar took that design whole.
+
+The phase text expected that keeping the widget's verb stable through the day might need work, as it
+did in Konjugieren, which rewrites ten days of snapshots at every activation. Conjugar needed none.
+It writes one snapshot a day and skips the write when today's is already on disk, so the first time
+the app opens on a given day settles the verb, however My Verbs changes afterward. The simulator
+showed that directly: the new build kept the verb the old rule had picked that morning, and only when
+the snapshot was deleted did it write the new draw's choice, heredar, the verb the tests had predicted.
+
+The seeded draw reuses the small random number generator the game's boss fight uses in its tests.
+Using it for the widget makes its sequence part of the app's behavior, because a change to it would
+change every day's verb, so a test now pins its first outputs. One performance note: the first
+version sorted the whole verb map on every draw, which made a random verb cost about 7 milliseconds.
+Building the band once brought that to about 0.6.
+
+The bands themselves, the top 100, 300, and 1,000, are now defined once as `FrequencyBand`, because
+the pedagogy plan's quiz levels will draw from them too. No analytics changed: the verb page's
+existing `source` already says whether a page was opened from the widget, the control, or a shortcut.
+
+## A Review Card Above the Verb List (2026-11-22)
+
+Phase 15 of the browse plan gives the Verbs tab a card that appears above the list when the app
+opens. It offers one verb the learner looked up some days earlier, with its four key conjugations
+hidden under a gray bar and the line "Recall its conjugations, then tap to check." A tap reveals
+them, tengo · tuve · tendré · tenido, with the irregular letters in red. A second tap opens the
+verb's page, and the ✕ puts the card away. It is the smallest useful piece of spaced repetition:
+a verb comes back after one day, then three, then seven, fourteen, and thirty, and a verb looked up
+again starts over, on the reasoning that a learner who looks a verb up has forgotten it.
+
+All of that came from Konjugieren, where Josh had settled the rules nine days earlier: a dismissal
+before the reveal is no review, so the verb keeps its place and returns tomorrow; a card can appear
+at every launch and every return from the background; due dates fall at midnight, so a verb looked
+up late in the evening does not come due an hour later. He later added a setting to hide the card,
+so Conjugar has it from the start.
+
+The one rule that is Conjugar's own is that only irregular verbs get a card. When Konjugieren's
+pedagogy work later folded the card's schedule into the quiz's practice record, Josh restricted the
+card to strong and mixed verbs, because "hablo · hablé · hablaré · hablado" teaches nothing a learner
+of one regular -ar verb lacks. Conjugar adopted the restriction on day one, which spares its own
+pedagogy plan a migration. "Irregular" means what the verb page's pill says, so a verb whose only
+change is a spelling, like buscar, gets a card too, and its card shows the red qu of busqué.
+
+That restriction changed one detail of the port. Konjugieren had no migration for records written
+before the card existed: an entry with no schedule simply counted as looked up on its last open,
+worked out at every read. In Conjugar the same fallback would have scheduled every regular verb
+opened since, because a regular verb's entry has no schedule either, by design. So the store does
+it once instead. As it loads the record, it schedules any irregular verb that was opened but never
+scheduled, and saves. After the first launch there is nothing left for it to do. In the simulator
+it picked up the verbs the previous session had opened while testing the verb of the day.
+
+The simulator checks went as planned once one snag was out of the way. `defaults write` reads its
+value as a property list unless told otherwise, and JSON is not a property list, so the first seed
+was silently refused while the app went on with the old record. With `-string` it took. The seeded
+tener came up as "Looked up 10 days ago", revealed, and moved from the second box to the third,
+due in a week. A trip to the Settings app and back brought up ir, which the store had scheduled as
+it loaded. On the iPad, in Spanish and dark mode, arrepentirse's card read "Consultado hace 4 días"
+and revealed "me arrepiento · me arrepentí · me arrepentiré · arrepentido", with pronouns, as the
+verb page writes them.

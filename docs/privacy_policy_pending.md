@@ -252,3 +252,53 @@ El primer párrafo de la sección 7 queda así:
 ```
 Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de un cuestionario completo sobre todos los verbos; la de un cuestionario sobre Mis verbos o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
 ```
+
+## The review card (browse plan, Phase 15, 2026-11-22)
+
+Adds the signals `viewReviewCard`, sent when the review card above the verb list appears, and
+`tapRevealReviewCard`, sent when a tap reveals its conjugations. Neither has parameters, and neither
+says which verb. Begins sending `reviewCard` as the `source` of `viewVerbView`, which the first
+bullet's "the verb list" covers, so that bullet is unchanged. The list kept on the device now also
+holds when each irregular verb is next due on the card. This rewrites the bullet about in-app
+actions and the paragraph about the list, both as Phase 12's section gives them; apply this wording
+in place of both.
+
+### English
+
+The bullet about in-app actions in section 2 now reads:
+
+```
+- Certain in-app actions: opening the game, reshowing the onboarding tour, tapping to rate or review the app, sending a message to the tutor, opening a tense's article from a verb's page, tapping to share a verb's page, starring or unstarring a verb (whether the verb is starred afterward, but not which verb), and revealing the conjugations on a review card
+```
+
+A new bullet follows it:
+
+```
+- That a review card, which offers a verb you looked up some days ago, was shown
+```
+
+The paragraph about the list kept on the device now reads:
+
+```
+To show your recent and starred verbs in My Verbs, and to offer review cards, the app keeps a list of the verbs you open and star, with when you opened them, how often, and when each is next due for review. The list stays on your device, in storage shared only with the app's own widgets. It is never sent to the developer or to anyone else, and it is deleted when you delete the app. You can clear the recent verbs, or remove any verb from the list, in My Verbs.
+```
+
+### Spanish
+
+El punto sobre las acciones dentro de la aplicación, en la sección 2, queda así:
+
+```
+- Ciertas acciones dentro de la aplicación: abrir el juego, volver a mostrar la introducción, tocar para valorar o reseñar la aplicación, enviar un mensaje al tutor, abrir el artículo de un tiempo verbal desde la página de un verbo, tocar para compartir la página de un verbo, marcar o desmarcar un verbo con una estrella (si el verbo queda marcado, pero no de qué verbo se trata) y mostrar las conjugaciones de una tarjeta de repaso
+```
+
+Le sigue un punto nuevo:
+
+```
+- Que se mostró una tarjeta de repaso, que le ofrece un verbo que consultó hace unos días
+```
+
+El párrafo sobre la lista guardada en el dispositivo queda así:
+
+```
+Para mostrar sus verbos recientes y marcados con una estrella en Mis verbos, y para ofrecerle tarjetas de repaso, la aplicación guarda una lista de los verbos que abre y marca, con la fecha en que los abrió, cuántas veces y cuándo le toca repasar cada uno. La lista se queda en su dispositivo, en un almacenamiento que solo comparte con los widgets de la propia aplicación. Nunca se envía al desarrollador ni a nadie más, y se borra al eliminar la aplicación. En Mis verbos puede borrar los verbos recientes o quitar cualquier verbo de la lista.
+```

@@ -2839,6 +2839,142 @@
         }
       }
     },
+    "ReviewCard.dismiss" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dismiss"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Descartar"
+          }
+        }
+      }
+    },
+    "ReviewCard.lookedUp %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Looked up yesterday"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Looked up %lld days ago"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Consultado ayer"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Consultado hace %lld días"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ReviewCard.lookedUpEarlier" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Looked up earlier"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consultado antes"
+          }
+        }
+      }
+    },
+    "ReviewCard.openHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens the verb’s page."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre la página del verbo."
+          }
+        }
+      }
+    },
+    "ReviewCard.prompt" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recall its conjugations, then tap to check."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recuerda sus conjugaciones y luego toca para comprobarlas."
+          }
+        }
+      }
+    },
+    "ReviewCardSuppression.off" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        }
+      }
+    },
+    "ReviewCardSuppression.on" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sí"
+          }
+        }
+      }
+    },
     "Settings.addYours" : {
       "localizations" : {
         "en" : {
@@ -3179,6 +3315,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "En el modo latinoamericano, los tests no incluyen las conjugaciones de vosotros. Esta configuración también influye en la forma en que Conjugar pronuncia las conjugaciones."
+          }
+        }
+      }
+    },
+    "Settings.reviewCardSuppressionDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This setting determines whether the verb list hides the review card, which offers an irregular verb you looked up some days ago."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este ajuste determina si la lista de verbos oculta la tarjeta de repaso, que te ofrece un verbo irregular que consultaste hace unos días."
+          }
+        }
+      }
+    },
+    "Settings.reviewCardSuppressionHeading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suppress Review Card"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar la tarjeta de repaso"
           }
         }
       }

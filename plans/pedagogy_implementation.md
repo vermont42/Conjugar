@@ -396,8 +396,25 @@ disagree, the note wins.
     Phases 4 and 8 here will rework when levels replace the difficulties and the learner chooses a
     scope.
 - **Frequency bands** (browse Phase 14): top 100, 300, and 1,000, defined once.
+  Landed 2026-11-22 (browse Phase 14): `FrequencyBand` (`Models/FrequencyBand.swift`, `nonisolated`)
+  with `VerbMapEntry.isIn(_:)` and `VerbMap.entries(in:)`, most frequent first. `VerbDraw` draws the
+  widget's verb and random verbs from `.top1000` and My Verbs; the quiz widget's verb is therefore
+  that draw's, and its question sampling is unchanged (pedagogy Phase 23's). `SplitMix64` is now
+  `nonisolated` and seeds the widget's daily draw, so a seeded generator for the quiz can reuse it.
 - **The review card's schedule** (browse Phase 15): a box and a due date on the 1, 3, 7, 14, and 30
   day ladder, in `Shared/`, for irregular verbs only (Josh, 2026-11-22). Phase 10 here absorbs it.
+  Landed 2026-11-22 (browse Phase 15): `ReviewSchedule` (`Shared/ReviewSchedule.swift`,
+  `nonisolated`, Codable), a `box` and a `due` date with `lookedUp(at:calendar:)`,
+  `revealed(at:calendar:)`, `dismissed(at:calendar:)`, and `isDue(at:)`; due dates fall at the start
+  of a day. It is the optional `review` on `LearnerVerbs.Entry`, so Phase 10 here can move it into
+  the practice record or generalize it (Konjugieren's later version adds `answered(correctly:)`,
+  which moves up only when due, and `new(at:)`). Only irregular verbs are scheduled, as the verb
+  page's pill counts them (`VerbDraw.isIrregular`, so buscar too): `LearnerVerbStore.isReviewable`
+  decides and `LearnerVerbs.recordOpen(_:at:schedulesReview:)` obeys, so a regular verb's entry
+  never has a `review` and nothing needs migrating. An open by any route but the card restarts the
+  verb in box 0; an open with source `reviewCard` leaves it. A record written before Phase 15 is
+  scheduled once as the store loads (`scheduleUnscheduledReviews(where:)`), not by a read-time
+  fallback as in Konjugieren. `docs/feature_architecture.md` § The Review Card has the rules.
 - **Collections** (browse Phase 16): fixed lists derived from the engine, and a bar on every model's
   page, shared as
   `conjugar://list/<key>`. Phases 8 and 15 here use them.
