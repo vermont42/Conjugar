@@ -101,7 +101,7 @@ a model's key names the model.
 
 `AnalyticsSource` is one vocabulary for every signal that carries `source`: `viewVerbView`;
 `finishSearch`, where it names the surface that opened the search field; and `startQuiz`,
-`quitQuiz`, and `completeQuiz` (§ The Scoped Quiz).
+`quitQuiz`, and `completeQuiz` (§ Quiz).
 
 | Value | Sent today? | Meaning |
 |---|---|---|
@@ -653,9 +653,36 @@ container>/Library/Preferences/group.biz.joshadams.Conjugar learnerVerbs -string
 dates as seconds since 2001-01-01, while the app is not running. Without `-string`, `defaults`
 tries to parse the JSON as a plist and fails.
 
-## The Scoped Quiz
+## Quiz
 
 The pedagogy plan reshapes the quiz and should extend this rather than replace it.
+
+**Levels.** The learner chooses one of four levels in Settings (`Settings.quizLevel`, key
+`quizLevel`; a new install starts at Beginner), and nothing unlocks. `QuizLevel`
+(`Models/QuizLevel.swift`, `nonisolated`) lists each level's tenses written out in `pool`, so each
+reads as a whole, and each adds to the one before:
+
+| Level | Spanish | Roughly | Tenses added |
+|---|---|---|---|
+| Beginner | Inicial | A1 | presente; imperativo positivo of tú or vos, usted, and ustedes |
+| Elementary | Elemental | A2 | pretérito; imperfecto; perfecto de indicativo; futuro; gerundio |
+| Intermediate | Intermedio | B1 | presente de subjuntivo; imperativo negativo; imperativo positivo of nosotros and vosotros; condicional; pluscuamperfecto de indicativo; futuro perfecto |
+| Advanced | Avanzado | B2 and above | both imperfectos de subjuntivo; perfecto de subjuntivo; both pluscuamperfectos de subjuntivo; condicional compuesto; futuro de subjuntivo; futuro perfecto de subjuntivo; pretérito anterior |
+
+A `QuizPoolEntry` is a tense, the persons it leaves out (a beginner's commands leave out nosotros and
+vosotros), and a weight, the same at every level and never changed by what the learner has done:
+3 for the presente, pretérito, and imperfecto, the most used (`docs/tense_frequency.md` puts the
+imperfecto above the pretérito); 2 for the other simple tenses and the two imperatives; 1 for the
+gerundio, every compound tense (haber, which the simple tenses already ask, and a participle that
+never changes), and the futuro de subjuntivo, which is rare outside legal and literary prose. A
+weight belongs to a tense as a whole, whatever its number of persons. No tense is asked only of
+certain verbs. A stored Easy, Moderate, or Difficult (key `difficulty`) became Elementary,
+Intermediate, or Advanced the first time the app ran without a level. The Info tab's filter keeps
+its own three difficulties, `InfoDifficulty`, which has nothing to do with the levels.
+
+Every right answer scores 10 at every level, 5 on a second try, and the score is their sum: no
+normalization to fifty questions and no multiplier for the region or level. Until each level has a
+leaderboard, every level posts to the one there is.
 
 **`QuizScope`** (`Models/QuizScope.swift`, `nonisolated`) says what a quiz asks about: the verbs
 (nil for every verb, through the curated lists in `VerbFamilies`; otherwise bare infinitives), the
@@ -667,17 +694,28 @@ collection, which also carries a `title` for the sheet and a `collectionKey` for
 score goes to Game Center and whether the leaderboard shows at the end. No scoped quiz ranks.
 
 **The draw.** `Quiz.start(scope:)` defaults to `.allVerbs`, and returns false, changing nothing,
-when the scope gives no question (an empty My Verbs). The difficulty's plan over the curated lists
-is `Quiz.standardQuestions()`, unshuffled. A scoped quiz borrows it:
+when the scope gives no question (an empty My Verbs). Every random choice goes through one
+generator: `Quiz(randomSource:)` takes one (tests pass `SplitMix64`, so a seed draws the same quiz
+in every process); without one, a shuffling quiz uses the system's, and an unshuffled one
+(`shouldShuffle: false`, for tests and UI tests) a fixed seed.
 
-- **Full length** (My Verbs) keeps the plan's tenses and persons, so its mix is the tab's at that
-  difficulty, and puts the scope's verbs into the slots in turn, preferring a verb not already asked
-  in that cell. Two verbs share thirty questions about evenly.
-- **Shorter** (Test Me) takes distinct cells one tense at a time from the plan's tenses, so three
-  questions at Easy are a presente, a futuro, and a pretérito, never three of one tense.
-- **Either** skips a cell the engine does not give for that verb (a defective verb's), asks tú or vos
-  by the quiz setting, no vosotros in the Latin America region, and no yo in a command, as the tab's
-  plan does.
+- **Every verb** (`levelQuestions(count:)`) draws each question's tense from the level by weight,
+  its person from the tense's rotation, and its verb from the curated lists in `VerbFamilies`,
+  regular and irregular in turn, so half the questions take a verb from an irregular list. The
+  regular verbs take turns by ending (-ar, -er, -ir). The irregular list is the cell's: a tense built
+  on another's stem takes that tense's list (the imperfectos and futuro de subjuntivo the
+  pretérito's, the condicional the futuro's, commands other than tú's and vos's the presente de
+  subjuntivo's), and a compound tense the participle's. A verb the engine cannot ask in the cell is
+  skipped.
+- **Full length over chosen verbs** (My Verbs, a collection) draws tenses by weight the same way and
+  puts the scope's verbs into them, preferring a verb not already asked in that cell, then the verb
+  asked least, then the next in turn, so a defective verb gets its share of the cells it has. A
+  tense none of the verbs has is left out.
+- **Shorter** (Test Me) takes distinct cells one tense at a time, in an order drawn by weight, so the
+  presente tends to come first. A beginner's three questions span its two tenses.
+- **Each** skips a cell the engine does not give for that verb (a defective verb's), asks tú or vos
+  by the quiz setting, no vosotros in the Latin America region, no yo in a command, and no person
+  the level leaves out.
 
 The tab's plan draws each question's person from a rotation of that tense's own
 (`Quiz.personNumber(for:)`), carried from one quiz to the next. A single rotation over every tense
@@ -754,8 +792,9 @@ the results in place of the question with a Done button, closes on Quit, and can
 mid-quiz, so every quiz it starts ends with `quitQuiz` or `completeQuiz`. It skips `viewQuizView`,
 the Game Center prompt, and the router's quiz link.
 
-**A quiz that is not full length** starts no Live Activity, and does not count toward
-`ChangeDifficultyTip`. Nor does a collection's quiz start one, though it is full length, because it
+The Live Activity's attributes carry the level's raw value (`QuizActivityAttributes.level`), which
+the widget does not show. **A quiz that is not full length** starts no Live Activity, and does not count toward
+`ChangeLevelTip`. Nor does a collection's quiz start one, though it is full length, because it
 runs in the sheet beside a quiz the tab may hold, and the Live Activity is one for the app
 (`QuizScope.startsLiveActivity`; `Quiz.hasLiveActivity` keeps a sheet's quiz from ending the tab's).
 Quiz.swift reaches the activity through `Current.liveActivities`: `LiveActivitiesReal` on device
@@ -765,13 +804,18 @@ A collection's completed quiz does count toward the tip.
 
 **The Quiz tab's start screen**: a large yellow symbol for the scope (`books.vertical.fill`, or a
 star for My Verbs), the scope's name ("4,811 verbs" or My Verbs) and a line on what the quiz asks,
-an All Verbs / My Verbs picker above Start, three tiles (30 questions, the difficulty, the region),
+an All Verbs / My Verbs picker above Start, three tiles (30 questions, the level with its gauge, the region),
 and for My Verbs the verbs as centered chips, up to twelve and "+N more" (`FlowLayout.centersRows`).
-The third tile is the region rather than points per answer, because the points depend on both
-settings and are not a whole number. Start is disabled while My Verbs is empty. The choice is not
+The level is chosen in Settings, where each level is a tile with a gauge
+(`gauge.with.dots.needle.0percent` to `100percent`) whose needle rises with the level, since a
+four-segment picker would truncate the names on an iPhone. `ChangeLevelTip` ("Choose Your Level")
+points at it after a first full-length quiz; Settings attaches it only while Settings is on screen,
+since a popover tip on a view that outlives the tab's first visit would float over the Quiz tab's
+results when the quiz finishing met its rule. Start is disabled while My Verbs is empty. The choice is not
 stored. On iPad the symbol, type, and tiles are larger and Start is scaled up.
 
-**Signals.** `startQuiz`, `quitQuiz`, and `completeQuiz` carry `source`: `tab`, `myVerbs`,
+**Signals.** `startQuiz`, `quitQuiz`, and `completeQuiz` carry `level` (a `QuizLevel` raw value,
+in place of the old `difficulty`) and `source`: `tab`, `myVerbs`,
 `verbPage`, or a `quiz` link's own (`deeplink` by default), so that three-question completions do
 not raise the full quiz's completion rate. There is no `tapTestVerb`: the sheet starts its quiz as
 it opens, so `startQuiz` with `verbPage` counts the same taps.
@@ -863,7 +907,7 @@ rows gain the check; a verb opened there still reports `model`.
 counts verbs with a last open (`LearnerVerbStore.openedCount(of:)`); a star alone does not count,
 and Clear in My Verbs resets every collection's progress. Quiz opens `QuizSheet` with
 `QuizScope.collection(_:title:)`: thirty unranked questions over the collection's verbs in the
-difficulty's tenses, titled with the collection's name ("-go Verbs", "Verbs Like tener"). Share
+level's tenses, titled with the collection's name ("-go Verbs", "Verbs Like tener"). Share
 sends the title, the count, the six most frequent verbs, the `list` link with `source=sharedLink`,
 and the App Store link; on iPad the sheet anchors to the button's own frame
 (`ShareSheet.present(…anchorRect:)`), since the button is in the page, not the navigation bar.

@@ -20,8 +20,8 @@ import Testing
   /// The difficulty filter thresholds (each About article is `.easy`, so adding one bumps
   /// every tier): Easy → 11, Easy+Moderate → 19, all → 30. Perífrasis Verbales, though in Tenses, is easy too.
   @Test func difficultyFilterCounts() {
-    func rank(_ d: Difficulty) -> Int { Difficulty.allCases.firstIndex(of: d) ?? 0 }
-    func count(upTo d: Difficulty) -> Int {
+    func rank(_ d: InfoDifficulty) -> Int { InfoDifficulty.allCases.firstIndex(of: d) ?? 0 }
+    func count(upTo d: InfoDifficulty) -> Int {
       Info.infos.filter { rank($0.difficulty) <= rank(d) }.count
     }
     #expect(count(upTo: .easy) == 11)

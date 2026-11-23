@@ -20,7 +20,11 @@ struct SettingsView: View {
   @State private var rateReviewDescription = ""
   @State private var showingGame = false
   @State private var showingOnboarding = false
-  private let changeDifficultyTip = ChangeDifficultyTip()
+  // A popover tip attached to a view that outlives the tab's first visit would float over another
+  // tab, pointing at nothing, when its rule is met there, as ChangeLevelTip's is when a quiz
+  // finishes. Tips are therefore attached only while Settings is on screen.
+  @State private var isOnScreen = false
+  private let changeLevelTip = ChangeLevelTip()
   private let enableGameCenterTip = EnableGameCenterTip()
 
   var body: some View {
@@ -48,8 +52,12 @@ struct SettingsView: View {
       }
       .navigationTitle(L.Settings.localizedTitle)
       .onAppear {
+        isOnScreen = true
         isGameCenterUIHidden = Current.gameCenter.isAuthenticated
         Current.analytics.signal(name: .viewSettingsView)
+      }
+      .onDisappear {
+        isOnScreen = false
       }
       .task {
         // Surface the failure: show an unavailable message rather than
@@ -86,23 +94,14 @@ struct SettingsView: View {
       settingSection(
         icon: "speedometer",
         tint: .customYellow,
-        heading: L.Settings.difficulty,
-        description: L.Settings.difficultyDescription
+        heading: L.Settings.level,
+        description: L.Settings.levelDescription
       ) {
-        Picker(selection: $settings.difficulty) {
-          ForEach(Difficulty.allCases, id: \.self) { difficulty in
-            Text(difficulty.localizedDifficulty).tag(difficulty)
-          }
-        } label: {
-          Text(verbatim: "")
-        }
-        .pickerStyle(.segmented)
-        .selectionFeedback(trigger: settings.difficulty)
-        .accessibilityLabel(L.Settings.difficulty)
+        quizLevelPicker
       }
-      .popoverTip(changeDifficultyTip)
-      .onChange(of: settings.difficulty) {
-        changeDifficultyTip.invalidate(reason: .actionPerformed)
+      .popoverTip(isOnScreen ? changeLevelTip : nil)
+      .onChange(of: settings.quizLevel) {
+        changeLevelTip.invalidate(reason: .actionPerformed)
       }
 
       GradientDivider()
@@ -125,6 +124,51 @@ struct SettingsView: View {
         .accessibilityLabel(L.Settings.quiz)
       }
     }
+  }
+
+  // A segmented control would truncate Intermediate and Intermedio on an iPhone, so the levels
+  // are tiles, each with a gauge whose needle rises with the level.
+  private var quizLevelPicker: some View {
+    LazyVGrid(
+      columns: Array(repeating: GridItem(.flexible(), spacing: Layout.defaultSpacing), count: QuizLevel.allCases.count),
+      alignment: .center,
+      spacing: Layout.defaultSpacing
+    ) {
+      ForEach(QuizLevel.allCases, id: \.self) { quizLevel in
+        let isSelected = settings.quizLevel == quizLevel
+        Button {
+          settings.quizLevel = quizLevel
+        } label: {
+          VStack(spacing: 4) {
+            Image(systemName: quizLevel.systemImage)
+              .font(.system(size: 30))
+              .foregroundStyle(isSelected ? Color.customYellow : Color.secondary)
+              .frame(width: 60, height: 60)
+              .background(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                  .fill(Color.customBackground)
+              )
+              .overlay(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                  .strokeBorder(isSelected ? Color.customYellow : Color.clear, lineWidth: 3)
+              )
+              .accessibilityHidden(true)
+            Text(quizLevel.localizedName)
+              .font(.caption)
+              .foregroundStyle(isSelected ? Color.customYellow : Color.customForeground)
+              .lineLimit(1)
+              .minimumScaleFactor(0.7)
+          }
+          .frame(maxWidth: .infinity)
+          .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(quizLevel.localizedName)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityIdentifier("quiz_level_\(quizLevel.rawValue)")
+      }
+    }
+    .selectionFeedback(trigger: settings.quizLevel)
   }
 
   private var browseCard: some View {

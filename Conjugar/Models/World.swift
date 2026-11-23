@@ -154,18 +154,9 @@ class World {
       region = Settings.regionDefault
     }
 
-    let difficulty: Difficulty
-    if arguments.contains(Difficulty.difficult.rawValue) {
-      difficulty = .difficult
-    } else if arguments.contains(Difficulty.moderate.rawValue) {
-      difficulty = .moderate
-    } else if arguments.contains(Difficulty.easy.rawValue) {
-      difficulty = .easy
-    } else {
-      difficulty = Settings.difficultyDefault
-    }
+    let quizLevel = QuizLevel.allCases.last { arguments.contains($0.rawValue) } ?? Settings.quizLevelDefault
 
-    let dictionary = [Settings.regionKey: region.rawValue, Settings.difficultyKey: difficulty.rawValue]
+    let dictionary = [Settings.regionKey: region.rawValue, Settings.quizLevelKey: quizLevel.rawValue]
     let getterSetter = GetterSetterFake(dictionary: dictionary)
     let settings = Settings(getterSetter: getterSetter)
     let gameCenter = GameCenterFake()

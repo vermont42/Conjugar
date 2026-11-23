@@ -1149,7 +1149,7 @@ Visual review will surface bad cells. Re-run any single one via the `--device` /
 
 - **New model or info topic.** If the change alters which 9 views ship as App Store screenshots, update [`prompts/screenshot.md`](../prompts/screenshot.md) first; the driver's `VIEWS` array follows. New info topics need a `stableKey` in `Info.swift` (the `info_row_<stableKey>` identifier comes from it).
 - **New device size class.** Add the device-class label to `DEVICES`, calibrate `tab_coords_for()` (top vs. bottom tab bar — iPad's regular size class uses a top segmented bar at y=54; iPhone's is a bottom pill bar at y=899.3), and verify the scroll targets still apply. `udid_for()` resolves the new device by name automatically.
-- **Quiz length or difficulty default changes.** Screens 5 and 8 read the fixture's own length; confirm `generateScreenshotFixture()` still pins a count rather than inheriting `Settings.difficulty`.
+- **Quiz length or difficulty default changes.** Screens 5 and 8 read the fixture's own length; confirm `generateScreenshotFixture()` still pins a count rather than inheriting `Settings.quizLevel`.
 - **`axe` upstream fix for the iPad `--id` `typeMismatch` bug.** If a future `axe` release fixes the bug, `tap_id` can be simplified back to `axe tap --id` directly. The driver's `tap_id_first` is currently always-on; after upstream fix it can become iPad-only or be removed.
 
 ## Known Gotchas

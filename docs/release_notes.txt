@@ -27,7 +27,7 @@ REDESIGNED
 Every screen was rebuilt in SwiftUI. Conjugar now supports Dark Mode, Dynamic Type, and VoiceOver, and offers four app icons to choose from. A welcome tour introduces the app on first launch and can be replayed from Settings.
 
 QUIZ
-Quizzes are now 30 questions rather than 50, a length people actually finish, and the three difficulty levels were rebalanced around it. Scores are scaled to the old 50-question range, so your existing Game Center leaderboard entries remain comparable.
+Quizzes are now 30 questions rather than 50, a length people actually finish. The three difficulties became four levels, from Beginner to Advanced, and each adds tenses to the one before in about the order a course teaches them. Choose yours in Settings. A right answer earns 10 points at every level.
 
 ARTICLES
 A new article traces the history of the Spanish verb system from Latin to today, the Purpose and Use article was rewritten, and the article list can be filtered by difficulty.

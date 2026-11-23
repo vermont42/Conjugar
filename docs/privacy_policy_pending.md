@@ -414,3 +414,26 @@ El punto sobre las colecciones queda así:
 ```
 - Qué colección de verbos abrió, como los 100 verbos más frecuentes o los verbos de un modelo, y cómo llegó a ella (la pestaña de modelos, la página de un verbo, la corrección de una respuesta del cuestionario o un enlace)
 ```
+
+## Quiz levels (pedagogy plan, Phase 4, 2026-11-23)
+
+The quiz's three difficulties became four levels, and the parameter `difficulty` on `startQuiz`,
+`quitQuiz`, and `completeQuiz` became `level`, whose values are `beginner`, `elementary`,
+`intermediate`, and `advanced`. The bullet that names the difficulty is rewritten in place. Nothing
+new is sent.
+
+### English
+
+The bullet about the quiz's difficulty in section 2 now reads:
+
+```
+- Quiz level (beginner, elementary, intermediate, or advanced) when you start, quit, or complete a quiz
+```
+
+### Spanish
+
+El punto sobre la dificultad del cuestionario, en la sección 2, queda así:
+
+```
+- El nivel del cuestionario (inicial, elemental, intermedio o avanzado) al comenzar, abandonar o terminar un cuestionario
+```

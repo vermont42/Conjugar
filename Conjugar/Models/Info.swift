@@ -32,11 +32,11 @@ struct Info: Hashable, Identifiable {
   /// and **hyphen-free** — the driver's id predicate treats "-" as a prefix
   /// boundary.
   let stableKey: String
-  let difficulty: Difficulty
+  let difficulty: InfoDifficulty
   let section: InfoSection
   let richTextBlocks: [RichTextBlock]
 
-  private init(heading: String, stableKey: String, difficulty: Difficulty, section: InfoSection, text: String) {
+  private init(heading: String, stableKey: String, difficulty: InfoDifficulty, section: InfoSection, text: String) {
     self.heading = heading
     self.stableKey = stableKey
     self.difficulty = difficulty

@@ -183,9 +183,9 @@ struct QuizView: View {
           HStack(alignment: .top, spacing: Layout.defaultSpacing) {
             QuizFactTile(systemImage: "list.number", value: "\(QuizScope.fullLength)", label: L.Quiz.questionsLabel, isLarge: isLarge)
             QuizFactTile(
-              systemImage: difficultySymbol,
-              value: Current.settings.difficulty.localizedDifficulty,
-              label: L.Settings.difficulty,
+              systemImage: Current.settings.quizLevel.systemImage,
+              value: Current.settings.quizLevel.localizedName,
+              label: L.Settings.level,
               isLarge: isLarge
             )
             QuizFactTile(systemImage: "globe.americas.fill", value: Current.settings.region.localizedRegion, label: L.Settings.region, isLarge: isLarge)
@@ -203,17 +203,6 @@ struct QuizView: View {
         .frame(maxWidth: .infinity, minHeight: geometry.size.height)
       }
       .scrollBounceBehavior(.basedOnSize)
-    }
-  }
-
-  private var difficultySymbol: String {
-    switch Current.settings.difficulty {
-    case .easy:
-      return "gauge.with.dots.needle.0percent"
-    case .moderate:
-      return "gauge.with.dots.needle.50percent"
-    case .difficult:
-      return "flame.fill"
     }
   }
 
@@ -572,7 +561,7 @@ struct QuizView: View {
     navigationPath = NavigationPath()
     fieldFocused = true
     var parameters = [
-      ParameterKey.difficulty.rawValue: quiz.lastDifficulty.rawValue,
+      ParameterKey.level.rawValue: quiz.lastLevel.rawValue,
       ParameterKey.source.rawValue: scope.source.rawValue
     ]
     // A quiz over a collection names it.
@@ -647,7 +636,7 @@ struct QuizView: View {
     Current.analytics.signal(
       name: .completeQuiz,
       parameters: [
-        ParameterKey.difficulty.rawValue: quiz.lastDifficulty.rawValue,
+        ParameterKey.level.rawValue: quiz.lastLevel.rawValue,
         ParameterKey.elapsedTime.rawValue: "\(quiz.elapsedTime)",
         ParameterKey.score.rawValue: "\(quiz.score)",
         ParameterKey.source.rawValue: quiz.scope.source.rawValue
@@ -666,7 +655,7 @@ struct QuizView: View {
     Current.analytics.signal(
       name: .quitQuiz,
       parameters: [
-        ParameterKey.difficulty.rawValue: quiz.lastDifficulty.rawValue,
+        ParameterKey.level.rawValue: quiz.lastLevel.rawValue,
         ParameterKey.elapsedTime.rawValue: "\(quiz.elapsedTime)",
         ParameterKey.questionNumber.rawValue: "\(quiz.currentQuestionIndex + 1)",
         ParameterKey.score.rawValue: "\(quiz.score)",

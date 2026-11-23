@@ -30,17 +30,20 @@ final class Settings {
   static let regionKey = "region"
   static let regionDefault: Region = .latinAmerica
 
-  var difficulty: Difficulty {
-    didSet { Settings.persist(getterSetter, Settings.difficultyKey, difficulty, oldValue) }
+  var quizLevel: QuizLevel {
+    didSet { Settings.persist(getterSetter, Settings.quizLevelKey, quizLevel, oldValue) }
   }
-  static let difficultyKey = "difficulty"
-  static let difficultyDefault: Difficulty = .easy
+  static let quizLevelKey = "quizLevel"
+  static let quizLevelDefault: QuizLevel = .initial
+  /// Where the quiz's Easy, Moderate, or Difficult was stored before levels replaced them. It is
+  /// read once, to choose the level of a learner who has none yet.
+  static let legacyDifficultyKey = "difficulty"
 
-  var infoDifficulty: Difficulty {
+  var infoDifficulty: InfoDifficulty {
     didSet { Settings.persist(getterSetter, Settings.infoDifficultyKey, infoDifficulty, oldValue) }
   }
   static let infoDifficultyKey = "infoDifficulty"
-  static let infoDifficultyDefault: Difficulty = .difficult
+  static let infoDifficultyDefault: InfoDifficulty = .difficult
 
   var secondSingularBrowse: SecondSingularBrowse {
     didSet { Settings.persist(getterSetter, Settings.secondSingularBrowseKey, secondSingularBrowse, oldValue) }
@@ -124,7 +127,12 @@ final class Settings {
     self.getterSetter = getterSetter
 
     region = Settings.read(getterSetter, Settings.regionKey, default: Settings.regionDefault)
-    difficulty = Settings.read(getterSetter, Settings.difficultyKey, default: Settings.difficultyDefault)
+    if getterSetter.get(key: Settings.quizLevelKey) == nil,
+      let legacy = getterSetter.get(key: Settings.legacyDifficultyKey),
+      let migrated = QuizLevel(legacyDifficulty: legacy) {
+      getterSetter.set(key: Settings.quizLevelKey, value: migrated.rawValue)
+    }
+    quizLevel = Settings.read(getterSetter, Settings.quizLevelKey, default: Settings.quizLevelDefault)
     infoDifficulty = Settings.read(getterSetter, Settings.infoDifficultyKey, default: Settings.infoDifficultyDefault)
     secondSingularBrowse = Settings.read(getterSetter, Settings.secondSingularBrowseKey, default: Settings.secondSingularBrowseDefault)
     verbSort = Settings.read(getterSetter, Settings.verbSortKey, default: Settings.verbSortDefault)

@@ -17,9 +17,10 @@ nonisolated enum ParameterKey: String {
   /// and a collection's `startQuiz`. A list, never a verb.
   case collection
   case deepestSection
-  case difficulty
   case dwell
   case elapsedTime
+  /// The quiz's `QuizLevel`, by its raw value, on `startQuiz`, `quitQuiz`, and `completeQuiz`.
+  case level
   case matchKind
   case outcome
   case queryLength

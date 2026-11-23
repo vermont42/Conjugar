@@ -21,7 +21,7 @@ struct AnalyticsTests {
   @Test func spyRecordsParameters() {
     let spy = AnalyticsSpy()
     let parameters = [
-      ParameterKey.difficulty.rawValue: "moderate",
+      ParameterKey.level.rawValue: "intermediate",
       ParameterKey.score.rawValue: "42"
     ]
     spy.signal(name: .completeQuiz, parameters: parameters)
@@ -49,8 +49,8 @@ struct AnalyticsTests {
   }
 
   @Test(arguments: [
-    (ParameterKey.difficulty, "difficulty"),
     (ParameterKey.elapsedTime, "elapsedTime"),
+    (ParameterKey.level, "level"),
     (ParameterKey.questionNumber, "questionNumber"),
     (ParameterKey.score, "score"),
     (ParameterKey.stage, "stage")

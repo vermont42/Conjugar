@@ -1,6 +1,6 @@
 Version 2.8
 
-Conjugar is an app for learning Spanish verb conjugations. Conjugar conjugates 95 irregular and 112 regular Spanish verbs in _all_ Spanish verb tenses. Conjugar allows you to study vosotros conjugations, useful in Spain, and vos conjugations, useful in parts of Latin America. Conjugar has a quiz mode with three difficulty levels. Results from quizzes are available in Game Center®. Conjugar has descriptions of all the tenses with example uses.
+Conjugar is an app for learning Spanish verb conjugations. Conjugar conjugates 95 irregular and 112 regular Spanish verbs in _all_ Spanish verb tenses. Conjugar allows you to study vosotros conjugations, useful in Spain, and vos conjugations, useful in parts of Latin America. Conjugar has a quiz mode with four levels, from Beginner to Advanced. Results from quizzes are available in Game Center®. Conjugar has descriptions of all the tenses with example uses.
 
 Version 3.0
 
@@ -22,7 +22,7 @@ Conjugar goes deeper than a conjugation table.
 - More than 2,100 quotations from medieval Spanish texts, including the Poema de mio Cid and the Libro de buen amor, with translations, showing the verbs as they were written in the 1200s and 1300s.
 
 QUIZ AND GAME CENTER
-A 30-question quiz in three difficulty levels, timed and scored, with your results reported to Game Center leaderboards.
+A 30-question quiz in four levels, from the presente and commands to every tense, timed and scored, with your results reported to Game Center leaderboards.
 
 ASK THE TUTOR
 A Spanish conjugation tutor that runs entirely on your device. Ask how a tense works or how a verb is conjugated, and get an answer grounded in Conjugar's own conjugation engine. Nothing you type leaves your iPhone or iPad. Requires a device with Apple Intelligence enabled.

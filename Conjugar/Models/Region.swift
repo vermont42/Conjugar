@@ -19,15 +19,6 @@ enum Region: String, CaseIterable {
     }
   }
 
-  var scoreModifier: Double {
-    switch self {
-    case .spain:
-      return 1.0
-    case .latinAmerica:
-      return 0.833
-    }
-  }
-
   var localizedRegion: String {
     switch self {
     case .spain:

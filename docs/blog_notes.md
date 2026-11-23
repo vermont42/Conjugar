@@ -11182,3 +11182,52 @@ a count line it never had ("Correct: 8 / 10 · Second Try: 1") and a "First Try:
 that needed one. The iPhone run took six slips and four near misses through the new `slips` fixture;
 the iPad run did the same in Spanish and dark mode. The software keyboard and VoiceOver by ear are
 still untried.
+
+## Four Levels in Place of Three Difficulties (2026-11-23)
+
+Phase 4 of the pedagogy plan replaced Easy, Moderate, and Difficult with four levels: Beginner,
+Elementary, Intermediate, and Advanced, or Inicial, Elemental, Intermedio, and Avanzado. Each adds
+tenses to the one before, roughly in the order a course teaches them. Beginner asks the presente
+and the commands a learner meets first, those of tú or vos, usted, and ustedes. Elementary adds the
+pretérito, the imperfecto, the perfecto, the futuro, and the gerundio. Intermediate adds the
+presente de subjuntivo, the condicional, negative commands, the nosotros and vosotros commands, and
+two compound tenses. Advanced asks everything else.
+
+The old difficulties were lists of fixed counts per tense, written out by hand. The levels draw
+each question's tense by weight instead. Josh took all four recommendations I put to him. The
+weights give the presente, the pretérito, and the imperfecto 3, the other simple tenses 2, and the
+gerundio, every compound tense, and the futuro de subjuntivo 1. The plan's draft gave the
+imperfecto a 2, but the corpus count from the browse plan puts it slightly above the pretérito, so
+it joined the top group. The compound tenses are light because a learner who knows haber and the
+participle gets them right. No tense is restricted to certain verbs. The obvious candidate was the
+polite condicional at Elementary, but its classic phrase, me gustaría, does not fit a quiz that
+frames the answer as `yo [ ]`.
+
+I meant to check the ladder against the Instituto Cervantes's Plan curricular, as the plan asked,
+but every page of cvc.cervantes.es redirected to a maintenance page that morning. The check is left
+for later.
+
+The verbs are still drawn from the hand-curated lists, regular and irregular in turn, because Phase
+5 replaces them with the engine's own per-cell irregularity. The lists' age shows in the meantime.
+buscar counts as regular, though its preterite is busqué, and an Elementary quiz asks about three
+irregular imperfectos, which can only be ser, ir, and ver.
+
+The tests found two old problems in the quiz over chosen verbs. At Beginner there are few cells, so
+questions must repeat. When every verb had already been asked a cell, the fallback never passed the
+turn, and tener took 21 of 30 questions in a quiz over tener and ir. And abolir, which at Beginner
+has only abolimos and abolís, never came up at all, because its turn rarely met a cell it has. A
+cell now goes to the verb asked least, which fixed both.
+
+Scoring got simpler. A right answer is 10 points at every level, and there is no normalization to
+the old fifty-question quiz and no multiplier for region or difficulty. Each level will get its own
+leaderboard in Phase 7. The stored difficulty migrates on first launch, and both simulators
+showed it: the iPhone's Easy became Elementary, and the iPad's Difficult became Advanced. The Info
+tab's filter, which had shared the quiz's enum, keeps its three difficulties under a new name,
+`InfoDifficulty`.
+
+In Settings the levels are tiles with a gauge whose needle rises, as in Konjugieren, since four
+segments would truncate "Intermediate". Konjugieren had found that a popover tip attached to
+Settings could float over the Quiz tab's results on the iPad, so Settings now attaches its tip only
+while it is on screen. The renamed tip, "Choose Your Level", appeared at once on the iPhone, because
+TipKit treats a renamed tip as new while the quiz-completed donation survives. A learner who has
+already finished a quiz will see it once more, which suits a new setting.

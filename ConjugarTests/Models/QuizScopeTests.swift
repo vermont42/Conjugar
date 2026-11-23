@@ -17,14 +17,14 @@ import Testing
   private static let myVerbs = ["tener", "hablar", "ir", "arrepentir", "abolir"]
 
   private func makeQuiz(
-    difficulty: Difficulty = .moderate,
+    level: QuizLevel = .intermediate,
     region: Region = .spain,
     secondSingular: SecondSingularQuiz = .tu,
     shouldShuffle: Bool = false,
     gameCenter: GameCenter = GameCenterFake()
   ) -> Quiz {
     let settings = Settings(getterSetter: GetterSetterFake(dictionary: [
-      Settings.difficultyKey: difficulty.rawValue,
+      Settings.quizLevelKey: level.rawValue,
       Settings.regionKey: region.rawValue,
       Settings.secondSingularQuizKey: secondSingular.rawValue
     ]))
@@ -50,10 +50,10 @@ import Testing
     #expect(QuizScope.myVerbs(Self.myVerbs).questionCount == QuizScope.fullLength)
   }
 
-  /// The tab's quiz is unchanged by the scope's arrival: thirty questions for every difficulty.
+  /// The tab's quiz is thirty questions at every level.
   @Test func theDefaultScopeAsksTheFullQuiz() {
-    for difficulty in Difficulty.allCases {
-      let quiz = makeQuiz(difficulty: difficulty)
+    for level in QuizLevel.allCases {
+      let quiz = makeQuiz(level: level)
       #expect(quiz.start())
       #expect(quiz.scope == .allVerbs)
       #expect(quiz.questionCount == QuizScope.fullLength)
@@ -61,9 +61,9 @@ import Testing
   }
 
   @Test func aMyVerbsQuizAsksOnlyItsVerbs() {
-    for difficulty in Difficulty.allCases {
+    for level in QuizLevel.allCases {
       for shouldShuffle in [false, true] {
-        let quiz = makeQuiz(difficulty: difficulty, shouldShuffle: shouldShuffle)
+        let quiz = makeQuiz(level: level, shouldShuffle: shouldShuffle)
         #expect(quiz.start(scope: .myVerbs(Self.myVerbs)))
         #expect(quiz.questionCount == QuizScope.fullLength)
         for question in quiz.questions {
@@ -78,42 +78,50 @@ import Testing
 
   /// The verbs take turns, so two verbs share a quiz about evenly, shuffled or not.
   @Test func myVerbsShareTheQuizEvenly() {
-    for difficulty in Difficulty.allCases {
+    for level in QuizLevel.allCases {
       for shouldShuffle in [false, true] {
-        let quiz = makeQuiz(difficulty: difficulty, shouldShuffle: shouldShuffle)
+        let quiz = makeQuiz(level: level, shouldShuffle: shouldShuffle)
         quiz.start(scope: .myVerbs(["tener", "ir"]))
         let tenerCount = quiz.questions.filter { $0.verb == "tener" }.count
-        #expect((13...17).contains(tenerCount), "tener asked \(tenerCount) of 30 at \(difficulty)")
+        #expect((13...17).contains(tenerCount), "tener asked \(tenerCount) of 30 at \(level)")
       }
     }
   }
 
-  /// A full-length scoped quiz keeps the difficulty's tenses, so Easy asks only Easy's three.
-  @Test func aMyVerbsQuizKeepsTheDifficultysTenses() {
-    let quiz = makeQuiz(difficulty: .easy)
-    quiz.start(scope: .myVerbs(Self.myVerbs))
-    #expect(Set(quiz.questions.map(\.tense)) == [.presenteDeIndicativo, .futuroDeIndicativo, .pretérito])
+  /// A scoped quiz asks at the learner's level, so a beginner's My Verbs asks only the presente
+  /// and the commands of tú, usted, and ustedes.
+  @Test func aMyVerbsQuizKeepsTheLevelsTenses() {
+    for shouldShuffle in [false, true] {
+      let quiz = makeQuiz(level: .beginner, shouldShuffle: shouldShuffle)
+      quiz.start(scope: .myVerbs(Self.myVerbs))
+      #expect(Set(quiz.questions.map(\.tense)) == [.presenteDeIndicativo, .imperativoPositivo])
+      #expect(!quiz.questions.contains { $0.tense == .imperativoPositivo && [.firstPlural, .secondPlural].contains($0.personNumber) })
+    }
   }
 
-  @Test func testMeAsksThreeDistinctTensesOfTheVerb() {
-    for difficulty in Difficulty.allCases {
+  /// Three distinct cells in as many tenses as the level has, up to three: a beginner's two
+  /// tenses give two.
+  @Test func testMeAsksDistinctTensesOfTheVerb() {
+    for level in QuizLevel.allCases {
       for shouldShuffle in [false, true] {
-        let quiz = makeQuiz(difficulty: difficulty, shouldShuffle: shouldShuffle)
+        let quiz = makeQuiz(level: level, shouldShuffle: shouldShuffle)
         #expect(quiz.start(scope: .verbPage("tener")))
         #expect(quiz.questionCount == 3)
         #expect(quiz.questions.allSatisfy { $0.verb == "tener" })
-        #expect(Set(quiz.questions.map(\.tense)).count == 3)
+        #expect(Set(quiz.questions.map(\.tense)).count == min(3, level.pool.count))
+        #expect(Set(quiz.questions.map { "\($0.tense.rawValue) \($0.personNumber.rawValue)" }).count == 3)
         #expect(quiz.questions.allSatisfy(Self.conjugates))
+        #expect(quiz.questions.allSatisfy { level.entry(for: $0.tense)?.asks($0.personNumber) == true })
       }
     }
   }
 
   /// A defective verb is never asked a cell it lacks, however long the quiz.
   @Test func aDefectiveVerbIsAskedOnlyCellsItHas() {
-    for difficulty in Difficulty.allCases {
+    for level in QuizLevel.allCases {
       #expect(Conjugator.isDefective(infinitive: "abolir"))
       for scope in [QuizScope.verbPage("abolir"), .myVerbs(["abolir"])] {
-        let quiz = makeQuiz(difficulty: difficulty, shouldShuffle: true)
+        let quiz = makeQuiz(level: level, shouldShuffle: true)
         #expect(quiz.start(scope: scope))
         #expect(!quiz.questions.isEmpty)
         #expect(quiz.questions.allSatisfy(Self.conjugates))
@@ -122,10 +130,10 @@ import Testing
   }
 
   @Test func theLatinAmericaRegionAsksNoVosotros() {
-    for difficulty in Difficulty.allCases {
+    for level in QuizLevel.allCases {
       for scope in [QuizScope.verbPage("hablar"), .myVerbs(Self.myVerbs)] {
         for _ in 0..<3 {
-          let quiz = makeQuiz(difficulty: difficulty, region: .latinAmerica, shouldShuffle: true)
+          let quiz = makeQuiz(level: level, region: .latinAmerica, shouldShuffle: true)
           quiz.start(scope: scope)
           #expect(!quiz.questions.contains { $0.personNumber == .secondPlural })
         }
@@ -136,7 +144,7 @@ import Testing
   /// Under the vos setting a scoped quiz asks vos, never tú, as the tab's quiz does.
   @Test func theVosSettingAsksVos() {
     for _ in 0..<3 {
-      let quiz = makeQuiz(difficulty: .moderate, secondSingular: .vos, shouldShuffle: true)
+      let quiz = makeQuiz(level: .intermediate, secondSingular: .vos, shouldShuffle: true)
       quiz.start(scope: .verbPage("tener"))
       #expect(!quiz.questions.contains { $0.personNumber == .secondSingularTú })
     }
@@ -162,13 +170,12 @@ import Testing
     #expect(quiz.scope == .verbPage("tener"))
   }
 
-  /// A perfect Test Me run scores what a perfect full run at the same settings does, since the
-  /// score is normalized to the question count.
+  /// A perfect Test Me run scores 10 a question.
   @Test func aPerfectTestMeRunScoresTheMaximum() {
-    let quiz = makeQuiz(difficulty: .moderate)
+    let quiz = makeQuiz(level: .intermediate)
     quiz.start(scope: .verbPage("tener"))
     answerEveryQuestion(quiz)
-    #expect(quiz.score == 500)
+    #expect(quiz.score == 30)
     #expect(quiz.correctCount == 3)
   }
 

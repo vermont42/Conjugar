@@ -551,50 +551,66 @@
         }
       }
     },
-    "Difficulty.difficult" : {
+    "QuizLevel.beginner" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Difficult"
+            "value" : "Beginner"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Difícil"
+            "value" : "Inicial"
           }
         }
       }
     },
-    "Difficulty.easy" : {
+    "QuizLevel.elementary" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Easy"
+            "value" : "Elementary"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fácil"
+            "value" : "Elemental"
           }
         }
       }
     },
-    "Difficulty.moderate" : {
+    "QuizLevel.intermediate" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Moderate"
+            "value" : "Intermediate"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Moderado"
+            "value" : "Intermedio"
+          }
+        }
+      }
+    },
+    "QuizLevel.advanced" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Advanced"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avanzado"
           }
         }
       }
@@ -2196,13 +2212,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Take timed quizzes, earn points, and compete on the Game Center leaderboard. Choose from three difficulty levels as your skills grow."
+            "value" : "Take timed quizzes, earn points, and compete on the Game Center leaderboard. Choose from four levels, from Beginner to Advanced, as your skills grow."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Haz cuestionarios cronometrados, gana puntos y compite en la tabla de clasificación de Game Center. Elige entre tres niveles de dificultad a medida que mejoras."
+            "value" : "Haz cuestionarios cronometrados, gana puntos y compite en la tabla de clasificación de Game Center. Elige entre cuatro niveles, de Inicial a Avanzado, a medida que mejoras."
           }
         }
       }
@@ -2388,13 +2404,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjugate 30 Spanish verbs. Your score rewards accuracy, and harder difficulty and region settings earn more points."
+            "value" : "Conjugate 30 Spanish verbs at your level. A right answer earns 10 points, and a right second try earns 5."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjuga 30 verbos españoles. Tu puntuación premia la precisión, y los ajustes de dificultad y región más exigentes otorgan más puntos."
+            "value" : "Conjuga 30 verbos españoles de tu nivel. Cada respuesta correcta vale 10 puntos, y 5 si aciertas en el segundo intento."
           }
         }
       }
@@ -3263,34 +3279,34 @@
         }
       }
     },
-    "Settings.difficulty" : {
+    "Settings.level" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Difficulty"
+            "value" : "Level"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dificultad"
+            "value" : "Nivel"
           }
         }
       }
     },
-    "Settings.difficultyDescription" : {
+    "Settings.levelDescription" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Moderate-mode quizzes test more tenses than easy-mode quizzes. Difficult-mode quizzes test more tenses than moderate-mode quizzes."
+            "value" : "Each level asks the tenses of the level before and more. Beginner asks the presente and commands. Elementary adds the past tenses, the futuro, and the gerundio. Intermediate adds the presente de subjuntivo, the condicional, and negative commands. Advanced asks every tense."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Los tests del modo moderado examinan más tiempos verbales que los tests del modo fácil. Los tests del modo difícil examinan más tiempos verbales que los tests del modo moderado."
+            "value" : "Cada nivel pregunta los tiempos del nivel anterior y algunos más. Inicial pregunta el presente y el imperativo. Elemental añade los tiempos del pasado, el futuro y el gerundio. Intermedio añade el presente de subjuntivo, el condicional y el imperativo negativo. Avanzado pregunta todos los tiempos."
           }
         }
       }
@@ -3543,34 +3559,34 @@
         }
       }
     },
-    "Tips.changeDifficultyMessage" : {
+    "Tips.changeLevelMessage" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Try Difficult difficulty for a greater challenge with more tenses to conjugate."
+            "value" : "Try a higher level for more tenses to conjugate."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prueba la dificultad Difícil para un mayor reto con más tiempos verbales que conjugar."
+            "value" : "Prueba un nivel más alto para conjugar más tiempos verbales."
           }
         }
       }
     },
-    "Tips.changeDifficultyTitle" : {
+    "Tips.changeLevelTitle" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Change Quiz Difficulty"
+            "value" : "Choose Your Level"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cambia la dificultad del test"
+            "value" : "Elige tu nivel"
           }
         }
       }

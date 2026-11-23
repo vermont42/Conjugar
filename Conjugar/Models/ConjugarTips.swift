@@ -3,7 +3,7 @@
 //  Conjugar
 //
 //  TipKit onboarding tips. Four tips nudge new users toward the quiz, the verb
-//  models, higher quiz difficulty (rule-gated on a completed quiz), and Game
+//  models, a higher quiz level (rule-gated on a completed quiz), and Game
 //  Center, and two on the verb page explain its red letters and point to the
 //  etymology and examples at its bottom. See `TipDisplay.tipsEnabled`, in
 //  `Utils/KillSwitches.swift`, for the screenshot kill switch.
@@ -49,15 +49,15 @@ struct ExploreModelsTip: Tip {
   }
 }
 
-struct ChangeDifficultyTip: Tip {
+struct ChangeLevelTip: Tip {
   static let quizCompleted = Event(id: "quizCompleted")
 
   var title: Text {
-    Text(L.Tips.changeDifficultyTitle)
+    Text(L.Tips.changeLevelTitle)
   }
 
   var message: Text? {
-    Text(L.Tips.changeDifficultyMessage)
+    Text(L.Tips.changeLevelMessage)
   }
 
   var image: Image? {

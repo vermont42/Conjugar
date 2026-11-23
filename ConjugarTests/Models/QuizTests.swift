@@ -15,20 +15,12 @@ import Testing
 
 @MainActor
 @Suite struct QuizTests {
-  /// A perfect run (every answer a total match) yields the maximum score. Every
-  /// question is worth 10, and the raw total is normalized to `Quiz.scoreScale`
-  /// (50) questions before the region and difficulty modifiers — so the maxima
-  /// below are unchanged by the August 2026 cut from 50 questions to 30, which is
-  /// the point of the normalization.
+  /// A perfect run (every answer a total match) scores 10 a question, 300 for thirty, at every
+  /// level and in every region.
   @Test func perfectRunScoresTheMaximum() {
-    let cases: [(region: Region, difficulty: Difficulty, maxScore: Int)] = [
-      (.spain, .difficult, 750),
-      (.latinAmerica, .difficult, 624),
-      (.spain, .moderate, 500),
-      (.latinAmerica, .moderate, 416),
-      (.spain, .easy, 250),
-      (.latinAmerica, .easy, 208)
-    ]
+    let cases: [(region: Region, level: QuizLevel)] = Region.allCases.flatMap { region in
+      QuizLevel.allCases.map { (region, $0) }
+    }
 
     // Iterate both shuffle modes: `false` gives a deterministic, reproducible
     // run (the same verbs every time, so a regression can't hide behind randomness —
@@ -37,7 +29,7 @@ import Testing
     for shouldShuffle in [false, true] {
       for testCase in cases {
         let settings = Settings(getterSetter: GetterSetterFake(dictionary: [
-          Settings.difficultyKey: testCase.difficulty.rawValue,
+          Settings.quizLevelKey: testCase.level.rawValue,
           Settings.regionKey: testCase.region.rawValue
         ]))
         let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: shouldShuffle)
@@ -50,15 +42,15 @@ import Testing
           #expect(quiz.currentQuestionIndex >= 0 && quiz.currentQuestionIndex < questionCount)
           let result = TenseBridge.conjugate(infinitive: quiz.verb, tense: quiz.tense, personNumber: quiz.currentPersonNumber)
           guard case .success(let correct) = result else {
-            Issue.record("Conjugation failed for \(quiz.verb) in \(testCase.region)/\(testCase.difficulty) (shuffle \(shouldShuffle)).")
+            Issue.record("Conjugation failed for \(quiz.verb) in \(testCase.region)/\(testCase.level) (shuffle \(shouldShuffle)).")
             break
           }
           _ = quiz.process(proposedAnswer: correct)
-          #expect(quiz.score >= 0 && quiz.score <= 750)
+          #expect(quiz.score >= 0 && quiz.score <= 300)
         }
 
         #expect(quiz.quizState == .finished)
-        #expect(quiz.score == testCase.maxScore, "Wrong max for \(testCase.region)/\(testCase.difficulty) (shuffle \(shouldShuffle)).")
+        #expect(quiz.score == 300, "Wrong max for \(testCase.region)/\(testCase.level) (shuffle \(shouldShuffle)).")
         #expect(quiz.proposedAnswers.count == questionCount)
         #expect(quiz.correctAnswers.count == questionCount)
       }

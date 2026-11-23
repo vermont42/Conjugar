@@ -137,20 +137,6 @@ nonisolated enum L {
     }
   }
 
-  enum Difficulty {
-    static var easy: String {
-      String(localized: "Difficulty.easy")
-    }
-
-    static var moderate: String {
-      String(localized: "Difficulty.moderate")
-    }
-
-    static var difficult: String {
-      String(localized: "Difficulty.difficult")
-    }
-  }
-
   enum Game {
     static var title: String {
       String(localized: "Game.title")
@@ -813,6 +799,24 @@ nonisolated enum L {
     }
   }
 
+  enum QuizLevel {
+    nonisolated static var beginner: String {
+      String(localized: "QuizLevel.beginner")
+    }
+
+    nonisolated static var elementary: String {
+      String(localized: "QuizLevel.elementary")
+    }
+
+    nonisolated static var intermediate: String {
+      String(localized: "QuizLevel.intermediate")
+    }
+
+    nonisolated static var advanced: String {
+      String(localized: "QuizLevel.advanced")
+    }
+  }
+
   enum Region {
     static var spain: String {
       String(localized: "Region.spain")
@@ -870,12 +874,12 @@ nonisolated enum L {
       String(localized: "Settings.regionDescription")
     }
 
-    static var difficulty: String {
-      String(localized: "Settings.difficulty")
+    static var level: String {
+      String(localized: "Settings.level")
     }
 
-    static var difficultyDescription: String {
-      String(localized: "Settings.difficultyDescription")
+    static var levelDescription: String {
+      String(localized: "Settings.levelDescription")
     }
 
     static var browse: String {
@@ -1294,12 +1298,12 @@ nonisolated enum L {
       String(localized: "Tips.exploreModelsMessage")
     }
 
-    nonisolated static var changeDifficultyTitle: String {
-      String(localized: "Tips.changeDifficultyTitle")
+    nonisolated static var changeLevelTitle: String {
+      String(localized: "Tips.changeLevelTitle")
     }
 
-    nonisolated static var changeDifficultyMessage: String {
-      String(localized: "Tips.changeDifficultyMessage")
+    nonisolated static var changeLevelMessage: String {
+      String(localized: "Tips.changeLevelMessage")
     }
 
     nonisolated static var enableGameCenterTitle: String {

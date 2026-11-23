@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Conjugar is a universal iOS app for learning Spanish verb conjugations. It conjugates 4,811 regular and irregular verbs in all tenses, and offers a searchable verb browser, verb-model reference, tense essays, a three-difficulty quiz with Game Center leaderboards and a Live Activity, an on-device AI tutor, Home/Lock Screen widgets and Control Center controls, and an arcade minigame. `README.md` has the user-facing feature list.
+Conjugar is a universal iOS app for learning Spanish verb conjugations. It conjugates 4,811 regular and irregular verbs in all tenses, and offers a searchable verb browser, verb-model reference, tense essays, a four-level quiz with Game Center leaderboards and a Live Activity, an on-device AI tutor, Home/Lock Screen widgets and Control Center controls, and an arcade minigame. `README.md` has the user-facing feature list.
 
 **Developer:** Josh Adams (vermontcoder@gmail.com), who released the app in 2017.
 **Target:** iOS 26+

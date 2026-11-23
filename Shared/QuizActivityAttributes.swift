@@ -12,8 +12,8 @@ import ActivityKit
 import Foundation
 
 nonisolated struct QuizActivityAttributes: ActivityAttributes {
-  /// Static for the life of the activity.
-  let difficulty: String
+  /// Static for the life of the activity. `level` is a `QuizLevel`'s raw value.
+  let level: String
   let totalQuestions: Int
 
   nonisolated struct ContentState: Codable, Hashable, Sendable {

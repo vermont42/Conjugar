@@ -203,9 +203,9 @@ import Testing
 /// Commands are asked of every person but yo, tú included.
 @MainActor
 @Suite struct QuizPersonRotationTests {
-  private func commandPersons(difficulty: Difficulty, region: Region, quizzes: Int) -> [DisplayTense: [DisplayPersonNumber: Int]] {
+  private func commandPersons(level: QuizLevel, region: Region, quizzes: Int) -> [DisplayTense: [DisplayPersonNumber: Int]] {
     let settings = Settings(getterSetter: GetterSetterFake(dictionary: [
-      Settings.difficultyKey: difficulty.rawValue,
+      Settings.quizLevelKey: level.rawValue,
       Settings.regionKey: region.rawValue,
       Settings.secondSingularQuizKey: SecondSingularQuiz.tu.rawValue
     ]))
@@ -213,8 +213,7 @@ import Testing
     var counts: [DisplayTense: [DisplayPersonNumber: Int]] = [:]
     for _ in 0..<quizzes {
       quiz.start()
-      for question in quiz.questions where question.tense == .imperativoNegativo
-        || (question.tense == .imperativoPositivo && !VerbFamilies.irregularTuImperativoVerbs.contains(question.verb)) {
+      for question in quiz.questions where question.tense == .imperativoNegativo || question.tense == .imperativoPositivo {
         counts[question.tense, default: [:]][question.personNumber, default: 0] += 1
       }
       quiz.quit()
@@ -227,7 +226,7 @@ import Testing
       let expectedPersons: Set<DisplayPersonNumber> = region == .spain
         ? [.secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
         : [.secondSingularTú, .thirdSingular, .firstPlural, .thirdPlural]
-      let counts = commandPersons(difficulty: .moderate, region: region, quizzes: 60)
+      let counts = commandPersons(level: .intermediate, region: region, quizzes: 60)
       for tense in [DisplayTense.imperativoPositivo, .imperativoNegativo] {
         let byPerson = counts[tense] ?? [:]
         #expect(Set(byPerson.keys) == expectedPersons, "\(tense.rawValue) in \(region.rawValue): \(byPerson)")
@@ -239,13 +238,13 @@ import Testing
     }
   }
 
-  @Test func theDifficultQuizAsksANegativeTuCommand() {
-    let counts = commandPersons(difficulty: .difficult, region: .spain, quizzes: 30)
+  @Test func theAdvancedQuizAsksANegativeTuCommand() {
+    let counts = commandPersons(level: .advanced, region: .spain, quizzes: 30)
     #expect((counts[.imperativoNegativo]?[.secondSingularTú] ?? 0) > 0)
   }
 
   @Test func aScopedQuizAsksANegativeTuCommand() {
-    let settings = Settings(getterSetter: GetterSetterFake(dictionary: [Settings.difficultyKey: Difficulty.moderate.rawValue]))
+    let settings = Settings(getterSetter: GetterSetterFake(dictionary: [Settings.quizLevelKey: QuizLevel.intermediate.rawValue]))
     let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: false)
     quiz.start(scope: .myVerbs(["hablar", "comer", "vivir", "tener", "poner", "decir", "hacer", "salir", "venir", "ir"]))
     #expect(quiz.questions.contains { $0.tense == .imperativoNegativo && $0.personNumber == .secondSingularTú })

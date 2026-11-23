@@ -110,18 +110,19 @@ Conjugar/
 │   │                           #   QuizScope.collection(_:title:)
 │   │
 │   │  ── quiz, settings vocabulary, services ──
-│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the scoped draw, per-tense person rotation, the held correction (correction, continueAfterCorrection()), DEBUG fixtures (screenshot, grading, frames, corrections)
+│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the level's weighted draw through an injectable random source (randomSource:), the scoped draw, per-tense person rotation, the held correction (correction, continueAfterCorrection()), DEBUG fixtures (screenshot, grading, frames, corrections)
 │   ├── QuizQuestion.swift      # One question (verb, tense, person): its written answer, every accepted spelling (shownSpellings, acceptedAnswers), grade(_:), its frame, and answer(filling:)
 │   ├── QuizCorrection.swift    # A wrong answer held on its question: its AnswerDifference
 │   ├── AnswerDifference.swift  # Which letters of a wrong answer and of the nearest right one differ, by an edit-distance alignment; QuizQuestion.difference(from:)
 │   ├── AnswerFrame.swift       # The shape of an answer: the words around the blank (yo, (tú) ¡no … !, a reflexive me) and the answer a filled blank gives
+│   ├── QuizLevel.swift         # The four levels (beginner … advanced): each one's tenses (pool, QuizPoolEntry with the persons it leaves out and its weight), name, gauge symbol, and the old difficulty each migrates from
 │   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, or a collection; question count, source, title, isRanked, startsLiveActivity
 │   ├── QuizState.swift         # notStarted / inProgress / finished
 │   ├── ConjugationResult.swift # What an answered question earned: totalMatch (10) / secondAttemptMatch (5) / noMatch
 │   ├── AnswerSlip.swift        # Whether a wrong answer is a slip that earns one more attempt (accents only, or one edit in four letters or more), and never another cell of the verb; QuizQuestion.isSlip(_:)
 │   ├── AnswerSpelling.swift    # How the quiz reads an answer: case, spacing, and a leading subject pronoun of the asked person
 │   ├── StandardVariants.swift  # The RAE's standard doublets of a cell (frito, satisface, adecúo, vos hablés…), accepted by the quiz only
-│   ├── Difficulty.swift        # Setting enum: easy / moderate / difficult, each with a score modifier
+│   ├── InfoDifficulty.swift    # The Info filter's enum: easy / moderate / difficult (the quiz asks by QuizLevel)
 │   ├── Region.swift            # Setting enum: Spain vs. Latin America (TTS accent + score modifier)
 │   ├── SecondSingularBrowse.swift  # Setting enum: which 2s form(s) the browse screens show
 │   ├── SecondSingularQuiz.swift    # Setting enum: which 2s form the quiz asks for
@@ -134,7 +135,7 @@ Conjugar/
 │   ├── VerbType.swift          # verbModelMap `vt` marker: irregular / regular -ar / -er / -ir
 │   ├── VerbFamilies.swift      # The hand-curated verb lists the quiz builds questions from, and the oracle for the collections' derivations
 │   ├── AppIcon.swift           # Alternate app-icon enum (bull / dancer / matador / classic) + preview asset names
-│   ├── ConjugarTips.swift      # TipKit tips (try the quiz, explore models, change difficulty, enable Game Center; on the
+│   ├── ConjugarTips.swift      # TipKit tips (try the quiz, explore models, choose a level, enable Game Center; on the
 │   │                           #   verb page, red letters and keep scrolling)
 │   ├── Sound.swift             # One-shot SFX vocabulary; CaseIterable so SoundPlayerReal can pre-decode off-main
 │   ├── Music.swift             # Looping background tracks (gameLoop / onboarding / bossFight)
@@ -228,7 +229,7 @@ Conjugar/
     ├── QuizView.swift          # The Quiz tab's start screen (scope symbol, All Verbs / My Verbs picker, fact tiles, chips) and gameplay: prompt, framed answer field, held correction, timer, score; pushes a correction's links; a sheet mode for QuizSheet
     ├── QuizCorrectionView.swift # A wrong answer's held correction: the two answers with their differing letters marked, links to the verb's and model's pages, Continue; isBeneathQuiz
     ├── ReviewCardView.swift    # The review card above the verb list: an irregular verb looked up days ago, its key conjugations hidden until tapped
-    ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, difficulty/region/time pills, and each answer
+    ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, level/region/time pills, and each answer
     ├── RelatedVerbsView.swift  # The verb page's Related Verbs card, the full related list, VerbPagePush, and verbPageDestinations()
     ├── RichTextView.swift      # Renders parsed [RichTextBlock] as native SwiftUI Text
     ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center, onboarding reshow, Play
@@ -324,6 +325,8 @@ ConjugarTests/
 │   ├── VerbFamiliesTests.swift         # Guard-rail: every hand-curated quiz verb resolves in the verb map
 │   ├── QuizTests.swift                 # Quiz logic, scoring, and timer, driven through the @Observable model
 │   ├── QuizLiveActivityTests.swift     # Which quizzes start, update, and end the Live Activity, against LiveActivitiesSpy
+│   ├── QuizLevelTests.swift            # Each level's tenses and weights, only its own cells drawn, tenses at their weight under a seed, regular and
+│   │                                   #   irregular in turn; the setting's default and the migration from the old difficulty
 │   ├── QuizScopeTests.swift            # The scoped quiz: My Verbs and Test Me draws, defective verbs, region and vos, ranking
 │   ├── QuizGradingTests.swift          # Accepted answers (pronouns, spacing, each standard variant), the 2010 spelling, per-tense person rotation
 │   ├── QuizCorrectionTests.swift       # The held correction's state machine: hold, clock, Continue, the last question

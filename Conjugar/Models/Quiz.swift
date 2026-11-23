@@ -24,10 +24,14 @@ private final class Cycler {
     self.elements = elements
   }
 
+  var count: Int {
+    elements.count
+  }
+
   /// Return to the start of a (optionally reshuffled) list for a new quiz.
-  func restart(shuffle: Bool) {
+  func restart(shuffle: Bool, using generator: inout some RandomNumberGenerator) {
     if shuffle {
-      elements.shuffle()
+      elements.shuffle(using: &generator)
     }
     index = 0
   }
@@ -41,6 +45,19 @@ private final class Cycler {
   }
 }
 
+/// Lets `Quiz` hold whichever generator it was given.
+private struct AnyRandomNumberGenerator: RandomNumberGenerator {
+  private var base: any RandomNumberGenerator
+
+  init(_ base: any RandomNumberGenerator) {
+    self.base = base
+  }
+
+  mutating func next() -> UInt64 {
+    base.next()
+  }
+}
+
 @MainActor
 @Observable
 class Quiz {
@@ -50,7 +67,7 @@ class Quiz {
   private(set) var currentQuestionIndex = 0
   private(set) var correctCount = 0
   private(set) var lastRegion: Region = .spain
-  private(set) var lastDifficulty: Difficulty = .moderate
+  private(set) var lastLevel: QuizLevel = .initial
   private(set) var proposedAnswers: [String] = []
   private(set) var correctAnswers: [String] = []
   /// Each answered question's grade, as `process(proposedAnswer:)` gave it. The results screen
@@ -74,7 +91,6 @@ class Quiz {
   private let regularAr = Cycler(VerbFamilies.regularArVerbs)
   private let regularIr = Cycler(VerbFamilies.regularIrVerbs)
   private let regularEr = Cycler(VerbFamilies.regularErVerbs)
-  private let allRegular = Cycler(VerbFamilies.allRegularVerbs)
   private let irregularPresenteDeIndicativo = Cycler(VerbFamilies.irregularPresenteDeIndicativoVerbs)
   private let irregularPreterito = Cycler(VerbFamilies.irregularPreteritoVerbs)
   private let irregularRaizFutura = Cycler(VerbFamilies.irregularRaizFuturaVerbs)
@@ -86,7 +102,7 @@ class Quiz {
   private let irregularVosImperativo = Cycler(VerbFamilies.irregularVosImperativoVerbs)
   private var allCyclers: [Cycler] {
     [
-      regularAr, regularIr, regularEr, allRegular,
+      regularAr, regularIr, regularEr,
       irregularPresenteDeIndicativo, irregularPreterito, irregularRaizFutura,
       irregularParticipio, irregularImperfecto, irregularPresenteDeSubjuntivo,
       irregularGerundio, irregularTuImperativo, irregularVosImperativo
@@ -96,8 +112,13 @@ class Quiz {
   private let settings: Settings
   private let gameCenter: GameCenter
   @ObservationIgnored private var personRotation: [DisplayTense: Int] = [:]
-  /// False makes every draw deterministic, for tests and UI tests. A quiz made for a verb page's
-  /// sheet copies it from `Current.quiz`.
+  /// Which of the -ar, -er, and -ir lists gives the next regular verb, so that the three
+  /// endings take turns.
+  @ObservationIgnored private var regularTurn = 0
+  /// Every random choice a quiz makes, so that a seed draws the same quiz in every process.
+  @ObservationIgnored private var generator: AnyRandomNumberGenerator
+  /// False leaves every list and order unshuffled and draws from a fixed seed, for tests and UI
+  /// tests. A quiz made for a verb page's sheet copies it from `Current.quiz`.
   let shouldShuffle: Bool
   /// Whether this quiz started the Live Activity, which is one for the whole app. A quiz that did
   /// not, such as Test Me's in a sheet, must not update or end the tab's.
@@ -138,35 +159,33 @@ class Quiz {
     }
   }
 
-  /// The question count every final score is normalized to, so that a run's length
-  /// does not change what a score is worth.
-  ///
-  /// The quiz ran 50 questions from 2017 until August 2026, when it was cut to 30 —
-  /// long enough that few players finished one. Scaling the raw score by
-  /// `scoreScale / questions.count` keeps a perfect run worth the same 500 points
-  /// before the region and difficulty modifiers as it was at 50 questions, so the
-  /// Game Center leaderboard's existing entries stay comparable with new ones
-  /// instead of becoming permanently unbeatable.
-  private static let scoreScale = 50.0
-
-  init(settings: Settings, gameCenter: GameCenter, shouldShuffle: Bool = true) {
+  /// A `randomSource` makes every draw follow it. Without one, a shuffling quiz draws from the
+  /// system's generator and any other from a fixed seed.
+  init(settings: Settings, gameCenter: GameCenter, shouldShuffle: Bool = true, randomSource: (any RandomNumberGenerator)? = nil) {
     self.settings = settings
     self.gameCenter = gameCenter
     self.shouldShuffle = shouldShuffle
+    if let randomSource {
+      generator = AnyRandomNumberGenerator(randomSource)
+    } else if shouldShuffle {
+      generator = AnyRandomNumberGenerator(SystemRandomNumberGenerator())
+    } else {
+      generator = AnyRandomNumberGenerator(SplitMix64(seed: 0))
+    }
   }
 
-  /// Build the scope's questions for the current difficulty and start the clock. The default
-  /// scope, every verb, is the Quiz tab's quiz as it has always been. A scope whose verbs give no
-  /// question (an empty My Verbs) starts nothing, leaves the quiz as it was, and returns false.
+  /// Build the scope's questions at the learner's level and start the clock. The default scope,
+  /// every verb, is the Quiz tab's quiz. A scope whose verbs give no question (an empty My Verbs)
+  /// starts nothing, leaves the quiz as it was, and returns false.
   @discardableResult
   func start(scope: QuizScope = .allVerbs) -> Bool {
     let region = settings.region
-    let difficulty = settings.difficulty
+    let level = settings.quizLevel
     #if DEBUG
     if let fixture = Quiz.fixtureRun, scope.verbs == nil {
       self.scope = scope
       lastRegion = region
-      lastDifficulty = difficulty
+      lastLevel = level
       clearAnswers()
       switch fixture {
       case .screenshot:
@@ -188,23 +207,23 @@ class Quiz {
     }
     #endif
     let previousRegion = lastRegion
-    let previousDifficulty = lastDifficulty
-    // `personNumber(for:)` reads the region, so it is set before the draw.
+    let previousLevel = lastLevel
+    // `personNumber(for:)` reads the region and the level, so they are set before the draw.
     lastRegion = region
-    lastDifficulty = difficulty
+    lastLevel = level
     var drawn: [Question]
     if let verbs = scope.verbs {
       drawn = scopedQuestions(verbs: verbs, count: scope.questionCount)
     } else {
-      drawn = standardQuestions()
+      drawn = levelQuestions(count: scope.questionCount)
     }
     guard !drawn.isEmpty else {
       lastRegion = previousRegion
-      lastDifficulty = previousDifficulty
+      lastLevel = previousLevel
       return false
     }
     if shouldShuffle {
-      drawn.shuffle()
+      drawn.shuffle(using: &generator)
     }
     self.scope = scope
     clearAnswers()
@@ -221,204 +240,158 @@ class Quiz {
     firstAttempts.removeAll()
   }
 
-  /// The difficulty's plan over the curated lists in `VerbFamilies`, unshuffled: the full quiz
-  /// over every verb, and the tenses and persons a scoped quiz borrows.
-  private func standardQuestions() -> [Question] {
-    var questions: [Question] = []
+  /// The quiz over every verb: each question's tense drawn from the level by weight, its person
+  /// the next of the tense's rotation, and its verb from the curated lists in `VerbFamilies`,
+  /// regular and irregular in turn.
+  private func levelQuestions(count: Int) -> [Question] {
     for cycler in allCyclers {
-      cycler.restart(shuffle: shouldShuffle)
+      cycler.restart(shuffle: shouldShuffle, using: &generator)
     }
-
-    switch lastDifficulty {
-    case .easy:
-//      questions.append(QuizQuestion(allRegular.next(), .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo))) // useful for testing
-      // Ten questions per tense, five regular and five irregular in each.
-      [regularAr.next(), regularAr.next(), regularEr.next(), regularEr.next(), regularIr.next()].forEach {
-        questions.append(QuizQuestion($0, .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
-      }
-      for _ in 0..<5 {
-        questions.append(QuizQuestion(irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
-      }
-      [regularAr.next(), regularAr.next(), regularEr.next(), regularEr.next(), regularIr.next()].forEach {
-        questions.append(QuizQuestion($0, .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
-      }
-      for _ in 0..<5 {
-        questions.append(QuizQuestion(irregularRaizFutura.next(), .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
-      }
-      for _ in 0..<5 {
-        questions.append(QuizQuestion(allRegular.next(), .pretérito, personNumber(for: .pretérito)))
-      }
-      for _ in 0..<5 {
-        questions.append(QuizQuestion(irregularPreterito.next(), .pretérito, personNumber(for: .pretérito)))
-      }
-    case .moderate:
-      // The same ten tenses as before, thinned to 30: presente 5, pretérito 4,
-      // three each for the middle six, two each for the last three.
-      [regularAr.next(), regularEr.next(), regularIr.next()].forEach {
-        questions.append(QuizQuestion($0, .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
-      }
-      for _ in 0..<2 {
-        questions.append(QuizQuestion(irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
-      }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(QuizQuestion($0, .pretérito, personNumber(for: .pretérito)))
-      }
-      for _ in 0..<2 {
-        questions.append(QuizQuestion(irregularPreterito.next(), .pretérito, personNumber(for: .pretérito)))
-      }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(QuizQuestion($0, .imperfectoDeIndicativo, personNumber(for: .imperfectoDeIndicativo)))
-      }
-      // One draw, not three: only three verbs are irregular in the imperfecto, so
-      // three draws showed the whole list every run.
-      questions.append(QuizQuestion(irregularImperfecto.next(), .imperfectoDeIndicativo, personNumber(for: .imperfectoDeIndicativo)))
-      questions.append(QuizQuestion(allRegular.next(), .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
-      for _ in 0..<2 {
-        questions.append(QuizQuestion(irregularRaizFutura.next(), .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
-      }
-      questions.append(QuizQuestion(allRegular.next(), .condicional, personNumber(for: .condicional)))
-      for _ in 0..<2 {
-        questions.append(QuizQuestion(irregularRaizFutura.next(), .condicional, personNumber(for: .condicional)))
-      }
-      questions.append(QuizQuestion(allRegular.next(), .perfectoDeIndicativo, personNumber(for: .perfectoDeIndicativo)))
-      for _ in 0..<2 {
-        questions.append(QuizQuestion(irregularParticipio.next(), .perfectoDeIndicativo, personNumber(for: .perfectoDeIndicativo)))
-      }
-      questions.append(QuizQuestion(allRegular.next(), .presenteDeSubjuntivo, personNumber(for: .presenteDeSubjuntivo)))
-      for _ in 0..<2 {
-        questions.append(QuizQuestion(irregularPresenteDeSubjuntivo.next(), .presenteDeSubjuntivo, personNumber(for: .presenteDeSubjuntivo)))
-      }
-      questions.append(QuizQuestion(allRegular.next(), .gerundio, .none))
-      questions.append(QuizQuestion(irregularGerundio.next(), .gerundio, .none))
-      if settings.secondSingularQuiz == .tu {
-        questions.append(QuizQuestion(irregularTuImperativo.next(), .imperativoPositivo, .secondSingularTú))
-      } else {
-        questions.append(QuizQuestion(irregularVosImperativo.next(), .imperativoPositivo, .secondSingularVos))
-      }
-      questions.append(QuizQuestion(allRegular.next(), .imperativoPositivo, personNumber(for: .imperativoPositivo)))
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(QuizQuestion($0, .imperativoNegativo, personNumber(for: .imperativoNegativo)))
-      }
-    case .difficult:
-      // 25 simple-tense questions plus five of the nine compound tenses.
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(QuizQuestion($0, .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
-      }
-      for _ in 0..<2 {
-        questions.append(QuizQuestion(irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
-      }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(QuizQuestion($0, .pretérito, personNumber(for: .pretérito)))
-      }
-      for _ in 0..<2 {
-        questions.append(QuizQuestion(irregularPreterito.next(), .pretérito, personNumber(for: .pretérito)))
-      }
-      [allRegular.next(), allRegular.next()].forEach {
-        questions.append(QuizQuestion($0, .presenteDeSubjuntivo, personNumber(for: .presenteDeSubjuntivo)))
-      }
-      for _ in 0..<2 {
-        questions.append(QuizQuestion(irregularPresenteDeSubjuntivo.next(), .presenteDeSubjuntivo, personNumber(for: .presenteDeSubjuntivo)))
-      }
-      [regularAr.next(), regularEr.next()].forEach {
-        questions.append(QuizQuestion($0, .gerundio, .none))
-      }
-      questions.append(QuizQuestion(irregularGerundio.next(), .gerundio, .none))
-      questions.append(QuizQuestion(allRegular.next(), .imperfectoDeIndicativo, personNumber(for: .imperfectoDeIndicativo)))
-      questions.append(QuizQuestion(irregularImperfecto.next(), .imperfectoDeIndicativo, personNumber(for: .imperfectoDeIndicativo)))
-      questions.append(QuizQuestion(allRegular.next(), .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
-      questions.append(QuizQuestion(irregularRaizFutura.next(), .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
-      questions.append(QuizQuestion(irregularPreterito.next(), .imperfectoDeSubjuntivo1, personNumber(for: .imperfectoDeSubjuntivo1)))
-      questions.append(QuizQuestion(allRegular.next(), .imperfectoDeSubjuntivo2, personNumber(for: .imperfectoDeSubjuntivo2)))
-      questions.append(QuizQuestion(irregularRaizFutura.next(), .condicional, personNumber(for: .condicional)))
-      questions.append(QuizQuestion(irregularPreterito.next(), .futuroDeSubjuntivo, personNumber(for: .futuroDeSubjuntivo)))
-      if settings.secondSingularQuiz == .tu {
-        questions.append(QuizQuestion(irregularTuImperativo.next(), .imperativoPositivo, .secondSingularTú))
-      } else {
-        questions.append(QuizQuestion(irregularVosImperativo.next(), .imperativoPositivo, .secondSingularVos))
-      }
-      questions.append(QuizQuestion(allRegular.next(), .imperativoNegativo, personNumber(for: .imperativoNegativo)))
-      // Five of the nine compound tenses per run rather than all nine, which would
-      // otherwise be 30% of a 30-question quiz. Drawn without replacement, so a
-      // single quiz stays varied and repeat play still covers the whole set.
-      let compoundTenses: [DisplayTense] = [
-        .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo,
-        .futuroPerfecto, .condicionalCompuesto, .perfectoDeSubjuntivo,
-        .pluscuamperfectoDeSubjuntivo1, .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo
-      ]
-      let chosenCompounds = shouldShuffle ? compoundTenses.shuffled() : compoundTenses
-      chosenCompounds.prefix(5).forEach {
-        questions.append(QuizQuestion(regularOrIrregularParticipioVerb(questionNumber: questions.count), $0, personNumber(for: $0)))
-      }
+    let pool = lastLevel.pool
+    var questions: [Question] = []
+    while questions.count < count, let entry = pool.weightedRandomElement(using: &generator) {
+      let personNumber = personNumber(for: entry)
+      let verb = listedVerb(for: entry.tense, personNumber, irregular: !questions.count.isMultiple(of: 2))
+      questions.append(QuizQuestion(verb, entry.tense, personNumber))
     }
     return questions
   }
 
-  /// Questions about the given verbs only, in the tenses the difficulty asks and never in a cell
-  /// a verb lacks (a defective verb's) or vosotros in the Latin America region.
+  /// The next verb of the list for the cell that the engine can ask it, skipping a defective
+  /// verb's missing cells.
+  private func listedVerb(for tense: DisplayTense, _ personNumber: DisplayPersonNumber, irregular: Bool) -> String {
+    let cycler: Cycler
+    if irregular {
+      cycler = irregularCycler(for: tense, personNumber)
+    } else {
+      let endings = [regularAr, regularEr, regularIr]
+      cycler = endings[regularTurn % endings.count]
+      regularTurn += 1
+    }
+    for _ in 0..<cycler.count {
+      let verb = cycler.next()
+      if Quiz.canAsk(verb, tense, personNumber) {
+        return verb
+      }
+    }
+    return regularAr.next()
+  }
+
+  /// The curated list of verbs irregular in a cell. A tense built on another's stem takes that
+  /// tense's list: the imperfectos and futuro de subjuntivo the pretérito's, the condicional the
+  /// futuro's, and the commands other than tú's and vos's the presente de subjuntivo's. A compound
+  /// tense is irregular in its participle.
+  private func irregularCycler(for tense: DisplayTense, _ personNumber: DisplayPersonNumber) -> Cycler {
+    switch tense {
+    case .presenteDeIndicativo:
+      return irregularPresenteDeIndicativo
+    case .pretérito, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo:
+      return irregularPreterito
+    case .imperfectoDeIndicativo:
+      return irregularImperfecto
+    case .futuroDeIndicativo, .condicional:
+      return irregularRaizFutura
+    case .presenteDeSubjuntivo, .imperativoNegativo:
+      return irregularPresenteDeSubjuntivo
+    case .imperativoPositivo:
+      switch personNumber {
+      case .secondSingularTú:
+        return irregularTuImperativo
+      case .secondSingularVos:
+        return irregularVosImperativo
+      default:
+        return irregularPresenteDeSubjuntivo
+      }
+    case .gerundio:
+      return irregularGerundio
+    default:
+      return irregularParticipio
+    }
+  }
+
+  /// Questions about the given verbs only, in the level's tenses and never in a cell a verb lacks
+  /// (a defective verb's) or vosotros in the Latin America region.
   ///
-  /// A full-length quiz keeps the difficulty's plan, so its mix of tenses is the tab's, and puts
-  /// the scope's verbs in it in turn, avoiding a repeated question where another verb can take
-  /// the cell. A shorter quiz, such as Test Me's three questions, would get an arbitrary slice of
-  /// that mix, so it asks distinct cells in different tenses instead, one tense at a time.
+  /// A full-length quiz draws its tenses by weight as the tab's quiz does and puts the scope's
+  /// verbs in them in turn, avoiding a repeated question where another verb can take the cell. A
+  /// tense that none of the verbs has is left out. A shorter quiz, such as Test Me's three
+  /// questions, asks distinct cells in different tenses instead, one tense at a time, the heavier
+  /// tenses likelier to come first.
   private func scopedQuestions(verbs: [String], count: Int) -> [Question] {
     var pool = verbs.filter { VerbMap.shared.entry(for: $0) != nil }
     guard !pool.isEmpty, count > 0 else {
       return []
     }
     if shouldShuffle {
-      pool.shuffle()
+      pool.shuffle(using: &generator)
     }
-    let plan = standardQuestions()
     var asked: [Question] = []
     var nextVerb = 0
 
-    /// The first verb, from the turn onward, that can be asked in a cell, preferring one not
-    /// already asked there.
+    /// A verb that can be asked in a cell, preferring one not already asked there, then the one
+    /// asked least, then the next in turn. The turn passes to the verb after the one chosen, so a
+    /// defective verb, which fits few cells, still gets its share of the cells it fits.
     func verb(for tense: DisplayTense, _ personNumber: DisplayPersonNumber, allowingRepeat: Bool) -> String? {
-      var fallback: String?
+      var best: (offset: Int, isRepeat: Bool, count: Int)?
       for offset in 0..<pool.count {
         let candidate = pool[(nextVerb + offset) % pool.count]
         guard Quiz.canAsk(candidate, tense, personNumber) else {
           continue
         }
         let isRepeat = asked.contains { $0 == QuizQuestion(candidate, tense, personNumber) }
-        if !isRepeat {
-          nextVerb = (nextVerb + offset + 1) % pool.count
-          return candidate
+        guard allowingRepeat || !isRepeat else {
+          continue
         }
-        fallback = fallback ?? candidate
+        let count = asked.filter { $0.verb == candidate }.count
+        if let current = best, (current.isRepeat ? 1 : 0, current.count) <= (isRepeat ? 1 : 0, count) {
+          continue
+        }
+        best = (offset, isRepeat, count)
       }
-      return allowingRepeat ? fallback : nil
+      guard let best else {
+        return nil
+      }
+      let chosen = pool[(nextVerb + best.offset) % pool.count]
+      nextVerb = (nextVerb + best.offset + 1) % pool.count
+      return chosen
     }
 
     if count >= QuizScope.fullLength {
-      for question in plan where asked.count < count {
-        if let chosen = verb(for: question.tense, question.personNumber, allowingRepeat: true) {
-          asked.append(QuizQuestion(chosen, question.tense, question.personNumber))
+      var entries = lastLevel.pool
+      while asked.count < count, let entry = entries.weightedRandomElement(using: &generator) {
+        // The rotation's person first, then the tense's others, for a verb that lacks it.
+        let first = personNumber(for: entry)
+        let personNumbers = personNumbers(for: entry)
+        let start = personNumbers.firstIndex(of: first) ?? 0
+        var placed: Question?
+        for personNumber in personNumbers[start...] + personNumbers[..<start] {
+          if let chosen = verb(for: entry.tense, personNumber, allowingRepeat: true) {
+            placed = QuizQuestion(chosen, entry.tense, personNumber)
+            break
+          }
+        }
+        if let placed {
+          asked.append(placed)
+        } else {
+          entries.removeAll { $0 == entry }
         }
       }
       return asked
     }
 
-    var tenses: [DisplayTense] = []
-    for question in plan where !tenses.contains(question.tense) {
-      tenses.append(question.tense)
-    }
-    if shouldShuffle {
-      tenses.shuffle()
-    }
-    var cellsByTense: [[DisplayPersonNumber]] = tenses.map { tense in
-      let personNumbers = scopedPersonNumbers(for: tense)
-      return shouldShuffle ? personNumbers.shuffled() : personNumbers
+    let entries = shouldShuffle ? lastLevel.pool.weightedShuffled(using: &generator) : lastLevel.pool
+    var cellsByTense: [[DisplayPersonNumber]] = entries.map { entry in
+      let personNumbers = personNumbers(for: entry)
+      return shouldShuffle ? personNumbers.shuffled(using: &generator) : personNumbers
     }
     var askedInRound = true
     while asked.count < count, askedInRound {
       askedInRound = false
-      for index in tenses.indices where asked.count < count {
+      for index in entries.indices where asked.count < count {
         while !cellsByTense[index].isEmpty {
           let personNumber = cellsByTense[index].removeFirst()
-          if let chosen = verb(for: tenses[index], personNumber, allowingRepeat: false) {
-            asked.append(QuizQuestion(chosen, tenses[index], personNumber))
+          if let chosen = verb(for: entries[index].tense, personNumber, allowingRepeat: false) {
+            asked.append(QuizQuestion(chosen, entries[index].tense, personNumber))
             askedInRound = true
             break
           }
@@ -428,9 +401,10 @@ class Quiz {
     return asked
   }
 
-  /// The persons a scoped quiz may ask in a tense, as the tab's plan asks them: tú or vos by the
-  /// setting, no vosotros in the Latin America region, and no yo in a command.
-  private func scopedPersonNumbers(for tense: DisplayTense) -> [DisplayPersonNumber] {
+  /// The persons a quiz may ask in a level's tense: tú or vos by the setting, no vosotros in the
+  /// Latin America region, no yo in a command, and none the level leaves out.
+  private func personNumbers(for entry: QuizPoolEntry) -> [DisplayPersonNumber] {
+    let tense = entry.tense
     if tense == .gerundio || tense == .participio {
       return [.none]
     }
@@ -445,7 +419,7 @@ class Quiz {
     if lastRegion == .latinAmerica {
       personNumbers.removeAll { $0 == .secondPlural }
     }
-    return personNumbers
+    return personNumbers.filter(entry.asks)
   }
 
   /// Whether the engine gives the cell, which a defective verb's missing cells it does not.
@@ -494,24 +468,10 @@ class Quiz {
     hasLiveActivity = scope.startsLiveActivity
     if hasLiveActivity {
       Current.liveActivities.start(
-        difficulty: lastDifficulty.rawValue,
+        level: lastLevel.rawValue,
         totalQuestions: questions.count,
         state: liveActivityState(isFinished: false)
       )
-    }
-  }
-
-  private func regularOrIrregularParticipioVerb(questionNumber: Int) -> String {
-    let diceRoll: Int
-    if shouldShuffle {
-      diceRoll = Int.random(in: 0..<2)
-    } else {
-      diceRoll = questionNumber % 2
-    }
-    if diceRoll == 0 {
-      return allRegular.next()
-    } else /* diceRoll == 1 */ {
-      return irregularParticipio.next()
     }
   }
 
@@ -590,13 +550,12 @@ class Quiz {
   }
 
   private func finish() {
-    score = Int(Double(score) * Quiz.scoreScale / Double(max(questions.count, 1)) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
     timer?.invalidate()
     quizState = .finished
-    // Unlocks the "Change Quiz Difficulty" tip, which is rule-gated on having
+    // Unlocks the "Choose Your Level" tip, which is rule-gated on having
     // finished at least one quiz. Three questions on a verb's page are not one.
     if scope.questionCount >= QuizScope.fullLength {
-      ChangeDifficultyTip.quizCompleted.sendDonation()
+      ChangeLevelTip.quizCompleted.sendDonation()
     }
     endLiveActivity()
     if scope.isRanked {
@@ -657,18 +616,18 @@ class Quiz {
   }
 
   /// The next person a tense asks, in a rotation of its own over the persons it may ask
-  /// (`scopedPersonNumbers(for:)`), which carries over from one quiz to the next. One rotation
-  /// for every tense would fall into step with a quiz's length, and a tense asked once a quiz,
-  /// such as a command, would meet the same person every time.
-  private func personNumber(for tense: DisplayTense) -> DisplayPersonNumber {
-    let personNumbers = scopedPersonNumbers(for: tense)
+  /// (`personNumbers(for:)`), which carries over from one quiz to the next. One rotation for
+  /// every tense would fall into step with a quiz's length, and a tense asked once a quiz, such
+  /// as a command, would meet the same person every time.
+  private func personNumber(for entry: QuizPoolEntry) -> DisplayPersonNumber {
+    let personNumbers = personNumbers(for: entry)
     let index: Int
-    if let last = personRotation[tense] {
+    if let last = personRotation[entry.tense] {
       index = last + 1
     } else {
-      index = shouldShuffle ? Int.random(in: 0..<personNumbers.count) : 0
+      index = shouldShuffle ? Int.random(in: 0..<personNumbers.count, using: &generator) : 0
     }
-    personRotation[tense] = index
+    personRotation[entry.tense] = index
     return personNumbers[index % personNumbers.count]
   }
 }
@@ -773,8 +732,8 @@ extension Quiz {
 
   /// A fixed, curated question plan for App Store screenshots.
   ///
-  /// Deliberately *not* derived from `start()`'s difficulty-driven generators: those
-  /// draw from shuffled `Cycler`s, so the verbs — and therefore the per-question
+  /// Deliberately *not* derived from `start()`'s level-driven draw: that draws from
+  /// shuffled `Cycler`s, so the verbs — and therefore the per-question
   /// review rows on the results screen — would differ every run and between the
   /// `en` and `es` passes of the same sweep. A hand-picked list keeps the listing
   /// screenshots identical across all four device × language cells, and lets the

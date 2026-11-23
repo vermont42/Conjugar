@@ -60,7 +60,7 @@ struct ResultsView: View {
       countLine
 
       HStack(spacing: Layout.defaultSpacing) {
-        Text(quiz.lastDifficulty.localizedDifficulty).metadataPill(tint: .customYellow)
+        Text(quiz.lastLevel.localizedName).metadataPill(tint: .customYellow)
         Text(quiz.lastRegion.localizedRegion).metadataPill(tint: .customBlue)
         Text(quiz.elapsedTime.timeString).metadataPill(tint: .customForeground)
       }

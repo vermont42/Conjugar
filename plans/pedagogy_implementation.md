@@ -29,8 +29,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 0 | Done | 2026-11-22 | 8518921 | T1.3, T1.4, T1.5, Conjugar's defects |
 | 1 | Done | 2026-11-23 | 30822ac | T1.2 |
 | 2 | Done | 2026-11-23 | df7633c | T4.1, T4.4, T4.5 |
-| 3 | Awaiting Josh | 2026-11-23 | | T1.6 |
-| 4 | Not started | | | T2.3, T2.6, T6.7, M1 |
+| 3 | Done | 2026-11-23 | 8bd27c4 | T1.6 |
+| 4 | Awaiting Josh | 2026-11-23 | | T2.3, T2.6, T6.7, M1 |
 | 5 | Not started | | | T2.1, T2.2, T2.5 |
 | 6 | Not started | | | T2.7, T3.1, T6.5, M2, M3 |
 | 7 | Not started | | | Decision 4 |
@@ -911,8 +911,7 @@ difference is marked accents included, both links work and return, and tests pin
 
 ## Phase 3: One More Try
 
-**Ports:** Konjugieren Phase 4. **Suggestions:** T1.6. **Depends on:** Phase 2. **Status:** Awaiting
-Josh.
+**Ports:** Konjugieren Phase 4. **Suggestions:** T1.6. **Depends on:** Phase 2. **Status:** Done.
 
 Treat a slip as "almost" and allow one more attempt. A right second attempt earns half the points
 (5 where a first attempt earns 10). A wrong second attempt goes to Phase 2's correction. **This
@@ -1013,7 +1012,7 @@ does not, half points are scored and shown, and tests pin each case.
 ## Phase 4: Levels
 
 **Ports:** Konjugieren Phase 5. **Suggestions:** T2.3, T2.6, T6.7, M1. **Depends on:** nothing,
-though Phases 0 to 3 come first by leverage. **Status:** Not started.
+though Phases 0 to 3 come first by leverage. **Status:** Awaiting Josh.
 
 Replace Easy, Moderate, and Difficult, and the score modifiers for difficulty and region, with
 levels ordered by use, each adding to the one before. **Josh accepted the ladder below as drafted**
@@ -1085,7 +1084,85 @@ the names in both languages.
 low-weight tenses appear at their weight under a fixed seed, settings migrate, the Info filter still
 works, the quiz signals carry `level`, and tests pin each level's pool.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh chose on 2026-11-23**, taking every recommendation: the ladder as drafted, with no
+  restricted cells (the courteous condicional is a few phrases, and me gustaría does not fit the
+  quiz's `yo [ ]` frame, so the condicional waits for Intermediate for every verb); the weights 3
+  for the presente, pretérito, and imperfecto (the tense count puts the imperfecto, 14.4%, above the
+  pretérito, 12.3%, so it joined the plan's draft 3s), 2 for the other simple tenses and both
+  imperatives, 1 for the gerundio, every compound, and the futuro de subjuntivo; the names
+  Beginner, Elementary, Intermediate, Advanced and Inicial, Elemental, Intermedio, Avanzado
+  (adjectives agreeing with an implied nivel, over Principiante, which names a person, and over the
+  Instituto Cervantes's Acceso, Plataforma, Umbral, Avanzado); and Info on its own enum.
+- **The Plan curricular was not checked.** Every cvc.cervantes.es page redirected to a maintenance
+  page that day, so the ladder was checked only against `docs/tense_frequency.md`. A later session
+  could still compare it with the PCIC's A1 to C2 inventories and bring Josh any disagreement.
+- **The draw.** `QuizLevel` (`Models/QuizLevel.swift`, `nonisolated`) writes out each level's
+  `pool` of `QuizPoolEntry` values (a tense, the persons it leaves out, its weight). Beginner and
+  Elementary leave nosotros and vosotros out of the imperativo positivo. Each question of the
+  default quiz draws a tense by weight, a person from the tense's rotation (filtered by the level),
+  and a verb from the curated lists, regular and irregular in turn, so the old balance holds at
+  fifteen of thirty. The irregular list follows the cell (the imperfecto de subjuntivo and futuro
+  de subjuntivo take the pretérito's, the condicional the futuro's, a compound the participle's,
+  usted's and the plural commands the presente de subjuntivo's); the regular verbs now take turns
+  by ending, which Easy did and Moderate and Difficult did not. Phase 5 replaces all of this with
+  per-cell irregularity from the engine. Until then the lists' flaws show: buscar is a "regular"
+  verb asked its buscase, and an Elementary quiz asks about three irregular imperfectos, which are
+  always ser, ir, and ver.
+- **The random source is injectable**: `Quiz(randomSource:)`. Without one, a shuffling quiz uses
+  the system's generator and an unshuffled one (`shouldShuffle: false`, which tests and UI tests
+  use) `SplitMix64(seed: 0)`, so both stay deterministic. Every shuffle and the rotation's random
+  start go through it. The default quiz's verbs come from arrays, not a dictionary, so nothing
+  needed sorting.
+- **Scoped quizzes use the level.** A full-length one (My Verbs, a collection) draws tenses by weight
+  and drops a tense none of its verbs has. Test Me's three take distinct cells in a weighted order,
+  so a beginner's span two tenses (the old test asked for three distinct tenses; it now asks for
+  as many as the level has, up to three). Two fixes came with it, found by the tests at Beginner,
+  whose few cells force repeats. When every verb had already been asked a cell, the fallback never
+  passed the turn, so tener took 21 of 30 questions beside ir. And abolir, which has only the
+  nosotros and vosotros presente at Beginner, never came up, since its turn rarely met a cell it
+  has. A cell now goes to a verb not yet asked it, then the verb asked least, then the next in
+  turn.
+- **Scoring.** 10 a right answer and 5 a second try at every level, summed. `Quiz.scoreScale` and
+  both modifiers (`Region.scoreModifier`, `Difficulty.scoreModifier`) are gone, and a perfect run
+  is 300. Until Phase 7 every level posts to the one leaderboard, whose old entries reach 750;
+  nothing ships before then.
+- **The setting** moved to a new key, `quizLevel`. On a launch without it, a stored `difficulty`
+  (Easy, Moderate, Difficult) becomes Elementary, Intermediate, or Advanced; the old key stays,
+  since `GetterSetter` has no removal, and is never read again once a level exists. Both paths
+  ran on real installs: the iPhone's stored Easy became Elementary, and the iPad's, set to
+  Difficult for the test (it was Easy), became Advanced. `World.uiTest` reads a level's raw value
+  from the launch arguments in place of a difficulty's.
+- **Info** keeps `InfoDifficulty` (the renamed `Models/Difficulty.swift`, cases and raw values
+  unchanged, so `infoDifficulty` needs no migration); its score modifier and localized names went
+  with the quiz's. `L.Difficulty` and its three strings are gone.
+- **Settings' tiles.** As in Konjugieren, the levels are four tiles with a gauge
+  (`gauge.with.dots.needle.0percent` to `100percent`), and the Quiz tab's middle tile shows the
+  level with its gauge. Settings now attaches `ChangeLevelTip` only while it is on screen
+  (`isOnScreen`), the bug Konjugieren found. The renamed tip appeared at once on the iPhone, whose
+  `quizCompleted` donation survived, so learners who have finished a quiz will see it once more.
+- **Text that named the difficulties:** the Quiz tab's line (now "Conjugate 30 Spanish verbs at your
+  level. A right answer earns 10 points, and a right second try earns 5."), the onboarding quiz
+  page, the tip, `docs/app_description.txt`, the README, the 3.0 release notes (which said scores
+  were scaled to fifty questions), and `CLAUDE.md`'s overview.
+- **Analytics.** `difficulty` became `level` on `startQuiz`, `quitQuiz`, and `completeQuiz`, with a
+  `QuizLevel` raw value. Staged in `docs/privacy_policy_pending.md` as a rewritten bullet in both
+  languages. `QuizActivityAttributes.difficulty` became `level`; the widget never showed it, and the
+  Live Activity was not looked at.
+- **`docs/feature_architecture.md` § The Scoped Quiz became § Quiz**, with the levels, the weights,
+  and the draw.
+- **No fixture.** What needed seeing was the random draw, so the check typed a wrong answer into
+  thirty real questions per level and read each question from the accessibility tree.
+- **Verified:** 999 tests in 63 suites, in the simulator's default language (English), with two new
+  suites (`QuizLevelTests`, `QuizLevelSettingTests`), up from 985 in 61; `QuizLevelTests` took 1.4
+  seconds. On the iPhone, in English and light mode: Settings' tiles and the tip, the Quiz tab's
+  tile, a Beginner quiz (eighteen presentes and twelve commands, every command tú, usted, or
+  ustedes), and its results' Beginner pill. On the iPad, in Spanish and dark mode: the tiles
+  (Inicial … Avanzado), the tip, the Quiz tab's Avanzado tile, an Advanced quiz (fifteen tenses in
+  thirty questions, compounds among them, no vosotros in América Latina), and its results. Not
+  tried: VoiceOver by ear (each tile reads its name with the selected trait), accessibility text
+  sizes, and the Live Activity.
 
 ## Phase 5: Which Verbs Are Asked
 

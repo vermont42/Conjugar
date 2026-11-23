@@ -17,7 +17,7 @@ struct InfoBrowseView: View {
 
   @Environment(AppRouter.self) private var router
   @State private var navigationPath = NavigationPath()
-  @State private var infoDifficulty: Difficulty = Current.settings.infoDifficulty
+  @State private var infoDifficulty: InfoDifficulty = Current.settings.infoDifficulty
   // Programmatic push of the tutor, triggered by the onboarding "Meet the Tutor" CTA
   // via `router.pendingTutor` (the in-list NavigationLink handles manual taps).
   @State private var showTutor = false
@@ -34,8 +34,8 @@ struct InfoBrowseView: View {
     rank(info.difficulty) <= rank(infoDifficulty)
   }
 
-  private func rank(_ difficulty: Difficulty) -> Int {
-    Difficulty.allCases.firstIndex(of: difficulty) ?? 0
+  private func rank(_ difficulty: InfoDifficulty) -> Int {
+    InfoDifficulty.allCases.firstIndex(of: difficulty) ?? 0
   }
 
   var body: some View {
@@ -57,9 +57,9 @@ struct InfoBrowseView: View {
           VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
             Text(L.BrowseInfo.tensesSection)
             Picker(L.BrowseInfo.filter, selection: $infoDifficulty) {
-              Text(L.BrowseInfo.easy).tag(Difficulty.easy)
-              Text(L.BrowseInfo.easyAndModerate).tag(Difficulty.moderate)
-              Text(L.BrowseInfo.easyModerateAndDifficult).tag(Difficulty.difficult)
+              Text(L.BrowseInfo.easy).tag(InfoDifficulty.easy)
+              Text(L.BrowseInfo.easyAndModerate).tag(InfoDifficulty.moderate)
+              Text(L.BrowseInfo.easyModerateAndDifficult).tag(InfoDifficulty.difficult)
             }
             .pickerStyle(.segmented)
             .textCase(nil)
