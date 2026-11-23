@@ -11112,3 +11112,38 @@ stays put.
 
 The run through a fixture of 21 frames scored a perfect 208. It also turned up an older bug: a quiz
 link that arrives while the results screen is showing starts a new quiz underneath it.
+
+
+## A Correction That Stays (2026-11-23)
+
+Conjugar's quiz used to grade an answer and move on in the same breath. The correction for question
+n appeared under question n + 1, with the clock running, so a learner had to choose between reading
+what went wrong and answering what came next. Phase 2 of the pedagogy plan makes a wrong answer stop
+the quiz. The question stays on screen with the learner's answer, the right one, links to the verb's
+page and its model's, and a Continue button. The clock stops until the learner moves on.
+
+Most of the design came from Konjugieren, which built the same thing ten days earlier. Its
+`AnswerDifference` ported almost unchanged: an edit-distance alignment marks the letters that
+differ, struck through on a red tint in the learner's answer and underlined on a green one in the
+right answer. Red letters already mean "irregular" in Conjugar, so the difference had to look like
+something else. Spanish made one choice easy. An accent is a letter of its own in the alignment, so
+hablo against habló marks exactly the o, which is the whole lesson of that mistake. I let an
+accent-only answer hold as well, with its half points and a line saying so. Phase 3 will replace
+that half credit with a second try.
+
+Two bugs came from looking rather than reading. Konjugieren warned that Back from a linked page
+would leave the field without its keyboard. Here it was subtler: the keyboard did come back, but
+SwiftUI's focus state still read false, so the field's yellow border stayed grey while its cursor
+blinked, and setting the state to true did nothing. A few log lines showed the sequence, and the fix
+clears the state and sets it again once the pop has finished.
+
+The other was a crash that the test run nearly hid. A small extension on `QuizQuestion`, in a new
+file, took the app's default MainActor isolation, though the struct itself is `nonisolated`. Called
+from a nonisolated test, it trapped. The runner restarted, skipped the rest of that suite and the
+whole new suite, and printed a cheerful "passed" for the tests it did run. Only the exit code and a
+line about restarting gave it away. The count of tests was the real check: it should have grown by
+18 and grew by 4.
+
+Josh has yet to judge the layout on a device. The iPhone and iPad runs covered English and Spanish,
+light and dark, a hardware keyboard, and Test Me's sheet, where the link back to the same verb is
+left out. The software keyboard is still untried against the new layout.

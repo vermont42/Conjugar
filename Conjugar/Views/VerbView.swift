@@ -46,6 +46,7 @@ struct VerbView: View {
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   @Environment(\.scenePhase) private var scenePhase
   @Environment(\.verbPagePush) private var push
+  @Environment(\.isBeneathQuiz) private var isBeneathQuiz
 
   init(verb: String, source: AnalyticsSource, marks: Set<ConjugationCell> = []) {
     self.verb = verb
@@ -148,13 +149,15 @@ struct VerbView: View {
       // Test Me, the star, and Share sit in the navigation bar, so that the top of the page is
       // unchanged. Test Me's symbol is a clipboard because the Quiz tab's cap read poorly at this
       // size.
-      ToolbarItem(placement: .topBarTrailing) {
-        Button {
-          isTestingVerb = true
-        } label: {
-          Label(L.Verb.testMe, systemImage: "pencil.and.list.clipboard")
+      if !isBeneathQuiz {
+        ToolbarItem(placement: .topBarTrailing) {
+          Button {
+            isTestingVerb = true
+          } label: {
+            Label(L.Verb.testMe, systemImage: "pencil.and.list.clipboard")
+          }
+          .accessibilityIdentifier("verb_test_button")
         }
-        .accessibilityIdentifier("verb_test_button")
       }
       ToolbarItem(placement: .topBarTrailing) {
         let isStarred = Current.learnerVerbs.isStarred(verb)

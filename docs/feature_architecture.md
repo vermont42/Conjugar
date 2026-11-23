@@ -91,7 +91,7 @@ a form is still `guess`. Rows and verbs correspond one to one, so `resultCount` 
 
 | Signal | Parameters | Sent |
 |---|---|---|
-| `viewCollection` | `collection` (a key: `top100`, `goVerbs`, `strongPreterite`, `irregularFuture`, `irregularParticiple`, or `model-<class>`), `source` (`tab`, `verbPage`, `sharedLink`, or `deeplink`) | Once for each opening of a featured collection's page or of a model's page, whose bar makes it a collection. A return from one of its verb pages sends nothing |
+| `viewCollection` | `collection` (a key: `top100`, `goVerbs`, `strongPreterite`, `irregularFuture`, `irregularParticiple`, or `model-<class>`), `source` (`tab`, `verbPage`, `quizCorrection`, `sharedLink`, or `deeplink`) | Once for each opening of a featured collection's page or of a model's page, whose bar makes it a collection. A return from one of its verb pages sends nothing |
 | `tapShareCollection` | `collection` | On each tap of a collection bar's Share button, whether or not the learner then shares |
 
 A collection's quiz adds `collection` to `startQuiz`. A collection names a list, never a verb, though
@@ -114,6 +114,7 @@ a model's key names the model.
 | `model` | Yes | A verb row on a model's page, in the Models tab or reached from a verb page's pill |
 | `myVerbs` | Yes | A row of My Verbs, the verb list's third segment; for the quiz signals, a quiz over My Verbs begun from the Quiz tab |
 | `quickAction` | Yes | `finishSearch` only: a search begun from the Find a Verb Home Screen quick action |
+| `quizCorrection` | Yes | A link on a quiz's held correction: for `viewVerbView`, the verb's page; for `viewCollection`, its model's page |
 | `recent` | Yes | A recent verb, listed while the search field is focused and empty |
 | `related` | Yes | A chip on a verb page's Related Verbs card, or a row of the full list it opens |
 | `resume` | Yes | A page that came back after another tab, a pushed page, or the background |
@@ -322,10 +323,11 @@ and -scribir would also join esperar with operar, and their verbs already share 
 on capar), read from the 2,000 most frequent verbs, so a few false pairs remain among rarer ones.
 976 verbs have a base; 605 roots have at least one other verb built on them.
 
-**Navigation.** A verb page is pushed from two stacks, the Verbs tab and the Models tab. Each injects
+**Navigation.** A verb page is pushed from three stacks, the Verbs tab, the Models tab, and the
+quiz's (from a held correction, in the tab or in `QuizSheet`). Each injects
 `VerbPagePush` (an environment action that appends to its own path) and registers the destinations
 `verbPageDestinations()` names (`ModelInfo`, `RelatedVerbListDestination`), so the pill and the card
-work in both tabs, and a learner who arrived from a widget reaches a model's page without switching
+work in each, and a learner who arrived from a widget reaches a model's page without switching
 tabs. `ModelView` pushes its verbs through the same action.
 
 **A model's page** has a Frequency/Alphabetical control above its verb list, Alphabetical by default
@@ -691,8 +693,38 @@ the engine models in `Conjugator.conjugateAll`, which includes the spelling the 
 retired, rió beside rio). `grade(_:)` reads the answer through `AnswerSpelling`, which ignores case,
 runs of spaces, and a leading subject pronoun of the asked person (yo hablo; tú or tu; él, el, ella,
 or usted), though never before a command, a gerundio, or a participio. An answer right but for its
-accents is still `.partialMatch`. The -ra and -se imperfect subjunctives never stand in for each
-other. `SpanishLetterKeyRow` inserts at the answer field's cursor through a `TextSelection`
+accents is still `.partialMatch`, worth half. The -ra and -se imperfect subjunctives never stand in
+for each other.
+
+**The held correction.** A right answer advances at once. Any other (`.noMatch`, or `.partialMatch`
+with its half points already scored) holds the question: `Quiz.process(proposedAnswer:)` stops the
+clock and sets `Quiz.correction` (a `QuizCorrection`: the grade and an `AnswerDifference`), and
+`continueAfterCorrection()` clears it, advances or finishes, and restarts the clock. A wrong last
+answer therefore shows its correction before the results. `QuizCorrectionView` sits under the
+answer field: Your Answer and Correct Answer, a link to the verb's page (scrolled to the asked cell
+and marked) and to its model's page ("Verbs Like tener"), and Continue. The field keeps the
+learner's answer and the keyboard, so Return continues; Return resigns a `TextField`, so the view
+refocuses the field as the hold begins and again once Back returns from a linked page, clearing the
+focus state first because setting it to the value it still holds does nothing. A Magic Tap also
+continues. The links push onto the quiz's own stack (it injects `VerbPagePush` and registers
+`VerbDestination`, `QuizCorrectionModel`, and `verbPageDestinations()`), report `quizCorrection`,
+and leave the clock stopped, since it is stopped for the whole hold. The verb link is left out of a
+quiz begun from that verb's page, and the model link out of a quiz over that model's verbs.
+`isBeneathQuiz` hides Test Me and a model's Quiz button on the pages pushed while a quiz is in
+progress, so there is no quiz inside a quiz.
+
+**The marking.** `QuizQuestion.difference(from:)` shows the nearest of `shownSpellings` (the
+written answer, irregularity-marked, winning a tie), so freido is corrected to freído and arepiento
+to arrepiento rather than me arrepiento, and drops a leading subject pronoun as grading does.
+`AnswerDifference.between(given:expected:)` aligns the two with `VerbSearch.editDistance`'s costs
+(a swap of neighbors costs one) and marks what the cheapest alignment leaves unmatched. An accent
+is a letter of its own, so hablo against habló marks the o. Red letters already mean irregular, so
+a difference is a tinted background instead: struck through in red in the learner's answer, and
+underlined in green in the right one, whose red letters stay red. A missing letter has nothing to
+mark in the learner's answer, so it shows only in the right one. Case is never a difference.
+VoiceOver moves to the correction and reads "Incorrect. Your Answer: hablo. Correct Answer: habló.
+Letters that differ: ó." (the letters only when three or fewer; "Half points: only the accent marks
+differ." in place of "Incorrect." for a partial match), the answers in Spanish. `SpanishLetterKeyRow` inserts at the answer field's cursor through a `TextSelection`
 binding. On the iPhone it is a keyboard toolbar; iPadOS's keyboard shows no toolbar items, so on
 the iPad it sits under the field. The question view takes the keyboard again as it appears, since a
 quiz started by a link focuses the field before it is on screen and the row then never joins the

@@ -27,8 +27,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | Phase | Status | Date | Commit | Suggestions |
 |---:|---|---|---|---|
 | 0 | Done | 2026-11-22 | 8518921 | T1.3, T1.4, T1.5, Conjugar's defects |
-| 1 | Awaiting Josh | 2026-11-23 | | T1.2 |
-| 2 | Not started | | | T4.1, T4.4, T4.5 |
+| 1 | Done | 2026-11-23 | 30822ac | T1.2 |
+| 2 | Awaiting Josh | 2026-11-23 | | T4.1, T4.4, T4.5 |
 | 3 | Not started | | | T1.6 |
 | 4 | Not started | | | T2.3, T2.6, T6.7, M1 |
 | 5 | Not started | | | T2.1, T2.2, T2.5 |
@@ -708,8 +708,7 @@ key row inserts at the cursor, tú imperatives are asked, and tests pin each.
 
 ## Phase 1: The Shape of the Answer
 
-**Ports:** Konjugieren Phase 2. **Suggestions:** T1.2. **Depends on:** Phase 0. **Status:** Awaiting
-Josh.
+**Ports:** Konjugieren Phase 2. **Suggestions:** T1.2. **Depends on:** Phase 0. **Status:** Done.
 
 Show the shape of the expected answer around the field, with the fixed words outside it: `yo [ ]`
 for a finite form; `(tú) ¡[ ]!` and `(usted) ¡[ ]!` for an affirmative imperative, naming the
@@ -794,7 +793,7 @@ the frame for each kind of question.
 ## Phase 2: A Correction That Stays
 
 **Ports:** Konjugieren Phase 3. **Suggestions:** T4.1, T4.4, T4.5. **Depends on:** nothing; Phase 1
-preferably. **Status:** Not started.
+preferably. **Status:** Awaiting Josh.
 
 Today `Quiz.process` advances before the view redraws, so the correction for question n appears
 under question n + 1 while the clock runs.
@@ -834,7 +833,81 @@ The `feedbackReveal` rows under the next question are replaced, not supplemented
 **Done when** a wrong answer holds with the clock stopped, Continue and Return advance, the
 difference is marked accents included, both links work and return, and tests pin the state machine.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **The layout is built, not yet judged.** The correction is a card under the answer field, where
+  the old rows were: a line for half points when only accents differ, Your Answer and Correct
+  Answer stacked under their labels, a row of two link capsules, and a full-width Continue capped
+  at 400 points (`Views/QuizCorrectionView.swift`). The field keeps the learner's answer and the
+  keyboard, so Return continues; it stays editable, and nothing typed there is graded. Josh has
+  still to judge it on a device (the Ask Josh above). A right answer still shows its green check
+  under the next question, with Phase 0's retired-spelling line; only the wrong-answer rows went.
+- **A partial match holds too.** The phase says to hold "after a wrong answer". An answer right but
+  for its accents (`.partialMatch`, 5 points) is the case T4.4 names (hablo for habló), so it holds
+  with its half points already scored and the line "Half points: only the accent marks differ."
+  Phase 3 replaces partial credit, and with it that line.
+- **The state machine.** `Quiz.correction` (a `QuizCorrection`: the grade and an
+  `AnswerDifference`) holds the question; `process(proposedAnswer:)` now returns only the
+  `ConjugationResult`, stops the clock on any other than `.totalMatch`, and advances on a right
+  answer; `continueAfterCorrection()` clears the hold, advances or finishes, and restarts the
+  clock. Advancing and finishing moved into `advance()` and `finish()`. `isHeld` and
+  `isClockRunning` let the tests read the state. A wrong last answer shows its correction before
+  the results. The clock is stopped for the whole hold, so a visit to a linked page cannot run it.
+- **The marking** is Konjugieren's `AnswerDifference`, ported (`Models/AnswerDifference.swift`). Its
+  `QuizQuestion.difference(from:)` picks the nearest of a new `QuizQuestion.shownSpellings` (the
+  accepted answers before lowercasing, so the written answer keeps its red letters and wins a
+  tie); `acceptedAnswers` is now that list lowercased. The learner's answer is the composed one
+  that Phase 1's frame gives (no hablas, me arepiento), so a frame's supplied words are never
+  marked. Learner letters are struck through on a red tint, missing or wrong letters of the right
+  answer underlined on a green one, and a red letter stays red. The red tint was raised from 0.25
+  to 0.35 after the iPad's dark card made it faint.
+- **The links.** The verb link opens the verb's page scrolled to the asked cell and marked (a
+  `VerbDestination` with `marks`); the model link opens "Verbs Like cantar", the model's page,
+  through a new `QuizCorrectionModel` so that it reports its own source, since the stack's
+  `ModelInfo` destination is the pill's. The quiz's `NavigationStack` now has a path, injects
+  `VerbPagePush`, and registers `VerbDestination`, `QuizCorrectionModel`, and
+  `verbPageDestinations()`, in the tab and in `QuizSheet` alike. The verb link is left out of a
+  quiz begun from that verb's page, as the phase says, and, not in the phase, the model link out of
+  a quiz over that model's own collection. Opening a verb from a correction records an open in the
+  learner's record and restarts an irregular verb's review in box 0, as any open but the card's
+  does.
+- **No quiz inside a quiz.** Not in the phase: `isBeneathQuiz`, true while a quiz is in progress,
+  hides Test Me on a pushed verb page and the Quiz button on a pushed model's collection bar. This
+  is the narrower rule Konjugieren reached in its Phase 16, used from the start.
+- **Two focus bugs.** Return resigns the field, so the hold refocuses it, as in Konjugieren. The
+  Back bug was different here: on the pop, UIKit gave the field its keyboard back without telling
+  `@FocusState`, which read false, so setting it true did nothing and the field's border stayed
+  grey while its cursor blinked. Logging the focus state showed it. `refocusAnswer(after:)` now
+  clears the state and sets it again 50 ms apart once the pop has finished.
+- **An isolation crash, found by the tests.** The `QuizQuestion` extension in
+  `AnswerDifference.swift` took the app's default MainActor isolation, though the struct is
+  `nonisolated`, and its closure trapped in `dispatch_assert_queue` when a nonisolated test called
+  it. The test runner restarted after each crash and still exited green on the Swift Testing line,
+  with `QuizCorrectionTests` never run; the 65 exit code and the "Restarting after unexpected exit"
+  line gave it away. The extension is `nonisolated` now. An extension of an engine type in another
+  file needs its own `nonisolated`.
+- **VoiceOver.** Focus moves to the correction, which reads "Incorrect. Your Answer: hablo. Correct
+  Answer: habló. Letters that differ: ó." (half points read in place of "Incorrect."; the letters
+  only when three or fewer), with the answers tagged Spanish in one attributed label, and the hint
+  "Swipe right for links to the verb, then Continue." Each link and Continue has a hint, and a
+  Magic Tap continues. Nobody has listened to it.
+- **A fixture**, `CONJUGAR_QUIZ_FIXTURE corrections`: eight questions, each with a wrong answer in a
+  comment that shows one kind of marking (an accent, a red letter, a missing, extra, or swapped
+  letter, a negative command's "no", the nearer of freído and frito, a compound).
+- **Verified:** 976 tests in 59 suites, in the simulator's default language (English), 18 of them
+  new (`AnswerDifferenceTests`, `QuizCorrectionTests`). On the iPhone, in English and light mode
+  with a hardware keyboard, all eight fixture answers held and continued by Return; the clock stood
+  still through a hold and through a visit to the verb's page; the verb page hid Test Me and marked
+  tengo; the model page hid its Quiz button; Back returned the keyboard and a focused border; the
+  last wrong answer held, then Return showed the results. On the iPad, in Spanish and dark mode, the
+  hold drew beside the letter keys with Continue capped, and Test Me's sheet left out the verb link
+  and pushed the model's page inside the sheet. Not tried: the software keyboard, so Phase 0's note
+  that the key row covers the score line is unchecked against the new layout; accessibility text
+  sizes; VoiceOver by ear.
+- **Analytics:** one new value, `quizCorrection`, the `source` of `viewVerbView` and
+  `viewCollection`, staged in `docs/privacy_policy_pending.md` as a new kind of surface for both
+  bullets.
+
 
 ## Phase 3: One More Try
 

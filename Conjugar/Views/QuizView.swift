@@ -17,13 +17,16 @@ struct QuizView: View {
   @State private var tabScope = TabQuizScope.allVerbs
   @State private var answer = ""
   @State private var answerSelection: TextSelection?
-  @State private var lastProposed: String?
-  @State private var lastCorrect: String?
   @State private var lastResult: ConjugationResult?
+  /// Whether the check for the last answer, which was right, shows under the next question.
+  @State private var showsRightAnswer = false
   @State private var answerToken = 0
   @State private var showingResults = false
   @State private var showingGameCenterPrompt = false
   @FocusState private var fieldFocused: Bool
+  @AccessibilityFocusState private var correctionHasAccessibilityFocus: Bool
+  /// Pages opened from a held correction, pushed over the quiz, which waits beneath them.
+  @State private var navigationPath = NavigationPath()
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
   @Environment(\.horizontalSizeClass) private var sizeClass
   @Environment(\.dismiss) private var dismiss
@@ -35,7 +38,7 @@ struct QuizView: View {
   }
 
   var body: some View {
-    NavigationStack {
+    NavigationStack(path: $navigationPath) {
       Group {
         switch quiz.quizState {
         case .notStarted, .finished:
@@ -56,6 +59,13 @@ struct QuizView: View {
       .navigationTitle(sheetTitle ?? L.Quiz.localizedTitle)
       .navigationBarTitleDisplayMode(sheetScope == nil ? .automatic : .inline)
       .navigationDestination(isPresented: $showingResults) { ResultsView(quiz: quiz) }
+      .navigationDestination(for: VerbDestination.self) { destination in
+        VerbView(verb: destination.infinitive, source: destination.source, marks: destination.marks)
+      }
+      .navigationDestination(for: QuizCorrectionModel.self) { destination in
+        ModelView(model: destination.model, source: .quizCorrection)
+      }
+      .verbPageDestinations()
       .toolbar {
         if quiz.quizState == .inProgress {
           ToolbarItem(placement: .cancellationAction) {
@@ -100,6 +110,20 @@ struct QuizView: View {
         Button(L.Quiz.yes) { authenticateGameCenter() }
       } message: {
         Text(L.Quiz.gameCenterMessage)
+      }
+    }
+    // A correction's links, and the links on the pages they open, push onto this stack.
+    .environment(\.verbPagePush, VerbPagePush { navigationPath.append($0) })
+    .environment(\.isBeneathQuiz, quiz.quizState == .inProgress)
+    .accessibilityAction(.magicTap) {
+      if quiz.isHeld {
+        continueAfterCorrection()
+      }
+    }
+    // Back from a page opened from the correction, the keyboard returns, so Return continues.
+    .onChange(of: navigationPath.isEmpty) { _, isEmpty in
+      if isEmpty, quiz.isHeld {
+        refocusAnswer(after: .milliseconds(450))
       }
     }
   }
@@ -315,8 +339,21 @@ struct QuizView: View {
             letterKeys
           }
 
-          feedbackReveal
-            .frame(minHeight: 64)
+          if let question = quiz.currentQuestion, let correction = quiz.correction {
+            QuizCorrectionView(
+              question: question,
+              correction: correction,
+              showsVerbLink: quiz.scope.source != .verbPage,
+              model: correctionModel(for: question),
+              accessibilityIsFocused: $correctionHasAccessibilityFocus,
+              onOpen: { navigationPath.append($0) },
+              onContinue: continueAfterCorrection
+            )
+            .transition(.opacity)
+          } else {
+            rightAnswerReveal
+              .frame(minHeight: 44)
+          }
 
           statusStrip
         }
@@ -331,6 +368,16 @@ struct QuizView: View {
       }
       .onChange(of: quiz.currentQuestionIndex) {
         revealAnswerField(proxy)
+      }
+      .onChange(of: quiz.isHeld) { _, isHeld in
+        guard isHeld else {
+          return
+        }
+        correctionHasAccessibilityFocus = true
+        refocusAnswer(after: .milliseconds(50))
+        withAnimation(reduceMotion ? nil : .snappy) {
+          proxy.scrollTo(QuizCorrectionView.continueButtonID, anchor: .bottom)
+        }
       }
     }
     // A link's quiz starts as the tab appears, before the field exists, so the field takes the
@@ -394,7 +441,13 @@ struct QuizView: View {
       selection: $answerSelection,
       isFocused: $fieldFocused,
       identifier: "input_quiz_conjugation",  // screenshot-driver anchor
-      onSubmit: submit
+      onSubmit: {
+        if quiz.isHeld {
+          continueAfterCorrection()
+        } else {
+          submit()
+        }
+      }
     )
   }
 
@@ -422,37 +475,55 @@ struct QuizView: View {
     answerSelection = TextSelection(insertionPoint: text.index(text.startIndex, offsetBy: offset))
   }
 
+  /// The check for a right answer, under the next question, with the current spelling of an
+  /// answer typed in a retired one. A wrong answer holds its question instead.
   @ViewBuilder
-  private var feedbackReveal: some View {
-    if let result = lastResult {
+  private var rightAnswerReveal: some View {
+    if showsRightAnswer {
       HStack(alignment: .top, spacing: Layout.defaultSpacing) {
-        Image(systemName: result == .noMatch ? "xmark.circle.fill" : "checkmark.circle.fill")
-          .foregroundStyle(result == .totalMatch ? Color.customGreen : result == .partialMatch ? Color.customYellow : Color.customRed)
+        Image(systemName: "checkmark.circle.fill")
+          .foregroundStyle(Color.customGreen)
           .font(.title2)
 
-        if result == .totalMatch, let spelling = quiz.lastCurrentSpelling {
+        if let spelling = quiz.lastCurrentSpelling {
           // "Correct. Spelled: rio", the form read in Spanish.
           ConjugationText(form: spelling, regularColor: .secondary)
             .font(.callout)
             .accessibilityLabel(Text(L.Quiz.correctSpelled + " ") + Text(Self.spanish(spelling.lowercased())))
             .accessibilityIdentifier("quiz_current_spelling")
         }
-
-        if let correct = lastCorrect {
-          VStack(alignment: .leading, spacing: 2) {
-            HStack(spacing: 4) {
-              Text(L.Quiz.yourAnswer + ":").font(.caption).foregroundStyle(.secondary)
-              Text(lastProposed ?? "").font(.callout).foregroundStyle(Color.customBlue)
-            }
-            HStack(spacing: 4) {
-              Text(L.Quiz.correctAnswer + ":").font(.caption).foregroundStyle(.secondary)
-              ConjugationText(form: correct).font(.callout)
-            }
-          }
-        }
       }
       .transition(.opacity)
       .frame(maxWidth: .infinity, alignment: .leading)
+    }
+  }
+
+  /// The verb's model for a correction's link, or nil in a quiz over that model's own verbs.
+  private func correctionModel(for question: QuizQuestion) -> ModelInfo? {
+    guard let model = ModelInfo.row(for: question.verb),
+          VerbCollection.model(model.classNumber).key != quiz.scope.collectionKey else {
+      return nil
+    }
+    return model
+  }
+
+  /// Gives the answer field the keyboard while a correction is held, so that Return continues.
+  /// Return resigns the field while the focus state can still read true. Back from a linked page
+  /// gives the field its keyboard again without telling the focus state, which reads false, so
+  /// setting it true then does nothing and the field's border stays unfocused. Either way, the
+  /// state is cleared and set again once the field is back on screen.
+  private func refocusAnswer(after delay: Duration) {
+    fieldFocused = false
+    Task { @MainActor in
+      try? await Task.sleep(for: delay)
+      guard navigationPath.isEmpty, quiz.isHeld else {
+        return
+      }
+      fieldFocused = false
+      try? await Task.sleep(for: .milliseconds(50))
+      if navigationPath.isEmpty, quiz.isHeld {
+        fieldFocused = true
+      }
     }
   }
 
@@ -481,9 +552,9 @@ struct QuizView: View {
     }
     Current.soundPlayer.play(.gun, shouldDebounce: false)
     answer = ""
-    lastProposed = nil
-    lastCorrect = nil
     lastResult = nil
+    showsRightAnswer = false
+    navigationPath = NavigationPath()
     fieldFocused = true
     var parameters = [
       ParameterKey.difficulty.rawValue: quiz.lastDifficulty.rawValue,
@@ -498,21 +569,38 @@ struct QuizView: View {
 
   private func submit() {
     guard let question = quiz.currentQuestion, !answer.allSatisfy(\.isWhitespace) else { return }
-    let proposed = question.answer(filling: answer)
-    let (result, correct) = quiz.process(proposedAnswer: proposed)
+    let result = quiz.process(proposedAnswer: question.answer(filling: answer))
     switch result {
     case .totalMatch: Current.soundPlayer.play(.chime, shouldDebounce: false)
     case .partialMatch: Current.soundPlayer.play(.chirp, shouldDebounce: false)
     case .noMatch: Current.soundPlayer.play(.buzz, shouldDebounce: false)
     }
+    lastResult = result
+    answerToken += 1
+    guard result == .totalMatch else {
+      // The field keeps the answer while its correction holds the question.
+      withAnimation(reduceMotion ? nil : .snappy) {
+        showsRightAnswer = false
+      }
+      return
+    }
     withAnimation(.snappy) {
-      lastProposed = proposed
-      lastCorrect = correct
-      lastResult = result
+      showsRightAnswer = true
     }
     answer = ""
     answerSelection = nil
-    answerToken += 1
+    if quiz.quizState == .finished {
+      finish()
+    } else {
+      fieldFocused = true
+    }
+  }
+
+  /// Return in the field, Continue, or a Magic Tap: the next question, or the results.
+  private func continueAfterCorrection() {
+    quiz.continueAfterCorrection()
+    answer = ""
+    answerSelection = nil
     if quiz.quizState == .finished {
       finish()
     } else {
@@ -557,6 +645,7 @@ struct QuizView: View {
     )
     fieldFocused = false
     lastResult = nil
+    showsRightAnswer = false
     if sheetScope != nil {
       dismiss()
     }

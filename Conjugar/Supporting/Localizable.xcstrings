@@ -2399,6 +2399,38 @@
         }
       }
     },
+    "Quiz.continueAfterCorrection" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuar"
+          }
+        }
+      }
+    },
+    "Quiz.continueHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goes to the next question."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasa a la siguiente pregunta."
+          }
+        }
+      }
+    },
     "Quiz.correctAnswer" : {
       "localizations" : {
         "en" : {
@@ -2427,6 +2459,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Correcto. Se escribe:"
+          }
+        }
+      }
+    },
+    "Quiz.correctionHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Swipe right for links to the verb, then Continue."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desliza a la derecha para ver los enlaces al verbo y luego Continuar."
+          }
+        }
+      }
+    },
+    "Quiz.correctionLinkHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens the page. The quiz waits here until you come back."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre la página. El test te espera aquí hasta que vuelvas."
           }
         }
       }
@@ -2495,6 +2559,38 @@
         }
       }
     },
+    "Quiz.halfPoints" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Half points: only the accent marks differ."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La mitad de los puntos: solo difieren las tildes."
+          }
+        }
+      }
+    },
+    "Quiz.incorrect" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incorrect."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incorrecto."
+          }
+        }
+      }
+    },
     "Quiz.lastAnswer" : {
       "localizations" : {
         "en" : {
@@ -2507,6 +2603,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Respuesta Anterior"
+          }
+        }
+      }
+    },
+    "Quiz.lettersDiffer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letters that differ:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letras que difieren:"
           }
         }
       }

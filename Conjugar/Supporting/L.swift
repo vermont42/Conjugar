@@ -753,6 +753,39 @@ nonisolated enum L {
     static var done: String {
       String(localized: "Quiz.done")
     }
+
+    /// Leaves a wrong answer's held correction for the next question.
+    static var continueAfterCorrection: String {
+      String(localized: "Quiz.continueAfterCorrection")
+    }
+
+    static var continueHint: String {
+      String(localized: "Quiz.continueHint")
+    }
+
+    /// What VoiceOver says first on a wrong answer's correction.
+    static var incorrect: String {
+      String(localized: "Quiz.incorrect")
+    }
+
+    /// The correction's line for an answer right but for its accents.
+    static var halfPoints: String {
+      String(localized: "Quiz.halfPoints")
+    }
+
+    /// What VoiceOver says before the letters of the right answer the learner missed.
+    static var lettersDiffer: String {
+      String(localized: "Quiz.lettersDiffer")
+    }
+
+    static var correctionHint: String {
+      String(localized: "Quiz.correctionHint")
+    }
+
+    /// The hint of a correction's link to the verb's page or its model's.
+    static var correctionLinkHint: String {
+      String(localized: "Quiz.correctionLinkHint")
+    }
   }
 
   enum Results {

@@ -60,6 +60,9 @@ class Quiz {
   /// The current spelling of the last answer when it was right in a retired one. See
   /// `QuizQuestion.currentSpelling(of:)`.
   private(set) var lastCurrentSpelling: String?
+  /// The correction of a wrong answer, which holds the quiz on its question, with the clock
+  /// stopped, until `continueAfterCorrection()`. A right answer advances at once.
+  private(set) var correction: QuizCorrection?
   private(set) var questions: [Question] = []
   /// What the quiz under way, or last finished, asks about. See `QuizScope`.
   private(set) var scope = QuizScope.allVerbs
@@ -168,6 +171,9 @@ class Quiz {
         beginQuiz()
       case .frames:
         questions = Quiz.framesFixture
+        beginQuiz()
+      case .corrections:
+        questions = Quiz.correctionsFixture
         beginQuiz()
       }
       return true
@@ -441,6 +447,16 @@ class Quiz {
     return false
   }
 
+  /// Whether the quiz waits on its question for the learner to continue.
+  var isHeld: Bool {
+    correction != nil
+  }
+
+  /// Whether the clock is counting, which it does only while a question waits for its answer.
+  var isClockRunning: Bool {
+    timer?.isValid ?? false
+  }
+
   /// Reset the per-run counters and start the clock. Split out of `start()` so the
   /// screenshot fixture can build its own question list and then enter the quiz
   /// through exactly the same door.
@@ -449,6 +465,8 @@ class Quiz {
     correctCount = 0
     currentQuestionIndex = 0
     elapsedTime = 0
+    correction = nil
+    lastCurrentSpelling = nil
     quizState = .inProgress
     startTimer()
     // The Live Activity belongs to the tab's quiz. See `QuizScope.startsLiveActivity`.
@@ -476,7 +494,10 @@ class Quiz {
     }
   }
 
-  func process(proposedAnswer: String) -> (ConjugationResult, String?) {
+  /// Grades the answer to the question on screen and records it. A right answer advances at
+  /// once; any other holds the question with its correction and stops the clock.
+  @discardableResult
+  func process(proposedAnswer: String) -> ConjugationResult {
     let question = questions[currentQuestionIndex]
     let correctAnswer: String
     let result: ConjugationResult
@@ -487,7 +508,7 @@ class Quiz {
     } else {
       // A quiz slot should always conjugate — VerbFamiliesTests pins every list
       // entry to VerbMap — but degrade gracefully rather than crash a learner
-      // mid-quiz: log, score the question as a miss, and advance.
+      // mid-quiz: log and score the question as a miss.
       quizLogger.error("Could not conjugate quiz slot \(self.verb) / \(self.tense.displayName)")
       correctAnswer = ""
       result = .noMatch
@@ -501,33 +522,52 @@ class Quiz {
     }
     if result == .totalMatch {
       correctCount += 1
+      advance()
+    } else {
+      timer?.invalidate()
+      correction = QuizCorrection(result: result, difference: question.difference(from: proposedAnswer))
     }
+    return result
+  }
+
+  /// Leaves a held correction for the next question, or for the results after the last.
+  func continueAfterCorrection() {
+    guard quizState == .inProgress, isHeld else {
+      return
+    }
+    correction = nil
+    advance()
+    if quizState == .inProgress {
+      startTimer()
+    }
+  }
+
+  private func advance() {
     if currentQuestionIndex < questions.count - 1 {
       currentQuestionIndex += 1
       if hasLiveActivity {
         Current.liveActivities.update(liveActivityState(isFinished: false))
       }
     } else {
-      score = Int(Double(score) * Quiz.scoreScale / Double(max(questions.count, 1)) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
-      timer?.invalidate()
-      quizState = .finished
-      // Unlocks the "Change Quiz Difficulty" tip, which is rule-gated on having
-      // finished at least one quiz. Three questions on a verb's page are not one.
-      if scope.questionCount >= QuizScope.fullLength {
-        ChangeDifficultyTip.quizCompleted.sendDonation()
-      }
-      endLiveActivity()
-      if scope.isRanked {
-        let finalScore = score
-        Task {
-          await gameCenter.reportScore(finalScore)
-        }
-      }
+      finish()
     }
-    if result == .totalMatch {
-      return (result, nil)
-    } else {
-      return (result, correctAnswer)
+  }
+
+  private func finish() {
+    score = Int(Double(score) * Quiz.scoreScale / Double(max(questions.count, 1)) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
+    timer?.invalidate()
+    quizState = .finished
+    // Unlocks the "Change Quiz Difficulty" tip, which is rule-gated on having
+    // finished at least one quiz. Three questions on a verb's page are not one.
+    if scope.questionCount >= QuizScope.fullLength {
+      ChangeDifficultyTip.quizCompleted.sendDonation()
+    }
+    endLiveActivity()
+    if scope.isRanked {
+      let finalScore = score
+      Task {
+        await gameCenter.reportScore(finalScore)
+      }
     }
   }
 
@@ -537,6 +577,7 @@ class Quiz {
 
   func stop() {
     timer?.invalidate()
+    correction = nil
     quizState = .finished
     endLiveActivity()
   }
@@ -612,6 +653,10 @@ extension Quiz {
     /// form, a compound tense, every command, the gerundio and participio, and a reflexive-only
     /// verb's frames.
     case frames
+    /// Questions whose comments give a wrong answer that shows a kind of marking on the held
+    /// correction: an accent, a red letter, a missing or extra letter, a swap, a frame's supplied
+    /// word, and the nearest of two right answers.
+    case corrections
   }
 
   static var fixtureRun: Fixture? {
@@ -653,6 +698,17 @@ extension Quiz {
     QuizQuestion("arrepentir", .perfectoDeIndicativo, .firstPlural),         // nosotros nos [hemos arrepentido]
     QuizQuestion("arrepentir", .imperativoPositivo, .secondSingularTú),      // (tú) ¡[arrepiéntete]!
     QuizQuestion("arrepentir", .imperativoNegativo, .thirdSingular)          // (usted) ¡no se [arrepienta]!
+  ]
+
+  static let correctionsFixture: [Question] = [
+    QuizQuestion("hablar", .pretérito, .thirdSingular),                 // hablo: an accent, half points
+    QuizQuestion("tener", .presenteDeIndicativo, .firstSingular),       // teno: a missing red letter
+    QuizQuestion("arrepentir", .presenteDeIndicativo, .firstSingular),  // arepiento: a missing letter
+    QuizQuestion("comer", .imperfectoDeIndicativo, .firstPlural),       // comíamoss: an extra letter
+    QuizQuestion("vivir", .presenteDeIndicativo, .thirdPlural),         // vivne: a swap
+    QuizQuestion("hablar", .imperativoNegativo, .secondSingularTú),     // hablas: the "no" is not marked
+    QuizQuestion("freír", .participio, .none),                          // freido: freído, not frito
+    QuizQuestion("decir", .perfectoDeIndicativo, .thirdPlural)          // han decido: a compound
   ]
 
   /// Where `exportFixtureAnswers()` writes the answer key the driver types back in.

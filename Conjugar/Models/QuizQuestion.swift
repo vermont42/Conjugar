@@ -32,16 +32,16 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
     return nil
   }
 
-  /// Every lowercased spelling the quiz takes as right: the written answer; a reflexive-only
-  /// verb's form without its pronoun (arrepiento beside me arrepiento); and each standard variant
-  /// of the cell (`StandardVariants`), such as frito beside freído or the rió that the 2010
-  /// *Ortografía* retired beside rio, with and without that pronoun.
-  var acceptedAnswers: [String] {
-    var answers: [String] = []
-    func add(_ answer: String) {
-      let lowercased = answer.lowercased()
-      if !answers.contains(lowercased) {
-        answers.append(lowercased)
+  /// Every spelling the quiz takes as right, irregularity-marked where the engine marks it, as
+  /// the quiz would show it: the written answer first; a reflexive-only verb's form without its
+  /// pronoun (arrepiento beside me arrepiento); and each standard variant of the cell
+  /// (`StandardVariants`), such as frito beside freído or the rió that the 2010 *Ortografía*
+  /// retired beside rio, with and without that pronoun.
+  var shownSpellings: [String] {
+    var spellings: [String] = []
+    func add(_ spelling: String) {
+      if !spellings.contains(where: { $0.lowercased() == spelling.lowercased() }) {
+        spellings.append(spelling)
       }
     }
     if let writtenAnswer {
@@ -57,7 +57,12 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
       }
       add(variant)
     }
-    return answers
+    return spellings
+  }
+
+  /// `shownSpellings`, lowercased: every answer the quiz takes as right.
+  var acceptedAnswers: [String] {
+    shownSpellings.map { $0.lowercased() }
   }
 
   /// The shape of the answer, with the words the learner does not type around the blank.

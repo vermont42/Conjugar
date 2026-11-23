@@ -378,3 +378,39 @@ El primer párrafo de la sección 7 queda así:
 ```
 Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de un cuestionario completo sobre todos los verbos; la de un cuestionario sobre Mis verbos, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
 ```
+
+## Links on a quiz's correction (pedagogy plan, Phase 2, 2026-11-23)
+
+Begins sending `quizCorrection` as the `source` of `viewVerbView` (the verb's page, opened from the
+correction a quiz holds after a wrong answer) and of `viewCollection` (the verb's model's page,
+opened the same way). It is a new kind of surface for the first lookup bullet and for the
+collection bullet, so both are rewritten; apply this wording in place of the Collections section's.
+Nothing about the answer, the verb, or whether it was right is sent.
+
+### English
+
+The first bullet of Phase 2's section now reads:
+
+```
+- How you reached a verb's page: for example from a search, the verb list, a model's page, a collection of verbs, another verb's page, the correction of a quiz answer, a widget, Control Center, a shortcut, Spotlight, or a link
+```
+
+The bullet about collections now reads:
+
+```
+- Which collection of verbs you opened, such as the 100 most frequent verbs or the verbs of one model, and how you reached it (the Models tab, a verb's page, the correction of a quiz answer, or a link)
+```
+
+### Spanish
+
+El primer punto de la sección de la fase 2 queda así:
+
+```
+- Cómo llegó a la página de un verbo: por ejemplo, desde una búsqueda, la lista de verbos, la página de un modelo, una colección de verbos, la página de otro verbo, la corrección de una respuesta del cuestionario, un widget, el Centro de control, un atajo, Spotlight o un enlace
+```
+
+El punto sobre las colecciones queda así:
+
+```
+- Qué colección de verbos abrió, como los 100 verbos más frecuentes o los verbos de un modelo, y cómo llegó a ella (la pestaña de modelos, la página de un verbo, la corrección de una respuesta del cuestionario o un enlace)
+```

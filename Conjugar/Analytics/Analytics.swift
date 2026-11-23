@@ -99,6 +99,8 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   /// A row of My Verbs in the verb list, or a quiz over My Verbs begun from the Quiz tab.
   case myVerbs
   case quickAction
+  /// A link on the correction a quiz holds after a wrong answer: to the verb's page or its model's.
+  case quizCorrection
   case recent
   case related
   /// The page came back after another tab, a pushed page, or the background. See `VerbVisit`.

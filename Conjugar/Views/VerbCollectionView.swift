@@ -85,6 +85,7 @@ struct VerbCollectionBar: View {
   /// The quiz sheet's title and the shared text's.
   let title: String
   let verbs: [VerbMapEntry]
+  @Environment(\.isBeneathQuiz) private var isBeneathQuiz
   @State private var isQuizzing = false
   @State private var shareButtonFrame = CGRect.zero
 
@@ -101,13 +102,15 @@ struct VerbCollectionBar: View {
 
         Spacer()
 
-        Button {
-          isQuizzing = true
-        } label: {
-          Label(L.Quiz.localizedTitle, systemImage: "pencil.and.list.clipboard")
+        if !isBeneathQuiz {
+          Button {
+            isQuizzing = true
+          } label: {
+            Label(L.Quiz.localizedTitle, systemImage: "pencil.and.list.clipboard")
+          }
+          .accessibilityHint(L.VerbCollection.quizHint(questionCount: QuizScope.fullLength))
+          .accessibilityIdentifier("collection_quiz_button")
         }
-        .accessibilityHint(L.VerbCollection.quizHint(questionCount: QuizScope.fullLength))
-        .accessibilityIdentifier("collection_quiz_button")
 
         Button {
           share()

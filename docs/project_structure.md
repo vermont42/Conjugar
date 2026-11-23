@@ -110,8 +110,10 @@ Conjugar/
 │   │                           #   QuizScope.collection(_:title:)
 │   │
 │   │  ── quiz, settings vocabulary, services ──
-│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the scoped draw, per-tense person rotation, DEBUG fixtures (screenshot, grading, frames)
-│   ├── QuizQuestion.swift      # One question (verb, tense, person): its written answer, every accepted spelling, grade(_:), its frame, and answer(filling:)
+│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the scoped draw, per-tense person rotation, the held correction (correction, continueAfterCorrection()), DEBUG fixtures (screenshot, grading, frames, corrections)
+│   ├── QuizQuestion.swift      # One question (verb, tense, person): its written answer, every accepted spelling (shownSpellings, acceptedAnswers), grade(_:), its frame, and answer(filling:)
+│   ├── QuizCorrection.swift    # A wrong answer held on its question: its grade and its AnswerDifference
+│   ├── AnswerDifference.swift  # Which letters of a wrong answer and of the nearest right one differ, by an edit-distance alignment; QuizQuestion.difference(from:)
 │   ├── AnswerFrame.swift       # The shape of an answer: the words around the blank (yo, (tú) ¡no … !, a reflexive me) and the answer a filled blank gives
 │   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, or a collection; question count, source, title, isRanked, startsLiveActivity
 │   ├── QuizState.swift         # notStarted / inProgress / finished
@@ -222,7 +224,8 @@ Conjugar/
     ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, the model's collection bar, and the verbs using the model, by frequency or alphabetically
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
     ├── QuizSheet.swift         # A quiz in a sheet with a Quiz of its own over a QuizScope: Test Me and a collection's Quiz
-    ├── QuizView.swift          # The Quiz tab's start screen (scope symbol, All Verbs / My Verbs picker, fact tiles, chips) and gameplay: prompt, framed answer field, timer, score; a sheet mode for QuizSheet
+    ├── QuizView.swift          # The Quiz tab's start screen (scope symbol, All Verbs / My Verbs picker, fact tiles, chips) and gameplay: prompt, framed answer field, held correction, timer, score; pushes a correction's links; a sheet mode for QuizSheet
+    ├── QuizCorrectionView.swift # A wrong answer's held correction: the two answers with their differing letters marked, links to the verb's and model's pages, Continue; isBeneathQuiz
     ├── ReviewCardView.swift    # The review card above the verb list: an irregular verb looked up days ago, its key conjugations hidden until tapped
     ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, difficulty/region/time pills, and each answer
     ├── RelatedVerbsView.swift  # The verb page's Related Verbs card, the full related list, VerbPagePush, and verbPageDestinations()
@@ -323,6 +326,8 @@ ConjugarTests/
 │   ├── QuizLiveActivityTests.swift     # Which quizzes start, update, and end the Live Activity, against LiveActivitiesSpy
 │   ├── QuizScopeTests.swift            # The scoped quiz: My Verbs and Test Me draws, defective verbs, region and vos, ranking
 │   ├── QuizGradingTests.swift          # Accepted answers (pronouns, spacing, each standard variant), the 2010 spelling, per-tense person rotation
+│   ├── QuizCorrectionTests.swift       # The held correction's state machine: hold, clock, half points, Continue, the last question
+│   ├── AnswerDifferenceTests.swift     # The letters a correction marks (accents, red letters, missing, extra, swapped) and the right answer it shows
 │   ├── AnswerFrameTests.swift          # Each kind of question's frame, and the answer a filled blank gives (supplied no, reflexive pronoun, typed pronoun)
 │   ├── VerbCollectionTests.swift       # Collections: keys, derived membership with VerbFamilies as oracle, progress, quiz, share text
 │   ├── QuizGoldenFormsTests.swift      # Golden forms: proves the quiz asks for correct Spanish, not just self-consistent Spanish
