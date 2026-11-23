@@ -35,8 +35,8 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 7 | Done | 2026-11-22 | 048f585 | B7's article |
 | 8 | Done | 2026-11-22 | 5d2d435 | B4, A9 |
 | 9 | Done | 2026-11-22 | c40be1f | B6 |
-| 10 | Awaiting Josh | 2026-11-22 | | C1 (links, control, quick action) |
-| 11 | Not started | | | C1 (the intent), C2 |
+| 10 | Done | 2026-11-22 | 43d7b00 | C1 (links, control, quick action) |
+| 11 | Awaiting Josh | 2026-11-22 | | C1 (the intent), C2 |
 | 12 | Not started | | | D1, D2 |
 | 13 | Not started | | | D2's quiz scope, D3 |
 | 14 | Not started | | | D5 |
@@ -1406,7 +1406,7 @@ tests pin the key conjugations of a regular, a stem-changing, an irregular, and 
 
 **Ideas:** C1, first part. **Ports:** Konjugieren Phase 11, which this plan splits in two because
 Conjugar has no App Shortcuts to build on. **Depends on:** Phase 5 for the search it opens.
-**Status:** Awaiting Josh (2026-11-22).
+**Status:** Done (2026-11-22, 43d7b00).
 
 - **The grammar.** Before adding a route, write down one deeplink grammar in
   `docs/feature_architecture.md` § Deeplinks, and point `CLAUDE.md`'s Deeplinks section at it.
@@ -1499,7 +1499,7 @@ routes and their round trips.
 ## Phase 11: Look Up a Verb, and Spotlight
 
 **Ideas:** C1's intent, C2. **Ports:** Konjugieren Phase 11, second part. **Depends on:** Phases 5,
-9, and 10. **Status:** Not started.
+9, and 10. **Status:** Awaiting Josh (2026-11-22).
 
 - **App Shortcuts.** Conjugar has none. Add an `AppShortcutsProvider` with English phrases only, as
   Konjugieren's convention is (C3, phrases in the app's second language, was rejected). Ask Josh
@@ -1529,7 +1529,86 @@ routes and their round trips.
 **Done when** the shortcut answers and opens the page in the simulator's Shortcuts app, Spotlight
 finds a verb by its title, and the device test is recorded as done or pending.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh's answers (2026-11-22).** The two existing intents became shortcuts beside Look Up a
+  Verb: `OpenQuizIntent` as "Start a Quiz" and `OpenRandomVerbIntent` as "Random Verb", with
+  Konjugieren's phrases. Spotlight and Siri were tried in the simulator only; the device check is
+  written into `docs/release.md` (item 5).
+- **What the code looks like.** `Models/VerbLookup.swift` holds the logic: its findings, its
+  answer, and its destination, built on the verb list's own `VerbSearch.matches` and `guess`. In
+  `Supporting/`: `LookUpVerbIntent.swift` (the intent and the hidden `OpenLookupResultIntent`,
+  which routes through `AppRouter.shared`), `ConjugarShortcuts.swift` (the `AppShortcutsProvider`),
+  `VerbEntity.swift` (the entity and its `EntityStringQuery`), and `VerbSpotlight.swift`. Unlike
+  the intents in `Shared/`, the two new intents are not marked `nonisolated`, because a property
+  wrapper (`@Parameter`) cannot be. Their `perform()` is nonisolated all the same, so each hops to
+  the main actor for the settings or the router, and the lookup runs in a `@concurrent` function,
+  since the first one loads the conjugation index. The `L.Lookup` accessors are `nonisolated`, as
+  the Tips accessors are.
+- **A Spanish departure, decided in session: an English sense answers.** Konjugieren lets only an
+  infinitive or a conjugation answer, and a gloss match falls to "other matches". Here an exact
+  English sense (`exactGlossSense`) answers too, because Josh's Phase 0 ranking puts it above a
+  form: "come" is llegar's, venir's, and acudir's before it is comer's él come. Under Konjugieren's
+  rule the lookup would have opened comer's page; here it names llegar, venir, acudir, and comer and
+  opens the search. A sense only one verb has opens its page, answered as an infinitive is:
+  "refuel" opens repostar. "eat" is comer's, papear's, and manducar's, so it names all three
+  ("comer, “eat”: como · comí · comeré · comido" first) and opens the search. Josh may want to see
+  this.
+- **What it opens and says.** One verb answers: its page, the form marked. Several: the search.
+  A form's line is "tuve: Pretérito (yo) of tener" ("de tener" in Spanish), in the tense names the
+  page uses, one line per spelling. A literal match names only what was typed, so "hablo" leaves out
+  the habló that the list shows on a second line; a form found only by folding answers only when
+  nothing literal does, so "se" names saber's and ser's sé. At most four verbs are named
+  (`maxNamedVerbs`). With no answer, the line is Konjugieren's "no verb or conjugation spelled …",
+  with the count and first match, the guess (with its form, as in "tengo, of tener"), or nothing.
+  Spanish quotes are «», as in the share text. The second-singular person the page hides is left
+  out of a line's persons, as a search row leaves it.
+- **Stripped pronouns.** Conjugar's search has one row per verb, and a pronoun the lookup strips
+  (dímelo, se lo dije, me levanto) leaves a form of one verb, so nothing had to be excluded from the
+  count as Konjugieren's stranded parts were. But the `verb` route marks through
+  `ConjugationMatch`, which reads cells only, so a link carrying "dímelo" would open decir unmarked.
+  The link's `match` is therefore the bare form of the first cell when the typed text is not itself
+  a cell (`VerbLookup.markableText`): dímelo sends `di`, hecha `hecho`, levántate `levanta`.
+- **Spotlight.** A named index ("verbs") from the start, so there was nothing to delete from the
+  default index, which is where Konjugieren's bug lay. Each entry is titled with the citation form
+  (arrepentirse), subtitled with the gloss, described by the key conjugations, and carries the
+  gloss phrases and key conjugations as alternate names and every one-word form, every gloss, and
+  each phrase with and without "to" as keywords. A tap arrives as a `CSSearchableItemActionType`
+  activity, which `MainTabView` routes as `verb/<infinitive>?source=spotlight`; the identifier is
+  read bare or as "VerbEntity/<id>". **Titles only, again.** In the iOS 26.3 simulator "aprender"
+  found its entry, reading "aprendo · aprendí · aprenderé · aprendido" over "learn", and tapping it
+  opened aprender's page; "aprendimos", "learn", and "tuve" found nothing from Conjugar. Indexing
+  runs at every launch, as Konjugieren's does, off the main actor: building the 4,811 entries takes
+  about two seconds and the indexing call about twenty on this Intel Mac in Debug, so a first search
+  right after launch finds nothing yet, which cost one false start here.
+- **Not built.** Konjugieren also has Open Verb and Conjugate a Verb shortcuts, which take a
+  `VerbEntity`. The phase did not ask for them, but the entity and its query now exist, so either
+  is a small addition if Josh wants one.
+- **Analytics.** No new signal or value. `lookup` is now sent as `viewVerbView`'s source (a lookup
+  that opened a page) and `finishSearch`'s (one that opened the search), and `spotlight` as
+  `viewVerbView`'s. The staged privacy bullets gained "a shortcut" for where a search began, as
+  Phase 10 asked, and "Spotlight" for how a page was reached.
+- **What was tried where.** iPhone, English, light: Spotlight for "aprender" and the tap into its
+  page, and the three keyword queries above; the Shortcuts app's Conjugar section with its three
+  shortcuts; Look Up a Verb for "tuve" (tener's page, scrolled to the Pretérito, tuve marked) and
+  "fue" (the search, ser and ir with their lines); Start a Quiz (the Quiz tab, a quiz begun) and
+  Random Verb (entorpecer). As in Konjugieren, the app opened but the spoken answer was not seen
+  first. iPad, Spanish, dark, regular: the shortcut titles ("Consultar un verbo", "Empezar un test",
+  "Verbo aleatorio"); Consultar un verbo for "hablaste" (hablar's Pretérito, tú and vos marked, since
+  that simulator shows both); Spotlight for "comer" (its entry, then comercializar). The word
+  prompt showed in English there, Cancel and Done included, so the system process that draws it had
+  not taken the language change made for the check; the Spanish strings are in the bundle. The
+  iPad was set back to English afterward. Not tried: Siri, VoiceOver (nothing new is tappable in
+  the app), a device, and a shortcut run while Conjugar is in front, when `OpenQuizIntent`'s and
+  `OpenRandomVerbIntent`'s stashed link waits for the next activation.
+- **Tests.** New: `VerbLookupTests` (24 `@Test` functions, one parameterized over four words: each
+  kind of finding, the answers' wording, the destinations, the marks a lookup's link produces, and
+  the hidden intent) and `VerbSpotlightTests` (10: gloss phrases, forms, keywords, the description,
+  the reflexive title, every verb's entity, the activity identifier, and the query). The whole suite
+  passes: 824 Swift Testing tests in 46 suites, plus the XCTest suites, in 43 to 48 seconds over two
+  runs (36.8 after Phase 10). The two new suites take about one and three seconds; ConjugationMap and
+  ReverseLookupTests, at 12 and 10, are the slowest, and whichever suite first touches the bundled
+  map pays for loading it. The simulator language was English.
 
 ## Phase 12: Recents and My Verbs
 

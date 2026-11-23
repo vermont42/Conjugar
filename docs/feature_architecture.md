@@ -96,7 +96,7 @@ field. Phase 13 adds it to the quiz signals.
 | `deeplink` | Yes | A `conjugar://` link with no recognized `source` query item; for `finishSearch`, a `search` link |
 | `infoLink` | No | Reserved for a link from an Info article to a verb |
 | `list` | No | Phase 16: a verb opened from a collection |
-| `lookup` | No | Phase 11: the Look Up a Verb intent, for a verb page or a search |
+| `lookup` | Yes | The Look Up a Verb shortcut (Phase 11): for `viewVerbView`, the page it opened when one verb answered; for `finishSearch`, the search it opened otherwise |
 | `model` | Yes | A verb row on a model's page, in the Models tab or reached from a verb page's pill |
 | `myVerbs` | No | Phase 12: the My Verbs list |
 | `quickAction` | Yes | `finishSearch` only: a search begun from the Find a Verb Home Screen quick action (Phase 10) |
@@ -107,8 +107,8 @@ field. Phase 13 adds it to the quiz signals.
 | `search` | Yes | A result of a search that found something |
 | `searchGuess` | Yes | The closest verb offered by a search that found nothing |
 | `sharedLink` | No | Phase 16: a shared collection's link |
-| `shortcut` | Yes | Open Random Verb run from the Shortcuts app or Siri (`OpenRandomVerbIntent`) |
-| `spotlight` | No | Phase 11: a Spotlight result |
+| `shortcut` | Yes | Open Random Verb run from the Shortcuts app or Siri (`OpenRandomVerbIntent`, offered as the Random Verb shortcut since Phase 11) |
+| `spotlight` | Yes | A tap on a verb's Spotlight entry (Phase 11) |
 | `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included (Phase 10). Phase 13: a quiz begun from the Quiz tab |
 | `verbPage` | No | Phase 13: a quiz begun from a verb's page |
 | `widget` | Yes | A tap on any widget: Verb of the Day, the quiz widget, or a Lock Screen accessory |
@@ -207,7 +207,7 @@ and whether it matched only after folding. `VerbSearch.matches(for:in:index:)` c
 each such verb the kind `conjugation` (some form matched as written) or `foldedConjugation`, with
 its forms in `Match.forms`, literal ones first. `VerbSearch.guess(for:in:index:)` replaces
 `closestVerb` as the empty state's guess. Both are `nonisolated` and take the entries to search, so
-Phase 11's intent can call them from outside the view.
+Phase 11's `VerbLookup` calls them from outside the view (§ App Shortcuts and Spotlight).
 
 **What a query may be.** One word is looked up as written and folded; with up to two enclitic
 pronouns split off a command, gerund, or infinitive (dímelo, levántate, diciéndole, vámonos,
@@ -411,7 +411,7 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
 as written, else with accents folded, so several words ("he hablado") and compounds work. Where tú
 and vos share the form in one tense (hablaste), the person that Settings' second-singular choice
 hides is left out, as a search's marks leave it (`MatchedForm.shownCells(hiding:)`). A match that is
-no form of the verb opens the page unmarked. Phase 11's Look Up a Verb will open pages this way.
+no form of the verb opens the page unmarked. Phase 11's Look Up a Verb opens pages this way.
 
 **`info`** accepts a position as well as a key, as Konjugieren's links did, but a position moves when
 the articles are reordered, so app code always builds the key (`Info.info(deeplinkTarget:)`). The
@@ -471,4 +471,76 @@ in `scene(_:willConnectTo:options:)`, before any view exists, and one that bring
 `windowScene(_:performActionFor:completionHandler:)`. SwiftUI still owns the window, and
 `.onOpenURL` still receives links (checked in the iOS 26.3 simulator with the app running and not
 running).
+
+## App Shortcuts and Spotlight
+
+Built 2026-11-22 by Phase 11 of the browse plan, porting Konjugieren's Phase 11.
+
+### Shortcuts
+
+`Supporting/ConjugarShortcuts.swift` is the `AppShortcutsProvider`. Its phrases are English only,
+Konjugieren's convention; its short titles are localized.
+
+| Shortcut | Intent | Phrases | Opens |
+|---|---|---|---|
+| Look Up a Verb / Consultar un verbo | `LookUpVerbIntent` | "Look up a verb / a word / a conjugation with Conjugar" | Asks for a word, answers, then opens a page or a search (below) |
+| Start a Quiz / Empezar un test | `OpenQuizIntent` (`Shared/`) | "Start a quiz with Conjugar", "Quiz me with Conjugar" | The Quiz tab, a quiz started (`conjugar://quiz/start`) |
+| Random Verb / Verbo aleatorio | `OpenRandomVerbIntent` (`Shared/`) | "Show a random verb with Conjugar", "Random verb with Conjugar" | A random verb's page (`source=shortcut`) |
+
+The two intents in `Shared/` stash their link in the App Group's defaults, as the controls do, and
+`MainTabView` routes it when the scene becomes active. A shortcut run while Conjugar is already in
+front would wait for the next activation (untried).
+
+### Look Up a Verb
+
+A phrase can carry only an entity or an enum, not free text, so the shortcut asks "Which word should
+Conjugar look up?", with autocorrection off. `LookUpVerbIntent.perform()` builds a `VerbLookup`
+(`Models/VerbLookup.swift`) off the main actor and answers with `.result(opensIntent:dialog:)`,
+naming the hidden `OpenLookupResultIntent`, which routes the lookup's link through
+`AppRouter.shared`. A result can open the app only by naming another intent.
+
+`VerbLookup` reads `VerbSearch.matches`. Its answers are the matches of kind `exactInfinitive`,
+`exactFoldedInfinitive`, `exactGlossSense`, or `conjugation`, or failing those, `foldedConjugation`.
+An exact English sense answers because the verb list ranks it above a form ("come"); that is
+Conjugar's departure from Konjugieren.
+
+| Answers | Says | Opens |
+|---|---|---|
+| One verb, by infinitive or English sense | "tener, “have”: tengo · tuve · tendré · tenido" | `verb/tener?source=lookup` |
+| One verb, by a form | "tuve: Pretérito (yo) of tener" | `verb/tener?source=lookup&match=tuve` |
+| Several verbs | One line per verb, at most four ("fue: Pretérito (él) of ser", then of ir) | `search?q=fue&source=lookup` |
+| None, but other matches | "Conjugar has no verb or conjugation spelled “habl”, but one verb matches: hablar, “speak”." | The search |
+| None; the guess | "… Perhaps you meant tengo, of tener." | The search |
+| Nothing | "Conjugar has no verb or conjugation spelled “xyzzyq”." | The search |
+
+A form's line names only the spellings that matched as typed ("hablo" leaves out habló), and leaves
+out the second-singular person the page hides. The link's `match` is the typed form when it is a
+cell, and otherwise the bare form of its first cell (dímelo sends `di`), because the `verb` route
+marks through `ConjugationMatch`, which reads cells only. The answer's strings are `L.Lookup`,
+whose accessors are `nonisolated`.
+
+### Spotlight
+
+`Supporting/VerbSpotlight.swift` indexes one `VerbEntity` (`Supporting/VerbEntity.swift`, an
+`AppEntity` and `IndexedEntity`) per verb into the named index `verbs`, at every launch, from
+`MainTabView`'s `.task`, off the main actor. Building the entries takes about two seconds and the
+indexing call about twenty in a Debug build on an Intel Mac.
+
+| Field | Holds |
+|---|---|
+| `id` | The bare infinitive (arrepentir) |
+| Title, subtitle | The citation form (arrepentirse) and the first gloss |
+| `contentDescription` | The key conjugations, unlabeled: "tengo · tuve · tendré · tenido" |
+| `alternateNames` | The glosses' phrases ("arrive", "come"), then the key conjugations |
+| `keywords` | Every one-word form in the conjugation map, every gloss, and each phrase with and without "to" |
+
+**Only titles matched** in the iOS 26.3 simulator, as in Konjugieren: "aprender" finds its entry,
+but "aprendimos", "learn", and "tuve" find nothing from Conjugar. `docs/release.md` asks for a
+device check. A tap arrives as a `CSSearchableItemActionType` activity, which `MainTabView` routes
+as `verb/<infinitive>?source=spotlight`; `VerbSpotlight.infinitive(fromActivityIdentifier:)` reads
+the identifier bare or as "VerbEntity/<id>". `VerbEntityQuery` ranks a parameter picker's matches
+with `VerbSearch` before cutting at 25; no shortcut takes a `VerbEntity` yet.
+
+**Konjugieren's lesson, kept for a future change:** deleting app entities by type empties every
+index of the app, the named one included, so delete before indexing, never after.
 

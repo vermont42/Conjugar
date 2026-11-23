@@ -8,6 +8,7 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
+import CoreSpotlight
 import SwiftUI
 
 struct MainTabView: View {
@@ -66,9 +67,22 @@ struct MainTabView: View {
       // Warm the ~4 MB content caches off-main so the first verb push isn't a main-thread
       // decode. refresh() is date-gated and often no-ops, so it can't be relied on to warm.
       Task.detached { ContentCaches.warm() }
+      // One Spotlight entry per verb (browse plan, Phase 11). Off the main actor.
+      Task { await VerbSpotlight.indexVerbs() }
       presentOnboardingIfNeeded()
     }
     .onOpenURL { router.handle(url: $0) }
+    // A tap on one of `VerbSpotlight`'s entries.
+    .onContinueUserActivity(CSSearchableItemActionType) { activity in
+      guard
+        let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
+        let infinitive = VerbSpotlight.infinitive(fromActivityIdentifier: identifier),
+        let url = URL.verbDeeplink(infinitive, source: .spotlight)
+      else {
+        return
+      }
+      router.handle(url: url)
+    }
     .onChange(of: scenePhase) { _, phase in
       guard phase == .active else { return }
       Task.detached { WidgetSnapshotWriter.refresh() }

@@ -39,6 +39,20 @@ material for the release notes in `docs/release_notes.txt`.
    and the keyboard up. Check the quick action's title in Spanish ("Buscar un verbo") too. With
    Test Mode on, a search begun from each should send `finishSearch` with `source` `control` or
    `quickAction`.
+5. **Try the shortcuts and Spotlight on a device** (browse plan, Phase 11). In the simulator, Look
+   Up a Verb opened the right page or search but its answer was never seen or heard first, Siri
+   was never tried, and Spotlight matched only titles. On a device: ask Siri "Look up a verb with
+   Conjugar", say "tuve", and check that it speaks "tuve: Pretérito (yo) of tener" before opening
+   tener's page with tuve marked; then "fue", which should name ser and ir and open the search.
+   Run Start a Quiz and Random Verb from the Shortcuts app with Conjugar closed, and by Siri with
+   Conjugar open in front (that case was not tried; their link waits for the app to become active,
+   which it already is). In
+   Spotlight, search "aprendimos", "learn", and "tuve": if they find aprender, aprender, and
+   tener, the keywords work; if only "aprender" does, record it in `docs/feature_architecture.md`
+   § Spotlight. On a Spanish-language device, check that the word prompt reads "¿Qué palabra debe
+   consultar Conjugar?" (the simulator showed it in English after a language switch). With Test
+   Mode on, a lookup that opens a page should send `viewVerbView` with `source` `lookup`, and a
+   Spotlight tap `source` `spotlight`.
 
 ## On Release Day
 

@@ -10632,3 +10632,46 @@ the tap went nowhere, although the field showed its cursor. With fifteen seconds
 launch through a plain link took typing at once, so this Intel Mac's slow launch looks like the
 culprit rather than the code. The release checklist asks for both the control and the quick action on
 a real device, since nobody has yet added the control to Control Center.
+
+## Look Up a Verb, Three Shortcuts, and Spotlight (2026-11-22)
+
+Phase 11 of the browse plan gave Conjugar its first App Shortcuts. Until now the app had intents only
+for its Control Center controls. Josh decided at the start of the session that the quiz and
+random-verb intents should become shortcuts too, so the Shortcuts app now shows three: Look Up a Verb,
+Start a Quiz, and Random Verb. Their phrases are English only, as in Konjugieren, and their titles are
+localized ("Consultar un verbo", "Empezar un test", "Verbo aleatorio").
+
+Look Up a Verb is the interesting one. A shortcut's phrase can carry an entity or an enum but not free
+text, so the shortcut asks which word to look up. It answers in a line or two ("tuve: Pretérito (yo) of
+tener") and then opens the app: on the verb's page with the form marked when one verb answers, and on
+the verb list searched for the word when several do. "fue" names ser and ir and opens the search. The
+logic lives in a small `VerbLookup` type that reads the same ranked search the verb list uses, so the
+shortcut and the list cannot disagree.
+
+Porting it raised one question that Konjugieren never faced. Konjugieren lets only an infinitive or a
+conjugation answer; an English gloss match is "other matches". But Conjugar's search ranks an exact
+English sense above a Spanish form, by Josh's choice in Phase 0, because so many English words are
+also Spanish forms. Under Konjugieren's rule, "come" would have opened comer's page, which is wrong
+for a learner who meant the English verb. So here an English sense answers as an infinitive does:
+"come" names llegar, venir, acudir, and comer and opens the search, and "refuel" goes straight to
+repostar. My first note claimed "eat" opened comer's page too. A test said otherwise, since papear and
+manducar also mean "eat", and the note was corrected before it was finished.
+
+Another wrinkle came from the deeplink grammar of Phase 10. A link's `match` is turned back into cells
+by `ConjugationMatch`, which knows only the cells themselves. A lookup of "dímelo" finds decir through
+the enclitic split of Phase 5, but a link carrying "dímelo" would open decir with nothing marked. The
+lookup therefore sends the bare form of the cell instead (`di`), which marks the same row.
+
+Spotlight got one entry per verb, titled as the app shows the verb, with its key conjugations as the
+description ("aprendo · aprendí · aprenderé · aprendido") and its glosses and every form as keywords.
+The first search for it found nothing, and a temporary log explained why: indexing 4,811 entries takes
+about twenty seconds on this Intel Mac, and the search had come too early. After that, "aprender" found
+its entry and a tap opened its page. As in Konjugieren, though, the simulator matched titles only.
+"aprendimos", "learn", and "tuve" found nothing from Conjugar. Whether a real device does better is now
+an item in the release checklist, alongside hearing Siri speak the lookup's answer, which the simulator
+never showed before opening the app.
+
+On the iPad, switched to Spanish for the check, the shortcut titles came out in Spanish but the word
+prompt came out in English, Cancel and Done included. The Spanish strings are in the bundle, so the
+system process that draws the prompt had evidently not taken the language change. That too waits for a
+device.

@@ -4100,6 +4100,278 @@
           }
         }
       }
+    },
+    "Lookup.verbWithGloss %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, “%2$@”"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, «%2$@»"
+          }
+        }
+      }
+    },
+    "Lookup.form %@ %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ of %3$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ de %3$@"
+          }
+        }
+      }
+    },
+    "Lookup.otherMatchesOne %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar has no verb or conjugation spelled “%1$@”, but one verb matches: %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@», pero coincide un verbo: %2$@."
+          }
+        }
+      }
+    },
+    "Lookup.otherMatchesMany %@ %lld %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar has no verb or conjugation spelled “%1$@”, but %2$lld verbs match. The first is %3$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@», pero coinciden %2$lld verbos. El primero es %3$@."
+          }
+        }
+      }
+    },
+    "Lookup.guessVerb %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar has no verb or conjugation spelled “%1$@”. Perhaps you meant %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@». Quizá querías decir %2$@."
+          }
+        }
+      }
+    },
+    "Lookup.guessForm %@ %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar has no verb or conjugation spelled “%1$@”. Perhaps you meant %2$@, of %3$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@». Quizá querías decir %2$@, de %3$@."
+          }
+        }
+      }
+    },
+    "Lookup.nothing %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar has no verb or conjugation spelled “%1$@”."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@»."
+          }
+        }
+      }
+    },
+    "Intent.lookUpVerbTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Look Up a Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consultar un verbo"
+          }
+        }
+      }
+    },
+    "Intent.lookUpVerbDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finds the verb that a conjugation, an infinitive, or an English meaning belongs to, says what it found, and opens it in Conjugar."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encuentra el verbo al que pertenece una forma conjugada, un infinitivo o un significado en inglés, dice lo que encontró y lo abre en Conjugar."
+          }
+        }
+      }
+    },
+    "Intent.lookUpVerbWord" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palabra"
+          }
+        }
+      }
+    },
+    "Intent.lookUpVerbWordPrompt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Which word should Conjugar look up?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué palabra debe consultar Conjugar?"
+          }
+        }
+      }
+    },
+    "Intent.openLookupResultTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Lookup Result"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir el resultado de la consulta"
+          }
+        }
+      }
+    },
+    "Intent.openLookupResultURL" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enlace"
+          }
+        }
+      }
+    },
+    "Intent.verbEntityName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbo"
+          }
+        }
+      }
+    },
+    "Shortcut.startQuiz" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start a Quiz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar un test"
+          }
+        }
+      }
+    },
+    "Shortcut.randomVerb" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Random Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbo aleatorio"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

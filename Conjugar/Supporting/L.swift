@@ -473,6 +473,40 @@ nonisolated enum L {
     }
   }
 
+  // What the Look Up a Verb shortcut says (browse plan, Phase 11). Nonisolated, as the Tips
+  // accessors are, because `VerbLookup` builds its answer off the main actor.
+  enum Lookup {
+    /// "tener, “have”", or in Spanish "tener, «have»".
+    nonisolated static func verbWithGloss(infinitive: String, gloss: String) -> String {
+      String(localized: "Lookup.verbWithGloss \(infinitive) \(gloss)")
+    }
+
+    /// "fue: Pretérito (él) of ir".
+    nonisolated static func form(_ form: String, cells: String, infinitive: String) -> String {
+      String(localized: "Lookup.form \(form) \(cells) \(infinitive)")
+    }
+
+    nonisolated static func otherMatchesOne(_ word: String, verb: String) -> String {
+      String(localized: "Lookup.otherMatchesOne \(word) \(verb)")
+    }
+
+    nonisolated static func otherMatchesMany(_ word: String, count: Int, verb: String) -> String {
+      String(localized: "Lookup.otherMatchesMany \(word) \(count) \(verb)")
+    }
+
+    nonisolated static func guessVerb(_ word: String, infinitive: String) -> String {
+      String(localized: "Lookup.guessVerb \(word) \(infinitive)")
+    }
+
+    nonisolated static func guessForm(_ word: String, form: String, infinitive: String) -> String {
+      String(localized: "Lookup.guessForm \(word) \(form) \(infinitive)")
+    }
+
+    nonisolated static func nothing(_ word: String) -> String {
+      String(localized: "Lookup.nothing \(word)")
+    }
+  }
+
   enum Model {
     static func numberAndPercent(model: String, percent: Int) -> String {
       String(localized: "Model.numberAndPercent \(model) \(percent)")

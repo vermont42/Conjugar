@@ -87,6 +87,8 @@ Conjugar/
 │   │                           #   tense's second names (preterite · pretérito perfecto simple), and its Info article
 │   ├── KeyConjugation.swift    # A verb's four key conjugations, unlabeled (tengo · tuve · tendré · tenido), each with its
 │   │                           #   cell, mixed case; and the verb page's share text built on them
+│   ├── VerbLookup.swift        # What the Look Up a Verb shortcut says about a word ("tuve: Pretérito (yo) of tener") and
+│   │                           #   the link it opens: the verb's page, marked, or the search. Built on VerbSearch
 │   │
 │   │  ── content ──
 │   ├── ContentCaches.swift     # Pre-warms Etymology / ExampleData / MedievalData off the main actor at launch
@@ -136,10 +138,15 @@ Conjugar/
 │       └── GameState+Stages.swift      # The five stages, escape beats, stage advance, and soft respawn
 ├── Supporting/                 # A PBXFileSystemSynchronizedRootGroup — files dropped here need no pbxproj edit
 │   ├── AppDelegate.swift       # UIApplicationDelegateAdaptor for the hooks the App lifecycle doesn't cover (appearance config, installing the quick action, naming its scene delegate)
+│   ├── ConjugarShortcuts.swift # The AppShortcutsProvider: Look Up a Verb, Start a Quiz, Random Verb (English phrases)
 │   ├── ConjugarApp.swift       # @main App: analytics init, TipKit configure, cache warm, holds AppRouter.shared, WindowGroup → MainTabView, VerbSearchCommands
 │   ├── L.swift                 # Type-safe scoped localization accessors backed by String(localized:)
 │   ├── Localizable.xcstrings   # The one string catalog holding both en and es
-│   └── QuickAction.swift       # The Find a Verb Home Screen quick action (conjugar://search?source=quickAction) and QuickActionSceneDelegate, which receives it
+│   ├── LookUpVerbIntent.swift  # The Look Up a Verb intent, and the hidden OpenLookupResultIntent that opens its answer
+│   ├── QuickAction.swift       # The Find a Verb Home Screen quick action (conjugar://search?source=quickAction) and QuickActionSceneDelegate, which receives it
+│   ├── VerbEntity.swift        # A verb as App Intents and Spotlight see it (AppEntity + IndexedEntity) and its string query
+│   └── VerbSpotlight.swift     # One Spotlight entry per verb in the named index "verbs": forms and glosses as keywords,
+│                               #   key conjugations as the description; indexed at each launch
 ├── Utils/
 │   ├── BrowseSearch.swift      # The pure filter the Models tab searches through (the Verbs tab ranks with VerbSearch)
 │   ├── Colors.swift            # Semantic palette bridging the colorsets to UIKit-facing call sites
@@ -262,6 +269,8 @@ ConjugarTests/
 │   ├── ConjugationTableTests.swift     # The verb page's order, second names, and articles; search names follow the page
 │   ├── ReverseLookupTests.swift        # A form finds its verb: shared forms, accents, enclitics, compounds, vos, participle endings,
 │   │                                   #   the row's names, the guess from a form, every example's token through search
+│   ├── VerbLookupTests.swift           # Look Up a Verb: each kind of answer and its wording, page or search, a lookup link's marks
+│   ├── VerbSpotlightTests.swift        # Spotlight entries: gloss phrases, forms as keywords, key conjugations, the activity identifier
 │   ├── VerbMapRankingTests.swift       # Rank derivation on a fixture, the shipped map's invariants, and
 │   │                                   #   line-for-line agreement with docs/frequencies.txt
 │   ├── TenseBridgeTests.swift          # DisplayTense/DisplayPersonNumber → engine mapping, compounds, negative imperative

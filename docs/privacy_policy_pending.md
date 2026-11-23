@@ -127,3 +127,40 @@ El punto sobre las búsquedas, en la sección 2, queda así:
 ```
 - Cuando termina una búsqueda en la lista de verbos: dónde la empezó (por ejemplo, en la lista de verbos, el Centro de control, una acción rápida de la pantalla de inicio o un enlace), si abrió un verbo, el tipo de coincidencia que lo encontró (por ejemplo, el infinitivo, una forma conjugada como fue, una grafía sin tildes, un significado en inglés o la conjetura de la aplicación ante una errata) y cifras aproximadas: la longitud de lo que escribió (de 1 a 2 letras, de 3 a 5, de 6 a 9, o 10 o más), cuántos verbos coincidieron (ninguno, 1, de 2 a 10, o más) y en qué lugar de la lista estaba el verbo que abrió (el primero, del segundo al quinto, o más abajo)
 ```
+
+## Shortcuts and Spotlight (browse plan, Phase 11, 2026-11-22)
+
+Begins sending `lookup` as the `source` of `viewVerbView` and `finishSearch`, when the Look Up a
+Verb shortcut opens a page or a search, and `spotlight` as the `source` of `viewVerbView`, when a
+verb's Spotlight entry is tapped. No signal or parameter is added. A search begun from the shortcut
+is a new kind of surface for the search bullet, so it gains "a shortcut", as the section above
+foresaw; Spotlight is a new one for the first bullet. Apply these two bullets in place of the
+wording the sections above give them.
+
+### English
+
+The first bullet in section 2 now reads:
+
+```
+- How you reached a verb's page: for example from a search, the verb list, a model's page, another verb's page, a widget, Control Center, a shortcut, Spotlight, or a link
+```
+
+The bullet about searches in section 2 now reads:
+
+```
+- When a search of the verb list ends: where you began it (for example the verb list, Control Center, a Home Screen quick action, a shortcut, or a link), whether you opened a verb, the kind of match that found it (for example the infinitive, a conjugation such as fue, a spelling without accents, an English meaning, or the app's guess at a misspelling), and rough counts: the length of what you typed (1 to 2 letters, 3 to 5, 6 to 9, or 10 or more), how many verbs matched (none, 1, 2 to 10, or more), and where the verb you opened stood in the list (first, second to fifth, or lower)
+```
+
+### Spanish
+
+El primer punto de la sección 2 queda así:
+
+```
+- Cómo llegó a la página de un verbo: por ejemplo, desde una búsqueda, la lista de verbos, la página de un modelo, la página de otro verbo, un widget, el Centro de control, un atajo, Spotlight o un enlace
+```
+
+El punto sobre las búsquedas, en la sección 2, queda así:
+
+```
+- Cuando termina una búsqueda en la lista de verbos: dónde la empezó (por ejemplo, en la lista de verbos, el Centro de control, una acción rápida de la pantalla de inicio, un atajo o un enlace), si abrió un verbo, el tipo de coincidencia que lo encontró (por ejemplo, el infinitivo, una forma conjugada como fue, una grafía sin tildes, un significado en inglés o la conjetura de la aplicación ante una errata) y cifras aproximadas: la longitud de lo que escribió (de 1 a 2 letras, de 3 a 5, de 6 a 9, o 10 o más), cuántos verbos coincidieron (ninguno, 1, de 2 a 10, o más) y en qué lugar de la lista estaba el verbo que abrió (el primero, del segundo al quinto, o más abajo)
+```
