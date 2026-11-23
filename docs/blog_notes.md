@@ -11231,3 +11231,64 @@ Settings could float over the Quiz tab's results on the iPad, so Settings now at
 while it is on screen. The renamed tip, "Choose Your Level", appeared at once on the iPhone, because
 TipKit treats a renamed tip as new while the quiz-completed donation survives. A learner who has
 already finished a quiz will see it once more, which suits a new setting.
+
+## Which Verbs the Quiz Asks (2026-11-23)
+
+Until today Conjugar's quiz chose its verbs from hand-made lists written in 2017: sixty regular -ar
+verbs, two dozen each of -er and -ir, and a list per tense of verbs irregular in it. The lists did
+one thing well. Half of every quiz asked an irregular verb. But they had grown old beside the
+engine. The "regular" list held buscar, whose busqué the engine marks in red, and the irregular
+imperfecto list could only ever be ser, ir, and ver. Phase 5 of the pedagogy plan replaced them with
+a draw from the engine itself, within a frequency band that follows the learner's level: the 100
+most used verbs at Beginner, 300 at Elementary, 1,000 at Intermediate, and all 4,811 at Advanced.
+
+The rule that half the questions are irregular survived, made exact and judged per cell, since
+tener is irregular in the presente and regular in the imperfecto. The engine already marks an
+irregular span with capitals, which the verb page shows in red, so a cell is irregular when its form
+has a capital. Two questions went to Josh before any code. Should a spelling change count, as in
+llegué, busque, or cojo? A probe I compiled against the engine showed that spelling-only changes are
+a third of the marked presente de subjuntivo cells in the top 300, so the answer mattered. Josh said
+yes: the learner sees them red and has to learn them. The second question came out of the same
+probe. Only ser, ir, and ver are irregular in the imperfecto. If the irregular half fell evenly
+across tenses, as it does in Konjugieren, three of an Elementary quiz's six imperfectos would be
+era, iba, and veía, every time. Josh chose to let such a tense ask at most one irregular question
+and have the others make up the half.
+
+One subtlety came from the engine. A compound tense's regular composition is a regular haber plus a
+regular participle, so "he hablado" marks its he as irregular. Judged by capitals alone, nearly every
+perfecto would count as irregular, so a compound is judged by its participle alone.
+
+The draw follows Konjugieren's design. Each slot first gets a role (core verb, prefixed compound,
+or free) and an irregularity, and only then a verb, so the counts are exact rather than likely. Josh
+had already chosen Konjugieren's looser reading of "one to three derivatives": mantener and
+conseguir, in the top 300, draw as freely as tener and seguir, and only rarer compounds are held to
+one to three a quiz. At least two questions ask ser, estar, haber, tener, ir, or hacer. The regular
+questions still take the three endings in turn, so -er and -ir verbs are not drowned by the many -ar
+verbs.
+
+Speed shaped the design. One engine call costs about 28 microseconds in a debug build, so judging
+all 4,811 verbs in a cell takes a seventh of a second, and a quiz has up to thirty cells. But a
+model's features are anchored to the end of the verb, so all the verbs of one model class are
+irregular in the same cells. The probe found only two exceptions in sixteen cells across 106
+classes. So the draw judges one verb per class, caches the result, and checks the verb it finally
+picks against the engine.
+
+The tests demanded exactly fifteen irregular questions in each of forty seeded quizzes per level,
+and they caught two bugs that a looser test would have hidden. At Beginner, the presente has only
+two irregular vosotros forms among the top 100 verbs, sois and vais, and one quiz assigned three
+irregular slots there, so the third quietly fell back to a regular verb. In another quiz two core
+slots landed in the presente's tú, where haces is the only regular core form. The assignment now
+spreads roles across cells and respects how many verbs a cell can give each kind of slot. Konjugieren
+had warned that a refactor of its draw made a test suite three hundred times slower while still
+passing. The same thing nearly happened here: the first working version took the level tests from
+1.4 seconds to 28. Copying candidate lists for every slot was most of it, along with a loop whose
+`where` clause filtered without stopping. With both fixed, a quiz costs 5 to 18 milliseconds in a
+debug build.
+
+The hand-made lists did not disappear. They moved to the test target as an oracle: every verb a list
+calls irregular in a tense, the engine's judgment must find irregular there. It found one true
+exception. Ser's vos command, sé, is just its stem s- with the regular vos ending -é, so nothing in
+it is irregular. A real Beginner quiz on the iPhone came out as the tests promised: fifteen
+irregular cells, five core verbs, five frequent compounds, and the regular half split exactly five
+-ar, five -er, and five -ir. On the iPad at Advanced, the quiz asked añorar, deglutir, fusilar, and
+desvergonzarse beside hacer and venir, which is what "every verb" means.

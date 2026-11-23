@@ -30,8 +30,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 1 | Done | 2026-11-23 | 30822ac | T1.2 |
 | 2 | Done | 2026-11-23 | df7633c | T4.1, T4.4, T4.5 |
 | 3 | Done | 2026-11-23 | 8bd27c4 | T1.6 |
-| 4 | Awaiting Josh | 2026-11-23 | | T2.3, T2.6, T6.7, M1 |
-| 5 | Not started | | | T2.1, T2.2, T2.5 |
+| 4 | Done | 2026-11-23 | 17aab3e | T2.3, T2.6, T6.7, M1 |
+| 5 | Awaiting Josh | 2026-11-23 | | T2.1, T2.2, T2.5 |
 | 6 | Not started | | | T2.7, T3.1, T6.5, M2, M3 |
 | 7 | Not started | | | Decision 4 |
 | 8 | Not started | | | T2.8 |
@@ -1012,7 +1012,7 @@ does not, half points are scored and shown, and tests pin each case.
 ## Phase 4: Levels
 
 **Ports:** Konjugieren Phase 5. **Suggestions:** T2.3, T2.6, T6.7, M1. **Depends on:** nothing,
-though Phases 0 to 3 come first by leverage. **Status:** Awaiting Josh.
+though Phases 0 to 3 come first by leverage. **Status:** Done.
 
 Replace Easy, Moderate, and Difficult, and the score modifiers for difficulty and region, with
 levels ordered by use, each adding to the one before. **Josh accepted the ladder below as drafted**
@@ -1167,7 +1167,7 @@ works, the quiz signals carry `level`, and tests pin each level's pool.
 ## Phase 5: Which Verbs Are Asked
 
 **Ports:** Konjugieren Phase 6. **Suggestions:** T2.1, T2.2, T2.5. **Depends on:** Phase 4.
-**Status:** Not started.
+**Status:** Awaiting Josh.
 
 For the default quiz (not My Verbs, a collection, or a verb's page, whose verbs are chosen):
 
@@ -1209,7 +1209,79 @@ mark it, and a learner does have to learn it.
 prefixed compounds, asks irregular cells for exactly half its questions, includes the core verbs,
 leaves scoped quizzes unaffected, and tests pin each.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh chose on 2026-11-23**, taking both recommendations. A spelling change (llegué, busque,
+  cojo, creyó, continúo) counts as irregular for the half: a cell is irregular when the engine's
+  form shows red on the verb page. A probe before asking found spelling-only changes to be a third
+  of the marked presente de subjuntivo cells in the top 300 and a quarter of the pretérito's. And a
+  tense with few irregular verbs asks at most one irregular question, a question the phase text did
+  not raise: only ser, ir, and ver are irregular in the imperfecto, so an even spread would have put
+  era, iba, and veía into three of an Elementary quiz's six imperfectos, every quiz. "Few" is fewer
+  than five roots among the band's irregular verbs, so that prever and entrever count with ver at
+  Advanced; in practice it is only the imperfecto. The option Josh chose said ser, ir, and ver would
+  come "in turn". The draw picks among them at random each quiz, not by a turn kept across quizzes.
+- **No provisional count reaches a band.** The highest verb with `hp="y"` is podrir, near #1454, so
+  nothing in the top 1,000 rests on an estimate, unlike Konjugieren's 56. `QuizVerbMixTests` pins it.
+- **The draw** is `QuizDraw` (`Models/QuizDraw.swift`, `nonisolated`). `Quiz.levelQuestions` still
+  draws the cells (tense by weight, person by the tense's rotation) and hands them over. Then, as in
+  Konjugieren, every slot gets a role (core, compound or rare compound, free) and an irregularity
+  before any verb is drawn, so the counts are exact. Josh's looser reading of T2.2 carried over:
+  a compound in the top 300 (`VerbRelations.shared.baseByVerb`) draws freely; beyond it, exactly
+  one to three questions ask a rare compound at Intermediate and Advanced; at Beginner and
+  Elementary, at least one question asks a compound. The top 100 holds six (mantener, entender,
+  aparecer, conseguir, desarrollar, reconocer) and the top 300 fifty-three. The core verbs are ser,
+  estar, haber, tener, ir, and hacer, at least two questions a quiz. The regular questions still take
+  the -ar, -er, and -ir endings in turn, which Phase 4 kept from Easy.
+- **A compound tense is judged by its participle.** The engine's regular composition of a compound
+  is a regular haber plus a regular participle, so "he hablado" marks hE, and judging by capitals
+  alone would have made nearly every perfecto irregular.
+- **Irregularity by class.** Judging every verb of the band in a cell costs 0.14 s at Advanced in a
+  debug build (28 µs an engine call), and a quiz has up to thirty cells. A model's features are
+  end-anchored, so a class's verbs are irregular in the same cells: a probe over sixteen cells and all
+  106 classes found only two exceptions (prever and entrever in the pretérito, pudrir and podrir in
+  the participle). So the draw judges one verb per class per cell, caches that for the process, and
+  confirms the verb it finally chooses with the engine.
+- **Two bugs the exact tests caught, both of crowding.** The first version assigned the irregular
+  half without asking whether a cell had the verbs for it: Beginner's presente has only sois and vais
+  irregular for vosotros among the top 100, so a third irregular vosotros slot fell back to a regular
+  verb (seed 17: 14 of 30). Then two core slots landed in the presente's tú, where haces is the only
+  regular core form (seed 38: 16 of 30). A role now goes to different cells where it can, each side
+  of the split respects how many verbs a cell has for a role, and a slot that still cannot be filled
+  gives up its ending, then its role, and only last its irregularity.
+- **A slowdown, read in the per-suite times.** The first working version made `QuizLevelTests`, which
+  draws 560 quizzes, go from 1.4 seconds to 28. Copying candidate lists per slot, and a root count
+  whose `where` clause filtered without stopping, were most of it. Candidate sets now hold the band's
+  own per-class lists unjoined. A quiz costs about 5 ms at Beginner and 18 ms at Advanced in a debug
+  build. `QuizLevelTests` takes 4.5 seconds in the full run and `QuizVerbMixTests` 2.
+- **`VerbFamilies` moved to the test target** (`ConjugarTests/Models/VerbFamilies.swift`) as the
+  oracle Josh chose. `VerbFamiliesTests` now also checks that the draw's per-cell judgment finds every
+  listed irregular verb irregular in its list's tense, and every listed regular verb of a plain class
+  (1, 2, 3) regular in every cell Advanced asks. It found one true exception: ser's vos command *sé*
+  is the stem s- with the regular vos ending -é, so the engine rightly marks nothing; the test names
+  it. The rename script rewrote a sentence in `docs/code_review_recommendations.md` into something
+  false ("Quiz builds questions from the lists in ConjugarTests/…"); that historical review was
+  restored as it was.
+- **Text.** Settings' level description gained a sentence on the bands in both languages ("Beginner
+  asks the 100 most used verbs, Elementary the 300 most used, Intermediate the 1,000 most used, and
+  Advanced every verb."). The App Store description's quiz paragraph now names the verbs too. Its
+  Spanish half still said "tres niveles de dificultad", which Phase 4 had missed; it now says four
+  levels. The onboarding page is still true and was left alone.
+- **No analytics and no privacy lines.** Nothing new is sent. **VoiceOver:** nothing new to say.
+- **Verified:** 1,016 tests in 64 suites, in the simulator's default language (English), up from 999
+  in 63. One new suite (`QuizVerbMixTests`, 15 tests over forty seeds per level), two new oracle tests,
+  and the old turn-taking test retired. On the iPhone, in English and light mode, a real Beginner quiz
+  answered wrongly thirty times and read from the accessibility tree: every verb in the top 100,
+  exactly 15 irregular cells, five core verbs, five frequent compounds, and the regular half split
+  five -ar, five -er, five -ir. Also Settings' new description. On the iPad, in Spanish and dark mode
+  at Advanced: fifteen questions of a real quiz (half the typings were lost to the transition after
+  Continue), with rare verbs such as añorar, deglutir, fusilar, and desvergonzarse beside hacer and
+  venir, compounds, and the rare tenses. AXe's tap by identifier failed on the iPad with a decoding
+  error, so taps there went by the frames `describe_ui.sh` reports. Not seen: Settings' description
+  in Spanish on a device (the iPad's tab bar hid Configuración), and the Live Activity.
+- **For Phase 6:** the rules are per draw, so a quiz of ten gets five irregular questions, two core,
+  and one to three rare compounds (a test pins it at ten). Phase 6 should decide, as Konjugieren's
+  note said, whether Ten More draws a fresh mix of ten or one mix for the session.
 
 ## Phase 6: Ten Questions, Then Ten More
 

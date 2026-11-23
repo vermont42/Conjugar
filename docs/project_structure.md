@@ -115,7 +115,9 @@ Conjugar/
 │   ├── QuizCorrection.swift    # A wrong answer held on its question: its AnswerDifference
 │   ├── AnswerDifference.swift  # Which letters of a wrong answer and of the nearest right one differ, by an edit-distance alignment; QuizQuestion.difference(from:)
 │   ├── AnswerFrame.swift       # The shape of an answer: the words around the blank (yo, (tú) ¡no … !, a reflexive me) and the answer a filled blank gives
-│   ├── QuizLevel.swift         # The four levels (beginner … advanced): each one's tenses (pool, QuizPoolEntry with the persons it leaves out and its weight), name, gauge symbol, and the old difficulty each migrates from
+│   ├── QuizLevel.swift         # The four levels (beginner … advanced): each one's tenses (pool, QuizPoolEntry with the persons it leaves out and its weight), frequency band, name, gauge symbol, and the old difficulty each migrates from
+│   ├── QuizDraw.swift          # The default quiz's verbs: the level's frequency band, half the questions in an irregular cell (judged per cell,
+│   │                           #   isIrregular(_:in:)), the core verbs, one to three rare prefixed compounds, regular endings in turn
 │   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, or a collection; question count, source, title, isRanked, startsLiveActivity
 │   ├── QuizState.swift         # notStarted / inProgress / finished
 │   ├── ConjugationResult.swift # What an answered question earned: totalMatch (10) / secondAttemptMatch (5) / noMatch
@@ -133,7 +135,6 @@ Conjugar/
 │   │                           #   LearnerVerbs, saves to the App Group; decides which verbs the review card schedules (irregular ones)
 │   ├── ModelSort.swift         # Model-list sort order (irregularity / alphabetical / class number)
 │   ├── VerbType.swift          # verbModelMap `vt` marker: irregular / regular -ar / -er / -ir
-│   ├── VerbFamilies.swift      # The hand-curated verb lists the quiz builds questions from, and the oracle for the collections' derivations
 │   ├── AppIcon.swift           # Alternate app-icon enum (bull / dancer / matador / classic) + preview asset names
 │   ├── ConjugarTips.swift      # TipKit tips (try the quiz, explore models, choose a level, enable Game Center; on the
 │   │                           #   verb page, red letters and keep scrolling)
@@ -322,11 +323,14 @@ ConjugarTests/
 │   ├── ReviewScheduleTests.swift       # The review card's ladder, reveals and dismissals, a later lookup restarting it, only
 │   │                                   #   irregular verbs scheduled, an older record scheduled as it loads
 │   ├── FrequencyBandTests.swift        # Each band holds exactly its count, the bands nest, and where one ends
-│   ├── VerbFamiliesTests.swift         # Guard-rail: every hand-curated quiz verb resolves in the verb map
+│   ├── VerbFamilies.swift              # Hand-curated lists of verbs irregular in a tense, and regular verbs by ending: an oracle for the quiz's draw and the collections
+│   ├── VerbFamiliesTests.swift         # The lists resolve in the verb map, and the quiz's per-cell judgment finds each listed irregular (and regular) verb
 │   ├── QuizTests.swift                 # Quiz logic, scoring, and timer, driven through the @Observable model
 │   ├── QuizLiveActivityTests.swift     # Which quizzes start, update, and end the Live Activity, against LiveActivitiesSpy
-│   ├── QuizLevelTests.swift            # Each level's tenses and weights, only its own cells drawn, tenses at their weight under a seed, regular and
-│   │                                   #   irregular in turn; the setting's default and the migration from the old difficulty
+│   ├── QuizLevelTests.swift            # Each level's tenses and weights, only its own cells drawn, tenses at their weight under a seed;
+│   │                                   #   the setting's default and the migration from the old difficulty
+│   ├── QuizVerbMixTests.swift          # The default quiz's verbs under forty seeds: the band, exactly half irregular cells, at most one irregular
+│   │                                   #   imperfecto, the core verbs, rare and frequent compounds, endings, ten questions, scopes unaffected
 │   ├── QuizScopeTests.swift            # The scoped quiz: My Verbs and Test Me draws, defective verbs, region and vos, ranking
 │   ├── QuizGradingTests.swift          # Accepted answers (pronouns, spacing, each standard variant), the 2010 spelling, per-tense person rotation
 │   ├── QuizCorrectionTests.swift       # The held correction's state machine: hold, clock, Continue, the last question

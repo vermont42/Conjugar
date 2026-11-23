@@ -56,6 +56,20 @@ nonisolated enum QuizLevel: String, CaseIterable, Sendable {
     }
   }
 
+  /// The most frequent verbs the default quiz draws from, or nil for every verb.
+  var band: FrequencyBand? {
+    switch self {
+    case .beginner:
+      return .top100
+    case .elementary:
+      return .top300
+    case .intermediate:
+      return .top1000
+    case .advanced:
+      return nil
+    }
+  }
+
   /// The tenses the level asks, written out per level so that each reads as a whole.
   var pool: [QuizPoolEntry] {
     switch self {

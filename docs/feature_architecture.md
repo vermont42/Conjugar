@@ -685,7 +685,7 @@ normalization to fifty questions and no multiplier for the region or level. Unti
 leaderboard, every level posts to the one there is.
 
 **`QuizScope`** (`Models/QuizScope.swift`, `nonisolated`) says what a quiz asks about: the verbs
-(nil for every verb, through the curated lists in `VerbFamilies`; otherwise bare infinitives), the
+(nil for every verb, drawn from the level's frequency band; otherwise bare infinitives), the
 question count, and the `source` its signals carry. `allVerbs` is the Quiz tab's quiz over every
 verb, `allVerbs(source:)` the same begun by a `quiz` link, `myVerbs(_:)` thirty questions over My
 Verbs, `verbPage(_:)` Test Me's three, and `collection(_:title:)` thirty questions over a
@@ -699,14 +699,9 @@ generator: `Quiz(randomSource:)` takes one (tests pass `SplitMix64`, so a seed d
 in every process); without one, a shuffling quiz uses the system's, and an unshuffled one
 (`shouldShuffle: false`, for tests and UI tests) a fixed seed.
 
-- **Every verb** (`levelQuestions(count:)`) draws each question's tense from the level by weight,
-  its person from the tense's rotation, and its verb from the curated lists in `VerbFamilies`,
-  regular and irregular in turn, so half the questions take a verb from an irregular list. The
-  regular verbs take turns by ending (-ar, -er, -ir). The irregular list is the cell's: a tense built
-  on another's stem takes that tense's list (the imperfectos and futuro de subjuntivo the
-  pretérito's, the condicional the futuro's, commands other than tú's and vos's the presente de
-  subjuntivo's), and a compound tense the participle's. A verb the engine cannot ask in the cell is
-  skipped.
+- **Every verb** (`levelQuestions(count:)`) draws each question's tense from the level by weight
+  and its person from the tense's rotation, then hands the cells to `QuizDraw`
+  (`Models/QuizDraw.swift`, `nonisolated`), which chooses the verbs. See **Which verbs** below.
 - **Full length over chosen verbs** (My Verbs, a collection) draws tenses by weight the same way and
   puts the scope's verbs into them, preferring a verb not already asked in that cell, then the verb
   asked least, then the next in turn, so a defective verb gets its share of the cells it has. A
@@ -716,6 +711,37 @@ in every process); without one, a shuffling quiz uses the system's, and an unshu
 - **Each** skips a cell the engine does not give for that verb (a defective verb's), asks tú or vos
   by the quiz setting, no vosotros in the Latin America region, no yo in a command, and no person
   the level leaves out.
+
+**Which verbs.** The default quiz draws its verbs from the level's frequency band
+(`QuizLevel.band`): the 100 most frequent verbs at Beginner, 300 at Elementary, 1,000 at
+Intermediate, and every verb at Advanced. No verb with an estimated count (`hitsAreProvisional`)
+sits in the top 1,000. Within the band the draw is uniform, and it is balanced:
+
+- **Half the questions**, rounded down, ask a cell in which the verb is irregular. Irregularity is
+  judged per cell, not per verb (`QuizDraw.isIrregular(_:in:)`): a cell is irregular when the
+  engine's form marks a capital, as the verb page shows it in red, so a spelling change (llegué,
+  cojo, creyó) counts. A compound tense is judged by its participle alone, since its haber is the
+  same for every verb. A tense whose irregular verbs in the band come from fewer than five roots
+  (the imperfecto: ser, ir, ver, and ver's compounds) asks at most one irregular question, and the
+  other tenses make up the half, so a quiz does not repeat era, iba, and veía. A cell gets no more
+  questions of one kind than it has verbs to give them: Beginner's presente has only sois and vais
+  irregular for vosotros.
+- **At least two questions** ask a core verb: ser, estar, haber, tener, ir, or hacer.
+- **Prefixed compounds** (`VerbRelations.shared.baseByVerb`): a compound among the 300 most frequent
+  verbs (mantener, conseguir) draws as freely as a base verb. Where the band reaches past them
+  (Intermediate and Advanced), exactly one to three questions ask a rarer compound and no other
+  question does; at Beginner and Elementary, at least one question asks a compound.
+- **The regular questions** take the -ar, -er, and -ir endings in turn, so -er and -ir verbs are not
+  drowned by a band's many -ar verbs.
+
+The draw gives every slot its role (core, compound, free) and its irregularity before choosing any
+verb, so the counts are exact, not likely, at thirty questions or ten. To keep it cheap, it judges
+each cell once per model class rather than per verb: a model's features are end-anchored, so a
+class's verbs are irregular in the same cells, with rare exceptions (prever and entrever) that the
+draw catches by judging the verb it chose with the engine. The judgments are cached for the
+process; a quiz costs about 5 ms at Beginner and 20 ms at Advanced in a debug build. The
+hand-curated lists in `VerbFamilies` now live in the test target, as the oracle that the engine's
+judgment finds every verb a teacher would call irregular in a tense (`VerbFamiliesTests`).
 
 The tab's plan draws each question's person from a rotation of that tense's own
 (`Quiz.personNumber(for:)`), carried from one quiz to the next. A single rotation over every tense

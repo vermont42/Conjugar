@@ -2,11 +2,11 @@
 //  VerbFamiliesTests.swift
 //  ConjugarTests
 //
-//  A guard-rail for the hand-curated quiz verb lists in `VerbFamilies`. `Quiz`
-//  builds questions from these lists and the engine conjugates whatever it is given,
-//  so a bad entry silently teaches wrong Spanish. `QuizTests` can't catch it — it
-//  compares the quiz's answer to the same engine's output, verifying self-consistency,
-//  not linguistic truth. These tests instead pin the lists to `VerbMap.shared`:
+//  The hand-curated verb lists in `VerbFamilies` are an oracle for the quiz's draw, which
+//  judges irregularity per cell from the engine (`QuizDraw.isIrregular(_:in:)`): every verb a
+//  list names as irregular in a tense, the engine marks irregular there, and every listed
+//  regular verb of a plain regular class it marks regular everywhere. The lists are also
+//  pinned to `VerbMap.shared`:
 //
 //   • every listed verb must resolve in the map (an unmapped verb falls back to a
 //     regular model and drills a nonexistent form — this is how "manecer" survived);
@@ -97,5 +97,56 @@ struct VerbFamiliesTests {
       }
     }
     #expect(duplicated.isEmpty, "lists with duplicate entries: \(duplicated)")
+  }
+
+  /// Each irregular list, with the cells its tense asks.
+  static let irregularLists: [(name: String, verbs: [String], cells: [ConjugationCell])] = {
+    let persons: [DisplayPersonNumber] = [.firstSingular, .secondSingularTú, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+    func cells(_ tense: DisplayTense) -> [ConjugationCell] {
+      persons.map { ConjugationCell(tense: tense, personNumber: $0) }
+    }
+    return [
+      ("irregularPresenteDeIndicativoVerbs", VerbFamilies.irregularPresenteDeIndicativoVerbs, cells(.presenteDeIndicativo)),
+      ("irregularImperfectivoVerbs", VerbFamilies.irregularImperfectivoVerbs, cells(.imperfectoDeIndicativo)),
+      ("irregularPreteritoVerbs", VerbFamilies.irregularPreteritoVerbs, cells(.pretérito)),
+      ("irregularRaizFuturaVerbs", VerbFamilies.irregularRaizFuturaVerbs, cells(.futuroDeIndicativo)),
+      ("irregularPresenteDeSubjuntivoVerbs", VerbFamilies.irregularPresenteDeSubjuntivoVerbs, cells(.presenteDeSubjuntivo)),
+      ("irregularTuImperativoVerbs", VerbFamilies.irregularTuImperativoVerbs, [ConjugationCell(tense: .imperativoPositivo, personNumber: .secondSingularTú)]),
+      ("irregularVosImperativoVerbs", VerbFamilies.irregularVosImperativoVerbs, [ConjugationCell(tense: .imperativoPositivo, personNumber: .secondSingularVos)]),
+      ("irregularParticipioVerbs", VerbFamilies.irregularParticipioVerbs, [ConjugationCell(tense: .participio, personNumber: .none)]),
+      ("irregularGerundioVerbs", VerbFamilies.irregularGerundioVerbs, [ConjugationCell(tense: .gerundio, personNumber: .none)])
+    ]
+  }()
+
+  // ser's vos command, sé, is its stem s- with the regular vos ending -é, so the engine rightly
+  // marks nothing in it.
+  static let regularLookingIrregulars: Set<String> = ["irregularVosImperativoVerbs: ser"]
+
+  @Test("the quiz's draw judges every listed irregular verb irregular in its tense")
+  func theDrawFindsTheIrregularVerbs() {
+    var missed: [String] = []
+    for list in Self.irregularLists {
+      for verb in list.verbs where !list.cells.contains(where: { QuizDraw.isIrregular(verb, in: $0) == true }) {
+        missed.append("\(list.name): \(verb)")
+      }
+    }
+    #expect(Set(missed) == Self.regularLookingIrregulars, "judged regular: \(missed)")
+  }
+
+  // A listed regular verb of an orthographic class (buscar, 1-1) is irregular where its spelling
+  // changes (busqué), as the quiz counts it, so only the plain classes are held to every cell.
+  @Test("the quiz's draw judges every plainly regular listed verb regular everywhere")
+  func theDrawFindsTheRegularVerbs() {
+    let plainClasses: Set<String> = ["1", "2", "3"]
+    var marked: [String] = []
+    for verb in VerbFamilies.allRegularVerbs where plainClasses.contains(Self.map.entry(for: verb)?.classNumber ?? "") {
+      for entry in QuizLevel.advanced.pool {
+        let persons: [DisplayPersonNumber] = entry.tense == .gerundio ? [.none] : [.firstSingular, .secondSingularTú, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+        for person in persons where QuizDraw.isIrregular(verb, in: ConjugationCell(tense: entry.tense, personNumber: person)) == true {
+          marked.append("\(verb) \(entry.tense) \(person)")
+        }
+      }
+    }
+    #expect(marked.isEmpty, "judged irregular: \(marked.prefix(20))")
   }
 }

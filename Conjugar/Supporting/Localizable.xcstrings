@@ -3300,13 +3300,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Each level asks the tenses of the level before and more. Beginner asks the presente and commands. Elementary adds the past tenses, the futuro, and the gerundio. Intermediate adds the presente de subjuntivo, the condicional, and negative commands. Advanced asks every tense."
+            "value" : "Each level asks the tenses of the level before and more. Beginner asks the presente and commands. Elementary adds the past tenses, the futuro, and the gerundio. Intermediate adds the presente de subjuntivo, the condicional, and negative commands. Advanced asks every tense. Beginner asks the 100 most used verbs, Elementary the 300 most used, Intermediate the 1,000 most used, and Advanced every verb."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cada nivel pregunta los tiempos del nivel anterior y algunos más. Inicial pregunta el presente y el imperativo. Elemental añade los tiempos del pasado, el futuro y el gerundio. Intermedio añade el presente de subjuntivo, el condicional y el imperativo negativo. Avanzado pregunta todos los tiempos."
+            "value" : "Cada nivel pregunta los tiempos del nivel anterior y algunos más. Inicial pregunta el presente y el imperativo. Elemental añade los tiempos del pasado, el futuro y el gerundio. Intermedio añade el presente de subjuntivo, el condicional y el imperativo negativo. Avanzado pregunta todos los tiempos. Inicial pregunta los 100 verbos más usados, Elemental los 300 más usados, Intermedio los 1000 más usados y Avanzado todos los verbos."
           }
         }
       }

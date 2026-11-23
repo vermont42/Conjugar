@@ -1,9 +1,13 @@
 //
 //  VerbFamilies.swift
-//  Conjugar
+//  ConjugarTests
 //
 //  Created by Joshua Adams on 6/10/17.
 //  Copyright © 2017 Josh Adams. All rights reserved.
+//
+//  Hand-curated lists of verbs irregular in a tense, and of regular verbs, by ending. The quiz
+//  judges irregularity per cell from the engine; these lists are the oracle that the engine's
+//  judgment, and the collections' derivations, find the verbs a teacher would name.
 //
 
 nonisolated struct VerbFamilies {

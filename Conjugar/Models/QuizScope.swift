@@ -9,8 +9,8 @@
 /// `Quiz.start(scope:)` defaults to `allVerbs`, the Quiz tab's quiz. Collections add
 /// `collection(_:title:)` (`VerbCollection+Text.swift`).
 nonisolated struct QuizScope: Equatable, Sendable {
-  /// Nil asks about every verb, through the curated lists in `VerbFamilies`. Otherwise the bare
-  /// infinitives the verb map uses (arrepentir, not arrepentirse).
+  /// Nil asks about every verb, drawn from the level's frequency band (`QuizDraw`). Otherwise
+  /// the bare infinitives the verb map uses (arrepentir, not arrepentirse).
   let verbs: [String]?
   let questionCount: Int
   /// `startQuiz`, `quitQuiz`, and `completeQuiz` carry it.

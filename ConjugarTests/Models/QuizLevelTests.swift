@@ -137,22 +137,6 @@ import Testing
     #expect(first.questions != third.questions)
   }
 
-  /// Regular and irregular verbs take turns, so half a quiz asks a verb from an irregular list.
-  @Test func regularAndIrregularVerbsTakeTurns() {
-    let regular = Set(VerbFamilies.allRegularVerbs)
-    for level in QuizLevel.allCases {
-      let settings = Settings(getterSetter: GetterSetterFake(dictionary: [Settings.quizLevelKey: level.rawValue]))
-      let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: false)
-      quiz.start()
-      for (index, question) in quiz.questions.enumerated() where index.isMultiple(of: 2) {
-        #expect(regular.contains(question.verb), "\(level): \(question.verb) at \(index)")
-      }
-      let irregularCount = quiz.questions.filter { !regular.contains($0.verb) }.count
-      #expect(irregularCount >= QuizScope.fullLength / 2 - 3, "\(level): \(irregularCount) irregular")
-      quiz.quit()
-    }
-  }
-
   @Test func theLiveActivityCarriesTheLevel() {
     let spy = Current.liveActivities as! LiveActivitiesSpy // swiftlint:disable:this force_cast
     let quiz = makeQuiz(level: .elementary)

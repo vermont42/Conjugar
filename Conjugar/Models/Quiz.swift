@@ -13,38 +13,6 @@ import TipKit
 
 nonisolated private let quizLogger = Logger(subsystem: "com.racecondition.Conjugar", category: "Quiz")
 
-/// A shuffle-on-start, wrap-around cursor over one verb list. `next()` advances
-/// the index first, so the first call returns element 1 and element 0 is reached
-/// only after a full wrap.
-private final class Cycler {
-  private var elements: [String]
-  private var index = 0
-
-  init(_ elements: [String]) {
-    self.elements = elements
-  }
-
-  var count: Int {
-    elements.count
-  }
-
-  /// Return to the start of a (optionally reshuffled) list for a new quiz.
-  func restart(shuffle: Bool, using generator: inout some RandomNumberGenerator) {
-    if shuffle {
-      elements.shuffle(using: &generator)
-    }
-    index = 0
-  }
-
-  func next() -> String {
-    index += 1
-    if index == elements.count {
-      index = 0
-    }
-    return elements[index]
-  }
-}
-
 /// Lets `Quiz` hold whichever generator it was given.
 private struct AnyRandomNumberGenerator: RandomNumberGenerator {
   private var base: any RandomNumberGenerator
@@ -88,37 +56,14 @@ class Quiz {
   private(set) var questions: [Question] = []
   /// What the quiz under way, or last finished, asks about. See `QuizScope`.
   private(set) var scope = QuizScope.allVerbs
-  private let regularAr = Cycler(VerbFamilies.regularArVerbs)
-  private let regularIr = Cycler(VerbFamilies.regularIrVerbs)
-  private let regularEr = Cycler(VerbFamilies.regularErVerbs)
-  private let irregularPresenteDeIndicativo = Cycler(VerbFamilies.irregularPresenteDeIndicativoVerbs)
-  private let irregularPreterito = Cycler(VerbFamilies.irregularPreteritoVerbs)
-  private let irregularRaizFutura = Cycler(VerbFamilies.irregularRaizFuturaVerbs)
-  private let irregularParticipio = Cycler(VerbFamilies.irregularParticipioVerbs)
-  private let irregularImperfecto = Cycler(VerbFamilies.irregularImperfectivoVerbs)
-  private let irregularPresenteDeSubjuntivo = Cycler(VerbFamilies.irregularPresenteDeSubjuntivoVerbs)
-  private let irregularGerundio = Cycler(VerbFamilies.irregularGerundioVerbs)
-  private let irregularTuImperativo = Cycler(VerbFamilies.irregularTuImperativoVerbs)
-  private let irregularVosImperativo = Cycler(VerbFamilies.irregularVosImperativoVerbs)
-  private var allCyclers: [Cycler] {
-    [
-      regularAr, regularIr, regularEr,
-      irregularPresenteDeIndicativo, irregularPreterito, irregularRaizFutura,
-      irregularParticipio, irregularImperfecto, irregularPresenteDeSubjuntivo,
-      irregularGerundio, irregularTuImperativo, irregularVosImperativo
-    ]
-  }
   @ObservationIgnored private var timer: Timer?
   private let settings: Settings
   private let gameCenter: GameCenter
   @ObservationIgnored private var personRotation: [DisplayTense: Int] = [:]
-  /// Which of the -ar, -er, and -ir lists gives the next regular verb, so that the three
-  /// endings take turns.
-  @ObservationIgnored private var regularTurn = 0
   /// Every random choice a quiz makes, so that a seed draws the same quiz in every process.
   @ObservationIgnored private var generator: AnyRandomNumberGenerator
-  /// False leaves every list and order unshuffled and draws from a fixed seed, for tests and UI
-  /// tests. A quiz made for a verb page's sheet copies it from `Current.quiz`.
+  /// False leaves the order of a quiz's questions unshuffled and draws from a fixed seed, for
+  /// tests and UI tests. A quiz made for a verb page's sheet copies it from `Current.quiz`.
   let shouldShuffle: Bool
   /// Whether this quiz started the Live Activity, which is one for the whole app. A quiz that did
   /// not, such as Test Me's in a sheet, must not update or end the tab's.
@@ -240,73 +185,15 @@ class Quiz {
     firstAttempts.removeAll()
   }
 
-  /// The quiz over every verb: each question's tense drawn from the level by weight, its person
-  /// the next of the tense's rotation, and its verb from the curated lists in `VerbFamilies`,
-  /// regular and irregular in turn.
+  /// The quiz over every verb: each question's tense drawn from the level by weight and its
+  /// person the next of the tense's rotation, then the verbs from the level's band (`QuizDraw`).
   private func levelQuestions(count: Int) -> [Question] {
-    for cycler in allCyclers {
-      cycler.restart(shuffle: shouldShuffle, using: &generator)
-    }
     let pool = lastLevel.pool
-    var questions: [Question] = []
-    while questions.count < count, let entry = pool.weightedRandomElement(using: &generator) {
-      let personNumber = personNumber(for: entry)
-      let verb = listedVerb(for: entry.tense, personNumber, irregular: !questions.count.isMultiple(of: 2))
-      questions.append(QuizQuestion(verb, entry.tense, personNumber))
+    var cells: [ConjugationCell] = []
+    while cells.count < count, let entry = pool.weightedRandomElement(using: &generator) {
+      cells.append(ConjugationCell(tense: entry.tense, personNumber: personNumber(for: entry)))
     }
-    return questions
-  }
-
-  /// The next verb of the list for the cell that the engine can ask it, skipping a defective
-  /// verb's missing cells.
-  private func listedVerb(for tense: DisplayTense, _ personNumber: DisplayPersonNumber, irregular: Bool) -> String {
-    let cycler: Cycler
-    if irregular {
-      cycler = irregularCycler(for: tense, personNumber)
-    } else {
-      let endings = [regularAr, regularEr, regularIr]
-      cycler = endings[regularTurn % endings.count]
-      regularTurn += 1
-    }
-    for _ in 0..<cycler.count {
-      let verb = cycler.next()
-      if Quiz.canAsk(verb, tense, personNumber) {
-        return verb
-      }
-    }
-    return regularAr.next()
-  }
-
-  /// The curated list of verbs irregular in a cell. A tense built on another's stem takes that
-  /// tense's list: the imperfectos and futuro de subjuntivo the pretérito's, the condicional the
-  /// futuro's, and the commands other than tú's and vos's the presente de subjuntivo's. A compound
-  /// tense is irregular in its participle.
-  private func irregularCycler(for tense: DisplayTense, _ personNumber: DisplayPersonNumber) -> Cycler {
-    switch tense {
-    case .presenteDeIndicativo:
-      return irregularPresenteDeIndicativo
-    case .pretérito, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2, .futuroDeSubjuntivo:
-      return irregularPreterito
-    case .imperfectoDeIndicativo:
-      return irregularImperfecto
-    case .futuroDeIndicativo, .condicional:
-      return irregularRaizFutura
-    case .presenteDeSubjuntivo, .imperativoNegativo:
-      return irregularPresenteDeSubjuntivo
-    case .imperativoPositivo:
-      switch personNumber {
-      case .secondSingularTú:
-        return irregularTuImperativo
-      case .secondSingularVos:
-        return irregularVosImperativo
-      default:
-        return irregularPresenteDeSubjuntivo
-      }
-    case .gerundio:
-      return irregularGerundio
-    default:
-      return irregularParticipio
-    }
+    return QuizDraw.questions(cells: cells, level: lastLevel, using: &generator)
   }
 
   /// Questions about the given verbs only, in the level's tenses and never in a cell a verb lacks
@@ -499,9 +386,9 @@ class Quiz {
       }
       lastCurrentSpelling = isRight ? question.currentSpelling(of: proposedAnswer) : nil
     } else {
-      // A quiz slot should always conjugate — VerbFamiliesTests pins every list
-      // entry to VerbMap — but degrade gracefully rather than crash a learner
-      // mid-quiz: log and score the question as a miss.
+      // A quiz slot should always conjugate, since every draw asks the engine first, but
+      // degrade gracefully rather than crash a learner mid-quiz: log and score the question
+      // as a miss.
       quizLogger.error("Could not conjugate quiz slot \(self.verb) / \(self.tense.displayName)")
       correctAnswer = ""
       result = .noMatch
@@ -732,8 +619,8 @@ extension Quiz {
 
   /// A fixed, curated question plan for App Store screenshots.
   ///
-  /// Deliberately *not* derived from `start()`'s level-driven draw: that draws from
-  /// shuffled `Cycler`s, so the verbs — and therefore the per-question
+  /// Deliberately *not* derived from `start()`'s level-driven draw: that draws at
+  /// random, so the verbs — and therefore the per-question
   /// review rows on the results screen — would differ every run and between the
   /// `en` and `es` passes of the same sweep. A hand-picked list keeps the listing
   /// screenshots identical across all four device × language cells, and lets the
