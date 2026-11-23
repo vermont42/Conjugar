@@ -65,6 +65,8 @@ nonisolated enum AnalyticsName: String {
   case tapKeepPracticeSet
   case tapPlayGame
   case tapRateOrReview
+  /// Reset in Settings' confirmation of Reset Practice. No parameters.
+  case tapResetPractice
   /// The first tap on the review card above the verb list, which reveals its key conjugations.
   /// No parameters, and it does not say which verb.
   case tapRevealReviewCard

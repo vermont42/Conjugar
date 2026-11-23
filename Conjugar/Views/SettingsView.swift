@@ -20,6 +20,7 @@ struct SettingsView: View {
   @State private var rateReviewDescription = ""
   @State private var showingGame = false
   @State private var showingOnboarding = false
+  @State private var showingResetPractice = false
   // A popover tip attached to a view that outlives the tab's first visit would float over another
   // tab, pointing at nothing, when its rule is met there, as ChangeLevelTip's is when a quiz
   // finishes. Tips are therefore attached only while Settings is on screen.
@@ -144,6 +145,39 @@ struct SettingsView: View {
         .accessibilityLabel(L.Settings.quizClockHeading)
         .accessibilityIdentifier("quiz_clock_picker")
       }
+
+      if !Current.practice.isEmpty {
+        GradientDivider()
+
+        resetPracticeSection
+      }
+    }
+  }
+
+  private var resetPracticeSection: some View {
+    settingSection(
+      icon: "arrow.counterclockwise",
+      tint: .customRed,
+      heading: L.Settings.resetPracticeHeading,
+      description: L.Settings.resetPracticeDescription
+    ) {
+      Button(L.Settings.resetPractice) {
+        showingResetPractice = true
+      }
+      .buttonStyle(TintedCapsuleButtonStyle(tint: .customRed))
+      .accessibilityHint(L.Settings.resetPracticeHint)
+      .accessibilityIdentifier("settings_reset_practice")
+    }
+    .alert(L.Settings.resetPracticeTitle, isPresented: $showingResetPractice) {
+      Button(L.Settings.resetPracticeConfirm, role: .destructive) {
+        withAnimation {
+          Current.practice.reset()
+        }
+        Current.analytics.signal(name: .tapResetPractice)
+      }
+      Button(role: .cancel) {}
+    } message: {
+      Text(L.Settings.resetPracticeMessage)
     }
   }
 

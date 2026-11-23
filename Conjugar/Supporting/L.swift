@@ -1001,7 +1001,8 @@ nonisolated enum L {
     }
   }
 
-  /// The card above the verb list that offers an irregular verb looked up some days ago.
+  /// The card above the verb list that offers an irregular verb looked up or practiced some days
+  /// ago.
   enum ReviewCard {
     static var dismiss: String {
       String(localized: "ReviewCard.dismiss")
@@ -1014,6 +1015,15 @@ nonisolated enum L {
         return String(localized: "ReviewCard.lookedUpEarlier")
       }
       return String(localized: "ReviewCard.lookedUp \(daysAgo)")
+    }
+
+    /// "Practiced yesterday", "Practiced 3 days ago", or, for nil or less than a day, "Practiced
+    /// earlier": the caption when a quiz answer, not a lookup, last touched the verb.
+    static func practiced(daysAgo: Int?) -> String {
+      guard let daysAgo, daysAgo > 0 else {
+        return String(localized: "ReviewCard.practicedEarlier")
+      }
+      return String(localized: "ReviewCard.practiced \(daysAgo)")
     }
 
     static var openHint: String {
@@ -1088,6 +1098,34 @@ nonisolated enum L {
 
     static var quizClockDescription: String {
       String(localized: "Settings.quizClockDescription")
+    }
+
+    static var resetPracticeHeading: String {
+      String(localized: "Settings.resetPracticeHeading")
+    }
+
+    static var resetPracticeDescription: String {
+      String(localized: "Settings.resetPracticeDescription")
+    }
+
+    static var resetPractice: String {
+      String(localized: "Settings.resetPractice")
+    }
+
+    static var resetPracticeHint: String {
+      String(localized: "Settings.resetPracticeHint")
+    }
+
+    static var resetPracticeTitle: String {
+      String(localized: "Settings.resetPracticeTitle")
+    }
+
+    static var resetPracticeMessage: String {
+      String(localized: "Settings.resetPracticeMessage")
+    }
+
+    static var resetPracticeConfirm: String {
+      String(localized: "Settings.resetPracticeConfirm")
     }
 
     static var quiz: String {

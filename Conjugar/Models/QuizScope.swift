@@ -64,6 +64,12 @@ nonisolated struct QuizScope: Equatable, Sendable {
     verbs == nil && custom == nil && questionCount == QuizScope.roundLength
   }
 
+  /// Whether each round mixes in items the practice record says are due: only the default quiz,
+  /// since a quiz over chosen verbs or tenses should ask what was chosen.
+  var mixesDueItems: Bool {
+    isRanked
+  }
+
   /// Whether the results offer Ten More, which continues the session with another round. Test
   /// Me's three questions are a check on one verb, not a session to grow.
   var continues: Bool {

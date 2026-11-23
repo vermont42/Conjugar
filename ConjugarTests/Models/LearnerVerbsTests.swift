@@ -164,7 +164,7 @@ struct LearnerVerbsTests {
     #expect(LearnerVerbs(json: json) == record)
   }
 
-  /// A field added later, such as the review due date, must stay optional, so that what an older
+  /// A field added later must stay optional, so that what an older
   /// build wrote still decodes. This pins the decoding of an entry that carries only its key and
   /// its count, as an entry written today by `clearRecents` for a starred verb nearly does.
   @Test func anEntryWithoutItsOptionalFieldsDecodes() throws {
@@ -191,7 +191,7 @@ struct LearnerVerbsTests {
     let getterSetter = GetterSetterFake()
     let store = LearnerVerbStore(getterSetter: getterSetter)
 
-    store.recordOpen("ir", source: .browse, at: date(1))
+    store.recordOpen("ir", at: date(1))
     #expect(store.toggleStar("ser", at: date(2)))
 
     let reloaded = LearnerVerbStore(getterSetter: getterSetter)
@@ -207,9 +207,9 @@ struct LearnerVerbsTests {
   @Test func theStoreSavesARemovalAndAClear() {
     let getterSetter = GetterSetterFake()
     let store = LearnerVerbStore(getterSetter: getterSetter)
-    store.recordOpen("ir", source: .browse, at: date(1))
+    store.recordOpen("ir", at: date(1))
     store.toggleStar("ir", at: date(2))
-    store.recordOpen("ser", source: .browse, at: date(3))
+    store.recordOpen("ser", at: date(3))
     store.toggleStar("tener", at: date(4))
 
     store.remove("ir")
@@ -235,15 +235,15 @@ struct LearnerVerbsTests {
   /// carries the citation form the rows show.
   @Test func aReflexiveOnlyVerbIsKeptBare() {
     let store = LearnerVerbStore(getterSetter: GetterSetterFake())
-    store.recordOpen("arrepentir", source: .browse, at: date(1))
+    store.recordOpen("arrepentir", at: date(1))
 
     #expect(store.recentVerbs.map(\.citationForm) == ["arrepentirse"])
   }
 
   @Test func recentUnstarredLeavesOutStarredVerbs() {
     let store = LearnerVerbStore(getterSetter: GetterSetterFake())
-    store.recordOpen("ir", source: .browse, at: date(1))
-    store.recordOpen("ser", source: .browse, at: date(2))
+    store.recordOpen("ir", at: date(1))
+    store.recordOpen("ser", at: date(2))
     store.toggleStar("ser", at: date(3))
 
     #expect(store.recentVerbs.map(\.infinitive) == ["ser", "ir"])

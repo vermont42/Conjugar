@@ -121,6 +121,11 @@ Conjugar/
 │   ├── QuizLevel.swift         # The four levels (beginner … advanced): each one's tenses (pool, QuizPoolEntry with the persons it leaves out and its weight), frequency band, name, gauge symbol, and the old difficulty each migrates from
 │   ├── QuizDraw.swift          # The default quiz's verbs: the level's frequency band (or a custom quiz's), half the questions in an irregular cell (judged per cell,
 │   │                           #   isIrregular(_:in:)), the core verbs, one to three rare prefixed compounds, regular endings in turn
+│   ├── QuizDueItems.swift      # The default quiz's due items: up to three a round from the practice record, within the level and band, mixed in at random
+│   ├── PracticeItemMapping.swift  # Which practice item a question exercises (an irregular cell's key conjugation, a regular cell's pattern), the key
+│   │                           #   conjugations a lookup schedules, the irregular cells a review asks, the record's tense keys
+│   ├── PracticeStore.swift     # Current.practice: the practice record's answers, lookups, due and missed items, the review card's offer, reveal,
+│   │                           #   and snooze, Reset Practice, and the migration of LearnerVerbs' old review schedules
 │   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, a collection, a custom choice, or a practice set; question count (a round of ten, or Test Me's three), source, title, a practice set's level, isRanked, continues, startsLiveActivity, pool(level:), band(level:)
 │   ├── CustomQuiz.swift        # The Quiz tab's Custom choice: chosen tenses and a QuizVerbSet (all, a band, a collection, a shared list of infinitives, My Verbs), each the level's when unchosen; stored as tenses=…&verbs=… (or infinitives=…); QuizScope.custom
 │   ├── PracticeSet.swift       # A custom quiz shared as a link or a QR code: the conjugar://quiz/set link both ways, My Verbs shared as a list (at most 100), the level that travels, the scope its quiz asks, the share text; PracticeSetRequest
@@ -136,8 +141,7 @@ Conjugar/
 │   ├── ReviewCardSuppression.swift # Setting enum: whether the verb list hides the review card (off / on)
 │   ├── VerbSort.swift          # Verb-list sort order (frequency / alphabetical) + the Spanish collation locale, and
 │   │                           #   VerbListMode, the picker's three segments (the two sorts and My Verbs)
-│   ├── LearnerVerbStore.swift  # Current.learnerVerbs: records opens, stars, and review-card reveals and dismissals in
-│   │                           #   LearnerVerbs, saves to the App Group; decides which verbs the review card schedules (irregular ones)
+│   ├── LearnerVerbStore.swift  # Current.learnerVerbs: records opens and stars in LearnerVerbs and saves to the App Group
 │   ├── ModelSort.swift         # Model-list sort order (irregularity / alphabetical / class number)
 │   ├── VerbType.swift          # verbModelMap `vt` marker: irregular / regular -ar / -er / -ir
 │   ├── AppIcon.swift           # Alternate app-icon enum (bull / dancer / matador / classic) + preview asset names
@@ -289,9 +293,10 @@ Shared/                         # Compiled into both the app and the widget exte
 ├── OpenRandomVerbControlIntent.swift  # The Random Verb control's own hidden copy of it (source=control)
 ├── OpenVerbSearchIntent.swift  # The Find a Verb control's hidden intent: stashes conjugar://search?source=control
 ├── QuizActivityAttributes.swift  # The ActivityKit contract shared by LiveActivitiesReal and QuizLiveActivity
-├── LearnerVerbs.swift          # The learner's record: verbs opened (dates, count) and starred, and each irregular verb's
-│                               #   ReviewSchedule, as JSON in the App Group
-├── ReviewSchedule.swift        # The review card's Leitner ladder (1, 3, 7, 14, 30 days): a box and a due date
+├── LearnerVerbs.swift          # The learner's record: verbs opened (dates, count) and starred, as JSON in the App Group
+├── PracticeRecord.swift        # The practice record: PracticeItem (a key conjugation or a pattern, with permanent string keys) and each item's
+│                               #   schedule, last answer, and last lookup, as JSON in the App Group; never sent
+├── ReviewSchedule.swift        # The practice record's Leitner ladder (1, 3, 7, 14, 30 days): a box and a due date, moved by answers, lookups, and the review card
 ├── WidgetConstants.swift       # App Group id, snapshot filename, and the shared-defaults keys
 ├── WidgetL.swift               # Widget-target localization accessors mirroring L, with English defaultValues
 └── WidgetSnapshot.swift        # The Codable payload the app precomputes and the widget renders
@@ -329,8 +334,12 @@ ConjugarTests/
 │   ├── LearnerVerbsTests.swift         # The learner's record (opens, stars, recents, Clear, delete, older JSON), its store, the list modes
 │   ├── VerbDrawTests.swift             # The verb of the day and random verbs: weights, My Verbs every third day in turn, the band,
 │   │                                   #   one in three on demand, the seeded generator's sequence, the widget's next ten days
-│   ├── ReviewScheduleTests.swift       # The review card's ladder, reveals and dismissals, a later lookup restarting it, only
-│   │                                   #   irregular verbs scheduled, an older record scheduled as it loads
+│   ├── ReviewScheduleTests.swift       # The ladder alone: a start, reviews, a snooze, a new item, answers moving an item only when due
+│   ├── PracticeItemTests.swift         # Which item each question exercises across tenses, persons, and kinds of verb; pinned keys; which key
+│   │                                   #   conjugations a lookup schedules and a review asks
+│   ├── PracticeRecordTests.swift       # The practice record and its store: the ladder through answers and lookups, due and missed order, the
+│   │                                   #   review card's offer and caption, a relaunch, the migration, a reset that stays
+│   ├── QuizPracticeTests.swift         # Every answer recorded as given by every scope, a quit keeping them, and the default quiz's due items
 │   ├── FrequencyBandTests.swift        # Each band holds exactly its count, the bands nest, and where one ends
 │   ├── VerbFamilies.swift              # Hand-curated lists of verbs irregular in a tense, and regular verbs by ending: an oracle for the quiz's draw and the collections
 │   ├── VerbFamiliesTests.swift         # The lists resolve in the verb map, and the quiz's per-cell judgment finds each listed irregular (and regular) verb

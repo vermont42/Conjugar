@@ -35,8 +35,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 6 | Done | 2026-11-23 | dd360ca | T2.7, T3.1, T6.5, M2, M3 |
 | 7 | Done | 2026-11-23 | bcf9356 | Decision 4 |
 | 8 | Done | 2026-11-23 | 5ffc73a | T2.8 |
-| 9 | Awaiting Josh | 2026-11-23 | | T2.9, Decision 8 |
-| 10 | Not started | | | T3.3 (the record), T3.4, T3.5, T6.4 |
+| 9 | Done | 2026-11-23 | 37c3149 | T2.9, Decision 8 |
+| 10 | Awaiting Josh | 2026-11-23 | | T3.3 (the record), T3.4, T3.5, T6.4 |
 | 11 | Not started | | | T3.2, T3.3 (the session) |
 | 12 | Not started | | | T6.1, T6.6 (the leaderboard's place) |
 | 13 | Not started | | | T4.2, T4.3 |
@@ -1620,7 +1620,7 @@ is unchanged, and tests pin scope construction.
 ## Phase 9: Practice Sets to Share
 
 **Ports:** Konjugieren Phase 10. **Suggestions:** T2.9, Decision 8. **Depends on:** Phase 8.
-**Status:** Awaiting Josh. **Taken last**, after Phase 23, if at all (Josh, 2026-11-22): schools are
+**Status:** Done. **Taken last**, after Phase 23, if at all (Josh, 2026-11-22): schools are
 mostly Conjuguer's channel. Before starting, ask Josh whether he still wants it. (He did, and asked
 for it after Phase 8, on 2026-11-23.)
 
@@ -1714,7 +1714,7 @@ and tests pin encoding and decoding of every scope.
 ## Phase 10: The Practice Record
 
 **Ports:** Konjugieren Phase 11. **Suggestions:** T3.3 (the record), T3.4, T3.5, T6.4. **Depends
-on:** Phase 6. **Status:** Not started.
+on:** Phase 6. **Status:** Awaiting Josh.
 
 Give the quiz a memory: a small record per item, a box and a due date, moved up the ladder of 1, 3,
 7, 14, and 30 days by a right answer and back to the start by a wrong one. Josh's verdict on the
@@ -1779,7 +1779,99 @@ intervals: do not agonize over the numbers.
 keeps what was answered, the record survives a relaunch, the card reads it, and tests pin the item
 mapping and the schedule.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Nothing was asked of Josh.** The phase's decisions were his from 2026-11-22 (the kinds of item)
+  and Konjugieren's (one schedule, three due items, Reset Practice), and none of the merge's
+  consequences needed a ruling: the card already offered irregular verbs only, so no verb lost its
+  card. Every scope writes to the record, as proposed.
+- **The mapping (T3.5)** is the accepted design, judged per cell by `QuizDraw.isIrregular(_:in:)`,
+  which Phase 5 built: a capital in the engine's form, a compound judged by its participle. An
+  irregular cell exercises its verb's key conjugation by tense (presente, presente de subjuntivo,
+  both imperatives, and the imperfecto to the yo presente; pretérito, both imperfectos de
+  subjuntivo, the futuro de subjuntivo, and the gerundio to the yo pretérito; futuro and condicional
+  to the yo futuro; the participio and every compound to the participio). A regular cell exercises
+  a pattern of tense, person, and ending (`pattern:imperfecto_de_indicativo:fs:er`), so the vos
+  presente (tenés) and nosotros (tenemos) of an irregular verb are patterns. **No cell's nearest key
+  was unclear**; the irregular imperfectos and the gerundio went where the phase text put them.
+- **A problem the phase text missed, and its fix.** A key conjugation's own cell can be regular for
+  its verb: pedí (pedir's yo pretérito), busco, pensé, tenido. Asked as a review, such a cell would
+  record a pattern and leave the key conjugation due forever, so the default quiz would ask it in
+  every round. Two rules fix it. A lookup schedules only the key conjugations that some irregular
+  cell of the verb is built on (`PracticeItem.keyConjugations(of:)`): tener three (not tenido),
+  pensar one, pedir two, escribir only escrito. And a review of a key conjugation asks the first
+  irregular cell built on it that the level asks (`irregularCells(of:builtOn:)`), its own cell
+  first, so pedir's yo pretérito is reviewed as pidió. `PracticeItemTests` checks, over 34 verbs
+  of every kind, that every cell exercising a key conjugation is one its review can ask. **Phase 11's
+  Review should use `irregularCells` for a key conjugation**, not the key's own cell, as the phase
+  text says.
+- **The participio is no level's tense** (Phase 4 left it out), so a participio key conjugation is
+  reviewed in the default quiz through a compound tense the level asks (he escrito at Elementary),
+  and at Beginner it waits for Phase 11.
+- **Keys.** `key:tener:yo_presente`, `pattern:<tense>:<person>:<ending>`, with the gerundio and
+  participio having no person. Tense keys are the custom quiz's (`CustomQuiz.key(for:)`, already
+  permanent) plus `participio`; persons are `DisplayPersonNumber` raw values, which the map's file
+  format already fixes. `PracticeItem.Key` lives in `Shared/` beside the record, mirrored by
+  `KeyConjugation` in the app, since the widget cannot see `KeyConjugation`.
+- **The ladder** is Konjugieren's: `ReviewSchedule` generalized (`lookedUp` became `start`,
+  `revealed` `reviewed`, `dismissed` `snoozed`; `new` and `answered(correctly:)` added). A right
+  answer moves an item up only when due; a new item answered right enters box 1. A re-ask is
+  another answer.
+- **Where it lives.** `Shared/PracticeRecord.swift` (`PracticeItem`, `PracticeRecord`),
+  `Models/PracticeStore.swift` (`Current.practice`, in the App Group under `practiceRecord`),
+  `Models/PracticeItemMapping.swift`, and `Models/QuizDueItems.swift`. `LearnerVerbs` lost its
+  `review` field, `dueForReview`, the reveal and dismissal, and `scheduleUnscheduledReviews`;
+  `LearnerVerbStore` lost `isReviewable` (now `PracticeItem.isReviewable`) and the review methods,
+  and `recordOpen` lost its `source`. `VerbView` records the open and the lookup separately.
+  `Quiz(practice:)` takes a store; nil reads `Current.practice`, since a world's quiz is built
+  before `Current` exists.
+- **The migration** runs once, when no record is stored, reading `LearnerVerbs`' old `review` (or a
+  start at the last open) through a private decoder. On the iPhone's real install it carried poner
+  (overdue, offered at once), reír, traer, and tener; on the iPad's, arrepentir, ir, and tener.
+- **Clear in My Verbs no longer ends a verb's reviews**, which the browse plan's Phase 15 made it
+  do. The schedule now also holds quiz answers, so Clear and a swipe leave it, and Reset Practice
+  is the way to empty it, as in Konjugieren. Josh may want Clear to reach the record too.
+- **Due items in the default quiz**: up to three a round, the most overdue first, placed at random,
+  in Ten More rounds too, only in the ranked scope (`QuizScope.mixesDueItems`). Skipped when no
+  irregular cell built on the key is one the level asks (with tú or vos, the region, and the
+  level's persons), or the verb is beyond the band. A pattern asks a fully regular verb of its
+  ending from the band (`VerbDraw.isIrregular` false). Due questions sit outside Phase 5's mix.
+- **The card** reads `PracticeStore.cardOffer()`: the verb whose key conjugation is longest overdue,
+  with its due key conjugations in the card's order. Its caption says "Practiced 3 days ago"
+  ("Practicado hace 3 días") when an answer came after the last lookup. The Suppress Review Card
+  description now says "looked up or practiced" ("consultaste o practicaste").
+- **Reset Practice** ("Restablecer práctica") sits at the foot of Settings' quiz card, under the
+  heading Practice Record ("Registro de práctica"), only while the record holds anything, with a
+  red tint, a hint, and an alert. Its description begins "This button erases", as Konjugieren's
+  settled on. Josh has not judged the wording.
+- **Analytics.** `tapResetPractice`, no parameters, on confirmation. Staged in
+  `docs/privacy_policy_pending.md` in both languages: the in-app-actions bullet, and the paragraph
+  after the list with "does not record" become "does not send" and a sentence that the practice
+  record stays on the device. Not pinned in `AnalyticsTests`, which pins only signals that carry
+  parameters.
+- **VoiceOver.** No new quiz state: recording is silent, and a due item is an ordinary question.
+  The card's caption is read as before; the alert is the system's. Not tried by ear.
+- **Tests:** 1,101 in 71 suites in the simulator's default language (English), up from 1,080 in
+  68. New: `PracticeItemTests` (pinned and round-tripped keys, ten unreadable keys, 23 irregular
+  cells across every tense family and spelling changes, 10 regular cells, prefixed and
+  reflexive-only verbs, a defective verb's missing cell, what a lookup schedules, what a review
+  asks, and the 34-verb round trip), `PracticeRecordTests` (13: the ladder, due and missed order, a
+  lookup from the card, reveal and snooze, JSON, an unreadable key skipped, the store's mapping, the
+  card's offer and both captions, regular verbs never on the card, a relaunch, the migration, a
+  reset that stays), and `QuizPracticeTests` (answers kept on quit, a slip recording nothing until
+  its second attempt, five scopes writing, due items in the default quiz and in Ten More, the
+  level's cells only, the band, a pattern's verb, none in a scoped quiz). `ReviewScheduleTests` was
+  rewritten for the ladder alone. `QuizLevelTests` took 5.6 seconds and `QuizVerbMixTests` 3.3.
+- **Verified on the iPhone**, in English and light mode: the real record's migration and poner's
+  card; the reveal moving poner's four key conjugations to box 1; a Beginner quiz answered wrongly
+  (nothing within reach was due, correctly, since tener's and traer's migrated dates fall due
+  tomorrow and reír is beyond the top 100); a seeded record's hacer card, "Practiced 3 days ago";
+  a Beginner quiz that asked the three seeded due items (hacer, tener, ir) and recorded each; and
+  Reset Practice, its alert, an empty record, and the section hiding. **On the iPad**, in Spanish
+  and dark mode: the migration and ir's card ("Consultado ayer"), a seeded salir card ("Practicado
+  hace 2 días"), Configuración's Registro de práctica, its alert, and Cancelar keeping the record.
+  Not tried: VoiceOver by ear, accessibility text sizes, a real day passing, and the widget, which
+  reads nothing of the record yet. The iPad's appearance was left light.
 
 ## Phase 11: Review and My Mistakes
 

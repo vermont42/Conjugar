@@ -41,6 +41,11 @@ nonisolated enum QuizDraw {
     bands[level.band]?.verbs ?? []
   }
 
+  /// The verbs of a band, or of every verb for nil, the most frequent first.
+  static func verbs(in frequencyBand: FrequencyBand?) -> [VerbMapEntry] {
+    bands[frequencyBand]?.verbs ?? []
+  }
+
   /// Whether the engine's form of the cell marks an irregular letter, a spelling change (llegué,
   /// cojo) included, as the verb page shows it in red. A compound tense is judged by its
   /// participle alone, since its haber is the same for every verb. Nil when the verb has no form

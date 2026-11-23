@@ -61,6 +61,8 @@ class Quiz {
   @ObservationIgnored private var timer: Timer?
   private let settings: Settings
   private let gameCenter: GameCenter
+  /// Nil reads `Current.practice`, which a world's quiz cannot be handed as the world is built.
+  @ObservationIgnored private let practiceStore: PracticeStore?
   @ObservationIgnored private var personRotation: [DisplayTense: Int] = [:]
   /// Every random choice a quiz makes, so that a seed draws the same quiz in every process.
   @ObservationIgnored private var generator: AnyRandomNumberGenerator
@@ -185,9 +187,16 @@ class Quiz {
 
   /// A `randomSource` makes every draw follow it. Without one, a shuffling quiz draws from the
   /// system's generator and any other from a fixed seed.
-  init(settings: Settings, gameCenter: GameCenter, shouldShuffle: Bool = true, randomSource: (any RandomNumberGenerator)? = nil) {
+  init(
+    settings: Settings,
+    gameCenter: GameCenter,
+    shouldShuffle: Bool = true,
+    randomSource: (any RandomNumberGenerator)? = nil,
+    practice: PracticeStore? = nil
+  ) {
     self.settings = settings
     self.gameCenter = gameCenter
+    practiceStore = practice
     self.shouldShuffle = shouldShuffle
     if let randomSource {
       generator = AnyRandomNumberGenerator(randomSource)
@@ -260,13 +269,30 @@ class Quiz {
     firstAttempts.removeAll()
   }
 
-  /// A round of the scope's questions at `lastLevel`, after the session's questions so far.
+  /// Where each answer is recorded and the due items come from.
+  private var practice: PracticeStore {
+    practiceStore ?? Current.practice
+  }
+
+  /// A round of the scope's questions at `lastLevel`, after the session's questions so far. The
+  /// default quiz's rounds each mix in up to three items the practice record says are due
+  /// (`QuizDraw.dueQuestions`); a quiz whose verbs or tenses were chosen asks only what was
+  /// chosen.
   private func draw(_ scope: QuizScope, after prior: [Question] = []) -> [Question] {
     let pool = scope.pool(level: lastLevel)
     if let verbs = scope.verbs {
       return scopedQuestions(verbs: verbs, count: scope.questionCount, pool: pool, after: prior)
     }
-    return mixedQuestions(count: scope.questionCount, pool: pool, band: scope.band(level: lastLevel))
+    let band = scope.band(level: lastLevel)
+    let due = scope.mixesDueItems ? dueQuestions(pool: pool, band: band) : []
+    let drawn = mixedQuestions(count: scope.questionCount - due.count, pool: pool, band: band)
+    return QuizDraw.mixing(due, into: drawn, using: &generator)
+  }
+
+  private func dueQuestions(pool: [QuizPoolEntry], band: FrequencyBand?) -> [Question] {
+    QuizDraw.dueQuestions(for: practice.dueItems(), band: band, asks: { cell in
+      pool.first { $0.tense == cell.tense }.map { personNumbers(for: $0).contains(cell.personNumber) } ?? false
+    }, using: &generator)
   }
 
   /// The quiz over a band's verbs, the default quiz's over the level's: each question's tense
@@ -514,6 +540,10 @@ class Quiz {
     results.append(result)
     firstAttempts.append(firstAttempt)
     firstAttempt = nil
+    // Recorded as it is given, so that a quiz quit after six questions has still practiced six.
+    if !correctAnswer.isEmpty {
+      practice.recordAnswer(to: question, isCorrect: result != .noMatch)
+    }
     switch result {
     case .totalMatch, .secondAttemptMatch:
       advance()

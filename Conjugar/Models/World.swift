@@ -26,6 +26,8 @@ class World {
   var hapticPlayer: HapticPlayer
   /// The learner's opened and starred verbs, kept in the App Group so the widget can read them.
   var learnerVerbs: LearnerVerbStore
+  /// What each quiz answer and lookup has practiced, kept in the App Group and sent nowhere.
+  var practice: PracticeStore
   var liveActivities: LiveActivities
 
   private static let fakeRatingsCount = 42
@@ -42,6 +44,7 @@ class World {
     soundPlayer: SoundPlayer,
     hapticPlayer: HapticPlayer,
     learnerVerbs: LearnerVerbStore,
+    practice: PracticeStore,
     liveActivities: LiveActivities
   ) {
     self.analytics = analytics
@@ -55,10 +58,12 @@ class World {
     self.soundPlayer = soundPlayer
     self.hapticPlayer = hapticPlayer
     self.learnerVerbs = learnerVerbs
+    self.practice = practice
     self.liveActivities = liveActivities
   }
 
-  /// The App Group's defaults, where the record of the learner's verbs lives. The standard
+  /// The App Group's defaults, where the record of the learner's verbs and the practice record
+  /// live. The standard
   /// defaults stand in should the group be unavailable, so that the record is still kept.
   private static var sharedGetterSetter: GetterSetterReal {
     GetterSetterReal(userDefaults: WidgetConstants.sharedDefaults ?? .standard)
@@ -98,6 +103,7 @@ class World {
       soundPlayer: SoundPlayerReal(),
       hapticPlayer: HapticPlayerReal(),
       learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter),
+      practice: PracticeStore(getterSetter: sharedGetterSetter),
       liveActivities: LiveActivitiesReal()
     )
   }()
@@ -119,6 +125,7 @@ class World {
       soundPlayer: SoundPlayerReal(),
       hapticPlayer: HapticPlayerReal(),
       learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter),
+      practice: PracticeStore(getterSetter: sharedGetterSetter),
       liveActivities: LiveActivitiesReal()
     )
   }()
@@ -140,6 +147,7 @@ class World {
       soundPlayer: SoundPlayerDummy(),
       hapticPlayer: HapticPlayerDummy(),
       learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake()),
+      practice: PracticeStore(getterSetter: GetterSetterFake()),
       liveActivities: LiveActivitiesSpy()
     )
   }()
@@ -173,6 +181,7 @@ class World {
       soundPlayer: SoundPlayerDummy(),
       hapticPlayer: HapticPlayerDummy(),
       learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake()),
+      practice: PracticeStore(getterSetter: GetterSetterFake()),
       liveActivities: LiveActivitiesSpy()
     )
   }

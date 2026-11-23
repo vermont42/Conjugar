@@ -145,8 +145,8 @@ import UIKit
   @Test func progressCountsOpensNotStarsAndClearResetsIt() {
     let store = LearnerVerbStore(getterSetter: GetterSetterFake())
     let verbs = VerbCollection.goVerbs.verbs
-    store.recordOpen("tener", source: .list)
-    store.recordOpen("hablar", source: .browse)
+    store.recordOpen("tener")
+    store.recordOpen("hablar")
     store.toggleStar("hacer")
     #expect(store.openedCount(of: verbs) == 1)
     store.clearRecents()

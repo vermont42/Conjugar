@@ -7,14 +7,17 @@
 
 import SwiftUI
 
-/// An irregular verb looked up some days ago, offered above the verb list with its key
-/// conjugations hidden. A tap anywhere on the card reveals them; after that, a tap opens the verb's
-/// page. The ✕ dismisses the card. Which verb, and what each tap does to its schedule, is the
-/// caller's.
+/// An irregular verb looked up or practiced some days ago, offered above the verb list with its
+/// key conjugations hidden. A tap anywhere on the card reveals them; after that, a tap opens the
+/// verb's page. The ✕ dismisses the card. Which verb, and what each tap does to its schedule, is
+/// the caller's.
 struct ReviewCardView: View {
   let entry: VerbMapEntry
-  /// Whole days since the verb was last opened, or nil when the record does not know.
-  let daysSinceLookup: Int?
+  /// Whole days since a key conjugation of the verb was last looked up or answered, or nil when
+  /// the record does not know.
+  let daysSinceActivity: Int?
+  /// Whether that was a lookup rather than a quiz answer, which the caption says.
+  let wasLookedUp: Bool
   let isRevealed: Bool
   let reveal: () -> Void
   let open: () -> Void
@@ -34,7 +37,7 @@ struct ReviewCardView: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
-      Text(L.ReviewCard.lookedUp(daysAgo: daysSinceLookup))
+      Text(wasLookedUp ? L.ReviewCard.lookedUp(daysAgo: daysSinceActivity) : L.ReviewCard.practiced(daysAgo: daysSinceActivity))
         .font(.caption.smallCaps())
         .foregroundStyle(.secondary)
         .padding(.trailing, 44)

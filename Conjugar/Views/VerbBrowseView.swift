@@ -395,18 +395,16 @@ struct VerbBrowseView: View {
 
   private static let reviewCardMaxWidth: CGFloat = 560
 
-  /// Each launch, and each return from the background, offers the irregular verb longest overdue,
-  /// if any. The choice is made once per opening, so revealing a card does not swap it for the next
-  /// verb due.
+  /// Each launch, and each return from the background, offers the irregular verb whose key
+  /// conjugation is longest overdue in the practice record, if any. The choice is made once per
+  /// opening, so revealing a card does not swap it for the next verb due.
   private func chooseReviewCard() {
     reviewCardIsChosen = true
     guard settings.reviewCardSuppression == .off else {
       reviewCard = nil
       return
     }
-    reviewCard = learnerVerbs.verbDueForReview().map { entry in
-      ReviewCardState(entry: entry, daysSinceLookup: learnerVerbs.daysSinceOpened(entry.infinitive))
-    }
+    reviewCard = Current.practice.cardOffer().map { ReviewCardState(offer: $0) }
   }
 
   private func signalReviewCardShown() {
@@ -421,7 +419,7 @@ struct VerbBrowseView: View {
     guard let reviewCard, !reviewCard.isRevealed else {
       return
     }
-    learnerVerbs.recordReveal(reviewCard.entry.infinitive)
+    Current.practice.recordReview(reviewCard.offer)
     Current.analytics.signal(name: .tapRevealReviewCard)
     withAnimation {
       self.reviewCard?.isRevealed = true
@@ -432,17 +430,17 @@ struct VerbBrowseView: View {
     guard let reviewCard else {
       return
     }
-    navigationPath.append(VerbDestination(infinitive: reviewCard.entry.infinitive, source: .reviewCard))
+    navigationPath.append(VerbDestination(infinitive: reviewCard.offer.entry.infinitive, source: .reviewCard))
   }
 
-  /// A card dismissed before its conjugations were seen was no review, so its verb returns
-  /// tomorrow in the same box.
+  /// A card dismissed before its conjugations were seen was no review, so its due key
+  /// conjugations return tomorrow in the same box.
   private func dismissReviewCard() {
     guard let reviewCard else {
       return
     }
     if !reviewCard.isRevealed {
-      learnerVerbs.recordDismissal(reviewCard.entry.infinitive)
+      Current.practice.snooze(reviewCard.offer)
     }
     withAnimation {
       self.reviewCard = nil
@@ -594,8 +592,9 @@ struct VerbBrowseView: View {
 
               if let reviewCard, searchText.isEmpty, !showsRecents, settings.reviewCardSuppression == .off {
                 ReviewCardView(
-                  entry: reviewCard.entry,
-                  daysSinceLookup: reviewCard.daysSinceLookup,
+                  entry: reviewCard.offer.entry,
+                  daysSinceActivity: reviewCard.offer.daysSinceActivity,
+                  wasLookedUp: reviewCard.offer.wasLookedUp,
                   isRevealed: reviewCard.isRevealed,
                   reveal: revealReviewCard,
                   open: openReviewCard,
@@ -799,8 +798,7 @@ struct VerbBrowseView: View {
 
 /// The review card on screen: its verb, chosen once per opening, and what the learner has done.
 private struct ReviewCardState {
-  let entry: VerbMapEntry
-  let daysSinceLookup: Int?
+  let offer: PracticeStore.CardOffer
   var isRevealed = false
   var wasSignaled = false
 }

@@ -1,0 +1,158 @@
+//
+//  PracticeStore.swift
+//  Conjugar
+//
+//  Copyright © 2026 Josh Adams. All rights reserved.
+//
+
+import Foundation
+import Observation
+
+/// The app's view of `PracticeRecord` (`Current.practice`): it maps questions and lookups to
+/// items, saves each change to the App Group's defaults, and answers in verbs for the review card.
+/// Observable, so Settings' Reset Practice shows once there is something to reset.
+@Observable
+final class PracticeStore {
+  private(set) var record: PracticeRecord
+  @ObservationIgnored private let getterSetter: GetterSetter
+  @ObservationIgnored private let calendar: Calendar
+
+  /// The verb the review card offers, and what to say about it.
+  struct CardOffer: Equatable {
+    let entry: VerbMapEntry
+    /// The verb's key conjugations that are due, in the card's order, which a reveal moves up and
+    /// a dismissal snoozes.
+    let items: [PracticeItem]
+    /// Whole days since a key conjugation of the verb was last looked up or answered.
+    let daysSinceActivity: Int?
+    /// Whether that was a lookup rather than a quiz answer.
+    let wasLookedUp: Bool
+  }
+
+  /// `getterSetter` must be the store that holds `LearnerVerbs`, since the first launch with a
+  /// practice record migrates the review card's schedules from it.
+  init(getterSetter: GetterSetter, calendar: Calendar = .current) {
+    self.getterSetter = getterSetter
+    self.calendar = calendar
+    if let stored = getterSetter.get(key: PracticeRecord.storageKey).flatMap(PracticeRecord.init(json:)) {
+      record = stored
+    } else {
+      record = Self.migrated(from: getterSetter, calendar: calendar)
+      save()
+    }
+  }
+
+  var isEmpty: Bool {
+    record.isEmpty
+  }
+
+  /// A quiz's final answer to a question: a slip's right second attempt counts as right, since
+  /// one letter was all that stood between the learner and the conjugation.
+  func recordAnswer(to question: QuizQuestion, isCorrect: Bool, at date: Date = .now) {
+    guard let item = PracticeItem.exercised(by: question) else {
+      return
+    }
+    record.recordAnswer(item, isCorrect: isCorrect, at: date, calendar: calendar)
+    save()
+  }
+
+  /// A verb page was opened. An open from the review card does not reschedule, since the learner
+  /// has just reviewed the verb.
+  func recordLookup(_ infinitive: String, source: AnalyticsSource, at date: Date = .now) {
+    let items = PracticeItem.keyConjugations(of: infinitive)
+    guard !items.isEmpty else {
+      return
+    }
+    record.recordLookup(items, at: date, reschedules: source != .reviewCard, calendar: calendar)
+    save()
+  }
+
+  /// The items due at `date`, the longest overdue first.
+  func dueItems(at date: Date = .now) -> [PracticeItem] {
+    record.dueItems(at: date)
+  }
+
+  /// The items whose last answer was wrong, the most recently missed first.
+  func missedItems() -> [PracticeItem] {
+    record.missedItems()
+  }
+
+  /// The irregular verb whose key conjugation is longest overdue, with each of its due key
+  /// conjugations, since the card shows all four.
+  func cardOffer(at date: Date = .now) -> CardOffer? {
+    let due = record.dueItems(at: date)
+    guard let infinitive = due.lazy.compactMap(\.infinitive).first(where: PracticeItem.isReviewable),
+          let entry = VerbMap.shared.entry(for: infinitive) else {
+      return nil
+    }
+    let items = PracticeItem.Key.allCases
+      .map { PracticeItem.keyConjugation(infinitive: infinitive, key: $0) }
+      .filter(due.contains)
+    let entries = PracticeItem.Key.allCases.compactMap { key in
+      record.entry(for: .keyConjugation(infinitive: infinitive, key: key))
+    }
+    let latest = entries.max { ($0.lastActivity ?? .distantPast) < ($1.lastActivity ?? .distantPast) }
+    return CardOffer(
+      entry: entry,
+      items: items,
+      daysSinceActivity: latest?.lastActivity.flatMap { PracticeRecord.daysBetween($0, and: date, calendar: calendar) },
+      wasLookedUp: latest?.wasLastLookedUp ?? true
+    )
+  }
+
+  func recordReview(_ offer: CardOffer, at date: Date = .now) {
+    record.recordReview(offer.items, at: date, calendar: calendar)
+    save()
+  }
+
+  func snooze(_ offer: CardOffer, at date: Date = .now) {
+    record.snooze(offer.items, at: date, calendar: calendar)
+    save()
+  }
+
+  /// Settings' Reset Practice. The record is saved empty rather than removed, so that the next
+  /// launch does not migrate the old schedules again.
+  func reset() {
+    record.reset()
+    save()
+  }
+
+  private func save() {
+    if let json = record.json {
+      getterSetter.set(key: PracticeRecord.storageKey, value: json)
+    }
+  }
+
+  /// Before the practice record, `LearnerVerbs.Entry.review` kept one review schedule per
+  /// irregular verb, and an entry with no schedule, which predates that field, counts as looked up
+  /// on its last open. Each irregular verb's schedule becomes its key conjugations' schedule. A
+  /// regular verb never had one.
+  private static func migrated(from getterSetter: GetterSetter, calendar: Calendar) -> PracticeRecord {
+    var record = PracticeRecord()
+    guard let json = getterSetter.get(key: LearnerVerbs.storageKey),
+          let data = json.data(using: .utf8),
+          let legacy = try? JSONDecoder().decode(LegacyLearnerVerbs.self, from: data) else {
+      return record
+    }
+    for entry in legacy.entries.values {
+      guard let schedule = entry.review ?? entry.lastOpened.map({ ReviewSchedule.start(at: $0, calendar: calendar) }) else {
+        continue
+      }
+      for item in PracticeItem.keyConjugations(of: entry.infinitive) {
+        record.adopt(item, schedule: schedule, lastLookedUp: entry.lastOpened)
+      }
+    }
+    return record
+  }
+
+  /// The fields of a `LearnerVerbs` record that the migration reads. Decoding ignores the rest.
+  private struct LegacyLearnerVerbs: Decodable {
+    struct Entry: Decodable {
+      let infinitive: String
+      let lastOpened: Date?
+      let review: ReviewSchedule?
+    }
+
+    let entries: [String: Entry]
+  }
+}

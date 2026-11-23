@@ -218,7 +218,8 @@ struct VerbView: View {
     visit = newVisit
     // An open is the page's arrival by any route. A page that comes back is not a new one.
     if source != .resume {
-      Current.learnerVerbs.recordOpen(verb, source: source)
+      Current.learnerVerbs.recordOpen(verb)
+      Current.practice.recordLookup(verb, source: source)
     }
     Current.analytics.signal(name: .viewVerbView, parameters: newVisit.viewParameters)
   }

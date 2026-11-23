@@ -11448,3 +11448,44 @@ The QR code is drawn on the device with Core Image, dark on white in both appear
 reads it back with Core Image's own detector to prove the code says what the link says. The one
 thing a simulator cannot show is whether the Camera app offers to open a `conjugar://` code at all,
 since a simulator has no camera. That waits for Josh's phone.
+
+## The Quiz Gets a Memory (2026-11-23)
+
+Until today, Conjugar's quiz forgot everything the moment a learner left the results screen. Phase
+10 of the pedagogy plan gives it a practice record: for each thing an answer practices, a box on a
+Leitner ladder of 1, 3, 7, 14, and 30 days, a due date, and whether the last answer was right. The
+record stays on the device, in the App Group so a widget can read it later, and it is never sent
+anywhere.
+
+The interesting question was what "a thing an answer practices" is. Konjugieren, which built this
+first, split German verbs by strength: a strong verb's answers move its key conjugations, and a weak
+verb's answers move patterns that every weak verb shares. Spanish does not split so cleanly, since
+tener is irregular in the presente and perfectly regular in the imperfecto. So Conjugar judges each
+cell rather than each verb, using the same test the quiz's draw already used: does the engine's form
+carry a capital, the red letter the verb page shows? An irregular cell moves the key conjugation
+whose stem it is built on, so tenga moves tengo and tuviera moves tuve. A regular cell moves a
+pattern of tense, person, and ending, so tener's tenía moves the same item as comer's comía.
+
+The first draft had a quiet trap in it. The plan said a review of a key conjugation asks that key's
+own cell, which works for tener and fails for pedir, whose yo pretérito, pedí, is regular. pedir's
+irregularity in the pretérito is all in the third person: pidió, pidieron. Ask pedí as a review and
+the answer, judged regular, moves a pattern; the key conjugation stays due, and the default quiz asks
+it in every round, forever. The same goes for busco, pensé, and tenido. The fix came in two halves. A
+lookup now schedules only the key conjugations that some irregular cell of the verb is built on, so
+looking up tener schedules three, not four, since tenido is regular. And a review asks the first
+irregular cell built on the key, its own cell first, so pedir's is reviewed as pidió. A test walks
+every cell of thirty-four verbs of every kind and checks that each one moving a key conjugation is a
+cell that key's review can ask.
+
+The review card above the verb list kept its own per-verb schedule until now. It reads the practice
+record instead, so a verb gets onto the card by being looked up or by being missed in a quiz, and the
+caption says which: "Looked up 3 days ago" or "Practiced 3 days ago." Existing schedules migrate on
+the first launch. On the simulator's real install that carried over poner, which was overdue, and it
+was the first card offered. The default quiz now mixes up to three due items into each round of ten,
+within the learner's level and frequency band. Settings gained Reset Practice, behind a confirmation,
+and the policy's "does not record your quiz answers" is staged to become "does not send", with a
+sentence saying where the record lives.
+
+One behavior changed that Josh may want back. Clearing recents in My Verbs used to end the card's
+schedules as well. Those schedules now hold quiz answers too, so Clear leaves them, and Reset
+Practice is the way to empty the record.

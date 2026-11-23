@@ -631,3 +631,40 @@ El primer párrafo de la sección 7 queda así:
 ```
 Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios, una para cada nivel. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos, a la clasificación del nivel en que se hizo; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, de un cuestionario personalizado, de una serie de práctica compartida, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
 ```
+
+## The practice record (pedagogy plan, Phase 10, 2026-11-23)
+
+The quiz now keeps a practice record on the device: which conjugations each answer practiced, when
+each is due again, and whether the last answer was right. The review card reads the same record.
+It stays on the device, in the app's own storage, and is never sent. The new `tapResetPractice` is
+sent, with no parameters, when the learner confirms Reset Practice in Settings. This rewrites the
+paragraph after the list in section 2 that the Phase 6 section rewrote, and the in-app-actions
+bullet that the Practice sets section rewrote; this wording wins over both.
+
+### English
+
+The bullet about in-app actions in section 2 now reads:
+
+```
+- Certain in-app actions: opening the game, reshowing the onboarding tour, tapping to rate or review the app, sending a message to the tutor, opening a tense's article from a verb's page, tapping to share a verb's page, tapping to share a collection of verbs (and which collection), starring or unstarring a verb (whether the verb is starred afterward, but not which verb), revealing the conjugations on a review card, opening a Game Center leaderboard (and which level's), sharing a practice set as a link or a QR code (how it was shared, and whether it chooses tenses, verbs, or both, but not which ones), opening a shared practice set (and whether its link could be read), keeping a shared practice set as your custom quiz, and resetting your practice record
+```
+
+The paragraph after the list now reads:
+
+```
+Your quiz score and the rough duration of a quiz are collected, but, like all of these analytics, they are anonymized and are not tied to your identity (see Section 4). The app does not send your quiz answers, how many of them were right, which verbs you look up, or any text you type. To schedule your reviews, the app keeps a record of which conjugations you have practiced and how your last answers went; that record stays on your device and is never sent. That you searched is recorded, with the rough counts above; what you typed is not. That you opened a verb's page is recorded; which verb is not.
+```
+
+### Spanish
+
+El punto sobre las acciones dentro de la aplicación, en la sección 2, queda así:
+
+```
+- Ciertas acciones dentro de la aplicación: abrir el juego, volver a mostrar la introducción, tocar para valorar o reseñar la aplicación, enviar un mensaje al tutor, abrir el artículo de un tiempo verbal desde la página de un verbo, tocar para compartir la página de un verbo, tocar para compartir una colección de verbos (y cuál), marcar o desmarcar un verbo con una estrella (si el verbo queda marcado, pero no de qué verbo se trata), mostrar las conjugaciones de una tarjeta de repaso, abrir una clasificación de Game Center (y de qué nivel), compartir una serie de práctica como enlace o código QR (cómo se compartió y si elige tiempos, verbos o ambos, pero no cuáles), abrir una serie de práctica compartida (y si su enlace se pudo leer), guardar una serie de práctica compartida como su cuestionario personalizado y restablecer su registro de práctica
+```
+
+El párrafo que sigue a la lista queda así:
+
+```
+Su puntuación y la duración aproximada de un cuestionario se recopilan, pero, como todas estas estadísticas, están anonimizadas y no están vinculadas a su identidad (véase la sección 4). La aplicación no envía sus respuestas del cuestionario, cuántas acertó, qué verbos consulta ni ningún texto que escriba. Para programar sus repasos, la aplicación guarda un registro de qué conjugaciones ha practicado y cómo le fueron sus últimas respuestas; ese registro se queda en su dispositivo y nunca se envía. Se registra que usted hizo una búsqueda, con las cifras aproximadas indicadas arriba, pero no lo que escribió. Se registra que abrió la página de un verbo, pero no de cuál.
+```

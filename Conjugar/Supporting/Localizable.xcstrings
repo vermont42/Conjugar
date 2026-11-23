@@ -3868,13 +3868,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This setting determines whether the verb list hides the review card, which offers an irregular verb you looked up some days ago."
+            "value" : "This setting determines whether the verb list hides the review card, which offers an irregular verb you looked up or practiced some days ago."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Este ajuste determina si la lista de verbos oculta la tarjeta de repaso, que te ofrece un verbo irregular que consultaste hace unos días."
+            "value" : "Este ajuste determina si la lista de verbos oculta la tarjeta de repaso, que te ofrece un verbo irregular que consultaste o practicaste hace unos días."
           }
         }
       }
@@ -6081,6 +6081,174 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Comparte este test personalizado como enlace o código QR"
+          }
+        }
+      }
+    },
+    "ReviewCard.practiced %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Practiced yesterday"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Practiced %lld days ago"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Practicado ayer"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Practicado hace %lld días"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ReviewCard.practicedEarlier" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practiced earlier"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practicado antes"
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeHeading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice Record"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registro de práctica"
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This button erases what the quiz and the review card remember of your practice: which conjugations are due again and which you missed last. The record stays on this device and is never sent."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este botón borra lo que el test y la tarjeta de repaso recuerdan de tu práctica: qué conjugaciones te toca repasar y cuáles fallaste la última vez. El registro se queda en este dispositivo y nunca se envía."
+          }
+        }
+      }
+    },
+    "Settings.resetPractice" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset Practice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restablecer práctica"
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asks before erasing your practice record."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pregunta antes de borrar tu registro de práctica."
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset your practice?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Restablecer tu práctica?"
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The quiz will forget which conjugations you have practiced, and the review card will offer nothing until you look a verb up again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El test olvidará qué conjugaciones has practicado, y la tarjeta de repaso no te ofrecerá nada hasta que vuelvas a consultar un verbo."
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeConfirm" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restablecer"
           }
         }
       }
