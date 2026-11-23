@@ -10675,3 +10675,44 @@ On the iPad, switched to Spanish for the check, the shortcut titles came out in 
 prompt came out in English, Cancel and Done included. The Spanish strings are in the bundle, so the
 system process that draws the prompt had evidently not taken the language change. That too waits for a
 device.
+
+## Recents, My Verbs, and a Star (2026-11-22)
+
+Phase 12 of the browse plan gave Conjugar a memory of the learner. Until now the app forgot every
+verb the moment its page closed. Now it keeps, on the device, a small record of each verb opened
+(when first, when last, how often) and each verb starred. Three things read it today: the recent
+verbs that appear when the search field is focused and empty, a My Verbs list in the Verbs tab, and
+a star on every verb page. Later phases will read it too: a quiz over My Verbs, a Verb of the Day
+that leans on it, and a review card that brings back a verb looked up days ago.
+
+The record lives in the App Group, the storage the app shares with its widgets, because Phase 14's
+widget will want it. It is JSON written through the same `GetterSetter` the settings use, pointed at
+the group's defaults instead of the standard ones. Konjugieren learned the one rule that matters for
+such a record: every field added later must be optional. Swift's synthesized decoding requires every
+non-optional key, so a new required field would make every record written by an older build decode
+as nothing, and a learner's starred verbs would silently disappear after an update. A test pins it.
+
+The only open question went to Josh at the start: should My Verbs be a third segment of the picker
+under the list, beside Frequency and Alphabetical, or a star button in the navigation bar that
+toggles a filter? He chose the segment, as Konjugieren has it. The app still saves only the sort, so
+it always opens on the full list.
+
+Most of the phase was a port of Konjugieren's finished version, including what Josh asked for there
+after trying it: a Clear button on the Recent heading, which forgets opens and keeps stars, and swipe
+to delete, which asks first for a starred verb. Swipes exist only on a `List`, so My Verbs is a `List`
+of its own beside the verb list's `ScrollView`. That split hid one Conjugar-specific bug before it
+could bite. The search's refiltering was attached to the `ScrollView`, which is absent while My Verbs
+shows, so a search typed over My Verbs would have listed every verb unfiltered. The refiltering moved
+to the view around both.
+
+Konjugieren's worst bug in this phase was on the iPad: a tap on a recent verb ended the search at
+touch-down, the recents vanished under the finger, and the push then arrived while the search was
+still animating away, which UIKit drops. Conjugar had already ported both fixes in Phase 0, for the
+accent keys, so the recents only had to ride on them. On the iPad simulator, in Spanish and dark
+mode, a recent verb tapped from the focused field opened its page on the first try.
+
+The Spanish strings follow the app's tú: "Mis verbos", "Con estrella", "Recientes", and an alert that
+asks "¿Quitar la estrella de «tener»?". The privacy policy waiting for the 2027 release gains the
+star's signal, which says whether a verb ended up starred but not which, and loses a sentence that
+the record would have made untrue. It used to say the app "does not record" which verbs you look up.
+It now says the app does not send them, and a new paragraph says the list stays on the device.

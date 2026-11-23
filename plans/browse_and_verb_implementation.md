@@ -36,8 +36,8 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 8 | Done | 2026-11-22 | 5d2d435 | B4, A9 |
 | 9 | Done | 2026-11-22 | c40be1f | B6 |
 | 10 | Done | 2026-11-22 | 43d7b00 | C1 (links, control, quick action) |
-| 11 | Awaiting Josh | 2026-11-22 | | C1 (the intent), C2 |
-| 12 | Not started | | | D1, D2 |
+| 11 | Done | 2026-11-22 | 24b45fe | C1 (the intent), C2 |
+| 12 | Awaiting Josh | 2026-11-22 | | D1, D2 |
 | 13 | Not started | | | D2's quiz scope, D3 |
 | 14 | Not started | | | D5 |
 | 15 | Not started | | | D4 |
@@ -1499,7 +1499,7 @@ routes and their round trips.
 ## Phase 11: Look Up a Verb, and Spotlight
 
 **Ideas:** C1's intent, C2. **Ports:** Konjugieren Phase 11, second part. **Depends on:** Phases 5,
-9, and 10. **Status:** Awaiting Josh (2026-11-22).
+9, and 10. **Status:** Done (2026-11-22, 24b45fe).
 
 - **App Shortcuts.** Conjugar has none. Add an `AppShortcutsProvider` with English phrases only, as
   Konjugieren's convention is (C3, phrases in the app's second language, was rejected). Ask Josh
@@ -1613,7 +1613,7 @@ finds a verb by its title, and the device test is recorded as done or pending.
 ## Phase 12: Recents and My Verbs
 
 **Ideas:** D1, D2 apart from its quiz scope. **Ports:** Konjugieren Phase 12. **Depends on:**
-nothing. **Status:** Not started.
+nothing. **Status:** Awaiting Josh (2026-11-22).
 
 - One on-device record of the learner's verbs: each verb opened, with dates and a count, and each
   verb starred. Phases 13 to 16 read it, and the pedagogy plan will. Put it in the App Group
@@ -1652,7 +1652,55 @@ nothing. **Status:** Not started.
 **Done when** opens and stars survive a relaunch, recents appear in the focused empty field, My
 Verbs lists both, Clear and delete work, and tests pin the record's decoding of an older form.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh's answer (2026-11-22).** My Verbs is a third segment of the picker under the verb list
+  (Frequency, Alphabetical, My Verbs), as in Konjugieren, not a star in the navigation bar. Only a
+  sort is saved in Settings, so the app always opens on the full list, where the launch anchor is.
+- **What the code looks like.** `Shared/LearnerVerbs.swift` is Konjugieren's record with its field
+  renamed `infinitive`, keyed by the bare infinitive the verb map uses (arrepentir), so a
+  reflexive-only verb shows as arrepentirse through `VerbMapEntry.citationForm`. The app's store is
+  `Models/LearnerVerbStore.swift` (`Current.learnerVerbs`, `@Observable`), which answers in
+  `VerbMapEntry`s. `GetterSetterReal` gained `init(userDefaults:)`, and `World.device` and
+  `World.simulator` give the store one over `WidgetConstants.sharedDefaults`. `VerbListMode` lives in
+  `VerbSort.swift`. `docs/feature_architecture.md` § The Learner's Record has the whole design.
+- **Ported whole from Konjugieren's finished phase,** Josh's later additions included: Clear on the
+  Recent heading (forgets opens, keeps stars), swipe to delete with an alert for a starred verb, My
+  Verbs as a `List` beside the `ScrollView`, and the star in the navigation bar beside Share with
+  `tapStarVerb` and `starred`. Conjugar already had Konjugieren's iPad fixes from Phase 0
+  (`searchIsEngaged`, `ViewControllerTransitions`, and a `push` that waits for the search to go),
+  so the recents needed only to ride on them.
+- **One Conjugar-specific fix.** The search's `onChange(of: searchText)` and the sort's persistence
+  sat on the `ScrollView`, which is absent while My Verbs shows, so a search typed over My Verbs
+  would have shown the full list unfiltered. Both moved to the view around it, with the scroll to
+  the top left on the `ScrollView`. The Try a Quiz tip hides while the recents show.
+- **Recents as rows.** While they show, the list's rows are the recent verbs (`shownVerbs`), so
+  Return and the arrow keys reach them, and a row's source (`recent` or `browse`) is settled as it is
+  drawn, as Konjugieren's is. The heading reads "Recent" in place of the verb count.
+- **Strings.** Spanish uses tú, as the app's other Spanish strings do: "Mis verbos", "Con
+  estrella", "Recientes", "Borrar", "Añadir a Mis verbos", "¿Quitar la estrella de «tener»?".
+- **Analytics.** `tapStarVerb` with `starred` is new, and `recent` and `myVerbs` are now sent as
+  `viewVerbView`'s source. The staged policy section adds the star to the in-app actions, changes
+  "does not record … which verbs you look up" to "does not send", and adds a paragraph saying the
+  list stays on the device.
+- **What was tried where.** iPhone, English, light, compact: My Verbs empty; ir, arrepentirse, and
+  tener opened by link and tener starred by position (AXe cannot see the navigation bar's buttons);
+  after a relaunch, tener under Starred and arrepentirse, ir under Recent; the focused empty field
+  listing all three under Recent, and ir opened from it; a swipe deleting arrepentirse; a swipe on
+  tener raising "Remove the star from “tener”?" and Cancel keeping it; Clear emptying Recent and
+  keeping tener; the record read back from the App Group's defaults. iPad, Spanish, dark, regular:
+  the star's VoiceOver labels ("Añadir a Mis verbos", then "Quitar de Mis verbos"); My Verbs as a
+  full-width list; the recents as a grid in the focused empty field, and a tap on tener opening its
+  page, the iPad case Konjugieren had to fix. The taps were AXe touches, not pointer clicks. The iPad
+  was set back to English and light afterward. Not tried: VoiceOver itself, a hardware keyboard's
+  arrows over the recents, and the widget reading the record (Phase 14 will).
+- **Tests.** `LearnerVerbsTests`, 24 `@Test` functions: the record (opens, stars, recents, the
+  limit, ties, Clear, removal), its JSON (round trip, an entry with only its key and count, an
+  unknown field from a later build, garbage), the store (save and reload, removal and Clear, a verb
+  the map lacks, a reflexive-only verb), the list modes, and the signal's wire names. The whole suite
+  passes: 848 Swift Testing tests in 47 suites, plus the XCTest suites, in 56 seconds (43 to 48
+  after Phase 11). The new suite takes 0.2 seconds; ConjugationMap, at 18, is the slowest, as the
+  first suite to load the bundled map pays for it. The simulator language was English.
 
 ## Phase 13: A Quiz over Chosen Verbs
 

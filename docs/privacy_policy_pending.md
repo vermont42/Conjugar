@@ -164,3 +164,54 @@ El punto sobre las búsquedas, en la sección 2, queda así:
 ```
 - Cuando termina una búsqueda en la lista de verbos: dónde la empezó (por ejemplo, en la lista de verbos, el Centro de control, una acción rápida de la pantalla de inicio, un atajo o un enlace), si abrió un verbo, el tipo de coincidencia que lo encontró (por ejemplo, el infinitivo, una forma conjugada como fue, una grafía sin tildes, un significado en inglés o la conjetura de la aplicación ante una errata) y cifras aproximadas: la longitud de lo que escribió (de 1 a 2 letras, de 3 a 5, de 6 a 9, o 10 o más), cuántos verbos coincidieron (ninguno, 1, de 2 a 10, o más) y en qué lugar de la lista estaba el verbo que abrió (el primero, del segundo al quinto, o más abajo)
 ```
+
+## Recents, My Verbs, and the star (browse plan, Phase 12, 2026-11-22)
+
+Adds the signal `tapStarVerb`, sent on each tap of the star on a verb's page, with one parameter,
+`starred`: whether the verb is starred after the tap. It does not say which verb. Begins sending
+`recent` and `myVerbs` as the `source` of `viewVerbView`, which the first bullet's "the verb list"
+covers, so that bullet is unchanged. The app now keeps, on the device, a list of the verbs opened
+and starred, so the paragraph after the list can no longer say that the app does not record which
+verbs you look up. It now says the app does not send them, and a new paragraph says where the list
+stays. This rewrites the bullet about in-app actions that Phase 9's section rewrote, and the
+paragraph that the section on lookup signals rewrote; apply this wording in place of both.
+
+### English
+
+The bullet about in-app actions in section 2 now reads:
+
+```
+- Certain in-app actions: opening the game, reshowing the onboarding tour, tapping to rate or review the app, sending a message to the tutor, opening a tense's article from a verb's page, tapping to share a verb's page, and starring or unstarring a verb (whether the verb is starred afterward, but not which verb)
+```
+
+The paragraph after the list now reads:
+
+```
+Your quiz score and elapsed time are collected, but, like all of these analytics, they are anonymized and are not tied to your identity (see Section 4). The app does not send your quiz answers, which verbs you look up, or any text you type. That you searched is recorded, with the rough counts above; what you typed is not. That you opened a verb's page is recorded; which verb is not.
+```
+
+A new paragraph follows it:
+
+```
+To show your recent and starred verbs in My Verbs, the app keeps a list of the verbs you open and star, with when you opened them and how often. The list stays on your device, in storage shared only with the app's own widgets. It is never sent to the developer or to anyone else, and it is deleted when you delete the app. You can clear the recent verbs, or remove any verb from the list, in My Verbs.
+```
+
+### Spanish
+
+El punto sobre las acciones dentro de la aplicación, en la sección 2, queda así:
+
+```
+- Ciertas acciones dentro de la aplicación: abrir el juego, volver a mostrar la introducción, tocar para valorar o reseñar la aplicación, enviar un mensaje al tutor, abrir el artículo de un tiempo verbal desde la página de un verbo, tocar para compartir la página de un verbo y marcar o desmarcar un verbo con una estrella (si el verbo queda marcado, pero no de qué verbo se trata)
+```
+
+El párrafo que sigue a la lista queda así:
+
+```
+Su puntuación y el tiempo transcurrido se recopilan, pero, como todas estas estadísticas, están anonimizados y no están vinculados a su identidad (véase la sección 4). La aplicación no envía sus respuestas del cuestionario, qué verbos consulta ni ningún texto que escriba. Se registra que usted hizo una búsqueda, con las cifras aproximadas indicadas arriba, pero no lo que escribió. Se registra que abrió la página de un verbo, pero no de cuál.
+```
+
+Le sigue un párrafo nuevo:
+
+```
+Para mostrar sus verbos recientes y marcados con una estrella en Mis verbos, la aplicación guarda una lista de los verbos que abre y marca, con la fecha en que los abrió y cuántas veces. La lista se queda en su dispositivo, en un almacenamiento que solo comparte con los widgets de la propia aplicación. Nunca se envía al desarrollador ni a nadie más, y se borra al eliminar la aplicación. En Mis verbos puede borrar los verbos recientes o quitar cualquier verbo de la lista.
+```

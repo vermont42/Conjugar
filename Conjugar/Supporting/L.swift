@@ -837,6 +837,51 @@ nonisolated enum L {
     }
   }
 
+  /// The learner's starred and recent verbs (browse plan, Phase 12).
+  enum MyVerbs {
+    static var title: String {
+      String(localized: "MyVerbs.title")
+    }
+
+    static var starred: String {
+      String(localized: "MyVerbs.starred")
+    }
+
+    static var recent: String {
+      String(localized: "MyVerbs.recent")
+    }
+
+    /// Forgets every verb opened and keeps the stars.
+    static var clearRecent: String {
+      String(localized: "MyVerbs.clearRecent")
+    }
+
+    static var delete: String {
+      String(localized: "MyVerbs.delete")
+    }
+
+    static var emptyTitle: String {
+      String(localized: "MyVerbs.emptyTitle")
+    }
+
+    static var emptyDescription: String {
+      String(localized: "MyVerbs.emptyDescription")
+    }
+
+    /// The alert a swipe on a starred verb raises: "Remove the star from “tener”?"
+    static func unstarTitle(verb: String) -> String {
+      String(localized: "MyVerbs.unstarTitle \(verb)")
+    }
+
+    static var unstarMessage: String {
+      String(localized: "MyVerbs.unstarMessage")
+    }
+
+    static var unstarConfirm: String {
+      String(localized: "MyVerbs.unstarConfirm")
+    }
+  }
+
   enum VerbSort {
     static var frequency: String {
       String(localized: "VerbSort.frequency")
@@ -896,6 +941,16 @@ nonisolated enum L {
     /// anchors to.
     static var share: String {
       String(localized: "Verb.share")
+    }
+
+    /// The star in the verb page's navigation bar, while the verb is not in My Verbs.
+    static var star: String {
+      String(localized: "Verb.star")
+    }
+
+    /// The star in the verb page's navigation bar, while the verb is in My Verbs.
+    static var unstar: String {
+      String(localized: "Verb.unstar")
     }
 
     /// The long-press menu's item, and the VoiceOver action, that copies a form.

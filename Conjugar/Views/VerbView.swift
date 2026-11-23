@@ -140,6 +140,20 @@ struct VerbView: View {
     .navigationTitle(ReflexivePronoun.citationForm(of: verb).capitalized)
     .navigationBarTitleDisplayMode(.large)
     .toolbar {
+      // Beside Share, so that the top of the page is unchanged (browse plan, Phase 12).
+      ToolbarItem(placement: .topBarTrailing) {
+        let isStarred = Current.learnerVerbs.isStarred(verb)
+        Button {
+          let isNowStarred = Current.learnerVerbs.toggleStar(verb)
+          Current.analytics.signal(name: .tapStarVerb, parameters: [
+            ParameterKey.starred.rawValue: "\(isNowStarred)"
+          ])
+        } label: {
+          Label(isStarred ? L.Verb.unstar : L.Verb.star, systemImage: isStarred ? "star.fill" : "star")
+        }
+        .sensoryFeedback(.selection, trigger: isStarred)
+        .accessibilityIdentifier("verb_star_button")
+      }
       ToolbarItem(placement: .topBarTrailing) {
         Button {
           Current.analytics.signal(name: .tapShareVerb)
@@ -184,6 +198,10 @@ struct VerbView: View {
     }
     let newVisit = VerbVisit(source: source, start: .now, visibleSections: visibleSections)
     visit = newVisit
+    // An open is the page's arrival by any route. A page that comes back is not a new one.
+    if source != .resume {
+      Current.learnerVerbs.recordOpen(verb)
+    }
     Current.analytics.signal(name: .viewVerbView, parameters: newVisit.viewParameters)
   }
 

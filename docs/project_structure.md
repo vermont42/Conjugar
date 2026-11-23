@@ -110,7 +110,9 @@ Conjugar/
 │   ├── Region.swift            # Setting enum: Spain vs. Latin America (TTS accent + score modifier)
 │   ├── SecondSingularBrowse.swift  # Setting enum: which 2s form(s) the browse screens show
 │   ├── SecondSingularQuiz.swift    # Setting enum: which 2s form the quiz asks for
-│   ├── VerbSort.swift          # Verb-list sort order (frequency / alphabetical) + the Spanish collation locale
+│   ├── VerbSort.swift          # Verb-list sort order (frequency / alphabetical) + the Spanish collation locale, and
+│   │                           #   VerbListMode, the picker's three segments (the two sorts and My Verbs)
+│   ├── LearnerVerbStore.swift  # Current.learnerVerbs: records opens and stars in LearnerVerbs, saves to the App Group
 │   ├── ModelSort.swift         # Model-list sort order (irregularity / alphabetical / class number)
 │   ├── VerbType.swift          # verbModelMap `vt` marker: irregular / regular -ar / -er / -ir
 │   ├── VerbFamilies.swift      # The hand-curated verb lists the quiz builds questions from
@@ -157,7 +159,7 @@ Conjugar/
 │   ├── GameCenterReal.swift    # GKLocalPlayer authentication, score reporting, leaderboard presentation
 │   ├── GetterSetter.swift      # Protocol for string key-value storage
 │   ├── GetterSetterFake.swift  # In-memory dictionary implementation for tests
-│   ├── GetterSetterReal.swift  # UserDefaults implementation
+│   ├── GetterSetterReal.swift  # UserDefaults implementation (the standard defaults, or the App Group's for LearnerVerbs)
 │   ├── GlyphWarmer.swift       # Pre-rasterizes emoji glyphs so the game's first flag emoji doesn't stall the render thread
 │   ├── GradientDivider.swift   # Hairline separator that fades to transparent, for splitting sections inside a card()
 │   ├── HapticPlayer.swift      # The haptics seam, protocol-injected like SoundPlayer
@@ -211,9 +213,9 @@ Conjugar/
     ├── TutorView.swift         # The conjugation-tutor chat screen
     ├── SpanishLetterKeyRow.swift  # á é í ó ú ü ñ keys with an insert closure; replaces the Verbs sort picker while search is focused
     ├── VerbEntryList.swift     # Lazy verb rows (compact) or carded grid (regular) that open a verb; a model's page and the related list use it
-    ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; carries the browse_verb_count launch anchor
+    ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; recents in the focused empty field; the My Verbs list; carries the browse_verb_count launch anchor
     ├── VerbSearchCommands.swift  # Command-F as a top-level menu (Verbs › Find a Verb) that opens the verb search through AppRouter.openSearch
-    └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples, related verbs; the pill opens the model; sends viewVerbView/leaveVerbView per VerbVisit
+    └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples, related verbs; the pill opens the model; the star and Share in the navigation bar; sends viewVerbView/leaveVerbView per VerbVisit and records each open
 
 ConjugarWidget/
 ├── AnswerQuizIntent.swift      # Interactive AppIntent behind the Quiz widget's answer buttons
@@ -251,6 +253,7 @@ Shared/                         # Compiled into both the app and the widget exte
 ├── OpenRandomVerbControlIntent.swift  # The Random Verb control's own hidden copy of it (source=control)
 ├── OpenVerbSearchIntent.swift  # The Find a Verb control's hidden intent: stashes conjugar://search?source=control
 ├── QuizActivityAttributes.swift  # The ActivityKit contract shared by LiveActivityManager and QuizLiveActivity
+├── LearnerVerbs.swift          # The learner's record: verbs opened (dates, count) and starred, as JSON in the App Group (browse Phase 12)
 ├── WidgetConstants.swift       # App Group id, snapshot filename, and the shared-defaults keys
 ├── WidgetL.swift               # Widget-target localization accessors mirroring L, with English defaultValues
 └── WidgetSnapshot.swift        # The Codable payload the app precomputes and the widget renders
@@ -286,6 +289,7 @@ ConjugarTests/
 │   ├── KeyConjugationTests.swift       # The four key conjugations (regular, stem-changing, irregular, reflexive, defective),
 │   │                                   #   the share text, URL.appStore, and what a long press copies
 │   ├── VerbSortTests.swift             # Verb-list sort orders and Spanish collation
+│   ├── LearnerVerbsTests.swift         # The learner's record (opens, stars, recents, Clear, delete, older JSON), its store, the list modes
 │   ├── VerbFamiliesTests.swift         # Guard-rail: every hand-curated quiz verb resolves in the verb map
 │   ├── QuizTests.swift                 # Quiz logic, scoring, and timer, driven through the @Observable model
 │   ├── QuizGoldenFormsTests.swift      # Golden forms: proves the quiz asks for correct Spanish, not just self-consistent Spanish

@@ -363,6 +363,18 @@ disagree, the note wins.
     itself.
 - **The learner's record** (browse Phase 12): `LearnerVerbs` in `Shared/`, recents, stars, and the My
   Verbs filter.
+  - *Landed 2026-11-22 (browse Phase 12):* `LearnerVerbs` (`Shared/LearnerVerbs.swift`,
+    `nonisolated`, Codable) keys an `Entry` by bare infinitive (arrepentir, not arrepentirse): first
+    and last opened, `openCount`, and the date starred. `starred`, `recent(limit:)` (20 by default),
+    and `myVerbs` (starred, then recent unstarred) answer in infinitives. The app reads it through
+    `Current.learnerVerbs`, a `LearnerVerbStore` (`Models/`, `@Observable`) that answers in
+    `VerbMapEntry`s and saves each change as JSON in the App Group's defaults
+    (`WidgetConstants.sharedDefaults`, key `LearnerVerbs.storageKey`), so the widget can decode it
+    with `LearnerVerbs(json:)`. **A field added to `Entry`, such as a due date or a practice box,
+    must be optional**, or every record written before it decodes as nothing;
+    `LearnerVerbsTests.anEntryWithoutItsOptionalFieldsDecodes` pins this. An open is recorded where
+    `viewVerbView` is sent with any source but `resume`. Phase 10 here may prefer to keep its
+    practice record beside this one, as Konjugieren's `PracticeRecord` is, rather than in it.
 - **A scoped quiz** (browse Phase 13): `QuizScope`, Test Me in a sheet, a My Verbs scope on the Quiz
   tab, `source` on the three quiz signals, and the rule that scoped quizzes do not rank.
 - **Frequency bands** (browse Phase 14): top 100, 300, and 1,000, defined once.

@@ -9,7 +9,13 @@
 import Foundation
 
 class GetterSetterReal: GetterSetter {
-  private let userDefaults = UserDefaults.standard
+  private let userDefaults: UserDefaults
+
+  /// The App Group's defaults, given here, hold what the widget extension reads, such as
+  /// `LearnerVerbs`. Settings stay in the standard defaults.
+  init(userDefaults: UserDefaults = .standard) {
+    self.userDefaults = userDefaults
+  }
 
   func get(key: String) -> String? {
     return userDefaults.string(forKey: key)

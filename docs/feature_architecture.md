@@ -82,6 +82,7 @@ made from a form is still `guess`. Rows and verbs correspond one to one, as befo
 |---|---|---|
 | `tapTenseArticle` | None | When the ⓘ beside a tense's heading on a verb page opens that tense's article (Phase 6). The article itself also sends `viewInfoView`. It does not say which tense or which verb |
 | `tapShareVerb` | None | On each tap of the share button in a verb page's navigation bar (Phase 9), whether or not the learner then shares. It does not say which verb. Copying a form, by a long press or from the share sheet, sends nothing |
+| `tapStarVerb` | `starred` (`true` or `false`) | On each tap of the star in a verb page's navigation bar (Phase 12). `starred` is the state after the tap, since a count of taps alone cannot tell starring from unstarring. It does not say which verb |
 
 ### The `source` vocabulary
 
@@ -98,9 +99,9 @@ field. Phase 13 adds it to the quiz signals.
 | `list` | No | Phase 16: a verb opened from a collection |
 | `lookup` | Yes | The Look Up a Verb shortcut (Phase 11): for `viewVerbView`, the page it opened when one verb answered; for `finishSearch`, the search it opened otherwise |
 | `model` | Yes | A verb row on a model's page, in the Models tab or reached from a verb page's pill |
-| `myVerbs` | No | Phase 12: the My Verbs list |
+| `myVerbs` | Yes | A row of My Verbs, the verb list's third segment (Phase 12) |
 | `quickAction` | Yes | `finishSearch` only: a search begun from the Find a Verb Home Screen quick action (Phase 10) |
-| `recent` | No | Phase 12: the recent verbs |
+| `recent` | Yes | A recent verb, listed while the search field is focused and empty (Phase 12) |
 | `related` | Yes | A chip on a verb page's Related Verbs card, or a row of the full list it opens (Phase 8) |
 | `resume` | Yes | A page that came back after another tab, a pushed page, or the background |
 | `reviewCard` | No | Phase 15: the review card |
@@ -544,3 +545,49 @@ with `VerbSearch` before cutting at 25; no shortcut takes a `VerbEntity` yet.
 **Konjugieren's lesson, kept for a future change:** deleting app entities by type empties every
 index of the app, the named one included, so delete before indexing, never after.
 
+
+## The Learner's Record
+
+Built by browse Phase 12 (2026-11-22), ported from Konjugieren's Phase 12.
+
+**The record.** `LearnerVerbs` (`Shared/LearnerVerbs.swift`, `nonisolated`, Codable) holds one
+`Entry` per verb, keyed by the bare infinitive the verb map uses (arrepentir, never arrepentirse):
+first and last opened, `openCount`, and the date starred. A verb neither opened since the last
+Clear nor starred has no entry. `recent(limit:)` (20 by default) and `starred` are newest first,
+ties broken by infinitive; `myVerbs` is the starred verbs, then the recent ones not starred.
+`remove(_:)` forgets a verb entirely; `clearRecents()` forgets every open and keeps the stars.
+
+**Storage.** `Current.learnerVerbs` is a `LearnerVerbStore` (`Models/LearnerVerbStore.swift`,
+`@Observable`), which saves the record as JSON after each change, under `LearnerVerbs.storageKey`,
+through a `GetterSetterReal` given the App Group's defaults (`WidgetConstants.sharedDefaults`). The
+widget extension can therefore decode it with `LearnerVerbs(json:)`, which Phase 14 will. The unit
+and UI-test worlds use a `GetterSetterFake`. The store answers in `VerbMapEntry`s and skips an
+infinitive the verb map lacks. To read the record in the simulator: `xcrun simctl spawn <udid>
+defaults read <group container>/Library/Preferences/group.biz.joshadams.Conjugar learnerVerbs`,
+where the container comes from `xcrun simctl get_app_container <udid> biz.joshadams.Conjugar
+groups`.
+
+**Every field added to `Entry` later must be optional.** Synthesized decoding requires every
+non-optional key, so a new non-optional field would make every older record decode as nothing, and
+the learner's verbs would vanish silently. `LearnerVerbsTests` pins the decoding of an entry with
+only its key and count.
+
+**An open** is a verb page's arrival by any route, recorded in `VerbView.beginVisit` whenever
+`viewVerbView` is sent with a source other than `resume`. A page that comes back after another tab,
+a pushed page, or the background is not a new open.
+
+**Where it shows.**
+
+- **Recents.** While the verb list's search field is focused and empty, the list shows "Recent" and
+  the recent verbs in place of every verb (`VerbBrowseView.showsRecents`), as rows the arrow keys
+  and Return reach. They follow `searchIsEngaged`, which lets go of the focus 0.7 seconds late,
+  and a row's push waits on `ViewControllerTransitions.waitUntilIdle()` when the search is ending,
+  both for the iPad bug Konjugieren found. A row opens with source `recent`.
+- **My Verbs** is the third segment of the picker under the list (`VerbListMode`: Frequency,
+  Alphabetical, My Verbs; Josh chose this over a star in the navigation bar, 2026-11-22). Only a
+  sort is saved in Settings, so the app opens on the full list. My Verbs is a `List` of its own, so
+  that rows can be swiped: Starred, then Recent with a Clear button, and an empty state. A swipe
+  forgets the verb; a starred one asks first. Typing searches every verb, whatever the picker says.
+  A row opens with source `myVerbs`.
+- **The star** sits in the verb page's navigation bar beside Share, reads "Add to My Verbs" or
+  "Remove from My Verbs", and sends `tapStarVerb` with `starred`.

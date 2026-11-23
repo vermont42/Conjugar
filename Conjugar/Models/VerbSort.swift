@@ -39,3 +39,37 @@ enum VerbSort: String, CaseIterable {
     entries.sorted(by: areInIncreasingOrder)
   }
 }
+
+/// What the verb list shows while its search field is empty: every verb in a sort order, or My
+/// Verbs (browse plan, Phase 12). The picker under the list offers all three. Only a sort is saved
+/// in Settings, so the app always opens on the full list, where the launch anchor is.
+enum VerbListMode: Hashable, CaseIterable {
+  case frequency
+  case alphabetical
+  case myVerbs
+
+  init(sort: VerbSort) {
+    switch sort {
+    case .frequency:
+      self = .frequency
+    case .alphabetical:
+      self = .alphabetical
+    }
+  }
+
+  /// The sort order this mode lists every verb in, or nil for My Verbs.
+  var sort: VerbSort? {
+    switch self {
+    case .frequency:
+      return .frequency
+    case .alphabetical:
+      return .alphabetical
+    case .myVerbs:
+      return nil
+    }
+  }
+
+  var localizedDisplayName: String {
+    sort?.localizedDisplayName ?? L.MyVerbs.title
+  }
+}

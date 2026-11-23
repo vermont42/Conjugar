@@ -24,6 +24,8 @@ class World {
   var getterSetter: GetterSetter
   var soundPlayer: SoundPlayer
   var hapticPlayer: HapticPlayer
+  /// The learner's opened and starred verbs, kept in the App Group so the widget can read them.
+  var learnerVerbs: LearnerVerbStore
 
   private static let fakeRatingsCount = 42
 
@@ -37,7 +39,8 @@ class World {
     languageModelService: LanguageModelService,
     getterSetter: GetterSetter,
     soundPlayer: SoundPlayer,
-    hapticPlayer: HapticPlayer
+    hapticPlayer: HapticPlayer,
+    learnerVerbs: LearnerVerbStore
   ) {
     self.analytics = analytics
     self.reviewPrompter = reviewPrompter
@@ -49,6 +52,13 @@ class World {
     self.getterSetter = getterSetter
     self.soundPlayer = soundPlayer
     self.hapticPlayer = hapticPlayer
+    self.learnerVerbs = learnerVerbs
+  }
+
+  /// The App Group's defaults, where the record of the learner's verbs lives. The standard
+  /// defaults stand in should the group be unavailable, so that the record is still kept.
+  private static var sharedGetterSetter: GetterSetterReal {
+    GetterSetterReal(userDefaults: WidgetConstants.sharedDefaults ?? .standard)
   }
 
   // Under the SwiftUI App lifecycle there is no custom main.swift to select a
@@ -83,7 +93,8 @@ class World {
       languageModelService: LanguageModelServiceReal(),
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerReal(),
-      hapticPlayer: HapticPlayerReal()
+      hapticPlayer: HapticPlayerReal(),
+      learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter)
     )
   }()
 
@@ -102,7 +113,8 @@ class World {
       languageModelService: LanguageModelServiceReal(),
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerReal(),
-      hapticPlayer: HapticPlayerReal()
+      hapticPlayer: HapticPlayerReal(),
+      learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter)
     )
   }()
 
@@ -121,7 +133,8 @@ class World {
       languageModelService: LanguageModelServiceDummy(),
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerDummy(),
-      hapticPlayer: HapticPlayerDummy()
+      hapticPlayer: HapticPlayerDummy(),
+      learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake())
     )
   }()
 
@@ -161,7 +174,8 @@ class World {
       languageModelService: LanguageModelServiceDummy(),
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerDummy(),
-      hapticPlayer: HapticPlayerDummy()
+      hapticPlayer: HapticPlayerDummy(),
+      learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake())
     )
   }
 }

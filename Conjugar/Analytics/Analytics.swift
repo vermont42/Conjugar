@@ -26,6 +26,8 @@ nonisolated enum ParameterKey: String {
   case score
   case source
   case stage
+  /// `tapStarVerb`'s state after the tap, `true` or `false` (browse plan, Phase 12).
+  case starred
 }
 
 nonisolated enum AnalyticsName: String {
@@ -45,6 +47,9 @@ nonisolated enum AnalyticsName: String {
   /// it does not say which verb. Copying a form sends nothing.
   case tapShareVerb
   case tapShowOnboarding
+  /// The star in a verb page's navigation bar (browse plan, Phase 12). Carries `starred`, the
+  /// state after the tap, and does not say which verb.
+  case tapStarVerb
   /// The ⓘ beside a tense's heading on a verb page (browse plan, Phase 6). No parameters.
   case tapTenseArticle
   case viewInfoBrowseView
