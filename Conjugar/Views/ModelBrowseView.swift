@@ -137,17 +137,17 @@ struct ModelBrowseView: View {
       .searchable(text: $searchText, prompt: L.BrowseModels.searchPrompt)
       .sensoryFeedback(.selection, trigger: sort)
       .navigationTitle(L.BrowseModels.localizedTitle)
-      .navigationDestination(for: ModelInfo.self) { model in
-        ModelView(model: model) { verb in navigationPath.append(VerbDestination(infinitive: verb, source: .model)) }
-      }
       .navigationDestination(for: VerbDestination.self) { destination in
         VerbView(verb: destination.infinitive, source: destination.source)
       }
+      .verbPageDestinations()
       .onAppear {
         Current.analytics.signal(name: .viewModelBrowseView)
         Current.reviewPrompter.promptableActionHappened()
       }
     }
+    // A model page, a verb page, and the pages they lead to push onto this stack.
+    .environment(\.verbPagePush, VerbPagePush { navigationPath.append($0) })
   }
 }
 

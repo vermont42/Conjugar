@@ -89,11 +89,11 @@ to `finishSearch` too (where the search began); this app's Phase 10 or 11 may do
 | `infoLink` | No | Reserved for a link from an Info article to a verb |
 | `list` | No | Phase 16: a verb opened from a collection |
 | `lookup` | No | Phase 11: the Look Up a Verb intent |
-| `model` | Yes | A verb row on a model's page in the Models tab |
+| `model` | Yes | A verb row on a model's page, in the Models tab or reached from a verb page's pill |
 | `myVerbs` | No | Phase 12: the My Verbs list |
 | `quickAction` | No | Phase 10: a Home Screen quick action |
 | `recent` | No | Phase 12: the recent verbs |
-| `related` | No | Phase 8: another verb's page |
+| `related` | Yes | A chip on a verb page's Related Verbs card, or a row of the full list it opens (Phase 8) |
 | `resume` | Yes | A page that came back after another tab, a pushed page, or the background |
 | `reviewCard` | No | Phase 15: the review card |
 | `search` | Yes | A result of a search that found something |
@@ -277,4 +277,40 @@ other. Reaching the etymology or the examples invalidates it. Each, once closed,
 
 **The iPad grid** (`BrowseLayout.detailColumns`) aligns its cells to the top, so that a five-row
 imperative beside a seven-row tense starts level with it.
+
+### Ways between verbs
+
+Built 2026-11-22 by Phase 8 of the browse plan, porting Konjugieren's Phase 9.
+
+**The pill** that names a verb's model ("Regular AR ›", "Irreg. ☛ tener ›") opens that model's page
+(`ModelInfo.row(for:)`, which folds the alias classes 29-2, 30-1, 31-1, and 32-1 into their parents).
+
+**The Related Verbs card** (`Views/RelatedVerbsView.swift`) sits at the bottom of the page, below the
+examples (Josh, 2026-11-22, as for Konjugieren). It has up to two rows of chips, six verbs each:
+
+- **Built on tener**: the verbs that share the page's root, the root first, then by frequency. "All
+  N" opens `RelatedVerbListView`, every verb of the root with a Frequency/Alphabetical control,
+  Frequency first.
+- **Conjugated like cantar**: one verb per other root among the model's verbs, by frequency (the root
+  verb when it uses the model, else the model's most frequent verb built on it). "All N" opens the
+  model's page. The row is absent when every verb of the model shares the page's root, as for tener.
+
+**The relation** is `VerbRelations` (`Models/RelatedVerbs.swift`), computed once from the verb map. A
+verb's base is the longest verb of the map that ends it after a known Spanish prefix and whose class
+number has the same leading number (contener 31-1 on tener 31; predecir 28-1 on decir 28). Its root
+follows bases inward (desaparecer → aparecer → parecer). Bases must be verbs: tails such as -ducir
+and -scribir would also join esperar with operar, and their verbs already share a model (Josh,
+2026-11-22). `falseCompounds` lists 59 verbs that look built on a verb but are not (trabajar on
+bajar, escapar on capar), read from the 2,000 most frequent verbs, so a few false pairs remain among
+rarer ones. 976 verbs have a base; 605 roots have at least one other verb built on them.
+
+**Navigation.** A verb page is pushed from two stacks, the Verbs tab and the Models tab. Each injects
+`VerbPagePush` (an environment action that appends to its own path) and registers the destinations
+`verbPageDestinations()` names (`ModelInfo`, `RelatedVerbListDestination`), so the pill and the card
+work in both tabs, and a learner who arrived from a widget reaches a model's page without switching
+tabs. `ModelView` pushes its verbs through the same action; its old `onSelectVerb` closure is gone.
+
+**A model's page** has a Frequency/Alphabetical control above its verb list, Alphabetical by default
+and not stored. The list (`VerbEntryList`, shared with the full related list) is lazy in both size
+classes, since the cantar model holds 2,968 verbs.
 

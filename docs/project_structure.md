@@ -95,7 +95,8 @@ Conjugar/
 │   ├── MedievalExample.swift   # One Medieval-Spanish verse: work, ref, Old-Spanish line, translation
 │   ├── MedievalData.swift      # Load-once MedievalExamples.json cache keyed by bare infinitive
 │   ├── Info.swift              # Info article model: InfoSection + heading/body parsed into richTextBlocks
-│   ├── ModelInfo.swift         # The Models tab's row model: class number, exemplar, verbs, irregularity percent
+│   ├── ModelInfo.swift         # The Models tab's row model: class number, exemplar, verbs, irregularity percent; row(for:) a verb
+│   ├── RelatedVerbs.swift      # VerbRelations: each verb's base and root (detener → tener), and the verb page's related verbs
 │   │
 │   │  ── quiz, settings vocabulary, services ──
 │   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks
@@ -152,6 +153,7 @@ Conjugar/
 │   ├── HapticPlayer.swift      # The haptics seam, protocol-injected like SoundPlayer
 │   ├── HapticPlayerDummy.swift # No-op so the test worlds never touch the Taptic Engine
 │   ├── HapticPlayerReal.swift  # UIKit feedback generators, held and re-prepare()d for low latency
+│   ├── FlowLayout.swift        # A Layout that wraps its children into rows (the related-verb chips), ported from Konjugieren
 │   ├── IntExtension.swift      # Int.timeString — elapsed seconds as h:mm:ss
 │   ├── KillSwitches.swift      # Compile-time screenshot kill switches: TipDisplay, OnboardingDisplay, TutorDisplay
 │   ├── Layout.swift            # Spacing/geometry constants (8/16/24 pt, readingWidth 680, cornerRadius 12)
@@ -185,18 +187,20 @@ Conjugar/
     ├── InfoView.swift          # Info-article detail; a tapped %…% term opens a URL or pushes another article
     ├── MainTabView.swift       # The app shell: a five-tab TabView, onboarding presentation, game full-screen cover
     ├── ModelBrowseView.swift   # Sortable, searchable list of every verb model with irregularity badges
-    ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, and the verbs using the model
+    ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, and the verbs using the model, by frequency or alphabetically
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
     ├── QuizView.swift          # Quiz gameplay: prompt, answer field, timer, score
     ├── ResultsView.swift       # Quiz results with the hero score numeral and the leaderboard button
+    ├── RelatedVerbsView.swift  # The verb page's Related Verbs card, the full related list, VerbPagePush, and verbPageDestinations()
     ├── RichTextView.swift      # Renders parsed [RichTextBlock] as native SwiftUI Text
     ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center, onboarding reshow, Play
     ├── TutorTestView.swift     # Batch tutor harness (~30 queries, ShareLink export); reached by triple-tapping the tutor title
     ├── TutorView.swift         # The conjugation-tutor chat screen
     ├── SpanishLetterKeyRow.swift  # á é í ó ú ü ñ keys with an insert closure; replaces the Verbs sort picker while search is focused
+    ├── VerbEntryList.swift     # Lazy verb rows (compact) or carded grid (regular) that open a verb; a model's page and the related list use it
     ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; carries the browse_verb_count launch anchor
     ├── VerbSearchCommands.swift  # Command-F as a top-level menu (Verbs › Find a Verb) that focuses the verb search
-    └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples; sends viewVerbView/leaveVerbView per VerbVisit
+    └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples, related verbs; the pill opens the model; sends viewVerbView/leaveVerbView per VerbVisit
 
 ConjugarWidget/
 ├── AnswerQuizIntent.swift      # Interactive AppIntent behind the Quiz widget's answer buttons
@@ -260,6 +264,8 @@ ConjugarTests/
 │   ├── ConjugationResultTests.swift    # Answer scoring, incl. the diacritic-folding partial match
 │   ├── ModelInfoTests.swift            # Models-tab row construction and irregularity percent
 │   ├── ModelSortTests.swift            # Model-list sort orders
+│   ├── RelatedVerbsTests.swift         # Bases and roots (tener, decir, formar), the class and prefix rules, false compounds,
+│   │                                   #   model relatives one per root by frequency, and the pill's model row
 │   ├── VerbSortTests.swift             # Verb-list sort orders and Spanish collation
 │   ├── VerbFamiliesTests.swift         # Guard-rail: every hand-curated quiz verb resolves in the verb map
 │   ├── QuizTests.swift                 # Quiz logic, scoring, and timer, driven through the @Observable model

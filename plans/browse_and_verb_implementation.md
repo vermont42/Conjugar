@@ -32,8 +32,8 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 4 | Done | 2026-11-22 | fe24e92 | A5 (the map) |
 | 5 | Done | 2026-11-22 | 6c0ed97 | A5 (the search) |
 | 6 | Done | 2026-11-22 | 6c0ed97 | B3, B5's tip |
-| 7 | Awaiting Josh | 2026-11-22 | | B7's article |
-| 8 | Not started | | | B4, A9 |
+| 7 | Done | 2026-11-22 | 048f585 | B7's article |
+| 8 | Awaiting Josh | 2026-11-22 | | B4, A9 |
 | 9 | Not started | | | B6 |
 | 10 | Not started | | | C1 (links, control, quick action) |
 | 11 | Not started | | | C1 (the intent), C2 |
@@ -1128,7 +1128,7 @@ as described on a fresh install, the doc and script reproduce the count, and tes
 ## Phase 7: An Article on Periphrasis
 
 **Ideas:** B7's verdict, by analogy. **Ports:** Konjugieren Phase 8. **Depends on:** nothing.
-**Status:** Awaiting Josh (2026-11-22). **Accepted** (Josh, 2026-11-22), on ir a + infinitivo and
+**Status:** Done (2026-11-22, 048f585). **Accepted** (Josh, 2026-11-22), on ir a + infinitivo and
 estar + gerundio.
 
 Konjugieren's B7 found the verb page lacking two constructions a learner meets every day (the Futur
@@ -1208,7 +1208,7 @@ check how articles are addressed before choosing a position in the list.
 ## Phase 8: Ways Between Verbs
 
 **Ideas:** B4, A9. **Ports:** Konjugieren Phase 9. **Depends on:** nothing; Phase 2's `related` and
-`model` sources apply if it is done. **Status:** Not started.
+`model` sources apply if it is done. **Status:** Awaiting Josh (2026-11-22).
 
 - **B4.** The verb page leads to related verbs: the model's page (make the existing "Irregular
   (like tener)" or "Regular AR" pill a link, which Konjugieren's ideas document sized as small),
@@ -1244,7 +1244,71 @@ hand, and say how many verbs have a base, and how many bases are not themselves 
 model relatives, the model page sorts both ways, and tests pin the relations for tener, decir, and
 a regular verb.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh's decisions (2026-11-22), from screenshots of the built card.** (1) The Related Verbs card
+  stays at the bottom of the page, below the examples, and the top changes only by a chevron in the
+  pill. (2) Only verbs count as bases; see below.
+- **The base relation** is `VerbRelations` (`Models/RelatedVerbs.swift`), computed once from the
+  verb map. A base is the longest verb of the map that ends the verb after a known prefix (a list of
+  56) and whose class number has the same leading number: contener (31-1) on tener (31), predecir
+  (28-1) and bendecir (28-2) on decir (28). That is the engine's relation stated in the book's terms,
+  and the class rule does real work: it keeps presentar (1) off sentar (4A) and andar off dar. Without
+  a prefix list the rule matched -izar and -ear verbs to anything (realizar on "alizar"), so the list
+  is needed; res- and tra- were dropped from it because they mostly matched by accident (respetar on
+  petar, trabajar on bajar). Reading every pair among the 2,000 most frequent verbs found more false
+  ones (escapar on capar, solicitar on licitar, estimar on timar, comparar on parar), and a few
+  bases that no real compound uses (piar, pirar, timar), whose rarer verbs were added too;
+  `falseCompounds` lists 59 verbs in all.
+  Rarer verbs were sampled, not read, so a few false pairs remain there. **976 verbs have a base, and
+  605 roots have at least one other verb built on them.** A root follows bases inward (desaparecer →
+  aparecer → parecer).
+- **No base that is not a verb.** The plan asked how many bases are not verbs. A tail such as -ducir
+  or -scribir, shared by two or more verbs of one class after a prefix, gives 257 groups, and many
+  are noise (esperar, imperar, operar, and superar on "-perar"; abultar, exultar, and resultar on
+  "-ultar"). The good ones, -ducir (34) and -scribir (3-11), already share a model, so the model row
+  shows them. Josh chose verbs only (2026-11-22). escribir therefore has no "Built on" row.
+- **The card** has up to two rows: "Built on tener" (the root first, then by frequency, six chips,
+  then "All N" to `RelatedVerbListView`, Frequency first) and "Conjugated like cantar" (one verb per
+  other root among the model's verbs, by frequency, then "All N" to the **model's page** rather than
+  a separate list, since that page now sorts both ways). Konjugieren's third row, its family chips,
+  has no analog, because the pill already opens the model. The model row is absent when every verb of
+  the model shares the root (tener's, decir's). In Spanish: "Verbos Relacionados", "Formados con
+  tener", "Se conjugan como cantar", "Ver los 9".
+- **The pill** ("Regular AR ›", "Irreg. ☛ tener ›") pushes the model's page, found by
+  `ModelInfo.row(for:)`, which folds the alias classes into their parents as the Models tab does. Its
+  hit area grows to 44 points with `Layout.pillTapInset`, without moving the rows below. VoiceOver
+  hears a hint, "Shows every verb of this model".
+- **Navigation** is Konjugieren's `VerbPagePush`, injected by the Verbs and Models stacks, with
+  `verbPageDestinations()` registering `ModelInfo` and `RelatedVerbListDestination` in both. The Verbs
+  tab can now show a model's page. `ModelView`'s `onSelectVerb` closure is gone; it pushes through
+  the same action. Where no stack injects the action (none today), the pill is plain text and the
+  card is hidden.
+- **A9.** The model page's Frequency/Alphabetical control sits above "N verbs use this model",
+  Alphabetical by default, not stored, with both orders sorted once in `init`. The list moved into
+  `VerbEntryList`, lazy in both size classes, which the full related list shares.
+- **Analytics.** A verb opened from the card or its full list reports `source` `related`, now marked
+  sent in `docs/feature_architecture.md`; one opened from a model's page reports `model`, whichever
+  tab shows it. The staged privacy bullet's examples now name "another verb's page" / "la página de
+  otro verbo". No new signal or section: reaching the card is not a `deepestSection` value.
+- **Speed.** The relation index takes about 0.15 seconds to build in the simulator, so
+  `ContentCaches.warm()` now builds it at launch, off the main actor. `ModelInfo.all` (the model rows
+  and their irregularity percents, about as long) is MainActor and is still built by the first verb
+  page or the Models tab, whichever comes first.
+- **What was tried where.** iPhone, English, light: detener's pill and card (tener first, "All 9");
+  formar's card with both rows; "All 2,968" opening the cantar page in the Verbs tab; hablar's pill
+  opening the same page; its control switched to Frequency (pasar, dejar, llevar, quedar, hablar,
+  tomar). iPad, Spanish, dark, regular: decir's page with its "Formados con decir" row and no model
+  row; poner's "Ver los 22" opening the two-column list and suponer opened from it; then in the
+  Models tab, tener's model page, mantener opened from it, and its "Ver los 9" pushing the list inside
+  the Models tab. Not tried: VoiceOver itself (the tree was read with `describe-ui`), the iPad in
+  English, and a device.
+- **Tests.** New: `RelatedVerbsTests` (12 tests: tener, detener, decir, nested roots, formar as the
+  regular verb, model relatives one per root by frequency, the class and prefix rules, the
+  false-compound list, every base's invariants, the pill's model row, an empty card, and the two
+  counts above). The whole suite passes: 751 Swift Testing tests in 43 suites, plus the XCTest
+  suites, in 34.6 seconds. No suite slowed; the new one takes about 0.1 seconds. The simulator
+  language was English.
 
 ## Phase 9: Copy and Share
 

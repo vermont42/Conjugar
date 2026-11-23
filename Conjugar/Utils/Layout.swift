@@ -21,4 +21,6 @@ struct Layout {
   /// How far to grow a small glyph's hit area on each side, with `contentShape`, so that it
   /// reaches the 44-point minimum without changing the layout.
   static let tapTargetInset: CGFloat = 14.0
+  /// The same, above and below a metadata pill, which is about 24 points tall.
+  static let pillTapInset: CGFloat = 10.0
 }

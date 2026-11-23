@@ -27,6 +27,10 @@ struct VerbView: View {
   private let etymology: String?
   private let example: Example?
   private let medievalExamples: [MedievalExample]
+  /// The verbs the card at the bottom of the page leads to. Nil when it would be empty.
+  private let related: RelatedVerbs?
+  /// The model the pill names, whose page the pill opens.
+  private let model: ModelInfo?
   @State private var medievalIndex: Int
   @State private var visit: VerbVisit?
   @State private var visibleSections: Set<VerbPageSection> = []
@@ -39,6 +43,7 @@ struct VerbView: View {
   private let scrollToBottomTip = ScrollToBottomTip()
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   @Environment(\.scenePhase) private var scenePhase
+  @Environment(\.verbPagePush) private var push
 
   init(verb: String, source: AnalyticsSource, marks: Set<ConjugationCell> = []) {
     self.verb = verb
@@ -56,6 +61,8 @@ struct VerbView: View {
     example = ExampleData.example(for: verb)
     let medieval = MedievalData.examples(for: verb)
     medievalExamples = medieval
+    related = VerbRelations.related(to: verb).flatMap { $0.isEmpty ? nil : $0 }
+    model = ModelInfo.row(for: verb)
     // Start on a random attestation so each visit varies; the cycle button advances from here.
     _medievalIndex = State(initialValue: medieval.indices.randomElement() ?? 0)
   }
@@ -103,6 +110,9 @@ struct VerbView: View {
           if example != nil || medievalExample != nil {
             exampleCard
               .reportsVisibility { sectionVisibilityChanged(.example, isVisible: $0) }
+          }
+          if let related, push != nil {
+            RelatedVerbsView(related: related)
           }
         }
         .padding()
@@ -222,7 +232,7 @@ struct VerbView: View {
       }
 
       HStack(spacing: Layout.defaultSpacing) {
-        Text(typeOrParent).metadataPill(tint: .customYellow)
+        modelPill
         if isDefective {
           Text(L.Verb.defective).metadataPill(tint: .customRed)
         }
@@ -235,6 +245,33 @@ struct VerbView: View {
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
+  }
+
+  /// The pill that names the verb's model ("Regular AR", "Irreg. ☛ tener") opens the model's page,
+  /// in whichever tab shows the verb.
+  @ViewBuilder
+  private var modelPill: some View {
+    if let model, let push {
+      Button {
+        push(model)
+      } label: {
+        HStack(spacing: 4) {
+          Text(typeOrParent)
+          Image(systemName: "chevron.right")
+            .font(.caption2.weight(.bold))
+            .accessibilityHidden(true)
+        }
+        .metadataPill(tint: .customYellow)
+        // A 44-point target around a 24-point pill, without moving the rows below it.
+        .padding(.vertical, Layout.pillTapInset)
+        .contentShape(Rectangle())
+        .padding(.vertical, -Layout.pillTapInset)
+      }
+      .buttonStyle(.plain)
+      .accessibilityHint(Text(L.Verb.showsModel))
+    } else {
+      Text(typeOrParent).metadataPill(tint: .customYellow)
+    }
   }
 
   private func isMarked(_ tense: DisplayTense) -> Bool {

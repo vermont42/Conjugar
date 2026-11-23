@@ -10496,3 +10496,58 @@ pass over the catalog confirmed it: 136 cross-references in each language, every
 article's heading in that language. Editing the Futuro de Indicativo article to link the new one
 turned up an older slip there, an example sentence missing its closing quotation mark in both
 languages, now fixed.
+
+## From Detener to Tener (2026-11-22)
+
+Phase 8 of the browse plan gives the verb page ways out to other verbs. Two small things and one
+interesting one. The small things: the pill under a verb's gloss, "Irreg. ☛ tener" or "Regular AR",
+had always named a model without leading to it, and now it opens the model's page, in whichever tab
+the verb is showing. And a model's page, which lists every verb that uses it, can now sort that list
+by frequency as well as alphabetically, so the cantar model's 2,968 verbs start with pasar, dejar,
+and llevar rather than abajar and abalar.
+
+The interesting thing is a card at the bottom of the verb page, Related Verbs, whose first row is the
+verbs built on the same base: on detener's page, tener and then mantener, obtener, sostener,
+contener, and retener, with a chip that opens all nine. Konjugieren, the German sibling, could build
+this row from data its corpus already had, since German dictionaries mark where a prefix ends. The
+verb map here marks no prefixes, so the question was how to find detener's base without a
+hand-made list.
+
+The engine suggested the answer. Every feature in it is anchored to the end of the word, which is why
+detener conjugates like tener without a line of code about detener. And the reference book the
+engine follows gives a compound its base's class number or a sub-class of it: tener is 31 and
+contener 31-1, decir is 28 and predecir 28-1. So a base became the longest verb of the map that ends
+the verb, after a prefix, with the same leading class number. The class rule earns its place at
+once. It keeps presentar (class 1) off sentar (4A), and andar off dar, because an irregular base
+always has its class to itself.
+
+The first try had no prefix list, on the theory that the class rule was enough. It was not. Spanish
+has thousands of regular -ar verbs in class 1, and any one of them that ends another was taken for
+its base: llamar on amar, and realizar on izar ("to hoist"), with "real" as its prefix. A list of 56 Spanish
+prefixes fixed most of that, and reading the pairs that survived fixed the rest worth fixing.
+Spanish is full of words that look like a prefix and a verb but are not: trabajar is not tra- and
+bajar, escapar is not es- and capar ("to castrate", which would have made an unfortunate chip),
+solicitar is not so- and licitar. Two prefixes, res- and tra-, were dropped because they matched by
+accident more often than not. A list of 59 false compounds, read from the 2,000 most frequent verbs,
+catches the rest that a learner is likely to see. Rarer verbs keep a few false pairs, and the note
+says so. In the end 976 verbs have a base, and 605 bases have something built on them.
+
+The plan asked how many bases are not verbs, as Konjugieren's beginnen rests on a "ginnen" that
+German no longer has. Spanish has the same thing: conducir, producir, and traducir share "-ducir",
+and describir, inscribir, and suscribir share "-scribir". Allowing such tails gave 257 groups, and
+reading a sample showed why they are dangerous. "-perar" joins esperar with operar, and "-ultar"
+joins resultar with insultar. The good tails turned out to be covered already, because -ducir verbs
+share a model (they all go conduje, produje, traduje), and the card's second row lists the model.
+Josh chose to keep bases to real verbs. escribir pays for that with no first row.
+
+That second row is "Conjugated like cantar": one verb for each other base among the model's verbs,
+by frequency, so that a model of three thousand verbs does not become a wall of compounds of one
+base. Its "All" chip opens the model's page rather than a list of its own, since that page now sorts
+the same two ways. Konjugieren had a third row of chips for its Families tab; here the pill already
+does that job, so there is none.
+
+The plumbing is Konjugieren's: an environment action, `VerbPagePush`, that each tab's navigation
+stack injects, so the same card pushes onto whichever stack is showing the page. The Models tab's
+page had its own closure for opening a verb, and now uses the same action. Josh saw screenshots of
+the card before the rest was finished, and kept the placement, at the bottom below the examples,
+exactly as he had for Konjugieren.

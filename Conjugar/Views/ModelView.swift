@@ -15,10 +15,6 @@ import TipKit
 
 struct ModelView: View {
   let model: ModelInfo
-  /// Navigate to a verb (a tapped "verbs using this model" row). A closure rather
-  /// than a `NavigationLink(value:)` because appending to the stack's path from the
-  /// enclosing view reliably reaches its `VerbDestination` destination from this pushed view.
-  let onSelectVerb: (String) -> Void
 
   /// The grid's tense rows: five core tenses, plus futuro (Spanish concentrates
   /// irregularity in the future stem).
@@ -50,13 +46,17 @@ struct ModelView: View {
     return persons
   }
 
-  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+  /// Opens a tapped verb in whichever tab shows this page. See `VerbPagePush`.
+  @Environment(\.verbPagePush) private var push
+  /// The order of the verbs using this model. Not stored: the page always opens alphabetical.
+  @State private var verbSort = VerbSort.alphabetical
 
   private let gloss: String
   private let isDefective: Bool
   private let participio: String
   private let gerundio: String
-  private let entries: [VerbMapEntry]
+  /// The verbs using this model, in each order, sorted once in `init`.
+  private let entriesBySort: [VerbSort: [VerbMapEntry]]
   /// The person columns this instance renders, resolved from the browse setting in
   /// `init` — like `VerbView`'s row set, so both screens agree on tú/vos/both.
   private let gridPersons: [DisplayPersonNumber]
@@ -65,14 +65,14 @@ struct ModelView: View {
   /// slot has no form. Previously `gridCell` re-conjugated every slot on each `body`.
   private let gridForms: [[String?]]
 
-  init(model: ModelInfo, onSelectVerb: @escaping (String) -> Void) {
+  init(model: ModelInfo) {
     self.model = model
-    self.onSelectVerb = onSelectVerb
     gloss = VerbMap.shared.entry(for: model.exemplar)?.gloss ?? ""
     isDefective = Conjugator.isDefective(infinitive: model.exemplar)
     participio = Self.form(model.exemplar, .participio)
     gerundio = Self.form(model.exemplar, .gerundio)
-    entries = model.verbs.compactMap { VerbMap.shared.entry(for: $0) }
+    let entries = model.verbs.compactMap { VerbMap.shared.entry(for: $0) }
+    entriesBySort = Dictionary(uniqueKeysWithValues: VerbSort.allCases.map { ($0, $0.sorted(entries)) })
     let persons = Self.gridPersons(for: Current.settings.secondSingularBrowse)
     gridPersons = persons
     gridForms = Self.gridTenses.map { gridTense in
@@ -91,12 +91,22 @@ struct ModelView: View {
         headerCard
         gridCard
 
+        Picker(L.BrowseVerbs.sort, selection: $verbSort.animation(.snappy)) {
+          ForEach(VerbSort.allCases, id: \.self) { order in
+            Text(order.localizedDisplayName).tag(order)
+          }
+        }
+        .pickerStyle(.segmented)
+        .sensoryFeedback(.selection, trigger: verbSort)
+
         Text(L.Model.verbsUsing(count: model.verbs.count))
           .font(.caption.smallCaps())
           .foregroundStyle(.secondary)
           .frame(maxWidth: .infinity, alignment: .leading)
 
-        verbsUsingList
+        VerbEntryList(entries: entriesBySort[verbSort] ?? []) { verb in
+          push?(VerbDestination(infinitive: verb, source: .model))
+        }
       }
       .padding()
       // Cap the whole column to reading width and center it so the header, the
@@ -110,44 +120,6 @@ struct ModelView: View {
     .onAppear {
       ExploreModelsTip().invalidate(reason: .actionPerformed)
       Current.analytics.signal(name: .viewModelView)
-    }
-  }
-
-  /// The "verbs using this model" list. On regular width (iPad) it reflows into an
-  /// adaptive grid of carded cells mirroring Browse Verbs; on compact width it stays
-  /// the bare zebra-striped, divider-separated single column. Both paths keep the
-  /// closure-based navigation (rather than `NavigationLink(value:)`) because appending
-  /// to the enclosing stack's path from this pushed view reliably reaches the `VerbDestination`
-  /// destination.
-  @ViewBuilder
-  private var verbsUsingList: some View {
-    if horizontalSizeClass == .regular {
-      LazyVGrid(columns: BrowseLayout.listColumns, spacing: Layout.doubleDefaultSpacing) {
-        ForEach(entries, id: \.infinitive) { entry in
-          Button {
-            onSelectVerb(entry.infinitive)
-          } label: {
-            VerbGridCell(entry: entry)
-              .card()
-          }
-          .buttonStyle(.plain)
-        }
-      }
-    } else {
-      LazyVStack(spacing: 0) {
-        ForEach(Array(entries.enumerated()), id: \.element.infinitive) { index, entry in
-          // A `Button` wrapper gives these rows `.isButton` semantics and a press
-          // highlight.
-          Button {
-            onSelectVerb(entry.infinitive)
-          } label: {
-            VerbRowLabel(entry: entry)
-          }
-          .buttonStyle(.plain)
-          .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
-          Divider().padding(.leading)
-        }
-      }
     }
   }
 

@@ -332,6 +332,13 @@ disagree, the note wins.
     (`Info.infos.first { $0.stableKey == … }`, as `ConjugationTable.article` does) until browse
     Phase 10 gives Info a deeplink.
 - **The model link and related verbs** (browse Phase 8), which Phase 2's correction links reuse.
+  - *Landed 2026-11-22 (browse Phase 8):* a verb page's pill pushes its `ModelInfo` (found by
+    `ModelInfo.row(for:)`), and a correction link can push the same way: any view under the Verbs or
+    Models stack reads `@Environment(\.verbPagePush)` and pushes a `VerbDestination`, a `ModelInfo`,
+    or a `RelatedVerbListDestination`. A stack elsewhere (the Quiz tab) must inject `VerbPagePush`
+    and call `.verbPageDestinations()` before a pushed verb page's pill and card work there; without
+    it the pill is plain text and the card is hidden. For T2.2, `VerbRelations.shared.baseByVerb`
+    says whether a verb is a prefixed compound (976 are), and `rootByVerb` gives its root.
 - **Key conjugations** (browse Phase 9): four, tengo · tuve · tendré · tenido (Josh, 2026-11-22),
   and a function returning them. Phases
   10, 14, 15, and 19 build on it.
@@ -674,7 +681,9 @@ For the default quiz (not My Verbs, a collection, or a verb's page, whose verbs 
   attribute; Konjugieren found 56 inflated estimates in its top 1,000).
 - **T2.2.** Prefer base verbs. Every quiz includes one to three prefixed compounds (detener,
   componer, deshacer) to practice them, and otherwise draws unprefixed verbs and frequent compounds.
-  The base-verb relation is the browse plan's Phase 8.
+  The base-verb relation is the browse plan's Phase 8. *Landed 2026-11-22:*
+  `VerbRelations.shared.baseByVerb[verb] != nil` marks a prefixed compound; see
+  `docs/feature_architecture.md` § Ways between verbs for what it misses.
 - **T2.5.** Keep Conjugar's balance and make it exact: half of a default quiz's questions ask a cell
   in which the verb is irregular. Judge irregularity per cell, not per verb, since tener is
   irregular in the presente and regular in the imperfecto; the engine already marks an irregular

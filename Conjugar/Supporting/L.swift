@@ -853,6 +853,31 @@ nonisolated enum L {
       String(localized: "Verb.irregularWithParent \(exemplar)")
     }
 
+    /// The VoiceOver hint on the pill that names the verb's model and opens its page.
+    static var showsModel: String {
+      String(localized: "Verb.showsModel")
+    }
+
+    /// The heading of the card at the bottom of the verb page.
+    static var relatedHeading: String {
+      String(localized: "Verb.relatedHeading")
+    }
+
+    /// The caption over the verbs built on the same base: "Built on tener".
+    static func builtOn(root: String) -> String {
+      String(localized: "Verb.builtOn \(root)")
+    }
+
+    /// The caption over other verbs of the same model: "Conjugated like cantar".
+    static func conjugatedLike(exemplar: String) -> String {
+      String(localized: "Verb.conjugatedLike \(exemplar)")
+    }
+
+    /// The chip that opens every verb of a relation: "All 9".
+    static func allRelated(count: Int) -> String {
+      String(localized: "Verb.allRelated \(count)")
+    }
+
     static var etymology: String {
       String(localized: "Verb.etymology")
     }

@@ -487,6 +487,9 @@ struct VerbBrowseView: View {
       .navigationDestination(for: VerbDestination.self) { destination in
         VerbView(verb: destination.infinitive, source: destination.source, marks: destination.marks)
       }
+      // A verb page's pill and related verbs lead to a model's page and a full list without
+      // leaving this tab, so a learner who arrived from a widget or a link reaches them too.
+      .verbPageDestinations()
       .onChange(of: router.pendingVerb, initial: true) { _, destination in
         guard let destination else { return }
         navigationPath.append(destination)
@@ -517,6 +520,7 @@ struct VerbBrowseView: View {
         }.value
       }
     }
+    .environment(\.verbPagePush, VerbPagePush { navigationPath.append($0) })
   }
 }
 

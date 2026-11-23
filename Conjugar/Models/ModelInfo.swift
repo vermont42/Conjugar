@@ -61,9 +61,21 @@ struct ModelInfo: Identifiable, Hashable {
       }
   }()
 
+  /// Every row, by its class number.
+  static let byClassNumber: [String: ModelInfo] = Dictionary(uniqueKeysWithValues: all.map { ($0.classNumber, $0) })
+
+  /// The row whose page lists a verb under its default sense, which is the model the verb page
+  /// names: an alias class's verb (contener, 31-1) shows under its parent's row (tener, 31).
+  static func row(for infinitive: String) -> ModelInfo? {
+    guard let classNumber = VerbMap.shared.entry(for: infinitive)?.classNumber else {
+      return nil
+    }
+    return byClassNumber[parentByAlias[classNumber] ?? classNumber]
+  }
+
   /// The alias classes that ride a parent's model and exemplar verbatim; their
   /// verbs display under the parent's row.
-  static let parentByAlias = ["29-2": "29", "30-1": "30", "31-1": "31", "32-1": "32"]
+  nonisolated static let parentByAlias = ["29-2": "29", "30-1": "30", "31-1": "31", "32-1": "32"]
 
   /// The percent of the exemplar's slots that deviate from a feature-less
   /// regular conjugation of the same infinitive, rounded to the nearest integer.
