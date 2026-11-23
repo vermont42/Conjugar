@@ -70,3 +70,18 @@ tab bar's automatic `.fill` substitution, so they render their line art as-is.
 The two Noun Project icons are CC BY 3.0; attribution is carried in the app's Info-tab
 credits (`Localizable.xcstrings` → `Info.creditsText`). To swap in different art, drop a new
 SVG in `symbol_sources/`, point the `__main__` call at it, and re-run.
+
+## `write_forms_json.sh`: the corpus pipelines' form maps
+
+Writes `corpus/working/forms.json` (the 1,000 most common verbs) and `forms_all.json` (all
+4,811), each `{ "<form>": ["<infinitive>", …] }`, which `corpus/working/build_*_index.py` and
+`frequency/aggregate_gbooks.py` read. It builds the `ConjugationMapTool` target into a scratch
+directory under `TMPDIR` and runs it, so the pipelines see exactly the forms the app's engine
+and its bundled conjugation map do. Run it after `verbModelMap.xml` or the engine changes.
+
+```bash
+scripts/write_forms_json.sh
+```
+
+It replaced the disabled `CorpusFormsDumpTests` harness on 2026-11-22. Its first
+`forms_all.json` was byte-identical to the harness's last.

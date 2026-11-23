@@ -119,3 +119,58 @@ left to the Shortcuts app and Siri. Konjugieren found the same in its Phase 3.
 
 **Any new way to reach a verb page** sets its `source` value (adding it here and to the enum if it
 is new) and stages a policy line if its kind of surface is not already named.
+
+## Conjugation Map
+
+Built 2026-11-22 by Phase 4 of the browse plan, porting Konjugieren's Phase 5. Phase 5 here (reverse
+lookup in search) reads it; the pedagogy plan's Phases 3, 13, and 16 call `ConjugationMatch`.
+
+**What it is.** `ConjugationMap` (`Models/ConjugationMap.swift`) maps every one-word form of every
+verb to the verbs and cells it belongs to: fue → ir and ser, each in the pretérito (él). A cell is a
+`ConjugationCell`, a `DisplayTense` and a `DisplayPersonNumber`, so a result names itself in the
+verb page's own vocabulary. The one-word cells (`ConjugationMap.oneWordCells`, 72 of them) are the
+infinitive, the gerund, the participle, the nine simple tenses in all seven persons (vos included),
+and the imperativo positivo's six. Compound tenses and the imperativo negativo have no entries,
+because their last word (a participle, a subjunctive) does. Forms are the engine's bare forms,
+lowercased (the uppercase irregularity marking is highlighting), accents as written: "hablo" finds
+only hablar's presente (yo), never habló. A reflexive-only verb is stored bare (arrepiento), so
+Phase 5 must strip a pronoun before looking up. 254,328 forms, 293 of them shared by two verbs.
+
+**How it is built.** `ConjugationMapTool` is a macOS command-line target that compiles the engine
+from the app's own sources (listed as membership exceptions on the `Models` folder in
+`project.pbxproj`) plus `ConjugationMap.swift`. The app target depends on it, so an iOS build builds
+it for the Mac first, and the app's "Generate Conjugation Map" Run Script phase (after Resources)
+runs it, writing `ConjugationMap.lzfse` straight into the app bundle. Nothing generated is
+committed. The phase's inputs are `verbModelMap.xml` and the tool's executable, which stands in
+for every engine source: an engine code change relinks the tool and reruns the phase; a
+comment-only change recompiles without relinking and does not. An unchanged build skips the phase.
+Judge that by the timestamps of the tool and the map, not by the build log. The tool reads
+`verbModelMap.xml` through `VerbMap.resourceURLOverride`, since it has no bundle. It is built
+optimized even in Debug (2.9 seconds to run, against 9.8 unoptimized) and with code coverage off,
+because an instrumented tool writes a `default.profraw` into the repository each time the phase
+runs it.
+
+**The file** is one line per verb: the infinitive, then each cell's form as a delta from it (the
+letters to drop from its end, then the letters to add: hablar's hablo is `2o`, ir's voy is `2voy`),
+"-" for a defective verb's empty slot. Every regular verb of a conjugation writes the same line,
+so 1.8 MB of text compresses to 43 KB. One line per form, as Konjugieren writes it, came to
+1.4 MB. Loading inverts the paradigms into the form index; `ConjugationMap.bundled` is a
+`nonisolated static let`, so Phase 5 can touch it first from a background task.
+
+**Which cells of a verb a text is** is `ConjugationMatch.cells(of:equalTo:accents:)`
+(`Models/ConjugationMatch.swift`). It conjugates every displayed cell of the one verb rather than
+reading the map, so compounds ("ha hablado") and negative commands ("no hables") match too. It is
+exact by default; `.folded` ignores acute accents and the diaeresis but keeps ñ, so the quiz can tell
+an accent slip from an accent that marks another tense (hablo for habló is the presente, a real
+error). Case and runs of spaces never count, a reflexive-only verb matches with its pronoun or
+without, and a verb not in `VerbMap` matches nothing. It makes about 150 engine calls, so call it to
+judge an answer, not per keystroke.
+
+**The corpus files.** The same tool writes `corpus/working/forms.json` (the 1,000 most common verbs)
+and `forms_all.json` for the Python pipelines, through `scripts/write_forms_json.sh`. It replaced
+the disabled `CorpusFormsDumpTests` harness, whose last `forms_all.json` it reproduced byte for
+byte.
+
+**Tests.** `ConjugationMapTests` compares the bundled map with a fresh in-process build of every
+verb, which catches an engine dependency the tool does not compile, and measures the map against
+`ExampleUses.json` (see the Phase 4 note in the browse plan for the exact measure).

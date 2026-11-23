@@ -114,14 +114,20 @@ nonisolated final class VerbMap: @unchecked Sendable {
     }
   }
 
-  /// Load from the bundle resource `verbModelMap.xml`. Tries the app bundle first
-  /// (`Bundle.main`, which is the host app under unit tests) then the framework
-  /// bundle, so it resolves in both the app and the test target.
+  /// Where `shared` loads from instead of the bundle. ConjugationMapTool, a command-line tool
+  /// with no bundle, sets it to the path it was given before anything touches `shared`, so the
+  /// engine it compiles reads the same file the app does. Nothing else sets it, and setting it
+  /// after `shared` has loaded changes nothing.
+  nonisolated(unsafe) static var resourceURLOverride: URL?
+
+  /// Load from `resourceURLOverride` when it is set, else from the bundle resource
+  /// `verbModelMap.xml`. Tries the app bundle first (`Bundle.main`, which is the host app under
+  /// unit tests) then the framework bundle, so it resolves in both the app and the test target.
   private init() {
     let bundle = Bundle.main.url(forResource: "verbModelMap", withExtension: "xml") != nil
       ? Bundle.main
       : Bundle(for: VerbMap.self)
-    guard let url = bundle.url(forResource: "verbModelMap", withExtension: "xml") else {
+    guard let url = Self.resourceURLOverride ?? bundle.url(forResource: "verbModelMap", withExtension: "xml") else {
       assertionFailure("verbModelMap.xml not found in bundle")
       return
     }

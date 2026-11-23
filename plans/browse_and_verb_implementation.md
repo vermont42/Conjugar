@@ -27,9 +27,9 @@ session, which reads the hash from `git log` once Josh's commit exists.
 |---:|---|---|---|---|
 | 0 | Done | 2026-11-22 | f27a7a6 | A1, A2, A3, A8 |
 | 1 | Done | 2026-11-22 | 7c34a17 | A4, C4 |
-| 2 | Awaiting Josh | 2026-11-22 | | Signals |
-| 3 | Awaiting Josh | 2026-11-22 | | B2 (the reflexive analog) |
-| 4 | Not started | | | A5 (the map) |
+| 2 | Done | 2026-11-22 | 49b9f19 | Signals |
+| 3 | Done | 2026-11-22 | 49b9f19 | B2 (the reflexive analog) |
+| 4 | Awaiting Josh | 2026-11-22 | | A5 (the map) |
 | 5 | Not started | | | A5 (the search) |
 | 6 | Not started | | | B3, B5's tip |
 | 7 | Not started | | | B7's article |
@@ -491,7 +491,7 @@ Command-F, Return, and the arrows work on the iPad simulator.
 
 **Ideas:** the three signals in Konjugieren's ideas document, "What to Measure". **Ports:**
 Konjugieren Phase 3. **Depends on:** Phase 0, so that the match kinds exist. **Status:**
-Awaiting Josh (2026-11-22).
+Done (2026-11-22, 49b9f19).
 
 - `finishSearch`, sent once per search, with banded `outcome`, `queryLength`, `resultCount`,
   `matchKind`, and `resultPosition`.
@@ -623,7 +623,7 @@ exist.
 ## Phase 3: Reflexive-Only Verbs with Their Pronouns
 
 **Ideas:** B2, by analogy. **Ports:** Konjugieren Phase 4. **Depends on:** nothing. **Status:**
-Awaiting Josh (2026-11-22). **Accepted** (Josh, 2026-11-22). Konjugieren's ideas document called B2 not
+Done (2026-11-22, 49b9f19). **Accepted** (Josh, 2026-11-22). Konjugieren's ideas document called B2 not
 applicable to Spanish and named the reflexive pronoun as "a separate question"; this phase is that
 question's answer.
 
@@ -727,7 +727,7 @@ every slot under test, and the quiz accepts both forms.
 ## Phase 4: The Conjugation Map as a Build Product
 
 **Ideas:** A5, first half. **Ports:** Konjugieren Phase 5. **Depends on:** nothing (Phase 3 only
-if it changes what a form is). **Status:** Not started.
+if it changes what a form is). **Status:** Awaiting Josh (2026-11-22).
 
 - A macOS command-line target that compiles the engine's sources and writes a compact
   form-to-cells map for the app bundle: each single-word form with its infinitives, tenses, and
@@ -773,7 +773,91 @@ confirms that the map finds the verb of at least 99% of `ExampleUses.json`'s 1,3
 their `token`. State the measure exactly (folding or not, what counts), since Konjugieren's first
 version of the test came out at 98.99% for want of one fold.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **The risks were smaller than in Konjugieren.** The engine already compiled for macOS as it
+  stands: 26 files from `Models/` (the feature family, `Conjugator`, `ModelCatalog`, `VerbModel`,
+  `VerbMap`, `VerbType`, `RegularRoot`, `TenseBridge`, `CompoundTense`, `IrregularityMarker`,
+  `ReflexivePronoun`, `DisplayTense`, `DisplayPersonNumber`, the engine's tense and person types,
+  the two error types) plus `ConjugationMap.swift`. None of them reaches `L`, `Current`, or
+  `Settings`, so nothing moved and no stand-in World was needed. The one seam is
+  `VerbMap.resourceURLOverride`, a `nonisolated(unsafe) static var` that the tool sets before
+  touching `VerbMap.shared`, because a command-line tool has no bundle. Josh did not need to do
+  anything in Xcode.
+- **The target was added by editing `project.pbxproj`**, as in Konjugieren: a synchronized
+  `ConjugationMapTool/` folder for `main.swift`, and a membership exception on the `Models`
+  folder listing the engine files. The app target depends on the tool, and its "Generate
+  Conjugation Map" Run Script phase (after Resources) declares `verbModelMap.xml` and the tool's
+  executable as inputs and the bundle's `ConjugationMap.lzfse` as output. Measured by
+  timestamps: an unchanged rebuild touched neither the tool nor the map; touching
+  `verbModelMap.xml` reran the phase; a code change to `ConjugationMap.swift` relinked the tool
+  and reran it; a comment added to `VerbType.swift` recompiled without relinking and did not. An
+  unsigned `xcodebuild archive` for a generic iOS device produced `Products/Applications/
+  Conjugar.app` only, with the map inside, byte-identical to the one a standalone build wrote.
+  **Not tried:** Xcode's own interface, and an Apple Silicon Mac.
+- **Two settings Konjugieren's tool lacks.** The tool is built `-O` and whole-module even in
+  Debug: unoptimized it took 9.8 seconds to write the map, optimized 2.9, and it runs on every
+  build whose input changed. And `ENABLE_CODE_COVERAGE = NO`, because the scheme's test coverage
+  instrumented the tool even in a plain build, and every run of the phase then dropped a
+  `default.profraw` into the repository root. (`CLANG_ENABLE_CODE_COVERAGE` was tried first and
+  changes nothing.) Konjugieren's tool may have the same profraw problem if its scheme gathers
+  coverage.
+- **The measure, and a new format.** As the plan asked, the map was measured before anything else.
+  One sorted line per form, Konjugieren's format with each cell written as a four-letter code
+  (`fue	ir ptts	ser ptts`), came to 7.1 MB of text and 1.41 MB as LZFSE, eight times
+  Konjugieren's map, because Conjugar has five times the forms and every cell needs naming. One
+  line per verb with the forms in a fixed cell order was 740 KB. **Writing each form as a delta
+  from its infinitive** (hablar's hablo is `2o`, drop two letters and add "o"; ir's voy is
+  `2voy`) makes every regular verb's line identical after the infinitive, and the file came to
+  **1.8 MB of text and 43 KB as LZFSE** (28 KB as LZMA, not worth a second codec). Loading
+  inverts it into the form index, about 0.6 seconds on this Mac, so Phase 5 should load it from
+  a background task as the plan says. 254,328 forms from 4,811 verbs, 293 forms shared by two
+  verbs, exactly the counts of the old `forms_all.json`.
+- **What a form is.** The map's cells (`ConjugationMap.oneWordCells`, 72) are the infinitive, the
+  gerund, the participle, the nine simple tenses in seven persons with vos, and the imperativo
+  positivo's six. Compounds and the imperativo negativo are left out, since their last word is
+  already a participle or a subjunctive cell. A cell is a `ConjugationCell` (a `DisplayTense` and a
+  `DisplayPersonNumber`), so Phase 5 can name a row in the page's own tense names. Phase 3 did not
+  change what a form is: the map holds the bare forms (arrepiento), as the corpus dumps always
+  did, so Phase 5's pronoun stripping must run before the lookup, for arrepiéntete as for
+  dímelo.
+- **"Which cells of this verb equal this text" does not read the map.**
+  `ConjugationMatch.cells(of:equalTo:accents:)` conjugates every displayed cell of the one verb
+  (about 150 engine calls), because the pedagogy plan's diagnoses need compound cells (ha hablado
+  for he hablado) and negative commands, which the map leaves out. `.exact` is the default;
+  `.folded` drops acute accents and the diaeresis and keeps ñ, which pedagogy Phase 3 may revisit
+  when it asks Josh about ñ. A reflexive-only verb matches with its pronoun or without. A verb
+  outside `VerbMap` matches nothing, because the engine otherwise conjugates "xyzzar" as a
+  regular verb, which the first test run caught. A test checks that the matcher and the map agree
+  on every one-word form of seven verbs.
+- **The tool replaces `CorpusFormsDumpTests`.** Its `forms_all.json` was byte-identical to the
+  harness's last output (August 30). Its `forms.json` differed, but only because the harness had
+  last run before the ranking of August 30: the old file held 988 verbs, the new one the 1,000 most
+  common by today's ranks (52,825 forms). Restricted to the old 988 verbs, the new forms are
+  identical. The harness is deleted, and `scripts/write_forms_json.sh` writes both files. Updated
+  where the harness was named: `docs/project_structure.md`, `docs/example_corpus_sources.md`,
+  `frequency/README.md`, `frequency/aggregate_gbooks.py`, `corpus/working/build_corpus_index.py`,
+  `docs/verb_frequency_sources.md`, `plans/example_uses_pipeline.md`, `scripts/README.md`, and two
+  test comments that borrowed its `#filePath` idiom. Older plans and audits that mention it as
+  history were left alone. `CLAUDE.md` § Core Models names the tool and warns that an engine file
+  reaching another app file breaks its build. `docs/feature_architecture.md` § Conjugation Map
+  describes the whole piece.
+- **The 99% measure, stated exactly.** Each of `ExampleUses.json`'s 1,340 examples is found when
+  its `token`, lowercased and with nothing else folded or stripped, is a map key whose entries
+  name the example's verb. **1,339 of 1,340 (99.9%).** The one miss is especializar's token
+  "especializarse", an infinitive with an enclitic, which Phase 5 is to strip. Since the tokens
+  were chosen with the old harness's forms, a second test scans every word of each sentence
+  instead of trusting the token. It also finds 1,339 of 1,340.
+- **Tests.** New: `ConjugationMapTests` (26 tests in five suites: the bundled map against a fresh
+  in-process build of all 4,811 verbs in eight parallel shards, both example measures, shared
+  forms, accents and case, vos, non-finite and reflexive-only forms, compounds, defective slots,
+  the delta format and its round trip, cell codes, and `ConjugationMatch`). The whole suite passes:
+  692 Swift Testing tests in 40 suites, plus the XCTest suites, in 25 seconds. `ConjugationMap`
+  takes 10.5 seconds, 7 of them the fresh build, which is the price of comparing every verb; no
+  other suite slowed. The simulator language was English.
+- **Nothing visible changed**, so the app was not driven in the simulator: the tests run inside
+  the app as host and load the map from its bundle. No string, signal, or VoiceOver element was
+  added.
 
 ## Phase 5: Reverse Lookup in Search
 

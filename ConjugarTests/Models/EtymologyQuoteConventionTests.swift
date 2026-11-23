@@ -7,7 +7,7 @@
 //  with: Spanish sets glosses closed in guillemets (`«ser»`, never `« ser »`) and
 //  uses no curly quotes; English sets them in curly double quotes (`“to be”`) and
 //  uses no guillemets. Reads the source-tree JSON via the `#filePath`-relative
-//  repo-root idiom from `CorpusFormsDumpTests`/`SymbolValidityTests`.
+//  repo-root idiom that `SymbolValidityTests` uses too.
 //
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //

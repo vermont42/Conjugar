@@ -23,9 +23,8 @@ Work from the repo root: `/Users/josh/Desktop/workspace/Conjugar.mig`. Commits g
 3. **Form-dump DONE** — `ConjugarTests/Models/CorpusFormsDumpTests.swift` (a `.disabled` build-time
    tool) writes `corpus/working/forms.json` (ranked: **52,166 forms → 988 verbs**) and
    `forms_all.json` (all: **254,328 forms → 4,811 verbs**), each `{ "<surface form>": ["<infinitive>", …] }`.
-   Regenerate: remove the `.disabled(...)` trait, then
-   `~/.claude/skills/ios-build-verify/scripts/run_tests.sh --only-testing ConjugarTests/CorpusFormsDumpTests`,
-   then restore the trait.
+   Regenerate: `scripts/write_forms_json.sh`, which replaced the harness on 2026-11-22 (browse
+   plan Phase 4) and writes `forms.json` for the 1,000 most common verbs by today's ranks.
 4. **Credits DONE** — `Info.creditsText` in `Conjugar/Supporting/Localizable.xcstrings` has an
    `^Example Uses^` / `^Ejemplos de Uso^` section (both `en` and `es`) crediting every source +
    Claude. **Edit `.xcstrings` only via `python3`/`json.dump`, never the Edit tool** (ASCII-quote
@@ -388,7 +387,7 @@ attribution strings and the LatAm credits block are in `docs/example_corpus_sour
   work-list: `docs/etymology_verbs.json` (`{rank, infinitive, gloss}`, 988 entries).
 - Engine to conjugate/verify: `TenseBridge.conjugate(infinitive:tense:personNumber:)`,
   `DisplayTense.conjugatedTenses`, `VerbMap.shared.entry(for:)` (all `nonisolated`).
-- Regenerate forms: enable + run `CorpusFormsDumpTests` (see "What is DONE" #3).
+- Regenerate forms: `scripts/write_forms_json.sh` (see "What is DONE" #3).
 - Build: `~/.claude/skills/ios-build-verify/scripts/build_app.sh`. Tests:
   `run_tests.sh --only-testing ConjugarTests/<Suite>`. New tests → Swift Testing (see CLAUDE.md).
 - Validate any `.xcstrings` edit: `python3 -c "import json; json.load(open('Conjugar/Supporting/Localizable.xcstrings'))"`.

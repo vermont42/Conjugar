@@ -8,10 +8,12 @@ C) only do the expensive *selection + translation* on a handful of pre-found lin
 reading whole novels.
 
 Inputs
-  - corpus/working/forms.json : { "<surface form>": ["<infinitive>", …] } from the
-    `CorpusFormsDumpTests` Swift tool driving the app's own engine. Exact whole-token matching
-    against this map handles irregular stems and avoids substring false positives. (52,166 forms
-    → 988 ranked verbs; verbs are bare infinitives.)
+  - corpus/working/forms.json : { "<surface form>": ["<infinitive>", …] } from
+    scripts/write_forms_json.sh (ConjugationMapTool, driving the app's own engine; the
+    `CorpusFormsDumpTests` harness wrote it until 2026-11-22). Exact whole-token matching
+    against this map handles irregular stems and avoids substring false positives. (52,825 forms
+    → the 1,000 most common verbs as of 2026-11-22; 52,166 → 988 when the index was built in
+    July; verbs are bare infinitives.)
   - corpus/originals/{literature,government,technology}/*.txt : the source texts (cleaned by
     clean_corpus.py — Gutenberg boilerplate already removed).
 

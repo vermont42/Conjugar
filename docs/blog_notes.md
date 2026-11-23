@@ -10301,3 +10301,55 @@ The plan asked how many verbs are often, but not only, pronominal, like levantar
 data cannot say: CORPES files nearly all such uses under the bare verb. It did turn up six verbs
 that CORPES knows only with "-se", such as alcoholizarse and encorbatarse, which the source annex
 never marked reflexive. They are noted for Josh, not changed.
+
+## The Conjugation Map Becomes a Build Product (2026-11-22)
+
+Phase 4 of the browse plan gives the app a map from every form to the verbs it belongs to, so that
+the next phase can let a learner type "fue" and find both ir and ser. Konjugieren built the same
+thing a week ago, and its recipe carried over almost whole: a small macOS command-line target that
+compiles the app's own engine files, run by a build phase that writes the map straight into the app
+bundle, so nothing generated is ever committed and the map can never disagree with the verb page.
+
+The step Konjugieren had to sweat, untangling its conjugator from the app's localization and
+settings, was already done here. When Conjugar's engine was rebuilt last summer, every engine type
+was marked `nonisolated` so it could run off the main actor, and it turned out that the same
+discipline made it portable. All 26 engine files compiled for the Mac on the first try. The only
+seam was the verb list itself, which the engine reads from the app bundle; a command-line tool has
+no bundle, so the tool now tells `VerbMap` where the file is before anything reads it.
+
+The plan said to measure the map before shipping it, and the measurement is the interesting part
+of the session. Konjugieren's format, one line per form listing the verbs and cells it belongs to,
+came to 1.4 MB compressed here, eight times Konjugieren's, because Spanish verbs have far more forms
+and every cell has to be named. Grouping the forms by verb, in a fixed order of cells, halved that.
+The real win came from noticing that most of each line is predictable. If each form is written as
+the difference from its infinitive (hablo is hablar with two letters dropped and an "o" added,
+written `2o`), then every regular -ar verb writes exactly the same line after its infinitive, and
+a compressor reduces thousands of identical lines to almost nothing. The map went from 1.4 MB to
+43 KB, smaller than Konjugieren's, for five times the forms.
+
+Two surprises came from the build system rather than the language. The tool ran in 9.8 seconds
+unoptimized, which every data edit would pay, so it is now built optimized even in Debug, and it
+runs in under 3. And after one build a stray `default.profraw` appeared in the repository root. The
+scheme gathers code coverage for tests, Xcode had quietly instrumented the tool too, and every time
+the build phase ran it, the tool wrote its coverage data into the current directory. Turning
+coverage off for that one target fixed it. The obvious setting for that, `CLANG_ENABLE_CODE_COVERAGE`,
+changed nothing; `ENABLE_CODE_COVERAGE` did.
+
+The same tool now writes the two JSON files the Python corpus pipelines read, which used to come
+from a test that had to be enabled by hand to run. The tool's output for every verb was
+byte-identical to the harness's last run in August, so the harness is gone. The 1,000-verb file did
+change, but only because the harness had last run before the verbs were re-ranked in August; it
+had quietly kept the old top list.
+
+The plan also wanted a function that tells which cells of a verb a given text is, so that the
+future quiz can tell a slip from a real mistake: "hablo" for "habló" is one accent away, but it is
+also the present tense, and a learner who types it has confused the tenses rather than slipped.
+That function does not read the map. The quiz will need compound answers ("ha hablado" for "he
+hablado") and negative commands, which the map leaves out because their last word is already in
+it, so the function simply conjugates the one verb's 150 or so cells and compares. Its first test
+run caught a nice trap: the engine happily conjugates any made-up infinitive as a regular verb, so
+"xyzzar" matched "xyzzo" until the function learned to refuse verbs that are not in the list.
+
+The acceptance test asked that the map find the verb in at least 99% of the app's 1,340 example
+sentences. It finds 1,339. The one miss is "especializarse", where the pronoun is fused onto the
+infinitive, which is exactly what the next phase's pronoun stripping is for.

@@ -48,6 +48,13 @@
 			remoteGlobalIDString = F1D6E7000000000000000001;
 			remoteInfo = ConjugarWidgetExtension;
 		};
+		CA9F0E70000000000000000A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E1F06ACC1E8F05F200ADD2E1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CA9F0E700000000000000001;
+			remoteInfo = ConjugationMapTool;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -106,6 +113,7 @@
 		E1F06AE81E8F05F400ADD2E1 /* ConjugarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConjugarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1D6E7000000000000000002 /* ConjugarWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ConjugarWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1D6E7000000000000000005 /* ConjugarWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ConjugarWidget.entitlements; sourceTree = "<group>"; };
+		CA9F0E700000000000000002 /* ConjugationMapTool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ConjugationMapTool; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -123,10 +131,42 @@
 			);
 			target = F1D6E7000000000000000001 /* ConjugarWidgetExtension */;
 		};
+		CA9F0E700000000000000004 /* Exceptions for "Models" folder in "ConjugationMapTool" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AccentFeature.swift,
+				AuxiliaryError.swift,
+				CompoundTense.swift,
+				ConjugationFeature.swift,
+				ConjugationMap.swift,
+				Conjugator.swift,
+				ConjugatorError.swift,
+				DiaeresisFeature.swift,
+				DisplayPersonNumber.swift,
+				DisplayTense.swift,
+				EnginePersonNumber.swift,
+				EngineTense.swift,
+				FutureFeature.swift,
+				IrregularityMarker.swift,
+				ModelCatalog.swift,
+				OrthographicFeature.swift,
+				PreteriteFeature.swift,
+				ReflexivePronoun.swift,
+				RegularRoot.swift,
+				ResidueFeature.swift,
+				StemFeature.swift,
+				StemVowelFeature.swift,
+				TenseBridge.swift,
+				VerbMap.swift,
+				VerbModel.swift,
+				VerbType.swift,
+			);
+			target = CA9F0E700000000000000001 /* ConjugationMapTool */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		0353B2D62FDCE50E00FF069B /* Models */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Models; sourceTree = "<group>"; };
+		0353B2D62FDCE50E00FF069B /* Models */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (CA9F0E700000000000000004 /* Exceptions for "Models" folder in "ConjugationMapTool" target */, ); explicitFileTypes = {}; explicitFolders = (); path = Models; sourceTree = "<group>"; };
 		0353B2F62FDCE50E00FF069B /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
 		0353B3372FDCE50E00FF069B /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
 		0353B3632FDCE50E00FF069B /* Analytics */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Analytics; sourceTree = "<group>"; };
@@ -135,6 +175,7 @@
 		0353B41100000000000AD100 /* Audio */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Audio; sourceTree = "<group>"; };
 		F1D6E7000000000000000003 /* ConjugarWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F1D6E7000000000000000010 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ConjugarWidget; sourceTree = "<group>"; };
 		F1D6E7000000000000000004 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Shared; sourceTree = "<group>"; };
+		CA9F0E700000000000000003 /* ConjugationMapTool */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ConjugationMapTool; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +196,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F1D6E700000000000000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA9F0E700000000000000006 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -215,6 +263,7 @@
 				F1D6E7000000000000000004 /* Shared */,
 				F1D6E7000000000000000005 /* ConjugarWidget.entitlements */,
 				0353B3B12FDCE54000FF069B /* ConjugarTests */,
+				CA9F0E700000000000000003 /* ConjugationMapTool */,
 				E1F06AD51E8F05F300ADD2E1 /* Products */,
 				E14271351F01CA98001D19E1 /* Frameworks */,
 			);
@@ -226,6 +275,7 @@
 				E1F06AD41E8F05F300ADD2E1 /* Conjugar.app */,
 				E1F06AE81E8F05F400ADD2E1 /* ConjugarTests.xctest */,
 				F1D6E7000000000000000002 /* ConjugarWidgetExtension.appex */,
+				CA9F0E700000000000000002 /* ConjugationMapTool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -259,6 +309,7 @@
 				E1F06AD01E8F05F200ADD2E1 /* Sources */,
 				E1F06AD11E8F05F200ADD2E1 /* Frameworks */,
 				E1F06AD21E8F05F200ADD2E1 /* Resources */,
+				CA9F0E70000000000000000C /* Generate Conjugation Map */,
 				E1EC70F92198A63700872787 /* Embed Frameworks */,
 				F1D6E700000000000000000C /* Embed Foundation Extensions */,
 				E1171C8F21A9A4AD00B06342 /* Run SwiftLint */,
@@ -267,6 +318,7 @@
 			);
 			dependencies = (
 				F1D6E700000000000000000E /* PBXTargetDependency */,
+				CA9F0E70000000000000000B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				0353B2D62FDCE50E00FF069B /* Models */,
@@ -324,6 +376,25 @@
 			productReference = F1D6E7000000000000000002 /* ConjugarWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		CA9F0E700000000000000001 /* ConjugationMapTool */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA9F0E700000000000000007 /* Build configuration list for PBXNativeTarget "ConjugationMapTool" */;
+			buildPhases = (
+				CA9F0E700000000000000005 /* Sources */,
+				CA9F0E700000000000000006 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CA9F0E700000000000000003 /* ConjugationMapTool */,
+			);
+			name = ConjugationMapTool;
+			productName = ConjugationMapTool;
+			productReference = CA9F0E700000000000000002 /* ConjugationMapTool */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -376,6 +447,7 @@
 				E1F06AD31E8F05F200ADD2E1 /* Conjugar */,
 				E1F06AE71E8F05F400ADD2E1 /* ConjugarTests */,
 				F1D6E7000000000000000001 /* ConjugarWidgetExtension */,
+				CA9F0E700000000000000001 /* ConjugationMapTool */,
 			);
 		};
 /* End PBXProject section */
@@ -445,6 +517,23 @@
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
+		CA9F0E70000000000000000C /* Generate Conjugation Map */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Conjugar/Models/verbModelMap.xml",
+				"$(BUILD_DIR)/$(CONFIGURATION)/ConjugationMapTool",
+			);
+			name = "Generate Conjugation Map";
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/ConjugationMap.lzfse",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Writes the conjugation map into the app bundle. Xcode runs this phase only when an input\n# is newer than the output; the tool is an input, so a change to any engine source, which\n# relinks the tool, regenerates the map too. See ConjugationMapTool/main.swift.\n\"$SCRIPT_INPUT_FILE_1\" --verb-map \"$SCRIPT_INPUT_FILE_0\" --map \"$SCRIPT_OUTPUT_FILE_0\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -469,6 +558,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CA9F0E700000000000000005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -481,6 +577,11 @@
 			isa = PBXTargetDependency;
 			target = F1D6E7000000000000000001 /* ConjugarWidgetExtension */;
 			targetProxy = F1D6E700000000000000000F /* PBXContainerItemProxy */;
+		};
+		CA9F0E70000000000000000B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CA9F0E700000000000000001 /* ConjugationMapTool */;
+			targetProxy = CA9F0E70000000000000000A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -783,6 +884,48 @@
 			};
 			name = Release;
 		};
+		CA9F0E700000000000000008 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_CODE_COVERAGE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		CA9F0E700000000000000009 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_CODE_COVERAGE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -818,6 +961,15 @@
 			buildConfigurations = (
 				F1D6E7000000000000000007 /* Debug */,
 				F1D6E7000000000000000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CA9F0E700000000000000007 /* Build configuration list for PBXNativeTarget "ConjugationMapTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA9F0E700000000000000008 /* Debug */,
+				CA9F0E700000000000000009 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

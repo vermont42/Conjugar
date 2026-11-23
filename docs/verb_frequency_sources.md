@@ -252,7 +252,7 @@ three gzip shards of 631 MB, 1,114 MB, and 1,478 MB, **CC BY 3.0**) covers 158.9
 of scanned books, 76.5 billion of them printed since 1980, and every 1-gram also appears with a
 part-of-speech suffix. The `_VERB` rows — 1,260,588 of them — are word forms, not lemmas, but
 Conjugar already has the lemmatizer: `corpus/working/forms_all.json` (from
-`CorpusFormsDumpTests`) maps 254,328 surface forms to the verbs that produce them. Summing the
+`CorpusFormsDumpTests` then, `scripts/write_forms_json.sh` since 2026-11-22) maps 254,328 surface forms to the verbs that produce them. Summing the
 tagged counts through it, and splitting the 264 forms that belong to more than one verb
 (`fui`, `fue`, `era` …, 3.4% of the tokens) by expectation-maximization, gives:
 
@@ -543,7 +543,7 @@ print(sum(1 for c in counts.values() if c), 'covered;', [v for v in inf if not c
 ```
 
 Google Books lemma counts through the app's paradigms (`corpus/working/forms_all.json` is
-`{"form": ["infinitive", …]}`; regenerate it with `CorpusFormsDumpTests` if the verb map has
+`{"form": ["infinitive", …]}`; regenerate it with `scripts/write_forms_json.sh` if the verb map has
 changed):
 
 ```python

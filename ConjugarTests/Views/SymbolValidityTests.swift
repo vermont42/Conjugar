@@ -5,8 +5,8 @@
 //  Asserts every `systemName:` / `systemImage:` string literal in the app, widget, and
 //  shared targets resolves to a real SF Symbol via `UIImage(systemName:)`. A bad name
 //  (e.g. `figure.jump`, which does not exist) compiles fine but renders nothing at
-//  runtime, so only a source sweep catches it. Reuses the `#filePath`-relative repo-root
-//  idiom from `CorpusFormsDumpTests`. Custom asset-catalog symbols use `Image("name")` /
+//  runtime, so only a source sweep catches it. Finds the repo root from `#filePath`, as
+//  `EtymologyQuoteConventionTests` does. Custom asset-catalog symbols use `Image("name")` /
 //  `.custom("name")`, never `systemName:`, so they don't match here.
 //
 

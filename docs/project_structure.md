@@ -75,6 +75,10 @@ Conjugar/
 │   ├── DisplayTense.swift      # The UI's tense vocabulary, including the compounds (formerly Tense.swift)
 │   ├── DisplayPersonNumber.swift  # The UI's person vocabulary with localized pronouns (formerly PersonNumber.swift)
 │   ├── AuxiliaryError.swift    # Error type for auxiliary-verb lookup failures
+│   ├── ConjugationMap.swift    # ConjugationCell (a tense + person) and the conjugation map: every one-word form → its verbs
+│   │                           #   and cells. ConjugationMapTool writes it into the bundle at build time (delta lines, LZFSE)
+│   ├── ConjugationMatch.swift  # Which cells of a verb a text is (hablo → presente yo), exact or accents folded, compounds
+│   │                           #   included; for the quiz's slip-or-error check. Conjugates directly, not through the map
 │   │
 │   │  ── content ──
 │   ├── ContentCaches.swift     # Pre-warms Etymology / ExampleData / MedievalData off the main actor at launch
@@ -209,6 +213,12 @@ ConjugarWidget/
     ├── WidgetConjugationText.swift  # The widget's copy of the UPPERCASE-means-irregular render convention
     └── WidgetEtymologyText.swift    # The widget's standalone copy of the `~…~` etymology markup renderer
 
+ConjugationMapTool/             # macOS command-line target, built for the host and run by the app's "Generate Conjugation
+│                               #   Map" build phase. Compiles the engine files that project.pbxproj's membership
+│                               #   exceptions on Models/ list, plus ConjugationMap.swift
+└── main.swift                  # Writes ConjugationMap.lzfse into the app bundle (--map), and forms.json /
+                                #   forms_all.json for the corpus pipelines (via scripts/write_forms_json.sh)
+
 Shared/                         # Compiled into both the app and the widget extension
 ├── OpenQuizIntent.swift        # Opens the app and stashes a deeplink the app drains on activation
 ├── OpenRandomVerbIntent.swift  # Same, for a random verb, as Shortcuts and Siri run it (source=shortcut)
@@ -247,7 +257,8 @@ ConjugarTests/
 │   ├── GameBossTests.swift             # La Llamada: summit gate, demo/echo/judge loop, freeze fake-out, Duende meter, victory, end-scene slideshow
 │   ├── ExampleDataTests.swift          # ExampleUses/MedievalExamples decode + ExampleSource attribution mapping
 │   ├── EtymologyQuoteConventionTests.swift  # Pins the gloss-quote convention in the shipped Etymologies.json
-│   └── CorpusFormsDumpTests.swift      # Harness: drives the engine over every verb to emit corpus/working/forms.json
+│   └── ConjugationMapTests.swift       # The bundled map against a fresh build, the 99% example measure, shared forms, the
+│                                       #   file format, and ConjugationMatch (accents, compounds, the reflexive pronoun)
 ├── Utils/
 │   ├── BrowseSearchTests.swift         # The shared browse filter: empty query, matching, case/diacritic insensitivity
 │   ├── GameCenterFakeTests.swift       # The Game Center double's behavior
@@ -426,6 +437,8 @@ scripts/
 ├── take_screenshots.sh         # Drives ios-build-verify + axe/simctl through the App Store screenshot sweep
 ├── prep_screenshot_sim.sh      # Prepares one simulator for one language (clean status bar, locale, appearance)
 ├── verify_store_media.sh       # Preflight for App Store Connect media: asserts every requirement that has bitten this project
+├── write_forms_json.sh         # Builds ConjugationMapTool and writes corpus/working/forms.json and forms_all.json (replaced
+│                               #   the CorpusFormsDumpTests harness on 2026-11-22)
 ├── _extract_annexb.py          # Extracts Annex B from docs/spanish_verbs_made_simpler.pdf into docs/annex_b_verb_models.md
 ├── _build_verbmap.py           # Builds Conjugar/Models/verbModelMap.xml from the extracted class index + glosses +
 │                               #   frequency/verb_counts.json. Reproduces the shipped file byte-for-byte

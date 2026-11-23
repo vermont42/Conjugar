@@ -274,6 +274,16 @@ disagree, the note wins.
 - **The conjugation map** (browse Phase 4) ships in the app, with a function that answers "which
   cells of this verb equal this text", exact by default and folding accents on request. Phases 3,
   13, and 16 here call it.
+  - *Landed 2026-11-22 (browse Phase 4):* `ConjugationMatch.cells(of:equalTo:accents:)`
+    (`Models/ConjugationMatch.swift`, `nonisolated`) returns the `ConjugationCell`s (a
+    `DisplayTense` and a `DisplayPersonNumber`) of one verb whose form equals a text, in page
+    order. It conjugates every displayed cell rather than reading the map, so compounds ("ha
+    hablado") and negative commands ("no hables") count, which Phase 13's other-cell diagnosis
+    needs. `.exact` is the default; `.folded` ignores acute accents and the diaeresis but keeps ñ
+    strict, so Phase 3's question to Josh about ñ would change `foldingAccents(_:)`. Case and runs
+    of spaces never count, and a reflexive-only verb matches with or without its pronoun. It costs
+    about 150 engine calls, fine once per answer. The map itself (`ConjugationMap.bundled`, one-word
+    forms only) is for search.
 - **Reverse lookup** (browse Phase 5) strips pronouns and handles compounds, which Phase 16's
   prompts and Phase 13's diagnoses can reuse.
 - **The tense count** (browse Phase 6, `docs/tense_frequency.md`), which orders the verb page by use

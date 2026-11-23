@@ -197,7 +197,8 @@ register — otherwise Mozilla SUMO + GNOME/Ubuntu (CC BY-SA) are the best consu
    (gitignored — re-fetchable), `grokked/` (tracked hand-built intermediates: the Cid
    normalization table / reflex overrides), `working/` (tracked build scripts), `json/`
    (tracked finished exports). Manifest + license note tracked under `docs/` (this file).
-2. **Form dump** (test-target tool, à la `CorpusFormsDumpTests`): conjugate every ranked verb
+2. **Form dump** (test-target tool, à la `CorpusFormsDumpTests`; since 2026-11-22
+   `scripts/write_forms_json.sh`): conjugate every ranked verb
    across all tenses/persons via `TenseBridge` → `{ surface-form → [verb id] }`. Compound tenses
    emit only the participle (else *he* maps to every haber-form).
 3. **Index build:** one tokenizing pass per source `.txt` → `{ verb id → [{doc,line,token,text}] }`,
@@ -294,14 +295,17 @@ modern editorial *introductions/footnotes* (the Cid keeps interspersed footnotes
 
 ### Pipeline — form-dump DONE
 
-`ConjugarTests/Models/CorpusFormsDumpTests.swift` (disabled build-time tool) conjugates every
-verb through `TenseBridge` and writes `corpus/working/forms.json` (ranked: **52,166 forms → 988
-verbs**) and `forms_all.json` (all: **254,328 forms → 4,811 verbs**). Verified: irregulars and
+`ConjugarTests/Models/CorpusFormsDumpTests.swift` (disabled build-time tool) conjugated every
+verb through `TenseBridge` and wrote `corpus/working/forms.json` (ranked: **52,166 forms → 988
+verbs**) and `forms_all.json` (all: **254,328 forms → 4,811 verbs**). **Since 2026-11-22 the
+writer is `scripts/write_forms_json.sh`**, which runs ConjugationMapTool, the build-time tool that
+also writes the app's conjugation map; its `forms_all.json` was byte-identical to the harness's
+last, and the harness is deleted. Its `forms.json` holds the 1,000 most common verbs by today's
+ranks (52,825 forms). Verified: irregulars and
 suppletion resolve correctly (`voy→ir`, `fue→[ir,ser]`, `supe→saber`, `dicho→decir`,
 `tuviéramos→tener`). Compounds emit only the participle; imperativo negativo drops "no"; the
 UPPERCASE irregularity marking is lowercased to the plain surface form; voseo (2S vos) forms are
-included. Regenerate on demand by removing the `.disabled` trait and running
-`run_tests.sh --only-testing ConjugarTests/CorpusFormsDumpTests`.
+included. Regenerate on demand with `scripts/write_forms_json.sh`.
 
 ### Remaining pipeline steps (next)
 

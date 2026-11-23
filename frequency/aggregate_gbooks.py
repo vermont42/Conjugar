@@ -3,7 +3,7 @@
 
 Google Books counts word *forms*, not lemmas, so the tie-breaker has to be summed through
 Conjugar's own paradigms. `corpus/working/forms_all.json` (written by
-`ConjugarTests/CorpusFormsDumpTests`, gitignored, regenerate it when the verb map changes)
+`scripts/write_forms_json.sh`, gitignored, regenerate it when the verb map changes)
 maps each of the 254,328 surface forms the engine can produce to the verbs that produce it.
 
 Two wrinkles the sum has to handle:
