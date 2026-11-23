@@ -85,6 +85,8 @@ Conjugar/
 │   │                           #   included; for the quiz's slip-or-error check. Conjugates directly, not through the map
 │   ├── ConjugationTable.swift  # The verb page's cards: their order (by corpus frequency, docs/tense_frequency.md), each
 │   │                           #   tense's second names (preterite · pretérito perfecto simple), and its Info article
+│   ├── KeyConjugation.swift    # A verb's four key conjugations, unlabeled (tengo · tuve · tendré · tenido), each with its
+│   │                           #   cell, mixed case; and the verb page's share text built on them
 │   │
 │   │  ── content ──
 │   ├── ContentCaches.swift     # Pre-warms Etymology / ExampleData / MedievalData off the main actor at launch
@@ -158,18 +160,21 @@ Conjugar/
 │   ├── KillSwitches.swift      # Compile-time screenshot kill switches: TipDisplay, OnboardingDisplay, TutorDisplay
 │   ├── Layout.swift            # Spacing/geometry constants (8/16/24 pt, readingWidth 680, cornerRadius 12)
 │   ├── LiveActivityManager.swift  # Starts / updates / ends the quiz Live Activity, driven from Quiz.swift
-│   ├── Modifiers.swift         # The design system: card(), metadataPill(), linguistic(), numeric(), speakOnTapFlash(), PrimaryButtonStyle
+│   ├── Modifiers.swift         # The design system: card(), metadataPill(), linguistic(), numeric(), speakOnTapFlash(),
+│   │                           #   copyOnLongPress() (a Copy context menu and VoiceOver action), PrimaryButtonStyle
 │   ├── RatingsFetcher.swift    # Fetches App Store ratings from the iTunes API for the Settings screen
 │   ├── ReviewPrompter.swift    # Protocol for review-prompting behavior
 │   ├── ReviewPrompterReal.swift   # SKStoreReviewController prompting at usage intervals
 │   ├── ReviewPrompterStub.swift   # Canned no-op for tests
 │   ├── RichText.swift          # Parses Info markup (^…^ ~…~ $…$ %…%) into RichTextBlock / TextSegment
 │   ├── Settings.swift          # @Observable user preferences over GetterSetter
+│   ├── ShareSheet.swift        # Workaround for ShareLink: presents UIActivityViewController from a plain button, with an
+│   │                           #   LPLinkMetadata header and Copy kept; on iPad anchored to the named bar button
 │   ├── SoundPlayer.swift       # Protocol for one-shot SFX and looping music
 │   ├── SoundPlayerDummy.swift  # No-op so the test worlds never touch CoreAudio
 │   ├── SoundPlayerReal.swift   # AVAudioPlayer implementation: off-main warm-up, per-sound debounce, music fades
 │   ├── UIApplicationExtensions.swift  # topViewController / key-window helpers for the remaining UIKit presentations
-│   ├── URLExtension.swift      # URL.developerEmail and URL.mailto(_:subject:body:), for the failed search's request line; URL.analyticsSource reads a link's source query item
+│   ├── URLExtension.swift      # URL.developerEmail and URL.mailto(_:subject:body:), for the failed search's request line; URL.analyticsSource reads a link's source query item; URL.appStore, with no storefront
 │   ├── URLProtocolStub.swift   # URLProtocol subclass for stubbing HTTP responses in tests
 │   ├── URLSessionExtension.swift  # Stubbed URLSession for testing
 │   ├── Utterer.swift           # AVSpeechSynthesizer text-to-speech plus the single .ambient audio-session owner
@@ -266,6 +271,8 @@ ConjugarTests/
 │   ├── ModelSortTests.swift            # Model-list sort orders
 │   ├── RelatedVerbsTests.swift         # Bases and roots (tener, decir, formar), the class and prefix rules, false compounds,
 │   │                                   #   model relatives one per root by frequency, and the pill's model row
+│   ├── KeyConjugationTests.swift       # The four key conjugations (regular, stem-changing, irregular, reflexive, defective),
+│   │                                   #   the share text, URL.appStore, and what a long press copies
 │   ├── VerbSortTests.swift             # Verb-list sort orders and Spanish collation
 │   ├── VerbFamiliesTests.swift         # Guard-rail: every hand-curated quiz verb resolves in the verb map
 │   ├── QuizTests.swift                 # Quiz logic, scoring, and timer, driven through the @Observable model

@@ -33,8 +33,8 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 5 | Done | 2026-11-22 | 6c0ed97 | A5 (the search) |
 | 6 | Done | 2026-11-22 | 6c0ed97 | B3, B5's tip |
 | 7 | Done | 2026-11-22 | 048f585 | B7's article |
-| 8 | Awaiting Josh | 2026-11-22 | | B4, A9 |
-| 9 | Not started | | | B6 |
+| 8 | Done | 2026-11-22 | 5d2d435 | B4, A9 |
+| 9 | Awaiting Josh | 2026-11-22 | | B6 |
 | 10 | Not started | | | C1 (links, control, quick action) |
 | 11 | Not started | | | C1 (the intent), C2 |
 | 12 | Not started | | | D1, D2 |
@@ -1208,7 +1208,7 @@ check how articles are addressed before choosing a position in the list.
 ## Phase 8: Ways Between Verbs
 
 **Ideas:** B4, A9. **Ports:** Konjugieren Phase 9. **Depends on:** nothing; Phase 2's `related` and
-`model` sources apply if it is done. **Status:** Awaiting Josh (2026-11-22).
+`model` sources apply if it is done. **Status:** Done (2026-11-22, 5d2d435).
 
 - **B4.** The verb page leads to related verbs: the model's page (make the existing "Irregular
   (like tener)" or "Regular AR" pill a link, which Konjugieren's ideas document sized as small),
@@ -1312,7 +1312,8 @@ a regular verb.
 
 ## Phase 9: Copy and Share
 
-**Ideas:** B6. **Ports:** Konjugieren Phase 10. **Depends on:** nothing. **Status:** Not started.
+**Ideas:** B6. **Ports:** Konjugieren Phase 10. **Depends on:** nothing. **Status:** Awaiting Josh
+(2026-11-22).
 
 - A long press on a form opens a context menu with Copy. A tap still speaks it.
 - A share button on the verb page sends a short text: the verb, its gloss, its key conjugations
@@ -1349,7 +1350,57 @@ function's comment which tenses each one stands for.
 **Done when** a long press copies, the share sheet sends the agreed text with Copy available, and
 tests pin the key conjugations of a regular, a stem-changing, an irregular, and a defective verb.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **No questions for Josh.** Konjugieren's verdicts settled every choice: the App Store link only,
+  a context menu rather than an instant copy, and no signal for copying.
+- **The key conjugations** are `KeyConjugation` (`Models/KeyConjugation.swift`), an enum of the four
+  (`yoPresente`, `yoPretérito`, `yoFuturo`, `participio`), each naming its cell (`tense`,
+  `personNumber`) and, in its comment, the tenses it stands for. The pedagogy plan maps cells onto
+  keys, so a case that knows its cell saves it a table. `forms(of:)` returns `Form`s (key and
+  mixed-case form); `line(for:)` returns the lowercased "tengo · tuve · tendré · tenido". Both are
+  `nonisolated`, unlike Konjugieren's, which read `Current.settings` for its region; Spanish needs no
+  region here, so Phase 11's Spotlight and the widget can call them off the main actor. They conjugate
+  with `pronoun: .written`, so a reflexive-only verb's set is "me arrepiento · me arrepentí · me
+  arrepentiré · arrepentido". A form the engine cannot give is left out: abolir's set is "abolí ·
+  aboliré · abolido". The engine marks tener as tenGo, tUVE, tenDré, tenido; the tests pin that.
+- **The share text** is `KeyConjugation.shareText(for:)`: "tener, “have”", the key conjugations, a
+  blank line, "Every conjugation of tener is in Conjugar:", and
+  `https://apps.apple.com/app/conjugar/id1236500467` (`URL.appStore`). It cites the verb as a
+  dictionary does (arrepentirse), and the share sheet's header shows the same with the learner's
+  chosen app icon. In Spanish the gloss takes «», as the catalog's other Spanish strings quote, and
+  the line is "Todas las conjugaciones de tener están en Conjugar:". The gloss is always the first
+  (`VerbMapEntry.gloss`), as the page shows; Conjugar's verb page has no reading picker.
+- **`ShareSheet`** is Konjugieren's, less the `anchorRect` parameter, which only its in-page buttons
+  used. The button sits in the navigation bar's trailing side, which was empty. It is the only change
+  near the top of the page, and the plan's layout rule asks for new things in the bar, so it was
+  built without a screenshot first.
+- **What a long press copies.** The form alone, lowercased, without the subject pronoun or an
+  imperative's ¡…! (¡TEN! copies "ten"); a reflexive-only verb's form keeps its reflexive pronoun.
+  The participio and gerundio copy too. Two departures from Konjugieren: the raíz futura (tendr-)
+  copies nothing, since a stem is not a word, and the infinitive does not copy, because here it is
+  the navigation bar's large title, which takes no context menu; the share sheet's text starts with
+  it. A dash copies nothing. VoiceOver hears "Copy" / "Copiar" beside "Speak", checked in the
+  accessibility tree (abolido had both actions, abolir- only "Pronunciar"). No Spanish-specific
+  VoiceOver rule was needed, so `docs/voiceover.md` was not started.
+- **Analytics.** `tapShareVerb`, no parameters, on each tap of the button. Copying sends nothing. The
+  staged privacy bullet about in-app actions now ends with "and tapping to share a verb's page" /
+  "y tocar para compartir la página de un verbo", in a new section of
+  `docs/privacy_policy_pending.md`. The simulator's `AnalyticsSpy` does not print, so the signal was
+  not seen; `docs/release.md` now asks for it on a device, along with sharing into Messages and Mail.
+- **What was tried where.** iPhone, English, light: tener's share button, the sheet's header (the
+  dancer icon and "tener") and Copy, the copied text read back with `simctl pbpaste`; long presses
+  copying "tengo", "me arrepiento" (arrepentirse), and "ten" (¡ten!), the menu's preview uncropped,
+  and a plain tap copying nothing. iPad, Spanish, dark, regular: abolir's popover anchored below the
+  share button, its "Copiar" giving the Spanish text with «abolish» and three key conjugations; a long
+  press on abolió copying it; a long press on a dash opening no menu. Not tried: VoiceOver itself,
+  Messages, Mail, a device, a Mac, and the iPad in English.
+- **Tests.** New: `KeyConjugationTests` (9 tests: seven verbs' lines, among them regular hablar,
+  stem-changing pensar and dormir, irregular tener, ir, and decir, and reflexive arrepentir; tener's
+  mixed case; defective abolir; each key's cell; the share text, also for a reflexive verb;
+  `URL.appStore`; and what a row copies). The whole suite passes: 760 Swift Testing tests in 44
+  suites, plus the XCTest suites, in 36.0 seconds. No suite slowed; the new one takes about 0.14
+  seconds. The simulator language was English.
 
 ## Phase 10: Links into the App: the Grammar, Search, a Control, and a Quick Action
 

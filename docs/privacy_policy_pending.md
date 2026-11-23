@@ -82,3 +82,25 @@ El punto sobre las acciones dentro de la aplicación, en la sección 2, queda as
 - Ciertas acciones dentro de la aplicación: abrir el juego, volver a mostrar la introducción, tocar para valorar o reseñar la aplicación, enviar un mensaje al tutor y abrir el artículo de un tiempo verbal desde la página de un verbo
 ```
 
+## Sharing a verb's page (browse plan, Phase 9, 2026-11-22)
+
+Adds the signal `tapShareVerb`, sent on each tap of the share button on a verb's page. It has no
+parameters and does not say which verb, or whether the learner went on to share. Copying a form
+sends nothing. It rewrites the bullet about in-app actions that Phase 6 rewrote, so apply this
+wording in place of that one.
+
+### English
+
+The bullet about in-app actions in section 2 now reads:
+
+```
+- Certain in-app actions: opening the game, reshowing the onboarding tour, tapping to rate or review the app, sending a message to the tutor, opening a tense's article from a verb's page, and tapping to share a verb's page
+```
+
+### Spanish
+
+El punto sobre las acciones dentro de la aplicación, en la sección 2, queda así:
+
+```
+- Ciertas acciones dentro de la aplicación: abrir el juego, volver a mostrar la introducción, tocar para valorar o reseñar la aplicación, enviar un mensaje al tutor, abrir el artículo de un tiempo verbal desde la página de un verbo y tocar para compartir la página de un verbo
+```

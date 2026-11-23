@@ -10551,3 +10551,43 @@ stack injects, so the same card pushes onto whichever stack is showing the page.
 page had its own closure for opening a verb, and now uses the same action. Josh saw screenshots of
 the card before the rest was finished, and kept the placement, at the bottom below the examples,
 exactly as he had for Konjugieren.
+
+## Tengo, Tuve, Tendré, Tenido (2026-11-22)
+
+Phase 9 of the browse plan gave the verb page two small ways out of the app: a long press that copies
+a form, and a share button that sends a verb to someone else. Konjugieren had built both a few days
+earlier, and its notes did most of the work here. Its first attempt used SwiftUI's `ShareLink`, which
+turned out to swallow its own taps in a toolbar, so no analytics signal could be sent, and which lost
+the share sheet's Copy button the moment it was given a preview header. Its fix, a plain button that
+presents UIKit's activity controller, came across almost line for line.
+
+The interesting part was deciding what to share. Konjugieren sends three conjugations that let a
+learner rebuild most of a German verb. Spanish has no single textbook set, so Josh had already chosen
+four for this plan: the yo presente, the yo pretérito, the yo futuro, and the participle. For tener
+that is "tengo · tuve · tendré · tenido". Each is the stem a family of tenses grows from. tengo gives
+the present subjunctive (tenga) and most commands; tuve gives both imperfect subjunctives (tuviera,
+tuviese); tendré gives the conditional (tendría); tenido gives every compound tense. The function that
+returns them is meant to outlive the share button. The review card, Spotlight, and the pedagogy plan's
+practice record will all build on it, so each of the four knows which cell of the page it is, and the
+forms come back in the engine's mixed case (tenGo, tUVE, tenDré) so that a later screen can paint the
+irregular letters red. A verb that lacks one simply has fewer: abolir, which traditional grammar leaves without a yo presente, shares "abolí · aboliré · abolido". Nothing anywhere calls them "principal parts", because
+learners do not know the term.
+
+A shared tener reads "tener, “have”", the four forms, and a line saying that every conjugation of
+tener is in Conjugar, followed by the App Store link. In Spanish the gloss sits in «», as the app's
+other Spanish strings already quote. There is no `conjugar://` link, because Josh decided on
+Konjugieren that a custom-scheme link in Messages looks technical and may not even be tappable.
+
+The long press copies the form alone, without the subject pronoun or the ¡…! around a command, so
+¡ten! copies "ten". A reflexive-only verb keeps its pronoun, since "me arrepiento" is the form and
+"arrepiento" is not Spanish. Two things differ from Konjugieren. The future stem (tendr-) copies
+nothing, because a stem is not a word anyone would paste. And the infinitive does not copy, because
+on Conjugar's page it is the navigation bar's large title, which takes no menu; the shared text starts
+with it anyway. Konjugieren also found that the menu's lifted preview cropped the first and last
+letters of a form, and the padding trick it used to fix that came along too. On the simulator the
+preview showed "tengo" whole.
+
+The share button sends one new signal, with no parameters and no verb. Its line for the privacy
+policy waits in the staged file with the others until the 2027 release, and the release checklist now
+asks for a real share into Messages and Mail on a device, since the simulator can show the sheet but
+not what a friend receives.

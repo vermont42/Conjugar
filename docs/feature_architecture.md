@@ -74,6 +74,7 @@ made from a form is still `guess`. Rows and verbs correspond one to one, as befo
 | Signal | Parameters | Sent |
 |---|---|---|
 | `tapTenseArticle` | None | When the ⓘ beside a tense's heading on a verb page opens that tense's article (Phase 6). The article itself also sends `viewInfoView`. It does not say which tense or which verb |
+| `tapShareVerb` | None | On each tap of the share button in a verb page's navigation bar (Phase 9), whether or not the learner then shares. It does not say which verb. Copying a form, by a long press or from the share sheet, sends nothing |
 
 ### The `source` vocabulary
 
@@ -314,3 +315,48 @@ tabs. `ModelView` pushes its verbs through the same action; its old `onSelectVer
 and not stored. The list (`VerbEntryList`, shared with the full related list) is lazy in both size
 classes, since the cantar model holds 2,968 verbs.
 
+### Copy and share
+
+Built 2026-11-22 by Phase 9 of the browse plan, porting Konjugieren's Phase 10.
+
+**The key conjugations** are `KeyConjugation` (`Models/KeyConjugation.swift`): four, each the stem a
+family of tenses is built on (Josh, 2026-11-22). The yo presente (tengo) stands for the presente de
+subjuntivo and the usted, nosotros, ustedes, and negative imperatives; the yo pretérito (tuve) for
+the imperfectos and futuro de subjuntivo; the yo futuro (tendré) for the condicional; the participio
+(tenido) for every compound tense. Each case names its cell (`tense`, `personNumber`), so the
+pedagogy plan can map practice items onto it. `forms(of:)` returns them mixed case, as the engine
+writes them (tenGo, tUVE, tenDré, tenido), for a caller that shows red letters; `line(for:)` gives
+the lowercased "tengo · tuve · tendré · tenido". A reflexive-only verb's forms carry their pronoun
+(me arrepiento · me arrepentí · me arrepentiré · arrepentido). A form the engine cannot produce is
+left out, so abolir has three: abolí · aboliré · abolido. Both are `nonisolated`, for Spotlight and
+the widget extension later; the share text is MainActor because `L` is. Nothing calls the set
+"principal parts", in the interface or in code.
+
+**The share button** sits in the verb page's navigation bar and presents `ShareSheet`
+(`Utils/ShareSheet.swift`), a `UIActivityViewController` with an `LPLinkMetadata` header (the verb's
+citation form and the learner's chosen app icon) and Copy kept. `ShareLink` was not used, for
+Konjugieren's reasons: it reports no tap in a toolbar, and a `SharePreview` drops Copy. On iPad the
+popover hangs from the button, found by its label (`L.Verb.share`) among the visible bar items. The
+text, in the learner's language, is the verb and its gloss, the key conjugations, and the App Store
+link (`URL.appStore`, no storefront), with no `conjugar://` link:
+
+```
+tener, “have”
+tengo · tuve · tendré · tenido
+
+Every conjugation of tener is in Conjugar:
+https://apps.apple.com/app/conjugar/id1236500467
+```
+
+In Spanish the gloss sits in «», as the app's other Spanish strings quote, and the line reads
+"Todas las conjugaciones de tener están en Conjugar:".
+
+**A long press** on a form, or a right-click on a Mac, opens a context menu with Copy
+(`copyOnLongPress` in `Utils/Modifiers.swift`); a tap still speaks. It copies the form alone,
+lowercased, without the subject pronoun or an imperative's ¡…!, so ¡TEN! copies "ten"; a
+reflexive-only verb's form keeps its reflexive pronoun ("me arrepiento"). The participio and
+gerundio copy; the raíz futura (tendr-) does not, since a stem is not a word, and a dash copies
+nothing. The infinitive is the navigation bar's title, which takes no menu, so it does not copy
+(Konjugieren's infinitive sat in the page and did). VoiceOver gets a "Copy" / "Copiar" action beside
+"Speak". The modifier pads the row before the menu and takes the padding back after, so the lifted
+preview does not crop the first and last letters.

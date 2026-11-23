@@ -858,6 +858,22 @@ nonisolated enum L {
       String(localized: "Verb.showsModel")
     }
 
+    /// The share button in the verb page's navigation bar, and the label the iPad's popover
+    /// anchors to.
+    static var share: String {
+      String(localized: "Verb.share")
+    }
+
+    /// The long-press menu's item, and the VoiceOver action, that copies a form.
+    static var copy: String {
+      String(localized: "Verb.copy")
+    }
+
+    /// What the share button sends: "tener, “have”", the key conjugations, and the App Store link.
+    static func shareText(infinitive: String, gloss: String, keyConjugations: String, link: String) -> String {
+      String(localized: "Verb.shareText \(infinitive) \(gloss) \(keyConjugations) \(link)")
+    }
+
     /// The heading of the card at the bottom of the verb page.
     static var relatedHeading: String {
       String(localized: "Verb.relatedHeading")

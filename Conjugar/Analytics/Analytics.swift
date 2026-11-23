@@ -41,6 +41,9 @@ nonisolated enum AnalyticsName: String {
   case tapPlayGame
   case tapRateOrReview
   case tapSendTutorMessage
+  /// The share button in a verb page's navigation bar (browse plan, Phase 9). No parameters, and
+  /// it does not say which verb. Copying a form sends nothing.
+  case tapShareVerb
   case tapShowOnboarding
   /// The ⓘ beside a tense's heading on a verb page (browse plan, Phase 6). No parameters.
   case tapTenseArticle

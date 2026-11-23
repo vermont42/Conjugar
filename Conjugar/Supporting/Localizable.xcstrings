@@ -3783,6 +3783,54 @@
         }
       }
     },
+    "Verb.copy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar"
+          }
+        }
+      }
+    },
+    "Verb.share" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir"
+          }
+        }
+      }
+    },
+    "Verb.shareText %@ %@ %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, “%2$@”\n%3$@\n\nEvery conjugation of %1$@ is in Conjugar:\n%4$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, «%2$@»\n%3$@\n\nTodas las conjugaciones de %1$@ están en Conjugar:\n%4$@"
+          }
+        }
+      }
+    },
     "VerbSort.alphabetical" : {
       "localizations" : {
         "en" : {

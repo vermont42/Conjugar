@@ -27,7 +27,11 @@ material for the release notes in `docs/release_notes.txt`.
    Phase 2) have been seen only in a temporary log. Run a Debug build on a device, flip the
    TelemetryDeck dashboard's Test Mode toggle, and confirm that a search, a verb page, a widget tap
    (`source` `widget`), and the Random Verb control (`source` `control`) arrive with the parameters
-   in `docs/feature_architecture.md` § Analytics.
+   in `docs/feature_architecture.md` § Analytics. A tap of a verb page's share button should send
+   `tapShareVerb` (browse plan, Phase 9), which no log has shown, since the spy does not print.
+3. **Share a verb's page from a device** into Messages and Mail (browse plan, Phase 9). The share
+   sheet, its header, and its Copy were tried only in the simulator. Check that the App Store link
+   is tappable in both and that the gloss's quotation marks survive, in English and Spanish.
 
 ## On Release Day
 

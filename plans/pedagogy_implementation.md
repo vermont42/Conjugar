@@ -342,6 +342,14 @@ disagree, the note wins.
 - **Key conjugations** (browse Phase 9): four, tengo · tuve · tendré · tenido (Josh, 2026-11-22),
   and a function returning them. Phases
   10, 14, 15, and 19 build on it.
+  - *Landed 2026-11-22 (browse Phase 9):* `KeyConjugation` (`Models/KeyConjugation.swift`), an
+    enum of `yoPresente`, `yoPretérito`, `yoFuturo`, and `participio`, each with its cell (`tense`,
+    `personNumber`), so Phase 10's mapping can say which key a cell falls under by case.
+    `KeyConjugation.forms(of:)` returns `[KeyConjugation.Form]` (key plus the engine's mixed-case
+    form: tenGo, tUVE, tenDré, tenido), leaving out a form the engine cannot give (abolir has no yo
+    presente). A reflexive-only verb's forms carry their pronoun (me arrepiento); grading that
+    accepts the bare form needs its own rule, as Phase 3 of the browse plan found for the quiz.
+    `line(for:)` gives the lowercased "tengo · tuve · tendré · tenido". All `nonisolated`.
 - **The deeplink grammar** (browse Phase 10, `docs/feature_architecture.md` § Deeplinks). Phases 9,
   21, and 23 add quiz targets under it.
 - **The learner's record** (browse Phase 12): `LearnerVerbs` in `Shared/`, recents, stars, and the My

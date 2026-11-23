@@ -139,6 +139,21 @@ struct VerbView: View {
     .background(Color.customBackground.ignoresSafeArea())
     .navigationTitle(ReflexivePronoun.citationForm(of: verb).capitalized)
     .navigationBarTitleDisplayMode(.large)
+    .toolbar {
+      ToolbarItem(placement: .topBarTrailing) {
+        Button {
+          Current.analytics.signal(name: .tapShareVerb)
+          ShareSheet.present(
+            text: KeyConjugation.shareText(for: verb),
+            title: ReflexivePronoun.citationForm(of: verb),
+            icon: UIImage(named: Current.settings.appIcon.previewAssetName),
+            anchorLabel: L.Verb.share
+          )
+        } label: {
+          Label(L.Verb.share, systemImage: "square.and.arrow.up")
+        }
+      }
+    }
     .onAppear {
       isOnScreen = true
       beginVisit(source: hasAppeared ? .resume : source)
@@ -239,9 +254,10 @@ struct VerbView: View {
       }
 
       VStack(alignment: .leading, spacing: 4) {
-        nonFiniteRow(DisplayTense.participio.titleCaseName, form: participio, isMarked: isMarked(.participio))
-        nonFiniteRow(DisplayTense.gerundio.titleCaseName, form: gerundio, isMarked: isMarked(.gerundio))
-        nonFiniteRow(DisplayTense.raízFutura.titleCaseName, form: raizFutura, isMarked: false)
+        nonFiniteRow(DisplayTense.participio.titleCaseName, form: participio, isMarked: isMarked(.participio), isCopyable: true)
+        nonFiniteRow(DisplayTense.gerundio.titleCaseName, form: gerundio, isMarked: isMarked(.gerundio), isCopyable: true)
+        // A stem is not a word, so the raíz futura copies nothing.
+        nonFiniteRow(DisplayTense.raízFutura.titleCaseName, form: raizFutura, isMarked: false, isCopyable: false)
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
@@ -278,7 +294,7 @@ struct VerbView: View {
     marks.contains(ConjugationCell(tense: tense, personNumber: .none))
   }
 
-  private func nonFiniteRow(_ label: String, form: String, isMarked: Bool) -> some View {
+  private func nonFiniteRow(_ label: String, form: String, isMarked: Bool, isCopyable: Bool) -> some View {
     HStack(spacing: Layout.defaultSpacing) {
       Text(label)
         .font(.subheadline)
@@ -287,6 +303,7 @@ struct VerbView: View {
         .font(.body)
         .searchMark(isMarked)
         .speakOnTapFlash(ConjugationText.plain(form))
+        .copyOnLongPress(isCopyable ? ConjugationDisplayRow.copyText(of: form) : nil)
     }
   }
 
@@ -496,6 +513,7 @@ struct VerbView: View {
         .font(.body)
         .searchMark(row.isMarked)
         .speakOnTapFlash(row.spokenText)
+        .copyOnLongPress(row.copyText)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
   }
@@ -626,6 +644,18 @@ struct ConjugationDisplayRow: Identifiable {
   /// The form as displayed: imperatives are wrapped in ¡…!.
   var displayForm: String {
     isImperative ? "¡\(form)!" : form
+  }
+
+  /// What a long press copies: the form alone, without its subject pronoun or the ¡…! that wraps
+  /// an imperative, lowercased, since the capitals only mark the red letters. A reflexive-only
+  /// verb's form keeps its reflexive pronoun (me arrepiento), which is part of the form. Nil for a
+  /// cell the engine could not fill.
+  var copyText: String? {
+    Self.copyText(of: form)
+  }
+
+  static func copyText(of form: String) -> String? {
+    form.isEmpty ? nil : form.lowercased()
   }
 
   /// What to speak on tap: pronoun + form for finite tenses, the bare form for

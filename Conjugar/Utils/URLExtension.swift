@@ -11,6 +11,16 @@ extension URL {
   /// Where feedback goes: Settings' email button and the verb search's request for a missing verb.
   nonisolated static let developerEmail = "vermontcoder@gmail.com"
 
+  /// Conjugar's App Store page, which the verb page's share text links to. With no storefront in
+  /// the path, the App Store opens the reader's own.
+  nonisolated static var appStore: URL {
+    var components = URLComponents()
+    components.scheme = "https"
+    components.host = "apps.apple.com"
+    components.path = "/app/conjugar/id\(RatingsFetcher.iTunesID)"
+    return components.url ?? URL(filePath: "/")
+  }
+
   nonisolated private static let mailtoUnreserved = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~")
 
   /// A `mailto:` link with the subject and body filled in. Every character outside RFC 3986's

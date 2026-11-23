@@ -75,6 +75,12 @@ extension View {
   func speakOnTapFlash(_ text: String, locale: String? = nil, flash: Color = .customYellow) -> some View {
     modifier(SpeakOnTapFlash(text: text, locale: locale, flash: flash))
   }
+
+  /// A long press, or a right-click on a Mac, offers to copy `text` from a context menu.
+  /// VoiceOver gets the same choice as a named action. Nil offers nothing.
+  func copyOnLongPress(_ text: String?) -> some View {
+    modifier(CopyOnLongPress(text: text))
+  }
 }
 
 /// The primary call-to-action: a filled, accent-tinted capsule that scales
@@ -217,4 +223,35 @@ private struct SpeakOnTapFlash: ViewModifier {
       isSpeaking = false
     }
   }
+}
+
+private struct CopyOnLongPress: ViewModifier {
+  let text: String?
+
+  func body(content: Content) -> some View {
+    // The margin goes on before the menu and comes off after it, so the lifted preview does not
+    // crop the first and last letters while the layout stays as it was (found in Konjugieren).
+    if let text {
+      content
+        .padding(.horizontal, Self.previewMargin)
+        .padding(.vertical, Self.previewMargin / 2)
+        .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 8))
+        .contextMenu {
+          Button {
+            UIPasteboard.general.string = text
+          } label: {
+            Label(L.Verb.copy, systemImage: "doc.on.doc")
+          }
+        }
+        .accessibilityAction(named: Text(L.Verb.copy)) {
+          UIPasteboard.general.string = text
+        }
+        .padding(.horizontal, -Self.previewMargin)
+        .padding(.vertical, -Self.previewMargin / 2)
+    } else {
+      content
+    }
+  }
+
+  private static let previewMargin: CGFloat = 8
 }
