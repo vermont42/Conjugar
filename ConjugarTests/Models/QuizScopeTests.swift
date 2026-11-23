@@ -32,7 +32,7 @@ import Testing
   }
 
   private static func conjugates(_ question: Quiz.Question) -> Bool {
-    if case .success = TenseBridge.conjugate(infinitive: question.0, tense: question.1, personNumber: question.2) {
+    if case .success = TenseBridge.conjugate(infinitive: question.verb, tense: question.tense, personNumber: question.personNumber) {
       return true
     }
     return false
@@ -67,11 +67,11 @@ import Testing
         #expect(quiz.start(scope: .myVerbs(Self.myVerbs)))
         #expect(quiz.questionCount == QuizScope.fullLength)
         for question in quiz.questions {
-          #expect(Self.myVerbs.contains(question.0), "\(question.0) is not in My Verbs")
-          #expect(Self.conjugates(question), "\(question.0) cannot be asked in \(question.1) \(question.2)")
+          #expect(Self.myVerbs.contains(question.verb), "\(question.verb) is not in My Verbs")
+          #expect(Self.conjugates(question), "\(question.verb) cannot be asked in \(question.tense) \(question.personNumber)")
         }
         // Five verbs over thirty questions: each verb takes its turn.
-        #expect(Set(quiz.questions.map(\.0)) == Set(Self.myVerbs))
+        #expect(Set(quiz.questions.map(\.verb)) == Set(Self.myVerbs))
       }
     }
   }
@@ -82,7 +82,7 @@ import Testing
       for shouldShuffle in [false, true] {
         let quiz = makeQuiz(difficulty: difficulty, shouldShuffle: shouldShuffle)
         quiz.start(scope: .myVerbs(["tener", "ir"]))
-        let tenerCount = quiz.questions.filter { $0.0 == "tener" }.count
+        let tenerCount = quiz.questions.filter { $0.verb == "tener" }.count
         #expect((13...17).contains(tenerCount), "tener asked \(tenerCount) of 30 at \(difficulty)")
       }
     }
@@ -92,7 +92,7 @@ import Testing
   @Test func aMyVerbsQuizKeepsTheDifficultysTenses() {
     let quiz = makeQuiz(difficulty: .easy)
     quiz.start(scope: .myVerbs(Self.myVerbs))
-    #expect(Set(quiz.questions.map(\.1)) == [.presenteDeIndicativo, .futuroDeIndicativo, .pretérito])
+    #expect(Set(quiz.questions.map(\.tense)) == [.presenteDeIndicativo, .futuroDeIndicativo, .pretérito])
   }
 
   @Test func testMeAsksThreeDistinctTensesOfTheVerb() {
@@ -101,8 +101,8 @@ import Testing
         let quiz = makeQuiz(difficulty: difficulty, shouldShuffle: shouldShuffle)
         #expect(quiz.start(scope: .verbPage("tener")))
         #expect(quiz.questionCount == 3)
-        #expect(quiz.questions.allSatisfy { $0.0 == "tener" })
-        #expect(Set(quiz.questions.map(\.1)).count == 3)
+        #expect(quiz.questions.allSatisfy { $0.verb == "tener" })
+        #expect(Set(quiz.questions.map(\.tense)).count == 3)
         #expect(quiz.questions.allSatisfy(Self.conjugates))
       }
     }
@@ -127,7 +127,7 @@ import Testing
         for _ in 0..<3 {
           let quiz = makeQuiz(difficulty: difficulty, region: .latinAmerica, shouldShuffle: true)
           quiz.start(scope: scope)
-          #expect(!quiz.questions.contains { $0.2 == .secondPlural })
+          #expect(!quiz.questions.contains { $0.personNumber == .secondPlural })
         }
       }
     }
@@ -138,7 +138,7 @@ import Testing
     for _ in 0..<3 {
       let quiz = makeQuiz(difficulty: .moderate, secondSingular: .vos, shouldShuffle: true)
       quiz.start(scope: .verbPage("tener"))
-      #expect(!quiz.questions.contains { $0.2 == .secondSingularTú })
+      #expect(!quiz.questions.contains { $0.personNumber == .secondSingularTú })
     }
   }
 

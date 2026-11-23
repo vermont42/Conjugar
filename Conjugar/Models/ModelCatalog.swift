@@ -212,7 +212,8 @@ nonisolated enum ModelCatalog {
     IrregularParticiple("v", "visto"),
     residue([
       (.presenteDeIndicativo(.secondPlural), "veis"),
-      (.presenteDeIndicativo(.secondSingularVos), "ves")
+      (.presenteDeIndicativo(.secondSingularVos), "ves"),
+      (.imperativoAfirmativo(.secondSingularVos), "ve")  // monosyllable: no accent, unlike the derived *vé
     ])
   ])
   // 14-1 prever = ver's stem rebuilds + monosyllable→polysyllable accent residue.

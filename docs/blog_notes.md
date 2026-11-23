@@ -11040,3 +11040,44 @@ tests in 39.9 seconds. Stashing the change and running again gave 68.1 seconds, 
 each, a smaller gain than Konjugieren's 55 against 102 to 107. That baseline run also had one
 failure, `terremotoOpensGapsRoughlyTenPercentOfEachGirder()`, a statistical game test that does
 not touch Live Activities and passed in the run with the change.
+
+## Accepting What Is Right, and Spelling Rio as the RAE Does (2026-11-22)
+
+The first phase of the pedagogy plan was meant to be small: make the quiz accept answers that are
+right but typed in a way it did not expect. A learner who writes "yo hablo" for the yo presente
+knows the form. So does one who writes frito for freír's participle, which the RAE counts as
+standard beside freído, and more common. Grading moved into one type, `QuizQuestion`, which
+replaced the tuple the quiz had carried since 2017. Following Konjugieren's lesson, it expands the
+list of accepted answers rather than folding the learner's answer, because a fold applied to both
+sides also forgives misspellings. A leading subject pronoun of the asked person is dropped before
+comparing, never in front of a command.
+
+The variants needed an audit, with sources, for Josh to rule on. The engine's own dump of every
+form found the first surprise. It wrote rió, guió, fiás, and huí, the spellings the 2010
+*Ortografía* retired by counting these words as monosyllables. A Sonnet research agent could not
+read rae.es, which refused every scripted fetch, so its verdicts came from search extracts. Josh
+accepted every recommendation, then asked for the shaky rows to be confirmed in Chrome, where the
+pages loaded fine. Every one held. The DPD's entries for paliar, repatriar, historiar, and vidriar
+each allow both stresses, and the DLE's fiar table writes "fías / fias".
+
+Josh also chose to fix the verb page rather than only accept both spellings. The engine now passes
+every form through a small orthography rule, so reír's page reads rio and riais, and ver's vos
+imperative is ve rather than vé. The quiz still takes rió, because `conjugateAll` keeps the
+retired spelling as an alternate, and it shows rio quietly beside the check. Two side effects
+needed care. The irregularity marker compares a form against the verb's regular composition, and
+ir's regular baseline, the bare ending áis, had itself become ais, so vayáis lit up a red Á. It
+now marks against both spellings and keeps the one that explains more. The test that finds strong
+preterites by their unstressed -e also started catching guie, so it now looks at every spelling.
+
+The defect the plan named, that the quiz never asked a tú command, hid a larger one. One person
+rotation served every tense, and a quiz's length fell into step with it. In the Latin America
+region, a Moderate quiz's commands met only nosotros and tú, quiz after quiz, and no shuffle
+helped, since the shuffle came after the draw. Each tense now keeps its own rotation across
+quizzes, which is simpler than the skip logic it replaced.
+
+The accent keys came to the quiz as a keyboard toolbar that inserts at the cursor. Trying it with
+the software keyboard took computer use, to reach Simulator's menu, and it found two problems a
+hardware keyboard had hidden. iPadOS's keyboard shows no toolbar items at all, so on the iPad the
+keys now sit under the answer field, where there is room. And a quiz started by a link focused its
+field before the field was on screen, which left the iPhone's keyboard without the keys until the
+field was focused again. The question view now takes the keyboard once more as it appears.

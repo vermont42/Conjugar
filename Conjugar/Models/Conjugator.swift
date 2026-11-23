@@ -49,6 +49,7 @@ nonisolated enum Conjugator {
     // (`model.alternates`) are invisible here, so this path (and the irregularity
     // score that reads `model.features`) is unaffected by them.
     return conjugateOne(infinitive: infinitive, tense: tense, base: model.base, features: model.features)
+      .map(Orthography.currentSpelling(of:))
   }
 
   /// All accepted forms for a slot — the **primary** form plus any alternates,
@@ -113,6 +114,10 @@ nonisolated enum Conjugator {
         }
       }
     }
+
+    // 3. The spelling the 2010 Ortografía retired (rió beside rio), last, since a learner may
+    // have been taught it.
+    forms = forms.map(Orthography.currentSpelling(of:)) + forms
 
     // Stable dedup: keep first occurrence, so order is primary then alternates in
     // preference order, and coincident slots collapse to a single form.
@@ -316,5 +321,58 @@ nonisolated enum Conjugator {
       (stem, ending) = feature.apply(stem: stem, ending: ending, tense: tense, regularStem: regularStem)
     }
     return stem + ending
+  }
+}
+
+/// Spelling rules the engine applies to every form it composes.
+nonisolated enum Orthography {
+  /// A form with each word that the 2010 *Ortografía* counts as a monosyllable written without
+  /// its accent: rió as rio, guié as guie, huí as hui, riáis as riais, and the voseo fiás as fias.
+  /// Such a word has its accent on a vowel joined to another vowel, a diphthong or triphthong for
+  /// spelling purposes, and no other vowel group. Two open vowels side by side, or a stressed i
+  /// or u beside an open vowel, are two syllables (reí, ríe), and a lone accented vowel is a
+  /// diacritic accent (dé, sé); both keep theirs. Case is kept.
+  static func currentSpelling(of form: String) -> String {
+    form.split(separator: " ", omittingEmptySubsequences: false)
+      .map { word in isAccentedMonosyllable(word) ? String(word.map { unaccented[$0] ?? $0 }) : String(word) }
+      .joined(separator: " ")
+  }
+
+  private static let openVowels: Set<Character> = ["a", "e", "o", "á", "é", "ó"]
+  private static let closedVowels: Set<Character> = ["i", "u", "ü", "í", "ú"]
+  private static let stressedClosedVowels: Set<Character> = ["í", "ú"]
+  private static let unaccented: [Character: Character] = [
+    "á": "a", "é": "e", "í": "i", "ó": "o", "ú": "u", "Á": "A", "É": "E", "Í": "I", "Ó": "O", "Ú": "U"
+  ]
+
+  private static func isAccentedMonosyllable(_ word: Substring) -> Bool {
+    let letters = Array(word.lowercased())
+    guard letters.contains(where: { unaccented[$0] != nil }) else {
+      return false
+    }
+    // The u of gue, gui, que, and qui is silent, so it joins no vowel.
+    var groups: [[Character]] = []
+    var group: [Character] = []
+    for (index, letter) in letters.enumerated() {
+      let isSilentU = letter == "u" && index > 0 && ["g", "q"].contains(letters[index - 1])
+        && index + 1 < letters.count && ["e", "i", "é", "í"].contains(letters[index + 1])
+      if (openVowels.contains(letter) || closedVowels.contains(letter)) && !isSilentU {
+        group.append(letter)
+      } else if !group.isEmpty {
+        groups.append(group)
+        group = []
+      }
+    }
+    if !group.isEmpty {
+      groups.append(group)
+    }
+    guard groups.count == 1, let vowels = groups.first, vowels.count > 1 else {
+      return false
+    }
+    return !zip(vowels, vowels.dropFirst()).contains { left, right in
+      (openVowels.contains(left) && openVowels.contains(right))
+        || (stressedClosedVowels.contains(left) && openVowels.contains(right))
+        || (openVowels.contains(left) && stressedClosedVowels.contains(right))
+    }
   }
 }

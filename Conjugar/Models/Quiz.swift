@@ -57,6 +57,9 @@ class Quiz {
   /// reads these rather than regrading, because a reflexive-only verb accepts two answers and
   /// `correctAnswers` holds only the one shown.
   private(set) var results: [ConjugationResult] = []
+  /// The current spelling of the last answer when it was right in a retired one. See
+  /// `QuizQuestion.currentSpelling(of:)`.
+  private(set) var lastCurrentSpelling: String?
   private(set) var questions: [Question] = []
   /// What the quiz under way, or last finished, asks about. See `QuizScope`.
   private(set) var scope = QuizScope.allVerbs
@@ -84,9 +87,7 @@ class Quiz {
   @ObservationIgnored private var timer: Timer?
   private let settings: Settings
   private let gameCenter: GameCenter
-  private let personNumbersWithTu: [DisplayPersonNumber] = [.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
-  private let personNumbersWithVos: [DisplayPersonNumber] = [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
-  private var personNumbersIndex = 0
+  @ObservationIgnored private var personRotation: [DisplayTense: Int] = [:]
   /// False makes every draw deterministic, for tests and UI tests. A quiz made for a verb page's
   /// sheet copies it from `Current.quiz`.
   let shouldShuffle: Bool
@@ -94,8 +95,7 @@ class Quiz {
   /// not, such as Test Me's in a sheet, must not update or end the tab's.
   @ObservationIgnored private var hasLiveActivity = false
 
-  /// One question: the infinitive, the tense, and the person (`.none` for the gerundio).
-  typealias Question = (String, DisplayTense, DisplayPersonNumber)
+  typealias Question = QuizQuestion
 
   var questionCount: Int {
     return questions.count
@@ -103,7 +103,7 @@ class Quiz {
 
   var verb: String {
     if questions.count > 0 {
-      return questions[currentQuestionIndex].0
+      return questions[currentQuestionIndex].verb
     } else {
       return ""
     }
@@ -111,7 +111,7 @@ class Quiz {
 
   var tense: DisplayTense {
     if questions.count > 0 {
-      return questions[currentQuestionIndex].1
+      return questions[currentQuestionIndex].tense
     } else {
       return .infinitivo
     }
@@ -119,7 +119,7 @@ class Quiz {
 
   var currentPersonNumber: DisplayPersonNumber {
     if questions.count > 0 {
-      return questions[currentQuestionIndex].2
+      return questions[currentQuestionIndex].personNumber
     } else {
       return .none
     }
@@ -150,18 +150,24 @@ class Quiz {
     let region = settings.region
     let difficulty = settings.difficulty
     #if DEBUG
-    if Quiz.isScreenshotFixtureRun, scope.verbs == nil {
+    if let fixture = Quiz.fixtureRun, scope.verbs == nil {
       self.scope = scope
       lastRegion = region
       lastDifficulty = difficulty
       clearAnswers()
-      startScreenshotFixture()
+      switch fixture {
+      case .screenshot:
+        startScreenshotFixture()
+      case .grading:
+        questions = Quiz.gradingFixture
+        beginQuiz()
+      }
       return true
     }
     #endif
     let previousRegion = lastRegion
     let previousDifficulty = lastDifficulty
-    // `personNumber()` reads the region, so it is set before the draw.
+    // `personNumber(for:)` reads the region, so it is set before the draw.
     lastRegion = region
     lastDifficulty = difficulty
     var drawn: [Question]
@@ -202,112 +208,112 @@ class Quiz {
 
     switch lastDifficulty {
     case .easy:
-//      questions.append((allRegular.next(), .presenteDeIndicativo, personNumber())) // useful for testing
+//      questions.append(QuizQuestion(allRegular.next(), .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo))) // useful for testing
       // Ten questions per tense, five regular and five irregular in each.
       [regularAr.next(), regularAr.next(), regularEr.next(), regularEr.next(), regularIr.next()].forEach {
-        questions.append(($0, .presenteDeIndicativo, personNumber()))
+        questions.append(QuizQuestion($0, .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
       }
       for _ in 0..<5 {
-        questions.append((irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber()))
+        questions.append(QuizQuestion(irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
       }
       [regularAr.next(), regularAr.next(), regularEr.next(), regularEr.next(), regularIr.next()].forEach {
-        questions.append(($0, .futuroDeIndicativo, personNumber()))
+        questions.append(QuizQuestion($0, .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
       }
       for _ in 0..<5 {
-        questions.append((irregularRaizFutura.next(), .futuroDeIndicativo, personNumber()))
+        questions.append(QuizQuestion(irregularRaizFutura.next(), .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
       }
       for _ in 0..<5 {
-        questions.append((allRegular.next(), .pretérito, personNumber()))
+        questions.append(QuizQuestion(allRegular.next(), .pretérito, personNumber(for: .pretérito)))
       }
       for _ in 0..<5 {
-        questions.append((irregularPreterito.next(), .pretérito, personNumber()))
+        questions.append(QuizQuestion(irregularPreterito.next(), .pretérito, personNumber(for: .pretérito)))
       }
     case .moderate:
       // The same ten tenses as before, thinned to 30: presente 5, pretérito 4,
       // three each for the middle six, two each for the last three.
       [regularAr.next(), regularEr.next(), regularIr.next()].forEach {
-        questions.append(($0, .presenteDeIndicativo, personNumber()))
+        questions.append(QuizQuestion($0, .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
       }
       for _ in 0..<2 {
-        questions.append((irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber()))
+        questions.append(QuizQuestion(irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
       }
       [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .pretérito, personNumber()))
+        questions.append(QuizQuestion($0, .pretérito, personNumber(for: .pretérito)))
       }
       for _ in 0..<2 {
-        questions.append((irregularPreterito.next(), .pretérito, personNumber()))
+        questions.append(QuizQuestion(irregularPreterito.next(), .pretérito, personNumber(for: .pretérito)))
       }
       [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .imperfectoDeIndicativo, personNumber()))
+        questions.append(QuizQuestion($0, .imperfectoDeIndicativo, personNumber(for: .imperfectoDeIndicativo)))
       }
       // One draw, not three: only three verbs are irregular in the imperfecto, so
       // three draws showed the whole list every run.
-      questions.append((irregularImperfecto.next(), .imperfectoDeIndicativo, personNumber()))
-      questions.append((allRegular.next(), .futuroDeIndicativo, personNumber()))
+      questions.append(QuizQuestion(irregularImperfecto.next(), .imperfectoDeIndicativo, personNumber(for: .imperfectoDeIndicativo)))
+      questions.append(QuizQuestion(allRegular.next(), .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
       for _ in 0..<2 {
-        questions.append((irregularRaizFutura.next(), .futuroDeIndicativo, personNumber()))
+        questions.append(QuizQuestion(irregularRaizFutura.next(), .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
       }
-      questions.append((allRegular.next(), .condicional, personNumber()))
+      questions.append(QuizQuestion(allRegular.next(), .condicional, personNumber(for: .condicional)))
       for _ in 0..<2 {
-        questions.append((irregularRaizFutura.next(), .condicional, personNumber()))
+        questions.append(QuizQuestion(irregularRaizFutura.next(), .condicional, personNumber(for: .condicional)))
       }
-      questions.append((allRegular.next(), .perfectoDeIndicativo, personNumber()))
+      questions.append(QuizQuestion(allRegular.next(), .perfectoDeIndicativo, personNumber(for: .perfectoDeIndicativo)))
       for _ in 0..<2 {
-        questions.append((irregularParticipio.next(), .perfectoDeIndicativo, personNumber()))
+        questions.append(QuizQuestion(irregularParticipio.next(), .perfectoDeIndicativo, personNumber(for: .perfectoDeIndicativo)))
       }
-      questions.append((allRegular.next(), .presenteDeSubjuntivo, personNumber()))
+      questions.append(QuizQuestion(allRegular.next(), .presenteDeSubjuntivo, personNumber(for: .presenteDeSubjuntivo)))
       for _ in 0..<2 {
-        questions.append((irregularPresenteDeSubjuntivo.next(), .presenteDeSubjuntivo, personNumber()))
+        questions.append(QuizQuestion(irregularPresenteDeSubjuntivo.next(), .presenteDeSubjuntivo, personNumber(for: .presenteDeSubjuntivo)))
       }
-      questions.append((allRegular.next(), .gerundio, .none))
-      questions.append((irregularGerundio.next(), .gerundio, .none))
+      questions.append(QuizQuestion(allRegular.next(), .gerundio, .none))
+      questions.append(QuizQuestion(irregularGerundio.next(), .gerundio, .none))
       if settings.secondSingularQuiz == .tu {
-        questions.append((irregularTuImperativo.next(), .imperativoPositivo, .secondSingularTú))
+        questions.append(QuizQuestion(irregularTuImperativo.next(), .imperativoPositivo, .secondSingularTú))
       } else {
-        questions.append((irregularVosImperativo.next(), .imperativoPositivo, .secondSingularVos))
+        questions.append(QuizQuestion(irregularVosImperativo.next(), .imperativoPositivo, .secondSingularVos))
       }
-      questions.append((allRegular.next(), .imperativoPositivo, personNumber(skipYo: true, skipTu: true)))
+      questions.append(QuizQuestion(allRegular.next(), .imperativoPositivo, personNumber(for: .imperativoPositivo)))
       [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
+        questions.append(QuizQuestion($0, .imperativoNegativo, personNumber(for: .imperativoNegativo)))
       }
     case .difficult:
       // 25 simple-tense questions plus five of the nine compound tenses.
       [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .presenteDeIndicativo, personNumber()))
+        questions.append(QuizQuestion($0, .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
       }
       for _ in 0..<2 {
-        questions.append((irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber()))
+        questions.append(QuizQuestion(irregularPresenteDeIndicativo.next(), .presenteDeIndicativo, personNumber(for: .presenteDeIndicativo)))
       }
       [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .pretérito, personNumber()))
+        questions.append(QuizQuestion($0, .pretérito, personNumber(for: .pretérito)))
       }
       for _ in 0..<2 {
-        questions.append((irregularPreterito.next(), .pretérito, personNumber()))
+        questions.append(QuizQuestion(irregularPreterito.next(), .pretérito, personNumber(for: .pretérito)))
       }
       [allRegular.next(), allRegular.next()].forEach {
-        questions.append(($0, .presenteDeSubjuntivo, personNumber()))
+        questions.append(QuizQuestion($0, .presenteDeSubjuntivo, personNumber(for: .presenteDeSubjuntivo)))
       }
       for _ in 0..<2 {
-        questions.append((irregularPresenteDeSubjuntivo.next(), .presenteDeSubjuntivo, personNumber()))
+        questions.append(QuizQuestion(irregularPresenteDeSubjuntivo.next(), .presenteDeSubjuntivo, personNumber(for: .presenteDeSubjuntivo)))
       }
       [regularAr.next(), regularEr.next()].forEach {
-        questions.append(($0, .gerundio, .none))
+        questions.append(QuizQuestion($0, .gerundio, .none))
       }
-      questions.append((irregularGerundio.next(), .gerundio, .none))
-      questions.append((allRegular.next(), .imperfectoDeIndicativo, personNumber()))
-      questions.append((irregularImperfecto.next(), .imperfectoDeIndicativo, personNumber()))
-      questions.append((allRegular.next(), .futuroDeIndicativo, personNumber()))
-      questions.append((irregularRaizFutura.next(), .futuroDeIndicativo, personNumber()))
-      questions.append((irregularPreterito.next(), .imperfectoDeSubjuntivo1, personNumber()))
-      questions.append((allRegular.next(), .imperfectoDeSubjuntivo2, personNumber()))
-      questions.append((irregularRaizFutura.next(), .condicional, personNumber()))
-      questions.append((irregularPreterito.next(), .futuroDeSubjuntivo, personNumber()))
+      questions.append(QuizQuestion(irregularGerundio.next(), .gerundio, .none))
+      questions.append(QuizQuestion(allRegular.next(), .imperfectoDeIndicativo, personNumber(for: .imperfectoDeIndicativo)))
+      questions.append(QuizQuestion(irregularImperfecto.next(), .imperfectoDeIndicativo, personNumber(for: .imperfectoDeIndicativo)))
+      questions.append(QuizQuestion(allRegular.next(), .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
+      questions.append(QuizQuestion(irregularRaizFutura.next(), .futuroDeIndicativo, personNumber(for: .futuroDeIndicativo)))
+      questions.append(QuizQuestion(irregularPreterito.next(), .imperfectoDeSubjuntivo1, personNumber(for: .imperfectoDeSubjuntivo1)))
+      questions.append(QuizQuestion(allRegular.next(), .imperfectoDeSubjuntivo2, personNumber(for: .imperfectoDeSubjuntivo2)))
+      questions.append(QuizQuestion(irregularRaizFutura.next(), .condicional, personNumber(for: .condicional)))
+      questions.append(QuizQuestion(irregularPreterito.next(), .futuroDeSubjuntivo, personNumber(for: .futuroDeSubjuntivo)))
       if settings.secondSingularQuiz == .tu {
-        questions.append((irregularTuImperativo.next(), .imperativoPositivo, .secondSingularTú))
+        questions.append(QuizQuestion(irregularTuImperativo.next(), .imperativoPositivo, .secondSingularTú))
       } else {
-        questions.append((irregularVosImperativo.next(), .imperativoPositivo, .secondSingularVos))
+        questions.append(QuizQuestion(irregularVosImperativo.next(), .imperativoPositivo, .secondSingularVos))
       }
-      questions.append((allRegular.next(), .imperativoNegativo, personNumber(skipYo: true, skipTu: true)))
+      questions.append(QuizQuestion(allRegular.next(), .imperativoNegativo, personNumber(for: .imperativoNegativo)))
       // Five of the nine compound tenses per run rather than all nine, which would
       // otherwise be 30% of a 30-question quiz. Drawn without replacement, so a
       // single quiz stays varied and repeat play still covers the whole set.
@@ -318,7 +324,7 @@ class Quiz {
       ]
       let chosenCompounds = shouldShuffle ? compoundTenses.shuffled() : compoundTenses
       chosenCompounds.prefix(5).forEach {
-        questions.append((regularOrIrregularParticipioVerb(questionNumber: questions.count), $0, personNumber()))
+        questions.append(QuizQuestion(regularOrIrregularParticipioVerb(questionNumber: questions.count), $0, personNumber(for: $0)))
       }
     }
     return questions
@@ -352,7 +358,7 @@ class Quiz {
         guard Quiz.canAsk(candidate, tense, personNumber) else {
           continue
         }
-        let isRepeat = asked.contains { $0.0 == candidate && $0.1 == tense && $0.2 == personNumber }
+        let isRepeat = asked.contains { $0 == QuizQuestion(candidate, tense, personNumber) }
         if !isRepeat {
           nextVerb = (nextVerb + offset + 1) % pool.count
           return candidate
@@ -363,17 +369,17 @@ class Quiz {
     }
 
     if count >= QuizScope.fullLength {
-      for (_, tense, personNumber) in plan where asked.count < count {
-        if let chosen = verb(for: tense, personNumber, allowingRepeat: true) {
-          asked.append((chosen, tense, personNumber))
+      for question in plan where asked.count < count {
+        if let chosen = verb(for: question.tense, question.personNumber, allowingRepeat: true) {
+          asked.append(QuizQuestion(chosen, question.tense, question.personNumber))
         }
       }
       return asked
     }
 
     var tenses: [DisplayTense] = []
-    for (_, tense, _) in plan where !tenses.contains(tense) {
-      tenses.append(tense)
+    for question in plan where !tenses.contains(question.tense) {
+      tenses.append(question.tense)
     }
     if shouldShuffle {
       tenses.shuffle()
@@ -389,7 +395,7 @@ class Quiz {
         while !cellsByTense[index].isEmpty {
           let personNumber = cellsByTense[index].removeFirst()
           if let chosen = verb(for: tenses[index], personNumber, allowingRepeat: false) {
-            asked.append((chosen, tenses[index], personNumber))
+            asked.append(QuizQuestion(chosen, tenses[index], personNumber))
             askedInRound = true
             break
           }
@@ -400,8 +406,7 @@ class Quiz {
   }
 
   /// The persons a scoped quiz may ask in a tense, as the tab's plan asks them: tú or vos by the
-  /// setting, no vosotros in the Latin America region, no yo in a command, and no tú or vos in a
-  /// negative one.
+  /// setting, no vosotros in the Latin America region, and no yo in a command.
   private func scopedPersonNumbers(for tense: DisplayTense) -> [DisplayPersonNumber] {
     if tense == .gerundio || tense == .participio {
       return [.none]
@@ -409,10 +414,8 @@ class Quiz {
     let secondSingular: DisplayPersonNumber = settings.secondSingularQuiz == .tu ? .secondSingularTú : .secondSingularVos
     var personNumbers: [DisplayPersonNumber]
     switch tense {
-    case .imperativoPositivo:
+    case .imperativoPositivo, .imperativoNegativo:
       personNumbers = [secondSingular, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
-    case .imperativoNegativo:
-      personNumbers = [.thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
     default:
       personNumbers = [.firstSingular, secondSingular, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
     }
@@ -466,19 +469,21 @@ class Quiz {
   }
 
   func process(proposedAnswer: String) -> (ConjugationResult, String?) {
+    let question = questions[currentQuestionIndex]
     let correctAnswer: String
     let result: ConjugationResult
-    switch TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: currentPersonNumber, pronoun: .written) {
-    case let .success(answer):
+    if let answer = question.writtenAnswer {
       correctAnswer = answer
-      result = Quiz.grade(proposedAnswer, infinitive: verb, tense: tense, personNumber: currentPersonNumber, writtenAnswer: answer)
-    case let .failure(error):
+      result = question.grade(proposedAnswer)
+      lastCurrentSpelling = result == .totalMatch ? question.currentSpelling(of: proposedAnswer) : nil
+    } else {
       // A quiz slot should always conjugate — VerbFamiliesTests pins every list
       // entry to VerbMap — but degrade gracefully rather than crash a learner
       // mid-quiz: log, score the question as a miss, and advance.
-      quizLogger.error("Could not conjugate quiz slot \(self.verb) / \(self.tense.displayName): \(String(describing: error))")
+      quizLogger.error("Could not conjugate quiz slot \(self.verb) / \(self.tense.displayName)")
       correctAnswer = ""
       result = .noMatch
+      lastCurrentSpelling = nil
     }
     proposedAnswers.append(proposedAnswer)
     correctAnswers.append(correctAnswer)
@@ -516,27 +521,6 @@ class Quiz {
     } else {
       return (result, correctAnswer)
     }
-  }
-
-  /// Grades an answer against every way the slot may be written. A reflexive-only verb's form
-  /// counts with its pronoun (me arrepiento, the form the quiz shows) or without it
-  /// (arrepiento), since a learner may answer either; any other verb has one answer. Runs of
-  /// spaces collapse, now that an answer can be two words.
-  static func grade(
-    _ proposedAnswer: String,
-    infinitive: String,
-    tense: DisplayTense,
-    personNumber: DisplayPersonNumber,
-    writtenAnswer: String
-  ) -> ConjugationResult {
-    let proposed = proposedAnswer.split(whereSeparator: \.isWhitespace).joined(separator: " ")
-    var answers = [writtenAnswer]
-    if case let .success(bare) = TenseBridge.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber), bare != writtenAnswer {
-      answers.append(bare)
-    }
-    return answers
-      .map { ConjugationResult.compare(lhs: proposed, rhs: $0) }
-      .max { $0.rawValue < $1.rawValue } ?? .noMatch
   }
 
   func quit() {
@@ -586,41 +570,54 @@ class Quiz {
     elapsedTime += 1
   }
 
-  private func personNumber(skipYo: Bool = false, skipTu: Bool = false) -> DisplayPersonNumber {
-    let personNumbers: [DisplayPersonNumber]
-    switch settings.secondSingularQuiz {
-    case .tu:
-      personNumbers = personNumbersWithTu
-    case .vos:
-      personNumbers = personNumbersWithVos
-    }
-    personNumbersIndex += 1
-    if personNumbersIndex == personNumbers.count {
-      personNumbersIndex = 0
-    } else if personNumbers[personNumbersIndex].pronoun == DisplayPersonNumber.secondPlural.pronoun && lastRegion == .latinAmerica {
-      personNumbersIndex += 1
-    }
-
-    if (personNumbers[personNumbersIndex].pronoun == DisplayPersonNumber.firstSingular.pronoun && skipYo) || (personNumbers[personNumbersIndex].pronoun == DisplayPersonNumber.secondSingularTú.pronoun && skipTu) {
-      return personNumber(skipYo: skipYo, skipTu: skipTu)
+  /// The next person a tense asks, in a rotation of its own over the persons it may ask
+  /// (`scopedPersonNumbers(for:)`), which carries over from one quiz to the next. One rotation
+  /// for every tense would fall into step with a quiz's length, and a tense asked once a quiz,
+  /// such as a command, would meet the same person every time.
+  private func personNumber(for tense: DisplayTense) -> DisplayPersonNumber {
+    let personNumbers = scopedPersonNumbers(for: tense)
+    let index: Int
+    if let last = personRotation[tense] {
+      index = last + 1
     } else {
-      return personNumbers[personNumbersIndex]
+      index = shouldShuffle ? Int.random(in: 0..<personNumbers.count) : 0
     }
+    personRotation[tense] = index
+    return personNumbers[index % personNumbers.count]
   }
 }
 
 #if DEBUG
 extension Quiz {
-  /// Launch-argument switch that puts the quiz into deterministic screenshot mode:
-  /// `xcrun simctl launch … -CONJUGAR_QUIZ_FIXTURE screenshot`. Used by
-  /// `scripts/take_screenshots.sh` for screens 5 (quiz mid-question) and 8
-  /// (results); see `docs/screenshot_playbook.md`.
-  ///
-  /// DEBUG-gated, so it cannot be triggered in a release build no matter what
-  /// arguments the process is launched with.
-  static var isScreenshotFixtureRun: Bool {
-    UserDefaults.standard.string(forKey: "CONJUGAR_QUIZ_FIXTURE") == "screenshot"
+  /// A fixed question plan the tab's quiz asks instead of drawing one, named by the launch
+  /// argument `-CONJUGAR_QUIZ_FIXTURE <name>`. DEBUG-gated, so it cannot be triggered in a
+  /// release build no matter what arguments the process is launched with.
+  enum Fixture: String {
+    /// Deterministic screenshot mode, used by `scripts/take_screenshots.sh` for screens 5 (quiz
+    /// mid-question) and 8 (results); see `docs/screenshot_playbook.md`.
+    case screenshot
+    /// Questions whose right answers can be typed more than one way, for trying the grading by
+    /// hand. Each comment names an answer beside the shown one; the second-person questions
+    /// assume the tú setting.
+    case grading
   }
+
+  static var fixtureRun: Fixture? {
+    UserDefaults.standard.string(forKey: "CONJUGAR_QUIZ_FIXTURE").flatMap(Fixture.init(rawValue:))
+  }
+
+  static let gradingFixture: [Question] = [
+    QuizQuestion("hablar", .presenteDeIndicativo, .firstSingular),      // yo hablo
+    QuizQuestion("reír", .pretérito, .thirdSingular),                   // rió
+    QuizQuestion("freír", .perfectoDeIndicativo, .firstSingular),       // he frito, yo he frito
+    QuizQuestion("hablar", .imperativoNegativo, .secondSingularTú),     // no hables
+    QuizQuestion("arrepentir", .presenteDeIndicativo, .firstSingular),  // arrepiento
+    QuizQuestion("satisfacer", .imperativoPositivo, .secondSingularTú), // satisface
+    QuizQuestion("predecir", .futuroDeIndicativo, .firstSingular),      // predeciré
+    QuizQuestion("huir", .pretérito, .firstSingular),                   // huí
+    QuizQuestion("adecuar", .presenteDeIndicativo, .firstSingular),     // adecúo
+    QuizQuestion("tener", .presenteDeIndicativo, .thirdPlural)          // ellos tienen, ustedes tienen
+  ]
 
   /// Where `exportFixtureAnswers()` writes the answer key the driver types back in.
   static var fixtureAnswersURL: URL? {
@@ -646,18 +643,18 @@ extension Quiz {
   ///   than exporting a blank answer, because a blank would be typed as an empty
   ///   string and scored as a miss, quietly ruining the results screenshot.
   static let screenshotFixture: [Question] = [
-    ("ser", .presenteDeIndicativo, .firstSingular),
-    ("hablar", .presenteDeIndicativo, .thirdSingular),
-    ("tener", .pretérito, .firstSingular),
-    ("comer", .imperfectoDeIndicativo, .thirdPlural),
-    ("hacer", .futuroDeIndicativo, .firstSingular),
-    ("vivir", .condicional, .thirdSingular),
-    ("ir", .presenteDeSubjuntivo, .firstPlural),
-    ("poder", .pretérito, .thirdPlural),
-    ("decir", .participio, .none),
-    ("estar", .gerundio, .none),
-    ("saber", .futuroDeIndicativo, .thirdSingular),
-    ("querer", .perfectoDeIndicativo, .firstSingular)
+    QuizQuestion("ser", .presenteDeIndicativo, .firstSingular),
+    QuizQuestion("hablar", .presenteDeIndicativo, .thirdSingular),
+    QuizQuestion("tener", .pretérito, .firstSingular),
+    QuizQuestion("comer", .imperfectoDeIndicativo, .thirdPlural),
+    QuizQuestion("hacer", .futuroDeIndicativo, .firstSingular),
+    QuizQuestion("vivir", .condicional, .thirdSingular),
+    QuizQuestion("ir", .presenteDeSubjuntivo, .firstPlural),
+    QuizQuestion("poder", .pretérito, .thirdPlural),
+    QuizQuestion("decir", .participio, .none),
+    QuizQuestion("estar", .gerundio, .none),
+    QuizQuestion("saber", .futuroDeIndicativo, .thirdSingular),
+    QuizQuestion("querer", .perfectoDeIndicativo, .firstSingular)
   ]
 
   /// Build the fixed question plan, export its answer key, and start the quiz.
@@ -683,7 +680,8 @@ extension Quiz {
       return
     }
     var payload: [[String: String]] = []
-    for (verb, tense, personNumber) in questions {
+    for question in questions {
+      let (verb, tense, personNumber) = (question.verb, question.tense, question.personNumber)
       switch TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber, pronoun: .written) {
       case let .success(answer):
         payload.append([

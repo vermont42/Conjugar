@@ -8,8 +8,8 @@
 import SwiftUI
 
 /// The letters an English keyboard lacks, as a row of keys. The caller decides where a letter
-/// goes, so that a field tracking its selection can insert at the cursor; the verb search
-/// appends, and the quiz's answer field is to adopt the row as well.
+/// goes, so that a field tracking its selection can insert at the cursor, as the quiz's answer
+/// field does; the verb search appends.
 struct SpanishLetterKeyRow: View {
   static let letters = ["á", "é", "í", "ó", "ú", "ü", "ñ"]
 

@@ -16,6 +16,7 @@ struct QuizView: View {
   /// What the tab's picker offers. The choice is not stored, so the tab opens on All Verbs.
   @State private var tabScope = TabQuizScope.allVerbs
   @State private var answer = ""
+  @State private var answerSelection: TextSelection?
   @State private var lastProposed: String?
   @State private var lastCorrect: String?
   @State private var lastResult: ConjugationResult?
@@ -60,6 +61,12 @@ struct QuizView: View {
           ToolbarItem(placement: .cancellationAction) {
             Button(L.Quiz.quit, role: .destructive) { quit() }
               .tint(.customRed)
+          }
+          // iPadOS's keyboard shows no toolbar items, so an iPad has the keys under the field.
+          if !isLarge {
+            ToolbarItem(placement: .keyboard) {
+              letterKeys
+            }
           }
         } else if sheetScope != nil {
           ToolbarItem(placement: .confirmationAction) {
@@ -304,6 +311,10 @@ struct QuizView: View {
           answerField
             .id(QuizView.answerFieldID)
 
+          if isLarge {
+            letterKeys
+          }
+
           feedbackReveal
             .frame(minHeight: 64)
 
@@ -320,6 +331,14 @@ struct QuizView: View {
       }
       .onChange(of: quiz.currentQuestionIndex) {
         revealAnswerField(proxy)
+      }
+    }
+    // A link's quiz starts as the tab appears, before the field exists, so the field takes the
+    // keyboard again once it is on screen, or the letter keys never join the keyboard.
+    .onAppear {
+      fieldFocused = false
+      Task { @MainActor in
+        fieldFocused = true
       }
     }
     .sensoryFeedback(trigger: answerToken) { _, _ in
@@ -370,7 +389,7 @@ struct QuizView: View {
   }
 
   private var answerField: some View {
-    TextField(text: $answer, prompt: Text(L.Quiz.conjugation).foregroundStyle(.secondary)) {
+    TextField(text: $answer, selection: $answerSelection, prompt: Text(L.Quiz.conjugation).foregroundStyle(.secondary)) {
       Text(verbatim: "")
     }
       .accessibilityLabel(L.Quiz.conjugation)
@@ -391,6 +410,30 @@ struct QuizView: View {
       .onSubmit { submit() }
   }
 
+  private var letterKeys: some View {
+    SpanishLetterKeyRow { letter in
+      insertLetter(letter)
+    }
+  }
+
+  /// Replaces the field's selection, or inserts at its cursor, and leaves the cursor after the
+  /// letter. With no selection known, the letter goes at the end.
+  private func insertLetter(_ letter: String) {
+    var text = answer
+    guard
+      case .selection(let range) = answerSelection?.indices,
+      range.lowerBound >= text.startIndex,
+      range.upperBound <= text.endIndex
+    else {
+      answer.append(letter)
+      return
+    }
+    let offset = text.distance(from: text.startIndex, to: range.lowerBound) + letter.count
+    text.replaceSubrange(range, with: letter)
+    answer = text
+    answerSelection = TextSelection(insertionPoint: text.index(text.startIndex, offsetBy: offset))
+  }
+
   @ViewBuilder
   private var feedbackReveal: some View {
     if let result = lastResult {
@@ -398,6 +441,14 @@ struct QuizView: View {
         Image(systemName: result == .noMatch ? "xmark.circle.fill" : "checkmark.circle.fill")
           .foregroundStyle(result == .totalMatch ? Color.customGreen : result == .partialMatch ? Color.customYellow : Color.customRed)
           .font(.title2)
+
+        if result == .totalMatch, let spelling = quiz.lastCurrentSpelling {
+          // "Correct. Spelled: rio", the form read in Spanish.
+          ConjugationText(form: spelling, regularColor: .secondary)
+            .font(.callout)
+            .accessibilityLabel(Text(L.Quiz.correctSpelled + " ") + Text(Self.spanish(spelling.lowercased())))
+            .accessibilityIdentifier("quiz_current_spelling")
+        }
 
         if let correct = lastCorrect {
           VStack(alignment: .leading, spacing: 2) {
@@ -472,6 +523,7 @@ struct QuizView: View {
       lastResult = result
     }
     answer = ""
+    answerSelection = nil
     answerToken += 1
     if quiz.quizState == .finished {
       finish()

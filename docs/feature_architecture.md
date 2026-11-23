@@ -674,11 +674,29 @@ is `Quiz.standardQuestions()`, unshuffled. A scoped quiz borrows it:
 - **Shorter** (Test Me) takes distinct cells one tense at a time from the plan's tenses, so three
   questions at Easy are a presente, a futuro, and a pretérito, never three of one tense.
 - **Either** skips a cell the engine does not give for that verb (a defective verb's), asks tú or vos
-  by the quiz setting, no vosotros in the Latin America region, no yo in a command, and no tú or vos
-  in a negative command, as the tab's plan does.
+  by the quiz setting, no vosotros in the Latin America region, and no yo in a command, as the tab's
+  plan does.
 
-A question is the `(String, DisplayTense, DisplayPersonNumber)` tuple, named `Quiz.Question`; the
-pedagogy plan may want a type.
+The tab's plan draws each question's person from a rotation of that tense's own
+(`Quiz.personNumber(for:)`), carried from one quiz to the next. A single rotation over every tense
+fell into step with a quiz's length, so a tense asked once a quiz, a command above all, met the
+same person every time.
+
+A question is a `QuizQuestion` (`Quiz.Question`), which also grades. `acceptedAnswers` expands every
+spelling the quiz takes rather than folding the learner's answer, since a fold applied to both sides
+would accept misspellings: the written answer, a reflexive-only verb's bare form, and
+`StandardVariants`, the RAE's standard doublets of a cell (frito beside freído, satisface beside
+satisfaz, adecúo beside adecuo, the Río de la Plata's vos hablés beside hables, and every alternate
+the engine models in `Conjugator.conjugateAll`, which includes the spelling the 2010 *Ortografía*
+retired, rió beside rio). `grade(_:)` reads the answer through `AnswerSpelling`, which ignores case,
+runs of spaces, and a leading subject pronoun of the asked person (yo hablo; tú or tu; él, el, ella,
+or usted), though never before a command, a gerundio, or a participio. An answer right but for its
+accents is still `.partialMatch`. The -ra and -se imperfect subjunctives never stand in for each
+other. `SpanishLetterKeyRow` inserts at the answer field's cursor through a `TextSelection`
+binding. On the iPhone it is a keyboard toolbar; iPadOS's keyboard shows no toolbar items, so on
+the iPad it sits under the field. The question view takes the keyboard again as it appears, since a
+quiz started by a link focuses the field before it is on screen and the row then never joins the
+keyboard.
 
 **Test Me** is the clipboard (`pencil.and.list.clipboard`) first in a verb page's navigation bar,
 before the star and Share, read by VoiceOver as "Test Me on This Verb". It opens `QuizSheet`

@@ -316,7 +316,7 @@ struct VerbMapTests {
     ("rehacer", .pretérito(.thirdSingular), "rehízo"),
     // 6B-4 reír family (end-anchored: own stem, not the base's literal).
     ("freír", .presenteDeIndicativo(.firstSingular), "frío"),
-    ("freír", .pretérito(.thirdSingular), "frió"),
+    ("freír", .pretérito(.thirdSingular), "frio"),
     ("sonreír", .gerundio, "sonriendo"),
     ("desleír", .presenteDeIndicativo(.firstSingular), "deslío"),
     // 10 oír family (every slot keeps the prefix).

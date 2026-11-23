@@ -46,12 +46,18 @@ nonisolated enum TenseBridge {
 
   private static func markedConjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, ConjugatorError> {
     let result = unmarkedConjugate(infinitive: infinitive, tense: tense, personNumber: personNumber)
-    guard
-      case let .success(form) = result,
-      let regular = regularForm(infinitive: infinitive, tense: tense, personNumber: personNumber) else {
+    guard case let .success(form) = result else {
       return result
     }
-    return .success(IrregularityMarker.marked(form: form, regular: regular))
+    // The regular composition may be written two ways, since the 2010 Ortografía takes the
+    // accent off a monosyllable: ir's bare ending áis is ais. The spelling that explains more of
+    // the form is the baseline, so vayáis marks VAYáis.
+    let markings = regularForms(infinitive: infinitive, tense: tense, personNumber: personNumber)
+      .map { IrregularityMarker.marked(form: form, regular: $0) }
+    guard let marking = markings.min(by: { $0.filter(\.isUppercase).count < $1.filter(\.isUppercase).count }) else {
+      return result
+    }
+    return .success(marking)
   }
 
   /// The display person's `EnginePersonNumber` counterpart, or nil for `.none`.
@@ -144,21 +150,19 @@ nonisolated enum TenseBridge {
   }
 
   /// The same slot conjugated with a **feature-less** regular model — the
-  /// baseline whose differing span is the verb's irregularity.
-  private static func regularForm(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> String? {
+  /// baseline whose differing span is the verb's irregularity — in each spelling the engine
+  /// accepts for it (`Conjugator.conjugateAll`).
+  private static func regularForms(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> [String] {
     guard let base = RegularRoot(infinitive: infinitive) else {
-      return nil
+      return []
     }
     let regularModel = VerbModel(base: base)
-    func regular(_ engineTense: EngineTense) -> String? {
-      if case let .success(form) = Conjugator.conjugate(infinitive: infinitive, tense: engineTense, model: regularModel) {
-        return form
-      }
-      return nil
+    func regular(_ engineTense: EngineTense) -> [String] {
+      (try? Conjugator.conjugateAll(infinitive: infinitive, tense: engineTense, model: regularModel).get()) ?? []
     }
     switch tense {
     case .infinitivo, .translation:
-      return nil
+      return []
     case .gerundio:
       return regular(.gerundio)
     case .participio:
@@ -167,17 +171,17 @@ nonisolated enum TenseBridge {
       return regular(.futuro(.firstSingular)).map { String($0.dropLast()) }
     case .imperativoPositivo:
       guard let enginePersonNumber = enginePersonNumber(for: personNumber) else {
-        return nil
+        return []
       }
       return regular(.imperativoAfirmativo(enginePersonNumber))
     case .imperativoNegativo:
       guard let enginePersonNumber = enginePersonNumber(for: personNumber) else {
-        return nil
+        return []
       }
       return regular(.presenteDeSubjuntivo(enginePersonNumber)).map { "no " + $0 }
     case .futuroDeSubjuntivo:
       guard let enginePersonNumber = enginePersonNumber(for: personNumber) else {
-        return nil
+        return []
       }
       return regular(.imperfectoDeSubjuntivoRa(enginePersonNumber)).map {
         futureSubjunctive(fromRaForm: $0, personNumber: enginePersonNumber)
@@ -185,19 +189,19 @@ nonisolated enum TenseBridge {
     case .presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
          .presenteDeSubjuntivo, .imperfectoDeSubjuntivo1, .imperfectoDeSubjuntivo2:
       guard let enginePersonNumber = enginePersonNumber(for: personNumber), let engineTense = simpleEngineTense(for: tense, personNumber: enginePersonNumber) else {
-        return nil
+        return []
       }
       return regular(engineTense)
     case .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto,
          .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1,
          .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo:
-      guard
-        case let .success(haberTense) = tense.haberTenseForCompoundTense(),
-        let auxiliary = regularForm(infinitive: DisplayTense.auxiliary, tense: haberTense, personNumber: personNumber),
-        let participle = regularForm(infinitive: infinitive, tense: .participio, personNumber: .none) else {
-        return nil
+      guard case let .success(haberTense) = tense.haberTenseForCompoundTense() else {
+        return []
       }
-      return auxiliary + " " + participle
+      let participles = regularForms(infinitive: infinitive, tense: .participio, personNumber: .none)
+      return regularForms(infinitive: DisplayTense.auxiliary, tense: haberTense, personNumber: personNumber).flatMap { auxiliary in
+        participles.map { auxiliary + " " + $0 }
+      }
     }
   }
 

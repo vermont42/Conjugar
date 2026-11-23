@@ -105,7 +105,8 @@ struct ConjugationMapTests {
       #expect(cells("ve", "ir") == [ConjugationMapTests.cell(.imperativoPositivo, .secondSingularTú)])
       #expect(cells("ve", "ver") == [
         ConjugationMapTests.cell(.presenteDeIndicativo, .thirdSingular),
-        ConjugationMapTests.cell(.imperativoPositivo, .secondSingularTú)
+        ConjugationMapTests.cell(.imperativoPositivo, .secondSingularTú),
+        ConjugationMapTests.cell(.imperativoPositivo, .secondSingularVos)
       ])
       #expect(cells("sé", "saber") == [ConjugationMapTests.cell(.presenteDeIndicativo, .firstSingular)])
       #expect(cells("sé", "ser").contains(ConjugationMapTests.cell(.imperativoPositivo, .secondSingularTú)))

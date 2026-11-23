@@ -26,7 +26,7 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 
 | Phase | Status | Date | Commit | Suggestions |
 |---:|---|---|---|---|
-| 0 | Not started | | | T1.3, T1.4, T1.5, Conjugar's defects |
+| 0 | Awaiting Josh | 2026-11-22 | | T1.3, T1.4, T1.5, Conjugar's defects |
 | 1 | Not started | | | T1.2 |
 | 2 | Not started | | | T4.1, T4.4, T4.5 |
 | 3 | Not started | | | T1.6 |
@@ -598,7 +598,7 @@ lands here, and what differs.
 ## Phase 0: Accept What Is Right
 
 **Ports:** Konjugieren Phase 1. **Suggestions:** T1.3, T1.4, T1.5, and two Conjugar defects.
-**Depends on:** nothing. **Status:** Not started.
+**Depends on:** nothing. **Status:** Awaiting Josh.
 
 - **Trim the answer.** Neither sibling trims whitespace, so a trailing space is wrong today. Trim
   and collapse runs of spaces before grading.
@@ -645,7 +645,66 @@ the swap.
 **Done when** "yo hablo", "  hablo ", and each ruled variant pass, a missing accent still fails, the
 key row inserts at the cursor, tú imperatives are asked, and tests pin each.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Grading lives in `QuizQuestion`** (`Models/QuizQuestion.swift`), a `nonisolated` struct that
+  replaces the `Quiz.Question` tuple (the typealias remains) and holds `writtenAnswer`,
+  `acceptedAnswers`, `grade(_:)`, and `currentSpelling(of:)`. `Quiz.grade` is gone. Accepted
+  answers are expanded, never folded: the written answer, a reflexive-only verb's bare form, and
+  `StandardVariants` (`Models/StandardVariants.swift`). An answer right but for its accents keeps
+  `.partialMatch`, so "a missing accent still fails" means "is not counted right" until Phase 3
+  replaces partial credit. `ConjugationResult` became `nonisolated`.
+- **The pronoun rule** (`Models/AnswerSpelling.swift`) strips any pronoun of the asked person, not
+  only the one shown: él, ella, or usted; ellos, ellas, or ustedes; nosotros or nosotras. It also
+  strips tú and él typed without their accents (tu hablas), since the pronoun is not what is asked.
+  Nothing is stripped before a command, a gerundio, or a participio, pending Phase 1's frame.
+- **The audit** is [`pedagogy_variant_audit.md`](pedagogy_variant_audit.md). rae.es refused
+  scripted fetches, so a Sonnet research pass worked from search extracts. Josh accepted every
+  recommended row, accepted the Río de la Plata's vos subjunctive (hablés, no hablés, hayás
+  hablado; the DLE's table lists only hables, the DPD's voseo entry both), and had the unconfirmed
+  rows checked in Chrome; all held, so desdeciré, palío, repatrio, historío, vidrío, proscripto,
+  transcripto, and adscripto are accepted too.
+- **The verb page changed, at Josh's ruling.** The engine wrote the pre-2010 accents (rió, guió,
+  fiás, huí, riáis), which the RAE no longer admits. `Orthography.currentSpelling(of:)` (in
+  `Conjugator.swift`, so `ConjugationMapTool` compiles it) now respells every composed form, and
+  `Conjugator.conjugateAll` lists the retired spelling last, which is how the quiz still takes
+  rió. ver's vos imperative is ve, not vé (a residue entry on ver's model). A right answer in the
+  retired spelling shows the current one quietly beside the check, read by VoiceOver as "Correct.
+  Spelled: rio" (`L.Quiz.correctSpelled`, the form tagged Spanish). Side effects, each handled:
+  `TenseBridge` marks irregularity against both spellings of the regular baseline, since ir's
+  bare ending áis became ais and marked VAYÁis; `VerbCollection.hasStrongPreterite` checks every
+  spelling, since guie now ends in -e; oracle tests for reír and freír and the ve lookup tests now
+  expect the new forms. Not handled: `Etymologies.json` writes "crió" in seven entries of Spanish
+  prose, and the corpus pipelines' `forms.json` will hold the new spellings the next time they
+  run, though older texts write rió. Both are Josh's to schedule.
+- **The person rotation was worse than the tú skip.** One rotation over every tense fell into step
+  with a quiz's length: in the Latin America region the Moderate quiz's commands met only nosotros
+  and tú, quiz after quiz, and the other regions had the same kind of lock. Each tense now has a
+  rotation of its own (`Quiz.personNumber(for:)`, drawn from `scopedPersonNumbers(for:)`, which the
+  scoped draw already used), carried across quizzes and started at a random person when
+  shuffling. Tú commands, negative ones included, are asked, and a scoped quiz asks tú or vos in
+  a negative command too.
+- **The key row** inserts at the cursor through a `TextSelection` binding. On the iPhone it is a
+  keyboard toolbar on the quiz screen: above the software keyboard, or floating at the bottom with
+  a hardware keyboard. Typing "ro", Left arrow, then í gave "río"; typing fu on the software
+  keyboard and tapping í gave "fuí". iPadOS's keyboard showed no toolbar items at all, with either
+  keyboard and either way of starting, so on the iPad (regular width) the row sits under the
+  answer field instead; there a key tapped into an empty field inserted without ending editing,
+  and "deber", á, "n" on the software keyboard scored deberán. Trying the software keyboard (with
+  computer use, through Simulator's I/O menu) also found that a quiz started by a link, as the tab
+  appears, focused the field before it was on screen, and the row never joined the keyboard. The
+  question view now takes the focus again as it appears. **Left for Josh:** on the iPhone, the row
+  above the software keyboard covers the score and clock line once a correction shows beneath the
+  field. Phase 2's held correction rebuilds that area.
+- **A fixture**, `CONJUGAR_QUIZ_FIXTURE grading` (`Quiz.Fixture`, which now also names
+  `screenshot`): ten questions whose comments give an answer beside the shown one.
+- **Verified:** 945 tests in 56 suites, in the simulator's default language (English). On the
+  iPhone, in English and light mode, the fixture quiz scored the maximum with yo hablo, rió, yo he
+  frito, no hables, arrepiento, satisface, predeciré, huí, adecúo, and ustedes tienen, and reír's
+  page reads rio and riais. On the iPad, in Spanish and dark mode, with the software keyboard, the
+  quiz started by link and by Start, with the keys under the field. VoiceOver's label on the spelling line was read from the
+  accessibility tree, not spoken.
+- **Analytics:** none added, so nothing is staged in `docs/privacy_policy_pending.md`.
 
 ## Phase 1: The Shape of the Answer
 

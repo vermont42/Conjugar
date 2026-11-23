@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ConjugationResult: Int {
+nonisolated enum ConjugationResult: Int {
   case totalMatch = 10
   case partialMatch = 5
   case noMatch = 0

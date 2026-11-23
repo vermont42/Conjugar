@@ -227,9 +227,8 @@ import Testing
   }
 
   @Test func aFoldedFormOfAHiddenPersonIsNotNamed() {
-    let ve = "ve: Presente de Indicativo (él) · Imperativo Positivo (tú)"
-    #expect(lines("ve", "ver") == [ve])
-    #expect(lines("ve", "ver", hiding: []) == [ve, "vé: Imperativo Positivo (vos)"])
+    #expect(lines("ve", "ver") == ["ve: Presente de Indicativo (él) · Imperativo Positivo (tú)"])
+    #expect(lines("ve", "ver", hiding: []) == ["ve: Presente de Indicativo (él) · Imperativo Positivo (tú, vos)"])
     // A vos form typed without its accent is the only form, and stays.
     #expect(lines("tenes", "tener") == ["tenés: Presente de Indicativo (vos)"])
   }

@@ -42,7 +42,7 @@ Conjugar/
 │   ├── MedievalExamples.json   # Bundled Medieval-Spanish attestations keyed infinitive → array
 │   │
 │   │  ── the conjugation engine (all nonisolated + Sendable) ──
-│   ├── Conjugator.swift        # Engine entry point: resolves a verb's model (VerbMap → ModelCatalog) and composes features
+│   ├── Conjugator.swift        # Engine entry point: resolves a verb's model (VerbMap → ModelCatalog) and composes features; Orthography writes the 2010 Ortografía's unaccented monosyllables (rio, guie, fias)
 │   ├── ConjugationFeature.swift  # The feature protocol (applies(to:) + apply(stem:ending:tense:)) and the `Slot` vocabulary
 │   ├── ConjugatorError.swift   # Errors from the conjugation engine
 │   ├── ModelCatalog.swift      # Class number ("1", "4B-1", "31-1", …) → VerbModel (base + ordered features)
@@ -110,10 +110,13 @@ Conjugar/
 │   │                           #   QuizScope.collection(_:title:)
 │   │
 │   │  ── quiz, settings vocabulary, services ──
-│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:) and the scoped draw
+│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the scoped draw, per-tense person rotation, DEBUG fixtures (screenshot, grading)
+│   ├── QuizQuestion.swift      # One question (verb, tense, person): its written answer, every accepted spelling, and grade(_:)
 │   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, or a collection; question count, source, title, isRanked, startsLiveActivity
 │   ├── QuizState.swift         # notStarted / inProgress / finished
 │   ├── ConjugationResult.swift # Answer scoring: totalMatch / partialMatch (diacritic-folded) / noMatch
+│   ├── AnswerSpelling.swift    # How the quiz reads an answer: case, spacing, and a leading subject pronoun of the asked person
+│   ├── StandardVariants.swift  # The RAE's standard doublets of a cell (frito, satisface, adecúo, vos hablés…), accepted by the quiz only
 │   ├── Difficulty.swift        # Setting enum: easy / moderate / difficult, each with a score modifier
 │   ├── Region.swift            # Setting enum: Spain vs. Latin America (TTS accent + score modifier)
 │   ├── SecondSingularBrowse.swift  # Setting enum: which 2s form(s) the browse screens show
@@ -317,6 +320,7 @@ ConjugarTests/
 │   ├── QuizTests.swift                 # Quiz logic, scoring, and timer, driven through the @Observable model
 │   ├── QuizLiveActivityTests.swift     # Which quizzes start, update, and end the Live Activity, against LiveActivitiesSpy
 │   ├── QuizScopeTests.swift            # The scoped quiz: My Verbs and Test Me draws, defective verbs, region and vos, ranking
+│   ├── QuizGradingTests.swift          # Accepted answers (pronouns, spacing, each standard variant), the 2010 spelling, per-tense person rotation
 │   ├── VerbCollectionTests.swift       # Collections: keys, derived membership with VerbFamilies as oracle, progress, quiz, share text
 │   ├── QuizGoldenFormsTests.swift      # Golden forms: proves the quiz asks for correct Spanish, not just self-consistent Spanish
 │   ├── GameStateTests.swift            # Climb helpers: flipbook math, AABB overlap, platform snap, ladders, collisions
@@ -493,6 +497,8 @@ plans/                          # What Claude writes to get another session to d
 ├── pedagogy_implementation.md             # The quiz rebuilt for practice: grading, levels, ten-question rounds, a practice
 │                                          #   record, diagnosis, new exercises, hub, streak, achievements. Ported from
 │                                          #   Konjugieren's pedagogy plan; 24 phases
+├── pedagogy_variant_audit.md              # Which alternate Spanish forms the quiz accepts (rio/rió, frito, satisface,
+│                                          #   adecúo, vos hablés…), with RAE sources per row and Josh's rulings
 └── end_scene_images/                      # What produced the two end-scene portraits, for exact regeneration:
     ├── toreros.txt, familia.txt           #   the image prompts (reference order is in the plan)
     └── recolor_suit.py                    #   the pixel-only navy → royal-blue suit recolor applied to the La familia winner

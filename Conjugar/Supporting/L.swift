@@ -649,6 +649,11 @@ nonisolated enum L {
       String(localized: "Quiz.yourAnswer")
     }
 
+    /// What VoiceOver says before the current spelling of a right answer typed in a retired one.
+    static var correctSpelled: String {
+      String(localized: "Quiz.correctSpelled")
+    }
+
     static var tense: String {
       String(localized: "Quiz.tense")
     }

@@ -33,7 +33,7 @@ struct ResultsView: View {
 
         LazyVStack(spacing: 0) {
           ForEach(Array(quiz.questions.enumerated()), id: \.offset) { index, question in
-            resultRow(index: index, verb: question.0, tense: question.1, person: question.2)
+            resultRow(index: index, verb: question.verb, tense: question.tense, person: question.personNumber)
             Divider().padding(.leading)
           }
         }

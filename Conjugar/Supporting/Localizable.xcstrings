@@ -2399,6 +2399,22 @@
         }
       }
     },
+    "Quiz.correctSpelled" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correct. Spelled:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correcto. Se escribe:"
+          }
+        }
+      }
+    },
     "Quiz.done" : {
       "localizations" : {
         "en" : {

@@ -174,7 +174,7 @@ import UIKit
     #expect(quiz.start(scope: .collection(.irregularFuture, title: "")))
     let verbs = Set(Self.infinitives(.irregularFuture))
     #expect(quiz.questions.count == QuizScope.fullLength)
-    #expect(quiz.questions.allSatisfy { verbs.contains($0.0) })
+    #expect(quiz.questions.allSatisfy { verbs.contains($0.verb) })
     quiz.quit()
   }
 

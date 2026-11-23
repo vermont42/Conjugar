@@ -35,8 +35,8 @@ nonisolated struct MatchedForm: Hashable, Sendable {
   }
 
   /// The forms a result row names. A form found only by folding, every cell of which is a
-  /// person the page hides, is left out when another form remains: "ve" names ver's ve, not its
-  /// vos command vé, for a learner who never chose vos. "tenes" still names tenés, its only form.
+  /// person the page hides, is left out when another form remains: "habla" names habla, not the
+  /// vos command hablá, for a learner who never chose vos. "tenes" still names tenés, its only form.
   static func shown(_ forms: [MatchedForm], hiding hidden: Set<DisplayPersonNumber>) -> [MatchedForm] {
     let visible = forms.filter { !$0.isFolded || !$0.cells.allSatisfy { hidden.contains($0.personNumber) } }
     return visible.isEmpty ? forms : visible

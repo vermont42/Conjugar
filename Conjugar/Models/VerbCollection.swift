@@ -197,10 +197,11 @@ nonisolated enum VerbCollection: Hashable, Identifiable, Sendable {
   /// regular one ends in a stressed -é or -í. Not fui, di, or vi, which are irregular but not
   /// strong.
   static func hasStrongPreterite(_ infinitive: String) -> Bool {
-    guard let form = plainForm(infinitive, .pretérito, .firstSingular) else {
+    // Every spelling: guie, as the 2010 Ortografía writes guié, ends in an e too.
+    guard case .success(let forms) = Conjugator.conjugateAll(infinitive: infinitive, tense: .pretérito(.firstSingular)) else {
       return false
     }
-    return form.hasSuffix("e")
+    return forms.allSatisfy { $0.hasSuffix("e") }
   }
 
   /// A future on a changed stem (tendré, haré, diré, cabré), which the engine marks with capitals.

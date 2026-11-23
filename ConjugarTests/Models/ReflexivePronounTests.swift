@@ -183,10 +183,7 @@ struct ReflexivePronounTests {
   @MainActor
   @Test func theQuizAcceptsTheFormWithAndWithoutItsPronoun() {
     func grade(_ answer: String, _ tense: DisplayTense = .presenteDeIndicativo, _ person: DisplayPersonNumber = .firstSingular) -> ConjugationResult {
-      guard case let .success(written) = TenseBridge.conjugate(infinitive: "arrepentir", tense: tense, personNumber: person, pronoun: .written) else {
-        return .noMatch
-      }
-      return Quiz.grade(answer, infinitive: "arrepentir", tense: tense, personNumber: person, writtenAnswer: written)
+      QuizQuestion("arrepentir", tense, person).grade(answer)
     }
     #expect(grade("me arrepiento") == .totalMatch)
     #expect(grade("arrepiento") == .totalMatch)
@@ -199,7 +196,8 @@ struct ReflexivePronounTests {
 
   @MainActor
   @Test func aVerbWithNoPronounHasOneAnswer() {
-    #expect(Quiz.grade("hablo", infinitive: "hablar", tense: .presenteDeIndicativo, personNumber: .firstSingular, writtenAnswer: "hablo") == .totalMatch)
-    #expect(Quiz.grade("me hablo", infinitive: "hablar", tense: .presenteDeIndicativo, personNumber: .firstSingular, writtenAnswer: "hablo") == .noMatch)
+    let question = QuizQuestion("hablar", .presenteDeIndicativo, .firstSingular)
+    #expect(question.grade("hablo") == .totalMatch)
+    #expect(question.grade("me hablo") == .noMatch)
   }
 }

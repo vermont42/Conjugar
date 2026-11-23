@@ -2301,13 +2301,13 @@ struct ConjugatorTests {
   }
 
   @Test("reír — pretérito (collapse-ii + accents)", arguments: zip(EnginePersonNumber.oracleOrder,
-    ["reí", "reíste", "rió", "reímos", "reísteis", "rieron"]))
+    ["reí", "reíste", "rio", "reímos", "reísteis", "rieron"]))
   func reirPreterite(person: EnginePersonNumber, expected: String) {
     expectForm("reír", model: Self.reir, .pretérito(person), expected)
   }
 
   @Test("reír — presente de subjuntivo (STR accents, WK clean)", arguments: zip(EnginePersonNumber.oracleOrder,
-    ["ría", "rías", "ría", "riamos", "riáis", "rían"]))
+    ["ría", "rías", "ría", "riamos", "riais", "rían"]))
   func reirPresentSubjunctive(person: EnginePersonNumber, expected: String) {
     expectForm("reír", model: Self.reir, .presenteDeSubjuntivo(person), expected)
   }
@@ -2330,7 +2330,7 @@ struct ConjugatorTests {
   // per-verb data, out of scope).
   @Test("reír (6B-4) — prefix-invariance (freír/sonreír/sofreír/refreír/desleír/engreír)", arguments: [
     ("freír", EngineTense.presenteDeIndicativo(.firstSingular), "frío"),
-    ("freír", .pretérito(.thirdSingular), "frió"),
+    ("freír", .pretérito(.thirdSingular), "frio"),
     ("freír", .gerundio, "friendo"),
     ("freír", .presenteDeIndicativo(.firstPlural), "freímos"),
     ("freír", .participioPasado, "freído"),
@@ -2601,7 +2601,7 @@ struct ConjugatorTests {
   // freír also carries reír's umlaut/collapse machinery (sanity beyond the PP).
   @Test("freír — umlaut/collapse spot-checks", arguments: [
     (EngineTense.presenteDeIndicativo(.firstSingular), "frío"),
-    (.pretérito(.thirdSingular), "frió"),
+    (.pretérito(.thirdSingular), "frio"),
     (.gerundio, "friendo"),
     (.presenteDeSubjuntivo(.firstPlural), "friamos")
   ])
