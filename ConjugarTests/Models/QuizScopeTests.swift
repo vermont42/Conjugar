@@ -47,16 +47,16 @@ import Testing
     #expect(QuizScope.myVerbs(Self.myVerbs).source == .myVerbs)
     #expect(QuizScope.verbPage("tener").source == .verbPage)
     #expect(QuizScope.verbPage("tener").questionCount == 3)
-    #expect(QuizScope.myVerbs(Self.myVerbs).questionCount == QuizScope.fullLength)
+    #expect(QuizScope.myVerbs(Self.myVerbs).questionCount == QuizScope.roundLength)
   }
 
-  /// The tab's quiz is thirty questions at every level.
+  /// The tab's quiz is a round of ten at every level.
   @Test func theDefaultScopeAsksTheFullQuiz() {
     for level in QuizLevel.allCases {
       let quiz = makeQuiz(level: level)
       #expect(quiz.start())
       #expect(quiz.scope == .allVerbs)
-      #expect(quiz.questionCount == QuizScope.fullLength)
+      #expect(quiz.questionCount == QuizScope.roundLength)
     }
   }
 
@@ -65,12 +65,19 @@ import Testing
       for shouldShuffle in [false, true] {
         let quiz = makeQuiz(level: level, shouldShuffle: shouldShuffle)
         #expect(quiz.start(scope: .myVerbs(Self.myVerbs)))
-        #expect(quiz.questionCount == QuizScope.fullLength)
+        #expect(quiz.questionCount == QuizScope.roundLength)
+        for _ in 0..<2 {
+          answerEveryQuestion(quiz)
+          #expect(quiz.continueSession())
+        }
+        answerEveryQuestion(quiz)
+        #expect(quiz.questionCount == 3 * QuizScope.roundLength)
         for question in quiz.questions {
           #expect(Self.myVerbs.contains(question.verb), "\(question.verb) is not in My Verbs")
           #expect(Self.conjugates(question), "\(question.verb) cannot be asked in \(question.tense) \(question.personNumber)")
         }
-        // Five verbs over thirty questions: each verb takes its turn.
+        // Five verbs over three rounds: each verb takes its turn, even abolir, which a beginner
+        // can be asked in only two cells.
         #expect(Set(quiz.questions.map(\.verb)) == Set(Self.myVerbs))
       }
     }
@@ -83,7 +90,7 @@ import Testing
         let quiz = makeQuiz(level: level, shouldShuffle: shouldShuffle)
         quiz.start(scope: .myVerbs(["tener", "ir"]))
         let tenerCount = quiz.questions.filter { $0.verb == "tener" }.count
-        #expect((13...17).contains(tenerCount), "tener asked \(tenerCount) of 30 at \(level)")
+        #expect((4...6).contains(tenerCount), "tener asked \(tenerCount) of 10 at \(level)")
       }
     }
   }

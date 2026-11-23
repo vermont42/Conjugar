@@ -15,8 +15,8 @@ import Testing
 
 @MainActor
 @Suite struct QuizTests {
-  /// A perfect run (every answer a total match) scores 10 a question, 300 for thirty, at every
-  /// level and in every region.
+  /// A perfect run (every answer a total match) scores 10 a question, 100 for a round of ten, at
+  /// every level and in every region.
   @Test func perfectRunScoresTheMaximum() {
     let cases: [(region: Region, level: QuizLevel)] = Region.allCases.flatMap { region in
       QuizLevel.allCases.map { (region, $0) }
@@ -36,7 +36,7 @@ import Testing
         quiz.start()
 
         let questionCount = quiz.questionCount
-        #expect(questionCount == 30)
+        #expect(questionCount == QuizScope.roundLength)
 
         while quiz.quizState == .inProgress {
           #expect(quiz.currentQuestionIndex >= 0 && quiz.currentQuestionIndex < questionCount)
@@ -46,11 +46,11 @@ import Testing
             break
           }
           _ = quiz.process(proposedAnswer: correct)
-          #expect(quiz.score >= 0 && quiz.score <= 300)
+          #expect(quiz.score >= 0 && quiz.score <= 100)
         }
 
         #expect(quiz.quizState == .finished)
-        #expect(quiz.score == 300, "Wrong max for \(testCase.region)/\(testCase.level) (shuffle \(shouldShuffle)).")
+        #expect(quiz.score == 100, "Wrong max for \(testCase.region)/\(testCase.level) (shuffle \(shouldShuffle)).")
         #expect(quiz.proposedAnswers.count == questionCount)
         #expect(quiz.correctAnswers.count == questionCount)
       }

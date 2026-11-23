@@ -432,7 +432,7 @@ keyboard_is_visible() {
 # So the answer is pasted with the keyboard attached and the hardware keyboard is detached
 # afterwards, purely to raise the soft keyboard for the capture. Detaching does not
 # disturb the field's contents. nav_quiz_results wants the opposite state throughout: it
-# submits 12 answers with Cmd+V and Return and never photographs a keyboard.
+# submits ten answers with Cmd+V and Return and never photographs a keyboard.
 #
 # Cmd+K ("Toggle Software Keyboard") was what this did through the version_2 sweep. As of
 # Xcode 26.3 / 2026-08-01 it no longer surfaces the keyboard on this machine — the
@@ -858,9 +858,8 @@ nav_quiz_results() {
   sleep 1.0
   local fixture answer i count
   fixture=$(read_fixture_answers_path)
-  # Conjugar's quiz length varies with Settings.difficulty, so don't hardcode 30
-  # the way Conjuguer's driver did — the fixture is the source of truth for how
-  # many questions there are.
+  # Don't hardcode the quiz's length the way Conjuguer's driver did: the fixture
+  # is the source of truth for how many questions there are.
   count=$(jq 'length' "$fixture")
   [[ "$count" -gt 0 ]] || { log "fixture at $fixture is empty — is the app built with -CONJUGAR_QUIZ_FIXTURE support?"; return 1; }
   # Cmd+V needs the hardware keyboard attached; this screen never shows a keyboard, so

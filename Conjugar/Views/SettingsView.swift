@@ -123,6 +123,27 @@ struct SettingsView: View {
         .selectionFeedback(trigger: settings.secondSingularQuiz)
         .accessibilityLabel(L.Settings.quiz)
       }
+
+      GradientDivider()
+
+      settingSection(
+        icon: "clock",
+        tint: .customBlue,
+        heading: L.Settings.quizClockHeading,
+        description: L.Settings.quizClockDescription
+      ) {
+        Picker(selection: $settings.quizClock) {
+          ForEach(QuizClock.allCases, id: \.self) { quizClock in
+            Text(quizClock.localizedQuizClock).tag(quizClock)
+          }
+        } label: {
+          Text(verbatim: "")
+        }
+        .pickerStyle(.segmented)
+        .selectionFeedback(trigger: settings.quizClock)
+        .accessibilityLabel(L.Settings.quizClockHeading)
+        .accessibilityIdentifier("quiz_clock_picker")
+      }
     }
   }
 

@@ -108,7 +108,7 @@ struct VerbCollectionBar: View {
           } label: {
             Label(L.Quiz.localizedTitle, systemImage: "pencil.and.list.clipboard")
           }
-          .accessibilityHint(L.VerbCollection.quizHint(questionCount: QuizScope.fullLength))
+          .accessibilityHint(L.VerbCollection.quizHint(questionCount: QuizScope.roundLength))
           .accessibilityIdentifier("collection_quiz_button")
         }
 

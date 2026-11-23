@@ -11292,3 +11292,47 @@ it is irregular. A real Beginner quiz on the iPhone came out as the tests promis
 irregular cells, five core verbs, five frequent compounds, and the regular half split exactly five
 -ar, five -er, and five -ir. On the iPad at Advanced, the quiz asked añorar, deglutir, fusilar, and
 desvergonzarse beside hacer and venir, which is what "every verb" means.
+
+## Ten Questions, Then Ten More (2026-11-23)
+
+Phase 6 of the pedagogy plan cut the quiz from thirty questions to ten. Josh agreed to the same
+change in Konjugieren reluctantly, since ten questions cover little, in the hope that a short quiz
+is started and finished more often. The results now offer Ten More, which continues the same
+session: the score, the clock, and the questions so far carry on, and the bar under the question
+simply has further to go. Each round is a fresh draw at the session's level, so the second round
+has the first round's balance of irregular cells, core verbs, and compounds that Phase 5 built.
+
+A missed question now comes back once, three questions later, or before the results if the round
+ends sooner. The correction says so, and the question returns with an "Asked Again" pill. A right
+answer to it earns 5 points, like a second try, and a wrong one is not asked a third time. The
+result is a little spaced repetition inside a single session, which costs a learner nothing but a
+few seconds.
+
+Conjugar's quiz model differs from Konjugieren's. Konjugieren keeps one item per question, with its
+answers and points on it. Conjugar keeps parallel arrays: the questions, the answers given, the right
+answers, the grades. That looked like trouble for inserting questions mid-quiz, but an insertion
+always lands after the question on screen, and the arrays only ever hold answered questions, so
+they stay aligned by index. The score and the counts stopped being running totals and became
+sums over the questions. That one change made re-asks and Ten More free of bookkeeping, which
+Konjugieren had found too.
+
+The clock is now hidden by default. A setting, Quiz Clock, shows it in the quiz, the results, and
+the Live Activity. The clock still counts while hidden, because a stopped correction already pauses
+it and nothing else needs it.
+
+Analytics changed in three ways. The exact elapsed time became a coarse band (under three seconds,
+under fifteen, under forty, under two minutes, or longer). The score goes out only for a ranked
+session's first round, which is also the only score posted to Game Center, so every ranked score has
+the same ceiling of 100. And a new signal, `abandonQuiz`, reports on the next launch a quiz the app
+was left during. Konjugieren's closing audit had found a privacy leak in its version of that
+signal: the question number counted list positions, and since a re-ask follows only a wrong answer,
+a quit at question 13 of a ten-question round revealed three mistakes. Conjugar counted original
+questions from the start, and a test pins it. The record of quizzes in progress is read in the app's
+`init`, before any view exists, because a quiz started by a link on a cold launch could otherwise
+write its own entry first and be reported as abandoned.
+
+Looking at the app caught one bug the tests could not. Ten More popped the results back onto a
+question whose answer field had no keyboard, because the field was focused while the pop was still
+animating. A short delay, the same one the correction already used after Back, fixed it. On the
+iPad in Spanish, the new lines read "Esta pregunta volverá a salir.", "Pregunta repetida", and
+"Diez más".

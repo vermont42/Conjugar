@@ -16,11 +16,21 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
   let tense: DisplayTense
   /// `.none` for the gerundio and the participio.
   let personNumber: DisplayPersonNumber
+  /// Whether the quiz asks this question again after a wrong answer to it (`reasked()`). A
+  /// re-ask is never asked again, and a right answer to it earns half points.
+  private(set) var isReask = false
 
   init(_ verb: String, _ tense: DisplayTense, _ personNumber: DisplayPersonNumber) {
     self.verb = verb
     self.tense = tense
     self.personNumber = personNumber
+  }
+
+  /// The same question, to be asked again.
+  func reasked() -> QuizQuestion {
+    var question = self
+    question.isReask = true
+    return question
   }
 
   /// The answer the quiz shows, irregularity-marked, with a reflexive-only verb's pronoun. Nil

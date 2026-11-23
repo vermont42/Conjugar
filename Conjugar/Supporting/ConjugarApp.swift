@@ -39,6 +39,8 @@ struct ConjugarApp: App {
     // rather than crashing — a fresh clone without Secrets.xcconfig still builds.
     let appID = Bundle.main.infoDictionary?["TelemetryDeckAppID"] as? String ?? ""
     Current.analytics.initialize(appID: appID)
+    // Before any view can start a quiz of its own, whose entry this would report.
+    QuizAbandonment.reportAndClear(getterSetter: Current.getterSetter, analytics: Current.analytics)
 
     // TipKit shows nothing until configured, so the `tipsEnabled` kill switch —
     // flipped off before capturing screenshots — hides every tip app-wide with no

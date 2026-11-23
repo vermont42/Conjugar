@@ -17,16 +17,24 @@ nonisolated enum ParameterKey: String {
   /// and a collection's `startQuiz`. A list, never a verb.
   case collection
   case deepestSection
+  /// The band of time from a quiz's start to its quit or to a round's results
+  /// (`AnalyticsBand.quizDuration`), on `quitQuiz` and `completeQuiz`.
+  case duration
   case dwell
-  case elapsedTime
   /// The quiz's `QuizLevel`, by its raw value, on `startQuiz`, `quitQuiz`, and `completeQuiz`.
   case level
   case matchKind
   case outcome
   case queryLength
+  /// The questions a session has asked at a round's results, re-asks not counted (10, 20, …),
+  /// on `completeQuiz`.
+  case questionCount
+  /// The question reached, re-asks not counted, on `quitQuiz` and `abandonQuiz`.
   case questionNumber
   case resultCount
   case resultPosition
+  /// The score of a ranked session's first round, on that round's `completeQuiz` and on a quit
+  /// during it. No other quiz sends it.
   case score
   case source
   case stage
@@ -35,6 +43,9 @@ nonisolated enum ParameterKey: String {
 }
 
 nonisolated enum AnalyticsName: String {
+  /// Sent at launch for each quiz the last run was left during. Carries `level`, `source`, and
+  /// `questionNumber`.
+  case abandonQuiz
   case completeQuiz
   case completeStage
   case enterBossFight
@@ -207,6 +218,24 @@ nonisolated enum AnalyticsBand {
       return "2-5"
     default:
       return "6+"
+    }
+  }
+
+  /// From a quiz's start to its quit or its results. A quit within three seconds reads as
+  /// exploring and one after forty as struggling; the longer bands split a round of ten, which
+  /// often runs one to three minutes.
+  static func quizDuration(_ seconds: Double) -> String {
+    switch seconds {
+    case ..<3:
+      return "0-3s"
+    case ..<15:
+      return "3-15s"
+    case ..<40:
+      return "15-40s"
+    case ..<120:
+      return "40s-2m"
+    default:
+      return "2m+"
     }
   }
 

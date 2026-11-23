@@ -437,3 +437,69 @@ El punto sobre la dificultad del cuestionario, en la sección 2, queda así:
 ```
 - El nivel del cuestionario (inicial, elemental, intermedio o avanzado) al comenzar, abandonar o terminar un cuestionario
 ```
+
+## Rounds of ten, duration bands, and abandoned quizzes (pedagogy plan, Phase 6, 2026-11-23)
+
+The quiz became rounds of ten questions, and a missed question is asked again. The exact elapsed
+time on `quitQuiz` and `completeQuiz` became `duration`, a band from the quiz's start (0-3s, 3-15s,
+15-40s, 40s-2m, 2m+). `completeQuiz` is now sent at each round's results with `questionCount`, the
+questions asked so far (10, 20, …, re-asks not counted). `score` is sent only for the first round of
+a quiz over all verbs, on its `completeQuiz` or on a quit during it. The new `abandonQuiz` is sent
+at the next launch for each quiz the app was left during, with `level`, `source`, and
+`questionNumber`. `questionNumber` counts no repeated question, so it does not reveal how many
+answers were wrong. Only a quiz's first round of ten is submitted to Game Center. These rewrite the
+score bullet, the question-number bullet, and the paragraph after the list in section 2 (where the
+Phase 2 section's paragraph replaced it, this wording wins), and the Game Center paragraph of
+section 7 (in place of the Collections section's wording).
+
+### English
+
+The bullet about the quiz score and elapsed time in section 2 now reads:
+
+```
+- For a quiz over all verbs, the score of its first ten questions, when you complete them or quit during them; and, for every quiz, roughly how long it ran when you quit or complete a round (under 3 seconds, 3 to 15 seconds, 15 to 40 seconds, 40 seconds to 2 minutes, or longer) and how many questions it has asked when you complete a round of ten
+```
+
+The bullet about progress in a quiz now reads:
+
+```
+- How far you progressed in a quiz if you quit it, or if you leave the app during it (the question number reached, reported the next time you open the app)
+```
+
+The paragraph after the list now reads:
+
+```
+Your quiz score and the rough duration of a quiz are collected, but, like all of these analytics, they are anonymized and are not tied to your identity (see Section 4). The app does not record your quiz answers, how many of them were right, which verbs you look up, or any text you type. That you searched is recorded, with the rough counts above; what you typed is not. That you opened a verb's page is recorded; which verb is not.
+```
+
+The first paragraph of section 7 now reads:
+
+```
+Conjugar integrates with Apple Game Center for quiz leaderboards. When you submit a score, Game Center handles that data according to Apple's privacy policy. Only the score of the first ten questions of a quiz over all verbs is submitted; the questions after them, and a quiz over My Verbs, a collection, or a single verb's page, are not. The developer does not have access to your Game Center identity or personal information through this integration.
+```
+
+### Spanish
+
+El punto sobre la puntuación y el tiempo transcurrido, en la sección 2, queda así:
+
+```
+- En un cuestionario sobre todos los verbos, la puntuación de sus diez primeras preguntas, al terminarlas o al abandonarlo durante ellas; y, en todo cuestionario, cuánto duró aproximadamente al abandonarlo o al terminar una tanda (menos de 3 segundos, de 3 a 15 segundos, de 15 a 40 segundos, de 40 segundos a 2 minutos, o más) y cuántas preguntas lleva al terminar una tanda de diez
+```
+
+El punto sobre el progreso en un cuestionario queda así:
+
+```
+- Su progreso en un cuestionario si lo abandona o si sale de la aplicación durante él (el número de pregunta alcanzado, que se comunica la próxima vez que abre la aplicación)
+```
+
+El párrafo que sigue a la lista queda así:
+
+```
+Su puntuación y la duración aproximada de un cuestionario se recopilan, pero, como todas estas estadísticas, están anonimizadas y no están vinculadas a su identidad (véase la sección 4). La aplicación no registra sus respuestas del cuestionario, cuántas acertó, qué verbos consulta ni ningún texto que escriba. Se registra que usted hizo una búsqueda, con las cifras aproximadas indicadas arriba, pero no lo que escribió. Se registra que abrió la página de un verbo, pero no de cuál.
+```
+
+El primer párrafo de la sección 7 queda así:
+
+```
+Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
+```

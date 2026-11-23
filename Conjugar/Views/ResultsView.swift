@@ -10,12 +10,12 @@ import SwiftUI
 struct ResultsView: View {
   /// The tab's quiz, or Test Me's own in a verb page's sheet.
   let quiz: Quiz
+  /// Continues the session with another round, offered while `Quiz.canContinue`.
+  var onTenMore: (() -> Void)?
 
   private var accuracy: Double {
-    let total = quiz.questions.count
-    guard total > 0 else { return 0 }
-    let earned = quiz.results.reduce(0) { $0 + $1.rawValue }
-    return Double(earned) / Double(total * ConjugationResult.totalMatch.rawValue)
+    guard quiz.maximumScore > 0 else { return 0 }
+    return Double(quiz.score) / Double(quiz.maximumScore)
   }
 
   private var scoreColor: Color {
@@ -31,9 +31,16 @@ struct ResultsView: View {
       VStack(spacing: Layout.doubleDefaultSpacing) {
         summaryCard
 
+        if let onTenMore, quiz.canContinue {
+          Button(L.Results.tenMore, action: onTenMore)
+            .buttonStyle(PrimaryButtonStyle())
+            .accessibilityHint(L.Results.tenMoreHint)
+            .accessibilityIdentifier("results_ten_more")
+        }
+
         LazyVStack(spacing: 0) {
           ForEach(Array(quiz.questions.enumerated()), id: \.offset) { index, question in
-            resultRow(index: index, verb: question.verb, tense: question.tense, person: question.personNumber)
+            resultRow(index: index, question: question)
             Divider().padding(.leading)
           }
         }
@@ -59,32 +66,44 @@ struct ResultsView: View {
 
       countLine
 
-      HStack(spacing: Layout.defaultSpacing) {
+      // Wraps once a long level and region name meet the time on an iPhone.
+      FlowLayout(spacing: Layout.defaultSpacing, centersRows: true) {
         Text(quiz.lastLevel.localizedName).metadataPill(tint: .customYellow)
         Text(quiz.lastRegion.localizedRegion).metadataPill(tint: .customBlue)
-        Text(quiz.elapsedTime.timeString).metadataPill(tint: .customForeground)
+        if Current.settings.quizClock == .show {
+          Text(quiz.elapsedTime.timeString).metadataPill(tint: .customForeground)
+        }
       }
     }
     .frame(maxWidth: .infinity)
     .card()
   }
 
-  /// "Correct: 25 / 30 · Second Try: 2", the second part only when an answer was right on its
-  /// second attempt.
+  /// "Correct: 8 / 10 · Second Try: 1 · Asked Again: 1 / 2", the second part only when an answer
+  /// was right on its second attempt and the third only when a question was asked again. The
+  /// parts wrap whole.
   private var countLine: some View {
-    var line = "\(L.Results.correct): \(quiz.correctCount) / \(quiz.questionCount)"
+    var parts = ["\(L.Results.correct): \(quiz.correctCount) / \(quiz.questionCount)"]
     if quiz.secondAttemptCount > 0 {
-      line += " · \(L.Results.secondTry): \(quiz.secondAttemptCount)"
+      parts.append("\(L.Results.secondTry): \(quiz.secondAttemptCount)")
     }
-    return Text(verbatim: line)
-      .font(.subheadline.monospacedDigit())
-      .foregroundStyle(.secondary)
-      .multilineTextAlignment(.center)
-      .fixedSize(horizontal: false, vertical: true)
-      .accessibilityIdentifier("results_counts")
+    if quiz.reaskCount > 0 {
+      parts.append("\(L.Results.askedAgain): \(quiz.reaskCorrectCount) / \(quiz.reaskCount)")
+    }
+    return FlowLayout(spacing: 6, centersRows: true) {
+      ForEach(Array(parts.enumerated()), id: \.offset) { index, part in
+        Text(verbatim: index < parts.count - 1 ? part + " ·" : part)
+      }
+    }
+    .font(.subheadline.monospacedDigit())
+    .foregroundStyle(.secondary)
+    .accessibilityElement(children: .ignore)
+    .accessibilityLabel(parts.joined(separator: ", "))
+    .accessibilityIdentifier("results_counts")
   }
 
-  private func resultRow(index: Int, verb: String, tense: DisplayTense, person: DisplayPersonNumber) -> some View {
+  private func resultRow(index: Int, question: QuizQuestion) -> some View {
+    let (verb, tense, person) = (question.verb, question.tense, question.personNumber)
     let proposed = index < quiz.proposedAnswers.count ? quiz.proposedAnswers[index] : ""
     let correct = index < quiz.correctAnswers.count ? quiz.correctAnswers[index] : ""
     let result = index < quiz.results.count ? quiz.results[index] : ConjugationResult.noMatch
@@ -115,6 +134,13 @@ struct ResultsView: View {
         Text(verbatim: person == .none ? tense.displayName : "\(tense.displayName), \(person.shortDisplayName)")
           .font(.caption)
           .foregroundStyle(.secondary)
+        if question.isReask {
+          // Text, not a Label, whose icon would sit apart from its title in a row.
+          Text("\(Image(systemName: "arrow.counterclockwise")) \(L.Quiz.askedAgain)")
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(Color.customYellow)
+            .accessibilityLabel(L.Quiz.askedAgain)
+        }
 
         HStack(spacing: 4) {
           Text(L.Quiz.yourAnswer + ":").font(.caption).foregroundStyle(.secondary)

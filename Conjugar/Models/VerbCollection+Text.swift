@@ -106,12 +106,12 @@ extension VerbCollection {
 }
 
 nonisolated extension QuizScope {
-  /// A full-length, unranked quiz over a collection, in the same sheet as Test Me, titled with the
+  /// A round of an unranked quiz over a collection, in the same sheet as Test Me, titled with the
   /// collection's name. Its `startQuiz` carries the collection's key.
   static func collection(_ collection: VerbCollection, title: String) -> QuizScope {
     QuizScope(
       verbs: collection.infinitives,
-      questionCount: fullLength,
+      questionCount: roundLength,
       source: .list,
       title: title,
       collectionKey: collection.key

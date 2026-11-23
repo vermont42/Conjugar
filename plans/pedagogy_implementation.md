@@ -31,8 +31,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 2 | Done | 2026-11-23 | df7633c | T4.1, T4.4, T4.5 |
 | 3 | Done | 2026-11-23 | 8bd27c4 | T1.6 |
 | 4 | Done | 2026-11-23 | 17aab3e | T2.3, T2.6, T6.7, M1 |
-| 5 | Awaiting Josh | 2026-11-23 | | T2.1, T2.2, T2.5 |
-| 6 | Not started | | | T2.7, T3.1, T6.5, M2, M3 |
+| 5 | Done | 2026-11-23 | c4d16e2 | T2.1, T2.2, T2.5 |
+| 6 | Awaiting Josh | 2026-11-23 | | T2.7, T3.1, T6.5, M2, M3 |
 | 7 | Not started | | | Decision 4 |
 | 8 | Not started | | | T2.8 |
 | 9 | Not started | | | T2.9, Decision 8 |
@@ -1167,7 +1167,7 @@ works, the quiz signals carry `level`, and tests pin each level's pool.
 ## Phase 5: Which Verbs Are Asked
 
 **Ports:** Konjugieren Phase 6. **Suggestions:** T2.1, T2.2, T2.5. **Depends on:** Phase 4.
-**Status:** Awaiting Josh.
+**Status:** Done.
 
 For the default quiz (not My Verbs, a collection, or a verb's page, whose verbs are chosen):
 
@@ -1286,7 +1286,7 @@ leaves scoped quizzes unaffected, and tests pin each.
 ## Phase 6: Ten Questions, Then Ten More
 
 **Ports:** Konjugieren Phase 7. **Suggestions:** T2.7, T3.1, T6.5, M2, M3. **Depends on:** Phases 2
-and 4. **Status:** Not started.
+and 4. **Status:** Awaiting Josh.
 
 - **T2.7.** The default session is ten questions, with an offer to continue. Josh agreed
   reluctantly for Konjugieren, in the hope that a shorter quiz is started and finished more often.
@@ -1326,7 +1326,82 @@ Activity runs for each round of ten.
 the clock hides by default, the Live Activity and tip follow the new length, the abandonment signal
 fires on the next launch, and tests pin re-ask placement and the continuation.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Nothing was asked.** The phase had no **Ask Josh**, so its "proposed here" decisions, which
+  were Konjugieren's, became Conjugar's: Ten More continues the session and adds to its score; a
+  re-ask comes beyond the ten and earns 5 when right; no thirty-question choice remains; with the
+  clock hidden the results show no time; a default session posts its first round's score only, re-asks
+  not counted; My Verbs and collection quizzes are ten with Ten More, and a verb page keeps three
+  with none; the Live Activity runs for each round. The bands are 0-3s, 3-15s, 15-40s, 40s-2m, and
+  2m+.
+- **Decided in the session, as Konjugieren did.** Each Ten More draws a fresh mix of ten (the
+  question Phase 5 left), so every round has the first round's balance. Ten More has no limit. A
+  verb page's quiz re-asks too. A re-ask may still earn a slip's second attempt, and a right re-ask
+  earns 5 on either attempt. `completeQuiz` is sent at each round's results with `questionCount`
+  (10, 20, …), so Ten More shows without a signal of its own; the phase text did not ask for
+  `questionCount`, but Konjugieren sends it. A later round over My Verbs or a collection is handed
+  the session's questions so far, so it goes on taking turns with them and avoids a cell already
+  asked.
+- **How it works.** `QuizScope.fullLength` (30) became `roundLength` (10), and `continues` joined
+  `isRanked` and `startsLiveActivity`. A re-ask is the same `QuizQuestion` with `isReask` set
+  (`reasked()`), inserted into `Quiz.questions` `Quiz.reaskGap` (3) on, or at the end. Conjugar's
+  quiz keeps parallel arrays (`proposedAnswers`, `results`, …) rather than Konjugieren's items, and
+  an insertion always lands after the question on screen, so the arrays stay aligned by index.
+  `score`, `correctCount`, and `secondAttemptCount` stopped being stored and are computed, re-asks
+  apart (`reaskCount`, `reaskCorrectCount`, `points(at:)`, `maximumScore`, `firstRoundScore`).
+  `questionCount` counts no re-ask. `continueSession()` appends the round, keeps the clock's
+  seconds, and starts a Live Activity. `QuizActivityAttributes.totalQuestions` moved into the
+  content state, since a re-ask grows it, and `elapsedTime` became optional, nil while the clock is
+  hidden.
+- **The privacy leak Konjugieren found in its Closing was avoided from the start.**
+  `quitQuiz` and `abandonQuiz` send `Quiz.questionReached`, which counts no re-ask, and a test pins
+  it (a quit at the fifth position after three misses reports 4).
+- **`score`** now goes only on a ranked session's first round: `completeQuiz` at its results, and
+  `quitQuiz` during it, as `firstRoundScore`. A scoped quiz and Ten More's rounds send none. The
+  exact `elapsedTime` is gone from every signal, replaced by `duration`, wall-clock from the
+  session's start (`AnalyticsBand.quizDuration`). `ParameterKey.elapsedTime` was removed; nothing
+  else sent it.
+- **The abandonment record.** `QuizAbandonment` keeps one entry per quiz in the defaults (key
+  `quizzesInProgress`). `GetterSetter` has no removal, so an empty record is an empty string, as
+  `TutorChatHistory` clears. It is reported in `ConjugarApp.init`, after analytics starts and
+  before any view can start a quiz, rather than in `MainTabView`'s `.task`, where a quiz started by
+  a cold-launch link could already have written an entry to be misreported.
+- **What a learner sees.** The correction says "This question will come up again." / "Esta pregunta
+  volverá a salir.", spoken with the correction. A re-ask's card has an "Asked Again" / "Pregunta
+  repetida" pill, announced as the question comes, and its results row says so too. The results add
+  "Asked Again: 1 / 2" / "Repetidas: 1 / 2" and a Ten More / Diez más button. The counts and the
+  pills now wrap through `FlowLayout`. The new setting is Quiz Clock / Reloj del test, Hide / Show
+  (Ocultar / Mostrar), under Quiz Tú or Vos. Josh has not judged any of the wording.
+- **Found by looking.** On the iPhone, Ten More popped the results onto a question whose field had no
+  keyboard, since the focus was set before the pop ended. The view now focuses the field after
+  450 ms, the delay the correction's Back already used.
+- **Text that said 30 or "timed":** the Quiz tab's line (now "Conjugate 10 Spanish verbs at your
+  level, then ten more if you like. …", naming the re-ask's 5), the start screen's tile (10),
+  the onboarding quiz page ("Take ten-question quizzes"), `TryQuizTip` ("with a ten-question
+  quiz"), the collection Quiz button's VoiceOver hint (from `roundLength`), the App Store
+  description, and the README. The screenshot fixture lost two questions (hablar's presente and
+  saber's futuro, each a second of its tense) to hold one round of ten.
+- **Tests that changed their claim.** `QuizVerbMixTests` and `QuizLevelTests`'s weight test draw
+  thirty-question quizzes explicitly, as before, since proportions need the sample. `QuizScopeTests`'s
+  check that five My Verbs all come up, abolir among them, now runs over three rounds through Ten
+  More, since abolir has only two cells at Beginner and ten questions did not always reach it; the
+  even-share test expects 4 to 6 of ten.
+- **Analytics and privacy** are staged in `docs/privacy_policy_pending.md` (the score, progress, and
+  after-list bullets and section 7's Game Center paragraph, in both languages). A device check of the
+  Live Activity and the new signals is item 6 of `docs/release.md` § Before Submitting.
+- **Verified:** 1,034 tests in 65 suites, in the simulator's default language (English), up from
+  1,016 in 64, with one new suite (`QuizRoundTests`, 16 tests, 0.2 seconds) and a test of the
+  duration bands. `QuizLevelTests` took 4.3 seconds and `QuizVerbMixTests` 2.7, as before.
+  On the iPhone, in English and light mode, with the `grading` and `slips` fixtures: the start
+  screen's line and tile, a miss's correction with its come-up-again line and no clock, the re-ask
+  four places on with its pill, 5 points for it, the results (5, "Correct: 0 / 10 · Asked Again: 1 /
+  10", no time pill, Ten More), and Ten More resuming at the eleventh place with the score, the
+  longer bar, and the keyboard. On the iPad, in Spanish and dark mode at Advanced: the Reloj del test
+  setting, the quiz with the clock shown, "Esta pregunta volverá a salir.", the Pregunta repetida
+  pill, and the results (Repetidas, the time pill, Diez más, the rows' badges). Not tried: VoiceOver
+  by ear, the Live Activity, a real abandonment across a relaunch (unit-tested), Game Center, and
+  accessibility text sizes.
 
 ## Phase 7: Leaderboards by Level
 

@@ -15,10 +15,12 @@ import Testing
 @MainActor
 @Suite struct QuizVerbMixTests {
   private static let seeds: [UInt64] = Array(1...40)
+  /// Three rounds' worth, so that the proportions show at a length a round cannot.
+  private static let longQuiz = 30
 
   // Each level's quizzes are drawn once for the suite.
   private static let quizzes: [QuizLevel: [UInt64: [QuizQuestion]]] = Dictionary(uniqueKeysWithValues: QuizLevel.allCases.map { level in
-    (level, Dictionary(uniqueKeysWithValues: seeds.map { ($0, draw(level, seed: $0, count: QuizScope.fullLength)) }))
+    (level, Dictionary(uniqueKeysWithValues: seeds.map { ($0, draw(level, seed: $0, count: Self.longQuiz)) }))
   })
 
   private static func draw(_ level: QuizLevel, seed: UInt64, count: Int, region: Region = .spain) -> [QuizQuestion] {
@@ -58,7 +60,7 @@ import Testing
   func aDefaultQuizAsksEveryQuestion(level: QuizLevel) {
     for seed in Self.seeds {
       let questions = defaultQuiz(level, seed: seed)
-      #expect(questions.count == QuizScope.fullLength, "seed \(seed)")
+      #expect(questions.count == Self.longQuiz, "seed \(seed)")
       #expect(questions.allSatisfy { $0.writtenAnswer != nil }, "seed \(seed)")
     }
   }
@@ -67,7 +69,7 @@ import Testing
   func halfTheQuestionsAskAnIrregularCell(level: QuizLevel) {
     for seed in Self.seeds {
       let irregular = defaultQuiz(level, seed: seed).filter(isIrregular)
-      #expect(irregular.count == QuizScope.fullLength / 2, "seed \(seed)")
+      #expect(irregular.count == Self.longQuiz / 2, "seed \(seed)")
     }
   }
 
@@ -182,9 +184,9 @@ import Testing
 
   @Test func theMixHoldsInLatinAmerica() {
     for seed in Self.seeds.prefix(10) {
-      let questions = Self.draw(.advanced, seed: seed, count: QuizScope.fullLength, region: .latinAmerica)
+      let questions = Self.draw(.advanced, seed: seed, count: Self.longQuiz, region: .latinAmerica)
       #expect(questions.allSatisfy { $0.personNumber != .secondPlural })
-      #expect(questions.filter(isIrregular).count == QuizScope.fullLength / 2, "seed \(seed)")
+      #expect(questions.filter(isIrregular).count == Self.longQuiz / 2, "seed \(seed)")
     }
   }
 

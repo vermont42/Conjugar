@@ -48,6 +48,16 @@ struct QuizCorrectionView: View {
       .accessibilityFocused(accessibilityIsFocused)
       .accessibilityIdentifier("quiz_correction")
 
+      if correction.willBeReasked {
+        // Spoken with the correction, above.
+        Label(L.Quiz.willComeUpAgain, systemImage: "arrow.counterclockwise")
+          .font(.subheadline)
+          .foregroundStyle(.secondary)
+          .fixedSize(horizontal: false, vertical: true)
+          .accessibilityHidden(true)
+          .accessibilityIdentifier("quiz_will_come_up_again")
+      }
+
       if showsVerbLink || model != nil {
         FlowLayout(spacing: Layout.defaultSpacing) {
           if showsVerbLink {
@@ -124,9 +134,9 @@ struct QuizCorrectionView: View {
     .accessibilityIdentifier(identifier)
   }
 
-  /// "Incorrect. Your Answer: hablo. Correct Answer: habló. Letters that differ: ó." The answers
-  /// are read in Spanish and the rest in the device's language. The letters are named only while
-  /// there are few enough to help.
+  /// "Incorrect. Your Answer: hablo. Correct Answer: habló. Letters that differ: ó. This question
+  /// will come up again." The answers are read in Spanish and the rest in the device's language.
+  /// The letters are named only while there are few enough to help.
   private var spokenCorrection: Text {
     var spoken = AttributedString(L.Quiz.incorrect + " " + L.Quiz.yourAnswer + ": ")
     spoken += Self.spanish(difference.given)
@@ -138,6 +148,9 @@ struct QuizCorrectionView: View {
       spoken += AttributedString(" " + L.Quiz.lettersDiffer + " ")
       spoken += Self.spanish(letters.joined(separator: ", "))
       spoken += AttributedString(".")
+    }
+    if correction.willBeReasked {
+      spoken += AttributedString(" " + L.Quiz.willComeUpAgain)
     }
     return Text(spoken)
   }

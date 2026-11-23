@@ -101,7 +101,7 @@ a model's key names the model.
 
 `AnalyticsSource` is one vocabulary for every signal that carries `source`: `viewVerbView`;
 `finishSearch`, where it names the surface that opened the search field; and `startQuiz`,
-`quitQuiz`, and `completeQuiz` (§ Quiz).
+`quitQuiz`, `completeQuiz`, and `abandonQuiz` (§ Quiz).
 
 | Value | Sent today? | Meaning |
 |---|---|---|
@@ -680,18 +680,20 @@ certain verbs. A stored Easy, Moderate, or Difficult (key `difficulty`) became E
 Intermediate, or Advanced the first time the app ran without a level. The Info tab's filter keeps
 its own three difficulties, `InfoDifficulty`, which has nothing to do with the levels.
 
-Every right answer scores 10 at every level, 5 on a second try, and the score is their sum: no
-normalization to fifty questions and no multiplier for the region or level. Until each level has a
-leaderboard, every level posts to the one there is.
+Every right answer scores 10 at every level, 5 on a second try or on a re-ask, and the score is
+their sum: no normalization to fifty questions and no multiplier for the region or level. Until each
+level has a leaderboard, every level posts to the one there is.
 
 **`QuizScope`** (`Models/QuizScope.swift`, `nonisolated`) says what a quiz asks about: the verbs
 (nil for every verb, drawn from the level's frequency band; otherwise bare infinitives), the
 question count, and the `source` its signals carry. `allVerbs` is the Quiz tab's quiz over every
-verb, `allVerbs(source:)` the same begun by a `quiz` link, `myVerbs(_:)` thirty questions over My
-Verbs, `verbPage(_:)` Test Me's three, and `collection(_:title:)` thirty questions over a
-collection, which also carries a `title` for the sheet and a `collectionKey` for `startQuiz`.
-`QuizScope.fullLength` is 30, and `isRanked` (every verb, full length) decides both whether the
-score goes to Game Center and whether the leaderboard shows at the end. No scoped quiz ranks.
+verb, `allVerbs(source:)` the same begun by a `quiz` link, `myVerbs(_:)` a round over My Verbs,
+`verbPage(_:)` Test Me's three, and `collection(_:title:)` a round over a collection, which also
+carries a `title` for the sheet and a `collectionKey` for `startQuiz`. A round is
+`QuizScope.roundLength`, ten questions. `continues` (a round's length or more) decides whether the
+results offer Ten More, so Test Me's three do not. `isRanked` (every verb, one round) decides
+whether a session's first round posts to Game Center and shows the leaderboard at its results
+(`Quiz.isRankedRound`). No scoped quiz ranks.
 
 **The draw.** `Quiz.start(scope:)` defaults to `.allVerbs`, and returns false, changing nothing,
 when the scope gives no question (an empty My Verbs). Every random choice goes through one
@@ -702,10 +704,11 @@ in every process); without one, a shuffling quiz uses the system's, and an unshu
 - **Every verb** (`levelQuestions(count:)`) draws each question's tense from the level by weight
   and its person from the tense's rotation, then hands the cells to `QuizDraw`
   (`Models/QuizDraw.swift`, `nonisolated`), which chooses the verbs. See **Which verbs** below.
-- **Full length over chosen verbs** (My Verbs, a collection) draws tenses by weight the same way and
+- **A round over chosen verbs** (My Verbs, a collection) draws tenses by weight the same way and
   puts the scope's verbs into them, preferring a verb not already asked in that cell, then the verb
   asked least, then the next in turn, so a defective verb gets its share of the cells it has. A
-  tense none of the verbs has is left out.
+  tense none of the verbs has is left out. Ten More passes the session's questions so far, so a
+  later round goes on taking turns with the earlier ones.
 - **Shorter** (Test Me) takes distinct cells one tense at a time, in an order drawn by weight, so the
   presente tends to come first. A beginner's three questions span its two tenses.
 - **Each** skips a cell the engine does not give for that verb (a defective verb's), asks tú or vos
@@ -809,6 +812,37 @@ the iPad it sits under the field. The question view takes the keyboard again as 
 quiz started by a link focuses the field before it is on screen and the row then never joins the
 keyboard.
 
+**Rounds and Ten More.** A session is rounds of ten. `Quiz.questionCount` counts the rounds'
+questions so far, re-asks not included, and `score`, `correctCount`, `secondAttemptCount`,
+`reaskCount`, and `reaskCorrectCount` are computed from `questions` and `results` rather than kept
+alongside them. A round ends when the last question in `questions`, re-asks included, is answered.
+The results then offer Ten More while `Quiz.canContinue` (a finished round, not a quit, of a scope
+that `continues`): `continueSession()` appends a fresh draw of ten at the session's level, so every
+round has a first round's mix, and the score, the clock, and the questions so far carry on.
+`roundCount` counts the rounds. Only the first round of a ranked session posts, and only its own
+questions' points (`firstRoundScore`, re-asks not counted), so every ranked score has the same
+ceiling, 100. The results' counts ("Correct: 8 / 10 · Second Try: 1 · Asked Again: 1 / 2") and
+pills wrap through `FlowLayout`. Ten More has no limit.
+
+**Re-asks.** A wrong answer (`.noMatch`, after any second attempt) inserts the question again,
+`QuizQuestion.reasked()`, `Quiz.reaskGap` (3) questions on, or at the round's end if that comes
+first, so a question missed near the end returns before the results. A re-ask is asked once,
+whatever its answer, and a right answer to it earns 5 on either attempt (`Quiz.points(at:)`); a slip
+still earns its second attempt. The correction says "This question will come up again." when it
+will, and VoiceOver reads the line with the correction. A re-ask's card shows an "Asked Again" pill,
+which VoiceOver announces as the question comes, and its results row says so too. A test or a
+fixture that walks a quiz by index must expect `questions` to grow.
+
+**The quiz clock.** `Settings.quizClock` (`QuizClock`, key `quizClock`, default `hide`) decides
+whether the question view, the results, and the Live Activity show the time. The clock counts
+either way, and stops while a correction holds the question.
+
+**A quiz left in progress.** `QuizAbandonment` keeps an entry in the defaults (key
+`quizzesInProgress`) for each quiz under way, written as a round begins and at each question and
+removed when it is quit or reaches its results, keyed by `Quiz.abandonmentID`, since a sheet's quiz
+can run beside the tab's. `ConjugarApp.init` sends `abandonQuiz` for each entry the last run left
+and clears them, before any view can start a quiz of its own.
+
 **Test Me** is the clipboard (`pencil.and.list.clipboard`) first in a verb page's navigation bar,
 before the star and Share, read by VoiceOver as "Test Me on This Verb". It opens `QuizSheet`
 (`Views/QuizSheet.swift`), which owns a `Quiz` of its own, so a quiz in progress in the tab carries
@@ -819,8 +853,11 @@ mid-quiz, so every quiz it starts ends with `quitQuiz` or `completeQuiz`. It ski
 the Game Center prompt, and the router's quiz link.
 
 The Live Activity's attributes carry the level's raw value (`QuizActivityAttributes.level`), which
-the widget does not show. **A quiz that is not full length** starts no Live Activity, and does not count toward
-`ChangeLevelTip`. Nor does a collection's quiz start one, though it is full length, because it
+the widget does not show. Each round starts one, and its content state carries the session's
+question on screen and its total so far (`totalQuestions`, which a re-ask grows), and the time only
+while the quiz clock shows it (`elapsedTime` is optional). **A quiz shorter than a round** starts no
+Live Activity, and does not count toward `ChangeLevelTip`, which only a first round's results
+donate to. Nor does a collection's quiz start one, though it is a round, because it
 runs in the sheet beside a quiz the tab may hold, and the Live Activity is one for the app
 (`QuizScope.startsLiveActivity`; `Quiz.hasLiveActivity` keeps a sheet's quiz from ending the tab's).
 Quiz.swift reaches the activity through `Current.liveActivities`: `LiveActivitiesReal` on device
@@ -830,21 +867,34 @@ A collection's completed quiz does count toward the tip.
 
 **The Quiz tab's start screen**: a large yellow symbol for the scope (`books.vertical.fill`, or a
 star for My Verbs), the scope's name ("4,811 verbs" or My Verbs) and a line on what the quiz asks,
-an All Verbs / My Verbs picker above Start, three tiles (30 questions, the level with its gauge, the region),
+an All Verbs / My Verbs picker above Start, three tiles (10 questions, the level with its gauge, the region),
 and for My Verbs the verbs as centered chips, up to twelve and "+N more" (`FlowLayout.centersRows`).
 The level is chosen in Settings, where each level is a tile with a gauge
 (`gauge.with.dots.needle.0percent` to `100percent`) whose needle rises with the level, since a
 four-segment picker would truncate the names on an iPhone. `ChangeLevelTip` ("Choose Your Level")
-points at it after a first full-length quiz; Settings attaches it only while Settings is on screen,
+points at it after a first round's results; Settings attaches it only while Settings is on screen,
 since a popover tip on a view that outlives the tab's first visit would float over the Quiz tab's
 results when the quiz finishing met its rule. Start is disabled while My Verbs is empty. The choice is not
 stored. On iPad the symbol, type, and tiles are larger and Start is scaled up.
 
-**Signals.** `startQuiz`, `quitQuiz`, and `completeQuiz` carry `level` (a `QuizLevel` raw value,
-in place of the old `difficulty`) and `source`: `tab`, `myVerbs`,
+**Signals.** `startQuiz`, `quitQuiz`, `completeQuiz`, and `abandonQuiz` carry `level` (a
+`QuizLevel` raw value, in place of the old `difficulty`) and `source`: `tab`, `myVerbs`, `list`,
 `verbPage`, or a `quiz` link's own (`deeplink` by default), so that three-question completions do
-not raise the full quiz's completion rate. There is no `tapTestVerb`: the sheet starts its quiz as
-it opens, so `startQuiz` with `verbPage` counts the same taps.
+not raise a round's completion rate. There is no `tapTestVerb`: the sheet starts its quiz as it
+opens, so `startQuiz` with `verbPage` counts the same taps. Ten More sends no signal of its own.
+
+| Signal | Further parameters | Sent |
+|---|---|---|
+| `startQuiz` | `collection` for a collection's quiz | As a session starts |
+| `completeQuiz` | `duration`, `questionCount` (10, 20, …), `score` for a ranked session's first round only | At each round's results |
+| `quitQuiz` | `duration`, `questionNumber`, `score` during a ranked session's first round only | On Quit |
+| `abandonQuiz` | `questionNumber` | At the next launch, for each quiz the app was left during |
+
+`duration` is wall-clock from the session's start, background included, in the bands of
+`AnalyticsBand.quizDuration`: 0-3s, 3-15s, 15-40s, 40s-2m, and 2m+. It replaced the exact
+`elapsedTime`. `questionNumber` is `Quiz.questionReached`, which counts no re-ask, since a re-ask
+follows only a wrong answer and a count that included them would say how many answers were wrong.
+`score` is `firstRoundScore`, and no other quiz or round sends one.
 
 ## The Verb of the Day and Random Verbs
 

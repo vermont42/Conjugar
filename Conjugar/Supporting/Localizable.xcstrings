@@ -2212,13 +2212,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Take timed quizzes, earn points, and compete on the Game Center leaderboard. Choose from four levels, from Beginner to Advanced, as your skills grow."
+            "value" : "Take ten-question quizzes, earn points, and compete on the Game Center leaderboard. Choose from four levels, from Beginner to Advanced, as your skills grow."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Haz cuestionarios cronometrados, gana puntos y compite en la tabla de clasificación de Game Center. Elige entre cuatro niveles, de Inicial a Avanzado, a medida que mejoras."
+            "value" : "Haz cuestionarios de diez preguntas, gana puntos y compite en la tabla de clasificación de Game Center. Elige entre cuatro niveles, de Inicial a Avanzado, a medida que mejoras."
           }
         }
       }
@@ -2383,6 +2383,38 @@
         }
       }
     },
+    "Quiz.askedAgain" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asked Again"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pregunta repetida"
+          }
+        }
+      }
+    },
+    "Quiz.willComeUpAgain" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This question will come up again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta pregunta volverá a salir."
+          }
+        }
+      }
+    },
     "Quiz.blank" : {
       "localizations" : {
         "en" : {
@@ -2404,13 +2436,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjugate 30 Spanish verbs at your level. A right answer earns 10 points, and a right second try earns 5."
+            "value" : "Conjugate 10 Spanish verbs at your level, then ten more if you like. A right answer earns 10 points. A right second try, or a missed question answered right when it comes back, earns 5."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjuga 30 verbos españoles de tu nivel. Cada respuesta correcta vale 10 puntos, y 5 si aciertas en el segundo intento."
+            "value" : "Conjuga 10 verbos españoles de tu nivel y, si quieres, diez más. Cada respuesta correcta vale 10 puntos. Un segundo intento correcto, o una pregunta fallada que aciertas cuando vuelve, vale 5."
           }
         }
       }
@@ -3015,6 +3047,54 @@
         }
       }
     },
+    "Results.askedAgain" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asked Again"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repetidas"
+          }
+        }
+      }
+    },
+    "Results.tenMore" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten More"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diez más"
+          }
+        }
+      }
+    },
+    "Results.tenMoreHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continues this quiz with ten more questions."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continúa este test con diez preguntas más."
+          }
+        }
+      }
+    },
     "Results.time" : {
       "localizations" : {
         "en" : {
@@ -3147,6 +3227,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recuerda sus conjugaciones y luego toca para comprobarlas."
+          }
+        }
+      }
+    },
+    "QuizClock.hide" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar"
+          }
+        }
+      }
+    },
+    "QuizClock.show" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar"
           }
         }
       }
@@ -3543,6 +3655,38 @@
         }
       }
     },
+    "Settings.quizClockHeading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quiz Clock"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reloj del test"
+          }
+        }
+      }
+    },
+    "Settings.quizClockDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This setting determines whether the quiz and its results show the time you spend answering."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este ajuste determina si el test y sus resultados muestran el tiempo que dedicas a responder."
+          }
+        }
+      }
+    },
     "Settings.reviewCardSuppressionHeading" : {
       "localizations" : {
         "en" : {
@@ -3660,13 +3804,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Test your knowledge of Spanish verb conjugations with a timed quiz."
+            "value" : "Test your knowledge of Spanish verb conjugations with a ten-question quiz."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pon a prueba tu conocimiento de las conjugaciones de verbos españoles con un test cronometrado."
+            "value" : "Pon a prueba tu conocimiento de las conjugaciones de verbos españoles con un test de diez preguntas."
           }
         }
       }

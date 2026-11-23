@@ -11,13 +11,13 @@ import Foundation
 final class LiveActivitiesReal: LiveActivities {
   private var current: Activity<QuizActivityAttributes>?
 
-  func start(level: String, totalQuestions: Int, state: QuizActivityAttributes.ContentState) {
+  func start(level: String, state: QuizActivityAttributes.ContentState) {
     guard ActivityAuthorizationInfo().areActivitiesEnabled else {
       return
     }
     // endAll() lists the activities to end before this request, so the new one is not among them.
     endAll()
-    let attributes = QuizActivityAttributes(level: level, totalQuestions: totalQuestions)
+    let attributes = QuizActivityAttributes(level: level)
     current = try? Activity<QuizActivityAttributes>.request(
       attributes: attributes,
       content: ActivityContent(state: state, staleDate: nil)

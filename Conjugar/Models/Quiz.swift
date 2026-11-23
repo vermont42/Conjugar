@@ -30,10 +30,12 @@ private struct AnyRandomNumberGenerator: RandomNumberGenerator {
 @Observable
 class Quiz {
   private(set) var quizState: QuizState = .notStarted
+  /// The seconds spent answering, across the session's rounds. It counts whether or not the
+  /// quiz clock shows it, and stops while a correction holds the question.
   private(set) var elapsedTime: Int = 0
-  private(set) var score: Int = 0
   private(set) var currentQuestionIndex = 0
-  private(set) var correctCount = 0
+  /// The rounds the session has begun: 1, then 2 after Ten More.
+  private(set) var roundCount = 0
   private(set) var lastRegion: Region = .spain
   private(set) var lastLevel: QuizLevel = .initial
   private(set) var proposedAnswers: [String] = []
@@ -68,11 +70,88 @@ class Quiz {
   /// Whether this quiz started the Live Activity, which is one for the whole app. A quiz that did
   /// not, such as Test Me's in a sheet, must not update or end the tab's.
   @ObservationIgnored private var hasLiveActivity = false
+  /// When the session began, for the duration that `quitQuiz` and `completeQuiz` send.
+  @ObservationIgnored private var startDate = Date()
+  /// Names this quiz's entry in `QuizAbandonment`, since a quiz in a sheet can run beside the
+  /// Quiz tab's.
+  @ObservationIgnored let abandonmentID = UUID().uuidString
 
   typealias Question = QuizQuestion
 
+  /// How many questions after a wrong answer its re-ask comes, or sooner at the round's end.
+  static let reaskGap = 3
+
+  /// The questions the session's rounds have asked, re-asks not counted: 10, then 20 after Ten
+  /// More, or 3 on a verb's page.
   var questionCount: Int {
-    return questions.count
+    questions.filter { !$0.isReask }.count
+  }
+
+  /// The points the answer to the question at `index` earned: a re-ask's right answer earns half,
+  /// on either attempt.
+  func points(at index: Int) -> Int {
+    guard results.indices.contains(index) else {
+      return 0
+    }
+    let points = results[index].rawValue
+    return questions[index].isReask ? min(points, ConjugationResult.secondAttemptMatch.rawValue) : points
+  }
+
+  var score: Int {
+    results.indices.reduce(0) { $0 + points(at: $1) }
+  }
+
+  /// The most `score` could be once every question asked so far is answered.
+  var maximumScore: Int {
+    questions.reduce(0) { $0 + ($1.isReask ? ConjugationResult.secondAttemptMatch.rawValue : ConjugationResult.totalMatch.rawValue) }
+  }
+
+  /// The score of the first round's questions, re-asks not counted, which is all that a ranked
+  /// session posts.
+  var firstRoundScore: Int {
+    questions.indices
+      .filter { !questions[$0].isReask }
+      .prefix(scope.questionCount)
+      .reduce(0) { $0 + points(at: $1) }
+  }
+
+  /// Whether the round under way, or just finished, is a ranked session's first, the only round
+  /// whose score is posted or sent.
+  var isRankedRound: Bool {
+    scope.isRanked && roundCount == 1
+  }
+
+  /// Right on the first attempt, re-asks not counted. A right second attempt is counted apart,
+  /// in `secondAttemptCount`.
+  var correctCount: Int {
+    results.indices.filter { !questions[$0].isReask && results[$0] == .totalMatch }.count
+  }
+
+  /// The re-asks the session has asked.
+  var reaskCount: Int {
+    questions.filter(\.isReask).count
+  }
+
+  /// The re-asks answered right, on either attempt.
+  var reaskCorrectCount: Int {
+    results.indices.filter { questions[$0].isReask && results[$0] != .noMatch }.count
+  }
+
+  /// The question reached, re-asks not counted, which `quitQuiz` and `abandonQuiz` send. A re-ask
+  /// is inserted only after a wrong answer, so a position that counted re-asks would tell how many
+  /// answers were wrong, and no signal says how well a learner did.
+  var questionReached: Int {
+    questions.prefix(currentQuestionIndex + 1).filter { !$0.isReask }.count
+  }
+
+  /// The band of time since the session began, wall-clock, so a stay in the background counts.
+  var durationBand: String {
+    AnalyticsBand.quizDuration(Date().timeIntervalSince(startDate))
+  }
+
+  /// Whether the results offer Ten More: a finished round, not a quit, of a scope that continues.
+  var canContinue: Bool {
+    quizState == .finished && scope.continues && !questions.isEmpty && results.count == questions.count
   }
 
   var verb: String {
@@ -204,7 +283,10 @@ class Quiz {
   /// tense that none of the verbs has is left out. A shorter quiz, such as Test Me's three
   /// questions, asks distinct cells in different tenses instead, one tense at a time, the heavier
   /// tenses likelier to come first.
-  private func scopedQuestions(verbs: [String], count: Int) -> [Question] {
+  ///
+  /// A later round passes the session's questions so far as `prior`, so that its verbs take
+  /// turns with the earlier rounds' and a cell already asked goes to another verb where one fits.
+  private func scopedQuestions(verbs: [String], count: Int, after prior: [Question] = []) -> [Question] {
     var pool = verbs.filter { VerbMap.shared.entry(for: $0) != nil }
     guard !pool.isEmpty, count > 0 else {
       return []
@@ -212,7 +294,8 @@ class Quiz {
     if shouldShuffle {
       pool.shuffle(using: &generator)
     }
-    var asked: [Question] = []
+    var asked = prior.map { QuizQuestion($0.verb, $0.tense, $0.personNumber) }
+    let target = asked.count + count
     var nextVerb = 0
 
     /// A verb that can be asked in a cell, preferring one not already asked there, then the one
@@ -243,9 +326,9 @@ class Quiz {
       return chosen
     }
 
-    if count >= QuizScope.fullLength {
+    if count >= QuizScope.roundLength {
       var entries = lastLevel.pool
-      while asked.count < count, let entry = entries.weightedRandomElement(using: &generator) {
+      while asked.count < target, let entry = entries.weightedRandomElement(using: &generator) {
         // The rotation's person first, then the tense's others, for a verb that lacks it.
         let first = personNumber(for: entry)
         let personNumbers = personNumbers(for: entry)
@@ -263,7 +346,7 @@ class Quiz {
           entries.removeAll { $0 == entry }
         }
       }
-      return asked
+      return Array(asked.dropFirst(prior.count))
     }
 
     let entries = shouldShuffle ? lastLevel.pool.weightedShuffled(using: &generator) : lastLevel.pool
@@ -272,9 +355,9 @@ class Quiz {
       return shouldShuffle ? personNumbers.shuffled(using: &generator) : personNumbers
     }
     var askedInRound = true
-    while asked.count < count, askedInRound {
+    while asked.count < target, askedInRound {
       askedInRound = false
-      for index in entries.indices where asked.count < count {
+      for index in entries.indices where asked.count < target {
         while !cellsByTense[index].isEmpty {
           let personNumber = cellsByTense[index].removeFirst()
           if let chosen = verb(for: entries[index].tense, personNumber, allowingRepeat: false) {
@@ -285,7 +368,7 @@ class Quiz {
         }
       }
     }
-    return asked
+    return Array(asked.dropFirst(prior.count))
   }
 
   /// The persons a quiz may ask in a level's tense: tú or vos by the setting, no vosotros in the
@@ -328,9 +411,10 @@ class Quiz {
     firstAttempt != nil
   }
 
-  /// The answers right on the second attempt, counted apart from `correctCount`.
+  /// The answers right on the second attempt, re-asks not counted, counted apart from
+  /// `correctCount`.
   var secondAttemptCount: Int {
-    results.filter { $0 == .secondAttemptMatch }.count
+    results.indices.filter { !questions[$0].isReask && results[$0] == .secondAttemptMatch }.count
   }
 
   /// Whether the clock is counting, which it does only while a question waits for its answer.
@@ -342,10 +426,44 @@ class Quiz {
   /// screenshot fixture can build its own question list and then enter the quiz
   /// through exactly the same door.
   private func beginQuiz() {
-    score = 0
-    correctCount = 0
     currentQuestionIndex = 0
     elapsedTime = 0
+    roundCount = 1
+    startDate = Date()
+    beginRound()
+  }
+
+  /// Ten More: another round in the same session, offered by the results. The score, the clock,
+  /// and the questions so far carry on, and the new questions are a fresh draw at the session's
+  /// level, so that every round has the mix of a quiz's first. Returns false, changing nothing,
+  /// when the results offer no Ten More or the draw gives no question.
+  @discardableResult
+  func continueSession() -> Bool {
+    guard canContinue else {
+      return false
+    }
+    var drawn: [Question]
+    if let verbs = scope.verbs {
+      drawn = scopedQuestions(verbs: verbs, count: scope.questionCount, after: questions)
+    } else {
+      drawn = levelQuestions(count: scope.questionCount)
+    }
+    guard !drawn.isEmpty else {
+      return false
+    }
+    if shouldShuffle {
+      drawn.shuffle(using: &generator)
+    }
+    currentQuestionIndex = questions.count
+    questions += drawn
+    roundCount += 1
+    beginRound()
+    return true
+  }
+
+  /// Starts the clock, the Live Activity, and the record of progress for the round from
+  /// `currentQuestionIndex`.
+  private func beginRound() {
     correction = nil
     firstAttempt = nil
     lastCurrentSpelling = nil
@@ -354,12 +472,9 @@ class Quiz {
     // The Live Activity belongs to the tab's quiz. See `QuizScope.startsLiveActivity`.
     hasLiveActivity = scope.startsLiveActivity
     if hasLiveActivity {
-      Current.liveActivities.start(
-        level: lastLevel.rawValue,
-        totalQuestions: questions.count,
-        state: liveActivityState(isFinished: false)
-      )
+      Current.liveActivities.start(level: lastLevel.rawValue, state: liveActivityState(isFinished: false))
     }
+    recordProgress()
   }
 
   /// Grades the answer to the question on screen. A first attempt that is a slip
@@ -399,16 +514,16 @@ class Quiz {
     results.append(result)
     firstAttempts.append(firstAttempt)
     firstAttempt = nil
-    score += result.rawValue
     switch result {
-    case .totalMatch:
-      correctCount += 1
-      advance()
-    case .secondAttemptMatch:
+    case .totalMatch, .secondAttemptMatch:
       advance()
     case .noMatch:
       timer?.invalidate()
-      correction = QuizCorrection(difference: question.difference(from: proposedAnswer))
+      let willBeReasked = !question.isReask
+      if willBeReasked {
+        questions.insert(question.reasked(), at: min(currentQuestionIndex + 1 + Quiz.reaskGap, questions.count))
+      }
+      correction = QuizCorrection(difference: question.difference(from: proposedAnswer), willBeReasked: willBeReasked)
     }
     return result
   }
@@ -431,6 +546,7 @@ class Quiz {
       if hasLiveActivity {
         Current.liveActivities.update(liveActivityState(isFinished: false))
       }
+      recordProgress()
     } else {
       finish()
     }
@@ -439,14 +555,15 @@ class Quiz {
   private func finish() {
     timer?.invalidate()
     quizState = .finished
+    clearProgress()
     // Unlocks the "Choose Your Level" tip, which is rule-gated on having
     // finished at least one quiz. Three questions on a verb's page are not one.
-    if scope.questionCount >= QuizScope.fullLength {
+    if roundCount == 1, scope.continues {
       ChangeLevelTip.quizCompleted.sendDonation()
     }
     endLiveActivity()
-    if scope.isRanked {
-      let finalScore = score
+    if isRankedRound {
+      let finalScore = firstRoundScore
       Task {
         await gameCenter.reportScore(finalScore)
       }
@@ -462,7 +579,21 @@ class Quiz {
     correction = nil
     firstAttempt = nil
     quizState = .finished
+    clearProgress()
     endLiveActivity()
+  }
+
+  /// Where the quiz has reached, for the next launch to report should the app be left during it.
+  private func recordProgress() {
+    QuizAbandonment.record(
+      QuizAbandonment.Entry(level: lastLevel.rawValue, source: scope.source.rawValue, questionNumber: questionReached),
+      id: abandonmentID,
+      getterSetter: Current.getterSetter
+    )
+  }
+
+  private func clearProgress() {
+    QuizAbandonment.clear(id: abandonmentID, getterSetter: Current.getterSetter)
   }
 
   private func endLiveActivity() {
@@ -477,9 +608,10 @@ class Quiz {
   private func liveActivityState(isFinished: Bool) -> QuizActivityAttributes.ContentState {
     QuizActivityAttributes.ContentState(
       currentQuestion: questions.isEmpty ? 0 : min(currentQuestionIndex + 1, questions.count),
+      totalQuestions: questions.count,
       score: score,
       correctCount: correctCount,
-      elapsedTime: Quiz.formatElapsed(elapsedTime),
+      elapsedTime: settings.quizClock == .show ? Quiz.formatElapsed(elapsedTime) : nil,
       isFinished: isFinished
     )
   }
@@ -625,6 +757,7 @@ extension Quiz {
   /// `en` and `es` passes of the same sweep. A hand-picked list keeps the listing
   /// screenshots identical across all four device × language cells, and lets the
   /// rows show off a spread of tenses with verbs a browsing shopper recognizes.
+  /// It holds one round, so that the results show what a learner's first ten do.
   ///
   /// Two constraints on anything added here:
   /// - **No second-person slots.** `tú` vs. `vos` is a user setting
@@ -636,7 +769,6 @@ extension Quiz {
   ///   string and scored as a miss, quietly ruining the results screenshot.
   static let screenshotFixture: [Question] = [
     QuizQuestion("ser", .presenteDeIndicativo, .firstSingular),
-    QuizQuestion("hablar", .presenteDeIndicativo, .thirdSingular),
     QuizQuestion("tener", .pretérito, .firstSingular),
     QuizQuestion("comer", .imperfectoDeIndicativo, .thirdPlural),
     QuizQuestion("hacer", .futuroDeIndicativo, .firstSingular),
@@ -645,7 +777,6 @@ extension Quiz {
     QuizQuestion("poder", .pretérito, .thirdPlural),
     QuizQuestion("decir", .participio, .none),
     QuizQuestion("estar", .gerundio, .none),
-    QuizQuestion("saber", .futuroDeIndicativo, .thirdSingular),
     QuizQuestion("querer", .perfectoDeIndicativo, .firstSingular)
   ]
 

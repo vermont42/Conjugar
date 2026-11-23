@@ -14,7 +14,7 @@
 protocol LiveActivities {
   /// Ends any activity already showing, then starts the quiz's. Does nothing when the learner
   /// has turned Live Activities off.
-  func start(level: String, totalQuestions: Int, state: QuizActivityAttributes.ContentState)
+  func start(level: String, state: QuizActivityAttributes.ContentState)
   func update(_ state: QuizActivityAttributes.ContentState)
   func end(_ state: QuizActivityAttributes.ContentState)
   /// Ends every quiz activity, which a launch does, since none survives its quiz.

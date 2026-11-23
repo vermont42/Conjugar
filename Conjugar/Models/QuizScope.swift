@@ -29,36 +29,44 @@ nonisolated struct QuizScope: Equatable, Sendable {
     self.collectionKey = collectionKey
   }
 
-  /// The length of the Quiz tab's quiz, whatever its scope.
-  static let fullLength = 30
+  /// A round's length. The Quiz tab's quiz, a My Verbs quiz, and a collection's ask one round,
+  /// and the results offer another (`continues`).
+  static let roundLength = 10
 
   /// Test Me's length on a verb's page.
   static let verbPageQuestionCount = 3
 
-  /// Only a full quiz over every verb posts to the Game Center leaderboard and shows it at the
-  /// end: a score over a learner's own verbs, or over three questions, compares with nothing.
+  /// Only a quiz over every verb ranks: a score over a learner's own verbs, or over three
+  /// questions, compares with nothing. Of a ranked session, only the first round's score counts
+  /// (`Quiz.firstRoundScore`).
   var isRanked: Bool {
-    verbs == nil && questionCount == QuizScope.fullLength
+    verbs == nil && questionCount == QuizScope.roundLength
+  }
+
+  /// Whether the results offer Ten More, which continues the session with another round. Test
+  /// Me's three questions are a check on one verb, not a session to grow.
+  var continues: Bool {
+    questionCount >= QuizScope.roundLength
   }
 
   /// Whether the quiz starts the Live Activity, which is one for the whole app and belongs to the
   /// Quiz tab's quiz. A three-question quiz in a verb page's sheet is over before one would be
   /// noticed, and a collection's quiz runs in the same sheet, beside a quiz the tab may hold, so
-  /// neither starts one, though a collection's is full length.
+  /// neither starts one, though a collection's is a full round.
   var startsLiveActivity: Bool {
-    questionCount >= QuizScope.fullLength && collectionKey == nil
+    questionCount >= QuizScope.roundLength && collectionKey == nil
   }
 
   static let allVerbs = allVerbs(source: .tab)
 
-  /// The full quiz over every verb, begun somewhere other than Start: a `quiz` link names its
+  /// The quiz over every verb, begun somewhere other than Start: a `quiz` link names its
   /// surface, or `deeplink`. It ranks like the tab's.
   static func allVerbs(source: AnalyticsSource) -> QuizScope {
-    QuizScope(verbs: nil, questionCount: fullLength, source: source)
+    QuizScope(verbs: nil, questionCount: roundLength, source: source)
   }
 
   static func myVerbs(_ verbs: [String]) -> QuizScope {
-    QuizScope(verbs: verbs, questionCount: fullLength, source: .myVerbs)
+    QuizScope(verbs: verbs, questionCount: roundLength, source: .myVerbs)
   }
 
   static func verbPage(_ verb: String) -> QuizScope {

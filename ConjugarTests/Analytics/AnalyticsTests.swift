@@ -40,6 +40,7 @@ struct AnalyticsTests {
   // The dashboard groups by raw value, so a renamed case would silently orphan its
   // history. These pin the wire names of the signals carrying parameters.
   @Test(arguments: [
+    (AnalyticsName.abandonQuiz, "abandonQuiz"),
     (AnalyticsName.completeQuiz, "completeQuiz"),
     (AnalyticsName.quitQuiz, "quitQuiz"),
     (AnalyticsName.completeStage, "completeStage")
@@ -49,14 +50,23 @@ struct AnalyticsTests {
   }
 
   @Test(arguments: [
-    (ParameterKey.elapsedTime, "elapsedTime"),
+    (ParameterKey.duration, "duration"),
     (ParameterKey.level, "level"),
+    (ParameterKey.questionCount, "questionCount"),
     (ParameterKey.questionNumber, "questionNumber"),
     (ParameterKey.score, "score"),
     (ParameterKey.stage, "stage")
   ])
   func parameterKeyRawValuesAreStable(key: ParameterKey, expected: String) {
     #expect(key.rawValue == expected)
+  }
+
+  @Test(arguments: [
+    (0.0, "0-3s"), (2.9, "0-3s"), (3.0, "3-15s"), (14.9, "3-15s"), (15.0, "15-40s"),
+    (39.9, "15-40s"), (40.0, "40s-2m"), (119.9, "40s-2m"), (120.0, "2m+"), (3600.0, "2m+")
+  ])
+  func quizDurationBands(seconds: Double, band: String) {
+    #expect(AnalyticsBand.quizDuration(seconds) == band)
   }
 
   // AnalyticsReal drops every signal when handed an empty app ID rather than

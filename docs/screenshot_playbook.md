@@ -843,7 +843,7 @@ Compact reference. The driver's inline comments hold the full WHY for each — c
     instant: pasting needs it attached, photographing the keyboard needs it detached.
     Detaching does not disturb the field's contents, so the driver orders them —
     `set_keyboard_state hidden` → paste → `set_keyboard_state visible` → capture — and
-    `nav_quiz_results`, which submits 12 answers and never photographs a keyboard, holds
+    `nav_quiz_results`, which submits ten answers and never photographs a keyboard, holds
     `hidden` throughout. `set_keyboard_state` keeps #24's window / frontmost / 3× retry
     guards verbatim; it never reads the menu's checkmark (only readable while the menu is
     open) but clicks and then asks the screen, which is also what makes it idempotent

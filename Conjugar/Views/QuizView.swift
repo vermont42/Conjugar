@@ -46,7 +46,7 @@ struct QuizView: View {
           if sheetScope == nil {
             startScreen
           } else if quiz.quizState == .finished {
-            ResultsView(quiz: quiz)
+            ResultsView(quiz: quiz, onTenMore: continueSession)
           } else {
             // Something must be on screen for `onAppear` to start the sheet's quiz.
             Color.clear
@@ -59,7 +59,7 @@ struct QuizView: View {
       .background(Color.customBackground.ignoresSafeArea())
       .navigationTitle(sheetTitle ?? L.Quiz.localizedTitle)
       .navigationBarTitleDisplayMode(sheetScope == nil ? .automatic : .inline)
-      .navigationDestination(isPresented: $showingResults) { ResultsView(quiz: quiz) }
+      .navigationDestination(isPresented: $showingResults) { ResultsView(quiz: quiz, onTenMore: continueSession) }
       .navigationDestination(for: VerbDestination.self) { destination in
         VerbView(verb: destination.infinitive, source: destination.source, marks: destination.marks)
       }
@@ -181,7 +181,7 @@ struct QuizView: View {
           }
 
           HStack(alignment: .top, spacing: Layout.defaultSpacing) {
-            QuizFactTile(systemImage: "list.number", value: "\(QuizScope.fullLength)", label: L.Quiz.questionsLabel, isLarge: isLarge)
+            QuizFactTile(systemImage: "list.number", value: "\(QuizScope.roundLength)", label: L.Quiz.questionsLabel, isLarge: isLarge)
             QuizFactTile(
               systemImage: Current.settings.quizLevel.systemImage,
               value: Current.settings.quizLevel.localizedName,
@@ -317,7 +317,8 @@ struct QuizView: View {
     ScrollViewReader { proxy in
       ScrollView {
         VStack(spacing: Layout.doubleDefaultSpacing) {
-          ProgressView(value: Double(quiz.currentQuestionIndex), total: Double(max(quiz.questionCount, 1)))
+          // Over the session so far, so that Ten More and a re-ask lengthen the bar's road.
+          ProgressView(value: Double(quiz.currentQuestionIndex), total: Double(max(quiz.questions.count, 1)))
             .tint(.customYellow)
 
           questionCard
@@ -361,6 +362,9 @@ struct QuizView: View {
       }
       .onChange(of: quiz.currentQuestionIndex) {
         revealAnswerField(proxy)
+        if quiz.currentQuestion?.isReask == true {
+          AccessibilityNotification.Announcement(L.Quiz.askedAgain).post()
+        }
       }
       .onChange(of: quiz.isHeld) { _, isHeld in
         guard isHeld else {
@@ -388,6 +392,13 @@ struct QuizView: View {
 
   private var questionCard: some View {
     VStack(spacing: Layout.defaultSpacing) {
+      if quiz.currentQuestion?.isReask == true {
+        Label(L.Quiz.askedAgain, systemImage: "arrow.counterclockwise")
+          .labelStyle(.titleAndIcon)
+          .metadataPill(tint: .customYellow)
+          .accessibilityIdentifier("quiz_asked_again")
+      }
+
       Text(ReflexivePronoun.citationForm(of: quiz.verb))
         .font(.largeTitle.bold())
         .fontDesign(.serif)
@@ -541,9 +552,11 @@ struct QuizView: View {
       .foregroundStyle(.secondary)
       .numeric()
       Spacer()
-      Label(quiz.elapsedTime.timeString, systemImage: "clock")
-        .foregroundStyle(.secondary)
-        .numeric()
+      if Current.settings.quizClock == .show {
+        Label(quiz.elapsedTime.timeString, systemImage: "clock")
+          .foregroundStyle(.secondary)
+          .numeric()
+      }
     }
     .font(.footnote)
     .labelStyle(.titleAndIcon)
@@ -629,19 +642,20 @@ struct QuizView: View {
 
   private func finish() {
     Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
-    // A scoped quiz posts no score, so it shows no leaderboard.
-    if quiz.scope.isRanked {
+    // Only a ranked session's first round posts a score, so only it shows the leaderboard.
+    if quiz.isRankedRound {
       Current.gameCenter.showLeaderboard()
     }
-    Current.analytics.signal(
-      name: .completeQuiz,
-      parameters: [
-        ParameterKey.level.rawValue: quiz.lastLevel.rawValue,
-        ParameterKey.elapsedTime.rawValue: "\(quiz.elapsedTime)",
-        ParameterKey.score.rawValue: "\(quiz.score)",
-        ParameterKey.source.rawValue: quiz.scope.source.rawValue
-      ]
-    )
+    var parameters = [
+      ParameterKey.duration.rawValue: quiz.durationBand,
+      ParameterKey.level.rawValue: quiz.lastLevel.rawValue,
+      ParameterKey.questionCount.rawValue: "\(quiz.questionCount)",
+      ParameterKey.source.rawValue: quiz.scope.source.rawValue
+    ]
+    if quiz.isRankedRound {
+      parameters[ParameterKey.score.rawValue] = "\(quiz.firstRoundScore)"
+    }
+    Current.analytics.signal(name: .completeQuiz, parameters: parameters)
     // The sheet shows the results in place of the question; the tab pushes them.
     fieldFocused = false
     if sheetScope == nil {
@@ -652,21 +666,41 @@ struct QuizView: View {
   private func quit() {
     quiz.quit()
     Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)
-    Current.analytics.signal(
-      name: .quitQuiz,
-      parameters: [
-        ParameterKey.level.rawValue: quiz.lastLevel.rawValue,
-        ParameterKey.elapsedTime.rawValue: "\(quiz.elapsedTime)",
-        ParameterKey.questionNumber.rawValue: "\(quiz.currentQuestionIndex + 1)",
-        ParameterKey.score.rawValue: "\(quiz.score)",
-        ParameterKey.source.rawValue: quiz.scope.source.rawValue
-      ]
-    )
+    var parameters = [
+      ParameterKey.duration.rawValue: quiz.durationBand,
+      ParameterKey.level.rawValue: quiz.lastLevel.rawValue,
+      ParameterKey.questionNumber.rawValue: "\(quiz.questionReached)",
+      ParameterKey.source.rawValue: quiz.scope.source.rawValue
+    ]
+    if quiz.isRankedRound {
+      parameters[ParameterKey.score.rawValue] = "\(quiz.firstRoundScore)"
+    }
+    Current.analytics.signal(name: .quitQuiz, parameters: parameters)
     fieldFocused = false
     lastFeedback = nil
     showsRightAnswer = false
     if sheetScope != nil {
       dismiss()
+    }
+  }
+
+  /// Ten More, from the results: the session's next round, typed into at once.
+  private func continueSession() {
+    guard quiz.continueSession() else {
+      return
+    }
+    answer = ""
+    answerSelection = nil
+    lastFeedback = nil
+    showsRightAnswer = false
+    showingResults = false
+    // The tab pops its results, and a field focused before the pop ends never takes the keyboard.
+    fieldFocused = false
+    Task { @MainActor in
+      try? await Task.sleep(for: .milliseconds(450))
+      if quiz.quizState == .inProgress {
+        fieldFocused = true
+      }
     }
   }
 

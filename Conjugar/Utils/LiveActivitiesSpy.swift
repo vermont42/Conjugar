@@ -14,14 +14,17 @@ final class LiveActivitiesSpy: LiveActivities {
   private(set) var endCount = 0
   private(set) var endAllCount = 0
   private(set) var lastLevel: String?
+  private(set) var lastState: QuizActivityAttributes.ContentState?
 
-  func start(level: String, totalQuestions: Int, state: QuizActivityAttributes.ContentState) {
+  func start(level: String, state: QuizActivityAttributes.ContentState) {
     startCount += 1
     lastLevel = level
+    lastState = state
   }
 
   func update(_ state: QuizActivityAttributes.ContentState) {
     updateCount += 1
+    lastState = state
   }
 
   func end(_ state: QuizActivityAttributes.ContentState) {

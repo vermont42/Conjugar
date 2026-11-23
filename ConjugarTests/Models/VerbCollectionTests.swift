@@ -156,7 +156,7 @@ import UIKit
   @Test func aCollectionsQuizIsFullLengthUnrankedAndTitled() {
     let scope = QuizScope.collection(.goVerbs, title: "-go Verbs")
     #expect(scope.verbs == Self.infinitives(.goVerbs))
-    #expect(scope.questionCount == QuizScope.fullLength)
+    #expect(scope.questionCount == QuizScope.roundLength)
     #expect(scope.source == .list)
     #expect(scope.title == "-go Verbs")
     #expect(scope.collectionKey == "goVerbs")
@@ -173,7 +173,7 @@ import UIKit
     let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: true)
     #expect(quiz.start(scope: .collection(.irregularFuture, title: "")))
     let verbs = Set(Self.infinitives(.irregularFuture))
-    #expect(quiz.questions.count == QuizScope.fullLength)
+    #expect(quiz.questions.count == QuizScope.roundLength)
     #expect(quiz.questions.allSatisfy { verbs.contains($0.verb) })
     quiz.quit()
   }

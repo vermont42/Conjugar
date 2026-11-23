@@ -759,6 +759,16 @@ nonisolated enum L {
       String(localized: "Quiz.almost")
     }
 
+    /// On a question that a wrong answer brought back.
+    static var askedAgain: String {
+      String(localized: "Quiz.askedAgain")
+    }
+
+    /// On a wrong answer's correction, when its question will be asked again.
+    static var willComeUpAgain: String {
+      String(localized: "Quiz.willComeUpAgain")
+    }
+
     /// What VoiceOver says before the letters of the right answer the learner missed.
     static var lettersDiffer: String {
       String(localized: "Quiz.lettersDiffer")
@@ -791,6 +801,19 @@ nonisolated enum L {
     /// The count of answers right on the second attempt, after a slip.
     static var secondTry: String {
       String(localized: "Results.secondTry")
+    }
+
+    /// The results' count of re-asks answered right, as in "Asked Again: 1 / 2".
+    static var askedAgain: String {
+      String(localized: "Results.askedAgain")
+    }
+
+    static var tenMore: String {
+      String(localized: "Results.tenMore")
+    }
+
+    static var tenMoreHint: String {
+      String(localized: "Results.tenMoreHint")
     }
 
     /// Before the slip that a row's answer, right on the second attempt, followed.
@@ -851,6 +874,16 @@ nonisolated enum L {
     }
   }
 
+  enum QuizClock {
+    static var hide: String {
+      String(localized: "QuizClock.hide")
+    }
+
+    static var show: String {
+      String(localized: "QuizClock.show")
+    }
+  }
+
   enum ReviewCardSuppression {
     static var off: String {
       String(localized: "ReviewCardSuppression.off")
@@ -896,6 +929,14 @@ nonisolated enum L {
 
     static var reviewCardSuppressionDescription: String {
       String(localized: "Settings.reviewCardSuppressionDescription")
+    }
+
+    static var quizClockHeading: String {
+      String(localized: "Settings.quizClockHeading")
+    }
+
+    static var quizClockDescription: String {
+      String(localized: "Settings.quizClockDescription")
     }
 
     static var quiz: String {

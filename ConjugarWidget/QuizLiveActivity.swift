@@ -24,7 +24,7 @@ struct QuizLiveActivity: Widget {
       DynamicIsland {
         DynamicIslandExpandedRegion(.leading) {
           Label {
-            Text(verbatim: "\(context.state.currentQuestion)/\(context.attributes.totalQuestions)")
+            Text(verbatim: "\(context.state.currentQuestion)/\(context.state.totalQuestions)")
           } icon: {
             Image(systemName: "list.number")
           }
@@ -48,7 +48,7 @@ struct QuizLiveActivity: Widget {
       } compactLeading: {
         Image(systemName: "pencil.circle.fill")
       } compactTrailing: {
-        Text(verbatim: "\(context.state.currentQuestion)/\(context.attributes.totalQuestions)")
+        Text(verbatim: "\(context.state.currentQuestion)/\(context.state.totalQuestions)")
           .font(.caption2)
       } minimal: {
         Image(systemName: "pencil.circle.fill")
@@ -67,13 +67,15 @@ struct QuizLiveActivityLockScreenView: View {
         Label(WidgetL.LiveActivity.title, systemImage: "pencil.circle.fill")
           .font(.headline)
         Spacer()
-        Text(context.state.elapsedTime)
-          .font(.subheadline.monospacedDigit())
-          .foregroundStyle(.secondary)
+        if let elapsedTime = context.state.elapsedTime {
+          Text(elapsedTime)
+            .font(.subheadline.monospacedDigit())
+            .foregroundStyle(.secondary)
+        }
       }
       QuizProgressBar(context: context)
       HStack {
-        Text(verbatim: "\(context.state.currentQuestion)/\(context.attributes.totalQuestions)")
+        Text(verbatim: "\(context.state.currentQuestion)/\(context.state.totalQuestions)")
         Spacer()
         Label {
           Text(verbatim: "\(context.state.score)")
@@ -91,7 +93,7 @@ struct QuizProgressBar: View {
   let context: ActivityViewContext<QuizActivityAttributes>
 
   private var fraction: Double {
-    let total = max(context.attributes.totalQuestions, 1)
+    let total = max(context.state.totalQuestions, 1)
     return min(Double(context.state.currentQuestion) / Double(total), 1)
   }
 

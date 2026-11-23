@@ -68,6 +68,7 @@ import Testing
     quiz.quit()
   }
 
+  /// The correction comes first, then the missed question's re-ask, then the results.
   @Test func aWrongLastAnswerShowsItsCorrectionBeforeTheResults() {
     let quiz = startedQuiz()
     while quiz.currentQuestionIndex < quiz.questionCount - 1 {
@@ -76,11 +77,17 @@ import Testing
     quiz.process(proposedAnswer: "zzzz")
     #expect(quiz.quizState == .inProgress)
     #expect(quiz.isHeld)
+    #expect(quiz.correction?.willBeReasked == true)
+    quiz.continueAfterCorrection()
+    #expect(quiz.quizState == .inProgress)
+    #expect(quiz.currentQuestion?.isReask == true)
+    quiz.process(proposedAnswer: "zzzz")
+    #expect(quiz.correction?.willBeReasked == false)
     quiz.continueAfterCorrection()
     #expect(quiz.quizState == .finished)
     #expect(!quiz.isHeld)
     #expect(!quiz.isClockRunning)
-    #expect(quiz.results.count == quiz.questionCount)
+    #expect(quiz.results.count == quiz.questions.count)
   }
 
   @Test func quittingOrRestartingClearsTheCorrection() {

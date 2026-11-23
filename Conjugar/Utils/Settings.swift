@@ -69,6 +69,12 @@ final class Settings {
   static let secondSingularQuizKey = "secondSingularQuiz"
   static let secondSingularQuizDefault: SecondSingularQuiz = .tu
 
+  var quizClock: QuizClock {
+    didSet { Settings.persist(getterSetter, Settings.quizClockKey, quizClock, oldValue) }
+  }
+  static let quizClockKey = "quizClock"
+  static let quizClockDefault: QuizClock = .hide
+
   var promptActionCount: Int {
     didSet { Settings.persist(getterSetter, Settings.promptActionCountKey, promptActionCount, oldValue) }
   }
@@ -138,6 +144,7 @@ final class Settings {
     verbSort = Settings.read(getterSetter, Settings.verbSortKey, default: Settings.verbSortDefault)
     modelSort = Settings.read(getterSetter, Settings.modelSortKey, default: Settings.modelSortDefault)
     secondSingularQuiz = Settings.read(getterSetter, Settings.secondSingularQuizKey, default: Settings.secondSingularQuizDefault)
+    quizClock = Settings.read(getterSetter, Settings.quizClockKey, default: Settings.quizClockDefault)
     promptActionCount = Settings.read(getterSetter, Settings.promptActionCountKey, default: Settings.promptActionCountDefault)
     lastReviewPromptDate = Settings.read(getterSetter, Settings.lastReviewPromptDateKey, default: Settings.lastReviewPromptDateDefault)
     userRejectedGameCenter = Settings.read(getterSetter, Settings.userRejectedGameCenterKey, default: Settings.userRejectedGameCenterDefault)

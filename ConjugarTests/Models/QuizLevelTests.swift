@@ -14,6 +14,9 @@ import Testing
 
 @MainActor
 @Suite struct QuizLevelTests {
+  /// Three rounds' worth, so that a rare tense's share shows.
+  private static let longQuiz = 30
+
   private func makeQuiz(
     level: QuizLevel,
     region: Region = .spain,
@@ -86,7 +89,7 @@ import Testing
           let quiz = makeQuiz(level: level, region: region, secondSingular: secondSingular)
           for _ in 0..<10 {
             #expect(quiz.start())
-            #expect(quiz.questionCount == QuizScope.fullLength)
+            #expect(quiz.questionCount == QuizScope.roundLength)
             for question in quiz.questions {
               let entry = level.entry(for: question.tense)
               #expect(entry != nil, "\(level) asked \(question.tense)")
@@ -110,13 +113,13 @@ import Testing
       var counts: [DisplayTense: Int] = [:]
       let quizzes = 200
       for _ in 0..<quizzes {
-        quiz.start()
+        quiz.start(scope: QuizScope(verbs: nil, questionCount: Self.longQuiz, source: .tab))
         for question in quiz.questions {
           counts[question.tense, default: 0] += 1
         }
         quiz.quit()
       }
-      let total = Double(quizzes * QuizScope.fullLength)
+      let total = Double(quizzes * Self.longQuiz)
       let totalWeight = Double(level.pool.reduce(0) { $0 + $1.weight })
       for entry in level.pool {
         let expected = total * Double(entry.weight) / totalWeight

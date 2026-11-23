@@ -54,6 +54,15 @@ material for the release notes in `docs/release_notes.txt`.
    Mode on, a lookup that opens a page should send `viewVerbView` with `source` `lookup`, and a
    Spotlight tap `source` `spotlight`.
 
+6. **Try a quiz's Live Activity and an abandoned quiz on a device.** Neither was seen in the
+   simulator. Start a quiz over all verbs and check the Lock Screen and the Dynamic Island: the
+   question count should read 1/10, grow by one after a wrong answer (its re-ask), and show no time
+   while Settings' Quiz Clock is Hide, and the time when it is Show. Tap Ten More at the results and
+   check that a new activity starts at 11/20. With Test Mode on, quit one quiz, finish a round of
+   another, and leave a third mid-question by swiping the app away; the next launch should send
+   `abandonQuiz` with the question reached, and the others `quitQuiz` and `completeQuiz` with a
+   `duration` band.
+
 ## On Release Day
 
 1. **Deploy the staged privacy-policy lines.** Apply `docs/privacy_policy_pending.md` to
