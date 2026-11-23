@@ -642,10 +642,6 @@ struct QuizView: View {
 
   private func finish() {
     Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
-    // Only a ranked session's first round posts a score, so only it shows the leaderboard.
-    if quiz.isRankedRound {
-      Current.gameCenter.showLeaderboard()
-    }
     var parameters = [
       ParameterKey.duration.rawValue: quiz.durationBand,
       ParameterKey.level.rawValue: quiz.lastLevel.rawValue,

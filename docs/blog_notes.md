@@ -11336,3 +11336,40 @@ question whose answer field had no keyboard, because the field was focused while
 animating. A short delay, the same one the correction already used after Back, fixed it. On the
 iPad in Spanish, the new lines read "Esta pregunta volverá a salir.", "Pregunta repetida", and
 "Diez más".
+
+## Leaderboards by Level (2026-11-23)
+
+Since 2017, Conjugar has posted every quiz to one Game Center leaderboard. Once the quiz had four
+levels and ten-question rounds, that board mixed a beginner's presente with an advanced learner's
+pluscuamperfecto de subjuntivo, and old scores that reached 750 with new ones that cannot pass 100.
+So each level now has its own board, and only a quiz over every verb posts to it: the points of its
+first ten questions, a right second try's 5 included and a re-ask's left out. Every ranked score
+therefore has the same ceiling, 100, and a learner ranks among others at the same level. Many will
+tie at 100. Nothing breaks the ties, which suits a quiz meant for practice, whose clock is hidden by
+default.
+
+The leaderboards had to exist in App Store Connect, and Josh asked Claude to make them by driving
+his Chrome, as a Konjugieren session had done nine days earlier. Four boards, each in three
+languages, meant two dozen dialogs; the form's default sort order is Low to High, which would have
+ranked the worst score first, so every board was read back afterward. The visit also answered a
+question the code could not: which board the shipped app posts to. The old code asked GameKit for
+the app's default leaderboard rather than naming one, and App Store Connect showed it to be
+`biz.joshadams.Conjugar.leaderboard`. It stays live until the 2027 release ships, since every
+installed copy still posts to it, and is archived after. The new boards wait in "Prepare for
+Submission", because a Game Center component goes to review with the first app version that uses
+it, and there will be no version until 2027.
+
+Josh also chose to give Conjugar the local Game Center file that Konjugieren had, a `.gamekit`
+bundle that Xcode copies into the app and reads to test leaderboards on a device. Konjugieren's had
+come with its original project; Conjugar's was written by hand from what App Store Connect showed.
+
+Removing the leaderboard sheet that popped up after every quiz left Conjugar with no way to reach a
+board at all, since the sheet had been the only one. So, until the Quiz tab becomes a practice hub
+with a modest leaderboard control of its own, a ranked quiz's results offer View Leaderboard, and
+Settings offers View Leaderboards once the learner is signed in, in place of the Enable button that
+signing in makes pointless.
+
+What could not be checked is a real score arriving on a real board. Konjugieren tried on Josh's
+iPhone and found its new boards invisible to a development build, probably because no app version
+held them yet. Conjugar's test is written into the release checklist, to run after the 2027 version
+exists and before it is submitted.

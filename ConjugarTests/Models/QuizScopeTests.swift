@@ -186,10 +186,9 @@ import Testing
     #expect(quiz.correctCount == 3)
   }
 
-  /// Only the ranked quiz reports a score. The scoped quiz runs first, so if it reported, its
-  /// task would land before the ranked one's.
-  @Test func onlyARankedQuizReportsItsScore() async {
-    let spy = GameCenterScoreSpy()
+  /// Only the ranked quiz reports a score.
+  @Test func onlyARankedQuizReportsItsScore() {
+    let spy = GameCenterSpy()
     let scoped = makeQuiz(gameCenter: spy)
     scoped.start(scope: .myVerbs(Self.myVerbs))
     answerEveryQuestion(scoped)
@@ -199,10 +198,7 @@ import Testing
     let ranked = makeQuiz(gameCenter: spy)
     ranked.start()
     answerEveryQuestion(ranked)
-    for _ in 0..<200 where spy.reportedScores.isEmpty {
-      await Task.yield()
-    }
-    #expect(spy.reportedScores == [ranked.score])
+    #expect(spy.submissions.map(\.score) == [ranked.score])
   }
 
   private func answerEveryQuestion(_ quiz: Quiz) {
@@ -219,15 +215,4 @@ import Testing
       _ = quiz.process(proposedAnswer: answer)
     }
   }
-}
-
-/// Records each score reported, for `onlyARankedQuizReportsItsScore`.
-private final class GameCenterScoreSpy: GameCenter {
-  private(set) var reportedScores: [Int] = []
-  var isAuthenticated: Bool { true }
-  func authenticate() {}
-  func reportScore(_ score: Int) async {
-    reportedScores.append(score)
-  }
-  func showLeaderboard() {}
 }

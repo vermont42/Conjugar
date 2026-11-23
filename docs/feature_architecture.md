@@ -681,8 +681,7 @@ Intermediate, or Advanced the first time the app ran without a level. The Info t
 its own three difficulties, `InfoDifficulty`, which has nothing to do with the levels.
 
 Every right answer scores 10 at every level, 5 on a second try or on a re-ask, and the score is
-their sum: no normalization to fifty questions and no multiplier for the region or level. Until each
-level has a leaderboard, every level posts to the one there is.
+their sum: no normalization to fifty questions and no multiplier for the region or level.
 
 **`QuizScope`** (`Models/QuizScope.swift`, `nonisolated`) says what a quiz asks about: the verbs
 (nil for every verb, drawn from the level's frequency band; otherwise bare infinitives), the
@@ -692,8 +691,7 @@ verb, `allVerbs(source:)` the same begun by a `quiz` link, `myVerbs(_:)` a round
 carries a `title` for the sheet and a `collectionKey` for `startQuiz`. A round is
 `QuizScope.roundLength`, ten questions. `continues` (a round's length or more) decides whether the
 results offer Ten More, so Test Me's three do not. `isRanked` (every verb, one round) decides
-whether a session's first round posts to Game Center and shows the leaderboard at its results
-(`Quiz.isRankedRound`). No scoped quiz ranks.
+whether a session's first round posts to Game Center (`Quiz.isRankedRound`). No scoped quiz ranks.
 
 **The draw.** `Quiz.start(scope:)` defaults to `.allVerbs`, and returns false, changing nothing,
 when the scope gives no question (an empty My Verbs). Every random choice goes through one
@@ -895,6 +893,21 @@ opens, so `startQuiz` with `verbPage` counts the same taps. Ten More sends no si
 `elapsedTime`. `questionNumber` is `Quiz.questionReached`, which counts no re-ask, since a re-ask
 follows only a wrong answer and a count that included them would say how many answers were wrong.
 `score` is `firstRoundScore`, and no other quiz or round sends one.
+
+**Game Center.** Each level has a leaderboard, `QuizLevel.leaderboardID` (`Utils/GameCenter.swift`):
+`conjugar.level.beginner`, `.elementary`, `.intermediate`, and `.advanced`. App Store Connect never
+lets an ID change, so `QuizLeaderboardTests` pins each literally. A ranked session posts
+`firstRoundScore`, the first ten questions' points with second attempts' 5s and without re-asks, to
+the board of the level it began at (`Quiz.lastLevel`), so every ranked score's ceiling is 100.
+Nothing breaks ties at 100. `GameCenter.submitScore(_:level:)` returns at once (`GameCenterReal`
+starts its own task), so a test sees the call through `GameCenterSpy`. The quiz's end shows no
+leaderboard. While the learner is signed in, a ranked session's results offer View Leaderboard,
+which opens its level's board (`showLeaderboard(level:)`), and Settings' Game Center card offers View
+Leaderboards in place of Enable, which opens Game Center's list of the boards
+(`showLeaderboards()`). Both send `tapViewLeaderboard`, the results' with `level`. The live board the
+shipped app posts to, `biz.joshadams.Conjugar.leaderboard`, is retired on release day.
+`Conjugar/GameCenterResources.gamekit` is Xcode's local copy of the configuration. The App Store
+Connect side, and how to test before release, are in [`game_center_setup.md`](game_center_setup.md).
 
 ## The Verb of the Day and Random Verbs
 

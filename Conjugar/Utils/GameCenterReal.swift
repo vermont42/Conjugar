@@ -25,10 +25,6 @@ final class GameCenterReal: GameCenter {
   // re-assigned; re-assigning it while a handler is pending can crash or hang.
   private var didInstallHandler = false
 
-  // Loaded lazily on first score submission and cached; `nil` until then, so there
-  // is no `""`/`"ERROR"` sentinel for an early submit to race against.
-  private var leaderboardIdentifier: String?
-
   private init() {}
 
   func authenticate() {
@@ -57,31 +53,25 @@ final class GameCenterReal: GameCenter {
     }
   }
 
-  func reportScore(_ score: Int) async {
+  func submitScore(_ score: Int, level: QuizLevel) {
     guard isAuthenticated else { return }
 
-    let leaderboardID: String
-    if let leaderboardIdentifier {
-      leaderboardID = leaderboardIdentifier
-    } else {
+    let leaderboardID = level.leaderboardID
+    Task {
       do {
-        let loaded = try await GKLocalPlayer.local.loadDefaultLeaderboardIdentifier()
-        leaderboardIdentifier = loaded
-        leaderboardID = loaded
+        try await GKLeaderboard.submitScore(score, context: 0, player: GKLocalPlayer.local, leaderboardIDs: [leaderboardID])
       } catch {
-        gameCenterLogger.warning("Failed to load leaderboard identifier: \(error.localizedDescription)")
-        return
+        gameCenterLogger.warning("Failed to submit score to \(leaderboardID): \(error.localizedDescription)")
       }
-    }
-
-    do {
-      try await GKLeaderboard.submitScore(score, context: 0, player: GKLocalPlayer.local, leaderboardIDs: [leaderboardID])
-    } catch {
-      gameCenterLogger.warning("Failed to submit score: \(error.localizedDescription)")
     }
   }
 
-  func showLeaderboard() {
+  func showLeaderboard(level: QuizLevel) {
+    guard isAuthenticated else { return }
+    GKAccessPoint.shared.trigger(leaderboardID: level.leaderboardID, playerScope: .global, timeScope: .allTime) {}
+  }
+
+  func showLeaderboards() {
     guard isAuthenticated else { return }
     GKAccessPoint.shared.trigger(state: .leaderboards) {}
   }

@@ -13,8 +13,28 @@
 protocol GameCenter {
   var isAuthenticated: Bool { get }
   func authenticate()
-  func reportScore(_ score: Int) async
-  func showLeaderboard()
+  /// Posts a ranked session's score to its level's leaderboard.
+  func submitScore(_ score: Int, level: QuizLevel)
+  func showLeaderboard(level: QuizLevel)
+  /// Game Center's list of the app's leaderboards, one a level.
+  func showLeaderboards()
+}
+
+extension QuizLevel {
+  // App Store Connect makes a leaderboard's ID permanent, so these must match
+  // docs/game_center_setup.md and never change, even if a level is renamed.
+  nonisolated var leaderboardID: String {
+    switch self {
+    case .beginner:
+      return "conjugar.level.beginner"
+    case .elementary:
+      return "conjugar.level.elementary"
+    case .intermediate:
+      return "conjugar.level.intermediate"
+    case .advanced:
+      return "conjugar.level.advanced"
+    }
+  }
 }
 
 /// The decision the Quiz screen makes on appear about the Game Center opt-in.

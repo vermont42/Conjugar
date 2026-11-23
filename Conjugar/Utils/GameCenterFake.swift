@@ -17,7 +17,9 @@ class GameCenterFake: GameCenter {
     isAuthenticated = true
   }
 
-  func reportScore(_ score: Int) async {}
+  func submitScore(_ score: Int, level: QuizLevel) {}
 
-  func showLeaderboard() {}
+  func showLeaderboard(level: QuizLevel) {}
+
+  func showLeaderboards() {}
 }

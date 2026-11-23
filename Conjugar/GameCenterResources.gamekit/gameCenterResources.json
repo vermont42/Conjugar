@@ -1,0 +1,170 @@
+{
+  "meta" : {
+    "version" : "2024-11-15"
+  },
+  "resources" : {
+    "achievementImages" : {},
+    "achievementLocalizations" : {},
+    "achievements" : [],
+    "leaderboardImages" : {},
+    "leaderboardLocalizations" : {
+      "biz.joshadams.Conjugar.leaderboard" : [
+        {
+          "formatterOverride" : "INTEGER",
+          "locale" : "en-US",
+          "localID" : "biz.joshadams.Conjugar.leaderboard-en-US",
+          "name" : "Leaderboard"
+        }
+      ],
+      "conjugar.level.beginner" : [
+        {
+          "description" : "The first ten questions of a quiz over all verbs at the Beginner level",
+          "formatterOverride" : null,
+          "locale" : "en-US",
+          "localID" : "conjugar.level.beginner-en-US",
+          "name" : "Beginner"
+        },
+        {
+          "description" : "Las diez primeras preguntas de un test sobre todos los verbos en el nivel Inicial",
+          "formatterOverride" : null,
+          "locale" : "es-ES",
+          "localID" : "conjugar.level.beginner-es-ES",
+          "name" : "Inicial"
+        },
+        {
+          "description" : "Las diez primeras preguntas de un test sobre todos los verbos en el nivel Inicial",
+          "formatterOverride" : null,
+          "locale" : "es-MX",
+          "localID" : "conjugar.level.beginner-es-MX",
+          "name" : "Inicial"
+        }
+      ],
+      "conjugar.level.elementary" : [
+        {
+          "description" : "The first ten questions of a quiz over all verbs at the Elementary level",
+          "formatterOverride" : null,
+          "locale" : "en-US",
+          "localID" : "conjugar.level.elementary-en-US",
+          "name" : "Elementary"
+        },
+        {
+          "description" : "Las diez primeras preguntas de un test sobre todos los verbos en el nivel Elemental",
+          "formatterOverride" : null,
+          "locale" : "es-ES",
+          "localID" : "conjugar.level.elementary-es-ES",
+          "name" : "Elemental"
+        },
+        {
+          "description" : "Las diez primeras preguntas de un test sobre todos los verbos en el nivel Elemental",
+          "formatterOverride" : null,
+          "locale" : "es-MX",
+          "localID" : "conjugar.level.elementary-es-MX",
+          "name" : "Elemental"
+        }
+      ],
+      "conjugar.level.intermediate" : [
+        {
+          "description" : "The first ten questions of a quiz over all verbs at the Intermediate level",
+          "formatterOverride" : null,
+          "locale" : "en-US",
+          "localID" : "conjugar.level.intermediate-en-US",
+          "name" : "Intermediate"
+        },
+        {
+          "description" : "Las diez primeras preguntas de un test sobre todos los verbos en el nivel Intermedio",
+          "formatterOverride" : null,
+          "locale" : "es-ES",
+          "localID" : "conjugar.level.intermediate-es-ES",
+          "name" : "Intermedio"
+        },
+        {
+          "description" : "Las diez primeras preguntas de un test sobre todos los verbos en el nivel Intermedio",
+          "formatterOverride" : null,
+          "locale" : "es-MX",
+          "localID" : "conjugar.level.intermediate-es-MX",
+          "name" : "Intermedio"
+        }
+      ],
+      "conjugar.level.advanced" : [
+        {
+          "description" : "The first ten questions of a quiz over all verbs at the Advanced level",
+          "formatterOverride" : null,
+          "locale" : "en-US",
+          "localID" : "conjugar.level.advanced-en-US",
+          "name" : "Advanced"
+        },
+        {
+          "description" : "Las diez primeras preguntas de un test sobre todos los verbos en el nivel Avanzado",
+          "formatterOverride" : null,
+          "locale" : "es-ES",
+          "localID" : "conjugar.level.advanced-es-ES",
+          "name" : "Avanzado"
+        },
+        {
+          "description" : "Las diez primeras preguntas de un test sobre todos los verbos en el nivel Avanzado",
+          "formatterOverride" : null,
+          "locale" : "es-MX",
+          "localID" : "conjugar.level.advanced-es-MX",
+          "name" : "Avanzado"
+        }
+      ]
+    },
+    "leaderboards" : [
+      {
+        "archived" : false,
+        "defaultFormatter" : "INTEGER",
+        "referenceName" : "leaderboard",
+        "scoreRangeEnd" : null,
+        "scoreRangeStart" : null,
+        "scoreSortType" : "DESC",
+        "submissionType" : "BEST_SCORE",
+        "vendorIdentifier" : "biz.joshadams.Conjugar.leaderboard",
+        "visibility" : "SHOW_FOR_ALL"
+      },
+      {
+        "archived" : false,
+        "defaultFormatter" : "INTEGER",
+        "referenceName" : "Beginner",
+        "scoreRangeEnd" : "100",
+        "scoreRangeStart" : "0",
+        "scoreSortType" : "DESC",
+        "submissionType" : "BEST_SCORE",
+        "vendorIdentifier" : "conjugar.level.beginner",
+        "visibility" : "SHOW_FOR_ALL"
+      },
+      {
+        "archived" : false,
+        "defaultFormatter" : "INTEGER",
+        "referenceName" : "Elementary",
+        "scoreRangeEnd" : "100",
+        "scoreRangeStart" : "0",
+        "scoreSortType" : "DESC",
+        "submissionType" : "BEST_SCORE",
+        "vendorIdentifier" : "conjugar.level.elementary",
+        "visibility" : "SHOW_FOR_ALL"
+      },
+      {
+        "archived" : false,
+        "defaultFormatter" : "INTEGER",
+        "referenceName" : "Intermediate",
+        "scoreRangeEnd" : "100",
+        "scoreRangeStart" : "0",
+        "scoreSortType" : "DESC",
+        "submissionType" : "BEST_SCORE",
+        "vendorIdentifier" : "conjugar.level.intermediate",
+        "visibility" : "SHOW_FOR_ALL"
+      },
+      {
+        "archived" : false,
+        "defaultFormatter" : "INTEGER",
+        "referenceName" : "Advanced",
+        "scoreRangeEnd" : "100",
+        "scoreRangeStart" : "0",
+        "scoreSortType" : "DESC",
+        "submissionType" : "BEST_SCORE",
+        "vendorIdentifier" : "conjugar.level.advanced",
+        "visibility" : "SHOW_FOR_ALL"
+      }
+    ]
+  }
+}

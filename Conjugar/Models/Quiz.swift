@@ -563,10 +563,7 @@ class Quiz {
     }
     endLiveActivity()
     if isRankedRound {
-      let finalScore = firstRoundScore
-      Task {
-        await gameCenter.reportScore(finalScore)
-      }
+      gameCenter.submitScore(firstRoundScore, level: lastLevel)
     }
   }
 

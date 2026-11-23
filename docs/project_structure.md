@@ -5,6 +5,7 @@ Conjugar/
 ├── Info.plist                  # App configuration (conjugar:// URL scheme, iPad orientations, TelemetryDeckAppID)
 ├── Conjugar.entitlements       # App entitlements (App Groups for widget sharing, Game Center)
 ├── PrivacyInfo.xcprivacy       # Privacy manifest for App Store submission
+├── GameCenterResources.gamekit/ # Xcode's local Game Center configuration: the live leaderboard and one per quiz level
 ├── Secrets.example.xcconfig    # Template for Secrets.xcconfig (TELEMETRY_DECK_APP_ID)
 ├── flamencoLoop.mp3            # Music.gameLoop — Pond5 "Flamenco Adventure" (legacy filename); the one music file NOT in Audio/
 ├── *.mp3                       # Legacy one-shot SFX at the target root (applause1-3, buzz, chime, chirp, chomp, gun,
@@ -175,9 +176,10 @@ Conjugar/
 │   ├── Colors.swift            # Semantic palette bridging the colorsets to UIKit-facing call sites
 │   ├── Emailer.swift           # MFMailComposeViewController wrapper for the Settings feedback link (address from URL.developerEmail)
 │   ├── FontExtensions.swift    # Font.button and Font.heroNumeral
-│   ├── GameCenter.swift        # Protocol for Game Center operations (fire-and-forget auth, observable isAuthenticated)
+│   ├── GameCenter.swift        # Protocol for Game Center operations (fire-and-forget auth, observable isAuthenticated); each level's leaderboard ID
 │   ├── GameCenterFake.swift    # In-memory double for the test/simulator worlds
-│   ├── GameCenterReal.swift    # GKLocalPlayer authentication, score reporting, leaderboard presentation
+│   ├── GameCenterReal.swift    # GKLocalPlayer authentication, score submission to a level's board, leaderboard presentation
+│   ├── GameCenterSpy.swift     # Test double recording each score submitted and leaderboard shown
 │   ├── GetterSetter.swift      # Protocol for string key-value storage
 │   ├── GetterSetterFake.swift  # In-memory dictionary implementation for tests
 │   ├── GetterSetterReal.swift  # UserDefaults implementation (the standard defaults, or the App Group's for LearnerVerbs)
@@ -232,10 +234,10 @@ Conjugar/
     ├── QuizView.swift          # The Quiz tab's start screen (scope symbol, All Verbs / My Verbs picker, fact tiles, chips) and gameplay: prompt, framed answer field, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
     ├── QuizCorrectionView.swift # A wrong answer's held correction: the two answers with their differing letters marked, links to the verb's and model's pages, Continue; isBeneathQuiz
     ├── ReviewCardView.swift    # The review card above the verb list: an irregular verb looked up days ago, its key conjugations hidden until tapped
-    ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills, Ten More, and each answer
+    ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills, Ten More, View Leaderboard (signed in, ranked), and each answer
     ├── RelatedVerbsView.swift  # The verb page's Related Verbs card, the full related list, VerbPagePush, and verbPageDestinations()
     ├── RichTextView.swift      # Renders parsed [RichTextBlock] as native SwiftUI Text
-    ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center, onboarding reshow, Play
+    ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center (Enable, or View Leaderboards once signed in), onboarding reshow, Play
     ├── TutorTestView.swift     # Batch tutor harness (~30 queries, ShareLink export); reached by triple-tapping the tutor title
     ├── TutorView.swift         # The conjugation-tutor chat screen
     ├── SpanishLetterKeyRow.swift  # á é í ó ú ü ñ keys with an insert closure; replaces the Verbs sort picker while search is focused
@@ -330,6 +332,7 @@ ConjugarTests/
 │   ├── QuizTests.swift                 # Quiz logic, scoring, and timer, driven through the @Observable model
 │   ├── QuizLiveActivityTests.swift     # Which quizzes start, update, and end the Live Activity, against LiveActivitiesSpy
 │   ├── QuizRoundTests.swift            # Rounds of ten, re-ask placement and points, Ten More, which round ranks, the record of a quiz in progress, the quiz clock
+│   ├── QuizLeaderboardTests.swift      # One leaderboard a level: each ID pinned, which sessions post, the score and the level they post
 │   ├── QuizLevelTests.swift            # Each level's tenses and weights, only its own cells drawn, tenses at their weight under a seed;
 │   │                                   #   the setting's default and the migration from the old difficulty
 │   ├── QuizVerbMixTests.swift          # The default quiz's verbs under forty seeds: the band, exactly half irregular cells, at most one irregular
@@ -374,6 +377,8 @@ docs/                           # Claude's output that holds information and is 
 ├── project_structure.md        # This file — annotated directory tree
 ├── blog_notes.md               # Work journal: dated narrative notes for future blog posts and session memory
 ├── game.md                     # Toreo por Amor: La Subida, La Llamada, the Music enum, debug deeplinks and env vars
+├── game_center_setup.md        # The Game Center leaderboards (one per quiz level): App Store Connect settings, how to create one,
+│                               #   release-day steps, and testing before release
 ├── onboarding.md               # The first-launch welcome tour: sheets, presentation, kill switch, music
 ├── conjugation_tutor.md        # The on-device AI tutor: grounding tool, prompts, availability, TutorTestView
 ├── conjugar_ui_issues.md       # The mapped UI audit that drove the SwiftUI migration

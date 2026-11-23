@@ -62,11 +62,22 @@ material for the release notes in `docs/release_notes.txt`.
    another, and leave a third mid-question by swiping the app away; the next launch should send
    `abandonQuiz` with the question reached, and the others `quitQuiz` and `completeQuiz` with a
    `duration` band.
+7. **Test the level leaderboards from a development build.** Add the four `conjugar.level.*`
+   leaderboards to the new version (Add for Review into the version's draft submission, without
+   submitting), then follow [`game_center_setup.md`](game_center_setup.md) § Testing Before
+   Release: finish a quiz over all verbs, tap View Leaderboard on the results, and check that the
+   level's board shows the score; check Settings' View Leaderboards too. With Test Mode on,
+   `tapViewLeaderboard` should arrive, with `level` from the results.
 
 ## On Release Day
 
 1. **Deploy the staged privacy-policy lines.** Apply `docs/privacy_policy_pending.md` to
    `docs/privacy_policy3.txt`, in English and Spanish, by its own instructions, and publish the
    policy the day the release that sends the new signals goes live.
+2. **Submit the level leaderboards with the version.** Each `conjugar.level.*` leaderboard must be
+   in the same submission as the app version, with the version's Game Center checkbox on. Make
+   Beginner the Default. See [`game_center_setup.md`](game_center_setup.md) § On Release Day.
+3. **Once the release is live, archive the old leaderboard**, `biz.joshadams.Conjugar.leaderboard`,
+   which the shipped app posts to until then.
 
 ## Afterward

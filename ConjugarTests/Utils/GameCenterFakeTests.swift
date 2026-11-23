@@ -31,15 +31,11 @@ struct GameCenterFakeTests {
     #expect(gameCenter.isAuthenticated)
   }
 
-  @Test func reportScore() async {
+  @Test func submitScoreAndShowLeaderboards() {
     // Nothing to assert. Exercising for coverage.
     let gameCenter = GameCenterFake()
-    await gameCenter.reportScore(42)
-  }
-
-  @Test func showLeaderboard() {
-    // Nothing to assert. Exercising for coverage.
-    let gameCenter = GameCenterFake()
-    gameCenter.showLeaderboard()
+    gameCenter.submitScore(42, level: .beginner)
+    gameCenter.showLeaderboard(level: .advanced)
+    gameCenter.showLeaderboards()
   }
 }

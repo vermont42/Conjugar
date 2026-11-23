@@ -32,8 +32,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 3 | Done | 2026-11-23 | 8bd27c4 | T1.6 |
 | 4 | Done | 2026-11-23 | 17aab3e | T2.3, T2.6, T6.7, M1 |
 | 5 | Done | 2026-11-23 | c4d16e2 | T2.1, T2.2, T2.5 |
-| 6 | Awaiting Josh | 2026-11-23 | | T2.7, T3.1, T6.5, M2, M3 |
-| 7 | Not started | | | Decision 4 |
+| 6 | Done | 2026-11-23 | dd360ca | T2.7, T3.1, T6.5, M2, M3 |
+| 7 | Awaiting Josh | 2026-11-23 | | Decision 4 |
 | 8 | Not started | | | T2.8 |
 | 9 | Not started | | | T2.9, Decision 8 |
 | 10 | Not started | | | T3.3 (the record), T3.4, T3.5, T6.4 |
@@ -1286,7 +1286,7 @@ leaves scoped quizzes unaffected, and tests pin each.
 ## Phase 6: Ten Questions, Then Ten More
 
 **Ports:** Konjugieren Phase 7. **Suggestions:** T2.7, T3.1, T6.5, M2, M3. **Depends on:** Phases 2
-and 4. **Status:** Awaiting Josh.
+and 4. **Status:** Done.
 
 - **T2.7.** The default session is ten questions, with an offer to continue. Josh agreed
   reluctantly for Konjugieren, in the hope that a shorter quiz is started and finished more often.
@@ -1406,7 +1406,7 @@ fires on the next launch, and tests pin re-ask placement and the continuation.
 ## Phase 7: Leaderboards by Level
 
 **Ports:** Konjugieren Phase 8. **Suggestions:** Decision 4. **Depends on:** Phases 4 and 6.
-**Status:** Not started.
+**Status:** Awaiting Josh.
 
 Re-scope the Game Center leaderboard by level: one leaderboard per level, posting the score of a
 default session's first ten questions, so every ranked score has the same ceiling, 100. Scoped
@@ -1443,7 +1443,74 @@ Chrome, as Konjugieren's session did, or to follow the walkthrough himself.
 **Done when** a ranked session posts to its level's board through the double, an unranked one posts
 nowhere, the walkthrough exists, and tests pin which sessions rank.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh chose on 2026-11-23**, taking two recommendations and declining one: Claude created the
+  leaderboards in App Store Connect by driving his Chrome; Conjugar got a local Game Center
+  configuration after all (the recommendation was to skip it); and, since Conjugar had no
+  leaderboard button and this phase removed the only way to the board, a ranked round's results
+  offer View Leaderboard (the level's board) and Settings offers View Leaderboards (the list of
+  every board), as Konjugieren's Phase 8 did, until Phase 12 gives the leaderboard its place on the
+  hub. Nothing breaks ties at 100, as in Konjugieren; it was not asked.
+- **The four leaderboards exist in App Store Connect**, in "Prepare for Submission": Beginner,
+  Elementary, Intermediate, and Advanced, IDs `conjugar.level.<level>`, each Classic, Integer, 0 to
+  100, Best Score, High to Low, not hidden, no suffix, no image. Each has three localizations,
+  English (U.S.), Spanish (Spain), and Spanish (Mexico), the Spanish two identical (Inicial,
+  Elemental, Intermedio, Avanzado), with a description of the first ten questions at that level.
+  The live board turned out to be `biz.joshadams.Conjugar.leaderboard` (reference name
+  "leaderboard", English only, the Default), which the shipped app found through
+  `loadDefaultLeaderboardIdentifier()`. Each board's range and sort order were read back from its
+  page afterward. None was added for review.
+- **`Conjugar/GameCenterResources.gamekit`** holds the five leaderboards in the JSON shape of
+  Konjugieren's (App Store Connect's API attributes), written by hand, and is in the app target's
+  Copy Bundle Resources by an explicit file reference (four `project.pbxproj` lines), since
+  `Conjugar/` itself is not a synchronized folder. The build copies it into the app. Josh should
+  open it in Xcode once to confirm the editor reads it. The live board's image (`flag.png`) is not
+  in it.
+- **The protocol** became Konjugieren's: `submitScore(_:level:)` (no longer `async`;
+  `GameCenterReal` starts its own task, so a test sees the call at once), `showLeaderboard(level:)`
+  (`GKAccessPoint.trigger(leaderboardID:playerScope:timeScope:)`), and `showLeaderboards()`.
+  `QuizLevel.leaderboardID` sits in `GameCenter.swift`. The cached default-leaderboard lookup is
+  gone. `GameCenterFake` stays in the simulator and test worlds; the new `GameCenterSpy` records
+  submissions and shown boards and replaced the two private spies in `QuizScopeTests` and
+  `QuizRoundTests`, whose yield loops went with `async`. `QuizView.finish()` no longer opens the
+  leaderboard.
+- **The results' button** shows while the player is signed in and the session ranks
+  (`scope.isRanked`), so it stays after Ten More, opening the board of the level the session began
+  at. Settings' Game Center card shows Enable while signed out and View Leaderboards once signed
+  in (its `isGameCenterUIHidden` became `isSignedInToGameCenter`).
+- **Analytics.** A new `tapViewLeaderboard`: from the results with `level`, from Settings with no
+  parameter. Staged in `docs/privacy_policy_pending.md` as a rewritten in-app-actions bullet and a
+  rewritten section 7 paragraph ("one for each quiz level"), in both languages, and pinned in
+  `AnalyticsTests`.
+- **Strings.** New: View Leaderboard / Ver clasificación, View Leaderboards / Ver clasificaciones,
+  their hints, and Settings' description of the boards. Rewritten: Settings' Enable description
+  ("which keeps a leaderboard for each level") and the onboarding quiz page ("compete on your
+  level's Game Center leaderboard"). Josh has not judged the wording.
+- **Docs.** [`docs/game_center_setup.md`](../docs/game_center_setup.md) records the boards, their
+  settings, the steps as App Store Connect showed them, release day, and testing. Apple's help
+  pages were read for it through a Sonnet subagent: a new component goes in the same submission as
+  its first app version; Make Default is a hover action in the Default column; archiving takes up
+  to 24 hours; prerelease testing needs the boards added to the version under test. The release
+  steps (test before submitting, submit with the version, make Beginner the default, archive the
+  old board) are in `docs/release.md`. Conjugar's shared scheme has no GameKit debug mode, the
+  setting that hid every board in Konjugieren.
+- **Not verified:** posting a real score. As in Konjugieren, the new boards are presumably invisible
+  to a development build until a 2027 version holds them, so the test waits for release day.
+- **Verified:** 1,039 tests in 66 suites in the full run, in the simulator's default language
+  (English), up from 1,034 in 65: the new `QuizLeaderboardTests` (6 tests: each ID pinned, a
+  perfect hundred to each level's own board, the level fixed at the start, a second attempt's 5
+  counted and a re-ask's not, Ten More posting nothing more, scoped quizzes posting nothing), with
+  `GameCenterFakeTests`' two exercise tests merged into one. The `tapViewLeaderboard` pin was added
+  after, and its suite rerun with the other two (16 tests). `QuizLevelTests` took 9.1 seconds, up
+  from 4.3, while Chrome was busy beside it; nothing in this phase touches the draw. On the iPhone,
+  in English and light mode: Settings' new Enable description, then (the fake signed in by Enable)
+  View Leaderboards with its description, and a real Beginner quiz answered wrongly, whose results
+  showed View Leaderboard under Ten More and no sheet. On the iPad, in Spanish and dark mode at
+  Avanzado: Configuración's Permitir description, then Ver clasificaciones, and a real quiz's
+  results with Ver clasificación. Not tried: VoiceOver by ear, the Game Center sheets themselves
+  (the simulator's fake shows nothing), and accessibility text sizes.
+
 
 ## Phase 8: Choosing What to Practice
 

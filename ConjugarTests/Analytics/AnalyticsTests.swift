@@ -43,7 +43,8 @@ struct AnalyticsTests {
     (AnalyticsName.abandonQuiz, "abandonQuiz"),
     (AnalyticsName.completeQuiz, "completeQuiz"),
     (AnalyticsName.quitQuiz, "quitQuiz"),
-    (AnalyticsName.completeStage, "completeStage")
+    (AnalyticsName.completeStage, "completeStage"),
+    (AnalyticsName.tapViewLeaderboard, "tapViewLeaderboard")
   ])
   func analyticsNameRawValuesAreStable(name: AnalyticsName, expected: String) {
     #expect(name.rawValue == expected)

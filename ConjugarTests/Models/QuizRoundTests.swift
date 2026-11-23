@@ -220,8 +220,8 @@ import Testing
 
   /// Only the first round posts, and only its own questions' points: the re-ask's 5 and Ten
   /// More's 100 never count.
-  @Test func aRankedSessionPostsItsFirstRoundOnly() async {
-    let spy = GameCenterRoundSpy()
+  @Test func aRankedSessionPostsItsFirstRoundOnly() {
+    let spy = GameCenterSpy()
     let quiz = makeQuiz(gameCenter: spy)
     quiz.start()
     answerWrong(quiz)
@@ -230,13 +230,7 @@ import Testing
     quiz.continueSession()
     #expect(!quiz.isRankedRound)
     finishRight(quiz)
-    for _ in 0..<200 where spy.reportedScores.isEmpty {
-      await Task.yield()
-    }
-    for _ in 0..<20 {
-      await Task.yield()
-    }
-    #expect(spy.reportedScores == [90])
+    #expect(spy.submissions.map(\.score) == [90])
   }
 
   @Test func onlyAQuizOverEveryVerbRanks() {
@@ -303,14 +297,4 @@ import Testing
       quiz.quit()
     }
   }
-}
-
-private final class GameCenterRoundSpy: GameCenter {
-  private(set) var reportedScores: [Int] = []
-  var isAuthenticated: Bool { true }
-  func authenticate() {}
-  func reportScore(_ score: Int) async {
-    reportedScores.append(score)
-  }
-  func showLeaderboard() {}
 }

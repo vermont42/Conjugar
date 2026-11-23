@@ -72,6 +72,9 @@ nonisolated enum AnalyticsName: String {
   case tapStarVerb
   /// The ⓘ beside a tense's heading on a verb page. No parameters.
   case tapTenseArticle
+  /// A leaderboard button: the results' sends `level`, the board it opens, and Settings', which
+  /// opens the list of every level's board, sends nothing.
+  case tapViewLeaderboard
   /// Once for each opening of a featured collection's page or of a model's page, whose bar makes
   /// it a collection. Carries `collection` and `source`.
   case viewCollection

@@ -2212,13 +2212,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Take ten-question quizzes, earn points, and compete on the Game Center leaderboard. Choose from four levels, from Beginner to Advanced, as your skills grow."
+            "value" : "Take ten-question quizzes, earn points, and compete on your level's Game Center leaderboard. Choose from four levels, from Beginner to Advanced, as your skills grow."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Haz cuestionarios de diez preguntas, gana puntos y compite en la tabla de clasificación de Game Center. Elige entre cuatro niveles, de Inicial a Avanzado, a medida que mejoras."
+            "value" : "Haz cuestionarios de diez preguntas, gana puntos y compite en la tabla de clasificación de Game Center de tu nivel. Elige entre cuatro niveles, de Inicial a Avanzado, a medida que mejoras."
           }
         }
       }
@@ -3444,13 +3444,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjugar can send future quiz scores to Game Center so that you can see them in the global leaderboard. Tap Enable to enable this."
+            "value" : "Conjugar can send future quiz scores to Game Center, which keeps a leaderboard for each level. Tap Enable to enable this."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjugar puede enviar tus puntuaciones futuras a Game Center para que puedas verlas en la tabla de clasificación mundial (\"leaderboard\"). Toca Permitir para habilitarlo."
+            "value" : "Conjugar puede enviar tus puntuaciones futuras a Game Center, que tiene una tabla de clasificación (\"leaderboard\") para cada nivel. Toca Permitir para habilitarlo."
           }
         }
       }
@@ -5505,6 +5505,86 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ (%2$@): %3$@\n\nAbre esta lista en Conjugar:\n%4$@\n\nDescarga Conjugar en el App Store:\n%5$@"
+          }
+        }
+      }
+    },
+    "GameCenter.viewLeaderboard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Leaderboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver clasificación"
+          }
+        }
+      }
+    },
+    "GameCenter.viewLeaderboardHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens the Game Center leaderboard for this quiz's level."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre la tabla de clasificación de Game Center del nivel de este test."
+          }
+        }
+      }
+    },
+    "GameCenter.viewLeaderboards" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Leaderboards"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver clasificaciones"
+          }
+        }
+      }
+    },
+    "GameCenter.viewLeaderboardsDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Center keeps a leaderboard for each level. A quiz over every verb posts the points of its first ten questions to its level's leaderboard, so you rank among learners at the same level."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Center tiene una tabla de clasificación para cada nivel. Un test sobre todos los verbos publica los puntos de sus diez primeras preguntas en la tabla de su nivel, así que compites con estudiantes del mismo nivel."
+          }
+        }
+      }
+    },
+    "GameCenter.viewLeaderboardsHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens Game Center's list of Conjugar's leaderboards."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre en Game Center la lista de tablas de clasificación de Conjugar."
           }
         }
       }

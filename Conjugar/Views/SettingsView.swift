@@ -16,7 +16,7 @@ struct SettingsView: View {
   // content can't reliably read `@Environment(AppRouter.self)` (see `OnboardingView`).
   let router: AppRouter
   @Bindable private var settings = Current.settings
-  @State private var isGameCenterUIHidden = false
+  @State private var isSignedInToGameCenter = false
   @State private var rateReviewDescription = ""
   @State private var showingGame = false
   @State private var showingOnboarding = false
@@ -53,7 +53,7 @@ struct SettingsView: View {
       .navigationTitle(L.Settings.localizedTitle)
       .onAppear {
         isOnScreen = true
-        isGameCenterUIHidden = Current.gameCenter.isAuthenticated
+        isSignedInToGameCenter = Current.gameCenter.isAuthenticated
         Current.analytics.signal(name: .viewSettingsView)
       }
       .onDisappear {
@@ -325,7 +325,7 @@ struct SettingsView: View {
 
   private var actionsCard: some View {
     settingsCard {
-      if !isGameCenterUIHidden {
+      if !isSignedInToGameCenter {
         // Inline rather than `.popoverTip(_:)` on the button: this card sits near the
         // bottom of a long scroll, so at the default scroll position the button is
         // below the fold. TipKit anchors a popover to the (offscreen) button and
@@ -342,6 +342,23 @@ struct SettingsView: View {
         ) {
           Button(L.Settings.enable) { enableGameCenter() }
             .buttonStyle(TintedCapsuleButtonStyle(tint: .customRed))
+        }
+
+        GradientDivider()
+      } else {
+        settingSection(
+          icon: "trophy.fill",
+          tint: .customYellow,
+          heading: L.Quiz.gameCenter,
+          description: L.GameCenter.viewLeaderboardsDescription
+        ) {
+          Button(L.GameCenter.viewLeaderboards) {
+            Current.gameCenter.showLeaderboards()
+            Current.analytics.signal(name: .tapViewLeaderboard)
+          }
+          .buttonStyle(TintedCapsuleButtonStyle(tint: .customYellow))
+          .accessibilityHint(L.GameCenter.viewLeaderboardsHint)
+          .accessibilityIdentifier("settings_leaderboards")
         }
 
         GradientDivider()
@@ -426,7 +443,7 @@ struct SettingsView: View {
     enableGameCenterTip.invalidate(reason: .actionPerformed)
     Current.settings.userRejectedGameCenter = false
     // Fire-and-forget: GameKit presents its own login sheet and publishes
-    // `isAuthenticated` asynchronously. `isGameCenterUIHidden` is refreshed from
+    // `isAuthenticated` asynchronously. `isSignedInToGameCenter` is refreshed from
     // that state on the next `onAppear`; making it reactively hide the moment auth
     // settles waits on Settings observability.
     Current.gameCenter.authenticate()

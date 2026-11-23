@@ -314,6 +314,28 @@ nonisolated enum L {
     static var failure: String {
       String(localized: "GameCenter.failure")
     }
+
+    /// The results' button, which opens the board of the quiz's level.
+    static var viewLeaderboard: String {
+      String(localized: "GameCenter.viewLeaderboard")
+    }
+
+    static var viewLeaderboardHint: String {
+      String(localized: "GameCenter.viewLeaderboardHint")
+    }
+
+    /// Settings' button, which opens Game Center's list of every level's board.
+    static var viewLeaderboards: String {
+      String(localized: "GameCenter.viewLeaderboards")
+    }
+
+    static var viewLeaderboardsDescription: String {
+      String(localized: "GameCenter.viewLeaderboardsDescription")
+    }
+
+    static var viewLeaderboardsHint: String {
+      String(localized: "GameCenter.viewLeaderboardsHint")
+    }
   }
 
   enum Info {
