@@ -16,8 +16,11 @@ nonisolated struct OpenQuizIntent: AppIntent {
   static let title = LocalizedStringResource("Widget.intentOpenQuiz", defaultValue: "Open Quiz")
   static let openAppWhenRun = true
 
+  /// A literal, since `URL` builders are not in this target. `AppRouterTests` pins it.
+  static let pendingDeeplink = "conjugar://quiz/start"
+
   func perform() async throws -> some IntentResult {
-    WidgetConstants.sharedDefaults?.set("conjugar://quiz/start", forKey: WidgetConstants.pendingDeeplinkKey)
+    WidgetConstants.sharedDefaults?.set(Self.pendingDeeplink, forKey: WidgetConstants.pendingDeeplinkKey)
     return .result()
   }
 }

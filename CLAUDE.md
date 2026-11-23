@@ -173,8 +173,11 @@ Conjugar-specific facts baked into `.claude/ios-build-verify.config.sh`:
 ### Deeplinks (jump straight to a screen)
 
 The app registers the **`conjugar://`** URL scheme (`Conjugar/Info.plist`), routed by
-`AppRouter.handle(url:)` (`Views/AppRouter.swift`). Open one with `simctl` to skip manual
-navigation — it cold-launches the app and routes on arrival:
+`AppRouter.handle(url:)` (`Views/AppRouter.swift`). Every route follows one grammar,
+`conjugar://<route>[/<target>][?items]`, written down with the full route table in
+[`docs/feature_architecture.md` § Deeplinks](docs/feature_architecture.md#deeplinks); app code builds
+links with the `URL` builders there rather than interpolating them. Open one with `simctl` to skip
+manual navigation. It cold-launches the app and routes on arrival:
 
 ```bash
 UDID=6318CA93-7FB5-4E19-B318-915010531F76   # Conjugar iPhone 17; never `booted` with several simulators up
@@ -182,6 +185,9 @@ xcrun simctl openurl "$UDID" conjugar://game            # → full-screen game (
 xcrun simctl openurl "$UDID" conjugar://game/boss       # → jump straight to the boss fight (La Llamada)
 xcrun simctl openurl "$UDID" conjugar://quiz/start      # → Quiz tab, starts a quiz
 xcrun simctl openurl "$UDID" conjugar://verb/hablar     # → Browse tab, pushes a verb (or verb/random)
+xcrun simctl openurl "$UDID" "conjugar://verb/ir?match=fue"   # → ir's page, fue marked and scrolled to
+xcrun simctl openurl "$UDID" "conjugar://search?q=fue"  # → Browse tab, searched (no q: empty, focused field)
+xcrun simctl openurl "$UDID" conjugar://info/voseo      # → Info tab, an article by its stableKey
 ```
 
 **`conjugar://game`** is the fast path to the game: it presents `GameView` full-screen via

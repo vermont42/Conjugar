@@ -3863,6 +3863,23 @@
         }
       }
     },
+    "Widget.intentFindVerb" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find a Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar un verbo"
+          }
+        }
+      }
+    },
     "Widget.intentOpenQuiz" : {
       "extractionState" : "manual",
       "localizations" : {

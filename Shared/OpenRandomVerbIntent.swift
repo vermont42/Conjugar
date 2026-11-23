@@ -16,8 +16,11 @@ nonisolated struct OpenRandomVerbIntent: AppIntent {
   static let title = LocalizedStringResource("Widget.intentOpenRandomVerb", defaultValue: "Open Random Verb")
   static let openAppWhenRun = true
 
+  /// A literal, since `AnalyticsSource` is not in this target. `AppRouterTests` pins it to the vocabulary.
+  static let pendingDeeplink = "conjugar://verb/random?source=shortcut"
+
   func perform() async throws -> some IntentResult {
-    WidgetConstants.sharedDefaults?.set("conjugar://verb/random?source=shortcut", forKey: WidgetConstants.pendingDeeplinkKey)
+    WidgetConstants.sharedDefaults?.set(Self.pendingDeeplink, forKey: WidgetConstants.pendingDeeplinkKey)
     return .result()
   }
 }

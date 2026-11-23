@@ -135,10 +135,11 @@ Conjugar/
 │       ├── GameState+Slideshow.swift   # End-scene slideshow: live → Los toreros → La familia iris-wipe cycle, Ken Burns camera, caption boldness
 │       └── GameState+Stages.swift      # The five stages, escape beats, stage advance, and soft respawn
 ├── Supporting/                 # A PBXFileSystemSynchronizedRootGroup — files dropped here need no pbxproj edit
-│   ├── AppDelegate.swift       # UIApplicationDelegateAdaptor for the hooks the App lifecycle doesn't cover (appearance config)
-│   ├── ConjugarApp.swift       # @main App: analytics init, TipKit configure, cache warm, owns the AppRouter, WindowGroup → MainTabView, VerbSearchCommands
+│   ├── AppDelegate.swift       # UIApplicationDelegateAdaptor for the hooks the App lifecycle doesn't cover (appearance config, installing the quick action, naming its scene delegate)
+│   ├── ConjugarApp.swift       # @main App: analytics init, TipKit configure, cache warm, holds AppRouter.shared, WindowGroup → MainTabView, VerbSearchCommands
 │   ├── L.swift                 # Type-safe scoped localization accessors backed by String(localized:)
-│   └── Localizable.xcstrings   # The one string catalog holding both en and es
+│   ├── Localizable.xcstrings   # The one string catalog holding both en and es
+│   └── QuickAction.swift       # The Find a Verb Home Screen quick action (conjugar://search?source=quickAction) and QuickActionSceneDelegate, which receives it
 ├── Utils/
 │   ├── BrowseSearch.swift      # The pure filter the Models tab searches through (the Verbs tab ranks with VerbSearch)
 │   ├── Colors.swift            # Semantic palette bridging the colorsets to UIKit-facing call sites
@@ -174,7 +175,7 @@ Conjugar/
 │   ├── SoundPlayerDummy.swift  # No-op so the test worlds never touch CoreAudio
 │   ├── SoundPlayerReal.swift   # AVAudioPlayer implementation: off-main warm-up, per-sound debounce, music fades
 │   ├── UIApplicationExtensions.swift  # topViewController / key-window helpers for the remaining UIKit presentations
-│   ├── URLExtension.swift      # URL.developerEmail and URL.mailto(_:subject:body:), for the failed search's request line; URL.analyticsSource reads a link's source query item; URL.appStore, with no storefront
+│   ├── URLExtension.swift      # The conjugar:// deeplink grammar's constants, parsers (deeplinkTarget, deeplinkQueryValue, analyticsSource), and builders (verbDeeplink, searchDeeplink, infoDeeplink); URL.developerEmail and URL.mailto for the failed search's request line; URL.appStore, with no storefront
 │   ├── URLProtocolStub.swift   # URLProtocol subclass for stubbing HTTP responses in tests
 │   ├── URLSessionExtension.swift  # Stubbed URLSession for testing
 │   ├── Utterer.swift           # AVSpeechSynthesizer text-to-speech plus the single .ambient audio-session owner
@@ -183,7 +184,7 @@ Conjugar/
 │   └── WidgetSnapshotWriter.swift  # Picks the daily verb + quiz question, conjugates them, writes JSON to the App Group.
 │                                   #   Draws from the top verbOfTheDayPoolSize (1,000) verbs by frequency
 └── Views/
-    ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing, incl. the one-shot game/onboarding/tutor/search-focus flags; a verb link's ?source= becomes the pushed page's source
+    ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing (verb with match, search, info, quiz, game), the one-shot requests the tabs consume (pendingVerb, pendingSearch, pendingInfo, game/onboarding/tutor flags), openSearch for Command-F, the control, and the quick action; SearchRequest
     ├── BrowseLayout.swift      # Shared LazyVGrid column sets for the iPad (regular-width) layouts
     ├── ConjugationText.swift   # Renders a conjugated form with its irregular span in customRed
     ├── EtymologyText.swift     # Renders etymology prose (its own minimal `~…~` parser, independent of Info markup)
@@ -204,13 +205,14 @@ Conjugar/
     ├── SpanishLetterKeyRow.swift  # á é í ó ú ü ñ keys with an insert closure; replaces the Verbs sort picker while search is focused
     ├── VerbEntryList.swift     # Lazy verb rows (compact) or carded grid (regular) that open a verb; a model's page and the related list use it
     ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; carries the browse_verb_count launch anchor
-    ├── VerbSearchCommands.swift  # Command-F as a top-level menu (Verbs › Find a Verb) that focuses the verb search
+    ├── VerbSearchCommands.swift  # Command-F as a top-level menu (Verbs › Find a Verb) that opens the verb search through AppRouter.openSearch
     └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples, related verbs; the pill opens the model; sends viewVerbView/leaveVerbView per VerbVisit
 
 ConjugarWidget/
 ├── AnswerQuizIntent.swift      # Interactive AppIntent behind the Quiz widget's answer buttons
 ├── Assets.xcassets/            # Widget-specific asset catalog (AccentColor, WidgetBackground)
 ├── ConjugarWidgetBundle.swift  # The extension's @main: every widget, control, and Live Activity it vends
+├── FindVerbControl.swift       # Control Center / Lock Screen control that opens the verb search, empty and focused
 ├── Info.plist                  # Widget extension configuration
 ├── Localizable.xcstrings       # Widget-target string catalog (en/es), resolved against the widget bundle
 ├── QuickQuizControl.swift      # Control Center / Lock Screen control that starts a quiz
@@ -240,6 +242,7 @@ Shared/                         # Compiled into both the app and the widget exte
 ├── OpenQuizIntent.swift        # Opens the app and stashes a deeplink the app drains on activation
 ├── OpenRandomVerbIntent.swift  # Same, for a random verb, as Shortcuts and Siri run it (source=shortcut)
 ├── OpenRandomVerbControlIntent.swift  # The Random Verb control's own hidden copy of it (source=control)
+├── OpenVerbSearchIntent.swift  # The Find a Verb control's hidden intent: stashes conjugar://search?source=control
 ├── QuizActivityAttributes.swift  # The ActivityKit contract shared by LiveActivityManager and QuizLiveActivity
 ├── WidgetConstants.swift       # App Group id, snapshot filename, and the shared-defaults keys
 ├── WidgetL.swift               # Widget-target localization accessors mirroring L, with English defaultValues
@@ -295,7 +298,7 @@ ConjugarTests/
 │   ├── SoundPlayerTests.swift          # The audio DI seam: the test world must get SoundPlayerDummy
 │   └── URLExtensionTests.swift         # mailto encoding of a learner's query
 └── Views/
-    ├── AppRouterTests.swift            # Deeplink routing, focused on the one-shot game/boss and game/end flags, plus Command-F's search request and a verb link's source
+    ├── AppRouterTests.swift            # Deeplink routing: the grammar's routes and round trips (search, verb with match, info, the reserved list), the intents' literal links, the quick action, and the one-shot game/boss and game/end flags
     ├── ConjugationTextTests.swift      # The shared conjugation renderer
     ├── EtymologyTextTests.swift        # The etymology markup renderer
     ├── InfoTests.swift                 # The rich-text parser, the Info model, and every article link in en and es

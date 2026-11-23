@@ -86,6 +86,15 @@ struct InfoBrowseView: View {
           showTutor = true
         }
       }
+      // An `info` link's article, pushed onto the tab's list. `initial` covers a link that
+      // arrives before the tab first appears.
+      .onChange(of: router.pendingInfo, initial: true) { _, info in
+        guard let info else { return }
+        router.pendingInfo = nil
+        showTutor = false
+        navigationPath = NavigationPath()
+        navigationPath.append(info)
+      }
       .onAppear {
         Current.analytics.signal(name: .viewInfoBrowseView)
       }

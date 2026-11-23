@@ -15,6 +15,19 @@ enum SecondSingularBrowse: String, CaseIterable {
   case vos = "Vos"
   case both = "Both"
 
+  /// The second-singular person the verb page hides, which a search's match line and a link's
+  /// marks leave out where the other person shares its form. See `MatchedForm.shownCells(hiding:)`.
+  var hiddenPersons: Set<DisplayPersonNumber> {
+    switch self {
+    case .tu:
+      return [.secondSingularVos]
+    case .vos:
+      return [.secondSingularTú]
+    case .both:
+      return []
+    }
+  }
+
   var localizedSecondSingularBrowse: String {
     switch self {
     case .tu:

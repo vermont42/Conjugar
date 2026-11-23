@@ -104,3 +104,26 @@ El punto sobre las acciones dentro de la aplicación, en la sección 2, queda as
 ```
 - Ciertas acciones dentro de la aplicación: abrir el juego, volver a mostrar la introducción, tocar para valorar o reseñar la aplicación, enviar un mensaje al tutor, abrir el artículo de un tiempo verbal desde la página de un verbo y tocar para compartir la página de un verbo
 ```
+
+## Where a search began (browse plan, Phase 10, 2026-11-22)
+
+Adds `source` to `finishSearch`: where the search began, which is the verb list itself, the Find a
+Verb control in Control Center, the Find a Verb Home Screen quick action, or a link (Phase 11 will
+add the Look Up a Verb shortcut, and should add "a shortcut" / "un atajo" to these examples). It rewrites the
+search bullet that the section on lookup signals added, so apply this wording in place of that one.
+
+### English
+
+The bullet about searches in section 2 now reads:
+
+```
+- When a search of the verb list ends: where you began it (for example the verb list, Control Center, a Home Screen quick action, or a link), whether you opened a verb, the kind of match that found it (for example the infinitive, a conjugation such as fue, a spelling without accents, an English meaning, or the app's guess at a misspelling), and rough counts: the length of what you typed (1 to 2 letters, 3 to 5, 6 to 9, or 10 or more), how many verbs matched (none, 1, 2 to 10, or more), and where the verb you opened stood in the list (first, second to fifth, or lower)
+```
+
+### Spanish
+
+El punto sobre las búsquedas, en la sección 2, queda así:
+
+```
+- Cuando termina una búsqueda en la lista de verbos: dónde la empezó (por ejemplo, en la lista de verbos, el Centro de control, una acción rápida de la pantalla de inicio o un enlace), si abrió un verbo, el tipo de coincidencia que lo encontró (por ejemplo, el infinitivo, una forma conjugada como fue, una grafía sin tildes, un significado en inglés o la conjetura de la aplicación ante una errata) y cifras aproximadas: la longitud de lo que escribió (de 1 a 2 letras, de 3 a 5, de 6 a 9, o 10 o más), cuántos verbos coincidieron (ninguno, 1, de 2 a 10, o más) y en qué lugar de la lista estaba el verbo que abrió (el primero, del segundo al quinto, o más abajo)
+```

@@ -5,7 +5,7 @@ and [`plans/pedagogy_implementation.md`](../plans/pedagogy_implementation.md) fi
 each piece is, where it lives, and the rules that keep it true. Created 2026-11-22 by Phase 2 of the
 browse plan, on the model of Konjugieren's document of the same name. Each phase that changes a
 piece described here updates its section, and later phases add theirs: the deeplink grammar
-(browse Phase 10), the learner's record (Phase 12), the review card (Phase 15), and the quiz (the
+(browse Phase 10, § Deeplinks), the learner's record (Phase 12), the review card (Phase 15), and the quiz (the
 pedagogy plan). The code is the final authority; this document is a map of it.
 
 ## Analytics
@@ -34,7 +34,7 @@ Built 2026-11-22 by Phase 2 of the browse plan.
 |---|---|---|
 | `viewVerbView` | `source` (below) | When a verb page appears: on arrival, and again with `source` `resume` after the page returns from another tab, a pushed page, or the background |
 | `leaveVerbView` | `deepestSection` (`header`, `simple`, `compound`, `etymology`, `example`), `dwell` (`0-5s`, `5-15s`, `15-60s`, `60s+`) | Exactly once for each `viewVerbView`: when the page leaves the screen or the app goes to the background |
-| `finishSearch` | `outcome` (`opened`, `abandoned`, `noResult`), `queryLength` (`1-2`, `3-5`, `6-9`, `10+`), `resultCount` (`0`, `1`, `2-10`, `11+`), `matchKind` (below), `resultPosition` (`1`, `2-5`, `6+`, `none`) | Once per search of the verb list: when a result or the guess is opened, the field is cleared, or the app goes to the background with text in the field |
+| `finishSearch` | `source` (where the search began: `tab`, `control`, `quickAction`, or `deeplink`; since Phase 10), `outcome` (`opened`, `abandoned`, `noResult`), `queryLength` (`1-2`, `3-5`, `6-9`, `10+`), `resultCount` (`0`, `1`, `2-10`, `11+`), `matchKind` (below), `resultPosition` (`1`, `2-5`, `6+`, `none`) | Once per search of the verb list: when a result or the guess is opened, the field is cleared, or the app goes to the background with text in the field |
 
 **A visit** (`Models/VerbVisit.swift`, `VerbVisit`) is one stretch of a verb page on screen with
 the app in the foreground. `VerbView` begins one in `onAppear` and when the app returns to the
@@ -60,6 +60,13 @@ top result it passed over. Opening the guess reports `opened`, `resultCount` `0`
 `guess`, and position `1`, and the page reports `searchGuess`. Return and the arrow keys (iPad and
 Mac) count as ordinary opens. The Models tab's search sends nothing.
 
+**Where a search began** (Phase 10) is the surface that opened the field: `SearchTracker.fieldOpened(from:)`
+records it when the Find a Verb control, the quick action, or a `search` link opens the field, and
+the first letter typed (or a link's own text) begins a search with that source. A search in
+progress when another surface opens the field ends there. A field that closes with nothing typed
+forgets the surface, so a later search typed into it is `tab`, as is any search begun in the tab,
+Command-F included.
+
 `matchKind` values are `VerbSearch.MatchKind`'s eleven cases by name (`exactInfinitive`,
 `exactFoldedInfinitive`, `exactGlossSense`, `conjugation`, `foldedConjugation`,
 `infinitivePrefix`, `wholeWordGloss`, `infinitiveSubstring`, `foldedInfinitivePrefix`,
@@ -78,21 +85,21 @@ made from a form is still `guess`. Rows and verbs correspond one to one, as befo
 
 ### The `source` vocabulary
 
-`AnalyticsSource` is one vocabulary for every signal that carries `source`. Today only
-`viewVerbView` does. Phase 13 adds it to the quiz signals, and Konjugieren's later phases added it
-to `finishSearch` too (where the search began); this app's Phase 10 or 11 may do the same.
+`AnalyticsSource` is one vocabulary for every signal that carries `source`. Today `viewVerbView`
+does, and since Phase 10 `finishSearch` too, where it names the surface that opened the search
+field. Phase 13 adds it to the quiz signals.
 
 | Value | Sent today? | Meaning |
 |---|---|---|
 | `browse` | Yes | A row of the verb list with the search field empty |
-| `control` | Yes | The Random Verb control in Control Center (`OpenRandomVerbControlIntent`) |
-| `deeplink` | Yes | A `conjugar://` link with no recognized `source` query item |
+| `control` | Yes | The Random Verb control in Control Center (`OpenRandomVerbControlIntent`); for `finishSearch`, the Find a Verb control (`OpenVerbSearchIntent`, Phase 10) |
+| `deeplink` | Yes | A `conjugar://` link with no recognized `source` query item; for `finishSearch`, a `search` link |
 | `infoLink` | No | Reserved for a link from an Info article to a verb |
 | `list` | No | Phase 16: a verb opened from a collection |
-| `lookup` | No | Phase 11: the Look Up a Verb intent |
+| `lookup` | No | Phase 11: the Look Up a Verb intent, for a verb page or a search |
 | `model` | Yes | A verb row on a model's page, in the Models tab or reached from a verb page's pill |
 | `myVerbs` | No | Phase 12: the My Verbs list |
-| `quickAction` | No | Phase 10: a Home Screen quick action |
+| `quickAction` | Yes | `finishSearch` only: a search begun from the Find a Verb Home Screen quick action (Phase 10) |
 | `recent` | No | Phase 12: the recent verbs |
 | `related` | Yes | A chip on a verb page's Related Verbs card, or a row of the full list it opens (Phase 8) |
 | `resume` | Yes | A page that came back after another tab, a pushed page, or the background |
@@ -102,7 +109,7 @@ to `finishSearch` too (where the search began); this app's Phase 10 or 11 may do
 | `sharedLink` | No | Phase 16: a shared collection's link |
 | `shortcut` | Yes | Open Random Verb run from the Shortcuts app or Siri (`OpenRandomVerbIntent`) |
 | `spotlight` | No | Phase 11: a Spotlight result |
-| `tab` | No | Phase 13: a quiz begun from the Quiz tab |
+| `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included (Phase 10). Phase 13: a quiz begun from the Quiz tab |
 | `verbPage` | No | Phase 13: a quiz begun from a verb's page |
 | `widget` | Yes | A tap on any widget: Verb of the Day, the quiz widget, or a Lock Screen accessory |
 
@@ -114,8 +121,8 @@ are buttons, not `NavigationLink`s, so that an open can send `finishSearch` befo
 or an intent can hand the app only a URL. `AppRouter.handle(url:)` reads it through
 `URL.analyticsSource` and falls back to `deeplink` when it is missing or unknown.
 `WidgetDeeplink.verb(_:)` adds `source=widget`; `OpenRandomVerbIntent` stashes
-`conjugar://verb/random?source=shortcut` and `OpenRandomVerbControlIntent`
-`…?source=control`. Phase 10's deeplink grammar should keep this query item.
+`conjugar://verb/random?source=shortcut`, `OpenRandomVerbControlIntent` `…?source=control`, and
+`OpenVerbSearchIntent` `conjugar://search?source=control`. § Deeplinks has the grammar.
 
 **A verb link may name a pronominal verb with its "se"** (`conjugar://verb/arrepentirse`), which
 opens the bare infinitive the map keys on (browse Phase 3). The widgets name a reflexive-only verb
@@ -360,3 +367,108 @@ nothing. The infinitive is the navigation bar's title, which takes no menu, so i
 (Konjugieren's infinitive sat in the page and did). VoiceOver gets a "Copy" / "Copiar" action beside
 "Speak". The modifier pads the row before the menu and takes the padding back after, so the lifted
 preview does not crop the first and last letters.
+
+## Deeplinks
+
+Built 2026-11-22 by Phase 10 of the browse plan, porting the grammar of Konjugieren's Phase 11. The
+app opens `conjugar://` links from widgets, controls, intents, the Home Screen quick action, and
+`simctl openurl`. There is no web domain, so there are no universal links (decided for Konjugieren
+and carried over; see the browse plan).
+
+### Grammar
+
+Written before the `search` and `info` routes were added, so that every route follows one shape:
+
+```
+conjugar://<route>[/<target>][?<item>=<value>&…]
+```
+
+- **The route** is the host. It names the kind of place: a verb, the search, an article.
+- **The target** is at most one path segment, percent-encoded, naming one thing of that kind: an
+  infinitive, a stable key. A route that needs no target takes none, and the `search` route
+  refuses one.
+- **Text travels in query items, never in the path**, because it can hold spaces and slashes ("he
+  hablado"). Query items modify a route; unknown ones are ignored.
+- **`source`** may follow any route that leads to a verb page, a search, or (Phase 13) a quiz. It
+  names the surface that built the link, from `AnalyticsSource`, because a widget or an intent can
+  hand the app nothing but a URL. A missing or unknown value counts as `deeplink`.
+- **Builders, not literals.** App code builds links with `URL.verbDeeplink(_:source:match:)`,
+  `URL.searchDeeplink(text:source:)`, and `URL.infoDeeplink(stableKey:)` (`Utils/URLExtension.swift`),
+  which percent-encode. Only the widget extension (`WidgetDeeplink`) and `Shared/`'s intents, which
+  cannot see `AnalyticsSource`, write literals; each intent keeps its literal in a
+  `pendingDeeplink` constant, and `AppRouterTests` pins it to the routes and the vocabulary.
+
+| Route | Target | Query items | Opens | Since |
+|---|---|---|---|---|
+| `verb` | An infinitive, bare or with "se" (`arrepentirse` opens arrepentir), or `random` | `source`; `match`, a form the page marks as it marks a search's match (`verb/ir?match=fue`) | The Verbs tab's verb page, scrolled to the first marked card | Before 2026; `match` Phase 10 |
+| `search` | None | `q`, the text; `source` | The Verbs tab's list with its search field. With text, the results show with the keyboard down; with none, or `q` empty, the field is cleared and focused for typing | Phase 10 |
+| `info` | A `stableKey`, or a position in `Info.infos` | None | The Info tab, with the article pushed | Phase 10 |
+| `quiz` | Any, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz at once, as the Quick Quiz control and the quiz widget expect | Before 2026 |
+| `game` | None, `boss`, or `end` | None | The game, full screen over any tab (see `docs/game.md`) | Before 2026 |
+| `list` | Reserved for Phase 16's collections | `source` | Nothing yet: ignored | Reserved Phase 10 |
+
+**`match`** goes through `AppRouter.marks(of:on:hiding:)`: `ConjugationMatch.cells(of:equalTo:)`,
+as written, else with accents folded, so several words ("he hablado") and compounds work. Where tú
+and vos share the form in one tense (hablaste), the person that Settings' second-singular choice
+hides is left out, as a search's marks leave it (`MatchedForm.shownCells(hiding:)`). A match that is
+no form of the verb opens the page unmarked. Phase 11's Look Up a Verb will open pages this way.
+
+**`info`** accepts a position as well as a key, as Konjugieren's links did, but a position moves when
+the articles are reordered, so app code always builds the key (`Info.info(deeplinkTarget:)`). The
+Info tab's own cross-references still go by heading inside `InfoView`, since they never leave it.
+
+**A link replaces what another left pending:** a verb link clears a pending search and a search
+link a pending verb, so the last link wins on a cold launch.
+
+### Architecture
+
+| File | Purpose |
+|------|---------|
+| `Utils/URLExtension.swift` | The grammar's constants (routes, query-item names), `isDeeplink`, `deeplinkTarget`, `deeplinkQueryValue(named:)`, `analyticsSource`, and the builders |
+| `Views/AppRouter.swift` | `handle(url:)` parses a link and sets the tab and a one-shot request: `pendingVerb` (with its marks), `pendingSearch` (a `SearchRequest`: text and source), `pendingInfo`, `pendingQuizStart`, or the game's flags. `openSearch(text:source:)` is the search route's effect, which Command-F, the control, and the quick action share. `AppRouter.shared` is the one instance, so that the quick action's scene delegate can reach it |
+| `Views/VerbBrowseView.swift` | Consumes `pendingVerb` and `pendingSearch` with `onChange(initial: true)`, since a link can arrive before the tab first appears. A search request pops to the list first, waiting out the pop before it focuses |
+| `Views/InfoBrowseView.swift` | Consumes `pendingInfo` the same way |
+| `Views/MainTabView.swift` | Receives URLs via `.onOpenURL`, and drains a control's pending link from the shared defaults when the scene becomes active |
+| `Supporting/QuickAction.swift` | The Home Screen quick action and the scene delegate that receives it (below) |
+
+### Examples
+
+```
+conjugar://verb/hablar                          → hablar's page
+conjugar://verb/ir?match=fue&source=lookup      → ir's page at the Pretérito, fue marked
+conjugar://verb/arrepentirse?source=widget      → arrepentir's page (shown as arrepentirse)
+conjugar://search?q=he%20hablado                → the verb list searched for "he hablado"
+conjugar://search?source=control                → the verb list with an empty, focused field
+conjugar://info/voseo                           → the Voseo article
+conjugar://info/1                               → the article at position 1 (Terminology, today)
+conjugar://quiz/start                           → the Quiz tab, a quiz started
+```
+
+### Control Center controls
+
+Three controls, in `ConjugarWidget/`: **Quick Quiz** (`QuickQuizControl`), **Random Verb**
+(`RandomVerbControl`), and, since Phase 10, **Find a Verb** (`FindVerbControl`), which opens the
+verb search empty and focused. Each runs an intent from `Shared/` (`OpenQuizIntent`,
+`OpenRandomVerbControlIntent`, `OpenVerbSearchIntent`), compiled into both the app and the
+extension, with `openAppWhenRun = true`. A control cannot navigate, so its intent writes its
+`pendingDeeplink` to the App Group's defaults (`WidgetConstants.pendingDeeplinkKey`) and
+`MainTabView` routes it when the scene becomes active. `OpenVerbSearchIntent` is hidden from
+Shortcuts (`isDiscoverable = false`), because Phase 11's Look Up a Verb is the shortcut for this.
+Its title, "Find a Verb" / "Buscar un verbo", is Command-F's, under the widget catalog's own keys
+(`Widget.findVerbName`, `Widget.intentFindVerb`, also in the app's catalog for the intent's
+metadata).
+
+### Home Screen quick actions
+
+A long press on the app icon offers **Find a Verb** ("Buscar un verbo"), which routes
+`conjugar://search?source=quickAction`: the same empty, focused search as the control and
+Command-F. `Supporting/QuickAction.swift` installs the item at every launch
+(`UIApplication.shortcutItems`, from `AppDelegate`) rather than declaring it in Info.plist, so its
+title comes from the string catalog (`L.BrowseVerbs.findVerb`, Command-F's). SwiftUI has no hook
+for quick actions, so `AppDelegate` names `QuickActionSceneDelegate` as the scene's delegate in
+`application(_:configurationForConnecting:options:)`. A quick action that launches the app arrives
+in `scene(_:willConnectTo:options:)`, before any view exists, and one that brings it forward in
+`windowScene(_:performActionFor:completionHandler:)`. SwiftUI still owns the window, and
+`.onOpenURL` still receives links (checked in the iOS 26.3 simulator with the app running and not
+running).
+

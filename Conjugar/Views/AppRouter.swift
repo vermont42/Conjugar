@@ -2,10 +2,11 @@
 //  AppRouter.swift
 //  Conjugar
 //
-//  Tab selection + deeplink routing for the widgets and control-center controls. A
-//  `conjugar://` URL (from a widget tap) or a drained control-widget deeplink is turned
-//  into a tab switch plus a pending navigation the destination screen consumes. Added
-//  with the widget port (July 2026).
+//  Tab selection + deeplink routing for the widgets, the Control Center controls, the Home
+//  Screen quick action, and Command-F. A `conjugar://` URL (from a widget tap, a quick action,
+//  or `simctl openurl`) or a drained control-widget deeplink is turned into a tab switch plus a
+//  pending navigation the destination screen consumes. Added with the widget port (July 2026);
+//  the grammar in `docs/feature_architecture.md` § Deeplinks since browse Phase 10.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -21,13 +22,21 @@ enum AppTab: Hashable {
 
 @Observable
 final class AppRouter {
+  /// The router the app runs on. `ConjugarApp` hands it to its views; the quick action's scene
+  /// delegate, which SwiftUI creates and cannot hand a value, reaches it here. Tests make their own.
+  static let shared = AppRouter()
+
   var selectedTab: AppTab = .browseVerbs
   /// A verb the Verbs tab should push, with the surface that asked for it. `VerbBrowseView`
   /// consumes and clears it.
   var pendingVerb: VerbDestination?
-  /// A one-shot request for the Verbs tab to pop to its list and focus the search field, set by
-  /// Command-F. `VerbBrowseView` consumes and clears it.
-  var pendingSearchFocus = false
+  /// A one-shot request for the Verbs tab to pop to its list and show its search field, set by
+  /// Command-F, the Find a Verb control and quick action, and a `search` link.
+  /// `VerbBrowseView` consumes and clears it.
+  var pendingSearch: SearchRequest?
+  /// An article the Info tab should push, from an `info` link. `InfoBrowseView` consumes and
+  /// clears it.
+  var pendingInfo: Info?
   /// A one-shot request for the Quiz tab to start a quiz. `QuizView` consumes it.
   var pendingQuizStart = false
   /// Drives a full-screen `GameView` cover from `MainTabView`, tab-independent so a
@@ -65,29 +74,39 @@ final class AppRouter {
     showGame = true
   }
 
-  /// Route a `conjugar://` deeplink. Hosts: `verb/<infinitive>` (the infinitive bare or with
-  /// "se", so `verb/arrepentirse` opens arrepentir; or `verb/random`),
-  /// `quiz/start`, and `game`. Unknown or unmapped verbs are ignored. A verb link may name the
-  /// surface it came from in a `source` query item (`?source=widget`), which the verb page
-  /// reports; a link that names none reports `deeplink`.
+  /// Route a `conjugar://` deeplink. `docs/feature_architecture.md` § Deeplinks has the grammar
+  /// and every route: `verb/<infinitive>` (bare or with "se", so `verb/arrepentirse` opens
+  /// arrepentir, or `verb/random`), with `match`, a form the page marks; `search`, with its text
+  /// in `q`; `info/<stableKey>` (or a position); `quiz` (any target starts a quiz); and `game`.
+  /// A link to a verb page or a search may name the surface it came from in `source`
+  /// (`?source=widget`); a link that names none reports `deeplink`. Unknown routes, unknown
+  /// verbs, and the `list` route that Phase 16 reserves are ignored.
   func handle(url: URL) {
-    guard url.scheme == "conjugar", let host = url.host() else { return }
+    guard url.isDeeplink, let host = url.host() else { return }
+    let source = url.analyticsSource ?? .deeplink
     switch host {
-    case "verb":
-      let last = url.lastPathComponent
-      let source = url.analyticsSource ?? .deeplink
-      if last == "random", let random = VerbMap.shared.entries.keys.randomElement() {
+    case URL.verbHost:
+      guard let target = url.deeplinkTarget else { return }
+      if target == URL.randomVerbTarget, let random = VerbMap.shared.entries.keys.randomElement() {
         open(verb: random, source: source)
-      } else if VerbMap.shared.entry(for: last) != nil {
-        open(verb: last, source: source)
-      } else if let bare = ReflexivePronoun.bareInfinitive(fromCitation: last), VerbMap.shared.entry(for: bare) != nil {
-        // A pronominal citation form, arrepentirse, as the widgets name a reflexive-only verb.
-        open(verb: bare, source: source)
+      } else if let infinitive = Self.infinitive(named: target) {
+        let match = url.deeplinkQueryValue(named: URL.matchQueryName)
+        let marks = match.map { Self.marks(of: $0, on: infinitive, hiding: Current.settings.secondSingularBrowse.hiddenPersons) } ?? []
+        open(verb: infinitive, source: source, marks: marks)
       }
-    case "quiz":
+    case URL.searchHost:
+      // The search route alone takes no target; its text travels in `q`.
+      guard url.hasNoDeeplinkTarget else { return }
+      openSearch(text: url.deeplinkQueryValue(named: URL.searchTextQueryName) ?? "", source: source)
+    case URL.infoHost:
+      guard let target = url.deeplinkTarget, let info = Info.info(deeplinkTarget: target) else { return }
+      selectedTab = .info
+      pendingInfo = info
+    case URL.quizHost:
+      // Any target, `quiz/start` as the Quick Quiz control sends it, or none, starts a quiz.
       selectedTab = .quiz
       pendingQuizStart = true
-    case "game":
+    case URL.gameHost:
       // `conjugar://game/boss` is the boss fight's debug entry and
       // `conjugar://game/end` jumps straight to its end scene (same host, one
       // path component); plain `conjugar://game` starts the climb as always.
@@ -106,14 +125,53 @@ final class AppRouter {
     }
   }
 
-  /// Command-F: switch to the Verbs tab, pop to its list, and focus the search field.
-  func openSearch() {
+  /// Shows the Verbs tab's list with its search field. A nil `text` keeps what the field holds,
+  /// as Command-F does, and focuses it. Empty text clears the field and focuses it, for typing.
+  /// Other text is searched for, with the keyboard down so that the results show.
+  func openSearch(text: String?, source: AnalyticsSource) {
+    pendingVerb = nil
     selectedTab = .browseVerbs
-    pendingSearchFocus = true
+    pendingSearch = SearchRequest(text: text, source: source)
   }
 
-  private func open(verb: String, source: AnalyticsSource) {
-    selectedTab = .browseVerbs
-    pendingVerb = VerbDestination(infinitive: verb, source: source)
+  /// The infinitive `VerbMap` keys a link's target on: the target itself, or for a pronominal
+  /// citation form, arrepentirse, as the widgets name a reflexive-only verb, the bare one.
+  private static func infinitive(named target: String) -> String? {
+    if VerbMap.shared.entry(for: target) != nil {
+      return target
+    }
+    if let bare = ReflexivePronoun.bareInfinitive(fromCitation: target), VerbMap.shared.entry(for: bare) != nil {
+      return bare
+    }
+    return nil
   }
+
+  /// The cells of `infinitive` that `match` is, as written or else with its accents folded, less
+  /// the second-singular person the page hides where the other shares the form. Empty when the
+  /// text is no form of the verb.
+  static func marks(of match: String, on infinitive: String, hiding hidden: Set<DisplayPersonNumber>) -> Set<ConjugationCell> {
+    var cells = ConjugationMatch.cells(of: infinitive, equalTo: match)
+    if cells.isEmpty {
+      cells = ConjugationMatch.cells(of: infinitive, equalTo: match, accents: .folded)
+    }
+    guard !cells.isEmpty else {
+      return []
+    }
+    return Set(MatchedForm(text: match, cells: cells, isFolded: false).shownCells(hiding: hidden))
+  }
+
+  private func open(verb: String, source: AnalyticsSource, marks: Set<ConjugationCell> = []) {
+    pendingSearch = nil
+    selectedTab = .browseVerbs
+    pendingVerb = VerbDestination(infinitive: verb, source: source, marks: marks)
+  }
+}
+
+/// A request, from a link, a control, a quick action, or Command-F, that the verb list show its
+/// search field.
+struct SearchRequest: Equatable {
+  /// Nil keeps what the field holds.
+  let text: String?
+  /// Where the search began, which `finishSearch` reports.
+  let source: AnalyticsSource
 }

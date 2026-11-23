@@ -89,4 +89,17 @@ struct Info: Hashable, Identifiable {
   static func info(forHeading heading: String) -> Info? {
     infos.first { $0.heading.lowercased() == heading.lowercased() }
   }
+
+  /// The article a `conjugar://info/<target>` link names: by its `stableKey`
+  /// (`info/voseo`), or by its position in `infos` (`info/3`), which survives only until
+  /// the articles are reordered. Nil for anything else.
+  static func info(deeplinkTarget target: String) -> Info? {
+    if let byKey = infos.first(where: { $0.stableKey == target }) {
+      return byKey
+    }
+    guard let position = Int(target), infos.indices.contains(position) else {
+      return nil
+    }
+    return infos[position]
+  }
 }

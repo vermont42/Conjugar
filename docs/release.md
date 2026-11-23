@@ -32,6 +32,13 @@ material for the release notes in `docs/release_notes.txt`.
 3. **Share a verb's page from a device** into Messages and Mail (browse plan, Phase 9). The share
    sheet, its header, and its Copy were tried only in the simulator. Check that the App Store link
    is tappable in both and that the gloss's quotation marks survive, in English and Spanish.
+4. **Try Find a Verb from Control Center and the Home Screen on a device** (browse plan, Phase 10).
+   In the simulator the quick action was tried with the app running and not running, but the
+   control was never added to Control Center; only its link was drained. Add the control, tap it
+   with the app closed and open, and check that the Verbs tab opens with the search field focused
+   and the keyboard up. Check the quick action's title in Spanish ("Buscar un verbo") too. With
+   Test Mode on, a search begun from each should send `finishSearch` with `source` `control` or
+   `quickAction`.
 
 ## On Release Day
 

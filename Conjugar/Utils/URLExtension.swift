@@ -30,16 +30,89 @@ extension URL {
     return URL(string: "mailto:\(address)?subject=\(encode(subject))&body=\(encode(body))")
   }
 
+  // MARK: - Deeplinks
+
+  // The grammar is `conjugar://<route>[/<target>][?<item>=<value>&…]`: the route is the host, the
+  // target at most one path segment, and text only ever in a query item, because it can hold
+  // spaces and slashes. `docs/feature_architecture.md` § Deeplinks lists every route.
+
+  nonisolated static let deeplinkScheme = "conjugar"
+  nonisolated static let verbHost = "verb"
+  nonisolated static let searchHost = "search"
+  nonisolated static let infoHost = "info"
+  nonisolated static let quizHost = "quiz"
+  nonisolated static let gameHost = "game"
+  /// Reserved for the collections of the browse plan's Phase 16, and not handled before then.
+  nonisolated static let listHost = "list"
+  /// The target of `conjugar://verb/random`.
+  nonisolated static let randomVerbTarget = "random"
+
   /// The query item a `conjugar://` link names its surface in, as in
   /// `conjugar://verb/hablar?source=widget`. A widget or a control can hand the app only a URL.
   nonisolated static let sourceQueryName = "source"
+  /// A search's text: `conjugar://search?q=he%20hablado`.
+  nonisolated static let searchTextQueryName = "q"
+  /// A form a verb page marks, as it marks a search's match: `conjugar://verb/ir?match=fue`.
+  nonisolated static let matchQueryName = "match"
+
+  nonisolated var isDeeplink: Bool {
+    scheme == Self.deeplinkScheme
+  }
+
+  /// The link's target, its one path segment, decoded. Nil for a link with none or with more.
+  nonisolated var deeplinkTarget: String? {
+    let segments = pathComponents.filter { $0 != "/" }
+    return segments.count == 1 ? segments[0] : nil
+  }
+
+  /// Whether the link has no path at all, as `conjugar://search` has.
+  nonisolated var hasNoDeeplinkTarget: Bool {
+    pathComponents.filter { $0 != "/" }.isEmpty
+  }
+
+  /// The value of a query item, such as a search's text.
+  nonisolated func deeplinkQueryValue(named name: String) -> String? {
+    URLComponents(url: self, resolvingAgainstBaseURL: false)?
+      .queryItems?
+      .first { $0.name == name }?
+      .value
+  }
 
   /// The surface this link says it came from, or nil if it names none that the app knows.
   nonisolated var analyticsSource: AnalyticsSource? {
-    URLComponents(url: self, resolvingAgainstBaseURL: false)?
-      .queryItems?
-      .first { $0.name == Self.sourceQueryName }?
-      .value
-      .flatMap(AnalyticsSource.init(rawValue:))
+    deeplinkQueryValue(named: Self.sourceQueryName).flatMap(AnalyticsSource.init(rawValue:))
+  }
+
+  /// `conjugar://verb/tener?source=lookup&match=tuve`. A `match` names a form the page marks.
+  nonisolated static func verbDeeplink(_ infinitive: String, source: AnalyticsSource, match: String? = nil) -> URL? {
+    deeplink(host: verbHost, target: infinitive, queryItems: [
+      URLQueryItem(name: sourceQueryName, value: source.rawValue),
+      match.map { URLQueryItem(name: matchQueryName, value: $0) }
+    ])
+  }
+
+  /// `conjugar://search?q=fue&source=control`. With no text, or empty text, the search opens empty
+  /// and focused for typing.
+  nonisolated static func searchDeeplink(text: String?, source: AnalyticsSource) -> URL? {
+    deeplink(host: searchHost, target: nil, queryItems: [
+      text.map { URLQueryItem(name: searchTextQueryName, value: $0) },
+      URLQueryItem(name: sourceQueryName, value: source.rawValue)
+    ])
+  }
+
+  /// `conjugar://info/voseo`. A stable key survives a reordering of the articles, which a
+  /// position does not.
+  nonisolated static func infoDeeplink(stableKey: String) -> URL? {
+    deeplink(host: infoHost, target: stableKey, queryItems: [])
+  }
+
+  nonisolated private static func deeplink(host: String, target: String?, queryItems: [URLQueryItem?]) -> URL? {
+    var components = URLComponents()
+    components.scheme = deeplinkScheme
+    components.host = host
+    components.path = target.map { "/\($0)" } ?? ""
+    let items = queryItems.compactMap { $0 }
+    components.queryItems = items.isEmpty ? nil : items
+    return components.url
   }
 }

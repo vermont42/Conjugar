@@ -89,6 +89,9 @@ struct VerbBrowseView: View {
   // touch-down, before the tap completes. A letter row that followed the focus vanished under the
   // finger, so tapping á did nothing. The row follows this instead, which lets go a moment later.
   private func searchFocusChanged() {
+    if !searchIsFocused {
+      searchTracker.fieldClosed()
+    }
     guard !searchIsFocused else {
       searchIsEngaged = true
       searchFocusLostAt = nil
@@ -133,30 +136,21 @@ struct VerbBrowseView: View {
       return
     }
     let match = searchMatches[index]
-    if let query = searchTracker.finish() {
-      signal(.opened(query: query, resultCount: searchMatches.count, kind: match.kind, position: index))
+    if let search = searchTracker.finish() {
+      signal(.opened(query: search.query, source: search.source, resultCount: searchMatches.count, kind: match.kind, position: index))
     }
     push(VerbDestination(infinitive: infinitive, source: .search, marks: marks(of: match.forms)))
   }
 
   private func openGuess(_ guess: VerbSearch.Guess) {
-    if let query = searchTracker.finish() {
-      signal(.openedGuess(query: query))
+    if let search = searchTracker.finish() {
+      signal(.openedGuess(query: search.query, source: search.source))
     }
     push(VerbDestination(infinitive: guess.entry.infinitive, source: .searchGuess, marks: marks(of: guess.form.map { [$0] } ?? [])))
   }
 
-  /// The second-singular person the verb page hides, which a match line leaves out where the
-  /// other person shares its form. See `MatchedForm.shownCells(hiding:)`.
   private var hiddenPersons: Set<DisplayPersonNumber> {
-    switch Current.settings.secondSingularBrowse {
-    case .tu:
-      return [.secondSingularVos]
-    case .vos:
-      return [.secondSingularTú]
-    case .both:
-      return []
-    }
+    Current.settings.secondSingularBrowse.hiddenPersons
   }
 
   private func marks(of forms: [MatchedForm]) -> Set<ConjugationCell> {
@@ -173,8 +167,8 @@ struct VerbBrowseView: View {
   }
 
   /// A search that ended with nothing opened: cleared, or left in the background.
-  private func signalEndedSearch(query: String) {
-    signal(.ended(query: query, matches: VerbSearch.matches(for: query, in: verbs)))
+  private func signalEndedSearch(_ search: SearchTracker.Search) {
+    signal(.ended(query: search.query, source: search.source, matches: VerbSearch.matches(for: search.query, in: verbs)))
   }
 
   private func signal(_ report: SearchReport) {
@@ -329,15 +323,38 @@ struct VerbBrowseView: View {
     }
   }
 
-  /// Command-F: pop to the list and focus the field.
-  private func focusSearch() async {
+  /// Command-F, the Find a Verb control and quick action, or a `search` link. Text that arrives
+  /// with the request is shown as results, with the keyboard down so that they are visible. A
+  /// request with no text, or with empty text, is for typing, so it focuses the field.
+  private func openRequestedSearch() {
+    guard let request = router.pendingSearch else {
+      return
+    }
+    router.pendingSearch = nil
+    if let text = request.text {
+      if let ended = searchTracker.fieldOpened(from: request.source) {
+        signalEndedSearch(ended)
+      }
+      searchText = text
+      // onChange(of: searchText) does not fire when the text is unchanged, and the request
+      // still begins a search.
+      _ = searchTracker.textChanged(to: text)
+    }
+    let wantsKeyboard = request.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
+    Task {
+      await showSearch(focused: wantsKeyboard)
+    }
+  }
+
+  /// Pops to the list, then focuses the field or lets it go.
+  private func showSearch(focused: Bool) async {
     if !navigationPath.isEmpty {
       navigationPath = NavigationPath()
       // Hack, from Konjugieren: focus requested while the pop animates sets the focus state
       // without making the field first responder, so typing goes nowhere. Wait out the animation.
       try? await Task.sleep(for: .milliseconds(500))
     }
-    searchIsFocused = true
+    searchIsFocused = focused
   }
 
   var body: some View {
@@ -425,8 +442,8 @@ struct VerbBrowseView: View {
           }
           .onChange(of: searchText) { _, _ in
             keyboardSelection = nil
-            if let query = searchTracker.textChanged(to: searchText) {
-              signalEndedSearch(query: query)
+            if let search = searchTracker.textChanged(to: searchText) {
+              signalEndedSearch(search)
             }
             recomputeFilteredVerbs()
           }
@@ -497,16 +514,12 @@ struct VerbBrowseView: View {
       }
       // A search left with text in the field when the app goes to the background has ended.
       .onChange(of: scenePhase) {
-        if scenePhase == .background, let query = searchTracker.finish() {
-          signalEndedSearch(query: query)
+        if scenePhase == .background, let search = searchTracker.finish() {
+          signalEndedSearch(search)
         }
       }
-      .onChange(of: router.pendingSearchFocus, initial: true) { _, requested in
-        guard requested else { return }
-        router.pendingSearchFocus = false
-        Task {
-          await focusSearch()
-        }
+      .onChange(of: router.pendingSearch, initial: true) {
+        openRequestedSearch()
       }
       .onAppear {
         Current.analytics.signal(name: .viewVerbBrowseView)

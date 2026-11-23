@@ -10591,3 +10591,44 @@ The share button sends one new signal, with no parameters and no verb. Its line 
 policy waits in the staged file with the others until the 2027 release, and the release checklist now
 asks for a real share into Messages and Mail on a device, since the simulator can show the sheet but
 not what a friend receives.
+
+## Links into the App: One Grammar, a Control, and a Quick Action (2026-11-22)
+
+Phase 10 of the browse plan gave Conjugar three new ways to reach its verb search from outside the
+app, and it began by writing down a rule before adding a single route. Konjugieren had learned that
+links accrete. Each feature invents its own shape, and soon one link carries text in its path, another
+in a query item, and a third reads only the last path segment. So the first step was a grammar,
+`conjugar://<route>[/<target>][?items]`, with one target at most and any free text in a query item.
+Every link built by the app now goes through a `URL` builder that does the percent-encoding, and a
+test round-trips "he hablado", "año", and "a&b=c#d+e/f" through each.
+
+Under that grammar came three routes. `search?q=fue` opens the Verbs tab already searched, with the
+keyboard down so the results show; a bare `search` clears the field and focuses it for typing.
+`verb/ir?match=fue` opens ir's page with fue marked and scrolled to, as a search result's page is,
+which Phase 11's Look Up a Verb will use. Conjugar had no Info link at all, so `info/voseo` is new; it
+takes an article's stable key, and for Konjugieren's sake a position too. One Spanish wrinkle carried
+over from Phase 5: tú and vos share forms like hablaste, so a link's marks leave out whichever person
+the learner's settings hide.
+
+The Find a Verb control in Control Center and the Find a Verb quick action on the Home Screen both open
+that empty, focused search, as Command-F already did. The quick action needed the most plumbing.
+SwiftUI has no hook for quick actions, so the app delegate now names a small scene delegate that
+receives them. Konjugieren routes through a global world object; Conjugar's router lived inside the
+SwiftUI app as state, out of reach of a delegate that UIKit creates. It became a shared instance
+instead. The quick action is installed at launch rather than declared in Info.plist, so its title
+comes from the string catalog and reads "Buscar un verbo" in Spanish.
+
+The search signal gained a `source`: the verb list itself, the control, the quick action, or a link.
+Without it, a search begun from Control Center would be indistinguishable from one begun in the tab.
+The tracker that follows a search now remembers which surface opened the field, and forgets it if the
+field closes with nothing typed. The privacy policy's line about searches was rewritten in the staged
+file to say so.
+
+Testing the quick action in the simulator took some patience. `simctl` cannot press one, so the test
+was a long press on the icon by coordinates, which first landed on a calendar widget because the Home
+key had returned to the wrong page. Once on the right page, the quick action worked with the app
+running and with it closed. On the first cold launch, though, the letters typed eight seconds after
+the tap went nowhere, although the field showed its cursor. With fifteen seconds they landed, and a cold
+launch through a plain link took typing at once, so this Intel Mac's slow launch looks like the
+culprit rather than the code. The release checklist asks for both the control and the quick action on
+a real device, since nobody has yet added the control to Control Center.

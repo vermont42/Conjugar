@@ -2,15 +2,18 @@
 //  AppRouterTests.swift
 //  ConjugarTests
 //
-//  Deeplink routing for `AppRouter.handle(url:)`, focused on the one-shot game flags
-//  (`pendingBossEntry` / `pendingEndScene`). They are drained only by `GameView.onAppear`,
-//  so a `game/boss` or `game/end` URL arriving while the game is already presented must be
-//  ignored — otherwise the stale flag would hijack the next plain `conjugar://game`.
+//  Deeplink routing for `AppRouter.handle(url:)`: the grammar's routes and their round trips
+//  (browse plan, Phase 10), the control's and the quick action's links, and the one-shot game
+//  flags (`pendingBossEntry` / `pendingEndScene`). Those are drained only by
+//  `GameView.onAppear`, so a `game/boss` or `game/end` URL arriving while the game is already
+//  presented must be ignored — otherwise the stale flag would hijack the next plain
+//  `conjugar://game`.
 //  Swift Testing + `@MainActor` (AppRouter is MainActor).
 //
 
 import Foundation
 import Testing
+import UIKit
 @testable import Conjugar
 
 @Suite("AppRouter")
@@ -81,12 +84,210 @@ struct AppRouterTests {
     #expect(!router.showGame)
   }
 
-  @Test func openSearchSelectsTheVerbsTabAndAsksForFocus() {
+  // MARK: - Search (browse plan, Phase 10)
+
+  @Test func commandFShowsTheVerbsTabAndKeepsTheFieldsText() {
     let router = AppRouter()
     router.selectedTab = .quiz
-    router.openSearch()
+    router.openSearch(text: nil, source: .tab)
     #expect(router.selectedTab == .browseVerbs)
-    #expect(router.pendingSearchFocus)
+    #expect(router.pendingSearch == SearchRequest(text: nil, source: .tab))
+  }
+
+  @Test func searchDeeplinkCarriesItsTextAndSource() {
+    let router = AppRouter()
+    router.selectedTab = .settings
+    router.handle(url: url("conjugar://search?q=he%20hablado&source=control"))
+    #expect(router.selectedTab == .browseVerbs)
+    #expect(router.pendingSearch == SearchRequest(text: "he hablado", source: .control))
+  }
+
+  @Test func searchDeeplinkWithNoTextOpensAnEmptyField() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://search"))
+    #expect(router.pendingSearch == SearchRequest(text: "", source: .deeplink))
+    router.handle(url: url("conjugar://search/?q="))
+    #expect(router.pendingSearch == SearchRequest(text: "", source: .deeplink))
+  }
+
+  @Test func searchDeeplinkWithATargetIsIgnored() {
+    let router = AppRouter()
+    router.selectedTab = .settings
+    router.handle(url: url("conjugar://search/fue"))
+    #expect(router.pendingSearch == nil)
+    #expect(router.selectedTab == .settings)
+  }
+
+  @Test(arguments: ["fue", "he hablado", "año", "a&b=c#d+e/f", "¿qué?", ""])
+  func builtSearchDeeplinkRoundTrips(text: String) throws {
+    let router = AppRouter()
+    let link = try #require(URL.searchDeeplink(text: text, source: .lookup))
+    router.handle(url: link)
+    #expect(router.pendingSearch == SearchRequest(text: text, source: .lookup))
+  }
+
+  @Test func aSearchWithNoTextBuildsNoQueryItemForIt() throws {
+    let link = try #require(URL.searchDeeplink(text: nil, source: .control))
+    #expect(link.absoluteString == "conjugar://search?source=control")
+  }
+
+  @Test func aVerbDeeplinkReplacesAPendingSearch() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://search?q=fue"))
+    router.handle(url: url("conjugar://verb/ir"))
+    #expect(router.pendingSearch == nil)
+    #expect(router.pendingVerb?.infinitive == "ir")
+  }
+
+  @Test func aSearchDeeplinkReplacesAPendingVerb() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://verb/ir"))
+    router.handle(url: url("conjugar://search?q=fue"))
+    #expect(router.pendingVerb == nil)
+    #expect(router.pendingSearch?.text == "fue")
+  }
+
+  // MARK: - A verb's match
+
+  @Test func verbDeeplinkMarksItsMatch() throws {
+    let router = AppRouter()
+    let link = try #require(URL.verbDeeplink("ir", source: .lookup, match: "fue"))
+    router.handle(url: link)
+    #expect(router.pendingVerb == VerbDestination(infinitive: "ir", source: .lookup, marks: [ConjugationCell(tense: .pretérito, personNumber: .thirdSingular)]))
+  }
+
+  @Test func aMatchMayBeSeveralWords() {
+    let marks = AppRouter.marks(of: "he hablado", on: "hablar", hiding: [])
+    #expect(marks == [ConjugationCell(tense: .perfectoDeIndicativo, personNumber: .firstSingular)])
+  }
+
+  @Test func aMatchWithoutItsAccentsStillMarks() {
+    let marks = AppRouter.marks(of: "tendre", on: "tener", hiding: [])
+    #expect(marks == [ConjugationCell(tense: .futuroDeIndicativo, personNumber: .firstSingular)])
+  }
+
+  // Tú and vos share hablaste, so a learner who chose tú is not shown the vos row as well.
+  @Test func aMatchLeavesOutTheHiddenPersonWhereTheOtherSharesTheForm() {
+    let tú = ConjugationCell(tense: .pretérito, personNumber: .secondSingularTú)
+    let vos = ConjugationCell(tense: .pretérito, personNumber: .secondSingularVos)
+    #expect(AppRouter.marks(of: "hablaste", on: "hablar", hiding: [.secondSingularVos]) == [tú])
+    #expect(AppRouter.marks(of: "hablaste", on: "hablar", hiding: []) == [tú, vos])
+  }
+
+  @Test func verbDeeplinkWhoseMatchIsNoFormMarksNothing() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://verb/ir?match=xyzzy"))
+    #expect(router.pendingVerb == VerbDestination(infinitive: "ir", source: .deeplink))
+  }
+
+  @Test func builtVerbDeeplinkFindsAVerbWithAnEñe() throws {
+    let router = AppRouter()
+    let link = try #require(URL.verbDeeplink("añadir", source: .spotlight))
+    router.handle(url: link)
+    #expect(router.pendingVerb == VerbDestination(infinitive: "añadir", source: .spotlight))
+  }
+
+  @Test func verbDeeplinkWithTwoSegmentsIsIgnored() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://verb/hablar/extra"))
+    #expect(router.pendingVerb == nil)
+  }
+
+  // MARK: - Info, the quiz, and the reserved list route
+
+  @Test func infoDeeplinkOpensAnArticleByItsStableKey() throws {
+    let router = AppRouter()
+    let link = try #require(URL.infoDeeplink(stableKey: "preterito"))
+    router.handle(url: link)
+    #expect(router.selectedTab == .info)
+    #expect(router.pendingInfo?.stableKey == "preterito")
+  }
+
+  @Test func infoDeeplinkAcceptsAPosition() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://info/2"))
+    #expect(router.pendingInfo == Info.infos[2])
+  }
+
+  @Test(arguments: ["conjugar://info/nonsense", "conjugar://info/999", "conjugar://info/-1", "conjugar://info"])
+  func infoDeeplinkToNoArticleIsIgnored(link: String) {
+    let router = AppRouter()
+    router.selectedTab = .settings
+    router.handle(url: url(link))
+    #expect(router.pendingInfo == nil)
+    #expect(router.selectedTab == .settings)
+  }
+
+  @Test func everyArticleRoundTripsByItsStableKey() throws {
+    for info in Info.infos {
+      let router = AppRouter()
+      router.handle(url: try #require(URL.infoDeeplink(stableKey: info.stableKey)))
+      #expect(router.pendingInfo == info)
+    }
+  }
+
+  @Test(arguments: ["conjugar://quiz/start", "conjugar://quiz"])
+  func quizDeeplinkStillStartsAQuiz(link: String) {
+    let router = AppRouter()
+    router.handle(url: url(link))
+    #expect(router.selectedTab == .quiz)
+    #expect(router.pendingQuizStart)
+  }
+
+  // Phase 16 reserves `list/<key>`; until then it does nothing.
+  @Test(arguments: ["conjugar://list/top100", "conjugar://nonsense/hablar", "https://example.com/verb/hablar"])
+  func reservedAndUnknownRoutesAreIgnored(link: String) {
+    let router = AppRouter()
+    router.selectedTab = .settings
+    router.handle(url: url(link))
+    #expect(router.selectedTab == .settings)
+    #expect(router.pendingVerb == nil)
+    #expect(router.pendingSearch == nil)
+    #expect(router.pendingInfo == nil)
+  }
+
+  // MARK: - The control and the quick action
+
+  // `Shared/` cannot see `AnalyticsSource`, so its intents spell their links as literals. These
+  // pin the literals to the routes and the vocabulary.
+  @Test func findAVerbControlOpensAnEmptySearch() {
+    let router = AppRouter()
+    router.handle(url: url(OpenVerbSearchIntent.pendingDeeplink))
+    #expect(router.pendingSearch == SearchRequest(text: "", source: .control))
+  }
+
+  @Test(arguments: zip(
+    [OpenRandomVerbIntent.pendingDeeplink, OpenRandomVerbControlIntent.pendingDeeplink],
+    [AnalyticsSource.shortcut, .control]
+  ))
+  func randomVerbIntentsNameTheirSources(link: String, source: AnalyticsSource) {
+    let router = AppRouter()
+    router.handle(url: url(link))
+    #expect(router.pendingVerb?.source == source)
+  }
+
+  @Test func quickQuizControlStartsAQuiz() {
+    let router = AppRouter()
+    router.handle(url: url(OpenQuizIntent.pendingDeeplink))
+    #expect(router.pendingQuizStart)
+  }
+
+  @Test func findAVerbQuickActionOpensAnEmptySearch() {
+    let router = AppRouter()
+    #expect(QuickAction.perform(QuickAction.findVerb.item, router: router))
+    #expect(router.selectedTab == .browseVerbs)
+    #expect(router.pendingSearch == SearchRequest(text: "", source: .quickAction))
+  }
+
+  @Test func findAVerbQuickActionSharesCommandFsTitle() {
+    #expect(QuickAction.findVerb.item.localizedTitle == L.BrowseVerbs.findVerb)
+  }
+
+  @Test func anUnknownQuickActionIsNotPerformed() {
+    let router = AppRouter()
+    let item = UIApplicationShortcutItem(type: "biz.joshadams.Conjugar.nonsense", localizedTitle: "x")
+    #expect(!QuickAction.perform(item, router: router))
+    #expect(router.pendingSearch == nil)
   }
 
   // A verb link carries the surface it came from to the page, which reports it as `source`.

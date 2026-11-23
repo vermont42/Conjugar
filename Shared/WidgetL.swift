@@ -58,6 +58,15 @@ nonisolated enum WidgetL {
     }
   }
 
+  enum FindVerbControl {
+    static var name: LocalizedStringResource {
+      LocalizedStringResource("Widget.findVerbName", defaultValue: "Find a Verb")
+    }
+    static var description: LocalizedStringResource {
+      LocalizedStringResource("Widget.findVerbDescription", defaultValue: "Search Conjugar's verbs.")
+    }
+  }
+
   enum LiveActivity {
     static var title: LocalizedStringResource {
       LocalizedStringResource("Widget.liveActivityTitle", defaultValue: "Quiz")

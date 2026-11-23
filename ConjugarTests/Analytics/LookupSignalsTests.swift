@@ -86,14 +86,14 @@ struct LookupSignalsTests {
   @Test func clearingTheFieldEndsTheSearchOnce() {
     var tracker = SearchTracker()
     _ = tracker.textChanged(to: "hablr")
-    #expect(tracker.textChanged(to: "") == "hablr")
+    #expect(tracker.textChanged(to: "") == SearchTracker.Search(query: "hablr", source: .tab))
     #expect(tracker.textChanged(to: "") == nil)
   }
 
   @Test func openingEndsTheSearchSoClearingAfterwardSendsNothing() {
     var tracker = SearchTracker()
     _ = tracker.textChanged(to: "tener")
-    #expect(tracker.finish() == "tener")
+    #expect(tracker.finish()?.query == "tener")
     // Back at the results, a second open is not a second search.
     #expect(tracker.finish() == nil)
     #expect(tracker.textChanged(to: "") == nil)
@@ -104,14 +104,52 @@ struct LookupSignalsTests {
     _ = tracker.textChanged(to: "tener")
     _ = tracker.finish()
     _ = tracker.textChanged(to: "tene")
-    #expect(tracker.finish() == "tene")
+    #expect(tracker.finish()?.query == "tene")
+  }
+
+  // A search's source is the surface that opened the field, until the learner types into it.
+  @Test func aSurfaceThatOpensTheFieldOwnsTheNextSearch() {
+    var tracker = SearchTracker()
+    #expect(tracker.fieldOpened(from: .control) == nil)
+    _ = tracker.textChanged(to: "fue")
+    _ = tracker.textChanged(to: "fuer")
+    #expect(tracker.finish() == SearchTracker.Search(query: "fuer", source: .control))
+    // The next search, begun in the tab, is the tab's.
+    _ = tracker.textChanged(to: "ir")
+    #expect(tracker.finish()?.source == .tab)
+  }
+
+  @Test func openingTheFieldEndsTheSearchInProgress() {
+    var tracker = SearchTracker()
+    _ = tracker.textChanged(to: "hab")
+    #expect(tracker.fieldOpened(from: .deeplink) == SearchTracker.Search(query: "hab", source: .tab))
+    _ = tracker.textChanged(to: "he hablado")
+    #expect(tracker.query == "he hablado")
+    #expect(tracker.finish()?.source == .deeplink)
+  }
+
+  @Test func aFieldClosedWithNothingTypedForgetsItsSurface() {
+    var tracker = SearchTracker()
+    _ = tracker.fieldOpened(from: .quickAction)
+    tracker.fieldClosed()
+    _ = tracker.textChanged(to: "tener")
+    #expect(tracker.finish()?.source == .tab)
+  }
+
+  @Test func closingTheFieldKeepsATypedSearchsSurface() {
+    var tracker = SearchTracker()
+    _ = tracker.fieldOpened(from: .quickAction)
+    _ = tracker.textChanged(to: "tener")
+    tracker.fieldClosed()
+    #expect(tracker.finish()?.source == .quickAction)
   }
 
   // MARK: - Reports
 
   @Test func anOpenedResultReportsItsKindAndPosition() {
-    let report = SearchReport.opened(query: "come", resultCount: 12, kind: .exactGlossSense, position: 1)
+    let report = SearchReport.opened(query: "come", source: .tab, resultCount: 12, kind: .exactGlossSense, position: 1)
     #expect(report.parameters == [
+      "source": "tab",
       "outcome": "opened",
       "queryLength": "3-5",
       "resultCount": "11+",
@@ -121,8 +159,9 @@ struct LookupSignalsTests {
   }
 
   @Test func anOpenedGuessReportsNoResultsAndTheGuessKind() {
-    let report = SearchReport.openedGuess(query: "hablr")
+    let report = SearchReport.openedGuess(query: "hablr", source: .quickAction)
     #expect(report.parameters == [
+      "source": "quickAction",
       "outcome": "opened",
       "queryLength": "3-5",
       "resultCount": "0",
@@ -133,15 +172,16 @@ struct LookupSignalsTests {
 
   @Test func anAbandonedSearchReportsTheTopResultsKind() {
     let matches = VerbSearch.matches(for: "sonar", in: VerbMap.shared.entries.values)
-    let report = SearchReport.ended(query: "sonar", matches: matches)
+    let report = SearchReport.ended(query: "sonar", source: .tab, matches: matches)
     #expect(report.outcome == .abandoned)
     #expect(report.matchKind == .exactInfinitive)
     #expect(report.parameters["resultPosition"] == "none")
   }
 
   @Test func aSearchThatFoundNothingReportsNone() {
-    let report = SearchReport.ended(query: "xyzzyq", matches: [])
+    let report = SearchReport.ended(query: "xyzzyq", source: .control, matches: [])
     #expect(report.parameters == [
+      "source": "control",
       "outcome": "noResult",
       "queryLength": "6-9",
       "resultCount": "0",
@@ -156,14 +196,14 @@ struct LookupSignalsTests {
   func noParameterCanEchoTheQuery(query: String) {
     let matches = VerbSearch.matches(for: query, in: VerbMap.shared.entries.values)
     let reports: [SearchReport] = [
-      .ended(query: query, matches: matches),
-      .openedGuess(query: query),
-      .opened(query: query, resultCount: matches.count, kind: matches.first?.kind ?? .glossSubstring, position: 0)
+      .ended(query: query, source: .deeplink, matches: matches),
+      .openedGuess(query: query, source: .tab),
+      .opened(query: query, source: .control, resultCount: matches.count, kind: matches.first?.kind ?? .glossSubstring, position: 0)
     ]
-    let vocabulary = Set(SearchOutcome.allCases.map(\.rawValue) + SearchMatchKind.allCases.map(\.rawValue))
+    let vocabulary = Set(SearchOutcome.allCases.map(\.rawValue) + SearchMatchKind.allCases.map(\.rawValue) + AnalyticsSource.allCases.map(\.rawValue))
       .union(["1-2", "3-5", "6-9", "10+", "0", "1", "2-10", "11+", "2-5", "6+", "none"])
     for report in reports {
-      #expect(Set(report.parameters.keys) == ["outcome", "queryLength", "resultCount", "matchKind", "resultPosition"])
+      #expect(Set(report.parameters.keys) == ["source", "outcome", "queryLength", "resultCount", "matchKind", "resultPosition"])
       for value in report.parameters.values {
         #expect(vocabulary.contains(value))
       }

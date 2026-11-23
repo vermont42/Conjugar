@@ -34,8 +34,8 @@ session, which reads the hash from `git log` once Josh's commit exists.
 | 6 | Done | 2026-11-22 | 6c0ed97 | B3, B5's tip |
 | 7 | Done | 2026-11-22 | 048f585 | B7's article |
 | 8 | Done | 2026-11-22 | 5d2d435 | B4, A9 |
-| 9 | Awaiting Josh | 2026-11-22 | | B6 |
-| 10 | Not started | | | C1 (links, control, quick action) |
+| 9 | Done | 2026-11-22 | c40be1f | B6 |
+| 10 | Awaiting Josh | 2026-11-22 | | C1 (links, control, quick action) |
 | 11 | Not started | | | C1 (the intent), C2 |
 | 12 | Not started | | | D1, D2 |
 | 13 | Not started | | | D2's quiz scope, D3 |
@@ -1312,8 +1312,8 @@ a regular verb.
 
 ## Phase 9: Copy and Share
 
-**Ideas:** B6. **Ports:** Konjugieren Phase 10. **Depends on:** nothing. **Status:** Awaiting Josh
-(2026-11-22).
+**Ideas:** B6. **Ports:** Konjugieren Phase 10. **Depends on:** nothing. **Status:** Done
+(2026-11-22, c40be1f).
 
 - A long press on a form opens a context menu with Copy. A tap still speaks it.
 - A share button on the verb page sends a short text: the verb, its gloss, its key conjugations
@@ -1406,7 +1406,7 @@ tests pin the key conjugations of a regular, a stem-changing, an irregular, and 
 
 **Ideas:** C1, first part. **Ports:** Konjugieren Phase 11, which this plan splits in two because
 Conjugar has no App Shortcuts to build on. **Depends on:** Phase 5 for the search it opens.
-**Status:** Not started.
+**Status:** Awaiting Josh (2026-11-22).
 
 - **The grammar.** Before adding a route, write down one deeplink grammar in
   `docs/feature_architecture.md` § Deeplinks, and point `CLAUDE.md`'s Deeplinks section at it.
@@ -1435,7 +1435,66 @@ Conjugar has no App Shortcuts to build on. **Depends on:** Phase 5 for the searc
 the device's UDID, the control and the quick action open a focused search, and tests pin the
 routes and their round trips.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **No questions for Josh.** Konjugieren's Phase 11 settled the grammar, the quick action's
+  title, and the source of a search, and this phase asked nothing the plan left open.
+- **The grammar** is in `docs/feature_architecture.md` § Deeplinks, and `CLAUDE.md`'s Deeplinks
+  section points there. It is Konjugieren's: `conjugar://<route>[/<target>][?items]`, at most one
+  path segment, text only in query items, `source` on a route to a page, a search, or a quiz.
+  `URL` gained the grammar's constants, `deeplinkTarget`, `deeplinkQueryValue(named:)`, and three
+  builders (`verbDeeplink(_:source:match:)`, `searchDeeplink(text:source:)`,
+  `infoDeeplink(stableKey:)`). No app code interpolated a link before this phase, so nothing had to
+  move to them; the widget's `WidgetDeeplink` and the intents in `Shared/` keep literals, which
+  each intent now holds in a `pendingDeeplink` constant that `AppRouterTests` pins.
+- **The routes.** `search` (no target; `q` and `source`): with text, the results show with the
+  keyboard down; with none, the field is cleared and focused. `verb` gained `match`, marked through
+  `ConjugationMatch` (as written, then folded), less the second-singular person the settings hide
+  where tú and vos share the form, as a search's marks are. `info/<stableKey>` is new, since
+  Conjugar had no `info` route at all; it accepts a position too, as the plan asked. `list` is
+  reserved and ignored. `quiz` with any target still starts a quiz, and the `game` routes are
+  untouched. `handle(url:)` now refuses a verb link with two segments, which it used to read by
+  its last.
+- **One router.** Konjugieren routes through the `Current` world; Conjugar's `AppRouter` was
+  `ConjugarApp`'s `@State`. The quick action's scene delegate is created by UIKit and cannot be
+  handed it, so the router became `AppRouter.shared`, which `ConjugarApp` holds. Tests still make
+  their own.
+- **The control** is `FindVerbControl` (`ConjugarWidget/`) running `OpenVerbSearchIntent`
+  (`Shared/`, hidden from Shortcuts), titled "Find a Verb" / "Buscar un verbo", Command-F's title,
+  under three new widget-catalog keys (the intent's title key is in the app's catalog too, like the
+  other intents').
+- **The quick action** is `Supporting/QuickAction.swift`, installed at every launch from
+  `AppDelegate`, which also names `QuickActionSceneDelegate`. Command-F, the control, and the quick
+  action all go through `AppRouter.openSearch(text:source:)`, which replaced `openSearch()` and
+  the `pendingSearchFocus` flag with a `SearchRequest`.
+- **Analytics.** `finishSearch` gained `source`: `tab` (the Verbs tab, Command-F included),
+  `control`, `quickAction`, or `deeplink`; Phase 11 adds `lookup`. `SearchTracker` learned the
+  surface that opened the field (`fieldOpened(from:)`, `fieldClosed()`), and its `finish()` now
+  returns a `Search` (query and source). `quickAction` and `tab` are now sent. The staged privacy
+  bullet about searches names where a search began, in a new section of
+  `docs/privacy_policy_pending.md`, which leaves "a shortcut" for Phase 11 to add.
+- **What was tried where.** iPhone, English, light: `search?q=fue` (ser, ir, and repostar, keyboard
+  down); `verb/ir?match=fue` (fue marked, the Pretérito scrolled to); `search?source=control` from
+  ir's page (popped, field focused, letter row up); `info/voseo`; the quick action from the Home
+  Screen with the app on the Info tab and with the app not running, then typing into the field;
+  the control's link written into the App Group's defaults with `simctl spawn defaults write`,
+  which the app drained on launch, from the Info tab to a focused search. On the first cold quick
+  action, typing eight seconds after the tap was lost, though the field showed its cursor; with
+  fifteen seconds it landed, as it did at once after a cold `simctl openurl`, so this Intel Mac's
+  launch is the likely cause. iPad, Spanish, dark, regular: `search?q=he%20hablado` (hablar,
+  Perfecto de Indicativo), `verb/hablar?match=hablaste` (both rows marked, since that simulator
+  shows tú and vos), an empty `search` from hablar's page and typing "tuve" into it, and
+  `info/1` (Terminología). Not tried: the control inside Control Center, the quick action on the
+  iPad (its icon was not on the Home Screen pages), VoiceOver (nothing new is tappable on the
+  page), and a device; `docs/release.md` asks for the control and the quick action on one.
+- **Tests.** `AppRouterTests` grew from 14 `@Test` functions to 40 (one replaced, 26 added): the search route with and without text or a target, built links that round-trip
+  text with spaces, ñ, and &=#+/, the marks of a match (several words, folded, tú and vos), every
+  article by its key, positions and bad targets, the quiz and reserved routes, the intents' literal
+  links, and the quick action. `LookupSignalsTests` gained four tests of the tracker's source and
+  `source` in every report. The whole suite passes: 790 Swift Testing tests in 44 suites, plus the
+  XCTest suites, in 36.8 seconds (36.0 before). No suite slowed. The simulator language was
+  English.
+
 
 ## Phase 11: Look Up a Verb, and Spotlight
 

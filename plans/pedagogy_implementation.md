@@ -331,6 +331,8 @@ disagree, the note wins.
     which is what Phase 18's choice would link to. Articles are addressed by `stableKey`
     (`Info.infos.first { $0.stableKey == … }`, as `ConjugationTable.article` does) until browse
     Phase 10 gives Info a deeplink.
+  - *Landed 2026-11-22 (browse Phase 10):* `conjugar://info/perifrasis_verbales` opens it, built
+    with `URL.infoDeeplink(stableKey:)`; `Info.info(deeplinkTarget:)` resolves a key.
 - **The model link and related verbs** (browse Phase 8), which Phase 2's correction links reuse.
   - *Landed 2026-11-22 (browse Phase 8):* a verb page's pill pushes its `ModelInfo` (found by
     `ModelInfo.row(for:)`), and a correction link can push the same way: any view under the Verbs or
@@ -352,6 +354,13 @@ disagree, the note wins.
     `line(for:)` gives the lowercased "tengo · tuve · tendré · tenido". All `nonisolated`.
 - **The deeplink grammar** (browse Phase 10, `docs/feature_architecture.md` § Deeplinks). Phases 9,
   21, and 23 add quiz targets under it.
+  - *Landed 2026-11-22 (browse Phase 10):* the grammar and route table are in that section. The
+    `quiz` route still starts a quiz for any target (`quiz/start` by convention), so a new quiz
+    target (`set`, `daily`, `challenge`) must be matched before that fallback in
+    `AppRouter.handle(url:)`; read its text with `url.deeplinkQueryValue(named:)` and `source` with
+    `url.analyticsSource`, and add a builder beside `URL.searchDeeplink`. `finishSearch` now carries
+    `source`, and `SearchTracker.fieldOpened(from:)` is how a new surface that opens the search names
+    itself.
 - **The learner's record** (browse Phase 12): `LearnerVerbs` in `Shared/`, recents, stars, and the My
   Verbs filter.
 - **A scoped quiz** (browse Phase 13): `QuizScope`, Test Me in a sheet, a My Verbs scope on the Quiz

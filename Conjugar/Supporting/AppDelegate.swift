@@ -12,7 +12,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   // Retained under @UIApplicationDelegateAdaptor for the hooks the App
   // lifecycle doesn't cover. The window is now owned by SwiftUI's WindowGroup,
   // so this no longer creates one; it sets the one global UIKit appearance the
-  // SwiftUI screens still rely on and handles the UI-test-World override.
+  // SwiftUI screens still rely on, handles the UI-test-World override, and installs
+  // and receives the Home Screen quick action (see QuickAction.swift).
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     configureSegmentedControlAppearance()
 
@@ -26,7 +27,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     Utterer.setup(settings: Current.settings)
     Current.soundPlayer.setup()
 
+    QuickAction.install()
+
     return true
+  }
+
+  // Names the scene delegate that receives Home Screen quick actions, for which SwiftUI has no
+  // hook. SwiftUI still builds and owns the window.
+  func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+    let configuration = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
+    configuration.delegateClass = QuickActionSceneDelegate.self
+    return configuration
   }
 
   // Conjugar styles its segmented controls (Browse/Models sort, Settings pickers) with
