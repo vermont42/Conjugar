@@ -26,6 +26,7 @@ class World {
   var hapticPlayer: HapticPlayer
   /// The learner's opened and starred verbs, kept in the App Group so the widget can read them.
   var learnerVerbs: LearnerVerbStore
+  var liveActivities: LiveActivities
 
   private static let fakeRatingsCount = 42
 
@@ -40,7 +41,8 @@ class World {
     getterSetter: GetterSetter,
     soundPlayer: SoundPlayer,
     hapticPlayer: HapticPlayer,
-    learnerVerbs: LearnerVerbStore
+    learnerVerbs: LearnerVerbStore,
+    liveActivities: LiveActivities
   ) {
     self.analytics = analytics
     self.reviewPrompter = reviewPrompter
@@ -53,6 +55,7 @@ class World {
     self.soundPlayer = soundPlayer
     self.hapticPlayer = hapticPlayer
     self.learnerVerbs = learnerVerbs
+    self.liveActivities = liveActivities
   }
 
   /// The App Group's defaults, where the record of the learner's verbs lives. The standard
@@ -94,7 +97,8 @@ class World {
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerReal(),
       hapticPlayer: HapticPlayerReal(),
-      learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter)
+      learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter),
+      liveActivities: LiveActivitiesReal()
     )
   }()
 
@@ -114,7 +118,8 @@ class World {
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerReal(),
       hapticPlayer: HapticPlayerReal(),
-      learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter)
+      learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter),
+      liveActivities: LiveActivitiesReal()
     )
   }()
 
@@ -134,7 +139,8 @@ class World {
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerDummy(),
       hapticPlayer: HapticPlayerDummy(),
-      learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake())
+      learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake()),
+      liveActivities: LiveActivitiesSpy()
     )
   }()
 
@@ -175,7 +181,8 @@ class World {
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerDummy(),
       hapticPlayer: HapticPlayerDummy(),
-      learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake())
+      learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake()),
+      liveActivities: LiveActivitiesSpy()
     )
   }
 }

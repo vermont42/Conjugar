@@ -443,7 +443,7 @@ class Quiz {
     // The Live Activity belongs to the tab's quiz. See `QuizScope.startsLiveActivity`.
     hasLiveActivity = scope.startsLiveActivity
     if hasLiveActivity {
-      LiveActivityManager.start(
+      Current.liveActivities.start(
         difficulty: lastDifficulty.rawValue,
         totalQuestions: questions.count,
         state: liveActivityState(isFinished: false)
@@ -492,7 +492,7 @@ class Quiz {
     if currentQuestionIndex < questions.count - 1 {
       currentQuestionIndex += 1
       if hasLiveActivity {
-        LiveActivityManager.update(liveActivityState(isFinished: false))
+        Current.liveActivities.update(liveActivityState(isFinished: false))
       }
     } else {
       score = Int(Double(score) * Quiz.scoreScale / Double(max(questions.count, 1)) * lastRegion.scoreModifier * lastDifficulty.scoreModifier)
@@ -554,7 +554,7 @@ class Quiz {
       return
     }
     hasLiveActivity = false
-    LiveActivityManager.end(liveActivityState(isFinished: true))
+    Current.liveActivities.end(liveActivityState(isFinished: true))
   }
 
   /// The Live Activity content state for the current quiz progress.

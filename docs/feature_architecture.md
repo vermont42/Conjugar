@@ -693,6 +693,9 @@ the Game Center prompt, and the router's quiz link.
 `ChangeDifficultyTip`. Nor does a collection's quiz start one, though it is full length, because it
 runs in the sheet beside a quiz the tab may hold, and the Live Activity is one for the app
 (`QuizScope.startsLiveActivity`; `Quiz.hasLiveActivity` keeps a sheet's quiz from ending the tab's).
+Quiz.swift reaches the activity through `Current.liveActivities`: `LiveActivitiesReal` on device
+and in the simulator World, and `LiveActivitiesSpy` under tests, which `QuizLiveActivityTests`
+checks these rules against.
 A collection's completed quiz does count toward the tip.
 
 **The Quiz tab's start screen**: a large yellow symbol for the scope (`books.vertical.fill`, or a

@@ -10997,3 +10997,46 @@ like history and was not. `ModelCatalog`'s "andá (per the legacy data)" was the
 for ir's vos imperative, so it now gives the linguistic one: voseo avoids *í and borrows andar's
 form. Where a migration remark carried a reason, such as why the segmented-control appearance is
 set at launch rather than in `SettingsView.init`, the reason stayed in the present tense.
+
+## Live Activities Behind a Current Dependency (2026-11-22)
+
+Konjugieren's session sent over a change it had just made (Konjugieren commit be21f35): its static
+`LiveActivityManager` became a `LiveActivities` protocol on `World`, with an ActivityKit conformer
+on device and a spy under unit tests. It had found that the header comment both apps shared was
+wrong. The comment said Live Activities are unavailable in the simulator, so the calls were safe
+no-ops in tests. In fact the simulator's test host granted real activities until ActivityKit began
+refusing them with `targetMaximumExceeded`, 191 refusals in one of its runs. Conjugar's `try?`
+would have swallowed those refusals without a word, and every full-length quiz in the suite went
+through `LiveActivityManager.start`.
+
+Conjugar took the shape but not the handle. Konjugieren's protocol returns a `LiveActivity`
+handle (an ID and an optional `Activity`) because its quiz and its game each hold one. Conjugar
+has one activity for the whole app, which the manager kept as a single static `current`, so the
+protocol here is just `start`, `update`, `end`, and `endAll`, with `current` moved into
+`LiveActivitiesReal` as an instance property. `LiveActivitiesSpy` counts the four calls.
+`World.device` and `World.simulator` get the real one, since running the app in the simulator
+does show the activity; `unitTest` and `uiTest` get the spy. `Quiz` reaches it through
+`Current.liveActivities` at call time rather than through its initializer, because `World`'s
+static worlds build their `Quiz` before `Current` exists.
+
+The peer also flagged a possible bug, from reading the code only, and on reading it here it
+holds up. `start()` called `endAll()`, which cleared `current` and scheduled a `Task` to end every
+activity in `Activity<QuizActivityAttributes>.activities`. Then `start()` requested the new
+activity synchronously. The `Task` inherits the main actor, so it could not run until `start()`
+returned, and by then the list it enumerated would include the activity just requested. If
+ActivityKit lists a requested activity at once, every quiz's Live Activity was ended with
+`.immediate` as it began, and later updates went to a dead activity. That needs a device to
+confirm, and no device check is possible before the 2027 release. The fix holds either way:
+`endAll()` now reads the list synchronously and hands that snapshot to the `Task`. The same change
+covers a launch race, where `MainTabView`'s launch cleanup could end the activity of a quiz that a
+`conjugar://quiz/start` cold launch had just begun.
+
+`QuizLiveActivityTests` checks the one-activity rules against the spy: the tab's quiz starts,
+updates, and ends it; finishing a quiz ends it exactly once, even if `quit()` follows; a
+collection's quiz in a sheet over the tab's starts, updates, and ends nothing; and a verb page's
+three questions take none. `Current` is shared with suites running in parallel, so each test
+compares the spy's counts before and after its own synchronous steps. The full suite ran 928
+tests in 39.9 seconds. Stashing the change and running again gave 68.1 seconds, one measurement
+each, a smaller gain than Konjugieren's 55 against 102 to 107. That baseline run also had one
+failure, `terremotoOpensGapsRoughlyTenPercentOfEachGirder()`, a statistical game test that does
+not touch Live Activities and passed in the run with the change.

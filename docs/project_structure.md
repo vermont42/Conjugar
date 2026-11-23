@@ -179,7 +179,9 @@ Conjugar/
 │   ├── IntExtension.swift      # Int.timeString — elapsed seconds as h:mm:ss
 │   ├── KillSwitches.swift      # Compile-time screenshot kill switches: TipDisplay, OnboardingDisplay, TutorDisplay
 │   ├── Layout.swift            # Spacing/geometry constants (8/16/24 pt, readingWidth 680, cornerRadius 12)
-│   ├── LiveActivityManager.swift  # Starts / updates / ends the quiz Live Activity, driven from Quiz.swift
+│   ├── LiveActivities.swift    # Protocol: start / update / end the quiz Live Activity, driven from Quiz.swift via Current
+│   ├── LiveActivitiesReal.swift  # The ActivityKit conformer (device and the simulator World)
+│   ├── LiveActivitiesSpy.swift   # Counts starts, updates, and ends under unit and UI tests
 │   ├── Modifiers.swift         # The design system: card(), metadataPill(), linguistic(), numeric(), speakOnTapFlash(),
 │   │                           #   copyOnLongPress() (a Copy context menu and VoiceOver action), PrimaryButtonStyle
 │   ├── RatingsFetcher.swift    # Fetches App Store ratings from the iTunes API for the Settings screen
@@ -266,7 +268,7 @@ Shared/                         # Compiled into both the app and the widget exte
 ├── OpenRandomVerbIntent.swift  # Same, for a random verb, as Shortcuts and Siri run it (source=shortcut)
 ├── OpenRandomVerbControlIntent.swift  # The Random Verb control's own hidden copy of it (source=control)
 ├── OpenVerbSearchIntent.swift  # The Find a Verb control's hidden intent: stashes conjugar://search?source=control
-├── QuizActivityAttributes.swift  # The ActivityKit contract shared by LiveActivityManager and QuizLiveActivity
+├── QuizActivityAttributes.swift  # The ActivityKit contract shared by LiveActivitiesReal and QuizLiveActivity
 ├── LearnerVerbs.swift          # The learner's record: verbs opened (dates, count) and starred, and each irregular verb's
 │                               #   ReviewSchedule, as JSON in the App Group
 ├── ReviewSchedule.swift        # The review card's Leitner ladder (1, 3, 7, 14, 30 days): a box and a due date
@@ -313,6 +315,7 @@ ConjugarTests/
 │   ├── FrequencyBandTests.swift        # Each band holds exactly its count, the bands nest, and where one ends
 │   ├── VerbFamiliesTests.swift         # Guard-rail: every hand-curated quiz verb resolves in the verb map
 │   ├── QuizTests.swift                 # Quiz logic, scoring, and timer, driven through the @Observable model
+│   ├── QuizLiveActivityTests.swift     # Which quizzes start, update, and end the Live Activity, against LiveActivitiesSpy
 │   ├── QuizScopeTests.swift            # The scoped quiz: My Verbs and Test Me draws, defective verbs, region and vos, ranking
 │   ├── VerbCollectionTests.swift       # Collections: keys, derived membership with VerbFamilies as oracle, progress, quiz, share text
 │   ├── QuizGoldenFormsTests.swift      # Golden forms: proves the quiz asks for correct Spanish, not just self-consistent Spanish

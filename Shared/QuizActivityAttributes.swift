@@ -3,7 +3,7 @@
 //  Conjugar
 //
 //  The Live Activity contract shared by the app (which drives the activity from
-//  Quiz.swift via LiveActivityManager) and the widget (which renders the Lock Screen
+//  Quiz.swift via LiveActivitiesReal) and the widget (which renders the Lock Screen
 //  + Dynamic Island presentations in QuizLiveActivity).
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //

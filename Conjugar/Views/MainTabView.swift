@@ -58,7 +58,7 @@ struct MainTabView: View {
     .environment(router)
     .task {
       // Widgets show today's verb/quiz; clean up any Live Activity left by a prior run.
-      LiveActivityManager.endAll()
+      Current.liveActivities.endAll()
       // Off-main: refresh() parses verbModelMap.xml + runs ~50 conjugations;
       // everything it touches is nonisolated/Sendable, so it belongs off the launch path.
       // My Verbs is read here, on the main actor, and resolved off it.
