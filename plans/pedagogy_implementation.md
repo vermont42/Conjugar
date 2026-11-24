@@ -1677,7 +1677,9 @@ and tests pin encoding and decoding of every scope.
   gone. Seen on the iPhone: a link sent while the tour was up showed nothing until Skip, then the
   set. **Not handled:** a link arriving while some other sheet is up (Test Me's or a
   collection's quiz) finds the presenter busy, and SwiftUI drops the set's sheet.
-  Konjugieren has the same gap.
+  Konjugieren has the same gap. **Josh decided on 2026-11-24 not to fix it**: it needs a learner
+  mid-quiz in a sheet when a set's link arrives, and the likelier case, the welcome tour, is
+  handled. Nobody has reproduced the drop; it is reasoned from how SwiftUI presents sheets.
 - **Invalid links** open "Practice Set Not Found" / "Serie de práctica no encontrada", and send
   `viewPracticeSet` with `outcome` `invalid`. Unknown keys, infinitives, and levels are dropped and
   the rest kept.
