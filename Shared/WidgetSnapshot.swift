@@ -44,7 +44,8 @@ nonisolated struct WidgetSnapshot: Codable, Equatable, Sendable {
   /// A short etymology snippet in `~bold~` markup, truncated to a sentence boundary,
   /// or nil if none is on file. Shown by the large widget.
   let etymologySnippet: String?
-  /// A tap-to-answer quiz question over the same verb.
+  /// A tap-to-answer quiz question: the first of the day's daily challenge at the learner's level,
+  /// or, should the challenge give none, one over the verb of the day.
   let quizQuestion: WidgetQuizQuestion
   /// The yyyy-MM-dd this snapshot was generated for.
   let dateString: String
@@ -74,6 +75,7 @@ nonisolated struct WidgetQuizQuestion: Codable, Equatable, Sendable {
   let correctAnswer: String
   /// Up to three distractors, UPPERCASE-marked.
   let wrongAnswers: [String]
-  /// Stable id ("yyyy-MM-dd-infinitive") — keys the shuffle and the answer state.
+  /// Stable id ("yyyy-MM-dd-level-region-person-infinitive" for a challenge's question) — keys the
+  /// shuffle and the answer state.
   let questionID: String
 }

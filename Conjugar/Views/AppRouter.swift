@@ -45,6 +45,9 @@ final class AppRouter {
   /// A one-shot request for the Quiz tab to start a daily session, from a `quiz/daily` link, which
   /// a tapped reminder opens, with the link's `source`. `QuizView` consumes it.
   var pendingDailySession: AnalyticsSource?
+  /// A one-shot request for the Quiz tab to start a daily challenge, from a `quiz/challenge` link,
+  /// which shared text and the quiz widget open. `QuizView` consumes it.
+  var pendingChallenge: DailyChallengeRequest?
   /// A practice set from a `quiz/set` link, which `MainTabView` shows in a sheet over whatever tab
   /// is open. Any other link replaces it with nil, so that what the link opens is not hidden.
   var pendingPracticeSet: PracticeSetRequest?
@@ -99,7 +102,8 @@ final class AppRouter {
   /// and every route: `verb/<infinitive>` (bare or with "se", so `verb/arrepentirse` opens
   /// arrepentir, or `verb/random`), with `match`, a form the page marks; `search`, with its text
   /// in `q`; `info/<stableKey>` (or a position); `list/<key>`, a collection; `quiz` (any target
-  /// starts a quiz, except `quiz/set`, a practice set, and `quiz/daily`, a daily session); and
+  /// starts a quiz, except `quiz/set`, a practice set, `quiz/daily`, a daily session, and
+  /// `quiz/challenge`, a daily challenge); and
   /// `game`.
   /// A link to a verb page, a search, or a quiz may name the surface it came from in `source`
   /// (`?source=widget`); a link that names none reports `deeplink`. Unknown routes, unknown
@@ -141,6 +145,8 @@ final class AppRouter {
       selectedTab = .quiz
       if url.deeplinkTarget == URL.dailySessionTarget {
         pendingDailySession = source
+      } else if url.deeplinkTarget == URL.challengeTarget {
+        pendingChallenge = DailyChallengeRequest(url: url, source: source)
       } else {
         // Any other target, `quiz/start` as the Quick Quiz control sends it, or none, starts a quiz.
         pendingQuizStart = source

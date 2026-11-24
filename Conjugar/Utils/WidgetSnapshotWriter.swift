@@ -4,7 +4,7 @@
 //
 //  The one place the conjugation engine is invoked for widget purposes. Deterministically
 //  picks a verb of the day (`VerbDraw`, from the frequent verbs and My Verbs) and a daily
-//  quiz question (both keyed on the date), conjugates
+//  quiz question (the first of the day's challenge at the learner's level), conjugates
 //  them through the app's own engine (VerbMap + TenseBridge), and writes the result as
 //  JSON into the App Group container for the widget to render.
 //
@@ -33,7 +33,18 @@ nonisolated enum WidgetSnapshotWriter {
     .presenteDeIndicativo
   ]
 
-  /// The tense families a daily quiz question can be drawn from.
+  /// What the quiz widget's question follows: the learner's level, region, and tú or vos, which
+  /// the caller reads from the settings on the main actor.
+  struct ChallengeContext: Equatable, Sendable {
+    let level: QuizLevel
+    let region: Region
+    let secondSingular: DisplayPersonNumber
+
+    static let initial = ChallengeContext(level: .initial, region: .latinAmerica, secondSingular: .secondSingularTú)
+  }
+
+  /// The tense families the fallback quiz question can be drawn from, should a day's challenge
+  /// give none.
   private static let quizTenses: [DisplayTense] = [
     .presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo,
     .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo
@@ -48,35 +59,39 @@ nonisolated enum WidgetSnapshotWriter {
   /// the rewrite and, crucially, the `reloadAllTimelines()` that would otherwise spend
   /// WidgetKit's refresh budget on every foreground activation for unchanged content.
   /// The gate is also what keeps the day's verb fixed while My Verbs changes during the
-  /// day: the first activation of a day settles it.
-  static func refresh(myVerbs: [String] = []) {
-    let today = dateString(for: Date(), calendar: .current)
-    if currentSnapshotDateString() == today { return }
+  /// day: the first activation of a day settles it. A change of level, region, or tú or vos
+  /// rewrites the snapshot, since the quiz widget's question follows the challenge they name.
+  static func refresh(myVerbs: [String] = [], challenge: ChallengeContext = .initial) {
+    let now = Date()
+    let today = dateString(for: now, calendar: .current)
+    if let current = currentSnapshot(), current.dateString == today,
+       current.quizQuestion.questionID.hasPrefix(questionIDPrefix(on: now, challenge: challenge)) {
+      return
+    }
     let myVerbEntries = myVerbs.compactMap { VerbMap.shared.entry(for: $0) }
-    guard writeSnapshot(myVerbs: myVerbEntries) else { return }
+    guard writeSnapshot(myVerbs: myVerbEntries, challenge: challenge) else { return }
     WidgetCenter.shared.reloadAllTimelines()
   }
 
-  /// The `dateString` of the snapshot currently on disk, or nil if none is written yet
-  /// (or it can't be read/decoded). Decodes the shared `WidgetSnapshot` the app itself
-  /// wrote; the widget target's `SnapshotReader` isn't visible here.
-  private static func currentSnapshotDateString() -> String? {
+  /// The snapshot currently on disk, or nil if none is written yet (or it can't be
+  /// read/decoded). Decodes the shared `WidgetSnapshot` the app itself wrote; the widget
+  /// target's `SnapshotReader` isn't visible here.
+  private static func currentSnapshot() -> WidgetSnapshot? {
     guard
       let url = WidgetConstants.snapshotURL,
-      let data = try? Data(contentsOf: url),
-      let snapshot = try? JSONDecoder().decode(WidgetSnapshot.self, from: data)
+      let data = try? Data(contentsOf: url)
     else {
       return nil
     }
-    return snapshot.dateString
+    return try? JSONDecoder().decode(WidgetSnapshot.self, from: data)
   }
 
   /// Build and persist the snapshot for the given day. Returns whether it was written.
   @discardableResult
-  static func writeSnapshot(for date: Date = Date(), myVerbs: [VerbMapEntry] = []) -> Bool {
+  static func writeSnapshot(for date: Date = Date(), myVerbs: [VerbMapEntry] = [], challenge: ChallengeContext = .initial) -> Bool {
     guard
       let url = WidgetConstants.snapshotURL,
-      let snapshot = makeSnapshot(for: date, myVerbs: myVerbs),
+      let snapshot = makeSnapshot(for: date, myVerbs: myVerbs, challenge: challenge),
       let data = try? JSONEncoder().encode(snapshot)
     else {
       return false
@@ -89,7 +104,7 @@ nonisolated enum WidgetSnapshotWriter {
     }
   }
 
-  static func makeSnapshot(for date: Date, myVerbs: [VerbMapEntry] = []) -> WidgetSnapshot? {
+  static func makeSnapshot(for date: Date, myVerbs: [VerbMapEntry] = [], challenge: ChallengeContext = .initial) -> WidgetSnapshot? {
     let calendar = Calendar.current
     let dayOffset = daysSinceReference(to: date, calendar: calendar)
     let dateString = Self.dateString(for: date, calendar: calendar)
@@ -100,7 +115,8 @@ nonisolated enum WidgetSnapshotWriter {
     let paradigms = paradigmTenses.compactMap { paradigm(for: infinitive, tense: $0) }
     let gerundio = markedForm(infinitive: infinitive, tense: .gerundio, personNumber: .none) ?? infinitive
     let participio = markedForm(infinitive: infinitive, tense: .participio, personNumber: .none) ?? infinitive
-    let quizQuestion = makeQuizQuestion(infinitive: infinitive, dayOffset: dayOffset, dateString: dateString)
+    let quizQuestion = challengeQuizQuestion(on: date, challenge: challenge)
+      ?? makeQuizQuestion(infinitive: infinitive, dayOffset: dayOffset, dateString: dateString)
 
     // Richer large-widget content: a modern example sentence (with a real, human-readable
     // attribution — a book title, statistics body, or the Claude credit, never a raw
@@ -170,6 +186,126 @@ nonisolated enum WidgetSnapshotWriter {
     }
     guard !conjugations.isEmpty else { return nil }
     return WidgetParadigm(tenseDisplay: tense.titleCaseName, conjugations: conjugations)
+  }
+
+  /// What every question ID of a day's challenge begins with, so that a change of level, region,
+  /// or tú or vos shows as a stale snapshot.
+  static func questionIDPrefix(on date: Date, challenge: ChallengeContext) -> String {
+    let key = DailyChallenge.Key(date: date, level: challenge.level, region: challenge.region)
+    return "\(key.day)-\(key.levelKey)-\(key.regionKey)-\(challenge.secondSingular.rawValue)-"
+  }
+
+  /// The quiz widget's question for a day: the first question of that day's challenge at the
+  /// learner's level and region, in their tú or vos, so that the widget and the challenge agree.
+  /// Nil when the challenge gives no question.
+  static func challengeQuizQuestion(on date: Date, challenge: ChallengeContext) -> WidgetQuizQuestion? {
+    let key = DailyChallenge.Key(date: date, level: challenge.level, region: challenge.region)
+    guard
+      let question = DailyChallenge.questions(for: key, secondSingular: challenge.secondSingular).first,
+      let correct = markedForm(infinitive: question.verb, tense: question.tense, personNumber: question.personNumber)
+    else {
+      return nil
+    }
+    let questionID = questionIDPrefix(on: date, challenge: challenge) + question.verb
+    var generator = SplitMix64(seed: DailyChallenge.stableSeed(for: questionID))
+    return WidgetQuizQuestion(
+      infinitive: ReflexivePronoun.citationForm(of: question.verb),
+      tenseDisplay: question.tense.titleCaseName,
+      pronoun: question.personNumber == .none ? nil : question.personNumber.pronoun,
+      correctAnswer: correct,
+      wrongAnswers: wrongAnswers(for: question, correct: correct, challenge: challenge, using: &generator),
+      questionID: questionID
+    )
+  }
+
+  /// How a form looks apart from its letters: a compound tense's has haber before it, a negative
+  /// command's has no, and a gerundio or participio has no person. A wrong answer of another
+  /// shape would stand out as plainly wrong.
+  private enum Shape {
+    case simple
+    case compound
+    case negativeCommand
+    case personless
+  }
+
+  private static func shape(of tense: DisplayTense) -> Shape {
+    if tense == .gerundio || tense == .participio {
+      return .personless
+    }
+    if tense == .imperativoNegativo {
+      return .negativeCommand
+    }
+    return tense.isCompound ? .compound : .simple
+  }
+
+  /// Three wrong answers of the same verb and shape: one of the same tense in another person
+  /// the level asks, one of the same person in another of the level's tenses, then the cell as a
+  /// regular verb would have it, and more of the first two. A reflexive-only verb's pronoun
+  /// names its person, so its wrong answers keep the person and change the tense. A gerundio or
+  /// participio, which has no person, is offered the other endings, then the other of the two and
+  /// the infinitive, which ir's yendo needs.
+  private static func wrongAnswers(for question: QuizQuestion, correct: String, challenge: ChallengeContext, using generator: inout SplitMix64) -> [String] {
+    let verb = question.verb
+    let tense = question.tense
+    let personNumber = question.personNumber
+    let questionShape = shape(of: tense)
+    let isReflexiveOnly = ReflexivePronoun.isReflexiveOnly(verb)
+    let pool = challenge.level.pool
+
+    var sameTense: [String] = []
+    if questionShape != .personless, !isReflexiveOnly {
+      let personNumbers = Quiz.personNumbers(in: tense, secondSingular: challenge.secondSingular, region: challenge.region)
+        .filter { $0 != personNumber && (challenge.level.entry(for: tense)?.asks($0) ?? true) }
+      sameTense = personNumbers.compactMap { markedForm(infinitive: verb, tense: tense, personNumber: $0) }.shuffled(using: &generator)
+    }
+    var samePerson: [String] = []
+    if questionShape != .personless {
+      samePerson = pool.map(\.tense)
+        .filter { $0 != tense && shape(of: $0) == questionShape }
+        .compactMap { markedForm(infinitive: verb, tense: $0, personNumber: personNumber) }
+        .shuffled(using: &generator)
+    }
+    var regular: [String] = []
+    if let form = TenseBridge.regularForm(infinitive: verb, tense: tense, personNumber: personNumber) {
+      regular.append(isReflexiveOnly ? ReflexivePronoun.attach(to: form, tense: tense, personNumber: personNumber) : form)
+    }
+    if questionShape == .personless, !isReflexiveOnly {
+      regular += otherEndings(of: verb, tense: tense)
+      let otherNonFinite: DisplayTense = tense == .gerundio ? .participio : .gerundio
+      regular += [markedForm(infinitive: verb, tense: otherNonFinite, personNumber: .none), verb].compactMap { $0 }
+    }
+
+    var seen: Set<String> = [correct.lowercased()]
+    var answers: [String] = []
+    func take(_ candidates: [String], upTo count: Int) {
+      for candidate in candidates where answers.count < count && !seen.contains(candidate.lowercased()) {
+        seen.insert(candidate.lowercased())
+        answers.append(candidate)
+      }
+    }
+    take(sameTense, upTo: 1)
+    take(samePerson, upTo: answers.count + 1)
+    take(regular, upTo: wrongAnswerCount)
+    take(sameTense + samePerson, upTo: wrongAnswerCount)
+    var suffix = ""
+    while answers.count < wrongAnswerCount {
+      suffix += "s"
+      take([correct.lowercased() + suffix], upTo: wrongAnswerCount)
+    }
+    return answers
+  }
+
+  private static let wrongAnswerCount = 3
+
+  /// A gerundio's or participio's form with each regular ending but the verb's own, and the
+  /// endings that leyendo and leído add: hablando offers habliendo, hablendo, and hablyendo.
+  private static func otherEndings(of verb: String, tense: DisplayTense) -> [String] {
+    guard verb.count > 2 else {
+      return []
+    }
+    let stem = String(verb.dropLast(2))
+    let endings = tense == .gerundio ? ["ando", "iendo", "endo", "yendo"] : ["ado", "ido", "ído"]
+    return endings.map { stem + $0 }
   }
 
   private static func makeQuizQuestion(infinitive: String, dayOffset: Int, dateString: String) -> WidgetQuizQuestion {

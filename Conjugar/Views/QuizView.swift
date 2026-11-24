@@ -30,6 +30,8 @@ struct QuizView: View {
   @State private var isShowingQRCode = false
   /// The Share menu's frame in window coordinates, which an iPad's share popover anchors to.
   @State private var shareButtonFrame = CGRect.zero
+  /// The challenge row's frame, which the popover of a taken challenge's share anchors to.
+  @State private var challengeRowFrame = CGRect.zero
   @FocusState private var fieldFocused: Bool
   @AccessibilityFocusState private var correctionHasAccessibilityFocus: Bool
   @AccessibilityFocusState private var choiceReasonHasAccessibilityFocus: Bool
@@ -142,6 +144,9 @@ struct QuizView: View {
           startQuiz(scope: .daily(source: linkSource))
         }
       }
+      .onChange(of: router.pendingChallenge, initial: true) {
+        startRequestedChallenge()
+      }
       .alert(L.Quiz.gameCenter, isPresented: $showingGameCenterPrompt) {
         Button(L.Quiz.no, role: .destructive) {
           Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)
@@ -206,6 +211,9 @@ struct QuizView: View {
     }
     if quiz.scope.isDaily {
       return L.DailySession.title
+    }
+    if quiz.scope.isChallenge {
+      return L.DailyChallenge.title
     }
     return quiz.scope.recordSession?.title
   }
@@ -566,6 +574,8 @@ struct QuizView: View {
         start: { startQuiz(scope: .daily()) }
       )
 
+      challengeRow
+
       ForEach(QuizRecordSession.allCases, id: \.self) { session in
         let count = quiz.askableCount(for: session)
         QuizPracticeRow(
@@ -601,6 +611,65 @@ struct QuizView: View {
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
+  }
+
+  /// Today's challenge at the learner's level and region, which starts it, or, once it is taken,
+  /// shows its result and shares it.
+  private var challengeRow: some View {
+    let key = todaysChallengeKey
+    let result = Current.practice.challengeResult(for: key)
+    return QuizPracticeRow(
+      title: L.DailyChallenge.title,
+      detail: result.map { L.DailyChallenge.doneToday($0.pointsLine) } ?? L.DailyChallenge.description,
+      systemImage: result == nil ? "flag.2.crossed" : "flag.2.crossed.fill",
+      hint: result == nil ? L.DailyChallenge.startHint : L.DailyChallenge.shareHint,
+      identifier: result == nil ? "quiz_challenge" : "quiz_challenge_share",
+      isLarge: isLarge,
+      outcomes: result?.outcomes,
+      accessibilityDetail: result.map { L.DailyChallenge.doneToday($0.spokenSummary) },
+      trailingSystemImage: result == nil ? nil : "arrowshape.turn.up.right.circle.fill",
+      start: {
+        if let result {
+          result.share(anchorRect: challengeRowFrame)
+        } else {
+          startQuiz(scope: .challenge(key))
+        }
+      }
+    )
+    .onGeometryChange(for: CGRect.self) { proxy in
+      proxy.frame(in: .global)
+    } action: { frame in
+      challengeRowFrame = frame
+    }
+  }
+
+  private var todaysChallengeKey: DailyChallenge.Key {
+    DailyChallenge.Key(date: .now, level: Current.settings.quizLevel, region: Current.settings.region)
+  }
+
+  /// A shared link's or the quiz widget's challenge, unless a quiz is under way, which the learner
+  /// returns to instead, or the challenge was taken already, which leaves the hub showing today's
+  /// result. Results on screen give way to either.
+  private func startRequestedChallenge() {
+    guard sheetScope == nil, let request = router.pendingChallenge else {
+      return
+    }
+    router.pendingChallenge = nil
+    guard quiz.quizState != .inProgress else {
+      return
+    }
+    let key = request.key(now: .now, level: Current.settings.quizLevel, region: Current.settings.region)
+    guard Current.practice.challengeResult(for: key) == nil else {
+      showingResults = false
+      navigationPath = NavigationPath()
+      return
+    }
+    let scope = QuizScope.challenge(key, source: request.source)
+    if showingResults {
+      startFromResults(scope: scope)
+    } else {
+      startQuiz(scope: scope)
+    }
   }
 
   /// Ways to practice beside the quiz, at the learner's level.
@@ -1673,6 +1742,12 @@ private struct QuizPracticeRow: View {
   var isLarge = false
   /// Whether the row pushes a list rather than starting a session, which its chevron says.
   var opensList = false
+  /// A taken challenge's dots, under the detail.
+  var outcomes: [DailyChallenge.Outcome]?
+  /// What VoiceOver reads in place of the detail and the dots.
+  var accessibilityDetail: String?
+  /// The symbol at the row's end in place of the play symbol.
+  var trailingSystemImage: String?
   let start: (() -> Void)?
 
   var body: some View {
@@ -1706,6 +1781,12 @@ private struct QuizPracticeRow: View {
           // Fixed, since `.secondary` inside a button would take the button's tint.
           .foregroundStyle(Color.secondary)
           .fixedSize(horizontal: false, vertical: true)
+          .accessibilityLabel(accessibilityDetail ?? detail)
+        if let outcomes {
+          ChallengeDots(outcomes: outcomes, size: isLarge ? 16 : 12)
+            .padding(.top, 2)
+            .accessibilityHidden(true)
+        }
       }
       .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -1715,7 +1796,7 @@ private struct QuizPracticeRow: View {
           .foregroundStyle(Color.secondary)
           .accessibilityHidden(true)
       } else if start != nil {
-        Image(systemName: "play.circle.fill")
+        Image(systemName: trailingSystemImage ?? "play.circle.fill")
           .font(isLarge ? .system(size: 36) : .title2)
           .foregroundStyle(Color.customYellow)
           .accessibilityHidden(true)

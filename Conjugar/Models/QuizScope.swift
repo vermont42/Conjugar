@@ -47,6 +47,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
   let isSpeedRound: Bool
   /// The daily session, whose finish extends the streak (`DailySession.swift`).
   let isDaily: Bool
+  /// A day's challenge, the same five questions on every device (`DailyChallenge.swift`).
+  let challenge: DailyChallenge.Key?
 
   init(
     verbs: [String]?,
@@ -63,7 +65,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
     isRecognition: Bool = false,
     isSentences: Bool = false,
     isSpeedRound: Bool = false,
-    isDaily: Bool = false
+    isDaily: Bool = false,
+    challenge: DailyChallenge.Key? = nil
   ) {
     self.verbs = verbs
     self.questionCount = questionCount
@@ -80,6 +83,11 @@ nonisolated struct QuizScope: Equatable, Sendable {
     self.isSentences = isSentences
     self.isSpeedRound = isSpeedRound
     self.isDaily = isDaily
+    self.challenge = challenge
+  }
+
+  var isChallenge: Bool {
+    challenge != nil
   }
 
   /// A round's length. The Quiz tab's quiz, a My Verbs quiz, and a collection's ask one round,
@@ -95,7 +103,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// ranked session, only the first round's score counts (`Quiz.firstRoundScore`).
   var isRanked: Bool {
     verbs == nil && custom == nil && recordSession == nil && !isVerbEssentials && !isRecognition && !isSentences && !isSpeedRound
-      && !isDaily && questionCount == QuizScope.roundLength
+      && !isDaily && !isChallenge && questionCount == QuizScope.roundLength
   }
 
   /// Whether `completeQuiz`, `quitQuiz`, and `abandonQuiz` say how many questions were asked or
@@ -111,9 +119,10 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// Whether a round's questions are shuffled. A record session asks its items in the record's
   /// order, the most overdue or most recently missed first, with a verb's key conjugations
   /// together. Verb Essentials asks a verb's key conjugations together, in the verb page's order. A
-  /// Speed Round's draw orders its own questions, so that no item is asked twice running.
+  /// Speed Round's draw orders its own questions, so that no item is asked twice running. A
+  /// challenge asks its questions in the order every device draws them.
   var shufflesQuestions: Bool {
-    recordSession == nil && !isVerbEssentials && !isSpeedRound
+    recordSession == nil && !isVerbEssentials && !isSpeedRound && !isChallenge
   }
 
   /// Whether each round mixes in items the practice record says are due: only the default quiz,
@@ -133,7 +142,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// to grow. A Speed Round's results offer a new round instead. A daily session's next is a
   /// session of its own, which a repair counts.
   var continues: Bool {
-    questionCount >= QuizScope.roundLength && !isSpeedRound && !isDaily
+    questionCount >= QuizScope.roundLength && !isSpeedRound && !isDaily && !isChallenge
   }
 
   /// Whether the quiz starts the Live Activity, which is one for the whole app and belongs to the

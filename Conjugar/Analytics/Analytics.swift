@@ -82,6 +82,9 @@ nonisolated enum AnalyticsName: String {
   /// The share button in a verb page's navigation bar. No parameters, and it does not say which
   /// verb. Copying a form sends nothing.
   case tapShareVerb
+  /// Share Result on a daily challenge's results or its row on the Quiz tab. Carries `level`, never
+  /// the result.
+  case tapShareChallenge
   /// The share button on a collection's bar. Carries `collection`.
   case tapShareCollection
   /// Share Link or Show QR Code under the Quiz tab's custom quiz. Carries `method` and
@@ -132,6 +135,12 @@ nonisolated enum AnalyticsName: String {
 nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   /// A row of the verb list with the search field empty.
   case browse
+  /// The Quiz tab's Daily Challenge, five questions a day, the same for everyone at a level.
+  case challenge
+  /// A daily challenge's link, from the text a learner shared.
+  case challengeLink
+  /// A tap on the quiz widget beside its answers, which opens the day's challenge.
+  case challengeWidget
   /// The Random Verb control in Control Center.
   case control
   /// A custom quiz begun from the Quiz tab's Custom segment.

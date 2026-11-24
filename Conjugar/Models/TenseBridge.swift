@@ -180,6 +180,12 @@ nonisolated enum TenseBridge {
     }
   }
 
+  /// The cell as a regular verb of the same ending would have it (tení for tuve), or nil when the
+  /// verb has no regular root.
+  static func regularForm(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> String? {
+    regularForms(infinitive: infinitive, tense: tense, personNumber: personNumber).first
+  }
+
   /// The same slot conjugated with a **feature-less** regular model — the
   /// baseline whose differing span is the verb's irregularity — in each spelling the engine
   /// accepts for it (`Conjugator.conjugateAll`).

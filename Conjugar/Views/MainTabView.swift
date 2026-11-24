@@ -62,8 +62,7 @@ struct MainTabView: View {
       // Off-main: refresh() parses verbModelMap.xml + runs ~50 conjugations;
       // everything it touches is nonisolated/Sendable, so it belongs off the launch path.
       // My Verbs is read here, on the main actor, and resolved off it.
-      let myVerbs = Current.learnerVerbs.record.myVerbs
-      Task.detached { WidgetSnapshotWriter.refresh(myVerbs: myVerbs) }
+      refreshWidgetSnapshot()
       // Warm the ~4 MB content caches off-main so the first verb push isn't a main-thread
       // decode. refresh() is date-gated and often no-ops, so it can't be relied on to warm.
       Task.detached { ContentCaches.warm() }
@@ -89,9 +88,13 @@ struct MainTabView: View {
         Current.rescheduleReminders()
       }
       guard phase == .active else { return }
-      let myVerbs = Current.learnerVerbs.record.myVerbs
-      Task.detached { WidgetSnapshotWriter.refresh(myVerbs: myVerbs) }
+      refreshWidgetSnapshot()
       drainPendingDeeplink()
+    }
+    // The quiz widget's question is the first of the day's challenge at the level, in the region
+    // and the tú or vos the settings name.
+    .onChange(of: widgetChallengeContext) {
+      refreshWidgetSnapshot()
     }
     // A `conjugar://game` deeplink jumps straight to the game from any tab. The
     // router is passed explicitly (cover content doesn't inherit the custom
@@ -112,6 +115,22 @@ struct MainTabView: View {
   }
 
   /// Trip the first-launch onboarding cover, unless already seen or disabled for screenshots.
+  private var widgetChallengeContext: WidgetSnapshotWriter.ChallengeContext {
+    WidgetSnapshotWriter.ChallengeContext(
+      level: Current.settings.quizLevel,
+      region: Current.settings.region,
+      secondSingular: Current.settings.secondSingularQuiz == .tu ? .secondSingularTú : .secondSingularVos
+    )
+  }
+
+  /// My Verbs and the settings are read here, on the main actor, and the snapshot is written off
+  /// it.
+  private func refreshWidgetSnapshot() {
+    let myVerbs = Current.learnerVerbs.record.myVerbs
+    let challenge = widgetChallengeContext
+    Task.detached { WidgetSnapshotWriter.refresh(myVerbs: myVerbs, challenge: challenge) }
+  }
+
   private func presentOnboardingIfNeeded() {
     guard OnboardingDisplay.onboardingEnabled, !Current.settings.hasSeenOnboarding else {
       return

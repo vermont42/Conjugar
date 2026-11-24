@@ -17,6 +17,8 @@ struct ResultsView: View {
   var onAnotherRound: (() -> Void)?
   /// The rows whose example sentence is open.
   @State private var openExamples: Set<Int> = []
+  /// Share Result's frame in window coordinates, which an iPad's share popover anchors to.
+  @State private var shareButtonFrame = CGRect.zero
 
   private var accuracy: Double {
     guard quiz.maximumScore > 0 else { return 0 }
@@ -53,6 +55,20 @@ struct ResultsView: View {
           .buttonStyle(PrimaryButtonStyle())
           .accessibilityHint(L.DailySession.anotherHint)
           .accessibilityIdentifier("results_daily_another")
+        } else if let result = quiz.challengeResult {
+          Button {
+            result.share(anchorRect: shareButtonFrame)
+          } label: {
+            Label(L.DailyChallenge.share, systemImage: "square.and.arrow.up")
+          }
+          .buttonStyle(PrimaryButtonStyle())
+          .onGeometryChange(for: CGRect.self) { proxy in
+            proxy.frame(in: .global)
+          } action: { frame in
+            shareButtonFrame = frame
+          }
+          .accessibilityHint(L.DailyChallenge.shareHint)
+          .accessibilityIdentifier("results_challenge_share")
         } else if let onTenMore, quiz.canContinue {
           Button(continueLabel, action: onTenMore)
             .buttonStyle(PrimaryButtonStyle())
@@ -116,6 +132,13 @@ struct ResultsView: View {
       }
 
       levelBest
+
+      if let result = quiz.challengeResult {
+        ChallengeDots(outcomes: result.outcomes, size: 18)
+          .accessibilityElement(children: .ignore)
+          .accessibilityLabel(result.spokenSummary)
+          .accessibilityIdentifier("results_challenge_dots")
+      }
 
       if let line = quiz.dailyStreakStatus?.resultsLine, !line.isEmpty {
         Label(line, systemImage: "flame.fill")
@@ -355,5 +378,35 @@ struct ResultsView: View {
     var attributed = AttributedString(text)
     attributed.languageIdentifier = "es"
     return attributed
+  }
+}
+
+/// A challenge's outcomes as circles in the results' colors, rather than the shared text's emoji,
+/// which the iOS 26 simulator draws as empty boxes.
+struct ChallengeDots: View {
+  let outcomes: [DailyChallenge.Outcome]
+  var size: CGFloat = 12
+
+  var body: some View {
+    HStack(spacing: size / 2) {
+      ForEach(Array(outcomes.enumerated()), id: \.offset) { _, outcome in
+        Circle()
+          .fill(outcome.color)
+          .frame(width: size, height: size)
+      }
+    }
+  }
+}
+
+private extension DailyChallenge.Outcome {
+  var color: Color {
+    switch self {
+    case .right:
+      return .customGreen
+    case .secondTry:
+      return .customYellow
+    case .wrong:
+      return .customRed
+    }
   }
 }

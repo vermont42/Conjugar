@@ -6,7 +6,7 @@
 //  Copyright © 2017 Josh Adams. All rights reserved.
 //
 
-enum Region: String, CaseIterable {
+nonisolated enum Region: String, CaseIterable, Sendable {
   case spain = "Spain"
   case latinAmerica = "Latin America"
 

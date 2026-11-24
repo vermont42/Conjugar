@@ -46,6 +46,7 @@ struct AnalyticsTests {
     (AnalyticsName.completeStage, "completeStage"),
     (AnalyticsName.tapViewAchievements, "tapViewAchievements"),
     (AnalyticsName.tapViewLeaderboard, "tapViewLeaderboard"),
+    (AnalyticsName.tapShareChallenge, "tapShareChallenge"),
     (AnalyticsName.tapSharePracticeSet, "tapSharePracticeSet"),
     (AnalyticsName.viewPracticeSet, "viewPracticeSet")
   ])

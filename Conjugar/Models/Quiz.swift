@@ -74,6 +74,9 @@ class Quiz {
   private(set) var isNewSpeedRoundBest = false
   /// The streak a finished daily session left, which its results show. Nil for any other quiz.
   private(set) var dailyStreakStatus: DailyStreak.Status?
+  /// A finished challenge's result, which its results show and share: the one kept, should the
+  /// challenge have been taken before. Nil for any other quiz.
+  private(set) var challengeResult: DailyChallengeResult?
   /// The best at its level that a ranked session's first round had to beat, read as the round
   /// finished. Nil when there was none, or the round was not ranked.
   private(set) var levelPreviousBest: Int?
@@ -281,7 +284,7 @@ class Quiz {
   /// leaves the quiz as it was, and returns false.
   @discardableResult
   func start(scope: QuizScope = .allVerbs) -> Bool {
-    let region = settings.region
+    let region = scope.challenge?.region ?? settings.region
     let level = scope.level ?? settings.quizLevel
     #if DEBUG
     if let fixture = Quiz.fixtureRun, scope.verbs == nil, scope.custom == nil, fixture.standsIn(for: scope) {
@@ -353,6 +356,7 @@ class Quiz {
     speedRoundPreviousBest = nil
     isNewSpeedRoundBest = false
     dailyStreakStatus = nil
+    challengeResult = nil
     levelPreviousBest = nil
     isNewLevelBest = false
   }
@@ -397,8 +401,12 @@ class Quiz {
   /// chosen; a Review or My Mistakes asks the record's items, beyond the level's tenses; Verb
   /// Essentials asks five verbs' key conjugations, of the band or of a model and the known models;
   /// a daily session is filled first from the due items the level asks and the band holds, then
-  /// with the default quiz's draw. `reserving` leaves room in the default quiz's round for questions placed after the draw.
+  /// with the default quiz's draw; a challenge asks its key's five, the same on every device.
+  /// `reserving` leaves room in the default quiz's round for questions placed after the draw.
   private func draw(_ scope: QuizScope, after prior: [Question] = [], reserving: Int = 0) -> [Question] {
+    if let challenge = scope.challenge {
+      return DailyChallenge.questions(for: challenge, secondSingular: secondSingular)
+    }
     if scope.isSpeedRound {
       let pool = lastLevel.pool
       return QuizDraw.speedRoundQuestions(
@@ -647,7 +655,7 @@ class Quiz {
 
   /// The persons a quiz may ask in a tense: tú or vos by the setting, no vosotros in the Latin
   /// America region, and no yo in a command.
-  static func personNumbers(in tense: DisplayTense, secondSingular: DisplayPersonNumber, region: Region) -> [DisplayPersonNumber] {
+  nonisolated static func personNumbers(in tense: DisplayTense, secondSingular: DisplayPersonNumber, region: Region) -> [DisplayPersonNumber] {
     if tense == .gerundio || tense == .participio {
       return [.none]
     }
@@ -818,7 +826,8 @@ class Quiz {
       advance()
     case .noMatch:
       timer?.invalidate()
-      let willBeReasked = !question.isReask
+      // A challenge asks nothing again, so that its results are the five questions it shares.
+      let willBeReasked = !question.isReask && !scope.isChallenge
       if willBeReasked {
         let placement = Quiz.reaskPlacement(of: currentQuestionIndex, in: questions)
         questions.insert(question.reasked(inStep: placement.step), at: placement.position)
@@ -884,7 +893,8 @@ class Quiz {
       advance()
     case .noMatch:
       timer?.invalidate()
-      let willBeReasked = !question.isReask
+      // A challenge asks nothing again, so that its results are the five questions it shares.
+      let willBeReasked = !question.isReask && !scope.isChallenge
       if willBeReasked {
         let placement = Quiz.reaskPlacement(of: currentQuestionIndex, in: questions)
         questions.insert(question.reasked(inStep: placement.step), at: placement.position)
@@ -986,6 +996,9 @@ class Quiz {
     if scope.isDaily {
       dailyStreakStatus = practice.recordDailySession(at: now())
       DailyReminderPlan.reschedule(with: reminderScheduler, settings: settings, practice: practice, now: now())
+    }
+    if let challenge = scope.challenge {
+      challengeResult = practice.recordChallenge(DailyChallengeResult(key: challenge, questions: questions, results: results))
     }
     endLiveActivity()
     if isRankedRound {
@@ -1160,7 +1173,7 @@ extension Quiz {
       case .speedRound:
         return false
       default:
-        return !scope.isVerbEssentials && !scope.isRecognition && !scope.isSentences && !scope.isSpeedRound
+        return !scope.isVerbEssentials && !scope.isRecognition && !scope.isSentences && !scope.isSpeedRound && !scope.isChallenge
       }
     }
   }

@@ -1819,6 +1819,142 @@
         }
       }
     },
+    "DailyChallenge.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Challenge"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desafío diario"
+          }
+        }
+      }
+    },
+    "DailyChallenge.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Five questions at your level, the same for everyone today. Take it once, then share how you did."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cinco preguntas de tu nivel, las mismas para todos hoy. Hazlo una vez y después comparte cómo te fue."
+          }
+        }
+      }
+    },
+    "DailyChallenge.startHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts today's challenge of five questions."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza el desafío de hoy, de cinco preguntas."
+          }
+        }
+      }
+    },
+    "DailyChallenge.share" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Result"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir resultado"
+          }
+        }
+      }
+    },
+    "DailyChallenge.shareHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shares your result as text, with a link that opens the same challenge."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparte tu resultado como texto, con un enlace que abre el mismo desafío."
+          }
+        }
+      }
+    },
+    "DailyChallenge.doneToday %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done today: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hecho hoy: %@"
+          }
+        }
+      }
+    },
+    "DailyChallenge.spokenResult %lld %lld %lld %lld %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld of %3$lld right on the first try, %2$lld on the second. %4$lld of %5$lld points."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld de %3$lld bien al primer intento, %2$lld al segundo. %4$lld de %5$lld puntos."
+          }
+        }
+      }
+    },
+    "DailyChallenge.shareText %@ %@ %@ %lld %lld %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar · Daily Challenge\n%1$@ · %2$@\n%3$@  %4$lld / %5$lld\n\nTake this challenge in Conjugar:\n%6$@\n\nGet Conjugar on the App Store:\n%7$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar · Desafío diario\n%1$@ · %2$@\n%3$@  %4$lld / %5$lld\n\nAcepta este desafío en Conjugar:\n%6$@\n\nDescarga Conjugar en el App Store:\n%7$@"
+          }
+        }
+      }
+    },
     "QuizLevel.beginner" : {
       "localizations" : {
         "en" : {

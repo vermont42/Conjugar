@@ -50,6 +50,8 @@ extension URL {
   /// The target of the daily session's link, `conjugar://quiz/daily?source=reminder`, which starts
   /// a daily session rather than the quiz over every verb.
   nonisolated static let dailySessionTarget = "daily"
+  /// The target of a daily challenge's link, `conjugar://quiz/challenge?date=…&level=…&region=…`.
+  nonisolated static let challengeTarget = "challenge"
 
   /// The query item a `conjugar://` link names its surface in, as in
   /// `conjugar://verb/hablar?source=widget`. A widget or a control can hand the app only a URL.
@@ -60,6 +62,10 @@ extension URL {
   nonisolated static let matchQueryName = "match"
   /// A practice set's level: `conjugar://quiz/set?tenses=futuro&level=beginner`.
   nonisolated static let levelQueryName = "level"
+  /// A daily challenge's day, `yyyy-MM-dd`.
+  nonisolated static let dateQueryName = "date"
+  /// A daily challenge's region, `spain` or `latinAmerica`.
+  nonisolated static let regionQueryName = "region"
 
   nonisolated var isDeeplink: Bool {
     scheme == Self.deeplinkScheme
@@ -131,6 +137,17 @@ extension URL {
   }
 
   /// `conjugar://quiz/daily?source=reminder`, which a tapped reminder opens.
+  /// `conjugar://quiz/challenge?date=2026-11-24&level=elementary&region=spain&source=challengeLink`,
+  /// a day's challenge. Without the key, the day's challenge at the learner's level and region.
+  nonisolated static func challengeDeeplink(_ key: DailyChallenge.Key?, source: AnalyticsSource) -> URL? {
+    deeplink(host: quizHost, target: challengeTarget, queryItems: [
+      key.map { URLQueryItem(name: dateQueryName, value: $0.day) },
+      key.map { URLQueryItem(name: levelQueryName, value: $0.levelKey) },
+      key.map { URLQueryItem(name: regionQueryName, value: $0.regionKey) },
+      URLQueryItem(name: sourceQueryName, value: source.rawValue)
+    ])
+  }
+
   nonisolated static func dailySessionDeeplink(source: AnalyticsSource) -> URL? {
     deeplink(host: quizHost, target: dailySessionTarget, queryItems: [
       URLQueryItem(name: sourceQueryName, value: source.rawValue)

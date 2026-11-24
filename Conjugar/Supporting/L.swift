@@ -1082,6 +1082,43 @@ nonisolated enum L {
     }
   }
 
+  enum DailyChallenge {
+    static var title: String {
+      String(localized: "DailyChallenge.title")
+    }
+
+    /// The Quiz tab's row's line before today's challenge is taken.
+    static var description: String {
+      String(localized: "DailyChallenge.description")
+    }
+
+    static var startHint: String {
+      String(localized: "DailyChallenge.startHint")
+    }
+
+    static var share: String {
+      String(localized: "DailyChallenge.share")
+    }
+
+    static var shareHint: String {
+      String(localized: "DailyChallenge.shareHint")
+    }
+
+    /// "Done today: 35 / 50", the Quiz tab's row once today's challenge is taken.
+    static func doneToday(_ result: String) -> String {
+      String(localized: "DailyChallenge.doneToday \(result)")
+    }
+
+    /// What VoiceOver reads for a result's dots.
+    static func spokenResult(right: Int, secondTry: Int, count: Int, score: Int, maximum: Int) -> String {
+      String(localized: "DailyChallenge.spokenResult \(right) \(secondTry) \(count) \(score) \(maximum)")
+    }
+
+    static func shareText(date: String, level: String, dots: String, score: Int, maximum: Int, link: String, appStoreLink: String) -> String {
+      String(localized: "DailyChallenge.shareText \(date) \(level) \(dots) \(score) \(maximum) \(link) \(appStoreLink)")
+    }
+  }
+
   enum DailySession {
     static var title: String {
       String(localized: "DailySession.title")

@@ -135,6 +135,7 @@ Conjugar/
 │   │                           #   and snooze, the last quiz's results, the Speed Round's best, each level's best ranked score, the daily streak, Reset Practice, and the migration of LearnerVerbs' old review schedules
 │   ├── SpeedRound.swift        # The Speed Round: its constants, the mastered items it may ask, QuizScope.speedRound, and QuizDraw.speedRoundQuestions
 │   │                           #   (each item in turn, never twice running) with speedRoundCells (the irregular cells a mastered key conjugation asks)
+│   ├── DailyChallenge.swift    # The daily challenge: its key (day, level, region) and seed, the draw every device makes, the result and its shared text, QuizScope.challenge, and the link's request
 │   ├── DailySession.swift      # The daily session: QuizScope.daily, the streak's bands, and what the hub's row and the results say
 │   ├── DailyStreak.swift       # The daily session's streak: finished sessions by calendar day, its status, and the repair of one missed day
 │   ├── DailyReminder.swift     # The Daily Reminder setting, DailyReminderPlan (14 days of worded reminders), and its rescheduling
@@ -256,8 +257,9 @@ Conjugar/
 │   ├── Utterer.swift           # AVSpeechSynthesizer text-to-speech plus the single .ambient audio-session owner
 │   ├── VerbSearchArrowKeys.swift  # Hack: priority UIKeyCommands for ↑/↓ through verb results while the search field is focused
 │   ├── ViewControllerTransitions.swift  # Hack: waits for UIKit transitions to end, so an iPad letter key survives search dismissal
-│   └── WidgetSnapshotWriter.swift  # Picks the daily verb (VerbDraw, with My Verbs) + quiz question, conjugates them,
-│                                   #   writes JSON to the App Group once a day
+│   └── WidgetSnapshotWriter.swift  # Picks the daily verb (VerbDraw, with My Verbs) + the quiz widget's question (the first of the
+│                                   #   day's challenge, with wrong answers of its shape), writes JSON to the App Group once a day
+│                                   #   and again when the level, region, or tú or vos changes
 └── Views/
     ├── AnswerFrameView.swift   # An AnswerFrame drawn on one line around the quiz's answer field, or a sentence wrapped word by word around it; VoiceOver reads the frame as the field's label
     ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing (verb with match, search, info, list, quiz, game), the one-shot requests the tabs consume (pendingVerb, pendingSearch, pendingInfo, pendingCollection, pendingQuizStart with its link's source, pendingPracticeSet from quiz/set and presentablePracticeSet, which waits out a cover, game/onboarding/tutor flags), openSearch for Command-F, the control, and the quick action; SearchRequest, CollectionRequest
@@ -318,7 +320,7 @@ ConjugarWidget/
     ├── AccessoryWidgetView.swift    # Lock Screen accessory presentations
     ├── LargeWidgetView.swift        # systemLarge: header, non-finite forms, presente paradigm, example, etymology
     ├── MediumWidgetView.swift       # systemMedium: header plus the full presente paradigm in two columns
-    ├── QuizWidgetView.swift         # The Quiz widget's unanswered / answered states (deterministic answer shuffle)
+    ├── QuizWidgetView.swift         # The Quiz widget's unanswered / answered states (deterministic answer shuffle; a tap beside the answers opens the day's challenge)
     ├── SmallWidgetView.swift        # systemSmall: verb, gloss, first three present-tense forms
     ├── WidgetConjugationText.swift  # The widget's copy of the UPPERCASE-means-irregular render convention
     └── WidgetEtymologyText.swift    # The widget's standalone copy of the `~…~` etymology markup renderer
@@ -425,6 +427,9 @@ ConjugarTests/
 │   │                                   #   none at Beginner or elsewhere, a held right or wrong choice, nothing recorded, out of 100, Ten More)
 │   ├── SpeedRoundTests.swift           # The Speed Round: the mastered items, the draw (in turn, never twice running, a pattern's regular verbs, a key
 │   │                                   #   conjugation's cells by level), the scope, the best, and rounds (a miss moving on, nothing recorded, batches, sixty ticks)
+│   ├── DailyChallengeTests.swift       # The daily challenge: the pinned seed, days, the same draw from the same key, five balanced
+│   │                                   #   questions by level and region, vos, the result and the agreed text, the widget's question and its
+│   │                                   #   wrong answers' shape, a challenge in a quiz (whatever the device, no re-ask, kept once), the store, the link
 │   ├── DailySessionTests.swift         # The streak under a fixed calendar (repair, a 25-hour day, pruning, bands), the session's draw and
 │   │                                   #   flags, quizzes finished on chosen days, the reminder plan and rescheduling, the setting, the link
 │   ├── AnswerDiagnosisTests.swift      # Each diagnosis for real verbs, the answers that get none, the lines in English, and a diagnosed error's second attempt in a quiz

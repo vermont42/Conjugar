@@ -85,6 +85,15 @@ material for the release notes in `docs/release_notes.txt`.
    could not open it from the Lock Screen, so the tap's path through `ReminderNotificationDelegate`
    has not been tried. Turn notifications off for Conjugar in the Settings app and check that
    Settings' Daily Reminder shows its red line and Open Settings.
+10. **Try the daily challenge on two devices and the quiz widget.** On two devices with the same
+    date, level, and region, the Quiz tab's Daily Challenge should ask the same five questions.
+    Finish it on one, tap the row's share symbol, and send the text to the other in Messages: the
+    dots should draw as colored circles there, and tapping the `conjugar://` link should open the
+    same challenge, or the hub if it was taken. Add the quiz widget to a Home Screen: its question
+    should be the challenge's first, and a tap beside its answers should open the challenge. With
+    Test Mode on, `startQuiz` should carry `source` `challenge`, `challengeLink`, or
+    `challengeWidget`, and Share Result should send `tapShareChallenge` with `level`. Only the
+    widget's bundle was checked on the simulator, never the widget on a Home Screen.
 
 ## On Release Day
 

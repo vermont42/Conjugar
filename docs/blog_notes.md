@@ -12047,3 +12047,48 @@ patterns and Advanced's verbs.
 Nothing could be tried signed in to real Game Center. The achievements live only in the project's
 local Game Center file until the 2027 release. On both simulators, a pasted-in quiz set a new best,
 and a second quiz showed the unbeaten one. The full suite ran 1,320 tests, 19 of them new.
+
+## The Daily Challenge (2026-11-24)
+
+The last phase of the pedagogy plan gave Conjugar a daily challenge: five questions a day at each
+level, the same on every device that day, taken once, with a result the learner can share. The
+research rated the idea as speculative, resting on a designer's testimony and one survey, but the
+pieces were all built, and Konjugieren had done it first.
+
+The draft of the shared text followed Konjugieren's, which Josh had approved for the German app: a
+title, the date and level, a row of colored dots with the points, a link that opens the same
+challenge, and the App Store link. Conjugar's dots are green, yellow, and red, because its results
+mark a right answer green and a second try yellow, where Konjugieren's quiz uses yellow and
+orange. Josh took the draft, with "Desafío diario" in Spanish over "Reto diario".
+
+The real question was one Konjugieren never met. German has no regional pronouns. Conjugar's
+learner chooses Spain or Latin America, and Latin America never asks vosotros. So "the same five
+questions for everyone" had three possible meanings: drop vosotros from every challenge, ask it of
+everyone, or give each region its own challenge. Josh chose one per region. The key became the day,
+the level, and the region, and a shared link names all three, so a friend in the other region gets
+the sharer's questions. Tú and vos are a setting rather than a region, so every challenge is drawn
+in tú and a vos learner sees the same verb and tense in vos.
+
+The seed is a hash of the key's text feeding the same small generator the verb of the day already
+uses. Nothing on the device enters the draw, which meant leaving out one thing that was easy to
+miss: the quiz rotates persons from one quiz to the next, and that rotation lives on the device, so
+the challenge draws its persons from its own generator. As in Konjugieren, the draw is the same for
+everyone only within one build and one verb list, so the tests pin the seed and the draw's
+determinism rather than a list of questions that every verb-list change would break.
+
+The quiz widget now asks the challenge's first question, and that turned up an old weakness. The
+widget's wrong answers had been the verb's other forms, whatever their shape, so a perfect tense's
+"he hablado" sat among one-word forms and a negative command's "no hables" was the only one with a
+"no". The new wrong answers keep the right answer's shape: the same tense in another person, the
+same person in another tense of the same kind, and the form a regular verb would have, so hago is
+offered haco. The simulator caught two more giveaways. The right answer kept its red irregular
+letters while the wrong ones had none, so the buttons now show plain lowercase. And a gerundio has
+no persons to vary, so haber's got "habiendos", the answer padded out; it now gets the other
+endings (habando, habendo, habyendo), and ir's yendo, too short for that, gets iendo, ido, and ir.
+
+On the iPad, in Spanish at Avanzado and set to Spain and vos, the challenge opened on the widget's
+question, asked a vosotros form that Latin America would never see, and asked its last question in
+vos. Copying the result gave the agreed Spanish text, and a link to the finished challenge opened
+the hub instead of starting it again. On the iPhone, in English, the same check gave the English
+text. The full suite ran 1,344 tests, 24 of them new. What remains of the plan is its closing
+audit, and the rest of Phase 17's sentences.

@@ -52,7 +52,8 @@ struct QuizWidgetView: View {
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-    .widgetURL(WidgetDeeplink.verb(quiz.infinitive))
+    // The question is the first of the day's challenge, so a tap beside the answers opens it.
+    .widgetURL(WidgetDeeplink.challenge)
   }
 
   private var answeredView: some View {
@@ -75,7 +76,8 @@ struct QuizWidgetView: View {
 
   private func answerButton(answer: String) -> some View {
     Button(intent: AnswerQuizIntent(selectedAnswer: answer, questionID: quiz.questionID)) {
-      Text(mixedCase: answer)
+      // Plain, since a right answer's red letters would stand out among wrong ones without them.
+      Text(verbatim: answer.lowercased())
         .font(.caption2)
         .fontWeight(.medium)
         .fontDesign(.serif)

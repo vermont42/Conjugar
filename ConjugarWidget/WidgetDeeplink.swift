@@ -19,4 +19,10 @@ nonisolated enum WidgetDeeplink {
   static var quizStart: URL? {
     URL(string: "conjugar://quiz/start")
   }
+
+  /// The day's challenge at the learner's level and region, whose first question the quiz widget
+  /// asks.
+  static var challenge: URL? {
+    URL(string: "conjugar://quiz/challenge?source=challengeWidget")
+  }
 }

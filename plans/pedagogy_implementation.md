@@ -48,8 +48,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 19 | Done | 2026-11-24 | f99637e | T6.2 |
 | 20 | Done | 2026-11-24 | 8d97908 | T5.7 |
 | 21 | Done | 2026-11-24 | 82b5d83 | T6.3 |
-| 22 | Awaiting Josh | 2026-11-24 | | T6.6 (personal bests and achievements) |
-| 23 | Not started | | | T6.8 |
+| 22 | Done | 2026-11-24 | 409db52 | T6.6 (personal bests and achievements) |
+| 23 | Awaiting Josh | 2026-11-24 | | T6.8 |
 | Closing | Not started | | | Audit, porting notes |
 
 ## How to Work This Plan
@@ -3094,7 +3094,7 @@ controllable clock in tests, and the reminder fires on the simulator at the chos
 ## Phase 22: Personal Bests and Achievements
 
 **Ports:** Konjugieren Phase 23. **Suggestions:** T6.6 (personal bests and achievements). **Depends
-on:** Phases 7, 19, and 21. **Status:** Awaiting Josh.
+on:** Phases 7, 19, and 21. **Status:** Done.
 
 Personal bests per level, kept on the device, and Game Center achievements for mastery milestones,
 not for volume of play. Comparisons with one's own past motivate weaker performers better than
@@ -3230,7 +3230,7 @@ and the walkthrough covers achievements.
 ## Phase 23: The Daily Challenge
 
 **Ports:** Konjugieren Phase 24. **Suggestions:** T6.8. **Depends on:** Phases 4 and 21. **Status:**
-Not started.
+Awaiting Josh.
 
 A daily shared challenge built on the quiz widget's daily question: the same short set for everyone
 that day, seeded by the date, with a result the learner can share as text with the App Store link.
@@ -3256,7 +3256,115 @@ avoid giving the answer away.
 **Done when** two devices on the same date get the same challenge, the widget's question agrees with
 it, sharing produces the agreed text, and tests pin the seeding.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh decided two things on 2026-11-24**, asked with previews before building. (1) **The shared
+  text as drafted**, over calling it a *reto* in Spanish and over leaving out the challenge's link:
+  the title, the date in the app's language and the level, a dot per question in the results'
+  colors (🟢 right, 🟡 right on the second try, 🔴 wrong) with the points out of 50, a link that
+  opens the same challenge, then the App Store link. The English and Spanish:
+
+  ```
+  Conjugar · Daily Challenge
+  November 24, 2026 · Elementary
+  🟢🟢🟡🔴🟢  35 / 50
+
+  Take this challenge in Conjugar:
+  conjugar://quiz/challenge?date=2026-11-24&level=elementary&region=spain&source=challengeLink
+
+  Get Conjugar on the App Store:
+  https://apps.apple.com/app/conjugar/id1236500467
+  ```
+
+  "Conjugar · Desafío diario", "24 de noviembre de 2026 · Elemental", "Acepta este desafío en
+  Conjugar:", and "Descarga Conjugar en el App Store:". Konjugieren's dots are yellow, orange, and
+  red, its quiz's colors; Conjugar's results mark a right answer green and a second try yellow, so
+  the dots follow them. (2) **One challenge per region** (over a challenge with no vosotros, and
+  over vosotros for everyone), a question Konjugieren never met: Spain's quiz asks vosotros and
+  Latin America's never does. So the key is the day, the level, and the region, and the link names
+  all three. The plan's other proposals (one per level per day, five questions, once a day, the row
+  under Daily Session) were taken as accepted.
+- **Tú or vos is the learner's, not the key's.** The answer about regions did not settle the second
+  person, so I chose: every challenge is drawn in tú, and a learner whose setting is vos is asked a
+  tú question in vos, the same verb and tense (`DailyChallenge.questions(for:secondSingular:)`). The
+  iPad, set to vos, was asked reflotar's futuro for vos.
+- **The draw** (`Models/DailyChallenge.swift`) is the default quiz's at the key's level, five cells
+  drawn by weight with each person drawn by the seeded generator (the quiz's own person rotation is
+  device state, so it stays out), then `QuizDraw`'s balanced verbs, drawn again until no verb
+  repeats. The seed is FNV-1a of `challenge-<day>-<level>-<region>` feeding `SplitMix64`, both
+  pinned by a test. Nothing on the device enters it. As in Konjugieren, "the same for everyone"
+  holds within a build and a verb list, so the tests pin determinism and the seed, not a list of
+  questions. The day is the Gregorian calendar's in the learner's time zone. `Region` and
+  `Quiz.personNumbers(in:secondSingular:region:)` became `nonisolated` so that the draw, which the
+  widget's writer runs off the main actor, could use them.
+- **Decided in the session, as Konjugieren did:** no re-ask (the correction promises none; a slip
+  still earns its half-point second try); never ranked, continued, shuffled, or given a Live
+  Activity; answers move the practice record; the first result for a key is kept and a quit keeps
+  nothing; the last 12 results are kept, as JSON under `dailyChallengeResults`, and **Reset Practice
+  keeps them**; a link to a taken challenge opens the hub; a link part that is missing or not
+  understood is the learner's own (today, their level, their region). The last result's kind is
+  `challenge`.
+- **The widget.** The quiz widget's question is now the first of the day's challenge at the
+  learner's level and region, in their tú or vos, no longer one on the verb of the day, which the
+  verb widgets still show. Conjugar's widget has no ten-day bundle, so `refresh(myVerbs:challenge:)`
+  rewrites the one-day snapshot when the date or the question ID's
+  `<day>-<level>-<region>-<person>-` prefix changes, and `MainTabView` calls it when the level,
+  region, or tú or vos changes. **The wrong answers are new work.** The old ones were the verb's
+  other cells regardless of shape, so a compound tense's or a negative command's right answer stood
+  out. They are now the verb's own forms of the same shape (one of the same tense in another person
+  the level asks, one of the same person in another of the level's tenses, then the cell as a
+  regular verb would have it, through a new `TenseBridge.regularForm`, so hago is offered haco). A
+  reflexive-only verb's pronoun names its person, so its wrong answers keep the person. A gerundio
+  or participio is offered the other endings, the other non-finite form, and the infinitive; the
+  first version padded haber's gerundio to "habiendos" and ir's to "yendos", which the simulator
+  showed and a test now forbids. **The buttons show the answers lowercased**, since the right
+  answer's red irregular letters stood out among regular-looking wrong ones; the answered state
+  still shows the marked form. A tap beside the answers opens the challenge
+  (`conjugar://quiz/challenge?source=challengeWidget`); the answered widget still opens the verb.
+- **The dots in the app are circles** (`ChallengeDots`), for the reason Konjugieren found: the iOS
+  26 simulator draws these emoji as empty boxes. The shared text keeps the emoji. The taken row's
+  symbol is `arrowshape.turn.up.right.circle.fill`, as Konjugieren chose after
+  `square.and.arrow.up.circle.fill` drew blank. `QuizPracticeRow` gained the dots, a spoken detail,
+  and a trailing symbol.
+- **Analytics.** `source` `challenge`, `challengeLink`, or `challengeWidget` on the quiz signals,
+  with `questionCount`, always five, and no score; `tapShareChallenge` with `level`, never the
+  result or the region. Staged in `docs/privacy_policy_pending.md` in both languages: the lifecycle
+  bullet, the in-app-actions bullet, the paragraph after the list (which now says a challenge's
+  result leaves the device only when the learner shares it), and section 7's first paragraph.
+  `LookupSignalsTests` and `AnalyticsTests` pin the new names.
+- **VoiceOver.** The dots are read as a sentence ("3 of 5 right on the first try, 1 on the second.
+  35 of 50 points."), on the results and in the hub's row, which reads as one element with a hint;
+  Share Result has a hint. Read from the accessibility tree only; nobody has listened to it.
+- **Tests:** `DailyChallengeTests`, 20 functions (24 cases with the arguments): the seed pinned, a
+  day's round trip, five days that are not dates, the same key drawing the same five (4 levels, both
+  regions), days, levels, and regions differing, each level's 10 days of five balanced questions in
+  both regions (the level's cells and persons, its band, two irregular, two core verbs, a prefixed
+  compound, no verb twice), Latin America never asking vosotros, a vos learner's questions, a
+  result's outcomes and points, the agreed English text in full, the Spanish date, the widget's
+  question agreeing with the challenge for ten days in Spain with tú and Latin America with vos (4
+  levels), with three wrong answers of the right answer's word count and no padded ones, the
+  question ID's prefix, the snapshot, a challenge in a quiz whatever the random source, level,
+  region, and record, the scope's flags, a finish kept once with no score posted, no re-ask, a quit
+  keeping nothing, the store's limit, a launch and a reset keeping the results, the share signal,
+  and two link tests. **The full run passed 1,344 tests in 85 suites**, up from 1,320 in 84, in the
+  simulator's default language (English). SwiftLint reports nothing on the changed files.
+- **Verified on the iPad**, in Spanish and dark mode at Avanzado, set to Spain and vos for the
+  check: the widget's bundle rewritten on launch for Spain and vos (hacer, ellas, pretérito, with
+  hicisteis, hacían, and hacieron offered), the row under Sesión diaria, a challenge opening on that
+  question with one right, a slip and its second try, a wrong answer whose correction promised no
+  re-ask, and two right (the fifth in vos), ending 35 with the dots and Compartir resultado; its
+  popover anchored to the button and Copiar giving the agreed Spanish text; the hub's row "Hecho
+  hoy: 35 / 50" over the dots; a link to the taken challenge opening the hub and starting nothing;
+  and a link to 20 November at Elemental in Latin America starting that challenge (ir's perfecto,
+  in vos), quit, which kept nothing. **On the iPhone**, in English and light mode at Elementary in
+  Latin America with tú: the widget's link starting the day's challenge on the widget's question
+  (haber's gerundio), a held correction, results of 40 with Share Result, the taken row, its tap
+  sharing, and Copy giving the agreed English text; then the rewritten bundle's habando, habendo,
+  and habyendo. Both simulators' defaults and widget bundles were backed up first and restored
+  afterward, checked key by key; the iPad was returned to light mode and shut down. Not tried: the
+  widget on a Home Screen (its bundle was read instead), two real devices, a real midnight, a
+  shared link opened from Messages, and VoiceOver by ear. `docs/release.md` gains the release-day
+  check.
 
 ## Tasks for Josh Outside the Code
 

@@ -107,6 +107,9 @@ a model's key names the model.
 | Value | Sent today? | Meaning |
 |---|---|---|
 | `browse` | Yes | A row of the verb list with the search field empty |
+| `challenge` | Yes | The quiz signals: the Daily Challenge, from its row on the Quiz tab. `tapShareChallenge` carries `level` and no `source` |
+| `challengeLink` | Yes | The quiz signals: a daily challenge opened from the link in a shared result |
+| `challengeWidget` | Yes | The quiz signals: the day's challenge, opened by a tap on the quiz widget beside its answers |
 | `control` | Yes | The Random Verb control in Control Center (`OpenRandomVerbControlIntent`); for `finishSearch`, the Find a Verb control (`OpenVerbSearchIntent`) |
 | `custom` | Yes | The quiz signals: a custom quiz begun from the Quiz tab's Custom segment |
 | `daily` | Yes | The quiz signals: the Daily Session, from the first row of the Quiz tab's From Your Practice section, or from its results' Another Session |
@@ -139,7 +142,7 @@ a model's key names the model.
 | `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included. The quiz signals: a quiz over every verb begun with the Quiz tab's Start. `viewCollection`: a collection or a model opened from the Models tab's list. `tapViewLeaderboard`: a leaderboard opened from the Quiz tab. `tapViewAchievements`: the achievements opened from the Quiz tab |
 | `verbEssentials` | Yes | The quiz signals: Verb Essentials, from the Quiz tab's Exercises section |
 | `verbPage` | Yes | The quiz signals: Test Me's three questions on a verb's page. `viewCollection`: a model's page opened from a verb page's model pill |
-| `widget` | Yes | A tap on any widget: Verb of the Day, the quiz widget, or a Lock Screen accessory |
+| `widget` | Yes | A tap on any widget: Verb of the Day, the quiz widget once answered, or a Lock Screen accessory. The quiz widget's question sends `challengeWidget` |
 
 **How the source travels.** The Verbs and Models tabs push a `VerbDestination` (infinitive plus
 source) rather than a bare infinitive, and `VerbView(verb:source:)` takes it. The verb list's rows
@@ -414,7 +417,8 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
   hand the app nothing but a URL. A missing or unknown value counts as `deeplink`.
 - **Builders, not literals.** App code builds links with `URL.verbDeeplink(_:source:match:)`,
   `URL.searchDeeplink(text:source:)`, `URL.infoDeeplink(stableKey:)`, and
-  `URL.listDeeplink(key:source:)`, and `URL.dailySessionDeeplink(source:)`
+  `URL.listDeeplink(key:source:)`, `URL.dailySessionDeeplink(source:)`, and
+  `URL.challengeDeeplink(_:source:)`
   (`Utils/URLExtension.swift`), which percent-encode. Only the
   widget extension (`WidgetDeeplink`) and `Shared/`'s intents, which cannot see `AnalyticsSource`,
   write literals; each intent keeps its literal in a `pendingDeeplink` constant, and
@@ -425,9 +429,10 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
 | `verb` | An infinitive, bare or with "se" (`arrepentirse` opens arrepentir), or `random` (drawn by `VerbDraw`; see [The Verb of the Day and Random Verbs](#the-verb-of-the-day-and-random-verbs)) | `source`; `match`, a form the page marks as it marks a search's match (`verb/ir?match=fue`) | The Verbs tab's verb page, scrolled to the first marked card |
 | `search` | None | `q`, the text; `source` | The Verbs tab's list with its search field. With text, the results show with the keyboard down; with none, or `q` empty, the field is cleared and focused for typing |
 | `info` | A `stableKey`, or a position in `Info.infos` | None | The Info tab, with the article pushed |
-| `quiz` | Any but `set` and `daily`, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals |
+| `quiz` | Any but `set`, `daily`, and `challenge`, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals |
 | `quiz` | `set` | A custom quiz's stored form (`tenses`, and `verbs` or `infinitives`); `level`, while a part is left to it; `source`, `sharedLink` or `qrCode` | A practice set in a sheet over whatever tab is open, with Start (see [Practice sets](#practice-sets)). A link that names nothing this version knows shows "Practice Set Not Found" |
 | `quiz` | `daily` | `source`; the reminder sends `reminder` | The Quiz tab, starting a daily session unless a quiz is under way. Results on screen give way to it (see [Daily Session and Streak](#daily-session-and-streak)) |
+| `quiz` | `challenge` | `date` (`yyyy-MM-dd`), `level`, `region` (`spain` or `latinAmerica`), `source`; shared text sends `challengeLink`, the quiz widget `challengeWidget` with no key | The Quiz tab, starting that day's challenge unless a quiz is under way. A part left out or not understood is the learner's own: today, their level, their region. A challenge already taken opens the hub, which shows today's result (see [Daily Challenge](#daily-challenge)) |
 | `game` | None, `boss`, or `end` | None | The game, full screen over any tab (see `docs/game.md`) |
 | `list` | A collection's key (`top100`, `goVerbs`, `model-31`, `model-4B`; see [Collections](#collections)) | `source`; a shared collection sends `sharedLink` | The Models tab, with the collection's page pushed, or for a model the model's page. An unknown key, or an alias class's (`model-31-1`), is ignored |
 
@@ -1612,6 +1617,87 @@ Nothing says that an achievement was earned, which would report how well a learn
 never sent. The App Store Connect side is in [`game_center_setup.md`](game_center_setup.md) § The
 Achievements.
 
+### Daily Challenge
+
+**What it is** (`Models/DailyChallenge.swift`, `QuizScope.challenge(_:source:)`). Five questions a
+day for each level and region, the same on every device on that date, taken once and shared as text.
+Its row on the Quiz tab sits under Daily Session, with crossed flags. The name is Daily Challenge /
+Desafío diario.
+
+**The key and the seed.** `DailyChallenge.Key` is the day, `yyyy-MM-dd` in the Gregorian calendar
+and the learner's time zone, so learners share a challenge by date rather than by instant; the
+level; and the region, since Spain's quiz asks vosotros and Latin America's never does. The seed is
+FNV-1a of `challenge-<day>-<level>-<region>` (`Key.seedText`, `DailyChallenge.stableSeed`), which
+seeds `SplitMix64`. `DailyChallengeTests` pins both, since changing either changes every challenge.
+
+**The draw** (`DailyChallenge.draw(for:)`) is the default quiz's: five cells, each tense drawn by
+weight from the level's pool and its person drawn from those the level asks in the key's region, in
+tú; then `QuizDraw`'s balanced verbs from the level's band (two irregular, two core verbs, a prefixed
+compound). It draws again with the same generator until no verb repeats, at most twenty times.
+Nothing on the device enters it: not the practice record, My Verbs, the quiz's person rotation, its
+random source, or a choice question. A learner whose setting is vos is asked a tú question in vos
+(`questions(for:secondSingular:)`), the same verb and tense. **"The same for everyone" holds within
+a build and a verb list**, since `QuizDraw` uses the standard library's random functions and the
+bands come from the verb list, so the tests pin determinism and the seed rather than a list of
+questions. `DailyChallenge.questions(for:)` caches each key's draw behind a `Mutex`.
+
+**In the quiz.** `QuizScope.isChallenge` turns off ranking, Ten More, the shuffle, the Live
+Activity (five questions), choice questions, and due items, and the quiz asks at the key's level and
+in its region whatever the learner's. **No re-ask**: a wrong answer is held with its correction,
+which promises nothing, and a slip still earns its second attempt at half points. Answers move the
+practice record as in any quiz. `Quiz.finish()` keeps a `DailyChallengeResult` (the key and an
+`Outcome` per question: right, second try, wrong) through `PracticeStore.recordChallenge(_:)`, which
+keeps the first result for a key and returns it, so a challenge is taken once; a quit keeps nothing.
+The last 12 are kept, as JSON under `dailyChallengeResults` in the App Group. **Reset Practice keeps
+them**, since forgetting one would reopen its challenge. The last result's kind is `challenge`.
+
+**The results and the hub.** The results show the dots under the score (`ChallengeDots`: circles in
+the results' green, yellow, and red, not the shared emoji, which the iOS 26 simulator draws as empty
+boxes) and Share Result in Ten More's place. Once today's challenge is taken, the hub's row says
+"Done today: 35 / 50" over the dots, and a tap shares it, with a share symbol at its end.
+
+**The shared text** (`DailyChallengeResult.shareText(locale:)`), the date in the app's language:
+
+```
+Conjugar · Daily Challenge
+November 24, 2026 · Elementary
+🟢🟢🟡🔴🟢  35 / 50
+
+Take this challenge in Conjugar:
+conjugar://quiz/challenge?date=2026-11-24&level=elementary&region=spain&source=challengeLink
+
+Get Conjugar on the App Store:
+https://apps.apple.com/app/conjugar/id1236500467
+```
+
+The Spanish says "Conjugar · Desafío diario", "24 de noviembre de 2026 · Elemental", "Acepta este
+desafío en Conjugar:", and "Descarga Conjugar en el App Store:".
+
+**The link.** `AppRouter` sets `pendingChallenge`, a `DailyChallengeRequest`, which `QuizView`
+resolves against today and the settings, then starts unless a quiz is under way; results on screen
+give way to it. A link to a challenge already taken opens the hub.
+
+**The quiz widget** asks the first question of the day's challenge at the learner's level and
+region, in their tú or vos (`WidgetSnapshotWriter.challengeQuizQuestion(on:challenge:)`), no longer a
+question on the verb of the day, which the verb widgets still show. Its question ID begins
+`<day>-<level>-<region>-<person>-`, and `refresh(myVerbs:challenge:)` rewrites the snapshot when the
+day or that prefix changes; `MainTabView` calls it when the level, region, or tú or vos changes.
+Its three wrong answers are the verb's own forms of the same shape (`wordCount` equal, so a
+compound's haber, a negative command's no, and a reflexive verb's pronoun never single out the
+right one): one of the same tense in another person the level asks, one of the same person in
+another of the level's tenses, then the cell as a regular verb would have it
+(`TenseBridge.regularForm`). A reflexive-only verb's pronoun names its person, so its wrong answers
+keep the person; a gerundio or participio is offered the other regular endings (-yendo and -ído
+among them), then the other of the two and the infinitive, which ir's yendo needs. The buttons show
+the answers lowercased, since the right answer's red letters would stand out. A tap beside the
+answers opens the challenge (`WidgetDeeplink.challenge`); the answered widget still opens the verb.
+
+**Analytics.** `source` `challenge`, `challengeLink`, or `challengeWidget` on the quiz signals, with
+`questionCount`, always five; `tapShareChallenge` with `level`, never the result or the region.
+
+**VoiceOver.** The dots are read as a sentence ("3 of 5 right on the first try, 1 on the second. 35
+of 50 points."), on the results and in the hub's row; the row and Share Result have hints.
+
 ## The Verb of the Day and Random Verbs
 
 **`FrequencyBand`** (`Models/FrequencyBand.swift`, `nonisolated`) defines the bands once: `.top100`,
@@ -1637,7 +1723,7 @@ and can return as a My Verbs draw until it ages out.
 **Stable through the day.** A frequent day seeds `SplitMix64` (`Models/Game/GameModels.swift`,
 `nonisolated` so that the draw can use it) with the day number, so its verb is a function of the
 day. Its sequence must not change; `VerbDrawTests` pins its first outputs. A My Verbs day depends on
-the list, which can change during the day, but `WidgetSnapshotWriter.refresh(myVerbs:)` writes one
+the list, which can change during the day, but `WidgetSnapshotWriter.refresh(myVerbs:challenge:)` writes one
 snapshot per date and skips the write when today's is on disk, so the first activation of a day
 settles the verb. `MainTabView` reads My Verbs on the main actor
 (`Current.learnerVerbs.record.myVerbs`, infinitives) and passes them to the detached refresh, which

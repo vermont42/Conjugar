@@ -25,6 +25,10 @@ final class PracticeStore {
   private(set) var levelBests: [String: Int] = [:]
   /// The days a daily session was finished, kept on the device and sent nowhere but as a band.
   private(set) var dailyStreak = DailyStreak()
+  /// The challenges finished lately, the newest last, kept on the device and sent nowhere. Reset
+  /// Practice keeps them, since each is a day's result rather than part of the record, and
+  /// forgetting one would let its challenge be taken again.
+  private(set) var challengeResults: [DailyChallengeResult] = []
   @ObservationIgnored private let getterSetter: GetterSetter
   @ObservationIgnored private let calendar: Calendar
 
@@ -57,6 +61,9 @@ final class PracticeStore {
       .flatMap { $0.data(using: .utf8) }
       .flatMap { try? JSONDecoder().decode([String: Int].self, from: $0) } ?? [:]
     dailyStreak = getterSetter.get(key: DailyStreak.storageKey).flatMap(DailyStreak.init(json:)) ?? DailyStreak()
+    challengeResults = getterSetter.get(key: DailyChallengeResult.storageKey)
+      .flatMap { $0.data(using: .utf8) }
+      .flatMap { try? JSONDecoder().decode([DailyChallengeResult].self, from: $0) } ?? []
   }
 
   static let speedRoundBestKey = "speedRoundBest"
@@ -116,6 +123,24 @@ final class PracticeStore {
 
   func streakStatus(at date: Date = .now) -> DailyStreak.Status {
     dailyStreak.status(at: date, calendar: calendar)
+  }
+
+  func challengeResult(for key: DailyChallenge.Key) -> DailyChallengeResult? {
+    challengeResults.last { $0.key == key }
+  }
+
+  /// A finished challenge, kept unless its key was finished before, since a challenge is taken
+  /// once. Returns the result the challenge keeps.
+  @discardableResult
+  func recordChallenge(_ result: DailyChallengeResult) -> DailyChallengeResult {
+    if let kept = challengeResult(for: result.key) {
+      return kept
+    }
+    challengeResults = Array((challengeResults + [result]).suffix(DailyChallengeResult.keptCount))
+    if let data = try? JSONEncoder().encode(challengeResults), let json = String(data: data, encoding: .utf8) {
+      getterSetter.set(key: DailyChallengeResult.storageKey, value: json)
+    }
+    return result
   }
 
   /// A quiz's final answer to a question: a slip's right second attempt counts as right, since
@@ -189,7 +214,7 @@ final class PracticeStore {
   }
 
   /// Settings' Reset Practice, which forgets the last quiz's results, the Speed Round's best, the
-  /// level bests, and the daily streak too. The record is saved empty rather than removed, so that
+  /// level bests, and the daily streak too, and keeps the challenges' results. The record is saved empty rather than removed, so that
   /// the next launch does not migrate the old schedules again. `GetterSetter` cannot remove a key,
   /// so the last result, the bests, and the streak are saved as empty strings, which read as none.
   func reset() {
