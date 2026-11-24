@@ -156,6 +156,8 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case spotlight
   /// A search begun in the Verbs tab, or a quiz over every verb begun with the Quiz tab's Start.
   case tab
+  /// The Quiz tab's Verb Essentials, of irregular verbs' key conjugations.
+  case verbEssentials
   /// Test Me's three questions on a verb's page.
   case verbPage
   /// A tap on any of the widgets: Verb of the Day, the quiz widget, or a Lock Screen accessory.

@@ -19,6 +19,9 @@ struct AnswerFrameView: View {
   @Binding var selection: TextSelection?
   var isFocused: FocusState<Bool>.Binding
   let identifier: String
+  /// Spanish that VoiceOver reads before the frame, such as the tense of a Verb Essentials row,
+  /// which the screen shows above the field rather than in the frame.
+  var spokenPrefix: String?
   let onSubmit: () -> Void
   @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -87,15 +90,19 @@ struct AnswerFrameView: View {
       .accessibilityHidden(true)
   }
 
-  /// "yo, blank", or "tú, no, blank", with the frame's Spanish read in Spanish. A frame of only a
-  /// blank keeps the field's plain name.
+  /// "yo, blank", or "tú, no, blank", with the frame's Spanish read in Spanish, and with a prefix,
+  /// "pretérito, yo, blank". A frame of only a blank keeps the field's plain name, after any
+  /// prefix.
   private var spokenPrompt: Text {
     let parts = frame.spokenParts
-    guard parts.contains(where: { $0 != nil }) else {
-      return Text(L.Quiz.conjugation)
-    }
-    let pieces = parts.map { part in
-      part.map { Text(Self.spanish($0)) } ?? Text(L.Quiz.blank)
+    let prefix = spokenPrefix.map { [Text(Self.spanish($0))] } ?? []
+    let pieces: [Text]
+    if parts.contains(where: { $0 != nil }) {
+      pieces = prefix + parts.map { part in
+        part.map { Text(Self.spanish($0)) } ?? Text(L.Quiz.blank)
+      }
+    } else {
+      pieces = prefix + [Text(L.Quiz.conjugation)]
     }
     return pieces.dropFirst().reduce(pieces[0]) { $0 + Text(verbatim: ", ") + $1 }
   }

@@ -130,6 +130,7 @@ a model's key names the model.
 | `shortcut` | Yes | Open Random Verb run from the Shortcuts app or Siri (`OpenRandomVerbIntent`, offered as the Random Verb shortcut) |
 | `spotlight` | Yes | A tap on a verb's Spotlight entry |
 | `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included. The quiz signals: a quiz over every verb begun with the Quiz tab's Start. `viewCollection`: a collection or a model opened from the Models tab's list. `tapViewLeaderboard`: a leaderboard opened from the Quiz tab |
+| `verbEssentials` | Yes | The quiz signals: Verb Essentials, from the Quiz tab's Exercises section |
 | `verbPage` | Yes | The quiz signals: Test Me's three questions on a verb's page. `viewCollection`: a model's page opened from a verb page's model pill |
 | `widget` | Yes | A tap on any widget: Verb of the Day, the quiz widget, or a Lock Screen accessory |
 
@@ -1066,7 +1067,7 @@ opens, so `startQuiz` with `verbPage` counts the same taps. Ten More sends no si
 | `tapSharePracticeSet` | `method` (`link` or `qrCode`) and `customChoice`, never which tenses or verbs | On Share Link or Show QR Code |
 | `viewPracticeSet` | `outcome` (`opened`, or `invalid` for a link that names nothing) and `source` | Once for each practice-set sheet a link opens |
 | `tapKeepPracticeSet` | None | On Keep as My Custom Quiz |
-| `completeQuiz` | `duration`, `questionCount` (10, 20, …) except for a record session, `score` for a ranked session's first round only | At each round's results |
+| `completeQuiz` | `duration`, `questionCount` (10, 20, …, or 20, 40, … for Verb Essentials) except for a record session, `score` for a ranked session's first round only | At each round's results |
 | `quitQuiz` | `duration`, `questionNumber` except for a record session, `score` during a ranked session's first round only | On Quit |
 | `abandonQuiz` | `questionNumber` except for a record session | At the next launch, for each quiz the app was left during |
 
@@ -1125,6 +1126,47 @@ due) but My Mistakes does, since a mistake missed again would come straight back
 attempts, and recording work as in any quiz. A record session is never ranked, mixes in no due
 items, does not donate to `ChangeLevelTip`, and starts the Live Activity, since it runs on the tab.
 While it runs, the tab's bar reads the session's name.
+
+### Verb Essentials
+
+**What it asks** (`Models/VerbEssentials.swift`, `QuizScope.verbEssentials(_:)`). Given an
+irregular verb, the learner types its key conjugations (`KeyConjugation`): "tener: tengo · tuve ·
+tendré · tenido". A round is five verbs, twenty blanks. The verbs are the irregular verbs of the
+level's band (`VerbDraw.isIrregular`) with at least one irregular key conjugation
+(`VerbEssentials.hasIrregularKeyConjugation`), which leaves out only a few defective verbs and
+those whose only change is an ending's i lost after ll or ñ (bullir, tañer): 57 at Beginner, 150 at
+Elementary, 389 at Intermediate, and 1,613 at Advanced (measured 2026-11-23). They are drawn at
+random, with at most one prefixed compound (detener, componer) a round while base verbs remain
+(`VerbEssentials.compoundLimit`). The level's tenses do not apply. A key conjugation the engine
+does not give (abolir's yo presente) is not asked. Five More Verbs draws verbs the session has not
+asked first. `QuizScope.verbEssentials(_:)` also takes a list of verbs, drawn without the compound
+limit.
+
+**One blank, one question.** A verb is four ordinary `QuizQuestion`s sharing a `step`, so every
+mechanism applies per blank unchanged: a slip or a diagnosed error earns one more attempt at half
+points, a wrong answer holds its correction under its row, and each answer records its own
+practice item (`PracticeItem.exercised`): tengo, tuve, and tendré their key conjugations, and
+tenido, which is regular, the -er participio's pattern. `Quiz.essentialsRows` gives the current
+verb's rows: answered (the engine's form, with its red letters, and how it went), current, given,
+or pending. `QuizView` draws the rows before the answer field and the rows after it as separate
+children around it, so that the field keeps its identity, and the keyboard its focus, as it moves
+down a row. Each row is labeled with its tense, and the right-answer check under the field is not
+shown, since the rows show it.
+
+**Re-asks** (`Quiz.reaskPlacement(of:in:)`). A missed blank returns after the next verb, as a step
+of its own whose other rows are given in grey, so that a re-ask never lands among another verb's
+blanks. A second miss in the same verb joins the first's re-ask step. A missed blank of the last
+verb returns at the end.
+
+**The rest.** Never ranked; no due items mixed in; not shuffled (`shufflesQuestions`, which would
+scatter a verb's blanks); no `ChangeLevelTip` donation. It runs on the tab and starts the Live
+Activity. The bar reads Verb Essentials (Lo esencial del verbo) while it runs, the results offer
+Five More Verbs (Cinco verbos más), and the last result keeps the kind `verbEssentials` with its
+level. `completeQuiz` keeps `questionCount`, since a round's length depends on no answer.
+VoiceOver reads the field as "pretérito, yo, blank" (`AnswerFrameView.spokenPrefix`) and each other
+row as one element ("presente de indicativo, yo salgo, right"; "participio, not yet asked"). The
+DEBUG fixture `CONJUGAR_QUIZ_FIXTURE essentials` stands in for Verb Essentials only: salir, poder,
+escribir, detener, and arrepentir.
 
 ## The Verb of the Day and Random Verbs
 

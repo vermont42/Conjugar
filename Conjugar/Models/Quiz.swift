@@ -239,7 +239,8 @@ class Quiz {
     let region = settings.region
     let level = scope.level ?? settings.quizLevel
     #if DEBUG
-    if let fixture = Quiz.fixtureRun, scope.verbs == nil, scope.custom == nil {
+    // The essentials fixture stands in for Verb Essentials only, and the others for any quiz but it.
+    if let fixture = Quiz.fixtureRun, scope.verbs == nil, scope.custom == nil, (fixture == .essentials) == scope.isVerbEssentials {
       self.scope = scope
       lastRegion = region
       lastLevel = level
@@ -261,6 +262,9 @@ class Quiz {
         beginQuiz()
       case .diagnoses:
         questions = Quiz.diagnosesFixture
+        beginQuiz()
+      case .essentials:
+        questions = Quiz.essentialsFixture
         beginQuiz()
       }
       return true
@@ -303,8 +307,19 @@ class Quiz {
   /// A round of the scope's questions at `lastLevel`, after the session's questions so far. The
   /// default quiz's rounds each mix in up to three items the practice record says are due
   /// (`QuizDraw.dueQuestions`); a quiz whose verbs or tenses were chosen asks only what was
-  /// chosen; a Review or My Mistakes asks the record's items, beyond the level's tenses.
+  /// chosen; a Review or My Mistakes asks the record's items, beyond the level's tenses; Verb
+  /// Essentials asks five verbs' key conjugations.
   private func draw(_ scope: QuizScope, after prior: [Question] = []) -> [Question] {
+    if scope.isVerbEssentials {
+      let verbs = VerbEssentials.verbs(
+        from: scope.verbs ?? VerbEssentials.pool(band: scope.band(level: lastLevel)),
+        count: QuizScope.verbEssentialsVerbCount,
+        asked: Set(prior.map(\.verb)),
+        limitsCompounds: scope.verbs == nil,
+        using: &generator
+      )
+      return VerbEssentials.steps(for: verbs, after: prior)
+    }
     if let session = scope.recordSession {
       return QuizDraw.sessionQuestions(
         for: session.items(from: practice),
@@ -622,7 +637,8 @@ class Quiz {
       timer?.invalidate()
       let willBeReasked = !question.isReask
       if willBeReasked {
-        questions.insert(question.reasked(), at: min(currentQuestionIndex + 1 + Quiz.reaskGap, questions.count))
+        let placement = Quiz.reaskPlacement(of: currentQuestionIndex, in: questions)
+        questions.insert(question.reasked(inStep: placement.step), at: placement.position)
       }
       correction = QuizCorrection(
         difference: question.difference(from: proposedAnswer),
@@ -662,8 +678,9 @@ class Quiz {
     quizState = .finished
     clearProgress()
     // Unlocks the "Choose Your Level" tip, which is rule-gated on having
-    // finished at least one quiz. Three questions on a verb's page are not one.
-    if roundCount == 1, scope.continues, scope.recordSession == nil {
+    // finished at least one quiz. Three questions on a verb's page are not one, and neither a
+    // record session nor Verb Essentials asks by the level's tenses.
+    if roundCount == 1, scope.continues, scope.recordSession == nil, !scope.isVerbEssentials {
       ChangeLevelTip.quizCompleted.sendDonation()
     }
     endLiveActivity()
@@ -787,6 +804,9 @@ extension Quiz {
     /// One question per kind of diagnosis, each comment giving the wrong answer and the line it
     /// earns. Each is typed twice to reach its correction, where the line shows again.
     case diagnoses
+    /// Five verbs for Verb Essentials, used only when it is started from the Quiz tab, each with a
+    /// wrong answer worth typing in its comment.
+    case essentials
   }
 
   static var fixtureRun: Fixture? {
@@ -860,6 +880,14 @@ extension Quiz {
     QuizQuestion("hablar", .pretérito, .thirdSingular),                 // hablo: the presente de indicativo (yo)
     QuizQuestion("comer", .presenteDeIndicativo, .firstSingular)        // comer: the infinitivo
   ]
+
+  static let essentialsFixture: [Question] = VerbEssentials.steps(for: [
+    "salir",      // a -go presente and an irregular futuro: salo, saliré
+    "poder",      // a strong pretérito: podí
+    "escribir",   // an irregular participio only: escribido
+    "detener",    // a prefixed compound: detení
+    "arrepentir"  // a reflexive-only verb, yo me [ ]: arrepento
+  ])
 
   static let correctionsFixture: [Question] = [
     QuizQuestion("hablar", .pretérito, .thirdSingular),                 // hablo: an accent, and the presente

@@ -16,9 +16,12 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
   let tense: DisplayTense
   /// `.none` for the gerundio and the participio.
   let personNumber: DisplayPersonNumber
-  /// Whether the quiz asks this question again after a wrong answer to it (`reasked()`). A
+  /// Whether the quiz asks this question again after a wrong answer to it (`reasked(inStep:)`). A
   /// re-ask is never asked again, and a right answer to it earns half points.
   private(set) var isReask = false
+  /// The questions shown together on one screen share a step, as a verb's key conjugations do in
+  /// Verb Essentials. Nil for a question shown alone.
+  private(set) var step: Int?
 
   init(_ verb: String, _ tense: DisplayTense, _ personNumber: DisplayPersonNumber) {
     self.verb = verb
@@ -26,10 +29,18 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
     self.personNumber = personNumber
   }
 
-  /// The same question, to be asked again.
-  func reasked() -> QuizQuestion {
+  /// The same question, to be asked again, in `step`.
+  func reasked(inStep step: Int? = nil) -> QuizQuestion {
     var question = self
     question.isReask = true
+    question.step = step
+    return question
+  }
+
+  /// The same question, shown with the others of `step`.
+  func inStep(_ step: Int) -> QuizQuestion {
+    var question = self
+    question.step = step
     return question
   }
 

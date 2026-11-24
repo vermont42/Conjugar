@@ -32,9 +32,10 @@ struct ResultsView: View {
         summaryCard
 
         if let onTenMore, quiz.canContinue {
-          Button(L.Results.tenMore, action: onTenMore)
+          let isVerbEssentials = quiz.scope.isVerbEssentials
+          Button(isVerbEssentials ? L.VerbEssentials.fiveMore : L.Results.tenMore, action: onTenMore)
             .buttonStyle(PrimaryButtonStyle())
-            .accessibilityHint(L.Results.tenMoreHint)
+            .accessibilityHint(isVerbEssentials ? L.VerbEssentials.fiveMoreHint : L.Results.tenMoreHint)
             .accessibilityIdentifier("results_ten_more")
         }
 

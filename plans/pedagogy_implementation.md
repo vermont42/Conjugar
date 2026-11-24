@@ -39,8 +39,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 10 | Done | 2026-11-23 | 16e92b3 | T3.3 (the record), T3.4, T3.5, T6.4 |
 | 11 | Done | 2026-11-23 | 5a40257 | T3.2, T3.3 (the session) |
 | 12 | Done | 2026-11-23 | b59f1fa | T6.1, T6.6 (the leaderboard's place) |
-| 13 | Awaiting Josh | 2026-11-23 | | T4.2, T4.3 |
-| 14 | Not started | | | T5.1 |
+| 13 | Done | 2026-11-23 | abb865e | T4.2, T4.3 |
+| 14 | Awaiting Josh | 2026-11-23 | | T5.1 |
 | 15 | Not started | | | T5.2 |
 | 16 | Not started | | | T5.4 |
 | 17 | Not started | | | T5.5 |
@@ -2085,7 +2085,7 @@ both languages, and the leaderboard is one tap away but not in the way.
 ## Phase 13: Naming the Error
 
 **Ports:** Konjugieren Phase 14. **Suggestions:** T4.2, T4.3. **Depends on:** Phases 2 and 3.
-**Status:** Awaiting Josh.
+**Status:** Done.
 
 Diagnose a wrong answer from the engine's own knowledge and say it in one templated line, shown with
 Phase 2's correction. No language model. A wrong diagnosis is worse than none: say only what is
@@ -2201,7 +2201,7 @@ line, and the prompted second attempt shares Phase 3's mechanism.
 ## Phase 14: Key Conjugations
 
 **Ports:** Konjugieren Phase 15. **Suggestions:** T5.1. **Depends on:** Phases 1 and 10. **Status:**
-Not started.
+Awaiting Josh.
 
 An exercise for irregular verbs: given the infinitive, supply its key conjugations (with the
 browse plan's four, "tener: tengo · tuve · tendré · tenido"). The browse plan's key-conjugations
@@ -2224,7 +2224,82 @@ each row was labeled with its tense.
 **Done when** the exercise asks, grades each blank, and records each item, with tests for a -go
 verb, a strong preterite, an irregular future, an irregular participle, and a prefixed compound.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh decided on 2026-11-23**, before anything was built, taking every recommendation: the
+  Spanish name is **"Lo esencial del verbo"** (over "Formas esenciales" and "Verbos esenciales");
+  a round is **five verbs, twenty blanks** (over four verbs, sixteen), so "Five More Verbs" matches
+  Konjugieren; and the verbs are **the level's band with at most one prefixed compound a round**
+  (over no limit, and over capping Advanced at the top 1,000). Konjugieren's other choices carried
+  over unasked: one blank at a time with every row on screen, an Exercises (Ejercicios) section of
+  the hub below From Your Practice, and Five More Verbs (Cinco verbos más).
+- **Which verbs.** The irregular verbs of the band (`VerbDraw.isIrregular`) with at least one
+  irregular key conjugation (`VerbEssentials.hasIrregularKeyConjugation`, a capital in the
+  engine's form). Measured on 2026-11-23: 57 at Beginner, 150 at Elementary, 389 at Intermediate,
+  and 1,613 of 1,631 irregular verbs at Advanced, 367 of those prefixed compounds. The 18 left out
+  are defective verbs and those whose only change is an ending's i lost after ll or ñ (bullir,
+  tañer, abolir). Drawn uniformly at random, the compound limit deferring any further compound
+  unless the pool runs out of base verbs; verbs the session has asked come last, so Five More
+  Verbs is new verbs for as long as the band lasts. The level's tenses do not apply, so a Beginner
+  is asked the pretérito, futuro, and participio. `QuizScope.verbEssentials(_:)` takes a list of
+  verbs for Phase 15, drawn without the compound limit but with the same filter.
+- **The rows.** All four keys, even a regular one (pensar: pienso · pensé · pensaré · pensado),
+  as the share line shows them; a key the engine does not give (abolir's yo presente) is not asked.
+  The frames are Phase 1's, `yo [ ]` and the participio's bare `[ ]`, and a reflexive-only verb's
+  `yo me [ ]` accepts arrepiento with or without its pronoun. Each row is labeled with its tense in
+  Spanish, lowercase, as the quiz card writes tenses; the card loses its tense line. An answered
+  row shows the engine's form with its red letters and a check, a half circle for a second try, or
+  a cross; a row to come shows a dashed outline.
+- **The model.** A step is a new optional `step: Int` on `QuizQuestion`, numbered within the
+  session, rather than Konjugieren's `UUID`, so that tests compare questions exactly. Conjugar's
+  quiz keeps answers in arrays parallel to `questions`, and a re-ask is inserted only after the
+  current question, so nothing else changed. `Quiz.essentialsRows`, `currentStepRange`,
+  `isMidStep`, and `reaskPlacement(of:in:)` are in `Models/VerbEssentials.swift`; the rows view is
+  `Views/VerbEssentialsRowView.swift`. Re-asks are Konjugieren's: a missed blank returns after the
+  next verb as a step of its own with the other rows given in grey, a second miss in the same verb
+  joins that step, and the last verb's miss returns at the end.
+- **The right-answer check is hidden** in Verb Essentials. At first it was hidden only mid-step,
+  but at a new verb's first row it floated between the rows for the last verb's answer, so it went
+  entirely; the rows show each result. The pending outline began in `customCardBorder` and was
+  nearly invisible in light mode, so it is `secondary` at 40%.
+- **Scope flags.** Never ranked, no due items, not shuffled (which would scatter a verb's blanks),
+  no `ChangeLevelTip` donation, continues, and starts the Live Activity, since it runs on the tab.
+  The last result's kind is `verbEssentials`, with its level. The DEBUG fixture `essentials` stands
+  in for Verb Essentials only, and the other fixtures no longer replace it: salir, poder, escribir,
+  detener, arrepentir, with wrong answers worth typing in their comments.
+- **Analytics.** A new `source` value, `verbEssentials`. `completeQuiz` keeps `questionCount`
+  (20 a round), since its length depends on no answer. Staged in `docs/privacy_policy_pending.md`
+  in both languages: the lifecycle bullet names the exercise, the score bullet's "a round of ten"
+  becomes "a round", and section 7 names it among what posts no score. `LookupSignalsTests` pins
+  the new value. The README gained the exercise; the App Store description did not, since its
+  Spanish is 34 characters from the limit.
+- **VoiceOver.** The field reads its row's tense first ("pretérito, yo, blank", new
+  `AnswerFrameView.spokenPrefix`), each other row reads as one element ("presente de indicativo,
+  yo salgo, right"; "participio, not yet asked"), and "Asked again" is announced once per re-ask
+  step. Read from the accessibility tree, not heard.
+- **Tests:** `VerbEssentialsTests`, 23 tests (29 cases): a step's keys and abolir's three, step
+  numbering, each blank's answers for salir, poder, tener, escribir, hacer, detener, and componer
+  (a -go presente, a strong pretérito, an irregular futuro, an irregular participio, and two
+  prefixed compounds), arrepentir with and without its pronoun, podí and escribido diagnosed, the
+  pool and draw (the band, irregular only, at most one compound over twenty seeds, a pool of
+  compounds still filling, asked verbs last), the scope's flags, a Beginner round, each blank
+  recorded alone (tenido as a pattern), the rows, a re-ask after the next verb with its rows given,
+  a second miss joining it, the last verb's re-ask, half points after a diagnosis, Five More Verbs,
+  and the last result. **The full run passed 1,170 tests in 75 suites**, up from 1,146 in 74, in
+  the simulator's default language (English).
+- **Verified on the iPhone**, in English and light mode at Elementary with a hardware keyboard,
+  from the hub's Exercises row (below the fold): the fixture's salir with salo diagnosed under its
+  row and salgo earning a half circle, a held correction under the pretérito with the rows to come
+  below it and the field keeping the keyboard after Continue, poder with podré typed through the
+  letter keys mid-step, a re-ask step for escribir's participio with its other forms given, results
+  of 195, "Correct: 19 / 20 · Asked Again: 1 / 1", Five More Verbs (venir, from the band), and the
+  hub's Last Quiz "Verb Essentials · Elementary · today". **On the iPad**, in Spanish and dark mode
+  at Avanzado: Ejercicios and Lo esencial del verbo on the hub, the Spanish diagnosis line under
+  salir's first row, and a held correction mid-step with the letter keys under the field. Not
+  tried: VoiceOver by ear, the software keyboard (whether the field's move between rows bounces
+  it), accessibility text sizes, the Live Activity, and Five More from the iPad. Both simulators'
+  App Group preferences were backed up before the first round and restored after, the fixture
+  default removed, and the iPad returned to English and light mode and shut down.
 
 ## Phase 15: Models, One Then Mixed
 

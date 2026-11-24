@@ -145,11 +145,14 @@ struct QuizView: View {
     sheetScope?.title ?? sheetScope?.verbs?.first.map { ReflexivePronoun.citationForm(of: $0) }
   }
 
-  /// A Review's or My Mistakes' name while it runs on the tab, since its questions look like any
-  /// quiz's.
+  /// A Review's, My Mistakes', or Verb Essentials' name while it runs on the tab, since its
+  /// questions look like any quiz's.
   private var sessionTitle: String? {
     guard sheetScope == nil, quiz.quizState == .inProgress else {
       return nil
+    }
+    if quiz.scope.isVerbEssentials {
+      return L.VerbEssentials.title
     }
     return quiz.scope.recordSession?.title
   }
@@ -196,7 +199,7 @@ struct QuizView: View {
   }
 
   /// The practice hub: what a session is and how long it takes, the level, Start, what the record
-  /// has due or missed, the last result, and the leaderboard last. For Custom, what the quiz asks
+  /// has due or missed, the last result, the exercises beside the quiz, and the leaderboard last. For Custom, what the quiz asks
   /// and the way to change it take the facts' place; for My Verbs, its verbs follow them.
   private var startScreen: some View {
     GeometryReader { geometry in
@@ -234,6 +237,8 @@ struct QuizView: View {
           }
 
           practiceSection
+
+          exercisesSection
 
           if Current.gameCenter.isAuthenticated {
             leaderboardButton
@@ -490,6 +495,27 @@ struct QuizView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
   }
 
+  /// Ways to practice beside the quiz, at the learner's level.
+  private var exercisesSection: some View {
+    VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
+      Text(L.Quiz.exercises)
+        .font(isLarge ? .title3.bold() : .headline)
+        .foregroundStyle(Color.customForeground)
+        .accessibilityAddTraits(.isHeader)
+
+      QuizPracticeRow(
+        title: L.VerbEssentials.title,
+        detail: L.VerbEssentials.description,
+        systemImage: "square.stack.3d.up.fill",
+        hint: L.VerbEssentials.startHint,
+        identifier: "quiz_verb_essentials",
+        isLarge: isLarge,
+        start: { startQuiz(scope: .verbEssentials()) }
+      )
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+  }
+
   private static let chipLimit = 12
 
   /// The verbs a My Verbs quiz will ask about, so the learner sees the list before starting.
@@ -560,8 +586,27 @@ struct QuizView: View {
 
           questionCard
 
-          answerField
-            .id(QuizView.answerFieldID)
+          // A Verb Essentials verb shows its rows, with the answer field in the current one. The
+          // rows before and after the field are separate children around it, so that the field
+          // keeps its place in the hierarchy, and the keyboard its focus, as it moves down a row.
+          let essentialsRows = quiz.essentialsRows
+          let currentRowIndex = essentialsRows?.firstIndex { $0.content == .current }
+          if let essentialsRows, let currentRowIndex, currentRowIndex > 0 {
+            VStack(spacing: Layout.doubleDefaultSpacing) {
+              ForEach(essentialsRows.prefix(currentRowIndex)) { row in
+                VerbEssentialsRowView(row: row)
+              }
+            }
+          }
+
+          VStack(alignment: .leading, spacing: 4) {
+            if let essentialsRows, let currentRowIndex {
+              VerbEssentialsRowLabel(key: essentialsRows[currentRowIndex].key)
+                .accessibilityHidden(true)
+            }
+            answerField(spokenPrefix: currentRowIndex.flatMap { essentialsRows?[$0].key.tense.displayName })
+          }
+          .id(QuizView.answerFieldID)
 
           if isLarge {
             letterKeys
@@ -581,9 +626,18 @@ struct QuizView: View {
               onContinue: continueAfterCorrection
             )
             .transition(.opacity)
-          } else {
+          } else if essentialsRows == nil {
+            // A Verb Essentials row shows how its answer went.
             rightAnswerReveal
               .frame(minHeight: 44)
+          }
+
+          if let essentialsRows, let currentRowIndex, currentRowIndex < essentialsRows.count - 1 {
+            VStack(spacing: Layout.doubleDefaultSpacing) {
+              ForEach(essentialsRows.dropFirst(currentRowIndex + 1)) { row in
+                VerbEssentialsRowView(row: row)
+              }
+            }
           }
 
           statusStrip
@@ -599,7 +653,8 @@ struct QuizView: View {
       }
       .onChange(of: quiz.currentQuestionIndex) {
         revealAnswerField(proxy)
-        if quiz.currentQuestion?.isReask == true {
+        // A re-ask's later blanks in Verb Essentials are not announced again.
+        if quiz.currentQuestion?.isReask == true, !quiz.isMidStep {
           AccessibilityNotification.Announcement(L.Quiz.askedAgain).post()
         }
       }
@@ -648,13 +703,16 @@ struct QuizView: View {
           .foregroundStyle(.secondary)
       }
 
-      // The person asked is in the answer's frame, below.
-      Text(verbatim: quiz.tense.displayName)
-        .font(.title3.weight(.semibold))
-        .fontDesign(.serif)
-        .foregroundStyle(Color.customForeground)
-        .multilineTextAlignment(.center)
-        .fixedSize(horizontal: false, vertical: true)
+      // The person asked is in the answer's frame, below, and a Verb Essentials row names its
+      // own tense.
+      if quiz.essentialsRows == nil {
+        Text(verbatim: quiz.tense.displayName)
+          .font(.title3.weight(.semibold))
+          .fontDesign(.serif)
+          .foregroundStyle(Color.customForeground)
+          .multilineTextAlignment(.center)
+          .fixedSize(horizontal: false, vertical: true)
+      }
     }
     .frame(maxWidth: .infinity)
     .card()
@@ -670,13 +728,14 @@ struct QuizView: View {
     }
   }
 
-  private var answerField: some View {
+  private func answerField(spokenPrefix: String?) -> some View {
     AnswerFrameView(
       frame: quiz.currentQuestion?.frame ?? AnswerFrame(segments: [.blank]),
       text: $answer,
       selection: $answerSelection,
       isFocused: $fieldFocused,
       identifier: "input_quiz_conjugation",  // screenshot-driver anchor
+      spokenPrefix: spokenPrefix,
       onSubmit: {
         if quiz.isHeld {
           continueAfterCorrection()

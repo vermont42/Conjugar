@@ -835,6 +835,44 @@ nonisolated enum L {
     }
   }
 
+  enum VerbEssentials {
+    static var title: String {
+      String(localized: "VerbEssentials.title")
+    }
+
+    /// The hub row's line under the title, with tener's key conjugations as the example.
+    static var description: String {
+      String(localized: "VerbEssentials.description")
+    }
+
+    static var startHint: String {
+      String(localized: "VerbEssentials.startHint")
+    }
+
+    /// The results' button that continues the session, in place of Ten More.
+    static var fiveMore: String {
+      String(localized: "VerbEssentials.fiveMore")
+    }
+
+    static var fiveMoreHint: String {
+      String(localized: "VerbEssentials.fiveMoreHint")
+    }
+
+    /// What VoiceOver says of a row answered right, after its form: "pretérito, yo tuve, right".
+    static var spokenRight: String {
+      String(localized: "VerbEssentials.spokenRight")
+    }
+
+    static var spokenWrong: String {
+      String(localized: "VerbEssentials.spokenWrong")
+    }
+
+    /// What VoiceOver says of a row still to come: "participio, not yet asked".
+    static var spokenPending: String {
+      String(localized: "VerbEssentials.spokenPending")
+    }
+  }
+
   enum PracticeSession {
     static var heading: String {
       String(localized: "PracticeSession.heading")
@@ -1009,6 +1047,11 @@ nonisolated enum L {
     }
 
     /// The start screen's row of the last round's results.
+    /// The hub's heading over the ways to practice beside the quiz, such as Verb Essentials.
+    static var exercises: String {
+      String(localized: "Quiz.exercises")
+    }
+
     static var lastQuiz: String {
       String(localized: "Quiz.lastQuiz")
     }

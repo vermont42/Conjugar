@@ -11628,3 +11628,57 @@ about practice records was half heeded. The test rounds wrote fifteen entries in
 record and three into the iPad's, all dated within the session's few minutes. Each was removed
 afterward, and the iPad's one older entry was kept. The records still were not exported before the
 first round, which is the step to remember next time.
+
+## Verb Essentials (2026-11-23)
+
+The Quiz tab now has an exercise beside the quiz. Verb Essentials shows an irregular verb and asks
+for its four key conjugations, the forms the verb page's share text and the review card already
+use: "tener: tengo · tuve · tendré · tenido". Each of the four is built on a stem that a family of
+tenses shares, so a learner who has these four can rebuild most of the verb. Konjugieren built the
+same exercise for its strong verbs (fährt · fuhr · ist gefahren), and Conjugar's version ports
+that design with one Spanish difference: four rows instead of three.
+
+Before building, I asked Josh three questions. The Spanish name became "Lo esencial del verbo", the
+plan's suggestion. A round stayed at five verbs, as in Konjugieren, though four rows a verb make it
+twenty blanks rather than fifteen; keeping the number keeps "Five More Verbs" the same in both apps.
+And the verbs come from the learner's level band, with at most one prefixed compound a round. That
+last question mattered at Advanced, where the band is every verb. A quick count showed 1,613
+irregular verbs there, 367 of them compounds such as detener and componer, and a compound's key
+conjugations are its root's behind a prefix. One a round keeps them in play without letting the
+-tener and -poner families crowd out everything else. The same count showed that "irregular" and
+"has an irregular key conjugation" are almost the same set: only 18 rare verbs (bullir, tañer, a
+few defective ones) are irregular without one of the four forms showing it, and those are left out.
+
+The design that made Konjugieren's version cheap carried over intact. A verb is four ordinary quiz
+questions that share a step number, so every mechanism the earlier phases built applies to each
+blank without change. salo typed for salgo gets Phase 13's line, "That is the regular form, but
+salir is irregular in the Presente de Indicativo. Try once more." A wrong answer holds its Phase 2
+correction under its own row. Each answer records its own practice item: tengo, tuve, and tendré
+move tener's key conjugations, and tenido, which is regular, moves the -er participio's pattern.
+Conjugar's quiz keeps its answers in arrays parallel to the questions, and a re-ask is only ever
+inserted after the question on screen, so adding the step number to the question was the whole
+change to the model.
+
+The view took more care. The answer field has to move down the rows as each blank is answered, and
+a field that SwiftUI rebuilds loses the keyboard. Konjugieren learned that in its frame phase. So
+the rows above the field and the rows below it are separate children around it, and the field
+never changes its place in the hierarchy. On the simulator it kept the keyboard through every row,
+through held corrections, and through Continue. One scare turned out to be the test driver: the
+field lost focus once, and only after a comparison with the plain quiz did it become clear that
+`axe type` cannot type é and had dropped the field's focus trying. Typing accents with the app's own
+letter keys worked.
+
+Re-asks needed one decision of their own. The ordinary quiz brings a missed question back three
+questions later, which here would drop it among another verb's blanks. As in Konjugieren, a missed
+blank returns after the next verb, as a step of its own, with the verb's other forms given in grey,
+and a second miss in the same verb joins that step. Two small things changed after seeing the
+screen. The check mark that the quiz shows under the field after a right answer floated oddly
+between rows when a new verb began, so Verb Essentials does not show it; the rows already show how
+each answer went. And the dashed outlines of rows still to come were almost invisible in light mode,
+so they took a stronger color.
+
+This time the practice records were backed up before the first round, as the last entry said to
+remember. The App Group's preferences file on each simulator was copied to the scratchpad, and
+restored with `defaults import` afterward. Import merges rather than replaces, so the last quiz's
+result, a key the iPhone's record had not held, had to be deleted on its own before the file
+matched its backup.

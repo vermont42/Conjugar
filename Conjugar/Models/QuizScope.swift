@@ -31,6 +31,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
   let isPracticeSet: Bool
   /// Review or Practice My Mistakes, whose questions come from the practice record.
   let recordSession: QuizRecordSession?
+  /// Verb Essentials, which asks each verb's key conjugations together (`VerbEssentials.swift`).
+  let isVerbEssentials: Bool
 
   init(
     verbs: [String]?,
@@ -41,7 +43,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
     custom: CustomQuiz? = nil,
     level: QuizLevel? = nil,
     isPracticeSet: Bool = false,
-    recordSession: QuizRecordSession? = nil
+    recordSession: QuizRecordSession? = nil,
+    isVerbEssentials: Bool = false
   ) {
     self.verbs = verbs
     self.questionCount = questionCount
@@ -52,6 +55,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
     self.level = level
     self.isPracticeSet = isPracticeSet
     self.recordSession = recordSession
+    self.isVerbEssentials = isVerbEssentials
   }
 
   /// A round's length. The Quiz tab's quiz, a My Verbs quiz, and a collection's ask one round,
@@ -65,7 +69,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// over what the practice record holds, or over three questions, compares with nothing. Of a
   /// ranked session, only the first round's score counts (`Quiz.firstRoundScore`).
   var isRanked: Bool {
-    verbs == nil && custom == nil && recordSession == nil && questionCount == QuizScope.roundLength
+    verbs == nil && custom == nil && recordSession == nil && !isVerbEssentials && questionCount == QuizScope.roundLength
   }
 
   /// Whether `completeQuiz`, `quitQuiz`, and `abandonQuiz` say how many questions were asked or
@@ -78,9 +82,9 @@ nonisolated struct QuizScope: Equatable, Sendable {
 
   /// Whether a round's questions are shuffled. A record session asks its items in the record's
   /// order, the most overdue or most recently missed first, with a verb's key conjugations
-  /// together.
+  /// together. Verb Essentials asks a verb's key conjugations together, in the verb page's order.
   var shufflesQuestions: Bool {
-    recordSession == nil
+    recordSession == nil && !isVerbEssentials
   }
 
   /// Whether each round mixes in items the practice record says are due: only the default quiz,
@@ -89,8 +93,9 @@ nonisolated struct QuizScope: Equatable, Sendable {
     isRanked
   }
 
-  /// Whether the results offer Ten More, which continues the session with another round. Test
-  /// Me's three questions are a check on one verb, not a session to grow.
+  /// Whether the results offer Ten More, or for Verb Essentials five more verbs, which continue the
+  /// session with another round. Test Me's three questions are a check on one verb, not a session
+  /// to grow.
   var continues: Bool {
     questionCount >= QuizScope.roundLength
   }
