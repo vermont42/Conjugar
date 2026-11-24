@@ -112,6 +112,7 @@ a model's key names the model.
 | `deeplink` | Yes | A `conjugar://` link with no recognized `source` query item; for `finishSearch`, a `search` link; for the quiz signals, a `quiz` link, which the Quick Quiz control, the Start a Quiz shortcut, and the Live Activity send; for `viewCollection`, a `list` link that names no source |
 | `infoLink` | No | Reserved for a link from an Info article to a verb |
 | `list` | Yes | A verb opened from a featured collection's page (a verb opened from a model's page stays `model`); for the quiz signals, a collection's quiz |
+| `mistakes` | Yes | The quiz signals: Practice My Mistakes, from the Quiz tab's From Your Practice section |
 | `lookup` | Yes | The Look Up a Verb shortcut: for `viewVerbView`, the page it opened when one verb answered; for `finishSearch`, the search it opened otherwise |
 | `model` | Yes | A verb row on a model's page, in the Models tab or reached from a verb page's pill |
 | `myVerbs` | Yes | A row of My Verbs, the verb list's third segment; for the quiz signals, a quiz over My Verbs begun from the Quiz tab |
@@ -121,6 +122,7 @@ a model's key names the model.
 | `recent` | Yes | A recent verb, listed while the search field is focused and empty |
 | `related` | Yes | A chip on a verb page's Related Verbs card, or a row of the full list it opens |
 | `resume` | Yes | A page that came back after another tab, a pushed page, or the background |
+| `review` | Yes | The quiz signals: Review, from the Quiz tab's From Your Practice section |
 | `reviewCard` | Yes | The review card above the verb list, tapped after its reveal |
 | `search` | Yes | A result of a search that found something |
 | `searchGuess` | Yes | The closest verb offered by a search that found nothing |
@@ -1026,15 +1028,18 @@ opens, so `startQuiz` with `verbPage` counts the same taps. Ten More sends no si
 | `tapSharePracticeSet` | `method` (`link` or `qrCode`) and `customChoice`, never which tenses or verbs | On Share Link or Show QR Code |
 | `viewPracticeSet` | `outcome` (`opened`, or `invalid` for a link that names nothing) and `source` | Once for each practice-set sheet a link opens |
 | `tapKeepPracticeSet` | None | On Keep as My Custom Quiz |
-| `completeQuiz` | `duration`, `questionCount` (10, 20, …), `score` for a ranked session's first round only | At each round's results |
-| `quitQuiz` | `duration`, `questionNumber`, `score` during a ranked session's first round only | On Quit |
-| `abandonQuiz` | `questionNumber` | At the next launch, for each quiz the app was left during |
+| `completeQuiz` | `duration`, `questionCount` (10, 20, …) except for a record session, `score` for a ranked session's first round only | At each round's results |
+| `quitQuiz` | `duration`, `questionNumber` except for a record session, `score` during a ranked session's first round only | On Quit |
+| `abandonQuiz` | `questionNumber` except for a record session | At the next launch, for each quiz the app was left during |
 
 `duration` is wall-clock from the session's start, background included, in the bands of
 `AnalyticsBand.quizDuration`: 0-3s, 3-15s, 15-40s, 40s-2m, and 2m+. It replaced the exact
 `elapsedTime`. `questionNumber` is `Quiz.questionReached`, which counts no re-ask, since a re-ask
 follows only a wrong answer and a count that included them would say how many answers were wrong.
-`score` is `firstRoundScore`, and no other quiz or round sends one.
+`score` is `firstRoundScore`, and no other quiz or round sends one. **A record session (Review or
+Practice My Mistakes) sends no counts** (`QuizScope.sendsQuestionCounts`): a round shorter than ten
+is exactly as long as the learner's due or missed items, so its length would count wrong answers.
+`QuizAbandonment.Entry.questionNumber` is optional for that reason.
 
 **Game Center.** Each level has a leaderboard, `QuizLevel.leaderboardID` (`Utils/GameCenter.swift`):
 `conjugar.level.beginner`, `.elementary`, `.intermediate`, and `.advanced`. App Store Connect never
@@ -1050,6 +1055,37 @@ Leaderboards in place of Enable, which opens Game Center's list of the boards
 shipped app posts to, `biz.joshadams.Conjugar.leaderboard`, is retired on release day.
 `Conjugar/GameCenterResources.gamekit` is Xcode's local copy of the configuration. The App Store
 Connect side, and how to test before release, are in [`game_center_setup.md`](game_center_setup.md).
+
+### Review and Practice My Mistakes
+
+**Where.** A From Your Practice (De tu práctica) section below the start screen's tiles, on every
+segment, with one row each for Review (Repaso) and Practice My Mistakes (Practicar mis errores).
+A row with questions shows their count and a play symbol, and a tap starts the session at once on
+the tab. An empty row is not a button; it says why it is empty. Review gives the days to the next
+due item ("Nothing is due today. The next review is tomorrow."), or, with nothing scheduled, says
+that quiz answers and irregular verbs looked up come due a day or more later. My Mistakes says that
+a missed question waits there until answered right. The count is `Quiz.askableCount(for:)`, the
+session's items the settings let it ask. On an iPhone the section is below the fold.
+
+**What each asks** (`QuizRecordSession`, `Models/QuizRecordSession.swift`, and
+`QuizDraw.sessionQuestions`). Review: the record's due items, the most overdue first. My Mistakes:
+the items whose last answer was wrong, the most recently missed first (`PracticeRecord.missedItems()`).
+A key conjugation asks the first irregular cell built on it (`PracticeItem.irregularCells`), its own
+cell first, so pidió for pedir's yo pretérito. A pattern asks its cell of a regular verb of its
+ending from the level's band. **Neither is held to the level's tenses or band**, so Review asks what
+the default quiz's due items left out (a yo pretérito looked up at Beginner, a participio, a rare
+verb looked up). The tú or vos setting and the region still apply (`QuizDraw.canAsk`), so a vosotros
+pattern missed in Spain waits while the region is Latin America. A verb's key conjugations sit
+together in the verb page's order, at the place of the first drawn; nothing is shuffled
+(`QuizScope.shufflesQuestions`).
+
+**Rounds.** Up to ten items, then Ten More while an askable item remains that the session has not
+asked (`Quiz.canContinue` reads the record). Fewer than ten make a shorter round. Each round skips
+the items the session has already asked, which Review hardly needs (an answered item is no longer
+due) but My Mistakes does, since a mistake missed again would come straight back. Re-asks, second
+attempts, and recording work as in any quiz. A record session is never ranked, mixes in no due
+items, does not donate to `ChangeLevelTip`, and starts the Live Activity, since it runs on the tab.
+While it runs, the tab's bar reads the session's name.
 
 ## The Verb of the Day and Random Verbs
 

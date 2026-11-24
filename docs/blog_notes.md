@@ -11489,3 +11489,37 @@ sentence saying where the record lives.
 One behavior changed that Josh may want back. Clearing recents in My Verbs used to end the card's
 schedules as well. Those schedules now hold quiz answers too, so Clear leaves them, and Reset
 Practice is the way to empty the record.
+
+## Review and My Mistakes (2026-11-23)
+
+Phase 10 gave the quiz a memory, but the memory had only two ways out: the review card above the
+verb list, and the three due items the default quiz slips into each round. Phase 11 of the pedagogy
+plan adds two sessions that read the record directly. Review asks whatever is due, the most overdue
+first. Practice My Mistakes asks whatever the learner last got wrong, the most recently missed
+first, and a question leaves that list the moment it is answered right. Both sit in a From Your
+Practice section on the Quiz tab, and each says why it is empty when it is: Review gives the days
+to the next due item, and My Mistakes explains that a missed question waits there.
+
+The point of these sessions is that they are not held to the learner's level. The default quiz keeps
+a Beginner in the presente and the hundred most frequent verbs, so a yo pretérito looked up on a
+verb page, or a participle like escrito, would otherwise wait forever. Review asks them anyway,
+since the learner chose to look them up or got them wrong. On the simulator, a Beginner's Review
+asked tuve, escrito, and pidió.
+
+That last one shows Phase 10's lesson paying off. pedir's yo pretérito, pedí, is regular, so a review
+of it asks the first irregular cell built on it, which is pidió. Asking pedí would move a pattern and
+leave the key conjugation due forever.
+
+One thing Conjugar needed that Konjugieren, which built these sessions first, did not: German has no
+vosotros. A learner in Spain who misses hablasteis and then switches the region to Latin America
+should not be asked hablasteis again, so a session still obeys the tú or vos setting and the region,
+and the row's count leaves such items out.
+
+The privacy rule from Konjugieren carried over unchanged. A session shorter than ten questions is
+exactly as long as the learner's due or missed items, so reporting its length would report how many
+answers were wrong. Review and My Mistakes therefore send no question count and no question number,
+and, like every quiz but the default one, no score. They report only that they started, ended, or
+were left, and roughly how long they took.
+
+On an iPhone the new section sits below the fold, under the start screen's hero and tiles. Phase 12
+turns the Quiz tab into a practice hub, and that is where the layout gets fixed.

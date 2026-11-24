@@ -25,40 +25,55 @@ nonisolated extension QuizDraw {
     limit: Int = dueItemLimit,
     using generator: inout some RandomNumberGenerator
   ) -> [QuizQuestion] {
-    var questions: [QuizQuestion] = []
+    recordQuestions(for: items, keyConjugationBand: frequencyBand, patternBand: frequencyBand, asks: asks, limit: limit, using: &generator)
+      .map(\.question)
+  }
+
+  /// A question for each of the first `limit` items that can be asked, with the item it asks. A
+  /// key conjugation's verb must be in `keyConjugationBand`, nil for every verb; a pattern's verb
+  /// is drawn from `patternBand`.
+  static func recordQuestions(
+    for items: [PracticeItem],
+    keyConjugationBand: FrequencyBand?,
+    patternBand: FrequencyBand?,
+    asks: (ConjugationCell) -> Bool,
+    limit: Int,
+    using generator: inout some RandomNumberGenerator
+  ) -> [(item: PracticeItem, question: QuizQuestion)] {
+    var drawn: [(item: PracticeItem, question: QuizQuestion)] = []
     var regularVerbsByEnding: [String: [String]] = [:]
 
-    for item in items where questions.count < limit {
+    for item in items where drawn.count < limit {
       switch item {
       case let .keyConjugation(infinitive, key):
         guard let entry = VerbMap.shared.entry(for: infinitive),
-              frequencyBand.map(entry.isIn) ?? true,
+              keyConjugationBand.map(entry.isIn) ?? true,
               let cell = PracticeItem.irregularCells(of: infinitive, builtOn: key).first(where: asks) else {
           continue
         }
-        questions.append(QuizQuestion(infinitive, cell.tense, cell.personNumber))
+        drawn.append((item, QuizQuestion(infinitive, cell.tense, cell.personNumber)))
       case .pattern:
         guard let cell = item.cell, let ending = item.ending, asks(cell) else {
           continue
         }
-        let candidates = regularVerbsByEnding[ending.practiceKey] ?? verbs(in: frequencyBand)
+        let candidates = regularVerbsByEnding[ending.practiceKey] ?? verbs(in: patternBand)
           .filter { !VerbDraw.isIrregular($0) && RegularRoot(infinitive: $0.infinitive) == ending }
           .map(\.infinitive)
         regularVerbsByEnding[ending.practiceKey] = candidates
-        let used = Set(questions.map(\.verb))
+        let used = Set(drawn.map(\.question.verb))
         let fitting = candidates.filter { !used.contains($0) }
         for _ in 0..<attemptsPerPattern {
           guard let verb = fitting.randomElement(using: &generator) else {
             break
           }
           if isIrregular(verb, in: cell) == false {
-            questions.append(QuizQuestion(verb, cell.tense, cell.personNumber))
+            drawn.append((item, QuizQuestion(verb, cell.tense, cell.personNumber)))
             break
           }
         }
       }
     }
-    return questions
+    return drawn
   }
 
   /// The drawn questions with the due ones placed among them at random.

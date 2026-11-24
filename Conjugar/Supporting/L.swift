@@ -773,6 +773,48 @@ nonisolated enum L {
     }
   }
 
+  enum PracticeSession {
+    static var heading: String {
+      String(localized: "PracticeSession.heading")
+    }
+
+    static var review: String {
+      String(localized: "PracticeSession.review")
+    }
+
+    static func reviewCount(count: Int) -> String {
+      String(localized: "PracticeSession.reviewCount \(count)")
+    }
+
+    static var reviewEmpty: String {
+      String(localized: "PracticeSession.reviewEmpty")
+    }
+
+    static func reviewNextDue(days: Int) -> String {
+      String(localized: "PracticeSession.reviewNextDue \(days)")
+    }
+
+    static var reviewHint: String {
+      String(localized: "PracticeSession.reviewHint")
+    }
+
+    static var mistakes: String {
+      String(localized: "PracticeSession.mistakes")
+    }
+
+    static func mistakesCount(count: Int) -> String {
+      String(localized: "PracticeSession.mistakesCount \(count)")
+    }
+
+    static var mistakesEmpty: String {
+      String(localized: "PracticeSession.mistakesEmpty")
+    }
+
+    static var mistakesHint: String {
+      String(localized: "PracticeSession.mistakesHint")
+    }
+  }
+
   enum Quiz {
     static var localizedTitle: String {
       String(localized: "Quiz.localizedTitle")

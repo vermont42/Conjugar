@@ -15,8 +15,9 @@ enum QuizAbandonment {
   struct Entry: Codable, Equatable {
     let level: String
     let source: String
-    /// The question reached, re-asks not counted (`Quiz.questionReached`).
-    let questionNumber: Int
+    /// The question reached, re-asks not counted (`Quiz.questionReached`). Nil for a session that
+    /// sends no counts (`QuizScope.sendsQuestionCounts`).
+    let questionNumber: Int?
   }
 
   static let key = "quizzesInProgress"
@@ -45,11 +46,14 @@ enum QuizAbandonment {
       return
     }
     for entry in entries.values {
-      analytics.signal(name: .abandonQuiz, parameters: [
+      var parameters = [
         ParameterKey.level.rawValue: entry.level,
-        ParameterKey.questionNumber.rawValue: "\(entry.questionNumber)",
         ParameterKey.source.rawValue: entry.source
-      ])
+      ]
+      if let questionNumber = entry.questionNumber {
+        parameters[ParameterKey.questionNumber.rawValue] = "\(questionNumber)"
+      }
+      analytics.signal(name: .abandonQuiz, parameters: parameters)
     }
     store([:], getterSetter: getterSetter)
   }

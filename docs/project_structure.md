@@ -121,12 +121,15 @@ Conjugar/
 │   ├── QuizLevel.swift         # The four levels (beginner … advanced): each one's tenses (pool, QuizPoolEntry with the persons it leaves out and its weight), frequency band, name, gauge symbol, and the old difficulty each migrates from
 │   ├── QuizDraw.swift          # The default quiz's verbs: the level's frequency band (or a custom quiz's), half the questions in an irregular cell (judged per cell,
 │   │                           #   isIrregular(_:in:)), the core verbs, one to three rare prefixed compounds, regular endings in turn
-│   ├── QuizDueItems.swift      # The default quiz's due items: up to three a round from the practice record, within the level and band, mixed in at random
+│   ├── QuizDueItems.swift      # The default quiz's due items: up to three a round from the practice record, within the level and band, mixed in at random;
+│   │                           #   recordQuestions, the draw it shares with the record sessions
+│   ├── QuizRecordSession.swift # Review and Practice My Mistakes: each one's items from the record, QuizScope.recordSession, and its rounds' questions
+│   │                           #   (beyond the level's tenses and band, a verb's key conjugations together), QuizDraw.canAsk
 │   ├── PracticeItemMapping.swift  # Which practice item a question exercises (an irregular cell's key conjugation, a regular cell's pattern), the key
 │   │                           #   conjugations a lookup schedules, the irregular cells a review asks, the record's tense keys
 │   ├── PracticeStore.swift     # Current.practice: the practice record's answers, lookups, due and missed items, the review card's offer, reveal,
 │   │                           #   and snooze, Reset Practice, and the migration of LearnerVerbs' old review schedules
-│   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, a collection, a custom choice, or a practice set; question count (a round of ten, or Test Me's three), source, title, a practice set's level, isRanked, continues, startsLiveActivity, pool(level:), band(level:)
+│   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, a collection, a custom choice, or a practice set; question count (a round of ten, or Test Me's three), source, title, a practice set's level, a record session, isRanked, sendsQuestionCounts, shufflesQuestions, continues, startsLiveActivity, pool(level:), band(level:)
 │   ├── CustomQuiz.swift        # The Quiz tab's Custom choice: chosen tenses and a QuizVerbSet (all, a band, a collection, a shared list of infinitives, My Verbs), each the level's when unchosen; stored as tenses=…&verbs=… (or infinitives=…); QuizScope.custom
 │   ├── PracticeSet.swift       # A custom quiz shared as a link or a QR code: the conjugar://quiz/set link both ways, My Verbs shared as a list (at most 100), the level that travels, the scope its quiz asks, the share text; PracticeSetRequest
 │   ├── QuizState.swift         # notStarted / inProgress / finished
@@ -238,7 +241,7 @@ Conjugar/
     ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, the model's collection bar, and the verbs using the model, by frequency or alphabetically
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
     ├── QuizSheet.swift         # A quiz in a sheet with a Quiz of its own over a QuizScope: Test Me, a collection's Quiz, and a practice set's Start
-    ├── QuizView.swift          # The Quiz tab's start screen (scope symbol, All Verbs / My Verbs / Custom picker, fact tiles or the custom summary, chips) and gameplay: prompt, framed answer field, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
+    ├── QuizView.swift          # The Quiz tab's start screen (scope symbol, All Verbs / My Verbs / Custom picker, fact tiles or the custom summary, chips, the From Your Practice rows for Review and My Mistakes) and gameplay: prompt, framed answer field, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
     ├── CustomQuizView.swift    # The Custom segment's editor of tenses and verbs, its Models list, and the summary card on the start screen and a practice set's sheet
     ├── PracticeSetView.swift   # A shared practice set's sheet (Start, Keep as My Custom Quiz, "Practice Set Not Found") and its full-screen QR code
     ├── QuizCorrectionView.swift # A wrong answer's held correction: the two answers with their differing letters marked, links to the verb's and model's pages, Continue; isBeneathQuiz
@@ -340,6 +343,8 @@ ConjugarTests/
 │   ├── PracticeRecordTests.swift       # The practice record and its store: the ladder through answers and lookups, due and missed order, the
 │   │                                   #   review card's offer and caption, a relaunch, the migration, a reset that stays
 │   ├── QuizPracticeTests.swift         # Every answer recorded as given by every scope, a quit keeping them, and the default quiz's due items
+│   ├── QuizRecordSessionTests.swift    # Review and My Mistakes: items beyond the level, a verb's key conjugations together, rounds of ten then the rest,
+│   │                                   #   a mistake leaving once right and not returning in Ten More, the region, no score and no counts
 │   ├── FrequencyBandTests.swift        # Each band holds exactly its count, the bands nest, and where one ends
 │   ├── VerbFamilies.swift              # Hand-curated lists of verbs irregular in a tense, and regular verbs by ending: an oracle for the quiz's draw and the collections
 │   ├── VerbFamiliesTests.swift         # The lists resolve in the verb map, and the quiz's per-cell judgment finds each listed irregular (and regular) verb

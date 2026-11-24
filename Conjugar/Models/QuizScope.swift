@@ -29,6 +29,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
   let level: QuizLevel?
   /// A shared practice set, whose quiz runs in a sheet over whatever tab is open.
   let isPracticeSet: Bool
+  /// Review or Practice My Mistakes, whose questions come from the practice record.
+  let recordSession: QuizRecordSession?
 
   init(
     verbs: [String]?,
@@ -38,7 +40,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
     collectionKey: String? = nil,
     custom: CustomQuiz? = nil,
     level: QuizLevel? = nil,
-    isPracticeSet: Bool = false
+    isPracticeSet: Bool = false,
+    recordSession: QuizRecordSession? = nil
   ) {
     self.verbs = verbs
     self.questionCount = questionCount
@@ -48,6 +51,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
     self.custom = custom
     self.level = level
     self.isPracticeSet = isPracticeSet
+    self.recordSession = recordSession
   }
 
   /// A round's length. The Quiz tab's quiz, a My Verbs quiz, and a collection's ask one round,
@@ -58,10 +62,25 @@ nonisolated struct QuizScope: Equatable, Sendable {
   static let verbPageQuestionCount = 3
 
   /// Only the default quiz over every verb ranks: a score over a learner's own verbs or tenses,
-  /// or over three questions, compares with nothing. Of a ranked session, only the first round's
-  /// score counts (`Quiz.firstRoundScore`).
+  /// over what the practice record holds, or over three questions, compares with nothing. Of a
+  /// ranked session, only the first round's score counts (`Quiz.firstRoundScore`).
   var isRanked: Bool {
-    verbs == nil && custom == nil && questionCount == QuizScope.roundLength
+    verbs == nil && custom == nil && recordSession == nil && questionCount == QuizScope.roundLength
+  }
+
+  /// Whether `completeQuiz`, `quitQuiz`, and `abandonQuiz` say how many questions were asked or
+  /// reached. A record session's round is as long as the learner's due or missed items when they
+  /// number fewer than ten, so its length would count wrong answers, and no signal says how well
+  /// a learner did.
+  var sendsQuestionCounts: Bool {
+    recordSession == nil
+  }
+
+  /// Whether a round's questions are shuffled. A record session asks its items in the record's
+  /// order, the most overdue or most recently missed first, with a verb's key conjugations
+  /// together.
+  var shufflesQuestions: Bool {
+    recordSession == nil
   }
 
   /// Whether each round mixes in items the practice record says are due: only the default quiz,

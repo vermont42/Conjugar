@@ -127,6 +127,8 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case infoLink
   case list
   case lookup
+  /// The Quiz tab's Practice My Mistakes, of the questions last answered wrongly.
+  case mistakes
   /// A verb row on a model's page.
   case model
   /// A row of My Verbs in the verb list, or a quiz over My Verbs begun from the Quiz tab.
@@ -140,6 +142,8 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case related
   /// The page came back after another tab, a pushed page, or the background. See `VerbVisit`.
   case resume
+  /// The Quiz tab's Review, of the questions the practice record says are due.
+  case review
   /// The review card above the verb list, tapped after its reveal.
   case reviewCard
   /// A result of a search that found something.

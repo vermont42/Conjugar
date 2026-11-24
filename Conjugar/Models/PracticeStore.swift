@@ -72,6 +72,12 @@ final class PracticeStore {
     record.dueItems(at: date)
   }
 
+  /// Whole days from `date` to the next item to fall due, 1 for tomorrow. Nil when nothing in the
+  /// record waits.
+  func daysUntilNextDue(at date: Date = .now) -> Int? {
+    record.nextDue(after: date).flatMap { PracticeRecord.daysBetween(date, and: $0, calendar: calendar) }
+  }
+
   /// The items whose last answer was wrong, the most recently missed first.
   func missedItems() -> [PracticeItem] {
     record.missedItems()

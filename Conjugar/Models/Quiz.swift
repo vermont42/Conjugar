@@ -152,8 +152,28 @@ class Quiz {
   }
 
   /// Whether the results offer Ten More: a finished round, not a quit, of a scope that continues.
+  /// A Review or My Mistakes session continues only while the record holds an item it can ask
+  /// that the session has not asked.
   var canContinue: Bool {
-    quizState == .finished && scope.continues && !questions.isEmpty && results.count == questions.count
+    guard quizState == .finished, scope.continues, !questions.isEmpty, results.count == questions.count else {
+      return false
+    }
+    guard let session = scope.recordSession else {
+      return true
+    }
+    let asked = askedItemKeys(in: questions)
+    return session.items(from: practice).contains { !asked.contains($0.key) && QuizDraw.canAsk($0, asks: sessionAllows) }
+  }
+
+  /// How many of a Review's or My Mistakes' items the settings let a session ask, which the Quiz
+  /// tab shows before it starts.
+  func askableCount(for session: QuizRecordSession, at date: Date = .now) -> Int {
+    session.items(from: practice, at: date).filter { QuizDraw.canAsk($0, asks: settingsAllow) }.count
+  }
+
+  /// The record's items the questions exercise, which a record session's Ten More skips.
+  private func askedItemKeys(in questions: [Question]) -> Set<String> {
+    Set(questions.compactMap { PracticeItem.exercised(by: $0)?.key })
   }
 
   var verb: String {
@@ -251,7 +271,7 @@ class Quiz {
       lastLevel = previousLevel
       return false
     }
-    if shouldShuffle {
+    if shouldShuffle, scope.shufflesQuestions {
       drawn.shuffle(using: &generator)
     }
     self.scope = scope
@@ -277,8 +297,18 @@ class Quiz {
   /// A round of the scope's questions at `lastLevel`, after the session's questions so far. The
   /// default quiz's rounds each mix in up to three items the practice record says are due
   /// (`QuizDraw.dueQuestions`); a quiz whose verbs or tenses were chosen asks only what was
-  /// chosen.
+  /// chosen; a Review or My Mistakes asks the record's items, beyond the level's tenses.
   private func draw(_ scope: QuizScope, after prior: [Question] = []) -> [Question] {
+    if let session = scope.recordSession {
+      return QuizDraw.sessionQuestions(
+        for: session.items(from: practice),
+        band: lastLevel.band,
+        asks: sessionAllows,
+        excluded: askedItemKeys(in: prior),
+        limit: scope.questionCount,
+        using: &generator
+      )
+    }
     let pool = scope.pool(level: lastLevel)
     if let verbs = scope.verbs {
       return scopedQuestions(verbs: verbs, count: scope.questionCount, pool: pool, after: prior)
@@ -402,10 +432,26 @@ class Quiz {
     return Array(asked.dropFirst(prior.count))
   }
 
-  /// The persons a quiz may ask in a level's tense: tú or vos by the setting, no vosotros in the
-  /// Latin America region, no yo in a command, and none the level leaves out.
+  /// The persons a quiz may ask in a level's tense: those of `personNumbers(in:region:)` that the level
+  /// asks.
   private func personNumbers(for entry: QuizPoolEntry) -> [DisplayPersonNumber] {
-    let tense = entry.tense
+    personNumbers(in: entry.tense, region: lastRegion).filter(entry.asks)
+  }
+
+  /// Whether the settings let a quiz ask the cell, whatever the level: a record session asks what
+  /// the learner practiced, but in the learner's tú or vos and the session's region.
+  private func sessionAllows(_ cell: ConjugationCell) -> Bool {
+    personNumbers(in: cell.tense, region: lastRegion).contains(cell.personNumber)
+  }
+
+  /// As `sessionAllows(_:)`, before a session, in the region a quiz would start in.
+  private func settingsAllow(_ cell: ConjugationCell) -> Bool {
+    personNumbers(in: cell.tense, region: settings.region).contains(cell.personNumber)
+  }
+
+  /// The persons a quiz may ask in a tense: tú or vos by the setting, no vosotros in the Latin
+  /// America region, and no yo in a command.
+  private func personNumbers(in tense: DisplayTense, region: Region) -> [DisplayPersonNumber] {
     if tense == .gerundio || tense == .participio {
       return [.none]
     }
@@ -417,10 +463,10 @@ class Quiz {
     default:
       personNumbers = [.firstSingular, secondSingular, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
     }
-    if lastRegion == .latinAmerica {
+    if region == .latinAmerica {
       personNumbers.removeAll { $0 == .secondPlural }
     }
-    return personNumbers.filter(entry.asks)
+    return personNumbers
   }
 
   /// Whether the engine gives the cell, which a defective verb's missing cells it does not.
@@ -477,7 +523,7 @@ class Quiz {
     guard !drawn.isEmpty else {
       return false
     }
-    if shouldShuffle {
+    if shouldShuffle, scope.shufflesQuestions {
       drawn.shuffle(using: &generator)
     }
     currentQuestionIndex = questions.count
@@ -588,7 +634,7 @@ class Quiz {
     clearProgress()
     // Unlocks the "Choose Your Level" tip, which is rule-gated on having
     // finished at least one quiz. Three questions on a verb's page are not one.
-    if roundCount == 1, scope.continues {
+    if roundCount == 1, scope.continues, scope.recordSession == nil {
       ChangeLevelTip.quizCompleted.sendDonation()
     }
     endLiveActivity()
@@ -613,7 +659,11 @@ class Quiz {
   /// Where the quiz has reached, for the next launch to report should the app be left during it.
   private func recordProgress() {
     QuizAbandonment.record(
-      QuizAbandonment.Entry(level: lastLevel.rawValue, source: scope.source.rawValue, questionNumber: questionReached),
+      QuizAbandonment.Entry(
+        level: lastLevel.rawValue,
+        source: scope.source.rawValue,
+        questionNumber: scope.sendsQuestionCounts ? questionReached : nil
+      ),
       id: abandonmentID,
       getterSetter: Current.getterSetter
     )

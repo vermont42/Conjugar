@@ -60,7 +60,7 @@ struct QuizView: View {
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(Color.customBackground.ignoresSafeArea())
-      .navigationTitle(sheetTitle ?? L.Quiz.localizedTitle)
+      .navigationTitle(sheetTitle ?? sessionTitle ?? L.Quiz.localizedTitle)
       .navigationBarTitleDisplayMode(sheetScope == nil ? .automatic : .inline)
       .navigationDestination(isPresented: $showingResults) { ResultsView(quiz: quiz, onTenMore: continueSession) }
       .navigationDestination(for: VerbDestination.self) { destination in
@@ -145,6 +145,15 @@ struct QuizView: View {
     sheetScope?.title ?? sheetScope?.verbs?.first.map { ReflexivePronoun.citationForm(of: $0) }
   }
 
+  /// A Review's or My Mistakes' name while it runs on the tab, since its questions look like any
+  /// quiz's.
+  private var sessionTitle: String? {
+    guard sheetScope == nil, quiz.quizState == .inProgress else {
+      return nil
+    }
+    return quiz.scope.recordSession?.title
+  }
+
   private var myVerbs: [VerbMapEntry] {
     Current.learnerVerbs.myVerbs
   }
@@ -222,6 +231,8 @@ struct QuizView: View {
           if tabScope == .myVerbs, !myVerbs.isEmpty {
             myVerbChips
           }
+
+          practiceSection
         }
         .padding(.horizontal, Layout.doubleDefaultSpacing)
         .padding(.vertical, Layout.doubleDefaultSpacing)
@@ -391,6 +402,30 @@ struct QuizView: View {
       }
       return customQuizLacksMyVerbs ? L.Quiz.myVerbsEmpty : L.CustomQuiz.description
     }
+  }
+
+  /// Review and Practice My Mistakes, on every segment, each saying why it is empty when it is.
+  private var practiceSection: some View {
+    VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
+      Text(L.PracticeSession.heading)
+        .font(isLarge ? .title3.bold() : .headline)
+        .foregroundStyle(Color.customForeground)
+        .accessibilityAddTraits(.isHeader)
+
+      ForEach(QuizRecordSession.allCases, id: \.self) { session in
+        let count = quiz.askableCount(for: session)
+        QuizPracticeRow(
+          title: session.title,
+          detail: session.detail(count: count, daysUntilNextDue: Current.practice.daysUntilNextDue()),
+          systemImage: session.systemImage,
+          hint: session.hint,
+          identifier: session.identifier,
+          isLarge: isLarge,
+          start: count > 0 ? { startQuiz(scope: .recordSession(session)) } : nil
+        )
+      }
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
   }
 
   private static let chipLimit = 12
@@ -788,9 +823,11 @@ struct QuizView: View {
     var parameters = [
       ParameterKey.duration.rawValue: quiz.durationBand,
       ParameterKey.level.rawValue: quiz.lastLevel.rawValue,
-      ParameterKey.questionCount.rawValue: "\(quiz.questionCount)",
       ParameterKey.source.rawValue: quiz.scope.source.rawValue
     ]
+    if quiz.scope.sendsQuestionCounts {
+      parameters[ParameterKey.questionCount.rawValue] = "\(quiz.questionCount)"
+    }
     if quiz.isRankedRound {
       parameters[ParameterKey.score.rawValue] = "\(quiz.firstRoundScore)"
     }
@@ -808,9 +845,11 @@ struct QuizView: View {
     var parameters = [
       ParameterKey.duration.rawValue: quiz.durationBand,
       ParameterKey.level.rawValue: quiz.lastLevel.rawValue,
-      ParameterKey.questionNumber.rawValue: "\(quiz.questionReached)",
       ParameterKey.source.rawValue: quiz.scope.source.rawValue
     ]
+    if quiz.scope.sendsQuestionCounts {
+      parameters[ParameterKey.questionNumber.rawValue] = "\(quiz.questionReached)"
+    }
     if quiz.isRankedRound {
       parameters[ParameterKey.score.rawValue] = "\(quiz.firstRoundScore)"
     }
@@ -902,6 +941,111 @@ private struct QuizFactTile: View {
         .strokeBorder(Color.customYellow.opacity(0.25), lineWidth: 1)
     }
     .accessibilityElement(children: .combine)
+  }
+}
+
+/// A way to practice from the record: a symbol, a name, and how many questions wait or why none
+/// do. With questions, the row is a button that starts the session; without, it only explains.
+private struct QuizPracticeRow: View {
+  let title: String
+  let detail: String
+  let systemImage: String
+  let hint: String
+  let identifier: String
+  var isLarge = false
+  let start: (() -> Void)?
+
+  var body: some View {
+    if let start {
+      Button(action: start) {
+        content
+      }
+      .buttonStyle(.plain)
+      .accessibilityHint(hint)
+      .accessibilityIdentifier(identifier)
+    } else {
+      content
+        .accessibilityIdentifier(identifier)
+    }
+  }
+
+  private var content: some View {
+    HStack(spacing: Layout.doubleDefaultSpacing) {
+      Image(systemName: systemImage)
+        .font(isLarge ? .system(size: 36) : .title2)
+        .foregroundStyle(Color.customYellow)
+        .frame(width: isLarge ? 52 : 36)
+        .accessibilityHidden(true)
+
+      VStack(alignment: .leading, spacing: 4) {
+        Text(title)
+          .font(isLarge ? .title3.bold() : .headline)
+          .foregroundStyle(Color.customForeground)
+        Text(detail)
+          .font(isLarge ? .body : .subheadline)
+          // Fixed, since `.secondary` inside a button would take the button's tint.
+          .foregroundStyle(Color.secondary)
+          .fixedSize(horizontal: false, vertical: true)
+      }
+      .frame(maxWidth: .infinity, alignment: .leading)
+
+      if start != nil {
+        Image(systemName: "play.circle.fill")
+          .font(isLarge ? .system(size: 36) : .title2)
+          .foregroundStyle(Color.customYellow)
+          .accessibilityHidden(true)
+      }
+    }
+    .padding(Layout.doubleDefaultSpacing)
+    .background(Color.customYellow.opacity(0.06), in: RoundedRectangle(cornerRadius: Layout.cornerRadius))
+    .overlay {
+      RoundedRectangle(cornerRadius: Layout.cornerRadius)
+        .strokeBorder(Color.customYellow.opacity(0.25), lineWidth: 1)
+    }
+    .contentShape(RoundedRectangle(cornerRadius: Layout.cornerRadius))
+    .accessibilityElement(children: .combine)
+  }
+}
+
+/// What a record session's row on the Quiz tab says and shows.
+private extension QuizRecordSession {
+  func detail(count: Int, daysUntilNextDue: Int?) -> String {
+    switch self {
+    case .review:
+      if count > 0 {
+        return L.PracticeSession.reviewCount(count: count)
+      }
+      return daysUntilNextDue.map { L.PracticeSession.reviewNextDue(days: $0) } ?? L.PracticeSession.reviewEmpty
+    case .mistakes:
+      return count > 0 ? L.PracticeSession.mistakesCount(count: count) : L.PracticeSession.mistakesEmpty
+    }
+  }
+
+  var hint: String {
+    switch self {
+    case .review:
+      return L.PracticeSession.reviewHint
+    case .mistakes:
+      return L.PracticeSession.mistakesHint
+    }
+  }
+
+  var systemImage: String {
+    switch self {
+    case .review:
+      return "clock.arrow.circlepath"
+    case .mistakes:
+      return "arrow.uturn.backward.circle"
+    }
+  }
+
+  var identifier: String {
+    switch self {
+    case .review:
+      return "quiz_review"
+    case .mistakes:
+      return "quiz_mistakes"
+    }
   }
 }
 

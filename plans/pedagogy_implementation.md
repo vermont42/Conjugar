@@ -36,8 +36,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 7 | Done | 2026-11-23 | bcf9356 | Decision 4 |
 | 8 | Done | 2026-11-23 | 5ffc73a | T2.8 |
 | 9 | Done | 2026-11-23 | 37c3149 | T2.9, Decision 8 |
-| 10 | Awaiting Josh | 2026-11-23 | | T3.3 (the record), T3.4, T3.5, T6.4 |
-| 11 | Not started | | | T3.2, T3.3 (the session) |
+| 10 | Done | 2026-11-23 | 16e92b3 | T3.3 (the record), T3.4, T3.5, T6.4 |
+| 11 | Awaiting Josh | 2026-11-23 | | T3.2, T3.3 (the session) |
 | 12 | Not started | | | T6.1, T6.6 (the leaderboard's place) |
 | 13 | Not started | | | T4.2, T4.3 |
 | 14 | Not started | | | T5.1 |
@@ -1714,7 +1714,7 @@ and tests pin encoding and decoding of every scope.
 ## Phase 10: The Practice Record
 
 **Ports:** Konjugieren Phase 11. **Suggestions:** T3.3 (the record), T3.4, T3.5, T6.4. **Depends
-on:** Phase 6. **Status:** Awaiting Josh.
+on:** Phase 6. **Status:** Done.
 
 Give the quiz a memory: a small record per item, a box and a due date, moved up the ladder of 1, 3,
 7, 14, and 30 days by a right answer and back to the start by a wrong one. Josh's verdict on the
@@ -1876,7 +1876,7 @@ mapping and the schedule.
 ## Phase 11: Review and My Mistakes
 
 **Ports:** Konjugieren Phase 12. **Suggestions:** T3.2, T3.3 (the session). **Depends on:** Phase
-10. **Status:** Not started.
+10. **Status:** Awaiting Josh.
 
 - **Review.** A session of whatever items are due: a key conjugation asks its own cell, and a
   pattern asks its cell of a regular verb from the learner's band.
@@ -1899,7 +1899,78 @@ A record session sends no `score` either (Josh, 2026-11-22).
 **Done when** both sessions draw the right items under test, update the record, and show sensible
 empty states.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Nothing was asked of Josh.** The phase lists no Ask Josh items, and every question below was
+  decided in the session, as Konjugieren's were. Each is a guess he can overrule.
+- **Where the entry points live.** A From Your Practice (De tu práctica) section below the start
+  screen's tiles, on every segment, with one row each for Review (Repaso) and Practice My Mistakes
+  (Practicar mis errores). A row with questions shows the count and a play symbol, and a tap starts
+  the session on the tab at once. An empty row is not a button and says why it is empty: Review
+  gives the days to the next due item ("Nothing is due today. The next review is in 3 days."), or,
+  with nothing scheduled, says that quiz answers and irregular verbs looked up come due a day or
+  more later; My Mistakes says a missed question waits there until answered right. A fourth and
+  fifth segment would not fit the iPhone beside Personalizado. **On an iPhone the section is below
+  the fold**, under the hero and the tiles, as in Konjugieren; Phase 12's hub should fix that. On
+  the iPad it is above the fold.
+- **What each asks.** Review: the record's due items, most overdue first. My Mistakes: items whose
+  last answer was wrong, most recently missed first (`PracticeRecord.missedItems()`, which Phase 10
+  already wrote). A key conjugation asks the first irregular cell built on it, its own cell first, as
+  Phase 10's note asked, so pedir's yo pretérito was asked as él pidió on the iPhone. A pattern asks
+  its cell of a regular verb of its ending from the learner's band. **Neither is held to the level's
+  tenses or band**, so a Beginner's Review asked escrito and tuve. **The tú or vos setting and the
+  region still hold**: a vosotros pattern missed in Spain is neither counted nor asked while the
+  region is Latin America (`QuizDraw.canAsk`). Konjugieren has no such setting, so this is new. A
+  verb's due key conjugations sit together in the verb page's order at the place of the first
+  drawn, and a record session is never shuffled (`QuizScope.shufflesQuestions`).
+- **How it works.** `QuizRecordSession` (`Models/QuizRecordSession.swift`) and
+  `QuizScope.recordSession`, a new optional field on `QuizScope`. `QuizDraw.dueQuestions` became a
+  wrapper over `recordQuestions(for:keyConjugationBand:patternBand:asks:limit:using:)`, which the
+  default quiz's due items and `QuizDraw.sessionQuestions` share. `Quiz`'s persons split into
+  `personNumbers(in:region:)` (the settings' rule) and the level's filter over it.
+  `Quiz.askableCount(for:)` reads the settings' region before a session; the draw and Ten More read
+  the session's, as the default quiz's do.
+- **Rounds.** Ten items, then Ten More while an askable item remains that the session has not
+  asked; fewer make a shorter round, with no Ten More. Each round skips the items the session has
+  already asked, for both sessions. `Quiz.questionCount` already counted questions asked (Phase 6),
+  so a short Review's results read "Correct: 4 / 5". A record session is never ranked, mixes in no
+  due items, and does not donate to `ChangeLevelTip`. It starts the Live Activity, since it runs on
+  the tab; `startsLiveActivity` needed no change.
+- **The bar's title** reads Review or Practice My Mistakes while a session runs on the iPhone. The
+  iPad's top tab bar shows no navigation title at all, which predates this phase.
+- **Analytics.** New `source` values `review` and `mistakes`. **A record session sends no counts**
+  (`QuizScope.sendsQuestionCounts`): `completeQuiz` omits `questionCount`, and `quitQuiz` and
+  `abandonQuiz` omit `questionNumber`; `QuizAbandonment.Entry.questionNumber` became optional, which
+  still decodes stored entries. No `score` either. Staged in `docs/privacy_policy_pending.md` in both
+  languages: the quiz-lifecycle bullet, the score bullet, the progress bullet, and section 7's Game
+  Center paragraph. `LookupSignalsTests` pins the two new values.
+- **Text.** New strings in `L.PracticeSession`; Josh has not judged the wording. The README and the
+  App Store description (both languages) gained a sentence on the two sessions. The Spanish
+  description is now 3,966 characters of the 4,000 allowed, so the next addition must trim.
+- **VoiceOver.** No new quiz state. Each row reads as one element, its title and its count or
+  reason, and a startable row has a hint ("Starts a quiz of the questions due for review."). Not
+  tried by ear.
+- **Tests:** `QuizRecordSessionTests`, 15 tests in 0.4 seconds: days to the next due item, a
+  session beyond the level's tenses and band, a key conjugation asked by an irregular cell built on
+  it (pidió) and a participio as itself, a pattern's verb from the band, a verb's key conjugations
+  together, excluded and unaskable items within the limit, the scope's flags, twelve due items asked
+  as ten then two and nothing more, a short Review that does not continue, an empty record starting
+  nothing, a mistake leaving once answered right, a mistake missed again not returning in Ten More,
+  no score and no question number recorded, an abandoned record session reported without one, and
+  the region deciding what can be asked.
+- **Verified:** 1,116 tests in 72 suites in the simulator's default language (English), up from
+  1,101 in 71; the one failure, `LookupSignalsTests`' pinned `source` list, was updated and its suite
+  rerun with the new one (43 tests). On the iPhone, in English and light mode, with a seeded record
+  (the real one was empty, and restored after): both rows (5 due; 2 missed, the third a vosotros
+  pattern hidden by Latin America), a Review titled Review asking escuchábamos (the most overdue
+  pattern), tengo and tuve together, escrito, and pidió, a miss on tuve with its correction and
+  re-ask, results of 4 / 5 with no Ten More and no leaderboard, then both rows after (Review "next
+  review is tomorrow", My Mistakes 1). On the iPad, in Spanish and dark mode at Avanzado, with its
+  real record: De tu práctica above the fold (1 and 1), Practicar mis errores asking salgo, results
+  of 1 / 1, both empty states after ("dentro de 3 días" and the mistakes line), and, with the record
+  emptied for a moment and then restored, "Aún no hay nada que repasar". Not tried: VoiceOver by
+  ear, accessibility text sizes, the Live Activity of a record session, and Ten More from a real
+  record of more than ten (unit-tested).
 
 ## Phase 12: The Practice Hub
 

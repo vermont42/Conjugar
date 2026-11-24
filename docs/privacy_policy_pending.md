@@ -668,3 +668,67 @@ El párrafo que sigue a la lista queda así:
 ```
 Su puntuación y la duración aproximada de un cuestionario se recopilan, pero, como todas estas estadísticas, están anonimizadas y no están vinculadas a su identidad (véase la sección 4). La aplicación no envía sus respuestas del cuestionario, cuántas acertó, qué verbos consulta ni ningún texto que escriba. Para programar sus repasos, la aplicación guarda un registro de qué conjugaciones ha practicado y cómo le fueron sus últimas respuestas; ese registro se queda en su dispositivo y nunca se envía. Se registra que usted hizo una búsqueda, con las cifras aproximadas indicadas arriba, pero no lo que escribió. Se registra que abrió la página de un verbo, pero no de cuál.
 ```
+
+## Review and Practice My Mistakes (pedagogy plan, Phase 11, 2026-11-23)
+
+The Quiz tab gains two sessions drawn from the practice record: Review, of the questions due for
+review, and Practice My Mistakes, of the questions last answered wrongly. They begin sending
+`review` and `mistakes` as the `source` of the quiz signals, a new kind of surface. **A record
+session sends no counts:** its `completeQuiz` carries no `questionCount`, and its `quitQuiz` and
+`abandonQuiz` carry no `questionNumber`, because a session shorter than ten is exactly as long as
+the learner's due or missed questions, so its length would say how many answers were wrong. Nor
+does it send a score or post one to Game Center. This rewrites the quiz-lifecycle bullet and the
+Game Center paragraph of section 7 that the Practice sets section rewrote, and the score bullet and
+the progress bullet that the Phase 6 section rewrote; this wording wins over all four.
+
+### English
+
+The bullet about quiz lifecycle events in section 2 now reads:
+
+```
+- Quiz lifecycle events (starting, quitting, or completing a quiz), where you began the quiz (for example the Quiz tab, My Verbs, a custom quiz of your own choosing, a review of what is due, a practice of your mistakes, a practice set someone shared with you as a link or a QR code, a verb's page, a collection, or a link), for a quiz over a collection, which collection, and, for a custom quiz or a practice set, whether it chooses tenses, verbs, or both (but not which ones)
+```
+
+The bullet about the quiz score and elapsed time in section 2 now reads:
+
+```
+- For a quiz over all verbs, the score of its first ten questions, when you complete them or quit during them; for every quiz, roughly how long it ran when you quit or complete a round (under 3 seconds, 3 to 15 seconds, 15 to 40 seconds, 40 seconds to 2 minutes, or longer); and, except for a review or a practice of your mistakes, how many questions it has asked when you complete a round of ten
+```
+
+The bullet about progress in a quiz now reads:
+
+```
+- How far you progressed in a quiz if you quit it, or if you leave the app during it (the question number reached, reported the next time you open the app), except in a review or a practice of your mistakes, whose length would show how many of your answers were wrong
+```
+
+The first paragraph of section 7 now reads:
+
+```
+Conjugar integrates with Apple Game Center for quiz leaderboards, one for each quiz level. When you submit a score, Game Center handles that data according to Apple's privacy policy. Only the score of the first ten questions of a quiz over all verbs is submitted, to the leaderboard of the level the quiz was taken at; the questions after them, and a quiz over My Verbs, a custom quiz, a shared practice set, a review, a practice of your mistakes, a collection, or a single verb's page, are not. The developer does not have access to your Game Center identity or personal information through this integration.
+```
+
+### Spanish
+
+El punto sobre los eventos del ciclo de vida de un cuestionario, en la sección 2, queda así:
+
+```
+- Los eventos del ciclo de vida de un cuestionario (comenzar, abandonar o terminar un cuestionario), dónde lo empezó (por ejemplo, en la pestaña del cuestionario, en Mis verbos, en un cuestionario personalizado que usted eligió, en un repaso de lo pendiente, en una práctica de sus errores, en una serie de práctica que alguien le compartió como enlace o código QR, en la página de un verbo, en una colección o desde un enlace), si el cuestionario es sobre una colección, cuál y, si es personalizado o una serie de práctica, si elige tiempos, verbos o ambos (pero no cuáles)
+```
+
+El punto sobre la puntuación y el tiempo transcurrido, en la sección 2, queda así:
+
+```
+- En un cuestionario sobre todos los verbos, la puntuación de sus diez primeras preguntas, al terminarlas o al abandonarlo durante ellas; en todo cuestionario, cuánto duró aproximadamente al abandonarlo o al terminar una tanda (menos de 3 segundos, de 3 a 15 segundos, de 15 a 40 segundos, de 40 segundos a 2 minutos, o más); y, salvo en un repaso o en una práctica de sus errores, cuántas preguntas lleva al terminar una tanda de diez
+```
+
+El punto sobre el progreso en un cuestionario queda así:
+
+```
+- Su progreso en un cuestionario si lo abandona o si sale de la aplicación durante él (el número de pregunta alcanzado, que se comunica la próxima vez que abre la aplicación), salvo en un repaso o en una práctica de sus errores, cuya longitud mostraría cuántas de sus respuestas fueron incorrectas
+```
+
+El primer párrafo de la sección 7 queda así:
+
+```
+Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios, una para cada nivel. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos, a la clasificación del nivel en que se hizo; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, de un cuestionario personalizado, de una serie de práctica compartida, de un repaso, de una práctica de sus errores, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
+```
