@@ -43,7 +43,7 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 14 | Done | 2026-11-23 | 60f37e9 | T5.1 |
 | 15 | Done | 2026-11-23 | 5da7c25 | T5.2 |
 | 16 | Done | 2026-11-23 | 18175a3 | T5.4 |
-| 17 | Partly done (the app and the first batch); awaiting Josh | 2026-11-23 | | T5.5 |
+| 17 | Partly done (the app and the first batch, approved); verbs 26–300 remain | 2026-11-23 | d1a3c66 | T5.5 |
 | 18 | Not started | | | T5.6 |
 | 19 | Not started | | | T6.2 |
 | 20 | Not started | | | T5.7 |
@@ -2526,8 +2526,7 @@ on ambiguous forms.
 
 **Ports:** Konjugieren Phase 18. **Suggestions:** T5.5. **Depends on:** Phases 1 and 2. **Status:**
 Partly done: the app, the machine check, the review tooling, and a first batch of 118 sentences
-for the 25 most frequent verbs, awaiting Josh's review. Verbs 26 to 300 are left for a later
-session.
+for the 25 most frequent verbs, which Josh approved. Verbs 26 to 300 are left for a later session.
 
 Short authored sentences for the core verbs, with the verb blanked, so the form is tied to a
 meaning. Spanish gives the blank more to do than German did: a subjunctive trigger (quiero que,
@@ -2563,13 +2562,14 @@ sentence questions appear where decided, and tests pin the check.
 **How it differed:**
 
 - **Split, as Konjugieren's was.** This session built the app, the machine check, the review
-  tooling, and a first batch of 118 sentences for the 25 most frequent verbs. All 118 are drafts
-  (`reviewed: false`) awaiting Josh's review in
-  [`gap_sentences_batch_1.md`](gap_sentences_batch_1.md); a debug build asks them with a Draft
-  pill, and a release build asks none, so the hub's row says "No sentences at your level yet."
-  until they are approved. **Left for a later session:** verbs 26 to 300, at Konjugieren's three
-  each for 26 to 100 and two each for 101 to 300, once Josh has reviewed this batch and said
-  whether he wants to review the rest.
+  tooling, and a first batch of 118 sentences for the 25 most frequent verbs, reviewed in
+  [`gap_sentences_batch_1.md`](gap_sentences_batch_1.md). **Josh approved all 118 on 2026-11-23**,
+  after the commit d1a3c66, with no changes; `gap_sentences.py approve --all` set `reviewed`, and
+  the machine check passed again (19 of 19). **Left for a later session:** verbs 26 to 300, at
+  Konjugieren's three each for 26 to 100 and two each for 101 to 300. **Josh decided on 2026-11-23
+  not to review those**: the machine check settles each form, and Claude's full reread of every
+  sentence, not a sample, settles the rest, as Konjugieren's second batch did. That session approves
+  the sentences itself with `gap_sentences.py approve` once both are done.
 - **Josh decided four things on 2026-11-23**, asked before building, each the recommended option.
   (1) The name is **"Complete the Sentence" / "Completa la frase"** (over "Sentences" / "Frases"
   and "Fill in the Blank" / "Rellena el hueco"). (2) **One sentence serves tú and vos**: a

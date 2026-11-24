@@ -6,7 +6,7 @@
     "person": "fp",
     "es": "Mi hermana y yo {somos} de Chile.",
     "en": "My sister and I are from Chile.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ser.imperativoPositivo.1",
@@ -15,7 +15,7 @@
     "person": "ss",
     "es": "{Sé} paciente con tu hermano.",
     "en": "Be patient with your brother.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ser.pretérito.1",
@@ -24,7 +24,7 @@
     "person": "ts",
     "es": "El concierto {fue} un éxito.",
     "en": "The concert was a success.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ser.presenteDeSubjuntivo.1",
@@ -33,7 +33,7 @@
     "person": "ts",
     "es": "Espero que la fiesta {sea} divertida.",
     "en": "I hope the party is fun.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ser.imperfectoDeSubjuntivo1.1",
@@ -42,7 +42,7 @@
     "person": "fs",
     "es": "Si yo {fuera} rico, viajaría por todo el mundo.",
     "en": "If I were rich, I would travel all over the world.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "estar.presenteDeIndicativo.1",
@@ -51,7 +51,7 @@
     "person": "ts",
     "es": "La farmacia {está} cerca de aquí.",
     "en": "The pharmacy is near here.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "estar.presenteDeIndicativo.2",
@@ -60,7 +60,7 @@
     "person": "ss",
     "es": "¿Cómo {estás} hoy?",
     "en": "How are you today?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "estar.imperfectoDeIndicativo.1",
@@ -69,7 +69,7 @@
     "person": "fs",
     "es": "Ayer no fui a clase porque {estaba} enfermo.",
     "en": "Yesterday I didn't go to class because I was sick.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "estar.presenteDeSubjuntivo.1",
@@ -78,7 +78,7 @@
     "person": "fp",
     "es": "Mamá quiere que mi hermano y yo {estemos} en casa a las nueve.",
     "en": "Mom wants my brother and me home by nine.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "estar.pluscuamperfectoDeSubjuntivo1.1",
@@ -87,7 +87,7 @@
     "person": "fs",
     "es": "Si yo {hubiera estado} allí, te habría ayudado.",
     "en": "If I had been there, I would have helped you.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "tener.presenteDeIndicativo.1",
@@ -96,7 +96,7 @@
     "person": "ss",
     "es": "¿Cuántos años {tienes}?",
     "en": "How old are you?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "tener.imperativoPositivo.1",
@@ -105,7 +105,7 @@
     "person": "ss",
     "es": "{Ten} cuidado con el perro.",
     "en": "Be careful with the dog.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "tener.pretérito.1",
@@ -114,7 +114,7 @@
     "person": "fp",
     "es": "El sábado pasado mi familia y yo {tuvimos} una gran fiesta.",
     "en": "Last Saturday my family and I had a big party.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "tener.presenteDeSubjuntivo.1",
@@ -123,7 +123,7 @@
     "person": "ss",
     "es": "Ojalá {tengas} buena suerte en el examen.",
     "en": "I hope you have good luck on the exam.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "tener.imperfectoDeSubjuntivo1.1",
@@ -132,7 +132,7 @@
     "person": "fs",
     "es": "Si yo {tuviera} más tiempo, aprendería a tocar la guitarra.",
     "en": "If I had more time, I would learn to play the guitar.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ir.presenteDeIndicativo.1",
@@ -141,7 +141,7 @@
     "person": "fp",
     "es": "Los domingos nosotros {vamos} al parque.",
     "en": "On Sundays we go to the park.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ir.presenteDeIndicativo.2",
@@ -150,7 +150,7 @@
     "person": "ts",
     "es": "Mi padre {va} al trabajo a pie.",
     "en": "My father goes to work on foot.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ir.pretérito.1",
@@ -159,7 +159,7 @@
     "person": "fs",
     "es": "Anoche yo {fui} al cine con unos amigos.",
     "en": "Last night I went to the movies with some friends.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ir.imperativoNegativo.1",
@@ -168,7 +168,7 @@
     "person": "ss",
     "es": "¡No {vayas} solo de noche!",
     "en": "Don't go alone at night!",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ir.imperfectoDeSubjuntivo1.1",
@@ -177,7 +177,7 @@
     "person": "tp",
     "es": "Me sorprendió que mis vecinos se {fueran} tan pronto.",
     "en": "I was surprised that my neighbors left so soon.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "hacer.presenteDeIndicativo.1",
@@ -186,7 +186,7 @@
     "person": "ss",
     "es": "¿Qué {haces} los fines de semana?",
     "en": "What do you do on weekends?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "hacer.imperativoPositivo.1",
@@ -195,7 +195,7 @@
     "person": "ss",
     "es": "{Haz} la tarea antes de cenar.",
     "en": "Do your homework before dinner.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "hacer.perfectoDeIndicativo.1",
@@ -204,7 +204,7 @@
     "person": "fs",
     "es": "Yo todavía no {he hecho} la tarea.",
     "en": "I still haven't done my homework.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "hacer.presenteDeSubjuntivo.1",
@@ -213,7 +213,7 @@
     "person": "tp",
     "es": "Es importante que todos {hagan} ejercicio.",
     "en": "It's important for everyone to exercise.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "hacer.pluscuamperfectoDeSubjuntivo1.1",
@@ -222,7 +222,7 @@
     "person": "fp",
     "es": "Si {hubiéramos hecho} una reserva, no habríamos esperado tanto.",
     "en": "If we had made a reservation, we wouldn't have waited so long.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "poder.presenteDeIndicativo.1",
@@ -231,7 +231,7 @@
     "person": "fs",
     "es": "Hoy no {puedo} salir porque tengo que trabajar.",
     "en": "I can't go out today because I have to work.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "poder.presenteDeIndicativo.2",
@@ -240,7 +240,7 @@
     "person": "ss",
     "es": "¿{Puedes} cerrar la ventana, por favor?",
     "en": "Can you close the window, please?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "poder.pretérito.1",
@@ -249,7 +249,7 @@
     "person": "tp",
     "es": "Mis amigos no {pudieron} venir a la fiesta.",
     "en": "My friends couldn't come to the party.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "poder.condicional.1",
@@ -258,7 +258,7 @@
     "person": "ts",
     "es": "¿{Podría} usted ayudarme con esta maleta?",
     "en": "Could you help me with this suitcase?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "decir.presenteDeIndicativo.1",
@@ -267,7 +267,7 @@
     "person": "ts",
     "es": "Mi abuela siempre {dice} la verdad.",
     "en": "My grandmother always tells the truth.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "decir.imperativoPositivo.1",
@@ -276,7 +276,7 @@
     "person": "ss",
     "es": "{Di} la verdad.",
     "en": "Tell the truth.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "decir.pretérito.1",
@@ -285,7 +285,7 @@
     "person": "fp",
     "es": "Nosotros le {dijimos} adiós al profesor.",
     "en": "We said goodbye to the teacher.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "decir.presenteDeSubjuntivo.1",
@@ -294,7 +294,7 @@
     "person": "ss",
     "es": "Quiero que me {digas} la verdad.",
     "en": "I want you to tell me the truth.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "decir.pluscuamperfectoDeIndicativo.1",
@@ -303,7 +303,7 @@
     "person": "tp",
     "es": "Mis padres ya me lo {habían dicho}.",
     "en": "My parents had already told me.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "haber.presenteDeIndicativo.1",
@@ -312,7 +312,7 @@
     "person": "fp",
     "es": "Nosotros ya {hemos} comido.",
     "en": "We've already eaten.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "haber.pretérito.1",
@@ -321,7 +321,7 @@
     "person": "ts",
     "es": "Ayer {hubo} un accidente en la autopista.",
     "en": "Yesterday there was an accident on the highway.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "haber.imperfectoDeIndicativo.1",
@@ -330,7 +330,7 @@
     "person": "ts",
     "es": "Antes {había} muchos árboles en esta calle.",
     "en": "There used to be a lot of trees on this street.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "haber.futuroDeIndicativo.1",
@@ -339,7 +339,7 @@
     "person": "ts",
     "es": "Mañana {habrá} una reunión a las diez.",
     "en": "Tomorrow there will be a meeting at ten.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "haber.imperfectoDeSubjuntivo1.1",
@@ -348,7 +348,7 @@
     "person": "fs",
     "es": "Si yo lo {hubiera} sabido, habría venido antes.",
     "en": "If I had known, I would have come earlier.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dar.presenteDeIndicativo.1",
@@ -357,7 +357,7 @@
     "person": "fs",
     "es": "Yo le {doy} agua a mi perro todos los días.",
     "en": "I give my dog water every day.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dar.imperativoPositivo.1",
@@ -366,7 +366,7 @@
     "person": "ss",
     "es": "{Da} un paseo por el parque.",
     "en": "Take a walk in the park.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dar.pretérito.1",
@@ -375,7 +375,7 @@
     "person": "ts",
     "es": "El profesor nos {dio} mucha tarea.",
     "en": "The teacher gave us a lot of homework.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dar.presenteDeSubjuntivo.1",
@@ -384,7 +384,7 @@
     "person": "tp",
     "es": "No creo que me {den} el trabajo.",
     "en": "I don't think they'll give me the job.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dar.imperfectoDeSubjuntivo1.1",
@@ -393,7 +393,7 @@
     "person": "ts",
     "es": "Le pedí a mi jefe que me {diera} un día libre.",
     "en": "I asked my boss to give me a day off.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ver.presenteDeIndicativo.1",
@@ -402,7 +402,7 @@
     "person": "fp",
     "es": "Los viernes mi familia y yo {vemos} películas en casa.",
     "en": "On Fridays my family and I watch movies at home.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ver.presenteDeIndicativo.2",
@@ -411,7 +411,7 @@
     "person": "ss",
     "es": "¿{Ves} esa montaña a lo lejos?",
     "en": "Do you see that mountain in the distance?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ver.perfectoDeIndicativo.1",
@@ -420,7 +420,7 @@
     "person": "ss",
     "es": "¿Alguna vez {has visto} la nieve?",
     "en": "Have you ever seen snow?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ver.pluscuamperfectoDeIndicativo.1",
@@ -429,7 +429,7 @@
     "person": "fs",
     "es": "Yo nunca {había visto} un lugar tan bonito.",
     "en": "I had never seen such a beautiful place.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "ver.perfectoDeSubjuntivo.1",
@@ -438,7 +438,7 @@
     "person": "ts",
     "es": "Espero que Juan {haya visto} mi mensaje.",
     "en": "I hope Juan has seen my message.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "saber.presenteDeIndicativo.1",
@@ -447,7 +447,7 @@
     "person": "fs",
     "es": "Yo no {sé} dónde están mis llaves.",
     "en": "I don't know where my keys are.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "saber.presenteDeIndicativo.2",
@@ -456,7 +456,7 @@
     "person": "ss",
     "es": "¿{Sabes} nadar?",
     "en": "Do you know how to swim?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "saber.imperfectoDeIndicativo.1",
@@ -465,7 +465,7 @@
     "person": "tp",
     "es": "Mis padres no {sabían} nada de la sorpresa.",
     "en": "My parents didn't know anything about the surprise.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "saber.presenteDeSubjuntivo.1",
@@ -474,7 +474,7 @@
     "person": "ts",
     "es": "Es posible que nadie {sepa} la respuesta.",
     "en": "It's possible that nobody knows the answer.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "querer.presenteDeIndicativo.1",
@@ -483,7 +483,7 @@
     "person": "fs",
     "es": "Yo {quiero} un café con leche, por favor.",
     "en": "I want a coffee with milk, please.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "querer.presenteDeIndicativo.2",
@@ -492,7 +492,7 @@
     "person": "tp",
     "es": "Mis hijos {quieren} ir a la playa.",
     "en": "My kids want to go to the beach.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "querer.imperfectoDeIndicativo.1",
@@ -501,7 +501,7 @@
     "person": "ts",
     "es": "De niña, mi madre {quería} ser médica.",
     "en": "As a girl, my mother wanted to be a doctor.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "querer.condicional.1",
@@ -510,7 +510,7 @@
     "person": "fs",
     "es": "Yo {querría} vivir cerca del mar.",
     "en": "I'd like to live near the ocean.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "querer.imperfectoDeSubjuntivo1.1",
@@ -519,7 +519,7 @@
     "person": "fs",
     "es": "Buenas noches, {quisiera} una mesa para dos, por favor.",
     "en": "Good evening, I'd like a table for two, please.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "deber.presenteDeIndicativo.1",
@@ -528,7 +528,7 @@
     "person": "ss",
     "es": "{Debes} beber más agua.",
     "en": "You should drink more water.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "deber.presenteDeIndicativo.2",
@@ -537,7 +537,7 @@
     "person": "tp",
     "es": "Los estudiantes {deben} llegar a tiempo.",
     "en": "Students must arrive on time.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "deber.imperfectoDeIndicativo.1",
@@ -546,7 +546,7 @@
     "person": "fs",
     "es": "Antes yo {debía} trabajar los sábados.",
     "en": "I used to have to work on Saturdays.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "deber.condicional.1",
@@ -555,7 +555,7 @@
     "person": "fp",
     "es": "Ya es tarde; Ana y yo {deberíamos} irnos.",
     "en": "It's late; Ana and I should go.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "pasar.presenteDeIndicativo.1",
@@ -564,7 +564,7 @@
     "person": "ts",
     "es": "¿Qué {pasa} aquí?",
     "en": "What's going on here?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "pasar.imperativoPositivo.1",
@@ -573,7 +573,7 @@
     "person": "ts",
     "es": "{Pase}, por favor, está abierto.",
     "en": "Come in, please; it's open.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "pasar.pretérito.1",
@@ -582,7 +582,7 @@
     "person": "fp",
     "es": "El verano pasado mi novia y yo {pasamos} dos semanas en la costa.",
     "en": "Last summer my girlfriend and I spent two weeks on the coast.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "pasar.pluscuamperfectoDeIndicativo.1",
@@ -591,7 +591,7 @@
     "person": "ts",
     "es": "Cuando llegué, el tren ya {había pasado}.",
     "en": "When I got there, the train had already gone by.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "pasar.perfectoDeSubjuntivo.1",
@@ -600,7 +600,7 @@
     "person": "ts",
     "es": "Espero que no te {haya pasado} nada grave.",
     "en": "I hope nothing serious has happened to you.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "llegar.presenteDeIndicativo.1",
@@ -609,7 +609,7 @@
     "person": "ts",
     "es": "El tren {llega} a las ocho.",
     "en": "The train arrives at eight.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "llegar.presenteDeIndicativo.2",
@@ -618,7 +618,7 @@
     "person": "fs",
     "es": "Yo siempre {llego} tarde los lunes.",
     "en": "I'm always late on Mondays.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "llegar.pretérito.1",
@@ -627,7 +627,7 @@
     "person": "fs",
     "es": "Anoche {llegué} tarde y no cené.",
     "en": "Last night I got in late and didn't have dinner.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "llegar.presenteDeSubjuntivo.1",
@@ -636,7 +636,7 @@
     "person": "ts",
     "es": "Te aviso cuando {llegue} el paquete.",
     "en": "I'll let you know when the package arrives.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "llegar.imperfectoDeSubjuntivo1.1",
@@ -645,7 +645,7 @@
     "person": "tp",
     "es": "Les pedimos a los invitados que {llegaran} temprano.",
     "en": "We asked the guests to arrive early.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dejar.presenteDeIndicativo.1",
@@ -654,7 +654,7 @@
     "person": "ts",
     "es": "Mi madre no me {deja} salir de noche.",
     "en": "My mother doesn't let me go out at night.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dejar.imperativoPositivo.1",
@@ -663,7 +663,7 @@
     "person": "ss",
     "es": "{Deja} el abrigo en la silla.",
     "en": "Leave your coat on the chair.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dejar.pretérito.1",
@@ -672,7 +672,7 @@
     "person": "fs",
     "es": "No encuentro mis llaves; creo que las {dejé} en la oficina.",
     "en": "I can't find my keys; I think I left them at the office.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dejar.imperativoNegativo.1",
@@ -681,7 +681,7 @@
     "person": "ts",
     "es": "No {deje} la puerta abierta, por favor.",
     "en": "Please don't leave the door open.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "llevar.presenteDeIndicativo.1",
@@ -690,7 +690,7 @@
     "person": "ts",
     "es": "Mi hermano siempre {lleva} una gorra roja.",
     "en": "My brother always wears a red cap.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "llevar.imperativoPositivo.1",
@@ -699,7 +699,7 @@
     "person": "ss",
     "es": "{Lleva} un paraguas, que va a llover.",
     "en": "Take an umbrella; it's going to rain.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "llevar.perfectoDeIndicativo.1",
@@ -708,7 +708,7 @@
     "person": "fp",
     "es": "Mi hermana y yo ya {hemos llevado} todas las cajas a la casa nueva.",
     "en": "My sister and I have already taken all the boxes to the new house.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "llevar.presenteDeSubjuntivo.1",
@@ -717,7 +717,7 @@
     "person": "ss",
     "es": "Es mejor que {lleves} ropa cómoda.",
     "en": "It's better for you to wear comfortable clothes.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "seguir.presenteDeIndicativo.1",
@@ -726,7 +726,7 @@
     "person": "ts",
     "es": "Mi abuelo {sigue} trabajando a los ochenta años.",
     "en": "My grandfather is still working at eighty.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "seguir.imperativoPositivo.1",
@@ -735,7 +735,7 @@
     "person": "ts",
     "es": "{Siga} por esta calle y gire a la derecha.",
     "en": "Keep going down this street and turn right.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "seguir.pretérito.1",
@@ -744,7 +744,7 @@
     "person": "tp",
     "es": "Los niños {siguieron} jugando hasta la noche.",
     "en": "The children kept playing until nightfall.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "seguir.gerundio.1",
@@ -752,7 +752,7 @@
     "tense": "gerundio",
     "es": "Estoy {siguiendo} una dieta muy estricta.",
     "en": "I'm following a very strict diet.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "seguir.presenteDeSubjuntivo.1",
@@ -761,7 +761,7 @@
     "person": "fp",
     "es": "Si queremos ganar, es importante que {sigamos} practicando.",
     "en": "If we want to win, it's important that we keep practicing.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "encontrar.presenteDeIndicativo.1",
@@ -770,7 +770,7 @@
     "person": "fs",
     "es": "Yo nunca {encuentro} nada en este cajón.",
     "en": "I can never find anything in this drawer.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "encontrar.presenteDeIndicativo.2",
@@ -779,7 +779,7 @@
     "person": "ss",
     "es": "¿Dónde {encuentras} ropa tan bonita?",
     "en": "Where do you find such nice clothes?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "encontrar.pretérito.1",
@@ -788,7 +788,7 @@
     "person": "fp",
     "es": "Ayer mi hijo y yo {encontramos} un gato en la calle.",
     "en": "Yesterday my son and I found a cat on the street.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "encontrar.presenteDeSubjuntivo.1",
@@ -797,7 +797,7 @@
     "person": "tp",
     "es": "Ojalá {encuentren} pronto a su perro.",
     "en": "I hope they find their dog soon.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "poner.presenteDeIndicativo.1",
@@ -806,7 +806,7 @@
     "person": "fs",
     "es": "Por la mañana yo {pongo} la radio.",
     "en": "In the morning I turn on the radio.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "poner.imperativoPositivo.1",
@@ -815,7 +815,7 @@
     "person": "ss",
     "es": "{Pon} la mesa, por favor.",
     "en": "Set the table, please.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "poner.pretérito.1",
@@ -824,7 +824,7 @@
     "person": "ts",
     "es": "¿Dónde {puso} Ana las llaves?",
     "en": "Where did Ana put the keys?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "poner.imperativoNegativo.1",
@@ -833,7 +833,7 @@
     "person": "ss",
     "es": "No {pongas} los pies en el sofá.",
     "en": "Don't put your feet on the couch.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "poner.condicionalCompuesto.1",
@@ -842,7 +842,7 @@
     "person": "fs",
     "es": "Yo no {habría puesto} tanta sal en la sopa.",
     "en": "I wouldn't have put so much salt in the soup.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "quedar.presenteDeIndicativo.1",
@@ -851,7 +851,7 @@
     "person": "fs",
     "es": "Hoy me {quedo} en casa.",
     "en": "I'm staying home today.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "quedar.presenteDeIndicativo.2",
@@ -860,7 +860,7 @@
     "person": "ts",
     "es": "La estación {queda} muy lejos de aquí.",
     "en": "The station is very far from here.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "quedar.pretérito.1",
@@ -869,7 +869,7 @@
     "person": "fp",
     "es": "El sábado nos {quedamos} en casa todo el día.",
     "en": "On Saturday we stayed home all day.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "quedar.condicional.1",
@@ -878,7 +878,7 @@
     "person": "ss",
     "es": "¿Te {quedarías} una semana más?",
     "en": "Would you stay one more week?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "quedar.imperfectoDeSubjuntivo1.1",
@@ -887,7 +887,7 @@
     "person": "tp",
     "es": "Les pedí que se {quedaran} a cenar.",
     "en": "I asked them to stay for dinner.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "hablar.presenteDeIndicativo.1",
@@ -896,7 +896,7 @@
     "person": "ss",
     "es": "¿{Hablas} inglés?",
     "en": "Do you speak English?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "hablar.presenteDeIndicativo.2",
@@ -905,7 +905,7 @@
     "person": "tp",
     "es": "En Brasil {hablan} portugués.",
     "en": "In Brazil they speak Portuguese.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "hablar.imperfectoDeIndicativo.1",
@@ -914,7 +914,7 @@
     "person": "fp",
     "es": "De niños, mi hermano y yo {hablábamos} francés en casa.",
     "en": "As kids, my brother and I spoke French at home.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "hablar.imperativoNegativo.1",
@@ -923,7 +923,7 @@
     "person": "ss",
     "es": "No {hables} tan alto, que el bebé está dormido.",
     "en": "Don't talk so loud; the baby is asleep.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "hablar.pluscuamperfectoDeSubjuntivo1.1",
@@ -932,7 +932,7 @@
     "person": "fs",
     "es": "Ojalá yo {hubiera hablado} con ella antes.",
     "en": "I wish I had talked to her sooner.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "parecer.presenteDeIndicativo.1",
@@ -941,7 +941,7 @@
     "person": "ts",
     "es": "Este restaurante {parece} muy caro.",
     "en": "This restaurant looks very expensive.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "parecer.presenteDeIndicativo.2",
@@ -950,7 +950,7 @@
     "person": "tp",
     "es": "Los gemelos se {parecen} mucho.",
     "en": "The twins look a lot alike.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "parecer.imperfectoDeIndicativo.1",
@@ -959,7 +959,7 @@
     "person": "ts",
     "es": "La película {parecía} interesante, pero fue aburrida.",
     "en": "The movie seemed interesting, but it was boring.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "parecer.presenteDeSubjuntivo.1",
@@ -968,7 +968,7 @@
     "person": "ts",
     "es": "No me importa que {parezca} raro.",
     "en": "I don't care if it seems strange.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "pensar.presenteDeIndicativo.1",
@@ -977,7 +977,7 @@
     "person": "ss",
     "es": "¿Qué {piensas} de mi idea?",
     "en": "What do you think of my idea?",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "pensar.presenteDeIndicativo.2",
@@ -986,7 +986,7 @@
     "person": "fs",
     "es": "Yo {pienso} mucho en mi familia.",
     "en": "I think about my family a lot.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "pensar.imperfectoDeIndicativo.1",
@@ -995,7 +995,7 @@
     "person": "fs",
     "es": "Yo {pensaba} que hoy era domingo.",
     "en": "I thought today was Sunday.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "pensar.imperativoNegativo.1",
@@ -1004,7 +1004,7 @@
     "person": "ss",
     "es": "No {pienses} más en eso.",
     "en": "Don't think about that anymore.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "pensar.imperfectoDeSubjuntivo1.1",
@@ -1013,7 +1013,7 @@
     "person": "ss",
     "es": "Me molestó que {pensaras} eso de mí.",
     "en": "It bothered me that you thought that about me.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "volver.presenteDeIndicativo.1",
@@ -1022,7 +1022,7 @@
     "person": "fs",
     "es": "Yo {vuelvo} a casa a las seis.",
     "en": "I get back home at six.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "volver.imperativoPositivo.1",
@@ -1031,7 +1031,7 @@
     "person": "ss",
     "es": "{Vuelve} pronto.",
     "en": "Come back soon.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "volver.pretérito.1",
@@ -1040,7 +1040,7 @@
     "person": "tp",
     "es": "Mis padres {volvieron} de su viaje anoche.",
     "en": "My parents got back from their trip last night.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "volver.presenteDeSubjuntivo.1",
@@ -1049,7 +1049,7 @@
     "person": "ss",
     "es": "Te espero aquí hasta que {vuelvas}.",
     "en": "I'll wait for you here until you come back.",
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "volver.perfectoDeSubjuntivo.1",
@@ -1058,6 +1058,6 @@
     "person": "tp",
     "es": "No creo que los niños {hayan vuelto} todavía.",
     "en": "I don't think the kids have come back yet.",
-    "reviewed": false
+    "reviewed": true
   }
 ]

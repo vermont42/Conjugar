@@ -11830,5 +11830,7 @@ right row in any quiz's results now offers its example sentence, from the bundle
 authored examples. tener's opened on a line from Valera's Pepita Jiménez.
 
 The full suite ran 1,235 tests in 78 suites. The only failure was a test pinning the analytics
-source names, which had compiled before I taught it the new value. The 118 sentences are drafts
-until Josh reviews them: a debug build asks them with a Borrador pill, and a release build asks none.
+source names, which had compiled before I taught it the new value. The 118 sentences began as drafts,
+which a debug build asks with a Borrador pill and a release build skips. Josh read the review sheet
+the same evening and approved all 118 without a change. He also decided that the later batches,
+verbs 26 to 300, need no review of his: the machine check and Claude's full reread are enough.
