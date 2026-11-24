@@ -69,7 +69,13 @@ material for the release notes in `docs/release_notes.txt`.
    of the tab, and check that the level's board shows the score; check Settings' View Leaderboards
    too. With Test Mode on, `tapViewLeaderboard` should arrive, with `level` and `source` `tab` from
    the Quiz tab.
-8. **Try the daily reminder on a device.** In Settings, turn Daily Reminder on, allow
+8. **Test the achievements from the same build.** Add the eight `conjugar.achievement.*`
+   achievements to the version too, then tap View Achievements at the foot of the Quiz tab and in
+   Settings, and check that Game Center lists all eight in order, with their art and any progress
+   the practice record has made. See [`game_center_setup.md`](game_center_setup.md) § Release Day
+   and Testing. With Test Mode on, `tapViewAchievements` should arrive, with `source` `tab` from
+   the Quiz tab and nothing from Settings.
+9. **Try the daily reminder on a device.** In Settings, turn Daily Reminder on, allow
    notifications at the system's request, and set the time two minutes ahead. Lock the device. The
    reminder should arrive at that time, titled "Time to Practice" and saying how many conjugations
    are due. Tap it: the app should open on the Quiz tab with a daily session under way and its
@@ -88,7 +94,9 @@ material for the release notes in `docs/release_notes.txt`.
 2. **Submit the level leaderboards with the version.** Each `conjugar.level.*` leaderboard must be
    in the same submission as the app version, with the version's Game Center checkbox on. Make
    Beginner the Default. See [`game_center_setup.md`](game_center_setup.md) § On Release Day.
-3. **Once the release is live, archive the old leaderboard**, `biz.joshadams.Conjugar.leaderboard`,
+3. **Submit the eight achievements with the version**, in the same submission, as for the
+   leaderboards. See [`game_center_setup.md`](game_center_setup.md) § The Achievements.
+4. **Once the release is live, archive the old leaderboard**, `biz.joshadams.Conjugar.leaderboard`,
    which the shipped app posts to until then.
 
 ## Afterward

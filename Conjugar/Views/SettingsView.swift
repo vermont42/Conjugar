@@ -489,6 +489,23 @@ struct SettingsView: View {
         }
 
         GradientDivider()
+
+        settingSection(
+          icon: "rosette",
+          tint: .customYellow,
+          heading: L.GameCenter.achievementsHeading,
+          description: L.GameCenter.viewAchievementsDescription
+        ) {
+          Button(L.GameCenter.viewAchievements) {
+            Current.gameCenter.showAchievements()
+            Current.analytics.signal(name: .tapViewAchievements)
+          }
+          .buttonStyle(TintedCapsuleButtonStyle(tint: .customYellow))
+          .accessibilityHint(L.GameCenter.viewAchievementsHint)
+          .accessibilityIdentifier("settings_achievements")
+        }
+
+        GradientDivider()
       }
 
       settingSection(

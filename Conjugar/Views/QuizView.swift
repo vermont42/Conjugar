@@ -287,6 +287,13 @@ struct QuizView: View {
               .padding(.vertical, isLarge ? Layout.defaultSpacing : 0)
               .disabled(!canStart)
               .opacity(canStart ? 1 : 0.4)
+
+            if tabScope == .allVerbs, let best = Current.practice.levelBest(at: Current.settings.quizLevel) {
+              Label(L.PersonalBest.hubLine(best), systemImage: "star.fill")
+                .font(isLarge ? .body : .subheadline)
+                .foregroundStyle(.secondary)
+                .accessibilityIdentifier("quiz_level_best")
+            }
           }
 
           practiceSection
@@ -294,7 +301,11 @@ struct QuizView: View {
           exercisesSection
 
           if Current.gameCenter.isAuthenticated {
-            leaderboardButton
+            // A flow, since the two labels need more than an iPhone's line at large sizes.
+            FlowLayout(spacing: Layout.defaultSpacing, centersRows: true) {
+              leaderboardButton
+              achievementsButton
+            }
           }
         }
         .padding(.horizontal, Layout.doubleDefaultSpacing)
@@ -372,6 +383,21 @@ struct QuizView: View {
     .controlSize(isLarge ? .regular : .small)
     .accessibilityHint(L.GameCenter.viewLeaderboardHint)
     .accessibilityIdentifier("quiz_leaderboard_button")
+  }
+
+  private var achievementsButton: some View {
+    Button {
+      Current.gameCenter.showAchievements()
+      Current.analytics.signal(name: .tapViewAchievements, parameters: [ParameterKey.source.rawValue: AnalyticsSource.tab.rawValue])
+    } label: {
+      Label(L.GameCenter.viewAchievements, systemImage: "rosette")
+        .font(isLarge ? .body : .subheadline)
+    }
+    .buttonStyle(.bordered)
+    .tint(.customYellow)
+    .controlSize(isLarge ? .regular : .small)
+    .accessibilityHint(L.GameCenter.viewAchievementsHint)
+    .accessibilityIdentifier("quiz_achievements_button")
   }
 
   /// What a custom quiz will ask, and the way to change it, one tap from Start.
@@ -1329,6 +1355,11 @@ struct QuizView: View {
         announcement += " " + L.SpeedRound.best(best) + "."
       }
       AccessibilityNotification.Announcement(announcement).post()
+    }
+    if quiz.isNewLevelBest {
+      AccessibilityNotification.Announcement(L.PersonalBest.newBest).post()
+    } else if let best = quiz.levelPreviousBest {
+      AccessibilityNotification.Announcement(L.PersonalBest.best(best) + ".").post()
     }
     if let line = quiz.dailyStreakStatus?.resultsLine, !line.isEmpty {
       AccessibilityNotification.Announcement(line).post()

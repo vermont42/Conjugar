@@ -93,6 +93,9 @@ nonisolated enum AnalyticsName: String {
   case tapStarVerb
   /// The ⓘ beside a tense's heading on a verb page. No parameters.
   case tapTenseArticle
+  /// A View Achievements button: the Quiz tab's sends `source` `tab`, and Settings' sends nothing.
+  /// No signal says that an achievement was earned, which would report how well a learner did.
+  case tapViewAchievements
   /// A leaderboard button: the results' sends `level`, the board it opens, and Settings', which
   /// opens the list of every level's board, sends nothing.
   case tapViewLeaderboard

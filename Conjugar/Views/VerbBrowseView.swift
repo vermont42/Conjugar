@@ -419,6 +419,8 @@ struct VerbBrowseView: View {
       return
     }
     Current.practice.recordReview(reviewCard.offer)
+    // A reveal moves the verb's due key conjugations up a box, which can reach the third.
+    Current.reportAchievements()
     Current.analytics.signal(name: .tapRevealReviewCard)
     withAnimation {
       self.reviewCard?.isRevealed = true

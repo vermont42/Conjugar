@@ -115,6 +115,8 @@ struct ResultsView: View {
         speedRoundBest
       }
 
+      levelBest
+
       if let line = quiz.dailyStreakStatus?.resultsLine, !line.isEmpty {
         Label(line, systemImage: "flame.fill")
           .font(.headline)
@@ -156,6 +158,23 @@ struct ResultsView: View {
         .font(.subheadline)
         .foregroundStyle(.secondary)
         .accessibilityIdentifier("results_speed_round_best")
+    }
+  }
+
+  /// A ranked session's first round against its level's best. The best measures the first ten
+  /// questions without their re-asks, the leaderboard's score, so it may be below the score above.
+  @ViewBuilder
+  private var levelBest: some View {
+    if quiz.isNewLevelBest {
+      Label(L.PersonalBest.newBest, systemImage: "star.fill")
+        .font(.headline)
+        .foregroundStyle(Color.customYellow)
+        .accessibilityIdentifier("results_level_new_best")
+    } else if let best = quiz.levelPreviousBest {
+      Text(L.PersonalBest.best(best))
+        .font(.subheadline)
+        .foregroundStyle(.secondary)
+        .accessibilityIdentifier("results_level_best")
     }
   }
 

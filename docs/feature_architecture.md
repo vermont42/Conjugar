@@ -136,7 +136,7 @@ a model's key names the model.
 | `shortcut` | Yes | Open Random Verb run from the Shortcuts app or Siri (`OpenRandomVerbIntent`, offered as the Random Verb shortcut) |
 | `speedRound` | Yes | The quiz signals: the Speed Round, from the Quiz tab's Exercises section, without counts |
 | `spotlight` | Yes | A tap on a verb's Spotlight entry |
-| `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included. The quiz signals: a quiz over every verb begun with the Quiz tab's Start. `viewCollection`: a collection or a model opened from the Models tab's list. `tapViewLeaderboard`: a leaderboard opened from the Quiz tab |
+| `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included. The quiz signals: a quiz over every verb begun with the Quiz tab's Start. `viewCollection`: a collection or a model opened from the Models tab's list. `tapViewLeaderboard`: a leaderboard opened from the Quiz tab. `tapViewAchievements`: the achievements opened from the Quiz tab |
 | `verbEssentials` | Yes | The quiz signals: Verb Essentials, from the Quiz tab's Exercises section |
 | `verbPage` | Yes | The quiz signals: Test Me's three questions on a verb's page. `viewCollection`: a model's page opened from a verb page's model pill |
 | `widget` | Yes | A tap on any widget: Verb of the Day, the quiz widget, or a Lock Screen accessory |
@@ -1557,6 +1557,60 @@ since `defaults` does not find the group by name in a simulator and `cfprefsd` c
 dailyStreak -string '{"sessions":{"2026-11-22":1,"2026-11-23":1}}'`. The reminder's time is in the
 app's own plist (`get_app_container … data`, key `dailyReminderMinutes`, minutes as a string);
 set it a few minutes ahead, launch, and go to the Home Screen to see it fire.
+
+### Personal Bests and Achievements
+
+**The personal best** is the best ranked score at each level: a ranked session's
+`firstRoundScore`, what the leaderboard takes. `PracticeStore.levelBests` keeps one per level,
+stored as JSON under `levelBests` in the App Group, beside the Speed Round's best and the streak;
+Reset Practice forgets them. `Quiz.finish()` reads the previous best into `levelPreviousBest` and
+records the score (`recordRankedScore(_:level:)`, which sets `isNewLevelBest`) on a ranked round
+only, so Ten More's results, the daily session, and every scoped quiz show none, and a score of 0
+sets none. The results show "New personal best!" with a star, or "Your best: n", under the score
+(`ResultsView.levelBest`); the best measures the first ten questions without re-asks, so it may be
+below the score shown. The hub shows "Your best at this level: n" under Start, for All Verbs, once
+the level has one. VoiceOver announces the line at the results.
+
+**The achievements** (`Models/Achievement.swift`) are eight Game Center achievements for mastery,
+each counting what the Mastery page counts, an item in the third box or above:
+
+| Achievement | ID | Points | Counts |
+|---|---|---:|---|
+| The Tile / El azulejo | `conjugar.achievement.patterns.beginner` | 10 | Beginner's regular patterns |
+| The Border / La cenefa | `conjugar.achievement.patterns.elementary` | 25 | Elementary's |
+| The Mural / El mural | `conjugar.achievement.patterns.intermediate` | 50 | Intermediate's |
+| The Courtyard / El patio | `conjugar.achievement.patterns.advanced` | 100 | Advanced's |
+| The Pillars / Los pilares | `conjugar.achievement.verbs.pillars` | 25 | ser, estar, haber, tener, ir, hacer |
+| Ten Irregulars / Diez irregulares | `conjugar.achievement.verbs.core10` | 25 | The first 10 of `Mastery.coreVerbs` |
+| Twenty-Five Irregulars / Veinticinco irregulares | `conjugar.achievement.verbs.core25` | 50 | The first 25 |
+| Fifty Irregulars / Cincuenta irregulares | `conjugar.achievement.verbs.core50` | 100 | All 50 |
+
+A pattern achievement counts its level's patterns in the learner's tú or vos and region, whatever
+level is chosen (`Mastery(level:…)`), so a Latin American learner needs 24, 87, 162, and 297, and a
+learner in Spain, with vosotros, 27, 102, 195, and 357. A verb counts once every key conjugation
+that **Advanced** asks of it is mastered, the keys its row shows on the Mastery page at Advanced, so
+that choosing Beginner earns no verb. The verb steps are the most frequent verbs, not any ten of the
+fifty. `AchievementTests` pins each ID literally, since App Store Connect never lets one change.
+
+**Reporting.** `Achievement.progress(in:settings:)` gives each achievement's mastered and required
+counts; `GameCenter.reportAchievements(record:settings:)` sends their percentages through
+`reportAchievementProgress(_:)`, only while signed in. A quiz reports through its own Game Center
+and store as it finishes and as it is quit (`Quiz.finish()`, `quit()`); revealing a review card
+reports through `Current.reportAchievements()`. `GameCenterReal` loads what Game Center holds for a
+newly signed-in player (`GKAchievement.loadAchievements`), then reports from the record, so progress
+made while signed out arrives at the next sign-in; it holds reports until that load is done and
+sends only what has risen, so a fall in the record (a wrong answer) never reaches Game Center. The
+first report in a launch builds the four levels' `Mastery` layouts, Advanced's the costliest,
+about 0.4 seconds in the simulator on this Intel Mac; later ones reuse them.
+
+**Where a learner sees them.** While signed in, the hub's foot holds View Achievements beside View
+Leaderboard, and Settings' Game Center card adds an Achievements row below View Leaderboards. Both
+open Game Center's achievements (`showAchievements()`).
+
+**Analytics.** `tapViewAchievements`, with `source` `tab` from the hub and nothing from Settings.
+Nothing says that an achievement was earned, which would report how well a learner did; the best is
+never sent. The App Store Connect side is in [`game_center_setup.md`](game_center_setup.md) § The
+Achievements.
 
 ## The Verb of the Day and Random Verbs
 

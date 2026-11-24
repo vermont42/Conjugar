@@ -5,7 +5,7 @@ Conjugar/
 ├── Info.plist                  # App configuration (conjugar:// URL scheme, iPad orientations, TelemetryDeckAppID)
 ├── Conjugar.entitlements       # App entitlements (App Groups for widget sharing, Game Center)
 ├── PrivacyInfo.xcprivacy       # Privacy manifest for App Store submission
-├── GameCenterResources.gamekit/ # Xcode's local Game Center configuration: the live leaderboard and one per quiz level
+├── GameCenterResources.gamekit/ # Xcode's local Game Center configuration: the live leaderboard, one per quiz level, and the eight achievements with their art
 ├── Secrets.example.xcconfig    # Template for Secrets.xcconfig (TELEMETRY_DECK_APP_ID)
 ├── flamencoLoop.mp3            # Music.gameLoop — Pond5 "Flamenco Adventure" (legacy filename); the one music file NOT in Audio/
 ├── *.mp3                       # Legacy one-shot SFX at the target root (applause1-3, buzz, chime, chirp, chomp, gun,
@@ -132,7 +132,7 @@ Conjugar/
 │   ├── PracticeItemMapping.swift  # Which practice item a question exercises (an irregular cell's key conjugation, a regular cell's pattern), the key
 │   │                           #   conjugations a lookup schedules, the irregular cells a review asks, the record's tense keys
 │   ├── PracticeStore.swift     # Current.practice: the practice record's answers, lookups, due and missed items, the review card's offer, reveal,
-│   │                           #   and snooze, the last quiz's results, the Speed Round's best, the daily streak, Reset Practice, and the migration of LearnerVerbs' old review schedules
+│   │                           #   and snooze, the last quiz's results, the Speed Round's best, each level's best ranked score, the daily streak, Reset Practice, and the migration of LearnerVerbs' old review schedules
 │   ├── SpeedRound.swift        # The Speed Round: its constants, the mastered items it may ask, QuizScope.speedRound, and QuizDraw.speedRoundQuestions
 │   │                           #   (each item in turn, never twice running) with speedRoundCells (the irregular cells a mastered key conjugation asks)
 │   ├── DailySession.swift      # The daily session: QuizScope.daily, the streak's bands, and what the hub's row and the results say
@@ -150,6 +150,8 @@ Conjugar/
 │   ├── ChoiceQuestion.swift    # The default round's choice of tense: ChoiceQuestion (two GapSentences, a level, an optional ChoiceRegion, a
 │   │                           #   ChoiceReason and its line), ChoicePrompt (the order and the learner's tú or vos), ChoiceQuestions (load, askable
 │   │                           #   at a level in a region), QuizDraw.choice and choicePosition (never first)
+│   ├── Achievement.swift       # The eight Game Center achievements: permanent IDs, points, each one's progress in the practice record as the
+│   │                           #   Mastery page counts it (a level's patterns, or core verbs fully mastered at Advanced), and the report to Game Center
 │   ├── Mastery.swift           # The Mastery page's model: MasteryState (mastered at the third box, learning, not yet practiced), each level's
 │   │                           #   regular patterns as endings-by-persons grids, the 50 most frequent irregular verbs' key conjugations the level asks, counts
 │   ├── LastQuizResult.swift    # The last round's results that the Quiz tab's hub shows: a kind and subject (not a title), level, counts, score, date
@@ -210,10 +212,10 @@ Conjugar/
 │   ├── Colors.swift            # Semantic palette bridging the colorsets to UIKit-facing call sites
 │   ├── Emailer.swift           # MFMailComposeViewController wrapper for the Settings feedback link (address from URL.developerEmail)
 │   ├── FontExtensions.swift    # Font.button and Font.heroNumeral
-│   ├── GameCenter.swift        # Protocol for Game Center operations (fire-and-forget auth, observable isAuthenticated); each level's leaderboard ID
+│   ├── GameCenter.swift        # Protocol for Game Center operations (fire-and-forget auth, observable isAuthenticated, scores, achievement progress); each level's leaderboard ID
 │   ├── GameCenterFake.swift    # In-memory double for the test/simulator worlds
-│   ├── GameCenterReal.swift    # GKLocalPlayer authentication, score submission to a level's board, leaderboard presentation
-│   ├── GameCenterSpy.swift     # Test double recording each score submitted and leaderboard shown
+│   ├── GameCenterReal.swift    # GKLocalPlayer authentication, score submission to a level's board, leaderboard and achievement presentation, achievement progress held until a sign-in loads and sent only when risen
+│   ├── GameCenterSpy.swift     # Test double recording each score submitted, leaderboard shown, and achievement report
 │   ├── GetterSetter.swift      # Protocol for string key-value storage
 │   ├── GetterSetterFake.swift  # In-memory dictionary implementation for tests
 │   ├── GetterSetterReal.swift  # UserDefaults implementation (the standard defaults, or the App Group's for LearnerVerbs)
@@ -273,7 +275,7 @@ Conjugar/
     ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, the model's collection bar, its practice card, and the verbs using the model, by frequency or alphabetically
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
     ├── QuizSheet.swift         # A quiz in a sheet with a Quiz of its own over a QuizScope: Test Me, a collection's Quiz, and a practice set's Start
-    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, Mastery, and Last Quiz, the Exercises rows for Verb Essentials, Verb Models, Name the Form, Complete the Sentence, and Speed Round, a small View Leaderboard button) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, Name the Form's prompt, chips, and Check, a sentence's English and Draft pill, a choice in the field's place with its region pill, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
+    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, Mastery, and Last Quiz, the Exercises rows for Verb Essentials, Verb Models, Name the Form, Complete the Sentence, and Speed Round, the level's personal best under Start, small View Leaderboard and View Achievements buttons) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, Name the Form's prompt, chips, and Check, a sentence's English and Draft pill, a choice in the field's place with its region pill, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
     ├── CustomQuizView.swift    # The Custom segment's editor of tenses and verbs, its Models list, and the summary card on the start screen and a practice set's sheet
     ├── PracticeSetView.swift   # A shared practice set's sheet (Start, Keep as My Custom Quiz, "Practice Set Not Found") and its full-screen QR code
     ├── QuizCorrectionView.swift # A wrong answer's held correction: the two answers with their differing letters marked (a Name the Form answer's wrong parts, and
@@ -285,7 +287,7 @@ Conjugar/
     ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills (no level for a model's practice), Ten More (Five More Verbs, Another Round), a Speed Round's right answers, best, and Another Round, and each answer, with Example Use on each verb's first right row
     ├── RelatedVerbsView.swift  # The verb page's Related Verbs card, the full related list, VerbPagePush, and verbPageDestinations()
     ├── RichTextView.swift      # Renders parsed [RichTextBlock] as native SwiftUI Text
-    ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center (Enable, or View Leaderboards once signed in), onboarding reshow, Play
+    ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center (Enable, or View Leaderboards and View Achievements once signed in), onboarding reshow, Play
     ├── TutorTestView.swift     # Batch tutor harness (~30 queries, ShareLink export); reached by triple-tapping the tutor title
     ├── TutorView.swift         # The conjugation-tutor chat screen
     ├── SpanishLetterKeyRow.swift  # á é í ó ú ü ñ keys with an insert closure; replaces the Verbs sort picker while search is focused
@@ -385,6 +387,8 @@ ConjugarTests/
 │   │                                   #   a mistake leaving once right and not returning in Ten More, the region, no score and no counts
 │   ├── QuizHubTests.swift              # The last quiz's results: the stored form, each scope's kind and title, a relaunch, Reset, and
 │   │                                   #   what a finished round, Ten More, a quit, a Review, a verb page, and a collection keep
+│   ├── AchievementTests.swift          # Achievements: each ID pinned, the points, the verbs, an empty record, each level's patterns earning its own and
+│   │                                   #   those below, one short, learning, every key Advanced asks, the core steps, vosotros in Spain, nothing while signed out
 │   ├── MasteryTests.swift              # Mastery: the state by box, each level's patterns in both regions, the persons, the core verbs, the key
 │   │                                   #   conjugations each level asks, the display following a seeded record, and answers landing where mapped
 │   ├── FrequencyBandTests.swift        # Each band holds exactly its count, the bands nest, and where one ends
@@ -394,6 +398,7 @@ ConjugarTests/
 │   ├── QuizLiveActivityTests.swift     # Which quizzes start, update, and end the Live Activity, against LiveActivitiesSpy
 │   ├── QuizRoundTests.swift            # Rounds of ten, re-ask placement and points, Ten More, which round ranks, the record of a quiz in progress, the quiz clock
 │   ├── QuizLeaderboardTests.swift      # One leaderboard a level: each ID pinned, which sessions post, the score and the level they post
+│   ├── QuizPersonalBestTests.swift     # The best ranked score at each level (first, beaten, not beaten, per level, none for Ten More, 0, or unranked, across a launch and a reset) and the achievement reports at a finish and a quit
 │   ├── QuizLevelTests.swift            # Each level's tenses and weights, only its own cells drawn, tenses at their weight under a seed;
 │   │                                   #   the setting's default and the migration from the old difficulty
 │   ├── QuizVerbMixTests.swift          # The default quiz's verbs under forty seeds: the band, exactly half irregular cells, at most one irregular
@@ -607,6 +612,11 @@ plans/                          # What Claude writes to get another session to d
 ├── choice_questions_batch_1.md            # The review sheet of the first 45 choice questions (which tense a speaker would use), from choice_questions.py
 ├── pedagogy_variant_audit.md              # Which alternate Spanish forms the quiz accepts (rio/rió, frito, satisface,
 │                                          #   adecúo, vos hablés…), with RAE sources per row and Josh's rulings
+├── achievement_art/                       # What produced the Game Center achievements' tile medallions:
+│   ├── preamble.txt, subjects.txt         #   the shared prompt and each achievement's subject
+│   ├── generate.sh                        #   two gpt-image drafts per achievement
+│   ├── drafts/                            #   each draft's full prompt; the sixteen PNG drafts are gitignored (Josh chose every draft 1)
+│   └── review_a.png, review_b.png         #   the contact sheets he chose from
 └── end_scene_images/                      # What produced the two end-scene portraits, for exact regeneration:
     ├── toreros.txt, familia.txt           #   the image prompts (reference order is in the plan)
     └── recolor_suit.py                    #   the pixel-only navy → royal-blue suit recolor applied to the La familia winner

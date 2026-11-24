@@ -3,9 +3,404 @@
     "version" : "2024-11-15"
   },
   "resources" : {
-    "achievementImages" : {},
-    "achievementLocalizations" : {},
-    "achievements" : [],
+    "achievementImages" : {
+      "conjugar.achievement.patterns.beginner-en-US" : [
+        {
+          "localID" : "conjugar.achievement.patterns.beginner-en-US",
+          "url" : "en-US/AchievementImage-conjugar.achievement.patterns.beginner-en-US.jpg"
+        }
+      ],
+      "conjugar.achievement.patterns.beginner-es-ES" : [
+        {
+          "localID" : "conjugar.achievement.patterns.beginner-es-ES",
+          "url" : "es-ES/AchievementImage-conjugar.achievement.patterns.beginner-es-ES.jpg"
+        }
+      ],
+      "conjugar.achievement.patterns.beginner-es-MX" : [
+        {
+          "localID" : "conjugar.achievement.patterns.beginner-es-MX",
+          "url" : "es-MX/AchievementImage-conjugar.achievement.patterns.beginner-es-MX.jpg"
+        }
+      ],
+      "conjugar.achievement.patterns.elementary-en-US" : [
+        {
+          "localID" : "conjugar.achievement.patterns.elementary-en-US",
+          "url" : "en-US/AchievementImage-conjugar.achievement.patterns.elementary-en-US.jpg"
+        }
+      ],
+      "conjugar.achievement.patterns.elementary-es-ES" : [
+        {
+          "localID" : "conjugar.achievement.patterns.elementary-es-ES",
+          "url" : "es-ES/AchievementImage-conjugar.achievement.patterns.elementary-es-ES.jpg"
+        }
+      ],
+      "conjugar.achievement.patterns.elementary-es-MX" : [
+        {
+          "localID" : "conjugar.achievement.patterns.elementary-es-MX",
+          "url" : "es-MX/AchievementImage-conjugar.achievement.patterns.elementary-es-MX.jpg"
+        }
+      ],
+      "conjugar.achievement.patterns.intermediate-en-US" : [
+        {
+          "localID" : "conjugar.achievement.patterns.intermediate-en-US",
+          "url" : "en-US/AchievementImage-conjugar.achievement.patterns.intermediate-en-US.jpg"
+        }
+      ],
+      "conjugar.achievement.patterns.intermediate-es-ES" : [
+        {
+          "localID" : "conjugar.achievement.patterns.intermediate-es-ES",
+          "url" : "es-ES/AchievementImage-conjugar.achievement.patterns.intermediate-es-ES.jpg"
+        }
+      ],
+      "conjugar.achievement.patterns.intermediate-es-MX" : [
+        {
+          "localID" : "conjugar.achievement.patterns.intermediate-es-MX",
+          "url" : "es-MX/AchievementImage-conjugar.achievement.patterns.intermediate-es-MX.jpg"
+        }
+      ],
+      "conjugar.achievement.patterns.advanced-en-US" : [
+        {
+          "localID" : "conjugar.achievement.patterns.advanced-en-US",
+          "url" : "en-US/AchievementImage-conjugar.achievement.patterns.advanced-en-US.jpg"
+        }
+      ],
+      "conjugar.achievement.patterns.advanced-es-ES" : [
+        {
+          "localID" : "conjugar.achievement.patterns.advanced-es-ES",
+          "url" : "es-ES/AchievementImage-conjugar.achievement.patterns.advanced-es-ES.jpg"
+        }
+      ],
+      "conjugar.achievement.patterns.advanced-es-MX" : [
+        {
+          "localID" : "conjugar.achievement.patterns.advanced-es-MX",
+          "url" : "es-MX/AchievementImage-conjugar.achievement.patterns.advanced-es-MX.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.pillars-en-US" : [
+        {
+          "localID" : "conjugar.achievement.verbs.pillars-en-US",
+          "url" : "en-US/AchievementImage-conjugar.achievement.verbs.pillars-en-US.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.pillars-es-ES" : [
+        {
+          "localID" : "conjugar.achievement.verbs.pillars-es-ES",
+          "url" : "es-ES/AchievementImage-conjugar.achievement.verbs.pillars-es-ES.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.pillars-es-MX" : [
+        {
+          "localID" : "conjugar.achievement.verbs.pillars-es-MX",
+          "url" : "es-MX/AchievementImage-conjugar.achievement.verbs.pillars-es-MX.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.core10-en-US" : [
+        {
+          "localID" : "conjugar.achievement.verbs.core10-en-US",
+          "url" : "en-US/AchievementImage-conjugar.achievement.verbs.core10-en-US.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.core10-es-ES" : [
+        {
+          "localID" : "conjugar.achievement.verbs.core10-es-ES",
+          "url" : "es-ES/AchievementImage-conjugar.achievement.verbs.core10-es-ES.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.core10-es-MX" : [
+        {
+          "localID" : "conjugar.achievement.verbs.core10-es-MX",
+          "url" : "es-MX/AchievementImage-conjugar.achievement.verbs.core10-es-MX.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.core25-en-US" : [
+        {
+          "localID" : "conjugar.achievement.verbs.core25-en-US",
+          "url" : "en-US/AchievementImage-conjugar.achievement.verbs.core25-en-US.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.core25-es-ES" : [
+        {
+          "localID" : "conjugar.achievement.verbs.core25-es-ES",
+          "url" : "es-ES/AchievementImage-conjugar.achievement.verbs.core25-es-ES.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.core25-es-MX" : [
+        {
+          "localID" : "conjugar.achievement.verbs.core25-es-MX",
+          "url" : "es-MX/AchievementImage-conjugar.achievement.verbs.core25-es-MX.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.core50-en-US" : [
+        {
+          "localID" : "conjugar.achievement.verbs.core50-en-US",
+          "url" : "en-US/AchievementImage-conjugar.achievement.verbs.core50-en-US.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.core50-es-ES" : [
+        {
+          "localID" : "conjugar.achievement.verbs.core50-es-ES",
+          "url" : "es-ES/AchievementImage-conjugar.achievement.verbs.core50-es-ES.jpg"
+        }
+      ],
+      "conjugar.achievement.verbs.core50-es-MX" : [
+        {
+          "localID" : "conjugar.achievement.verbs.core50-es-MX",
+          "url" : "es-MX/AchievementImage-conjugar.achievement.verbs.core50-es-MX.jpg"
+        }
+      ]
+    },
+    "achievementLocalizations" : {
+      "conjugar.achievement.patterns.beginner" : [
+        {
+          "afterEarnedDescription" : "Every regular pattern of Beginner, mastered.",
+          "beforeEarnedDescription" : "Master all 24 regular patterns that Beginner asks, 27 with vosotros. A pattern is mastered once its next review is a week or more away.",
+          "locale" : "en-US",
+          "localID" : "conjugar.achievement.patterns.beginner-en-US",
+          "name" : "The Tile"
+        },
+        {
+          "afterEarnedDescription" : "Todos los patrones regulares del nivel Inicial, dominados.",
+          "beforeEarnedDescription" : "Domina los 24 patrones regulares que pregunta el nivel Inicial, 27 con vosotros. Un patrón está dominado cuando su próximo repaso queda a una semana o más.",
+          "locale" : "es-ES",
+          "localID" : "conjugar.achievement.patterns.beginner-es-ES",
+          "name" : "El azulejo"
+        },
+        {
+          "afterEarnedDescription" : "Todos los patrones regulares del nivel Inicial, dominados.",
+          "beforeEarnedDescription" : "Domina los 24 patrones regulares que pregunta el nivel Inicial, 27 con vosotros. Un patrón está dominado cuando su próximo repaso queda a una semana o más.",
+          "locale" : "es-MX",
+          "localID" : "conjugar.achievement.patterns.beginner-es-MX",
+          "name" : "El azulejo"
+        }
+      ],
+      "conjugar.achievement.patterns.elementary" : [
+        {
+          "afterEarnedDescription" : "Every regular pattern of Elementary, mastered.",
+          "beforeEarnedDescription" : "Master all 87 regular patterns that Elementary asks, 102 with vosotros. A pattern is mastered once its next review is a week or more away.",
+          "locale" : "en-US",
+          "localID" : "conjugar.achievement.patterns.elementary-en-US",
+          "name" : "The Border"
+        },
+        {
+          "afterEarnedDescription" : "Todos los patrones regulares del nivel Elemental, dominados.",
+          "beforeEarnedDescription" : "Domina los 87 patrones regulares que pregunta el nivel Elemental, 102 con vosotros. Un patrón está dominado cuando su próximo repaso queda a una semana o más.",
+          "locale" : "es-ES",
+          "localID" : "conjugar.achievement.patterns.elementary-es-ES",
+          "name" : "La cenefa"
+        },
+        {
+          "afterEarnedDescription" : "Todos los patrones regulares del nivel Elemental, dominados.",
+          "beforeEarnedDescription" : "Domina los 87 patrones regulares que pregunta el nivel Elemental, 102 con vosotros. Un patrón está dominado cuando su próximo repaso queda a una semana o más.",
+          "locale" : "es-MX",
+          "localID" : "conjugar.achievement.patterns.elementary-es-MX",
+          "name" : "La cenefa"
+        }
+      ],
+      "conjugar.achievement.patterns.intermediate" : [
+        {
+          "afterEarnedDescription" : "Every regular pattern of Intermediate, mastered.",
+          "beforeEarnedDescription" : "Master all 162 regular patterns that Intermediate asks, 195 with vosotros. A pattern is mastered once its next review is a week or more away.",
+          "locale" : "en-US",
+          "localID" : "conjugar.achievement.patterns.intermediate-en-US",
+          "name" : "The Mural"
+        },
+        {
+          "afterEarnedDescription" : "Todos los patrones regulares del nivel Intermedio, dominados.",
+          "beforeEarnedDescription" : "Domina los 162 patrones regulares que pregunta el nivel Intermedio, 195 con vosotros. Un patrón está dominado cuando su próximo repaso queda a una semana o más.",
+          "locale" : "es-ES",
+          "localID" : "conjugar.achievement.patterns.intermediate-es-ES",
+          "name" : "El mural"
+        },
+        {
+          "afterEarnedDescription" : "Todos los patrones regulares del nivel Intermedio, dominados.",
+          "beforeEarnedDescription" : "Domina los 162 patrones regulares que pregunta el nivel Intermedio, 195 con vosotros. Un patrón está dominado cuando su próximo repaso queda a una semana o más.",
+          "locale" : "es-MX",
+          "localID" : "conjugar.achievement.patterns.intermediate-es-MX",
+          "name" : "El mural"
+        }
+      ],
+      "conjugar.achievement.patterns.advanced" : [
+        {
+          "afterEarnedDescription" : "Every regular pattern of Advanced, mastered.",
+          "beforeEarnedDescription" : "Master all 297 regular patterns that Advanced asks, 357 with vosotros. A pattern is mastered once its next review is a week or more away.",
+          "locale" : "en-US",
+          "localID" : "conjugar.achievement.patterns.advanced-en-US",
+          "name" : "The Courtyard"
+        },
+        {
+          "afterEarnedDescription" : "Todos los patrones regulares del nivel Avanzado, dominados.",
+          "beforeEarnedDescription" : "Domina los 297 patrones regulares que pregunta el nivel Avanzado, 357 con vosotros. Un patrón está dominado cuando su próximo repaso queda a una semana o más.",
+          "locale" : "es-ES",
+          "localID" : "conjugar.achievement.patterns.advanced-es-ES",
+          "name" : "El patio"
+        },
+        {
+          "afterEarnedDescription" : "Todos los patrones regulares del nivel Avanzado, dominados.",
+          "beforeEarnedDescription" : "Domina los 297 patrones regulares que pregunta el nivel Avanzado, 357 con vosotros. Un patrón está dominado cuando su próximo repaso queda a una semana o más.",
+          "locale" : "es-MX",
+          "localID" : "conjugar.achievement.patterns.advanced-es-MX",
+          "name" : "El patio"
+        }
+      ],
+      "conjugar.achievement.verbs.pillars" : [
+        {
+          "afterEarnedDescription" : "ser, estar, haber, tener, ir, and hacer, mastered.",
+          "beforeEarnedDescription" : "Master ser, estar, haber, tener, ir, and hacer: the forms their irregular conjugations are built on, as in tengo · tuve · tendré, in every tense Advanced asks.",
+          "locale" : "en-US",
+          "localID" : "conjugar.achievement.verbs.pillars-en-US",
+          "name" : "The Pillars"
+        },
+        {
+          "afterEarnedDescription" : "ser, estar, haber, tener, ir y hacer, dominados.",
+          "beforeEarnedDescription" : "Domina ser, estar, haber, tener, ir y hacer: las formas en que se basan sus conjugaciones irregulares, como tengo · tuve · tendré, en todos los tiempos del nivel Avanzado.",
+          "locale" : "es-ES",
+          "localID" : "conjugar.achievement.verbs.pillars-es-ES",
+          "name" : "Los pilares"
+        },
+        {
+          "afterEarnedDescription" : "ser, estar, haber, tener, ir y hacer, dominados.",
+          "beforeEarnedDescription" : "Domina ser, estar, haber, tener, ir y hacer: las formas en que se basan sus conjugaciones irregulares, como tengo · tuve · tendré, en todos los tiempos del nivel Avanzado.",
+          "locale" : "es-MX",
+          "localID" : "conjugar.achievement.verbs.pillars-es-MX",
+          "name" : "Los pilares"
+        }
+      ],
+      "conjugar.achievement.verbs.core10" : [
+        {
+          "afterEarnedDescription" : "The 10 most used irregular verbs, mastered.",
+          "beforeEarnedDescription" : "Master the 10 most used irregular verbs, ser to ver: the forms their irregular conjugations are built on, as in tengo · tuve · tendré, in every tense Advanced asks.",
+          "locale" : "en-US",
+          "localID" : "conjugar.achievement.verbs.core10-en-US",
+          "name" : "Ten Irregulars"
+        },
+        {
+          "afterEarnedDescription" : "Los 10 verbos irregulares más usados, dominados.",
+          "beforeEarnedDescription" : "Domina los 10 verbos irregulares más usados, de ser a ver: las formas en que se basan sus conjugaciones irregulares, como tengo · tuve · tendré, en todos los tiempos del nivel Avanzado.",
+          "locale" : "es-ES",
+          "localID" : "conjugar.achievement.verbs.core10-es-ES",
+          "name" : "Diez irregulares"
+        },
+        {
+          "afterEarnedDescription" : "Los 10 verbos irregulares más usados, dominados.",
+          "beforeEarnedDescription" : "Domina los 10 verbos irregulares más usados, de ser a ver: las formas en que se basan sus conjugaciones irregulares, como tengo · tuve · tendré, en todos los tiempos del nivel Avanzado.",
+          "locale" : "es-MX",
+          "localID" : "conjugar.achievement.verbs.core10-es-MX",
+          "name" : "Diez irregulares"
+        }
+      ],
+      "conjugar.achievement.verbs.core25" : [
+        {
+          "afterEarnedDescription" : "The 25 most used irregular verbs, mastered.",
+          "beforeEarnedDescription" : "Master the 25 most used irregular verbs, ser to venir: the forms their irregular conjugations are built on, as in tengo · tuve · tendré, in every tense Advanced asks.",
+          "locale" : "en-US",
+          "localID" : "conjugar.achievement.verbs.core25-en-US",
+          "name" : "Twenty-Five Irregulars"
+        },
+        {
+          "afterEarnedDescription" : "Los 25 verbos irregulares más usados, dominados.",
+          "beforeEarnedDescription" : "Domina los 25 verbos irregulares más usados, de ser a venir: las formas en que se basan sus conjugaciones irregulares, como tengo · tuve · tendré, en todos los tiempos del nivel Avanzado.",
+          "locale" : "es-ES",
+          "localID" : "conjugar.achievement.verbs.core25-es-ES",
+          "name" : "Veinticinco irregulares"
+        },
+        {
+          "afterEarnedDescription" : "Los 25 verbos irregulares más usados, dominados.",
+          "beforeEarnedDescription" : "Domina los 25 verbos irregulares más usados, de ser a venir: las formas en que se basan sus conjugaciones irregulares, como tengo · tuve · tendré, en todos los tiempos del nivel Avanzado.",
+          "locale" : "es-MX",
+          "localID" : "conjugar.achievement.verbs.core25-es-MX",
+          "name" : "Veinticinco irregulares"
+        }
+      ],
+      "conjugar.achievement.verbs.core50" : [
+        {
+          "afterEarnedDescription" : "The 50 most used irregular verbs, mastered.",
+          "beforeEarnedDescription" : "Master the 50 most used irregular verbs, as the Mastery page lists them: the forms their irregular conjugations are built on, as in tengo · tuve · tendré, in every tense Advanced asks.",
+          "locale" : "en-US",
+          "localID" : "conjugar.achievement.verbs.core50-en-US",
+          "name" : "Fifty Irregulars"
+        },
+        {
+          "afterEarnedDescription" : "Los 50 verbos irregulares más usados, dominados.",
+          "beforeEarnedDescription" : "Domina los 50 verbos irregulares más usados, como los lista la página Dominio: las formas en que se basan sus conjugaciones irregulares, como tengo · tuve · tendré, en todos los tiempos del nivel Avanzado.",
+          "locale" : "es-ES",
+          "localID" : "conjugar.achievement.verbs.core50-es-ES",
+          "name" : "Cincuenta irregulares"
+        },
+        {
+          "afterEarnedDescription" : "Los 50 verbos irregulares más usados, dominados.",
+          "beforeEarnedDescription" : "Domina los 50 verbos irregulares más usados, como los lista la página Dominio: las formas en que se basan sus conjugaciones irregulares, como tengo · tuve · tendré, en todos los tiempos del nivel Avanzado.",
+          "locale" : "es-MX",
+          "localID" : "conjugar.achievement.verbs.core50-es-MX",
+          "name" : "Cincuenta irregulares"
+        }
+      ]
+    },
+    "achievements" : [
+      {
+        "archived" : false,
+        "points" : 10,
+        "referenceName" : "Patterns Beginner",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "conjugar.achievement.patterns.beginner"
+      },
+      {
+        "archived" : false,
+        "points" : 25,
+        "referenceName" : "Patterns Elementary",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "conjugar.achievement.patterns.elementary"
+      },
+      {
+        "archived" : false,
+        "points" : 50,
+        "referenceName" : "Patterns Intermediate",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "conjugar.achievement.patterns.intermediate"
+      },
+      {
+        "archived" : false,
+        "points" : 100,
+        "referenceName" : "Patterns Advanced",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "conjugar.achievement.patterns.advanced"
+      },
+      {
+        "archived" : false,
+        "points" : 25,
+        "referenceName" : "Pillars",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "conjugar.achievement.verbs.pillars"
+      },
+      {
+        "archived" : false,
+        "points" : 25,
+        "referenceName" : "Core 10",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "conjugar.achievement.verbs.core10"
+      },
+      {
+        "archived" : false,
+        "points" : 50,
+        "referenceName" : "Core 25",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "conjugar.achievement.verbs.core25"
+      },
+      {
+        "archived" : false,
+        "points" : 100,
+        "referenceName" : "Core 50",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "conjugar.achievement.verbs.core50"
+      }
+    ],
     "leaderboardImages" : {},
     "leaderboardLocalizations" : {
       "biz.joshadams.Conjugar.leaderboard" : [

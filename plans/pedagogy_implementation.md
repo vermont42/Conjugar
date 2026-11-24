@@ -47,8 +47,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 18 | Done (the app and 45 items, approved) | 2026-11-23 | 3271b9b | T5.6 |
 | 19 | Done | 2026-11-24 | f99637e | T6.2 |
 | 20 | Done | 2026-11-24 | 8d97908 | T5.7 |
-| 21 | Awaiting Josh | 2026-11-24 | | T6.3 |
-| 22 | Not started | | | T6.6 (personal bests and achievements) |
+| 21 | Done | 2026-11-24 | 82b5d83 | T6.3 |
+| 22 | Awaiting Josh | 2026-11-24 | | T6.6 (personal bests and achievements) |
 | 23 | Not started | | | T6.8 |
 | Closing | Not started | | | Audit, porting notes |
 
@@ -2987,7 +2987,7 @@ scoring.
 ## Phase 21: A Daily Session and a Streak
 
 **Ports:** Konjugieren Phase 22. **Suggestions:** T6.3. **Depends on:** Phases 10, 11, and 12.
-**Status:** Awaiting Josh.
+**Status:** Done.
 
 A short daily session, a streak that can be repaired, and an optional reminder at a time the learner
 picks. About 37% of iOS education-app users allow notifications (secondhand, in the report), so the
@@ -3094,7 +3094,7 @@ controllable clock in tests, and the reminder fires on the simulator at the chos
 ## Phase 22: Personal Bests and Achievements
 
 **Ports:** Konjugieren Phase 23. **Suggestions:** T6.6 (personal bests and achievements). **Depends
-on:** Phases 7, 19, and 21. **Status:** Not started.
+on:** Phases 7, 19, and 21. **Status:** Awaiting Josh.
 
 Personal bests per level, kept on the device, and Game Center achievements for mastery milestones,
 not for volume of play. Comparisons with one's own past motivate weaker performers better than
@@ -3127,7 +3127,105 @@ simulator.
 **Done when** each achievement reports when its milestone is reached, under test with the double,
 and the walkthrough covers achievements.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh decided three things on 2026-11-24**, asked with previews before building. (1) **The
+  eight achievements as proposed** (over six, and over adding streak milestones): four for every
+  regular pattern of a level, The Pillars for ser, estar, haber, tener, ir, and hacer, and three for
+  the 10, 25, and 50 most frequent irregular verbs; 10, 25, 50, 100, 25, 25, 50, and 100 points, 385
+  in all. (2) **A tile theme** (over a castle with keys, and the Camino de Santiago): the painted
+  tile shared by Spain's azulejos and Mexico's Talavera, since a regular pattern is a tile pattern.
+  The Tile, The Border, The Mural, The Courtyard (El azulejo, La cenefa, El mural, El patio); The
+  Pillars (Los pilares); Ten, Twenty-Five, and Fifty Irregulars (Diez, Veinticinco, Cincuenta
+  irregulares). (3) **The first draft of each image**, from two contact sheets, and The Pillars kept
+  at five columns rather than regenerated for six. The plan's other proposals, the best ranked score
+  per level and Reset Practice forgetting the bests, were taken as accepted.
+- **The verb steps are the most frequent verbs, not any of the fifty.** Konjugieren's Ten Strong
+  counts any ten of its fifty. The proposal Josh approved here listed "10 most frequent irregular:
+  ser … ver", so `coreTen` and `coreTwentyFive` count the first 10 and 25 of `Mastery.coreVerbs`.
+  The six pillars are all among the first eight, so The Pillars nearly always comes just before Ten
+  Irregulars.
+- **What counts, in Conjugar's terms.** A pattern achievement counts its level's patterns in the
+  learner's tú or vos and region, whatever level is chosen: 24, 87, 162, and 297 in Latin America,
+  27, 102, 195, and 357 in Spain. A verb counts once every key conjugation **Advanced** asks of it is
+  mastered (the keys its Mastery row shows at Advanced), so tener needs tengo, tuve, and tendré, and
+  never the regular tenido. That replaces Konjugieren's "all three key conjugations", since here a
+  verb's keys are those with an irregular cell built on them. All fifty core verbs have a key at
+  Advanced; a test pins that, since one without could never be earned.
+- **Built as** `Models/Achievement.swift` (`nonisolated`, its `verbs` and `progress` MainActor
+  because `Mastery` is), `GameCenter.reportAchievementProgress(_:)` and `showAchievements()` on the
+  protocol, the fake, the spy (which now takes `isAuthenticated`), and the real conformer, and
+  `PracticeStore.levelBests`, stored as JSON under `levelBests` since `GetterSetter` has no
+  `getCodable`.
+- **Reporting departs from Konjugieren in two ways.** Konjugieren reported at launch; Conjugar signs
+  in only when the Quiz tab or Settings asks, so nothing is reported at launch. Instead
+  `GameCenter.reportAchievements(record:settings:)` does nothing while signed out, and
+  `GameCenterReal`, once a newly signed-in player's achievements have loaded, reports from the
+  record itself, so progress made while signed out arrives at the next sign-in. It loads only for a
+  new `gamePlayerID`, since the handler runs again on every return to the foreground. A quiz reports
+  through its own injected Game Center and store, at `finish()` and `quit()`, so tests see it through
+  the spy; a review card's reveal reports through `Current.reportAchievements()`. The rest is
+  Konjugieren's: percentages, held until loaded, only rises sent.
+- **The cost.** The first report in a launch builds the four levels' `Mastery` layouts, Advanced's
+  conjugating some thousands of cells: about 0.4 seconds on the main thread in the simulator on this
+  Intel Mac, measured by the first achievement test. Later reports reuse the caches. It happens only
+  while signed in, at a quiz's end. Moving it off the main thread would mean making `Mastery`
+  nonisolated; not done.
+- **Where the best shows**, as in Konjugieren: "New personal best!" with a star, or "Your best: n",
+  under a ranked round's score ("¡Nuevo récord personal!", "Tu récord: n", the Speed Round's words
+  under keys of their own, `L.PersonalBest`), and "Your best at this level: n" ("Tu récord en este
+  nivel: n") under Start for All Verbs. Ten More's results, the daily session, and every scoped quiz
+  show none, and a score of 0 sets none. On the iPhone, the line pushes Daily Session one line lower.
+- **View Achievements** (Ver logros), as in Konjugieren though the phase did not ask: beside View
+  Leaderboard at the hub's foot, in a `FlowLayout` (both fit one line on the iPhone in English), and
+  an Achievements (Logros) row in Settings' Game Center card, below View Leaderboards, whose
+  description begins "This button shows". Both appear only while signed in.
+- **Analytics.** `tapViewAchievements`, with `source` `tab` from the hub and nothing from Settings,
+  pinned in `AnalyticsTests`. Nothing says an achievement was earned, and the best is never sent.
+  Staged in `docs/privacy_policy_pending.md` in both languages: the in-app-actions bullet, the
+  paragraph after the list (now naming the level bests; it also mends Phase 21's missing Spanish
+  comma after "domina"), and section 7's first paragraph, which now says the achievement
+  percentages go to Game Center while signed in and adds the daily session to what posts no score.
+- **The walkthrough** is `docs/game_center_setup.md` § The Achievements: IDs, points, the counts,
+  the English and Spanish names and both descriptions, the artwork, the steps from Apple's help page
+  as Konjugieren's session read them (not re-read here, and not followed in App Store Connect), the
+  reporting, and release-day testing. **Nothing was created in App Store Connect.** The eight are in
+  `GameCenterResources.gamekit` with three locales each (English (U.S.), Spanish (Spain), Spanish
+  (Mexico)), as the leaderboards are. **Josh should open it in Xcode once** to confirm that the
+  editor reads them. `docs/release.md` gains the test before submitting and the submission step;
+  the README's quiz bullet mentions the bests and achievements. The App Store description was left
+  alone, since its Spanish is near the limit.
+- **The artwork.** Sixteen drafts for about $0.86 (`gpt-image-2.5-sunburst`, high, 1024 × 1024),
+  every prompt one shared preamble naming the color sets' hex values (`customYellow` #CDA51B and
+  #8A6600, `customCardBackground` #F2F2F7, `customBlue` #1E56E0 and #5587FF, `customRed` #C1001D,
+  `customGreen` #1E7A36, black) and then a subject. Prompts, script, and the contact sheets are in
+  `plans/achievement_art/`; the sixteen PNG drafts are gitignored and kept only on Josh's Mac. The chosen eight are JPEGs at quality 92, copied for each of the
+  three locales: **7.5 MB in the app**, against Konjugieren's 3.1 MB for two locales. Pointing the
+  two Spanish localizations at one file might halve that, but whether Xcode's editor accepts a shared
+  file is untried.
+- **VoiceOver.** The results announce the best line; the hub's line is read as is; View
+  Achievements has a hint. Read from the code only; nobody has listened to it.
+- **Tests:** `AchievementTests`, 11 functions (22 cases): each ID (8), distinct IDs and the points,
+  the verbs (the ten, and every core verb having a key at Advanced), an empty record and the
+  required counts in both regions, each level's patterns earning its own and those below (4), one
+  pattern short, learning counting for nothing, every key Advanced asks, each core step and any ten
+  of the fifty not making the ten, a vosotros pattern only in Spain, and nothing reported while
+  signed out. `QuizPersonalBestTests`, 8 functions: the first best, a lower score not beating it and
+  a higher one replacing it, each level its own, Ten More and a score of 0 setting none, unranked
+  sessions setting none, across a launch and a reset, a finish reporting a mastered Beginner at 100,
+  and a quit reporting, with nothing reported while signed out. `GameCenterFakeTests` exercises the new
+  methods. **The full run passed 1,320 tests in 84 suites**, up from 1,301 in 82, in the simulator's
+  default language (English). SwiftLint reports nothing on the changed files.
+- **Verified on the iPhone**, in English and light mode at Elementary, with the screenshot fixture
+  answered by pasting: results of 100 with "New personal best!", the hub's "Your best at this level:
+  100", View Leaderboard and View Achievements side by side at the foot (the simulator's fake signs
+  in on the Quiz tab), and Settings' Achievements row with its description. **On the iPad**, in
+  Spanish and dark mode at Avanzado: "¡Nuevo récord personal!", "Tu récord en este nivel: 100", a
+  second quiz's "Tu récord: 100", and Ver logros at the hub's foot and in Configuración. Both
+  simulators' defaults were backed up first and restored afterward, checked key by key, the fixture
+  key deleted; the iPad was returned to light mode and shut down. Not tried: anything signed in to
+  real Game Center (the reports, the sheets, the banner), VoiceOver by ear, and an achievement earned
+  by real days.
 
 ## Phase 23: The Daily Challenge
 

@@ -398,6 +398,22 @@ nonisolated enum L {
     static var viewLeaderboardsHint: String {
       String(localized: "GameCenter.viewLeaderboardsHint")
     }
+
+    static var achievementsHeading: String {
+      String(localized: "GameCenter.achievementsHeading")
+    }
+
+    static var viewAchievements: String {
+      String(localized: "GameCenter.viewAchievements")
+    }
+
+    static var viewAchievementsDescription: String {
+      String(localized: "GameCenter.viewAchievementsDescription")
+    }
+
+    static var viewAchievementsHint: String {
+      String(localized: "GameCenter.viewAchievementsHint")
+    }
   }
 
   enum Info {
@@ -1046,6 +1062,23 @@ nonisolated enum L {
 
     static var againHint: String {
       String(localized: "SpeedRound.againHint")
+    }
+  }
+
+  /// The best ranked score at a level: a default quiz's first ten questions.
+  enum PersonalBest {
+    static var newBest: String {
+      String(localized: "PersonalBest.newBest")
+    }
+
+    /// The best a ranked round did not beat.
+    static func best(_ best: Int) -> String {
+      String(localized: "PersonalBest.best \(best)")
+    }
+
+    /// The Quiz tab's line under Start.
+    static func hubLine(_ best: Int) -> String {
+      String(localized: "PersonalBest.hubLine \(best)")
     }
   }
 

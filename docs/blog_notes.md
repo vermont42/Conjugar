@@ -12004,3 +12004,46 @@ Session, "Streak: 3 days". The iPhone also showed "2-" stranded at the end of a 
 strings now use a non-breaking hyphen. On the iPad, in Spanish and dark mode, the session read
 "Racha: 1 día". I meant to refuse notifications there and tapped Permitir instead, so the refused
 state is still untried. The full suite ran 1,301 tests, 26 of them new.
+
+## Personal Bests and Tile Achievements (2026-11-24)
+
+Phase 22 of the pedagogy plan gave the quiz two kinds of reward, both aimed at comparing a learner
+with their own past rather than with other people. The first is a personal best at each level: the
+score of a quiz's first ten questions, the same number the level's leaderboard takes, kept on the
+device. The results say "New personal best!" or "Your best: 90", and the Quiz tab shows "Your best
+at this level" under Start. The second is a set of eight Game Center achievements, each for
+mastering something rather than for playing a lot.
+
+Josh chose the list from three options: every regular pattern of each of the four levels, the six
+verbs most of the language rests on (ser, estar, haber, tener, ir, hacer), and the 10, 25, and 50
+most frequent irregular verbs. He turned down streak achievements, which would reward a habit
+rather than mastery. Konjugieren's version counted any ten of its fifty verbs for its first step;
+the list Josh approved here named the ten most frequent, ser through ver, so that is what Conjugar
+counts.
+
+The theme took more thought. Konjugieren's achievements build a stone arch in the German flag's
+colors. Conjugar's red and gold pointed toward Spain, but the app serves Latin America as much, and
+its region setting says so. Painted tile answered both: Spain's azulejos and Mexico's Talavera of
+Puebla are one tradition. It also fits the pedagogy, since a regular pattern is a tile pattern. So
+the pattern achievements grow from one tile to a border, a mural, and a whole tiled courtyard, and
+the verbs are tiled columns and painted number plaques. The image model drew sixteen medallions
+for 86 cents, two per achievement, and Josh took the first of each. Both drafts of The Pillars had
+five columns for six verbs; he kept it, reasoning that nobody counts.
+
+Counting took some care, because Conjugar's patterns depend on the learner. A pattern is a tense, a
+person, and an ending, and a learner in Spain has vosotros, so Beginner holds 24 patterns in Latin
+America and 27 in Spain, and Advanced 297 or 357. Each achievement counts in the learner's own
+settings. A verb counts only once every key form that Advanced asks of it is mastered, so a learner
+cannot earn tener by switching to Beginner.
+
+Reporting differed from Konjugieren's in one way. Konjugieren reported progress at launch. Conjugar
+signs in to Game Center only when the Quiz tab or Settings asks, so a launch report would find no
+player. Instead, once a player signs in and Game Center says what it already holds, the app works
+out progress from the practice record and sends what has risen. Nothing is lost while signed out,
+because the record keeps everything the progress is computed from. The first computation in a
+launch costs about 0.4 seconds in the simulator on this Intel Mac, since it lays out every level's
+patterns and Advanced's verbs.
+
+Nothing could be tried signed in to real Game Center. The achievements live only in the project's
+local Game Center file until the 2027 release. On both simulators, a pasted-in quiz set a new best,
+and a second quiz showed the unbeaten one. The full suite ran 1,320 tests, 19 of them new.

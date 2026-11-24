@@ -31,11 +31,13 @@ struct GameCenterFakeTests {
     #expect(gameCenter.isAuthenticated)
   }
 
-  @Test func submitScoreAndShowLeaderboards() {
+  @Test func submitScoreAndShowLeaderboardsAndAchievements() {
     // Nothing to assert. Exercising for coverage.
     let gameCenter = GameCenterFake()
     gameCenter.submitScore(42, level: .beginner)
     gameCenter.showLeaderboard(level: .advanced)
     gameCenter.showLeaderboards()
+    gameCenter.reportAchievementProgress([.patternsBeginner: 50])
+    gameCenter.showAchievements()
   }
 }

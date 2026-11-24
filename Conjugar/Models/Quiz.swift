@@ -74,6 +74,11 @@ class Quiz {
   private(set) var isNewSpeedRoundBest = false
   /// The streak a finished daily session left, which its results show. Nil for any other quiz.
   private(set) var dailyStreakStatus: DailyStreak.Status?
+  /// The best at its level that a ranked session's first round had to beat, read as the round
+  /// finished. Nil when there was none, or the round was not ranked.
+  private(set) var levelPreviousBest: Int?
+  /// Whether a ranked session's first round set a new best at its level.
+  private(set) var isNewLevelBest = false
   private(set) var questions: [Question] = []
   /// What the quiz under way, or last finished, asks about. See `QuizScope`.
   private(set) var scope = QuizScope.allVerbs
@@ -348,6 +353,8 @@ class Quiz {
     speedRoundPreviousBest = nil
     isNewSpeedRoundBest = false
     dailyStreakStatus = nil
+    levelPreviousBest = nil
+    isNewLevelBest = false
   }
 
   /// Where each answer is recorded and the due items come from.
@@ -726,6 +733,9 @@ class Quiz {
     currentQuestionIndex = questions.count
     questions += drawn
     roundCount += 1
+    // Ten More's results count more than the ten questions the best measures.
+    levelPreviousBest = nil
+    isNewLevelBest = false
     beginRound()
     return true
   }
@@ -979,13 +989,18 @@ class Quiz {
     }
     endLiveActivity()
     if isRankedRound {
+      levelPreviousBest = practice.levelBest(at: lastLevel)
+      isNewLevelBest = practice.recordRankedScore(firstRoundScore, level: lastLevel)
       gameCenter.submitScore(firstRoundScore, level: lastLevel)
     }
     practice.recordResult(LastQuizResult(quiz: self))
+    gameCenter.reportAchievements(record: practice.record, settings: settings)
   }
 
   func quit() {
     stop()
+    // The answers given before quitting are in the record already.
+    gameCenter.reportAchievements(record: practice.record, settings: settings)
   }
 
   func stop() {

@@ -18,6 +18,9 @@ protocol GameCenter {
   func showLeaderboard(level: QuizLevel)
   /// Game Center's list of the app's leaderboards, one a level.
   func showLeaderboards()
+  /// Each achievement's progress, 0 to 100, as the practice record now stands.
+  func reportAchievementProgress(_ percentComplete: [Achievement: Double])
+  func showAchievements()
 }
 
 extension QuizLevel {

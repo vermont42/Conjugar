@@ -44,6 +44,7 @@ struct AnalyticsTests {
     (AnalyticsName.completeQuiz, "completeQuiz"),
     (AnalyticsName.quitQuiz, "quitQuiz"),
     (AnalyticsName.completeStage, "completeStage"),
+    (AnalyticsName.tapViewAchievements, "tapViewAchievements"),
     (AnalyticsName.tapViewLeaderboard, "tapViewLeaderboard"),
     (AnalyticsName.tapSharePracticeSet, "tapSharePracticeSet"),
     (AnalyticsName.viewPracticeSet, "viewPracticeSet")

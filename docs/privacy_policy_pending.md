@@ -1111,3 +1111,57 @@ El párrafo que sigue a la lista queda así:
 ```
 Su puntuación y la duración aproximada de un cuestionario se recopilan, pero, como todas estas estadísticas, están anonimizadas y no están vinculadas a su identidad (véase la sección 4). La aplicación no envía sus respuestas del cuestionario, cuántas acertó, qué verbos consulta ni ningún texto que escriba. Para programar sus repasos, mostrarle cómo le fue su último cuestionario, mostrarle qué conjugaciones domina guardar su récord en la Ronda rápida y llevar la cuenta de su racha de sesiones diarias, la aplicación guarda un registro de qué conjugaciones ha practicado, cómo le fueron sus últimas respuestas, los resultados de su último cuestionario, su mayor número de respuestas correctas en una Ronda rápida y los días en que terminó una sesión diaria; ese registro se queda en su dispositivo y nunca se envía. Si activa el recordatorio diario, la aplicación redacta y programa sus notificaciones en su dispositivo, y no se envía nada sobre ellas. Se registra que usted hizo una búsqueda, con las cifras aproximadas indicadas arriba, pero no lo que escribió. Se registra que abrió la página de un verbo, pero no de cuál.
 ```
+
+## Personal bests and achievements (pedagogy plan, Phase 22, 2026-11-24)
+
+The app keeps the best ranked score at each level, the score of a quiz over all verbs' first ten
+questions, on the device beside the practice record, and shows it on the results and the Quiz tab.
+It is never sent; the score itself was already sent and posted as before. Conjugar gains eight Game
+Center achievements for mastering conjugations. While the learner is signed in to Game Center, the
+app sends Game Center each achievement's progress as a percentage, figured on the device from the
+practice record, and only when it has risen. No analytics signal says that an achievement was
+earned. A new signal, `tapViewAchievements`, is sent when View Achievements is tapped, with `source`
+`tab` from the Quiz tab and nothing from Settings. This rewrites the in-app-actions bullet and the
+paragraph after the list that the daily-session section rewrote, and the first paragraph of section
+7 that the Speed Round section rewrote; this wording wins over all three. It also mends the Spanish
+paragraph's missing comma after "domina".
+
+### English
+
+The bullet about in-app actions in section 2 now reads:
+
+```
+- Certain in-app actions: opening the game, reshowing the onboarding tour, tapping to rate or review the app, sending a message to the tutor, opening a tense's article from a verb's page, tapping to share a verb's page, tapping to share a collection of verbs (and which collection), starring or unstarring a verb (whether the verb is starred afterward, but not which verb), revealing the conjugations on a review card, opening a Game Center leaderboard (and which level's), opening Game Center's achievements, sharing a practice set as a link or a QR code (how it was shared, and whether it chooses tenses, verbs, or both, but not which ones), opening a shared practice set (and whether its link could be read), keeping a shared practice set as your custom quiz, resetting your practice record, and turning the daily reminder on or off (and whether notifications were refused)
+```
+
+The paragraph after the list now reads:
+
+```
+Your quiz score and the rough duration of a quiz are collected, but, like all of these analytics, they are anonymized and are not tied to your identity (see Section 4). The app does not send your quiz answers, how many of them were right, which verbs you look up, or any text you type. To schedule your reviews, show how your last quiz went, show which conjugations you have mastered, keep your Speed Round best and your best score at each level, and keep your streak of daily sessions, the app keeps a record of which conjugations you have practiced, how your last answers went, the results of your last quiz, your most right answers in a Speed Round, your best score at each level, and the days on which you finished a daily session; that record stays on your device and is never sent. If you turn on the daily reminder, the app writes and schedules its notifications on your device, and nothing about them is sent. That you searched is recorded, with the rough counts above; what you typed is not. That you opened a verb's page is recorded; which verb is not.
+```
+
+The first paragraph of section 7 now reads:
+
+```
+Conjugar integrates with Apple Game Center for quiz leaderboards, one for each quiz level, and for achievements. When you submit a score, Game Center handles that data according to Apple's privacy policy. Only the score of the first ten questions of a quiz over all verbs is submitted, to the leaderboard of the level the quiz was taken at; the questions after them, and a quiz over My Verbs, a custom quiz, a shared practice set, a review, a practice of your mistakes, the Verb Essentials exercise, the practice of a verb model, the Name the Form exercise, the Complete the Sentence exercise, the Speed Round, the daily session, a collection, or a single verb's page, are not. While you are signed in to Game Center, the app also sends it your progress toward each of Conjugar's achievements, as a percentage, which Game Center keeps and shows you; the app figures that progress on your device from your practice record, and the record itself is not sent. The developer does not have access to your Game Center identity or personal information through this integration.
+```
+
+### Spanish
+
+El punto sobre las acciones dentro de la aplicación, en la sección 2, queda así:
+
+```
+- Ciertas acciones dentro de la aplicación: abrir el juego, volver a mostrar la introducción, tocar para valorar o reseñar la aplicación, enviar un mensaje al tutor, abrir el artículo de un tiempo verbal desde la página de un verbo, tocar para compartir la página de un verbo, tocar para compartir una colección de verbos (y cuál), marcar o desmarcar un verbo con una estrella (si el verbo queda marcado, pero no de qué verbo se trata), mostrar las conjugaciones de una tarjeta de repaso, abrir una clasificación de Game Center (y de qué nivel), abrir los logros de Game Center, compartir una serie de práctica como enlace o código QR (cómo se compartió y si elige tiempos, verbos o ambos, pero no cuáles), abrir una serie de práctica compartida (y si su enlace se pudo leer), guardar una serie de práctica compartida como su cuestionario personalizado, restablecer su registro de práctica y activar o desactivar el recordatorio diario (y si se rechazaron las notificaciones)
+```
+
+El párrafo que sigue a la lista queda así:
+
+```
+Su puntuación y la duración aproximada de un cuestionario se recopilan, pero, como todas estas estadísticas, están anonimizadas y no están vinculadas a su identidad (véase la sección 4). La aplicación no envía sus respuestas del cuestionario, cuántas acertó, qué verbos consulta ni ningún texto que escriba. Para programar sus repasos, mostrarle cómo le fue su último cuestionario, mostrarle qué conjugaciones domina, guardar su récord en la Ronda rápida y su mejor puntuación en cada nivel, y llevar la cuenta de su racha de sesiones diarias, la aplicación guarda un registro de qué conjugaciones ha practicado, cómo le fueron sus últimas respuestas, los resultados de su último cuestionario, su mayor número de respuestas correctas en una Ronda rápida, su mejor puntuación en cada nivel y los días en que terminó una sesión diaria; ese registro se queda en su dispositivo y nunca se envía. Si activa el recordatorio diario, la aplicación redacta y programa sus notificaciones en su dispositivo, y no se envía nada sobre ellas. Se registra que usted hizo una búsqueda, con las cifras aproximadas indicadas arriba, pero no lo que escribió. Se registra que abrió la página de un verbo, pero no de cuál.
+```
+
+El primer párrafo de la sección 7 queda así:
+
+```
+Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios, una para cada nivel, y para los logros. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos, a la clasificación del nivel en que se hizo; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, de un cuestionario personalizado, de una serie de práctica compartida, de un repaso, de una práctica de sus errores, del ejercicio Lo esencial del verbo, de la práctica de un modelo de verbos, del ejercicio Identifica la forma, del ejercicio Completa la frase, de la Ronda rápida, de la sesión diaria, sobre una colección o sobre la página de un solo verbo, no. Mientras tenga la sesión iniciada en Game Center, la aplicación también le envía su progreso hacia cada uno de los logros de Conjugar, como un porcentaje, que Game Center guarda y le muestra; la aplicación calcula ese progreso en su dispositivo a partir de su registro de práctica, y el registro mismo no se envía. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
+```

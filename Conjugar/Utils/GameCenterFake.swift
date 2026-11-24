@@ -22,4 +22,8 @@ class GameCenterFake: GameCenter {
   func showLeaderboard(level: QuizLevel) {}
 
   func showLeaderboards() {}
+
+  func reportAchievementProgress(_ percentComplete: [Achievement: Double]) {}
+
+  func showAchievements() {}
 }

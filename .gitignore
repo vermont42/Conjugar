@@ -5,6 +5,7 @@ Conjugar/Secrets.xcconfig
 # Other
 .DS_Store
 docs/screenshots/
+plans/achievement_art/drafts/*.png
 Conjugar.xcodeproj/project.xcworkspace/xcuserdata/
 Conjugar.xcodeproj/xcuserdata/
 

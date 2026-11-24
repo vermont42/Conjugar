@@ -50,7 +50,85 @@ final class GameCenterReal: GameCenter {
         Current.analytics.signal(name: .gameCenterAuthSucceeded)
         Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
       }
+      if GKLocalPlayer.local.isAuthenticated, GKLocalPlayer.local.gamePlayerID != self.loadedPlayerID {
+        self.loadReportedAchievements()
+      }
     }
+  }
+
+  /// What Game Center holds for the signed-in player, by achievement ID, once loaded. Until then,
+  /// reports wait in `pendingAchievements`, so that progress reported before sign-in finished is
+  /// not sent blind.
+  private var reportedAchievements: [String: Double]?
+  private var pendingAchievements: [Achievement: Double] = [:]
+  /// The player whose achievements `reportedAchievements` holds. The handler runs again on every
+  /// return to the foreground, and may run for another player, so a load happens only for a new one.
+  private var loadedPlayerID: String?
+
+  private func loadReportedAchievements() {
+    let playerID = GKLocalPlayer.local.gamePlayerID
+    loadedPlayerID = playerID
+    reportedAchievements = nil
+    GKAchievement.loadAchievements { [weak self] achievements, error in
+      let failure = error?.localizedDescription
+      let loaded = Dictionary((achievements ?? []).map { ($0.identifier, $0.percentComplete) }, uniquingKeysWith: max)
+      Task { @MainActor in
+        guard let self, self.loadedPlayerID == playerID else {
+          return
+        }
+        if let failure {
+          gameCenterLogger.warning("Unable to load achievements: \(failure)")
+        }
+        self.reportedAchievements = loaded
+        // The record may have risen while the player was signed out.
+        Current.reportAchievements()
+        self.sendPendingAchievements()
+      }
+    }
+  }
+
+  func reportAchievementProgress(_ percentComplete: [Achievement: Double]) {
+    pendingAchievements.merge(percentComplete, uniquingKeysWith: max)
+    sendPendingAchievements()
+  }
+
+  /// Sends only progress that has risen. The practice record can fall, a wrong answer sending an
+  /// item down the ladder, but an achievement once earned stays earned, so a fall is never sent.
+  private func sendPendingAchievements() {
+    guard isAuthenticated, let reported = reportedAchievements else {
+      return
+    }
+
+    let risen = pendingAchievements.filter { achievement, percent in
+      percent > (reported[achievement.identifier] ?? 0)
+    }
+    pendingAchievements = [:]
+    guard !risen.isEmpty else {
+      return
+    }
+
+    let achievements = risen.map { achievement, percent in
+      let gkAchievement = GKAchievement(identifier: achievement.identifier)
+      gkAchievement.percentComplete = percent
+      gkAchievement.showsCompletionBanner = true
+      return gkAchievement
+    }
+    let sent = Dictionary(uniqueKeysWithValues: risen.map { ($0.key.identifier, $0.value) })
+    GKAchievement.report(achievements) { [weak self] error in
+      let failure = error?.localizedDescription
+      Task { @MainActor in
+        if let failure {
+          gameCenterLogger.warning("Failed to report achievements: \(failure)")
+          return
+        }
+        self?.reportedAchievements?.merge(sent, uniquingKeysWith: max)
+      }
+    }
+  }
+
+  func showAchievements() {
+    guard isAuthenticated else { return }
+    GKAccessPoint.shared.trigger(state: .achievements) {}
   }
 
   func submitScore(_ score: Int, level: QuizLevel) {

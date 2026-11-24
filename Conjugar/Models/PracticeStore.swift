@@ -10,8 +10,8 @@ import Observation
 
 /// The app's view of `PracticeRecord` (`Current.practice`): it maps questions and lookups to
 /// items, saves each change to the App Group's defaults, and answers in verbs for the review card.
-/// It also keeps the last quiz's results, which the Quiz tab shows, the Speed Round's best, and the
-/// daily session's streak.
+/// It also keeps the last quiz's results, which the Quiz tab shows, the Speed Round's best, the
+/// best ranked score at each level, and the daily session's streak.
 /// Observable, so Settings' Reset Practice shows once there is something to reset.
 @Observable
 final class PracticeStore {
@@ -19,6 +19,10 @@ final class PracticeStore {
   private(set) var lastResult: LastQuizResult?
   /// The most right answers in one Speed Round, kept on the device and sent nowhere.
   private(set) var speedRoundBest: Int?
+  /// The best ranked score at each level, by the level's raw value: the points of a default quiz's
+  /// first ten questions, which the leaderboard takes. Kept on the device; the leaderboard is sent
+  /// its own copy only while the learner is signed in to Game Center.
+  private(set) var levelBests: [String: Int] = [:]
   /// The days a daily session was finished, kept on the device and sent nowhere but as a band.
   private(set) var dailyStreak = DailyStreak()
   @ObservationIgnored private let getterSetter: GetterSetter
@@ -49,13 +53,17 @@ final class PracticeStore {
     }
     lastResult = getterSetter.get(key: LastQuizResult.storageKey).flatMap(LastQuizResult.init(json:))
     speedRoundBest = getterSetter.get(key: Self.speedRoundBestKey).flatMap { Int($0) }
+    levelBests = getterSetter.get(key: Self.levelBestsKey)
+      .flatMap { $0.data(using: .utf8) }
+      .flatMap { try? JSONDecoder().decode([String: Int].self, from: $0) } ?? [:]
     dailyStreak = getterSetter.get(key: DailyStreak.storageKey).flatMap(DailyStreak.init(json:)) ?? DailyStreak()
   }
 
   static let speedRoundBestKey = "speedRoundBest"
+  static let levelBestsKey = "levelBests"
 
   var isEmpty: Bool {
-    record.isEmpty && lastResult == nil && speedRoundBest == nil && dailyStreak.isEmpty
+    record.isEmpty && lastResult == nil && speedRoundBest == nil && levelBests.isEmpty && dailyStreak.isEmpty
   }
 
   /// A round's results, as they appear: after Ten More, the session's so far.
@@ -75,6 +83,24 @@ final class PracticeStore {
     }
     speedRoundBest = correctCount
     getterSetter.set(key: Self.speedRoundBestKey, value: "\(correctCount)")
+    return true
+  }
+
+  func levelBest(at level: QuizLevel) -> Int? {
+    levelBests[level.rawValue]
+  }
+
+  /// A ranked session's first-round score, kept when it beats the level's best. Returns whether it
+  /// did. A score of 0 sets no best.
+  @discardableResult
+  func recordRankedScore(_ score: Int, level: QuizLevel) -> Bool {
+    guard score > (levelBest(at: level) ?? 0) else {
+      return false
+    }
+    levelBests[level.rawValue] = score
+    if let data = try? JSONEncoder().encode(levelBests), let json = String(data: data, encoding: .utf8) {
+      getterSetter.set(key: Self.levelBestsKey, value: json)
+    }
     return true
   }
 
@@ -162,10 +188,10 @@ final class PracticeStore {
     save()
   }
 
-  /// Settings' Reset Practice, which forgets the last quiz's results, the Speed Round's best, and
-  /// the daily streak too. The record is saved empty rather than removed, so that the next launch
-  /// does not migrate the old schedules again. `GetterSetter` cannot remove a key, so the last
-  /// result, the best, and the streak are saved as empty strings, which read as none.
+  /// Settings' Reset Practice, which forgets the last quiz's results, the Speed Round's best, the
+  /// level bests, and the daily streak too. The record is saved empty rather than removed, so that
+  /// the next launch does not migrate the old schedules again. `GetterSetter` cannot remove a key,
+  /// so the last result, the bests, and the streak are saved as empty strings, which read as none.
   func reset() {
     record.reset()
     save()
@@ -173,6 +199,8 @@ final class PracticeStore {
     getterSetter.set(key: LastQuizResult.storageKey, value: "")
     speedRoundBest = nil
     getterSetter.set(key: Self.speedRoundBestKey, value: "")
+    levelBests = [:]
+    getterSetter.set(key: Self.levelBestsKey, value: "")
     dailyStreak = DailyStreak()
     getterSetter.set(key: DailyStreak.storageKey, value: "")
   }
