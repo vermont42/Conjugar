@@ -8180,6 +8180,214 @@
           }
         }
       }
+    },
+    "Mastery.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mastery"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dominio"
+          }
+        }
+      }
+    },
+    "Mastery.intro %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What your practice has made secure at your level, %@. An item is mastered once its next review is a week or more away, and a wrong answer starts it over."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo que tu práctica ha afianzado en tu nivel, %@. Algo está dominado cuando su próximo repaso queda a una semana o más, y una respuesta incorrecta lo devuelve al principio."
+          }
+        }
+      }
+    },
+    "Mastery.mastered" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mastered"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dominado"
+          }
+        }
+      }
+    },
+    "Mastery.learning" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learning"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En aprendizaje"
+          }
+        }
+      }
+    },
+    "Mastery.notPracticed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not yet practiced"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin practicar"
+          }
+        }
+      }
+    },
+    "Mastery.patterns" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regular Patterns"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patrones regulares"
+          }
+        }
+      }
+    },
+    "Mastery.patternsDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every regular verb of an ending shares these forms, so practicing hablaba practices cantaba too."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todos los verbos regulares de una terminación comparten estas formas, así que practicar hablaba es practicar también cantaba."
+          }
+        }
+      }
+    },
+    "Mastery.verbs" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregular Verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos irregulares"
+          }
+        }
+      }
+    },
+    "Mastery.verbsDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The 50 most used, each with the forms that its irregular conjugations at your level are built on, as in tengo · tuve · tendré. A verb regular throughout your level is left out."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los 50 más usados, cada uno con las formas en que se basan sus conjugaciones irregulares de tu nivel, como tengo · tuve · tendré. Se omite el verbo que es regular en todo tu nivel."
+          }
+        }
+      }
+    },
+    "Mastery.count %lld %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld of %2$lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld de %2$lld"
+          }
+        }
+      }
+    },
+    "Mastery.hubSummary %lld %lld %lld %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mastered: %1$lld of %2$lld patterns · %3$lld of %4$lld verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dominados: %1$lld de %2$lld patrones · %3$lld de %4$lld verbos"
+          }
+        }
+      }
+    },
+    "Mastery.hubHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows which regular patterns and irregular verbs your practice has mastered."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra qué patrones regulares y verbos irregulares dominas gracias a tu práctica."
+          }
+        }
+      }
+    },
+    "Mastery.patternMark %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ verbs: %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos en %1$@: %2$@"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

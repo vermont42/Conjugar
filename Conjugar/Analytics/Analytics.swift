@@ -93,6 +93,9 @@ nonisolated enum AnalyticsName: String {
   case viewCollection
   case viewInfoBrowseView
   case viewInfoView
+  /// Once for each opening of the Mastery page from the Quiz tab. No parameters, and nothing
+  /// about the record or the level.
+  case viewMastery
   case viewModelBrowseView
   case viewModelView
   case viewOnboardingView

@@ -939,3 +939,40 @@ El primer párrafo de la sección 7 queda así:
 ```
 Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios, una para cada nivel. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos, a la clasificación del nivel en que se hizo; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, de un cuestionario personalizado, de una serie de práctica compartida, de un repaso, de una práctica de sus errores, del ejercicio Lo esencial del verbo, de la práctica de un modelo de verbos, del ejercicio Identifica la forma, del ejercicio Completa la frase, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
 ```
+
+## Mastery (pedagogy plan, Phase 19, 2026-11-24)
+
+Adds the signal `viewMastery`, sent with no parameters when the Mastery page, reached from the Quiz
+tab, appears. It carries nothing: not the level, and nothing of what the page shows. The page shows,
+from the practice record kept on the device, which regular patterns and irregular verbs the learner
+has mastered, so the paragraph after the list names it. This rewrites the screens bullet of section
+2, which no earlier section here rewrote, and the paragraph after the list that the practice-hub
+section rewrote; this wording wins.
+
+### English
+
+The first bullet in section 2 now reads:
+
+```
+- Which screens you visit (verbs, verb models, quiz, quiz results, mastery, info articles, settings, the onboarding tour, and the tutor)
+```
+
+The paragraph after the list now reads:
+
+```
+Your quiz score and the rough duration of a quiz are collected, but, like all of these analytics, they are anonymized and are not tied to your identity (see Section 4). The app does not send your quiz answers, how many of them were right, which verbs you look up, or any text you type. To schedule your reviews, show how your last quiz went, and show which conjugations you have mastered, the app keeps a record of which conjugations you have practiced, how your last answers went, and the results of your last quiz; that record stays on your device and is never sent. That you searched is recorded, with the rough counts above; what you typed is not. That you opened a verb's page is recorded; which verb is not.
+```
+
+### Spanish
+
+El primer punto de la sección 2 queda así:
+
+```
+- Las pantallas que usted visita (verbos, modelos de verbos, cuestionario, resultados del cuestionario, dominio, artículos informativos, ajustes, la introducción y el tutor)
+```
+
+El párrafo que sigue a la lista queda así:
+
+```
+Su puntuación y la duración aproximada de un cuestionario se recopilan, pero, como todas estas estadísticas, están anonimizadas y no están vinculadas a su identidad (véase la sección 4). La aplicación no envía sus respuestas del cuestionario, cuántas acertó, qué verbos consulta ni ningún texto que escriba. Para programar sus repasos, mostrarle cómo le fue su último cuestionario y mostrarle qué conjugaciones domina, la aplicación guarda un registro de qué conjugaciones ha practicado, cómo le fueron sus últimas respuestas y los resultados de su último cuestionario; ese registro se queda en su dispositivo y nunca se envía. Se registra que usted hizo una búsqueda, con las cifras aproximadas indicadas arriba, pero no lo que escribió. Se registra que abrió la página de un verbo, pero no de cuál.
+```

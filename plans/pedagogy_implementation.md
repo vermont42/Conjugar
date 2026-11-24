@@ -44,8 +44,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 15 | Done | 2026-11-23 | 5da7c25 | T5.2 |
 | 16 | Done | 2026-11-23 | 18175a3 | T5.4 |
 | 17 | Partly done (the app and the first batch, approved); verbs 26–300 remain | 2026-11-23 | d1a3c66 | T5.5 |
-| 18 | Awaiting Josh (the app and 45 items, approved) | 2026-11-23 | | T5.6 |
-| 19 | Not started | | | T6.2 |
+| 18 | Done (the app and 45 items, approved) | 2026-11-23 | 3271b9b | T5.6 |
+| 19 | Awaiting Josh | 2026-11-24 | | T6.2 |
 | 20 | Not started | | | T5.7 |
 | 21 | Not started | | | T6.3 |
 | 22 | Not started | | | T6.6 (personal bests and achievements) |
@@ -1975,7 +1975,7 @@ empty states.
 ## Phase 12: The Practice Hub
 
 **Ports:** Konjugieren Phase 13. **Suggestions:** T6.1, T6.6 (the leaderboard's place). **Depends
-on:** Phases 6, 7, 10, and 11. **Status:** Awaiting Josh.
+on:** Phases 6, 7, 10, and 11. **Status:** Done.
 
 Turn the Quiz tab into a practice hub: what a session is, how long it takes, the current level, what
 is due for review, and the last result. The browse plan's start screen is the base.
@@ -2669,8 +2669,8 @@ sentence questions appear where decided, and tests pin the check.
 ## Phase 18: Which Tense Would a Speaker Use?
 
 **Ports:** Konjugieren Phase 19. **Suggestions:** T5.6. **Depends on:** Phase 17 for its content
-pipeline. **Status:** Built, awaiting Josh's commit: the app, the machine check, the review tooling, and a
-first batch of 45 items, which Josh approved.
+pipeline. **Status:** Done: the app, the machine check, the review tooling, and a first batch of 45
+items, which Josh approved.
 
 A context and two sentences, each in a different tense, with the learner choosing the one a speaker
 would use. Spanish has the classic contrasts: the pretérito or the imperfecto; the subjuntivo or the
@@ -2796,7 +2796,7 @@ items follow the setting, and tests pin the item data's integrity.
 ## Phase 19: Mastery
 
 **Ports:** Konjugieren Phase 20. **Suggestions:** T6.2. **Depends on:** Phases 4, 10, and 12.
-**Status:** Not started.
+**Status:** Awaiting Josh.
 
 Show mastery, modestly: the report warns that progress displays are unproven for persistence. The
 two kinds of item complicate a verb-by-tense grid, since a regular pattern is shared by every verb in
@@ -2817,7 +2817,80 @@ German word was its own VoiceOver element; the counts change with the level.
 **Done when** the display reflects the record under test and Josh has judged it on a device-sized
 screen.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh decided three things on 2026-11-24**, from ASCII mockups at Elementary, asked before
+  building, each the recommended option. (1) **A grid per tense** for the regular patterns: rows
+  -ar, -er, -ir, a column per person (over one mark per person, mastered only when all three endings
+  are, which hides which ending is shaky, and over three sections grouped by ending). In Conjugar a
+  pattern is a tense, a person, and an ending, so the counts are larger than Konjugieren's: 24
+  patterns at Beginner and 297 at Advanced in Latin America, 27 and 357 in Spain. (2) **The names
+  Mastery / Dominio**, with the states Mastered, Learning, Not yet practiced / Dominado, En
+  aprendizaje, Sin practicar, and the hub row "Mastered: 7 of 87 patterns · 2 of 50 verbs" /
+  "Dominados: 7 de 87 patrones · 2 de 50 verbos" (over Progress / Progreso and Lo que dominas). (3)
+  **The 50 most frequent irregular verbs as the verb page's pill counts them**, so spelling changes
+  (llegar, buscar, realizar, explicar, utilizar, sacar) and prefixed compounds (mantener, conseguir,
+  aparecer) are in (over leaving the spelling-only verbs out, whose practice would then show
+  nowhere).
+- **Carried over from Konjugieren unasked:** a row in From Your Practice, below My Mistakes, that
+  pushes the page (`QuizPracticeRow` with a chevron and `circle.grid.3x3.fill`); mastered is the
+  third box (`MasteryState.masteredBox`, 2); three states, each its own shape (●, ◐, ○), with a
+  legend; and a page that only shows, since opening a verb page is a lookup that would send its key
+  conjugations back to the first box.
+- **Decided in the session.** The grid's columns are the persons the quiz would ask at the level in
+  the learner's tú or vos and region (`Quiz.personNumbers(in:secondSingular:region:)`, made static
+  for this), so vosotros is a column only in Spain and Beginner's imperativo positivo has tú or vos,
+  usted, and ustedes; a command's column names whom it addresses (usted, not él). The tenses are the
+  level's pool in its order; the gerundio is one line. **A verb shows the key conjugations the level
+  asks**: those with an irregular cell built on them in a tense and person the level asks, the rule
+  the default quiz's due items use. tener has tengo at Beginner and tengo · tuve · tendré from
+  Elementary (tenido is regular, so never); llegar shows llego, which llegue, usted's command, moves.
+  **A verb with none at the level is left out there**, unlike Konjugieren, where such a row would
+  have counted as mastered with nothing in it: creer, abrir, escribir, and leer at Beginner, which
+  therefore lists 46. A verb counts as mastered once every key it shows is. The section's line says
+  so ("A verb regular throughout your level is left out.") and avoids the words "key conjugations",
+  which the interface never uses.
+- **Built as** `Models/Mastery.swift` (`MasteryState`, `PracticeRecord.masteryState(of:)`,
+  `Mastery` with its pattern tables, verb rows, counts, `coreVerbs`, and
+  `keyConjugations(of:askedBy:)`) and `Views/MasteryView.swift` (`MasteryDestination`). The tenses,
+  persons, and each verb's keys do not depend on the record, so `Mastery` caches them per level, tú
+  or vos, and region; the hub row builds a `Mastery` each time it draws and conjugates nothing after
+  the first. Forms are conjugated as each verb row is drawn, in a `LazyVStack`.
+- **SwiftLint's `inclusive_language` rule flagged every "Mastery" name**, a false positive. Josh
+  had the rule disabled outright on 2026-11-24, in Conjugar's, Conjuguer's, and Konjugieren's
+  `.swiftlint.yml` (Konjugieren, which runs no SwiftLint phase, got a config holding only that
+  rule). A test helper first named `master` stayed renamed `bringToMastery`.
+- **Analytics.** `viewMastery`, with no parameters, when the page appears. Staged in
+  `docs/privacy_policy_pending.md` in both languages: the screens bullet gains "mastery" /
+  "dominio", and the paragraph after the list says the record also shows which conjugations the
+  learner has mastered.
+- **VoiceOver.** Found by reading the accessibility tree: a grid of `HStack` columns was still read
+  by rows (every pronoun, then every -ar mark), so a listener could not tell whose mark was whose.
+  Each column is now an accessibility container, and the tree reads "yo", "-ar verbs: Mastered",
+  "-er verbs: Mastered", "-ir verbs: Not yet practiced", "tú", …. Pronouns, tense names,
+  infinitives, and forms are Spanish elements; marks, glosses, and headers are in the interface's
+  language. The section headers are headers read with their counts, and the hub row has a hint.
+  Nobody has listened to it.
+- **Also:** the README's quiz bullet names the page. The App Store description was left alone, since
+  its Spanish is 34 characters from the limit.
+- **Tests:** `MasteryTests`, 10 functions (17 cases): the state by box through a wrong answer, a
+  lookup as learning, each level's pattern count in both regions (8 cases), the columns under tú,
+  vos, and Spain, the 50 core verbs (order, irregular, llegar and mantener in), the four verbs left
+  out at Beginner, the keys each level asks (tener, hacer, pedir, llegar, escribir), the display
+  following a seeded record at Beginner and Elementary, a vosotros pattern counted only in Spain,
+  and answers landing where the mapping sends them. **The full run passed 1,260 tests in 80
+  suites**, up from 1,250 in 79, in the simulator's default language (English).
+- **Verified on the iPhone**, in English and light mode at Elementary in Latin America, with a
+  seeded record (the real one restored afterward and checked byte for byte): the hub row ("Mastered:
+  7 of 87 patterns · 2 of 50 verbs"), the page's intro, legend, and grids matching the seed, the
+  gerundio's line, and the verbs (ser and estar mastered, tener at ● tengo ◐ tuve ○ tendré, red
+  letters as on the verb page). **On the iPad**, in Spanish and dark mode at Intermedio in Spain:
+  "Dominados: 7 de 195 patrones · 2 de 50 verbos", the vosotros columns and the five-column
+  imperativo positivo, and the verbs, where the marks were smaller than the title-size forms until
+  the row's font moved to the mark and form together. Its settings and record were restored and
+  checked, its appearance returned to light, and it was shut down. Not tried: VoiceOver by ear,
+  accessibility text sizes (the row heights scale with `@ScaledMetric`), and a record built by real
+  days of practice. **Josh has not yet judged it on a device**, which the phase's Done when asks.
 
 ## Phase 20: Speed Round
 

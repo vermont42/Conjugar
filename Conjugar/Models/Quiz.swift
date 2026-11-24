@@ -571,9 +571,13 @@ class Quiz {
     personNumbers(in: cell.tense, region: settings.region).contains(cell.personNumber)
   }
 
+  private func personNumbers(in tense: DisplayTense, region: Region) -> [DisplayPersonNumber] {
+    Self.personNumbers(in: tense, secondSingular: secondSingular, region: region)
+  }
+
   /// The persons a quiz may ask in a tense: tú or vos by the setting, no vosotros in the Latin
   /// America region, and no yo in a command.
-  private func personNumbers(in tense: DisplayTense, region: Region) -> [DisplayPersonNumber] {
+  static func personNumbers(in tense: DisplayTense, secondSingular: DisplayPersonNumber, region: Region) -> [DisplayPersonNumber] {
     if tense == .gerundio || tense == .participio {
       return [.none]
     }

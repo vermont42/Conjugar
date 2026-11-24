@@ -1211,6 +1211,61 @@ nonisolated enum L {
     }
   }
 
+  enum Mastery {
+    static var title: String {
+      String(localized: "Mastery.title")
+    }
+
+    static func intro(level: String) -> String {
+      String(localized: "Mastery.intro \(level)")
+    }
+
+    static var mastered: String {
+      String(localized: "Mastery.mastered")
+    }
+
+    static var learning: String {
+      String(localized: "Mastery.learning")
+    }
+
+    static var notPracticed: String {
+      String(localized: "Mastery.notPracticed")
+    }
+
+    static var patterns: String {
+      String(localized: "Mastery.patterns")
+    }
+
+    static var patternsDescription: String {
+      String(localized: "Mastery.patternsDescription")
+    }
+
+    static var verbs: String {
+      String(localized: "Mastery.verbs")
+    }
+
+    static var verbsDescription: String {
+      String(localized: "Mastery.verbsDescription")
+    }
+
+    static func count(mastered: Int, total: Int) -> String {
+      String(localized: "Mastery.count \(mastered) \(total)")
+    }
+
+    static func hubSummary(masteredPatterns: Int, patterns: Int, masteredVerbs: Int, verbs: Int) -> String {
+      String(localized: "Mastery.hubSummary \(masteredPatterns) \(patterns) \(masteredVerbs) \(verbs)")
+    }
+
+    static var hubHint: String {
+      String(localized: "Mastery.hubHint")
+    }
+
+    /// VoiceOver's name for one mark of a tense's grid: "-ar verbs: Mastered".
+    static func patternMark(ending: String, state: String) -> String {
+      String(localized: "Mastery.patternMark \(ending) \(state)")
+    }
+  }
+
   enum PracticeSession {
     static var heading: String {
       String(localized: "PracticeSession.heading")

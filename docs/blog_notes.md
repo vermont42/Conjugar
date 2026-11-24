@@ -11883,3 +11883,51 @@ passed. Josh read the review sheet the same evening and approved all 45 without 
 including the two I had flagged as regional, so a release build will ask them. He also decided
 that later batches need no review of his, as he had for the sentences: the machine check and
 Claude's full reread are enough.
+
+## Showing What Practice Has Made Secure (2026-11-24)
+
+Since Phase 10, Conjugar's quiz has kept a practice record: a box and a due date for each thing an
+answer exercises, either one of an irregular verb's key conjugations (tengo, tuve, tendré, tenido)
+or a regular pattern shared by every verb of an ending. Nothing showed the learner that record
+except the review rows. This session added a Mastery page, reached from a row on the Quiz tab, that
+shows what the record has made secure at the learner's level. Mastered means the third box, whose
+next review is a week away; below it an item is learning, and with no entry it is not yet
+practiced. Each state has its own shape (●, ◐, ○), so the page does not depend on color.
+
+Konjugieren built the same page first, and its design mostly carried over: regular patterns first,
+then the most frequent irregular verbs with their key conjugations, and a page that only shows.
+That last rule looks odd until you recall that opening a verb page is a lookup, and a lookup sends
+the verb's key conjugations back to the first box. A learner who tapped a mastered verb to admire
+it would undo it.
+
+The part that did not carry over was the size. A German pattern is a tense and a person. A Spanish
+one is a tense, a person, and an ending, since hablaba and comía are different things to learn. So
+Elementary holds 87 patterns in Latin America and Advanced 297. I asked Josh to choose from three
+ASCII mockups: a grid per tense with endings as rows and persons as columns, one mark per person
+that is mastered only when all three endings are, or the patterns grouped by ending. He chose the
+grid, which shows exactly which ending and person is shaky. He also chose the names Mastery and
+Dominio. For the verbs, he chose to count irregular verbs as the verb page's pill does, so llegar
+and buscar, whose only irregularity is spelling, are among the 50. Their practice moves items like
+any other verb's, and leaving them out would have hidden it.
+
+One rule differs from Konjugieren's. A verb lists only the key conjugations its level asks: those
+with an irregular cell built on them in a tense the level asks. At Beginner that leaves creer,
+abrir, escribir, and leer with nothing at all, since their irregular forms (creyó, abierto,
+escrito, leyó) are all beyond the presente and the commands. Konjugieren would have shown such a
+row empty and counted it as mastered. Here the verb is left out at that level, so Beginner lists
+46 verbs.
+
+The most useful find came from reading the accessibility tree rather than the screenshot. I had
+laid the grid out as columns, a pronoun above three marks, expecting VoiceOver to read each person
+in turn. It read by rows instead: every pronoun, then every -ar mark, so a listener could not tell
+whose mark was whose. Making each column an accessibility container fixed the order. Now it reads
+"yo", then "-ar verbs: Mastered", "-er verbs: Mastered", and "-ir verbs: Not yet practiced", then
+"tú". SwiftLint also objected to every type named Mastery under its inclusive-language rule, a false
+positive. Josh had the rule turned off entirely, here and in Conjuguer and Konjugieren.
+
+The full suite ran 1,260 tests in 80 suites and passed. On the iPhone, in English, a seeded record's
+seven mastered patterns and two mastered verbs appeared where the seed put them. On the iPad, in
+Spanish and dark mode at Intermedio in Spain, the vosotros columns appeared and the count read 195.
+The iPad also showed that the marks beside each verb's forms were smaller than the forms, which
+grow to title size on a wide screen. Both now take the same font. Josh has yet to judge the page on
+his phone.

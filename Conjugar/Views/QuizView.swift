@@ -76,6 +76,9 @@ struct QuizView: View {
       .navigationDestination(for: ModelPracticeDestination.self) { _ in
         ModelPracticeListView()
       }
+      .navigationDestination(for: MasteryDestination.self) { _ in
+        MasteryView()
+      }
       .navigationDestination(for: CustomQuizDestination.self) { destination in
         switch destination {
         case .editor:
@@ -484,7 +487,7 @@ struct QuizView: View {
   }
 
   /// Review and Practice My Mistakes, on every segment, each saying why it is empty when it is,
-  /// and the last round's results once a quiz has finished.
+  /// the Mastery page, and the last round's results once a quiz has finished.
   private var practiceSection: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
       Text(L.PracticeSession.heading)
@@ -504,6 +507,23 @@ struct QuizView: View {
           start: count > 0 ? { startQuiz(scope: .recordSession(session)) } : nil
         )
       }
+
+      let mastery = Mastery.current()
+      QuizPracticeRow(
+        title: L.Mastery.title,
+        detail: L.Mastery.hubSummary(
+          masteredPatterns: mastery.masteredPatternCount,
+          patterns: mastery.patternCount,
+          masteredVerbs: mastery.masteredVerbCount,
+          verbs: mastery.verbCount
+        ),
+        systemImage: "circle.grid.3x3.fill",
+        hint: L.Mastery.hubHint,
+        identifier: "quiz_mastery",
+        isLarge: isLarge,
+        opensList: true,
+        start: { navigationPath.append(MasteryDestination()) }
+      )
 
       if let lastResult = Current.practice.lastResult {
         LastQuizResultRow(result: lastResult, isLarge: isLarge)

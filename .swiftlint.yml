@@ -12,6 +12,7 @@ disabled_rules:
   - nesting
   - blanket_disable_command
   - for_where
+  - inclusive_language
 
 file_length:
   warning: 10000

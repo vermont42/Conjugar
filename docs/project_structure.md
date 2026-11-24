@@ -145,6 +145,8 @@ Conjugar/
 │   ├── ChoiceQuestion.swift    # The default round's choice of tense: ChoiceQuestion (two GapSentences, a level, an optional ChoiceRegion, a
 │   │                           #   ChoiceReason and its line), ChoicePrompt (the order and the learner's tú or vos), ChoiceQuestions (load, askable
 │   │                           #   at a level in a region), QuizDraw.choice and choicePosition (never first)
+│   ├── Mastery.swift           # The Mastery page's model: MasteryState (mastered at the third box, learning, not yet practiced), each level's
+│   │                           #   regular patterns as endings-by-persons grids, the 50 most frequent irregular verbs' key conjugations the level asks, counts
 │   ├── LastQuizResult.swift    # The last round's results that the Quiz tab's hub shows: a kind and subject (not a title), level, counts, score, date
 │   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, a collection, a custom choice, or a practice set; question count (a round of ten, or Test Me's three), source, title, a practice set's level, a record session, isVerbEssentials, a model's practice, isRecognition, isRanked, mixesChoiceQuestions, sendsQuestionCounts, shufflesQuestions, continues, startsLiveActivity, pool(level:), band(level:)
 │   ├── CustomQuiz.swift        # The Quiz tab's Custom choice: chosen tenses and a QuizVerbSet (all, a band, a collection, a shared list of infinitives, My Verbs), each the level's when unchosen; stored as tenses=…&verbs=… (or infinitives=…); QuizScope.custom
@@ -258,10 +260,11 @@ Conjugar/
     ├── ModelBrowseView.swift   # The Collections section above a sortable, searchable list of every verb model with irregularity badges; consumes list links
     ├── ModelPracticeCard.swift # A model's practice card: Alone and Mixed, the known seal, why Mixed is closed, or a single-verb model's note; on each model's page and in the list
     ├── ModelPracticeListView.swift  # The Quiz hub's Verb Models list: the models practiced alone, the most used first, each with its key conjugations, expanding to its card
+    ├── MasteryView.swift       # The Mastery page the Quiz hub pushes: a legend, a grid per tense of the regular patterns, and the irregular verbs' key conjugations, each marked; shows only
     ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, the model's collection bar, its practice card, and the verbs using the model, by frequency or alphabetically
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
     ├── QuizSheet.swift         # A quiz in a sheet with a Quiz of its own over a QuizScope: Test Me, a collection's Quiz, and a practice set's Start
-    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, and Last Quiz, the Exercises rows for Verb Essentials, Verb Models, Name the Form, and Complete the Sentence, a small View Leaderboard button) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, Name the Form's prompt, chips, and Check, a sentence's English and Draft pill, a choice in the field's place with its region pill, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
+    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, Mastery, and Last Quiz, the Exercises rows for Verb Essentials, Verb Models, Name the Form, and Complete the Sentence, a small View Leaderboard button) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, Name the Form's prompt, chips, and Check, a sentence's English and Draft pill, a choice in the field's place with its region pill, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
     ├── CustomQuizView.swift    # The Custom segment's editor of tenses and verbs, its Models list, and the summary card on the start screen and a practice set's sheet
     ├── PracticeSetView.swift   # A shared practice set's sheet (Start, Keep as My Custom Quiz, "Practice Set Not Found") and its full-screen QR code
     ├── QuizCorrectionView.swift # A wrong answer's held correction: the two answers with their differing letters marked (a Name the Form answer's wrong parts, and
@@ -373,6 +376,8 @@ ConjugarTests/
 │   │                                   #   a mistake leaving once right and not returning in Ten More, the region, no score and no counts
 │   ├── QuizHubTests.swift              # The last quiz's results: the stored form, each scope's kind and title, a relaunch, Reset, and
 │   │                                   #   what a finished round, Ten More, a quit, a Review, a verb page, and a collection keep
+│   ├── MasteryTests.swift              # Mastery: the state by box, each level's patterns in both regions, the persons, the core verbs, the key
+│   │                                   #   conjugations each level asks, the display following a seeded record, and answers landing where mapped
 │   ├── FrequencyBandTests.swift        # Each band holds exactly its count, the bands nest, and where one ends
 │   ├── VerbFamilies.swift              # Hand-curated lists of verbs irregular in a tense, and regular verbs by ending: an oracle for the quiz's draw and the collections
 │   ├── VerbFamiliesTests.swift         # The lists resolve in the verb map, and the quiz's per-cell judgment finds each listed irregular (and regular) verb

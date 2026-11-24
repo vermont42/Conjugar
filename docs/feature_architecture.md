@@ -1389,6 +1389,51 @@ its reason ("Incorrect. The right choice: …. …"), and focus moves to the rea
 `CONJUGAR_QUIZ_FIXTURE choices` replaces the default quiz with ten choices, one per kind of reason,
 the right sentence first and second by turns (`Quiz.choicesFixtureIDs`).
 
+### Mastery
+
+**Where.** A Mastery (Dominio) row in the Quiz tab's From Your Practice, below My Mistakes, reads
+"Mastered: 23 of 87 patterns · 2 of 50 verbs" and pushes the page (`MasteryView`, through
+`MasteryDestination`). The page only shows. A verb on it opens nothing, though a link to its page
+would be the obvious thing, because opening a verb page is a lookup, which sends the verb's key
+conjugations back to the first box; a learner admiring a mastered verb would undo it.
+
+**The states** (`MasteryState`). Mastered is the third box of the ladder or above
+(`MasteryState.masteredBox`, 2, the seven-day interval); below it an item is learning, a lookup
+included; with no entry, not yet practiced. Each state has its own shape (●, ◐, ○), not only its
+own color, and a legend at the top names them.
+
+**What it shows** (`Mastery`, `Models/Mastery.swift`), at the learner's level, in the tú or vos and
+the region set now, so the counts change with the level and settings:
+
+- **Regular Patterns.** One card per tense of the level's pool, in the pool's order, a grid of the
+  three endings (rows) by the persons the level asks there (columns): the imperativo positivo's
+  columns at Beginner and Elementary are tú or vos, usted, and ustedes, a command's columns name
+  whom it addresses (usted, not él), and vosotros is a column only in Spain. The gerundio is one
+  line. Each mark is `PracticeItem.pattern(of:ending:)`'s state in the record. Beginner holds 24
+  patterns in Latin America and 27 in Spain; Advanced 297 and 357.
+- **Irregular Verbs.** The 50 most frequent verbs the verb page's pill calls irregular
+  (`Mastery.coreVerbs`, `VerbEssentials.pool`), spelling changes (llegar) and prefixed compounds
+  (mantener) included, since the record keeps their key conjugations like any other's. Each shows
+  the key conjugations the level asks (`Mastery.keyConjugations(of:askedBy:)`): those with an
+  irregular cell built on them in a tense and person the level asks. So tener has only tengo at
+  Beginner and tengo · tuve · tendré from Elementary, never tenido (regular); llegar's yo presente,
+  llego, is shown because llegue, usted's command, is built on it. A verb with no such key at the level is left out there (creer,
+  abrir, escribir, and leer at Beginner, which lists 46). A verb is mastered once every key it shows
+  is. The forms are the engine's, red letters and all, conjugated as each row is drawn.
+
+The persons, tenses, and keys do not depend on the record, so `Mastery` keeps them per level and
+settings, and the hub's row, which builds a `Mastery` each time it draws, conjugates nothing after
+the first time.
+
+**Analytics.** `viewMastery`, with no parameters, when the page appears. Nothing about the record
+or the level is sent.
+
+**VoiceOver.** A tense's grid is laid out in columns, so VoiceOver reads a person's pronoun (in
+Spanish), then that person's three marks, each naming its ending and state ("-ar verbs: Mastered").
+The ending labels themselves are hidden. A verb's infinitive and each form are Spanish elements,
+its gloss and each mark English; the section headers are headers read with their counts; the hub
+row has a hint.
+
 ## The Verb of the Day and Random Verbs
 
 **`FrequencyBand`** (`Models/FrequencyBand.swift`, `nonisolated`) defines the bands once: `.top100`,
