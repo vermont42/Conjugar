@@ -152,7 +152,8 @@ put them back.
    or which verb or item was asked.** Conjugar's quiz signals already send `score` and
    `elapsedTime`, which its policy discloses. Josh decided on 2026-11-22 that `score` stays only on
    the default quiz's ranked round and is sent by no other mode, and that Phase 6's duration bands
-   replace `elapsedTime`. That a mode was started, quit, or finished, and from where, is fine.
+   replace `elapsedTime`. **Josh reversed the first half on 2026-11-24:** no quiz signal sends
+   `score` now (see the Closing). That a mode was started, quit, or finished, and from where, is fine.
 6. Update [`docs/project_structure.md`](../docs/project_structure.md) for new, renamed, or
    repurposed files, and keep `docs/feature_architecture.md` § Quiz true (create the section in
    Phase 4 if the browse plan has not).
@@ -183,7 +184,8 @@ defaults here. He may overrule any of them for Conjugar when he reviews this pla
   practice.
 - **The leaderboard is re-scoped by level** (Decision 4), in Phase 7.
 - **No accuracy signals** (Decision 5): nothing new reports how well a learner did. Conjugar's
-  existing `score` stays on the default quiz's ranked round only (below). The practice record is
+  existing `score` stayed on the default quiz's ranked round only (below) until Josh removed it on
+  2026-11-24. The practice record is
   kept on the device and sent nowhere.
 - **The arcade game is left as play** (Decision 7, T6.9). Toreo por Amor does not conjugate.
 - **Schools are a channel** (Decision 8), but mostly Conjuguer's, whose Swiss institution bought
@@ -211,6 +213,7 @@ he reviewed it. Each is written into its phase:
 - **The score signal** (step 5 above, Phases 6 and 11): `score` is sent only with the default
   quiz's ranked round, and by no other mode; record sessions, the speed round, and mixed model
   practice send neither `score` nor counts. Phase 6's duration bands replace `elapsedTime`.
+  **Reversed (Josh, 2026-11-24):** no mode sends `score` now; see the Closing.
 - **The levels** (Phase 4): the draft ladder, with Easy migrating to Level 2, Moderate to Level 3,
   Difficult to Level 4, and a new install starting at Level 1.
 - **The verbs asked** (Phase 5): drawn from the engine's per-cell irregularity within the band,
@@ -1366,7 +1369,7 @@ fires on the next launch, and tests pin re-ask placement and the continuation.
   `quitQuiz` during it, as `firstRoundScore`. A scoped quiz and Ten More's rounds send none. The
   exact `elapsedTime` is gone from every signal, replaced by `duration`, wall-clock from the
   session's start (`AnalyticsBand.quizDuration`). `ParameterKey.elapsedTime` was removed; nothing
-  else sent it.
+  else sent it. (`score` itself was removed on 2026-11-24; see the Closing.)
 - **The abandonment record.** `QuizAbandonment` keeps one entry per quiz in the defaults (key
   `quizzesInProgress`). `GetterSetter` has no removal, so an empty record is an empty string, as
   `TutorChatHistory` clears. It is reported in `ConjugarApp.init`, after analytics starts and
@@ -3489,12 +3492,21 @@ it, sharing produces the agreed text, and tests pin the seeding.
   Konjugieren's Closing found: it is `Quiz.questionReached`, which counts no re-ask, on `quitQuiz`
   and in `QuizAbandonment.Entry`, as Phase 6 built it and a test pins. `questionCount` counts no
   re-ask either, and neither is sent where a round's length depends on answers (a record session,
-  a model's mixed practice, the Speed Round: `QuizScope.sendsQuestionCounts`). `score` goes only
-  with a ranked session's first round (`Quiz.isRankedRound`), as Josh decided; the streak band
+  a model's mixed practice, the Speed Round: `QuizScope.sendsQuestionCounts`). `score` went only
+  with a ranked session's first round (`Quiz.isRankedRound`), as Josh decided on 2026-11-22, until
+  he reversed it (below); the streak band
   counts days, not answers; `tapShareChallenge` sends the level, never the result. **One stale
   comment, fixed:** `AnalyticsName.tapViewLeaderboard`'s said the results screen sends it with
   `level`; since Phase 12 the button is the Quiz tab's and sends `level` and `source` `tab`, as
   the pending policy and `feature_architecture.md` already said.
+- **The score signal was removed after the Closing (Josh, 2026-11-24).** Conjuguer's Closing
+  noticed that Conjugar still sent `score` (`firstRoundScore`) on a ranked round's `completeQuiz`
+  and `quitQuiz`, while Konjugieren had dropped it under its Decision 5 and Conjuguer's plan said
+  dropping it made the three apps agree. A score sent on a quit also counted the right answers
+  before the quit, the kind of count Decision 5 keeps off the signals. Josh reversed his
+  2026-11-22 decision: neither signal sends `score`, `ParameterKey.score` is gone (nothing else
+  sent it), and `docs/privacy_policy_pending.md` stages the change in both languages under "No
+  quiz score". The ranked score still posts to Game Center and still sets the personal best.
 
 ### What Conjugar Did That the Siblings Could Adopt
 

@@ -1234,3 +1234,42 @@ El primer párrafo de la sección 7 queda así:
 ```
 Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios, una para cada nivel, y para los logros. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos, a la clasificación del nivel en que se hizo; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, de un cuestionario personalizado, de una serie de práctica compartida, de un repaso, de una práctica de sus errores, del ejercicio Lo esencial del verbo, de la práctica de un modelo de verbos, del ejercicio Identifica la forma, del ejercicio Completa la frase, de la Ronda rápida, de la sesión diaria, del desafío diario, sobre una colección o sobre la página de un solo verbo, no. Mientras tenga la sesión iniciada en Game Center, la aplicación también le envía su progreso hacia cada uno de los logros de Conjugar, como un porcentaje, que Game Center guarda y le muestra; la aplicación calcula ese progreso en su dispositivo a partir de su registro de práctica, y el registro mismo no se envía. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
 ```
+
+## No quiz score (pedagogy plan, after the Closing, 2026-11-24)
+
+`completeQuiz` and `quitQuiz` no longer send `score`, which a quiz over all verbs sent for its first
+ten questions. Josh removed it so that Conjugar agrees with Conjuguer and Konjugieren, which send no
+score, and because a score sent on a quit counted the right answers before it. The deployed policy
+discloses the score, so its bullet and the paragraph after the list change. This rewrites the score
+bullet that the daily-session section rewrote and the paragraph after the list that the
+daily-challenge section rewrote; this wording wins over both. Section 7 does not change: the score
+of a quiz over all verbs' first ten questions still goes to Game Center, and the best at each level
+is still kept on the device and never sent.
+
+### English
+
+The bullet about the quiz score and elapsed time in section 2 now reads:
+
+```
+- For every quiz, roughly how long it ran when you quit or complete a round (under 3 seconds, 3 to 15 seconds, 15 to 40 seconds, 40 seconds to 2 minutes, or longer); except for a review, a practice of your mistakes, a verb model's mixed practice, or the Speed Round, how many questions it has asked when you complete a round; and, when you complete a daily session, roughly how many days your streak of daily sessions has reached (1, 2 to 6, 7 to 29, or 30 or more)
+```
+
+The paragraph after the list now reads:
+
+```
+The rough duration of a quiz is collected, but, like all of these analytics, it is anonymized and is not tied to your identity (see Section 4). Your quiz score is not collected. The app does not send your quiz answers, how many of them were right, which verbs you look up, or any text you type. To schedule your reviews, show how your last quiz went, show which conjugations you have mastered, keep your Speed Round best and your best score at each level, keep your streak of daily sessions, and show and share how your daily challenges went, the app keeps a record of which conjugations you have practiced, how your last answers went, the results of your last quiz, your most right answers in a Speed Round, your best score at each level, the days on which you finished a daily session, and the results of your last daily challenges; that record stays on your device and is never sent. A daily challenge's result leaves your device only if you share it yourself. If you turn on the daily reminder, the app writes and schedules its notifications on your device, and nothing about them is sent. That you searched is recorded, with the rough counts above; what you typed is not. That you opened a verb's page is recorded; which verb is not.
+```
+
+### Spanish
+
+El punto sobre la puntuación y el tiempo transcurrido, en la sección 2, queda así:
+
+```
+- En todo cuestionario, cuánto duró aproximadamente al abandonarlo o al terminar una tanda (menos de 3 segundos, de 3 a 15 segundos, de 15 a 40 segundos, de 40 segundos a 2 minutos, o más); salvo en un repaso, en una práctica de sus errores, en la práctica mezclada de un modelo de verbos o en la Ronda rápida, cuántas preguntas lleva al terminar una tanda; y, al terminar una sesión diaria, cuántos días aproximadamente lleva su racha de sesiones diarias (1, de 2 a 6, de 7 a 29, o 30 o más)
+```
+
+El párrafo que sigue a la lista queda así:
+
+```
+La duración aproximada de un cuestionario se recopila, pero, como todas estas estadísticas, está anonimizada y no está vinculada a su identidad (véase la sección 4). Su puntuación en los cuestionarios no se recopila. La aplicación no envía sus respuestas del cuestionario, cuántas acertó, qué verbos consulta ni ningún texto que escriba. Para programar sus repasos, mostrarle cómo le fue su último cuestionario, mostrarle qué conjugaciones domina, guardar su récord en la Ronda rápida y su mejor puntuación en cada nivel, llevar la cuenta de su racha de sesiones diarias, y mostrarle y compartir cómo le fueron sus desafíos diarios, la aplicación guarda un registro de qué conjugaciones ha practicado, cómo le fueron sus últimas respuestas, los resultados de su último cuestionario, su mayor número de respuestas correctas en una Ronda rápida, su mejor puntuación en cada nivel, los días en que terminó una sesión diaria y los resultados de sus últimos desafíos diarios; ese registro se queda en su dispositivo y nunca se envía. El resultado de un desafío diario solo sale de su dispositivo si usted mismo lo comparte. Si activa el recordatorio diario, la aplicación redacta y programa sus notificaciones en su dispositivo, y no se envía nada sobre ellas. Se registra que usted hizo una búsqueda, con las cifras aproximadas indicadas arriba, pero no lo que escribió. Se registra que abrió la página de un verbo, pero no de cuál.
+```

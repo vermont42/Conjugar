@@ -42,9 +42,6 @@ nonisolated enum ParameterKey: String {
   case questionNumber
   case resultCount
   case resultPosition
-  /// The score of a ranked session's first round, on that round's `completeQuiz` and on a quit
-  /// during it. No other quiz sends it.
-  case score
   case source
   case stage
   /// The streak a daily session leaves, or the one at stake while a repair waits, in bands

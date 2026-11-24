@@ -1081,17 +1081,21 @@ opens, so `startQuiz` with `verbPage` counts the same taps. Ten More sends no si
 | `tapSharePracticeSet` | `method` (`link` or `qrCode`) and `customChoice`, never which tenses or verbs | On Share Link or Show QR Code |
 | `viewPracticeSet` | `outcome` (`opened`, or `invalid` for a link that names nothing) and `source` | Once for each practice-set sheet a link opens |
 | `tapKeepPracticeSet` | None | On Keep as My Custom Quiz |
-| `completeQuiz` | `duration`, `questionCount` (10, 20, …, or 20, 40, … for Verb Essentials) except for a record session or a model's mixed practice, `score` for a ranked session's first round only | At each round's results |
-| `quitQuiz` | `duration`, `questionNumber` except for a record session or a model's mixed practice, `score` during a ranked session's first round only | On Quit |
+| `completeQuiz` | `duration`, `questionCount` (10, 20, …, or 20, 40, … for Verb Essentials) except for a record session or a model's mixed practice | At each round's results |
+| `quitQuiz` | `duration`, `questionNumber` except for a record session or a model's mixed practice | On Quit |
 | `abandonQuiz` | `questionNumber` except for a record session or a model's mixed practice | At the next launch, for each quiz the app was left during |
 
 `duration` is wall-clock from the session's start, background included, in the bands of
 `AnalyticsBand.quizDuration`: 0-3s, 3-15s, 15-40s, 40s-2m, and 2m+. It replaced the exact
 `elapsedTime`. `questionNumber` is `Quiz.questionReached`, which counts no re-ask, since a re-ask
 follows only a wrong answer and a count that included them would say how many answers were wrong.
-`score` is `firstRoundScore`, and no other quiz or round sends one. **A record session (Review or
-Practice My Mistakes) sends no counts** (`QuizScope.sendsQuestionCounts`): a round shorter than ten
-is exactly as long as the learner's due or missed items, so its length would count wrong answers.
+**No quiz signal sends a score.** A ranked session's first round sent `firstRoundScore` until Josh
+removed it on 2026-11-24, so that Conjugar agrees with Conjuguer and Konjugieren, which send none
+(Konjugieren's Decision 5). A score sent on a quit also counted the right answers before it, a
+count of how well the learner did. The score still goes to Game Center (below). **A record
+session (Review or Practice My Mistakes) sends no counts** (`QuizScope.sendsQuestionCounts`): a
+round shorter than ten is exactly as long as the learner's due or missed items, so its length would
+count wrong answers.
 `QuizAbandonment.Entry.questionNumber` is optional for that reason.
 
 **Game Center.** Each level has a leaderboard, `QuizLevel.leaderboardID` (`Utils/GameCenter.swift`):

@@ -1441,9 +1441,6 @@ struct QuizView: View {
     if quiz.scope.sendsQuestionCounts {
       parameters[ParameterKey.questionCount.rawValue] = "\(quiz.questionCount)"
     }
-    if quiz.isRankedRound {
-      parameters[ParameterKey.score.rawValue] = "\(quiz.firstRoundScore)"
-    }
     if let streak = quiz.dailyStreakStatus {
       parameters[ParameterKey.streak.rawValue] = AnalyticsBand.streak(streak.length)
     }
@@ -1465,9 +1462,6 @@ struct QuizView: View {
     ]
     if quiz.scope.sendsQuestionCounts {
       parameters[ParameterKey.questionNumber.rawValue] = "\(quiz.questionReached)"
-    }
-    if quiz.isRankedRound {
-      parameters[ParameterKey.score.rawValue] = "\(quiz.firstRoundScore)"
     }
     Current.analytics.signal(name: .quitQuiz, parameters: parameters)
     fieldFocused = false

@@ -12158,3 +12158,26 @@ icon beside a label. They now say not to be translated, since every language sho
 Throwing the rewrite away would only have postponed it to the next Xcode build, so it was kept and
 finished. The localization rules now say to keep the keys in Xcode's order and to write the file as
 Xcode does, so that a future session's new string does not reshuffle the whole catalog again.
+
+## The Quiz Score Leaves the Analytics (2026-11-24)
+
+On 2026-11-22 Josh had decided that Conjugar's quiz signals would keep sending `score`, but only for
+the ranked round: the first ten questions of a quiz over all verbs, at its results or on a quit
+during it. Two days later the Conjuguer session, closing its own run of the same pedagogy plan,
+noticed the difference. Konjugieren had dropped the score under its Decision 5, which keeps how well
+a learner did off the signals, and Conjuguer's plan had said that dropping it made the three apps
+agree. Conjugar was the one app still sending it. There was a second problem, quieter than the
+first. A score sent on a quit is the points earned before the quit, so it counts right answers,
+exactly the kind of number Decision 5 rules out.
+
+Josh reversed the decision, and Conjuguer's session passed the request here. `completeQuiz` and
+`quitQuiz` no longer carry `score`, and `ParameterKey.score` is gone, since nothing else sent it.
+The score itself is untouched in the app: it still posts to the level's Game Center leaderboard and
+still sets the personal best, which stays on the device. Only the analytics copy went away.
+
+The deployed privacy policy names the score, so the policy change is staged for release day in
+`docs/privacy_policy_pending.md`, in English and Spanish. The bullet that named the score now names
+only the duration bands, the question counts, and the streak band. The paragraph after the list
+now opens the way Conjuguer's does: the rough duration is collected, and "your quiz score is not
+collected." The pedagogy plan keeps its 2026-11-22 decision as written and records the reversal
+beside it, so a later reader sees both what was decided and why it changed.

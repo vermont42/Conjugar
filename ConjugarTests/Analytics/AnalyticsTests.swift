@@ -22,7 +22,7 @@ struct AnalyticsTests {
     let spy = AnalyticsSpy()
     let parameters = [
       ParameterKey.level.rawValue: "intermediate",
-      ParameterKey.score.rawValue: "42"
+      ParameterKey.questionCount.rawValue: "10"
     ]
     spy.signal(name: .completeQuiz, parameters: parameters)
     #expect(spy.signalNames == [.completeQuiz])
@@ -62,7 +62,6 @@ struct AnalyticsTests {
     (ParameterKey.outcome, "outcome"),
     (ParameterKey.questionCount, "questionCount"),
     (ParameterKey.questionNumber, "questionNumber"),
-    (ParameterKey.score, "score"),
     (ParameterKey.stage, "stage")
   ])
   func parameterKeyRawValuesAreStable(key: ParameterKey, expected: String) {
