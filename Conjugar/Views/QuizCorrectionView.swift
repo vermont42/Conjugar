@@ -156,7 +156,7 @@ struct QuizCorrectionView: View {
   }
 
   // As wide as an iPhone's card, and no wider on an iPad.
-  private static let continueMaxWidth: CGFloat = 400
+  static let continueMaxWidth: CGFloat = 400
 
   private func answerRow(label: String, text: Text) -> some View {
     VStack(alignment: .leading, spacing: 2) {

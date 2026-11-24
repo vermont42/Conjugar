@@ -39,6 +39,8 @@ Conjugar/
 │   ├── verbModelMap.xml        # The verb→model map: 4,811 verbs → class number(s), gloss(es), reflexive flag,
 │   │                           #   frequency counts (hi/gb/hp — see frequency/README.md; the rank is derived, not stored)
 │   ├── Etymologies.json        # Bundled verb etymologies keyed language → infinitive
+│   ├── ChoiceQuestions.json    # The default quiz's choices: one sentence in two tenses (the form in braces), the level from which each is
+│   │                           #   asked, a region for today's-events items, a reason; written only through scripts/choice_questions.py
 │   ├── ExampleUses.json        # Bundled modern-prose example sentences keyed by bare infinitive
 │   ├── GapSentences.json       # Complete the Sentence's authored sentences (the answer in braces, tú written for tú or vos), written
 │   │                           #   only through scripts/gap_sentences.py; `reviewed` gates release builds
@@ -113,7 +115,7 @@ Conjugar/
 │   │                           #   QuizScope.collection(_:title:)
 │   │
 │   │  ── quiz, settings vocabulary, services ──
-│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the level's weighted draw through an injectable random source (randomSource:), the scoped draw, per-tense person rotation, the held correction (correction, continueAfterCorrection()), a slip's or a diagnosed error's second attempt (firstAttempt, firstAttemptDiagnosis, secondAttemptPrompt), re-asks, Ten More (continueSession()), the session's computed score and counts (firstRoundScore, questionReached), the record of a quiz in progress, DEBUG fixtures (screenshot, grading, frames, corrections, slips, diagnoses)
+│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the level's weighted draw through an injectable random source (randomSource:), the scoped draw, per-tense person rotation, the held correction (correction, continueAfterCorrection()), a slip's or a diagnosed error's second attempt (firstAttempt, firstAttemptDiagnosis, secondAttemptPrompt), re-asks, Ten More (continueSession()), the session's computed score and counts (firstRoundScore, questionReached), the record of a quiz in progress, a default round's one choice (drawRound, submitChoice, chosenOption), DEBUG fixtures (screenshot, grading, frames, corrections, slips, diagnoses, essentials, recognition, sentences, choices)
 │   ├── QuizQuestion.swift      # One question (verb, tense, person, isReask; reasked()): its written answer, every accepted spelling (shownSpellings, acceptedAnswers), grade(_:), its frame, and answer(filling:)
 │   ├── QuizCorrection.swift    # A wrong answer held on its question: its AnswerDifference, its AnswerDiagnosis, and whether the question will be asked again
 │   ├── QuizClock.swift         # Setting enum: whether the quiz shows the time (hide, the default, or show)
@@ -139,9 +141,12 @@ Conjugar/
 │   │                           #   tenses and persons), grading by part (infinitive, tense, person) and the lines to check, RecognitionMood's chip groups
 │   ├── GapSentence.swift       # Complete the Sentence: QuizScope.sentences, GapSentence (its frame, with a command's "no" split out and
 │   │                           #   tú or vos named), GapSentences (load, drafts in debug, askable at a level), QuizDraw.sentences, the
-│   │                           #   either-imperfect-subjunctive rule, QuizQuestion.completedSentence
+│   │                           #   either-imperfect-subjunctive rule, QuizQuestion.completedSentence (and its parts)
+│   ├── ChoiceQuestion.swift    # The default round's choice of tense: ChoiceQuestion (two GapSentences, a level, an optional ChoiceRegion, a
+│   │                           #   ChoiceReason and its line), ChoicePrompt (the order and the learner's tú or vos), ChoiceQuestions (load, askable
+│   │                           #   at a level in a region), QuizDraw.choice and choicePosition (never first)
 │   ├── LastQuizResult.swift    # The last round's results that the Quiz tab's hub shows: a kind and subject (not a title), level, counts, score, date
-│   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, a collection, a custom choice, or a practice set; question count (a round of ten, or Test Me's three), source, title, a practice set's level, a record session, isVerbEssentials, a model's practice, isRecognition, isRanked, sendsQuestionCounts, shufflesQuestions, continues, startsLiveActivity, pool(level:), band(level:)
+│   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, a collection, a custom choice, or a practice set; question count (a round of ten, or Test Me's three), source, title, a practice set's level, a record session, isVerbEssentials, a model's practice, isRecognition, isRanked, mixesChoiceQuestions, sendsQuestionCounts, shufflesQuestions, continues, startsLiveActivity, pool(level:), band(level:)
 │   ├── CustomQuiz.swift        # The Quiz tab's Custom choice: chosen tenses and a QuizVerbSet (all, a band, a collection, a shared list of infinitives, My Verbs), each the level's when unchosen; stored as tenses=…&verbs=… (or infinitives=…); QuizScope.custom
 │   ├── PracticeSet.swift       # A custom quiz shared as a link or a QR code: the conjugar://quiz/set link both ways, My Verbs shared as a list (at most 100), the level that travels, the scope its quiz asks, the share text; PracticeSetRequest
 │   ├── QuizState.swift         # notStarted / inProgress / finished
@@ -256,11 +261,13 @@ Conjugar/
     ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, the model's collection bar, its practice card, and the verbs using the model, by frequency or alphabetically
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
     ├── QuizSheet.swift         # A quiz in a sheet with a Quiz of its own over a QuizScope: Test Me, a collection's Quiz, and a practice set's Start
-    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, and Last Quiz, the Exercises rows for Verb Essentials, Verb Models, Name the Form, and Complete the Sentence, a small View Leaderboard button) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, Name the Form's prompt, chips, and Check, a sentence's English and Draft pill, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
+    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, and Last Quiz, the Exercises rows for Verb Essentials, Verb Models, Name the Form, and Complete the Sentence, a small View Leaderboard button) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, Name the Form's prompt, chips, and Check, a sentence's English and Draft pill, a choice in the field's place with its region pill, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
     ├── CustomQuizView.swift    # The Custom segment's editor of tenses and verbs, its Models list, and the summary card on the start screen and a practice set's sheet
     ├── PracticeSetView.swift   # A shared practice set's sheet (Start, Keep as My Custom Quiz, "Practice Set Not Found") and its full-screen QR code
     ├── QuizCorrectionView.swift # A wrong answer's held correction: the two answers with their differing letters marked (a Name the Form answer's wrong parts, and
     │                           #   every right reading; a sentence completed), links to the verb's and model's pages, Continue; isBeneathQuiz
+    ├── ChoiceQuestionView.swift # A choice question's two sentences (the form in bold yellow, its tense beneath), and once chosen the marks,
+    │                           #   the English, the reason, and Continue
     ├── RecognitionChoicesView.swift # Name the Form's prompt (RecognitionPromptView) and its chips: the level's tenses under their moods, then the tense's persons
     ├── ReviewCardView.swift    # The review card above the verb list: an irregular verb looked up days ago, its key conjugations hidden until tapped
     ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills (no level for a model's practice), Ten More (Five More Verbs, Another Round), and each answer, with Example Use on each verb's first right row
@@ -376,7 +383,7 @@ ConjugarTests/
 │   ├── QuizLevelTests.swift            # Each level's tenses and weights, only its own cells drawn, tenses at their weight under a seed;
 │   │                                   #   the setting's default and the migration from the old difficulty
 │   ├── QuizVerbMixTests.swift          # The default quiz's verbs under forty seeds: the band, exactly half irregular cells, at most one irregular
-│   │                                   #   imperfecto, the core verbs, rare and frequent compounds, endings, ten questions, scopes unaffected
+│   │                                   #   imperfecto, the core verbs, rare and frequent compounds, endings, ten questions (nine typed beside a choice), scopes unaffected
 │   ├── QuizScopeTests.swift            # The scoped quiz: My Verbs and Test Me draws, defective verbs, region and vos, ranking
 │   ├── CustomQuizTests.swift           # The custom quiz: the stored form and its keys, the scope, never ranked, and sessions over chosen tenses, verbs, or both
 │   ├── PracticeSetTests.swift          # Practice sets: the pinned link, every set's round trip, links that name nothing, My Verbs as a capped list, the level that travels, the scope and its session, the share text, the QR code read back; the quiz/set route (in AppRouterTests)
@@ -393,6 +400,10 @@ ConjugarTests/
 │   ├── GapSentenceTests.swift          # Complete the Sentence: the machine check (every blank the engine's in tú and vos, no vosotros, no tú
 │   │                                   #   named, no tú form around the blank, asked at some level) and its breaking; the top 25's counts;
 │   │                                   #   frames, tokens, grading, -ra and -se; drafts; the draw; the scope; and rounds
+│   ├── ChoiceQuestionTests.swift       # Choice questions: the machine check (both sentences the engine's in tú and vos, differing only in their
+│   │                                   #   braces, asked from their own level, a region only for today's events, each reason naming its tenses)
+│   │                                   #   and its breaking; regions, levels, drafts; the prompt; the draw; and rounds (one choice never first,
+│   │                                   #   none at Beginner or elsewhere, a held right or wrong choice, nothing recorded, out of 100, Ten More)
 │   ├── AnswerDiagnosisTests.swift      # Each diagnosis for real verbs, the answers that get none, the lines in English, and a diagnosed error's second attempt in a quiz
 │   ├── AnswerDifferenceTests.swift     # The letters a correction marks (accents, red letters, missing, extra, swapped) and the right answer it shows
 │   ├── AnswerFrameTests.swift          # Each kind of question's frame, and the answer a filled blank gives (supplied no, reflexive pronoun, typed pronoun)
@@ -575,6 +586,7 @@ plans/                          # What Claude writes to get another session to d
 │                                          #   record, diagnosis, new exercises, hub, streak, achievements. Ported from
 │                                          #   Konjugieren's pedagogy plan; 24 phases
 ├── gap_sentences_batch_1.md               # The review sheet of the first 118 sentences (the 25 most frequent verbs), from gap_sentences.py
+├── choice_questions_batch_1.md            # The review sheet of the first 45 choice questions (which tense a speaker would use), from choice_questions.py
 ├── pedagogy_variant_audit.md              # Which alternate Spanish forms the quiz accepts (rio/rió, frito, satisface,
 │                                          #   adecúo, vos hablés…), with RAE sources per row and Josh's rulings
 └── end_scene_images/                      # What produced the two end-scene portraits, for exact regeneration:
@@ -592,6 +604,7 @@ scripts/
 ├── write_forms_json.sh         # Builds ConjugationMapTool and writes corpus/working/forms.json and forms_all.json
 ├── count_tenses.py             # Counts each tense in the corpus from ConjugationMapTool --cells-json; docs/tense_frequency.md
 ├── gap_sentences.py            # Complete the Sentence's review sheet, approval, and status over Conjugar/Models/GapSentences.json
+├── choice_questions.py         # The choice questions' review sheet, approval, and status over Conjugar/Models/ChoiceQuestions.json
 ├── _extract_annexb.py          # Extracts Annex B from docs/spanish_verbs_made_simpler.pdf into docs/annex_b_verb_models.md
 ├── _build_verbmap.py           # Builds Conjugar/Models/verbModelMap.xml from the extracted class index + glosses +
 │                               #   frequency/verb_counts.json. Reproduces the shipped file byte-for-byte

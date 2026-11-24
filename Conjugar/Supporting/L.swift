@@ -985,6 +985,156 @@ nonisolated enum L {
     }
   }
 
+  enum Choice {
+    /// The choice's heading above its two sentences.
+    static var prompt: String {
+      String(localized: "Choice.prompt")
+    }
+
+    /// The card's line on an item whose answer is Spain's usage.
+    static var inSpain: String {
+      String(localized: "Choice.inSpain")
+    }
+
+    /// The card's line on an item whose answer is Latin America's usage.
+    static var inLatinAmerica: String {
+      String(localized: "Choice.inLatinAmerica")
+    }
+
+    /// A chosen sentence's VoiceOver value.
+    static var yourChoice: String {
+      String(localized: "Choice.yourChoice")
+    }
+
+    /// The right sentence's VoiceOver value once the learner has chosen.
+    static var rightChoice: String {
+      String(localized: "Choice.rightChoice")
+    }
+
+    /// A sentence's VoiceOver hint before the choice.
+    static var optionHint: String {
+      String(localized: "Choice.optionHint")
+    }
+
+    /// The announcement of a right choice, with its reason.
+    static func announceRight(_ reason: String) -> String {
+      String(localized: "Choice.announceRight \(reason)")
+    }
+
+    /// The announcement of a wrong choice: the right sentence, then the reason.
+    static func announceWrong(right: String, reason: String) -> String {
+      String(localized: "Choice.announceWrong \(right) \(reason)")
+    }
+
+    static func reasonActionUnderWay(_ tense: String) -> String {
+      String(localized: "Choice.reasonActionUnderWay \(tense)")
+    }
+
+    static func reasonBelief(_ tense: String) -> String {
+      String(localized: "Choice.reasonBelief \(tense)")
+    }
+
+    static func reasonComoSi(right: String, other: String) -> String {
+      String(localized: "Choice.reasonComoSi \(right) \(other)")
+    }
+
+    static func reasonDescriptionInThePast(_ tense: String) -> String {
+      String(localized: "Choice.reasonDescriptionInThePast \(tense)")
+    }
+
+    static func reasonDoubtOrDenial(_ tense: String) -> String {
+      String(localized: "Choice.reasonDoubtOrDenial \(tense)")
+    }
+
+    static func reasonEarlierPast(_ tense: String) -> String {
+      String(localized: "Choice.reasonEarlierPast \(tense)")
+    }
+
+    static func reasonEmotion(_ tense: String) -> String {
+      String(localized: "Choice.reasonEmotion \(tense)")
+    }
+
+    static func reasonFinishedEvent(_ tense: String) -> String {
+      String(localized: "Choice.reasonFinishedEvent \(tense)")
+    }
+
+    static func reasonFutureAfterCuando(_ tense: String) -> String {
+      String(localized: "Choice.reasonFutureAfterCuando \(tense)")
+    }
+
+    static func reasonFutureInThePast(_ tense: String) -> String {
+      String(localized: "Choice.reasonFutureInThePast \(tense)")
+    }
+
+    static func reasonGuessAboutThePresent(_ tense: String) -> String {
+      String(localized: "Choice.reasonGuessAboutThePresent \(tense)")
+    }
+
+    static func reasonHabitAfterCuando(_ tense: String) -> String {
+      String(localized: "Choice.reasonHabitAfterCuando \(tense)")
+    }
+
+    static func reasonHabitInThePast(_ tense: String) -> String {
+      String(localized: "Choice.reasonHabitInThePast \(tense)")
+    }
+
+    static func reasonHopeWithOjalá(_ tense: String) -> String {
+      String(localized: "Choice.reasonHopeWithOjala \(tense)")
+    }
+
+    static func reasonInfluence(_ tense: String) -> String {
+      String(localized: "Choice.reasonInfluence \(tense)")
+    }
+
+    static func reasonInterruptingEvent(_ tense: String) -> String {
+      String(localized: "Choice.reasonInterruptingEvent \(tense)")
+    }
+
+    static func reasonJudgment(_ tense: String) -> String {
+      String(localized: "Choice.reasonJudgment \(tense)")
+    }
+
+    static func reasonLikelySi(right: String, other: String) -> String {
+      String(localized: "Choice.reasonLikelySi \(right) \(other)")
+    }
+
+    static func reasonNegativeCommand(right: String, other: String) -> String {
+      String(localized: "Choice.reasonNegativeCommand \(right) \(other)")
+    }
+
+    static func reasonPastTrigger(_ tense: String) -> String {
+      String(localized: "Choice.reasonPastTrigger \(tense)")
+    }
+
+    static func reasonPeriodNowOver(_ tense: String) -> String {
+      String(localized: "Choice.reasonPeriodNowOver \(tense)")
+    }
+
+    static func reasonResultOfCondition(_ tense: String) -> String {
+      String(localized: "Choice.reasonResultOfCondition \(tense)")
+    }
+
+    static func reasonTimeAndAgeInThePast(_ tense: String) -> String {
+      String(localized: "Choice.reasonTimeAndAgeInThePast \(tense)")
+    }
+
+    static func reasonTodayInLatinAmerica(_ tense: String) -> String {
+      String(localized: "Choice.reasonTodayInLatinAmerica \(tense)")
+    }
+
+    static func reasonTodayInSpain(_ tense: String) -> String {
+      String(localized: "Choice.reasonTodayInSpain \(tense)")
+    }
+
+    static func reasonUnlikelySi(right: String, other: String) -> String {
+      String(localized: "Choice.reasonUnlikelySi \(right) \(other)")
+    }
+
+    static func reasonWishContraryToFact(_ tense: String) -> String {
+      String(localized: "Choice.reasonWishContraryToFact \(tense)")
+    }
+  }
+
   enum Recognition {
     static var title: String {
       String(localized: "Recognition.title")

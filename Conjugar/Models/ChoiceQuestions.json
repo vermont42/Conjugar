@@ -1,0 +1,773 @@
+[
+  {
+    "id": "jugar.imperfectoDeIndicativo.1",
+    "verb": "jugar",
+    "person": "ts",
+    "level": "elementary",
+    "reason": "habit_in_the_past",
+    "right": {
+      "tense": "imperfectoDeIndicativo",
+      "es": "De niña, Ana {jugaba} al tenis todos los sábados."
+    },
+    "other": {
+      "tense": "pretérito",
+      "es": "De niña, Ana {jugó} al tenis todos los sábados."
+    },
+    "en": "As a girl, Ana used to play tennis every Saturday.",
+    "reviewed": true
+  },
+  {
+    "id": "ser.imperfectoDeIndicativo.1",
+    "verb": "ser",
+    "person": "ts",
+    "level": "elementary",
+    "reason": "description_in_the_past",
+    "right": {
+      "tense": "imperfectoDeIndicativo",
+      "es": "La casa de mis abuelos {era} grande y tenía un jardín precioso."
+    },
+    "other": {
+      "tense": "pretérito",
+      "es": "La casa de mis abuelos {fue} grande y tenía un jardín precioso."
+    },
+    "en": "My grandparents' house was big and had a lovely garden.",
+    "reviewed": true
+  },
+  {
+    "id": "hacer.imperfectoDeIndicativo.1",
+    "verb": "hacer",
+    "person": "ts",
+    "level": "elementary",
+    "reason": "description_in_the_past",
+    "right": {
+      "tense": "imperfectoDeIndicativo",
+      "es": "Cuando salimos de casa, {hacía} mucho frío."
+    },
+    "other": {
+      "tense": "pretérito",
+      "es": "Cuando salimos de casa, {hizo} mucho frío."
+    },
+    "en": "When we left the house, it was very cold.",
+    "reviewed": true
+  },
+  {
+    "id": "ser.imperfectoDeIndicativo.2",
+    "verb": "ser",
+    "person": "tp",
+    "level": "elementary",
+    "reason": "time_and_age_in_the_past",
+    "right": {
+      "tense": "imperfectoDeIndicativo",
+      "es": "{Eran} las diez cuando llegó el tren."
+    },
+    "other": {
+      "tense": "pretérito",
+      "es": "{Fueron} las diez cuando llegó el tren."
+    },
+    "en": "It was ten o'clock when the train arrived.",
+    "reviewed": true
+  },
+  {
+    "id": "tener.imperfectoDeIndicativo.1",
+    "verb": "tener",
+    "person": "ts",
+    "level": "elementary",
+    "reason": "time_and_age_in_the_past",
+    "right": {
+      "tense": "imperfectoDeIndicativo",
+      "es": "Mi abuelo {tenía} ochenta años cuando aprendió a nadar."
+    },
+    "other": {
+      "tense": "pretérito",
+      "es": "Mi abuelo {tuvo} ochenta años cuando aprendió a nadar."
+    },
+    "en": "My grandfather was eighty when he learned to swim.",
+    "reviewed": true
+  },
+  {
+    "id": "leer.imperfectoDeIndicativo.1",
+    "verb": "leer",
+    "person": "fs",
+    "level": "elementary",
+    "reason": "action_under_way",
+    "right": {
+      "tense": "imperfectoDeIndicativo",
+      "es": "Yo {leía} un libro cuando sonó el teléfono."
+    },
+    "other": {
+      "tense": "pretérito",
+      "es": "Yo {leí} un libro cuando sonó el teléfono."
+    },
+    "en": "I was reading a book when the phone rang.",
+    "reviewed": true
+  },
+  {
+    "id": "sonar.pretérito.1",
+    "verb": "sonar",
+    "person": "ts",
+    "level": "elementary",
+    "reason": "interrupting_event",
+    "right": {
+      "tense": "pretérito",
+      "es": "Yo leía un libro cuando {sonó} el teléfono."
+    },
+    "other": {
+      "tense": "imperfectoDeIndicativo",
+      "es": "Yo leía un libro cuando {sonaba} el teléfono."
+    },
+    "en": "I was reading a book when the phone rang.",
+    "reviewed": true
+  },
+  {
+    "id": "llegar.pretérito.1",
+    "verb": "llegar",
+    "person": "ts",
+    "level": "elementary",
+    "reason": "finished_event",
+    "right": {
+      "tense": "pretérito",
+      "es": "Ayer mi hermano {llegó} a las ocho en punto."
+    },
+    "other": {
+      "tense": "imperfectoDeIndicativo",
+      "es": "Ayer mi hermano {llegaba} a las ocho en punto."
+    },
+    "en": "Yesterday my brother arrived at eight o'clock sharp.",
+    "reviewed": true
+  },
+  {
+    "id": "ganar.pretérito.1",
+    "verb": "ganar",
+    "person": "ts",
+    "level": "elementary",
+    "reason": "finished_event",
+    "right": {
+      "tense": "pretérito",
+      "es": "El sábado pasado nuestro equipo {ganó} la final."
+    },
+    "other": {
+      "tense": "imperfectoDeIndicativo",
+      "es": "El sábado pasado nuestro equipo {ganaba} la final."
+    },
+    "en": "Last Saturday our team won the final.",
+    "reviewed": true
+  },
+  {
+    "id": "vivir.pretérito.1",
+    "verb": "vivir",
+    "person": "tp",
+    "level": "elementary",
+    "reason": "period_now_over",
+    "right": {
+      "tense": "pretérito",
+      "es": "Mis padres {vivieron} tres años en Madrid y luego volvieron a Chile."
+    },
+    "other": {
+      "tense": "imperfectoDeIndicativo",
+      "es": "Mis padres {vivían} tres años en Madrid y luego volvieron a Chile."
+    },
+    "en": "My parents lived in Madrid for three years and then went back to Chile.",
+    "reviewed": true
+  },
+  {
+    "id": "comer.perfectoDeIndicativo.1",
+    "verb": "comer",
+    "person": "fs",
+    "level": "elementary",
+    "region": "spain",
+    "reason": "today_in_spain",
+    "right": {
+      "tense": "perfectoDeIndicativo",
+      "es": "Hoy {he comido} paella con mis amigos."
+    },
+    "other": {
+      "tense": "pretérito",
+      "es": "Hoy {comí} paella con mis amigos."
+    },
+    "en": "Today I had paella with my friends.",
+    "reviewed": true
+  },
+  {
+    "id": "comer.pretérito.1",
+    "verb": "comer",
+    "person": "fs",
+    "level": "elementary",
+    "region": "latinAmerica",
+    "reason": "today_in_latin_america",
+    "right": {
+      "tense": "pretérito",
+      "es": "Hoy {comí} paella con mis amigos."
+    },
+    "other": {
+      "tense": "perfectoDeIndicativo",
+      "es": "Hoy {he comido} paella con mis amigos."
+    },
+    "en": "Today I had paella with my friends.",
+    "reviewed": true
+  },
+  {
+    "id": "hablar.perfectoDeIndicativo.1",
+    "verb": "hablar",
+    "person": "fs",
+    "level": "elementary",
+    "region": "spain",
+    "reason": "today_in_spain",
+    "right": {
+      "tense": "perfectoDeIndicativo",
+      "es": "Esta mañana {he hablado} con mi jefa."
+    },
+    "other": {
+      "tense": "pretérito",
+      "es": "Esta mañana {hablé} con mi jefa."
+    },
+    "en": "This morning I talked with my boss.",
+    "reviewed": true
+  },
+  {
+    "id": "hablar.pretérito.1",
+    "verb": "hablar",
+    "person": "fs",
+    "level": "elementary",
+    "region": "latinAmerica",
+    "reason": "today_in_latin_america",
+    "right": {
+      "tense": "pretérito",
+      "es": "Esta mañana {hablé} con mi jefa."
+    },
+    "other": {
+      "tense": "perfectoDeIndicativo",
+      "es": "Esta mañana {he hablado} con mi jefa."
+    },
+    "en": "This morning I talked with my boss.",
+    "reviewed": true
+  },
+  {
+    "id": "llamar.perfectoDeIndicativo.1",
+    "verb": "llamar",
+    "person": "ts",
+    "level": "elementary",
+    "region": "spain",
+    "reason": "today_in_spain",
+    "right": {
+      "tense": "perfectoDeIndicativo",
+      "es": "¿Quién {ha llamado} esta tarde?"
+    },
+    "other": {
+      "tense": "pretérito",
+      "es": "¿Quién {llamó} esta tarde?"
+    },
+    "en": "Who called this afternoon?",
+    "reviewed": true
+  },
+  {
+    "id": "llamar.pretérito.1",
+    "verb": "llamar",
+    "person": "ts",
+    "level": "elementary",
+    "region": "latinAmerica",
+    "reason": "today_in_latin_america",
+    "right": {
+      "tense": "pretérito",
+      "es": "¿Quién {llamó} esta tarde?"
+    },
+    "other": {
+      "tense": "perfectoDeIndicativo",
+      "es": "¿Quién {ha llamado} esta tarde?"
+    },
+    "en": "Who called this afternoon?",
+    "reviewed": true
+  },
+  {
+    "id": "estar.futuroDeIndicativo.1",
+    "verb": "estar",
+    "person": "ts",
+    "level": "elementary",
+    "reason": "guess_about_the_present",
+    "right": {
+      "tense": "futuroDeIndicativo",
+      "es": "No sé dónde anda Luis; {estará} en la biblioteca."
+    },
+    "other": {
+      "tense": "presenteDeIndicativo",
+      "es": "No sé dónde anda Luis; {está} en la biblioteca."
+    },
+    "en": "I don't know where Luis is; he's probably at the library.",
+    "reviewed": true
+  },
+  {
+    "id": "ser.futuroDeIndicativo.1",
+    "verb": "ser",
+    "person": "tp",
+    "level": "elementary",
+    "reason": "guess_about_the_present",
+    "right": {
+      "tense": "futuroDeIndicativo",
+      "es": "No tengo reloj, pero {serán} las tres."
+    },
+    "other": {
+      "tense": "presenteDeIndicativo",
+      "es": "No tengo reloj, pero {son} las tres."
+    },
+    "en": "I don't have a watch, but it must be about three.",
+    "reviewed": true
+  },
+  {
+    "id": "tener.presenteDeSubjuntivo.1",
+    "verb": "tener",
+    "person": "ts",
+    "level": "intermediate",
+    "reason": "doubt_or_denial",
+    "right": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "No creo que Marta {tenga} razón."
+    },
+    "other": {
+      "tense": "presenteDeIndicativo",
+      "es": "No creo que Marta {tiene} razón."
+    },
+    "en": "I don't think Marta is right.",
+    "reviewed": true
+  },
+  {
+    "id": "tener.presenteDeIndicativo.1",
+    "verb": "tener",
+    "person": "ts",
+    "level": "intermediate",
+    "reason": "belief",
+    "right": {
+      "tense": "presenteDeIndicativo",
+      "es": "Creo que Marta {tiene} razón."
+    },
+    "other": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Creo que Marta {tenga} razón."
+    },
+    "en": "I think Marta is right.",
+    "reviewed": true
+  },
+  {
+    "id": "llegar.presenteDeSubjuntivo.1",
+    "verb": "llegar",
+    "person": "ts",
+    "level": "intermediate",
+    "reason": "doubt_or_denial",
+    "right": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Dudo que el tren {llegue} a tiempo."
+    },
+    "other": {
+      "tense": "presenteDeIndicativo",
+      "es": "Dudo que el tren {llega} a tiempo."
+    },
+    "en": "I doubt the train will arrive on time.",
+    "reviewed": true
+  },
+  {
+    "id": "venir.presenteDeSubjuntivo.1",
+    "verb": "venir",
+    "person": "ss",
+    "level": "intermediate",
+    "reason": "influence",
+    "right": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Quiero que {vengas} a mi fiesta."
+    },
+    "other": {
+      "tense": "presenteDeIndicativo",
+      "es": "Quiero que {vienes} a mi fiesta."
+    },
+    "en": "I want you to come to my party.",
+    "reviewed": true
+  },
+  {
+    "id": "dormir.presenteDeSubjuntivo.1",
+    "verb": "dormir",
+    "person": "fs",
+    "level": "intermediate",
+    "reason": "influence",
+    "right": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "La médica me pide que {duerma} más."
+    },
+    "other": {
+      "tense": "presenteDeIndicativo",
+      "es": "La médica me pide que {duermo} más."
+    },
+    "en": "The doctor is asking me to sleep more.",
+    "reviewed": true
+  },
+  {
+    "id": "estudiar.presenteDeSubjuntivo.1",
+    "verb": "estudiar",
+    "person": "tp",
+    "level": "intermediate",
+    "reason": "judgment",
+    "right": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Es importante que los niños {estudien} todos los días."
+    },
+    "other": {
+      "tense": "presenteDeIndicativo",
+      "es": "Es importante que los niños {estudian} todos los días."
+    },
+    "en": "It's important for the children to study every day.",
+    "reviewed": true
+  },
+  {
+    "id": "hacer.presenteDeSubjuntivo.1",
+    "verb": "hacer",
+    "person": "ts",
+    "level": "intermediate",
+    "reason": "hope_with_ojala",
+    "right": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Ojalá {haga} buen tiempo mañana."
+    },
+    "other": {
+      "tense": "presenteDeIndicativo",
+      "es": "Ojalá {hace} buen tiempo mañana."
+    },
+    "en": "I hope the weather is nice tomorrow.",
+    "reviewed": true
+  },
+  {
+    "id": "estar.presenteDeSubjuntivo.1",
+    "verb": "estar",
+    "person": "ss",
+    "level": "intermediate",
+    "reason": "emotion",
+    "right": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Me alegro de que {estés} mejor."
+    },
+    "other": {
+      "tense": "presenteDeIndicativo",
+      "es": "Me alegro de que {estás} mejor."
+    },
+    "en": "I'm glad you're feeling better.",
+    "reviewed": true
+  },
+  {
+    "id": "llegar.presenteDeSubjuntivo.2",
+    "verb": "llegar",
+    "person": "ts",
+    "level": "intermediate",
+    "reason": "future_after_cuando",
+    "right": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Cuando mi hermana {llegue} a casa, cenaremos."
+    },
+    "other": {
+      "tense": "presenteDeIndicativo",
+      "es": "Cuando mi hermana {llega} a casa, cenaremos."
+    },
+    "en": "When my sister gets home, we'll have dinner.",
+    "reviewed": true
+  },
+  {
+    "id": "llegar.presenteDeIndicativo.1",
+    "verb": "llegar",
+    "person": "ts",
+    "level": "intermediate",
+    "reason": "habit_after_cuando",
+    "right": {
+      "tense": "presenteDeIndicativo",
+      "es": "Cuando mi hermana {llega} a casa, siempre cenamos juntos."
+    },
+    "other": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Cuando mi hermana {llegue} a casa, siempre cenamos juntos."
+    },
+    "en": "When my sister gets home, we always have dinner together.",
+    "reviewed": true
+  },
+  {
+    "id": "llover.presenteDeIndicativo.1",
+    "verb": "llover",
+    "person": "ts",
+    "level": "intermediate",
+    "reason": "likely_si",
+    "right": {
+      "tense": "presenteDeIndicativo",
+      "es": "Si {llueve} mañana, nos quedaremos en casa."
+    },
+    "other": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Si {llueva} mañana, nos quedaremos en casa."
+    },
+    "en": "If it rains tomorrow, we'll stay home.",
+    "reviewed": true
+  },
+  {
+    "id": "hablar.imperativoNegativo.1",
+    "verb": "hablar",
+    "person": "ss",
+    "level": "intermediate",
+    "reason": "negative_command",
+    "right": {
+      "tense": "imperativoNegativo",
+      "es": "¡No {hables} tan alto!"
+    },
+    "other": {
+      "tense": "presenteDeIndicativo",
+      "es": "¡No {hablas} tan alto!"
+    },
+    "en": "Don't talk so loud!",
+    "reviewed": true
+  },
+  {
+    "id": "empezar.pluscuamperfectoDeIndicativo.1",
+    "verb": "empezar",
+    "person": "ts",
+    "level": "intermediate",
+    "reason": "earlier_past",
+    "right": {
+      "tense": "pluscuamperfectoDeIndicativo",
+      "es": "Cuando llegamos al cine, la película ya {había empezado}."
+    },
+    "other": {
+      "tense": "pretérito",
+      "es": "Cuando llegamos al cine, la película ya {empezó}."
+    },
+    "en": "When we got to the movie theater, the movie had already started.",
+    "reviewed": true
+  },
+  {
+    "id": "salir.pluscuamperfectoDeIndicativo.1",
+    "verb": "salir",
+    "person": "ts",
+    "level": "intermediate",
+    "reason": "earlier_past",
+    "right": {
+      "tense": "pluscuamperfectoDeIndicativo",
+      "es": "Llamé a Pedro, pero ya {había salido} de casa."
+    },
+    "other": {
+      "tense": "pretérito",
+      "es": "Llamé a Pedro, pero ya {salió} de casa."
+    },
+    "en": "I called Pedro, but he had already left home.",
+    "reviewed": true
+  },
+  {
+    "id": "llamar.condicional.1",
+    "verb": "llamar",
+    "person": "ts",
+    "level": "intermediate",
+    "reason": "future_in_the_past",
+    "right": {
+      "tense": "condicional",
+      "es": "Mi primo me prometió que me {llamaría}, pero no me llamó."
+    },
+    "other": {
+      "tense": "futuroDeIndicativo",
+      "es": "Mi primo me prometió que me {llamará}, pero no me llamó."
+    },
+    "en": "My cousin promised he would call me, but he didn't.",
+    "reviewed": true
+  },
+  {
+    "id": "tener.imperfectoDeSubjuntivo1.1",
+    "verb": "tener",
+    "person": "fs",
+    "level": "advanced",
+    "reason": "unlikely_si",
+    "right": {
+      "tense": "imperfectoDeSubjuntivo1",
+      "es": "Si yo {tuviera} más tiempo, aprendería a tocar la guitarra."
+    },
+    "other": {
+      "tense": "condicional",
+      "es": "Si yo {tendría} más tiempo, aprendería a tocar la guitarra."
+    },
+    "en": "If I had more time, I would learn to play the guitar.",
+    "reviewed": true
+  },
+  {
+    "id": "ser.imperfectoDeSubjuntivo1.1",
+    "verb": "ser",
+    "person": "ts",
+    "level": "advanced",
+    "reason": "unlikely_si",
+    "right": {
+      "tense": "imperfectoDeSubjuntivo1",
+      "es": "Si Pablo {fuera} rico, compraría una casa en la playa."
+    },
+    "other": {
+      "tense": "condicional",
+      "es": "Si Pablo {sería} rico, compraría una casa en la playa."
+    },
+    "en": "If Pablo were rich, he would buy a house on the beach.",
+    "reviewed": true
+  },
+  {
+    "id": "saber.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "saber",
+    "person": "fs",
+    "level": "advanced",
+    "reason": "unlikely_si",
+    "right": {
+      "tense": "pluscuamperfectoDeSubjuntivo1",
+      "es": "Si yo {hubiera sabido} la verdad, no habría venido."
+    },
+    "other": {
+      "tense": "condicionalCompuesto",
+      "es": "Si yo {habría sabido} la verdad, no habría venido."
+    },
+    "en": "If I had known the truth, I wouldn't have come.",
+    "reviewed": true
+  },
+  {
+    "id": "viajar.condicional.1",
+    "verb": "viajar",
+    "person": "fp",
+    "level": "advanced",
+    "reason": "result_of_condition",
+    "right": {
+      "tense": "condicional",
+      "es": "Si tuviéramos dinero, {viajaríamos} por todo el mundo."
+    },
+    "other": {
+      "tense": "imperfectoDeSubjuntivo1",
+      "es": "Si tuviéramos dinero, {viajáramos} por todo el mundo."
+    },
+    "en": "If we had money, we would travel all over the world.",
+    "reviewed": true
+  },
+  {
+    "id": "saber.imperfectoDeSubjuntivo1.1",
+    "verb": "saber",
+    "person": "ts",
+    "level": "advanced",
+    "reason": "como_si",
+    "right": {
+      "tense": "imperfectoDeSubjuntivo1",
+      "es": "Mi vecino habla como si lo {supiera} todo."
+    },
+    "other": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Mi vecino habla como si lo {sepa} todo."
+    },
+    "en": "My neighbor talks as if he knew everything.",
+    "reviewed": true
+  },
+  {
+    "id": "ser.imperfectoDeSubjuntivo1.2",
+    "verb": "ser",
+    "person": "fp",
+    "level": "advanced",
+    "reason": "como_si",
+    "right": {
+      "tense": "imperfectoDeSubjuntivo1",
+      "es": "Nos trataron como si {fuéramos} niños."
+    },
+    "other": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Nos trataron como si {seamos} niños."
+    },
+    "en": "They treated us as if we were children.",
+    "reviewed": true
+  },
+  {
+    "id": "comprar.imperfectoDeSubjuntivo1.1",
+    "verb": "comprar",
+    "person": "fs",
+    "level": "advanced",
+    "reason": "past_trigger",
+    "right": {
+      "tense": "imperfectoDeSubjuntivo1",
+      "es": "Ayer mi madre me pidió que {comprara} pan, y lo compré."
+    },
+    "other": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Ayer mi madre me pidió que {compre} pan, y lo compré."
+    },
+    "en": "Yesterday my mother asked me to buy bread, and I bought it.",
+    "reviewed": true
+  },
+  {
+    "id": "llegar.imperfectoDeSubjuntivo1.1",
+    "verb": "llegar",
+    "person": "tp",
+    "level": "advanced",
+    "reason": "past_trigger",
+    "right": {
+      "tense": "imperfectoDeSubjuntivo1",
+      "es": "Era necesario que todos {llegaran} temprano."
+    },
+    "other": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Era necesario que todos {lleguen} temprano."
+    },
+    "en": "Everyone needed to arrive early.",
+    "reviewed": true
+  },
+  {
+    "id": "venir.imperfectoDeSubjuntivo1.1",
+    "verb": "venir",
+    "person": "tp",
+    "level": "advanced",
+    "reason": "past_trigger",
+    "right": {
+      "tense": "imperfectoDeSubjuntivo1",
+      "es": "Quería que mis padres {vinieran} a la boda, pero no pudieron."
+    },
+    "other": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Quería que mis padres {vengan} a la boda, pero no pudieron."
+    },
+    "en": "I wanted my parents to come to the wedding, but they couldn't.",
+    "reviewed": true
+  },
+  {
+    "id": "ser.imperfectoDeSubjuntivo1.3",
+    "verb": "ser",
+    "person": "ts",
+    "level": "advanced",
+    "reason": "wish_contrary_to_fact",
+    "right": {
+      "tense": "imperfectoDeSubjuntivo1",
+      "es": "Hoy es lunes. ¡Ojalá {fuera} viernes!"
+    },
+    "other": {
+      "tense": "presenteDeSubjuntivo",
+      "es": "Hoy es lunes. ¡Ojalá {sea} viernes!"
+    },
+    "en": "Today is Monday. If only it were Friday!",
+    "reviewed": true
+  },
+  {
+    "id": "llegar.perfectoDeSubjuntivo.1",
+    "verb": "llegar",
+    "person": "ts",
+    "level": "advanced",
+    "reason": "doubt_or_denial",
+    "right": {
+      "tense": "perfectoDeSubjuntivo",
+      "es": "No creo que Juan {haya llegado} todavía."
+    },
+    "other": {
+      "tense": "perfectoDeIndicativo",
+      "es": "No creo que Juan {ha llegado} todavía."
+    },
+    "en": "I don't think Juan has arrived yet.",
+    "reviewed": true
+  },
+  {
+    "id": "venir.perfectoDeSubjuntivo.1",
+    "verb": "venir",
+    "person": "ss",
+    "level": "advanced",
+    "reason": "emotion",
+    "right": {
+      "tense": "perfectoDeSubjuntivo",
+      "es": "Me alegro mucho de que {hayas venido}."
+    },
+    "other": {
+      "tense": "perfectoDeIndicativo",
+      "es": "Me alegro mucho de que {has venido}."
+    },
+    "en": "I'm so glad you came.",
+    "reviewed": true
+  }
+]

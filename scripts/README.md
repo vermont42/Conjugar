@@ -113,3 +113,18 @@ python3 scripts/gap_sentences.py review --out plans/gap_sentences_batch_1.md
 python3 scripts/gap_sentences.py approve --all --except ser.pretérito.1
 python3 scripts/gap_sentences.py status
 ```
+
+## `choice_questions.py`: reviewing the quiz's choice questions
+
+Reads `Conjugar/Models/ChoiceQuestions.json`, the items in which the learner picks which of two
+tenses a speaker would use, each sentence with its form in braces. `review` writes a Markdown sheet
+of the drafts (or every item, with `--all`), grouped by level, with the right sentence first and the
+reason the card shows, filled from the catalog's English; `approve` marks items reviewed, which a
+release build requires; `status` counts them by level and reason. Like `gap_sentences.py`, it is the
+only writer of its file. The machine check is `ConjugarTests/ChoiceQuestionTests`.
+
+```bash
+python3 scripts/choice_questions.py review --out plans/choice_questions_batch_1.md
+python3 scripts/choice_questions.py approve --all
+python3 scripts/choice_questions.py status
+```

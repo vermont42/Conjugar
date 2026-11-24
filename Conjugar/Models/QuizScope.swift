@@ -110,6 +110,12 @@ nonisolated struct QuizScope: Equatable, Sendable {
     isRanked
   }
 
+  /// Whether each round asks one choice between two sentences, from the second level up: only
+  /// the default quiz, so that every ranked round of a level asks the same mix.
+  var mixesChoiceQuestions: Bool {
+    isRanked && !isPracticeSet
+  }
+
   /// Whether the results offer Ten More, or for Verb Essentials five more verbs, which continue the
   /// session with another round. Test Me's three questions are a check on one verb, not a session
   /// to grow.

@@ -551,6 +551,566 @@
         }
       }
     },
+    "Choice.announceRight %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correct. %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correcto. %@"
+          }
+        }
+      }
+    },
+    "Choice.announceWrong %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incorrect. The right choice: %1$@. %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incorrecto. La elección correcta: %1$@. %2$@"
+          }
+        }
+      }
+    },
+    "Choice.inLatinAmerica" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Latin America"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En Latinoamérica"
+          }
+        }
+      }
+    },
+    "Choice.inSpain" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Spain"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En España"
+          }
+        }
+      }
+    },
+    "Choice.optionHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chooses this sentence."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige esta frase."
+          }
+        }
+      }
+    },
+    "Choice.prompt" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Which fits here?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cuál encaja aquí?"
+          }
+        }
+      }
+    },
+    "Choice.reasonActionUnderWay %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An action under way in the past takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una acción en curso en el pasado se expresa con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonBelief %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A statement of belief, such as creo que, takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una afirmación de lo que se cree, como creo que, lleva el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonComoSi %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Como si takes the %1$@, never the %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Como si lleva el %1$@, nunca el %2$@."
+          }
+        }
+      }
+    },
+    "Choice.reasonDescriptionInThePast %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A description or a scene in the past takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una descripción o un escenario del pasado se expresa con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonDoubtOrDenial %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doubt or denial takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La duda o la negación pide el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonEarlierPast %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An event before another past event takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un suceso anterior a otro suceso pasado se expresa con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonEmotion %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A feeling about something else, such as me alegro de que, takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un sentimiento ante otra cosa, como me alegro de que, pide el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonFinishedEvent %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A single event, finished at a stated time, takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un suceso único, terminado en un momento dado, se expresa con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonFutureAfterCuando %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After cuando, an event still to come takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tras cuando, un suceso aún por venir pide el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonFutureInThePast %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What was still to come, seen from the past, takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo que aún estaba por venir, visto desde el pasado, se expresa con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonGuessAboutThePresent %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A guess about the present takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una conjetura sobre el presente se expresa con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonHabitAfterCuando %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After cuando, a habit takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tras cuando, un hábito lleva el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonHabitInThePast %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A habit in the past takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un hábito del pasado se expresa con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonHopeWithOjala %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A hope after ojalá takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un deseo tras ojalá pide el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonInfluence %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wanting or asking someone else to act takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Querer o pedir que otro haga algo pide el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonInterruptingEvent %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The event that interrupts an action under way takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El suceso que interrumpe una acción en curso se expresa con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonJudgment %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A judgment such as es importante que takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un juicio como es importante que pide el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonLikelySi %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After si, a likely condition takes the %1$@, never the %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tras si, una condición probable lleva el %1$@, nunca el %2$@."
+          }
+        }
+      }
+    },
+    "Choice.reasonNegativeCommand %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A negative command takes the %1$@, never the %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un mandato negativo lleva el %1$@, nunca el %2$@."
+          }
+        }
+      }
+    },
+    "Choice.reasonPastTrigger %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When the verb that calls for the subjunctive is in the past, use the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuando el verbo que pide el subjuntivo está en pasado, se usa el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonPeriodNowOver %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A stretch of time of a stated length, now over, takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un periodo de duración dada, ya terminado, se expresa con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonResultOfCondition %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The result of an unlikely or untrue condition takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El resultado de una condición improbable o falsa se expresa con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonTimeAndAgeInThePast %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The time of day and a person's age in the past take the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La hora y la edad en el pasado se expresan con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonTodayInLatinAmerica %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In most of Latin America, a finished event takes the %@, even one of today."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En casi toda Latinoamérica, un suceso terminado se expresa con el %@, aunque sea de hoy."
+          }
+        }
+      }
+    },
+    "Choice.reasonTodayInSpain %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Spain, an event of today usually takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En España, un suceso de hoy suele expresarse con el %@."
+          }
+        }
+      }
+    },
+    "Choice.reasonUnlikelySi %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After si, an unlikely or untrue condition takes the %1$@, never the %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tras si, una condición improbable o falsa lleva el %1$@, nunca el %2$@."
+          }
+        }
+      }
+    },
+    "Choice.reasonWishContraryToFact %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A wish after ojalá for what is not so takes the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un deseo tras ojalá de lo que no es así pide el %@."
+          }
+        }
+      }
+    },
+    "Choice.rightChoice" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The right choice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La elección correcta"
+          }
+        }
+      }
+    },
+    "Choice.yourChoice" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your choice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu elección"
+          }
+        }
+      }
+    },
     "CustomQuiz.band %lld" : {
       "localizations" : {
         "en" : {

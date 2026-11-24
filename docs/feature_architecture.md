@@ -1321,7 +1321,73 @@ Complete the Sentence only: ten sentences, one per kind of frame (`Quiz.sentence
 **The example reward** (`ResultsView`). In every quiz's results, each verb's first right row
 offers Example Use (Ejemplo de Uso), which reveals the verb's example sentence from
 `ExampleUses.json` with its English and source. The quiz itself never pauses after a right
-answer. Opening it sends nothing, since only right rows offer it.
+typed answer (a choice question, below, is the one place it does). Opening it sends nothing,
+since only right rows offer it.
+
+### Choice Questions: Which Tense Would a Speaker Use?
+
+**What it asks.** The same sentence in two tenses, of which the learner picks the one a speaker
+would use: "De niña, Ana jugaba al tenis todos los sábados." over "…jugó…". Choosing is where much
+of the difficulty of Spanish tenses lies (the pretérito or the imperfecto, the subjuntivo or the
+indicativo, the imperfecto de subjuntivo or the condicional after si), and typing a form never asks
+it. **Not a mode:** every default round from Elementary up, Ten More's included, asks exactly one
+(`QuizScope.mixesChoiceQuestions`, the ranked scope less a practice set), so every ranked round of
+a level asks the same mix. My Verbs, custom quizzes, record sessions, and the exercises ask none,
+and Beginner, whose tenses offer no contrast, has none.
+
+**The content** (`Models/ChoiceQuestions.json`, `Models/ChoiceQuestion.swift`). Each item has an id
+built from its verb and the right sentence's tense (`jugar.imperfectoDeIndicativo.1`), a verb and
+person that both sentences share, the level from which it is asked, an optional region, a reason,
+the right and the other sentence (a `DisplayTense` case name and the Spanish with the form in
+braces), American English, and `reviewed`. Each sentence is read as a `GapSentence`, so the braces,
+the tú or vos rule, the machine check, and the completed sentence serve both kinds of content. The
+two sentences differ only inside their braces. The file is written only through
+`scripts/choice_questions.py` (`review`, `approve`, `status`); debug builds ask drafts with the
+Draft pill, as Complete the Sentence does.
+
+**Levels and regions.** An item is asked from its own level up, where that level asks the right
+sentence's verb (in its band) in its cell; the other sentence's cell may be one no level asks, as
+the condicional after si is, since the learner reads it and is never asked to write it. An item on
+today's events names its region (`ChoiceRegion`): in Spain "Hoy he comido paella" is right, in most
+of Latin America "Hoy comí paella", so each pair of items is asked only in its region, and the card
+says which ("In Spain", "In Latin America") above the sentences. A second-person item is shown in
+the learner's tú or vos, its forms the engine's.
+
+**The reasons** (`ChoiceReason`). A few dozen lines in `Localizable.xcstrings` (`Choice.reason…`),
+each with the tenses' names filled in as the card shows them (`DisplayTense.sentenceDisplayName`),
+so one line serves every item of its kind. Four (`likelySi`, `unlikelySi`, `comoSi`,
+`negativeCommand`) also name the wrong tense: "After si, an unlikely or untrue condition takes the
+imperfecto de subjuntivo, never the condicional."
+
+**The screen** (`ChoiceQuestionView`). The card shows the verb and gloss, no tense line, and the
+region pill when there is one. The two sentences take the field's place, each a button with its
+form in bold yellow and its tense's name beneath, under "Which fits here?" ("¿Cuál encaja aquí?");
+the right one is first or second at random (`ChoicePrompt.rightIndex`). No field, so no keyboard,
+until Continue. Once one is chosen, the card **holds, right or wrong**, with the clock stopped: the
+right sentence gets a green rim and check, a wrong choice a red rim and cross, the other is dimmed
+(not disabled, which would dim the right one just when it should be read), and the English, the
+reason, and Continue appear. **The English waits for the choice**, since its aspect ("used to
+play", "was reading") can give the answer away. Continue answers Return on a hardware keyboard and
+Magic Tap, and the next question's field takes the keyboard again once it is on screen.
+
+**Scoring** (`Quiz.submitChoice`). 10 points if right and none if wrong, with no second attempt and
+no re-ask, since either would ask a choice of two whose answer is now known. Choosing is not
+producing a form, so the practice record is untouched. The choice is one of the round's ten, so a
+ranked round still scores out of 100. Its results row is an ordinary row: the right cell, the chosen
+form, and the right form when the choice was wrong.
+
+**The draw** (`QuizDraw.choice`, `Quiz.drawRound`). The level's items in the session's region, the
+session's unasked ones first; the typed draw makes nine questions, and the choice goes anywhere but
+first, after the shuffle, so a round opens on a typed question with the keyboard up.
+
+**Analytics.** None new: the choice is one question of a default round, whose signals are
+unchanged, and which item was asked or how it was answered may not be sent.
+
+**VoiceOver.** Each sentence is one button whose label is the sentence and its tense, in Spanish;
+once chosen, its value is "Your choice", "The right choice", or both. The choice is announced with
+its reason ("Incorrect. The right choice: …. …"), and focus moves to the reason. The DEBUG fixture
+`CONJUGAR_QUIZ_FIXTURE choices` replaces the default quiz with ten choices, one per kind of reason,
+the right sentence first and second by turns (`Quiz.choicesFixtureIDs`).
 
 ## The Verb of the Day and Random Verbs
 

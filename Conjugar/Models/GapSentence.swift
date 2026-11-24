@@ -149,12 +149,20 @@ nonisolated struct GapSentence: Decodable, Identifiable, Equatable, Sendable {
 
   /// The sentence as it reads with `blank` written in, capitalized where the blank begins it.
   func completed(with blank: String) -> String {
-    guard let (before, after) = surroundings else {
+    guard let parts = completedParts(with: blank) else {
       return es
+    }
+    return parts.before + parts.blank + parts.after
+  }
+
+  /// `completed(with:)` in its three parts, the blank's apart, for a view that sets it off.
+  func completedParts(with blank: String) -> (before: String, blank: String, after: String)? {
+    guard let (before, after) = surroundings else {
+      return nil
     }
     let opensSentence = !before.contains { $0.isLetter }
     let filled = opensSentence ? blank.prefix(1).uppercased() + blank.dropFirst() : blank
-    return before + filled + after
+    return (before, filled, after)
   }
 
   /// Whether a level asks this sentence: its verb is in the level's band, and its tense and person
@@ -299,6 +307,11 @@ nonisolated extension QuizQuestion {
   /// The question's sentence completed with the engine's form, in the person asked, which the
   /// correction shows: "¡No vayas solo de noche!". Nil for a question asked without a sentence.
   var completedSentence: String? {
+    completedSentenceParts.map { $0.before + $0.blank + $0.after }
+  }
+
+  /// `completedSentence` in its three parts, the engine's form apart.
+  var completedSentenceParts: (before: String, blank: String, after: String)? {
     guard let sentence, let answer = writtenAnswer?.lowercased() else {
       return nil
     }
@@ -308,6 +321,6 @@ nonisolated extension QuizQuestion {
       }
       return false
     }.count
-    return sentence.completed(with: answer.split(separator: " ").dropFirst(suppliedCount).joined(separator: " "))
+    return sentence.completedParts(with: answer.split(separator: " ").dropFirst(suppliedCount).joined(separator: " "))
   }
 }

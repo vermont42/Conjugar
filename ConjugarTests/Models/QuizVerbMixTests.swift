@@ -175,9 +175,13 @@ import Testing
       for seed in Self.seeds.prefix(20) {
         let questions = Self.draw(level, seed: seed, count: 10)
         #expect(questions.count == 10)
-        #expect(questions.filter(isIrregular).count == 5, "\(level) seed \(seed)")
-        #expect(questions.filter { QuizDraw.isCore($0.verb) }.count >= QuizDraw.minimumCoreQuestions, "\(level) seed \(seed)")
-        #expect(questions.contains { QuizDraw.isCompound($0.verb) }, "\(level) seed \(seed)")
+        // From the second level up, a choice between two sentences takes one of the ten, so the
+        // draw's rules govern the other nine, of which half, rounded either way, are irregular.
+        let typed = questions.filter { $0.choice == nil }
+        #expect(typed.count == (level == .beginner ? 10 : 9))
+        #expect((typed.count / 2...(typed.count + 1) / 2).contains(typed.filter(isIrregular).count), "\(level) seed \(seed)")
+        #expect(typed.filter { QuizDraw.isCore($0.verb) }.count >= QuizDraw.minimumCoreQuestions, "\(level) seed \(seed)")
+        #expect(typed.contains { QuizDraw.isCompound($0.verb) }, "\(level) seed \(seed)")
       }
     }
   }

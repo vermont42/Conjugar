@@ -32,6 +32,7 @@ struct QuizView: View {
   @State private var shareButtonFrame = CGRect.zero
   @FocusState private var fieldFocused: Bool
   @AccessibilityFocusState private var correctionHasAccessibilityFocus: Bool
+  @AccessibilityFocusState private var choiceReasonHasAccessibilityFocus: Bool
   /// Pages opened from a held correction, pushed over the quiz, which waits beneath them.
   @State private var navigationPath = NavigationPath()
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -658,31 +659,7 @@ struct QuizView: View {
             )
           }
 
-          VStack(alignment: .leading, spacing: 4) {
-            if let essentialsRows, let currentRowIndex {
-              VerbEssentialsRowLabel(key: essentialsRows[currentRowIndex].key)
-                .accessibilityHidden(true)
-            }
-            if quiz.currentQuestion?.recognition != nil {
-              Text(L.Recognition.infinitiveHeading)
-                .font(.subheadline.bold())
-                .foregroundStyle(Color.customYellow)
-                .accessibilityHidden(true)
-            }
-            answerField(spokenPrefix: currentRowIndex.flatMap { essentialsRows?[$0].key.tense.displayName })
-            if let sentence = quiz.currentQuestion?.sentence {
-              Text(sentence.en)
-                .font(.callout)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-                .accessibilityIdentifier("quiz_sentence_english")
-            }
-          }
-          .id(QuizView.answerFieldID)
-
-          if isLarge {
-            letterKeys
-          }
+          answerSection(essentialsRows: essentialsRows, currentRowIndex: currentRowIndex)
 
           if quiz.isAwaitingSecondAttempt {
             secondAttemptLine
@@ -699,8 +676,8 @@ struct QuizView: View {
               onContinue: continueAfterCorrection
             )
             .transition(.opacity)
-          } else if essentialsRows == nil {
-            // A Verb Essentials row shows how its answer went.
+          } else if essentialsRows == nil, !quiz.isHeld {
+            // A Verb Essentials row shows how its answer went, and a held choice its sentences.
             rightAnswerReveal
               .frame(minHeight: 44)
           }
@@ -752,6 +729,19 @@ struct QuizView: View {
       .onChange(of: recognitionTense) {
         revealCheckButton(proxy)
       }
+      // The field returns after a choice, and takes the keyboard once it is on screen.
+      .onChange(of: quiz.currentQuestion?.choice != nil) { _, isChoice in
+        guard !isChoice, quiz.quizState == .inProgress else {
+          return
+        }
+        fieldFocused = false
+        Task { @MainActor in
+          try? await Task.sleep(for: .milliseconds(50))
+          if quiz.quizState == .inProgress {
+            fieldFocused = true
+          }
+        }
+      }
       .onChange(of: recognitionPerson) {
         revealCheckButton(proxy)
       }
@@ -767,8 +757,12 @@ struct QuizView: View {
         guard isHeld else {
           return
         }
-        correctionHasAccessibilityFocus = true
-        refocusAnswer(after: .milliseconds(50))
+        if quiz.currentQuestion?.choice != nil {
+          choiceReasonHasAccessibilityFocus = true
+        } else {
+          correctionHasAccessibilityFocus = true
+          refocusAnswer(after: .milliseconds(50))
+        }
         withAnimation(reduceMotion ? nil : .snappy) {
           proxy.scrollTo(QuizCorrectionView.continueButtonID, anchor: .bottom)
         }
@@ -784,6 +778,48 @@ struct QuizView: View {
     }
     .sensoryFeedback(trigger: answerToken) { _, _ in
       lastFeedback
+    }
+  }
+
+  /// The answer field, with its labels and the letter keys under it on an iPad, or a choice's
+  /// sentences in its place.
+  @ViewBuilder
+  private func answerSection(essentialsRows: [VerbEssentialsRow]?, currentRowIndex: Int?) -> some View {
+    // A choice has no field, and so no keyboard, until its Continue.
+    if let choice = quiz.currentQuestion?.choice {
+      ChoiceQuestionView(
+        choice: choice,
+        chosenOption: quiz.chosenOption,
+        reasonIsFocused: $choiceReasonHasAccessibilityFocus,
+        onChoose: choose,
+        onContinue: continueAfterCorrection
+      )
+    } else {
+      VStack(alignment: .leading, spacing: 4) {
+        if let essentialsRows, let currentRowIndex {
+          VerbEssentialsRowLabel(key: essentialsRows[currentRowIndex].key)
+            .accessibilityHidden(true)
+        }
+        if quiz.currentQuestion?.recognition != nil {
+          Text(L.Recognition.infinitiveHeading)
+            .font(.subheadline.bold())
+            .foregroundStyle(Color.customYellow)
+            .accessibilityHidden(true)
+        }
+        answerField(spokenPrefix: currentRowIndex.flatMap { essentialsRows?[$0].key.tense.displayName })
+        if let sentence = quiz.currentQuestion?.sentence {
+          Text(sentence.en)
+            .font(.callout)
+            .foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityIdentifier("quiz_sentence_english")
+        }
+      }
+      .id(QuizView.answerFieldID)
+
+      if isLarge {
+        letterKeys
+      }
     }
   }
 
@@ -820,9 +856,17 @@ struct QuizView: View {
         }
       }
 
-      // The person asked is in the answer's frame, below, and a Verb Essentials row names its
-      // own tense.
-      if quiz.essentialsRows == nil, quiz.currentQuestion?.recognition == nil {
+      // An item true in one region only says which, since the answer is that region's usage.
+      if let region = quiz.currentQuestion?.choice?.question.choiceRegion {
+        Label(region == .spain ? L.Choice.inSpain : L.Choice.inLatinAmerica, systemImage: "globe")
+          .labelStyle(.titleAndIcon)
+          .metadataPill(tint: .customBlue)
+          .accessibilityIdentifier("choice_region")
+      }
+
+      // The person asked is in the answer's frame, below, a Verb Essentials row names its own
+      // tense, and a choice's sentences name theirs.
+      if quiz.essentialsRows == nil, quiz.currentQuestion?.recognition == nil, quiz.currentQuestion?.choice == nil {
         Text(verbatim: quiz.currentQuestion?.sentence == nil ? quiz.tense.displayName : quiz.tense.sentenceDisplayName)
           .font(.title3.weight(.semibold))
           .fontDesign(.serif)
@@ -1096,6 +1140,24 @@ struct QuizView: View {
     } else {
       fieldFocused = true
     }
+  }
+
+  /// A sentence chosen in a choice question: the sound and haptic of a typed answer, and the
+  /// reason announced, since the card holds with it, right or wrong.
+  private func choose(_ index: Int) {
+    guard let choice = quiz.currentQuestion?.choice, let result = quiz.submitChoice(index) else {
+      return
+    }
+    let isRight = result != .noMatch
+    Current.soundPlayer.play(isRight ? .chime : .buzz, shouldDebounce: false)
+    lastFeedback = isRight ? .success : .error
+    answerToken += 1
+    withAnimation(reduceMotion ? nil : .snappy) {
+      showsRightAnswer = false
+    }
+    let reason = choice.question.reasonLine
+    let rightSentence = choice.options.first(where: \.isRight)?.sentence ?? ""
+    AccessibilityNotification.Announcement(isRight ? L.Choice.announceRight(reason) : L.Choice.announceWrong(right: rightSentence, reason: reason)).post()
   }
 
   /// Return in the field, Continue, or a Magic Tap: the next question, or the results.

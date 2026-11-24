@@ -44,7 +44,7 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 15 | Done | 2026-11-23 | 5da7c25 | T5.2 |
 | 16 | Done | 2026-11-23 | 18175a3 | T5.4 |
 | 17 | Partly done (the app and the first batch, approved); verbs 26–300 remain | 2026-11-23 | d1a3c66 | T5.5 |
-| 18 | Not started | | | T5.6 |
+| 18 | Awaiting Josh (the app and 45 items, approved) | 2026-11-23 | | T5.6 |
 | 19 | Not started | | | T6.2 |
 | 20 | Not started | | | T5.7 |
 | 21 | Not started | | | T6.3 |
@@ -2669,7 +2669,8 @@ sentence questions appear where decided, and tests pin the check.
 ## Phase 18: Which Tense Would a Speaker Use?
 
 **Ports:** Konjugieren Phase 19. **Suggestions:** T5.6. **Depends on:** Phase 17 for its content
-pipeline. **Status:** Not started.
+pipeline. **Status:** Built, awaiting Josh's commit: the app, the machine check, the review tooling, and a
+first batch of 45 items, which Josh approved.
 
 A context and two sentences, each in a different tense, with the learner choosing the one a speaker
 would use. Spanish has the classic contrasts: the pretérito or the imperfecto; the subjuntivo or the
@@ -2696,7 +2697,101 @@ dimming; the machine check caught a draft on its first run.
 **Done when** the items exist and are reviewed, the choice and its reason appear as decided, region
 items follow the setting, and tests pin the item data's integrity.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh decided two things on 2026-11-23**, asked before building, each the recommended option.
+  (1) **Region items are tagged**: an item on today's events names its region (`"region": "spain"`
+  or `"latinAmerica"`) and is asked only to learners with that region set, and the card says "In
+  Spain" or "In Latin America" above the sentences (over leaving the contrast out). (2) **The
+  English waits for the choice** and appears with the reason and Continue (over Konjugieren's English
+  under the sentences from the start), since English aspect can give the answer away ("used to
+  play" is the imperfecto). Konjugieren's other decisions carried over unasked: one choice per
+  default round from Elementary up, Ten More's included (`QuizScope.mixesChoiceQuestions`, the
+  ranked scope less a practice set); two sentences, the form in bold yellow and its tense beneath;
+  the card holds after every choice, right or wrong; 10 points or none, no second attempt, no
+  re-ask; nothing recorded in the practice record; never first in a round; reasons as a few strings
+  with the tenses' names filled in; and a first batch of about 40 for Josh to review.
+- **The batch: 45 items** in `Models/ChoiceQuestions.json`, reviewed in
+  [`choice_questions_batch_1.md`](choice_questions_batch_1.md), over 27 reasons. **Josh approved all
+  45 on 2026-11-23** with no changes, the two flagged below included; `choice_questions.py approve
+  --all` set `reviewed`, and the machine check passed again (15 of 15). **Josh decided on 2026-11-23
+  not to review later batches**: the machine check settles each form, and Claude's full reread of
+  every item, not a sample, settles the rest. A later batch's session approves its items itself
+  with `choice_questions.py approve` once both are done. **Elementary, 18:**
+  the pretérito or the imperfecto (a habit, a description, the time and an age, an action under way
+  and the event that interrupts it, an event at a stated time, a period now over), three pairs on
+  today's events (hoy he comido, esta mañana he hablado, ¿quién ha llamado esta tarde?, each once
+  for Spain and once, reversed, for Latin America), and two futuros of conjecture (estará en la
+  biblioteca, serán las tres). **Intermediate, 15:** the subjuntivo or the indicativo (no creo que
+  and creo que, dudo que, quiero que, me pide que, es importante que, ojalá, me alegro de que,
+  cuando for the future and for a habit), si with the presente never the presente de subjuntivo, a
+  negative command never the presente, the pluscuamperfecto for the earlier past, and the
+  condicional for a promise seen from the past. **Advanced, 12:** si with the imperfecto or
+  pluscuamperfecto de subjuntivo never the condicional, the condicional in the result, como si,
+  a past trigger's imperfecto de subjuntivo, ojalá fuera for what is not so, and the perfecto de
+  subjuntivo after doubt and a feeling. Items avoid vosotros; three are second person and show in
+  the learner's tú or vos. **Not covered:** ir a + infinitivo against the futuro, since ir a is
+  no cell and an item's two sentences differ only in one form of one verb; and contrasts where both
+  sentences are natural (the futuro or the presente with mañana, the futuro perfecto of conjecture),
+  which a choice of two cannot judge fairly.
+- **The machine check passed on its first run**, so it was tested by breaking it, in
+  `theMachineCheckCatchesABrokenItem`: a misspelled form, two sentences in one tense, sentences that
+  differ outside their braces, tú named in a second-person item, an unknown reason, a region on an
+  item that needs none, a level that does not ask the right sentence, and the -se form. It also
+  requires a region exactly on the two today's-events reasons, requires that no level below an
+  item's own asks it, and confirms that each reason's line names its right tense, and the other
+  tense only for the four reasons that name both. **My reread changed one reason**: "A feeling
+  about what someone else does" did not fit "Me alegro de que estés mejor", a state, so it became
+  "A feeling about something else, such as me alegro de que, takes the …".
+- **Flag for Josh's review:** `viajar.condicional.1` ("Si tuviéramos dinero, viajaríamos" over
+  "viajáramos") is right in the standard, but the -ra form in the result is heard in parts of the
+  Caribbean and Central America; and the two pluscuamperfecto items ("la película ya había
+  empezado" over "ya empezó") are the norm everywhere, though "ya empezó" is heard in Latin American
+  speech.
+- **How it is built.** `ChoiceQuestion` reads each sentence as a `GapSentence` (which gained
+  `completedParts(with:)`, and `QuizQuestion.completedSentenceParts`), so the braces, the tú or
+  vos rule, and the check serve both. `ChoicePrompt` holds the order and the learner's tú or vos,
+  and its `quizQuestion` is the right sentence's cell, with `QuizQuestion.choice` set, so the
+  results row, the Live Activity, and Ten More work unchanged. `Quiz.drawRound` replaced the two
+  draw-then-shuffle sites in `start(scope:)` and `continueSession()`: it reserves one of the ten,
+  draws nine, shuffles, then inserts the choice at 1…9. `Quiz.submitChoice` and `chosenOption`;
+  `isHeld` now reads either. `ChoiceQuestionView` takes the field's place (the field section moved
+  into `QuizView.answerSection`, since the body no longer type-checked in time), with Continue on
+  `.keyboardShortcut(.defaultAction)`, as no field holds the keyboard; leaving a choice focuses the
+  next field once it is on screen. `scripts/choice_questions.py` (`review`, `approve`, `status`)
+  fills each reason's line from the catalog, so the sheet shows the card's words.
+- **Found by looking.** The form in a sentence did not look bold: a strongly emphasized run did
+  not turn the serif bold, so the run now carries its own bold serif font.
+- **Analytics.** None new, as in Konjugieren: the choice is one question of a default round, whose
+  signals are unchanged. Nothing to stage in the privacy policy.
+- **VoiceOver.** Each sentence is one button, labeled with the sentence and its tense in Spanish
+  ("¡No hables tan alto! imperativo negativo", read from the accessibility tree); once chosen, its
+  value is "Your choice", "The right choice", or both. The choice is announced with its reason
+  ("Incorrect. The right choice: …. …"), and focus moves to the reason. Nobody has listened to it.
+- **A fixture**, `CONJUGAR_QUIZ_FIXTURE choices`, standing in for the default quiz: ten choices, one
+  per kind of reason, the right sentence first and second by turns, the today's-events item of the
+  learner's region (`Quiz.choicesFixtureIDs`).
+- **Tests:** `ChoiceQuestionTests`, 15 functions (17 cases): the machine check and its breaking;
+  ids, reasons, levels, and the fixture covered; region items; cumulative levels; drafts; the
+  prompt's order and capitalization; tú and vos; reason lines; the draw; and in a quiz one choice
+  never first at each level in both regions, none at Beginner or in other scopes, a right choice
+  held with nothing recorded and no second choice, a wrong one held and not re-asked, and a ranked
+  round of 100 with Ten More's new choice. `QuizVerbMixTests.aTenQuestionQuizMixesToo` now judges
+  the nine typed questions beside a choice (half irregular, rounded either way). **The full run
+  passed 1,250 tests in 79 suites**, up from 1,235 in 78, in the simulator's default language
+  (English). The run before that fix failed only that test.
+- **Verified on the iPhone**, in English and light mode, with the fixture: jugaba and jugó, jugó
+  chosen (the green and red rims, the English, "A habit in the past takes the imperfecto de
+  indicativo.", Continue), sonó chosen rightly, the "In Latin America" pill on hoy comí, and the
+  results (60, "Correct: 6 / 10", choice rows like any other, Example Use on right rows). **On the
+  iPad**, in Spanish and dark mode at Avanzado, a real draw: the choice came after typed questions
+  and their re-asks (venir, "Me alegro mucho de que hayas venido"), chosen wrongly ("Un sentimiento
+  ante otra cosa, como me alegro de que, pide el perfecto de subjuntivo."), Return continued from a
+  hardware keyboard, and the next question's field took typing at once. Both simulators'
+  preferences were restored from backups, the iPhone's fixture default removed, and the iPad
+  returned to light mode and shut down. Not tried: VoiceOver by ear, the software keyboard's
+  return after a choice, accessibility text sizes, the vos setting on a device (unit-tested), the
+  "In Spain" pill (unit-tested), the Live Activity, and a release build.
 
 ## Phase 19: Mastery
 

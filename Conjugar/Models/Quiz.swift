@@ -61,6 +61,10 @@ class Quiz {
   /// The correction of a wrong answer, which holds the quiz on its question, with the clock
   /// stopped, until `continueAfterCorrection()`. A right answer advances at once.
   private(set) var correction: QuizCorrection?
+  /// The sentence chosen in a choice question, which holds the card, right or wrong, with its
+  /// reason and the clock stopped, until `continueAfterCorrection()`: a choice of two can be a
+  /// lucky guess, and the reason is the lesson.
+  private(set) var chosenOption: Int?
   private(set) var questions: [Question] = []
   /// What the quiz under way, or last finished, asks about. See `QuizScope`.
   private(set) var scope = QuizScope.allVerbs
@@ -274,6 +278,9 @@ class Quiz {
       case .sentences:
         questions = sentencesFixture()
         beginQuiz()
+      case .choices:
+        questions = choicesFixture()
+        beginQuiz()
       }
       return true
     }
@@ -283,14 +290,11 @@ class Quiz {
     // `personNumber(for:)` reads the region and the level, so they are set before the draw.
     lastRegion = region
     lastLevel = level
-    var drawn = draw(scope)
+    let drawn = drawRound(scope)
     guard !drawn.isEmpty else {
       lastRegion = previousRegion
       lastLevel = previousLevel
       return false
-    }
-    if shouldShuffle, scope.shufflesQuestions {
-      drawn.shuffle(using: &generator)
     }
     self.scope = scope
     clearAnswers()
@@ -312,12 +316,38 @@ class Quiz {
     practiceStore ?? Current.practice
   }
 
+  /// A round as asked: `draw(_:after:reserving:)`'s questions, shuffled where the scope shuffles,
+  /// and in the default quiz one choice between two sentences, placed anywhere but first.
+  private func drawRound(_ scope: QuizScope, after prior: [Question] = []) -> [Question] {
+    let choice = scope.mixesChoiceQuestions ? choiceQuestion(after: prior) : nil
+    var drawn = draw(scope, after: prior, reserving: choice == nil ? 0 : 1)
+    if shouldShuffle, scope.shufflesQuestions {
+      drawn.shuffle(using: &generator)
+    }
+    if let choice, !drawn.isEmpty {
+      drawn.insert(choice, at: QuizDraw.choicePosition(in: drawn.count, using: &generator))
+    }
+    return drawn
+  }
+
+  /// A choice the level asks in the session's region, the session's unasked ones first.
+  private func choiceQuestion(after prior: [Question]) -> Question? {
+    let region: ChoiceRegion = lastRegion == .spain ? .spain : .latinAmerica
+    return QuizDraw.choice(
+      from: ChoiceQuestions.askable(at: lastLevel, in: region),
+      excluded: Set(prior.compactMap { $0.choice?.question.id }),
+      secondSingular: secondSingular,
+      using: &generator
+    )?.quizQuestion
+  }
+
   /// A round of the scope's questions at `lastLevel`, after the session's questions so far. The
   /// default quiz's rounds each mix in up to three items the practice record says are due
   /// (`QuizDraw.dueQuestions`); a quiz whose verbs or tenses were chosen asks only what was
   /// chosen; a Review or My Mistakes asks the record's items, beyond the level's tenses; Verb
   /// Essentials asks five verbs' key conjugations, of the band or of a model and the known models.
-  private func draw(_ scope: QuizScope, after prior: [Question] = []) -> [Question] {
+  /// `reserving` leaves room in the default quiz's round for questions placed after the draw.
+  private func draw(_ scope: QuizScope, after prior: [Question] = [], reserving: Int = 0) -> [Question] {
     if scope.isSentences {
       return sentenceQuestions(count: scope.questionCount, after: prior)
     }
@@ -354,7 +384,7 @@ class Quiz {
     }
     let band = scope.band(level: lastLevel)
     let due = scope.mixesDueItems ? dueQuestions(pool: pool, band: band) : []
-    let drawn = mixedQuestions(count: scope.questionCount - due.count, pool: pool, band: band)
+    let drawn = mixedQuestions(count: scope.questionCount - reserving - due.count, pool: pool, band: band)
     return QuizDraw.mixing(due, into: drawn, using: &generator)
   }
 
@@ -570,7 +600,7 @@ class Quiz {
 
   /// Whether the quiz waits on its question for the learner to continue.
   var isHeld: Bool {
-    correction != nil
+    correction != nil || chosenOption != nil
   }
 
   /// Whether the question on screen waits for a second attempt after a slip. The clock runs on,
@@ -622,12 +652,9 @@ class Quiz {
     guard canContinue else {
       return false
     }
-    var drawn = draw(scope, after: questions)
+    let drawn = drawRound(scope, after: questions)
     guard !drawn.isEmpty else {
       return false
-    }
-    if shouldShuffle, scope.shufflesQuestions {
-      drawn.shuffle(using: &generator)
     }
     currentQuestionIndex = questions.count
     questions += drawn
@@ -640,6 +667,7 @@ class Quiz {
   /// `currentQuestionIndex`.
   private func beginRound() {
     correction = nil
+    chosenOption = nil
     firstAttempt = nil
     firstAttemptDiagnosis = nil
     firstAttemptRecognition = nil
@@ -779,12 +807,40 @@ class Quiz {
     return result
   }
 
+  /// Records the choice of the sentence at `index` and holds the card with its reason, right or
+  /// wrong. A right choice earns full points and a wrong one none, with no second attempt and no
+  /// re-ask, since either would ask a choice of two whose answer is now known. Choosing is not
+  /// producing a form, so the practice record is untouched.
+  @discardableResult
+  func submitChoice(_ index: Int) -> ConjugationResult? {
+    guard
+      quizState == .inProgress,
+      !isHeld,
+      let question = currentQuestion,
+      let choice = question.choice,
+      let chosen = choice.form(at: index),
+      let right = choice.form(at: choice.rightIndex)
+    else {
+      return nil
+    }
+    let result: ConjugationResult = index == choice.rightIndex ? .totalMatch : .noMatch
+    timer?.invalidate()
+    lastCurrentSpelling = nil
+    proposedAnswers.append(chosen)
+    correctAnswers.append(question.writtenAnswer ?? right)
+    results.append(result)
+    firstAttempts.append(nil)
+    chosenOption = index
+    return result
+  }
+
   /// Leaves a held correction for the next question, or for the results after the last.
   func continueAfterCorrection() {
     guard quizState == .inProgress, isHeld else {
       return
     }
     correction = nil
+    chosenOption = nil
     advance()
     if quizState == .inProgress {
       startTimer()
@@ -827,6 +883,7 @@ class Quiz {
   func stop() {
     timer?.invalidate()
     correction = nil
+    chosenOption = nil
     firstAttempt = nil
     firstAttemptDiagnosis = nil
     firstAttemptRecognition = nil
@@ -946,6 +1003,10 @@ extension Quiz {
     /// kind of sentence frame whatever the level, each with its answer and a wrong one worth
     /// trying in its comment.
     case sentences
+    /// Choices between two sentences, used only for the Quiz tab's default quiz, one per kind of
+    /// reason whatever the level, the right sentence first and second by turns. Of the two items on
+    /// today's events, the learner's region's is asked.
+    case choices
 
     /// Whether the fixture replaces the questions of a quiz over this scope. The essentials,
     /// recognition, and sentences fixtures stand in for their own exercises, and the others for
@@ -958,6 +1019,8 @@ extension Quiz {
         return scope.isRecognition
       case .sentences:
         return scope.isSentences
+      case .choices:
+        return scope.mixesChoiceQuestions
       default:
         return !scope.isVerbEssentials && !scope.isRecognition && !scope.isSentences
       }
@@ -1084,6 +1147,32 @@ extension Quiz {
   func sentencesFixture() -> [Question] {
     Self.sentencesFixtureIDs.compactMap { id in
       GapSentences.all.first { $0.id == id }.flatMap { QuizQuestion.sentence($0, secondSingular: secondSingular) }
+    }
+  }
+
+  /// The choices fixture's items, by id.
+  static let choicesFixtureIDs = [
+    "jugar.imperfectoDeIndicativo.1",          // a habit: jugaba over jugó
+    "sonar.pretérito.1",                       // the interrupting event: sonó over sonaba
+    "comer.perfectoDeIndicativo.1",            // in Spain only: hoy he comido
+    "comer.pretérito.1",                       // in Latin America only: hoy comí
+    "estar.futuroDeIndicativo.1",              // a guess: estará over está
+    "tener.presenteDeSubjuntivo.1",            // doubt: no creo que tenga
+    "venir.presenteDeSubjuntivo.1",            // (tú or vos) quiero que vengas, in the learner's setting
+    "hablar.imperativoNegativo.1",             // a negative command, naming both tenses: no hables
+    "llover.presenteDeIndicativo.1",           // a likely si, naming both tenses: si llueve
+    "tener.imperfectoDeSubjuntivo1.1",         // an unlikely si: si tuviera, never tendría
+    "saber.pluscuamperfectoDeSubjuntivo1.1"    // a compound in each sentence: hubiera sabido
+  ]
+
+  /// The choices fixture, in the learner's tú or vos and region.
+  func choicesFixture() -> [Question] {
+    let region: ChoiceRegion = lastRegion == .spain ? .spain : .latinAmerica
+    let items = Self.choicesFixtureIDs.compactMap { id in
+      ChoiceQuestions.all.first { $0.id == id && ($0.choiceRegion == nil || $0.choiceRegion == region) }
+    }
+    return items.enumerated().compactMap { index, item in
+      ChoicePrompt(question: item, rightIndex: index % 2, secondSingular: secondSingular).quizQuestion
     }
   }
 

@@ -27,6 +27,9 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
   private(set) var recognition: RecognitionQuestion?
   /// For Complete the Sentence, the sentence the answer fills.
   private(set) var sentence: GapSentence?
+  /// For a choice question, the two sentences the learner chooses between. The verb and cell are
+  /// the right sentence's, and `sentence` is that sentence.
+  private(set) var choice: ChoicePrompt?
 
   init(_ verb: String, _ tense: DisplayTense, _ personNumber: DisplayPersonNumber) {
     self.verb = verb
@@ -60,6 +63,13 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
   func inSentence(_ sentence: GapSentence) -> QuizQuestion {
     var question = self
     question.sentence = sentence
+    return question
+  }
+
+  /// The same question, asked as a choice between two sentences.
+  func choosing(_ choice: ChoicePrompt) -> QuizQuestion {
+    var question = self
+    question.choice = choice
     return question
   }
 

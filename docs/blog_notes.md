@@ -11834,3 +11834,52 @@ source names, which had compiled before I taught it the new value. The 118 sente
 which a debug build asks with a Borrador pill and a release build skips. Josh read the review sheet
 the same evening and approved all 118 without a change. He also decided that the later batches,
 verbs 26 to 300, need no review of his: the machine check and Claude's full reread are enough.
+
+## Which Tense Would a Speaker Use? (2026-11-23)
+
+Typing a form never asks the question that gives learners of Spanish the most trouble: which tense
+the sentence wants. Konjugieren answered it with a choice question, the same sentence in two
+tenses, and this session ported that idea to Conjugar. Each default round from Elementary up now
+asks one. "De niña, Ana jugaba al tenis todos los sábados" sits above "De niña, Ana jugó al tenis
+todos los sábados", each form in bold yellow with its tense named beneath. Once the learner picks
+one, the card holds, right or wrong, and shows the English, a one-line reason ("A habit in the past
+takes the imperfecto de indicativo."), and Continue. This is the one place the quiz pauses after a
+right answer, because a choice of two can be a lucky guess and the reason is the lesson.
+
+Two questions were Spanish ones, so I asked Josh before building. The first was the region. "Hoy he
+comido paella" is what a speaker in Spain says; "Hoy comí paella" is what most of Latin America
+says. Josh chose to tag such items by region, so each pair is asked only where it is true, and the
+card says "In Latin America" or "In Spain" above the sentences. The second was the English line.
+Konjugieren shows the translation under the sentences from the start, which is harmless in German,
+where "did" does not choose between the Perfekt and the Präteritum. English aspect does choose in
+Spanish: "used to play" is the imperfecto, and "was reading" is the imperfecto too. So the English
+now waits until after the choice.
+
+The content followed Phase 17's pipeline. Each sentence is read as a Complete the Sentence sentence,
+so the braces, the tú-or-vos rule, and the machine check serve both kinds of content. I drafted 45
+items over 27 reasons. The machine check confirms both forms against the engine in tú and vos. It
+also requires that the two sentences differ only inside their braces and that each item is asked
+from its own level and not below. Another rule checks that each reason's line names the tenses it
+should. The check passed on its first run, so a test now feeds it eight broken items to prove it can
+fail. My reread changed one reason. "A feeling about what someone else does" did not fit "Me alegro
+de que estés mejor", which is a state, so the line now reads "A feeling about something else, such
+as me alegro de que, takes the …". Some contrasts stayed out on purpose. Ir a + infinitivo is no
+cell, and a choice between "mañana salgo" and "mañana saldré" would mark a natural sentence wrong.
+
+The quiz needed less change than I expected. The choice is an ordinary question with the right
+sentence's cell, so results, the Live Activity, and Ten More work as before. The new
+`Quiz.drawRound` draws nine typed questions, shuffles them, and slips the choice in anywhere but
+first, so a round still opens with the keyboard up. One existing test noticed: it expected five
+irregular verbs among ten typed questions, and a round now has nine. A choice records nothing in
+the practice record, since choosing is not producing. It is never asked again either, since its
+answer is now known.
+
+Looking at it caught one thing the tests could not. The bold on the form did not render, because a
+strongly emphasized run in a serif Text stayed regular, so the form now carries its own bold serif
+font. On the iPad, in Spanish and dark mode at Avanzado, a real draw put "Me alegro mucho de que
+hayas venido" after a run of typed questions. Return on the hardware keyboard continued past the
+held card, and the next field took typing at once. The full suite ran 1,250 tests in 79 suites and
+passed. Josh read the review sheet the same evening and approved all 45 without a change,
+including the two I had flagged as regional, so a release build will ask them. He also decided
+that later batches need no review of his, as he had for the sentences: the machine check and
+Claude's full reread are enough.
