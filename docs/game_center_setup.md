@@ -69,8 +69,8 @@ posts nothing. A quiz over My Verbs, a collection, or one verb's page posts noth
 and a clock that is hidden by default.
 
 **Where a player sees them.** The quiz's end no longer opens Game Center. While the player is
-signed in, a ranked quiz's results offer View Leaderboard, which opens its level's board, and
-Settings offers View Leaderboards, which opens Game Center's list of the app's boards.
+signed in, the Quiz tab ends with a small View Leaderboard button, which opens the board of the
+player's level, and Settings offers View Leaderboards, which opens Game Center's list of the app's boards.
 
 ## Creating a Leaderboard
 
@@ -126,6 +126,6 @@ So the test waits for the 2027 version. Once it is created in App Store Connect,
 boards to it (On Release Day, steps 1 and 2, without submitting), then, **before** submitting:
 build to the iPhone from Xcode, sign in to Game Center if not already, enable Game Center in
 Conjugar's Settings, finish a ten-question quiz over all verbs at some level, and tap **View
-Leaderboard** on the results. It should open that level's board with the score. In Settings, **View
+Leaderboard** at the foot of the Quiz tab. It should open that level's board with the score. In Settings, **View
 Leaderboards** should open the list of the app's boards. Remove the test scores afterward (Apple's
 *Remove leaderboard test data*). [`release.md`](release.md) carries the reminder.

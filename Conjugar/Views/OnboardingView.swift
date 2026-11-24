@@ -105,7 +105,7 @@ struct OnboardingView: View {
           .tag(2)
 
           OnboardingPageView(
-            symbol: .system("trophy.fill"),
+            symbol: .system("pencil.and.list.clipboard"),
             title: L.Onboarding.quizTitle,
             bodyText: L.Onboarding.quizBody,
             ctaTitle: L.Onboarding.startQuizButton,

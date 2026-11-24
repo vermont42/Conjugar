@@ -195,12 +195,13 @@ struct QuizView: View {
     sizeClass == .regular
   }
 
-  /// A big symbol for the scope, the picker and Start, three facts about the quiz (for Custom,
-  /// what it asks and the way to change it), and for My Verbs, the verbs it will ask about.
+  /// The practice hub: what a session is and how long it takes, the level, Start, what the record
+  /// has due or missed, the last result, and the leaderboard last. For Custom, what the quiz asks
+  /// and the way to change it take the facts' place; for My Verbs, its verbs follow them.
   private var startScreen: some View {
     GeometryReader { geometry in
       ScrollView {
-        VStack(spacing: isLarge ? Layout.tripleDefaultSpacing * 2 : Layout.tripleDefaultSpacing) {
+        VStack(spacing: isLarge ? Layout.tripleDefaultSpacing * 2 : Layout.doubleDefaultSpacing) {
           scopeHero
 
           VStack(spacing: Layout.doubleDefaultSpacing) {
@@ -214,6 +215,16 @@ struct QuizView: View {
             .controlSize(isLarge ? .large : .regular)
             .accessibilityIdentifier("quiz_scope_picker")
 
+            if tabScope == .custom {
+              customQuizSummary
+            } else {
+              factTiles
+            }
+
+            if tabScope == .myVerbs, !myVerbs.isEmpty {
+              myVerbChips
+            }
+
             startButton
               // `PrimaryButtonStyle` fixes its own font, so a scale is the way to enlarge it.
               .scaleEffect(isLarge ? 1.4 : 1)
@@ -222,17 +233,11 @@ struct QuizView: View {
               .opacity(canStart ? 1 : 0.4)
           }
 
-          if tabScope == .custom {
-            customQuizSummary
-          } else {
-            factTiles
-          }
-
-          if tabScope == .myVerbs, !myVerbs.isEmpty {
-            myVerbChips
-          }
-
           practiceSection
+
+          if Current.gameCenter.isAuthenticated {
+            leaderboardButton
+          }
         }
         .padding(.horizontal, Layout.doubleDefaultSpacing)
         .padding(.vertical, Layout.doubleDefaultSpacing)
@@ -243,20 +248,72 @@ struct QuizView: View {
     }
   }
 
-  /// The quiz's length, level, and region.
+  /// How many questions, how long they take, and the level, which a tap changes here rather than
+  /// in Settings. The minutes are a fixed estimate, since showing the learner's own times would
+  /// undo the hidden clock.
   private var factTiles: some View {
     HStack(alignment: .top, spacing: Layout.defaultSpacing) {
       QuizFactTile(systemImage: "list.number", value: "\(QuizScope.roundLength)", label: L.Quiz.questionsLabel, isLarge: isLarge)
       QuizFactTile(
-        systemImage: Current.settings.quizLevel.systemImage,
-        value: Current.settings.quizLevel.localizedName,
-        label: L.Settings.level,
+        systemImage: "timer",
+        value: L.Quiz.sessionMinutes,
+        label: L.Quiz.minutesLabel,
+        accessibilityLabel: L.Quiz.sessionLength,
         isLarge: isLarge
       )
-      QuizFactTile(systemImage: "globe.americas.fill", value: Current.settings.region.localizedRegion, label: L.Settings.region, isLarge: isLarge)
+      levelMenu
     }
     // Equal heights when one label wraps to two lines.
     .fixedSize(horizontal: false, vertical: true)
+    .transition(.opacity)
+  }
+
+  private var levelMenu: some View {
+    let settings = Current.settings
+    return Menu {
+      Picker(L.Settings.level, selection: Binding(get: { settings.quizLevel }, set: { settings.quizLevel = $0 })) {
+        ForEach(QuizLevel.allCases, id: \.self) { level in
+          Label(level.localizedName, systemImage: level.systemImage)
+            .tag(level)
+        }
+      }
+    } label: {
+      QuizFactTile(
+        systemImage: settings.quizLevel.systemImage,
+        value: settings.quizLevel.localizedName,
+        label: L.Settings.level,
+        showsMenuIndicator: true,
+        isLarge: isLarge
+      )
+    }
+    .buttonStyle(.plain)
+    .accessibilityHint(L.Quiz.levelMenuHint)
+    .accessibilityIdentifier("quiz_level_menu")
+    .sensoryFeedback(.selection, trigger: settings.quizLevel)
+    .onChange(of: settings.quizLevel) {
+      ChangeLevelTip().invalidate(reason: .actionPerformed)
+    }
+  }
+
+  /// A modest control below everything else, since the leaderboard is beside the point of
+  /// practice, though one tap away.
+  private var leaderboardButton: some View {
+    Button {
+      let level = Current.settings.quizLevel
+      Current.gameCenter.showLeaderboard(level: level)
+      Current.analytics.signal(name: .tapViewLeaderboard, parameters: [
+        ParameterKey.level.rawValue: level.rawValue,
+        ParameterKey.source.rawValue: AnalyticsSource.tab.rawValue
+      ])
+    } label: {
+      Label(L.GameCenter.viewLeaderboard, systemImage: "trophy")
+        .font(isLarge ? .body : .subheadline)
+    }
+    .buttonStyle(.bordered)
+    .tint(.customYellow)
+    .controlSize(isLarge ? .regular : .small)
+    .accessibilityHint(L.GameCenter.viewLeaderboardHint)
+    .accessibilityIdentifier("quiz_leaderboard_button")
   }
 
   /// What a custom quiz will ask, and the way to change it, one tap from Start.
@@ -343,13 +400,13 @@ struct QuizView: View {
   private var scopeHero: some View {
     VStack(spacing: Layout.defaultSpacing) {
       Image(systemName: heroSymbol)
-        .font(.system(size: isLarge ? 180 : 96, weight: .semibold))
+        .font(.system(size: isLarge ? 180 : 64, weight: .semibold))
         .foregroundStyle(
           LinearGradient(colors: [.customYellow, .customYellow.opacity(0.6)], startPoint: .top, endPoint: .bottom)
         )
         .contentTransition(.symbolEffect(.replace))
         .symbolEffect(.bounce, value: reduceMotion ? TabQuizScope.allVerbs : tabScope)
-        .frame(height: isLarge ? 220 : 120)
+        .frame(height: isLarge ? 220 : 76)
         .accessibilityHidden(true)
 
       Text(heroTitle)
@@ -404,7 +461,8 @@ struct QuizView: View {
     }
   }
 
-  /// Review and Practice My Mistakes, on every segment, each saying why it is empty when it is.
+  /// Review and Practice My Mistakes, on every segment, each saying why it is empty when it is,
+  /// and the last round's results once a quiz has finished.
   private var practiceSection: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
       Text(L.PracticeSession.heading)
@@ -423,6 +481,10 @@ struct QuizView: View {
           isLarge: isLarge,
           start: count > 0 ? { startQuiz(scope: .recordSession(session)) } : nil
         )
+      }
+
+      if let lastResult = Current.practice.lastResult {
+        LastQuizResultRow(result: lastResult, isLarge: isLarge)
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
@@ -910,24 +972,37 @@ private struct QuizFactTile: View {
   let systemImage: String
   let value: String
   let label: String
+  /// What VoiceOver reads in place of the value and label, such as words for "2–3".
+  var accessibilityLabel: String?
+  /// The level's tile is a menu, and its chevron says so.
+  var showsMenuIndicator = false
   var isLarge = false
 
   var body: some View {
-    VStack(spacing: 6) {
+    let tile = VStack(spacing: 6) {
       Image(systemName: systemImage)
         .font(isLarge ? .system(size: 48) : .title)
         .foregroundStyle(Color.customYellow)
         .contentTransition(.symbolEffect(.replace))
         .frame(height: isLarge ? 64 : 36)
         .accessibilityHidden(true)
-      Text(verbatim: value)
-        .font(isLarge ? .title2.bold() : .headline)
-        .foregroundStyle(Color.customForeground)
-        .lineLimit(1)
-        .minimumScaleFactor(0.7)
+      HStack(spacing: 3) {
+        Text(verbatim: value)
+          .lineLimit(1)
+          .minimumScaleFactor(0.7)
+        if showsMenuIndicator {
+          Image(systemName: "chevron.up.chevron.down")
+            .font(isLarge ? .subheadline.bold() : .caption2.bold())
+            .foregroundStyle(Color.customYellow)
+            .accessibilityHidden(true)
+        }
+      }
+      .font(isLarge ? .title2.bold() : .headline)
+      .foregroundStyle(Color.customForeground)
       Text(label)
         .font(isLarge ? .subheadline : .caption)
-        .foregroundStyle(.secondary)
+        // Fixed, since `.secondary` inside a menu's label would take the app's tint.
+        .foregroundStyle(Color.secondary)
         .multilineTextAlignment(.center)
         .fixedSize(horizontal: false, vertical: true)
       Spacer(minLength: 0)
@@ -940,7 +1015,89 @@ private struct QuizFactTile: View {
       RoundedRectangle(cornerRadius: Layout.cornerRadius)
         .strokeBorder(Color.customYellow.opacity(0.25), lineWidth: 1)
     }
+    .contentShape(RoundedRectangle(cornerRadius: Layout.cornerRadius))
     .accessibilityElement(children: .combine)
+
+    if let accessibilityLabel {
+      tile.accessibilityLabel(accessibilityLabel)
+    } else {
+      tile
+    }
+  }
+}
+
+/// The last round's results, kept on the device: what was quizzed, at which level, when, and how
+/// it went.
+private struct LastQuizResultRow: View {
+  let result: LastQuizResult
+  var isLarge = false
+
+  var body: some View {
+    HStack(spacing: Layout.doubleDefaultSpacing) {
+      Image(systemName: "flag.checkered")
+        .font(isLarge ? .system(size: 36) : .title2)
+        .foregroundStyle(Color.customYellow)
+        .frame(width: isLarge ? 52 : 36)
+        .accessibilityHidden(true)
+
+      VStack(alignment: .leading, spacing: 4) {
+        Text(L.Quiz.lastQuiz)
+          .font(isLarge ? .title3.bold() : .headline)
+          .foregroundStyle(Color.customForeground)
+        subjectLine
+          .font(isLarge ? .body : .subheadline)
+          .foregroundStyle(Color.customForeground)
+          .fixedSize(horizontal: false, vertical: true)
+        Text(verbatim: resultLine)
+          .font((isLarge ? Font.body : .subheadline).monospacedDigit())
+          .foregroundStyle(Color.secondary)
+          .fixedSize(horizontal: false, vertical: true)
+      }
+      .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    .padding(Layout.doubleDefaultSpacing)
+    .background(Color.customYellow.opacity(0.06), in: RoundedRectangle(cornerRadius: Layout.cornerRadius))
+    .overlay {
+      RoundedRectangle(cornerRadius: Layout.cornerRadius)
+        .strokeBorder(Color.customYellow.opacity(0.25), lineWidth: 1)
+    }
+    .accessibilityElement(children: .combine)
+    .accessibilityIdentifier("quiz_last_result")
+  }
+
+  /// "All Verbs · Elementary · today", a verb page's infinitive read in Spanish.
+  private var subjectLine: Text {
+    var line = AttributedString(result.title)
+    if result.kind == .verbPage {
+      line.languageIdentifier = "es"
+    }
+    for part in [result.level?.localizedName, relativeDay].compactMap({ $0 }) {
+      line += AttributedString(" · \(part)")
+    }
+    return Text(line)
+  }
+
+  /// "Correct: 8 / 10 · Second Try: 1 · Score: 85", the second part only when there was one.
+  private var resultLine: String {
+    var parts = ["\(L.Results.correct): \(result.correctCount) / \(result.questionCount)"]
+    if result.secondAttemptCount > 0 {
+      parts.append("\(L.Results.secondTry): \(result.secondAttemptCount)")
+    }
+    parts.append("\(L.Quiz.score): \(result.score)")
+    return parts.joined(separator: " · ")
+  }
+
+  private var relativeDay: String? {
+    guard let days = PracticeRecord.daysBetween(result.date, and: .now) else {
+      return nil
+    }
+    let formatter = RelativeDateTimeFormatter()
+    formatter.dateTimeStyle = .named
+    formatter.unitsStyle = .full
+    // The app's language, which can differ from the region's.
+    formatter.locale = Locale(identifier: Bundle.main.preferredLocalizations.first ?? "en")
+    // A clock set back would otherwise make the last quiz tomorrow's.
+    return formatter.localizedString(from: DateComponents(day: -max(days, 0)))
   }
 }
 

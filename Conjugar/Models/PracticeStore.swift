@@ -10,10 +10,12 @@ import Observation
 
 /// The app's view of `PracticeRecord` (`Current.practice`): it maps questions and lookups to
 /// items, saves each change to the App Group's defaults, and answers in verbs for the review card.
-/// Observable, so Settings' Reset Practice shows once there is something to reset.
+/// It also keeps the last quiz's results, which the Quiz tab shows. Observable, so Settings' Reset
+/// Practice shows once there is something to reset.
 @Observable
 final class PracticeStore {
   private(set) var record: PracticeRecord
+  private(set) var lastResult: LastQuizResult?
   @ObservationIgnored private let getterSetter: GetterSetter
   @ObservationIgnored private let calendar: Calendar
 
@@ -40,10 +42,19 @@ final class PracticeStore {
       record = Self.migrated(from: getterSetter, calendar: calendar)
       save()
     }
+    lastResult = getterSetter.get(key: LastQuizResult.storageKey).flatMap(LastQuizResult.init(json:))
   }
 
   var isEmpty: Bool {
-    record.isEmpty
+    record.isEmpty && lastResult == nil
+  }
+
+  /// A round's results, as they appear: after Ten More, the session's so far.
+  func recordResult(_ result: LastQuizResult) {
+    lastResult = result
+    if let json = result.json {
+      getterSetter.set(key: LastQuizResult.storageKey, value: json)
+    }
   }
 
   /// A quiz's final answer to a question: a slip's right second attempt counts as right, since
@@ -116,11 +127,15 @@ final class PracticeStore {
     save()
   }
 
-  /// Settings' Reset Practice. The record is saved empty rather than removed, so that the next
-  /// launch does not migrate the old schedules again.
+  /// Settings' Reset Practice, which forgets the last quiz's results too. The record is saved
+  /// empty rather than removed, so that the next launch does not migrate the old schedules again.
+  /// `GetterSetter` cannot remove a key, so the last result is saved as an empty string, which
+  /// reads as none.
   func reset() {
     record.reset()
     save()
+    lastResult = nil
+    getterSetter.set(key: LastQuizResult.storageKey, value: "")
   }
 
   private func save() {

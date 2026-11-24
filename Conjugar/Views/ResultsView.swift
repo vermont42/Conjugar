@@ -38,19 +38,6 @@ struct ResultsView: View {
             .accessibilityIdentifier("results_ten_more")
         }
 
-        // A ranked session's first round posted to the board of the level it began at.
-        if quiz.scope.isRanked, Current.gameCenter.isAuthenticated {
-          Button {
-            Current.gameCenter.showLeaderboard(level: quiz.lastLevel)
-            Current.analytics.signal(name: .tapViewLeaderboard, parameters: [ParameterKey.level.rawValue: quiz.lastLevel.rawValue])
-          } label: {
-            Label(L.GameCenter.viewLeaderboard, systemImage: "trophy")
-          }
-          .buttonStyle(TintedCapsuleButtonStyle(tint: .customYellow))
-          .accessibilityHint(L.GameCenter.viewLeaderboardHint)
-          .accessibilityIdentifier("results_leaderboard")
-        }
-
         LazyVStack(spacing: 0) {
           ForEach(Array(quiz.questions.enumerated()), id: \.offset) { index, question in
             resultRow(index: index, question: question)

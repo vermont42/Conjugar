@@ -65,9 +65,10 @@ material for the release notes in `docs/release_notes.txt`.
 7. **Test the level leaderboards from a development build.** Add the four `conjugar.level.*`
    leaderboards to the new version (Add for Review into the version's draft submission, without
    submitting), then follow [`game_center_setup.md`](game_center_setup.md) § Testing Before
-   Release: finish a quiz over all verbs, tap View Leaderboard on the results, and check that the
-   level's board shows the score; check Settings' View Leaderboards too. With Test Mode on,
-   `tapViewLeaderboard` should arrive, with `level` from the results.
+   Release: finish a quiz over all verbs, go back to the Quiz tab, tap View Leaderboard at the foot
+   of the tab, and check that the level's board shows the score; check Settings' View Leaderboards
+   too. With Test Mode on, `tapViewLeaderboard` should arrive, with `level` and `source` `tab` from
+   the Quiz tab.
 
 ## On Release Day
 

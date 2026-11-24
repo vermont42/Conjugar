@@ -315,7 +315,7 @@ nonisolated enum L {
       String(localized: "GameCenter.failure")
     }
 
-    /// The results' button, which opens the board of the quiz's level.
+    /// The Quiz tab's button, which opens the board of the learner's level.
     static var viewLeaderboard: String {
       String(localized: "GameCenter.viewLeaderboard")
     }
@@ -926,6 +926,29 @@ nonisolated enum L {
 
     static var questionsLabel: String {
       String(localized: "Quiz.questionsLabel")
+    }
+
+    /// The start screen's estimate of a round's length, the value of a tile labeled Minutes.
+    static var sessionMinutes: String {
+      String(localized: "Quiz.sessionMinutes")
+    }
+
+    static var minutesLabel: String {
+      String(localized: "Quiz.minutesLabel")
+    }
+
+    /// What VoiceOver reads for `sessionMinutes`, which it would read as a subtraction.
+    static var sessionLength: String {
+      String(localized: "Quiz.sessionLength")
+    }
+
+    static var levelMenuHint: String {
+      String(localized: "Quiz.levelMenuHint")
+    }
+
+    /// The start screen's row of the last round's results.
+    static var lastQuiz: String {
+      String(localized: "Quiz.lastQuiz")
     }
 
     /// Closes Test Me's sheet once its results show.

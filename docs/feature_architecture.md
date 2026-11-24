@@ -129,7 +129,7 @@ a model's key names the model.
 | `sharedLink` | Yes | `viewCollection`: a collection's shared link, which carries `source=sharedLink`. `viewPracticeSet` and the quiz signals: a practice set's shared link |
 | `shortcut` | Yes | Open Random Verb run from the Shortcuts app or Siri (`OpenRandomVerbIntent`, offered as the Random Verb shortcut) |
 | `spotlight` | Yes | A tap on a verb's Spotlight entry |
-| `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included. The quiz signals: a quiz over every verb begun with the Quiz tab's Start. `viewCollection`: a collection or a model opened from the Models tab's list |
+| `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included. The quiz signals: a quiz over every verb begun with the Quiz tab's Start. `viewCollection`: a collection or a model opened from the Models tab's list. `tapViewLeaderboard`: a leaderboard opened from the Quiz tab |
 | `verbPage` | Yes | The quiz signals: Test Me's three questions on a verb's page. `viewCollection`: a model's page opened from a verb page's model pill |
 | `widget` | Yes | A tap on any widget: Verb of the Day, the quiz widget, or a Lock Screen accessory |
 
@@ -942,13 +942,25 @@ and in the simulator World, and `LiveActivitiesSpy` under tests, which `QuizLive
 checks these rules against.
 A collection's completed quiz does count toward the tip.
 
-**The Quiz tab's start screen**: a large yellow symbol for the scope (`books.vertical.fill`, or a
-star for My Verbs), the scope's name ("4,811 verbs" or My Verbs) and a line on what the quiz asks,
-an All Verbs / My Verbs picker above Start, three tiles (10 questions, the level with its gauge, the region),
-and for My Verbs the verbs as centered chips, up to twelve and "+N more" (`FlowLayout.centersRows`).
-The level is chosen in Settings, where each level is a tile with a gauge
+**The Quiz tab's start screen, the practice hub**, says what a session is before Start: a yellow
+symbol for the scope (`books.vertical.fill`, or a star for My Verbs; 64 points on an iPhone, 180 on
+an iPad), the scope's name ("4,811 verbs" or My Verbs) and a line on what the quiz asks, the
+All Verbs / My Verbs / Custom picker, three tiles (10 Questions; 2–3 Minutes, a fixed estimate,
+since showing the learner's own times would undo the hidden clock; and the level with its gauge),
+for My Verbs the verbs as centered chips, up to twelve and "+N more" (`FlowLayout.centersRows`),
+then Start, then From Your Practice (Review, My Mistakes, and Last Quiz), and last, while signed in
+to Game Center, a small View Leaderboard button. The level tile is a menu of the four levels with a
+chevron, setting the same `Settings.quizLevel` as Settings, where each level is a tile with a gauge
 (`gauge.with.dots.needle.0percent` to `100percent`) whose needle rises with the level, since a
-four-segment picker would truncate the names on an iPhone. `ChangeLevelTip` ("Choose Your Level")
+four-segment picker would truncate the names on an iPhone. The region is no longer on the hub; it
+is in Settings. **Last Quiz** (`LastQuizResult`, `Models/LastQuizResult.swift`) is the last round's
+results that appeared: written by `Quiz.finish()` for every scope, a verb page's three and a
+collection's sheet included, so after Ten More it is the session so far; a quit writes nothing. It
+keeps a kind and a subject (a verb, or a collection's key) rather than a title, so it reads in the
+current language: "All Verbs · Elementary · today", then "Correct: 7 / 10 · Second Try: 1 · Score:
+75". Review and My Mistakes keep no level. `PracticeStore` keeps it in the App Group under
+`lastQuizResult`, sent nowhere; the row is absent until a round has finished, and Reset Practice
+forgets it. `ChangeLevelTip` ("Choose Your Level")
 points at it after a first round's results; Settings attaches it only while Settings is on screen,
 since a popover tip on a view that outlives the tab's first visit would float over the Quiz tab's
 results when the quiz finishing met its rule. Start is disabled while My Verbs is empty. The choice is not
@@ -1048,10 +1060,11 @@ lets an ID change, so `QuizLeaderboardTests` pins each literally. A ranked sessi
 the board of the level it began at (`Quiz.lastLevel`), so every ranked score's ceiling is 100.
 Nothing breaks ties at 100. `GameCenter.submitScore(_:level:)` returns at once (`GameCenterReal`
 starts its own task), so a test sees the call through `GameCenterSpy`. The quiz's end shows no
-leaderboard. While the learner is signed in, a ranked session's results offer View Leaderboard,
-which opens its level's board (`showLeaderboard(level:)`), and Settings' Game Center card offers View
+leaderboard, and its results offer none: the leaderboard is beside the point of practice. While the
+learner is signed in, the Quiz tab's hub ends with a small View Leaderboard button, which opens the
+board of the learner's level (`showLeaderboard(level:)`), and Settings' Game Center card offers View
 Leaderboards in place of Enable, which opens Game Center's list of the boards
-(`showLeaderboards()`). Both send `tapViewLeaderboard`, the results' with `level`. The live board the
+(`showLeaderboards()`). Both send `tapViewLeaderboard`, the hub's with `level` and `source` `tab`. The live board the
 shipped app posts to, `biz.joshadams.Conjugar.leaderboard`, is retired on release day.
 `Conjugar/GameCenterResources.gamekit` is Xcode's local copy of the configuration. The App Store
 Connect side, and how to test before release, are in [`game_center_setup.md`](game_center_setup.md).
@@ -1065,7 +1078,7 @@ the tab. An empty row is not a button; it says why it is empty. Review gives the
 due item ("Nothing is due today. The next review is tomorrow."), or, with nothing scheduled, says
 that quiz answers and irregular verbs looked up come due a day or more later. My Mistakes says that
 a missed question waits there until answered right. The count is `Quiz.askableCount(for:)`, the
-session's items the settings let it ask. On an iPhone the section is below the fold.
+session's items the settings let it ask. On an iPhone 17 the Review row sits above the fold.
 
 **What each asks** (`QuizRecordSession`, `Models/QuizRecordSession.swift`, and
 `QuizDraw.sessionQuestions`). Review: the record's due items, the most overdue first. My Mistakes:

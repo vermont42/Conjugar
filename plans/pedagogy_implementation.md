@@ -37,8 +37,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 8 | Done | 2026-11-23 | 5ffc73a | T2.8 |
 | 9 | Done | 2026-11-23 | 37c3149 | T2.9, Decision 8 |
 | 10 | Done | 2026-11-23 | 16e92b3 | T3.3 (the record), T3.4, T3.5, T6.4 |
-| 11 | Awaiting Josh | 2026-11-23 | | T3.2, T3.3 (the session) |
-| 12 | Not started | | | T6.1, T6.6 (the leaderboard's place) |
+| 11 | Done | 2026-11-23 | 5a40257 | T3.2, T3.3 (the session) |
+| 12 | Awaiting Josh | 2026-11-23 | | T6.1, T6.6 (the leaderboard's place) |
 | 13 | Not started | | | T4.2, T4.3 |
 | 14 | Not started | | | T5.1 |
 | 15 | Not started | | | T5.2 |
@@ -1876,7 +1876,7 @@ mapping and the schedule.
 ## Phase 11: Review and My Mistakes
 
 **Ports:** Konjugieren Phase 12. **Suggestions:** T3.2, T3.3 (the session). **Depends on:** Phase
-10. **Status:** Awaiting Josh.
+10. **Status:** Done.
 
 - **Review.** A session of whatever items are due: a key conjugation asks its own cell, and a
   pattern asks its cell of a regular verb from the learner's band.
@@ -1975,7 +1975,7 @@ empty states.
 ## Phase 12: The Practice Hub
 
 **Ports:** Konjugieren Phase 13. **Suggestions:** T6.1, T6.6 (the leaderboard's place). **Depends
-on:** Phases 6, 7, 10, and 11. **Status:** Not started.
+on:** Phases 6, 7, 10, and 11. **Status:** Awaiting Josh.
 
 Turn the Quiz tab into a practice hub: what a session is, how long it takes, the current level, what
 is due for review, and the last result. The browse plan's start screen is the base.
@@ -1997,7 +1997,90 @@ did not focus the answer field until Phase 21 there fixed it, so focus it from t
 **Done when** the hub shows each item with real data, the onboarding page and tip are rewritten in
 both languages, and the leaderboard is one tap away but not in the way.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh has not judged the hub yet**, which the phase asks for before polishing. It was built as
+  Konjugieren's and waits for his verdict on a phone and an iPad, in light and dark. Every choice
+  below was made in the session and is open to his overrule.
+- **The layout.** What a session is now comes before Start: the scope's symbol (64 points on an
+  iPhone, down from 96; still 180 on an iPad), its name and line, the picker, three tiles (or the
+  custom summary, or the My Verbs chips after the tiles), Start, then From Your Practice with Review,
+  My Mistakes, and a new Last Quiz row, and last a small bordered View Leaderboard button. **On the
+  iPhone 17, Review is now above the fold**, which Phase 11 could not manage; My Mistakes is below
+  it. The All Verbs line (`Quiz.briefing`) no longer explains points. It says ten questions at your
+  level, ten more whenever you like, and that a missed question comes back a few questions later and
+  again on a later day for review. It runs to four lines on the iPhone, which Josh may want shorter.
+- **The tiles: Questions, 2–3 Minutes, and the level as a menu.** Konjugieren's Minutes tile
+  replaced its points per answer. Conjugar's third tile was the region, which the browse plan chose
+  in place of points per answer because points then depended on the region. Since Phase 4 they do
+  not, so **the region tile gave way to Minutes**. The region still decides whether vosotros is
+  asked, and it remains in Settings and on the results' pills. Josh may want it back, as a fourth
+  tile or as a second menu. The minutes are a fixed estimate (VoiceOver: "Two to three minutes"),
+  since showing the learner's own times would undo the hidden clock. The level tile opens a menu of
+  the four levels, with a chevron to say so, and sets the same `Settings.quizLevel` as Settings'
+  level picker. It sends no signal, as Settings' picker sends none, and it retires `ChangeLevelTip`,
+  as a change in Settings does.
+- **The last result** (`LastQuizResult`, `Models/LastQuizResult.swift`, kept by `PracticeStore`
+  under `lastQuizResult` in the App Group) is written by `Quiz.finish()` for every scope, a verb
+  page's three and a collection's or practice set's sheet included. After Ten More it is the session
+  so far; a quit writes nothing. It keeps a kind (`allVerbs`, `myVerbs`, `custom`, `practiceSet`,
+  `collection`, `verbPage`, `review`, `mistakes`) and a subject (a verb or a collection's key)
+  rather than a title, so it reads in the current language: "All Verbs · Beginner · today", then
+  "Correct: 0 / 10 · Score: 0", with Second Try when there was one. A verb page's infinitive is read
+  in Spanish. Review and My Mistakes keep no level. The row is absent until a round has finished.
+  `GetterSetter` has no remove, so Reset Practice saves an empty string, which reads as none.
+  `PracticeStore.isEmpty` now counts the last result, so Settings' Reset Practice shows while either
+  exists, and its description and alert now name the last quiz's results.
+- **The leaderboard (T6.6).** The results' View Leaderboard button is gone. Conjugar's quiz never
+  showed a sheet at the end (Phase 7 removed that), so the button was the whole of the leaderboard's
+  place in the main path. The hub's button shows only while signed in, opens the board of the
+  learner's current level, and sends `tapViewLeaderboard` with `level` and `source` `tab`.
+  Settings' View Leaderboards is unchanged. `docs/release.md` and `docs/game_center_setup.md` now
+  say to test it from the Quiz tab.
+- **Still in the main path, and left for Josh:** the Game Center alert that the Quiz tab shows on
+  its first visit (`maybePromptGameCenter`), which asks a new learner to sign in to compete before
+  the first question. It is shown once, and Konjugieren has no such alert to compare. Josh may want
+  it moved, perhaps to the first finished round.
+- **Focus from the start.** Konjugieren's hub did not focus the answer field until its Phase 21.
+  Here, Start and a `quiz` link both left the field focused, because `inProgress` already clears
+  and resets the focus once it appears. Seen on the iPhone after Start and on the iPad after a
+  link, where typing went straight into the field. A row's play button starts its session through
+  the same `startQuiz`, but was not tried. No change was needed.
+- **Onboarding and tip.** The quiz page is now "Practice Conjugating" / "Practica la conjugación",
+  with `pencil.and.list.clipboard` in place of the trophy and a button reading "Start Practicing" /
+  "Empezar a practicar". Its body names ten questions in two or three minutes, the held correction,
+  the re-ask, and review from a record kept on the device, and drops points and the leaderboard.
+  `TryQuizTip` keeps its title and now says "Practice Spanish verb conjugations ten questions at a
+  time. What you miss comes back for review." Josh has not judged the wording.
+- **Analytics and privacy.** No new signal; `tapViewLeaderboard` gains `source` (`tab`). Staged in
+  `docs/privacy_policy_pending.md` in both languages: the in-app-actions bullet already names the
+  leaderboard and its level, so it is unchanged, and the paragraph after the list now names the
+  last quiz's results as kept on the device and never sent. The README and the App Store
+  description were left alone, since neither mentions the results' button.
+- **VoiceOver.** No new quiz state. Each tile and the Last Quiz row read as one element; the
+  level menu has the hint "Changes the quiz level." and the leaderboard button "Opens the Game
+  Center leaderboard for your level." The accessibility tree read "De dos a tres minutos" and
+  "Avanzado, Nivel" on the iPad. Not tried by ear.
+- **Tests:** `QuizHubTests`, 14 tests in 0.7 seconds: the stored form pinned, a round trip, a
+  result with no level and two unreadable ones, every scope's kind (a deeplink's quiz, a custom
+  quiz over a collection, and a practice set among them), every kind's title, the store keeping the
+  result across a launch, Reset forgetting it, a finished quiz keeping its result, Ten More
+  replacing it with the session so far, a quit keeping nothing, a quit keeping the earlier result,
+  a Review keeping no level, a verb page naming its verb, and a collection naming its key.
+- **Verified:** 1,130 tests in 73 suites in the simulator's default language (English), up from
+  1,116 in 72. **On the iPhone**, in English and light mode: the hub with Review above the fold, a
+  round started with Start (field focused) and answered wrongly to the results (no leaderboard
+  button), the hub after it (Practice My Mistakes 10, Last Quiz "All Verbs · Beginner · today",
+  "Correct: 0 / 10 · Score: 0", and View Leaderboard, which the simulator world's
+  `GameCenterFake` shows once Enable has signed it in, and whose tap shows nothing there), the
+  level menu and Elementary chosen, and the onboarding page through Settings' Show Onboarding.
+  **On the iPad**, in Spanish and dark mode at Avanzado: a round started by `conjugar://quiz` with
+  the field focused, its results, and the hub with Último test ("Todos los verbos · Avanzado ·
+  hoy"). Both simulators' practice records were restored afterward to what they held before (the
+  iPhone's empty, the iPad's one `salir` entry), the last result deleted, the iPhone's level set
+  back to Beginner, and the iPad's appearance back to light. Not tried: VoiceOver by ear,
+  accessibility text sizes, the real Game Center sheet from the hub's button, and a record session's
+  Last Quiz from the device (unit-tested).
 
 ## Phase 13: Naming the Error
 

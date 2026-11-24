@@ -11523,3 +11523,49 @@ were left, and roughly how long they took.
 
 On an iPhone the new section sits below the fold, under the start screen's hero and tiles. Phase 12
 turns the Quiz tab into a practice hub, and that is where the layout gets fixed.
+
+## The Quiz Tab Becomes a Practice Hub (2026-11-23)
+
+Phase 12 of the pedagogy plan rearranges the Quiz tab so that it says what a session is before it
+asks the learner to start one. The old screen led with a big symbol and Start, then three facts
+about the quiz, then, below the fold on an iPhone, the Review and Practice My Mistakes rows that
+Phase 11 had just added. Konjugieren's usage data had shown most quizzes ending before the first
+answer, and a screen that leads with Start gives a hesitant learner no reason to press it.
+
+Now the hero symbol is smaller on a phone, the facts come before Start, and Start comes before
+everything the practice record offers. On an iPhone 17 the Review row finally sits above the fold.
+
+The facts changed too. Conjugar's tiles were Questions, Level, and Region. The region tile had a
+history: the browse plan put it there in place of Konjugieren's points per answer, because back then
+a Conjugar answer's points depended on the region and the difficulty and were not a whole number.
+Phase 4 made every right answer worth ten, so that reason is gone. Konjugieren replaced its points
+tile with "2–3 Minutes", a fixed estimate of how long a round takes, and Conjugar now does the same
+with the region tile. It is a fixed estimate rather than the learner's own average, because showing
+someone their times would undo the decision to hide the clock. The level tile became a menu of the
+four levels, since a hub that shows the level but sends you to Settings to change it is only half
+a hub. The region still matters (it decides whether vosotros is asked), so whether it belongs back
+on the hub is one of the questions for Josh.
+
+A new Last Quiz row shows the most recent round: what was quizzed, at which level, which day, how
+many answers were right, and the score. It stores a kind and a key rather than a title, so a
+learner who switches the app to Spanish sees "Todos los verbos · Avanzado · hoy" rather than an
+English title frozen at the time of the quiz. It lives on the device beside the practice record and
+is never sent, and Reset Practice now forgets it too.
+
+The leaderboard moved out of the way. The results screen used to offer View Leaderboard after every
+ranked round. Now the results say nothing about Game Center, and a small bordered button at the very
+foot of the hub opens the board of the learner's level for anyone who wants it. The welcome tour's
+quiz page lost its trophy and its talk of points and competition. It is now "Practice Conjugating",
+with a clipboard, and it describes the correction that stays on screen, the missed question that
+comes back, and the review that the record schedules.
+
+One bug from Konjugieren did not come across. There, starting a quiz from the hub left the answer
+field unfocused until a much later phase fixed it, so a hardware keyboard's first keystrokes went
+nowhere. Conjugar's quiz view already clears and resets its focus when the question first appears,
+a fix made earlier for quizzes started by links, so the field was focused from the first try.
+
+A housekeeping lesson from the verification. Answering test rounds on the simulators writes real
+entries into each simulator's practice record, which other sessions rely on when they check what
+Review and My Mistakes show. This time the records were read back before the cleanup, every entry
+from the test rounds was removed, and the one older entry on the iPad was kept. Next time, export
+the App Group's defaults before the first test round, not after.

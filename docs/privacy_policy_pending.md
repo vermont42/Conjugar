@@ -732,3 +732,31 @@ El primer párrafo de la sección 7 queda así:
 ```
 Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios, una para cada nivel. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos, a la clasificación del nivel en que se hizo; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, de un cuestionario personalizado, de una serie de práctica compartida, de un repaso, de una práctica de sus errores, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
 ```
+
+## The practice hub (pedagogy plan, Phase 12, 2026-11-23)
+
+The quiz's results no longer offer the leaderboard. The Quiz tab does instead, with a small button
+shown while the learner is signed in to Game Center, and its `tapViewLeaderboard` carries `level`,
+the board it opens, and `source` with the one value `tab`. Settings' still sends the signal with no
+parameter. The in-app-actions bullet already says "opening a Game Center leaderboard (and which
+level's)", and where it was opened is no new kind of information, so the bullet does not change.
+The Quiz tab now shows the last quiz's results (what was quizzed, the level, the day, how many
+answers were right, and the score), which the app keeps on the device beside the practice record
+and never sends. This rewrites the paragraph after the list in section 2 that the practice-record
+section rewrote; this wording wins.
+
+### English
+
+The paragraph after the list now reads:
+
+```
+Your quiz score and the rough duration of a quiz are collected, but, like all of these analytics, they are anonymized and are not tied to your identity (see Section 4). The app does not send your quiz answers, how many of them were right, which verbs you look up, or any text you type. To schedule your reviews and show how your last quiz went, the app keeps a record of which conjugations you have practiced, how your last answers went, and the results of your last quiz; that record stays on your device and is never sent. That you searched is recorded, with the rough counts above; what you typed is not. That you opened a verb's page is recorded; which verb is not.
+```
+
+### Spanish
+
+El párrafo que sigue a la lista queda así:
+
+```
+Su puntuación y la duración aproximada de un cuestionario se recopilan, pero, como todas estas estadísticas, están anonimizadas y no están vinculadas a su identidad (véase la sección 4). La aplicación no envía sus respuestas del cuestionario, cuántas acertó, qué verbos consulta ni ningún texto que escriba. Para programar sus repasos y mostrarle cómo le fue su último cuestionario, la aplicación guarda un registro de qué conjugaciones ha practicado, cómo le fueron sus últimas respuestas y los resultados de su último cuestionario; ese registro se queda en su dispositivo y nunca se envía. Se registra que usted hizo una búsqueda, con las cifras aproximadas indicadas arriba, pero no lo que escribió. Se registra que abrió la página de un verbo, pero no de cuál.
+```

@@ -641,6 +641,7 @@ class Quiz {
     if isRankedRound {
       gameCenter.submitScore(firstRoundScore, level: lastLevel)
     }
+    practice.recordResult(LastQuizResult(quiz: self))
   }
 
   func quit() {

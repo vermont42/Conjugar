@@ -2436,13 +2436,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Take ten-question quizzes, earn points, and compete on your level's Game Center leaderboard. Choose from four levels, from Beginner to Advanced, as your skills grow."
+            "value" : "A quiz is ten questions, two or three minutes, with ten more whenever you like. A wrong answer stays on screen with its correction, and a missed question comes back later. The app remembers on your device what you practice and brings each conjugation back for review when it is due. Choose a level from Beginner to Advanced as your skills grow."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Haz cuestionarios de diez preguntas, gana puntos y compite en la tabla de clasificación de Game Center de tu nivel. Elige entre cuatro niveles, de Inicial a Avanzado, a medida que mejoras."
+            "value" : "Un test tiene diez preguntas y dura dos o tres minutos, y hay diez más cuando quieras. Una respuesta incorrecta se queda en pantalla con su corrección, y una pregunta fallada vuelve más tarde. La aplicación recuerda en tu dispositivo lo que practicas y te devuelve cada conjugación para que la repases cuando toca. Elige un nivel, de Inicial a Avanzado, a medida que mejoras."
           }
         }
       }
@@ -2452,13 +2452,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Test Your Knowledge"
+            "value" : "Practice Conjugating"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pon a prueba tus conocimientos"
+            "value" : "Practica la conjugación"
           }
         }
       }
@@ -2532,13 +2532,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Take a Quiz"
+            "value" : "Start Practicing"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hacer un cuestionario"
+            "value" : "Empezar a practicar"
           }
         }
       }
@@ -2660,13 +2660,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjugate 10 Spanish verbs at your level, then ten more if you like. A right answer earns 10 points. A right second try, or a missed question answered right when it comes back, earns 5."
+            "value" : "Ten questions on verbs at your level, and ten more whenever you like. A missed question comes back a few questions later, and again on a later day for review."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjuga 10 verbos españoles de tu nivel y, si quieres, diez más. Cada respuesta correcta vale 10 puntos. Un segundo intento correcto, o una pregunta fallada que aciertas cuando vuelve, vale 5."
+            "value" : "Diez preguntas sobre verbos de tu nivel, y diez más cuando quieras. Una pregunta fallada vuelve unas preguntas después, y otro día para que la repases."
           }
         }
       }
@@ -4028,13 +4028,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Test your knowledge of Spanish verb conjugations with a ten-question quiz."
+            "value" : "Practice Spanish verb conjugations ten questions at a time. What you miss comes back for review."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pon a prueba tu conocimiento de las conjugaciones de verbos españoles con un test de diez preguntas."
+            "value" : "Practica las conjugaciones de los verbos españoles de diez en diez preguntas. Lo que falles vuelve para que lo repases."
           }
         }
       }
@@ -5754,13 +5754,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Opens the Game Center leaderboard for this quiz's level."
+            "value" : "Opens the Game Center leaderboard for your level."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abre la tabla de clasificación de Game Center del nivel de este test."
+            "value" : "Abre la tabla de clasificación de Game Center de tu nivel."
           }
         }
       }
@@ -6394,13 +6394,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This button erases what the quiz and the review card remember of your practice: which conjugations are due again and which you missed last. The record stays on this device and is never sent."
+            "value" : "This button erases what the quiz and the review card remember of your practice: which conjugations are due again, which you missed last, and your last quiz's results. The record stays on this device and is never sent."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Este botón borra lo que el test y la tarjeta de repaso recuerdan de tu práctica: qué conjugaciones te toca repasar y cuáles fallaste la última vez. El registro se queda en este dispositivo y nunca se envía."
+            "value" : "Este botón borra lo que el test y la tarjeta de repaso recuerdan de tu práctica: qué conjugaciones te toca repasar, cuáles fallaste la última vez y los resultados de tu último test. El registro se queda en este dispositivo y nunca se envía."
           }
         }
       }
@@ -6458,13 +6458,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The quiz will forget which conjugations you have practiced, and the review card will offer nothing until you look a verb up again."
+            "value" : "The quiz will forget which conjugations you have practiced and your last quiz's results, and the review card will offer nothing until you look a verb up again."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El test olvidará qué conjugaciones has practicado, y la tarjeta de repaso no te ofrecerá nada hasta que vuelvas a consultar un verbo."
+            "value" : "El test olvidará qué conjugaciones has practicado y los resultados de tu último test, y la tarjeta de repaso no te ofrecerá nada hasta que vuelvas a consultar un verbo."
           }
         }
       }
@@ -6481,6 +6481,86 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Restablecer"
+          }
+        }
+      }
+    },
+    "Quiz.sessionMinutes" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2–3"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2–3"
+          }
+        }
+      }
+    },
+    "Quiz.minutesLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutos"
+          }
+        }
+      }
+    },
+    "Quiz.sessionLength" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Two to three minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De dos a tres minutos"
+          }
+        }
+      }
+    },
+    "Quiz.levelMenuHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changes the quiz level."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia el nivel del test."
+          }
+        }
+      }
+    },
+    "Quiz.lastQuiz" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Quiz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Último test"
           }
         }
       }
