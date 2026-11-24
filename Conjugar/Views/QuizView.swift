@@ -69,6 +69,9 @@ struct QuizView: View {
       .navigationDestination(for: QuizCorrectionModel.self) { destination in
         ModelView(model: destination.model, source: .quizCorrection)
       }
+      .navigationDestination(for: ModelPracticeDestination.self) { _ in
+        ModelPracticeListView()
+      }
       .navigationDestination(for: CustomQuizDestination.self) { destination in
         switch destination {
         case .editor:
@@ -511,6 +514,17 @@ struct QuizView: View {
         identifier: "quiz_verb_essentials",
         isLarge: isLarge,
         start: { startQuiz(scope: .verbEssentials()) }
+      )
+
+      QuizPracticeRow(
+        title: L.ModelPractice.title,
+        detail: L.ModelPractice.hubDescription,
+        systemImage: "square.grid.3x3.square",
+        hint: L.ModelPractice.hubHint,
+        identifier: "quiz_model_practice",
+        isLarge: isLarge,
+        opensList: true,
+        start: { navigationPath.append(ModelPracticeDestination()) }
       )
     }
     .frame(maxWidth: .infinity, alignment: .leading)
@@ -1170,6 +1184,8 @@ private struct QuizPracticeRow: View {
   let hint: String
   let identifier: String
   var isLarge = false
+  /// Whether the row pushes a list rather than starting a session, which its chevron says.
+  var opensList = false
   let start: (() -> Void)?
 
   var body: some View {
@@ -1206,7 +1222,12 @@ private struct QuizPracticeRow: View {
       }
       .frame(maxWidth: .infinity, alignment: .leading)
 
-      if start != nil {
+      if opensList {
+        Image(systemName: "chevron.right")
+          .font(isLarge ? .title2 : .body)
+          .foregroundStyle(Color.secondary)
+          .accessibilityHidden(true)
+      } else if start != nil {
         Image(systemName: "play.circle.fill")
           .font(isLarge ? .system(size: 36) : .title2)
           .foregroundStyle(Color.customYellow)

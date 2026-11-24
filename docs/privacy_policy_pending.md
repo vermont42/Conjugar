@@ -810,3 +810,55 @@ El primer párrafo de la sección 7 queda así:
 ```
 Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios, una para cada nivel. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos, a la clasificación del nivel en que se hizo; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, de un cuestionario personalizado, de una serie de práctica compartida, de un repaso, de una práctica de sus errores, del ejercicio Lo esencial del verbo, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
 ```
+
+## Verb Models (pedagogy plan, Phase 15, 2026-11-23)
+
+The Quiz tab and each model's page gain the practice of a verb model: Verb Essentials over one
+model's verbs alone, then mixed with the models the learner knows. It begins sending `modelAlone`
+and `modelMixed` as the `source` of the quiz signals, and `startQuiz` names the model in
+`collection` (`model-4A`), as a model's collection quiz already does. A mixed session sends no
+`questionCount` or `questionNumber`, since its round can be short when the known models hold few
+verbs, and which models are known comes from the learner's answers. Neither sends a score or posts
+one to Game Center. Whether a model is known is computed on the device from the practice record and
+never sent. This rewrites the quiz-lifecycle bullet, the score bullet, and the first paragraph of
+section 7 that the Verb Essentials section rewrote; this wording wins over all three.
+
+### English
+
+The bullet about quiz lifecycle events in section 2 now reads:
+
+```
+- Quiz lifecycle events (starting, quitting, or completing a quiz), where you began the quiz (for example the Quiz tab, My Verbs, a custom quiz of your own choosing, a review of what is due, a practice of your mistakes, the Verb Essentials exercise, the practice of a verb model alone or mixed with the models you know, a practice set someone shared with you as a link or a QR code, a verb's page, a collection, or a link), for a quiz over a collection or a verb model, which one, and, for a custom quiz or a practice set, whether it chooses tenses, verbs, or both (but not which ones)
+```
+
+The bullet about the quiz score and elapsed time in section 2 now reads:
+
+```
+- For a quiz over all verbs, the score of its first ten questions, when you complete them or quit during them; for every quiz, roughly how long it ran when you quit or complete a round (under 3 seconds, 3 to 15 seconds, 15 to 40 seconds, 40 seconds to 2 minutes, or longer); and, except for a review, a practice of your mistakes, or a verb model's mixed practice, how many questions it has asked when you complete a round
+```
+
+The first paragraph of section 7 now reads:
+
+```
+Conjugar integrates with Apple Game Center for quiz leaderboards, one for each quiz level. When you submit a score, Game Center handles that data according to Apple's privacy policy. Only the score of the first ten questions of a quiz over all verbs is submitted, to the leaderboard of the level the quiz was taken at; the questions after them, and a quiz over My Verbs, a custom quiz, a shared practice set, a review, a practice of your mistakes, the Verb Essentials exercise, the practice of a verb model, a collection, or a single verb's page, are not. The developer does not have access to your Game Center identity or personal information through this integration.
+```
+
+### Spanish
+
+El punto sobre los eventos del ciclo de vida de un cuestionario, en la sección 2, queda así:
+
+```
+- Los eventos del ciclo de vida de un cuestionario (comenzar, abandonar o terminar un cuestionario), dónde lo empezó (por ejemplo, en la pestaña del cuestionario, en Mis verbos, en un cuestionario personalizado que usted eligió, en un repaso de lo pendiente, en una práctica de sus errores, en el ejercicio Lo esencial del verbo, en la práctica de un modelo de verbos, solo o mezclado con los modelos que conoce, en una serie de práctica que alguien le compartió como enlace o código QR, en la página de un verbo, en una colección o desde un enlace), si el cuestionario es sobre una colección o un modelo de verbos, cuál y, si es personalizado o una serie de práctica, si elige tiempos, verbos o ambos (pero no cuáles)
+```
+
+El punto sobre la puntuación y el tiempo transcurrido, en la sección 2, queda así:
+
+```
+- En un cuestionario sobre todos los verbos, la puntuación de sus diez primeras preguntas, al terminarlas o al abandonarlo durante ellas; en todo cuestionario, cuánto duró aproximadamente al abandonarlo o al terminar una tanda (menos de 3 segundos, de 3 a 15 segundos, de 15 a 40 segundos, de 40 segundos a 2 minutos, o más); y, salvo en un repaso, en una práctica de sus errores o en la práctica mezclada de un modelo de verbos, cuántas preguntas lleva al terminar una tanda
+```
+
+El primer párrafo de la sección 7 queda así:
+
+```
+Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios, una para cada nivel. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos, a la clasificación del nivel en que se hizo; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, de un cuestionario personalizado, de una serie de práctica compartida, de un repaso, de una práctica de sus errores, del ejercicio Lo esencial del verbo, de la práctica de un modelo de verbos, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
+```

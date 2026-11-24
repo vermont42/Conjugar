@@ -11682,3 +11682,57 @@ remember. The App Group's preferences file on each simulator was copied to the s
 restored with `defaults import` afterward. Import merges rather than replaces, so the last quiz's
 result, a key the iPhone's record had not held, had to be deleted on its own before the file
 matched its backup.
+
+## Verb Models, One Then Mixed (2026-11-23)
+
+Phase 15 of the pedagogy plan ports Konjugieren's ablaut-group practice to Conjugar's verb models.
+The idea comes from Pan et al. (2019): practice one pattern alone, then mix it with patterns you
+already know, so that the learner has to pick the pattern rather than repeat it. For verb models as
+such there is no study, so it is a bet. The exercise underneath is the previous phase's Verb
+Essentials, which asks a verb's four key conjugations. Konjugieren drew its groups from a German
+classification of strong verbs. Conjugar already had the analog on its Models tab: the 102 models
+of the conjugation book the engine was built from.
+
+The plan left one question for Josh: which models should offer practice? Its draft guessed every
+irregular model except those whose only change is a spelling change, on the theory that tocar
+(toqué) and coger (cojo) are orthography, not patterns. Before asking, the session measured all 102
+models with a throwaway test that printed each model's exemplar, irregularity, features, number of
+verbs, and the key conjugations with their red letters. That table undercut the draft. A spelling
+change shows in exactly the rows Verb Essentials asks: toqué, pagué, cojo, dirijo, venzo. So do the
+accent shifts (envío, actúo) and the irregular participles (escrito, abierto). Five models could
+not be asked at all, because none of their key conjugations is irregular (bullir, bruñir, tañer,
+empeller, abolir), and the three regular models were out by definition. Josh chose the widest
+option: every model the exercise can ask. That is 94 models, 65 of them with more than one verb.
+He also chose the name, Verb Models, since the onboarding page and its tip already say "Explore Verb
+Models".
+
+"Known" came out simpler here than in Konjugieren. There, a verb such as fahren has two readings,
+and the record kept a key conjugation once for each, so the session had to count each verb once to
+make one perfect round reach half. Conjugar's record has no readings, but it has a different
+subtlety. A Verb Essentials answer records a key conjugation only when its cell is irregular; a
+regular answer, such as pensé, moves the -ar pretérito's pattern, which every regular verb shares
+and no model owns. So a model's items are its verbs' irregular key conjugations: ten for pensar's
+ten verbs, thirty for tener's, two for ser. Half of them past the first box makes the model known,
+and one perfect round of five verbs does it.
+
+A second subtlety was membership. A model's page lists every verb with a sense in that model, but
+Verb Essentials conjugates a verb's default sense, so a verb whose other sense follows the model
+would be asked in the wrong pattern. A model's practice takes only verbs whose default sense follows
+it. A test pins that for every model. It changed none of the counts, but it would catch a future
+map edit.
+
+The rest followed Konjugieren closely: a card on each model's page and a Verb Models row in the
+Quiz hub that opens a list ordered by use. Each row shows the exemplar's key conjugations with the
+irregular letters in red (tengo · tuve · tendré · tenido). That line says more about a Spanish
+pattern than a description would. A mixed round is three of the model's verbs and two from the
+models the learner knows, taken one model at a time so that a known model of ten verbs cannot crowd
+out one of a single verb. A mixed session sends no question counts, since which models are known
+comes from the learner's answers.
+
+On the simulator, a salir round typed through the app's own accent keys (axe still cannot type é)
+made salir known. Pensar's card then opened Mixed with "Mixed adds verbs of the models you know:
+salir", and the hub's Last Quiz read "Verbs Like salir · today". The App Group preferences were
+backed up first and restored afterward. This time the restore copied the file back after killing
+`cfprefsd` with the app terminated, which avoided the merge problem the last entry described for
+`defaults import`; a read afterward confirmed the last result was gone. The full suite passed 1,192
+tests in 76 suites.

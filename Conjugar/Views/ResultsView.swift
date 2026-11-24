@@ -32,10 +32,9 @@ struct ResultsView: View {
         summaryCard
 
         if let onTenMore, quiz.canContinue {
-          let isVerbEssentials = quiz.scope.isVerbEssentials
-          Button(isVerbEssentials ? L.VerbEssentials.fiveMore : L.Results.tenMore, action: onTenMore)
+          Button(continueLabel, action: onTenMore)
             .buttonStyle(PrimaryButtonStyle())
-            .accessibilityHint(isVerbEssentials ? L.VerbEssentials.fiveMoreHint : L.Results.tenMoreHint)
+            .accessibilityHint(continueHint)
             .accessibilityIdentifier("results_ten_more")
         }
 
@@ -56,6 +55,22 @@ struct ResultsView: View {
     .onAppear { Current.analytics.signal(name: .viewResultsView) }
   }
 
+  // A model's round is as many verbs as the model and the known models can give, which may be
+  // fewer than five, so its button promises a round rather than a number.
+  private var continueLabel: String {
+    if quiz.scope.modelPractice != nil {
+      return L.ModelPractice.anotherRound
+    }
+    return quiz.scope.isVerbEssentials ? L.VerbEssentials.fiveMore : L.Results.tenMore
+  }
+
+  private var continueHint: String {
+    if quiz.scope.modelPractice != nil {
+      return L.ModelPractice.anotherRoundHint
+    }
+    return quiz.scope.isVerbEssentials ? L.VerbEssentials.fiveMoreHint : L.Results.tenMoreHint
+  }
+
   private var summaryCard: some View {
     VStack(spacing: Layout.defaultSpacing) {
       Text(verbatim: "\(quiz.score)")
@@ -69,7 +84,10 @@ struct ResultsView: View {
 
       // Wraps once a long level and region name meet the time on an iPhone.
       FlowLayout(spacing: Layout.defaultSpacing, centersRows: true) {
-        Text(quiz.lastLevel.localizedName).metadataPill(tint: .customYellow)
+        // A model's practice asks the same at every level.
+        if quiz.scope.modelPractice == nil {
+          Text(quiz.lastLevel.localizedName).metadataPill(tint: .customYellow)
+        }
         Text(quiz.lastRegion.localizedRegion).metadataPill(tint: .customBlue)
         if Current.settings.quizClock == .show {
           Text(quiz.elapsedTime.timeString).metadataPill(tint: .customForeground)

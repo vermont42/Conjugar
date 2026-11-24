@@ -131,6 +131,10 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case mistakes
   /// A verb row on a model's page.
   case model
+  /// A verb model's practice alone, from its card on the model's page or in the Quiz tab's list.
+  case modelAlone
+  /// A verb model's practice mixed with the models the learner knows.
+  case modelMixed
   /// A row of My Verbs in the verb list, or a quiz over My Verbs begun from the Quiz tab.
   case myVerbs
   /// A practice set's QR code, scanned with the Camera app. A shared link says `sharedLink`.

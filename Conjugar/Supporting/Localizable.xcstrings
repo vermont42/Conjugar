@@ -6948,6 +6948,294 @@
           }
         }
       }
+    },
+    "ModelPractice.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb Models"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modelos de verbos"
+          }
+        }
+      }
+    },
+    "ModelPractice.hubDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One model’s verbs alone, then mixed with the models you know."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los verbos de un modelo solos, y luego mezclados con los modelos que conoces."
+          }
+        }
+      }
+    },
+    "ModelPractice.hubHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens the verb models, where each model has its practice."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre los modelos de verbos, donde cada modelo tiene su práctica."
+          }
+        }
+      }
+    },
+    "ModelPractice.listIntro" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick a model and practice its verbs alone, then mixed with the models you know. The most used come first."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige un modelo y practica sus verbos solos, y luego mezclados con los modelos que conoces. Los más usados van primero."
+          }
+        }
+      }
+    },
+    "ModelPractice.heading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice This Pattern"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practica este patrón"
+          }
+        }
+      }
+    },
+    "ModelPractice.descriptionAll" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb Essentials with this model’s verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo esencial del verbo con los verbos de este modelo."
+          }
+        }
+      }
+    },
+    "ModelPractice.descriptionFrequent" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb Essentials with this model’s ten most frequent verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo esencial del verbo con los diez verbos más frecuentes de este modelo."
+          }
+        }
+      }
+    },
+    "ModelPractice.alone" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alone"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo"
+          }
+        }
+      }
+    },
+    "ModelPractice.aloneHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts a round of up to five of this model’s verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza una ronda de hasta cinco verbos de este modelo."
+          }
+        }
+      }
+    },
+    "ModelPractice.mixed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mezcla"
+          }
+        }
+      }
+    },
+    "ModelPractice.mixedHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts a round of this model’s verbs mixed with verbs of the models you know."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza una ronda de verbos de este modelo mezclados con verbos de los modelos que conoces."
+          }
+        }
+      }
+    },
+    "ModelPractice.mixedLocked" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed opens once you know another model. You know a model once you have answered half of its practice right."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La mezcla se abre cuando conoces otro modelo. Conoces un modelo cuando has respondido bien la mitad de su práctica."
+          }
+        }
+      }
+    },
+    "ModelPractice.mixedWith %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed adds verbs of the models you know: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La mezcla añade verbos de los modelos que conoces: %@"
+          }
+        }
+      }
+    },
+    "ModelPractice.mixedTitle %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mezcla: %@"
+          }
+        }
+      }
+    },
+    "ModelPractice.known" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Known"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conocido"
+          }
+        }
+      }
+    },
+    "ModelPractice.singleVerb" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One verb is not a pattern, so this model has no practice of its own. Its verb joins other models’ mixed practice once you know it."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un solo verbo no es un patrón, así que este modelo no tiene práctica propia. Su verbo se suma a la práctica mezclada de otros modelos cuando lo conoces."
+          }
+        }
+      }
+    },
+    "ModelPractice.anotherRound" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Another Round"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otra ronda"
+          }
+        }
+      }
+    },
+    "ModelPractice.anotherRoundHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continues with another round of this practice."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continúa con otra ronda de esta práctica."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

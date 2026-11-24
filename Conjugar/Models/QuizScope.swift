@@ -33,6 +33,9 @@ nonisolated struct QuizScope: Equatable, Sendable {
   let recordSession: QuizRecordSession?
   /// Verb Essentials, which asks each verb's key conjugations together (`VerbEssentials.swift`).
   let isVerbEssentials: Bool
+  /// A verb model's practice, alone or mixed with the known models (`ModelPractice.swift`), which
+  /// is Verb Essentials over the model's verbs.
+  let modelPractice: ModelPracticeSession?
 
   init(
     verbs: [String]?,
@@ -44,7 +47,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
     level: QuizLevel? = nil,
     isPracticeSet: Bool = false,
     recordSession: QuizRecordSession? = nil,
-    isVerbEssentials: Bool = false
+    isVerbEssentials: Bool = false,
+    modelPractice: ModelPracticeSession? = nil
   ) {
     self.verbs = verbs
     self.questionCount = questionCount
@@ -56,6 +60,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
     self.isPracticeSet = isPracticeSet
     self.recordSession = recordSession
     self.isVerbEssentials = isVerbEssentials
+    self.modelPractice = modelPractice
   }
 
   /// A round's length. The Quiz tab's quiz, a My Verbs quiz, and a collection's ask one round,
@@ -75,9 +80,10 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// Whether `completeQuiz`, `quitQuiz`, and `abandonQuiz` say how many questions were asked or
   /// reached. A record session's round is as long as the learner's due or missed items when they
   /// number fewer than ten, so its length would count wrong answers, and no signal says how well
-  /// a learner did.
+  /// a learner did. A mixed model practice's round can be short when the known models hold few
+  /// verbs, and which models are known comes from the learner's answers.
   var sendsQuestionCounts: Bool {
-    recordSession == nil
+    recordSession == nil && modelPractice?.mode != .mixed
   }
 
   /// Whether a round's questions are shuffled. A record session asks its items in the record's

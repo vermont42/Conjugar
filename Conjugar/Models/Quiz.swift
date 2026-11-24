@@ -308,8 +308,12 @@ class Quiz {
   /// default quiz's rounds each mix in up to three items the practice record says are due
   /// (`QuizDraw.dueQuestions`); a quiz whose verbs or tenses were chosen asks only what was
   /// chosen; a Review or My Mistakes asks the record's items, beyond the level's tenses; Verb
-  /// Essentials asks five verbs' key conjugations.
+  /// Essentials asks five verbs' key conjugations, of the band or of a model and the known models.
   private func draw(_ scope: QuizScope, after prior: [Question] = []) -> [Question] {
+    if let session = scope.modelPractice {
+      let verbs = ModelPractice.verbs(for: session, record: practice.record, asked: Set(prior.map(\.verb)), using: &generator)
+      return VerbEssentials.steps(for: verbs, after: prior)
+    }
     if scope.isVerbEssentials {
       let verbs = VerbEssentials.verbs(
         from: scope.verbs ?? VerbEssentials.pool(band: scope.band(level: lastLevel)),

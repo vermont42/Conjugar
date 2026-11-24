@@ -17,6 +17,10 @@ struct LastQuizResult: Codable, Equatable {
     case collection
     case custom
     case mistakes
+    /// A verb model's practice alone, its subject the class number.
+    case modelAlone
+    /// A verb model's practice mixed with the known models, its subject the class number.
+    case modelMixed
     case myVerbs
     case practiceSet
     case review
@@ -27,9 +31,10 @@ struct LastQuizResult: Codable, Equatable {
   static let storageKey = "lastQuizResult"
 
   let kind: Kind
-  /// The infinitive of a verb page's quiz, or the key of a collection's.
+  /// The infinitive of a verb page's quiz, the key of a collection's, or a model practice's class
+  /// number.
   let subject: String?
-  /// Nil for Review and My Mistakes, which do not ask by level.
+  /// Nil for Review, My Mistakes, and a model's practice, which do not ask by level.
   let levelKey: String?
   let score: Int
   let correctCount: Int
@@ -70,13 +75,15 @@ struct LastQuizResult: Codable, Equatable {
       subject = quiz.scope.collectionKey
     case .verbPage:
       subject = quiz.scope.verbs?.first
+    case .modelAlone, .modelMixed:
+      subject = quiz.scope.modelPractice?.classNumber
     case .allVerbs, .custom, .mistakes, .myVerbs, .practiceSet, .review, .verbEssentials:
       subject = nil
     }
     self.init(
       kind: kind,
       subject: subject,
-      level: quiz.scope.recordSession == nil ? quiz.lastLevel : nil,
+      level: quiz.scope.recordSession == nil && quiz.scope.modelPractice == nil ? quiz.lastLevel : nil,
       score: quiz.score,
       correctCount: quiz.correctCount,
       secondAttemptCount: quiz.secondAttemptCount,
@@ -108,6 +115,10 @@ struct LastQuizResult: Codable, Equatable {
       return L.CustomQuiz.title
     case .mistakes:
       return QuizRecordSession.mistakes.title
+    case .modelAlone:
+      return modelSession(.alone)?.title ?? L.ModelPractice.title
+    case .modelMixed:
+      return modelSession(.mixed)?.title ?? L.ModelPractice.title
     case .myVerbs:
       return L.MyVerbs.title
     case .practiceSet:
@@ -120,6 +131,13 @@ struct LastQuizResult: Codable, Equatable {
       return subject.map { ReflexivePronoun.citationForm(of: $0) } ?? L.Quiz.allVerbs
     }
   }
+
+  private func modelSession(_ mode: ModelPracticeSession.Mode) -> ModelPracticeSession? {
+    guard let subject, ModelPracticeGroup.group(subject) != nil else {
+      return nil
+    }
+    return ModelPracticeSession(classNumber: subject, mode: mode)
+  }
 }
 
 extension LastQuizResult.Kind {
@@ -131,6 +149,13 @@ extension LastQuizResult.Kind {
         self = .review
       case .mistakes:
         self = .mistakes
+      }
+    } else if let session = scope.modelPractice {
+      switch session.mode {
+      case .alone:
+        self = .modelAlone
+      case .mixed:
+        self = .modelMixed
       }
     } else if scope.isVerbEssentials {
       self = .verbEssentials

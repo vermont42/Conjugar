@@ -131,8 +131,10 @@ Conjugar/
 │   │                           #   and snooze, the last quiz's results, Reset Practice, and the migration of LearnerVerbs' old review schedules
 │   ├── VerbEssentials.swift    # Verb Essentials: QuizScope.verbEssentials, five irregular verbs of the band (one prefixed compound at most) asked their
 │   │                           #   key conjugations as one step each; Quiz.essentialsRows, currentStepRange, and reaskPlacement (a missed blank after the next verb)
+│   ├── ModelPractice.swift     # Verb Models: ModelPracticeGroup (a model's ten most frequent verbs with an irregular key conjugation, its items, known at half
+│   │                           #   past the first box), ModelPracticeSession (alone or mixed), QuizScope.modelPractice, and the draws (three own verbs and two of known models)
 │   ├── LastQuizResult.swift    # The last round's results that the Quiz tab's hub shows: a kind and subject (not a title), level, counts, score, date
-│   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, a collection, a custom choice, or a practice set; question count (a round of ten, or Test Me's three), source, title, a practice set's level, a record session, isVerbEssentials, isRanked, sendsQuestionCounts, shufflesQuestions, continues, startsLiveActivity, pool(level:), band(level:)
+│   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, a collection, a custom choice, or a practice set; question count (a round of ten, or Test Me's three), source, title, a practice set's level, a record session, isVerbEssentials, a model's practice, isRanked, sendsQuestionCounts, shufflesQuestions, continues, startsLiveActivity, pool(level:), band(level:)
 │   ├── CustomQuiz.swift        # The Quiz tab's Custom choice: chosen tenses and a QuizVerbSet (all, a band, a collection, a shared list of infinitives, My Verbs), each the level's when unchosen; stored as tenses=…&verbs=… (or infinitives=…); QuizScope.custom
 │   ├── PracticeSet.swift       # A custom quiz shared as a link or a QR code: the conjugar://quiz/set link both ways, My Verbs shared as a list (at most 100), the level that travels, the scope its quiz asks, the share text; PracticeSetRequest
 │   ├── QuizState.swift         # notStarted / inProgress / finished
@@ -242,15 +244,17 @@ Conjugar/
     ├── InfoView.swift          # Info-article detail; a tapped %…% term opens a URL or pushes another article
     ├── MainTabView.swift       # The app shell: a five-tab TabView, onboarding presentation, game full-screen cover
     ├── ModelBrowseView.swift   # The Collections section above a sortable, searchable list of every verb model with irregularity badges; consumes list links
-    ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, the model's collection bar, and the verbs using the model, by frequency or alphabetically
+    ├── ModelPracticeCard.swift # A model's practice card: Alone and Mixed, the known seal, why Mixed is closed, or a single-verb model's note; on each model's page and in the list
+    ├── ModelPracticeListView.swift  # The Quiz hub's Verb Models list: the models practiced alone, the most used first, each with its key conjugations, expanding to its card
+    ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, the model's collection bar, its practice card, and the verbs using the model, by frequency or alphabetically
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
     ├── QuizSheet.swift         # A quiz in a sheet with a Quiz of its own over a QuizScope: Test Me, a collection's Quiz, and a practice set's Start
-    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, and Last Quiz, the Exercises row for Verb Essentials, a small View Leaderboard button) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
+    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, and Last Quiz, the Exercises rows for Verb Essentials and Verb Models, a small View Leaderboard button) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
     ├── CustomQuizView.swift    # The Custom segment's editor of tenses and verbs, its Models list, and the summary card on the start screen and a practice set's sheet
     ├── PracticeSetView.swift   # A shared practice set's sheet (Start, Keep as My Custom Quiz, "Practice Set Not Found") and its full-screen QR code
     ├── QuizCorrectionView.swift # A wrong answer's held correction: the two answers with their differing letters marked, links to the verb's and model's pages, Continue; isBeneathQuiz
     ├── ReviewCardView.swift    # The review card above the verb list: an irregular verb looked up days ago, its key conjugations hidden until tapped
-    ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills, Ten More (Five More Verbs), and each answer
+    ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills (no level for a model's practice), Ten More (Five More Verbs, Another Round), and each answer
     ├── RelatedVerbsView.swift  # The verb page's Related Verbs card, the full related list, VerbPagePush, and verbPageDestinations()
     ├── RichTextView.swift      # Renders parsed [RichTextBlock] as native SwiftUI Text
     ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center (Enable, or View Leaderboards once signed in), onboarding reshow, Play
@@ -373,6 +377,8 @@ ConjugarTests/
 │   ├── AnswerSlipTests.swift           # Which near misses are slips, and which are another cell of the verb (hablo for habló, comio for comí)
 │   ├── VerbEssentialsTests.swift       # Verb Essentials: each blank's answers for -go, strong-pretérito, irregular-future, irregular-participle, and prefixed verbs,
 │   │                                   #   the draw (band, compound limit, asked verbs last), the rows, re-ask placement, each blank recorded, Five More Verbs
+│   ├── ModelPracticeTests.swift        # Verb Models: which models and verbs, items, known and unknown, mix partners, the mixed draw (three and two, one model at a time,
+│   │                                   #   a short side, asked verbs last), the scopes, and sessions (a round making a model known, Another Round, the last result)
 │   ├── AnswerDiagnosisTests.swift      # Each diagnosis for real verbs, the answers that get none, the lines in English, and a diagnosed error's second attempt in a quiz
 │   ├── AnswerDifferenceTests.swift     # The letters a correction marks (accents, red letters, missing, extra, swapped) and the right answer it shows
 │   ├── AnswerFrameTests.swift          # Each kind of question's frame, and the answer a filled blank gives (supplied no, reflexive pronoun, typed pronoun)

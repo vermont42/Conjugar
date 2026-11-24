@@ -873,6 +873,88 @@ nonisolated enum L {
     }
   }
 
+  enum ModelPractice {
+    /// The hub row and the list it opens.
+    static var title: String {
+      String(localized: "ModelPractice.title")
+    }
+
+    static var hubDescription: String {
+      String(localized: "ModelPractice.hubDescription")
+    }
+
+    static var hubHint: String {
+      String(localized: "ModelPractice.hubHint")
+    }
+
+    static var listIntro: String {
+      String(localized: "ModelPractice.listIntro")
+    }
+
+    /// The card's heading on a model's page.
+    static var heading: String {
+      String(localized: "ModelPractice.heading")
+    }
+
+    /// The card's line for a model of ten verbs or fewer.
+    static var descriptionAll: String {
+      String(localized: "ModelPractice.descriptionAll")
+    }
+
+    /// The card's line for a model of more than ten verbs.
+    static var descriptionFrequent: String {
+      String(localized: "ModelPractice.descriptionFrequent")
+    }
+
+    static var alone: String {
+      String(localized: "ModelPractice.alone")
+    }
+
+    static var aloneHint: String {
+      String(localized: "ModelPractice.aloneHint")
+    }
+
+    static var mixed: String {
+      String(localized: "ModelPractice.mixed")
+    }
+
+    static var mixedHint: String {
+      String(localized: "ModelPractice.mixedHint")
+    }
+
+    /// Why Mixed is closed, and what opens it.
+    static var mixedLocked: String {
+      String(localized: "ModelPractice.mixedLocked")
+    }
+
+    /// "Mixed adds verbs of the models you know: tener, pensar, volver …"
+    static func mixedWith(_ exemplars: String) -> String {
+      String(localized: "ModelPractice.mixedWith \(exemplars)")
+    }
+
+    /// A mixed session's title: "Mixed: pensar".
+    static func mixedTitle(exemplar: String) -> String {
+      String(localized: "ModelPractice.mixedTitle \(exemplar)")
+    }
+
+    static var known: String {
+      String(localized: "ModelPractice.known")
+    }
+
+    static var singleVerb: String {
+      String(localized: "ModelPractice.singleVerb")
+    }
+
+    /// The results' button that continues the session, since a round may be fewer than five verbs.
+    static var anotherRound: String {
+      String(localized: "ModelPractice.anotherRound")
+    }
+
+    static var anotherRoundHint: String {
+      String(localized: "ModelPractice.anotherRoundHint")
+    }
+  }
+
   enum PracticeSession {
     static var heading: String {
       String(localized: "PracticeSession.heading")

@@ -115,6 +115,8 @@ a model's key names the model.
 | `mistakes` | Yes | The quiz signals: Practice My Mistakes, from the Quiz tab's From Your Practice section |
 | `lookup` | Yes | The Look Up a Verb shortcut: for `viewVerbView`, the page it opened when one verb answered; for `finishSearch`, the search it opened otherwise |
 | `model` | Yes | A verb row on a model's page, in the Models tab or reached from a verb page's pill |
+| `modelAlone` | Yes | The quiz signals: a verb model's practice alone, from its card on the model's page or in the Quiz tab's Verb Models list |
+| `modelMixed` | Yes | The quiz signals: a verb model's practice mixed with the known models, from the same card |
 | `myVerbs` | Yes | A row of My Verbs, the verb list's third segment; for the quiz signals, a quiz over My Verbs begun from the Quiz tab |
 | `qrCode` | Yes | `viewPracticeSet` and the quiz signals: a practice set opened from its QR code |
 | `quickAction` | Yes | `finishSearch` only: a search begun from the Find a Verb Home Screen quick action |
@@ -1063,13 +1065,13 @@ opens, so `startQuiz` with `verbPage` counts the same taps. Ten More sends no si
 
 | Signal | Further parameters | Sent |
 |---|---|---|
-| `startQuiz` | `collection` for a collection's quiz, or a custom quiz over one; `customChoice` (`tenses`, `verbs`, or `both`) for a custom quiz or a practice set, which says what kind of choice and never which | As a session starts |
+| `startQuiz` | `collection` for a collection's quiz, a custom quiz over one, or a model's practice (`model-4A`); `customChoice` (`tenses`, `verbs`, or `both`) for a custom quiz or a practice set, which says what kind of choice and never which | As a session starts |
 | `tapSharePracticeSet` | `method` (`link` or `qrCode`) and `customChoice`, never which tenses or verbs | On Share Link or Show QR Code |
 | `viewPracticeSet` | `outcome` (`opened`, or `invalid` for a link that names nothing) and `source` | Once for each practice-set sheet a link opens |
 | `tapKeepPracticeSet` | None | On Keep as My Custom Quiz |
-| `completeQuiz` | `duration`, `questionCount` (10, 20, …, or 20, 40, … for Verb Essentials) except for a record session, `score` for a ranked session's first round only | At each round's results |
-| `quitQuiz` | `duration`, `questionNumber` except for a record session, `score` during a ranked session's first round only | On Quit |
-| `abandonQuiz` | `questionNumber` except for a record session | At the next launch, for each quiz the app was left during |
+| `completeQuiz` | `duration`, `questionCount` (10, 20, …, or 20, 40, … for Verb Essentials) except for a record session or a model's mixed practice, `score` for a ranked session's first round only | At each round's results |
+| `quitQuiz` | `duration`, `questionNumber` except for a record session or a model's mixed practice, `score` during a ranked session's first round only | On Quit |
+| `abandonQuiz` | `questionNumber` except for a record session or a model's mixed practice | At the next launch, for each quiz the app was left during |
 
 `duration` is wall-clock from the session's start, background included, in the bands of
 `AnalyticsBand.quizDuration`: 0-3s, 3-15s, 15-40s, 40s-2m, and 2m+. It replaced the exact
@@ -1167,6 +1169,45 @@ VoiceOver reads the field as "pretérito, yo, blank" (`AnswerFrameView.spokenPre
 row as one element ("presente de indicativo, yo salgo, right"; "participio, not yet asked"). The
 DEBUG fixture `CONJUGAR_QUIZ_FIXTURE essentials` stands in for Verb Essentials only: salir, poder,
 escribir, detener, and arrepentir.
+
+### Verb Models
+
+**One model, then mixed** (`Models/ModelPractice.swift`). Verb Essentials over one verb model's
+verbs alone, then mixed with the models the learner knows, after Pan et al. (2019) on
+blocked-then-mixed practice; for verb models as such there is no study. A model
+(`ModelPracticeGroup`) is its ten most frequent verbs whose default sense follows it
+(`ModelInfo.row(for:)`) and that have an irregular key conjugation. Every model of the Models tab
+offers it but the three regular ones and the five whose key conjugations are all regular (bullir,
+bruñir, tañer, empeller, abolir): 94 models, 65 practiced alone and 29 single-verb models (ser,
+ir, dar, dormir), which have no practice of their own, since one verb is not a pattern, and join
+mixes once known. Spelling changes (toqué, cojo), accent shifts (envío), and irregular participles
+(escrito) count, since they show in the key conjugations.
+
+**Known** (`isKnown(in:)`), computed from the practice record and never stored: at least half of
+the model's items past the first box. A model's items are its verbs' irregular key conjugations,
+the ones a Verb Essentials answer records as key conjugations (`PracticeItem.exercised`); a
+regular key conjugation (pensé) moves a pattern that no model owns. So pensar's ten verbs have ten
+items and tener's thirty, and one perfect round of five makes a model of ten known. A wrong answer
+can make it unknown again. Since the ladder moves an item up only when it is due, a verb looked up
+today and answered right today stays in the first box.
+
+**The draws** (`ModelPractice.verbs(for:record:…)`). Alone: five of the model's verbs, the
+session's unasked ones first, so Another Round asks the rest and a model of two makes a round of
+two. Mixed: three of the model's verbs (`mixGroupVerbCount`) and two of the other known models',
+taken one model at a time so that a known model of ten does not crowd out one of one; whichever
+side is short leaves the rest to the other; shuffled. Mixed opens once another model is known,
+whether or not this one is.
+
+**Where it starts.** `ModelPracticeCard` on each model's page below the collection bar, and the
+Quiz hub's Verb Models row (Modelos de verbos) in Exercises, which pushes `ModelPracticeListView`:
+the 65 models, the most used first (tener, hacer, pagar), each with its exemplar's key
+conjugations in red and a seal once known, expanding to the same card. The card hides beneath a
+quiz in progress. A session runs in a `QuizSheet` over `QuizScope.modelPractice(_:)`, titled
+"Verbs Like pensar" or "Mixed: pensar" (Mezcla: pensar). Never ranked, no due items, no level tip,
+no Live Activity; the results offer Another Round (Otra ronda) and no level pill; the last result
+keeps the kind `modelAlone` or `modelMixed` with the class number and no level. `startQuiz` sends
+`collection` with the model's key, and **a mixed session sends no counts**
+(`QuizScope.sendsQuestionCounts`), since which models are known comes from the learner's answers.
 
 ## The Verb of the Day and Random Verbs
 

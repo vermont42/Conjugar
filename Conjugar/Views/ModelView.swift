@@ -102,6 +102,7 @@ struct ModelView: View {
         headerCard
         gridCard
         VerbCollectionBar(collection: collection, title: L.VerbCollection.modelTitle(exemplar: model.exemplar), verbs: collectionVerbs)
+        ModelPracticeCard(classNumber: model.classNumber)
 
         Picker(L.BrowseVerbs.sort, selection: $verbSort.animation(.snappy)) {
           ForEach(VerbSort.allCases, id: \.self) { order in

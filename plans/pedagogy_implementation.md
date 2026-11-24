@@ -40,8 +40,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 11 | Done | 2026-11-23 | 5a40257 | T3.2, T3.3 (the session) |
 | 12 | Done | 2026-11-23 | b59f1fa | T6.1, T6.6 (the leaderboard's place) |
 | 13 | Done | 2026-11-23 | abb865e | T4.2, T4.3 |
-| 14 | Awaiting Josh | 2026-11-23 | | T5.1 |
-| 15 | Not started | | | T5.2 |
+| 14 | Done | 2026-11-23 | 60f37e9 | T5.1 |
+| 15 | Awaiting Josh | 2026-11-23 | | T5.2 |
 | 16 | Not started | | | T5.4 |
 | 17 | Not started | | | T5.5 |
 | 18 | Not started | | | T5.6 |
@@ -2201,7 +2201,7 @@ line, and the prompted second attempt shares Phase 3's mechanism.
 ## Phase 14: Key Conjugations
 
 **Ports:** Konjugieren Phase 15. **Suggestions:** T5.1. **Depends on:** Phases 1 and 10. **Status:**
-Awaiting Josh.
+Done.
 
 An exercise for irregular verbs: given the infinitive, supply its key conjugations (with the
 browse plan's four, "tener: tengo · tuve · tendré · tenido"). The browse plan's key-conjugations
@@ -2304,7 +2304,7 @@ verb, a strong preterite, an irregular future, an irregular participle, and a pr
 ## Phase 15: Models, One Then Mixed
 
 **Ports:** Konjugieren Phase 16. **Suggestions:** T5.2. **Depends on:** Phases 10 and 14.
-**Status:** Not started.
+**Status:** Awaiting Josh.
 
 Work through one model's verbs, then mix them with models already practiced. Konjugieren did this
 with ablaut groups; Conjugar's models (the Models tab, the browse plan's Phase 16 bars) are the
@@ -2329,7 +2329,77 @@ since which groups are known comes from the learner's answers.
 **Done when** a learner can practice one model, then a mix with known models, and tests pin which
 models count as known and how the mix is drawn.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh decided on 2026-11-23**, asked before building with measurements of all 102 models:
+  **every model the exercise can ask offers practice** (over leaving out the spelling-only models,
+  the plan's draft, and over keeping only stem changes and wholly irregular verbs), since toqué,
+  cojo, envío, and escrito show in the key conjugations Verb Essentials asks. And the name is
+  **Verb Models** ("Modelos de verbos"), as the onboarding page and tip already say, over "Model
+  Practice" and "Verb Patterns". Konjugieren's other decisions carried over unasked, as the phase
+  proposed: ten most frequent verbs, known at half past the first box, single-verb models as
+  partners only, Mixed open once another model is known, and three of a mixed round's five verbs
+  the model's own (`ModelPractice.mixGroupVerbCount`).
+- **Which models.** 94 of the Models tab's 102 rows: all but the three regular models and the five
+  whose key conjugations are all regular (bullir, bruñir, tañer, empeller, abolir). 65 are
+  practiced alone; 29 are single-verb models (ser, ir, dar, dormir, romper, and pudrir, whose
+  second verb has no irregular key conjugation) that join mixes once known. A model's verbs are
+  those whose **default sense** follows it (`ModelInfo.row(for:)`), since the exercise conjugates
+  the default sense, then only those with an irregular key conjugation, the most frequent first.
+- **Known, as built.** Simpler than Konjugieren's, whose readings needed counting once per verb:
+  Conjugar's key-conjugation items have no reading. A model's items are its verbs' *irregular* key
+  conjugations, the ones a Verb Essentials answer records as key conjugations
+  (`PracticeItem.exercised`). A regular key conjugation (pensé) moves the -ar pretérito's pattern,
+  which no model owns. So pensar's ten verbs have ten items, tener's thirty, ser's two, and one
+  perfect round of five makes a model of ten known. Computed from the record, never stored; a wrong
+  answer can un-know a model. Konjugieren's caveat holds: a verb looked up today and answered right
+  today stays in the first box, since the ladder moves an item up only when it is due.
+- **Where it starts, as in Konjugieren.** `ModelPracticeCard` on every model's page, below the
+  collection bar, and a **Verb Models** row in the hub's Exercises, with a chevron rather than a
+  play symbol, which pushes `ModelPracticeListView`: the 65 models ordered by use (tener, hacer,
+  pagar, seguir, mostrar), each with its exemplar's key conjugations in red, which show the pattern
+  better than Konjugieren's pattern description would here, a seal once known, and the same card
+  inside. The card hides beneath a quiz in progress (`isBeneathQuiz`, which here was already true
+  only while a quiz is in progress). `QuizPracticeRow` gained `opensList`.
+- **The sessions** are `QuizScope.modelPractice(_:)` in a `QuizSheet`, titled "Verbs Like pensar"
+  (the model collection's existing title, "Verbos como pensar") or "Mixed: pensar" ("Mezcla:
+  pensar"). The card's buttons are Alone and Mixed ("Solo" and "Mezcla"). The results offer
+  **Another Round** ("Otra ronda") and drop the level pill, since the level does not apply; the
+  region pill stays. Never ranked, no due items, no level tip, no Live Activity (the scope carries
+  the model's collection key, which already keeps a sheet's quiz from starting one). The last
+  result's kind is `modelAlone` or `modelMixed`, with the class number and no level. No fixture:
+  the simulator round was typed.
+- **Analytics.** New `source` values `modelAlone` and `modelMixed`, with the model's `collection`
+  key on `startQuiz`; **a mixed session sends no counts** (`QuizScope.sendsQuestionCounts`).
+  Staged in `docs/privacy_policy_pending.md` in both languages; `LookupSignalsTests` pins the
+  values. The README gained a clause.
+- **VoiceOver.** No new quiz state. The card's heading is a header, each button has a hint, a
+  closed Mixed is dimmed with its reason below, and the mixed note's exemplars are tagged Spanish
+  inside the English sentence. A list row reads as one element (exemplar, seal, key
+  conjugations). Not heard.
+- **Not built.** No step from Alone's results into Mixed, and no mark for a known model on the
+  Models tab's rows (Phase 19 shows mastery).
+- **Tests:** `ModelPracticeTests`, 22 tests: ten most frequent, a small model whole, default sense
+  only, the 94 and 65, a single-verb model, the list's order, items (tener's three a verb,
+  pensar's one), known at half, a wrong answer or a lookup not counting and un-knowing, ser known
+  through its verb, mix partners by use, the mixed draw (three and two, one model at a time, a
+  short side, asked verbs last), Alone's draw, the scopes, and in a quiz a round making pensar
+  known and joining volver's mix, a wrong round, Another Round, a small model's round, and both
+  last results. **The full run passed 1,192 tests in 76 suites**, up from 1,170 in 75, in the
+  simulator's default language (English).
+- **Verified on the iPhone**, in English and light mode with a hardware keyboard: the hub's Verb
+  Models row; the list (tener, hacer, pagar, …); tener's card with Mixed closed and its reason;
+  salir's page with the card below the collection bar; a salir round alone (salir, sobresalir,
+  eight blanks, 80, "Correct: 8 / 8", Another Round, the region pill and no level); salir's card
+  then Known; pensar's card with Mixed open, "Mixed adds verbs of the models you know: salir"; a
+  sheet titled "Mixed: pensar" asking cerrar, quit; salir's seal in the list; and the hub's Last
+  Quiz "Verbs Like salir · today". **On the iPad**, in Spanish and dark mode: pensar's page with
+  "Practica este patrón", Solo, and the closed Mezcla; a "Verbos como pensar" sheet; ser's
+  single-verb note; the hub's Modelos de verbos row; and the list with hacer's card ("con los verbos
+  de este modelo"). Both simulators' App Group preferences were restored from backups, the iPad
+  returned to light mode and shut down. Not tried: VoiceOver by ear, the software keyboard,
+  accessibility text sizes, a whole mixed round on a device (unit-tested), and a model un-knowing
+  on a device (unit-tested).
 
 ## Phase 16: Recognition
 
