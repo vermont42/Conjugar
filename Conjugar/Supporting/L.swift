@@ -137,6 +137,68 @@ nonisolated enum L {
     }
   }
 
+  /// The one line that names a wrong quiz answer's error. See `AnswerDiagnosis`.
+  enum Diagnosis {
+    static var negativeCommand: String {
+      String(localized: "Diagnosis.negativeCommand")
+    }
+
+    static func consonantBeforeE(_ infinitive: String, _ from: String, _ to: String) -> String {
+      String(localized: "Diagnosis.consonantBeforeE \(infinitive) \(from) \(to)")
+    }
+
+    static func consonantBeforeAO(_ infinitive: String, _ from: String, _ to: String) -> String {
+      String(localized: "Diagnosis.consonantBeforeAO \(infinitive) \(from) \(to)")
+    }
+
+    static func endingIBecomesY(_ infinitive: String) -> String {
+      String(localized: "Diagnosis.endingIBecomesY \(infinitive)")
+    }
+
+    static func endingLosesI(_ infinitive: String, _ palatal: String) -> String {
+      String(localized: "Diagnosis.endingLosesI \(infinitive) \(palatal)")
+    }
+
+    static func stemAccent(_ infinitive: String, _ vowel: String) -> String {
+      String(localized: "Diagnosis.stemAccent \(infinitive) \(vowel)")
+    }
+
+    static func stemChangeMissing(_ infinitive: String, _ from: String, _ to: String) -> String {
+      String(localized: "Diagnosis.stemChangeMissing \(infinitive) \(from) \(to)")
+    }
+
+    static func stemChangeMisplaced(_ infinitive: String) -> String {
+      String(localized: "Diagnosis.stemChangeMisplaced \(infinitive)")
+    }
+
+    static func regularForm(_ infinitive: String, _ tense: String) -> String {
+      String(localized: "Diagnosis.regularForm \(infinitive) \(tense)")
+    }
+
+    static var raForSe: String {
+      String(localized: "Diagnosis.raForSe")
+    }
+
+    static var seForRa: String {
+      String(localized: "Diagnosis.seForRa")
+    }
+
+    /// "That is the form for yo and él."
+    static func otherPerson(_ persons: String) -> String {
+      String(localized: "Diagnosis.otherPerson \(persons)")
+    }
+
+    /// "That is the form of the Pretérito (él)."
+    static func otherTense(_ cell: String) -> String {
+      String(localized: "Diagnosis.otherTense \(cell)")
+    }
+
+    /// "That is the Infinitivo."
+    static func nonFinite(_ tense: String) -> String {
+      String(localized: "Diagnosis.nonFinite \(tense)")
+    }
+  }
+
   enum Game {
     static var title: String {
       String(localized: "Game.title")
@@ -973,6 +1035,12 @@ nonisolated enum L {
     /// Under the field after a slip, which earns one more attempt.
     static var almost: String {
       String(localized: "Quiz.almost")
+    }
+
+    /// After a diagnosis's line, under the field, when the diagnosed answer earns one more
+    /// attempt.
+    static var tryOnceMore: String {
+      String(localized: "Quiz.tryOnceMore")
     }
 
     /// On a question that a wrong answer brought back.

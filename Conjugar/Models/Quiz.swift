@@ -46,9 +46,12 @@ class Quiz {
   private(set) var results: [ConjugationResult] = []
   /// Each answered question's first attempt when it was a slip that earned a second, else nil.
   private(set) var firstAttempts: [String?] = []
-  /// The slip that the question on screen waits on for its second attempt. A question gets one
-  /// more attempt at most, so a second slip goes to the correction.
+  /// The first attempt that the question on screen waits on for its second: a slip, or an
+  /// error that `firstAttemptDiagnosis` names. A question gets one more attempt at most, so a
+  /// second slip goes to the correction.
   private(set) var firstAttempt: String?
+  /// What was wrong with `firstAttempt`, when the engine can say. Nil for a slip.
+  private(set) var firstAttemptDiagnosis: AnswerDiagnosis?
   /// The current spelling of the last answer when it was right in a retired one. See
   /// `QuizQuestion.currentSpelling(of:)`.
   private(set) var lastCurrentSpelling: String?
@@ -255,6 +258,9 @@ class Quiz {
         beginQuiz()
       case .slips:
         questions = Quiz.slipsFixture
+        beginQuiz()
+      case .diagnoses:
+        questions = Quiz.diagnosesFixture
         beginQuiz()
       }
       return true
@@ -488,6 +494,15 @@ class Quiz {
     firstAttempt != nil
   }
 
+  /// The line under the field while the question waits for its second attempt: the
+  /// diagnosis's line, or "Almost!" after a slip.
+  var secondAttemptPrompt: String {
+    guard let firstAttemptDiagnosis else {
+      return L.Quiz.almost
+    }
+    return firstAttemptDiagnosis.line + " " + L.Quiz.tryOnceMore
+  }
+
   /// The answers right on the second attempt, re-asks not counted, counted apart from
   /// `correctCount`.
   var secondAttemptCount: Int {
@@ -538,6 +553,7 @@ class Quiz {
   private func beginRound() {
     correction = nil
     firstAttempt = nil
+    firstAttemptDiagnosis = nil
     lastCurrentSpelling = nil
     quizState = .inProgress
     startTimer()
@@ -549,9 +565,10 @@ class Quiz {
     recordProgress()
   }
 
-  /// Grades the answer to the question on screen. A first attempt that is a slip
-  /// (`QuizQuestion.isSlip(_:)`) records nothing and returns nil, and the question waits for one
-  /// more attempt with the clock running. Any other answer is recorded: a right one advances at
+  /// Grades the answer to the question on screen. A wrong first attempt whose error the engine
+  /// can name (`QuizQuestion.diagnosis(of:)`), or that is a slip (`QuizQuestion.isSlip(_:)`),
+  /// records nothing and returns nil, and the question waits for one more attempt with the clock
+  /// running. The diagnosis comes first, since it says more than "Almost!". Any other answer is recorded: a right one advances at
   /// once, earning half its points on a second attempt, and a wrong one holds the question with
   /// its correction and stops the clock.
   @discardableResult
@@ -561,9 +578,16 @@ class Quiz {
     let result: ConjugationResult
     if let answer = question.writtenAnswer {
       let isRight = question.grade(proposedAnswer) == .totalMatch
-      if !isRight, firstAttempt == nil, question.isSlip(proposedAnswer) {
-        firstAttempt = proposedAnswer
-        return nil
+      if !isRight, firstAttempt == nil {
+        if let diagnosis = question.diagnosis(of: proposedAnswer) {
+          firstAttempt = proposedAnswer
+          firstAttemptDiagnosis = diagnosis
+          return nil
+        }
+        if question.isSlip(proposedAnswer) {
+          firstAttempt = proposedAnswer
+          return nil
+        }
       }
       correctAnswer = answer
       if isRight {
@@ -586,6 +610,7 @@ class Quiz {
     results.append(result)
     firstAttempts.append(firstAttempt)
     firstAttempt = nil
+    firstAttemptDiagnosis = nil
     // Recorded as it is given, so that a quiz quit after six questions has still practiced six.
     if !correctAnswer.isEmpty {
       practice.recordAnswer(to: question, isCorrect: result != .noMatch)
@@ -599,7 +624,11 @@ class Quiz {
       if willBeReasked {
         questions.insert(question.reasked(), at: min(currentQuestionIndex + 1 + Quiz.reaskGap, questions.count))
       }
-      correction = QuizCorrection(difference: question.difference(from: proposedAnswer), willBeReasked: willBeReasked)
+      correction = QuizCorrection(
+        difference: question.difference(from: proposedAnswer),
+        diagnosis: question.diagnosis(of: proposedAnswer),
+        willBeReasked: willBeReasked
+      )
     }
     return result
   }
@@ -652,6 +681,7 @@ class Quiz {
     timer?.invalidate()
     correction = nil
     firstAttempt = nil
+    firstAttemptDiagnosis = nil
     quizState = .finished
     clearProgress()
     endLiveActivity()
@@ -748,12 +778,15 @@ extension Quiz {
     case frames
     /// Questions whose comments give a wrong answer that shows a kind of marking on the held
     /// correction: an accent, a red letter, a missing or extra letter, a swap, a frame's supplied
-    /// word, and the nearest of two right answers. Most of these answers are slips, so each is
-    /// typed twice to reach its correction.
+    /// word, and the nearest of two right answers. Most of these answers are slips or errors that
+    /// a diagnosis names, so each is typed twice to reach its correction.
     case corrections
     /// Questions whose comments give a near miss: a slip, which earns one more attempt, or an
-    /// answer as near that is another cell of the verb, which goes to the correction at once.
+    /// answer as near that is another cell of the verb, which a diagnosis names.
     case slips
+    /// One question per kind of diagnosis, each comment giving the wrong answer and the line it
+    /// earns. Each is typed twice to reach its correction, where the line shows again.
+    case diagnoses
   }
 
   static var fixtureRun: Fixture? {
@@ -804,10 +837,28 @@ extension Quiz {
     QuizQuestion("enseñar", .condicional, .thirdSingular),              // ensenaria: ñ and an accent
     QuizQuestion("hablar", .imperativoNegativo, .secondSingularTú),     // hablez: one letter, beside the frame's "no"
     QuizQuestion("decir", .perfectoDeIndicativo, .thirdPlural),         // han dicjo: one letter in a compound
-    QuizQuestion("hablar", .pretérito, .thirdSingular),                 // hablo: the presente, so a correction
-    QuizQuestion("comer", .pretérito, .firstSingular),                  // comio: comió, the wrong person
-    QuizQuestion("hablar", .presenteDeSubjuntivo, .firstSingular),      // hablé: the pretérito
+    QuizQuestion("hablar", .pretérito, .thirdSingular),                 // hablo: the presente, so a diagnosis
+    QuizQuestion("comer", .pretérito, .firstSingular),                  // comio: comió, the wrong person, so a correction
+    QuizQuestion("hablar", .presenteDeSubjuntivo, .firstSingular),      // hablé: the pretérito, so a diagnosis
     QuizQuestion("ser", .presenteDeIndicativo, .firstSingular)          // sot: too short for a one-letter slip
+  ]
+
+  static let diagnosesFixture: [Question] = [
+    QuizQuestion("hablar", .imperativoNegativo, .secondSingularTú),     // habla: negative commands use the subjunctive
+    QuizQuestion("buscar", .pretérito, .firstSingular),                 // buscé: c becomes qu before e
+    QuizQuestion("escoger", .presenteDeIndicativo, .firstSingular),     // escogo: g becomes j before a or o
+    QuizQuestion("leer", .pretérito, .thirdSingular),                   // leió: the ending's i becomes y
+    QuizQuestion("bullir", .pretérito, .thirdSingular),                 // bullió: the ending loses its i after ll
+    QuizQuestion("enviar", .presenteDeIndicativo, .firstSingular),      // envio: the stem's i takes an accent
+    QuizQuestion("pensar", .presenteDeIndicativo, .firstSingular),      // penso: e becomes ie
+    QuizQuestion("pensar", .presenteDeIndicativo, .firstPlural),        // piensamos: the stem does not change
+    QuizQuestion("tener", .pretérito, .firstSingular),                  // tení: the regular form
+    QuizQuestion("hacer", .perfectoDeIndicativo, .firstSingular),       // he hacido: irregular in the participio
+    QuizQuestion("hablar", .imperfectoDeSubjuntivo2, .firstSingular),   // hablara: the -ra form
+    QuizQuestion("hablar", .presenteDeIndicativo, .secondSingularTú),   // hablás: the form for vos
+    QuizQuestion("hablar", .perfectoDeIndicativo, .firstSingular),      // ha hablado: the form for él
+    QuizQuestion("hablar", .pretérito, .thirdSingular),                 // hablo: the presente de indicativo (yo)
+    QuizQuestion("comer", .presenteDeIndicativo, .firstSingular)        // comer: the infinitivo
   ]
 
   static let correctionsFixture: [Question] = [

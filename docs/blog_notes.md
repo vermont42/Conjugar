@@ -11569,3 +11569,62 @@ entries into each simulator's practice record, which other sessions rely on when
 Review and My Mistakes show. This time the records were read back before the cleanup, every entry
 from the test rounds was removed, and the one older entry on the iPad was kept. Next time, export
 the App Group's defaults before the first test round, not after.
+
+## Naming the Error (2026-11-23)
+
+Until now, a wrong quiz answer in Conjugar got a correction that showed what was typed beside what
+was right, with the differing letters marked, and nothing more. The learner had to work out why
+hablo is wrong for habló, or why tení is wrong for tuve. This phase has the engine say why, in one
+line, and lets the learner try once more before the answer is revealed.
+
+The rule carried over from Konjugieren is that a wrong diagnosis is worse than none. So the quiz
+never guesses at what the learner meant. Each check builds the asked form some specific wrong way
+and asks whether the answer is exactly that construction. To find out whether penso is pensar
+without its stem change, the code takes pensar's model, removes the feature that turns e into ie,
+conjugates the asked cell, and compares. If the comparison fails, nothing is said. The checks run
+from the most specific to the least and stop at the first that fits: a negative command written
+as the affirmative or the indicative ("Negative commands use the subjunctive."); a spelling change
+left out (buscé, escogo, leió, bullió, envio); a stem change left out (penso, sentió) or made where
+the verb makes none (piensamos); the form a regular verb would have (tení, sabo, he hacido); the
+-ra imperfect subjunctive for the -se one, or the reverse; another person of the asked tense; and
+another tense ("That is the form of the Presente de Indicativo (yo)."). The engine's composable
+feature model made this unusually cheap. Every irregularity is already a named feature on a list,
+so "the verb without this irregularity" is one line of code: remove an element from an array.
+Konjugieren needed a new engine entry point for the same job. Conjugar needed only a way to ask for
+a verb's model and a way to conjugate a displayed cell, compounds included, against a model it is
+handed.
+
+Josh took every recommendation before anything was built. Every kind of error earns a second try at
+half points. The same line serves the prompt, with "Try once more." after it, and the correction,
+without it. When the quiz asks for tú and the learner types the vos form, the answer stays wrong
+and is named ("That is the form for vos."), because the question's frame says tú. He approved the
+draft lines in both languages as written, including three kinds of error the plan had not listed:
+the ending's i written as y, the i dropped after ll or ñ, and a missing accent on the stem.
+
+Two guards keep the lines true. "In sentir, the stem does not change here" would be false for
+sientamos typed for sintamos, which is wrong but whose right form does change its stem, so that
+line is said only of a cell with no stem change at all. And "That is the regular form, but leer is
+irregular" would mislead for leiste typed for leíste, since leer's only quirk is a spelling rule, so
+the regular-form line requires an irregularity beyond spelling and stem vowel. leiste falls through
+to Phase 3's "Almost!", which is the right thing to say about a missing accent.
+
+One surprise came from the 2010 *Ortografía*. The leer check passed every step on paper and failed
+its test. The engine respells every form it writes by the 2010 rules, which take the accent off a
+monosyllable, and its syllable counter reads the hypothetical leió as one syllable, so the
+construction came out as leio and never matched what a learner types. The fix compares the
+learner's answer in its current spelling too.
+
+The diagnosis is checked before the slip test, so llegé, one letter from llegué and therefore a
+slip under Phase 3's rule, now gets "In llegar, g becomes gu before e." instead of "Almost!". Two
+of Phase 3's fixture answers changed their behavior the same way: hablo for habló and hablé for
+hable used to go straight to the correction, and now each earns a named second try.
+
+On the iPhone, driving a fifteen-question fixture through the accessibility tree, every class
+prompted with its line and every repair scored half points. Missed questions came back as re-asks
+and kept knocking a fixed script out of step, so the final driver read each question before
+answering it. On the iPad, in Spanish and dark mode, "El imperativo negativo se forma con el
+subjuntivo. Inténtalo una vez más." fit on one line under the letter keys. The last session's lesson
+about practice records was half heeded. The test rounds wrote fifteen entries into the iPhone's
+record and three into the iPad's, all dated within the session's few minutes. Each was removed
+afterward, and the iPad's one older entry was kept. The records still were not exported before the
+first round, which is the step to remember next time.

@@ -48,6 +48,15 @@ struct QuizCorrectionView: View {
       .accessibilityFocused(accessibilityIsFocused)
       .accessibilityIdentifier("quiz_correction")
 
+      if let diagnosis = correction.diagnosis {
+        // Spoken with the correction, above.
+        Label(diagnosis.line, systemImage: "lightbulb")
+          .font(.subheadline)
+          .fixedSize(horizontal: false, vertical: true)
+          .accessibilityHidden(true)
+          .accessibilityIdentifier("quiz_diagnosis")
+      }
+
       if correction.willBeReasked {
         // Spoken with the correction, above.
         Label(L.Quiz.willComeUpAgain, systemImage: "arrow.counterclockwise")
@@ -134,8 +143,9 @@ struct QuizCorrectionView: View {
     .accessibilityIdentifier(identifier)
   }
 
-  /// "Incorrect. Your Answer: hablo. Correct Answer: habló. Letters that differ: ó. This question
-  /// will come up again." The answers are read in Spanish and the rest in the device's language.
+  /// "Incorrect. Your Answer: hablo. Correct Answer: habló. Letters that differ: ó. That is the
+  /// form of the Presente de Indicativo (yo). This question will come up again." The answers are
+  /// read in Spanish and the rest in the device's language.
   /// The letters are named only while there are few enough to help.
   private var spokenCorrection: Text {
     var spoken = AttributedString(L.Quiz.incorrect + " " + L.Quiz.yourAnswer + ": ")
@@ -148,6 +158,9 @@ struct QuizCorrectionView: View {
       spoken += AttributedString(" " + L.Quiz.lettersDiffer + " ")
       spoken += Self.spanish(letters.joined(separator: ", "))
       spoken += AttributedString(".")
+    }
+    if let diagnosis = correction.diagnosis {
+      spoken += AttributedString(" " + diagnosis.line)
     }
     if correction.willBeReasked {
       spoken += AttributedString(" " + L.Quiz.willComeUpAgain)

@@ -2607,6 +2607,246 @@
         }
       }
     },
+    "Diagnosis.consonantBeforeAO %@ %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %1$@, %2$@ becomes %3$@ before a or o."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En %1$@, %2$@ se escribe %3$@ delante de a y o."
+          }
+        }
+      }
+    },
+    "Diagnosis.consonantBeforeE %@ %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %1$@, %2$@ becomes %3$@ before e."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En %1$@, %2$@ se escribe %3$@ delante de e."
+          }
+        }
+      }
+    },
+    "Diagnosis.endingIBecomesY %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %@, the ending’s i becomes y between vowels."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En %@, la i de la terminación se escribe y entre vocales."
+          }
+        }
+      }
+    },
+    "Diagnosis.endingLosesI %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %1$@, the ending loses its i after %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En %1$@, la terminación pierde la i tras %2$@."
+          }
+        }
+      }
+    },
+    "Diagnosis.negativeCommand" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Negative commands use the subjunctive."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El imperativo negativo se forma con el subjuntivo."
+          }
+        }
+      }
+    },
+    "Diagnosis.nonFinite %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That is the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ese es el %@."
+          }
+        }
+      }
+    },
+    "Diagnosis.otherPerson %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That is the form for %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esa es la forma de %@."
+          }
+        }
+      }
+    },
+    "Diagnosis.otherTense %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That is the form of the %@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esa es la forma del %@."
+          }
+        }
+      }
+    },
+    "Diagnosis.raForSe" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That is the -ra form. The -se form was asked."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esa es la forma en -ra. Se pedía la forma en -se."
+          }
+        }
+      }
+    },
+    "Diagnosis.regularForm %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That is the regular form, but %1$@ is irregular in the %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esa es la forma regular, pero %1$@ es irregular en el %2$@."
+          }
+        }
+      }
+    },
+    "Diagnosis.seForRa" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That is the -se form. The -ra form was asked."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esa es la forma en -se. Se pedía la forma en -ra."
+          }
+        }
+      }
+    },
+    "Diagnosis.stemAccent %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %1$@, the stem’s %2$@ takes a written accent here."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En %1$@, la %2$@ de la raíz lleva tilde aquí."
+          }
+        }
+      }
+    },
+    "Diagnosis.stemChangeMisplaced %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %@, the stem does not change here."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En %@, la raíz no cambia aquí."
+          }
+        }
+      }
+    },
+    "Diagnosis.stemChangeMissing %@ %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %1$@, the stem’s %2$@ becomes %3$@ here."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En %1$@, la %2$@ de la raíz pasa a %3$@ aquí."
+          }
+        }
+      }
+    },
+    "Quiz.tryOnceMore" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try once more."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inténtalo una vez más."
+          }
+        }
+      }
+    },
     "Quiz.askedAgain" : {
       "localizations" : {
         "en" : {

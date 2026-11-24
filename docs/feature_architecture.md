@@ -855,6 +855,32 @@ edit, with a pop and a light tap, and VoiceOver announces the line. A right seco
 "First Try:" line on the row. A wrong second attempt, a second slip included, goes to the
 correction. One more try is all a question gets, whatever earns it.
 
+**Naming the error.** Before the slip check, `Quiz.process(proposedAnswer:)` asks
+`QuizQuestion.diagnosis(of:)` (`AnswerDiagnosis.swift`) what was wrong with a wrong first attempt.
+A diagnosis earns the same one more try: `Quiz.firstAttemptDiagnosis` holds it beside
+`firstAttempt`, and `Quiz.secondAttemptPrompt` is its line plus "Try once more." in place of
+"Almost! Try once more.", in the same yellow line, sound, and announcement. The held correction
+shows the diagnosis of the final answer (`QuizCorrection.diagnosis`) under the two answers with a
+lightbulb, without "Try once more.", and VoiceOver reads it after the differing letters; a repair
+wrong in a way nothing names gets no line. Every check is an exact construction compared with the
+answer, never a resemblance, because a wrong diagnosis is worse than none. They run from the most
+specific to the least and stop at the first that fits: a negative command written as the affirmative
+or the indicative (no habla, no hablas); a spelling feature of the verb's model left out
+(`StemFinalConsonant`: buscé, escogo; `IYHiatus`'s y: leió; `AbsorbIAfterPalatal`: bullió;
+`AccentStem`: envio); a `StemVowel` left out (penso, sentió) or, in a cell whose right form has no
+stem change, made anyway (piensamos, sintí); the feature-less regular form, said only where the
+verb is irregular in more than spelling and stem vowel, so leer's leiste is not "the regular form"
+(tení, sabo, he hacido, whose irregularity the line places in the participio); and another cell of
+the verb, exact, through `ConjugationMatch`: the other imperfect subjunctive of the same person
+("That is the -ra form. The -se form was asked."), then another person of the asked tense (tú's
+vos form included, which the quiz does not accept), then another tense, whose persons are named
+only when the asked one is not among them. The rules come before the cell match, since dice for
+decir's di is both a regular construction and the presente (él). The constructions use
+`Conjugator.model(for:)` with a feature removed or replaced and
+`TenseBridge.conjugate(infinitive:tense:personNumber:model:)`, which conjugates any displayed cell,
+compounds included, against a given model. The engine writes such a construction as the 2010
+*Ortografía* would (leió as leio), so the answer is compared in its current spelling too.
+
 **The held correction.** A right answer advances at once. A wrong one holds the question:
 `Quiz.process(proposedAnswer:)` stops the clock and sets `Quiz.correction` (a `QuizCorrection`, an
 `AnswerDifference`), and

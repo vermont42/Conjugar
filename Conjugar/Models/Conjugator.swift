@@ -125,6 +125,16 @@ nonisolated enum Conjugator {
     return .success(forms.filter { seen.insert($0).inserted })
   }
 
+  /// The model the no-`model:` entry points conjugate `infinitive` against, or nil for text that
+  /// is not an infinitive. A caller can rebuild it without a feature to ask what the verb's form
+  /// would be without that irregularity.
+  static func model(for infinitive: String) -> VerbModel? {
+    guard infinitive.count >= minimumInfinitiveLength, let base = RegularRoot(infinitive: infinitive) else {
+      return nil
+    }
+    return resolvedModel(for: infinitive, base: base)
+  }
+
   /// Resolve a verb's model for the no-`model:` entry points: consult the
   /// verb→model map (`VerbMap`, loaded from `verbModelMap.xml`) — verb → its
   /// default class number → the `ModelCatalog` model — so an irregular verb

@@ -38,8 +38,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 9 | Done | 2026-11-23 | 37c3149 | T2.9, Decision 8 |
 | 10 | Done | 2026-11-23 | 16e92b3 | T3.3 (the record), T3.4, T3.5, T6.4 |
 | 11 | Done | 2026-11-23 | 5a40257 | T3.2, T3.3 (the session) |
-| 12 | Awaiting Josh | 2026-11-23 | | T6.1, T6.6 (the leaderboard's place) |
-| 13 | Not started | | | T4.2, T4.3 |
+| 12 | Done | 2026-11-23 | b59f1fa | T6.1, T6.6 (the leaderboard's place) |
+| 13 | Awaiting Josh | 2026-11-23 | | T4.2, T4.3 |
 | 14 | Not started | | | T5.1 |
 | 15 | Not started | | | T5.2 |
 | 16 | Not started | | | T5.4 |
@@ -2085,7 +2085,7 @@ both languages, and the leaderboard is one tap away but not in the way.
 ## Phase 13: Naming the Error
 
 **Ports:** Konjugieren Phase 14. **Suggestions:** T4.2, T4.3. **Depends on:** Phases 2 and 3.
-**Status:** Not started.
+**Status:** Awaiting Josh.
 
 Diagnose a wrong answer from the engine's own knowledge and say it in one templated line, shown with
 Phase 2's correction. No language model. A wrong diagnosis is worse than none: say only what is
@@ -2125,7 +2125,78 @@ made the check fast.
 **Done when** each class is diagnosed for real verbs under test, an undiagnosable answer gets no
 line, and the prompted second attempt shares Phase 3's mechanism.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh decided on 2026-11-23**, before anything was built, taking every recommendation: every
+  class prompts a repair; one line serves both places, with "Try once more." / "Inténtalo una vez
+  más." after it in the prompt; vos typed for tú, or tú for vos, stays wrong and is named ("That is
+  the form for vos."), since the frame names the person and the setting chooses it; and the draft
+  lines were approved as drafted, in both languages. The lines are in
+  `Localizable.xcstrings` under `Diagnosis.*`.
+- **The classes, in the order checked** (`Models/AnswerDiagnosis.swift`): a negative command
+  written as the affirmative command or as the indicative (no habla, no hablas: "Negative commands
+  use the subjunctive."); a spelling feature of the verb's model left out, each with its own line:
+  a stem-final consonant (buscé, llegé, empezé, escogo, venco: "In buscar, c becomes qu before
+  e."), and three kinds the phase did not list, the ending's i written as y (leió, construieron),
+  the i dropped after ll or ñ (bullió, tañieron), and a written accent on the stem (envio, actua); a
+  stem change left out (penso, dormo, sentió, jugas, tenes) or made where the cell has none
+  (piensamos, duermimos, sintí); the regular form of an irregular verb (tení, sabo, poní, teneré,
+  hacido, escribido, detení, and he hacido, whose line places the irregularity in the Participio);
+  then another cell, exact: the other imperfect subjunctive of the same person (hablara for
+  hablase, hubiera tenido for hubiese tenido: "That is the -ra form. The -se form was asked."),
+  another person of the asked tense ("That is the form for yo and él.", with a command's usted and
+  ustedes), and another tense ("That is the form of the Presente de Indicativo (yo)." in the tense
+  names and parentheses that search's result rows use, the persons left out when the asked one is
+  among them, and "That is the Infinitivo." for a non-finite cell). The phase's "tú form for vos"
+  is not its own class: it is another person of the same tense, and the generic line says it.
+- **Guards against a false line.** "The stem does not change here" is said only of a cell whose
+  right form has no stem change, since sientamos for sintamos is wrong but sintamos does change
+  its stem. "The regular form" is said only where the cell is irregular in more than spelling and
+  stem vowel, so leer's leiste (for leíste) gets no line rather than calling leer irregular; it
+  earns Phase 3's "Almost!" instead. Each check is an exact construction, compared with every
+  candidate the grading reads (pronoun stripped, reflexive pronoun on or off).
+- **Engine entry points.** `Conjugator.model(for:)` exposes the model the by-name entry points
+  resolve, and `TenseBridge.conjugate(infinitive:tense:personNumber:model:)` conjugates any
+  displayed cell against a given model, compounds included (haber's own form plus the model's
+  participle). The checks rebuild the model with one feature removed, or with a `StemVowel`
+  wrapped to fire in every slot. Both new functions use only engine files, so the
+  `ConjugationMapTool` build is unaffected.
+- **A surprise: the 2010 *Ortografía*.** The engine respells every form through
+  `Orthography.currentSpelling`, which treats leió as one syllable and writes leio, so a learner's
+  leió never matched the construction. The candidates are compared in their current spelling too.
+- **The mechanism**, as in Konjugieren: `Quiz.firstAttemptDiagnosis` beside Phase 3's
+  `firstAttempt`, checked before the slip, so llegé (one letter from llegué, and so a slip) is named
+  rather than called "Almost!"; `Quiz.secondAttemptPrompt` is the line plus "Try once more." or
+  "Almost! Try once more.", in the same yellow line, hand icon, pop, and announcement.
+  `QuizCorrection.diagnosis` is the final answer's, shown under the two answers with a lightbulb
+  and read by VoiceOver after the differing letters; a repair wrong in a way nothing names gets no
+  line. Phase 3's slips fixture changed meaning for two of its errors: hablo (for habló) and hablé
+  (for hable) are now diagnosed and earn a second try, while comio and sot still go to the
+  correction at once. Phase 2's corrections fixture likewise: hablo, teno, hablas, and han decido are
+  now diagnosed. Their comments say so.
+- **A fixture**, `CONJUGAR_QUIZ_FIXTURE diagnoses`: fifteen questions, one per class or line
+  shape, each wrong answer in its comment.
+- **Tests:** `AnswerDiagnosisTests`, 17 functions: 62 diagnosed cases for real verbs, the sientamos
+  guard, 9 answers that get no line (right answers, a retired spelling, a slip, nonsense, an empty
+  answer, comio, leiste), 11 lines in English, the new fixture and the older fixtures' answers that
+  are now named (freido and sot still are not), and in a quiz a diagnosed error waiting with its
+  line, a right repair earning half points, a wrong repair showing its own diagnosis or none, a
+  slip after a diagnosis going to the correction, and a slip still saying "Almost!". **The full
+  run passed 1,146 tests in 74 suites**, in the simulator's default language (English), with no
+  runner restarts; the older-fixtures test was added after it and passed in a run of its suite
+  (17 tests).
+- **Verified on the iPhone**, in English and light mode with a hardware keyboard: every fixture
+  class but bullir's prompted with its line, read from the accessibility tree, and each repair
+  advanced; no habla held its correction with "Negative commands use the subjunctive." under a
+  lightbulb, above the re-ask notice and the links; bullió typed on the wrong question (a re-ask
+  that had come round) got no line. The results read "Correct: 0 / 15, Second Try: 10". **On the
+  iPad**, in Spanish and dark mode: "El imperativo negativo se forma con el subjuntivo. Inténtalo
+  una vez más." on one line under the key row, the same line in the correction, and the buscar,
+  escoger, and leer lines in Spanish. Not tried: VoiceOver by ear, the software keyboard,
+  accessibility text sizes, and the bullir line on a device (its test passes). The fixture default
+  was removed from both simulators, and the iPad's language and appearance restored.
+- **Analytics:** none added, so nothing is staged in `docs/privacy_policy_pending.md`. A diagnosis
+  is a statement about an answer, which Decision 5 keeps on the device.
 
 ## Phase 14: Key Conjugations
 

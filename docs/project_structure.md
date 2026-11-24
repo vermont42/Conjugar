@@ -111,9 +111,9 @@ Conjugar/
 │   │                           #   QuizScope.collection(_:title:)
 │   │
 │   │  ── quiz, settings vocabulary, services ──
-│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the level's weighted draw through an injectable random source (randomSource:), the scoped draw, per-tense person rotation, the held correction (correction, continueAfterCorrection()), re-asks, Ten More (continueSession()), the session's computed score and counts (firstRoundScore, questionReached), the record of a quiz in progress, DEBUG fixtures (screenshot, grading, frames, corrections, slips)
+│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the level's weighted draw through an injectable random source (randomSource:), the scoped draw, per-tense person rotation, the held correction (correction, continueAfterCorrection()), a slip's or a diagnosed error's second attempt (firstAttempt, firstAttemptDiagnosis, secondAttemptPrompt), re-asks, Ten More (continueSession()), the session's computed score and counts (firstRoundScore, questionReached), the record of a quiz in progress, DEBUG fixtures (screenshot, grading, frames, corrections, slips, diagnoses)
 │   ├── QuizQuestion.swift      # One question (verb, tense, person, isReask; reasked()): its written answer, every accepted spelling (shownSpellings, acceptedAnswers), grade(_:), its frame, and answer(filling:)
-│   ├── QuizCorrection.swift    # A wrong answer held on its question: its AnswerDifference, and whether the question will be asked again
+│   ├── QuizCorrection.swift    # A wrong answer held on its question: its AnswerDifference, its AnswerDiagnosis, and whether the question will be asked again
 │   ├── QuizClock.swift         # Setting enum: whether the quiz shows the time (hide, the default, or show)
 │   ├── QuizAbandonment.swift   # The quizzes in progress, kept in the defaults so the next launch sends abandonQuiz for one the app was left during
 │   ├── AnswerDifference.swift  # Which letters of a wrong answer and of the nearest right one differ, by an edit-distance alignment; QuizQuestion.difference(from:)
@@ -136,6 +136,7 @@ Conjugar/
 │   ├── QuizState.swift         # notStarted / inProgress / finished
 │   ├── ConjugationResult.swift # What an answered question earned: totalMatch (10) / secondAttemptMatch (5) / noMatch
 │   ├── AnswerSlip.swift        # Whether a wrong answer is a slip that earns one more attempt (accents only, or one edit in four letters or more), and never another cell of the verb; QuizQuestion.isSlip(_:)
+│   ├── AnswerDiagnosis.swift   # The one line that names a wrong answer's error, from exact constructions over the verb's model (a negative command, a spelling or stem change left out, the regular form, another cell); QuizQuestion.diagnosis(of:)
 │   ├── AnswerSpelling.swift    # How the quiz reads an answer: case, spacing, and a leading subject pronoun of the asked person
 │   ├── StandardVariants.swift  # The RAE's standard doublets of a cell (frito, satisface, adecúo, vos hablés…), accepted by the quiz only
 │   ├── InfoDifficulty.swift    # The Info filter's enum: easy / moderate / difficult (the quiz asks by QuizLevel)
@@ -366,6 +367,7 @@ ConjugarTests/
 │   ├── QuizCorrectionTests.swift       # The held correction's state machine: hold, clock, Continue, the last question
 │   ├── QuizSecondAttemptTests.swift    # One more try: a slip waits with the clock running, half points on a right second attempt, a second slip to the correction
 │   ├── AnswerSlipTests.swift           # Which near misses are slips, and which are another cell of the verb (hablo for habló, comio for comí)
+│   ├── AnswerDiagnosisTests.swift      # Each diagnosis for real verbs, the answers that get none, the lines in English, and a diagnosed error's second attempt in a quiz
 │   ├── AnswerDifferenceTests.swift     # The letters a correction marks (accents, red letters, missing, extra, swapped) and the right answer it shows
 │   ├── AnswerFrameTests.swift          # Each kind of question's frame, and the answer a filled blank gives (supplied no, reflexive pronoun, typed pronoun)
 │   ├── VerbCollectionTests.swift       # Collections: keys, derived membership with VerbFamilies as oracle, progress, quiz, share text

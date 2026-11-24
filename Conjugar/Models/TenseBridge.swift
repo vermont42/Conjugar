@@ -110,14 +110,37 @@ nonisolated enum TenseBridge {
     }
   }
 
-  private static func unmarkedConjugate(infinitive: String, tense: DisplayTense, personNumber: DisplayPersonNumber) -> Result<String, ConjugatorError> {
+  /// The slot as `model` would conjugate `infinitive`, unmarked: what the verb's form would be
+  /// with one of its features removed or changed. A compound tense takes haber's own form and the
+  /// participle from `model`.
+  static func conjugate(
+    infinitive: String,
+    tense: DisplayTense,
+    personNumber: DisplayPersonNumber,
+    model: VerbModel
+  ) -> Result<String, ConjugatorError> {
+    unmarkedConjugate(infinitive: infinitive, tense: tense, personNumber: personNumber, model: model)
+  }
+
+  private static func unmarkedConjugate(
+    infinitive: String,
+    tense: DisplayTense,
+    personNumber: DisplayPersonNumber,
+    model: VerbModel? = nil
+  ) -> Result<String, ConjugatorError> {
+    func engine(_ engineTense: EngineTense) -> Result<String, ConjugatorError> {
+      if let model {
+        return Conjugator.conjugate(infinitive: infinitive, tense: engineTense, model: model)
+      }
+      return Conjugator.conjugate(infinitive: infinitive, tense: engineTense)
+    }
     switch tense {
     case .infinitivo, .translation:
       fatalError("\(tense.displayName) is not a conjugation; look it up directly.")
     case .gerundio:
-      return Conjugator.conjugate(infinitive: infinitive, tense: .gerundio)
+      return engine(.gerundio)
     case .participio:
-      return Conjugator.conjugate(infinitive: infinitive, tense: .participioPasado)
+      return engine(.participioPasado)
     case .raízFutura:
       return Conjugator.futureRoot(infinitive: infinitive)
     case .imperativoPositivo, .imperativoNegativo:
@@ -125,15 +148,15 @@ nonisolated enum TenseBridge {
         return .failure(.imperativeNotAvailable(.firstSingular))
       }
       if tense == .imperativoPositivo {
-        return Conjugator.conjugate(infinitive: infinitive, tense: .imperativoAfirmativo(enginePersonNumber))
+        return engine(.imperativoAfirmativo(enginePersonNumber))
       } else {
-        return Conjugator.conjugate(infinitive: infinitive, tense: .presenteDeSubjuntivo(enginePersonNumber)).map { "no " + $0 }
+        return engine(.presenteDeSubjuntivo(enginePersonNumber)).map { "no " + $0 }
       }
     case .futuroDeSubjuntivo:
       guard let enginePersonNumber = enginePersonNumber(for: personNumber) else {
         fatalError("\(tense.displayName) requires a person.")
       }
-      return Conjugator.conjugate(infinitive: infinitive, tense: .imperfectoDeSubjuntivoRa(enginePersonNumber)).map {
+      return engine(.imperfectoDeSubjuntivoRa(enginePersonNumber)).map {
         futureSubjunctive(fromRaForm: $0, personNumber: enginePersonNumber)
       }
     case .presenteDeIndicativo, .pretérito, .imperfectoDeIndicativo, .futuroDeIndicativo, .condicional,
@@ -141,11 +164,19 @@ nonisolated enum TenseBridge {
       guard let enginePersonNumber = enginePersonNumber(for: personNumber), let engineTense = simpleEngineTense(for: tense, personNumber: enginePersonNumber) else {
         fatalError("\(tense.displayName) requires a person.")
       }
-      return Conjugator.conjugate(infinitive: infinitive, tense: engineTense)
+      return engine(engineTense)
     case .perfectoDeIndicativo, .pretéritoAnterior, .pluscuamperfectoDeIndicativo, .futuroPerfecto,
          .condicionalCompuesto, .perfectoDeSubjuntivo, .pluscuamperfectoDeSubjuntivo1,
          .pluscuamperfectoDeSubjuntivo2, .futuroPerfectoDeSubjuntivo:
-      return CompoundTense.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber)
+      guard let model else {
+        return CompoundTense.conjugate(infinitive: infinitive, tense: tense, personNumber: personNumber)
+      }
+      guard case let .success(haberTense) = tense.haberTenseForCompoundTense() else {
+        fatalError("\(tense.displayName) is not a compound tense.")
+      }
+      return unmarkedConjugate(infinitive: DisplayTense.auxiliary, tense: haberTense, personNumber: personNumber).flatMap { auxiliary in
+        Conjugator.conjugate(infinitive: infinitive, tense: .participioPasado, model: model).map { auxiliary + " " + $0 }
+      }
     }
   }
 

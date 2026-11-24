@@ -734,9 +734,10 @@ struct QuizView: View {
     }
   }
 
-  /// "Almost! Try once more." under the field, which keeps the slip for the learner to edit.
+  /// "Almost! Try once more." under the field, or a diagnosis's line with "Try once more.", while
+  /// the field keeps the first attempt for the learner to edit.
   private var secondAttemptLine: some View {
-    Label(L.Quiz.almost, systemImage: "hand.raised.fill")
+    Label(quiz.secondAttemptPrompt, systemImage: "hand.raised.fill")
       .font(.headline)
       .foregroundStyle(Color.customYellow)
       .fixedSize(horizontal: false, vertical: true)
@@ -840,12 +841,12 @@ struct QuizView: View {
     }
     answerToken += 1
     guard let result else {
-      // A slip: the field keeps it to edit, and Return, which resigned the field, must find it
+      // A slip or a diagnosed error: the field keeps it to edit, and Return, which resigned the field, must find it
       // focused again.
       withAnimation(reduceMotion ? nil : .snappy) {
         showsRightAnswer = false
       }
-      AccessibilityNotification.Announcement(L.Quiz.almost).post()
+      AccessibilityNotification.Announcement(quiz.secondAttemptPrompt).post()
       refocusAnswer(after: .milliseconds(50))
       return
     }
