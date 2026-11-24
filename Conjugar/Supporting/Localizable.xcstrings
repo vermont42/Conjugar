@@ -3751,6 +3751,22 @@
         }
       }
     },
+    "Results.exampleHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows an example of this verb in use."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra un ejemplo de uso de este verbo."
+          }
+        }
+      }
+    },
     "Results.firstTry" : {
       "localizations" : {
         "en" : {
@@ -4027,6 +4043,102 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sí"
+          }
+        }
+      }
+    },
+    "Sentences.completed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In the Sentence"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En la frase"
+          }
+        }
+      }
+    },
+    "Sentences.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type the verb that completes a short sentence, such as Ayer fuimos al cine."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escribe el verbo que completa una frase corta, como Ayer fuimos al cine."
+          }
+        }
+      }
+    },
+    "Sentences.draft" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Draft"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borrador"
+          }
+        }
+      }
+    },
+    "Sentences.noneAtLevel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No sentences at your level yet."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todavía no hay frases de tu nivel."
+          }
+        }
+      }
+    },
+    "Sentences.startHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts ten sentences at your level, each with its verb missing."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza diez frases de tu nivel, cada una sin su verbo."
+          }
+        }
+      }
+    },
+    "Sentences.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Complete the Sentence"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completa la frase"
           }
         }
       }

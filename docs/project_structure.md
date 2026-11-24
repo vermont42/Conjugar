@@ -40,6 +40,8 @@ Conjugar/
 │   │                           #   frequency counts (hi/gb/hp — see frequency/README.md; the rank is derived, not stored)
 │   ├── Etymologies.json        # Bundled verb etymologies keyed language → infinitive
 │   ├── ExampleUses.json        # Bundled modern-prose example sentences keyed by bare infinitive
+│   ├── GapSentences.json       # Complete the Sentence's authored sentences (the answer in braces, tú written for tú or vos), written
+│   │                           #   only through scripts/gap_sentences.py; `reviewed` gates release builds
 │   ├── MedievalExamples.json   # Bundled Medieval-Spanish attestations keyed infinitive → array
 │   │
 │   │  ── the conjugation engine (all nonisolated + Sendable) ──
@@ -117,7 +119,7 @@ Conjugar/
 │   ├── QuizClock.swift         # Setting enum: whether the quiz shows the time (hide, the default, or show)
 │   ├── QuizAbandonment.swift   # The quizzes in progress, kept in the defaults so the next launch sends abandonQuiz for one the app was left during
 │   ├── AnswerDifference.swift  # Which letters of a wrong answer and of the nearest right one differ, by an edit-distance alignment; QuizQuestion.difference(from:)
-│   ├── AnswerFrame.swift       # The shape of an answer: the words around the blank (yo, (tú) ¡no … !, a reflexive me) and the answer a filled blank gives
+│   ├── AnswerFrame.swift       # The shape of an answer: the words around the blank (yo, (tú) ¡no … !, a reflexive me, or a sentence's words) and the answer a filled blank gives; a sentence's word-by-word tokens
 │   ├── QuizLevel.swift         # The four levels (beginner … advanced): each one's tenses (pool, QuizPoolEntry with the persons it leaves out and its weight), frequency band, name, gauge symbol, and the old difficulty each migrates from
 │   ├── QuizDraw.swift          # The default quiz's verbs: the level's frequency band (or a custom quiz's), half the questions in an irregular cell (judged per cell,
 │   │                           #   isIrregular(_:in:)), the core verbs, one to three rare prefixed compounds, regular endings in turn
@@ -135,6 +137,9 @@ Conjugar/
 │   │                           #   past the first box), ModelPracticeSession (alone or mixed), QuizScope.modelPractice, and the draws (three own verbs and two of known models)
 │   ├── Recognition.swift       # Name the Form: QuizScope.recognition, RecognitionQuestion (a prompt, every cell of every verb that writes it, the level's
 │   │                           #   tenses and persons), grading by part (infinitive, tense, person) and the lines to check, RecognitionMood's chip groups
+│   ├── GapSentence.swift       # Complete the Sentence: QuizScope.sentences, GapSentence (its frame, with a command's "no" split out and
+│   │                           #   tú or vos named), GapSentences (load, drafts in debug, askable at a level), QuizDraw.sentences, the
+│   │                           #   either-imperfect-subjunctive rule, QuizQuestion.completedSentence
 │   ├── LastQuizResult.swift    # The last round's results that the Quiz tab's hub shows: a kind and subject (not a title), level, counts, score, date
 │   ├── QuizScope.swift         # What a quiz asks about: every verb, My Verbs, Test Me's one verb, a collection, a custom choice, or a practice set; question count (a round of ten, or Test Me's three), source, title, a practice set's level, a record session, isVerbEssentials, a model's practice, isRecognition, isRanked, sendsQuestionCounts, shufflesQuestions, continues, startsLiveActivity, pool(level:), band(level:)
 │   ├── CustomQuiz.swift        # The Quiz tab's Custom choice: chosen tenses and a QuizVerbSet (all, a band, a collection, a shared list of infinitives, My Verbs), each the level's when unchosen; stored as tenses=…&verbs=… (or infinitives=…); QuizScope.custom
@@ -205,7 +210,7 @@ Conjugar/
 │   ├── HapticPlayer.swift      # The haptics seam, protocol-injected like SoundPlayer
 │   ├── HapticPlayerDummy.swift # No-op so the test worlds never touch the Taptic Engine
 │   ├── HapticPlayerReal.swift  # UIKit feedback generators, held and re-prepare()d for low latency
-│   ├── FlowLayout.swift        # A Layout that wraps its children into rows (the related-verb chips, the Quiz tab's My Verbs chips, centered)
+│   ├── FlowLayout.swift        # A Layout that wraps its children into rows (the related-verb chips, the Quiz tab's My Verbs chips, centered; a sentence's words, centered vertically)
 │   ├── IntExtension.swift      # Int.timeString — elapsed seconds as h:mm:ss
 │   ├── KillSwitches.swift      # Compile-time screenshot kill switches: TipDisplay, OnboardingDisplay, TutorDisplay
 │   ├── Layout.swift            # Spacing/geometry constants (8/16/24 pt, readingWidth 680, cornerRadius 12)
@@ -236,7 +241,7 @@ Conjugar/
 │   └── WidgetSnapshotWriter.swift  # Picks the daily verb (VerbDraw, with My Verbs) + quiz question, conjugates them,
 │                                   #   writes JSON to the App Group once a day
 └── Views/
-    ├── AnswerFrameView.swift   # An AnswerFrame drawn on one line around the quiz's answer field; VoiceOver reads the frame as the field's label
+    ├── AnswerFrameView.swift   # An AnswerFrame drawn on one line around the quiz's answer field, or a sentence wrapped word by word around it; VoiceOver reads the frame as the field's label
     ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing (verb with match, search, info, list, quiz, game), the one-shot requests the tabs consume (pendingVerb, pendingSearch, pendingInfo, pendingCollection, pendingQuizStart with its link's source, pendingPracticeSet from quiz/set and presentablePracticeSet, which waits out a cover, game/onboarding/tutor flags), openSearch for Command-F, the control, and the quick action; SearchRequest, CollectionRequest
     ├── BrowseLayout.swift      # Shared LazyVGrid column sets for the iPad (regular-width) layouts
     ├── ConjugationText.swift   # Renders a conjugated form with its irregular span in customRed
@@ -251,14 +256,14 @@ Conjugar/
     ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, the model's collection bar, its practice card, and the verbs using the model, by frequency or alphabetically
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
     ├── QuizSheet.swift         # A quiz in a sheet with a Quiz of its own over a QuizScope: Test Me, a collection's Quiz, and a practice set's Start
-    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, and Last Quiz, the Exercises rows for Verb Essentials, Verb Models, and Name the Form, a small View Leaderboard button) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, Name the Form's prompt, chips, and Check, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
+    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, and Last Quiz, the Exercises rows for Verb Essentials, Verb Models, Name the Form, and Complete the Sentence, a small View Leaderboard button) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, Name the Form's prompt, chips, and Check, a sentence's English and Draft pill, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
     ├── CustomQuizView.swift    # The Custom segment's editor of tenses and verbs, its Models list, and the summary card on the start screen and a practice set's sheet
     ├── PracticeSetView.swift   # A shared practice set's sheet (Start, Keep as My Custom Quiz, "Practice Set Not Found") and its full-screen QR code
     ├── QuizCorrectionView.swift # A wrong answer's held correction: the two answers with their differing letters marked (a Name the Form answer's wrong parts, and
-    │                           #   every right reading), links to the verb's and model's pages, Continue; isBeneathQuiz
+    │                           #   every right reading; a sentence completed), links to the verb's and model's pages, Continue; isBeneathQuiz
     ├── RecognitionChoicesView.swift # Name the Form's prompt (RecognitionPromptView) and its chips: the level's tenses under their moods, then the tense's persons
     ├── ReviewCardView.swift    # The review card above the verb list: an irregular verb looked up days ago, its key conjugations hidden until tapped
-    ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills (no level for a model's practice), Ten More (Five More Verbs, Another Round), and each answer
+    ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills (no level for a model's practice), Ten More (Five More Verbs, Another Round), and each answer, with Example Use on each verb's first right row
     ├── RelatedVerbsView.swift  # The verb page's Related Verbs card, the full related list, VerbPagePush, and verbPageDestinations()
     ├── RichTextView.swift      # Renders parsed [RichTextBlock] as native SwiftUI Text
     ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center (Enable, or View Leaderboards once signed in), onboarding reshow, Play
@@ -385,6 +390,9 @@ ConjugarTests/
 │   │                                   #   a short side, asked verbs last), the scopes, and sessions (a round making a model known, Another Round, the last result)
 │   ├── RecognitionTests.swift          # Name the Form: the cells of fuera, hablamos, hable, sé, ve, compounds, commands, and a gerundio; grading by part; the lines;
 │   │                                   #   the correction's lines; the scope; and a round (no record, a second try, a re-ask, the last result, Ten More)
+│   ├── GapSentenceTests.swift          # Complete the Sentence: the machine check (every blank the engine's in tú and vos, no vosotros, no tú
+│   │                                   #   named, no tú form around the blank, asked at some level) and its breaking; the top 25's counts;
+│   │                                   #   frames, tokens, grading, -ra and -se; drafts; the draw; the scope; and rounds
 │   ├── AnswerDiagnosisTests.swift      # Each diagnosis for real verbs, the answers that get none, the lines in English, and a diagnosed error's second attempt in a quiz
 │   ├── AnswerDifferenceTests.swift     # The letters a correction marks (accents, red letters, missing, extra, swapped) and the right answer it shows
 │   ├── AnswerFrameTests.swift          # Each kind of question's frame, and the answer a filled blank gives (supplied no, reflexive pronoun, typed pronoun)
@@ -566,6 +574,7 @@ plans/                          # What Claude writes to get another session to d
 ├── pedagogy_implementation.md             # The quiz rebuilt for practice: grading, levels, ten-question rounds, a practice
 │                                          #   record, diagnosis, new exercises, hub, streak, achievements. Ported from
 │                                          #   Konjugieren's pedagogy plan; 24 phases
+├── gap_sentences_batch_1.md               # The review sheet of the first 118 sentences (the 25 most frequent verbs), from gap_sentences.py
 ├── pedagogy_variant_audit.md              # Which alternate Spanish forms the quiz accepts (rio/rió, frito, satisface,
 │                                          #   adecúo, vos hablés…), with RAE sources per row and Josh's rulings
 └── end_scene_images/                      # What produced the two end-scene portraits, for exact regeneration:
@@ -582,6 +591,7 @@ scripts/
 ├── verify_store_media.sh       # Preflight for App Store Connect media: asserts every requirement that has bitten this project
 ├── write_forms_json.sh         # Builds ConjugationMapTool and writes corpus/working/forms.json and forms_all.json
 ├── count_tenses.py             # Counts each tense in the corpus from ConjugationMapTool --cells-json; docs/tense_frequency.md
+├── gap_sentences.py            # Complete the Sentence's review sheet, approval, and status over Conjugar/Models/GapSentences.json
 ├── _extract_annexb.py          # Extracts Annex B from docs/spanish_verbs_made_simpler.pdf into docs/annex_b_verb_models.md
 ├── _build_verbmap.py           # Builds Conjugar/Models/verbModelMap.xml from the extracted class index + glosses +
 │                               #   frequency/verb_counts.json. Reproduces the shipped file byte-for-byte

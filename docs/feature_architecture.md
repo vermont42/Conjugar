@@ -129,6 +129,7 @@ a model's key names the model.
 | `reviewCard` | Yes | The review card above the verb list, tapped after its reveal |
 | `search` | Yes | A result of a search that found something |
 | `searchGuess` | Yes | The closest verb offered by a search that found nothing |
+| `sentences` | Yes | The quiz signals: Complete the Sentence, from the Quiz tab's Exercises section |
 | `sharedLink` | Yes | `viewCollection`: a collection's shared link, which carries `source=sharedLink`. `viewPracticeSet` and the quiz signals: a practice set's shared link |
 | `shortcut` | Yes | Open Random Verb run from the Shortcuts app or Siri (`OpenRandomVerbIntent`, offered as the Random Verb shortcut) |
 | `spotlight` | Yes | A tap on a verb's Spotlight entry |
@@ -1262,6 +1263,65 @@ level. `startQuiz`, `quitQuiz`, and `completeQuiz` carry `source` `recognition`,
 DEBUG fixture `CONJUGAR_QUIZ_FIXTURE recognition` stands in for Name the Form only: ten prompts at
 Advanced's tenses (fuera, hablamos, hable, habló, fui, sé, ha hecho, no hagas, me arrepiento,
 diciendo), each with a wrong answer worth trying in its comment.
+
+### Complete the Sentence
+
+**The content** (`Models/GapSentences.json`, `Models/GapSentence.swift`). Authored sentences with
+their verb blanked, so that a form is tied to a meaning: each has an id built from its verb and
+tense (`hacer.perfectoDeIndicativo.1`), its verb, a `DisplayTense` case name, a person (absent for
+the gerundio), the Spanish with the words of the answer in braces ("Yo todavía no {he hecho} la
+tarea."), American English, and `reviewed`. Braces rather than a separate answer field, so that a
+reviewer reads the sentence as the learner will. A word of the answer that the quiz's frame
+supplies, a negative command's "no" or a reflexive-only verb's pronoun, stands just before the
+braces, outside them, and `GapSentence.frame(personNumber:)` splits it out as the frame's
+`.word`, so grading puts it in front of what was typed ("¡No {vayas} solo de noche!" grades "no
+vayas"). The file is written only by `json.dumps(indent=2, ensure_ascii=False)`, through
+`scripts/gap_sentences.py` (`review`, `approve`, `status`), so a round trip reproduces it byte for
+byte. Debug builds ask drafts too, with a Draft (Borrador) pill on the card; a release build asks
+only reviewed sentences.
+
+**Regions and the second person.** Nothing is written in vosotros, so every sentence reads in both
+regions. A second-person singular sentence is written with the tú form in its braces and asked in
+tú or vos as the setting chooses; its words name no tú, ti, or contigo (te and tu serve both), and
+the frame names the person instead, `(tú)` or `(vos)`, as a command's frame names its addressee.
+Every other sentence makes its person plain in its own words. Vocabulary that differs by region
+(coche and carro, todo recto) is avoided.
+
+**The machine check** (`GapSentenceTests`). Each sentence's braces, with the frame's supplied
+words, equal the engine's written form of its cell; in vos, the engine gives the cell and the
+frame's words stand before the braces; no word is vosotros, no second-person sentence names tú,
+and no word of any sentence is a finite tú form alone (tienes, puedes), which a vos learner would
+not use (commands are left out, since sal and ten are words too); no sentence is written with the
+-se form; and some level asks each one. A test feeds it broken sentences to show that it fails.
+
+**Grading in a sentence.** As any question's (`QuizQuestion.sentence`), so slips, diagnoses, the
+held correction, re-asks, and the practice record work unchanged, with one difference: **either
+imperfect subjunctive is right in a sentence** (`DisplayTense.otherImperfectSubjunctive`), since
+the sentence, not the tense's name, is the prompt and tuviese is as good as tuviera there.
+Sentences are written with the -ra form, and the card names the tense without its number
+("imperfecto de subjuntivo"). The bare quiz keeps the two apart.
+
+**The screen.** The card keeps the verb, its gloss, and the tense line. `AnswerFrameView` lays a
+sentence frame out word by word in a `FlowLayout` (`AnswerFrame.sentenceTokens`), with a field of
+one width whatever the answer, a ¿ or ¡ before the blank and a comma or question mark after it
+kept against the field, and the field keyed so that the keyboard keeps its focus from one sentence
+to the next. The English sits under the sentence. The correction adds the sentence completed in
+the person asked (`QuizQuestion.completedSentence`), which VoiceOver reads last. The field's label
+reads the sentence with "blank" in its place.
+
+**The draw** (`QuizDraw.sentences`). The sentences whose verb is in the level's band and whose
+tense and person the level asks; ten a round, the session's unasked ones first, one sentence a
+verb where possible. A short pool makes a short round, and Ten More starts over once all are
+asked. The hub's row says so, and starts nothing, when the level has none. Never ranked, no due
+items, continues, starts the Live Activity, and donates the level tip. The last result's kind is
+`sentences`, with its level. `startQuiz`, `quitQuiz`, and `completeQuiz` carry `source`
+`sentences`, with counts. The DEBUG fixture `CONJUGAR_QUIZ_FIXTURE sentences` stands in for
+Complete the Sentence only: ten sentences, one per kind of frame (`Quiz.sentencesFixtureIDs`).
+
+**The example reward** (`ResultsView`). In every quiz's results, each verb's first right row
+offers Example Use (Ejemplo de Uso), which reveals the verb's example sentence from
+`ExampleUses.json` with its English and source. The quiz itself never pauses after a right
+answer. Opening it sends nothing, since only right rows offer it.
 
 ## The Verb of the Day and Random Verbs
 

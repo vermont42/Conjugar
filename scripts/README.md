@@ -98,3 +98,18 @@ python3 scripts/count_tenses.py                     # the table
 python3 scripts/count_tenses.py --examples pretérito  # the forms counted most under one tense
 python3 scripts/count_tenses.py --no-quijote        # without the 1605 Quijote
 ```
+
+## `gap_sentences.py`: reviewing Complete the Sentence's sentences
+
+Reads `Conjugar/Models/GapSentences.json`, the quiz's authored sentences with each answer in
+braces. `review` writes a Markdown sheet of the drafts (or every sentence, with `--all`) with each
+blank filled in bold; `approve` marks sentences reviewed, which a release build requires before it
+asks one; `status` counts them. It rewrites the file through `json.dumps(indent=2,
+ensure_ascii=False)`, the only way the file is written, so a round trip changes nothing but the
+flags. The machine check is `ConjugarTests/GapSentenceTests`; run it after any edit to the file.
+
+```bash
+python3 scripts/gap_sentences.py review --out plans/gap_sentences_batch_1.md
+python3 scripts/gap_sentences.py approve --all --except ser.pretérito.1
+python3 scripts/gap_sentences.py status
+```

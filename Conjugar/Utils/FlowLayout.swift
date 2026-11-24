@@ -14,6 +14,9 @@ struct FlowLayout: SwiftUI.Layout {
   /// Centers each row in the width offered, as the Quiz tab's chips are, rather than starting it
   /// at the leading edge.
   var centersRows = false
+  /// Centers each child in its row's height, as a sentence's words sit beside its taller field,
+  /// rather than aligning the children's tops.
+  var centersItemsVertically = false
 
   func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
     let rows = rows(for: subviews, width: proposal.width ?? .infinity)
@@ -28,7 +31,8 @@ struct FlowLayout: SwiftUI.Layout {
       var x = centersRows ? bounds.minX + max(bounds.width - row.width, 0) / 2 : bounds.minX
       for index in row.indices {
         let size = subviews[index].sizeThatFits(.unspecified)
-        subviews[index].place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(size))
+        let offset = centersItemsVertically ? (row.height - size.height) / 2 : 0
+        subviews[index].place(at: CGPoint(x: x, y: y + offset), proposal: ProposedViewSize(size))
         x += size.width + spacing
       }
       y += row.height + spacing

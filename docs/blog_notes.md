@@ -11778,3 +11778,57 @@ well.
 Recognition answers are not written to the practice record, since recognizing fuera is no
 evidence that the learner could produce it. A typo in a test briefly claimed that ser's command sé
 was usted's; the engine was right. The full suite passed 1,216 tests in 77 suites.
+
+## Complete the Sentence: Tying a Form to a Meaning (2026-11-23)
+
+Every quiz Conjugar has asked so far names a verb and a cell and waits for a form. That trains the
+form, but not the reason for it. Phase 17 of the pedagogy plan adds short authored sentences with
+the verb blanked, so that the learner meets "Ojalá {tengas} buena suerte en el examen" and not
+just "tener, presente de subjuntivo, tú". Spanish gives the blank more to do than German did in
+Konjugieren, where this exercise was first built, because a trigger such as ojalá, cuando, or
+quiero que is often a sentence's whole reason for its mood.
+
+Josh settled four questions before any code was written. The exercise is called Complete the
+Sentence, Completa la frase in Spanish, an imperative to sit beside Name the Form. The harder
+question was tú and vos. A learner can set the quiz to ask vos, and a sentence written for tú would
+then ask for a form the sentence's own words contradict. Josh chose to write one sentence for both:
+the braces hold the tú form, the sentence never names tú, ti, or contigo (te and tu are shared),
+and the frame shows (tú) or (vos) before it, the way a command's frame already names whom it
+addresses. Third, either imperfect subjunctive counts in a sentence. The plain quiz keeps tuviera
+and tuviese apart because the prompt there is the tense's name, but in a sentence the sentence is
+the prompt, and "Si yo tuviese más tiempo" is as good Spanish as "tuviera". Fourth, the first batch
+covers the 25 most frequent verbs at four or five sentences each, for Josh to review before a later
+session writes the rest.
+
+I wrote the 118 sentences myself, and the machine check passed on its first run. A check that has
+never failed proves little, so a test now feeds it broken sentences: a misspelled blank, a missing
+"no", vosotros, tú named in a vos-able sentence, the -se form, and a second pair of braces. Each
+fails. The one check that misfired was mine. I had added a guard against any tú-only form in a
+sentence's other words, and it flagged sal in "tanta sal en la sopa", which is salt but also
+salir's tú command. The guard now ignores commands, since ten, ven, and pon are ordinary words too.
+
+Spanish's dropped subjects shaped the writing more than I expected. A German sentence always has
+its subject, but "Ayer ___ al cine" could take fui or fue, and the card shows no person. So every
+sentence that is not second person makes its person plain in its own words: an overt yo, a second
+verb in the same person ("Anoche llegué tarde y no cené"), or a noun subject. The braces must hold
+exactly the engine's form, which rules out enclitics. "Dale las gracias a tu abuela" is the natural
+Latin American sentence, but "dale" is not a cell, and "Da las gracias" without le sounds stiff
+there. My reread replaced it with "Da un paseo por el parque", and swapped Spain's "todo recto"
+for "por esta calle".
+
+The build reused nearly everything. Conjugar's answer frame has one blank, so a compound's whole
+answer goes in one field and Konjugieren's multi-blank machinery was not needed. A sentence frame
+adds a context segment, splits a negative command's "no" out of the words before the blank so that
+grading still composes "no vayas", and lays the words out in a flow layout around a field of one
+width, keyed so the keyboard stays up from one sentence to the next. Slips, diagnoses, the held
+correction, re-asks, and the practice record all work unchanged inside a sentence. In the
+simulator, "he hacido" in "Yo todavía no ___ la tarea" got Phase 13's line about the irregular
+participio, and the correction now ends with the sentence completed.
+
+The plan also asked for a reward after a right answer that never slows the quiz. Each verb's first
+right row in any quiz's results now offers its example sentence, from the bundled literary and
+authored examples. tener's opened on a line from Valera's Pepita Jiménez.
+
+The full suite ran 1,235 tests in 78 suites. The only failure was a test pinning the analytics
+source names, which had compiled before I taught it the new value. The 118 sentences are drafts
+until Josh reviews them: a debug build asks them with a Borrador pill, and a release build asks none.

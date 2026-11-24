@@ -156,6 +156,8 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case search
   /// The closest verb offered by a search that found nothing.
   case searchGuess
+  /// The Quiz tab's Complete the Sentence, which blanks a verb in an authored sentence.
+  case sentences
   case sharedLink
   /// An App Intent run from the Shortcuts app or Siri, as `OpenRandomVerbIntent` can be.
   case shortcut

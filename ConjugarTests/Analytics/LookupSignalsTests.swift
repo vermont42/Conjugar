@@ -24,7 +24,7 @@ struct LookupSignalsTests {
     #expect(AnalyticsSource.allCases.map(\.rawValue) == [
       "browse", "control", "custom", "deeplink", "infoLink", "list", "lookup", "mistakes", "model", "modelAlone",
       "modelMixed", "myVerbs", "qrCode", "quickAction", "quizCorrection", "recent", "recognition", "related", "resume", "review",
-      "reviewCard", "search", "searchGuess", "sharedLink", "shortcut", "spotlight", "tab", "verbEssentials", "verbPage",
+      "reviewCard", "search", "searchGuess", "sentences", "sharedLink", "shortcut", "spotlight", "tab", "verbEssentials", "verbPage",
       "widget"
     ])
   }

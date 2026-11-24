@@ -42,8 +42,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 13 | Done | 2026-11-23 | abb865e | T4.2, T4.3 |
 | 14 | Done | 2026-11-23 | 60f37e9 | T5.1 |
 | 15 | Done | 2026-11-23 | 5da7c25 | T5.2 |
-| 16 | Awaiting Josh | 2026-11-23 | | T5.4 |
-| 17 | Not started | | | T5.5 |
+| 16 | Done | 2026-11-23 | 18175a3 | T5.4 |
+| 17 | Partly done (the app and the first batch); awaiting Josh | 2026-11-23 | | T5.5 |
 | 18 | Not started | | | T5.6 |
 | 19 | Not started | | | T6.2 |
 | 20 | Not started | | | T5.7 |
@@ -2404,7 +2404,7 @@ models count as known and how the mix is drawn.
 ## Phase 16: Recognition
 
 **Ports:** Konjugieren Phase 17. **Suggestions:** T5.4. **Depends on:** Phase 2 and the browse
-plan's map. **Status:** Awaiting Josh.
+plan's map. **Status:** Done.
 
 Show a form, such as fuera, and ask for the infinitive, the tense, and the person. This is the
 direction a reader needs, and Konjugieren's report rated it highest for Conjugar, whose American
@@ -2525,7 +2525,9 @@ on ambiguous forms.
 ## Phase 17: Sentences with a Blank
 
 **Ports:** Konjugieren Phase 18. **Suggestions:** T5.5. **Depends on:** Phases 1 and 2. **Status:**
-Not started.
+Partly done: the app, the machine check, the review tooling, and a first batch of 118 sentences
+for the 25 most frequent verbs, awaiting Josh's review. Verbs 26 to 300 are left for a later
+session.
 
 Short authored sentences for the core verbs, with the verb blanked, so the form is tied to a
 meaning. Spanish gives the blank more to do than German did: a subjunctive trigger (quiero que,
@@ -2558,7 +2560,111 @@ of 619; one drafter transliterated characters in its ids, so build ids from the 
 **Done when** the sentences exist for the agreed verbs and pass the machine check in both regions,
 sentence questions appear where decided, and tests pin the check.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Split, as Konjugieren's was.** This session built the app, the machine check, the review
+  tooling, and a first batch of 118 sentences for the 25 most frequent verbs. All 118 are drafts
+  (`reviewed: false`) awaiting Josh's review in
+  [`gap_sentences_batch_1.md`](gap_sentences_batch_1.md); a debug build asks them with a Draft
+  pill, and a release build asks none, so the hub's row says "No sentences at your level yet."
+  until they are approved. **Left for a later session:** verbs 26 to 300, at Konjugieren's three
+  each for 26 to 100 and two each for 101 to 300, once Josh has reviewed this batch and said
+  whether he wants to review the rest.
+- **Josh decided four things on 2026-11-23**, asked before building, each the recommended option.
+  (1) The name is **"Complete the Sentence" / "Completa la frase"** (over "Sentences" / "Frases"
+  and "Fill in the Blank" / "Rellena el hueco"). (2) **One sentence serves tú and vos**: a
+  second-person singular sentence is written with the tú form in its braces, names no tú, ti, or
+  contigo, and is asked in the learner's tú or vos, with `(tú)` or `(vos)` before it (over tagging
+  each sentence for one setting). Nothing is written in vosotros. (3) **Either imperfect
+  subjunctive is right in a sentence** (over keeping them apart as the bare quiz does): sentences
+  are written with -ra, the card names the tense without its number ("imperfecto de subjuntivo"),
+  and tuviese fills "Si yo {tuviera} más tiempo" for full points. (4) The first batch is **the top
+  25 at four or five each** (over 50 verbs at two and 100 at one). Konjugieren's other decisions
+  carried over unasked: a mode of its own, a row in the hub's Exercises; Claude drafts, the check
+  confirms, Claude rereads; drafts in debug builds; the literary reward on right rows in every
+  quiz's results.
+- **The batch.** 118 sentences, at least one in Beginner's tenses for every verb (the presente or a
+  tú, usted, or ustedes command), then one or more for each later level's new tenses. Cells: 38
+  presente, 15 pretérito, 13 presente de subjuntivo, 11 imperativo positivo, 9 imperfecto de
+  subjuntivo, 8 imperfecto, 5 imperativo negativo, 4 condicional, 3 each perfecto de indicativo,
+  pluscuamperfecto de indicativo, perfecto de subjuntivo, and pluscuamperfecto de subjuntivo, and
+  one each futuro, gerundio, and condicional compuesto. haber is asked as itself:
+  existential (hubo, había, habrá) and the auxiliary alone ("Nosotros ya {hemos} comido.").
+  **Drafting rules found in the session**, beyond the phase's: a sentence that is not second-person
+  makes its person plain in its own words (an overt yo, a co-verb like "no cené", or a noun
+  subject), since Spanish drops subjects and the card shows no person; no enclitic in the braces
+  (Dale, Dime), since the braces must be the engine's form; a negative command's "no" stands just
+  before the braces; no region-marked words (coche, gafas, todo recto).
+- **The machine check passed on its first run**, every blank the engine's in tú and in vos, so it
+  was tested by breaking it, in `theMachineCheckCatchesABrokenSentence`: a misspelled blank, a
+  missing "no", tú named in a second-person sentence, vosotros, a tú form around the blank, the
+  -se form, and two pairs of braces each fail. One check of my own misfired: the guard against a
+  tú form in a sentence's other words flagged *sal* (salt), which is also salir's tú command, so
+  the guard now ignores commands (ten, ven, and pon are words too) and catches only finite tú forms
+  such as tienes and puedes.
+- **The reread changed four**: *Da las gracias a tu abuela* reads stiff in Latin America without
+  *le*, and *Dale* would put an enclitic in the braces, so it became *Da un paseo por el parque*;
+  *Siga todo recto* is Spain's, so *Siga por esta calle*; and two English lines.
+- **How it is built.** `GapSentence` and `GapSentences` (`Models/GapSentence.swift`, `nonisolated`)
+  read `Models/GapSentences.json`; `QuizQuestion.sentence` holds the sentence, so re-asks, slips,
+  diagnoses, the held correction, the practice record, the Live Activity, and Ten More work
+  unchanged. `AnswerFrame` gained a `.context` segment and `sentenceTokens`, and
+  `GapSentence.frame(personNumber:)` splits a command's supplied "no" out of the words before the
+  blank, so "¡No {vayas} solo de noche!" grades "vayas" as "no vayas". Conjugar's frame has one
+  blank, so Konjugieren's multi-blank machinery was not needed: a compound's whole answer ("he
+  hecho") goes in one field. `AnswerFrameView` lays a sentence out in a `FlowLayout` (which gained
+  `centersItemsVertically`) with a 170-point field keyed "blank", so the keyboard keeps its focus
+  from one sentence to the next; a ¿ or ¡ before the blank and a comma or ? after it stay against
+  the field. The card keeps the verb, gloss, and tense line; the English sits under the sentence.
+  The correction adds "In the Sentence" / "En la frase" with the sentence completed in the person
+  asked (`QuizQuestion.completedSentence`), capitalized where the blank opens it. The draw is
+  Konjugieren's `QuizDraw.sentences`. Never ranked, no due items, continues, starts the Live
+  Activity, donates the level tip; the last result's kind is `sentences`, with its level.
+  `scripts/gap_sentences.py` (`review`, `approve`, `status`) is Konjugieren's, with Conjugar's
+  tense names; it round-trips the JSON byte for byte.
+- **The literary reward.** `ResultsView` offers Example Use (Ejemplo de Uso, the verb page's
+  string) on each verb's first right row, in every quiz, revealing the verb's
+  `ExampleUses.json` sentence, its English, and its source. Opening it sends nothing.
+- **Analytics.** A new `source` value, `sentences`; `completeQuiz` keeps `questionCount`. Staged in
+  `docs/privacy_policy_pending.md` in both languages (the lifecycle bullet and section 7's first
+  paragraph); `LookupSignalsTests` pins the value. The README gained a clause.
+- **VoiceOver.** The field's label reads the sentence with "blank" in its place, in Spanish
+  ("Estoy, blank, una dieta muy estricta", read from the accessibility tree; a second-person one
+  begins "tú,"). The correction's spoken text ends with "In the Sentence:" and the completed
+  sentence. The reward is a button with a hint and the selected trait while open. Nobody has
+  listened to it.
+- **A fixture**, `CONJUGAR_QUIZ_FIXTURE sentences`, standing in for Complete the Sentence only: ten
+  sentences, one per kind of frame (a tú question, a negative command, a compound, an imperfect
+  subjunctive, usted commands, a gerundio, a ¿ against the field), each with a wrong answer to try
+  (`Quiz.sentencesFixtureIDs`).
+- **Tests:** `GapSentenceTests`, 19 tests: the machine check over every sentence and its breaking;
+  unique ids and the fixture's; the top 25's counts; every level asking sentences of its own tenses
+  only; a negative command's supplied "no" and tokens; marks against the field; which frames name a
+  person; tú and vos; either imperfect subjunctive in a sentence alone; the completed sentence;
+  a diagnosis inside a sentence; drafts out of release builds; the draw; the scope; and in a quiz
+  a Beginner round of ten verbs, a vos learner asked vos, an answer recorded and a miss re-asked in
+  its sentence, and a finished round's last result and Ten More's new sentences. **The full run:
+  1,235 tests in 78 suites**, up from 1,216 in 77, in the simulator's default language (English),
+  with one failure, `LookupSignalsTests.sourceValuesAreStable`, because the run had compiled before
+  that test learned the new value; with it, that suite and `GapSentenceTests` passed 47 of 47.
+- **Verified on the iPhone**, in English and light mode with a hardware keyboard, the fixture, at
+  Elementary: the hub's Complete the Sentence row; tener's "(tú) ¿Cuántos años [ ]?" with the Draft
+  pill and the English, tenes prompting "In tener, the stem's e becomes ie here. Try once more."
+  and tienes earning half points; ir's "(tú) ¡No [ ] solo de noche!" with the keyboard carried over,
+  vas prompting "Negative commands use the subjunctive.", then held with "In the Sentence: ¡No
+  vayas solo de noche!"; tuviese accepted for full points; the re-ask three questions later;
+  "(usted) [ ], por favor, está abierto." with the comma against the field; and results of 85,
+  "Correct: 8 / 10 · Second Try: 1 · Asked Again: 0 / 1", tener's Example Use opening Valera's
+  *Pepita Jiménez*. **On the iPad**, in Spanish and dark mode, at Avanzado with a real draw: the
+  hub's Completa la frase row; hacer's "Yo todavía no [ ] la tarea." with Borrador; he hacido
+  diagnosed, then held with "En la frase: Yo todavía no he hecho la tarea." Both simulators' App
+  Group preferences were restored from backups, the iPhone's fixture default removed, and the iPad
+  returned to light mode and shut down. Not tried: VoiceOver by ear, the software keyboard,
+  accessibility text sizes (the sentence wraps in a `FlowLayout`, so a long field row is the risk),
+  the vos setting on a device (unit-tested), the Live Activity, and a release build's empty row.
+- **Seen, not changed.** The English under a sentence is close to the sentence's last line when it
+  wraps; the Draft pill is faint on the dark card. Neither ships: the first is a spacing nit for
+  Josh to judge, and the pill exists only in debug builds.
 
 ## Phase 18: Which Tense Would a Speaker Use?
 

@@ -39,6 +39,9 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// Name the Form, which shows a form and asks for its infinitive, tense, and person
   /// (`Recognition.swift`).
   let isRecognition: Bool
+  /// Complete the Sentence, which asks authored sentences with their verb blanked
+  /// (`GapSentence.swift`).
+  let isSentences: Bool
 
   init(
     verbs: [String]?,
@@ -52,7 +55,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
     recordSession: QuizRecordSession? = nil,
     isVerbEssentials: Bool = false,
     modelPractice: ModelPracticeSession? = nil,
-    isRecognition: Bool = false
+    isRecognition: Bool = false,
+    isSentences: Bool = false
   ) {
     self.verbs = verbs
     self.questionCount = questionCount
@@ -66,6 +70,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
     self.isVerbEssentials = isVerbEssentials
     self.modelPractice = modelPractice
     self.isRecognition = isRecognition
+    self.isSentences = isSentences
   }
 
   /// A round's length. The Quiz tab's quiz, a My Verbs quiz, and a collection's ask one round,
@@ -80,7 +85,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// compares with nothing. Of a
   /// ranked session, only the first round's score counts (`Quiz.firstRoundScore`).
   var isRanked: Bool {
-    verbs == nil && custom == nil && recordSession == nil && !isVerbEssentials && !isRecognition && questionCount == QuizScope.roundLength
+    verbs == nil && custom == nil && recordSession == nil && !isVerbEssentials && !isRecognition && !isSentences && questionCount == QuizScope.roundLength
   }
 
   /// Whether `completeQuiz`, `quitQuiz`, and `abandonQuiz` say how many questions were asked or

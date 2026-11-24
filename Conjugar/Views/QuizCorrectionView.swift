@@ -56,6 +56,19 @@ struct QuizCorrectionView: View {
         } else {
           answerRow(label: L.Quiz.yourAnswer, text: Self.givenText(difference))
           answerRow(label: L.Quiz.correctAnswer, text: Self.expectedText(difference))
+          if let completed = question.completedSentence {
+            VStack(alignment: .leading, spacing: 2) {
+              Text(L.Sentences.completed)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+              Text(Self.spanish(completed))
+                .font(.body)
+                .fontDesign(.serif)
+                .foregroundStyle(Color.customForeground)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("quiz_correction_sentence")
+            }
+          }
         }
       }
       .accessibilityElement(children: .ignore)
@@ -199,6 +212,10 @@ struct QuizCorrectionView: View {
     }
     if correction.willBeReasked {
       spoken += AttributedString(" " + L.Quiz.willComeUpAgain)
+    }
+    if let completed = question.completedSentence {
+      spoken += AttributedString(" " + L.Sentences.completed + ": ")
+      spoken += Self.spanish(completed)
     }
     return Text(spoken)
   }

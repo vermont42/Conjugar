@@ -955,6 +955,36 @@ nonisolated enum L {
     }
   }
 
+  enum Sentences {
+    static var title: String {
+      String(localized: "Sentences.title")
+    }
+
+    /// The hub row's line under the title, with a sentence as the example.
+    static var description: String {
+      String(localized: "Sentences.description")
+    }
+
+    static var startHint: String {
+      String(localized: "Sentences.startHint")
+    }
+
+    /// The hub row's line when the learner's level asks no sentence.
+    static var noneAtLevel: String {
+      String(localized: "Sentences.noneAtLevel")
+    }
+
+    /// The card's label on a sentence not yet reviewed, which only a debug build asks.
+    static var draft: String {
+      String(localized: "Sentences.draft")
+    }
+
+    /// The correction's label above the completed sentence.
+    static var completed: String {
+      String(localized: "Sentences.completed")
+    }
+  }
+
   enum Recognition {
     static var title: String {
       String(localized: "Recognition.title")
@@ -1272,6 +1302,11 @@ nonisolated enum L {
   enum Results {
     static var title: String {
       String(localized: "Results.title")
+    }
+
+    /// The hint of a right row's Example Use, which shows the verb's example sentence.
+    static var exampleHint: String {
+      String(localized: "Results.exampleHint")
     }
 
     static var time: String {

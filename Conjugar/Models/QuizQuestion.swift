@@ -25,6 +25,8 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
   /// For Name the Form, the form shown and the cells that write it. The verb and cell are then the
   /// asked one, which the prompt was conjugated from, and the learner names them.
   private(set) var recognition: RecognitionQuestion?
+  /// For Complete the Sentence, the sentence the answer fills.
+  private(set) var sentence: GapSentence?
 
   init(_ verb: String, _ tense: DisplayTense, _ personNumber: DisplayPersonNumber) {
     self.verb = verb
@@ -52,6 +54,22 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
     var question = self
     question.recognition = recognition
     return question
+  }
+
+  /// The same question, asked in a sentence.
+  func inSentence(_ sentence: GapSentence) -> QuizQuestion {
+    var question = self
+    question.sentence = sentence
+    return question
+  }
+
+  /// The question a sentence asks in the learner's tú or vos, or nil when the sentence names no
+  /// cell.
+  static func sentence(_ sentence: GapSentence, secondSingular: DisplayPersonNumber) -> QuizQuestion? {
+    guard let tense = sentence.displayTense, let personNumber = sentence.personNumber(secondSingular: secondSingular) else {
+      return nil
+    }
+    return QuizQuestion(sentence.verb, tense, personNumber).inSentence(sentence)
   }
 
   /// The answer the quiz shows, irregularity-marked, with a reflexive-only verb's pronoun. Nil
@@ -88,6 +106,12 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
       }
       add(variant)
     }
+    // A sentence is the prompt, and in it either imperfect subjunctive is right.
+    if sentence != nil, let other = tense.otherImperfectSubjunctive {
+      for spelling in QuizQuestion(verb, other, personNumber).shownSpellings {
+        add(spelling)
+      }
+    }
     return spellings
   }
 
@@ -101,6 +125,9 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
     // Name the Form's one blank takes the infinitive.
     if recognition != nil {
       return AnswerFrame(segments: [.blank])
+    }
+    if let sentenceFrame = sentence?.frame(personNumber: personNumber) {
+      return sentenceFrame
     }
     return AnswerFrame.quizFrame(tense: tense, personNumber: personNumber, isReflexiveOnly: ReflexivePronoun.isReflexiveOnly(verb))
   }

@@ -22,6 +22,9 @@ nonisolated struct AnswerFrame: Equatable, Sendable {
     /// reflexive pronoun placed before the verb.
     case word(String)
     case punctuation(String)
+    /// A sentence's words around its blank, which are not part of the answer. The text keeps its
+    /// spacing, so that a comma or a question mark written against the blank stays there.
+    case context(String)
     case blank
   }
 
@@ -67,12 +70,79 @@ nonisolated struct AnswerFrame: Equatable, Sendable {
       switch segment {
       case .addressee(let text), .pronoun(let text), .word(let text):
         return .some(text)
+      case .context(let text):
+        let trimmed = text.trimmingCharacters(in: Self.spokenTrim)
+        return trimmed.isEmpty ? nil : .some(trimmed)
       case .blank:
         return .some(nil)
       case .punctuation:
         return nil
       }
     }
+  }
+
+  private static let spokenTrim = CharacterSet.whitespaces.union(.punctuationCharacters)
+
+  /// Whether the frame is a sentence, which lays out word by word.
+  var isSentence: Bool {
+    segments.contains { segment in
+      if case .context = segment {
+        return true
+      }
+      return false
+    }
+  }
+
+  /// What a sentence frame lays out, word by word, so that a long sentence wraps between words.
+  /// The blank carries the text written against it, such as the ¿ before it or the comma after
+  /// it, so that a mark never starts or ends a line of its own.
+  nonisolated enum SentenceToken: Equatable, Sendable {
+    case addressee(String)
+    case blank(leading: String, trailing: String)
+    /// A word of the answer that the frame supplies, the "no" of `¡No [ ] eso!`.
+    case answerWord(String)
+    case word(String)
+  }
+
+  var sentenceTokens: [SentenceToken] {
+    var tokens: [SentenceToken] = []
+    // The last word of a text written against what follows it, with no space between, as the ¡
+    // of ¡No or the ¿ of ¿[ ].
+    var glued: String?
+    func flush() {
+      if let word = glued {
+        tokens.append(.word(word))
+        glued = nil
+      }
+    }
+    for segment in segments {
+      switch segment {
+      case .blank:
+        tokens.append(.blank(leading: glued ?? "", trailing: ""))
+        glued = nil
+      case .addressee(let text):
+        flush()
+        tokens.append(.addressee(text))
+      case .word(let word):
+        tokens.append(.answerWord((glued ?? "") + word))
+        glued = nil
+      case .context(let text), .punctuation(let text), .pronoun(let text):
+        flush()
+        var words = text.split(separator: " ", omittingEmptySubsequences: true).map(String.init)
+        if let first = words.first, !text.hasPrefix(" "), case .blank(let leading, let trailing) = tokens.last {
+          tokens[tokens.count - 1] = .blank(leading: leading, trailing: trailing + first)
+          words.removeFirst()
+        }
+        if !text.hasSuffix(" "), let last = words.popLast() {
+          tokens += words.map(SentenceToken.word)
+          glued = last
+        } else {
+          tokens += words.map(SentenceToken.word)
+        }
+      }
+    }
+    flush()
+    return tokens
   }
 
   private static let framePunctuation = CharacterSet(charactersIn: "¡!¿?").union(.whitespacesAndNewlines)

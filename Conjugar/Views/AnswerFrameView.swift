@@ -30,22 +30,82 @@ struct AnswerFrameView: View {
   @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
   var body: some View {
-    let layout = dynamicTypeSize.isAccessibilitySize
-      ? AnyLayout(VStackLayout(alignment: .leading, spacing: Layout.defaultSpacing))
-      : AnyLayout(HStackLayout(spacing: Layout.defaultSpacing))
-    layout {
-      if !frame.leading.isEmpty {
-        frameText(frame.leading)
-      }
-      HStack(spacing: Layout.defaultSpacing / 2) {
-        field
-        if !frame.trailing.isEmpty {
-          frameText(frame.trailing)
+    Group {
+      if frame.isSentence {
+        sentence
+      } else {
+        let layout = dynamicTypeSize.isAccessibilitySize
+          ? AnyLayout(VStackLayout(alignment: .leading, spacing: Layout.defaultSpacing))
+          : AnyLayout(HStackLayout(spacing: Layout.defaultSpacing))
+        layout {
+          if !frame.leading.isEmpty {
+            frameText(frame.leading)
+          }
+          HStack(spacing: Layout.defaultSpacing / 2) {
+            field
+            if !frame.trailing.isEmpty {
+              frameText(frame.trailing)
+            }
+          }
         }
       }
     }
     .font(.title3)
     .fontDesign(.serif)
+  }
+
+  /// A sentence laid out word by word, wrapping between words, with a field of one width whatever
+  /// the answer, so that its width does not hint at the answer's length.
+  private var sentence: some View {
+    FlowLayout(spacing: 6, centersItemsVertically: true) {
+      // The blank keeps one identity from one sentence to the next, so that the keyboard keeps its
+      // focus as the words around it change.
+      ForEach(sentenceItems) { item in
+        switch item.token {
+        case .addressee(let addressee):
+          sentenceText(Text(Self.spanish("(\(addressee))")).foregroundStyle(.secondary))
+        case .answerWord(let word):
+          sentenceText(Text(Self.spanish(word)).fontWeight(.semibold).foregroundStyle(Color.customForeground))
+        case .word(let word):
+          sentenceText(Text(Self.spanish(word)).foregroundStyle(Color.customForeground))
+        case .blank(let leading, let trailing):
+          HStack(spacing: 2) {
+            if !leading.isEmpty {
+              sentenceText(Text(Self.spanish(leading)).foregroundStyle(Color.customForeground))
+            }
+            field
+              .frame(width: Self.sentenceFieldWidth)
+            if !trailing.isEmpty {
+              sentenceText(Text(Self.spanish(trailing)).foregroundStyle(Color.customForeground))
+            }
+          }
+        }
+      }
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+  }
+
+  private static let sentenceFieldWidth: CGFloat = 170
+
+  private struct SentenceItem: Identifiable {
+    let id: String
+    let token: AnswerFrame.SentenceToken
+  }
+
+  private var sentenceItems: [SentenceItem] {
+    frame.sentenceTokens.enumerated().map { offset, token in
+      if case .blank = token {
+        return SentenceItem(id: "blank", token: token)
+      }
+      return SentenceItem(id: "text\(offset)", token: token)
+    }
+  }
+
+  // Hidden, because the field's label reads the whole sentence as one prompt.
+  private func sentenceText(_ text: Text) -> some View {
+    text
+      .fixedSize()
+      .accessibilityHidden(true)
   }
 
   private var field: some View {
@@ -60,7 +120,8 @@ struct AnswerFrameView: View {
       .submitLabel(.next)
       .focused(isFocused)
       .multilineTextAlignment(frame.leading.isEmpty ? .center : .leading)
-      .padding()
+      .padding(.horizontal, frame.isSentence ? 10 : 16)
+      .padding(.vertical, frame.isSentence ? 8 : 16)
       .background(Color.customForeground.opacity(0.06), in: RoundedRectangle(cornerRadius: Layout.cornerRadius))
       .overlay(
         RoundedRectangle(cornerRadius: Layout.cornerRadius)
@@ -85,6 +146,8 @@ struct AnswerFrameView: View {
         pieces.append(Text(Self.spanish("(\(addressee))")).foregroundStyle(.secondary))
       case .pronoun(let word), .word(let word), .punctuation(let word):
         pieces.append(Text(Self.spanish(word)).fontWeight(.semibold).foregroundStyle(Color.customForeground))
+      case .context(let text):
+        pieces.append(Text(Self.spanish(text)).foregroundStyle(Color.customForeground))
       case .blank:
         break
       }

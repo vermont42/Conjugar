@@ -271,6 +271,9 @@ class Quiz {
       case .recognition:
         questions = recognitionFixture()
         beginQuiz()
+      case .sentences:
+        questions = sentencesFixture()
+        beginQuiz()
       }
       return true
     }
@@ -315,6 +318,9 @@ class Quiz {
   /// chosen; a Review or My Mistakes asks the record's items, beyond the level's tenses; Verb
   /// Essentials asks five verbs' key conjugations, of the band or of a model and the known models.
   private func draw(_ scope: QuizScope, after prior: [Question] = []) -> [Question] {
+    if scope.isSentences {
+      return sentenceQuestions(count: scope.questionCount, after: prior)
+    }
     if scope.isRecognition {
       return recognitionQuestions(count: scope.questionCount, pool: scope.pool(level: lastLevel), band: scope.band(level: lastLevel), after: prior)
     }
@@ -392,6 +398,20 @@ class Quiz {
       }
     }
     return questions
+  }
+
+  /// Complete the Sentence's round: the sentences of the level's band and tenses, the session's
+  /// unasked ones first (`QuizDraw.sentences`), each asked in the learner's tú or vos.
+  private func sentenceQuestions(count: Int, after prior: [Question]) -> [Question] {
+    let asked = Set(prior.compactMap { $0.sentence?.id })
+    return QuizDraw.sentences(from: GapSentences.askable(at: lastLevel), count: count, excluded: asked, using: &generator)
+      .compactMap { QuizQuestion.sentence($0, secondSingular: secondSingular) }
+      .filter { sessionAllows(ConjugationCell(tense: $0.tense, personNumber: $0.personNumber)) }
+  }
+
+  /// The second person singular the settings ask.
+  private var secondSingular: DisplayPersonNumber {
+    settings.secondSingularQuiz == .tu ? .secondSingularTú : .secondSingularVos
   }
 
   /// How many draws a round of Name the Form makes before it settles for fewer questions, which
@@ -527,7 +547,6 @@ class Quiz {
     if tense == .gerundio || tense == .participio {
       return [.none]
     }
-    let secondSingular: DisplayPersonNumber = settings.secondSingularQuiz == .tu ? .secondSingularTú : .secondSingularVos
     var personNumbers: [DisplayPersonNumber]
     switch tense {
     case .imperativoPositivo, .imperativoNegativo:
@@ -923,17 +942,24 @@ extension Quiz {
     /// tenses whatever the level, most of them more than one cell or verb. Each comment gives the
     /// right answers and a wrong one worth trying.
     case recognition
+    /// Sentences for Complete the Sentence, used only when it is started from the Quiz tab, one per
+    /// kind of sentence frame whatever the level, each with its answer and a wrong one worth
+    /// trying in its comment.
+    case sentences
 
-    /// Whether the fixture replaces the questions of a quiz over this scope. The essentials and
-    /// recognition fixtures stand in for their own exercises, and the others for any quiz but them.
+    /// Whether the fixture replaces the questions of a quiz over this scope. The essentials,
+    /// recognition, and sentences fixtures stand in for their own exercises, and the others for
+    /// any quiz but them.
     func standsIn(for scope: QuizScope) -> Bool {
       switch self {
       case .essentials:
         return scope.isVerbEssentials
       case .recognition:
         return scope.isRecognition
+      case .sentences:
+        return scope.isSentences
       default:
-        return !scope.isVerbEssentials && !scope.isRecognition
+        return !scope.isVerbEssentials && !scope.isRecognition && !scope.isSentences
       }
     }
   }
@@ -1037,6 +1063,27 @@ extension Quiz {
     let choices = recognitionChoices(pool: QuizLevel.advanced.pool)
     return Self.recognitionFixtureCells.compactMap { cell in
       QuizQuestion.recognition(cell.verb, cell.tense, cell.personNumber, choices: choices)
+    }
+  }
+
+  /// The sentences fixture's sentences, by id.
+  static let sentencesFixtureIDs = [
+    "tener.presenteDeIndicativo.1",      // (tú) ¿Cuántos años [tienes]?, or tenés in vos; try tenes
+    "ir.imperativoNegativo.1",           // (tú) ¡No [vayas] solo de noche!; try vas
+    "hacer.perfectoDeIndicativo.1",      // Yo todavía no [he hecho] la tarea.; try he hacido
+    "tener.imperfectoDeSubjuntivo1.1",   // Si yo [tuviera] más tiempo…; tuviese is right too
+    "seguir.imperativoPositivo.1",       // (usted) [Siga] por esta calle…; try sigue
+    "seguir.gerundio.1",                 // Estoy [siguiendo] una dieta…; try seguiendo
+    "poder.presenteDeIndicativo.2",      // (tú) ¿[Puedes] cerrar la ventana…?, the ¿ against the field; try podes
+    "ser.pretérito.1",                   // El concierto [fue] un éxito.; try era
+    "decir.presenteDeSubjuntivo.1",      // Quiero que me [digas] la verdad.; try dices
+    "pasar.imperativoPositivo.1"         // (usted) [Pase], por favor…, the comma against the field; try pasa
+  ]
+
+  /// Complete the Sentence's fixture, in the learner's tú or vos.
+  func sentencesFixture() -> [Question] {
+    Self.sentencesFixtureIDs.compactMap { id in
+      GapSentences.all.first { $0.id == id }.flatMap { QuizQuestion.sentence($0, secondSingular: secondSingular) }
     }
   }
 

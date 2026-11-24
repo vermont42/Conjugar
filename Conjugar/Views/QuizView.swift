@@ -167,6 +167,9 @@ struct QuizView: View {
     if quiz.scope.isRecognition {
       return L.Recognition.title
     }
+    if quiz.scope.isSentences {
+      return L.Sentences.title
+    }
     return quiz.scope.recordSession?.title
   }
 
@@ -546,6 +549,17 @@ struct QuizView: View {
         isLarge: isLarge,
         start: { startQuiz(scope: .recognition()) }
       )
+
+      let hasSentences = !GapSentences.askable(at: Current.settings.quizLevel).isEmpty
+      QuizPracticeRow(
+        title: L.Sentences.title,
+        detail: hasSentences ? L.Sentences.description : L.Sentences.noneAtLevel,
+        systemImage: "character.cursor.ibeam",
+        hint: L.Sentences.startHint,
+        identifier: "quiz_sentences",
+        isLarge: isLarge,
+        start: hasSentences ? { startQuiz(scope: .sentences()) } : nil
+      )
     }
     .frame(maxWidth: .infinity, alignment: .leading)
   }
@@ -656,6 +670,13 @@ struct QuizView: View {
                 .accessibilityHidden(true)
             }
             answerField(spokenPrefix: currentRowIndex.flatMap { essentialsRows?[$0].key.tense.displayName })
+            if let sentence = quiz.currentQuestion?.sentence {
+              Text(sentence.en)
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityIdentifier("quiz_sentence_english")
+            }
           }
           .id(QuizView.answerFieldID)
 
@@ -775,6 +796,14 @@ struct QuizView: View {
           .accessibilityIdentifier("quiz_asked_again")
       }
 
+      #if DEBUG
+      if let sentence = quiz.currentQuestion?.sentence, !sentence.reviewed {
+        Text(L.Sentences.draft)
+          .metadataPill(tint: .customRed)
+          .accessibilityIdentifier("quiz_sentence_draft")
+      }
+      #endif
+
       if let recognition = quiz.currentQuestion?.recognition {
         RecognitionPromptView(prompt: recognition.prompt)
       } else {
@@ -794,7 +823,7 @@ struct QuizView: View {
       // The person asked is in the answer's frame, below, and a Verb Essentials row names its
       // own tense.
       if quiz.essentialsRows == nil, quiz.currentQuestion?.recognition == nil {
-        Text(verbatim: quiz.tense.displayName)
+        Text(verbatim: quiz.currentQuestion?.sentence == nil ? quiz.tense.displayName : quiz.tense.sentenceDisplayName)
           .font(.title3.weight(.semibold))
           .fontDesign(.serif)
           .foregroundStyle(Color.customForeground)

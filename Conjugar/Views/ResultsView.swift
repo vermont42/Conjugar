@@ -12,6 +12,8 @@ struct ResultsView: View {
   let quiz: Quiz
   /// Continues the session with another round, offered while `Quiz.canContinue`.
   var onTenMore: (() -> Void)?
+  /// The rows whose example sentence is open.
+  @State private var openExamples: Set<Int> = []
 
   private var accuracy: Double {
     guard quiz.maximumScore > 0 else { return 0 }
@@ -39,8 +41,9 @@ struct ResultsView: View {
         }
 
         LazyVStack(spacing: 0) {
+          let exampleRows = Self.exampleRows(in: quiz)
           ForEach(Array(quiz.questions.enumerated()), id: \.offset) { index, question in
-            resultRow(index: index, question: question)
+            resultRow(index: index, question: question, offersExample: exampleRows.contains(index))
             Divider().padding(.leading)
           }
         }
@@ -121,7 +124,67 @@ struct ResultsView: View {
     .accessibilityIdentifier("results_counts")
   }
 
-  private func resultRow(index: Int, question: QuizQuestion) -> some View {
+  /// The rows that offer their verb's example sentence: each verb's first right row, so that a
+  /// right answer is rewarded and the quiz itself never pauses after one.
+  private static func exampleRows(in quiz: Quiz) -> Set<Int> {
+    var rows: Set<Int> = []
+    var verbs: Set<String> = []
+    for index in quiz.results.indices where quiz.results[index] != .noMatch && quiz.questions.indices.contains(index) {
+      let verb = quiz.questions[index].verb
+      if !verbs.contains(verb), ExampleData.example(for: verb) != nil {
+        verbs.insert(verb)
+        rows.insert(index)
+      }
+    }
+    return rows
+  }
+
+  @ViewBuilder
+  private func exampleReveal(index: Int, verb: String) -> some View {
+    if let example = ExampleData.example(for: verb) {
+      let isOpen = openExamples.contains(index)
+      Button {
+        withAnimation(.snappy) {
+          if isOpen {
+            openExamples.remove(index)
+          } else {
+            openExamples.insert(index)
+          }
+        }
+      } label: {
+        // An HStack, not a Label, whose icon would sit apart from its title in a row.
+        HStack(spacing: 4) {
+          Image(systemName: isOpen ? "book.fill" : "book")
+          Text(L.Verb.exampleUse)
+        }
+        .font(.caption.weight(.semibold))
+        .foregroundStyle(Color.customYellow)
+      }
+      .buttonStyle(.plain)
+      .accessibilityHint(L.Results.exampleHint)
+      .accessibilityAddTraits(isOpen ? .isSelected : [])
+      .accessibilityIdentifier("results_example_\(index)")
+
+      if isOpen {
+        VStack(alignment: .leading, spacing: 4) {
+          Text(Self.spanish(example.es))
+            .font(.callout)
+            .fontDesign(.serif)
+            .foregroundStyle(Color.customForeground)
+          Text(example.en)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+          Text(example.provenance.attribution)
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .transition(.opacity)
+      }
+    }
+  }
+
+  private func resultRow(index: Int, question: QuizQuestion, offersExample: Bool) -> some View {
     let (verb, tense, person) = (question.verb, question.tense, question.personNumber)
     let proposed = index < quiz.proposedAnswers.count ? quiz.proposedAnswers[index] : ""
     let correct = index < quiz.correctAnswers.count ? quiz.correctAnswers[index] : ""
@@ -198,6 +261,9 @@ struct ResultsView: View {
             Text(L.Quiz.correctAnswer + ":").font(.caption).foregroundStyle(.secondary)
             ConjugationText(form: correct).font(.callout)
           }
+        }
+        if offersExample {
+          exampleReveal(index: index, verb: verb)
         }
       }
 
