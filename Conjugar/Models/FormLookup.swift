@@ -298,8 +298,7 @@ nonisolated enum FormLookup {
     for pronoun in [ReflexivePronoun.omitted, .written] {
       if
         case let .success(form) = TenseBridge.conjugate(infinitive: infinitive, tense: cell.tense, personNumber: cell.personNumber, pronoun: pronoun),
-        ConjugationMatch.normalized(form, accents: accents) == target
-      {
+        ConjugationMatch.normalized(form, accents: accents) == target {
         return form.lowercased()
       }
     }

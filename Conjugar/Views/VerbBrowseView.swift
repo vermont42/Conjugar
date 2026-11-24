@@ -284,8 +284,7 @@ struct VerbBrowseView: View {
     var text = AttributedString(L.BrowseVerbs.verbRequest(query: query, address: address))
     if
       let range = text.range(of: address, options: .backwards),
-      let url = URL.mailto(address, subject: L.BrowseVerbs.verbRequestSubject(query: query), body: L.BrowseVerbs.verbRequestBody(query: query))
-    {
+      let url = URL.mailto(address, subject: L.BrowseVerbs.verbRequestSubject(query: query), body: L.BrowseVerbs.verbRequestBody(query: query)) {
       text[range].link = url
     }
     return text
