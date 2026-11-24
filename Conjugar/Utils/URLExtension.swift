@@ -47,6 +47,9 @@ extension URL {
   /// The target of a practice set's link, `conjugar://quiz/set?…`. The quiz route's other
   /// targets start a quiz.
   nonisolated static let practiceSetTarget = "set"
+  /// The target of the daily session's link, `conjugar://quiz/daily?source=reminder`, which starts
+  /// a daily session rather than the quiz over every verb.
+  nonisolated static let dailySessionTarget = "daily"
 
   /// The query item a `conjugar://` link names its surface in, as in
   /// `conjugar://verb/hablar?source=widget`. A widget or a control can hand the app only a URL.
@@ -123,6 +126,13 @@ extension URL {
     components.percentEncodedQuery = custom.rawValue
     return deeplink(host: quizHost, target: practiceSetTarget, queryItems: (components.queryItems ?? []) + [
       level.map { URLQueryItem(name: levelQueryName, value: $0.rawValue) },
+      URLQueryItem(name: sourceQueryName, value: source.rawValue)
+    ])
+  }
+
+  /// `conjugar://quiz/daily?source=reminder`, which a tapped reminder opens.
+  nonisolated static func dailySessionDeeplink(source: AnalyticsSource) -> URL? {
+    deeplink(host: quizHost, target: dailySessionTarget, queryItems: [
       URLQueryItem(name: sourceQueryName, value: source.rawValue)
     ])
   }

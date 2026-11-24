@@ -22,8 +22,8 @@ struct LookupSignalsTests {
 
   @Test func sourceValuesAreStable() {
     #expect(AnalyticsSource.allCases.map(\.rawValue) == [
-      "browse", "control", "custom", "deeplink", "infoLink", "list", "lookup", "mistakes", "model", "modelAlone",
-      "modelMixed", "myVerbs", "qrCode", "quickAction", "quizCorrection", "recent", "recognition", "related", "resume", "review",
+      "browse", "control", "custom", "daily", "deeplink", "infoLink", "list", "lookup", "mistakes", "model", "modelAlone",
+      "modelMixed", "myVerbs", "qrCode", "quickAction", "quizCorrection", "recent", "recognition", "related", "reminder", "resume", "review",
       "reviewCard", "search", "searchGuess", "sentences", "sharedLink", "shortcut", "speedRound", "spotlight", "tab", "verbEssentials", "verbPage",
       "widget"
     ])

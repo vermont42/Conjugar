@@ -46,8 +46,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 17 | Partly done (the app and the first batch, approved); verbs 26–300 remain | 2026-11-23 | d1a3c66 | T5.5 |
 | 18 | Done (the app and 45 items, approved) | 2026-11-23 | 3271b9b | T5.6 |
 | 19 | Done | 2026-11-24 | f99637e | T6.2 |
-| 20 | Awaiting Josh | 2026-11-24 | | T5.7 |
-| 21 | Not started | | | T6.3 |
+| 20 | Done | 2026-11-24 | 8d97908 | T5.7 |
+| 21 | Awaiting Josh | 2026-11-24 | | T6.3 |
 | 22 | Not started | | | T6.6 (personal bests and achievements) |
 | 23 | Not started | | | T6.8 |
 | Closing | Not started | | | Audit, porting notes |
@@ -2895,7 +2895,7 @@ screen.
 ## Phase 20: Speed Round
 
 **Ports:** Konjugieren Phase 21. **Suggestions:** T5.7. **Depends on:** Phases 10 and 19.
-**Status:** Awaiting Josh.
+**Status:** Done.
 
 A speed round over items already mastered, the one place where the clock counts: Paul Nation's
 fluency strand, speed for material already accurate.
@@ -2987,7 +2987,7 @@ scoring.
 ## Phase 21: A Daily Session and a Streak
 
 **Ports:** Konjugieren Phase 22. **Suggestions:** T6.3. **Depends on:** Phases 10, 11, and 12.
-**Status:** Not started.
+**Status:** Awaiting Josh.
 
 A short daily session, a streak that can be repaired, and an optional reminder at a time the learner
 picks. About 37% of iOS education-app users allow notifications (secondhand, in the report), so the
@@ -3008,7 +3008,88 @@ generation, and a closure did not; tests ran under a fixed calendar with an inje
 **Done when** the session, the streak with its repair, and the reminder work across days under a
 controllable clock in tests, and the reminder fires on the simulator at the chosen time.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Nothing was asked.** The phase has no Ask Josh, and Josh accepted the plan's recommendations, so
+  Konjugieren's decisions stand: ten questions at the level, due items first; finishing one extends
+  the streak; one missed day repaired by two sessions the next day; no streak on the widgets; and
+  the three signals. Every choice below was made in the session and is open to his overrule.
+- **The session** (`QuizScope.daily(source:)`, `Models/DailySession.swift`). The due items the level
+  asks and the band holds come first, most overdue first, up to all ten, through the default quiz's
+  own `QuizDraw.dueQuestions` with the round's length as its limit; the default quiz's balanced draw
+  fills the rest. No choice question, no Ten More, never ranked; it starts the Live Activity and
+  shuffles as the default quiz does. While a repair awaits its second session, the results offer
+  **Another Session** (Otra sesión) in Ten More's place. A quit does not count. The name is Daily
+  Session / Sesión diaria, chosen in the session.
+- **The streak** (`Models/DailyStreak.swift`) is Konjugieren's, ported nearly line for line: days
+  practiced, the bridged day not counted, one session after a missed day shown as a repair in
+  progress, the last two runs kept, calendar days. Conjugar's `GetterSetter` has no `getCodable`,
+  so it is stored as JSON under `dailyStreak` in the App Group, and Reset Practice saves an empty
+  string, as it does for the Speed Round's best. Its description and alert now name the streak.
+- **The hub.** Daily Session is the first row of From Your Practice, with a calendar, or a flame
+  once there is a streak. **On the iPhone it pushes Review below the fold**, which Phase 12 had
+  brought above it, as in Konjugieren. Josh may prefer the row elsewhere.
+- **The reminder.** In Settings' quiz card after Quiz Clock: Daily Reminder (Recordatorio diario),
+  Off or On (No or Sí, as the review card's setting says), with a time while on, 18:00 by default.
+  `DailyReminderPlan` and the `ReminderScheduler` protocol (`…Real`, `…Spy`) are Konjugieren's. Its
+  count of what will be due counts the record's due items that the learner's tú or vos and region
+  can ask, as the Review row does. Rescheduling is `DailyReminderPlan.reschedule(with:settings:practice:now:)`,
+  which `World.rescheduleReminders` and `Quiz.finish()` both call, so that a quiz in a test can
+  reschedule through its own store and a spy. A tapped reminder's link goes through
+  `ReminderNotificationDelegate` to `AppRouter.shared`, which Conjugar's quick action already uses.
+- **The link** is `conjugar://quiz/daily?source=reminder`, a second exception beside `quiz/set` to
+  "any quiz target starts the quiz over every verb". `AppRouter` sets a new `pendingDailySession`.
+  `QuizView` starts the session unless a quiz is under way, popping results on screen first; the
+  Speed Round's Another Round and the daily session's Another Session now share
+  `startFromResults(scope:)`.
+- **Two small changes beside it.** `ChangeLevelTip`'s donation now counts a finished daily session,
+  which asks by the level. In English, the "N-day streak" strings use a non-breaking hyphen, since
+  the iPhone broke "2-" from "day" at the end of a line.
+- **Analytics.** New `source` values `daily` and `reminder`; `streak` on a daily session's
+  `completeQuiz`, in Konjugieren's bands, the streak at stake while a repair waits; and
+  `tapDailyReminder` with `enabled` `true`, `false`, or `denied`. The session sends `questionCount`
+  (always ten) and no score. The view sends the band, as it sends the rest of `completeQuiz`'s
+  parameters here. Staged in `docs/privacy_policy_pending.md` in both languages: the lifecycle
+  bullet, the score bullet, the in-app-actions bullet, and the paragraph after the list, which now
+  names the streak and says the reminders are written and scheduled on the device. Section 7 needed
+  no change. `LookupSignalsTests` pins the two new sources.
+- **VoiceOver.** The row reads as one element, its title and line ("Daily Session, Streak: 1 day.
+  Done for today."), with a hint; the streak line is announced at the results; Another Session has
+  a hint. Read from the accessibility tree only; nobody has listened to it.
+- **Tests:** `DailySessionTests`, 26 functions (32 cases with the bands): under a fixed Madrid
+  calendar, no streak, a streak through the next day and repairable the day after, a day counted
+  once, two sessions repairing, one starting anew, two missed days, a 25-hour day (25 October
+  2026), pruning, the bands, the stored form, the store across a launch and a reset; the scope's
+  flags; due items the level asks first and the rest waiting; ten due items filling the session;
+  with `Quiz`'s new injectable `now` and reminder scheduler, a finish extending the streak with no
+  score posted, a quit and another quiz not counting, a repair across four days; the reminder plan
+  (each day at the time, today's past, a done day skipped and the repair line after, what will be
+  due), rescheduling by the setting, a finished session dropping today's reminder; the setting's
+  default and persistence; and the link. **The full run passed 1,301 tests in 82 suites**, up from
+  1,275 in 81, in the simulator's default language (English). SwiftLint reports nothing on the
+  changed files.
+- **Verified on the iPhone**, in English and light mode at Elementary, with its real record: the
+  row with no streak; a session started from the row with its field focused, poner's due yo
+  pretérito first and reír's participio through he reído; results of "Streak: 1 day" with no Ten
+  More; the row's "Streak: 1 day. Done for today." and Last Quiz naming the session; a seeded streak
+  of the 21st and 22nd showing the repair line on the 24th, a first session ending "One more session
+  today keeps your 2-day streak." with Another Session, which started the second with typing going
+  straight in, ending "Streak: 3 days"; Settings' section, the system's request appearing only on
+  tapping On, Allow, and the time picker at 6:00 PM; and **the reminder firing at the chosen time**
+  (set three minutes ahead, with a streak seeded so that the day was not done), "Time to Practice"
+  with the no-count body, since the sessions had just answered every due item. AXe's taps did not
+  open the delivered notification from the Lock Screen, so its link was opened with `simctl openurl`,
+  which started a session over the Settings tab with the field focused. **On the iPad**, in Spanish
+  and dark mode at Avanzado: a bare `conjugar://quiz/daily` starting the session, results of "Racha:
+  1 día", the row's "Racha: 1 día. Ya practicaste hoy.", and Configuración's section with the time
+  at 18:00 after the request. I meant to refuse permission there, but the tap landed on Permitir,
+  and the Settings app could not be reached by a link to turn it off again, so **the refused state
+  is untried**. Both simulators' reminder settings were set back to Off at 18:00, their streaks
+  removed, and their pending reminders cleared by a launch; the iPad was returned to light mode and
+  shut down. **Both simulators now allow Conjugar's notifications**, and each practice record holds
+  the wrong answers these sessions gave and their last result, since neither was backed up first.
+  Not tried: the tap on a delivered reminder, the refused state and Open Settings, VoiceOver by ear,
+  and a real day passing.
 
 ## Phase 22: Personal Bests and Achievements
 

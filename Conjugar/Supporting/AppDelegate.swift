@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import UserNotifications
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
   // Retained under @UIApplicationDelegateAdaptor for the hooks the App lifecycle doesn't
   // cover. SwiftUI's WindowGroup owns the window; this sets the one global UIKit appearance
-  // the SwiftUI screens rely on, handles the UI-test-World override, and installs and
-  // receives the Home Screen quick action (see QuickAction.swift).
+  // the SwiftUI screens rely on, handles the UI-test-World override, installs and receives the
+  // Home Screen quick action (see QuickAction.swift), and names the delegate that opens a tapped
+  // daily reminder.
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     configureSegmentedControlAppearance()
 
@@ -27,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     Current.soundPlayer.setup()
 
     QuickAction.install()
+    UNUserNotificationCenter.current().delegate = ReminderNotificationDelegate.shared
 
     return true
   }

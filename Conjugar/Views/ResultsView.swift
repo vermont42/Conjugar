@@ -12,7 +12,8 @@ struct ResultsView: View {
   let quiz: Quiz
   /// Continues the session with another round, offered while `Quiz.canContinue`.
   var onTenMore: (() -> Void)?
-  /// Starts a fresh Speed Round, which the results of one offer in place of Ten More.
+  /// Starts a fresh Speed Round, which the results of one offer in place of Ten More, or another
+  /// daily session, which a daily session's offer while a repair waits for its second.
   var onAnotherRound: (() -> Void)?
   /// The rows whose example sentence is open.
   @State private var openExamples: Set<Int> = []
@@ -45,6 +46,13 @@ struct ResultsView: View {
           .buttonStyle(PrimaryButtonStyle())
           .accessibilityHint(L.SpeedRound.againHint)
           .accessibilityIdentifier("results_speed_round_again")
+        } else if let onAnotherRound, quiz.dailyStreakStatus?.awaitsRepairSession == true {
+          Button(action: onAnotherRound) {
+            Label(L.DailySession.another, systemImage: "flame.fill")
+          }
+          .buttonStyle(PrimaryButtonStyle())
+          .accessibilityHint(L.DailySession.anotherHint)
+          .accessibilityIdentifier("results_daily_another")
         } else if let onTenMore, quiz.canContinue {
           Button(continueLabel, action: onTenMore)
             .buttonStyle(PrimaryButtonStyle())
@@ -105,6 +113,15 @@ struct ResultsView: View {
 
       if quiz.scope.isSpeedRound {
         speedRoundBest
+      }
+
+      if let line = quiz.dailyStreakStatus?.resultsLine, !line.isEmpty {
+        Label(line, systemImage: "flame.fill")
+          .font(.headline)
+          .foregroundStyle(Color.customYellow)
+          .multilineTextAlignment(.center)
+          .fixedSize(horizontal: false, vertical: true)
+          .accessibilityIdentifier("results_daily_streak")
       }
 
       countLine

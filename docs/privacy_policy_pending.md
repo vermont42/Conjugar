@@ -1041,3 +1041,73 @@ El primer párrafo de la sección 7 queda así:
 ```
 Conjugar se integra con Apple Game Center para las clasificaciones de los cuestionarios, una para cada nivel. Cuando usted envía una puntuación, Game Center trata esos datos conforme a la política de privacidad de Apple. Solo se envía la puntuación de las diez primeras preguntas de un cuestionario sobre todos los verbos, a la clasificación del nivel en que se hizo; la de las preguntas siguientes y la de un cuestionario sobre Mis verbos, de un cuestionario personalizado, de una serie de práctica compartida, de un repaso, de una práctica de sus errores, del ejercicio Lo esencial del verbo, de la práctica de un modelo de verbos, del ejercicio Identifica la forma, del ejercicio Completa la frase, de la Ronda rápida, sobre una colección o sobre la página de un solo verbo, no. El desarrollador no tiene acceso a su identidad de Game Center ni a su información personal a través de esta integración.
 ```
+
+## Daily session and streak (pedagogy plan, Phase 21, 2026-11-24)
+
+The Quiz tab gains the Daily Session, ten questions at the learner's level, filled first from what
+the practice record has due. Finishing one a day builds a streak, and a streak broken by one missed
+day is repaired by two sessions the next day. Settings gains an optional daily reminder, a local
+notification at a time the learner picks, for which the app asks permission only when it is turned
+on. The quiz signals gain two `source` values, `daily` for a session started from the Quiz tab and
+`reminder` for one started by tapping the reminder. A daily session's `completeQuiz` carries a new
+`streak` parameter, the streak's length in bands (`1`, `2-6`, `7-29`, `30+`), and, as every round of
+ten does, `questionCount`. It sends no score and posts none to Game Center. A new signal,
+`tapDailyReminder`, is sent when the reminder is turned on or off in Settings, with `enabled` set to
+`true`, `false`, or `denied` (turned on, then refused permission). The streak, the days on which a
+session was finished, is kept on the device beside the practice record and never sent but as that
+band. The reminders are written and scheduled on the device. This rewrites the quiz-lifecycle
+bullet, the score bullet, and the paragraph after the list that the Speed Round section rewrote,
+and the in-app-actions bullet that the practice-record section rewrote; this wording wins over all
+four. Section 7 does not change, since it already names only the quiz over all verbs as posting.
+
+### English
+
+The bullet about quiz lifecycle events in section 2 now reads:
+
+```
+- Quiz lifecycle events (starting, quitting, or completing a quiz), where you began the quiz (for example the Quiz tab, My Verbs, a custom quiz of your own choosing, a review of what is due, a practice of your mistakes, the Verb Essentials exercise, the practice of a verb model alone or mixed with the models you know, the Name the Form exercise, the Complete the Sentence exercise, the Speed Round, the daily session, a daily reminder you tapped, a practice set someone shared with you as a link or a QR code, a verb's page, a collection, or a link), for a quiz over a collection or a verb model, which one, and, for a custom quiz or a practice set, whether it chooses tenses, verbs, or both (but not which ones)
+```
+
+The bullet about the quiz score and elapsed time in section 2 now reads:
+
+```
+- For a quiz over all verbs, the score of its first ten questions, when you complete them or quit during them; for every quiz, roughly how long it ran when you quit or complete a round (under 3 seconds, 3 to 15 seconds, 15 to 40 seconds, 40 seconds to 2 minutes, or longer); and, except for a review, a practice of your mistakes, a verb model's mixed practice, or the Speed Round, how many questions it has asked when you complete a round; and, when you complete a daily session, roughly how many days your streak of daily sessions has reached (1, 2 to 6, 7 to 29, or 30 or more)
+```
+
+The bullet about in-app actions in section 2 now reads:
+
+```
+- Certain in-app actions: opening the game, reshowing the onboarding tour, tapping to rate or review the app, sending a message to the tutor, opening a tense's article from a verb's page, tapping to share a verb's page, tapping to share a collection of verbs (and which collection), starring or unstarring a verb (whether the verb is starred afterward, but not which verb), revealing the conjugations on a review card, opening a Game Center leaderboard (and which level's), sharing a practice set as a link or a QR code (how it was shared, and whether it chooses tenses, verbs, or both, but not which ones), opening a shared practice set (and whether its link could be read), keeping a shared practice set as your custom quiz, resetting your practice record, and turning the daily reminder on or off (and whether notifications were refused)
+```
+
+The paragraph after the list now reads:
+
+```
+Your quiz score and the rough duration of a quiz are collected, but, like all of these analytics, they are anonymized and are not tied to your identity (see Section 4). The app does not send your quiz answers, how many of them were right, which verbs you look up, or any text you type. To schedule your reviews, show how your last quiz went, show which conjugations you have mastered, keep your Speed Round best, and keep your streak of daily sessions, the app keeps a record of which conjugations you have practiced, how your last answers went, the results of your last quiz, your most right answers in a Speed Round, and the days on which you finished a daily session; that record stays on your device and is never sent. If you turn on the daily reminder, the app writes and schedules its notifications on your device, and nothing about them is sent. That you searched is recorded, with the rough counts above; what you typed is not. That you opened a verb's page is recorded; which verb is not.
+```
+
+### Spanish
+
+El punto sobre los eventos del ciclo de vida de un cuestionario, en la sección 2, queda así:
+
+```
+- Los eventos del ciclo de vida de un cuestionario (comenzar, abandonar o terminar un cuestionario), dónde lo empezó (por ejemplo, en la pestaña del cuestionario, en Mis verbos, en un cuestionario personalizado que usted eligió, en un repaso de lo pendiente, en una práctica de sus errores, en el ejercicio Lo esencial del verbo, en la práctica de un modelo de verbos, solo o mezclado con los modelos que conoce, en el ejercicio Identifica la forma, en el ejercicio Completa la frase, en la Ronda rápida, en la sesión diaria, en un recordatorio diario que tocó, en una serie de práctica que alguien le compartió como enlace o código QR, en la página de un verbo, en una colección o desde un enlace), si el cuestionario es sobre una colección o un modelo de verbos, cuál y, si es personalizado o una serie de práctica, si elige tiempos, verbos o ambos (pero no cuáles)
+```
+
+El punto sobre la puntuación y el tiempo transcurrido, en la sección 2, queda así:
+
+```
+- En un cuestionario sobre todos los verbos, la puntuación de sus diez primeras preguntas, al terminarlas o al abandonarlo durante ellas; en todo cuestionario, cuánto duró aproximadamente al abandonarlo o al terminar una tanda (menos de 3 segundos, de 3 a 15 segundos, de 15 a 40 segundos, de 40 segundos a 2 minutos, o más); y, salvo en un repaso, en una práctica de sus errores, en la práctica mezclada de un modelo de verbos o en la Ronda rápida, cuántas preguntas lleva al terminar una tanda; y, al terminar una sesión diaria, cuántos días aproximadamente lleva su racha de sesiones diarias (1, de 2 a 6, de 7 a 29, o 30 o más)
+```
+
+El punto sobre las acciones dentro de la aplicación, en la sección 2, queda así:
+
+```
+- Ciertas acciones dentro de la aplicación: abrir el juego, volver a mostrar la introducción, tocar para valorar o reseñar la aplicación, enviar un mensaje al tutor, abrir el artículo de un tiempo verbal desde la página de un verbo, tocar para compartir la página de un verbo, tocar para compartir una colección de verbos (y cuál), marcar o desmarcar un verbo con una estrella (si el verbo queda marcado, pero no de qué verbo se trata), mostrar las conjugaciones de una tarjeta de repaso, abrir una clasificación de Game Center (y de qué nivel), compartir una serie de práctica como enlace o código QR (cómo se compartió y si elige tiempos, verbos o ambos, pero no cuáles), abrir una serie de práctica compartida (y si su enlace se pudo leer), guardar una serie de práctica compartida como su cuestionario personalizado, restablecer su registro de práctica y activar o desactivar el recordatorio diario (y si se rechazaron las notificaciones)
+```
+
+El párrafo que sigue a la lista queda así:
+
+```
+Su puntuación y la duración aproximada de un cuestionario se recopilan, pero, como todas estas estadísticas, están anonimizadas y no están vinculadas a su identidad (véase la sección 4). La aplicación no envía sus respuestas del cuestionario, cuántas acertó, qué verbos consulta ni ningún texto que escriba. Para programar sus repasos, mostrarle cómo le fue su último cuestionario, mostrarle qué conjugaciones domina guardar su récord en la Ronda rápida y llevar la cuenta de su racha de sesiones diarias, la aplicación guarda un registro de qué conjugaciones ha practicado, cómo le fueron sus últimas respuestas, los resultados de su último cuestionario, su mayor número de respuestas correctas en una Ronda rápida y los días en que terminó una sesión diaria; ese registro se queda en su dispositivo y nunca se envía. Si activa el recordatorio diario, la aplicación redacta y programa sus notificaciones en su dispositivo, y no se envía nada sobre ellas. Se registra que usted hizo una búsqueda, con las cifras aproximadas indicadas arriba, pero no lo que escribió. Se registra que abrió la página de un verbo, pero no de cuál.
+```

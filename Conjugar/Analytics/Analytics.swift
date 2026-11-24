@@ -24,6 +24,9 @@ nonisolated enum ParameterKey: String {
   /// (`AnalyticsBand.quizDuration`), on `quitQuiz` and `completeQuiz`.
   case duration
   case dwell
+  /// `tapDailyReminder`'s choice: `true`, `false`, or `denied`, when the learner turned the
+  /// reminder on and refused notifications.
+  case enabled
   /// The quiz's `QuizLevel`, by its raw value, on `startQuiz`, `quitQuiz`, and `completeQuiz`.
   case level
   case matchKind
@@ -44,6 +47,9 @@ nonisolated enum ParameterKey: String {
   case score
   case source
   case stage
+  /// The streak a daily session leaves, or the one at stake while a repair waits, in bands
+  /// (`AnalyticsBand.streak`), on a daily session's `completeQuiz`.
+  case streak
   /// `tapStarVerb`'s state after the tap, `true` or `false`.
   case starred
 }
@@ -64,6 +70,8 @@ nonisolated enum AnalyticsName: String {
   /// Keep as My Custom Quiz on a practice set's sheet. No parameters.
   case tapKeepPracticeSet
   case tapPlayGame
+  /// Off or On under Settings' Daily Reminder. Carries `enabled`.
+  case tapDailyReminder
   case tapRateOrReview
   /// Reset in Settings' confirmation of Reset Practice. No parameters.
   case tapResetPractice
@@ -125,6 +133,8 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case control
   /// A custom quiz begun from the Quiz tab's Custom segment.
   case custom
+  /// The Quiz tab's Daily Session, ten questions a day that build a streak.
+  case daily
   /// A `conjugar://` link with no recognized `source` query item.
   case deeplink
   case infoLink
@@ -149,6 +159,8 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   /// The Quiz tab's Name the Form, which shows a form and asks for its infinitive, tense, and person.
   case recognition
   case related
+  /// A tapped daily reminder, which starts a daily session.
+  case reminder
   /// The page came back after another tab, a pushed page, or the background. See `VerbVisit`.
   case resume
   /// The Quiz tab's Review, of the questions the practice record says are due.

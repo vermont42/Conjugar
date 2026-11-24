@@ -69,6 +69,16 @@ material for the release notes in `docs/release_notes.txt`.
    of the tab, and check that the level's board shows the score; check Settings' View Leaderboards
    too. With Test Mode on, `tapViewLeaderboard` should arrive, with `level` and `source` `tab` from
    the Quiz tab.
+8. **Try the daily reminder on a device.** In Settings, turn Daily Reminder on, allow
+   notifications at the system's request, and set the time two minutes ahead. Lock the device. The
+   reminder should arrive at that time, titled "Time to Practice" and saying how many conjugations
+   are due. Tap it: the app should open on the Quiz tab with a daily session under way and its
+   field focused. With Test Mode on, its `startQuiz` should carry `source` `reminder`, finishing it
+   should send `completeQuiz` with a `streak` band, and turning the reminder off and on should send
+   `tapDailyReminder` with `enabled`. On the simulator the reminder fired at its time, but AXe's taps
+   could not open it from the Lock Screen, so the tap's path through `ReminderNotificationDelegate`
+   has not been tried. Turn notifications off for Conjugar in the Settings app and check that
+   Settings' Daily Reminder shows its red line and Open Settings.
 
 ## On Release Day
 

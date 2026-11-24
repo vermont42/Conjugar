@@ -72,6 +72,8 @@ class Quiz {
   private(set) var speedRoundPreviousBest: Int?
   /// Whether the finished Speed Round set a new personal best.
   private(set) var isNewSpeedRoundBest = false
+  /// The streak a finished daily session left, which its results show. Nil for any other quiz.
+  private(set) var dailyStreakStatus: DailyStreak.Status?
   private(set) var questions: [Question] = []
   /// What the quiz under way, or last finished, asks about. See `QuizScope`.
   private(set) var scope = QuizScope.allVerbs
@@ -80,6 +82,11 @@ class Quiz {
   private let gameCenter: GameCenter
   /// Nil reads `Current.practice`, which a world's quiz cannot be handed as the world is built.
   @ObservationIgnored private let practiceStore: PracticeStore?
+  /// Nil reads `Current.reminderScheduler`, as `practiceStore` reads `Current.practice`.
+  @ObservationIgnored private let reminderSchedulerOverride: ReminderScheduler?
+  /// The clock that a daily session's due items and streak are read by, which tests set to other
+  /// days.
+  @ObservationIgnored private let now: () -> Date
   @ObservationIgnored private var personRotation: [DisplayTense: Int] = [:]
   /// Every random choice a quiz makes, so that a seed draws the same quiz in every process.
   @ObservationIgnored private var generator: AnyRandomNumberGenerator
@@ -244,11 +251,15 @@ class Quiz {
     gameCenter: GameCenter,
     shouldShuffle: Bool = true,
     randomSource: (any RandomNumberGenerator)? = nil,
-    practice: PracticeStore? = nil
+    practice: PracticeStore? = nil,
+    reminderScheduler: ReminderScheduler? = nil,
+    now: @escaping () -> Date = Date.init
   ) {
     self.settings = settings
     self.gameCenter = gameCenter
     practiceStore = practice
+    reminderSchedulerOverride = reminderScheduler
+    self.now = now
     self.shouldShuffle = shouldShuffle
     if let randomSource {
       generator = AnyRandomNumberGenerator(randomSource)
@@ -336,11 +347,16 @@ class Quiz {
     speedRoundMiss = nil
     speedRoundPreviousBest = nil
     isNewSpeedRoundBest = false
+    dailyStreakStatus = nil
   }
 
   /// Where each answer is recorded and the due items come from.
   private var practice: PracticeStore {
     practiceStore ?? Current.practice
+  }
+
+  private var reminderScheduler: ReminderScheduler {
+    reminderSchedulerOverride ?? Current.reminderScheduler
   }
 
   /// A round as asked: `draw(_:after:reserving:)`'s questions, shuffled where the scope shuffles,
@@ -372,8 +388,9 @@ class Quiz {
   /// default quiz's rounds each mix in up to three items the practice record says are due
   /// (`QuizDraw.dueQuestions`); a quiz whose verbs or tenses were chosen asks only what was
   /// chosen; a Review or My Mistakes asks the record's items, beyond the level's tenses; Verb
-  /// Essentials asks five verbs' key conjugations, of the band or of a model and the known models.
-  /// `reserving` leaves room in the default quiz's round for questions placed after the draw.
+  /// Essentials asks five verbs' key conjugations, of the band or of a model and the known models;
+  /// a daily session is filled first from the due items the level asks and the band holds, then
+  /// with the default quiz's draw. `reserving` leaves room in the default quiz's round for questions placed after the draw.
   private func draw(_ scope: QuizScope, after prior: [Question] = [], reserving: Int = 0) -> [Question] {
     if scope.isSpeedRound {
       let pool = lastLevel.pool
@@ -424,15 +441,20 @@ class Quiz {
       return scopedQuestions(verbs: verbs, count: scope.questionCount, pool: pool, after: prior)
     }
     let band = scope.band(level: lastLevel)
+    if scope.isDaily {
+      let due = dueQuestions(pool: pool, band: band, limit: scope.questionCount)
+      let drawn = mixedQuestions(count: scope.questionCount - due.count, pool: pool, band: band)
+      return QuizDraw.mixing(due, into: drawn, using: &generator)
+    }
     let due = scope.mixesDueItems ? dueQuestions(pool: pool, band: band) : []
     let drawn = mixedQuestions(count: scope.questionCount - reserving - due.count, pool: pool, band: band)
     return QuizDraw.mixing(due, into: drawn, using: &generator)
   }
 
-  private func dueQuestions(pool: [QuizPoolEntry], band: FrequencyBand?) -> [Question] {
-    QuizDraw.dueQuestions(for: practice.dueItems(), band: band, asks: { cell in
+  private func dueQuestions(pool: [QuizPoolEntry], band: FrequencyBand?, limit: Int = QuizDraw.dueItemLimit) -> [Question] {
+    QuizDraw.dueQuestions(for: practice.dueItems(at: now()), band: band, asks: { cell in
       pool.first { $0.tense == cell.tense }.map { personNumbers(for: $0).contains(cell.personNumber) } ?? false
-    }, using: &generator)
+    }, limit: limit, using: &generator)
   }
 
   /// The quiz over a band's verbs, the default quiz's over the level's: each question's tense
@@ -948,8 +970,12 @@ class Quiz {
     // Unlocks the "Choose Your Level" tip, which is rule-gated on having
     // finished at least one quiz. Three questions on a verb's page are not one, and neither a
     // record session nor Verb Essentials asks by the level's tenses.
-    if roundCount == 1, scope.continues, scope.recordSession == nil, !scope.isVerbEssentials {
+    if roundCount == 1, scope.continues || scope.isDaily, scope.recordSession == nil, !scope.isVerbEssentials {
       ChangeLevelTip.quizCompleted.sendDonation()
+    }
+    if scope.isDaily {
+      dailyStreakStatus = practice.recordDailySession(at: now())
+      DailyReminderPlan.reschedule(with: reminderScheduler, settings: settings, practice: practice, now: now())
     }
     endLiveActivity()
     if isRankedRound {

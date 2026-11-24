@@ -29,6 +29,8 @@ class World {
   /// What each quiz answer and lookup has practiced, kept in the App Group and sent nowhere.
   var practice: PracticeStore
   var liveActivities: LiveActivities
+  /// The daily reminders' notifications.
+  var reminderScheduler: ReminderScheduler
 
   private static let fakeRatingsCount = 42
 
@@ -45,7 +47,8 @@ class World {
     hapticPlayer: HapticPlayer,
     learnerVerbs: LearnerVerbStore,
     practice: PracticeStore,
-    liveActivities: LiveActivities
+    liveActivities: LiveActivities,
+    reminderScheduler: ReminderScheduler
   ) {
     self.analytics = analytics
     self.reviewPrompter = reviewPrompter
@@ -60,6 +63,7 @@ class World {
     self.learnerVerbs = learnerVerbs
     self.practice = practice
     self.liveActivities = liveActivities
+    self.reminderScheduler = reminderScheduler
   }
 
   /// The App Group's defaults, where the record of the learner's verbs and the practice record
@@ -104,7 +108,8 @@ class World {
       hapticPlayer: HapticPlayerReal(),
       learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter),
       practice: PracticeStore(getterSetter: sharedGetterSetter),
-      liveActivities: LiveActivitiesReal()
+      liveActivities: LiveActivitiesReal(),
+      reminderScheduler: ReminderSchedulerReal()
     )
   }()
 
@@ -126,7 +131,8 @@ class World {
       hapticPlayer: HapticPlayerReal(),
       learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter),
       practice: PracticeStore(getterSetter: sharedGetterSetter),
-      liveActivities: LiveActivitiesReal()
+      liveActivities: LiveActivitiesReal(),
+      reminderScheduler: ReminderSchedulerReal()
     )
   }()
 
@@ -148,7 +154,8 @@ class World {
       hapticPlayer: HapticPlayerDummy(),
       learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake()),
       practice: PracticeStore(getterSetter: GetterSetterFake()),
-      liveActivities: LiveActivitiesSpy()
+      liveActivities: LiveActivitiesSpy(),
+      reminderScheduler: ReminderSchedulerSpy()
     )
   }()
 
@@ -182,7 +189,8 @@ class World {
       hapticPlayer: HapticPlayerDummy(),
       learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake()),
       practice: PracticeStore(getterSetter: GetterSetterFake()),
-      liveActivities: LiveActivitiesSpy()
+      liveActivities: LiveActivitiesSpy(),
+      reminderScheduler: ReminderSchedulerSpy()
     )
   }
 }

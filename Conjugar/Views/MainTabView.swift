@@ -84,6 +84,10 @@ struct MainTabView: View {
       router.handle(url: url)
     }
     .onChange(of: scenePhase) { _, phase in
+      // The day may have turned, and the record changed, since the reminders were scheduled.
+      if phase == .active || phase == .background {
+        Current.rescheduleReminders()
+      }
       guard phase == .active else { return }
       let myVerbs = Current.learnerVerbs.record.myVerbs
       Task.detached { WidgetSnapshotWriter.refresh(myVerbs: myVerbs) }

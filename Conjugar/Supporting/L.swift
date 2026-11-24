@@ -1049,6 +1049,97 @@ nonisolated enum L {
     }
   }
 
+  enum DailySession {
+    static var title: String {
+      String(localized: "DailySession.title")
+    }
+
+    /// The Quiz tab's row's line while there is no streak.
+    static var description: String {
+      String(localized: "DailySession.description")
+    }
+
+    static var startHint: String {
+      String(localized: "DailySession.startHint")
+    }
+
+    /// The results' button while a repair waits for its second session.
+    static var another: String {
+      String(localized: "DailySession.another")
+    }
+
+    static var anotherHint: String {
+      String(localized: "DailySession.anotherHint")
+    }
+
+    /// The results' line after a daily session.
+    static func streak(_ length: Int) -> String {
+      String(localized: "DailySession.streak \(length)")
+    }
+
+    static func streakDoneToday(_ length: Int) -> String {
+      String(localized: "DailySession.streakDoneToday \(length)")
+    }
+
+    static func streakKeepGoing(_ length: Int) -> String {
+      String(localized: "DailySession.streakKeepGoing \(length)")
+    }
+
+    /// Yesterday was missed, and no session has been finished today.
+    static func repairTwo(_ length: Int) -> String {
+      String(localized: "DailySession.repairTwo \(length)")
+    }
+
+    /// One session of the repair's two has been finished today.
+    static func repairOne(_ length: Int) -> String {
+      String(localized: "DailySession.repairOne \(length)")
+    }
+  }
+
+  enum DailyReminder {
+    static var heading: String {
+      String(localized: "DailyReminder.heading")
+    }
+
+    static var description: String {
+      String(localized: "DailyReminder.description")
+    }
+
+    static var off: String {
+      String(localized: "DailyReminder.off")
+    }
+
+    static var on: String {
+      String(localized: "DailyReminder.on")
+    }
+
+    static var time: String {
+      String(localized: "DailyReminder.time")
+    }
+
+    static var denied: String {
+      String(localized: "DailyReminder.denied")
+    }
+
+    static var openSettings: String {
+      String(localized: "DailyReminder.openSettings")
+    }
+
+    /// The notification's title.
+    static var title: String {
+      String(localized: "DailyReminder.title")
+    }
+
+    /// The notification's body on a day with nothing due.
+    static var body: String {
+      String(localized: "DailyReminder.body")
+    }
+
+    static func bodyDue(_ count: Int) -> String {
+      String(localized: "DailyReminder.bodyDue \(count)")
+    }
+  }
+
   enum Choice {
     /// The choice's heading above its two sentences.
     static var prompt: String {

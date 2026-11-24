@@ -45,6 +45,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// The Speed Round, sixty seconds on what the practice record says is mastered
   /// (`SpeedRound.swift`).
   let isSpeedRound: Bool
+  /// The daily session, whose finish extends the streak (`DailySession.swift`).
+  let isDaily: Bool
 
   init(
     verbs: [String]?,
@@ -60,7 +62,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
     modelPractice: ModelPracticeSession? = nil,
     isRecognition: Bool = false,
     isSentences: Bool = false,
-    isSpeedRound: Bool = false
+    isSpeedRound: Bool = false,
+    isDaily: Bool = false
   ) {
     self.verbs = verbs
     self.questionCount = questionCount
@@ -76,6 +79,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
     self.isRecognition = isRecognition
     self.isSentences = isSentences
     self.isSpeedRound = isSpeedRound
+    self.isDaily = isDaily
   }
 
   /// A round's length. The Quiz tab's quiz, a My Verbs quiz, and a collection's ask one round,
@@ -87,11 +91,11 @@ nonisolated struct QuizScope: Equatable, Sendable {
 
   /// Only the default quiz over every verb ranks: a score over a learner's own verbs or tenses,
   /// over what the practice record holds, over another kind of question, against the clock, or over
-  /// three questions, compares with nothing. Of a ranked session, only the first round's score
-  /// counts (`Quiz.firstRoundScore`).
+  /// three questions, compares with nothing, and a daily session is filled from the record. Of a
+  /// ranked session, only the first round's score counts (`Quiz.firstRoundScore`).
   var isRanked: Bool {
     verbs == nil && custom == nil && recordSession == nil && !isVerbEssentials && !isRecognition && !isSentences && !isSpeedRound
-      && questionCount == QuizScope.roundLength
+      && !isDaily && questionCount == QuizScope.roundLength
   }
 
   /// Whether `completeQuiz`, `quitQuiz`, and `abandonQuiz` say how many questions were asked or
@@ -126,9 +130,10 @@ nonisolated struct QuizScope: Equatable, Sendable {
 
   /// Whether the results offer Ten More, or for Verb Essentials five more verbs, which continue the
   /// session with another round. Test Me's three questions are a check on one verb, not a session
-  /// to grow. A Speed Round's results offer a new round instead.
+  /// to grow. A Speed Round's results offer a new round instead. A daily session's next is a
+  /// session of its own, which a repair counts.
   var continues: Bool {
-    questionCount >= QuizScope.roundLength && !isSpeedRound
+    questionCount >= QuizScope.roundLength && !isSpeedRound && !isDaily
   }
 
   /// Whether the quiz starts the Live Activity, which is one for the whole app and belongs to the

@@ -10,7 +10,8 @@ import Observation
 
 /// The app's view of `PracticeRecord` (`Current.practice`): it maps questions and lookups to
 /// items, saves each change to the App Group's defaults, and answers in verbs for the review card.
-/// It also keeps the last quiz's results, which the Quiz tab shows, and the Speed Round's best.
+/// It also keeps the last quiz's results, which the Quiz tab shows, the Speed Round's best, and the
+/// daily session's streak.
 /// Observable, so Settings' Reset Practice shows once there is something to reset.
 @Observable
 final class PracticeStore {
@@ -18,6 +19,8 @@ final class PracticeStore {
   private(set) var lastResult: LastQuizResult?
   /// The most right answers in one Speed Round, kept on the device and sent nowhere.
   private(set) var speedRoundBest: Int?
+  /// The days a daily session was finished, kept on the device and sent nowhere but as a band.
+  private(set) var dailyStreak = DailyStreak()
   @ObservationIgnored private let getterSetter: GetterSetter
   @ObservationIgnored private let calendar: Calendar
 
@@ -46,12 +49,13 @@ final class PracticeStore {
     }
     lastResult = getterSetter.get(key: LastQuizResult.storageKey).flatMap(LastQuizResult.init(json:))
     speedRoundBest = getterSetter.get(key: Self.speedRoundBestKey).flatMap { Int($0) }
+    dailyStreak = getterSetter.get(key: DailyStreak.storageKey).flatMap(DailyStreak.init(json:)) ?? DailyStreak()
   }
 
   static let speedRoundBestKey = "speedRoundBest"
 
   var isEmpty: Bool {
-    record.isEmpty && lastResult == nil && speedRoundBest == nil
+    record.isEmpty && lastResult == nil && speedRoundBest == nil && dailyStreak.isEmpty
   }
 
   /// A round's results, as they appear: after Ten More, the session's so far.
@@ -72,6 +76,20 @@ final class PracticeStore {
     speedRoundBest = correctCount
     getterSetter.set(key: Self.speedRoundBestKey, value: "\(correctCount)")
     return true
+  }
+
+  /// A daily session was finished at `date`. Returns the streak it leaves.
+  @discardableResult
+  func recordDailySession(at date: Date = .now) -> DailyStreak.Status {
+    dailyStreak.recordSession(at: date, calendar: calendar)
+    if let json = dailyStreak.json {
+      getterSetter.set(key: DailyStreak.storageKey, value: json)
+    }
+    return dailyStreak.status(at: date, calendar: calendar)
+  }
+
+  func streakStatus(at date: Date = .now) -> DailyStreak.Status {
+    dailyStreak.status(at: date, calendar: calendar)
   }
 
   /// A quiz's final answer to a question: a slip's right second attempt counts as right, since
@@ -144,10 +162,10 @@ final class PracticeStore {
     save()
   }
 
-  /// Settings' Reset Practice, which forgets the last quiz's results and the Speed Round's best
-  /// too. The record is saved empty rather than removed, so that the next launch does not migrate
-  /// the old schedules again. `GetterSetter` cannot remove a key, so the last result and the best
-  /// are saved as empty strings, which read as none.
+  /// Settings' Reset Practice, which forgets the last quiz's results, the Speed Round's best, and
+  /// the daily streak too. The record is saved empty rather than removed, so that the next launch
+  /// does not migrate the old schedules again. `GetterSetter` cannot remove a key, so the last
+  /// result, the best, and the streak are saved as empty strings, which read as none.
   func reset() {
     record.reset()
     save()
@@ -155,6 +173,8 @@ final class PracticeStore {
     getterSetter.set(key: LastQuizResult.storageKey, value: "")
     speedRoundBest = nil
     getterSetter.set(key: Self.speedRoundBestKey, value: "")
+    dailyStreak = DailyStreak()
+    getterSetter.set(key: DailyStreak.storageKey, value: "")
   }
 
   private func save() {

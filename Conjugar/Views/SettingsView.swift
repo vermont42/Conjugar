@@ -21,6 +21,8 @@ struct SettingsView: View {
   @State private var showingGame = false
   @State private var showingOnboarding = false
   @State private var showingResetPractice = false
+  /// Notifications are not allowed, so the daily reminder cannot appear.
+  @State private var areRemindersDenied = false
   // A popover tip attached to a view that outlives the tab's first visit would float over another
   // tab, pointing at nothing, when its rule is met there, as ChangeLevelTip's is when a quiz
   // finishes. Tips are therefore attached only while Settings is on screen.
@@ -59,6 +61,13 @@ struct SettingsView: View {
       }
       .onDisappear {
         isOnScreen = false
+      }
+      // Notifications can be turned off in the Settings app while the reminder is on.
+      .task(id: isOnScreen) {
+        guard isOnScreen, settings.dailyReminder == .on else {
+          return
+        }
+        areRemindersDenied = !(await Current.reminderScheduler.isAuthorized())
       }
       .task {
         // Surface the failure: show an unavailable message rather than
@@ -146,6 +155,17 @@ struct SettingsView: View {
         .accessibilityIdentifier("quiz_clock_picker")
       }
 
+      GradientDivider()
+
+      settingSection(
+        icon: "bell.fill",
+        tint: .customGreen,
+        heading: L.DailyReminder.heading,
+        description: L.DailyReminder.description
+      ) {
+        dailyReminderControls
+      }
+
       if !Current.practice.isEmpty {
         GradientDivider()
 
@@ -173,6 +193,7 @@ struct SettingsView: View {
         withAnimation {
           Current.practice.reset()
         }
+        Current.rescheduleReminders()
         Current.analytics.signal(name: .tapResetPractice)
       }
       Button(role: .cancel) {}
@@ -180,6 +201,78 @@ struct SettingsView: View {
       Text(L.Settings.resetPracticeMessage)
     }
   }
+
+  /// Off and On, the time while on, and a way to the Settings app while notifications are not
+  /// allowed. Permission is asked for only when the learner turns the reminder on.
+  @ViewBuilder
+  private var dailyReminderControls: some View {
+    Picker(selection: Binding(get: { settings.dailyReminder }, set: { setDailyReminder($0) })) {
+      ForEach(DailyReminder.allCases, id: \.self) { reminder in
+        Text(reminder.localizedDailyReminder).tag(reminder)
+      }
+    } label: {
+      Text(verbatim: "")
+    }
+    .pickerStyle(.segmented)
+    .selectionFeedback(trigger: settings.dailyReminder)
+    .accessibilityLabel(L.DailyReminder.heading)
+    .accessibilityIdentifier("daily_reminder_picker")
+
+    if settings.dailyReminder == .on {
+      DatePicker(L.DailyReminder.time, selection: dailyReminderTime, displayedComponents: .hourAndMinute)
+        .foregroundStyle(Color.customForeground)
+        .tint(.customYellow)
+        .accessibilityIdentifier("daily_reminder_time")
+    }
+
+    if areRemindersDenied {
+      Text(L.DailyReminder.denied)
+        .font(.callout)
+        .foregroundStyle(Color.customRed)
+        .fixedSize(horizontal: false, vertical: true)
+        .accessibilityIdentifier("daily_reminder_denied")
+      Button(L.DailyReminder.openSettings) {
+        if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
+          UIApplication.shared.open(url)
+        }
+      }
+      .buttonStyle(TintedCapsuleButtonStyle(tint: .customGreen))
+      .accessibilityIdentifier("daily_reminder_open_settings")
+    }
+  }
+
+  /// Today at the reminder's time, which the picker shows as a time alone.
+  private var dailyReminderTime: Binding<Date> {
+    Binding {
+      let minutes = settings.dailyReminderMinutes
+      return Calendar.current.date(bySettingHour: minutes / 60, minute: minutes % 60, second: 0, of: .now) ?? .now
+    } set: { date in
+      let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+      settings.dailyReminderMinutes = (components.hour ?? 0) * 60 + (components.minute ?? 0)
+      Current.rescheduleReminders()
+    }
+  }
+
+  /// Turning the reminder on asks for permission, and a refusal leaves it off, with a line saying
+  /// why. The signal says which: `true`, `false`, or `denied`.
+  private func setDailyReminder(_ reminder: DailyReminder) {
+    guard reminder == .on else {
+      settings.dailyReminder = .off
+      areRemindersDenied = false
+      Current.rescheduleReminders()
+      Current.analytics.signal(name: .tapDailyReminder, parameters: [ParameterKey.enabled.rawValue: "false"])
+      return
+    }
+    Task {
+      let isAllowed = await Current.reminderScheduler.requestAuthorization()
+      settings.dailyReminder = isAllowed ? .on : .off
+      areRemindersDenied = !isAllowed
+      Current.rescheduleReminders()
+      Current.analytics.signal(name: .tapDailyReminder, parameters: [ParameterKey.enabled.rawValue: isAllowed ? "true" : Self.deniedValue])
+    }
+  }
+
+  static let deniedValue = "denied"
 
   // A segmented control would truncate Intermediate and Intermedio on an iPhone, so the levels
   // are tiles, each with a gauge whose needle rises with the level.

@@ -53,7 +53,7 @@ struct QuizView: View {
           if sheetScope == nil {
             startScreen
           } else if quiz.quizState == .finished {
-            ResultsView(quiz: quiz, onTenMore: continueSession, onAnotherRound: anotherSpeedRound)
+            ResultsView(quiz: quiz, onTenMore: continueSession, onAnotherRound: anotherRound)
           } else {
             // Something must be on screen for `onAppear` to start the sheet's quiz.
             Color.clear
@@ -67,7 +67,7 @@ struct QuizView: View {
       .navigationTitle(sheetTitle ?? sessionTitle ?? L.Quiz.localizedTitle)
       .navigationBarTitleDisplayMode(sheetScope == nil ? .automatic : .inline)
       .navigationDestination(isPresented: $showingResults) {
-        ResultsView(quiz: quiz, onTenMore: continueSession, onAnotherRound: anotherSpeedRound)
+        ResultsView(quiz: quiz, onTenMore: continueSession, onAnotherRound: anotherRound)
       }
       .navigationDestination(for: VerbDestination.self) { destination in
         VerbView(verb: destination.infinitive, source: destination.source, marks: destination.marks)
@@ -128,6 +128,18 @@ struct QuizView: View {
         router.pendingQuizStart = nil
         if quiz.quizState != .inProgress {
           startQuiz(scope: .allVerbs(source: linkSource))
+        }
+      }
+      // A tapped reminder's daily session, unless a quiz is under way, which the learner returns
+      // to instead. Results on screen give way to it.
+      .onChange(of: router.pendingDailySession, initial: true) { _, linkSource in
+        guard let linkSource, sheetScope == nil else { return }
+        router.pendingDailySession = nil
+        guard quiz.quizState != .inProgress else { return }
+        if showingResults {
+          startFromResults(scope: .daily(source: linkSource))
+        } else {
+          startQuiz(scope: .daily(source: linkSource))
         }
       }
       .alert(L.Quiz.gameCenter, isPresented: $showingGameCenterPrompt) {
@@ -191,6 +203,9 @@ struct QuizView: View {
     }
     if quiz.scope.isSpeedRound {
       return L.SpeedRound.title
+    }
+    if quiz.scope.isDaily {
+      return L.DailySession.title
     }
     return quiz.scope.recordSession?.title
   }
@@ -504,14 +519,26 @@ struct QuizView: View {
     }
   }
 
-  /// Review and Practice My Mistakes, on every segment, each saying why it is empty when it is,
-  /// the Mastery page, and the last round's results once a quiz has finished.
+  /// The daily session with its streak, Review and Practice My Mistakes, on every segment, each
+  /// saying why it is empty when it is, the Mastery page, and the last round's results once a quiz
+  /// has finished.
   private var practiceSection: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
       Text(L.PracticeSession.heading)
         .font(isLarge ? .title3.bold() : .headline)
         .foregroundStyle(Color.customForeground)
         .accessibilityAddTraits(.isHeader)
+
+      let streak = Current.practice.streakStatus()
+      QuizPracticeRow(
+        title: L.DailySession.title,
+        detail: streak.hubDetail,
+        systemImage: streak.length > 0 ? "flame.fill" : "calendar",
+        hint: L.DailySession.startHint,
+        identifier: "quiz_daily",
+        isLarge: isLarge,
+        start: { startQuiz(scope: .daily()) }
+      )
 
       ForEach(QuizRecordSession.allCases, id: \.self) { session in
         let count = quiz.askableCount(for: session)
@@ -1303,6 +1330,9 @@ struct QuizView: View {
       }
       AccessibilityNotification.Announcement(announcement).post()
     }
+    if let line = quiz.dailyStreakStatus?.resultsLine, !line.isEmpty {
+      AccessibilityNotification.Announcement(line).post()
+    }
     var parameters = [
       ParameterKey.duration.rawValue: quiz.durationBand,
       ParameterKey.level.rawValue: quiz.lastLevel.rawValue,
@@ -1313,6 +1343,9 @@ struct QuizView: View {
     }
     if quiz.isRankedRound {
       parameters[ParameterKey.score.rawValue] = "\(quiz.firstRoundScore)"
+    }
+    if let streak = quiz.dailyStreakStatus {
+      parameters[ParameterKey.streak.rawValue] = AnalyticsBand.streak(streak.length)
     }
     Current.analytics.signal(name: .completeQuiz, parameters: parameters)
     // The sheet shows the results in place of the question; the tab pushes them.
@@ -1367,10 +1400,16 @@ struct QuizView: View {
     }
   }
 
-  /// Another Round, from a Speed Round's results: a fresh minute, typed into at once.
-  private func anotherSpeedRound() {
+  /// Another Round, from a Speed Round's results, a fresh minute, or Another Session, from a daily
+  /// session's while a repair waits for its second.
+  private func anotherRound() {
+    startFromResults(scope: quiz.scope.isDaily ? .daily() : .speedRound())
+  }
+
+  /// A new session from the results, typed into at once.
+  private func startFromResults(scope: QuizScope) {
     showingResults = false
-    startQuiz(scope: .speedRound())
+    startQuiz(scope: scope)
     // The tab pops its results, and a field focused before the pop ends never takes the keyboard.
     fieldFocused = false
     Task { @MainActor in

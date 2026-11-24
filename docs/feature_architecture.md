@@ -109,6 +109,7 @@ a model's key names the model.
 | `browse` | Yes | A row of the verb list with the search field empty |
 | `control` | Yes | The Random Verb control in Control Center (`OpenRandomVerbControlIntent`); for `finishSearch`, the Find a Verb control (`OpenVerbSearchIntent`) |
 | `custom` | Yes | The quiz signals: a custom quiz begun from the Quiz tab's Custom segment |
+| `daily` | Yes | The quiz signals: the Daily Session, from the first row of the Quiz tab's From Your Practice section, or from its results' Another Session |
 | `deeplink` | Yes | A `conjugar://` link with no recognized `source` query item; for `finishSearch`, a `search` link; for the quiz signals, a `quiz` link, which the Quick Quiz control, the Start a Quiz shortcut, and the Live Activity send; for `viewCollection`, a `list` link that names no source |
 | `infoLink` | No | Reserved for a link from an Info article to a verb |
 | `list` | Yes | A verb opened from a featured collection's page (a verb opened from a model's page stays `model`); for the quiz signals, a collection's quiz |
@@ -124,6 +125,7 @@ a model's key names the model.
 | `recent` | Yes | A recent verb, listed while the search field is focused and empty |
 | `recognition` | Yes | The quiz signals: Name the Form, from the Quiz tab's Exercises section |
 | `related` | Yes | A chip on a verb page's Related Verbs card, or a row of the full list it opens |
+| `reminder` | Yes | The quiz signals: a daily session started by tapping the daily reminder, whose link is `conjugar://quiz/daily?source=reminder` |
 | `resume` | Yes | A page that came back after another tab, a pushed page, or the background |
 | `review` | Yes | The quiz signals: Review, from the Quiz tab's From Your Practice section |
 | `reviewCard` | Yes | The review card above the verb list, tapped after its reveal |
@@ -412,7 +414,8 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
   hand the app nothing but a URL. A missing or unknown value counts as `deeplink`.
 - **Builders, not literals.** App code builds links with `URL.verbDeeplink(_:source:match:)`,
   `URL.searchDeeplink(text:source:)`, `URL.infoDeeplink(stableKey:)`, and
-  `URL.listDeeplink(key:source:)` (`Utils/URLExtension.swift`), which percent-encode. Only the
+  `URL.listDeeplink(key:source:)`, and `URL.dailySessionDeeplink(source:)`
+  (`Utils/URLExtension.swift`), which percent-encode. Only the
   widget extension (`WidgetDeeplink`) and `Shared/`'s intents, which cannot see `AnalyticsSource`,
   write literals; each intent keeps its literal in a `pendingDeeplink` constant, and
   `AppRouterTests` pins it to the routes and the vocabulary.
@@ -422,8 +425,9 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
 | `verb` | An infinitive, bare or with "se" (`arrepentirse` opens arrepentir), or `random` (drawn by `VerbDraw`; see [The Verb of the Day and Random Verbs](#the-verb-of-the-day-and-random-verbs)) | `source`; `match`, a form the page marks as it marks a search's match (`verb/ir?match=fue`) | The Verbs tab's verb page, scrolled to the first marked card |
 | `search` | None | `q`, the text; `source` | The Verbs tab's list with its search field. With text, the results show with the keyboard down; with none, or `q` empty, the field is cleared and focused for typing |
 | `info` | A `stableKey`, or a position in `Info.infos` | None | The Info tab, with the article pushed |
-| `quiz` | Any but `set`, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals |
+| `quiz` | Any but `set` and `daily`, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals |
 | `quiz` | `set` | A custom quiz's stored form (`tenses`, and `verbs` or `infinitives`); `level`, while a part is left to it; `source`, `sharedLink` or `qrCode` | A practice set in a sheet over whatever tab is open, with Start (see [Practice sets](#practice-sets)). A link that names nothing this version knows shows "Practice Set Not Found" |
+| `quiz` | `daily` | `source`; the reminder sends `reminder` | The Quiz tab, starting a daily session unless a quiz is under way. Results on screen give way to it (see [Daily Session and Streak](#daily-session-and-streak)) |
 | `game` | None, `boss`, or `end` | None | The game, full screen over any tab (see `docs/game.md`) |
 | `list` | A collection's key (`top100`, `goVerbs`, `model-31`, `model-4B`; see [Collections](#collections)) | `source`; a shared collection sends `sharedLink` | The Models tab, with the collection's page pushed, or for a model the model's page. An unknown key, or an alias class's (`model-31-1`), is ignored |
 
@@ -1490,6 +1494,69 @@ and time are labeled, and the row and Another Round have hints.
 **Fixture.** The DEBUG fixture `CONJUGAR_QUIZ_FIXTURE speedRound` treats seven items
 (`Quiz.speedRoundFixtureItems`) as mastered whatever the record, so the row opens and a round can be
 tried without days of practice; the questions are drawn as usual, and nothing else changes.
+
+### Daily Session and Streak
+
+**What it is** (`Models/DailySession.swift`, `QuizScope.daily(source:)`). Ten questions at the
+learner's level, the first row of the Quiz tab's From Your Practice, with a calendar, or a flame once
+there is a streak. Finishing one a day builds a streak. The name is Daily Session / Sesión diaria.
+
+**What it asks.** The due items that the level asks and the band holds, most overdue first, up to
+all ten (`Quiz.draw`, through `QuizDraw.dueQuestions` with the round's length as its limit), then
+the default quiz's balanced draw for the rest, the due questions placed among them at random. A due
+item the level does not ask (a yo pretérito at Beginner) or whose verb is beyond the band waits for
+Review, as in the default quiz. No choice question, since a choice moves nothing in the record.
+`QuizScope.isDaily` turns off ranking and Ten More; the session starts the Live Activity and is
+shuffled like the default quiz. A second session on a day is a session of its own; on an ordinary
+day it changes nothing, and after a missed day it is the repair.
+
+**The streak** (`Models/DailyStreak.swift`), kept by `PracticeStore.dailyStreak` in the App Group
+under `dailyStreak`, as JSON of finished sessions by calendar day (`{"sessions":{"2026-11-24":1}}`).
+Its length is the days practiced: a day after the last continues it; a missed day can be bridged by
+two sessions the day after, and the bridged day does not count. One session on that day starts a
+run of its own and shows as a repair in progress (`Status.repairable(length:sessionsToday:)`); if
+the day ends there, the old streak is gone. Only the last two runs are kept. Days are the
+calendar's, so a 25-hour day is one. `Quiz.finish()` records the session (`recordDailySession(at:)`,
+by the quiz's injectable `now`), and a quit records nothing. Reset Practice forgets the streak, as
+its description and alert say.
+
+**The hub and the results.** The row's line follows the status (`Status.hubDetail`): what the
+session is, "Streak: 3 days. Today's session keeps it going." or "… Done for today.", and the two
+repair lines. The results show the streak under the score (`Status.resultsLine`), and while a repair
+waits for its second session they offer Another Session in Ten More's place. The last result's kind
+is `daily`, with its level. The widgets do not show the streak.
+
+**The reminder** (`Models/DailyReminder.swift`, the `ReminderScheduler` protocol with
+`ReminderSchedulerReal` and `ReminderSchedulerSpy`). Settings' quiz card, after Quiz Clock: Daily
+Reminder, Off or On (`Settings.dailyReminder`), and a time while on (`dailyReminderMinutes`, 18:00 by
+default). Permission is asked only on turning it on; refused, the setting stays Off with a red line
+and Open Settings, which also show while On if notifications were later turned off in the Settings
+app. `DailyReminderPlan` schedules one notification per day for 14 days rather than one that
+repeats, so that each can say what that day will have due (the record's due items that the
+settings can ask) or that the streak needs repair, and so that a day whose session is done gets
+none; a learner away for two weeks stops being reminded. `DailyReminderPlan.reschedule` runs when
+the setting or the time changes, a daily session finishes, practice is reset, and the app becomes
+active or goes to the background (`MainTabView`). A tapped reminder carries
+`conjugar://quiz/daily?source=reminder`, which `ReminderNotificationDelegate` (set by `AppDelegate`)
+hands to `AppRouter`; `QuizView` starts the session unless a quiz is under way. A reminder due while
+the app is open shows nothing.
+
+**Analytics.** The quiz signals carry `source` `daily` or `reminder`. A daily session's
+`completeQuiz` carries `streak`, the length in bands (`AnalyticsBand.streak`: `1`, `2-6`, `7-29`,
+`30+`), the streak at stake while a repair waits; it sends `questionCount`, always ten, and no score.
+`tapDailyReminder` carries `enabled`: `true`, `false`, or `denied` for a learner who turned it on
+and refused permission.
+
+**VoiceOver.** The row reads its title and line, with a hint. At the end of a session, the streak
+line is announced, and Another Session has a hint.
+
+**Trying it on a simulator.** There is no fixture. Seed the streak by the App Group plist's path,
+since `defaults` does not find the group by name in a simulator and `cfprefsd` caches the plist:
+`G=$(xcrun simctl get_app_container <udid> biz.joshadams.Conjugar groups | awk '{print $2}')`, then
+`xcrun simctl spawn <udid> defaults write $G/Library/Preferences/group.biz.joshadams.Conjugar
+dailyStreak -string '{"sessions":{"2026-11-22":1,"2026-11-23":1}}'`. The reminder's time is in the
+app's own plist (`get_app_container … data`, key `dailyReminderMinutes`, minutes as a string);
+set it a few minutes ahead, launch, and go to the Home Screen to see it fire.
 
 ## The Verb of the Day and Random Verbs
 

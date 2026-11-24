@@ -75,6 +75,20 @@ final class Settings {
   static let quizClockKey = "quizClock"
   static let quizClockDefault: QuizClock = .hide
 
+  /// Whether a notification reminds the learner each day to finish a daily session.
+  var dailyReminder: DailyReminder {
+    didSet { Settings.persist(getterSetter, Settings.dailyReminderKey, dailyReminder, oldValue) }
+  }
+  static let dailyReminderKey = "dailyReminder"
+  static let dailyReminderDefault: DailyReminder = .off
+
+  /// When the daily reminder comes, in minutes after midnight.
+  var dailyReminderMinutes: Int {
+    didSet { Settings.persist(getterSetter, Settings.dailyReminderMinutesKey, dailyReminderMinutes, oldValue) }
+  }
+  static let dailyReminderMinutesKey = "dailyReminderMinutes"
+  static let dailyReminderMinutesDefault = DailyReminderPlan.defaultMinutes
+
   /// The Quiz tab's Custom segment's choice, kept between launches but not shown in Settings.
   var customQuiz: CustomQuiz {
     didSet { Settings.persist(getterSetter, Settings.customQuizKey, customQuiz, oldValue) }
@@ -153,6 +167,8 @@ final class Settings {
     secondSingularQuiz = Settings.read(getterSetter, Settings.secondSingularQuizKey, default: Settings.secondSingularQuizDefault)
     quizClock = Settings.read(getterSetter, Settings.quizClockKey, default: Settings.quizClockDefault)
     customQuiz = Settings.read(getterSetter, Settings.customQuizKey, default: Settings.customQuizDefault)
+    dailyReminder = Settings.read(getterSetter, Settings.dailyReminderKey, default: Settings.dailyReminderDefault)
+    dailyReminderMinutes = Settings.read(getterSetter, Settings.dailyReminderMinutesKey, default: Settings.dailyReminderMinutesDefault)
     promptActionCount = Settings.read(getterSetter, Settings.promptActionCountKey, default: Settings.promptActionCountDefault)
     lastReviewPromptDate = Settings.read(getterSetter, Settings.lastReviewPromptDateKey, default: Settings.lastReviewPromptDateDefault)
     userRejectedGameCenter = Settings.read(getterSetter, Settings.userRejectedGameCenterKey, default: Settings.userRejectedGameCenterDefault)

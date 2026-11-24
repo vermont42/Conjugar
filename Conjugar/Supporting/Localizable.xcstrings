@@ -1335,6 +1335,490 @@
         }
       }
     },
+    "DailyReminder.body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your daily session is ready: ten questions in two or three minutes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu sesión diaria te espera: diez preguntas en dos o tres minutos."
+          }
+        }
+      }
+    },
+    "DailyReminder.bodyDue %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your daily session is ready, with 1 conjugation due for review."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Your daily session is ready, with %lld conjugations due for review."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Tu sesión diaria te espera, con 1 conjugación para repasar."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Tu sesión diaria te espera, con %lld conjugaciones para repasar."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "DailyReminder.denied" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications from Conjugar are off, so the reminder cannot appear. You can allow them in the Settings app."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las notificaciones de Conjugar están desactivadas, así que el recordatorio no puede aparecer. Puedes permitirlas en la app Ajustes."
+          }
+        }
+      }
+    },
+    "DailyReminder.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This setting determines whether Conjugar reminds you each day, at the time you choose, to finish your daily session. The reminder says how many conjugations are due for review, and it does not come on a day whose session you have finished."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este ajuste determina si Conjugar te recuerda cada día, a la hora que elijas, que termines tu sesión diaria. El recordatorio dice cuántas conjugaciones te toca repasar, y no llega el día en que ya terminaste la sesión."
+          }
+        }
+      }
+    },
+    "DailyReminder.heading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Reminder"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recordatorio diario"
+          }
+        }
+      }
+    },
+    "DailyReminder.off" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        }
+      }
+    },
+    "DailyReminder.on" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sí"
+          }
+        }
+      }
+    },
+    "DailyReminder.openSettings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir Ajustes"
+          }
+        }
+      }
+    },
+    "DailyReminder.time" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hora"
+          }
+        }
+      }
+    },
+    "DailyReminder.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time to Practice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hora de practicar"
+          }
+        }
+      }
+    },
+    "DailySession.another" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Another Session"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otra sesión"
+          }
+        }
+      }
+    },
+    "DailySession.anotherHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts another daily session, which keeps your streak."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza otra sesión diaria, que mantiene tu racha."
+          }
+        }
+      }
+    },
+    "DailySession.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten questions, starting with what is due for review. Finish one a day to build a streak."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diez preguntas, empezando por lo que te toca repasar. Termina una cada día para formar una racha."
+          }
+        }
+      }
+    },
+    "DailySession.repairOne %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "One more session today keeps your 1‑day streak."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "One more session today keeps your %lld‑day streak."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Una sesión más hoy mantiene tu racha de 1 día."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Una sesión más hoy mantiene tu racha de %lld días."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "DailySession.repairTwo %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "You missed yesterday. Two sessions today keep your 1‑day streak."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "You missed yesterday. Two sessions today keep your %lld‑day streak."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ayer no practicaste. Dos sesiones hoy mantienen tu racha de 1 día."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Ayer no practicaste. Dos sesiones hoy mantienen tu racha de %lld días."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "DailySession.startHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts ten questions, beginning with what is due for review."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza diez preguntas, comenzando por lo que te toca repasar."
+          }
+        }
+      }
+    },
+    "DailySession.streak %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Streak: 1 day"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Streak: %lld days"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Racha: 1 día"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Racha: %lld días"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "DailySession.streakDoneToday %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Streak: 1 day. Done for today."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Streak: %lld days. Done for today."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Racha: 1 día. Ya practicaste hoy."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Racha: %lld días. Ya practicaste hoy."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "DailySession.streakKeepGoing %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Streak: 1 day. Today's session keeps it going."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Streak: %lld days. Today's session keeps it going."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Racha: 1 día. La sesión de hoy la mantiene."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Racha: %lld días. La sesión de hoy la mantiene."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "DailySession.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Session"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sesión diaria"
+          }
+        }
+      }
+    },
     "QuizLevel.beginner" : {
       "localizations" : {
         "en" : {
@@ -7578,13 +8062,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This button erases what the quiz and the review card remember of your practice: which conjugations are due again, which you missed last, your last quiz's results, and your Speed Round best. The record stays on this device and is never sent."
+            "value" : "This button erases what the quiz and the review card remember of your practice: which conjugations are due again, which you missed last, your last quiz's results, your Speed Round best, and your daily streak. The record stays on this device and is never sent."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Este botón borra lo que el test y la tarjeta de repaso recuerdan de tu práctica: qué conjugaciones te toca repasar, cuáles fallaste la última vez, los resultados de tu último test y tu récord en la Ronda rápida. El registro se queda en este dispositivo y nunca se envía."
+            "value" : "Este botón borra lo que el test y la tarjeta de repaso recuerdan de tu práctica: qué conjugaciones te toca repasar, cuáles fallaste la última vez, los resultados de tu último test, tu récord en la Ronda rápida y tu racha diaria. El registro se queda en este dispositivo y nunca se envía."
           }
         }
       }
@@ -7642,13 +8126,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The quiz will forget which conjugations you have practiced, your last quiz's results, and your Speed Round best, and the review card will offer nothing until you look a verb up again."
+            "value" : "The quiz will forget which conjugations you have practiced, your last quiz's results, your Speed Round best, and your daily streak, and the review card will offer nothing until you look a verb up again."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El test olvidará qué conjugaciones has practicado, los resultados de tu último test y tu récord en la Ronda rápida, y la tarjeta de repaso no te ofrecerá nada hasta que vuelvas a consultar un verbo."
+            "value" : "El test olvidará qué conjugaciones has practicado, los resultados de tu último test, tu récord en la Ronda rápida y tu racha diaria, y la tarjeta de repaso no te ofrecerá nada hasta que vuelvas a consultar un verbo."
           }
         }
       }

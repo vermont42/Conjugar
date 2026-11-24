@@ -132,9 +132,12 @@ Conjugar/
 │   ├── PracticeItemMapping.swift  # Which practice item a question exercises (an irregular cell's key conjugation, a regular cell's pattern), the key
 │   │                           #   conjugations a lookup schedules, the irregular cells a review asks, the record's tense keys
 │   ├── PracticeStore.swift     # Current.practice: the practice record's answers, lookups, due and missed items, the review card's offer, reveal,
-│   │                           #   and snooze, the last quiz's results, the Speed Round's best, Reset Practice, and the migration of LearnerVerbs' old review schedules
+│   │                           #   and snooze, the last quiz's results, the Speed Round's best, the daily streak, Reset Practice, and the migration of LearnerVerbs' old review schedules
 │   ├── SpeedRound.swift        # The Speed Round: its constants, the mastered items it may ask, QuizScope.speedRound, and QuizDraw.speedRoundQuestions
 │   │                           #   (each item in turn, never twice running) with speedRoundCells (the irregular cells a mastered key conjugation asks)
+│   ├── DailySession.swift      # The daily session: QuizScope.daily, the streak's bands, and what the hub's row and the results say
+│   ├── DailyStreak.swift       # The daily session's streak: finished sessions by calendar day, its status, and the repair of one missed day
+│   ├── DailyReminder.swift     # The Daily Reminder setting, DailyReminderPlan (14 days of worded reminders), and its rescheduling
 │   ├── VerbEssentials.swift    # Verb Essentials: QuizScope.verbEssentials, five irregular verbs of the band (one prefixed compound at most) asked their
 │   │                           #   key conjugations as one step each; Quiz.essentialsRows, currentStepRange, and reaskPlacement (a missed blank after the next verb)
 │   ├── ModelPractice.swift     # Verb Models: ModelPracticeGroup (a model's ten most frequent verbs with an irregular key conjugation, its items, known at half
@@ -226,6 +229,10 @@ Conjugar/
 │   ├── LiveActivities.swift    # Protocol: start / update / end the quiz Live Activity, driven from Quiz.swift via Current
 │   ├── LiveActivitiesReal.swift  # The ActivityKit conformer (device and the simulator World)
 │   ├── LiveActivitiesSpy.swift   # Counts starts, updates, and ends under unit and UI tests
+│   ├── ReminderScheduler.swift      # Protocol: ask notification permission and schedule the daily reminders
+│   ├── ReminderSchedulerReal.swift  # The UserNotifications conformer, each reminder carrying conjugar://quiz/daily?source=reminder
+│   ├── ReminderSchedulerSpy.swift   # Records the reminders scheduled, and grants or refuses permission, under unit and UI tests
+│   ├── ReminderNotificationDelegate.swift  # Opens a tapped reminder's link through AppRouter; shows nothing while the app is open
 │   ├── Modifiers.swift         # The design system: card(), metadataPill(), linguistic(), numeric(), speakOnTapFlash(),
 │   │                           #   copyOnLongPress() (a Copy context menu and VoiceOver action), PrimaryButtonStyle
 │   ├── QRCode.swift            # A QR code made on the device with Core Image, black on white, for a practice set
@@ -413,6 +420,8 @@ ConjugarTests/
 │   │                                   #   none at Beginner or elsewhere, a held right or wrong choice, nothing recorded, out of 100, Ten More)
 │   ├── SpeedRoundTests.swift           # The Speed Round: the mastered items, the draw (in turn, never twice running, a pattern's regular verbs, a key
 │   │                                   #   conjugation's cells by level), the scope, the best, and rounds (a miss moving on, nothing recorded, batches, sixty ticks)
+│   ├── DailySessionTests.swift         # The streak under a fixed calendar (repair, a 25-hour day, pruning, bands), the session's draw and
+│   │                                   #   flags, quizzes finished on chosen days, the reminder plan and rescheduling, the setting, the link
 │   ├── AnswerDiagnosisTests.swift      # Each diagnosis for real verbs, the answers that get none, the lines in English, and a diagnosed error's second attempt in a quiz
 │   ├── AnswerDifferenceTests.swift     # The letters a correction marks (accents, red letters, missing, extra, swapped) and the right answer it shows
 │   ├── AnswerFrameTests.swift          # Each kind of question's frame, and the answer a filled blank gives (supplied no, reflexive pronoun, typed pronoun)

@@ -42,6 +42,9 @@ final class AppRouter {
   /// A one-shot request for the Quiz tab to start a quiz, with the link's `source` (`deeplink` when
   /// it names none), which the quiz signals carry. `QuizView` consumes it.
   var pendingQuizStart: AnalyticsSource?
+  /// A one-shot request for the Quiz tab to start a daily session, from a `quiz/daily` link, which
+  /// a tapped reminder opens, with the link's `source`. `QuizView` consumes it.
+  var pendingDailySession: AnalyticsSource?
   /// A practice set from a `quiz/set` link, which `MainTabView` shows in a sheet over whatever tab
   /// is open. Any other link replaces it with nil, so that what the link opens is not hidden.
   var pendingPracticeSet: PracticeSetRequest?
@@ -96,7 +99,8 @@ final class AppRouter {
   /// and every route: `verb/<infinitive>` (bare or with "se", so `verb/arrepentirse` opens
   /// arrepentir, or `verb/random`), with `match`, a form the page marks; `search`, with its text
   /// in `q`; `info/<stableKey>` (or a position); `list/<key>`, a collection; `quiz` (any target
-  /// starts a quiz, except `quiz/set`, a practice set); and `game`.
+  /// starts a quiz, except `quiz/set`, a practice set, and `quiz/daily`, a daily session); and
+  /// `game`.
   /// A link to a verb page, a search, or a quiz may name the surface it came from in `source`
   /// (`?source=widget`); a link that names none reports `deeplink`. Unknown routes, unknown
   /// verbs, and unknown collections are ignored.
@@ -134,9 +138,13 @@ final class AppRouter {
       selectedTab = .models
       pendingCollection = CollectionRequest(collection: collection, source: source)
     case URL.quizHost:
-      // Any other target, `quiz/start` as the Quick Quiz control sends it, or none, starts a quiz.
       selectedTab = .quiz
-      pendingQuizStart = source
+      if url.deeplinkTarget == URL.dailySessionTarget {
+        pendingDailySession = source
+      } else {
+        // Any other target, `quiz/start` as the Quick Quiz control sends it, or none, starts a quiz.
+        pendingQuizStart = source
+      }
     case URL.gameHost:
       // `conjugar://game/boss` is the boss fight's debug entry and
       // `conjugar://game/end` jumps straight to its end scene (same host, one

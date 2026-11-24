@@ -11968,3 +11968,39 @@ alone. While I worked, another project's build drove the Mac's load average to 8
 and screenshots hung, and the iPhone simulator stuck in Shutting Down. On the iPad, in Spanish and
 then dark mode, a round ran to its results with "¡Nuevo récord personal!", Otra ronda took typing at
 once, and with the fixture removed the row explained how many items it still wanted.
+
+## A Daily Session and a Streak (2026-11-24)
+
+Phase 21 of the pedagogy plan gave the Quiz tab a Daily Session, Sesión diaria in Spanish: ten
+questions at the learner's level, filled first with whatever the practice record has due. Finishing
+one a day builds a streak, and an optional reminder at a time the learner picks says the session is
+waiting. The research behind it is modest about notifications. Only about a third of education-app
+users allow them, so the session and the streak had to stand on their own, and the reminder is off
+until the learner turns it on, which is the only moment the app asks for permission.
+
+Konjugieren built all of this nine days earlier, and almost every decision carried over. A missed
+day can be repaired by two sessions the next day, because a broken streak tends to end the habit
+unless it can be mended, and the repaired streak counts the days practiced, not the day bridged. The
+streak's arithmetic came across nearly line for line. It counts calendar days rather than spans of
+24 hours, and a test pins that by finishing sessions on either side of Madrid's 25-hour day at the
+end of summer time.
+
+The reminder is not one repeating notification but fourteen separate ones, one per day. That lets
+each say what that day will have due, or that the streak needs repairing, and lets a day whose
+session is already done get none. It also means a learner who stays away for two weeks stops being
+nagged. Every finish, reset, change of time, and trip to the background reschedules them.
+
+The porting was mostly plumbing. Conjugar keeps its analytics in the view rather than the model,
+and its stored values as strings, so the streak became JSON and the reschedule became a function
+that takes its scheduler, settings, and record, which let a test quiz reschedule through a spy. The
+reminder's link, `conjugar://quiz/daily?source=reminder`, is the second exception to the old rule
+that any quiz link starts the quiz over every verb.
+
+On the iPhone the reminder fired at the minute I set, titled "Time to Practice". The simulator
+would not let AXe open it from the Lock Screen, so the tap itself waits for Josh's phone; the link
+it carries, opened by hand, started a session with the keyboard ready. A seeded streak showed the
+repair from both sides: "One more session today keeps your 2-day streak." and then, after Another
+Session, "Streak: 3 days". The iPhone also showed "2-" stranded at the end of a line, so the English
+strings now use a non-breaking hyphen. On the iPad, in Spanish and dark mode, the session read
+"Racha: 1 día". I meant to refuse notifications there and tapped Permitir instead, so the refused
+state is still untried. The full suite ran 1,301 tests, 26 of them new.
