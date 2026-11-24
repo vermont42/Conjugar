@@ -143,6 +143,8 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   /// A link on the correction a quiz holds after a wrong answer: to the verb's page or its model's.
   case quizCorrection
   case recent
+  /// The Quiz tab's Name the Form, which shows a form and asks for its infinitive, tense, and person.
+  case recognition
   case related
   /// The page came back after another tab, a pushed page, or the background. See `VerbVisit`.
   case resume

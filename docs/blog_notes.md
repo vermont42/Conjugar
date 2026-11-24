@@ -11736,3 +11736,45 @@ backed up first and restored afterward. This time the restore copied the file ba
 `cfprefsd` with the app terminated, which avoided the merge problem the last entry described for
 `defaults import`; a read afterward confirmed the last result was gone. The full suite passed 1,192
 tests in 76 suites.
+
+## Name the Form: Reading a Verb Backward (2026-11-23)
+
+Every exercise so far ran in one direction: here is a verb and a cell, write the form. A reader
+needs the other direction. An American learner meets *fuera* on a page and has to work out that it
+is ser or ir, in the -ra imperfect subjunctive, for yo or él. Konjugieren's research had rated this
+direction highest for Conjugar, whose learners mostly read Spanish, so Phase 16 of the pedagogy
+plan built it as an exercise of its own on the Quiz hub. Josh named it Name the Form, Identifica la
+forma in Spanish. The Konjugieren name, "Name the Conjugation", would have translated badly, since
+*conjugación* in Spanish usually means a verb class.
+
+The interesting problem was ambiguity, and Spanish has more of it than German. Hablamos is both the
+presente and the pretérito. Hable is the subjunctive for yo and for él, and also usted's command.
+Sé is saber's yo and ser's tú command. Ve belongs to three cells of two verbs. Konjugieren settled
+the policy and it carried over: every right reading is accepted, and no prompt is avoided, because
+deciding what a form can be is the skill. Each question therefore holds every cell of every verb
+that writes its prompt. The bundled conjugation map nominates the verbs by each word of the prompt
+(hablado for "ha hablado", hagas for "no hagas"), and the engine confirms each cell exactly, since
+habló and hablo are different questions. Only cells the learner can choose count, so at Beginner,
+where the subjunctive is not offered, hable is only a command.
+
+Grading by part came straight from Konjugieren. An answer with the infinitive, the tense, or the
+person right earns one more try at half points, and the line names what to check. The rule that
+makes the line trustworthy is that a part is called wrong only when changing it could make the
+answer right. Ir · presente · él for ve gets "Check the tense and the person", not "Check the
+infinitive", because ver's presente cannot rescue an answer that names ir.
+
+Josh made one layout decision that Konjugieren never faced. Advanced asks 21 tenses with names like
+"pluscuamperfecto de subjuntivo 1", and a flat row of such chips would bury the answer field. He
+chose to group the chips under mood headings (Indicativo, Subjuntivo, Imperativo) so that each
+chip can say just "presente" or "imperfecto 1". VoiceOver still reads each chip's full name. Even
+grouped, the chips are tall on an iPhone. In the simulator, picking a person pushed the field and
+the Check button under the floating accent keys, so a choice now scrolls Check back into sight.
+
+While checking the correction, Josh noticed that the struck-through red letters on their pink
+highlight were hard to read in light mode. That highlight belongs to every quiz correction, not
+only this one. It is now a much paler tint on white and unchanged on black, where it already read
+well.
+
+Recognition answers are not written to the practice record, since recognizing fuera is no
+evidence that the learner could produce it. A typo in a test briefly claimed that ser's command sé
+was usted's; the engine was right. The full suite passed 1,216 tests in 77 suites.

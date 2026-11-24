@@ -41,8 +41,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 12 | Done | 2026-11-23 | b59f1fa | T6.1, T6.6 (the leaderboard's place) |
 | 13 | Done | 2026-11-23 | abb865e | T4.2, T4.3 |
 | 14 | Done | 2026-11-23 | 60f37e9 | T5.1 |
-| 15 | Awaiting Josh | 2026-11-23 | | T5.2 |
-| 16 | Not started | | | T5.4 |
+| 15 | Done | 2026-11-23 | 5da7c25 | T5.2 |
+| 16 | Awaiting Josh | 2026-11-23 | | T5.4 |
 | 17 | Not started | | | T5.5 |
 | 18 | Not started | | | T5.6 |
 | 19 | Not started | | | T6.2 |
@@ -2304,7 +2304,7 @@ verb, a strong preterite, an irregular future, an irregular participle, and a pr
 ## Phase 15: Models, One Then Mixed
 
 **Ports:** Konjugieren Phase 16. **Suggestions:** T5.2. **Depends on:** Phases 10 and 14.
-**Status:** Awaiting Josh.
+**Status:** Done.
 
 Work through one model's verbs, then mix them with models already practiced. Konjugieren did this
 with ablaut groups; Conjugar's models (the Models tab, the browse plan's Phase 16 bars) are the
@@ -2404,7 +2404,7 @@ models count as known and how the mix is drawn.
 ## Phase 16: Recognition
 
 **Ports:** Konjugieren Phase 17. **Suggestions:** T5.4. **Depends on:** Phase 2 and the browse
-plan's map. **Status:** Not started.
+plan's map. **Status:** Awaiting Josh.
 
 Show a form, such as fuera, and ask for the infinitive, the tense, and the person. This is the
 direction a reader needs, and Konjugieren's report rated it highest for Conjugar, whose American
@@ -2435,7 +2435,92 @@ a second attempt's line into sight.
 **Done when** recognition questions ask, accept every right reading, and grade by part, with tests
 on ambiguous forms.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Josh decided two things on 2026-11-23**, asked before building, each the recommended option.
+  (1) The name is **"Name the Form" / "Identifica la forma"** (over "Name the Conjugation" /
+  "Identifica la conjugación", since *conjugación* in Spanish usually means a verb class, and over
+  "Recognize the Verb" / "Reconoce el verbo"). (2) Advanced asks 21 tenses, most with long names,
+  so the tense chips are **grouped under their moods' headings** (Indicativo, Subjuntivo,
+  Imperativo, then the gerundio alone) with short names (presente, imperfecto 1, positivo), over
+  Konjugieren's flat chips of full names and over a three-step mood, tense, and person choice.
+  Konjugieren's other decisions carried over unasked: a mode of its own on the hub (an Exercises
+  row after Verb Models), tense then person as chips above the field, one more try at half points
+  for an answer with any part right, and **answers not recorded in the practice record**.
+- **Ambiguity: every reading is right, no prompt avoided**, as in Konjugieren
+  (`RecognitionQuestion.cells`, `Models/Recognition.swift`). fuera is ser's and ir's Imperfecto de
+  Subjuntivo 1 for yo and él; hablamos the presente and the pretérito; hable the presente de
+  subjuntivo of yo and él and usted's command; sé saber's yo and ser's tú command; ve ver's él and
+  ir's and ver's tú command. Only cells the learner can choose count: the level's tenses, and the
+  persons a quiz asks in each, in the learner's tú or vos and region (so hable at Beginner is only
+  usted's command). The verbs to try come from the bundled map by each word of the prompt
+  (hablado for "ha hablado", hagas for "no hagas", arrepiento for "me arrepiento"), and
+  `ConjugationMatch` confirms each cell exactly, since hablo and habló are different questions. The
+  Quiz tab touches `ConjugationMap.bundled` from a background task as it appears.
+- **The grade**, Konjugieren's: judged against the typed verb's cells when its infinitive is right,
+  else against every cell, and a part is called wrong only when changing it can make the answer
+  right (ir · Presente (él) for ve is "Check the tense and the person.", since ver's presente does
+  not rescue ir). The gerundio has no person to judge. The infinitive is right case and spacing
+  aside, a reflexive-only verb with or without its se, accents counted (reir is not reír, and earns
+  "Check the infinitive."). The six lines ("Check the infinitive." to "Check the tense and the
+  person." / "Revisa el infinitivo." to "Revisa el tiempo y la persona."), each followed by "Try
+  once more.", **have not been seen by Josh**.
+- **The draw** is the default quiz's (ten cells of the level's tenses and band, persons rotated, no
+  due items), and a prompt the session has shown is drawn again, so that two cells that write the
+  same form (hablamos) do not both appear. The prompt is the engine's form with its irregular
+  letters red, a reflexive-only verb's pronoun included; the verb, its gloss, and the tense line
+  are not shown. Never ranked, Ten More, the Live Activity, and the level tip as after a default
+  round. The last result's kind is `recognition`, with its level.
+- **How it is built.** `QuizQuestion.recognition` holds the `RecognitionQuestion`, so re-asks,
+  results, and the Live Activity work unchanged; its frame is a lone blank. `Quiz.processRecognition`
+  mirrors `process(proposedAnswer:)` without the practice record, with `firstAttemptRecognition`
+  beside Phase 13's `firstAttemptDiagnosis`; `proposedAnswers` keeps the summary ("ser · Pretérito
+  (yo)") and `correctAnswers` the prompt. `QuizCorrection` gained `recognitionAnswer` and
+  `recognitionGrade`; the correction shows the answer with its wrong parts struck through, then
+  every right reading, one line per verb in search's row style ("hablar · Presente de Subjuntivo
+  (yo, él) · Imperativo Positivo (usted)"), and links to every verb the prompt is (ser and ir for
+  fuera). `AnswerFrameView` gained `placeholder` and `hint`. A Check button below the field, enabled
+  once the answer is whole; Return checks too, and with a part missing announces what to do.
+- **Found by looking.** On the iPhone at Advanced, choosing a person pushed the field and Check
+  under the floating letter row, so a choice of tense or person now scrolls Check into sight, and a
+  second attempt's line scrolls into sight as Konjugieren's did. **Josh's note during the check:
+  the red letters on the pink highlight were hard to read in light mode.** That highlight is the
+  correction's wrong-letter tint, shared with every quiz's correction, so it is now 12% red in light
+  mode and stays 35% in dark, where it read well (`QuizCorrectionView.wrongBackground`).
+- **Not built.** No step from a recognition correction into Verb Essentials or the verb's table
+  beyond the existing links; the participio is not asked, since no level's pool asks it.
+- **Analytics.** A new `source` value, `recognition`; `completeQuiz` keeps `questionCount`. Staged
+  in `docs/privacy_policy_pending.md` in both languages (the lifecycle bullet and section 7's first
+  paragraph); `LookupSignalsTests` pins the value. The README gained a clause.
+- **VoiceOver.** The card speaks its prompt in Spanish, with "Name this form" as its hint. Each
+  chip is a button with the selected trait that reads its tense's whole name ("presente de
+  subjuntivo"), under a header per mood. The field reads "Infinitive" with its own hint. The
+  correction reads "Incorrect. Your Answer: comer, Gerundio. Correct Answer: ser, Imperfecto de
+  Subjuntivo 1, yo, él; ir, Imperfecto de Subjuntivo 1, yo, él. This question will come up again."
+  Read from the accessibility tree; nobody has listened to it.
+- **A fixture**, `CONJUGAR_QUIZ_FIXTURE recognition`, standing in for Name the Form only: fuera,
+  hablamos, hable, habló, fui, sé, ha hecho, no hagas, me arrepiento, diciendo, at Advanced's tenses,
+  each with a wrong answer worth trying in its comment (`Quiz.recognitionFixtureCells`).
+- **Tests:** `RecognitionTests`, 24 tests: the cells of fuera, hablamos, hable, habló and hablo, sé,
+  ve, ha hecho, no hagas, diciendo, and me arrepiento; Beginner's choices narrowing hable; the
+  choices' moods and persons; every right reading graded right; a reflexive-only verb with and
+  without se; the parts ten answers get wrong; the typed verb judging the other parts; the six
+  lines; the correction's lines; summaries and chip labels; every asked tense having a mood; the
+  scope; and in a quiz a Beginner round (ten distinct prompts of the band and tenses), a right
+  answer recording nothing, a second try for half points, a held correction and re-ask, and the
+  last result and Ten More. **The full run passed 1,216 tests in 77 suites**, up from 1,192 in 76,
+  in the simulator's default language (English).
+- **Verified on the iPhone**, in English and light mode with a hardware keyboard and the fixture:
+  the hub's row, fuera with Advanced's grouped chips, ser · pretérito · yo ("Check the tense. Try
+  once more."), repaired with imperfecto 1 for half points, comer · gerundio for hablamos held at
+  once with both readings and links to hablar and its model, the round typed to its results (95,
+  "Correct: 9 / 10 · Asked Again: 1 / 1", each row showing its prompt), and the lighter tint after
+  Josh's note. **On the iPad**, in Spanish and dark mode, at Avanzado with a real draw: the hub's
+  Identifica la forma row, ofuscaras, "Revisa el tiempo. Inténtalo una vez más." after imperfecto
+  2, and the correction after presente de subjuntivo ("Verbos como tocar"). Both simulators' App
+  Group preferences were restored, the fixture default removed, and the iPad returned to light mode
+  and shut down. Not tried: VoiceOver by ear, the software keyboard, accessibility text sizes, the
+  Live Activity, and the hub's Last Quiz row after a round (unit-tested).
 
 ## Phase 17: Sentences with a Blank
 

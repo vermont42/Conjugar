@@ -22,6 +22,10 @@ struct AnswerFrameView: View {
   /// Spanish that VoiceOver reads before the frame, such as the tense of a Verb Essentials row,
   /// which the screen shows above the field rather than in the frame.
   var spokenPrefix: String?
+  /// What the field says while empty, and VoiceOver's name for it in a frame of only a blank.
+  /// Nil says "Conjugation".
+  var placeholder: String?
+  var hint: String?
   let onSubmit: () -> Void
   @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -45,10 +49,11 @@ struct AnswerFrameView: View {
   }
 
   private var field: some View {
-    TextField(text: $text, selection: $selection, prompt: Text(L.Quiz.conjugation).foregroundStyle(.secondary)) {
+    TextField(text: $text, selection: $selection, prompt: Text(placeholder ?? L.Quiz.conjugation).foregroundStyle(.secondary)) {
       Text(verbatim: "")
     }
       .accessibilityLabel(spokenPrompt)
+      .accessibilityHint(Text(verbatim: hint ?? ""))
       .accessibilityIdentifier(identifier)
       .textInputAutocapitalization(.never)
       .autocorrectionDisabled()
@@ -102,7 +107,7 @@ struct AnswerFrameView: View {
         part.map { Text(Self.spanish($0)) } ?? Text(L.Quiz.blank)
       }
     } else {
-      pieces = prefix + [Text(L.Quiz.conjugation)]
+      pieces = prefix + [Text(placeholder ?? L.Quiz.conjugation)]
     }
     return pieces.dropFirst().reduce(pieces[0]) { $0 + Text(verbatim: ", ") + $1 }
   }

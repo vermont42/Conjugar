@@ -955,6 +955,82 @@ nonisolated enum L {
     }
   }
 
+  enum Recognition {
+    static var title: String {
+      String(localized: "Recognition.title")
+    }
+
+    /// The hub row's line under the title, with fuera as the example.
+    static var description: String {
+      String(localized: "Recognition.description")
+    }
+
+    static var startHint: String {
+      String(localized: "Recognition.startHint")
+    }
+
+    /// The heading above the form to name.
+    static var promptHeading: String {
+      String(localized: "Recognition.promptHeading")
+    }
+
+    static var tenseHeading: String {
+      String(localized: "Recognition.tenseHeading")
+    }
+
+    static var personHeading: String {
+      String(localized: "Recognition.personHeading")
+    }
+
+    /// The heading above the field, its placeholder, and what VoiceOver calls it.
+    static var infinitiveHeading: String {
+      String(localized: "Recognition.infinitiveHeading")
+    }
+
+    /// The button that checks a whole answer, beside Return.
+    static var check: String {
+      String(localized: "Recognition.check")
+    }
+
+    static var checkHint: String {
+      String(localized: "Recognition.checkHint")
+    }
+
+    /// What VoiceOver says when Return or Check finds a part missing.
+    static var incomplete: String {
+      String(localized: "Recognition.incomplete")
+    }
+
+    static var fieldHint: String {
+      String(localized: "Recognition.fieldHint")
+    }
+
+    /// What a second attempt's line names to check, before "Try once more."
+    static var checkInfinitive: String {
+      String(localized: "Recognition.checkInfinitive")
+    }
+
+    static var checkTense: String {
+      String(localized: "Recognition.checkTense")
+    }
+
+    static var checkPerson: String {
+      String(localized: "Recognition.checkPerson")
+    }
+
+    static var checkInfinitiveAndTense: String {
+      String(localized: "Recognition.checkInfinitiveAndTense")
+    }
+
+    static var checkInfinitiveAndPerson: String {
+      String(localized: "Recognition.checkInfinitiveAndPerson")
+    }
+
+    static var checkTenseAndPerson: String {
+      String(localized: "Recognition.checkTenseAndPerson")
+    }
+  }
+
   enum PracticeSession {
     static var heading: String {
       String(localized: "PracticeSession.heading")

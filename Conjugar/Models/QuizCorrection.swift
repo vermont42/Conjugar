@@ -16,4 +16,8 @@ nonisolated struct QuizCorrection: Equatable, Sendable {
   let diagnosis: AnswerDiagnosis?
   /// Whether the question comes back later in the round. A re-ask's own correction does not.
   let willBeReasked: Bool
+  /// A Name the Form answer held, and which of its parts are wrong, which the correction shows part
+  /// by part. For one, `difference` compares the typed infinitive with the nearest right one.
+  var recognitionAnswer: RecognitionAnswer?
+  var recognitionGrade: RecognitionGrade?
 }

@@ -17,6 +17,9 @@ struct QuizView: View {
   @State private var tabScope = TabQuizScope.allVerbs
   @State private var answer = ""
   @State private var answerSelection: TextSelection?
+  /// A Name the Form question's chosen tense and person, cleared for each question.
+  @State private var recognitionTense: DisplayTense?
+  @State private var recognitionPerson: DisplayPersonNumber?
   /// The haptic for the last answer: a light tap for a slip, which waits for one more attempt.
   @State private var lastFeedback: SensoryFeedback?
   /// Whether the check for the last answer, which was right, shows under the next question.
@@ -108,6 +111,10 @@ struct QuizView: View {
         }
         Current.analytics.signal(name: .viewQuizView)
         maybePromptGameCenter()
+        // Name the Form finds a prompt's verbs in the map, which takes a moment to load.
+        Task.detached(priority: .utility) {
+          _ = ConjugationMap.bundled
+        }
       }
       .onChange(of: router.pendingQuizStart, initial: true) { _, linkSource in
         // The tab's view handles the deeplink, never Test Me's sheet.
@@ -156,6 +163,9 @@ struct QuizView: View {
     }
     if quiz.scope.isVerbEssentials {
       return L.VerbEssentials.title
+    }
+    if quiz.scope.isRecognition {
+      return L.Recognition.title
     }
     return quiz.scope.recordSession?.title
   }
@@ -526,6 +536,16 @@ struct QuizView: View {
         opensList: true,
         start: { navigationPath.append(ModelPracticeDestination()) }
       )
+
+      QuizPracticeRow(
+        title: L.Recognition.title,
+        detail: L.Recognition.description,
+        systemImage: "text.magnifyingglass",
+        hint: L.Recognition.startHint,
+        identifier: "quiz_recognition",
+        isLarge: isLarge,
+        start: { startQuiz(scope: .recognition()) }
+      )
     }
     .frame(maxWidth: .infinity, alignment: .leading)
   }
@@ -613,9 +633,26 @@ struct QuizView: View {
             }
           }
 
+          // The choices come before the field, so that they stay in sight above the keyboard and
+          // Return can check the answer once the infinitive is typed.
+          if let recognition = quiz.currentQuestion?.recognition {
+            RecognitionChoicesView(
+              recognition: recognition,
+              tense: $recognitionTense,
+              personNumber: $recognitionPerson,
+              isLocked: quiz.isHeld
+            )
+          }
+
           VStack(alignment: .leading, spacing: 4) {
             if let essentialsRows, let currentRowIndex {
               VerbEssentialsRowLabel(key: essentialsRows[currentRowIndex].key)
+                .accessibilityHidden(true)
+            }
+            if quiz.currentQuestion?.recognition != nil {
+              Text(L.Recognition.infinitiveHeading)
+                .font(.subheadline.bold())
+                .foregroundStyle(Color.customYellow)
                 .accessibilityHidden(true)
             }
             answerField(spokenPrefix: currentRowIndex.flatMap { essentialsRows?[$0].key.tense.displayName })
@@ -629,6 +666,7 @@ struct QuizView: View {
           if quiz.isAwaitingSecondAttempt {
             secondAttemptLine
               .frame(minHeight: 44)
+              .id(QuizView.secondAttemptLineID)
           } else if let question = quiz.currentQuestion, let correction = quiz.correction {
             QuizCorrectionView(
               question: question,
@@ -644,6 +682,20 @@ struct QuizView: View {
             // A Verb Essentials row shows how its answer went.
             rightAnswerReveal
               .frame(minHeight: 44)
+          }
+
+          if let question = quiz.currentQuestion, question.recognition != nil, !quiz.isHeld {
+            Button {
+              submit()
+            } label: {
+              Label(L.Recognition.check, systemImage: "checkmark")
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            .disabled(recognitionAnswer(for: question) == nil)
+            .opacity(recognitionAnswer(for: question) == nil ? 0.4 : 1)
+            .accessibilityHint(L.Recognition.checkHint)
+            .accessibilityIdentifier("recognition_check_button")
+            .id(QuizView.checkButtonID)
           }
 
           if let essentialsRows, let currentRowIndex, currentRowIndex < essentialsRows.count - 1 {
@@ -666,10 +718,28 @@ struct QuizView: View {
         revealAnswerField(proxy)
       }
       .onChange(of: quiz.currentQuestionIndex) {
+        recognitionTense = nil
+        recognitionPerson = nil
         revealAnswerField(proxy)
         // A re-ask's later blanks in Verb Essentials are not announced again.
         if quiz.currentQuestion?.isReask == true, !quiz.isMidStep {
           AccessibilityNotification.Announcement(L.Quiz.askedAgain).post()
+        }
+      }
+      // Name the Form's chips push its field low: a choice brings the field and Check back into
+      // sight, as a second attempt's line does its line.
+      .onChange(of: recognitionTense) {
+        revealCheckButton(proxy)
+      }
+      .onChange(of: recognitionPerson) {
+        revealCheckButton(proxy)
+      }
+      .onChange(of: quiz.isAwaitingSecondAttempt) { _, isAwaiting in
+        guard isAwaiting else {
+          return
+        }
+        withAnimation(reduceMotion ? nil : .snappy) {
+          proxy.scrollTo(QuizView.secondAttemptLineID, anchor: .bottom)
         }
       }
       .onChange(of: quiz.isHeld) { _, isHeld in
@@ -705,21 +775,25 @@ struct QuizView: View {
           .accessibilityIdentifier("quiz_asked_again")
       }
 
-      Text(ReflexivePronoun.citationForm(of: quiz.verb))
-        .font(.largeTitle.bold())
-        .fontDesign(.serif)
-        .foregroundStyle(Color.customYellow)
+      if let recognition = quiz.currentQuestion?.recognition {
+        RecognitionPromptView(prompt: recognition.prompt)
+      } else {
+        Text(ReflexivePronoun.citationForm(of: quiz.verb))
+          .font(.largeTitle.bold())
+          .fontDesign(.serif)
+          .foregroundStyle(Color.customYellow)
 
-      let gloss = VerbMap.shared.entry(for: quiz.verb)?.gloss ?? ""
-      if !gloss.isEmpty {
-        Text(gloss)
-          .font(.subheadline)
-          .foregroundStyle(.secondary)
+        let gloss = VerbMap.shared.entry(for: quiz.verb)?.gloss ?? ""
+        if !gloss.isEmpty {
+          Text(gloss)
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+        }
       }
 
       // The person asked is in the answer's frame, below, and a Verb Essentials row names its
       // own tense.
-      if quiz.essentialsRows == nil {
+      if quiz.essentialsRows == nil, quiz.currentQuestion?.recognition == nil {
         Text(verbatim: quiz.tense.displayName)
           .font(.title3.weight(.semibold))
           .fontDesign(.serif)
@@ -733,6 +807,17 @@ struct QuizView: View {
   }
 
   private static let answerFieldID = "answerField"
+  private static let secondAttemptLineID = "secondAttemptLine"
+  private static let checkButtonID = "recognitionCheckButton"
+
+  private func revealCheckButton(_ proxy: ScrollViewProxy) {
+    guard recognitionTense != nil else {
+      return
+    }
+    withAnimation(reduceMotion ? nil : .snappy) {
+      proxy.scrollTo(QuizView.checkButtonID, anchor: .bottom)
+    }
+  }
 
   /// A nil anchor scrolls the minimum distance, so this is a no-op whenever the field is
   /// already fully visible (the usual case at default text sizes).
@@ -750,6 +835,8 @@ struct QuizView: View {
       isFocused: $fieldFocused,
       identifier: "input_quiz_conjugation",  // screenshot-driver anchor
       spokenPrefix: spokenPrefix,
+      placeholder: quiz.currentQuestion?.recognition == nil ? nil : L.Recognition.infinitiveHeading,
+      hint: quiz.currentQuestion?.recognition == nil ? nil : L.Recognition.fieldHint,
       onSubmit: {
         if quiz.isHeld {
           continueAfterCorrection()
@@ -880,6 +967,8 @@ struct QuizView: View {
     }
     Current.soundPlayer.play(.gun, shouldDebounce: false)
     answer = ""
+    recognitionTense = nil
+    recognitionPerson = nil
     lastFeedback = nil
     showsRightAnswer = false
     navigationPath = NavigationPath()
@@ -898,9 +987,47 @@ struct QuizView: View {
     Current.analytics.signal(name: .startQuiz, parameters: parameters)
   }
 
+  /// The Name the Form answer the screen holds, or nil until the infinitive, the tense, and,
+  /// unless the tense has none, the person are all given.
+  private func recognitionAnswer(for question: QuizQuestion) -> RecognitionAnswer? {
+    guard
+      let recognition = question.recognition,
+      !answer.allSatisfy(\.isWhitespace),
+      let recognitionTense,
+      let choice = recognition.choice(for: recognitionTense)
+    else {
+      return nil
+    }
+    if choice.personNumbers.isEmpty {
+      return RecognitionAnswer(infinitive: answer, tense: recognitionTense, personNumber: .none)
+    }
+    guard let recognitionPerson, choice.personNumbers.contains(recognitionPerson) else {
+      return nil
+    }
+    return RecognitionAnswer(infinitive: answer, tense: recognitionTense, personNumber: recognitionPerson)
+  }
+
   private func submit() {
-    guard let question = quiz.currentQuestion, !answer.allSatisfy(\.isWhitespace) else { return }
-    let result = quiz.process(proposedAnswer: question.answer(filling: answer))
+    guard let question = quiz.currentQuestion else { return }
+    let result: ConjugationResult?
+    if question.recognition != nil {
+      guard let recognitionAnswer = recognitionAnswer(for: question) else {
+        // Return with a part missing: the field keeps the keyboard, and VoiceOver says what to do.
+        AccessibilityNotification.Announcement(L.Recognition.incomplete).post()
+        fieldFocused = false
+        Task { @MainActor in
+          try? await Task.sleep(for: .milliseconds(50))
+          if quiz.quizState == .inProgress {
+            fieldFocused = true
+          }
+        }
+        return
+      }
+      result = quiz.processRecognition(recognitionAnswer)
+    } else {
+      guard !answer.allSatisfy(\.isWhitespace) else { return }
+      result = quiz.process(proposedAnswer: question.answer(filling: answer))
+    }
     switch result {
     case .totalMatch, .secondAttemptMatch:
       Current.soundPlayer.play(.chime, shouldDebounce: false)
@@ -1005,6 +1132,8 @@ struct QuizView: View {
     }
     answer = ""
     answerSelection = nil
+    recognitionTense = nil
+    recognitionPerson = nil
     lastFeedback = nil
     showsRightAnswer = false
     showingResults = false

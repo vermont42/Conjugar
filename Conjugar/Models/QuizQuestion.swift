@@ -22,6 +22,9 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
   /// The questions shown together on one screen share a step, as a verb's key conjugations do in
   /// Verb Essentials. Nil for a question shown alone.
   private(set) var step: Int?
+  /// For Name the Form, the form shown and the cells that write it. The verb and cell are then the
+  /// asked one, which the prompt was conjugated from, and the learner names them.
+  private(set) var recognition: RecognitionQuestion?
 
   init(_ verb: String, _ tense: DisplayTense, _ personNumber: DisplayPersonNumber) {
     self.verb = verb
@@ -41,6 +44,13 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
   func inStep(_ step: Int) -> QuizQuestion {
     var question = self
     question.step = step
+    return question
+  }
+
+  /// The same question, asked as Name the Form.
+  func recognizing(_ recognition: RecognitionQuestion) -> QuizQuestion {
+    var question = self
+    question.recognition = recognition
     return question
   }
 
@@ -88,7 +98,11 @@ nonisolated struct QuizQuestion: Equatable, Sendable {
 
   /// The shape of the answer, with the words the learner does not type around the blank.
   var frame: AnswerFrame {
-    AnswerFrame.quizFrame(tense: tense, personNumber: personNumber, isReflexiveOnly: ReflexivePronoun.isReflexiveOnly(verb))
+    // Name the Form's one blank takes the infinitive.
+    if recognition != nil {
+      return AnswerFrame(segments: [.blank])
+    }
+    return AnswerFrame.quizFrame(tense: tense, personNumber: personNumber, isReflexiveOnly: ReflexivePronoun.isReflexiveOnly(verb))
   }
 
   /// The answer that a filled blank gives, ready for `grade(_:)`: the frame's own words of the

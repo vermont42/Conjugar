@@ -122,6 +122,7 @@ a model's key names the model.
 | `quickAction` | Yes | `finishSearch` only: a search begun from the Find a Verb Home Screen quick action |
 | `quizCorrection` | Yes | A link on a quiz's held correction: for `viewVerbView`, the verb's page; for `viewCollection`, its model's page |
 | `recent` | Yes | A recent verb, listed while the search field is focused and empty |
+| `recognition` | Yes | The quiz signals: Name the Form, from the Quiz tab's Exercises section |
 | `related` | Yes | A chip on a verb page's Related Verbs card, or a row of the full list it opens |
 | `resume` | Yes | A page that came back after another tab, a pushed page, or the background |
 | `review` | Yes | The quiz signals: Review, from the Quiz tab's From Your Practice section |
@@ -1208,6 +1209,59 @@ no Live Activity; the results offer Another Round (Otra ronda) and no level pill
 keeps the kind `modelAlone` or `modelMixed` with the class number and no level. `startQuiz` sends
 `collection` with the model's key, and **a mixed session sends no counts**
 (`QuizScope.sendsQuestionCounts`), since which models are known comes from the learner's answers.
+
+### Name the Form
+
+**What it asks** (`Models/Recognition.swift`, `QuizScope.recognition()`). The quiz shows a form,
+such as fuera, and the learner types its infinitive and chooses its tense and person, the
+direction reading needs. A round is the default quiz's draw (ten cells of the level's tenses and
+band, the persons rotated, no due items), each cell's form the prompt as the engine writes it,
+irregular letters red, a reflexive-only verb's pronoun included (me arrepiento). A form already
+shown in the session is drawn again, so that no prompt repeats while others remain. The verb and
+its gloss are not shown.
+
+**Every reading is right** (`RecognitionQuestion.cells`). A question holds every cell of every
+verb that writes its prompt, among the cells the learner can choose (the level's tenses, and the
+persons a quiz asks there in the learner's tú or vos and region): fuera is ser's and ir's
+Imperfecto de Subjuntivo 1 for yo and él, hablamos the presente and the pretérito, hable the
+presente de subjuntivo of yo and él and usted's command, sé saber's yo and ser's command, ve ver's
+él and ir's and ver's command. No prompt is avoided, since deciding which cells a text can be is
+the skill. The conjugation map names the verbs to try, by each word of the prompt (hablado for "ha
+hablado", hagas for "no hagas"), and `ConjugationMatch` confirms each cell exactly, since habló
+and hablo are different questions. The Quiz tab touches `ConjugationMap.bundled` from a background
+task as it appears, since the map takes a moment to load.
+
+**The grade** (`RecognitionQuestion.grade(_:)`). Judged against the typed verb's cells when the
+infinitive is right, else against every cell, and a part is called wrong only when changing it can
+make the answer right, so a repair line never sends the learner to change what was right: ir ·
+Presente (él) for ve is "Check the tense and the person.", since ver's presente does not rescue
+ir. The gerundio has no person to judge. The infinitive is graded as the quiz grades an answer:
+case and spaces aside, a reflexive-only verb with or without its se, accents counted (reir is not
+reír). An answer with any part right gets one more try at half points (`Quiz.processRecognition`,
+`firstAttemptRecognition`), its line naming what to check ("Check the tense." / "Revisa el
+tiempo.", six lines in all) before "Try once more."; an answer with no part right goes to the
+correction at once. **Answers are not recorded in the practice record**, since recognizing a form
+is no evidence of producing it.
+
+**The screen** (`Views/RecognitionChoicesView.swift`). The card shows "Name this form" and the
+prompt. Above the field, so that they stay in sight above the keyboard, the tense chips sit under
+their moods' headings (Indicativo, Subjuntivo, Imperativo, then the gerundio alone), each chip a
+short name (presente, imperfecto 1, positivo) that VoiceOver reads whole ("presente de
+subjuntivo"); then, once a tense is chosen, its persons ("él, ella, usted", or "usted" in a
+command). A person the newly chosen tense lacks is cleared. Then the Infinitive field and a Check
+button, enabled once the answer is whole; Return checks too, and with a part missing announces
+what to do. A second attempt's line is scrolled into sight. The correction shows the answer with
+its wrong parts red and struck through, then every right answer, one line per verb, as search's
+rows name cells ("hablar · Presente de Subjuntivo (yo, él) · Imperativo Positivo (usted)"), and
+links to each verb's page with its cells marked. The results row shows the prompt, the answer, and
+the right ones.
+
+**Scope flags.** Never ranked, no due items, continues (Ten More), starts the Live Activity, and
+donates the level tip as a default round does. The last result's kind is `recognition`, with its
+level. `startQuiz`, `quitQuiz`, and `completeQuiz` carry `source` `recognition`, with counts. The
+DEBUG fixture `CONJUGAR_QUIZ_FIXTURE recognition` stands in for Name the Form only: ten prompts at
+Advanced's tenses (fuera, hablamos, hable, habló, fui, sé, ha hecho, no hagas, me arrepiento,
+diciendo), each with a wrong answer worth trying in its comment.
 
 ## The Verb of the Day and Random Verbs
 

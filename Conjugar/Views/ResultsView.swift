@@ -146,13 +146,19 @@ struct ResultsView: View {
       }
 
       VStack(alignment: .leading, spacing: 2) {
-        Text(ReflexivePronoun.citationForm(of: verb).lowercased())
-          .font(.headline)
-          .fontDesign(.serif)
-          .foregroundStyle(Color.customYellow)
-        Text(verbatim: person == .none ? tense.displayName : "\(tense.displayName), \(person.shortDisplayName)")
-          .font(.caption)
-          .foregroundStyle(.secondary)
+        // Name the Form's row shows its prompt, since the verb and cell are what it asked for.
+        if let recognition = question.recognition {
+          ConjugationText(form: recognition.prompt)
+            .font(.headline)
+        } else {
+          Text(ReflexivePronoun.citationForm(of: verb).lowercased())
+            .font(.headline)
+            .fontDesign(.serif)
+            .foregroundStyle(Color.customYellow)
+          Text(verbatim: person == .none ? tense.displayName : "\(tense.displayName), \(person.shortDisplayName)")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
         if question.isReask {
           // Text, not a Label, whose icon would sit apart from its title in a row.
           Text("\(Image(systemName: "arrow.counterclockwise")) \(L.Quiz.askedAgain)")
@@ -163,20 +169,31 @@ struct ResultsView: View {
 
         HStack(spacing: 4) {
           Text(L.Quiz.yourAnswer + ":").font(.caption).foregroundStyle(.secondary)
-          Text(proposed.lowercased())
+          // A recognition answer keeps its tense's capitals: "ser · Pretérito (yo)".
+          Text(Self.spanish(question.recognition == nil ? proposed.lowercased() : proposed))
             .font(.callout)
             .foregroundStyle(isRight ? Color.customForeground : Color.customBlue)
         }
         if let firstAttempt {
           HStack(spacing: 4) {
             Text(L.Results.firstTry + ":").font(.caption).foregroundStyle(Color.customYellow)
-            Text(Self.spanish(firstAttempt.lowercased()))
+            Text(Self.spanish(question.recognition == nil ? firstAttempt.lowercased() : firstAttempt))
               .font(.callout)
               .foregroundStyle(Color.customYellow)
           }
           .accessibilityElement(children: .combine)
         }
-        if !isRight {
+        if !isRight, let recognition = question.recognition {
+          VStack(alignment: .leading, spacing: 2) {
+            Text(L.Quiz.correctAnswer + ":").font(.caption).foregroundStyle(.secondary)
+            ForEach(recognition.answerLines, id: \.self) { line in
+              Text(Self.spanish(line))
+                .font(.callout)
+                .fixedSize(horizontal: false, vertical: true)
+            }
+          }
+          .accessibilityElement(children: .combine)
+        } else if !isRight {
           HStack(spacing: 4) {
             Text(L.Quiz.correctAnswer + ":").font(.caption).foregroundStyle(.secondary)
             ConjugationText(form: correct).font(.callout)

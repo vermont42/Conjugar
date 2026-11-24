@@ -39,8 +39,24 @@ struct QuizCorrectionView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
       VStack(alignment: .leading, spacing: 6) {
-        answerRow(label: L.Quiz.yourAnswer, text: Self.givenText(difference))
-        answerRow(label: L.Quiz.correctAnswer, text: Self.expectedText(difference))
+        if let recognition = question.recognition, let answer = correction.recognitionAnswer {
+          answerRow(label: L.Quiz.yourAnswer, text: Self.recognitionGivenText(answer, wrongParts: correction.recognitionGrade?.wrongParts ?? []))
+          VStack(alignment: .leading, spacing: 2) {
+            Text(L.Quiz.correctAnswer)
+              .font(.caption)
+              .foregroundStyle(.secondary)
+            ForEach(recognition.answerLines, id: \.self) { line in
+              Text(Self.spanish(line))
+                .font(.title3)
+                .fontDesign(.serif)
+                .foregroundStyle(Color.customForeground)
+                .fixedSize(horizontal: false, vertical: true)
+            }
+          }
+        } else {
+          answerRow(label: L.Quiz.yourAnswer, text: Self.givenText(difference))
+          answerRow(label: L.Quiz.correctAnswer, text: Self.expectedText(difference))
+        }
       }
       .accessibilityElement(children: .ignore)
       .accessibilityLabel(spokenCorrection)
@@ -70,16 +86,14 @@ struct QuizCorrectionView: View {
       if showsVerbLink || model != nil {
         FlowLayout(spacing: Layout.defaultSpacing) {
           if showsVerbLink {
-            link(
-              Text(Self.spanish(ReflexivePronoun.citationForm(of: question.verb))),
-              systemImage: "text.book.closed",
-              identifier: "quiz_correction_verb"
-            ) {
-              onOpen(VerbDestination(
-                infinitive: question.verb,
-                source: .quizCorrection,
-                marks: [ConjugationCell(tense: question.tense, personNumber: question.personNumber)]
-              ))
+            ForEach(linkedVerbs, id: \.self) { verb in
+              link(
+                Text(Self.spanish(ReflexivePronoun.citationForm(of: verb))),
+                systemImage: "text.book.closed",
+                identifier: verb == question.verb ? "quiz_correction_verb" : "quiz_correction_verb_\(verb)"
+              ) {
+                onOpen(VerbDestination(infinitive: verb, source: .quizCorrection, marks: marks(of: verb)))
+              }
             }
           }
           if let model {
@@ -109,6 +123,24 @@ struct QuizCorrectionView: View {
   }
 
   static let continueButtonID = "quiz_continue_button"
+
+  /// The verbs the correction links to: the question's, and for Name the Form every other verb
+  /// whose form the prompt is (fue, of ser and ir).
+  private var linkedVerbs: [String] {
+    var verbs = [question.verb]
+    for cell in question.recognition?.cells ?? [] where !verbs.contains(cell.verb) {
+      verbs.append(cell.verb)
+    }
+    return verbs
+  }
+
+  /// The cells a linked verb's page marks: the one asked, or every cell a prompt is of that verb.
+  private func marks(of verb: String) -> Set<ConjugationCell> {
+    guard let recognition = question.recognition else {
+      return [ConjugationCell(tense: question.tense, personNumber: question.personNumber)]
+    }
+    return Set(recognition.cells.filter { $0.verb == verb }.map(\.cell))
+  }
 
   // As wide as an iPhone's card, and no wider on an iPad.
   private static let continueMaxWidth: CGFloat = 400
@@ -148,6 +180,9 @@ struct QuizCorrectionView: View {
   /// read in Spanish and the rest in the device's language.
   /// The letters are named only while there are few enough to help.
   private var spokenCorrection: Text {
+    if let recognition = question.recognition, let answer = correction.recognitionAnswer {
+      return spokenRecognitionCorrection(recognition, answer: answer)
+    }
     var spoken = AttributedString(L.Quiz.incorrect + " " + L.Quiz.yourAnswer + ": ")
     spoken += Self.spanish(difference.given)
     spoken += AttributedString(". " + L.Quiz.correctAnswer + ": ")
@@ -170,6 +205,54 @@ struct QuizCorrectionView: View {
 
   private static let maxSpokenLetters = 3
 
+  /// "Incorrect. Your Answer: ser, Pretérito, yo. Correct Answer: ser, Pretérito, él; ir,
+  /// Pretérito, él. This question will come up again." The answers are read in Spanish.
+  private func spokenRecognitionCorrection(_ recognition: RecognitionQuestion, answer: RecognitionAnswer) -> Text {
+    func spokenSpanish(_ line: String) -> AttributedString {
+      Self.spanish(line.replacingOccurrences(of: " · ", with: ", ").replacingOccurrences(of: " (", with: ", ").replacingOccurrences(of: ")", with: ""))
+    }
+    var spoken = AttributedString(L.Quiz.incorrect + " " + L.Quiz.yourAnswer + ": ")
+    spoken += spokenSpanish(answer.summary)
+    spoken += AttributedString(". " + L.Quiz.correctAnswer + ": ")
+    spoken += spokenSpanish(recognition.answerLines.joined(separator: "; "))
+    spoken += AttributedString(".")
+    if correction.willBeReasked {
+      spoken += AttributedString(" " + L.Quiz.willComeUpAgain)
+    }
+    return Text(spoken)
+  }
+
+  /// A Name the Form answer, "ser · Pretérito (yo)", each wrong part red and struck through. A
+  /// wrong infinitive is marked whole, since one that only lacks letters would have none to mark.
+  static func recognitionGivenText(_ answer: RecognitionAnswer, wrongParts: Set<RecognitionPart>) -> Text {
+    func part(_ text: String, isWrong: Bool) -> AttributedString {
+      var part = AttributedString(text)
+      part.foregroundColor = Color.customForeground
+      if isWrong {
+        part.foregroundColor = Color.customRed
+        part.backgroundColor = Self.wrongBackground
+        part.strikethroughStyle = Text.LineStyle(pattern: .solid, color: .customRed)
+      }
+      return part
+    }
+    var result = part(answer.typedInfinitive, isWrong: wrongParts.contains(.infinitive))
+    result += AttributedString(" · ")
+    result += part(answer.tense.titleCaseName, isWrong: wrongParts.contains(.tense))
+    if let person = MatchedForm.personName(of: answer.cell) {
+      result += AttributedString(" (")
+      result += part(person, isWrong: wrongParts.contains(.person))
+      result += AttributedString(")")
+    }
+    result.languageIdentifier = "es"
+    return Text(result)
+  }
+
+  /// The tint behind a wrong letter. Light on white, where a stronger one left the red letters
+  /// hard to read, and stronger on black, where a light one would barely show.
+  private static let wrongBackground = Color(uiColor: UIColor { traits in
+    UIColor.customRed.withAlphaComponent(traits.userInterfaceStyle == .dark ? 0.35 : 0.12)
+  })
+
   // The red letters of a conjugation mark its irregularity, so a difference is shown another
   // way: a tinted background, struck through in the learner's answer and underlined in the right
   // one.
@@ -180,7 +263,7 @@ struct QuizCorrectionView: View {
       part.foregroundColor = Color.customForeground
       if isMarked {
         part.foregroundColor = Color.customRed
-        part.backgroundColor = Color.customRed.opacity(0.35)
+        part.backgroundColor = Self.wrongBackground
         part.strikethroughStyle = Text.LineStyle(pattern: .solid, color: .customRed)
       }
       result.append(part)

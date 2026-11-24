@@ -36,6 +36,9 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// A verb model's practice, alone or mixed with the known models (`ModelPractice.swift`), which
   /// is Verb Essentials over the model's verbs.
   let modelPractice: ModelPracticeSession?
+  /// Name the Form, which shows a form and asks for its infinitive, tense, and person
+  /// (`Recognition.swift`).
+  let isRecognition: Bool
 
   init(
     verbs: [String]?,
@@ -48,7 +51,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
     isPracticeSet: Bool = false,
     recordSession: QuizRecordSession? = nil,
     isVerbEssentials: Bool = false,
-    modelPractice: ModelPracticeSession? = nil
+    modelPractice: ModelPracticeSession? = nil,
+    isRecognition: Bool = false
   ) {
     self.verbs = verbs
     self.questionCount = questionCount
@@ -61,6 +65,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
     self.recordSession = recordSession
     self.isVerbEssentials = isVerbEssentials
     self.modelPractice = modelPractice
+    self.isRecognition = isRecognition
   }
 
   /// A round's length. The Quiz tab's quiz, a My Verbs quiz, and a collection's ask one round,
@@ -71,10 +76,11 @@ nonisolated struct QuizScope: Equatable, Sendable {
   static let verbPageQuestionCount = 3
 
   /// Only the default quiz over every verb ranks: a score over a learner's own verbs or tenses,
-  /// over what the practice record holds, or over three questions, compares with nothing. Of a
+  /// over what the practice record holds, over another kind of question, or over three questions,
+  /// compares with nothing. Of a
   /// ranked session, only the first round's score counts (`Quiz.firstRoundScore`).
   var isRanked: Bool {
-    verbs == nil && custom == nil && recordSession == nil && !isVerbEssentials && questionCount == QuizScope.roundLength
+    verbs == nil && custom == nil && recordSession == nil && !isVerbEssentials && !isRecognition && questionCount == QuizScope.roundLength
   }
 
   /// Whether `completeQuiz`, `quitQuiz`, and `abandonQuiz` say how many questions were asked or

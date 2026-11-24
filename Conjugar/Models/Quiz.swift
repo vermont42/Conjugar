@@ -52,6 +52,9 @@ class Quiz {
   private(set) var firstAttempt: String?
   /// What was wrong with `firstAttempt`, when the engine can say. Nil for a slip.
   private(set) var firstAttemptDiagnosis: AnswerDiagnosis?
+  /// Which parts of a Name the Form question's first attempt were wrong, while it waits for its
+  /// second.
+  private(set) var firstAttemptRecognition: RecognitionGrade?
   /// The current spelling of the last answer when it was right in a retired one. See
   /// `QuizQuestion.currentSpelling(of:)`.
   private(set) var lastCurrentSpelling: String?
@@ -239,8 +242,7 @@ class Quiz {
     let region = settings.region
     let level = scope.level ?? settings.quizLevel
     #if DEBUG
-    // The essentials fixture stands in for Verb Essentials only, and the others for any quiz but it.
-    if let fixture = Quiz.fixtureRun, scope.verbs == nil, scope.custom == nil, (fixture == .essentials) == scope.isVerbEssentials {
+    if let fixture = Quiz.fixtureRun, scope.verbs == nil, scope.custom == nil, fixture.standsIn(for: scope) {
       self.scope = scope
       lastRegion = region
       lastLevel = level
@@ -265,6 +267,9 @@ class Quiz {
         beginQuiz()
       case .essentials:
         questions = Quiz.essentialsFixture
+        beginQuiz()
+      case .recognition:
+        questions = recognitionFixture()
         beginQuiz()
       }
       return true
@@ -310,6 +315,9 @@ class Quiz {
   /// chosen; a Review or My Mistakes asks the record's items, beyond the level's tenses; Verb
   /// Essentials asks five verbs' key conjugations, of the band or of a model and the known models.
   private func draw(_ scope: QuizScope, after prior: [Question] = []) -> [Question] {
+    if scope.isRecognition {
+      return recognitionQuestions(count: scope.questionCount, pool: scope.pool(level: lastLevel), band: scope.band(level: lastLevel), after: prior)
+    }
     if let session = scope.modelPractice {
       let verbs = ModelPractice.verbs(for: session, record: practice.record, asked: Set(prior.map(\.verb)), using: &generator)
       return VerbEssentials.steps(for: verbs, after: prior)
@@ -359,6 +367,45 @@ class Quiz {
       cells.append(ConjugationCell(tense: entry.tense, personNumber: personNumber(for: entry)))
     }
     return QuizDraw.questions(cells: cells, band: band, using: &generator)
+  }
+
+  /// Name the Form's round: the default quiz's draw over the level's tenses and band, each cell's
+  /// form the prompt. A form the session has shown already, by this cell or another (hablamos is
+  /// the presente and the pretérito), is drawn again, so that no prompt repeats while others remain.
+  private func recognitionQuestions(count: Int, pool: [QuizPoolEntry], band: FrequencyBand?, after prior: [Question]) -> [Question] {
+    let choices = recognitionChoices(pool: pool)
+    var shown = Set(prior.compactMap { $0.recognition?.prompt.lowercased() })
+    var questions: [Question] = []
+    var attempts = 0
+    while questions.count < count, attempts < Self.recognitionDrawAttempts {
+      attempts += 1
+      for drawn in mixedQuestions(count: count - questions.count, pool: pool, band: band) {
+        guard
+          let question = QuizQuestion.recognition(drawn.verb, drawn.tense, drawn.personNumber, choices: choices),
+          let prompt = question.recognition?.prompt.lowercased(),
+          !shown.contains(prompt)
+        else {
+          continue
+        }
+        shown.insert(prompt)
+        questions.append(question)
+      }
+    }
+    return questions
+  }
+
+  /// How many draws a round of Name the Form makes before it settles for fewer questions, which
+  /// only a pool too small to give ten distinct forms would need.
+  private static let recognitionDrawAttempts = 5
+
+  /// The tenses a level asks, mood by mood, each with the persons a quiz may ask in it, for Name
+  /// the Form's chips.
+  func recognitionChoices(pool: [QuizPoolEntry]) -> [RecognitionChoice] {
+    RecognitionMood.tenseOrder.compactMap { tense in
+      pool.first { $0.tense == tense }.map { entry in
+        RecognitionChoice(tense: tense, personNumbers: personNumbers(for: entry).filter { $0 != .none })
+      }
+    }
   }
 
   /// Questions about the given verbs only, in the pool's tenses and never in a cell a verb lacks
@@ -516,6 +563,9 @@ class Quiz {
   /// The line under the field while the question waits for its second attempt: the
   /// diagnosis's line, or "Almost!" after a slip.
   var secondAttemptPrompt: String {
+    if let firstAttemptRecognition {
+      return firstAttemptRecognition.line + " " + L.Quiz.tryOnceMore
+    }
     guard let firstAttemptDiagnosis else {
       return L.Quiz.almost
     }
@@ -573,6 +623,7 @@ class Quiz {
     correction = nil
     firstAttempt = nil
     firstAttemptDiagnosis = nil
+    firstAttemptRecognition = nil
     lastCurrentSpelling = nil
     quizState = .inProgress
     startTimer()
@@ -630,6 +681,7 @@ class Quiz {
     firstAttempts.append(firstAttempt)
     firstAttempt = nil
     firstAttemptDiagnosis = nil
+    firstAttemptRecognition = nil
     // Recorded as it is given, so that a quiz quit after six questions has still practiced six.
     if !correctAnswer.isEmpty {
       practice.recordAnswer(to: question, isCorrect: result != .noMatch)
@@ -648,6 +700,61 @@ class Quiz {
         difference: question.difference(from: proposedAnswer),
         diagnosis: question.diagnosis(of: proposedAnswer),
         willBeReasked: willBeReasked
+      )
+    }
+    return result
+  }
+
+  /// Grades the answer to a Name the Form question. A wrong first attempt with any part right
+  /// records nothing and returns nil, and the question waits for one more attempt, whose line
+  /// names what to check. Any other answer is recorded in the session but not in the practice
+  /// record, since recognizing a form is no evidence of producing it: a right one advances, earning
+  /// half its points on a second attempt, and a wrong one holds the question with its correction.
+  @discardableResult
+  func processRecognition(_ answer: RecognitionAnswer) -> ConjugationResult? {
+    let question = questions[currentQuestionIndex]
+    guard let recognition = question.recognition else {
+      return nil
+    }
+    let grade = recognition.grade(answer)
+    if grade.earnsSecondAttempt, firstAttempt == nil {
+      firstAttempt = answer.summary
+      firstAttemptRecognition = grade
+      return nil
+    }
+    let result: ConjugationResult
+    if grade.isCorrect {
+      result = firstAttempt == nil ? .totalMatch : .secondAttemptMatch
+    } else {
+      result = .noMatch
+    }
+    lastCurrentSpelling = nil
+    proposedAnswers.append(answer.summary)
+    correctAnswers.append(recognition.prompt)
+    results.append(result)
+    firstAttempts.append(firstAttempt)
+    firstAttempt = nil
+    firstAttemptDiagnosis = nil
+    firstAttemptRecognition = nil
+    switch result {
+    case .totalMatch, .secondAttemptMatch:
+      advance()
+    case .noMatch:
+      timer?.invalidate()
+      let willBeReasked = !question.isReask
+      if willBeReasked {
+        let placement = Quiz.reaskPlacement(of: currentQuestionIndex, in: questions)
+        questions.insert(question.reasked(inStep: placement.step), at: placement.position)
+      }
+      let nearest = recognition.cells.map(\.verb).min {
+        VerbSearch.editDistance(Array(answer.typedInfinitive), Array($0)) < VerbSearch.editDistance(Array(answer.typedInfinitive), Array($1))
+      } ?? question.verb
+      correction = QuizCorrection(
+        difference: AnswerDifference.between(given: answer.typedInfinitive, expected: nearest),
+        diagnosis: nil,
+        willBeReasked: willBeReasked,
+        recognitionAnswer: answer,
+        recognitionGrade: grade
       )
     }
     return result
@@ -703,6 +810,7 @@ class Quiz {
     correction = nil
     firstAttempt = nil
     firstAttemptDiagnosis = nil
+    firstAttemptRecognition = nil
     quizState = .finished
     clearProgress()
     endLiveActivity()
@@ -811,6 +919,23 @@ extension Quiz {
     /// Five verbs for Verb Essentials, used only when it is started from the Quiz tab, each with a
     /// wrong answer worth typing in its comment.
     case essentials
+    /// Ten forms for Name the Form, used only when it is started from the Quiz tab, at Advanced's
+    /// tenses whatever the level, most of them more than one cell or verb. Each comment gives the
+    /// right answers and a wrong one worth trying.
+    case recognition
+
+    /// Whether the fixture replaces the questions of a quiz over this scope. The essentials and
+    /// recognition fixtures stand in for their own exercises, and the others for any quiz but them.
+    func standsIn(for scope: QuizScope) -> Bool {
+      switch self {
+      case .essentials:
+        return scope.isVerbEssentials
+      case .recognition:
+        return scope.isRecognition
+      default:
+        return !scope.isVerbEssentials && !scope.isRecognition
+      }
+    }
   }
 
   static var fixtureRun: Fixture? {
@@ -892,6 +1017,28 @@ extension Quiz {
     "detener",    // a prefixed compound: detení
     "arrepentir"  // a reflexive-only verb, yo me [ ]: arrepento
   ])
+
+  /// The recognition fixture's cells, each written as its prompt.
+  static let recognitionFixtureCells: [(verb: String, tense: DisplayTense, personNumber: DisplayPersonNumber)] = [
+    ("ser", .imperfectoDeSubjuntivo1, .firstSingular),    // fuera: ser and ir, yo and él; try ser · Pretérito (yo)
+    ("hablar", .presenteDeIndicativo, .firstPlural),      // hablamos: presente and pretérito; try hablar · Presente (yo)
+    ("hablar", .presenteDeSubjuntivo, .thirdSingular),    // hable: presente de subjuntivo (yo, él), imperativo (usted)
+    ("hablar", .pretérito, .thirdSingular),               // habló, not hablo; try hablar · Presente (yo)
+    ("ir", .pretérito, .firstSingular),                   // fui: ser and ir; try ir · Imperfecto (yo)
+    ("saber", .presenteDeIndicativo, .firstSingular),     // sé: saber (yo), ser's command (tú); try ver
+    ("hacer", .perfectoDeIndicativo, .thirdSingular),     // ha hecho; try hacer · Pluscuamperfecto (él)
+    ("hacer", .imperativoNegativo, .secondSingularTú),    // no hagas; try hacer · Presente de Subjuntivo (tú)
+    ("arrepentir", .presenteDeIndicativo, .firstSingular), // me arrepiento: arrepentir or arrepentirse
+    ("decir", .gerundio, .none)                           // diciendo; try decir · Presente (yo)
+  ]
+
+  /// Name the Form's fixture, over Advanced's tenses in the learner's tú or vos and region.
+  func recognitionFixture() -> [Question] {
+    let choices = recognitionChoices(pool: QuizLevel.advanced.pool)
+    return Self.recognitionFixtureCells.compactMap { cell in
+      QuizQuestion.recognition(cell.verb, cell.tense, cell.personNumber, choices: choices)
+    }
+  }
 
   static let correctionsFixture: [Question] = [
     QuizQuestion("hablar", .pretérito, .thirdSingular),                 // hablo: an accent, and the presente
