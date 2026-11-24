@@ -12137,3 +12137,24 @@ since Phase 6. The only fault was a stale comment on the leaderboard signal, whi
 results screen sent it. The plan ends with a list of what Conjugar did that its siblings could
 adopt: self-checking drafters, holding a choice's English until after the choice, a daily challenge
 keyed on every setting that changes what is asked, and a few smaller things.
+
+## Xcode's Catalog Rewrite, Kept (2026-11-24)
+
+After Josh built the app onto his phone from Xcode to scan a practice set's QR code (the Camera app
+offered to open it, and Conjugar opened the set's sheet), the working tree held a rewrite of the
+app's string catalog that no one had asked for: about 1,650 lines added and 1,600 removed. A
+comparison by key showed that no existing translation had changed. Xcode had done two things.
+It had sorted the keys alphabetically, ignoring case, which the last several sessions had broken by
+adding keys in feature order; and it had added five keys. Command-line builds do neither, which is
+why the sessions' own builds never showed it.
+
+Two of the five were a real gap. `WidgetL`, the widget's string accessors, is compiled into the app
+as well, and every one of its keys has an English and Spanish copy in the app's catalog except the
+two for the Find a Verb control, which an earlier session added without the copy. Xcode extracted
+them with English only. They now carry the widget catalog's Spanish. The other three were
+placeholder-only keys (`%@ %@` and the like) that SwiftUI makes from interpolated text, such as an
+icon beside a label. They now say not to be translated, since every language shows them the same.
+
+Throwing the rewrite away would only have postponed it to the next Xcode build, so it was kept and
+finished. The localization rules now say to keep the keys in Xcode's order and to write the file as
+Xcode does, so that a future session's new string does not reshuffle the whole catalog again.

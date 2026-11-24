@@ -1,6 +1,31 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@" : {
+      "shouldTranslate" : false
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
+    "%@: %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@: %2$lld"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
     "Accessibility.speak" : {
       "localizations" : {
         "en" : {
@@ -1319,6 +1344,22 @@
         }
       }
     },
+    "CustomQuiz.verbList" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb List"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista de verbos"
+          }
+        }
+      }
+    },
     "CustomQuiz.verbs" : {
       "localizations" : {
         "en" : {
@@ -1331,6 +1372,142 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verbos"
+          }
+        }
+      }
+    },
+    "DailyChallenge.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Five questions at your level, the same for everyone today. Take it once, then share how you did."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cinco preguntas de tu nivel, las mismas para todos hoy. Hazlo una vez y después comparte cómo te fue."
+          }
+        }
+      }
+    },
+    "DailyChallenge.doneToday %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done today: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hecho hoy: %@"
+          }
+        }
+      }
+    },
+    "DailyChallenge.share" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Result"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir resultado"
+          }
+        }
+      }
+    },
+    "DailyChallenge.shareHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shares your result as text, with a link that opens the same challenge."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparte tu resultado como texto, con un enlace que abre el mismo desafío."
+          }
+        }
+      }
+    },
+    "DailyChallenge.shareText %@ %@ %@ %lld %lld %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar · Daily Challenge\n%1$@ · %2$@\n%3$@  %4$lld / %5$lld\n\nTake this challenge in Conjugar:\n%6$@\n\nGet Conjugar on the App Store:\n%7$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar · Desafío diario\n%1$@ · %2$@\n%3$@  %4$lld / %5$lld\n\nAcepta este desafío en Conjugar:\n%6$@\n\nDescarga Conjugar en el App Store:\n%7$@"
+          }
+        }
+      }
+    },
+    "DailyChallenge.spokenResult %lld %lld %lld %lld %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld of %3$lld right on the first try, %2$lld on the second. %4$lld of %5$lld points."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld de %3$lld bien al primer intento, %2$lld al segundo. %4$lld de %5$lld puntos."
+          }
+        }
+      }
+    },
+    "DailyChallenge.startHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts today's challenge of five questions."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza el desafío de hoy, de cinco preguntas."
+          }
+        }
+      }
+    },
+    "DailyChallenge.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Challenge"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desafío diario"
           }
         }
       }
@@ -1819,266 +1996,226 @@
         }
       }
     },
-    "DailyChallenge.title" : {
-      "extractionState" : "manual",
+    "Diagnosis.consonantBeforeAO %@ %@ %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daily Challenge"
+            "value" : "In %1$@, %2$@ becomes %3$@ before a or o."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Desafío diario"
+            "value" : "En %1$@, %2$@ se escribe %3$@ delante de a y o."
           }
         }
       }
     },
-    "DailyChallenge.description" : {
-      "extractionState" : "manual",
+    "Diagnosis.consonantBeforeE %@ %@ %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Five questions at your level, the same for everyone today. Take it once, then share how you did."
+            "value" : "In %1$@, %2$@ becomes %3$@ before e."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cinco preguntas de tu nivel, las mismas para todos hoy. Hazlo una vez y después comparte cómo te fue."
+            "value" : "En %1$@, %2$@ se escribe %3$@ delante de e."
           }
         }
       }
     },
-    "DailyChallenge.startHint" : {
-      "extractionState" : "manual",
+    "Diagnosis.endingIBecomesY %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Starts today's challenge of five questions."
+            "value" : "In %@, the ending’s i becomes y between vowels."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Empieza el desafío de hoy, de cinco preguntas."
+            "value" : "En %@, la i de la terminación se escribe y entre vocales."
           }
         }
       }
     },
-    "DailyChallenge.share" : {
-      "extractionState" : "manual",
+    "Diagnosis.endingLosesI %@ %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Share Result"
+            "value" : "In %1$@, the ending loses its i after %2$@."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compartir resultado"
+            "value" : "En %1$@, la terminación pierde la i tras %2$@."
           }
         }
       }
     },
-    "DailyChallenge.shareHint" : {
-      "extractionState" : "manual",
+    "Diagnosis.negativeCommand" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Shares your result as text, with a link that opens the same challenge."
+            "value" : "Negative commands use the subjunctive."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comparte tu resultado como texto, con un enlace que abre el mismo desafío."
+            "value" : "El imperativo negativo se forma con el subjuntivo."
           }
         }
       }
     },
-    "DailyChallenge.doneToday %@" : {
-      "extractionState" : "manual",
+    "Diagnosis.nonFinite %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Done today: %@"
+            "value" : "That is the %@."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hecho hoy: %@"
+            "value" : "Ese es el %@."
           }
         }
       }
     },
-    "DailyChallenge.spokenResult %lld %lld %lld %lld %lld" : {
-      "extractionState" : "manual",
+    "Diagnosis.otherPerson %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$lld of %3$lld right on the first try, %2$lld on the second. %4$lld of %5$lld points."
+            "value" : "That is the form for %@."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$lld de %3$lld bien al primer intento, %2$lld al segundo. %4$lld de %5$lld puntos."
+            "value" : "Esa es la forma de %@."
           }
         }
       }
     },
-    "DailyChallenge.shareText %@ %@ %@ %lld %lld %@ %@" : {
-      "extractionState" : "manual",
+    "Diagnosis.otherTense %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjugar · Daily Challenge\n%1$@ · %2$@\n%3$@  %4$lld / %5$lld\n\nTake this challenge in Conjugar:\n%6$@\n\nGet Conjugar on the App Store:\n%7$@"
+            "value" : "That is the form of the %@."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conjugar · Desafío diario\n%1$@ · %2$@\n%3$@  %4$lld / %5$lld\n\nAcepta este desafío en Conjugar:\n%6$@\n\nDescarga Conjugar en el App Store:\n%7$@"
+            "value" : "Esa es la forma del %@."
           }
         }
       }
     },
-    "QuizLevel.beginner" : {
+    "Diagnosis.raForSe" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beginner"
+            "value" : "That is the -ra form. The -se form was asked."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inicial"
+            "value" : "Esa es la forma en -ra. Se pedía la forma en -se."
           }
         }
       }
     },
-    "QuizLevel.elementary" : {
+    "Diagnosis.regularForm %@ %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Elementary"
+            "value" : "That is the regular form, but %1$@ is irregular in the %2$@."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Elemental"
+            "value" : "Esa es la forma regular, pero %1$@ es irregular en el %2$@."
           }
         }
       }
     },
-    "QuizLevel.intermediate" : {
+    "Diagnosis.seForRa" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Intermediate"
+            "value" : "That is the -se form. The -ra form was asked."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Intermedio"
+            "value" : "Esa es la forma en -se. Se pedía la forma en -ra."
           }
         }
       }
     },
-    "QuizLevel.advanced" : {
+    "Diagnosis.stemAccent %@ %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Advanced"
+            "value" : "In %1$@, the stem’s %2$@ takes a written accent here."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Avanzado"
+            "value" : "En %1$@, la %2$@ de la raíz lleva tilde aquí."
           }
         }
       }
     },
-    "Game.bullImpressed" : {
+    "Diagnosis.stemChangeMisplaced %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The bull is impressed with your dancing and has freed the matador!"
+            "value" : "In %@, the stem does not change here."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¡El toro está impresionado con tu baile y ha liberado al matador!"
+            "value" : "En %@, la raíz no cambia aquí."
           }
         }
       }
     },
-    "Game.dancerName" : {
+    "Diagnosis.stemChangeMissing %@ %@ %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La Bailaora"
+            "value" : "In %1$@, the stem’s %2$@ becomes %3$@ here."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La Bailaora"
-          }
-        }
-      }
-    },
-    "Game.bullName" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El Toro"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El Toro"
-          }
-        }
-      }
-    },
-    "Game.matadorName" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El Matador"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El Matador"
+            "value" : "En %1$@, la %2$@ de la raíz pasa a %3$@ aquí."
           }
         }
       }
@@ -2099,66 +2236,50 @@
         }
       }
     },
-    "Game.vegasName" : {
+    "Game.apagonAnnouncement" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vegas"
+            "value" : "¡Apagón!"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vegas"
+            "value" : "¡Apagón!"
           }
         }
       }
     },
-    "Game.joshName" : {
+    "Game.bullImpressed" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Josh (The Developer)"
+            "value" : "The bull is impressed with your dancing and has freed the matador!"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Josh (El Desarrollador)"
+            "value" : "¡El toro está impresionado con tu baile y ha liberado al matador!"
           }
         }
       }
     },
-    "Game.torerosImageLabel" : {
+    "Game.bullName" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The dancer, the bull, and the matador, smiling together; the bull wears a garland of white carnations"
+            "value" : "El Toro"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La bailaora, el toro y el matador, sonrientes; el toro lleva una guirnalda de claveles blancos"
-          }
-        }
-      }
-    },
-    "Game.familyImageLabel" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Josh, the developer, and Amanda with their horse, Vegas, who wears a garland of white carnations"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Josh, el desarrollador, y Amanda con su caballo, Vegas, que lleva una guirnalda de claveles blancos"
+            "value" : "El Toro"
           }
         }
       }
@@ -2179,82 +2300,18 @@
         }
       }
     },
-    "Game.apagonAnnouncement" : {
+    "Game.dancerName" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¡Apagón!"
+            "value" : "La Bailaora"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¡Apagón!"
-          }
-        }
-      }
-    },
-    "Game.earthquakeAnnouncement" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "I summon an earthquake!"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Invoco un terremoto!"
-          }
-        }
-      }
-    },
-    "Game.multiplyAnnouncement" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The obstacles multiply!"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Los obstáculos se multiplican!"
-          }
-        }
-      }
-    },
-    "Game.encierroAnnouncement" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡El encierro!"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡El encierro!"
-          }
-        }
-      }
-    },
-    "Game.zombieAnnouncement" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your obstacles are now zombies!"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Tus obstáculos ahora son zombis!"
+            "value" : "La Bailaora"
           }
         }
       }
@@ -2287,6 +2344,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Medidor de duende"
+          }
+        }
+      }
+    },
+    "Game.earthquakeAnnouncement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I summon an earthquake!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Invoco un terremoto!"
+          }
+        }
+      }
+    },
+    "Game.encierroAnnouncement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡El encierro!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡El encierro!"
+          }
+        }
+      }
+    },
+    "Game.familyImageLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Josh, the developer, and Amanda with their horse, Vegas, who wears a garland of white carnations"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Josh, el desarrollador, y Amanda con su caballo, Vegas, que lleva una guirnalda de claveles blancos"
           }
         }
       }
@@ -2403,6 +2508,22 @@
         }
       }
     },
+    "Game.joshName" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Josh (The Developer)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Josh (El Desarrollador)"
+          }
+        }
+      }
+    },
     "Game.jump" : {
       "localizations" : {
         "en" : {
@@ -2415,6 +2536,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Saltar"
+          }
+        }
+      }
+    },
+    "Game.matadorName" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El Matador"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El Matador"
           }
         }
       }
@@ -2479,6 +2616,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mover arriba"
+          }
+        }
+      }
+    },
+    "Game.multiplyAnnouncement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The obstacles multiply!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Los obstáculos se multiplican!"
           }
         }
       }
@@ -2627,6 +2780,22 @@
         }
       }
     },
+    "Game.torerosImageLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The dancer, the bull, and the matador, smiling together; the bull wears a garland of white carnations"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La bailaora, el toro y el matador, sonrientes; el toro lleva una guirnalda de claveles blancos"
+          }
+        }
+      }
+    },
     "Game.tuTurno" : {
       "localizations" : {
         "en" : {
@@ -2639,6 +2808,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "¡Tu turno!"
+          }
+        }
+      }
+    },
+    "Game.vegasName" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vegas"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vegas"
           }
         }
       }
@@ -2659,6 +2844,38 @@
         }
       }
     },
+    "Game.zombieAnnouncement" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your obstacles are now zombies!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Tus obstáculos ahora son zombis!"
+          }
+        }
+      }
+    },
+    "GameCenter.achievementsHeading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Achievements"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logros"
+          }
+        }
+      }
+    },
     "GameCenter.failure" : {
       "localizations" : {
         "en" : {
@@ -2671,6 +2888,134 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "La autenticación de Game Center falló. Esto puede suceder si cancelas la autenticación o si tu iPhone aún no ha iniciado una sesión en Game Center. Inicia la aplicación Configuración, toca Game Center, inicia una sesión y relanza Conjugar."
+          }
+        }
+      }
+    },
+    "GameCenter.viewAchievements" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Achievements"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver logros"
+          }
+        }
+      }
+    },
+    "GameCenter.viewAchievementsDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This button shows your Game Center achievements, which you earn by mastering conjugations: every regular pattern of a level, and the most frequent irregular verbs. While you are signed in, Conjugar sends Game Center your progress toward each."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este botón muestra tus logros de Game Center, que ganas al dominar conjugaciones: todos los patrones regulares de un nivel y los verbos irregulares más frecuentes. Mientras tengas la sesión iniciada, Conjugar envía a Game Center tu progreso hacia cada uno."
+          }
+        }
+      }
+    },
+    "GameCenter.viewAchievementsHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens Game Center's list of Conjugar's achievements."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre en Game Center la lista de logros de Conjugar."
+          }
+        }
+      }
+    },
+    "GameCenter.viewLeaderboard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Leaderboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver clasificación"
+          }
+        }
+      }
+    },
+    "GameCenter.viewLeaderboardHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens the Game Center leaderboard for your level."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre la tabla de clasificación de Game Center de tu nivel."
+          }
+        }
+      }
+    },
+    "GameCenter.viewLeaderboards" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Leaderboards"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver clasificaciones"
+          }
+        }
+      }
+    },
+    "GameCenter.viewLeaderboardsDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Center keeps a leaderboard for each level. A quiz over every verb posts the points of its first ten questions to its level's leaderboard, so you rank among learners at the same level."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Game Center tiene una tabla de clasificación para cada nivel. Un test sobre todos los verbos publica los puntos de sus diez primeras preguntas en la tabla de su nivel, así que compites con estudiantes del mismo nivel."
+          }
+        }
+      }
+    },
+    "GameCenter.viewLeaderboardsHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens Game Center's list of Conjugar's leaderboards."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre en Game Center la lista de tablas de clasificación de Conjugar."
           }
         }
       }
@@ -3235,6 +3580,452 @@
         }
       }
     },
+    "Intent.lookUpVerbDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finds the verb that a conjugation, an infinitive, or an English meaning belongs to, says what it found, and opens it in Conjugar."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encuentra el verbo al que pertenece una forma conjugada, un infinitivo o un significado en inglés, dice lo que encontró y lo abre en Conjugar."
+          }
+        }
+      }
+    },
+    "Intent.lookUpVerbTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Look Up a Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consultar un verbo"
+          }
+        }
+      }
+    },
+    "Intent.lookUpVerbWord" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Word"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palabra"
+          }
+        }
+      }
+    },
+    "Intent.lookUpVerbWordPrompt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Which word should Conjugar look up?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Qué palabra debe consultar Conjugar?"
+          }
+        }
+      }
+    },
+    "Intent.openLookupResultTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Lookup Result"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir el resultado de la consulta"
+          }
+        }
+      }
+    },
+    "Intent.openLookupResultURL" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enlace"
+          }
+        }
+      }
+    },
+    "Intent.verbEntityName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbo"
+          }
+        }
+      }
+    },
+    "Lookup.form %@ %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ of %3$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ de %3$@"
+          }
+        }
+      }
+    },
+    "Lookup.guessForm %@ %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar has no verb or conjugation spelled “%1$@”. Perhaps you meant %2$@, of %3$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@». Quizá querías decir %2$@, de %3$@."
+          }
+        }
+      }
+    },
+    "Lookup.guessVerb %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar has no verb or conjugation spelled “%1$@”. Perhaps you meant %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@». Quizá querías decir %2$@."
+          }
+        }
+      }
+    },
+    "Lookup.nothing %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar has no verb or conjugation spelled “%1$@”."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@»."
+          }
+        }
+      }
+    },
+    "Lookup.otherMatchesMany %@ %lld %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar has no verb or conjugation spelled “%1$@”, but %2$lld verbs match. The first is %3$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@», pero coinciden %2$lld verbos. El primero es %3$@."
+          }
+        }
+      }
+    },
+    "Lookup.otherMatchesOne %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar has no verb or conjugation spelled “%1$@”, but one verb matches: %2$@."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@», pero coincide un verbo: %2$@."
+          }
+        }
+      }
+    },
+    "Lookup.verbWithGloss %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, “%2$@”"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, «%2$@»"
+          }
+        }
+      }
+    },
+    "Mastery.count %lld %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld of %2$lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld de %2$lld"
+          }
+        }
+      }
+    },
+    "Mastery.hubHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows which regular patterns and irregular verbs your practice has mastered."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra qué patrones regulares y verbos irregulares dominas gracias a tu práctica."
+          }
+        }
+      }
+    },
+    "Mastery.hubSummary %lld %lld %lld %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mastered: %1$lld of %2$lld patterns · %3$lld of %4$lld verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dominados: %1$lld de %2$lld patrones · %3$lld de %4$lld verbos"
+          }
+        }
+      }
+    },
+    "Mastery.intro %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What your practice has made secure at your level, %@. An item is mastered once its next review is a week or more away, and a wrong answer starts it over."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo que tu práctica ha afianzado en tu nivel, %@. Algo está dominado cuando su próximo repaso queda a una semana o más, y una respuesta incorrecta lo devuelve al principio."
+          }
+        }
+      }
+    },
+    "Mastery.learning" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learning"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En aprendizaje"
+          }
+        }
+      }
+    },
+    "Mastery.mastered" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mastered"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dominado"
+          }
+        }
+      }
+    },
+    "Mastery.notPracticed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not yet practiced"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin practicar"
+          }
+        }
+      }
+    },
+    "Mastery.patternMark %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ verbs: %2$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos en %1$@: %2$@"
+          }
+        }
+      }
+    },
+    "Mastery.patterns" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regular Patterns"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patrones regulares"
+          }
+        }
+      }
+    },
+    "Mastery.patternsDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every regular verb of an ending shares these forms, so practicing hablaba practices cantaba too."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todos los verbos regulares de una terminación comparten estas formas, así que practicar hablaba es practicar también cantaba."
+          }
+        }
+      }
+    },
+    "Mastery.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mastery"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dominio"
+          }
+        }
+      }
+    },
+    "Mastery.verbs" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregular Verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos irregulares"
+          }
+        }
+      }
+    },
+    "Mastery.verbsDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The 50 most used, each with the forms that its irregular conjugations at your level are built on, as in tengo · tuve · tendré. A verb regular throughout your level is left out."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los 50 más usados, cada uno con las formas en que se basan sus conjugaciones irregulares de tu nivel, como tengo · tuve · tendré. Se omite el verbo que es regular en todo tu nivel."
+          }
+        }
+      }
+    },
     "Model.modelLabel %@" : {
       "localizations" : {
         "en" : {
@@ -3307,6 +4098,294 @@
         }
       }
     },
+    "ModelPractice.alone" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alone"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo"
+          }
+        }
+      }
+    },
+    "ModelPractice.aloneHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts a round of up to five of this model’s verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza una ronda de hasta cinco verbos de este modelo."
+          }
+        }
+      }
+    },
+    "ModelPractice.anotherRound" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Another Round"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otra ronda"
+          }
+        }
+      }
+    },
+    "ModelPractice.anotherRoundHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continues with another round of this practice."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continúa con otra ronda de esta práctica."
+          }
+        }
+      }
+    },
+    "ModelPractice.descriptionAll" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb Essentials with this model’s verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo esencial del verbo con los verbos de este modelo."
+          }
+        }
+      }
+    },
+    "ModelPractice.descriptionFrequent" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb Essentials with this model’s ten most frequent verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo esencial del verbo con los diez verbos más frecuentes de este modelo."
+          }
+        }
+      }
+    },
+    "ModelPractice.heading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice This Pattern"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practica este patrón"
+          }
+        }
+      }
+    },
+    "ModelPractice.hubDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One model’s verbs alone, then mixed with the models you know."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los verbos de un modelo solos, y luego mezclados con los modelos que conoces."
+          }
+        }
+      }
+    },
+    "ModelPractice.hubHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens the verb models, where each model has its practice."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre los modelos de verbos, donde cada modelo tiene su práctica."
+          }
+        }
+      }
+    },
+    "ModelPractice.known" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Known"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conocido"
+          }
+        }
+      }
+    },
+    "ModelPractice.listIntro" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick a model and practice its verbs alone, then mixed with the models you know. The most used come first."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige un modelo y practica sus verbos solos, y luego mezclados con los modelos que conoces. Los más usados van primero."
+          }
+        }
+      }
+    },
+    "ModelPractice.mixed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mezcla"
+          }
+        }
+      }
+    },
+    "ModelPractice.mixedHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts a round of this model’s verbs mixed with verbs of the models you know."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza una ronda de verbos de este modelo mezclados con verbos de los modelos que conoces."
+          }
+        }
+      }
+    },
+    "ModelPractice.mixedLocked" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed opens once you know another model. You know a model once you have answered half of its practice right."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La mezcla se abre cuando conoces otro modelo. Conoces un modelo cuando has respondido bien la mitad de su práctica."
+          }
+        }
+      }
+    },
+    "ModelPractice.mixedTitle %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mezcla: %@"
+          }
+        }
+      }
+    },
+    "ModelPractice.mixedWith %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed adds verbs of the models you know: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La mezcla añade verbos de los modelos que conoces: %@"
+          }
+        }
+      }
+    },
+    "ModelPractice.singleVerb" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One verb is not a pattern, so this model has no practice of its own. Its verb joins other models’ mixed practice once you know it."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un solo verbo no es un patrón, así que este modelo no tiene práctica propia. Su verbo se suma a la práctica mezclada de otros modelos cuando lo conoces."
+          }
+        }
+      }
+    },
+    "ModelPractice.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb Models"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modelos de verbos"
+          }
+        }
+      }
+    },
     "ModelSort.classNumber" : {
       "localizations" : {
         "en" : {
@@ -3335,6 +4414,166 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Irregularidad"
+          }
+        }
+      }
+    },
+    "MyVerbs.clearRecent" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Borrar"
+          }
+        }
+      }
+    },
+    "MyVerbs.delete" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar"
+          }
+        }
+      }
+    },
+    "MyVerbs.emptyDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbs you star on their pages appear here, and so do the verbs you opened last."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aquí aparecen los verbos que marques con una estrella en su página y los últimos que abriste."
+          }
+        }
+      }
+    },
+    "MyVerbs.emptyTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Verbs Yet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay verbos"
+          }
+        }
+      }
+    },
+    "MyVerbs.recent" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recientes"
+          }
+        }
+      }
+    },
+    "MyVerbs.starred" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starred"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Con estrella"
+          }
+        }
+      }
+    },
+    "MyVerbs.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mis verbos"
+          }
+        }
+      }
+    },
+    "MyVerbs.unstarConfirm" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Star"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar estrella"
+          }
+        }
+      }
+    },
+    "MyVerbs.unstarMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The verb will leave My Verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El verbo saldrá de Mis verbos."
+          }
+        }
+      }
+    },
+    "MyVerbs.unstarTitle %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove the star from “%@”?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Quitar la estrella de «%@»?"
           }
         }
       }
@@ -3755,6 +4994,545 @@
         }
       }
     },
+    "PersonalBest.best %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your best: %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu récord: %lld"
+          }
+        }
+      }
+    },
+    "PersonalBest.hubLine %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your best at this level: %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu récord en este nivel: %lld"
+          }
+        }
+      }
+    },
+    "PersonalBest.newBest" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New personal best!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Nuevo récord personal!"
+          }
+        }
+      }
+    },
+    "PracticeSession.heading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From Your Practice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De tu práctica"
+          }
+        }
+      }
+    },
+    "PracticeSession.mistakes" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice My Mistakes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practicar mis errores"
+          }
+        }
+      }
+    },
+    "PracticeSession.mistakesCount %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld question you last missed"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld questions you last missed"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld pregunta que fallaste la última vez"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld preguntas que fallaste la última vez"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "PracticeSession.mistakesEmpty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No mistakes to practice. A question you miss in a quiz waits here until you answer it right."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay errores que practicar. Una pregunta que fallas en un test espera aquí hasta que la respondas bien."
+          }
+        }
+      }
+    },
+    "PracticeSession.mistakesHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts a quiz of the questions you last answered wrongly."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza un test de las preguntas que fallaste la última vez."
+          }
+        }
+      }
+    },
+    "PracticeSession.review" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repaso"
+          }
+        }
+      }
+    },
+    "PracticeSession.reviewCount %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld question due for review"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld questions due for review"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld pregunta pendiente de repaso"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld preguntas pendientes de repaso"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "PracticeSession.reviewEmpty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing to review yet. What you answer in a quiz, and every irregular verb you look up, comes due for review a day or more later."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay nada que repasar. Lo que respondes en un test, y cada verbo irregular que consultas, vuelve para repasarlo un día o más después."
+          }
+        }
+      }
+    },
+    "PracticeSession.reviewHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts a quiz of the questions due for review."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza un test de las preguntas pendientes de repaso."
+          }
+        }
+      }
+    },
+    "PracticeSession.reviewNextDue %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Nothing is due today. The next review is tomorrow."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Nothing is due today. The next review is in %lld days."
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hoy no hay nada pendiente. El próximo repaso es mañana."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Hoy no hay nada pendiente. El próximo repaso es dentro de %lld días."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "PracticeSet.byLevel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set by Level"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Según el nivel"
+          }
+        }
+      }
+    },
+    "PracticeSet.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Someone shared this choice of tenses and verbs with you. Ten questions, and ten more whenever you like."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alguien ha compartido contigo esta selección de tiempos y verbos. Diez preguntas y diez más cuando quieras."
+          }
+        }
+      }
+    },
+    "PracticeSet.invalidDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This link names no tense or verb set that this version of Conjugar knows. It may have been cut short, or it may need a newer version of the app."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este enlace no nombra ningún tiempo ni conjunto de verbos que esta versión de Conjugar conozca. Puede que esté incompleto o que necesite una versión más reciente de la app."
+          }
+        }
+      }
+    },
+    "PracticeSet.invalidTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice Set Not Found"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serie de práctica no encontrada"
+          }
+        }
+      }
+    },
+    "PracticeSet.keep" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep as My Custom Quiz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardar como mi test personalizado"
+          }
+        }
+      }
+    },
+    "PracticeSet.keepFooter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keeping it replaces the custom quiz on your Quiz tab."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al guardarla, reemplaza el test personalizado de tu pestaña Test."
+          }
+        }
+      }
+    },
+    "PracticeSet.kept" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kept as Your Custom Quiz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardada como tu test personalizado"
+          }
+        }
+      }
+    },
+    "PracticeSet.qrCodeLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR code that opens this practice set"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Código QR que abre esta serie de práctica"
+          }
+        }
+      }
+    },
+    "PracticeSet.scanNote" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Point the Camera app at the code to open this practice set in Conjugar."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apunta la app Cámara al código para abrir esta serie de práctica en Conjugar."
+          }
+        }
+      }
+    },
+    "PracticeSet.scanTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan to Practice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escanea y practica"
+          }
+        }
+      }
+    },
+    "PracticeSet.shareHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shares this custom quiz as a link or a QR code"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comparte este test personalizado como enlace o código QR"
+          }
+        }
+      }
+    },
+    "PracticeSet.shareLink" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Link"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir enlace"
+          }
+        }
+      }
+    },
+    "PracticeSet.shareText %@ %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice set:\n%1$@\n\nOpen it in Conjugar:\n%2$@\n\nGet Conjugar on the App Store:\n%3$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serie de práctica:\n%1$@\n\nÁbrela en Conjugar:\n%2$@\n\nDescarga Conjugar en el App Store:\n%3$@"
+          }
+        }
+      }
+    },
+    "PracticeSet.showQRCode" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show QR Code"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar código QR"
+          }
+        }
+      }
+    },
+    "PracticeSet.startHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts ten questions from this practice set"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza diez preguntas de esta serie de práctica"
+          }
+        }
+      }
+    },
+    "PracticeSet.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice Set"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serie de práctica"
+          }
+        }
+      }
+    },
     "Quiz.allVerbs" : {
       "localizations" : {
         "en" : {
@@ -3787,246 +5565,6 @@
         }
       }
     },
-    "Diagnosis.consonantBeforeAO %@ %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In %1$@, %2$@ becomes %3$@ before a or o."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En %1$@, %2$@ se escribe %3$@ delante de a y o."
-          }
-        }
-      }
-    },
-    "Diagnosis.consonantBeforeE %@ %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In %1$@, %2$@ becomes %3$@ before e."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En %1$@, %2$@ se escribe %3$@ delante de e."
-          }
-        }
-      }
-    },
-    "Diagnosis.endingIBecomesY %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In %@, the ending’s i becomes y between vowels."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En %@, la i de la terminación se escribe y entre vocales."
-          }
-        }
-      }
-    },
-    "Diagnosis.endingLosesI %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In %1$@, the ending loses its i after %2$@."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En %1$@, la terminación pierde la i tras %2$@."
-          }
-        }
-      }
-    },
-    "Diagnosis.negativeCommand" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Negative commands use the subjunctive."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El imperativo negativo se forma con el subjuntivo."
-          }
-        }
-      }
-    },
-    "Diagnosis.nonFinite %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "That is the %@."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ese es el %@."
-          }
-        }
-      }
-    },
-    "Diagnosis.otherPerson %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "That is the form for %@."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esa es la forma de %@."
-          }
-        }
-      }
-    },
-    "Diagnosis.otherTense %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "That is the form of the %@."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esa es la forma del %@."
-          }
-        }
-      }
-    },
-    "Diagnosis.raForSe" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "That is the -ra form. The -se form was asked."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esa es la forma en -ra. Se pedía la forma en -se."
-          }
-        }
-      }
-    },
-    "Diagnosis.regularForm %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "That is the regular form, but %1$@ is irregular in the %2$@."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esa es la forma regular, pero %1$@ es irregular en el %2$@."
-          }
-        }
-      }
-    },
-    "Diagnosis.seForRa" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "That is the -se form. The -ra form was asked."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esa es la forma en -se. Se pedía la forma en -ra."
-          }
-        }
-      }
-    },
-    "Diagnosis.stemAccent %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In %1$@, the stem’s %2$@ takes a written accent here."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En %1$@, la %2$@ de la raíz lleva tilde aquí."
-          }
-        }
-      }
-    },
-    "Diagnosis.stemChangeMisplaced %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In %@, the stem does not change here."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En %@, la raíz no cambia aquí."
-          }
-        }
-      }
-    },
-    "Diagnosis.stemChangeMissing %@ %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In %1$@, the stem’s %2$@ becomes %3$@ here."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En %1$@, la %2$@ de la raíz pasa a %3$@ aquí."
-          }
-        }
-      }
-    },
-    "Quiz.tryOnceMore" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Try once more."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inténtalo una vez más."
-          }
-        }
-      }
-    },
     "Quiz.askedAgain" : {
       "localizations" : {
         "en" : {
@@ -4039,22 +5577,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pregunta repetida"
-          }
-        }
-      }
-    },
-    "Quiz.willComeUpAgain" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This question will come up again."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta pregunta volverá a salir."
           }
         }
       }
@@ -4155,22 +5677,6 @@
         }
       }
     },
-    "Quiz.correctSpelled" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Correct. Spelled:"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Correcto. Se escribe:"
-          }
-        }
-      }
-    },
     "Quiz.correctionHint" : {
       "localizations" : {
         "en" : {
@@ -4203,6 +5709,22 @@
         }
       }
     },
+    "Quiz.correctSpelled" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correct. Spelled:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Correcto. Se escribe:"
+          }
+        }
+      }
+    },
     "Quiz.done" : {
       "localizations" : {
         "en" : {
@@ -4231,6 +5753,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Transcurrido"
+          }
+        }
+      }
+    },
+    "Quiz.exercises" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exercises"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ejercicios"
           }
         }
       }
@@ -4299,6 +5837,22 @@
         }
       }
     },
+    "Quiz.lastQuiz" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Quiz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Último test"
+          }
+        }
+      }
+    },
     "Quiz.lettersDiffer" : {
       "localizations" : {
         "en" : {
@@ -4315,6 +5869,22 @@
         }
       }
     },
+    "Quiz.levelMenuHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changes the quiz level."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia el nivel del test."
+          }
+        }
+      }
+    },
     "Quiz.localizedTitle" : {
       "localizations" : {
         "en" : {
@@ -4327,6 +5897,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Test"
+          }
+        }
+      }
+    },
+    "Quiz.minutesLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutos"
           }
         }
       }
@@ -4531,6 +6117,38 @@
         }
       }
     },
+    "Quiz.sessionLength" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Two to three minutes"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De dos a tres minutos"
+          }
+        }
+      }
+    },
+    "Quiz.sessionMinutes" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2–3"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2–3"
+          }
+        }
+      }
+    },
     "Quiz.start" : {
       "localizations" : {
         "en" : {
@@ -4563,6 +6181,22 @@
         }
       }
     },
+    "Quiz.tryOnceMore" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try once more."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inténtalo una vez más."
+          }
+        }
+      }
+    },
     "Quiz.verb" : {
       "localizations" : {
         "en" : {
@@ -4575,6 +6209,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verbo"
+          }
+        }
+      }
+    },
+    "Quiz.willComeUpAgain" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This question will come up again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta pregunta volverá a salir."
           }
         }
       }
@@ -4607,6 +6257,102 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tu Respuesta"
+          }
+        }
+      }
+    },
+    "QuizClock.hide" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar"
+          }
+        }
+      }
+    },
+    "QuizClock.show" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar"
+          }
+        }
+      }
+    },
+    "QuizLevel.advanced" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Advanced"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avanzado"
+          }
+        }
+      }
+    },
+    "QuizLevel.beginner" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beginner"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicial"
+          }
+        }
+      }
+    },
+    "QuizLevel.elementary" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elementary"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elemental"
+          }
+        }
+      }
+    },
+    "QuizLevel.intermediate" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intermediate"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intermedio"
           }
         }
       }
@@ -4915,6 +6661,22 @@
         }
       }
     },
+    "Results.askedAgain" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asked Again"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repetidas"
+          }
+        }
+      }
+    },
     "Results.correct" : {
       "localizations" : {
         "en" : {
@@ -4975,22 +6737,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Segundo intento"
-          }
-        }
-      }
-    },
-    "Results.askedAgain" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Asked Again"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Repetidas"
           }
         }
       }
@@ -5147,6 +6893,62 @@
         }
       }
     },
+    "ReviewCard.practiced %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Practiced yesterday"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Practiced %lld days ago"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Practicado ayer"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Practicado hace %lld días"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ReviewCard.practicedEarlier" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practiced earlier"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practicado antes"
+          }
+        }
+      }
+    },
     "ReviewCard.prompt" : {
       "localizations" : {
         "en" : {
@@ -5159,38 +6961,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recuerda sus conjugaciones y luego toca para comprobarlas."
-          }
-        }
-      }
-    },
-    "QuizClock.hide" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hide"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ocultar"
-          }
-        }
-      }
-    },
-    "QuizClock.show" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar"
           }
         }
       }
@@ -5419,38 +7189,6 @@
         }
       }
     },
-    "Settings.level" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Level"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nivel"
-          }
-        }
-      }
-    },
-    "Settings.levelDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Each level asks the tenses of the level before and more. Beginner asks the presente and commands. Elementary adds the past tenses, the futuro, and the gerundio. Intermediate adds the presente de subjuntivo, the condicional, and negative commands. Advanced asks every tense. Beginner asks the 100 most used verbs, Elementary the 300 most used, Intermediate the 1,000 most used, and Advanced every verb."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cada nivel pregunta los tiempos del nivel anterior y algunos más. Inicial pregunta el presente y el imperativo. Elemental añade los tiempos del pasado, el futuro y el gerundio. Intermedio añade el presente de subjuntivo, el condicional y el imperativo negativo. Avanzado pregunta todos los tiempos. Inicial pregunta los 100 verbos más usados, Elemental los 300 más usados, Intermedio los 1000 más usados y Avanzado todos los verbos."
-          }
-        }
-      }
-    },
     "Settings.enable" : {
       "localizations" : {
         "en" : {
@@ -5479,6 +7217,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Conjugar puede enviar tus puntuaciones futuras a Game Center, que tiene una tabla de clasificación (\"leaderboard\") para cada nivel. Toca Permitir para habilitarlo."
+          }
+        }
+      }
+    },
+    "Settings.level" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Level"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nivel"
+          }
+        }
+      }
+    },
+    "Settings.levelDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Each level asks the tenses of the level before and more. Beginner asks the presente and commands. Elementary adds the past tenses, the futuro, and the gerundio. Intermediate adds the presente de subjuntivo, the condicional, and negative commands. Advanced asks every tense. Beginner asks the 100 most used verbs, Elementary the 300 most used, Intermediate the 1,000 most used, and Advanced every verb."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cada nivel pregunta los tiempos del nivel anterior y algunos más. Inicial pregunta el presente y el imperativo. Elemental añade los tiempos del pasado, el futuro y el gerundio. Intermedio añade el presente de subjuntivo, el condicional y el imperativo negativo. Avanzado pregunta todos los tiempos. Inicial pregunta los 100 verbos más usados, Elemental los 300 más usados, Intermedio los 1000 más usados y Avanzado todos los verbos."
           }
         }
       }
@@ -5527,6 +7297,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hacer el Test de Tú o Vos"
+          }
+        }
+      }
+    },
+    "Settings.quizClockDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This setting determines whether the quiz and its results show the time you spend answering."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este ajuste determina si el test y sus resultados muestran el tiempo que dedicas a responder."
+          }
+        }
+      }
+    },
+    "Settings.quizClockHeading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quiz Clock"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reloj del test"
           }
         }
       }
@@ -5667,6 +7469,118 @@
         }
       }
     },
+    "Settings.resetPractice" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset Practice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restablecer práctica"
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeConfirm" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restablecer"
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This button erases what the quiz and the review card remember of your practice: which conjugations are due again, which you missed last, your last quiz's results, your Speed Round best, your best at each level, and your daily streak. The record stays on this device and is never sent."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este botón borra lo que el test y la tarjeta de repaso recuerdan de tu práctica: qué conjugaciones te toca repasar, cuáles fallaste la última vez, los resultados de tu último test, tu récord en la Ronda rápida, tu récord en cada nivel y tu racha diaria. El registro se queda en este dispositivo y nunca se envía."
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeHeading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Practice Record"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registro de práctica"
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asks before erasing your practice record."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pregunta antes de borrar tu registro de práctica."
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The quiz will forget which conjugations you have practiced, your last quiz's results, your Speed Round best, your best at each level, and your daily streak, and the review card will offer nothing until you look a verb up again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El test olvidará qué conjugaciones has practicado, los resultados de tu último test, tu récord en la Ronda rápida, tu récord en cada nivel y tu racha diaria, y la tarjeta de repaso no te ofrecerá nada hasta que vuelvas a consultar un verbo."
+          }
+        }
+      }
+    },
+    "Settings.resetPracticeTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset your practice?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Restablecer tu práctica?"
+          }
+        }
+      }
+    },
     "Settings.reviewCardSuppressionDescription" : {
       "localizations" : {
         "en" : {
@@ -5683,38 +7597,6 @@
         }
       }
     },
-    "Settings.quizClockHeading" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quiz Clock"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reloj del test"
-          }
-        }
-      }
-    },
-    "Settings.quizClockDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This setting determines whether the quiz and its results show the time you spend answering."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este ajuste determina si el test y sus resultados muestran el tiempo que dedicas a responder."
-          }
-        }
-      }
-    },
     "Settings.reviewCardSuppressionHeading" : {
       "localizations" : {
         "en" : {
@@ -5727,6 +7609,278 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ocultar la tarjeta de repaso"
+          }
+        }
+      }
+    },
+    "Shortcut.randomVerb" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Random Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbo aleatorio"
+          }
+        }
+      }
+    },
+    "Shortcut.startQuiz" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start a Quiz"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar un test"
+          }
+        }
+      }
+    },
+    "SpeedRound.again" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Another Round"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otra ronda"
+          }
+        }
+      }
+    },
+    "SpeedRound.againHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts another 60 seconds on what you have mastered."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza otros 60 segundos sobre lo que ya dominas."
+          }
+        }
+      }
+    },
+    "SpeedRound.announceTimeUp %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time is up. Right answers: %lld."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se acabó el tiempo. Respuestas correctas: %lld."
+          }
+        }
+      }
+    },
+    "SpeedRound.announceWarning" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten seconds left."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quedan diez segundos."
+          }
+        }
+      }
+    },
+    "SpeedRound.answerWas" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incorrect. The answer was"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incorrecto. La respuesta era"
+          }
+        }
+      }
+    },
+    "SpeedRound.best %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your best: %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu récord: %lld"
+          }
+        }
+      }
+    },
+    "SpeedRound.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As many right answers as you can in 60 seconds, on what you have mastered"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tantas respuestas correctas como puedas en 60 segundos, sobre lo que ya dominas"
+          }
+        }
+      }
+    },
+    "SpeedRound.descriptionWithBest %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As many right answers as you can in 60 seconds, on what you have mastered · Best: %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tantas respuestas correctas como puedas en 60 segundos, sobre lo que ya dominas · Récord: %lld"
+          }
+        }
+      }
+    },
+    "SpeedRound.locked %lld %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens once you have mastered %1$lld patterns or irregular forms. Mastered so far: %2$lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se abre cuando domines %1$lld patrones o formas irregulares. Dominados hasta ahora: %2$lld"
+          }
+        }
+      }
+    },
+    "SpeedRound.newBest" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New personal best!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Nuevo récord personal!"
+          }
+        }
+      }
+    },
+    "SpeedRound.resultsHeading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Right Answers in 60 Seconds"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Respuestas correctas en 60 segundos"
+          }
+        }
+      }
+    },
+    "SpeedRound.startHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts 60 seconds of questions on what you have mastered."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza 60 segundos de preguntas sobre lo que ya dominas."
+          }
+        }
+      }
+    },
+    "SpeedRound.timeLeft %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time left: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiempo restante: %@"
+          }
+        }
+      }
+    },
+    "SpeedRound.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speed Round"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ronda rápida"
           }
         }
       }
@@ -5827,6 +7981,70 @@
         }
       }
     },
+    "Tips.redLettersMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A red letter marks an irregularity: where a form departs from the pattern a regular verb like hablar, comer, or vivir would follow, as in tengo and tuve."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una letra roja marca una irregularidad: el punto en que una forma se aparta del modelo que seguiría un verbo regular como hablar, comer o vivir, como en tengo y tuve."
+          }
+        }
+      }
+    },
+    "Tips.redLettersTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Red Letters"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letras rojas"
+          }
+        }
+      }
+    },
+    "Tips.scrollToBottomMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Below the conjugations, the page tells where the verb comes from and shows it in example sentences."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debajo de las conjugaciones, la página cuenta de dónde viene el verbo y lo muestra en frases de ejemplo."
+          }
+        }
+      }
+    },
+    "Tips.scrollToBottomTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep Scrolling"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue bajando"
+          }
+        }
+      }
+    },
     "Tips.tryQuizMessage" : {
       "localizations" : {
         "en" : {
@@ -5855,70 +8073,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prueba el test"
-          }
-        }
-      }
-    },
-    "Tips.redLettersTitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Red Letters"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Letras rojas"
-          }
-        }
-      }
-    },
-    "Tips.redLettersMessage" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A red letter marks an irregularity: where a form departs from the pattern a regular verb like hablar, comer, or vivir would follow, as in tengo and tuve."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Una letra roja marca una irregularidad: el punto en que una forma se aparta del modelo que seguiría un verbo regular como hablar, comer o vivir, como en tengo y tuve."
-          }
-        }
-      }
-    },
-    "Tips.scrollToBottomTitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keep Scrolling"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sigue bajando"
-          }
-        }
-      }
-    },
-    "Tips.scrollToBottomMessage" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Below the conjugations, the page tells where the verb comes from and shows it in example sentences."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Debajo de las conjugaciones, la página cuenta de dónde viene el verbo y lo muestra en frases de ejemplo."
           }
         }
       }
@@ -6131,6 +8285,22 @@
         }
       }
     },
+    "Verb.aboutThisTense" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About this tense"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sobre este tiempo verbal"
+          }
+        }
+      }
+    },
     "Verb.allRelated %lld" : {
       "localizations" : {
         "en" : {
@@ -6143,6 +8313,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ver los %lld"
+          }
+        }
+      }
+    },
+    "Verb.alsoKnownAs" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "also"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "también"
           }
         }
       }
@@ -6163,6 +8349,22 @@
         }
       }
     },
+    "Verb.closeArticle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo"
+          }
+        }
+      }
+    },
     "Verb.conjugatedLike %@" : {
       "localizations" : {
         "en" : {
@@ -6175,6 +8377,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se conjugan como %@"
+          }
+        }
+      }
+    },
+    "Verb.copy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar"
           }
         }
       }
@@ -6307,6 +8525,22 @@
         }
       }
     },
+    "Verb.matchesSearch" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Matches your search"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coincide con tu búsqueda"
+          }
+        }
+      }
+    },
     "Verb.medievalExample" : {
       "localizations" : {
         "en" : {
@@ -6371,70 +8605,6 @@
         }
       }
     },
-    "Verb.matchesSearch" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Matches your search"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Coincide con tu búsqueda"
-          }
-        }
-      }
-    },
-    "Verb.alsoKnownAs" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "also"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "también"
-          }
-        }
-      }
-    },
-    "Verb.aboutThisTense" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "About this tense"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sobre este tiempo verbal"
-          }
-        }
-      }
-    },
-    "Verb.closeArticle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Done"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Listo"
-          }
-        }
-      }
-    },
     "Verb.relatedHeading" : {
       "localizations" : {
         "en" : {
@@ -6447,38 +8617,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verbos Relacionados"
-          }
-        }
-      }
-    },
-    "Verb.showsModel" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shows every verb of this model"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Muestra todos los verbos de este modelo"
-          }
-        }
-      }
-    },
-    "Verb.copy" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copiar"
           }
         }
       }
@@ -6515,6 +8653,470 @@
         }
       }
     },
+    "Verb.showsModel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows every verb of this model"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra todos los verbos de este modelo"
+          }
+        }
+      }
+    },
+    "Verb.star" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to My Verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir a Mis verbos"
+          }
+        }
+      }
+    },
+    "Verb.testMe" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test Me on This Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ponme a prueba con este verbo"
+          }
+        }
+      }
+    },
+    "Verb.unstar" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove from My Verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar de Mis verbos"
+          }
+        }
+      }
+    },
+    "VerbCollection.goVerbsDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbs whose yo form in the present ends in -go: tengo, hago, salgo. The g carries into the present subjunctive: tenga, haga, salga."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos cuya forma de yo en el presente termina en -go: tengo, hago, salgo. La g pasa al presente de subjuntivo: tenga, haga, salga."
+          }
+        }
+      }
+    },
+    "VerbCollection.goVerbsTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-go Verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos en -go"
+          }
+        }
+      }
+    },
+    "VerbCollection.heading" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collections"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colecciones"
+          }
+        }
+      }
+    },
+    "VerbCollection.irregularFutureDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbs whose future and conditional build on a changed stem: tendré, haré, diré, and tendría, haría, diría."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos cuyo futuro y condicional se forman sobre una raíz cambiada: tendré, haré, diré, y tendría, haría, diría."
+          }
+        }
+      }
+    },
+    "VerbCollection.irregularFutureTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregular Futures"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Futuros irregulares"
+          }
+        }
+      }
+    },
+    "VerbCollection.irregularParticipleDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbs whose participle does not end in -ado or -ido: hecho, dicho, visto, puesto, vuelto."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos cuyo participio no termina en -ado ni en -ido: hecho, dicho, visto, puesto, vuelto."
+          }
+        }
+      }
+    },
+    "VerbCollection.irregularParticipleTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregular Participles"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Participios irregulares"
+          }
+        }
+      }
+    },
+    "VerbCollection.lookedUp" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Looked up"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consultado"
+          }
+        }
+      }
+    },
+    "VerbCollection.modelTitle %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbs Like %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos como %@"
+          }
+        }
+      }
+    },
+    "VerbCollection.patternNote" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From the 1,000 most frequent verbs. Compounds such as detener and componer follow their base verbs and are not listed."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De los 1000 verbos más frecuentes. Los compuestos, como detener y componer, siguen a su verbo base y no se incluyen."
+          }
+        }
+      }
+    },
+    "VerbCollection.progress %lld %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld of %2$lld looked up"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consultados: %1$lld de %2$lld"
+          }
+        }
+      }
+    },
+    "VerbCollection.quizHint %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts a %lld-question quiz on this list’s verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza un test de %lld preguntas sobre los verbos de esta lista."
+          }
+        }
+      }
+    },
+    "VerbCollection.shareText %@ %@ %@ %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$@): %3$@\n\nOpen this list in Conjugar:\n%4$@\n\nGet Conjugar on the App Store:\n%5$@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$@): %3$@\n\nAbre esta lista en Conjugar:\n%4$@\n\nDescarga Conjugar en el App Store:\n%5$@"
+          }
+        }
+      }
+    },
+    "VerbCollection.strongPreteriteDescription" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbs whose preterite takes a new stem and unstressed endings: tuve, hice, dije, with no accent on yo or él."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbos cuyo pretérito toma una raíz nueva y terminaciones átonas: tuve, hice, dije, sin tilde en yo ni en él."
+          }
+        }
+      }
+    },
+    "VerbCollection.strongPreteriteTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strong Preterites"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pretéritos fuertes"
+          }
+        }
+      }
+    },
+    "VerbCollection.top100Description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The verbs that turn up most often in Spanish text, and the first to know."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los verbos que más aparecen en los textos en español, y los primeros que conviene saber."
+          }
+        }
+      }
+    },
+    "VerbCollection.top100Title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100 Most Frequent Verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los 100 verbos más frecuentes"
+          }
+        }
+      }
+    },
+    "VerbEssentials.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Five irregular verbs, four forms each: tengo · tuve · tendré · tenido."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cinco verbos irregulares, cuatro formas de cada uno: tengo · tuve · tendré · tenido."
+          }
+        }
+      }
+    },
+    "VerbEssentials.fiveMore" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Five More Verbs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cinco verbos más"
+          }
+        }
+      }
+    },
+    "VerbEssentials.fiveMoreHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continues with five more verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continúa con cinco verbos más."
+          }
+        }
+      }
+    },
+    "VerbEssentials.spokenPending" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "not yet asked"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pendiente"
+          }
+        }
+      }
+    },
+    "VerbEssentials.spokenRight" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "right"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "correcta"
+          }
+        }
+      }
+    },
+    "VerbEssentials.spokenWrong" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wrong"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "incorrecta"
+          }
+        }
+      }
+    },
+    "VerbEssentials.startHint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts a round of five irregular verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza una ronda de cinco verbos irregulares."
+          }
+        }
+      }
+    },
+    "VerbEssentials.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verb Essentials"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lo esencial del verbo"
+          }
+        }
+      }
+    },
     "VerbSort.alphabetical" : {
       "localizations" : {
         "en" : {
@@ -6543,6 +9145,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Frecuencia"
+          }
+        }
+      }
+    },
+    "Widget.findVerbDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search Conjugar’s verbs."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Busca entre los verbos de Conjugar."
+          }
+        }
+      }
+    },
+    "Widget.findVerbName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find a Verb"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar un verbo"
           }
         }
       }
@@ -6781,2583 +9417,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verbo del Día"
-          }
-        }
-      }
-    },
-    "Lookup.verbWithGloss %@ %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@, “%2$@”"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@, «%2$@»"
-          }
-        }
-      }
-    },
-    "Lookup.form %@ %@ %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@: %2$@ of %3$@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@: %2$@ de %3$@"
-          }
-        }
-      }
-    },
-    "Lookup.otherMatchesOne %@ %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conjugar has no verb or conjugation spelled “%1$@”, but one verb matches: %2$@."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@», pero coincide un verbo: %2$@."
-          }
-        }
-      }
-    },
-    "Lookup.otherMatchesMany %@ %lld %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conjugar has no verb or conjugation spelled “%1$@”, but %2$lld verbs match. The first is %3$@."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@», pero coinciden %2$lld verbos. El primero es %3$@."
-          }
-        }
-      }
-    },
-    "Lookup.guessVerb %@ %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conjugar has no verb or conjugation spelled “%1$@”. Perhaps you meant %2$@."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@». Quizá querías decir %2$@."
-          }
-        }
-      }
-    },
-    "Lookup.guessForm %@ %@ %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conjugar has no verb or conjugation spelled “%1$@”. Perhaps you meant %2$@, of %3$@."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@». Quizá querías decir %2$@, de %3$@."
-          }
-        }
-      }
-    },
-    "Lookup.nothing %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conjugar has no verb or conjugation spelled “%1$@”."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conjugar no tiene ningún verbo ni forma conjugada que se escriba «%1$@»."
-          }
-        }
-      }
-    },
-    "Intent.lookUpVerbTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Look Up a Verb"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consultar un verbo"
-          }
-        }
-      }
-    },
-    "Intent.lookUpVerbDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finds the verb that a conjugation, an infinitive, or an English meaning belongs to, says what it found, and opens it in Conjugar."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Encuentra el verbo al que pertenece una forma conjugada, un infinitivo o un significado en inglés, dice lo que encontró y lo abre en Conjugar."
-          }
-        }
-      }
-    },
-    "Intent.lookUpVerbWord" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Word"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Palabra"
-          }
-        }
-      }
-    },
-    "Intent.lookUpVerbWordPrompt" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Which word should Conjugar look up?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Qué palabra debe consultar Conjugar?"
-          }
-        }
-      }
-    },
-    "Intent.openLookupResultTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Lookup Result"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abrir el resultado de la consulta"
-          }
-        }
-      }
-    },
-    "Intent.openLookupResultURL" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Link"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enlace"
-          }
-        }
-      }
-    },
-    "Intent.verbEntityName" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verb"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbo"
-          }
-        }
-      }
-    },
-    "Shortcut.startQuiz" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start a Quiz"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empezar un test"
-          }
-        }
-      }
-    },
-    "Shortcut.randomVerb" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Random Verb"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbo aleatorio"
-          }
-        }
-      }
-    },
-    "Verb.star" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add to My Verbs"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Añadir a Mis verbos"
-          }
-        }
-      }
-    },
-    "Verb.testMe" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Test Me on This Verb"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ponme a prueba con este verbo"
-          }
-        }
-      }
-    },
-    "Verb.unstar" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove from My Verbs"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quitar de Mis verbos"
-          }
-        }
-      }
-    },
-    "MyVerbs.title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "My Verbs"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mis verbos"
-          }
-        }
-      }
-    },
-    "MyVerbs.starred" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starred"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Con estrella"
-          }
-        }
-      }
-    },
-    "MyVerbs.recent" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recent"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recientes"
-          }
-        }
-      }
-    },
-    "MyVerbs.clearRecent" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clear"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Borrar"
-          }
-        }
-      }
-    },
-    "MyVerbs.delete" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eliminar"
-          }
-        }
-      }
-    },
-    "MyVerbs.emptyTitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No Verbs Yet"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aún no hay verbos"
-          }
-        }
-      }
-    },
-    "MyVerbs.emptyDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbs you star on their pages appear here, and so do the verbs you opened last."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aquí aparecen los verbos que marques con una estrella en su página y los últimos que abriste."
-          }
-        }
-      }
-    },
-    "MyVerbs.unstarTitle %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove the star from “%@”?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Quitar la estrella de «%@»?"
-          }
-        }
-      }
-    },
-    "MyVerbs.unstarMessage" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The verb will leave My Verbs."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El verbo saldrá de Mis verbos."
-          }
-        }
-      }
-    },
-    "MyVerbs.unstarConfirm" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove Star"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quitar estrella"
-          }
-        }
-      }
-    },
-    "VerbCollection.heading" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Collections"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Colecciones"
-          }
-        }
-      }
-    },
-    "VerbCollection.top100Title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "100 Most Frequent Verbs"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Los 100 verbos más frecuentes"
-          }
-        }
-      }
-    },
-    "VerbCollection.top100Description" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The verbs that turn up most often in Spanish text, and the first to know."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Los verbos que más aparecen en los textos en español, y los primeros que conviene saber."
-          }
-        }
-      }
-    },
-    "VerbCollection.goVerbsTitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "-go Verbs"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbos en -go"
-          }
-        }
-      }
-    },
-    "VerbCollection.goVerbsDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbs whose yo form in the present ends in -go: tengo, hago, salgo. The g carries into the present subjunctive: tenga, haga, salga."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbos cuya forma de yo en el presente termina en -go: tengo, hago, salgo. La g pasa al presente de subjuntivo: tenga, haga, salga."
-          }
-        }
-      }
-    },
-    "VerbCollection.strongPreteriteTitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Strong Preterites"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pretéritos fuertes"
-          }
-        }
-      }
-    },
-    "VerbCollection.strongPreteriteDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbs whose preterite takes a new stem and unstressed endings: tuve, hice, dije, with no accent on yo or él."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbos cuyo pretérito toma una raíz nueva y terminaciones átonas: tuve, hice, dije, sin tilde en yo ni en él."
-          }
-        }
-      }
-    },
-    "VerbCollection.irregularFutureTitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Irregular Futures"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Futuros irregulares"
-          }
-        }
-      }
-    },
-    "VerbCollection.irregularFutureDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbs whose future and conditional build on a changed stem: tendré, haré, diré, and tendría, haría, diría."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbos cuyo futuro y condicional se forman sobre una raíz cambiada: tendré, haré, diré, y tendría, haría, diría."
-          }
-        }
-      }
-    },
-    "VerbCollection.irregularParticipleTitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Irregular Participles"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Participios irregulares"
-          }
-        }
-      }
-    },
-    "VerbCollection.irregularParticipleDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbs whose participle does not end in -ado or -ido: hecho, dicho, visto, puesto, vuelto."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbos cuyo participio no termina en -ado ni en -ido: hecho, dicho, visto, puesto, vuelto."
-          }
-        }
-      }
-    },
-    "VerbCollection.patternNote" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "From the 1,000 most frequent verbs. Compounds such as detener and componer follow their base verbs and are not listed."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "De los 1000 verbos más frecuentes. Los compuestos, como detener y componer, siguen a su verbo base y no se incluyen."
-          }
-        }
-      }
-    },
-    "VerbCollection.modelTitle %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbs Like %@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbos como %@"
-          }
-        }
-      }
-    },
-    "VerbCollection.progress %lld %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld of %2$lld looked up"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consultados: %1$lld de %2$lld"
-          }
-        }
-      }
-    },
-    "VerbCollection.quizHint %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts a %lld-question quiz on this list’s verbs."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empieza un test de %lld preguntas sobre los verbos de esta lista."
-          }
-        }
-      }
-    },
-    "VerbCollection.lookedUp" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Looked up"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consultado"
-          }
-        }
-      }
-    },
-    "VerbCollection.shareText %@ %@ %@ %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ (%2$@): %3$@\n\nOpen this list in Conjugar:\n%4$@\n\nGet Conjugar on the App Store:\n%5$@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ (%2$@): %3$@\n\nAbre esta lista en Conjugar:\n%4$@\n\nDescarga Conjugar en el App Store:\n%5$@"
-          }
-        }
-      }
-    },
-    "GameCenter.viewLeaderboard" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "View Leaderboard"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver clasificación"
-          }
-        }
-      }
-    },
-    "GameCenter.viewLeaderboardHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opens the Game Center leaderboard for your level."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abre la tabla de clasificación de Game Center de tu nivel."
-          }
-        }
-      }
-    },
-    "GameCenter.viewLeaderboards" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "View Leaderboards"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver clasificaciones"
-          }
-        }
-      }
-    },
-    "GameCenter.viewLeaderboardsDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Game Center keeps a leaderboard for each level. A quiz over every verb posts the points of its first ten questions to its level's leaderboard, so you rank among learners at the same level."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Game Center tiene una tabla de clasificación para cada nivel. Un test sobre todos los verbos publica los puntos de sus diez primeras preguntas en la tabla de su nivel, así que compites con estudiantes del mismo nivel."
-          }
-        }
-      }
-    },
-    "GameCenter.viewLeaderboardsHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opens Game Center's list of Conjugar's leaderboards."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abre en Game Center la lista de tablas de clasificación de Conjugar."
-          }
-        }
-      }
-    },
-    "CustomQuiz.verbList" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verb List"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lista de verbos"
-          }
-        }
-      }
-    },
-    "PracticeSet.title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practice Set"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Serie de práctica"
-          }
-        }
-      }
-    },
-    "PracticeSet.description" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Someone shared this choice of tenses and verbs with you. Ten questions, and ten more whenever you like."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alguien ha compartido contigo esta selección de tiempos y verbos. Diez preguntas y diez más cuando quieras."
-          }
-        }
-      }
-    },
-    "PracticeSet.byLevel" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Set by Level"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Según el nivel"
-          }
-        }
-      }
-    },
-    "PracticeSet.invalidTitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practice Set Not Found"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Serie de práctica no encontrada"
-          }
-        }
-      }
-    },
-    "PracticeSet.invalidDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This link names no tense or verb set that this version of Conjugar knows. It may have been cut short, or it may need a newer version of the app."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este enlace no nombra ningún tiempo ni conjunto de verbos que esta versión de Conjugar conozca. Puede que esté incompleto o que necesite una versión más reciente de la app."
-          }
-        }
-      }
-    },
-    "PracticeSet.keep" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keep as My Custom Quiz"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Guardar como mi test personalizado"
-          }
-        }
-      }
-    },
-    "PracticeSet.keepFooter" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keeping it replaces the custom quiz on your Quiz tab."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Al guardarla, reemplaza el test personalizado de tu pestaña Test."
-          }
-        }
-      }
-    },
-    "PracticeSet.kept" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kept as Your Custom Quiz"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Guardada como tu test personalizado"
-          }
-        }
-      }
-    },
-    "PracticeSet.qrCodeLabel" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QR code that opens this practice set"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Código QR que abre esta serie de práctica"
-          }
-        }
-      }
-    },
-    "PracticeSet.scanNote" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Point the Camera app at the code to open this practice set in Conjugar."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apunta la app Cámara al código para abrir esta serie de práctica en Conjugar."
-          }
-        }
-      }
-    },
-    "PracticeSet.scanTitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scan to Practice"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Escanea y practica"
-          }
-        }
-      }
-    },
-    "PracticeSet.shareText %@ %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practice set:\n%1$@\n\nOpen it in Conjugar:\n%2$@\n\nGet Conjugar on the App Store:\n%3$@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Serie de práctica:\n%1$@\n\nÁbrela en Conjugar:\n%2$@\n\nDescarga Conjugar en el App Store:\n%3$@"
-          }
-        }
-      }
-    },
-    "PracticeSet.shareLink" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Share Link"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compartir enlace"
-          }
-        }
-      }
-    },
-    "PracticeSet.showQRCode" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show QR Code"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar código QR"
-          }
-        }
-      }
-    },
-    "PracticeSet.startHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts ten questions from this practice set"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empieza diez preguntas de esta serie de práctica"
-          }
-        }
-      }
-    },
-    "PracticeSet.shareHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shares this custom quiz as a link or a QR code"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comparte este test personalizado como enlace o código QR"
-          }
-        }
-      }
-    },
-    "PracticeSession.heading" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "From Your Practice"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "De tu práctica"
-          }
-        }
-      }
-    },
-    "PracticeSession.mistakes" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practice My Mistakes"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practicar mis errores"
-          }
-        }
-      }
-    },
-    "PracticeSession.mistakesCount %lld" : {
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld question you last missed"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld questions you last missed"
-                }
-              }
-            }
-          }
-        },
-        "es" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld pregunta que fallaste la última vez"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld preguntas que fallaste la última vez"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "PracticeSession.mistakesEmpty" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No mistakes to practice. A question you miss in a quiz waits here until you answer it right."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No hay errores que practicar. Una pregunta que fallas en un test espera aquí hasta que la respondas bien."
-          }
-        }
-      }
-    },
-    "PracticeSession.mistakesHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts a quiz of the questions you last answered wrongly."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empieza un test de las preguntas que fallaste la última vez."
-          }
-        }
-      }
-    },
-    "PracticeSession.review" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Review"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Repaso"
-          }
-        }
-      }
-    },
-    "PracticeSession.reviewCount %lld" : {
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld question due for review"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld questions due for review"
-                }
-              }
-            }
-          }
-        },
-        "es" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld pregunta pendiente de repaso"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld preguntas pendientes de repaso"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "PracticeSession.reviewEmpty" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nothing to review yet. What you answer in a quiz, and every irregular verb you look up, comes due for review a day or more later."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aún no hay nada que repasar. Lo que respondes en un test, y cada verbo irregular que consultas, vuelve para repasarlo un día o más después."
-          }
-        }
-      }
-    },
-    "PracticeSession.reviewHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts a quiz of the questions due for review."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empieza un test de las preguntas pendientes de repaso."
-          }
-        }
-      }
-    },
-    "PracticeSession.reviewNextDue %lld" : {
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Nothing is due today. The next review is tomorrow."
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Nothing is due today. The next review is in %lld days."
-                }
-              }
-            }
-          }
-        },
-        "es" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Hoy no hay nada pendiente. El próximo repaso es mañana."
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Hoy no hay nada pendiente. El próximo repaso es dentro de %lld días."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "ReviewCard.practiced %lld" : {
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Practiced yesterday"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Practiced %lld days ago"
-                }
-              }
-            }
-          }
-        },
-        "es" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Practicado ayer"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Practicado hace %lld días"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "ReviewCard.practicedEarlier" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practiced earlier"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practicado antes"
-          }
-        }
-      }
-    },
-    "Settings.resetPracticeHeading" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practice Record"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Registro de práctica"
-          }
-        }
-      }
-    },
-    "Settings.resetPracticeDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This button erases what the quiz and the review card remember of your practice: which conjugations are due again, which you missed last, your last quiz's results, your Speed Round best, your best at each level, and your daily streak. The record stays on this device and is never sent."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este botón borra lo que el test y la tarjeta de repaso recuerdan de tu práctica: qué conjugaciones te toca repasar, cuáles fallaste la última vez, los resultados de tu último test, tu récord en la Ronda rápida, tu récord en cada nivel y tu racha diaria. El registro se queda en este dispositivo y nunca se envía."
-          }
-        }
-      }
-    },
-    "Settings.resetPractice" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset Practice"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Restablecer práctica"
-          }
-        }
-      }
-    },
-    "Settings.resetPracticeHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Asks before erasing your practice record."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pregunta antes de borrar tu registro de práctica."
-          }
-        }
-      }
-    },
-    "Settings.resetPracticeTitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset your practice?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Restablecer tu práctica?"
-          }
-        }
-      }
-    },
-    "Settings.resetPracticeMessage" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The quiz will forget which conjugations you have practiced, your last quiz's results, your Speed Round best, your best at each level, and your daily streak, and the review card will offer nothing until you look a verb up again."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El test olvidará qué conjugaciones has practicado, los resultados de tu último test, tu récord en la Ronda rápida, tu récord en cada nivel y tu racha diaria, y la tarjeta de repaso no te ofrecerá nada hasta que vuelvas a consultar un verbo."
-          }
-        }
-      }
-    },
-    "Settings.resetPracticeConfirm" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Restablecer"
-          }
-        }
-      }
-    },
-    "Quiz.sessionMinutes" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "2–3"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "2–3"
-          }
-        }
-      }
-    },
-    "Quiz.minutesLabel" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Minutes"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Minutos"
-          }
-        }
-      }
-    },
-    "Quiz.sessionLength" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Two to three minutes"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "De dos a tres minutos"
-          }
-        }
-      }
-    },
-    "Quiz.levelMenuHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Changes the quiz level."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cambia el nivel del test."
-          }
-        }
-      }
-    },
-    "Quiz.lastQuiz" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Last Quiz"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Último test"
-          }
-        }
-      }
-    },
-    "Quiz.exercises" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exercises"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ejercicios"
-          }
-        }
-      }
-    },
-    "VerbEssentials.title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verb Essentials"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lo esencial del verbo"
-          }
-        }
-      }
-    },
-    "VerbEssentials.description" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Five irregular verbs, four forms each: tengo · tuve · tendré · tenido."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cinco verbos irregulares, cuatro formas de cada uno: tengo · tuve · tendré · tenido."
-          }
-        }
-      }
-    },
-    "VerbEssentials.startHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts a round of five irregular verbs."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empieza una ronda de cinco verbos irregulares."
-          }
-        }
-      }
-    },
-    "VerbEssentials.fiveMore" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Five More Verbs"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cinco verbos más"
-          }
-        }
-      }
-    },
-    "VerbEssentials.fiveMoreHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Continues with five more verbs."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Continúa con cinco verbos más."
-          }
-        }
-      }
-    },
-    "VerbEssentials.spokenRight" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "right"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "correcta"
-          }
-        }
-      }
-    },
-    "VerbEssentials.spokenWrong" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "wrong"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "incorrecta"
-          }
-        }
-      }
-    },
-    "VerbEssentials.spokenPending" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "not yet asked"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "pendiente"
-          }
-        }
-      }
-    },
-    "ModelPractice.title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verb Models"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modelos de verbos"
-          }
-        }
-      }
-    },
-    "ModelPractice.hubDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "One model’s verbs alone, then mixed with the models you know."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Los verbos de un modelo solos, y luego mezclados con los modelos que conoces."
-          }
-        }
-      }
-    },
-    "ModelPractice.hubHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opens the verb models, where each model has its practice."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abre los modelos de verbos, donde cada modelo tiene su práctica."
-          }
-        }
-      }
-    },
-    "ModelPractice.listIntro" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pick a model and practice its verbs alone, then mixed with the models you know. The most used come first."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elige un modelo y practica sus verbos solos, y luego mezclados con los modelos que conoces. Los más usados van primero."
-          }
-        }
-      }
-    },
-    "ModelPractice.heading" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practice This Pattern"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Practica este patrón"
-          }
-        }
-      }
-    },
-    "ModelPractice.descriptionAll" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verb Essentials with this model’s verbs."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lo esencial del verbo con los verbos de este modelo."
-          }
-        }
-      }
-    },
-    "ModelPractice.descriptionFrequent" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verb Essentials with this model’s ten most frequent verbs."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lo esencial del verbo con los diez verbos más frecuentes de este modelo."
-          }
-        }
-      }
-    },
-    "ModelPractice.alone" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alone"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Solo"
-          }
-        }
-      }
-    },
-    "ModelPractice.aloneHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts a round of up to five of this model’s verbs."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empieza una ronda de hasta cinco verbos de este modelo."
-          }
-        }
-      }
-    },
-    "ModelPractice.mixed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mixed"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mezcla"
-          }
-        }
-      }
-    },
-    "ModelPractice.mixedHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts a round of this model’s verbs mixed with verbs of the models you know."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empieza una ronda de verbos de este modelo mezclados con verbos de los modelos que conoces."
-          }
-        }
-      }
-    },
-    "ModelPractice.mixedLocked" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mixed opens once you know another model. You know a model once you have answered half of its practice right."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La mezcla se abre cuando conoces otro modelo. Conoces un modelo cuando has respondido bien la mitad de su práctica."
-          }
-        }
-      }
-    },
-    "ModelPractice.mixedWith %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mixed adds verbs of the models you know: %@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La mezcla añade verbos de los modelos que conoces: %@"
-          }
-        }
-      }
-    },
-    "ModelPractice.mixedTitle %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mixed: %@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mezcla: %@"
-          }
-        }
-      }
-    },
-    "ModelPractice.known" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Known"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conocido"
-          }
-        }
-      }
-    },
-    "ModelPractice.singleVerb" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "One verb is not a pattern, so this model has no practice of its own. Its verb joins other models’ mixed practice once you know it."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Un solo verbo no es un patrón, así que este modelo no tiene práctica propia. Su verbo se suma a la práctica mezclada de otros modelos cuando lo conoces."
-          }
-        }
-      }
-    },
-    "ModelPractice.anotherRound" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Another Round"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otra ronda"
-          }
-        }
-      }
-    },
-    "ModelPractice.anotherRoundHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Continues with another round of this practice."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Continúa con otra ronda de esta práctica."
-          }
-        }
-      }
-    },
-    "Mastery.title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mastery"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dominio"
-          }
-        }
-      }
-    },
-    "Mastery.intro %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "What your practice has made secure at your level, %@. An item is mastered once its next review is a week or more away, and a wrong answer starts it over."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lo que tu práctica ha afianzado en tu nivel, %@. Algo está dominado cuando su próximo repaso queda a una semana o más, y una respuesta incorrecta lo devuelve al principio."
-          }
-        }
-      }
-    },
-    "Mastery.mastered" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mastered"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dominado"
-          }
-        }
-      }
-    },
-    "Mastery.learning" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Learning"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En aprendizaje"
-          }
-        }
-      }
-    },
-    "Mastery.notPracticed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Not yet practiced"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin practicar"
-          }
-        }
-      }
-    },
-    "Mastery.patterns" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Regular Patterns"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Patrones regulares"
-          }
-        }
-      }
-    },
-    "Mastery.patternsDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Every regular verb of an ending shares these forms, so practicing hablaba practices cantaba too."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Todos los verbos regulares de una terminación comparten estas formas, así que practicar hablaba es practicar también cantaba."
-          }
-        }
-      }
-    },
-    "Mastery.verbs" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Irregular Verbs"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbos irregulares"
-          }
-        }
-      }
-    },
-    "Mastery.verbsDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The 50 most used, each with the forms that its irregular conjugations at your level are built on, as in tengo · tuve · tendré. A verb regular throughout your level is left out."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Los 50 más usados, cada uno con las formas en que se basan sus conjugaciones irregulares de tu nivel, como tengo · tuve · tendré. Se omite el verbo que es regular en todo tu nivel."
-          }
-        }
-      }
-    },
-    "Mastery.count %lld %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld of %2$lld"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld de %2$lld"
-          }
-        }
-      }
-    },
-    "Mastery.hubSummary %lld %lld %lld %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mastered: %1$lld of %2$lld patterns · %3$lld of %4$lld verbs"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dominados: %1$lld de %2$lld patrones · %3$lld de %4$lld verbos"
-          }
-        }
-      }
-    },
-    "Mastery.hubHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shows which regular patterns and irregular verbs your practice has mastered."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Muestra qué patrones regulares y verbos irregulares dominas gracias a tu práctica."
-          }
-        }
-      }
-    },
-    "Mastery.patternMark %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ verbs: %2$@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbos en %1$@: %2$@"
-          }
-        }
-      }
-    },
-    "SpeedRound.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Speed Round"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ronda rápida"
-          }
-        }
-      }
-    },
-    "SpeedRound.description" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "As many right answers as you can in 60 seconds, on what you have mastered"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tantas respuestas correctas como puedas en 60 segundos, sobre lo que ya dominas"
-          }
-        }
-      }
-    },
-    "SpeedRound.descriptionWithBest %lld" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "As many right answers as you can in 60 seconds, on what you have mastered · Best: %lld"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tantas respuestas correctas como puedas en 60 segundos, sobre lo que ya dominas · Récord: %lld"
-          }
-        }
-      }
-    },
-    "SpeedRound.locked %lld %lld" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opens once you have mastered %1$lld patterns or irregular forms. Mastered so far: %2$lld"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se abre cuando domines %1$lld patrones o formas irregulares. Dominados hasta ahora: %2$lld"
-          }
-        }
-      }
-    },
-    "SpeedRound.startHint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts 60 seconds of questions on what you have mastered."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empieza 60 segundos de preguntas sobre lo que ya dominas."
-          }
-        }
-      }
-    },
-    "SpeedRound.timeLeft %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Time left: %@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tiempo restante: %@"
-          }
-        }
-      }
-    },
-    "SpeedRound.answerWas" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Incorrect. The answer was"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Incorrecto. La respuesta era"
-          }
-        }
-      }
-    },
-    "SpeedRound.announceWarning" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ten seconds left."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quedan diez segundos."
-          }
-        }
-      }
-    },
-    "SpeedRound.announceTimeUp %lld" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Time is up. Right answers: %lld."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se acabó el tiempo. Respuestas correctas: %lld."
-          }
-        }
-      }
-    },
-    "SpeedRound.resultsHeading" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Right Answers in 60 Seconds"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Respuestas correctas en 60 segundos"
-          }
-        }
-      }
-    },
-    "SpeedRound.newBest" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New personal best!"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Nuevo récord personal!"
-          }
-        }
-      }
-    },
-    "SpeedRound.best %lld" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your best: %lld"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tu récord: %lld"
-          }
-        }
-      }
-    },
-    "SpeedRound.again" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Another Round"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otra ronda"
-          }
-        }
-      }
-    },
-    "SpeedRound.againHint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starts another 60 seconds on what you have mastered."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empieza otros 60 segundos sobre lo que ya dominas."
-          }
-        }
-      }
-    },
-    "GameCenter.viewAchievements" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "View Achievements"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver logros"
-          }
-        }
-      }
-    },
-    "GameCenter.viewAchievementsDescription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This button shows your Game Center achievements, which you earn by mastering conjugations: every regular pattern of a level, and the most frequent irregular verbs. While you are signed in, Conjugar sends Game Center your progress toward each."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este botón muestra tus logros de Game Center, que ganas al dominar conjugaciones: todos los patrones regulares de un nivel y los verbos irregulares más frecuentes. Mientras tengas la sesión iniciada, Conjugar envía a Game Center tu progreso hacia cada uno."
-          }
-        }
-      }
-    },
-    "GameCenter.viewAchievementsHint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Opens Game Center's list of Conjugar's achievements."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abre en Game Center la lista de logros de Conjugar."
-          }
-        }
-      }
-    },
-    "PersonalBest.newBest" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New personal best!"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Nuevo récord personal!"
-          }
-        }
-      }
-    },
-    "PersonalBest.best %lld" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your best: %lld"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tu récord: %lld"
-          }
-        }
-      }
-    },
-    "PersonalBest.hubLine %lld" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your best at this level: %lld"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tu récord en este nivel: %lld"
-          }
-        }
-      }
-    },
-    "GameCenter.achievementsHeading" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Achievements"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Logros"
           }
         }
       }

@@ -16,6 +16,22 @@ These rules also apply to the widget target's own catalog, `ConjugarWidget/Local
    "translated"` so Xcode doesn't treat `es` as stale and fall back to English).
 3. Use via `L.Feature.name` in code.
 
+**Keep the keys in Xcode's order: sorted, ignoring case** (`sorted(keys, key=str.lower)` in
+Python). Building in the Xcode IDE re-sorts both catalogs that way, though `xcodebuild` does not,
+so a key added in feature order turns into a whole-file diff on Josh's next Xcode build. Write the
+file as Xcode does, `json.dumps(catalog, ensure_ascii=False, indent=2, separators=(',', ' : '))`
+plus a final newline, which reproduces it byte for byte (Xcode writes an empty object as `{` and
+`}` with a blank line between, the one thing this dump writes differently, so no entry should be
+left empty).
+
+**Mirror every `WidgetL` key into the app's catalog.** `Shared/WidgetL.swift` is compiled into the
+app too, and the IDE build extracts any of its keys the app's catalog lacks, with English only. Copy
+the widget catalog's entry, Spanish included.
+
+**Interpolated SwiftUI text that is only placeholders** (`Text("\(icon) \(label)")`, an
+`.accessibilityLabel("\(name): \(count)")`) makes the IDE build add a key such as `%@ %@`. Such a key
+carries `"shouldTranslate" : false`, since every language shows it the same way.
+
 # Editing `Localizable.xcstrings` safely (the foot-guns)
 
 - **The Edit tool corrupts `.xcstrings` values with ASCII quotes.** Edit operates on

@@ -63,8 +63,8 @@ The numbering follows Konjugieren's order of leverage (correct grading, then wha
 then memory, then feedback, then new directions, then motivation), adjusted where one phase needs
 another's pieces. It is a suggested order. If a phase proves too large for one session, split it,
 say so in its row, and leave the remainder marked "Partly done". Phases 10, 17, and 18 are the
-likeliest to split. **Phase 9 is the exception to the order:** take it last, after Phase 23, if at
-all (Josh, 2026-11-22). No other phase depends on it.
+likeliest to split. **Phase 9 was the exception to the order:** planned for last, after Phase 23,
+if at all (Josh, 2026-11-22), it was built after Phase 8 at his request (2026-11-23) and is done.
 
 **Read Konjugieren's version first.** Every phase here ports the phase one number higher in
 Konjugieren's plan, which starts at Phase 1 (Phase 0 here is its Phase 1, and Phase 23 its Phase
@@ -187,7 +187,7 @@ defaults here. He may overrule any of them for Conjugar when he reviews this pla
   kept on the device and sent nowhere.
 - **The arcade game is left as play** (Decision 7, T6.9). Toreo por Amor does not conjugate.
 - **Schools are a channel** (Decision 8), but mostly Conjuguer's, whose Swiss institution bought
-  more than half its downloads. Phase 9 is therefore taken last here, after Phase 23, if at all.
+  more than half its downloads. Phase 9 was therefore planned for last here, but Josh asked for it after Phase 8, and it is built.
 - **The sad trombone stays** on quitting, because it is fun and silly (T6.4).
 - **Levels are chosen, not earned.** What a learner has opened does not shape quizzes (T2.4's
   "No"). The learner picks a level, and nothing unlocks.
@@ -215,7 +215,8 @@ he reviewed it. Each is written into its phase:
   Difficult to Level 4, and a new install starting at Level 1.
 - **The verbs asked** (Phase 5): drawn from the engine's per-cell irregularity within the band,
   with `VerbFamilies` kept as a test oracle.
-- **Practice sets** (Phase 9): taken last, after Phase 23, if at all.
+- **Practice sets** (Phase 9): taken last, after Phase 23, if at all. (Josh later asked for them
+  after Phase 8; built 2026-11-23.)
 - **The kinds of practice item** (Phase 10): an irregular verb's key conjugations and a regular
   pattern, as that phase sets out.
 - **The two imperfect subjunctives** (Phases 0 and 13): neither is accepted for the other, and
@@ -1712,8 +1713,9 @@ and tests pin encoding and decoding of every scope.
   with `infinitives=`), and the QR view. Both screens' QR codes decode to the exact link. The
   iPad's share popover takes about four seconds to appear in this simulator. Not tried: VoiceOver by
   ear, accessibility text sizes, and Ten More in a set's sheet (unit-tested).
-- **Waiting on Josh's phone:** whether the Camera app offers to open a `conjugar://` QR code. The
-  simulator has no camera. Record the result here.
+- **Tried on Josh's phone (2026-11-24):** the Camera app read a `conjugar://quiz/set` code (the
+  -go verbs in the presente and pretérito, `source=qrCode`, drawn by Core Image and shown on his
+  Mac's screen), offered to open it in Conjugar, and the app opened to the practice set's sheet.
 
 ## Phase 10: The Practice Record
 
@@ -3432,8 +3434,8 @@ it, sharing produces the agreed text, and tests pin the seeding.
   version and retire the old leaderboard; `docs/release.md` lists these steps once Phases 7 and 22
   have written them there.
 - **Checks on his phone**, which the simulator cannot make: posting a score signed in to Game Center,
-  the Camera app opening a `conjugar://` QR code (Phase 9), the reminder notification's tap, and
-  anything a phase marks "not tried on a device".
+  the reminder notification's tap, and anything a phase marks "not tried on a device". (The Camera
+  app opening a Phase 9 QR code passed on 2026-11-24.)
 
 ## Not Built
 
