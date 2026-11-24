@@ -24,6 +24,10 @@ heading to match, and writes the phase's **How it differed** note. A finished ph
 Josh" until Josh has tried it and committed it. Sessions never commit, so the Commit cell is filled
 by the next session, which reads the hash from `git log` once Josh's commit exists.
 
+**This plan is finished** (2026-11-24): every phase is done, Phase 17's sentences cover the 300
+most frequent verbs, and the Closing's audit and porting notes are written. What remains is Josh's:
+the commit of the last session's work, and the release-day steps in `docs/release.md`.
+
 | Phase | Status | Date | Commit | Suggestions |
 |---:|---|---|---|---|
 | 0 | Done | 2026-11-22 | 8518921 | T1.3, T1.4, T1.5, Conjugar's defects |
@@ -43,14 +47,14 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 14 | Done | 2026-11-23 | 60f37e9 | T5.1 |
 | 15 | Done | 2026-11-23 | 5da7c25 | T5.2 |
 | 16 | Done | 2026-11-23 | 18175a3 | T5.4 |
-| 17 | Partly done (the app and the first batch, approved); verbs 26–300 remain | 2026-11-23 | d1a3c66 | T5.5 |
+| 17 | Done (741 sentences; the second batch awaits Josh's commit) | 2026-11-24 | d1a3c66 (app and first batch) | T5.5 |
 | 18 | Done (the app and 45 items, approved) | 2026-11-23 | 3271b9b | T5.6 |
 | 19 | Done | 2026-11-24 | f99637e | T6.2 |
 | 20 | Done | 2026-11-24 | 8d97908 | T5.7 |
 | 21 | Done | 2026-11-24 | 82b5d83 | T6.3 |
 | 22 | Done | 2026-11-24 | 409db52 | T6.6 (personal bests and achievements) |
-| 23 | Awaiting Josh | 2026-11-24 | | T6.8 |
-| Closing | Not started | | | Audit, porting notes |
+| 23 | Done | 2026-11-24 | 0c3b3a1 | T6.8 |
+| Closing | Awaiting Josh | 2026-11-24 | | Audit, porting notes |
 
 ## How to Work This Plan
 
@@ -2525,8 +2529,8 @@ on ambiguous forms.
 ## Phase 17: Sentences with a Blank
 
 **Ports:** Konjugieren Phase 18. **Suggestions:** T5.5. **Depends on:** Phases 1 and 2. **Status:**
-Partly done: the app, the machine check, the review tooling, and a first batch of 118 sentences
-for the 25 most frequent verbs, which Josh approved. Verbs 26 to 300 are left for a later session.
+Done: the app, the machine check, the review tooling, and 741 sentences for the 300 most frequent
+verbs, the first 118 approved by Josh and the other 623 by Claude's full reread, as he decided.
 
 Short authored sentences for the core verbs, with the verb blanked, so the form is tied to a
 meaning. Spanish gives the blank more to do than German did: a subjunctive trigger (quiero que,
@@ -2665,6 +2669,61 @@ sentence questions appear where decided, and tests pin the check.
 - **Seen, not changed.** The English under a sentence is close to the sentence's last line when it
   wraps; the Draft pill is faint on the dark card. Neither ships: the first is a spacing nit for
   Josh to judge, and the pill exists only in debug builds.
+- **The second batch (2026-11-24).** 623 sentences, at Konjugieren's counts: three for each of
+  verbs 26 to 100, one first asked at each of Beginner (the presente or a tú, usted, or ustedes
+  command), Elementary, and Intermediate or Advanced; and two for each of verbs 101 to 300, one at
+  Elementary (Beginner's band stops at 100) and one later. The ranking is the app's own
+  (`VerbMap.ranked`: hits, then book hits, then Spanish order), which a script reproduced and the
+  first batch's 25 confirmed. Cells: 102 presente, 88 pretérito, 65 presente de subjuntivo, 60
+  imperativo positivo, 48 imperfecto de subjuntivo, 33 each futuro and imperfecto, 31 imperativo
+  negativo, 30 condicional, 23 each perfecto and gerundio, 22 perfecto de subjuntivo, 19
+  condicional compuesto, 18 pluscuamperfecto, 16 futuro perfecto, 12 pluscuamperfecto de
+  subjuntivo; 64 are second person. No futuro de subjuntivo or pretérito anterior, which no
+  everyday sentence uses.
+  - **coger has none**, the one verb of the 300 left out, decided in the session: its everyday
+    sense in Spain (to take, to catch) is vulgar in much of Latin America, and a sentence must read
+    well in both. The coverage test names it.
+  - **How it was drafted.** Eleven Sonnet subagents, ranges of 25 verbs, from a self-contained brief
+    (the format with nine approved entries, the brace rules, the three level groups and counts, the
+    person and vos rules, a list of region-marked words to avoid, no perfecto for today's events,
+    no leísmo, American English). **New here:** each drafter ran the machine check itself before
+    returning. `ConjugationMapTool --cells-json` dumped every one-word form with its cells, and a
+    scratch Python script repeated the Swift check against it (compounds as haber plus the
+    participle, a negative command as the subjunctive after "no") and added the counts and level
+    groups. All eleven returned clean, so the Swift check then passed on its first run.
+  - **The tú-form guard misfires on nouns.** It rejects any word whose every cell is a tú form, and
+    ideas, notas, plantas, pruebas, reglas, historias, personas, and estrellas are tú forms of rare
+    verbs (idear, notar, plantar, probar, reglar, historiar, personarse, estrellar). The drafters
+    reworded them (flores, calificaciones, normas). The guard was left alone, since an exception
+    list would need upkeep and a determiner rule would also pass "las tienes", whose las is a
+    pronoun; `docs/feature_architecture.md` says so.
+  - **My reread changed 42 of 623.** Region: boleto, bolso (twice), cartera, licencia, "la clase
+    iniciará", "ya llegó" (a recent past that Spain says with the perfecto), and "Disfruten el
+    viaje" (now "del viaje"). Person: three sentences whose subject only the blank gave (ya
+    habremos pagado, celebraremos, hayan celebrado), and one tagged yo
+    whose blank was the teacher's (*Yo busco una maestra que {enseñe}*, now `ts`, the class of
+    error that shared forms hide from the engine). A tú command outside the braces of a third-person
+    sentence (*Habla más alto para que todos te {oigan}*), which a vos learner would not say.
+    Unnatural frames: "Nosotros ya hemos realizado el primer viaje", "Espero que el tren aparezca",
+    "el bebé ya habrá dormido dos horas", "El espejo había reflejado la luz y me cegó", "No cuide
+    usted tanto a su hijo", "el juez ya lo habrá obligado a pagar" (the last three moved to the
+    presente de subjuntivo); "No asegures la caja con tanta cinta" now means promise; a usted
+    command whose "su edad" could be the asker's. Repetition: "No creo que" opened 18 sentences and
+    "Mi madre quería que" 8, so a few became "Es posible que", "Es probable que", "Me sorprende
+    que", and "me pidió que". English alone: nine lines (stories for tales, arrested for caught, "Today
+    I'm presenting"). The engine check passed again after the edits, then the Swift suite 19 of 19.
+  - **Approved** with `gap_sentences.py approve --all`: 741 reviewed, 0 drafts. The JSON diff is
+    5,584 insertions and no deletions before approval, so the first batch did not change.
+  - **Tests.** `theTwentyFiveMostFrequentVerbsHaveFourSentencesOrMore` became
+    `everyTopThreeHundredVerbHasItsSentences`, which pins four for the top 25, the three groups for
+    26 to 100, the two for 101 to 300, and none for coger; `everyLevelAsksSentencesAndBeginnerOnlyItsTenses`
+    now expects Beginner's sentences to cover 100 verbs. The test count is unchanged.
+  - **Seen on the iPhone**, in English and light mode at Elementary in Latin America, a real draw
+    with no fixture, each answer typed from its card's accessibility label: hacer, empezar,
+    depender, pensar, aprovechar, alcanzar, considerar, caer, proteger, and abandonar, seven of
+    them from this batch, ten different verbs, no Draft pill, 100 and "Correct: 10 / 10". The
+    round's answers stayed in that simulator's practice record and last result; nothing else was
+    changed. Not tried on the iPad, since no layout changed.
 
 ## Phase 18: Which Tense Would a Speaker Use?
 
@@ -3230,7 +3289,7 @@ and the walkthrough covers achievements.
 ## Phase 23: The Daily Challenge
 
 **Ports:** Konjugieren Phase 24. **Suggestions:** T6.8. **Depends on:** Phases 4 and 21. **Status:**
-Awaiting Josh.
+Done.
 
 A daily shared challenge built on the quiz widget's daily question: the same short set for everyone
 that day, seeded by the date, with a result the learner can share as text with the App Store link.
@@ -3398,5 +3457,76 @@ it, sharing produces the agreed text, and tests pin the seeding.
   that the siblings could adopt.
 - Mark this plan finished in its Status section.
 
-**How it differed:** _Not started._
+**Status:** Done (2026-11-24), in the session that finished Phase 17's sentences.
+
+**How it differed:**
+
+- **The suite.** `run_tests.sh` passed 1,344 tests in 85 suites, in the simulator's default language
+  (English), the count Phase 23 left: the second batch renamed one test and added none. SwiftLint
+  reports nothing on the changed Swift files.
+- **Every suggestion is built or cut.** Each row of the Suggestion Index that names a phase points
+  at one marked Done in the Status table, Phase 17 now included; T1.1 and T5.3 were the browse
+  plan's, and T2.4, T4.6, T6.9, M4, and M5 are under Not Built with their reasons. Phase 9, taken
+  out of order, was built (T2.9). Conjugar has no research report of its own to annotate, so the
+  Konjugieren Closing's "Built on `main`" lines have no counterpart here; this plan's Status table
+  and phase notes are the record.
+- **The privacy audit found no leak.** `Analytics.swift` was diffed against `f263af3`, the commit
+  before Phase 0, and all 45 `signal` call sites read, `QuizAbandonment`'s among them. New since
+  then: ten signals (`abandonQuiz`, `tapDailyReminder`, `tapKeepPracticeSet`, `tapResetPractice`,
+  `tapShareChallenge`, `tapSharePracticeSet`, `tapViewAchievements`, `tapViewLeaderboard`,
+  `viewMastery`, `viewPracticeSet`); seven parameter keys (`customChoice`, `duration`, `enabled`,
+  `level`, `method`, `questionCount`, `streak`), with `difficulty` and `elapsedTime` retired and
+  `outcome` given `opened` and `invalid`; the quiz duration and streak bands; and 16 `source`
+  values (`challenge`, `challengeLink`, `challengeWidget`, `custom`, `daily`, `mistakes`,
+  `modelAlone`, `modelMixed`, `qrCode`, `quizCorrection`, `recognition`, `reminder`, `review`,
+  `sentences`, `speedRound`, `verbEssentials`). Each has its lines in
+  `docs/privacy_policy_pending.md`, English and Spanish, in the section of the phase that added
+  it. None carries an answer or a verb. **`questionNumber` was checked against re-asks**, the leak
+  Konjugieren's Closing found: it is `Quiz.questionReached`, which counts no re-ask, on `quitQuiz`
+  and in `QuizAbandonment.Entry`, as Phase 6 built it and a test pins. `questionCount` counts no
+  re-ask either, and neither is sent where a round's length depends on answers (a record session,
+  a model's mixed practice, the Speed Round: `QuizScope.sendsQuestionCounts`). `score` goes only
+  with a ranked session's first round (`Quiz.isRankedRound`), as Josh decided; the streak band
+  counts days, not answers; `tapShareChallenge` sends the level, never the result. **One stale
+  comment, fixed:** `AnalyticsName.tapViewLeaderboard`'s said the results screen sends it with
+  `level`; since Phase 12 the button is the Quiz tab's and sends `level` and `source` `tab`, as
+  the pending policy and `feature_architecture.md` already said.
+
+### What Conjugar Did That the Siblings Could Adopt
+
+For Konjugieren, which went first, and for Conjuguer's port of the same plan.
+
+1. **Avoid the `questionNumber` leak from the start.** Konjugieren found it at its Closing;
+   Conjugar's Phase 6 counted no re-ask in `questionNumber` or `questionCount` and pinned it with
+   a test before any other phase sent either.
+2. **Let drafters check themselves.** For a large content batch, dump the engine's every form
+   with its cells (Conjugar's `ConjugationMapTool --cells-json`) and give each drafting subagent a
+   script that repeats the machine check, plus the batch's counts per verb and level. All eleven
+   of Conjugar's second-batch drafters returned clean, so the app's own check passed on its first
+   run and the session's reread could spend itself on meaning, region, and person.
+3. **Read the person from the sentence, not the engine.** Shared forms hide a wrong person from any
+   conjugation check (yo and él share the subjunctive, as wir and sie share the Präsens). A scan of
+   every sentence whose cell shares its form with another person, read against its subject,
+   caught one here; Konjugieren's second batch made the same scan.
+4. **Hold the English until the choice** in a choice of tenses (Phase 18), since English aspect can
+   give the answer away (used to play is the imperfecto), and tag an item whose answer depends on a
+   setting with that setting, asking it only where it holds.
+5. **Key the daily challenge on every setting that changes what is asked** (Phase 23: the day, the
+   level, and the region, since only Spain asks vosotros), and give the widget's wrong answers the
+   right answer's shape, including the cell as a regular verb would write it (haco for hago), with
+   the buttons lowercased so that an irregular answer's marked letters do not stand out.
+6. **Accept every form the sentence allows.** In a sentence either imperfect subjunctive is right,
+   since the sentence, not the tense's name, is the prompt. Where a sibling's cell has standard
+   variants (Conjuguer's paie and paye), a sentence should accept each that it allows.
+7. **One sentence for two second persons.** A tú sentence is asked in vos with its addressee named
+   by the frame, and its words avoid anything only one of them says. Any sibling with a regional
+   second person can write once and ask in the learner's form.
+8. **Group long tense lists by mood** in Name the Form's chips (Phase 16), with short names under
+   each heading, over Konjugieren's flat chips of full names. Conjuguer's list is as long as
+   Conjugar's.
+9. **Focus the answer field from the start** on the hub (Phase 12); Konjugieren's did not until its
+   Phase 21.
+10. **Keep the practice record within the learner's settings**: a vosotros item missed in Spain is
+    neither counted nor asked while the region is Latin America (Phase 11). Konjugieren has no such
+    setting; Conjuguer should check whether any of its settings hides a cell.
 

@@ -1290,6 +1290,12 @@ vayas"). The file is written only by `json.dumps(indent=2, ensure_ascii=False)`,
 byte. Debug builds ask drafts too, with a Draft (Borrador) pill on the card; a release build asks
 only reviewed sentences.
 
+**Coverage.** 741 sentences cover the 300 most frequent verbs: four or more for each of the top 25,
+three for each of verbs 26 to 100 (one first asked at Beginner, one at Elementary, one at
+Intermediate or Advanced), and two for each of verbs 101 to 300 (one at Elementary, one later),
+which Beginner's band never reaches. coger has none, since its everyday sense in Spain is vulgar
+in much of Latin America. `everyTopThreeHundredVerbHasItsSentences` pins the counts.
+
 **Regions and the second person.** Nothing is written in vosotros, so every sentence reads in both
 regions. A second-person singular sentence is written with the tú form in its braces and asked in
 tú or vos as the setting chooses; its words name no tú, ti, or contigo (te and tu serve both), and
@@ -1303,6 +1309,9 @@ frame's words stand before the braces; no word is vosotros, no second-person sen
 and no word of any sentence is a finite tú form alone (tienes, puedes), which a vos learner would
 not use (commands are left out, since sal and ten are words too); no sentence is written with the
 -se form; and some level asks each one. A test feeds it broken sentences to show that it fails.
+The tú-form guard cannot tell a noun from a verb, so it also rejects plural nouns that spell a tú
+form of a rare verb (ideas, notas, plantas, pruebas, personas); a sentence rewords them (flores,
+calificaciones) rather than the guard listing exceptions.
 
 **Grading in a sentence.** As any question's (`QuizQuestion.sentence`), so slips, diagnoses, the
 held correction, re-asks, and the practice record work unchanged, with one difference: **either

@@ -151,12 +151,27 @@ struct GapSentenceTests {
     #expect(problems(made(verb: "tener", tense: "presenteDeIndicativo", person: "fs", es: "Yo {tengo} dos hermanos.")).isEmpty)
   }
 
-  @Test func theTwentyFiveMostFrequentVerbsHaveFourSentencesOrMore() {
-    let verbs = VerbMap.shared.entries.values.filter { $0.frequencyRank <= 25 }.map(\.infinitive)
-    #expect(verbs.count == 25)
-    for verb in verbs {
-      let count = GapSentences.all.filter { $0.verb == verb }.count
-      #expect(count >= 4, "\(verb) has \(count)")
+  /// Four or more sentences for each of the 25 most frequent verbs, three for each of the next 75
+  /// (one first asked at Beginner, one at Elementary, one later), and two for each of the next 200
+  /// (one at Elementary, one later). coger has none: its everyday sense in Spain is vulgar in much
+  /// of Latin America, and a sentence must read well in both.
+  @Test func everyTopThreeHundredVerbHasItsSentences() {
+    let entries = VerbMap.shared.entries.values.filter { $0.frequencyRank <= 300 }
+    #expect(entries.count == 300)
+    for entry in entries {
+      let sentences = GapSentences.all.filter { $0.verb == entry.infinitive }
+      let firstLevels = sentences.compactMap { sentence in QuizLevel.allCases.first { sentence.isAskable(at: $0) } }
+      let later = firstLevels.filter { $0 == .intermediate || $0 == .advanced }.count
+      switch entry.frequencyRank {
+      case ...25:
+        #expect(sentences.count >= 4, "\(entry.infinitive) has \(sentences.count)")
+      case ...100:
+        #expect(firstLevels.count(where: { $0 == .beginner }) >= 1 && firstLevels.count(where: { $0 == .elementary }) >= 1 && later >= 1, "\(entry.infinitive): \(firstLevels)")
+      case _ where entry.infinitive == "coger":
+        #expect(sentences.isEmpty)
+      default:
+        #expect(firstLevels.count(where: { $0 == .elementary }) >= 1 && later >= 1, "\(entry.infinitive): \(firstLevels)")
+      }
     }
   }
 
@@ -168,7 +183,7 @@ struct GapSentenceTests {
       #expect(askable.allSatisfy { $0.displayTense.map(tenses.contains) == true })
     }
     let beginner = GapSentences.askable(at: .beginner, includesDrafts: true)
-    #expect(Set(beginner.map(\.verb)).count == 25)
+    #expect(Set(beginner.map(\.verb)).count == 100)
   }
 
   // Frames, tokens, and grading

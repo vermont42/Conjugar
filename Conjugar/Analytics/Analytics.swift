@@ -99,8 +99,8 @@ nonisolated enum AnalyticsName: String {
   /// A View Achievements button: the Quiz tab's sends `source` `tab`, and Settings' sends nothing.
   /// No signal says that an achievement was earned, which would report how well a learner did.
   case tapViewAchievements
-  /// A leaderboard button: the results' sends `level`, the board it opens, and Settings', which
-  /// opens the list of every level's board, sends nothing.
+  /// A leaderboard button: the Quiz tab's sends `level`, the board it opens, and `source` `tab`;
+  /// Settings', which opens the list of every level's board, sends nothing.
   case tapViewLeaderboard
   /// Once for each opening of a featured collection's page or of a model's page, whose bar makes
   /// it a collection. Carries `collection` and `source`.

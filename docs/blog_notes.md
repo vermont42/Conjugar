@@ -12092,3 +12092,48 @@ vos. Copying the result gave the agreed Spanish text, and a link to the finished
 the hub instead of starting it again. On the iPhone, in English, the same check gave the English
 text. The full suite ran 1,344 tests, 24 of them new. What remains of the plan is its closing
 audit, and the rest of Phase 17's sentences.
+
+## The Last 623 Sentences, and the Plan's Close (2026-11-24)
+
+Complete the Sentence shipped on `master` with 118 sentences for the 25 most frequent verbs, which
+Josh read and approved. The plan called for the rest of the top 300 at Konjugieren's counts: three
+for each of verbs 26 to 100, one for each of three level groups, and two for each of verbs 101 to
+300, which the Beginner level never reaches. Josh had decided not to review these himself. The
+machine check settles each form, and a full reread by Claude, not a sample, settles the rest.
+
+Konjugieren's second batch was drafted by eleven Sonnet subagents, and so was this one, but with one
+change that paid for itself. In Konjugieren, the drafters returned and the session ran the app's
+test to find their mistakes. Here, the session first dumped every form the engine writes, with the
+cells it fills, from the same command-line tool that builds the app's conjugation map, and wrote a
+small Python script that repeats the app's machine check against that dump. It also checks the
+batch's own rules: the right number of sentences per verb, each first asked at the right level.
+Each drafter ran it on its own file and fixed what it found before returning. All eleven came back
+clean, and the Swift check then passed all 741 sentences on its first run, in tú and in vos.
+
+That left the reread for what a machine cannot judge, and it changed 42 of the 623. Regional words
+the brief had not listed got through: boleto, which Spain calls billete; bolso and cartera, which
+mean different things in Buenos Aires and Madrid; a driver's licencia; "ya llegó", a recent past that
+Spain would put in the perfecto. Three sentences let only the blank say who acted, which Spanish
+allows and the card cannot, since it shows no person. One was tagged yo when its blank belonged to a
+teacher: "Yo busco una maestra que enseñe". Enseñe is the form for yo and for ella alike, so no
+conjugation check can see the error. A scan of every sentence whose form is shared by two persons,
+read against its subject, found that one. And some frames repeated: "No creo que" opened eighteen
+sentences.
+
+One rule of the check misfired in a way worth recording. To keep a vos learner from meeting tienes
+or puedes in a sentence's other words, the check rejects any word whose every cell is a tú form. But
+ideas, notas, plantas, and pruebas are tú forms of idear, notar, plantar, and probar, so the
+drafters reworded them. The check was left as it is: an exception list would need upkeep, and
+skipping words after an article would also skip "las tienes", where las is a pronoun.
+
+One verb has no sentences: coger, whose everyday Spanish sense is vulgar in much of Latin America.
+A sentence must read well in both regions, and no use of coger does. The coverage test names it.
+
+The closing audit came next. The privacy audit compared `Analytics.swift` with the commit before the
+plan began, read all 45 places that send a signal, and found every new signal, parameter, and value
+staged in the pending policy in both languages. It checked the question number against re-asks,
+the leak Konjugieren's own closing found, and confirmed that Conjugar's has counted no re-ask
+since Phase 6. The only fault was a stale comment on the leaderboard signal, which still said the
+results screen sent it. The plan ends with a list of what Conjugar did that its siblings could
+adopt: self-checking drafters, holding a choice's English until after the choice, a daily challenge
+keyed on every setting that changes what is asked, and a few smaller things.

@@ -1059,5 +1059,5589 @@
     "es": "No creo que los niños {hayan vuelto} todavía.",
     "en": "I don't think the kids have come back yet.",
     "reviewed": true
+  },
+  {
+    "id": "creer.presenteDeIndicativo.1",
+    "verb": "creer",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {creo} que va a llover esta tarde.",
+    "en": "I think it's going to rain this afternoon.",
+    "reviewed": true
+  },
+  {
+    "id": "creer.pretérito.1",
+    "verb": "creer",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer mi abuela no {creyó} la noticia.",
+    "en": "Yesterday my grandmother didn't believe the news.",
+    "reviewed": true
+  },
+  {
+    "id": "creer.presenteDeSubjuntivo.1",
+    "verb": "creer",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "No quiero que {creas} todo lo que dicen.",
+    "en": "I don't want you to believe everything they say.",
+    "reviewed": true
+  },
+  {
+    "id": "salir.imperativoPositivo.1",
+    "verb": "salir",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Sal} de la casa antes de las ocho.",
+    "en": "Leave the house before eight.",
+    "reviewed": true
+  },
+  {
+    "id": "salir.futuroDeIndicativo.1",
+    "verb": "salir",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "Mañana el tren {saldrá} a las nueve.",
+    "en": "Tomorrow the train will leave at nine.",
+    "reviewed": true
+  },
+  {
+    "id": "salir.imperfectoDeSubjuntivo1.1",
+    "verb": "salir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fp",
+    "es": "Si {saliéramos} temprano, llegaríamos a tiempo.",
+    "en": "If we left early, we'd arrive on time.",
+    "reviewed": true
+  },
+  {
+    "id": "conocer.presenteDeIndicativo.1",
+    "verb": "conocer",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {conozco} a tu hermano de la escuela.",
+    "en": "I know your brother from school.",
+    "reviewed": true
+  },
+  {
+    "id": "conocer.perfectoDeIndicativo.1",
+    "verb": "conocer",
+    "tense": "perfectoDeIndicativo",
+    "person": "ss",
+    "es": "¿Alguna vez {has conocido} a un actor famoso?",
+    "en": "Have you ever met a famous actor?",
+    "reviewed": true
+  },
+  {
+    "id": "conocer.condicionalCompuesto.1",
+    "verb": "conocer",
+    "tense": "condicionalCompuesto",
+    "person": "tp",
+    "es": "Con más tiempo, mis padres {habrían conocido} mejor la ciudad.",
+    "en": "With more time, my parents would have gotten to know the city better.",
+    "reviewed": true
+  },
+  {
+    "id": "contar.imperativoPositivo.1",
+    "verb": "contar",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Cuente} el dinero, por favor.",
+    "en": "Count the money, please.",
+    "reviewed": true
+  },
+  {
+    "id": "contar.imperfectoDeIndicativo.1",
+    "verb": "contar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi abuelo siempre nos {contaba} cuentos de su pueblo.",
+    "en": "My grandfather always told us stories about his hometown.",
+    "reviewed": true
+  },
+  {
+    "id": "contar.presenteDeSubjuntivo.1",
+    "verb": "contar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Quiero que mi hermana me {cuente} lo que pasó.",
+    "en": "I want my sister to tell me what happened.",
+    "reviewed": true
+  },
+  {
+    "id": "tomar.presenteDeIndicativo.1",
+    "verb": "tomar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Mis hijos {toman} leche por la mañana.",
+    "en": "My kids drink milk in the morning.",
+    "reviewed": true
+  },
+  {
+    "id": "tomar.pretérito.1",
+    "verb": "tomar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Anoche yo {tomé} un café muy fuerte.",
+    "en": "Last night I had a very strong coffee.",
+    "reviewed": true
+  },
+  {
+    "id": "tomar.imperativoNegativo.1",
+    "verb": "tomar",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {tomes} esa medicina sin hablar con el médico.",
+    "en": "Don't take that medicine without talking to the doctor.",
+    "reviewed": true
+  },
+  {
+    "id": "llamar.imperativoPositivo.1",
+    "verb": "llamar",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "{Llamen} al médico ahora mismo.",
+    "en": "Call the doctor right now.",
+    "reviewed": true
+  },
+  {
+    "id": "llamar.futuroDeIndicativo.1",
+    "verb": "llamar",
+    "tense": "futuroDeIndicativo",
+    "person": "fs",
+    "es": "Mañana yo te {llamaré} después del trabajo.",
+    "en": "Tomorrow I'll call you after work.",
+    "reviewed": true
+  },
+  {
+    "id": "llamar.imperfectoDeSubjuntivo1.1",
+    "verb": "llamar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Mi madre quería que yo la {llamara} todos los domingos.",
+    "en": "My mother wanted me to call her every Sunday.",
+    "reviewed": true
+  },
+  {
+    "id": "tratar.presenteDeIndicativo.1",
+    "verb": "tratar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "El médico {trata} a los niños con mucho cariño.",
+    "en": "The doctor treats the children very kindly.",
+    "reviewed": true
+  },
+  {
+    "id": "tratar.gerundio.1",
+    "verb": "tratar",
+    "tense": "gerundio",
+    "es": "Estoy {tratando} de aprender a cocinar.",
+    "en": "I'm trying to learn to cook.",
+    "reviewed": true
+  },
+  {
+    "id": "tratar.pluscuamperfectoDeIndicativo.1",
+    "verb": "tratar",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "fs",
+    "es": "Cuando ella llegó, yo ya {había tratado} de llamarla dos veces.",
+    "en": "When she arrived, I had already tried to call her twice.",
+    "reviewed": true
+  },
+  {
+    "id": "sentir.presenteDeIndicativo.1",
+    "verb": "sentir",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo me {siento} mucho mejor.",
+    "en": "I feel much better.",
+    "reviewed": true
+  },
+  {
+    "id": "sentir.imperfectoDeIndicativo.1",
+    "verb": "sentir",
+    "tense": "imperfectoDeIndicativo",
+    "person": "tp",
+    "es": "De niños, mis primos {sentían} miedo de la oscuridad.",
+    "en": "As kids, my cousins were afraid of the dark.",
+    "reviewed": true
+  },
+  {
+    "id": "sentir.perfectoDeSubjuntivo.1",
+    "verb": "sentir",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ss",
+    "es": "Me alegra que te {hayas sentido} mejor esta semana.",
+    "en": "I'm glad you've been feeling better this week.",
+    "reviewed": true
+  },
+  {
+    "id": "venir.imperativoPositivo.1",
+    "verb": "venir",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Ven} a cenar a mi casa el sábado.",
+    "en": "Come have dinner at my house on Saturday.",
+    "reviewed": true
+  },
+  {
+    "id": "venir.pretérito.1",
+    "verb": "venir",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "Mis abuelos {vinieron} a vernos el año pasado.",
+    "en": "My grandparents came to see us last year.",
+    "reviewed": true
+  },
+  {
+    "id": "venir.presenteDeSubjuntivo.1",
+    "verb": "venir",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Te llamaré cuando {vengan} los invitados.",
+    "en": "I'll call you when the guests arrive.",
+    "reviewed": true
+  },
+  {
+    "id": "crear.presenteDeIndicativo.1",
+    "verb": "crear",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Los niños {crean} dibujos con lápices de colores.",
+    "en": "The kids create drawings with colored pencils.",
+    "reviewed": true
+  },
+  {
+    "id": "crear.pretérito.1",
+    "verb": "crear",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El año pasado mi hermano {creó} una página web.",
+    "en": "Last year my brother created a website.",
+    "reviewed": true
+  },
+  {
+    "id": "crear.pluscuamperfectoDeIndicativo.1",
+    "verb": "crear",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "fs",
+    "es": "Antes de 2020, yo ya {había creado} mi propio negocio.",
+    "en": "Before 2020, I had already started my own business.",
+    "reviewed": true
+  },
+  {
+    "id": "realizar.presenteDeIndicativo.1",
+    "verb": "realizar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi padre {realiza} su trabajo con mucho cuidado.",
+    "en": "My father does his work very carefully.",
+    "reviewed": true
+  },
+  {
+    "id": "realizar.perfectoDeIndicativo.1",
+    "verb": "realizar",
+    "tense": "perfectoDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros ya {hemos realizado} todos los pagos.",
+    "en": "We have already made all the payments.",
+    "reviewed": true
+  },
+  {
+    "id": "realizar.condicional.1",
+    "verb": "realizar",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "Si tuviera más tiempo, ella {realizaría} su sueño de viajar.",
+    "en": "If she had more time, she would fulfill her dream of traveling.",
+    "reviewed": true
+  },
+  {
+    "id": "mirar.imperativoPositivo.1",
+    "verb": "mirar",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "{Miren} el mapa antes de salir.",
+    "en": "Look at the map before leaving.",
+    "reviewed": true
+  },
+  {
+    "id": "mirar.imperfectoDeIndicativo.1",
+    "verb": "mirar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi abuelo {miraba} por la ventana cada tarde.",
+    "en": "My grandfather used to look out the window every afternoon.",
+    "reviewed": true
+  },
+  {
+    "id": "mirar.imperativoNegativo.1",
+    "verb": "mirar",
+    "tense": "imperativoNegativo",
+    "person": "ts",
+    "es": "No {mire} hacia abajo, señor.",
+    "en": "Don't look down, sir.",
+    "reviewed": true
+  },
+  {
+    "id": "vivir.presenteDeIndicativo.1",
+    "verb": "vivir",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {vivo} cerca de la escuela.",
+    "en": "I live near the school.",
+    "reviewed": true
+  },
+  {
+    "id": "vivir.futuroDeIndicativo.1",
+    "verb": "vivir",
+    "tense": "futuroDeIndicativo",
+    "person": "fp",
+    "es": "El próximo año nosotros {viviremos} en otra ciudad.",
+    "en": "Next year we'll live in another city.",
+    "reviewed": true
+  },
+  {
+    "id": "vivir.imperfectoDeSubjuntivo1.1",
+    "verb": "vivir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Ojalá yo {viviera} más cerca del mar.",
+    "en": "I wish I lived closer to the sea.",
+    "reviewed": true
+  },
+  {
+    "id": "permitir.presenteDeIndicativo.1",
+    "verb": "permitir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi madre no nos {permite} comer en la sala.",
+    "en": "My mother doesn't let us eat in the living room.",
+    "reviewed": true
+  },
+  {
+    "id": "permitir.pretérito.1",
+    "verb": "permitir",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "Ayer los profesores nos {permitieron} salir temprano.",
+    "en": "Yesterday the teachers let us leave early.",
+    "reviewed": true
+  },
+  {
+    "id": "permitir.presenteDeSubjuntivo.1",
+    "verb": "permitir",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "No creo que el jefe {permita} más descansos.",
+    "en": "I don't think the boss will allow more breaks.",
+    "reviewed": true
+  },
+  {
+    "id": "presentar.presenteDeIndicativo.1",
+    "verb": "presentar",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Hoy yo {presento} mi proyecto a la clase.",
+    "en": "Today I'm presenting my project to the class.",
+    "reviewed": true
+  },
+  {
+    "id": "presentar.pretérito.1",
+    "verb": "presentar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Anoche el director {presentó} la nueva película.",
+    "en": "Last night the director presented the new movie.",
+    "reviewed": true
+  },
+  {
+    "id": "presentar.perfectoDeSubjuntivo.1",
+    "verb": "presentar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ts",
+    "es": "Espero que ella ya {haya presentado} el informe.",
+    "en": "I hope she has already submitted the report.",
+    "reviewed": true
+  },
+  {
+    "id": "buscar.imperativoPositivo.1",
+    "verb": "buscar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Busca} tus llaves en la cocina.",
+    "en": "Look for your keys in the kitchen.",
+    "reviewed": true
+  },
+  {
+    "id": "buscar.gerundio.1",
+    "verb": "buscar",
+    "tense": "gerundio",
+    "es": "Mis padres están {buscando} una casa más grande.",
+    "en": "My parents are looking for a bigger house.",
+    "reviewed": true
+  },
+  {
+    "id": "buscar.condicionalCompuesto.1",
+    "verb": "buscar",
+    "tense": "condicionalCompuesto",
+    "person": "fs",
+    "es": "Si me hubieran pagado menos, yo {habría buscado} otro trabajo.",
+    "en": "If they had paid me less, I would have looked for another job.",
+    "reviewed": true
+  },
+  {
+    "id": "esperar.presenteDeIndicativo.1",
+    "verb": "esperar",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros {esperamos} el tren en la estación.",
+    "en": "We're waiting for the train at the station.",
+    "reviewed": true
+  },
+  {
+    "id": "esperar.imperfectoDeIndicativo.1",
+    "verb": "esperar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "fs",
+    "es": "Yo {esperaba} una llamada, pero nadie llamó.",
+    "en": "I was expecting a call, but nobody called.",
+    "reviewed": true
+  },
+  {
+    "id": "esperar.presenteDeSubjuntivo.1",
+    "verb": "esperar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "Te pido que me {esperes} en la entrada.",
+    "en": "I'm asking you to wait for me at the entrance.",
+    "reviewed": true
+  },
+  {
+    "id": "trabajar.presenteDeIndicativo.1",
+    "verb": "trabajar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi hermana {trabaja} en un hospital.",
+    "en": "My sister works at a hospital.",
+    "reviewed": true
+  },
+  {
+    "id": "trabajar.pretérito.1",
+    "verb": "trabajar",
+    "tense": "pretérito",
+    "person": "fp",
+    "es": "El año pasado nosotros {trabajamos} mucho en el jardín.",
+    "en": "Last year we worked a lot in the garden.",
+    "reviewed": true
+  },
+  {
+    "id": "trabajar.condicional.1",
+    "verb": "trabajar",
+    "tense": "condicional",
+    "person": "tp",
+    "es": "Mis padres {trabajarían} menos si pudieran.",
+    "en": "My parents would work less if they could.",
+    "reviewed": true
+  },
+  {
+    "id": "empezar.presenteDeIndicativo.1",
+    "verb": "empezar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Las clases {empiezan} a las ocho.",
+    "en": "Classes start at eight.",
+    "reviewed": true
+  },
+  {
+    "id": "empezar.perfectoDeIndicativo.1",
+    "verb": "empezar",
+    "tense": "perfectoDeIndicativo",
+    "person": "ts",
+    "es": "La película ya {ha empezado}.",
+    "en": "The movie has already started.",
+    "reviewed": true
+  },
+  {
+    "id": "empezar.imperativoPositivo.1",
+    "verb": "empezar",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Empecemos} la clase con una canción.",
+    "en": "Let's start class with a song.",
+    "reviewed": true
+  },
+  {
+    "id": "existir.presenteDeIndicativo.1",
+    "verb": "existir",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "En esta ciudad {existen} muchos parques.",
+    "en": "There are many parks in this city.",
+    "reviewed": true
+  },
+  {
+    "id": "existir.imperfectoDeIndicativo.1",
+    "verb": "existir",
+    "tense": "imperfectoDeIndicativo",
+    "person": "tp",
+    "es": "Cuando mi madre era niña, no {existían} los teléfonos inteligentes.",
+    "en": "When my mother was a girl, smartphones didn't exist.",
+    "reviewed": true
+  },
+  {
+    "id": "existir.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "existir",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Si no {hubiera existido} esa ley, todo sería distinto.",
+    "en": "If that law hadn't existed, everything would be different.",
+    "reviewed": true
+  },
+  {
+    "id": "explicar.imperativoPositivo.1",
+    "verb": "explicar",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Explique} el problema con calma, por favor.",
+    "en": "Explain the problem calmly, please.",
+    "reviewed": true
+  },
+  {
+    "id": "explicar.pretérito.1",
+    "verb": "explicar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer la maestra nos {explicó} la lección otra vez.",
+    "en": "Yesterday the teacher explained the lesson to us again.",
+    "reviewed": true
+  },
+  {
+    "id": "explicar.presenteDeSubjuntivo.1",
+    "verb": "explicar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "fs",
+    "es": "Es importante que yo {explique} bien el plan.",
+    "en": "It's important that I explain the plan well.",
+    "reviewed": true
+  },
+  {
+    "id": "recordar.presenteDeIndicativo.1",
+    "verb": "recordar",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo siempre {recuerdo} mi primer día de clases.",
+    "en": "I always remember my first day of school.",
+    "reviewed": true
+  },
+  {
+    "id": "recordar.futuroDeIndicativo.1",
+    "verb": "recordar",
+    "tense": "futuroDeIndicativo",
+    "person": "fp",
+    "es": "Dentro de diez años, nosotros {recordaremos} este verano.",
+    "en": "In ten years, we'll remember this summer.",
+    "reviewed": true
+  },
+  {
+    "id": "recordar.imperfectoDeSubjuntivo1.1",
+    "verb": "recordar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ss",
+    "es": "Me gustaría que {recordaras} mi cumpleaños.",
+    "en": "I'd like you to remember my birthday.",
+    "reviewed": true
+  },
+  {
+    "id": "considerar.presenteDeIndicativo.1",
+    "verb": "considerar",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {considero} a Marta una buena amiga.",
+    "en": "I consider Marta a good friend.",
+    "reviewed": true
+  },
+  {
+    "id": "considerar.gerundio.1",
+    "verb": "considerar",
+    "tense": "gerundio",
+    "es": "Mi hermano está {considerando} mudarse a otra ciudad.",
+    "en": "My brother is considering moving to another city.",
+    "reviewed": true
+  },
+  {
+    "id": "considerar.futuroPerfecto.1",
+    "verb": "considerar",
+    "tense": "futuroPerfecto",
+    "person": "tp",
+    "es": "Para mañana, los jueces ya {habrán considerado} todas las propuestas.",
+    "en": "By tomorrow, the judges will have considered all the proposals.",
+    "reviewed": true
+  },
+  {
+    "id": "mantener.imperativoPositivo.1",
+    "verb": "mantener",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "{Mantengan} la calma, por favor.",
+    "en": "Keep calm, please.",
+    "reviewed": true
+  },
+  {
+    "id": "mantener.pretérito.1",
+    "verb": "mantener",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "El año pasado yo {mantuve} el mismo horario de trabajo.",
+    "en": "Last year I kept the same work schedule.",
+    "reviewed": true
+  },
+  {
+    "id": "mantener.imperfectoDeSubjuntivo1.1",
+    "verb": "mantener",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fp",
+    "es": "Los vecinos pidieron que nosotros {mantuviéramos} el jardín limpio.",
+    "en": "The neighbors asked us to keep the garden clean.",
+    "reviewed": true
+  },
+  {
+    "id": "perder.presenteDeIndicativo.1",
+    "verb": "perder",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros siempre {perdemos} las llaves.",
+    "en": "We always lose the keys.",
+    "reviewed": true
+  },
+  {
+    "id": "perder.perfectoDeIndicativo.1",
+    "verb": "perder",
+    "tense": "perfectoDeIndicativo",
+    "person": "fs",
+    "es": "Yo nunca {he perdido} el tren.",
+    "en": "I've never missed the train.",
+    "reviewed": true
+  },
+  {
+    "id": "perder.imperativoNegativo.1",
+    "verb": "perder",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {pierdas} la paciencia.",
+    "en": "Don't lose your patience.",
+    "reviewed": true
+  },
+  {
+    "id": "recibir.presenteDeIndicativo.1",
+    "verb": "recibir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi madre {recibe} una carta cada mes.",
+    "en": "My mother gets a letter every month.",
+    "reviewed": true
+  },
+  {
+    "id": "recibir.pretérito.1",
+    "verb": "recibir",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Ayer yo {recibí} un regalo de mi abuela.",
+    "en": "Yesterday I received a gift from my grandmother.",
+    "reviewed": true
+  },
+  {
+    "id": "recibir.presenteDeSubjuntivo.1",
+    "verb": "recibir",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Quiero que ellos {reciban} bien a los invitados.",
+    "en": "I want them to welcome the guests warmly.",
+    "reviewed": true
+  },
+  {
+    "id": "abrir.imperativoPositivo.1",
+    "verb": "abrir",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Abre} la ventana, por favor, que hace calor.",
+    "en": "Open the window, please; it's hot.",
+    "reviewed": true
+  },
+  {
+    "id": "abrir.imperfectoDeIndicativo.1",
+    "verb": "abrir",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi abuelo siempre {abría} la tienda a las siete.",
+    "en": "My grandfather always opened the store at seven.",
+    "reviewed": true
+  },
+  {
+    "id": "abrir.imperfectoDeSubjuntivo1.1",
+    "verb": "abrir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Si yo {abriera} la ventana, entraría mucho ruido.",
+    "en": "If I opened the window, a lot of noise would come in.",
+    "reviewed": true
+  },
+  {
+    "id": "lograr.presenteDeIndicativo.1",
+    "verb": "lograr",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Mis hijos {logran} terminar la tarea sin ayuda.",
+    "en": "My kids manage to finish their homework without help.",
+    "reviewed": true
+  },
+  {
+    "id": "lograr.futuroDeIndicativo.1",
+    "verb": "lograr",
+    "tense": "futuroDeIndicativo",
+    "person": "fs",
+    "es": "Algún día yo {lograré} hablar español perfectamente.",
+    "en": "Someday I'll manage to speak Spanish perfectly.",
+    "reviewed": true
+  },
+  {
+    "id": "lograr.condicionalCompuesto.1",
+    "verb": "lograr",
+    "tense": "condicionalCompuesto",
+    "person": "ts",
+    "es": "Con más tiempo, ella {habría logrado} terminar el libro.",
+    "en": "With more time, she would have managed to finish the book.",
+    "reviewed": true
+  },
+  {
+    "id": "preguntar.imperativoPositivo.1",
+    "verb": "preguntar",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "{Pregunten} al maestro cuando no entiendan.",
+    "en": "Ask the teacher when you don't understand.",
+    "reviewed": true
+  },
+  {
+    "id": "preguntar.pretérito.1",
+    "verb": "preguntar",
+    "tense": "pretérito",
+    "person": "ss",
+    "es": "Ayer le {preguntaste} la hora a un policía.",
+    "en": "Yesterday you asked a police officer the time.",
+    "reviewed": true
+  },
+  {
+    "id": "preguntar.imperativoNegativo.1",
+    "verb": "preguntar",
+    "tense": "imperativoNegativo",
+    "person": "ts",
+    "es": "Por favor, no {pregunte} cosas tan personales.",
+    "en": "Please don't ask such personal questions.",
+    "reviewed": true
+  },
+  {
+    "id": "convertir.presenteDeIndicativo.1",
+    "verb": "convertir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "El agua se {convierte} en hielo en el congelador.",
+    "en": "Water turns into ice in the freezer.",
+    "reviewed": true
+  },
+  {
+    "id": "convertir.gerundio.1",
+    "verb": "convertir",
+    "tense": "gerundio",
+    "es": "El pueblo se está {convirtiendo} en una gran ciudad.",
+    "en": "The town is turning into a big city.",
+    "reviewed": true
+  },
+  {
+    "id": "convertir.pluscuamperfectoDeIndicativo.1",
+    "verb": "convertir",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Cuando llegamos, la sala ya se {había convertido} en un taller.",
+    "en": "When we arrived, the room had already turned into a workshop.",
+    "reviewed": true
+  },
+  {
+    "id": "comenzar.presenteDeIndicativo.1",
+    "verb": "comenzar",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros {comenzamos} la clase a las nueve.",
+    "en": "We begin class at nine.",
+    "reviewed": true
+  },
+  {
+    "id": "comenzar.futuroDeIndicativo.1",
+    "verb": "comenzar",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "Mañana {comenzará} el festival de música.",
+    "en": "Tomorrow the music festival will begin.",
+    "reviewed": true
+  },
+  {
+    "id": "comenzar.imperativoPositivo.1",
+    "verb": "comenzar",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Comencemos} la reunión ya.",
+    "en": "Let's start the meeting now.",
+    "reviewed": true
+  },
+  {
+    "id": "pedir.imperativoPositivo.1",
+    "verb": "pedir",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Pida} la cuenta, por favor.",
+    "en": "Ask for the check, please.",
+    "reviewed": true
+  },
+  {
+    "id": "pedir.pretérito.1",
+    "verb": "pedir",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Anoche yo {pedí} una pizza para cenar.",
+    "en": "Last night I ordered a pizza for dinner.",
+    "reviewed": true
+  },
+  {
+    "id": "pedir.imperfectoDeSubjuntivo1.1",
+    "verb": "pedir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "tp",
+    "es": "Fue raro que ellos no {pidieran} ayuda.",
+    "en": "It was odd that they didn't ask for help.",
+    "reviewed": true
+  },
+  {
+    "id": "entrar.presenteDeIndicativo.1",
+    "verb": "entrar",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {entro} a la oficina a las ocho.",
+    "en": "I go into the office at eight.",
+    "reviewed": true
+  },
+  {
+    "id": "entrar.perfectoDeIndicativo.1",
+    "verb": "entrar",
+    "tense": "perfectoDeIndicativo",
+    "person": "tp",
+    "es": "Los niños todavía no {han entrado} a clase.",
+    "en": "The kids still haven't gone into class.",
+    "reviewed": true
+  },
+  {
+    "id": "entrar.imperativoNegativo.1",
+    "verb": "entrar",
+    "tense": "imperativoNegativo",
+    "person": "tp",
+    "es": "No {entren} sin llamar, por favor.",
+    "en": "Don't come in without knocking, please.",
+    "reviewed": true
+  },
+  {
+    "id": "escribir.presenteDeIndicativo.1",
+    "verb": "escribir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi hermana {escribe} cuentos para niños.",
+    "en": "My sister writes stories for children.",
+    "reviewed": true
+  },
+  {
+    "id": "escribir.gerundio.1",
+    "verb": "escribir",
+    "tense": "gerundio",
+    "es": "Estoy {escribiendo} un correo a mi jefe.",
+    "en": "I'm writing an email to my boss.",
+    "reviewed": true
+  },
+  {
+    "id": "escribir.condicional.1",
+    "verb": "escribir",
+    "tense": "condicional",
+    "person": "ss",
+    "es": "¿Me {escribirías} un mensaje cuando llegues?",
+    "en": "Would you write me a message when you arrive?",
+    "reviewed": true
+  },
+  {
+    "id": "mostrar.imperativoPositivo.1",
+    "verb": "mostrar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Muestra} tus fotos al abuelo.",
+    "en": "Show your photos to Grandpa.",
+    "reviewed": true
+  },
+  {
+    "id": "mostrar.pretérito.1",
+    "verb": "mostrar",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "Ayer los niños nos {mostraron} su cuarto nuevo.",
+    "en": "Yesterday the kids showed us their new room.",
+    "reviewed": true
+  },
+  {
+    "id": "mostrar.presenteDeSubjuntivo.1",
+    "verb": "mostrar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Quiero que el guía nos {muestre} la catedral.",
+    "en": "I want the guide to show us the cathedral.",
+    "reviewed": true
+  },
+  {
+    "id": "entender.presenteDeIndicativo.1",
+    "verb": "entender",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros {entendemos} la lección de hoy.",
+    "en": "We understand today's lesson.",
+    "reviewed": true
+  },
+  {
+    "id": "entender.perfectoDeIndicativo.1",
+    "verb": "entender",
+    "tense": "perfectoDeIndicativo",
+    "person": "fs",
+    "es": "Yo nunca {he entendido} esta regla.",
+    "en": "I've never understood this rule.",
+    "reviewed": true
+  },
+  {
+    "id": "entender.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "entender",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Si yo {hubiera entendido} la pregunta, habría respondido.",
+    "en": "If I had understood the question, I would have answered.",
+    "reviewed": true
+  },
+  {
+    "id": "producir.presenteDeIndicativo.1",
+    "verb": "producir",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Estas fábricas {producen} miles de zapatos al día.",
+    "en": "These factories produce thousands of shoes a day.",
+    "reviewed": true
+  },
+  {
+    "id": "producir.imperfectoDeIndicativo.1",
+    "verb": "producir",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Antes, esta región {producía} mucho café.",
+    "en": "This region used to produce a lot of coffee.",
+    "reviewed": true
+  },
+  {
+    "id": "producir.futuroPerfecto.1",
+    "verb": "producir",
+    "tense": "futuroPerfecto",
+    "person": "ts",
+    "es": "Para el año próximo, la fábrica ya {habrá producido} un millón de piezas.",
+    "en": "By next year, the factory will have produced a million pieces.",
+    "reviewed": true
+  },
+  {
+    "id": "señalar.imperativoPositivo.1",
+    "verb": "señalar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Señala} el error con un lápiz.",
+    "en": "Point out the mistake with a pencil.",
+    "reviewed": true
+  },
+  {
+    "id": "señalar.pretérito.1",
+    "verb": "señalar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer el maestro {señaló} un error en mi tarea.",
+    "en": "Yesterday the teacher pointed out a mistake in my homework.",
+    "reviewed": true
+  },
+  {
+    "id": "señalar.condicional.1",
+    "verb": "señalar",
+    "tense": "condicional",
+    "person": "fs",
+    "es": "Yo {señalaría} primero el problema del precio.",
+    "en": "I would point out the price problem first.",
+    "reviewed": true
+  },
+  {
+    "id": "terminar.presenteDeIndicativo.1",
+    "verb": "terminar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "La película {termina} a las diez.",
+    "en": "The movie ends at ten.",
+    "reviewed": true
+  },
+  {
+    "id": "terminar.futuroDeIndicativo.1",
+    "verb": "terminar",
+    "tense": "futuroDeIndicativo",
+    "person": "fp",
+    "es": "Mañana nosotros {terminaremos} el proyecto.",
+    "en": "Tomorrow we'll finish the project.",
+    "reviewed": true
+  },
+  {
+    "id": "terminar.imperfectoDeSubjuntivo1.1",
+    "verb": "terminar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ss",
+    "es": "Mi madre quería que {terminaras} la tarea antes de cenar.",
+    "en": "My mother wanted you to finish your homework before dinner.",
+    "reviewed": true
+  },
+  {
+    "id": "utilizar.imperativoPositivo.1",
+    "verb": "utilizar",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "{Utilicen} el diccionario durante el examen.",
+    "en": "Use the dictionary during the exam.",
+    "reviewed": true
+  },
+  {
+    "id": "utilizar.pretérito.1",
+    "verb": "utilizar",
+    "tense": "pretérito",
+    "person": "fp",
+    "es": "El año pasado nosotros {utilizamos} esta sala para las clases.",
+    "en": "Last year we used this room for classes.",
+    "reviewed": true
+  },
+  {
+    "id": "utilizar.perfectoDeSubjuntivo.1",
+    "verb": "utilizar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ts",
+    "es": "Dudo que el cliente {haya utilizado} la tarjeta.",
+    "en": "I doubt the customer has used the card.",
+    "reviewed": true
+  },
+  {
+    "id": "ganar.presenteDeIndicativo.1",
+    "verb": "ganar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi padre {gana} bien en su trabajo.",
+    "en": "My father earns a good living at his job.",
+    "reviewed": true
+  },
+  {
+    "id": "ganar.pretérito.1",
+    "verb": "ganar",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "Ayer los jugadores {ganaron} el partido.",
+    "en": "Yesterday the players won the game.",
+    "reviewed": true
+  },
+  {
+    "id": "ganar.presenteDeSubjuntivo.1",
+    "verb": "ganar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "fp",
+    "es": "Ojalá que nosotros {ganemos} el campeonato.",
+    "en": "I hope we win the championship.",
+    "reviewed": true
+  },
+  {
+    "id": "gustar.presenteDeIndicativo.1",
+    "verb": "gustar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "A mis padres les {gustan} los libros de misterio.",
+    "en": "My parents like mystery books.",
+    "reviewed": true
+  },
+  {
+    "id": "gustar.imperfectoDeIndicativo.1",
+    "verb": "gustar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "De niña, a mi madre le {gustaba} cantar.",
+    "en": "As a girl, my mother liked to sing.",
+    "reviewed": true
+  },
+  {
+    "id": "gustar.condicional.1",
+    "verb": "gustar",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "A mi abuelo le {gustaría} viajar a España.",
+    "en": "My grandfather would like to travel to Spain.",
+    "reviewed": true
+  },
+  {
+    "id": "asegurar.presenteDeIndicativo.1",
+    "verb": "asegurar",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo te {aseguro} que el café es bueno.",
+    "en": "I assure you the coffee is good.",
+    "reviewed": true
+  },
+  {
+    "id": "asegurar.gerundio.1",
+    "verb": "asegurar",
+    "tense": "gerundio",
+    "es": "El dueño está {asegurando} la casa contra incendios.",
+    "en": "The owner is insuring the house against fire.",
+    "reviewed": true
+  },
+  {
+    "id": "asegurar.imperativoNegativo.1",
+    "verb": "asegurar",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {asegures} nada antes de hablar con él.",
+    "en": "Don't promise anything before talking to him.",
+    "reviewed": true
+  },
+  {
+    "id": "cambiar.presenteDeIndicativo.1",
+    "verb": "cambiar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi hermana {cambia} de trabajo cada año.",
+    "en": "My sister changes jobs every year.",
+    "reviewed": true
+  },
+  {
+    "id": "cambiar.pretérito.1",
+    "verb": "cambiar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "El año pasado yo {cambié} de escuela.",
+    "en": "Last year I changed schools.",
+    "reviewed": true
+  },
+  {
+    "id": "cambiar.condicionalCompuesto.1",
+    "verb": "cambiar",
+    "tense": "condicionalCompuesto",
+    "person": "fs",
+    "es": "Yo {habría cambiado} de ciudad con más dinero.",
+    "en": "I would have moved to another city with more money.",
+    "reviewed": true
+  },
+  {
+    "id": "ofrecer.imperativoPositivo.1",
+    "verb": "ofrecer",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Ofrezca} un café a los invitados, por favor.",
+    "en": "Offer the guests a coffee, please.",
+    "reviewed": true
+  },
+  {
+    "id": "ofrecer.perfectoDeIndicativo.1",
+    "verb": "ofrecer",
+    "tense": "perfectoDeIndicativo",
+    "person": "ts",
+    "es": "La tienda ya {ha ofrecido} un descuento.",
+    "en": "The store has already offered a discount.",
+    "reviewed": true
+  },
+  {
+    "id": "ofrecer.presenteDeSubjuntivo.1",
+    "verb": "ofrecer",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Es importante que ellos nos {ofrezcan} un buen precio.",
+    "en": "It's important that they offer us a good price.",
+    "reviewed": true
+  },
+  {
+    "id": "acabar.presenteDeIndicativo.1",
+    "verb": "acabar",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros {acabamos} de llegar a casa.",
+    "en": "We just got home.",
+    "reviewed": true
+  },
+  {
+    "id": "acabar.pretérito.1",
+    "verb": "acabar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer la clase {acabó} a las cinco.",
+    "en": "Yesterday the class ended at five.",
+    "reviewed": true
+  },
+  {
+    "id": "acabar.imperativoPositivo.1",
+    "verb": "acabar",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Acabemos} esta tarea antes de cenar.",
+    "en": "Let's finish this task before dinner.",
+    "reviewed": true
+  },
+  {
+    "id": "necesitar.presenteDeIndicativo.1",
+    "verb": "necesitar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Mis padres {necesitan} un teléfono nuevo.",
+    "en": "My parents need a new phone.",
+    "reviewed": true
+  },
+  {
+    "id": "necesitar.imperfectoDeIndicativo.1",
+    "verb": "necesitar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "fs",
+    "es": "De niño, yo {necesitaba} una luz para dormir.",
+    "en": "As a child, I needed a light to sleep.",
+    "reviewed": true
+  },
+  {
+    "id": "necesitar.pluscuamperfectoDeIndicativo.1",
+    "verb": "necesitar",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "fs",
+    "es": "Ella no sabía que yo {había necesitado} su ayuda.",
+    "en": "She didn't know I had needed her help.",
+    "reviewed": true
+  },
+  {
+    "id": "ocurrir.presenteDeIndicativo.1",
+    "verb": "ocurrir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "A veces {ocurre} algo raro en esta calle.",
+    "en": "Sometimes something strange happens on this street.",
+    "reviewed": true
+  },
+  {
+    "id": "ocurrir.pretérito.1",
+    "verb": "ocurrir",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El accidente {ocurrió} el año pasado.",
+    "en": "The accident happened last year.",
+    "reviewed": true
+  },
+  {
+    "id": "ocurrir.imperfectoDeSubjuntivo1.1",
+    "verb": "ocurrir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Si no {ocurriera} nada raro, llegaríamos a tiempo.",
+    "en": "If nothing strange happened, we'd arrive on time.",
+    "reviewed": true
+  },
+  {
+    "id": "escuchar.imperativoPositivo.1",
+    "verb": "escuchar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Escucha} esta canción; es muy bonita.",
+    "en": "Listen to this song; it's very pretty.",
+    "reviewed": true
+  },
+  {
+    "id": "escuchar.imperfectoDeIndicativo.1",
+    "verb": "escuchar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "tp",
+    "es": "Mis abuelos siempre {escuchaban} la radio por la noche.",
+    "en": "My grandparents always listened to the radio at night.",
+    "reviewed": true
+  },
+  {
+    "id": "escuchar.perfectoDeSubjuntivo.1",
+    "verb": "escuchar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "tp",
+    "es": "Es raro que los vecinos no {hayan escuchado} nada.",
+    "en": "It's strange that the neighbors haven't heard anything.",
+    "reviewed": true
+  },
+  {
+    "id": "jugar.presenteDeIndicativo.1",
+    "verb": "jugar",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {juego} al fútbol los sábados.",
+    "en": "I play soccer on Saturdays.",
+    "reviewed": true
+  },
+  {
+    "id": "jugar.gerundio.1",
+    "verb": "jugar",
+    "tense": "gerundio",
+    "es": "Los niños están {jugando} en el parque.",
+    "en": "The kids are playing in the park.",
+    "reviewed": true
+  },
+  {
+    "id": "jugar.presenteDeSubjuntivo.1",
+    "verb": "jugar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "fp",
+    "es": "Mi madre quiere que nosotros {juguemos} afuera.",
+    "en": "My mother wants us to play outside.",
+    "reviewed": true
+  },
+  {
+    "id": "incluir.presenteDeIndicativo.1",
+    "verb": "incluir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "El menú {incluye} postre y café.",
+    "en": "The menu includes dessert and coffee.",
+    "reviewed": true
+  },
+  {
+    "id": "incluir.pretérito.1",
+    "verb": "incluir",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Ayer yo {incluí} tu nombre en la lista.",
+    "en": "Yesterday I included your name on the list.",
+    "reviewed": true
+  },
+  {
+    "id": "incluir.presenteDeSubjuntivo.1",
+    "verb": "incluir",
+    "tense": "presenteDeSubjuntivo",
+    "person": "fp",
+    "es": "Mi madre quiere que nosotros {incluyamos} a los abuelos en la foto.",
+    "en": "My mother wants us to include our grandparents in the photo.",
+    "reviewed": true
+  },
+  {
+    "id": "morir.presenteDeIndicativo.1",
+    "verb": "morir",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Mis flores {mueren} cada invierno.",
+    "en": "My flowers die every winter.",
+    "reviewed": true
+  },
+  {
+    "id": "morir.pretérito.1",
+    "verb": "morir",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Su abuelo {murió} el año pasado.",
+    "en": "His grandfather died last year.",
+    "reviewed": true
+  },
+  {
+    "id": "morir.condicional.1",
+    "verb": "morir",
+    "tense": "condicional",
+    "person": "tp",
+    "es": "Sin agua, las flores {morirían} en una semana.",
+    "en": "Without water, the flowers would die within a week.",
+    "reviewed": true
+  },
+  {
+    "id": "aparecer.presenteDeIndicativo.1",
+    "verb": "aparecer",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "El sol {aparece} detrás de las montañas.",
+    "en": "The sun appears behind the mountains.",
+    "reviewed": true
+  },
+  {
+    "id": "aparecer.perfectoDeIndicativo.1",
+    "verb": "aparecer",
+    "tense": "perfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi gato todavía no {ha aparecido}.",
+    "en": "My cat still hasn't shown up.",
+    "reviewed": true
+  },
+  {
+    "id": "aparecer.presenteDeSubjuntivo.1",
+    "verb": "aparecer",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Ojalá que las llaves {aparezcan} pronto.",
+    "en": "I hope the keys turn up soon.",
+    "reviewed": true
+  },
+  {
+    "id": "decidir.imperativoPositivo.1",
+    "verb": "decidir",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "{Decidan} ustedes qué película vemos.",
+    "en": "You all decide which movie we watch.",
+    "reviewed": true
+  },
+  {
+    "id": "decidir.futuroDeIndicativo.1",
+    "verb": "decidir",
+    "tense": "futuroDeIndicativo",
+    "person": "fp",
+    "es": "Mañana nosotros {decidiremos} el menú.",
+    "en": "Tomorrow we'll decide on the menu.",
+    "reviewed": true
+  },
+  {
+    "id": "decidir.condicionalCompuesto.1",
+    "verb": "decidir",
+    "tense": "condicionalCompuesto",
+    "person": "fs",
+    "es": "Yo {habría decidido} otra cosa en tu lugar.",
+    "en": "I would have decided something else in your place.",
+    "reviewed": true
+  },
+  {
+    "id": "resultar.presenteDeIndicativo.1",
+    "verb": "resultar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "El libro {resulta} muy útil para aprender.",
+    "en": "The book turns out to be very useful for learning.",
+    "reviewed": true
+  },
+  {
+    "id": "resultar.pretérito.1",
+    "verb": "resultar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "La fiesta {resultó} muy divertida anoche.",
+    "en": "The party turned out to be a lot of fun last night.",
+    "reviewed": true
+  },
+  {
+    "id": "resultar.imperfectoDeSubjuntivo1.1",
+    "verb": "resultar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Dudé que el plan {resultara} bien.",
+    "en": "I doubted the plan would work out.",
+    "reviewed": true
+  },
+  {
+    "id": "sentar.presenteDeIndicativo.1",
+    "verb": "sentar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi madre {sienta} al bebé en la silla.",
+    "en": "My mother sits the baby in the chair.",
+    "reviewed": true
+  },
+  {
+    "id": "sentar.pretérito.1",
+    "verb": "sentar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Ayer yo {senté} al niño en su silla.",
+    "en": "Yesterday I sat the child in his chair.",
+    "reviewed": true
+  },
+  {
+    "id": "sentar.imperativoNegativo.1",
+    "verb": "sentar",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {sientes} al bebé en el suelo.",
+    "en": "Don't sit the baby on the floor.",
+    "reviewed": true
+  },
+  {
+    "id": "conseguir.presenteDeIndicativo.1",
+    "verb": "conseguir",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {consigo} las entradas en línea.",
+    "en": "I get the tickets online.",
+    "reviewed": true
+  },
+  {
+    "id": "conseguir.futuroDeIndicativo.1",
+    "verb": "conseguir",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "El próximo año mi hermano {conseguirá} un buen trabajo.",
+    "en": "Next year my brother will get a good job.",
+    "reviewed": true
+  },
+  {
+    "id": "conseguir.futuroPerfecto.1",
+    "verb": "conseguir",
+    "tense": "futuroPerfecto",
+    "person": "fp",
+    "es": "Para el viernes nosotros ya {habremos conseguido} las entradas.",
+    "en": "By Friday we'll have gotten the tickets.",
+    "reviewed": true
+  },
+  {
+    "id": "sacar.imperativoPositivo.1",
+    "verb": "sacar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Saca} la basura, por favor.",
+    "en": "Take out the trash, please.",
+    "reviewed": true
+  },
+  {
+    "id": "sacar.gerundio.1",
+    "verb": "sacar",
+    "tense": "gerundio",
+    "es": "Mi padre está {sacando} fotos del jardín.",
+    "en": "My father is taking pictures of the garden.",
+    "reviewed": true
+  },
+  {
+    "id": "sacar.imperfectoDeSubjuntivo1.1",
+    "verb": "sacar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Mis padres querían que yo {sacara} buenas calificaciones.",
+    "en": "My parents wanted me to get good grades.",
+    "reviewed": true
+  },
+  {
+    "id": "leer.presenteDeIndicativo.1",
+    "verb": "leer",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros {leemos} el periódico cada mañana.",
+    "en": "We read the newspaper every morning.",
+    "reviewed": true
+  },
+  {
+    "id": "leer.pretérito.1",
+    "verb": "leer",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "Ayer los niños {leyeron} tres cuentos.",
+    "en": "Yesterday the children read three stories.",
+    "reviewed": true
+  },
+  {
+    "id": "leer.perfectoDeSubjuntivo.1",
+    "verb": "leer",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ts",
+    "es": "Dudo que ella {haya leído} esa carta.",
+    "en": "I doubt she has read that letter.",
+    "reviewed": true
+  },
+  {
+    "id": "caer.presenteDeIndicativo.1",
+    "verb": "caer",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Las hojas {caen} de los árboles en otoño.",
+    "en": "The leaves fall from the trees in the fall.",
+    "reviewed": true
+  },
+  {
+    "id": "caer.imperfectoDeIndicativo.1",
+    "verb": "caer",
+    "tense": "imperfectoDeIndicativo",
+    "person": "fs",
+    "es": "Cuando yo era niño, me {caía} de la bicicleta a cada rato.",
+    "en": "When I was a kid, I used to fall off my bike all the time.",
+    "reviewed": true
+  },
+  {
+    "id": "caer.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "caer",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Si el niño no se {hubiera caído}, no habría llorado.",
+    "en": "If the child hadn't fallen, he wouldn't have cried.",
+    "reviewed": true
+  },
+  {
+    "id": "ayudar.imperativoPositivo.1",
+    "verb": "ayudar",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Ayude} a su hijo con la tarea, por favor.",
+    "en": "Please help your son with his homework.",
+    "reviewed": true
+  },
+  {
+    "id": "ayudar.futuroDeIndicativo.1",
+    "verb": "ayudar",
+    "tense": "futuroDeIndicativo",
+    "person": "fs",
+    "es": "Mañana yo {ayudaré} a mi vecino con la mudanza.",
+    "en": "Tomorrow I'll help my neighbor with the move.",
+    "reviewed": true
+  },
+  {
+    "id": "ayudar.presenteDeSubjuntivo.1",
+    "verb": "ayudar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Ojalá que mis amigos me {ayuden} a estudiar.",
+    "en": "I hope my friends help me study.",
+    "reviewed": true
+  },
+  {
+    "id": "desarrollar.presenteDeIndicativo.1",
+    "verb": "desarrollar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Esta empresa {desarrolla} aplicaciones para teléfonos.",
+    "en": "This company develops apps for phones.",
+    "reviewed": true
+  },
+  {
+    "id": "desarrollar.pretérito.1",
+    "verb": "desarrollar",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "El año pasado los ingenieros {desarrollaron} un motor nuevo.",
+    "en": "Last year the engineers developed a new engine.",
+    "reviewed": true
+  },
+  {
+    "id": "desarrollar.condicional.1",
+    "verb": "desarrollar",
+    "tense": "condicional",
+    "person": "fp",
+    "es": "Con más tiempo, nosotros {desarrollaríamos} mejor el proyecto.",
+    "en": "With more time, we would develop the project better.",
+    "reviewed": true
+  },
+  {
+    "id": "intentar.presenteDeIndicativo.1",
+    "verb": "intentar",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {intento} correr cada mañana.",
+    "en": "I try to run every morning.",
+    "reviewed": true
+  },
+  {
+    "id": "intentar.imperfectoDeIndicativo.1",
+    "verb": "intentar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi abuela siempre {intentaba} cocinar algo nuevo.",
+    "en": "My grandmother always tried to cook something new.",
+    "reviewed": true
+  },
+  {
+    "id": "intentar.imperativoNegativo.1",
+    "verb": "intentar",
+    "tense": "imperativoNegativo",
+    "person": "ts",
+    "es": "No {intente} abrir esa puerta, señor.",
+    "en": "Don't try to open that door, sir.",
+    "reviewed": true
+  },
+  {
+    "id": "formar.presenteDeIndicativo.1",
+    "verb": "formar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Estas tres calles {forman} un triángulo.",
+    "en": "These three streets form a triangle.",
+    "reviewed": true
+  },
+  {
+    "id": "formar.pretérito.1",
+    "verb": "formar",
+    "tense": "pretérito",
+    "person": "fp",
+    "es": "El año pasado nosotros {formamos} un equipo de fútbol.",
+    "en": "Last year we formed a soccer team.",
+    "reviewed": true
+  },
+  {
+    "id": "formar.pluscuamperfectoDeIndicativo.1",
+    "verb": "formar",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "tp",
+    "es": "Cuando llegué, los niños ya {habían formado} una fila.",
+    "en": "When I arrived, the kids had already formed a line.",
+    "reviewed": true
+  },
+  {
+    "id": "reconocer.presenteDeIndicativo.1",
+    "verb": "reconocer",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {reconozco} esa canción.",
+    "en": "I recognize that song.",
+    "reviewed": true
+  },
+  {
+    "id": "reconocer.perfectoDeIndicativo.1",
+    "verb": "reconocer",
+    "tense": "perfectoDeIndicativo",
+    "person": "ts",
+    "es": "Ella todavía no me {ha reconocido}.",
+    "en": "She still hasn't recognized me.",
+    "reviewed": true
+  },
+  {
+    "id": "reconocer.imperfectoDeSubjuntivo1.1",
+    "verb": "reconocer",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Me sorprendió que mi abuelo no me {reconociera}.",
+    "en": "It surprised me that my grandfather didn't recognize me.",
+    "reviewed": true
+  },
+  {
+    "id": "usar.imperativoPositivo.1",
+    "verb": "usar",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "{Usen} lápiz en el examen, por favor.",
+    "en": "Please use a pencil on the exam.",
+    "reviewed": true
+  },
+  {
+    "id": "usar.perfectoDeIndicativo.1",
+    "verb": "usar",
+    "tense": "perfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi padre nunca {ha usado} un teléfono inteligente.",
+    "en": "My father has never used a smartphone.",
+    "reviewed": true
+  },
+  {
+    "id": "usar.perfectoDeSubjuntivo.1",
+    "verb": "usar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "tp",
+    "es": "No creo que ellos {hayan usado} tu llave.",
+    "en": "I don't think they've used your key.",
+    "reviewed": true
+  },
+  {
+    "id": "generar.presenteDeIndicativo.1",
+    "verb": "generar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Los paneles solares {generan} energía para toda la casa.",
+    "en": "Solar panels generate energy for the whole house.",
+    "reviewed": true
+  },
+  {
+    "id": "generar.gerundio.1",
+    "verb": "generar",
+    "tense": "gerundio",
+    "es": "Esta situación está {generando} mucho estrés.",
+    "en": "This situation is causing a lot of stress.",
+    "reviewed": true
+  },
+  {
+    "id": "generar.imperfectoDeSubjuntivo1.1",
+    "verb": "generar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Si la tienda {generara} más ventas, contrataría a más gente.",
+    "en": "If the store generated more sales, it would hire more people.",
+    "reviewed": true
+  },
+  {
+    "id": "alcanzar.imperativoPositivo.1",
+    "verb": "alcanzar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Alcanza} esa caja del estante, por favor.",
+    "en": "Get that box down from the shelf, please.",
+    "reviewed": true
+  },
+  {
+    "id": "alcanzar.pretérito.1",
+    "verb": "alcanzar",
+    "tense": "pretérito",
+    "person": "fp",
+    "es": "Anoche nosotros {alcanzamos} el último tren.",
+    "en": "Last night we caught the last train.",
+    "reviewed": true
+  },
+  {
+    "id": "alcanzar.futuroPerfecto.1",
+    "verb": "alcanzar",
+    "tense": "futuroPerfecto",
+    "person": "ts",
+    "es": "Para las seis, el equipo ya {habrá alcanzado} la cima.",
+    "en": "By six o'clock, the team will have reached the summit.",
+    "reviewed": true
+  },
+  {
+    "id": "servir.presenteDeIndicativo.1",
+    "verb": "servir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Este restaurante {sirve} comida casera.",
+    "en": "This restaurant serves homemade food.",
+    "reviewed": true
+  },
+  {
+    "id": "servir.imperfectoDeIndicativo.1",
+    "verb": "servir",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi abuela siempre nos {servía} sopa los domingos.",
+    "en": "My grandmother always served us soup on Sundays.",
+    "reviewed": true
+  },
+  {
+    "id": "servir.imperativoNegativo.1",
+    "verb": "servir",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {sirvas} el café todavía.",
+    "en": "Don't serve the coffee yet.",
+    "reviewed": true
+  },
+  {
+    "id": "indicar.imperativoPositivo.1",
+    "verb": "indicar",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Indique} su nombre aquí, por favor.",
+    "en": "Please write your name here.",
+    "reviewed": true
+  },
+  {
+    "id": "indicar.pretérito.1",
+    "verb": "indicar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer el médico me {indicó} descansar una semana.",
+    "en": "Yesterday the doctor told me to rest for a week.",
+    "reviewed": true
+  },
+  {
+    "id": "indicar.presenteDeSubjuntivo.1",
+    "verb": "indicar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Voy a esperar hasta que la luz {indique} que puedo pasar.",
+    "en": "I'll wait until the light shows that I can go.",
+    "reviewed": true
+  },
+  {
+    "id": "cumplir.imperativoPositivo.1",
+    "verb": "cumplir",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Cumple} tu promesa.",
+    "en": "Keep your promise.",
+    "reviewed": true
+  },
+  {
+    "id": "cumplir.perfectoDeIndicativo.1",
+    "verb": "cumplir",
+    "tense": "perfectoDeIndicativo",
+    "person": "tp",
+    "es": "Mis padres ya {han cumplido} treinta años de casados.",
+    "en": "My parents have already been married for thirty years.",
+    "reviewed": true
+  },
+  {
+    "id": "cumplir.condicional.1",
+    "verb": "cumplir",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "Mi jefe dijo que {cumpliría} su palabra.",
+    "en": "My boss said he would keep his word.",
+    "reviewed": true
+  },
+  {
+    "id": "establecer.presenteDeIndicativo.1",
+    "verb": "establecer",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Las normas del edificio {establecen} que no se puede fumar.",
+    "en": "The building's rules state that smoking isn't allowed.",
+    "reviewed": true
+  },
+  {
+    "id": "establecer.pretérito.1",
+    "verb": "establecer",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "En 1998 mis abuelos {establecieron} un negocio familiar.",
+    "en": "In 1998 my grandparents established a family business.",
+    "reviewed": true
+  },
+  {
+    "id": "establecer.pluscuamperfectoDeIndicativo.1",
+    "verb": "establecer",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Para 2010, la empresa ya {había establecido} tres oficinas.",
+    "en": "By 2010, the company had already established three offices.",
+    "reviewed": true
+  },
+  {
+    "id": "responder.presenteDeIndicativo.1",
+    "verb": "responder",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi jefe siempre me {responde} rápido.",
+    "en": "My boss always answers me quickly.",
+    "reviewed": true
+  },
+  {
+    "id": "responder.gerundio.1",
+    "verb": "responder",
+    "tense": "gerundio",
+    "es": "Estoy {respondiendo} tus mensajes.",
+    "en": "I'm answering your messages.",
+    "reviewed": true
+  },
+  {
+    "id": "responder.imperativoPositivo.1",
+    "verb": "responder",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Respondamos} esa carta hoy mismo.",
+    "en": "Let's answer that letter today.",
+    "reviewed": true
+  },
+  {
+    "id": "evitar.presenteDeIndicativo.1",
+    "verb": "evitar",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {evito} el tráfico saliendo temprano.",
+    "en": "I avoid traffic by leaving early.",
+    "reviewed": true
+  },
+  {
+    "id": "evitar.imperfectoDeIndicativo.1",
+    "verb": "evitar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi hermano siempre {evitaba} las discusiones.",
+    "en": "My brother always avoided arguments.",
+    "reviewed": true
+  },
+  {
+    "id": "evitar.condicionalCompuesto.1",
+    "verb": "evitar",
+    "tense": "condicionalCompuesto",
+    "person": "fs",
+    "es": "Con tu consejo, yo {habría evitado} ese problema.",
+    "en": "With your advice, I would have avoided that problem.",
+    "reviewed": true
+  },
+  {
+    "id": "dirigir.presenteDeIndicativo.1",
+    "verb": "dirigir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi madre {dirige} una escuela pequeña.",
+    "en": "My mother runs a small school.",
+    "reviewed": true
+  },
+  {
+    "id": "dirigir.pretérito.1",
+    "verb": "dirigir",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "El año pasado yo {dirigí} la obra de teatro de la escuela.",
+    "en": "Last year I directed the school play.",
+    "reviewed": true
+  },
+  {
+    "id": "dirigir.imperfectoDeSubjuntivo1.1",
+    "verb": "dirigir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Mi madre quería que alguien {dirigiera} el coro.",
+    "en": "My mother wanted someone to direct the choir.",
+    "reviewed": true
+  },
+  {
+    "id": "afirmar.pretérito.1",
+    "verb": "afirmar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El testigo {afirmó} que vio al ladrón anoche.",
+    "en": "The witness stated that he saw the thief last night.",
+    "reviewed": true
+  },
+  {
+    "id": "afirmar.presenteDeSubjuntivo.1",
+    "verb": "afirmar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Me sorprende que ella {afirme} eso delante de todos.",
+    "en": "It surprises me that she would say that in front of everyone.",
+    "reviewed": true
+  },
+  {
+    "id": "observar.gerundio.1",
+    "verb": "observar",
+    "tense": "gerundio",
+    "es": "Los niños están {observando} las hormigas en el jardín.",
+    "en": "The children are watching the ants in the garden.",
+    "reviewed": true
+  },
+  {
+    "id": "observar.imperfectoDeSubjuntivo1.1",
+    "verb": "observar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ss",
+    "es": "Ella quería que {observaras} los pájaros con calma.",
+    "en": "She wanted you to watch the birds calmly.",
+    "reviewed": true
+  },
+  {
+    "id": "obtener.futuroDeIndicativo.1",
+    "verb": "obtener",
+    "tense": "futuroDeIndicativo",
+    "person": "fs",
+    "es": "Yo {obtendré} mi título el próximo año.",
+    "en": "I'll get my degree next year.",
+    "reviewed": true
+  },
+  {
+    "id": "obtener.condicionalCompuesto.1",
+    "verb": "obtener",
+    "tense": "condicionalCompuesto",
+    "person": "ts",
+    "es": "Ella {habría obtenido} la beca si hubiera estudiado más.",
+    "en": "She would have gotten the scholarship if she had studied more.",
+    "reviewed": true
+  },
+  {
+    "id": "suponer.presenteDeIndicativo.1",
+    "verb": "suponer",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {supongo} que mi madre está en casa.",
+    "en": "I suppose my mother is home.",
+    "reviewed": true
+  },
+  {
+    "id": "suponer.pluscuamperfectoDeIndicativo.1",
+    "verb": "suponer",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros nunca {habíamos supuesto} que sería tan difícil.",
+    "en": "We had never thought it would be so hard.",
+    "reviewed": true
+  },
+  {
+    "id": "tocar.imperativoPositivo.1",
+    "verb": "tocar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Toca} la guitarra para nosotros.",
+    "en": "Play the guitar for us.",
+    "reviewed": true
+  },
+  {
+    "id": "tocar.imperativoNegativo.1",
+    "verb": "tocar",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {toques} el horno, está muy caliente.",
+    "en": "Don't touch the oven; it's very hot.",
+    "reviewed": true
+  },
+  {
+    "id": "cerrar.pretérito.1",
+    "verb": "cerrar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Ayer yo {cerré} la tienda a las ocho.",
+    "en": "Yesterday I closed the store at eight.",
+    "reviewed": true
+  },
+  {
+    "id": "cerrar.presenteDeSubjuntivo.1",
+    "verb": "cerrar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Quiero que ustedes {cierren} las ventanas antes de salir.",
+    "en": "I want you to close the windows before leaving.",
+    "reviewed": true
+  },
+  {
+    "id": "continuar.futuroDeIndicativo.1",
+    "verb": "continuar",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "La lluvia {continuará} durante todo el fin de semana.",
+    "en": "The rain will continue all weekend.",
+    "reviewed": true
+  },
+  {
+    "id": "continuar.imperfectoDeSubjuntivo1.1",
+    "verb": "continuar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Si la fiebre {continuara}, llamaríamos al médico.",
+    "en": "If the fever continued, we would call the doctor.",
+    "reviewed": true
+  },
+  {
+    "id": "pagar.pretérito.1",
+    "verb": "pagar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Anoche yo {pagué} la cena con mi tarjeta.",
+    "en": "Last night I paid for dinner with my card.",
+    "reviewed": true
+  },
+  {
+    "id": "pagar.futuroPerfecto.1",
+    "verb": "pagar",
+    "tense": "futuroPerfecto",
+    "person": "fp",
+    "es": "Para el viernes, nosotros ya {habremos pagado} todas las deudas.",
+    "en": "By Friday, we will have paid off all our debts.",
+    "reviewed": true
+  },
+  {
+    "id": "destacar.imperfectoDeIndicativo.1",
+    "verb": "destacar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "De niña, mi hermana {destacaba} en matemáticas.",
+    "en": "As a girl, my sister stood out in math.",
+    "reviewed": true
+  },
+  {
+    "id": "destacar.condicional.1",
+    "verb": "destacar",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "Si practicara más, mi primo {destacaría} en el equipo.",
+    "en": "If he practiced more, my cousin would stand out on the team.",
+    "reviewed": true
+  },
+  {
+    "id": "levantar.imperativoPositivo.1",
+    "verb": "levantar",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Levante} la mano, por favor, si tiene una pregunta.",
+    "en": "Raise your hand, please, if you have a question.",
+    "reviewed": true
+  },
+  {
+    "id": "levantar.imperativoPositivo.2",
+    "verb": "levantar",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Levantemos} la caja entre todos.",
+    "en": "Let's lift the box together.",
+    "reviewed": true
+  },
+  {
+    "id": "representar.pretérito.1",
+    "verb": "representar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El año pasado, mi hermano {representó} a su escuela en el torneo.",
+    "en": "Last year my brother represented his school in the tournament.",
+    "reviewed": true
+  },
+  {
+    "id": "representar.presenteDeSubjuntivo.1",
+    "verb": "representar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Queremos que la bandera {represente} a todos los ciudadanos.",
+    "en": "We want the flag to represent all citizens.",
+    "reviewed": true
+  },
+  {
+    "id": "participar.presenteDeIndicativo.1",
+    "verb": "participar",
+    "tense": "presenteDeIndicativo",
+    "person": "ss",
+    "es": "¿{Participas} en el concurso este sábado?",
+    "en": "Are you taking part in the contest this Saturday?",
+    "reviewed": true
+  },
+  {
+    "id": "participar.condicionalCompuesto.1",
+    "verb": "participar",
+    "tense": "condicionalCompuesto",
+    "person": "fp",
+    "es": "Nosotros {habríamos participado}, pero llegamos tarde.",
+    "en": "We would have taken part, but we arrived late.",
+    "reviewed": true
+  },
+  {
+    "id": "comer.imperfectoDeIndicativo.1",
+    "verb": "comer",
+    "tense": "imperfectoDeIndicativo",
+    "person": "tp",
+    "es": "Mis abuelos {comían} siempre a las dos.",
+    "en": "My grandparents always ate at two.",
+    "reviewed": true
+  },
+  {
+    "id": "comer.imperativoNegativo.1",
+    "verb": "comer",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {comas} tanto dulce antes de la cena.",
+    "en": "Don't eat so many sweets before dinner.",
+    "reviewed": true
+  },
+  {
+    "id": "acercar.pretérito.1",
+    "verb": "acercar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Ayer yo {acerqué} la silla a la mesa.",
+    "en": "Yesterday I pulled the chair up to the table.",
+    "reviewed": true
+  },
+  {
+    "id": "acercar.presenteDeSubjuntivo.1",
+    "verb": "acercar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "fs",
+    "es": "Mi madre quiere que yo le {acerque} el teléfono.",
+    "en": "My mother wants me to bring her the phone.",
+    "reviewed": true
+  },
+  {
+    "id": "afectar.presenteDeIndicativo.1",
+    "verb": "afectar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "El frío {afecta} mucho a mi abuela.",
+    "en": "The cold affects my grandmother a lot.",
+    "reviewed": true
+  },
+  {
+    "id": "afectar.pluscuamperfectoDeIndicativo.1",
+    "verb": "afectar",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "ts",
+    "es": "La tormenta ya {había afectado} la ciudad antes del amanecer.",
+    "en": "The storm had already hit the city before dawn.",
+    "reviewed": true
+  },
+  {
+    "id": "sufrir.perfectoDeIndicativo.1",
+    "verb": "sufrir",
+    "tense": "perfectoDeIndicativo",
+    "person": "fs",
+    "es": "Yo nunca {he sufrido} un accidente grave.",
+    "en": "I've never suffered a serious accident.",
+    "reviewed": true
+  },
+  {
+    "id": "sufrir.imperfectoDeSubjuntivo1.1",
+    "verb": "sufrir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Ojalá mi perro no {sufriera} tanto con el calor.",
+    "en": "I wish my dog didn't suffer so much in the heat.",
+    "reviewed": true
+  },
+  {
+    "id": "suceder.pretérito.1",
+    "verb": "suceder",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer {sucedió} algo muy extraño en la escuela.",
+    "en": "Something very strange happened at school yesterday.",
+    "reviewed": true
+  },
+  {
+    "id": "suceder.presenteDeSubjuntivo.1",
+    "verb": "suceder",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Es posible que eso {suceda} otra vez.",
+    "en": "That might happen again.",
+    "reviewed": true
+  },
+  {
+    "id": "bajar.gerundio.1",
+    "verb": "bajar",
+    "tense": "gerundio",
+    "es": "Mi padre está {bajando} las cajas del armario.",
+    "en": "My father is taking the boxes down from the closet.",
+    "reviewed": true
+  },
+  {
+    "id": "bajar.imperativoPositivo.1",
+    "verb": "bajar",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Bajemos} la voz, que el bebé duerme.",
+    "en": "Let's lower our voices; the baby is sleeping.",
+    "reviewed": true
+  },
+  {
+    "id": "informar.futuroDeIndicativo.1",
+    "verb": "informar",
+    "tense": "futuroDeIndicativo",
+    "person": "fs",
+    "es": "Mañana yo le {informaré} a mi jefe del problema.",
+    "en": "Tomorrow I'll inform my boss about the problem.",
+    "reviewed": true
+  },
+  {
+    "id": "informar.perfectoDeSubjuntivo.1",
+    "verb": "informar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ts",
+    "es": "Dudo que la escuela ya {haya informado} a los padres.",
+    "en": "I doubt the school has informed the parents yet.",
+    "reviewed": true
+  },
+  {
+    "id": "descubrir.pretérito.1",
+    "verb": "descubrir",
+    "tense": "pretérito",
+    "person": "fp",
+    "es": "El año pasado nosotros {descubrimos} un café muy bonito.",
+    "en": "Last year we discovered a really nice café.",
+    "reviewed": true
+  },
+  {
+    "id": "descubrir.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "descubrir",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Si yo {hubiera descubierto} la verdad antes, habría hablado con ella.",
+    "en": "If I had discovered the truth sooner, I would have talked to her.",
+    "reviewed": true
+  },
+  {
+    "id": "subir.imperfectoDeIndicativo.1",
+    "verb": "subir",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "El precio del pan {subía} cada mes.",
+    "en": "The price of bread went up every month.",
+    "reviewed": true
+  },
+  {
+    "id": "subir.imperativoNegativo.1",
+    "verb": "subir",
+    "tense": "imperativoNegativo",
+    "person": "tp",
+    "es": "¡No {suban} tan rápido las escaleras!",
+    "en": "Don't go up the stairs so fast!",
+    "reviewed": true
+  },
+  {
+    "id": "nacer.pretérito.1",
+    "verb": "nacer",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Mi sobrina {nació} en 2019.",
+    "en": "My niece was born in 2019.",
+    "reviewed": true
+  },
+  {
+    "id": "nacer.presenteDeSubjuntivo.1",
+    "verb": "nacer",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Mi madre espera que el bebé {nazca} en primavera.",
+    "en": "My mother hopes the baby will be born in the spring.",
+    "reviewed": true
+  },
+  {
+    "id": "correr.imperativoPositivo.1",
+    "verb": "correr",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "¡{Corran}, que el tren ya sale!",
+    "en": "Run, the train is leaving now!",
+    "reviewed": true
+  },
+  {
+    "id": "correr.imperfectoDeSubjuntivo1.1",
+    "verb": "correr",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Si yo {corriera} más rápido, ganaría la carrera.",
+    "en": "If I ran faster, I would win the race.",
+    "reviewed": true
+  },
+  {
+    "id": "iniciar.futuroDeIndicativo.1",
+    "verb": "iniciar",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "El próximo mes la empresa {iniciará} un nuevo proyecto.",
+    "en": "Next month the company will launch a new project.",
+    "reviewed": true
+  },
+  {
+    "id": "iniciar.presenteDeSubjuntivo.1",
+    "verb": "iniciar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Antes de que el director {inicie} la reunión, quiero hablar con él.",
+    "en": "Before the director starts the meeting, I want to talk to him.",
+    "reviewed": true
+  },
+  {
+    "id": "acompañar.pretérito.1",
+    "verb": "acompañar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Anoche yo {acompañé} a mi abuela a su casa.",
+    "en": "Last night I walked my grandmother home.",
+    "reviewed": true
+  },
+  {
+    "id": "acompañar.condicional.1",
+    "verb": "acompañar",
+    "tense": "condicional",
+    "person": "fs",
+    "es": "Yo te {acompañaría} con gusto, pero tengo que trabajar.",
+    "en": "I'd gladly go with you, but I have to work.",
+    "reviewed": true
+  },
+  {
+    "id": "oír.presenteDeIndicativo.1",
+    "verb": "oír",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo no {oigo} nada con tanto ruido.",
+    "en": "I can't hear anything with so much noise.",
+    "reviewed": true
+  },
+  {
+    "id": "oír.presenteDeSubjuntivo.1",
+    "verb": "oír",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "El profesor habla alto para que todos lo {oigan}.",
+    "en": "The teacher speaks loudly so that everyone can hear him.",
+    "reviewed": true
+  },
+  {
+    "id": "traer.pretérito.1",
+    "verb": "traer",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer mi abuela {trajo} pan fresco.",
+    "en": "Yesterday my grandmother brought fresh bread.",
+    "reviewed": true
+  },
+  {
+    "id": "traer.imperfectoDeSubjuntivo1.1",
+    "verb": "traer",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "tp",
+    "es": "Ojalá mis amigos {trajeran} más sillas.",
+    "en": "I wish my friends would bring more chairs.",
+    "reviewed": true
+  },
+  {
+    "id": "dormir.imperfectoDeIndicativo.1",
+    "verb": "dormir",
+    "tense": "imperfectoDeIndicativo",
+    "person": "fs",
+    "es": "De niño, yo {dormía} con la luz encendida.",
+    "en": "As a kid, I used to sleep with the light on.",
+    "reviewed": true
+  },
+  {
+    "id": "dormir.futuroPerfecto.1",
+    "verb": "dormir",
+    "tense": "futuroPerfecto",
+    "person": "ts",
+    "es": "Para cuando lleguemos, el bebé ya se {habrá dormido}.",
+    "en": "By the time we arrive, the baby will have fallen asleep.",
+    "reviewed": true
+  },
+  {
+    "id": "comprar.futuroDeIndicativo.1",
+    "verb": "comprar",
+    "tense": "futuroDeIndicativo",
+    "person": "fs",
+    "es": "Mañana yo {compraré} el pan.",
+    "en": "Tomorrow I'll buy the bread.",
+    "reviewed": true
+  },
+  {
+    "id": "comprar.condicional.1",
+    "verb": "comprar",
+    "tense": "condicional",
+    "person": "fs",
+    "es": "Yo {compraría} esa casa si tuviera dinero.",
+    "en": "I would buy that house if I had the money.",
+    "reviewed": true
+  },
+  {
+    "id": "referir.presenteDeIndicativo.1",
+    "verb": "referir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi madre se {refiere} a nuestro vecino.",
+    "en": "My mother is referring to our neighbor.",
+    "reviewed": true
+  },
+  {
+    "id": "referir.presenteDeSubjuntivo.1",
+    "verb": "referir",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "No creo que ellos se {refieran} a mí.",
+    "en": "I don't think they're referring to me.",
+    "reviewed": true
+  },
+  {
+    "id": "agregar.imperativoPositivo.1",
+    "verb": "agregar",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Agregue} un poco de sal, por favor.",
+    "en": "Add a little salt, please.",
+    "reviewed": true
+  },
+  {
+    "id": "agregar.imperfectoDeSubjuntivo1.1",
+    "verb": "agregar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "El cocinero pidió que yo {agregara} más sal.",
+    "en": "The cook asked me to add more salt.",
+    "reviewed": true
+  },
+  {
+    "id": "publicar.pretérito.1",
+    "verb": "publicar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El año pasado mi hermana {publicó} un libro.",
+    "en": "Last year my sister published a book.",
+    "reviewed": true
+  },
+  {
+    "id": "publicar.perfectoDeSubjuntivo.1",
+    "verb": "publicar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "tp",
+    "es": "Espero que los profesores ya {hayan publicado} los resultados.",
+    "en": "I hope the teachers have already posted the results.",
+    "reviewed": true
+  },
+  {
+    "id": "añadir.presenteDeIndicativo.1",
+    "verb": "añadir",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo siempre {añado} limón al té.",
+    "en": "I always add lemon to my tea.",
+    "reviewed": true
+  },
+  {
+    "id": "añadir.imperativoNegativo.1",
+    "verb": "añadir",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {añadas} más azúcar al café.",
+    "en": "Don't add any more sugar to the coffee.",
+    "reviewed": true
+  },
+  {
+    "id": "construir.pretérito.1",
+    "verb": "construir",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Mi abuelo {construyó} esta casa en 1950.",
+    "en": "My grandfather built this house in 1950.",
+    "reviewed": true
+  },
+  {
+    "id": "construir.condicionalCompuesto.1",
+    "verb": "construir",
+    "tense": "condicionalCompuesto",
+    "person": "fp",
+    "es": "Con más dinero, nosotros {habríamos construido} una casa más grande.",
+    "en": "With more money, we would have built a bigger house.",
+    "reviewed": true
+  },
+  {
+    "id": "meter.imperativoPositivo.1",
+    "verb": "meter",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Mete} la ropa en la maleta.",
+    "en": "Put the clothes in the suitcase.",
+    "reviewed": true
+  },
+  {
+    "id": "meter.pluscuamperfectoDeIndicativo.1",
+    "verb": "meter",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "fs",
+    "es": "Cuando salimos, yo ya {había metido} las llaves en la mochila.",
+    "en": "When we left, I had already put the keys in my backpack.",
+    "reviewed": true
+  },
+  {
+    "id": "estudiar.gerundio.1",
+    "verb": "estudiar",
+    "tense": "gerundio",
+    "es": "Mis hermanos están {estudiando} para el examen.",
+    "en": "My brothers are studying for the exam.",
+    "reviewed": true
+  },
+  {
+    "id": "estudiar.presenteDeSubjuntivo.1",
+    "verb": "estudiar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "fs",
+    "es": "Mi madre quiere que yo {estudie} medicina.",
+    "en": "My mother wants me to study medicine.",
+    "reviewed": true
+  },
+  {
+    "id": "demostrar.futuroDeIndicativo.1",
+    "verb": "demostrar",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "Mañana el científico {demostrará} su teoría.",
+    "en": "Tomorrow the scientist will demonstrate his theory.",
+    "reviewed": true
+  },
+  {
+    "id": "demostrar.imperfectoDeSubjuntivo1.1",
+    "verb": "demostrar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Si ella {demostrara} su inocencia, la liberarían.",
+    "en": "If she proved her innocence, they would release her.",
+    "reviewed": true
+  },
+  {
+    "id": "proponer.presenteDeIndicativo.1",
+    "verb": "proponer",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {propongo} un viaje a la playa.",
+    "en": "I'm proposing a trip to the beach.",
+    "reviewed": true
+  },
+  {
+    "id": "proponer.condicional.1",
+    "verb": "proponer",
+    "tense": "condicional",
+    "person": "fp",
+    "es": "Nosotros {propondríamos} otra fecha para la reunión.",
+    "en": "We would propose another date for the meeting.",
+    "reviewed": true
+  },
+  {
+    "id": "aprender.pretérito.1",
+    "verb": "aprender",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "El año pasado yo {aprendí} a nadar.",
+    "en": "Last year I learned to swim.",
+    "reviewed": true
+  },
+  {
+    "id": "aprender.presenteDeSubjuntivo.1",
+    "verb": "aprender",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Es importante que los niños {aprendan} otro idioma.",
+    "en": "It's important for children to learn another language.",
+    "reviewed": true
+  },
+  {
+    "id": "aumentar.futuroDeIndicativo.1",
+    "verb": "aumentar",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "El próximo año el precio del pan {aumentará}.",
+    "en": "Next year the price of bread will go up.",
+    "reviewed": true
+  },
+  {
+    "id": "aumentar.perfectoDeSubjuntivo.1",
+    "verb": "aumentar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ts",
+    "es": "No creo que el precio {haya aumentado} tanto.",
+    "en": "I don't think the price has gone up that much.",
+    "reviewed": true
+  },
+  {
+    "id": "dedicar.presenteDeIndicativo.1",
+    "verb": "dedicar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi madre {dedica} los domingos a la familia.",
+    "en": "My mother devotes Sundays to the family.",
+    "reviewed": true
+  },
+  {
+    "id": "dedicar.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "dedicar",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Si yo {hubiera dedicado} más tiempo al estudio, habría aprobado.",
+    "en": "If I had devoted more time to studying, I would have passed.",
+    "reviewed": true
+  },
+  {
+    "id": "compartir.imperativoPositivo.1",
+    "verb": "compartir",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "{Compartan} los juguetes, niños.",
+    "en": "Share the toys, kids.",
+    "reviewed": true
+  },
+  {
+    "id": "compartir.imperativoNegativo.1",
+    "verb": "compartir",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {compartas} tu contraseña con nadie.",
+    "en": "Don't share your password with anyone.",
+    "reviewed": true
+  },
+  {
+    "id": "anunciar.pretérito.1",
+    "verb": "anunciar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Anoche el presidente {anunció} la noticia.",
+    "en": "Last night the president announced the news.",
+    "reviewed": true
+  },
+  {
+    "id": "anunciar.condicional.1",
+    "verb": "anunciar",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "Mi jefe dijo que el lunes {anunciaría} los cambios.",
+    "en": "My boss said he would announce the changes on Monday.",
+    "reviewed": true
+  },
+  {
+    "id": "mejorar.perfectoDeIndicativo.1",
+    "verb": "mejorar",
+    "tense": "perfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi español ya {ha mejorado} mucho.",
+    "en": "My Spanish has already improved a lot.",
+    "reviewed": true
+  },
+  {
+    "id": "mejorar.imperativoPositivo.1",
+    "verb": "mejorar",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Mejoremos} nuestro plan antes de empezar.",
+    "en": "Let's improve our plan before we start.",
+    "reviewed": true
+  },
+  {
+    "id": "aceptar.imperfectoDeIndicativo.1",
+    "verb": "aceptar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "De niña, ella nunca {aceptaba} dulces de extraños.",
+    "en": "As a girl, she never accepted candy from strangers.",
+    "reviewed": true
+  },
+  {
+    "id": "aceptar.pluscuamperfectoDeIndicativo.1",
+    "verb": "aceptar",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "fs",
+    "es": "Yo ya {había aceptado} el trabajo cuando me llamaron.",
+    "en": "I had already accepted the job when they called me.",
+    "reviewed": true
+  },
+  {
+    "id": "olvidar.perfectoDeIndicativo.1",
+    "verb": "olvidar",
+    "tense": "perfectoDeIndicativo",
+    "person": "fs",
+    "es": "Yo nunca {he olvidado} su cumpleaños.",
+    "en": "I have never forgotten his birthday.",
+    "reviewed": true
+  },
+  {
+    "id": "olvidar.imperativoNegativo.1",
+    "verb": "olvidar",
+    "tense": "imperativoNegativo",
+    "person": "ts",
+    "es": "No {olvide} su pasaporte, señor.",
+    "en": "Don't forget your passport, sir.",
+    "reviewed": true
+  },
+  {
+    "id": "ocupar.presenteDeIndicativo.1",
+    "verb": "ocupar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Esta mesa {ocupa} demasiado espacio.",
+    "en": "This table takes up too much space.",
+    "reviewed": true
+  },
+  {
+    "id": "ocupar.imperfectoDeSubjuntivo1.1",
+    "verb": "ocupar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "tp",
+    "es": "Mi madre quería que mis hermanos {ocuparan} el cuarto grande.",
+    "en": "My mother wanted my brothers to take the big room.",
+    "reviewed": true
+  },
+  {
+    "id": "preparar.gerundio.1",
+    "verb": "preparar",
+    "tense": "gerundio",
+    "es": "Nosotros estamos {preparando} la cena para veinte invitados.",
+    "en": "We're preparing dinner for twenty guests.",
+    "reviewed": true
+  },
+  {
+    "id": "preparar.futuroPerfecto.1",
+    "verb": "preparar",
+    "tense": "futuroPerfecto",
+    "person": "fs",
+    "es": "Mañana a las seis, yo ya {habré preparado} la cena.",
+    "en": "Tomorrow at six, I will have already prepared dinner.",
+    "reviewed": true
+  },
+  {
+    "id": "mover.imperativoPositivo.1",
+    "verb": "mover",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Mueve} la mesa hacia la ventana.",
+    "en": "Move the table toward the window.",
+    "reviewed": true
+  },
+  {
+    "id": "mover.presenteDeSubjuntivo.1",
+    "verb": "mover",
+    "tense": "presenteDeSubjuntivo",
+    "person": "fp",
+    "es": "Para que quepa la mesa, es necesario que nosotros {movamos} el sofá.",
+    "en": "For the table to fit, we need to move the sofa.",
+    "reviewed": true
+  },
+  {
+    "id": "expresar.pretérito.1",
+    "verb": "expresar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Anoche ella {expresó} su opinión con claridad.",
+    "en": "Last night she expressed her opinion clearly.",
+    "reviewed": true
+  },
+  {
+    "id": "expresar.condicionalCompuesto.1",
+    "verb": "expresar",
+    "tense": "condicionalCompuesto",
+    "person": "fs",
+    "es": "Yo {habría expresado} mi opinión, pero nadie preguntó.",
+    "en": "I would have expressed my opinion, but nobody asked.",
+    "reviewed": true
+  },
+  {
+    "id": "crecer.pretérito.1",
+    "verb": "crecer",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El año pasado mi hermano {creció} diez centímetros.",
+    "en": "Last year my brother grew ten centimeters.",
+    "reviewed": true
+  },
+  {
+    "id": "crecer.presenteDeSubjuntivo.1",
+    "verb": "crecer",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Ojalá que los árboles {crezcan} rápido este verano.",
+    "en": "I hope the trees grow fast this summer.",
+    "reviewed": true
+  },
+  {
+    "id": "reducir.imperativoPositivo.1",
+    "verb": "reducir",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Reduzca} la velocidad, por favor.",
+    "en": "Please slow down.",
+    "reviewed": true
+  },
+  {
+    "id": "reducir.condicional.1",
+    "verb": "reducir",
+    "tense": "condicional",
+    "person": "fs",
+    "es": "Yo {reduciría} el azúcar en esta receta.",
+    "en": "I would reduce the sugar in this recipe.",
+    "reviewed": true
+  },
+  {
+    "id": "sostener.presenteDeIndicativo.1",
+    "verb": "sostener",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi abuela {sostiene} al bebé con mucho cuidado.",
+    "en": "My grandmother holds the baby very carefully.",
+    "reviewed": true
+  },
+  {
+    "id": "sostener.imperfectoDeSubjuntivo1.1",
+    "verb": "sostener",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Mi padre pidió que yo {sostuviera} la escalera.",
+    "en": "My father asked me to hold the ladder.",
+    "reviewed": true
+  },
+  {
+    "id": "detener.pretérito.1",
+    "verb": "detener",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Anoche la policía {detuvo} a un ladrón.",
+    "en": "Last night the police arrested a thief.",
+    "reviewed": true
+  },
+  {
+    "id": "detener.perfectoDeSubjuntivo.1",
+    "verb": "detener",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ts",
+    "es": "Me alegra que la policía {haya detenido} al ladrón.",
+    "en": "I'm glad the police have arrested the thief.",
+    "reviewed": true
+  },
+  {
+    "id": "elegir.futuroDeIndicativo.1",
+    "verb": "elegir",
+    "tense": "futuroDeIndicativo",
+    "person": "tp",
+    "es": "Mañana los vecinos {elegirán} a su nuevo presidente.",
+    "en": "Tomorrow the neighbors will elect their new president.",
+    "reviewed": true
+  },
+  {
+    "id": "elegir.imperfectoDeSubjuntivo1.1",
+    "verb": "elegir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Si yo {eligiera} otra carrera, sería músico.",
+    "en": "If I chose another career, I'd be a musician.",
+    "reviewed": true
+  },
+  {
+    "id": "provocar.pretérito.1",
+    "verb": "provocar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "La tormenta {provocó} un apagón anoche.",
+    "en": "The storm caused a blackout last night.",
+    "reviewed": true
+  },
+  {
+    "id": "provocar.presenteDeSubjuntivo.1",
+    "verb": "provocar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Es posible que la lluvia {provoque} inundaciones.",
+    "en": "The rain might cause flooding.",
+    "reviewed": true
+  },
+  {
+    "id": "imaginar.presenteDeIndicativo.1",
+    "verb": "imaginar",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {imagino} una casa pequeña junto al mar.",
+    "en": "I imagine a small house by the sea.",
+    "reviewed": true
+  },
+  {
+    "id": "imaginar.imperativoPositivo.1",
+    "verb": "imaginar",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Imaginemos} un mundo sin ruido.",
+    "en": "Let's imagine a world without noise.",
+    "reviewed": true
+  },
+  {
+    "id": "regresar.imperfectoDeIndicativo.1",
+    "verb": "regresar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Cuando yo era niño, mi padre {regresaba} del trabajo a las seis.",
+    "en": "When I was a kid, my dad came home from work at six.",
+    "reviewed": true
+  },
+  {
+    "id": "regresar.condicionalCompuesto.1",
+    "verb": "regresar",
+    "tense": "condicionalCompuesto",
+    "person": "fs",
+    "es": "Yo {habría regresado} antes, pero perdí el tren.",
+    "en": "I would have come back earlier, but I missed the train.",
+    "reviewed": true
+  },
+  {
+    "id": "soler.presenteDeIndicativo.1",
+    "verb": "soler",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi abuela {suele} dormir la siesta después de comer.",
+    "en": "My grandmother usually takes a nap after lunch.",
+    "reviewed": true
+  },
+  {
+    "id": "soler.presenteDeSubjuntivo.1",
+    "verb": "soler",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "No creo que mis vecinos {suelan} cenar tan tarde.",
+    "en": "I don't think my neighbors usually eat dinner so late.",
+    "reviewed": true
+  },
+  {
+    "id": "definir.pretérito.1",
+    "verb": "definir",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer la maestra {definió} la palabra en clase.",
+    "en": "Yesterday the teacher defined the word in class.",
+    "reviewed": true
+  },
+  {
+    "id": "definir.futuroPerfecto.1",
+    "verb": "definir",
+    "tense": "futuroPerfecto",
+    "person": "ts",
+    "es": "Para el viernes, el equipo ya {habrá definido} el plan.",
+    "en": "By Friday, the team will have already defined the plan.",
+    "reviewed": true
+  },
+  {
+    "id": "entregar.imperativoPositivo.1",
+    "verb": "entregar",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Entregue} el informe antes de las cinco, por favor.",
+    "en": "Turn in the report before five, please.",
+    "reviewed": true
+  },
+  {
+    "id": "entregar.presenteDeSubjuntivo.1",
+    "verb": "entregar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "fs",
+    "es": "Mi jefe quiere que yo {entregue} el proyecto el lunes.",
+    "en": "My boss wants me to deliver the project on Monday.",
+    "reviewed": true
+  },
+  {
+    "id": "enfrentar.gerundio.1",
+    "verb": "enfrentar",
+    "tense": "gerundio",
+    "es": "Mi país está {enfrentando} una crisis difícil.",
+    "en": "My country is facing a difficult crisis.",
+    "reviewed": true
+  },
+  {
+    "id": "enfrentar.imperfectoDeSubjuntivo1.1",
+    "verb": "enfrentar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Era necesario que yo {enfrentara} el problema.",
+    "en": "I needed to face the problem.",
+    "reviewed": true
+  },
+  {
+    "id": "comentar.presenteDeIndicativo.1",
+    "verb": "comentar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Mis amigos siempre {comentan} las noticias en el café.",
+    "en": "My friends always talk about the news at the cafe.",
+    "reviewed": true
+  },
+  {
+    "id": "comentar.pluscuamperfectoDeIndicativo.1",
+    "verb": "comentar",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Cuando llegué, Ana ya {había comentado} el tema con todos.",
+    "en": "When I arrived, Ana had already discussed the topic with everyone.",
+    "reviewed": true
+  },
+  {
+    "id": "vender.imperfectoDeIndicativo.1",
+    "verb": "vender",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi abuelo {vendía} frutas en el mercado.",
+    "en": "My grandfather used to sell fruit at the market.",
+    "reviewed": true
+  },
+  {
+    "id": "vender.imperativoNegativo.1",
+    "verb": "vender",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {vendas} la casa todavía.",
+    "en": "Don't sell the house yet.",
+    "reviewed": true
+  },
+  {
+    "id": "apoyar.perfectoDeIndicativo.1",
+    "verb": "apoyar",
+    "tense": "perfectoDeIndicativo",
+    "person": "tp",
+    "es": "Mis padres siempre me {han apoyado}.",
+    "en": "My parents have always supported me.",
+    "reviewed": true
+  },
+  {
+    "id": "apoyar.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "apoyar",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "tp",
+    "es": "Si ellos nos {hubieran apoyado}, habríamos ganado.",
+    "en": "If they had supported us, we would have won.",
+    "reviewed": true
+  },
+  {
+    "id": "echar.presenteDeIndicativo.1",
+    "verb": "echar",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {echo} azúcar al café.",
+    "en": "I put sugar in my coffee.",
+    "reviewed": true
+  },
+  {
+    "id": "echar.imperativoNegativo.1",
+    "verb": "echar",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "¡No {eches} tanta sal a la sopa!",
+    "en": "Don't put so much salt in the soup!",
+    "reviewed": true
+  },
+  {
+    "id": "significar.presenteDeIndicativo.1",
+    "verb": "significar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "¿Qué {significa} esta palabra?",
+    "en": "What does this word mean?",
+    "reviewed": true
+  },
+  {
+    "id": "significar.condicional.1",
+    "verb": "significar",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "Para mi madre, ese premio {significaría} mucho.",
+    "en": "For my mother, that award would mean a lot.",
+    "reviewed": true
+  },
+  {
+    "id": "requerir.futuroDeIndicativo.1",
+    "verb": "requerir",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "El nuevo trabajo {requerirá} mucho tiempo.",
+    "en": "The new job will require a lot of time.",
+    "reviewed": true
+  },
+  {
+    "id": "requerir.presenteDeSubjuntivo.1",
+    "verb": "requerir",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Dudo que este trabajo {requiera} tanta experiencia.",
+    "en": "I doubt this job requires that much experience.",
+    "reviewed": true
+  },
+  {
+    "id": "marcar.pretérito.1",
+    "verb": "marcar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Anoche nuestro equipo {marcó} tres goles.",
+    "en": "Last night our team scored three goals.",
+    "reviewed": true
+  },
+  {
+    "id": "marcar.perfectoDeSubjuntivo.1",
+    "verb": "marcar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ts",
+    "es": "Ojalá que el equipo ya {haya marcado} un gol.",
+    "en": "I hope the team has scored a goal by now.",
+    "reviewed": true
+  },
+  {
+    "id": "comprender.presenteDeIndicativo.1",
+    "verb": "comprender",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo no {comprendo} esta lección.",
+    "en": "I don't understand this lesson.",
+    "reviewed": true
+  },
+  {
+    "id": "comprender.condicionalCompuesto.1",
+    "verb": "comprender",
+    "tense": "condicionalCompuesto",
+    "person": "ts",
+    "es": "Nadie {habría comprendido} esa decisión sin una explicación.",
+    "en": "Nobody would have understood that decision without an explanation.",
+    "reviewed": true
+  },
+  {
+    "id": "aplicar.imperativoPositivo.1",
+    "verb": "aplicar",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "{Apliquen} la crema dos veces al día.",
+    "en": "Apply the cream twice a day.",
+    "reviewed": true
+  },
+  {
+    "id": "aplicar.imperfectoDeSubjuntivo1.1",
+    "verb": "aplicar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fp",
+    "es": "El profesor pidió que nosotros {aplicáramos} la regla.",
+    "en": "The teacher asked us to apply the rule.",
+    "reviewed": true
+  },
+  {
+    "id": "superar.pretérito.1",
+    "verb": "superar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El año pasado mi hermana {superó} su miedo a volar.",
+    "en": "Last year my sister overcame her fear of flying.",
+    "reviewed": true
+  },
+  {
+    "id": "superar.presenteDeSubjuntivo.1",
+    "verb": "superar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "Te ayudo para que {superes} tu miedo a hablar en público.",
+    "en": "I'll help you so that you overcome your fear of public speaking.",
+    "reviewed": true
+  },
+  {
+    "id": "sumar.imperativoPositivo.1",
+    "verb": "sumar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Suma} dos más tres.",
+    "en": "Add two plus three.",
+    "reviewed": true
+  },
+  {
+    "id": "sumar.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "sumar",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Si Pedro {hubiera sumado} bien, habría tenido la respuesta correcta.",
+    "en": "If Pedro had added correctly, he would have gotten the right answer.",
+    "reviewed": true
+  },
+  {
+    "id": "plantear.pretérito.1",
+    "verb": "plantear",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer mi jefe {planteó} una idea nueva en la reunión.",
+    "en": "Yesterday my boss brought up a new idea at the meeting.",
+    "reviewed": true
+  },
+  {
+    "id": "plantear.presenteDeSubjuntivo.1",
+    "verb": "plantear",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Prefiero que mi jefe {plantee} el problema en la reunión.",
+    "en": "I'd rather my boss bring up the problem at the meeting.",
+    "reviewed": true
+  },
+  {
+    "id": "repetir.imperativoPositivo.1",
+    "verb": "repetir",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Repita} la pregunta, por favor.",
+    "en": "Please repeat the question.",
+    "reviewed": true
+  },
+  {
+    "id": "repetir.imperfectoDeSubjuntivo1.1",
+    "verb": "repetir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "La maestra pidió que yo {repitiera} la frase.",
+    "en": "The teacher asked me to repeat the sentence.",
+    "reviewed": true
+  },
+  {
+    "id": "caminar.presenteDeIndicativo.1",
+    "verb": "caminar",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros {caminamos} al trabajo todos los días.",
+    "en": "We walk to work every day.",
+    "reviewed": true
+  },
+  {
+    "id": "caminar.presenteDeSubjuntivo.1",
+    "verb": "caminar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "Quiero que {camines} conmigo por el parque.",
+    "en": "I want you to walk with me through the park.",
+    "reviewed": true
+  },
+  {
+    "id": "colocar.pretérito.1",
+    "verb": "colocar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Mi padre {colocó} el libro en el estante ayer.",
+    "en": "My father put the book on the shelf yesterday.",
+    "reviewed": true
+  },
+  {
+    "id": "colocar.imperativoNegativo.1",
+    "verb": "colocar",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {coloques} los vasos en el borde.",
+    "en": "Don't put the glasses on the edge.",
+    "reviewed": true
+  },
+  {
+    "id": "matar.imperfectoDeIndicativo.1",
+    "verb": "matar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "El gato {mataba} ratones en el jardín cada noche.",
+    "en": "The cat used to kill mice in the garden every night.",
+    "reviewed": true
+  },
+  {
+    "id": "matar.pluscuamperfectoDeIndicativo.1",
+    "verb": "matar",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Yo pensé que el frío {había matado} las flores.",
+    "en": "I thought the cold had killed the flowers.",
+    "reviewed": true
+  },
+  {
+    "id": "funcionar.futuroDeIndicativo.1",
+    "verb": "funcionar",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "Creo que este plan {funcionará}.",
+    "en": "I think this plan will work.",
+    "reviewed": true
+  },
+  {
+    "id": "funcionar.presenteDeSubjuntivo.1",
+    "verb": "funcionar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "No creo que esta radio {funcione}.",
+    "en": "I don't think this radio works.",
+    "reviewed": true
+  },
+  {
+    "id": "constituir.presenteDeIndicativo.1",
+    "verb": "constituir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Esta ley {constituye} un gran cambio.",
+    "en": "This law is a big change.",
+    "reviewed": true
+  },
+  {
+    "id": "constituir.imperfectoDeSubjuntivo1.1",
+    "verb": "constituir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Era importante que el grupo se {constituyera} antes del lunes.",
+    "en": "It was important for the group to be formed before Monday.",
+    "reviewed": true
+  },
+  {
+    "id": "faltar.presenteDeIndicativo.1",
+    "verb": "faltar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "A mi hermano le {falta} una hora para terminar.",
+    "en": "My brother has one hour left to finish.",
+    "reviewed": true
+  },
+  {
+    "id": "faltar.condicional.1",
+    "verb": "faltar",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "Si no ahorráramos, nos {faltaría} dinero en diciembre.",
+    "en": "If we didn't save, we'd run short of money in December.",
+    "reviewed": true
+  },
+  {
+    "id": "lanzar.pretérito.1",
+    "verb": "lanzar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El niño {lanzó} la pelota por la ventana.",
+    "en": "The boy threw the ball out the window.",
+    "reviewed": true
+  },
+  {
+    "id": "lanzar.imperativoPositivo.1",
+    "verb": "lanzar",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Lancemos} la pelota al perro.",
+    "en": "Let's throw the ball to the dog.",
+    "reviewed": true
+  },
+  {
+    "id": "celebrar.futuroDeIndicativo.1",
+    "verb": "celebrar",
+    "tense": "futuroDeIndicativo",
+    "person": "fp",
+    "es": "El próximo sábado nosotros {celebraremos} el cumpleaños de mi madre.",
+    "en": "Next Saturday we'll celebrate my mother's birthday.",
+    "reviewed": true
+  },
+  {
+    "id": "celebrar.perfectoDeSubjuntivo.1",
+    "verb": "celebrar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "tp",
+    "es": "Me alegra que mis primos {hayan celebrado} la boda en la playa.",
+    "en": "I'm glad my cousins held their wedding on the beach.",
+    "reviewed": true
+  },
+  {
+    "id": "cubrir.imperfectoDeIndicativo.1",
+    "verb": "cubrir",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Cada invierno la nieve {cubría} las calles del pueblo.",
+    "en": "Every winter the snow covered the streets of the town.",
+    "reviewed": true
+  },
+  {
+    "id": "cubrir.imperfectoDeSubjuntivo1.1",
+    "verb": "cubrir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Mi abuela me pidió que {cubriera} la mesa con un mantel.",
+    "en": "My grandmother asked me to cover the table with a tablecloth.",
+    "reviewed": true
+  },
+  {
+    "id": "importar.presenteDeIndicativo.1",
+    "verb": "importar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "A mi hermana no le {importan} las críticas.",
+    "en": "My sister doesn't care about criticism.",
+    "reviewed": true
+  },
+  {
+    "id": "importar.condicional.1",
+    "verb": "importar",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "¿Le {importaría} cerrar la ventana, por favor?",
+    "en": "Would you mind closing the window, please?",
+    "reviewed": true
+  },
+  {
+    "id": "identificar.pretérito.1",
+    "verb": "identificar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Ayer yo {identifiqué} al ladrón en la foto.",
+    "en": "Yesterday I identified the thief in the photo.",
+    "reviewed": true
+  },
+  {
+    "id": "identificar.perfectoDeSubjuntivo.1",
+    "verb": "identificar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ts",
+    "es": "No creo que la policía lo {haya identificado} todavía.",
+    "en": "I don't think the police have identified him yet.",
+    "reviewed": true
+  },
+  {
+    "id": "analizar.gerundio.1",
+    "verb": "analizar",
+    "tense": "gerundio",
+    "es": "Estamos {analizando} los resultados del examen.",
+    "en": "We're analyzing the results of the exam.",
+    "reviewed": true
+  },
+  {
+    "id": "analizar.futuroPerfecto.1",
+    "verb": "analizar",
+    "tense": "futuroPerfecto",
+    "person": "ts",
+    "es": "Para el viernes, la doctora ya {habrá analizado} los datos.",
+    "en": "By Friday, the doctor will have analyzed the data.",
+    "reviewed": true
+  },
+  {
+    "id": "enviar.perfectoDeIndicativo.1",
+    "verb": "enviar",
+    "tense": "perfectoDeIndicativo",
+    "person": "fs",
+    "es": "Yo ya {he enviado} el paquete a mi tía.",
+    "en": "I've already sent the package to my aunt.",
+    "reviewed": true
+  },
+  {
+    "id": "enviar.imperativoNegativo.1",
+    "verb": "enviar",
+    "tense": "imperativoNegativo",
+    "person": "ts",
+    "es": "Por favor, no {envíe} el paquete todavía.",
+    "en": "Please don't send the package yet.",
+    "reviewed": true
+  },
+  {
+    "id": "actuar.presenteDeIndicativo.1",
+    "verb": "actuar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Los niños {actúan} en la obra de la escuela.",
+    "en": "The children are acting in the school play.",
+    "reviewed": true
+  },
+  {
+    "id": "actuar.imperfectoDeSubjuntivo1.1",
+    "verb": "actuar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "tp",
+    "es": "Ojalá los jugadores {actuaran} con más calma.",
+    "en": "I wish the players would act more calmly.",
+    "reviewed": true
+  },
+  {
+    "id": "desear.presenteDeIndicativo.1",
+    "verb": "desear",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo te {deseo} mucha suerte.",
+    "en": "I wish you lots of luck.",
+    "reviewed": true
+  },
+  {
+    "id": "desear.condicionalCompuesto.1",
+    "verb": "desear",
+    "tense": "condicionalCompuesto",
+    "person": "fs",
+    "es": "Yo {habría deseado} más tiempo con mi abuela.",
+    "en": "I would have liked more time with my grandmother.",
+    "reviewed": true
+  },
+  {
+    "id": "abandonar.pretérito.1",
+    "verb": "abandonar",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "Los vecinos {abandonaron} la casa el año pasado.",
+    "en": "The neighbors abandoned the house last year.",
+    "reviewed": true
+  },
+  {
+    "id": "abandonar.presenteDeSubjuntivo.1",
+    "verb": "abandonar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "No quiero que nadie {abandone} el proyecto.",
+    "en": "I don't want anyone to abandon the project.",
+    "reviewed": true
+  },
+  {
+    "id": "proteger.presenteDeIndicativo.1",
+    "verb": "proteger",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros {protegemos} a los niños del sol.",
+    "en": "We protect the children from the sun.",
+    "reviewed": true
+  },
+  {
+    "id": "proteger.imperfectoDeSubjuntivo1.1",
+    "verb": "proteger",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fp",
+    "es": "Mi abuelo quería que nosotros {protegiéramos} la casa.",
+    "en": "My grandfather wanted us to protect the house.",
+    "reviewed": true
+  },
+  {
+    "id": "mencionar.pretérito.1",
+    "verb": "mencionar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Yo no {mencioné} tu nombre anoche.",
+    "en": "I didn't mention your name last night.",
+    "reviewed": true
+  },
+  {
+    "id": "mencionar.imperativoNegativo.1",
+    "verb": "mencionar",
+    "tense": "imperativoNegativo",
+    "person": "tp",
+    "es": "No {mencionen} el secreto a nadie.",
+    "en": "Don't mention the secret to anyone.",
+    "reviewed": true
+  },
+  {
+    "id": "andar.imperfectoDeIndicativo.1",
+    "verb": "andar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi abuelo {andaba} despacio por el parque.",
+    "en": "My grandfather used to walk slowly through the park.",
+    "reviewed": true
+  },
+  {
+    "id": "andar.presenteDeSubjuntivo.1",
+    "verb": "andar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "Es mejor que {andes} con cuidado.",
+    "en": "It's better for you to walk carefully.",
+    "reviewed": true
+  },
+  {
+    "id": "romper.pretérito.1",
+    "verb": "romper",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Ayer yo {rompí} un vaso en la cocina.",
+    "en": "Yesterday I broke a glass in the kitchen.",
+    "reviewed": true
+  },
+  {
+    "id": "romper.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "romper",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "ss",
+    "es": "Si no {hubieras roto} el vaso, no habríamos tenido que comprar otro.",
+    "en": "If you hadn't broken the glass, we wouldn't have had to buy another.",
+    "reviewed": true
+  },
+  {
+    "id": "aprovechar.futuroDeIndicativo.1",
+    "verb": "aprovechar",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "Mañana mi hermano {aprovechará} el día libre.",
+    "en": "Tomorrow my brother will make the most of his day off.",
+    "reviewed": true
+  },
+  {
+    "id": "aprovechar.condicional.1",
+    "verb": "aprovechar",
+    "tense": "condicional",
+    "person": "fs",
+    "es": "Si pudiera, yo {aprovecharía} el fin de semana para descansar.",
+    "en": "If I could, I'd use the weekend to rest.",
+    "reviewed": true
+  },
+  {
+    "id": "declarar.perfectoDeIndicativo.1",
+    "verb": "declarar",
+    "tense": "perfectoDeIndicativo",
+    "person": "ts",
+    "es": "El presidente ya {ha declarado} el estado de emergencia.",
+    "en": "The president has already declared a state of emergency.",
+    "reviewed": true
+  },
+  {
+    "id": "declarar.presenteDeSubjuntivo.1",
+    "verb": "declarar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Es necesario que usted {declare} todo su dinero.",
+    "en": "It's necessary for you to declare all your money.",
+    "reviewed": true
+  },
+  {
+    "id": "reunir.gerundio.1",
+    "verb": "reunir",
+    "tense": "gerundio",
+    "es": "Estoy {reuniendo} a mis amigos para la cena.",
+    "en": "I'm gathering my friends for dinner.",
+    "reviewed": true
+  },
+  {
+    "id": "reunir.pluscuamperfectoDeIndicativo.1",
+    "verb": "reunir",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "tp",
+    "es": "Mis tíos ya {habían reunido} el dinero cuando llegué.",
+    "en": "My aunt and uncle had already gathered the money when I arrived.",
+    "reviewed": true
+  },
+  {
+    "id": "depender.presenteDeIndicativo.1",
+    "verb": "depender",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Todo {depende} del clima.",
+    "en": "Everything depends on the weather.",
+    "reviewed": true
+  },
+  {
+    "id": "depender.presenteDeSubjuntivo.1",
+    "verb": "depender",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Es probable que el viaje {dependa} del clima.",
+    "en": "The trip will probably depend on the weather.",
+    "reviewed": true
+  },
+  {
+    "id": "apuntar.imperativoPositivo.1",
+    "verb": "apuntar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Apunta} tu nombre aquí.",
+    "en": "Write your name down here.",
+    "reviewed": true
+  },
+  {
+    "id": "apuntar.condicionalCompuesto.1",
+    "verb": "apuntar",
+    "tense": "condicionalCompuesto",
+    "person": "fs",
+    "es": "Yo {habría apuntado} la dirección si hubiera tenido un lápiz.",
+    "en": "I would have written down the address if I'd had a pencil.",
+    "reviewed": true
+  },
+  {
+    "id": "recuperar.pretérito.1",
+    "verb": "recuperar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Ayer yo {recuperé} mis llaves en la estación.",
+    "en": "Yesterday I got my keys back at the station.",
+    "reviewed": true
+  },
+  {
+    "id": "recuperar.presenteDeSubjuntivo.1",
+    "verb": "recuperar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Ojalá que mi abuelo {recupere} pronto la salud.",
+    "en": "I hope my grandfather regains his health soon.",
+    "reviewed": true
+  },
+  {
+    "id": "organizar.imperativoPositivo.1",
+    "verb": "organizar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Organiza} tus libros por tamaño.",
+    "en": "Organize your books by size.",
+    "reviewed": true
+  },
+  {
+    "id": "organizar.imperfectoDeSubjuntivo1.1",
+    "verb": "organizar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fp",
+    "es": "Mi madre quería que nosotros {organizáramos} una fiesta sorpresa.",
+    "en": "My mother wanted us to organize a surprise party.",
+    "reviewed": true
+  },
+  {
+    "id": "asumir.futuroDeIndicativo.1",
+    "verb": "asumir",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "El nuevo director {asumirá} el cargo el próximo lunes.",
+    "en": "The new director will take over the position next Monday.",
+    "reviewed": true
+  },
+  {
+    "id": "asumir.condicional.1",
+    "verb": "asumir",
+    "tense": "condicional",
+    "person": "fs",
+    "es": "Yo {asumiría} la culpa si fuera necesario.",
+    "en": "I would take the blame if it were necessary.",
+    "reviewed": true
+  },
+  {
+    "id": "defender.pretérito.1",
+    "verb": "defender",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "Anoche los vecinos {defendieron} al niño en la reunión.",
+    "en": "Last night the neighbors defended the boy at the meeting.",
+    "reviewed": true
+  },
+  {
+    "id": "defender.imperativoNegativo.1",
+    "verb": "defender",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {defiendas} a ese hombre; es culpable.",
+    "en": "Don't defend that man; he's guilty.",
+    "reviewed": true
+  },
+  {
+    "id": "preferir.presenteDeIndicativo.1",
+    "verb": "preferir",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros {preferimos} el té al café.",
+    "en": "We prefer tea to coffee.",
+    "reviewed": true
+  },
+  {
+    "id": "preferir.imperfectoDeSubjuntivo1.1",
+    "verb": "preferir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Si mi hermano {prefiriera} el campo, viviríamos allí.",
+    "en": "If my brother preferred the country, we would live there.",
+    "reviewed": true
+  },
+  {
+    "id": "viajar.perfectoDeIndicativo.1",
+    "verb": "viajar",
+    "tense": "perfectoDeIndicativo",
+    "person": "ss",
+    "es": "¿Alguna vez {has viajado} en tren de noche?",
+    "en": "Have you ever traveled by train at night?",
+    "reviewed": true
+  },
+  {
+    "id": "viajar.condicionalCompuesto.1",
+    "verb": "viajar",
+    "tense": "condicionalCompuesto",
+    "person": "fp",
+    "es": "Con más dinero, nosotros {habríamos viajado} a Chile.",
+    "en": "With more money, we would have traveled to Chile.",
+    "reviewed": true
+  },
+  {
+    "id": "unir.presenteDeIndicativo.1",
+    "verb": "unir",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Los niños {unen} las piezas del rompecabezas.",
+    "en": "The kids put the puzzle pieces together.",
+    "reviewed": true
+  },
+  {
+    "id": "unir.perfectoDeSubjuntivo.1",
+    "verb": "unir",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "tp",
+    "es": "No creo que los dos grupos se {hayan unido} todavía.",
+    "en": "I don't think the two groups have joined together yet.",
+    "reviewed": true
+  },
+  {
+    "id": "obligar.imperfectoDeIndicativo.1",
+    "verb": "obligar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Antes, mi padre nos {obligaba} a comer verduras.",
+    "en": "My father used to make us eat vegetables.",
+    "reviewed": true
+  },
+  {
+    "id": "obligar.presenteDeSubjuntivo.1",
+    "verb": "obligar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "No quiero que nadie te {obligue} a venir.",
+    "en": "I don't want anyone to force you to come.",
+    "reviewed": true
+  },
+  {
+    "id": "pretender.presenteDeIndicativo.1",
+    "verb": "pretender",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo no {pretendo} molestarte.",
+    "en": "I don't mean to bother you.",
+    "reviewed": true
+  },
+  {
+    "id": "pretender.pluscuamperfectoDeIndicativo.1",
+    "verb": "pretender",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "fs",
+    "es": "Yo {había pretendido} llegar temprano, pero había mucho tráfico.",
+    "en": "I had intended to arrive early, but there was a lot of traffic.",
+    "reviewed": true
+  },
+  {
+    "id": "advertir.pretérito.1",
+    "verb": "advertir",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer el médico me {advirtió} sobre los riesgos.",
+    "en": "Yesterday the doctor warned me about the risks.",
+    "reviewed": true
+  },
+  {
+    "id": "advertir.presenteDeSubjuntivo.1",
+    "verb": "advertir",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Es importante que el guía {advierta} a los turistas del peligro.",
+    "en": "It's important that the guide warn the tourists about the danger.",
+    "reviewed": true
+  },
+  {
+    "id": "disfrutar.imperativoPositivo.1",
+    "verb": "disfrutar",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "{Disfruten} del viaje, amigos.",
+    "en": "Enjoy the trip, friends.",
+    "reviewed": true
+  },
+  {
+    "id": "disfrutar.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "disfrutar",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Ojalá yo {hubiera disfrutado} más aquellas vacaciones.",
+    "en": "I wish I had enjoyed those vacations more.",
+    "reviewed": true
+  },
+  {
+    "id": "atender.futuroDeIndicativo.1",
+    "verb": "atender",
+    "tense": "futuroDeIndicativo",
+    "person": "tp",
+    "es": "Mañana los médicos lo {atenderán} a primera hora.",
+    "en": "Tomorrow the doctors will see him first thing.",
+    "reviewed": true
+  },
+  {
+    "id": "atender.imperativoPositivo.1",
+    "verb": "atender",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Atendamos} primero a los niños.",
+    "en": "Let's help the children first.",
+    "reviewed": true
+  },
+  {
+    "id": "avanzar.gerundio.1",
+    "verb": "avanzar",
+    "tense": "gerundio",
+    "es": "El tren va {avanzando} despacio por la nieve.",
+    "en": "The train is moving slowly through the snow.",
+    "reviewed": true
+  },
+  {
+    "id": "avanzar.condicional.1",
+    "verb": "avanzar",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "El proyecto {avanzaría} más rápido con más gente.",
+    "en": "The project would move faster with more people.",
+    "reviewed": true
+  },
+  {
+    "id": "visitar.presenteDeIndicativo.1",
+    "verb": "visitar",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros {visitamos} a mis abuelos cada domingo.",
+    "en": "We visit my grandparents every Sunday.",
+    "reviewed": true
+  },
+  {
+    "id": "visitar.presenteDeSubjuntivo.1",
+    "verb": "visitar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Cuando mi tía nos {visite}, haremos paella.",
+    "en": "When my aunt visits us, we'll make paella.",
+    "reviewed": true
+  },
+  {
+    "id": "confirmar.perfectoDeIndicativo.1",
+    "verb": "confirmar",
+    "tense": "perfectoDeIndicativo",
+    "person": "tp",
+    "es": "Los organizadores ya {han confirmado} la fecha.",
+    "en": "The organizers have already confirmed the date.",
+    "reviewed": true
+  },
+  {
+    "id": "confirmar.imperativoNegativo.1",
+    "verb": "confirmar",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {confirmes} nada hasta hablar con ella.",
+    "en": "Don't confirm anything until you talk to her.",
+    "reviewed": true
+  },
+  {
+    "id": "negar.imperfectoDeIndicativo.1",
+    "verb": "negar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "fs",
+    "es": "De niño, yo siempre {negaba} haber roto algo.",
+    "en": "As a kid, I always denied having broken anything.",
+    "reviewed": true
+  },
+  {
+    "id": "negar.presenteDeSubjuntivo.1",
+    "verb": "negar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "No creo que mi hermano {niegue} la verdad.",
+    "en": "I don't think my brother will deny the truth.",
+    "reviewed": true
+  },
+  {
+    "id": "quitar.imperativoPositivo.1",
+    "verb": "quitar",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "Por favor, {quite} su abrigo de la silla.",
+    "en": "Please take your coat off the chair.",
+    "reviewed": true
+  },
+  {
+    "id": "quitar.imperfectoDeSubjuntivo1.1",
+    "verb": "quitar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "tp",
+    "es": "Mamá pidió que los niños {quitaran} los juguetes del suelo.",
+    "en": "Mom asked the children to take the toys off the floor.",
+    "reviewed": true
+  },
+  {
+    "id": "desaparecer.pretérito.1",
+    "verb": "desaparecer",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El año pasado mi gato {desapareció} durante una semana.",
+    "en": "Last year my cat disappeared for a week.",
+    "reviewed": true
+  },
+  {
+    "id": "desaparecer.futuroPerfecto.1",
+    "verb": "desaparecer",
+    "tense": "futuroPerfecto",
+    "person": "tp",
+    "es": "Para el domingo, las nubes ya {habrán desaparecido}.",
+    "en": "By Sunday, the clouds will have disappeared.",
+    "reviewed": true
+  },
+  {
+    "id": "surgir.perfectoDeIndicativo.1",
+    "verb": "surgir",
+    "tense": "perfectoDeIndicativo",
+    "person": "ts",
+    "es": "Todavía no {ha surgido} ningún problema.",
+    "en": "No problems have come up yet.",
+    "reviewed": true
+  },
+  {
+    "id": "surgir.imperfectoDeSubjuntivo1.1",
+    "verb": "surgir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Si {surgiera} un problema, te llamaría.",
+    "en": "If a problem came up, I'd call you.",
+    "reviewed": true
+  },
+  {
+    "id": "manifestar.presenteDeIndicativo.1",
+    "verb": "manifestar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi tío siempre {manifiesta} su opinión sin miedo.",
+    "en": "My uncle always states his opinion without fear.",
+    "reviewed": true
+  },
+  {
+    "id": "manifestar.imperativoNegativo.1",
+    "verb": "manifestar",
+    "tense": "imperativoNegativo",
+    "person": "tp",
+    "es": "No {manifiesten} su desacuerdo con gritos.",
+    "en": "Don't express your disagreement by shouting.",
+    "reviewed": true
+  },
+  {
+    "id": "implicar.futuroDeIndicativo.1",
+    "verb": "implicar",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "Este cambio {implicará} más trabajo para todos.",
+    "en": "This change will mean more work for everyone.",
+    "reviewed": true
+  },
+  {
+    "id": "implicar.condicionalCompuesto.1",
+    "verb": "implicar",
+    "tense": "condicionalCompuesto",
+    "person": "ts",
+    "es": "Ese error {habría implicado} muchos problemas.",
+    "en": "That mistake would have meant a lot of trouble.",
+    "reviewed": true
+  },
+  {
+    "id": "recoger.imperativoPositivo.1",
+    "verb": "recoger",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Recoge} tus juguetes, por favor.",
+    "en": "Pick up your toys, please.",
+    "reviewed": true
+  },
+  {
+    "id": "recoger.perfectoDeSubjuntivo.1",
+    "verb": "recoger",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "tp",
+    "es": "Es bueno que los vecinos {hayan recogido} la basura.",
+    "en": "It's good that the neighbors have picked up the trash.",
+    "reviewed": true
+  },
+  {
+    "id": "resolver.pretérito.1",
+    "verb": "resolver",
+    "tense": "pretérito",
+    "person": "fp",
+    "es": "Anoche nosotros {resolvimos} el problema por fin.",
+    "en": "Last night we finally solved the problem.",
+    "reviewed": true
+  },
+  {
+    "id": "resolver.condicional.1",
+    "verb": "resolver",
+    "tense": "condicional",
+    "person": "fs",
+    "es": "Con más tiempo, yo {resolvería} el problema.",
+    "en": "With more time, I would solve the problem.",
+    "reviewed": true
+  },
+  {
+    "id": "contener.presenteDeIndicativo.1",
+    "verb": "contener",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Esta caja {contiene} fotos viejas.",
+    "en": "This box contains old photos.",
+    "reviewed": true
+  },
+  {
+    "id": "contener.presenteDeSubjuntivo.1",
+    "verb": "contener",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Necesito una bolsa que {contenga} todo.",
+    "en": "I need a bag that holds everything.",
+    "reviewed": true
+  },
+  {
+    "id": "imponer.pretérito.1",
+    "verb": "imponer",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer el director {impuso} una regla nueva.",
+    "en": "Yesterday the principal imposed a new rule.",
+    "reviewed": true
+  },
+  {
+    "id": "imponer.imperativoNegativo.1",
+    "verb": "imponer",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {impongas} tu opinión a los demás.",
+    "en": "Don't impose your opinion on others.",
+    "reviewed": true
+  },
+  {
+    "id": "preocupar.pretérito.1",
+    "verb": "preocupar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer el resultado del examen {preocupó} a mi madre.",
+    "en": "Yesterday the exam result worried my mother.",
+    "reviewed": true
+  },
+  {
+    "id": "preocupar.presenteDeSubjuntivo.1",
+    "verb": "preocupar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "No quiero que te {preocupes} por mí.",
+    "en": "I don't want you to worry about me.",
+    "reviewed": true
+  },
+  {
+    "id": "registrar.presenteDeIndicativo.1",
+    "verb": "registrar",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros {registramos} a todos los invitados en la entrada.",
+    "en": "We register all the guests at the entrance.",
+    "reviewed": true
+  },
+  {
+    "id": "registrar.imperfectoDeSubjuntivo1.1",
+    "verb": "registrar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Era necesario que la escuela {registrara} a los niños antes de junio.",
+    "en": "It was necessary for the school to register the children before June.",
+    "reviewed": true
+  },
+  {
+    "id": "invitar.futuroDeIndicativo.1",
+    "verb": "invitar",
+    "tense": "futuroDeIndicativo",
+    "person": "fs",
+    "es": "Mañana yo {invitaré} a mis primos a cenar.",
+    "en": "Tomorrow I'll invite my cousins to dinner.",
+    "reviewed": true
+  },
+  {
+    "id": "invitar.condicional.1",
+    "verb": "invitar",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "Mi madre {invitaría} a todos si tuviera más espacio.",
+    "en": "My mother would invite everyone if she had more room.",
+    "reviewed": true
+  },
+  {
+    "id": "concluir.pretérito.1",
+    "verb": "concluir",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer la profesora {concluyó} la clase a las tres.",
+    "en": "Yesterday the teacher ended class at three.",
+    "reviewed": true
+  },
+  {
+    "id": "concluir.perfectoDeSubjuntivo.1",
+    "verb": "concluir",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ss",
+    "es": "Espero que {hayas concluido} el informe antes de la reunión.",
+    "en": "I hope you've finished the report before the meeting.",
+    "reviewed": true
+  },
+  {
+    "id": "valer.presenteDeIndicativo.1",
+    "verb": "valer",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Este libro {vale} mucho dinero.",
+    "en": "This book is worth a lot of money.",
+    "reviewed": true
+  },
+  {
+    "id": "valer.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "valer",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Yo no habría ido si el viaje no {hubiera valido} la pena.",
+    "en": "I wouldn't have gone if the trip hadn't been worth it.",
+    "reviewed": true
+  },
+  {
+    "id": "determinar.gerundio.1",
+    "verb": "determinar",
+    "tense": "gerundio",
+    "es": "El médico está {determinando} la causa del dolor.",
+    "en": "The doctor is determining the cause of the pain.",
+    "reviewed": true
+  },
+  {
+    "id": "determinar.presenteDeSubjuntivo.1",
+    "verb": "determinar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Es importante que los científicos {determinen} la causa.",
+    "en": "It's important for the scientists to determine the cause.",
+    "reviewed": true
+  },
+  {
+    "id": "permanecer.imperfectoDeIndicativo.1",
+    "verb": "permanecer",
+    "tense": "imperfectoDeIndicativo",
+    "person": "tp",
+    "es": "Cuando éramos niños, mis abuelos {permanecían} en el pueblo todo el verano.",
+    "en": "When we were kids, my grandparents stayed in town all summer.",
+    "reviewed": true
+  },
+  {
+    "id": "permanecer.imperativoNegativo.1",
+    "verb": "permanecer",
+    "tense": "imperativoNegativo",
+    "person": "ts",
+    "es": "Señor, no {permanezca} cerca de la ventana.",
+    "en": "Sir, don't stay near the window.",
+    "reviewed": true
+  },
+  {
+    "id": "exigir.presenteDeIndicativo.1",
+    "verb": "exigir",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {exijo} una explicación.",
+    "en": "I demand an explanation.",
+    "reviewed": true
+  },
+  {
+    "id": "exigir.imperfectoDeSubjuntivo1.1",
+    "verb": "exigir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Nadie esperaba que la profesora {exigiera} tanto.",
+    "en": "No one expected the teacher to demand so much.",
+    "reviewed": true
+  },
+  {
+    "id": "disponer.futuroDeIndicativo.1",
+    "verb": "disponer",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "El hotel {dispondrá} de una piscina nueva el próximo verano.",
+    "en": "The hotel will have a new pool next summer.",
+    "reviewed": true
+  },
+  {
+    "id": "disponer.presenteDeSubjuntivo.1",
+    "verb": "disponer",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Queremos que los estudiantes {dispongan} de libros gratis.",
+    "en": "We want the students to have free books available.",
+    "reviewed": true
+  },
+  {
+    "id": "integrar.presenteDeIndicativo.1",
+    "verb": "integrar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Cinco jugadores {integran} el equipo.",
+    "en": "Five players make up the team.",
+    "reviewed": true
+  },
+  {
+    "id": "integrar.condicionalCompuesto.1",
+    "verb": "integrar",
+    "tense": "condicionalCompuesto",
+    "person": "fs",
+    "es": "Yo me {habría integrado} más rápido en la escuela nueva.",
+    "en": "I would have fit in faster at the new school.",
+    "reviewed": true
+  },
+  {
+    "id": "reír.pretérito.1",
+    "verb": "reír",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Anoche mi padre {rio} mucho con la película.",
+    "en": "Last night my father laughed a lot at the movie.",
+    "reviewed": true
+  },
+  {
+    "id": "reír.presenteDeSubjuntivo.1",
+    "verb": "reír",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "No quiero que te {rías} de mí.",
+    "en": "I don't want you to laugh at me.",
+    "reviewed": true
+  },
+  {
+    "id": "ubicar.presenteDeIndicativo.1",
+    "verb": "ubicar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi oficina se {ubica} cerca del parque.",
+    "en": "My office is located near the park.",
+    "reviewed": true
+  },
+  {
+    "id": "ubicar.pluscuamperfectoDeIndicativo.1",
+    "verb": "ubicar",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "fs",
+    "es": "Yo ya {había ubicado} el museo en el mapa cuando llegamos.",
+    "en": "I had already located the museum on the map when we arrived.",
+    "reviewed": true
+  },
+  {
+    "id": "guardar.pretérito.1",
+    "verb": "guardar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "El año pasado yo {guardé} las cartas de mi abuela en una caja.",
+    "en": "Last year I kept my grandmother's letters in a box.",
+    "reviewed": true
+  },
+  {
+    "id": "guardar.imperativoPositivo.1",
+    "verb": "guardar",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Guardemos} el dinero para el viaje.",
+    "en": "Let's save the money for the trip.",
+    "reviewed": true
+  },
+  {
+    "id": "aprobar.pretérito.1",
+    "verb": "aprobar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El año pasado mi hermana {aprobó} todos sus exámenes.",
+    "en": "Last year my sister passed all her exams.",
+    "reviewed": true
+  },
+  {
+    "id": "aprobar.perfectoDeSubjuntivo.1",
+    "verb": "aprobar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ss",
+    "es": "Me alegra que {hayas aprobado} el examen final.",
+    "en": "I'm glad you passed the final exam.",
+    "reviewed": true
+  },
+  {
+    "id": "corresponder.presenteDeIndicativo.1",
+    "verb": "corresponder",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Esta llave {corresponde} a la puerta de atrás.",
+    "en": "This key goes with the back door.",
+    "reviewed": true
+  },
+  {
+    "id": "corresponder.presenteDeSubjuntivo.1",
+    "verb": "corresponder",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "No creo que este número {corresponda} a mi casa.",
+    "en": "I don't think this number matches my house.",
+    "reviewed": true
+  },
+  {
+    "id": "causar.pretérito.1",
+    "verb": "causar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Anoche la tormenta {causó} muchos problemas en la ciudad.",
+    "en": "Last night the storm caused a lot of problems in the city.",
+    "reviewed": true
+  },
+  {
+    "id": "causar.futuroPerfecto.1",
+    "verb": "causar",
+    "tense": "futuroPerfecto",
+    "person": "ts",
+    "es": "Para el lunes, la lluvia ya {habrá causado} muchos daños.",
+    "en": "By Monday, the rain will have already caused a lot of damage.",
+    "reviewed": true
+  },
+  {
+    "id": "insistir.presenteDeIndicativo.1",
+    "verb": "insistir",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {insisto}: esta noche pago yo.",
+    "en": "I insist: tonight I'm paying.",
+    "reviewed": true
+  },
+  {
+    "id": "insistir.imperfectoDeSubjuntivo1.1",
+    "verb": "insistir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "tp",
+    "es": "No era necesario que ellos {insistieran} tanto.",
+    "en": "It wasn't necessary for them to insist so much.",
+    "reviewed": true
+  },
+  {
+    "id": "contestar.pretérito.1",
+    "verb": "contestar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer el profesor no {contestó} mi pregunta.",
+    "en": "Yesterday the teacher didn't answer my question.",
+    "reviewed": true
+  },
+  {
+    "id": "contestar.imperativoNegativo.1",
+    "verb": "contestar",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {contestes} el teléfono durante la cena.",
+    "en": "Don't answer the phone during dinner.",
+    "reviewed": true
+  },
+  {
+    "id": "interesar.presenteDeIndicativo.1",
+    "verb": "interesar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "A mi hermano le {interesan} los trenes.",
+    "en": "My brother is interested in trains.",
+    "reviewed": true
+  },
+  {
+    "id": "interesar.condicional.1",
+    "verb": "interesar",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "Ese curso de cocina nos {interesaría} mucho.",
+    "en": "That cooking class would interest us a lot.",
+    "reviewed": true
+  },
+  {
+    "id": "tirar.pretérito.1",
+    "verb": "tirar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Anoche yo {tiré} la basura antes de dormir.",
+    "en": "Last night I took out the trash before going to bed.",
+    "reviewed": true
+  },
+  {
+    "id": "tirar.presenteDeSubjuntivo.1",
+    "verb": "tirar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "Es mejor que {tires} esa camisa vieja.",
+    "en": "It's better for you to throw out that old shirt.",
+    "reviewed": true
+  },
+  {
+    "id": "parar.imperativoPositivo.1",
+    "verb": "parar",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Pare} aquí, por favor.",
+    "en": "Stop here, please.",
+    "reviewed": true
+  },
+  {
+    "id": "parar.pluscuamperfectoDeIndicativo.1",
+    "verb": "parar",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Cuando llegamos, la lluvia ya {había parado}.",
+    "en": "When we arrived, the rain had already stopped.",
+    "reviewed": true
+  },
+  {
+    "id": "controlar.gerundio.1",
+    "verb": "controlar",
+    "tense": "gerundio",
+    "es": "Mi padre está {controlando} los gastos de la casa.",
+    "en": "My father is keeping the household expenses under control.",
+    "reviewed": true
+  },
+  {
+    "id": "controlar.imperfectoDeSubjuntivo1.1",
+    "verb": "controlar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Mi padre me aconsejó que {controlara} mis gastos.",
+    "en": "My father advised me to keep my spending under control.",
+    "reviewed": true
+  },
+  {
+    "id": "relacionar.pretérito.1",
+    "verb": "relacionar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Anoche el periodista {relacionó} el robo con otro caso.",
+    "en": "Last night the reporter linked the robbery to another case.",
+    "reviewed": true
+  },
+  {
+    "id": "relacionar.presenteDeSubjuntivo.1",
+    "verb": "relacionar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Quiero que los alumnos {relacionen} cada palabra con su dibujo.",
+    "en": "I want the students to match each word with its picture.",
+    "reviewed": true
+  },
+  {
+    "id": "incorporar.futuroDeIndicativo.1",
+    "verb": "incorporar",
+    "tense": "futuroDeIndicativo",
+    "person": "tp",
+    "es": "El próximo año ellos {incorporarán} cien trabajadores nuevos.",
+    "en": "Next year they will take on a hundred new workers.",
+    "reviewed": true
+  },
+  {
+    "id": "incorporar.perfectoDeSubjuntivo.1",
+    "verb": "incorporar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ts",
+    "es": "Dudo que la empresa {haya incorporado} trabajadores nuevos este mes.",
+    "en": "I doubt the company has taken on new workers this month.",
+    "reviewed": true
+  },
+  {
+    "id": "acordar.pretérito.1",
+    "verb": "acordar",
+    "tense": "pretérito",
+    "person": "fp",
+    "es": "Ayer mi hermano y yo {acordamos} una hora para vernos.",
+    "en": "Yesterday my brother and I agreed on a time to meet.",
+    "reviewed": true
+  },
+  {
+    "id": "acordar.futuroPerfecto.1",
+    "verb": "acordar",
+    "tense": "futuroPerfecto",
+    "person": "tp",
+    "es": "Para el viernes, ellos ya {habrán acordado} el precio.",
+    "en": "By Friday, they will have agreed on the price.",
+    "reviewed": true
+  },
+  {
+    "id": "cruzar.pretérito.1",
+    "verb": "cruzar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Yo {crucé} el puente a pie ayer.",
+    "en": "I crossed the bridge on foot yesterday.",
+    "reviewed": true
+  },
+  {
+    "id": "cruzar.presenteDeSubjuntivo.1",
+    "verb": "cruzar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Mamá quiere que Pedro {cruce} la calle con cuidado.",
+    "en": "Mom wants Pedro to cross the street carefully.",
+    "reviewed": true
+  },
+  {
+    "id": "adquirir.futuroDeIndicativo.1",
+    "verb": "adquirir",
+    "tense": "futuroDeIndicativo",
+    "person": "tp",
+    "es": "Mis padres {adquirirán} una casa el próximo año.",
+    "en": "My parents will acquire a house next year.",
+    "reviewed": true
+  },
+  {
+    "id": "adquirir.imperfectoDeSubjuntivo1.1",
+    "verb": "adquirir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Si yo {adquiriera} más libros, no tendría dónde ponerlos.",
+    "en": "If I acquired more books, I wouldn't have anywhere to put them.",
+    "reviewed": true
+  },
+  {
+    "id": "garantizar.presenteDeIndicativo.1",
+    "verb": "garantizar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Esta tienda {garantiza} todos sus productos.",
+    "en": "This store guarantees all its products.",
+    "reviewed": true
+  },
+  {
+    "id": "garantizar.condicional.1",
+    "verb": "garantizar",
+    "tense": "condicional",
+    "person": "fs",
+    "es": "Yo no {garantizaría} que el tren llegue a tiempo.",
+    "en": "I wouldn't guarantee that the train will arrive on time.",
+    "reviewed": true
+  },
+  {
+    "id": "despertar.imperfectoDeIndicativo.1",
+    "verb": "despertar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi padre siempre {despertaba} a los niños a las siete.",
+    "en": "My father always woke the kids up at seven.",
+    "reviewed": true
+  },
+  {
+    "id": "despertar.perfectoDeSubjuntivo.1",
+    "verb": "despertar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "tp",
+    "es": "Me alegra que los niños no se {hayan despertado} todavía.",
+    "en": "I'm glad the kids haven't woken up yet.",
+    "reviewed": true
+  },
+  {
+    "id": "sonar.pretérito.1",
+    "verb": "sonar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Anoche el teléfono {sonó} a las tres.",
+    "en": "Last night the phone rang at three.",
+    "reviewed": true
+  },
+  {
+    "id": "sonar.presenteDeSubjuntivo.1",
+    "verb": "sonar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Quiero que la alarma {suene} a las seis.",
+    "en": "I want the alarm to go off at six.",
+    "reviewed": true
+  },
+  {
+    "id": "costar.pretérito.1",
+    "verb": "costar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El viaje {costó} mucho dinero el año pasado.",
+    "en": "The trip cost a lot of money last year.",
+    "reviewed": true
+  },
+  {
+    "id": "costar.imperfectoDeSubjuntivo1.1",
+    "verb": "costar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Compraría la casa si no {costara} tanto.",
+    "en": "I'd buy the house if it didn't cost so much.",
+    "reviewed": true
+  },
+  {
+    "id": "sorprender.perfectoDeIndicativo.1",
+    "verb": "sorprender",
+    "tense": "perfectoDeIndicativo",
+    "person": "ts",
+    "es": "Su respuesta me {ha sorprendido} mucho.",
+    "en": "Her answer has surprised me a lot.",
+    "reviewed": true
+  },
+  {
+    "id": "sorprender.condicional.1",
+    "verb": "sorprender",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "Esa noticia {sorprendería} a mi madre.",
+    "en": "That news would surprise my mother.",
+    "reviewed": true
+  },
+  {
+    "id": "llorar.presenteDeIndicativo.1",
+    "verb": "llorar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Los bebés {lloran} cuando tienen hambre.",
+    "en": "Babies cry when they're hungry.",
+    "reviewed": true
+  },
+  {
+    "id": "llorar.imperativoNegativo.1",
+    "verb": "llorar",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {llores}, todo va a salir bien.",
+    "en": "Don't cry; everything is going to be fine.",
+    "reviewed": true
+  },
+  {
+    "id": "sonreír.gerundio.1",
+    "verb": "sonreír",
+    "tense": "gerundio",
+    "es": "La niña camina {sonriendo} hacia su mamá.",
+    "en": "The girl walks toward her mom smiling.",
+    "reviewed": true
+  },
+  {
+    "id": "sonreír.presenteDeSubjuntivo.1",
+    "verb": "sonreír",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "Quiero que {sonrías} en la foto.",
+    "en": "I want you to smile in the photo.",
+    "reviewed": true
+  },
+  {
+    "id": "conducir.presenteDeIndicativo.1",
+    "verb": "conducir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Este camino {conduce} al río.",
+    "en": "This road leads to the river.",
+    "reviewed": true
+  },
+  {
+    "id": "conducir.imperfectoDeSubjuntivo1.1",
+    "verb": "conducir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Ojalá este sendero {condujera} al lago.",
+    "en": "I wish this trail led to the lake.",
+    "reviewed": true
+  },
+  {
+    "id": "gritar.pretérito.1",
+    "verb": "gritar",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "Los aficionados {gritaron} de alegría anoche.",
+    "en": "The fans shouted with joy last night.",
+    "reviewed": true
+  },
+  {
+    "id": "gritar.imperativoNegativo.1",
+    "verb": "gritar",
+    "tense": "imperativoNegativo",
+    "person": "ts",
+    "es": "Por favor, no {grite} usted, el bebé duerme.",
+    "en": "Please don't shout; the baby is sleeping.",
+    "reviewed": true
+  },
+  {
+    "id": "aportar.futuroDeIndicativo.1",
+    "verb": "aportar",
+    "tense": "futuroDeIndicativo",
+    "person": "fs",
+    "es": "Yo {aportaré} cien dólares para la fiesta.",
+    "en": "I'll contribute a hundred dollars to the party.",
+    "reviewed": true
+  },
+  {
+    "id": "aportar.condicionalCompuesto.1",
+    "verb": "aportar",
+    "tense": "condicionalCompuesto",
+    "person": "ts",
+    "es": "Ella {habría aportado} más dinero, pero llegó tarde.",
+    "en": "She would have contributed more money, but she arrived late.",
+    "reviewed": true
+  },
+  {
+    "id": "contribuir.pretérito.1",
+    "verb": "contribuir",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Mi tío {contribuyó} con mil dólares a la escuela el año pasado.",
+    "en": "My uncle contributed a thousand dollars to the school last year.",
+    "reviewed": true
+  },
+  {
+    "id": "contribuir.presenteDeSubjuntivo.1",
+    "verb": "contribuir",
+    "tense": "presenteDeSubjuntivo",
+    "person": "tp",
+    "es": "Es importante que todos {contribuyan} al proyecto.",
+    "en": "It's important that everyone contribute to the project.",
+    "reviewed": true
+  },
+  {
+    "id": "mandar.imperativoPositivo.1",
+    "verb": "mandar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Manda} un mensaje a tu hermana.",
+    "en": "Send a message to your sister.",
+    "reviewed": true
+  },
+  {
+    "id": "mandar.perfectoDeSubjuntivo.1",
+    "verb": "mandar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ts",
+    "es": "No creo que ella {haya mandado} la carta todavía.",
+    "en": "I don't think she has sent the letter yet.",
+    "reviewed": true
+  },
+  {
+    "id": "impedir.pretérito.1",
+    "verb": "impedir",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "La nieve {impidió} la salida del tren ayer.",
+    "en": "The snow kept the train from leaving yesterday.",
+    "reviewed": true
+  },
+  {
+    "id": "impedir.imperfectoDeSubjuntivo1.1",
+    "verb": "impedir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Mis padres no querían que nada me {impidiera} estudiar.",
+    "en": "My parents didn't want anything to stop me from studying.",
+    "reviewed": true
+  },
+  {
+    "id": "notar.pretérito.1",
+    "verb": "notar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Yo {noté} un olor extraño en la cocina anoche.",
+    "en": "I noticed a strange smell in the kitchen last night.",
+    "reviewed": true
+  },
+  {
+    "id": "notar.futuroPerfecto.1",
+    "verb": "notar",
+    "tense": "futuroPerfecto",
+    "person": "tp",
+    "es": "Para mañana, ellos ya {habrán notado} el error.",
+    "en": "By tomorrow they will have noticed the mistake.",
+    "reviewed": true
+  },
+  {
+    "id": "describir.presenteDeIndicativo.1",
+    "verb": "describir",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {describo} mi pueblo a mis amigos.",
+    "en": "I describe my town to my friends.",
+    "reviewed": true
+  },
+  {
+    "id": "describir.imperativoPositivo.1",
+    "verb": "describir",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Describamos} la escena paso a paso.",
+    "en": "Let's describe the scene step by step.",
+    "reviewed": true
+  },
+  {
+    "id": "promover.gerundio.1",
+    "verb": "promover",
+    "tense": "gerundio",
+    "es": "El gobierno sigue {promoviendo} el uso del tren.",
+    "en": "The government keeps promoting the use of trains.",
+    "reviewed": true
+  },
+  {
+    "id": "promover.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "promover",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Si el club {hubiera promovido} más el evento, habría venido más gente.",
+    "en": "If the club had promoted the event more, more people would have come.",
+    "reviewed": true
+  },
+  {
+    "id": "vestir.imperfectoDeIndicativo.1",
+    "verb": "vestir",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi abuela siempre {vestía} de negro.",
+    "en": "My grandmother always dressed in black.",
+    "reviewed": true
+  },
+  {
+    "id": "vestir.presenteDeSubjuntivo.1",
+    "verb": "vestir",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "Mamá quiere que te {vistas} antes de desayunar.",
+    "en": "Mom wants you to get dressed before breakfast.",
+    "reviewed": true
+  },
+  {
+    "id": "basar.presenteDeIndicativo.1",
+    "verb": "basar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Este libro se {basa} en hechos reales.",
+    "en": "This book is based on real events.",
+    "reviewed": true
+  },
+  {
+    "id": "basar.presenteDeSubjuntivo.1",
+    "verb": "basar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Es importante que el informe se {base} en datos reales.",
+    "en": "It's important that the report be based on real data.",
+    "reviewed": true
+  },
+  {
+    "id": "revelar.pretérito.1",
+    "verb": "revelar",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "El testigo {reveló} la verdad ayer.",
+    "en": "The witness revealed the truth yesterday.",
+    "reviewed": true
+  },
+  {
+    "id": "revelar.imperativoNegativo.1",
+    "verb": "revelar",
+    "tense": "imperativoNegativo",
+    "person": "tp",
+    "es": "No {revelen} el secreto, por favor.",
+    "en": "Don't reveal the secret, please.",
+    "reviewed": true
+  },
+  {
+    "id": "cantar.imperativoPositivo.1",
+    "verb": "cantar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Canta} esa canción otra vez.",
+    "en": "Sing that song again.",
+    "reviewed": true
+  },
+  {
+    "id": "cantar.imperfectoDeSubjuntivo1.1",
+    "verb": "cantar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Mi padre le pidió a mi hermana que {cantara} en la boda.",
+    "en": "My father asked my sister to sing at the wedding.",
+    "reviewed": true
+  },
+  {
+    "id": "enseñar.imperfectoDeIndicativo.1",
+    "verb": "enseñar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi madre me {enseñaba} a cocinar cada domingo.",
+    "en": "My mother taught me to cook every Sunday.",
+    "reviewed": true
+  },
+  {
+    "id": "enseñar.presenteDeSubjuntivo.1",
+    "verb": "enseñar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Yo busco una maestra que {enseñe} inglés a los niños.",
+    "en": "I'm looking for a teacher who teaches English to kids.",
+    "reviewed": true
+  },
+  {
+    "id": "extender.perfectoDeIndicativo.1",
+    "verb": "extender",
+    "tense": "perfectoDeIndicativo",
+    "person": "ts",
+    "es": "El gobierno ya {ha extendido} el plazo.",
+    "en": "The government has already extended the deadline.",
+    "reviewed": true
+  },
+  {
+    "id": "extender.condicional.1",
+    "verb": "extender",
+    "tense": "condicional",
+    "person": "fs",
+    "es": "Si pudiera, yo {extendería} mis vacaciones una semana.",
+    "en": "If I could, I'd extend my vacation by a week.",
+    "reviewed": true
+  },
+  {
+    "id": "acudir.pretérito.1",
+    "verb": "acudir",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "Muchos vecinos {acudieron} a la reunión anoche.",
+    "en": "Many neighbors came to the meeting last night.",
+    "reviewed": true
+  },
+  {
+    "id": "acudir.presenteDeSubjuntivo.1",
+    "verb": "acudir",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "El médico pide que el paciente {acuda} mañana temprano.",
+    "en": "The doctor asks the patient to come in early tomorrow.",
+    "reviewed": true
+  },
+  {
+    "id": "poseer.presenteDeIndicativo.1",
+    "verb": "poseer",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {poseo} una casa pequeña cerca del mar.",
+    "en": "I own a small house near the sea.",
+    "reviewed": true
+  },
+  {
+    "id": "poseer.imperfectoDeSubjuntivo1.1",
+    "verb": "poseer",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "tp",
+    "es": "Si ellos {poseyeran} más tierra, cultivarían trigo.",
+    "en": "If they owned more land, they would grow wheat.",
+    "reviewed": true
+  },
+  {
+    "id": "exponer.pretérito.1",
+    "verb": "exponer",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Ayer la artista {expuso} sus cuadros en la galería.",
+    "en": "Yesterday the artist exhibited her paintings at the gallery.",
+    "reviewed": true
+  },
+  {
+    "id": "exponer.presenteDeSubjuntivo.1",
+    "verb": "exponer",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "Quiero que {expongas} tu plan en la reunión.",
+    "en": "I want you to present your plan at the meeting.",
+    "reviewed": true
+  },
+  {
+    "id": "recorrer.futuroDeIndicativo.1",
+    "verb": "recorrer",
+    "tense": "futuroDeIndicativo",
+    "person": "fp",
+    "es": "Mañana nosotros {recorreremos} el centro a pie.",
+    "en": "Tomorrow we'll walk around downtown.",
+    "reviewed": true
+  },
+  {
+    "id": "recorrer.condicional.1",
+    "verb": "recorrer",
+    "tense": "condicional",
+    "person": "fs",
+    "es": "Si tuviera tiempo, yo {recorrería} toda la costa.",
+    "en": "If I had time, I would travel the whole coast.",
+    "reviewed": true
+  },
+  {
+    "id": "partir.imperativoPositivo.1",
+    "verb": "partir",
+    "tense": "imperativoPositivo",
+    "person": "ts",
+    "es": "{Parta} el pan en dos, por favor.",
+    "en": "Please cut the bread in two.",
+    "reviewed": true
+  },
+  {
+    "id": "partir.pluscuamperfectoDeIndicativo.1",
+    "verb": "partir",
+    "tense": "pluscuamperfectoDeIndicativo",
+    "person": "tp",
+    "es": "Mis primos ya {habían partido} el pastel cuando llegué.",
+    "en": "My cousins had already cut the cake when I arrived.",
+    "reviewed": true
+  },
+  {
+    "id": "cortar.imperfectoDeIndicativo.1",
+    "verb": "cortar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Mi abuelo siempre {cortaba} la leña en otoño.",
+    "en": "My grandfather always cut firewood in the fall.",
+    "reviewed": true
+  },
+  {
+    "id": "cortar.imperativoNegativo.1",
+    "verb": "cortar",
+    "tense": "imperativoNegativo",
+    "person": "ss",
+    "es": "No {cortes} el papel con ese cuchillo.",
+    "en": "Don't cut the paper with that knife.",
+    "reviewed": true
+  },
+  {
+    "id": "firmar.perfectoDeIndicativo.1",
+    "verb": "firmar",
+    "tense": "perfectoDeIndicativo",
+    "person": "fs",
+    "es": "Yo todavía no {he firmado} el contrato.",
+    "en": "I still haven't signed the contract.",
+    "reviewed": true
+  },
+  {
+    "id": "firmar.presenteDeSubjuntivo.1",
+    "verb": "firmar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Es importante que usted {firme} aquí.",
+    "en": "It's important that you sign here.",
+    "reviewed": true
+  },
+  {
+    "id": "recomendar.presenteDeIndicativo.1",
+    "verb": "recomendar",
+    "tense": "presenteDeIndicativo",
+    "person": "tp",
+    "es": "Mis amigos {recomiendan} este restaurante.",
+    "en": "My friends recommend this restaurant.",
+    "reviewed": true
+  },
+  {
+    "id": "recomendar.condicionalCompuesto.1",
+    "verb": "recomendar",
+    "tense": "condicionalCompuesto",
+    "person": "fs",
+    "es": "Yo te {habría recomendado} otro hotel si lo hubiera sabido.",
+    "en": "I would have recommended another hotel to you if I had known.",
+    "reviewed": true
+  },
+  {
+    "id": "pertenecer.imperfectoDeIndicativo.1",
+    "verb": "pertenecer",
+    "tense": "imperfectoDeIndicativo",
+    "person": "ts",
+    "es": "Esa casa {pertenecía} a mi familia hace años.",
+    "en": "That house used to belong to my family years ago.",
+    "reviewed": true
+  },
+  {
+    "id": "pertenecer.futuroPerfecto.1",
+    "verb": "pertenecer",
+    "tense": "futuroPerfecto",
+    "person": "ts",
+    "es": "El anillo {habrá pertenecido} a su abuela.",
+    "en": "The ring must have belonged to her grandmother.",
+    "reviewed": true
+  },
+  {
+    "id": "transformar.pretérito.1",
+    "verb": "transformar",
+    "tense": "pretérito",
+    "person": "tp",
+    "es": "El año pasado los obreros {transformaron} la fábrica en un museo.",
+    "en": "Last year the workers transformed the factory into a museum.",
+    "reviewed": true
+  },
+  {
+    "id": "transformar.presenteDeSubjuntivo.1",
+    "verb": "transformar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Ojalá que la lluvia {transforme} el desierto en jardín.",
+    "en": "I hope the rain transforms the desert into a garden.",
+    "reviewed": true
+  },
+  {
+    "id": "fijar.imperativoPositivo.1",
+    "verb": "fijar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Fija} la fecha de la reunión, por favor.",
+    "en": "Please set the date for the meeting.",
+    "reviewed": true
+  },
+  {
+    "id": "fijar.perfectoDeSubjuntivo.1",
+    "verb": "fijar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "tp",
+    "es": "No creo que ellos ya {hayan fijado} el precio.",
+    "en": "I don't think they've set the price yet.",
+    "reviewed": true
+  },
+  {
+    "id": "separar.gerundio.1",
+    "verb": "separar",
+    "tense": "gerundio",
+    "es": "Mi hermano está {separando} la ropa blanca de la de color.",
+    "en": "My brother is separating the whites from the colored clothes.",
+    "reviewed": true
+  },
+  {
+    "id": "separar.imperfectoDeSubjuntivo1.1",
+    "verb": "separar",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fp",
+    "es": "Mi madre nos pidió que {separáramos} la basura.",
+    "en": "My mother asked us to separate the trash.",
+    "reviewed": true
+  },
+  {
+    "id": "asistir.presenteDeIndicativo.1",
+    "verb": "asistir",
+    "tense": "presenteDeIndicativo",
+    "person": "fs",
+    "es": "Yo {asisto} a clases por la tarde.",
+    "en": "I attend classes in the afternoon.",
+    "reviewed": true
+  },
+  {
+    "id": "asistir.condicional.1",
+    "verb": "asistir",
+    "tense": "condicional",
+    "person": "ss",
+    "es": "Si te invitaran, ¿{asistirías} a la boda?",
+    "en": "If they invited you, would you attend the wedding?",
+    "reviewed": true
+  },
+  {
+    "id": "solicitar.pretérito.1",
+    "verb": "solicitar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "El mes pasado yo {solicité} una beca.",
+    "en": "Last month I applied for a scholarship.",
+    "reviewed": true
+  },
+  {
+    "id": "solicitar.futuroPerfecto.1",
+    "verb": "solicitar",
+    "tense": "futuroPerfecto",
+    "person": "fp",
+    "es": "Para el viernes nosotros ya {habremos solicitado} la visa.",
+    "en": "By Friday we will have applied for the visa.",
+    "reviewed": true
+  },
+  {
+    "id": "interpretar.futuroDeIndicativo.1",
+    "verb": "interpretar",
+    "tense": "futuroDeIndicativo",
+    "person": "ts",
+    "es": "Mañana la cantante {interpretará} su canción más famosa.",
+    "en": "Tomorrow the singer will perform her most famous song.",
+    "reviewed": true
+  },
+  {
+    "id": "interpretar.pluscuamperfectoDeSubjuntivo1.1",
+    "verb": "interpretar",
+    "tense": "pluscuamperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Me preocupaba que el guía {hubiera interpretado} mal el mapa.",
+    "en": "I was worried that the guide had misread the map.",
+    "reviewed": true
+  },
+  {
+    "id": "impulsar.presenteDeIndicativo.1",
+    "verb": "impulsar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Esta nueva ley {impulsa} la economía del país.",
+    "en": "This new law boosts the country's economy.",
+    "reviewed": true
+  },
+  {
+    "id": "impulsar.imperativoPositivo.1",
+    "verb": "impulsar",
+    "tense": "imperativoPositivo",
+    "person": "fp",
+    "es": "{Impulsemos} juntos este proyecto.",
+    "en": "Let's push this project forward together.",
+    "reviewed": true
+  },
+  {
+    "id": "convencer.pretérito.1",
+    "verb": "convencer",
+    "tense": "pretérito",
+    "person": "ts",
+    "es": "Anoche mi hermana me {convenció} de ir al cine.",
+    "en": "Last night my sister convinced me to go to the movies.",
+    "reviewed": true
+  },
+  {
+    "id": "convencer.imperfectoDeSubjuntivo1.1",
+    "verb": "convencer",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "fs",
+    "es": "Ojalá yo {convenciera} a mi padre de venir.",
+    "en": "I wish I could convince my father to come.",
+    "reviewed": true
+  },
+  {
+    "id": "retirar.imperativoPositivo.1",
+    "verb": "retirar",
+    "tense": "imperativoPositivo",
+    "person": "tp",
+    "es": "{Retiren} sus cosas de la mesa, por favor.",
+    "en": "Please take your things off the table.",
+    "reviewed": true
+  },
+  {
+    "id": "retirar.perfectoDeSubjuntivo.1",
+    "verb": "retirar",
+    "tense": "perfectoDeSubjuntivo",
+    "person": "ts",
+    "es": "Dudo que ella {haya retirado} el dinero.",
+    "en": "I doubt she has withdrawn the money.",
+    "reviewed": true
+  },
+  {
+    "id": "contemplar.imperfectoDeIndicativo.1",
+    "verb": "contemplar",
+    "tense": "imperfectoDeIndicativo",
+    "person": "fs",
+    "es": "De niño, yo {contemplaba} el cielo desde el patio.",
+    "en": "As a child, I used to gaze at the sky from the yard.",
+    "reviewed": true
+  },
+  {
+    "id": "contemplar.condicional.1",
+    "verb": "contemplar",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "Mi jefe {contemplaría} esa propuesta si fuera más barata.",
+    "en": "My boss would consider that proposal if it were cheaper.",
+    "reviewed": true
+  },
+  {
+    "id": "reflejar.presenteDeIndicativo.1",
+    "verb": "reflejar",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "El lago {refleja} las montañas como un espejo.",
+    "en": "The lake reflects the mountains like a mirror.",
+    "reviewed": true
+  },
+  {
+    "id": "reflejar.presenteDeSubjuntivo.1",
+    "verb": "reflejar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Ojalá que el informe {refleje} la verdad.",
+    "en": "I hope the report reflects the truth.",
+    "reviewed": true
+  },
+  {
+    "id": "consistir.presenteDeIndicativo.1",
+    "verb": "consistir",
+    "tense": "presenteDeIndicativo",
+    "person": "ts",
+    "es": "Mi trabajo {consiste} en atender a los clientes.",
+    "en": "My job consists of helping customers.",
+    "reviewed": true
+  },
+  {
+    "id": "consistir.imperfectoDeSubjuntivo1.1",
+    "verb": "consistir",
+    "tense": "imperfectoDeSubjuntivo1",
+    "person": "ts",
+    "es": "Si el plan {consistiera} solo en esperar, no funcionaría.",
+    "en": "If the plan consisted only of waiting, it wouldn't work.",
+    "reviewed": true
+  },
+  {
+    "id": "ordenar.imperativoPositivo.1",
+    "verb": "ordenar",
+    "tense": "imperativoPositivo",
+    "person": "ss",
+    "es": "{Ordena} tu cuarto antes de salir.",
+    "en": "Clean up your room before you go out.",
+    "reviewed": true
+  },
+  {
+    "id": "ordenar.presenteDeSubjuntivo.1",
+    "verb": "ordenar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "fp",
+    "es": "Mamá quiere que nosotros {ordenemos} la cocina.",
+    "en": "Mom wants us to tidy up the kitchen.",
+    "reviewed": true
+  },
+  {
+    "id": "cuidar.futuroDeIndicativo.1",
+    "verb": "cuidar",
+    "tense": "futuroDeIndicativo",
+    "person": "fs",
+    "es": "El sábado yo {cuidaré} a mis sobrinos.",
+    "en": "On Saturday I'll look after my nephews.",
+    "reviewed": true
+  },
+  {
+    "id": "cuidar.presenteDeSubjuntivo.1",
+    "verb": "cuidar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ts",
+    "es": "Quiero que mi hermano {cuide} al perro este fin de semana.",
+    "en": "I want my brother to take care of the dog this weekend.",
+    "reviewed": true
+  },
+  {
+    "id": "probar.pretérito.1",
+    "verb": "probar",
+    "tense": "pretérito",
+    "person": "fs",
+    "es": "Ayer yo {probé} la sopa de mi abuela.",
+    "en": "Yesterday I tried my grandmother's soup.",
+    "reviewed": true
+  },
+  {
+    "id": "probar.presenteDeSubjuntivo.1",
+    "verb": "probar",
+    "tense": "presenteDeSubjuntivo",
+    "person": "ss",
+    "es": "Quiero que {pruebes} este postre.",
+    "en": "I want you to try this dessert.",
+    "reviewed": true
+  },
+  {
+    "id": "caber.presenteDeIndicativo.1",
+    "verb": "caber",
+    "tense": "presenteDeIndicativo",
+    "person": "fp",
+    "es": "Nosotros no {cabemos} todos en la mesa.",
+    "en": "We don't all fit at the table.",
+    "reviewed": true
+  },
+  {
+    "id": "caber.condicional.1",
+    "verb": "caber",
+    "tense": "condicional",
+    "person": "ts",
+    "es": "Si fuera más pequeño, el sofá {cabría} en la sala.",
+    "en": "If it were smaller, the sofa would fit in the living room.",
+    "reviewed": true
   }
 ]

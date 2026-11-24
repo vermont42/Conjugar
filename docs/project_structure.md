@@ -419,7 +419,7 @@ ConjugarTests/
 │   ├── RecognitionTests.swift          # Name the Form: the cells of fuera, hablamos, hable, sé, ve, compounds, commands, and a gerundio; grading by part; the lines;
 │   │                                   #   the correction's lines; the scope; and a round (no record, a second try, a re-ask, the last result, Ten More)
 │   ├── GapSentenceTests.swift          # Complete the Sentence: the machine check (every blank the engine's in tú and vos, no vosotros, no tú
-│   │                                   #   named, no tú form around the blank, asked at some level) and its breaking; the top 25's counts;
+│   │                                   #   named, no tú form around the blank, asked at some level) and its breaking; the top 300's counts;
 │   │                                   #   frames, tokens, grading, -ra and -se; drafts; the draw; the scope; and rounds
 │   ├── ChoiceQuestionTests.swift       # Choice questions: the machine check (both sentences the engine's in tú and vos, differing only in their
 │   │                                   #   braces, asked from their own level, a region only for today's events, each reason naming its tenses)
