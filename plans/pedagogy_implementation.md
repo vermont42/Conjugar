@@ -26,7 +26,7 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 
 **This plan is finished** (2026-11-24): every phase is done, Phase 17's sentences cover the 300
 most frequent verbs, and the Closing's audit and porting notes are written. What remains is Josh's:
-the commit of the last session's work, and the release-day steps in `docs/release.md`.
+the release-day steps in `docs/release.md`.
 
 | Phase | Status | Date | Commit | Suggestions |
 |---:|---|---|---|---|
@@ -47,14 +47,14 @@ the commit of the last session's work, and the release-day steps in `docs/releas
 | 14 | Done | 2026-11-23 | 60f37e9 | T5.1 |
 | 15 | Done | 2026-11-23 | 5da7c25 | T5.2 |
 | 16 | Done | 2026-11-23 | 18175a3 | T5.4 |
-| 17 | Done (741 sentences; the second batch awaits Josh's commit) | 2026-11-24 | d1a3c66 (app and first batch) | T5.5 |
+| 17 | Done (741 sentences) | 2026-11-24 | d1a3c66 (app and first batch), 069b16c (second batch) | T5.5 |
 | 18 | Done (the app and 45 items, approved) | 2026-11-23 | 3271b9b | T5.6 |
 | 19 | Done | 2026-11-24 | f99637e | T6.2 |
 | 20 | Done | 2026-11-24 | 8d97908 | T5.7 |
 | 21 | Done | 2026-11-24 | 82b5d83 | T6.3 |
 | 22 | Done | 2026-11-24 | 409db52 | T6.6 (personal bests and achievements) |
 | 23 | Done | 2026-11-24 | 0c3b3a1 | T6.8 |
-| Closing | Awaiting Josh | 2026-11-24 | | Audit, porting notes |
+| Closing | Done | 2026-11-24 | 069b16c | Audit, porting notes |
 
 ## How to Work This Plan
 
