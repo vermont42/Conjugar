@@ -7578,13 +7578,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This button erases what the quiz and the review card remember of your practice: which conjugations are due again, which you missed last, and your last quiz's results. The record stays on this device and is never sent."
+            "value" : "This button erases what the quiz and the review card remember of your practice: which conjugations are due again, which you missed last, your last quiz's results, and your Speed Round best. The record stays on this device and is never sent."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Este botón borra lo que el test y la tarjeta de repaso recuerdan de tu práctica: qué conjugaciones te toca repasar, cuáles fallaste la última vez y los resultados de tu último test. El registro se queda en este dispositivo y nunca se envía."
+            "value" : "Este botón borra lo que el test y la tarjeta de repaso recuerdan de tu práctica: qué conjugaciones te toca repasar, cuáles fallaste la última vez, los resultados de tu último test y tu récord en la Ronda rápida. El registro se queda en este dispositivo y nunca se envía."
           }
         }
       }
@@ -7642,13 +7642,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The quiz will forget which conjugations you have practiced and your last quiz's results, and the review card will offer nothing until you look a verb up again."
+            "value" : "The quiz will forget which conjugations you have practiced, your last quiz's results, and your Speed Round best, and the review card will offer nothing until you look a verb up again."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El test olvidará qué conjugaciones has practicado y los resultados de tu último test, y la tarjeta de repaso no te ofrecerá nada hasta que vuelvas a consultar un verbo."
+            "value" : "El test olvidará qué conjugaciones has practicado, los resultados de tu último test y tu récord en la Ronda rápida, y la tarjeta de repaso no te ofrecerá nada hasta que vuelvas a consultar un verbo."
           }
         }
       }
@@ -8385,6 +8385,244 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verbos en %1$@: %2$@"
+          }
+        }
+      }
+    },
+    "SpeedRound.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speed Round"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ronda rápida"
+          }
+        }
+      }
+    },
+    "SpeedRound.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As many right answers as you can in 60 seconds, on what you have mastered"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tantas respuestas correctas como puedas en 60 segundos, sobre lo que ya dominas"
+          }
+        }
+      }
+    },
+    "SpeedRound.descriptionWithBest %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As many right answers as you can in 60 seconds, on what you have mastered · Best: %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tantas respuestas correctas como puedas en 60 segundos, sobre lo que ya dominas · Récord: %lld"
+          }
+        }
+      }
+    },
+    "SpeedRound.locked %lld %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens once you have mastered %1$lld patterns or irregular forms. Mastered so far: %2$lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se abre cuando domines %1$lld patrones o formas irregulares. Dominados hasta ahora: %2$lld"
+          }
+        }
+      }
+    },
+    "SpeedRound.startHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts 60 seconds of questions on what you have mastered."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza 60 segundos de preguntas sobre lo que ya dominas."
+          }
+        }
+      }
+    },
+    "SpeedRound.timeLeft %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time left: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiempo restante: %@"
+          }
+        }
+      }
+    },
+    "SpeedRound.answerWas" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incorrect. The answer was"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incorrecto. La respuesta era"
+          }
+        }
+      }
+    },
+    "SpeedRound.announceWarning" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten seconds left."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quedan diez segundos."
+          }
+        }
+      }
+    },
+    "SpeedRound.announceTimeUp %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time is up. Right answers: %lld."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se acabó el tiempo. Respuestas correctas: %lld."
+          }
+        }
+      }
+    },
+    "SpeedRound.resultsHeading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Right Answers in 60 Seconds"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Respuestas correctas en 60 segundos"
+          }
+        }
+      }
+    },
+    "SpeedRound.newBest" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New personal best!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Nuevo récord personal!"
+          }
+        }
+      }
+    },
+    "SpeedRound.best %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your best: %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu récord: %lld"
+          }
+        }
+      }
+    },
+    "SpeedRound.again" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Another Round"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otra ronda"
+          }
+        }
+      }
+    },
+    "SpeedRound.againHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts another 60 seconds on what you have mastered."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empieza otros 60 segundos sobre lo que ya dominas."
           }
         }
       }

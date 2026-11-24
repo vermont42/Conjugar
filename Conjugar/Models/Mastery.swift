@@ -16,7 +16,7 @@ enum MasteryState: CaseIterable {
 
   /// The third box, whose interval is seven days. Below it an item is learning, a lookup
   /// included.
-  static let masteredBox = 2
+  nonisolated static let masteredBox = 2
 
   init(_ entry: PracticeRecord.Entry?) {
     guard let entry else {

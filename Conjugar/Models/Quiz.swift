@@ -65,6 +65,13 @@ class Quiz {
   /// reason and the clock stopped, until `continueAfterCorrection()`: a choice of two can be a
   /// lucky guess, and the reason is the lesson.
   private(set) var chosenOption: Int?
+  /// A Speed Round's last question when it was missed, whose right answer shows under the next,
+  /// since the round does not stop for a correction.
+  private(set) var speedRoundMiss: Question?
+  /// The best a finished Speed Round had to beat. Nil when there was none.
+  private(set) var speedRoundPreviousBest: Int?
+  /// Whether the finished Speed Round set a new personal best.
+  private(set) var isNewSpeedRoundBest = false
   private(set) var questions: [Question] = []
   /// What the quiz under way, or last finished, asks about. See `QuizScope`.
   private(set) var scope = QuizScope.allVerbs
@@ -111,6 +118,21 @@ class Quiz {
 
   var score: Int {
     results.indices.reduce(0) { $0 + points(at: $1) }
+  }
+
+  /// The seconds a Speed Round has left.
+  var speedRoundSecondsLeft: Int {
+    max(SpeedRound.duration - elapsedTime, 0)
+  }
+
+  /// The mastered items a Speed Round can ask now, which the Quiz tab counts before it opens.
+  func speedRoundItems() -> [PracticeItem] {
+    #if DEBUG
+    if Quiz.fixtureRun == .speedRound {
+      return Quiz.speedRoundFixtureItems.filter { QuizDraw.canAsk($0, asks: settingsAllow) }
+    }
+    #endif
+    return SpeedRound.masteredItems(in: practice.record, asks: settingsAllow)
   }
 
   /// The most `score` could be once every question asked so far is answered.
@@ -281,6 +303,8 @@ class Quiz {
       case .choices:
         questions = choicesFixture()
         beginQuiz()
+      case .speedRound:
+        break
       }
       return true
     }
@@ -309,6 +333,9 @@ class Quiz {
     correctAnswers.removeAll()
     results.removeAll()
     firstAttempts.removeAll()
+    speedRoundMiss = nil
+    speedRoundPreviousBest = nil
+    isNewSpeedRoundBest = false
   }
 
   /// Where each answer is recorded and the due items come from.
@@ -348,6 +375,20 @@ class Quiz {
   /// Essentials asks five verbs' key conjugations, of the band or of a model and the known models.
   /// `reserving` leaves room in the default quiz's round for questions placed after the draw.
   private func draw(_ scope: QuizScope, after prior: [Question] = [], reserving: Int = 0) -> [Question] {
+    if scope.isSpeedRound {
+      let pool = lastLevel.pool
+      return QuizDraw.speedRoundQuestions(
+        for: speedRoundItems(),
+        levelAsks: { cell in
+          pool.first { $0.tense == cell.tense }.map { personNumbers(for: $0).contains(cell.personNumber) } ?? false
+        },
+        allows: sessionAllows,
+        band: lastLevel.band,
+        count: scope.questionCount,
+        after: prior.last.flatMap(PracticeItem.exercised(by:)),
+        using: &generator
+      )
+    }
     if scope.isSentences {
       return sentenceQuestions(count: scope.questionCount, after: prior)
     }
@@ -694,6 +735,9 @@ class Quiz {
   /// its correction and stops the clock.
   @discardableResult
   func process(proposedAnswer: String) -> ConjugationResult? {
+    if scope.isSpeedRound {
+      return processSpeedRoundAnswer(proposedAnswer)
+    }
     let question = questions[currentQuestionIndex]
     let correctAnswer: String
     let result: ConjugationResult
@@ -753,6 +797,22 @@ class Quiz {
         willBeReasked: willBeReasked
       )
     }
+    return result
+  }
+
+  /// A Speed Round's answer, which never holds the round: no second attempt, a slip counting as a
+  /// miss; no correction or re-ask; and nothing recorded in the practice record. A miss's right
+  /// answer shows under the next question.
+  private func processSpeedRoundAnswer(_ proposedAnswer: String) -> ConjugationResult {
+    let question = questions[currentQuestionIndex]
+    let result = question.grade(proposedAnswer)
+    lastCurrentSpelling = result == .totalMatch ? question.currentSpelling(of: proposedAnswer) : nil
+    speedRoundMiss = result == .totalMatch ? nil : question
+    proposedAnswers.append(proposedAnswer)
+    correctAnswers.append(question.writtenAnswer ?? "")
+    results.append(result)
+    firstAttempts.append(nil)
+    advance()
     return result
   }
 
@@ -852,15 +912,33 @@ class Quiz {
   }
 
   private func advance() {
+    // A Speed Round draws its next batch as it reaches the last question of this one.
+    if scope.isSpeedRound, currentQuestionIndex + 1 >= questions.count - 1 {
+      questions += draw(scope, after: questions)
+    }
     if currentQuestionIndex < questions.count - 1 {
       currentQuestionIndex += 1
       if hasLiveActivity {
         Current.liveActivities.update(liveActivityState(isFinished: false))
       }
       recordProgress()
+    } else if scope.isSpeedRound {
+      finishSpeedRound()
     } else {
       finish()
     }
+  }
+
+  /// Time is up, or, should no mastered item remain askable, the questions are. The question on
+  /// screen, unanswered, and the rest of the batch are dropped, so that the results list what was
+  /// answered, and the right answers are measured against the best.
+  private func finishSpeedRound() {
+    questions = Array(questions.prefix(results.count))
+    currentQuestionIndex = max(questions.count - 1, 0)
+    speedRoundMiss = nil
+    speedRoundPreviousBest = practice.speedRoundBest
+    isNewSpeedRoundBest = practice.recordSpeedRound(correctCount: correctCount)
+    finish()
   }
 
   private func finish() {
@@ -891,6 +969,7 @@ class Quiz {
     firstAttempt = nil
     firstAttemptDiagnosis = nil
     firstAttemptRecognition = nil
+    speedRoundMiss = nil
     quizState = .finished
     clearProgress()
     endLiveActivity()
@@ -928,13 +1007,13 @@ class Quiz {
       totalQuestions: questions.count,
       score: score,
       correctCount: correctCount,
-      elapsedTime: settings.quizClock == .show ? Quiz.formatElapsed(elapsedTime) : nil,
+      elapsedTime: settings.quizClock == .show ? Quiz.formatMinutesSeconds(elapsedTime) : nil,
       isFinished: isFinished
     )
   }
 
-  /// Seconds → "m:ss".
-  private static func formatElapsed(_ seconds: Int) -> String {
+  /// Seconds → "m:ss", minutes kept below one, so that a countdown reads 1:00, then 0:59.
+  static func formatMinutesSeconds(_ seconds: Int) -> String {
     String(format: "%d:%02d", seconds / 60, seconds % 60)
   }
 
@@ -942,13 +1021,21 @@ class Quiz {
     timer?.invalidate()
     timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
       MainActor.assumeIsolated {
-        self?.eachSecond()
+        self?.clockTicked()
       }
     }
   }
 
-  private func eachSecond() {
+  /// One second of the clock, which ends a Speed Round when its minute is up. Called by the
+  /// timer, and by tests, which do not wait a minute.
+  func clockTicked() {
+    guard quizState == .inProgress else {
+      return
+    }
     elapsedTime += 1
+    if scope.isSpeedRound, speedRoundSecondsLeft == 0 {
+      finishSpeedRound()
+    }
   }
 
   /// The next person a tense asks, in a rotation of its own over the persons it may ask
@@ -1011,6 +1098,10 @@ extension Quiz {
     /// reason whatever the level, the right sentence first and second by turns. Of the two items on
     /// today's events, the learner's region's is asked.
     case choices
+    /// Seven items the Speed Round treats as mastered whatever the record, so that the Quiz tab's
+    /// row opens and a round can be tried without days of practice. The round's questions are
+    /// drawn as usual.
+    case speedRound
 
     /// Whether the fixture replaces the questions of a quiz over this scope. The essentials,
     /// recognition, and sentences fixtures stand in for their own exercises, and the others for
@@ -1025,8 +1116,10 @@ extension Quiz {
         return scope.isSentences
       case .choices:
         return scope.mixesChoiceQuestions
+      case .speedRound:
+        return false
       default:
-        return !scope.isVerbEssentials && !scope.isRecognition && !scope.isSentences
+        return !scope.isVerbEssentials && !scope.isRecognition && !scope.isSentences && !scope.isSpeedRound
       }
     }
   }
@@ -1034,6 +1127,18 @@ extension Quiz {
   static var fixtureRun: Fixture? {
     UserDefaults.standard.string(forKey: "CONJUGAR_QUIZ_FIXTURE").flatMap(Fixture.init(rawValue:))
   }
+
+  /// The speed round fixture's mastered items: three irregular verbs' key conjugations and four
+  /// patterns, all asked at Beginner.
+  static let speedRoundFixtureItems: [PracticeItem] = [
+    .keyConjugation(infinitive: "tener", key: .yoPresente),        // tengo, tienes, tiene, tienen
+    .keyConjugation(infinitive: "ser", key: .yoPresente),          // soy, eres, es, somos, son
+    .keyConjugation(infinitive: "decir", key: .yoPresente),        // digo, dices, dice, dicen
+    PracticeItem.pattern(of: ConjugationCell(tense: .presenteDeIndicativo, personNumber: .firstSingular), ending: .ar),
+    PracticeItem.pattern(of: ConjugationCell(tense: .presenteDeIndicativo, personNumber: .thirdPlural), ending: .er),
+    PracticeItem.pattern(of: ConjugationCell(tense: .presenteDeIndicativo, personNumber: .firstPlural), ending: .ir),
+    PracticeItem.pattern(of: ConjugationCell(tense: .presenteDeIndicativo, personNumber: .secondSingularTú), ending: .ar)
+  ].compactMap { $0 }
 
   static let gradingFixture: [Question] = [
     QuizQuestion("hablar", .presenteDeIndicativo, .firstSingular),      // yo hablo

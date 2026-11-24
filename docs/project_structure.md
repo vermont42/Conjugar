@@ -115,7 +115,7 @@ Conjugar/
 │   │                           #   QuizScope.collection(_:title:)
 │   │
 │   │  ── quiz, settings vocabulary, services ──
-│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the level's weighted draw through an injectable random source (randomSource:), the scoped draw, per-tense person rotation, the held correction (correction, continueAfterCorrection()), a slip's or a diagnosed error's second attempt (firstAttempt, firstAttemptDiagnosis, secondAttemptPrompt), re-asks, Ten More (continueSession()), the session's computed score and counts (firstRoundScore, questionReached), the record of a quiz in progress, a default round's one choice (drawRound, submitChoice, chosenOption), DEBUG fixtures (screenshot, grading, frames, corrections, slips, diagnoses, essentials, recognition, sentences, choices)
+│   ├── Quiz.swift              # @Observable quiz state: questions, closure-based timer, scoring, Live Activity hooks; start(scope:), the level's weighted draw through an injectable random source (randomSource:), the scoped draw, per-tense person rotation, the held correction (correction, continueAfterCorrection()), a slip's or a diagnosed error's second attempt (firstAttempt, firstAttemptDiagnosis, secondAttemptPrompt), re-asks, Ten More (continueSession()), the session's computed score and counts (firstRoundScore, questionReached), the record of a quiz in progress, a default round's one choice (drawRound, submitChoice, chosenOption), the Speed Round's answers, batches, and clock (processSpeedRoundAnswer, clockTicked(), speedRoundMiss, speedRoundItems()), DEBUG fixtures (screenshot, grading, frames, corrections, slips, diagnoses, essentials, recognition, sentences, choices, speedRound)
 │   ├── QuizQuestion.swift      # One question (verb, tense, person, isReask; reasked()): its written answer, every accepted spelling (shownSpellings, acceptedAnswers), grade(_:), its frame, and answer(filling:)
 │   ├── QuizCorrection.swift    # A wrong answer held on its question: its AnswerDifference, its AnswerDiagnosis, and whether the question will be asked again
 │   ├── QuizClock.swift         # Setting enum: whether the quiz shows the time (hide, the default, or show)
@@ -132,7 +132,9 @@ Conjugar/
 │   ├── PracticeItemMapping.swift  # Which practice item a question exercises (an irregular cell's key conjugation, a regular cell's pattern), the key
 │   │                           #   conjugations a lookup schedules, the irregular cells a review asks, the record's tense keys
 │   ├── PracticeStore.swift     # Current.practice: the practice record's answers, lookups, due and missed items, the review card's offer, reveal,
-│   │                           #   and snooze, the last quiz's results, Reset Practice, and the migration of LearnerVerbs' old review schedules
+│   │                           #   and snooze, the last quiz's results, the Speed Round's best, Reset Practice, and the migration of LearnerVerbs' old review schedules
+│   ├── SpeedRound.swift        # The Speed Round: its constants, the mastered items it may ask, QuizScope.speedRound, and QuizDraw.speedRoundQuestions
+│   │                           #   (each item in turn, never twice running) with speedRoundCells (the irregular cells a mastered key conjugation asks)
 │   ├── VerbEssentials.swift    # Verb Essentials: QuizScope.verbEssentials, five irregular verbs of the band (one prefixed compound at most) asked their
 │   │                           #   key conjugations as one step each; Quiz.essentialsRows, currentStepRange, and reaskPlacement (a missed blank after the next verb)
 │   ├── ModelPractice.swift     # Verb Models: ModelPracticeGroup (a model's ten most frequent verbs with an irregular key conjugation, its items, known at half
@@ -264,7 +266,7 @@ Conjugar/
     ├── ModelView.swift         # Model detail: header pills, the pronoun-by-tense grid, the model's collection bar, its practice card, and the verbs using the model, by frequency or alphabetically
     ├── OnboardingView.swift    # The paged first-launch welcome tour (welcome, four content sheets, tutor, game preview)
     ├── QuizSheet.swift         # A quiz in a sheet with a Quiz of its own over a QuizScope: Test Me, a collection's Quiz, and a practice set's Start
-    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, Mastery, and Last Quiz, the Exercises rows for Verb Essentials, Verb Models, Name the Form, and Complete the Sentence, a small View Leaderboard button) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, Name the Form's prompt, chips, and Check, a sentence's English and Draft pill, a choice in the field's place with its region pill, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
+    ├── QuizView.swift          # The Quiz tab's start screen, the practice hub (scope symbol, All Verbs / My Verbs / Custom picker, the questions, minutes, and level-menu tiles or the custom summary, chips, Start, the From Your Practice rows for Review, My Mistakes, Mastery, and Last Quiz, the Exercises rows for Verb Essentials, Verb Models, Name the Form, Complete the Sentence, and Speed Round, a small View Leaderboard button) and gameplay: prompt, framed answer field, a Verb Essentials verb's rows around the field, Name the Form's prompt, chips, and Check, a sentence's English and Draft pill, a choice in the field's place with its region pill, held correction, a re-ask's pill, score, the time while the quiz clock shows it, Ten More; pushes a correction's links; a sheet mode for QuizSheet
     ├── CustomQuizView.swift    # The Custom segment's editor of tenses and verbs, its Models list, and the summary card on the start screen and a practice set's sheet
     ├── PracticeSetView.swift   # A shared practice set's sheet (Start, Keep as My Custom Quiz, "Practice Set Not Found") and its full-screen QR code
     ├── QuizCorrectionView.swift # A wrong answer's held correction: the two answers with their differing letters marked (a Name the Form answer's wrong parts, and
@@ -273,7 +275,7 @@ Conjugar/
     │                           #   the English, the reason, and Continue
     ├── RecognitionChoicesView.swift # Name the Form's prompt (RecognitionPromptView) and its chips: the level's tenses under their moods, then the tense's persons
     ├── ReviewCardView.swift    # The review card above the verb list: an irregular verb looked up days ago, its key conjugations hidden until tapped
-    ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills (no level for a model's practice), Ten More (Five More Verbs, Another Round), and each answer, with Example Use on each verb's first right row
+    ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills (no level for a model's practice), Ten More (Five More Verbs, Another Round), a Speed Round's right answers, best, and Another Round, and each answer, with Example Use on each verb's first right row
     ├── RelatedVerbsView.swift  # The verb page's Related Verbs card, the full related list, VerbPagePush, and verbPageDestinations()
     ├── RichTextView.swift      # Renders parsed [RichTextBlock] as native SwiftUI Text
     ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center (Enable, or View Leaderboards once signed in), onboarding reshow, Play
@@ -409,6 +411,8 @@ ConjugarTests/
 │   │                                   #   braces, asked from their own level, a region only for today's events, each reason naming its tenses)
 │   │                                   #   and its breaking; regions, levels, drafts; the prompt; the draw; and rounds (one choice never first,
 │   │                                   #   none at Beginner or elsewhere, a held right or wrong choice, nothing recorded, out of 100, Ten More)
+│   ├── SpeedRoundTests.swift           # The Speed Round: the mastered items, the draw (in turn, never twice running, a pattern's regular verbs, a key
+│   │                                   #   conjugation's cells by level), the scope, the best, and rounds (a miss moving on, nothing recorded, batches, sixty ticks)
 │   ├── AnswerDiagnosisTests.swift      # Each diagnosis for real verbs, the answers that get none, the lines in English, and a diagnosed error's second attempt in a quiz
 │   ├── AnswerDifferenceTests.swift     # The letters a correction marks (accents, red letters, missing, extra, swapped) and the right answer it shows
 │   ├── AnswerFrameTests.swift          # Each kind of question's frame, and the answer a filled blank gives (supplied no, reflexive pronoun, typed pronoun)

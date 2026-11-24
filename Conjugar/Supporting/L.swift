@@ -985,6 +985,70 @@ nonisolated enum L {
     }
   }
 
+  enum SpeedRound {
+    static var title: String {
+      String(localized: "SpeedRound.title")
+    }
+
+    /// The hub row's line under the title once the round opens.
+    static var description: String {
+      String(localized: "SpeedRound.description")
+    }
+
+    static func descriptionWithBest(_ best: Int) -> String {
+      String(localized: "SpeedRound.descriptionWithBest \(best)")
+    }
+
+    /// The hub row's line until enough items are mastered.
+    static func locked(needed: Int, mastered: Int) -> String {
+      String(localized: "SpeedRound.locked \(needed) \(mastered)")
+    }
+
+    static var startHint: String {
+      String(localized: "SpeedRound.startHint")
+    }
+
+    /// What VoiceOver reads for the countdown under the question.
+    static func timeLeft(_ time: String) -> String {
+      String(localized: "SpeedRound.timeLeft \(time)")
+    }
+
+    /// What VoiceOver reads before a missed question's right answer, which follows in Spanish.
+    static var answerWas: String {
+      String(localized: "SpeedRound.answerWas")
+    }
+
+    static var announceWarning: String {
+      String(localized: "SpeedRound.announceWarning")
+    }
+
+    static func announceTimeUp(_ correctCount: Int) -> String {
+      String(localized: "SpeedRound.announceTimeUp \(correctCount)")
+    }
+
+    /// The results' heading over the count of right answers.
+    static var resultsHeading: String {
+      String(localized: "SpeedRound.resultsHeading")
+    }
+
+    static var newBest: String {
+      String(localized: "SpeedRound.newBest")
+    }
+
+    /// The best a round did not beat.
+    static func best(_ best: Int) -> String {
+      String(localized: "SpeedRound.best \(best)")
+    }
+
+    static var again: String {
+      String(localized: "SpeedRound.again")
+    }
+
+    static var againHint: String {
+      String(localized: "SpeedRound.againHint")
+    }
+  }
+
   enum Choice {
     /// The choice's heading above its two sentences.
     static var prompt: String {

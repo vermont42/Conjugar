@@ -164,6 +164,8 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case sharedLink
   /// An App Intent run from the Shortcuts app or Siri, as `OpenRandomVerbIntent` can be.
   case shortcut
+  /// The Quiz tab's Speed Round, sixty seconds on what the practice record says is mastered.
+  case speedRound
   case spotlight
   /// A search begun in the Verbs tab, or a quiz over every verb begun with the Quiz tab's Start.
   case tab

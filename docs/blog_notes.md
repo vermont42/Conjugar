@@ -11931,3 +11931,40 @@ Spanish and dark mode at Intermedio in Spain, the vosotros columns appeared and 
 The iPad also showed that the marks beside each verb's forms were smaller than the forms, which
 grow to title size on a wide screen. Both now take the same font. Josh has yet to judge the page on
 his phone.
+
+## The Speed Round (2026-11-24)
+
+Phase 20 of the pedagogy plan added the Speed Round, Ronda rápida in Spanish: sixty seconds of
+questions on what the practice record says is mastered, counting right answers. It is the one
+place in Conjugar where the clock counts. Paul Nation calls this the fluency strand, speed for
+material already accurate, which is why the round draws only items in the third box of the review
+ladder and records nothing, right or wrong. A speed error is often haste, and a record that kept
+only a timed round's hits would be one-sided.
+
+Konjugieren built the same round nine days earlier, and Josh's decisions there carried over
+unchanged: five mastered items open it, they repeat as a minute needs, a miss neither stops the
+round nor moves the item, and one personal best is kept on the device. The interesting work was in
+translating "a mastered key conjugation asks any cell of its stem". Konjugieren always included the
+key's own cell. In Conjugar that cell can be regular. Pedir's yo pretérito is pedí, a regular form,
+and a regular cell's answer belongs to a pattern, not to pedir. So a mastered key here asks the
+irregular cells built on it: the first one the settings allow, plus any others the level asks. A
+Beginner who has mastered tuve is asked tuve; from Elementary, tuvieron and the rest of the
+pretérito join it; mastered pedir asks pidió.
+
+One bug was waiting in an old rule. The leaderboard ranks a quiz whose scope has no chosen verbs and
+asks ten questions, and the Speed Round draws its questions ten at a time. Without an explicit
+exclusion, a speed round would have posted to Game Center. The scope now says outright that it
+neither ranks nor continues, and that it does not shuffle, since a shuffle would undo the draw's
+promise never to ask the same item twice running.
+
+I placed the missed answer's line under the next question rather than above it, where Konjugieren
+puts it. Conjugar already shows a right answer's check in that slot, so the card and the field never
+jump. The line reads "ser · yo sea", red letters and all, or "decir · (ustedes) no digan" for a
+command. The countdown reads 1:00, then 0:59, because I reused the Live Activity's m:ss formatter;
+Konjugieren had first shown "59", since its formatter drops minutes below one.
+
+Fifteen new tests pass, and the full suite ran 1,275 tests. The visual check went to the iPad
+alone. While I worked, another project's build drove the Mac's load average to 80, AXe's gestures
+and screenshots hung, and the iPhone simulator stuck in Shutting Down. On the iPad, in Spanish and
+then dark mode, a round ran to its results with "¡Nuevo récord personal!", Otra ronda took typing at
+once, and with the fixture removed the row explained how many items it still wanted.

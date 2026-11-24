@@ -42,6 +42,9 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// Complete the Sentence, which asks authored sentences with their verb blanked
   /// (`GapSentence.swift`).
   let isSentences: Bool
+  /// The Speed Round, sixty seconds on what the practice record says is mastered
+  /// (`SpeedRound.swift`).
+  let isSpeedRound: Bool
 
   init(
     verbs: [String]?,
@@ -56,7 +59,8 @@ nonisolated struct QuizScope: Equatable, Sendable {
     isVerbEssentials: Bool = false,
     modelPractice: ModelPracticeSession? = nil,
     isRecognition: Bool = false,
-    isSentences: Bool = false
+    isSentences: Bool = false,
+    isSpeedRound: Bool = false
   ) {
     self.verbs = verbs
     self.questionCount = questionCount
@@ -71,6 +75,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
     self.modelPractice = modelPractice
     self.isRecognition = isRecognition
     self.isSentences = isSentences
+    self.isSpeedRound = isSpeedRound
   }
 
   /// A round's length. The Quiz tab's quiz, a My Verbs quiz, and a collection's ask one round,
@@ -81,27 +86,30 @@ nonisolated struct QuizScope: Equatable, Sendable {
   static let verbPageQuestionCount = 3
 
   /// Only the default quiz over every verb ranks: a score over a learner's own verbs or tenses,
-  /// over what the practice record holds, over another kind of question, or over three questions,
-  /// compares with nothing. Of a
-  /// ranked session, only the first round's score counts (`Quiz.firstRoundScore`).
+  /// over what the practice record holds, over another kind of question, against the clock, or over
+  /// three questions, compares with nothing. Of a ranked session, only the first round's score
+  /// counts (`Quiz.firstRoundScore`).
   var isRanked: Bool {
-    verbs == nil && custom == nil && recordSession == nil && !isVerbEssentials && !isRecognition && !isSentences && questionCount == QuizScope.roundLength
+    verbs == nil && custom == nil && recordSession == nil && !isVerbEssentials && !isRecognition && !isSentences && !isSpeedRound
+      && questionCount == QuizScope.roundLength
   }
 
   /// Whether `completeQuiz`, `quitQuiz`, and `abandonQuiz` say how many questions were asked or
   /// reached. A record session's round is as long as the learner's due or missed items when they
   /// number fewer than ten, so its length would count wrong answers, and no signal says how well
   /// a learner did. A mixed model practice's round can be short when the known models hold few
-  /// verbs, and which models are known comes from the learner's answers.
+  /// verbs, and which models are known comes from the learner's answers. A Speed Round's length is
+  /// how many questions were answered in a minute, which measures the answers themselves.
   var sendsQuestionCounts: Bool {
-    recordSession == nil && modelPractice?.mode != .mixed
+    recordSession == nil && modelPractice?.mode != .mixed && !isSpeedRound
   }
 
   /// Whether a round's questions are shuffled. A record session asks its items in the record's
   /// order, the most overdue or most recently missed first, with a verb's key conjugations
-  /// together. Verb Essentials asks a verb's key conjugations together, in the verb page's order.
+  /// together. Verb Essentials asks a verb's key conjugations together, in the verb page's order. A
+  /// Speed Round's draw orders its own questions, so that no item is asked twice running.
   var shufflesQuestions: Bool {
-    recordSession == nil && !isVerbEssentials
+    recordSession == nil && !isVerbEssentials && !isSpeedRound
   }
 
   /// Whether each round mixes in items the practice record says are due: only the default quiz,
@@ -118,18 +126,19 @@ nonisolated struct QuizScope: Equatable, Sendable {
 
   /// Whether the results offer Ten More, or for Verb Essentials five more verbs, which continue the
   /// session with another round. Test Me's three questions are a check on one verb, not a session
-  /// to grow.
+  /// to grow. A Speed Round's results offer a new round instead.
   var continues: Bool {
-    questionCount >= QuizScope.roundLength
+    questionCount >= QuizScope.roundLength && !isSpeedRound
   }
 
   /// Whether the quiz starts the Live Activity, which is one for the whole app and belongs to the
   /// Quiz tab's quiz. A three-question quiz in a verb page's sheet is over before one would be
   /// noticed, and a collection's quiz runs in the same sheet, beside a quiz the tab may hold, so
   /// neither starts one, though a collection's is a full round. A custom quiz over a collection
-  /// runs on the tab, and starts one. A practice set's runs in a sheet, and does not.
+  /// runs on the tab, and starts one. A practice set's runs in a sheet, and does not. A Speed
+  /// Round's minute has no number of questions for the activity to count toward.
   var startsLiveActivity: Bool {
-    questionCount >= QuizScope.roundLength && !isPracticeSet && (collectionKey == nil || custom != nil)
+    questionCount >= QuizScope.roundLength && !isPracticeSet && !isSpeedRound && (collectionKey == nil || custom != nil)
   }
 
   /// The tenses the quiz asks at a level: the learner's choice, or the level's.

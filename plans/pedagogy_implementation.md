@@ -45,8 +45,8 @@ by the next session, which reads the hash from `git log` once Josh's commit exis
 | 16 | Done | 2026-11-23 | 18175a3 | T5.4 |
 | 17 | Partly done (the app and the first batch, approved); verbs 26–300 remain | 2026-11-23 | d1a3c66 | T5.5 |
 | 18 | Done (the app and 45 items, approved) | 2026-11-23 | 3271b9b | T5.6 |
-| 19 | Awaiting Josh | 2026-11-24 | | T6.2 |
-| 20 | Not started | | | T5.7 |
+| 19 | Done | 2026-11-24 | f99637e | T6.2 |
+| 20 | Awaiting Josh | 2026-11-24 | | T5.7 |
 | 21 | Not started | | | T6.3 |
 | 22 | Not started | | | T6.6 (personal bests and achievements) |
 | 23 | Not started | | | T6.8 |
@@ -2796,7 +2796,7 @@ items follow the setting, and tests pin the item data's integrity.
 ## Phase 19: Mastery
 
 **Ports:** Konjugieren Phase 20. **Suggestions:** T6.2. **Depends on:** Phases 4, 10, and 12.
-**Status:** Awaiting Josh.
+**Status:** Done.
 
 Show mastery, modestly: the report warns that progress displays are unproven for persistence. The
 two kinds of item complicate a verb-by-tense grid, since a regular pattern is shared by every verb in
@@ -2895,7 +2895,7 @@ screen.
 ## Phase 20: Speed Round
 
 **Ports:** Konjugieren Phase 21. **Suggestions:** T5.7. **Depends on:** Phases 10 and 19.
-**Status:** Not started.
+**Status:** Awaiting Josh.
 
 A speed round over items already mastered, the one place where the clock counts: Paul Nation's
 fluency strand, speed for material already accurate.
@@ -2914,7 +2914,75 @@ had to focus the field, as Phase 12 here should already do.
 **Done when** the round draws only mastered items, times as decided, and tests pin the drawing and
 scoring.
 
-**How it differed:** _Not started._
+**How it differed:**
+
+- **Nothing was asked.** The phase has no Ask Josh, and Josh accepted the plan's recommendations, so
+  Konjugieren's decisions stand as proposed: 60 seconds counting right answers, one personal best on
+  the device, mastered as the third box, a miss that neither moves the item nor stops the round, an
+  opening at five mastered items that then repeat, and nothing recorded.
+- **The name is Speed Round / Ronda rápida**, chosen in the session, with a bolt, at the foot of
+  Exercises. Josh can change it.
+- **A key conjugation's cells, in Conjugar's terms.** Konjugieren always included the key's own cell.
+  Here the own cell can be regular (pedí), and a regular cell's answer moves a pattern, not the key.
+  So a mastered key asks the first irregular cell built on it that the settings allow, its own cell
+  where that is irregular, plus every other irregular cell built on it that the level asks
+  (`QuizDraw.speedRoundCells`). Mastered tuve asks only tuve at Beginner, which asks no pretérito,
+  and any irregular pretérito cell from Elementary; pedir's yo pretérito asks pidió. A pattern asks a
+  wholly regular verb of its ending from the level's band, as the default quiz's due items do. An item
+  the learner's tú or vos and region cannot ask (a vosotros pattern in Latin America) is left out and
+  not counted.
+- **The miss line sits under the next question**, in the slot where a right answer's check shows,
+  rather than above it as in Konjugieren, so that the card and field never move. It shows the verb,
+  the person (a command's addressee in parentheses), and the right answer with its red letters: "ser ·
+  yo sea", "decir · (ustedes) no digan".
+- **The progress bar is the minute**, since the questions are drawn as the round goes, and turns red
+  with the countdown at ten seconds. The strip shows right answers and m:ss whatever the clock
+  setting. `Quiz.formatMinutesSeconds` (the old private `formatElapsed`, which the Live Activity
+  also uses) keeps the minutes, so the countdown reads 1:00 then 0:59, avoiding Konjugieren's "59".
+- **The end of the round reaches the view through `onChange(of: quiz.speedRoundSecondsLeft)`**,
+  since the timer, not an answer, finishes it: at ten seconds the view announces the warning, and at
+  zero with the quiz finished it runs the same `finish()` as a last answer (applause, `completeQuiz`,
+  the pushed results).
+- **Excluded explicitly from ranking.** `QuizScope.isRanked` tested `questionCount == 10`, which the
+  round's batch of ten would have met, so it now says `!isSpeedRound`; so do `continues`,
+  `shufflesQuestions` (a shuffle would break "never twice running"), `sendsQuestionCounts`, and
+  `startsLiveActivity`. The DEBUG fixtures that stand in for any quiz no longer stand in for it.
+- **A new fixture, `CONJUGAR_QUIZ_FIXTURE speedRound`**, treats seven Beginner items as mastered
+  whatever the record, so the row opens without days of practice; the questions are drawn as usual.
+- **The hub's focus needed no fix.** Konjugieren had to give the field the keyboard when a session
+  started from the hub; Conjugar's `startQuiz` already did. Another Round pops the results and
+  focuses the field after the pop, as Ten More does.
+- **`MasteryState.masteredBox` became `nonisolated`**, since the nonisolated draw reads it.
+- **Analytics.** A new `source` value, `speedRound`, without counts or score; the best is never
+  sent. Staged in `docs/privacy_policy_pending.md` in both languages: the lifecycle bullet, the score
+  bullet, the paragraph after the list (which now names the best), and section 7. Reset Practice's
+  description and alert say it forgets the best.
+- **VoiceOver.** A miss is announced as "Incorrect. The answer was" followed by the person and form
+  marked as Spanish, and the miss line reads the same; "Ten seconds left."; and "Time is up. Right
+  answers: n." with "New personal best!" or "Your best: n." The strip's count and time are labeled.
+  Read from the code only; nobody has listened to it.
+- **Tests:** `SpeedRoundTests`, 15 functions: the third box, unaskable items left out, every question
+  a mastered item in turn and never twice running across batches, one item repeated and none giving
+  nothing, a pattern's regular verbs of the band, a key conjugation's cells at three levels and
+  pedir's, the scope's flags, the countdown's format, the best across a launch and a reset, nothing
+  mastered starting nothing, a miss and a slip moving on at once, nothing recorded, 25 answers past
+  two batches, sixty ticks ending the round with the unanswered question dropped and the best kept
+  then not beaten, nothing posted to Game Center, and a quit setting no best. **The full run passed
+  1,275 tests in 81 suites**, up from 1,260 in 80, in the simulator's default language (English).
+  SwiftLint 0.65.1, installed during the session, reports nothing on the changed Swift files.
+- **Verified on the iPad only**, in Spanish at Avanzado in Latin America, light then dark, with the
+  fixture: the open row, a round whose field had the keyboard at once (ser · presente de subjuntivo,
+  yo), a miss ("ser · yo sea" under idolatrar's question), a right answer counting, time running out
+  to results of 1 with "¡Nuevo récord personal!" and "Correctas: 1 / 2" (the unanswered aprehender
+  dropped), Otra ronda typing at once in dark mode, a command's miss line, the hub's "Récord: 1" and
+  Last Quiz row without points, and, with the fixture removed, the locked row ("Se abre cuando domines
+  5 patrones o formas irregulares. Dominados hasta ahora: 0"). The best and the last result were
+  removed from its App Group defaults afterward, its appearance returned to light, and it was shut
+  down. **The iPhone was not checked**: the Mac's load reached 80 while another project built, AXe
+  and screenshots hung, and the "Conjugar iPhone 17" simulator stuck in Shutting Down until Josh,
+  his Conjuguer session done, had CoreSimulator restarted; its `CONJUGAR_QUIZ_FIXTURE speedRound`
+  default was then removed from its preferences file. Not tried: English on a device, VoiceOver
+  by ear, the warning's red at ten seconds, and a record mastered by real days.
 
 ## Phase 21: A Daily Session and a Streak
 

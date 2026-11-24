@@ -10,12 +10,14 @@ import Observation
 
 /// The app's view of `PracticeRecord` (`Current.practice`): it maps questions and lookups to
 /// items, saves each change to the App Group's defaults, and answers in verbs for the review card.
-/// It also keeps the last quiz's results, which the Quiz tab shows. Observable, so Settings' Reset
-/// Practice shows once there is something to reset.
+/// It also keeps the last quiz's results, which the Quiz tab shows, and the Speed Round's best.
+/// Observable, so Settings' Reset Practice shows once there is something to reset.
 @Observable
 final class PracticeStore {
   private(set) var record: PracticeRecord
   private(set) var lastResult: LastQuizResult?
+  /// The most right answers in one Speed Round, kept on the device and sent nowhere.
+  private(set) var speedRoundBest: Int?
   @ObservationIgnored private let getterSetter: GetterSetter
   @ObservationIgnored private let calendar: Calendar
 
@@ -43,10 +45,13 @@ final class PracticeStore {
       save()
     }
     lastResult = getterSetter.get(key: LastQuizResult.storageKey).flatMap(LastQuizResult.init(json:))
+    speedRoundBest = getterSetter.get(key: Self.speedRoundBestKey).flatMap { Int($0) }
   }
 
+  static let speedRoundBestKey = "speedRoundBest"
+
   var isEmpty: Bool {
-    record.isEmpty && lastResult == nil
+    record.isEmpty && lastResult == nil && speedRoundBest == nil
   }
 
   /// A round's results, as they appear: after Ten More, the session's so far.
@@ -55,6 +60,18 @@ final class PracticeStore {
     if let json = result.json {
       getterSetter.set(key: LastQuizResult.storageKey, value: json)
     }
+  }
+
+  /// A finished Speed Round's right answers, kept when they beat the best. Returns whether they
+  /// did. A round with none right sets no best.
+  @discardableResult
+  func recordSpeedRound(correctCount: Int) -> Bool {
+    guard correctCount > (speedRoundBest ?? 0) else {
+      return false
+    }
+    speedRoundBest = correctCount
+    getterSetter.set(key: Self.speedRoundBestKey, value: "\(correctCount)")
+    return true
   }
 
   /// A quiz's final answer to a question: a slip's right second attempt counts as right, since
@@ -127,15 +144,17 @@ final class PracticeStore {
     save()
   }
 
-  /// Settings' Reset Practice, which forgets the last quiz's results too. The record is saved
-  /// empty rather than removed, so that the next launch does not migrate the old schedules again.
-  /// `GetterSetter` cannot remove a key, so the last result is saved as an empty string, which
-  /// reads as none.
+  /// Settings' Reset Practice, which forgets the last quiz's results and the Speed Round's best
+  /// too. The record is saved empty rather than removed, so that the next launch does not migrate
+  /// the old schedules again. `GetterSetter` cannot remove a key, so the last result and the best
+  /// are saved as empty strings, which read as none.
   func reset() {
     record.reset()
     save()
     lastResult = nil
     getterSetter.set(key: LastQuizResult.storageKey, value: "")
+    speedRoundBest = nil
+    getterSetter.set(key: Self.speedRoundBestKey, value: "")
   }
 
   private func save() {

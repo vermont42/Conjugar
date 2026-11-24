@@ -12,6 +12,8 @@ struct ResultsView: View {
   let quiz: Quiz
   /// Continues the session with another round, offered while `Quiz.canContinue`.
   var onTenMore: (() -> Void)?
+  /// Starts a fresh Speed Round, which the results of one offer in place of Ten More.
+  var onAnotherRound: (() -> Void)?
   /// The rows whose example sentence is open.
   @State private var openExamples: Set<Int> = []
 
@@ -21,6 +23,9 @@ struct ResultsView: View {
   }
 
   private var scoreColor: Color {
+    if quiz.scope.isSpeedRound {
+      return quiz.isNewSpeedRoundBest ? .customGreen : .customYellow
+    }
     switch accuracy {
     case 0.8...: return .customGreen
     case 0.5..<0.8: return .customYellow
@@ -33,7 +38,14 @@ struct ResultsView: View {
       VStack(spacing: Layout.doubleDefaultSpacing) {
         summaryCard
 
-        if let onTenMore, quiz.canContinue {
+        if let onAnotherRound, quiz.scope.isSpeedRound {
+          Button(action: onAnotherRound) {
+            Label(L.SpeedRound.again, systemImage: "bolt.fill")
+          }
+          .buttonStyle(PrimaryButtonStyle())
+          .accessibilityHint(L.SpeedRound.againHint)
+          .accessibilityIdentifier("results_speed_round_again")
+        } else if let onTenMore, quiz.canContinue {
           Button(continueLabel, action: onTenMore)
             .buttonStyle(PrimaryButtonStyle())
             .accessibilityHint(continueHint)
@@ -76,12 +88,24 @@ struct ResultsView: View {
 
   private var summaryCard: some View {
     VStack(spacing: Layout.defaultSpacing) {
-      Text(verbatim: "\(quiz.score)")
+      if quiz.scope.isSpeedRound {
+        Text(L.SpeedRound.resultsHeading)
+          .font(.headline)
+          .foregroundStyle(Color.customForeground)
+          .multilineTextAlignment(.center)
+          .accessibilityHidden(true)
+      }
+
+      Text(verbatim: "\(quiz.scope.isSpeedRound ? quiz.correctCount : quiz.score)")
         .font(.heroNumeral)
         .foregroundStyle(scoreColor)
         .contentTransition(.numericText())
-        .accessibilityLabel(L.Quiz.score + " \(quiz.score)")
+        .accessibilityLabel(quiz.scope.isSpeedRound ? L.SpeedRound.resultsHeading + ": \(quiz.correctCount)" : L.Quiz.score + " \(quiz.score)")
         .accessibilityIdentifier("results_score")  // screenshot-driver anchor
+
+      if quiz.scope.isSpeedRound {
+        speedRoundBest
+      }
 
       countLine
 
@@ -92,13 +116,30 @@ struct ResultsView: View {
           Text(quiz.lastLevel.localizedName).metadataPill(tint: .customYellow)
         }
         Text(quiz.lastRegion.localizedRegion).metadataPill(tint: .customBlue)
-        if Current.settings.quizClock == .show {
+        // A Speed Round always lasts its minute.
+        if Current.settings.quizClock == .show, !quiz.scope.isSpeedRound {
           Text(quiz.elapsedTime.timeString).metadataPill(tint: .customForeground)
         }
       }
     }
     .frame(maxWidth: .infinity)
     .card()
+  }
+
+  /// "New personal best!", or the best this round did not beat.
+  @ViewBuilder
+  private var speedRoundBest: some View {
+    if quiz.isNewSpeedRoundBest {
+      Label(L.SpeedRound.newBest, systemImage: "star.fill")
+        .font(.headline)
+        .foregroundStyle(Color.customYellow)
+        .accessibilityIdentifier("results_speed_round_new_best")
+    } else if let best = quiz.speedRoundPreviousBest {
+      Text(L.SpeedRound.best(best))
+        .font(.subheadline)
+        .foregroundStyle(.secondary)
+        .accessibilityIdentifier("results_speed_round_best")
+    }
   }
 
   /// "Correct: 8 / 10 · Second Try: 1 · Asked Again: 1 / 2", the second part only when an answer

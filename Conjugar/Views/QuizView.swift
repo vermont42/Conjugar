@@ -53,7 +53,7 @@ struct QuizView: View {
           if sheetScope == nil {
             startScreen
           } else if quiz.quizState == .finished {
-            ResultsView(quiz: quiz, onTenMore: continueSession)
+            ResultsView(quiz: quiz, onTenMore: continueSession, onAnotherRound: anotherSpeedRound)
           } else {
             // Something must be on screen for `onAppear` to start the sheet's quiz.
             Color.clear
@@ -66,7 +66,9 @@ struct QuizView: View {
       .background(Color.customBackground.ignoresSafeArea())
       .navigationTitle(sheetTitle ?? sessionTitle ?? L.Quiz.localizedTitle)
       .navigationBarTitleDisplayMode(sheetScope == nil ? .automatic : .inline)
-      .navigationDestination(isPresented: $showingResults) { ResultsView(quiz: quiz, onTenMore: continueSession) }
+      .navigationDestination(isPresented: $showingResults) {
+        ResultsView(quiz: quiz, onTenMore: continueSession, onAnotherRound: anotherSpeedRound)
+      }
       .navigationDestination(for: VerbDestination.self) { destination in
         VerbView(verb: destination.infinitive, source: destination.source, marks: destination.marks)
       }
@@ -146,6 +148,19 @@ struct QuizView: View {
         continueAfterCorrection()
       }
     }
+    // A Speed Round's clock warns, then ends the round, whatever the learner is typing.
+    .onChange(of: quiz.speedRoundSecondsLeft) { _, secondsLeft in
+      guard quiz.scope.isSpeedRound else {
+        return
+      }
+      if secondsLeft == SpeedRound.warningSecondsLeft, quiz.quizState == .inProgress {
+        AccessibilityNotification.Announcement(L.SpeedRound.announceWarning).post()
+      } else if secondsLeft == 0, quiz.quizState == .finished {
+        answer = ""
+        answerSelection = nil
+        finish()
+      }
+    }
     // Back from a page opened from the correction, the keyboard returns, so Return continues.
     .onChange(of: navigationPath.isEmpty) { _, isEmpty in
       if isEmpty, quiz.isHeld {
@@ -173,6 +188,9 @@ struct QuizView: View {
     }
     if quiz.scope.isSentences {
       return L.Sentences.title
+    }
+    if quiz.scope.isSpeedRound {
+      return L.SpeedRound.title
     }
     return quiz.scope.recordSession?.title
   }
@@ -581,6 +599,20 @@ struct QuizView: View {
         isLarge: isLarge,
         start: hasSentences ? { startQuiz(scope: .sentences()) } : nil
       )
+
+      let masteredCount = quiz.speedRoundItems().count
+      let opensSpeedRound = masteredCount >= SpeedRound.minimumMasteredCount
+      QuizPracticeRow(
+        title: L.SpeedRound.title,
+        detail: opensSpeedRound
+          ? Current.practice.speedRoundBest.map { L.SpeedRound.descriptionWithBest($0) } ?? L.SpeedRound.description
+          : L.SpeedRound.locked(needed: SpeedRound.minimumMasteredCount, mastered: masteredCount),
+        systemImage: "bolt.fill",
+        hint: L.SpeedRound.startHint,
+        identifier: "quiz_speed_round",
+        isLarge: isLarge,
+        start: opensSpeedRound ? { startQuiz(scope: .speedRound()) } : nil
+      )
     }
     .frame(maxWidth: .infinity, alignment: .leading)
   }
@@ -649,9 +681,16 @@ struct QuizView: View {
     ScrollViewReader { proxy in
       ScrollView {
         VStack(spacing: Layout.doubleDefaultSpacing) {
-          // Over the session so far, so that Ten More and a re-ask lengthen the bar's road.
-          ProgressView(value: Double(quiz.currentQuestionIndex), total: Double(max(quiz.questions.count, 1)))
-            .tint(.customYellow)
+          if quiz.scope.isSpeedRound {
+            // A Speed Round's questions are drawn as it goes, so its bar is the minute.
+            ProgressView(value: Double(min(quiz.elapsedTime, SpeedRound.duration)), total: Double(SpeedRound.duration))
+              .tint(isSpeedRoundWarning ? .customRed : .customYellow)
+              .accessibilityHidden(true)
+          } else {
+            // Over the session so far, so that Ten More and a re-ask lengthen the bar's road.
+            ProgressView(value: Double(quiz.currentQuestionIndex), total: Double(max(quiz.questions.count, 1)))
+              .tint(.customYellow)
+          }
 
           questionCard
 
@@ -696,6 +735,9 @@ struct QuizView: View {
               onContinue: continueAfterCorrection
             )
             .transition(.opacity)
+          } else if let miss = quiz.speedRoundMiss {
+            SpeedRoundMissLine(question: miss)
+              .frame(minHeight: 44)
           } else if essentialsRows == nil, !quiz.isHeld {
             // A Verb Essentials row shows how its answer went, and a held choice its sentences.
             rightAnswerReveal
@@ -1033,7 +1075,47 @@ struct QuizView: View {
     quiz.quizState == .inProgress && (quiz.isHeld || quiz.isAwaitingSecondAttempt)
   }
 
+  @ViewBuilder
   private var statusStrip: some View {
+    if quiz.scope.isSpeedRound {
+      speedRoundStrip
+    } else {
+      scoreStrip
+    }
+  }
+
+  private var isSpeedRoundWarning: Bool {
+    quiz.speedRoundSecondsLeft <= SpeedRound.warningSecondsLeft
+  }
+
+  /// The right answers so far and the time left, which shows whatever the clock setting, since
+  /// this is the one place the clock counts. The last seconds turn red.
+  private var speedRoundStrip: some View {
+    let timeLeft = Quiz.formatMinutesSeconds(quiz.speedRoundSecondsLeft)
+    return HStack {
+      Label {
+        Text(verbatim: "\(quiz.correctCount)")
+      } icon: {
+        Image(systemName: "checkmark.circle.fill")
+      }
+      .foregroundStyle(Color.customGreen)
+      .accessibilityElement(children: .ignore)
+      .accessibilityLabel("\(L.Results.correct): \(quiz.correctCount)")
+      .accessibilityIdentifier("speed_round_correct")
+      Spacer()
+      Label(timeLeft, systemImage: "timer")
+        .foregroundStyle(isSpeedRoundWarning ? Color.customRed : Color.customForeground)
+        .contentTransition(.numericText(countsDown: true))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(L.SpeedRound.timeLeft(timeLeft))
+        .accessibilityIdentifier("speed_round_time_left")
+    }
+    .font(.headline)
+    .numeric()
+    .labelStyle(.titleAndIcon)
+  }
+
+  private var scoreStrip: some View {
     HStack {
       Label {
         Text(verbatim: "\(quiz.score)")
@@ -1143,6 +1225,24 @@ struct QuizView: View {
       refocusAnswer(after: .milliseconds(50))
       return
     }
+    if quiz.scope.isSpeedRound, result == .noMatch {
+      // The round does not stop: the field empties for the next question, under which the
+      // missed one's answer shows.
+      withAnimation(reduceMotion ? nil : .snappy) {
+        showsRightAnswer = false
+      }
+      answer = ""
+      answerSelection = nil
+      if let miss = quiz.speedRoundMiss {
+        AccessibilityNotification.Announcement(SpeedRoundMissLine.spokenLine(for: miss)).post()
+      }
+      if quiz.quizState == .finished {
+        finish()
+      } else {
+        fieldFocused = true
+      }
+      return
+    }
     guard result != .noMatch else {
       // The field keeps the answer while its correction holds the question.
       withAnimation(reduceMotion ? nil : .snappy) {
@@ -1194,6 +1294,15 @@ struct QuizView: View {
 
   private func finish() {
     Current.soundPlayer.play(Sound.randomApplause, shouldDebounce: false)
+    if quiz.scope.isSpeedRound {
+      var announcement = L.SpeedRound.announceTimeUp(quiz.correctCount)
+      if quiz.isNewSpeedRoundBest {
+        announcement += " " + L.SpeedRound.newBest
+      } else if let best = quiz.speedRoundPreviousBest {
+        announcement += " " + L.SpeedRound.best(best) + "."
+      }
+      AccessibilityNotification.Announcement(announcement).post()
+    }
     var parameters = [
       ParameterKey.duration.rawValue: quiz.durationBand,
       ParameterKey.level.rawValue: quiz.lastLevel.rawValue,
@@ -1258,6 +1367,20 @@ struct QuizView: View {
     }
   }
 
+  /// Another Round, from a Speed Round's results: a fresh minute, typed into at once.
+  private func anotherSpeedRound() {
+    showingResults = false
+    startQuiz(scope: .speedRound())
+    // The tab pops its results, and a field focused before the pop ends never takes the keyboard.
+    fieldFocused = false
+    Task { @MainActor in
+      try? await Task.sleep(for: .milliseconds(450))
+      if quiz.quizState == .inProgress {
+        fieldFocused = true
+      }
+    }
+  }
+
   private func maybePromptGameCenter() {
     switch GameCenterPrompt.decision(
       isAuthenticated: Current.gameCenter.isAuthenticated,
@@ -1278,6 +1401,57 @@ struct QuizView: View {
     // Fire-and-forget: GameKit's authenticateHandler presents its own login sheet
     // against the live window and publishes `isAuthenticated` when it settles.
     Current.gameCenter.authenticate()
+  }
+}
+
+/// A Speed Round's missed question, under the next, since the round does not stop for a
+/// correction: "tener · tú tienes".
+private struct SpeedRoundMissLine: View {
+  let question: QuizQuestion
+
+  var body: some View {
+    HStack(alignment: .firstTextBaseline, spacing: 6) {
+      Image(systemName: "xmark.circle.fill")
+        .foregroundStyle(Color.customRed)
+      Text(verbatim: ReflexivePronoun.citationForm(of: question.verb) + " ·")
+        .fontDesign(.serif)
+        .foregroundStyle(.secondary)
+      if let person = Self.person(of: question) {
+        Text(verbatim: person)
+          .foregroundStyle(.secondary)
+      }
+      ConjugationText(form: question.writtenAnswer ?? "")
+    }
+    .font(.callout)
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .accessibilityElement(children: .ignore)
+    .accessibilityLabel(Text(Self.spokenLine(for: question)))
+    .accessibilityIdentifier("speed_round_miss")
+    .transition(.opacity)
+  }
+
+  /// Whom the answer is for: the subject pronoun, or a command's addressee in parentheses.
+  private static func person(of question: QuizQuestion) -> String? {
+    for segment in question.frame.leading {
+      switch segment {
+      case .pronoun(let pronoun):
+        return pronoun
+      case .addressee(let addressee):
+        return "(\(addressee))"
+      default:
+        continue
+      }
+    }
+    return nil
+  }
+
+  /// "Incorrect. The answer was", then the person and the answer read in Spanish.
+  static func spokenLine(for question: QuizQuestion) -> AttributedString {
+    var spanish = AttributedString(
+      [person(of: question), question.writtenAnswer?.lowercased()].compactMap { $0 }.joined(separator: " ")
+    )
+    spanish.languageIdentifier = "es"
+    return AttributedString(L.SpeedRound.answerWas + " ") + spanish
   }
 }
 
@@ -1397,7 +1571,10 @@ private struct LastQuizResultRow: View {
     if result.secondAttemptCount > 0 {
       parts.append("\(L.Results.secondTry): \(result.secondAttemptCount)")
     }
-    parts.append("\(L.Quiz.score): \(result.score)")
+    // A Speed Round counts right answers and scores no points.
+    if result.kind != .speedRound {
+      parts.append("\(L.Quiz.score): \(result.score)")
+    }
     return parts.joined(separator: " · ")
   }
 

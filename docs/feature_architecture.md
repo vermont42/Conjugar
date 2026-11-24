@@ -132,6 +132,7 @@ a model's key names the model.
 | `sentences` | Yes | The quiz signals: Complete the Sentence, from the Quiz tab's Exercises section |
 | `sharedLink` | Yes | `viewCollection`: a collection's shared link, which carries `source=sharedLink`. `viewPracticeSet` and the quiz signals: a practice set's shared link |
 | `shortcut` | Yes | Open Random Verb run from the Shortcuts app or Siri (`OpenRandomVerbIntent`, offered as the Random Verb shortcut) |
+| `speedRound` | Yes | The quiz signals: the Speed Round, from the Quiz tab's Exercises section, without counts |
 | `spotlight` | Yes | A tap on a verb's Spotlight entry |
 | `tab` | Yes | `finishSearch`: a search begun in the Verbs tab itself, Command-F included. The quiz signals: a quiz over every verb begun with the Quiz tab's Start. `viewCollection`: a collection or a model opened from the Models tab's list. `tapViewLeaderboard`: a leaderboard opened from the Quiz tab |
 | `verbEssentials` | Yes | The quiz signals: Verb Essentials, from the Quiz tab's Exercises section |
@@ -1433,6 +1434,62 @@ Spanish), then that person's three marks, each naming its ending and state ("-ar
 The ending labels themselves are hidden. A verb's infinitive and each form are Spanish elements,
 its gloss and each mark English; the section headers are headers read with their counts; the hub
 row has a hint.
+
+### Speed Round
+
+**What it is** (`Models/SpeedRound.swift`, `QuizScope.speedRound()`). Sixty seconds of questions on
+what the practice record says is mastered, counting right answers: speed for material already
+accurate, and the one place where the quiz's clock counts. A row at the foot of the Quiz tab's
+Exercises, with a bolt, starts it. Its name is Speed Round / Ronda rápida.
+
+**What it asks.** The mastered items (`SpeedRound.masteredItems(in:asks:)`): every item of the record
+in the third box or above (`MasteryState.masteredBox`, the Mastery page's rule) that the learner's
+tú or vos and region let a quiz ask, so a mastered vosotros pattern waits for Spain. The level does
+not hold an item back, since a mastered item stays mastered when the level changes. The round opens
+at five (`SpeedRound.minimumMasteredCount`); below that the row is not a button and says how many
+are mastered. Nothing is mastered sooner than a few days after an item's first right answer.
+
+The draw (`QuizDraw.speedRoundQuestions`) asks each item once before any again, and never the same
+item twice running, across batches too, so five items repeat as a minute needs. Ten questions are
+drawn at a time, and the next ten as the round reaches the last (`Quiz.advance()`). A key
+conjugation asks any irregular cell built on it that the level asks, plus the first irregular cell
+built on it that the settings allow, its own where that is irregular
+(`QuizDraw.speedRoundCells`): mastered tuve asks tuve at Beginner, which asks no pretérito, and any
+irregular pretérito cell of tener from Elementary; pedir's pedí is regular, so its yo pretérito asks
+pidió. Each such cell's answer is one `PracticeItem.exercised(by:)` credits to the same key. A
+pattern asks its cell of a verb of its ending regular there, from the level's band, a fresh one each
+time it comes back.
+
+**How it runs.** No second attempt (a slip is a miss), no correction, no re-ask, and nothing
+recorded in the practice record, right or wrong: a speed error is often haste, and a record that
+counted only a timed round's hits would be one-sided. A miss advances at once, and its verb, person,
+and right answer show under the next question, in the slot where a right answer's check shows
+(`Quiz.speedRoundMiss`). The progress bar is the minute; the strip under the card shows the right
+answers and the time left, as m:ss, whatever the clock setting, red at ten seconds. The clock is
+`Quiz.clockTicked()`, the timer's tick made a method so that tests run a minute without waiting one;
+at zero the question on screen, unanswered, and the rest of the batch are dropped, and the round
+finishes. `QuizScope.isSpeedRound` turns off ranking, the due items and the choice question, the
+shuffle (the draw orders its own questions), Ten More, and the Live Activity.
+
+**Results and the best.** The results show "Right Answers in 60 Seconds", the count, and "New
+personal best!" or "Your best: n", then Another Round, which starts a fresh minute with the field
+focused, in place of Ten More. `PracticeStore.speedRoundBest` keeps one best, not one per level, on
+the device beside the last result; a round with none right sets none, quitting sets none, and Reset
+Practice forgets it, as its description and alert say. The last result's kind is `speedRound`, with
+its level, and the hub's Last Quiz row shows it without points.
+
+**Analytics.** `startQuiz`, `quitQuiz`, `completeQuiz`, and `abandonQuiz` carry `source`
+`speedRound`, with no counts (`QuizScope.sendsQuestionCounts`), since a round's length is how many
+questions were answered in a minute, and no score. The best is never sent.
+
+**VoiceOver.** A miss is announced with its right answer, read in Spanish after the English
+("Incorrect. The answer was tú tienes."), and the miss line reads the same; "Ten seconds left." at
+ten seconds; and at the end, "Time is up. Right answers: 12. New personal best!" The strip's count
+and time are labeled, and the row and Another Round have hints.
+
+**Fixture.** The DEBUG fixture `CONJUGAR_QUIZ_FIXTURE speedRound` treats seven items
+(`Quiz.speedRoundFixtureItems`) as mastered whatever the record, so the row opens and a round can be
+tried without days of practice; the questions are drawn as usual, and nothing else changes.
 
 ## The Verb of the Day and Random Verbs
 
