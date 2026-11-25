@@ -1,0 +1,7 @@
+I had Claude ideate ways to improve Konjugieren's Browse tab and verb view. That ideation is in ../Konjugieren/docs/browse_and_verb_ideas.md . Claude then ported Konjugieren's implementation plan to Conjugar as plans/browse_and_verb_implementation.md and implemented it, for the Verbs and Models tabs. A lot of code got added. Please review that code for correctness, smells, gaps, duplication, and elegance. Output your findings to docs/verb_browse_review.md . If running the app to try the new functionality is helpful, please do so using ios-build-verify . If you choose to launch subagents, please use Opus subagents.
+
+prompts/code_review.md said that the code duplication between ModelBrowseView and VerbBrowseView is intentional. That no longer holds. Flag that duplication like any other, and eliminating it is fine.
+
+Konjugieren's code got the same review, in ../Konjugieren/docs/verb_browse_review.md . Do your own review first, so that it is not anchored on that one. Then check each of its findings against Conjugar's code, and say which carried over in the port, which did not, and which do not apply here. Do not review or change Konjugieren as part of this task.
+
+After I review the findings, use AskUserQuestion to resolve the open questions, and then create an implementation plan at plans/verb_browse_fixes.md . Konjugieren's plan, for comparison, is ../Konjugieren/plans/verb_browse_fixes.md .

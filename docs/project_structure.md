@@ -515,6 +515,10 @@ docs/                           # Claude's output that holds information and is 
 │                               #   sprite-development captures cited by blog_notes.md and plans/game_boss_llamada.md.
 │                               #   scripts/take_screenshots.sh writes fresh timestamped PNGs to the top level
 ├── video_script.md             # App Store preview script, adapted from Conjuguer's
+├── verb_browse_review.md       # 2026-11-25 review of the code the browse plan built (Verbs and Models tabs): correctness,
+│                               #   performance, privacy, doc gaps, duplication (the VerbBrowseView/ModelBrowseView map), smells,
+│                               #   tests; Konjugieren's findings checked against Conjugar; twelve open questions for Josh.
+│                               #   Reports only; Josh's answers and the fixes are in plans/verb_browse_fixes.md
 ├── verb_frequency_sources.md   # 2026-08-28 research behind the frequency/ pipeline: RAE CORPES XXI (CC BY-SA 4.0) as the
 │                               #   primary key, Google Books as tie-breaker, measured coverage, paid options and why they lose.
 │                               #   Shipped 2026-08-30; kept as the record of what was measured, not as a live plan
@@ -554,6 +558,8 @@ prompts/                        # What Josh writes to get Claude to do something
 ├── two_plans.md                # Port Konjugieren's browse and pedagogy plans to Conjugar
 │                               #   (→ plans/browse_and_verb_implementation.md, plans/pedagogy_implementation.md)
 ├── ui.md                       # Migrate to SwiftUI by way of the siblings' UI audits (→ plans/ui.md)
+├── verb_browse_review.md       # Review the code the browse plan built, then ask Josh the open questions and plan the
+│                               #   fixes (→ docs/verb_browse_review.md, plans/verb_browse_fixes.md)
 ├── widget_update.md            # Add etymologies and example uses to the large widget
 └── widgets.md                  # Port Conjuguer's widgets
 
@@ -610,6 +616,10 @@ plans/                          # What Claude writes to get another session to d
 ├── browse_and_verb_implementation.md      # Verbs and Models tabs: search ranking, reverse lookup, the conjugation map,
 │                                          #   section order, related verbs, share, Spotlight, My Verbs, review card, collections.
 │                                          #   Ported from Konjugieren's browse plan; 17 phases, run before the pedagogy plan
+├── verb_browse_fixes.md                   # Fixes for what docs/verb_browse_review.md found in the browse plan's code: 13 phases
+│                                          #   and a closing, with Josh's twelve decisions of 2026-11-25 (lookup, privacy, the
+│                                          #   learner's record, the widget's week, the verb page, links, shared list pieces,
+│                                          #   a search model, AdaptiveRows). Not started
 ├── pedagogy_implementation.md             # The quiz rebuilt for practice: grading, levels, ten-question rounds, a practice
 │                                          #   record, diagnosis, new exercises, hub, streak, achievements. Ported from
 │                                          #   Konjugieren's pedagogy plan; 24 phases

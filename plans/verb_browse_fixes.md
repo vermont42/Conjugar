@@ -1,0 +1,634 @@
+# Plan: Fix What the Browse and Verb Review Found
+
+**For:** a series of fresh Claude Code sessions, one phase per session as a rule. **Kind of work:**
+app code, the widget extension, tests, and prose. **Written:** 2026-11-25, from
+[`docs/verb_browse_review.md`](../docs/verb_browse_review.md) and Josh's answers to twelve
+questions the same day. Konjugieren's plan for the same job, for comparison, is
+[`../Konjugieren/plans/verb_browse_fixes.md`](../../Konjugieren/plans/verb_browse_fixes.md).
+
+The review is the specification. Each phase below names findings by the review's own labels (C1,
+P1, D2, and so on). Read the finding there before touching code: it gives the file, the line, the
+evidence, and a suggested fix. This plan adds only the order, the grouping, Josh's decisions, and
+what counts as done. Line numbers in the review are those of `7811ec9` and will drift as phases
+land, so find code by name.
+
+## Status
+
+Each session that finishes a phase fills in its row, changes nothing in other rows, and writes a
+**How it differed** note under that phase's heading. A finished phase is "Awaiting Josh" until
+Josh has tried it and committed it. Sessions never commit (see step 9 below), so the Commit cell
+is filled by the next session, which reads the hash from `git log`.
+
+| Phase | Status | Date | Commit | Findings |
+|---:|---|---|---|---|
+| 1 | Not started | | | C1, C4, C5, C6, and from C13 the homonym's sense and the guess's cell order |
+| 2 | Not started | | | P1, and the wire names from T1 |
+| 3 | Not started | | | C9, C12, G1, and from C13 Recent's count |
+| 4 | Not started | | | C3, and a week of verbs for the widget |
+| 5 | Not started | | | C2, C7, C8, G2, G3, G4, and from C13 the "All N" chip |
+| 6 | Not started | | | From C13 the stashed link, the ignored link, the link beneath the game, and case; F2 (Spotlight); the intents and links of D3 |
+| 7 | Not started | | | D1 (the cheap pieces), D2, G6, G8, S5 |
+| 8 | Not started | | | D3 (the model layer), F2 (repeated work), S8 |
+| 9 | Not started | | | S1 (the search model), C10, C11, F1, S2, S3, S4, S7, and the rest of C13 |
+| 10 | Not started | | | S1 (the rest), G9 |
+| 11 | Not started | | | D1 (`AdaptiveRows` and one row label) |
+| 12 | Not started | | | S6 |
+| 13 | Not started | | | T1, T2, T3, less what earlier phases added |
+| Closing | Not started | | | The audit, G5's release step, the timed workarounds' list |
+
+## How to Work This Plan
+
+**Choosing a phase.** Take the lowest-numbered phase that is not done and whose dependencies are.
+Phase 8 depends on Phase 1, because both edit the search's model files. Phase 10 depends on
+Phase 9. Phase 11 depends on Phases 7 and 10. Every other phase stands alone and may be taken in
+any order. If a phase proves too large for one session, split it, say so in its row, and leave
+the remainder "Partly done". Phases 7 and 9 are the likeliest to need it.
+
+**What this plan leaves to you.** The phases say what to fix and what Josh decided. The review
+suggests a fix for each finding, and a better one is welcome. Record in **How it differed**
+anything that departs from the phase as written: a scope change, a decision Josh made during the
+session, or a piece deferred.
+
+**A finding labeled Suspected or Reviewer in the review is not yet a fact.** Confirm it in the
+code, or by running something, before fixing it. If it turns out not to be real, say so in **How
+it differed** and under the finding in the review, and move on.
+
+**Ask Josh when a decision here does not settle a question.** Phases 3, 5, and 7 each name one.
+Do not guess at them. Ask before building the part that depends on the answer, and record the
+answer and its date in **How it differed**.
+
+**Every phase finishes the same way.**
+
+1. Each fix gets a test that fails without it, in Swift Testing, following
+   [`.claude/rules/testing.md`](../.claude/rules/testing.md). The review's Tests section names
+   the missing ones; a test belongs to the phase that fixes its finding, and Phase 13 takes what
+   is left.
+2. Build and run the suite with the `ios-build-verify` skill, as `CLAUDE.md` describes. Read the
+   run's `Test run with N tests` line, not only its exit status; a `--only-testing` selector that
+   names a suite by its display string runs zero tests and still says "Test Succeeded". The
+   baseline at `7811ec9` is 1,344 Swift Testing tests in 85 suites, plus 11 XCTest tests, in about
+   78 seconds. Read the per-suite times too: the slowest then were "ConjugationMap" (19 s), "The
+   bundled map" (13 s), and `ReverseLookupTests` (8 s).
+3. Run `swiftlint` from the repo root. The tree stays at zero violations.
+4. For any visible change, launch the app and look at it on both of Conjugar's simulators, "Conjugar
+   iPhone 17" (`6318CA93-7FB5-4E19-B318-915010531F76`) and "Conjugar iPad Pro 11"
+   (`3033197E-B596-4C49-AAD8-43373B9D254C`), as `CLAUDE.md` § Running the App in the Simulator
+   describes. Never use another project's simulators. Name the UDID in every `simctl` command.
+   Boot the iPad only for its check and shut it down afterward. Josh tries changes on an iPhone,
+   so the session's check is the only one the iPad gets. Say in **How it differed** what was tried
+   on each. **To seed the App Group's defaults, write the container's own plist with `plutil`
+   while the app is terminated.** `simctl spawn defaults write group.biz.joshadams.Conjugar` lands
+   in the simulator's ordinary preferences, which the app never reads; the review's session lost
+   time to that (`docs/blog_notes.md`, 2026-11-25).
+5. Localize any new string in English and Spanish, following `CLAUDE.md` and
+   [`.claude/rules/localization.md`](../.claude/rules/localization.md). Never use the Edit tool to
+   add or change an ASCII `"` inside an `.xcstrings` value. Strings used by `Shared/` or widget
+   code belong in the widget's catalog too.
+6. When a signal, parameter, or value is added or removed, stage its policy lines in
+   [`docs/privacy_policy_pending.md`](../docs/privacy_policy_pending.md), in English and Spanish,
+   and keep the vocabulary table in
+   [`docs/feature_architecture.md`](../docs/feature_architecture.md#analytics) true.
+7. Update [`docs/project_structure.md`](../docs/project_structure.md) for new, renamed, or
+   repurposed files. Under each finding fixed, in `docs/verb_browse_review.md`, add a line saying
+   it was fixed on `master`, with the date and this plan's phase. Correct any other doc the fix
+   makes untrue.
+8. Fill in the Status row, write **How it differed**, and append a journal entry to
+   `docs/blog_notes.md` (`## <Title> (YYYY-MM-DD)`, narrative, no em dashes between clauses).
+9. **Stop before git.** `CLAUDE.md` says sessions do not commit, push, or create branches. Leave
+   the changes in the working tree on `master` and tell Josh what changed and how to try it: which
+   screens, what to type or tap, on which device. Each phase's **Tell Josh to try** is the start
+   of that message. He commits with his own `/commit-and-push` skill.
+
+**No release before 2027.** Everything accumulates on `master`. A step that must wait for the
+release goes in [`docs/release.md`](../docs/release.md).
+
+**Conjugar only.** Do not port a fix to Konjugieren or Conjuguer, and do not edit their files.
+The Closing lists what might carry over.
+
+## Decisions Already Made
+
+Josh's answers on 2026-11-25, numbered as the review's Open Questions are.
+
+1. **P1.** When the source is `quizCorrection`, `viewCollection` carries no `collection`
+   parameter. The staged privacy text stays as written.
+2. **C1.** Clitic agreement is strict: *te* on a tú or vos command, *os* on vosotros, *nos* on
+   nosotros, *se* on usted and ustedes; any of them on a gerund or an infinitive; a clitic
+   followed by lo, la, los, or las stays free. Rare object uses such as tú + *os* are rejected.
+3. **C2.** The red-letter tip appears only where the verb itself has red letters. A marked
+   auxiliary in a compound tense does not count.
+4. **C4.** Exact spelling wins in Look Up a Verb: "sonar" opens sonar's page and "soñar" opens
+   soñar's. A folded infinitive answers only when nothing literal does.
+5. **C8.** "Built on" is a claim about etymology. transpirar, contemplar, and impedir lose their
+   bases. Pairs that are true by etymology and opaque to a learner (acercar, contestar, preparar,
+   revelar) stay.
+6. **C9.** Collection progress is separate from My Verbs. A verb counts once it has ever been
+   opened. Clear and the swipe forget only what puts a verb in My Verbs. Clear asks first.
+7. **A link that arrives during the game closes the game.** Sheets that views own (Test Me, an
+   article) are left alone, consistent with Josh's decision of 2026-11-24 about a practice set
+   behind a sheet.
+8. **G6.** The Models tab's search field stops autocorrecting and autocapitalizing. The iPad
+   drawer is shown to Josh as a screenshot before it is kept.
+9. **The widget.** The app writes a week of verbs of the day, so that the widget changes at
+   midnight without the app being opened.
+10. **A stashed link** is drained at once when the app is in front, and one older than a minute
+    is dropped unopened.
+11. **G5.** The practice record's migration is deleted at release time, by a step in
+    `docs/release.md`, not now.
+12. **Duplication: everything.** The cheap shared pieces, a search model for `VerbBrowseView` with
+    `MyVerbsList` and `FailedSearchHelp` as views of their own, a generic `AdaptiveRows` for the
+    grid-or-list block, and one row label with a style for the verb, model, and collection rows.
+
+Defaults this plan chose without asking, because the review left one reasonable course. Josh may
+overrule any of them:
+
+- **C6.** A verb link may name the cell to mark, in a new query item, when the text alone is
+  ambiguous.
+- **C12.** A record that fails to decode is copied to a backup key before anything overwrites it.
+- **S7.** The sort picker is disabled while the search field has text.
+- **From C13.** The sad trombone plays when the text changes to a failed query, and not on a sort
+  change. A link's scheme and route are compared without regard to case; a verb's name is not. A
+  `+` in a link's `q` stays a plus sign.
+- **F2.** Spotlight is indexed at background priority, and skipped when the app's version and the
+  verb count match the last run's.
+- **Costs of Settled Decisions.** A lookup from the widget still counts as a lookup, a verb
+  deleted from My Verbs can still be offered by the review card, and a third-person-only verb
+  still shares as one form. This plan changes none of them.
+- **Subagents.** No phase requires them. A session that delegates implementation follows the
+  browse plan's rule, Sonnet subagents, and reads and checks their work itself.
+
+## Phase 1: The Lookup Tells the Truth
+
+**Findings:** C1, C4, C5, C6; from C13, the homonym's second sense and the guess's cell order;
+from T1, `VerbLookupTests`' assertion that cannot fail. **Depends on:** nothing.
+
+- **C1.** In `FormLookup`'s enclitic branch, a parse is kept only if its first clitic agrees with
+  the cell, by the rule in Decision 2. Put the rule in one function beside
+  `ReflexivePronoun`'s own pronoun table, so that the two cannot disagree about which pronoun a
+  person takes.
+- **C4.** In `VerbLookup`, the literal tier is the exact infinitive, the exact gloss sense, and
+  the literal conjugation. The folded infinitive answers with the folded conjugation, and only
+  when the literal tier is empty. Make the comment and the code say the same thing.
+- **C5.** `FormLookup.confirmed` tries `.bare` after `.exact` and `.folded`, and `spelling`
+  follows.
+- **C6.** `VerbLookup` and the Verbs tab's rows already know the cells they matched. A verb link
+  carries them when `match` alone would mark more: add a query item that names cells by
+  `ConjugationCell.code`, have `AppRouter` prefer it to `match`, and add the route to the grammar
+  in `docs/feature_architecture.md` § Deeplinks and to `CLAUDE.md`'s examples. A link without the
+  item behaves as before.
+- **The homonym.** Look Up a Verb names the gloss that matched. If answering with that sense's
+  key conjugations needs more than `Match` carrying the sense's index, record what it would take
+  and leave the conjugations as they are.
+- **The guess** names its cells in the page's order, through `FoundForms` or the same ordering.
+
+**Done when** tests pin, by the lines a row shows and not only by its verb:
+
+- hablase and pasase give one line, the Imperfecto de Subjuntivo 2, and no command;
+- levantaos gives "Imperativo Positivo (vosotros)" alone;
+- levántate, dámelo, dime, siéntese, vámonos, and arrepintiéndose still find their verbs and
+  cells;
+- "he ensenado" names the Perfecto de Indicativo of enseñar;
+- Look Up a Verb gives sonar, soñar, ordenar, and ordeñar each a page as its destination, and
+  "sonar" names one verb;
+- a lookup of levántate opens a link that marks the imperativo's tú alone, and the page lands on
+  that card.
+
+`ReverseLookupTests`, `VerbLookupTests`, and `VerbSearchTests` pass, with any expectation that
+changes explained. Replace `VerbLookupTests`' `named.count == maxNamedVerbs ||
+named.contains("comer")` with an assertion that can fail.
+
+**Tell Josh to try:** in the Verbs tab, hablase, levantaos, levántate (open it, and see where the
+page lands), and "he ensenado"; in the Shortcuts app, Look Up a Verb for soñar and for sonar.
+
+**How it differed:**
+
+## Phase 2: A Correction's Link Names No Verb
+
+**Findings:** P1; from T1, the wire names. **Depends on:** nothing.
+
+- `VerbCollection.signalView(source:)` omits `collection` when the source is `quizCorrection`. A
+  test with `AnalyticsSpy` pins both cases.
+- `docs/feature_architecture.md` § Analytics says so beside `viewCollection`. Read the staged
+  Collections lines in `docs/privacy_policy_pending.md` and confirm that "never a verb" is now
+  true of everything the app sends; Josh decided that the wording stays.
+- Pin `SearchMatchKind`'s wire names by a literal list, `guess` and `none` included, as
+  `sourceValuesAreStable` pins the sources. The reviewer also found no literal in the tests for
+  `startQuiz`, `tapDailyReminder`, `enabled`, or `streak`; confirm that, and extend
+  `AnalyticsTests`' tables if it is so.
+- Correct `AnalyticsSource.control`'s doc comment, which names only the Random Verb control.
+
+**How it differed:**
+
+## Phase 3: The Learner's Record
+
+**Findings:** C9, C12, G1; from C13, Recent's count; from S8, `daysSinceOpened`. **Depends on:**
+nothing.
+
+- **C9.** `hasOpened` reads `firstOpened`. `clearRecents` and the swipe's `remove` forget
+  `lastOpened` (and the star, for the swipe) and keep `firstOpened`. An entry with only
+  `firstOpened` appears in neither Starred nor Recent, and is not dropped by `store`. An entry
+  written before this phase still decodes, and one with `lastOpened` but no `firstOpened` counts
+  as opened. Tests pin each. Clear asks before it clears, with an alert in the manner of the
+  starred row's. The starred row's swipe is labeled for what it now does; propose the English and
+  Spanish wording to Josh if "Delete" no longer fits.
+- **Ask Josh.** After this change nothing in the app forgets which verbs were ever opened, and
+  Phase 12 of the browse plan added Clear partly so that there would be a way. Ask him where a
+  full forget should live. Candidates: Settings' existing Reset Practice also forgets
+  `firstOpened`; or nowhere, since the record never leaves the device. The staged privacy
+  paragraph about the list kept on the device may need a clause either way.
+- **C12.** When the stored `learnerVerbs` string fails to decode, `LearnerVerbStore` copies the
+  raw string to a backup key before its first save. Confirm the reviewer's account of
+  `PracticeStore` (a failed decode runs the migration again), and give the practice record the
+  same protection if so. A test feeds each store a corrupt string.
+- **Recent** shows up to twenty unstarred verbs, by filtering before taking the limit. Remove
+  `recent(limit:)`'s parameter if nothing passes it.
+- **G1.** Correct the comments in `Shared/LearnerVerbs.swift`, `World.swift`, and
+  `GetterSetterReal.swift`, and `docs/feature_architecture.md`'s paragraph: the widget reads the
+  snapshot, not the record. Keep the rule that added fields must be optional, with its true
+  reason, an app upgrade.
+- Delete `LearnerVerbs.daysSinceOpened` if it still has no caller.
+
+**Tell Josh to try:** open a verb from a collection, swipe it out of My Verbs, and see that the
+collection still counts it; Clear, with its new question; a starred verb's swipe.
+
+**How it differed:**
+
+## Phase 4: The Widget's Verb Changes Daily on Its Own
+
+**Findings:** C3; the review's second cost of a settled decision. **Depends on:** nothing.
+
+- **C3.** `VerbDraw.verbOfTheDay` takes My Verbs in turn over an order that opening a verb does
+  not change, such as the infinitives sorted. Test with a list that gains a verb, and one that is
+  reordered, between My Verbs days: no verb repeats while another waits.
+- **A week of verbs.** `WidgetSnapshotWriter` writes the verb of the day for today and the six
+  days after, keyed by date, and the Verb of the Day widget's timeline returns one entry per
+  midnight. Read `WidgetSnapshot`, the writer, and `ConjugarWidget/VerbOfTheDayWidget.swift`
+  first, and the Lock Screen accessories that show the same verb. Things to settle and record:
+  - how the snapshot's format grows without breaking a widget that reads an older file, and the
+    reverse;
+  - what the widget shows on the eighth day (the last verb written, as now, is acceptable);
+  - whether the writer's date gate, which skips a refresh the same day, must now also notice that
+    My Verbs changed;
+  - the reference date and `dateString`, which the reviewer found read `Calendar.current`. Use a
+    Gregorian calendar in the current time zone, so that a Buddhist or Japanese calendar setting
+    cannot shift the day numbers.
+- **The quiz widget's question** has the same limit: `QuizWidget` also returns one entry and
+  reloads at midnight. Josh's answer was about the verb of the day. If the challenge's first
+  question is as cheap to write a week ahead, do it in the same way and say so; if it is not,
+  leave it and record why.
+- The widget target has its own copies of the rendering helpers and its own string catalog. A
+  change to the snapshot's shape is a change to both targets.
+
+**Done when** tests pin the rotation over a changing list; a test drives the writer for a given
+day and reads back seven dated verbs that match `VerbDraw` for each day; and the widget, with the
+simulator's clock or a snapshot written for past dates, shows the verb for its own date and not
+the first one in the file.
+
+**Tell Josh to try:** add the Verb of the Day widget, note the verb, and leave the app closed
+overnight.
+
+**How it differed:**
+
+## Phase 5: The Verb Page
+
+**Findings:** C2, C7, C8, G2, G3, G4; from C13, the "All N" chip; from F2, `VerbView.init`; from
+T1, the reflexive sweep. **Depends on:** nothing.
+
+- **C2.** The red-letter tip's guard looks at the simple tenses and the three header forms only.
+  Put the question on a model type so that a test can ask it: false for hablar and abaratar, true
+  for tener. Whether a spelling-change verb such as buscar counts follows from what the engine
+  marks in its simple tenses; pin whichever it is. Correct `RedLettersTip`'s doc comment.
+- **C7.** The scroll tip is drawn, and unlocked, only on a page that has an etymology or an
+  example.
+- **C8.** Add transpirar, contemplar, and impedir to `VerbRelations.falseCompounds`, and correct
+  the comment's claim about pirar. `RelatedVerbsTests` pins the three, and that the opaque pairs
+  Josh kept (acercar on cercar, preparar on parar) still hold.
+- **G2.** Reword `KeyConjugation`'s comment, the comment on `PracticeItem.Key.init(tense:)`, and
+  `docs/feature_architecture.md`: the imperfect and future subjunctives follow the pretérito's
+  third-person plural. The four forms do not change.
+- **G4.** A `VerbPageSection` for the Related Verbs card, reported like the etymology's. It is a
+  new value of `deepestSection`: add it to the vocabulary table, and check that the staged privacy
+  line about how far a page was scrolled still covers it.
+- **G3.** Move a visit's begin-and-end pairing out of `VerbView`'s body into a small type that a
+  test can drive: appear, disappear, each `scenePhase`, and the landing scroll. The landing scroll
+  to a marked form should not count as the learner reaching a section. **Ask Josh** about sheets:
+  a visit's dwell counts time under the article sheet and the Test Me quiz. The recommendation is
+  to end the visit when either presents and begin a `resume` visit when it closes, which matches
+  "on screen" in the docs. It raises the count of `resume` views, so he should agree first.
+- **The "All N" chip** appears when the model has more verbs than the row shows.
+- **`VerbView.init`** (Suspected). Put a temporary print in `init`, open a verb from the search
+  field's recents, and star a verb pushed from My Verbs. If the init reruns, move the page's
+  content into a value computed once per verb and held in `@State`. If it does not, record that
+  and leave it. Do the same check for `ModelView.init`, which Phase 8 lightens either way.
+- **The reflexive sweep.** Add a golden table of joined forms, the gerund and the six commands,
+  for about a dozen reflexive verbs of different shapes (-ear, -iar, -uir, ue and ie diphthongs,
+  ü, qu and gu, a one-syllable command). The reviewer's 46 cases, all right today, are in the
+  review's T1; the table is a guard, not a fix.
+
+**Tell Josh to try,** on a fresh install so that TipKit has no history: hablar's page (no
+red-letter tip), then tener's (the tip), then close it and open abaratar (no scroll tip) and
+tener again (the scroll tip); transpirar's and impedir's Related Verbs; a model with many verbs
+over few roots, for the chip.
+
+**How it differed:**
+
+## Phase 6: Links, Intents, and Spotlight
+
+**Findings:** from C13, the stashed link, the ignored link, the link beneath the game, and case;
+from F2, Spotlight; from D3, the intents and the links; from G7, the router's prose; from T2, the
+widget's literals. **Depends on:** nothing.
+
+- **The stashed link** (Decision 10). The stash carries the time it was written. The app drains
+  it on activation, as now, and also when it changes while the app is in front; an intent that
+  runs in the app's own process can route directly. A stash older than a minute is removed
+  unopened. Tests pin the expiry with an injected clock. To try the in-front case for real, run
+  the Open Random Verb shortcut from the Shortcuts app in Split View or Slide Over on the iPad
+  simulator, and say whether that was possible.
+- **An ignored link** leaves an open practice set alone: `handle(url:)` clears
+  `pendingPracticeSet` only once a route has resolved. A test: a set survives
+  `conjugar://verb/xyzzyq`.
+- **A link during the game** (Decision 7). A route other than `game` sets `showGame` to false.
+  Settings' Play button and its tour reshow present from local state (`showingGame`,
+  `showingOnboarding`), which the router cannot see, so move both to the router's flags; that
+  also makes `presentablePracticeSet`'s guard true of the game Settings opens, which today it is
+  not. Check the onboarding's "game after the tour" handoff afterward, since both presenters use
+  it.
+- **Case.** Compare the scheme and the route without regard to case.
+- **The intents.** One protocol in `Shared/` gives the four stashing intents a single
+  `perform()`. `WidgetDeeplink` moves to `Shared/`, builds its links from the same constants as
+  `URL`'s builders where the widget target can see them, and is pinned by `AppRouterTests`. Count
+  the `"conjugar://"` literals before and after. Strings stay in both catalogs.
+- **Spotlight.** Index at background priority. Skip the run when a stamp of the app's version and
+  the verb count matches the last run's. When the stamp changes, remove by identifier the entries
+  of verbs no longer in the map; do not delete by type, which the doc comment warns empties the
+  named index. `docs/release.md` already asks for a Spotlight check on a device; add what this
+  changes.
+- **`VerbEntityQuery.entities(matching:)`** (Suspected) may run its first load on the caller's
+  executor. `LookUpVerbIntent` is `@concurrent` for that reason. Measure, and match it if needed.
+- **Prose.** `AppRouter`'s header comment, the misplaced doc comment and the "only controls"
+  comment in `MainTabView`, and the three rows of `docs/feature_architecture.md` § Deeplinks that
+  G7 names.
+
+**Tell Josh to try:** a widget tap during the game; Settings ▸ Play and the tour from Settings;
+the Random Verb and Find a Verb controls; a verb found in Spotlight after a second launch.
+
+**How it differed:**
+
+## Phase 7: The Lists' Shared Pieces
+
+**Findings:** D1 (the cheap pieces), D2, G6, G8, S5; from C13, the Models tab's whitespace query
+and trombone; from S8, `englishTitle` and `BrowseSearch`. **Depends on:** nothing.
+
+Everything here is a move or a merge with no change in behavior, except G6 and the two small
+fixes named last. The accessibility identifiers `browse_verb_count`, `verb_row_<infinitive>`,
+`model_row_<exemplar>`, and `collection_row_<key>` must survive: the launch anchor and
+`scripts/take_screenshots.sh` depend on them.
+
+- **One list heading** for the small-caps count lines, used by the Verbs tab (two places), the
+  Models tab (two), `ModelView`, and `VerbCollectionView`.
+- **One sort picker**, generic over a sort that has a localized name, used by the Verbs tab, the
+  Models tab, `ModelView`, `VerbCollectionView`, and `RelatedVerbListView`.
+- **One helper for "every sort order, computed once"**, in place of the four copies of the
+  `Dictionary(uniqueKeysWithValues:)` expression.
+- **One zebra stripe** and **one style for the serif gold title**.
+- **`VerbDestination` is registered once**, inside `verbPageDestinations()`, for the Verbs,
+  Models, and Quiz stacks, with its marks. That fixes the marks the Models tab drops; a test or a
+  simulator check shows a marked destination pushed in the Models stack keeping its mark.
+  Consider one modifier that also sets the `verbPagePush` environment, since the three stacks
+  repeat that too.
+- **D2.** One `SortableVerbList` that owns its sort state, for the model's page, a collection's
+  page, and a related verb's full list, with the default sort, heading, source, and looked-up
+  checks as parameters. One modifier for "send `viewCollection` once per opening".
+- **One `AttributedString` helper for Spanish text**, in place of the fifteen private copies.
+- **S5.** Files named for what they hold: the row types out of `VerbBrowseView.swift`,
+  `VerbDestination` out of `VerbVisit.swift`, `VerbListMode` out of `VerbSort.swift`,
+  `verbPageDestinations()` and the `verbPagePush` key out of `RelatedVerbsView.swift`,
+  `DisplayTense.isCommand` into `DisplayTense.swift` (and used in the six places that spell it
+  out), `QuizScope.collection(_:title:)` beside `QuizScope`. Check each move against the
+  `ConjugationMapTool` target's membership, as `CLAUDE.md` § Core Models warns.
+- **G8.** Rewrite the three history-narrating comments to describe the code.
+- **S8.** Delete `englishTitle` from the four views if nothing reads it. Inline `BrowseSearch`
+  into its one caller, or keep it and say why.
+- **G6** (Decision 8). The Models tab's search field gets `.autocorrectionDisabled()` and
+  `.textInputAutocapitalization(.never)`. For the iPad, take a screenshot of the Models tab with
+  the drawer placement the Verbs tab uses and one without, **show Josh both, and keep the drawer
+  only if he says so.**
+- **Two small fixes.** The Models tab tests the trimmed text where it now tests
+  `searchText.isEmpty`, and it plays the trombone only when the text changes. Fold the query once
+  per search, not once per model.
+
+**Done when** the suite passes unchanged apart from moved types, and each screen has been looked
+at on both simulators before and after: the Verbs tab, My Verbs, the Models tab with its
+collections, a model's page, a collection's page, and a related verb's full list.
+
+**Tell Josh to try:** the six screens above, the sort pickers on each, and a search in the Models
+tab.
+
+**How it differed:**
+
+## Phase 8: One Definition Each
+
+**Findings:** D3 (the model layer); from F2, the repeated work; from S8, the cache check and the
+tool's flags. **Depends on:** Phase 1.
+
+- **Irregularity.** `isIrregular` has one definition, on `VerbMapEntry` or beside
+  `Conjugator.verbType`, which `VerbDraw`, `ModelPractice`, `PracticeItem`, `QuizDueItems`,
+  `SpeedRound`, and `VerbCollection` all read. `isCompound` moves off `VerbDraw` likewise.
+- **A model's verbs.** `VerbCollection`'s `.model` case reads `ModelInfo.byClassNumber`, and
+  `isInModel` and the test that keeps the two definitions equal go. `ModelView`'s bar, quiz, and
+  share then use one list.
+- **The verbs by frequency.** One cached list on `VerbMap`, of which a band is a prefix.
+  `VerbMap.entries(in:)` and the six files that sort every entry by rank read it. `ModelView` and
+  `VerbCollectionView` derive their sorted lists by filtering presorted ones where that is
+  cheaper than sorting.
+- **Edit distance.** One generic function with an optional limit serves `VerbSearch`'s two
+  copies. Leave `AnswerDifference`'s, which needs a backtrace, unless it falls out naturally. A
+  test pins that the limited and unlimited versions agree. Consider a home other than
+  `VerbSearch` for `fold` and the distance, now that the quiz uses both.
+- **"-se".** `VerbSearch.spanishQuery` calls `ReflexivePronoun.bareInfinitive(fromCitation:)`,
+  and `RelatedVerbsView` calls `ReflexivePronoun.citationForm(of:)`.
+- **Recents.** `LearnerVerbStore` does not re-sort the record on every read of `recentVerbs`.
+- **The cache check** in `VerbSearch.keys(for:)` compares whole entries.
+- **`ConjugationMapTool`** rejects a flag it does not know.
+
+**Done when** `ConjugationMapTests`' fresh-build test passes and `scripts/write_forms_json.sh`
+leaves `corpus/working/forms.json` byte-identical (`git diff --stat` shows nothing). Several of
+these files compile into the tool, and an identical map is the proof that nothing moved. Search
+results and the collections' membership are unchanged: `VerbSearchTests`, `VerbCollectionTests`,
+and `VerbDrawTests` pass without edits to their expectations.
+
+**How it differed:**
+
+## Phase 9: A Search Model for the Verb List
+
+**Findings:** S1 (the search model), C10, C11, F1, S2, S3, S4, S7; from C13, the linger, the
+whitespace query, the trombone, the mail note, and the two suspicions; from F2, the repeated
+search. **Depends on:** nothing, but read Phases 0, 1, 2, and 5 of the browse plan first: every
+workaround in this view has a recorded reason.
+
+- **The model.** Extract an `@Observable` search model from `VerbBrowseView`. It owns the text,
+  the matches (one array of rows, each with its entry and its match, in place of the two parallel
+  arrays), the guess, the `SearchTracker`, and the keyboard selection, and it decides what is
+  shown: recents, My Verbs, results, or every verb. The view keeps focus, navigation, and the
+  UIKit workarounds. The decisions become functions a test can call.
+- **C10.** The selection is a verb, not an index. It clears when the shown list changes. Nothing
+  is a keyboard target while My Verbs shows. Return acts on any idiom when a row is highlighted,
+  so the iPhone's Search key behaves as before.
+- **S3.** A row's action carries the entry and the match it was drawn with. `openRow` reads no
+  array when the tap fires.
+- **C11.** My Verbs' rows, the review card, and a link's pending verb go through `push(_:)`.
+- **S2.** Replace `searchFocusLostAt` with state that says what it means and resets when it
+  should, and correct `docs/feature_architecture.md`'s sentence about when the push waits.
+- **S4.** The linger's task and the mail note's are cancelled when superseded. Try
+  `ViewControllerTransitions.waitUntilIdle()` in place of the 500 ms sleep after a pop, on both
+  simulators with Command-F from a verb page; keep the sleep if the wait does not make the field
+  first responder.
+- **S7.** The sort picker is disabled while the field has text.
+- **The small ones.** One test of "is searching", the trimmed one, for the tip, the card, and the
+  list. The trombone plays when the text changes to a failed query. `signalEndedSearch` reads the
+  model's matches. Letters tapped quickly on iPad arrive in order.
+- **F1.** Until `ConjugationIndex.bundled` exists, a search matches infinitives and glosses only
+  and never waits on the main actor for the index. When the warm-up finishes, the current query
+  runs again. A cold `conjugar://search?q=fue` shows the list at once and ser and ir when the
+  index is ready. Correct the "about a second" comment with what is measured.
+- **The two suspicions.** With AXe on the iPad simulator: Command-F, type, Return, then ↓ on the
+  pushed page, to learn whether the arrow commands stay installed; and two letter keys tapped
+  quickly. Fix what is real.
+
+**Measure before and after**, with a temporary timing test in the manner of the review's Method
+section: the index's first touch, and the time from a cold search link to a first list. Record
+the numbers. The review measured 4.6 seconds for the first touch in a Debug build in the
+simulator.
+
+**Done when** the model's tests cover typing, clearing, a failed search and its guess, the
+recents, My Verbs with and without recents, the selection across each change of list, what Return
+opens, opening a result and the guess with the report each sends, a search before the index is
+ready, and a requested search from a link.
+
+**Tell Josh to try:** on the iPhone, a search typed in the first second after a cold launch,
+xyzzyq, hablr, a cleared field, a space alone; on the iPad with a hardware keyboard, Command-F,
+the arrow keys in the results and in the recents, Esc, Return on a result and on the guess, a
+letter key tapped into an empty field, and My Verbs' rows with the empty field focused.
+
+**How it differed:**
+
+## Phase 10: Split the Verb List's View
+
+**Findings:** S1 (the rest), G9. **Depends on:** Phase 9.
+
+- Move out of `VerbBrowseView`, each into its own file: `MyVerbsList` with its alerts,
+  `FailedSearchHelp` with the mail link and its copied-address note, and a host for the review
+  card's choice, reveal, snooze, and signal. `VerbBrowseView` should end as the navigation stack,
+  the list or grid, the picker or letter row, and the router's requests.
+- **G9.** The review card is one accessible element with one action, and a real `Button`, so
+  that Full Keyboard Access reaches it. The model pill has an accessibility label without the
+  glyph, with the exemplar tagged as Spanish. The letter keys are 44 points square if seven still
+  fit an iPhone's width; show Josh the row if its look changes. The rows' Spanish tagging waits
+  for Phase 11, which rebuilds the rows.
+- Conjugar has no VoiceOver guide. Konjugieren's
+  [`docs/voiceover.md`](../../Konjugieren/docs/voiceover.md) states the rules both apps follow. If
+  this phase needs a rule specific to Spanish, start `docs/voiceover.md` here and list it in
+  `docs/project_structure.md`.
+
+**Tell Josh to try:** My Verbs (swipe a recent verb, swipe a starred one and cancel, Clear), a
+failed search's mail link in the simulator, and the review card (reveal, open, dismiss, Suppress
+Review Card on and off), on both devices; with VoiceOver if he has a device at hand, the card and
+the pill.
+
+**How it differed:**
+
+## Phase 11: One Grid-or-List, One Row Label
+
+**Findings:** D1 (`AdaptiveRows` and the row label); from G9, the rows' Spanish; from C13, the
+selection outline's corners. **Depends on:** Phases 7 and 10.
+
+Josh chose the full refactor. The risk is a generic type that is mostly switches, so build it
+from the plainest of its four users outward and stop if it stops being simpler than what it
+replaces. Say so in **How it differed** if that happens, with what was tried.
+
+- **`AdaptiveRows`**: a grid of carded cells on regular width and a zebra-striped stack with
+  dividers on compact, generic over the item, with a row builder and a cell builder, an optional
+  highlight, and an identifier per item. Its users are `VerbEntryList`, the Models tab's models,
+  the Models tab's collections, and the Verbs tab's list. The Verbs tab's needs are the hard
+  ones: an index for the search report's position, match lines, the keyboard highlight, and
+  `scrollTo` by the row's id. The collections' rows have no zebra stripe today; keep that, or ask
+  Josh whether they should.
+- **One row label** with a row style and a card style, for a verb (infinitive, gloss, match
+  lines, the looked-up check, the rank), a model (exemplar, class number, the percent pill), and a
+  collection (its symbol, title, examples, and count). A collection's count, text, and
+  accessibility label are computed once, not in both its row and its card.
+- The label's title is tagged as Spanish for VoiceOver.
+- The grid's selection outline uses the card's corner radius.
+
+**Done when** screenshots of the Verbs tab, the Models tab, a model's page, and a collection's
+page, on both simulators, match the ones taken before the phase, apart from the outline's
+corners; the four identifiers named in Phase 7 still resolve with `tap_id.sh`; and the arrow keys
+still scroll the highlighted row into view on the iPad.
+
+**Tell Josh to try:** scrolling each list on the iPhone, a search with match lines, a
+collection's checks, and on the iPad the grid in both orientations.
+
+**How it differed:**
+
+## Phase 12: The Quiz's Scope
+
+**Findings:** S6. **Depends on:** nothing.
+
+This phase touches code the pedagogy plan wrote on top of the browse plan's Phase 13. Read
+[`plans/pedagogy_implementation.md`](pedagogy_implementation.md) for the modes before changing
+how they are told apart.
+
+- `QuizScope` gains a `kind`, and only the default kind is ranked, mixes due items, and mixes
+  choice questions. `isRanked`'s conjunction of negatives, and `mixesChoiceQuestions`' redundant
+  test, go. A test builds every scope the app can start and pins which is ranked.
+- A quiz that runs in a sheet says so, and `startsLiveActivity` reads that, not `collectionKey`
+  and `custom`.
+- `showsVerbLink` in `QuizView` reads the scope, not the analytics source.
+
+**Done when** the quiz's suites pass without edits to their expectations, and a ranked quiz, a
+collection's quiz, Test Me, and a practice set each start and finish in the simulator, with the
+Live Activity only where it was before.
+
+**How it differed:**
+
+## Phase 13: Tests That Prove What They Claim
+
+**Findings:** T1, T2, T3, less whatever earlier phases already added. **Depends on:** nothing,
+though it is shortest when taken last.
+
+- **T1.** Repair or delete: `noParameterCanEchoTheQuery`'s arguments that are already in the
+  vocabulary, `formsAreEveryOneWordFormOnce`, the `prefix(20)` of a dictionary in
+  `ConjugationMapTests`, the test that `allCells` follows the table it is built from, and the two
+  pattern lists pinned by count alone, which should be pinned by name.
+- **T2.** `ModelView.gridPersons(for:)`, and anything in the review's list that Phases 1 to 12
+  left.
+- **T3.** `QuizScopeTests` and `VerbCollectionTests` pass a practice store of their own to each
+  `Quiz`. `World.unitTest` gives `learnerVerbs` and `practice` one shared fake, as
+  `PracticeStore`'s comment requires, or the comment is corrected. `PracticeRecordTests` counts
+  days with an injected calendar and date, so that it cannot fail near a daylight-saving change.
+
+**How it differed:**
+
+## Closing
+
+- Run the full suite and `swiftlint`, and compare the suite's time and its slowest suites with
+  the baseline in step 2.
+- **G5.** Add a step to [`docs/release.md`](../docs/release.md) § Before Submitting: delete
+  `PracticeStore.migrated`, `LegacyLearnerVerbs`, their tests, and the paragraphs that describe
+  them, since no shipped build wrote the format they read.
+- **S4.** List the timed workarounds that remain in one place, in `docs/feature_architecture.md`:
+  what each waits for, how long, and how to tell whether a new iOS has made it unnecessary.
+- **F2's two unmeasured suspicions.** Time the first visit to the Models tab, and look at the
+  memory the conjugation map and its index hold after one search, in Instruments if this Mac
+  allows it. Record the numbers, and fix only what is plainly worth it.
+- **The Info article "Purpose/Use"** still describes thirty-verb quizzes at three difficulties.
+  The review listed it so that it would not be lost. Tell Josh; rewriting it is not this plan's
+  work unless he says so.
+- Confirm that every finding in `docs/verb_browse_review.md` carries a line: fixed, with date and
+  phase; found not to be real; or left, with the reason. The costs of settled decisions get the
+  last kind.
+- Write a short list of the fixes that might carry over to Konjugieren and Conjuguer. The
+  review's section "Found here and not in Konjugieren's review" is the starting point. Do not
+  read the siblings' code for it beyond what is needed to say whether a piece exists there.
+- Mark this plan finished in its Status section.
+
+**How it differed:**

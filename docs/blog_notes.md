@@ -12230,3 +12230,85 @@ Quantize flat UI, downscale photographs, and on a dark UI check the accent color
 octree to median cut.
 
 The simulator is left in dark mode. Its appearance before the session was not recorded.
+
+## A Review of the Browse Plan's Code (2026-11-25)
+
+Josh asked for a review of what `plans/browse_and_verb_implementation.md` built: about 12,000
+lines for the Verbs and Models tabs, across seventeen phases. Konjugieren's code had the same
+review first, dated the same day. His prompt set two conditions. The old allowance for duplication between
+`VerbBrowseView` and `ModelBrowseView` no longer held. And the review had to be done before
+reading Konjugieren's, so that it would not be anchored on it. The result is
+[`docs/verb_browse_review.md`](verb_browse_review.md). It reports and fixes nothing.
+
+**How it was done.** Five Opus subagents each took one area: search and reverse lookup, the list
+screens, the verb page, the ways in from outside with the signals, and the learner's record with
+collections. Each was told to stay out of `../Konjugieren` and not to run anything, since they
+shared one Mac and one simulator. The lead session read the browse views itself, then confirmed
+the reviewers' main findings three ways: by re-reading the code, by opening search and verb links
+in the simulator, and with a temporary probe test that was deleted afterward. Every finding in the
+document says which of these it rests on.
+
+**What running things found that reading had not.** The simulator showed the worst lookup bug in
+one line: "hablase" is labeled "Imperativo Positivo (vos)", because the enclitic parser accepts
+any clitic on any command and *hablá* + *se* happens to spell a real subjunctive. The probe
+settled three questions that were guesses until then. Every one of the 3,180 regular verbs has a
+"red letter" on its page, since compound tenses mark the auxiliary (hE laxado), so the red-letter
+tip's guard has never hidden it. The conjugation index took 4.6 seconds on first touch in a Debug
+build, against the "about a second" in the comment beside its warm-up, and a search that arrives
+first waits for it on the main thread. And a failed search's guess costs under a tenth of a
+second, so Konjugieren's worst performance finding did not carry over: Conjugar's edit distance
+has the early exit that Konjugieren's review recommends.
+
+**A check that misled before it informed.** One reviewer suspected that a link stashed by a
+Control Center control is not drained on a cold launch, and suggested `simctl spawn defaults
+write` to test it. The stash stayed put through a cold launch and a warm return, which looked like
+a real bug. It was the test. From outside the app's sandbox, `defaults write` on the group's name
+lands in the simulator's ordinary preferences, not in the App Group's container, so the app never
+saw it. Writing the key into the container's plist with `plutil`, with the app terminated, showed
+that a cold launch does drain it. The lesson is the one `CLAUDE.md` gives about empty search
+results: a negative result from a command that may not have reached its target proves nothing.
+
+**Against Konjugieren's review.** About two dozen of its findings carried over in the port, among
+them the widget's My Verbs rotation, the ñ twins that Look Up a Verb cannot open (five pairs here,
+eighteen umlaut pairs there), the collection progress that tidying My Verbs erases, and the
+privacy finding: a quiz correction's model link sends the model's key with `quizCorrection`, and
+29 models hold a single verb. Several did not carry over, and one for a reason worth keeping:
+Konjugieren ranks a folded infinitive above a literal conjugation and can misrank "fuhren", but
+no Spanish conjugation folds to an infinitive, because nothing but an infinitive ends in -ar, -er,
+or -ir. Ten findings here are not in Konjugieren's review. Some are Spanish-specific. Others may
+exist there too, and this session did not look.
+
+**What comes next.** The document ends with twelve questions that are Josh's to answer. After he
+has read it, a session asks them and writes `plans/verb_browse_fixes.md`.
+
+## Twelve Answers and a Plan for the Fixes (2026-11-25)
+
+Josh read the review of the browse plan's code and said "Ask." The twelve open questions went to
+him in three rounds of four, each with the course the review recommended listed first. He took the
+recommendation eleven times. The twelfth was about how far to go with the duplication, and there
+he chose more than was recommended: not only the cheap shared pieces and a search model for
+`VerbBrowseView`, but also a generic grid-or-list container and one row label for verbs, models,
+and collections. The review had advised leaving that container until a third screen needed it.
+
+His answers, briefly. A quiz correction's model link stops sending the model's key. Clitic
+agreement in reverse lookup is strict. The red-letter tip waits for a verb that is itself
+irregular. Exact spelling wins in Look Up a Verb, so soñar opens soñar. "Built on" is a claim
+about etymology, which costs transpirar, contemplar, and impedir their bases and keeps acercar on
+cercar. Collection progress survives tidying My Verbs, and Clear asks first. A link that arrives
+during the game closes the game. The Models tab's search field stops autocorrecting, and its iPad
+drawer waits for a screenshot. The widget gets a week of verbs. A stashed link is drained at once
+or expires after a minute. The practice record's migration goes at release time.
+
+The plan is [`plans/verb_browse_fixes.md`](../plans/verb_browse_fixes.md): thirteen phases and a
+closing, shaped like Konjugieren's so that the two can be compared, and different where the apps
+differ. Three differences are worth noting. Conjugar's sessions never commit, so every phase ends
+"Awaiting Josh", where Konjugieren's plan lets some phases commit on their own. Conjugar's lookup
+bugs get the first phase, since four of them live in two files and none exists in German. And the
+full refactor is three phases in a fixed order: the cheap pieces, then the search model and the
+split of the view, then the container, which is told to stop if it stops being simpler than what
+it replaces.
+
+One finding was added to the review while writing the plan. Josh's answer about the game exposed
+it: Settings presents its own game and its own tour from local state, which the router cannot
+close, so "a link closes the game" needs Settings to use the router's flags first. A reviewer had
+reported it as outside the browse plan's scope, and the review's first draft left it out.
