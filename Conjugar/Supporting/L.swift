@@ -2014,13 +2014,23 @@ nonisolated enum L {
       String(localized: "MyVerbs.recent")
     }
 
-    /// Forgets every verb opened and keeps the stars.
+    /// Empties Recent and keeps the stars and the collections' progress. Also the alert's confirm.
     static var clearRecent: String {
       String(localized: "MyVerbs.clearRecent")
     }
 
-    static var delete: String {
-      String(localized: "MyVerbs.delete")
+    /// The alert Clear raises.
+    static var clearTitle: String {
+      String(localized: "MyVerbs.clearTitle")
+    }
+
+    static var clearMessage: String {
+      String(localized: "MyVerbs.clearMessage")
+    }
+
+    /// A swipe's action, which takes a verb out of My Verbs and leaves the collections' progress.
+    static var remove: String {
+      String(localized: "MyVerbs.remove")
     }
 
     static var emptyTitle: String {

@@ -166,7 +166,7 @@ struct SettingsView: View {
         dailyReminderControls
       }
 
-      if !Current.practice.isEmpty {
+      if !Current.practice.isEmpty || Current.learnerVerbs.hasOpenHistory {
         GradientDivider()
 
         resetPracticeSection
@@ -192,6 +192,7 @@ struct SettingsView: View {
       Button(L.Settings.resetPracticeConfirm, role: .destructive) {
         withAnimation {
           Current.practice.reset()
+          Current.learnerVerbs.forgetOpenHistory()
         }
         Current.rescheduleReminders()
         Current.analytics.signal(name: .tapResetPractice)

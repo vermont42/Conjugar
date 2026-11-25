@@ -13,8 +13,8 @@ import Foundation
 /// exercises tengo). A question whose cell is regular exercises a pattern, a tense, a person, and
 /// an ending that every verb regular in that cell shares, since a learner who can write hablaba
 /// can write cantaba. The app decides which question maps to which item
-/// (`PracticeItemMapping.swift`). This file only names items, so that the widget, which has no
-/// verb map, can read the record.
+/// (`PracticeItemMapping.swift`). This file only names items and needs no verb map, so the widget,
+/// which has none, could read the record. Today it does not; it reads the snapshot the app writes.
 nonisolated enum PracticeItem: Hashable, Sendable {
   // Semantic ordering: the order the key conjugations are shown in.
   /// The four key conjugations: tengo · tuve · tendré · tenido.
@@ -79,7 +79,8 @@ nonisolated enum PracticeItem: Hashable, Sendable {
 
 /// The learner's practice record: a box and a due date for each item a quiz answer, a lookup, or
 /// the review card has touched, and how the last answer went. It is kept in the App Group's shared
-/// defaults, so that a widget or a reminder can read it, and it is never sent anywhere.
+/// defaults and is never sent anywhere. Only the app reads it: the reminders are scheduled from the
+/// app, and the widget reads the snapshot that `WidgetSnapshotWriter` writes.
 nonisolated struct PracticeRecord: Codable, Equatable, Sendable {
   // A field added later must be optional. Synthesized decoding ignores a default value and
   // requires the key, so any other field would fail to decode every record written before it,
@@ -106,6 +107,9 @@ nonisolated struct PracticeRecord: Codable, Equatable, Sendable {
   }
 
   static let storageKey = "practiceRecord"
+  /// Where `PracticeStore` copies a stored record that fails to decode, before anything
+  /// overwrites it.
+  static let unreadableKey = "practiceRecordUnreadable"
 
   /// Keyed by `PracticeItem.key`.
   private(set) var entries: [String: Entry] = [:]

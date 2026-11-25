@@ -4418,6 +4418,22 @@
         }
       }
     },
+    "MyVerbs.clearMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "They will leave My Verbs. Starred verbs stay, and collections still count every verb you have opened."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saldrán de Mis verbos. Los verbos con estrella se quedan, y las colecciones siguen contando todos los verbos que has abierto."
+          }
+        }
+      }
+    },
     "MyVerbs.clearRecent" : {
       "localizations" : {
         "en" : {
@@ -4434,18 +4450,18 @@
         }
       }
     },
-    "MyVerbs.delete" : {
+    "MyVerbs.clearTitle" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete"
+            "value" : "Clear your recent verbs?"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eliminar"
+            "value" : "¿Borrar tus verbos recientes?"
           }
         }
       }
@@ -4494,6 +4510,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recientes"
+          }
+        }
+      }
+    },
+    "MyVerbs.remove" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar"
           }
         }
       }
@@ -4551,13 +4583,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The verb will leave My Verbs."
+            "value" : "The verb will leave My Verbs. Collections still count it as looked up."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El verbo saldrá de Mis verbos."
+            "value" : "El verbo saldrá de Mis verbos. Las colecciones lo seguirán contando como consultado."
           }
         }
       }
@@ -7506,13 +7538,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This button erases what the quiz and the review card remember of your practice: which conjugations are due again, which you missed last, your last quiz's results, your Speed Round best, your best at each level, and your daily streak. The record stays on this device and is never sent."
+            "value" : "This button erases what the quiz and the review card remember of your practice: which conjugations are due again, which you missed last, your last quiz's results, your Speed Round best, your best at each level, and your daily streak. It also erases which verbs the collections count as looked up. My Verbs keeps its verbs. The record stays on this device and is never sent."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Este botón borra lo que el test y la tarjeta de repaso recuerdan de tu práctica: qué conjugaciones te toca repasar, cuáles fallaste la última vez, los resultados de tu último test, tu récord en la Ronda rápida, tu récord en cada nivel y tu racha diaria. El registro se queda en este dispositivo y nunca se envía."
+            "value" : "Este botón borra lo que el test y la tarjeta de repaso recuerdan de tu práctica: qué conjugaciones te toca repasar, cuáles fallaste la última vez, los resultados de tu último test, tu récord en la Ronda rápida, tu récord en cada nivel y tu racha diaria. También borra qué verbos cuentan las colecciones como consultados. Mis verbos conserva sus verbos. El registro se queda en este dispositivo y nunca se envía."
           }
         }
       }
@@ -7554,13 +7586,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The quiz will forget which conjugations you have practiced, your last quiz's results, your Speed Round best, your best at each level, and your daily streak, and the review card will offer nothing until you look a verb up again."
+            "value" : "The quiz will forget which conjugations you have practiced, your last quiz's results, your Speed Round best, your best at each level, and your daily streak, and the review card will offer nothing until you look a verb up again. The collections will count no verb as looked up."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El test olvidará qué conjugaciones has practicado, los resultados de tu último test, tu récord en la Ronda rápida, tu récord en cada nivel y tu racha diaria, y la tarjeta de repaso no te ofrecerá nada hasta que vuelvas a consultar un verbo."
+            "value" : "El test olvidará qué conjugaciones has practicado, los resultados de tu último test, tu récord en la Ronda rápida, tu récord en cada nivel y tu racha diaria, y la tarjeta de repaso no te ofrecerá nada hasta que vuelvas a consultar un verbo. Las colecciones no contarán ningún verbo como consultado."
           }
         }
       }

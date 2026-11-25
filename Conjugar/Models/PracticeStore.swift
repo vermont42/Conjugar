@@ -45,12 +45,19 @@ final class PracticeStore {
   }
 
   /// `getterSetter` must be the store that holds `LearnerVerbs`, since the first launch with a
-  /// practice record migrates the review card's schedules from it.
+  /// practice record migrates the review card's schedules from it. A stored record that fails to
+  /// decode is not a first launch: it is copied to `PracticeRecord.unreadableKey`, and the store
+  /// starts empty rather than migrating again.
   init(getterSetter: GetterSetter, calendar: Calendar = .current) {
     self.getterSetter = getterSetter
     self.calendar = calendar
-    if let stored = getterSetter.get(key: PracticeRecord.storageKey).flatMap(PracticeRecord.init(json:)) {
-      record = stored
+    let stored = getterSetter.get(key: PracticeRecord.storageKey)
+    if let decoded = stored.flatMap(PracticeRecord.init(json:)) {
+      record = decoded
+    } else if let stored {
+      getterSetter.backUpUnreadable(stored, to: PracticeRecord.unreadableKey)
+      record = PracticeRecord()
+      save()
     } else {
       record = Self.migrated(from: getterSetter, calendar: calendar)
       save()

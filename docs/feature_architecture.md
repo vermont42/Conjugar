@@ -599,17 +599,24 @@ one included, so delete before indexing, never after.
 
 **The record.** `LearnerVerbs` (`Shared/LearnerVerbs.swift`, `nonisolated`, Codable) holds one
 `Entry` per verb, keyed by the bare infinitive the verb map uses (arrepentir, never arrepentirse):
-first and last opened, `openCount`, and the date starred. A verb neither opened since the last
-Clear nor starred has no entry. `recent(limit:)` (20 by default) and `starred` are newest first,
-ties broken by infinitive; `myVerbs` is the starred verbs, then the recent ones not starred.
-`remove(_:)` forgets a verb entirely; `clearRecents()` forgets every open and keeps the stars.
-Neither touches the practice record, which keeps the review card's schedules (§ The Practice
-Record).
+first and last opened, `openCount`, and the date starred. Two questions are kept apart. A verb is
+in My Verbs while it is starred or has a last open; it counts toward a collection
+(`hasOpened(_:)`) once it has a first open. `recent` (the last 20 opened, the search field's
+recents), `recentUnstarred` (the last 20 opened that are not starred, My Verbs' Recent), and
+`starred` are newest first, ties broken by infinitive; `myVerbs` is `starred` then
+`recentUnstarred`. `remove(_:)` forgets a verb's star and last open, and `clearRecents()` every
+verb's last open, so either takes verbs out of My Verbs and leaves the collections' progress. Only
+`forgetOpenHistory()`, which Settings' Reset Practice calls, forgets the first opens and the counts.
+An entry is dropped when it has none of the three dates. None of these touches the practice record,
+which keeps the review card's schedules (§ The Practice Record).
 
 **Storage.** `Current.learnerVerbs` is a `LearnerVerbStore` (`Models/LearnerVerbStore.swift`,
 `@Observable`), which saves the record as JSON after each change, under `LearnerVerbs.storageKey`,
-through a `GetterSetterReal` given the App Group's defaults (`WidgetConstants.sharedDefaults`). The
-widget extension can therefore decode it with `LearnerVerbs(json:)`. The unit and UI-test worlds
+through a `GetterSetterReal` given the App Group's defaults (`WidgetConstants.sharedDefaults`),
+beside the practice record. The widget extension never reads it, though `LearnerVerbs.swift` is in
+`Shared/`: the app hands My Verbs to `WidgetSnapshotWriter`, and the widget reads the snapshot. A
+stored record that fails to decode is copied to `learnerVerbsUnreadable` before the store starts
+empty, so that the first save cannot destroy the only copy. The unit and UI-test worlds
 use a `GetterSetterFake`. The store answers in `VerbMapEntry`s and skips an infinitive the verb map
 lacks. To read the record in the simulator: `xcrun simctl spawn <udid>
 defaults read <group container>/Library/Preferences/group.biz.joshadams.Conjugar learnerVerbs`,
@@ -617,8 +624,8 @@ where the container comes from `xcrun simctl get_app_container <udid> biz.joshad
 groups`.
 
 **Every field added to `Entry` later must be optional.** Synthesized decoding requires every
-non-optional key, so a new non-optional field would make every older record decode as nothing, and
-the learner's verbs would vanish silently. `LearnerVerbsTests` pins the decoding of an entry with
+non-optional key, so a new non-optional field would make the record that the build before an app
+upgrade wrote decode as nothing, and the learner's verbs would vanish silently. `LearnerVerbsTests` pins the decoding of an entry with
 only its key and count.
 
 **An open** is a verb page's arrival by any route, recorded in `VerbView.beginVisit` whenever
@@ -637,7 +644,8 @@ a pushed page, or the background is not a new open.
 - **My Verbs** is the third segment of the picker under the list (`VerbListMode`: Frequency,
   Alphabetical, My Verbs). Only a sort is saved in Settings, so the app opens on the full list. My
   Verbs is a `List` of its own, so that rows can be swiped: Starred, then Recent with a Clear
-  button, and an empty state. A swipe forgets the verb; a starred one asks first. Typing searches
+  button, and an empty state. A swipe (Remove) takes the verb out of My Verbs; a starred one asks
+first. Clear asks too. Neither forgets that a verb was opened, which the collections count. Typing searches
   every verb, whatever the picker says. A row opens with source `myVerbs`.
 - **The star** sits in the verb page's navigation bar beside Share, reads "Add to My Verbs" or
   "Remove from My Verbs", and sends `tapStarVerb` with `starred`.
@@ -705,11 +713,14 @@ chosen.
 **The migration.** On the first launch with no stored record, the store reads `LearnerVerbs`' old
 per-verb `review` schedules (or, for an entry from before them, a start at its last open) and gives
 each irregular verb's key conjugations that schedule. `LearnerVerbs` no longer has the field;
-decoding ignores it.
+decoding ignores it. A stored record that fails to decode is not a first launch: the store copies
+it to `practiceRecordUnreadable` and starts empty, without migrating.
 
-**Reset Practice** sits at the foot of Settings' quiz card while the record holds anything. An
-alert confirms it, and it sends `tapResetPractice`. The record is saved empty rather than removed,
-so the next launch does not migrate the old schedules again.
+**Reset Practice** sits at the foot of Settings' quiz card while the record holds anything or any
+verb counts as opened. An alert confirms it, and it sends `tapResetPractice`. The record is saved
+empty rather than removed, so the next launch does not migrate the old schedules again. It also
+calls `LearnerVerbStore.forgetOpenHistory()`, so the collections count no verb as looked up; My
+Verbs keeps its starred and recent verbs.
 
 **Seeding the record in the simulator.** As for the learner's record: `xcrun simctl spawn <udid>
 defaults write <group container>/Library/Preferences/group.biz.joshadams.Conjugar practiceRecord
@@ -1746,7 +1757,7 @@ classes too) weighs 2 and a verb with no base in `VerbRelations` weighs 2, multi
 weigh 4, detener and hablar 2, recobrar 1. Frequency inside the band is not weighted. In the band,
 39% of verbs are irregular and 80% unprefixed; in 1,000 simulated days, 58% and 89% of the draws.
 
-**My Verbs** (`LearnerVerbs.myVerbs`: the starred verbs, then the last 20 opened, as the list's
+**My Verbs** (`LearnerVerbs.myVerbs`: the starred verbs, then the last 20 opened that are not starred, as the list's
 segment shows them) supplies one draw in three once it has entries. The widget gives it the days
 whose number since 2026-01-01 is a multiple of three and takes its verbs in turn, since chance
 leaves gaps of two weeks and repeats one verb while another waits. A random verb on demand goes to
@@ -1815,8 +1826,8 @@ there reports `list`. **A model's page** gains the same bar between its grid and
 rows gain the check; a verb opened there still reports `model`.
 
 **The bar** (`VerbCollectionBar`): "3 of 70 looked up", Quiz, Share, and a progress bar. Progress
-counts verbs with a last open (`LearnerVerbStore.openedCount(of:)`); a star alone does not count,
-and Clear in My Verbs resets every collection's progress. Quiz opens `QuizSheet` with
+counts verbs ever opened, by their first open (`LearnerVerbStore.openedCount(of:)`); a star alone
+does not count. Clear and a swipe in My Verbs leave it, and Reset Practice in Settings forgets it. Quiz opens `QuizSheet` with
 `QuizScope.collection(_:title:)`: thirty unranked questions over the collection's verbs in the
 level's tenses, titled with the collection's name ("-go Verbs", "Verbs Like tener"). Share
 sends the title, the count, the six most frequent verbs, the `list` link with `source=sharedLink`,

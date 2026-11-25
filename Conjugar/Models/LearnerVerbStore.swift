@@ -16,9 +16,17 @@ final class LearnerVerbStore {
   private(set) var record: LearnerVerbs
   @ObservationIgnored private let getterSetter: GetterSetter
 
+  /// A stored record that fails to decode is copied to `LearnerVerbs.unreadableKey` before the
+  /// store starts empty, so that the first save does not destroy the only copy of it.
   init(getterSetter: GetterSetter) {
     self.getterSetter = getterSetter
-    record = getterSetter.get(key: LearnerVerbs.storageKey).flatMap(LearnerVerbs.init(json:)) ?? LearnerVerbs()
+    let stored = getterSetter.get(key: LearnerVerbs.storageKey)
+    if let decoded = stored.flatMap(LearnerVerbs.init(json:)) {
+      record = decoded
+    } else {
+      getterSetter.backUpUnreadable(stored, to: LearnerVerbs.unreadableKey)
+      record = LearnerVerbs()
+    }
   }
 
   var starredVerbs: [VerbMapEntry] {
@@ -26,12 +34,12 @@ final class LearnerVerbStore {
   }
 
   var recentVerbs: [VerbMapEntry] {
-    entries(record.recent())
+    entries(record.recent)
   }
 
   /// The recent verbs that are not also starred, which My Verbs lists below the starred ones.
   var recentUnstarredVerbs: [VerbMapEntry] {
-    entries(record.recent().filter { !record.isStarred($0) })
+    entries(record.recentUnstarred)
   }
 
   var myVerbs: [VerbMapEntry] {
@@ -46,8 +54,8 @@ final class LearnerVerbStore {
     record.hasOpened(infinitive)
   }
 
-  /// How many of the verbs have been opened, a collection's progress. A star alone does not count,
-  /// and Clear resets every collection's progress, since it forgets the opens.
+  /// How many of the verbs have ever been opened, a collection's progress. A star alone does not
+  /// count. Clear and a swipe in My Verbs leave it; Reset Practice forgets it.
   func openedCount(of entries: [VerbMapEntry]) -> Int {
     entries.count { record.hasOpened($0.infinitive) }
   }
@@ -73,6 +81,15 @@ final class LearnerVerbStore {
 
   func clearRecents() {
     record.clearRecents()
+    save()
+  }
+
+  var hasOpenHistory: Bool {
+    record.hasOpenHistory
+  }
+
+  func forgetOpenHistory() {
+    record.forgetOpenHistory()
     save()
   }
 

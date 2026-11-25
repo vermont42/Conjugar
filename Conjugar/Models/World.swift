@@ -24,7 +24,8 @@ class World {
   var getterSetter: GetterSetter
   var soundPlayer: SoundPlayer
   var hapticPlayer: HapticPlayer
-  /// The learner's opened and starred verbs, kept in the App Group so the widget can read them.
+  /// The learner's opened and starred verbs, kept in the App Group beside the practice record. The
+  /// widget never reads them; it reads the snapshot that the app writes from My Verbs.
   var learnerVerbs: LearnerVerbStore
   /// What each quiz answer and lookup has practiced, kept in the App Group and sent nowhere.
   var practice: PracticeStore

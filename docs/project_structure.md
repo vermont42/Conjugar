@@ -217,7 +217,7 @@ Conjugar/
 │   ├── GameCenterFake.swift    # In-memory double for the test/simulator worlds
 │   ├── GameCenterReal.swift    # GKLocalPlayer authentication, score submission to a level's board, leaderboard and achievement presentation, achievement progress held until a sign-in loads and sent only when risen
 │   ├── GameCenterSpy.swift     # Test double recording each score submitted, leaderboard shown, and achievement report
-│   ├── GetterSetter.swift      # Protocol for string key-value storage
+│   ├── GetterSetter.swift      # Protocol for string key-value storage, and the backup of a stored string that fails to decode
 │   ├── GetterSetterFake.swift  # In-memory dictionary implementation for tests
 │   ├── GetterSetterReal.swift  # UserDefaults implementation (the standard defaults, or the App Group's for LearnerVerbs)
 │   ├── GlyphWarmer.swift       # Pre-rasterizes emoji glyphs so the game's first flag emoji doesn't stall the render thread
@@ -338,7 +338,7 @@ Shared/                         # Compiled into both the app and the widget exte
 ├── OpenRandomVerbControlIntent.swift  # The Random Verb control's own hidden copy of it (source=control)
 ├── OpenVerbSearchIntent.swift  # The Find a Verb control's hidden intent: stashes conjugar://search?source=control
 ├── QuizActivityAttributes.swift  # The ActivityKit contract shared by LiveActivitiesReal and QuizLiveActivity
-├── LearnerVerbs.swift          # The learner's record: verbs opened (dates, count) and starred, as JSON in the App Group
+├── LearnerVerbs.swift          # The learner's record: verbs opened (dates, count) and starred, as JSON in the App Group (the widget reads the snapshot, not this)
 ├── PracticeRecord.swift        # The practice record: PracticeItem (a key conjugation or a pattern, with permanent string keys) and each item's
 │                               #   schedule, last answer, and last lookup, as JSON in the App Group; never sent
 ├── ReviewSchedule.swift        # The practice record's Leitner ladder (1, 3, 7, 14, 30 days): a box and a due date, moved by answers, lookups, and the review card
@@ -376,7 +376,7 @@ ConjugarTests/
 │   ├── KeyConjugationTests.swift       # The four key conjugations (regular, stem-changing, irregular, reflexive, defective),
 │   │                                   #   the share text, URL.appStore, and what a long press copies
 │   ├── VerbSortTests.swift             # Verb-list sort orders and Spanish collation
-│   ├── LearnerVerbsTests.swift         # The learner's record (opens, stars, recents, Clear, delete, older JSON), its store, the list modes
+│   ├── LearnerVerbsTests.swift         # The learner's record (opens, stars, recents, Clear, Remove, Reset Practice's forget, older JSON), its store and its backup of a corrupt record, the list modes
 │   ├── VerbDrawTests.swift             # The verb of the day and random verbs: weights, My Verbs every third day in turn, the band,
 │   │                                   #   one in three on demand, the seeded generator's sequence, the widget's next ten days
 │   ├── ReviewScheduleTests.swift       # The ladder alone: a start, reviews, a snooze, a new item, answers moving an item only when due

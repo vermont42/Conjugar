@@ -217,6 +217,28 @@ struct PracticeRecordTests {
     #expect(LearnerVerbStore(getterSetter: getterSetter).recentVerbs.map(\.infinitive).sorted() == ["hablar", "ir", "tener"])
   }
 
+  /// A stored record that fails to decode is copied aside, and the store starts empty rather
+  /// than running the first launch's migration again over it.
+  @Test func anUnreadableRecordIsBackedUpAndNotMigratedOver() {
+    let getterSetter = GetterSetterFake()
+    let opened = daysAgo(10).timeIntervalSinceReferenceDate
+    getterSetter.set(key: LearnerVerbs.storageKey, value: #"{"entries":{"ir":{"infinitive":"ir","openCount":1,"lastOpened":\#(opened)}}}"#)
+    let corrupt = #"{"entries":{"key:ir:participio":{}}}"#
+    getterSetter.set(key: PracticeRecord.storageKey, value: corrupt)
+
+    let store = PracticeStore(getterSetter: getterSetter)
+
+    #expect(store.record.isEmpty)
+    #expect(getterSetter.get(key: PracticeRecord.unreadableKey) == corrupt)
+    #expect(getterSetter.get(key: PracticeRecord.storageKey) != corrupt)
+  }
+
+  @Test func aFirstLaunchBacksUpNothing() {
+    let getterSetter = GetterSetterFake()
+    _ = PracticeStore(getterSetter: getterSetter)
+    #expect(getterSetter.get(key: PracticeRecord.unreadableKey) == nil)
+  }
+
   @Test func aResetStaysReset() {
     let getterSetter = GetterSetterFake()
     let opened = daysAgo(10).timeIntervalSinceReferenceDate

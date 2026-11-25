@@ -1278,3 +1278,27 @@ El párrafo que sigue a la lista queda así:
 ```
 La duración aproximada de un cuestionario se recopila, pero, como todas estas estadísticas, está anonimizada y no está vinculada a su identidad (véase la sección 4). Su puntuación en los cuestionarios no se recopila. La aplicación no envía sus respuestas del cuestionario, cuántas acertó, qué verbos consulta ni ningún texto que escriba. Para programar sus repasos, mostrarle cómo le fue su último cuestionario, mostrarle qué conjugaciones domina, guardar su récord en la Ronda rápida y su mejor puntuación en cada nivel, llevar la cuenta de su racha de sesiones diarias, y mostrarle y compartir cómo le fueron sus desafíos diarios, la aplicación guarda un registro de qué conjugaciones ha practicado, cómo le fueron sus últimas respuestas, los resultados de su último cuestionario, su mayor número de respuestas correctas en una Ronda rápida, su mejor puntuación en cada nivel, los días en que terminó una sesión diaria y los resultados de sus últimos desafíos diarios; ese registro se queda en su dispositivo y nunca se envía. El resultado de un desafío diario solo sale de su dispositivo si usted mismo lo comparte. Si activa el recordatorio diario, la aplicación redacta y programa sus notificaciones en su dispositivo, y no se envía nada sobre ellas. Se registra que usted hizo una búsqueda, con las cifras aproximadas indicadas arriba, pero no lo que escribió. Se registra que abrió la página de un verbo, pero no de cuál.
 ```
+
+## My Verbs and the collections' progress (verb browse fixes plan, Phase 3, 2026-11-25)
+
+No signal, parameter, or value is added or removed. What the list kept on the device is for, and
+what forgets it, changed: a collection now counts every verb ever opened, Clear and a swipe in My
+Verbs no longer forget that, and Settings' Reset Practice does. This rewrites the paragraph about
+the list kept on the device, as the review card's section gives it; apply this wording in place of
+that one.
+
+### English
+
+The paragraph about the list kept on the device now reads:
+
+```
+To show your recent and starred verbs in My Verbs, to show how many of a collection's verbs you have looked up, and to offer review cards, the app keeps a list of the verbs you open and star, with when you opened them, how often, and when each is next due for review. The list stays on your device, in storage shared only with the app's own widgets. It is never sent to the developer or to anyone else, and it is deleted when you delete the app. You can clear the recent verbs, or remove any verb, in My Verbs; the collections still count every verb you have opened. Reset Practice in Settings forgets which verbs you have opened and how often.
+```
+
+### Spanish
+
+El párrafo sobre la lista guardada en el dispositivo queda así:
+
+```
+Para mostrar sus verbos recientes y marcados con una estrella en Mis verbos, para mostrar cuántos verbos de una colección ha consultado y para ofrecerle tarjetas de repaso, la aplicación guarda una lista de los verbos que abre y marca, con la fecha en que los abrió, cuántas veces y cuándo le toca repasar cada uno. La lista se queda en su dispositivo, en un almacenamiento que solo comparte con los widgets de la propia aplicación. Nunca se envía al desarrollador ni a nadie más, y se borra al eliminar la aplicación. En Mis verbos puede borrar los verbos recientes o quitar cualquier verbo; las colecciones siguen contando todos los verbos que ha abierto. Restablecer práctica, en Configuración, olvida qué verbos ha abierto y cuántas veces.
+```

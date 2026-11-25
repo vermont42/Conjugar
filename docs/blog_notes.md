@@ -12379,3 +12379,39 @@ outcomes, which nothing pinned before. The reviewer had also said that `startQui
 `tapDailyReminder`, `enabled`, and `streak` appear nowhere in the tests as strings. A loop over
 every case confirmed it, and found twenty-four parameterless signals in the same state; the test
 table's own comment scopes it to signals with parameters, so those stayed out.
+
+## Tidying My Verbs Stops Erasing Collection Progress (2026-11-25)
+
+Phase 3 of the verb browse fixes was about one record doing two jobs. `LearnerVerbs` keeps, for
+each verb, when it was first and last opened and whether it is starred. My Verbs reads the last
+open and the star. The collections, which say "37 of 100 looked up", read the last open too. So a
+learner who tidied My Verbs, by swiping a verb away or tapping Clear, also wiped the checks off
+every collection, and Clear did it in one tap with no question. The review's reviewer noticed that
+`firstOpened` and `openCount` were written on every open and read nowhere.
+
+Josh had already ruled that collection progress is separate from My Verbs: a verb counts once it
+has ever been opened. So progress now reads `firstOpened`, and Clear and the swipe forget only the
+last open and the star. That left a question the plan had saved for him. Once tidying no longer
+forgets anything, nothing in the app would ever forget which verbs were opened. He chose Settings'
+Reset Practice, which now clears every first open as well, while leaving My Verbs' stars and
+recents where they are. The swipes say Remove instead of Delete, since nothing is deleted any more,
+and Clear asks first.
+
+One line of the plan did not survive contact with that decision. It asked that an entry with a last
+open but no first open count as opened, a guard for older records. But no build ever wrote such an
+entry, since `recordOpen` has set both dates from the start, and after Reset Practice it is exactly
+what a recent verb looks like, which must not count. Keeping both rules would have needed a
+second date or a flag, for a case nothing produces, so the guard went.
+
+The other finding was about corruption. If the stored JSON ever failed to decode, the learner's
+store started empty, and its first save overwrote the only copy. The practice store was worse than
+the review said. It treated a failed decode as a first launch, ran the old migration, and saved the
+result at once, before the learner had done anything. Both stores now copy an unreadable string to
+a key of its own before anything is written, and the practice store starts empty instead of
+migrating. Nothing is known to corrupt either record; this is insurance against a future field that
+someone forgets to make optional.
+
+Two small things rode along. Recent took its twenty verbs before leaving out the starred ones, so
+a learner who starred most of what they opened saw a short list while older verbs waited; it now
+filters first. And several comments claimed the widget reads the learner's record or the practice
+record. It reads neither; the app hands My Verbs to the snapshot writer. The comments now say so.

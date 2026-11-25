@@ -9,14 +9,19 @@
 import Foundation
 
 /// The learner's own verbs: each verb opened, when and how often, and each verb starred. The review
-/// card's schedule is the practice record's (`PracticeRecord`). It is kept in the App Group's shared defaults, so the
-/// widget extension can read what the app writes, and it names verbs by infinitive, as
-/// `verbModelMap.xml` keys them (a reflexive-only verb by its bare infinitive), because the widget
-/// has no verb map.
+/// card's schedule is the practice record's (`PracticeRecord`). It names verbs by infinitive, as
+/// `verbModelMap.xml` keys them (a reflexive-only verb by its bare infinitive). It is kept in the
+/// App Group's defaults beside the practice record, but the widget extension never reads it: the
+/// app hands My Verbs to `WidgetSnapshotWriter`, and the widget reads the snapshot.
+///
+/// Two things are kept apart. A verb is in My Verbs while it is starred or recently opened
+/// (`starred`, `lastOpened`), which Clear and a swipe forget. A verb counts toward a collection
+/// once it has ever been opened (`firstOpened`), which only Settings' Reset Practice forgets.
 nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
   // A field added later must be optional. Synthesized decoding ignores a default value and
-  // requires the key, so any other field would fail to decode every record written before it,
-  // and the learner's verbs would silently vanish. `LearnerVerbsTests` pins this.
+  // requires the key, so any other field would fail to decode every record that the build before
+  // an app upgrade wrote, and the learner's verbs would silently vanish. `LearnerVerbsTests` pins
+  // this.
   struct Entry: Codable, Equatable, Sendable {
     let infinitive: String
     var firstOpened: Date?
@@ -30,6 +35,9 @@ nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
   }
 
   static let storageKey = "learnerVerbs"
+  /// Where `LearnerVerbStore` copies a stored record that fails to decode, before anything
+  /// overwrites it.
+  static let unreadableKey = "learnerVerbsUnreadable"
   static let recentLimit = 20
 
   private(set) var entries: [String: Entry] = [:]
@@ -57,9 +65,15 @@ nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
     entries[infinitive]?.isStarred ?? false
   }
 
-  /// Whether the verb has been opened since its opens were last forgotten.
+  /// Whether the verb has ever been opened, a collection's progress. Clear and a swipe leave this
+  /// alone; only `forgetOpenHistory()` forgets it.
   func hasOpened(_ infinitive: String) -> Bool {
-    entries[infinitive]?.lastOpened != nil
+    entries[infinitive]?.firstOpened != nil
+  }
+
+  /// Whether any verb counts as ever opened, so that Settings offers Reset Practice.
+  var hasOpenHistory: Bool {
+    entries.values.contains { $0.firstOpened != nil }
   }
 
   /// Starred verbs, the most recently starred first.
@@ -67,24 +81,22 @@ nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
     newestFirst(by: \.starred)
   }
 
-  /// Opened verbs, the most recently opened first.
-  func recent(limit: Int = recentLimit) -> [String] {
-    Array(newestFirst(by: \.lastOpened).prefix(limit))
+  /// The last `recentLimit` verbs opened, starred or not, the most recently opened first: the
+  /// search field's recents.
+  var recent: [String] {
+    Array(newestFirst(by: \.lastOpened).prefix(Self.recentLimit))
+  }
+
+  /// The last `recentLimit` verbs opened that are not starred, the most recently opened first: My
+  /// Verbs' Recent. The starred verbs are left out before the limit is taken, so that a list with
+  /// many starred opens still shows twenty.
+  var recentUnstarred: [String] {
+    Array(newestFirst(by: \.lastOpened).filter { !isStarred($0) }.prefix(Self.recentLimit))
   }
 
   /// What My Verbs holds: the starred verbs, then the recent ones not starred.
   var myVerbs: [String] {
-    let starred = self.starred
-    let starredSet = Set(starred)
-    return starred + recent().filter { !starredSet.contains($0) }
-  }
-
-  /// Whole days from the verb's last open to `date`, counted by the calendar: 1 for yesterday.
-  func daysSinceOpened(_ infinitive: String, at date: Date, calendar: Calendar = .current) -> Int? {
-    guard let lastOpened = entries[infinitive]?.lastOpened else {
-      return nil
-    }
-    return calendar.dateComponents([.day], from: calendar.startOfDay(for: lastOpened), to: calendar.startOfDay(for: date)).day
+    starred + recentUnstarred
   }
 
   mutating func recordOpen(_ infinitive: String, at date: Date) {
@@ -101,16 +113,34 @@ nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
     store(entry)
   }
 
-  /// Forgets the verb: its star and its opens. Unstarring alone would move an opened verb from
-  /// the starred verbs to the recent ones, and a verb deleted from My Verbs should leave it.
+  /// Takes the verb out of My Verbs: forgets its star and its last open. Unstarring alone would
+  /// move an opened verb from the starred verbs to the recent ones, and a verb removed from My
+  /// Verbs should leave it. Its first open stays, so collections still count it.
   mutating func remove(_ infinitive: String) {
-    entries[infinitive] = nil
+    guard var entry = entries[infinitive] else {
+      return
+    }
+    entry.starred = nil
+    entry.lastOpened = nil
+    store(entry)
   }
 
-  /// Forgets every verb opened. Stars stay.
+  /// Empties My Verbs' Recent: forgets every verb's last open. Stars stay, and so do first opens,
+  /// so collections still count every verb opened.
   mutating func clearRecents() {
-    for (infinitive, entry) in entries {
-      store(Entry(infinitive: infinitive, starred: entry.starred))
+    for var entry in entries.values {
+      entry.lastOpened = nil
+      store(entry)
+    }
+  }
+
+  /// Forgets which verbs were ever opened, and how often, for Settings' Reset Practice. My Verbs
+  /// keeps its starred and recent verbs.
+  mutating func forgetOpenHistory() {
+    for var entry in entries.values {
+      entry.firstOpened = nil
+      entry.openCount = 0
+      store(entry)
     }
   }
 
@@ -130,7 +160,10 @@ nonisolated struct LearnerVerbs: Codable, Equatable, Sendable {
       .map(\.infinitive)
   }
 
+  /// Keeps the entry while it says anything: a star, a last open, or a first open. An entry with
+  /// only its first open is in neither Starred nor Recent, and counts toward collections.
   private mutating func store(_ entry: Entry) {
-    entries[entry.infinitive] = entry.starred == nil && entry.lastOpened == nil ? nil : entry
+    let isEmpty = entry.starred == nil && entry.lastOpened == nil && entry.firstOpened == nil
+    entries[entry.infinitive] = isEmpty ? nil : entry
   }
 }

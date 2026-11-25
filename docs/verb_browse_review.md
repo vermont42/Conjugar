@@ -219,6 +219,10 @@ open and read nowhere in the app.
 **Fix.** Count progress on `firstOpened`, and have Clear and the swipe forget only `lastOpened`.
 Or keep the coupling, confirm before Clear, and say so in the docs ([Q6](#open-questions)).
 
+*Fixed on `master`, 2026-11-25, in Phase 3 of `plans/verb_browse_fixes.md`: progress reads
+`firstOpened`, Clear asks first, the swipes say Remove, and Settings' Reset Practice is now the
+one thing that forgets which verbs were opened.*
+
 <a id="c10"></a>
 ### C10. The keyboard selection is an index that outlives its rows (Read)
 
@@ -260,6 +264,11 @@ later non-optional field, which the "added fields must be optional" rule already
 
 **Fix.** On a failed decode, keep the raw string under a backup key before writing anything.
 
+*Fixed on `master`, 2026-11-25, in Phase 3 of `plans/verb_browse_fixes.md`. The account of
+`PracticeStore` was right, and it was worse than described: the store saves the migrated record at
+once, at launch. Both stores now copy an unreadable string to a backup key, and the practice
+store no longer migrates over one.*
+
 ### C13. Smaller correctness findings
 
 - **A stashed link waits when the app is already in front (Read).** The four `Shared/` intents
@@ -288,7 +297,8 @@ later non-optional field, which the "added fields must be optional" rule already
   the Models tab the picker is always there.
 - **Recent can show fewer than twenty (Read).** `recent()` takes twenty before the starred verbs
   are filtered out (`Shared/LearnerVerbs.swift:71-79`). With fifteen of the last twenty opens
-  starred, Recent lists five while older unstarred opens exist.
+  starred, Recent lists five while older unstarred opens exist. *Fixed on `master`, 2026-11-25, in
+  Phase 3 of `plans/verb_browse_fixes.md`.*
 - **A homonym found by its second sense is answered with its first (Reviewer).** Look Up a Verb
   for "station" answers apostar, "bet", with the stem-changing sense's key conjugations
   (`VerbLookup.swift:125-126`). *Fixed in part on `master`, 2026-11-25, in Phase 1 of
@@ -393,7 +403,9 @@ Josh's decision.*
   `World.swift:27`, `GetterSetterReal.swift:14-15`, and `docs/feature_architecture.md:592` say it
   does. Nothing under `ConjugarWidget/` names `LearnerVerbs`, `PracticeRecord`, or
   `ReviewSchedule`; the app hands My Verbs to the snapshot writer. Correcting the prose is cheaper
-  than moving the types.
+  than moving the types. *Fixed on `master`, 2026-11-25, in Phase 3 of
+  `plans/verb_browse_fixes.md`; `PracticeRecord`'s two comments made the same claim and were
+  corrected too.*
 - **G2. `KeyConjugation`'s rationale is wrong for the verbs it matters most for (Reviewer; the
   grammar is right).** `KeyConjugation.swift:20-21` and `docs/feature_architecture.md:357` say the
   imperfect and future subjunctives follow the yo pretérito. They follow the third-person plural:
@@ -554,7 +566,8 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   screen, and choosing a sort replays the trombone.
 - **S8. Unused or unguarded.**
   - `englishTitle` on four views is read nowhere (Read).
-  - `LearnerVerbs.daysSinceOpened` has no caller (Read).
+  - `LearnerVerbs.daysSinceOpened` has no caller (Read). *Deleted on `master`, 2026-11-25, in
+    Phase 3 of `plans/verb_browse_fixes.md`.*
   - `QuizScope.mixesChoiceQuestions` tests `!isPracticeSet`, which `isRanked` already implies
     (Reviewer).
   - `ConjugationTable.isCompound` is used only by tests (Reviewer).

@@ -22,8 +22,8 @@ is filled by the next session, which reads the hash from `git log`.
 | Phase | Status | Date | Commit | Findings |
 |---:|---|---|---|---|
 | 1 | Done | 2026-11-25 | `a5c37cc` | C1, C4, C5, C6, and from C13 the homonym's sense and the guess's cell order |
-| 2 | Awaiting Josh | 2026-11-25 | | P1, and the wire names from T1 |
-| 3 | Not started | | | C9, C12, G1, and from C13 Recent's count |
+| 2 | Done | 2026-11-25 | `4d5b2ec` | P1, and the wire names from T1 |
+| 3 | Awaiting Josh | 2026-11-25 | | C9, C12, G1, and from C13 Recent's count |
 | 4 | Not started | | | C3, and a week of verbs for the widget |
 | 5 | Not started | | | C2, C7, C8, G2, G3, G4, and from C13 the "All N" chip |
 | 6 | Not started | | | From C13 the stashed link, the ignored link, the link beneath the game, and case; F2 (Spotlight); the intents and links of D3 |
@@ -317,6 +317,52 @@ nothing.
 collection still counts it; Clear, with its new question; a starred verb's swipe.
 
 **How it differed:**
+
+- **The full forget (Josh, 2026-11-25).** Asked where it should live, Josh chose Settings' Reset
+  Practice. It now also calls `LearnerVerbStore.forgetOpenHistory()`, which clears every
+  `firstOpened` and `openCount` and keeps the stars and Recent, so the collections count nothing
+  until a verb is opened again. Reset Practice shows when the practice record holds anything or
+  any verb counts as opened, since opening only regular verbs leaves the practice record empty.
+  Its description and its alert's message gained a sentence each, in English and Spanish. The
+  staged privacy paragraph about the list kept on the device is rewritten in a new section of
+  `docs/privacy_policy_pending.md`.
+- **The swipes (Josh, 2026-11-25).** Both say Remove / Quitar, in place of Delete / Eliminar; the
+  key is now `MyVerbs.remove`. The recent row's icon changed from a trash can to `minus.circle`,
+  since nothing is deleted. The starred row's alert keeps its title, and its message now says that
+  collections still count the verb. Clear asks "Clear your recent verbs?" with a message saying
+  that the stars and the collections' counts stay.
+- **"One with `lastOpened` but no `firstOpened` counts as opened" was dropped.** `hasOpened` reads
+  `firstOpened` alone. No build ever wrote such an entry: `recordOpen` has set both since the
+  record began (`998795b`). After Josh's decision, it is exactly what Reset Practice leaves for a
+  verb still in Recent, which must not count. Honoring both would take a second date or a flag,
+  for a case nothing produces. A test pins that an entry as earlier builds wrote it decodes and
+  counts.
+- **`recent(limit:)`** had no caller passing a limit. It is now `recent`, the search field's
+  recents (starred verbs included, as before), beside a new `recentUnstarred`, which filters before
+  taking twenty and is My Verbs' Recent and the second half of `myVerbs`. `myVerbs` can therefore
+  grow by up to the number of starred recents, which is what the docs always said it held.
+- **C12.** The reviewer's account of `PracticeStore` was right, and it was worse than written: the
+  store saved the migrated record at launch, so a corrupt record was overwritten before anything
+  else happened. Both stores now copy an unreadable string to a key of its own
+  (`learnerVerbsUnreadable`, `practiceRecordUnreadable`) through a `GetterSetter` extension,
+  `backUpUnreadable(_:to:)`. The practice store no longer migrates over an unreadable record; it
+  starts empty, since a stored string means that this is not a first launch.
+- **G1.** Beyond the three files and the doc paragraph named, `PracticeRecord`'s two comments
+  claimed that the widget (or a reminder) reads the practice record. Neither does, and both were
+  corrected. `LearnerVerbs.swift` stays in `Shared/`.
+- **`daysSinceOpened`** had no caller and is deleted.
+- **Checked in the simulators**, with a record seeded by `plutil` (tener and hablar recent, hacer
+  starred, salir with only a first open). On the iPhone, in English: the -go collection read "3 of
+  11 looked up", salir included and absent from My Verbs; tener's swipe said Remove and took it out
+  of Recent; Clear asked its question and emptied Recent; hacer's swipe showed the new alert
+  message; the collection still read 3 of 11. Settings ▸ Reset Practice showed the new sentences,
+  and afterward the collection read 0 of 11, also after a cold relaunch, with hacer still starred.
+  On the iPad, in Spanish: Mis verbos, "¿Borrar tus verbos recientes?" and its message, only hacer
+  left after Borrar, and "Consultados: 3 de 11".
+- **The suite** is 1,370 Swift Testing tests in 85 suites and 11 XCTest tests, in 80 s. The slowest
+  suites are "ConjugationMap" (18.8 s), "The bundled map" (12.5 s), and `ReverseLookupTests`
+  (8.7 s). Two expectations changed, both on purpose: `LearnerVerbsTests`' Clear and removal tests,
+  and `VerbCollectionTests`' progress test, now say that Clear and a swipe keep a collection's count.
 
 ## Phase 4: The Widget's Verb Changes Daily on Its Own
 

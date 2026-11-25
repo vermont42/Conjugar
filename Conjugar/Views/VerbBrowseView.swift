@@ -15,8 +15,9 @@ struct VerbBrowseView: View {
   @State private var sort: VerbSort = Current.settings.verbSort
   /// The picker's choice: a sort order, or My Verbs.
   @State private var listMode = VerbListMode(sort: Current.settings.verbSort)
-  /// The starred verb whose swipe to delete awaits the learner's answer in an alert.
+  /// The starred verb whose swipe to remove awaits the learner's answer in an alert.
   @State private var verbToUnstar: VerbMapEntry?
+  @State private var isConfirmingClear = false
   @State private var navigationPath = NavigationPath()
   @State private var searchText = ""
   @FocusState private var searchIsFocused: Bool
@@ -458,9 +459,10 @@ struct VerbBrowseView: View {
       .accessibilityAddTraits(.isHeader)
   }
 
-  /// The starred verbs, then the recent ones not starred. A swipe deletes a verb, star and opens
-  /// alike, so that it leaves the list; a starred verb asks first, since its star was put there on
-  /// purpose. Clear forgets every open and keeps the stars.
+  /// The starred verbs, then the recent ones not starred. A swipe removes a verb, its star and its
+  /// last open alike, so that it leaves the list; a starred verb asks first, since its star was put
+  /// there on purpose. Clear asks, then forgets every last open and keeps the stars. Neither
+  /// forgets that a verb was opened, which the collections count.
   @ViewBuilder
   private var myVerbsList: some View {
     let starred = learnerVerbs.starredVerbs
@@ -480,7 +482,7 @@ struct VerbBrowseView: View {
                   Button {
                     verbToUnstar = entry
                   } label: {
-                    Label(L.MyVerbs.delete, systemImage: "star.slash")
+                    Label(L.MyVerbs.remove, systemImage: "star.slash")
                   }
                   .tint(Color.customRed)
                 }
@@ -500,7 +502,7 @@ struct VerbBrowseView: View {
                       learnerVerbs.remove(entry.infinitive)
                     }
                   } label: {
-                    Label(L.MyVerbs.delete, systemImage: "trash")
+                    Label(L.MyVerbs.remove, systemImage: "minus.circle")
                   }
                 }
             }
@@ -510,9 +512,7 @@ struct VerbBrowseView: View {
                 .accessibilityIdentifier("my_verbs_recent_heading")
               Spacer()
               Button(L.MyVerbs.clearRecent) {
-                withAnimation {
-                  learnerVerbs.clearRecents()
-                }
+                isConfirmingClear = true
               }
               .font(.caption)
               .buttonStyle(.borderless)
@@ -538,6 +538,16 @@ struct VerbBrowseView: View {
         Button(role: .cancel) {}
       } message: { _ in
         Text(L.MyVerbs.unstarMessage)
+      }
+      .alert(L.MyVerbs.clearTitle, isPresented: $isConfirmingClear) {
+        Button(L.MyVerbs.clearRecent, role: .destructive) {
+          withAnimation {
+            learnerVerbs.clearRecents()
+          }
+        }
+        Button(role: .cancel) {}
+      } message: {
+        Text(L.MyVerbs.clearMessage)
       }
     }
   }

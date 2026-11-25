@@ -142,14 +142,23 @@ import UIKit
     }
   }
 
-  @Test func progressCountsOpensNotStarsAndClearResetsIt() {
+  /// Progress counts verbs ever opened. Tidying My Verbs, by Clear or a swipe, keeps it; only
+  /// Reset Practice's forget resets it.
+  @Test func progressCountsOpensNotStarsAndOnlyResetPracticeForgetsIt() {
     let store = LearnerVerbStore(getterSetter: GetterSetterFake())
     let verbs = VerbCollection.goVerbs.verbs
     store.recordOpen("tener")
+    store.recordOpen("salir")
     store.recordOpen("hablar")
     store.toggleStar("hacer")
-    #expect(store.openedCount(of: verbs) == 1)
+    store.toggleStar("salir")
+    #expect(store.openedCount(of: verbs) == 2)
     store.clearRecents()
+    #expect(store.openedCount(of: verbs) == 2)
+    store.remove("salir")
+    #expect(store.openedCount(of: verbs) == 2)
+    #expect(store.myVerbs.map(\.infinitive) == ["hacer"])
+    store.forgetOpenHistory()
     #expect(store.openedCount(of: verbs) == 0)
   }
 
