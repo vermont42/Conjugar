@@ -120,8 +120,9 @@ put them back.
    **Use only Conjugar's own simulators** (set up 2026-11-22 so that sessions on Conjugar and
    Conjuguer can run at once): "Conjugar iPhone 17" (`6318CA93-7FB5-4E19-B318-915010531F76`) and
    "Conjugar iPad Pro 11", an iPad Pro 11-inch (M5) (`3033197E-B596-4C49-AAD8-43373B9D254C`).
-   Never use "Conjuguer iPhone 17" or "Conjuguer iPad Pro 11", which are Conjuguer's, or the plain
-   "iPhone 17" and "iPad Pro 11-inch (M5)", which are kept for Konjugieren and other work.
+   Never use "Conjuguer iPhone 17" or "Conjuguer iPad Pro 11", which are Conjuguer's, "Konjugieren
+   iPhone 17" or "Konjugieren iPad Pro 11", which are Konjugieren's, or the plain "iPhone 17" and
+   "iPad Pro 11-inch (M5)", which are kept for other work.
    - `.claude/ios-build-verify.config.sh` sets `TARGET_SIM="${TARGET_SIM:-Conjugar iPhone 17}"`,
      so `build_app.sh`, `run_tests.sh`, and `launch_app.sh` use the iPhone by default. For the
      iPad, prefix the script: `TARGET_SIM="Conjugar iPad Pro 11" "$IBV_SCRIPTS/launch_app.sh"`.

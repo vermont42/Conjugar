@@ -139,8 +139,9 @@ at the same time without colliding.
   uses the config's iPhone coordinates, so on the iPad tap by identifier (`tap_id.sh`) or by
   `describe_ui.sh` frames. Boot it only for an iPad check and shut it down afterward
   (`xcrun simctl shutdown 3033197E-B596-4C49-AAD8-43373B9D254C`).
-- **Never use** "Conjuguer iPhone 17" or "Conjuguer iPad Pro 11" (Conjuguer's), or the plain
-  "iPhone 17" and "iPad Pro 11-inch (M5)" (kept for Konjugieren and other work).
+- **Never use** "Conjuguer iPhone 17" or "Conjuguer iPad Pro 11" (Conjuguer's), "Konjugieren
+  iPhone 17" or "Konjugieren iPad Pro 11" (Konjugieren's), or the plain "iPhone 17" and
+  "iPad Pro 11-inch (M5)" (kept for other work).
 - **Name the UDID in every `simctl` command.** With several simulators booted, `simctl openurl
   booted` reaches the wrong one.
 - **If a simulator hangs, ask Josh before restarting CoreSimulator** (`killall -9
