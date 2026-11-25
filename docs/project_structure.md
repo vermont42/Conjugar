@@ -722,7 +722,8 @@ ConjugarWidget.entitlements     # Widget entitlements (App Groups)
 .swiftlint.yml                  # SwiftLint configuration
 unused.rb                       # Legacy helper: finds unreferenced assets
 apple.png                       # README imagery: the App Store download badge
-images/                         # README imagery: splash.png (the DancerIcon hero) plus the ten 800 px-wide
-                                #   screenshots of the shipping app. Regenerate from docs/screenshots/ (gitignored)
+images/                         # README imagery: splash.png (the DancerIcon hero) plus fifteen 800 px-wide
+                                #   screenshots, English, dark mode (game.png from 2026-08; the rest 2026-11-24).
+                                #   Regenerate from docs/screenshots/ (gitignored); blog_notes 2026-11-24 has how
 build.log                       # Raw xcodebuild output from the last ios-build-verify run (gitignored)
 ```

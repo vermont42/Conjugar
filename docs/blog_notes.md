@@ -12181,3 +12181,52 @@ only the duration bands, the question counts, and the streak band. The paragraph
 now opens the way Conjuguer's does: the rough duration is collected, and "your quiz score is not
 collected." The pedagogy plan keeps its 2026-11-22 decision as written and records the reversal
 beside it, so a later reader sees both what was decided and why it changed.
+
+## The README catches up with two finished plans (2026-11-24)
+
+With the browse-and-verb plan and the pedagogy plan both closed, the README described an app that
+no longer existed in two directions at once. It said nothing about search finding a conjugation,
+My Verbs, the review card, collections, related verbs, Shortcuts, or Spotlight. And it had already
+been patched for the pedagogy work, but in the worst way: the quiz bullet had grown into one
+sentence of about 230 words, a list of every practice feature joined by commas. It also said "two
+Control Center controls", and there are now three.
+
+The Features section is now in three groups, Look Up, Practice, and Everywhere Else, and the long
+quiz bullet became six. Two claims needed checking against `docs/feature_architecture.md` before
+they could go in. The first draft said a verb's key forms "can be copied or shared", but the page
+copies a single form on a long press, while the share button sends the key forms, so the README now
+says each. The first draft also gave every model "practice of its own". The decir model's page
+says otherwise, because a model with one verb has no practice of its own, so the README now says
+that only a model with more than one verb does. The pre-existing pair of em dashes in Data sources
+became commas, since Josh asked in August for none in the README.
+
+**The screenshots.** Josh asked for English, dark mode, and the game shot kept. The App Store
+driver (`scripts/take_screenshots.sh`) was the wrong tool. It alternates light and dark by view, it
+shoots an iPhone 17 Pro Max, and its nine views predate both plans. So the set was shot by hand on
+"Conjugar iPhone 17" with the `ios-build-verify` scripts and deeplinks: `search?q=fue`,
+`verb/tener`, and `list/model-31` reach their screens directly. The usual preparation came from the
+playbook. The three kill switches were set to false and then restored (`git diff` on
+`KillSwitches.swift` came back empty), the appearance was set to dark, and the status bar was
+pinned to 9:41 and cleared afterward. The quiz ran with `-CONJUGAR_QUIZ_FIXTURE screenshot`, so its
+questions were known. The set grew from ten to fifteen, three rows of five. The new shots are
+Search (fue finds ser and ir and names the cell), Exercises, Verb Essentials, Name the Form, and
+Complete the Sentence. The model shot moved from decir to tener, because decir's page has one verb
+and a note that it has no practice.
+
+Some of the shots show a feature at work. The quiz shot is a slip in progress: *hare* for *haré*,
+with "Almost! Try once more." The results then show a 95 with "New personal best!" and the
+hare/haré row. Verb Essentials has two forms answered, and Name the Form has a tense and a person
+chosen. Mastery was left out, because the simulator's record has mastered nothing, and an empty
+page would advertise nothing.
+
+Two snags. `axe type` has no keycodes for accented letters ("No keycode found for character: 'í'"),
+and its failure left the quiz field unfocused, so the next answer went nowhere. The fix is the
+driver's: `simctl pbcopy`, then Cmd+V. The other snag was the image reduction. August's recipe was
+LANCZOS to 800 px and then a 256-color MEDIANCUT quantize. On these dark screens MEDIANCUT turned
+the green battery and the blue selected tab teal, because a near-black screen spends most of its
+palette on grays. FASTOCTREE kept both colors and also made smaller files: the fourteen new images
+total about 670 KB, against about 1 MB for August's ten. So the rule from August grows a clause.
+Quantize flat UI, downscale photographs, and on a dark UI check the accent colors, preferring
+octree to median cut.
+
+The simulator is left in dark mode. Its appearance before the session was not recorded.
