@@ -151,13 +151,47 @@ struct AppRouterTests {
     #expect(router.pendingVerb == VerbDestination(infinitive: "ir", source: .lookup, marks: [ConjugationCell(tense: .pretérito, personNumber: .thirdSingular)]))
   }
 
+  // levanta is the presente's él and the imperativo's tú. A link that names the cell marks it alone.
+  @Test func verbDeeplinkPrefersItsCellsToItsMatch() throws {
+    let command = ConjugationCell(tense: .imperativoPositivo, personNumber: .secondSingularTú)
+    let link = try #require(URL.verbDeeplink("levantar", source: .lookup, match: "levanta", cells: [command]))
+    #expect(link.absoluteString == "conjugar://verb/levantar?source=lookup&match=levanta&cells=ioss")
+    let router = AppRouter()
+    router.handle(url: link)
+    #expect(router.pendingVerb?.marks == [command])
+  }
+
+  @Test func verbDeeplinkWithoutCellsMarksEveryCellOfItsMatch() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://verb/levantar?match=levanta"))
+    #expect(router.pendingVerb?.marks == [
+      ConjugationCell(tense: .presenteDeIndicativo, personNumber: .thirdSingular),
+      ConjugationCell(tense: .imperativoPositivo, personNumber: .secondSingularTú)
+    ])
+  }
+
+  @Test func verbDeeplinkWhoseCellsAreNoCellsFallsBackToItsMatch() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://verb/ir?match=fue&cells=zzzz,x"))
+    #expect(router.pendingVerb?.marks == [ConjugationCell(tense: .pretérito, personNumber: .thirdSingular)])
+  }
+
+  @Test func verbDeeplinkCellsMayBeSeveral() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://verb/hablar?cells=prfs,ptts"))
+    #expect(router.pendingVerb?.marks == [
+      ConjugationCell(tense: .presenteDeIndicativo, personNumber: .firstSingular),
+      ConjugationCell(tense: .pretérito, personNumber: .thirdSingular)
+    ])
+  }
+
   @Test func aMatchMayBeSeveralWords() {
-    let marks = AppRouter.marks(of: "he hablado", on: "hablar", hiding: [])
+    let marks = MatchedForm.marks(of: "he hablado", on: "hablar", hiding: [])
     #expect(marks == [ConjugationCell(tense: .perfectoDeIndicativo, personNumber: .firstSingular)])
   }
 
   @Test func aMatchWithoutItsAccentsStillMarks() {
-    let marks = AppRouter.marks(of: "tendre", on: "tener", hiding: [])
+    let marks = MatchedForm.marks(of: "tendre", on: "tener", hiding: [])
     #expect(marks == [ConjugationCell(tense: .futuroDeIndicativo, personNumber: .firstSingular)])
   }
 
@@ -165,8 +199,8 @@ struct AppRouterTests {
   @Test func aMatchLeavesOutTheHiddenPersonWhereTheOtherSharesTheForm() {
     let tú = ConjugationCell(tense: .pretérito, personNumber: .secondSingularTú)
     let vos = ConjugationCell(tense: .pretérito, personNumber: .secondSingularVos)
-    #expect(AppRouter.marks(of: "hablaste", on: "hablar", hiding: [.secondSingularVos]) == [tú])
-    #expect(AppRouter.marks(of: "hablaste", on: "hablar", hiding: []) == [tú, vos])
+    #expect(MatchedForm.marks(of: "hablaste", on: "hablar", hiding: [.secondSingularVos]) == [tú])
+    #expect(MatchedForm.marks(of: "hablaste", on: "hablar", hiding: []) == [tú, vos])
   }
 
   @Test func verbDeeplinkWhoseMatchIsNoFormMarksNothing() {

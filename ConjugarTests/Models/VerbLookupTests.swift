@@ -27,7 +27,7 @@ import Testing
   private func infinitives(_ lookup: VerbLookup) -> [String] {
     lookup.findings.compactMap { finding in
       switch finding {
-      case .verb(let entry), .form(_, let entry), .otherMatches(let entry, _), .guess(let entry, _):
+      case .verb(let entry, _), .form(_, let entry), .otherMatches(let entry, _), .guess(let entry, _):
         return entry.infinitive
       case .nothing:
         return nil
@@ -94,7 +94,6 @@ import Testing
   // carries the bare form of the cell, which the page can mark.
   @Test(arguments: [
     ("dímelo", "decir", "di"),
-    ("levántate", "levantar", "levanta"),
     ("se lo dije", "decir", "dije"),
     ("hecha", "hacer", "hecho")
   ])
@@ -102,6 +101,45 @@ import Testing
     let lookup = lookUp(word)
     #expect(infinitives(lookup) == [infinitive])
     #expect(lookup.destination == URL.verbDeeplink(infinitive, source: .lookup, match: match))
+  }
+
+  // levanta, the bare form levántate's link carries, is also the presente's él. The link names the
+  // tú command, so that the page marks it alone and lands on its card.
+  @MainActor
+  @Test(arguments: [
+    ("levántate", "levantar", "levanta"),
+    ("dámelo", "dar", "da")
+  ])
+  func aBareFormThatIsAlsoAnotherCellNamesItsCell(word: String, infinitive: String, match: String) throws {
+    let command = ConjugationCell(tense: .imperativoPositivo, personNumber: .secondSingularTú)
+    let lookup = lookUp(word)
+    #expect(infinitives(lookup) == [infinitive])
+    #expect(lookup.destination == URL.verbDeeplink(infinitive, source: .lookup, match: match, cells: [command]))
+    let router = AppRouter()
+    router.handle(url: try #require(lookup.destination))
+    #expect(router.pendingVerb?.marks == [command])
+  }
+
+  // Exact spelling wins: soñar opens soñar, though it folds to sonar, and sonar opens sonar.
+  @Test(arguments: ["sonar", "soñar", "ordenar", "ordeñar", "acunar", "acuñar"])
+  func anInfinitiveWithAnEñeTwinOpensItsOwnPage(word: String) throws {
+    let lookup = lookUp(word)
+    #expect(lookup.findings == [.verb(try entry(word))])
+    #expect(lookup.destination == URL.verbDeeplink(word, source: .lookup))
+  }
+
+  @Test func aSeveralWordFormWithoutItsTildeOpensItsPage() {
+    let lookup = lookUp("he ensenado")
+    #expect(lookup.answer() == "he enseñado: Perfecto de Indicativo (yo) of enseñar")
+    #expect(lookup.destination == URL.verbDeeplink("enseñar", source: .lookup, match: "he enseñado"))
+  }
+
+  // apostar is "bet" in its first sense and "station" in its second.
+  @Test func aHomonymFoundByItsSecondSenseIsNamedByIt() throws {
+    let lookup = lookUp("station")
+    #expect(lookup.findings == [.verb(try entry("apostar"), sense: 1)])
+    #expect(lookup.answer().hasPrefix("apostar, “station”: "))
+    #expect(lookUp("bet").answer().contains("apostar, “bet”: "))
   }
 
   @Test func aFoldedFormAnswersWhenNothingLiteralDoes() {
@@ -143,9 +181,7 @@ import Testing
   // only comer's.
   @Test func anEnglishSenseCountsAgainstAForm() {
     let lookup = lookUp("come")
-    let named = infinitives(lookup)
-    #expect(named.count == VerbLookup.maxNamedVerbs || named.contains("comer"))
-    #expect(named.first == "llegar")
+    #expect(infinitives(lookup) == ["llegar", "venir", "acudir", "comer"])
     #expect(lookup.destination == searchLink("come"))
   }
 

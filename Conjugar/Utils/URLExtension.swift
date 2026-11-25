@@ -60,6 +60,10 @@ extension URL {
   nonisolated static let searchTextQueryName = "q"
   /// A form a verb page marks, as it marks a search's match: `conjugar://verb/ir?match=fue`.
   nonisolated static let matchQueryName = "match"
+  /// The cells a verb page marks, by `ConjugationCell.code` and separated by commas, when `match`
+  /// alone would mark more: `conjugar://verb/levantar?match=levanta&cells=ioss` marks the tú
+  /// command, not the presente's él as well. The page prefers it to `match`.
+  nonisolated static let cellsQueryName = "cells"
   /// A practice set's level: `conjugar://quiz/set?tenses=futuro&level=beginner`.
   nonisolated static let levelQueryName = "level"
   /// A daily challenge's day, `yyyy-MM-dd`.
@@ -95,12 +99,28 @@ extension URL {
     deeplinkQueryValue(named: Self.sourceQueryName).flatMap(AnalyticsSource.init(rawValue:))
   }
 
-  /// `conjugar://verb/tener?source=lookup&match=tuve`. A `match` names a form the page marks.
-  nonisolated static func verbDeeplink(_ infinitive: String, source: AnalyticsSource, match: String? = nil) -> URL? {
+  /// `conjugar://verb/tener?source=lookup&match=tuve`. A `match` names a form the page marks, and
+  /// `cells`, when given, the cells it marks in place of every cell `match` is.
+  nonisolated static func verbDeeplink(
+    _ infinitive: String,
+    source: AnalyticsSource,
+    match: String? = nil,
+    cells: [ConjugationCell]? = nil
+  ) -> URL? {
     deeplink(host: verbHost, target: infinitive, queryItems: [
       URLQueryItem(name: sourceQueryName, value: source.rawValue),
-      match.map { URLQueryItem(name: matchQueryName, value: $0) }
+      match.map { URLQueryItem(name: matchQueryName, value: $0) },
+      cells.map { URLQueryItem(name: cellsQueryName, value: $0.map(\.code).joined(separator: ",")) }
     ])
+  }
+
+  /// The cells a verb link's `cells` names, those of its codes that are cells. Nil when it names
+  /// none.
+  nonisolated var deeplinkCells: [ConjugationCell]? {
+    let cells = deeplinkQueryValue(named: Self.cellsQueryName)?
+      .split(separator: ",")
+      .compactMap(ConjugationCell.init(code:)) ?? []
+    return cells.isEmpty ? nil : cells
   }
 
   /// `conjugar://search?q=fue&source=control`. With no text, or empty text, the search opens empty

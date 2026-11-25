@@ -21,7 +21,7 @@ is filled by the next session, which reads the hash from `git log`.
 
 | Phase | Status | Date | Commit | Findings |
 |---:|---|---|---|---|
-| 1 | Not started | | | C1, C4, C5, C6, and from C13 the homonym's sense and the guess's cell order |
+| 1 | Awaiting Josh | 2026-11-25 | | C1, C4, C5, C6, and from C13 the homonym's sense and the guess's cell order |
 | 2 | Not started | | | P1, and the wire names from T1 |
 | 3 | Not started | | | C9, C12, G1, and from C13 Recent's count |
 | 4 | Not started | | | C3, and a week of verbs for the widget |
@@ -200,6 +200,41 @@ named.contains("comer")` with an assertion that can fail.
 page lands), and "he ensenado"; in the Shortcuts app, Look Up a Verb for soñar and for sonar.
 
 **How it differed:**
+
+- **C1, a decision changed (Josh, 2026-11-25).** Decision 2 named *nos* only on the nosotros
+  command. Asked, Josh chose to leave *nos* free on every command, because it is also a common
+  object (dinos, danos, ayúdanos, díganos, dadnos), and the strict rule would have sent each of
+  them to the guess. *te*, *os*, and *se* agree strictly as decided; *me* was never constrained.
+  The rule is `ReflexivePronoun.encliticAgrees(_:with:)`, which reads `pronoun(for:)`.
+- **C6.** The new query item is `cells`, a comma-separated list of `ConjugationCell.code`s:
+  `conjugar://verb/levantar?source=lookup&match=levanta&cells=ioss`. `VerbLookup` adds it only
+  when `match` alone would mark cells the form is not (levántate, dámelo); every link the tests
+  pinned before is unchanged. A `cells` whose codes are all junk falls back to `match`. The
+  marking function moved from `AppRouter.marks` to `MatchedForm.marks(of:on:hiding:)`, so that the
+  nonisolated lookup can ask what a `match` would mark. The Verbs tab's rows push in-app with their
+  cells already, so only the lookup builds such links.
+- **The homonym.** No `Match` change was needed: `VerbSearch.sense(of:namedBy:)` finds the gloss,
+  and `Finding.verb` carries its index, so "station" answers "apostar, “station”: apuesto · …". The
+  key conjugations stay the first sense's. Answering with the second sense's would take a
+  model-taking `KeyConjugation.forms` (through `TenseBridge.conjugate(…model:)`, which is unmarked,
+  and `ModelCatalog.model(forClass: entry.classNumbers[sense])`, with the reflexive pronoun added by
+  hand), and it would then disagree with the page the lookup opens, which conjugates only the first
+  sense. Doing it right means a sense-aware verb page, which no phase plans.
+- **The guess's order is a latent bug.** A probe over all 254,000 map entries found none whose cells
+  were out of page order, although the map's own order puts the pretérito before the imperfecto and
+  the futuro before the presente de subjuntivo. No verb shares a form across those tenses. The fix
+  (`ConjugationMatch.inPageOrder`, which `FoundForms` now uses too) is pinned by a test that builds
+  a small map whose order disagrees with the page's.
+- **C4.** Beyond the four infinitives named, the tests pin acunar and acuñar as well.
+- **Checked in the simulators.** On the iPhone: hablase shows one line (Imperfecto de Subjuntivo 2
+  (yo, él)), levantaos one (vosotros), "he ensenado" names he enseñado's Perfecto de Indicativo, and
+  the levántate link lands on the Imperativo Positivo card with ¡levanta! marked alone. On the iPad,
+  in Spanish with vos shown: levantaos and the levántate link, the same results. The Shortcuts app
+  was not tried; `VerbLookupTests` covers soñar and sonar.
+- **The suite** is 1,357 Swift Testing tests in 85 suites and 11 XCTest tests, in 107 s against the
+  baseline's 78 s. The slowdown sits in suites this phase did not touch ("ConjugationMap" 31 s,
+  "The bundled map" 21 s), so it looks like machine load. `ReverseLookupTests` took 9.8 s against
+  8 s.
 
 ## Phase 2: A Correction's Link Names No Verb
 

@@ -48,6 +48,27 @@ nonisolated enum ReflexivePronoun: Sendable {
     }
   }
 
+  /// Whether `clitics`, joined to a form of `cell` in that order, can be Spanish, judged by the
+  /// first of them against `pronoun(for:)`. On a command, te, os, and se are reflexive and must
+  /// be the person's own: levántate is the tú command and levantaos the vosotros command, but
+  /// hablá + se is no word. Any pronoun may join the gerund or the infinitive. Me and nos are
+  /// free, because they are also objects that every command takes (dime, dinos, ayúdennos). So
+  /// is a first pronoun followed by lo, la, los, or las, which is an indirect object: dáselo,
+  /// dímelo. Rarer object uses of te, os, and se (ayúdeos) are refused, which costs less than
+  /// marking a vos command for every imperfecto de subjuntivo in -se.
+  static func encliticAgrees(_ clitics: [String], with cell: ConjugationCell) -> Bool {
+    guard cell.tense == .imperativoPositivo, let first = clitics.first, reflexiveOnlyClitics.contains(first) else {
+      return true
+    }
+    if clitics.count > 1, directObjectClitics.contains(clitics[1]) {
+      return true
+    }
+    return pronoun(for: cell.personNumber) == first
+  }
+
+  private static let reflexiveOnlyClitics: Set<String> = ["te", "os", "se"]
+  private static let directObjectClitics: Set<String> = ["lo", "la", "los", "las"]
+
   /// Whether the bundled map flags `infinitive` as reflexive-only.
   static func isReflexiveOnly(_ infinitive: String) -> Bool {
     VerbMap.shared.entry(for: infinitive)?.isReflexive ?? false

@@ -138,7 +138,7 @@ nonisolated enum VerbSearch {
           if let current = best, current.rank <= rank {
             continue
           }
-          let cells = mapEntry.cells.filter { $0.tense != .infinitivo }
+          let cells = ConjugationMatch.inPageOrder(mapEntry.cells.filter { $0.tense != .infinitivo })
           let matched = cells.isEmpty ? nil : MatchedForm(text: form, cells: cells, isFolded: false)
           best = (Guess(entry: entry, form: matched), rank)
         }
@@ -316,6 +316,13 @@ nonisolated enum VerbSearch {
       .split { $0 == "," || $0 == ";" }
       .map { $0.trimmingCharacters(in: .whitespaces) }
       .filter { !$0.isEmpty }
+  }
+
+  /// The index of `entry`'s first gloss that has `query` as a sense in full: 1 for apostar and
+  /// "station", its second sense. Nil when no gloss does.
+  static func sense(of entry: VerbMapEntry, namedBy query: String) -> Int? {
+    let english = glossQuery(from: query)
+    return entry.glosses.firstIndex { senses(of: $0.lowercased()).contains(english) }
   }
 
   /// What a verb is matched on, lowercased and folded once rather than on every keystroke.

@@ -100,7 +100,8 @@ final class AppRouter {
 
   /// Route a `conjugar://` deeplink. `docs/feature_architecture.md` § Deeplinks has the grammar
   /// and every route: `verb/<infinitive>` (bare or with "se", so `verb/arrepentirse` opens
-  /// arrepentir, or `verb/random`), with `match`, a form the page marks; `search`, with its text
+  /// arrepentir, or `verb/random`), with `match`, a form the page marks, and `cells`, the cells it
+  /// marks when `match` alone would mark more; `search`, with its text
   /// in `q`; `info/<stableKey>` (or a position); `list/<key>`, a collection; `quiz` (any target
   /// starts a quiz, except `quiz/set`, a practice set, `quiz/daily`, a daily session, and
   /// `quiz/challenge`, a daily challenge); and
@@ -125,9 +126,7 @@ final class AppRouter {
           open(verb: random.infinitive, source: source)
         }
       } else if let infinitive = Self.infinitive(named: target) {
-        let match = url.deeplinkQueryValue(named: URL.matchQueryName)
-        let marks = match.map { Self.marks(of: $0, on: infinitive, hiding: Current.settings.secondSingularBrowse.hiddenPersons) } ?? []
-        open(verb: infinitive, source: source, marks: marks)
+        open(verb: infinitive, source: source, marks: Self.marks(of: url, on: infinitive))
       }
     case URL.searchHost:
       // The search route alone takes no target; its text travels in `q`.
@@ -191,18 +190,18 @@ final class AppRouter {
     return nil
   }
 
-  /// The cells of `infinitive` that `match` is, as written or else with its accents folded, less
-  /// the second-singular person the page hides where the other shares the form. Empty when the
-  /// text is no form of the verb.
-  static func marks(of match: String, on infinitive: String, hiding hidden: Set<DisplayPersonNumber>) -> Set<ConjugationCell> {
-    var cells = ConjugationMatch.cells(of: infinitive, equalTo: match)
-    if cells.isEmpty {
-      cells = ConjugationMatch.cells(of: infinitive, equalTo: match, accents: .folded)
+  /// The cells a verb link marks on `infinitive`'s page: those its `cells` names, or else those
+  /// its `match` is, less the second-singular person the page hides where the other shares the
+  /// form.
+  private static func marks(of url: URL, on infinitive: String) -> Set<ConjugationCell> {
+    let hidden = Current.settings.secondSingularBrowse.hiddenPersons
+    if let cells = url.deeplinkCells {
+      return Set(MatchedForm.shownCells(of: cells, hiding: hidden))
     }
-    guard !cells.isEmpty else {
+    guard let match = url.deeplinkQueryValue(named: URL.matchQueryName) else {
       return []
     }
-    return Set(MatchedForm(text: match, cells: cells, isFolded: false).shownCells(hiding: hidden))
+    return MatchedForm.marks(of: match, on: infinitive, hiding: hidden)
   }
 
   private func open(verb: String, source: AnalyticsSource, marks: Set<ConjugationCell> = []) {

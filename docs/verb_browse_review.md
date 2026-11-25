@@ -100,6 +100,10 @@ usted and ustedes commands, the gerund, and the infinitive; *os* only on the vos
 gerund, and the infinitive; *te* only on tú and vos; *nos* on nosotros. A clitic followed by
 lo/la/los/las is an indirect object and stays free. Add tests on the lines, not only the verb.
 
+**Fixed on `master`, 2026-11-25, in Phase 1 of `plans/verb_browse_fixes.md`.** One exception to
+the fix as written, by Josh's decision that day: *nos* stays free on every command, because it is
+also a common object (dinos, ayúdanos, díganos).
+
 <a id="c2"></a>
 ### C2. The red-letter tip's guard is true for every verb (Run)
 
@@ -145,6 +149,8 @@ returned two findings and the search link, not the verb's page. A learner who ty
 both twins for an unaccented "sonar" is wanted, keep that case and fix only the accented one
 ([Q4](#open-questions)).
 
+**Fixed on `master`, 2026-11-25, in Phase 1 of `plans/verb_browse_fixes.md`.**
+
 <a id="c5"></a>
 ### C5. A several-word lookup does not forgive a missing ñ, though a one-word lookup does (Run)
 
@@ -154,6 +160,8 @@ ensenado" found enseñar but named only "enseñado: Participio"; the perfecto wa
 `ConjugationMatch` gained a `.bare` mode in pedagogy Phase 3, which `confirmed` never adopted.
 
 **Fix.** A third pass with `.bare`, passed through to `spelling`.
+
+**Fixed on `master`, 2026-11-25, in Phase 1 of `plans/verb_browse_fixes.md`.**
 
 <a id="c6"></a>
 ### C6. A lookup's link can mark two rows and land on the wrong one (Run)
@@ -167,6 +175,9 @@ the page scrolls to the first marked card, the Presente. "dámelo" and "cómelo"
 
 **Fix.** Let the link name the cell (`ConjugationCell.code` exists) when the text alone is
 ambiguous.
+
+**Fixed on `master`, 2026-11-25, in Phase 1 of `plans/verb_browse_fixes.md`**, with a `cells`
+query item.
 
 <a id="c7"></a>
 ### C7. The scroll tip shows on pages with nothing below the conjugations (Read; counts by a reviewer)
@@ -280,9 +291,13 @@ later non-optional field, which the "added fields must be optional" rule already
   starred, Recent lists five while older unstarred opens exist.
 - **A homonym found by its second sense is answered with its first (Reviewer).** Look Up a Verb
   for "station" answers apostar, "bet", with the stem-changing sense's key conjugations
-  (`VerbLookup.swift:125-126`).
+  (`VerbLookup.swift:125-126`). *Fixed in part on `master`, 2026-11-25, in Phase 1 of
+  `plans/verb_browse_fixes.md`: the answer names the sense that matched ("apostar, “station”").
+  The key conjugations stay the first sense's, which is also what the page shows; see that phase's
+  notes for what the rest would take.*
 - **The guess's form names its cells out of page order (Reviewer).** `VerbSearch.guess` builds its
-  `MatchedForm` from the map's order, not the page's (`VerbSearch.swift:141-142`).
+  `MatchedForm` from the map's order, not the page's (`VerbSearch.swift:141-142`). *Fixed on
+  `master`, 2026-11-25, in Phase 1 of `plans/verb_browse_fixes.md`.*
 - **Links are case-sensitive (Reviewer, who ran Foundation).** iOS matches a scheme without
   regard to case, so `CONJUGAR://VERB/hablar` opens the app, which then ignores it. Every builder
   writes lowercase, so this matters only for a link written by hand.
@@ -560,7 +575,8 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   - `noParameterCanEchoTheQuery` holds by the types, and four of its eight arguments are words
     already in the vocabulary.
   - `VerbLookupTests.swift:147` asserts `named.count == maxNamedVerbs || named.contains("comer")`,
-    which passes in almost any outcome.
+    which passes in almost any outcome. *Fixed on `master`, 2026-11-25, in Phase 1 of
+    `plans/verb_browse_fixes.md`: it pins the four verbs.*
   - `formsAreEveryOneWordFormOnce` (`VerbSpotlightTests.swift:30-32`) checks that one alternate
     name is present.
   - `ConjugationMapTests.swift:160` takes `prefix(20)` of a dictionary, a different twenty each

@@ -42,6 +42,20 @@ nonisolated enum ConjugationMatch {
     return cells
   }()
 
+  /// `cells` in `allCells` order, the page's.
+  static func inPageOrder(_ cells: some Sequence<ConjugationCell>) -> [ConjugationCell] {
+    cells.sorted { pageIndex(of: $0) < pageIndex(of: $1) }
+  }
+
+  /// Where `cell` falls in `allCells`.
+  static func pageIndex(of cell: ConjugationCell) -> Int {
+    pageIndexes[cell] ?? Int.max
+  }
+
+  private static let pageIndexes: [ConjugationCell: Int] = Dictionary(
+    uniqueKeysWithValues: allCells.enumerated().map { ($1, $0) }
+  )
+
   /// The cells of `infinitive` whose form equals `text`, in `allCells` order. Case and runs of
   /// spaces never count. A reflexive-only verb's form matches with its pronoun or without it
   /// (me arrepiento, arrepiento), as the quiz grades it. Empty for a verb not in `VerbMap`.

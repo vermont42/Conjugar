@@ -25,6 +25,11 @@ nonisolated struct MatchedForm: Hashable, Sendable {
   /// not read "(tú, vos)" on every line. A form that only the hidden person has (hablás) keeps
   /// it, and the page then shows that person.
   func shownCells(hiding hidden: Set<DisplayPersonNumber>) -> [ConjugationCell] {
+    Self.shownCells(of: cells, hiding: hidden)
+  }
+
+  /// `cells`, as `shownCells(hiding:)` leaves them.
+  static func shownCells(of cells: [ConjugationCell], hiding hidden: Set<DisplayPersonNumber>) -> [ConjugationCell] {
     let all = Set(cells)
     return cells.filter { cell in
       guard hidden.contains(cell.personNumber), let counterpart = Self.secondSingularCounterpart[cell.personNumber] else {
@@ -40,6 +45,17 @@ nonisolated struct MatchedForm: Hashable, Sendable {
   static func shown(_ forms: [MatchedForm], hiding hidden: Set<DisplayPersonNumber>) -> [MatchedForm] {
     let visible = forms.filter { !$0.isFolded || !$0.cells.allSatisfy { hidden.contains($0.personNumber) } }
     return visible.isEmpty ? forms : visible
+  }
+
+  /// The cells a verb link's `match` marks on `infinitive`'s page: those `text` is, as written
+  /// or else with its accents folded, less the second-singular person the page hides where the
+  /// other shares the form. Empty when the text is no form of the verb.
+  static func marks(of text: String, on infinitive: String, hiding hidden: Set<DisplayPersonNumber>) -> Set<ConjugationCell> {
+    var cells = ConjugationMatch.cells(of: infinitive, equalTo: text)
+    if cells.isEmpty {
+      cells = ConjugationMatch.cells(of: infinitive, equalTo: text, accents: .folded)
+    }
+    return Set(shownCells(of: cells, hiding: hidden))
   }
 
   private static let secondSingularCounterpart: [DisplayPersonNumber: DisplayPersonNumber] = [
@@ -185,6 +201,9 @@ nonisolated enum FormLookup {
         for form in index.forms(folding: VerbSearch.fold(base)) {
           for entry in index.map.entries(for: form) {
             for cell in entry.cells where encliticTenses.contains(cell.tense) && (tenses?.contains(cell.tense) ?? true) {
+              guard ReflexivePronoun.encliticAgrees(parse.clitics, with: cell) else {
+                continue
+              }
               let joined = attach(parse.clitics, to: form, at: cell)
               guard VerbSearch.fold(joined) == VerbSearch.fold(word) else {
                 continue
@@ -265,20 +284,21 @@ nonisolated enum FormLookup {
 
   /// The cells of each candidate verb that the whole of `text` is, compound tenses and the
   /// imperativo negativo included, by the verb's own conjugations: exactly if any match, else
-  /// with accents folded.
+  /// with accents folded, else with ñ's tilde folded too, as a one-word query is ("he ensenado"
+  /// for he enseñado).
   private static func confirmed(_ text: String, candidates: Set<String>) -> [String: [MatchedForm]] {
     var found = FoundForms()
     for infinitive in candidates.sorted() {
-      var isFolded = false
-      var cells = ConjugationMatch.cells(of: infinitive, equalTo: text, accents: .exact)
-      if cells.isEmpty {
-        cells = ConjugationMatch.cells(of: infinitive, equalTo: text, accents: .folded)
-        isFolded = true
+      var accents = ConjugationMatch.Accents.exact
+      var cells = ConjugationMatch.cells(of: infinitive, equalTo: text, accents: accents)
+      for looser in [ConjugationMatch.Accents.folded, .bare] where cells.isEmpty {
+        accents = looser
+        cells = ConjugationMatch.cells(of: infinitive, equalTo: text, accents: accents)
       }
       // Group the cells by spelling: "habria dicho" might match more than one.
       var cellsBySpelling: [(text: String, cells: [ConjugationCell])] = []
       for cell in cells {
-        let spelled = spelling(of: infinitive, at: cell, matching: text, accents: isFolded ? .folded : .exact)
+        let spelled = spelling(of: infinitive, at: cell, matching: text, accents: accents)
         if let index = cellsBySpelling.firstIndex(where: { $0.text == spelled }) {
           cellsBySpelling[index].cells.append(cell)
         } else {
@@ -336,19 +356,13 @@ private nonisolated struct FoundForms {
     }
     // Literal spellings first, then each spelling by its first cell's place on the page.
     byInfinitive[infinitive] = forms.sorted { lhs, rhs in
-      (lhs.isFolded ? 1 : 0, Self.pageIndex(lhs.cells[0]), lhs.text) < (rhs.isFolded ? 1 : 0, Self.pageIndex(rhs.cells[0]), rhs.text)
+      let lhsPlace = ConjugationMatch.pageIndex(of: lhs.cells[0])
+      let rhsPlace = ConjugationMatch.pageIndex(of: rhs.cells[0])
+      return (lhs.isFolded ? 1 : 0, lhsPlace, lhs.text) < (rhs.isFolded ? 1 : 0, rhsPlace, rhs.text)
     }
   }
 
   private static func inPageOrder(_ cells: Set<ConjugationCell>) -> [ConjugationCell] {
-    cells.sorted { pageIndex($0) < pageIndex($1) }
+    ConjugationMatch.inPageOrder(cells)
   }
-
-  private static func pageIndex(_ cell: ConjugationCell) -> Int {
-    pageIndexes[cell] ?? Int.max
-  }
-
-  private static let pageIndexes: [ConjugationCell: Int] = Dictionary(
-    uniqueKeysWithValues: ConjugationMatch.allCells.enumerated().map { ($1, $0) }
-  )
 }

@@ -124,6 +124,74 @@ import Testing
     #expect(lines("decírselo", "decir") == ["decírselo: Infinitivo"])
   }
 
+  // A vos command takes te, not se or os, so hablá + se is no word and hablase is only the
+  // imperfecto de subjuntivo. The lines are pinned with vos shown, so that a bogus vos cell
+  // could not hide behind the setting.
+  @Test(arguments: [
+    ("hablase", "hablar", ["hablase: Imperfecto de Subjuntivo 2 (yo, él)"]),
+    ("pasase", "pasar", ["pasase: Imperfecto de Subjuntivo 2 (yo, él)"]),
+    ("levantaos", "levantar", ["levantaos: Imperativo Positivo (vosotros)"])
+  ])
+  func aReflexiveCliticMustAgreeWithItsCommand(query: String, infinitive: String, expected: [String]) {
+    #expect(lines(query, infinitive) == expected)
+    #expect(lines(query, infinitive, hiding: []) == expected)
+  }
+
+  @Test(arguments: [
+    ("levántate", "levantar", "levántate: Imperativo Positivo (tú)"),
+    ("dámelo", "dar", "dámelo: Imperativo Positivo (tú)"),
+    ("dime", "decir", "dime: Imperativo Positivo (tú)"),
+    ("siéntese", "sentar", "siéntese: Imperativo Positivo (usted)"),
+    ("vámonos", "ir", "vámonos: Imperativo Positivo (nosotros)"),
+    ("arrepintiéndose", "arrepentir", "arrepintiéndose: Gerundio"),
+    ("dinos", "decir", "dinos: Imperativo Positivo (tú)"),
+    ("ayúdennos", "ayudar", "ayúdennos: Imperativo Positivo (ustedes)"),
+    ("dáselo", "dar", "dáselo: Imperativo Positivo (tú)")
+  ])
+  func agreeingCliticsStillFindTheirCells(query: String, infinitive: String, expected: String) {
+    #expect(lines(query, infinitive) == [expected])
+  }
+
+  @Test(arguments: [
+    (["te"], DisplayTense.imperativoPositivo, DisplayPersonNumber.secondSingularTú, true),
+    (["te"], .imperativoPositivo, .secondSingularVos, true),
+    (["te"], .imperativoPositivo, .thirdSingular, false),
+    (["se"], .imperativoPositivo, .secondSingularVos, false),
+    (["se"], .imperativoPositivo, .secondSingularTú, false),
+    (["se"], .imperativoPositivo, .thirdSingular, true),
+    (["se"], .imperativoPositivo, .thirdPlural, true),
+    (["os"], .imperativoPositivo, .secondPlural, true),
+    (["os"], .imperativoPositivo, .secondSingularVos, false),
+    (["os"], .imperativoPositivo, .secondSingularTú, false),
+    (["nos"], .imperativoPositivo, .firstPlural, true),
+    (["nos"], .imperativoPositivo, .secondSingularTú, true),
+    (["me"], .imperativoPositivo, .thirdSingular, true),
+    (["se", "lo"], .imperativoPositivo, .secondSingularTú, true),
+    (["te", "la"], .imperativoPositivo, .thirdSingular, true),
+    (["se", "me"], .imperativoPositivo, .secondSingularTú, false),
+    (["os"], .gerundio, .none, true),
+    (["te"], .infinitivo, .none, true)
+  ])
+  func encliticAgreementFollowsThePronounTable(clitics: [String], tense: DisplayTense, person: DisplayPersonNumber, agrees: Bool) {
+    #expect(ReflexivePronoun.encliticAgrees(clitics, with: Self.cell(tense, person)) == agrees)
+  }
+
+  @Test func aSeveralWordFormForgivesAMissingTilde() {
+    #expect(lines("he ensenado", "enseñar") == ["he enseñado: Perfecto de Indicativo (yo)"])
+  }
+
+  // The bundled map lists each verb's cells in page order today, though its own order puts the
+  // pretérito before the imperfecto, so this map is made to disagree.
+  @Test func aGuessedFormNamesItsCellsInPageOrder() throws {
+    let pretérito = Self.cell(.pretérito, .thirdSingular)
+    let imperfecto = Self.cell(.imperfectoDeIndicativo, .thirdSingular)
+    let map = ConjugationMap(entriesByForm: ["hablaba": [ConjugationMap.Entry(infinitive: "hablar", cells: [pretérito, imperfecto])]])
+    let hablar = try #require(VerbMap.shared.entry(for: "hablar"))
+    let guess = VerbSearch.guess(for: "hablabz", in: [hablar], index: ConjugationIndex(map: map))
+    #expect(guess?.form?.text == "hablaba")
+    #expect(guess?.form?.cells == [imperfecto, pretérito])
+  }
+
   @Test func anEncliticTypedWithoutItsAccentIsFolded() throws {
     let decir = try #require(match("dimelo", "decir"))
     #expect(decir.kind == .foldedConjugation)

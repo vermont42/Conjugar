@@ -243,7 +243,13 @@ from outside the view (§ App Shortcuts and Spotlight).
 **What a query may be.** One word is looked up as written and folded; with up to two enclitic
 pronouns split off a command, gerund, or infinitive (dímelo, levántate, diciéndole, vámonos,
 levantaos, idos, decírselo), each candidate rejoined through `ReflexivePronoun.enclitic` and kept
-only if it gives back the word; and as a participle with a feminine or plural ending (hecha, rotos,
+only if it gives back the word and its first pronoun agrees with the cell
+(`ReflexivePronoun.encliticAgrees`). On a command, te, os, and se must be the person's own
+pronoun, so hablase is only the imperfecto de subjuntivo and levantaos only the vosotros command;
+me and nos, which are also objects (dime, dinos), and a pronoun followed by lo, la, los, or las
+(dáselo) are free, as is anything on the gerund and the infinitive. The whole text of several words
+is confirmed as written, else with accents folded, else with ñ's tilde folded too ("he ensenado");
+and as a participle with a feminine or plural ending (hecha, rotos,
 dichas), only if the -o form is a participle cell. Several words: a leading subject pronoun is
 dropped and narrows the persons ("ella hable"); the whole text is confirmed by `ConjugationMatch`
 for the verbs whose form the last word is ("he hablado", "no hables", "me arrepiento"); failing
@@ -415,7 +421,7 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
 - **`source`** may follow any route that leads to a verb page, a search, or a quiz. It
   names the surface that built the link, from `AnalyticsSource`, because a widget or an intent can
   hand the app nothing but a URL. A missing or unknown value counts as `deeplink`.
-- **Builders, not literals.** App code builds links with `URL.verbDeeplink(_:source:match:)`,
+- **Builders, not literals.** App code builds links with `URL.verbDeeplink(_:source:match:cells:)`,
   `URL.searchDeeplink(text:source:)`, `URL.infoDeeplink(stableKey:)`, and
   `URL.listDeeplink(key:source:)`, `URL.dailySessionDeeplink(source:)`, and
   `URL.challengeDeeplink(_:source:)`
@@ -426,7 +432,7 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
 
 | Route | Target | Query items | Opens |
 |---|---|---|---|
-| `verb` | An infinitive, bare or with "se" (`arrepentirse` opens arrepentir), or `random` (drawn by `VerbDraw`; see [The Verb of the Day and Random Verbs](#the-verb-of-the-day-and-random-verbs)) | `source`; `match`, a form the page marks as it marks a search's match (`verb/ir?match=fue`) | The Verbs tab's verb page, scrolled to the first marked card |
+| `verb` | An infinitive, bare or with "se" (`arrepentirse` opens arrepentir), or `random` (drawn by `VerbDraw`; see [The Verb of the Day and Random Verbs](#the-verb-of-the-day-and-random-verbs)) | `source`; `match`, a form the page marks as it marks a search's match (`verb/ir?match=fue`); `cells`, the cells to mark by `ConjugationCell.code`, comma-separated, in place of every cell `match` is (`verb/levantar?match=levanta&cells=ioss`) | The Verbs tab's verb page, scrolled to the first marked card |
 | `search` | None | `q`, the text; `source` | The Verbs tab's list with its search field. With text, the results show with the keyboard down; with none, or `q` empty, the field is cleared and focused for typing |
 | `info` | A `stableKey`, or a position in `Info.infos` | None | The Info tab, with the article pushed |
 | `quiz` | Any but `set`, `daily`, and `challenge`, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals |
@@ -436,11 +442,18 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
 | `game` | None, `boss`, or `end` | None | The game, full screen over any tab (see `docs/game.md`) |
 | `list` | A collection's key (`top100`, `goVerbs`, `model-31`, `model-4B`; see [Collections](#collections)) | `source`; a shared collection sends `sharedLink` | The Models tab, with the collection's page pushed, or for a model the model's page. An unknown key, or an alias class's (`model-31-1`), is ignored |
 
-**`match`** goes through `AppRouter.marks(of:on:hiding:)`: `ConjugationMatch.cells(of:equalTo:)`,
+**`match`** goes through `MatchedForm.marks(of:on:hiding:)`: `ConjugationMatch.cells(of:equalTo:)`,
 as written, else with accents folded, so several words ("he hablado") and compounds work. Where tú
 and vos share the form in one tense (hablaste), the person that Settings' second-singular choice
 hides is left out, as a search's marks leave it (`MatchedForm.shownCells(hiding:)`). A match that is
 no form of the verb opens the page unmarked. The Look Up a Verb shortcut opens pages this way.
+
+**`cells`** names the cells when `match` alone would mark more. levanta, the bare form that
+levántate's link carries, is the presente's él as well as the imperativo's tú, so the lookup's link
+adds `cells=ioss` and the page marks the command alone and lands on its card. When `cells` is present
+and names at least one cell, `AppRouter` marks those (less the hidden person, as above) and ignores
+`match`. Codes that are no cell are dropped; a `cells` with none left falls back to `match`. A link
+without `cells` behaves as before.
 
 **`info`** accepts a position as well as a key, but a position moves when the articles are
 reordered, so app code always builds the key (`Info.info(deeplinkTarget:)`). The Info tab's own
@@ -467,6 +480,7 @@ pending practice set, whose sheet would otherwise hide what the link opened.
 ```
 conjugar://verb/hablar                          → hablar's page
 conjugar://verb/ir?match=fue&source=lookup      → ir's page at the Pretérito, fue marked
+conjugar://verb/levantar?match=levanta&cells=ioss → levantar's page at the Imperativo, its tú marked
 conjugar://verb/arrepentirse?source=widget      → arrepentir's page (shown as arrepentirse)
 conjugar://search?q=he%20hablado                → the verb list searched for "he hablado"
 conjugar://search?source=control                → the verb list with an empty, focused field
@@ -532,8 +546,13 @@ naming the hidden `OpenLookupResultIntent`, which routes the lookup's link throu
 `AppRouter.shared`. A result can open the app only by naming another intent.
 
 `VerbLookup` reads `VerbSearch.matches`. Its answers are the matches of kind `exactInfinitive`,
-`exactFoldedInfinitive`, `exactGlossSense`, or `conjugation`, or failing those, `foldedConjugation`.
-An exact English sense answers because the verb list ranks it above a form ("come").
+`exactGlossSense`, or `conjugation`, or failing those, `exactFoldedInfinitive` and
+`foldedConjugation`. An exact English sense answers because the verb list ranks it above a form
+("come"). Exact spelling wins: five pairs of infinitives differ only by ñ (acunar and acuñar,
+empanar and empañar, ordenar and ordeñar, rebanar and rebañar, sonar and soñar), and each opens its
+own page; "anadir" still answers with añadir, since nothing is spelled anadir. A homonym found by
+an English sense is named by that sense ("apostar, “station”"), though its key conjugations stay the
+first sense's, which the page shows too.
 
 | Answers | Says | Opens |
 |---|---|---|
@@ -547,7 +566,8 @@ An exact English sense answers because the verb list ranks it above a form ("com
 A form's line names only the spellings that matched as typed ("hablo" leaves out habló), and leaves
 out the second-singular person the page hides. The link's `match` is the typed form when it is a
 cell, and otherwise the bare form of its first cell (dímelo sends `di`), because the `verb` route
-marks through `ConjugationMatch`, which reads cells only. The answer's strings are `L.Lookup`,
+marks through `ConjugationMatch`, which reads cells only. Where that bare form is another cell too
+(levántate's levanta, dámelo's da), the link also carries `cells`. The answer's strings are `L.Lookup`,
 whose accessors are `nonisolated`.
 
 ### Spotlight

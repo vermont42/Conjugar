@@ -12312,3 +12312,40 @@ One finding was added to the review while writing the plan. Josh's answer about 
 it: Settings presents its own game and its own tour from local state, which the router cannot
 close, so "a link closes the game" needs Settings to use the router's flags first. A reviewer had
 reported it as outside the browse plan's scope, and the review's first draft left it out.
+
+## The Lookup Tells the Truth (2026-11-25)
+
+Phase 1 of the plan to fix what the browse review found was about reverse lookup, the part of
+search that starts from a form and finds its verb. Four of its findings sat in two files, and none
+of them can happen in German, which is why Conjugar's plan put them first.
+
+The first was the most embarrassing. The lookup splits pronouns off the end of a word (dímelo,
+levántate), rejoins them to each command they might fit, and keeps any that give back the word. It
+never asked whether the pronoun suited the command. Under the 2010 accent rules the vos command
+plus *se* needs no written accent, so hablá + se rebuilt "hablase" exactly, and every imperfecto de
+subjuntivo in -se also claimed to be a vos command. Josh's decision was strict agreement: te on tú
+and vos, os on vosotros, nos on nosotros, se on usted and ustedes. Writing the rule out turned up a
+problem with nos. It is a reflexive pronoun, but it is also the object in dinos, danos, ayúdanos,
+and the "danos hoy" of the Lord's Prayer, and the strict rule would have sent all of them to the
+"did you mean" guess. Josh chose to leave nos free. Te, os, and se as objects of other commands
+really are rare, so they still have to agree.
+
+The second was Look Up a Verb with an ñ twin. Five pairs of infinitives differ only by ñ (sonar and
+soñar among them), and the shortcut put the folded infinitive in the same tier as the exact one, so
+typing soñar, ñ and all, got both verbs and a search instead of a page. Exact spelling now wins.
+The third was smaller: "he ensenado" found enseñar but forgave the missing tilde only for the
+participle, because the several-word path never adopted the quiz's laxest accent mode.
+
+The fourth needed a new piece of the link grammar. The shortcut's link names a form to mark, and
+for levántate it sends levanta, which is the tú command and also the presente's él. The page
+marked both and scrolled to the presente. Links can now carry a `cells` item, cell codes the page
+prefers to the text, and the lookup adds it only when the text alone would mark too much. In the
+simulator, the page now opens on the Imperativo Positivo with ¡levanta! marked alone.
+
+Two smaller findings came along. A homonym found by its second sense ("station" is apostar's) is
+now named by that sense, though it still gives the first sense's key conjugations. Fixing those
+would make the answer disagree with the page it opens, which knows only the first sense. And the
+guess's cells were said to come out of page order. A probe over the whole conjugation map found
+nothing out of order: the map's tense order differs from the page's only between tenses that never
+share a form within one verb. The fix went in anyway, with a test that builds a small map whose
+order disagrees, since the real map's order was correct by accident.
