@@ -387,6 +387,11 @@ opened the same way). It is a new kind of surface for the first lookup bullet an
 collection bullet, so both are rewritten; apply this wording in place of the Collections section's.
 Nothing about the answer, the verb, or whether it was right is sent.
 
+(The verb browse fixes' Phase 2, 2026-11-25, made that last sentence true of `viewCollection`.
+Until then the model's page sent its `collection` key with this source, which said which model the
+learner had just missed, and for a model of one verb, such as ser's, which verb. It now sends
+`source` alone. Josh decided that the wording below stays as it is.)
+
 ### English
 
 The first bullet of Phase 2's section now reads:

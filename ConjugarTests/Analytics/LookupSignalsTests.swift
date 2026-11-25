@@ -40,6 +40,23 @@ struct LookupSignalsTests {
     #expect(kind.analyticsValue.rawValue == String(describing: kind))
   }
 
+  /// A renamed case orphans its history, and the test above passes if both enums are renamed
+  /// together, so the wire names are pinned by literals, `guess` and `none` among them.
+  @Test func matchKindValuesAreStable() {
+    #expect(SearchMatchKind.allCases.map(\.rawValue) == [
+      "conjugation", "exactFoldedInfinitive", "exactGlossSense", "exactInfinitive", "foldedConjugation", "foldedInfinitivePrefix",
+      "foldedInfinitiveSubstring", "glossSubstring", "guess", "infinitivePrefix", "infinitiveSubstring", "none", "wholeWordGloss"
+    ])
+    #expect(VerbSearch.MatchKind.allCases.map(\.analyticsValue.rawValue) == [
+      "exactInfinitive", "exactFoldedInfinitive", "exactGlossSense", "conjugation", "foldedConjugation", "infinitivePrefix",
+      "wholeWordGloss", "infinitiveSubstring", "foldedInfinitivePrefix", "foldedInfinitiveSubstring", "glossSubstring"
+    ])
+  }
+
+  @Test func outcomeValuesAreStable() {
+    #expect(SearchOutcome.allCases.map(\.rawValue) == ["abandoned", "noResult", "opened"])
+  }
+
   @Test func everyMatchKindHasItsOwnValue() {
     let values = VerbSearch.MatchKind.allCases.map(\.analyticsValue)
     #expect(Set(values).count == values.count)

@@ -14,7 +14,8 @@
 // test suite. MainActor call sites can call into it synchronously either way.
 nonisolated enum ParameterKey: String {
   /// A collection's key, such as `top100` or `model-31`, on `viewCollection`, `tapShareCollection`,
-  /// and a collection's `startQuiz`. A list, never a verb.
+  /// and a collection's `startQuiz`. A list, never a verb. A `viewCollection` whose source is
+  /// `quizCorrection` leaves it out, because it would say which model the learner just missed.
   case collection
   /// What kind of choice a custom quiz's `startQuiz` was over: `tenses`, `verbs`, or `both`
   /// (`CustomQuiz.choiceParameter`). Never which tenses or verbs.
@@ -100,7 +101,8 @@ nonisolated enum AnalyticsName: String {
   /// Settings', which opens the list of every level's board, sends nothing.
   case tapViewLeaderboard
   /// Once for each opening of a featured collection's page or of a model's page, whose bar makes
-  /// it a collection. Carries `collection` and `source`.
+  /// it a collection. Carries `collection` and `source`, or `source` alone when it is
+  /// `quizCorrection`.
   case viewCollection
   case viewInfoBrowseView
   case viewInfoView
@@ -138,7 +140,9 @@ nonisolated enum AnalyticsSource: String, CaseIterable, Sendable {
   case challengeLink
   /// A tap on the quiz widget beside its answers, which opens the day's challenge.
   case challengeWidget
-  /// The Random Verb control in Control Center.
+  /// A Control Center control: the Random Verb control, which opens a verb page, or the Find a
+  /// Verb control, which begins a search. The Quick Quiz control sends a `quiz` link and so
+  /// `deeplink`.
   case control
   /// A custom quiz begun from the Quiz tab's Custom segment.
   case custom

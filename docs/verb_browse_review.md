@@ -383,6 +383,10 @@ of the 102 models, never a verb" (`docs/privacy_policy_pending.md:308-309`).
 **Fix.** For `quizCorrection`, send `viewCollection` without `collection`, or amend the staged
 line, which is Josh's call ([Q1](#open-questions)).
 
+*Fixed on `master`, 2026-11-25, in Phase 2 of `plans/verb_browse_fixes.md`: a `viewCollection` whose source is `quizCorrection` carries `source` alone, pinned by
+`VerbCollectionTests.aViewNamesItsCollectionExceptFromACorrection`. The staged wording stays, by
+Josh's decision.*
+
 ## Gaps Between the Docs and the Code
 
 - **G1. The widget does not read the learner's record (Read).** `Shared/LearnerVerbs.swift:12-15`,
@@ -422,7 +426,8 @@ line, which is Josh's call ([Q1](#open-questions)).
   - `MainTabView.swift:117`: the doc comment about the onboarding cover sits on
     `widgetChallengeContext` (Read). Line 141 says only controls stash a link; two shortcuts do
     too.
-  - `Analytics.swift:141`: `control` is documented as the Random Verb control only.
+  - `Analytics.swift:141`: `control` is documented as the Random Verb control only. *Fixed on `master`, 2026-11-25, in Phase 2 of `plans/verb_browse_fixes.md`:
+    it names both controls that send it, and says the Quick Quiz control sends `deeplink`.*
   - `ViewControllerTransitions.swift:10-13` and `docs/project_structure.md:259` describe only the
     letter key's use; `push(_:)` uses it too.
   - The Info article "Purpose/Use" still says a quiz is thirty verbs at Easy, Moderate, or
@@ -571,7 +576,10 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
     arrepentíos, huíos, tente) and every one was right, so this is a missing guard, not a bug.
   - `matchKindIsSentByItsName` (`LookupSignalsTests.swift:38-41`) compares each wire name with
     `String(describing:)` of the case, so renaming both enums together passes and changes what is
-    sent. `guess` and `none` are not pinned at all.
+    sent. `guess` and `none` are not pinned at all. *Fixed on `master`, 2026-11-25, in Phase 2 of `plans/verb_browse_fixes.md`:
+    `matchKindValuesAreStable` pins both enums' wire names by literals, and `outcomeValuesAreStable`
+    pins `SearchOutcome`'s. `AnalyticsTests`' tables now pin `startQuiz`, `tapDailyReminder`,
+    `enabled`, and `streak`, which had no literal in the tests, as the reviewer said.*
   - `noParameterCanEchoTheQuery` holds by the types, and four of its eight arguments are words
     already in the vocabulary.
   - `VerbLookupTests.swift:147` asserts `named.count == maxNamedVerbs || named.contains("comer")`,

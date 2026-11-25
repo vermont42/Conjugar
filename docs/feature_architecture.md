@@ -92,7 +92,7 @@ a form is still `guess`. Rows and verbs correspond one to one, so `resultCount` 
 
 | Signal | Parameters | Sent |
 |---|---|---|
-| `viewCollection` | `collection` (a key: `top100`, `goVerbs`, `strongPreterite`, `irregularFuture`, `irregularParticiple`, or `model-<class>`), `source` (`tab`, `verbPage`, `quizCorrection`, `sharedLink`, or `deeplink`) | Once for each opening of a featured collection's page or of a model's page, whose bar makes it a collection. A return from one of its verb pages sends nothing |
+| `viewCollection` | `collection` (a key: `top100`, `goVerbs`, `strongPreterite`, `irregularFuture`, `irregularParticiple`, or `model-<class>`), `source` (`tab`, `verbPage`, `quizCorrection`, `sharedLink`, or `deeplink`) | Once for each opening of a featured collection's page or of a model's page, whose bar makes it a collection. A return from one of its verb pages sends nothing. When `source` is `quizCorrection`, `collection` is left out: a correction follows a wrong answer, so the key would say which model was missed, and for a model of one verb, such as ser's, which verb |
 | `tapShareCollection` | `collection` | On each tap of a collection bar's Share button, whether or not the learner then shares |
 
 A collection's quiz, and a custom quiz over a collection, adds `collection` to `startQuiz`. A collection names a list, never a verb, though
@@ -124,7 +124,7 @@ a model's key names the model.
 | `myVerbs` | Yes | A row of My Verbs, the verb list's third segment; for the quiz signals, a quiz over My Verbs begun from the Quiz tab |
 | `qrCode` | Yes | `viewPracticeSet` and the quiz signals: a practice set opened from its QR code |
 | `quickAction` | Yes | `finishSearch` only: a search begun from the Find a Verb Home Screen quick action |
-| `quizCorrection` | Yes | A link on a quiz's held correction: for `viewVerbView`, the verb's page; for `viewCollection`, its model's page |
+| `quizCorrection` | Yes | A link on a quiz's held correction: for `viewVerbView`, the verb's page; for `viewCollection`, its model's page, which then sends no `collection` |
 | `recent` | Yes | A recent verb, listed while the search field is focused and empty |
 | `recognition` | Yes | The quiz signals: Name the Form, from the Quiz tab's Exercises section |
 | `related` | Yes | A chip on a verb page's Related Verbs card, or a row of the full list it opens |

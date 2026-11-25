@@ -96,12 +96,16 @@ extension VerbCollection {
     )
   }
 
-  /// `viewCollection`: once for each opening of a collection's page or a model's page.
-  func signalView(source: AnalyticsSource) {
-    Current.analytics.signal(name: .viewCollection, parameters: [
-      ParameterKey.collection.rawValue: key,
-      ParameterKey.source.rawValue: source.rawValue
-    ])
+  /// `viewCollection`: once for each opening of a collection's page or a model's page. A model's
+  /// page opened from a quiz's correction sends its source alone: the correction follows a wrong
+  /// answer, so its model's key would say which model the learner missed, and for a model of one
+  /// verb, such as ser's or ir's, which verb.
+  func signalView(source: AnalyticsSource, analytics: Analytics = Current.analytics) {
+    var parameters = [ParameterKey.source.rawValue: source.rawValue]
+    if source != .quizCorrection {
+      parameters[ParameterKey.collection.rawValue] = key
+    }
+    analytics.signal(name: .viewCollection, parameters: parameters)
   }
 }
 

@@ -44,6 +44,8 @@ struct AnalyticsTests {
     (AnalyticsName.completeQuiz, "completeQuiz"),
     (AnalyticsName.quitQuiz, "quitQuiz"),
     (AnalyticsName.completeStage, "completeStage"),
+    (AnalyticsName.startQuiz, "startQuiz"),
+    (AnalyticsName.tapDailyReminder, "tapDailyReminder"),
     (AnalyticsName.tapViewAchievements, "tapViewAchievements"),
     (AnalyticsName.tapViewLeaderboard, "tapViewLeaderboard"),
     (AnalyticsName.tapShareChallenge, "tapShareChallenge"),
@@ -57,12 +59,14 @@ struct AnalyticsTests {
   @Test(arguments: [
     (ParameterKey.customChoice, "customChoice"),
     (ParameterKey.duration, "duration"),
+    (ParameterKey.enabled, "enabled"),
     (ParameterKey.level, "level"),
     (ParameterKey.method, "method"),
     (ParameterKey.outcome, "outcome"),
     (ParameterKey.questionCount, "questionCount"),
     (ParameterKey.questionNumber, "questionNumber"),
-    (ParameterKey.stage, "stage")
+    (ParameterKey.stage, "stage"),
+    (ParameterKey.streak, "streak")
   ])
   func parameterKeyRawValuesAreStable(key: ParameterKey, expected: String) {
     #expect(key.rawValue == expected)

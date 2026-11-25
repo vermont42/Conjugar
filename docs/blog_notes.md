@@ -12349,3 +12349,33 @@ guess's cells were said to come out of page order. A probe over the whole conjug
 nothing out of order: the map's tense order differs from the page's only between tenses that never
 share a form within one verb. The fix went in anyway, with a test that builds a small map whose
 order disagrees, since the real map's order was correct by accident.
+
+## A Correction's Model Link Stops Naming the Model (2026-11-25)
+
+Phase 2 of the verb browse fixes was the smallest privacy finding in the review, and in a way the
+most interesting, because neither half of it was wrong on its own. The browse plan's Phase 16 gave
+`viewCollection` the collection's key, so that the dashboard could say which lists people open. The
+pedagogy plan later added `quizCorrection` as a source: a wrong answer in a quiz holds a correction
+with a link to the verb's model. Put the two together and the signal said which model the learner
+had just got wrong. Twenty-nine of the 102 models have a single verb, ser, ir, estar, and haber
+among them, so for those it said which verb. The staged policy promises "never a verb."
+
+Josh's ruling was to drop the key for that one source and keep the policy's wording. The change is
+four lines in `VerbCollection.signalView`. It now takes the analytics service as a defaulted
+parameter, so its test can hand it a spy of its own rather than fish the last signal out of the
+shared one. I also read through all forty-five places the app sends a signal, to see whether
+"never a verb" now holds everywhere. It does, with two near misses that were already there and
+that I left alone. A model of one verb names that verb whenever its page is opened, but from the
+Models tab that is the learner's own choice of what to look at, not a record of a mistake. And from
+a correction's model page the learner can go on to share the model or start its quiz, each of which
+carries the key under another source. Linking those back to the correction would take reading a
+session's signals in sequence.
+
+The rest of the phase was tests for wire names. `matchKindIsSentByItsName` compared each search
+kind's wire name with the Swift name of its case, which sounds like a guard but passes if someone
+renames both enums together, and that is exactly the change that orphans a dashboard's history.
+The kinds are now pinned by literal lists, as the sources already were, and so are the search's
+outcomes, which nothing pinned before. The reviewer had also said that `startQuiz`,
+`tapDailyReminder`, `enabled`, and `streak` appear nowhere in the tests as strings. A loop over
+every case confirmed it, and found twenty-four parameterless signals in the same state; the test
+table's own comment scopes it to signals with parameters, so those stayed out.

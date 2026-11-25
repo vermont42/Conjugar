@@ -21,8 +21,8 @@ is filled by the next session, which reads the hash from `git log`.
 
 | Phase | Status | Date | Commit | Findings |
 |---:|---|---|---|---|
-| 1 | Awaiting Josh | 2026-11-25 | | C1, C4, C5, C6, and from C13 the homonym's sense and the guess's cell order |
-| 2 | Not started | | | P1, and the wire names from T1 |
+| 1 | Done | 2026-11-25 | `a5c37cc` | C1, C4, C5, C6, and from C13 the homonym's sense and the guess's cell order |
+| 2 | Awaiting Josh | 2026-11-25 | | P1, and the wire names from T1 |
 | 3 | Not started | | | C9, C12, G1, and from C13 Recent's count |
 | 4 | Not started | | | C3, and a week of verbs for the widget |
 | 5 | Not started | | | C2, C7, C8, G2, G3, G4, and from C13 the "All N" chip |
@@ -252,6 +252,37 @@ page lands), and "he ensenado"; in the Shortcuts app, Look Up a Verb for soñar 
 - Correct `AnalyticsSource.control`'s doc comment, which names only the Random Verb control.
 
 **How it differed:**
+
+- **P1.** `VerbCollection.signalView(source:analytics:)` leaves out `collection` for
+  `quizCorrection`, and takes the analytics service as a parameter that defaults to
+  `Current.analytics`, so that the test hands it a spy of its own instead of reading the shared one.
+  `VerbCollectionTests.aViewNamesItsCollectionExceptFromACorrection` pins five sources, the
+  correction's the only one without the key. `ParameterKey.collection`'s and
+  `AnalyticsName.viewCollection`'s doc comments, the `viewCollection` and `quizCorrection` rows of
+  `docs/feature_architecture.md` § Analytics, and a note under the staged "Links on a quiz's
+  correction" section of `docs/privacy_policy_pending.md` say so. The policy's wording is untouched.
+- **"Never a verb," checked against all 45 `signal(` calls.** No parameter carries an infinitive
+  or anything typed. Two things come close, and neither is new. A model's key names a verb in
+  effect for the 29 models of one verb wherever the page is opened from, but there it says what
+  the learner chose to open, not what they got wrong. And from a correction's model page, the
+  learner may go on to tap Share (`tapShareCollection`) or the collection's quiz (`startQuiz`),
+  each carrying the model's key under its own source. Joining either to the correction takes a
+  session's sequence of signals, and each is a deliberate act. This phase leaves both alone; Josh
+  may want to know.
+- **T1's wire names.** `LookupSignalsTests.matchKindValuesAreStable` pins `SearchMatchKind` by a
+  literal list, `guess` and `none` included, and the `MatchKind`-to-wire mapping by another, since
+  `matchKindIsSentByItsName` passes when both enums are renamed together. I kept that test; it
+  still says why the names match. `outcomeValuesAreStable` pins `SearchOutcome` too, which nothing
+  pinned. The reviewer was right that `startQuiz`, `tapDailyReminder`, `enabled`, and `streak` had
+  no literal anywhere in the tests; `AnalyticsTests`' two tables now carry them. Twenty-four
+  parameterless signal names still have no literal. `AnalyticsTests`' comment limits its table to
+  the signals that carry parameters, and this phase kept to that.
+- **`control`'s doc comment** names both controls that send it and says that the Quick Quiz
+  control sends `deeplink`, which `docs/feature_architecture.md` already said.
+- **No visible change**, so no simulator check. No new string, file, or signal value.
+- **The suite** is 1,360 Swift Testing tests in 85 suites and 11 XCTest tests, in 83 s. The
+  slowest suites are "ConjugationMap" (19.5 s), "The bundled map" (12.9 s), and
+  `ReverseLookupTests` (10.2 s), back near the baseline after Phase 1's 107 s run.
 
 ## Phase 3: The Learner's Record
 

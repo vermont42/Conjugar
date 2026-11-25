@@ -194,6 +194,27 @@ import UIKit
     }
   }
 
+  /// A page opened from anywhere else names its collection; one opened from a quiz's correction
+  /// does not, since the correction follows a wrong answer and its model's key would say which model
+  /// was missed.
+  @Test(arguments: [
+    (VerbCollection.model("31"), AnalyticsSource.tab, true),
+    (.model("31"), .verbPage, true),
+    (.top100, .sharedLink, true),
+    (.goVerbs, .deeplink, true),
+    (.model("31"), .quizCorrection, false)
+  ])
+  func aViewNamesItsCollectionExceptFromACorrection(collection: VerbCollection, source: AnalyticsSource, namesCollection: Bool) {
+    let spy = AnalyticsSpy()
+    collection.signalView(source: source, analytics: spy)
+    #expect(spy.signalNames == [.viewCollection])
+    var expected = [ParameterKey.source.rawValue: source.rawValue]
+    if namesCollection {
+      expected[ParameterKey.collection.rawValue] = collection.key
+    }
+    #expect(spy.signalParameters == [expected])
+  }
+
   @Test func signalsWireNames() {
     #expect(AnalyticsName.viewCollection.rawValue == "viewCollection")
     #expect(AnalyticsName.tapShareCollection.rawValue == "tapShareCollection")
