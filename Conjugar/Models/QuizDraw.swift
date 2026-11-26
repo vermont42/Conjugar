@@ -62,12 +62,8 @@ nonisolated enum QuizDraw {
     coreVerbs.contains(verb)
   }
 
-  static func isCompound(_ verb: String) -> Bool {
-    VerbRelations.shared.baseByVerb[verb] != nil
-  }
-
   static func isRareCompound(_ entry: VerbMapEntry) -> Bool {
-    isCompound(entry.infinitive) && !entry.isIn(frequentCompoundBand)
+    entry.isCompound && !entry.isIn(frequentCompoundBand)
   }
 
   /// One question per cell, in the cells' order, from the level's band.
@@ -124,7 +120,7 @@ nonisolated enum QuizDraw {
       if QuizDraw.isRareCompound(entry) {
         return .rareCompound
       }
-      return QuizDraw.isCompound(entry.infinitive) ? .frequentCompound : .other
+      return entry.isCompound ? .frequentCompound : .other
     }
 
     func kinds(for role: Role) -> [Kind] {
@@ -143,8 +139,7 @@ nonisolated enum QuizDraw {
 
   /// Each band, and every verb under nil.
   private static let bands: [FrequencyBand?: Band] = Dictionary(uniqueKeysWithValues: ([nil] + FrequencyBand.allCases).map { frequencyBand in
-    let verbs = frequencyBand.map { VerbMap.shared.entries(in: $0) }
-      ?? VerbMap.shared.entries.values.sorted { $0.frequencyRank < $1.frequencyRank }
+    let verbs = frequencyBand.map { VerbMap.shared.entries(in: $0) } ?? VerbMap.shared.entriesByFrequency
     return (frequencyBand, Band(frequencyBand: frequencyBand, verbs: verbs))
   })
 
@@ -154,7 +149,7 @@ nonisolated enum QuizDraw {
   /// every verb to about a hundred engine calls a cell.
   private static let representatives: [String: String] = {
     var representatives: [String: String] = [:]
-    for entry in VerbMap.shared.entries.values.sorted(by: { $0.frequencyRank < $1.frequencyRank }) where representatives[entry.classNumber] == nil {
+    for entry in VerbMap.shared.entriesByFrequency where representatives[entry.classNumber] == nil {
       representatives[entry.classNumber] = entry.infinitive
     }
     return representatives

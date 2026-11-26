@@ -8,7 +8,9 @@
 
 // The Models tab's row model: one displayable row per verb model in
 // `ModelCatalog`, carrying the class number, the exemplar, every verb that
-// conjugates with the model, and a computed irregularity percent.
+// conjugates with the model, and a computed irregularity percent. The verbs are
+// the one definition of a model's verbs: its page, its collection
+// (`VerbCollection.model`), its practice, and the Related Verbs card all read them.
 //
 // The prefix-accent alias classes (29-2 satisfacer / 30-1 suponer / 31-1
 // obtener / 32-1 convenir) ride their parents' models byte-for-byte (see
@@ -24,10 +26,13 @@
 
 import Foundation
 
-struct ModelInfo: Identifiable, Hashable {
+/// `nonisolated`, like the engine and the verb map it reads, so that `VerbCollection` can read it.
+nonisolated struct ModelInfo: Identifiable, Hashable, Sendable {
   let classNumber: String
   let exemplar: String
-  let verbs: [String]
+  /// Every verb that uses the model under any of its senses, an alias class's verb (contener,
+  /// 31-1) under its parent's row (tener, 31), each once, the most frequent first.
+  let verbs: [VerbMapEntry]
   let irregularityPercent: Int
 
   /// The class number uniquely identifies a model row — used for SwiftUI
@@ -37,11 +42,10 @@ struct ModelInfo: Identifiable, Hashable {
   /// Every displayable model row, built once. Order is unspecified; `ModelSort`
   /// supplies the display orders.
   static let all: [ModelInfo] = {
-    var verbsByClass: [String: [String]] = [:]
-    for entry in VerbMap.shared.entries.values {
-      for classNumber in entry.classNumbers {
-        let rowClass = parentByAlias[classNumber] ?? classNumber
-        verbsByClass[rowClass, default: []].append(entry.infinitive)
+    var verbsByClass: [String: [VerbMapEntry]] = [:]
+    for entry in VerbMap.shared.entriesByFrequency {
+      for rowClass in Set(entry.classNumbers.map { parentByAlias[$0] ?? $0 }) {
+        verbsByClass[rowClass, default: []].append(entry)
       }
     }
     return ModelCatalog.classNumbers
@@ -53,13 +57,20 @@ struct ModelInfo: Identifiable, Hashable {
         return ModelInfo(
           classNumber: classNumber,
           exemplar: exemplar,
-          verbs: (verbsByClass[classNumber] ?? []).sorted {
-            $0.compare($1, locale: VerbSort.spanish) == .orderedAscending
-          },
+          verbs: verbsByClass[classNumber] ?? [],
           irregularityPercent: irregularityPercent(exemplar: exemplar)
         )
       }
   }()
+
+  /// A row is its class number, which keeps hashing a row for navigation from hashing its verbs.
+  static func == (lhs: ModelInfo, rhs: ModelInfo) -> Bool {
+    lhs.classNumber == rhs.classNumber
+  }
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(classNumber)
+  }
 
   /// Every row, by its class number.
   static let byClassNumber: [String: ModelInfo] = Dictionary(uniqueKeysWithValues: all.map { ($0.classNumber, $0) })

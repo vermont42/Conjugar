@@ -140,7 +140,7 @@ struct RelatedVerbsTests {
     #expect(ModelInfo.row(for: "contener")?.classNumber == "31")
     #expect(ModelInfo.row(for: "contener")?.exemplar == "tener")
     #expect(ModelInfo.row(for: "hablar")?.exemplar == "cantar")
-    #expect(ModelInfo.row(for: "conducir")?.verbs.contains("traducir") == true)
+    #expect(ModelInfo.row(for: "conducir")?.verbs.contains { $0.infinitive == "traducir" } == true)
     #expect(ModelInfo.row(for: "xyzzy") == nil)
   }
 

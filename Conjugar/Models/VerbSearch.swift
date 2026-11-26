@@ -66,7 +66,7 @@ nonisolated enum VerbSearch {
     guard !spanish.isEmpty || !english.isEmpty else {
       return []
     }
-    let foldedSpanish = fold(spanish)
+    let foldedSpanish = SpellingComparison.fold(spanish)
 
     var entriesByInfinitive: [String: VerbMapEntry] = [:]
     var best: [String: Match] = [:]
@@ -108,12 +108,12 @@ nonisolated enum VerbSearch {
   /// thousand forms rather than a quarter of a million. Nil when nothing is near enough.
   static func guess(for query: String, in entries: some Sequence<VerbMapEntry>, index: ConjugationIndex = .bundled) -> Guess? {
     let entries = Array(entries)
-    let foldedQuery = Array(fold(spanishQuery(from: query)))
+    let foldedQuery = Array(SpellingComparison.fold(spanishQuery(from: query)))
     guard !foldedQuery.isEmpty else {
       return nil
     }
     let infinitiveGuess = closestVerb(to: query, in: entries)
-    let infinitiveDistance = infinitiveGuess.map { editDistance(foldedQuery, Array(keys(for: $0).foldedInfinitive)) }
+    let infinitiveDistance = infinitiveGuess.map { SpellingComparison.editDistance(foldedQuery, Array(keys(for: $0).foldedInfinitive)) }
     // A form at distance zero would have matched, so a guess one edit away cannot be beaten.
     guard !foldedQuery.contains(" "), infinitiveDistance.map({ $0 > 1 }) ?? true else {
       return infinitiveGuess.map { Guess(entry: $0, form: nil) }
@@ -124,7 +124,7 @@ nonisolated enum VerbSearch {
     var best: (guess: Guess, rank: (Int, Int, Int))?
     let queryLetters = Array(String(foldedQuery).utf8)
     for folded in index.foldedForms(startingWith: foldedQuery[0], nearLength: foldedQuery.count, distance: maxDistance) {
-      guard let distance = editDistance(queryLetters, Array(folded.utf8), limit: maxDistance) else {
+      guard let distance = SpellingComparison.editDistance(queryLetters, Array(folded.utf8), limit: maxDistance) else {
         continue
       }
       let candidate = Array(folded)
@@ -155,7 +155,7 @@ nonisolated enum VerbSearch {
   /// a plausible misspelling, so that nonsense guesses nothing. The query is read as the
   /// infinitive search reads it, so a pronominal "levantarse" is measured as levantar.
   static func closestVerb(to query: String, in entries: some Sequence<VerbMapEntry>) -> VerbMapEntry? {
-    let foldedQuery = Array(fold(spanishQuery(from: query)))
+    let foldedQuery = Array(SpellingComparison.fold(spanishQuery(from: query)))
     guard !foldedQuery.isEmpty else {
       return nil
     }
@@ -168,7 +168,7 @@ nonisolated enum VerbSearch {
       guard abs(candidate.count - foldedQuery.count) <= maxDistance else {
         continue
       }
-      let distance = editDistance(foldedQuery, candidate)
+      let distance = SpellingComparison.editDistance(foldedQuery, candidate)
       guard distance <= maxDistance else {
         continue
       }
@@ -188,72 +188,6 @@ nonisolated enum VerbSearch {
     min(3, max(1, length / 3))
   }
 
-  /// Optimal-string-alignment distance: insertions, deletions, substitutions, and swaps of two
-  /// adjacent letters each cost one, because a swap is the commonest slip on a keyboard (hbalar
-  /// for hablar).
-  static func editDistance(_ lhs: [Character], _ rhs: [Character]) -> Int {
-    guard !lhs.isEmpty else {
-      return rhs.count
-    }
-    guard !rhs.isEmpty else {
-      return lhs.count
-    }
-    var twoRowsBack = [Int](repeating: 0, count: rhs.count + 1)
-    var previousRow = Array(0...rhs.count)
-    var currentRow = [Int](repeating: 0, count: rhs.count + 1)
-    for i in 1...lhs.count {
-      currentRow[0] = i
-      for j in 1...rhs.count {
-        let substitutionCost = lhs[i - 1] == rhs[j - 1] ? 0 : 1
-        currentRow[j] = min(previousRow[j] + 1, currentRow[j - 1] + 1, previousRow[j - 1] + substitutionCost)
-        if i > 1, j > 1, lhs[i - 1] == rhs[j - 2], lhs[i - 2] == rhs[j - 1] {
-          currentRow[j] = min(currentRow[j], twoRowsBack[j - 2] + 1)
-        }
-      }
-      (twoRowsBack, previousRow, currentRow) = (previousRow, currentRow, twoRowsBack)
-    }
-    return previousRow[rhs.count]
-  }
-
-  /// `editDistance` over bytes, which a folded form is, giving up once every alignment costs
-  /// more than `limit`. Nil past the limit. The guess calls this for thousands of forms per
-  /// keystroke, so it must be cheap.
-  static func editDistance(_ lhs: [UInt8], _ rhs: [UInt8], limit: Int) -> Int? {
-    guard abs(lhs.count - rhs.count) <= limit else {
-      return nil
-    }
-    guard !lhs.isEmpty, !rhs.isEmpty else {
-      return max(lhs.count, rhs.count)
-    }
-    var twoRowsBack = [Int](repeating: 0, count: rhs.count + 1)
-    var previousRow = Array(0...rhs.count)
-    var currentRow = [Int](repeating: 0, count: rhs.count + 1)
-    for i in 1...lhs.count {
-      currentRow[0] = i
-      var rowMinimum = i
-      for j in 1...rhs.count {
-        let substitutionCost = lhs[i - 1] == rhs[j - 1] ? 0 : 1
-        currentRow[j] = min(previousRow[j] + 1, currentRow[j - 1] + 1, previousRow[j - 1] + substitutionCost)
-        if i > 1, j > 1, lhs[i - 1] == rhs[j - 2], lhs[i - 2] == rhs[j - 1] {
-          currentRow[j] = min(currentRow[j], twoRowsBack[j - 2] + 1)
-        }
-        rowMinimum = min(rowMinimum, currentRow[j])
-      }
-      if rowMinimum > limit {
-        return nil
-      }
-      (twoRowsBack, previousRow, currentRow) = (previousRow, currentRow, twoRowsBack)
-    }
-    let distance = previousRow[rhs.count]
-    return distance <= limit ? distance : nil
-  }
-
-  /// Case and every diacritic folded away, ñ to n included, so that a learner without a Spanish
-  /// keyboard finds añadir by typing anadir. For matching only: never render it.
-  static func fold(_ text: String) -> String {
-    text.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
-  }
-
   /// What a query asks of the infinitives. Learners type a pronominal verb in its dictionary
   /// form, so "levantarse", "levantar(se)", and "se levantar" all search for levantar. A trailing
   /// "se" goes only when what remains could be an infinitive, so that "base" and "clase" are
@@ -265,16 +199,11 @@ nonisolated enum VerbSearch {
     }
     if spanish.hasSuffix("(se)") {
       spanish = String(spanish.dropLast(4)).trimmingCharacters(in: .whitespaces)
-    } else if spanish.hasSuffix("se") {
-      let remainder = String(spanish.dropLast(2))
-      if infinitiveEndings.contains(where: { remainder.hasSuffix($0) }) {
-        spanish = remainder
-      }
+    } else if let bare = ReflexivePronoun.bareInfinitive(fromCitation: spanish) {
+      spanish = bare
     }
     return spanish
   }
-
-  private static let infinitiveEndings = ["ar", "er", "ir", "ír"]
 
   /// What a query asks of the glosses. Glosses are stored without a leading "to", so a learner
   /// who types "to go" means "go".
@@ -327,7 +256,8 @@ nonisolated enum VerbSearch {
 
   /// What a verb is matched on, lowercased and folded once rather than on every keystroke.
   private struct Keys: Sendable {
-    let rawGlosses: [String]
+    /// The entry the keys were made from, so that a cached set serves only that entry.
+    let entry: VerbMapEntry
     let infinitive: String
     let foldedInfinitive: String
     /// A reflexive-only verb's infinitive with its "se", as the list shows it (arrepentirse), so
@@ -339,11 +269,11 @@ nonisolated enum VerbSearch {
     let glossSenses: Set<String>
 
     init(entry: VerbMapEntry) {
-      rawGlosses = entry.glosses
+      self.entry = entry
       infinitive = entry.infinitive.lowercased()
-      foldedInfinitive = VerbSearch.fold(infinitive)
+      foldedInfinitive = SpellingComparison.fold(infinitive)
       citation = entry.isReflexive ? entry.citationForm.lowercased() : nil
-      foldedCitation = citation.map(VerbSearch.fold)
+      foldedCitation = citation.map(SpellingComparison.fold)
       glosses = entry.glosses.map { $0.lowercased() }
       glossSenses = Set(glosses.flatMap { VerbSearch.senses(of: $0) })
     }
@@ -353,8 +283,8 @@ nonisolated enum VerbSearch {
 
   private static func keys(for entry: VerbMapEntry) -> Keys {
     // A test may pass entries the bundled map lacks, or entries that differ from the bundled
-    // ones under the same infinitive.
-    if let keys = bundledKeys[entry.infinitive], keys.rawGlosses == entry.glosses {
+    // ones under the same infinitive, in any field that a key reads.
+    if let keys = bundledKeys[entry.infinitive], keys.entry == entry {
       return keys
     }
     return Keys(entry: entry)

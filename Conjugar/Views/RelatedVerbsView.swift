@@ -26,7 +26,7 @@ struct RelatedVerbsView: View {
 
       if !related.builtOnRoot.isEmpty {
         relation(
-          title: L.Verb.builtOn(root: Self.citationForm(related.root)),
+          title: L.Verb.builtOn(root: ReflexivePronoun.citationForm(of: related.root)),
           verbs: related.builtOnRoot,
           all: RelatedVerbListDestination(root: related.root, verbs: related.builtOnRoot),
           count: related.builtOnRoot.count,
@@ -57,7 +57,7 @@ struct RelatedVerbsView: View {
         .foregroundStyle(.secondary)
       FlowLayout(spacing: Layout.defaultSpacing) {
         ForEach(verbs.prefix(RelatedVerbs.shortListLength), id: \.self) { verb in
-          RelatedChip(text: Self.citationForm(verb), isSpanish: true) { push in
+          RelatedChip(text: ReflexivePronoun.citationForm(of: verb), isSpanish: true) { push in
             push(VerbDestination(infinitive: verb, source: .related))
           }
         }
@@ -68,11 +68,6 @@ struct RelatedVerbsView: View {
         }
       }
     }
-  }
-
-  /// The infinitive as the page titles it: arrepentirse for a reflexive-only verb.
-  static func citationForm(_ infinitive: String) -> String {
-    VerbMap.shared.entry(for: infinitive)?.citationForm ?? infinitive
   }
 }
 

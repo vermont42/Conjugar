@@ -28,10 +28,10 @@ struct ModelInfoTests {
     // 29-2 satisfacer rides hacer's model, so satisfacer lists under row 29.
     let hacer = info("29")
     #expect(hacer?.exemplar == "hacer")
-    #expect(hacer?.verbs.contains("satisfacer") == true)
-    #expect(info("30")?.verbs.contains("suponer") == true)
-    #expect(info("31")?.verbs.contains("obtener") == true)
-    #expect(info("32")?.verbs.contains("convenir") == true)
+    #expect(hacer?.verbs.contains { $0.infinitive == "satisfacer" } == true)
+    #expect(info("30")?.verbs.contains { $0.infinitive == "suponer" } == true)
+    #expect(info("31")?.verbs.contains { $0.infinitive == "obtener" } == true)
+    #expect(info("32")?.verbs.contains { $0.infinitive == "convenir" } == true)
   }
 
   @Test func verbListsCoverEveryVerbSense() {
@@ -42,10 +42,22 @@ struct ModelInfoTests {
     #expect(rowCount == senseCount)
   }
 
-  @Test func verbListsAreSortedWithSpanishCollation() {
+  @Test func verbListsAreByFrequency() {
     let verbs = info("1")?.verbs ?? []
-    #expect(verbs == verbs.sorted { $0.compare($1, locale: VerbSort.spanish) == .orderedAscending })
-    #expect(verbs.contains("cantar"))
+    #expect(verbs.map(\.frequencyRank) == verbs.map(\.frequencyRank).sorted())
+    #expect(verbs.contains { $0.infinitive == "cantar" })
+  }
+
+  /// A row's verbs are every verb with a sense in its class, or in an alias class that rides it,
+  /// each once: the one definition that a model's page, its collection, its practice, and the
+  /// Related Verbs card read.
+  @Test func aRowsVerbsAreEveryVerbWithASenseInIt() {
+    for model in ModelInfo.all {
+      let expected = VerbMap.shared.entriesByFrequency.filter { entry in
+        entry.classNumbers.contains { (ModelInfo.parentByAlias[$0] ?? $0) == model.classNumber }
+      }
+      #expect(model.verbs.map(\.infinitive) == expected.map(\.infinitive), "\(model.classNumber)")
+    }
   }
 
   @Test func regularClassesScoreZeroIrregularity() {

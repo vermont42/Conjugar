@@ -32,7 +32,7 @@ nonisolated struct AnswerDifference: Equatable, Sendable {
   /// Aligns the two answers and marks every letter that the cheapest alignment does not match.
   /// Case is ignored, so a red letter of `expected` (written in capitals) matches its lowercase.
   /// Insertions, deletions, substitutions, and swaps of two adjacent letters each cost one, as in
-  /// `VerbSearch.editDistance`, and a swap marks both letters on both sides.
+  /// `SpellingComparison.editDistance`, and a swap marks both letters on both sides.
   static func between(given: String, expected: String) -> AnswerDifference {
     let lhs = Array(given).map(folded)
     let rhs = Array(expected).map(folded)
@@ -112,7 +112,7 @@ nonisolated extension QuizQuestion {
     var best: (distance: Int, given: String, expected: String)?
     for given in givenOptions {
       for expected in targets {
-        let distance = VerbSearch.editDistance(Array(given), Array(expected.lowercased()))
+        let distance = SpellingComparison.editDistance(Array(given), Array(expected.lowercased()))
         if best.map({ distance < $0.distance }) ?? true {
           best = (distance, given, expected)
         }

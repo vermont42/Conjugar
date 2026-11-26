@@ -198,14 +198,14 @@ nonisolated enum FormLookup {
 
     for parse in encliticParses(of: word) {
       for base in parse.bases {
-        for form in index.forms(folding: VerbSearch.fold(base)) {
+        for form in index.forms(folding: SpellingComparison.fold(base)) {
           for entry in index.map.entries(for: form) {
             for cell in entry.cells where encliticTenses.contains(cell.tense) && (tenses?.contains(cell.tense) ?? true) {
               guard ReflexivePronoun.encliticAgrees(parse.clitics, with: cell) else {
                 continue
               }
               let joined = attach(parse.clitics, to: form, at: cell)
-              guard VerbSearch.fold(joined) == VerbSearch.fold(word) else {
+              guard SpellingComparison.fold(joined) == SpellingComparison.fold(word) else {
                 continue
               }
               found.add(entry.infinitive, text: joined, cells: [cell], isFolded: joined != word)

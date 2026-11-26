@@ -42,16 +42,13 @@ struct VerbBrowseView: View {
   @Environment(\.scenePhase) private var scenePhase
   private let tryQuizTip = TryQuizTip()
 
-  /// Both sort orders, computed once.
-  private static let verbsBySort = VerbSort.sortedLists(of: VerbMap.shared.entries.values)
-
-  private var verbs: [VerbMapEntry] { Self.verbsBySort[sort] ?? [] }
+  private var verbs: [VerbMapEntry] { VerbSort.mapLists[sort] ?? [] }
 
   /// The current sort filtered by the search query, materialized into `@State` and
   /// recomputed only when `searchText` or `sort` changes — rather than as a
   /// computed property `body` scanned twice per render. Seeded to the initial sort's
   /// full list so the first frame isn't a "0 verbs" flash.
-  @State private var filteredVerbs: [VerbMapEntry] = Self.verbsBySort[Current.settings.verbSort] ?? []
+  @State private var filteredVerbs: [VerbMapEntry] = VerbSort.mapLists[Current.settings.verbSort] ?? []
 
   /// Refilter for the current `searchText` + `sort`, firing the no-results sad trombone
   /// here — the one-shot search transition — instead of inside `body`. An empty query lists

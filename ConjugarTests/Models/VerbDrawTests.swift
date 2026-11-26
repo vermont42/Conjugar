@@ -32,7 +32,7 @@ struct VerbDrawTests {
     // Regular, and built on cobrar.
     #expect(VerbDraw.weight(of: try entry("recobrar")) == 1)
     // An orthographic class counts as irregular, as the verb page's pill says.
-    #expect(VerbDraw.isIrregular(try entry("buscar")))
+    #expect(try entry("buscar").isIrregular)
   }
 
   @Test func theSameDayNamesTheSameVerb() throws {

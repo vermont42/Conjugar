@@ -20,7 +20,7 @@ struct RelatedVerbListView: View {
 
   init(destination: RelatedVerbListDestination) {
     self.destination = destination
-    lists = VerbSort.sortedLists(of: destination.verbs.compactMap { VerbMap.shared.entry(for: $0) })
+    lists = VerbSort.sortedLists(ofMapEntries: destination.verbs.compactMap { VerbMap.shared.entry(for: $0) })
   }
 
   var body: some View {
@@ -32,7 +32,7 @@ struct RelatedVerbListView: View {
       .readingWidth()
     }
     .background(Color.customBackground.ignoresSafeArea())
-    .navigationTitle(L.Verb.builtOn(root: RelatedVerbsView.citationForm(destination.root)))
+    .navigationTitle(L.Verb.builtOn(root: ReflexivePronoun.citationForm(of: destination.root)))
     .navigationBarTitleDisplayMode(.inline)
   }
 }

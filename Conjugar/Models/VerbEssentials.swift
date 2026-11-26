@@ -54,9 +54,8 @@ nonisolated enum VerbEssentials {
 
   /// The irregular verbs of a band, or of every verb, the most frequent first.
   static func pool(band: FrequencyBand?) -> [String] {
-    let entries = band.map { VerbMap.shared.entries(in: $0) }
-      ?? VerbMap.shared.entries.values.sorted { $0.frequencyRank < $1.frequencyRank }
-    return entries.filter(VerbDraw.isIrregular).map(\.infinitive)
+    let entries = band.map { VerbMap.shared.entries(in: $0) } ?? VerbMap.shared.entriesByFrequency
+    return entries.filter(\.isIrregular).map(\.infinitive)
   }
 
   /// A round's verbs: `count` distinct verbs of `pool` with an irregular key conjugation, at
@@ -79,7 +78,7 @@ nonisolated enum VerbEssentials {
       guard hasIrregularKeyConjugation(verb) else {
         continue
       }
-      if limitsCompounds, isCompound(verb) {
+      if limitsCompounds, VerbRelations.isCompound(verb) {
         guard compoundCount < compoundLimit else {
           deferred.append(verb)
           continue
@@ -90,11 +89,6 @@ nonisolated enum VerbEssentials {
     }
     chosen += deferred.prefix(max(count - chosen.count, 0))
     return chosen
-  }
-
-  /// A prefixed compound of another verb of the map, by the Related Verbs card's relation.
-  static func isCompound(_ verb: String) -> Bool {
-    VerbRelations.shared.baseByVerb[verb] != nil
   }
 }
 

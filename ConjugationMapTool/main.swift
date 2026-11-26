@@ -39,6 +39,10 @@
 
 import Foundation
 
+/// The flags the tool reads. Any other is an error, so that a misspelled --forms-json fails the
+/// run rather than writing the map and silently skipping the file.
+private let knownFlags: Set<String> = ["--verb-map", "--map", "--forms-json", "--forms-all-json", "--cells-json"]
+
 /// The command line, as a dictionary of flag to path. Every flag takes exactly one value.
 private func parseArguments() -> [String: String] {
   var values: [String: String] = [:]
@@ -46,6 +50,12 @@ private func parseArguments() -> [String: String] {
   while let flag = remaining.popFirst() {
     guard flag.hasPrefix("--"), let value = remaining.popFirst() else {
       fail("Expected --flag value pairs, got \(flag).")
+    }
+    guard knownFlags.contains(flag) else {
+      fail("Unknown flag \(flag). Known flags: \(knownFlags.sorted().joined(separator: ", ")).")
+    }
+    guard values[flag] == nil else {
+      fail("\(flag) is given twice.")
     }
     values[flag] = value
   }

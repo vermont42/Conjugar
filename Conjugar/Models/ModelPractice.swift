@@ -63,14 +63,12 @@ struct ModelPracticeGroup: Identifiable {
   /// are not patterns to practice, and five models (bullir, tañer, abolir) have no irregular key
   /// conjugation to ask.
   static let all: [ModelPracticeGroup] = ModelInfo.all.compactMap { row in
-    guard !regularClassNumbers.contains(row.classNumber) else {
+    guard !VerbMapEntry.isRegularClass(row.classNumber) else {
       return nil
     }
     let verbs = row.verbs
-      .compactMap { VerbMap.shared.entry(for: $0) }
-      .filter { ModelInfo.row(for: $0.infinitive)?.classNumber == row.classNumber }
-      .sorted { $0.frequencyRank < $1.frequencyRank }
       .lazy
+      .filter { ModelInfo.row(for: $0.infinitive)?.classNumber == row.classNumber }
       .map(\.infinitive)
       .filter(VerbEssentials.hasIrregularKeyConjugation)
       .prefix(verbLimit)
@@ -108,8 +106,6 @@ struct ModelPracticeGroup: Identifiable {
   private static func rank(of group: ModelPracticeGroup) -> Int {
     group.verbs.first.flatMap { VerbMap.shared.entry(for: $0)?.frequencyRank } ?? .max
   }
-
-  private static let regularClassNumbers: Set<String> = ["1", "2", "3"]
 }
 
 extension PracticeRecord {

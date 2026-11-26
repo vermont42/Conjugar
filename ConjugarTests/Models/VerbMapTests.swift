@@ -355,4 +355,27 @@ struct VerbMapTests {
     #expect(broken.isEmpty, "classes with no working representative: \(broken.sorted())")
     #expect(representative.count == 106, "representatives cover \(representative.count) classes")
   }
+
+  /// The map's frequency list holds every entry once, in rank order, so a band is a prefix of it.
+  @Test("the frequency list is every entry in rank order")
+  func frequencyListIsEveryEntryInRankOrder() {
+    let map = VerbMap.shared
+    #expect(map.entriesByFrequency.map(\.frequencyRank) == Array(1...map.rankCount))
+    #expect(map.entriesByFrequency.allSatisfy { map.entry(for: $0.infinitive) == $0 })
+    for band in FrequencyBand.allCases {
+      let filtered = map.entries.values.filter { $0.isIn(band) }.sorted { $0.frequencyRank < $1.frequencyRank }
+      #expect(map.entries(in: band) == filtered, "\(band)")
+    }
+  }
+
+  /// Irregularity has one definition: the verb page's pill (`verbType`) agrees with it for every
+  /// verb, and the regular classes are 1, 2, and 3 alone.
+  @Test("isIrregular agrees with verbType for every verb")
+  func isIrregularAgreesWithVerbType() {
+    for entry in VerbMap.shared.entriesByFrequency {
+      #expect((Conjugator.verbType(infinitive: entry.infinitive) == .irregular) == entry.isIrregular, "\(entry.infinitive)")
+    }
+    let regular = Set(VerbMap.shared.entriesByFrequency.filter { !$0.isIrregular }.map(\.classNumber))
+    #expect(regular == ["1", "2", "3"])
+  }
 }

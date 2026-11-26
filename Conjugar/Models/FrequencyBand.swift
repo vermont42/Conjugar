@@ -27,10 +27,8 @@ nonisolated extension VerbMapEntry {
 }
 
 nonisolated extension VerbMap {
-  /// The band's verbs, the most frequent first.
+  /// The band's verbs, the most frequent first: a prefix of `entriesByFrequency`.
   func entries(in band: FrequencyBand) -> [VerbMapEntry] {
-    entries.values
-      .filter { $0.isIn(band) }
-      .sorted { $0.frequencyRank < $1.frequencyRank }
+    Array(entriesByFrequency.prefix(band.verbCount))
   }
 }

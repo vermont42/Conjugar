@@ -60,7 +60,7 @@ nonisolated extension PracticeItem {
   /// Whether the review card offers the verb: only an irregular verb, counted as the verb page's
   /// pill counts it, so the orthographic classes (buscar, busqué) too.
   static func isReviewable(_ infinitive: String) -> Bool {
-    VerbMap.shared.entry(for: infinitive).map(VerbDraw.isIrregular) ?? false
+    VerbMap.shared.entry(for: infinitive)?.isIrregular ?? false
   }
 
   /// The item's own cell: a key conjugation's (yo tengo, the participio), or the pattern's. Nil

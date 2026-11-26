@@ -53,7 +53,8 @@ Conjugar/
 │   ├── ModelCatalog.swift      # Class number ("1", "4B-1", "31-1", …) → VerbModel (base + ordered features)
 │   ├── VerbModel.swift         # One regular base root plus an ordered feature list; also the alternate-paradigm scheme
 │   ├── VerbMap.swift           # VerbMapEntry + the load-once @unchecked Sendable cache over verbModelMap.xml.
-│   │                           #   ranked(_:) derives the dense 1…4,811 frequency rank from the stored counts at parse time
+│   │                           #   ranked(_:) derives the dense 1…4,811 frequency rank from the stored counts at parse time,
+│   │                           #   and entriesByFrequency, which a band is a prefix of; VerbMapEntry.isIrregular, the one definition
 │   ├── VerbDestination.swift   # A verb page to push: infinitive, analytics source, and the cells to mark; every stack registers it in verbPageDestinations()
 │   ├── VerbVisit.swift         # VerbVisit: one stretch of a verb page on screen (viewVerbView/leaveVerbView, deepest section, dwell)
 │   ├── VerbVisitTracker.swift  # When a verb page's visits begin and end (screen, foreground, a sheet over the page) and
@@ -62,7 +63,8 @@ Conjugar/
 │   │                           #   the marked card, and hasRedLetters (the verb's own, compound auxiliaries aside)
 │   ├── SearchReport.swift      # SearchTracker (one search, first letter to its end) and SearchReport (finishSearch's banded
 │   │                           #   parameters); MatchKind.analyticsValue
-│   ├── VerbSearch.swift        # The one verb-search rule: folding, -se stripping, every gloss, forms (via FormLookup), MatchKind
+│   ├── SpellingComparison.swift # fold and the one edit distance (optional limit), shared by the verb search and the quiz
+│   ├── VerbSearch.swift        # The one verb-search rule: -se stripping, every gloss, forms (via FormLookup), MatchKind
 │   │                           #   ranking by kind then frequency; guess(for:) for a failed search, from an infinitive or a form
 │   ├── FormLookup.swift        # Reverse lookup: which verbs' forms a query is (fue, hablo→habló, dímelo, he hablado, hecha),
 │   │                           #   as MatchedForms that name their cells ("fue: Pretérito (él)")
@@ -108,8 +110,10 @@ Conjugar/
 │   ├── MedievalExample.swift   # One Medieval-Spanish verse: work, ref, Old-Spanish line, translation
 │   ├── MedievalData.swift      # Load-once MedievalExamples.json cache keyed by bare infinitive
 │   ├── Info.swift              # Info article model: InfoSection + heading/body parsed into richTextBlocks
-│   ├── ModelInfo.swift         # The Models tab's row model: class number, exemplar, verbs, irregularity percent; row(for:) a verb
-│   ├── RelatedVerbs.swift      # VerbRelations: each verb's base and root (detener → tener), and the verb page's related verbs
+│   ├── ModelInfo.swift         # The Models tab's row model: class number, exemplar, verbs (by frequency, the one definition of a
+│   │                           #   model's verbs), irregularity percent; row(for:) a verb
+│   ├── RelatedVerbs.swift      # VerbRelations: each verb's base and root (detener → tener), and the verb page's related verbs;
+│   │                           #   isCompound, the one definition of a prefixed compound
 │   ├── FrequencyBand.swift     # The frequency bands, defined once: top 100, 300, 1,000; VerbMapEntry.isIn, VerbMap.entries(in:)
 │   ├── VerbDraw.swift          # The verb of the day and every random verb: the top 1,000 weighted toward irregular and
 │   │                           #   unprefixed verbs, My Verbs one draw in three
@@ -175,7 +179,8 @@ Conjugar/
 │   ├── SecondSingularQuiz.swift    # Setting enum: which 2s form the quiz asks for
 │   ├── ReviewCardSuppression.swift # Setting enum: whether the verb list hides the review card (off / on)
 │   ├── ListSort.swift          # PickerOption (a SortPicker's choices) and ListSort (an order for a list's items, with sortedLists(of:), every order sorted once)
-│   ├── VerbSort.swift          # Verb-list sort order (frequency / alphabetical) + the Spanish collation locale
+│   ├── VerbSort.swift          # Verb-list sort order (frequency / alphabetical) + the Spanish collation locale; mapLists, the whole
+│   │                           #   map in each order, which sortedLists(ofMapEntries:) filters for a long list
 │   ├── VerbListMode.swift      # The Verbs tab picker's three segments: the two sorts and My Verbs
 │   ├── LearnerVerbStore.swift  # Current.learnerVerbs: records opens and stars in LearnerVerbs and saves to the App Group
 │   ├── ModelSort.swift         # Model-list sort order (irregularity / alphabetical / class number)
@@ -374,7 +379,8 @@ ConjugarTests/
 │   ├── ConjugatorAccessorsTests.swift  # The engine's convenience accessors
 │   ├── ConjugatorResolverTests.swift   # Verb → model resolution, incl. prefixed compounds and the regular fallback
 │   ├── VerbMapTests.swift              # verbModelMap.xml parsing and lookup
-│   ├── VerbSearchTests.swift           # Search ranking (Josh's table of queries), folding, -se stripping, every gloss of a homonym, the failed-search guess
+│   ├── VerbSearchTests.swift           # Search ranking (Josh's table of queries), -se stripping, every gloss of a homonym, the failed-search guess
+│   ├── SpellingComparisonTests.swift   # Folding, the edit distance, and the limited distance agreeing with the unlimited one
 │   ├── ConjugationTableTests.swift     # The verb page's order, second names, and articles; search names follow the page
 │   ├── ReverseLookupTests.swift        # A form finds its verb: shared forms, accents, enclitics, compounds, vos, participle endings,
 │   │                                   #   the row's names, the guess from a form, every example's token through search

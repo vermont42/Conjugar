@@ -396,4 +396,33 @@ struct LearnerVerbsTests {
     #expect(AnalyticsName.tapStarVerb.rawValue == "tapStarVerb")
     #expect(ParameterKey.starred.rawValue == "starred")
   }
+
+  /// The store derives its lists once per change, so each list must follow every kind of change.
+  @Test func theStoresListsFollowEveryChange() {
+    let store = LearnerVerbStore(getterSetter: GetterSetterFake())
+    func expectLists(_ change: String, sourceLocation: SourceLocation = #_sourceLocation) {
+      let record = store.record
+      #expect(store.starredVerbs.map(\.infinitive) == record.starred, "\(change)", sourceLocation: sourceLocation)
+      #expect(store.recentVerbs.map(\.infinitive) == record.recent, "\(change)", sourceLocation: sourceLocation)
+      #expect(store.recentUnstarredVerbs.map(\.infinitive) == record.recentUnstarred, "\(change)", sourceLocation: sourceLocation)
+      #expect(store.myVerbs.map(\.infinitive) == record.myVerbs, "\(change)", sourceLocation: sourceLocation)
+    }
+    store.recordOpen("ir", at: date(1))
+    store.recordOpen("tener", at: date(2))
+    expectLists("opens")
+    #expect(store.recentVerbs.map(\.infinitive) == ["tener", "ir"])
+    store.toggleStar("ir", at: date(3))
+    expectLists("a star")
+    #expect(store.myVerbs.map(\.infinitive) == ["ir", "tener"])
+    store.recordOpen("ir", at: date(4))
+    expectLists("a reopen")
+    store.remove("tener")
+    expectLists("a removal")
+    store.clearRecents()
+    expectLists("a clear")
+    #expect(store.recentVerbs.isEmpty)
+    store.forgetOpenHistory()
+    expectLists("a reset")
+    #expect(store.starredVerbs.map(\.infinitive) == ["ir"])
+  }
 }

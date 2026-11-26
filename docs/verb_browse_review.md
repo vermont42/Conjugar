@@ -389,13 +389,14 @@ when the warm-up completes. Or move matching off the main actor and publish the 
   skips a launch of the same build, and removal by identifier of the verbs the map lost.*
 - **Work repeated per render or per call (Reviewer, except where noted).**
   - `LearnerVerbStore.recentVerbs` sorts the record on every access, and the Verbs tab's body
-    reads it about eight times.
+    reads it about eight times. *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: the store derives its four lists once per change.*
   - `signalEndedSearch` runs the whole search again for a query whose matches the view still
     holds (Read; `VerbBrowseView.swift:207`).
   - `VerbCollection.verbs` for a model filters and sorts all 4,811 entries on each access.
+    *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: it reads the model's row.*
   - `VerbMap.entries(in:)` sorts the whole map on every call, and six other files sort every
     entry by rank themselves. Ranks are dense, so one cached list would serve them all, and a band
-    would be a prefix of it.
+    would be a prefix of it. *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: `VerbMap.entriesByFrequency`.*
   - `ModelBrowseView.swift:45` folds the query once per model. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`.*
 - **The first visit to the Models tab derives the collections on the main actor (Suspected).**
   `VerbCollection.featuredVerbs` runs about 4,000 conjugations. Not timed.
@@ -538,16 +539,17 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
 - **Edit distance is written three times**: `VerbSearch.swift:194-216`, `:221-249` (the same
   algorithm with a limit), and `AnswerDifference`'s with a backtrace. The first two could be one
   generic function. Edit distance and `fold` now serve the quiz as well, so `VerbSearch` is an odd
-  home for them.
+  home for them. *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: both moved to `SpellingComparison`, whose one generic distance takes an optional limit; `AnswerDifference` keeps its own for the backtrace.*
 - **Stripping "-se" is written twice**: `VerbSearch.spanishQuery` (`VerbSearch.swift:268-277`),
   with its own list of endings, and `ReflexivePronoun.bareInfinitive(fromCitation:)`.
   `RelatedVerbsView.citationForm(_:)` is likewise a copy of `ReflexivePronoun.citationForm(of:)`.
+  *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: `spanishQuery` calls `bareInfinitive(fromCitation:)`, and the copy is gone.*
 - **"Is this verb irregular?" has three definitions**: `VerbDraw.isIrregular` with its own
   `["1", "2", "3"]`, `Conjugator.verbType`, and `ModelPractice.regularClassNumbers`. Four types
-  outside the daily draw reach into `VerbDraw` for it.
+  outside the daily draw reach into `VerbDraw` for it. *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: `VerbMapEntry.isIrregular`, which `verbType` and `ModelPractice` read too, and `VerbMapEntry.isCompound` in place of three copies.*
 - **A model's verbs have two definitions**: `VerbCollection.verbs` filters every entry, and
   `ModelView` reads `ModelInfo.verbs`, so one bar uses both. A test exists only to keep them
-  equal.
+  equal. *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: `ModelInfo.verbs`, now entries by frequency, is the one list, which the collection, the practice, and the Related Verbs card (a third copy) read; the test went.*
 - **`private static func spanish(_:) -> AttributedString` is declared in fifteen views (Read: 15
   declarations, 17 files that set the language).** One extension would do. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: `AttributedString(spanish:)` and `Text(spanish:)` in `Utils/SpanishText.swift`; all fifteen declarations went.*
 - **`tense == .imperativoPositivo || tense == .imperativoNegativo` is spelled out in six files**,
@@ -614,9 +616,9 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   - `ConjugationTable.isCompound` is used only by tests (Reviewer).
   - `BrowseSearch` is six lines with one caller since the Verbs tab left it (Read). *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: folded into `ModelSearch`, which folds the query once per search.*
   - `ConjugationMapTool` accepts any `--flag value`, so a misspelled `--forms-json` writes the map
-    and silently skips the file (`main.swift:43-53`, Reviewer).
+    and silently skips the file (`main.swift:43-53`, Reviewer). *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: an unknown or repeated flag fails the run.*
   - `VerbSearch.keys(for:)` decides whether its cache applies by comparing glosses only
-    (`VerbSearch.swift:347-353`, Reviewer). `VerbMapEntry` is `Equatable`.
+    (`VerbSearch.swift:347-353`, Reviewer). `VerbMapEntry` is `Equatable`. *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: it compares whole entries.*
   - `SecondSingularBrowse.swift:11` cites "item 20" of a list that the reader cannot see
     (Reviewer).
 

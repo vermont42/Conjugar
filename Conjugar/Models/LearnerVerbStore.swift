@@ -14,6 +14,14 @@ import Observation
 @Observable
 final class LearnerVerbStore {
   private(set) var record: LearnerVerbs
+  /// The record's lists as verb-map entries, derived once per change rather than on every read:
+  /// the Verbs tab's body reads the recents several times a render, and each derivation sorts the
+  /// whole record.
+  private(set) var starredVerbs: [VerbMapEntry] = []
+  private(set) var recentVerbs: [VerbMapEntry] = []
+  /// The recent verbs that are not also starred, which My Verbs lists below the starred ones.
+  private(set) var recentUnstarredVerbs: [VerbMapEntry] = []
+  private(set) var myVerbs: [VerbMapEntry] = []
   @ObservationIgnored private let getterSetter: GetterSetter
 
   /// A stored record that fails to decode is copied to `LearnerVerbs.unreadableKey` before the
@@ -27,23 +35,7 @@ final class LearnerVerbStore {
       getterSetter.backUpUnreadable(stored, to: LearnerVerbs.unreadableKey)
       record = LearnerVerbs()
     }
-  }
-
-  var starredVerbs: [VerbMapEntry] {
-    entries(record.starred)
-  }
-
-  var recentVerbs: [VerbMapEntry] {
-    entries(record.recent)
-  }
-
-  /// The recent verbs that are not also starred, which My Verbs lists below the starred ones.
-  var recentUnstarredVerbs: [VerbMapEntry] {
-    entries(record.recentUnstarred)
-  }
-
-  var myVerbs: [VerbMapEntry] {
-    entries(record.myVerbs)
+    deriveLists()
   }
 
   func isStarred(_ infinitive: String) -> Bool {
@@ -97,7 +89,16 @@ final class LearnerVerbStore {
     infinitives.compactMap { VerbMap.shared.entry(for: $0) }
   }
 
+  private func deriveLists() {
+    starredVerbs = entries(record.starred)
+    recentUnstarredVerbs = entries(record.recentUnstarred)
+    recentVerbs = entries(record.recent)
+    myVerbs = starredVerbs + recentUnstarredVerbs
+  }
+
+  /// Every change to the record comes through here, so the derived lists never lag it.
   private func save() {
+    deriveLists()
     if let json = record.json {
       getterSetter.set(key: LearnerVerbs.storageKey, value: json)
     }

@@ -114,7 +114,7 @@ import Testing
   @Test(arguments: QuizLevel.allCases)
   func everyQuizAsksACompound(level: QuizLevel) {
     for seed in Self.seeds {
-      #expect(defaultQuiz(level, seed: seed).contains { QuizDraw.isCompound($0.verb) }, "seed \(seed)")
+      #expect(defaultQuiz(level, seed: seed).contains { VerbRelations.isCompound($0.verb) }, "seed \(seed)")
     }
   }
 
@@ -137,7 +137,7 @@ import Testing
   /// A frequent compound is not held to the rare ones' one to three.
   @Test func frequentCompoundsDrawFreely() {
     let compoundCounts = Self.seeds.map { seed in
-      defaultQuiz(.elementary, seed: seed).filter { QuizDraw.isCompound($0.verb) }.count
+      defaultQuiz(.elementary, seed: seed).filter { VerbRelations.isCompound($0.verb) }.count
     }
     #expect((compoundCounts.max() ?? 0) > QuizDraw.rareCompoundRange.upperBound)
   }
@@ -181,7 +181,7 @@ import Testing
         #expect(typed.count == (level == .beginner ? 10 : 9))
         #expect((typed.count / 2...(typed.count + 1) / 2).contains(typed.filter(isIrregular).count), "\(level) seed \(seed)")
         #expect(typed.filter { QuizDraw.isCore($0.verb) }.count >= QuizDraw.minimumCoreQuestions, "\(level) seed \(seed)")
-        #expect(typed.contains { QuizDraw.isCompound($0.verb) }, "\(level) seed \(seed)")
+        #expect(typed.contains { VerbRelations.isCompound($0.verb) }, "\(level) seed \(seed)")
       }
     }
   }

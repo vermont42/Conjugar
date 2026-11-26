@@ -62,7 +62,7 @@ import UIKit
     for collection in VerbCollection.featured where collection != .top100 {
       for entry in collection.verbs {
         #expect(entry.isIn(.top1000), "\(entry.infinitive)")
-        #expect(!VerbDraw.isCompound(entry), "\(entry.infinitive) is a compound")
+        #expect(!entry.isCompound, "\(entry.infinitive) is a compound")
       }
       let ranks = collection.verbs.map(\.frequencyRank)
       #expect(ranks == ranks.sorted())
@@ -124,12 +124,8 @@ import UIKit
     }
   }
 
-  /// A model's collection holds exactly the verbs its page lists, an alias class's included.
-  @Test func everyModelsCollectionIsItsPagesVerbs() {
-    for model in ModelInfo.all {
-      let collection = VerbCollection.model(model.classNumber)
-      #expect(Set(collection.infinitives) == Set(model.verbs), "\(model.classNumber)")
-    }
+  /// A model's collection holds an alias class's verbs too.
+  @Test func aModelsCollectionHoldsItsAliasClassesVerbs() {
     #expect(VerbCollection.model("31").infinitives.contains("contener"))
   }
 

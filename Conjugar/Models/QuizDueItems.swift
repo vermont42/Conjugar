@@ -57,7 +57,7 @@ nonisolated extension QuizDraw {
           continue
         }
         let candidates = regularVerbsByEnding[ending.practiceKey] ?? verbs(in: patternBand)
-          .filter { !VerbDraw.isIrregular($0) && RegularRoot(infinitive: $0.infinitive) == ending }
+          .filter { !$0.isIrregular && RegularRoot(infinitive: $0.infinitive) == ending }
           .map(\.infinitive)
         regularVerbsByEnding[ending.practiceKey] = candidates
         let used = Set(drawn.map(\.question.verb))

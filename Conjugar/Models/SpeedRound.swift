@@ -86,7 +86,7 @@ nonisolated extension QuizDraw {
           return nil
         }
         let candidates = regularVerbsByEnding[ending.practiceKey] ?? verbs(in: frequencyBand)
-          .filter { !VerbDraw.isIrregular($0) && RegularRoot(infinitive: $0.infinitive) == ending }
+          .filter { !$0.isIrregular && RegularRoot(infinitive: $0.infinitive) == ending }
           .map(\.infinitive)
         regularVerbsByEnding[ending.practiceKey] = candidates
         for _ in 0..<attemptsPerSpeedRoundPattern {

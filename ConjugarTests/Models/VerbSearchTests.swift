@@ -59,12 +59,6 @@ import Testing
     #expect(infinitives(for: "soñar").dropFirst().first == "sonar")
   }
 
-  @Test func foldingDropsCaseAccentsAndTilde() {
-    #expect(VerbSearch.fold("Añadir") == "anadir")
-    #expect(VerbSearch.fold("REÍR") == "reir")
-    #expect(VerbSearch.fold("argüir") == "arguir")
-  }
-
   @Test func everyGlossOfAHomonymIsSearched() {
     // apostar is "bet" and, as its second sense, "station".
     #expect(infinitives(for: "station").first == "apostar")
@@ -167,6 +161,25 @@ import Testing
     #expect(infinitives(for: "zorglar", in: [invented]) == ["zorglar"])
   }
 
+  /// The search's cached keys serve only an entry equal to the bundled one: an entry that differs
+  /// from it in anything but its glosses, here a reflexive flag, gets keys of its own.
+  @Test func anEntryThatDiffersFromTheBundledOneIsSearchedAsItIs() throws {
+    let bundled = try #require(VerbMap.shared.entry(for: "hablar"))
+    #expect(!bundled.isReflexive)
+    let reflexive = VerbMapEntry(
+      infinitive: bundled.infinitive,
+      classNumbers: bundled.classNumbers,
+      glosses: bundled.glosses,
+      isReflexive: true,
+      hits: bundled.hits,
+      bookHits: bundled.bookHits,
+      hitsAreProvisional: bundled.hitsAreProvisional,
+      frequencyRank: bundled.frequencyRank
+    )
+    #expect(infinitives(for: "hablars", in: [bundled]).isEmpty)
+    #expect(infinitives(for: "hablars", in: [reflexive]) == ["hablar"])
+  }
+
   @Test(arguments: [
     ("hablr", "hablar"),
     ("tenr", "tener"),
@@ -200,18 +213,6 @@ import Testing
     #expect(tied.count == 2)
     #expect(VerbSearch.closestVerb(to: "pogar", in: tied)?.infinitive == expected)
     #expect(VerbSearch.closestVerb(to: "pogar", in: tied.reversed())?.infinitive == expected)
-  }
-
-  @Test(arguments: [
-    ("hablar", "hablar", 0),
-    ("hablr", "hablar", 1),
-    ("hbalar", "hablar", 1),
-    ("kitten", "sitting", 3),
-    ("", "abc", 3),
-    ("abc", "", 3)
-  ])
-  func editDistanceCountsASwapAsOneEdit(lhs: String, rhs: String, expected: Int) {
-    #expect(VerbSearch.editDistance(Array(lhs), Array(rhs)) == expected)
   }
 
   @Test(arguments: zip([1, 4, 6, 9, 20], [1, 1, 2, 3, 3]))

@@ -60,4 +60,23 @@ struct VerbSortTests {
       #expect(lists[sort]?.map(\.infinitive) == sort.sorted(entries).map(\.infinitive))
     }
   }
+
+  /// A long list is filtered out of the map's presorted lists and a short one is sorted, and either
+  /// way the lists are those that sorting gives.
+  @Test func filteredListsMatchSortedOnes() {
+    let all = VerbMap.shared.entriesByFrequency
+    let lists = [
+      Array(all.prefix(5)),
+      all.filter { $0.classNumber == "1" },
+      Array(all.prefix(VerbSort.filteringThreshold + 1).reversed()),
+      ModelInfo.byClassNumber["31"]?.verbs ?? []
+    ]
+    for entries in lists {
+      let expected = VerbSort.sortedLists(of: entries)
+      let derived = VerbSort.sortedLists(ofMapEntries: entries)
+      for sort in VerbSort.allCases {
+        #expect(derived[sort]?.map(\.infinitive) == expected[sort]?.map(\.infinitive), "\(entries.count) \(sort)")
+      }
+    }
+  }
 }

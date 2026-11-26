@@ -129,7 +129,7 @@ struct VerbEssentialsTests {
       var generator = SplitMix64(seed: UInt64(seed))
       let verbs = VerbEssentials.verbs(from: pool, count: 5, limitsCompounds: true, using: &generator)
       #expect(verbs.count == 5)
-      #expect(verbs.filter(VerbEssentials.isCompound).count <= VerbEssentials.compoundLimit)
+      #expect(verbs.filter(VerbRelations.isCompound).count <= VerbEssentials.compoundLimit)
     }
   }
 

@@ -103,6 +103,13 @@ nonisolated enum VerbRelations {
     shared.related(to: infinitive)
   }
 
+  /// Whether the verb is a prefixed compound of another verb of the map, by this relation: detener
+  /// on tener, reconocer on conocer. The daily draw, the quiz, and the pattern lists all count
+  /// compounds this way.
+  static func isCompound(_ infinitive: String) -> Bool {
+    shared.baseByVerb[infinitive] != nil
+  }
+
   /// The leading number of a class number, which a base and its compounds share: 31 for 31-1, 4B
   /// for 4B-1.
   static func classFamily(_ classNumber: String) -> Substring {
@@ -116,8 +123,6 @@ nonisolated enum VerbRelations {
     let rootByVerb: [String: String]
     /// Every verb, keyed by its root, each list by frequency.
     let verbsByRoot: [String: [String]]
-    /// Each row of the Models tab, by its class number, to its verbs, by frequency.
-    let verbsByModel: [String: [String]]
     private let entries: [String: VerbMapEntry]
 
     init(map: VerbMap) {
@@ -144,17 +149,11 @@ nonisolated enum VerbRelations {
       }
       self.rootByVerb = rootByVerb
 
-      let byFrequency = map.entries.values.sorted { $0.frequencyRank < $1.frequencyRank }
       var verbsByRoot: [String: [String]] = [:]
-      var verbsByModel: [String: [String]] = [:]
-      for entry in byFrequency {
+      for entry in map.entriesByFrequency {
         verbsByRoot[rootByVerb[entry.infinitive] ?? entry.infinitive, default: []].append(entry.infinitive)
-        for classNumber in Set(entry.classNumbers.map(Self.modelClassNumber)) {
-          verbsByModel[classNumber, default: []].append(entry.infinitive)
-        }
       }
       self.verbsByRoot = verbsByRoot
-      self.verbsByModel = verbsByModel
     }
 
     /// The Models tab's row for a class number: an alias class (31-1) shows under its parent (31).
@@ -194,7 +193,7 @@ nonisolated enum VerbRelations {
       let builtOnRoot = family.contains(root) ? [root] + family.filter { $0 != root } : family
 
       let modelClassNumber = Self.modelClassNumber(entry.classNumber)
-      let modelVerbs = verbsByModel[modelClassNumber] ?? []
+      let modelVerbs = ModelInfo.byClassNumber[modelClassNumber]?.verbs.map(\.infinitive) ?? []
       var representativeByRoot: [String: String] = [:]
       var roots: [String] = []
       for verb in modelVerbs {
@@ -226,5 +225,13 @@ nonisolated enum VerbRelations {
     private func rank(of infinitive: String) -> Int {
       entries[infinitive]?.frequencyRank ?? Int.max
     }
+  }
+}
+
+nonisolated extension VerbMapEntry {
+  /// Whether the verb is a prefixed compound of another verb of the map
+  /// (`VerbRelations.isCompound(_:)`).
+  var isCompound: Bool {
+    VerbRelations.isCompound(infinitive)
   }
 }

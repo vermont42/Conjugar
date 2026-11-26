@@ -70,8 +70,7 @@ nonisolated struct VerbEntityQuery: EntityStringQuery {
 
   @concurrent
   func suggestedEntities() async -> [VerbEntity] {
-    VerbMap.shared.entries.values
-      .sorted { $0.frequencyRank < $1.frequencyRank }
+    VerbMap.shared.entriesByFrequency
       .prefix(10)
       .map { VerbEntity(entry: $0) }
   }

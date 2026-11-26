@@ -779,7 +779,7 @@ defaults write <group container>/Library/Preferences/group.biz.joshadams.Conjuga
 
 **What it offers.** The card reads the practice record (§ The Practice Record): an irregular verb
 whose key conjugation is due, from a lookup or a quiz answer alike. Only irregular verbs, as the
-verb page's pill counts them (`VerbDraw.isIrregular`, any class but 1, 2, and 3), so buscar's card
+verb page's pill counts them (`VerbMapEntry.isIrregular`, any class but 1, 2, and 3), so buscar's card
 shows busqué's red letters. A regular verb's answers move patterns, which are never on the card.
 
 **What moves it**:
@@ -996,7 +996,7 @@ progress, so there is no quiz inside a quiz.
 **The marking.** `QuizQuestion.difference(from:)` shows the nearest of `shownSpellings` (the
 written answer, irregularity-marked, winning a tie), so freido is corrected to freído and arepiento
 to arrepiento rather than me arrepiento, and drops a leading subject pronoun as grading does.
-`AnswerDifference.between(given:expected:)` aligns the two with `VerbSearch.editDistance`'s costs
+`AnswerDifference.between(given:expected:)` aligns the two with `SpellingComparison.editDistance`'s costs
 (a swap of neighbors costs one) and marks what the cheapest alignment leaves unmatched. An accent
 is a letter of its own, so hablo against habló marks the o. Red letters already mean irregular, so
 a difference is a tinted background instead: struck through in red in the learner's answer, and
@@ -1230,7 +1230,7 @@ While it runs, the tab's bar reads the session's name.
 **What it asks** (`Models/VerbEssentials.swift`, `QuizScope.verbEssentials(_:)`). Given an
 irregular verb, the learner types its key conjugations (`KeyConjugation`): "tener: tengo · tuve ·
 tendré · tenido". A round is five verbs, twenty blanks. The verbs are the irregular verbs of the
-level's band (`VerbDraw.isIrregular`) with at least one irregular key conjugation
+level's band (`VerbMapEntry.isIrregular`) with at least one irregular key conjugation
 (`VerbEssentials.hasIrregularKeyConjugation`), which leaves out only a few defective verbs and
 those whose only change is an ending's i lost after ll or ñ (bullir, tañer): 57 at Beginner, 150 at
 Elementary, 389 at Intermediate, and 1,613 at Advanced (measured 2026-11-23). They are drawn at
@@ -1872,10 +1872,10 @@ on the main actor.
 | `strongPreterite` | 22 | `hasStrongPreterite`: the yo pretérito ends in an unstressed -e (tuve, hice, conduje), so not fui, di, or vi |
 | `irregularFuture` | 13 | `hasIrregularFuture`: the engine marks the yo futuro with capitals (tendré) |
 | `irregularParticiple` | 17 | `hasIrregularParticiple`: the participle, accents folded, is not stem + -ado or -ido, so podrido counts and creído does not |
-| `model-<class>` | The model's page's verbs | `isInModel`: any reading's class, an alias class's under its parent |
+| `model-<class>` | The model's page's verbs | `ModelInfo.verbs`: any reading's class, an alias class's under its parent |
 
 A pattern list holds only **base verbs among the 1,000 most frequent** (`isPatternCandidate`: in
-`FrequencyBand.top1000`, and not a compound by `VerbDraw.isCompound`, the Related Verbs relation),
+`FrequencyBand.top1000`, and not a compound by `VerbMapEntry.isCompound`, the Related Verbs relation),
 because compounds such as detener follow their base verbs, and every compound is still on its
 model's page, which has its own bar. With compounds the lists would hold 33 to 49 verbs, mostly of
 tener, poner, venir, and traer. The pattern tests are static and take any infinitive, so the

@@ -96,13 +96,12 @@ nonisolated enum VerbCollection: Hashable, Identifiable, Sendable {
     return false
   }
 
-  /// The collection's verbs, the most frequent first.
+  /// The collection's verbs, the most frequent first. A model's are its row's (`ModelInfo`), so
+  /// the bar, the quiz, and the share on the model's page count the verbs the page lists.
   var verbs: [VerbMapEntry] {
     switch self {
     case .model(let classNumber):
-      return VerbMap.shared.entries.values
-        .filter { Self.isInModel($0, classNumber: classNumber) }
-        .sorted { $0.frequencyRank < $1.frequencyRank }
+      return ModelInfo.byClassNumber[classNumber]?.verbs ?? []
     default:
       return Self.featuredVerbs[self] ?? []
     }
@@ -159,8 +158,8 @@ nonisolated enum VerbCollection: Hashable, Identifiable, Sendable {
       return Self.isPatternCandidate(entry) && Self.hasIrregularFuture(entry.infinitive)
     case .irregularParticiple:
       return Self.isPatternCandidate(entry) && Self.hasIrregularParticiple(entry.infinitive)
-    case .model(let classNumber):
-      return Self.isInModel(entry, classNumber: classNumber)
+    case .model:
+      return verbs.contains { $0.infinitive == entry.infinitive }
     }
   }
 
@@ -172,16 +171,10 @@ nonisolated enum VerbCollection: Hashable, Identifiable, Sendable {
     })
   }()
 
-  /// A verb a pattern list may hold: in the band, and not a prefixed compound of another verb by
-  /// the Related Verbs card's relation (`VerbRelations`), as `VerbDraw` counts compounds.
+  /// A verb a pattern list may hold: in the band, and not a prefixed compound of another verb
+  /// (`VerbMapEntry.isCompound`).
   static func isPatternCandidate(_ entry: VerbMapEntry) -> Bool {
-    entry.isIn(patternBand) && !VerbDraw.isCompound(entry)
-  }
-
-  /// A verb that is listed on the model's page, under any of its readings. An alias class's verb
-  /// (contener, 31-1) is on its parent's page (tener, 31).
-  static func isInModel(_ entry: VerbMapEntry, classNumber: String) -> Bool {
-    entry.classNumbers.contains { (ModelInfo.parentByAlias[$0] ?? $0) == classNumber }
+    entry.isIn(patternBand) && !entry.isCompound
   }
 
   /// A yo presente in -go whose g the infinitive's stem lacks: tengo, hago, digo, caigo, oigo. A g
@@ -220,7 +213,7 @@ nonisolated enum VerbCollection: Hashable, Identifiable, Sendable {
       return false
     }
     let ending = infinitive.hasSuffix("ar") ? "ado" : "ido"
-    return VerbSearch.fold(form) != VerbSearch.fold(stem(of: infinitive) + ending)
+    return SpellingComparison.fold(form) != SpellingComparison.fold(stem(of: infinitive) + ending)
   }
 
   /// The form in lowercase, its last word only, so a reflexive verb's pronoun does not count.

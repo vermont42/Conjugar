@@ -8,7 +8,7 @@
 import Foundation
 
 /// How the quiz reads what a learner typed, before comparing it with the accepted answers. Search
-/// folds far more loosely (`VerbSearch.fold` drops ñ's tilde), which is right for finding a verb
+/// folds far more loosely (`SpellingComparison.fold` drops ñ's tilde), which is right for finding a verb
 /// and wrong for grading one.
 nonisolated enum AnswerSpelling {
   /// Case and runs of whitespace are not part of an answer: "  He   Hablado " is he hablado.

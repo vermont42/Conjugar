@@ -40,7 +40,7 @@ struct ModelSearch {
     return textChanged && isSearching && models.isEmpty
   }
 
-  /// The models whose exemplar or class number contains the query after `VerbSearch.fold`, the
+  /// The models whose exemplar or class number contains the query after `SpellingComparison.fold`, the
   /// Verbs tab's folding, which drops case and every diacritic, ñ included, so that a query behaves
   /// alike in both tabs: `28` or `4B` finds a model by its class number, `hacer` by its exemplar.
   /// Every model, in order, when the query is empty or only spaces.
@@ -49,9 +49,9 @@ struct ModelSearch {
     guard !trimmed.isEmpty else {
       return models
     }
-    let folded = VerbSearch.fold(trimmed)
+    let folded = SpellingComparison.fold(trimmed)
     return models.filter { model in
-      VerbSearch.fold(model.exemplar).contains(folded) || VerbSearch.fold(model.classNumber).contains(folded)
+      SpellingComparison.fold(model.exemplar).contains(folded) || SpellingComparison.fold(model.classNumber).contains(folded)
     }
   }
 }

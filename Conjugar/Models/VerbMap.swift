@@ -68,6 +68,19 @@ nonisolated struct VerbMapEntry: Equatable {
   /// on the bare `infinitive`.
   var citationForm: String { isReflexive ? infinitive + "se" : infinitive }
 
+  /// Irregular as the verb page's pill says it (`Conjugator.verbType`): any class but the three
+  /// perfectly regular ones, the orthographic classes (buscar, llegar) included. Judged by the
+  /// default sense.
+  var isIrregular: Bool { !Self.isRegularClass(classNumber) }
+
+  /// Whether a class number is one of the three perfectly regular classes: 1 (cantar), 2 (comer),
+  /// and 3 (vivir). Every other class, an orthographic one included, is irregular.
+  static func isRegularClass(_ classNumber: String) -> Bool {
+    regularClassNumbers.contains(classNumber)
+  }
+
+  private static let regularClassNumbers: Set<String> = ["1", "2", "3"]
+
   func withFrequencyRank(_ rank: Int) -> VerbMapEntry {
     VerbMapEntry(
       infinitive: infinitive,
@@ -85,6 +98,10 @@ nonisolated struct VerbMapEntry: Equatable {
 nonisolated final class VerbMap: @unchecked Sendable {
   /// infinitive → its mapping.
   private(set) var entries: [String: VerbMapEntry] = [:]
+
+  /// Every entry, the most frequent first: entry `n` has rank `n + 1`, since ranks are dense.
+  /// A frequency band is a prefix of it (`entries(in:)`), so nothing sorts the map again.
+  private(set) var entriesByFrequency: [VerbMapEntry] = []
 
   /// The shared map, loaded once from the app/test bundle resource.
   static let shared = VerbMap()
@@ -110,7 +127,7 @@ nonisolated final class VerbMap: @unchecked Sendable {
       let delegate = VerbMapParser()
       parser.delegate = delegate
       parser.parse()
-      entries = Self.ranked(delegate.entries)
+      (entries, entriesByFrequency) = Self.ranked(delegate.entries)
     }
   }
 
@@ -135,7 +152,7 @@ nonisolated final class VerbMap: @unchecked Sendable {
       let delegate = VerbMapParser()
       parser.delegate = delegate
       parser.parse()
-      entries = Self.ranked(delegate.entries)
+      (entries, entriesByFrequency) = Self.ranked(delegate.entries)
     }
   }
 
@@ -156,7 +173,9 @@ nonisolated final class VerbMap: @unchecked Sendable {
   ///
   /// The map is keyed by infinitive and a homonym's two `<verb>` rows have already merged
   /// into one entry, so each rank belongs to one spelling with no grouping step needed.
-  private static func ranked(_ entries: [String: VerbMapEntry]) -> [String: VerbMapEntry] {
+  ///
+  /// Returns the ranked entries both by infinitive and in rank order.
+  private static func ranked(_ entries: [String: VerbMapEntry]) -> (byInfinitive: [String: VerbMapEntry], byFrequency: [VerbMapEntry]) {
     let ordered = entries.keys.sorted { lhs, rhs in
       guard let left = entries[lhs], let right = entries[rhs] else {
         return lhs.compare(rhs, locale: VerbMap.spanish) == .orderedAscending
@@ -172,10 +191,16 @@ nonisolated final class VerbMap: @unchecked Sendable {
 
     var ranked: [String: VerbMapEntry] = [:]
     ranked.reserveCapacity(entries.count)
-    for (index, key) in ordered.enumerated() {
-      ranked[key] = entries[key]?.withFrequencyRank(index + 1)
+    var byFrequency: [VerbMapEntry] = []
+    byFrequency.reserveCapacity(entries.count)
+    for key in ordered {
+      guard let entry = entries[key]?.withFrequencyRank(byFrequency.count + 1) else {
+        continue
+      }
+      ranked[key] = entry
+      byFrequency.append(entry)
     }
-    return ranked
+    return (ranked, byFrequency)
   }
 }
 

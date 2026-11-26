@@ -95,7 +95,7 @@ struct DailyChallengeTests {
         let irregular = questions.filter { QuizDraw.isIrregular($0.verb, in: ConjugationCell(tense: $0.tense, personNumber: $0.personNumber)) == true }
         #expect(irregular.count >= 2, "\(described)")
         #expect(questions.filter { QuizDraw.isCore($0.verb) }.count >= QuizDraw.minimumCoreQuestions, "\(described)")
-        #expect(questions.contains { QuizDraw.isCompound($0.verb) }, "\(described)")
+        #expect(questions.contains { VerbRelations.isCompound($0.verb) }, "\(described)")
       }
     }
   }

@@ -266,31 +266,22 @@ nonisolated enum Conjugator {
     return allSlots.contains { slot in features.contains { $0.suppresses(slot) } }
   }
 
-  /// The four-way classification the Verb screen displays, derived from the
-  /// mapped class number: 1/2/3 are the perfectly regular classes; every other
-  /// class (including the orthographic sub-classes) counts as irregular. A verb
-  /// outside the map conjugates regularly, so it classifies by its ending.
+  /// The four-way classification the Verb screen displays. A mapped verb is irregular as
+  /// `VerbMapEntry.isIrregular` says, the orthographic sub-classes included; a regular one, like
+  /// a verb outside the map, which conjugates regularly, classifies by its ending.
   static func verbType(infinitive: String) -> VerbType {
-    switch VerbMap.shared.entry(for: infinitive)?.classNumber {
-    case "1":
-      return .regularAr
-    case "2":
-      return .regularEr
-    case "3":
-      return .regularIr
-    case .some:
+    if VerbMap.shared.entry(for: infinitive)?.isIrregular == true {
       return .irregular
+    }
+    switch RegularRoot(infinitive: infinitive) {
+    case .ar:
+      return .regularAr
+    case .er:
+      return .regularEr
+    case .ir:
+      return .regularIr
     case nil:
-      switch RegularRoot(infinitive: infinitive) {
-      case .ar:
-        return .regularAr
-      case .er:
-        return .regularEr
-      case .ir:
-        return .regularIr
-      case nil:
-        return .irregular
-      }
+      return .irregular
     }
   }
 

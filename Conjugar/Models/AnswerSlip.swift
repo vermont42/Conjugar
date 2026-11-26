@@ -29,7 +29,7 @@ nonisolated enum AnswerSlip {
     guard target.filter({ !$0.isWhitespace }).count >= minimumLetterCount else {
       return false
     }
-    return VerbSearch.editDistance(Array(answer), Array(target)) <= 1
+    return SpellingComparison.editDistance(Array(answer), Array(target)) <= 1
   }
 }
 

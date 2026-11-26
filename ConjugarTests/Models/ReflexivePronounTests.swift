@@ -92,7 +92,7 @@ struct ReflexivePronounTests {
   }
 
   /// A golden table of joined forms, whose accents the sweep below cannot see, since it compares
-  /// through `VerbSearch.fold`. One verb of each shape: -ear, both kinds of -iar, -uir, a ue and an
+  /// through `SpellingComparison.fold`. One verb of each shape: -ear, both kinds of -iar, -uir, a ue and an
   /// ie diphthong, ü, qu, gu, e to i, a hiatus in -eír, and one-syllable commands. A reflexive-only
   /// verb is read as its page writes it; any other has its bare forms joined by `attach`, as a
   /// learner would write the reflexive.
@@ -141,7 +141,7 @@ struct ReflexivePronounTests {
         switch tense {
         case .imperativoPositivo:
           let dropped = person == .firstPlural || person == .secondPlural ? String(bare.dropLast()) : bare
-          #expect(VerbSearch.fold(written) == VerbSearch.fold(dropped + pronoun), "\(infinitive) \(tense) \(person)")
+          #expect(SpellingComparison.fold(written) == SpellingComparison.fold(dropped + pronoun), "\(infinitive) \(tense) \(person)")
         case .imperativoNegativo:
           #expect(written == "no \(pronoun) " + bare.dropFirst(3), "\(infinitive) \(tense) \(person)")
         default:
@@ -149,7 +149,7 @@ struct ReflexivePronounTests {
         }
       }
     }
-    #expect(VerbSearch.fold(Self.written(infinitive, .gerundio, .none) ?? "") == VerbSearch.fold((Self.bare(infinitive, .gerundio, .none) ?? "") + "se"))
+    #expect(SpellingComparison.fold(Self.written(infinitive, .gerundio, .none) ?? "") == SpellingComparison.fold((Self.bare(infinitive, .gerundio, .none) ?? "") + "se"))
     #expect(Self.written(infinitive, .participio, .none) == Self.bare(infinitive, .participio, .none))
   }
 

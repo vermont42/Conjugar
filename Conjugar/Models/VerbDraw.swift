@@ -70,23 +70,9 @@ nonisolated enum VerbDraw {
   }
 
   static func weight(of entry: VerbMapEntry) -> UInt64 {
-    let irregularWeight: UInt64 = isIrregular(entry) ? 2 : 1
-    let compoundWeight: UInt64 = isCompound(entry) ? 1 : 2
+    let irregularWeight: UInt64 = entry.isIrregular ? 2 : 1
+    let compoundWeight: UInt64 = entry.isCompound ? 1 : 2
     return irregularWeight * compoundWeight
-  }
-
-  /// Irregular as the verb page's pill says it: any class but the three regular ones, the
-  /// orthographic classes (buscar, llegar) included.
-  static func isIrregular(_ entry: VerbMapEntry) -> Bool {
-    !regularClassNumbers.contains(entry.classNumber)
-  }
-
-  private static let regularClassNumbers: Set<String> = ["1", "2", "3"]
-
-  /// A prefixed compound of another verb of the map, by the Related Verbs card's relation
-  /// (`VerbRelations`): detener on tener, reconocer on conocer.
-  static func isCompound(_ entry: VerbMapEntry) -> Bool {
-    VerbRelations.shared.baseByVerb[entry.infinitive] != nil
   }
 
   // `Int.random(in:using:)` would serve, but its use of the generator is not documented, so a

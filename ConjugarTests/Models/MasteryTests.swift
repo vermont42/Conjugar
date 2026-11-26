@@ -113,7 +113,7 @@ struct MasteryTests {
     #expect(!Mastery.coreVerbs.contains("hablar"))
     let ranks = Mastery.coreVerbs.compactMap { VerbMap.shared.entry(for: $0)?.frequencyRank }
     #expect(ranks == ranks.sorted())
-    #expect(Mastery.coreVerbs.allSatisfy { VerbMap.shared.entry(for: $0).map(VerbDraw.isIrregular) == true })
+    #expect(Mastery.coreVerbs.allSatisfy { VerbMap.shared.entry(for: $0)?.isIrregular == true })
   }
 
   @Test func aVerbRegularThroughoutTheLevelIsLeftOut() {

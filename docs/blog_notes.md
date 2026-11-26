@@ -12591,3 +12591,46 @@ failed. The tab's search became a small value type, `ModelSearch`, whose `update
 trombone should play, so that a test could pin both. The plan left one decision to Josh. The Models
 tab's search field on iPad still shrank to a toolbar button, while the Verbs tab had long used a
 drawer that always shows. Shown both, he chose the drawer, and the two tabs now read one placement.
+
+## One Definition Each (2026-11-26)
+
+Phase 8 of the browse fixes was about facts the app had written down more than once. "Is this verb
+irregular?" had three answers: a set of the regular classes in `VerbDraw`, the same set in
+`ModelPractice`, and a switch in `Conjugator.verbType`. "Is it a prefixed compound?" had three
+identical copies. A model's verbs were computed twice by the review's count. A third copy, inside
+the Related Verbs card, turned up only once the work started. The copies agreed today, and a test
+existed only to keep two of them agreeing, which is the tell that one of them should not exist.
+
+Each fact now has one home. Irregularity lives on `VerbMapEntry`, and a test holds the verb page's
+pill to it for all 4,811 verbs. Compounds live beside the relation that defines them. A model's
+verbs are `ModelInfo.verbs`, which the model's page, its collection bar, its quiz, its practice,
+and the Related Verbs card all read. Making that possible meant making `ModelInfo` `nonisolated`,
+since the collection type is. That move exposed a cost no one had noticed. `ModelInfo`'s
+synthesized `Hashable` hashed every verb of the row, so pushing cantar's page onto a navigation
+stack hashed 2,968 strings. Two rows are now equal when their class numbers are.
+
+Sorting got the same treatment. Six files sorted the whole map by frequency rank whenever they
+needed it, though the ranks are dense and the map's loader already sorts once to assign them. That
+sort now keeps its result, `entriesByFrequency`, and a frequency band is just a prefix of it. For the
+alphabetical lists, the plan asked to filter presorted lists "where that is cheaper than sorting".
+A small release-build benchmark in the scratchpad answered where. Sorting in Spanish collation costs
+about a hundredth of a millisecond per verb, and filtering the whole map costs a quarter of a
+millisecond whatever the list's size. The crossover is near 35 verbs, and cantar's page goes from
+37 ms of sorting to half a millisecond.
+
+The two edit distances in the search became one generic function with an optional limit. It moved,
+with `fold`, out of `VerbSearch` into a new `SpellingComparison`, because the quiz grades with both.
+Its first name, `Spelling`, broke the build: `ConjugationIndex` already had a nested `Spelling`
+type, which shadowed it inside that file. The quiz's correction view keeps its own distance, since
+it needs the alignment as well as the count.
+
+The phase's proof was meant to be that `scripts/write_forms_json.sh` leaves `forms.json` unchanged
+in git. That proof turned out to be empty, because the file is gitignored. Instead, the session
+built `ConjugationMapTool` at `HEAD` in a scratch worktree, ran the old and new tools side by side,
+and compared all four of their outputs, the bundled map among them. They were byte for byte the
+same.
+
+Smaller things rode along. The search's key cache now compares whole entries, where it once
+compared only glosses. The learner's store derives its recent and starred lists once per change
+instead of on every read. The map tool refuses a flag it does not know, so a misspelled
+`--forms-json` can no longer write the map and quietly skip the file.

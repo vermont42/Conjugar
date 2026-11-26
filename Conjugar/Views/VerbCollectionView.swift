@@ -20,7 +20,7 @@ struct VerbCollectionView: View {
     self.collection = collection
     self.source = source
     verbs = collection.verbs
-    lists = VerbSort.sortedLists(of: verbs)
+    lists = VerbSort.sortedLists(ofMapEntries: verbs)
   }
 
   var body: some View {

@@ -900,7 +900,7 @@ class Quiz {
         questions.insert(question.reasked(inStep: placement.step), at: placement.position)
       }
       let nearest = recognition.cells.map(\.verb).min {
-        VerbSearch.editDistance(Array(answer.typedInfinitive), Array($0)) < VerbSearch.editDistance(Array(answer.typedInfinitive), Array($1))
+        SpellingComparison.editDistance(Array(answer.typedInfinitive), Array($0)) < SpellingComparison.editDistance(Array(answer.typedInfinitive), Array($1))
       } ?? question.verb
       correction = QuizCorrection(
         difference: AnswerDifference.between(given: answer.typedInfinitive, expected: nearest),

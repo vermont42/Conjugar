@@ -48,16 +48,15 @@ struct ModelView: View {
     return persons
   }
 
-  /// The model as a collection, whose bar sits between the grid and the verbs.
+  /// The model as a collection, whose bar sits between the grid and the verbs. Its verbs are the
+  /// model's (`ModelInfo.verbs`), so the bar, its quiz, and its share count the listed verbs.
   private let collection: VerbCollection
-  /// The collection's verbs, for the bar's count. The same verbs as `entriesBySort`'s.
-  private let collectionVerbs: [VerbMapEntry]
 
   private let gloss: String
   private let isDefective: Bool
   private let participio: String
   private let gerundio: String
-  /// The verbs using this model, in each order, sorted once in `init`. The page always opens on
+  /// The verbs using this model, in each order, derived once in `init`. The page always opens on
   /// the alphabetical order, which is not saved.
   private let entriesBySort: [VerbSort: [VerbMapEntry]]
   /// The person columns this instance renders, resolved from the browse setting in
@@ -76,9 +75,7 @@ struct ModelView: View {
     isDefective = Conjugator.isDefective(infinitive: model.exemplar)
     participio = Self.form(model.exemplar, .participio)
     gerundio = Self.form(model.exemplar, .gerundio)
-    let entries = model.verbs.compactMap { VerbMap.shared.entry(for: $0) }
-    entriesBySort = VerbSort.sortedLists(of: entries)
-    collectionVerbs = entries
+    entriesBySort = VerbSort.sortedLists(ofMapEntries: model.verbs)
     let persons = Self.gridPersons(for: Current.settings.secondSingularBrowse)
     gridPersons = persons
     gridForms = Self.gridTenses.map { gridTense in
@@ -96,7 +93,7 @@ struct ModelView: View {
       VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
         headerCard
         gridCard
-        VerbCollectionBar(collection: collection, title: L.VerbCollection.modelTitle(exemplar: model.exemplar), verbs: collectionVerbs)
+        VerbCollectionBar(collection: collection, title: L.VerbCollection.modelTitle(exemplar: model.exemplar), verbs: model.verbs)
         ModelPracticeCard(classNumber: model.classNumber)
 
         SortableVerbList(lists: entriesBySort, initialSort: .alphabetical, source: .model, showsLookedUp: true) { count in

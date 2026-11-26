@@ -27,8 +27,8 @@ is filled by the next session, which reads the hash from `git log`.
 | 4 | Done | 2026-11-25 | `c0618fe` | C3, and a week of verbs for the widget |
 | 5 | Done | 2026-11-25 | `57abe4c` | C2, C7, C8, G2, G3, G4, and from C13 the "All N" chip |
 | 6 | Done | 2026-11-26 | `082a446` | From C13 the stashed link, the ignored link, the link beneath the game, and case; F2 (Spotlight); the intents and links of D3 |
-| 7 | Awaiting Josh | 2026-11-26 | | D1 (the cheap pieces), D2, G6, G8, S5, and from C13 the Models tab's whitespace and trombone |
-| 8 | Not started | | | D3 (the model layer), F2 (repeated work), S8 |
+| 7 | Done | 2026-11-26 | `1349e60` | D1 (the cheap pieces), D2, G6, G8, S5, and from C13 the Models tab's whitespace and trombone |
+| 8 | Awaiting Josh | 2026-11-26 | | D3 (the model layer), F2 (repeated work), S8 |
 | 9 | Not started | | | S1 (the search model), C10, C11, F1, S2, S3, S4, S7, and the rest of C13 |
 | 10 | Not started | | | S1 (the rest), G9 |
 | 11 | Not started | | | D1 (`AdaptiveRows` and one row label) |
@@ -779,6 +779,59 @@ results and the collections' membership are unchanged: `VerbSearchTests`, `VerbC
 and `VerbDrawTests` pass without edits to their expectations.
 
 **How it differed:**
+
+- **Irregularity and compounds.** `VerbMapEntry.isIrregular` and `isRegularClass(_:)` hold the only
+  list of the regular classes. `Conjugator.verbType` now asks `isIrregular` before reading the ending,
+  and a new test holds it to `isIrregular` for all 4,811 verbs. `isCompound` had three copies, in
+  `VerbDraw`, `QuizDraw`, and `VerbEssentials`. All three went into one
+  `VerbRelations.isCompound(_:)`, beside the relation it reads, with `VerbMapEntry.isCompound` over it.
+- **A model's verbs.** `ModelInfo` is now `nonisolated`, so `VerbCollection` can read it. Its `verbs` are
+  entries ordered by frequency rather than infinitives ordered alphabetically, and two rows are
+  equal and hash alike by class number, so pushing a row no longer hashes its 2,968 verbs. The
+  plan did not name a third copy, `RelatedVerbs.Index.verbsByModel`, which also went: the Related
+  Verbs card reads the row too. `isInModel` and `everyModelsCollectionIsItsPagesVerbs` went as well.
+  `ModelInfoTests` loses its alphabetical-order test, the one expectation this phase changed, since
+  that order no longer exists. In its place, one test pins frequency order and another pins
+  membership against the rule `isInModel` used to state. No row ever listed a homonym twice, but
+  `ModelInfo` now takes each verb once on principle.
+- **The verbs by frequency.** `VerbMap.entriesByFrequency` comes out of `ranked(_:)` at no extra
+  cost, and `entries(in:)` is a prefix of it. Six files no longer sort the map themselves:
+  `VerbEntity`, `RelatedVerbs`, `VerbCollection`, `VerbEssentials`, `ModelPractice`, and `QuizDraw`.
+  `VerbSort.mapLists` holds the whole map in each order and replaces the Verbs tab's private copy.
+  `sortedLists(ofMapEntries:)` filters it for a list longer than 32 verbs and sorts a shorter one.
+  The threshold comes from a release-build timing in the scratchpad: sorting 50 verbs in Spanish
+  collation took 0.47 ms, filtering the map took about 0.25 ms at any size, and sorting cantar's
+  3,000 verbs took 37 ms against 0.5 ms to filter. A model's page, a collection's page, and the
+  related verbs' full list all use it.
+- **Edit distance and `fold`** moved to a new `Models/SpellingComparison.swift`. Its first name,
+  `Spelling`, collided with `ConjugationIndex.Spelling`. One generic function with a limit serves
+  both of `VerbSearch`'s former copies, and the unlimited form passes `Int.max`.
+  `AnswerDifference` keeps its own, which needs the backtrace. The fold and distance tests moved
+  from `VerbSearchTests` to `SpellingComparisonTests`, which also pins that the limited distance
+  agrees with the unlimited one, over characters and over folded bytes.
+- **The search cache.** `VerbSearch.Keys` keeps its entry and compares it whole. A new test fails
+  without that: a hablar marked reflexive, with the bundled glosses, is found by "hablars".
+- **Recents.** `LearnerVerbStore` keeps `starredVerbs`, `recentVerbs`, `recentUnstarredVerbs`, and
+  `myVerbs` as observed stored properties, derived in `init` and in `save()`, which every change
+  goes through. The new test checks all four after each kind of change. That test cannot fail for
+  want of the cache; it guards the cache's correctness.
+- **`ConjugationMapTool`** fails on a flag it does not know, and also on a repeated one, which the plan
+  did not ask for. Checked by hand: `--froms-json` and a doubled `--map` each exit 1 with a message.
+  The tool has no test target.
+- **The identical-map check.** `corpus/working/forms.json` is gitignored, so `git diff --stat`
+  could not have shown a change. I built the tool at `HEAD` in a scratch worktree and ran both builds
+  with all four outputs: the `.lzfse` map, `forms.json`, `forms_all.json`, and the cells JSON.
+  All four were byte-identical, and `scripts/write_forms_json.sh`'s `forms.json` matched them too.
+- **Checked in the simulator,** on the iPhone only, since nothing visible was meant to change. On
+  cantar's page, the bar and the heading both read 2,968, the alphabetical list starts at abajar,
+  and the frequency list starts at pasar. The iPad was not booted.
+- **The suite** is 1,439 Swift Testing tests in 90 suites and 11 XCTest tests, in 145 s, with the
+  load average between 150 and 190. The slowest suites were "ConjugationMap" (26.2 s; its
+  fresh-build test passed), `QuizLevelTests` (22.8 s), "The bundled map" (19.0 s), and
+  `ReverseLookupTests` (14.9 s). `QuizLevelTests` is not among Phase 7's slowest, so I ran it
+  alone: 5.8 s here and 9.2 s at `HEAD` under heavier load, which is noise and not a regression.
+  `VerbSearchTests`, `VerbCollectionTests`, and `VerbDrawTests` kept their expectations. Only
+  call sites changed, such as `entry.isIrregular`, and two tests moved out.
 
 ## Phase 9: A Search Model for the Verb List
 
