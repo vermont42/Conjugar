@@ -134,6 +134,13 @@ its list never changes between days.
 **Fix.** Rotate over an order that recency does not change, such as the infinitives sorted, and
 test with a list that changes between turns.
 
+**Fixed on `master`, 2026-11-25, in Phase 4 of `plans/verb_browse_fixes.md`.** A My Verbs day goes
+to the verb whose last turn is oldest, one that never had a turn first, and among equals the first
+by infinitive (`VerbDraw.myVerbsTurn(in:lastShown:)`). The record of turns is kept in the widgets'
+file. In the reviewer's scenario no verb now comes back within twenty My Verbs days, and none
+while another of the list has waited longer.
+
+
 <a id="c4"></a>
 ### C4. Look Up a Verb cannot open the page of a verb with an ñ twin (Run)
 
@@ -640,6 +647,8 @@ These are Josh's decisions, recorded in the plan. Each has a cost its note does 
   sees one verb for five days. This predates the plan, but Phase 14's "next ten days" was tested
   as a function and never as what the widget holds. The draw is deterministic, so the app could
   write a week of verbs. See [Q9](#open-questions).
+  **Fixed on `master`, 2026-11-25, in Phase 4 of `plans/verb_browse_fixes.md`:** the app writes
+  today and six days ahead, and the widgets' timelines change at each midnight.
 - **A verb deleted from My Verbs can still be offered by the review card**, with "Looked up 3 days
   ago", because Clear and the swipe keep the practice record by decision.
 - **Weather verbs share as one form.** A third-person-only verb's key conjugations leave out the

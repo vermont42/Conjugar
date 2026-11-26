@@ -113,31 +113,19 @@ nonisolated enum DailyChallenge {
     }
   }
 
-  /// The Gregorian calendar in the learner's time zone, so that a learner whose calendar is
-  /// another still names the day as a link does.
+  /// The Gregorian calendar in the learner's time zone (`CalendarDay`), so that a learner whose
+  /// calendar is another still names the day as a link does.
   static var calendar: Calendar {
-    var calendar = Calendar(identifier: .gregorian)
-    calendar.timeZone = .current
-    return calendar
+    CalendarDay.calendar
   }
 
   static func dayString(for date: Date) -> String {
-    let components = calendar.dateComponents([.year, .month, .day], from: date)
-    return String(format: "%04d-%02d-%02d", components.year ?? 0, components.month ?? 0, components.day ?? 0)
+    CalendarDay.string(for: date)
   }
 
   /// Noon of a `yyyy-MM-dd` day, or nil for text that names no day.
   static func date(fromDayString day: String) -> Date? {
-    let parts = day.split(separator: "-", omittingEmptySubsequences: false)
-    guard
-      parts.count == 3, parts[0].count == 4, parts[1].count == 2, parts[2].count == 2,
-      let year = Int(parts[0]), let month = Int(parts[1]), let dayOfMonth = Int(parts[2]),
-      let date = calendar.date(from: DateComponents(year: year, month: month, day: dayOfMonth, hour: 12)),
-      dayString(for: date) == day
-    else {
-      return nil
-    }
-    return date
+    CalendarDay.noon(of: day)
   }
 
   /// 64-bit FNV-1a.

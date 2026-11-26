@@ -3,13 +3,15 @@
 //  Conjugar
 //
 //  The Codable payload the app precomputes (via the conjugation engine) and hands
-//  to the widget as JSON in the App Group container. The widget is a pure renderer:
-//  it never runs the engine or loads verbModelMap.xml — it only decodes this.
+//  to the widget as JSON in the App Group container: a week of days (`WidgetWeek`), each a
+//  `WidgetSnapshot`. The widget is a pure renderer: it never runs the engine or loads
+//  verbModelMap.xml. It only decodes this.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
 import Foundation
 
+/// One day of what the widgets show: the verb of the day and the quiz widget's question.
 nonisolated struct WidgetSnapshot: Codable, Equatable, Sendable {
   /// The verb of the day as the app shows it, e.g. "tener", or "arrepentirse" for a
   /// reflexive-only verb. The app's `conjugar://verb/` route accepts that form.
@@ -47,8 +49,104 @@ nonisolated struct WidgetSnapshot: Codable, Equatable, Sendable {
   /// A tap-to-answer quiz question: the first of the day's daily challenge at the learner's level,
   /// or, should the challenge give none, one over the verb of the day.
   let quizQuestion: WidgetQuizQuestion
-  /// The yyyy-MM-dd this snapshot was generated for.
+  /// The day this snapshot is for, `yyyy-MM-dd` as `CalendarDay` names it.
   let dateString: String
+}
+
+/// What the app writes into the App Group: the days from the one it was written on to six days
+/// after, so that the widgets change at midnight without the app being opened. On the eighth day
+/// and after, the widgets keep the last day written.
+///
+/// The file keeps the shape a single day had. The first day's keys sit at the top level, and the
+/// rest go under `laterDays`, so a widget that knows only one day reads the first from a week, and
+/// a widget that knows the week reads a file of one day as a week of one. The app's bookkeeping is
+/// optional for the same reason, and the widget ignores it.
+nonisolated struct WidgetWeek: Codable, Equatable, Sendable {
+  /// A My Verbs day's verb, by the map's infinitive (arrepentir, not arrepentirse).
+  struct Turn: Codable, Equatable, Sendable {
+    let dayNumber: Int
+    let verb: String
+  }
+
+  /// A moment of a widget's timeline and the day it shows from then.
+  struct Moment: Equatable, Sendable {
+    let date: Date
+    let day: WidgetSnapshot
+  }
+
+  let firstDay: WidgetSnapshot
+  /// The days after the first, in order.
+  let laterDays: [WidgetSnapshot]
+  /// For the app: My Verbs as the week was planned from them, sorted, so that a change shows.
+  var myVerbs: [String]?
+  /// For the app: the My Verbs days among `days` and their verbs.
+  let myVerbsTurns: [Turn]?
+  /// For the app: the day number on which each verb of My Verbs last had its turn, through the day
+  /// the week was written. Later days are only planned, and `myVerbsTurns` holds them.
+  let myVerbsShown: [String: Int]?
+
+  init(firstDay: WidgetSnapshot, laterDays: [WidgetSnapshot] = [], myVerbs: [String]? = nil, myVerbsTurns: [Turn]? = nil, myVerbsShown: [String: Int]? = nil) {
+    self.firstDay = firstDay
+    self.laterDays = laterDays
+    self.myVerbs = myVerbs
+    self.myVerbsTurns = myVerbsTurns
+    self.myVerbsShown = myVerbsShown
+  }
+
+  var days: [WidgetSnapshot] {
+    [firstDay] + laterDays
+  }
+
+  private enum CodingKeys: String, CodingKey {
+    case laterDays
+    case myVerbs
+    case myVerbsTurns
+    case myVerbsShown
+  }
+
+  init(from decoder: any Decoder) throws {
+    firstDay = try WidgetSnapshot(from: decoder)
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    laterDays = try container.decodeIfPresent([WidgetSnapshot].self, forKey: .laterDays) ?? []
+    myVerbs = try container.decodeIfPresent([String].self, forKey: .myVerbs)
+    myVerbsTurns = try container.decodeIfPresent([Turn].self, forKey: .myVerbsTurns)
+    myVerbsShown = try container.decodeIfPresent([String: Int].self, forKey: .myVerbsShown)
+  }
+
+  func encode(to encoder: any Encoder) throws {
+    try firstDay.encode(to: encoder)
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(laterDays, forKey: .laterDays)
+    try container.encodeIfPresent(myVerbs, forKey: .myVerbs)
+    try container.encodeIfPresent(myVerbsTurns, forKey: .myVerbsTurns)
+    try container.encodeIfPresent(myVerbsShown, forKey: .myVerbsShown)
+  }
+
+  /// The day the widgets show on the date: the last day written for it or before it, or the first
+  /// when every day is later, as after the clock is turned back.
+  func day(on date: Date) -> WidgetSnapshot {
+    let today = CalendarDay.string(for: date)
+    return days.last { $0.dateString <= today } ?? firstDay
+  }
+
+  /// The day whose quiz question has the ID, which the quiz widget's answer names.
+  func day(askingQuestion questionID: String) -> WidgetSnapshot? {
+    days.first { $0.quizQuestion.questionID == questionID }
+  }
+
+  /// A widget's timeline from `now`: the day shown now, then each later day from its midnight, and
+  /// the midnight after the last, when WidgetKit should ask again.
+  func timeline(from now: Date) -> (moments: [Moment], reload: Date) {
+    let today = CalendarDay.string(for: now)
+    var moments = [Moment(date: now, day: day(on: now))]
+    for later in days where later.dateString > today {
+      guard let start = CalendarDay.start(of: later.dateString), start > now else {
+        continue
+      }
+      moments.append(Moment(date: start, day: later))
+    }
+    return (moments, CalendarDay.nextMidnight(after: moments.last?.date ?? now))
+  }
 }
 
 nonisolated struct WidgetParadigm: Codable, Equatable, Sendable {

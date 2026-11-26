@@ -2,7 +2,7 @@
 //  SnapshotReader.swift
 //  ConjugarWidget
 //
-//  Reads and decodes the JSON snapshot the app writes into the App Group container,
+//  Reads and decodes the week of snapshots the app writes into the App Group container,
 //  and supplies a static placeholder for the widget gallery / redacted states.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
@@ -10,15 +10,22 @@
 import Foundation
 
 nonisolated enum SnapshotReader {
-  static func read() -> WidgetSnapshot? {
+  /// The week the app wrote. A file of one day, as an earlier build wrote it, reads as a week of
+  /// one day.
+  static func read() -> WidgetWeek? {
     guard
       let url = WidgetConstants.snapshotURL,
       let data = try? Data(contentsOf: url),
-      let snapshot = try? JSONDecoder().decode(WidgetSnapshot.self, from: data)
+      let week = try? JSONDecoder().decode(WidgetWeek.self, from: data)
     else {
       return nil
     }
-    return snapshot
+    return week
+  }
+
+  /// The week the app wrote, or the placeholder's week of one day when there is none.
+  static var weekOrPlaceholder: WidgetWeek {
+    read() ?? WidgetWeek(firstDay: placeholder)
   }
 
   /// A representative snapshot used before the app has written a real one (widget

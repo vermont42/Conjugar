@@ -354,7 +354,8 @@ The project has a second target, **`ConjugarWidgetExtension`** (`ConjugarWidget/
 the Day" widget, an interactive daily-quiz widget, Lock Screen accessories, two Control Center
 controls, and the quiz **Live Activity** / Dynamic Island. The app and the extension share data
 through an **App Group** — `Utils/WidgetSnapshotWriter.swift` picks and conjugates the daily
-verb and quiz question and writes JSON that the widgets read; `Shared/` holds the ActivityKit
+verb and quiz question for today and the six days after and writes JSON that the widgets read,
+an entry per day, so they change at midnight without the app; `Shared/` holds the ActivityKit
 contract and the App Group constants. The widget target has its **own** `Localizable.xcstrings`
 and its own copies of the conjugation- and etymology-rendering helpers, so a change to the app's
 render conventions has to be mirrored there. See

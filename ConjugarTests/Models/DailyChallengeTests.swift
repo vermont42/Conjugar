@@ -207,7 +207,7 @@ struct DailyChallengeTests {
   @Test func theWidgetsSnapshotAsksTheChallengesQuestion() throws {
     let date = try #require(DailyChallenge.date(fromDayString: "2026-11-24"))
     let context = WidgetSnapshotWriter.ChallengeContext(level: .elementary, region: .latinAmerica, secondSingular: .secondSingularTú)
-    let snapshot = try #require(WidgetSnapshotWriter.makeSnapshot(for: date, challenge: context))
+    let snapshot = try #require(WidgetSnapshotWriter.makeWeek(for: date, myVerbs: [], challenge: context)).firstDay
     let first = try #require(DailyChallenge.questions(for: DailyChallenge.Key(date: date, level: .elementary, region: .latinAmerica)).first)
     #expect(snapshot.quizQuestion.infinitive == ReflexivePronoun.citationForm(of: first.verb))
     #expect(snapshot.quizQuestion.questionID.hasPrefix("2026-11-24-elementary-latinAmerica-"))

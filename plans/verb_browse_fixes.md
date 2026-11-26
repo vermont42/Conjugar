@@ -23,8 +23,8 @@ is filled by the next session, which reads the hash from `git log`.
 |---:|---|---|---|---|
 | 1 | Done | 2026-11-25 | `a5c37cc` | C1, C4, C5, C6, and from C13 the homonym's sense and the guess's cell order |
 | 2 | Done | 2026-11-25 | `4d5b2ec` | P1, and the wire names from T1 |
-| 3 | Awaiting Josh | 2026-11-25 | | C9, C12, G1, and from C13 Recent's count |
-| 4 | Not started | | | C3, and a week of verbs for the widget |
+| 3 | Done | 2026-11-25 | `942f3a4` | C9, C12, G1, and from C13 Recent's count |
+| 4 | Awaiting Josh | 2026-11-25 | | C3, and a week of verbs for the widget |
 | 5 | Not started | | | C2, C7, C8, G2, G3, G4, and from C13 the "All N" chip |
 | 6 | Not started | | | From C13 the stashed link, the ignored link, the link beneath the game, and case; F2 (Spotlight); the intents and links of D3 |
 | 7 | Not started | | | D1 (the cheap pieces), D2, G6, G8, S5 |
@@ -399,6 +399,50 @@ the first one in the file.
 overnight.
 
 **How it differed:**
+
+- **C3 needed a record, not only an order.** Sorting My Verbs stops a reordering from bringing a
+  verb back, but any turn taken by position (`turn % count`) still repeats one when the list
+  grows, which a newly opened verb does. A turn now goes to the verb whose last turn is oldest, one
+  never shown first, ties by infinitive (`VerbDraw.myVerbsTurn(in:lastShown:)`), and the app keeps
+  the record of turns in the widgets' file. A verb that leaves My Verbs leaves the record, so one
+  that returns counts as new. `myVerbsGetEveryThirdDayInTurn` and
+  `theWidgetsNextTenDaysComeFromTheBandOrMyVerbs` changed their expectations: the first turns now
+  go in alphabetical order (abolir before churruscar), and they thread the record from day to day.
+  Against the old turn, the new rotation tests fail with 1,124 issues on the reviewer's scenario.
+- **The file's format.** One day keeps the name `WidgetSnapshot`; a new `WidgetWeek` holds seven.
+  It encodes the first day's keys at the top level and the rest under `laterDays`, so a widget that
+  knows one day reads the first from a week and a widget that knows the week reads an old file as a
+  week of one. App and widget ship together, so only the second case should ever happen, after an
+  update and before the app is opened. The app's bookkeeping (`myVerbs`, `myVerbsTurns`,
+  `myVerbsShown`) is optional and ignored by the widget.
+- **The eighth day** shows the last day written, as accepted. Both widgets' timelines end at the
+  midnight after the last day, when WidgetKit asks again.
+- **The gate notices My Verbs.** Without it, a verb opened today would wait for the next day the app
+  is opened to be planned, and a verb removed could still come up within the week. The gate compares
+  the names sorted, without loading the verb map. A rewrite keeps the verb of today if the previous
+  week held today, so opening the app never changes the verb the widget showed since midnight, and
+  `MainTabView` now also refreshes when the app goes to the background, so a session's change to My
+  Verbs reaches the planned days before the learner leaves for a week. The reload happens only when
+  something changed, as before.
+- **The calendar.** A new `Shared/CalendarDay.swift` names days in the Gregorian calendar and the
+  current time zone; `DailyChallenge`'s three day functions now forward to it. The writer's day
+  numbers and `dateString` use it, and so do the widgets' midnights. For a Gregorian user every day
+  number is unchanged.
+- **The quiz widget's question** was as cheap to write ahead: each day carries its own challenge's
+  first question, the quiz widget has an entry per midnight, and `AnswerQuizIntent` grades against
+  the day whose question ID the tap names.
+- **Checked in the simulators.** On the iPhone, the app wrote seven dated days (inscribir on
+  2026-11-25). With the app closed, the file's dates were shifted back two days, and the widget
+  gallery's preview (the widget's `getSnapshot`) showed identificar, the entry for 2026-11-25, not
+  the file's first. Placing the widget on the iPhone's Home Screen crashed SpringBoard twice, in its
+  own `SBHRippleSimulation` (iOS 26.3 simulator), so the iPhone's timeline was not seen. On the iPad,
+  in Spanish with hacer in My Verbs, the week put hacer on days 330 and 333; with the dates shifted
+  back four days, the gallery and the placed widget (its timeline) both showed procesar, the entry
+  for today. Opening the app then rewrote the week from today and kept procesar, where a fresh plan
+  would have drawn inscribir. A real midnight on a device is left to `docs/release.md` step 11.
+- **The suite** is 1,384 Swift Testing tests in 86 suites and 11 XCTest tests, in 84 s. The slowest
+  suites are "ConjugationMap" (20.5 s), "The bundled map" (14.2 s), and `ReverseLookupTests`
+  (10.2 s). The new `WidgetWeekTests` takes 0.4 s.
 
 ## Phase 5: The Verb Page
 

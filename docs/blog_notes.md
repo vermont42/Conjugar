@@ -12415,3 +12415,47 @@ Two small things rode along. Recent took its twenty verbs before leaving out the
 a learner who starred most of what they opened saw a short list while older verbs waited; it now
 filters first. And several comments claimed the widget reads the learner's record or the practice
 record. It reads neither; the app hands My Verbs to the snapshot writer. The comments now say so.
+
+## A Week of Verbs for the Widget (2026-11-25)
+
+Phase 4 of the verb-browse fixes took on two complaints about the Verb of the Day widget. The first
+was the review's: on the days that belong to My Verbs, the widget kept showing the same verb. The
+rotation took `myVerbs[turn % count]`, and My Verbs is newest first. Each My Verbs day moved the turn
+down the list by one, and each verb opened in between pushed every other verb down by one, so the
+two cancelled. The reviewer simulated it and saw one verb on 56 of 60 My Verbs days.
+
+The plan suggested rotating over the infinitives sorted, which fixes a reordered list. It does not
+fix a list that grows. Any turn taken by position jumps when the count changes, and a verb opened
+between days is exactly a list that grows. A rotation that never brings one verb back while another
+waits has to remember what it showed, so the app now keeps a small record: for each verb in My
+Verbs, the day of its last turn. A turn goes to a verb that never had one, or else to the one whose
+last turn is oldest, alphabetically among equals. Run against the old code, the new tests report
+1,124 failures on the reviewer's scenario. Against the new code, no verb comes back within twenty
+My Verbs days.
+
+The second complaint was older. The app wrote one day's snapshot when it was opened, so a learner
+who stayed away for five days saw one verb for five days. Josh asked for a week. The writer now
+plans today and the six days after, each with its verb, its forms, its example, and the quiz
+widget's question from that day's challenge, and both widgets return a timeline entry per midnight.
+The record of turns rides in the same file, since the plan for a My Verbs day has to know which
+earlier days the widget actually showed.
+
+The file had to stay readable both ways. The week's first day keeps its keys at the top level,
+where a single day's used to be, and the other six go under a new key. A widget from the old build
+would read today from the new file, and the new widget reads an old file as a week of one day.
+
+Two decisions came out of planning ahead. If the week is planned from My Verbs once a day, a verb
+opened this afternoon waits for the next day the app is opened, and a verb swiped away can still
+turn up on Thursday. So the gate that skips a rewrite now also compares My Verbs, and the app
+refreshes on its way to the background as well as on its way in. But a rewrite must not change a
+verb the widget has shown since midnight, so a day that the previous week already held for today
+keeps its verb, and only the days after are planned again. The day numbers and date strings moved
+to a Gregorian calendar in the current time zone, in a small `CalendarDay` type that the daily
+challenge now shares, so that a Buddhist calendar setting cannot shift the days.
+
+Seeing it took some fiddling. The check was to shift the dates in the app's file back a few days
+with the app closed and see whether the widget picked today's entry rather than the file's first.
+The widget gallery's preview did, on both simulators. Putting the widget on the iPhone's Home Screen
+crashed SpringBoard twice, in its own ripple animation, which has nothing to do with Conjugar. The
+iPad took the widget, showed today's verb from the shifted file, and kept that verb when the app
+was opened and rewrote the week. A real midnight on a device is now a release-day step.

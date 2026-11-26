@@ -4,9 +4,9 @@
 //
 //  The one place the conjugation engine is invoked for widget purposes. Deterministically
 //  picks a verb of the day (`VerbDraw`, from the frequent verbs and My Verbs) and a daily
-//  quiz question (the first of the day's challenge at the learner's level), conjugates
-//  them through the app's own engine (VerbMap + TenseBridge), and writes the result as
-//  JSON into the App Group container for the widget to render.
+//  quiz question (the first of the day's challenge at the learner's level) for today and the
+//  six days after, conjugates them through the app's own engine (VerbMap + TenseBridge), and
+//  writes the week as JSON into the App Group container for the widget to render.
 //
 //  Everything here is `nonisolated`: the engine is pure value-type computation, so the
 //  snapshot can be built off the main actor.
@@ -50,49 +50,66 @@ nonisolated enum WidgetSnapshotWriter {
     .futuroDeIndicativo, .condicional, .presenteDeSubjuntivo
   ]
 
-  /// Rebuild the snapshot for today and ask WidgetKit to reload every timeline. `myVerbs` names
-  /// the learner's My Verbs by infinitive (`LearnerVerbs.myVerbs`), which the caller reads on the
-  /// main actor; they are resolved here, off it, and only when a snapshot is written.
+  /// How many days a week holds: the day it is written and the six after.
+  static let weekLength = 7
+
+  /// Rebuild the week from today and ask WidgetKit to reload every timeline. `myVerbs` names the
+  /// learner's My Verbs by infinitive (`LearnerVerbs.myVerbs`), which the caller reads on the main
+  /// actor; they are resolved here, off it, and only when a week is written.
   ///
-  /// Date-gated: the verb/quiz content changes once a day, so when the
-  /// snapshot already on disk is stamped with today's date this is a no-op — skipping
-  /// the rewrite and, crucially, the `reloadAllTimelines()` that would otherwise spend
-  /// WidgetKit's refresh budget on every foreground activation for unchanged content.
-  /// The gate is also what keeps the day's verb fixed while My Verbs changes during the
-  /// day: the first activation of a day settles it. A change of level, region, or tú or vos
-  /// rewrites the snapshot, since the quiz widget's question follows the challenge they name.
+  /// Gated: when the week on disk is current (`isCurrent`), this does nothing, skipping the rewrite
+  /// and, crucially, the `reloadAllTimelines()` that would otherwise spend WidgetKit's refresh
+  /// budget on every foreground activation for unchanged content. A new day, a change to My
+  /// Verbs, or a change of level, region, or tú or vos rewrites it. Today's verb survives a
+  /// rewrite (`makeWeek`), so the first write of a day settles it.
   static func refresh(myVerbs: [String] = [], challenge: ChallengeContext = .initial) {
     let now = Date()
-    let today = dateString(for: now, calendar: .current)
-    if let current = currentSnapshot(), current.dateString == today,
-       current.quizQuestion.questionID.hasPrefix(questionIDPrefix(on: now, challenge: challenge)) {
+    let previous = currentWeek()
+    if let previous, isCurrent(previous, on: now, myVerbs: myVerbs, challenge: challenge) {
       return
     }
     let myVerbEntries = myVerbs.compactMap { VerbMap.shared.entry(for: $0) }
-    guard writeSnapshot(myVerbs: myVerbEntries, challenge: challenge) else { return }
+    guard var week = makeWeek(for: now, myVerbs: myVerbEntries, challenge: challenge, previous: previous) else {
+      return
+    }
+    // The names as given, so that the gate can compare them without loading the verb map, even
+    // when one no longer resolves.
+    week.myVerbs = myVerbs.sorted()
+    guard write(week) else {
+      return
+    }
     WidgetCenter.shared.reloadAllTimelines()
   }
 
-  /// The snapshot currently on disk, or nil if none is written yet (or it can't be
-  /// read/decoded). Decodes the shared `WidgetSnapshot` the app itself wrote; the widget
-  /// target's `SnapshotReader` isn't visible here.
-  private static func currentSnapshot() -> WidgetSnapshot? {
+  /// Whether the week needs no rewrite on the date: it begins that day, it was planned from the
+  /// same My Verbs in any order, and its first question is of the challenge at the same level,
+  /// region, and tú or vos. My Verbs is compared because the week plans six days ahead: without
+  /// it, a verb just opened would wait for the next day the app is opened to be planned, and a
+  /// verb removed could still come up.
+  static func isCurrent(_ week: WidgetWeek, on date: Date, myVerbs: [String], challenge: ChallengeContext) -> Bool {
+    week.firstDay.dateString == CalendarDay.string(for: date)
+      && week.myVerbs == myVerbs.sorted()
+      && week.firstDay.quizQuestion.questionID.hasPrefix(questionIDPrefix(on: date, challenge: challenge))
+  }
+
+  /// The week on disk, or nil if none is written yet (or it can't be read/decoded). Decodes the
+  /// shared `WidgetWeek` the app itself wrote; the widget target's `SnapshotReader` isn't visible
+  /// here. A file that an earlier build wrote, of one day, reads as a week of one day.
+  private static func currentWeek() -> WidgetWeek? {
     guard
       let url = WidgetConstants.snapshotURL,
       let data = try? Data(contentsOf: url)
     else {
       return nil
     }
-    return try? JSONDecoder().decode(WidgetSnapshot.self, from: data)
+    return try? JSONDecoder().decode(WidgetWeek.self, from: data)
   }
 
-  /// Build and persist the snapshot for the given day. Returns whether it was written.
-  @discardableResult
-  static func writeSnapshot(for date: Date = Date(), myVerbs: [VerbMapEntry] = [], challenge: ChallengeContext = .initial) -> Bool {
+  /// Persist the week. Returns whether it was written.
+  private static func write(_ week: WidgetWeek) -> Bool {
     guard
       let url = WidgetConstants.snapshotURL,
-      let snapshot = makeSnapshot(for: date, myVerbs: myVerbs, challenge: challenge),
-      let data = try? JSONEncoder().encode(snapshot)
+      let data = try? JSONEncoder().encode(week)
     else {
       return false
     }
@@ -104,12 +121,79 @@ nonisolated enum WidgetSnapshotWriter {
     }
   }
 
-  static func makeSnapshot(for date: Date, myVerbs: [VerbMapEntry] = [], challenge: ChallengeContext = .initial) -> WidgetSnapshot? {
-    let calendar = Calendar.current
-    let dayOffset = daysSinceReference(to: date, calendar: calendar)
-    let dateString = Self.dateString(for: date, calendar: calendar)
+  /// The week from the date's day: that day and the six after, each with its verb of the day
+  /// (`VerbDraw`) and the quiz widget's question. When `previous` already has the date's day, that
+  /// day keeps its verb, so that opening the app never changes the verb the widget has shown since
+  /// midnight; its question follows `challenge`. The later days are planned afresh from
+  /// `myVerbs`, each My Verbs day's verb counted as having had its turn for the days after it.
+  /// `previous`'s turns before the date's day count as shown, since the widget showed them.
+  static func makeWeek(for date: Date, myVerbs: [VerbMapEntry], challenge: ChallengeContext = .initial, previous: WidgetWeek? = nil) -> WidgetWeek? {
+    let calendar = CalendarDay.calendar
+    let today = dayNumber(of: date)
+    let noon = CalendarDay.noon(of: CalendarDay.string(for: date)) ?? date
+    let previousTurns = previous?.myVerbsTurns ?? []
 
-    guard let entry = verbOfTheDay(on: date, myVerbs: myVerbs) else { return nil }
+    var shown = previous?.myVerbsShown ?? [:]
+    for turn in previousTurns where turn.dayNumber < today {
+      shown[turn.verb] = max(shown[turn.verb] ?? Int.min, turn.dayNumber)
+    }
+    let inMyVerbs = Set(myVerbs.map(\.infinitive))
+    shown = shown.filter { inMyVerbs.contains($0.key) }
+
+    var planned = shown
+    var turns: [WidgetWeek.Turn] = []
+    var days: [WidgetSnapshot] = []
+    for offset in 0..<weekLength {
+      let number = today + offset
+      guard let day = calendar.date(byAdding: .day, value: offset, to: noon) else {
+        return nil
+      }
+      let entry: VerbMapEntry
+      if offset == 0, let previous, let kept = keptVerb(on: date, in: previous) {
+        entry = kept
+        if let turn = previousTurns.first(where: { $0.dayNumber == number }) {
+          planned[turn.verb] = number
+          turns.append(turn)
+        }
+      } else {
+        guard let drawn = VerbDraw.verbOfTheDay(dayNumber: number, myVerbs: myVerbs, lastShown: planned, frequentVerbs: VerbDraw.frequentVerbs) else {
+          return nil
+        }
+        entry = drawn
+        if VerbDraw.isMyVerbsDay(number), !myVerbs.isEmpty {
+          planned[drawn.infinitive] = number
+          turns.append(WidgetWeek.Turn(dayNumber: number, verb: drawn.infinitive))
+        }
+      }
+      days.append(makeSnapshot(for: day, verb: entry, challenge: challenge))
+    }
+    guard let firstDay = days.first else {
+      return nil
+    }
+    return WidgetWeek(
+      firstDay: firstDay,
+      laterDays: Array(days.dropFirst()),
+      myVerbs: myVerbs.map(\.infinitive).sorted(),
+      myVerbsTurns: turns,
+      myVerbsShown: shown
+    )
+  }
+
+  /// The verb of the date's day in `previous`, if it has that day.
+  private static func keptVerb(on date: Date, in previous: WidgetWeek) -> VerbMapEntry? {
+    let today = CalendarDay.string(for: date)
+    guard let kept = previous.days.first(where: { $0.dateString == today }) else {
+      return nil
+    }
+    // A day shows a reflexive-only verb with its pronoun, and the map keys it without.
+    return VerbMap.shared.entry(for: kept.infinitive)
+      ?? ReflexivePronoun.bareInfinitive(fromCitation: kept.infinitive).flatMap { VerbMap.shared.entry(for: $0) }
+  }
+
+  /// One day of the week, with `entry` as its verb of the day.
+  static func makeSnapshot(for date: Date, verb entry: VerbMapEntry, challenge: ChallengeContext = .initial) -> WidgetSnapshot {
+    let dayOffset = dayNumber(of: date)
+    let dateString = CalendarDay.string(for: date)
     let infinitive = entry.infinitive
 
     let paradigms = paradigmTenses.compactMap { paradigm(for: infinitive, tense: $0) }
@@ -172,9 +256,20 @@ nonisolated enum WidgetSnapshotWriter {
   /// The verb the widget shows on the date's day: from My Verbs every third day once it has
   /// entries, otherwise drawn from the 1,000 most frequent verbs (`VerbDraw`). Without the band
   /// the verb of the day would eventually be `churruscar` and the widget quiz would ask for its
-  /// pretérito. A My Verbs day may name a rare verb, since the learner chose it.
-  static func verbOfTheDay(on date: Date, myVerbs: [VerbMapEntry], calendar: Calendar = .current) -> VerbMapEntry? {
-    VerbDraw.verbOfTheDay(dayNumber: daysSinceReference(to: date, calendar: calendar), myVerbs: myVerbs, frequentVerbs: VerbDraw.frequentVerbs)
+  /// pretérito. A My Verbs day may name a rare verb, since the learner chose it. `lastShown` is
+  /// `VerbDraw.verbOfTheDay`'s.
+  static func verbOfTheDay(on date: Date, myVerbs: [VerbMapEntry], lastShown: [String: Int] = [:]) -> VerbMapEntry? {
+    VerbDraw.verbOfTheDay(dayNumber: dayNumber(of: date), myVerbs: myVerbs, lastShown: lastShown, frequentVerbs: VerbDraw.frequentVerbs)
+  }
+
+  /// The date's day as a count of days since the reference date, in `CalendarDay`'s Gregorian
+  /// calendar, so that a Buddhist or Japanese calendar setting cannot shift it.
+  static func dayNumber(of date: Date) -> Int {
+    let calendar = CalendarDay.calendar
+    guard let reference = CalendarDay.start(of: referenceDateString) else {
+      return 0
+    }
+    return calendar.dateComponents([.day], from: reference, to: calendar.startOfDay(for: date)).day ?? 0
   }
 
   private static func paradigm(for infinitive: String, tense: DisplayTense) -> WidgetParadigm? {
@@ -363,26 +458,5 @@ nonisolated enum WidgetSnapshotWriter {
       return form
     }
     return nil
-  }
-
-  private static func daysSinceReference(to date: Date, calendar: Calendar) -> Int {
-    let today = calendar.startOfDay(for: date)
-    guard let reference = referenceDate(calendar: calendar) else { return 0 }
-    return calendar.dateComponents([.day], from: reference, to: today).day ?? 0
-  }
-
-  private static func referenceDate(calendar: Calendar) -> Date? {
-    let parts = referenceDateString.split(separator: "-").compactMap { Int($0) }
-    guard parts.count == 3 else { return nil }
-    var components = DateComponents()
-    components.year = parts[0]
-    components.month = parts[1]
-    components.day = parts[2]
-    return calendar.date(from: components)
-  }
-
-  private static func dateString(for date: Date, calendar: Calendar) -> String {
-    let components = calendar.dateComponents([.year, .month, .day], from: date)
-    return String(format: "%04d-%02d-%02d", components.year ?? 0, components.month ?? 0, components.day ?? 0)
   }
 }

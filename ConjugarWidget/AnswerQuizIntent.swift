@@ -26,9 +26,10 @@ struct AnswerQuizIntent: AppIntent {
   }
 
   func perform() async throws -> some IntentResult {
+    // The question answered, which may not be the week's first day's.
     guard
       let defaults = WidgetConstants.sharedDefaults,
-      let snapshot = SnapshotReader.read()
+      let snapshot = SnapshotReader.read()?.day(askingQuestion: questionID)
     else {
       return .result()
     }

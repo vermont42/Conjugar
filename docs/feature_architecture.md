@@ -1724,8 +1724,10 @@ give way to it. A link to a challenge already taken opens the hub.
 **The quiz widget** asks the first question of the day's challenge at the learner's level and
 region, in their tú or vos (`WidgetSnapshotWriter.challengeQuizQuestion(on:challenge:)`), no longer a
 question on the verb of the day, which the verb widgets still show. Its question ID begins
-`<day>-<level>-<region>-<person>-`, and `refresh(myVerbs:challenge:)` rewrites the snapshot when the
+`<day>-<level>-<region>-<person>-`, and `refresh(myVerbs:challenge:)` rewrites the week when the
 day or that prefix changes; `MainTabView` calls it when the level, region, or tú or vos changes.
+Each day of the week carries its own day's question, so the question changes at midnight with the
+verb, and an answer (`AnswerQuizIntent`) is graded against the day whose question ID it names.
 Its three wrong answers are the verb's own forms of the same shape (`wordCount` equal, so a
 compound's haber, a negative command's no, and a reflexive verb's pronoun never single out the
 right one): one of the same tense in another person the level asks, one of the same person in
@@ -1760,18 +1762,40 @@ weigh 4, detener and hablar 2, recobrar 1. Frequency inside the band is not weig
 **My Verbs** (`LearnerVerbs.myVerbs`: the starred verbs, then the last 20 opened that are not starred, as the list's
 segment shows them) supplies one draw in three once it has entries. The widget gives it the days
 whose number since 2026-01-01 is a multiple of three and takes its verbs in turn, since chance
-leaves gaps of two weeks and repeats one verb while another waits. A random verb on demand goes to
+leaves gaps of two weeks and repeats one verb while another waits. The turn
+(`VerbDraw.myVerbsTurn(in:lastShown:)`) goes to a verb that has never had one, or else to the one
+whose last turn is oldest, and among equals to the first by infinitive. Opening a verb reorders My
+Verbs and adds to it, so a turn taken by position, as before 2026-11-25, brought one verb back on
+56 of 60 My Verbs days when a verb was opened between them; this turn does not depend on the
+list's order. The record of turns lives in the widgets' file (below). A random verb on demand goes to
 My Verbs with a chance of one in three. A random verb opened is a recent verb, so it joins My Verbs
 and can return as a My Verbs draw until it ages out.
+
+**A week at a time.** `WidgetSnapshotWriter.makeWeek(for:myVerbs:challenge:previous:)` writes
+today and the six days after, each a `WidgetSnapshot` with its verb, forms, example, etymology, and
+the quiz widget's question, into one `WidgetWeek` in the App Group. Both widgets' timelines hold an
+entry per day from its midnight (`WidgetWeek.timeline(from:)`), so the verb changes daily without
+the app being opened. On the eighth day and after, the last day written stays until the app is
+opened. Days are named by `CalendarDay` (`Shared/`), `yyyy-MM-dd` in the Gregorian calendar and the
+current time zone, and counted from 2026-01-01 in that calendar, so that a Buddhist or Japanese
+calendar setting cannot shift them. The file keeps the shape one day had: the first day's keys sit
+at the top level and the rest under `laterDays`, so a reader of either shape reads the other.
 
 **Stable through the day.** A frequent day seeds `SplitMix64` (`Models/Game/GameModels.swift`,
 `nonisolated` so that the draw can use it) with the day number, so its verb is a function of the
 day. Its sequence must not change; `VerbDrawTests` pins its first outputs. A My Verbs day depends on
-the list, which can change during the day, but `WidgetSnapshotWriter.refresh(myVerbs:challenge:)` writes one
-snapshot per date and skips the write when today's is on disk, so the first activation of a day
-settles the verb. `MainTabView` reads My Verbs on the main actor
-(`Current.learnerVerbs.record.myVerbs`, infinitives) and passes them to the detached refresh, which
-resolves them only when it writes.
+the list and on the turns before it. A rewrite keeps the verb of a day the previous week already
+held for today, so opening the app never changes the verb the widget has shown since midnight, and
+plans the later days afresh. The week also records, for the app alone, the My Verbs it was planned
+from (`myVerbs`), its My Verbs days (`myVerbsTurns`), and each verb's last turn before the week
+(`myVerbsShown`, only for verbs still in My Verbs). A rewrite counts the previous week's turns
+before today as shown, since the widget showed them. `refresh(myVerbs:challenge:)` skips the write
+(and the timeline reload) unless the day, My Verbs in any order, or the challenge's level, region,
+or tú or vos changed; it runs when the app becomes active and when it goes to the background, so a
+verb opened in a session is planned before the app is left for days. `MainTabView` reads My Verbs
+on the main actor (`Current.learnerVerbs.record.myVerbs`, infinitives) and passes them to the
+detached refresh, which compares the names without loading the verb map and resolves them only when
+it writes.
 
 **No new signal.** `viewVerbView` with `source` `widget`, `control`, or `shortcut` already counts
 the pages these draws open.

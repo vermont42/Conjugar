@@ -94,6 +94,13 @@ material for the release notes in `docs/release_notes.txt`.
     Test Mode on, `startQuiz` should carry `source` `challenge`, `challengeLink`, or
     `challengeWidget`, and Share Result should send `tapShareChallenge` with `level`. Only the
     widget's bundle was checked on the simulator, never the widget on a Home Screen.
+11. **Leave the widgets overnight without opening the app.** The app writes a week of verbs and
+    questions, and the widgets' timelines change at each midnight (Phase 4 of
+    `plans/verb_browse_fixes.md`). With the Verb of the Day and quiz widgets on a device's Home
+    Screen and a Verb of the Day accessory on its Lock Screen, note the verb and the question, and
+    leave the app closed for two nights. Each morning both should have changed, the quiz widget
+    unanswered. Answer it, and it should flip to its result. On the simulator the timeline was
+    checked with a file whose days were shifted back, never across a real midnight on a device.
 
 ## On Release Day
 

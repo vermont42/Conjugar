@@ -257,9 +257,9 @@ Conjugar/
 │   ├── Utterer.swift           # AVSpeechSynthesizer text-to-speech plus the single .ambient audio-session owner
 │   ├── VerbSearchArrowKeys.swift  # Hack: priority UIKeyCommands for ↑/↓ through verb results while the search field is focused
 │   ├── ViewControllerTransitions.swift  # Hack: waits for UIKit transitions to end, so an iPad letter key survives search dismissal
-│   └── WidgetSnapshotWriter.swift  # Picks the daily verb (VerbDraw, with My Verbs) + the quiz widget's question (the first of the
-│                                   #   day's challenge, with wrong answers of its shape), writes JSON to the App Group once a day
-│                                   #   and again when the level, region, or tú or vos changes
+│   └── WidgetSnapshotWriter.swift  # Picks the daily verb (VerbDraw, with My Verbs in turn) + the quiz widget's question (the first of
+│                                   #   the day's challenge, with wrong answers of its shape) for today and six days ahead, and writes the
+│                                   #   week as JSON to the App Group on a new day, a change to My Verbs, or a new level, region, or tú or vos
 └── Views/
     ├── AnswerFrameView.swift   # An AnswerFrame drawn on one line around the quiz's answer field, or a sentence wrapped word by word around it; VoiceOver reads the frame as the field's label
     ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing (verb with match, search, info, list, quiz, game), the one-shot requests the tabs consume (pendingVerb, pendingSearch, pendingInfo, pendingCollection, pendingQuizStart with its link's source, pendingPracticeSet from quiz/set and presentablePracticeSet, which waits out a cover, game/onboarding/tutor flags), openSearch for Command-F, the control, and the quick action; SearchRequest, CollectionRequest
@@ -311,10 +311,10 @@ ConjugarWidget/
 ├── Localizable.xcstrings       # Widget-target string catalog (en/es), resolved against the widget bundle
 ├── QuickQuizControl.swift      # Control Center / Lock Screen control that starts a quiz
 ├── QuizLiveActivity.swift      # Lock Screen + Dynamic Island rendering of QuizActivityAttributes
-├── QuizWidget.swift            # The interactive daily-quiz widget (tap to answer, flips to a result)
+├── QuizWidget.swift            # The interactive daily-quiz widget (tap to answer, flips to a result), a timeline entry per day
 ├── RandomVerbControl.swift     # Control Center / Lock Screen control that opens a random verb
-├── SnapshotReader.swift        # Decodes the App-Group JSON snapshot; supplies the gallery placeholder
-├── VerbOfTheDayWidget.swift    # "Verb of the Day" StaticConfiguration refreshing at the next local midnight
+├── SnapshotReader.swift        # Decodes the App-Group week (WidgetWeek); supplies the gallery placeholder
+├── VerbOfTheDayWidget.swift    # "Verb of the Day" StaticConfiguration: a timeline entry per day of the week, each from its midnight
 ├── WidgetDeeplink.swift        # Builds the conjugar:// URLs the widgets attach via .widgetURL(_:); verb links carry ?source=widget
 └── Views/
     ├── AccessoryWidgetView.swift    # Lock Screen accessory presentations
@@ -333,6 +333,7 @@ ConjugationMapTool/             # macOS command-line target, built for the host 
 └── CellsJSON.swift             # --cells-json: every form with its cells, for scripts/count_tenses.py
 
 Shared/                         # Compiled into both the app and the widget extension
+├── CalendarDay.swift           # A day as yyyy-MM-dd in the Gregorian calendar and the current time zone: the challenge's, the widgets' days
 ├── OpenQuizIntent.swift        # Opens the app and stashes a deeplink the app drains on activation
 ├── OpenRandomVerbIntent.swift  # Same, for a random verb, as Shortcuts and Siri run it (source=shortcut)
 ├── OpenRandomVerbControlIntent.swift  # The Random Verb control's own hidden copy of it (source=control)
@@ -344,7 +345,8 @@ Shared/                         # Compiled into both the app and the widget exte
 ├── ReviewSchedule.swift        # The practice record's Leitner ladder (1, 3, 7, 14, 30 days): a box and a due date, moved by answers, lookups, and the review card
 ├── WidgetConstants.swift       # App Group id, snapshot filename, and the shared-defaults keys
 ├── WidgetL.swift               # Widget-target localization accessors mirroring L, with English defaultValues
-└── WidgetSnapshot.swift        # The Codable payload the app precomputes and the widget renders
+└── WidgetSnapshot.swift        # The Codable payload the app precomputes and the widget renders: WidgetSnapshot (one day) and
+                                #   WidgetWeek (seven days, the first at the top level, with the app's My Verbs bookkeeping)
 
 ConjugarTests/
 ├── Info.plist
@@ -377,8 +379,10 @@ ConjugarTests/
 │   │                                   #   the share text, URL.appStore, and what a long press copies
 │   ├── VerbSortTests.swift             # Verb-list sort orders and Spanish collation
 │   ├── LearnerVerbsTests.swift         # The learner's record (opens, stars, recents, Clear, Remove, Reset Practice's forget, older JSON), its store and its backup of a corrupt record, the list modes
-│   ├── VerbDrawTests.swift             # The verb of the day and random verbs: weights, My Verbs every third day in turn, the band,
-│   │                                   #   one in three on demand, the seeded generator's sequence, the widget's next ten days
+│   ├── VerbDrawTests.swift             # The verb of the day and random verbs: weights, My Verbs every third day in turn over a list that
+│   │                                   #   grows, is reordered, or loses a verb, the band, one in three on demand, the seeded generator's sequence
+│   ├── WidgetWeekTests.swift           # The widgets' week: seven dated days of VerbDraw's verbs, today kept on a rewrite, turns across odd
+│   │                                   #   openings, the gate, the file read both ways, the timeline, the eighth day, an answer's own day
 │   ├── ReviewScheduleTests.swift       # The ladder alone: a start, reviews, a snooze, a new item, answers moving an item only when due
 │   ├── PracticeItemTests.swift         # Which item each question exercises across tenses, persons, and kinds of verb; pinned keys; which key
 │   │                                   #   conjugations a lookup schedules and a review asks

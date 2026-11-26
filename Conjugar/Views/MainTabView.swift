@@ -87,6 +87,11 @@ struct MainTabView: View {
       if phase == .active || phase == .background {
         Current.rescheduleReminders()
       }
+      // The widgets' week plans six days ahead from My Verbs, so a session that changed My Verbs
+      // rewrites it on the way out, in case the app is not opened again for days.
+      if phase == .background {
+        refreshWidgetSnapshot()
+      }
       guard phase == .active else { return }
       refreshWidgetSnapshot()
       drainPendingDeeplink()

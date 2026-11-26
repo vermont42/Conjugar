@@ -31,18 +31,30 @@ nonisolated enum VerbDraw {
     return draw(goesToMyVerbs: goesToMyVerbs, myVerbs: myVerbs, frequentVerbs: frequentVerbs, using: &generator)
   }
 
-  /// The same verb for the same day number and lists, in any process. My Verbs gets every third
-  /// day rather than a chance of one in three, since chance leaves gaps of two weeks, and those
-  /// days take its verbs in turn, since chance repeats one while another waits. A day number is
-  /// a count of days since a fixed date (`WidgetSnapshotWriter`'s), negative before it.
-  static func verbOfTheDay(dayNumber: Int, myVerbs: [VerbMapEntry], frequentVerbs: [VerbMapEntry]) -> VerbMapEntry? {
-    if isMyVerbsDay(dayNumber), !myVerbs.isEmpty {
-      // Exact, since the day is a multiple of the odds.
-      let turn = dayNumber / myVerbsOdds
-      return myVerbs[(turn % myVerbs.count + myVerbs.count) % myVerbs.count]
+  /// The same verb for the same day number, lists, and record of turns, in any process. My Verbs
+  /// gets every third day rather than a chance of one in three, since chance leaves gaps of two
+  /// weeks, and those days take its verbs in turn (`myVerbsTurn`), since chance repeats one while
+  /// another waits. A day number is a count of days since a fixed date (`WidgetSnapshotWriter`'s),
+  /// negative before it. `lastShown` gives the day number on which each verb last had its turn.
+  static func verbOfTheDay(dayNumber: Int, myVerbs: [VerbMapEntry], lastShown: [String: Int] = [:], frequentVerbs: [VerbMapEntry]) -> VerbMapEntry? {
+    if isMyVerbsDay(dayNumber), let turn = myVerbsTurn(in: myVerbs, lastShown: lastShown) {
+      return turn
     }
     var generator = SplitMix64(seed: UInt64(bitPattern: Int64(dayNumber)))
     return draw(goesToMyVerbs: false, myVerbs: myVerbs, frequentVerbs: frequentVerbs, using: &generator)
+  }
+
+  /// The verb of My Verbs whose turn it is: one that has never had a turn, or else the one whose
+  /// last turn is oldest, and among equals the first by infinitive. Opening a verb reorders My
+  /// Verbs and adds to it, so a turn taken by position would bring one verb back while another
+  /// waited; this one is the same whatever the list's order, and a verb new to the list goes
+  /// before any that has had a turn. Nil when My Verbs is empty.
+  static func myVerbsTurn(in myVerbs: [VerbMapEntry], lastShown: [String: Int]) -> VerbMapEntry? {
+    myVerbs.min { first, second in
+      let firstShown = lastShown[first.infinitive] ?? Int.min
+      let secondShown = lastShown[second.infinitive] ?? Int.min
+      return firstShown == secondShown ? first.infinitive < second.infinitive : firstShown < secondShown
+    }
   }
 
   /// Whether the day goes to My Verbs, when My Verbs has entries.

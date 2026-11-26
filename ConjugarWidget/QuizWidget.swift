@@ -2,7 +2,7 @@
 //  QuizWidget.swift
 //  ConjugarWidget
 //
-//  The interactive daily-quiz widget. Shows the snapshot's quiz question with
+//  The interactive daily-quiz widget. Shows the day's quiz question with
 //  tap-to-answer buttons (AnswerQuizIntent); once answered (state stored in the shared
 //  defaults suite, keyed to the question id) it flips to a correct/incorrect result.
 //  Copyright © 2026 Josh Adams. All rights reserved.
@@ -24,21 +24,21 @@ struct QuizProvider: TimelineProvider {
   }
 
   func getSnapshot(in context: Context, completion: @escaping (QuizEntry) -> Void) {
-    completion(makeEntry())
+    let now = Date.now
+    completion(makeEntry(date: now, snapshot: SnapshotReader.weekOrPlaceholder.day(on: now)))
   }
 
+  /// One entry for today's question and one from each later day's midnight, each answered only
+  /// if its own question was. After the last day written, the last question stays.
   func getTimeline(in context: Context, completion: @escaping (Timeline<QuizEntry>) -> Void) {
-    // Add one calendar day (not a flat 86,400 s) so the rollover lands on local
-    // midnight even on DST-change days.
-    let startOfToday = Calendar.current.startOfDay(for: .now)
-    let nextMidnight = Calendar.current.date(byAdding: .day, value: 1, to: startOfToday) ?? startOfToday.addingTimeInterval(86_400)
-    completion(Timeline(entries: [makeEntry()], policy: .after(nextMidnight)))
+    let (moments, reload) = SnapshotReader.weekOrPlaceholder.timeline(from: .now)
+    let entries = moments.map { makeEntry(date: $0.date, snapshot: $0.day) }
+    completion(Timeline(entries: entries, policy: .after(reload)))
   }
 
-  private func makeEntry() -> QuizEntry {
-    let snapshot = SnapshotReader.read() ?? SnapshotReader.placeholder
+  private func makeEntry(date: Date, snapshot: WidgetSnapshot) -> QuizEntry {
     let (isAnswered, wasCorrect) = readQuizState(snapshot: snapshot)
-    return QuizEntry(date: .now, snapshot: snapshot, isAnswered: isAnswered, wasCorrect: wasCorrect)
+    return QuizEntry(date: date, snapshot: snapshot, isAnswered: isAnswered, wasCorrect: wasCorrect)
   }
 
   // Answer state counts only if it was recorded for the question currently displayed.
