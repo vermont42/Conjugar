@@ -110,12 +110,14 @@ nonisolated extension PracticeItem {
 nonisolated extension PracticeItem.Key {
   /// The key conjugation whose stem an irregular cell of the tense is built on. Most follow from
   /// the stems: the presente de subjuntivo and the commands of usted, nosotros, and ustedes from
-  /// tengo; both imperfectos de subjuntivo and the futuro de subjuntivo from tuve; the condicional
-  /// from tendré; every compound tense from tenido. The rest go to the nearest key, accepting that
-  /// a slip in tienes counts against tengo: the presente's other persons (tienes, duerme), the tú
-  /// and vos commands (ten, pon, di), and the three irregular imperfectos (era, iba, veía) to the yo
-  /// presente; the gerundio (durmiendo, pidiendo), whose stem is the third-person pretérito's
-  /// (durmió), to the yo pretérito. Nil for a tense a quiz never asks.
+  /// tengo; the condicional from tendré; every compound tense from tenido. The rest go to the
+  /// nearest key, accepting that a slip in tienes counts against tengo: the presente's other
+  /// persons (tienes, duerme), the tú and vos commands (ten, pon, di), and the three irregular
+  /// imperfectos (era, iba, veía) to the yo presente; both imperfectos de subjuntivo and the futuro
+  /// de subjuntivo, built on the pretérito's third-person plural (tuvieron, durmieron), and the
+  /// gerundio (durmiendo, pidiendo), built on its third-person singular (durmió), to the yo
+  /// pretérito, whose stem is theirs for tener (tuve) but not for dormir (dormí). Nil for a tense a
+  /// quiz never asks.
   init?(tense: DisplayTense) {
     switch tense {
     case .presenteDeIndicativo, .presenteDeSubjuntivo, .imperativoPositivo, .imperativoNegativo, .imperfectoDeIndicativo:

@@ -12459,3 +12459,41 @@ The widget gallery's preview did, on both simulators. Putting the widget on the 
 crashed SpringBoard twice, in its own ripple animation, which has nothing to do with Conjugar. The
 iPad took the widget, showed today's verb from the shifted file, and kept that verb when the app
 was opened and rewrote the week. A real midnight on a device is now a release-day step.
+
+## The Verb Page Stops Guessing (2026-11-25)
+
+Phase 5 of the verb browse fixes was a handful of small untruths on the verb page, and most of
+them were cheap. The red-letter tip's guard asked whether any form on the page had a capital, and
+every page has one, because every compound tense marks its auxiliary: hE hablado. So the guard now
+reads only the simple tenses and the three header forms. To make that testable, the page's forms
+moved out of `VerbView` into a small `VerbPageForms` value that takes the learner's choice of tú or
+vos as a parameter instead of reading Settings. buscar counts as having red letters, since the
+engine marks busQUé, and the test says so rather than leaving it to whoever looks next. The scroll
+tip, which promises an etymology and examples below the conjugations, now appears only on a page
+that has one of them, which by the reviewer's count rules out about 3,470 verbs.
+
+"Built on" turned out to be a claim about etymology, which is how Josh ruled. contemplar is not
+templar, impedir is not pedir, and transpirar is not on pirar any more than espirar, expirar, and
+suspirar were; all four come from *spirare*. Pairs that are true and opaque, such as preparar on
+parar, stay. The "All N" chip under "Conjugated like" had been comparing the number of chips with
+six, but the row shows one verb per root, so mover's model, twelve verbs over five other roots,
+never offered its full list. It does now.
+
+The interesting part was the visit. A verb page reports how long it was open and how far down the
+learner got, and both numbers lied in ordinary use: a Test Me sheet left the page "open" for the
+whole quiz, and a page opened on a marked form scrolled itself to the Perfecto and reported that
+the learner had reached the compound tenses. The begin-and-end logic lived in the view's body, where
+no test could reach it. It is now `VerbVisitTracker`, a value type that is told what happened
+(appeared, background, sheet opened, scrolled) and answers with the signal to send. Josh agreed
+that a sheet should end a visit and its closing begin a resumed one. For the landing, the question
+was how to tell a programmatic scroll from a learner's. `onScrollPhaseChange` answered it: a
+temporary log in the simulator showed the landing's `scrollTo` leaving the phase idle and a real
+drag reporting `interacting`, so the landing ends at the first drag.
+
+The review had also suspected that `VerbView.init` and `ModelView.init`, which do real work, rerun
+whenever the stack's host re-renders. A print in each said no: one init per push, and nothing on
+starring, on opening from recents or My Verbs, or on coming back. That one is recorded and left.
+
+Two small lessons from the tests. Swift Testing's `#expect` cannot take a mutating call, so every
+assertion about the tracker binds the result first. And a test run whose output went through
+`head` lost exactly the line it was run to print; the raw `build.log` still had it.

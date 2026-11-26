@@ -47,8 +47,6 @@ struct RelatedVerbListDestination: Hashable {
 struct RelatedVerbsView: View {
   let related: RelatedVerbs
 
-  static let shortListLength = 6
-
   private var model: ModelInfo? {
     ModelInfo.byClassNumber[related.modelClassNumber]
   }
@@ -66,7 +64,8 @@ struct RelatedVerbsView: View {
           title: L.Verb.builtOn(root: Self.citationForm(related.root)),
           verbs: related.builtOnRoot,
           all: RelatedVerbListDestination(root: related.root, verbs: related.builtOnRoot),
-          count: related.builtOnRoot.count
+          count: related.builtOnRoot.count,
+          hasMore: related.builtOnRootHasMore
         )
       }
 
@@ -75,7 +74,8 @@ struct RelatedVerbsView: View {
           title: L.Verb.conjugatedLike(exemplar: model.exemplar),
           verbs: related.modelRelatives,
           all: model,
-          count: related.modelVerbCount
+          count: related.modelVerbCount,
+          hasMore: related.modelHasMore
         )
       }
     }
@@ -85,18 +85,18 @@ struct RelatedVerbsView: View {
 
   /// A relation's caption, its first few verbs, and, when it has more, a chip that opens all of
   /// them: the full list for a base, and the model's page for a model.
-  private func relation(title: String, verbs: [String], all: some Hashable, count: Int) -> some View {
+  private func relation(title: String, verbs: [String], all: some Hashable, count: Int, hasMore: Bool) -> some View {
     VStack(alignment: .leading, spacing: 6) {
       Text(title)
         .font(.subheadline)
         .foregroundStyle(.secondary)
       FlowLayout(spacing: Layout.defaultSpacing) {
-        ForEach(verbs.prefix(Self.shortListLength), id: \.self) { verb in
+        ForEach(verbs.prefix(RelatedVerbs.shortListLength), id: \.self) { verb in
           RelatedChip(text: Self.citationForm(verb), isSpanish: true) { push in
             push(VerbDestination(infinitive: verb, source: .related))
           }
         }
-        if verbs.count > Self.shortListLength {
+        if hasMore {
           RelatedChip(text: L.Verb.allRelated(count: count), systemImage: "list.bullet", isSpanish: false, isBordered: true) { push in
             push(all)
           }

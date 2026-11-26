@@ -93,8 +93,9 @@ struct EnableGameCenterTip: Tip {
   }
 }
 
-/// Explains the verb page's red letters. `VerbView` shows it only on a page that has one. Once
-/// closed, it never returns.
+/// Explains the verb page's red letters. `VerbView` shows it only where the verb itself has one
+/// (`VerbPageForms.hasRedLetters`), not on a regular verb's page, whose compound tenses mark only
+/// the auxiliary. Once closed, it never returns.
 struct RedLettersTip: Tip {
   var title: Text {
     Text(L.Tips.redLettersTitle)
@@ -109,12 +110,19 @@ struct RedLettersTip: Tip {
   }
 }
 
-/// Points to the etymology and the examples at the bottom of the verb page. It waits until a page
-/// visit after `RedLettersTip` was closed, so the two never appear one straight after the other,
-/// and the page retires it once the learner scrolls that far unprompted.
+/// Points to the etymology and the examples at the bottom of the verb page, and appears only on a
+/// page that has one of them. It waits until a visit to such a page after `RedLettersTip` was
+/// closed, so the two never appear one straight after the other, and the page retires it once the
+/// learner scrolls that far unprompted.
 struct ScrollToBottomTip: Tip {
   @Parameter
   static var isUnlocked: Bool = false
+
+  /// Whether `verb`'s page has something for the tip to point to: an etymology, an example, or a
+  /// medieval example.
+  static func hasTarget(onPageOf verb: String) -> Bool {
+    Etymology.text(for: verb) != nil || ExampleData.example(for: verb) != nil || !MedievalData.examples(for: verb).isEmpty
+  }
 
   var title: Text {
     Text(L.Tips.scrollToBottomTitle)

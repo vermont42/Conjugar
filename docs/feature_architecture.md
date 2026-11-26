@@ -28,25 +28,31 @@ time.
 
 | Signal | Parameters | Sent |
 |---|---|---|
-| `viewVerbView` | `source` (below) | When a verb page appears: on arrival, and again with `source` `resume` after the page returns from another tab, a pushed page, or the background |
-| `leaveVerbView` | `deepestSection` (`header`, `simple`, `compound`, `etymology`, `example`), `dwell` (`0-5s`, `5-15s`, `15-60s`, `60s+`) | Exactly once for each `viewVerbView`: when the page leaves the screen or the app goes to the background |
+| `viewVerbView` | `source` (below) | When a verb page appears: on arrival, and again with `source` `resume` after the page returns from another tab, a pushed page, a sheet of its own, or the background |
+| `leaveVerbView` | `deepestSection` (`header`, `simple`, `compound`, `etymology`, `example`, `related`), `dwell` (`0-5s`, `5-15s`, `15-60s`, `60s+`) | Exactly once for each `viewVerbView`: when the page leaves the screen, opens a sheet over itself, or the app goes to the background |
 | `finishSearch` | `source` (where the search began: `tab`, `control`, `quickAction`, `deeplink`, or `lookup`), `outcome` (`opened`, `abandoned`, `noResult`), `queryLength` (`1-2`, `3-5`, `6-9`, `10+`), `resultCount` (`0`, `1`, `2-10`, `11+`), `matchKind` (below), `resultPosition` (`1`, `2-5`, `6+`, `none`) | Once per search of the verb list: when a result or the guess is opened, the field is cleared, or the app goes to the background with text in the field |
 
-**A visit** (`Models/VerbVisit.swift`, `VerbVisit`) is one stretch of a verb page on screen with
-the app in the foreground. `VerbView` begins one in `onAppear` and when the app returns to the
-foreground while the page is on screen, and ends it in `onDisappear` and when the app goes to the
-background. A page's first visit reports the `source` it was pushed with; every later one reports
-`resume`, so arrivals are the views whose source is not `resume`, and background time never counts
-as reading. A resumed visit starts from the deepest section already on screen. A system alert,
+**A visit** (`Models/VerbVisit.swift`, `VerbVisit`) is one stretch of a verb page on screen,
+uncovered, with the app in the foreground. `VerbVisitTracker` (`Models/VerbVisitTracker.swift`)
+decides when each begins and ends, and `VerbView` reports to it and sends the signals it returns. A
+visit begins when the page appears, when the app returns to the foreground, and when a sheet over
+the page closes, if the page is then on screen and uncovered; it ends when the page disappears,
+when the app goes to the background, and when the page opens a sheet over itself (a tense's
+article, Test Me). A page's first visit reports the `source` it was pushed with; every later one
+reports `resume`, so arrivals are the views whose source is not `resume`, and neither background
+time nor time under a sheet counts as reading. A resumed visit starts from the deepest section
+already on screen. A system alert,
 such as the simulator's "Open in Conjugar?", makes the app inactive but not backgrounded, and ends
 nothing.
 
 **Reaching a section** means a third of its first card on screen (`onScrollVisibilityChange`,
 threshold 0.3): the header needs nothing; `simple` is the first simple tense's card (Presente de
 Indicativo); `compound` is the first compound tense's card (Perfecto de Indicativo); then the
-etymology card and the examples card. `VerbView.section(markedBy:)` reads the first of each block
-from `ConjugationTable` (§ Verb Page), the page's own order, so a reordering moves the marks with it.
-On an iPhone the Presente card shows without scrolling, so `header` alone will be rare.
+etymology card, the examples card, and the Related Verbs card. `VerbView.section(markedBy:)` reads
+the first of each block from `ConjugationTable` (§ Verb Page), the page's own order, so a reordering
+moves the marks with it. On an iPhone the Presente card shows without scrolling, so `header` alone
+will be rare, except on a page opened on a marked form: what the landing scroll shows is not
+reached, until the learner scrolls (`onScrollPhaseChange`, the phase `interacting`).
 
 **A search** (`Models/SearchReport.swift`, `SearchTracker` and `SearchReport`) begins with the
 first non-blank letter in the Verbs tab's field and ends once. Returning to the results and opening
@@ -312,11 +318,15 @@ element in its own language, without the "also". The heading itself is tagged Sp
 `tapTenseArticle`.
 
 **The tips** (`Models/ConjugarTips.swift`) are inline `TipView`s between the header and the first
-card, and obey `TipDisplay.tipsEnabled`. `RedLettersTip` appears only on a page with a red letter
-(a form with an uppercase letter, header forms included), so hablar's page shows none.
-`ScrollToBottomTip` waits on a persisted `@Parameter`, `isUnlocked`, which the next verb page to
-appear sets once the red-letter tip is closed, so the two never appear one straight after the
-other. Reaching the etymology or the examples invalidates it. Each, once closed, never returns.
+card, and obey `TipDisplay.tipsEnabled`. `RedLettersTip` appears only where the verb itself has a
+red letter (`VerbPageForms.hasRedLetters`: a form of a simple tense, or a header form, with an
+uppercase letter), so hablar's page shows none; every page's compound tenses mark the auxiliary
+(hE hablado), and they do not count. A spelling change counts, since the engine marks it (busQUé).
+`ScrollToBottomTip` appears only on a page with an etymology or an example
+(`ScrollToBottomTip.hasTarget(onPageOf:)`). It waits on a
+persisted `@Parameter`, `isUnlocked`, which the next such page to appear sets once the red-letter
+tip is closed, so the two never appear one straight after the other. Reaching the etymology or the
+examples unprompted, not by the landing scroll, invalidates it. Each, once closed, never returns.
 
 **The iPad grid** (`BrowseLayout.detailColumns`) aligns its cells to the top, so that a five-row
 imperative beside a seven-row tense starts level with it.
@@ -334,16 +344,20 @@ examples. It has up to two rows of chips, six verbs each:
   Frequency first.
 - **Conjugated like cantar**: one verb per other root among the model's verbs, by frequency (the root
   verb when it uses the model, else the model's most frequent verb built on it). "All N" opens the
-  model's page. The row is absent when every verb of the model shares the page's root, as for tener.
+  model's page, and appears whenever the model has verbs the row does not show
+  (`RelatedVerbs.modelHasMore`), so a model of twelve verbs over four roots has one. The row is absent when every verb of the model shares the page's root, as for tener.
 
 **The relation** is `VerbRelations` (`Models/RelatedVerbs.swift`), computed once from the verb map. A
 verb's base is the longest verb of the map that ends it after a known Spanish prefix and whose class
 number has the same leading number (contener 31-1 on tener 31; predecir 28-1 on decir 28). Its root
 follows bases inward (desaparecer → aparecer → parecer). Bases must be verbs: tails such as -ducir
 and -scribir would also join esperar with operar, and their verbs already share a model.
-`falseCompounds` lists 59 verbs that look built on a verb but are not (trabajar on bajar, escapar
+`falseCompounds` lists 62 verbs that look built on a verb but are not (trabajar on bajar, escapar
 on capar), read from the 2,000 most frequent verbs, so a few false pairs remain among rarer ones.
-976 verbs have a base; 605 roots have at least one other verb built on them.
+"Built on" is a claim about etymology: contemplar (*templum*) is not on templar, impedir (*pes*) not
+on pedir, transpirar (*spirare*) not on pirar, while a true pair stays however opaque to a learner
+(acercar on cercar, preparar on parar).
+973 verbs have a base; 604 roots have at least one other verb built on them.
 
 **Navigation.** A verb page is pushed from three stacks, the Verbs tab, the Models tab, and the
 quiz's (from a held correction, in the tab or in `QuizSheet`). Each injects
@@ -361,8 +375,10 @@ classes, since the cantar model holds 2,968 verbs.
 **The key conjugations** are `KeyConjugation` (`Models/KeyConjugation.swift`): four, each the stem a
 family of tenses is built on. The yo presente (tengo) stands for the presente de subjuntivo and the
 usted, nosotros, ustedes, and negative imperatives; the yo pretérito (tuve) for the imperfectos and
-futuro de subjuntivo; the yo futuro (tendré) for the condicional; the participio (tenido) for every
-compound tense. Each case names its cell (`tense`, `personNumber`), so the pedagogy plan can map
+futuro de subjuntivo, which follow the pretérito's third-person plural (tuvieron), so that a verb
+whose stem changes only in the third person parts from yo there (dormí but durmiera, pedí but
+pidiera, leí but leyera); the yo futuro (tendré) for the condicional; the participio (tenido) for
+every compound tense. Each case names its cell (`tense`, `personNumber`), so the pedagogy plan can map
 practice items onto it. `forms(of:)` returns them mixed case, as the engine writes them (tenGo,
 tUVE, tenDré, tenido), for a caller that shows red letters; `line(for:)` gives the lowercased
 "tengo · tuve · tendré · tenido". A reflexive-only verb's forms carry their pronoun (me arrepiento ·

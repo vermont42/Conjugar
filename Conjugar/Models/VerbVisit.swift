@@ -29,7 +29,7 @@ nonisolated struct VerbDestination: Hashable, Sendable {
 /// screen or the foreground and then returns begins a new visit whose source is `resume`, because
 /// the alternatives either count time spent in another app as reading or send a `leaveVerbView`
 /// that no `viewVerbView` preceded.
-nonisolated struct VerbVisit: Sendable {
+nonisolated struct VerbVisit: Equatable, Sendable {
   let source: AnalyticsSource
   let start: Date
   private(set) var deepestSection: VerbPageSection

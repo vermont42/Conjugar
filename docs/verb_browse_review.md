@@ -117,6 +117,9 @@ page") is untrue, and each body evaluation scans about 120 forms to learn nothin
 delete the guard. If it should appear only where the verb itself is irregular, test the simple
 tenses and the three header forms only, or ask `Conjugator.verbType`.
 
+**Fixed on `master`, 2026-11-25, in Phase 5 of `plans/verb_browse_fixes.md`.** `VerbPageForms.hasRedLetters` reads the simple tenses and the header forms only.
+A spelling-change verb such as buscar counts, because the engine marks busQUé.
+
 <a id="c3"></a>
 ### C3. The widget's My Verbs rotation repeats a verb as the list changes (Read)
 
@@ -198,6 +201,9 @@ because the simulator's tip state had already retired it.
 
 **Fix.** Draw the tip only when the page has an etymology or an example.
 
+**Fixed on `master`, 2026-11-25, in Phase 5 of `plans/verb_browse_fixes.md`.** The page asks `ScrollToBottomTip.hasTarget(onPageOf:)` before drawing the tip and
+before unlocking it.
+
 <a id="c8"></a>
 ### C8. "Built on" names bases that are not bases (Run)
 
@@ -211,6 +217,9 @@ contestar on testar, preparar on parar, revelar on velar.
 
 **Fix.** Add transpirar, contemplar, and impedir. The opaque pairs need a ruling
 ([Q5](#open-questions)).
+
+**Fixed on `master`, 2026-11-25, in Phase 5 of `plans/verb_browse_fixes.md`.** The three are in `falseCompounds`, and the comment says that pirar is no base. The
+opaque pairs stay, by Josh's ruling. 973 verbs now have a base, against 976.
 
 <a id="c9"></a>
 ### C9. Tidying My Verbs erases collection progress (Read)
@@ -320,6 +329,8 @@ store no longer migrates over one.*
   writes lowercase, so this matters only for a link written by hand.
 - **The "All N" chip counts roots, not verbs (Reviewer).** `RelatedVerbsView.swift:99` tests the
   number of chips against 6, so a model of twelve verbs over four roots shows no "All 12".
+  *Fixed on `master`, 2026-11-25, in Phase 5 of `plans/verb_browse_fixes.md`: `RelatedVerbs.modelHasMore` compares the model's other verbs with the chips
+  shown, so mover's page (five chips, twelve verbs) shows "All 12".*
 - **The grid's selection outline has the wrong corners (Read).** It strokes a radius of 8
   (`VerbBrowseView.swift:634`) around a card whose radius is 12.
 - **A second tap on the mail link hides its note early (Read).** The first tap's four-second task
@@ -361,7 +372,10 @@ when the warm-up completes. Or move matching off the main actor and publish the 
   `navigationDestination` closure can run again whenever the stack's host re-renders, and
   `VerbBrowseView` reads the learner's record, which every page open changes. `@State` survives,
   so the result is correct. Whether the init really reruns was not checked; a print in `init`
-  would say.
+  would say. *Checked on `master`, 2026-11-25, in Phase 5 of `plans/verb_browse_fixes.md`, and not
+  real: with a print in both inits, each push ran its init once, and starring the page, opening it
+  from the search field's recents or from My Verbs, and returning from a pushed page ran neither
+  again. Left as it is; Phase 8 lightens `ModelView` anyway.*
 - **Spotlight is re-indexed at every launch (Read).** A recorded choice, but
   `Task { await VerbSpotlight.indexVerbs() }` (`MainTabView.swift:70`) inherits the launch task's
   priority, so about two seconds of building entries competes with launch. Nothing removes the
@@ -417,14 +431,17 @@ Josh's decision.*
   grammar is right).** `KeyConjugation.swift:20-21` and `docs/feature_architecture.md:357` say the
   imperfect and future subjunctives follow the yo pretérito. They follow the third-person plural:
   dormí but durmiera, pedí but pidiera, leí but leyera. The four forms are Josh's decision and
-  stay; only the sentence is wrong.
+  stay; only the sentence is wrong. *Fixed on `master`, 2026-11-25, in Phase 5 of `plans/verb_browse_fixes.md`: `KeyConjugation`, `PracticeItem.Key.init(tense:)`,
+  and the doc now say so.*
 - **G3. A visit's dwell includes time under a sheet (Reviewer).** A sheet does not make its
   presenter disappear, so a three-minute Test Me reports `dwell` as `60s+` for the page. The
   landing scroll to a marked form also counts as the learner reaching `compound`, and can retire
   the scroll tip unprompted. The begin-and-end logic lives in `VerbView`'s body
-  (`VerbView.swift:189-233`), where no test reaches it.
+  (`VerbView.swift:189-233`), where no test reaches it. *Fixed on `master`, 2026-11-25, in Phase 5 of `plans/verb_browse_fixes.md`: `VerbVisitTracker` decides,
+  and its tests drive it. By Josh's decision that day, a sheet ends the visit and its closing
+  begins a `resume` one. What the landing scroll shows is not reached until the learner scrolls.*
 - **G4. The Related Verbs card has no `VerbPageSection` (Read)**, so `deepestSection` cannot say
-  that a learner reached the last thing on the page.
+  that a learner reached the last thing on the page. *Fixed on `master`, 2026-11-25, in Phase 5 of `plans/verb_browse_fixes.md`: `related`.*
 - **G5. A migration for data no shipped build wrote (Read).** `PracticeStore.migrated` and
   `LegacyLearnerVerbs` (`PracticeStore.swift:243-262`) carry Phase 15's per-verb schedules into
   the practice record. Both formats exist only on `master`; version 3.1 has neither. Delete before
@@ -594,6 +611,8 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
     thing most likely to be wrong. Only five verbs pin accents exactly. The reviewer ran the
     algorithm standalone on 46 hard cases (conduélete, desvergüénzate, inmiscúyete, comidámonos,
     arrepentíos, huíos, tente) and every one was right, so this is a missing guard, not a bug.
+    *Fixed on `master`, 2026-11-25, in Phase 5 of `plans/verb_browse_fixes.md`: a golden table of fourteen verbs' joined commands and gerunds,
+    all right.*
   - `matchKindIsSentByItsName` (`LookupSignalsTests.swift:38-41`) compares each wire name with
     `String(describing:)` of the case, so renaming both enums together passes and changes what is
     sent. `guess` and `none` are not pinned at all. *Fixed on `master`, 2026-11-25, in Phase 2 of `plans/verb_browse_fixes.md`:

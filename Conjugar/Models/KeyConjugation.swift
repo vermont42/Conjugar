@@ -17,7 +17,9 @@ nonisolated enum KeyConjugation: CaseIterable, Sendable {
   /// imperatives follow it.
   case yoPresente
   /// tuve. The two imperfectos de subjuntivo (tuviera, tuviese) and the futuro de subjuntivo
-  /// (tuviere) follow it.
+  /// (tuviere) follow the pretérito's third-person plural (tuvieron), whose stem tuve shares. For a
+  /// verb whose stem changes only in the third person, they follow that person and not yo: dormí
+  /// but durmiera, pedí but pidiera, leí but leyera.
   case yoPretérito
   /// tendré. The condicional (tendría) shares its stem.
   case yoFuturo

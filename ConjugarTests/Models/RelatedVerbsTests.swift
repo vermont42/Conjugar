@@ -91,6 +91,40 @@ struct RelatedVerbsTests {
     }
   }
 
+  /// "Built on" is a claim about etymology. transpirar comes from *spirare*, not pirar; contemplar
+  /// from *templum*, not templar's *temperare*; impedir from *pes*, not pedir's *petere*.
+  @Test func falseByEtymologyHaveNoBase() {
+    for verb in ["transpirar", "espirar", "expirar", "suspirar", "contemplar", "impedir"] {
+      #expect(VerbRelations.shared.baseByVerb[verb] == nil, "\(verb)")
+    }
+  }
+
+  /// Pairs true by etymology stay, however opaque to a learner.
+  @Test func opaqueButTruePairsHold() {
+    #expect(VerbRelations.shared.baseByVerb["acercar"] == "cercar")
+    #expect(VerbRelations.shared.baseByVerb["preparar"] == "parar")
+  }
+
+  /// The model's row shows one verb per root, so its "All N" depends on the model's other verbs,
+  /// not on how many chips the row has.
+  @Test func theModelRowHasMoreWhenItsRootsHideVerbs() {
+    func related(relatives: Int, count: Int) -> RelatedVerbs {
+      RelatedVerbs(root: "x", builtOnRoot: [], modelClassNumber: "1", modelRelatives: (0..<relatives).map { "v\($0)" }, modelVerbCount: count)
+    }
+    // Twelve verbs over four other roots, this verb's included: four chips, seven more verbs.
+    #expect(related(relatives: 4, count: 12).modelHasMore)
+    // Every other verb has a chip.
+    #expect(!related(relatives: 4, count: 5).modelHasMore)
+    // More roots than chips.
+    #expect(related(relatives: 9, count: 10).modelHasMore)
+    #expect(!related(relatives: 6, count: 7).modelHasMore)
+  }
+
+  @Test func theBaseRowHasMoreBeyondSixVerbs() throws {
+    #expect(try related("tener").builtOnRootHasMore)
+    #expect(try !related("decir").builtOnRootHasMore)
+  }
+
   @Test func everyBaseIsAVerbOfTheSameFamily() throws {
     for (verb, base) in VerbRelations.shared.baseByVerb {
       let verbEntry = try #require(VerbMap.shared.entry(for: verb))
@@ -118,7 +152,7 @@ struct RelatedVerbsTests {
 
   @Test func theRelationCountsHold() {
     let index = VerbRelations.shared
-    #expect(index.baseByVerb.count == 976)
-    #expect(index.verbsByRoot.values.filter { $0.count > 1 }.count == 605)
+    #expect(index.baseByVerb.count == 973)
+    #expect(index.verbsByRoot.values.filter { $0.count > 1 }.count == 604)
   }
 }

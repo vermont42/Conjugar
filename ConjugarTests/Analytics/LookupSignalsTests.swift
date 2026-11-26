@@ -30,7 +30,7 @@ struct LookupSignalsTests {
   }
 
   @Test func sectionValuesAreStableAndOrderedDownThePage() {
-    #expect(VerbPageSection.allCases.map(\.rawValue) == ["header", "simple", "compound", "etymology", "example"])
+    #expect(VerbPageSection.allCases.map(\.rawValue) == ["header", "simple", "compound", "etymology", "example", "related"])
     #expect(VerbPageSection.allCases.sorted() == VerbPageSection.allCases)
   }
 

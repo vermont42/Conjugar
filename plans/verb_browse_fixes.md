@@ -24,8 +24,8 @@ is filled by the next session, which reads the hash from `git log`.
 | 1 | Done | 2026-11-25 | `a5c37cc` | C1, C4, C5, C6, and from C13 the homonym's sense and the guess's cell order |
 | 2 | Done | 2026-11-25 | `4d5b2ec` | P1, and the wire names from T1 |
 | 3 | Done | 2026-11-25 | `942f3a4` | C9, C12, G1, and from C13 Recent's count |
-| 4 | Awaiting Josh | 2026-11-25 | | C3, and a week of verbs for the widget |
-| 5 | Not started | | | C2, C7, C8, G2, G3, G4, and from C13 the "All N" chip |
+| 4 | Done | 2026-11-25 | `c0618fe` | C3, and a week of verbs for the widget |
+| 5 | Awaiting Josh | 2026-11-25 | | C2, C7, C8, G2, G3, G4, and from C13 the "All N" chip |
 | 6 | Not started | | | From C13 the stashed link, the ignored link, the link beneath the game, and case; F2 (Spotlight); the intents and links of D3 |
 | 7 | Not started | | | D1 (the cheap pieces), D2, G6, G8, S5 |
 | 8 | Not started | | | D3 (the model layer), F2 (repeated work), S8 |
@@ -486,6 +486,54 @@ tener again (the scroll tip); transpirar's and impedir's Related Verbs; a model 
 over few roots, for the chip.
 
 **How it differed:**
+
+- **G3, the sheets (Josh, 2026-11-25).** Asked, Josh chose the recommendation: a sheet over the
+  page (a tense's article, Test Me) ends the visit, and its closing begins a `resume` one. The
+  logic is `VerbVisitTracker` (`Models/VerbVisitTracker.swift`), a value type that `VerbView`
+  reports to and whose returned events it sends; `VerbVisitTrackerTests` drives the screen, the
+  foreground, a sheet, and the landing. A visit begins only when the page is on screen and
+  uncovered, so the app returning under a sheet begins nothing.
+- **The landing scroll** begins when the page scrolls itself to a marked card and ends at the
+  learner's first drag (`onScrollPhaseChange`, phase `interacting`). Until then, a section coming on
+  screen is recorded as visible but not reached, and a resumed visit starts from the header. In
+  the iPhone simulator, with a temporary log, `conjugar://verb/hablar?match=he%20hablado` landed on
+  the Perfecto with the phase still `idle` and nothing reached; a drag reported `interacting`, and
+  scrolling down then reached `compound`, `etymology`, `example`, and `related`. A section the
+  landing showed and that stays on screen after the drag is never reached in that visit; a learner
+  who reads only the landed card reports `header`. That is the plan's wording taken literally.
+- **C2.** The page's forms moved into `VerbPageForms` (`Models/VerbPageForms.swift`), with
+  `ConjugationSection` and `ConjugationDisplayRow`, and it takes the learner's tú-or-vos choice as
+  a parameter so that a test can build it. `hasRedLetters` is computed once there. buscar counts:
+  the engine marks busQUé.
+- **C7** asks `ScrollToBottomTip.hasTarget(onPageOf:)`, which reads the etymology, the example,
+  and the medieval examples. The view computes it once in `init`.
+- **The "All N" chip** appears when the model's other verbs outnumber the chips shown
+  (`RelatedVerbs.modelHasMore`). The page's own verb is not counted as hidden, since it is the
+  page. mover's page (five chips over twelve verbs) now shows "All 12"; hacer's shows "All 3" beside
+  one chip, satisfacer, since deshacer sits in the built-on row. `shortListLength` moved to
+  `RelatedVerbs`.
+- **C8.** `RelatedVerbsTests.theRelationCountsHold` changed on purpose: 973 verbs have a base
+  (976 before) and 604 roots have another verb built on them (605). The comment no longer calls
+  pirar a base of anything.
+- **`VerbView.init` and `ModelView.init` do not rerun.** With a print in each: one init per push,
+  and none on starring (from the list and from My Verbs), opening from the search field's recents,
+  or returning from a pushed page. Recorded and left.
+- **The reflexive sweep** is a golden table of fourteen verbs, every shape the plan named plus
+  dar, hacer, and reír: the reflexive-only ones as their page writes them, the others through
+  `ReflexivePronoun.attach`. Every expectation, written by hand first, matched (dese, reíte, huite,
+  huíos, desvergüénzate among them).
+- **G4.** `related` is a new value of `deepestSection`. The staged policy bullet named the sections
+  one by one, so a new section of `docs/privacy_policy_pending.md` rewrites it, in both languages,
+  and says "in view" for the dwell, which sheets now end.
+- **Checked in the simulators.** On the iPhone, after uninstalling for a fresh TipKit store:
+  hablar showed no tip; tener showed Red Letters, which I closed; abaratar showed no tip; tener
+  then showed Keep Scrolling. transpirar's card has only "Conjugated like cantar"; mover's has
+  "All 12". On the iPad, in Spanish: hablar with no tip, tener with Letras rojas, impedir with
+  pedir among "Se conjugan como pedir" and no "Formados con", and mover with "Ver los 12".
+- **The suite** is 1,404 Swift Testing tests in 88 suites and 11 XCTest tests, in 194 s. The
+  slowest suites are "ConjugationMap" (48.4 s), "The bundled map" (32.4 s), and
+  `ReverseLookupTests` (21.4 s), all untouched here; a Konjugieren test run was going on the same
+  Mac at the time. The targeted run of this phase's six suites took 22 s.
 
 ## Phase 6: Links, Intents, and Spotlight
 

@@ -91,6 +91,41 @@ struct ReflexivePronounTests {
     #expect(Self.written(infinitive, .gerundio, .none) == gerund)
   }
 
+  /// A golden table of joined forms, whose accents the sweep below cannot see, since it compares
+  /// through `VerbSearch.fold`. One verb of each shape: -ear, both kinds of -iar, -uir, a ue and an
+  /// ie diphthong, ü, qu, gu, e to i, a hiatus in -eír, and one-syllable commands. A reflexive-only
+  /// verb is read as its page writes it; any other has its bare forms joined by `attach`, as a
+  /// learner would write the reflexive.
+  @Test("joined forms carry the accent Spanish writes", arguments: [
+    ("contonear", ["contonéate", "contoneate", "contonéese", "contoneémonos", "contoneaos", "contonéense"], "contoneándose"),
+    ("vanagloriar", ["vanaglóriate", "vanagloriate", "vanaglóriese", "vanagloriémonos", "vanagloriaos", "vanaglóriense"], "vanagloriándose"),
+    ("enviar", ["envíate", "enviate", "envíese", "enviémonos", "enviaos", "envíense"], "enviándose"),
+    ("huir", ["húyete", "huite", "húyase", "huyámonos", "huíos", "húyanse"], "huyéndose"),
+    ("condoler", ["conduélete", "condolete", "conduélase", "condolámonos", "condoleos", "conduélanse"], "condoliéndose"),
+    ("desentender", ["desentiéndete", "desentendete", "desentiéndase", "desentendámonos", "desentendeos", "desentiéndanse"], "desentendiéndose"),
+    ("desvergonzar", ["desvergüénzate", "desvergonzate", "desvergüéncese", "desvergoncémonos", "desvergonzaos", "desvergüéncense"], "desvergonzándose"),
+    ("acurrucar", ["acurrúcate", "acurrucate", "acurrúquese", "acurruquémonos", "acurrucaos", "acurrúquense"], "acurrucándose"),
+    ("endomingar", ["endomíngate", "endomingate", "endomínguese", "endominguémonos", "endomingaos", "endomínguense"], "endomingándose"),
+    ("comedir", ["comídete", "comedite", "comídase", "comidámonos", "comedíos", "comídanse"], "comidiéndose"),
+    ("reír", ["ríete", "reíte", "ríase", "riámonos", "reíos", "ríanse"], "riéndose"),
+    ("poner", ["ponte", "ponete", "póngase", "pongámonos", "poneos", "pónganse"], "poniéndose"),
+    ("hacer", ["hazte", "hacete", "hágase", "hagámonos", "haceos", "háganse"], "haciéndose"),
+    ("dar", ["date", "date", "dese", "démonos", "daos", "dense"], "dándose")
+  ])
+  func joinedForms(infinitive: String, commands: [String], gerund: String) {
+    let persons: [DisplayPersonNumber] = [.secondSingularTú, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+    func joined(_ tense: DisplayTense, _ person: DisplayPersonNumber) -> String? {
+      if ReflexivePronoun.isReflexiveOnly(infinitive) {
+        return Self.written(infinitive, tense, person)
+      }
+      return Self.bare(infinitive, tense, person).map {
+        ReflexivePronoun.attach(to: $0, tense: tense, personNumber: person)
+      }
+    }
+    #expect(persons.map { joined(.imperativoPositivo, $0) } == commands)
+    #expect(joined(.gerundio, .none) == gerund)
+  }
+
   /// The written form is the bare form with the pronoun placed: before it, after the "no" of a
   /// negative command, or joined to a command or gerund. Accents aside, nothing else changes.
   @Test("every reflexive-only verb places its pronoun in every slot", arguments: reflexiveVerbs)

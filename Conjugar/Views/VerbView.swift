@@ -19,11 +19,8 @@ struct VerbView: View {
 
   private let gloss: String
   private let typeOrParent: String
-  private let participio: String
-  private let gerundio: String
-  private let raizFutura: String
+  private let forms: VerbPageForms
   private let isDefective: Bool
-  private let sections: [ConjugationSection]
   private let etymology: String?
   private let example: Example?
   private let medievalExamples: [MedievalExample]
@@ -31,12 +28,12 @@ struct VerbView: View {
   private let related: RelatedVerbs?
   /// The model the pill names, whose page the pill opens.
   private let model: ModelInfo?
+  /// Whether the page has an etymology or an example below the conjugations, which
+  /// `ScrollToBottomTip` points to.
+  private let hasContentBelow: Bool
   @State private var medievalIndex: Int
-  @State private var visit: VerbVisit?
-  @State private var visibleSections: Set<VerbPageSection> = []
-  @State private var hasAppeared = false
+  @State private var tracker: VerbVisitTracker
   @State private var hasScrolledToMark = false
-  @State private var isOnScreen = false
   /// The tense article open in a sheet over the page, from the ⓘ beside a heading.
   @State private var article: Info?
   /// Whether Test Me's three questions are open in a sheet over the page.
@@ -54,37 +51,28 @@ struct VerbView: View {
     self.marks = marks
     let entry = VerbMap.shared.entry(for: verb)
     gloss = entry?.gloss ?? ""
-    participio = Self.form(verb, .participio)
-    gerundio = Self.form(verb, .gerundio)
-    raizFutura = Self.form(verb, .raízFutura) + "-"
+    forms = VerbPageForms(verb: verb, marks: marks, secondSingular: Current.settings.secondSingularBrowse)
     isDefective = Conjugator.isDefective(infinitive: verb)
     typeOrParent = Self.typeOrParent(verb: verb, entry: entry)
-    sections = Self.buildSections(verb: verb, marks: marks)
     etymology = Etymology.text(for: verb)
     example = ExampleData.example(for: verb)
     let medieval = MedievalData.examples(for: verb)
     medievalExamples = medieval
     related = VerbRelations.related(to: verb).flatMap { $0.isEmpty ? nil : $0 }
     model = ModelInfo.row(for: verb)
+    hasContentBelow = ScrollToBottomTip.hasTarget(onPageOf: verb)
     // Start on a random attestation so each visit varies; the cycle button advances from here.
     _medievalIndex = State(initialValue: medieval.indices.randomElement() ?? 0)
+    _tracker = State(initialValue: VerbVisitTracker(source: source))
   }
 
   private var medievalExample: MedievalExample? {
     medievalExamples.indices.contains(medievalIndex) ? medievalExamples[medievalIndex] : nil
   }
 
-  /// The first card with a marked row, in the page's own order, which the page scrolls to when
-  /// it opens. Nil when nothing is marked or only the header is.
-  private var markedSectionID: String? {
-    sections.first { $0.rows.contains(where: \.isMarked) }?.id
-  }
-
-  /// Whether any form on the page has a red letter, which the engine marks by writing it in
-  /// uppercase. `RedLettersTip` has nothing to point at on a regular verb's page.
-  private var hasRedLetters: Bool {
-    let forms = sections.flatMap { $0.rows.map(\.form) } + [participio, gerundio, raizFutura]
-    return forms.contains { $0.contains(where: \.isUppercase) }
+  /// Whether a sheet covers the page, which ends its visit.
+  private var isCovered: Bool {
+    article != nil || isTestingVerb
   }
 
   var body: some View {
@@ -92,10 +80,12 @@ struct VerbView: View {
       ScrollView {
         VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
           metadataHeader
-          if hasRedLetters {
+          if forms.hasRedLetters {
             TipView(redLettersTip)
           }
-          TipView(scrollToBottomTip)
+          if hasContentBelow {
+            TipView(scrollToBottomTip)
+          }
           if horizontalSizeClass == .regular {
             // iPad / regular width: two columns of conjugation cards side by side,
             // halving the vertical scroll. `conjugationCards` is the single content
@@ -116,6 +106,7 @@ struct VerbView: View {
           }
           if let related, push != nil {
             RelatedVerbsView(related: related)
+              .reportsVisibility { sectionVisibilityChanged(.related, isVisible: $0) }
           }
         }
         .padding()
@@ -125,12 +116,18 @@ struct VerbView: View {
         // sharing one tidy column. A no-op on iPhone (narrower than the cap).
         .readingWidth()
       }
+      .onScrollPhaseChange { _, phase in
+        if phase == .interacting {
+          tracker.learnerScrolled()
+        }
+      }
       .onAppear {
         // Once only: returning to the page from another tab keeps the learner's place.
-        guard !hasScrolledToMark, let markedSectionID else {
+        guard !hasScrolledToMark, let markedSectionID = forms.markedSectionID else {
           return
         }
         hasScrolledToMark = true
+        tracker.beganLanding()
         Task {
           proxy.scrollTo(markedSectionID, anchor: .top)
         }
@@ -187,56 +184,49 @@ struct VerbView: View {
       }
     }
     .onAppear {
-      isOnScreen = true
-      beginVisit(source: hasAppeared ? .resume : source)
-      hasAppeared = true
+      send(tracker.appeared(at: .now))
       unlockScrollTipIfDue()
     }
     .onDisappear {
-      isOnScreen = false
-      endVisit()
+      send(tracker.disappeared(at: .now))
     }
     .onChange(of: scenePhase) {
       switch scenePhase {
       case .background:
-        endVisit()
+        send(tracker.enteredBackground(at: .now))
       case .active:
-        if isOnScreen {
-          beginVisit(source: .resume)
-        }
+        send(tracker.becameActive(at: .now))
       default:
         break
       }
     }
+    .onChange(of: isCovered) {
+      send(tracker.coveredChanged(isCovered, at: .now))
+    }
   }
 
-  private func beginVisit(source: AnalyticsSource) {
-    guard visit == nil else {
-      return
+  private func send(_ event: VerbVisitTracker.Event?) {
+    switch event {
+    case .began(let visit):
+      // An open is the page's arrival by any route. A page that comes back is not a new one.
+      if visit.source != .resume {
+        Current.learnerVerbs.recordOpen(verb)
+        Current.practice.recordLookup(verb, source: visit.source)
+      }
+      Current.analytics.signal(name: .viewVerbView, parameters: visit.viewParameters)
+    case let .ended(visit, end):
+      Current.analytics.signal(name: .leaveVerbView, parameters: visit.leaveParameters(end: end))
+    case nil:
+      break
     }
-    let newVisit = VerbVisit(source: source, start: .now, visibleSections: visibleSections)
-    visit = newVisit
-    // An open is the page's arrival by any route. A page that comes back is not a new one.
-    if source != .resume {
-      Current.learnerVerbs.recordOpen(verb)
-      Current.practice.recordLookup(verb, source: source)
-    }
-    Current.analytics.signal(name: .viewVerbView, parameters: newVisit.viewParameters)
   }
 
-  private func endVisit() {
-    guard let visit else {
-      return
-    }
-    Current.analytics.signal(name: .leaveVerbView, parameters: visit.leaveParameters(end: .now))
-    self.visit = nil
-  }
-
-  // The scroll tip waits for a page visit after the red-letter tip was closed, rather than
-  // replacing it in place the moment it closes. With tips switched off for screenshots, TipKit is
-  // never configured, so this leaves its datastore alone.
+  // The scroll tip waits for a visit, to a page that has something below the conjugations, after
+  // the red-letter tip was closed, rather than replacing it in place the moment it closes. With
+  // tips switched off for screenshots, TipKit is never configured, so this leaves its datastore
+  // alone.
   private func unlockScrollTipIfDue() {
-    guard TipDisplay.tipsEnabled else {
+    guard TipDisplay.tipsEnabled, hasContentBelow else {
       return
     }
     if case .invalidated = redLettersTip.status {
@@ -245,15 +235,10 @@ struct VerbView: View {
   }
 
   private func sectionVisibilityChanged(_ section: VerbPageSection, isVisible: Bool) {
-    if isVisible {
-      visibleSections.insert(section)
-      visit?.reach(section)
-      // A learner who reaches the etymology or the examples unprompted needs no advice.
-      if section >= .etymology, TipDisplay.tipsEnabled {
-        scrollToBottomTip.invalidate(reason: .actionPerformed)
-      }
-    } else {
-      visibleSections.remove(section)
+    let isReached = tracker.sectionVisibilityChanged(section, isVisible: isVisible)
+    // A learner who reaches the etymology or the examples unprompted needs no advice.
+    if isReached, section >= .etymology, TipDisplay.tipsEnabled {
+      scrollToBottomTip.invalidate(reason: .actionPerformed)
     }
   }
 
@@ -291,10 +276,10 @@ struct VerbView: View {
       }
 
       VStack(alignment: .leading, spacing: 4) {
-        nonFiniteRow(DisplayTense.participio.titleCaseName, form: participio, isMarked: isMarked(.participio), isCopyable: true)
-        nonFiniteRow(DisplayTense.gerundio.titleCaseName, form: gerundio, isMarked: isMarked(.gerundio), isCopyable: true)
+        nonFiniteRow(DisplayTense.participio.titleCaseName, form: forms.participio, isMarked: isMarked(.participio), isCopyable: true)
+        nonFiniteRow(DisplayTense.gerundio.titleCaseName, form: forms.gerundio, isMarked: isMarked(.gerundio), isCopyable: true)
         // A stem is not a word, so the raíz futura copies nothing.
-        nonFiniteRow(DisplayTense.raízFutura.titleCaseName, form: raizFutura, isMarked: false, isCopyable: false)
+        nonFiniteRow(DisplayTense.raízFutura.titleCaseName, form: forms.raizFutura, isMarked: false, isCopyable: false)
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
@@ -440,7 +425,7 @@ struct VerbView: View {
   /// diverge.
   @ViewBuilder
   private var conjugationCards: some View {
-    ForEach(sections) { section in
+    ForEach(forms.sections) { section in
       conjugationCard(section)
     }
   }
@@ -555,13 +540,6 @@ struct VerbView: View {
     }
   }
 
-  private static func form(_ verb: String, _ tense: DisplayTense) -> String {
-    if case .success(let value) = TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: .none, pronoun: .written) {
-      return value
-    }
-    return ""
-  }
-
   private static func typeOrParent(verb: String, entry: VerbMapEntry?) -> String {
     switch Conjugator.verbType(infinitive: verb) {
     case .regularAr:
@@ -579,64 +557,6 @@ struct VerbView: View {
       return L.Verb.irregular
     }
   }
-
-  /// Build the displayed conjugation sections — one per tense, each a
-  /// pronoun-ordered list of rows: yo where the tense has one, the tú/vos/both
-  /// second-singular per `Settings.secondSingularBrowse`, then the plural persons,
-  /// with a defective/formless slot rendered blank. A page opened from a search for a vos form
-  /// (hablás) shows vos as well as tú, whatever the setting, so that the mark has a row to sit
-  /// on; likewise tú for a learner who chose vos.
-  private static func buildSections(verb: String, marks: Set<ConjugationCell>) -> [ConjugationSection] {
-    var secondSingular = Current.settings.secondSingularBrowse
-    let hidden: [SecondSingularBrowse: DisplayPersonNumber] = [.tu: .secondSingularVos, .vos: .secondSingularTú]
-    if let hiddenPerson = hidden[secondSingular], marks.contains(where: { $0.personNumber == hiddenPerson }) {
-      secondSingular = .both
-    }
-    return ConjugationTable.all.map { table in
-      let tense = table.tense
-      let isImperative = tense == .imperativoPositivo || tense == .imperativoNegativo
-      var persons: [DisplayPersonNumber] = []
-      if tense.hasYoForm {
-        persons.append(.firstSingular)
-      }
-      switch secondSingular {
-      case .tu:
-        persons.append(.secondSingularTú)
-      case .vos:
-        persons.append(.secondSingularVos)
-      case .both:
-        persons.append(contentsOf: [.secondSingularTú, .secondSingularVos])
-      }
-      persons.append(contentsOf: [.thirdSingular, .firstPlural, .secondPlural, .thirdPlural])
-
-      let rows = persons.enumerated().map { index, personNumber in
-        ConjugationDisplayRow(
-          index: index,
-          pronoun: isImperative ? nil : personNumber.pronoun,
-          form: formOrBlank(verb, tense, personNumber),
-          isImperative: isImperative,
-          isMarked: marks.contains(ConjugationCell(tense: tense, personNumber: personNumber))
-        )
-      }
-      return ConjugationSection(table: table, rows: rows)
-    }
-  }
-
-  /// One displayed slot: a defective verb's formless slot renders blank; any other
-  /// failure renders blank rather than crash.
-  private static func formOrBlank(_ verb: String, _ tense: DisplayTense, _ personNumber: DisplayPersonNumber) -> String {
-    if case .success(let value) = TenseBridge.conjugate(infinitive: verb, tense: tense, personNumber: personNumber, pronoun: .written) {
-      return value
-    }
-    return ""
-  }
-}
-
-struct ConjugationSection: Identifiable {
-  let table: ConjugationTable
-  let rows: [ConjugationDisplayRow]
-  var tense: DisplayTense { table.tense }
-  var id: String { table.id }
 }
 
 /// A tense's Info article, opened from the ⓘ beside its heading on the verb page. A link to
@@ -665,42 +585,6 @@ private struct TenseArticleSheet: View {
           }
         }
       }
-  }
-}
-
-struct ConjugationDisplayRow: Identifiable {
-  let index: Int
-  let pronoun: String?
-  let form: String
-  let isImperative: Bool
-  /// True for a cell that the search which opened the page matched.
-  let isMarked: Bool
-  var id: Int { index }
-
-  /// The form as displayed: imperatives are wrapped in ¡…!.
-  var displayForm: String {
-    isImperative ? "¡\(form)!" : form
-  }
-
-  /// What a long press copies: the form alone, without its subject pronoun or the ¡…! that wraps
-  /// an imperative, lowercased, since the capitals only mark the red letters. A reflexive-only
-  /// verb's form keeps its reflexive pronoun (me arrepiento), which is part of the form. Nil for a
-  /// cell the engine could not fill.
-  var copyText: String? {
-    Self.copyText(of: form)
-  }
-
-  static func copyText(of form: String) -> String? {
-    form.isEmpty ? nil : form.lowercased()
-  }
-
-  /// What to speak on tap: pronoun + form for finite tenses, the bare form for
-  /// imperatives, all lowercased.
-  var spokenText: String {
-    if let pronoun {
-      return "\(pronoun) \(form)".lowercased()
-    }
-    return form.lowercased()
   }
 }
 

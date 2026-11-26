@@ -35,6 +35,21 @@ nonisolated struct RelatedVerbs: Equatable, Sendable {
   var isEmpty: Bool {
     builtOnRoot.isEmpty && modelRelatives.isEmpty
   }
+
+  /// How many verbs a relation's row shows before its "All" chip.
+  static let shortListLength = 6
+
+  /// Whether the base's row leaves out some of the verbs built on it, which "All N" then lists.
+  var builtOnRootHasMore: Bool {
+    builtOnRoot.count > Self.shortListLength
+  }
+
+  /// Whether the model's row leaves out some of the model's other verbs, which "All N" then lists
+  /// on the model's page. The row shows one verb per root, so a model of twelve verbs over four
+  /// roots shows four and has eight more.
+  var modelHasMore: Bool {
+    modelVerbCount - 1 > min(modelRelatives.count, Self.shortListLength)
+  }
 }
 
 /// How verbs relate through their bases, computed from the verb map.
@@ -64,18 +79,21 @@ nonisolated enum VerbRelations {
   ]
 
   /// Verbs that look like a prefix and a verb but are not built on that verb, found by reading the
-  /// pairs among the 2,000 most frequent verbs, plus every verb resting on a base that no real
-  /// compound uses (piar, pirar, timar). Rarer verbs were not read, so a few false pairs remain
-  /// there.
+  /// pairs among the 2,000 most frequent verbs, plus every verb resting on piar or timar, which no
+  /// real compound uses. pirar is no base either: espirar, expirar, suspirar, and transpirar only
+  /// seem to end in it, coming from Latin *spirare*. "Built on" is a claim about etymology, so
+  /// contemplar is not on templar, nor impedir on pedir, while a pair that is true by etymology
+  /// stays, however opaque to a learner: acercar on cercar, preparar on parar. Rarer verbs were not
+  /// read, so a few false pairs remain there.
   static let falseCompounds: Set<String> = [
     "abalar", "abogar", "abrasar", "acostar", "adherir", "adorar", "adosar", "alegrar", "amigar",
-    "apagar", "apechar", "apelar", "apodar", "autorizar", "comparar", "copiar", "decantar",
-    "desbastar", "diversificar", "divisar", "embalar", "embotar", "encalar", "encarecer",
+    "apagar", "apechar", "apelar", "apodar", "autorizar", "comparar", "contemplar", "copiar",
+    "decantar", "desbastar", "diversificar", "divisar", "embalar", "embotar", "encalar", "encarecer",
     "encastrar", "enfundar", "engastar", "envarar", "equilibrar", "equiparar", "erizar", "escalar",
     "escapar", "espesar", "espetar", "espiar", "espirar", "esposar", "esquejar", "estallar",
-    "estimar", "estocar", "estragar", "expiar", "expirar", "impactar", "intercalar", "interpelar",
+    "estimar", "estocar", "estragar", "expiar", "expirar", "impactar", "impedir", "intercalar", "interpelar",
     "intimar", "procesar", "propagar", "rebasar", "recalar", "recostar", "solicitar", "somatizar",
-    "sospechar", "subastar", "suspirar"
+    "sospechar", "subastar", "suspirar", "transpirar"
   ]
 
   /// The verb map's relations, built once.

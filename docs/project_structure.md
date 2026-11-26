@@ -56,6 +56,10 @@ Conjugar/
 │   │                           #   ranked(_:) derives the dense 1…4,811 frequency rank from the stored counts at parse time
 │   ├── VerbVisit.swift         # VerbDestination (infinitive + analytics source + search marks, what the tabs push) and VerbVisit (one
 │   │                           #   stretch of a verb page on screen: viewVerbView/leaveVerbView, deepest section, dwell)
+│   ├── VerbVisitTracker.swift  # When a verb page's visits begin and end (screen, foreground, a sheet over the page) and
+│   │                           #   what they reach, the landing scroll to a marked form reaching nothing; VerbView sends its events
+│   ├── VerbPageForms.swift     # A verb page's forms: the header's three, ConjugationSection and ConjugationDisplayRow per tense,
+│   │                           #   the marked card, and hasRedLetters (the verb's own, compound auxiliaries aside)
 │   ├── SearchReport.swift      # SearchTracker (one search, first letter to its end) and SearchReport (finishSearch's banded
 │   │                           #   parameters); MatchKind.analyticsValue
 │   ├── VerbSearch.swift        # The one verb-search rule: folding, -se stripping, every gloss, forms (via FormLookup), MatchKind
@@ -177,7 +181,7 @@ Conjugar/
 │   ├── VerbType.swift          # verbModelMap `vt` marker: irregular / regular -ar / -er / -ir
 │   ├── AppIcon.swift           # Alternate app-icon enum (bull / dancer / matador / classic) + preview asset names
 │   ├── ConjugarTips.swift      # TipKit tips (try the quiz, explore models, choose a level, enable Game Center; on the
-│   │                           #   verb page, red letters and keep scrolling)
+│   │                           #   verb page, red letters and keep scrolling, each only on a page it has something to point at)
 │   ├── Sound.swift             # One-shot SFX vocabulary; CaseIterable so SoundPlayerReal can pre-decode off-main
 │   ├── Music.swift             # Looping background tracks (gameLoop / onboarding / bossFight)
 │   ├── Haptic.swift            # Tactile-feedback vocabulary played through Current.hapticPlayer
@@ -300,7 +304,7 @@ Conjugar/
     ├── VerbEntryList.swift     # Lazy verb rows (compact) or carded grid (regular) that open a verb, optionally checking those looked up; a model's page, a collection's page, and the related list use it
     ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; recents in the focused empty field; the My Verbs list; the review card above the rows; carries the browse_verb_count launch anchor
     ├── VerbSearchCommands.swift  # Command-F as a top-level menu (Verbs › Find a Verb) that opens the verb search through AppRouter.openSearch
-    └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples, related verbs; the pill opens the model; the star and Share in the navigation bar; sends viewVerbView/leaveVerbView per VerbVisit and records each open
+    └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples, related verbs; the pill opens the model; the star and Share in the navigation bar; sends viewVerbView/leaveVerbView as VerbVisitTracker says and records each open
 
 ConjugarWidget/
 ├── AnswerQuizIntent.swift      # Interactive AppIntent behind the Quiz widget's answer buttons
@@ -352,7 +356,8 @@ ConjugarTests/
 ├── Info.plist
 ├── Analytics/
 │   ├── AnalyticsTests.swift            # Signal names and parameters via AnalyticsSpy; pins the wire names
-│   └── LookupSignalsTests.swift        # finishSearch/viewVerbView/leaveVerbView: bands, the search's lifecycle, reports, visits, link sources, no echo of the query
+│   ├── LookupSignalsTests.swift        # finishSearch/viewVerbView/leaveVerbView: bands, the search's lifecycle, reports, visits, link sources, no echo of the query
+│   └── VerbVisitTrackerTests.swift     # A page's visits across the screen, the foreground, a sheet, and the landing scroll
 ├── Models/
 │   ├── ConjugatorTests.swift           # The main engine suite — regular and irregular verbs across all tenses
 │   ├── ConjugatorAccessorsTests.swift  # The engine's convenience accessors
@@ -368,13 +373,15 @@ ConjugarTests/
 │   │                                   #   line-for-line agreement with docs/frequencies.txt
 │   ├── TenseBridgeTests.swift          # DisplayTense/DisplayPersonNumber → engine mapping, compounds, negative imperative
 │   ├── ReflexivePronounTests.swift     # Reflexive-only verbs: arrepentirse in every slot, every rx verb's pronoun placement,
-│   │                                   #   the enclisis accent rule, citation-form search, and quiz grading with and without the pronoun
+│   │                                   #   the enclisis accent rule, a golden table of joined forms by verb shape, citation-form search,
+│   │                                   #   and quiz grading with and without the pronoun
 │   ├── DisplayTenseTests.swift         # The UI tense vocabulary
 │   ├── DisplayPersonNumberTests.swift  # The UI person vocabulary and its pronouns
 │   ├── ModelInfoTests.swift            # Models-tab row construction and irregularity percent
 │   ├── ModelSortTests.swift            # Model-list sort orders
 │   ├── RelatedVerbsTests.swift         # Bases and roots (tener, decir, formar), the class and prefix rules, false compounds,
-│   │                                   #   model relatives one per root by frequency, and the pill's model row
+│   │                                   #   pairs false by etymology, model relatives one per root by frequency, the "All N" chips, and the pill's model row
+│   ├── VerbPageFormsTests.swift        # The verb page's forms by chosen person and marks; which verbs have red letters; the scroll tip's target
 │   ├── KeyConjugationTests.swift       # The four key conjugations (regular, stem-changing, irregular, reflexive, defective),
 │   │                                   #   the share text, URL.appStore, and what a long press copies
 │   ├── VerbSortTests.swift             # Verb-list sort orders and Spanish collation

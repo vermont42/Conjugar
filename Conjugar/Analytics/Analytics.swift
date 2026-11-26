@@ -234,6 +234,8 @@ nonisolated enum VerbPageSection: String, CaseIterable, Comparable, Sendable {
   case compound
   case etymology
   case example
+  /// The Related Verbs card, the last on the page.
+  case related
 
   static func < (lhs: VerbPageSection, rhs: VerbPageSection) -> Bool {
     let order = allCases

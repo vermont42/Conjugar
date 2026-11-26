@@ -1302,3 +1302,23 @@ El párrafo sobre la lista guardada en el dispositivo queda así:
 ```
 Para mostrar sus verbos recientes y marcados con una estrella en Mis verbos, para mostrar cuántos verbos de una colección ha consultado y para ofrecerle tarjetas de repaso, la aplicación guarda una lista de los verbos que abre y marca, con la fecha en que los abrió, cuántas veces y cuándo le toca repasar cada uno. La lista se queda en su dispositivo, en un almacenamiento que solo comparte con los widgets de la propia aplicación. Nunca se envía al desarrollador ni a nadie más, y se borra al eliminar la aplicación. En Mis verbos puede borrar los verbos recientes o quitar cualquier verbo; las colecciones siguen contando todos los verbos que ha abierto. Restablecer práctica, en Configuración, olvida qué verbos ha abierto y cuántas veces.
 ```
+
+## The Related Verbs card and time in view (verb browse fixes plan, Phase 5, 2026-11-25)
+
+Adds `related`, the Related Verbs card at the bottom of a verb's page, to `leaveVerbView`'s
+`deepestSection`. A visit to a page now also ends when the page opens a sheet over itself (a
+tense's article, Test Me) and begins again, as `resume`, when the sheet closes, so the time
+reported is time the page was in view. This rewrites the second bullet of the lookup signals'
+section; apply this wording in place of that one.
+
+### English
+
+```
+- How far down a verb's page you scrolled (its top, the simple tenses, the compound tenses, the etymology, the examples, or the related verbs), and roughly how long the page was in view (under 5 seconds, 5 to 15 seconds, 15 to 60 seconds, or longer)
+```
+
+### Spanish
+
+```
+- Hasta dónde se desplazó en la página de un verbo (el principio, los tiempos simples, los tiempos compuestos, la etimología, los ejemplos o los verbos relacionados) y, aproximadamente, cuánto tiempo estuvo a la vista la página (menos de 5 segundos, de 5 a 15 segundos, de 15 a 60 segundos o más)
+```
