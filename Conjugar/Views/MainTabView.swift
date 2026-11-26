@@ -66,9 +66,16 @@ struct MainTabView: View {
       // Warm the ~4 MB content caches off-main so the first verb push isn't a main-thread
       // decode. refresh() is date-gated and often no-ops, so it can't be relied on to warm.
       Task.detached { ContentCaches.warm() }
-      // One Spotlight entry per verb. Off the main actor.
-      Task { await VerbSpotlight.indexVerbs() }
+      // One Spotlight entry per verb, off the main actor and behind the launch's own work. Skipped
+      // when this version has already indexed the same verbs.
+      Task(priority: .background) { await VerbSpotlight.indexVerbs() }
       presentOnboardingIfNeeded()
+    }
+    // A control or a shortcut stashed a link while the app was already in front.
+    .task {
+      for await _ in PendingDeeplink.announcements() {
+        drainPendingDeeplink()
+      }
     }
     .onOpenURL { router.handle(url: $0) }
     // A tap on one of `VerbSpotlight`'s entries.
@@ -101,14 +108,14 @@ struct MainTabView: View {
     .onChange(of: widgetChallengeContext) {
       refreshWidgetSnapshot()
     }
-    // A `conjugar://game` deeplink jumps straight to the game from any tab. The
-    // router is passed explicitly (cover content doesn't inherit the custom
+    // The game, from a `conjugar://game` link, Settings' Play button, or the tour, over any tab.
+    // The router is passed explicitly (cover content doesn't inherit the custom
     // environment object) so GameView can consume a `conjugar://game/boss` entry.
     .fullScreenCover(isPresented: $router.showGame) { GameView(router: router) }
-    // First-launch welcome tour. Its game-preview CTA defers the game launch to this
-    // cover's onDismiss so the two covers never overlap.
-    .fullScreenCover(isPresented: $router.showOnboarding, onDismiss: router.launchGameAfterOnboardingIfRequested) {
-      OnboardingView(router: router, requestGame: router.requestGameAfterOnboarding)
+    // The welcome tour, at the first launch or from Settings. Its game-preview CTA defers the game
+    // launch to this cover's onDismiss so the two covers never overlap.
+    .fullScreenCover(isPresented: $router.showOnboarding, onDismiss: router.onboardingDismissed) {
+      OnboardingView(router: router, isReshow: router.isOnboardingReshow, requestGame: router.requestGameAfterOnboarding)
     }
     // Over whatever tab is open, since a practice set's link can arrive at any time.
     .sheet(item: $router.presentablePracticeSet) { request in
@@ -119,7 +126,6 @@ struct MainTabView: View {
     }
   }
 
-  /// Trip the first-launch onboarding cover, unless already seen or disabled for screenshots.
   private var widgetChallengeContext: WidgetSnapshotWriter.ChallengeContext {
     WidgetSnapshotWriter.ChallengeContext(
       level: Current.settings.quizLevel,
@@ -136,6 +142,7 @@ struct MainTabView: View {
     Task.detached { WidgetSnapshotWriter.refresh(myVerbs: myVerbs, challenge: challenge) }
   }
 
+  /// Trip the first-launch onboarding cover, unless already seen or disabled for screenshots.
   private func presentOnboardingIfNeeded() {
     guard OnboardingDisplay.onboardingEnabled, !Current.settings.hasSeenOnboarding else {
       return
@@ -143,17 +150,11 @@ struct MainTabView: View {
     router.showOnboarding = true
   }
 
-  /// Control-center controls can't navigate, so they stash a deeplink in the shared
-  /// defaults suite; drain and route it when the app next becomes active.
+  /// The controls and the shortcuts in Shared cannot navigate, so they stash a link in the App
+  /// Group's defaults (`LinkStashingIntent`). Route it, unless it is more than a minute old.
   private func drainPendingDeeplink() {
-    guard
-      let defaults = WidgetConstants.sharedDefaults,
-      let deeplink = defaults.string(forKey: WidgetConstants.pendingDeeplinkKey),
-      let url = URL(string: deeplink)
-    else {
-      return
+    if let url = PendingDeeplink.drain(from: WidgetConstants.sharedDefaults) {
+      router.handle(url: url)
     }
-    defaults.removeObject(forKey: WidgetConstants.pendingDeeplinkKey)
-    router.handle(url: url)
   }
 }

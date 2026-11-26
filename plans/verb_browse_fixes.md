@@ -25,8 +25,8 @@ is filled by the next session, which reads the hash from `git log`.
 | 2 | Done | 2026-11-25 | `4d5b2ec` | P1, and the wire names from T1 |
 | 3 | Done | 2026-11-25 | `942f3a4` | C9, C12, G1, and from C13 Recent's count |
 | 4 | Done | 2026-11-25 | `c0618fe` | C3, and a week of verbs for the widget |
-| 5 | Awaiting Josh | 2026-11-25 | | C2, C7, C8, G2, G3, G4, and from C13 the "All N" chip |
-| 6 | Not started | | | From C13 the stashed link, the ignored link, the link beneath the game, and case; F2 (Spotlight); the intents and links of D3 |
+| 5 | Done | 2026-11-25 | `57abe4c` | C2, C7, C8, G2, G3, G4, and from C13 the "All N" chip |
+| 6 | Awaiting Josh | 2026-11-26 | | From C13 the stashed link, the ignored link, the link beneath the game, and case; F2 (Spotlight); the intents and links of D3 |
 | 7 | Not started | | | D1 (the cheap pieces), D2, G6, G8, S5 |
 | 8 | Not started | | | D3 (the model layer), F2 (repeated work), S8 |
 | 9 | Not started | | | S1 (the search model), C10, C11, F1, S2, S3, S4, S7, and the rest of C13 |
@@ -576,6 +576,68 @@ widget's literals. **Depends on:** nothing.
 the Random Verb and Find a Verb controls; a verb found in Spotlight after a second launch.
 
 **How it differed:**
+
+- **The stashed link is announced, not routed directly.** `PendingDeeplink` (`Shared/`) writes the
+  link with the time it was written, and the intent posts a Darwin notification
+  (`notify_post`), which reaches every process. `MainTabView` listens with
+  `PendingDeeplink.announcements()` and drains on each, as well as on activation. The plan allowed an
+  intent running in the app's own process to route directly; the notification already reaches that
+  process too, so there is one path wherever the intent runs. A stash older than a minute, or
+  without a date, as earlier builds wrote it, is removed unopened. `PendingDeeplinkTests` pins the
+  expiry with injected dates and a defaults suite of its own.
+- **Split View or Slide Over was not tried.** The iPad simulator runs iPadOS 26 in full-screen app
+  mode, and getting the Shortcuts app into a side window with AXe would have taken long. Two checks
+  stand in for it. With Conjugar in front on the iPad, writing a dated stash through `cfprefsd`
+  (`simctl spawn … defaults write <container plist path>`) and posting the announcement with
+  `notifyutil -p` from another process opened a random verb (empatar) at once and removed the stash.
+  And running Verbo aleatorio from the Shortcuts app opened one (disminuir), which shows that the
+  shared `perform()` works for the real intent. Siri with Conjugar in front is in `docs/release.md`
+  step 5.
+- **One protocol, one grammar.** `LinkStashingIntent` gives the four intents one `perform()`, and
+  each names a `link: URL?` in place of the old `pendingDeeplink` string. The grammar's constants,
+  `isDeeplink`, and the raw builder moved from `Utils/URLExtension.swift` to
+  `Shared/DeeplinkGrammar.swift`, so the intents and `WidgetDeeplink` (now in `Shared/`) build from
+  them; only their `source` values are literals, since `AnalyticsSource` stays in the app.
+  `URL.quizStartTarget` is new. `"conjugar://` literals in code: seven before, none after.
+  `AppRouterTests` pins every intent's and widget's link whole and routes it.
+- **The game and the tour moved to the router.** Settings' Play sets `router.showGame`, and Show
+  Onboarding calls `router.reshowOnboarding()`, which sets `isOnboardingReshow` for
+  `MainTabView`'s one tour cover; `onboardingDismissed()` clears it and makes the game hand-off.
+  `GameView.router` is no longer optional. A link that resolves, other than `game`, closes the game;
+  a practice set's link does too, and its sheet shows once the cover is gone. A link that resolves
+  to nothing leaves both the practice set and the game.
+- **Case.** The scheme and the route (the host) ignore case, and so does `PracticeSet(url:)`, which
+  checks the host itself. Keywords in the target position (`random`, `set`, `boss`) keep their
+  case, as a verb's name does; the plan named only the scheme and the route. In the simulator,
+  `CONJUGAR://LIST/goVerbs` made iOS ask "Open in Conjugar?" first, then opened the collection.
+- **Spotlight.** The stamp is the version, the build, and the verb count ("3.1 (1), 4811 verbs"),
+  kept with the indexed infinitives in `Caches/spotlight_index.json`. Caches, because a backup
+  leaves it out: an app restored to a new device, whose Spotlight index starts empty, finds no
+  record and indexes. The record is written only after the index takes the entries. On the iPhone
+  under very heavy load (a load average near 300, with Konjugieren's and Conjuguer's tests running),
+  building the entries at background priority took four and a half minutes and the record appeared
+  ten minutes after launch; the next launch skipped the work, Spotlight still found aprender, and
+  tapping it opened aprender's page. A development build keeps its stamp, so a change to the
+  entries reaches the simulator only after the app is deleted; the doc comment says so.
+- **`VerbEntityQuery` was not slow as App Intents calls it.** A temporary probe with a query of the
+  same shape ran `entities(matching:)` on the main thread when called directly from the main actor,
+  and off it when called through `EntityStringQuery`, as the framework calls it. A cold
+  `entities(matching: "fue")` took 7.8 s. The three methods are `@concurrent` anyway, so that a
+  direct caller cannot stall.
+- **Prose.** Beyond what the phase named: `docs/onboarding.md` and `docs/game.md` describe the one
+  presenter, the § Shortcuts paragraph that called the in-front case untried describes the stash,
+  and G7's "thirty unranked questions" now says ten, with Ten More. G7's third Deeplinks item, line
+  614's "when the search is ending", is S2's and stays for Phase 9.
+- **Checked in the simulators.** On the iPhone: `conjugar://game` then a verb link closed the game
+  on hablar's page; Settings ▸ Play then `CONJUGAR://LIST/goVerbs` closed the game on -go Verbs;
+  Settings ▸ Show Onboarding showed Dismiss, and its Play handed off to the game; a fresh stash
+  written with `plutil` opened a random verb on a cold launch, and one two minutes old was dropped.
+  On the iPad, in Spanish: the in-front announcement and the Shortcuts run above, and
+  `conjugar://game` then `conjugar://info/voseo` closed the game on Voseo. The Control Center
+  controls were not tried; they run the same `perform()` as the shortcut.
+- **The suite** is 1,428 Swift Testing tests in 89 suites and 11 XCTest tests, in 86 s. The slowest
+  suites are "ConjugationMap" (21.0 s), "The bundled map" (14.1 s), and `ReverseLookupTests`
+  (9.5 s). No expectation changed; the intent tests now read `link` in place of `pendingDeeplink`.
 
 ## Phase 7: The Lists' Shared Pieces
 

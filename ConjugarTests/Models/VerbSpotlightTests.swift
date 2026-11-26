@@ -87,4 +87,39 @@ import Testing
     #expect(entities.prefix(2).map(\.id) == ["ser", "ir"])
     #expect(entities.count <= VerbEntityQuery.matchLimit)
   }
+
+  // A launch skips the index when this build has already filled it.
+  @Test func aFirstRunIndexesAndRemovesNothing() {
+    #expect(VerbSpotlight.plan(last: nil, stamp: "3.2 (1), 4811 verbs", infinitives: ["hablar"]) == .index(removing: []))
+  }
+
+  @Test func theSameStampSkips() {
+    let last = VerbSpotlight.IndexRecord(stamp: "3.2 (1), 4811 verbs", infinitives: ["hablar", "tener"])
+    #expect(VerbSpotlight.plan(last: last, stamp: "3.2 (1), 4811 verbs", infinitives: ["hablar"]) == .skip)
+  }
+
+  @Test func aNewStampRemovesTheVerbsTheMapLost() {
+    let last = VerbSpotlight.IndexRecord(stamp: "3.2 (1), 4811 verbs", infinitives: ["tener", "abolir", "hablar", "churruscar"])
+    let plan = VerbSpotlight.plan(last: last, stamp: "3.2 (2), 4810 verbs", infinitives: ["hablar", "tener", "comer"])
+    #expect(plan == .index(removing: ["abolir", "churruscar"]))
+  }
+
+  @Test func theStampNamesTheBuildAndTheVerbCount() {
+    let stamp = VerbSpotlight.stamp(verbCount: 4_811)
+    #expect(stamp.hasSuffix(", 4811 verbs"))
+    #expect(stamp != VerbSpotlight.stamp(verbCount: 4_810))
+    #expect(!stamp.hasPrefix("?"))
+  }
+
+  @Test func aRunThatIndexedWritesItsRecord() async throws {
+    let record = FileManager.default.temporaryDirectory.appending(path: "spotlight_index_\(UUID().uuidString).json")
+    defer { try? FileManager.default.removeItem(at: record) }
+    let stamp = VerbSpotlight.stamp(verbCount: VerbMap.shared.entries.count)
+    let written = VerbSpotlight.IndexRecord(stamp: stamp, infinitives: ["hablar"])
+    try JSONEncoder().encode(written).write(to: record)
+    // The stamp matches, so the run skips the index and leaves the record as it was.
+    await VerbSpotlight.indexVerbs(recordURL: record)
+    #expect(try JSONDecoder().decode(VerbSpotlight.IndexRecord.self, from: Data(contentsOf: record)) == written)
+  }
+
 }

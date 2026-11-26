@@ -43,7 +43,7 @@ nonisolated struct PracticeSet: Equatable, Sendable {
   init?(url: URL) {
     guard
       url.isDeeplink,
-      url.host() == URL.quizHost,
+      url.deeplinkRoute == URL.quizHost,
       url.deeplinkTarget == URL.practiceSetTarget,
       let query = URLComponents(url: url, resolvingAgainstBaseURL: false)?.percentEncodedQuery,
       var custom = CustomQuiz(rawValue: query)

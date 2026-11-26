@@ -2,10 +2,11 @@
 //  AppRouter.swift
 //  Conjugar
 //
-//  Tab selection + deeplink routing for the widgets, the Control Center controls, the Home
-//  Screen quick action, and Command-F. A `conjugar://` URL (from a widget tap, a quick action,
-//  or `simctl openurl`) or a drained control-widget deeplink is turned into a tab switch plus a
-//  pending navigation the destination screen consumes.
+//  Tab selection and the routing of `conjugar://` links, whichever way they come in: a widget or
+//  a Live Activity tapped, a control or a shortcut's stashed link, Look Up a Verb's answer, a
+//  Spotlight result, a tapped reminder, a shared link or QR code, the Home Screen quick action,
+//  Command-F, or `simctl openurl`. A link becomes a tab switch plus a pending request that the
+//  destination screen consumes, or a cover or a sheet that `MainTabView` presents.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -51,9 +52,9 @@ final class AppRouter {
   /// A practice set from a `quiz/set` link, which `MainTabView` shows in a sheet over whatever tab
   /// is open. Any other link replaces it with nil, so that what the link opens is not hidden.
   var pendingPracticeSet: PracticeSetRequest?
-  /// Drives a full-screen `GameView` cover from `MainTabView`, tab-independent so a
-  /// `conjugar://game` deeplink jumps straight to the game from any screen. (The
-  /// Settings tab's Play button presents the game via its own state; both are fine.)
+  /// Drives the full-screen `GameView` cover from `MainTabView`, which a `conjugar://game` link,
+  /// Settings' Play button, and the tour's game preview all present. Any other link that resolves
+  /// closes it, so that what the link opens is not hidden beneath the game.
   var showGame = false
   /// A one-shot request to start the game at the boss fight, set by the
   /// `conjugar://game/boss` debug deeplink. `GameView` consumes it after configure.
@@ -61,9 +62,13 @@ final class AppRouter {
   /// A one-shot request to jump straight to the boss's end scene, set by the
   /// `conjugar://game/end` debug deeplink. `GameView` consumes it after configure.
   var pendingEndScene = false
-  /// Drives the first-launch onboarding cover from `MainTabView`. Tripped once at
-  /// launch when `Settings.hasSeenOnboarding` is false (and the kill switch is on).
+  /// Drives the onboarding cover from `MainTabView`: at the first launch, when
+  /// `Settings.hasSeenOnboarding` is false (and the kill switch is on), and from Settings'
+  /// Show Onboarding (`reshowOnboarding()`).
   var showOnboarding = false
+  /// Whether the cover shown is Settings' reshow, which offers Done in place of Skip and leaves
+  /// `hasSeenOnboarding` alone. Cleared when the cover goes.
+  private(set) var isOnboardingReshow = false
   /// A one-shot request for the Info tab to push the conjugation tutor, set by the
   /// onboarding "Meet the Tutor" CTA. `InfoBrowseView` consumes and clears it.
   var pendingTutor = false
@@ -98,46 +103,68 @@ final class AppRouter {
     showGame = true
   }
 
+  /// Settings' Show Onboarding: the tour again, as a reshow.
+  func reshowOnboarding() {
+    isOnboardingReshow = true
+    showOnboarding = true
+  }
+
+  /// The onboarding cover's `onDismiss`, whether it was the first launch's or a reshow.
+  func onboardingDismissed() {
+    isOnboardingReshow = false
+    launchGameAfterOnboardingIfRequested()
+  }
+
   /// Route a `conjugar://` deeplink. `docs/feature_architecture.md` § Deeplinks has the grammar
   /// and every route: `verb/<infinitive>` (bare or with "se", so `verb/arrepentirse` opens
   /// arrepentir, or `verb/random`), with `match`, a form the page marks, and `cells`, the cells it
-  /// marks when `match` alone would mark more; `search`, with its text
-  /// in `q`; `info/<stableKey>` (or a position); `list/<key>`, a collection; `quiz` (any target
-  /// starts a quiz, except `quiz/set`, a practice set, `quiz/daily`, a daily session, and
-  /// `quiz/challenge`, a daily challenge); and
-  /// `game`.
+  /// marks when `match` alone would mark more; `search`, with its text in `q`;
+  /// `info/<stableKey>` (or a position); `list/<key>`, a collection; `quiz` (any target starts a
+  /// quiz, except `quiz/set`, a practice set, `quiz/daily`, a daily session, and
+  /// `quiz/challenge`, a daily challenge); and `game`. The scheme and the route are compared
+  /// without regard to case, and a target is not.
   /// A link to a verb page, a search, or a quiz may name the surface it came from in `source`
   /// (`?source=widget`); a link that names none reports `deeplink`. Unknown routes, unknown
-  /// verbs, and unknown collections are ignored.
+  /// verbs, and unknown collections are ignored, and change nothing. A link that resolves
+  /// replaces a waiting practice set, unless it is one, and closes the game, unless it opens it.
   func handle(url: URL) {
-    guard url.isDeeplink, let host = url.host() else { return }
+    guard url.isDeeplink, let route = url.deeplinkRoute else { return }
     let source = url.analyticsSource ?? .deeplink
-    if host == URL.quizHost, url.deeplinkTarget == URL.practiceSetTarget {
+    if route == URL.quizHost, url.deeplinkTarget == URL.practiceSetTarget {
       pendingPracticeSet = PracticeSetRequest(practiceSet: PracticeSet(url: url), source: source)
+      showGame = false
       return
     }
+    guard open(route: route, of: url, source: source) else { return }
     pendingPracticeSet = nil
-    switch host {
+    if route != URL.gameHost {
+      showGame = false
+    }
+  }
+
+  /// Sets what `url`'s route asks for, and says whether it resolved.
+  private func open(route: String, of url: URL, source: AnalyticsSource) -> Bool {
+    switch route {
     case URL.verbHost:
-      guard let target = url.deeplinkTarget else { return }
+      guard let target = url.deeplinkTarget else { return false }
       if target == URL.randomVerbTarget {
         // From the frequent verbs or My Verbs, as the widget's verb of the day is.
-        if let random = VerbDraw.randomVerb(myVerbs: Current.learnerVerbs.myVerbs) {
-          open(verb: random.infinitive, source: source)
-        }
-      } else if let infinitive = Self.infinitive(named: target) {
+        guard let random = VerbDraw.randomVerb(myVerbs: Current.learnerVerbs.myVerbs) else { return false }
+        open(verb: random.infinitive, source: source)
+      } else {
+        guard let infinitive = Self.infinitive(named: target) else { return false }
         open(verb: infinitive, source: source, marks: Self.marks(of: url, on: infinitive))
       }
     case URL.searchHost:
       // The search route alone takes no target; its text travels in `q`.
-      guard url.hasNoDeeplinkTarget else { return }
+      guard url.hasNoDeeplinkTarget else { return false }
       openSearch(text: url.deeplinkQueryValue(named: URL.searchTextQueryName) ?? "", source: source)
     case URL.infoHost:
-      guard let target = url.deeplinkTarget, let info = Info.info(deeplinkTarget: target) else { return }
+      guard let target = url.deeplinkTarget, let info = Info.info(deeplinkTarget: target) else { return false }
       selectedTab = .info
       pendingInfo = info
     case URL.listHost:
-      guard let target = url.deeplinkTarget, let collection = VerbCollection(key: target) else { return }
+      guard let target = url.deeplinkTarget, let collection = VerbCollection(key: target) else { return false }
       selectedTab = .models
       pendingCollection = CollectionRequest(collection: collection, source: source)
     case URL.quizHost:
@@ -165,8 +192,9 @@ final class AppRouter {
       }
       showGame = true
     default:
-      break
+      return false
     }
+    return true
   }
 
   /// Shows the Verbs tab's list with its search field. A nil `text` keeps what the field holds,

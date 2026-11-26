@@ -3,25 +3,19 @@
 //  Conjugar
 //
 //  The action behind the Quick Quiz control-center widget and the Start a Quiz App Shortcut
-//  (`ConjugarShortcuts`). Opens the app and stashes a deeplink the app drains on activation
-//  (control widgets can't navigate directly). Lives in Shared so the app can also resolve the
-//  intent's metadata.
+//  (`ConjugarShortcuts`). Opens the app on a quiz through `LinkStashingIntent`, since a control
+//  cannot navigate. Lives in Shared so the app can also resolve the intent's metadata.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
 import AppIntents
 import Foundation
 
-nonisolated struct OpenQuizIntent: AppIntent {
+nonisolated struct OpenQuizIntent: LinkStashingIntent {
   // Inline literal, not WidgetL: AppIntent metadata is extracted at compile time.
   static let title = LocalizedStringResource("Widget.intentOpenQuiz", defaultValue: "Open Quiz")
   static let openAppWhenRun = true
 
-  /// A literal, since `URL` builders are not in this target. `AppRouterTests` pins it.
-  static let pendingDeeplink = "conjugar://quiz/start"
-
-  func perform() async throws -> some IntentResult {
-    WidgetConstants.sharedDefaults?.set(Self.pendingDeeplink, forKey: WidgetConstants.pendingDeeplinkKey)
-    return .result()
-  }
+  /// `conjugar://quiz/start`, with no source, so that the quiz reports `deeplink`.
+  static let link = URL.deeplink(host: URL.quizHost, target: URL.quizStartTarget, queryItems: [])
 }

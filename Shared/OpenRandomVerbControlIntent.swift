@@ -11,16 +11,14 @@
 import AppIntents
 import Foundation
 
-nonisolated struct OpenRandomVerbControlIntent: AppIntent {
+nonisolated struct OpenRandomVerbControlIntent: LinkStashingIntent {
   static let title = LocalizedStringResource("Widget.intentOpenRandomVerb", defaultValue: "Open Random Verb")
   static let openAppWhenRun = true
   static let isDiscoverable = false
 
-  /// A literal, since `AnalyticsSource` is not in this target. `AppRouterTests` pins it to the vocabulary.
-  static let pendingDeeplink = "conjugar://verb/random?source=control"
-
-  func perform() async throws -> some IntentResult {
-    WidgetConstants.sharedDefaults?.set(Self.pendingDeeplink, forKey: WidgetConstants.pendingDeeplinkKey)
-    return .result()
-  }
+  /// `conjugar://verb/random?source=control`. The source is a literal, since `AnalyticsSource` is
+  /// not in this target; `AppRouterTests` pins it to the vocabulary.
+  static let link = URL.deeplink(host: URL.verbHost, target: URL.randomVerbTarget, queryItems: [
+    URLQueryItem(name: URL.sourceQueryName, value: "control")
+  ])
 }

@@ -15,10 +15,10 @@ import UIKit
 
 struct GameView: View {
   /// Passed in explicitly (cover content does not inherit a custom `.environment`
-  /// router — the OnboardingView lesson) so the `conjugar://game/boss` deeplink's
-  /// `pendingBossEntry` can be consumed after configure. The Settings-tab Play
-  /// button presents `GameView()` with no router; that path never starts at the boss.
-  var router: AppRouter?
+  /// router, the OnboardingView lesson) so the `conjugar://game/boss` deeplink's
+  /// `pendingBossEntry` can be consumed after configure. `MainTabView`'s cover is the game's
+  /// only presenter.
+  let router: AppRouter
 
   @Environment(\.dismiss) private var dismiss
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -240,11 +240,11 @@ struct GameView: View {
         // The conjugar://game/boss deeplink: consume the one-shot flag after
         // configure and jump straight to the boss intro. `conjugar://game/end`
         // jumps all the way to the end scene.
-        if router?.pendingBossEntry == true {
-          router?.pendingBossEntry = false
+        if router.pendingBossEntry {
+          router.pendingBossEntry = false
           gameState.enterBossIntro()
-        } else if router?.pendingEndScene == true {
-          router?.pendingEndScene = false
+        } else if router.pendingEndScene {
+          router.pendingEndScene = false
           gameState.debugJumpToEndScene()
         }
       }

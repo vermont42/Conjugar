@@ -12,14 +12,12 @@ import TipKit
 struct SettingsView: View {
   static let englishTitle = "Settings"
 
-  // Passed in from `MainTabView` so it can be handed to the onboarding cover, whose
-  // content can't reliably read `@Environment(AppRouter.self)` (see `OnboardingView`).
+  // Passed in from `MainTabView`, whose covers Play and Show Onboarding present, so that a link
+  // that arrives during the game can close it.
   let router: AppRouter
   @Bindable private var settings = Current.settings
   @State private var isSignedInToGameCenter = false
   @State private var rateReviewDescription = ""
-  @State private var showingGame = false
-  @State private var showingOnboarding = false
   @State private var showingResetPractice = false
   /// Notifications are not allowed, so the daily reminder cannot appear.
   @State private var areRemindersDenied = false
@@ -49,10 +47,6 @@ struct SettingsView: View {
       }
       .frame(maxWidth: .infinity)
       .background(Color.customBackground.ignoresSafeArea())
-      .fullScreenCover(isPresented: $showingGame) { GameView() }
-      .fullScreenCover(isPresented: $showingOnboarding, onDismiss: router.launchGameAfterOnboardingIfRequested) {
-        OnboardingView(router: router, isReshow: true, requestGame: router.requestGameAfterOnboarding)
-      }
       .navigationTitle(L.Settings.localizedTitle)
       .onAppear {
         isOnScreen = true
@@ -427,7 +421,7 @@ struct SettingsView: View {
       ) {
         Button(L.Game.play) {
           Current.analytics.signal(name: .tapPlayGame)
-          showingGame = true
+          router.showGame = true
         }
           .buttonStyle(TintedCapsuleButtonStyle(tint: .customYellow))
       }
@@ -444,7 +438,7 @@ struct SettingsView: View {
       ) {
         Button(L.Onboarding.showOnboarding) {
           Current.analytics.signal(name: .tapShowOnboarding)
-          showingOnboarding = true
+          router.reshowOnboarding()
         }
           .buttonStyle(TintedCapsuleButtonStyle(tint: .customGreen))
       }

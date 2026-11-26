@@ -292,16 +292,20 @@ store no longer migrates over one.*
   becomes active (`MainTabView.swift:85-93`). A shortcut run while Conjugar is frontmost leaves
   the link there, and the next return to the app, whenever it comes, opens a random verb or starts
   a quiz nobody asked for. Phase 11 notes the wait as untried, not the late surprise. I confirmed
-  that a cold launch does drain a stashed link.
+  that a cold launch does drain a stashed link. *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`: the stash carries
+  the time it was written and is announced by a Darwin notification, which an app in front drains
+  at once; one more than a minute old is removed unopened.*
 - **An ignored link still dismisses an open practice set (Read).** `handle(url:)` clears
   `pendingPracticeSet` before it knows that the route resolves (`AppRouter.swift:118`), so
-  `conjugar://verb/xyzzyq` closes the sheet and opens nothing.
+  `conjugar://verb/xyzzyq` closes the sheet and opens nothing. *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`: only a
+  link that resolves clears it.*
 - **A link opens its page beneath the game (Read).** `handle(url:)` never clears `showGame`, so a
   widget tap during the game pushes the verb out of sight and sends `viewVerbView`. See
   [Q7](#open-questions). Settings' Play button and its tour reshow present from local state
   (`SettingsView.swift:21-22`, `:52-53`), which the router cannot see at all, so
   `presentablePracticeSet`'s guard does not cover the game that Settings opens (Reviewer; the
-  local state is Read).
+  local state is Read). *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`: a link that resolves, other than `game`, closes
+  the game, and Settings' Play and Show Onboarding present through the router's covers.*
 - **The linger's task is never cancelled (Read).** Lose focus, regain it, and lose it again within
   700 ms, and the first task ends the linger early (`VerbBrowseView.swift:128-144`). The iPad's
   letter-key path makes exactly that sequence.
@@ -326,7 +330,8 @@ store no longer migrates over one.*
   `master`, 2026-11-25, in Phase 1 of `plans/verb_browse_fixes.md`.*
 - **Links are case-sensitive (Reviewer, who ran Foundation).** iOS matches a scheme without
   regard to case, so `CONJUGAR://VERB/hablar` opens the app, which then ignores it. Every builder
-  writes lowercase, so this matters only for a link written by hand.
+  writes lowercase, so this matters only for a link written by hand. *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`: the
+  scheme and the route ignore case; a target does not.*
 - **The "All N" chip counts roots, not verbs (Reviewer).** `RelatedVerbsView.swift:99` tests the
   number of chips against 6, so a model of twelve verbs over four roots shows no "All 12".
   *Fixed on `master`, 2026-11-25, in Phase 5 of `plans/verb_browse_fixes.md`: `RelatedVerbs.modelHasMore` compares the model's other verbs with the chips
@@ -380,6 +385,8 @@ when the warm-up completes. Or move matching off the main actor and publish the 
   `Task { await VerbSpotlight.indexVerbs() }` (`MainTabView.swift:70`) inherits the launch task's
   priority, so about two seconds of building entries competes with launch. Nothing removes the
   entry of a verb that leaves the map. A version stamp would skip the work on most launches.
+  *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`: background priority, a stamp of the version, build, and verb count that
+  skips a launch of the same build, and removal by identifier of the verbs the map lost.*
 - **Work repeated per render or per call (Reviewer, except where noted).**
   - `LearnerVerbStore.recentVerbs` sorts the record on every access, and the Verbs tab's body
     reads it about eight times.
@@ -452,16 +459,19 @@ Josh's decision.*
   left for a drawer. I did not look at it on the iPad. See [Q8](#open-questions).
 - **G7. Stale prose (Reviewer unless noted).**
   - `docs/feature_architecture.md:1800`: a collection's quiz is "thirty unranked questions". It
-    is ten, with Ten More.
+    is ten, with Ten More. *Fixed on `master`, 2026-11-26, in Phase 6 of
+    `plans/verb_browse_fixes.md`.*
   - `docs/feature_architecture.md:432`: the `quiz` route's query items are "None"; the router
     reads `source`. Line 458 omits three of the router's pending values, and line 614 says the
-    push waits "when the search is ending" ([S2](#smells) says when it really waits).
+    push waits "when the search is ending" ([S2](#smells) says when it really waits). *The
+    first two fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`; the
+    third is S2's, in Phase 9.*
   - `VerbBrowseView.swift:788`: "about a second" (Run; see [F1](#f1)).
   - `AppRouter.swift:5-8`: the header names four ways in and omits Spotlight, Look Up a Verb,
-    reminders, and shared links (Read).
+    reminders, and shared links (Read). *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`.*
   - `MainTabView.swift:117`: the doc comment about the onboarding cover sits on
     `widgetChallengeContext` (Read). Line 141 says only controls stash a link; two shortcuts do
-    too.
+    too. *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`.*
   - `Analytics.swift:141`: `control` is documented as the Random Verb control only. *Fixed on `master`, 2026-11-25, in Phase 2 of `plans/verb_browse_fixes.md`:
     it names both controls that send it, and says the Quick Quiz control sends `deeplink`.*
   - `ViewControllerTransitions.swift:10-13` and `docs/project_structure.md:259` describe only the
@@ -541,7 +551,10 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   while `DisplayTense.isCommand` sits in `GapSentence.swift:251`.
 - **The four `Shared/` intents have one `perform()` body**, and `"conjugar://"` is written out in
   seven places besides `URL.deeplinkScheme` (Read). A small protocol with a default `perform()`,
-  and `WidgetDeeplink` moved to `Shared/` where a test can pin it, would remove both.
+  and `WidgetDeeplink` moved to `Shared/` where a test can pin it, would remove both. *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`:
+    `LinkStashingIntent` gives the four one `perform()`, and they and `WidgetDeeplink`, now in
+    `Shared/`, build from the grammar's constants in `Shared/DeeplinkGrammar.swift`. Seven
+    `"conjugar://` literals in code before, none after.*
 
 <a id="smells"></a>
 ## Smells
@@ -641,7 +654,8 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   - A visit's begin and end across `scenePhase` and a sheet ([G3](#gaps-between-the-docs-and-the-code)).
   - Everything in `VerbBrowseView` but one static function ([S1](#smells)).
   - The widget's link literals: nothing in `ConjugarTests` names `WidgetDeeplink`, so a typo in
-    `source=widget` would quietly report `deeplink` (Read).
+    `source=widget` would quietly report `deeplink` (Read). *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`: `AppRouterTests`
+    pins each of the widgets' links whole and routes it.*
   - `editDistance(_:_:limit:)` against the unlimited version.
   - `ModelView.gridPersons(for:)`.
 - **T3. Tests that share state or depend on the clock (Reviewer).**
@@ -732,6 +746,10 @@ Read after the review above was complete. IDs are those of
   better and has its own question ([F2](#f2-smaller-performance-findings)).
 - **F2: Look Up a Verb builds the index on the main actor.** `LookUpVerbIntent` is `@concurrent`
   here. `VerbEntityQuery.entities(matching:)` is not, which a reviewer flagged as a suspicion.
+  *Checked on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`, and not real as App
+  Intents calls it: a query of the same shape, called through `EntityStringQuery`, ran off the main
+  thread, though called directly from the main actor it ran on it. The query's methods are now
+  `@concurrent` all the same, so that a direct caller cannot stall either.*
 - **G7: the stale figures.** Conjugar's own comments have different stale prose
   ([G7](#gaps-between-the-docs-and-the-code)). The tool's comment about the script sandbox is
   conditional here ("if enabled") and still true.

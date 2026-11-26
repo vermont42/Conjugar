@@ -45,11 +45,15 @@ material for the release notes in `docs/release_notes.txt`.
    Conjugar", say "tuve", and check that it speaks "tuve: Pretérito (yo) of tener" before opening
    tener's page with tuve marked; then "fue", which should name ser and ir and open the search.
    Run Start a Quiz and Random Verb from the Shortcuts app with Conjugar closed, and by Siri with
-   Conjugar open in front (that case was not tried; their link waits for the app to become active,
-   which it already is). In
+   Conjugar open in front: since 2026-11-26 the intent announces its link and an app in front
+   opens it at once (`PendingDeeplink`), so neither should wait for the next time the app becomes
+   active. In
    Spotlight, search "aprendimos", "learn", and "tuve": if they find aprender, aprender, and
    tener, the keywords work; if only "aprender" does, record it in `docs/feature_architecture.md`
-   § Spotlight. On a Spanish-language device, check that the word prompt reads "¿Qué palabra debe
+   § Spotlight. Spotlight is now indexed only when the build or the verb count changes: install
+   the release build over the previous one and check that "aprender" finds the verb after the first
+   launch, then that a second launch leaves it there. After installing from a backup restore, if
+   the chance comes, check the same. On a Spanish-language device, check that the word prompt reads "¿Qué palabra debe
    consultar Conjugar?" (the simulator showed it in English after a language switch). With Test
    Mode on, a lookup that opens a page should send `viewVerbView` with `source` `lookup`, and a
    Spotlight tap `source` `spotlight`.

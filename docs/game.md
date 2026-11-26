@@ -12,7 +12,9 @@ Code: `Conjugar/Views/GameView.swift` (the whole UI) and `Conjugar/Models/Game/`
 ## Running the game in the simulator
 
 `conjugar://game` is the fast path: it presents `GameView` full-screen via `AppRouter.showGame`
-from `MainTabView` (tab-independent), so no Settings→scroll→Play dance.
+from `MainTabView` (tab-independent), so no Settings→scroll→Play dance. Settings' Play button and
+the tour's game preview set the same flag, and any other link that resolves clears it, closing the
+game.
 
 ```bash
 UDID=$(xcrun simctl list devices booted -j | python3 -c "import sys,json;print(json.load(sys.stdin)['devices'].popitem()[1][0]['udid'])")

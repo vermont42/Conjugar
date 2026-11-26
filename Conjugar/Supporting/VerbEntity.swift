@@ -45,22 +45,30 @@ nonisolated struct VerbEntity: AppEntity, IndexedEntity {
   }
 }
 
-/// Finds verbs for a parameter's picker, as the verb list's search finds them.
+/// Finds verbs for a parameter's picker, as the verb list's search finds them. The first call loads
+/// the verb map, and a search the conjugation index, which took 7.8 seconds cold in a Debug build in
+/// the simulator. Called through `EntityStringQuery`, as App Intents calls it, a method already runs
+/// off the main actor (measured 2026-11-26); called directly from it, a nonisolated async method
+/// would run there. Each is `@concurrent`, as `LookUpVerbIntent`'s lookup is, so that neither way
+/// waits on the main actor.
 nonisolated struct VerbEntityQuery: EntityStringQuery {
   static let matchLimit = 25
 
+  @concurrent
   func entities(for identifiers: [String]) async -> [VerbEntity] {
     identifiers.compactMap { VerbMap.shared.entry(for: $0).map { VerbEntity(entry: $0) } }
   }
 
   // Ranking happens before the limit, so that the verb asked for is not cut off behind 25
   // verbs that merely begin with it.
+  @concurrent
   func entities(matching string: String) async -> [VerbEntity] {
     VerbSearch.matches(for: string, in: VerbMap.shared.entries.values)
       .prefix(Self.matchLimit)
       .map { VerbEntity(entry: $0.entry) }
   }
 
+  @concurrent
   func suggestedEntities() async -> [VerbEntity] {
     VerbMap.shared.entries.values
       .sorted { $0.frequencyRank < $1.frequencyRank }

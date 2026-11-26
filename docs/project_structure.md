@@ -211,7 +211,7 @@ Conjugar/
 │   ├── QuickAction.swift       # The Find a Verb Home Screen quick action (conjugar://search?source=quickAction) and QuickActionSceneDelegate, which receives it
 │   ├── VerbEntity.swift        # A verb as App Intents and Spotlight see it (AppEntity + IndexedEntity) and its string query
 │   └── VerbSpotlight.swift     # One Spotlight entry per verb in the named index "verbs": forms and glosses as keywords,
-│                               #   key conjugations as the description; indexed at each launch
+│                               #   key conjugations as the description; indexed when the build or the verb count changes
 ├── Utils/
 │   ├── BrowseSearch.swift      # The pure filter the Models tab searches through (the Verbs tab ranks with VerbSearch)
 │   ├── Colors.swift            # Semantic palette bridging the colorsets to UIKit-facing call sites
@@ -319,7 +319,6 @@ ConjugarWidget/
 ├── RandomVerbControl.swift     # Control Center / Lock Screen control that opens a random verb
 ├── SnapshotReader.swift        # Decodes the App-Group week (WidgetWeek); supplies the gallery placeholder
 ├── VerbOfTheDayWidget.swift    # "Verb of the Day" StaticConfiguration: a timeline entry per day of the week, each from its midnight
-├── WidgetDeeplink.swift        # Builds the conjugar:// URLs the widgets attach via .widgetURL(_:); verb links carry ?source=widget
 └── Views/
     ├── AccessoryWidgetView.swift    # Lock Screen accessory presentations
     ├── LargeWidgetView.swift        # systemLarge: header, non-finite forms, presente paradigm, example, etymology
@@ -338,16 +337,20 @@ ConjugationMapTool/             # macOS command-line target, built for the host 
 
 Shared/                         # Compiled into both the app and the widget extension
 ├── CalendarDay.swift           # A day as yyyy-MM-dd in the Gregorian calendar and the current time zone: the challenge's, the widgets' days
-├── OpenQuizIntent.swift        # Opens the app and stashes a deeplink the app drains on activation
+├── DeeplinkGrammar.swift       # The conjugar:// grammar's routes, targets, and query names, isDeeplink, deeplinkRoute, and the raw builder
+├── LinkStashingIntent.swift    # The one perform() of the intents that open the app on a link: stash it and announce it
+├── OpenQuizIntent.swift        # A LinkStashingIntent: the Quick Quiz control and the Start a Quiz shortcut (conjugar://quiz/start)
 ├── OpenRandomVerbIntent.swift  # Same, for a random verb, as Shortcuts and Siri run it (source=shortcut)
 ├── OpenRandomVerbControlIntent.swift  # The Random Verb control's own hidden copy of it (source=control)
 ├── OpenVerbSearchIntent.swift  # The Find a Verb control's hidden intent: stashes conjugar://search?source=control
+├── PendingDeeplink.swift       # The dated stash in the App Group's defaults, its Darwin-notification announcement, and its one-minute expiry
 ├── QuizActivityAttributes.swift  # The ActivityKit contract shared by LiveActivitiesReal and QuizLiveActivity
 ├── LearnerVerbs.swift          # The learner's record: verbs opened (dates, count) and starred, as JSON in the App Group (the widget reads the snapshot, not this)
 ├── PracticeRecord.swift        # The practice record: PracticeItem (a key conjugation or a pattern, with permanent string keys) and each item's
 │                               #   schedule, last answer, and last lookup, as JSON in the App Group; never sent
 ├── ReviewSchedule.swift        # The practice record's Leitner ladder (1, 3, 7, 14, 30 days): a box and a due date, moved by answers, lookups, and the review card
 ├── WidgetConstants.swift       # App Group id, snapshot filename, and the shared-defaults keys
+├── WidgetDeeplink.swift        # The links the widgets and the Live Activity attach via .widgetURL(_:); here so that AppRouterTests can route them
 ├── WidgetL.swift               # Widget-target localization accessors mirroring L, with English defaultValues
 └── WidgetSnapshot.swift        # The Codable payload the app precomputes and the widget renders: WidgetSnapshot (one day) and
                                 #   WidgetWeek (seven days, the first at the top level, with the app's My Verbs bookkeeping)
@@ -368,7 +371,9 @@ ConjugarTests/
 │   ├── ReverseLookupTests.swift        # A form finds its verb: shared forms, accents, enclitics, compounds, vos, participle endings,
 │   │                                   #   the row's names, the guess from a form, every example's token through search
 │   ├── VerbLookupTests.swift           # Look Up a Verb: each kind of answer and its wording, page or search, a lookup link's marks
-│   ├── VerbSpotlightTests.swift        # Spotlight entries: gloss phrases, forms as keywords, key conjugations, the activity identifier
+│   ├── VerbSpotlightTests.swift        # Spotlight entries: gloss phrases, forms as keywords, key conjugations, the activity identifier,
+│   │                                   #   and the version stamp that skips or re-indexes
+│   ├── PendingDeeplinkTests.swift      # The intents' stash: drained once, good for a minute, an undated one dropped
 │   ├── VerbMapRankingTests.swift       # Rank derivation on a fixture, the shipped map's invariants, and
 │   │                                   #   line-for-line agreement with docs/frequencies.txt
 │   ├── TenseBridgeTests.swift          # DisplayTense/DisplayPersonNumber → engine mapping, compounds, negative imperative
@@ -466,7 +471,7 @@ ConjugarTests/
 │   ├── SoundPlayerTests.swift          # The audio DI seam: the test world must get SoundPlayerDummy
 │   └── URLExtensionTests.swift         # mailto encoding of a learner's query
 └── Views/
-    ├── AppRouterTests.swift            # Deeplink routing: the grammar's routes and round trips (search, verb with match, info, the reserved list), the intents' literal links, the quick action, and the one-shot game/boss and game/end flags
+    ├── AppRouterTests.swift            # Deeplink routing: the grammar's routes and round trips (search, verb with match, info, the reserved list), the intents' and the widgets' links, an ignored link, a link during the game, case, the tour's reshow, the quick action, and the one-shot game/boss and game/end flags
     ├── ConjugationTextTests.swift      # The shared conjugation renderer
     ├── EtymologyTextTests.swift        # The etymology markup renderer
     ├── InfoTests.swift                 # The rich-text parser, the Info model, and every article link in en and es

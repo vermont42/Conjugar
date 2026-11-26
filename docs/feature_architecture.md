@@ -441,17 +441,21 @@ conjugar://<route>[/<target>][?<item>=<value>&…]
   `URL.searchDeeplink(text:source:)`, `URL.infoDeeplink(stableKey:)`, and
   `URL.listDeeplink(key:source:)`, `URL.dailySessionDeeplink(source:)`, and
   `URL.challengeDeeplink(_:source:)`
-  (`Utils/URLExtension.swift`), which percent-encode. Only the
-  widget extension (`WidgetDeeplink`) and `Shared/`'s intents, which cannot see `AnalyticsSource`,
-  write literals; each intent keeps its literal in a `pendingDeeplink` constant, and
-  `AppRouterTests` pins it to the routes and the vocabulary.
+  (`Utils/URLExtension.swift`), which percent-encode. The grammar's constants and the raw builder
+  they all call, `URL.deeplink(host:target:queryItems:)`, are in `Shared/DeeplinkGrammar.swift`,
+  where the widget extension sees them too. `WidgetDeeplink` (`Shared/`) and the intents in
+  `Shared/` build from them, and write only their `source` as a literal, since they cannot see
+  `AnalyticsSource`; `AppRouterTests` pins each link whole and routes it to its source.
+- **Case.** The scheme and the route are compared without regard to case, since iOS opens the app
+  for `CONJUGAR://` too: `CONJUGAR://VERB/hablar` opens hablar. A target keeps its case, so
+  `verb/HABLAR` opens nothing. A `+` in `q` stays a plus sign.
 
 | Route | Target | Query items | Opens |
 |---|---|---|---|
 | `verb` | An infinitive, bare or with "se" (`arrepentirse` opens arrepentir), or `random` (drawn by `VerbDraw`; see [The Verb of the Day and Random Verbs](#the-verb-of-the-day-and-random-verbs)) | `source`; `match`, a form the page marks as it marks a search's match (`verb/ir?match=fue`); `cells`, the cells to mark by `ConjugationCell.code`, comma-separated, in place of every cell `match` is (`verb/levantar?match=levanta&cells=ioss`) | The Verbs tab's verb page, scrolled to the first marked card |
 | `search` | None | `q`, the text; `source` | The Verbs tab's list with its search field. With text, the results show with the keyboard down; with none, or `q` empty, the field is cleared and focused for typing |
 | `info` | A `stableKey`, or a position in `Info.infos` | None | The Info tab, with the article pushed |
-| `quiz` | Any but `set`, `daily`, and `challenge`, or none (`quiz/start` by convention) | None | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals |
+| `quiz` | Any but `set`, `daily`, and `challenge`, or none (`quiz/start` by convention) | `source` | The Quiz tab, starting a quiz over every verb at once, as the Quick Quiz control and the quiz widget expect. The link's `source` (or `deeplink`) goes to the quiz signals |
 | `quiz` | `set` | A custom quiz's stored form (`tenses`, and `verbs` or `infinitives`); `level`, while a part is left to it; `source`, `sharedLink` or `qrCode` | A practice set in a sheet over whatever tab is open, with Start (see [Practice sets](#practice-sets)). A link that names nothing this version knows shows "Practice Set Not Found" |
 | `quiz` | `daily` | `source`; the reminder sends `reminder` | The Quiz tab, starting a daily session unless a quiz is under way. Results on screen give way to it (see [Daily Session and Streak](#daily-session-and-streak)) |
 | `quiz` | `challenge` | `date` (`yyyy-MM-dd`), `level`, `region` (`spain` or `latinAmerica`), `source`; shared text sends `challengeLink`, the quiz widget `challengeWidget` with no key | The Quiz tab, starting that day's challenge unless a quiz is under way. A part left out or not understood is the learner's own: today, their level, their region. A challenge already taken opens the hub, which shows today's result (see [Daily Challenge](#daily-challenge)) |
@@ -476,19 +480,25 @@ reordered, so app code always builds the key (`Info.info(deeplinkTarget:)`). The
 cross-references go by heading inside `InfoView`, since they never leave it.
 
 **A link replaces what another left pending:** a verb link clears a pending search and a search
-link a pending verb, so the last link wins on a cold launch. Any link but a practice set's clears a
-pending practice set, whose sheet would otherwise hide what the link opened.
+link a pending verb, so the last link wins on a cold launch. Any link that resolves, but a practice
+set's, clears a pending practice set, whose sheet would otherwise hide what the link opened. Any
+link that resolves, but a `game` link, closes the game, so that its page does not open beneath the
+game. A link that resolves to nothing (`verb/xyzzyq`, an unknown route) changes nothing: the
+practice set and the game stay. Sheets that views own, Test Me and an article, are left alone.
 
 ### Architecture
 
 | File | Purpose |
 |------|---------|
 | `Utils/URLExtension.swift` | The grammar's constants (routes, query-item names), `isDeeplink`, `deeplinkTarget`, `deeplinkQueryValue(named:)`, `analyticsSource`, and the builders |
-| `Views/AppRouter.swift` | `handle(url:)` parses a link and sets the tab and a one-shot request: `pendingVerb` (with its marks), `pendingSearch` (a `SearchRequest`: text and source), `pendingInfo`, `pendingQuizStart`, `pendingPracticeSet` (a `PracticeSetRequest`), or the game's flags. `openSearch(text:source:)` is the search route's effect, which Command-F, the control, and the quick action share. `AppRouter.shared` is the one instance, so that the quick action's scene delegate can reach it |
+| `Shared/DeeplinkGrammar.swift` | The routes, the targets, the query-item names, `isDeeplink`, `deeplinkRoute` (the host, lowercased), and the raw builder, shared with the widget extension |
+| `Shared/WidgetDeeplink.swift` | The widgets' and the Live Activity's links: `verb(_:)` with `source=widget`, `quizStart`, and `challenge` with `source=challengeWidget` |
+| `Shared/LinkStashingIntent.swift`, `Shared/PendingDeeplink.swift` | The intents' one `perform()`, and the dated stash it writes and announces (below) |
+| `Views/AppRouter.swift` | `handle(url:)` parses a link and sets the tab and a one-shot request: `pendingVerb` (with its marks), `pendingSearch` (a `SearchRequest`: text and source), `pendingInfo`, `pendingCollection` (a `CollectionRequest`), `pendingQuizStart`, `pendingDailySession`, `pendingChallenge` (a `DailyChallengeRequest`), `pendingPracticeSet` (a `PracticeSetRequest`), or the game's flags. It also owns the game's and the tour's covers (`showGame`, `showOnboarding`, and `reshowOnboarding()` for Settings), so that a link can close the game whoever opened it. `openSearch(text:source:)` is the search route's effect, which Command-F, the control, and the quick action share. `AppRouter.shared` is the one instance, so that the quick action's scene delegate can reach it |
 | `Views/VerbBrowseView.swift` | Consumes `pendingVerb` and `pendingSearch` with `onChange(initial: true)`, since a link can arrive before the tab first appears. A search request pops to the list first, waiting out the pop before it focuses |
 | `Views/InfoBrowseView.swift` | Consumes `pendingInfo` the same way |
 | `Views/ModelBrowseView.swift` | Consumes `pendingCollection` (a `CollectionRequest`: collection and source) the same way, pushing it onto the Models tab's stack |
-| `Views/MainTabView.swift` | Receives URLs via `.onOpenURL`, and drains a control's pending link from the shared defaults when the scene becomes active. Shows a practice set's sheet through `AppRouter.presentablePracticeSet`, which holds the set back while the onboarding tour or the game covers the tabs |
+| `Views/MainTabView.swift` | Receives URLs via `.onOpenURL`, and drains a stashed link when the scene becomes active and when an intent announces one. Presents the game and the tour, and shows a practice set's sheet through `AppRouter.presentablePracticeSet`, which holds the set back while the onboarding tour or the game covers the tabs |
 | `Supporting/QuickAction.swift` | The Home Screen quick action and the scene delegate that receives it (below) |
 
 ### Examples
@@ -515,9 +525,8 @@ Three controls, in `ConjugarWidget/`: **Quick Quiz** (`QuickQuizControl`), **Ran
 (`RandomVerbControl`), and **Find a Verb** (`FindVerbControl`), which opens the verb search empty
 and focused. Each runs an intent from `Shared/` (`OpenQuizIntent`, `OpenRandomVerbControlIntent`,
 `OpenVerbSearchIntent`), compiled into both the app and the extension, with
-`openAppWhenRun = true`. A control cannot navigate, so its intent writes its `pendingDeeplink` to
-the App Group's defaults (`WidgetConstants.pendingDeeplinkKey`) and `MainTabView` routes it when the
-scene becomes active. `OpenVerbSearchIntent` is hidden from Shortcuts (`isDiscoverable = false`),
+`openAppWhenRun = true`. A control cannot navigate, so its intent is a `LinkStashingIntent`, whose
+one `perform()` stashes its `link` (below). `OpenVerbSearchIntent` is hidden from Shortcuts (`isDiscoverable = false`),
 because the Look Up a Verb shortcut covers this. Its title, "Find a Verb" / "Buscar un verbo", is
 Command-F's, under the widget catalog's own keys (`Widget.findVerbName`, `Widget.intentFindVerb`,
 also in the app's catalog for the intent's metadata).
@@ -549,9 +558,17 @@ its short titles are localized.
 | Start a Quiz / Empezar un test | `OpenQuizIntent` (`Shared/`) | "Start a quiz with Conjugar", "Quiz me with Conjugar" | The Quiz tab, a quiz started (`conjugar://quiz/start`) |
 | Random Verb / Verbo aleatorio | `OpenRandomVerbIntent` (`Shared/`) | "Show a random verb with Conjugar", "Random verb with Conjugar" | A random verb's page (`source=shortcut`) |
 
-The two intents in `Shared/` stash their link in the App Group's defaults, as the controls do, and
-`MainTabView` routes it when the scene becomes active. A shortcut run while Conjugar is already in
-front would wait for the next activation (untried).
+The two intents in `Shared/` stash their link, as the controls do.
+
+**The stash.** `PendingDeeplink` (`Shared/PendingDeeplink.swift`) writes the link and the time it
+was written under `WidgetConstants.pendingDeeplinkKey` in the App Group's defaults, and posts a Darwin
+notification, which reaches every process. `MainTabView` drains the stash when the scene becomes
+active and when the notification arrives, so a shortcut run while Conjugar is already in front, as
+from Slide Over on iPad, opens at once. Whichever drain comes first routes the link, and the other
+finds nothing. A stash more than a minute old (`PendingDeeplink.lifetime`) is removed unopened, as is
+one without a date, which builds before 2026-11-26 wrote: a link the app missed must not open,
+days later, a random verb or a quiz nobody asked for. The intent may run in the app's own process
+or the extension's; the notification serves both, so neither routes directly.
 
 ### Look Up a Verb
 
@@ -589,9 +606,18 @@ whose accessors are `nonisolated`.
 ### Spotlight
 
 `Supporting/VerbSpotlight.swift` indexes one `VerbEntity` (`Supporting/VerbEntity.swift`, an
-`AppEntity` and `IndexedEntity`) per verb into the named index `verbs`, at every launch, from
-`MainTabView`'s `.task`, off the main actor. Building the entries takes about two seconds and the
-indexing call about twenty in a Debug build on an Intel Mac.
+`AppEntity` and `IndexedEntity`) per verb into the named index `verbs`, from `MainTabView`'s
+`.task`, off the main actor and at background priority. Building the entries takes about two seconds
+and the indexing call about twenty in a Debug build on an Intel Mac, so a launch skips both when
+nothing has changed: a stamp of the app's version, its build, and the verb count
+(`VerbSpotlight.stamp(verbCount:)`) is kept with the indexed infinitives in
+`Caches/spotlight_index.json`, written only once the index has taken the entries. When the stamp
+matches the last run's, the launch does nothing. When it differs, the entries of verbs the map no
+longer has are removed by identifier (`deleteAppEntities(identifiedBy:ofType:)`) and every verb is
+indexed again (`VerbSpotlight.plan(last:stamp:infinitives:)`). Caches is left out of a backup, so an
+app restored to a new device, whose index starts empty, indexes at its first launch; a purged
+record costs only one run. A development build keeps its version and build, so a change to the
+entries reaches the simulator's Spotlight only after the app is deleted.
 
 | Field | Holds |
 |---|---|
@@ -606,10 +632,14 @@ but "aprendimos", "learn", and "tuve" find nothing from Conjugar. `docs/release.
 device check. A tap arrives as a `CSSearchableItemActionType` activity, which `MainTabView` routes
 as `verb/<infinitive>?source=spotlight`; `VerbSpotlight.infinitive(fromActivityIdentifier:)` reads
 the identifier bare or as "VerbEntity/<id>". `VerbEntityQuery` ranks a parameter picker's matches
-with `VerbSearch` before cutting at 25; no shortcut takes a `VerbEntity` yet.
+with `VerbSearch` before cutting at 25; no shortcut takes a `VerbEntity` yet. Its methods are
+`@concurrent`, as `LookUpVerbIntent`'s lookup is. Called through the protocol, as App Intents calls
+them, they ran off the main actor even without it (measured 2026-11-26); called directly from the
+main actor, a nonisolated async method runs there, and the first loads the map and the conjugation
+index, 7.8 seconds cold in a Debug build in the simulator.
 
 **For a future change:** deleting app entities by type empties every index of the app, the named
-one included, so delete before indexing, never after.
+one included, so delete by identifier, or by type only before indexing, never after.
 
 ## The Learner's Record
 
@@ -1868,7 +1898,7 @@ rows gain the check; a verb opened there still reports `model`.
 **The bar** (`VerbCollectionBar`): "3 of 70 looked up", Quiz, Share, and a progress bar. Progress
 counts verbs ever opened, by their first open (`LearnerVerbStore.openedCount(of:)`); a star alone
 does not count. Clear and a swipe in My Verbs leave it, and Reset Practice in Settings forgets it. Quiz opens `QuizSheet` with
-`QuizScope.collection(_:title:)`: thirty unranked questions over the collection's verbs in the
+`QuizScope.collection(_:title:)`: ten unranked questions (`QuizScope.roundLength`), with Ten More, over the collection's verbs in the
 level's tenses, titled with the collection's name ("-go Verbs", "Verbs Like tener"). Share
 sends the title, the count, the six most frequent verbs, the `list` link with `source=sharedLink`,
 and the App Store link; on iPad the sheet anchors to the button's own frame

@@ -12497,3 +12497,58 @@ starring, on opening from recents or My Verbs, or on coming back. That one is re
 Two small lessons from the tests. Swift Testing's `#expect` cannot take a mutating call, so every
 assertion about the tracker binds the result first. And a test run whose output went through
 `head` lost exactly the line it was run to print; the raw `build.log` still had it.
+
+## Links That Arrive at the Wrong Moment (2026-11-26)
+
+Phase 6 of the verb browse fixes was about links, and about the moments when a link arrives and
+the app is not where the link assumes. Every way into Conjugar becomes a `conjugar://` link and
+goes through `AppRouter.handle(url:)`, and the review had found four ways that went wrong.
+
+The worst was the stashed link. The Control Center controls and two shortcuts cannot navigate, so
+they write their link into the App Group's defaults and the app routes it when it next becomes
+active. If Conjugar was already in front, as it can be beside Shortcuts on an iPad, nothing became
+active, and the link waited. The next time the learner came back, maybe days later, a random verb
+or a quiz opened that nobody had asked for. The fix has two halves. The stash now carries the time
+it was written, and one more than a minute old is thrown away unopened. And the intent announces
+its link with a Darwin notification, `notify_post`, which every process on the device can hear;
+the app listens through a small `AsyncStream` and drains the stash when the announcement comes.
+The plan had allowed a shortcut that runs inside the app's own process to route directly, but the
+notification reaches that process too, so there is one path wherever the intent happens to run.
+
+Trying that for real meant putting Shortcuts beside Conjugar on the iPad simulator, which runs
+iPadOS 26 in full-screen mode, and driving the window controls through AXe looked like a long
+detour. A shorter test proved the mechanism: write the dated stash through `cfprefsd` from
+another process, post the notification with `notifyutil`, and watch Conjugar, still in front, open
+a random verb at once. The real shortcut, run from the Shortcuts app, opened another.
+
+Two smaller fixes followed from the same thought. A link that resolves to nothing,
+`conjugar://verb/xyzzyq`, used to dismiss an open practice set on its way to doing nothing; now
+the router clears things only once it knows the link leads somewhere. And a link that arrived
+during the game opened its page underneath the game. Josh had decided that such a link closes the
+game, which needed the router to know about every game, including the one Settings' Play button
+presented from its own state. So Settings' Play and its tour now go through the router's covers,
+which also made the practice set's "wait while a cover is up" rule true of the Settings game for
+the first time.
+
+The four intents had four copies of one `perform()`, and seven `"conjugar://"` literals were
+scattered through the intents and the widget. The grammar's constants moved to `Shared/`, where
+the widget extension can see them, and a `LinkStashingIntent` protocol supplies the one
+`perform()`. Now nothing in the code writes the scheme by hand except the constant itself. Only the
+`source` values remain literals, since the analytics vocabulary lives in the app, and the tests
+pin each link whole.
+
+Spotlight had been re-indexing all 4,811 verbs at every launch. It now keeps a stamp (the version,
+the build, and the verb count) beside the list of infinitives it indexed, and skips the work when
+the stamp matches. The record lives in Caches on purpose: a backup leaves Caches out, so an app
+restored onto a new phone, whose Spotlight index starts empty, finds no record and indexes. The
+simulator check happened under an unusual load, with three projects' test suites running on the
+same Mac and a load average near 300. Building the entries at background priority took four and
+a half minutes, so the record appeared ten minutes after launch. The next launch skipped all of
+it, and Spotlight still found aprender.
+
+One suspicion turned out not to be real. The review wondered whether `VerbEntityQuery` loads the
+verb map on the main actor. A probe showed that, with this project's settings, a nonisolated async
+method called directly from the main actor runs there. Called through the `EntityStringQuery`
+protocol, the way App Intents calls it, the same method ran off the main actor. The methods are
+`@concurrent` now anyway, which costs nothing and stops any future direct caller from stalling the
+main actor.

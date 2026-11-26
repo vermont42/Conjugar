@@ -302,28 +302,160 @@ struct AppRouterTests {
     }
   }
 
-  // `Shared/` cannot see `AnalyticsSource`, so its intents spell their links as literals. These
-  // pin the literals to the routes and the vocabulary.
-  @Test func findAVerbControlOpensAnEmptySearch() {
+  // `Shared/` cannot see `AnalyticsSource`, so its intents and the widgets' links spell their
+  // sources as literals. These pin each link, and route it to its source.
+  @Test func findAVerbControlOpensAnEmptySearch() throws {
     let router = AppRouter()
-    router.handle(url: url(OpenVerbSearchIntent.pendingDeeplink))
+    let link = try #require(OpenVerbSearchIntent.link)
+    #expect(link.absoluteString == "conjugar://search?source=control")
+    router.handle(url: link)
     #expect(router.pendingSearch == SearchRequest(text: "", source: .control))
   }
 
   @Test(arguments: zip(
-    [OpenRandomVerbIntent.pendingDeeplink, OpenRandomVerbControlIntent.pendingDeeplink],
+    [OpenRandomVerbIntent.link, OpenRandomVerbControlIntent.link],
     [AnalyticsSource.shortcut, .control]
   ))
-  func randomVerbIntentsNameTheirSources(link: String, source: AnalyticsSource) {
+  func randomVerbIntentsNameTheirSources(link: URL?, source: AnalyticsSource) throws {
     let router = AppRouter()
-    router.handle(url: url(link))
+    let link = try #require(link)
+    #expect(link.absoluteString == "conjugar://verb/random?source=\(source.rawValue)")
+    router.handle(url: link)
     #expect(router.pendingVerb?.source == source)
   }
 
-  @Test func quickQuizControlStartsAQuiz() {
+  @Test func quickQuizControlStartsAQuiz() throws {
     let router = AppRouter()
-    router.handle(url: url(OpenQuizIntent.pendingDeeplink))
+    let link = try #require(OpenQuizIntent.link)
+    #expect(link.absoluteString == "conjugar://quiz/start")
+    router.handle(url: link)
     #expect(router.pendingQuizStart == .deeplink)
+  }
+
+  @Test(arguments: zip(["hablar", "arrepentirse", "huir", "oír"], ["hablar", "arrepentir", "huir", "oír"]))
+  func aWidgetsVerbLinkOpensItsPage(named: String, infinitive: String) throws {
+    let router = AppRouter()
+    router.handle(url: try #require(WidgetDeeplink.verb(named)))
+    #expect(router.pendingVerb == VerbDestination(infinitive: infinitive, source: .widget))
+  }
+
+  @Test func theWidgetsLinksArePinned() throws {
+    #expect(try #require(WidgetDeeplink.verb("oír")).absoluteString == "conjugar://verb/o%C3%ADr?source=widget")
+    #expect(try #require(WidgetDeeplink.quizStart).absoluteString == "conjugar://quiz/start")
+    #expect(try #require(WidgetDeeplink.challenge).absoluteString == "conjugar://quiz/challenge?source=challengeWidget")
+  }
+
+  @Test func theLiveActivitysLinkStartsAQuiz() throws {
+    let router = AppRouter()
+    router.handle(url: try #require(WidgetDeeplink.quizStart))
+    #expect(router.selectedTab == .quiz)
+    #expect(router.pendingQuizStart == .deeplink)
+  }
+
+  @Test func theQuizWidgetsLinkStartsTodaysChallenge() throws {
+    let router = AppRouter()
+    router.handle(url: try #require(WidgetDeeplink.challenge))
+    #expect(router.pendingChallenge?.source == .challengeWidget)
+    #expect(router.pendingChallenge?.day == nil)
+  }
+
+  // An ignored link changes nothing, and a link that resolves closes the game.
+  @Test(arguments: [
+    "conjugar://verb/xyzzyq",
+    "conjugar://verb",
+    "conjugar://search/fue",
+    "conjugar://info/xyzzyq",
+    "conjugar://list/xyzzyq",
+    "conjugar://nowhere/hablar",
+    "https://verb/hablar"
+  ])
+  func anIgnoredLinkLeavesAPracticeSetAndTheGame(link: String) {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://quiz/set?tenses=preterito"))
+    router.handle(url: url(link))
+    #expect(router.pendingPracticeSet?.practiceSet?.custom.tenses == [.pretérito])
+    router.pendingPracticeSet = nil
+    router.showGame = true
+    router.handle(url: url(link))
+    #expect(router.showGame)
+  }
+
+  @Test(arguments: [
+    "conjugar://verb/hablar?source=widget",
+    "conjugar://verb/random",
+    "conjugar://search?q=fue",
+    "conjugar://info/voseo",
+    "conjugar://list/goVerbs",
+    "conjugar://quiz/start",
+    "conjugar://quiz/daily?source=reminder",
+    "conjugar://quiz/challenge",
+    "conjugar://quiz/set?tenses=preterito"
+  ])
+  func aLinkThatResolvesClosesTheGame(link: String) {
+    let router = AppRouter()
+    router.showGame = true
+    router.handle(url: url(link))
+    #expect(!router.showGame)
+  }
+
+  @Test func aPracticeSetFromDuringTheGameShowsOnceTheGameCloses() {
+    let router = AppRouter()
+    router.showGame = true
+    router.handle(url: url("conjugar://quiz/set?tenses=preterito"))
+    #expect(router.presentablePracticeSet?.practiceSet?.custom.tenses == [.pretérito])
+  }
+
+  @Test func aGameLinkDuringTheGameKeepsIt() {
+    let router = AppRouter()
+    router.showGame = true
+    router.handle(url: url("conjugar://game"))
+    #expect(router.showGame)
+  }
+
+  // iOS opens the app for the scheme in any case. A verb's name keeps its case.
+  @Test func theSchemeAndTheRouteIgnoreCase() {
+    let router = AppRouter()
+    router.handle(url: url("CONJUGAR://VERB/hablar?source=widget"))
+    #expect(router.pendingVerb == VerbDestination(infinitive: "hablar", source: .widget))
+    router.handle(url: url("Conjugar://Search?q=fue"))
+    #expect(router.pendingSearch == SearchRequest(text: "fue", source: .deeplink))
+    router.handle(url: url("conjugar://QUIZ/set?tenses=preterito"))
+    #expect(router.pendingPracticeSet?.practiceSet?.custom.tenses == [.pretérito])
+  }
+
+  @Test func aVerbsNameKeepsItsCase() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://verb/HABLAR"))
+    #expect(router.pendingVerb == nil)
+  }
+
+  @Test func aPlusInASearchStaysAPlus() {
+    let router = AppRouter()
+    router.handle(url: url("conjugar://search?q=he+hablado"))
+    #expect(router.pendingSearch == SearchRequest(text: "he+hablado", source: .deeplink))
+  }
+
+  // Settings' Show Onboarding presents the tour through the router, as a reshow.
+  @Test func aReshowIsMarkedUntilTheTourCloses() {
+    let router = AppRouter()
+    router.reshowOnboarding()
+    #expect(router.showOnboarding)
+    #expect(router.isOnboardingReshow)
+    router.showOnboarding = false
+    router.onboardingDismissed()
+    #expect(!router.isOnboardingReshow)
+    #expect(!router.showGame)
+  }
+
+  @Test func theTourStillHandsOffToTheGame() {
+    let router = AppRouter()
+    router.reshowOnboarding()
+    router.requestGameAfterOnboarding()
+    #expect(router.presentablePracticeSet == nil)
+    router.showOnboarding = false
+    router.onboardingDismissed()
+    #expect(router.showGame)
+    #expect(!router.pendingGameAfterOnboarding)
   }
 
   @Test func findAVerbQuickActionOpensAnEmptySearch() {
