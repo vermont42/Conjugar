@@ -54,8 +54,8 @@ Conjugar/
 │   ├── VerbModel.swift         # One regular base root plus an ordered feature list; also the alternate-paradigm scheme
 │   ├── VerbMap.swift           # VerbMapEntry + the load-once @unchecked Sendable cache over verbModelMap.xml.
 │   │                           #   ranked(_:) derives the dense 1…4,811 frequency rank from the stored counts at parse time
-│   ├── VerbVisit.swift         # VerbDestination (infinitive + analytics source + search marks, what the tabs push) and VerbVisit (one
-│   │                           #   stretch of a verb page on screen: viewVerbView/leaveVerbView, deepest section, dwell)
+│   ├── VerbDestination.swift   # A verb page to push: infinitive, analytics source, and the cells to mark; every stack registers it in verbPageDestinations()
+│   ├── VerbVisit.swift         # VerbVisit: one stretch of a verb page on screen (viewVerbView/leaveVerbView, deepest section, dwell)
 │   ├── VerbVisitTracker.swift  # When a verb page's visits begin and end (screen, foreground, a sheet over the page) and
 │   │                           #   what they reach, the landing scroll to a marked form reaching nothing; VerbView sends its events
 │   ├── VerbPageForms.swift     # A verb page's forms: the header's three, ConjugationSection and ConjugationDisplayRow per tense,
@@ -174,10 +174,12 @@ Conjugar/
 │   ├── SecondSingularBrowse.swift  # Setting enum: which 2s form(s) the browse screens show
 │   ├── SecondSingularQuiz.swift    # Setting enum: which 2s form the quiz asks for
 │   ├── ReviewCardSuppression.swift # Setting enum: whether the verb list hides the review card (off / on)
-│   ├── VerbSort.swift          # Verb-list sort order (frequency / alphabetical) + the Spanish collation locale, and
-│   │                           #   VerbListMode, the picker's three segments (the two sorts and My Verbs)
+│   ├── ListSort.swift          # PickerOption (a SortPicker's choices) and ListSort (an order for a list's items, with sortedLists(of:), every order sorted once)
+│   ├── VerbSort.swift          # Verb-list sort order (frequency / alphabetical) + the Spanish collation locale
+│   ├── VerbListMode.swift      # The Verbs tab picker's three segments: the two sorts and My Verbs
 │   ├── LearnerVerbStore.swift  # Current.learnerVerbs: records opens and stars in LearnerVerbs and saves to the App Group
 │   ├── ModelSort.swift         # Model-list sort order (irregularity / alphabetical / class number)
+│   ├── ModelSearch.swift       # The Models tab's search: models by folded exemplar or class number, a space alone no search, the trombone only when the text changes
 │   ├── VerbType.swift          # verbModelMap `vt` marker: irregular / regular -ar / -er / -ir
 │   ├── AppIcon.swift           # Alternate app-icon enum (bull / dancer / matador / classic) + preview asset names
 │   ├── ConjugarTips.swift      # TipKit tips (try the quiz, explore models, choose a level, enable Game Center; on the
@@ -213,7 +215,6 @@ Conjugar/
 │   └── VerbSpotlight.swift     # One Spotlight entry per verb in the named index "verbs": forms and glosses as keywords,
 │                               #   key conjugations as the description; indexed when the build or the verb count changes
 ├── Utils/
-│   ├── BrowseSearch.swift      # The pure filter the Models tab searches through (the Verbs tab ranks with VerbSearch)
 │   ├── Colors.swift            # Semantic palette bridging the colorsets to UIKit-facing call sites
 │   ├── Emailer.swift           # MFMailComposeViewController wrapper for the Settings feedback link (address from URL.developerEmail)
 │   ├── FontExtensions.swift    # Font.button and Font.heroNumeral
@@ -241,12 +242,13 @@ Conjugar/
 │   ├── ReminderSchedulerSpy.swift   # Records the reminders scheduled, and grants or refuses permission, under unit and UI tests
 │   ├── ReminderNotificationDelegate.swift  # Opens a tapped reminder's link through AppRouter; shows nothing while the app is open
 │   ├── Modifiers.swift         # The design system: card(), metadataPill(), linguistic(), numeric(), speakOnTapFlash(),
-│   │                           #   copyOnLongPress() (a Copy context menu and VoiceOver action), PrimaryButtonStyle
+│   │                           #   copyOnLongPress() (a Copy context menu and VoiceOver action), serifTitle(), zebraStriped(), PrimaryButtonStyle
 │   ├── QRCode.swift            # A QR code made on the device with Core Image, black on white, for a practice set
 │   ├── RatingsFetcher.swift    # Fetches App Store ratings from the iTunes API for the Settings screen
 │   ├── ReviewPrompter.swift    # Protocol for review-prompting behavior
 │   ├── ReviewPrompterReal.swift   # SKStoreReviewController prompting at usage intervals
 │   ├── ReviewPrompterStub.swift   # Canned no-op for tests
+│   ├── SpanishText.swift       # AttributedString(spanish:) and Text(spanish:): text that VoiceOver reads in a Spanish voice
 │   ├── RichText.swift          # Parses Info markup (^…^ ~…~ $…$ %…%) into RichTextBlock / TextSegment
 │   ├── Settings.swift          # @Observable user preferences over GetterSetter
 │   ├── ShareSheet.swift        # Workaround for ShareLink: presents UIActivityViewController from a plain button, with an
@@ -267,7 +269,7 @@ Conjugar/
 └── Views/
     ├── AnswerFrameView.swift   # An AnswerFrame drawn on one line around the quiz's answer field, or a sentence wrapped word by word around it; VoiceOver reads the frame as the field's label
     ├── AppRouter.swift         # Tab selection + conjugar:// deeplink routing (verb with match, search, info, list, quiz, game), the one-shot requests the tabs consume (pendingVerb, pendingSearch, pendingInfo, pendingCollection, pendingQuizStart with its link's source, pendingPracticeSet from quiz/set and presentablePracticeSet, which waits out a cover, game/onboarding/tutor flags), openSearch for Command-F, the control, and the quick action; SearchRequest, CollectionRequest
-    ├── BrowseLayout.swift      # Shared LazyVGrid column sets for the iPad (regular-width) layouts
+    ├── BrowseLayout.swift      # Shared LazyVGrid column sets for the iPad (regular-width) layouts, and the browse tabs' search placement (a drawer on iPad)
     ├── ConjugationText.swift   # Renders a conjugated form with its irregular span in customRed
     ├── EtymologyText.swift     # Renders etymology prose (its own minimal `~…~` parser, independent of Info markup)
     ├── GameView.swift          # Toreo por Amor: the full-screen SwiftUI game (climb + boss fight + end scene and its slideshow)
@@ -291,7 +293,8 @@ Conjugar/
     ├── RecognitionChoicesView.swift # Name the Form's prompt (RecognitionPromptView) and its chips: the level's tenses under their moods, then the tense's persons
     ├── ReviewCardView.swift    # The review card above the verb list: an irregular verb looked up days ago, its key conjugations hidden until tapped
     ├── ResultsView.swift       # Quiz results for a given Quiz: the hero score numeral, the counts (re-asks among them), level/region/time pills (no level for a model's practice), Ten More (Five More Verbs, Another Round), a Speed Round's right answers, best, and Another Round, and each answer, with Example Use on each verb's first right row
-    ├── RelatedVerbsView.swift  # The verb page's Related Verbs card, the full related list, VerbPagePush, and verbPageDestinations()
+    ├── RelatedVerbsView.swift  # The verb page's Related Verbs card: verbs built on the same base and others of the model, with an "All N" chip
+    ├── RelatedVerbListView.swift  # Every verb built on one root (RelatedVerbListDestination), a SortableVerbList
     ├── RichTextView.swift      # Renders parsed [RichTextBlock] as native SwiftUI Text
     ├── SettingsView.swift      # Settings: pickers, app-icon picker, ratings, Game Center (Enable, or View Leaderboards and View Achievements once signed in), onboarding reshow, Play
     ├── TutorTestView.swift     # Batch tutor harness (~30 queries, ShareLink export); reached by triple-tapping the tutor title
@@ -301,8 +304,13 @@ Conjugar/
     │                           #   the Models tab's VerbCollectionRow and iPad VerbCollectionCard
     ├── VerbEssentialsRowView.swift  # A Verb Essentials row other than the field's: its tense, yo, and the answered form with how it went, a given form, or a
     │                           #   dashed blank to come; VerbEssentialsRowLabel
+    ├── ListHeading.swift       # The small-caps line that names or counts a list (the Verbs and Models tabs, My Verbs, a model's and a collection's page)
+    ├── SortPicker.swift        # The segmented order picker over any PickerOption, with its animation and selection haptic
+    ├── SortableVerbList.swift  # A sort picker, an optional count heading, and a VerbEntryList: a model's page, a collection's page, the related list
+    ├── VerbPageNavigation.swift  # VerbPagePush and its environment key, verbPageDestinations() (VerbDestination, ModelInfo, the related list), pushesVerbPages(onto:)
+    ├── VerbRowLabel.swift      # A verb's row and iPad card (VerbRowLabel, VerbGridCell), LookedUpCheck, and MatchLines
     ├── VerbEntryList.swift     # Lazy verb rows (compact) or carded grid (regular) that open a verb, optionally checking those looked up; a model's page, a collection's page, and the related list use it
-    ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; recents in the focused empty field; the My Verbs list; the review card above the rows; carries the browse_verb_count launch anchor
+    ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; recents in the focused empty field; the My Verbs list; the review card above the rows; carries the browse_verb_count launch anchor (its row types are in VerbRowLabel.swift)
     ├── VerbSearchCommands.swift  # Command-F as a top-level menu (Verbs › Find a Verb) that opens the verb search through AppRouter.openSearch
     └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples, related verbs; the pill opens the model; the star and Share in the navigation bar; sends viewVerbView/leaveVerbView as VerbVisitTracker says and records each open
 
@@ -384,12 +392,13 @@ ConjugarTests/
 │   ├── DisplayPersonNumberTests.swift  # The UI person vocabulary and its pronouns
 │   ├── ModelInfoTests.swift            # Models-tab row construction and irregularity percent
 │   ├── ModelSortTests.swift            # Model-list sort orders
+│   ├── ModelSearchTests.swift          # The Models tab's search: folding, class numbers, a space alone, when the trombone plays
 │   ├── RelatedVerbsTests.swift         # Bases and roots (tener, decir, formar), the class and prefix rules, false compounds,
 │   │                                   #   pairs false by etymology, model relatives one per root by frequency, the "All N" chips, and the pill's model row
 │   ├── VerbPageFormsTests.swift        # The verb page's forms by chosen person and marks; which verbs have red letters; the scroll tip's target
 │   ├── KeyConjugationTests.swift       # The four key conjugations (regular, stem-changing, irregular, reflexive, defective),
 │   │                                   #   the share text, URL.appStore, and what a long press copies
-│   ├── VerbSortTests.swift             # Verb-list sort orders and Spanish collation
+│   ├── VerbSortTests.swift             # Verb-list sort orders, Spanish collation, and sortedLists(of:)
 │   ├── LearnerVerbsTests.swift         # The learner's record (opens, stars, recents, Clear, Remove, Reset Practice's forget, older JSON), its store and its backup of a corrupt record, the list modes
 │   ├── VerbDrawTests.swift             # The verb of the day and random verbs: weights, My Verbs every third day in turn over a list that
 │   │                                   #   grows, is reordered, or loses a verb, the band, one in three on demand, the seeded generator's sequence
@@ -460,7 +469,6 @@ ConjugarTests/
 │   └── ConjugationMapTests.swift       # The bundled map against a fresh build, the 99% example measure, shared forms, the
 │                                       #   file format, and ConjugationMatch (accents, compounds, the reflexive pronoun)
 ├── Utils/
-│   ├── BrowseSearchTests.swift         # The shared browse filter: empty query, matching, case/diacritic insensitivity
 │   ├── GameCenterFakeTests.swift       # The Game Center double's behavior
 │   ├── GameCenterPromptTests.swift     # Pins the Game Center opt-in gating
 │   ├── GetterSetterRealTests.swift     # UserDefaults-backed storage

@@ -7,23 +7,6 @@
 
 import Foundation
 
-/// A verb page to push, with the way the learner reached it. The Verbs and Models tabs push this
-/// rather than a bare infinitive, so that the page can report its `source`.
-nonisolated struct VerbDestination: Hashable, Sendable {
-  let infinitive: String
-  let source: AnalyticsSource
-
-  /// The cells that the search which opened the page matched. The page scrolls to the first of
-  /// them and marks them all. Empty for any other way in.
-  let marks: Set<ConjugationCell>
-
-  init(infinitive: String, source: AnalyticsSource, marks: Set<ConjugationCell> = []) {
-    self.infinitive = infinitive
-    self.source = source
-    self.marks = marks
-  }
-}
-
 /// One stretch of time during which a verb page is on screen with the app in the foreground. It
 /// begins with `viewVerbView` and ends with exactly one `leaveVerbView`. A page that leaves the
 /// screen or the foreground and then returns begins a new visit whose source is `resume`, because

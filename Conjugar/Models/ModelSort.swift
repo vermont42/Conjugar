@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ModelSort: String, CaseIterable {
+enum ModelSort: String, ListSort {
   case irregularity
   case alphabetical
   case classNumber

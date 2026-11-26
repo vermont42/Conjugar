@@ -92,7 +92,7 @@ nonisolated struct MatchedForm: Hashable, Sendable {
     guard cell.personNumber != .none else {
       return nil
     }
-    let isCommand = cell.tense == .imperativoPositivo || cell.tense == .imperativoNegativo
+    let isCommand = cell.tense.isCommand
     switch cell.personNumber {
     case .thirdSingular where isCommand:
       return "usted"

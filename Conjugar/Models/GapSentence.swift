@@ -249,10 +249,6 @@ nonisolated enum GapSentences {
 }
 
 nonisolated extension DisplayTense {
-  var isCommand: Bool {
-    self == .imperativoPositivo || self == .imperativoNegativo
-  }
-
   /// The other imperfect subjunctive, simple or compound, which a sentence takes as right beside
   /// the one asked: in a sentence, tuviese is as good as tuviera.
   var otherImperfectSubjunctive: DisplayTense? {

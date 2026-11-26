@@ -115,7 +115,7 @@ private struct MasteryPatternTableView: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
-      Text(MasteryText.spanish(table.tense.displayName))
+      Text(spanish: table.tense.displayName)
         .font(isLarge ? .title3.weight(.semibold) : .headline)
         .linguistic()
         .foregroundStyle(Color.customForeground)
@@ -149,7 +149,7 @@ private struct MasteryPatternTableView: View {
 
       ForEach(Array(table.personNumbers.enumerated()), id: \.offset) { index, personNumber in
         VStack(spacing: 0) {
-          Text(MasteryText.spanish(MasteryText.pronoun(personNumber, in: table.tense)))
+          Text(spanish: MasteryText.pronoun(personNumber, in: table.tense))
             .font(isLarge ? .subheadline : .caption)
             .foregroundStyle(Color.secondary)
             .lineLimit(1)
@@ -200,7 +200,7 @@ private struct MasteryVerbRowView: View {
 
     VStack(alignment: .leading, spacing: 6) {
       HStack(alignment: .firstTextBaseline, spacing: Layout.defaultSpacing) {
-        Text(MasteryText.spanish(entry?.citationForm ?? row.infinitive))
+        Text(spanish: entry?.citationForm ?? row.infinitive)
           .font(isLarge ? .title3 : .headline)
           .linguistic()
           .foregroundStyle(Color.customYellow)
@@ -243,20 +243,13 @@ private struct MasteryMark: View {
 }
 
 private enum MasteryText {
-  /// Text that VoiceOver reads with a Spanish voice.
-  static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
-  }
-
   static func ending(_ ending: RegularRoot) -> String {
     "-\(ending.practiceKey)"
   }
 
   /// A command's column names whom it addresses (usted, not él), as the quiz's frame does.
   static func pronoun(_ personNumber: DisplayPersonNumber, in tense: DisplayTense) -> String {
-    if tense == .imperativoPositivo || tense == .imperativoNegativo {
+    if tense.isCommand {
       return personNumber.commandAddressee ?? personNumber.pronoun
     }
     return personNumber.pronoun

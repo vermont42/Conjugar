@@ -21,7 +21,8 @@ struct SpanishLetterKeyRow: View {
         Button {
           insert(letter)
         } label: {
-          Text(Self.spanish(letter))
+          // Tagged Spanish, so that VoiceOver names ñ as eñe rather than spelling it in English.
+          Text(spanish: letter)
             .font(.title3)
             .linguistic()
             .frame(minWidth: 40, minHeight: 40)
@@ -32,13 +33,6 @@ struct SpanishLetterKeyRow: View {
         .accessibilityIdentifier("spanish_letter_key_\(letter)")
       }
     }
-  }
-
-  /// Tagged Spanish, so that VoiceOver names ñ as eñe rather than spelling it in English.
-  private static func spanish(_ letter: String) -> AttributedString {
-    var text = AttributedString(letter)
-    text.languageIdentifier = "es"
-    return text
   }
 }
 

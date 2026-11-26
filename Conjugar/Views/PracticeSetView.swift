@@ -142,7 +142,7 @@ struct PracticeSetView: View {
     let hiddenCount = infinitives.count - shown.count
     return FlowLayout(spacing: Layout.defaultSpacing, centersRows: true) {
       ForEach(Array(shown), id: \.self) { infinitive in
-        Text(CustomQuizEditor.spanish(VerbMap.shared.entry(for: infinitive)?.citationForm ?? infinitive))
+        Text(spanish: VerbMap.shared.entry(for: infinitive)?.citationForm ?? infinitive)
           .font(isLarge ? .title3 : .subheadline)
           .fontDesign(.serif)
           .foregroundStyle(Color.customYellow)
@@ -241,7 +241,7 @@ struct PracticeSetQRView: View {
               VStack(spacing: 4) {
                 let tensesAreSpanish = !practiceSet.custom.tenses.isEmpty
                 let tenses = practiceSet.tensesSummary(levelFallback: Current.settings.quizLevel)
-                Text(tensesAreSpanish ? CustomQuizEditor.spanish(tenses) : AttributedString(tenses))
+                Text(tensesAreSpanish ? AttributedString(spanish: tenses) : AttributedString(tenses))
                   .fontDesign(tensesAreSpanish ? .serif : .default)
                 Text(verbatim: practiceSet.verbsSummary(levelFallback: Current.settings.quizLevel))
               }

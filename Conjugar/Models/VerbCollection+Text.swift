@@ -108,17 +108,3 @@ extension VerbCollection {
     analytics.signal(name: .viewCollection, parameters: parameters)
   }
 }
-
-nonisolated extension QuizScope {
-  /// A round of an unranked quiz over a collection, in the same sheet as Test Me, titled with the
-  /// collection's name. Its `startQuiz` carries the collection's key.
-  static func collection(_ collection: VerbCollection, title: String) -> QuizScope {
-    QuizScope(
-      verbs: collection.infinitives,
-      questionCount: roundLength,
-      source: .list,
-      title: title,
-      collectionKey: collection.key
-    )
-  }
-}

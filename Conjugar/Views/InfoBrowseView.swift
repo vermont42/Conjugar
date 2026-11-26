@@ -13,8 +13,6 @@ import SwiftUI
 import UIKit
 
 struct InfoBrowseView: View {
-  static let englishTitle = "Info"
-
   @Environment(AppRouter.self) private var router
   @State private var navigationPath = NavigationPath()
   @State private var infoDifficulty: InfoDifficulty = Current.settings.infoDifficulty

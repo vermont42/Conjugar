@@ -48,7 +48,7 @@ struct VerbPageForms {
     }
     return ConjugationTable.all.map { table in
       let tense = table.tense
-      let isImperative = tense == .imperativoPositivo || tense == .imperativoNegativo
+      let isImperative = tense.isCommand
       var persons: [DisplayPersonNumber] = []
       if tense.hasYoForm {
         persons.append(.firstSingular)

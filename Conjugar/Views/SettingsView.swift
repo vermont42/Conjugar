@@ -10,8 +10,6 @@ import SwiftUI
 import TipKit
 
 struct SettingsView: View {
-  static let englishTitle = "Settings"
-
   // Passed in from `MainTabView`, whose covers Play and Show Onboarding present, so that a link
   // that arrives during the game can close it.
   let router: AppRouter

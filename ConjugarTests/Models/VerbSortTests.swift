@@ -49,4 +49,15 @@ struct VerbSortTests {
     // Every verb is ranked now, so the sort runs the whole map end to end.
     #expect(sorted.last?.frequencyRank == VerbMap.shared.rankCount)
   }
+
+  /// The lists a page keeps so that changing the order sorts nothing: one per order, each the same
+  /// verbs as that order's own sort.
+  @Test func sortedListsHoldEveryOrderOnce() {
+    let entries = [entry("obrar", rank: 3), entry("ñoñear", rank: 1), entry("nadar", rank: 2)]
+    let lists = VerbSort.sortedLists(of: entries)
+    #expect(Set(lists.keys) == Set(VerbSort.allCases))
+    for sort in VerbSort.allCases {
+      #expect(lists[sort]?.map(\.infinitive) == sort.sorted(entries).map(\.infinitive))
+    }
+  }
 }

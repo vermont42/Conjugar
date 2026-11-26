@@ -170,6 +170,11 @@ nonisolated enum DisplayTense: String, CaseIterable {
     return false
   }
 
+  /// The imperativo, positive or negative.
+  var isCommand: Bool {
+    self == .imperativoPositivo || self == .imperativoNegativo
+  }
+
   func haberTenseForCompoundTense() -> Result<DisplayTense, AuxiliaryError> {
     switch self {
     case .perfectoDeIndicativo:

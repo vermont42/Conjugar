@@ -20,7 +20,7 @@ struct VerbEssentialsRowView: View {
 
       HStack(spacing: Layout.defaultSpacing) {
         if let pronoun = row.key.pronoun {
-          Text(Self.spanish(pronoun))
+          Text(spanish: pronoun)
             .fontWeight(.semibold)
             .foregroundStyle(Color.customForeground)
         }
@@ -71,13 +71,13 @@ struct VerbEssentialsRowView: View {
   /// "pretérito, yo tuve, right", or for a row to come, "participio, not yet asked", the Spanish
   /// read in Spanish.
   private var spokenRow: Text {
-    let name = Text(Self.spanish(row.key.tense.displayName))
+    let name = Text(spanish: row.key.tense.displayName)
     let lead = row.key.pronoun.map { $0 + " " } ?? ""
     switch row.content {
     case .answered(let form, let result):
-      return name + Text(verbatim: ", ") + Text(Self.spanish(lead + form.lowercased())) + Text(verbatim: ", ") + Text(Self.spokenResult(result))
+      return name + Text(verbatim: ", ") + Text(spanish: lead + form.lowercased()) + Text(verbatim: ", ") + Text(Self.spokenResult(result))
     case .given(let form):
-      return name + Text(verbatim: ", ") + Text(Self.spanish(lead + form.lowercased()))
+      return name + Text(verbatim: ", ") + Text(spanish: lead + form.lowercased())
     case .pending:
       return name + Text(verbatim: ", ") + Text(L.VerbEssentials.spokenPending)
     case .current:
@@ -95,12 +95,6 @@ struct VerbEssentialsRowView: View {
       return L.VerbEssentials.spokenWrong
     }
   }
-
-  static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
-  }
 }
 
 /// The tense a row asks, above its conjugation.
@@ -108,7 +102,7 @@ struct VerbEssentialsRowLabel: View {
   let key: KeyConjugation
 
   var body: some View {
-    Text(VerbEssentialsRowView.spanish(key.tense.displayName))
+    Text(spanish: key.tense.displayName)
       .font(.subheadline.weight(.semibold))
       .fontDesign(.serif)
       .foregroundStyle(Color.customYellow)

@@ -73,7 +73,7 @@ private struct ModelPracticeRowHeader: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
       HStack {
-        Text(Self.spanish(group.exemplar))
+        Text(spanish: group.exemplar)
           .font(.title3.bold())
           .fontDesign(.serif)
           .foregroundStyle(Color.customYellow)
@@ -100,11 +100,5 @@ private struct ModelPracticeRowHeader: View {
     }
     .padding(.vertical, 12)
     .accessibilityElement(children: .combine)
-  }
-
-  private static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
   }
 }

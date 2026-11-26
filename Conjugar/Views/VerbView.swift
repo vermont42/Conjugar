@@ -434,7 +434,7 @@ struct VerbView: View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
       VStack(alignment: .leading, spacing: 2) {
         HStack(alignment: .firstTextBaseline, spacing: Layout.defaultSpacing) {
-          Text(Self.spanish(section.tense.titleCaseName))
+          Text(spanish: section.tense.titleCaseName)
             .font(.headline)
             .fontDesign(.serif)
             .foregroundStyle(Color.customYellow)
@@ -514,14 +514,7 @@ struct VerbView: View {
   }
 
   private static func attributed(_ name: ConjugationTable.SecondName) -> AttributedString {
-    name.isSpanish ? spanish(name.text) : AttributedString(name.text)
-  }
-
-  /// Text that VoiceOver reads with a Spanish voice.
-  private static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
+    name.isSpanish ? AttributedString(spanish: name.text) : AttributedString(name.text)
   }
 
   @ViewBuilder

@@ -105,7 +105,7 @@ struct ChoiceQuestionView: View {
     // Not disabled, which would dim the right sentence just when the learner should read it.
     .allowsHitTesting(!isAnswered)
     .accessibilityElement(children: .ignore)
-    .accessibilityLabel(Text(Self.spanish("\(option.sentence) \(tenseName)")))
+    .accessibilityLabel(Text(spanish: "\(option.sentence) \(tenseName)"))
     .accessibilityValue(Self.accessibilityValue(isRight: option.isRight, isChosen: isChosen, isAnswered: isAnswered))
     .accessibilityHint(isAnswered ? "" : L.Choice.optionHint)
     .accessibilityAddTraits(.isButton)
@@ -132,11 +132,5 @@ struct ChoiceQuestionView: View {
     var sentence = before + form + after
     sentence.languageIdentifier = "es"
     return sentence
-  }
-
-  private static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
   }
 }

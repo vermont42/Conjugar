@@ -183,4 +183,16 @@ nonisolated struct QuizScope: Equatable, Sendable {
   static func verbPage(_ verb: String) -> QuizScope {
     QuizScope(verbs: [verb], questionCount: verbPageQuestionCount, source: .verbPage)
   }
+
+  /// A round of an unranked quiz over a collection, in the same sheet as Test Me, titled with the
+  /// collection's name. Its `startQuiz` carries the collection's key.
+  static func collection(_ collection: VerbCollection, title: String) -> QuizScope {
+    QuizScope(
+      verbs: collection.infinitives,
+      questionCount: roundLength,
+      source: .list,
+      title: title,
+      collectionKey: collection.key
+    )
+  }
 }

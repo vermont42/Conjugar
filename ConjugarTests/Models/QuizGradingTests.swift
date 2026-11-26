@@ -213,7 +213,7 @@ import Testing
     var counts: [DisplayTense: [DisplayPersonNumber: Int]] = [:]
     for _ in 0..<quizzes {
       quiz.start()
-      for question in quiz.questions where question.tense == .imperativoNegativo || question.tense == .imperativoPositivo {
+      for question in quiz.questions where question.tense.isCommand {
         counts[question.tense, default: [:]][question.personNumber, default: 0] += 1
       }
       quiz.quit()

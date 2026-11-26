@@ -47,7 +47,7 @@ struct RecognitionChoicesView: View {
       ForEach(moods, id: \.self) { mood in
         VStack(alignment: .leading, spacing: 6) {
           if let moodHeading = mood.heading {
-            Text(Self.spanish(moodHeading))
+            Text(spanish: moodHeading)
               .font(.caption.bold())
               .foregroundStyle(.secondary)
               .accessibilityAddTraits(.isHeader)
@@ -107,7 +107,7 @@ struct RecognitionChoicesView: View {
 
   private func chip(_ text: String, spokenAs spoken: String, isSelected: Bool, identifier: String, action: @escaping () -> Void) -> some View {
     Button(action: action) {
-      Text(Self.spanish(text))
+      Text(spanish: text)
         .font(.subheadline)
         .fontDesign(.serif)
         .foregroundStyle(isSelected ? Color.customBackground : Color.customYellow)
@@ -122,15 +122,8 @@ struct RecognitionChoicesView: View {
     }
     .buttonStyle(.plain)
     // A chip reads its tense's whole name, since its mood's heading is a separate element.
-    .accessibilityLabel(Text(Self.spanish(spoken)))
+    .accessibilityLabel(Text(spanish: spoken))
     .accessibilityAddTraits(isSelected ? .isSelected : [])
     .accessibilityIdentifier(identifier)
-  }
-
-  /// Spanish text that VoiceOver reads in Spanish, whatever the device's language.
-  private static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
   }
 }

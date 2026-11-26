@@ -63,20 +63,20 @@ struct AnswerFrameView: View {
       ForEach(sentenceItems) { item in
         switch item.token {
         case .addressee(let addressee):
-          sentenceText(Text(Self.spanish("(\(addressee))")).foregroundStyle(.secondary))
+          sentenceText(Text(spanish: "(\(addressee))").foregroundStyle(.secondary))
         case .answerWord(let word):
-          sentenceText(Text(Self.spanish(word)).fontWeight(.semibold).foregroundStyle(Color.customForeground))
+          sentenceText(Text(spanish: word).fontWeight(.semibold).foregroundStyle(Color.customForeground))
         case .word(let word):
-          sentenceText(Text(Self.spanish(word)).foregroundStyle(Color.customForeground))
+          sentenceText(Text(spanish: word).foregroundStyle(Color.customForeground))
         case .blank(let leading, let trailing):
           HStack(spacing: 2) {
             if !leading.isEmpty {
-              sentenceText(Text(Self.spanish(leading)).foregroundStyle(Color.customForeground))
+              sentenceText(Text(spanish: leading).foregroundStyle(Color.customForeground))
             }
             field
               .frame(width: Self.sentenceFieldWidth)
             if !trailing.isEmpty {
-              sentenceText(Text(Self.spanish(trailing)).foregroundStyle(Color.customForeground))
+              sentenceText(Text(spanish: trailing).foregroundStyle(Color.customForeground))
             }
           }
         }
@@ -143,11 +143,11 @@ struct AnswerFrameView: View {
       }
       switch segment {
       case .addressee(let addressee):
-        pieces.append(Text(Self.spanish("(\(addressee))")).foregroundStyle(.secondary))
+        pieces.append(Text(spanish: "(\(addressee))").foregroundStyle(.secondary))
       case .pronoun(let word), .word(let word), .punctuation(let word):
-        pieces.append(Text(Self.spanish(word)).fontWeight(.semibold).foregroundStyle(Color.customForeground))
+        pieces.append(Text(spanish: word).fontWeight(.semibold).foregroundStyle(Color.customForeground))
       case .context(let text):
-        pieces.append(Text(Self.spanish(text)).foregroundStyle(Color.customForeground))
+        pieces.append(Text(spanish: text).foregroundStyle(Color.customForeground))
       case .blank:
         break
       }
@@ -163,21 +163,15 @@ struct AnswerFrameView: View {
   /// prefix.
   private var spokenPrompt: Text {
     let parts = frame.spokenParts
-    let prefix = spokenPrefix.map { [Text(Self.spanish($0))] } ?? []
+    let prefix = spokenPrefix.map { [Text(spanish: $0)] } ?? []
     let pieces: [Text]
     if parts.contains(where: { $0 != nil }) {
       pieces = prefix + parts.map { part in
-        part.map { Text(Self.spanish($0)) } ?? Text(L.Quiz.blank)
+        part.map { Text(spanish: $0) } ?? Text(L.Quiz.blank)
       }
     } else {
       pieces = prefix + [Text(placeholder ?? L.Quiz.conjugation)]
     }
     return pieces.dropFirst().reduce(pieces[0]) { $0 + Text(verbatim: ", ") + $1 }
-  }
-
-  private static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
   }
 }

@@ -26,8 +26,8 @@ is filled by the next session, which reads the hash from `git log`.
 | 3 | Done | 2026-11-25 | `942f3a4` | C9, C12, G1, and from C13 Recent's count |
 | 4 | Done | 2026-11-25 | `c0618fe` | C3, and a week of verbs for the widget |
 | 5 | Done | 2026-11-25 | `57abe4c` | C2, C7, C8, G2, G3, G4, and from C13 the "All N" chip |
-| 6 | Awaiting Josh | 2026-11-26 | | From C13 the stashed link, the ignored link, the link beneath the game, and case; F2 (Spotlight); the intents and links of D3 |
-| 7 | Not started | | | D1 (the cheap pieces), D2, G6, G8, S5 |
+| 6 | Done | 2026-11-26 | `082a446` | From C13 the stashed link, the ignored link, the link beneath the game, and case; F2 (Spotlight); the intents and links of D3 |
+| 7 | Awaiting Josh | 2026-11-26 | | D1 (the cheap pieces), D2, G6, G8, S5, and from C13 the Models tab's whitespace and trombone |
 | 8 | Not started | | | D3 (the model layer), F2 (repeated work), S8 |
 | 9 | Not started | | | S1 (the search model), C10, C11, F1, S2, S3, S4, S7, and the rest of C13 |
 | 10 | Not started | | | S1 (the rest), G9 |
@@ -690,6 +690,62 @@ collections, a model's page, a collection's page, and a related verb's full list
 tab.
 
 **How it differed:**
+
+- **G6, the drawer (Josh, 2026-11-26).** Shown the iPad's Models tab with today's toolbar button and
+  with the Verbs tab's drawer side by side, Josh chose the drawer. Both tabs now read one
+  `BrowseLayout.searchPlacement`, which carries the Verbs tab's comment about why. Autocorrection
+  and autocapitalization are off.
+- **The shared pieces** are `ListHeading`, `SortPicker` over a `PickerOption`, `ListSort` with
+  `sortedLists(of:)` (`VerbSort` and `ModelSort` conform), `zebraStriped(_:)` with
+  `Color.zebraStripe(_:)`, and `serifTitle()`, which the review card's title also uses. The
+  picker now carries its own selection haptic, which the two tabs had put on their roots. The
+  headings of a model's page, a collection's page, and the Models tab's count gained the header
+  trait the others had, a VoiceOver-only change.
+- **`VerbListMode` is `nonisolated`,** with only `localizedDisplayName` on the main actor. As a
+  main-actor enum, its synthesized `Hashable` conformance was isolated and could not serve
+  `PickerOption`, a build error. `VerbSort` and `ModelSort` were spared because their `Hashable`
+  comes from their raw values.
+- **D2.** `SortableVerbList` is the picker, an optional count heading, and the list, and its body is
+  several views rather than a stack, so each page keeps its own spacing. It takes the sorted lists
+  from its page rather than sorting in its own `init`, which runs with every render of the page;
+  the pages sort once in theirs, as before, and the related list now does too instead of in its
+  body. `signalsCollectionView(_:source:)` replaces the two `hasSignaledView` flags.
+- **`VerbDestination`** is registered only in `verbPageDestinations()`, with its marks, and
+  `pushesVerbPages(onto:)` sets the environment in all three stacks. Checked in the iPhone
+  simulator with a temporary build whose model-page rows pushed a mark on the futuro's yo: from the
+  Models tab, obtener's page landed on Futuro de Indicativo with obtendré marked. The build was
+  reverted.
+- **The Spanish helper** is `AttributedString(spanish:)` and `Text(spanish:)` in
+  `Utils/SpanishText.swift`. All fifteen declarations went; `SpanishLetterKeyRow`'s note about
+  eñe now sits at its call site. The places that tag
+  only part of an attributed string are left as they were.
+- **S5.** New files: `Models/VerbDestination.swift`, `Models/VerbListMode.swift`,
+  `Models/ListSort.swift`, `Views/VerbPageNavigation.swift`, `Views/VerbRowLabel.swift` (the four
+  row types), and `Views/RelatedVerbListView.swift`, which the plan did not name: the full related
+  list and its destination left `RelatedVerbsView.swift` with the navigation pieces. `isCommand`
+  sits in `DisplayTense.swift`, which the `ConjugationMapTool` target compiles; it reads nothing
+  else, and the tool builds. `ModelRowLabel` stays in `ModelBrowseView.swift` until Phase 11.
+- **S8.** `englishTitle` went from all four views. `BrowseSearch` and its tests went into
+  `Models/ModelSearch.swift`, a value type that holds the Models tab's text, order, and results, so
+  that the two small fixes could be tested: a space alone is not a search, and `update` reports
+  the trombone only when the text changes to a failed query. `ModelSearchTests` replaces
+  `BrowseSearchTests` with the same cases on real models, plus those two; the trombone test fails
+  if a sort change reports one. The query is folded once per search.
+- **G8.** `VerbRowLabel`'s story about the tap target went with `ModelRowLabel`'s, since it was the
+  same story.
+- **Checked in the simulators,** before and after, with the same script: the Verbs tab, My Verbs,
+  the Models tab and its list, tener's model page and its verbs, the -go Verbs page and its verbs,
+  and poner's full related list. On both the iPhone (English, dark) and the iPad (Spanish, light),
+  the unscrolled after shots matched the before shots pixel for pixel, apart from the counts and
+  checks that my own opens of poner and obtener changed; the scrolled ones, whose positions vary
+  with a swipe's momentum, matched by eye. On the iPhone, a space in the Models tab's field kept
+  the collections over all 102 models, and "4b" found the seven 4B models. On the iPad, "hac" in
+  the drawer found hacer and rehacer.
+- **The suite** is 1,432 Swift Testing tests in 89 suites and 11 XCTest tests, in 125 s, with the
+  load average near 290 from other projects' runs. The slowest suites are "ConjugationMap"
+  (33.6 s), "The bundled map" (23.9 s), and `ReverseLookupTests` (17.5 s). No expectation changed:
+  `BrowseSearchTests`' six tests moved into `ModelSearchTests`' nine, `VerbSortTests` gained
+  `sortedLists(of:)`'s, and `QuizGradingTests` reads `isCommand`.
 
 ## Phase 8: One Definition Each
 

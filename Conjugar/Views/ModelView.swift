@@ -2,11 +2,10 @@
 //  ModelView.swift
 //  Conjugar
 //
-//  The SwiftUI model-detail screen, replacing the UIKit ModelVC/ModelUIV/
-//  ModelHeaderUIV. A carded header (gloss + tinted metadata pills + non-finite
-//  forms), a horizontally-scrollable pronoun-by-tense conjugation grid whose
-//  irregular spans render red (with a visible scroll indicator), and
-//  the "verbs using this model" list, each row linking to the native VerbView.
+//  A model's page: a carded header (gloss, tinted metadata pills, and non-finite
+//  forms), a horizontally scrollable pronoun-by-tense grid whose irregular spans
+//  render red, the model as a collection, its practice, and the verbs using it,
+//  each opening its verb page.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
@@ -49,11 +48,6 @@ struct ModelView: View {
     return persons
   }
 
-  /// Opens a tapped verb in whichever tab shows this page. See `VerbPagePush`.
-  @Environment(\.verbPagePush) private var push
-  /// The order of the verbs using this model. Not stored: the page always opens alphabetical.
-  @State private var verbSort = VerbSort.alphabetical
-  @State private var hasSignaledView = false
   /// The model as a collection, whose bar sits between the grid and the verbs.
   private let collection: VerbCollection
   /// The collection's verbs, for the bar's count. The same verbs as `entriesBySort`'s.
@@ -63,7 +57,8 @@ struct ModelView: View {
   private let isDefective: Bool
   private let participio: String
   private let gerundio: String
-  /// The verbs using this model, in each order, sorted once in `init`.
+  /// The verbs using this model, in each order, sorted once in `init`. The page always opens on
+  /// the alphabetical order, which is not saved.
   private let entriesBySort: [VerbSort: [VerbMapEntry]]
   /// The person columns this instance renders, resolved from the browse setting in
   /// `init` — like `VerbView`'s row set, so both screens agree on tú/vos/both.
@@ -82,7 +77,7 @@ struct ModelView: View {
     participio = Self.form(model.exemplar, .participio)
     gerundio = Self.form(model.exemplar, .gerundio)
     let entries = model.verbs.compactMap { VerbMap.shared.entry(for: $0) }
-    entriesBySort = Dictionary(uniqueKeysWithValues: VerbSort.allCases.map { ($0, $0.sorted(entries)) })
+    entriesBySort = VerbSort.sortedLists(of: entries)
     collectionVerbs = entries
     let persons = Self.gridPersons(for: Current.settings.secondSingularBrowse)
     gridPersons = persons
@@ -104,21 +99,8 @@ struct ModelView: View {
         VerbCollectionBar(collection: collection, title: L.VerbCollection.modelTitle(exemplar: model.exemplar), verbs: collectionVerbs)
         ModelPracticeCard(classNumber: model.classNumber)
 
-        Picker(L.BrowseVerbs.sort, selection: $verbSort.animation(.snappy)) {
-          ForEach(VerbSort.allCases, id: \.self) { order in
-            Text(order.localizedDisplayName).tag(order)
-          }
-        }
-        .pickerStyle(.segmented)
-        .sensoryFeedback(.selection, trigger: verbSort)
-
-        Text(L.Model.verbsUsing(count: model.verbs.count))
-          .font(.caption.smallCaps())
-          .foregroundStyle(.secondary)
-          .frame(maxWidth: .infinity, alignment: .leading)
-
-        VerbEntryList(entries: entriesBySort[verbSort] ?? [], showsLookedUp: true) { verb in
-          push?(VerbDestination(infinitive: verb, source: .model))
+        SortableVerbList(lists: entriesBySort, initialSort: .alphabetical, source: .model, showsLookedUp: true) { count in
+          L.Model.verbsUsing(count: count)
         }
       }
       .padding()
@@ -133,12 +115,8 @@ struct ModelView: View {
     .onAppear {
       ExploreModelsTip().invalidate(reason: .actionPerformed)
       Current.analytics.signal(name: .viewModelView)
-      // A return from one of the model's verb pages is not another opening of the collection.
-      if !hasSignaledView {
-        hasSignaledView = true
-        collection.signalView(source: source)
-      }
     }
+    .signalsCollectionView(collection, source: source)
   }
 
   private var headerCard: some View {

@@ -77,7 +77,7 @@ struct CustomQuizEditor: View {
               .foregroundStyle(Color.customForeground)
             Spacer()
             if case .collection(.model(let classNumber)) = custom.verbSet, let model = ModelInfo.byClassNumber[classNumber] {
-              Text(Self.spanish(model.exemplar))
+              Text(spanish: model.exemplar)
                 .fontDesign(.serif)
                 .foregroundStyle(Color.customYellow)
             }
@@ -110,12 +110,6 @@ struct CustomQuizEditor: View {
   /// The level that adds the tense to the quiz.
   static func firstLevel(asking tense: DisplayTense) -> QuizLevel? {
     QuizLevel.allCases.first { $0.entry(for: tense) != nil }
-  }
-
-  static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
   }
 }
 
@@ -159,7 +153,7 @@ private struct CustomQuizChoiceRow: View {
     Button(action: action) {
       HStack {
         VStack(alignment: .leading, spacing: 2) {
-          Text(titleIsSpanish ? CustomQuizEditor.spanish(title) : AttributedString(title))
+          Text(titleIsSpanish ? AttributedString(spanish: title) : AttributedString(title))
             .fontDesign(titleIsSpanish ? .serif : .default)
             .foregroundStyle(Color.customForeground)
           if let detail {
@@ -198,7 +192,7 @@ struct CustomQuizSummaryCard: View {
         L.CustomQuiz.tenses,
         value: custom.tenses.isEmpty
           ? AttributedString("\(byLevel): \(level.localizedName)")
-          : CustomQuizEditor.spanish(custom.orderedTenses.map(\.titleCaseName).joined(separator: ", ")),
+          : AttributedString(spanish: custom.orderedTenses.map(\.titleCaseName).joined(separator: ", ")),
         isSpanish: !custom.tenses.isEmpty
       )
       row(

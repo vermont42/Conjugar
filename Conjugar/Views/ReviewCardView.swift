@@ -42,10 +42,8 @@ struct ReviewCardView: View {
         .foregroundStyle(.secondary)
         .padding(.trailing, 44)
 
-      Text(Self.spanish(entry.citationForm))
-        .font(.title3)
-        .fontDesign(.serif)
-        .foregroundStyle(Color.customYellow)
+      Text(spanish: entry.citationForm)
+        .serifTitle()
         .accessibilityAddTraits(.isButton)
         .accessibilityAction { tap() }
 
@@ -110,7 +108,7 @@ struct ReviewCardView: View {
         .font(.body)
         .fontDesign(.serif)
         // VoiceOver would read the middle dots aloud, so the label pauses at commas instead.
-        .accessibilityLabel(Text(Self.spanish(forms.map(ConjugationText.plain).joined(separator: ", "))))
+        .accessibilityLabel(Text(spanish: forms.map(ConjugationText.plain).joined(separator: ", ")))
         .accessibilityHint(Text(L.ReviewCard.openHint))
         .accessibilityAddTraits(.isButton)
         .accessibilityAction { tap() }
@@ -141,12 +139,5 @@ struct ReviewCardView: View {
     }
     line.languageIdentifier = "es"
     return line
-  }
-
-  /// Text that VoiceOver reads with a Spanish voice.
-  private static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
   }
 }

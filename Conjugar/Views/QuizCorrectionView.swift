@@ -46,7 +46,7 @@ struct QuizCorrectionView: View {
               .font(.caption)
               .foregroundStyle(.secondary)
             ForEach(recognition.answerLines, id: \.self) { line in
-              Text(Self.spanish(line))
+              Text(spanish: line)
                 .font(.title3)
                 .fontDesign(.serif)
                 .foregroundStyle(Color.customForeground)
@@ -61,7 +61,7 @@ struct QuizCorrectionView: View {
               Text(L.Sentences.completed)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-              Text(Self.spanish(completed))
+              Text(spanish: completed)
                 .font(.body)
                 .fontDesign(.serif)
                 .foregroundStyle(Color.customForeground)
@@ -101,7 +101,7 @@ struct QuizCorrectionView: View {
           if showsVerbLink {
             ForEach(linkedVerbs, id: \.self) { verb in
               link(
-                Text(Self.spanish(ReflexivePronoun.citationForm(of: verb))),
+                Text(spanish: ReflexivePronoun.citationForm(of: verb)),
                 systemImage: "text.book.closed",
                 identifier: verb == question.verb ? "quiz_correction_verb" : "quiz_correction_verb_\(verb)"
               ) {
@@ -197,14 +197,14 @@ struct QuizCorrectionView: View {
       return spokenRecognitionCorrection(recognition, answer: answer)
     }
     var spoken = AttributedString(L.Quiz.incorrect + " " + L.Quiz.yourAnswer + ": ")
-    spoken += Self.spanish(difference.given)
+    spoken += AttributedString(spanish: difference.given)
     spoken += AttributedString(". " + L.Quiz.correctAnswer + ": ")
-    spoken += Self.spanish(difference.expected.lowercased())
+    spoken += AttributedString(spanish: difference.expected.lowercased())
     spoken += AttributedString(".")
     let letters = difference.expectedMarkedLetters
     if !letters.isEmpty, letters.count <= Self.maxSpokenLetters {
       spoken += AttributedString(" " + L.Quiz.lettersDiffer + " ")
-      spoken += Self.spanish(letters.joined(separator: ", "))
+      spoken += AttributedString(spanish: letters.joined(separator: ", "))
       spoken += AttributedString(".")
     }
     if let diagnosis = correction.diagnosis {
@@ -215,7 +215,7 @@ struct QuizCorrectionView: View {
     }
     if let completed = question.completedSentence {
       spoken += AttributedString(" " + L.Sentences.completed + ": ")
-      spoken += Self.spanish(completed)
+      spoken += AttributedString(spanish: completed)
     }
     return Text(spoken)
   }
@@ -226,7 +226,7 @@ struct QuizCorrectionView: View {
   /// Pretérito, él. This question will come up again." The answers are read in Spanish.
   private func spokenRecognitionCorrection(_ recognition: RecognitionQuestion, answer: RecognitionAnswer) -> Text {
     func spokenSpanish(_ line: String) -> AttributedString {
-      Self.spanish(line.replacingOccurrences(of: " · ", with: ", ").replacingOccurrences(of: " (", with: ", ").replacingOccurrences(of: ")", with: ""))
+      AttributedString(spanish: line.replacingOccurrences(of: " · ", with: ", ").replacingOccurrences(of: " (", with: ", ").replacingOccurrences(of: ")", with: ""))
     }
     var spoken = AttributedString(L.Quiz.incorrect + " " + L.Quiz.yourAnswer + ": ")
     spoken += spokenSpanish(answer.summary)
@@ -320,11 +320,5 @@ struct QuizCorrectionView: View {
         return (text, true)
       }
     }
-  }
-
-  private static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
   }
 }

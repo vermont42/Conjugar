@@ -12552,3 +12552,42 @@ method called directly from the main actor runs there. Called through the `Entit
 protocol, the way App Intents calls it, the same method ran off the main actor. The methods are
 `@concurrent` now anyway, which costs nothing and stops any future direct caller from stalling the
 main actor.
+
+## One Copy of Each Piece the Lists Share (2026-11-26)
+
+Phase 7 of the browse-fixes plan was meant to change almost nothing a learner can see. The review
+had found the same small blocks copied across the Verbs tab, the Models tab, a model's page, a
+collection's page, and the full list of verbs built on one root: a small-caps count line, a
+segmented sort picker, the line of code that sorts a list into every order once, a faint gold zebra
+stripe, and the serif gold title of a row. Each became one thing (`ListHeading`, `SortPicker`,
+`ListSort.sortedLists(of:)`, `zebraStriped(_:)`, `serifTitle()`), and the three pages that showed a
+sorted verb list became users of one `SortableVerbList`. Fifteen views had each declared a private
+function that tags a string as Spanish for VoiceOver. They now share `Text(spanish:)`.
+
+The proof that nothing moved was a script. Before touching anything, it launched the app on both of
+Conjugar's simulators and photographed the six screens; afterward it did the same, and a pixel diff
+compared the pairs. The unscrolled screens matched exactly, except where the session itself had
+changed the data: opening poner and obtener to set up the shots raised a collection's count from 1
+to 2. Writing the script took longer than expected. Label taps missed, a cold launch by link needed
+nine seconds, and the preset scroll gesture did nothing, so it ended up tapping by coordinates and
+swiping by hand.
+
+One of the copies had been a latent bug. The Models tab registered its own destination for a verb
+page and forgot the cells to mark, so the first marked link pushed there would have lost its
+highlight. Nothing pushes one today, so the check needed a temporary build whose model-page rows
+pushed a mark on the futuro's yo. From the Models tab, obtener's page landed on its Futuro card with
+obtendré highlighted. The build was reverted, and every stack now registers the verb page in one
+place.
+
+The compiler raised the only surprise. A protocol for the picker's choices compiled for the two
+sort enums but not for the Verbs tab's three-way mode (two sorts and My Verbs). Under this project's
+default main-actor isolation, that enum's synthesized `Hashable` conformance was isolated, and the
+protocol could not take it. The sorts escaped because their `Hashable` comes from their string raw
+values. Making the mode `nonisolated`, with only its display name on the main actor, settled it.
+
+Two small fixes rode along in the Models tab. A space typed alone used to hide the collections above
+an unfiltered list, and changing the sort replayed the sad trombone for a query that had already
+failed. The tab's search became a small value type, `ModelSearch`, whose `update` says when the
+trombone should play, so that a test could pin both. The plan left one decision to Josh. The Models
+tab's search field on iPad still shrank to a toolbar button, while the Verbs tab had long used a
+drawer that always shows. Shown both, he chose the drawer, and the two tabs now read one placement.

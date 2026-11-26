@@ -150,8 +150,8 @@ a model's key names the model.
 | `verbPage` | Yes | The quiz signals: Test Me's three questions on a verb's page. `viewCollection`: a model's page opened from a verb page's model pill |
 | `widget` | Yes | A tap on any widget: Verb of the Day, the quiz widget once answered, or a Lock Screen accessory. The quiz widget's question sends `challengeWidget` |
 
-**How the source travels.** The Verbs and Models tabs push a `VerbDestination` (infinitive plus
-source) rather than a bare infinitive, and `VerbView(verb:source:)` takes it. The verb list's rows
+**How the source travels.** Every stack that shows verb pages pushes a `VerbDestination`
+(infinitive plus source, and any cells to mark) rather than a bare infinitive, and `VerbView(verb:source:)` takes it. The verb list's rows
 are buttons, not `NavigationLink`s, so that an open can send `finishSearch` before it pushes.
 
 **Links carry `source` as a query item** (`conjugar://verb/hablar?source=widget`), because a widget
@@ -361,14 +361,17 @@ on pedir, transpirar (*spirare*) not on pirar, while a true pair stays however o
 
 **Navigation.** A verb page is pushed from three stacks, the Verbs tab, the Models tab, and the
 quiz's (from a held correction, in the tab or in `QuizSheet`). Each injects
-`VerbPagePush` (an environment action that appends to its own path) and registers the destinations
-`verbPageDestinations()` names (`ModelInfo`, `RelatedVerbListDestination`), so the pill and the card
-work in each, and a learner who arrived from a widget reaches a model's page without switching
+`VerbPagePush` (an environment action that appends to its own path, through `pushesVerbPages(onto:)`)
+and registers the destinations `verbPageDestinations()` names (`VerbDestination` with its marks,
+`ModelInfo`, and `RelatedVerbListDestination`; `Views/VerbPageNavigation.swift`), so every stack
+builds a verb page alike and the pill and the card work in each, and a learner who arrived from a widget reaches a model's page without switching
 tabs. `ModelView` pushes its verbs through the same action.
 
 **A model's page** has a Frequency/Alphabetical control above its verb list, Alphabetical by default
-and not stored. The list (`VerbEntryList`, shared with the full related list) is lazy in both size
-classes, since the cantar model holds 2,968 verbs.
+and not stored. The control, the count, and the list are a `SortableVerbList`, which a
+collection's page (Frequency by default) and the full related list share; its `VerbEntryList` is
+lazy in both size classes, since the cantar model holds 2,968 verbs. Each page sorts its verbs into
+both orders once, as it opens (`VerbSort.sortedLists(of:)`).
 
 ### Copy and share
 
@@ -984,7 +987,7 @@ learner's answer and the keyboard, so Return continues; Return resigns a `TextFi
 refocuses the field as the hold begins and again once Back returns from a linked page, clearing the
 focus state first because setting it to the value it still holds does nothing. A Magic Tap also
 continues. The links push onto the quiz's own stack (it injects `VerbPagePush` and registers
-`VerbDestination`, `QuizCorrectionModel`, and `verbPageDestinations()`), report `quizCorrection`,
+`QuizCorrectionModel` and `verbPageDestinations()`), report `quizCorrection`,
 and leave the clock stopped, since it is stopped for the whole hold. The verb link is left out of a
 quiz begun from that verb's page, and the model link out of a quiz over that model's verbs.
 `isBeneathQuiz` hides Test Me and a model's Quiz button on the pages pushed while a quiz is in
@@ -1881,7 +1884,9 @@ pedagogy plan's draw can ask them. `VerbFamilies`' hand-made lists are their ora
 are irregular but not strong).
 
 **Where they live**: a Collections section at the top of the Models tab, above
-the "102 models" count, hidden while a model search is typed. On iPhone each is a compact row: the
+the "102 models" count, hidden while a model search is typed (a space alone is not a search; see
+`Models/ModelSearch.swift`, which also plays the sad trombone only when the text changes to a failed
+query, never on a change of order). On iPhone each is a compact row: the
 title, three of its forms with the irregular letters red (`examples`: "tengo · hago · digo"), and
 "opened/total"; five two-line rows with descriptions pushed every model below the fold, so the
 description waits on the collection's page. On iPad each is a card with the forms, the description,

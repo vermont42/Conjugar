@@ -311,10 +311,10 @@ store no longer migrates over one.*
   letter-key path makes exactly that sequence.
 - **A whitespace-only query hides things and filters nothing (Read).** The tip, the review card,
   and the Models tab's collections test `searchText.isEmpty`; the lists test the trimmed text.
-  Type a space and they vanish above a full list.
+  Type a space and they vanish above a full list. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md` for the Models tab: `ModelSearch.isSearching` reads the trimmed text. The Verbs tab's tip and card are Phase 9's.*
 - **The sad trombone replays on a sort change (Read).** `recomputeFilteredVerbs` and
   `recomputeFilteredModels` run on a sort change and play it again for the same failed query. In
-  the Models tab the picker is always there.
+  the Models tab the picker is always there. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md` for the Models tab: `ModelSearch.update` plays it only when the text changes. The Verbs tab's is Phase 9's.*
 - **Recent can show fewer than twenty (Read).** `recent()` takes twenty before the starred verbs
   are filtered out (`Shared/LearnerVerbs.swift:71-79`). With fifteen of the last twenty opens
   starred, Recent lists five while older unstarred opens exist. *Fixed on `master`, 2026-11-25, in
@@ -396,7 +396,7 @@ when the warm-up completes. Or move matching off the main actor and publish the 
   - `VerbMap.entries(in:)` sorts the whole map on every call, and six other files sort every
     entry by rank themselves. Ranks are dense, so one cached list would serve them all, and a band
     would be a prefix of it.
-  - `ModelBrowseView.swift:45` folds the query once per model.
+  - `ModelBrowseView.swift:45` folds the query once per model. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`.*
 - **The first visit to the Models tab derives the collections on the main actor (Suspected).**
   `VerbCollection.featuredVerbs` runs about 4,000 conjugations. Not timed.
 - **The map's and the index's memory is unmeasured (Suspected).** About 254,000 small arrays, kept
@@ -456,7 +456,7 @@ Josh's decision.*
 - **G6. The Models tab's search field was left as it was (Read).** Phase 0 said to change nothing
   else there. So autocapitalization and autocorrection are still on, and on iPad the field keeps the
   default placement, which Phase 0 found shrinks to a toolbar button and which the Verbs tab
-  left for a drawer. I did not look at it on the iPad. See [Q8](#open-questions).
+  left for a drawer. I did not look at it on the iPad. See [Q8](#open-questions). *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: autocorrection and autocapitalization are off, and on iPad, by Josh's choice that day after seeing both, the field is the Verbs tab's drawer (`BrowseLayout.searchPlacement`, which both tabs now read).*
 - **G7. Stale prose (Reviewer unless noted).**
   - `docs/feature_architecture.md:1800`: a collection's quiz is "thirty unranked questions". It
     is ten, with Ten More. *Fixed on `master`, 2026-11-26, in Phase 6 of
@@ -480,7 +480,7 @@ Josh's decision.*
     Difficult. That is the pedagogy plan's to fix and is listed here so that it is not lost.
 - **G8. Comments that narrate history (Read).** Commit `860795f` swept these out and missed
   `ModelBrowseView.swift:5-8` ("replacing the UIKit BrowseModelsVC…"), `ModelView.swift:5-9`, and
-  the bug story on `ModelRowLabel` (`ModelBrowseView.swift:245-251`).
+  the bug story on `ModelRowLabel` (`ModelBrowseView.swift:245-251`). *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: each describes the code, and `VerbRowLabel`'s matching story went too.*
 - **G9. VoiceOver (Reviewer; nothing was listened to).**
   - The list's rows do not tag the infinitive as Spanish, so an English voice reads "tener".
     Everything this plan added does tag its Spanish, which makes the rows the odd ones out.
@@ -517,6 +517,8 @@ builds `VerbView(verb:source:)` without `destination.marks` (`ModelBrowseView.sw
 Verbs and Quiz tabs pass them. Nothing in the Models stack pushes a marked destination today; the
 first thing that does will lose its mark and its landing scroll there, silently.
 
+*Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`, the cheap pieces: `ListHeading`, `SortPicker` (over `PickerOption`), `ListSort.sortedLists(of:)`, `zebraStriped(_:)`, `serifTitle()`, and `VerbDestination` registered once, with its marks, inside `verbPageDestinations()`. `AdaptiveRows` and one row label are Phase 11's.*
+
 Cheap and safe: the heading, the picker, the sorted lists, the zebra stripe, and the single
 `VerbDestination` registration. Medium: `AdaptiveRows`, because the Verbs tab's rows need an
 index, match lines, a highlight, and the identifiers that the screenshot driver and the launch
@@ -529,6 +531,7 @@ picker, a count heading, and a `VerbEntryList`. They differ in the default sort,
 string, the push's `source`, and the practice card that the model's page puts between. Both also
 keep a `hasSignaledView` flag to send `viewCollection` once. `RelatedVerbListView` has the picker
 and the list again. One `SortableVerbList` that owns its sort state would serve all three.
+*Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: `SortableVerbList` serves all three, and `signalsCollectionView(_:source:)` replaces both flags.*
 
 ### D3. Smaller duplication (Reviewer unless noted)
 
@@ -546,9 +549,9 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   `ModelView` reads `ModelInfo.verbs`, so one bar uses both. A test exists only to keep them
   equal.
 - **`private static func spanish(_:) -> AttributedString` is declared in fifteen views (Read: 15
-  declarations, 17 files that set the language).** One extension would do.
+  declarations, 17 files that set the language).** One extension would do. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: `AttributedString(spanish:)` and `Text(spanish:)` in `Utils/SpanishText.swift`; all fifteen declarations went.*
 - **`tense == .imperativoPositivo || tense == .imperativoNegativo` is spelled out in six files**,
-  while `DisplayTense.isCommand` sits in `GapSentence.swift:251`.
+  while `DisplayTense.isCommand` sits in `GapSentence.swift:251`. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: it moved to `DisplayTense.swift`, and the six read it.*
 - **The four `Shared/` intents have one `perform()` body**, and `"conjugar://"` is written out in
   seven places besides `URL.deeplinkScheme` (Read). A small protocol with a default `perform()`,
   and `WidgetDeeplink` moved to `Shared/` where a test can pin it, would remove both. *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`:
@@ -592,6 +595,7 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   `verbPagePush` environment key are in `RelatedVerbsView.swift`. `VerbRowLabel`, `VerbGridCell`,
   `LookedUpCheck`, and `MatchLines` are in `VerbBrowseView.swift`. `DisplayTense.isCommand` is in
   `GapSentence.swift`. `QuizScope.collection(_:title:)` is in `VerbCollection+Text.swift`.
+  *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: `VerbDestination.swift`, `VerbListMode.swift`, `VerbPageNavigation.swift`, `VerbRowLabel.swift`, and `RelatedVerbListView.swift` are new; `isCommand` and `collection(_:title:)` moved beside their types.*
 - **S6. `QuizScope` is a bag of flags (Reviewer; I read `isRanked`).** `isRanked` is a conjunction
   of nine negatives and a length (`QuizScope.swift:104-107`), so a new mode that forgets to add
   itself is ranked and posts to Game Center. `startsLiveActivity` guesses "runs in a sheet" from
@@ -602,13 +606,13 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   and the keyboard down, the picker replaces the letter row. Choosing My Verbs changes nothing on
   screen, and choosing a sort replays the trombone.
 - **S8. Unused or unguarded.**
-  - `englishTitle` on four views is read nowhere (Read).
+  - `englishTitle` on four views is read nowhere (Read). *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: deleted.*
   - `LearnerVerbs.daysSinceOpened` has no caller (Read). *Deleted on `master`, 2026-11-25, in
     Phase 3 of `plans/verb_browse_fixes.md`.*
   - `QuizScope.mixesChoiceQuestions` tests `!isPracticeSet`, which `isRanked` already implies
     (Reviewer).
   - `ConjugationTable.isCompound` is used only by tests (Reviewer).
-  - `BrowseSearch` is six lines with one caller since the Verbs tab left it (Read).
+  - `BrowseSearch` is six lines with one caller since the Verbs tab left it (Read). *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: folded into `ModelSearch`, which folds the query once per search.*
   - `ConjugationMapTool` accepts any `--flag value`, so a misspelled `--forms-json` writes the map
     and silently skips the file (`main.swift:43-53`, Reviewer).
   - `VerbSearch.keys(for:)` decides whether its cache applies by comparing glosses only

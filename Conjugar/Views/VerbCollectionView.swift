@@ -13,21 +13,17 @@ import SwiftUI
 struct VerbCollectionView: View {
   let collection: VerbCollection
   let source: AnalyticsSource
-  @Environment(\.verbPagePush) private var push
-  @State private var verbSort = VerbSort.frequency
-  @State private var hasSignaledView = false
-  private let entriesBySort: [VerbSort: [VerbMapEntry]]
+  private let verbs: [VerbMapEntry]
+  private let lists: [VerbSort: [VerbMapEntry]]
 
   init(collection: VerbCollection, source: AnalyticsSource) {
     self.collection = collection
     self.source = source
-    let entries = collection.verbs
-    entriesBySort = Dictionary(uniqueKeysWithValues: VerbSort.allCases.map { ($0, $0.sorted(entries)) })
+    verbs = collection.verbs
+    lists = VerbSort.sortedLists(of: verbs)
   }
 
   var body: some View {
-    let entries = entriesBySort[verbSort] ?? []
-
     ScrollView {
       VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
         VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
@@ -42,23 +38,10 @@ struct VerbCollectionView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .card()
 
-        VerbCollectionBar(collection: collection, title: collection.title, verbs: entries)
+        VerbCollectionBar(collection: collection, title: collection.title, verbs: verbs)
 
-        Picker(L.BrowseVerbs.sort, selection: $verbSort.animation(.snappy)) {
-          ForEach(VerbSort.allCases, id: \.self) { order in
-            Text(order.localizedDisplayName).tag(order)
-          }
-        }
-        .pickerStyle(.segmented)
-        .sensoryFeedback(.selection, trigger: verbSort)
-
-        Text(L.BrowseVerbs.verbCount(count: entries.count))
-          .font(.caption.smallCaps())
-          .foregroundStyle(.secondary)
-          .frame(maxWidth: .infinity, alignment: .leading)
-
-        VerbEntryList(entries: entries, showsLookedUp: true) { verb in
-          push?(VerbDestination(infinitive: verb, source: .list))
+        SortableVerbList(lists: lists, initialSort: .frequency, source: .list, showsLookedUp: true) { count in
+          L.BrowseVerbs.verbCount(count: count)
         }
       }
       .padding()
@@ -67,12 +50,29 @@ struct VerbCollectionView: View {
     .background(Color.customBackground.ignoresSafeArea())
     .navigationTitle(collection.title)
     .navigationBarTitleDisplayMode(.large)
-    .onAppear {
-      // A return from one of the list's verb pages is not another opening of the list.
-      guard !hasSignaledView else {
+    .signalsCollectionView(collection, source: source)
+  }
+}
+
+extension View {
+  /// Sends `viewCollection` once for each opening of a collection's page, or a model's. A return
+  /// from one of its verb pages is not another opening.
+  func signalsCollectionView(_ collection: VerbCollection, source: AnalyticsSource) -> some View {
+    modifier(CollectionViewSignal(collection: collection, source: source))
+  }
+}
+
+private struct CollectionViewSignal: ViewModifier {
+  let collection: VerbCollection
+  let source: AnalyticsSource
+  @State private var hasSignaled = false
+
+  func body(content: Content) -> some View {
+    content.onAppear {
+      guard !hasSignaled else {
         return
       }
-      hasSignaledView = true
+      hasSignaled = true
       collection.signalView(source: source)
     }
   }
@@ -171,9 +171,7 @@ struct VerbCollectionRow: View {
 
       VStack(alignment: .leading, spacing: 2) {
         Text(collection.title)
-          .font(.title3)
-          .fontDesign(.serif)
-          .foregroundStyle(Color.customYellow)
+          .serifTitle()
         ConjugationText(form: collection.examples)
           .font(.subheadline)
           .lineLimit(1)
@@ -217,9 +215,7 @@ struct VerbCollectionCard: View {
       }
 
       Text(collection.title)
-        .font(.title3)
-        .fontDesign(.serif)
-        .foregroundStyle(Color.customYellow)
+        .serifTitle()
       ConjugationText(form: collection.examples)
         .font(.subheadline)
       Text(collection.shortDescription)

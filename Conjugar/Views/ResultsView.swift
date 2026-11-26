@@ -267,7 +267,7 @@ struct ResultsView: View {
 
       if isOpen {
         VStack(alignment: .leading, spacing: 4) {
-          Text(Self.spanish(example.es))
+          Text(spanish: example.es)
             .font(.callout)
             .fontDesign(.serif)
             .foregroundStyle(Color.customForeground)
@@ -333,14 +333,14 @@ struct ResultsView: View {
         HStack(spacing: 4) {
           Text(L.Quiz.yourAnswer + ":").font(.caption).foregroundStyle(.secondary)
           // A recognition answer keeps its tense's capitals: "ser · Pretérito (yo)".
-          Text(Self.spanish(question.recognition == nil ? proposed.lowercased() : proposed))
+          Text(spanish: question.recognition == nil ? proposed.lowercased() : proposed)
             .font(.callout)
             .foregroundStyle(isRight ? Color.customForeground : Color.customBlue)
         }
         if let firstAttempt {
           HStack(spacing: 4) {
             Text(L.Results.firstTry + ":").font(.caption).foregroundStyle(Color.customYellow)
-            Text(Self.spanish(question.recognition == nil ? firstAttempt.lowercased() : firstAttempt))
+            Text(spanish: question.recognition == nil ? firstAttempt.lowercased() : firstAttempt)
               .font(.callout)
               .foregroundStyle(Color.customYellow)
           }
@@ -350,7 +350,7 @@ struct ResultsView: View {
           VStack(alignment: .leading, spacing: 2) {
             Text(L.Quiz.correctAnswer + ":").font(.caption).foregroundStyle(.secondary)
             ForEach(recognition.answerLines, id: \.self) { line in
-              Text(Self.spanish(line))
+              Text(spanish: line)
                 .font(.callout)
                 .fixedSize(horizontal: false, vertical: true)
             }
@@ -371,13 +371,6 @@ struct ResultsView: View {
     }
     .padding(.vertical, Layout.defaultSpacing)
     .frame(maxWidth: .infinity, alignment: .leading)
-  }
-
-  /// Spanish text that VoiceOver reads in Spanish, whatever the device's language.
-  private static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
   }
 }
 

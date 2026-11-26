@@ -7,41 +7,6 @@
 
 import SwiftUI
 
-/// Pushes a value onto whichever navigation stack shows the verb page, so that the page's links work
-/// in the Verbs tab and the Models tab alike. The stack needs a destination for the value's type:
-/// `VerbDestination`, `ModelInfo`, or `RelatedVerbListDestination`.
-struct VerbPagePush {
-  let push: (any Hashable) -> Void
-
-  func callAsFunction(_ value: some Hashable) {
-    push(value)
-  }
-}
-
-extension EnvironmentValues {
-  @Entry var verbPagePush: VerbPagePush?
-}
-
-extension View {
-  /// The destinations that a verb page, and the pages it leads to, can push.
-  func verbPageDestinations() -> some View {
-    // Only a verb page's model pill pushes a bare `ModelInfo`; the Models tab's rows push a
-    // `CollectionRequest`, which names its source.
-    navigationDestination(for: ModelInfo.self) { model in
-      ModelView(model: model, source: .verbPage)
-    }
-    .navigationDestination(for: RelatedVerbListDestination.self) { destination in
-      RelatedVerbListView(destination: destination)
-    }
-  }
-}
-
-/// Every verb built on one root, which a verb page's short list leads to.
-struct RelatedVerbListDestination: Hashable {
-  let root: String
-  let verbs: [String]
-}
-
 /// The verb page's ways to other verbs, at the bottom of the page: a few verbs built on the same
 /// base, and a few others of the same model.
 struct RelatedVerbsView: View {
@@ -145,50 +110,10 @@ private struct RelatedChip: View {
     if let systemImage {
       Label(text, systemImage: systemImage)
     } else if isSpanish {
-      Text(Self.spanish(text))
+      Text(spanish: text)
         .fontDesign(.serif)
     } else {
       Text(verbatim: text)
     }
-  }
-
-  private static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
-  }
-}
-
-/// Every verb built on one root, by frequency or alphabetically.
-struct RelatedVerbListView: View {
-  let destination: RelatedVerbListDestination
-  @Environment(\.verbPagePush) private var push
-  @State private var sort = VerbSort.frequency
-
-  private var entries: [VerbMapEntry] {
-    sort.sorted(destination.verbs.compactMap { VerbMap.shared.entry(for: $0) })
-  }
-
-  var body: some View {
-    ScrollView {
-      VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
-        Picker(L.BrowseVerbs.sort, selection: $sort.animation(.snappy)) {
-          ForEach(VerbSort.allCases, id: \.self) { order in
-            Text(order.localizedDisplayName).tag(order)
-          }
-        }
-        .pickerStyle(.segmented)
-        .sensoryFeedback(.selection, trigger: sort)
-
-        VerbEntryList(entries: entries) { verb in
-          push?(VerbDestination(infinitive: verb, source: .related))
-        }
-      }
-      .padding()
-      .readingWidth()
-    }
-    .background(Color.customBackground.ignoresSafeArea())
-    .navigationTitle(L.Verb.builtOn(root: RelatedVerbsView.citationForm(destination.root)))
-    .navigationBarTitleDisplayMode(.inline)
   }
 }

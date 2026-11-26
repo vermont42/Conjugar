@@ -318,7 +318,7 @@ nonisolated struct RecognitionQuestion: Equatable, Sendable {
   /// The chip's label for a person in a tense: the subjects a form of that person may take, or,
   /// for a command, whom it addresses.
   static func personLabel(_ personNumber: DisplayPersonNumber, in tense: DisplayTense) -> String {
-    let isCommand = tense == .imperativoPositivo || tense == .imperativoNegativo
+    let isCommand = tense.isCommand
     switch personNumber {
     case .thirdSingular:
       return isCommand ? "usted" : "él, ella, usted"

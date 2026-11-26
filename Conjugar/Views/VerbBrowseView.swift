@@ -9,8 +9,6 @@ import SwiftUI
 import TipKit
 
 struct VerbBrowseView: View {
-  static let englishTitle = "Verbs"
-
   /// The sort order of the full list. It survives a visit to My Verbs and is saved in Settings.
   @State private var sort: VerbSort = Current.settings.verbSort
   /// The picker's choice: a sort order, or My Verbs.
@@ -45,10 +43,7 @@ struct VerbBrowseView: View {
   private let tryQuizTip = TryQuizTip()
 
   /// Both sort orders, computed once.
-  private static let verbsBySort: [VerbSort: [VerbMapEntry]] = {
-    let entries = VerbMap.shared.entries.values
-    return Dictionary(uniqueKeysWithValues: VerbSort.allCases.map { ($0, $0.sorted(entries)) })
-  }()
+  private static let verbsBySort = VerbSort.sortedLists(of: VerbMap.shared.entries.values)
 
   private var verbs: [VerbMapEntry] { Self.verbsBySort[sort] ?? [] }
 
@@ -115,13 +110,6 @@ struct VerbBrowseView: View {
   }
 
   private static let isPadOrMac = UIDevice.current.userInterfaceIdiom == .pad
-
-  // iPadOS 26 shrinks .automatic search into a toolbar button that ignores a programmatic
-  // .searchFocused, so a letter key could not reopen it. A drawer that stays put accepts it.
-  // The iPhone keeps .automatic and looks as before.
-  private var searchPlacement: SearchFieldPlacement {
-    Self.isPadOrMac ? .navigationBarDrawer(displayMode: .always) : .automatic
-  }
 
   // Hack: on iPad, a tap outside an empty search field ends the search at touch-down, before the
   // tap completes. A letter row that followed the focus vanished under the finger, so tapping á did
@@ -311,10 +299,7 @@ struct VerbBrowseView: View {
   private static let selectionColor = Color.customRed.opacity(0.2)
 
   private func rowBackground(index: Int) -> Color {
-    if index == keyboardSelection {
-      return Self.selectionColor
-    }
-    return index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03)
+    index == keyboardSelection ? Self.selectionColor : .zebraStripe(index)
   }
 
   /// The rows that Return and the arrow keys move through: the verbs as listed, or the guess
@@ -450,13 +435,9 @@ struct VerbBrowseView: View {
   }
 
   private func listHeading(_ text: String) -> some View {
-    Text(text)
-      .font(.caption.smallCaps())
-      .foregroundStyle(.secondary)
-      .frame(maxWidth: .infinity, alignment: .leading)
+    ListHeading(text)
       .padding(.horizontal)
       .padding(.top, Layout.defaultSpacing)
-      .accessibilityAddTraits(.isHeader)
   }
 
   /// The starred verbs, then the recent ones not starred. A swipe removes a verb, its star and its
@@ -488,7 +469,7 @@ struct VerbBrowseView: View {
                 }
             }
           } header: {
-            myVerbsHeading(L.MyVerbs.starred)
+            ListHeading(L.MyVerbs.starred)
               .accessibilityIdentifier("my_verbs_starred_heading")
           }
         }
@@ -508,7 +489,7 @@ struct VerbBrowseView: View {
             }
           } header: {
             HStack(alignment: .firstTextBaseline) {
-              myVerbsHeading(L.MyVerbs.recent)
+              ListHeading(L.MyVerbs.recent)
                 .accessibilityIdentifier("my_verbs_recent_heading")
               Spacer()
               Button(L.MyVerbs.clearRecent) {
@@ -550,13 +531,6 @@ struct VerbBrowseView: View {
         Text(L.MyVerbs.clearMessage)
       }
     }
-  }
-
-  private func myVerbsHeading(_ text: String) -> some View {
-    Text(text)
-      .font(.caption.smallCaps())
-      .foregroundStyle(.secondary)
-      .accessibilityAddTraits(.isHeader)
   }
 
   private func myVerbRow(_ entry: VerbMapEntry) -> some View {
@@ -699,13 +673,8 @@ struct VerbBrowseView: View {
           }
           .padding(.vertical, Layout.defaultSpacing)
         } else {
-          Picker(L.BrowseVerbs.sort, selection: $listMode.animation(.snappy)) {
-            ForEach(VerbListMode.allCases, id: \.self) { mode in
-              Text(mode.localizedDisplayName).tag(mode)
-            }
-          }
-          .pickerStyle(.segmented)
-          .readingWidth()
+          SortPicker(selection: $listMode)
+            .readingWidth()
           .padding()
           .accessibilityIdentifier("verb_list_mode_picker")
         }
@@ -729,7 +698,7 @@ struct VerbBrowseView: View {
         recomputeFilteredVerbs()
       }
       .background(Color.customBackground.ignoresSafeArea())
-      .searchable(text: $searchText, placement: searchPlacement, prompt: L.BrowseVerbs.searchPromptVerbConjugationOrMeaning)
+      .searchable(text: $searchText, placement: BrowseLayout.searchPlacement, prompt: L.BrowseVerbs.searchPromptVerbConjugationOrMeaning)
       .searchFocused($searchIsFocused)
       .onChange(of: searchIsFocused) {
         searchFocusChanged()
@@ -751,11 +720,7 @@ struct VerbBrowseView: View {
       }
       .textInputAutocapitalization(.never)
       .autocorrectionDisabled()
-      .sensoryFeedback(.selection, trigger: listMode)
       .navigationTitle(L.BrowseVerbs.localizedTitle)
-      .navigationDestination(for: VerbDestination.self) { destination in
-        VerbView(verb: destination.infinitive, source: destination.source, marks: destination.marks)
-      }
       // A verb page's pill and related verbs lead to a model's page and a full list without
       // leaving this tab, so a learner who arrived from a widget or a link reaches them too.
       .verbPageDestinations()
@@ -803,7 +768,7 @@ struct VerbBrowseView: View {
         }.value
       }
     }
-    .environment(\.verbPagePush, VerbPagePush { navigationPath.append($0) })
+    .pushesVerbPages(onto: $navigationPath)
   }
 }
 
@@ -812,126 +777,6 @@ private struct ReviewCardState {
   let offer: PracticeStore.CardOffer
   var isRevealed = false
   var wasSignaled = false
-}
-
-/// The visual content of a verb row — serif gold infinitive + gloss with a blue
-/// frequency-rank badge. Shared by Browse Verbs and the Model detail's
-/// "verbs using this model" list.
-struct VerbRowLabel: View {
-  let entry: VerbMapEntry
-  /// What a search matched, if it matched a form. See `MatchLines`.
-  var matchLines: [String] = []
-  /// A collection's rows check the verbs looked up.
-  var isLookedUp = false
-
-  var body: some View {
-    HStack(alignment: .firstTextBaseline) {
-      VStack(alignment: .leading, spacing: 2) {
-        Text(entry.citationForm)
-          .font(.title3)
-          .fontDesign(.serif)
-          .foregroundStyle(Color.customYellow)
-        if !entry.gloss.isEmpty {
-          Text(entry.gloss)
-            .font(.subheadline)
-            .foregroundStyle(Color.customForeground)
-        }
-        MatchLines(lines: matchLines)
-      }
-
-      Spacer()
-
-      if isLookedUp {
-        LookedUpCheck()
-      }
-
-      Text(verbatim: "#\(entry.frequencyRank)")
-        .font(.caption.monospacedDigit())
-        .foregroundStyle(Color.customBlue)
-        .accessibilityHidden(true)
-    }
-    .padding(.horizontal)
-    .padding(.vertical, 12)
-    // Make the *entire* row a tap target. Without this, SwiftUI hit-tests only the
-    // drawn glyphs (infinitive/gloss/rank), so taps on the transparent Spacer gap and
-    // padding fall through — the row felt only partly tappable (and defeated
-    // ios-build-verify's tap-to-drill-down on a verb). A content shape over the padded
-    // frame claims the whole cell.
-    .contentShape(Rectangle())
-  }
-}
-
-/// The carded grid variant of a verb row for the iPad (regular-width) grid: the
-/// same serif gold infinitive + gloss + rank as `VerbRowLabel`, but laid out to
-/// fill a `.card()` cell (rank pulled up beside the infinitive, no row padding —
-/// the card supplies it).
-struct VerbGridCell: View {
-  let entry: VerbMapEntry
-  var matchLines: [String] = []
-  var isLookedUp = false
-
-  var body: some View {
-    VStack(alignment: .leading, spacing: 2) {
-      HStack(alignment: .firstTextBaseline) {
-        Text(entry.citationForm)
-          .font(.title3)
-          .fontDesign(.serif)
-          .foregroundStyle(Color.customYellow)
-
-        Spacer(minLength: Layout.defaultSpacing)
-
-        if isLookedUp {
-          LookedUpCheck()
-        }
-
-        Text(verbatim: "#\(entry.frequencyRank)")
-          .font(.caption.monospacedDigit())
-          .foregroundStyle(Color.customBlue)
-          .accessibilityHidden(true)
-      }
-
-      if !entry.gloss.isEmpty {
-        Text(entry.gloss)
-          .font(.subheadline)
-          .foregroundStyle(Color.customForeground)
-      }
-
-      MatchLines(lines: matchLines)
-    }
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .contentShape(Rectangle())
-  }
-}
-
-/// The check on a collection's row for a verb looked up, which VoiceOver reads as "Looked up".
-struct LookedUpCheck: View {
-  var body: some View {
-    Image(systemName: "checkmark.circle.fill")
-      .font(.subheadline)
-      .foregroundStyle(Color.customGreen)
-      .accessibilityLabel(L.VerbCollection.lookedUp)
-  }
-}
-
-/// The forms a search matched, under a row's gloss: "fue: Pretérito (él)". Every word of a line
-/// is Spanish, the tense names included, so VoiceOver reads each line in a Spanish voice.
-struct MatchLines: View {
-  let lines: [String]
-
-  var body: some View {
-    ForEach(lines, id: \.self) { line in
-      Text(Self.spanish(line))
-        .font(.caption)
-        .foregroundStyle(Color.customBlue)
-        .padding(.top, 2)
-    }
-  }
-
-  private static func spanish(_ line: String) -> AttributedString {
-    var text = AttributedString(line)
-    text.languageIdentifier = "es"
-    return text
-  }
 }
 
 #Preview {

@@ -41,7 +41,7 @@ struct VerbEntryList: View {
             VerbRowLabel(entry: entry, isLookedUp: isLookedUp(entry))
           }
           .buttonStyle(.plain)
-          .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
+          .zebraStriped(index)
           Divider().padding(.leading)
         }
       }

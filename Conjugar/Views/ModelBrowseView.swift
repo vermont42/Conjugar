@@ -2,19 +2,16 @@
 //  ModelBrowseView.swift
 //  Conjugar
 //
-//  The SwiftUI Models list, replacing the UIKit BrowseModelsVC/BrowseModelsUIV/
-//  ModelCell. Every verb model with a tinted irregularity-percent badge, sortable
-//  Irregularity / Alphabetical / Number (persisted via Settings.modelSort), with a
-//  count banner and animated sort + selection haptic. Mirrors VerbBrowseView.
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
 import SwiftUI
 import TipKit
 
+/// The Models tab: the featured collections, then every verb model with a tinted
+/// irregularity-percent badge, searchable and sortable by irregularity, alphabetically, or by
+/// number (saved in `Settings.modelSort`).
 struct ModelBrowseView: View {
-  static let englishTitle = "Models"
-
   @State private var sort: ModelSort = Current.settings.modelSort
   @State private var navigationPath = NavigationPath()
   @State private var searchText = ""
@@ -22,34 +19,17 @@ struct ModelBrowseView: View {
   @Environment(AppRouter.self) private var router
   private let exploreModelsTip = ExploreModelsTip()
 
-  private static let modelsBySort: [ModelSort: [ModelInfo]] = {
-    let models = ModelInfo.all
-    return Dictionary(uniqueKeysWithValues: ModelSort.allCases.map { ($0, $0.sorted(models)) })
-  }()
+  /// The search's text and order and the models they find, updated only when the text or the
+  /// order changes. Seeded with the saved order's full list, so that the first frame is not a "0
+  /// models" flash.
+  @State private var search = ModelSearch(sort: Current.settings.modelSort)
 
-  private var models: [ModelInfo] { Self.modelsBySort[sort] ?? [] }
-
-  /// The current sort filtered by the search query, materialized into `@State` and
-  /// recomputed only when `searchText` or `sort` changes. Seeded to the initial
-  /// sort's full list so the first frame isn't a "0 models" flash.
-  @State private var filteredModels: [ModelInfo] = Self.modelsBySort[Current.settings.modelSort] ?? []
-
-  /// Refilter for the current `searchText` + `sort`, firing the no-results sad trombone
-  /// here — the one-shot search transition — instead of inside `body`. Matches the exemplar
-  /// **or** the class number after `VerbSearch.fold`, the Verbs tab's folding, which drops case
-  /// and every diacritic, ñ included, so that a query behaves alike in both tabs (`28` or `4B`
-  /// finds a model by its class number, `hacer` by its exemplar). Unlike the Verbs tab, this one
-  /// does not rank.
-  private func recomputeFilteredModels() {
-    let results = BrowseSearch.results(in: models, query: searchText) { model, query in
-      let foldedQuery = VerbSearch.fold(query)
-      return VerbSearch.fold(model.exemplar).contains(foldedQuery)
-        || VerbSearch.fold(model.classNumber).contains(foldedQuery)
-    }
-    if results.isEmpty && !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+  /// Refilters for the current text and order, and plays the sad trombone here, when the text
+  /// changes to a failed query, rather than inside `body`.
+  private func updateSearch() {
+    if search.update(text: searchText, sort: sort) {
       Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)
     }
-    filteredModels = results
   }
 
   var body: some View {
@@ -58,26 +38,23 @@ struct ModelBrowseView: View {
         ScrollViewReader { proxy in
           ScrollView {
             // The featured collections lead the tab and step aside while a search is typed.
-            if searchText.isEmpty {
+            if !search.isSearching {
               collectionsSection
                 .id("top")
             }
 
-            Text(L.BrowseModels.modelCount(count: filteredModels.count))
-              .font(.caption.smallCaps())
-              .foregroundStyle(.secondary)
-              .frame(maxWidth: .infinity, alignment: .leading)
+            ListHeading(L.BrowseModels.modelCount(count: search.models.count))
               .padding(.horizontal)
-              .padding(.top, searchText.isEmpty ? Layout.doubleDefaultSpacing : Layout.defaultSpacing)
-              .id(searchText.isEmpty ? "models" : "top")
+              .padding(.top, search.isSearching ? Layout.defaultSpacing : Layout.doubleDefaultSpacing)
+              .id(search.isSearching ? "top" : "models")
 
-            if searchText.isEmpty {
+            if !search.isSearching {
               TipView(exploreModelsTip)
                 .padding(.horizontal)
                 .padding(.top, Layout.defaultSpacing)
             }
 
-            if !searchText.isEmpty && filteredModels.isEmpty {
+            if search.isSearching && search.models.isEmpty {
               ContentUnavailableView(L.BrowseModels.searchNoResults, systemImage: "magnifyingglass")
                 .padding(.top, Layout.tripleDefaultSpacing)
             } else if horizontalSizeClass == .regular {
@@ -85,7 +62,7 @@ struct ModelBrowseView: View {
               // carded cells (≈2 columns portrait, ≈3–4 landscape). The same
               // `navigationDestination(for: CollectionRequest)` renders the pushed `ModelView`.
               LazyVGrid(columns: BrowseLayout.listColumns, spacing: Layout.doubleDefaultSpacing) {
-                ForEach(filteredModels, id: \.classNumber) { model in
+                ForEach(search.models, id: \.classNumber) { model in
                   NavigationLink(value: CollectionRequest(collection: .model(model.classNumber), source: .tab)) {
                     ModelGridCell(model: model)
                       .card()
@@ -104,7 +81,7 @@ struct ModelBrowseView: View {
               .padding(.top, Layout.defaultSpacing)
             } else {
               LazyVStack(spacing: 0) {
-                ForEach(Array(filteredModels.enumerated()), id: \.element.classNumber) { index, model in
+                ForEach(Array(search.models.enumerated()), id: \.element.classNumber) { index, model in
                   // A real `NavigationLink` — button semantics + press
                   // highlight; the stack's `navigationDestination(for: CollectionRequest)`
                   // renders the pushed `ModelView`.
@@ -113,7 +90,7 @@ struct ModelBrowseView: View {
                   }
                   .buttonStyle(.plain)
                   .accessibilityIdentifier("model_row_\(model.exemplar)")
-                  .background(index.isMultiple(of: 2) ? Color.clear : Color.customYellow.opacity(0.03))
+                  .zebraStriped(index)
                   Divider().padding(.leading)
                 }
               }
@@ -121,32 +98,25 @@ struct ModelBrowseView: View {
           }
           .onChange(of: sort) { _, newValue in
             Current.settings.modelSort = newValue
-            recomputeFilteredModels()
+            updateSearch()
             proxy.scrollTo("top", anchor: .top)
           }
-          .onChange(of: searchText) { _, _ in
-            recomputeFilteredModels()
+          .onChange(of: searchText) {
+            updateSearch()
           }
         }
 
         Divider()
 
-        Picker(L.BrowseVerbs.sort, selection: $sort.animation(.snappy)) {
-          ForEach(ModelSort.allCases, id: \.self) { order in
-            Text(order.localizedDisplayName).tag(order)
-          }
-        }
-        .pickerStyle(.segmented)
-        .readingWidth()
+        SortPicker(selection: $sort)
+          .readingWidth()
         .padding()
       }
       .background(Color.customBackground.ignoresSafeArea())
-      .searchable(text: $searchText, prompt: L.BrowseModels.searchPrompt)
-      .sensoryFeedback(.selection, trigger: sort)
+      .searchable(text: $searchText, placement: BrowseLayout.searchPlacement, prompt: L.BrowseModels.searchPrompt)
+      .textInputAutocapitalization(.never)
+      .autocorrectionDisabled()
       .navigationTitle(L.BrowseModels.localizedTitle)
-      .navigationDestination(for: VerbDestination.self) { destination in
-        VerbView(verb: destination.infinitive, source: destination.source)
-      }
       .navigationDestination(for: CollectionRequest.self) { request in
         collectionPage(request)
       }
@@ -163,7 +133,7 @@ struct ModelBrowseView: View {
       }
     }
     // A model page, a verb page, and the pages they lead to push onto this stack.
-    .environment(\.verbPagePush, VerbPagePush { navigationPath.append($0) })
+    .pushesVerbPages(onto: $navigationPath)
   }
 }
 
@@ -171,12 +141,8 @@ extension ModelBrowseView {
   /// The featured collections: rows on iPhone, cards on iPad.
   private var collectionsSection: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
-      Text(L.VerbCollection.heading)
-        .font(.caption.smallCaps())
-        .foregroundStyle(.secondary)
-        .frame(maxWidth: .infinity, alignment: .leading)
+      ListHeading(L.VerbCollection.heading)
         .padding(.horizontal)
-        .accessibilityAddTraits(.isHeader)
 
       if horizontalSizeClass == .regular {
         LazyVGrid(columns: BrowseLayout.listColumns, spacing: Layout.doubleDefaultSpacing) {
@@ -218,8 +184,8 @@ extension ModelBrowseView {
   }
 }
 
-/// The visual content of a model row — serif gold exemplar + class number with a
-/// tinted irregularity-percent capsule badge.
+/// The visual content of a model row: the serif gold exemplar and the class number, with a tinted
+/// irregularity-percent capsule badge.
 struct ModelRowLabel: View {
   let model: ModelInfo
 
@@ -227,9 +193,7 @@ struct ModelRowLabel: View {
     HStack(alignment: .firstTextBaseline) {
       VStack(alignment: .leading, spacing: 2) {
         Text(model.exemplar)
-          .font(.title3)
-          .fontDesign(.serif)
-          .foregroundStyle(Color.customYellow)
+          .serifTitle()
         Text(model.classNumber)
           .font(.subheadline)
           .foregroundStyle(Color.customForeground)
@@ -242,13 +206,9 @@ struct ModelRowLabel: View {
     }
     .padding(.horizontal)
     .padding(.vertical, 12)
-    // Make the *entire* row a tap target — the same fix VerbRowLabel carries, and
-    // for the same reason. Without it SwiftUI hit-tests only the drawn glyphs
-    // (exemplar/class number on the left, percent pill on the right), so a tap
-    // anywhere in the Spacer gap between them — most of the row — falls through and
-    // the NavigationLink never fires. On iPhone that made model rows effectively
-    // untappable except on their text; the iPad was unaffected because its grid
-    // branch wraps each cell in `.card()`, whose fill hit-tests on its own.
+    // The whole row is the tap target. Without a content shape, SwiftUI hit-tests only the drawn
+    // text and pill, and a tap in the gap between them, most of the row, opens nothing. The
+    // iPad's cards need no shape, since `.card()`'s fill hit-tests on its own.
     .contentShape(Rectangle())
   }
 }
@@ -264,9 +224,7 @@ struct ModelGridCell: View {
     VStack(alignment: .leading, spacing: 2) {
       HStack(alignment: .firstTextBaseline) {
         Text(model.exemplar)
-          .font(.title3)
-          .fontDesign(.serif)
-          .foregroundStyle(Color.customYellow)
+          .serifTitle()
 
         Spacer(minLength: Layout.defaultSpacing)
 

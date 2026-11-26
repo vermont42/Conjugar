@@ -71,9 +71,6 @@ struct QuizView: View {
       .navigationDestination(isPresented: $showingResults) {
         ResultsView(quiz: quiz, onTenMore: continueSession, onAnotherRound: anotherRound)
       }
-      .navigationDestination(for: VerbDestination.self) { destination in
-        VerbView(verb: destination.infinitive, source: destination.source, marks: destination.marks)
-      }
       .navigationDestination(for: QuizCorrectionModel.self) { destination in
         ModelView(model: destination.model, source: .quizCorrection)
       }
@@ -158,7 +155,7 @@ struct QuizView: View {
       }
     }
     // A correction's links, and the links on the pages they open, push onto this stack.
-    .environment(\.verbPagePush, VerbPagePush { navigationPath.append($0) })
+    .pushesVerbPages(onto: $navigationPath)
     .environment(\.isBeneathQuiz, quiz.quizState == .inProgress)
     .accessibilityAction(.magicTap) {
       if quiz.isHeld {
@@ -747,7 +744,7 @@ struct QuizView: View {
     let hiddenCount = myVerbs.count - shown.count
     return FlowLayout(spacing: Layout.defaultSpacing, centersRows: true) {
       ForEach(Array(shown), id: \.infinitive) { entry in
-        Text(Self.spanish(entry.citationForm))
+        Text(spanish: entry.citationForm)
           .font(isLarge ? .title3 : .subheadline)
           .fontDesign(.serif)
           .foregroundStyle(Color.customYellow)
@@ -765,13 +762,6 @@ struct QuizView: View {
     .frame(maxWidth: .infinity)
     .transition(.opacity.combined(with: .move(edge: .bottom)))
     .accessibilityIdentifier("quiz_my_verbs_chips")
-  }
-
-  /// Spanish text that VoiceOver reads in Spanish, whatever the device's language.
-  private static func spanish(_ text: String) -> AttributedString {
-    var attributed = AttributedString(text)
-    attributed.languageIdentifier = "es"
-    return attributed
   }
 
   /// The primary Start CTA has a subtle "breathing" pulse: the button gently
@@ -1142,7 +1132,7 @@ struct QuizView: View {
           // "Correct. Spelled: rio", the form read in Spanish.
           ConjugationText(form: spelling, regularColor: .secondary)
             .font(.callout)
-            .accessibilityLabel(Text(L.Quiz.correctSpelled + " ") + Text(Self.spanish(spelling.lowercased())))
+            .accessibilityLabel(Text(L.Quiz.correctSpelled + " ") + Text(spanish: spelling.lowercased()))
             .accessibilityIdentifier("quiz_current_spelling")
         }
       }

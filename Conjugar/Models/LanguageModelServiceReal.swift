@@ -303,7 +303,7 @@ struct ConjugationTool: Tool {
       return "Could not conjugate \(name) for the \(tense.titleCaseName)."
     }
 
-    let imperative = (tense == .imperativoPositivo || tense == .imperativoNegativo)
+    let imperative = tense.isCommand
     let persons = imperative ? imperativePersons : regularPersons
     var lines: [String] = []
     for person in persons {

@@ -64,6 +64,19 @@ extension View {
     modifier(MetadataPill(tint: tint))
   }
 
+  /// The serif gold title of a verb's, a model's, or a collection's row or card.
+  func serifTitle() -> some View {
+    font(.title3)
+      .fontDesign(.serif)
+      .foregroundStyle(Color.customYellow)
+  }
+
+  /// A list row's background: every other row faintly gold, so that a long list is easy to follow
+  /// across the width of the screen.
+  func zebraStriped(_ index: Int) -> some View {
+    background(Color.zebraStripe(index))
+  }
+
   /// A light selection haptic keyed to `trigger`. Attach to sort controls and
   /// pickers.
   func selectionFeedback(trigger: some Equatable) -> some View {
@@ -254,4 +267,11 @@ private struct CopyOnLongPress: ViewModifier {
   }
 
   private static let previewMargin: CGFloat = 8
+}
+
+extension Color {
+  /// The background of the list row at `index`. See `zebraStriped(_:)`.
+  static func zebraStripe(_ index: Int) -> Color {
+    index.isMultiple(of: 2) ? .clear : .customYellow.opacity(0.03)
+  }
 }
