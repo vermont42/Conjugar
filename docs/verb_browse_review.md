@@ -258,6 +258,10 @@ one thing that forgets which verbs were opened.*
 **Fix.** Store the selected infinitive, clear it when the shown list changes, count no targets
 while My Verbs shows, and let Return act whenever a row is highlighted.
 
+*Fixed on `master`, 2026-11-26, in Phase 9 of `plans/verb_browse_fixes.md`: `VerbBrowseSearch.selection` is an
+infinitive, cleared whenever what the list shows changes; My Verbs has no keyboard targets; Return
+opens a highlighted row on any idiom, and only the iPad idiom opens the first result unasked.*
+
 <a id="c11"></a>
 ### C11. Three pushes skip the wait that the list's rows take (Read; the drop itself is Suspected)
 
@@ -268,6 +272,9 @@ Verbs and the card can both sit under an empty, focused field when there are no 
 has tried the tap on an iPad.
 
 **Fix.** Send all three through `push(_:)`.
+
+*Fixed on `master`, 2026-11-26, in Phase 9 of `plans/verb_browse_fixes.md`: every push from the tab goes through
+`push(_:)`. The drop itself stays untried on these three paths.*
 
 <a id="c12"></a>
 ### C12. One failed decode silently replaces a record (Reviewer)
@@ -308,13 +315,14 @@ store no longer migrates over one.*
   the game, and Settings' Play and Show Onboarding present through the router's covers.*
 - **The linger's task is never cancelled (Read).** Lose focus, regain it, and lose it again within
   700 ms, and the first task ends the linger early (`VerbBrowseView.swift:128-144`). The iPad's
-  letter-key path makes exactly that sequence.
+  letter-key path makes exactly that sequence. *Fixed on `master`, 2026-11-26, in Phase 9 of
+  `plans/verb_browse_fixes.md`: each change of focus cancels the last linger.*
 - **A whitespace-only query hides things and filters nothing (Read).** The tip, the review card,
   and the Models tab's collections test `searchText.isEmpty`; the lists test the trimmed text.
-  Type a space and they vanish above a full list. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md` for the Models tab: `ModelSearch.isSearching` reads the trimmed text. The Verbs tab's tip and card are Phase 9's.*
+  Type a space and they vanish above a full list. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md` for the Models tab: `ModelSearch.isSearching` reads the trimmed text. The Verbs tab's tip and card are Phase 9's.* *Fixed on `master` for the Verbs tab, 2026-11-26, in Phase 9 of `plans/verb_browse_fixes.md`: the tip, the card, the list, and the picker all read `VerbBrowseSearch.isSearching`, the trimmed test.*
 - **The sad trombone replays on a sort change (Read).** `recomputeFilteredVerbs` and
   `recomputeFilteredModels` run on a sort change and play it again for the same failed query. In
-  the Models tab the picker is always there. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md` for the Models tab: `ModelSearch.update` plays it only when the text changes. The Verbs tab's is Phase 9's.*
+  the Models tab the picker is always there. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md` for the Models tab: `ModelSearch.update` plays it only when the text changes. The Verbs tab's is Phase 9's.* *Fixed on `master` for the Verbs tab, 2026-11-26, in Phase 9 of `plans/verb_browse_fixes.md`: the trombone plays when the text changes to a failed query, or when the index arrives and a failure made without it stays one.*
 - **Recent can show fewer than twenty (Read).** `recent()` takes twenty before the starred verbs
   are filtered out (`Shared/LearnerVerbs.swift:71-79`). With fifteen of the last twenty opens
   starred, Recent lists five while older unstarred opens exist. *Fixed on `master`, 2026-11-25, in
@@ -339,12 +347,23 @@ store no longer migrates over one.*
 - **The grid's selection outline has the wrong corners (Read).** It strokes a radius of 8
   (`VerbBrowseView.swift:634`) around a card whose radius is 12.
 - **A second tap on the mail link hides its note early (Read).** The first tap's four-second task
-  is not cancelled (`VerbBrowseView.swift:295-308`).
+  is not cancelled (`VerbBrowseView.swift:295-308`). *Fixed on `master`, 2026-11-26, in Phase 9
+  of `plans/verb_browse_fixes.md`: a second tap cancels the first's task.*
 - **Two quick letter taps may arrive reversed on iPad (Suspected).** Each tap starts its own
   polling task (`VerbBrowseView.swift:216-226`). The order in which they wake was not tried.
+  *Real, and fixed on `master`, 2026-11-26, in Phase 9 of `plans/verb_browse_fixes.md`. With AXe on the iPad
+  simulator, á then é tapped 50 to 300 ms apart into the focused empty field gave "éá" three
+  times in five and lost the á once. Letters that must wait now queue in the model and arrive
+  together, in order: "áé" in every trial from 80 to 300 ms. At 50 ms the á is still lost when
+  the field is empty, before the fix and after it, though 50 ms taps into a field holding text
+  arrive whole. Making the first letter wait whenever the field was empty did not help, so the
+  first tap's action seems never to run; that is the touch, not the order, and it was left.*
 - **The arrow keys may stay installed over a pushed page (Suspected).** If Return pushes a page
   and the field keeps focus, the priority ↑ and ↓ commands would swallow the page's own arrow
-  scrolling. One AXe check would settle it.
+  scrolling. One AXe check would settle it. *Checked on `master`, 2026-11-26, in Phase 9 of
+  `plans/verb_browse_fixes.md`, and nothing is lost: ↓ did not scroll tener's page after ⌘F, "tener", Return, but it
+  did not scroll the page opened by a link with no search focused either, so there is no arrow
+  scrolling to swallow. The commands are now installed only while the list is on screen anyway.*
 
 ## Performance
 
@@ -369,6 +388,12 @@ carry over, because `editDistance(_:_:limit:)` stops early here.
 **Fix.** Until the index is ready, search infinitives and glosses only and run the search again
 when the warm-up completes. Or move matching off the main actor and publish the results.
 
+*Fixed on `master`, 2026-11-26, in Phase 9 of `plans/verb_browse_fixes.md`, the first way. A Debug build in the
+simulator measured the index's first touch at 6.0 to 6.2 seconds. From a cold `search?q=fue`, the
+results showed at 8.0 to 8.7 seconds before the fix, the main thread blocked for 5.4 to 6.0 of
+them. After it, the first results (repostar, by its gloss "refuel") showed at about 3.1 seconds,
+and ser and ir at 7.0 to 7.9 seconds, with the warm-up begun at launch.*
+
 ### F2. Smaller performance findings
 
 - **`VerbView.init` and `ModelView.init` do the page's work (Suspected).** `VerbView.init`
@@ -391,7 +416,8 @@ when the warm-up completes. Or move matching off the main actor and publish the 
   - `LearnerVerbStore.recentVerbs` sorts the record on every access, and the Verbs tab's body
     reads it about eight times. *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: the store derives its four lists once per change.*
   - `signalEndedSearch` runs the whole search again for a query whose matches the view still
-    holds (Read; `VerbBrowseView.swift:207`).
+    holds (Read; `VerbBrowseView.swift:207`). *Fixed on `master`, 2026-11-26, in Phase 9 of
+    `plans/verb_browse_fixes.md`: the report reads the model's results.*
   - `VerbCollection.verbs` for a model filters and sorts all 4,811 entries on each access.
     *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: it reads the model's row.*
   - `VerbMap.entries(in:)` sorts the whole map on every call, and six other files sort every
@@ -466,8 +492,11 @@ Josh's decision.*
     reads `source`. Line 458 omits three of the router's pending values, and line 614 says the
     push waits "when the search is ending" ([S2](#smells) says when it really waits). *The
     first two fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`; the
-    third is S2's, in Phase 9.*
-  - `VerbBrowseView.swift:788`: "about a second" (Run; see [F1](#f1)).
+    third is S2's, in Phase 9.* *The third fixed on `master`, 2026-11-26, in Phase 9 of
+    `plans/verb_browse_fixes.md`.*
+  - `VerbBrowseView.swift:788`: "about a second" (Run; see [F1](#f1)). *Fixed on `master`,
+    2026-11-26, in Phase 9 of `plans/verb_browse_fixes.md`, here, in `ConjugationIndex`, and in
+    `docs/feature_architecture.md`.*
   - `AppRouter.swift:5-8`: the header names four ways in and omits Spotlight, Look Up a Verb,
     reminders, and shared links (Read). *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`.*
   - `MainTabView.swift:117`: the doc comment about the onboarding cover sits on
@@ -573,25 +602,34 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   their own file, and an `@Observable` search model that owns the text, the matches, the tracker,
   and the selection. The last would make the decisions testable. Today only
   `keyboardSelection(after:moving:count:)` is tested, and [C10](#c10)'s three bugs live in the
-  untested decisions around it.
+  untested decisions around it. *The search model fixed on `master`, 2026-11-26, in Phase 9 of
+  `plans/verb_browse_fixes.md`: `Models/VerbBrowseSearch.swift`, with 37 tests. The view's other seams are Phase 10's.*
 - **S2. `searchFocusLostAt` is a `Date` used as a `Bool`, and it never resets (Read).** It is
   assigned `.now` and compared only with `nil` (`VerbBrowseView.swift:36`, `:137`, `:152`). After
   the field first loses focus it stays set until the field is focused again, so every later push
   from the unsearched list goes through `Task { await waitUntilIdle() }`. That is harmless,
   because the wait returns at once when nothing is animating, but the guard does not do what its
-  comment describes.
+  comment describes. *Fixed on `master`, 2026-11-26, in Phase 9 of `plans/verb_browse_fixes.md`: the state is gone.
+  `searchIsEnding` is true during the linger, with the field unfocused and nothing typed, which is
+  the moment it described.*
 - **S3. Rows are opened by index, read when the tap fires (Read).** `openRow(at:…)` takes an index
   into `shownVerbs` and into `searchMatches`, two arrays that must stay parallel, and reads both
   when the action runs, though `wasSearching` and `browseSource` were deliberately captured when
   the row was drawn (`VerbBrowseView.swift:164-179`). Opening the right recent verb depends on
   the 700 ms linger still holding. The closure already has the entry; passing the entry and its
-  match would remove the lookup and the dependence.
+  match would remove the lookup and the dependence. *Fixed on `master`, 2026-11-26, in Phase 9 of
+  `plans/verb_browse_fixes.md`: a `VerbBrowseSearch.Row` carries its entry and its origin (every verb, a recent verb,
+  or a result with its match, place, and count), and the action opens that row.*
 - **S4. Timed workarounds (Read).** 700 ms of lingering focus, 500 ms after a pop before focusing
   the field, a poll of up to a second for UIKit's transitions, and a four-second note
   (`VerbBrowseView.swift:146`, `:390`, `:304`; `ViewControllerTransitions.swift:17-22`). Each is
   commented as a hack with its reason, which is right. None is cancelled when superseded. The
   500 ms sleep could use the transition wait that already exists. They are worth one list in a
-  doc, to retry on each new iOS.
+  doc, to retry on each new iOS. *Fixed on `master`, 2026-11-26, in Phase 9 of `plans/verb_browse_fixes.md`, but
+  for the list, which is the Closing's: the linger and the note are cancelled when superseded, and
+  the 500 ms sleep is a yield and the transition wait. With ⌘F from a verb page and typing 1.5
+  seconds later, the field took the text 12 times in 12 across both simulators with the wait, and
+  5 in 6 with neither wait nor sleep.*
 - **S5. Declarations in files named for something else (Read).** `VerbDestination` is in
   `VerbVisit.swift`. `VerbListMode` is in `VerbSort.swift`. `verbPageDestinations()` and the
   `verbPagePush` environment key are in `RelatedVerbsView.swift`. `VerbRowLabel`, `VerbGridCell`,
@@ -606,7 +644,8 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   plan's Phase 13.
 - **S7. The sort picker returns during a search and does nothing (Read).** With text in the field
   and the keyboard down, the picker replaces the letter row. Choosing My Verbs changes nothing on
-  screen, and choosing a sort replays the trombone.
+  screen, and choosing a sort replays the trombone. *Fixed on `master`, 2026-11-26, in Phase 9 of
+  `plans/verb_browse_fixes.md`: the picker is disabled while the field holds a search.*
 - **S8. Unused or unguarded.**
   - `englishTitle` on four views is read nowhere (Read). *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: deleted.*
   - `LearnerVerbs.daysSinceOpened` has no caller (Read). *Deleted on `master`, 2026-11-25, in

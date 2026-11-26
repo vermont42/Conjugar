@@ -12634,3 +12634,58 @@ Smaller things rode along. The search's key cache now compares whole entries, wh
 compared only glosses. The learner's store derives its recent and starred lists once per change
 instead of on every read. The map tool refuses a flag it does not know, so a misspelled
 `--forms-json` can no longer write the map and quietly skip the file.
+
+## A Search Model for the Verb List (2026-11-26)
+
+The Verbs tab's view had grown to almost 800 lines, and the review found most of its bugs in the
+decisions nobody could test: which list was showing, which row the keyboard had highlighted, and
+what Return would open. Phase 9 of the browse fixes moved those decisions into an `@Observable`
+model, `VerbBrowseSearch`, and left the view the focus, the navigation, and the UIKit workarounds.
+
+The model's shape came from one rule in the review: a row should open as it was drawn. The old
+view kept the search's entries and their matches in two arrays that had to stay parallel, and a
+tap read both by index when it fired. On iPad a tap can end the search at touch-down, which swaps
+the list under the finger, so opening the right recent verb depended on a 700 ms linger still
+holding. Each row now carries its entry and its origin: every verb, a recent verb, or a result with
+its match, its place, and the result count. The tap opens that row and reads no array.
+
+The keyboard's highlight changed from an index into a verb. An index outlived its list. Press ↓
+twice in the recents, press Esc, and 700 ms later the highlight sat on the second verb of the full
+list. The selection is now an infinitive, cleared whenever what the list shows changes. My Verbs
+has no keyboard targets at all. Return opens a highlighted row on any keyboard, so an iPhone with a
+hardware keyboard no longer highlights a row that Return then ignores.
+
+The biggest win for a learner is the cold search link. The conjugation index takes seconds to
+build, and the code's comment said "about a second". A temporary test measured its first touch at
+6.0 to 6.2 seconds in a Debug build in the simulator. A cold `conjugar://search?q=fue` used to
+draw the list, then freeze the main thread for 5.4 to 6.0 seconds while the search waited for the
+index. The warm-up task that was meant to prevent this never even started until the freeze ended.
+Now the model has no index until the warm-up hands it one. Until then a search matches infinitives
+and glosses only, and a failure shows a spinner instead of "No verbs found". When the index
+arrives, the query runs again. The first results now show about three seconds after launch, where
+they took eight or nine. Starting the warm-up in the app's `init` rather than when the tab
+appeared brought ser and ir in about two seconds sooner as well. The sad trombone learned to wait
+for the index too, so that "fuimos", typed before the index exists, no longer groans just before
+the index finds ir and ser.
+
+Two of the review's suspicions were checked with AXe on the iPad simulator. The letter row's taps
+really did arrive out of order. Tapping á and then é quickly into an empty search gave "éá" three
+times in five, and once lost the á entirely, because each tap started its own polling task, and
+whichever woke first won. Letters that must wait now queue in the model and arrive together, in
+order, at every gap from 80 to 300 ms. At 50 ms the first letter is still lost when the field is
+empty, as it was before. A theory that its action ran before the focus let go, so that the ending
+search cleared it, was tested by making the first letter always wait, and it changed nothing. The
+tap's action seems never to run, so that one was written down and left. The other suspicion, that the search's arrow-key commands would swallow a pushed page's arrow
+scrolling, came to nothing. A verb page doesn't scroll with the arrow keys even when no search is
+focused, so there was nothing to swallow. The commands are now installed only while the list is on
+screen anyway.
+
+One timed hack went away. After popping to the list for Command-F, the view slept 500 ms before
+focusing the field. A yield and the existing transition wait do the job instead. With typing
+1.5 seconds after Command-F from a verb page, the field took the text 12 times in 12 across both
+simulators. With neither wait nor sleep it missed once in six, so the test could tell them apart.
+
+`searchFocusLostAt`, a `Date` used only as a `Bool` that never reset, is gone. The push waits for
+UIKit only during the linger, when the field has let go and nothing is typed. That was the moment
+the old comment described. The linger's task and the copied-address note's task are cancelled
+when something supersedes them. The sort picker is disabled while the field holds a search.

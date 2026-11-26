@@ -49,6 +49,15 @@ struct ConjugarApp: App {
     if TipDisplay.tipsEnabled {
       try? Tips.configure()
     }
+
+    // Building the conjugation index takes seconds, and a search finds forms only once it exists,
+    // so it starts here, off the main actor, rather than when the Verbs tab first appears. That
+    // tab's warm-up then waits for this one. Measured on 2026-11-26 from a cold search link, in a
+    // Debug build in the simulator: the forms arrived about two seconds sooner, and the first
+    // results no later.
+    Task.detached(priority: .userInitiated) {
+      _ = ConjugationIndex.bundled
+    }
   }
 
   var body: some Scene {

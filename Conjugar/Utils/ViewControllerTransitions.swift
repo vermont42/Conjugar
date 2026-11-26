@@ -7,10 +7,12 @@
 
 import UIKit
 
-// Hack: SwiftUI offers no way to know when a UIKit transition ends. On iPad, a tap outside an
-// empty search field ends the search, and the search clears its text as it goes, so a letter key
-// tapped then was lost. The key waits here for the search to be gone before it sets the letter and
-// reopens the search.
+// Hack: SwiftUI offers no way to know when a UIKit transition ends. The Verbs tab waits here three
+// times. On iPad, a tap outside an empty search field ends the search, and the search clears its
+// text as it goes, so a letter key tapped then was lost: the key waits for the search to be gone
+// before it sets the letter and reopens the search. A push made while that search animates away
+// is dropped, so the push waits too. And focus requested while a pop animates does not make the
+// field first responder, so a search request waits for the pop.
 enum ViewControllerTransitions {
   /// Returns once no view controller is mid-transition, or after a second at most. With nothing
   /// presenting or dismissing, as on an iPhone, it returns at once.

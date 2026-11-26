@@ -36,8 +36,9 @@ nonisolated struct ConjugationIndex: Sendable {
     self.foldedFormsByStart = foldedFormsByStart
   }
 
-  /// Built on first use from `ConjugationMap.bundled`, which takes about a second, so the verb
-  /// list touches it from a background task before the learner types.
+  /// Built on first use from `ConjugationMap.bundled`, which took 6.0 to 6.2 seconds in a Debug
+  /// build in the simulator (2026-11-26), so the app touches it from a background task at launch.
+  /// The verb list never touches it on the main actor: its search does without forms until then.
   static let bundled = ConjugationIndex(map: .bundled)
 
   nonisolated struct Spelling: Equatable, Sendable {

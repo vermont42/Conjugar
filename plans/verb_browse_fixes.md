@@ -28,8 +28,8 @@ is filled by the next session, which reads the hash from `git log`.
 | 5 | Done | 2026-11-25 | `57abe4c` | C2, C7, C8, G2, G3, G4, and from C13 the "All N" chip |
 | 6 | Done | 2026-11-26 | `082a446` | From C13 the stashed link, the ignored link, the link beneath the game, and case; F2 (Spotlight); the intents and links of D3 |
 | 7 | Done | 2026-11-26 | `1349e60` | D1 (the cheap pieces), D2, G6, G8, S5, and from C13 the Models tab's whitespace and trombone |
-| 8 | Awaiting Josh | 2026-11-26 | | D3 (the model layer), F2 (repeated work), S8 |
-| 9 | Not started | | | S1 (the search model), C10, C11, F1, S2, S3, S4, S7, and the rest of C13 |
+| 8 | Done | 2026-11-26 | `73df869` | D3 (the model layer), F2 (repeated work), S8 |
+| 9 | Awaiting Josh | 2026-11-26 | | S1 (the search model), C10, C11, F1, S2, S3, S4, S7, and the rest of C13 |
 | 10 | Not started | | | S1 (the rest), G9 |
 | 11 | Not started | | | D1 (`AdaptiveRows` and one row label) |
 | 12 | Not started | | | S6 |
@@ -885,6 +885,60 @@ the arrow keys in the results and in the recents, Esc, Return on a result and on
 letter key tapped into an empty field, and My Verbs' rows with the empty field focused.
 
 **How it differed:**
+
+- **The model** is `Models/VerbBrowseSearch.swift`, an `@Observable` class. It owns the text, the
+  list mode and sort, the results, the guess, the tracker, the selection, and the index once it
+  exists, and it sends every `finishSearch`. `shown` says which of the four lists shows. The view
+  passes the field's text and the picker through bindings that call `setText(_:)` and
+  `setListMode(_:)`. Every verb's rows are built once per sort, in a static, so the view's `@State`
+  initializer stays cheap. The four keyboard tests moved in from `VerbBrowseKeyboardTests`, which is
+  deleted, and `VerbBrowseSearchTests` has 37 tests in all.
+- **S3.** A `Row` carries its entry and an origin: every verb, a recent verb, or a result with its
+  match, place, and result count. The plan asked for the entry and the match; the place and count
+  came along so that the report reads nothing at tap time either.
+- **C10.** "Clears when the shown list changes" is three rules: a new search (text, or the index
+  arriving), a new sort, and a change of `shown`. A selection gone stale any other way, as when the
+  recents change, is not found among the targets, so the next arrow starts from the top.
+- **S2.** No state replaced `searchFocusLostAt`. `searchIsEnding` is computed: the field unfocused
+  while the linger still holds, with nothing typed. Every push from the tab goes through `push(_:)`,
+  which waits only then.
+- **F1.** `VerbSearch.matches` and `guess` take an optional index, and nil skips the forms. Before
+  the index, a failure shows a spinner, not "No verbs found", and its trombone waits: it plays when
+  the index arrives only if the query still fails. The plan did not ask for that wait. Without it,
+  "fuimos" would groan and then find ir and ser. I also moved the warm-up's start from the tab's
+  `.task` to `ConjugarApp.init`, at user-initiated priority; the tab's task now only waits for it.
+  **Measured** in a Debug build on "Conjugar iPhone 17": the index's first touch took 6.2 s before
+  and 6.0 s after (map 2.3 to 2.8 s, index 3.2 to 3.8 s). From a cold `search?q=fue`, before: the
+  unsearched list at +2.3 s, then the main thread blocked for 5.4 to 6.0 s, and results at +8.0 to
+  8.7 s, with the warm-up starting only after. After, with the warm-up in the tab: first results
+  (repostar, by its gloss) at +2.8 to 3.2 s, and ser and ir at +8.6 to 10.4 s. After, with the
+  warm-up at launch: first results at +3.1 to 3.2 s, and ser and ir at +7.0 to 7.9 s. The load
+  average swung between 5 and 400 during the session, from work outside it. I discarded runs taken
+  during a spike.
+- **S4.** The 500 ms sleep after a pop is now `Task.yield()` and `waitUntilIdle()`. With ⌘F from a
+  verb page and typing 1.5 s later, the field took the text 12 times in 12 across both simulators.
+  With neither wait nor sleep it took it 5 times in 6, so the trial can tell them apart.
+- **The two suspicions.** The letter taps were real. On the iPad, á then é tapped 50 to 300 ms
+  apart into the empty field gave "éá" three times in five and lost the á once. The model now queues
+  the letters that wait. After the fix, gaps of 80 to 300 ms gave "áé" every time. At 50 ms the á is
+  still lost, as before the fix, though 50 ms taps into a field holding text arrive whole. Making the
+  first letter always wait in an empty field did not help, so I reverted that. The arrow keys took
+  nothing: ↓ did not scroll tener's page after ⌘F, "tener", Return, nor the page opened by a link
+  with no search focused. They are now installed only while the field is focused and the stack is
+  empty, which costs one line.
+- **Return on the iPhone.** With a hardware keyboard, ↓ then Return now opens the highlighted row
+  or guess. With nothing highlighted, the Search key only lowers the keyboard, as before.
+- **Checked on "Conjugar iPhone 17"** (English, dark): xyzzyq with its mail line, then the picker
+  dimmed with the keyboard down; hablr's guess, then ↓ and Return opening hablar; a space alone
+  showing the recents; "tuve" typed 3.5 s after a cold launch, arriving whole and finding tener.
+  **On "Conjugar iPad Pro 11"** (Spanish, light): ⌘F and ↓↓ outlining the second recent; Esc
+  returning to the full list with no outline; "come" with ↓↓↓↑ outlining venir and Return opening
+  it; hablr and Return opening the guess; a recent tapped with the empty field focused pushing its
+  page three times in three. I did not try My Verbs with the field focused and no recents, which
+  needs Clear, nor the mail link.
+- **The suite** is 1,472 Swift Testing tests in 90 suites and 11 XCTest tests, in 118 s, under a
+  load average above 70. The slowest were "ConjugationMap" (42.3 s), "The bundled map" (35.2 s),
+  and `ReverseLookupTests` (11.1 s), which load the map and are not touched by this phase.
 
 ## Phase 10: Split the Verb List's View
 

@@ -9,30 +9,16 @@ import SwiftUI
 import TipKit
 
 struct VerbBrowseView: View {
-  /// The sort order of the full list. It survives a visit to My Verbs and is saved in Settings.
-  @State private var sort: VerbSort = Current.settings.verbSort
-  /// The picker's choice: a sort order, or My Verbs.
-  @State private var listMode = VerbListMode(sort: Current.settings.verbSort)
+  @State private var search = VerbBrowseSearch()
   /// The starred verb whose swipe to remove awaits the learner's answer in an alert.
   @State private var verbToUnstar: VerbMapEntry?
   @State private var isConfirmingClear = false
   @State private var navigationPath = NavigationPath()
-  @State private var searchText = ""
   @FocusState private var searchIsFocused: Bool
-  /// Follows `searchIsFocused`, but lets go of it a moment later. See `searchFocusChanged`.
-  @State private var searchIsEngaged = false
-  /// The row that Return opens and the arrow keys move, on iPad and Mac keyboards. Nil until an
-  /// arrow is pressed, and cleared whenever the query changes.
-  @State private var keyboardSelection: Int?
-  /// The closest verb to a query that found nothing, or nil. See `VerbSearch.guess`.
-  @State private var guess: VerbSearch.Guess?
+  /// Lets `search.isEngaged` go a moment after the focus. See `searchFocusChanged`.
+  @State private var lingerTask: Task<Void, Never>?
   @State private var addressWasCopied = false
-  /// The ranked matches behind `filteredVerbs` while searching, which say each row's match kind
-  /// for `finishSearch`. Empty when the field is.
-  @State private var searchMatches: [VerbSearch.Match] = []
-  @State private var searchTracker = SearchTracker()
-  /// When the field last lost focus, or nil while it has it. See `push(_:)`.
-  @State private var searchFocusLostAt: Date?
+  @State private var addressNoteTask: Task<Void, Never>?
   /// The review card's verb and state, chosen once per opening of the app. See `chooseReviewCard`.
   @State private var reviewCard: ReviewCardState?
   @State private var reviewCardIsChosen = false
@@ -42,100 +28,47 @@ struct VerbBrowseView: View {
   @Environment(\.scenePhase) private var scenePhase
   private let tryQuizTip = TryQuizTip()
 
-  private var verbs: [VerbMapEntry] { VerbSort.mapLists[sort] ?? [] }
-
-  /// The current sort filtered by the search query, materialized into `@State` and
-  /// recomputed only when `searchText` or `sort` changes — rather than as a
-  /// computed property `body` scanned twice per render. Seeded to the initial sort's
-  /// full list so the first frame isn't a "0 verbs" flash.
-  @State private var filteredVerbs: [VerbMapEntry] = VerbSort.mapLists[Current.settings.verbSort] ?? []
-
-  /// Refilter for the current `searchText` + `sort`, firing the no-results sad trombone
-  /// here — the one-shot search transition — instead of inside `body`. An empty query lists
-  /// every verb in the chosen sort order. Otherwise `VerbSearch` ranks the matches, by kind and
-  /// then frequency, whatever the sort order.
-  private func recomputeFilteredVerbs() {
-    guess = nil
-    guard isSearching else {
-      searchMatches = []
-      filteredVerbs = verbs
-      return
-    }
-    let matches = VerbSearch.matches(for: searchText, in: verbs)
-    if matches.isEmpty {
-      Current.soundPlayer.play(Sound.randomSadTrombone, shouldDebounce: true)
-      guess = VerbSearch.guess(for: searchText, in: verbs)
-    }
-    searchMatches = matches
-    filteredVerbs = matches.map(\.entry)
-  }
-
-  private var trimmedSearchText: String {
-    searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-  }
-
-  private var isSearching: Bool {
-    !trimmedSearchText.isEmpty
-  }
-
   private var learnerVerbs: LearnerVerbStore { Current.learnerVerbs }
 
   private var settings: Settings { Current.settings }
-
-  /// The verbs last opened, listed while the field is focused and empty, before anything is typed.
-  /// They follow `searchIsEngaged`, not the focus, for the reason `searchFocusChanged` gives.
-  private var showsRecents: Bool {
-    searchIsEngaged && !isSearching && !learnerVerbs.recentVerbs.isEmpty
-  }
-
-  /// My Verbs replaces the full list only while nothing is typed. Search ignores the picker, as it
-  /// ignores the sort order, so typing searches every verb.
-  private var showsMyVerbs: Bool {
-    listMode == .myVerbs && !isSearching && !showsRecents
-  }
-
-  /// The rows the list shows, which Return and the arrow keys move through: the recent verbs, or
-  /// the search's results, or every verb in the sort order.
-  private var shownVerbs: [VerbMapEntry] {
-    showsRecents ? learnerVerbs.recentVerbs : filteredVerbs
-  }
-
-  /// The source of a row opened with nothing typed. Settled as the row is drawn, because on iPad
-  /// a tap can take the focus from the field, and with it the recents, before the row's action runs.
-  private var browseSource: AnalyticsSource {
-    showsRecents ? .recent : .browse
-  }
 
   private static let isPadOrMac = UIDevice.current.userInterfaceIdiom == .pad
 
   // Hack: on iPad, a tap outside an empty search field ends the search at touch-down, before the
   // tap completes. A letter row that followed the focus vanished under the finger, so tapping á did
-  // nothing. The row follows this instead, which lets go a moment later.
+  // nothing. The row, and the recents, follow `search.isEngaged` instead, which lets go a moment
+  // later. A focus regained meanwhile cancels the letting go.
   private func searchFocusChanged() {
-    if !searchIsFocused {
-      searchTracker.fieldClosed()
-    }
+    lingerTask?.cancel()
+    lingerTask = nil
     guard !searchIsFocused else {
-      searchIsEngaged = true
-      searchFocusLostAt = nil
+      search.setEngaged(true)
       return
     }
-    searchFocusLostAt = .now
-    Task {
+    search.fieldLostFocus()
+    lingerTask = Task {
       try? await Task.sleep(for: Self.searchLingering)
-      if !searchIsFocused {
-        searchIsEngaged = false
+      guard !Task.isCancelled else {
+        return
       }
+      search.setEngaged(false)
     }
   }
 
   private static let searchLingering = Duration.milliseconds(700)
 
+  /// The field has let go of the focus with nothing typed, and the search may still be animating
+  /// away: the span of the linger. On iPad that is a tap's touch-down outside the field.
+  private var searchIsEnding: Bool {
+    search.isEngaged && !searchIsFocused && !search.isSearching
+  }
+
   // A tap that ends an empty search on iPad would push while the search is still animating away,
   // and UIKit drops such a push; see ViewControllerTransitions. A typed search does not end on that
-  // tap, and on iPhone nothing is animating, so both push at once.
+  // tap, and on iPhone nothing is animating, so both push at once. Every push from this tab comes
+  // through here: a row, the guess, My Verbs, the review card, and a link's verb.
   private func push(_ destination: VerbDestination) {
-    guard !isSearching, searchFocusLostAt != nil else {
+    guard searchIsEnding else {
       navigationPath.append(destination)
       return
     }
@@ -143,70 +76,18 @@ struct VerbBrowseView: View {
       await ViewControllerTransitions.waitUntilIdle()
       navigationPath.append(destination)
     }
-  }
-
-  /// Opens the row at `index` in `shownVerbs`. `wasSearching` and `browseSource` are read when
-  /// the row is drawn, so that a tap that changes the field first cannot change the source.
-  private func openRow(at index: Int, wasSearching: Bool, browseSource: AnalyticsSource) {
-    let rows = shownVerbs
-    guard rows.indices.contains(index) else {
-      return
-    }
-    let infinitive = rows[index].infinitive
-    guard wasSearching, searchMatches.indices.contains(index) else {
-      push(VerbDestination(infinitive: infinitive, source: browseSource))
-      return
-    }
-    let match = searchMatches[index]
-    if let search = searchTracker.finish() {
-      signal(.opened(query: search.query, source: search.source, resultCount: searchMatches.count, kind: match.kind, position: index))
-    }
-    push(VerbDestination(infinitive: infinitive, source: .search, marks: marks(of: match.forms)))
-  }
-
-  private func openGuess(_ guess: VerbSearch.Guess) {
-    if let search = searchTracker.finish() {
-      signal(.openedGuess(query: search.query, source: search.source))
-    }
-    push(VerbDestination(infinitive: guess.entry.infinitive, source: .searchGuess, marks: marks(of: guess.form.map { [$0] } ?? [])))
-  }
-
-  private var hiddenPersons: Set<DisplayPersonNumber> {
-    Current.settings.secondSingularBrowse.hiddenPersons
-  }
-
-  private func marks(of forms: [MatchedForm]) -> Set<ConjugationCell> {
-    Set(MatchedForm.shown(forms, hiding: hiddenPersons).flatMap { $0.shownCells(hiding: hiddenPersons) })
-  }
-
-  /// What the row at `index` matched, one line per form: "hablo: Presente de Indicativo (yo)".
-  /// Empty for a match on the infinitive or a gloss, and for the unsearched list.
-  private func matchLines(at index: Int, wasSearching: Bool) -> [String] {
-    guard wasSearching, searchMatches.indices.contains(index) else {
-      return []
-    }
-    return MatchedForm.shown(searchMatches[index].forms, hiding: hiddenPersons).map { $0.line(hiding: hiddenPersons) }
-  }
-
-  /// A search that ended with nothing opened: cleared, or left in the background.
-  private func signalEndedSearch(_ search: SearchTracker.Search) {
-    signal(.ended(query: search.query, source: search.source, matches: VerbSearch.matches(for: search.query, in: verbs)))
-  }
-
-  private func signal(_ report: SearchReport) {
-    Current.analytics.signal(name: .finishSearch, parameters: report.parameters)
   }
 
   // On iPad a key's tap ends an empty search, and the search clears its text as it goes, so a
-  // letter set meanwhile is lost. The letter waits for the search to be gone, then reopens it.
+  // letter set meanwhile is lost. The letters wait for the search to be gone, in the order they
+  // were tapped, then reopen it.
   private func insertLetter(_ letter: String) {
-    guard !searchIsFocused else {
-      searchText.append(letter)
+    guard search.typeLetter(letter, fieldIsFocused: searchIsFocused) else {
       return
     }
     Task {
       await ViewControllerTransitions.waitUntilIdle()
-      searchText.append(letter)
+      search.releaseWaitingLetters()
       searchIsFocused = true
     }
   }
@@ -216,7 +97,7 @@ struct VerbBrowseView: View {
   /// guess may come from a form too (tenjo guesses tener through tengo).
   private var failedSearchHelp: some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
-      if let guess {
+      if let guess = search.guess {
         Text(L.BrowseVerbs.guessIntro)
           .font(.subheadline)
           .foregroundStyle(.secondary)
@@ -224,19 +105,19 @@ struct VerbBrowseView: View {
           .accessibilityIdentifier("search_guess_intro")
 
         Button {
-          openGuess(guess)
+          push(search.openGuess(guess))
         } label: {
-          VerbRowLabel(entry: guess.entry, matchLines: guess.form.map { [$0.line(hiding: hiddenPersons)] } ?? [])
+          VerbRowLabel(entry: guess.entry, matchLines: search.matchLines(of: guess))
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("search_guess_\(guess.entry.infinitive)")
-        .background(keyboardSelection == 0 ? Self.selectionColor : Color.clear)
+        .background(search.selection == guess.entry.infinitive ? Self.selectionColor : Color.clear)
 
         Divider()
           .padding(.leading)
       }
 
-      Text(verbRequestText(query: trimmedSearchText))
+      Text(verbRequestText(query: search.trimmedText))
         .font(.footnote)
         .foregroundStyle(.secondary)
         .tint(Color.customBlue)
@@ -244,7 +125,8 @@ struct VerbBrowseView: View {
         .padding(.top, Layout.defaultSpacing)
         .accessibilityIdentifier("verb_request_link")
         .environment(\.openURL, OpenURLAction { url in
-          Task {
+          addressNoteTask?.cancel()
+          addressNoteTask = Task {
             await openVerbRequest(url)
           }
           return .handled
@@ -277,7 +159,8 @@ struct VerbBrowseView: View {
   }
 
   /// A device with no email app, such as the simulator, cannot open the link, so the address
-  /// goes to the clipboard instead of nowhere, and a note says so for four seconds.
+  /// goes to the clipboard instead of nowhere, and a note says so for four seconds. A second tap
+  /// cancels the first's task, so that the note stays its full four seconds.
   private func openVerbRequest(_ url: URL) async {
     guard !(await UIApplication.shared.open(url)) else {
       return
@@ -288,6 +171,9 @@ struct VerbBrowseView: View {
       addressWasCopied = true
     }
     try? await Task.sleep(for: .seconds(4))
+    guard !Task.isCancelled else {
+      return
+    }
     withAnimation {
       addressWasCopied = false
     }
@@ -295,50 +181,25 @@ struct VerbBrowseView: View {
 
   private static let selectionColor = Color.customRed.opacity(0.2)
 
-  private func rowBackground(index: Int) -> Color {
-    index == keyboardSelection ? Self.selectionColor : .zebraStripe(index)
-  }
-
-  /// The rows that Return and the arrow keys move through: the verbs as listed, or the guess
-  /// when a search found nothing.
-  private var keyboardTargetCount: Int {
-    if filteredVerbs.isEmpty, isSearching, guess != nil {
-      return 1
-    }
-    return shownVerbs.count
+  private func rowBackground(_ row: VerbBrowseSearch.Row, index: Int) -> Color {
+    row.id == search.selection ? Self.selectionColor : .zebraStripe(index)
   }
 
   private func moveKeyboardSelection(by offset: Int) {
     guard navigationPath.isEmpty else {
       return
     }
-    keyboardSelection = Self.keyboardSelection(after: keyboardSelection, moving: offset, count: keyboardTargetCount)
+    search.moveSelection(by: offset)
   }
 
-  /// The first arrow press lands on the first result, and the selection stops at either end
-  /// rather than wrapping. Down moves in reading order, in the iPad's grid too.
-  nonisolated static func keyboardSelection(after current: Int?, moving offset: Int, count: Int) -> Int? {
-    guard count > 0 else {
-      return nil
-    }
-    guard let current else {
-      return offset > 0 ? 0 : nil
-    }
-    return min(max(current + offset, 0), count - 1)
-  }
-
+  /// Return opens the highlighted row or guess on any keyboard. With nothing highlighted, the iPad
+  /// idiom, which a Mac running the app also reports, opens the first result, else the guess; the
+  /// iPhone keyboard's Search key only lowers the keyboard, as it always has.
   private func openKeyboardSelection() {
-    guard navigationPath.isEmpty else {
+    guard navigationPath.isEmpty, let destination = search.submit(opensFirstResult: Self.isPadOrMac) else {
       return
     }
-    guard let index = keyboardSelection ?? (isSearching ? 0 : nil) else {
-      return
-    }
-    if filteredVerbs.isEmpty, index == 0, let guess {
-      openGuess(guess)
-    } else {
-      openRow(at: index, wasSearching: isSearching, browseSource: browseSource)
-    }
+    push(destination)
   }
 
   /// Command-F, the Find a Verb control and quick action, or a `search` link. Text that arrives
@@ -349,16 +210,7 @@ struct VerbBrowseView: View {
       return
     }
     router.pendingSearch = nil
-    if let text = request.text {
-      if let ended = searchTracker.fieldOpened(from: request.source) {
-        signalEndedSearch(ended)
-      }
-      searchText = text
-      // onChange(of: searchText) does not fire when the text is unchanged, and the request
-      // still begins a search.
-      _ = searchTracker.textChanged(to: text)
-    }
-    let wantsKeyboard = request.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true
+    let wantsKeyboard = search.request(request)
     Task {
       await showSearch(focused: wantsKeyboard)
     }
@@ -369,8 +221,10 @@ struct VerbBrowseView: View {
     if !navigationPath.isEmpty {
       navigationPath = NavigationPath()
       // Hack: focus requested while the pop animates sets the focus state without making the
-      // field first responder, so typing goes nowhere. Wait out the animation.
-      try? await Task.sleep(for: .milliseconds(500))
+      // field first responder, so typing goes nowhere. Wait out the animation. The yield lets
+      // the pop begin, so that the wait has a transition to see.
+      await Task.yield()
+      await ViewControllerTransitions.waitUntilIdle()
     }
     searchIsFocused = focused
   }
@@ -414,7 +268,7 @@ struct VerbBrowseView: View {
     guard let reviewCard else {
       return
     }
-    navigationPath.append(VerbDestination(infinitive: reviewCard.offer.entry.infinitive, source: .reviewCard))
+    push(VerbDestination(infinitive: reviewCard.offer.entry.infinitive, source: .reviewCard))
   }
 
   /// A card dismissed before its conjugations were seen was no review, so its due key
@@ -532,7 +386,7 @@ struct VerbBrowseView: View {
 
   private func myVerbRow(_ entry: VerbMapEntry) -> some View {
     Button {
-      navigationPath.append(VerbDestination(infinitive: entry.infinitive, source: .myVerbs))
+      push(VerbDestination(infinitive: entry.infinitive, source: .myVerbs))
     } label: {
       VerbRowLabel(entry: entry)
     }
@@ -546,19 +400,19 @@ struct VerbBrowseView: View {
     NavigationStack(path: $navigationPath) {
       VStack(spacing: 0) {
         // My Verbs is a List of its own, because only a List's rows can be swiped to delete.
-        if showsMyVerbs {
+        if search.shown == .myVerbs {
           myVerbsList
         } else {
           ScrollViewReader { proxy in
-            let rows = shownVerbs
-            let browseSource = self.browseSource
+            let shown = search.shown
+            let rows = search.rows
             ScrollView {
-              if showsRecents {
+              if shown == .recents {
                 listHeading(L.MyVerbs.recent)
                   .id("top")
                   .accessibilityIdentifier("recent_verbs_heading")
               } else {
-                listHeading(L.BrowseVerbs.verbCount(count: filteredVerbs.count))
+                listHeading(L.BrowseVerbs.verbCount(count: rows.count))
                   .id("top")
                   // Stable launch-screen leaf anchor for the ios-build-verify skill's
                   // wait-for-render poll (FIRST_SCREEN_ID); a leaf, not a container, to
@@ -566,13 +420,13 @@ struct VerbBrowseView: View {
                   .accessibilityIdentifier("browse_verb_count")
               }
 
-              if searchText.isEmpty && !showsRecents {
+              if shown == .everyVerb {
                 TipView(tryQuizTip)
                   .padding(.horizontal)
                   .padding(.top, Layout.defaultSpacing)
               }
 
-              if let reviewCard, searchText.isEmpty, !showsRecents, settings.reviewCardSuppression == .off {
+              if let reviewCard, shown == .everyVerb, settings.reviewCardSuppression == .off {
                 ReviewCardView(
                   entry: reviewCard.offer.entry,
                   daysSinceActivity: reviewCard.offer.daysSinceActivity,
@@ -592,7 +446,13 @@ struct VerbBrowseView: View {
                 }
               }
 
-              if !searchText.isEmpty && filteredVerbs.isEmpty {
+              if search.awaitsIndex {
+                // A form may yet match, once the index is built. Saying "No verbs found" now
+                // would be premature.
+                ProgressView()
+                  .padding(.top, Layout.tripleDefaultSpacing)
+                  .accessibilityIdentifier("search_awaiting_index")
+              } else if search.hasFailed {
                 ContentUnavailableView(L.BrowseVerbs.searchNoResults, systemImage: "magnifyingglass")
                   .padding(.top, Layout.tripleDefaultSpacing)
 
@@ -602,16 +462,15 @@ struct VerbBrowseView: View {
                 // iPad / regular width: reflow the rows into an adaptive grid of
                 // carded cells (≈2 columns portrait, ≈3–4 landscape). The same
                 // `navigationDestination(for: VerbDestination)` renders the pushed `VerbView`.
-                let wasSearching = isSearching
                 LazyVGrid(columns: BrowseLayout.listColumns, spacing: Layout.doubleDefaultSpacing) {
-                  ForEach(Array(rows.enumerated()), id: \.element.infinitive) { index, entry in
+                  ForEach(rows) { row in
                     Button {
-                      openRow(at: index, wasSearching: wasSearching, browseSource: browseSource)
+                      push(search.open(row))
                     } label: {
-                      VerbGridCell(entry: entry, matchLines: matchLines(at: index, wasSearching: wasSearching))
+                      VerbGridCell(entry: row.entry, matchLines: search.matchLines(of: row))
                         .card()
                         .overlay {
-                          if index == keyboardSelection {
+                          if row.id == search.selection {
                             RoundedRectangle(cornerRadius: Layout.defaultSpacing)
                               .stroke(Color.customRed, lineWidth: 2)
                           }
@@ -621,38 +480,37 @@ struct VerbBrowseView: View {
                     // Screenshot-driver anchor (scripts/take_screenshots.sh taps
                     // `verb_row_ser`). Both size-class branches carry it — the iPad
                     // renders this grid, the iPhone the stack below.
-                    .accessibilityIdentifier("verb_row_\(entry.infinitive)")
+                    .accessibilityIdentifier("verb_row_\(row.id)")
                   }
                 }
                 .padding(.horizontal)
                 .padding(.top, Layout.defaultSpacing)
               } else {
-                let wasSearching = isSearching
                 LazyVStack(spacing: 0) {
-                  ForEach(Array(rows.enumerated()), id: \.element.infinitive) { index, entry in
+                  ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
                     // A real `Button`, not `.onTapGesture`: `.isButton` trait, press highlight,
                     // and stronger VoiceOver semantics. Not a `NavigationLink`, because the open
                     // reports its search; the stack's `navigationDestination(for:
                     // VerbDestination)` renders the pushed `VerbView`.
                     Button {
-                      openRow(at: index, wasSearching: wasSearching, browseSource: browseSource)
+                      push(search.open(row))
                     } label: {
-                      VerbRowLabel(entry: entry, matchLines: matchLines(at: index, wasSearching: wasSearching))
+                      VerbRowLabel(entry: row.entry, matchLines: search.matchLines(of: row))
                     }
                     .buttonStyle(.plain)
-                    .accessibilityIdentifier("verb_row_\(entry.infinitive)")
-                    .background(rowBackground(index: index))
+                    .accessibilityIdentifier("verb_row_\(row.id)")
+                    .background(rowBackground(row, index: index))
                     Divider().padding(.leading)
                   }
                 }
               }
             }
-            .onChange(of: sort) {
+            .onChange(of: search.sort) {
               proxy.scrollTo("top", anchor: .top)
             }
-            .onChange(of: keyboardSelection) { _, selection in
-              if let selection, rows.indices.contains(selection) {
-                proxy.scrollTo(rows[selection].infinitive)
+            .onChange(of: search.selection) { _, selection in
+              if let selection {
+                proxy.scrollTo(selection)
               }
             }
           }
@@ -662,44 +520,38 @@ struct VerbBrowseView: View {
 
         // A keyboard toolbar never appears for the navigation bar's search field (iOS 26), so
         // the letter row takes the sort picker's place while the field is focused, which puts
-        // it directly above the keyboard. Search ignores the sort order, so the picker has
-        // nothing to do meanwhile.
-        if searchIsEngaged {
+        // it directly above the keyboard. Search ignores the sort order and the picker, so the
+        // picker is disabled while the field holds a search and the keyboard is down.
+        if search.isEngaged {
           SpanishLetterKeyRow { letter in
             insertLetter(letter)
           }
           .padding(.vertical, Layout.defaultSpacing)
         } else {
-          SortPicker(selection: $listMode)
+          SortPicker(selection: Binding(get: { search.listMode }, set: { search.setListMode($0) }))
             .readingWidth()
-          .padding()
-          .accessibilityIdentifier("verb_list_mode_picker")
+            .padding()
+            .disabled(search.isSearching)
+            .accessibilityIdentifier("verb_list_mode_picker")
         }
       }
-      // These three are here rather than on the ScrollView, which is absent while My Verbs
-      // shows, so that a search typed over My Verbs, or a sort chosen from it, still refilters.
-      .onChange(of: listMode) {
-        if let newSort = listMode.sort {
-          sort = newSort
-        }
-      }
-      .onChange(of: sort) {
-        Current.settings.verbSort = sort
-        recomputeFilteredVerbs()
-      }
-      .onChange(of: searchText) {
-        keyboardSelection = nil
-        if let search = searchTracker.textChanged(to: searchText) {
-          signalEndedSearch(search)
-        }
-        recomputeFilteredVerbs()
+      .onChange(of: search.sort) {
+        Current.settings.verbSort = search.sort
       }
       .background(Color.customBackground.ignoresSafeArea())
-      .searchable(text: $searchText, placement: BrowseLayout.searchPlacement, prompt: L.BrowseVerbs.searchPromptVerbConjugationOrMeaning)
+      .searchable(
+        text: Binding(get: { search.text }, set: { search.setText($0) }),
+        placement: BrowseLayout.searchPlacement,
+        prompt: L.BrowseVerbs.searchPromptVerbConjugationOrMeaning
+      )
       .searchFocused($searchIsFocused)
       .onChange(of: searchIsFocused) {
         searchFocusChanged()
-        if searchIsFocused {
+      }
+      // The arrow keys are the list's only while the field is focused and the list is on screen,
+      // so that a page pushed over the list keeps its own arrow keys.
+      .onChange(of: searchIsFocused && navigationPath.isEmpty, initial: true) { _, wantsArrowKeys in
+        if wantsArrowKeys {
           VerbSearchArrowKeys.install { offset in
             moveKeyboardSelection(by: offset)
           }
@@ -707,13 +559,8 @@ struct VerbBrowseView: View {
           VerbSearchArrowKeys.uninstall()
         }
       }
-      // Return opens the highlighted result, else the first, else the guess. Only on the iPad
-      // idiom, which a Mac running the app also reports, so that the iPhone keyboard's Search key
-      // behaves as before.
       .onSubmit(of: .search) {
-        if Self.isPadOrMac {
-          openKeyboardSelection()
-        }
+        openKeyboardSelection()
       }
       .textInputAutocapitalization(.never)
       .autocorrectionDisabled()
@@ -723,7 +570,7 @@ struct VerbBrowseView: View {
       .verbPageDestinations()
       .onChange(of: router.pendingVerb, initial: true) { _, destination in
         guard let destination else { return }
-        navigationPath.append(destination)
+        push(destination)
         router.pendingVerb = nil
       }
       // A search left with text in the field when the app goes to the background has ended. A
@@ -732,9 +579,7 @@ struct VerbBrowseView: View {
         switch scenePhase {
         case .background:
           appWasInBackground = true
-          if let search = searchTracker.finish() {
-            signalEndedSearch(search)
-          }
+          search.appEnteredBackground()
         case .active where appWasInBackground:
           appWasInBackground = false
           chooseReviewCard()
@@ -757,12 +602,15 @@ struct VerbBrowseView: View {
           chooseReviewCard()
         }
       }
-      // Loading the conjugation map and indexing its forms takes about a second, so it happens
-      // off the main actor before the learner types rather than on the first keystroke.
+      // Loading the conjugation map and indexing its forms took 6.0 to 6.2 seconds at first touch
+      // in a Debug build in the simulator (2026-11-26), so it happens off the main actor, begun at
+      // launch by ConjugarApp. A search meanwhile matches infinitives and glosses, and runs again
+      // when the index arrives.
       .task {
-        await Task.detached(priority: .utility) {
-          _ = ConjugationIndex.bundled
+        let index = await Task.detached(priority: .userInitiated) {
+          ConjugationIndex.bundled
         }.value
+        search.indexIsReady(index)
       }
     }
     .pushesVerbPages(onto: $navigationPath)

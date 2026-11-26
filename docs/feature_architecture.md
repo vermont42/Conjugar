@@ -59,8 +59,10 @@ first non-blank letter in the Verbs tab's field and ends once. Returning to the 
 a second verb without editing sends no second `finishSearch`, though the page still reports
 `search`; editing the text begins a new search. An abandoned search's `matchKind` is that of the
 top result it passed over. Opening the guess reports `opened`, `resultCount` `0`, `matchKind`
-`guess`, and position `1`, and the page reports `searchGuess`. Return and the arrow keys (iPad and
-Mac) count as ordinary opens. The Models tab's search sends nothing.
+`guess`, and position `1`, and the page reports `searchGuess`. Return and the arrow keys on a
+hardware keyboard count as ordinary opens. `VerbBrowseSearch` (`Models/VerbBrowseSearch.swift`)
+owns the tracker and sends every `finishSearch`; an ended search's report reads the results it
+already holds. The Models tab's search sends nothing.
 
 **Where a search began** is the surface that opened the field: `SearchTracker.fieldOpened(from:)`
 records it when the Find a Verb control, the quick action, or a `search` link opens the field, and
@@ -237,8 +239,12 @@ A form typed into the Verbs tab's search finds its verb, and each result names w
 
 **The pieces.** `ConjugationIndex` (`Models/ConjugationIndex.swift`) indexes the conjugation map by
 folded spelling (so "hablo" also reaches habló, "sueno" sueño) and by first letter and length (for
-the guess). `ConjugationIndex.bundled` takes about a second to build, so `VerbBrowseView` builds it
-in a detached task when it appears. `FormLookup.forms(for:)` (`Models/FormLookup.swift`) returns,
+the guess). `ConjugationIndex.bundled` took 6.0 to 6.2 seconds to build at first touch in a Debug
+build in the simulator (2026-11-26), so `ConjugarApp.init` starts building it in a detached task
+at launch, and `VerbBrowseView` waits for it off the main actor and hands it to `VerbBrowseSearch`. Until then a search matches infinitives and glosses only, never
+waiting for the index on the main actor, and a failure shows a spinner rather than "No verbs found".
+When the index arrives the current query runs again, and a failure that stays one plays the sad
+trombone then. `FormLookup.forms(for:)` (`Models/FormLookup.swift`) returns,
 for each verb, the `MatchedForm`s a query is: the form as the app spells it, its cells in page order,
 and whether it matched only after folding. `VerbSearch.matches(for:in:index:)` calls it and gives
 each such verb the kind `conjugation` (some form matched as written) or `foldedConjugation`, with
@@ -498,7 +504,7 @@ practice set and the game stay. Sheets that views own, Test Me and an article, a
 | `Shared/WidgetDeeplink.swift` | The widgets' and the Live Activity's links: `verb(_:)` with `source=widget`, `quizStart`, and `challenge` with `source=challengeWidget` |
 | `Shared/LinkStashingIntent.swift`, `Shared/PendingDeeplink.swift` | The intents' one `perform()`, and the dated stash it writes and announces (below) |
 | `Views/AppRouter.swift` | `handle(url:)` parses a link and sets the tab and a one-shot request: `pendingVerb` (with its marks), `pendingSearch` (a `SearchRequest`: text and source), `pendingInfo`, `pendingCollection` (a `CollectionRequest`), `pendingQuizStart`, `pendingDailySession`, `pendingChallenge` (a `DailyChallengeRequest`), `pendingPracticeSet` (a `PracticeSetRequest`), or the game's flags. It also owns the game's and the tour's covers (`showGame`, `showOnboarding`, and `reshowOnboarding()` for Settings), so that a link can close the game whoever opened it. `openSearch(text:source:)` is the search route's effect, which Command-F, the control, and the quick action share. `AppRouter.shared` is the one instance, so that the quick action's scene delegate can reach it |
-| `Views/VerbBrowseView.swift` | Consumes `pendingVerb` and `pendingSearch` with `onChange(initial: true)`, since a link can arrive before the tab first appears. A search request pops to the list first, waiting out the pop before it focuses |
+| `Views/VerbBrowseView.swift` | Consumes `pendingVerb` and `pendingSearch` with `onChange(initial: true)`, since a link can arrive before the tab first appears. A verb goes through the tab's one `push(_:)`. A search request goes to `VerbBrowseSearch.request(_:)`, then pops to the list, waiting out the pop before it focuses |
 | `Views/InfoBrowseView.swift` | Consumes `pendingInfo` the same way |
 | `Views/ModelBrowseView.swift` | Consumes `pendingCollection` (a `CollectionRequest`: collection and source) the same way, pushing it onto the Models tab's stack |
 | `Views/MainTabView.swift` | Receives URLs via `.onOpenURL`, and drains a stashed link when the scene becomes active and when an intent announces one. Presents the game and the tour, and shows a practice set's sheet through `AppRouter.presentablePracticeSet`, which holds the set back while the onboarding tour or the game covers the tabs |
@@ -685,11 +691,13 @@ a pushed page, or the background is not a new open.
 **Where it shows.**
 
 - **Recents.** While the verb list's search field is focused and empty, the list shows "Recent" and
-  the recent verbs in place of every verb (`VerbBrowseView.showsRecents`), as rows the arrow keys
-  and Return reach. They follow `searchIsEngaged`, which lets go of the focus 0.7 seconds late,
-  and a row's push waits on `ViewControllerTransitions.waitUntilIdle()` when the search is ending,
-  both because on iPad a tap outside an empty search field ends the search at touch-down, before
-  the tap completes. A row opens with source `recent`.
+  the recent verbs in place of every verb (`VerbBrowseSearch.shown` is `.recents`), as rows the
+  arrow keys and Return reach. They follow `VerbBrowseSearch.isEngaged`, which lets go of the focus
+  0.7 seconds late; a focus regained meanwhile cancels the letting go. During those 0.7 seconds,
+  with nothing typed, every push from the tab (a row, the guess, My Verbs, the review card, a
+  link's verb) waits on `ViewControllerTransitions.waitUntilIdle()`, and at any other time it
+  pushes at once. Both are because on iPad a tap outside an empty search field ends the search at
+  touch-down, before the tap completes. A row opens with source `recent`.
 - **My Verbs** is the third segment of the picker under the list (`VerbListMode`: Frequency,
   Alphabetical, My Verbs). Only a sort is saved in Settings, so the app opens on the full list. My
   Verbs is a `List` of its own, so that rows can be swiped: Starred, then Recent with a Clear

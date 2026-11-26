@@ -59,8 +59,9 @@ nonisolated enum VerbSearch {
 
   /// Every verb in `entries` that matches `query`, one match per verb, its best, ranked by kind,
   /// then frequency, then infinitive. Empty for an empty query. A query that is a form of a verb
-  /// finds the verb through `FormLookup`, in `index`.
-  static func matches(for query: String, in entries: some Sequence<VerbMapEntry>, index: ConjugationIndex = .bundled) -> [Match] {
+  /// finds the verb through `FormLookup`, in `index`. With no index, as before the verb list's
+  /// warm-up has built one, only infinitives and glosses are searched.
+  static func matches(for query: String, in entries: some Sequence<VerbMapEntry>, index: ConjugationIndex? = .bundled) -> [Match] {
     let spanish = spanishQuery(from: query)
     let english = glossQuery(from: query)
     guard !spanish.isEmpty || !english.isEmpty else {
@@ -77,7 +78,7 @@ nonisolated enum VerbSearch {
       }
     }
 
-    for (infinitive, forms) in FormLookup.forms(for: query, index: index) {
+    for (infinitive, forms) in index.map({ FormLookup.forms(for: query, index: $0) }) ?? [:] {
       guard let entry = entriesByInfinitive[infinitive] else {
         continue
       }
@@ -105,8 +106,9 @@ nonisolated enum VerbSearch {
   /// infinitive beats a form, so only a form nearer than every infinitive is considered. Among
   /// forms, ties break as `closestVerb` breaks them. A form must begin with the query's first
   /// letter, as a learner's misspelling usually does, which keeps the comparison to a few
-  /// thousand forms rather than a quarter of a million. Nil when nothing is near enough.
-  static func guess(for query: String, in entries: some Sequence<VerbMapEntry>, index: ConjugationIndex = .bundled) -> Guess? {
+  /// thousand forms rather than a quarter of a million. Nil when nothing is near enough. With no
+  /// index, only an infinitive is guessed.
+  static func guess(for query: String, in entries: some Sequence<VerbMapEntry>, index: ConjugationIndex? = .bundled) -> Guess? {
     let entries = Array(entries)
     let foldedQuery = Array(SpellingComparison.fold(spanishQuery(from: query)))
     guard !foldedQuery.isEmpty else {
@@ -115,7 +117,7 @@ nonisolated enum VerbSearch {
     let infinitiveGuess = closestVerb(to: query, in: entries)
     let infinitiveDistance = infinitiveGuess.map { SpellingComparison.editDistance(foldedQuery, Array(keys(for: $0).foldedInfinitive)) }
     // A form at distance zero would have matched, so a guess one edit away cannot be beaten.
-    guard !foldedQuery.contains(" "), infinitiveDistance.map({ $0 > 1 }) ?? true else {
+    guard let index, !foldedQuery.contains(" "), infinitiveDistance.map({ $0 > 1 }) ?? true else {
       return infinitiveGuess.map { Guess(entry: $0, form: nil) }
     }
 

@@ -185,6 +185,8 @@ Conjugar/
 │   ├── LearnerVerbStore.swift  # Current.learnerVerbs: records opens and stars in LearnerVerbs and saves to the App Group
 │   ├── ModelSort.swift         # Model-list sort order (irregularity / alphabetical / class number)
 │   ├── ModelSearch.swift       # The Models tab's search: models by folded exemplar or class number, a space alone no search, the trombone only when the text changes
+│   ├── VerbBrowseSearch.swift  # The Verbs tab's @Observable search model: text, ranked result rows, guess, SearchTracker, keyboard selection;
+│   │                           #   decides what shows (recents, My Verbs, results, every verb), what Return opens, each open's report, letters in order
 │   ├── VerbType.swift          # verbModelMap `vt` marker: irregular / regular -ar / -er / -ir
 │   ├── AppIcon.swift           # Alternate app-icon enum (bull / dancer / matador / classic) + preview asset names
 │   ├── ConjugarTips.swift      # TipKit tips (try the quiz, explore models, choose a level, enable Game Center; on the
@@ -267,7 +269,7 @@ Conjugar/
 │   ├── URLSessionExtension.swift  # Stubbed URLSession for testing
 │   ├── Utterer.swift           # AVSpeechSynthesizer text-to-speech plus the single .ambient audio-session owner
 │   ├── VerbSearchArrowKeys.swift  # Hack: priority UIKeyCommands for ↑/↓ through verb results while the search field is focused
-│   ├── ViewControllerTransitions.swift  # Hack: waits for UIKit transitions to end, so an iPad letter key survives search dismissal
+│   ├── ViewControllerTransitions.swift  # Hack: waits for UIKit transitions to end: an iPad letter key, a push as the search ends, focus after a pop
 │   └── WidgetSnapshotWriter.swift  # Picks the daily verb (VerbDraw, with My Verbs in turn) + the quiz widget's question (the first of
 │                                   #   the day's challenge, with wrong answers of its shape) for today and six days ahead, and writes the
 │                                   #   week as JSON to the App Group on a new day, a change to My Verbs, or a new level, region, or tú or vos
@@ -315,7 +317,7 @@ Conjugar/
     ├── VerbPageNavigation.swift  # VerbPagePush and its environment key, verbPageDestinations() (VerbDestination, ModelInfo, the related list), pushesVerbPages(onto:)
     ├── VerbRowLabel.swift      # A verb's row and iPad card (VerbRowLabel, VerbGridCell), LookedUpCheck, and MatchLines
     ├── VerbEntryList.swift     # Lazy verb rows (compact) or carded grid (regular) that open a verb, optionally checking those looked up; a model's page, a collection's page, and the related list use it
-    ├── VerbBrowseView.swift    # Searchable, sortable list of all verbs (search ranked by VerbSearch); failed-search guess and mail line; Return and arrow keys on iPad; recents in the focused empty field; the My Verbs list; the review card above the rows; carries the browse_verb_count launch anchor (its row types are in VerbRowLabel.swift)
+    ├── VerbBrowseView.swift    # The Verbs tab: draws VerbBrowseSearch's list or grid, and keeps the focus, navigation, and UIKit workarounds; failed-search guess and mail line; the My Verbs list; the review card above the rows; carries the browse_verb_count launch anchor (its row types are in VerbRowLabel.swift)
     ├── VerbSearchCommands.swift  # Command-F as a top-level menu (Verbs › Find a Verb) that opens the verb search through AppRouter.openSearch
     └── VerbView.swift          # Verb detail: full conjugation paradigm, etymology, modern and medieval examples, related verbs; the pill opens the model; the star and Share in the navigation bar; sends viewVerbView/leaveVerbView as VerbVisitTracker says and records each open
 
@@ -491,7 +493,7 @@ ConjugarTests/
     ├── InfoTests.swift                 # The rich-text parser, the Info model, and every article link in en and es
     ├── SettingsViewTests.swift         # Settings-screen state
     ├── SymbolValidityTests.swift       # Every systemName: literal in all three targets resolves to a real SF Symbol
-    └── VerbBrowseKeyboardTests.swift   # How the arrow keys move the highlighted verb result
+    └── VerbBrowseSearchTests.swift     # The Verbs tab's search model: what shows, the selection across each change, Return, each report, before the index, a requested search, letter order
 
 docs/                           # Claude's output that holds information and is not a plan: research, audits, playbooks,
 │                               #   reference guides, drafts. See CLAUDE.md § Prompts, Plans, and Documents
