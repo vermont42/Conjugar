@@ -8541,6 +8541,22 @@
         }
       }
     },
+    "Verb.irregularLike %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregular, like %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Irregular, como %@"
+          }
+        }
+      }
+    },
     "Verb.irregularWithParent %@" : {
       "localizations" : {
         "en" : {

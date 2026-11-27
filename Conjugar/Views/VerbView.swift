@@ -19,6 +19,8 @@ struct VerbView: View {
 
   private let gloss: String
   private let typeOrParent: String
+  /// What VoiceOver reads for the pill, when its text would read badly. See `spokenTypeOrParent`.
+  private let spokenTypeOrParent: AttributedString?
   private let forms: VerbPageForms
   private let isDefective: Bool
   private let etymology: String?
@@ -54,6 +56,7 @@ struct VerbView: View {
     forms = VerbPageForms(verb: verb, marks: marks, secondSingular: Current.settings.secondSingularBrowse)
     isDefective = Conjugator.isDefective(infinitive: verb)
     typeOrParent = Self.typeOrParent(verb: verb, entry: entry)
+    spokenTypeOrParent = Self.spokenTypeOrParent(verb: verb, entry: entry)
     etymology = Etymology.text(for: verb)
     example = ExampleData.example(for: verb)
     let medieval = MedievalData.examples(for: verb)
@@ -306,10 +309,16 @@ struct VerbView: View {
         .padding(.vertical, -Layout.pillTapInset)
       }
       .buttonStyle(.plain)
+      .accessibilityLabel(pillLabel)
       .accessibilityHint(Text(L.Verb.showsModel))
     } else {
       Text(typeOrParent).metadataPill(tint: .customYellow)
+        .accessibilityLabel(pillLabel)
     }
+  }
+
+  private var pillLabel: Text {
+    spokenTypeOrParent.map { Text($0) } ?? Text(typeOrParent)
   }
 
   private func isMarked(_ tense: DisplayTense) -> Bool {
@@ -533,6 +542,33 @@ struct VerbView: View {
     }
   }
 
+  /// The model's exemplar, when the pill names one: tener for mantener, not for tener itself.
+  private static func exemplar(verb: String, entry: VerbMapEntry?) -> String? {
+    guard
+      Conjugator.verbType(infinitive: verb) == .irregular,
+      let classNumber = entry?.classNumber,
+      let exemplar = ModelCatalog.exemplar(forClass: classNumber),
+      exemplar != verb
+    else {
+      return nil
+    }
+    return exemplar
+  }
+
+  /// "Irregular, like tener", with tener tagged Spanish, for a pill that names an exemplar, since
+  /// VoiceOver would read "Irreg. ☛" as an abbreviation and a glyph. Nil for every other pill,
+  /// whose text reads as it is.
+  static func spokenTypeOrParent(verb: String, entry: VerbMapEntry?) -> AttributedString? {
+    guard let exemplar = exemplar(verb: verb, entry: entry) else {
+      return nil
+    }
+    var label = AttributedString(L.Verb.irregularLike(exemplar: exemplar))
+    if let range = label.range(of: exemplar, options: .backwards) {
+      label[range].languageIdentifier = "es"
+    }
+    return label
+  }
+
   private static func typeOrParent(verb: String, entry: VerbMapEntry?) -> String {
     switch Conjugator.verbType(infinitive: verb) {
     case .regularAr:
@@ -542,9 +578,7 @@ struct VerbView: View {
     case .regularIr:
       return "\(L.Verb.regular) IR"
     case .irregular:
-      if let classNumber = entry?.classNumber,
-         let exemplar = ModelCatalog.exemplar(forClass: classNumber),
-         exemplar != verb {
+      if let exemplar = exemplar(verb: verb, entry: entry) {
         return L.Verb.irregularWithParent(exemplar: exemplar)
       }
       return L.Verb.irregular

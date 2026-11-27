@@ -520,6 +520,11 @@ Josh's decision.*
     `onTapGesture`, which Full Keyboard Access cannot reach.
   - The letter keys are 40 points square.
 
+  *Fixed on `master`, 2026-11-26, in Phase 10 of `plans/verb_browse_fixes.md`, but for the rows'
+  Spanish, which is Phase 11's: the review card is one `Button` read as one element, the ✕ a second;
+  the pill reads "Irregular, like tener" with tener tagged Spanish; and the letter keys are 44
+  points square, five apart, 338 points in all. Still nothing was listened to.*
+
 <a id="duplication"></a>
 ## Duplication
 
@@ -603,7 +608,11 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   and the selection. The last would make the decisions testable. Today only
   `keyboardSelection(after:moving:count:)` is tested, and [C10](#c10)'s three bugs live in the
   untested decisions around it. *The search model fixed on `master`, 2026-11-26, in Phase 9 of
-  `plans/verb_browse_fixes.md`: `Models/VerbBrowseSearch.swift`, with 37 tests. The view's other seams are Phase 10's.*
+  `plans/verb_browse_fixes.md`: `Models/VerbBrowseSearch.swift`, with 37 tests. The view's other seams are Phase 10's.* *The rest fixed on
+  `master`, 2026-11-26, in Phase 10 of `plans/verb_browse_fixes.md`: `MyVerbsList`, `FailedSearchHelp`,
+  and `ReviewCardHost` are views of their own, and the review card's choice, reveal, snooze, and
+  signals are `VerbBrowseReviewCard`, with 9 tests. `VerbBrowseView` is 341 lines with 4 `@State`
+  properties.*
 - **S2. `searchFocusLostAt` is a `Date` used as a `Bool`, and it never resets (Read).** It is
   assigned `.now` and compared only with `nil` (`VerbBrowseView.swift:36`, `:137`, `:152`). After
   the field first loses focus it stays set until the field is focused again, so every later push

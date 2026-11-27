@@ -274,4 +274,7 @@ extension Color {
   static func zebraStripe(_ index: Int) -> Color {
     index.isMultiple(of: 2) ? .clear : .customYellow.opacity(0.03)
   }
+
+  /// The background of the row the arrow keys have highlighted.
+  static let keyboardSelection = Color.customRed.opacity(0.2)
 }

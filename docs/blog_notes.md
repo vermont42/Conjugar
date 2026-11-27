@@ -12689,3 +12689,47 @@ simulators. With neither wait nor sleep it missed once in six, so the test could
 UIKit only during the linger, when the field has let go and nothing is typed. That was the moment
 the old comment described. The linger's task and the copied-address note's task are cancelled
 when something supersedes them. The sort picker is disabled while the field holds a search.
+
+## The Verb List Comes Apart, and the Review Card Becomes One Button (2026-11-26)
+
+Phase 9 pulled the search out of `VerbBrowseView` into a model. Phase 10 of
+`plans/verb_browse_fixes.md` took the rest of the view apart along the seams the review named. My
+Verbs, with its swipes and its two alerts, is now `MyVerbsList`. The failed search's guess and
+mail line, with the note that says the address was copied, is now `FailedSearchHelp`. The review
+card's lifecycle is now `ReviewCardHost`. The view went from 630 lines to 341 and from ten `@State`
+properties to four. What is left is what the plan asked for: the navigation stack, the list or
+grid, the picker or letter row, and the router's requests, plus the focus workarounds that only
+the view can do.
+
+The review card was the one seam that could not be just a view. The card disappears whenever the
+learner types, because the list shows results instead, and a view that leaves the hierarchy loses
+its `@State`. A host view holding the card's state would have chosen a fresh verb every time a
+search ended, which is exactly what the old code's "chosen once per opening" rule exists to
+prevent. So the state went into `VerbBrowseReviewCard`, an `@Observable` class like the search
+model, and the host only draws it. A side benefit is that the choice, the reveal, the snooze, and
+the two analytics signals now have nine tests. Before, they lived in the view's body, where no test
+could reach them.
+
+The accessibility findings (G9) changed the card most. It used to be three text elements, each
+with the card's tap as its action, wrapped in an `onTapGesture`. VoiceOver read three buttons that
+all did the same thing, and Full Keyboard Access could not reach the card at all. Now the card is
+a single `Button`, and the ✕ sits in an overlay outside it, so that the two remain separate
+controls. Its label is one attributed string with the infinitive and the forms tagged Spanish.
+Konjugieren went the other way and split its card into elements, so that each gets its own voice.
+Conjugar already relies on tagging a range of an `AttributedString`, so I followed that, and noted
+that nobody has yet listened to whether VoiceOver switches voice partway through a label. One
+surprise came from the overlay: it put the ✕ first in VoiceOver's order. A sort priority on the
+card fixed that.
+
+The model pill had been read aloud with its glyph, "Irreg. ☛ tener". It now says "Irregular, like
+tener", or "Irregular, como tener" in Spanish, with tener tagged Spanish. The letter keys grew from
+40 to 44 points, the minimum tap target. At the old spacing, seven of them would have overflowed
+the quiz's keyboard toolbar by a point on a 375-point iPhone SE, so the gaps shrank from six points
+to five.
+
+One small thing went wrong while checking. To show a card, I seeded each simulator's practice
+record and backed up the old one first with `defaults read`. On the iPad that backup came back with
+sonreír written as `sonre\355r`, an old-style plist escape that is not valid JSON. Writing it back
+as read would have stored a broken record. One substitution fixed it, and the record read back
+afterward matched the original exactly. Anyone who backs up a record this way should check the
+backup for escapes before restoring it.

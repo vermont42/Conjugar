@@ -2184,6 +2184,11 @@ nonisolated enum L {
       String(localized: "Verb.irregularWithParent \(exemplar)")
     }
 
+    /// What VoiceOver reads for the "Irreg. ☛ tener" pill: "Irregular, like tener", without the glyph.
+    static func irregularLike(exemplar: String) -> String {
+      String(localized: "Verb.irregularLike \(exemplar)")
+    }
+
     /// The VoiceOver hint on the pill that names the verb's model and opens its page.
     static var showsModel: String {
       String(localized: "Verb.showsModel")

@@ -15,8 +15,13 @@ struct SpanishLetterKeyRow: View {
 
   let insert: (String) -> Void
 
+  /// A key is the 44-point minimum target. Seven keys and their gaps take 338 points, which fits
+  /// the narrowest iPhone iOS 26 runs on, the 375-point SE, with the keyboard toolbar's margins.
+  private static let keySide: CGFloat = 44
+  private static let spacing: CGFloat = 5
+
   var body: some View {
-    HStack(spacing: 6) {
+    HStack(spacing: Self.spacing) {
       ForEach(Self.letters, id: \.self) { letter in
         Button {
           insert(letter)
@@ -25,7 +30,7 @@ struct SpanishLetterKeyRow: View {
           Text(spanish: letter)
             .font(.title3)
             .linguistic()
-            .frame(minWidth: 40, minHeight: 40)
+            .frame(minWidth: Self.keySide, minHeight: Self.keySide)
         }
         // Seven .bordered keys overflow an iPhone, so the keys take the app's own tinted
         // rectangle, which has no padding of its own.

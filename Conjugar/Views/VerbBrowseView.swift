@@ -10,25 +10,15 @@ import TipKit
 
 struct VerbBrowseView: View {
   @State private var search = VerbBrowseSearch()
-  /// The starred verb whose swipe to remove awaits the learner's answer in an alert.
-  @State private var verbToUnstar: VerbMapEntry?
-  @State private var isConfirmingClear = false
+  @State private var reviewCard = VerbBrowseReviewCard()
   @State private var navigationPath = NavigationPath()
   @FocusState private var searchIsFocused: Bool
   /// Lets `search.isEngaged` go a moment after the focus. See `searchFocusChanged`.
   @State private var lingerTask: Task<Void, Never>?
-  @State private var addressWasCopied = false
-  @State private var addressNoteTask: Task<Void, Never>?
-  /// The review card's verb and state, chosen once per opening of the app. See `chooseReviewCard`.
-  @State private var reviewCard: ReviewCardState?
-  @State private var reviewCardIsChosen = false
-  @State private var appWasInBackground = false
   @Environment(AppRouter.self) private var router
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   @Environment(\.scenePhase) private var scenePhase
   private let tryQuizTip = TryQuizTip()
-
-  private var learnerVerbs: LearnerVerbStore { Current.learnerVerbs }
 
   private var settings: Settings { Current.settings }
 
@@ -92,97 +82,8 @@ struct VerbBrowseView: View {
     }
   }
 
-  /// Under "No verbs found": the guess, if any, then a line asking the learner to email a verb
-  /// that the app lacks. It appears only when every lookup failed, a form's included, so the
-  /// guess may come from a form too (tenjo guesses tener through tengo).
-  private var failedSearchHelp: some View {
-    VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
-      if let guess = search.guess {
-        Text(L.BrowseVerbs.guessIntro)
-          .font(.subheadline)
-          .foregroundStyle(.secondary)
-          .padding(.horizontal)
-          .accessibilityIdentifier("search_guess_intro")
-
-        Button {
-          push(search.openGuess(guess))
-        } label: {
-          VerbRowLabel(entry: guess.entry, matchLines: search.matchLines(of: guess))
-        }
-        .buttonStyle(.plain)
-        .accessibilityIdentifier("search_guess_\(guess.entry.infinitive)")
-        .background(search.selection == guess.entry.infinitive ? Self.selectionColor : Color.clear)
-
-        Divider()
-          .padding(.leading)
-      }
-
-      Text(verbRequestText(query: search.trimmedText))
-        .font(.footnote)
-        .foregroundStyle(.secondary)
-        .tint(Color.customBlue)
-        .padding(.horizontal)
-        .padding(.top, Layout.defaultSpacing)
-        .accessibilityIdentifier("verb_request_link")
-        .environment(\.openURL, OpenURLAction { url in
-          addressNoteTask?.cancel()
-          addressNoteTask = Task {
-            await openVerbRequest(url)
-          }
-          return .handled
-        })
-
-      if addressWasCopied {
-        Text(L.BrowseVerbs.addressCopied)
-          .font(.footnote)
-          .foregroundStyle(Color.customYellow)
-          .padding(.horizontal)
-          .transition(.opacity)
-          .accessibilityIdentifier("address_copied_note")
-      }
-    }
-    // Without a guess row to fill it, the stack would shrink to the request line and center it.
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .padding(.top, Layout.defaultSpacing)
-  }
-
-  /// The request line, with the address as a `mailto:` link that carries the query.
-  private func verbRequestText(query: String) -> AttributedString {
-    let address = URL.developerEmail
-    var text = AttributedString(L.BrowseVerbs.verbRequest(query: query, address: address))
-    if
-      let range = text.range(of: address, options: .backwards),
-      let url = URL.mailto(address, subject: L.BrowseVerbs.verbRequestSubject(query: query), body: L.BrowseVerbs.verbRequestBody(query: query)) {
-      text[range].link = url
-    }
-    return text
-  }
-
-  /// A device with no email app, such as the simulator, cannot open the link, so the address
-  /// goes to the clipboard instead of nowhere, and a note says so for four seconds. A second tap
-  /// cancels the first's task, so that the note stays its full four seconds.
-  private func openVerbRequest(_ url: URL) async {
-    guard !(await UIApplication.shared.open(url)) else {
-      return
-    }
-    UIPasteboard.general.string = URL.developerEmail
-    AccessibilityNotification.Announcement(L.BrowseVerbs.addressCopied).post()
-    withAnimation {
-      addressWasCopied = true
-    }
-    try? await Task.sleep(for: .seconds(4))
-    guard !Task.isCancelled else {
-      return
-    }
-    withAnimation {
-      addressWasCopied = false
-    }
-  }
-
-  private static let selectionColor = Color.customRed.opacity(0.2)
-
   private func rowBackground(_ row: VerbBrowseSearch.Row, index: Int) -> Color {
-    row.id == search.selection ? Self.selectionColor : .zebraStripe(index)
+    row.id == search.selection ? .keyboardSelection : .zebraStripe(index)
   }
 
   private func moveKeyboardSelection(by offset: Int) {
@@ -229,179 +130,19 @@ struct VerbBrowseView: View {
     searchIsFocused = focused
   }
 
-  private static let reviewCardMaxWidth: CGFloat = 560
-
-  /// Each launch, and each return from the background, offers the irregular verb whose key
-  /// conjugation is longest overdue in the practice record, if any. The choice is made once per
-  /// opening, so revealing a card does not swap it for the next verb due.
-  private func chooseReviewCard() {
-    reviewCardIsChosen = true
-    guard settings.reviewCardSuppression == .off else {
-      reviewCard = nil
-      return
-    }
-    reviewCard = Current.practice.cardOffer().map { ReviewCardState(offer: $0) }
-  }
-
-  private func signalReviewCardShown() {
-    guard reviewCard?.wasSignaled == false else {
-      return
-    }
-    reviewCard?.wasSignaled = true
-    Current.analytics.signal(name: .viewReviewCard)
-  }
-
-  private func revealReviewCard() {
-    guard let reviewCard, !reviewCard.isRevealed else {
-      return
-    }
-    Current.practice.recordReview(reviewCard.offer)
-    // A reveal moves the verb's due key conjugations up a box, which can reach the third.
-    Current.reportAchievements()
-    Current.analytics.signal(name: .tapRevealReviewCard)
-    withAnimation {
-      self.reviewCard?.isRevealed = true
-    }
-  }
-
-  private func openReviewCard() {
-    guard let reviewCard else {
-      return
-    }
-    push(VerbDestination(infinitive: reviewCard.offer.entry.infinitive, source: .reviewCard))
-  }
-
-  /// A card dismissed before its conjugations were seen was no review, so its due key
-  /// conjugations return tomorrow in the same box.
-  private func dismissReviewCard() {
-    guard let reviewCard else {
-      return
-    }
-    if !reviewCard.isRevealed {
-      Current.practice.snooze(reviewCard.offer)
-    }
-    withAnimation {
-      self.reviewCard = nil
-    }
-  }
-
   private func listHeading(_ text: String) -> some View {
     ListHeading(text)
       .padding(.horizontal)
       .padding(.top, Layout.defaultSpacing)
   }
 
-  /// The starred verbs, then the recent ones not starred. A swipe removes a verb, its star and its
-  /// last open alike, so that it leaves the list; a starred verb asks first, since its star was put
-  /// there on purpose. Clear asks, then forgets every last open and keeps the stars. Neither
-  /// forgets that a verb was opened, which the collections count.
-  @ViewBuilder
-  private var myVerbsList: some View {
-    let starred = learnerVerbs.starredVerbs
-    let recent = learnerVerbs.recentUnstarredVerbs
-    if starred.isEmpty, recent.isEmpty {
-      ContentUnavailableView(L.MyVerbs.emptyTitle, systemImage: "star", description: Text(L.MyVerbs.emptyDescription))
-        .frame(maxHeight: .infinity)
-        .accessibilityIdentifier("my_verbs_empty")
-    } else {
-      List {
-        if !starred.isEmpty {
-          Section {
-            ForEach(starred, id: \.infinitive) { entry in
-              myVerbRow(entry)
-                .swipeActions(edge: .trailing) {
-                  // Not .destructive: that role removes the row at once, before the learner answers.
-                  Button {
-                    verbToUnstar = entry
-                  } label: {
-                    Label(L.MyVerbs.remove, systemImage: "star.slash")
-                  }
-                  .tint(Color.customRed)
-                }
-            }
-          } header: {
-            ListHeading(L.MyVerbs.starred)
-              .accessibilityIdentifier("my_verbs_starred_heading")
-          }
-        }
-        if !recent.isEmpty {
-          Section {
-            ForEach(recent, id: \.infinitive) { entry in
-              myVerbRow(entry)
-                .swipeActions(edge: .trailing) {
-                  Button(role: .destructive) {
-                    withAnimation {
-                      learnerVerbs.remove(entry.infinitive)
-                    }
-                  } label: {
-                    Label(L.MyVerbs.remove, systemImage: "minus.circle")
-                  }
-                }
-            }
-          } header: {
-            HStack(alignment: .firstTextBaseline) {
-              ListHeading(L.MyVerbs.recent)
-                .accessibilityIdentifier("my_verbs_recent_heading")
-              Spacer()
-              Button(L.MyVerbs.clearRecent) {
-                isConfirmingClear = true
-              }
-              .font(.caption)
-              .buttonStyle(.borderless)
-              .tint(Color.customBlue)
-              .accessibilityIdentifier("my_verbs_clear_recent")
-            }
-          }
-        }
-      }
-      .listStyle(.plain)
-      .scrollContentBackground(.hidden)
-      .accessibilityIdentifier("my_verbs_list")
-      .alert(
-        L.MyVerbs.unstarTitle(verb: verbToUnstar?.citationForm ?? ""),
-        isPresented: Binding(get: { verbToUnstar != nil }, set: { if !$0 { verbToUnstar = nil } }),
-        presenting: verbToUnstar
-      ) { entry in
-        Button(L.MyVerbs.unstarConfirm, role: .destructive) {
-          withAnimation {
-            learnerVerbs.remove(entry.infinitive)
-          }
-        }
-        Button(role: .cancel) {}
-      } message: { _ in
-        Text(L.MyVerbs.unstarMessage)
-      }
-      .alert(L.MyVerbs.clearTitle, isPresented: $isConfirmingClear) {
-        Button(L.MyVerbs.clearRecent, role: .destructive) {
-          withAnimation {
-            learnerVerbs.clearRecents()
-          }
-        }
-        Button(role: .cancel) {}
-      } message: {
-        Text(L.MyVerbs.clearMessage)
-      }
-    }
-  }
-
-  private func myVerbRow(_ entry: VerbMapEntry) -> some View {
-    Button {
-      push(VerbDestination(infinitive: entry.infinitive, source: .myVerbs))
-    } label: {
-      VerbRowLabel(entry: entry)
-    }
-    .buttonStyle(.plain)
-    .accessibilityIdentifier("my_verb_row_\(entry.infinitive)")
-    .listRowInsets(EdgeInsets())
-    .listRowBackground(Color.clear)
-  }
-
   var body: some View {
     NavigationStack(path: $navigationPath) {
       VStack(spacing: 0) {
-        // My Verbs is a List of its own, because only a List's rows can be swiped to delete.
         if search.shown == .myVerbs {
-          myVerbsList
+          MyVerbsList { entry in
+            push(VerbDestination(infinitive: entry.infinitive, source: .myVerbs))
+          }
         } else {
           ScrollViewReader { proxy in
             let shown = search.shown
@@ -424,26 +165,8 @@ struct VerbBrowseView: View {
                 TipView(tryQuizTip)
                   .padding(.horizontal)
                   .padding(.top, Layout.defaultSpacing)
-              }
 
-              if let reviewCard, shown == .everyVerb, settings.reviewCardSuppression == .off {
-                ReviewCardView(
-                  entry: reviewCard.offer.entry,
-                  daysSinceActivity: reviewCard.offer.daysSinceActivity,
-                  wasLookedUp: reviewCard.offer.wasLookedUp,
-                  isRevealed: reviewCard.isRevealed,
-                  reveal: revealReviewCard,
-                  open: openReviewCard,
-                  dismiss: dismissReviewCard
-                )
-                .frame(maxWidth: horizontalSizeClass == .regular ? Self.reviewCardMaxWidth : .infinity)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal)
-                .padding(.top, Layout.defaultSpacing)
-                .transition(.opacity)
-                .onAppear {
-                  signalReviewCardShown()
-                }
+                ReviewCardHost(model: reviewCard, push: push)
               }
 
               if search.awaitsIndex {
@@ -456,7 +179,7 @@ struct VerbBrowseView: View {
                 ContentUnavailableView(L.BrowseVerbs.searchNoResults, systemImage: "magnifyingglass")
                   .padding(.top, Layout.tripleDefaultSpacing)
 
-                failedSearchHelp
+                FailedSearchHelp(search: search, push: push)
                   .readingWidth()
               } else if horizontalSizeClass == .regular {
                 // iPad / regular width: reflow the rows into an adaptive grid of
@@ -578,19 +301,16 @@ struct VerbBrowseView: View {
       .onChange(of: scenePhase) {
         switch scenePhase {
         case .background:
-          appWasInBackground = true
           search.appEnteredBackground()
-        case .active where appWasInBackground:
-          appWasInBackground = false
-          chooseReviewCard()
+          reviewCard.appEnteredBackground()
+        case .active:
+          reviewCard.appBecameActive()
         default:
           break
         }
       }
       .onChange(of: settings.reviewCardSuppression) {
-        if settings.reviewCardSuppression == .off, reviewCard == nil {
-          chooseReviewCard()
-        }
+        reviewCard.suppressionChanged()
       }
       .onChange(of: router.pendingSearch, initial: true) {
         openRequestedSearch()
@@ -598,9 +318,7 @@ struct VerbBrowseView: View {
       .onAppear {
         Current.analytics.signal(name: .viewVerbBrowseView)
         Current.reviewPrompter.promptableActionHappened()
-        if !reviewCardIsChosen {
-          chooseReviewCard()
-        }
+        reviewCard.listAppeared()
       }
       // Loading the conjugation map and indexing its forms took 6.0 to 6.2 seconds at first touch
       // in a Debug build in the simulator (2026-11-26), so it happens off the main actor, begun at
@@ -615,13 +333,6 @@ struct VerbBrowseView: View {
     }
     .pushesVerbPages(onto: $navigationPath)
   }
-}
-
-/// The review card on screen: its verb, chosen once per opening, and what the learner has done.
-private struct ReviewCardState {
-  let offer: PracticeStore.CardOffer
-  var isRevealed = false
-  var wasSignaled = false
 }
 
 #Preview {

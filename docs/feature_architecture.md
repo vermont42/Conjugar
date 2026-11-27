@@ -341,6 +341,8 @@ imperative beside a seven-row tense starts level with it.
 
 **The pill** that names a verb's model ("Regular AR ›", "Irreg. ☛ tener ›") opens that model's page
 (`ModelInfo.row(for:)`, which folds the alias classes 29-2, 30-1, 31-1, and 32-1 into their parents).
+VoiceOver reads "Irreg. ☛ tener" as "Irregular, like tener", with tener tagged Spanish
+(`VerbView.spokenTypeOrParent`), since it would read the abbreviation and the glyph aloud.
 
 **The Related Verbs card** (`Views/RelatedVerbsView.swift`) sits at the bottom of the page, below the
 examples. It has up to two rows of chips, six verbs each:
@@ -803,7 +805,7 @@ shows busqué's red letters. A regular verb's answers move patterns, which are n
   clears it.
 
 **Which card.** `PracticeStore.cardOffer()` takes the verb whose key conjugation is longest
-overdue, ties broken by key, with each of its due key conjugations. `VerbBrowseView` chooses once at launch and again at each return from the background,
+overdue, ties broken by key, with each of its due key conjugations. `VerbBrowseReviewCard` (`Models/`) chooses once at launch and again at each return from the background,
 so a reveal does not swap the card for the next verb due. The card hides while anything is typed
 and while the recents show, and is absent from My Verbs, which is a list of its own. On iPad it
 stops at 560 points rather than spanning the grid.
@@ -813,9 +815,13 @@ ago" when a quiz answer came after the last lookup ("yesterday" for one, counted
 from the latest activity of any of the verb's key conjugations), the citation form (arrepentirse), the gloss, and the key conjugations
 (`KeyConjugation.forms`) under a redacted placeholder, with "Recall its conjugations, then tap to
 check." A tap anywhere reveals them with their red letters; a second tap opens the page, and a
-chevron says so. A reflexive-only verb's forms carry their pronoun (me arrepiento). VoiceOver reads
-the infinitive and forms in Spanish, the forms separated by commas rather than middle dots, and each
-text element carries the tap as its action.
+chevron says so. A reflexive-only verb's forms carry their pronoun (me arrepiento). The card is one
+`Button`, so that Full Keyboard Access reaches it, with the ✕ a second button beside it rather than
+inside it. VoiceOver finds the card first, as one element: the infinitive and gloss, the caption,
+and once revealed the forms, separated by commas rather than middle dots. The infinitive and the
+forms are tagged Spanish (`ReviewCardView.accessibilityLabel`), and the hint is the prompt, or once
+revealed that a tap opens the page. `ReviewCardHost` draws the card from `VerbBrowseReviewCard`,
+which records the reveal and the snooze and sends the two signals.
 
 **Suppress Review Card** (`Settings.reviewCardSuppression`, `ReviewCardSuppression`, Off by
 default) sits in the Settings card with Browse Tú and/or Vos. On hides a card at once and chooses
@@ -828,7 +834,9 @@ container>/Library/Preferences/group.biz.joshadams.Conjugar practiceRecord -stri
 dates as seconds since 2001-01-01, while the app is not running. Without `-string`, `defaults`
 tries to parse the JSON as a plist and fails. A record of key conjugations due long ago, such as
 `{"entries":{"key:tener:yo_presente":{"schedule":{"box":0,"due":0},"lastLookedUp":0}}}`, offers
-tener.
+tener. To keep the learner's record, read it first with `defaults read` and write it back after.
+`defaults read` prints a non-ASCII letter as an old-style plist escape (sonreír as `sonre\355r`), which
+is not JSON, so turn each escape back into its letter before writing.
 
 ## Quiz
 

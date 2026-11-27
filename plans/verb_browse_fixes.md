@@ -29,8 +29,8 @@ is filled by the next session, which reads the hash from `git log`.
 | 6 | Done | 2026-11-26 | `082a446` | From C13 the stashed link, the ignored link, the link beneath the game, and case; F2 (Spotlight); the intents and links of D3 |
 | 7 | Done | 2026-11-26 | `1349e60` | D1 (the cheap pieces), D2, G6, G8, S5, and from C13 the Models tab's whitespace and trombone |
 | 8 | Done | 2026-11-26 | `73df869` | D3 (the model layer), F2 (repeated work), S8 |
-| 9 | Awaiting Josh | 2026-11-26 | | S1 (the search model), C10, C11, F1, S2, S3, S4, S7, and the rest of C13 |
-| 10 | Not started | | | S1 (the rest), G9 |
+| 9 | Done | 2026-11-26 | `102ab01` | S1 (the search model), C10, C11, F1, S2, S3, S4, S7, and the rest of C13 |
+| 10 | Awaiting Josh | 2026-11-26 | | S1 (the rest), G9 |
 | 11 | Not started | | | D1 (`AdaptiveRows` and one row label) |
 | 12 | Not started | | | S6 |
 | 13 | Not started | | | T1, T2, T3, less what earlier phases added |
@@ -964,6 +964,50 @@ Review Card on and off), on both devices; with VoiceOver if he has a device at h
 the pill.
 
 **How it differed:**
+
+- **The review card's host is two pieces.** Its state must outlive the view that draws it, since
+  the card leaves the hierarchy whenever the learner types and a host's `@State` would then choose
+  a new verb on its return. So `Models/VerbBrowseReviewCard.swift`, an `@Observable` class like
+  `VerbBrowseSearch`, owns the choice, the reveal, the snooze, and the two signals, and
+  `Views/ReviewCardHost.swift` draws it. `VerbBrowseView` still forwards the scene phase and the
+  suppression setting to it, in two lines, because only a view that stays on screen can see them.
+  The model has 9 tests, which the old code, living in the view's body, could not have.
+- **`VerbBrowseView`** went from 630 lines to 341 and from 10 `@State` properties to 4: the search,
+  the review card, the navigation path, and the linger's task. `MyVerbsList` takes an `open`
+  closure and `FailedSearchHelp` takes the search and the tab's `push(_:)`, so every push still goes
+  through the one function that waits when a search is ending. `FailedSearchHelp` now cancels its
+  note's task when it leaves the screen. The highlight's color became `Color.keyboardSelection`,
+  since two files draw it.
+- **G9, the card.** The card is a `Button` whose label is the card, with the ✕ in an overlay
+  outside it, two points from the card's corner as before. Its accessibility label is one
+  `AttributedString`, "tener, have. Looked up 3 days ago." and once revealed the forms, with the
+  infinitive and the forms tagged Spanish; the hint is the prompt, or "Opens the verb's page". The
+  overlay put the ✕ first in VoiceOver's order, so the card has a sort priority. This departs from
+  Konjugieren's `docs/voiceover.md`, whose card is separate elements so that each gets its own
+  voice. G9 asked for one element, and Conjugar already tags Spanish by range in an
+  `AttributedString` (`ModelPracticeCard`), so no Spanish-specific rule arose and I did not start
+  `docs/voiceover.md`. Whether VoiceOver switches voice mid-label is unheard. The identifiers
+  `review_card_reveal` and `review_card_conjugations` are gone, since their elements are; nothing
+  used them.
+- **G9, the pill.** "Irreg. ☛ tener" is read as "Irregular, like tener" ("Irregular, como tener"),
+  a new string, with tener tagged Spanish. "Regular AR" and "Irregular" read as they are.
+- **G9, the letter keys** are 44 points square and 5 apart, 338 points in all, down from 6 apart
+  so that they fit a 375-point iPhone SE's keyboard toolbar in the quiz with its margins. The look
+  changes only in size: `docs/screenshots/20261126-145608-phase10_letters_40.png` before and
+  `20261126-150255-phase10_letters_44.png` after, on "Conjugar iPhone 17".
+- **Checked on "Conjugar iPhone 17"** (English, dark), with a seeded card for tener: the card one
+  button and the ✕ second in the accessibility tree; a tap in the card's padding revealing it and
+  reading the forms; a second tap opening tener; obtener's pill read as "Irregular, like tener";
+  the 44-point letter row; xyzzyq's mail link copying the address, its note gone after four seconds;
+  a starred verb's swipe cancelled, a recent verb swiped away, and Clear asking, then leaving only
+  the starred verb. **On "Conjugar iPad Pro 11"** (Spanish, light): the card at 560 points, read as
+  "tener, have. Consultado hace 9461 días.", revealed by a tap and dismissed by the ✕; the letter
+  row. I did not try Suppress Review Card in the simulator, which the model's tests cover, nor My
+  Verbs on the iPad. Both simulators' practice records were restored afterward; the iPhone keeps
+  the star on hablar and the Clear I did.
+- **The suite** is 1,485 Swift Testing tests in 92 suites and 11 XCTest tests, in 142 s, under a
+  load average near 100. The slowest were "ConjugationMap" (59.5 s), "The bundled map" (47.8 s),
+  and "Which cells a text is" (10.8 s).
 
 ## Phase 11: One Grid-or-List, One Row Label
 
