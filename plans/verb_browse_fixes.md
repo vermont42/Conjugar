@@ -14,8 +14,8 @@ land, so find code by name.
 
 ## Status
 
-**Finished 2026-11-27.** Every phase and the Closing are done. The Closing awaits Josh's commit,
-and nothing in this plan remains to be built.
+**Finished 2026-11-27.** Every phase and the Closing are done and committed, and nothing in this
+plan remains to be built.
 
 Each session that finishes a phase fills in its row, changes nothing in other rows, and writes a
 **How it differed** note under that phase's heading. A finished phase is "Awaiting Josh" until
@@ -37,7 +37,7 @@ is filled by the next session, which reads the hash from `git log`.
 | 11 | Done | 2026-11-27 | `5d399e8` | D1 (`AdaptiveRows` and one row label), the rows' Spanish from G9, the outline's corners from C13 |
 | 12 | Done | 2026-11-27 | `c3bb034` | S6, and from S8 `mixesChoiceQuestions`' redundant test |
 | 13 | Done | 2026-11-27 | `1c78580` | T1, T2, T3, less what earlier phases added |
-| Closing | Awaiting Josh | 2026-11-27 | | The audit, G5's release step, the timed workarounds' list |
+| Closing | Done | 2026-11-27 | `7d2e38a` | The audit, G5's release step, the timed workarounds' list |
 
 ## How to Work This Plan
 
