@@ -13050,3 +13050,50 @@ rulings: the review card's reveal now stops at the second box, only a search sen
 verb back to the first box, and a default quiz's first round no longer mixes in due items.
 Sixteen phases follow, each waiting for him before git, with an empty Commit column until he has
 tried the change.
+
+## A plan from a voice memo (2026-11-27)
+
+Josh used the app on his iPhone, recorded eight minutes of spoken bug reports, took six
+screenshots, and asked for a plan. The plan is `plans/voice_memo_bugs.md`, and the screenshots
+are beside it at half size.
+
+**Transcribing.** The Video project keeps a built whisper.cpp with the `small.en` model, and
+its notes warn that a vocabulary prompt can plant phrases. It did. With a prompt that listed
+the tab names and "Screenshot 1", whisper filled the silences with "Screenshot 3, get rid of
+the first label for tenses" and eight variations of it, none of which Josh said. Without the prompt the
+silences came out as "oh" and "you", which are easy to discard, and the five real reports were
+the same in both runs. Four stretches had sound and no words. I cut each out and transcribed it
+alone, and they were taps and the app's own sounds. So the memo has five bugs, not fourteen.
+
+**What the screenshots gave away.** They are 1125 × 2436 pixels, a 375 × 812 point screen.
+Conjugar's simulator is an iPhone 17 at 402 × 874. Every one of the four layout bugs depends on
+those missing 27 points of width or 62 of height, so a session that tried to reproduce them on
+the project's simulator at the same text size could conclude there was nothing to fix. The
+body text's line height puts the text size at about xxxLarge, the largest that is not an
+accessibility size. The plan asks for a third simulator, an iPhone 13 mini, which has exactly
+that screen. I did not create it, since the simulators are Josh's to decide.
+
+**The five bugs.** The "also" line under each tense heading on a verb's page goes, and the
+names it held move to the tense's Info article. `ConjugationTable` already holds every name, so
+the plan has `InfoView` draw them under the article's heading. The catalog's forty article
+bodies stay as they are. A Spanish article shows no English name, which a test will pin. The
+collection page's large title, "Irregular Participles", truncates because a system large title
+is one line, and the fix is the one `InfoView` already uses: the title in the scroll content,
+where it wraps, under an inline bar. The same goes for a verb's page and a model's. Two level
+pickers truncate a single word that cannot wrap, "Elementary" in the Quiz tab's tile and
+"Intermediate" in Settings, each behind a `minimumScaleFactor(0.7)` that was not enough. Both
+need a layout that gives the word more room when it does not fit.
+
+**The quiz field.** This one I could only reason about. In the screenshot the letter keys cover
+the lower 34 points of the answer field on a quiz's first question. The field's bottom edge is
+above the keyboard's top edge and below the top of the letter-key bar. `revealAnswerField`
+scrolls with a nil anchor, which does nothing when the view counts as visible. So the likely
+cause is that iOS 26's floating keyboard toolbar is not part of the scroll view's safe area,
+and the field counts as visible while the bar covers it. I did not confirm this. Showing the
+software keyboard in the simulator takes Simulator's menu bar, three simulators were booted,
+and none has the right screen. The plan's third phase starts by telling that cause from a
+timing one, and gives the fix for each.
+
+Six assumptions are listed for Josh to strike. The first matters most: I took "the also label"
+to mean the whole line, not the one word, because his next sentence sends the names to the
+articles. No code changed.

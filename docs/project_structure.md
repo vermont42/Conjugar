@@ -672,6 +672,11 @@ plans/                          # What Claude writes to get another session to d
 │                                          #   findings (what the learner is taught, correctness, privacy, docs, accessibility,
 │                                          #   smells, tests), Konjugieren's findings checked here, Josh's 23 decisions of
 │                                          #   2026-11-27, and 16 phases and a closing. Not started
+├── voice_memo_bugs.md                     # Five bugs Josh recorded on his iPhone on 2026-11-27 (375-point screen, xxxLarge
+│                                          #   text): the "also" names line leaves the verb page for the tense articles, a
+│                                          #   truncated large title, truncated level names in the Quiz tab and Settings, and
+│                                          #   the letter keys covering the quiz's answer field. Three phases. Not started
+├── voice_memo_bugs/                       # His six screenshots at half size, screenshot_1.jpg to screenshot_6.jpg
 ├── gap_sentences_batch_1.md               # The review sheet of the first 118 sentences (the 25 most frequent verbs), from gap_sentences.py
 ├── choice_questions_batch_1.md            # The review sheet of the first 45 choice questions (which tense a speaker would use), from choice_questions.py
 ├── pedagogy_variant_audit.md              # Which alternate Spanish forms the quiz accepts (rio/rió, frito, satisface,
