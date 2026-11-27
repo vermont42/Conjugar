@@ -591,6 +591,8 @@ prompts/                        # What Josh writes to get Claude to do something
 │                               #   (→ plans/game_la_subida.md)
 ├── matador.md                  # How the matador should look and how to make him (→ plans/matador_wire_into_game.md)
 ├── onboarding.md               # Port Conjuguer's onboarding flow, in Conjugar's yellow
+├── pedagogy_review.md          # Review the code the pedagogy plan built, checked against Konjugieren's review, and
+│                               #   plan the fixes (→ plans/pedagogy_fixes.md)
 ├── power_up_fixes.md           # Flourishes for the cape, speed, and serenata power-ups
 ├── rae_followup.md             # The CORPES coordinator's replies; draft an answer (→ docs/rae_reply_draft.md)
 ├── rename_objects.md           # Adopt Fowler's test-double naming
