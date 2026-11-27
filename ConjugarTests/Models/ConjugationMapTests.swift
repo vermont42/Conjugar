@@ -266,16 +266,27 @@ struct ConjugationMapTests {
     }
 
     // The map and the matcher reach the engine separately; for a one-word form they must agree.
-    @Test(arguments: ["ser", "ir", "tener", "hablar", "decir", "haber", "arrepentir"])
+    // Each verb stands for a case: ser and ir share forms (fue), hablar is regular, haber is the
+    // auxiliary, and arrepentir is reflexive-only. The matcher conjugates all of a verb's cells
+    // on every call, about 11 ms in a test build, so it is asked once per distinct form, not once
+    // per cell. Tener and decir, two more irregular verbs that ser and ir already stand for, took
+    // the test's time to 5.8 seconds (2026-11-27).
+    @Test(arguments: ["ser", "ir", "hablar", "haber", "arrepentir"])
     func agreesWithTheMap(infinitive: String) {
       let paradigm = ConjugationMap.oneWordCells.map { ConjugationMap.form(of: infinitive, at: $0) }
+      var cellsByForm: [String: [ConjugationCell]] = [:]
       for (cell, form) in zip(ConjugationMap.oneWordCells, paradigm) {
-        guard let form else {
-          continue
+        if let form {
+          cellsByForm[form, default: []].append(cell)
         }
+      }
+      #expect(!cellsByForm.isEmpty)
+      for (form, cells) in cellsByForm {
         let mapCells = ConjugationMap.bundled.entries(for: form).first { $0.infinitive == infinitive }?.cells ?? []
         let matchCells = ConjugationMatch.cells(of: infinitive, equalTo: form).filter(ConjugationMap.oneWordCells.contains)
-        #expect(mapCells.contains(cell), "\(infinitive) \(cell.code) \(form)")
+        for cell in cells {
+          #expect(mapCells.contains(cell), "\(infinitive) \(cell.code) \(form)")
+        }
         #expect(mapCells == matchCells, "\(infinitive) \(form)")
       }
     }

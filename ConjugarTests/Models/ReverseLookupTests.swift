@@ -328,7 +328,12 @@ import Testing
   // Every example's token, typed into the search as it stands, finds the example's verb among
   // the results. A lookup in the map alone misses especializarse, an infinitive with an
   // enclitic; the search finds it.
-  @Test func theSearchFindsTheVerbOfEveryExampleByItsToken() {
+  //
+  // The search judges each verb on its own entry, and only ranking compares verbs, which this
+  // test does not check. So it searches only the example's verb, which answers as a search of
+  // every verb would, in a fraction of the time: 290 of the tokens are bare infinitives, which
+  // FormLookup does not find, and a full search of each took 6.7 seconds in all (2026-11-27).
+  @Test func theSearchFindsTheVerbOfEveryExampleByItsToken() throws {
     var exampleCount = 0
     var misses: [String] = []
     for infinitive in VerbMap.shared.entries.keys.sorted() {
@@ -336,10 +341,8 @@ import Testing
         continue
       }
       exampleCount += 1
-      // FormLookup is the part of the search that finds forms, and costs a fraction of a full
-      // search, which the misses alone go through.
-      let foundAsForm = FormLookup.forms(for: example.token)[infinitive] != nil
-      if !foundAsForm, !matches(example.token).contains(where: { $0.entry.infinitive == infinitive }) {
+      let entry = try #require(VerbMap.shared.entries[infinitive])
+      if !VerbSearch.matches(for: example.token, in: [entry]).contains(where: { $0.entry.infinitive == infinitive }) {
         misses.append("\(infinitive): \(example.token)")
       }
     }

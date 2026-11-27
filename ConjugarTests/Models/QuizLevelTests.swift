@@ -105,26 +105,52 @@ import Testing
     }
   }
 
-  /// Under a fixed seed, each tense is asked in proportion to its weight: a compound about one
-  /// question in 34 at Advanced, the presente three times as often.
+  /// Under a fixed seed, each tense is drawn in proportion to its weight: a compound about one
+  /// draw in 34 at Advanced, the presente three times as often. The draws are the quiz's own,
+  /// made directly. Through `Quiz.start`, the same 6,000 per level took 4.1 seconds
+  /// (2026-11-27); `aQuizAsksEachWeightAtItsShare` checks that a quiz draws this way.
   @Test func tensesAppearAtTheirWeight() {
     for level in [QuizLevel.elementary, .advanced] {
-      let quiz = makeQuiz(level: level, seed: 7)
+      var generator = SplitMix64(seed: 7)
       var counts: [DisplayTense: Int] = [:]
-      let quizzes = 200
+      let draws = 200 * Self.longQuiz
+      for _ in 0..<draws {
+        if let entry = level.pool.weightedRandomElement(using: &generator) {
+          counts[entry.tense, default: 0] += 1
+        }
+      }
+      let totalWeight = Double(level.pool.reduce(0) { $0 + $1.weight })
+      for entry in level.pool {
+        let expected = Double(draws) * Double(entry.weight) / totalWeight
+        let actual = Double(counts[entry.tense] ?? 0)
+        #expect(abs(actual - expected) < expected * 0.25, "\(level) \(entry.tense): \(actual), expected about \(expected)")
+      }
+    }
+  }
+
+  /// A quiz asks its tenses by weight: under a fixed seed, the tenses of each weight together
+  /// take their share of its questions. Shares of whole weights rather than of single tenses,
+  /// because each holds enough questions to judge in 30 quizzes, not 200.
+  @Test func aQuizAsksEachWeightAtItsShare() {
+    for level in [QuizLevel.elementary, .advanced] {
+      let quiz = makeQuiz(level: level, seed: 7)
+      let weights = Dictionary(uniqueKeysWithValues: level.pool.map { ($0.tense, $0.weight) })
+      var counts: [Int: Int] = [:]
+      let quizzes = 30
       for _ in 0..<quizzes {
         quiz.start(scope: QuizScope(kind: .allVerbs, verbs: nil, questionCount: Self.longQuiz, source: .tab))
         for question in quiz.questions {
-          counts[question.tense, default: 0] += 1
+          counts[weights[question.tense] ?? 0, default: 0] += 1
         }
         quiz.quit()
       }
+      #expect(counts[0] == nil, "\(level) asked a tense outside its pool")
       let total = Double(quizzes * Self.longQuiz)
-      let totalWeight = Double(level.pool.reduce(0) { $0 + $1.weight })
-      for entry in level.pool {
-        let expected = total * Double(entry.weight) / totalWeight
-        let actual = Double(counts[entry.tense] ?? 0)
-        #expect(abs(actual - expected) < expected * 0.25, "\(level) \(entry.tense): \(actual), expected about \(expected)")
+      let totalWeight = Double(weights.values.reduce(0, +))
+      for weight in Set(weights.values) {
+        let expected = total * Double(weights.values.filter { $0 == weight }.reduce(0, +)) / totalWeight
+        let actual = Double(counts[weight] ?? 0)
+        #expect(abs(actual - expected) < expected * 0.25, "\(level) weight \(weight): \(actual), expected about \(expected)")
       }
     }
   }

@@ -357,22 +357,66 @@ extension GameState {
         let minX = rect.minX + width
         let maxX = rect.maxX - width * 2
         guard maxX > minX else { continue }
-        // A few attempts to land a hole that clears both other holes and every ladder
-        // mouth on this girder; give up quietly if the beam is too crowded to place one.
-        for _ in 0..<12 {
-          let start = CGFloat.random(in: minX...maxX, using: &bossRNG)
-          let range = start...(start + width)
-          if placed.contains(where: { $0.overlaps(range) }) { continue }
-          if forbidden.contains(where: { $0.overlaps(range) }) { continue }
-          placed.append(range)
-          platformGaps.append(
-            PlatformGap(id: platformGapCounter, level: platform.level, xRange: range, fadeRemaining: Self.earthquakeGapFade)
-          )
-          platformGapCounter += 1
-          break
+        // Land each hole clear of the other holes and every ladder mouth on this girder; give
+        // up quietly only if the beam is too crowded to place one.
+        guard let start = Self.gapStart(width: width, in: minX...maxX, avoiding: forbidden + placed, using: &bossRNG) else {
+          continue
         }
+        let range = start...(start + width)
+        placed.append(range)
+        platformGaps.append(
+          PlatformGap(id: platformGapCounter, level: platform.level, xRange: range, fadeRemaining: Self.earthquakeGapFade)
+        )
+        platformGapCounter += 1
       }
     }
+  }
+
+  /// A start in `bounds` for a hole `width` wide that overlaps none of `blocked`, drawn evenly
+  /// from every such start; nil when none is left. Choosing among the free starts, rather than
+  /// drawing a start and retrying when it lands on a ladder mouth, never gives up on a girder
+  /// with room. Twelve random tries left about one girder in 95 a hole short (2026-11-27).
+  static func gapStart(
+    width: CGFloat,
+    in bounds: ClosedRange<CGFloat>,
+    avoiding blocked: [ClosedRange<CGFloat>],
+    using generator: inout some RandomNumberGenerator
+  ) -> CGFloat? {
+    // A hole starting at s overlaps a closed range a...b when s is in (a - width)...b. The
+    // free starts are what is left of `bounds`, kept a hair from each blocked stretch's ends,
+    // where the hole would touch a neighbor, and `overlaps` counts touching.
+    let margin: CGFloat = 0.5
+    let starts = blocked
+      .map { ($0.lowerBound - width - margin, $0.upperBound + margin) }
+      .sorted { $0.0 < $1.0 }
+    var free: [(lower: CGFloat, upper: CGFloat)] = []
+    var cursor = bounds.lowerBound
+    for (lower, upper) in starts {
+      if lower > cursor {
+        free.append((cursor, min(lower, bounds.upperBound)))
+      }
+      cursor = max(cursor, upper)
+      if cursor >= bounds.upperBound {
+        break
+      }
+    }
+    if cursor < bounds.upperBound {
+      free.append((cursor, bounds.upperBound))
+    }
+    free.removeAll { $0.upper <= $0.lower }
+    let total = free.reduce(0) { $0 + ($1.upper - $1.lower) }
+    guard total > 0 else {
+      return nil
+    }
+    var roll = CGFloat.random(in: 0..<total, using: &generator)
+    for stretch in free {
+      let length = stretch.upper - stretch.lower
+      if roll < length {
+        return stretch.lower + roll
+      }
+      roll -= length
+    }
+    return free.last?.lower
   }
 
   /// Whether `x` on `level` sits inside a **finished** gap (a true hole) — the traversability

@@ -952,6 +952,21 @@ struct GameStateTests {
     }
   }
 
+  /// A hole lands whenever its girder has room for it, however little. Here only starts from
+  /// about 100 to 110 are free, which twelve random tries across the beam used to miss.
+  @Test func aGapLandsInTheOnlyRoomLeft() {
+    var generator = SplitMix64(seed: 1)
+    let blocked: [ClosedRange<CGFloat>] = [0...100, 130...200]
+    for _ in 0..<100 {
+      let start = GameState.gapStart(width: 20, in: 0...200, avoiding: blocked, using: &generator)
+      #expect(start.map { (100...110).contains($0) } == true)
+      if let start {
+        #expect(!blocked.contains { $0.overlaps(start...(start + 20)) })
+      }
+    }
+    #expect(GameState.gapStart(width: 20, in: 0...200, avoiding: [0...100, 115...200], using: &generator) == nil)
+  }
+
   @Test func terremotoNeverOpensAGapUnderALadderMouth() {
     let gameState = configured()
     gameState.assignedMechanic = .terremoto

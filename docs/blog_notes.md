@@ -12921,3 +12921,74 @@ choice is lost. The July draft the old article came from was deleted too.
 
 The new article is about 18,000 characters in English, against 14,000 before. It went into the
 catalog through Python, as the localization rules require for a value full of ASCII quotes.
+
+## Timing the Unit Tests (2026-11-27)
+
+Before planning a review of the quiz changes, Josh asked how long the unit tests take. A full run
+through `run_tests.sh` took 121 seconds of wall clock, 87 of them in Swift Testing, for 1,497
+tests in 93 suites. The per-test durations summed to 86 seconds, almost the run's own length,
+which showed that nothing ran in parallel. The skill passes `-parallel-testing-enabled NO`, and
+Xcode applies that to Swift Testing as well as XCTest. So the eight shards of
+`matchesAFreshBuild`, split "so that Swift Testing builds them in parallel", run one after
+another.
+
+Turning parallelism on was the obvious first try, and it lost. With `-parallel-testing-enabled
+YES`, Xcode shut the simulator down, cloned it, booted the clone, and installed the app there.
+The tests themselves finished in about 69 seconds rather than 87, but the run took 195 seconds
+against 117. On this six-core Intel Mac the clone costs far more than the parallelism saves, and
+61 of the 86 Swift Testing files are `@MainActor`, so most suites still take turns on the main
+actor. All 1,508 tests passed in parallel, which at least showed no race on the shared `Current`.
+The run left the simulator shut down, and a serial run after it paid to boot it again.
+
+The other lever was the slowest tests. Five took 33 of the 87 seconds, and a temporary probe suite
+separated each one's loading from its own work. Only one was mostly loading:
+`anAbandonedSearchReportsTheTopResultsKind` is simply the first test to touch
+`ConjugationIndex.bundled`, which takes 2.9 seconds to build in a test build, and some test will
+always pay that. The other four were slow on their own. Three of them changed:
+
+- `theSearchFindsTheVerbOfEveryExampleByItsToken` (6.7 seconds) sent 290 of its 1,340 tokens
+  through a full search of all 4,811 verbs, because those tokens are bare infinitives, which
+  `FormLookup` does not find. The test checks only that the verb is among the results, never its
+  rank, and `VerbSearch.matches` decides each verb's match from that verb's entry alone. So
+  searching just that entry gives the same answer. It now takes 0.1 seconds and checks exactly
+  what it did.
+- `agreesWithTheMap` (5.8 seconds) called `ConjugationMatch.cells(of:equalTo:)` 504 times, and
+  each call conjugates every cell of the verb, compounds included. It now asks once per distinct
+  form, which loses nothing, and drops tener and decir, two more irregular verbs that ser and ir
+  already stand for. That loses a little. It takes about 3.3 seconds.
+- `tensesAppearAtTheirWeight` (4.1 seconds) started 400 quizzes to count their tenses. It now
+  makes its 6,000 draws per level directly through `weightedRandomElement`, with the same 25%
+  tolerance, in under a tenth of a second. A new test, `aQuizAsksEachWeightAtItsShare`, keeps the
+  proof that a real quiz draws by weight. It runs 30 quizzes per level and checks each weight
+  class's share rather than each tense's, since a class holds enough questions to judge at that
+  size. Making the draw ignore weights failed it four times, so it has teeth.
+
+`matchesAFreshBuild` (13 seconds, about 346,000 conjugations at `-Onone`) stayed as it was. It
+checks every verb, and a sample could miss a stale map that differs in one verb.
+
+The three tests went from 15.6 seconds to about 4. The full runs after the change took 84 and 79
+seconds of Swift Testing, against 87 before. The Mac was busy throughout (its fifteen-minute load
+average reached 22), which inflated untouched tests in the first of those runs, and run on their
+own they went back to their old times. The last run also hit a flake that predates this work.
+`terremotoOpensGapsRoughlyTenPercentOfEachGirder` failed with one gap on a girder instead of two,
+because `openPlatformGaps()` gives up on a hole after twelve random attempts, and the test
+expects every hole to land.
+
+## Fixing the Earthquake's Missing Holes (2026-11-27)
+
+The flake that turned up while timing the tests, `terremotoOpensGapsRoughlyTenPercentOfEachGirder`,
+was a real bug in the game, not a fragile test. El Terremoto is meant to remove a tenth of every
+girder, as two holes. `openPlatformGaps()` drew each hole's start at random and, when it landed on
+a ladder mouth, on the standing dancer, or on the girder's other hole, tried again, up to twelve
+times before giving up quietly. The test runs on the system generator, so each run draws
+differently. A temporary probe ran the quake under 2,000 seeds: 126 of the 12,000 girders, about
+one in 95, got a single hole. With six girders a quake, the test failed about one run in 16.
+
+Seeding the test would have made it pass while leaving the game short a hole now and then. So the
+placement changed instead. A new helper, `GameState.gapStart(width:in:avoiding:using:)`, works out
+every start that keeps a hole clear of the ladder mouths, the dancer, and the first hole, and draws
+evenly from those. It gives up only when no such start is left. Under the same 2,000 seeds every
+girder got both holes, with none overlapping another hole, a ladder mouth, or the girder's ends. A
+new test, `aGapLandsInTheOnlyRoomLeft`, pins the case the retries handled worst: a beam with a
+ten-point window of room, where the helper must land every time, and one with none, where it must
+return nil.
