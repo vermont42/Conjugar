@@ -295,8 +295,17 @@ rules forward, the guess, and that every `ExampleUses.json` token finds its verb
 
 ## Verb Page
 
+**The title wraps.** The verb page, a model's page, a collection's page, and Settings put their
+title in the scroll content as a `WrappingTitle` (`Utils/Modifiers.swift`), large and bold, where a
+long one wraps, and keep the bar inline with `wrappingTitleBar`, which shows the title in the bar
+only once the content's title has scrolled away, as a large title does, so that neither the eye nor
+VoiceOver meets it twice. The system's large title neither wraps nor shrinks: "Irregular
+Participles" read "Irregular Particip…" at a large text size on a 375-point iPhone, and Settings'
+"Configuración" truncated at the largest accessibility size (2026-11-27). The other tab roots keep
+the system's large title, since theirs fit. A verb's and an exemplar's title are tagged Spanish.
+
 **`ConjugationTable`** (`Models/ConjugationTable.swift`) owns the verb page's cards: their order,
-each tense's second names, and its Info article (`articleKey`, an `Info.stableKey`). The page
+each tense's Info article (`articleKey`, an `Info.stableKey`), and the names that article lists. The page
 builds its cards from `ConjugationTable.all`; `VerbView.section(markedBy:)` and
 `ConjugationMatch.allCells` read it, so the landing scroll, the `leaveVerbView` marks, and a search
 row's names all follow the page. Nothing else uses this order: Info, the quiz, the Models grid, the
@@ -309,13 +318,19 @@ the counts and the method, and `scripts/count_tenses.py` reproduces them from
 `ConjugationMapTool --cells-json`. `ConjugationTableTests` pins the order; change the doc and the
 script first.
 
-**Second names** sit under each heading after "also" / "también". The headings are Spanish in
-either interface, so the names follow the interface: English gets the English textbook name and the
-RAE's name where it differs from the heading (Pretérito: "also preterite · pretérito perfecto
-simple"); Spanish gets the RAE's name and Andrés Bello's ("también pretérito imperfecto ·
-copretérito"). The Presente de Indicativo and Presente de Subjuntivo have none in Spanish. The line
-is one `Text` to the eye, but its `accessibilityRepresentation` gives VoiceOver each name as its own
-element in its own language, without the "also". The heading itself is tagged Spanish.
+**A tense's other names** live in its Info article, not on the verb page, whose cards show only
+the heading and the ⓘ (until 2026-11-27 a line under each heading said "also preterite ·
+pretérito perfecto simple"). `InfoView` looks the article up with
+`ConjugationTable.table(forArticle:)` and draws `articleNames(spanishInterface:)` between the
+heading and the three-dot rule. An English article shows "English: preterite", then "Other names:"
+with the RAE's name where it differs from the heading and Andrés Bello's where there is one
+("pretérito perfecto simple · pretérito indefinido"). A Spanish article shows only "Otros nombres:"
+and the same Spanish names, never an English one. Presente de Indicativo and Presente de
+Subjuntivo have no Spanish names, so their English articles show the English line alone and their
+Spanish articles show nothing. The four Tenses articles that no card opens (Participio, Gerundio,
+Raíz Futura, Perífrasis Verbales) have no table and no names. Each line is one `Text` to the eye,
+but its `accessibilityRepresentation` gives VoiceOver each name as its own element in its own
+language, with the label read before the first. The heading itself is tagged Spanish.
 
 **The ⓘ button** at the right of a heading opens that tense's article in a sheet over the page
 (`TenseArticleSheet`, private to `VerbView.swift`), so closing it returns to the same verb. A
@@ -422,7 +437,7 @@ In Spanish the gloss sits in «», as the app's other Spanish strings quote, and
 lowercased, without the subject pronoun or an imperative's ¡…!, so ¡TEN! copies "ten"; a
 reflexive-only verb's form keeps its reflexive pronoun ("me arrepiento"). The participio and
 gerundio copy; the raíz futura (tendr-) does not, since a stem is not a word, and a dash copies
-nothing. The infinitive is the navigation bar's title, which takes no menu, so it does not copy.
+nothing. The infinitive is the page's title, which takes no menu, so it does not copy.
 VoiceOver gets a "Copy" / "Copiar" action beside "Speak". The modifier pads the row before the menu
 and takes the padding back after, so the lifted preview does not crop the first and last letters.
 
@@ -1027,7 +1042,18 @@ VoiceOver moves to the correction and reads "Incorrect. Your Answer: hablo. Corr
 Letters that differ: ó." (the letters only when three or fewer; "Half points: only the accent marks
 differ." in place of "Incorrect." for a partial match), the answers in Spanish. `SpanishLetterKeyRow` inserts at the answer field's cursor through a `TextSelection`
 binding. On the iPhone it is a keyboard toolbar; iPadOS's keyboard shows no toolbar items, so on
-the iPad it sits under the field. The question view takes the keyboard again as it appears, since a
+the iPad it sits under the field. **The field stays clear of the keys** through
+`QuizView.letterKeysPadding`: the scroll view's safe area ends at the keyboard but not at the top of
+iOS 26's floating toolbar (on a 375-point iPhone it ended 32 points into the keys), so a
+`scrollTo` that counted the field as visible left it under them. While the keyboard is shown, the
+scroll view gets a bottom `safeAreaPadding` of that overlap plus 16 points, measured from the keys'
+frame and the frame of the `ScrollViewReader` around the scroll view (the scroll view's own frame
+changes with the padding, and measuring it fed back). Every reveal, the field's, a second attempt's
+line, and a correction's Continue, then lands above the keys, and the learner can scroll the last
+content above them by hand. The keyboard's arrival reveals what comes next
+(`revealWhatComesNext`): Continue under a held correction, since the correction gives the field its
+focus back and the keyboard's return used to scroll the field back into sight and Continue under
+the keyboard. The question view takes the keyboard again as it appears, since a
 quiz started by a link focuses the field before it is on screen and the row then never joins the
 keyboard.
 
@@ -1094,8 +1120,17 @@ then Start, then From Your Practice (Review, My Mistakes, and Last Quiz), and la
 to Game Center, a small View Leaderboard button. The level tile is a menu of the four levels with a
 chevron, setting the same `Settings.quizLevel` as Settings, where each level is a tile with a gauge
 (`gauge.with.dots.needle.0percent` to `100percent`) whose needle rises with the level, since a
-four-segment picker would truncate the names on an iPhone. The region is no longer on the hub; it
-is in Settings. **Last Quiz** (`LastQuizResult`, `Models/LastQuizResult.swift`) is the last round's
+four-segment picker would truncate the names on an iPhone. A level's name is one word and cannot
+wrap, so both places choose their columns by what fits, through `ViewThatFits` over
+`EqualWidthRow` (`Utils/EqualWidthRow.swift`), a row of equal-width children whose ideal width is
+the widest child's times their number. An `HStack` of `maxWidth: .infinity` tiles always claims to
+fit, which is how "Elementary" and "Intermediate" came to truncate at a large text size on a
+375-point iPhone (2026-11-27). The Quiz tab's tiles are a row of three, else Questions and Minutes
+over a full-width level tile, else one tile per row. The level's name does not shrink: the tile is
+a `Menu`'s label, which ignores `minimumScaleFactor`, so the old 0.7 never helped, and on the
+iPhone 17 at the default size Intermediate now takes the full-width row. Settings' levels are a row of
+four, else two rows of two, else one per row with the gauge beside the name, all four names at one
+size. The region is no longer on the hub; it is in Settings. **Last Quiz** (`LastQuizResult`, `Models/LastQuizResult.swift`) is the last round's
 results that appeared: written by `Quiz.finish()` for every scope, a verb page's three and a
 collection's sheet included, so after Ten More it is the session so far; a quit writes nothing. It
 keeps a kind and a subject (a verb, or a collection's key) rather than a title, so it reads in the
@@ -1244,7 +1279,9 @@ the items the session has already asked, which Review hardly needs (an answered 
 due) but My Mistakes does, since a mistake missed again would come straight back. Re-asks, second
 attempts, and recording work as in any quiz. A record session is never ranked, mixes in no due
 items, does not donate to `ChangeLevelTip`, and starts the Live Activity, since it runs on the tab.
-While it runs, the tab's bar reads the session's name.
+While it runs, its name heads the content above the progress bar, and the bar, inline while any
+quiz runs, reads Quiz (Test). Beside Quit (Abandonar) an inline bar has no room for "Complete the
+Sentence" at large text sizes.
 
 ### Verb Essentials
 

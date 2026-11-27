@@ -13097,3 +13097,97 @@ timing one, and gives the fix for each.
 Six assumptions are listed for Josh to strike. The first matters most: I took "the also label"
 to mean the whole line, not the one word, because his next sentence sends the names to the
 articles. No code changed.
+
+## Fixing the Five Bugs from the Voice Memo (2026-11-27)
+
+All three phases of `plans/voice_memo_bugs.md` ran in one session, in order. Nothing is committed.
+
+**Phase 1: the tense names move to the articles.** The line under each verb-page heading ("also
+preterite · pretérito perfecto simple") is gone, along with `L.Verb.alsoKnownAs` and its catalog
+key. `ConjugationTable.secondNames(spanishInterface:)` became `articleNames(spanishInterface:)`,
+and `SecondName` became `TenseName`. The English list no longer keeps its own RAE column: it is the
+English name followed by every Spanish name, since the RAE's name was always the first of those
+anyway. `InfoView` finds the article's table with `ConjugationTable.table(forArticle:)` and draws
+"English: preterite" over "Other names: pretérito perfecto simple · pretérito indefinido" between
+the heading and the three dots. A Spanish article shows only "Otros nombres:", and a test pins
+Josh's rule that it never shows an English name. The English articles now carry Bello's names, which
+the English interface never showed before. Reading all twenty lists, four seem worth Josh's eye.
+Imperativo Negativo's other name is "no + presente de subjuntivo", which is a recipe more than a
+name. Perfecto de Subjuntivo's is a bare "pretérito perfecto", which out of context could be the
+indicative's. Futuro de Subjuntivo shares "futuro simple" with Futuro de Indicativo, and Futuro
+Perfecto de Subjuntivo shares "futuro compuesto · antefuturo" with Futuro Perfecto. Bello and the
+RAE name each mood's tenses separately, so the heading carries the mood, but a learner may read them
+as the same tense. The three Spanish prose sentences that compare a tense to an English one (D6)
+stay as they were.
+
+**Phase 2: titles and level names.** A third simulator, "Conjugar iPhone 13 mini", gives the
+375 × 812 screen of Josh's phone. It taught two things about tooling. Its screen is 2.88×, not 3×,
+and AXe converts at 3×, so a tap at the tab bar's logical y of 760 landed under the pill on whatever
+list row lay beneath. Coordinates times 0.96 work. And `axe type` attaches the simulator's hardware
+keyboard, which hides the software one, and the attachment survived a reboot. This session could not
+click Simulator's menu: osascript was refused assistive access even after Josh granted it, probably
+because the permission is charged to the app hosting the session. Josh unchecked the menu item by
+hand, and from then on answers were typed by tapping the software keyboard's keys. Both are written
+into CLAUDE.md beside the new simulator.
+
+All three bugs reproduced at xxxLarge. "Irregular Participles" now wraps: `WrappingTitle` and
+`wrappingTitleBar` in `Modifiers.swift` put the title in the scroll content and keep the bar inline,
+with the title appearing in the bar only after the content's title scrolls away. The verb page, a
+model's page, and a collection's page use them. The sweep found one more of the same kind: at the
+largest accessibility size, Spanish Settings read "Configurac…", so Settings uses them too. The
+other tab roots fit, "Información" just barely, so they keep the system's large title. The
+landing scroll to a marked form (`conjugar://verb/ir?match=fue`) still lands.
+
+The level names took three tries. The plan asked for `ViewThatFits` with an honest measurement, so
+`EqualWidthRow` (`Utils/EqualWidthRow.swift`) reports its ideal width as its widest child's times
+the count of children. An `HStack` of `maxWidth: .infinity` tiles reports the sum of its children's
+widths, which is why the old row always claimed to fit. For the Quiz tab's tile I first kept a
+mild 0.85 scale factor and taught the measurement to count it, through a little `Layout` that
+reported a shrunk ideal width. On the iPhone 17 at the default size, "Intermediate" still truncated,
+and at full size. Correcting the layout's handling of an infinite proposal changed nothing, and
+neither did computing the shrunk width from the font and passing it to `.frame(idealWidth:)`. The
+name was never scaled at all, because the level tile is a `Menu`'s label, and a menu's label
+ignores `minimumScaleFactor`. So the old 0.7 had never helped either, and "Intermediate" was very
+likely truncating at the default size before today. The tile now measures the name at full size and
+does not scale it. When the name does not fit a third of the row, the level takes a full-width row
+under Questions and Minutes, and at the accessibility sizes every tile takes its own row. Beginner
+at the default size looks exactly as before. Settings' four levels are one size now. They sit four
+in a row when every name fits, two by two otherwise (Josh's xxxLarge), and one per row with the
+gauge beside the name at the accessibility sizes. The default-size row of four is unchanged.
+
+While a quiz runs, its bar is inline. The session names do not fit inline beside Quit at xxxLarge:
+"Complete the Sentence" needs 244 points against about 177, and beside "Abandonar" the Spanish bar
+has under 50. So a session's name now heads the content above the progress bar, and the bar says
+Quiz (Test).
+
+Not fixed, for Josh: the Verbs tab's search placeholder truncates at xxxLarge in both languages
+("Verb, conjugation, or Englis…", "Verbo, conjugación o signifi…"), and the iPhone's tab bar labels
+crowd each other at the largest accessibility size. Both are system controls. A quiz sheet's inline
+title (a collection's name beside Quit) has the same squeeze as the session names had and was not
+in scope.
+
+**Phase 3: the letter keys.** Temporary logging settled the cause the plan suspected. With the
+keyboard up at accessibility-large, the keyboard's frame began at y = 420 and the letter keys at
+422, but the scroll view's safe area ended at 454, 32 points inside the keys. The reveal put the
+field's bottom at exactly 454. So the reveal was working. The safe area just does not include iOS
+26's floating toolbar. The fix pads the scroll view's bottom safe area by that overlap plus 16
+points while the keyboard is shown (`QuizView.letterKeysPadding`), and every reveal then lands
+above the keys. Two missteps on the way. Measuring the scroll view's own frame fed the padding back
+into itself, and it oscillated between 17 and 31, so the frame is measured on the `ScrollViewReader`
+around it. And before the keyboard arrives, the toolbar lays the keys out at y = −22, which
+produced a padding of 778 and an overshooting scroll, so the padding counts only between the
+keyboard's did-show and will-hide. A third problem was older than this work. A wrong answer's
+correction gives the field its focus back, the keyboard shows again, and the keyboard's reveal then
+scrolled back to the field and left Continue under the keyboard. `revealWhatComesNext` now reveals
+Continue under a held correction, the line under a second attempt, and the field otherwise.
+
+Checked on the 375-point simulator with the software keyboard: a fresh quiz at accessibility-large
+and at xxxLarge, in English and Spanish, with the field clear of the keys by about 20 points; a
+correction's Continue; the next question; and a second attempt's line. Not checked: a re-ask with
+its pill, a three-line tense name, and the three exercises (Complete the Sentence, Name the Form,
+Verb Essentials). They share the same reveals and padding, but nobody has looked.
+
+**Restored:** the mini's text size is back to Large and the mini is shut down, as is the iPad.
+Josh unchecked the mini's hardware keyboard by hand and it is still unchecked, which is what a
+quiz check wants. The iPhone 17 simulator's level is back to Beginner. The suite passes and
+SwiftLint is clean.

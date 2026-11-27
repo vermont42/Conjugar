@@ -9,9 +9,9 @@ and the six screenshots he took on his iPhone while recording it.
 
 | Phase | Status | Date | Commit | Bugs |
 |---:|---|---|---|---|
-| 1 | Not started | | | Bug 1: tense names move from the verb page to the articles |
-| 2 | Not started | | | Bugs 2, 3, 5: truncated titles and level names, and a sweep |
-| 3 | Not started | | | Bug 4: the letter keys cover the quiz's answer field |
+| 1 | Awaiting Josh | 2026-11-27 | | Bug 1: tense names move from the verb page to the articles |
+| 2 | Awaiting Josh | 2026-11-27 | | Bugs 2, 3, 5: truncated titles and level names, and a sweep |
+| 3 | Awaiting Josh | 2026-11-27 | | Bug 4: the letter keys cover the quiz's answer field |
 
 A session that finishes a phase fills in its row with "Awaiting Josh" and writes a **How it
 differed** note under that phase. Sessions never commit; Josh does. The next session fills in the
@@ -208,6 +208,13 @@ Each has a default that the phases build. Josh can strike any of them before a p
 - Screenshots: ser's page in English and Spanish, and the Pretérito and Presente de Indicativo
   articles in English and Spanish.
 
+### How it differed
+
+`SecondName` became `TenseName`. The names sit between the heading and the three dots, in
+`.subheadline` and `.secondary`, as suggested. The new tests are in `ConjugationTableTests` only,
+since the lookup from an article (`ConjugationTable.table(forArticle:)`) lives there. Four English
+lists may read oddly; the journal names them.
+
 ---
 
 ## Phase 2: Truncated Titles and Level Names (Bugs 2, 3, 5)
@@ -335,6 +342,18 @@ Josh and do not fix it here.
 - `docs/project_structure.md` lists any new file, and `docs/feature_architecture.md` describes
   the shared title treatment where it describes the verb page.
 
+### How it differed
+
+- The simulator was created as planned; the 26.3 runtime accepted the iPhone 13 mini. AXe taps on it
+  need coordinates times 0.96, and `axe type` attaches its hardware keyboard. CLAUDE.md says both.
+- Settings got the wrapping title too: "Configuración" truncated at the largest accessibility size.
+- The session's name moved into the content, as the fallback allowed, since it did not fit inline.
+- The Quiz tile keeps no `minimumScaleFactor`. A `Menu`'s label ignores it, so it never worked
+  there. At the default size on the iPhone 17, Intermediate takes the full-width row, which is a
+  change from before, when it very likely truncated.
+- The sweep found two system controls that truncate (the search placeholder, and tab bar labels at
+  the largest size), listed in the journal and not fixed.
+
 ---
 
 ## Phase 3: The Letter Keys Cover the Answer Field (Bug 4)
@@ -425,6 +444,14 @@ languages:
 - `docs/feature_architecture.md` says, where it describes the quiz's answer field, how the
   field stays clear of the letter keys. Update the doc comment on `inProgress` and on
   `revealAnswerField` to match.
+
+### How it differed
+
+The first cause held: the safe area ended 32 points inside the keys. Fix 1 was used, with the
+overlap measured rather than a constant, gated on the keyboard being shown, and measured on the
+`ScrollViewReader` to avoid a feedback loop. A correction's Continue was being scrolled back under
+the keyboard by the keyboard's own reveal, which `revealWhatComesNext` fixes. Not checked: a
+re-ask with its pill, a three-line tense name, and the three exercises.
 
 ---
 

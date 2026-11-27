@@ -95,7 +95,7 @@ Conjugar/
 │   ├── ConjugationMatch.swift  # Which cells of a verb a text is (hablo → presente yo), exact or accents folded, compounds
 │   │                           #   included; for the quiz's slip-or-error check. Conjugates directly, not through the map
 │   ├── ConjugationTable.swift  # The verb page's cards: their order (by corpus frequency, docs/tense_frequency.md), each
-│   │                           #   tense's second names (preterite · pretérito perfecto simple), and its Info article
+│   │                           #   tense's Info article, and the names that article lists (preterite · pretérito perfecto simple)
 │   ├── KeyConjugation.swift    # A verb's four key conjugations, unlabeled (tengo · tuve · tendré · tenido), each with its
 │   │                           #   cell, mixed case; and the verb page's share text built on them
 │   ├── VerbLookup.swift        # What the Look Up a Verb shortcut says about a word ("tuve: Pretérito (yo) of tener") and
@@ -240,6 +240,8 @@ Conjugar/
 │   ├── HapticPlayer.swift      # The haptics seam, protocol-injected like SoundPlayer
 │   ├── HapticPlayerDummy.swift # No-op so the test worlds never touch the Taptic Engine
 │   ├── HapticPlayerReal.swift  # UIKit feedback generators, held and re-prepare()d for low latency
+│   ├── EqualWidthRow.swift     # A Layout of equal-width children whose ideal width is honest, for ViewThatFits (the Quiz tab's
+│   │                           #   tiles and Settings' levels)
 │   ├── FlowLayout.swift        # A Layout that wraps its children into rows (the related-verb chips, the Quiz tab's My Verbs chips, centered; a sentence's words, centered vertically)
 │   ├── IntExtension.swift      # Int.timeString — elapsed seconds as h:mm:ss
 │   ├── KillSwitches.swift      # Compile-time screenshot kill switches: TipDisplay, OnboardingDisplay, TutorDisplay
@@ -252,7 +254,8 @@ Conjugar/
 │   ├── ReminderSchedulerSpy.swift   # Records the reminders scheduled, and grants or refuses permission, under unit and UI tests
 │   ├── ReminderNotificationDelegate.swift  # Opens a tapped reminder's link through AppRouter; shows nothing while the app is open
 │   ├── Modifiers.swift         # The design system: card(), metadataPill(), linguistic(), numeric(), speakOnTapFlash(),
-│   │                           #   copyOnLongPress() (a Copy context menu and VoiceOver action), serifTitle(), Color.zebraStripe and listRow, PrimaryButtonStyle
+│   │                           #   copyOnLongPress() (a Copy context menu and VoiceOver action), serifTitle(), Color.zebraStripe and listRow, PrimaryButtonStyle,
+│   │                           #   WrappingTitle and wrappingTitleBar (a screen title in the content, where it wraps; the bar inline)
 │   ├── QRCode.swift            # A QR code made on the device with Core Image, black on white, for a practice set
 │   ├── RatingsFetcher.swift    # Fetches App Store ratings from the iTunes API for the Settings screen
 │   ├── ReviewPrompter.swift    # Protocol for review-prompting behavior
@@ -286,7 +289,7 @@ Conjugar/
     ├── FailedSearchHelp.swift  # Under "No verbs found": the guess, and the mail line whose address goes to the clipboard, with a note, when no email app opens
     ├── GameView.swift          # Toreo por Amor: the full-screen SwiftUI game (climb + boss fight + end scene and its slideshow)
     ├── InfoBrowseView.swift    # The Info topic list, incl. the tutor section and the tense difficulty filter
-    ├── InfoView.swift          # Info-article detail; a tapped %…% term opens a URL or pushes another article
+    ├── InfoView.swift          # Info-article detail; a tense's names under its heading; a tapped %…% term opens a URL or pushes another article
     ├── MainTabView.swift       # The app shell: a five-tab TabView, onboarding presentation, game full-screen cover
     ├── ModelBrowseView.swift   # The Collections section above a sortable, searchable list of every verb model with irregularity badges; consumes list links
     ├── ModelRowLabel.swift     # A model's row or card (exemplar, class number, percent pill) and ModelPalette, the pill's tint
@@ -392,7 +395,7 @@ ConjugarTests/
 │   ├── VerbMapTests.swift              # verbModelMap.xml parsing and lookup
 │   ├── VerbSearchTests.swift           # Search ranking (Josh's table of queries), -se stripping, every gloss of a homonym, the failed-search guess
 │   ├── SpellingComparisonTests.swift   # Folding, the edit distance, and the limited distance agreeing with the unlimited one
-│   ├── ConjugationTableTests.swift     # The verb page's order, second names, and articles; search names follow the page
+│   ├── ConjugationTableTests.swift     # The verb page's order, its articles and their tense names; search names follow the page
 │   ├── ReverseLookupTests.swift        # A form finds its verb: shared forms, accents, enclitics, compounds, vos, participle endings,
 │   │                                   #   the row's names, the guess from a form, every example's token through search
 │   ├── VerbLookupTests.swift           # Look Up a Verb: each kind of answer and its wording, page or search, a lookup link's marks
@@ -532,7 +535,7 @@ docs/                           # Claude's output that holds information and is 
 ├── privacy_policy3.txt         # The published privacy policy (English + Spanish), describing the shipped app
 ├── privacy_policy_pending.md   # Policy lines for signals built on master, English + Spanish, waiting for the 2027 release
 ├── feature_architecture.md     # How the browse and pedagogy plans' features fit together; § Analytics: signals, the source vocabulary;
-│                               #   § Verb Page: ConjugationTable, second names, the article sheet, the tips
+│                               #   § Verb Page: ConjugationTable, the tense names in articles, the article sheet, the tips
 ├── tense_frequency.md          # How often each tense occurs in the corpus, which orders the verb page; method and results
 ├── app_description.txt         # App Store descriptions: the 2.8 text and the 3.0 rewrite, English and Spanish
 ├── release_notes.txt           # App Store release notes, newest version first

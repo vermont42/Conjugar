@@ -139,6 +139,13 @@ at the same time without colliding.
   uses the config's iPhone coordinates, so on the iPad tap by identifier (`tap_id.sh`) or by
   `describe_ui.sh` frames. Boot it only for an iPad check and shut it down afterward
   (`xcrun simctl shutdown 3033197E-B596-4C49-AAD8-43373B9D254C`).
+- **"Conjugar iPhone 13 mini"**, `132431E7-CFBD-436A-A0B9-67346EBEFB8F` (2026-11-27), a 375 × 812
+  screen like Josh's own iPhone with Display Zoom, for layout at large text sizes. Prefix a script
+  with `TARGET_SIM="Conjugar iPhone 13 mini"`. Its screen is 2.88×, not 3×, and AXe converts at 3×,
+  so multiply a tap's logical-point coordinates by 0.96 (the tab bar's centers are at y 732, x 60,
+  125, 180, 240, 300). `tap_id.sh` and `tap_label.sh` take the same error, landing about 4% too far down and right, which a large target absorbs and a small one near the bottom may not. Typing with `axe type`
+  attaches the hardware keyboard and hides the software one, so tap the software keyboard's keys
+  instead. Boot it only for such a check and shut it down afterward.
 - **Never use** "Conjuguer iPhone 17" or "Conjuguer iPad Pro 11" (Conjuguer's), "Konjugieren
   iPhone 17" or "Konjugieren iPad Pro 11" (Konjugieren's), or the plain "iPhone 17" and
   "iPad Pro 11-inch (M5)" (kept for other work).

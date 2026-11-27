@@ -23,6 +23,9 @@ struct SettingsView: View {
   // tab, pointing at nothing, when its rule is met there, as ChangeLevelTip's is when a quiz
   // finishes. Tips are therefore attached only while Settings is on screen.
   @State private var isOnScreen = false
+  /// Whether the title at the top of the screen is on screen. See `WrappingTitle`: at the largest
+  /// accessibility size, the system's large title truncated "Configuración".
+  @State private var isTitleVisible = true
   private let changeLevelTip = ChangeLevelTip()
   private let enableGameCenterTip = EnableGameCenterTip()
 
@@ -30,6 +33,7 @@ struct SettingsView: View {
     NavigationStack {
       ScrollView(.vertical) {
         VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
+          WrappingTitle(title: L.Settings.localizedTitle, isVisible: $isTitleVisible)
           regionCard
           quizCard
           browseCard
@@ -45,7 +49,7 @@ struct SettingsView: View {
       }
       .frame(maxWidth: .infinity)
       .background(Color.customBackground.ignoresSafeArea())
-      .navigationTitle(L.Settings.localizedTitle)
+      .wrappingTitleBar(L.Settings.localizedTitle, isTitleVisible: isTitleVisible)
       .onAppear {
         isOnScreen = true
         isSignedInToGameCenter = Current.gameCenter.isAuthenticated
@@ -268,48 +272,76 @@ struct SettingsView: View {
   static let deniedValue = "denied"
 
   // A segmented control would truncate Intermediate and Intermedio on an iPhone, so the levels
-  // are tiles, each with a gauge whose needle rises with the level.
+  // are tiles, each with a gauge whose needle rises with the level. The names are one size and
+  // never shrink, so the columns give way instead: four in a row when every name fits its column,
+  // else two rows of two, else one tile per row with the name beside its gauge, for the
+  // accessibility sizes. `EqualWidthRow` makes that measurement honest.
   private var quizLevelPicker: some View {
-    LazyVGrid(
-      columns: Array(repeating: GridItem(.flexible(), spacing: Layout.defaultSpacing), count: QuizLevel.allCases.count),
-      alignment: .center,
-      spacing: Layout.defaultSpacing
-    ) {
-      ForEach(QuizLevel.allCases, id: \.self) { quizLevel in
-        let isSelected = settings.quizLevel == quizLevel
-        Button {
-          settings.quizLevel = quizLevel
-        } label: {
-          VStack(spacing: 4) {
-            Image(systemName: quizLevel.systemImage)
-              .font(.system(size: 30))
-              .foregroundStyle(isSelected ? Color.customYellow : Color.secondary)
-              .frame(width: 60, height: 60)
-              .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                  .fill(Color.customBackground)
-              )
-              .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                  .strokeBorder(isSelected ? Color.customYellow : Color.clear, lineWidth: 3)
-              )
-              .accessibilityHidden(true)
-            Text(quizLevel.localizedName)
-              .font(.caption)
-              .foregroundStyle(isSelected ? Color.customYellow : Color.customForeground)
-              .lineLimit(1)
-              .minimumScaleFactor(0.7)
-          }
-          .frame(maxWidth: .infinity)
-          .contentShape(Rectangle())
+    let levels = QuizLevel.allCases
+    let half = levels.count / 2
+    return ViewThatFits(in: .horizontal) {
+      EqualWidthRow(spacing: Layout.defaultSpacing) {
+        ForEach(levels, id: \.self) { levelButton($0, isWide: false) }
+      }
+      VStack(spacing: Layout.defaultSpacing) {
+        EqualWidthRow(spacing: Layout.defaultSpacing) {
+          ForEach(levels.prefix(half), id: \.self) { levelButton($0, isWide: false) }
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(quizLevel.localizedName)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-        .accessibilityIdentifier("quiz_level_\(quizLevel.rawValue)")
+        EqualWidthRow(spacing: Layout.defaultSpacing) {
+          ForEach(levels.suffix(from: half), id: \.self) { levelButton($0, isWide: false) }
+        }
+      }
+      VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
+        ForEach(levels, id: \.self) { levelButton($0, isWide: true) }
       }
     }
     .selectionFeedback(trigger: settings.quizLevel)
+  }
+
+  /// A level's gauge with its name under it, or beside it when `isWide`.
+  private func levelButton(_ quizLevel: QuizLevel, isWide: Bool) -> some View {
+    let isSelected = settings.quizLevel == quizLevel
+    let gauge = Image(systemName: quizLevel.systemImage)
+      .font(.system(size: 30))
+      .foregroundStyle(isSelected ? Color.customYellow : Color.secondary)
+      .frame(width: 60, height: 60)
+      .background(
+        RoundedRectangle(cornerRadius: 14, style: .continuous)
+          .fill(Color.customBackground)
+      )
+      .overlay(
+        RoundedRectangle(cornerRadius: 14, style: .continuous)
+          .strokeBorder(isSelected ? Color.customYellow : Color.clear, lineWidth: 3)
+      )
+      .accessibilityHidden(true)
+    let name = Text(quizLevel.localizedName)
+      .font(.caption)
+      .foregroundStyle(isSelected ? Color.customYellow : Color.customForeground)
+      .lineLimit(1)
+    return Button {
+      settings.quizLevel = quizLevel
+    } label: {
+      Group {
+        if isWide {
+          HStack(spacing: Layout.doubleDefaultSpacing) {
+            gauge
+            name
+          }
+          .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+          VStack(spacing: 4) {
+            gauge
+            name
+          }
+          .frame(maxWidth: .infinity)
+        }
+      }
+      .contentShape(Rectangle())
+    }
+    .buttonStyle(.plain)
+    .accessibilityLabel(quizLevel.localizedName)
+    .accessibilityAddTraits(isSelected ? .isSelected : [])
+    .accessibilityIdentifier("quiz_level_\(quizLevel.rawValue)")
   }
 
   private var browseCard: some View {

@@ -433,6 +433,16 @@ nonisolated enum L {
       String(localized: "Info.creditsHeading")
     }
 
+    /// Before a tense's English name, under its article's heading: "English: preterite".
+    static var englishNameLabel: String {
+      String(localized: "Info.englishNameLabel")
+    }
+
+    /// Before a tense's Spanish names, under its article's heading: "Other names: copretérito".
+    static var otherNamesLabel: String {
+      String(localized: "Info.otherNamesLabel")
+    }
+
     static var verbHistoryHeading: String {
       String(localized: "Info.verbHistoryHeading")
     }
@@ -2147,11 +2157,6 @@ nonisolated enum L {
 
     static var matchesSearch: String {
       String(localized: "Verb.matchesSearch")
-    }
-
-    /// Before a tense's other names under its heading: "also preterite".
-    static var alsoKnownAs: String {
-      String(localized: "Verb.alsoKnownAs")
     }
 
     /// The accessibility label of the ⓘ beside a tense's heading.

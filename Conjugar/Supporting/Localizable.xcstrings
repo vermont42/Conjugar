@@ -3084,6 +3084,22 @@
         }
       }
     },
+    "Info.englishNameLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inglés"
+          }
+        }
+      }
+    },
     "Info.futuroDeIndicativoText" : {
       "localizations" : {
         "en" : {
@@ -3240,6 +3256,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "^Uso^\n\nEl ~imperfecto de subjuntivo 2~ sirve para unos usos similares a los del %presente de subjuntivo% pero colocando las acciones en pasado. Aquí hay algunos ejemplos de usos de este tiempo.\n\n• Una orden:\n\n\"Nos mandó que platicásemos.\" = \"He ordered us to talk.\"\n\n• Un estado emocional:\n\n\"Temía que Colombia no ganase la Copa América este año.\" = \"I feared that Colombia would not win the America Cup this year.\"\n\n• Duda:\n\n\"Dudaba que $vIniese$ hoy.\" = \"I doubted that you would come today.\"\n\nLos expertos en gramática consideran que imperfecto de subjuntivo 2 y el %imperfecto de subjuntivo 1% son variantes diferentes del mismo tiempo, a los que simplemente se les llama \"imperfecto de subjuntivo\". En español moderno, los usos de las dos variantes no difieren. El desarrollador de ~Conjugar~ ha tratado estas variantes como tiempos separados con diferentes nombres con fines pedagógicos.\n\n^Conjugación^\n\nLos verbos se conjugan en imperfecto de subjuntivo 2 eliminando la terminación -ron de la forma ellos del %pretérito% del verbo y agregando la siguiente terminación, dependiendo de la persona y el número del sujeto:\n\nyo: -se\ntú: -ses\nél: -se\nnosotros: -semos\nvosotros: -seis\nellos: -sen\n\nEjemplo (cantar): cantase, cantases, cantase, cantásemos, cantaseis, cantasen\n\nComo se muestra en el ejemplo, la vocal que aparece antes del final de la conjugación de nosotros tiene un acento para indicar que esa es la sílaba tónica y que su pronunciación es, por lo tanto, un poco diferente del resto de formas de este tiempo verbal.\n\nVe a %créditos% para leer la atribución a la Wikipedia."
+          }
+        }
+      }
+    },
+    "Info.otherNamesLabel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other names"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otros nombres"
           }
         }
       }
@@ -8345,22 +8377,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ver los %lld"
-          }
-        }
-      }
-    },
-    "Verb.alsoKnownAs" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "also"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "también"
           }
         }
       }

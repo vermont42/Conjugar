@@ -15,6 +15,7 @@ struct VerbCollectionView: View {
   let source: AnalyticsSource
   private let verbs: [VerbMapEntry]
   private let lists: [VerbSort: [VerbMapEntry]]
+  @State private var isTitleVisible = true
 
   init(collection: VerbCollection, source: AnalyticsSource) {
     self.collection = collection
@@ -26,6 +27,8 @@ struct VerbCollectionView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
+        WrappingTitle(title: collection.title, isVisible: $isTitleVisible)
+
         VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
           Text(collection.shortDescription)
             .foregroundStyle(Color.customForeground)
@@ -48,8 +51,7 @@ struct VerbCollectionView: View {
       .readingWidth()
     }
     .background(Color.customBackground.ignoresSafeArea())
-    .navigationTitle(collection.title)
-    .navigationBarTitleDisplayMode(.large)
+    .wrappingTitleBar(collection.title, isTitleVisible: isTitleVisible)
     .signalsCollectionView(collection, source: source)
   }
 }

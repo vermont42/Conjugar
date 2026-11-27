@@ -40,6 +40,8 @@ struct VerbView: View {
   @State private var article: Info?
   /// Whether Test Me's three questions are open in a sheet over the page.
   @State private var isTestingVerb = false
+  /// Whether the title at the top of the page is on screen. See `WrappingTitle`.
+  @State private var isTitleVisible = true
   private let redLettersTip = RedLettersTip()
   private let scrollToBottomTip = ScrollToBottomTip()
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -69,6 +71,11 @@ struct VerbView: View {
     _tracker = State(initialValue: VerbVisitTracker(source: source))
   }
 
+  /// The verb as a dictionary lists it, capitalized: "Arrepentirse".
+  private var title: String {
+    ReflexivePronoun.citationForm(of: verb).capitalized
+  }
+
   private var medievalExample: MedievalExample? {
     medievalExamples.indices.contains(medievalIndex) ? medievalExamples[medievalIndex] : nil
   }
@@ -82,6 +89,7 @@ struct VerbView: View {
     ScrollViewReader { proxy in
       ScrollView {
         VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
+          WrappingTitle(title: title, isSpanish: true, isVisible: $isTitleVisible)
           metadataHeader
           if forms.hasRedLetters {
             TipView(redLettersTip)
@@ -143,8 +151,7 @@ struct VerbView: View {
       QuizSheet(scope: .verbPage(verb))
     }
     .background(Color.customBackground.ignoresSafeArea())
-    .navigationTitle(ReflexivePronoun.citationForm(of: verb).capitalized)
-    .navigationBarTitleDisplayMode(.large)
+    .wrappingTitleBar(title, isSpanish: true, isTitleVisible: isTitleVisible)
     .toolbar {
       // Test Me, the star, and Share sit in the navigation bar, so that the top of the page is
       // unchanged. Test Me's symbol is a clipboard because the Quiz tab's cap read poorly at this
@@ -256,11 +263,6 @@ struct VerbView: View {
       return .compound
     }
     return nil
-  }
-
-  /// Whether the interface is Spanish, which picks the second names under each heading.
-  private static var spanishInterface: Bool {
-    Locale.current.language.languageCode?.identifier == "es"
   }
 
   private var metadataHeader: some View {
@@ -441,32 +443,29 @@ struct VerbView: View {
 
   private func conjugationCard(_ section: ConjugationSection) -> some View {
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
-      VStack(alignment: .leading, spacing: 2) {
-        HStack(alignment: .firstTextBaseline, spacing: Layout.defaultSpacing) {
-          Text(spanish: section.tense.titleCaseName)
-            .font(.headline)
-            .fontDesign(.serif)
-            .foregroundStyle(Color.customYellow)
-            .accessibilityAddTraits(.isHeader)
-            .frame(maxWidth: .infinity, alignment: .leading)
-          if let info = section.table.article {
-            Button {
-              Current.analytics.signal(name: .tapTenseArticle)
-              article = info
-            } label: {
-              Image(systemName: "info.circle")
-                .font(.body)
-                .foregroundStyle(Color.customBlue)
-                // A 44-point target around a 17-point glyph, without making the heading taller.
-                .padding(Layout.tapTargetInset)
-                .contentShape(Rectangle())
-                .padding(-Layout.tapTargetInset)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(Text(L.Verb.aboutThisTense))
+      HStack(alignment: .firstTextBaseline, spacing: Layout.defaultSpacing) {
+        Text(spanish: section.tense.titleCaseName)
+          .font(.headline)
+          .fontDesign(.serif)
+          .foregroundStyle(Color.customYellow)
+          .accessibilityAddTraits(.isHeader)
+          .frame(maxWidth: .infinity, alignment: .leading)
+        if let info = section.table.article {
+          Button {
+            Current.analytics.signal(name: .tapTenseArticle)
+            article = info
+          } label: {
+            Image(systemName: "info.circle")
+              .font(.body)
+              .foregroundStyle(Color.customBlue)
+              // A 44-point target around a 17-point glyph, without making the heading taller.
+              .padding(Layout.tapTargetInset)
+              .contentShape(Rectangle())
+              .padding(-Layout.tapTargetInset)
           }
+          .buttonStyle(.plain)
+          .accessibilityLabel(Text(L.Verb.aboutThisTense))
         }
-        secondNamesLine(section.table)
       }
 
       Grid(alignment: .leadingFirstTextBaseline, horizontalSpacing: Layout.doubleDefaultSpacing, verticalSpacing: 6) {
@@ -488,42 +487,6 @@ struct VerbView: View {
         sectionVisibilityChanged(marked, isVisible: isVisible)
       }
     }
-  }
-
-  /// "also preterite · pretérito perfecto simple" under a heading. VoiceOver hears each name as its
-  /// own element, in its own language and without the "also", because one element cannot speak
-  /// both English and Spanish.
-  @ViewBuilder
-  private func secondNamesLine(_ table: ConjugationTable) -> some View {
-    let names = table.secondNames(spanishInterface: Self.spanishInterface)
-    if !names.isEmpty {
-      Text(Self.secondNamesText(names))
-        .font(.footnote)
-        .foregroundStyle(.secondary)
-        .fixedSize(horizontal: false, vertical: true)
-        .accessibilityRepresentation {
-          VStack {
-            ForEach(names, id: \.text) { name in
-              Text(Self.attributed(name))
-            }
-          }
-        }
-    }
-  }
-
-  private static func secondNamesText(_ names: [ConjugationTable.SecondName]) -> AttributedString {
-    var line = AttributedString("\(L.Verb.alsoKnownAs) ")
-    for (index, name) in names.enumerated() {
-      if index > 0 {
-        line.append(AttributedString(" · "))
-      }
-      line.append(attributed(name))
-    }
-    return line
-  }
-
-  private static func attributed(_ name: ConjugationTable.SecondName) -> AttributedString {
-    name.isSpanish ? AttributedString(spanish: name.text) : AttributedString(name.text)
   }
 
   @ViewBuilder

@@ -33,6 +33,13 @@ struct QuizView: View {
   /// The challenge row's frame, which the popover of a taken challenge's share anchors to.
   @State private var challengeRowFrame = CGRect.zero
   @FocusState private var fieldFocused: Bool
+  /// The top of the letter keys over the keyboard, and the bottom of the in-progress scroll view,
+  /// in global coordinates. See `letterKeysPadding`.
+  @State private var letterKeysTop = CGFloat.infinity
+  @State private var scrollViewBottom: CGFloat = 0
+  /// Between the keyboard's did-show and will-hide, when the letter keys sit over it. Before that,
+  /// the keyboard toolbar lays them out at the top of the screen, which no padding should follow.
+  @State private var isKeyboardShown = false
   @AccessibilityFocusState private var correctionHasAccessibilityFocus: Bool
   @AccessibilityFocusState private var choiceReasonHasAccessibilityFocus: Bool
   /// Pages opened from a held correction, pushed over the quiz, which waits beneath them.
@@ -66,8 +73,10 @@ struct QuizView: View {
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(Color.customBackground.ignoresSafeArea())
-      .navigationTitle(sheetTitle ?? sessionTitle ?? L.Quiz.localizedTitle)
-      .navigationBarTitleDisplayMode(sheetScope == nil ? .automatic : .inline)
+      .navigationTitle(sheetTitle ?? L.Quiz.localizedTitle)
+      // Inline while a quiz runs: a large title would cost the answer field 54 points of height
+      // above the keyboard, and a session's name would not fit it at large text sizes.
+      .navigationBarTitleDisplayMode(sheetScope == nil && quiz.quizState != .inProgress ? .automatic : .inline)
       .navigationDestination(isPresented: $showingResults) {
         ResultsView(quiz: quiz, onTenMore: continueSession, onAnotherRound: anotherRound)
       }
@@ -189,7 +198,9 @@ struct QuizView: View {
   }
 
   /// A Review's, My Mistakes', or Verb Essentials' name while it runs on the tab, since its
-  /// questions look like any quiz's.
+  /// questions look like any quiz's. It heads the content rather than the bar, whose inline title
+  /// beside Quit has no room for "Complete the Sentence" at large text sizes, and in Spanish, beside
+  /// "Abandonar", little room for anything.
   private var sessionTitle: String? {
     guard sheetScope == nil, quiz.quizState == .inProgress else {
       return nil
@@ -325,21 +336,52 @@ struct QuizView: View {
   /// How many questions, how long they take, and the level, which a tap changes here rather than
   /// in Settings. The minutes are a fixed estimate, since showing the learner's own times would
   /// undo the hidden clock.
+  ///
+  /// A level's name is one word and cannot wrap, so when it would not fit a third of the row, the
+  /// level takes a row of its own under the other two, and at the largest sizes each tile does.
+  /// `EqualWidthRow` makes that measurement honest.
   private var factTiles: some View {
-    HStack(alignment: .top, spacing: Layout.defaultSpacing) {
-      QuizFactTile(systemImage: "list.number", value: "\(QuizScope.roundLength)", label: L.Quiz.questionsLabel, isLarge: isLarge)
-      QuizFactTile(
-        systemImage: "timer",
-        value: L.Quiz.sessionMinutes,
-        label: L.Quiz.minutesLabel,
-        accessibilityLabel: L.Quiz.sessionLength,
-        isLarge: isLarge
-      )
-      levelMenu
+    let settings = Current.settings
+    return ViewThatFits(in: .horizontal) {
+      EqualWidthRow(spacing: Layout.defaultSpacing) {
+        questionsTile
+        minutesTile
+        levelMenu
+      }
+      VStack(spacing: Layout.defaultSpacing) {
+        EqualWidthRow(spacing: Layout.defaultSpacing) {
+          questionsTile
+          minutesTile
+        }
+        levelMenu
+      }
+      VStack(spacing: Layout.defaultSpacing) {
+        questionsTile
+        minutesTile
+        levelMenu
+      }
     }
-    // Equal heights when one label wraps to two lines.
+    // The tiles' natural heights, which `EqualWidthRow` evens out within a row.
     .fixedSize(horizontal: false, vertical: true)
+    .sensoryFeedback(.selection, trigger: settings.quizLevel)
+    .onChange(of: settings.quizLevel) {
+      ChangeLevelTip().invalidate(reason: .actionPerformed)
+    }
     .transition(.opacity)
+  }
+
+  private var questionsTile: some View {
+    QuizFactTile(systemImage: "list.number", value: "\(QuizScope.roundLength)", label: L.Quiz.questionsLabel, isLarge: isLarge)
+  }
+
+  private var minutesTile: some View {
+    QuizFactTile(
+      systemImage: "timer",
+      value: L.Quiz.sessionMinutes,
+      label: L.Quiz.minutesLabel,
+      accessibilityLabel: L.Quiz.sessionLength,
+      isLarge: isLarge
+    )
   }
 
   private var levelMenu: some View {
@@ -363,10 +405,6 @@ struct QuizView: View {
     .buttonStyle(.plain)
     .accessibilityHint(L.Quiz.levelMenuHint)
     .accessibilityIdentifier("quiz_level_menu")
-    .sensoryFeedback(.selection, trigger: settings.quizLevel)
-    .onChange(of: settings.quizLevel) {
-      ChangeLevelTip().invalidate(reason: .actionPerformed)
-    }
   }
 
   /// A modest control below everything else, since the leaderboard is beside the point of
@@ -788,11 +826,22 @@ struct QuizView: View {
   /// a plain VStack squeezed the question card until the tense name truncated (e.g.
   /// "presente de ind…"), hiding exactly the words that distinguish subjuntivo 1 from 2.
   /// SwiftUI's own keyboard avoidance can leave the field half-covered at accessibility
-  /// sizes, so the field is scrolled into view whenever the keyboard or question changes.
+  /// sizes, so the field is scrolled into view whenever the keyboard or question changes, and
+  /// `letterKeysPadding` makes "into view" mean above the letter keys on an iPhone.
   private var inProgress: some View {
     ScrollViewReader { proxy in
       ScrollView {
         VStack(spacing: Layout.doubleDefaultSpacing) {
+          if let sessionTitle {
+            Text(sessionTitle)
+              .font(.title2.bold())
+              .foregroundStyle(Color.customForeground)
+              .fixedSize(horizontal: false, vertical: true)
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .accessibilityAddTraits(.isHeader)
+              .accessibilityIdentifier("quiz_session_title")
+          }
+
           if quiz.scope.isSpeedRound {
             // A Speed Round's questions are drawn as it goes, so its bar is the minute.
             ProgressView(value: Double(min(quiz.elapsedTime, SpeedRound.duration)), total: Double(SpeedRound.duration))
@@ -886,8 +935,20 @@ struct QuizView: View {
       }
       .scrollDismissesKeyboard(.never)
       .scrollBounceBehavior(.basedOnSize)
+      .safeAreaPadding(.bottom, letterKeysPadding)
       .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
-        revealAnswerField(proxy)
+        isKeyboardShown = true
+        revealWhatComesNext(proxy)
+      }
+      .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+        isKeyboardShown = false
+      }
+      // The padding arrives as the keys settle over the keyboard, which can be after the keyboard
+      // has shown, so the field is revealed again against it.
+      .onChange(of: letterKeysPadding) { _, padding in
+        if padding > 0 {
+          revealWhatComesNext(proxy)
+        }
       }
       .onChange(of: quiz.currentQuestionIndex) {
         recognitionTense = nil
@@ -942,6 +1003,9 @@ struct QuizView: View {
         }
       }
     }
+    // Measured out here, around the scroll view, because the padding changes the scroll view's
+    // own frame, and measuring that fed the padding back into itself.
+    .onGeometryChange(for: CGFloat.self) { $0.frame(in: .global).maxY } action: { scrollViewBottom = $0 }
     // A link's quiz starts as the tab appears, before the field exists, so the field takes the
     // keyboard again once it is on screen, or the letter keys never join the keyboard.
     .onAppear {
@@ -1067,11 +1131,44 @@ struct QuizView: View {
   }
 
   /// A nil anchor scrolls the minimum distance, so this is a no-op whenever the field is
-  /// already fully visible (the usual case at default text sizes).
+  /// already fully visible (the usual case at default text sizes). "Visible" means above the
+  /// letter keys, because `letterKeysPadding` extends the scroll view's safe area over them.
   private func revealAnswerField(_ proxy: ScrollViewProxy) {
-    withAnimation(.snappy) {
+    withAnimation(reduceMotion ? nil : .snappy) {
       proxy.scrollTo(QuizView.answerFieldID)
     }
+  }
+
+  /// What the keyboard's arrival should bring into sight: a held correction's Continue, a second
+  /// attempt's line, or else the field. A held correction gives the field its focus back, which
+  /// raises the keyboard again, and revealing the field then scrolled Continue back under the
+  /// keyboard.
+  private func revealWhatComesNext(_ proxy: ScrollViewProxy) {
+    if quiz.isHeld, quiz.correction != nil, quiz.currentQuestion?.choice == nil {
+      withAnimation(reduceMotion ? nil : .snappy) {
+        proxy.scrollTo(QuizCorrectionView.continueButtonID, anchor: .bottom)
+      }
+    } else if quiz.isAwaitingSecondAttempt {
+      withAnimation(reduceMotion ? nil : .snappy) {
+        proxy.scrollTo(QuizView.secondAttemptLineID, anchor: .bottom)
+      }
+    } else {
+      revealAnswerField(proxy)
+    }
+  }
+
+  /// How far the letter keys reach into the scroll view's safe area, plus a gap, while they sit
+  /// over an iPhone's keyboard. The safe area ends at the keyboard, but not at the top of iOS 26's
+  /// floating keyboard toolbar: on a 375-point iPhone it ended 32 points into the keys, so every
+  /// reveal (the field's, a second attempt's line, a correction's Continue) landed under them.
+  /// Measured rather than a constant, since the overlap is the toolbar's business. Zero on an
+  /// iPad, whose keys are in the content, and while the keyboard is down.
+  private var letterKeysPadding: CGFloat {
+    guard !isLarge, isKeyboardShown else {
+      return 0
+    }
+    let overlap = scrollViewBottom - letterKeysTop
+    return overlap > 0 ? overlap + Layout.doubleDefaultSpacing : 0
   }
 
   private func answerField(spokenPrefix: String?) -> some View {
@@ -1097,6 +1194,11 @@ struct QuizView: View {
   private var letterKeys: some View {
     SpanishLetterKeyRow { letter in
       insertLetter(letter)
+    }
+    .onGeometryChange(for: CGFloat.self) { $0.frame(in: .global).minY } action: { top in
+      if !isLarge {
+        letterKeysTop = top
+      }
     }
   }
 
@@ -1598,9 +1700,10 @@ private struct QuizFactTile: View {
         .frame(height: isLarge ? 64 : 36)
         .accessibilityHidden(true)
       HStack(spacing: 3) {
+        // No `minimumScaleFactor`: the level's tile is a menu's label, which ignores it, so a name
+        // too long for its tile truncated at full size. `factTiles` gives it more width instead.
         Text(verbatim: value)
           .lineLimit(1)
-          .minimumScaleFactor(0.7)
         if showsMenuIndicator {
           Image(systemName: "chevron.up.chevron.down")
             .font(isLarge ? .subheadline.bold() : .caption2.bold())

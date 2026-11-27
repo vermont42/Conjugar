@@ -8,7 +8,7 @@
 @testable import Conjugar
 import Testing
 
-/// The verb page's order, second names, and articles. The order comes from docs/tense_frequency.md;
+/// The verb page's order, its articles, and the names those articles list. The order comes from docs/tense_frequency.md;
 /// change it there first.
 @Suite("ConjugationTable")
 struct ConjugationTableTests {
@@ -87,42 +87,67 @@ struct ConjugationTableTests {
     }
   }
 
-  @Test func everyCardHasAnEnglishSecondName() {
+  /// An English article names its tense in English first, then gives only Spanish names.
+  @Test func everyEnglishArticleStartsWithItsEnglishName() {
     for table in ConjugationTable.all {
-      let names = table.secondNames(spanishInterface: false)
+      let names = table.articleNames(spanishInterface: false)
       #expect(names.first?.isSpanish == false, "\(table.tense)")
+      #expect(names.dropFirst().allSatisfy { $0.isSpanish }, "\(table.tense)")
       #expect(names.allSatisfy { !$0.text.isEmpty })
     }
   }
 
-  @Test func theEnglishInterfaceAddsTheRAENameWhereItDiffers() {
-    #expect(ConjugationTable(tense: .pretérito).secondNames(spanishInterface: false) == [
+  /// Josh's rule: a Spanish article never names its tense in English.
+  @Test func noSpanishArticleHasAnEnglishName() {
+    for table in ConjugationTable.all {
+      #expect(table.articleNames(spanishInterface: true).allSatisfy { $0.isSpanish }, "\(table.tense)")
+    }
+  }
+
+  @Test func theEnglishArticleAddsTheRAEAndBelloNames() {
+    #expect(ConjugationTable(tense: .pretérito).articleNames(spanishInterface: false) == [
       .init(text: "preterite", isSpanish: false),
-      .init(text: "pretérito perfecto simple", isSpanish: true)
+      .init(text: "pretérito perfecto simple", isSpanish: true),
+      .init(text: "pretérito indefinido", isSpanish: true)
     ])
-    #expect(ConjugationTable(tense: .presenteDeIndicativo).secondNames(spanishInterface: false) == [
+    #expect(ConjugationTable(tense: .presenteDeIndicativo).articleNames(spanishInterface: false) == [
       .init(text: "present", isSpanish: false)
     ])
   }
 
-  @Test func theSpanishInterfaceGivesTheRAEAndBelloNames() {
-    #expect(ConjugationTable(tense: .imperfectoDeIndicativo).secondNames(spanishInterface: true).map(\.text) == [
+  @Test func theSpanishArticleGivesTheRAEAndBelloNames() {
+    #expect(ConjugationTable(tense: .imperfectoDeIndicativo).articleNames(spanishInterface: true).map(\.text) == [
       "pretérito imperfecto", "copretérito"
     ])
-    #expect(ConjugationTable(tense: .condicionalCompuesto).secondNames(spanishInterface: true).map(\.text) == ["antepospretérito"])
-    let empty = ConjugationTable.all.filter { $0.secondNames(spanishInterface: true).isEmpty }.map(\.tense)
+    #expect(ConjugationTable(tense: .condicionalCompuesto).articleNames(spanishInterface: true).map(\.text) == ["antepospretérito"])
+    let empty = ConjugationTable.all.filter { $0.articleNames(spanishInterface: true).isEmpty }.map(\.tense)
     #expect(empty == [.presenteDeIndicativo, .presenteDeSubjuntivo])
-    #expect(ConjugationTable.all.allSatisfy { $0.secondNames(spanishInterface: true).allSatisfy(\.isSpanish) })
   }
 
-  /// No second name repeats the heading it sits under.
-  @Test func noSecondNameRepeatsItsHeading() {
+  /// No name repeats the heading it sits under.
+  @Test func noNameRepeatsItsHeading() {
     for table in ConjugationTable.all {
       for spanish in [false, true] {
-        for name in table.secondNames(spanishInterface: spanish) {
+        for name in table.articleNames(spanishInterface: spanish) {
           #expect(name.text.lowercased() != table.tense.displayName, "\(table.tense)")
         }
       }
+    }
+  }
+
+  /// An article finds its names through the card that opens it.
+  @MainActor
+  @Test func everyCardsArticleLeadsBackToTheCard() throws {
+    for table in ConjugationTable.all {
+      let article = try #require(table.article, "\(table.tense)")
+      #expect(ConjugationTable.table(forArticle: article.stableKey) == table)
+    }
+  }
+
+  /// The Tenses articles that no card opens list no names (decision D5 of plans/voice_memo_bugs.md).
+  @Test func theNonCardArticlesHaveNoTable() {
+    for key in ["participio", "gerundio", "raiz_futura", "perifrasis_verbales"] {
+      #expect(ConjugationTable.table(forArticle: key) == nil, "\(key)")
     }
   }
 

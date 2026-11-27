@@ -17,6 +17,8 @@ struct ModelView: View {
   /// Where the page was opened, which `viewCollection` reports: `tab` from the Models tab's list,
   /// `verbPage` from a verb page's model pill, or a `list` link's source.
   let source: AnalyticsSource
+  /// Whether the title at the top of the page is on screen. See `WrappingTitle`.
+  @State private var isTitleVisible = true
 
   /// The grid's tense rows: five core tenses, plus futuro (Spanish concentrates
   /// irregularity in the future stem).
@@ -91,6 +93,7 @@ struct ModelView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: Layout.doubleDefaultSpacing) {
+        WrappingTitle(title: model.exemplar.capitalized, isSpanish: true, isVisible: $isTitleVisible)
         headerCard
         gridCard
         VerbCollectionBar(collection: collection, title: L.VerbCollection.modelTitle(exemplar: model.exemplar), verbs: model.verbs)
@@ -107,8 +110,7 @@ struct ModelView: View {
       .readingWidth()
     }
     .background(Color.customBackground.ignoresSafeArea())
-    .navigationTitle(model.exemplar.capitalized)
-    .navigationBarTitleDisplayMode(.large)
+    .wrappingTitleBar(model.exemplar.capitalized, isSpanish: true, isTitleVisible: isTitleVisible)
     .onAppear {
       ExploreModelsTip().invalidate(reason: .actionPerformed)
       Current.analytics.signal(name: .viewModelView)

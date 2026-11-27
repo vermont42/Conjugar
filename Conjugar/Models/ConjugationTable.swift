@@ -5,7 +5,8 @@
 //  Copyright © 2026 Josh Adams. All rights reserved.
 //
 
-/// One card of the verb page's conjugations: a tense, with its other names and its Info article.
+/// One card of the verb page's conjugations: a tense, with its Info article and the names that
+/// article lists.
 ///
 /// The verb page's order lives here and nowhere else. The simple tenses come first and the compound
 /// ones after them, and each block is ordered by how often its tense occurs in the corpus, weighing
@@ -108,8 +109,8 @@ nonisolated struct ConjugationTable: Hashable, Identifiable, Sendable {
     }
   }
 
-  /// A name the tense also goes by, for the line under its heading.
-  struct SecondName: Equatable, Sendable {
+  /// A name the tense goes by, which its article lists under the heading.
+  struct TenseName: Equatable, Sendable {
     let text: String
 
     /// Whether VoiceOver should speak it with a Spanish voice: pretérito perfecto simple is
@@ -117,69 +118,72 @@ nonisolated struct ConjugationTable: Hashable, Identifiable, Sendable {
     let isSpanish: Bool
   }
 
-  /// The names a learner will meet elsewhere, shown under the heading after "also". The headings
-  /// are Spanish in either interface, so the lists follow the interface instead. An English
-  /// interface gets the English textbook name, then the RAE's name where it differs from the
-  /// heading. A Spanish interface gets the RAE's name, then Andrés Bello's, which Mexican and other
-  /// Latin American schools teach. Empty where every system agrees with the heading.
-  func secondNames(spanishInterface: Bool) -> [SecondName] {
-    spanishInterface ? spanishNames.map { SecondName(text: $0, isSpanish: true) } : englishNames
-  }
-
-  private var englishNames: [SecondName] {
-    let (english, rae): (String, String?) = {
-      switch tense {
-      case .presenteDeIndicativo:
-        return ("present", nil)
-      case .pretérito:
-        return ("preterite", "pretérito perfecto simple")
-      case .imperfectoDeIndicativo:
-        return ("imperfect", "pretérito imperfecto")
-      case .futuroDeIndicativo:
-        return ("future", "futuro simple")
-      case .condicional:
-        return ("conditional", "condicional simple")
-      case .presenteDeSubjuntivo:
-        return ("present subjunctive", nil)
-      case .imperfectoDeSubjuntivo1:
-        return ("imperfect subjunctive, -ra form", nil)
-      case .imperfectoDeSubjuntivo2:
-        return ("imperfect subjunctive, -se form", nil)
-      case .futuroDeSubjuntivo:
-        return ("future subjunctive", nil)
-      case .imperativoPositivo:
-        return ("affirmative command", nil)
-      case .imperativoNegativo:
-        return ("negative command", nil)
-      case .perfectoDeIndicativo:
-        return ("present perfect", "pretérito perfecto compuesto")
-      case .pretéritoAnterior:
-        return ("past anterior", nil)
-      case .pluscuamperfectoDeIndicativo:
-        return ("past perfect", "pretérito pluscuamperfecto")
-      case .futuroPerfecto:
-        return ("future perfect", "futuro compuesto")
-      case .condicionalCompuesto:
-        return ("conditional perfect", nil)
-      case .perfectoDeSubjuntivo:
-        return ("present perfect subjunctive", nil)
-      case .pluscuamperfectoDeSubjuntivo1:
-        return ("past perfect subjunctive, -ra form", nil)
-      case .pluscuamperfectoDeSubjuntivo2:
-        return ("past perfect subjunctive, -se form", nil)
-      case .futuroPerfectoDeSubjuntivo:
-        return ("future perfect subjunctive", nil)
-      case .infinitivo, .translation, .gerundio, .participio, .raízFutura:
-        return ("", nil)
-      }
-    }()
-    var names = [SecondName(text: english, isSpanish: false)]
-    if let rae {
-      names.append(SecondName(text: rae, isSpanish: true))
+  /// The names a learner will meet elsewhere, which the tense's article lists under its heading.
+  /// The headings are Spanish in either interface, so the lists follow the interface instead. An
+  /// English interface gets the English textbook name, then the RAE's name where it differs from
+  /// the heading, then Andrés Bello's, which Mexican and other Latin American schools teach. A
+  /// Spanish interface gets the same Spanish names and never an English one.
+  func articleNames(spanishInterface: Bool) -> [TenseName] {
+    let spanish = spanishNames.map { TenseName(text: $0, isSpanish: true) }
+    if spanishInterface || englishName.isEmpty {
+      return spanish
     }
-    return names.filter { !$0.text.isEmpty }
+    return [TenseName(text: englishName, isSpanish: false)] + spanish
   }
 
+  /// The table whose tense an Info article is about, or nil for an article that no card opens.
+  static func table(forArticle stableKey: String) -> ConjugationTable? {
+    all.first { $0.articleKey == stableKey }
+  }
+
+  private var englishName: String {
+    switch tense {
+    case .presenteDeIndicativo:
+      return "present"
+    case .pretérito:
+      return "preterite"
+    case .imperfectoDeIndicativo:
+      return "imperfect"
+    case .futuroDeIndicativo:
+      return "future"
+    case .condicional:
+      return "conditional"
+    case .presenteDeSubjuntivo:
+      return "present subjunctive"
+    case .imperfectoDeSubjuntivo1:
+      return "imperfect subjunctive, -ra form"
+    case .imperfectoDeSubjuntivo2:
+      return "imperfect subjunctive, -se form"
+    case .futuroDeSubjuntivo:
+      return "future subjunctive"
+    case .imperativoPositivo:
+      return "affirmative command"
+    case .imperativoNegativo:
+      return "negative command"
+    case .perfectoDeIndicativo:
+      return "present perfect"
+    case .pretéritoAnterior:
+      return "past anterior"
+    case .pluscuamperfectoDeIndicativo:
+      return "past perfect"
+    case .futuroPerfecto:
+      return "future perfect"
+    case .condicionalCompuesto:
+      return "conditional perfect"
+    case .perfectoDeSubjuntivo:
+      return "present perfect subjunctive"
+    case .pluscuamperfectoDeSubjuntivo1:
+      return "past perfect subjunctive, -ra form"
+    case .pluscuamperfectoDeSubjuntivo2:
+      return "past perfect subjunctive, -se form"
+    case .futuroPerfectoDeSubjuntivo:
+      return "future perfect subjunctive"
+    case .infinitivo, .translation, .gerundio, .participio, .raízFutura:
+      return ""
+    }
+  }
+
+  /// The RAE's name where it differs from the heading, then Bello's where there is one.
   private var spanishNames: [String] {
     switch tense {
     case .presenteDeIndicativo, .presenteDeSubjuntivo:

@@ -282,3 +282,49 @@ extension Color {
     return isStriped ? .zebraStripe(index) : .clear
   }
 }
+
+// MARK: - A title that wraps
+
+/// A screen's title as the first item of its scroll content, where a long one wraps. The system's
+/// large title neither wraps nor shrinks, so "Irregular Participles" at a large text size on a
+/// 375-point screen came out "Irregular Particip…". Pair it with `wrappingTitleBar`, which keeps
+/// the bar inline and shows the title there once this one has scrolled away, as a large title
+/// does.
+struct WrappingTitle: View {
+  let title: String
+  /// A verb or an exemplar, which VoiceOver reads in a Spanish voice.
+  var isSpanish = false
+  /// Whether the title is on screen, which `wrappingTitleBar` reads.
+  @Binding var isVisible: Bool
+
+  var body: some View {
+    Text(isSpanish ? AttributedString(spanish: title) : AttributedString(title))
+      .font(.largeTitle.bold())
+      .foregroundStyle(.primary)
+      .fixedSize(horizontal: false, vertical: true)
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .accessibilityAddTraits(.isHeader)
+      .onScrollVisibilityChange(threshold: 0.5) { isVisible = $0 }
+  }
+}
+
+extension View {
+  /// The bar of a screen whose title is a `WrappingTitle`: inline, with the title shown in the bar
+  /// only while the `WrappingTitle` is off screen, so that it is never shown, or read by
+  /// VoiceOver, twice. `navigationTitle` stays for the next screen's back button.
+  func wrappingTitleBar(_ title: String, isSpanish: Bool = false, isTitleVisible: Bool) -> some View {
+    navigationTitle(title)
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .principal) {
+          Text(isSpanish ? AttributedString(spanish: title) : AttributedString(title))
+            .font(.headline)
+            .lineLimit(1)
+            .opacity(isTitleVisible ? 0 : 1)
+            .animation(.easeInOut(duration: 0.2), value: isTitleVisible)
+            .accessibilityHidden(isTitleVisible)
+            .accessibilityAddTraits(.isHeader)
+        }
+      }
+  }
+}
