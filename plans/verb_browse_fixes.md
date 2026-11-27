@@ -31,8 +31,8 @@ is filled by the next session, which reads the hash from `git log`.
 | 8 | Done | 2026-11-26 | `73df869` | D3 (the model layer), F2 (repeated work), S8 |
 | 9 | Done | 2026-11-26 | `102ab01` | S1 (the search model), C10, C11, F1, S2, S3, S4, S7, and the rest of C13 |
 | 10 | Done | 2026-11-26 | `ccfb31c` | S1 (the rest), G9 |
-| 11 | Awaiting Josh | 2026-11-27 | | D1 (`AdaptiveRows` and one row label), the rows' Spanish from G9, the outline's corners from C13 |
-| 12 | Not started | | | S6 |
+| 11 | Done | 2026-11-27 | `5d399e8` | D1 (`AdaptiveRows` and one row label), the rows' Spanish from G9, the outline's corners from C13 |
+| 12 | Awaiting Josh | 2026-11-27 | | S6, and from S8 `mixesChoiceQuestions`' redundant test |
 | 13 | Not started | | | T1, T2, T3, less what earlier phases added |
 | Closing | Not started | | | The audit, G5's release step, the timed workarounds' list |
 
@@ -1113,6 +1113,48 @@ collection's quiz, Test Me, and a practice set each start and finish in the simu
 Live Activity only where it was before.
 
 **How it differed:**
+
+- **The kind is the whole mode, not a flag beside the others.** `QuizScope.Kind` has one case per
+  quiz the app can start (fourteen), and the stored flags it replaced (`isPracticeSet`,
+  `isVerbEssentials`, `isRecognition`, `isSentences`, `isSpeedRound`, `isDaily`) and the optional
+  `recordSession`, `modelPractice`, and `challenge` are gone from storage. The last three are
+  payloads of their cases, so a scope can no longer be both a record session and a Speed Round. The
+  old names survive as computed readers of the kind, so the views and models that read them, and
+  every test, did not change. `isVerbEssentials` is true for a model's practice too, as the stored
+  flag was. `custom`, `collectionKey`, and `level` stay stored, since several kinds share them.
+- **`kind` has no default** in the initializer, so a new mode cannot fall into `allVerbs` by
+  forgetting it. The two tests that build a long default quiz for its statistics name
+  `.allVerbs`; that is their only edit, and no expectation changed.
+- **`isRanked` is `kind == .allVerbs && questionCount == roundLength`.** The length stays because
+  `QuizLevelTests` and `QuizVerbMixTests` draw thirty-question default quizzes, which must not mix
+  in due items and choice questions. In the app an `allVerbs` scope is always a round.
+  `mixesDueItems` and `mixesChoiceQuestions` are both `isRanked`; the latter's `!isPracticeSet`
+  was redundant, as the review suspected, because a practice set always carries a custom quiz.
+- **`Kind.runsInSheet`** is an exhaustive switch: Test Me, a collection, a model's practice, and a
+  practice set. `startsLiveActivity` is `!runsInSheet`, a round's length or more, and not a Speed
+  Round. Checked kind by kind against the old expression, it gives the same answer for all
+  fourteen.
+- **`showsVerbLink`** is a scope property, false only for the `verbPage` kind.
+- **Two more chains became switches,** because they were the same smell and a new kind should have
+  to decide there too: `LastQuizResult.Kind(scope:)`, an if-chain that told Test Me apart by its
+  analytics source, and the DEBUG fixtures' `standsIn(for:)`, a conjunction of five negatives.
+  `QuizView`'s title chain and the other readers of single flags were left alone.
+- **Tests.** `everyScopeTheAppStartsPinsWhetherItRanks` builds all eighteen scopes the app's
+  factories make, every kind and both record sessions and model modes among them, and pins
+  `isRanked`, the two mixes, `runsInSheet`, and `startsLiveActivity` for each. A helper with an
+  exhaustive switch names each kind, so a new kind does not compile in the test until it is named,
+  and fails it until it has a row. `onlyTestMeHidesTheVerbLink` pins the link. Neither fails
+  against the old code, which had no wrong answer to fix; S6 was about failing safe, and the
+  tests pin today's answers so that the refactor cannot have changed one.
+- **The suite** is 1,494 Swift Testing tests in 93 suites and 11 XCTest tests, in 164 s.
+  `swiftlint` is clean.
+- **Checked on "Conjugar iPhone 17"** only, since nothing on screen changed: a ranked quiz from
+  `conjugar://quiz/start`, the -go Verbs collection's quiz, Test Me on tener, and a practice set
+  from `conjugar://quiz/set?tenses=preterito&verbs=goVerbs`. Each was answered wrongly to its
+  results by a script. Going home mid-quiz showed "1/10" in the Dynamic Island for the ranked quiz
+  and an empty island for the other three. Test Me's correction had the model's link and no verb
+  link; the practice set's had both. The iPad was not booted. The iPhone's practice record now
+  holds the misses from those four quizzes.
 
 ## Phase 13: Tests That Prove What They Claim
 

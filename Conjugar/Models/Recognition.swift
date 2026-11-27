@@ -12,7 +12,7 @@ import Foundation
 /// the direction practiced.
 nonisolated extension QuizScope {
   static func recognition() -> QuizScope {
-    QuizScope(verbs: nil, questionCount: roundLength, source: .recognition, isRecognition: true)
+    QuizScope(kind: .recognition, verbs: nil, questionCount: roundLength, source: .recognition)
   }
 }
 

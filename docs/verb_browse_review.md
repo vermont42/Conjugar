@@ -654,7 +654,10 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   itself is ranked and posts to Game Center. `startsLiveActivity` guesses "runs in a sheet" from
   `collectionKey` and `custom` (`:154-156`). No mode is wrongly ranked today. A `kind` enum with
   only the default ranked fails safe. This is mostly the pedagogy plan's code, built on this
-  plan's Phase 13.
+  plan's Phase 13. *Fixed on `master`, 2026-11-27, in Phase 12 of `plans/verb_browse_fixes.md`:
+  every scope names a `QuizScope.Kind`, only `allVerbs` at a round's length ranks, the old flags
+  are readers of the kind, `Kind.runsInSheet` is what `startsLiveActivity` reads, and a test pins
+  every scope the app starts.*
 - **S7. The sort picker returns during a search and does nothing (Read).** With text in the field
   and the keyboard down, the picker replaces the letter row. Choosing My Verbs changes nothing on
   screen, and choosing a sort replays the trombone. *Fixed on `master`, 2026-11-26, in Phase 9 of
@@ -664,7 +667,9 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
   - `LearnerVerbs.daysSinceOpened` has no caller (Read). *Deleted on `master`, 2026-11-25, in
     Phase 3 of `plans/verb_browse_fixes.md`.*
   - `QuizScope.mixesChoiceQuestions` tests `!isPracticeSet`, which `isRanked` already implies
-    (Reviewer).
+    (Reviewer). *Confirmed and fixed on `master`, 2026-11-27, in Phase 12 of
+    `plans/verb_browse_fixes.md`: a practice set always carries a custom quiz, so it never ranked;
+    the test is gone.*
   - `ConjugationTable.isCompound` is used only by tests (Reviewer).
   - `BrowseSearch` is six lines with one caller since the Verbs tab left it (Read). *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: folded into `ModelSearch`, which folds the query once per search.*
   - `ConjugationMapTool` accepts any `--flag value`, so a misspelled `--forms-json` writes the map

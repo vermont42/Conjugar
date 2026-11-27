@@ -29,7 +29,7 @@ import Testing
       Settings.regionKey: region.rawValue
     ]))
     let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), randomSource: SplitMix64(seed: seed))
-    quiz.start(scope: QuizScope(verbs: nil, questionCount: count, source: .tab))
+    quiz.start(scope: QuizScope(kind: .allVerbs, verbs: nil, questionCount: count, source: .tab))
     let questions = quiz.questions
     quiz.quit()
     return questions

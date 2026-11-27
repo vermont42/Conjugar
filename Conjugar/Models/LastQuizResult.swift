@@ -158,44 +158,42 @@ struct LastQuizResult: Codable, Equatable {
 extension LastQuizResult.Kind {
   /// A custom quiz over a collection counts as custom, since the learner chose it in the editor.
   init(scope: QuizScope) {
-    if let session = scope.recordSession {
-      switch session {
-      case .review:
-        self = .review
-      case .mistakes:
-        self = .mistakes
-      }
-    } else if let session = scope.modelPractice {
+    switch scope.kind {
+    case .allVerbs:
+      self = .allVerbs
+    case .myVerbs:
+      self = .myVerbs
+    case .verbPage:
+      self = .verbPage
+    case .collection:
+      self = .collection
+    case .custom:
+      self = .custom
+    case .practiceSet:
+      self = .practiceSet
+    case .recordSession(.review):
+      self = .review
+    case .recordSession(.mistakes):
+      self = .mistakes
+    case .verbEssentials:
+      self = .verbEssentials
+    case .modelPractice(let session):
       switch session.mode {
       case .alone:
         self = .modelAlone
       case .mixed:
         self = .modelMixed
       }
-    } else if scope.isVerbEssentials {
-      self = .verbEssentials
-    } else if scope.isRecognition {
+    case .recognition:
       self = .recognition
-    } else if scope.isSentences {
+    case .sentences:
       self = .sentences
-    } else if scope.isSpeedRound {
+    case .speedRound:
       self = .speedRound
-    } else if scope.isChallenge {
-      self = .challenge
-    } else if scope.isDaily {
+    case .daily:
       self = .daily
-    } else if scope.isPracticeSet {
-      self = .practiceSet
-    } else if scope.custom != nil {
-      self = .custom
-    } else if scope.source == .verbPage {
-      self = .verbPage
-    } else if scope.collectionKey != nil {
-      self = .collection
-    } else if scope.verbs != nil {
-      self = .myVerbs
-    } else {
-      self = .allVerbs
+    case .challenge:
+      self = .challenge
     }
   }
 }

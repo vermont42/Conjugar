@@ -9,6 +9,56 @@
 /// `Quiz.start(scope:)` defaults to `allVerbs`, the Quiz tab's quiz. Collections add
 /// `collection(_:title:)` (`VerbCollection+Text.swift`).
 nonisolated struct QuizScope: Equatable, Sendable {
+  /// Which of the app's quizzes this is. Every scope names one, so that a new mode is a new case,
+  /// and the switches below make it decide, rather than a flag it might forget to add itself to.
+  /// Only `allVerbs` ranks.
+  enum Kind: Equatable, Sendable {
+    /// The quiz over every verb at the learner's level: the Quiz tab's Start, or a `quiz` link.
+    case allVerbs
+    /// The Quiz tab's quiz over the learner's My Verbs.
+    case myVerbs
+    /// Test Me, three questions on a verb's page.
+    case verbPage
+    /// A collection's Quiz button.
+    case collection
+    /// The Quiz tab's Custom segment.
+    case custom
+    /// A shared practice set, opened from a link or a QR code.
+    case practiceSet
+    /// Review or Practice My Mistakes, whose questions come from the practice record.
+    case recordSession(QuizRecordSession)
+    /// Verb Essentials, which asks each verb's key conjugations together (`VerbEssentials.swift`).
+    case verbEssentials
+    /// A verb model's practice, alone or mixed with the known models (`ModelPractice.swift`), which
+    /// is Verb Essentials over the model's verbs.
+    case modelPractice(ModelPracticeSession)
+    /// Name the Form, which shows a form and asks for its infinitive, tense, and person
+    /// (`Recognition.swift`).
+    case recognition
+    /// Complete the Sentence, which asks authored sentences with their verb blanked
+    /// (`GapSentence.swift`).
+    case sentences
+    /// The Speed Round, sixty seconds on what the practice record says is mastered
+    /// (`SpeedRound.swift`).
+    case speedRound
+    /// The daily session, whose finish extends the streak (`DailySession.swift`).
+    case daily
+    /// A day's challenge, the same five questions on every device (`DailyChallenge.swift`).
+    case challenge(DailyChallenge.Key)
+
+    /// Whether the quiz runs in `QuizSheet`, over whatever page or tab is open, rather than on the
+    /// Quiz tab. A custom quiz over a collection runs on the tab.
+    var runsInSheet: Bool {
+      switch self {
+      case .verbPage, .collection, .practiceSet, .modelPractice:
+        return true
+      case .allVerbs, .myVerbs, .custom, .recordSession, .verbEssentials, .recognition, .sentences, .speedRound, .daily, .challenge:
+        return false
+      }
+    }
+  }
+
+  let kind: Kind
   /// Nil asks about every verb, drawn from the level's frequency band (`QuizDraw`). Otherwise
   /// the bare infinitives the verb map uses (arrepentir, not arrepentirse).
   let verbs: [String]?
@@ -20,54 +70,25 @@ nonisolated struct QuizScope: Equatable, Sendable {
   let title: String?
   /// The collection the quiz is over, which `startQuiz` carries as `collection`.
   let collectionKey: String?
-  /// The learner's own choice of tenses and verbs, which the Quiz tab's Custom segment starts.
-  /// A custom quiz over a band or every verb has nil `verbs` and draws as the default quiz does,
-  /// from the chosen band.
+  /// The learner's own choice of tenses and verbs, which the Quiz tab's Custom segment starts and
+  /// a practice set carries. A custom quiz over a band or every verb has nil `verbs` and draws as
+  /// the default quiz does, from the chosen band.
   let custom: CustomQuiz?
   /// A practice set's level, so that everyone who opens the set is asked the same tenses and
-  /// verbs. Nil asks at the learner's own level.
+  /// verbs, or a challenge's. Nil asks at the learner's own level.
   let level: QuizLevel?
-  /// A shared practice set, whose quiz runs in a sheet over whatever tab is open.
-  let isPracticeSet: Bool
-  /// Review or Practice My Mistakes, whose questions come from the practice record.
-  let recordSession: QuizRecordSession?
-  /// Verb Essentials, which asks each verb's key conjugations together (`VerbEssentials.swift`).
-  let isVerbEssentials: Bool
-  /// A verb model's practice, alone or mixed with the known models (`ModelPractice.swift`), which
-  /// is Verb Essentials over the model's verbs.
-  let modelPractice: ModelPracticeSession?
-  /// Name the Form, which shows a form and asks for its infinitive, tense, and person
-  /// (`Recognition.swift`).
-  let isRecognition: Bool
-  /// Complete the Sentence, which asks authored sentences with their verb blanked
-  /// (`GapSentence.swift`).
-  let isSentences: Bool
-  /// The Speed Round, sixty seconds on what the practice record says is mastered
-  /// (`SpeedRound.swift`).
-  let isSpeedRound: Bool
-  /// The daily session, whose finish extends the streak (`DailySession.swift`).
-  let isDaily: Bool
-  /// A day's challenge, the same five questions on every device (`DailyChallenge.swift`).
-  let challenge: DailyChallenge.Key?
 
   init(
+    kind: Kind,
     verbs: [String]?,
     questionCount: Int,
     source: AnalyticsSource,
     title: String? = nil,
     collectionKey: String? = nil,
     custom: CustomQuiz? = nil,
-    level: QuizLevel? = nil,
-    isPracticeSet: Bool = false,
-    recordSession: QuizRecordSession? = nil,
-    isVerbEssentials: Bool = false,
-    modelPractice: ModelPracticeSession? = nil,
-    isRecognition: Bool = false,
-    isSentences: Bool = false,
-    isSpeedRound: Bool = false,
-    isDaily: Bool = false,
-    challenge: DailyChallenge.Key? = nil
+    level: QuizLevel? = nil
   ) {
+    self.kind = kind
     self.verbs = verbs
     self.questionCount = questionCount
     self.source = source
@@ -75,15 +96,52 @@ nonisolated struct QuizScope: Equatable, Sendable {
     self.collectionKey = collectionKey
     self.custom = custom
     self.level = level
-    self.isPracticeSet = isPracticeSet
-    self.recordSession = recordSession
-    self.isVerbEssentials = isVerbEssentials
-    self.modelPractice = modelPractice
-    self.isRecognition = isRecognition
-    self.isSentences = isSentences
-    self.isSpeedRound = isSpeedRound
-    self.isDaily = isDaily
-    self.challenge = challenge
+  }
+
+  var isPracticeSet: Bool {
+    kind == .practiceSet
+  }
+
+  var recordSession: QuizRecordSession? {
+    if case .recordSession(let session) = kind {
+      return session
+    }
+    return nil
+  }
+
+  /// Verb Essentials, or a model's practice, which asks the same questions over the model's verbs.
+  var isVerbEssentials: Bool {
+    kind == .verbEssentials || modelPractice != nil
+  }
+
+  var modelPractice: ModelPracticeSession? {
+    if case .modelPractice(let session) = kind {
+      return session
+    }
+    return nil
+  }
+
+  var isRecognition: Bool {
+    kind == .recognition
+  }
+
+  var isSentences: Bool {
+    kind == .sentences
+  }
+
+  var isSpeedRound: Bool {
+    kind == .speedRound
+  }
+
+  var isDaily: Bool {
+    kind == .daily
+  }
+
+  var challenge: DailyChallenge.Key? {
+    if case .challenge(let key) = kind {
+      return key
+    }
+    return nil
   }
 
   var isChallenge: Bool {
@@ -97,13 +155,13 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// Test Me's length on a verb's page.
   static let verbPageQuestionCount = 3
 
-  /// Only the default quiz over every verb ranks: a score over a learner's own verbs or tenses,
-  /// over what the practice record holds, over another kind of question, against the clock, or over
-  /// three questions, compares with nothing, and a daily session is filled from the record. Of a
-  /// ranked session, only the first round's score counts (`Quiz.firstRoundScore`).
+  /// Only the default quiz over every verb, a round long, ranks: a score over a learner's own
+  /// verbs or tenses, over what the practice record holds, over another kind of question, against
+  /// the clock, or over another number of questions, compares with nothing, and a daily session is
+  /// filled from the record. Of a ranked session, only the first round's score counts
+  /// (`Quiz.firstRoundScore`).
   var isRanked: Bool {
-    verbs == nil && custom == nil && recordSession == nil && !isVerbEssentials && !isRecognition && !isSentences && !isSpeedRound
-      && !isDaily && !isChallenge && questionCount == QuizScope.roundLength
+    kind == .allVerbs && questionCount == QuizScope.roundLength
   }
 
   /// Whether `completeQuiz`, `quitQuiz`, and `abandonQuiz` say how many questions were asked or
@@ -134,7 +192,7 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// Whether each round asks one choice between two sentences, from the second level up: only
   /// the default quiz, so that every ranked round of a level asks the same mix.
   var mixesChoiceQuestions: Bool {
-    isRanked && !isPracticeSet
+    isRanked
   }
 
   /// Whether the results offer Ten More, or for Verb Essentials five more verbs, which continue the
@@ -146,13 +204,17 @@ nonisolated struct QuizScope: Equatable, Sendable {
   }
 
   /// Whether the quiz starts the Live Activity, which is one for the whole app and belongs to the
-  /// Quiz tab's quiz. A three-question quiz in a verb page's sheet is over before one would be
-  /// noticed, and a collection's quiz runs in the same sheet, beside a quiz the tab may hold, so
-  /// neither starts one, though a collection's is a full round. A custom quiz over a collection
-  /// runs on the tab, and starts one. A practice set's runs in a sheet, and does not. A Speed
-  /// Round's minute has no number of questions for the activity to count toward.
+  /// Quiz tab's quiz. A quiz in a sheet runs beside a quiz the tab may hold, so it starts none,
+  /// though a collection's is a full round. A quiz shorter than a round, such as a challenge, is
+  /// over before one would be noticed. A Speed Round's minute has no number of questions for the
+  /// activity to count toward.
   var startsLiveActivity: Bool {
-    questionCount >= QuizScope.roundLength && !isPracticeSet && !isSpeedRound && (collectionKey == nil || custom != nil)
+    !kind.runsInSheet && questionCount >= QuizScope.roundLength && !isSpeedRound
+  }
+
+  /// Whether a correction links to its verb's page. Test Me runs on that page, under its sheet.
+  var showsVerbLink: Bool {
+    kind != .verbPage
   }
 
   /// The tenses the quiz asks at a level: the learner's choice, or the level's.
@@ -173,21 +235,22 @@ nonisolated struct QuizScope: Equatable, Sendable {
   /// The quiz over every verb, begun somewhere other than Start: a `quiz` link names its
   /// surface, or `deeplink`. It ranks like the tab's.
   static func allVerbs(source: AnalyticsSource) -> QuizScope {
-    QuizScope(verbs: nil, questionCount: roundLength, source: source)
+    QuizScope(kind: .allVerbs, verbs: nil, questionCount: roundLength, source: source)
   }
 
   static func myVerbs(_ verbs: [String]) -> QuizScope {
-    QuizScope(verbs: verbs, questionCount: roundLength, source: .myVerbs)
+    QuizScope(kind: .myVerbs, verbs: verbs, questionCount: roundLength, source: .myVerbs)
   }
 
   static func verbPage(_ verb: String) -> QuizScope {
-    QuizScope(verbs: [verb], questionCount: verbPageQuestionCount, source: .verbPage)
+    QuizScope(kind: .verbPage, verbs: [verb], questionCount: verbPageQuestionCount, source: .verbPage)
   }
 
   /// A round of an unranked quiz over a collection, in the same sheet as Test Me, titled with the
   /// collection's name. Its `startQuiz` carries the collection's key.
   static func collection(_ collection: VerbCollection, title: String) -> QuizScope {
     QuizScope(
+      kind: .collection,
       verbs: collection.infinitives,
       questionCount: roundLength,
       source: .list,

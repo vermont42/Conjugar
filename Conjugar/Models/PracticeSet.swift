@@ -70,14 +70,14 @@ nonisolated struct PracticeSet: Equatable, Sendable {
   /// and then Ten More, never ranked. `title` is the quiz sheet's.
   func scope(source: AnalyticsSource, title: String? = nil) -> QuizScope {
     QuizScope(
+      kind: .practiceSet,
       verbs: custom.verbSet?.infinitives(myVerbs: []),
       questionCount: QuizScope.roundLength,
       source: source,
       title: title,
       collectionKey: custom.verbSet?.collectionKey,
       custom: custom,
-      level: level,
-      isPracticeSet: true
+      level: level
     )
   }
 

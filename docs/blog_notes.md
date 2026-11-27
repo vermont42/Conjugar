@@ -12779,3 +12779,43 @@ each shot.
 The code ended up about as long as it was. The seven changed files lost 352 lines and gained 102,
 and the four new files have 322, a third of them comments. The size held steady, but the copies are
 gone. A change to how a row looks is now made once, in `RowLabel`, instead of in six places.
+
+## A Quiz Says What It Is (2026-11-27)
+
+Conjugar's quiz has grown from one mode to fourteen: the Quiz tab's quiz, My Verbs, Test Me on a
+verb's page, a collection's quiz, a custom quiz, a shared practice set, Review, Practice My
+Mistakes, Verb Essentials, a model's practice, Name the Form, Complete the Sentence, the Speed
+Round, the daily session, and the daily challenge. Each arrived with a flag on `QuizScope`, the
+value that says what a quiz asks. By this week the scope had nine of them, and the question that
+matters most, whether a quiz ranks and posts its score to Game Center, was answered by a
+conjunction of nine negatives and a length. The review that this plan works from pointed out the
+trap. No mode was wrongly ranked, but a new mode whose author forgot to add one more `!isSomething`
+would be ranked by default. The same went for the Live Activity, whose rule guessed that a quiz ran
+in a sheet from whether it had a collection key and no custom choice.
+
+The fix was a `Kind` enum with one case per mode. I went further than adding it beside the flags.
+The flags themselves left storage, and the modes that carried data (which record session, which
+model, which day's challenge) now carry it as the case's payload, so a scope can no longer claim to
+be two modes at once. Ranking became `kind == .allVerbs` at a round's length. Whether a quiz runs
+in a sheet became an exhaustive switch on the kind, which the Live Activity's rule now reads, and
+the compiler will make the next mode's author decide. The initializer has no default kind, for the
+same reason.
+
+What kept the change small was leaving the old names in place as computed properties. Views,
+models, and tests ask `scope.isSpeedRound` or `scope.recordSession` in dozens of places, and every
+one of them kept working without an edit. The only test edits were two scopes built by hand for a
+thirty-question sample, which now say `.allVerbs`. That sample is also why ranking still checks the
+length: those quizzes must not start mixing in due items and choice questions.
+
+A refactor that is supposed to change nothing needs a test that says what "nothing" is. The new
+one builds all eighteen scopes the app's factories can make and pins, for each, whether it ranks,
+mixes, runs in a sheet, and starts the Live Activity. A small helper in the test switches over the
+kind to name it, so a fifteenth mode will not compile there until someone writes its row. Before
+trusting the refactor I also checked the new Live Activity rule against the old expression kind by
+kind, by hand, and they agreed on all fourteen.
+
+Then I ran four quizzes in the simulator, answering each wrongly to the end with a small script
+that types a bad answer and taps Continue. With the app sent home in the middle, the ranked quiz
+showed "1/10" in the Dynamic Island, and the collection's quiz, Test Me, and the practice set
+showed nothing, as before. One small surprise was that Test Me's button lives in the toolbar,
+where its accessibility identifier never reaches AXe, so the script had to tap it by position.

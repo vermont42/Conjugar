@@ -162,13 +162,12 @@ extension QuizScope {
   /// and the record itself, so `verbs` is only the model's.
   static func modelPractice(_ session: ModelPracticeSession) -> QuizScope {
     QuizScope(
+      kind: .modelPractice(session),
       verbs: ModelPracticeGroup.group(session.classNumber)?.verbs ?? [],
       questionCount: verbEssentialsVerbCount * KeyConjugation.allCases.count,
       source: session.source,
       title: session.title,
-      collectionKey: session.collection.key,
-      isVerbEssentials: true,
-      modelPractice: session
+      collectionKey: session.collection.key
     )
   }
 }

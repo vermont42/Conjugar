@@ -113,7 +113,7 @@ import Testing
       var counts: [DisplayTense: Int] = [:]
       let quizzes = 200
       for _ in 0..<quizzes {
-        quiz.start(scope: QuizScope(verbs: nil, questionCount: Self.longQuiz, source: .tab))
+        quiz.start(scope: QuizScope(kind: .allVerbs, verbs: nil, questionCount: Self.longQuiz, source: .tab))
         for question in quiz.questions {
           counts[question.tense, default: 0] += 1
         }

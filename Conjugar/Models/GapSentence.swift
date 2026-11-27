@@ -11,7 +11,7 @@ nonisolated extension QuizScope {
   /// Complete the Sentence: ten authored sentences at the learner's level, each with its verb
   /// blanked.
   static func sentences() -> QuizScope {
-    QuizScope(verbs: nil, questionCount: roundLength, source: .sentences, isSentences: true)
+    QuizScope(kind: .sentences, verbs: nil, questionCount: roundLength, source: .sentences)
   }
 }
 

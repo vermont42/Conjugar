@@ -876,9 +876,13 @@ verb, `allVerbs(source:)` the same begun by a `quiz` link, `myVerbs(_:)` a round
 carries a `title` for the sheet and a `collectionKey` for `startQuiz`, and `custom(_:myVerbs:)` a
 round of the learner's own choice (§ Custom quiz below), which carries a `custom`. A round is
 `QuizScope.roundLength`, ten questions. `continues` (a round's length or more) decides whether the
-results offer Ten More, so Test Me's three do not. `isRanked` (every verb, one round, no custom
-choice) decides whether a session's first round posts to Game Center (`Quiz.isRankedRound`). No
-scoped or custom quiz ranks. `pool(level:)` and `band(level:)` give the tenses a quiz asks and the
+results offer Ten More, so Test Me's three do not. Every scope names its `kind`
+(`QuizScope.Kind`), one case per quiz the app can start, with a record session's, a model
+practice's, and a challenge's details as the case's payload. `isRanked` is the `allVerbs` kind at a
+round's length, and decides whether a session's first round posts to Game Center
+(`Quiz.isRankedRound`), so a new mode is unranked unless it is the default quiz. No scoped or custom
+quiz ranks. `Kind.runsInSheet`, an exhaustive switch, says which kinds run in `QuizSheet` (Test Me, a
+collection, a model's practice, a practice set). `QuizScopeTests` pins every scope the app starts. `pool(level:)` and `band(level:)` give the tenses a quiz asks and the
 band a quiz with nil `verbs` draws from: a custom quiz's choice, else the level's.
 
 **The draw.** `Quiz.start(scope:)` defaults to `.allVerbs`, and returns false, changing nothing,
@@ -1073,7 +1077,7 @@ while the quiz clock shows it (`elapsedTime` is optional). **A quiz shorter than
 Live Activity, and does not count toward `ChangeLevelTip`, which only a first round's results
 donate to. Nor does a collection's quiz start one, though it is a round, because it
 runs in the sheet beside a quiz the tab may hold, and the Live Activity is one for the app
-(`QuizScope.startsLiveActivity`; `Quiz.hasLiveActivity` keeps a sheet's quiz from ending the tab's).
+(`QuizScope.startsLiveActivity`, which reads `Kind.runsInSheet`; `Quiz.hasLiveActivity` keeps a sheet's quiz from ending the tab's).
 Quiz.swift reaches the activity through `Current.liveActivities`: `LiveActivitiesReal` on device
 and in the simulator World, and `LiveActivitiesSpy` under tests, which `QuizLiveActivityTests`
 checks these rules against.
@@ -1155,7 +1159,7 @@ Image, made on the device).
 - **The length does not travel.** Every set is a round of ten, then Ten More.
 - **Opening a set** shows `PracticeSetView` in a sheet over whatever tab is open, page-sized on
   iPad. It never starts a quiz unasked. Start runs the quiz in a `QuizSheet` over it, never ranked
-  and with no Live Activity (`QuizScope.isPracticeSet`). Keep as My Custom Quiz replaces the
+  and with no Live Activity (the `practiceSet` kind, which `QuizScope.Kind.runsInSheet` names). Keep as My Custom Quiz replaces the
   learner's custom quiz, only when tapped; a kept set asks the learner's own level for any part left
   to the level. A list's verbs show as chips, as My Verbs' do.
 - **A link that names nothing** this version knows shows "Practice Set Not Found" with a line that
@@ -1450,7 +1454,7 @@ would use: "De niña, Ana jugaba al tenis todos los sábados." over "…jugó…
 of the difficulty of Spanish tenses lies (the pretérito or the imperfecto, the subjuntivo or the
 indicativo, the imperfecto de subjuntivo or the condicional after si), and typing a form never asks
 it. **Not a mode:** every default round from Elementary up, Ten More's included, asks exactly one
-(`QuizScope.mixesChoiceQuestions`, the ranked scope less a practice set), so every ranked round of
+(`QuizScope.mixesChoiceQuestions`, the ranked scope), so every ranked round of
 a level asks the same mix. My Verbs, custom quizzes, record sessions, and the exercises ask none,
 and Beginner, whose tenses offer no contrast, has none.
 

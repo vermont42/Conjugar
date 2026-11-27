@@ -48,7 +48,7 @@ nonisolated extension QuizScope {
   /// Review or My Mistakes, from the Quiz tab: up to a round's length of items, then Ten More
   /// while any remain unasked. Never ranked, and mixing in nothing.
   static func recordSession(_ session: QuizRecordSession) -> QuizScope {
-    QuizScope(verbs: nil, questionCount: roundLength, source: session.source, recordSession: session)
+    QuizScope(kind: .recordSession(session), verbs: nil, questionCount: roundLength, source: session.source)
   }
 }
 

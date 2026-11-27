@@ -1173,7 +1173,12 @@ extension Quiz {
       case .speedRound:
         return false
       default:
-        return !scope.isVerbEssentials && !scope.isRecognition && !scope.isSentences && !scope.isSpeedRound && !scope.isChallenge
+        switch scope.kind {
+        case .allVerbs, .myVerbs, .verbPage, .collection, .custom, .practiceSet, .recordSession, .daily:
+          return true
+        case .verbEssentials, .modelPractice, .recognition, .sentences, .speedRound, .challenge:
+          return false
+        }
       }
     }
   }

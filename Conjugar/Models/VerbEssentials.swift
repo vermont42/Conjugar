@@ -18,10 +18,10 @@ nonisolated extension QuizScope {
   /// an irregular key conjugation.
   static func verbEssentials(_ verbs: [String]? = nil) -> QuizScope {
     QuizScope(
+      kind: .verbEssentials,
       verbs: verbs,
       questionCount: verbEssentialsVerbCount * KeyConjugation.allCases.count,
-      source: .verbEssentials,
-      isVerbEssentials: true
+      source: .verbEssentials
     )
   }
 }

@@ -50,6 +50,75 @@ import Testing
     #expect(QuizScope.myVerbs(Self.myVerbs).questionCount == QuizScope.roundLength)
   }
 
+  /// Every scope the app can start, with whether it ranks, runs in a sheet, and starts the Live
+  /// Activity. A new kind fails to compile `name(of:)` until it is named there, and fails this
+  /// test until it has a row.
+  @Test func everyScopeTheAppStartsPinsWhetherItRanks() {
+    let challenge = DailyChallenge.Key(day: "2026-11-27", level: .beginner, region: .spain)
+    let custom = CustomQuiz(verbSet: .collection(.irregularFuture))
+    let practiceSet = PracticeSet(custom: CustomQuiz(tenses: [.pretérito]), level: .advanced)
+    let rows: [(scope: QuizScope, isRanked: Bool, runsInSheet: Bool, startsLiveActivity: Bool)] = [
+      (.allVerbs, true, false, true),
+      (.allVerbs(source: .deeplink), true, false, true),
+      (.myVerbs(Self.myVerbs), false, false, true),
+      (.verbPage("tener"), false, true, false),
+      (.collection(.goVerbs, title: "-go Verbs"), false, true, false),
+      (.custom(custom, myVerbs: Self.myVerbs), false, false, true),
+      (practiceSet.scope(source: .sharedLink), false, true, false),
+      (.recordSession(.review), false, false, true),
+      (.recordSession(.mistakes), false, false, true),
+      (.verbEssentials(), false, false, true),
+      (.verbEssentials(["tener", "ir"]), false, false, true),
+      (.modelPractice(ModelPracticeSession(classNumber: "4A", mode: .alone)), false, true, false),
+      (.modelPractice(ModelPracticeSession(classNumber: "4A", mode: .mixed)), false, true, false),
+      (.recognition(), false, false, true),
+      (.sentences(), false, false, true),
+      (.speedRound(), false, false, false),
+      (.daily(), false, false, true),
+      (.challenge(challenge), false, false, false)
+    ]
+    for row in rows {
+      let name = Self.name(of: row.scope.kind)
+      #expect(row.scope.isRanked == row.isRanked, "\(name)")
+      #expect(row.scope.mixesDueItems == row.isRanked, "\(name)")
+      #expect(row.scope.mixesChoiceQuestions == row.isRanked, "\(name)")
+      #expect(row.scope.kind.runsInSheet == row.runsInSheet, "\(name)")
+      #expect(row.scope.startsLiveActivity == row.startsLiveActivity, "\(name)")
+    }
+    #expect(Set(rows.map { Self.name(of: $0.scope.kind) }) == Set(Self.kindNames))
+  }
+
+  private static let kindNames = [
+    "allVerbs", "myVerbs", "verbPage", "collection", "custom", "practiceSet", "recordSession", "verbEssentials",
+    "modelPractice", "recognition", "sentences", "speedRound", "daily", "challenge"
+  ]
+
+  private static func name(of kind: QuizScope.Kind) -> String {
+    switch kind {
+    case .allVerbs: "allVerbs"
+    case .myVerbs: "myVerbs"
+    case .verbPage: "verbPage"
+    case .collection: "collection"
+    case .custom: "custom"
+    case .practiceSet: "practiceSet"
+    case .recordSession: "recordSession"
+    case .verbEssentials: "verbEssentials"
+    case .modelPractice: "modelPractice"
+    case .recognition: "recognition"
+    case .sentences: "sentences"
+    case .speedRound: "speedRound"
+    case .daily: "daily"
+    case .challenge: "challenge"
+    }
+  }
+
+  /// Test Me's correction links nowhere, since its verb's page is under the sheet.
+  @Test func onlyTestMeHidesTheVerbLink() {
+    #expect(!QuizScope.verbPage("tener").showsVerbLink)
+    #expect(QuizScope.collection(.goVerbs, title: "-go Verbs").showsVerbLink)
+    #expect(QuizScope.allVerbs.showsVerbLink)
+  }
+
   /// The tab's quiz is a round of ten at every level.
   @Test func theDefaultScopeAsksTheFullQuiz() {
     for level in QuizLevel.allCases {

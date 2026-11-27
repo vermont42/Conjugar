@@ -310,7 +310,7 @@ nonisolated extension QuizScope {
   /// shuffled, and nothing in it is asked again, so that the results show what the shared text
   /// says.
   static func challenge(_ key: DailyChallenge.Key, source: AnalyticsSource = .challenge) -> QuizScope {
-    QuizScope(verbs: nil, questionCount: DailyChallenge.questionCount, source: source, level: key.level, challenge: key)
+    QuizScope(kind: .challenge(key), verbs: nil, questionCount: DailyChallenge.questionCount, source: source, level: key.level)
   }
 }
 

@@ -220,6 +220,7 @@ nonisolated extension QuizScope {
   /// A custom quiz from the Quiz tab: a round of ten, then Ten More, never ranked.
   static func custom(_ custom: CustomQuiz, myVerbs: [String]) -> QuizScope {
     QuizScope(
+      kind: .custom,
       verbs: custom.verbSet?.infinitives(myVerbs: myVerbs),
       questionCount: roundLength,
       source: .custom,

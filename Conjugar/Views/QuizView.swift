@@ -840,7 +840,7 @@ struct QuizView: View {
             QuizCorrectionView(
               question: question,
               correction: correction,
-              showsVerbLink: quiz.scope.source != .verbPage,
+              showsVerbLink: quiz.scope.showsVerbLink,
               model: correctionModel(for: question),
               accessibilityIsFocused: $correctionHasAccessibilityFocus,
               onOpen: { navigationPath.append($0) },
