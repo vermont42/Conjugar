@@ -32,8 +32,8 @@ is filled by the next session, which reads the hash from `git log`.
 | 9 | Done | 2026-11-26 | `102ab01` | S1 (the search model), C10, C11, F1, S2, S3, S4, S7, and the rest of C13 |
 | 10 | Done | 2026-11-26 | `ccfb31c` | S1 (the rest), G9 |
 | 11 | Done | 2026-11-27 | `5d399e8` | D1 (`AdaptiveRows` and one row label), the rows' Spanish from G9, the outline's corners from C13 |
-| 12 | Awaiting Josh | 2026-11-27 | | S6, and from S8 `mixesChoiceQuestions`' redundant test |
-| 13 | Not started | | | T1, T2, T3, less what earlier phases added |
+| 12 | Done | 2026-11-27 | `c3bb034` | S6, and from S8 `mixesChoiceQuestions`' redundant test |
+| 13 | Awaiting Josh | 2026-11-27 | | T1, T2, T3, less what earlier phases added |
 | Closing | Not started | | | The audit, G5's release step, the timed workarounds' list |
 
 ## How to Work This Plan
@@ -1173,6 +1173,43 @@ though it is shortest when taken last.
   days with an injected calendar and date, so that it cannot fail near a daylight-saving change.
 
 **How it differed:**
+
+- **The echo test was half evidence, as Konjugieren's was.** No report can echo the query, since
+  a report stores only enums and counts. That half is now `aReportKeepsNoText`, which fails if
+  any stored property of a report is text. The other half is real: the parameters are strings,
+  and a count sent unbanded would leave the vocabulary. So the sweep stays, renamed
+  `everyParameterValueIsAWordOfTheVocabularyOrABand`. Its four arguments that were already
+  vocabulary words ("opened", "none", "1-2", "guess") are gone, it asserts that no argument is
+  one, and two of its six arguments (levantarse, desvergonzarse) are long enough that an unbanded
+  length would fail it.
+- **`formsAreEveryOneWordFormOnce`** compares four verbs' lists whole (ir, tener, arrepentir,
+  abolir) with lists built cell by cell from the engine through `ConjugationMap.form(of:at:)`, the
+  function the map's tool writes the file with. The bundled file and the engine are the two
+  sides.
+- **The defective verbs' test checks all of them**, not `prefix(20)`. It takes 0.6 s.
+- **`searchNamesFollowThePage` walks `VerbPageForms`' rows**, the ones the page draws, with tú and
+  vos both shown, and asks that each row is the next cell of `allCells` by tense, pronoun, and
+  form. hablar's forms tell its imperatives' persons apart, since those rows have no pronoun.
+  Swapping tú and vos on the page fails it, and fails one of the new grid tests too; I tried the
+  swap and reverted it.
+- **The pattern lists are pinned by name**: 22 strong preterites and 17 irregular participles, the
+  same counts as before, so no verb had moved.
+- **T2's other items were covered already**, by Phases 1 (the rows' lines, the links' marks, the ñ
+  twins), 4 (the rotation), 5 (the visit), 8 (`editDistance`), and 9 and 10 (the verb list). The
+  review now says so under each. `gridPersons(for:)` got two tests in `ModelInfoTests`: its
+  columns for each choice, and that they are the verb page's rows in the same order, which is what
+  its comment promises.
+- **Twelve more suites than the review named built a `Quiz` without `practice:`.** All fourteen
+  sites now pass a store of their own. `.claude/rules/testing.md` gained a short section saying
+  so, and saying that a test which counts days gives its store a calendar and a date.
+- **`World.uiTest`** had the same two fakes as `World.unitTest`, and now shares one too.
+- **`PracticeRecordTests`** gives every store the suite's UTC calendar and counts back by calendar
+  days from a fixed noon, passing `at:` to every call that reads the date. Nothing in it reads
+  `Date.now` now.
+- **The suite** is 1,497 Swift Testing tests in 93 suites and 11 XCTest tests, in 87 s, against
+  Phase 12's 164 s on the same machine. The slowest are "ConjugationMap" (20 s), "The bundled map"
+  (14 s), and `ReverseLookupTests` (10 s), much as at the baseline. `swiftlint` is clean. Nothing
+  on screen changed, so no simulator check was run.
 
 ## Closing
 

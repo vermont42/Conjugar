@@ -18,7 +18,7 @@ import Testing
       Settings.quizLevelKey: level.rawValue,
       Settings.regionKey: region.rawValue
     ]))
-    return Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false)
+    return Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false, practice: PracticeStore(getterSetter: GetterSetterFake()))
   }
 
   private func rightAnswer(_ quiz: Quiz) -> String {

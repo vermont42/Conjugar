@@ -23,7 +23,7 @@ import Testing
       Settings.regionKey: Region.spain.rawValue,
       Settings.quizClockKey: clock.rawValue
     ]))
-    return Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false)
+    return Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false, practice: PracticeStore(getterSetter: GetterSetterFake()))
   }
 
   private func rightAnswer(_ quiz: Quiz) -> String {

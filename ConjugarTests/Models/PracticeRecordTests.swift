@@ -35,8 +35,15 @@ struct PracticeRecordTests {
 
   private let imperfecto = PracticeItem.pattern(tenseKey: "imperfecto_de_indicativo", person: "fs", ending: "er")
 
-  private func daysAgo(_ days: Double) -> Date {
-    Date.now.addingTimeInterval(-days * 86_400)
+  /// The store's tests run at a fixed noon in UTC, and count back by calendar days. Counting back
+  /// from `Date.now` by flat 86,400-second days, in the device's time zone, gave one day too few
+  /// in the hour after midnight within ten days of a spring-forward change.
+  private var now: Date {
+    date(20)
+  }
+
+  private func daysAgo(_ days: Int) -> Date {
+    calendar.date(byAdding: .day, value: -days, to: now) ?? .distantPast
   }
 
   @Test func answersMoveAnItemUpTheLadderAndAMissStartsItOver() {
@@ -141,53 +148,53 @@ struct PracticeRecordTests {
   }
 
   @Test func theCardOffersTheVerbLongestOverdueWithItsDueKeyConjugations() throws {
-    let store = PracticeStore(getterSetter: GetterSetterFake())
+    let store = PracticeStore(getterSetter: GetterSetterFake(), calendar: calendar)
     store.recordLookup("tener", source: .search, at: daysAgo(10))
     store.recordLookup("ir", source: .search, at: daysAgo(5))
     store.recordAnswer(to: QuizQuestion("hablar", .imperfectoDeIndicativo, .firstSingular), isCorrect: false, at: daysAgo(20))
 
-    let offer = try #require(store.cardOffer())
+    let offer = try #require(store.cardOffer(at: now))
     #expect(offer.entry.infinitive == "tener")
     #expect(offer.items == PracticeItem.keyConjugations(of: "tener"))
     #expect(offer.daysSinceActivity == 10)
     #expect(offer.wasLookedUp)
 
-    store.recordReview(offer)
-    #expect(store.cardOffer()?.entry.infinitive == "ir")
+    store.recordReview(offer, at: now)
+    #expect(store.cardOffer(at: now)?.entry.infinitive == "ir")
   }
 
   @Test func theCardSaysPracticedWhenAnAnswerCameAfterTheLookup() throws {
-    let store = PracticeStore(getterSetter: GetterSetterFake())
+    let store = PracticeStore(getterSetter: GetterSetterFake(), calendar: calendar)
     store.recordLookup("tener", source: .search, at: daysAgo(10))
     store.recordAnswer(to: QuizQuestion("tener", .futuroDeIndicativo, .firstSingular), isCorrect: false, at: daysAgo(4))
 
-    let offer = try #require(store.cardOffer())
+    let offer = try #require(store.cardOffer(at: now))
     #expect(!offer.wasLookedUp)
     #expect(offer.daysSinceActivity == 4)
     #expect(offer.items.contains(key("tener", .yoFuturo)))
 
-    store.snooze(offer)
-    #expect(store.cardOffer() == nil)
+    store.snooze(offer, at: now)
+    #expect(store.cardOffer(at: now) == nil)
   }
 
   @Test func aRegularVerbsPatternsAreNeverOnTheCard() {
-    let store = PracticeStore(getterSetter: GetterSetterFake())
+    let store = PracticeStore(getterSetter: GetterSetterFake(), calendar: calendar)
     store.recordAnswer(to: QuizQuestion("hablar", .presenteDeIndicativo, .firstSingular), isCorrect: false, at: daysAgo(10))
     store.recordLookup("hablar", source: .search, at: daysAgo(10))
 
     #expect(!store.isEmpty)
-    #expect(store.cardOffer() == nil)
+    #expect(store.cardOffer(at: now) == nil)
   }
 
   @Test func theRecordSurvivesARelaunch() {
     let getterSetter = GetterSetterFake()
-    let store = PracticeStore(getterSetter: getterSetter)
+    let store = PracticeStore(getterSetter: getterSetter, calendar: calendar)
     store.recordLookup("tener", source: .search, at: daysAgo(3))
-    store.recordAnswer(to: QuizQuestion("comer", .imperfectoDeIndicativo, .firstSingular), isCorrect: false)
+    store.recordAnswer(to: QuizQuestion("comer", .imperfectoDeIndicativo, .firstSingular), isCorrect: false, at: now)
 
-    let reloaded = PracticeStore(getterSetter: getterSetter)
+    let reloaded = PracticeStore(getterSetter: getterSetter, calendar: calendar)
     #expect(reloaded.record == store.record)
-    #expect(reloaded.cardOffer()?.entry.infinitive == "tener")
+    #expect(reloaded.cardOffer(at: now)?.entry.infinitive == "tener")
   }
 
   /// The review card kept one schedule per irregular verb on `LearnerVerbs.Entry.review`, and an
@@ -200,7 +207,7 @@ struct PracticeRecordTests {
     let json = #"{"entries":{"tener":{"infinitive":"tener","openCount":2,"lastOpened":\#(opened),"review":{"box":2,"due":\#(due)}},"ir":{"infinitive":"ir","openCount":1,"lastOpened":\#(opened)},"hablar":{"infinitive":"hablar","openCount":1,"lastOpened":\#(opened)},"ser":{"infinitive":"ser","openCount":0,"starred":0}}}"#
     getterSetter.set(key: LearnerVerbs.storageKey, value: json)
 
-    let store = PracticeStore(getterSetter: getterSetter)
+    let store = PracticeStore(getterSetter: getterSetter, calendar: calendar)
 
     for item in PracticeItem.keyConjugations(of: "tener") {
       #expect(store.record.entry(for: item)?.schedule == ReviewSchedule(box: 2, due: Date(timeIntervalSinceReferenceDate: due)))
@@ -210,7 +217,7 @@ struct PracticeRecordTests {
       #expect(store.record.entry(for: item)?.lastLookedUp == Date(timeIntervalSinceReferenceDate: opened))
     }
     #expect(store.record.entries.keys.allSatisfy { $0.hasPrefix("key:tener:") || $0.hasPrefix("key:ir:") })
-    #expect(store.cardOffer()?.entry.infinitive == "ir")
+    #expect(store.cardOffer(at: now)?.entry.infinitive == "ir")
     let saved = try #require(getterSetter.get(key: PracticeRecord.storageKey).flatMap(PracticeRecord.init(json:)))
     #expect(saved == store.record)
     // The learner's verbs still decode, without their old schedules.
@@ -226,7 +233,7 @@ struct PracticeRecordTests {
     let corrupt = #"{"entries":{"key:ir:participio":{}}}"#
     getterSetter.set(key: PracticeRecord.storageKey, value: corrupt)
 
-    let store = PracticeStore(getterSetter: getterSetter)
+    let store = PracticeStore(getterSetter: getterSetter, calendar: calendar)
 
     #expect(store.record.isEmpty)
     #expect(getterSetter.get(key: PracticeRecord.unreadableKey) == corrupt)
@@ -235,7 +242,7 @@ struct PracticeRecordTests {
 
   @Test func aFirstLaunchBacksUpNothing() {
     let getterSetter = GetterSetterFake()
-    _ = PracticeStore(getterSetter: getterSetter)
+    _ = PracticeStore(getterSetter: getterSetter, calendar: calendar)
     #expect(getterSetter.get(key: PracticeRecord.unreadableKey) == nil)
   }
 
@@ -243,12 +250,12 @@ struct PracticeRecordTests {
     let getterSetter = GetterSetterFake()
     let opened = daysAgo(10).timeIntervalSinceReferenceDate
     getterSetter.set(key: LearnerVerbs.storageKey, value: #"{"entries":{"ir":{"infinitive":"ir","openCount":1,"lastOpened":\#(opened)}}}"#)
-    let store = PracticeStore(getterSetter: getterSetter)
+    let store = PracticeStore(getterSetter: getterSetter, calendar: calendar)
     #expect(!store.isEmpty)
 
     store.reset()
 
     #expect(store.isEmpty)
-    #expect(PracticeStore(getterSetter: getterSetter).isEmpty)
+    #expect(PracticeStore(getterSetter: getterSetter, calendar: calendar).isEmpty)
   }
 }

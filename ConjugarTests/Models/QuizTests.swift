@@ -32,7 +32,7 @@ import Testing
           Settings.quizLevelKey: testCase.level.rawValue,
           Settings.regionKey: testCase.region.rawValue
         ]))
-        let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: shouldShuffle)
+        let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: shouldShuffle, practice: PracticeStore(getterSetter: GetterSetterFake()))
         quiz.start()
 
         let questionCount = quiz.questionCount

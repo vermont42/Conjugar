@@ -28,7 +28,9 @@ import Testing
       Settings.regionKey: region.rawValue,
       Settings.secondSingularQuizKey: secondSingular.rawValue
     ]))
-    return Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: shouldShuffle)
+    // A store of its own, so that answers here never reach `Current.practice`, from which a
+    // later suite's ranked quiz would draw due items.
+    return Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: shouldShuffle, practice: PracticeStore(getterSetter: GetterSetterFake()))
   }
 
   private static func conjugates(_ question: Quiz.Question) -> Bool {

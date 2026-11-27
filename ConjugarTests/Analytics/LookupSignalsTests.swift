@@ -199,10 +199,28 @@ struct LookupSignalsTests {
     ])
   }
 
-  /// The policy promises that nothing typed is sent. Every value must come from a fixed
-  /// vocabulary, whatever the query, including a query that is itself one of those values.
-  @Test(arguments: ["hablar", "come", "opened", "none", "1-2", "guess", "ñ", "levantarse"])
-  func noParameterCanEchoTheQuery(query: String) {
+  /// The policy promises that nothing typed is sent. A report stores only enums and counts, so it
+  /// cannot hold the query to echo. This fails if a stored property of a report is ever text.
+  @Test func aReportKeepsNoText() {
+    let query = "levantarse"
+    let matches = VerbSearch.matches(for: query, in: VerbMap.shared.entries.values)
+    let reports: [SearchReport] = [
+      .ended(query: query, source: .deeplink, matches: matches),
+      .openedGuess(query: query, source: .tab),
+      .opened(query: query, source: .control, resultCount: matches.count, kind: matches.first?.kind ?? .glossSubstring, position: 0)
+    ]
+    for report in reports {
+      for child in Mirror(reflecting: report).children {
+        #expect(!(child.value is String) && !(child.value is Substring), "\(child.label ?? "?") holds text")
+      }
+    }
+  }
+
+  /// Every value comes from a fixed vocabulary or a band. No query here is itself a word of the
+  /// vocabulary, so an echo would fail, and a count sent unbanded would too: levantarse's length
+  /// would be "10", and desvergonzarse's "14", neither of which is a band.
+  @Test(arguments: ["hablar", "come", "ñ", "levantarse", "desvergonzarse", "xyzzyq"])
+  func everyParameterValueIsAWordOfTheVocabularyOrABand(query: String) {
     let matches = VerbSearch.matches(for: query, in: VerbMap.shared.entries.values)
     let reports: [SearchReport] = [
       .ended(query: query, source: .deeplink, matches: matches),
@@ -211,10 +229,11 @@ struct LookupSignalsTests {
     ]
     let vocabulary = Set(SearchOutcome.allCases.map(\.rawValue) + SearchMatchKind.allCases.map(\.rawValue) + AnalyticsSource.allCases.map(\.rawValue))
       .union(["1-2", "3-5", "6-9", "10+", "0", "1", "2-10", "11+", "2-5", "6+", "none"])
+    #expect(!vocabulary.contains(query))
     for report in reports {
       #expect(Set(report.parameters.keys) == ["source", "outcome", "queryLength", "resultCount", "matchKind", "resultPosition"])
       for value in report.parameters.values {
-        #expect(vocabulary.contains(value))
+        #expect(vocabulary.contains(value), "\(value)")
       }
     }
   }

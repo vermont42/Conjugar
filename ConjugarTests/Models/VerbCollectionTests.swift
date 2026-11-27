@@ -57,8 +57,14 @@ import UIKit
   @Test func patternListsAreTheirBandsBaseVerbs() {
     #expect(Self.infinitives(.goVerbs) == ["tener", "hacer", "decir", "poner", "salir", "venir", "caer", "oír", "traer", "valer", "satisfacer"])
     #expect(Self.infinitives(.irregularFuture) == ["tener", "hacer", "poder", "decir", "haber", "saber", "querer", "poner", "salir", "venir", "valer", "caber", "satisfacer"])
-    #expect(VerbCollection.strongPreterite.verbs.count == 22)
-    #expect(VerbCollection.irregularParticiple.verbs.count == 17)
+    #expect(Self.infinitives(.strongPreterite) == [
+      "estar", "tener", "hacer", "poder", "decir", "haber", "saber", "querer", "poner", "venir", "producir",
+      "traer", "reducir", "andar", "conducir", "caber", "introducir", "traducir", "satisfacer", "inducir", "deducir", "seducir"
+    ])
+    #expect(Self.infinitives(.irregularParticiple) == [
+      "hacer", "decir", "ver", "poner", "volver", "abrir", "escribir", "morir", "cubrir",
+      "romper", "resolver", "describir", "imprimir", "inscribir", "satisfacer", "suscribir", "disolver"
+    ])
     for collection in VerbCollection.featured where collection != .top100 {
       for entry in collection.verbs {
         #expect(entry.isIn(.top1000), "\(entry.infinitive)")
@@ -175,7 +181,7 @@ import UIKit
 
   @Test func aCollectionsQuizAsksOnlyItsVerbs() {
     let settings = Settings(getterSetter: GetterSetterFake())
-    let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: true)
+    let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: true, practice: PracticeStore(getterSetter: GetterSetterFake()))
     #expect(quiz.start(scope: .collection(.irregularFuture, title: "")))
     let verbs = Set(Self.infinitives(.irregularFuture))
     #expect(quiz.questions.count == QuizScope.roundLength)

@@ -139,6 +139,9 @@ class World {
 
   static let unitTest: World = {
     let getterSetter = GetterSetterFake()
+    // The App Group's stand-in. The two stores share it, as on a device: `PracticeStore` reads
+    // `LearnerVerbs` from its own store on its first launch.
+    let sharedGetterSetter = GetterSetterFake()
     let settings = Settings(getterSetter: getterSetter)
     let gameCenter = GameCenterFake()
 
@@ -153,8 +156,8 @@ class World {
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerDummy(),
       hapticPlayer: HapticPlayerDummy(),
-      learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake()),
-      practice: PracticeStore(getterSetter: GetterSetterFake()),
+      learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter),
+      practice: PracticeStore(getterSetter: sharedGetterSetter),
       liveActivities: LiveActivitiesSpy(),
       reminderScheduler: ReminderSchedulerSpy()
     )
@@ -174,6 +177,7 @@ class World {
 
     let dictionary = [Settings.regionKey: region.rawValue, Settings.quizLevelKey: quizLevel.rawValue]
     let getterSetter = GetterSetterFake(dictionary: dictionary)
+    let sharedGetterSetter = GetterSetterFake()
     let settings = Settings(getterSetter: getterSetter)
     let gameCenter = GameCenterFake()
 
@@ -188,8 +192,8 @@ class World {
       getterSetter: getterSetter,
       soundPlayer: SoundPlayerDummy(),
       hapticPlayer: HapticPlayerDummy(),
-      learnerVerbs: LearnerVerbStore(getterSetter: GetterSetterFake()),
-      practice: PracticeStore(getterSetter: GetterSetterFake()),
+      learnerVerbs: LearnerVerbStore(getterSetter: sharedGetterSetter),
+      practice: PracticeStore(getterSetter: sharedGetterSetter),
       liveActivities: LiveActivitiesSpy(),
       reminderScheduler: ReminderSchedulerSpy()
     )

@@ -157,7 +157,7 @@ struct ConjugationMapTests {
       // A defective verb's formless slot is "-" in the file and nil here, never a guess.
       let defective = ConjugationMap.bundled.paradigms().filter { $0.value.contains(nil) }
       #expect(!defective.isEmpty)
-      for (infinitive, forms) in defective.prefix(20) {
+      for (infinitive, forms) in defective {
         for (cell, form) in zip(ConjugationMap.oneWordCells, forms) where form == nil {
           let engineForm = try? TenseBridge.conjugate(infinitive: infinitive, tense: cell.tense, personNumber: cell.personNumber).get()
           #expect(engineForm?.isEmpty ?? true, "\(infinitive) \(cell.code)")

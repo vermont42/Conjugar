@@ -209,7 +209,7 @@ import Testing
       Settings.regionKey: region.rawValue,
       Settings.secondSingularQuizKey: SecondSingularQuiz.tu.rawValue
     ]))
-    let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: false)
+    let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: false, practice: PracticeStore(getterSetter: GetterSetterFake()))
     var counts: [DisplayTense: [DisplayPersonNumber: Int]] = [:]
     for _ in 0..<quizzes {
       quiz.start()
@@ -245,7 +245,7 @@ import Testing
 
   @Test func aScopedQuizAsksANegativeTuCommand() {
     let settings = Settings(getterSetter: GetterSetterFake(dictionary: [Settings.quizLevelKey: QuizLevel.intermediate.rawValue]))
-    let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: false)
+    let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), shouldShuffle: false, practice: PracticeStore(getterSetter: GetterSetterFake()))
     quiz.start(scope: .myVerbs(["hablar", "comer", "vivir", "tener", "poner", "decir", "hacer", "salir", "venir", "ir"]))
     #expect(quiz.questions.contains { $0.tense == .imperativoNegativo && $0.personNumber == .secondSingularTú })
     quiz.quit()

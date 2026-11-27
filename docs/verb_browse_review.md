@@ -697,39 +697,69 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
     `enabled`, and `streak`, which had no literal in the tests, as the reviewer said.*
   - `noParameterCanEchoTheQuery` holds by the types, and four of its eight arguments are words
     already in the vocabulary.
+    *Fixed on `master`, 2026-11-27, in Phase 13 of `plans/verb_browse_fixes.md`: `aReportKeepsNoText` pins the types,
+    failing if a stored property of a report is text, and the sweep, renamed
+    `everyParameterValueIsAWordOfTheVocabularyOrABand`, takes only queries outside the vocabulary,
+    two of them long enough that an unbanded length would fail it.*
   - `VerbLookupTests.swift:147` asserts `named.count == maxNamedVerbs || named.contains("comer")`,
     which passes in almost any outcome. *Fixed on `master`, 2026-11-25, in Phase 1 of
     `plans/verb_browse_fixes.md`: it pins the four verbs.*
   - `formsAreEveryOneWordFormOnce` (`VerbSpotlightTests.swift:30-32`) checks that one alternate
     name is present.
+    *Fixed on `master`, 2026-11-27, in Phase 13 of `plans/verb_browse_fixes.md`: it now runs on four verbs (ir, tener, arrepentir,
+    abolir) and compares each list whole with one built cell by cell from the engine through
+    `ConjugationMap.form(of:at:)`.*
   - `ConjugationMapTests.swift:160` takes `prefix(20)` of a dictionary, a different twenty each
     run.
+    *Fixed on `master`, 2026-11-27, in Phase 13 of `plans/verb_browse_fixes.md`: the test checks every defective verb.*
   - `ConjugationTableTests.swift:64-70` checks that `ConjugationMatch.allCells` follows
     `ConjugationTable.all`, from which `allCells` is built (`ConjugationMatch.swift:34-43`), so it
     asserts a definition (Read).
+    *Fixed on `master`, 2026-11-27, in Phase 13 of `plans/verb_browse_fixes.md`: `searchNamesFollowThePage` walks the rows
+    `VerbPageForms` draws, with tú and vos shown, and asks that each is the next cell of `allCells`
+    by tense, pronoun, and form.*
   - `strongPreterite` and `irregularParticiple` are pinned by count alone
     (`VerbCollectionTests.swift:60-61`), so one verb swapped for another passes.
+    *Fixed on `master`, 2026-11-27, in Phase 13 of `plans/verb_browse_fixes.md`: both are pinned by name, 22 and 17 verbs, as
+    the -go and future lists were.*
 - **T2. Branches with no test.**
   - The lines a search row shows for an enclitic query ([C1](#c1)), and the marks a lookup's link
     produces ([C6](#c6)).
+    *Covered on `master` before Phase 13 of `plans/verb_browse_fixes.md` (2026-11-27): Phase 1 added the rows' lines and the links' marks
+    (`ReverseLookupTests`, `AppRouterTests`).*
   - An ñ twin in Look Up a Verb ([C4](#c4)).
+    *Covered on `master` before Phase 13 of `plans/verb_browse_fixes.md` (2026-11-27): Phase 1, in `VerbLookupTests`.*
   - The rotation with a list that changes ([C3](#c3)).
+    *Covered on `master` before Phase 13 of `plans/verb_browse_fixes.md` (2026-11-27): Phase 4, in `WidgetWeekTests`.*
   - A visit's begin and end across `scenePhase` and a sheet ([G3](#gaps-between-the-docs-and-the-code)).
+    *Covered on `master` before Phase 13 of `plans/verb_browse_fixes.md` (2026-11-27): Phase 5, in `VerbVisitTrackerTests`.*
   - Everything in `VerbBrowseView` but one static function ([S1](#smells)).
+    *Covered on `master` before Phase 13 of `plans/verb_browse_fixes.md` (2026-11-27): Phases 9 and 10 moved the list's logic into
+    `VerbBrowseSearch`, which `VerbBrowseSearchTests` covers.*
   - The widget's link literals: nothing in `ConjugarTests` names `WidgetDeeplink`, so a typo in
     `source=widget` would quietly report `deeplink` (Read). *Fixed on `master`, 2026-11-26, in Phase 6 of `plans/verb_browse_fixes.md`: `AppRouterTests`
     pins each of the widgets' links whole and routes it.*
   - `editDistance(_:_:limit:)` against the unlimited version.
+    *Covered on `master` before Phase 13 of `plans/verb_browse_fixes.md` (2026-11-27): Phase 8,
+    `SpellingComparisonTests.theLimitedDistanceAgreesWithTheUnlimitedOne`.*
   - `ModelView.gridPersons(for:)`.
+    *Fixed on `master`, 2026-11-27, in Phase 13 of `plans/verb_browse_fixes.md`: `ModelInfoTests` pins its columns for tú, vos, and
+    both, and that they are the verb page's rows in the same order.*
 - **T3. Tests that share state or depend on the clock (Reviewer).**
   - `QuizScopeTests` and `VerbCollectionTests:171-179` build a `Quiz` without `practice:`, so
     their answers land in the global `Current.practice`, and a later ranked quiz draws due items
     from whatever was left there.
+    *Fixed on `master`, 2026-11-27, in Phase 13 of `plans/verb_browse_fixes.md`: both, and the twelve other suites that built a
+    `Quiz` the same way, now give each quiz a `PracticeStore` of its own.*
   - `World.unitTest` gives `learnerVerbs` and `practice` two different fakes, though
     `PracticeStore`'s comment says they must share one store.
+    *Fixed on `master`, 2026-11-27, in Phase 13 of `plans/verb_browse_fixes.md`: `World.unitTest` and `World.uiTest` now give both
+    stores one `GetterSetterFake`, as the device and simulator worlds give them the App Group's.*
   - `PracticeRecordTests.swift:38-40` subtracts flat 86,400-second days from `Date.now` and
     asserts an exact day count, which fails in the first hour after midnight within ten days of a
     spring-forward change.
+    *Fixed on `master`, 2026-11-27, in Phase 13 of `plans/verb_browse_fixes.md`: the store's tests count back by calendar days
+    from a fixed noon, in the suite's UTC calendar, which each store is given.*
 
 ## Costs of Settled Decisions
 

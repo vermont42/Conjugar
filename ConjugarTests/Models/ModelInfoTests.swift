@@ -16,6 +16,27 @@ struct ModelInfoTests {
     ModelInfo.all.first { $0.classNumber == classNumber }
   }
 
+  /// The model page's grid shows the second singular as the learner chose, tú, vos, or both.
+  @Test(arguments: zip(
+    [SecondSingularBrowse.tu, .vos, .both],
+    [
+      [DisplayPersonNumber.firstSingular, .secondSingularTú, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural],
+      [.firstSingular, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural],
+      [.firstSingular, .secondSingularTú, .secondSingularVos, .thirdSingular, .firstPlural, .secondPlural, .thirdPlural]
+    ]
+  ))
+  func theGridsPersonsFollowTheSecondSingularChoice(secondSingular: SecondSingularBrowse, persons: [DisplayPersonNumber]) {
+    #expect(ModelView.gridPersons(for: secondSingular) == persons)
+  }
+
+  /// The grid's columns are the verb page's rows, in the same order, for each choice.
+  @Test(arguments: [SecondSingularBrowse.tu, .vos, .both])
+  func theGridsPersonsAreTheVerbPagesRows(secondSingular: SecondSingularBrowse) throws {
+    let page = VerbPageForms(verb: "hablar", marks: [], secondSingular: secondSingular)
+    let presente = try #require(page.sections.first { $0.tense == .presenteDeIndicativo })
+    #expect(presente.rows.map(\.pronoun) == ModelView.gridPersons(for: secondSingular).map(\.pronoun))
+  }
+
   @Test func catalogYields102RowsWithNoAliasRows() {
     // 106 class numbers − the 4 prefix-accent aliases folded into their parents.
     #expect(ModelInfo.all.count == 102)

@@ -28,7 +28,7 @@ import Testing
       Settings.quizLevelKey: level.rawValue,
       Settings.regionKey: region.rawValue
     ]))
-    let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), randomSource: SplitMix64(seed: seed))
+    let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), randomSource: SplitMix64(seed: seed), practice: PracticeStore(getterSetter: GetterSetterFake()))
     quiz.start(scope: QuizScope(kind: .allVerbs, verbs: nil, questionCount: count, source: .tab))
     let questions = quiz.questions
     quiz.quit()
@@ -202,7 +202,7 @@ import Testing
   @Test func aScopedQuizAsksOnlyItsVerbs() {
     let verbs = ["hablar", "comer", "vivir"]
     let settings = Settings(getterSetter: GetterSetterFake(dictionary: [Settings.quizLevelKey: QuizLevel.advanced.rawValue]))
-    let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), randomSource: SplitMix64(seed: 3))
+    let quiz = Quiz(settings: settings, gameCenter: GameCenterFake(), randomSource: SplitMix64(seed: 3), practice: PracticeStore(getterSetter: GetterSetterFake()))
     #expect(quiz.start(scope: .myVerbs(verbs)))
     #expect(quiz.questions.allSatisfy { verbs.contains($0.verb) })
     #expect(quiz.questions.allSatisfy { !isIrregular($0) })

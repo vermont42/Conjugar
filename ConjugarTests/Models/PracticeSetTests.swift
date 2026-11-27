@@ -38,7 +38,7 @@ import UIKit
 
   private func makeQuiz(level: QuizLevel, gameCenter: GameCenter = GameCenterFake()) -> Quiz {
     let settings = Settings(getterSetter: GetterSetterFake(dictionary: [Settings.quizLevelKey: level.rawValue]))
-    return Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false)
+    return Quiz(settings: settings, gameCenter: gameCenter, shouldShuffle: false, practice: PracticeStore(getterSetter: GetterSetterFake()))
   }
 
   /// Shared links outlive the version that made them, so their form is permanent.

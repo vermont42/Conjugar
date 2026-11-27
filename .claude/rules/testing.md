@@ -26,3 +26,12 @@ paths:
 > the rule still stands, since MainActor default isolation remains: a new pure-Swift
 > `@MainActor` object deallocated by XCTest will hit the same double-free — so **write new
 > tests in Swift Testing.**
+
+## Give a test's `Quiz` and `PracticeStore` their own state
+
+`Current` is one global, shared by every suite in the run. A `Quiz` built without
+`practice:` records its answers in `Current.practice`, from which any later ranked quiz draws due
+items, so every test that builds a `Quiz` passes `practice: PracticeStore(getterSetter:
+GetterSetterFake())`, or a store it means to inspect. A test that counts days on a
+`PracticeStore` gives it a fixed calendar (`calendar:`) and a fixed date (`at:`) rather than
+counting back from `Date.now`, which is off by one near a daylight-saving change.

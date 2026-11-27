@@ -60,13 +60,22 @@ struct ConjugationTableTests {
     #expect(marked == [.simple, .compound])
   }
 
-  /// A search result names its cells in the order the page shows them.
+  /// A search result names its cells in the order the page shows them. The page draws its rows
+  /// from `VerbPageForms`, so walk those, with tú and vos both shown, and ask that each row is the
+  /// next cell of `allCells`: the same tense, and the same pronoun and form. hablar's forms tell
+  /// its imperatives' persons apart, which have no pronoun.
+  @MainActor
   @Test func searchNamesFollowThePage() {
-    var tenses: [DisplayTense] = []
-    for cell in ConjugationMatch.allCells where cell.personNumber != .none && tenses.last != cell.tense {
-      tenses.append(cell.tense)
+    let page = VerbPageForms(verb: "hablar", marks: [], secondSingular: .both)
+    let drawn = page.sections.flatMap { section in
+      section.rows.map { "\(section.tense) \($0.pronoun ?? "-") \($0.form)" }
     }
-    #expect(tenses == ConjugationTable.all.map(\.tense))
+    let named = ConjugationMatch.allCells.filter { $0.personNumber != .none }.map { cell in
+      let pronoun = cell.tense.isCommand ? "-" : cell.personNumber.pronoun
+      let form = (try? TenseBridge.conjugate(infinitive: "hablar", tense: cell.tense, personNumber: cell.personNumber, pronoun: .written).get()) ?? ""
+      return "\(cell.tense) \(pronoun) \(form)"
+    }
+    #expect(named == drawn)
   }
 
   @MainActor

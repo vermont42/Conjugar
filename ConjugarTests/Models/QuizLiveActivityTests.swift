@@ -21,7 +21,7 @@ import Testing
   }
 
   private func startedQuiz(scope: QuizScope = .allVerbs) -> Quiz {
-    let quiz = Quiz(settings: Settings(getterSetter: GetterSetterFake()), gameCenter: GameCenterFake(), shouldShuffle: false)
+    let quiz = Quiz(settings: Settings(getterSetter: GetterSetterFake()), gameCenter: GameCenterFake(), shouldShuffle: false, practice: PracticeStore(getterSetter: GetterSetterFake()))
     #expect(quiz.start(scope: scope))
     return quiz
   }

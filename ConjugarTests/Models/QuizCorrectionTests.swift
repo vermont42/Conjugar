@@ -16,7 +16,7 @@ import Testing
 @MainActor
 @Suite struct QuizCorrectionTests {
   private func startedQuiz() -> Quiz {
-    let quiz = Quiz(settings: Settings(getterSetter: GetterSetterFake()), gameCenter: GameCenterFake(), shouldShuffle: false)
+    let quiz = Quiz(settings: Settings(getterSetter: GetterSetterFake()), gameCenter: GameCenterFake(), shouldShuffle: false, practice: PracticeStore(getterSetter: GetterSetterFake()))
     #expect(quiz.start(scope: .verbPage("hablar")))
     #expect(quiz.questionCount > 1)
     return quiz

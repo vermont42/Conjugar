@@ -12819,3 +12819,37 @@ that types a bad answer and taps Continue. With the app sent home in the middle,
 showed "1/10" in the Dynamic Island, and the collection's quiz, Test Me, and the practice set
 showed nothing, as before. One small surprise was that Test Me's button lives in the toolbar,
 where its accessibility identifier never reaches AXe, so the script had to tap it by position.
+
+## Tests That Prove What They Claim (2026-11-27)
+
+The review that this plan works from had a section on tests that pass for the wrong reason, and
+Phase 13 took what earlier phases had left of it. None of the repairs found a bug in the app. What
+they found was tests that would have stayed green through one.
+
+The most instructive was the analytics test that promises nothing typed is ever sent. It fed eight
+queries through the search report and checked that every parameter came from a fixed vocabulary.
+Four of the eight were vocabulary words already ("opened", "none", "1-2", "guess"), so an echo of
+those would have passed. The review also said the test held by the types, since a report stores
+only enums and counts. Konjugieren had fixed the same test the day before and found the review
+half right there, and the same was true here. The echo is impossible by construction, so that half
+became a test of the construction: it reflects over a report and fails if any stored property is
+text. The other half is not guaranteed by the types at all, because the parameters are strings and
+a count could be sent unbanded. So the sweep stayed, with queries outside the vocabulary, two of
+them long enough that an unbanded length of 10 or 14 would fail it.
+
+Two tests asserted their own definitions. One checked that the search's list of cells follows the
+verb page's tense order by comparing it with the table the list is built from. It now walks the
+rows the page actually draws and compares tense, pronoun, and form, row by row. The other checked
+the Spotlight forms by looking for seven familiar ones; it now compares whole lists, for four verbs
+chosen to be awkward, with lists built from the engine one cell at a time. To be sure the page
+test could fail, I swapped tú and vos on the page and ran it: it failed, and so did a new test of
+the model page's grid columns, which promise to follow the verb page.
+
+The review named two suites that let their quizzes write into the app-wide practice store, where a
+later ranked quiz would find the leftovers as due items. A search found twelve more doing the same
+thing. All fourteen now pass a store of their own, and the testing rules say why. The last repair
+was a clock: a test counted back from `Date.now` in flat 86,400-second days, which comes out a day
+short just after midnight near a daylight-saving change. It now counts calendar days from a fixed
+noon in UTC.
+
+The suite went from 1,494 tests to 1,497 and ran in 87 seconds.

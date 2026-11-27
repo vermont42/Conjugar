@@ -27,11 +27,15 @@ import Testing
     #expect(VerbSpotlight.glossPhrases(in: gloss) == phrases)
   }
 
-  @Test func formsAreEveryOneWordFormOnce() throws {
-    let ir = try #require(Self.forms["ir"])
-    #expect(ir.count == Set(ir).count)
-    #expect(Set(["voy", "fue", "fui", "yendo", "ido", "iba", "vaya"]).isSubset(of: Set(ir)))
-    #expect(!ir.contains("ir"))
+  /// The forms are read back from the bundled map. The oracle builds them from the engine, cell by
+  /// cell, as the map's tool does: every one-word form but the infinitive, each at its first cell.
+  /// ir is suppletive, arrepentir reflexive-only, and abolir defective.
+  @Test(arguments: ["ir", "tener", "arrepentir", "abolir"])
+  func formsAreEveryOneWordFormOnce(infinitive: String) throws {
+    let forms = try #require(Self.forms[infinitive])
+    let expected = ConjugationMap.oneWordCells.dropFirst().compactMap { ConjugationMap.form(of: infinitive, at: $0) }.uniqued()
+    #expect(forms == expected)
+    #expect(forms.count == Set(forms).count)
   }
 
   @Test func irCanBeFoundByItsFormsAndItsGloss() throws {

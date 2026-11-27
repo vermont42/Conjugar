@@ -28,7 +28,7 @@ import Testing
       Settings.regionKey: region.rawValue,
       Settings.secondSingularQuizKey: secondSingular.rawValue
     ]))
-    return Quiz(settings: settings, gameCenter: GameCenterFake(), randomSource: SplitMix64(seed: seed))
+    return Quiz(settings: settings, gameCenter: GameCenterFake(), randomSource: SplitMix64(seed: seed), practice: PracticeStore(getterSetter: GetterSetterFake()))
   }
 
   @Test func eachLevelAsksTheTensesOfTheLadder() {
