@@ -20,6 +20,12 @@ enum BrowseLayout {
     GridItem(.adaptive(minimum: 260), spacing: Layout.doubleDefaultSpacing)
   ]
 
+  /// The margins of a browse tab's grid, whose cards would otherwise touch the edges of the screen.
+  /// Its rows reach the edges on purpose. `top` is the space under what precedes the grid.
+  static func gridPadding(top: CGFloat = Layout.defaultSpacing) -> EdgeInsets {
+    EdgeInsets(top: top, leading: 16, bottom: 0, trailing: 16)
+  }
+
   /// Where the Verbs and Models tabs put their search fields. iPadOS 26 shrinks `.automatic` into a
   /// toolbar button, which hides the field and ignores a programmatic `.searchFocused`, so the
   /// Verbs tab's letter keys could not reopen it. On iPad, and on a Mac running the app, a drawer

@@ -377,8 +377,8 @@ tabs. `ModelView` pushes its verbs through the same action.
 
 **A model's page** has a Frequency/Alphabetical control above its verb list, Alphabetical by default
 and not stored. The control, the count, and the list are a `SortableVerbList`, which a
-collection's page (Frequency by default) and the full related list share; its `VerbEntryList` is
-lazy in both size classes, since the cantar model holds 2,968 verbs. Each page sorts its verbs into
+collection's page (Frequency by default) and the full related list share. Its `VerbEntryList`, an
+`AdaptiveRows` of `VerbRowLabel`s like every browse list, is lazy in both size classes, since the cantar model holds 2,968 verbs. Each page sorts its verbs into
 both orders once, as it opens (`VerbSort.sortedLists(of:)`).
 
 ### Copy and share

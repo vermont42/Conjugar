@@ -30,8 +30,8 @@ is filled by the next session, which reads the hash from `git log`.
 | 7 | Done | 2026-11-26 | `1349e60` | D1 (the cheap pieces), D2, G6, G8, S5, and from C13 the Models tab's whitespace and trombone |
 | 8 | Done | 2026-11-26 | `73df869` | D3 (the model layer), F2 (repeated work), S8 |
 | 9 | Done | 2026-11-26 | `102ab01` | S1 (the search model), C10, C11, F1, S2, S3, S4, S7, and the rest of C13 |
-| 10 | Awaiting Josh | 2026-11-26 | | S1 (the rest), G9 |
-| 11 | Not started | | | D1 (`AdaptiveRows` and one row label) |
+| 10 | Done | 2026-11-26 | `ccfb31c` | S1 (the rest), G9 |
+| 11 | Awaiting Josh | 2026-11-27 | | D1 (`AdaptiveRows` and one row label), the rows' Spanish from G9, the outline's corners from C13 |
 | 12 | Not started | | | S6 |
 | 13 | Not started | | | T1, T2, T3, less what earlier phases added |
 | Closing | Not started | | | The audit, G5's release step, the timed workarounds' list |
@@ -1041,6 +1041,57 @@ still scroll the highlighted row into view on the iPad.
 collection's checks, and on the iPad the grid in both orientations.
 
 **How it differed:**
+
+- **The refactor held.** Built from `VerbEntryList` outward, `AdaptiveRows` took all four users
+  without a switch on which one it serves. Their differences became five parameters: the items
+  and their id key path, whether the rows are striped, the highlighted id, the grid's padding, and
+  an identifier as a prefix and a key path. The identifier is not a closure because SwiftLint's
+  `multiple_closures_with_trailing_closure` rejects one beside the open and label closures. The
+  grid strokes its outline with `Layout.cornerRadius`, the card's own.
+- **One builder, not two.** The plan named a row builder and a cell builder. `AdaptiveRows` instead
+  sets `rowLabelStyle` in the environment (`.row` in the stack, `.card` in the grid), and
+  `RowLabel` reads it, so each caller passes one label. `VerbGridCell`, `ModelGridCell`,
+  `VerbCollectionRow`, `VerbCollectionCard`, and `zebraStriped(_:)` are gone. The stripe and the
+  highlight became `Color.listRow(_:isStriped:isHighlighted:)`.
+- **`RowLabel`** is generic over its lines and its trailing part, with a title and an optional
+  symbol. `VerbRowLabel`, `ModelRowLabel` (now in its own file, with `ModelPalette`), and
+  `VerbCollectionRowLabel` fill it in. Verbs and models fit it exactly. The collections were the
+  risk the plan named: their row pads 10 points above and below, not 12, and leaves 12 after the symbol, and their
+  card puts the symbol and count on the first line, spaces its lines 8 apart, and adds the
+  description and a bar. Those are three conditionals on `symbol` in `RowLabel`, each with its
+  reason, plus the collection's own lines, which read the style. I judged that still simpler than
+  two parallel twin views and kept it. A verb's infinitive and a model's exemplar are tagged
+  Spanish; a collection's title, which is in the app's language, is not.
+- **`CollectionProgress`** (`Models/`) counts a collection's opened verbs once and gives the
+  fraction, the sentence, and the bar's value; the label and `VerbCollectionBar` both use it, with
+  one `CollectionProgressBar`. The collection's label lost its `.accessibilityElement(children:
+  .combine)`, since the `Button` around it merges its children already. In the simulator the row
+  still reads "-go Verbs, tengo · hago · digo, 2 of 11 looked up" as one button.
+- **The Models tab's rows are `Button`s** that append to the path, not `NavigationLink`s, since
+  `AdaptiveRows` owns the button. The push is the same.
+- **One change in look that no screenshot shows.** A verb's or a model's card now fills its grid
+  row's height with its content at the top, as a collection's card always did, so that a card
+  beside one with a two-line gloss is as tall rather than centered and shorter. No screen in the
+  comparison had such a gloss, so the shots match.
+- **Size.** The seven changed files lost 352 lines and gained 102; the four new files have 322, a
+  third of them comments. The code is about as long as it was; what went is the duplication.
+  `ModelBrowseView` went from 262 lines to 154.
+- **Tests.** `RowLabelTests` (7 tests): the title's language, a striped and an unstriped row, the
+  highlight over either, and a collection's progress, an empty one included. Nothing tests the
+  outline's corners but the screenshots.
+- **Checked on both simulators,** with one script before and after: the Verbs tab with its review
+  card, a `fue` search with its match lines, tener's model page at its top and scrolled to its
+  verbs, the -go Verbs page, and the Models tab at its top and scrolled. On "Conjugar iPhone 17"
+  (English, dark) and "Conjugar iPad Pro 11" (Spanish, light), every unscrolled shot matched its
+  before shot pixel for pixel, the collections' rows and cards included. The scrolled shots matched
+  once shifted by the swipe's momentum (31 and 43 pixels on the iPhone, 6 and 0 on the iPad).
+  `browse_verb_count`, `verb_row_ser`, `model_row_decir`, and `collection_row_goVerbs` resolved
+  with `tap_id.sh` and opened their pages on the iPhone. On the iPad, the arrow keys outlined
+  hablar in the recents with the card's corners, and thirty presses down "ar" results scrolled
+  argüir, outlined, into view. The iPhone's record now has ser opened once more.
+- **The suite** is 1,492 Swift Testing tests in 93 suites and 11 XCTest tests, in 164 s, under a
+  load average near 250. The slowest were "ConjugationMap" (26.9 s), "The bundled map" (18.3 s),
+  and `PracticeItemTests` (17.1 s). No expectation changed.
 
 ## Phase 12: The Quiz's Scope
 

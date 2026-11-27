@@ -12733,3 +12733,49 @@ sonreír written as `sonre\355r`, an old-style plist escape that is not valid JS
 as read would have stored a broken record. One substitution fixed it, and the record read back
 afterward matched the original exactly. Anyone who backs up a record this way should check the
 backup for escapes before restoring it.
+
+## One Grid-or-List and One Row Label (2026-11-27)
+
+Phase 11 of `plans/verb_browse_fixes.md` took on the last of the duplication the review found in
+the browse screens. Four places drew the same thing: a zebra-striped stack of rows on an iPhone and
+a grid of cards on an iPad. They were the Verbs tab, the Models tab's models, its collections, and
+`VerbEntryList`, which serves a model's page, a collection's page, and a related verb's full list.
+Each row also had a twin for the grid, so a verb, a model, and a collection each had two views
+that said the same thing in two layouts.
+
+The plan warned that a generic version could turn into a type that is mostly switches, and said to
+build it from the plainest user outward and stop if it stopped being simpler. It never did.
+`AdaptiveRows` took all four users with five parameters and no switch on which one it serves: the
+items and their id, whether the rows are striped, which item the arrow keys have highlighted, the
+grid's padding, and an identifier for the screenshot driver. The plan pictured two builders, one
+for a row and one for a card. One builder turned out to be enough. `AdaptiveRows` tells the label
+which it is through the environment, and the label lays itself out either way.
+
+That label, `RowLabel`, is where the risk really lay. A verb's row and a model's row have the same
+shape: a serif gold title, a line or two beneath, and something at the end, a rank or a pill. The
+collections do not. Their rows are a little tighter, so that all five leave the models in view,
+and their cards stack a symbol and a count above the title, then add a description and a progress
+bar. That came to three small conditionals on whether the label has a symbol, each with a comment
+saying why. I kept it, because the alternative was the two twin views the phase existed to
+remove. A collection's count used to be worked out separately by its row and its card; now
+`CollectionProgress` works it out once, and the bar on a collection's page uses it as well.
+
+Two small things came along. The rows now tag a verb's infinitive and a model's exemplar as
+Spanish, so VoiceOver no longer reads "tener" in an English voice. That was the one piece of the
+accessibility finding that the previous phase left for this one. The red outline the arrow keys
+draw on the iPad's grid now follows the card's 12-point corners instead of an 8-point radius that
+cut across them.
+
+The test of a refactor like this is that nothing looks different. I wrote a script that drove both
+simulators through the same screens before and after: the Verbs tab, a search for "fue" with its
+match lines, tener's model page, the -go Verbs page, and the Models tab, at the top and scrolled.
+Every unscrolled screenshot matched its earlier one pixel for pixel, on the iPhone in English and
+dark mode and on the iPad in Spanish and light mode. The scrolled ones matched too, once shifted by
+the few pixels that a swipe's momentum varies. The machine's load average sat between 170 and 450
+throughout, from other projects' builds. My first script's fixed five-second waits caught nothing
+but the launch screen, so it kept the app running and sent it links instead of relaunching it for
+each shot.
+
+The code ended up about as long as it was. The seven changed files lost 352 lines and gained 102,
+and the four new files have 322, a third of them comments. The size held steady, but the copies are
+gone. A change to how a row looks is now made once, in `RowLabel`, instead of in six places.

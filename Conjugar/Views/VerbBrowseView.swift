@@ -16,7 +16,6 @@ struct VerbBrowseView: View {
   /// Lets `search.isEngaged` go a moment after the focus. See `searchFocusChanged`.
   @State private var lingerTask: Task<Void, Never>?
   @Environment(AppRouter.self) private var router
-  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   @Environment(\.scenePhase) private var scenePhase
   private let tryQuizTip = TryQuizTip()
 
@@ -80,10 +79,6 @@ struct VerbBrowseView: View {
       search.releaseWaitingLetters()
       searchIsFocused = true
     }
-  }
-
-  private func rowBackground(_ row: VerbBrowseSearch.Row, index: Int) -> Color {
-    row.id == search.selection ? .keyboardSelection : .zebraStripe(index)
   }
 
   private func moveKeyboardSelection(by offset: Int) {
@@ -181,50 +176,21 @@ struct VerbBrowseView: View {
 
                 FailedSearchHelp(search: search, push: push)
                   .readingWidth()
-              } else if horizontalSizeClass == .regular {
-                // iPad / regular width: reflow the rows into an adaptive grid of
-                // carded cells (≈2 columns portrait, ≈3–4 landscape). The same
-                // `navigationDestination(for: VerbDestination)` renders the pushed `VerbView`.
-                LazyVGrid(columns: BrowseLayout.listColumns, spacing: Layout.doubleDefaultSpacing) {
-                  ForEach(rows) { row in
-                    Button {
-                      push(search.open(row))
-                    } label: {
-                      VerbGridCell(entry: row.entry, matchLines: search.matchLines(of: row))
-                        .card()
-                        .overlay {
-                          if row.id == search.selection {
-                            RoundedRectangle(cornerRadius: Layout.defaultSpacing)
-                              .stroke(Color.customRed, lineWidth: 2)
-                          }
-                        }
-                    }
-                    .buttonStyle(.plain)
-                    // Screenshot-driver anchor (scripts/take_screenshots.sh taps
-                    // `verb_row_ser`). Both size-class branches carry it — the iPad
-                    // renders this grid, the iPhone the stack below.
-                    .accessibilityIdentifier("verb_row_\(row.id)")
-                  }
-                }
-                .padding(.horizontal)
-                .padding(.top, Layout.defaultSpacing)
               } else {
-                LazyVStack(spacing: 0) {
-                  ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
-                    // A real `Button`, not `.onTapGesture`: `.isButton` trait, press highlight,
-                    // and stronger VoiceOver semantics. Not a `NavigationLink`, because the open
-                    // reports its search; the stack's `navigationDestination(for:
-                    // VerbDestination)` renders the pushed `VerbView`.
-                    Button {
-                      push(search.open(row))
-                    } label: {
-                      VerbRowLabel(entry: row.entry, matchLines: search.matchLines(of: row))
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityIdentifier("verb_row_\(row.id)")
-                    .background(rowBackground(row, index: index))
-                    Divider().padding(.leading)
-                  }
+                // A row is a `Button`, not a `NavigationLink`, because the open reports its search;
+                // the stack's `navigationDestination(for: VerbDestination)` renders the pushed
+                // `VerbView`. The rows' ids are what the arrow keys' `scrollTo` scrolls to.
+                AdaptiveRows(
+                  rows,
+                  id: \.id,
+                  highlighted: search.selection,
+                  gridPadding: BrowseLayout.gridPadding(),
+                  // Screenshot-driver anchor: scripts/take_screenshots.sh taps `verb_row_ser`.
+                  accessibilityIdentifier: ("verb_row_", \.id)
+                ) { row in
+                  push(search.open(row))
+                } label: { row in
+                  VerbRowLabel(entry: row.entry, matchLines: search.matchLines(of: row))
                 }
               }
             }

@@ -345,7 +345,9 @@ store no longer migrates over one.*
   *Fixed on `master`, 2026-11-25, in Phase 5 of `plans/verb_browse_fixes.md`: `RelatedVerbs.modelHasMore` compares the model's other verbs with the chips
   shown, so mover's page (five chips, twelve verbs) shows "All 12".*
 - **The grid's selection outline has the wrong corners (Read).** It strokes a radius of 8
-  (`VerbBrowseView.swift:634`) around a card whose radius is 12.
+  (`VerbBrowseView.swift:634`) around a card whose radius is 12. *Fixed on `master`, 2026-11-27,
+  in Phase 11 of `plans/verb_browse_fixes.md`: `AdaptiveRows` strokes `Layout.cornerRadius`, the
+  card's own.*
 - **A second tap on the mail link hides its note early (Read).** The first tap's four-second task
   is not cancelled (`VerbBrowseView.swift:295-308`). *Fixed on `master`, 2026-11-26, in Phase 9
   of `plans/verb_browse_fixes.md`: a second tap cancels the first's task.*
@@ -523,7 +525,9 @@ Josh's decision.*
   *Fixed on `master`, 2026-11-26, in Phase 10 of `plans/verb_browse_fixes.md`, but for the rows'
   Spanish, which is Phase 11's: the review card is one `Button` read as one element, the ✕ a second;
   the pill reads "Irregular, like tener" with tener tagged Spanish; and the letter keys are 44
-  points square, five apart, 338 points in all. Still nothing was listened to.*
+  points square, five apart, 338 points in all. Still nothing was listened to.* *The rows' Spanish
+  was fixed on `master`, 2026-11-27, in Phase 11: `RowLabel` tags a verb's infinitive and a model's
+  exemplar Spanish, in every list and grid.*
 
 <a id="duplication"></a>
 ## Duplication
@@ -552,7 +556,7 @@ builds `VerbView(verb:source:)` without `destination.marks` (`ModelBrowseView.sw
 Verbs and Quiz tabs pass them. Nothing in the Models stack pushes a marked destination today; the
 first thing that does will lose its mark and its landing scroll there, silently.
 
-*Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`, the cheap pieces: `ListHeading`, `SortPicker` (over `PickerOption`), `ListSort.sortedLists(of:)`, `zebraStriped(_:)`, `serifTitle()`, and `VerbDestination` registered once, with its marks, inside `verbPageDestinations()`. `AdaptiveRows` and one row label are Phase 11's.*
+*Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`, the cheap pieces: `ListHeading`, `SortPicker` (over `PickerOption`), `ListSort.sortedLists(of:)`, `zebraStriped(_:)`, `serifTitle()`, and `VerbDestination` registered once, with its marks, inside `verbPageDestinations()`. `AdaptiveRows` and one row label are Phase 11's.* *The rest was fixed on `master`, 2026-11-27, in Phase 11: `AdaptiveRows` draws all four grid-or-list blocks, and `RowLabel` is the one label, as a row or a card, under `VerbRowLabel`, `ModelRowLabel`, and `VerbCollectionRowLabel`; `VerbGridCell`, `ModelGridCell`, `VerbCollectionRow`, `VerbCollectionCard`, and `zebraStriped(_:)` are gone.*
 
 Cheap and safe: the heading, the picker, the sorted lists, the zebra stripe, and the single
 `VerbDestination` registration. Medium: `AdaptiveRows`, because the Verbs tab's rows need an

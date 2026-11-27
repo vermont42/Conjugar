@@ -71,12 +71,6 @@ extension View {
       .foregroundStyle(Color.customYellow)
   }
 
-  /// A list row's background: every other row faintly gold, so that a long list is easy to follow
-  /// across the width of the screen.
-  func zebraStriped(_ index: Int) -> some View {
-    background(Color.zebraStripe(index))
-  }
-
   /// A light selection haptic keyed to `trigger`. Attach to sort controls and
   /// pickers.
   func selectionFeedback(trigger: some Equatable) -> some View {
@@ -270,11 +264,21 @@ private struct CopyOnLongPress: ViewModifier {
 }
 
 extension Color {
-  /// The background of the list row at `index`. See `zebraStriped(_:)`.
+  /// The background of the list row at `index`: every other row faintly gold, so that a long list
+  /// is easy to follow across the width of the screen.
   static func zebraStripe(_ index: Int) -> Color {
     index.isMultiple(of: 2) ? .clear : .customYellow.opacity(0.03)
   }
 
   /// The background of the row the arrow keys have highlighted.
   static let keyboardSelection = Color.customRed.opacity(0.2)
+
+  /// The background of `AdaptiveRows`' row at `index`: the highlight's tint, or else the stripe if
+  /// the list has one.
+  static func listRow(_ index: Int, isStriped: Bool, isHighlighted: Bool) -> Color {
+    if isHighlighted {
+      return .keyboardSelection
+    }
+    return isStriped ? .zebraStripe(index) : .clear
+  }
 }

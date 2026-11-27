@@ -90,12 +90,11 @@ struct VerbCollectionBar: View {
   @State private var shareButtonFrame = CGRect.zero
 
   var body: some View {
-    let openedCount = Current.learnerVerbs.openedCount(of: verbs)
-    let progress = L.VerbCollection.progress(opened: openedCount, total: verbs.count)
+    let progress = CollectionProgress(verbs: verbs)
 
     VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
       HStack(spacing: Layout.defaultSpacing) {
-        Text(progress)
+        Text(progress.description)
           .font(.subheadline)
           .foregroundStyle(Color.customForeground)
           .accessibilityIdentifier("collection_progress")
@@ -128,9 +127,7 @@ struct VerbCollectionBar: View {
       .buttonStyle(.bordered)
       .tint(Color.customYellow)
 
-      ProgressView(value: Double(openedCount), total: Double(max(verbs.count, 1)))
-        .tint(Color.customYellow)
-        .accessibilityHidden(true)
+      CollectionProgressBar(progress: progress)
     }
     .card()
     .sheet(isPresented: $isQuizzing) {
@@ -152,85 +149,48 @@ struct VerbCollectionBar: View {
   }
 }
 
-/// A featured collection's row in the Models tab's Collections section, on iPhone: its title and a
-/// glimpse of its forms, short enough that five rows leave the models in view. The description
-/// waits on the collection's page.
-struct VerbCollectionRow: View {
+/// A featured collection's row or card in the Models tab's Collections section: its symbol, its
+/// title, a glimpse of its forms, and how many of its verbs have been looked up. The row is short
+/// enough that five leave the models in view; the card adds the description and a bar.
+struct VerbCollectionRowLabel: View {
   let collection: VerbCollection
+  @Environment(\.rowLabelStyle) private var style
 
   var body: some View {
-    let verbs = collection.verbs
-    let openedCount = Current.learnerVerbs.openedCount(of: verbs)
+    let progress = CollectionProgress(verbs: collection.verbs)
 
-    HStack(alignment: .firstTextBaseline, spacing: 12) {
-      Image(systemName: collection.systemImageName)
-        .font(.title3)
-        .foregroundStyle(Color.customYellow)
-        .frame(width: 28)
-        .accessibilityHidden(true)
+    RowLabel(title: collection.title, titleIsSpanish: false, symbol: collection.systemImageName) {
+      ConjugationText(form: collection.examples)
+        .font(.subheadline)
+        .lineLimit(style == .row ? 1 : nil)
 
-      VStack(alignment: .leading, spacing: 2) {
-        Text(collection.title)
-          .serifTitle()
-        ConjugationText(form: collection.examples)
+      if style == .card {
+        Text(collection.shortDescription)
           .font(.subheadline)
-          .lineLimit(1)
+          .foregroundStyle(Color.customForeground)
+          .fixedSize(horizontal: false, vertical: true)
+
+        Spacer(minLength: 0)
+
+        CollectionProgressBar(progress: progress)
       }
-
-      Spacer()
-
-      Text(verbatim: "\(openedCount)/\(verbs.count)")
+    } trailing: {
+      Text(verbatim: progress.fraction)
         .font(.caption.monospacedDigit())
         .foregroundStyle(Color.customBlue)
-        .accessibilityLabel(L.VerbCollection.progress(opened: openedCount, total: verbs.count))
+        .accessibilityLabel(progress.description)
     }
-    .padding(.horizontal)
-    .padding(.vertical, 10)
-    .contentShape(Rectangle())
-    .accessibilityElement(children: .combine)
   }
 }
 
-/// A featured collection's card in the Models tab's Collections section, on iPad.
-struct VerbCollectionCard: View {
-  let collection: VerbCollection
+/// The gold bar of a collection's progress, which VoiceOver skips, since the text beside it says
+/// the same.
+struct CollectionProgressBar: View {
+  let progress: CollectionProgress
 
   var body: some View {
-    let verbs = collection.verbs
-    let openedCount = Current.learnerVerbs.openedCount(of: verbs)
-
-    VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
-      HStack {
-        Image(systemName: collection.systemImageName)
-          .font(.title2)
-          .foregroundStyle(Color.customYellow)
-          .accessibilityHidden(true)
-
-        Spacer()
-
-        Text(verbatim: "\(openedCount)/\(verbs.count)")
-          .font(.caption.monospacedDigit())
-          .foregroundStyle(Color.customBlue)
-          .accessibilityLabel(L.VerbCollection.progress(opened: openedCount, total: verbs.count))
-      }
-
-      Text(collection.title)
-        .serifTitle()
-      ConjugationText(form: collection.examples)
-        .font(.subheadline)
-      Text(collection.shortDescription)
-        .font(.subheadline)
-        .foregroundStyle(Color.customForeground)
-        .fixedSize(horizontal: false, vertical: true)
-
-      Spacer(minLength: 0)
-
-      ProgressView(value: Double(openedCount), total: Double(max(verbs.count, 1)))
-        .tint(Color.customYellow)
-        .accessibilityHidden(true)
-    }
-    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-    .contentShape(Rectangle())
-    .accessibilityElement(children: .combine)
+    ProgressView(value: progress.barValue, total: progress.barTotal)
+      .tint(Color.customYellow)
+      .accessibilityHidden(true)
   }
 }
