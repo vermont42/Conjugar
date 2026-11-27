@@ -12992,3 +12992,61 @@ girder got both holes, with none overlapping another hole, a ladder mouth, or th
 new test, `aGapLandsInTheOnlyRoomLeft`, pins the case the retries handled worst: a beam with a
 ten-point window of room, where the helper must land every time, and one with none, where it must
 return nil.
+
+## Reviewing the Pedagogy Plan's Code (2026-11-27)
+
+Josh asked for a review of everything the pedagogy plan built, some 33,900 lines of app, widget,
+and test code, with the findings and the plan to fix them in one file,
+[`plans/pedagogy_fixes.md`](../plans/pedagogy_fixes.md). Konjugieren's code had the same review
+that morning, and the prompt asked that this one be done first and compared afterward, so that it
+would not be anchored on the other.
+
+Six Opus subagents each took one area with no view of the others or of Konjugieren's file:
+grading and feedback, the draw and rounds, the practice record, the new kinds of question, the
+daily features with an audit of every signal, and the views. I read `Quiz.swift`, the scope, the
+level, the draw, the record, and the diagnosis code myself, and kept a ledger of what each
+reported. Then two temporary probe suites, 31 tests in all and since deleted, ran the claims that
+code could settle. Most held. One did not: a reviewer estimated that four in five Advanced
+questions ask a verb beyond the 1,000 most frequent, and the probe counted 421 of 900. It is
+still a finding, at its real size. The lesson is the browse review's again, that a reviewer's
+number is a guess until something counts it.
+
+The baseline was 1,499 Swift Testing tests in 93 suites and 11 XCTest tests, in 79 seconds, in
+English, with no lint violation.
+
+The findings are mostly of one kind, and it is the kind Konjugieren's review found, because the
+port carried the designs. A feature was built to its phase, and a later phase changed what it
+meant. The re-ask came before My Mistakes, so a right re-ask three questions after the correction
+takes the miss off the list, and the list is nearly always empty. The second attempt was built
+for a typing slip and then given to every diagnosed error, so "tení" repaired to "tuve" moves the
+item up the ladder. The box was built to schedule a review and is now read as mastery, so two
+taps of Reveal on the review card master a verb nobody typed, and opening a verb's page from the
+widget erases a mastery that took a week.
+
+Some findings are Spanish's own. A review of a key conjugation asks the key's own cell first, so
+a miss on tengas is reviewed as tengo and a miss on era as soy. A third of Beginner rounds ask a
+command nobody gives, haber's "he" most often, because haber is a core verb, commands weigh two
+of Beginner's five, and nothing knows which verbs are commanded. A reflexive-only verb's command
+is right without its pronoun, so "atreve" earns ten points. Verb Essentials asks pedir for pedí,
+which is regular, and never for pidió. A vos learner's daily challenge is easier than a tú
+learner's on 26 days of 60 at Beginner, since tenés and hacé are regular.
+
+One finding I could show on screen. A `quiz/start` link that arrives while the results are up
+starts the quiz beneath them, and the results then list the new quiz's ten questions as missed.
+The quiz's own Live Activity sends that link and stays on the Lock Screen after a round. I
+finished a challenge in the simulator, opened the link, and took the screenshot. That left the
+iPhone simulator with five misses and today's challenge taken.
+
+The analytics audit found no leak: no score, no answer, no count of right or wrong, no verb the
+quiz drew. The edges are a model's key on `startQuiz`, which for 29 models is one verb, and the
+collection bar's Share button on a page opened from a correction, which the browse fix did not
+reach.
+
+The plan had 23 decisions for Josh. Where Konjugieren's plan records his answer to the same
+question that day, it was given as the recommendation, and he was still asked, since Conjugar
+may differ. He answered all 23 the same day, through a run of nine question dialogs, and took
+the recommendation each time, so no phase waits on a decision. Three answers replace earlier
+rulings: the review card's reveal now stops at the second box, only a search sends a looked-up
+verb back to the first box, and a default quiz's first round no longer mixes in due items.
+Sixteen phases follow, each waiting for him before git, with an empty Commit column until he has
+tried the change.
