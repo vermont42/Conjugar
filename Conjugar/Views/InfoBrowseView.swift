@@ -55,9 +55,9 @@ struct InfoBrowseView: View {
           VStack(alignment: .leading, spacing: Layout.defaultSpacing) {
             Text(L.BrowseInfo.tensesSection)
             Picker(L.BrowseInfo.filter, selection: $infoDifficulty) {
-              Text(L.BrowseInfo.easy).tag(InfoDifficulty.easy)
-              Text(L.BrowseInfo.easyAndModerate).tag(InfoDifficulty.moderate)
-              Text(L.BrowseInfo.easyModerateAndDifficult).tag(InfoDifficulty.difficult)
+              Text(L.BrowseInfo.essentialTenses).tag(InfoDifficulty.easy)
+              Text(L.BrowseInfo.commonTenses).tag(InfoDifficulty.moderate)
+              Text(L.BrowseInfo.allTenses).tag(InfoDifficulty.difficult)
             }
             .pickerStyle(.segmented)
             .textCase(nil)

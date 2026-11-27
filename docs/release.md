@@ -105,6 +105,22 @@ material for the release notes in `docs/release_notes.txt`.
     leave the app closed for two nights. Each morning both should have changed, the quiz widget
     unanswered. Answer it, and it should flip to its result. On the simulator the timeline was
     checked with a file whose days were shifted back, never across a real midnight on a device.
+12. **Delete the practice record's migration.** `PracticeStore.migrated(from:calendar:)` and
+    `LegacyLearnerVerbs` (`Models/PracticeStore.swift`) read the per-verb review schedules that
+    `LearnerVerbs.Entry.review` kept before the practice record. Both formats exist only on
+    `master`, and no shipped build wrote either, so the migration has nothing to read on a
+    learner's device (G5 of `docs/verb_browse_review.md`; Josh's decision of 2026-11-25). Delete
+    the function and the struct, and let `PracticeStore.init` start an empty record when nothing is
+    stored. Delete `PracticeRecordTests.theFirstLaunchMigratesTheReviewCardsSchedules`, and keep
+    `anUnreadableRecordIsBackedUpAndNotMigratedOver` for its backup, renamed and without its
+    `LearnerVerbs` seed. Then correct the prose: `init`'s doc comment (which says `getterSetter`
+    must hold `LearnerVerbs` for the migration's sake; the shared store stays, since `World` gives
+    both stores one), the paragraph **The migration** in `docs/feature_architecture.md` and the
+    sentence there about Reset Practice saving the record empty "so the next launch does not
+    migrate the old schedules again", the suite's header comment in `PracticeRecordTests.swift`,
+    and the entry for `PracticeStore.swift` in `docs/project_structure.md`. A simulator that has
+    launched since the practice record arrived already stores one, so the migration no longer runs
+    there either, and deleting it changes nothing on Josh's simulators.
 
 ## On Release Day
 

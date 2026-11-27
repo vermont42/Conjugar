@@ -428,8 +428,18 @@ and ser and ir at 7.0 to 7.9 seconds, with the warm-up begun at launch.*
   - `ModelBrowseView.swift:45` folds the query once per model. *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`.*
 - **The first visit to the Models tab derives the collections on the main actor (Suspected).**
   `VerbCollection.featuredVerbs` runs about 4,000 conjugations. Not timed.
+  *Real, and fixed on `master`, 2026-11-27, in the Closing of `plans/verb_browse_fixes.md`. A probe test, timed four
+  times in a Debug build in the simulator, measured the model rows (`ModelInfo.all`) at 0.17 to
+  0.35 s and the featured collections at 0.15 to 0.48 s, with the verb map already loaded. Both
+  are now warmed at launch by `ContentCaches.warm()`, off the main actor.*
 - **The map's and the index's memory is unmeasured (Suspected).** About 254,000 small arrays, kept
   by the app and by each intent that loads them.
+  *Measured on `master`, 2026-11-27, in the Closing of `plans/verb_browse_fixes.md`, and left. A probe test read the
+  process's `phys_footprint` in a Debug build in the simulator, three times: the conjugation map
+  adds 45 to 47 MB and its index 20 to 22 MB, about 67 MB for both, from 1.8 MB of text. A search
+  adds 1 to 2 MB more. The whole app holds about 150 MB once launched (`footprint`). Shrinking
+  the map would mean a new storage format, not a fix, and nothing suggests memory pressure; it is
+  worth doing only if a device shows some.*
 
 ## Privacy
 
@@ -482,6 +492,9 @@ Josh's decision.*
   `LegacyLearnerVerbs` (`PracticeStore.swift:243-262`) carry Phase 15's per-verb schedules into
   the practice record. Both formats exist only on `master`; version 3.1 has neither. Delete before
   the release unless Josh wants his own simulators' history kept.
+  *Left until the release, by Josh's decision of 2026-11-25: step 12 of `docs/release.md` §
+  Before Submitting deletes the migration, its tests, and the prose that describes it. Added in
+  the Closing of `plans/verb_browse_fixes.md`, 2026-11-27.*
 - **G6. The Models tab's search field was left as it was (Read).** Phase 0 said to change nothing
   else there. So autocapitalization and autocorrection are still on, and on iPad the field keeps the
   default placement, which Phase 0 found shrinks to a toolbar button and which the Verbs tab
@@ -508,8 +521,13 @@ Josh's decision.*
     it names both controls that send it, and says the Quick Quiz control sends `deeplink`.*
   - `ViewControllerTransitions.swift:10-13` and `docs/project_structure.md:259` describe only the
     letter key's use; `push(_:)` uses it too.
+    *Fixed on `master`, 2026-11-26, in Phase 9 of `plans/verb_browse_fixes.md`: both name the three waits. Found in the
+    Closing, which also lists them in `docs/feature_architecture.md` § Timed Workarounds.*
   - The Info article "Purpose/Use" still says a quiz is thirty verbs at Easy, Moderate, or
     Difficult. That is the pedagogy plan's to fix and is listed here so that it is not lost.
+    *Fixed on `master`, 2026-11-27, after the Closing of `plans/verb_browse_fixes.md`, at Josh's
+    request: the article, in English and Spanish, now describes the four levels, ten-question
+    rounds, and the app as it stands.*
 - **G8. Comments that narrate history (Read).** Commit `860795f` swept these out and missed
   `ModelBrowseView.swift:5-8` ("replacing the UIKit BrowseModelsVC…"), `ModelView.swift:5-9`, and
   the bug story on `ModelRowLabel` (`ModelBrowseView.swift:245-251`). *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: each describes the code, and `VerbRowLabel`'s matching story went too.*
@@ -556,7 +574,7 @@ builds `VerbView(verb:source:)` without `destination.marks` (`ModelBrowseView.sw
 Verbs and Quiz tabs pass them. Nothing in the Models stack pushes a marked destination today; the
 first thing that does will lose its mark and its landing scroll there, silently.
 
-*Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`, the cheap pieces: `ListHeading`, `SortPicker` (over `PickerOption`), `ListSort.sortedLists(of:)`, `zebraStriped(_:)`, `serifTitle()`, and `VerbDestination` registered once, with its marks, inside `verbPageDestinations()`. `AdaptiveRows` and one row label are Phase 11's.* *The rest was fixed on `master`, 2026-11-27, in Phase 11: `AdaptiveRows` draws all four grid-or-list blocks, and `RowLabel` is the one label, as a row or a card, under `VerbRowLabel`, `ModelRowLabel`, and `VerbCollectionRowLabel`; `VerbGridCell`, `ModelGridCell`, `VerbCollectionRow`, `VerbCollectionCard`, and `zebraStriped(_:)` are gone.*
+*Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`, the cheap pieces: `ListHeading`, `SortPicker` (over `PickerOption`), `ListSort.sortedLists(of:)`, `zebraStriped(_:)`, `serifTitle()`, and `VerbDestination` registered once, with its marks, inside `verbPageDestinations()`. `AdaptiveRows` and one row label are Phase 11's.* *The rest was fixed on `master`, 2026-11-27, in Phase 11: `AdaptiveRows` draws all four grid-or-list blocks, and `RowLabel` is the one label, as a row or a card, under `VerbRowLabel`, `ModelRowLabel`, and `VerbCollectionRowLabel`; `VerbGridCell`, `ModelGridCell`, `VerbCollectionRow`, `VerbCollectionCard`, and `zebraStriped(_:)` are gone.* *Left, as the table allows: the no-results view and the router request consumed once are still a copy in each screen, a few lines each (Closing, 2026-11-27).*
 
 Cheap and safe: the heading, the picker, the sorted lists, the zebra stripe, and the single
 `VerbDestination` registration. Medium: `AdaptiveRows`, because the Verbs tab's rows need an
@@ -671,13 +689,16 @@ and the list again. One `SortableVerbList` that owns its sort state would serve 
     `plans/verb_browse_fixes.md`: a practice set always carries a custom quiz, so it never ranked;
     the test is gone.*
   - `ConjugationTable.isCompound` is used only by tests (Reviewer).
+    *No longer true on `master`: since Phase 5 of `plans/verb_browse_fixes.md` (2026-11-25), `VerbPageForms` reads it to
+    keep the compound tenses out of the red-letter test. Found in the Closing, 2026-11-27.*
   - `BrowseSearch` is six lines with one caller since the Verbs tab left it (Read). *Fixed on `master`, 2026-11-26, in Phase 7 of `plans/verb_browse_fixes.md`: folded into `ModelSearch`, which folds the query once per search.*
   - `ConjugationMapTool` accepts any `--flag value`, so a misspelled `--forms-json` writes the map
     and silently skips the file (`main.swift:43-53`, Reviewer). *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: an unknown or repeated flag fails the run.*
   - `VerbSearch.keys(for:)` decides whether its cache applies by comparing glosses only
     (`VerbSearch.swift:347-353`, Reviewer). `VerbMapEntry` is `Equatable`. *Fixed on `master`, 2026-11-26, in Phase 8 of `plans/verb_browse_fixes.md`: it compares whole entries.*
   - `SecondSingularBrowse.swift:11` cites "item 20" of a list that the reader cannot see
-    (Reviewer).
+    (Reviewer). *Fixed on `master`, 2026-11-27, in the Closing of `plans/verb_browse_fixes.md`: the comment gives the
+    reason without the citation.*
 
 ## Tests
 
@@ -768,6 +789,7 @@ These are Josh's decisions, recorded in the plan. Each has a cost its note does 
 - **Opening a verb from the widget counts as looking it up.** Every open but the review card's
   calls `recordLookup` (`VerbView.swift:220-223`). On a My Verbs day the widget shows a verb the
   learner already has, and a tap sends its schedule back to the first box.
+  *Left by decision: `plans/verb_browse_fixes.md` § Decisions Already Made keeps it, and changes none of these costs.*
 - **The verb of the day changes only when the app is opened (Reviewer).** The app writes one
   snapshot, for today, on launch and on becoming active. A learner who stays away for five days
   sees one verb for five days. This predates the plan, but Phase 14's "next ten days" was tested
@@ -777,8 +799,10 @@ These are Josh's decisions, recorded in the plan. Each has a cost its note does 
   today and six days ahead, and the widgets' timelines change at each midnight.
 - **A verb deleted from My Verbs can still be offered by the review card**, with "Looked up 3 days
   ago", because Clear and the swipe keep the practice record by decision.
+  *Left by decision, as above. Settings' Reset Practice is the way to forget it.*
 - **Weather verbs share as one form.** A third-person-only verb's key conjugations leave out the
   three yo cells, so llover's shared line is "llovido".
+  *Left by decision, as above.*
 
 <a id="konjugierens-findings-checked-here"></a>
 ## Konjugieren's Findings, Checked Here

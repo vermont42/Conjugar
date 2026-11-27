@@ -102,7 +102,7 @@ Conjugar/
 │   │                           #   the link it opens: the verb's page, marked, or the search. Built on VerbSearch
 │   │
 │   │  ── content ──
-│   ├── ContentCaches.swift     # Pre-warms Etymology / ExampleData / MedievalData off the main actor at launch
+│   ├── ContentCaches.swift     # Pre-warms Etymology / ExampleData / MedievalData, the related verbs, and the Models tab's rows and collections off the main actor at launch
 │   ├── Etymology.swift         # Load-once etymology lookup by infinitive (`~bold~` markup)
 │   ├── Example.swift           # One modern-prose example: text, translation, source, token, line
 │   ├── ExampleData.swift       # Load-once ExampleUses.json cache keyed by bare infinitive
@@ -174,7 +174,7 @@ Conjugar/
 │   ├── AnswerDiagnosis.swift   # The one line that names a wrong answer's error, from exact constructions over the verb's model (a negative command, a spelling or stem change left out, the regular form, another cell); QuizQuestion.diagnosis(of:)
 │   ├── AnswerSpelling.swift    # How the quiz reads an answer: case, spacing, and a leading subject pronoun of the asked person
 │   ├── StandardVariants.swift  # The RAE's standard doublets of a cell (frito, satisface, adecúo, vos hablés…), accepted by the quiz only
-│   ├── InfoDifficulty.swift    # The Info filter's enum: easy / moderate / difficult (the quiz asks by QuizLevel)
+│   ├── InfoDifficulty.swift    # The Info filter's enum: easy / moderate / difficult, shown as Essential / Common / All (the quiz asks by QuizLevel)
 │   ├── Region.swift            # Setting enum: Spain vs. Latin America (TTS accent, and no vosotros questions in Latin America)
 │   ├── SecondSingularBrowse.swift  # Setting enum: which 2s form(s) the browse screens show
 │   ├── SecondSingularQuiz.swift    # Setting enum: which 2s form the quiz asks for
@@ -529,7 +529,6 @@ docs/                           # Claude's output that holds information and is 
 ├── history_corrections.md      # Fact-check of the verb-history essay, with replacement prose
 ├── verb_history.txt            # Editable English source of Info.verbHistoryText; sync with scripts/sync_verb_history.py
 ├── verb_history_es.txt         # The Spanish translation of the same, synced with --lang es
-├── purpose_and_use_proposed.txt    # Draft replacement for Info.purposeAndUseText
 ├── privacy_policy3.txt         # The published privacy policy (English + Spanish), describing the shipped app
 ├── privacy_policy_pending.md   # Policy lines for signals built on master, English + Spanish, waiting for the 2027 release
 ├── feature_architecture.md     # How the browse and pedagogy plans' features fit together; § Analytics: signals, the source vocabulary;

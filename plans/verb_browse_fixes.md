@@ -14,6 +14,9 @@ land, so find code by name.
 
 ## Status
 
+**Finished 2026-11-27.** Every phase and the Closing are done. The Closing awaits Josh's commit,
+and nothing in this plan remains to be built.
+
 Each session that finishes a phase fills in its row, changes nothing in other rows, and writes a
 **How it differed** note under that phase's heading. A finished phase is "Awaiting Josh" until
 Josh has tried it and committed it. Sessions never commit (see step 9 below), so the Commit cell
@@ -33,8 +36,8 @@ is filled by the next session, which reads the hash from `git log`.
 | 10 | Done | 2026-11-26 | `ccfb31c` | S1 (the rest), G9 |
 | 11 | Done | 2026-11-27 | `5d399e8` | D1 (`AdaptiveRows` and one row label), the rows' Spanish from G9, the outline's corners from C13 |
 | 12 | Done | 2026-11-27 | `c3bb034` | S6, and from S8 `mixesChoiceQuestions`' redundant test |
-| 13 | Awaiting Josh | 2026-11-27 | | T1, T2, T3, less what earlier phases added |
-| Closing | Not started | | | The audit, G5's release step, the timed workarounds' list |
+| 13 | Done | 2026-11-27 | `1c78580` | T1, T2, T3, less what earlier phases added |
+| Closing | Awaiting Josh | 2026-11-27 | | The audit, G5's release step, the timed workarounds' list |
 
 ## How to Work This Plan
 
@@ -1235,3 +1238,92 @@ though it is shortest when taken last.
 - Mark this plan finished in its Status section.
 
 **How it differed:**
+
+- **The suite** is 1,497 Swift Testing tests in 93 suites and 11 XCTest tests, all passing, in
+  100 s against the baseline's 78 s and Phase 13's 87 s on the same machine (2 min 25 s of wall
+  time with the build). The slowest suites are where they were: "ConjugationMap" 20.4 s (19 s at
+  the baseline), `ReverseLookupTests` 14.4 s (8 s), and "The bundled map" 13.5 s (13 s). So the
+  plan added 153 tests and 8 suites, and the extra time is mostly `ReverseLookupTests`, which
+  Phase 1 gave its tests on the lines and the marks. The run after the Closing's code change
+  had one failure, outside this plan's code: `GameStateTests.terremotoOpensGapsRoughlyTenPercentOfEachGirder`
+  found one girder's gaps at 15% of its width against the 10% ± 1% it asks. The gaps are placed at
+  random, and the suite then passed five runs in five, so the test is flaky. Its likeliest cause
+  is a gap shifted or clipped by another rule; that was not traced, and it is left for Josh. The
+  other 1,496 passed. `swiftlint` is clean, at 0 violations in 353 files.
+- **G5** is step 12 of `docs/release.md` § Before Submitting. It names the function and the
+  struct, the migration's test to delete, the backup test to keep without its `LearnerVerbs`
+  seed, and the four places whose prose describes the migration.
+- **S4** is a new section, `docs/feature_architecture.md` § Timed Workarounds. It has two tables:
+  the Verbs tab's linger and its three waits on `ViewControllerTransitions`, and the Quiz tab's
+  focus delays (450 ms after a pop, 50 ms after a slip, a choice, or an incomplete Name the
+  Form). The review named only the Verbs tab's. The Quiz tab's wait for the same kind of thing, so
+  they belong in the same list. Each row says what to remove and what to try in the simulator to
+  learn whether a new iOS still needs it. The things that are timed by design (the mail link's
+  note, the spoken form's flash, the tutor's availability poll, the game) are named as not
+  belonging.
+- **F2's first Models tab visit was real, and fixed.** A temporary probe test, run four times in
+  a Debug build in the simulator, timed `ModelInfo.all` at 0.17 to 0.35 s and the featured
+  collections at 0.15 to 0.48 s, with the verb map already loaded. That is up to 0.8 s on the
+  main actor at the first tap of the tab. Both types are `nonisolated`, so
+  `ContentCaches.warm()`, which the launch already runs off the main actor, now touches them too.
+  Four lines. The probe is deleted.
+- **F2's memory was measured, and left.** A second probe read `phys_footprint` three times
+  around the first touches: the conjugation map adds 45 to 47 MB, its index 20 to 22 MB, and a
+  search 1 to 2 MB, from 1.8 MB of text. `footprint` put the launched app at 150 MB. Instruments
+  was not needed. Shrinking the map would mean a new storage format, and nothing suggests memory
+  pressure, so it is not plainly worth it. If a device ever shows some, the map is where to look.
+- **The Info article "Purpose/Use"** described thirty-verb quizzes at three difficulties. Josh
+  asked for a rewrite once the Closing reported it, and `Info.purposeAndUseText` is new in both
+  languages. Josh's own story in Purpose stays, but for the sentences about the quiz. Use is
+  rewritten tab by tab for the app as it stands: the search and My Verbs, the review card, the
+  verb page's links and Related Verbs, the collections, the ten-question quiz with its second try
+  and its corrections, the Quiz tab's other ways to practice, every Settings section, the third
+  control, Siri, and Spotlight. It also drops two claims that had become false: partial credit for
+  a missing accent, and higher scores for the region or the level. The draft it was first written
+  from in July, `docs/purpose_and_use_proposed.txt`, was older than the article, and Josh had it
+  deleted. The Info tab's tense filter read "Filter Tenses by Difficulty", E, E & M, and E, M, &
+  D, from before the levels. At Josh's word it is relabeled Essential, Common, and All (Esenciales,
+  Comunes, Todos), under the VoiceOver name Show Tenses (Mostrar tiempos), and the article
+  describes it so. `InfoDifficulty` and its stored raw values are unchanged, so a learner's choice
+  survives. The article was checked on "Conjugar iPhone 17" at its top and foot, and the filter on
+  both simulators, in English and Spanish on the iPhone and Spanish on the iPad; `InfoTests`
+  pass.
+- **The audit** found ten findings with no line. Two were stale by now: `ConjugationTable`'s
+  `isCompound` has had an app caller since Phase 5, and `ViewControllerTransitions`' header and its
+  `project_structure.md` entry were corrected in Phase 9 without a line. Two were fixed here: the
+  Models tab's first visit, and the "item 20" citation in `SecondSingularBrowse.swift`. The other
+  six got a line saying they were left, with the reason: G5 for the release, the Info article, the
+  map's memory, and the three costs of settled decisions. D1, marked fixed, also had two rows that
+  its own table said to leave (the no-results view, the request consumed once); its line now says
+  so. The section on Konjugieren's findings holds cross-references, not findings, so it got no
+  lines.
+- **Fixes that might carry over.** Each piece below exists in the sibling by a name search. I did
+  not read further, so whether the sibling has the bug is for its own session to check. Both
+  siblings have their own `plans/verb_browse_fixes.md`, which may have taken some of these
+  already.
+  - **C7, the scroll tip with nothing below.** Konjugieren draws `TipView(scrollToBottomTip)`
+    unconditionally, and Conjuguer whenever the page has no color key. Neither has a
+    `hasTarget` test.
+  - **C6, a lookup's link that marks two rows.** Both build `match=` links, and neither has a
+    `cells` query item.
+  - **The stashed link that waits for the next activation.** Both have `PendingDeeplink`, and
+    neither posts a Darwin notification for an app in front to drain.
+  - **F1, a search that beats the index.** Both search through `ConjugationIndex.bundled`, and
+    neither has an `indexIsReady` path that searches without forms until the index is built.
+  - **C10, the keyboard selection kept as an index.** Konjugieren's search model keeps one.
+    Conjuguer's keeps the selected verb's ID already.
+  - **C11, pushes that skip the transition wait.** Both have `waitUntilIdle`.
+  - **C12, a failed decode that overwrites a record.** Both back up one unreadable record. Whether
+    the learner's record is covered too needs a look.
+  - **C5, the bare pass for a several-word lookup.** Conjuguer's `ConjugationMatch` has a `.bare`
+    mode. Whether its several-word lookup uses it is unchecked.
+  - **The Models tab's first visit, and S4's list.** Neither sibling has `featuredVerbs` by that
+    name, but each has a collections screen worth timing once. Both have `waitUntilIdle` and
+    `refocusAnswer`, so a § Timed Workarounds would serve them too.
+  - **C8, false bases.** A matter of each language's etymology. Both have a "built on" relation,
+    and an audit of their most frequent verbs, as the probe did here, might find false pairs.
+  - **Spanish only:** C1 (clitic agreement) and C4 (the ñ twins). Konjugieren's review had the
+    umlaut version of C4.
+- **Nothing on screen changed**, so no simulator check was run beyond the footprint reading on
+  "Conjugar iPhone 17". The warm-up's effect on the Models tab was not timed in the app: the probe
+  measured the work, and the change moves it, without a check by eye.

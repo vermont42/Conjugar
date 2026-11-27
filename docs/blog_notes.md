@@ -12853,3 +12853,71 @@ short just after midnight near a daylight-saving change. It now counts calendar 
 noon in UTC.
 
 The suite went from 1,494 tests to 1,497 and ran in 87 seconds.
+
+## Closing the Browse Review's Fixes (2026-11-27)
+
+The plan that worked through the browse and verb review ended with a Closing, a phase of loose
+ends: measure what had only been suspected, write down what must wait for the release, and make
+sure every finding in the review says what became of it.
+
+Two of the review's performance findings had been left as suspicions, untimed. The first was that
+the Models tab's first visit builds its rows and its featured collections on the main actor, and
+the collections conjugate about a thousand verbs to decide which are -go verbs, strong preterites,
+and so on. A probe test put a clock around the first touch of each, four times in a Debug build in
+the simulator: 0.17 to 0.35 seconds for the model rows and 0.15 to 0.48 for the collections. Up to
+0.8 seconds of a frozen tab is worth four lines, so the launch's existing warm-up, which already
+loads the etymologies and examples off the main actor, now touches both lists too.
+
+The second suspicion was memory. The conjugation map holds about 254,000 forms, and the search
+index over it holds them again by folded spelling. A probe read the process's footprint before and
+after each first touch: the map adds about 46 MB and the index about 21 MB, from 1.8 MB of text.
+That ratio looks bad, and it is the cost of a quarter of a million small Swift strings and arrays.
+But the whole launched app sits at 150 MB, nothing has ever hinted at memory pressure, and a
+leaner map would need a new storage format. So the numbers went into the review, and the map was
+left alone. Instruments turned out to be unnecessary: `task_info` from inside a test gives the
+same figure without a trace.
+
+The review had asked for one list of the app's timed workarounds, so that each can be retried on
+a new iOS. It named the Verbs tab's four: a 700 ms linger on the search's focus and three waits on
+UIKit's transitions. A search for sleeps found that the Quiz tab has a family of its own, focus
+delays of 450 and 50 ms that wait for the answer field to be on screen. They are the same kind of
+thing, so `docs/feature_architecture.md` now has a section that lists all of them, each with what
+it works around and what to try in the simulator to learn whether it is still needed. The sleeps
+that are design rather than workaround, such as the four-second note after the mail link and the
+game's timings, are named as not belonging.
+
+The practice record's migration, which reads a format no shipped build ever wrote, became step 12
+of the release checklist, as Josh decided at the start. The audit of the review found ten findings
+with no line. Two had been fixed in passing by earlier phases without anyone saying so, two were
+fixed here, and six were left on purpose, now with the reason written down. The last task was a
+list of fixes that might carry over to Konjugieren and Conjuguer. A name search, without reading
+their code further, found the scroll tip with nothing below it, the link that marks two rows, the
+stashed link that waits, and the search that waits for its index in both, so those head the list
+in the plan's Closing.
+
+The suite ended at 1,497 tests in 93 suites, 153 more than when the review began, in 100 seconds
+against the baseline's 78.
+
+## Rewriting Purpose & Use (2026-11-27)
+
+The Closing reported that the Info tab's "Purpose & Use" article still described thirty-verb
+quizzes at Easy, Moderate, and Difficult, and Josh asked for a rewrite. It turned out to be stale
+well beyond that sentence. The article was last rewritten in July, before the pedagogy plan gave
+the quiz four levels, ten-question rounds, second tries, review, and a hub of exercises, and
+before the browse plan gave the Verbs tab search by conjugation, My Verbs, and the review card.
+It still promised partial credit for a missing accent and higher scores for vosotros and for
+harder levels. Neither has been true since the quiz began scoring 10 for a right answer and 5 for
+a second try.
+
+The facts came from the app's own strings rather than from memory: every Settings heading and
+description, the Quiz tab's labels, and the onboarding text, in both languages, so that the
+article names each control as the screen does. Josh's story in Purpose, about "va a la oficina"
+and "voy a la oficina", stays as he wrote it. Only the paragraph about the quiz changed. The Use
+half is rewritten tab by tab. Writing the Info tab's part turned up one more relic: its tense
+filter still read E, E & M, and E, M, & D, abbreviations of the quiz's old difficulties, which now
+rate only articles. Josh asked for it to be relabeled, so it now reads Essential, Common, and All,
+in Spanish Esenciales, Comunes, and Todos. The stored values behind it did not change, so nobody's
+choice is lost. The July draft the old article came from was deleted too.
+
+The new article is about 18,000 characters in English, against 14,000 before. It went into the
+catalog through Python, as the localization rules require for a value full of ASCII quotes.

@@ -863,7 +863,8 @@ never changes), and the futuro de subjuntivo, which is rare outside legal and li
 weight belongs to a tense as a whole, whatever its number of persons. No tense is asked only of
 certain verbs. A stored Easy, Moderate, or Difficult (key `difficulty`) became Elementary,
 Intermediate, or Advanced the first time the app ran without a level. The Info tab's filter keeps
-its own three difficulties, `InfoDifficulty`, which has nothing to do with the levels.
+its own three ratings, `InfoDifficulty`, which has nothing to do with the levels; since 2026-11-27 it
+labels them Essential, Common, and All (Esenciales, Comunes, Todos), not E, E & M, and E, M, & D.
 
 Every right answer scores 10 at every level, 5 on a second try or on a re-ask, and the score is
 their sum: no normalization to fifty questions and no multiplier for the region or level.
@@ -1931,3 +1932,43 @@ and the App Store link; on iPad the sheet anchors to the button's own frame
 
 **No `quiz/start?list=<key>`:** a shared link opens the collection, where Quiz is one tap.
 
+
+## Timed Workarounds
+
+Each of these waits out something UIKit or SwiftUI does without saying when it is done. Each is
+commented in the code as a hack, with the failure it works around. Retry them on each new iOS: if
+the failure no longer happens without the wait, delete the wait and its row. The Verbs tab's were
+last tried on iOS 26.3, on 2026-11-26, in Phase 9 of
+[`plans/verb_browse_fixes.md`](../plans/verb_browse_fixes.md); the Quiz tab's date from the
+pedagogy plan. None can be tested in a unit test, so the check is by hand in the simulator.
+
+**`ViewControllerTransitions.waitUntilIdle()`** polls every 50 ms, for a second at most, until no
+view controller is presenting or dismissing. With nothing animating, as on an iPhone, it returns at
+once. Three of the Verbs tab's four waits use it:
+
+| Wait | Where | What it works around | How to tell it is no longer needed |
+|---|---|---|---|
+| The search's linger, 700 ms | `VerbBrowseView.searchLingering` | On iPad, a tap outside an empty, focused search field ends the search at touch-down. The letter row and the recents would vanish under the finger, so a tap on á would do nothing. They follow `VerbBrowseSearch.isEngaged`, which lets go 700 ms later; a focus regained meanwhile cancels the letting go. | On the iPad simulator, set the linger to zero, focus the empty field, and tap á. If á lands in the field, the linger can go. |
+| A letter key's wait | `VerbBrowseView.insertLetter(_:)`, then `waitUntilIdle()` | The same tap's search clears its text as it ends, so a letter set meanwhile is lost. The letters queue in `VerbBrowseSearch` and arrive, in order, once the search is gone. | Set the letter at once instead. If á, then é, tapped into the focused empty field 80 to 300 ms apart, give "áé" every time, the wait can go. A tap 50 ms after focus loses its letter with or without the wait; that is the touch, not this wait. |
+| A push's wait | `VerbBrowseView.push(_:)`, while `searchIsEnding` | A push made while an empty search animates away is dropped. | Push at once. On the iPad simulator, focus the empty field so the recents show and tap one. If the page opens every time, the wait can go. |
+| Focus after a pop | `VerbBrowseView.showSearch(focused:)`: `Task.yield()`, then `waitUntilIdle()` | Focus requested while a pop animates sets the focus state without making the field first responder, so typing goes nowhere. The yield lets the pop begin, so that the wait has a transition to see. | Remove both. From a verb page, press ⌘F and type about 1.5 seconds later, a dozen times on each simulator. With the wait the field took the text 12 times in 12; without wait or yield, 5 in 6. |
+
+**The Quiz tab's focus delays** wait for the answer field to be on screen before giving it the
+keyboard. `QuizView.refocusAnswer(after:)` clears `fieldFocused`, sleeps, clears it again, sleeps
+50 ms, and sets it, because a field whose keyboard came back without the focus state's knowing reads
+false, and setting it true then does nothing.
+
+| Wait | Where | What it works around | How to tell it is no longer needed |
+|---|---|---|---|
+| 450 ms after a pop | `refocusAnswer(after:)` when the path empties under a held correction; `continueSession()` and `startFromResults(scope:)` after the results pop | A field focused before the pop ends never takes the keyboard. | Set `fieldFocused` at once. Back from a correction's model link, and Ten More from the results, on the iPhone simulator: if the field has the keyboard and Return works, the delay can go. |
+| 50 ms after a slip or a held correction | `refocusAnswer(after:)` from `submit()` and `onChange(of: quiz.isHeld)` | Return resigns the field while the focus state still reads true, so setting it true again changes nothing. | Set it at once after a slip. If the field keeps the keyboard and its focused border, the clear-and-set can go. |
+| 50 ms after a choice, and after an incomplete Name the Form | `onChange(of: quiz.currentQuestion?.choice != nil)` and `submit()` | The field returns after a choice question and must be on screen to take the keyboard; Return with a part missing resigns it. | As above, with a choice question followed by a typed one, and Return in Name the Form with the tense unchosen. |
+
+One more wait is a hop, not a timer: a linked quiz starts as the tab appears, before the field
+exists, so `QuizView`'s `onAppear` clears the focus and sets it again in a new task, or the letter
+keys never join the keyboard.
+
+These are not workarounds and are not listed: the four-second note after the mail link
+(`FailedSearchHelp`), the 300 ms flash of a spoken form (`speakOnTapFlash()`), the tutor's
+five-second availability poll, which has no notification to wait for instead
+(`LanguageModelServiceReal.monitorAvailability()`), the music's fade, and the game's timings.

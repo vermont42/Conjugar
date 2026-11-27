@@ -43,16 +43,16 @@ nonisolated enum L {
       String(localized: "BrowseInfo.localizedTitle")
     }
 
-    static var easy: String {
-      String(localized: "BrowseInfo.easy")
+    static var essentialTenses: String {
+      String(localized: "BrowseInfo.essentialTenses")
     }
 
-    static var easyAndModerate: String {
-      String(localized: "BrowseInfo.easyAndModerate")
+    static var commonTenses: String {
+      String(localized: "BrowseInfo.commonTenses")
     }
 
-    static var easyModerateAndDifficult: String {
-      String(localized: "BrowseInfo.easyModerateAndDifficult")
+    static var allTenses: String {
+      String(localized: "BrowseInfo.allTenses")
     }
 
     static var filter: String {
